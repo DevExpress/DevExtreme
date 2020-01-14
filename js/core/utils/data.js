@@ -1,20 +1,20 @@
-var errors = require('../errors'),
-    Class = require('../class'),
-    objectUtils = require('./object'),
-    typeUtils = require('./type'),
-    each = require('./iterator').each,
-    variableWrapper = require('./variable_wrapper'),
-    unwrapVariable = variableWrapper.unwrap,
-    isWrapped = variableWrapper.isWrapped,
-    assign = variableWrapper.assign;
+const errors = require('../errors');
+const Class = require('../class');
+const objectUtils = require('./object');
+const typeUtils = require('./type');
+const each = require('./iterator').each;
+const variableWrapper = require('./variable_wrapper');
+const unwrapVariable = variableWrapper.unwrap;
+const isWrapped = variableWrapper.isWrapped;
+const assign = variableWrapper.assign;
 
-var bracketsToDots = function(expr) {
+const bracketsToDots = function(expr) {
     return expr
         .replace(/\[/g, '.')
         .replace(/\]/g, '');
 };
 
-var readPropValue = function(obj, propName, options) {
+const readPropValue = function(obj, propName, options) {
     options = options || { };
     if(propName === 'this') {
         return unwrap(obj, options);
@@ -22,12 +22,12 @@ var readPropValue = function(obj, propName, options) {
     return unwrap(obj[propName], options);
 };
 
-var assignPropValue = function(obj, propName, value, options) {
+const assignPropValue = function(obj, propName, value, options) {
     if(propName === 'this') {
         throw new errors.Error('E4016');
     }
 
-    var propValue = obj[propName];
+    const propValue = obj[propName];
     if(options.unwrapObservables && isWrapped(propValue)) {
         assign(propValue, value);
     } else {
@@ -35,7 +35,7 @@ var assignPropValue = function(obj, propName, value, options) {
     }
 };
 
-var prepareOptions = function(options) {
+const prepareOptions = function(options) {
     options = options || {};
     options.unwrapObservables = options.unwrapObservables !== undefined ? options.unwrapObservables : true;
     return options;
@@ -45,7 +45,7 @@ var unwrap = function(value, options) {
     return options.unwrapObservables ? unwrapVariable(value) : value;
 };
 
-var compileGetter = function(expr) {
+const compileGetter = function(expr) {
     if(arguments.length > 1) {
         expr = [].slice.call(arguments);
     }
@@ -57,15 +57,15 @@ var compileGetter = function(expr) {
     if(typeof expr === 'string') {
         expr = bracketsToDots(expr);
 
-        var path = expr.split('.');
+        const path = expr.split('.');
 
         return function(obj, options) {
             options = prepareOptions(options);
-            var functionAsIs = options.functionsAsIs,
-                hasDefaultValue = 'defaultValue' in options,
-                current = unwrap(obj, options);
+            const functionAsIs = options.functionsAsIs;
+            const hasDefaultValue = 'defaultValue' in options;
+            let current = unwrap(obj, options);
 
-            for(var i = 0; i < path.length; i++) {
+            for(let i = 0; i < path.length; i++) {
                 if(!current) {
                     if(current == null && hasDefaultValue) {
                         return options.defaultValue;
@@ -73,13 +73,13 @@ var compileGetter = function(expr) {
                     break;
                 }
 
-                var pathPart = path[i];
+                const pathPart = path[i];
 
                 if(hasDefaultValue && typeUtils.isObject(current) && !(pathPart in current)) {
                     return options.defaultValue;
                 }
 
-                var next = unwrap(current[pathPart], options);
+                let next = unwrap(current[pathPart], options);
 
                 if(!functionAsIs && typeUtils.isFunction(next)) {
                     next = next.call(current);
@@ -102,22 +102,22 @@ var compileGetter = function(expr) {
 };
 
 var combineGetters = function(getters) {
-    var compiledGetters = {};
-    for(var i = 0, l = getters.length; i < l; i++) {
-        var getter = getters[i];
+    const compiledGetters = {};
+    for(let i = 0, l = getters.length; i < l; i++) {
+        const getter = getters[i];
         compiledGetters[getter] = compileGetter(getter);
     }
 
     return function(obj, options) {
-        var result;
+        let result;
 
         each(compiledGetters, function(name) {
-            var value = this(obj, options),
-                current,
-                path,
-                pathItem,
-                last,
-                i;
+            const value = this(obj, options);
+            let current;
+            let path;
+            let pathItem;
+            let last;
+            let i;
 
             if(value === undefined) {
                 return;
@@ -141,28 +141,28 @@ var combineGetters = function(getters) {
     };
 };
 
-var ensurePropValueDefined = function(obj, propName, value, options) {
+const ensurePropValueDefined = function(obj, propName, value, options) {
     if(typeUtils.isDefined(value)) {
         return value;
     }
 
-    var newValue = {};
+    const newValue = {};
     assignPropValue(obj, propName, newValue, options);
 
     return newValue;
 };
 
-var compileSetter = function(expr) {
+const compileSetter = function(expr) {
     expr = bracketsToDots(expr || 'this').split('.');
-    var lastLevelIndex = expr.length - 1;
+    const lastLevelIndex = expr.length - 1;
 
     return function(obj, value, options) {
         options = prepareOptions(options);
-        var currentValue = unwrap(obj, options);
+        let currentValue = unwrap(obj, options);
 
         expr.forEach(function(propertyName, levelIndex) {
-            var propertyValue = readPropValue(currentValue, propertyName, options),
-                isPropertyFunc = !options.functionsAsIs && typeUtils.isFunction(propertyValue) && !isWrapped(propertyValue);
+            let propertyValue = readPropValue(currentValue, propertyName, options);
+            const isPropertyFunc = !options.functionsAsIs && typeUtils.isFunction(propertyValue) && !isWrapped(propertyValue);
 
             if(levelIndex === lastLevelIndex) {
                 if(options.merge && typeUtils.isPlainObject(value) && (!typeUtils.isDefined(propertyValue) || typeUtils.isPlainObject(propertyValue))) {
@@ -184,7 +184,7 @@ var compileSetter = function(expr) {
     };
 };
 
-var toComparable = function(value, caseSensitive) {
+const toComparable = function(value, caseSensitive) {
     if(value instanceof Date) {
         return value.getTime();
     }

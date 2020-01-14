@@ -1,13 +1,13 @@
-var extend = require('../core/utils/extend').extend,
-    numberLocalization = require('./number');
+const extend = require('../core/utils/extend').extend;
+const numberLocalization = require('./number');
 
 numberLocalization.inject({
     _formatNumberCore: function(value, format, formatConfig) {
         if(format === 'currency') {
             formatConfig.precision = formatConfig.precision || 0;
 
-            var result = this.format(value, extend({}, formatConfig, { type: 'fixedpoint' })),
-                currencyPart = this.getCurrencySymbol().symbol.replace('$', '$$$$');
+            let result = this.format(value, extend({}, formatConfig, { type: 'fixedpoint' }));
+            const currencyPart = this.getCurrencySymbol().symbol.replace('$', '$$$$');
 
             result = result.replace(/^(\D*)(\d.*)/, '$1' + currencyPart + '$2');
 

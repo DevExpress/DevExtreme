@@ -104,7 +104,7 @@ class FileProvider {
         return result;
     }
     _createFileItem(dataObj, path) {
-        let fileItem = new FileManagerItem(path, this._nameGetter(dataObj), !!this._isDirGetter(dataObj));
+        const fileItem = new FileManagerItem(path, this._nameGetter(dataObj), !!this._isDirGetter(dataObj));
 
         fileItem.size = this._sizeGetter(dataObj);
         if(fileItem.size === undefined) {

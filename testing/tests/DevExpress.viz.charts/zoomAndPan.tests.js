@@ -4,7 +4,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import 'viz/chart';
 
 const dataSource = (() => {
-    let arr = [];
+    const arr = [];
     for(let i = 0; i < 11; i++) {
         arr.push({ arg: i, val: Math.abs(5 - i) });
     }
@@ -53,21 +53,21 @@ QUnit.testStart(function() {
 QUnit.module('Panning', environment);
 
 QUnit.test('Argument pan right by 1', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'pan'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
 
@@ -91,23 +91,23 @@ QUnit.test('Argument pan right by 1', function(assert) {
 });
 
 QUnit.test('Argument pan right by 2 (discrete axis)', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                type: 'discrete',
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'pan'
-            },
-            series: [{ type: 'bar' }],
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            type: 'discrete',
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'pan'
+        },
+        series: [{ type: 'bar' }],
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
 
@@ -126,21 +126,21 @@ QUnit.test('Argument pan right by 2 (discrete axis)', function(assert) {
 });
 
 QUnit.test('Argument pan right out of the data', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'pan'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
 
@@ -159,21 +159,21 @@ QUnit.test('Argument pan right out of the data', function(assert) {
 });
 
 QUnit.test('Value pan bottom by 1', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            valueAxis: {
-                visualRange: {
-                    startValue: 2,
-                    endValue: 4
-                }
-            },
-            zoomAndPan: {
-                valueAxis: 'pan'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        valueAxis: {
+            visualRange: {
+                startValue: 2,
+                endValue: 4
+            }
+        },
+        zoomAndPan: {
+            valueAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const valueAxis = chart.getValueAxis();
 
@@ -192,28 +192,28 @@ QUnit.test('Value pan bottom by 1', function(assert) {
 });
 
 QUnit.test('Argument and value', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            valueAxis: {
-                visualRange: {
-                    startValue: 2,
-                    endValue: 4
-                }
-            },
-            zoomAndPan: {
-                valueAxis: 'pan',
-                argumentAxis: 'pan'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        valueAxis: {
+            visualRange: {
+                startValue: 2,
+                endValue: 4
+            }
+        },
+        zoomAndPan: {
+            valueAxis: 'pan',
+            argumentAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis = chart.getValueAxis();
@@ -243,30 +243,30 @@ QUnit.test('Argument and value', function(assert) {
 });
 
 QUnit.test('Argument and value. Multiple axis chart with empty axis', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            valueAxis: [{
-                visualRange: {
-                    startValue: 2,
-                    endValue: 4
-                }
-            }, {
-                name: 'axis2'
-            }],
-            zoomAndPan: {
-                valueAxis: 'pan',
-                argumentAxis: 'pan'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        valueAxis: [{
+            visualRange: {
+                startValue: 2,
+                endValue: 4
+            }
+        }, {
+            name: 'axis2'
+        }],
+        zoomAndPan: {
+            valueAxis: 'pan',
+            argumentAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis = chart.getValueAxis();
@@ -296,29 +296,29 @@ QUnit.test('Argument and value. Multiple axis chart with empty axis', function(a
 });
 
 QUnit.test('Argument and value. Rotated', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            rotated: true,
-            argumentAxis: {
-                visualRange: {
-                    startValue: 2,
-                    endValue: 4
-                }
-            },
-            valueAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomAndPan: {
-                valueAxis: 'pan',
-                argumentAxis: 'pan'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        rotated: true,
+        argumentAxis: {
+            visualRange: {
+                startValue: 2,
+                endValue: 4
+            }
+        },
+        valueAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        zoomAndPan: {
+            valueAxis: 'pan',
+            argumentAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis = chart.getValueAxis();
@@ -346,39 +346,39 @@ QUnit.test('Argument and value. Rotated', function(assert) {
 });
 
 QUnit.test('Argument and value. Multiple panes', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            size: {
-                height: 610
-            },
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            valueAxis: [
-                { name: 'v1', visualRange: { startValue: 2, endValue: 4 } },
-                { name: 'v2', visualRange: { startValue: 1, endValue: 3 } },
-                { name: 'v3', visualRange: { startValue: 2, endValue: 4 } }
-            ],
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            series: [
-                { pane: 'p1', axis: 'v1' },
-                { pane: 'p1', axis: 'v2' },
-                { pane: 'p2', axis: 'v3' }
-            ],
-            zoomAndPan: {
-                valueAxis: 'pan',
-                argumentAxis: 'pan'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        valueAxis: [
+            { name: 'v1', visualRange: { startValue: 2, endValue: 4 } },
+            { name: 'v2', visualRange: { startValue: 1, endValue: 3 } },
+            { name: 'v3', visualRange: { startValue: 2, endValue: 4 } }
+        ],
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        series: [
+            { pane: 'p1', axis: 'v1' },
+            { pane: 'p1', axis: 'v2' },
+            { pane: 'p2', axis: 'v3' }
+        ],
+        zoomAndPan: {
+            valueAxis: 'pan',
+            argumentAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis1 = chart.getValueAxis('v1');
@@ -415,32 +415,32 @@ QUnit.test('Argument and value. Multiple panes', function(assert) {
 });
 
 QUnit.test('Multiple panes. Check argument axes visual ranges', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            size: {
-                height: 610
-            },
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            series: [
-                { pane: 'p1' },
-                { pane: 'p2' }
-            ],
-            zoomAndPan: {
-                argumentAxis: 'pan'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        series: [
+            { pane: 'p1' },
+            { pane: 'p2' }
+        ],
+        zoomAndPan: {
+            argumentAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     this.pointer.start({ x: 150, y: 100 }).dragStart().drag(50, 50).dragEnd();
@@ -514,24 +514,24 @@ QUnit.test('[T684665] Chart - zooming-out with multiple value axes leads to wron
 });
 
 QUnit.test('Reject zoom-in by minVisualRangeLength option', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 6.9,
-                    endValue: 7.3
-                },
-                minVisualRangeLength: 0.5
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 6.9,
+                endValue: 7.3
             },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'none',
-                allowMouseWheel: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+            minVisualRangeLength: 0.5
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'none',
+            allowMouseWheel: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const visualRange = argumentAxis.visualRange();
@@ -556,24 +556,24 @@ QUnit.test('Reject zoom-in by minVisualRangeLength option', function(assert) {
 });
 
 QUnit.test('Allow zoom-out by minVisualRangeLength option', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 6.5,
-                    endValue: 7.3
-                },
-                minVisualRangeLength: 1
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 6.5,
+                endValue: 7.3
             },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'none',
-                allowMouseWheel: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+            minVisualRangeLength: 1
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'none',
+            allowMouseWheel: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const visualRange = argumentAxis.visualRange();
@@ -617,23 +617,23 @@ QUnit.test('T741577. Reset initial whole range after dataSource is changed', fun
 });
 
 QUnit.test('Zoom-in argument axis', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 2.9,
-                    endValue: 7.3
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'none',
-                allowMouseWheel: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 2.9,
+                endValue: 7.3
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'none',
+            allowMouseWheel: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
 
@@ -657,23 +657,23 @@ QUnit.test('Zoom-in argument axis', function(assert) {
 });
 
 QUnit.test('Zoom-out argument axis', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3.1,
-                    endValue: 6.7
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'none',
-                allowMouseWheel: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3.1,
+                endValue: 6.7
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'none',
+            allowMouseWheel: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
 
@@ -693,23 +693,23 @@ QUnit.test('Zoom-out argument axis', function(assert) {
 });
 
 QUnit.test('zoom value axis', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            valueAxis: {
-                visualRange: {
-                    startValue: 0.9,
-                    endValue: 4.2
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'none',
-                valueAxis: 'zoom',
-                allowMouseWheel: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        valueAxis: {
+            visualRange: {
+                startValue: 0.9,
+                endValue: 4.2
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'none',
+            valueAxis: 'zoom',
+            allowMouseWheel: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const valueAxis = chart.getValueAxis();
 
@@ -731,8 +731,8 @@ QUnit.test('zoom value axis', function(assert) {
 });
 
 QUnit.test('zoom both axis', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
 
     this.createChart({
         valueAxis: {
@@ -764,38 +764,38 @@ QUnit.test('zoom both axis', function(assert) {
 QUnit.module('Wheel zooming. Multiple panes', environment);
 
 QUnit.test('Multiaxes, zoom axes only in one pane', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            size: {
-                height: 610
-            },
-            zoomAndPan: {
-                argumentAxis: 'none',
-                valueAxis: 'zoom',
-                allowMouseWheel: true
-            },
-            commonAxisSettings: {
-                valueMarginsEnabled: false,
-                endOnTick: false
-            },
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            valueAxis: [
-                { name: 'v1', visualRange: { startValue: 0.9, endValue: 4.2 } },
-                { name: 'v2', visualRange: { startValue: 1.8, endValue: 8.4 } },
-                { name: 'v3', visualRange: { startValue: 0.9, endValue: 4.2 } }
-            ],
-            series: [
-                { pane: 'p1', axis: 'v1' },
-                { pane: 'p1', axis: 'v2' },
-                { pane: 'p2', axis: 'v3' }
-            ],
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        zoomAndPan: {
+            argumentAxis: 'none',
+            valueAxis: 'zoom',
+            allowMouseWheel: true
+        },
+        commonAxisSettings: {
+            valueMarginsEnabled: false,
+            endOnTick: false
+        },
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        valueAxis: [
+            { name: 'v1', visualRange: { startValue: 0.9, endValue: 4.2 } },
+            { name: 'v2', visualRange: { startValue: 1.8, endValue: 8.4 } },
+            { name: 'v3', visualRange: { startValue: 0.9, endValue: 4.2 } }
+        ],
+        series: [
+            { pane: 'p1', axis: 'v1' },
+            { pane: 'p1', axis: 'v2' },
+            { pane: 'p2', axis: 'v3' }
+        ],
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const valueAxis1 = chart.getValueAxis('v1');
     const valueAxis2 = chart.getValueAxis('v2');
@@ -821,36 +821,36 @@ QUnit.test('Multiaxes, zoom axes only in one pane', function(assert) {
 });
 
 QUnit.test('Multiaxes, zoom axes only in one pane. Rotated', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            rotated: true,
-            size: {
-                width: 810
-            },
-            zoomAndPan: {
-                argumentAxis: 'none',
-                valueAxis: 'zoom',
-                allowMouseWheel: true
-            },
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            valueAxis: [
-                { name: 'v1', visualRange: { startValue: 2.9, endValue: 7.3 } },
-                { name: 'v2', visualRange: { startValue: 2.9, endValue: 7.3 } },
-                { name: 'v3', visualRange: { startValue: 5.8, endValue: 14.6 } }
-            ],
-            series: [
-                { pane: 'p1', axis: 'v1' },
-                { pane: 'p1', axis: 'v2' },
-                { pane: 'p2', axis: 'v3' }
-            ],
-            synchronizeMultiAxes: false,
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        rotated: true,
+        size: {
+            width: 810
+        },
+        zoomAndPan: {
+            argumentAxis: 'none',
+            valueAxis: 'zoom',
+            allowMouseWheel: true
+        },
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        valueAxis: [
+            { name: 'v1', visualRange: { startValue: 2.9, endValue: 7.3 } },
+            { name: 'v2', visualRange: { startValue: 2.9, endValue: 7.3 } },
+            { name: 'v3', visualRange: { startValue: 5.8, endValue: 14.6 } }
+        ],
+        series: [
+            { pane: 'p1', axis: 'v1' },
+            { pane: 'p1', axis: 'v2' },
+            { pane: 'p2', axis: 'v3' }
+        ],
+        synchronizeMultiAxes: false,
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const valueAxis3 = chart.getValueAxis('v3');
 
@@ -870,30 +870,30 @@ QUnit.test('Multiaxes, zoom axes only in one pane. Rotated', function(assert) {
 });
 
 QUnit.test('Multiple panes. Check argument axes visual ranges', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 2.9,
-                    endValue: 7.3
-                }
-            },
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            series: [
-                { pane: 'p1' },
-                { pane: 'p2' }
-            ],
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                allowMouseWheel: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 2.9,
+                endValue: 7.3
+            }
+        },
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        series: [
+            { pane: 'p1' },
+            { pane: 'p2' }
+        ],
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            allowMouseWheel: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     this.pointer.start({ x: 200, y: 250 }).wheel(10);
@@ -944,38 +944,38 @@ QUnit.test('Multiple panes. Cancel argument mousewheel zooming on zoomStart', fu
 QUnit.module('Wheel zooming. Mouse on axis', environment);
 
 QUnit.test('Mouse over value axis - zoom only value axes in one pane axes', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            size: {
-                height: 610
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'zoom',
-                allowMouseWheel: true
-            },
-            commonAxisSettings: {
-                valueMarginsEnabled: false,
-                endOnTick: false
-            },
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            valueAxis: [
-                { name: 'v1', visualRange: { startValue: 0.9, endValue: 4.2 }, placeholderSize: 100 },
-                { name: 'v2', visualRange: { startValue: 1.8, endValue: 8.4 }, placeholderSize: 100 },
-                { name: 'v3', visualRange: { startValue: 0.9, endValue: 4.2 }, placeholderSize: 100 }
-            ],
-            series: [
-                { pane: 'p1', axis: 'v1' },
-                { pane: 'p1', axis: 'v2' },
-                { pane: 'p2', axis: 'v3' }
-            ],
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'zoom',
+            allowMouseWheel: true
+        },
+        commonAxisSettings: {
+            valueMarginsEnabled: false,
+            endOnTick: false
+        },
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        valueAxis: [
+            { name: 'v1', visualRange: { startValue: 0.9, endValue: 4.2 }, placeholderSize: 100 },
+            { name: 'v2', visualRange: { startValue: 1.8, endValue: 8.4 }, placeholderSize: 100 },
+            { name: 'v3', visualRange: { startValue: 0.9, endValue: 4.2 }, placeholderSize: 100 }
+        ],
+        series: [
+            { pane: 'p1', axis: 'v1' },
+            { pane: 'p1', axis: 'v2' },
+            { pane: 'p2', axis: 'v3' }
+        ],
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const valueAxis1 = chart.getValueAxis('v1');
     const valueAxis2 = chart.getValueAxis('v2');
@@ -1001,38 +1001,38 @@ QUnit.test('Mouse over value axis - zoom only value axes in one pane axes', func
 });
 
 QUnit.test('Mouse over argument axis - zoom only argument axes', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            size: {
-                width: 900,
-                height: 700
-            },
-            commonAxisSettings: {
-                placeholderSize: 100
-            },
-            argumentAxis: {
-                visualRange: {
-                    startValue: 2.9,
-                    endValue: 7.3
-                }
-            },
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            series: [
-                { pane: 'p1' },
-                { pane: 'p2' }
-            ],
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'zoom',
-                allowMouseWheel: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        size: {
+            width: 900,
+            height: 700
+        },
+        commonAxisSettings: {
+            placeholderSize: 100
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 2.9,
+                endValue: 7.3
+            }
+        },
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        series: [
+            { pane: 'p1' },
+            { pane: 'p2' }
+        ],
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'zoom',
+            allowMouseWheel: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     this.pointer.start({ x: 300, y: 650 }).wheel(10);
@@ -1046,8 +1046,8 @@ QUnit.test('Mouse over argument axis - zoom only argument axes', function(assert
 });
 
 QUnit.test('Mouse not on axes nor panes - do not zoom any axis', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
     this.createChart({
         size: {
             height: 710,
@@ -1089,22 +1089,22 @@ QUnit.test('Mouse not on axes nor panes - do not zoom any axis', function(assert
 QUnit.module('Shutter zoom. Test zooming', environment);
 
 QUnit.test('Zoom argument axis', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 2,
-                    endValue: 10
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                dragToZoom: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 2,
+                endValue: 10
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            dragToZoom: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
 
@@ -1128,23 +1128,23 @@ QUnit.test('Zoom argument axis', function(assert) {
 });
 
 QUnit.test('Reject zooming by minVisualRangeLength option', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 6.5,
-                    endValue: 8
-                },
-                minVisualRangeLength: 1
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 6.5,
+                endValue: 8
             },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                dragToZoom: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+            minVisualRangeLength: 1
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            dragToZoom: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const visualRange = argumentAxis.visualRange();
@@ -1169,22 +1169,22 @@ QUnit.test('Reject zooming by minVisualRangeLength option', function(assert) {
 });
 
 QUnit.test('Zoom value axis', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            valueAxis: {
-                visualRange: {
-                    startValue: 0,
-                    endValue: 5
-                }
-            },
-            zoomAndPan: {
-                valueAxis: 'zoom',
-                dragToZoom: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        valueAxis: {
+            visualRange: {
+                startValue: 0,
+                endValue: 5
+            }
+        },
+        zoomAndPan: {
+            valueAxis: 'zoom',
+            dragToZoom: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const valueAxis = chart.getValueAxis();
 
@@ -1204,29 +1204,29 @@ QUnit.test('Zoom value axis', function(assert) {
 });
 
 QUnit.test('Zoom argument and value axis', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 2,
-                    endValue: 10
-                }
-            },
-            valueAxis: {
-                visualRange: {
-                    startValue: 0,
-                    endValue: 5
-                }
-            },
-            zoomAndPan: {
-                valueAxis: 'zoom',
-                argumentAxis: 'zoom',
-                dragToZoom: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 2,
+                endValue: 10
+            }
+        },
+        valueAxis: {
+            visualRange: {
+                startValue: 0,
+                endValue: 5
+            }
+        },
+        zoomAndPan: {
+            valueAxis: 'zoom',
+            argumentAxis: 'zoom',
+            dragToZoom: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis = chart.getValueAxis();
@@ -1252,15 +1252,15 @@ QUnit.test('Zoom argument and value axis', function(assert) {
 });
 
 QUnit.test('Zoom argument axis. Argument axis has too small zoom area', function(assert) {
-    const onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            zoomAndPan: {
-                valueAxis: 'zoom',
-                argumentAxis: 'zoom',
-                dragToZoom: true
-            },
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        zoomAndPan: {
+            valueAxis: 'zoom',
+            argumentAxis: 'zoom',
+            dragToZoom: true
+        },
+        onZoomEnd: onZoomEnd
+    });
 
     const valueAxis = chart.getValueAxis();
 
@@ -1271,27 +1271,27 @@ QUnit.test('Zoom argument axis. Argument axis has too small zoom area', function
 });
 
 QUnit.test('Zoom value axis. Value axis has too small zoom area', function(assert) {
-    const onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 2,
-                    endValue: 10
-                }
-            },
-            valueAxis: {
-                visualRange: {
-                    startValue: 0,
-                    endValue: 5
-                }
-            },
-            zoomAndPan: {
-                valueAxis: 'zoom',
-                argumentAxis: 'zoom',
-                dragToZoom: true
-            },
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 2,
+                endValue: 10
+            }
+        },
+        valueAxis: {
+            visualRange: {
+                startValue: 0,
+                endValue: 5
+            }
+        },
+        zoomAndPan: {
+            valueAxis: 'zoom',
+            argumentAxis: 'zoom',
+            dragToZoom: true
+        },
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
 
@@ -1303,39 +1303,39 @@ QUnit.test('Zoom value axis. Value axis has too small zoom area', function(asser
 });
 
 QUnit.test('Multiaxes, zoom axes only in one pane. Rotated', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            rotated: true,
-            size: {
-                width: 810
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'zoom',
-                dragToZoom: true
-            },
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            argumentAxis: {
-                visualRange: { startValue: 2, endValue: 8 }
-            },
-            valueAxis: [
-                { name: 'v1', visualRange: { startValue: 0, endValue: 4 } },
-                { name: 'v2', visualRange: { startValue: 2, endValue: 10 } },
-                { name: 'v3', visualRange: { startValue: 4, endValue: 5 } }
-            ],
-            series: [
-                { pane: 'p1', axis: 'v1' },
-                { pane: 'p1', axis: 'v2' },
-                { pane: 'p2', axis: 'v3' }
-            ],
-            synchronizeMultiAxes: false,
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        rotated: true,
+        size: {
+            width: 810
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'zoom',
+            dragToZoom: true
+        },
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        argumentAxis: {
+            visualRange: { startValue: 2, endValue: 8 }
+        },
+        valueAxis: [
+            { name: 'v1', visualRange: { startValue: 0, endValue: 4 } },
+            { name: 'v2', visualRange: { startValue: 2, endValue: 10 } },
+            { name: 'v3', visualRange: { startValue: 4, endValue: 5 } }
+        ],
+        series: [
+            { pane: 'p1', axis: 'v1' },
+            { pane: 'p1', axis: 'v2' },
+            { pane: 'p2', axis: 'v3' }
+        ],
+        synchronizeMultiAxes: false,
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis1 = chart.getValueAxis('v1');
@@ -1369,33 +1369,33 @@ QUnit.test('Multiaxes, zoom axes only in one pane. Rotated', function(assert) {
 });
 
 QUnit.test('Multiple panes. Check argument axes visual ranges', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            size: {
-                height: 610
-            },
-            argumentAxis: {
-                visualRange: {
-                    startValue: 2,
-                    endValue: 10
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                dragToZoom: true
-            },
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            series: [
-                { pane: 'p1' },
-                { pane: 'p2' }
-            ],
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 2,
+                endValue: 10
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            dragToZoom: true
+        },
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        series: [
+            { pane: 'p1' },
+            { pane: 'p2' }
+        ],
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     this.pointer.start({ x: 200, y: 250 }).dragStart().drag(400, 50).dragEnd();
@@ -1457,7 +1457,7 @@ QUnit.test('Zoom argument axis', function(assert) {
             }
         }
     });
-    let rects = chart._renderer.root.element.getElementsByTagName('rect');
+    const rects = chart._renderer.root.element.getElementsByTagName('rect');
     assert.equal(rects.length, 4);
     // act
     this.pointer.start({ x: 200, y: 250 }).dragStart();
@@ -1558,23 +1558,23 @@ QUnit.test('Zoom value axis, multiple panes, rotated', function(assert) {
 QUnit.module('Shutter zoom and drag combination', environment);
 
 QUnit.test('Without panKey pressed drag action zooms chart', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 2,
-                    endValue: 10
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'both',
-                dragToZoom: true,
-                panKey: 'shift'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 2,
+                endValue: 10
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'both',
+            dragToZoom: true,
+            panKey: 'shift'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
 
@@ -1598,23 +1598,23 @@ QUnit.test('Without panKey pressed drag action zooms chart', function(assert) {
 });
 
 QUnit.test('With panKey pressed drag action zooms chart', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 2,
-                    endValue: 10
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'both',
-                dragToZoom: true,
-                panKey: 'shift'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 2,
+                endValue: 10
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'both',
+            dragToZoom: true,
+            panKey: 'shift'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
 
@@ -1696,30 +1696,30 @@ QUnit.test('[T684665] Chart - zooming-out with multiple value axes leads to wron
 });
 
 QUnit.test('Drag by touch pans chart, even if dragToZoom = true', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            valueAxis: {
-                visualRange: {
-                    startValue: 2,
-                    endValue: 4
-                }
-            },
-            zoomAndPan: {
-                valueAxis: 'both',
-                argumentAxis: 'both',
-                allowTouchGestures: true,
-                dragToZoom: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        valueAxis: {
+            visualRange: {
+                startValue: 2,
+                endValue: 4
+            }
+        },
+        zoomAndPan: {
+            valueAxis: 'both',
+            argumentAxis: 'both',
+            allowTouchGestures: true,
+            dragToZoom: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis = chart.getValueAxis();
@@ -1746,29 +1746,29 @@ QUnit.test('Drag by touch pans chart, even if dragToZoom = true', function(asser
 });
 
 QUnit.test('Reject pinch zoom-in both axes by default minVisualRangeLength option', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3.5,
-                    endValue: 3.51
-                }
-            },
-            valueAxis: {
-                visualRange: {
-                    startValue: 1.99,
-                    endValue: 2
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'zoom',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3.5,
+                endValue: 3.51
+            }
+        },
+        valueAxis: {
+            visualRange: {
+                startValue: 1.99,
+                endValue: 2
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'zoom',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis = chart.getValueAxis();
@@ -1794,17 +1794,17 @@ QUnit.test('Reject pinch zoom-in both axes by default minVisualRangeLength optio
 });
 
 QUnit.test('Pinch zoom-in both axes', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'zoom',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'zoom',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis = chart.getValueAxis();
@@ -1839,23 +1839,23 @@ QUnit.test('Pinch zoom-in both axes', function(assert) {
 });
 
 QUnit.test('Pinch zoom-out both axes', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: { startValue: 0, endValue: 5 }
-            },
-            valueAxis: {
-                visualRange: { startValue: 2.5, endValue: 5 }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'zoom',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: { startValue: 0, endValue: 5 }
+        },
+        valueAxis: {
+            visualRange: { startValue: 2.5, endValue: 5 }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'zoom',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis = chart.getValueAxis();
@@ -1886,20 +1886,20 @@ QUnit.test('Pinch zoom-out both axes', function(assert) {
 });
 
 QUnit.test('Pinch zoom-in argument axis from some point', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: { startValue: 1, endValue: 9 }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'none',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: { startValue: 1, endValue: 9 }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'none',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
 
@@ -1920,21 +1920,21 @@ QUnit.test('Pinch zoom-in argument axis from some point', function(assert) {
 });
 
 QUnit.test('Pinch zoom-in/zoom-out argument axis from some point (discrete axis)', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                type: 'discrete',
-                visualRange: { startValue: 1, endValue: 9 }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'none',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            type: 'discrete',
+            visualRange: { startValue: 1, endValue: 9 }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'none',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
 
@@ -1968,23 +1968,23 @@ QUnit.test('Pinch zoom-in/zoom-out argument axis from some point (discrete axis)
 QUnit.module('ScrollBar', environment);
 
 QUnit.test('Scrollbar pans only argument axis', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                type: 'discrete',
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'pan',
-                valueAxis: 'pan'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            type: 'discrete',
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'pan',
+            valueAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
 
@@ -2011,25 +2011,25 @@ QUnit.test('Scrollbar pans only argument axis', function(assert) {
 });
 
 QUnit.test('Scrollbar does not pan argument axis if it can not be panned', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            scrollBar: {
-                visible: true
-            },
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'pan'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        scrollBar: {
+            visible: true
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const scrollBarElement = $(chart._scrollBar._scroll.element);
     const scrollBarOffset = scrollBarElement.offset();
@@ -2048,39 +2048,39 @@ QUnit.test('Scrollbar does not pan argument axis if it can not be panned', funct
 QUnit.module('Check visualRange changing strategy choosing', environment);
 
 QUnit.test('Drag. Small chart rendering time on start and big time in the middle', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            size: {
-                height: 610
-            },
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            valueAxis: [
-                { name: 'v1', visualRange: { startValue: 2, endValue: 4 } },
-                { name: 'v2', visualRange: { startValue: 1, endValue: 3 } },
-                { name: 'v3', visualRange: { startValue: 2, endValue: 4 } }
-            ],
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            series: [
-                { pane: 'p1', axis: 'v1' },
-                { pane: 'p1', axis: 'v2' },
-                { pane: 'p2', axis: 'v3' }
-            ],
-            zoomAndPan: {
-                valueAxis: 'pan',
-                argumentAxis: 'pan'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        valueAxis: [
+            { name: 'v1', visualRange: { startValue: 2, endValue: 4 } },
+            { name: 'v2', visualRange: { startValue: 1, endValue: 3 } },
+            { name: 'v3', visualRange: { startValue: 2, endValue: 4 } }
+        ],
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        series: [
+            { pane: 'p1', axis: 'v1' },
+            { pane: 'p1', axis: 'v2' },
+            { pane: 'p2', axis: 'v3' }
+        ],
+        zoomAndPan: {
+            valueAxis: 'pan',
+            argumentAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis1 = chart.getValueAxis('v1');
@@ -2166,39 +2166,39 @@ QUnit.test('Drag. Small chart rendering time on start and big time in the middle
 });
 
 QUnit.test('Drag. Big chart rendering time on start and small time in the middle', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            size: {
-                height: 610
-            },
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            valueAxis: [
-                { name: 'v1', visualRange: { startValue: 2, endValue: 4 } },
-                { name: 'v2', visualRange: { startValue: 1, endValue: 3 } },
-                { name: 'v3', visualRange: { startValue: 2, endValue: 4 } }
-            ],
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            series: [
-                { pane: 'p1', axis: 'v1' },
-                { pane: 'p1', axis: 'v2' },
-                { pane: 'p2', axis: 'v3' }
-            ],
-            zoomAndPan: {
-                valueAxis: 'pan',
-                argumentAxis: 'pan'
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        valueAxis: [
+            { name: 'v1', visualRange: { startValue: 2, endValue: 4 } },
+            { name: 'v2', visualRange: { startValue: 1, endValue: 3 } },
+            { name: 'v3', visualRange: { startValue: 2, endValue: 4 } }
+        ],
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        series: [
+            { pane: 'p1', axis: 'v1' },
+            { pane: 'p1', axis: 'v2' },
+            { pane: 'p2', axis: 'v3' }
+        ],
+        zoomAndPan: {
+            valueAxis: 'pan',
+            argumentAxis: 'pan'
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis1 = chart.getValueAxis('v1');
@@ -2285,37 +2285,37 @@ QUnit.test('Drag. Big chart rendering time on start and small time in the middle
 });
 
 QUnit.test('Pinch zoom. Small chart rendering time on start and big time in the middle', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            size: {
-                height: 610
-            },
-            argumentAxis: {
-                visualRange: { startValue: 1, endValue: 9 }
-            },
-            valueAxis: [
-                { name: 'v1', visualRange: { startValue: 0, endValue: 6 } },
-                { name: 'v2', visualRange: { startValue: 10, endValue: 16 }, wholeRange: { startValue: 0, endValue: 20 } },
-                { name: 'v3', visualRange: { startValue: 2, endValue: 4 } }
-            ],
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            series: [
-                { pane: 'p1', axis: 'v1' },
-                { pane: 'p1', axis: 'v2' },
-                { pane: 'p2', axis: 'v3' }
-            ],
-            zoomAndPan: {
-                valueAxis: 'zoom',
-                argumentAxis: 'zoom',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        argumentAxis: {
+            visualRange: { startValue: 1, endValue: 9 }
+        },
+        valueAxis: [
+            { name: 'v1', visualRange: { startValue: 0, endValue: 6 } },
+            { name: 'v2', visualRange: { startValue: 10, endValue: 16 }, wholeRange: { startValue: 0, endValue: 20 } },
+            { name: 'v3', visualRange: { startValue: 2, endValue: 4 } }
+        ],
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        series: [
+            { pane: 'p1', axis: 'v1' },
+            { pane: 'p1', axis: 'v2' },
+            { pane: 'p2', axis: 'v3' }
+        ],
+        zoomAndPan: {
+            valueAxis: 'zoom',
+            argumentAxis: 'zoom',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis1 = chart.getValueAxis('v1');
@@ -2401,37 +2401,37 @@ QUnit.test('Pinch zoom. Small chart rendering time on start and big time in the 
 });
 
 QUnit.test('Pinch zoom. Big chart rendering time on start and small time in the middle', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            size: {
-                height: 610
-            },
-            argumentAxis: {
-                visualRange: { startValue: 1, endValue: 9 }
-            },
-            valueAxis: [
-                { name: 'v1', visualRange: { startValue: 0, endValue: 6 } },
-                { name: 'v2', visualRange: { startValue: 10, endValue: 16 } },
-                { name: 'v3', visualRange: { startValue: 2, endValue: 4 } }
-            ],
-            panes: [
-                { name: 'p1' },
-                { name: 'p2' }
-            ],
-            series: [
-                { pane: 'p1', axis: 'v1' },
-                { pane: 'p1', axis: 'v2' },
-                { pane: 'p2', axis: 'v3' }
-            ],
-            zoomAndPan: {
-                valueAxis: 'zoom',
-                argumentAxis: 'zoom',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        argumentAxis: {
+            visualRange: { startValue: 1, endValue: 9 }
+        },
+        valueAxis: [
+            { name: 'v1', visualRange: { startValue: 0, endValue: 6 } },
+            { name: 'v2', visualRange: { startValue: 10, endValue: 16 } },
+            { name: 'v3', visualRange: { startValue: 2, endValue: 4 } }
+        ],
+        panes: [
+            { name: 'p1' },
+            { name: 'p2' }
+        ],
+        series: [
+            { pane: 'p1', axis: 'v1' },
+            { pane: 'p1', axis: 'v2' },
+            { pane: 'p2', axis: 'v3' }
+        ],
+        zoomAndPan: {
+            valueAxis: 'zoom',
+            argumentAxis: 'zoom',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis1 = chart.getValueAxis('v1');
@@ -2520,30 +2520,30 @@ QUnit.test('Pinch zoom. Big chart rendering time on start and small time in the 
 QUnit.module('Misc', environment);
 
 QUnit.test('Do nothing if no actions allowed', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            valueAxis: {
-                visualRange: {
-                    startValue: 30,
-                    endValue: 70
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'none',
-                valueAxis: 'none',
-                allowTouchGestures: true,
-                allowMouseWheel: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        valueAxis: {
+            visualRange: {
+                startValue: 30,
+                endValue: 70
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'none',
+            valueAxis: 'none',
+            allowTouchGestures: true,
+            allowMouseWheel: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -2566,8 +2566,8 @@ QUnit.test('Do nothing if no actions allowed', function(assert) {
 });
 
 QUnit.test('allowTouchGestures = false, do nothing on touch drag and pinch zoom', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
     this.createChart({
         argumentAxis: {
             visualRange: {
@@ -2591,8 +2591,8 @@ QUnit.test('allowTouchGestures = false, do nothing on touch drag and pinch zoom'
 });
 
 QUnit.test('allowTouchGestures = true, only zoom allowed, touch drag - do nothing', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
     this.createChart({
         argumentAxis: {
             visualRange: {
@@ -2616,29 +2616,29 @@ QUnit.test('allowTouchGestures = true, only zoom allowed, touch drag - do nothin
 });
 
 QUnit.test('Reject API zoom-in both axes by default minVisualRangeLength option', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3.5,
-                    endValue: 3.51
-                }
-            },
-            valueAxis: {
-                visualRange: {
-                    startValue: 1.99,
-                    endValue: 2
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'zoom',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3.5,
+                endValue: 3.51
+            }
+        },
+        valueAxis: {
+            visualRange: {
+                startValue: 1.99,
+                endValue: 2
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'zoom',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     const argumentAxis = chart.getArgumentAxis();
     const valueAxis = chart.getValueAxis();
@@ -2673,8 +2673,8 @@ QUnit.test('Reject API zoom-in both axes by default minVisualRangeLength option'
 QUnit.module('Axes with empty range', environment);
 
 QUnit.test('Pan - do nothing', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
     this.createChart({
         dataSource: null,
         argumentAxis: {},
@@ -2696,8 +2696,8 @@ QUnit.test('Pan - do nothing', function(assert) {
 });
 
 QUnit.test('Mouse wheel - do nothing', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
     this.createChart({
         dataSource: null,
         argumentAxis: {},
@@ -2720,8 +2720,8 @@ QUnit.test('Mouse wheel - do nothing', function(assert) {
 });
 
 QUnit.test('Shutter zoom - do nothing', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
     this.createChart({
         dataSource: null,
         argumentAxis: {},
@@ -2746,20 +2746,20 @@ QUnit.test('Shutter zoom - do nothing', function(assert) {
 QUnit.module('Prevent default behavior', environment);
 
 QUnit.test('On pan', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'pan',
-                valueAxis: 'pan'
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
             }
-        });
+        },
+        zoomAndPan: {
+            argumentAxis: 'pan',
+            valueAxis: 'pan'
+        }
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -2773,45 +2773,45 @@ QUnit.test('On pan', function(assert) {
 });
 
 QUnit.test('Pan action in pane without zoom if another pane has a zoom', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        chart = this.createChart({
-            dataSource: [{
-                arg: 'a1',
-                val1: 4.1,
-                val2: 109
-            }, {
-                arg: 'a2',
-                val1: 10,
-                val2: 104
-            }],
-            panes: [{
-                name: 'topPane'
-            }, {
-                name: 'bottomPane'
-            }],
-            zoomAndPan: {
-                valueAxis: 'both',
-                allowMouseWheel: true
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const chart = this.createChart({
+        dataSource: [{
+            arg: 'a1',
+            val1: 4.1,
+            val2: 109
+        }, {
+            arg: 'a2',
+            val1: 10,
+            val2: 104
+        }],
+        panes: [{
+            name: 'topPane'
+        }, {
+            name: 'bottomPane'
+        }],
+        zoomAndPan: {
+            valueAxis: 'both',
+            allowMouseWheel: true
+        },
+        series: [{
+            pane: 'topPane',
+            valueField: 'val1'
+        }, {
+            valueField: 'val2'
+        }],
+        valueAxis: [{
+            pane: 'bottomPane',
+            name: 'bottomAxis'
+        }, {
+            visualRange: {
+                startValue: 4,
+                endValue: 5
             },
-            series: [{
-                pane: 'topPane',
-                valueField: 'val1'
-            }, {
-                valueField: 'val2'
-            }],
-            valueAxis: [{
-                pane: 'bottomPane',
-                name: 'bottomAxis'
-            }, {
-                visualRange: {
-                    startValue: 4,
-                    endValue: 5
-                },
-                pane: 'topPane',
-                name: 'topAxis'
-            }]
-        });
+            pane: 'topPane',
+            name: 'topAxis'
+        }]
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -2823,22 +2823,22 @@ QUnit.test('Pan action in pane without zoom if another pane has a zoom', functio
 });
 
 QUnit.test('Default behavior - no prevent. On panning by drag (goes to the edge)', function(assert) {
-    const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 10
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'pan',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 10
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'pan',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -2853,25 +2853,25 @@ QUnit.test('Default behavior - no prevent. On panning by drag (goes to the edge)
 });
 
 QUnit.test('Do not cancel panning if pan took place early. Pan X', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 10
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'pan',
-                valueAxis: 'none',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 10
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'pan',
+            valueAxis: 'none',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -2887,32 +2887,32 @@ QUnit.test('Do not cancel panning if pan took place early. Pan X', function(asse
 
 
 QUnit.test('Do not cancel panning if pan took place early. Pan Y', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 10
-                }
-            },
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 10
+            }
+        },
 
-            valueAxis: {
-                visualRange: {
-                    startValue: 1,
-                    endValue: 2
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'none',
-                valueAxis: 'pan',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+        valueAxis: {
+            visualRange: {
+                startValue: 1,
+                endValue: 2
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'none',
+            valueAxis: 'pan',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -2927,24 +2927,24 @@ QUnit.test('Do not cancel panning if pan took place early. Pan Y', function(asse
 });
 
 QUnit.test('On panning by drag (goes from the edge)', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 10
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'pan',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 10
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'pan',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -2962,20 +2962,20 @@ QUnit.test('On panning by drag (goes from the edge)', function(assert) {
 
 // T249548
 QUnit.test('On mouse wheel', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                allowMouseWheel: true
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
             }
-        });
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            allowMouseWheel: true
+        }
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -2987,20 +2987,20 @@ QUnit.test('On mouse wheel', function(assert) {
 });
 
 QUnit.test('Default behavior - no prevent. On mouse wheel', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        chart = this.createChart({
-            valueAxis: {
-                visualRange: {
-                    startValue: 0,
-                    endValue: 5
-                }
-            },
-            zoomAndPan: {
-                valueAxis: 'zoom',
-                allowMouseWheel: true
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const chart = this.createChart({
+        valueAxis: {
+            visualRange: {
+                startValue: 0,
+                endValue: 5
             }
-        });
+        },
+        zoomAndPan: {
+            valueAxis: 'zoom',
+            allowMouseWheel: true
+        }
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -3012,21 +3012,21 @@ QUnit.test('Default behavior - no prevent. On mouse wheel', function(assert) {
 });
 
 QUnit.test('On pinch zoom', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                valueAxis: 'zoom',
-                allowTouchGestures: true
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
             }
-        });
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            valueAxis: 'zoom',
+            allowTouchGestures: true
+        }
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -3040,27 +3040,27 @@ QUnit.test('On pinch zoom', function(assert) {
 });
 
 QUnit.test('Prevent default behavior for pinch-in zoom', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 0,
-                    endValue: 10
-                }
-            },
-            valueAxis: {
-                visualRange: {
-                    startValue: 0,
-                    endValue: 5
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'both',
-                valueAxis: 'both',
-                allowTouchGestures: true
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 0,
+                endValue: 10
             }
-        });
+        },
+        valueAxis: {
+            visualRange: {
+                startValue: 0,
+                endValue: 5
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'both',
+            valueAxis: 'both',
+            allowTouchGestures: true
+        }
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -3074,24 +3074,24 @@ QUnit.test('Prevent default behavior for pinch-in zoom', function(assert) {
 });
 
 QUnit.test('Default behavior - no prevent. On pinch-out zoom', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 1,
-                    endValue: 9.99
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 1,
+                endValue: 9.99
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -3107,24 +3107,24 @@ QUnit.test('Default behavior - no prevent. On pinch-out zoom', function(assert) 
 });
 
 QUnit.test('Default behavior - prevent. On pinch-out zoom when zoomed out to whole range', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 0,
-                    endValue: 10
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'zoom',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 0,
+                endValue: 10
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'zoom',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -3137,31 +3137,31 @@ QUnit.test('Default behavior - prevent. On pinch-out zoom when zoomed out to who
 });
 
 QUnit.test('Default behavior - no prevent. On panning by drag (full visualRange)', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 0.01,
-                    endValue: 9.99
-                }
-            },
-            valueAxis: {
-                visualRange: {
-                    startValue: 0.01,
-                    endValue: 4.99
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'both',
-                valueAxis: 'both',
-                allowTouchGestures: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 0.01,
+                endValue: 9.99
+            }
+        },
+        valueAxis: {
+            visualRange: {
+                startValue: 0.01,
+                endValue: 4.99
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'both',
+            valueAxis: 'both',
+            allowTouchGestures: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -3178,20 +3178,20 @@ QUnit.test('Default behavior - no prevent. On panning by drag (full visualRange)
 });
 
 QUnit.test('On ScrollBar', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'pan',
-                valueAxis: 'pan'
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
             }
-        });
+        },
+        zoomAndPan: {
+            argumentAxis: 'pan',
+            valueAxis: 'pan'
+        }
+    });
 
     // act
     const $root = $(chart._renderer.root.element);
@@ -3205,22 +3205,22 @@ QUnit.test('On ScrollBar', function(assert) {
 });
 
 QUnit.test('Do not prevent and stop if no actions allowed', function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        chart = this.createChart({
-            argumentAxis: {
-                visualRange: {
-                    startValue: 3,
-                    endValue: 7
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: 'none',
-                valueAxis: 'none',
-                allowTouchGestures: true,
-                allowMouseWheel: true
+    const preventDefault = sinon.spy();
+    const stopPropagation = sinon.spy();
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
             }
-        });
+        },
+        zoomAndPan: {
+            argumentAxis: 'none',
+            valueAxis: 'none',
+            allowTouchGestures: true,
+            allowMouseWheel: true
+        }
+    });
 
     // act
     const $root = $(chart._renderer.root.element);

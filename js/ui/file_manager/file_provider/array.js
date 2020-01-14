@@ -56,7 +56,7 @@ class ArrayFileProvider extends FileProvider {
     }
 
     createFolder(parentFolder, name) {
-        let newItem = { };
+        const newItem = { };
         this._nameSetter(newItem, name);
         this._getIsDirSetter(newItem, true);
 
@@ -69,7 +69,7 @@ class ArrayFileProvider extends FileProvider {
     }
 
     moveItems(items, destinationDir) {
-        let array = this._getChildrenArray(destinationDir.dataItem);
+        const array = this._getChildrenArray(destinationDir.dataItem);
         each(items, (_, item) => {
             this._checkAbilityToMoveOrCopyItem(item, destinationDir);
             this._deleteItem(item);
@@ -98,13 +98,13 @@ class ArrayFileProvider extends FileProvider {
     }
 
     _createCopy(dataObj) {
-        let copyObj = { };
+        const copyObj = { };
         this._nameSetter(copyObj, this._nameGetter(dataObj));
         this._getIsDirSetter(copyObj, this._isDirGetter(dataObj));
 
         const items = this._subFileItemsGetter(dataObj);
         if(Array.isArray(items)) {
-            let itemsCopy = [];
+            const itemsCopy = [];
             each(items, (_, childItem) => {
                 const childCopy = this._createCopy(childItem);
                 itemsCopy.push(childCopy);

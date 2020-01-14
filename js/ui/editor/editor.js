@@ -1,29 +1,29 @@
-var $ = require('../../core/renderer'),
-    dataUtils = require('../../core/element_data'),
-    Callbacks = require('../../core/utils/callbacks'),
-    commonUtils = require('../../core/utils/common'),
-    windowUtils = require('../../core/utils/window'),
-    Guid = require('../../core/guid'),
-    getDefaultAlignment = require('../../core/utils/position').getDefaultAlignment,
-    extend = require('../../core/utils/extend').extend,
-    Widget = require('../widget/ui.widget'),
-    ValidationMixin = require('../validation/validation_mixin'),
-    Overlay = require('../overlay'),
-    EventsEngine = require('../../events/core/events_engine'),
-    eventUtils = require('../../events/utils');
+const $ = require('../../core/renderer');
+const dataUtils = require('../../core/element_data');
+const Callbacks = require('../../core/utils/callbacks');
+const commonUtils = require('../../core/utils/common');
+const windowUtils = require('../../core/utils/window');
+const Guid = require('../../core/guid');
+const getDefaultAlignment = require('../../core/utils/position').getDefaultAlignment;
+const extend = require('../../core/utils/extend').extend;
+const Widget = require('../widget/ui.widget');
+const ValidationMixin = require('../validation/validation_mixin');
+const Overlay = require('../overlay');
+const EventsEngine = require('../../events/core/events_engine');
+const eventUtils = require('../../events/utils');
 
-var READONLY_STATE_CLASS = 'dx-state-readonly',
-    INVALID_CLASS = 'dx-invalid',
-    INVALID_MESSAGE = 'dx-invalid-message',
-    INVALID_MESSAGE_CONTENT = 'dx-invalid-message-content',
-    INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto',
-    INVALID_MESSAGE_ALWAYS = 'dx-invalid-message-always',
+const READONLY_STATE_CLASS = 'dx-state-readonly';
+const INVALID_CLASS = 'dx-invalid';
+const INVALID_MESSAGE = 'dx-invalid-message';
+const INVALID_MESSAGE_CONTENT = 'dx-invalid-message-content';
+const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
+const INVALID_MESSAGE_ALWAYS = 'dx-invalid-message-always';
 
-    VALIDATION_TARGET = 'dx-validation-target',
+const VALIDATION_TARGET = 'dx-validation-target';
 
-    VALIDATION_MESSAGE_MIN_WIDTH = 100,
+const VALIDATION_MESSAGE_MIN_WIDTH = 100;
 
-    READONLY_NAMESPACE = 'editorReadOnly';
+const READONLY_NAMESPACE = 'editorReadOnly';
 
 /**
 * @name Editor
@@ -33,7 +33,7 @@ var READONLY_STATE_CLASS = 'dx-state-readonly',
 * @export default
 * @hidden
 */
-var Editor = Widget.inherit({
+const Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
         this.validationRequest = Callbacks();
@@ -206,10 +206,10 @@ var Editor = Widget.inherit({
     },
 
     _renderValidationState: function() {
-        var isValid = this.option('isValid'),
-            validationError = this.option('validationError'),
-            validationMessageMode = this.option('validationMessageMode'),
-            $element = this.$element();
+        const isValid = this.option('isValid');
+        const validationError = this.option('validationError');
+        const validationMessageMode = this.option('validationMessageMode');
+        const $element = this.$element();
 
         $element.toggleClass(INVALID_CLASS, !isValid);
         this.setAria('invalid', !isValid || undefined);
@@ -229,7 +229,7 @@ var Editor = Widget.inherit({
                 .html(validationError.message)
                 .appendTo($element);
 
-            var validationTarget = this._getValidationMessageTarget();
+            const validationTarget = this._getValidationMessageTarget();
 
             this._validationMessage = this._createComponent(this._$validationMessage, Overlay, extend({
                 integrationOptions: {},
@@ -252,7 +252,7 @@ var Editor = Widget.inherit({
                 .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === 'auto')
                 .toggleClass(INVALID_MESSAGE_ALWAYS, validationMessageMode === 'always');
 
-            var messageId = 'dx-' + new Guid();
+            const messageId = 'dx-' + new Guid();
 
             this._validationMessage.$content()
                 .addClass(INVALID_MESSAGE_CONTENT)
@@ -275,7 +275,7 @@ var Editor = Widget.inherit({
             return;
         }
 
-        var validationMessageMaxWidth = Math.max(VALIDATION_MESSAGE_MIN_WIDTH, this._getValidationMessageTarget().outerWidth());
+        const validationMessageMaxWidth = Math.max(VALIDATION_MESSAGE_MIN_WIDTH, this._getValidationMessageTarget().outerWidth());
         this._validationMessage.option('maxWidth', validationMessageMaxWidth);
     },
 
@@ -284,11 +284,11 @@ var Editor = Widget.inherit({
     },
 
     _getValidationMessagePosition: function(positionRequest) {
-        var rtlEnabled = this.option('rtlEnabled'),
-            messagePositionSide = getDefaultAlignment(rtlEnabled),
-            messageOriginalOffset = this.option('validationMessageOffset'),
-            messageOffset = { h: messageOriginalOffset.h, v: messageOriginalOffset.v },
-            verticalPositions = positionRequest === 'below' ? [' top', ' bottom'] : [' bottom', ' top'];
+        const rtlEnabled = this.option('rtlEnabled');
+        const messagePositionSide = getDefaultAlignment(rtlEnabled);
+        const messageOriginalOffset = this.option('validationMessageOffset');
+        const messageOffset = { h: messageOriginalOffset.h, v: messageOriginalOffset.v };
+        const verticalPositions = positionRequest === 'below' ? [' top', ' bottom'] : [' bottom', ' top'];
 
         if(rtlEnabled) messageOffset.h = -messageOffset.h;
         if(positionRequest !== 'below') messageOffset.v = -messageOffset.v;
@@ -311,8 +311,8 @@ var Editor = Widget.inherit({
     },
 
     _toggleBackspaceHandler: function(isReadOnly) {
-        var $eventTarget = this._keyboardEventBindingTarget();
-        var eventName = eventUtils.addNamespace('keydown', READONLY_NAMESPACE);
+        const $eventTarget = this._keyboardEventBindingTarget();
+        const eventName = eventUtils.addNamespace('keydown', READONLY_NAMESPACE);
 
         EventsEngine.off($eventTarget, eventName);
 
@@ -326,7 +326,7 @@ var Editor = Widget.inherit({
     },
 
     _dispose: function() {
-        var element = this.$element()[0];
+        const element = this.$element()[0];
 
         dataUtils.data(element, VALIDATION_TARGET, null);
         clearTimeout(this.showValidationMessageTimeout);
@@ -334,7 +334,7 @@ var Editor = Widget.inherit({
     },
 
     _setSubmitElementName: function(name) {
-        var $submitElement = this._getSubmitElement();
+        const $submitElement = this._getSubmitElement();
 
         if(!$submitElement) {
             return;
@@ -398,7 +398,7 @@ var Editor = Widget.inherit({
     * @publicName reset()
     */
     reset: function() {
-        var defaultOptions = this._getDefaultOptions();
+        const defaultOptions = this._getDefaultOptions();
         this.option('value', defaultOptions.value);
     }
 }).include(ValidationMixin);

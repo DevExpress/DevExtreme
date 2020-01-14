@@ -1,14 +1,14 @@
-var renderer = require('core/renderer');
+const renderer = require('core/renderer');
 
 QUnit.module('renderer');
 
 QUnit.test('renderer should return correct element if window contains element with id=toArray', function(assert) {
-    var element = renderer('<div>');
+    const element = renderer('<div>');
     element.attr('id', 'toArray');
 
     document.getElementById('qunit-fixture').appendChild(element[0]);
 
-    var $window = renderer(window);
+    const $window = renderer(window);
     assert.equal($window[0], window);
 });
 
@@ -56,8 +56,8 @@ QUnit.test('Insert tfoot tag', function(assert) {
 });
 
 QUnit.test('Insert tr tag', function(assert) {
-    var table = document.createElement('table');
-    var tbody = document.createElement('tbody');
+    const table = document.createElement('table');
+    const tbody = document.createElement('tbody');
     table.appendChild(tbody);
 
     assert.equal(
@@ -66,8 +66,8 @@ QUnit.test('Insert tr tag', function(assert) {
 });
 
 QUnit.test('Insert into table tag', function(assert) {
-    var table = document.createElement('table');
-    var colgroup = document.createElement('colgroup');
+    const table = document.createElement('table');
+    const colgroup = document.createElement('colgroup');
     table.appendChild(colgroup);
 
     assert.equal(
@@ -76,9 +76,9 @@ QUnit.test('Insert into table tag', function(assert) {
 });
 
 QUnit.test('Insert th tag', function(assert) {
-    var table = document.createElement('table');
-    var tbody = document.createElement('tbody');
-    var tr = document.createElement('tr');
+    const table = document.createElement('table');
+    const tbody = document.createElement('tbody');
+    const tr = document.createElement('tr');
     table.appendChild(tbody);
     tbody.appendChild(tr);
 
@@ -87,9 +87,9 @@ QUnit.test('Insert th tag', function(assert) {
         '<th></th>');
 });
 QUnit.test('Insert td tag', function(assert) {
-    var table = document.createElement('table');
-    var tbody = document.createElement('tbody');
-    var tr = document.createElement('tr');
+    const table = document.createElement('table');
+    const tbody = document.createElement('tbody');
+    const tr = document.createElement('tr');
     table.appendChild(tbody);
     tbody.appendChild(tr);
 
@@ -107,7 +107,7 @@ QUnit.test('Insert thead tag', function(assert) {
 QUnit.module('CSS method');
 
 QUnit.test('Get value', function(assert) {
-    var element = renderer('<div>');
+    let element = renderer('<div>');
 
     document.getElementById('qunit-fixture').appendChild(element[0]);
 
@@ -128,7 +128,7 @@ QUnit.test('Get value', function(assert) {
 });
 
 QUnit.test('Set value', function(assert) {
-    var element = renderer('<div>');
+    let element = renderer('<div>');
 
     document.body.appendChild(element[0]);
 
@@ -150,11 +150,11 @@ QUnit.test('Set value', function(assert) {
 
     assert.equal(window.getComputedStyle(element[0])['position'], 'fixed', 'Set position with object of css values');
     assert.equal(window.getComputedStyle(element[0])['zIndex'], '2', 'Set zIndex with object of css values');
-    var margin = window.getComputedStyle(element[0])['margin'] || window.getComputedStyle(element[0])['marginBottom'];// IE sets marginTop, marginBottom ... instead of margin
+    const margin = window.getComputedStyle(element[0])['margin'] || window.getComputedStyle(element[0])['marginBottom'];// IE sets marginTop, marginBottom ... instead of margin
     assert.equal(margin, '2px', 'Set margin with object of css values');
 
     element = renderer('fake_element');
-    var returnValue = element.css('height', '25px');
+    const returnValue = element.css('height', '25px');
     assert.equal(returnValue, element, 'Return element itself for empty element');
 });
 
@@ -162,9 +162,9 @@ QUnit.module('addClass method');
 
 
 QUnit.test('class should be set for only an element node', function(assert) {
-    var element = renderer('<div>'),
-        textNodeElement = renderer(document.createTextNode('text')),
-        svgElement = renderer(document.createElementNS('http://www.w3.org/2000/svg', 'circle'));
+    const element = renderer('<div>');
+    const textNodeElement = renderer(document.createTextNode('text'));
+    const svgElement = renderer(document.createElementNS('http://www.w3.org/2000/svg', 'circle'));
 
     element.addClass('someClass');
     textNodeElement.addClass('someClass');
@@ -178,7 +178,7 @@ QUnit.test('class should be set for only an element node', function(assert) {
 QUnit.module('removeClass method');
 
 QUnit.test('class should not be set when class name empty', function(assert) {
-    var element = renderer('<div>');
+    const element = renderer('<div>');
     element.addClass('someClass');
 
     element.removeClass(' someClass');
@@ -187,13 +187,13 @@ QUnit.test('class should not be set when class name empty', function(assert) {
 });
 
 QUnit.test('should get class on element', function(assert) {
-    var element = renderer(document.createElementNS('http://www.w3.org/2000/svg', 'circle'));
+    const element = renderer(document.createElementNS('http://www.w3.org/2000/svg', 'circle'));
 
     assert.notOk(element.hasClass('someClass'));
 });
 
 QUnit.test('class should be removed from SVG', function(assert) {
-    var element = renderer(document.createElementNS('http://www.w3.org/2000/svg', 'circle'));
+    const element = renderer(document.createElementNS('http://www.w3.org/2000/svg', 'circle'));
     element.addClass('someClass');
 
     element.removeClass('someClass');
@@ -204,7 +204,7 @@ QUnit.test('class should be removed from SVG', function(assert) {
 QUnit.module('width and height methods');
 
 QUnit.test('width and height should take into consideration borders and paddings if box-sizing is border-box', function(assert) {
-    var $element = renderer('<div>');
+    const $element = renderer('<div>');
     document.getElementById('qunit-fixture').appendChild($element.get(0));
 
     $element.css('boxSizing', 'border-box');
@@ -219,7 +219,7 @@ QUnit.test('width and height should take into consideration borders and paddings
 });
 
 QUnit.test('string value should be set correctly', function(assert) {
-    var $element = renderer('<div>');
+    const $element = renderer('<div>');
     document.getElementById('qunit-fixture').appendChild($element.get(0));
 
     $element.css('boxSizing', 'border-box');
@@ -234,7 +234,7 @@ QUnit.test('string value should be set correctly', function(assert) {
 });
 
 QUnit.test('null and NaN values should not be set in .css()', function(assert) {
-    var $element = renderer('<div>');
+    const $element = renderer('<div>');
     const prop = 'height';
     document.getElementById('qunit-fixture').appendChild($element.get(0));
 
@@ -250,12 +250,12 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
 
 
 ['Width', 'Height'].forEach(function(propName) {
-    var outerPropName = 'outer' + propName;
-    var innerPropName = 'inner' + propName;
+    const outerPropName = 'outer' + propName;
+    const innerPropName = 'inner' + propName;
     propName = propName.toLocaleLowerCase();
 
     QUnit.test(propName + ' shouldn\'t take into consideration borders and paddings if box-sizing isn\'t border-box', function(assert) {
-        var $element = renderer('<div>');
+        const $element = renderer('<div>');
         document.getElementById('qunit-fixture').appendChild($element.get(0));
 
         $element.css('padding', 3);
@@ -267,7 +267,7 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
     });
 
     QUnit.test(outerPropName + ' shouldn\'t take into consideration borders and paddings if box-sizing is border-box', function(assert) {
-        var $element = renderer('<div>');
+        const $element = renderer('<div>');
         document.getElementById('qunit-fixture').appendChild($element.get(0));
 
         $element.css('boxSizing', 'border-box');
@@ -280,7 +280,7 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
     });
 
     QUnit.test(outerPropName + ' shouldn take into consideration borders and paddings if box-sizing isn\'t border-box', function(assert) {
-        var $element = renderer('<div>');
+        const $element = renderer('<div>');
         document.getElementById('qunit-fixture').appendChild($element.get(0));
 
         $element.css('padding', 3);
@@ -292,7 +292,7 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
     });
 
     QUnit.test(innerPropName + ' shouldn\'t take into consideration borders and paddings if box-sizing is border-box', function(assert) {
-        var $element = renderer('<div>');
+        const $element = renderer('<div>');
         document.getElementById('qunit-fixture').appendChild($element.get(0));
 
         $element.css('boxSizing', 'border-box');
@@ -305,7 +305,7 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
     });
 
     QUnit.test(innerPropName + ' shouldn take into consideration borders and paddings if box-sizing isn\'t border-box', function(assert) {
-        var $element = renderer('<div>');
+        const $element = renderer('<div>');
         document.getElementById('qunit-fixture').appendChild($element.get(0));
 
         $element.css('padding', 3);
@@ -320,7 +320,7 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
 QUnit.module('text method');
 
 QUnit.test('shouldn process functions', function(assert) {
-    var element = renderer('<div>');
+    const element = renderer('<div>');
 
     element.text(function() {
         return 'text';
@@ -332,7 +332,7 @@ QUnit.test('shouldn process functions', function(assert) {
 QUnit.module('append method');
 
 QUnit.test('shouldn insert number value', function(assert) {
-    var element = renderer('<div>');
+    const element = renderer('<div>');
 
     element.append(1);
 
@@ -342,14 +342,14 @@ QUnit.test('shouldn insert number value', function(assert) {
 QUnit.module('replaceWith method');
 
 QUnit.test('Should not remove content when replacing the same content', function(assert) {
-    var $element = renderer('<div>');
+    const $element = renderer('<div>');
 
-    var fixture = document.getElementById('qunit-fixture');
+    const fixture = document.getElementById('qunit-fixture');
 
     fixture.appendChild($element.get(0));
     assert.equal(fixture.childElementCount, 1, 'element attached to the DOM');
 
-    var $result = $element.replaceWith($element);
+    const $result = $element.replaceWith($element);
     assert.equal(fixture.childElementCount, 1, 'element still exist');
     assert.equal($element.is($result), true, 'returned value the same element');
 });

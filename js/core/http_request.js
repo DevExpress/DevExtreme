@@ -1,8 +1,8 @@
-var windowUtils = require('./utils/window');
-var window = windowUtils.getWindow();
-var injector = require('./utils/dependency_injector');
+const windowUtils = require('./utils/window');
+const window = windowUtils.getWindow();
+const injector = require('./utils/dependency_injector');
 
-var nativeXMLHttpRequest = {
+const nativeXMLHttpRequest = {
     getXhr: function() {
         return new window.XMLHttpRequest();
     }

@@ -1,8 +1,8 @@
-var Globalize = require('globalize'),
-    coreLocalization = require('../core');
+const Globalize = require('globalize');
+const coreLocalization = require('../core');
 
 if(Globalize && Globalize.load) {
-    var likelySubtags = {
+    const likelySubtags = {
         'supplemental': {
             'version': {
                 '_cldrVersion': '28',

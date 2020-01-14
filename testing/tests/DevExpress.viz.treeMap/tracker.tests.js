@@ -1,11 +1,11 @@
-var common = require('./commonParts/common.js'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    $ = require('jquery'),
+const common = require('./commonParts/common.js');
+const vizMocks = require('../../helpers/vizMocks.js');
+const $ = require('jquery');
 
-    trackerModule = require('viz/tree_map/tracker'),
-    tooltipModule = require('viz/core/tooltip'),
-    clickEventName = require('events/click').name,
-    pointerEvents = require('events/pointer');
+const trackerModule = require('viz/tree_map/tracker');
+const tooltipModule = require('viz/core/tooltip');
+const clickEventName = require('events/click').name;
+const pointerEvents = require('events/pointer');
 
 // Actually testing "data" applying is bad because it is totally internal part. But it allows to test events in a slightly simple way -
 // by triggering events on custom divs with data. Otherwise we would have to create widgets with real renderers, search the DOM for
@@ -68,11 +68,11 @@ QUnit.test('Header labels', function(assert) {
 });
 
 QUnit.test('Two widgets do not have data intersection', function(assert) {
-    var renderer1 = common.createRenderer();
+    const renderer1 = common.createRenderer();
     $('<div>').css({ width: 600, height: 400 }).appendTo('#qunit-fixture').dxTreeMap({
         dataSource: [{ value: 1 }, { value: 2 }]
     });
-    var renderer2 = common.createRenderer();
+    const renderer2 = common.createRenderer();
     $('<div>').css({ width: 600, height: 400 }).appendTo('#qunit-fixture').dxTreeMap({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     });
@@ -80,14 +80,14 @@ QUnit.test('Two widgets do not have data intersection', function(assert) {
     assert.notStrictEqual(renderer1.simpleRect.returnValues[0].data.lastCall.args[0], renderer2.simpleRect.returnValues[0].data.lastCall.args[0]);
 });
 
-var environment = {
+const environment = {
     beforeEach: function() {
         common.environment.beforeEach.apply(this, arguments);
         this.renderer.root.element = $('<div>').appendTo('#test-container')[0];
     },
 
     trigger: function(name, data, options) {
-        var $target = $('<div>').appendTo(this.renderer.root.element);
+        const $target = $('<div>').appendTo(this.renderer.root.element);
         $target[0][trackerModule._TESTS_dataKey] = data;
         $target.trigger($.Event(name, options));
     }
@@ -99,8 +99,8 @@ QUnit.test('Default is prevented and propagation is stopped on down', function(a
     common.createWidget({
         dataSource: [{ value: 1 }]
     });
-    var $target = $('<div>').appendTo(this.renderer.root.element),
-        $event = $.Event(pointerEvents.down);
+    const $target = $('<div>').appendTo(this.renderer.root.element);
+    const $event = $.Event(pointerEvents.down);
     $target[0][trackerModule._TESTS_dataKey] = 1;
 
     $target.trigger($event);
@@ -111,11 +111,11 @@ QUnit.test('Default is prevented and propagation is stopped on down', function(a
 
 QUnit.test('Click', function(assert) {
     this.renderer.offsetTemplate = { left: 40, top: 30 };
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
-            onClick: spy
-        });
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        onClick: spy
+    });
 
     this.trigger(clickEventName, 2, { pageX: 400, pageY: 300 });
 
@@ -126,22 +126,22 @@ QUnit.test('Click', function(assert) {
 
 QUnit.test('Click tile with \'interactWithGroup\' option', function(assert) {
     this.renderer.offsetTemplate = { left: 40, top: 30 };
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{
-                items: [{
-                    value: 1
-                }]
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{
+            items: [{
+                value: 1
+            }]
+        }, {
+            items: [{
+                value: 2
             }, {
-                items: [{
-                    value: 2
-                }, {
-                    value: 3
-                }]
-            }],
-            interactWithGroup: true,
-            onClick: spy
-        });
+                value: 3
+            }]
+        }],
+        interactWithGroup: true,
+        onClick: spy
+    });
 
     this.trigger(clickEventName, 3, { pageX: 400, pageY: 300 });
 
@@ -151,16 +151,16 @@ QUnit.test('Click tile with \'interactWithGroup\' option', function(assert) {
 });
 
 QUnit.test('Click tile with \'interactWithGroup\' when parent is not shown', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{
-                value: 1
-            }, {
-                value: 2
-            }],
-            interactWithGroup: true,
-            onClick: spy
-        });
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{
+            value: 1
+        }, {
+            value: 2
+        }],
+        interactWithGroup: true,
+        onClick: spy
+    });
 
     this.trigger(clickEventName, 1, {});
 
@@ -169,11 +169,11 @@ QUnit.test('Click tile with \'interactWithGroup\' when parent is not shown', fun
 });
 
 QUnit.test('Hover on', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
-            onHoverChanged: spy
-        });
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        onHoverChanged: spy
+    });
 
     this.trigger(pointerEvents.move, 2);
 
@@ -183,11 +183,11 @@ QUnit.test('Hover on', function(assert) {
 });
 
 QUnit.test('Hover off', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
-            onHoverChanged: spy
-        });
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        onHoverChanged: spy
+    });
     this.trigger(pointerEvents.move, 2);
     spy.reset();
 
@@ -201,11 +201,11 @@ QUnit.test('Hover off', function(assert) {
 });
 
 QUnit.test('Hover on / touch', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
-            onHoverChanged: spy
-        });
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        onHoverChanged: spy
+    });
 
     this.trigger(pointerEvents.down, 2);
 
@@ -215,7 +215,7 @@ QUnit.test('Hover on / touch', function(assert) {
 });
 
 QUnit.test('Hovering same element several times does not cause hover changes', function(assert) {
-    var spy = sinon.spy();
+    const spy = sinon.spy();
     common.createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
         onHoverChanged: spy
@@ -231,11 +231,11 @@ QUnit.test('Hovering same element several times does not cause hover changes', f
 });
 
 QUnit.test('Hovering unknown element turns current hover off', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
-            onHoverChanged: spy
-        });
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        onHoverChanged: spy
+    });
     this.trigger(pointerEvents.move, 2);
     spy.reset();
 
@@ -247,22 +247,22 @@ QUnit.test('Hovering unknown element turns current hover off', function(assert) 
 });
 
 QUnit.test('Hover with \'interactWithGroup\' option', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{
-                items: [{
-                    value: 1
-                }]
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{
+            items: [{
+                value: 1
+            }]
+        }, {
+            items: [{
+                value: 2
             }, {
-                items: [{
-                    value: 2
-                }, {
-                    value: 3
-                }]
-            }],
-            interactWithGroup: true,
-            onHoverChanged: spy
-        });
+                value: 3
+            }]
+        }],
+        interactWithGroup: true,
+        onHoverChanged: spy
+    });
 
     this.trigger(pointerEvents.move, 3);
 
@@ -288,7 +288,7 @@ QUnit.module('Tooltip', $.extend({}, environment, {
 }));
 
 QUnit.test('Tooltip is shown on hover', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
         tooltip: {
             enabled: true
@@ -315,7 +315,7 @@ QUnit.test('Tooltip is not shown on hover if tooltip disabled', function(assert)
 });
 
 QUnit.test('Tooltip is shown on touch', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
         tooltip: {
             enabled: true
@@ -329,7 +329,7 @@ QUnit.test('Tooltip is shown on touch', function(assert) {
 });
 
 QUnit.test('Hovering same element several times does not cause several tooltip shows', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
         tooltip: {
             enabled: true
@@ -348,7 +348,7 @@ QUnit.test('Hovering same element several times does not cause several tooltip s
 });
 
 QUnit.test('Hovering unknown element hides tooltip', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
         tooltip: {
             enabled: true
@@ -362,7 +362,7 @@ QUnit.test('Hovering unknown element hides tooltip', function(assert) {
 });
 
 QUnit.test('Show tooltip with \'interactWithGroup\' option', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{
             items: [{
                 value: 1

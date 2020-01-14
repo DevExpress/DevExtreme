@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<div>\
     <div class="dx-datagrid">\
         <div id="container"></div>\
@@ -46,7 +46,7 @@ QUnit.module('Error handling', {
 
 QUnit.test('Initialization', function(assert) {
     // arrange
-    var errorHandlingController = this.errorHandlingController;
+    const errorHandlingController = this.errorHandlingController;
 
     // assert
     assert.ok(errorHandlingController._rowsView, 'initialization rows view');
@@ -55,10 +55,10 @@ QUnit.test('Initialization', function(assert) {
 
 QUnit.test('Render error row in column headers view', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container'),
-        $headerRow,
-        $errorRow;
+    const that = this;
+    const $testElement = $('#container');
+    let $headerRow;
+    let $errorRow;
 
     that.columnHeadersView.render($testElement);
 
@@ -83,9 +83,9 @@ QUnit.test('Render error row in column headers view', function(assert) {
 // T653307
 QUnit.test('Render error row in rows view if column headers are hidden', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container'),
-        $firstRow;
+    const that = this;
+    const $testElement = $('#container');
+    let $firstRow;
 
     this.options.showColumnHeaders = false;
 
@@ -103,10 +103,10 @@ QUnit.test('Render error row in rows view if column headers are hidden', functio
 
 QUnit.test('Render error row in rows view', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container'),
-        $rowsView,
-        $errorRow;
+    const that = this;
+    const $testElement = $('#container');
+    let $rowsView;
+    let $errorRow;
 
     that.columnHeadersView.getColumnCount = function() {
         return that.columns.length;
@@ -131,10 +131,10 @@ QUnit.test('Render error row in rows view', function(assert) {
 
 QUnit.test('Close error row', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container'),
-        $rowsView,
-        $errorRow;
+    const that = this;
+    const $testElement = $('#container');
+    let $rowsView;
+    let $errorRow;
 
     that.columnHeadersView.getColumnCount = function() {
         return that.columns.length;
@@ -167,9 +167,9 @@ QUnit.test('Close error row', function(assert) {
 // T372560
 QUnit.test('Remove error row after save edit data', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container'),
-        $errorRow;
+    const that = this;
+    const $testElement = $('#container');
+    let $errorRow;
 
     that.columnHeadersView.render($testElement);
 
@@ -211,9 +211,9 @@ QUnit.test('Remove error row after save edit data', function(assert) {
 // T679666
 QUnit.test('Remove error row in rows view after cancel edit data', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container'),
-        $errorRow;
+    const that = this;
+    const $testElement = $('#container');
+    let $errorRow;
 
     that.columnHeadersView.render($testElement);
     that.rowsView.render($testElement);
@@ -245,11 +245,11 @@ QUnit.test('Remove error row in rows view after cancel edit data', function(asse
 // T432507
 QUnit.test('Repaint error row in rows view', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container'),
-        $table,
-        $rowsView,
-        $errorRow;
+    const that = this;
+    const $testElement = $('#container');
+    let $table;
+    let $rowsView;
+    let $errorRow;
 
     that.columnHeadersView.getColumnCount = function() {
         return that.columns.length;

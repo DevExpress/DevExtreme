@@ -418,7 +418,7 @@ class FilesTreeViewModel {
             return;
         }
 
-        for(let key in this._itemMap) {
+        for(const key in this._itemMap) {
             if(!Object.prototype.hasOwnProperty.call(this._itemMap, key)) {
                 continue;
             }

@@ -1,11 +1,11 @@
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    layoutElementModule = require('viz/core/layout_element');
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const layoutElementModule = require('viz/core/layout_element');
 
-var LayoutElement = layoutElementModule.LayoutElement,
-    WrapperLayoutElement = layoutElementModule.WrapperLayoutElement,
-    environmentLE,
-    environmentW;
+const LayoutElement = layoutElementModule.LayoutElement;
+const WrapperLayoutElement = layoutElementModule.WrapperLayoutElement;
+let environmentLE;
+let environmentW;
 
 environmentLE = {
     createLayoutElement: function(options) {
@@ -14,11 +14,11 @@ environmentLE = {
         },
         options);
 
-        var layoutElement = new LayoutElement(options);
+        const layoutElement = new LayoutElement(options);
         layoutElement.shift = sinon.spy();
         layoutElement.draw = sinon.spy();
         layoutElement.getLayoutOptions = function() {
-            var options = this._options;
+            const options = this._options;
             return {
                 position: {
                     horizontal: options.horizontalAlignment,
@@ -36,7 +36,7 @@ environmentLE = {
 
 environmentW = {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.bBoxes = [];
         this.renderer = new vizMocks.Renderer();
         this.renderer.bBoxTemplate = function() {
@@ -59,8 +59,8 @@ QUnit.test('Simple create', function(assert) {
 });
 
 QUnit.test('Set default position', function(assert) {
-    var LE1 = this.createLayoutElement(),
-        LE2 = this.createLayoutElement();
+    const LE1 = this.createLayoutElement();
+    const LE2 = this.createLayoutElement();
 
     LE1.position({
         of: LE2,
@@ -73,8 +73,8 @@ QUnit.test('Set default position', function(assert) {
 });
 
 QUnit.test('Set position not empty elements', function(assert) {
-    var LE1 = this.createLayoutElement({ x: 0, y: 0, width: 10, height: 10 }),
-        LE2 = this.createLayoutElement({ x: 5, y: 5, width: 20, height: 20 });
+    const LE1 = this.createLayoutElement({ x: 0, y: 0, width: 10, height: 10 });
+    const LE2 = this.createLayoutElement({ x: 5, y: 5, width: 20, height: 20 });
 
     LE1.position({
         of: LE2,
@@ -86,8 +86,8 @@ QUnit.test('Set position not empty elements', function(assert) {
 });
 
 QUnit.test('Set position left bottom, left bottom', function(assert) {
-    var LE1 = this.createLayoutElement({ x: 5, y: 5, width: 10, height: 10 }),
-        LE2 = this.createLayoutElement({ x: 5, y: 5, width: 20, height: 20 });
+    const LE1 = this.createLayoutElement({ x: 5, y: 5, width: 10, height: 10 });
+    const LE2 = this.createLayoutElement({ x: 5, y: 5, width: 20, height: 20 });
 
     LE1.position({
         of: LE2,
@@ -99,8 +99,8 @@ QUnit.test('Set position left bottom, left bottom', function(assert) {
 });
 
 QUnit.test('Set position right top, right top', function(assert) {
-    var LE1 = this.createLayoutElement({ x: 5, y: 5, width: 10, height: 10 }),
-        LE2 = this.createLayoutElement({ x: 5, y: 5, width: 20, height: 20 });
+    const LE1 = this.createLayoutElement({ x: 5, y: 5, width: 10, height: 10 });
+    const LE2 = this.createLayoutElement({ x: 5, y: 5, width: 20, height: 20 });
 
     LE1.position({
         of: LE2,
@@ -112,8 +112,8 @@ QUnit.test('Set position right top, right top', function(assert) {
 });
 
 QUnit.test('Set position right top, right top. With offset', function(assert) {
-    var LE1 = this.createLayoutElement({ x: 5, y: 5, width: 10, height: 10 }),
-        LE2 = this.createLayoutElement({ x: 5, y: 5, width: 20, height: 20 });
+    const LE1 = this.createLayoutElement({ x: 5, y: 5, width: 10, height: 10 });
+    const LE2 = this.createLayoutElement({ x: 5, y: 5, width: 20, height: 20 });
 
     LE1.position({
         of: LE2,
@@ -129,8 +129,8 @@ QUnit.test('Set position right top, right top. With offset', function(assert) {
 });
 
 QUnit.test('Set position. Round coord', function(assert) {
-    var LE1 = this.createLayoutElement({ x: 5, y: 5, width: 11, height: 11 }),
-        LE2 = this.createLayoutElement({ x: 5, y: 5, width: 20, height: 20 });
+    const LE1 = this.createLayoutElement({ x: 5, y: 5, width: 11, height: 11 });
+    const LE2 = this.createLayoutElement({ x: 5, y: 5, width: 20, height: 20 });
 
     LE1.position({
         of: LE2,
@@ -144,7 +144,7 @@ QUnit.test('Set position. Round coord', function(assert) {
 QUnit.module('Get BBox', environmentLE);
 
 QUnit.test('simple getLayoutOptions', function(assert) {
-    var LE = this.createLayoutElement({ x: 11, y: 23, width: 99, height: 10, verticalAlignment: 'bottom', horizontalAlignment: 'right' });
+    const LE = this.createLayoutElement({ x: 11, y: 23, width: 99, height: 10, verticalAlignment: 'bottom', horizontalAlignment: 'right' });
 
     assert.deepEqual(LE.getLayoutOptions(), { x: 11, y: 23, width: 99, height: 10, position: { vertical: 'bottom', horizontal: 'right' } });
 });

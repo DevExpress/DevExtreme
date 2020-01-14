@@ -1,18 +1,18 @@
 import { hasWindow } from '../../core/utils/window';
 import { createColumnsInfo } from './ui.grid_core.virtual_columns_core';
 
-var DEFAULT_COLUMN_WIDTH = 50;
+const DEFAULT_COLUMN_WIDTH = 50;
 
-var VirtualScrollingRowsViewExtender = {
+const VirtualScrollingRowsViewExtender = {
     _resizeCore: function() {
         this.callBase.apply(this, arguments);
         this._columnsController.resize();
     },
 
     _handleScroll: function(e) {
-        var that = this,
-            scrollable = this.getScrollable(),
-            left = e.scrollOffset.left;
+        const that = this;
+        const scrollable = this.getScrollable();
+        let left = e.scrollOffset.left;
 
         that.callBase.apply(that, arguments);
 
@@ -24,10 +24,10 @@ var VirtualScrollingRowsViewExtender = {
     }
 };
 
-var HeaderFooterViewExtender = {
+const HeaderFooterViewExtender = {
     _renderCore: function() {
-        var that = this,
-            scrollLeft = that._scrollLeft;
+        const that = this;
+        const scrollLeft = that._scrollLeft;
 
         that.callBase.apply(that, arguments);
 
@@ -38,14 +38,14 @@ var HeaderFooterViewExtender = {
     }
 };
 
-var ColumnsControllerExtender = (function() {
-    var getWidths = function(columns) {
+const ColumnsControllerExtender = (function() {
+    const getWidths = function(columns) {
         return columns.map(column => column.visibleWidth || parseFloat(column.width) || DEFAULT_COLUMN_WIDTH);
     };
 
-    var members = {
+    const members = {
         init: function() {
-            var that = this;
+            const that = this;
             that.callBase();
 
             that._beginPageIndex = 0;
@@ -58,11 +58,11 @@ var ColumnsControllerExtender = (function() {
             this._virtualVisibleColumns = {};
         },
         getBeginPageIndex: function(position) {
-            var visibleColumns = this.getVisibleColumns(undefined, true),
-                widths = getWidths(visibleColumns),
-                currentPosition = 0;
+            const visibleColumns = this.getVisibleColumns(undefined, true);
+            const widths = getWidths(visibleColumns);
+            let currentPosition = 0;
 
-            for(var index = 0; index < widths.length; index++) {
+            for(let index = 0; index < widths.length; index++) {
                 if(currentPosition >= position) {
                     return Math.floor(index / this.getColumnPageSize());
                 }
@@ -72,20 +72,20 @@ var ColumnsControllerExtender = (function() {
             return 0;
         },
         getTotalWidth: function() {
-            var width = this.option('width');
+            const width = this.option('width');
             if(typeof width === 'number') {
                 return width;
             }
             return this.getController('resizing')._lastWidth || this.component.$element().outerWidth();
         },
         getEndPageIndex: function(position) {
-            var visibleColumns = this.getVisibleColumns(undefined, true),
-                widths = getWidths(visibleColumns),
-                currentPosition = 0;
+            const visibleColumns = this.getVisibleColumns(undefined, true);
+            const widths = getWidths(visibleColumns);
+            let currentPosition = 0;
 
             position += this.getTotalWidth();
 
-            for(var index = 0; index < widths.length; index++) {
+            for(let index = 0; index < widths.length; index++) {
                 if(currentPosition >= position) {
                     return Math.ceil(index / this.getColumnPageSize());
                 }
@@ -98,7 +98,7 @@ var ColumnsControllerExtender = (function() {
             return this.option('scrolling.columnPageSize');
         },
         _fireColumnsChanged: function() {
-            var date = new Date();
+            const date = new Date();
             this.columnsChanged.fire({
                 optionNames: { all: true, length: 1 },
                 changeTypes: { columns: true, length: 1 }
@@ -106,8 +106,8 @@ var ColumnsControllerExtender = (function() {
             this._renderTime = new Date() - date;
         },
         setScrollPosition: function(position) {
-            var that = this,
-                renderingThreshold = that.option('scrolling.columnRenderingThreshold');
+            const that = this;
+            const renderingThreshold = that.option('scrolling.columnRenderingThreshold');
 
             if(that._renderTime > renderingThreshold) {
                 clearTimeout(that._changedTimeout);
@@ -126,12 +126,12 @@ var ColumnsControllerExtender = (function() {
             this._setScrollPositionCore(this._position);
         },
         _setScrollPositionCore: function(position) {
-            var that = this;
+            const that = this;
 
             if(that.isVirtualMode()) {
-                var beginPageIndex = that.getBeginPageIndex(position),
-                    endPageIndex = that.getEndPageIndex(position),
-                    needColumnsChanged = position < that._position ? that._beginPageIndex > beginPageIndex : that._endPageIndex < endPageIndex;
+                const beginPageIndex = that.getBeginPageIndex(position);
+                const endPageIndex = that.getEndPageIndex(position);
+                const needColumnsChanged = position < that._position ? that._beginPageIndex > beginPageIndex : that._endPageIndex < endPageIndex;
 
                 that._position = position;
                 if(needColumnsChanged) {
@@ -142,9 +142,9 @@ var ColumnsControllerExtender = (function() {
             }
         },
         getFixedColumns: function(rowIndex, isBase) {
-            var fixedColumns = this.callBase(rowIndex);
+            const fixedColumns = this.callBase(rowIndex);
             if(this.isVirtualMode() && !isBase && fixedColumns.length) {
-                var transparentColumnIndex = fixedColumns.map(c => c.command).indexOf('transparent');
+                const transparentColumnIndex = fixedColumns.map(c => c.command).indexOf('transparent');
                 fixedColumns[transparentColumnIndex].colspan = this.getVisibleColumns().length - this.callBase().length + 1;
                 return fixedColumns;
             }
@@ -161,43 +161,43 @@ var ColumnsControllerExtender = (function() {
                 this._endPageIndex = this.getEndPageIndex(this._position);
             }
 
-            var beginPageIndex = this._beginPageIndex,
-                endPageIndex = this._endPageIndex,
-                visibleColumnsHash = rowIndex + '-' + beginPageIndex + '-' + endPageIndex;
+            const beginPageIndex = this._beginPageIndex;
+            const endPageIndex = this._endPageIndex;
+            const visibleColumnsHash = rowIndex + '-' + beginPageIndex + '-' + endPageIndex;
 
             if(this._virtualVisibleColumns[visibleColumnsHash]) {
                 return this._virtualVisibleColumns[visibleColumnsHash];
             }
 
-            var visibleColumns = this.callBase(),
-                rowCount = this.getRowCount(),
-                pageSize = this.getColumnPageSize(),
-                startIndex = beginPageIndex * pageSize,
-                endIndex = endPageIndex * pageSize,
-                fixedColumns = this.getFixedColumns(undefined, true),
-                transparentColumnIndex = fixedColumns.map(c => c.command).indexOf('transparent');
+            let visibleColumns = this.callBase();
+            const rowCount = this.getRowCount();
+            const pageSize = this.getColumnPageSize();
+            let startIndex = beginPageIndex * pageSize;
+            let endIndex = endPageIndex * pageSize;
+            const fixedColumns = this.getFixedColumns(undefined, true);
+            const transparentColumnIndex = fixedColumns.map(c => c.command).indexOf('transparent');
 
-            var beginFixedColumnCount = fixedColumns.length ? transparentColumnIndex : 0;
-            var beginFixedColumns = visibleColumns.slice(0, beginFixedColumnCount);
-            var beginColumns = visibleColumns.slice(beginFixedColumnCount, startIndex);
-            var beginWidth = getWidths(beginColumns).reduce((a, b) => a + b, 0);
+            const beginFixedColumnCount = fixedColumns.length ? transparentColumnIndex : 0;
+            let beginFixedColumns = visibleColumns.slice(0, beginFixedColumnCount);
+            const beginColumns = visibleColumns.slice(beginFixedColumnCount, startIndex);
+            const beginWidth = getWidths(beginColumns).reduce((a, b) => a + b, 0);
 
             if(!beginWidth) {
                 startIndex = 0;
             }
 
-            var endFixedColumnCount = fixedColumns.length ? fixedColumns.length - transparentColumnIndex - 1 : 0;
-            var endFixedColumns = visibleColumns.slice(visibleColumns.length - endFixedColumnCount);
-            var endColumns = visibleColumns.slice(endIndex, visibleColumns.length - endFixedColumnCount);
-            var endWidth = getWidths(endColumns).reduce((a, b) => a + b, 0);
+            const endFixedColumnCount = fixedColumns.length ? fixedColumns.length - transparentColumnIndex - 1 : 0;
+            let endFixedColumns = visibleColumns.slice(visibleColumns.length - endFixedColumnCount);
+            const endColumns = visibleColumns.slice(endIndex, visibleColumns.length - endFixedColumnCount);
+            const endWidth = getWidths(endColumns).reduce((a, b) => a + b, 0);
 
             if(!endWidth) {
                 endIndex = visibleColumns.length;
             }
 
             if(rowCount > 1 && typeof rowIndex === 'number') {
-                var columnsInfo = [];
-                for(var i = 0; i < rowCount; i++) {
+                const columnsInfo = [];
+                for(let i = 0; i < rowCount; i++) {
                     columnsInfo.push(this.callBase(i));
                 }
                 beginFixedColumns = createColumnsInfo(columnsInfo, 0, beginFixedColumns.length)[rowIndex] || [];

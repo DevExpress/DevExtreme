@@ -1,17 +1,17 @@
-var $ = require('jquery'),
-    registerEvent = require('events/core/event_registrator'),
-    eventsEngine = require('events/core/events_engine'),
-    registerEventCallbacks = require('events/core/event_registrator_callbacks'),
-    Class = require('core/class');
+const $ = require('jquery');
+const registerEvent = require('events/core/event_registrator');
+const eventsEngine = require('events/core/events_engine');
+const registerEventCallbacks = require('events/core/event_registrator_callbacks');
+const Class = require('core/class');
 
-var eventHelper = require('../../helpers/eventHelper.js');
+const eventHelper = require('../../helpers/eventHelper.js');
 
 registerEventCallbacks.add(function(name, eventObject) {
     eventHelper.special[name] = eventObject;
 });
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="container">\
             <div id="element"></div>\
         </div>';
@@ -21,9 +21,9 @@ QUnit.testStart(function() {
 
 QUnit.module('event registration', {
     beforeEach: function() {
-        var impl = Class.inherit({
+        const impl = Class.inherit({
             ctor: function() {
-                var impl = this;
+                const impl = this;
 
                 impl.LOG = { };
 
@@ -76,9 +76,9 @@ QUnit.test('\'delegateType\' property', function(assert) {
 });
 
 QUnit.test('\'setup\' method', function(assert) {
-    var data = {},
-        handler = function() { },
-        LOG;
+    const data = {};
+    const handler = function() { };
+    let LOG;
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', data, handler);
 
@@ -92,9 +92,9 @@ QUnit.test('\'setup\' method', function(assert) {
 });
 
 QUnit.test('\'teardown\' method', function(assert) {
-    var data = {},
-        handler = function() { },
-        LOG;
+    const data = {};
+    const handler = function() { };
+    let LOG;
 
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', data, handler);
@@ -110,9 +110,9 @@ QUnit.test('\'teardown\' method', function(assert) {
 });
 
 QUnit.test('\'add\' method', function(assert) {
-    var data = {},
-        handler = function() { },
-        LOG;
+    const data = {};
+    const handler = function() { };
+    let LOG;
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', '.some', data, handler);
 
@@ -130,9 +130,9 @@ QUnit.test('\'add\' method', function(assert) {
 });
 
 QUnit.test('\'remove\' method', function(assert) {
-    var data = {},
-        handler = function() { },
-        LOG;
+    const data = {};
+    const handler = function() { };
+    let LOG;
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', '.some', data, handler);
     eventsEngine.off(this.element, 'dxtestevent.test1.test2', handler);
@@ -151,10 +151,10 @@ QUnit.test('\'remove\' method', function(assert) {
 });
 
 QUnit.test('\'trigger\' method', function(assert) {
-    var data = {},
-        handler = function() { },
-        event = eventsEngine.Event('dxtestevent'),
-        LOG;
+    const data = {};
+    const handler = function() { };
+    const event = eventsEngine.Event('dxtestevent');
+    let LOG;
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', handler);
     eventsEngine.trigger(this.element, event, data);
@@ -168,10 +168,10 @@ QUnit.test('\'trigger\' method', function(assert) {
 });
 
 QUnit.test('\'_default\' method', function(assert) {
-    var data = {},
-        handler = function() { },
-        event = eventsEngine.Event('dxtestevent'),
-        LOG;
+    const data = {};
+    const handler = function() { };
+    const event = eventsEngine.Event('dxtestevent');
+    let LOG;
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', data, handler);
     eventsEngine.trigger(this.element, event, data);
@@ -184,10 +184,10 @@ QUnit.test('\'_default\' method', function(assert) {
 });
 
 QUnit.test('\'handle\' method', function(assert) {
-    var data = {},
-        handler = function() { },
-        event = eventsEngine.Event('dxtestevent'),
-        LOG;
+    const data = {};
+    const handler = function() { };
+    const event = eventsEngine.Event('dxtestevent');
+    let LOG;
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', data, handler);
     eventsEngine.trigger(this.element, event, data);

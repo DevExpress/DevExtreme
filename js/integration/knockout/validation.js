@@ -1,12 +1,12 @@
-var each = require('../../core/utils/iterator').each,
-    Class = require('../../core/class'),
-    EventsMixin = require('../../core/events_mixin'),
-    ValidationEngine = require('../../ui/validation_engine'),
-    ko = require('knockout');
+const each = require('../../core/utils/iterator').each;
+const Class = require('../../core/class');
+const EventsMixin = require('../../core/events_mixin');
+const ValidationEngine = require('../../ui/validation_engine');
+const ko = require('knockout');
 
-var koDxValidator = Class.inherit({
+const koDxValidator = Class.inherit({
     ctor: function(target, option) {
-        var that = this;
+        const that = this;
         that.target = target;
         that.validationRules = option.validationRules;
         that.name = option.name;
@@ -20,14 +20,14 @@ var koDxValidator = Class.inherit({
 
 
     validate: function() {
-        var result = ValidationEngine.validate(this.target(), this.validationRules, this.name);
+        const result = ValidationEngine.validate(this.target(), this.validationRules, this.name);
         this._applyValidationResult(result);
         return result;
     },
 
     reset: function() {
         this.target(null);
-        var result = { isValid: true, brokenRule: null };
+        const result = { isValid: true, brokenRule: null };
         this._applyValidationResult(result);
         return result;
     },

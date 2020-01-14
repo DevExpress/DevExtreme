@@ -1,12 +1,12 @@
-var Calendar = require('../calendar'),
-    DateBoxStrategy = require('./ui.date_box.strategy'),
-    dateUtils = require('../../core/utils/date'),
-    commonUtils = require('../../core/utils/common'),
-    isFunction = require('../../core/utils/type').isFunction,
-    extend = require('../../core/utils/extend').extend,
-    messageLocalization = require('../../localization/message');
+const Calendar = require('../calendar');
+const DateBoxStrategy = require('./ui.date_box.strategy');
+const dateUtils = require('../../core/utils/date');
+const commonUtils = require('../../core/utils/common');
+const isFunction = require('../../core/utils/type').isFunction;
+const extend = require('../../core/utils/extend').extend;
+const messageLocalization = require('../../localization/message');
 
-var CalendarStrategy = DateBoxStrategy.inherit({
+const CalendarStrategy = DateBoxStrategy.inherit({
 
     NAME: 'Calendar',
 
@@ -27,7 +27,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
                     e.preventDefault();
 
                     if(this._widget.option('zoomLevel') === this._widget.option('maxZoomLevel')) {
-                        var contouredDate = this._widget._view.option('contouredDate');
+                        const contouredDate = this._widget._view.option('contouredDate');
                         contouredDate && this.dateBoxValue(contouredDate, e);
 
                         this.dateBox.close();
@@ -51,7 +51,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _getWidgetOptions: function() {
-        var disabledDates = this.dateBox.option('disabledDates');
+        const disabledDates = this.dateBox.option('disabledDates');
 
         return extend(this.dateBox.option('calendarOptions'), {
             value: this.dateBoxValue() || null,
@@ -69,7 +69,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _injectComponent: function(func) {
-        var that = this;
+        const that = this;
         return function(params) {
             extend(params, { component: that.dateBox });
             return func(params);
@@ -81,10 +81,10 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     popupConfig: function(popupConfig) {
-        var toolbarItems = popupConfig.toolbarItems,
-            buttonsLocation = this.dateBox.option('buttonsLocation');
+        const toolbarItems = popupConfig.toolbarItems;
+        const buttonsLocation = this.dateBox.option('buttonsLocation');
 
-        var position = [];
+        let position = [];
 
         if(buttonsLocation !== 'default') {
             position = commonUtils.splitPair(buttonsLocation);
@@ -122,9 +122,9 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _valueChangedHandler: function(e) {
-        var dateBox = this.dateBox,
-            value = e.value,
-            prevValue = e.previousValue;
+        const dateBox = this.dateBox;
+        const value = e.value;
+        const prevValue = e.previousValue;
 
         if(dateUtils.sameDate(value, prevValue)) {
             return;
@@ -150,7 +150,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _cellClickHandler: function(e) {
-        var dateBox = this.dateBox;
+        const dateBox = this.dateBox;
 
         if(dateBox.option('applyValueMode') === 'instantly') {
             dateBox.option('opened', false);

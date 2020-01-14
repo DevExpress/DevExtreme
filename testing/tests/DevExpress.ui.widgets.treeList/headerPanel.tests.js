@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<!--qunit-fixture-->\
     <div id="container">\
         <div id="treeList">\
@@ -19,8 +19,8 @@ import { setupTreeListModules, MockColumnsController, MockDataController } from 
 
 fx.off = true;
 
-var setupModule = function() {
-    var that = this;
+const setupModule = function() {
+    const that = this;
 
     that.options = {};
     that.columns = [
@@ -40,7 +40,7 @@ var setupModule = function() {
     };
 };
 
-var teardownModule = function() {
+const teardownModule = function() {
     this.dispose();
 };
 
@@ -48,7 +48,7 @@ QUnit.module('Header panel', { beforeEach: setupModule, afterEach: teardownModul
 
 QUnit.test('Draw edit buttons', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch',
@@ -68,7 +68,7 @@ QUnit.test('Draw edit buttons', function(assert) {
 
 QUnit.test('Draw column chooser button', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.columnChooser = {
         enabled: true

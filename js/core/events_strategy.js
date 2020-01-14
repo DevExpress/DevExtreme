@@ -1,7 +1,7 @@
-var Callbacks = require('./utils/callbacks'),
-    isFunction = require('./utils/type').isFunction,
-    each = require('./utils/iterator').each,
-    Class = require('./class');
+const Callbacks = require('./utils/callbacks');
+const isFunction = require('./utils/type').isFunction;
+const each = require('./utils/iterator').each;
+const Class = require('./class');
 
 module.exports = Class.inherit({
     ctor: function(owner) {
@@ -10,7 +10,7 @@ module.exports = Class.inherit({
     },
 
     hasEvent: function(eventName) {
-        var callbacks = this._events[eventName];
+        const callbacks = this._events[eventName];
         if(callbacks) {
             return callbacks.has();
         }
@@ -18,15 +18,15 @@ module.exports = Class.inherit({
     },
 
     fireEvent: function(eventName, eventArgs) {
-        var callbacks = this._events[eventName];
+        const callbacks = this._events[eventName];
         if(callbacks) {
             callbacks.fireWith(this._owner, eventArgs);
         }
     },
 
     on: function(eventName, eventHandler) {
-        var callbacks = this._events[eventName],
-            addFn;
+        let callbacks = this._events[eventName];
+        let addFn;
 
         if(!callbacks) {
             callbacks = Callbacks();
@@ -37,7 +37,7 @@ module.exports = Class.inherit({
     },
 
     off: function(eventName, eventHandler) {
-        var callbacks = this._events[eventName];
+        const callbacks = this._events[eventName];
         if(callbacks) {
             if(isFunction(eventHandler)) {
                 callbacks.remove(eventHandler);

@@ -1,15 +1,15 @@
-var Class = require('../core/class'),
-    extend = require('../core/utils/extend').extend,
-    inArray = require('../core/utils/array').inArray,
-    each = require('../core/utils/iterator').each,
-    EventsMixin = require('../core/events_mixin'),
-    errors = require('../core/errors'),
-    commonUtils = require('../core/utils/common'),
-    typeUtils = require('../core/utils/type'),
-    numberLocalization = require('../localization/number'),
-    messageLocalization = require('../localization/message');
+const Class = require('../core/class');
+const extend = require('../core/utils/extend').extend;
+const inArray = require('../core/utils/array').inArray;
+const each = require('../core/utils/iterator').each;
+const EventsMixin = require('../core/events_mixin');
+const errors = require('../core/errors');
+const commonUtils = require('../core/utils/common');
+const typeUtils = require('../core/utils/type');
+const numberLocalization = require('../localization/number');
+const messageLocalization = require('../localization/message');
 
-var BaseRuleValidator = Class.inherit({
+const BaseRuleValidator = Class.inherit({
     NAME: 'base',
 
     defaultMessage: function(value) { return messageLocalization.getFormatter('validation-' + this.NAME)(value); },
@@ -20,8 +20,8 @@ var BaseRuleValidator = Class.inherit({
     },
 
     validate: function(value, rule) {
-        var valueArray = Array.isArray(value) ? value : [value],
-            result = true;
+        const valueArray = Array.isArray(value) ? value : [value];
+        let result = true;
 
         if(valueArray.length) {
             valueArray.every(function(itemValue) {
@@ -36,7 +36,7 @@ var BaseRuleValidator = Class.inherit({
     }
 });
 
-var RequiredRuleValidator = BaseRuleValidator.inherit({
+const RequiredRuleValidator = BaseRuleValidator.inherit({
     NAME: 'required',
 
     /**
@@ -67,7 +67,7 @@ var RequiredRuleValidator = BaseRuleValidator.inherit({
     }
 });
 
-var NumericRuleValidator = BaseRuleValidator.inherit({
+const NumericRuleValidator = BaseRuleValidator.inherit({
     NAME: 'numeric',
 
     /**
@@ -97,7 +97,7 @@ var NumericRuleValidator = BaseRuleValidator.inherit({
     }
 });
 
-var RangeRuleValidator = BaseRuleValidator.inherit({
+const RangeRuleValidator = BaseRuleValidator.inherit({
     NAME: 'range',
 
     /**
@@ -132,11 +132,11 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
             return true;
         }
 
-        var validNumber = rulesValidators['numeric'].validate(value, rule),
-            validValue = typeUtils.isDefined(value) && value !== '',
-            number = validNumber ? parseFloat(value) : validValue && value.valueOf(),
-            min = rule.min,
-            max = rule.max;
+        const validNumber = rulesValidators['numeric'].validate(value, rule);
+        const validValue = typeUtils.isDefined(value) && value !== '';
+        const number = validNumber ? parseFloat(value) : validValue && value.valueOf();
+        const min = rule.min;
+        const max = rule.max;
 
         if(!(validNumber || typeUtils.isDate(value)) && !validValue) {
             return false;
@@ -157,7 +157,7 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
     }
 });
 
-var StringLengthRuleValidator = BaseRuleValidator.inherit({
+const StringLengthRuleValidator = BaseRuleValidator.inherit({
     NAME: 'stringLength',
 
     /**
@@ -202,7 +202,7 @@ var StringLengthRuleValidator = BaseRuleValidator.inherit({
     }
 });
 
-var CustomRuleValidator = BaseRuleValidator.inherit({
+const CustomRuleValidator = BaseRuleValidator.inherit({
     NAME: 'custom',
 
     /**
@@ -239,14 +239,14 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
             return true;
         }
 
-        var validator = rule.validator,
-            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter'),
-            data = typeUtils.isFunction(dataGetter) && dataGetter(),
-            params = {
-                value: value,
-                validator: validator,
-                rule: rule
-            };
+        const validator = rule.validator;
+        const dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter');
+        const data = typeUtils.isFunction(dataGetter) && dataGetter();
+        const params = {
+            value: value,
+            validator: validator,
+            rule: rule
+        };
 
         if(data) {
             params.data = data;
@@ -256,7 +256,7 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
     }
 });
 
-var CompareRuleValidator = BaseRuleValidator.inherit({
+const CompareRuleValidator = BaseRuleValidator.inherit({
     NAME: 'compare',
 
     /**
@@ -299,8 +299,8 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
 
         extend(rule, { reevaluate: true });
 
-        var otherValue = rule.comparisonTarget(),
-            type = rule.comparisonType || '==';
+        const otherValue = rule.comparisonTarget();
+        const type = rule.comparisonType || '==';
 
         switch(type) {
             case '==':
@@ -324,7 +324,7 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
     }
 });
 
-var PatternRuleValidator = BaseRuleValidator.inherit({
+const PatternRuleValidator = BaseRuleValidator.inherit({
     NAME: 'pattern',
 
     /**
@@ -349,7 +349,7 @@ var PatternRuleValidator = BaseRuleValidator.inherit({
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
-        var pattern = rule.pattern;
+        let pattern = rule.pattern;
         if(typeUtils.isString(pattern)) {
             pattern = new RegExp(pattern);
         }
@@ -357,7 +357,7 @@ var PatternRuleValidator = BaseRuleValidator.inherit({
     }
 });
 
-var EmailRuleValidator = BaseRuleValidator.inherit({
+const EmailRuleValidator = BaseRuleValidator.inherit({
     NAME: 'email',
 
     /**
@@ -445,7 +445,7 @@ var rulesValidators = {
     'email': new EmailRuleValidator()
 };
 
-var GroupConfig = Class.inherit({
+const GroupConfig = Class.inherit({
     ctor: function(group) {
         this.group = group;
         this.validators = [];
@@ -456,7 +456,7 @@ var GroupConfig = Class.inherit({
          * @name dxValidationGroupResult
          * @type Object
          */
-        var result = {
+        const result = {
             /**
              * @name dxValidationGroupResult.isValid
              * @type boolean
@@ -475,7 +475,7 @@ var GroupConfig = Class.inherit({
         };
 
         each(this.validators, function(_, validator) {
-            var validatorResult = validator.validate();
+            const validatorResult = validator.validate();
             result.isValid = result.isValid && validatorResult.isValid;
 
             if(validatorResult.brokenRule) {
@@ -526,7 +526,7 @@ var ValidationEngine = {
     * @static
     */
     getGroupConfig: function(group) {
-        var result = commonUtils.grep(this.groups, function(config) {
+        const result = commonUtils.grep(this.groups, function(config) {
             return config.group === group;
         });
 
@@ -543,7 +543,7 @@ var ValidationEngine = {
 
     addGroup: function(group) {
 
-        var config = this.getGroupConfig(group);
+        let config = this.getGroupConfig(group);
         if(!config) {
             config = new GroupConfig(group);
             this.groups.push(config);
@@ -553,8 +553,8 @@ var ValidationEngine = {
     },
 
     removeGroup: function(group) {
-        var config = this.getGroupConfig(group),
-            index = inArray(config, this.groups);
+        const config = this.getGroupConfig(group);
+        const index = inArray(config, this.groups);
 
         if(index > -1) {
             this.groups.splice(index, 1);
@@ -578,34 +578,34 @@ var ValidationEngine = {
          * @name dxValidatorResult
          * @type Object
          */
-        var result = {
-                name: name,
-                /**
+        const result = {
+            name: name,
+            /**
                  * @name dxValidatorResult.value
                  * @type any
                  */
-                value: value,
-                /**
+            value: value,
+            /**
                  * @name dxValidatorResult.brokenRule
                  * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule
                  */
-                brokenRule: null,
-                /**
+            brokenRule: null,
+            /**
                  * @name dxValidatorResult.isValid
                  * @type boolean
                  */
-                isValid: true,
-                /**
+            isValid: true,
+            /**
                  * @name dxValidatorResult.validationRules
                  * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
                  */
-                validationRules: rules
-            },
-            that = this;
+            validationRules: rules
+        };
+        const that = this;
 
         each(rules || [], function(_, rule) {
-            var ruleValidator = rulesValidators[rule.type],
-                ruleValidationResult;
+            const ruleValidator = rulesValidators[rule.type];
+            let ruleValidationResult;
 
             if(ruleValidator) {
                 if(typeUtils.isDefined(rule.isValid) && rule.value === value && !rule.reevaluate) {
@@ -642,7 +642,7 @@ var ValidationEngine = {
     },
 
     registerValidatorInGroup: function(group, validator) {
-        var groupConfig = ValidationEngine.addGroup(group);
+        const groupConfig = ValidationEngine.addGroup(group);
 
         if(inArray(validator, groupConfig.validators) < 0) {
             groupConfig.validators.push(validator);
@@ -650,16 +650,16 @@ var ValidationEngine = {
     },
 
     _shouldRemoveGroup: function(group, validatorsInGroup) {
-        var isDefaultGroup = group === undefined,
-            isValidationGroupInstance = group && group.NAME === 'dxValidationGroup';
+        const isDefaultGroup = group === undefined;
+        const isValidationGroupInstance = group && group.NAME === 'dxValidationGroup';
 
         return !isDefaultGroup && !isValidationGroupInstance && !validatorsInGroup.length;
     },
 
     removeRegisteredValidator: function(group, validator) {
-        var config = ValidationEngine.getGroupConfig(group),
-            validatorsInGroup = config && config.validators;
-        var index = inArray(validator, validatorsInGroup);
+        const config = ValidationEngine.getGroupConfig(group);
+        const validatorsInGroup = config && config.validators;
+        const index = inArray(validator, validatorsInGroup);
         if(index > -1) {
             validatorsInGroup.splice(index, 1);
             if(this._shouldRemoveGroup(group, validatorsInGroup)) {
@@ -684,7 +684,7 @@ var ValidationEngine = {
     * @static
     */
     validateGroup: function(group) {
-        var groupConfig = ValidationEngine.getGroupConfig(group);
+        const groupConfig = ValidationEngine.getGroupConfig(group);
 
         if(!groupConfig) {
             throw errors.Error('E0110');
@@ -707,7 +707,7 @@ var ValidationEngine = {
     * @static
     */
     resetGroup: function(group) {
-        var groupConfig = ValidationEngine.getGroupConfig(group);
+        const groupConfig = ValidationEngine.getGroupConfig(group);
 
         if(!groupConfig) {
             throw errors.Error('E0110');

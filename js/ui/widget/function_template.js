@@ -1,7 +1,7 @@
-var TemplateBase = require('./ui.template_base'),
-    domUtils = require('../../core/utils/dom');
+const TemplateBase = require('./ui.template_base');
+const domUtils = require('../../core/utils/dom');
 
-var FunctionTemplate = TemplateBase.inherit({
+const FunctionTemplate = TemplateBase.inherit({
 
     ctor: function(render) {
         this._render = render;

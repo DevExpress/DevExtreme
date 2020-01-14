@@ -1,5 +1,5 @@
-var ko = require('knockout'),
-    iconUtils = require('../../core/utils/icon');
+const ko = require('knockout');
+const iconUtils = require('../../core/utils/icon');
 
 ko.bindingHandlers.dxControlsDescendantBindings = {
     init: function(_, valueAccessor) {
@@ -11,8 +11,8 @@ ko.bindingHandlers.dxControlsDescendantBindings = {
 
 ko.bindingHandlers.dxIcon = {
     init: function(element, valueAccessor) {
-        var options = ko.utils.unwrapObservable(valueAccessor()) || {},
-            iconElement = iconUtils.getImageContainer(options);
+        const options = ko.utils.unwrapObservable(valueAccessor()) || {};
+        const iconElement = iconUtils.getImageContainer(options);
 
         ko.virtualElements.emptyNode(element);
         if(iconElement) {
@@ -20,8 +20,8 @@ ko.bindingHandlers.dxIcon = {
         }
     },
     update: function(element, valueAccessor) {
-        var options = ko.utils.unwrapObservable(valueAccessor()) || {},
-            iconElement = iconUtils.getImageContainer(options);
+        const options = ko.utils.unwrapObservable(valueAccessor()) || {};
+        const iconElement = iconUtils.getImageContainer(options);
 
         ko.virtualElements.emptyNode(element);
         if(iconElement) {

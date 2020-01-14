@@ -3,6 +3,6 @@
 QUnit.module('Initialization');
 
 QUnit.test('Init tree view', function(assert) {
-    var $treeView = initTree();
+    const $treeView = initTree();
     assert.ok($treeView);
 });

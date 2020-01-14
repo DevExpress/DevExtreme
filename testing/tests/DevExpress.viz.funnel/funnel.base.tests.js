@@ -1,11 +1,11 @@
-var $ = require('jquery'),
-    common = require('./commonParts/common.js'),
-    createFunnel = common.createFunnel,
-    environment = common.environment,
-    stubAlgorithm = common.stubAlgorithm,
-    rendererModule = require('viz/core/renderers/renderer'),
-    paletteModule = require('viz/palette'),
-    themeModule = require('viz/themes');
+const $ = require('jquery');
+const common = require('./commonParts/common.js');
+const createFunnel = common.createFunnel;
+const environment = common.environment;
+const stubAlgorithm = common.stubAlgorithm;
+const rendererModule = require('viz/core/renderers/renderer');
+const paletteModule = require('viz/palette');
+const themeModule = require('viz/themes');
 
 themeModule.registerTheme({
     name: 'test-theme',
@@ -22,7 +22,7 @@ themeModule.registerTheme({
 QUnit.module('Initialization', environment);
 
 QUnit.test('Create empty widget', function(assert) {
-    var funnel = createFunnel({});
+    const funnel = createFunnel({});
 
     assert.ok(funnel);
     assert.equal(rendererModule.Renderer.firstCall.args[0].cssClass, 'dxf dxf-funnel', 'rootClass prefix rootClass');
@@ -31,13 +31,13 @@ QUnit.test('Create empty widget', function(assert) {
 
 QUnit.test('Default size', function(assert) {
     $('#test-container').hide();
-    var funnel = createFunnel({});
+    const funnel = createFunnel({});
 
     assert.deepEqual(funnel.getSize(), { width: 400, height: 400 });
 });
 
 QUnit.test('Base funnel not fail when tooltip api is called', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 1 }]
     });
 
@@ -69,7 +69,7 @@ QUnit.test('Skip not valid values', function(assert) {
         algorithm: 'stub',
         dataSource: [{ value: '10' }, { value: 0 }, { value: null }, { value: undefined }, { value: NaN }, { value: -1 }]
     });
-    var args = stubAlgorithm.normalizeValues.lastCall.args[0];
+    const args = stubAlgorithm.normalizeValues.lastCall.args[0];
 
     assert.equal(args.length, 3);
     assert.equal(args[0].value, 10);
@@ -84,7 +84,7 @@ QUnit.test('Sort dataSource by default', function(assert) {
         valueField: 'value'
     });
 
-    var args = stubAlgorithm.normalizeValues.lastCall.args[0];
+    const args = stubAlgorithm.normalizeValues.lastCall.args[0];
 
     assert.equal(args[0].value, 10);
     assert.equal(args[1].value, 5);
@@ -99,7 +99,7 @@ QUnit.test('Disable sorting', function(assert) {
         valueField: 'value'
     });
 
-    var args = stubAlgorithm.normalizeValues.lastCall.args[0];
+    const args = stubAlgorithm.normalizeValues.lastCall.args[0];
 
     assert.equal(args[0].value, 1);
     assert.equal(args[1].value, 10);
@@ -115,7 +115,7 @@ QUnit.test('Use colors from dataSource', function(assert) {
         colorField: 'color'
     });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items[0].smartAttr.lastCall.args[0].fill, 'green');
     assert.equal(items[1].smartAttr.lastCall.args[0].fill, 'red');
@@ -127,7 +127,7 @@ QUnit.test('Correct values if each value is zero', function(assert) {
         dataSource: [{ value: 0 }, { value: 0 }]
     });
 
-    var values = stubAlgorithm.normalizeValues.lastCall.args[0].map(function(item) {
+    const values = stubAlgorithm.normalizeValues.lastCall.args[0].map(function(item) {
         return item.value;
     });
 
@@ -135,7 +135,7 @@ QUnit.test('Correct values if each value is zero', function(assert) {
 });
 
 QUnit.test('Data source with invalid value fields and items are not created, warning is fired', function(assert) {
-    var spy = sinon.stub();
+    const spy = sinon.stub();
     createFunnel({
         algorithm: 'stub',
         valueField: 'val1',
@@ -151,7 +151,7 @@ QUnit.test('Data source with invalid value fields and items are not created, war
 });
 
 QUnit.test('Empty data source, warning shouldn\'t fire', function(assert) {
-    var spy = sinon.stub();
+    const spy = sinon.stub();
     createFunnel({
         algorithm: 'stub',
         dataSource: [],
@@ -162,7 +162,7 @@ QUnit.test('Empty data source, warning shouldn\'t fire', function(assert) {
 });
 
 QUnit.test('Data source with negative values', function(assert) {
-    var spy = sinon.stub();
+    const spy = sinon.stub();
     createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: -2 }, { value: -3 }],
@@ -180,20 +180,20 @@ QUnit.test('Pass dataItem to funnel item', function(assert) {
         [1]
     ]);
 
-    var dataSource = [{ val: 1, value: 5, argument: 'One', color: 'red' }],
-        funnel = createFunnel({
-            algorithm: 'stub',
-            dataSource: dataSource,
-            valueField: 'value',
-            argumentField: 'argument',
-            colorField: 'color'
-        });
+    const dataSource = [{ val: 1, value: 5, argument: 'One', color: 'red' }];
+    const funnel = createFunnel({
+        algorithm: 'stub',
+        dataSource: dataSource,
+        valueField: 'value',
+        argumentField: 'argument',
+        colorField: 'color'
+    });
 
     funnel.option({
         valueField: 'val'
     });
 
-    var items = funnel.getAllItems();
+    const items = funnel.getAllItems();
 
     assert.deepEqual(items[0].data, dataSource[0]);
 });
@@ -220,7 +220,7 @@ QUnit.test('Draw Items', function(assert) {
         dataSource: [{ value: 1 }, { value: 1 }],
     });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 2);
     assert.equal(this.itemsGroup().clear.callCount, 1);
@@ -243,7 +243,7 @@ QUnit.test('Draw Items, inverted chart', function(assert) {
         inverted: true
     });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 2);
     assert.equal(this.itemsGroup().clear.callCount, 1);
@@ -258,7 +258,7 @@ QUnit.test('Resize', function(assert) {
         [1, 1]
     ]);
 
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }],
     });
@@ -266,7 +266,7 @@ QUnit.test('Resize', function(assert) {
 
     funnel.option('size', { width: 900, height: 600 });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 1);
     assert.equal(this.itemsGroup().clear.callCount, 1);
@@ -288,7 +288,7 @@ QUnit.test('palette', function(assert) {
         paletteExtensionMode: 'blend'
     });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.deepEqual(items[0].smartAttr.lastCall.args[0].fill, 'green');
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].fill, 'red');
@@ -305,7 +305,7 @@ QUnit.test('palette', function(assert) {
 });
 
 QUnit.test('Funnel fires drawn event', function(assert) {
-    var drawn = sinon.spy();
+    const drawn = sinon.spy();
     createFunnel({
         dataSource: [{ value: 1 }],
         onDrawn: drawn
@@ -315,8 +315,8 @@ QUnit.test('Funnel fires drawn event', function(assert) {
 });
 
 QUnit.test('Funnel fires once drawn event if asynchronus dataSource ', function(assert) {
-    var drawn = sinon.spy(),
-        d = $.Deferred();
+    const drawn = sinon.spy();
+    const d = $.Deferred();
 
     createFunnel({
         dataSource: {
@@ -340,14 +340,14 @@ QUnit.test('Update styles of items', function(assert) {
         [1], [1]
     ]);
 
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }, { value: 1 }]
     });
 
     funnel.option({ item: { border: { visible: true, width: 3, color: 'red' } } });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.deepEqual(items[0].smartAttr.lastCall.args[0]['stroke-width'], 3);
     assert.deepEqual(items[0].smartAttr.lastCall.args[0]['stroke'], 'red');
@@ -362,7 +362,7 @@ QUnit.test('Update value field', function(assert) {
         [1]
     ]);
 
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'stub',
         dataSource: [{ val: 1, value: 5, argument: 'One', color: 'red' }],
         valueField: 'value',
@@ -374,7 +374,7 @@ QUnit.test('Update value field', function(assert) {
         valueField: 'val'
     });
 
-    var items = funnel.getAllItems();
+    const items = funnel.getAllItems();
 
     assert.equal(items[0].value, 1);
     assert.equal(items[0].argument, 'One');
@@ -387,7 +387,7 @@ QUnit.test('Update argument field', function(assert) {
         [1]
     ]);
 
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1, argument: 'One', arg: 'Two', color: 'red' }],
         valueField: 'value',
@@ -399,7 +399,7 @@ QUnit.test('Update argument field', function(assert) {
         argumentField: 'arg'
     });
 
-    var items = funnel.getAllItems();
+    const items = funnel.getAllItems();
 
     assert.equal(items[0].value, 1);
     assert.equal(items[0].argument, 'Two');
@@ -412,7 +412,7 @@ QUnit.test('Update color field', function(assert) {
         [1]
     ]);
 
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1, argument: 'One', color1: 'red', color2: 'green' }],
         valueField: 'value',
@@ -424,7 +424,7 @@ QUnit.test('Update color field', function(assert) {
         colorField: 'color2'
     });
 
-    var items = funnel.getAllItems();
+    const items = funnel.getAllItems();
 
     assert.equal(items[0].data.value, 1);
     assert.equal(items[0].data.argument, 'One');
@@ -438,14 +438,14 @@ QUnit.test('Update inverted option', function(assert) {
         [0.5, 0.5, 1, 0.5, 0.5, 1, 1, 1]
     ]);
 
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }, { value: 1 }],
         inverted: true
     });
     funnel.option({ inverted: false });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 2);
     assert.equal(this.itemsGroup().clear.callCount, 2);
@@ -462,7 +462,7 @@ QUnit.test('Update palette', function(assert) {
         [1], [1]
     ]);
 
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }, { value: 1 }],
         palette: ['red', 'blue']
@@ -470,7 +470,7 @@ QUnit.test('Update palette', function(assert) {
 
     funnel.option({ palette: ['green', 'orange'] });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.deepEqual(items[0].smartAttr.lastCall.args[0].fill, 'green');
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].fill, 'orange');
@@ -482,7 +482,7 @@ QUnit.test('Update paletteExtenstionMode', function(assert) {
         [1], [1], [1]
     ]);
 
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }, { value: 1 }, { value: 1 }],
         palette: ['green', 'red']
@@ -490,7 +490,7 @@ QUnit.test('Update paletteExtenstionMode', function(assert) {
 
     funnel.option({ paletteExtensionMode: 'alternate' });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.deepEqual(items[0].smartAttr.lastCall.args[0].fill, 'green');
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].fill, 'red');
@@ -503,7 +503,7 @@ QUnit.test('SortData option', function(assert) {
         [1], [1]
     ]);
 
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }, { value: 10 }],
         palette: ['red', 'blue'],
@@ -512,14 +512,14 @@ QUnit.test('SortData option', function(assert) {
 
     funnel.option({ sortData: false });
 
-    var items = funnel.getAllItems();
+    const items = funnel.getAllItems();
 
     assert.equal(items[0].data.value, 1);
     assert.equal(items[1].data.value, 10);
 });
 
 QUnit.test('Recreate items if theme changed', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 1 }]
     });
 
@@ -533,10 +533,10 @@ QUnit.test('Recreate items if theme changed', function(assert) {
 QUnit.module('Items', environment);
 
 QUnit.test('Creation', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
-        }),
-        items = funnel.getAllItems();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
+    });
+    const items = funnel.getAllItems();
 
     assert.equal(items[0].data.value, 10);
     assert.equal(items[0].data.argument, 'One');
@@ -558,7 +558,7 @@ QUnit.test('Normal style', function(assert) {
             }
         }
     });
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items[0].smartAttr.lastCall.args[0].fill, '#123123');
     assert.deepEqual(items[0].smartAttr.lastCall.args[0].stroke, '#ffffff');
@@ -580,7 +580,7 @@ QUnit.test('Normal style, border is not visible', function(assert) {
             }
         }
     });
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items[0].smartAttr.lastCall.args[0].fill, '#123123');
     assert.deepEqual(items[0].smartAttr.lastCall.args[0].stroke, '#ffffff');
@@ -592,7 +592,7 @@ QUnit.test('Normal style, border is not visible', function(assert) {
 });
 
 QUnit.test('Hover style', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
         item: {
             border: {
@@ -615,7 +615,7 @@ QUnit.test('Hover style', function(assert) {
 
     funnel.getAllItems()[1].hover(true);
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items[1].smartAttr.lastCall.args[0].fill, '#234234');
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].stroke, '#123123');
@@ -629,11 +629,11 @@ QUnit.test('Hover style', function(assert) {
 });
 
 QUnit.test('Funnel does not fire drawn event on hover', function(assert) {
-    var drawn = sinon.spy(),
-        funnel = createFunnel({
-            dataSource: [{ value: 10, argument: 'One' }],
-            onDrawn: drawn
-        });
+    const drawn = sinon.spy();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One' }],
+        onDrawn: drawn
+    });
 
     drawn.reset();
 
@@ -643,32 +643,32 @@ QUnit.test('Funnel does not fire drawn event on hover', function(assert) {
 });
 
 QUnit.test('Clear hover of item', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
-            item: {
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
+        item: {
+            border: {
+                visible: true,
+                color: '#ffffff',
+                width: 2
+            },
+            hoverStyle: {
                 border: {
                     visible: true,
-                    color: '#ffffff',
-                    width: 2
+                    color: '#123123',
+                    width: 3
                 },
-                hoverStyle: {
-                    border: {
-                        visible: true,
-                        color: '#123123',
-                        width: 3
-                    },
-                    hatching: {
-                        direction: 'left'
-                    }
+                hatching: {
+                    direction: 'left'
                 }
             }
-        }),
-        item = funnel.getAllItems()[1];
+        }
+    });
+    const item = funnel.getAllItems()[1];
 
     item.hover(true);
     item.hover(false);
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items[1].smartAttr.lastCall.args[0].fill, '#234234');
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].stroke, '#ffffff');
@@ -677,58 +677,58 @@ QUnit.test('Clear hover of item', function(assert) {
 });
 
 QUnit.test('Inherit border from normal style if hoverStyle.border option is not set', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
-            item: {
-                border: {
-                    visible: true,
-                    color: '#ffffff',
-                    width: 2
-                }
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
+        item: {
+            border: {
+                visible: true,
+                color: '#ffffff',
+                width: 2
             }
-        }),
-        item = funnel.getAllItems()[1];
+        }
+    });
+    const item = funnel.getAllItems()[1];
 
     item.hover(true);
 
-    var items = this.items();
+    const items = this.items();
 
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].stroke, '#ffffff');
     assert.deepEqual(items[1].smartAttr.lastCall.args[0]['stroke-width'], 2);
 });
 
 QUnit.test('Border for hoverStyle can be disabled', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
-            item: {
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
+        item: {
+            border: {
+                visible: true,
+                color: '#ffffff',
+                width: 2
+            },
+            hoverStyle: {
                 border: {
-                    visible: true,
-                    color: '#ffffff',
-                    width: 2
-                },
-                hoverStyle: {
-                    border: {
-                        visible: false
-                    }
+                    visible: false
                 }
             }
-        }),
-        item = funnel.getAllItems()[1];
+        }
+    });
+    const item = funnel.getAllItems()[1];
 
     item.hover(true);
 
-    var items = this.items();
+    const items = this.items();
 
     assert.deepEqual(items[1].smartAttr.lastCall.args[0]['stroke-width'], 0);
 });
 
 QUnit.test('hover changed event', function(assert) {
-    var hoverChanged = sinon.spy(),
-        funnel = createFunnel({
-            dataSource: [{ value: 10 }, { value: 5 }],
-            onHoverChanged: hoverChanged
-        }),
-        item = funnel.getAllItems()[0];
+    const hoverChanged = sinon.spy();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10 }, { value: 5 }],
+        onHoverChanged: hoverChanged
+    });
+    const item = funnel.getAllItems()[0];
 
     item.hover(true);
 
@@ -737,12 +737,12 @@ QUnit.test('hover changed event', function(assert) {
 });
 
 QUnit.test('hover changed event after hover second item', function(assert) {
-    var hoverChanged = sinon.spy(),
-        funnel = createFunnel({
-            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
-            onHoverChanged: hoverChanged
-        }),
-        item = funnel.getAllItems()[0];
+    const hoverChanged = sinon.spy();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+        onHoverChanged: hoverChanged
+    });
+    const item = funnel.getAllItems()[0];
 
     item.hover(true);
     hoverChanged.reset();
@@ -753,12 +753,12 @@ QUnit.test('hover changed event after hover second item', function(assert) {
 });
 
 QUnit.test('Hover item two times, hover changed event should fire only one time', function(assert) {
-    var hoverChanged = sinon.spy(),
-        funnel = createFunnel({
-            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
-            onHoverChanged: hoverChanged
-        }),
-        item = funnel.getAllItems()[0];
+    const hoverChanged = sinon.spy();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+        onHoverChanged: hoverChanged
+    });
+    const item = funnel.getAllItems()[0];
 
     item.hover(true);
     item.hover(true);
@@ -767,12 +767,12 @@ QUnit.test('Hover item two times, hover changed event should fire only one time'
 });
 
 QUnit.test('Unhover item if it is not hovered, hover changed event shouldn\'t fire', function(assert) {
-    var hoverChanged = sinon.spy(),
-        funnel = createFunnel({
-            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
-            onHoverChanged: hoverChanged
-        }),
-        item = funnel.getAllItems()[0];
+    const hoverChanged = sinon.spy();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+        onHoverChanged: hoverChanged
+    });
+    const item = funnel.getAllItems()[0];
 
     item.hover(false);
 
@@ -780,11 +780,11 @@ QUnit.test('Unhover item if it is not hovered, hover changed event shouldn\'t fi
 });
 
 QUnit.test('disable hover', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 10, argument: 'One' }],
-            hoverEnabled: false
-        }),
-        items = funnel.getAllItems();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One' }],
+        hoverEnabled: false
+    });
+    const items = funnel.getAllItems();
 
     items[0].hover(true);
 
@@ -792,7 +792,7 @@ QUnit.test('disable hover', function(assert) {
 });
 
 QUnit.test('Selection', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
         item: {
             border: {
@@ -811,7 +811,7 @@ QUnit.test('Selection', function(assert) {
     });
 
     funnel.getAllItems()[1].select(true);
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items[1].smartAttr.lastCall.args[0].fill, '#234234');
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].stroke, '#123123');
@@ -847,7 +847,7 @@ QUnit.test('Can select an item in onDrawn enven', function(assert) {
     });
 
 
-    var item = this.items()[1];
+    const item = this.items()[1];
 
     assert.equal(item.smartAttr.lastCall.args[0].fill, '#234234');
     assert.deepEqual(item.smartAttr.lastCall.args[0].stroke, '#123123');
@@ -861,7 +861,7 @@ QUnit.test('Can select an item in onDrawn enven', function(assert) {
 });
 
 QUnit.test('Inherit border for selection style if selection.border option is not set', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
         item: {
             border: {
@@ -873,14 +873,14 @@ QUnit.test('Inherit border for selection style if selection.border option is not
     });
 
     funnel.getAllItems()[1].select(true);
-    var items = this.items();
+    const items = this.items();
 
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].stroke, '#ffffff');
     assert.deepEqual(items[1].smartAttr.lastCall.args[0]['stroke-width'], 2);
 });
 
 QUnit.test('Border for selection style can be disabled', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
         item: {
             border: {
@@ -897,13 +897,13 @@ QUnit.test('Border for selection style can be disabled', function(assert) {
     });
 
     funnel.getAllItems()[1].select(true);
-    var items = this.items();
+    const items = this.items();
 
     assert.deepEqual(items[1].smartAttr.lastCall.args[0]['stroke-width'], 0);
 });
 
 QUnit.test('Single selection', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two' }]
     });
 
@@ -916,7 +916,7 @@ QUnit.test('Single selection', function(assert) {
 });
 
 QUnit.test('Multiple selection', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two' }],
         selectionMode: 'multiple'
     });
@@ -930,7 +930,7 @@ QUnit.test('Multiple selection', function(assert) {
 });
 
 QUnit.test('disable selection', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 10, argument: 'One' }],
         selectionMode: 'none'
     });
@@ -941,12 +941,12 @@ QUnit.test('disable selection', function(assert) {
 });
 
 QUnit.test('selection changed event', function(assert) {
-    var spy = sinon.spy(),
-        funnel = createFunnel({
-            dataSource: [{ value: 10 }, { value: 5 }],
-            onSelectionChanged: spy
-        }),
-        item = funnel.getAllItems()[0];
+    const spy = sinon.spy();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10 }, { value: 5 }],
+        onSelectionChanged: spy
+    });
+    const item = funnel.getAllItems()[0];
 
     item.select(true);
 
@@ -955,13 +955,13 @@ QUnit.test('selection changed event', function(assert) {
 });
 
 QUnit.test('selection changed event in single mode fire only for selected element and unselected', function(assert) {
-    var spy = sinon.spy(),
-        funnel = createFunnel({
-            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
-            onSelectionChanged: spy,
-            selectionMode: 'single'
-        }),
-        item = funnel.getAllItems()[0];
+    const spy = sinon.spy();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+        onSelectionChanged: spy,
+        selectionMode: 'single'
+    });
+    const item = funnel.getAllItems()[0];
 
     item.select(true);
     spy.reset();
@@ -971,12 +971,12 @@ QUnit.test('selection changed event in single mode fire only for selected elemen
 });
 
 QUnit.test('Select item two times, selection changed event should fire only one time', function(assert) {
-    var selectChanged = sinon.spy(),
-        funnel = createFunnel({
-            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
-            onSelectionChanged: selectChanged
-        }),
-        item = funnel.getAllItems()[0];
+    const selectChanged = sinon.spy();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+        onSelectionChanged: selectChanged
+    });
+    const item = funnel.getAllItems()[0];
 
     item.select(true);
     item.select(true);
@@ -985,12 +985,12 @@ QUnit.test('Select item two times, selection changed event should fire only one 
 });
 
 QUnit.test('Unselect item if it is not selected, selection changed event shouldn\'t fire', function(assert) {
-    var selectChanged = sinon.spy(),
-        funnel = createFunnel({
-            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
-            onSelectionChanged: selectChanged
-        }),
-        item = funnel.getAllItems()[0];
+    const selectChanged = sinon.spy();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+        onSelectionChanged: selectChanged
+    });
+    const item = funnel.getAllItems()[0];
 
     item.select(false);
 
@@ -998,7 +998,7 @@ QUnit.test('Unselect item if it is not selected, selection changed event shouldn
 });
 
 QUnit.test('Clear selection', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
         item: {
             border: {
@@ -1018,7 +1018,7 @@ QUnit.test('Clear selection', function(assert) {
 
     funnel.getAllItems()[1].select(true);
     funnel.getAllItems()[1].select(false);
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items[1].smartAttr.lastCall.args[0].fill, '#234234');
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].stroke, '#ffffff');
@@ -1027,7 +1027,7 @@ QUnit.test('Clear selection', function(assert) {
 });
 
 QUnit.test('Clear selection of all elements', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 10, argument: 'One', color: '#987987' }, { value: 5, argument: 'Two', color: '#234234' }],
         item: {
             border: {
@@ -1049,7 +1049,7 @@ QUnit.test('Clear selection of all elements', function(assert) {
     funnel.getAllItems()[1].select(true);
     funnel.clearSelection();
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items[0].smartAttr.lastCall.args[0].fill, '#987987');
     assert.deepEqual(items[0].smartAttr.lastCall.args[0].stroke, '#ffffff');
@@ -1063,13 +1063,13 @@ QUnit.test('Clear selection of all elements', function(assert) {
 });
 
 QUnit.test('Select and hover item', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two', color: '#234234' }],
     });
 
     funnel.getAllItems()[1].select(true);
     funnel.getAllItems()[1].hover(true);
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items[1].smartAttr.lastCall.args[0].fill, '#234234');
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].hatching, {
@@ -1081,20 +1081,20 @@ QUnit.test('Select and hover item', function(assert) {
 });
 
 QUnit.test('getColor method', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 10, argument: 'One', color: '#987987' }, { value: 5, argument: 'Two', color: '#234234' }],
-        }),
-        items = funnel.getAllItems();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One', color: '#987987' }, { value: 5, argument: 'Two', color: '#234234' }],
+    });
+    const items = funnel.getAllItems();
 
     assert.equal(items[0].getColor(), '#987987');
     assert.equal(items[1].getColor(), '#234234');
 });
 
 QUnit.test('isHovered method', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two' }],
-        }),
-        items = funnel.getAllItems();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two' }],
+    });
+    const items = funnel.getAllItems();
 
     items[1].hover(true);
 
@@ -1103,10 +1103,10 @@ QUnit.test('isHovered method', function(assert) {
 });
 
 QUnit.test('isSelected method', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two' }],
-        }),
-        items = funnel.getAllItems();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two' }],
+    });
+    const items = funnel.getAllItems();
 
     items[1].select(true);
 
@@ -1115,10 +1115,10 @@ QUnit.test('isSelected method', function(assert) {
 });
 
 QUnit.test('isHovered method after hover and select', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two' }],
-        }),
-        items = funnel.getAllItems();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two' }],
+    });
+    const items = funnel.getAllItems();
 
     items[1].hover(true);
     items[1].select(true);
@@ -1127,10 +1127,10 @@ QUnit.test('isHovered method after hover and select', function(assert) {
 });
 
 QUnit.test('isSelected method after hover and select', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two' }],
-        }),
-        items = funnel.getAllItems();
+    const funnel = createFunnel({
+        dataSource: [{ value: 10, argument: 'One' }, { value: 5, argument: 'Two' }],
+    });
+    const items = funnel.getAllItems();
 
     items[1].hover(true);
     items[1].select(true);

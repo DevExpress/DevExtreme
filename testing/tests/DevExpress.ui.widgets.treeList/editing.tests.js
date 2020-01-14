@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<!--qunit-fixture-->\
     <div id="container">\
         <div id="treeList">\
@@ -19,8 +19,8 @@ import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
 fx.off = true;
 
-var setupModule = function() {
-    var that = this;
+const setupModule = function() {
+    const that = this;
 
     that.options = {
         dataSource: {
@@ -55,7 +55,7 @@ var setupModule = function() {
     this.clock = sinon.useFakeTimers();
 };
 
-var teardownModule = function() {
+const teardownModule = function() {
     this.dispose();
     this.clock.restore();
 };
@@ -64,8 +64,8 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test('Edit row', function(assert) {
     // arrange
-    var $rowElement,
-        $testElement = $('#treeList');
+    let $rowElement;
+    const $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
@@ -82,9 +82,9 @@ QUnit.test('Edit row', function(assert) {
 
 QUnit.test('Edit cell when edit mode is \'batch\'', function(assert) {
     // arrange
-    var $cellElement,
-        $rowElement,
-        $testElement = $('#treeList');
+    let $cellElement;
+    let $rowElement;
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch'
@@ -107,9 +107,9 @@ QUnit.test('Edit cell when edit mode is \'batch\'', function(assert) {
 
 QUnit.test('Edit cell when edit mode is \'cell\'', function(assert) {
     // arrange
-    var $cellElement,
-        $rowElement,
-        $testElement = $('#treeList');
+    let $cellElement;
+    let $rowElement;
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'cell'
@@ -131,8 +131,8 @@ QUnit.test('Edit cell when edit mode is \'cell\'', function(assert) {
 
 QUnit.test('Edit form', function(assert) {
     // arrange
-    var $rowElement,
-        $testElement = $('#treeList');
+    let $rowElement;
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'form'
@@ -153,7 +153,7 @@ QUnit.test('Edit form', function(assert) {
 
 QUnit.test('Edit popup', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'popup'
@@ -170,9 +170,9 @@ QUnit.test('Edit popup', function(assert) {
     this.editRow(0);
 
     // assert
-    var $editPopup = $testElement.find('.dx-treelist-edit-popup'),
-        editPopup = $editPopup.dxPopup('instance'),
-        $editPopupContent = editPopup.$content();
+    const $editPopup = $testElement.find('.dx-treelist-edit-popup');
+    const editPopup = $editPopup.dxPopup('instance');
+    const $editPopupContent = editPopup.$content();
 
     assert.equal($editPopup.length, 1, 'edit popup was rendered');
     assert.ok(editPopup.option('visible'), 'Edit popup is visible');
@@ -182,9 +182,9 @@ QUnit.test('Edit popup', function(assert) {
 
 QUnit.test('Insert row', function(assert) {
     // arrange
-    var items,
-        $rowElements,
-        $testElement = $('#treeList');
+    let items;
+    let $rowElements;
+    const $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
@@ -217,7 +217,7 @@ QUnit.test('Insert row', function(assert) {
 
 QUnit.test('Edit batch - add links should be rendered in rows when allowAdding is true', function(assert) {
     // arrange, act
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch',
@@ -231,14 +231,14 @@ QUnit.test('Edit batch - add links should be rendered in rows when allowAdding i
     this.rowsView.render($testElement);
 
     // assert
-    var $addLinks = $testElement.find('.dx-command-edit .dx-link-add');
+    const $addLinks = $testElement.find('.dx-command-edit .dx-link-add');
     assert.equal($addLinks.length, 1, 'link add is rendered');
     assert.equal($addLinks.text(), 'Add', 'Add link text');
 });
 
 QUnit.test('Add row to child should call addRow method with parentId', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing.allowAdding = true;
     this.options.editing.texts = { addRowToNode: 'Add' };
@@ -259,7 +259,7 @@ QUnit.test('Add row to child should call addRow method with parentId', function(
 
 QUnit.test('AddRow method should expand row and add item after parent', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing.allowAdding = true;
     this.options.editing.texts = { addRowToNode: 'Add' };
@@ -272,7 +272,7 @@ QUnit.test('AddRow method should expand row and add item after parent', function
     this.clock.tick();
 
     // assert
-    var rows = this.getVisibleRows();
+    const rows = this.getVisibleRows();
 
     assert.strictEqual(rows.length, 3, 'three rows are rendered');
     assert.strictEqual(rows[0].key, 1, 'row 0');
@@ -288,7 +288,7 @@ QUnit.test('AddRow method should expand row and add item after parent', function
 // T553905
 QUnit.test('Add item in node without children (Angular)', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing.allowAdding = true;
     this.options.expandedRowKeys = [1];
@@ -303,7 +303,7 @@ QUnit.test('Add item in node without children (Angular)', function(assert) {
     this.clock.tick(30);
 
     // assert
-    var rows = this.getVisibleRows();
+    const rows = this.getVisibleRows();
     assert.strictEqual(rows.length, 3, 'count row');
     assert.strictEqual(rows[0].key, 1, 'key of the first row');
     assert.strictEqual(rows[0].isExpanded, true, 'first row is expanded');
@@ -317,7 +317,7 @@ QUnit.test('Add item in node without children (Angular)', function(assert) {
 
 QUnit.test('AddRow method witout parameters should add item at begin', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.rootValue = 0;
     this.options.editing.allowAdding = true;
@@ -331,7 +331,7 @@ QUnit.test('AddRow method witout parameters should add item at begin', function(
     this.clock.tick();
 
     // assert
-    var rows = this.getVisibleRows();
+    const rows = this.getVisibleRows();
 
     assert.strictEqual(rows.length, 2, 'rows count');
     assert.deepEqual(rows[0].key.parentKey, 0, 'row 0 key parentKey');
@@ -344,7 +344,7 @@ QUnit.test('AddRow method witout parameters should add item at begin', function(
 
 QUnit.test('AddRow method witout parameters should add item at begin if rootValue is defined', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.rootValue = 0;
     this.options.dataSource.store.data[0].parentId = 0;
@@ -359,7 +359,7 @@ QUnit.test('AddRow method witout parameters should add item at begin if rootValu
     this.clock.tick();
 
     // assert
-    var rows = this.getVisibleRows();
+    const rows = this.getVisibleRows();
 
     assert.strictEqual(rows.length, 2, 'rows count');
     assert.deepEqual(rows[0].key.parentKey, 0, 'row 0 key parentKey');
@@ -372,7 +372,7 @@ QUnit.test('AddRow method witout parameters should add item at begin if rootValu
 
 QUnit.test('Inserted row should be reseted after collapsing when editing mode is row', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing.allowAdding = true;
     this.options.editing.texts = { addRowToNode: 'Add' };
@@ -387,7 +387,7 @@ QUnit.test('Inserted row should be reseted after collapsing when editing mode is
     this.collapseRow(1);
 
     // assert
-    var rows = this.getVisibleRows();
+    const rows = this.getVisibleRows();
     assert.strictEqual(rows.length, 1, 'one row is rendered');
     assert.strictEqual(rows[0].key, 1, 'row 0 key');
     assert.notOk(rows[0].isNewRow, 'row 0 is not inserted');
@@ -396,7 +396,7 @@ QUnit.test('Inserted row should be reseted after collapsing when editing mode is
 
 QUnit.test('Edit cell on row click', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch',
@@ -415,9 +415,9 @@ QUnit.test('Edit cell on row click', function(assert) {
 
 QUnit.test('Editing with validation - save edit data', function(assert) {
     // arrange
-    var items,
-        $cellElement,
-        $testElement = $('#treeList');
+    let items;
+    let $cellElement;
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch'
@@ -439,9 +439,9 @@ QUnit.test('Editing with validation - save edit data', function(assert) {
 
 QUnit.test('Editing with validation - not save edit data when there are invalid', function(assert) {
     // arrange
-    var items,
-        $cellElement,
-        $testElement = $('#treeList');
+    let items;
+    let $cellElement;
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch'
@@ -463,8 +463,8 @@ QUnit.test('Editing with validation - not save edit data when there are invalid'
 
 QUnit.test('Editing with validation - show error row on save edit data', function(assert) {
     // arrange
-    var $rowElements,
-        $testElement = $('#treeList');
+    let $rowElements;
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch'
@@ -490,7 +490,7 @@ QUnit.test('Editing with validation - show error row on save edit data', functio
 
 QUnit.test('Save edit data - exception when key is not specified in a store', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch'
@@ -519,7 +519,7 @@ QUnit.test('Save edit data - exception when key is not specified in a store', fu
 
 QUnit.test('Delete data - exception when key is not specified in a store', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch'
@@ -548,7 +548,7 @@ QUnit.test('Delete data - exception when key is not specified in a store', funct
 
 QUnit.test('Insert data - no exception when key is not specified in a store', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.rootValue = 0;
     this.options.editing = {
@@ -576,8 +576,8 @@ QUnit.test('Insert data - no exception when key is not specified in a store', fu
 
 QUnit.test('Edit cell when edit mode is \'batch\' and multiple selection is enabled', function(assert) {
     // arrange
-    var $cellElement,
-        $testElement = $('#treeList');
+    let $cellElement;
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch'
@@ -601,8 +601,8 @@ QUnit.test('Edit cell when edit mode is \'batch\' and multiple selection is enab
 // T514550
 QUnit.test('Edit batch - inserted row should not have add link', function(assert) {
     // arrange
-    var $commandEditCellElement,
-        $testElement = $('#treeList');
+    let $commandEditCellElement;
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch',
@@ -623,8 +623,8 @@ QUnit.test('Edit batch - inserted row should not have add link', function(assert
 
 QUnit.test('Edit batch - removed row should not have add link', function(assert) {
     // arrange
-    var $commandEditCellElement,
-        $testElement = $('#treeList');
+    let $commandEditCellElement;
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch',
@@ -645,8 +645,8 @@ QUnit.test('Edit batch - removed row should not have add link', function(assert)
 
 QUnit.test('Edit row with useIcons is true', function(assert) {
     // arrange
-    var $editCellElement,
-        $testElement = $('#container');
+    let $editCellElement;
+    const $testElement = $('#container');
 
     this.options.editing = {
         mode: 'row',
@@ -672,8 +672,8 @@ QUnit.test('Edit row with useIcons is true', function(assert) {
 // T633865
 QUnit.test('Add row when \'keyExpr\' and \'parentIdExpr\' options are specified as functions', function(assert) {
     // arrange
-    var $rowElements,
-        $testElement = $('#treeList');
+    let $rowElements;
+    const $testElement = $('#treeList');
 
     this.options.rootValue = 0;
     this.options.dataSource = this.options.dataSource.store.data;
@@ -703,8 +703,8 @@ QUnit.test('Add row when \'keyExpr\' and \'parentIdExpr\' options are specified 
 
 QUnit.test('TreeList should show error message on adding row if dataSource is not specified (T711831)', function(assert) {
     // arrange
-    var errorCode,
-        widgetName;
+    let errorCode;
+    let widgetName;
 
     this.options.dataSource = undefined;
     this.setupTreeList();
@@ -725,8 +725,8 @@ QUnit.test('TreeList should show error message on adding row if dataSource is no
 
 QUnit.test('Set add button for a specific row', function(assert) {
     // arrange
-    var $rowElements,
-        $testElement = $('#treeList');
+    let $rowElements;
+    const $testElement = $('#treeList');
 
     this.options.expandedRowKeys = [1];
     this.options.editing = {
@@ -750,7 +750,7 @@ QUnit.test('Set add button for a specific row', function(assert) {
 // T690119
 QUnit.test('Edit cell - The editable cell should be closed after click on expand button', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'cell',
@@ -784,7 +784,7 @@ QUnit.test('Edit cell - The editable cell should be closed after click on expand
 // T697344
 QUnit.test('Removing a selected row should not throw an exception', function(assert) {
     // arrange
-    var $testElement = $('#container');
+    const $testElement = $('#container');
 
     this.options.editing = {
         mode: 'row',
@@ -809,7 +809,7 @@ QUnit.test('Removing a selected row should not throw an exception', function(ass
 
 QUnit.test('Selection should be updated correctly after deleting a nested node', function(assert) {
     // arrange
-    var $testElement = $('#container');
+    const $testElement = $('#container');
 
     this.options.editing = {
         mode: 'row',
@@ -837,7 +837,7 @@ QUnit.test('Selection should be updated correctly after deleting a nested node',
 
 QUnit.test('Batch mode - Editing should not work when double-clicking on the select checkbox (startEditAction is dblClick)', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch',
@@ -863,7 +863,7 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
 
 ['reshape', 'repaint'].forEach(function(refreshMode) {
     QUnit.module('Refresh mode ' + refreshMode, { beforeEach: function() {
-        var that = this;
+        const that = this;
 
         that.loadingCount = 0;
 
@@ -917,7 +917,7 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
         this.saveEditData();
 
         // assert
-        var rows = this.getVisibleRows();
+        const rows = this.getVisibleRows();
         assert.equal(this.loadingCount, 0, 'loading count is not changed');
         assert.equal(rows.length, 3, 'row count');
         assert.ok(rows[1].node.hasChildren, 'row 1 node hasChildren');
@@ -939,8 +939,8 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
         this.saveEditData();
 
         // assert
-        var rows = this.getVisibleRows();
-        var insertIndex = refreshMode === 'reshape' ? 2 : 0;
+        const rows = this.getVisibleRows();
+        const insertIndex = refreshMode === 'reshape' ? 2 : 0;
         assert.equal(this.loadingCount, 0, 'loading count is not changed');
         assert.equal(rows.length, 3, 'row count');
         assert.equal(rows[insertIndex].data.field1, 'added', 'row 2 data is updated');
@@ -959,7 +959,7 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
         this.saveEditData();
 
         // assert
-        var rows = this.getVisibleRows();
+        const rows = this.getVisibleRows();
         assert.strictEqual(this.loadingCount, 0, 'loading count is not changed');
         assert.strictEqual(rows.length, 1, 'row count');
         assert.strictEqual(rows[0].node.hasChildren, false, 'row 0 node hasChildren');
@@ -980,7 +980,7 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
         this.saveEditData();
 
         // assert
-        var rows = this.getVisibleRows();
+        const rows = this.getVisibleRows();
         assert.strictEqual(this.loadingCount, 0, 'loading count is not changed');
         assert.strictEqual(rows.length, 1, 'row count');
         assert.strictEqual(rows[0].key, 3, 'row 2 id');
@@ -999,7 +999,7 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
         this.saveEditData();
 
         // assert
-        var rows = this.getVisibleRows();
+        const rows = this.getVisibleRows();
         assert.strictEqual(this.loadingCount, 0, 'loading count is not changed');
         assert.strictEqual(rows.length, 2, 'row count');
         assert.strictEqual(rows[1].data.field1, 'updated', 'row 0 data is updated');
@@ -1017,7 +1017,7 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
         this.clock.tick();
 
         // assert
-        var rows = this.getVisibleRows();
+        const rows = this.getVisibleRows();
         assert.strictEqual(this.loadingCount, 0, 'loading count is not changed');
         assert.strictEqual(rows.length, 3, 'row count');
         assert.strictEqual(rows[0].node.children.length, 2, 'row 0 children count');
@@ -1036,7 +1036,7 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
         this.clock.tick();
 
         // assert
-        var rows = this.getVisibleRows();
+        const rows = this.getVisibleRows();
         assert.strictEqual(this.loadingCount, 0, 'loading count is not changed');
         assert.strictEqual(rows.length, 3, 'row count');
         assert.strictEqual(rows[0].node.children.length, 2, 'row 0 children count');
@@ -1055,7 +1055,7 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
         this.clock.tick();
 
         // assert
-        var rows = this.getVisibleRows();
+        const rows = this.getVisibleRows();
         assert.strictEqual(this.loadingCount, 0, 'loading count is not changed');
         assert.strictEqual(rows.length, 3, 'row count');
         assert.strictEqual(rows[0].node.children.length, 2, 'row 0 children count');

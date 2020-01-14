@@ -1,6 +1,6 @@
-var $ = require('jquery'),
-    themeModule = require('viz/themes'),
-    uiThemeModule = require('ui/themes');
+const $ = require('jquery');
+const themeModule = require('viz/themes');
+const uiThemeModule = require('ui/themes');
 
 require('viz/core/themes/generic.light');
 require('viz/core/themes/generic.dark');
@@ -37,7 +37,7 @@ QUnit.test('registerTheme', function(assert) {
         isCustomTheme1: true
     });
 
-    var theme = themeModule.getTheme('custom theme');
+    const theme = themeModule.getTheme('custom theme');
 
     assert.ok(theme);
     assert.ok(theme.isCustomTheme1);
@@ -54,7 +54,7 @@ QUnit.test('registerTheme based on theme', function(assert) {
         isCustomTheme2: true
     }, 'platform');
 
-    var theme = themeModule.getTheme('custom theme 2');
+    const theme = themeModule.getTheme('custom theme 2');
 
     assert.ok(theme);
     assert.ok(theme.isCustomTheme);
@@ -63,7 +63,7 @@ QUnit.test('registerTheme based on theme', function(assert) {
 });
 
 QUnit.test('registerTheme with options', function(assert) {
-    var lightTheme = {
+    const lightTheme = {
         platform: 'platform',
         version: '5',
         tone: 'light',
@@ -78,7 +78,7 @@ QUnit.test('registerTheme with options', function(assert) {
 });
 
 QUnit.test('Patched properties on register theme', function(assert) {
-    var theme = {
+    let theme = {
         name: 'custom theme',
         defaultPalette: 'custom palette',
         backgroundColor: 'background color',
@@ -252,7 +252,7 @@ QUnit.test('Patched properties on register theme', function(assert) {
 QUnit.module('Themes functions');
 
 QUnit.test('getTheme', function(assert) {
-    var theme = themeModule.getTheme('platform1');
+    const theme = themeModule.getTheme('platform1');
 
     assert.ok(theme);
     assert.ok(theme.isCustomTheme);
@@ -265,7 +265,7 @@ QUnit.test('getTheme not exists', function(assert) {
 QUnit.module('currentTheme method.');
 
 QUnit.test('Get default theme', function(assert) {
-    var currentTheme = themeModule.currentTheme();
+    const currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, 'generic.light', 'valid default theme');
 });
@@ -312,7 +312,7 @@ QUnit.test('currentTheme return registered default theme', function(assert) {
         name: 'custom default theme',
         isDefault: true
     });
-    var currentTheme = themeModule.currentTheme();
+    const currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, 'custom default theme');
 });
@@ -340,9 +340,9 @@ QUnit.module('refresh all', {
 });
 
 QUnit.test('added items are refresh', function(assert) {
-    var item1 = this.createItem(),
-        item2 = this.createItem(),
-        item3 = this.createItem();
+    const item1 = this.createItem();
+    const item2 = this.createItem();
+    const item3 = this.createItem();
     themeModule.addCacheItem(item1);
     themeModule.addCacheItem(item2);
     themeModule.addCacheItem(item3);
@@ -355,9 +355,9 @@ QUnit.test('added items are refresh', function(assert) {
 });
 
 QUnit.test('removed items are not refreshed', function(assert) {
-    var item1 = this.createItem(),
-        item2 = this.createItem(),
-        item3 = this.createItem();
+    const item1 = this.createItem();
+    const item2 = this.createItem();
+    const item3 = this.createItem();
     themeModule.addCacheItem(item1);
     themeModule.addCacheItem(item2);
     themeModule.addCacheItem(item3);
@@ -392,7 +392,7 @@ QUnit.test('currentTheme returns theme from ui.themes', function(assert) {
     uiThemeModule.init({ theme: 'platform2', context: this.frameDoc() });
 
     // act
-    var currentTheme = themeModule.currentTheme();
+    const currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, 'platform2');
 });
@@ -403,7 +403,7 @@ QUnit.test('currentTheme returns previously set theme, regardles of what ui them
     themeModule.currentTheme('generic');
 
     // act
-    var currentTheme = themeModule.currentTheme();
+    const currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, 'generic.light');
 });
@@ -417,7 +417,7 @@ QUnit.test('currentTheme returns default theme if ui theme returns wrong theme',
     });
 
     // act
-    var currentTheme = themeModule.currentTheme();
+    const currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, 'viz default theme');
 });

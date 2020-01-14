@@ -1,20 +1,20 @@
-var $ = require('jquery'),
-    transformEvent = require('events/transform');
+const $ = require('jquery');
+const transformEvent = require('events/transform');
 
 $('#qunit-fixture').addClass('qunit-fixture-visible');
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="element"></div>';
 
     $('#qunit-fixture').html(markup);
 });
 
-var testEventFiring = function(eventName) {
+const testEventFiring = function(eventName) {
     QUnit.test(eventName + ' should be fired in correct condition', function(assert) {
         assert.expect(2);
 
-        var $element = $('#element');
-        var eventFired = 0;
+        const $element = $('#element');
+        let eventFired = 0;
 
         $element.on(eventName, function(e) {
             eventFired++;
@@ -40,11 +40,11 @@ var testEventFiring = function(eventName) {
     });
 };
 
-var testEventScale = function(eventName) {
+const testEventScale = function(eventName) {
     QUnit.test(eventName + ' should be fired with correct scale', function(assert) {
         assert.expect(1);
 
-        var $element = $('#element');
+        const $element = $('#element');
 
         $element.on(eventName, function(e) {
             assert.equal(e.scale, 0.5);
@@ -56,11 +56,11 @@ var testEventScale = function(eventName) {
     });
 };
 
-var testEventDeltaScale = function(eventName) {
+const testEventDeltaScale = function(eventName) {
     QUnit.test(eventName + ' should be fired with correct deltaScale', function(assert) {
         assert.expect(2);
 
-        var $element = $('#element');
+        const $element = $('#element');
 
         $element.on(eventName, function(e) {
             assert.equal(e.deltaScale, 0.75);
@@ -73,11 +73,11 @@ var testEventDeltaScale = function(eventName) {
     });
 };
 
-var testEventRotation = function(eventName) {
+const testEventRotation = function(eventName) {
     QUnit.test(eventName + ' should be fired with correct rotation', function(assert) {
         assert.expect(1);
 
-        var $element = $('#element');
+        const $element = $('#element');
 
         $element.on(eventName, function(e) {
             assert.ok(Math.abs(e.rotation + Math.PI / 4) < 0.0001);
@@ -89,11 +89,11 @@ var testEventRotation = function(eventName) {
     });
 };
 
-var testEventDeltaRotation = function(eventName) {
+const testEventDeltaRotation = function(eventName) {
     QUnit.test(eventName + ' should be fired with correct deltaRotation', function(assert) {
         assert.expect(2);
 
-        var $element = $('#element');
+        const $element = $('#element');
 
         $element.on(eventName, function(e) {
             assert.ok(Math.abs(e.deltaRotation + Math.PI / 4) < 0.0001);
@@ -106,11 +106,11 @@ var testEventDeltaRotation = function(eventName) {
     });
 };
 
-var testEventTranslation = function(eventName) {
+const testEventTranslation = function(eventName) {
     QUnit.test(eventName + ' should be fired with correct translation', function(assert) {
         assert.expect(1);
 
-        var $element = $('#element');
+        const $element = $('#element');
 
         $element.on(eventName, function(e) {
             assert.deepEqual(e.translation, {
@@ -125,11 +125,11 @@ var testEventTranslation = function(eventName) {
     });
 };
 
-var testEventDeltaTranslation = function(eventName) {
+const testEventDeltaTranslation = function(eventName) {
     QUnit.test(eventName + ' should be fired with correct deltaTranslation', function(assert) {
         assert.expect(2);
 
-        var $element = $('#element');
+        const $element = $('#element');
 
         $element.on(eventName, function(e) {
             assert.deepEqual(e.deltaTranslation, {

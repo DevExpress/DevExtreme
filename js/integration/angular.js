@@ -1,4 +1,4 @@
-var angular = require('angular');
+const angular = require('angular');
 
 // Check availability in global environment
 if(angular) {

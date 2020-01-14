@@ -1,4 +1,4 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="hcw"></div>');

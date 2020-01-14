@@ -17,30 +17,30 @@ import Overlay from '../overlay';
 import themes from '../themes';
 import errors from '../widget/ui.errors';
 
-var INVALIDATE_CLASS = 'invalid',
-    REVERT_TOOLTIP_CLASS = 'revert-tooltip',
-    ROWS_VIEW_CLASS = 'rowsview',
-    INVALID_MESSAGE_CLASS = 'dx-invalid-message',
-    WIDGET_INVALID_MESSAGE_CLASS = 'invalid-message',
-    INVALID_MESSAGE_ALWAYS_CLASS = 'dx-invalid-message-always',
-    REVERT_BUTTON_CLASS = 'dx-revert-button',
-    CELL_HIGHLIGHT_OUTLINE = 'dx-highlight-outline',
-    VALIDATOR_CLASS = 'validator',
+const INVALIDATE_CLASS = 'invalid';
+const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
+const ROWS_VIEW_CLASS = 'rowsview';
+const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
+const WIDGET_INVALID_MESSAGE_CLASS = 'invalid-message';
+const INVALID_MESSAGE_ALWAYS_CLASS = 'dx-invalid-message-always';
+const REVERT_BUTTON_CLASS = 'dx-revert-button';
+const CELL_HIGHLIGHT_OUTLINE = 'dx-highlight-outline';
+const VALIDATOR_CLASS = 'validator';
 
-    INSERT_INDEX = '__DX_INSERT_INDEX__',
-    PADDING_BETWEEN_TOOLTIPS = 2,
-    EDIT_MODE_ROW = 'row',
-    EDIT_MODE_FORM = 'form',
-    EDIT_MODE_BATCH = 'batch',
-    EDIT_MODE_CELL = 'cell',
-    EDIT_MODE_POPUP = 'popup',
-    GROUP_CELL_CLASS = 'dx-group-cell',
+const INSERT_INDEX = '__DX_INSERT_INDEX__';
+const PADDING_BETWEEN_TOOLTIPS = 2;
+const EDIT_MODE_ROW = 'row';
+const EDIT_MODE_FORM = 'form';
+const EDIT_MODE_BATCH = 'batch';
+const EDIT_MODE_CELL = 'cell';
+const EDIT_MODE_POPUP = 'popup';
+const GROUP_CELL_CLASS = 'dx-group-cell';
 
-    FORM_BASED_MODES = [EDIT_MODE_POPUP, EDIT_MODE_FORM],
+const FORM_BASED_MODES = [EDIT_MODE_POPUP, EDIT_MODE_FORM];
 
-    COMMAND_TRANSPARENT = 'transparent';
+const COMMAND_TRANSPARENT = 'transparent';
 
-var ValidatingController = modules.Controller.inherit((function() {
+const ValidatingController = modules.Controller.inherit((function() {
     return {
         init: function() {
             this._editingController = this.getController('editing');
@@ -48,17 +48,17 @@ var ValidatingController = modules.Controller.inherit((function() {
         },
 
         _rowValidating: function(editData, validate) {
-            var that = this,
-                brokenRules = validate ? validate.brokenRules || validate.brokenRule && [validate.brokenRule] : [],
-                isValid = validate ? validate.isValid : editData.isValid,
-                parameters = {
-                    brokenRules: brokenRules,
-                    isValid: isValid,
-                    key: editData.key,
-                    newData: editData.data,
-                    oldData: editData.oldData,
-                    errorText: this.getHiddenValidatorsErrorText(brokenRules)
-                };
+            const that = this;
+            const brokenRules = validate ? validate.brokenRules || validate.brokenRule && [validate.brokenRule] : [];
+            const isValid = validate ? validate.isValid : editData.isValid;
+            const parameters = {
+                brokenRules: brokenRules,
+                isValid: isValid,
+                key: editData.key,
+                newData: editData.data,
+                oldData: editData.oldData,
+                errorText: this.getHiddenValidatorsErrorText(brokenRules)
+            };
 
             that.executeAction('onRowValidating', parameters);
 
@@ -69,12 +69,12 @@ var ValidatingController = modules.Controller.inherit((function() {
         },
 
         getHiddenValidatorsErrorText: function(brokenRules) {
-            let brokenRulesMessages = [];
+            const brokenRulesMessages = [];
 
             each(brokenRules, function(_, brokenRule) {
-                let column = brokenRule.column,
-                    isGroupExpandColumn = column && column.groupIndex !== undefined && !column.showWhenGrouped,
-                    isVisibleColumn = column && column.visible;
+                const column = brokenRule.column;
+                const isGroupExpandColumn = column && column.groupIndex !== undefined && !column.showWhenGrouped;
+                const isVisibleColumn = column && column.visible;
 
                 if(!brokenRule.validator.$element().parent().length && (!isVisibleColumn || isGroupExpandColumn)) {
                     brokenRulesMessages.push(brokenRule.message);
@@ -84,9 +84,9 @@ var ValidatingController = modules.Controller.inherit((function() {
         },
 
         validate: function(isFull) {
-            var that = this,
-                isValid = true,
-                editingController = that._editingController;
+            const that = this;
+            let isValid = true;
+            const editingController = that._editingController;
 
             isFull = isFull || editingController.getEditMode() === EDIT_MODE_ROW;
 
@@ -97,13 +97,13 @@ var ValidatingController = modules.Controller.inherit((function() {
             that._isValidationInProgress = true;
             if(isFull) {
                 each(editingController._editData, function(index, editData) {
-                    var validationResult;
+                    let validationResult;
 
                     if(editData.type && editData.type !== 'remove') {
                         validationResult = that.validateGroup(editData);
                         if(!validationResult.isValid) {
                             each(validationResult.brokenRules, function() {
-                                var value = this.validator.option('adapter').getValue();
+                                let value = this.validator.option('adapter').getValue();
                                 if(value === undefined) {
                                     value = null;
                                 }
@@ -128,9 +128,9 @@ var ValidatingController = modules.Controller.inherit((function() {
         },
 
         validateGroup: function(editData) {
-            var that = this,
-                validateGroup = ValidationEngine.getGroupConfig(editData),
-                validationResults;
+            const that = this;
+            const validateGroup = ValidationEngine.getGroupConfig(editData);
+            let validationResults;
 
             if(validateGroup && validateGroup.validators.length) {
                 validationResults = ValidationEngine.validateGroup(editData);
@@ -140,7 +140,7 @@ var ValidatingController = modules.Controller.inherit((function() {
         },
 
         updateEditData: function(editData) {
-            var editMode = this._editingController.getEditMode();
+            const editMode = this._editingController.getEditMode();
 
             if(FORM_BASED_MODES.indexOf(editMode) === -1) {
                 this.setDisableApplyValidationResults(true);
@@ -160,36 +160,36 @@ var ValidatingController = modules.Controller.inherit((function() {
         },
 
         createValidator: function(parameters, $container) {
-            var that = this,
-                editingController = that._editingController,
-                column = parameters.column,
-                editData,
-                editIndex,
-                defaultValidationResult = function(options) {
-                    if(options.brokenRule) {
-                        options.brokenRule.columnIndex = column.index;
-                        options.brokenRule.column = column;
-                    }
+            const that = this;
+            const editingController = that._editingController;
+            const column = parameters.column;
+            let editData;
+            let editIndex;
+            const defaultValidationResult = function(options) {
+                if(options.brokenRule) {
+                    options.brokenRule.columnIndex = column.index;
+                    options.brokenRule.column = column;
+                }
 
-                    if($container && !that.getDisableApplyValidationResults()) {
-                        if(!options.isValid) {
-                            var $focus = $container.find(':focus');
-                            editingController.showHighlighting($container, true);
-                            if(!focused($focus)) {
-                                eventsEngine.trigger($focus, 'focus');
-                                eventsEngine.trigger($focus, pointerEvents.down);
-                            }
+                if($container && !that.getDisableApplyValidationResults()) {
+                    if(!options.isValid) {
+                        const $focus = $container.find(':focus');
+                        editingController.showHighlighting($container, true);
+                        if(!focused($focus)) {
+                            eventsEngine.trigger($focus, 'focus');
+                            eventsEngine.trigger($focus, pointerEvents.down);
                         }
-                        $container.toggleClass(that.addWidgetPrefix(INVALIDATE_CLASS), !options.isValid);
                     }
-                },
-                getValue = function() {
-                    var value = column.calculateCellValue(editData.data || {});
-                    return value !== undefined ? value : parameters.value;
-                },
-                visibleColumns,
-                columnsController,
-                showEditorAlways = column.showEditorAlways;
+                    $container.toggleClass(that.addWidgetPrefix(INVALIDATE_CLASS), !options.isValid);
+                }
+            };
+            const getValue = function() {
+                const value = column.calculateCellValue(editData.data || {});
+                return value !== undefined ? value : parameters.value;
+            };
+            let visibleColumns;
+            let columnsController;
+            let showEditorAlways = column.showEditorAlways;
 
             if(!column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length || isDefined(column.command)) return;
 
@@ -215,10 +215,10 @@ var ValidatingController = modules.Controller.inherit((function() {
 
                 editData = editingController._editData[editIndex];
 
-                var useDefaultValidator = $container && $container.hasClass('dx-widget');
+                const useDefaultValidator = $container && $container.hasClass('dx-widget');
                 $container && $container.addClass(that.addWidgetPrefix(VALIDATOR_CLASS));
 
-                var validator = new Validator($container || $('<div>'), {
+                const validator = new Validator($container || $('<div>'), {
                     name: column.caption,
                     validationRules: extend(true, [], column.validationRules),
                     validationGroup: editData,
@@ -232,7 +232,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                 });
 
                 if(useDefaultValidator) {
-                    var adapter = validator.option('adapter');
+                    const adapter = validator.option('adapter');
                     if(adapter) {
                         adapter.getValue = getValue;
                     }
@@ -287,10 +287,10 @@ module.exports = {
         controllers: {
             editing: {
                 _addEditData: function(options, row) {
-                    var that = this,
-                        validatingController = that.getController('validating'),
-                        editDataIndex = that.callBase(options, row),
-                        editData;
+                    const that = this;
+                    const validatingController = that.getController('validating');
+                    const editDataIndex = that.callBase(options, row);
+                    let editData;
 
                     if(editDataIndex >= 0) {
                         editData = that._editData[editDataIndex];
@@ -301,9 +301,9 @@ module.exports = {
                 },
 
                 _updateRowAndPageIndices: function() {
-                    var that = this,
-                        startInsertIndex = that.getView('rowsView').getTopVisibleItemIndex(),
-                        rowIndex = startInsertIndex;
+                    const that = this;
+                    const startInsertIndex = that.getView('rowsView').getTopVisibleItemIndex();
+                    let rowIndex = startInsertIndex;
 
                     each(that._editData, function(_, editData) {
                         if(!editData.isValid && editData.pageIndex !== that._pageIndex) {
@@ -319,7 +319,7 @@ module.exports = {
                 },
 
                 _needInsertItem: function(editData) {
-                    var result = this.callBase.apply(this, arguments);
+                    let result = this.callBase.apply(this, arguments);
 
                     if(result && !editData.isValid) {
                         result = editData.key.pageIndex === this._pageIndex;
@@ -329,40 +329,40 @@ module.exports = {
                 },
 
                 processItems: function(items, changeType) {
-                    var that = this,
-                        i,
-                        itemsCount,
-                        editData = that._editData,
-                        dataController = that.getController('data'),
-                        getIndexByEditData = function(editData, items) {
-                            var index = -1,
-                                isInsert = editData.type === 'insert',
-                                key = editData.key;
+                    const that = this;
+                    let i;
+                    let itemsCount;
+                    const editData = that._editData;
+                    const dataController = that.getController('data');
+                    const getIndexByEditData = function(editData, items) {
+                        let index = -1;
+                        const isInsert = editData.type === 'insert';
+                        const key = editData.key;
 
-                            each(items, function(i, item) {
-                                if(equalByValue(key, isInsert ? item : dataController.keyOf(item))) {
-                                    index = i;
-                                    return false;
-                                }
-                            });
-
-                            return index;
-                        },
-                        addInValidItem = function(editData) {
-                            var data = { key: editData.key },
-                                index = getIndexByEditData(editData, items),
-                                rowIndex;
-
-                            if(index >= 0) {
-                                return;
+                        each(items, function(i, item) {
+                            if(equalByValue(key, isInsert ? item : dataController.keyOf(item))) {
+                                index = i;
+                                return false;
                             }
+                        });
 
-                            editData.rowIndex = editData.rowIndex > itemsCount ? editData.rowIndex % itemsCount : editData.rowIndex;
-                            rowIndex = editData.rowIndex;
+                        return index;
+                    };
+                    const addInValidItem = function(editData) {
+                        const data = { key: editData.key };
+                        const index = getIndexByEditData(editData, items);
+                        let rowIndex;
 
-                            data[INSERT_INDEX] = 1;
-                            items.splice(rowIndex, 0, data);
-                        };
+                        if(index >= 0) {
+                            return;
+                        }
+
+                        editData.rowIndex = editData.rowIndex > itemsCount ? editData.rowIndex % itemsCount : editData.rowIndex;
+                        rowIndex = editData.rowIndex;
+
+                        data[INSERT_INDEX] = 1;
+                        items.splice(rowIndex, 0, data);
+                    };
 
                     items = that.callBase(items, changeType);
                     itemsCount = items.length;
@@ -379,12 +379,12 @@ module.exports = {
                 },
 
                 processDataItem: function(item) {
-                    var that = this,
-                        editIndex,
-                        editData,
-                        isInserted = item.data[INSERT_INDEX],
-                        key = isInserted ? item.data.key : item.key,
-                        editMode = that.getEditMode();
+                    const that = this;
+                    let editIndex;
+                    let editData;
+                    const isInserted = item.data[INSERT_INDEX];
+                    const key = isInserted ? item.data.key : item.key;
+                    const editMode = that.getEditMode();
 
                     if(editMode === EDIT_MODE_BATCH && isInserted && key) {
                         editIndex = getIndexByKey(key, that._editData);
@@ -403,13 +403,13 @@ module.exports = {
                 },
 
                 _getInvisibleColumns: function(editData) {
-                    var columnsController = this.getController('columns'),
-                        hasInvisibleRows,
-                        invisibleColumns = columnsController.getInvisibleColumns();
+                    const columnsController = this.getController('columns');
+                    let hasInvisibleRows;
+                    const invisibleColumns = columnsController.getInvisibleColumns();
 
                     if(this.isCellOrBatchEditMode()) {
                         hasInvisibleRows = editData.some((rowEditData) => {
-                            let rowIndex = this._dataController.getRowIndexByKey(rowEditData.key);
+                            const rowIndex = this._dataController.getRowIndexByKey(rowEditData.key);
 
                             return rowIndex < 0;
                         });
@@ -419,25 +419,25 @@ module.exports = {
                 },
 
                 _createInvisibleColumnValidators: function(editData) {
-                    var validatingController = this.getController('validating'),
-                        columnsController = this.getController('columns'),
-                        invisibleColumns = this._getInvisibleColumns(editData).filter((column) => !column.isBand),
-                        groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1),
-                        invisibleColumnValidators = [];
+                    const validatingController = this.getController('validating');
+                    const columnsController = this.getController('columns');
+                    const invisibleColumns = this._getInvisibleColumns(editData).filter((column) => !column.isBand);
+                    const groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1);
+                    const invisibleColumnValidators = [];
 
                     invisibleColumns.push(...groupColumns);
 
                     if(FORM_BASED_MODES.indexOf(this.getEditMode()) === -1) {
                         each(invisibleColumns, function(_, column) {
                             editData.forEach(function(options) {
-                                var data;
+                                let data;
                                 if(options.type === 'insert') {
                                     data = options.data;
                                 } else if(options.type === 'update') {
                                     data = createObjectWithChanges(options.oldData, options.data);
                                 }
                                 if(data) {
-                                    var validator = validatingController.createValidator({
+                                    const validator = validatingController.createValidator({
                                         column: column,
                                         key: options.key,
                                         value: column.calculateCellValue(data)
@@ -455,17 +455,17 @@ module.exports = {
                 },
 
                 _beforeSaveEditData: function(editData, editIndex) {
-                    var that = this,
-                        isValid,
-                        isFullValid,
-                        result = that.callBase.apply(that, arguments),
-                        validatingController = that.getController('validating');
+                    const that = this;
+                    let isValid;
+                    let isFullValid;
+                    let result = that.callBase.apply(that, arguments);
+                    const validatingController = that.getController('validating');
 
                     if(editData) {
                         isValid = editData.type === 'remove' || editData.isValid;
                         result = result || !isValid;
                     } else {
-                        var disposeValidators = that._createInvisibleColumnValidators(this._editData);
+                        const disposeValidators = that._createInvisibleColumnValidators(this._editData);
                         isFullValid = validatingController.validate(true);
                         disposeValidators();
                         that._updateRowAndPageIndices();
@@ -495,10 +495,10 @@ module.exports = {
                 },
 
                 _beforeEditCell: function(rowIndex, columnIndex, item) {
-                    var result = this.callBase(rowIndex, columnIndex, item),
-                        $cell = this._rowsView._getCellElement(rowIndex, columnIndex),
-                        validator = $cell && $cell.data('dxValidator'),
-                        value = validator && validator.option('adapter').getValue();
+                    const result = this.callBase(rowIndex, columnIndex, item);
+                    const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
+                    const validator = $cell && $cell.data('dxValidator');
+                    const value = validator && validator.option('adapter').getValue();
 
                     if(this.getEditMode(this) === EDIT_MODE_CELL && (!validator || value !== undefined && validator.validate().isValid)) {
                         return result;
@@ -506,15 +506,15 @@ module.exports = {
                 },
 
                 _afterSaveEditData: function() {
-                    var that = this,
-                        $firstErrorRow;
+                    const that = this;
+                    let $firstErrorRow;
 
                     each(that._editData, function(_, editData) {
-                        var $errorRow = that._showErrorRow(editData);
+                        const $errorRow = that._showErrorRow(editData);
                         $firstErrorRow = $firstErrorRow || $errorRow;
                     });
                     if($firstErrorRow) {
-                        var scrollable = this._rowsView.getScrollable();
+                        const scrollable = this._rowsView.getScrollable();
                         if(scrollable) {
                             scrollable.update();
                             scrollable.scrollToElement($firstErrorRow);
@@ -523,10 +523,10 @@ module.exports = {
                 },
 
                 _showErrorRow: function(editData) {
-                    var $popupContent,
-                        errorHandling = this.getController('errorHandling'),
-                        items = this.getController('data').items(),
-                        rowIndex = this.getIndexByKey(editData.key, items);
+                    let $popupContent;
+                    const errorHandling = this.getController('errorHandling');
+                    const items = this.getController('data').items();
+                    const rowIndex = this.getIndexByKey(editData.key, items);
 
                     if(!editData.isValid && editData.errorText && rowIndex >= 0) {
                         $popupContent = this.getPopupContent();
@@ -535,20 +535,20 @@ module.exports = {
                 },
 
                 updateFieldValue: function(e) {
-                    var that = this,
-                        editMode = that.getEditMode();
+                    const that = this;
+                    const editMode = that.getEditMode();
 
                     that.callBase.apply(that, arguments);
 
                     if(editMode === EDIT_MODE_ROW || (editMode === EDIT_MODE_BATCH && e.column.showEditorAlways)) {
-                        var currentValidator = that.getController('validating').getValidator();
+                        const currentValidator = that.getController('validating').getValidator();
                         currentValidator && currentValidator.validate();
                     }
                 },
 
                 showHighlighting: function($cell, skipValidation) {
-                    var isValid = true,
-                        validator;
+                    let isValid = true;
+                    let validator;
 
                     if(!skipValidation) {
                         validator = $cell.data('dxValidator');
@@ -566,16 +566,16 @@ module.exports = {
                 }
             },
             editorFactory: (function() {
-                var getWidthOfVisibleCells = function(that, element) {
-                    let rowIndex = $(element).closest('tr').index(),
-                        $cellElements = $(that._rowsView.getRowElement(rowIndex)).first().children().filter(':not(.dx-hidden-cell)');
+                const getWidthOfVisibleCells = function(that, element) {
+                    const rowIndex = $(element).closest('tr').index();
+                    const $cellElements = $(that._rowsView.getRowElement(rowIndex)).first().children().filter(':not(.dx-hidden-cell)');
 
                     return that._rowsView._getWidths($cellElements).reduce((w1, w2) => w1 + w2, 0);
                 };
 
-                var getBoundaryNonFixedColumnsInfo = function(fixedColumns) {
-                    let firstNonFixedColumnIndex,
-                        lastNonFixedColumnIndex;
+                const getBoundaryNonFixedColumnsInfo = function(fixedColumns) {
+                    let firstNonFixedColumnIndex;
+                    let lastNonFixedColumnIndex;
 
                     fixedColumns.some((column, index) => {
                         if(column.command === COMMAND_TRANSPARENT) {
@@ -597,11 +597,11 @@ module.exports = {
                             return;
                         }
 
-                        let $tooltipElement = $('<div>')
+                        const $tooltipElement = $('<div>')
                             .addClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
                             .appendTo($container);
 
-                        let tooltipOptions = {
+                        const tooltipOptions = {
                             animation: null,
                             visible: true,
                             target: $targetElement,
@@ -609,8 +609,8 @@ module.exports = {
                             closeOnOutsideClick: false,
                             closeOnTargetScroll: false,
                             contentTemplate: () => {
-                                let $buttonElement = $('<div>').addClass(REVERT_BUTTON_CLASS);
-                                let buttonOptions = {
+                                const $buttonElement = $('<div>').addClass(REVERT_BUTTON_CLASS);
+                                const buttonOptions = {
                                     icon: 'revert',
                                     hint: this.option('editing.texts.validationCancelChanges'),
                                     onClick: () => {
@@ -634,11 +634,11 @@ module.exports = {
                     },
 
                     _hideFixedGroupCell: function($cell, overlayOptions) {
-                        var nextRowOptions,
-                            $nextFixedRowElement,
-                            $groupCellElement,
-                            isFixedColumns = this._rowsView.isFixedColumns(),
-                            isFormEditMode = this._editingController.isFormEditMode();
+                        let nextRowOptions;
+                        let $nextFixedRowElement;
+                        let $groupCellElement;
+                        const isFixedColumns = this._rowsView.isFixedColumns();
+                        const isFormEditMode = this._editingController.isFormEditMode();
 
                         if(isFixedColumns && !isFormEditMode) {
                             nextRowOptions = $cell.closest('.dx-row').next().data('options');
@@ -660,9 +660,9 @@ module.exports = {
 
                     _positionedHandler: function(e, isOverlayVisible) {
                         if(!e.component.__skipPositionProcessing) {
-                            let isRevertButton = $(e.element).hasClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS)),
-                                needRepaint = !isRevertButton && this._rowsView.updateFreeSpaceRowHeight(),
-                                normalizedPosition = this._normalizeValidationMessagePositionAndMaxWidth(e, isRevertButton, isOverlayVisible);
+                            const isRevertButton = $(e.element).hasClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
+                            const needRepaint = !isRevertButton && this._rowsView.updateFreeSpaceRowHeight();
+                            const normalizedPosition = this._normalizeValidationMessagePositionAndMaxWidth(e, isRevertButton, isOverlayVisible);
 
                             e.component.__skipPositionProcessing = !!(needRepaint || normalizedPosition);
 
@@ -675,22 +675,22 @@ module.exports = {
                     },
 
                     _showValidationMessage: function($cell, message, alignment, revertTooltip) {
-                        let $highlightContainer = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE),
-                            isMaterial = themes.isMaterial(),
-                            overlayTarget = $highlightContainer.length && !isMaterial ? $highlightContainer : $cell,
-                            editorPopup = $cell.find('.dx-dropdowneditor-overlay').data('dxPopup'),
-                            isOverlayVisible = editorPopup && editorPopup.option('visible'),
-                            myPosition = isOverlayVisible ? 'top right' : 'top ' + alignment,
-                            atPosition = isOverlayVisible ? 'top left' : 'bottom ' + alignment;
+                        const $highlightContainer = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
+                        const isMaterial = themes.isMaterial();
+                        const overlayTarget = $highlightContainer.length && !isMaterial ? $highlightContainer : $cell;
+                        const editorPopup = $cell.find('.dx-dropdowneditor-overlay').data('dxPopup');
+                        const isOverlayVisible = editorPopup && editorPopup.option('visible');
+                        const myPosition = isOverlayVisible ? 'top right' : 'top ' + alignment;
+                        const atPosition = isOverlayVisible ? 'top left' : 'bottom ' + alignment;
 
-                        let $overlayElement = $('<div>')
+                        const $overlayElement = $('<div>')
                             .addClass(INVALID_MESSAGE_CLASS)
                             .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
                             .addClass(this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
                             .text(message)
                             .appendTo($cell);
 
-                        let overlayOptions = {
+                        const overlayOptions = {
                             target: overlayTarget,
                             container: $cell,
                             shading: false,
@@ -720,19 +720,19 @@ module.exports = {
                     },
 
                     _normalizeValidationMessagePositionAndMaxWidth: function(options, isRevertButton, isOverlayVisible) {
-                        let fixedColumns = this._columnsController.getFixedColumns();
+                        const fixedColumns = this._columnsController.getFixedColumns();
 
                         if(!fixedColumns || !fixedColumns.length) {
                             return;
                         }
 
-                        let position,
-                            visibleTableWidth = !isRevertButton && getWidthOfVisibleCells(this, options.element),
-                            $overlayContentElement = isRevertButton ? options.component.overlayContent() : options.component.$content(),
-                            validationMessageWidth = $overlayContentElement.outerWidth(true),
-                            needMaxWidth = !isRevertButton && validationMessageWidth > visibleTableWidth,
-                            columnIndex = this._rowsView.getCellIndex($(options.element).closest('td')),
-                            boundaryNonFixedColumnsInfo = getBoundaryNonFixedColumnsInfo(fixedColumns);
+                        let position;
+                        const visibleTableWidth = !isRevertButton && getWidthOfVisibleCells(this, options.element);
+                        const $overlayContentElement = isRevertButton ? options.component.overlayContent() : options.component.$content();
+                        const validationMessageWidth = $overlayContentElement.outerWidth(true);
+                        const needMaxWidth = !isRevertButton && validationMessageWidth > visibleTableWidth;
+                        const columnIndex = this._rowsView.getCellIndex($(options.element).closest('td'));
+                        const boundaryNonFixedColumnsInfo = getBoundaryNonFixedColumnsInfo(fixedColumns);
 
                         if(!isRevertButton && (columnIndex === boundaryNonFixedColumnsInfo.startColumnIndex || needMaxWidth)) {
                             position = {
@@ -758,18 +758,18 @@ module.exports = {
                     _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {
                         if(!$revertContent) return;
 
-                        var contentOffset = $content.offset(),
-                            revertContentOffset = $revertContent.offset();
+                        const contentOffset = $content.offset();
+                        const revertContentOffset = $revertContent.offset();
 
                         if(contentOffset.top === revertContentOffset.top && contentOffset.left + $content.width() > revertContentOffset.left) {
-                            var left = $revertContent.width() + PADDING_BETWEEN_TOOLTIPS;
+                            const left = $revertContent.width() + PADDING_BETWEEN_TOOLTIPS;
                             $content.css('left', revertContentOffset.left < $cell.offset().left ? -left : left);
                         }
                     },
 
                     _getTooltipsSelector: function() {
-                        var invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS),
-                            revertTooltipClass = this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
+                        const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
+                        const revertTooltipClass = this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
                         return '.dx-editor-cell .' + revertTooltipClass + ', .dx-editor-cell .' + invalidMessageClass + ', .dx-cell-modified .' + invalidMessageClass;
                     },
 
@@ -788,17 +788,17 @@ module.exports = {
                     },
 
                     focus: function($element, hideBorder) {
-                        var that = this,
-                            $focus = $element && $element.closest(that._getFocusCellSelector()),
-                            validator = $focus && ($focus.data('dxValidator') || $element.find('.' + that.addWidgetPrefix(VALIDATOR_CLASS)).eq(0).data('dxValidator')),
-                            rowOptions = $focus && $focus.closest('.dx-row').data('options'),
-                            editData = rowOptions ? that.getController('editing').getEditDataByKey(rowOptions.key) : null,
-                            validationResult,
-                            $tooltips = $focus && $focus.closest('.' + that.addWidgetPrefix(ROWS_VIEW_CLASS)).find(that._getTooltipsSelector()),
-                            $cell = $focus && $focus.is('td') ? $focus : null,
-                            showValidationMessage = false,
-                            revertTooltip,
-                            column = $cell && that.getController('columns').getVisibleColumns()[$cell.index()];
+                        const that = this;
+                        const $focus = $element && $element.closest(that._getFocusCellSelector());
+                        const validator = $focus && ($focus.data('dxValidator') || $element.find('.' + that.addWidgetPrefix(VALIDATOR_CLASS)).eq(0).data('dxValidator'));
+                        const rowOptions = $focus && $focus.closest('.dx-row').data('options');
+                        const editData = rowOptions ? that.getController('editing').getEditDataByKey(rowOptions.key) : null;
+                        let validationResult;
+                        const $tooltips = $focus && $focus.closest('.' + that.addWidgetPrefix(ROWS_VIEW_CLASS)).find(that._getTooltipsSelector());
+                        const $cell = $focus && $focus.is('td') ? $focus : null;
+                        let showValidationMessage = false;
+                        let revertTooltip;
+                        const column = $cell && that.getController('columns').getVisibleColumns()[$cell.index()];
 
                         if(!arguments.length) return that.callBase();
 
@@ -835,12 +835,12 @@ module.exports = {
         views: {
             rowsView: {
                 updateFreeSpaceRowHeight: function($table) {
-                    var that = this,
-                        $rowElements,
-                        $freeSpaceRowElement,
-                        $freeSpaceRowElements,
-                        $element = that.element(),
-                        $tooltipContent = $element && $element.find('.' + that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS) + ' .dx-overlay-content');
+                    const that = this;
+                    let $rowElements;
+                    let $freeSpaceRowElement;
+                    let $freeSpaceRowElements;
+                    const $element = that.element();
+                    const $tooltipContent = $element && $element.find('.' + that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS) + ' .dx-overlay-content');
 
                     that.callBase($table);
 
@@ -859,8 +859,8 @@ module.exports = {
                 _formItemPrepared: function(cellOptions, $container) {
                     this.callBase.apply(this, arguments);
                     deferUpdate(() => {
-                        var $editor = $container.find('.dx-widget').first(),
-                            isEditorDisposed = $editor.length && !$editor.children().length;
+                        const $editor = $container.find('.dx-widget').first();
+                        const isEditorDisposed = $editor.length && !$editor.children().length;
 
                         // T736360
                         if(!isEditorDisposed) {

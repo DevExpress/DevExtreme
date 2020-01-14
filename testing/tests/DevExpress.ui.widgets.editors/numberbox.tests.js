@@ -1,9 +1,9 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
-require('common.css!');
+import 'common.css!';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="qunit-fixture">\
             <div id="numberbox"></div>\
             <div id="widget"></div>\
@@ -13,7 +13,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-require('./numberBoxParts/common.tests.js');
-require('./numberBoxParts/mask.caret.tests.js');
-require('./numberBoxParts/mask.tests.js');
+import './numberBoxParts/common.tests.js';
+import './numberBoxParts/mask.caret.tests.js';
+import './numberBoxParts/mask.tests.js';
 

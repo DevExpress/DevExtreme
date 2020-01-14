@@ -160,10 +160,10 @@ QUnit.module('onContentReady event', moduleConfig, () => {
             dataSource: dataSource,
             maxAppointmentsPerCell: null,
             onContentReady: e => {
-                const element = e.component,
-                    $header = element.getHeader().$element(),
-                    $workSpace = element.getWorkSpace().$element(),
-                    appointmentPosition = translator.locate(scheduler.appointments.getAppointment());
+                const element = e.component;
+                const $header = element.getHeader().$element();
+                const $workSpace = element.getWorkSpace().$element();
+                const appointmentPosition = translator.locate(scheduler.appointments.getAppointment());
 
                 assert.equal($header.length, 1, 'Header is rendered');
                 assert.equal($workSpace.length, 1, 'Work Space is rendered');

@@ -1,8 +1,8 @@
-var $ = require('jquery'),
-    themeModule = require('viz/themes'),
-    BaseThemeManager = require('viz/core/base_theme_manager').BaseThemeManager,
-    currentTheme = themeModule.currentTheme(),
-    paletteModule = require('viz/palette');
+const $ = require('jquery');
+const themeModule = require('viz/themes');
+const BaseThemeManager = require('viz/core/base_theme_manager').BaseThemeManager;
+const currentTheme = themeModule.currentTheme();
+const paletteModule = require('viz/palette');
 
 themeModule.registerTheme({
     name: 'custom',
@@ -27,7 +27,7 @@ themeModule.registerTheme({
     defaultPalette: ['#000000', '#100000']
 });
 
-var environment = {
+const environment = {
     beforeEach: function() {
         themeModule.currentTheme(currentTheme);
         this.themeManager = new BaseThemeManager({ fontFields: [] });
@@ -96,8 +96,8 @@ QUnit.module('Cache', {
 });
 
 QUnit.test('Adding and removing', function(assert) {
-    var item = this.create(),
-        k;
+    const item = this.create();
+    let k;
     $.each(this.cache, function(i) {
         k = i;
         return false;
@@ -112,7 +112,7 @@ QUnit.module('Themes', environment);
 QUnit.test('default theme', function(assert) {
     // act
     this.themeManager.setTheme();
-    var theme = this.themeManager.theme();
+    const theme = this.themeManager.theme();
 
     // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
@@ -128,7 +128,7 @@ QUnit.test('default theme with groupName', function(assert) {
     // act
     this.themeManager._themeSection = 'rangeSelector';
     this.themeManager.setTheme('generic');
-    var theme = this.themeManager.theme();
+    const theme = this.themeManager.theme();
 
     // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
@@ -142,7 +142,7 @@ QUnit.test('default theme with complex groupName', function(assert) {
     // act
     this.themeManager._themeSection = 'rangeSelector.scale';
     this.themeManager.setTheme('generic.light');
-    var theme = this.themeManager.theme();
+    const theme = this.themeManager.theme();
 
     // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
@@ -160,7 +160,7 @@ QUnit.test('customize default theme', function(assert) {
             }
         }
     });
-    var theme = this.themeManager.theme();
+    const theme = this.themeManager.theme();
 
     // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
@@ -178,7 +178,7 @@ QUnit.test('customize theme with groupName', function(assert) {
             borderWidth: 1
         }
     });
-    var theme = this.themeManager.theme();
+    const theme = this.themeManager.theme();
 
     // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
@@ -198,7 +198,7 @@ QUnit.test('customize custom theme', function(assert) {
         }
     });
 
-    var theme = this.themeManager.theme();
+    const theme = this.themeManager.theme();
 
     // assert
     assert.equal(this.themeManager.themeName(), 'custom');
@@ -215,7 +215,7 @@ QUnit.test('global customized theme', function(assert) {
 
     this.themeManager._themeSection = 'chart';
     this.themeManager.setTheme('custom');
-    var theme = this.themeManager.theme();
+    const theme = this.themeManager.theme();
 
     // assert
     assert.equal(this.themeManager.themeName(), 'custom');
@@ -228,7 +228,7 @@ QUnit.test('theme by name', function(assert) {
     // act
     this.themeManager._themeSection = 'chart';
     this.themeManager.setTheme('custom');
-    var theme = this.themeManager.theme();
+    const theme = this.themeManager.theme();
 
     // assert
     assert.equal(this.themeManager.themeName(), 'custom');
@@ -251,7 +251,7 @@ QUnit.test('initializeFont', function(assert) {
     // act
     this.themeManager._initializeFont(this.themeManager.theme().testLabel.font);
 
-    var theme = this.themeManager.theme();
+    const theme = this.themeManager.theme();
 
     // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
@@ -279,7 +279,7 @@ QUnit.test('initializeFont from customized font', function(assert) {
     // act
     this.themeManager._initializeFont(this.themeManager.theme().testLabel);
 
-    var theme = this.themeManager.theme();
+    const theme = this.themeManager.theme();
 
     // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
@@ -310,7 +310,7 @@ QUnit.test('initializeFont from customized font with groupName', function(assert
     // act
     this.themeManager._initializeFont(this.themeManager.theme().legend.testLabel);
 
-    var theme = this.themeManager.theme();
+    const theme = this.themeManager.theme();
 
     // assert
     assert.equal(this.themeManager.themeName(), 'custom');
@@ -396,7 +396,7 @@ QUnit.module('Palettes', environment);
 QUnit.test('Create palette', function(assert) {
     this.themeManager.setTheme('custom');
 
-    var palette = this.themeManager.createPalette('paletteName', { palette: 'options' });
+    const palette = this.themeManager.createPalette('paletteName', { palette: 'options' });
 
     assert.ok(this.createPalette.calledOnce);
     assert.ok(this.createPalette.firstCall.calledWithNew);
@@ -407,7 +407,7 @@ QUnit.test('Create palette', function(assert) {
 QUnit.test('Create discrete palette', function(assert) {
     this.themeManager.setTheme('custom');
 
-    var palette = this.themeManager.createDiscretePalette('paletteName', 13);
+    const palette = this.themeManager.createDiscretePalette('paletteName', 13);
 
     assert.ok(this.getDiscretePalette.calledOnce);
     assert.ok(this.getDiscretePalette.firstCall.calledWithNew);
@@ -418,7 +418,7 @@ QUnit.test('Create discrete palette', function(assert) {
 QUnit.test('Create gradient palette', function(assert) {
     this.themeManager.setTheme('custom');
 
-    var palette = this.themeManager.createGradientPalette(['#000000', '#080000']);
+    const palette = this.themeManager.createGradientPalette(['#000000', '#080000']);
 
     assert.strictEqual(palette.getColor(0.25), '#020000');
 });
@@ -426,7 +426,7 @@ QUnit.test('Create gradient palette', function(assert) {
 QUnit.test('Create palette. With default palette', function(assert) {
     this.themeManager.setTheme('custom-default-palette');
 
-    var palette = this.themeManager.createPalette(undefined, { palette: 'options' });
+    const palette = this.themeManager.createPalette(undefined, { palette: 'options' });
 
     assert.ok(this.createPalette.calledOnce);
     assert.ok(this.createPalette.firstCall.calledWithNew);
@@ -437,7 +437,7 @@ QUnit.test('Create palette. With default palette', function(assert) {
 QUnit.test('Create discrete palette. With default palette', function(assert) {
     this.themeManager.setTheme('custom-default-palette');
 
-    var palette = this.themeManager.createDiscretePalette(undefined, 13);
+    const palette = this.themeManager.createDiscretePalette(undefined, 13);
 
     assert.ok(this.getDiscretePalette.calledOnce);
     assert.ok(this.getDiscretePalette.firstCall.calledWithNew);
@@ -448,7 +448,7 @@ QUnit.test('Create discrete palette. With default palette', function(assert) {
 QUnit.test('Create gradient palette. With default palette', function(assert) {
     this.themeManager.setTheme('custom-default-gradient-palette');
 
-    var palette = this.themeManager.createGradientPalette(undefined);
+    const palette = this.themeManager.createGradientPalette(undefined);
 
     assert.strictEqual(palette.getColor(0.25), '#040000');
 });
@@ -456,7 +456,7 @@ QUnit.test('Create gradient palette. With default palette', function(assert) {
 QUnit.test('Create palette. Palette and default palette', function(assert) {
     this.themeManager.setTheme('custom-default-palette');
 
-    var palette = this.themeManager.createPalette('paletteName', { palette: 'options' });
+    const palette = this.themeManager.createPalette('paletteName', { palette: 'options' });
 
     assert.ok(this.createPalette.calledOnce);
     assert.ok(this.createPalette.firstCall.calledWithNew);
@@ -467,7 +467,7 @@ QUnit.test('Create palette. Palette and default palette', function(assert) {
 QUnit.test('Create discrete palette. Palette and default palette', function(assert) {
     this.themeManager.setTheme('custom-default-palette');
 
-    var palette = this.themeManager.createDiscretePalette('paletteName', 13);
+    const palette = this.themeManager.createDiscretePalette('paletteName', 13);
 
     assert.ok(this.getDiscretePalette.calledOnce);
     assert.ok(this.getDiscretePalette.firstCall.calledWithNew);
@@ -479,7 +479,7 @@ QUnit.test('Get palette\'s accent color', function(assert) {
     this.getAccentColor.returns('accent color');
     this.themeManager.setTheme('custom-default-palette');
 
-    var color = this.themeManager.getAccentColor('paletteName');
+    const color = this.themeManager.getAccentColor('paletteName');
 
     assert.equal(color, 'accent color');
     assert.deepEqual(this.getAccentColor.lastCall.args, ['paletteName', 'some-default-palette']);

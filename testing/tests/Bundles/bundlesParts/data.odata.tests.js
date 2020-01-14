@@ -1,4 +1,4 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 QUnit.test('data.odata', function(assert) {
 

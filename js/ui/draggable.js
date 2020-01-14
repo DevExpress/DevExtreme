@@ -1,29 +1,29 @@
-var $ = require('../core/renderer'),
-    window = require('../core/utils/window').getWindow(),
-    eventsEngine = require('../events/core/events_engine'),
-    stringUtils = require('../core/utils/string'),
-    registerComponent = require('../core/component_registrator'),
-    translator = require('../animation/translator'),
-    dasherize = require('../core/utils/inflector').dasherize,
-    extend = require('../core/utils/extend').extend,
-    DOMComponent = require('../core/dom_component'),
-    eventUtils = require('../events/utils'),
-    pointerEvents = require('../events/pointer'),
-    dragEvents = require('../events/drag'),
-    positionUtils = require('../animation/position'),
-    isFunction = require('../core/utils/type').isFunction,
-    noop = require('../core/utils/common').noop;
+const $ = require('../core/renderer');
+const window = require('../core/utils/window').getWindow();
+const eventsEngine = require('../events/core/events_engine');
+const stringUtils = require('../core/utils/string');
+const registerComponent = require('../core/component_registrator');
+const translator = require('../animation/translator');
+const dasherize = require('../core/utils/inflector').dasherize;
+const extend = require('../core/utils/extend').extend;
+const DOMComponent = require('../core/dom_component');
+const eventUtils = require('../events/utils');
+const pointerEvents = require('../events/pointer');
+const dragEvents = require('../events/drag');
+const positionUtils = require('../animation/position');
+const isFunction = require('../core/utils/type').isFunction;
+const noop = require('../core/utils/common').noop;
 
-var DRAGGABLE = 'dxDraggable',
-    DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE),
-    DRAG_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, DRAGGABLE),
-    DRAGEND_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, DRAGGABLE),
-    POINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, DRAGGABLE),
-    DRAGGABLE_CLASS = dasherize(DRAGGABLE),
-    DRAGGABLE_DRAGGING_CLASS = DRAGGABLE_CLASS + '-dragging';
+const DRAGGABLE = 'dxDraggable';
+const DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE);
+const DRAG_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, DRAGGABLE);
+const DRAGEND_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, DRAGGABLE);
+const POINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, DRAGGABLE);
+const DRAGGABLE_CLASS = dasherize(DRAGGABLE);
+const DRAGGABLE_DRAGGING_CLASS = DRAGGABLE_CLASS + '-dragging';
 
 
-var Draggable = DOMComponent.inherit({
+const Draggable = DOMComponent.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             onDragStart: noop,
@@ -47,9 +47,9 @@ var Draggable = DOMComponent.inherit({
             return;
         }
 
-        var $element = this.$element().css('position', 'absolute'),
-            eventHandlers = {},
-            allowMoveByClick = this.option('allowMoveByClick');
+        let $element = this.$element().css('position', 'absolute');
+        const eventHandlers = {};
+        const allowMoveByClick = this.option('allowMoveByClick');
 
         eventHandlers[DRAGSTART_EVENT_NAME] = this._dragStartHandler.bind(this);
         eventHandlers[DRAG_EVENT_NAME] = this._dragHandler.bind(this);
@@ -80,9 +80,9 @@ var Draggable = DOMComponent.inherit({
             return;
         }
 
-        var areaOffset = this._getAreaOffset($(e.currentTarget)),
-            direction = this.option('direction'),
-            position = {};
+        const areaOffset = this._getAreaOffset($(e.currentTarget));
+        const direction = this.option('direction');
+        const position = {};
 
         if(direction === 'horizontal' || direction === 'both') {
             position.left = e.pageX - this.$element().width() / 2 - areaOffset.left;
@@ -98,23 +98,23 @@ var Draggable = DOMComponent.inherit({
     },
 
     _dragStartHandler: function(e) {
-        var $element = this.$element();
+        const $element = this.$element();
         if($element.is('.dx-state-disabled, .dx-state-disabled *')) {
             e.cancel = true;
             return;
         }
 
-        var $area = this._getArea(),
-            areaOffset = this._getAreaOffset($area),
-            boundOffset = this._getBoundOffset(),
-            areaWidth = $area.outerWidth(),
-            areaHeight = $area.outerHeight(),
-            elementWidth = $element.width(),
-            elementHeight = $element.height();
+        const $area = this._getArea();
+        const areaOffset = this._getAreaOffset($area);
+        const boundOffset = this._getBoundOffset();
+        const areaWidth = $area.outerWidth();
+        const areaHeight = $area.outerHeight();
+        const elementWidth = $element.width();
+        const elementHeight = $element.height();
 
         this._toggleDraggingClass(true);
 
-        var startOffset = {
+        const startOffset = {
             left: $element.offset().left - areaOffset.left,
             top: $element.offset().top - areaOffset.top
         };
@@ -130,7 +130,7 @@ var Draggable = DOMComponent.inherit({
     },
 
     _getAreaOffset: function($area) {
-        var offset = $area && positionUtils.offset($area);
+        const offset = $area && positionUtils.offset($area);
         return offset ? offset : { left: 0, top: 0 };
     },
 
@@ -139,7 +139,7 @@ var Draggable = DOMComponent.inherit({
     },
 
     _getBoundOffset: function() {
-        var boundOffset = this.option('boundOffset');
+        let boundOffset = this.option('boundOffset');
 
         if(isFunction(boundOffset)) {
             boundOffset = boundOffset.call(this);
@@ -149,7 +149,7 @@ var Draggable = DOMComponent.inherit({
     },
 
     _getArea: function() {
-        var area = this.option('area');
+        let area = this.option('area');
         if(isFunction(area)) {
             area = area.call(this);
         }
@@ -157,8 +157,8 @@ var Draggable = DOMComponent.inherit({
     },
 
     _dragHandler: function(e) {
-        var offset = e.offset,
-            startPosition = this._startPosition;
+        const offset = e.offset;
+        const startPosition = this._startPosition;
 
         this._move({
             left: startPosition.left + offset.x,
@@ -184,7 +184,7 @@ var Draggable = DOMComponent.inherit({
     },
 
     _optionChanged: function(args) {
-        var name = args.name;
+        const name = args.name;
 
         switch(name) {
             case 'onDragStart':

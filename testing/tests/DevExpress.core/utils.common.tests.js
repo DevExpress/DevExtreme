@@ -160,11 +160,11 @@ module('findBestMatches', () => {
             b: 2,
             c: 3
         }];
-        let filter = {
+        const filter = {
             a: 1,
             b: 2
         };
-        let filteredItems = findBestMatches(filter, items);
+        const filteredItems = findBestMatches(filter, items);
 
         assert.equal(filteredItems.length, 2);
     });

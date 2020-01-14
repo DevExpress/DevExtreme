@@ -1,32 +1,32 @@
-var _isFinite = isFinite,
-    registerComponent = require('../../core/component_registrator'),
-    objectUtils = require('../../core/utils/object'),
-    extend = require('../../core/utils/extend').extend,
-    each = require('../../core/utils/iterator').each,
-    dxBaseGauge = require('./base_gauge').dxBaseGauge,
-    dxGauge = require('./common').dxGauge,
-    vizUtils = require('../core/utils'),
-    _normalizeAngle = vizUtils.normalizeAngle,
-    _getCosAndSin = vizUtils.getCosAndSin,
-    circularIndicatorsModule = require('./circular_indicators'),
-    createIndicatorCreator = require('./common').createIndicatorCreator,
-    CircularRangeContainer = require('./circular_range_container'),
+const _isFinite = isFinite;
+const registerComponent = require('../../core/component_registrator');
+const objectUtils = require('../../core/utils/object');
+const extend = require('../../core/utils/extend').extend;
+const each = require('../../core/utils/iterator').each;
+const dxBaseGauge = require('./base_gauge').dxBaseGauge;
+const dxGauge = require('./common').dxGauge;
+const vizUtils = require('../core/utils');
+const _normalizeAngle = vizUtils.normalizeAngle;
+const _getCosAndSin = vizUtils.getCosAndSin;
+const circularIndicatorsModule = require('./circular_indicators');
+const createIndicatorCreator = require('./common').createIndicatorCreator;
+const CircularRangeContainer = require('./circular_range_container');
 
-    _abs = Math.abs,
-    _max = Math.max,
-    _min = Math.min,
-    _round = Math.round,
-    _each = each,
+const _abs = Math.abs;
+const _max = Math.max;
+const _min = Math.min;
+const _round = Math.round;
+const _each = each;
 
-    PI = Math.PI;
+const PI = Math.PI;
 
 function getSides(startAngle, endAngle) {
-    var startCosSin = _getCosAndSin(startAngle),
-        endCosSin = _getCosAndSin(endAngle),
-        startCos = startCosSin.cos,
-        startSin = startCosSin.sin,
-        endCos = endCosSin.cos,
-        endSin = endCosSin.sin;
+    const startCosSin = _getCosAndSin(startAngle);
+    const endCosSin = _getCosAndSin(endAngle);
+    const startCos = startCosSin.cos;
+    const startSin = startCosSin.sin;
+    const endCos = endCosSin.cos;
+    const endSin = endCosSin.sin;
     return {
         left: ((startSin <= 0 && endSin >= 0) ||
             (startSin <= 0 && endSin <= 0 && startCos <= endCos) ||
@@ -43,7 +43,7 @@ function getSides(startAngle, endAngle) {
     };
 }
 
-var dxCircularGauge = dxGauge.inherit({
+const dxCircularGauge = dxGauge.inherit({
     _rootClass: 'dxg-circular-gauge',
 
     _factoryMethods: {
@@ -57,17 +57,17 @@ var dxCircularGauge = dxGauge.inherit({
     },
 
     _getThemeManagerOptions() {
-        let options = this.callBase.apply(this, arguments);
+        const options = this.callBase.apply(this, arguments);
 
         options.subTheme = '_circular';
         return options;
     },
 
     _updateScaleTickIndent: function(scaleOptions) {
-        var indentFromTick = scaleOptions.label.indentFromTick,
-            length = scaleOptions.tick.visible ? scaleOptions.tick.length : 0,
-            textParams = this._scale.measureLabels(extend({}, this._canvas)),
-            tickCorrection = length;
+        const indentFromTick = scaleOptions.label.indentFromTick;
+        const length = scaleOptions.tick.visible ? scaleOptions.tick.length : 0;
+        const textParams = this._scale.measureLabels(extend({}, this._canvas));
+        let tickCorrection = length;
 
         if(scaleOptions.orientation === 'inside') {
             tickCorrection = 0;
@@ -80,11 +80,11 @@ var dxCircularGauge = dxGauge.inherit({
     },
 
     _setupCodomain: function() {
-        var that = this,
-            geometry = that.option('geometry') || {},
-            startAngle = geometry.startAngle,
-            endAngle = geometry.endAngle,
-            sides;
+        const that = this;
+        const geometry = that.option('geometry') || {};
+        let startAngle = geometry.startAngle;
+        let endAngle = geometry.endAngle;
+        let sides;
         startAngle = _isFinite(startAngle) ? _normalizeAngle(startAngle) : 225;
         endAngle = _isFinite(endAngle) ? _normalizeAngle(endAngle) : -45;
         if(_abs(startAngle - endAngle) < 1) {
@@ -107,9 +107,9 @@ var dxCircularGauge = dxGauge.inherit({
     },
 
     _shiftScale: function(layout) {
-        var scale = this._scale,
-            centerCoords,
-            canvas = scale.getCanvas();
+        const scale = this._scale;
+        let centerCoords;
+        const canvas = scale.getCanvas();
 
         canvas.width = canvas.height = layout.radius * 2;
 
@@ -127,7 +127,7 @@ var dxCircularGauge = dxGauge.inherit({
     },
 
     _getTicksCoefficients: function(options) {
-        var coefs = { inner: 0, outer: 1 };
+        const coefs = { inner: 0, outer: 1 };
 
         if(options.orientation === 'inside') {
             coefs.inner = 1;
@@ -152,18 +152,18 @@ var dxCircularGauge = dxGauge.inherit({
     },
 
     _measureMainElements: function(elements, scaleMeasurement) {
-        var that = this,
-            radius = that._area.radius,
-            maxRadius = 0,
-            minRadius = Infinity,
-            maxHorizontalOffset = 0,
-            maxVerticalOffset = 0,
-            maxInverseHorizontalOffset = 0,
-            maxInverseVerticalOffset = 0,
-            scale = that._scale;
+        const that = this;
+        const radius = that._area.radius;
+        let maxRadius = 0;
+        let minRadius = Infinity;
+        let maxHorizontalOffset = 0;
+        let maxVerticalOffset = 0;
+        let maxInverseHorizontalOffset = 0;
+        let maxInverseVerticalOffset = 0;
+        const scale = that._scale;
 
         _each(elements.concat(scale), function(_, element) {
-            var bounds = element.measure ? element.measure({ radius: radius - element.getOffset() }) : scaleMeasurement;
+            const bounds = element.measure ? element.measure({ radius: radius - element.getOffset() }) : scaleMeasurement;
             (bounds.min > 0) && (minRadius = _min(minRadius, bounds.min));
             (bounds.max > 0) && (maxRadius = _max(maxRadius, bounds.max));
             (bounds.horizontalOffset > 0) && (maxHorizontalOffset = _max(maxHorizontalOffset, bounds.max + bounds.horizontalOffset));
@@ -185,19 +185,19 @@ var dxCircularGauge = dxGauge.inherit({
     },
 
     _applyMainLayout: function(elements, scaleMeasurement) {
-        var measurements = this._measureMainElements(elements, scaleMeasurement),
-            area = this._area,
-            sides = area.sides,
-            margins = {
-                left: (sides.left < -0.1 ? measurements.horizontalMargin : measurements.inverseHorizontalMargin) || 0,
-                right: (sides.right > 0.1 ? measurements.horizontalMargin : measurements.inverseHorizontalMargin) || 0,
-                top: (sides.up < -0.1 ? measurements.verticalMargin : measurements.inverseVerticalMargin) || 0,
-                bottom: (sides.down > 0.1 ? measurements.verticalMargin : measurements.inverseVerticalMargin) || 0
-            },
-            rect = selectRectByAspectRatio(this._innerRect, (sides.down - sides.up) / (sides.right - sides.left), margins),
-            radius = _min(getWidth(rect) / (sides.right - sides.left), getHeight(rect) / (sides.down - sides.up)),
-            x,
-            y;
+        const measurements = this._measureMainElements(elements, scaleMeasurement);
+        const area = this._area;
+        const sides = area.sides;
+        const margins = {
+            left: (sides.left < -0.1 ? measurements.horizontalMargin : measurements.inverseHorizontalMargin) || 0,
+            right: (sides.right > 0.1 ? measurements.horizontalMargin : measurements.inverseHorizontalMargin) || 0,
+            top: (sides.up < -0.1 ? measurements.verticalMargin : measurements.inverseVerticalMargin) || 0,
+            bottom: (sides.down > 0.1 ? measurements.verticalMargin : measurements.inverseVerticalMargin) || 0
+        };
+        const rect = selectRectByAspectRatio(this._innerRect, (sides.down - sides.up) / (sides.right - sides.left), margins);
+        let radius = _min(getWidth(rect) / (sides.right - sides.left), getHeight(rect) / (sides.down - sides.up));
+        let x;
+        let y;
 
         radius = radius - measurements.maxRadius + area.radius;
         x = rect.left - getWidth(rect) * sides.left / (sides.right - sides.left);
@@ -217,9 +217,9 @@ var dxCircularGauge = dxGauge.inherit({
     },
 
     _getApproximateScreenRange: function() {
-        var that = this,
-            area = that._area,
-            r = _min(that._canvas.width / (area.sides.right - area.sides.left), that._canvas.height / (area.sides.down - area.sides.up));
+        const that = this;
+        const area = that._area;
+        let r = _min(that._canvas.width / (area.sides.right - area.sides.left), that._canvas.height / (area.sides.down - area.sides.up));
 
         r > area.totalRadius && (r = area.totalRadius);
         r = 0.8 * r;
@@ -242,10 +242,10 @@ function getHeight(rect) {
 }
 
 function selectRectByAspectRatio(srcRect, aspectRatio, margins) {
-    var rect = extend({}, srcRect),
-        selfAspectRatio,
-        width = 0,
-        height = 0;
+    const rect = extend({}, srcRect);
+    let selfAspectRatio;
+    let width = 0;
+    let height = 0;
     margins = margins || {};
     if(aspectRatio > 0) {
         rect.left += margins.left || 0;
@@ -280,7 +280,7 @@ function selectRectByAspectRatio(srcRect, aspectRatio, margins) {
 dxCircularGauge._TESTS_selectRectByAspectRatio = selectRectByAspectRatio;
 ///#ENDDEBUG
 
-var indicators = dxCircularGauge.prototype._factory.indicators = {};
+const indicators = dxCircularGauge.prototype._factory.indicators = {};
 dxCircularGauge.prototype._factory.createIndicator = createIndicatorCreator(indicators);
 
 indicators._default = circularIndicatorsModule._default;

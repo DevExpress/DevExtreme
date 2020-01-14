@@ -40,7 +40,7 @@ const alignCenterWrap = { horizontal: 'center', wrapText: true };
 
 
 QUnit.testStart(() => {
-    let markup = '<div id=\'dataGrid\'></div>';
+    const markup = '<div id=\'dataGrid\'></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -73,13 +73,13 @@ const moduleConfig = {
 
 QUnit.module('API', moduleConfig, () => {
     [{ row: 2, column: 3 }].forEach((topLeftCell) => {
-        let topLeft = (topLeftCell ? topLeftCell : { row: 1, column: 1 });
-        let topLeftCellOption = `, topLeftCell: ${JSON.stringify(topLeftCell)}`;
+        const topLeft = (topLeftCell ? topLeftCell : { row: 1, column: 1 });
+        const topLeftCellOption = `, topLeftCell: ${JSON.stringify(topLeftCell)}`;
 
         [true, false].forEach((autoFilterEnabled) => {
-            let testCaption = topLeftCellOption + `, autoFilterEnabled: ${autoFilterEnabled}`;
+            const testCaption = topLeftCellOption + `, autoFilterEnabled: ${autoFilterEnabled}`;
             const getOptions = (dataGrid, expectedCustomizeCellArgs, options) => {
-                let { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
+                const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
 
                 const result = {
                     component: dataGrid,
@@ -102,7 +102,7 @@ QUnit.module('API', moduleConfig, () => {
 
                 const dataGrid = $('#dataGrid').dxDataGrid({}).dxDataGrid('instance');
 
-                let expectedCells = [];
+                const expectedCells = [];
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
@@ -3017,6 +3017,46 @@ QUnit.module('API', moduleConfig, () => {
                 });
             });
 
+            [true, false].forEach((remoteOperations) => {
+                [new Date(1996, 6, 4), '1996/7/4', '1996-07-04T00:00:00', new Date(1996, 6, 4).getTime()].forEach((dateValue) => {
+                    QUnit.test(`Grouping - 1 level, column.dataType: date, format: 'yyyy-MM-dd', cell.value: ${JSON.stringify(dateValue.value)}, remoteOperations: ${remoteOperations}`, function(assert) {
+                        const done = assert.async();
+                        const ds = [{ f1: dateValue, f2: 'f1_1' }];
+                        const dataGrid = $('#dataGrid').dxDataGrid({
+                            dataSource: ds,
+                            columns: [
+                                { caption: 'f1', dataField: 'f1', dataType: 'date', format: 'yyyy-MM-dd', groupIndex: 0 },
+                                { caption: 'f2', dataField: 'f2', dataType: 'string' }
+                            ],
+                            remoteOperations: remoteOperations,
+                            loadingTimeout: undefined
+                        }).dxDataGrid('instance');
+
+                        const expectedCells = [[
+                            { excelCell: { value: 'f2', alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(1) } }
+                        ], [
+                            { excelCell: { value: 'f1: 1996-07-04', alignment: alignLeftNoWrap, font: { bold: true } }, gridCell: { value: remoteOperations ? ds[0].f1 : new Date(ds[0].f1), rowType: 'group', groupIndex: 0, column: dataGrid.columnOption(0) } }
+                        ], [
+                            { excelCell: { value: 'f1_1', alignment: alignLeftNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } }
+                        ]];
+
+                        helper._extendExpectedCells(expectedCells, topLeft);
+
+                        exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                            helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
+                            helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
+                            helper.checkFont(expectedCells);
+                            helper.checkAlignment(expectedCells);
+                            helper.checkValues(expectedCells);
+                            helper.checkMergeCells(expectedCells, topLeft);
+                            helper.checkOutlineLevel([0, 0, 1], topLeft.row);
+                            helper.checkCellsRange(cellsRange, { row: 3, column: 1 }, topLeft);
+                            done();
+                        });
+                    });
+                });
+            });
+
             QUnit.test('Grouping - 1 level, col_1.customizeText: (cell) => \'custom\'' + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
@@ -4035,6 +4075,68 @@ QUnit.module('API', moduleConfig, () => {
                     { excelCell: { value: 'f2: f2_2', alignment: alignLeftNoWrap, font: { bold: true } }, gridCell: { rowType: 'group', groupIndex: 1, column: dataGrid.columnOption(1), value: ds[1].f2 } },
                     { excelCell: { value: 'Max: f4_2\nCount: 1', alignment: alignLeftWrap, font: { bold: true } }, gridCell: { rowType: 'group', groupIndex: 1, column: dataGrid.columnOption(3), groupSummaryItems: [{ 'name': 'GroupItems 1', value: 'f4_2' }, { 'name': 'GroupItems 2', value: 1 }] } },
                     { excelCell: { value: 'Max: f5_2\nCount: 1', alignment: alignLeftWrap, font: { bold: true } }, gridCell: { rowType: 'group', groupIndex: 1, column: dataGrid.columnOption(4), groupSummaryItems: [{ 'name': 'GroupItems 3', value: 'f5_2' }, { 'name': 'GroupItems 4', value: 1 }] } }
+                ], [
+                    { excelCell: { value: 'f3_2', alignment: alignLeftNoWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: 'f4_2', alignment: alignLeftNoWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: 'f5_2', alignment: alignLeftNoWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 5, column: 3 }, { row: 5, column: 3 }, topLeft);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 5, column: 3 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test('Grouping - 2 level & 2 column - 2 summary alignByColumn: false', function(assert) {
+                const done = assert.async();
+                const ds = [
+                    { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1', f4: 'f4_1', f5: 'f5_1' },
+                    { f1: 'f1_1', f2: 'f2_2', f3: 'f3_2', f4: 'f4_2', f5: 'f5_2' }
+                ];
+                const dataGrid = $('#dataGrid').dxDataGrid({
+                    columns: [
+                        { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
+                        { dataField: 'f2', caption: 'f2', dataType: 'string', groupIndex: 1 },
+                        { dataField: 'f3', caption: 'f3', dataType: 'string' },
+                        { dataField: 'f4', caption: 'f4', dataType: 'string' },
+                        { dataField: 'f5', caption: 'f5', dataType: 'string' }
+                    ],
+                    dataSource: ds,
+                    summary: {
+                        groupItems: [
+                            { name: 'GroupItems 1', column: 'f4', summaryType: 'max', alignByColumn: false }, { name: 'GroupItems 2', column: 'f4', summaryType: 'count', alignByColumn: false },
+                            { name: 'GroupItems 3', column: 'f5', summaryType: 'max', alignByColumn: false }, { name: 'GroupItems 4', column: 'f5', summaryType: 'count', alignByColumn: false }
+                        ]
+                    },
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid('instance');
+
+                const expectedCells = [[
+                    { excelCell: { value: 'f1: f1_1 (Max of f4 is f4_2, Count: 2, Max of f5 is f5_2, Count: 2)', alignment: alignLeftNoWrap, font: { bold: true } }, gridCell: { rowType: 'group', groupIndex: 0, column: dataGrid.columnOption(0), value: ds[0].f1, groupSummaryItems: [{ 'name': 'GroupItems 1', value: 'f4_2' }, { 'name': 'GroupItems 2', value: 2 }, { 'name': 'GroupItems 3', value: 'f5_2' }, { 'name': 'GroupItems 4', value: 2 }] } },
+                    { excelCell: { value: null }, gridCell: { value: undefined, rowType: 'group', groupIndex: 0, column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: null }, gridCell: { value: undefined, rowType: 'group', groupIndex: 0, column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: 'f2: f1_2 (Max of f4 is f4_1, Count: 1, Max of f5 is f5_1, Count: 1)', alignment: alignLeftNoWrap, font: { bold: true } }, gridCell: { rowType: 'group', groupIndex: 1, column: dataGrid.columnOption(1), value: ds[0].f2, groupSummaryItems: [{ 'name': 'GroupItems 1', value: 'f4_1' }, { 'name': 'GroupItems 2', value: 1 }, { 'name': 'GroupItems 3', value: 'f5_1' }, { 'name': 'GroupItems 4', value: 1 }] } },
+                    { excelCell: { value: null }, gridCell: { value: undefined, rowType: 'group', groupIndex: 1, column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: null }, gridCell: { value: undefined, rowType: 'group', groupIndex: 1, column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: 'f3_1', alignment: alignLeftNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: 'f4_1', alignment: alignLeftNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: 'f5_1', alignment: alignLeftNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: 'f2: f2_2 (Max of f4 is f4_2, Count: 1, Max of f5 is f5_2, Count: 1)', alignment: alignLeftNoWrap, font: { bold: true } }, gridCell: { rowType: 'group', groupIndex: 1, column: dataGrid.columnOption(1), value: ds[1].f2, groupSummaryItems: [{ 'name': 'GroupItems 1', value: 'f4_2' }, { 'name': 'GroupItems 2', value: 1 }, { 'name': 'GroupItems 3', value: 'f5_2' }, { 'name': 'GroupItems 4', value: 1 }] } },
+                    { excelCell: { value: null }, gridCell: { value: undefined, rowType: 'group', groupIndex: 1, column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: null }, gridCell: { value: undefined, rowType: 'group', groupIndex: 1, column: dataGrid.columnOption(4) } }
                 ], [
                     { excelCell: { value: 'f3_2', alignment: alignLeftNoWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(2) } },
                     { excelCell: { value: 'f4_2', alignment: alignLeftNoWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(3) } },
@@ -6475,7 +6577,7 @@ QUnit.module('API', moduleConfig, () => {
 
             dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
             const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
-            let expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, loadPanelConfig || { enabled: true, text: 'Exporting...' }, { onShown: loadPanelOnShownHandler });
+            const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, loadPanelConfig || { enabled: true, text: 'Exporting...' }, { onShown: loadPanelOnShownHandler });
 
             if(browser.webkit) {
                 extend(expectedLoadPanelSettingsOnExporting, { animation: null });

@@ -1,9 +1,9 @@
 /* global window */
 
-var domAdapter = require('../dom_adapter');
+const domAdapter = require('../dom_adapter');
 
-var hasWindow = typeof window !== 'undefined';
-var windowObject = hasWindow && window;
+const hasWindow = typeof window !== 'undefined';
+let windowObject = hasWindow && window;
 
 if(!windowObject) {
     windowObject = {};
@@ -36,8 +36,8 @@ module.exports = {
     },
 
     getCurrentScreenFactor: function(screenFactorCallback) {
-        var screenFactorFunc = screenFactorCallback || this.defaultScreenFactorFunc;
-        var windowWidth = domAdapter.getDocumentElement()['clientWidth'];
+        const screenFactorFunc = screenFactorCallback || this.defaultScreenFactorFunc;
+        const windowWidth = domAdapter.getDocumentElement()['clientWidth'];
 
         return screenFactorFunc(windowWidth);
     },

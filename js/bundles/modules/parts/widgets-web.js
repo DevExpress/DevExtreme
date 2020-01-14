@@ -1,5 +1,5 @@
-var data = require('./data');
-var ui = require('./widgets-base');
+const data = require('./data');
+const ui = require('./widgets-base');
 
 /// BUNDLER_PARTS
 /* Web widgets (dx.module-widgets-web.js) */

@@ -5,7 +5,7 @@ SystemJS.config({
 });
 
 define(function(require) {
-    var MarkdownConverter = require('ui/html_editor/converters/markdown').default;
+    const MarkdownConverter = require('ui/html_editor/converters/markdown').default;
 
     QUnit.module('Import 3rd party', function() {
         QUnit.test('it throw an error if the markdown -> html converter script isn\'t referenced', function(assert) {
@@ -19,7 +19,7 @@ define(function(require) {
         });
 
         QUnit.test('initialize showdown from window', function(assert) {
-            var prevWinShowdown = window.showdown;
+            const prevWinShowdown = window.showdown;
 
             window.showdown = {
                 Converter: function() {
@@ -27,7 +27,7 @@ define(function(require) {
                 }
             };
 
-            var converter = new MarkdownConverter();
+            const converter = new MarkdownConverter();
 
             assert.ok(converter._markdown2Html.initialized);
 

@@ -5,13 +5,13 @@ require('ui/popup');
 require('common.css!');
 require('generic_light.css!');
 
-var $ = require('jquery'),
-    positionUtils = require('animation/position');
+const $ = require('jquery');
+const positionUtils = require('animation/position');
 
 positionUtils.calculateScrollbarWidth();
 
 QUnit.testStart(function() {
-    var markup = '\
+    const markup = '\
     <div id="element">\
         <div>item1</div>\
         <div>item2</div>\
@@ -29,7 +29,7 @@ QUnit.testStart(function() {
 });
 
 QUnit.performanceTest('dxOverlay should not force relayout on creation', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('#element').dxOverlay({});
     };
 
@@ -37,7 +37,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
 });
 
 QUnit.performanceTest('dxOverlay should be rendered with minimum count of relayouts', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('#element').dxOverlay({
             visible: true,
             shading: false,
@@ -49,13 +49,13 @@ QUnit.performanceTest('dxOverlay should be rendered with minimum count of relayo
 });
 
 QUnit.performanceTest('showing dxOverlay should be with minimum count of relayouts', function(assert) {
-    var overlay = $('#element').dxOverlay({
+    const overlay = $('#element').dxOverlay({
         visible: false,
         shading: false,
         animation: null
     }).dxOverlay('instance');
 
-    var measureFunction = function() {
+    const measureFunction = function() {
         overlay.show();
     };
 
@@ -63,13 +63,13 @@ QUnit.performanceTest('showing dxOverlay should be with minimum count of relayou
 });
 
 QUnit.performanceTest('showing dxOverlay with shading should be with minimum count of relayouts', function(assert) {
-    var overlay = $('#element').dxOverlay({
+    const overlay = $('#element').dxOverlay({
         visible: false,
         shading: true,
         animation: null
     }).dxOverlay('instance');
 
-    var measureFunction = function() {
+    const measureFunction = function() {
         overlay.show();
     };
 
@@ -77,7 +77,7 @@ QUnit.performanceTest('showing dxOverlay with shading should be with minimum cou
 });
 
 QUnit.performanceTest('dxPopup should be rendered with minimum count of relayouts', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('#element').dxPopup({
             visible: true,
             shading: false,

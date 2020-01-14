@@ -334,7 +334,7 @@ QUnit.module('popup integration', {
             }
         };
 
-        for(let name in options) {
+        for(const name in options) {
             assert.deepEqual(this.popup.option(name), options[name], 'option ' + name + ' is correct');
         }
     });

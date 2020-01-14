@@ -1,5 +1,5 @@
-var clientExporter = require('exporter'),
-    fileSaver = clientExporter.fileSaver;
+const clientExporter = require('exporter');
+const fileSaver = clientExporter.fileSaver;
 
 QUnit.module('Client exporter', {
     beforeEach: function() {
@@ -28,7 +28,7 @@ QUnit.test('Save as', function(assert) {
 
 QUnit.test('onExporting', function(assert) {
     // arrange
-    var exportingActionStub = sinon.spy();
+    const exportingActionStub = sinon.spy();
 
     // act
     clientExporter.export({}, {
@@ -48,11 +48,11 @@ QUnit.test('onExporting', function(assert) {
 
 QUnit.test('Cancel exporting via onExporting', function(assert) {
     // arrange
-    var exportingActionStub = sinon.spy(function(e) {
-            e.cancel = true;
-        }),
-        exportedActionStub = sinon.spy(),
-        done = assert.async();
+    const exportingActionStub = sinon.spy(function(e) {
+        e.cancel = true;
+    });
+    const exportedActionStub = sinon.spy();
+    const done = assert.async();
 
     // act
     clientExporter.export({}, {
@@ -69,7 +69,7 @@ QUnit.test('Cancel exporting via onExporting', function(assert) {
 
 QUnit.test('FileName is changed on onExporting event', function(assert) {
     // arrange
-    var exportingActionStub = sinon.spy(function(e) {
+    const exportingActionStub = sinon.spy(function(e) {
         e.fileName = 'Excel file name';
     });
 
@@ -86,7 +86,7 @@ QUnit.test('FileName is changed on onExporting event', function(assert) {
 
 QUnit.test('onExported', function(assert) {
     // arrange
-    var exportedActionStub = sinon.spy();
+    const exportedActionStub = sinon.spy();
 
     // act
     clientExporter.export({}, {
@@ -101,11 +101,11 @@ QUnit.test('onExported', function(assert) {
 
 QUnit.test('onFileSaving without cancel', function(assert) {
     // arrange
-    var fileSavingActionStub = sinon.spy(),
-        data = 'test-data',
-        getBlob = function(_0, _1, callback) {
-            callback(data);
-        };
+    const fileSavingActionStub = sinon.spy();
+    const data = 'test-data';
+    const getBlob = function(_0, _1, callback) {
+        callback(data);
+    };
 
     // act
     clientExporter.export({}, {
@@ -127,7 +127,7 @@ QUnit.test('onFileSaving without cancel', function(assert) {
 
 QUnit.test('onFileSaving with cancel', function(assert) {
     // arrange
-    var fileSavingActionStub = sinon.spy(function(e) {
+    const fileSavingActionStub = sinon.spy(function(e) {
         e.cancel = true;
     });
 
@@ -144,7 +144,7 @@ QUnit.test('onFileSaving with cancel', function(assert) {
 });
 
 QUnit.test('Export to jpeg format', function(assert) {
-    var getBlob = sinon.spy(defaultGetBlob);
+    const getBlob = sinon.spy(defaultGetBlob);
     // arrange
     // act
     clientExporter.export('testData', {
@@ -162,7 +162,7 @@ QUnit.test('Export to jpeg format', function(assert) {
 });
 
 QUnit.test('Export to png format', function(assert) {
-    var getBlob = sinon.spy(defaultGetBlob);
+    const getBlob = sinon.spy(defaultGetBlob);
     // arrange
     // act
     clientExporter.export('testData', {
@@ -180,7 +180,7 @@ QUnit.test('Export to png format', function(assert) {
 });
 
 QUnit.test('Export to gif format', function(assert) {
-    var getBlob = sinon.spy(defaultGetBlob);
+    const getBlob = sinon.spy(defaultGetBlob);
     // arrange
     // act
     clientExporter.export('testData', {

@@ -1,12 +1,12 @@
-var $ = require('../../core/renderer'),
-    domAdapter = require('../../core/dom_adapter'),
-    Callbacks = require('../../core/utils/callbacks'),
-    domUtils = require('../../core/utils/dom'),
-    Class = require('../../core/class'),
-    abstract = Class.abstract;
+const $ = require('../../core/renderer');
+const domAdapter = require('../../core/dom_adapter');
+const Callbacks = require('../../core/utils/callbacks');
+const domUtils = require('../../core/utils/dom');
+const Class = require('../../core/class');
+const abstract = Class.abstract;
 
 
-var renderedCallbacks = Callbacks({ syncStrategy: true });
+const renderedCallbacks = Callbacks({ syncStrategy: true });
 
 /**
  * @name dxTemplate
@@ -19,15 +19,15 @@ var renderedCallbacks = Callbacks({ syncStrategy: true });
  * @type string
  */
 
-var TemplateBase = Class.inherit({
+const TemplateBase = Class.inherit({
 
     render: function(options) {
         options = options || {};
 
-        var onRendered = options.onRendered;
+        const onRendered = options.onRendered;
         delete options.onRendered;
 
-        var $result = this._renderCore(options);
+        const $result = this._renderCore(options);
 
         this._ensureResultInContainer($result, options.container);
         renderedCallbacks.fire($result, options.container);
@@ -41,14 +41,14 @@ var TemplateBase = Class.inherit({
             return;
         }
 
-        var $container = $(container);
-        var resultInContainer = domUtils.contains($container.get(0), $result.get(0));
+        const $container = $(container);
+        const resultInContainer = domUtils.contains($container.get(0), $result.get(0));
         $container.append($result);
         if(resultInContainer) {
             return;
         }
 
-        var resultInBody = domAdapter.getBody().contains($container.get(0));
+        const resultInBody = domAdapter.getBody().contains($container.get(0));
         if(!resultInBody) {
             return;
         }

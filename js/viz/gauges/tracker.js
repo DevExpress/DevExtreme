@@ -1,26 +1,26 @@
-var eventsEngine = require('../../events/core/events_engine'),
-    Class = require('../../core/class'),
-    domAdapter = require('../../core/dom_adapter'),
-    ready = require('../../core/utils/ready_callbacks').add,
-    wheelEvent = require('../../events/core/wheel'),
+const eventsEngine = require('../../events/core/events_engine');
+const Class = require('../../core/class');
+const domAdapter = require('../../core/dom_adapter');
+const ready = require('../../core/utils/ready_callbacks').add;
+const wheelEvent = require('../../events/core/wheel');
 
-    TOOLTIP_HIDE_DELAY = 100;
+const TOOLTIP_HIDE_DELAY = 100;
 
-var Tracker = Class.inherit({
+const Tracker = Class.inherit({
     ctor: function(parameters) {
         ///#DEBUG
-        var debug = require('../../core/utils/console').debug;
+        const debug = require('../../core/utils/console').debug;
         debug.assertParam(parameters, 'parameters');
         debug.assertParam(parameters.renderer, 'parameters.renderer');
         debug.assertParam(parameters.container, 'parameters.container');
         ///#ENDDEBUG
-        var that = this;
+        const that = this;
         that._element = parameters.renderer.g().attr({ 'class': 'dxg-tracker', stroke: 'none', 'stroke-width': 0, fill: '#000000', opacity: 0.0001 }).linkOn(parameters.container, { name: 'tracker', after: 'peripheral' });
 
         that._showTooltipCallback = function() {
-            var target = that._tooltipEvent.target,
-                data_target = target['gauge-data-target'],
-                data_info = target['gauge-data-info'];
+            const target = that._tooltipEvent.target;
+            const data_target = target['gauge-data-target'];
+            const data_info = target['gauge-data-info'];
 
             that._targetEvent = null; //  Internal state must be reset strictly BEFORE callback is invoked
             if(that._tooltipTarget !== target && that._callbacks['tooltip-show'](data_target, data_info)) {
@@ -46,7 +46,7 @@ var Tracker = Class.inherit({
     },
 
     dispose: function() {
-        var that = this;
+        const that = this;
         that._dispose();
         that.deactivate();
         that._element.linkOff();
@@ -75,7 +75,7 @@ var Tracker = Class.inherit({
     },
 
     setTooltipState: function(state) {
-        var that = this, data;
+        const that = this; let data;
         that._element.off(tooltipMouseEvents).off(tooltipTouchEvents).off(tooltipMouseWheelEvents);
         if(state) {
             data = { tracker: that };
@@ -90,7 +90,7 @@ var Tracker = Class.inherit({
     },
 
     _showTooltip: function(event) {
-        var that = this;
+        const that = this;
 
         ///#DEBUG
         that._hideTooltipTimeout && ++that._DEBUG_hideTooltipTimeoutCleared;
@@ -106,7 +106,7 @@ var Tracker = Class.inherit({
     },
 
     _hideTooltip: function(delay) {
-        var that = this;
+        const that = this;
         clearTimeout(that._hideTooltipTimeout);
         if(delay) {
             ///#DEBUG
@@ -124,7 +124,7 @@ var tooltipMouseEvents = {
     'mouseout.gauge-tooltip': handleTooltipMouseOut
 };
 
-var tooltipMouseMoveEvents = {
+const tooltipMouseMoveEvents = {
     'mousemove.gauge-tooltip': handleTooltipMouseMove
 };
 
@@ -136,7 +136,7 @@ var tooltipTouchEvents = {
 };
 
 function handleTooltipMouseOver(event) {
-    var tracker = event.data.tracker;
+    const tracker = event.data.tracker;
     tracker._x = event.pageX;
     tracker._y = event.pageY;
     tracker._element.off(tooltipMouseMoveEvents).on(tooltipMouseMoveEvents, event.data);
@@ -144,7 +144,7 @@ function handleTooltipMouseOver(event) {
 }
 
 function handleTooltipMouseMove(event) {
-    var tracker = event.data.tracker;
+    const tracker = event.data.tracker;
 
     tracker._x = event.pageX;
     tracker._y = event.pageY;
@@ -152,7 +152,7 @@ function handleTooltipMouseMove(event) {
 }
 
 function handleTooltipMouseOut(event) {
-    var tracker = event.data.tracker;
+    const tracker = event.data.tracker;
     tracker._element.off(tooltipMouseMoveEvents);
     tracker._hideTooltip(TOOLTIP_HIDE_DELAY);
 }
@@ -161,7 +161,7 @@ function handleTooltipMouseWheel(event) {
     event.data.tracker._hideTooltip();
 }
 
-var active_touch_tooltip_tracker = null;
+let active_touch_tooltip_tracker = null;
 
 ///#DEBUG
 Tracker._DEBUG_reset = function() {
@@ -171,7 +171,7 @@ Tracker._DEBUG_reset = function() {
 
 function handleTooltipTouchStart(event) {
     event.preventDefault();
-    var tracker = active_touch_tooltip_tracker;
+    let tracker = active_touch_tooltip_tracker;
     if(tracker && tracker !== event.data.tracker) {
         tracker._hideTooltip(TOOLTIP_HIDE_DELAY);
     }
@@ -181,7 +181,7 @@ function handleTooltipTouchStart(event) {
 }
 
 function handleTooltipDocumentTouchStart() {
-    var tracker = active_touch_tooltip_tracker;
+    const tracker = active_touch_tooltip_tracker;
     if(tracker) {
         if(!tracker._touch) {
             tracker._hideTooltip(TOOLTIP_HIDE_DELAY);
@@ -192,7 +192,7 @@ function handleTooltipDocumentTouchStart() {
 }
 
 function handleTooltipDocumentTouchEnd() {
-    var tracker = active_touch_tooltip_tracker;
+    const tracker = active_touch_tooltip_tracker;
     if(tracker) {
         tracker._hideTooltip(TOOLTIP_HIDE_DELAY);
         active_touch_tooltip_tracker = null;

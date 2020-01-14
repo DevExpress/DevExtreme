@@ -1,16 +1,16 @@
-var inArray = require('../../core/utils/array').inArray,
-    windowUtils = require('../../core/utils/window'),
-    weakMap = windowUtils.hasWindow() ? windowUtils.getWindow().WeakMap : WeakMap;
+const inArray = require('../../core/utils/array').inArray;
+const windowUtils = require('../../core/utils/window');
+let weakMap = windowUtils.hasWindow() ? windowUtils.getWindow().WeakMap : WeakMap;
 
 if(!weakMap) {
     // NOTE: This is an incomplete WeakMap polyfill but it is enough for creation purposes
 
     weakMap = function() {
-        var keys = [],
-            values = [];
+        const keys = [];
+        const values = [];
 
         this.set = function(key, value) {
-            var index = inArray(key, keys);
+            const index = inArray(key, keys);
             if(index === -1) {
                 keys.push(key);
                 values.push(value);
@@ -20,7 +20,7 @@ if(!weakMap) {
         };
 
         this.get = function(key) {
-            var index = inArray(key, keys);
+            const index = inArray(key, keys);
             if(index === -1) {
                 return undefined;
             }
@@ -28,7 +28,7 @@ if(!weakMap) {
         };
 
         this.has = function(key) {
-            var index = inArray(key, keys);
+            const index = inArray(key, keys);
             if(index === -1) {
                 return false;
             }
@@ -36,7 +36,7 @@ if(!weakMap) {
         };
 
         this.delete = function(key) {
-            var index = inArray(key, keys);
+            const index = inArray(key, keys);
             if(index === -1) {
                 return;
             }

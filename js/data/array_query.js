@@ -1,16 +1,16 @@
-var Class = require('../core/class'),
-    typeUtils = require('../core/utils/type'),
-    iteratorUtils = require('../core/utils/iterator'),
-    compileGetter = require('../core/utils/data').compileGetter,
-    toComparable = require('../core/utils/data').toComparable,
-    Deferred = require('../core/utils/deferred').Deferred,
-    errorsModule = require('./errors'),
-    dataUtils = require('./utils');
+const Class = require('../core/class');
+const typeUtils = require('../core/utils/type');
+const iteratorUtils = require('../core/utils/iterator');
+const compileGetter = require('../core/utils/data').compileGetter;
+const toComparable = require('../core/utils/data').toComparable;
+const Deferred = require('../core/utils/deferred').Deferred;
+const errorsModule = require('./errors');
+const dataUtils = require('./utils');
 
-var Iterator = Class.inherit({
+const Iterator = Class.inherit({
 
     toArray: function() {
-        var result = [];
+        const result = [];
 
         this.reset();
         while(this.next()) {
@@ -25,7 +25,7 @@ var Iterator = Class.inherit({
     }
 });
 
-var ArrayIterator = Iterator.inherit({
+const ArrayIterator = Iterator.inherit({
 
     ctor: function(array) {
         this.array = array;
@@ -62,7 +62,7 @@ var ArrayIterator = Iterator.inherit({
 
 });
 
-var WrappedIterator = Iterator.inherit({
+const WrappedIterator = Iterator.inherit({
     ctor: function(iter) {
         this.iter = iter;
     },
@@ -73,7 +73,7 @@ var WrappedIterator = Iterator.inherit({
 });
 
 
-var MapIterator = WrappedIterator.inherit({
+const MapIterator = WrappedIterator.inherit({
     ctor: function(iter, mapper) {
         this.callBase(iter);
         this.index = -1;
@@ -85,7 +85,7 @@ var MapIterator = WrappedIterator.inherit({
     },
 
     next: function() {
-        var hasNext = this.callBase();
+        const hasNext = this.callBase();
         if(hasNext) {
             this.index++;
         }
@@ -93,7 +93,7 @@ var MapIterator = WrappedIterator.inherit({
     }
 });
 
-var defaultCompare = function(xValue, yValue) {
+const defaultCompare = function(xValue, yValue) {
     xValue = toComparable(xValue);
     yValue = toComparable(yValue);
 
@@ -135,7 +135,7 @@ var SortIterator = Iterator.inherit({
     },
 
     thenBy: function(getter, desc, compare) {
-        var result = new SortIterator(this.sortedIter || this.iter, getter, desc, compare);
+        const result = new SortIterator(this.sortedIter || this.iter, getter, desc, compare);
         if(!this.sortedIter) {
             result.rules = this.rules.concat(result.rules);
         }
@@ -167,7 +167,7 @@ var SortIterator = Iterator.inherit({
         return this.iter.count();
     },
     _ensureSorted: function() {
-        var that = this;
+        const that = this;
 
         if(that.sortedIter) {
             return;
@@ -194,8 +194,8 @@ var SortIterator = Iterator.inherit({
         return wrappedItem.value;
     },
     _compare: function(x, y) {
-        var xIndex = x.index,
-            yIndex = y.index;
+        const xIndex = x.index;
+        const yIndex = y.index;
 
         x = x.value;
         y = y.value;
@@ -204,12 +204,12 @@ var SortIterator = Iterator.inherit({
             return xIndex - yIndex;
         }
 
-        for(var i = 0, rulesCount = this.rules.length; i < rulesCount; i++) {
-            var rule = this.rules[i],
-                xValue = rule.getter(x),
-                yValue = rule.getter(y),
-                compare = rule.compare || defaultCompare,
-                compareResult = compare(xValue, yValue);
+        for(let i = 0, rulesCount = this.rules.length; i < rulesCount; i++) {
+            const rule = this.rules[i];
+            const xValue = rule.getter(x);
+            const yValue = rule.getter(y);
+            const compare = rule.compare || defaultCompare;
+            const compareResult = compare(xValue, yValue);
 
             if(compareResult) {
                 return rule.desc ? -compareResult : compareResult;
@@ -223,11 +223,11 @@ var SortIterator = Iterator.inherit({
 
 var compileCriteria = (function() {
 
-    var compileGroup = function(crit) {
-        var ops = [];
+    const compileGroup = function(crit) {
+        const ops = [];
 
-        var isConjunctiveOperator = false;
-        var isConjunctiveNextOperator = false;
+        let isConjunctiveOperator = false;
+        let isConjunctiveNextOperator = false;
 
         iteratorUtils.each(crit, function() {
             if(Array.isArray(this) || typeUtils.isFunction(this)) {
@@ -245,9 +245,9 @@ var compileCriteria = (function() {
         });
 
         return function(d) {
-            var result = isConjunctiveOperator;
+            let result = isConjunctiveOperator;
 
-            for(var i = 0; i < ops.length; i++) {
+            for(let i = 0; i < ops.length; i++) {
                 if(ops[i](d) !== isConjunctiveOperator) {
                     result = !isConjunctiveOperator;
                     break;
@@ -258,15 +258,15 @@ var compileCriteria = (function() {
         };
     };
 
-    var toString = function(value) {
+    const toString = function(value) {
         return typeUtils.isDefined(value) ? value.toString() : '';
     };
 
-    var compileBinary = function(crit) {
+    const compileBinary = function(crit) {
         crit = dataUtils.normalizeBinaryCriterion(crit);
-        var getter = compileGetter(crit[0]),
-            op = crit[1],
-            value = crit[2];
+        const getter = compileGetter(crit[0]);
+        const op = crit[1];
+        let value = crit[2];
 
         value = toComparable(value);
 
@@ -287,8 +287,8 @@ var compileCriteria = (function() {
                 return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) === 0; };
             case 'endswith':
                 return function(obj) {
-                    var getterValue = toComparable(toString(getter(obj))),
-                        searchValue = toString(value);
+                    const getterValue = toComparable(toString(getter(obj)));
+                    const searchValue = toString(value);
 
                     if(getterValue.length < searchValue.length) {
                         return false;
@@ -309,7 +309,7 @@ var compileCriteria = (function() {
         return function(obj) {
             obj = toComparable(getter(obj));
             // eslint-disable-next-line eqeqeq
-            var result = useStrictComparison(value) ? obj === value : obj == value;
+            let result = useStrictComparison(value) ? obj === value : obj == value;
             if(negate) {
                 result = !result;
             }
@@ -322,8 +322,8 @@ var compileCriteria = (function() {
     }
 
     function compileUnary(crit) {
-        var op = crit[0],
-            criteria = compileCriteria(crit[1]);
+        const op = crit[0];
+        const criteria = compileCriteria(crit[1]);
 
         if(op === '!') {
             return function(obj) { return !criteria(obj); };
@@ -347,7 +347,7 @@ var compileCriteria = (function() {
 
 })();
 
-var FilterIterator = WrappedIterator.inherit({
+const FilterIterator = WrappedIterator.inherit({
 
     ctor: function(iter, criteria) {
         this.callBase(iter);
@@ -364,7 +364,7 @@ var FilterIterator = WrappedIterator.inherit({
     }
 });
 
-var GroupIterator = Iterator.inherit({
+const GroupIterator = Iterator.inherit({
     ctor: function(iter, getter) {
         this.iter = iter;
         this.getter = getter;
@@ -397,15 +397,15 @@ var GroupIterator = Iterator.inherit({
             return;
         }
 
-        var hash = {},
-            keys = [],
-            iter = this.iter,
-            getter = compileGetter(this.getter);
+        const hash = {};
+        const keys = [];
+        const iter = this.iter;
+        const getter = compileGetter(this.getter);
 
         iter.reset();
         while(iter.next()) {
-            var current = iter.current(),
-                key = getter(current);
+            const current = iter.current();
+            const key = getter(current);
 
             if(key in hash) {
                 hash[key].push(current);
@@ -427,7 +427,7 @@ var GroupIterator = Iterator.inherit({
 
 });
 
-var SelectIterator = WrappedIterator.inherit({
+const SelectIterator = WrappedIterator.inherit({
 
     ctor: function(iter, getter) {
         this.callBase(iter);
@@ -448,7 +448,7 @@ var SelectIterator = WrappedIterator.inherit({
 
 });
 
-var SliceIterator = WrappedIterator.inherit({
+const SliceIterator = WrappedIterator.inherit({
     ctor: function(iter, skip, take) {
         this.callBase(iter);
         this.skip = Math.max(0, skip);
@@ -491,8 +491,8 @@ var arrayQueryImpl = function(iter, queryOptions) {
         iter = new ArrayIterator(iter);
     }
 
-    var handleError = function(error) {
-        var handler = queryOptions.errorHandler;
+    const handleError = function(error) {
+        const handler = queryOptions.errorHandler;
         if(handler) {
             handler(error);
         }
@@ -500,11 +500,11 @@ var arrayQueryImpl = function(iter, queryOptions) {
         errorsModule._errorHandler(error);
     };
 
-    var aggregateCore = function(aggregator) {
-        var d = new Deferred().fail(handleError),
-            seed,
-            step = aggregator.step,
-            finalize = aggregator.finalize;
+    const aggregateCore = function(aggregator) {
+        const d = new Deferred().fail(handleError);
+        let seed;
+        const step = aggregator.step;
+        const finalize = aggregator.finalize;
 
         try {
             iter.reset();
@@ -514,7 +514,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
                 seed = iter.next() ? iter.current() : NaN;
             }
 
-            var accumulator = seed;
+            let accumulator = seed;
             while(iter.next()) {
                 accumulator = step(accumulator, iter.current());
             }
@@ -526,7 +526,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
         return d.promise();
     };
 
-    var aggregate = function(seed, step, finalize) {
+    const aggregate = function(seed, step, finalize) {
         if(arguments.length < 2) {
             return aggregateCore({ step: arguments[0] });
         }
@@ -537,11 +537,11 @@ var arrayQueryImpl = function(iter, queryOptions) {
         });
     };
 
-    var standardAggregate = function(name) {
+    const standardAggregate = function(name) {
         return aggregateCore(dataUtils.aggregators[name]);
     };
 
-    var select = function(getter) {
+    const select = function(getter) {
         if(!typeUtils.isFunction(getter) && !Array.isArray(getter)) {
             getter = [].slice.call(arguments);
         }
@@ -549,7 +549,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
         return chainQuery(new SelectIterator(iter, getter));
     };
 
-    var selectProp = function(name) {
+    const selectProp = function(name) {
         return select(compileGetter(name));
     };
 
@@ -563,7 +563,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
         },
 
         enumerate: function() {
-            var d = new Deferred().fail(handleError);
+            const d = new Deferred().fail(handleError);
 
             try {
                 d.resolve(iter.toArray());
@@ -610,7 +610,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
 
         count: function() {
             if(iter.countable()) {
-                var d = new Deferred().fail(handleError);
+                const d = new Deferred().fail(handleError);
 
                 try {
                     d.resolve(iter.count());

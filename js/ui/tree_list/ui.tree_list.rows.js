@@ -2,22 +2,22 @@ import $ from '../../core/renderer';
 import treeListCore from './ui.tree_list.core';
 import rowsViewModule from '../grid_core/ui.grid_core.rows';
 
-var TREELIST_TEXT_CONTENT = 'dx-treelist-text-content',
-    TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container',
-    TREELIST_CELL_EXPANDABLE_CLASS = 'dx-treelist-cell-expandable',
-    TREELIST_EMPTY_SPACE = 'dx-treelist-empty-space',
-    TREELIST_EXPANDED_CLASS = 'dx-treelist-expanded',
-    TREELIST_COLLAPSED_CLASS = 'dx-treelist-collapsed';
+const TREELIST_TEXT_CONTENT = 'dx-treelist-text-content';
+const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
+const TREELIST_CELL_EXPANDABLE_CLASS = 'dx-treelist-cell-expandable';
+const TREELIST_EMPTY_SPACE = 'dx-treelist-empty-space';
+const TREELIST_EXPANDED_CLASS = 'dx-treelist-expanded';
+const TREELIST_COLLAPSED_CLASS = 'dx-treelist-collapsed';
 
 exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
-    var createCellContent = function($container) {
+    const createCellContent = function($container) {
         return $('<div>')
             .addClass(TREELIST_TEXT_CONTENT)
             .appendTo($container);
     };
 
-    var createIcon = function(hasIcon, isExpanded) {
-        var $iconElement = $('<div>').addClass(TREELIST_EMPTY_SPACE);
+    const createIcon = function(hasIcon, isExpanded) {
+        const $iconElement = $('<div>').addClass(TREELIST_EMPTY_SPACE);
 
         if(hasIcon) {
             $iconElement
@@ -29,17 +29,17 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
         return $iconElement;
     };
 
-    var renderIcons = function($container, row) {
-        var level = row.level;
+    const renderIcons = function($container, row) {
+        const level = row.level;
 
-        for(var i = 0; i <= level; i++) {
+        for(let i = 0; i <= level; i++) {
             $container.append(createIcon(i === level && row.node.hasChildren, row.isExpanded));
         }
     };
 
     return {
         _renderExpandIcon: function($container, options) {
-            var $iconContainer = $('<div>')
+            const $iconContainer = $('<div>')
                 .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
                 .appendTo($container);
 
@@ -63,16 +63,16 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
         },
 
         _processTemplate: function(template, options) {
-            var that = this,
-                resultTemplate,
-                renderingTemplate = this.callBase(template);
+            const that = this;
+            let resultTemplate;
+            const renderingTemplate = this.callBase(template);
 
-            var firstDataColumnIndex = that._columnsController.getFirstDataColumnIndex();
+            const firstDataColumnIndex = that._columnsController.getFirstDataColumnIndex();
 
             if(renderingTemplate && options.column.index === firstDataColumnIndex) {
                 resultTemplate = {
                     render: function(options) {
-                        var $container = options.container;
+                        const $container = options.container;
 
                         if(that._renderCellCommandContent($container, options.model)) {
                             options.container = createCellContent($container);
@@ -94,10 +94,10 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
         },
 
         _rowClick: function(e) {
-            var dataController = this._dataController,
-                $targetElement = $(e.event.target),
-                isExpandIcon = this.isExpandIcon($targetElement),
-                item = dataController && dataController.items()[e.rowIndex];
+            const dataController = this._dataController;
+            const $targetElement = $(e.event.target);
+            const isExpandIcon = this.isExpandIcon($targetElement);
+            const item = dataController && dataController.items()[e.rowIndex];
 
             if(isExpandIcon && item) {
                 dataController.changeRowExpand(item.key);
@@ -107,8 +107,8 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
         },
 
         _createRow: function(row) {
-            var node = row && row.node,
-                $rowElement = this.callBase.apply(this, arguments);
+            const node = row && row.node;
+            const $rowElement = this.callBase.apply(this, arguments);
 
             if(node) {
                 this.setAria('level', row.level, $rowElement);

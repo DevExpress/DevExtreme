@@ -1,33 +1,33 @@
-var isDefined = require('../../core/utils/type').isDefined,
-    config = require('../../core/config'),
-    odataUtils = require('./utils'),
-    proxyUrlFormatter = require('../proxy_url_formatter'),
-    errors = require('../errors').errors,
-    query = require('../query'),
-    Store = require('../abstract_store'),
-    mixins = require('./mixins'),
-    deferredUtils = require('../../core/utils/deferred'),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+const isDefined = require('../../core/utils/type').isDefined;
+const config = require('../../core/config');
+const odataUtils = require('./utils');
+const proxyUrlFormatter = require('../proxy_url_formatter');
+const errors = require('../errors').errors;
+const query = require('../query');
+const Store = require('../abstract_store');
+const mixins = require('./mixins');
+const deferredUtils = require('../../core/utils/deferred');
+const when = deferredUtils.when;
+const Deferred = deferredUtils.Deferred;
 
 require('./query_adapter');
 
-var ANONYMOUS_KEY_NAME = '5d46402c-7899-4ea9-bd81-8b73c47c7683';
+const ANONYMOUS_KEY_NAME = '5d46402c-7899-4ea9-bd81-8b73c47c7683';
 
 function expandKeyType(key, keyType) {
-    var result = {};
+    const result = {};
     result[key] = keyType;
     return result;
 }
 
 function mergeFieldTypesWithKeyType(fieldTypes, keyType) {
-    var result = {};
+    const result = {};
 
-    for(var field in fieldTypes) {
+    for(const field in fieldTypes) {
         result[field] = fieldTypes[field];
     }
 
-    for(var keyName in keyType) {
+    for(const keyName in keyType) {
         if(keyName in result) {
             if(result[keyName] !== keyType[keyName]) {
                 errors.log('W4001', keyName);
@@ -47,7 +47,7 @@ function mergeFieldTypesWithKeyType(fieldTypes, keyType) {
 * @module data/odata/store
 * @export default
 */
-var ODataStore = Store.inherit({
+const ODataStore = Store.inherit({
 
     ctor: function(options) {
         this.callBase(options);
@@ -112,12 +112,12 @@ var ODataStore = Store.inherit({
          * @acceptValues "String"|"Int32"|"Int64"|"Guid"|"Boolean"|"Single"|"Decimal"
          */
 
-        var key = this.key(),
-            fieldTypes = options.fieldTypes,
-            keyType = options.keyType;
+        let key = this.key();
+        let fieldTypes = options.fieldTypes;
+        let keyType = options.keyType;
 
         if(keyType) {
-            var keyTypeIsString = (typeof keyType === 'string');
+            const keyTypeIsString = (typeof keyType === 'string');
 
             if(!key) {
                 key = keyTypeIsString ? ANONYMOUS_KEY_NAME : Object.keys(keyType);
@@ -159,7 +159,7 @@ var ODataStore = Store.inherit({
     * @return Promise<any>
     */
     _byKeyImpl: function(key, extraOptions) {
-        var params = {};
+        const params = {};
 
         if(extraOptions) {
             params['$expand'] = odataUtils.generateExpand(this._version, extraOptions.expand, extraOptions.select) || undefined;
@@ -176,8 +176,8 @@ var ODataStore = Store.inherit({
     * @return object
     */
     createQuery: function(loadOptions) {
-        var url,
-            queryOptions;
+        let url;
+        let queryOptions;
 
         loadOptions = loadOptions || {};
         queryOptions = {
@@ -206,7 +206,7 @@ var ODataStore = Store.inherit({
         }
 
         if(loadOptions.customQueryParams) {
-            var params = mixins.escapeServiceOperationParams(loadOptions.customQueryParams, this.version());
+            const params = mixins.escapeServiceOperationParams(loadOptions.customQueryParams, this.version());
 
             if(this.version() === 4) {
                 url = mixins.formatFunctionInvocationUrl(url, params);
@@ -221,8 +221,8 @@ var ODataStore = Store.inherit({
     _insertImpl: function(values) {
         this._requireKey();
 
-        var that = this,
-            d = new Deferred();
+        const that = this;
+        const d = new Deferred();
 
         when(this._sendRequest(this._url, 'POST', null, values))
             .done(function(serverResponse) {
@@ -234,7 +234,7 @@ var ODataStore = Store.inherit({
     },
 
     _updateImpl: function(key, values) {
-        var d = new Deferred();
+        const d = new Deferred();
 
         when(
             this._sendRequest(this._byKeyUrl(key), this._updateMethod, null, values)
@@ -252,7 +252,7 @@ var ODataStore = Store.inherit({
     },
 
     _removeImpl: function(key) {
-        var d = new Deferred();
+        const d = new Deferred();
 
         when(
             this._sendRequest(this._byKeyUrl(key), 'DELETE')
@@ -266,14 +266,14 @@ var ODataStore = Store.inherit({
     },
 
     _convertKey: function(value) {
-        var result = value,
-            fieldTypes = this._fieldTypes,
-            key = this.key() || this._legacyAnonymousKey;
+        let result = value;
+        const fieldTypes = this._fieldTypes;
+        const key = this.key() || this._legacyAnonymousKey;
 
         if(Array.isArray(key)) {
             result = {};
-            for(var i = 0; i < key.length; i++) {
-                var keyName = key[i];
+            for(let i = 0; i < key.length; i++) {
+                const keyName = key[i];
                 result[keyName] = odataUtils.convertPrimitiveValue(fieldTypes[keyName], value[keyName]);
             }
         } else if(fieldTypes[key]) {
@@ -284,11 +284,11 @@ var ODataStore = Store.inherit({
     },
 
     _byKeyUrl: function(value, useOriginalHost) {
-        var baseUrl = useOriginalHost
+        const baseUrl = useOriginalHost
             ? proxyUrlFormatter.formatLocalUrl(this._url)
             : this._url;
 
-        var convertedKey = this._convertKey(value);
+        const convertedKey = this._convertKey(value);
 
         return baseUrl + '(' + encodeURIComponent(odataUtils.serializeKey(convertedKey, this._version)) + ')';
     }

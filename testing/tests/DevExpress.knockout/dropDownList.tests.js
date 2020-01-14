@@ -1,6 +1,6 @@
-var $ = require('jquery'),
-    fx = require('animation/fx'),
-    ko = require('knockout');
+const $ = require('jquery');
+const fx = require('animation/fx');
+const ko = require('knockout');
 
 require('integration/knockout');
 require('ui/drop_down_editor/ui.drop_down_list');
@@ -8,7 +8,7 @@ require('ui/drop_down_editor/ui.drop_down_list');
 require('common.css!');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="dropDownListWithKO" data-bind="dxDropDownList: { dataSource: dataSource }"></div>\
         <div id="dropDownListWithKOAndKeyboardSupport" data-bind="dxDropDownList: { dataSource: dataSource, focusStateEnabled: true }"></div>\
         <div id="dropDownListWithKOAndSelectedItem" data-bind="dxDropDownList: {items: items, selectedItem: selectedItem}"></div>';
@@ -16,7 +16,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
@@ -30,9 +30,9 @@ var moduleConfig = {
 QUnit.module('items & dataSource', moduleConfig);
 
 QUnit.test('dataSource should changed when keyboard is support', function(assert) {
-    var $dropDownList = $('#dropDownListWithKOAndKeyboardSupport');
+    const $dropDownList = $('#dropDownListWithKOAndKeyboardSupport');
 
-    var model = {
+    const model = {
         dataSource: ko.observableArray()
     };
 
@@ -48,8 +48,8 @@ QUnit.test('dataSource should changed when keyboard is support', function(assert
 });
 
 QUnit.test('visible item binding', function(assert) {
-    var $dropDownList = $('#dropDownListWithKO');
-    var model = {
+    const $dropDownList = $('#dropDownListWithKO');
+    const model = {
         dataSource: [{
             text: 'text',
             visible: ko.observable(false)
@@ -68,8 +68,8 @@ QUnit.test('visible item binding', function(assert) {
 QUnit.module('selectedItem', moduleConfig);
 
 QUnit.test('selectedItem binding', function(assert) {
-    var $dropDownList = $('#dropDownListWithKOAndSelectedItem');
-    var vm = {
+    const $dropDownList = $('#dropDownListWithKOAndSelectedItem');
+    const vm = {
         items: [1, 2, 3, 4],
         selectedItem: ko.observable()
     };

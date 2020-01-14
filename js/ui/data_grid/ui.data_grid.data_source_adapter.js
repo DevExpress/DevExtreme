@@ -1,6 +1,6 @@
 import DataSourceAdapter from '../grid_core/ui.grid_core.data_source_adapter';
 
-var dataSourceAdapterType = DataSourceAdapter;
+let dataSourceAdapterType = DataSourceAdapter;
 
 module.exports = {
     extend: function(extender) {

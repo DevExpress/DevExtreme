@@ -89,8 +89,8 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     _onAppointmentDragStart(itemData, settings, eventArgs) {
-        const appointmentInstance = this.scheduler.getAppointmentsInstance(),
-            appointmentIndex = appointmentInstance.option('items').length;
+        const appointmentInstance = this.scheduler.getAppointmentsInstance();
+        const appointmentIndex = appointmentInstance.option('items').length;
 
         settings[0].isCompact = false;
         settings[0].virtual = false;
@@ -133,9 +133,9 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     _removeFakeAppointmentIfDragEndOnCurrentCell(itemData) {
-        const appointments = this.scheduler.getAppointmentsInstance(),
-            newCellIndex = this.scheduler._workSpace.getDroppableCellIndex(),
-            oldCellIndex = this.scheduler._workSpace.getCellIndexByCoordinates(this._startPosition);
+        const appointments = this.scheduler.getAppointmentsInstance();
+        const newCellIndex = this.scheduler._workSpace.getDroppableCellIndex();
+        const oldCellIndex = this.scheduler._workSpace.getCellIndexByCoordinates(this._startPosition);
 
         newCellIndex === oldCellIndex && appointments._clearItem({ itemData: itemData });
     }
@@ -160,9 +160,9 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
 
     _getRecurrencePart(appointments, startDate) {
         let result;
-        for(var i = 0; i < appointments.length; i++) {
-            const $appointment = appointments[i],
-                appointmentStartDate = $appointment.data('dxAppointmentStartDate');
+        for(let i = 0; i < appointments.length; i++) {
+            const $appointment = appointments[i];
+            const appointmentStartDate = $appointment.data('dxAppointmentStartDate');
             if(appointmentStartDate.getTime() === startDate.getTime()) {
                 result = $appointment;
             }
@@ -211,8 +211,8 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     }
 
     _isAppointmentInAllDayPanel(appointmentData) {
-        const workSpace = this.scheduler._workSpace,
-            itTakesAllDay = this.scheduler.appointmentTakesAllDay(appointmentData);
+        const workSpace = this.scheduler._workSpace;
+        const itTakesAllDay = this.scheduler.appointmentTakesAllDay(appointmentData);
 
         return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option('showAllDayPanel');
     }

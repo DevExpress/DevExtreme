@@ -9,13 +9,13 @@ import { setupDataGridModules, MockGridDataSource } from '../../helpers/dataGrid
 
 import 'ui/data_grid/ui.data_grid';
 
-var createDataSource = function(data, storeOptions, dataSourceOptions) {
-    var arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data);
-    var dataSource = new DataSource($.extend(true, { store: arrayStore, requireTotalCount: true, _preferSync: true }, dataSourceOptions));
+const createDataSource = function(data, storeOptions, dataSourceOptions) {
+    const arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data);
+    const dataSource = new DataSource($.extend(true, { store: arrayStore, requireTotalCount: true, _preferSync: true }, dataSourceOptions));
     return dataSource;
 };
 
-var setupModule = function() {
+const setupModule = function() {
     setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail', 'editorFactory', 'focus', 'keyboardNavigation', 'summary', 'selection']);
 
     this.applyOptions = function(options) {
@@ -26,7 +26,7 @@ var setupModule = function() {
     this.editingController.getFirstEditableCellInRow = function() { return $([]); };
 };
 
-var teardownModule = function() {
+const teardownModule = function() {
     this.dispose();
     this.clock.restore();
 };
@@ -40,12 +40,12 @@ QUnit.test('No initialization', function(assert) {
 });
 
 QUnit.test('Initialize from dataSource with all visible columns', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Dan', phone: '98-75-21' }
     ];
 
-    var dataSource = createDataSource(array, { key: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -58,13 +58,13 @@ QUnit.test('Initialize from dataSource with all visible columns', function(asser
 });
 
 QUnit.test('Initialize from dataSource when dataSource has null item', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Dan', phone: '98-75-21' },
         null
     ];
 
-    var dataSource = createDataSource(array);
+    const dataSource = createDataSource(array);
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -77,11 +77,11 @@ QUnit.test('Initialize from dataSource when dataSource has null item', function(
 });
 
 QUnit.test('Initialize from options with invisible columns', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', age: 20, phone: '55-55-55' },
         { name: 'Dan', age: 30, phone: '98-75-21' }
     ];
-    var dataSource = createDataSource(array);
+    const dataSource = createDataSource(array);
 
     this.applyOptions({ columns: ['name', { dataField: 'age', visible: false }, 'phone'] });
 
@@ -104,7 +104,7 @@ QUnit.test('Initialize array with keyExpr option', function(assert) {
 
 QUnit.test('Raise warning if keyExp is set and dataSource is not an array', function(assert) {
     // arrange
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         load: function() {
             return [
                 { name: 'Alex', phone: '55-55-55' },
@@ -136,13 +136,13 @@ QUnit.test('Not raise W1011 warning if dataSource is undefined', function(assert
 });
 
 QUnit.test('changed on initialize', function(assert) {
-    var changedCount = 0;
-    var lastArgs;
-    var array = [
+    let changedCount = 0;
+    let lastArgs;
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Dan', phone: '98-75-21' }
     ];
-    var dataSource = createDataSource(array);
+    const dataSource = createDataSource(array);
 
 
     this.dataController.changed.add(function(args) {
@@ -167,14 +167,14 @@ QUnit.test('changed on initialize', function(assert) {
 // B255430
 QUnit.test('Call changed after all columnsChanged', function(assert) {
     // arrange
-    var that = this,
-        changedCount = 0,
-        columnsChangedCount = 0,
-        array = [
-            { name: 'Alex', phone: '55-55-55' },
-            { name: 'Dan', phone: '98-75-21' }
-        ],
-        dataSource = createDataSource(array);
+    const that = this;
+    let changedCount = 0;
+    let columnsChangedCount = 0;
+    const array = [
+        { name: 'Alex', phone: '55-55-55' },
+        { name: 'Dan', phone: '98-75-21' }
+    ];
+    const dataSource = createDataSource(array);
 
     that.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -202,8 +202,8 @@ QUnit.test('Call changed after all columnsChanged', function(assert) {
 });
 
 QUnit.test('events rising on second initialize shared dataSource', function(assert) {
-    var changedCount = 0;
-    var dataSource = createDataSource([]);
+    let changedCount = 0;
+    const dataSource = createDataSource([]);
 
     this.applyOptions({
         dataSource: dataSource
@@ -224,7 +224,7 @@ QUnit.test('events rising on second initialize shared dataSource', function(asse
 });
 
 QUnit.test('events rising on second initialize not shared dataSource', function(assert) {
-    var changedCount = 0;
+    let changedCount = 0;
 
     this.applyOptions({
         dataSource: []
@@ -232,7 +232,7 @@ QUnit.test('events rising on second initialize not shared dataSource', function(
 
     this.dataController.optionChanged({ name: 'dataSource' });
 
-    var dataSource = this.dataController.dataSource()._dataSource;
+    const dataSource = this.dataController.dataSource()._dataSource;
 
     this.dataController.changed.add(function(args) {
         changedCount++;
@@ -248,7 +248,7 @@ QUnit.test('events rising on second initialize not shared dataSource', function(
 });
 
 QUnit.test('dataSource should be disposed after calling dispose method', function(assert) {
-    var dataSource = createDataSource([]);
+    const dataSource = createDataSource([]);
 
     this.dataController.setDataSource(dataSource);
 
@@ -262,7 +262,7 @@ QUnit.test('dataSource should be disposed after calling dispose method', functio
 
 // T697860
 QUnit.test('loading should be rised once on change dataSource and grouping', function(assert) {
-    var loadingSpy = sinon.spy();
+    const loadingSpy = sinon.spy();
 
     // act
     this.applyOptions({
@@ -281,12 +281,12 @@ QUnit.test('loading should be rised once on change dataSource and grouping', fun
 });
 
 QUnit.test('update rows on columnsChanged (changeType == \'columns\')', function(assert) {
-    var changedCount = 0;
-    var array = [
+    let changedCount = 0;
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Dan', phone: '98-75-21' }
     ];
-    var dataSource = createDataSource(array);
+    const dataSource = createDataSource(array);
 
     this.dataController.changed.add(function(args) {
         changedCount++;
@@ -296,7 +296,7 @@ QUnit.test('update rows on columnsChanged (changeType == \'columns\')', function
     this.dataController.setDataSource(dataSource);
     dataSource.load();
 
-    var rows = this.dataController.items();
+    const rows = this.dataController.items();
     this.columnsController.columnOption(1, 'visible', false);
 
     assert.notStrictEqual(this.dataController.items(), rows);
@@ -308,8 +308,8 @@ QUnit.test('update rows on columnsChanged (changeType == \'columns\')', function
 
 // T134124
 QUnit.test('update rows on columnsChanged when asyncLoadEnabled and column that need converting exists (changeType == \'columns\')', function(assert) {
-    var changedCount = 0;
-    var array = [
+    let changedCount = 0;
+    const array = [
         { name: 'Alex', phone: '55-55-55', age: '19' },
         { name: 'Dan', phone: '98-75-21', age: '23' }
     ];
@@ -318,7 +318,7 @@ QUnit.test('update rows on columnsChanged when asyncLoadEnabled and column that 
     this.options.customizeColumns = function(columns) {
         columns[2].dataType = 'number';
     };
-    var dataSource = createDataSource(array);
+    const dataSource = createDataSource(array);
 
     this.dataController.changed.add(function(args) {
         changedCount++;
@@ -329,7 +329,7 @@ QUnit.test('update rows on columnsChanged when asyncLoadEnabled and column that 
 
     this.clock.tick();
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     this.columnsController.columnOption(1, 'visible', false);
 
     this.clock.tick();
@@ -344,12 +344,12 @@ QUnit.test('update rows on columnsChanged when asyncLoadEnabled and column that 
 // B253046
 QUnit.test('Load sorting from state when columns generated by dataSource', function(assert) {
     // arrange
-    var array = [
+    const array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
         { name: 'Bob', age: 20 }
     ];
-    var dataSource = createDataSource(array);
+    const dataSource = createDataSource(array);
 
     this.applyOptions({
         commonColumnSettings: { allowSorting: true }
@@ -368,7 +368,7 @@ QUnit.test('Load sorting from state when columns generated by dataSource', funct
 // B254110
 QUnit.test('set isExpanded group parameters to dataSource on initialization', function(assert) {
     // arrange
-    var changedCallCount = 0;
+    let changedCallCount = 0;
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
         dataSource: {
@@ -402,7 +402,7 @@ QUnit.test('set isExpanded group parameters to dataSource on initialization', fu
 // T221453
 QUnit.test('grouping with autoExpandAll is false', function(assert) {
     // arrange
-    var changedCallCount = 0;
+    let changedCallCount = 0;
     this.applyOptions({
         dataSource: {
             store: [
@@ -435,8 +435,8 @@ QUnit.test('grouping with autoExpandAll is false', function(assert) {
 // B254110
 QUnit.test('collapseAll when grouped column with dataType', function(assert) {
     // arrange
-    var changedCallCount = 0,
-        loadingCount = 0;
+    let changedCallCount = 0;
+    let loadingCount = 0;
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -488,8 +488,8 @@ QUnit.test('collapseAll when grouped column with dataType', function(assert) {
 // T372049
 QUnit.test('collapseAll when remoteOperations with grouping and without paging', function(assert) {
     // arrange
-    var changedCallCount = 0,
-        loadingArgs = [];
+    let changedCallCount = 0;
+    const loadingArgs = [];
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -542,7 +542,7 @@ QUnit.test('collapseAll when remoteOperations with grouping and without paging',
 
 QUnit.test('collapseAll when several columns grouped', function(assert) {
     // arrange
-    var changedCallCount = 0;
+    let changedCallCount = 0;
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
         dataSource: {
@@ -572,7 +572,7 @@ QUnit.test('collapseAll when several columns grouped', function(assert) {
     // assert
     assert.equal(changedCallCount, 2, 'changed called two times');
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].key, ['Alex'], 'row 0 key');
     assert.ok(items[0].isExpanded, 'row 0 isExpanded');
     assert.deepEqual(items[1].key, ['Alex', 30], 'row 1 key');
@@ -582,7 +582,7 @@ QUnit.test('collapseAll when several columns grouped', function(assert) {
 });
 
 QUnit.test('the number of visible items should be identical after expandAll/collapseAll', function(assert) {
-    var dataItems = [];
+    const dataItems = [];
 
     $.each(TEN_NUMBERS, function(value) {
         dataItems.push({
@@ -614,7 +614,7 @@ QUnit.test('the number of visible items should be identical after expandAll/coll
 
     this.dataController._refreshDataSource();
 
-    var itemsCount = this.dataController.items().length;
+    const itemsCount = this.dataController.items().length;
 
     // act
     this.dataController.expandAll();
@@ -626,7 +626,7 @@ QUnit.test('the number of visible items should be identical after expandAll/coll
 
 QUnit.test('Using focusedRowEnabled should set sorting for the not sorted simple key column if remoteOperations enabled', function(assert) {
     // arrange
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
         { team: 'internal', name: 'Dan', age: 25 },
         { team: 'internal', name: 'Bob', age: 20 },
@@ -658,7 +658,7 @@ QUnit.test('Using focusedRowEnabled should set sorting for the not sorted simple
 
 QUnit.test('Using focusedRowEnabled should not set sorting for the not sorted simple key column if remoteOperations disabled', function(assert) {
     // arrange
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
         { team: 'internal', name: 'Dan', age: 25 },
         { team: 'internal', name: 'Bob', age: 20 },
@@ -689,17 +689,17 @@ QUnit.test('Using focusedRowEnabled should not set sorting for the not sorted si
 
 QUnit.test('Using focusedRowEnabled should not set sorting for the not sorted composite key columns', function(assert) {
     // arrange
-    var dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30 },
-            { team: 'internal', name: 'Dan', age: 25 },
-            { team: 'internal', name: 'Bob', age: 20 },
-            { team: 'public', name: 'Alice', age: 19 }],
-        { key: [ 'name', 'age' ] },
-        {
-            pageSize: 2,
-            asyncLoadEnabled: false
-        }),
-        dataIndexGetter;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Dan', age: 25 },
+        { team: 'internal', name: 'Bob', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }],
+    { key: [ 'name', 'age' ] },
+    {
+        pageSize: 2,
+        asyncLoadEnabled: false
+    });
+    let dataIndexGetter;
 
     this.applyOptions({
         dataSource: dataSource,
@@ -724,14 +724,14 @@ QUnit.test('Using focusedRowEnabled should not set sorting for the not sorted co
 
 QUnit.test('Operation filter should generates correctly when sorting, remoteOperations, and the key column is not present', function(assert) {
     // arrange
-    var data = [
-            { team: 'internal', name: 'Alex', age: 30 },
-            { team: 'internal', name: 'Dan', age: 25 },
-            { team: 'internal', name: 'Bob', age: 20 },
-            { team: 'public', name: 'Alice', age: 19 }],
-        dataSource = createDataSource(data,
-            { key: 'name' },
-            { pageSize: 1, asyncLoadEnabled: false });
+    const data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Dan', age: 25 },
+        { team: 'internal', name: 'Bob', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }];
+    const dataSource = createDataSource(data,
+        { key: 'name' },
+        { pageSize: 1, asyncLoadEnabled: false });
 
     this.applyOptions({
         keyExpr: 'name',
@@ -744,7 +744,7 @@ QUnit.test('Operation filter should generates correctly when sorting, remoteOper
     // act
     this.dataController._refreshDataSource();
 
-    var filter = this.dataController._generateOperationFilterByKey('Dan', data[1], false);
+    const filter = this.dataController._generateOperationFilterByKey('Dan', data[1], false);
 
     assert.equal(JSON.stringify(filter), '[["name","<","Dan"],"or",[["name","=","Dan"],"and",["name","<","Dan"]]]', 'Operation filter');
 });
@@ -752,7 +752,7 @@ QUnit.test('Operation filter should generates correctly when sorting, remoteOper
 // T755462
 QUnit.test('Check the filter generator for the boolean field', function(assert) {
     // act, assert
-    var filter = this.dataController._generateBooleanFilter('isRoom', true, { desc: false });
+    let filter = this.dataController._generateBooleanFilter('isRoom', true, { desc: false });
     assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",true]', 'filter');
 
     // act, assert
@@ -778,14 +778,14 @@ QUnit.test('Check the filter generator for the boolean field', function(assert) 
 
 QUnit.test('Get page index by simple key', function(assert) {
     // arrange
-    var count = 0,
-        dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30 },
-            { team: 'internal', name: 'Dan', age: 25 },
-            { team: 'internal', name: 'Bob', age: 20 },
-            { team: 'public', name: 'Alice', age: 19 }],
-        { key: 'name' },
-        { pageSize: 1, asyncLoadEnabled: false });
+    let count = 0;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Dan', age: 25 },
+        { team: 'internal', name: 'Bob', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }],
+    { key: 'name' },
+    { pageSize: 1, asyncLoadEnabled: false });
 
     this.applyOptions({
         dataSource: dataSource
@@ -802,7 +802,7 @@ QUnit.test('Get page index by simple key', function(assert) {
 
 QUnit.test('Get page index by composite key', function(assert) {
     // arrange
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
         { team: 'internal', name: 'Bob', age: 25 },
         { team: 'internal', name: 'Bob', age: 20 },
@@ -826,7 +826,7 @@ QUnit.test('Get page index by composite key', function(assert) {
 
 QUnit.test('Get page index by simple key with sorting', function(assert) {
     // arrange
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
         { team: 'internal', name: 'Dan', age: 25 },
         { team: 'internal', name: 'Bob', age: 20 },
@@ -852,7 +852,7 @@ QUnit.test('Get page index by simple key with sorting', function(assert) {
 
 QUnit.test('Get page index by composite key with sorting', function(assert) {
     // arrange
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
         { team: 'internal', name: 'Bob', age: 25 },
         { team: 'internal', name: 'Bob', age: 20 },
@@ -878,7 +878,7 @@ QUnit.test('Get page index by composite key with sorting', function(assert) {
 
 QUnit.test('Get page index by simple key with sorting by unbound column', function(assert) {
     // arrange
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
         { team: 'internal', name: 'Bob', age: 25 },
         { team: 'internal', name: 'Den', age: 20 },
@@ -912,7 +912,7 @@ QUnit.test('Get page index by simple key with sorting by unbound column', functi
 
 QUnit.test('Get page index by composite key with sorting by unbound column', function(assert) {
     // arrange
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
         { team: 'internal', name: 'Bob', age: 25 },
         { team: 'internal', name: 'Den', age: 20 },
@@ -946,7 +946,7 @@ QUnit.test('Get page index by composite key with sorting by unbound column', fun
 
 QUnit.test('Get page index by simple key if combined filter present', function(assert) {
     // arrange
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
         { team: 'internal', name: 'Bob', age: 25 },
         { team: 'internal', name: 'Den', age: 20 },
@@ -970,7 +970,7 @@ QUnit.test('Get page index by simple key if combined filter present', function(a
 
 QUnit.test('Get page index by simple key if combined filter present and remote operations', function(assert) {
     // arrange
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 19 },
         { team: 'internal', name: 'Bob', age: 30 },
         { team: 'internal', name: 'Den', age: 20 },
@@ -995,18 +995,18 @@ QUnit.test('Get page index by simple key if combined filter present and remote o
 
 QUnit.test('Get page index by composite key if combined filter present', function(assert) {
     // arrange
-    var dataController,
-        dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30 },
-            { team: 'internal', name: 'Bob', age: 25 },
-            { team: 'internal', name: 'Bob', age: 24 },
-            { team: 'internal', name: 'Bob', age: 23 },
-            { team: 'internal', name: 'Bob', age: 22 },
-            { team: 'internal', name: 'Den', age: 20 },
-            { team: 'public', name: 'Alice', age: 19 }],
-        { key: [ 'name', 'age' ] },
-        { filter: ['age', '>', 20], pageSize: 1, asyncLoadEnabled: false, allowFiltering: true, sort: [ 'name', 'age' ] }
-        );
+    let dataController;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 25 },
+        { team: 'internal', name: 'Bob', age: 24 },
+        { team: 'internal', name: 'Bob', age: 23 },
+        { team: 'internal', name: 'Bob', age: 22 },
+        { team: 'internal', name: 'Den', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }],
+    { key: [ 'name', 'age' ] },
+    { filter: ['age', '>', 20], pageSize: 1, asyncLoadEnabled: false, allowFiltering: true, sort: [ 'name', 'age' ] }
+    );
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -1025,20 +1025,20 @@ QUnit.test('Get page index by composite key if combined filter present', functio
 
 QUnit.test('Get row index if group by one column and simple key (group sizes are similar and equals to the pageSize)', function(assert) {
     // arrange
-    var dataController,
-        foundRowCount = 0,
-        dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30 },
-            { team: 'internal', name: 'Bob', age: 29 },
-            { team: 'internal0', name: 'Mark', age: 25 },
-            { team: 'internal0', name: 'Den', age: 24 },
-            { team: 'internal1', name: 'Dan', age: 23 },
-            { team: 'internal1', name: 'Clark', age: 22 },
-            { team: 'public', name: 'Alice', age: 19 },
-            { team: 'public', name: 'Zeb', age: 18 }],
-        { key: 'name' },
-        { group: 'team', pageSize: 3, asyncLoadEnabled: false, paginate: true }
-        );
+    let dataController;
+    let foundRowCount = 0;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal0', name: 'Mark', age: 25 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal1', name: 'Dan', age: 23 },
+        { team: 'internal1', name: 'Clark', age: 22 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }],
+    { key: 'name' },
+    { group: 'team', pageSize: 3, asyncLoadEnabled: false, paginate: true }
+    );
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -1088,21 +1088,21 @@ QUnit.test('Get row index if group by one column and simple key (group sizes are
 
 QUnit.test('Get row index if group by one column and simple key', function(assert) {
     // arrange
-    var dataController,
-        foundRowCount = 0,
-        dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30 },
-            { team: 'internal', name: 'Bob', age: 29 },
-            { team: 'internal', name: 'Sad', age: 28 },
-            { team: 'internal0', name: 'Mark', age: 25 },
-            { team: 'internal0', name: 'Den', age: 24 },
-            { team: 'internal1', name: 'Dan', age: 23 },
-            { team: 'internal1', name: 'Clark', age: 22 },
-            { team: 'public', name: 'Alice', age: 19 },
-            { team: 'public', name: 'Zeb', age: 18 }],
-        { key: 'name' },
-        { group: 'team', pageSize: 3, asyncLoadEnabled: false, paginate: true }
-        );
+    let dataController;
+    let foundRowCount = 0;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal', name: 'Sad', age: 28 },
+        { team: 'internal0', name: 'Mark', age: 25 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal1', name: 'Dan', age: 23 },
+        { team: 'internal1', name: 'Clark', age: 22 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }],
+    { key: 'name' },
+    { group: 'team', pageSize: 3, asyncLoadEnabled: false, paginate: true }
+    );
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -1156,21 +1156,21 @@ QUnit.test('Get row index if group by one column and simple key', function(asser
 
 QUnit.test('Get row index if group by one column and simple key and remote operations', function(assert) {
     // arrange
-    var dataController,
-        foundRowCount = 0,
-        dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30 },
-            { team: 'internal', name: 'Bob', age: 29 },
-            { team: 'internal', name: 'Sad', age: 28 },
-            { team: 'internal0', name: 'Mark', age: 25 },
-            { team: 'internal0', name: 'Den', age: 24 },
-            { team: 'internal1', name: 'Dan', age: 23 },
-            { team: 'internal1', name: 'Clark', age: 22 },
-            { team: 'public', name: 'Alice', age: 19 },
-            { team: 'public', name: 'Zeb', age: 18 }],
-        { key: 'name' },
-        { group: 'team', pageSize: 3, asyncLoadEnabled: false, paginate: true }
-        );
+    let dataController;
+    let foundRowCount = 0;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal', name: 'Sad', age: 28 },
+        { team: 'internal0', name: 'Mark', age: 25 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal1', name: 'Dan', age: 23 },
+        { team: 'internal1', name: 'Clark', age: 22 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }],
+    { key: 'name' },
+    { group: 'team', pageSize: 3, asyncLoadEnabled: false, paginate: true }
+    );
 
     this.applyOptions({
         remoteOperations: true,
@@ -1225,21 +1225,21 @@ QUnit.test('Get row index if group by one column and simple key and remote opera
 
 QUnit.test('Get row index if group by one column and simple key and OData', function(assert) {
     // arrange
-    var dataController,
-        foundRowCount = 0,
-        dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30 },
-            { team: 'internal', name: 'Bob', age: 29 },
-            { team: 'internal', name: 'Sad', age: 28 },
-            { team: 'internal0', name: 'Mark', age: 25 },
-            { team: 'internal0', name: 'Den', age: 24 },
-            { team: 'internal1', name: 'Dan', age: 23 },
-            { team: 'internal1', name: 'Clark', age: 22 },
-            { team: 'public', name: 'Alice', age: 19 },
-            { team: 'public', name: 'Zeb', age: 18 }],
-        { key: 'name' },
-        { group: 'team', pageSize: 3, asyncLoadEnabled: false, paginate: true }
-        );
+    let dataController;
+    let foundRowCount = 0;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal', name: 'Sad', age: 28 },
+        { team: 'internal0', name: 'Mark', age: 25 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal1', name: 'Dan', age: 23 },
+        { team: 'internal1', name: 'Clark', age: 22 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }],
+    { key: 'name' },
+    { group: 'team', pageSize: 3, asyncLoadEnabled: false, paginate: true }
+    );
 
     this.applyOptions({
         remoteOperations: { sorting: true, paging: true, filtering: true },
@@ -1294,21 +1294,21 @@ QUnit.test('Get row index if group by one column and simple key and OData', func
 
 QUnit.test('Get row index if group by two columns and simple key', function(assert) {
     // arrange
-    var dataController,
-        foundRowCount = 0,
-        dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
-            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
-            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
-            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
-            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
-            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
-            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
-            { team: 'public', name: 'Alice', age: 19, g0: 3 },
-            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-        { key: 'name' },
-        { group: ['team', 'g0'], pageSize: 5, asyncLoadEnabled: false, paginate: true }
-        );
+    let dataController;
+    let foundRowCount = 0;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30, g0: 0 },
+        { team: 'internal', name: 'Bob', age: 29, g0: 1 },
+        { team: 'internal', name: 'Sad', age: 28, g0: 1 },
+        { team: 'internal', name: 'Mark', age: 25, g0: 1 },
+        { team: 'internal0', name: 'Den', age: 24, g0: 2 },
+        { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
+        { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
+        { team: 'public', name: 'Alice', age: 19, g0: 3 },
+        { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
+    { key: 'name' },
+    { group: ['team', 'g0'], pageSize: 5, asyncLoadEnabled: false, paginate: true }
+    );
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -1362,21 +1362,21 @@ QUnit.test('Get row index if group by two columns and simple key', function(asse
 
 QUnit.test('Get row index if group by two columns and simple key and remote operations', function(assert) {
     // arrange
-    var dataController,
-        foundRowCount = 0,
-        dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
-            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
-            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
-            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
-            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
-            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
-            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
-            { team: 'public', name: 'Alice', age: 19, g0: 3 },
-            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-        { key: 'name' },
-        { group: ['team', 'g0'], pageSize: 5, asyncLoadEnabled: false, paginate: true }
-        );
+    let dataController;
+    let foundRowCount = 0;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30, g0: 0 },
+        { team: 'internal', name: 'Bob', age: 29, g0: 1 },
+        { team: 'internal', name: 'Sad', age: 28, g0: 1 },
+        { team: 'internal', name: 'Mark', age: 25, g0: 1 },
+        { team: 'internal0', name: 'Den', age: 24, g0: 2 },
+        { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
+        { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
+        { team: 'public', name: 'Alice', age: 19, g0: 3 },
+        { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
+    { key: 'name' },
+    { group: ['team', 'g0'], pageSize: 5, asyncLoadEnabled: false, paginate: true }
+    );
 
     this.applyOptions({
         remoteOperations: true,
@@ -1435,21 +1435,21 @@ QUnit.test('Get row index if group by two columns and simple key and remote oper
 
 QUnit.test('Get row index if group by two columns and simple key and OData', function(assert) {
     // arrange
-    var dataController,
-        foundRowCount = 0,
-        dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
-            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
-            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
-            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
-            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
-            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
-            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
-            { team: 'public', name: 'Alice', age: 19, g0: 3 },
-            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-        { key: 'name' },
-        { group: ['team', 'g0'], pageSize: 5, asyncLoadEnabled: false, paginate: true }
-        );
+    let dataController;
+    let foundRowCount = 0;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30, g0: 0 },
+        { team: 'internal', name: 'Bob', age: 29, g0: 1 },
+        { team: 'internal', name: 'Sad', age: 28, g0: 1 },
+        { team: 'internal', name: 'Mark', age: 25, g0: 1 },
+        { team: 'internal0', name: 'Den', age: 24, g0: 2 },
+        { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
+        { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
+        { team: 'public', name: 'Alice', age: 19, g0: 3 },
+        { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
+    { key: 'name' },
+    { group: ['team', 'g0'], pageSize: 5, asyncLoadEnabled: false, paginate: true }
+    );
 
     this.applyOptions({
         remoteOperations: { sorting: true, paging: true, filtering: true },
@@ -1504,21 +1504,21 @@ QUnit.test('Get row index if group by two columns and simple key and OData', fun
 
 QUnit.test('Get row index if group by one column, simple key and virtual scrolling', function(assert) {
     // arrange
-    var dataController,
-        foundRowCount = 0,
-        dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30 },
-            { team: 'internal', name: 'Bob', age: 29 },
-            { team: 'internal', name: 'Sad', age: 28 },
-            { team: 'internal', name: 'Mark', age: 25 },
-            { team: 'internal0', name: 'Den', age: 24 },
-            { team: 'internal0', name: 'Dan', age: 23 },
-            { team: 'internal1', name: 'Clark', age: 22 },
-            { team: 'public', name: 'Alice', age: 19 },
-            { team: 'public', name: 'Zeb', age: 18 }],
-        { key: 'name' },
-        { group: 'team', pageSize: 3, asyncLoadEnabled: false, paginate: true }
-        );
+    let dataController;
+    let foundRowCount = 0;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal', name: 'Sad', age: 28 },
+        { team: 'internal', name: 'Mark', age: 25 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'internal1', name: 'Clark', age: 22 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }],
+    { key: 'name' },
+    { group: 'team', pageSize: 3, asyncLoadEnabled: false, paginate: true }
+    );
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -1572,21 +1572,21 @@ QUnit.test('Get row index if group by one column, simple key and virtual scrolli
 
 QUnit.test('Get row index if group by two columns, simple key and virtual scrolling', function(assert) {
     // arrange
-    var dataController,
-        foundRowCount = 0,
-        dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
-            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
-            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
-            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
-            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
-            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
-            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
-            { team: 'public', name: 'Alice', age: 19, g0: 3 },
-            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-        { key: 'name' },
-        { group: ['team', 'g0'], pageSize: 3, asyncLoadEnabled: false, paginate: true }
-        );
+    let dataController;
+    let foundRowCount = 0;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30, g0: 0 },
+        { team: 'internal', name: 'Bob', age: 29, g0: 1 },
+        { team: 'internal', name: 'Sad', age: 28, g0: 1 },
+        { team: 'internal', name: 'Mark', age: 25, g0: 1 },
+        { team: 'internal0', name: 'Den', age: 24, g0: 2 },
+        { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
+        { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
+        { team: 'public', name: 'Alice', age: 19, g0: 3 },
+        { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
+    { key: 'name' },
+    { group: ['team', 'g0'], pageSize: 3, asyncLoadEnabled: false, paginate: true }
+    );
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -1640,21 +1640,21 @@ QUnit.test('Get row index if group by two columns, simple key and virtual scroll
 
 QUnit.test('Get row index if group by two columns, simple key and virtual scrolling', function(assert) {
     // arrange
-    var dataController,
-        foundRowCount = 0,
-        dataSource = createDataSource([
-            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
-            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
-            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
-            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
-            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
-            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
-            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
-            { team: 'public', name: 'Alice', age: 19, g0: 3 },
-            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-        { key: 'name' },
-        { group: ['team', 'g0'], pageSize: 3, asyncLoadEnabled: false, paginate: true }
-        );
+    let dataController;
+    let foundRowCount = 0;
+    const dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30, g0: 0 },
+        { team: 'internal', name: 'Bob', age: 29, g0: 1 },
+        { team: 'internal', name: 'Sad', age: 28, g0: 1 },
+        { team: 'internal', name: 'Mark', age: 25, g0: 1 },
+        { team: 'internal0', name: 'Den', age: 24, g0: 2 },
+        { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
+        { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
+        { team: 'public', name: 'Alice', age: 19, g0: 3 },
+        { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
+    { key: 'name' },
+    { group: ['team', 'g0'], pageSize: 3, asyncLoadEnabled: false, paginate: true }
+    );
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -1734,12 +1734,12 @@ QUnit.test('sortOrder in column options and group parameters in dataSource', fun
 });
 
 QUnit.test('update sorting on columnsChanged (changeType == \'sorting\')', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
         { name: 'Bob', age: 20 }
     ];
-    var dataSource = createDataSource(array, { key: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' });
 
     this.applyOptions({
         commonColumnSettings: { allowSorting: true },
@@ -1757,7 +1757,7 @@ QUnit.test('update sorting on columnsChanged (changeType == \'sorting\')', funct
 });
 
 QUnit.test('reset sorting on columnsChanged (changeType == \'sorting\')', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
         { name: 'Bob', age: 20 }
@@ -1767,7 +1767,7 @@ QUnit.test('reset sorting on columnsChanged (changeType == \'sorting\')', functi
         sorting: { mode: 'single' }
     });
 
-    var dataSource = createDataSource(array, { key: 'name' }, { sort: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' }, { sort: 'name' });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -1785,12 +1785,12 @@ QUnit.test('reset sorting on columnsChanged (changeType == \'sorting\')', functi
 });
 
 QUnit.test('update grouping on columnsChanged (changeType == \'grouping\')', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
         { name: 'Bob', age: 20 }
     ];
-    var dataSource = createDataSource(array, { key: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' });
 
     this.applyOptions({
         commonColumnSettings: { allowSorting: true },
@@ -1811,12 +1811,12 @@ QUnit.test('Load group from state when columns generated by dataSource', functio
     this.options.groupPanel = { visible: true, allowColumnDragging: true };
     this.options.grouping = { autoExpandAll: true };
 
-    var array = [
+    const array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
         { name: 'Bob', age: 20 }
     ];
-    var dataSource = createDataSource(array);
+    const dataSource = createDataSource(array);
     this.columnsController.setUserState([{ dataField: 'name', visible: true, groupIndex: 0, index: 0 }, { dataField: 'age', visible: true, index: 1 }]);
 
     // act
@@ -1835,7 +1835,7 @@ QUnit.test('Load group from state when columns generated by dataSource', functio
 
 QUnit.test('Reset sort/group parameters from user state for removed columns', function(assert) {
     // arrange
-    var dataSource = [
+    const dataSource = [
         { age: 30 },
         { age: 20 },
         { age: 25 }
@@ -1863,12 +1863,12 @@ QUnit.test('Reset sort/group parameters from user state for removed columns', fu
 
 // B253402
 QUnit.test('reset grouping on columnsChanged (changeType == \'grouping\')', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
         { name: 'Bob', age: 20 }
     ];
-    var dataSource = createDataSource(array, { key: 'name' }, { group: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' }, { group: 'name' });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -1882,13 +1882,13 @@ QUnit.test('reset grouping on columnsChanged (changeType == \'grouping\')', func
 });
 
 QUnit.test('update sorting on columnsChanged (changeType == \'sorting\'). Refresh current page', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
         { name: 'Bob', age: 20 }
     ];
 
-    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+    const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
     this.applyOptions({
         commonColumnSettings: { allowSorting: true },
@@ -1907,13 +1907,13 @@ QUnit.test('update sorting on columnsChanged (changeType == \'sorting\'). Refres
 });
 
 QUnit.test('sorting when calculateSortValue is defined', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
         { name: 'Bob', age: 20 }
     ];
 
-    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+    const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
     this.applyOptions({
         commonColumnSettings: { allowSorting: true },
@@ -1937,14 +1937,14 @@ QUnit.test('sorting when calculateSortValue is defined', function(assert) {
 });
 
 QUnit.test('sorting when sortingMethod is defined', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
         { name: 'Bob', age: 20 }
     ];
 
-    var order = ['Dan', 'Bob', 'Alex'];
-    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+    const order = ['Dan', 'Bob', 'Alex'];
+    const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
     this.applyOptions({
         commonColumnSettings: { allowSorting: true },
@@ -1968,12 +1968,12 @@ QUnit.test('sorting when sortingMethod is defined', function(assert) {
 });
 
 QUnit.test('update sorting on columnsChanged (changeType == \'sorting\'). Several updates', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
         { name: 'Bob', age: 20 }
     ];
-    var dataSource = createDataSource(array, { key: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' });
 
     this.applyOptions({
         commonColumnSettings: { allowSorting: true },
@@ -1993,11 +1993,11 @@ QUnit.test('update sorting on columnsChanged (changeType == \'sorting\'). Severa
 
 // B233497
 QUnit.test('changed when ArrayStore with datetime fields in string format', function(assert) {
-    var columnsChangedArgs = [];
-    var changedCount = 0;
-    var dataController = this.dataController;
+    const columnsChangedArgs = [];
+    let changedCount = 0;
+    const dataController = this.dataController;
 
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { name: 'Alex', birthDate: '1987/5/5' },
         { name: 'Dan', birthDate: '1985/3/21' }
     ], {}, { asyncLoadEnabled: true });
@@ -2024,11 +2024,11 @@ QUnit.test('changed when ArrayStore with datetime fields in string format', func
 });
 
 QUnit.test('changed when ArrayStore with datetime fields in string format and sorting defined', function(assert) {
-    var columnsChangedArgs = [];
-    var changedCount = 0;
-    var dataController = this.dataController;
+    const columnsChangedArgs = [];
+    let changedCount = 0;
+    const dataController = this.dataController;
 
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { name: 'Alex', birthDate: '1987/5/5' },
         { name: 'Dan', birthDate: '1985/3/21' }
     ], {}, { asyncLoadEnabled: true });
@@ -2057,11 +2057,11 @@ QUnit.test('changed when ArrayStore with datetime fields in string format and so
 });
 
 QUnit.test('changed when ArrayStore with datetime fields in string format and sorting defined and serializationFormat defined', function(assert) {
-    var columnsChangedArgs = [];
-    var changedCount = 0;
-    var dataController = this.dataController;
+    const columnsChangedArgs = [];
+    let changedCount = 0;
+    const dataController = this.dataController;
 
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { name: 'Alex', birthDate: '1987-05-05T00:00:00Z' },
         { name: 'Dan', birthDate: '1985-03-21T00:00:00Z' }
     ], {}, { asyncLoadEnabled: true });
@@ -2088,14 +2088,14 @@ QUnit.test('changed when ArrayStore with datetime fields in string format and so
 });
 
 QUnit.test('update lookup items on refresh', function(assert) {
-    var changedCount = 0;
-    var dataController = this.dataController;
+    let changedCount = 0;
+    const dataController = this.dataController;
 
-    var lookupLoadResult = [];
+    let lookupLoadResult = [];
 
     this.options.loadingTimeout = 0;
 
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { name: 'Alex', birthDate: '5/5/1987' },
         { name: 'Dan', birthDate: '3/21/1985' }
     ]);
@@ -2123,7 +2123,7 @@ QUnit.test('update lookup items on refresh', function(assert) {
         changedCount++;
     });
 
-    var refreshed = false;
+    let refreshed = false;
 
     // act
     dataController.refresh().done(function() {
@@ -2147,11 +2147,11 @@ QUnit.test('update lookup items on refresh', function(assert) {
 });
 
 QUnit.test('not update lookup items on refresh with changesOnly', function(assert) {
-    var changedCount = 0,
-        dataController = this.dataController,
-        lookupLoadCount = 0;
+    let changedCount = 0;
+    const dataController = this.dataController;
+    let lookupLoadCount = 0;
 
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { name: 'Alex', birthDate: '5/5/1987' },
         { name: 'Dan', birthDate: '3/21/1985' }
     ], {}, { asyncLoadEnabled: true });
@@ -2191,11 +2191,11 @@ QUnit.test('not update lookup items on refresh with changesOnly', function(asser
 });
 
 QUnit.test('Not Update lookup items when no valueExpr', function(assert) {
-    var changedCount = 0,
-        dataController = this.dataController,
-        lookupLoadCount = 0;
+    let changedCount = 0;
+    const dataController = this.dataController;
+    let lookupLoadCount = 0;
 
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { name: 'Alex', birthDate: '5/5/1987' },
         { name: 'Dan', birthDate: '3/21/1985' }
     ], {}, { asyncLoadEnabled: true });
@@ -2228,11 +2228,11 @@ QUnit.test('Not Update lookup items when no valueExpr', function(assert) {
 });
 
 QUnit.test('Not Update lookup items on change sorting', function(assert) {
-    var changedCount = 0,
-        dataController = this.dataController,
-        lookupLoadCount = 0;
+    let changedCount = 0;
+    const dataController = this.dataController;
+    let lookupLoadCount = 0;
 
-    var dataSource = createDataSource([
+    const dataSource = createDataSource([
         { name: 'Alex', birthDate: '5/5/1987' },
         { name: 'Dan', birthDate: '3/21/1985' }
     ], {}, { asyncLoadEnabled: true });
@@ -2276,14 +2276,14 @@ QUnit.test('Not Update lookup items on change sorting', function(assert) {
 
 QUnit.test('byKey from loaded items', function(assert) {
     // arrange
-    var array = [
-            { name: 'Alex', phone: '55-55-55' },
-            { name: 'Sam', phone: '66-66-66' },
-            { name: 'Dan', phone: '98-75-21' }
-        ],
-        data;
+    const array = [
+        { name: 'Alex', phone: '55-55-55' },
+        { name: 'Sam', phone: '66-66-66' },
+        { name: 'Dan', phone: '98-75-21' }
+    ];
+    let data;
 
-    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+    const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -2300,14 +2300,14 @@ QUnit.test('byKey from loaded items', function(assert) {
 
 QUnit.test('byKey from data store', function(assert) {
     // arrange
-    var array = [
-            { name: 'Alex', phone: '55-55-55' },
-            { name: 'Sam', phone: '66-66-66' },
-            { name: 'Dan', phone: '98-75-21' }
-        ],
-        data;
+    const array = [
+        { name: 'Alex', phone: '55-55-55' },
+        { name: 'Sam', phone: '66-66-66' },
+        { name: 'Dan', phone: '98-75-21' }
+    ];
+    let data;
 
-    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+    const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -2324,14 +2324,14 @@ QUnit.test('byKey from data store', function(assert) {
 
 QUnit.test('byKey when not has key', function(assert) {
     // arrange
-    var array = [
-            { name: 'Alex', phone: '55-55-55' },
-            { name: 'Sam', phone: '66-66-66' },
-            { name: 'Dan', phone: '98-75-21' }
-        ],
-        data;
+    const array = [
+        { name: 'Alex', phone: '55-55-55' },
+        { name: 'Sam', phone: '66-66-66' },
+        { name: 'Dan', phone: '98-75-21' }
+    ];
+    let data;
 
-    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+    const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -2348,14 +2348,14 @@ QUnit.test('byKey when not has key', function(assert) {
 
 QUnit.test('getDataByKeys from loaded items and data store', function(assert) {
     // arrange
-    var array = [
-            { name: 'Alex', phone: '55-55-55' },
-            { name: 'Sam', phone: '66-66-66' },
-            { name: 'Dan', phone: '98-75-21' }
-        ],
-        data;
+    const array = [
+        { name: 'Alex', phone: '55-55-55' },
+        { name: 'Sam', phone: '66-66-66' },
+        { name: 'Dan', phone: '98-75-21' }
+    ];
+    let data;
 
-    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+    const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -2374,14 +2374,14 @@ QUnit.test('getDataByKeys from loaded items and data store', function(assert) {
 
 QUnit.test('getDataByKeys not has keys', function(assert) {
     // arrange
-    var array = [
-            { name: 'Alex', phone: '55-55-55' },
-            { name: 'Sam', phone: '66-66-66' },
-            { name: 'Dan', phone: '98-75-21' }
-        ],
-        data;
+    const array = [
+        { name: 'Alex', phone: '55-55-55' },
+        { name: 'Sam', phone: '66-66-66' },
+        { name: 'Dan', phone: '98-75-21' }
+    ];
+    let data;
 
-    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+    const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -2400,13 +2400,13 @@ QUnit.test('getDataByKeys not has keys', function(assert) {
 
 QUnit.test('getKeyByRowIndex', function(assert) {
     // arrange
-    var array = [
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Sam', phone: '66-66-66' },
         { name: 'Dan', phone: '98-75-21' }
     ];
 
-    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+    const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -2419,13 +2419,13 @@ QUnit.test('getKeyByRowIndex', function(assert) {
 
 QUnit.test('getRowIndexByKey', function(assert) {
     // arrange
-    var array = [
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Sam', phone: '66-66-66' },
         { name: 'Dan', phone: '98-75-21' }
     ];
 
-    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+    const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -2439,7 +2439,7 @@ QUnit.test('getRowIndexByKey', function(assert) {
 // T174450
 QUnit.test('Assign loaded dataSource instance', function(assert) {
     // arrange
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         store: [
             { age: 30 },
             { age: 20 },
@@ -2469,7 +2469,7 @@ QUnit.test('Assign loaded dataSource instance', function(assert) {
 // T174450
 QUnit.test('Assign dataSource instance in loading', function(assert) {
     // arrange
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         store: [
             { age: 30 },
             { age: 20 },
@@ -2602,12 +2602,12 @@ QUnit.test('Set remoteOperations option to true', function(assert) {
 // T541798
 QUnit.test('Apply sorting by the lookup column with calculateSortValue when the first load', function(assert) {
     // arrange
-    var items,
-        array = [
-            { State: 1 },
-            { State: 2 },
-            { State: 3 }
-        ];
+    let items;
+    const array = [
+        { State: 1 },
+        { State: 2 },
+        { State: 3 }
+    ];
 
     this.applyOptions({
         dataSource: array,
@@ -2629,7 +2629,7 @@ QUnit.test('Apply sorting by the lookup column with calculateSortValue when the 
                 }]
             },
             calculateSortValue: function(data) {
-                var value = this.calculateCellValue(data);
+                const value = this.calculateCellValue(data);
                 return this.lookup.calculateCellValue(value);
             }
         }]
@@ -2686,11 +2686,11 @@ QUnit.test('begin/end customLoading', function(assert) {
 QUnit.module('Loading', { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test('LoadingChanged event on one loading', function(assert) {
-    var that = this,
-        loadingStates = [],
-        dataSource = createDataSource([{ id: 1 }, { id: 2 }, { id: 3 }], {}, {
-            pageSize: 2
-        });
+    const that = this;
+    const loadingStates = [];
+    const dataSource = createDataSource([{ id: 1 }, { id: 2 }, { id: 3 }], {}, {
+        pageSize: 2
+    });
     that.dataController.setDataSource(dataSource);
     dataSource.load();
 
@@ -2708,8 +2708,8 @@ QUnit.test('LoadingChanged event on one loading', function(assert) {
 });
 
 QUnit.test('isLoading for loaded dataSource', function(assert) {
-    var arrayStore = new ArrayStore([]);
-    var dataSource = new DataSource({
+    const arrayStore = new ArrayStore([]);
+    const dataSource = new DataSource({
         store: arrayStore,
         _preferSync: true
     });
@@ -2723,8 +2723,8 @@ QUnit.test('isLoading for loaded dataSource', function(assert) {
 });
 
 QUnit.test('begin custom loading', function(assert) {
-    var loadingStates = [];
-    var dataSource = createDataSource([]);
+    const loadingStates = [];
+    const dataSource = createDataSource([]);
     this.dataController.setDataSource(dataSource);
     dataSource.load();
 
@@ -2743,8 +2743,8 @@ QUnit.test('begin custom loading', function(assert) {
 });
 
 QUnit.test('end custom loading', function(assert) {
-    var loadingStates = [];
-    var dataSource = createDataSource([]);
+    const loadingStates = [];
+    const dataSource = createDataSource([]);
     this.dataController.setDataSource(dataSource);
     dataSource.load();
 
@@ -2764,10 +2764,10 @@ QUnit.test('end custom loading', function(assert) {
 
 // T179346
 QUnit.test('Loading for lookup column', function(assert) {
-    var lookupDeferred = $.Deferred();
-    var loadingStates = [];
-    var arrayStore = new ArrayStore([]);
-    var dataSource = new DataSource({
+    const lookupDeferred = $.Deferred();
+    const loadingStates = [];
+    const arrayStore = new ArrayStore([]);
+    const dataSource = new DataSource({
         store: arrayStore,
         _preferSync: true
     });
@@ -2808,10 +2808,10 @@ QUnit.test('Loading for lookup column', function(assert) {
 QUnit.module('Parsing values', { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test('Null value for dateTime dataType', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', birthday: null }
     ];
-    var dataSource = createDataSource(array, { key: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' });
 
     this.applyOptions({
         columns: ['name', { dataField: 'birthday', dataType: 'date', format: 'shortDate' }]
@@ -2824,11 +2824,11 @@ QUnit.test('Null value for dateTime dataType', function(assert) {
 });
 
 QUnit.test('value from calculateCellValue', function(assert) {
-    var array = [
+    const array = [
         { firstName: 'Alex', secondName: 'Ivanov' },
         { firstName: 'Boris', secondName: 'Sidorov' }
     ];
-    var dataSource = createDataSource(array, { key: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' });
 
     this.applyOptions({
         columns: [{ calculateCellValue: function(data) { return data.firstName + ' ' + data.secondName; } }]
@@ -2842,7 +2842,7 @@ QUnit.test('value from calculateCellValue', function(assert) {
     assert.deepEqual(this.dataController.items()[1].values, ['Boris Sidorov']);
 });
 
-var setupPagingModule = function() {
+const setupPagingModule = function() {
     setupModule.apply(this);
 
     this.array = [
@@ -2854,7 +2854,7 @@ var setupPagingModule = function() {
         { name: 'Dan5', pay: 155 },
         { name: 'Dan6', pay: 156 }
     ];
-    var dataSource = createDataSource(this.array, { key: 'name' }, {
+    const dataSource = createDataSource(this.array, { key: 'name' }, {
         pageSize: 5,
         paginate: true
     });
@@ -2862,7 +2862,7 @@ var setupPagingModule = function() {
     this.dataSource = dataSource;
 };
 
-var teardownPagingModule = function() {
+const teardownPagingModule = function() {
     teardownModule.apply(this);
 };
 
@@ -2882,7 +2882,7 @@ QUnit.test('PagesCount, TotalCount, Rows after initialization', function(assert)
 });
 
 QUnit.test('PagesCount after filter dataSource', function(assert) {
-    var changedCount = 0;
+    let changedCount = 0;
 
     this.dataController.setDataSource(this.dataSource);
     this.dataSource.load();
@@ -2905,7 +2905,7 @@ QUnit.test('PagesCount after filter dataSource', function(assert) {
 
 QUnit.test('Change pageIndex', function(assert) {
     // arrange
-    var countCallPageChanged = 0;
+    let countCallPageChanged = 0;
 
     this.dataController.setDataSource(this.dataSource);
     this.dataSource.load();
@@ -2952,7 +2952,7 @@ QUnit.test('dataSource should not be reloaded when pageIndex is normalized after
         columns: ['name', 'group']
     });
 
-    var loadingSpy = sinon.spy();
+    const loadingSpy = sinon.spy();
     this.dataSource.store().on('loading', loadingSpy);
 
     this.dataController.setDataSource(this.dataSource);
@@ -2972,7 +2972,7 @@ QUnit.test('dataSource should not be reloaded when pageIndex is normalized after
 
 QUnit.test('Change pageSize', function(assert) {
     // arrange
-    var countCallPageChanged = 0;
+    let countCallPageChanged = 0;
 
     this.dataController.setDataSource(this.dataSource);
     this.dataSource.load();
@@ -3042,7 +3042,7 @@ QUnit.test('Change dataSource after change pageIndex', function(assert) {
 
 
 QUnit.test('Rise changed on set pageSize', function(assert) {
-    var changedCount = 0;
+    let changedCount = 0;
 
     this.dataController.setDataSource(this.dataSource);
     this.dataSource.load();
@@ -3061,7 +3061,7 @@ QUnit.test('Rise changed on set pageSize', function(assert) {
 });
 
 QUnit.test('Rise changed on set pageSize with changing pageCount', function(assert) {
-    var changedCount = 0;
+    let changedCount = 0;
 
     this.dataController.setDataSource(this.dataSource);
     this.dataSource.load();
@@ -3078,8 +3078,8 @@ QUnit.test('Rise changed on set pageSize with changing pageCount', function(asse
 
 // B239351
 QUnit.test('Rise changed on set pageIndex', function(assert) {
-    var changedCallCount = 0;
-    var dataController = this.dataController;
+    let changedCallCount = 0;
+    const dataController = this.dataController;
     this.dataController.setDataSource(this.dataSource);
     this.dataSource.load();
     dataController.changed.add(function() {
@@ -3093,7 +3093,7 @@ QUnit.test('Rise changed on set pageIndex', function(assert) {
 
 
 QUnit.test('Not Rise changed on get pageIndex', function(assert) {
-    var changedCount = 0;
+    let changedCount = 0;
     this.dataController.setDataSource(this.dataSource);
     this.dataSource.load();
     this.dataController.changed.add(function() {
@@ -3104,7 +3104,7 @@ QUnit.test('Not Rise changed on get pageIndex', function(assert) {
 });
 
 QUnit.test('update pageCount after insert', function(assert) {
-    var changedCount = 0;
+    let changedCount = 0;
     this.dataController.setDataSource(this.dataSource);
     this.dataSource.load();
     this.dataController.changed.add(function() {
@@ -3147,7 +3147,7 @@ QUnit.test('Page size of data source is not changed for old value_T242652', func
     this.dataSource.load();
 
     // act
-    var dataSourceChangedCounter = 0;
+    let dataSourceChangedCounter = 0;
 
     this.dataSource.on('changed', function() {
         dataSourceChangedCounter++;
@@ -3160,14 +3160,14 @@ QUnit.test('Page size of data source is not changed for old value_T242652', func
     assert.equal(dataSourceChangedCounter, 1);
 });
 
-var setupVirtualScrollingModule = function() {
+const setupVirtualScrollingModule = function() {
     this.options = {
         scrolling: { mode: 'virtual' },
         pager: { visible: 'auto' }
     };
     setupModule.apply(this);
 
-    var i, array = [];
+    let i; const array = [];
 
     for(i = 0; i < 1000; i++) {
         array.push({
@@ -3176,7 +3176,7 @@ var setupVirtualScrollingModule = function() {
         });
     }
 
-    var dataSource = createDataSource(array, { key: 'id' }, {
+    const dataSource = createDataSource(array, { key: 'id' }, {
         pageSize: 20,
         paginate: true
     });
@@ -3189,14 +3189,14 @@ var setupVirtualScrollingModule = function() {
     this.dataSource = dataSource;
 };
 
-var teardownVirtualScrollingModule = function() {
+const teardownVirtualScrollingModule = function() {
     teardownModule.apply(this);
 };
 
 QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, afterEach: teardownVirtualScrollingModule });
 
 QUnit.test('virtual items return null when no virtual scrolling', function(assert) {
-    var dataSource = createDataSource(this.array, { key: 'id' }, {
+    const dataSource = createDataSource(this.array, { key: 'id' }, {
         pageSize: 20,
         paginate: true,
         userPageSize: 20
@@ -3210,12 +3210,12 @@ QUnit.test('virtual items return null when no virtual scrolling', function(asser
 });
 
 QUnit.test('virtual items when virtual scrolling enabled', function(assert) {
-    var virtualItemsCount = this.dataController.virtualItemsCount();
+    const virtualItemsCount = this.dataController.virtualItemsCount();
     assert.ok(virtualItemsCount);
 });
 
 QUnit.test('virtual items at begin', function(assert) {
-    var virtualItemsCount = this.dataController.virtualItemsCount();
+    const virtualItemsCount = this.dataController.virtualItemsCount();
     assert.ok(virtualItemsCount);
     assert.deepEqual(virtualItemsCount, {
         begin: 0,
@@ -3226,7 +3226,7 @@ QUnit.test('virtual items at begin', function(assert) {
 
 QUnit.test('virtual items at end', function(assert) {
     this.dataController.setViewportItemIndex(985);
-    var virtualItemsCount = this.dataController.virtualItemsCount();
+    const virtualItemsCount = this.dataController.virtualItemsCount();
     assert.ok(virtualItemsCount);
     assert.deepEqual(virtualItemsCount, {
         begin: 960,
@@ -3237,7 +3237,7 @@ QUnit.test('virtual items at end', function(assert) {
 
 QUnit.test('virtual items after small scrolling at beginning', function(assert) {
     this.dataController.setViewportItemIndex(1);
-    var virtualItemsCount = this.dataController.virtualItemsCount();
+    const virtualItemsCount = this.dataController.virtualItemsCount();
     assert.ok(virtualItemsCount);
     assert.deepEqual(virtualItemsCount, {
         begin: 0,
@@ -3248,7 +3248,7 @@ QUnit.test('virtual items after small scrolling at beginning', function(assert) 
 
 QUnit.test('virtual items before page center', function(assert) {
     this.dataController.setViewportItemIndex(9);
-    var virtualItemsCount = this.dataController.virtualItemsCount();
+    const virtualItemsCount = this.dataController.virtualItemsCount();
     assert.ok(virtualItemsCount);
     assert.deepEqual(virtualItemsCount, {
         begin: 0,
@@ -3260,7 +3260,7 @@ QUnit.test('virtual items before page center', function(assert) {
 
 QUnit.test('virtual items after page center', function(assert) {
     this.dataController.setViewportItemIndex(11);
-    var virtualItemsCount = this.dataController.virtualItemsCount();
+    const virtualItemsCount = this.dataController.virtualItemsCount();
     assert.ok(virtualItemsCount);
     assert.deepEqual(virtualItemsCount, {
         begin: 0,
@@ -3272,7 +3272,7 @@ QUnit.test('virtual items after page center', function(assert) {
 
 QUnit.test('virtual items before page end', function(assert) {
     this.dataController.setViewportItemIndex(19);
-    var virtualItemsCount = this.dataController.virtualItemsCount();
+    const virtualItemsCount = this.dataController.virtualItemsCount();
     assert.ok(virtualItemsCount);
     assert.deepEqual(virtualItemsCount, {
         begin: 0,
@@ -3284,7 +3284,7 @@ QUnit.test('virtual items before page end', function(assert) {
 
 QUnit.test('virtual items after page end', function(assert) {
     this.dataController.setViewportItemIndex(21);
-    var virtualItemsCount = this.dataController.virtualItemsCount();
+    const virtualItemsCount = this.dataController.virtualItemsCount();
     assert.ok(virtualItemsCount);
     assert.deepEqual(virtualItemsCount, {
         begin: 0,
@@ -3297,7 +3297,7 @@ QUnit.test('virtual items after page end', function(assert) {
 
 QUnit.test('virtual items after change current page to next', function(assert) {
     this.dataController.setViewportItemIndex(25);
-    var virtualItemsCount = this.dataController.virtualItemsCount();
+    const virtualItemsCount = this.dataController.virtualItemsCount();
     assert.ok(virtualItemsCount);
     assert.deepEqual(virtualItemsCount, {
         begin: 0,
@@ -3324,7 +3324,7 @@ QUnit.test('virtual items after change current page to previous', function(asser
 
 QUnit.test('virtual items after change current page to far', function(assert) {
     this.dataController.setViewportItemIndex(400);
-    var virtualItemsCount = this.dataController.virtualItemsCount();
+    const virtualItemsCount = this.dataController.virtualItemsCount();
     assert.deepEqual(virtualItemsCount, {
         begin: 400,
         end: 560
@@ -3334,7 +3334,7 @@ QUnit.test('virtual items after change current page to far', function(assert) {
 });
 
 QUnit.test('virtual items on end when last page size less than half page size', function(assert) {
-    var dataController = this.dataController;
+    const dataController = this.dataController;
     dataController.store().insert({ id: 1001, value: 'value1001' });
     dataController.refresh();
 
@@ -3346,7 +3346,7 @@ QUnit.test('virtual items on end when last page size less than half page size', 
     assert.strictEqual(dataController.items().length, 21, 'items');
 
     // act
-    var virtualItemsCount = dataController.virtualItemsCount();
+    const virtualItemsCount = dataController.virtualItemsCount();
 
     // assert
     assert.strictEqual(virtualItemsCount.begin, 980);
@@ -3355,7 +3355,7 @@ QUnit.test('virtual items on end when last page size less than half page size', 
 
 // B233350
 QUnit.test('virtual items on end when visibleRowsCount < pageSize and last page size greater than half page size', function(assert) {
-    var dataController = this.dataController;
+    const dataController = this.dataController;
     dataController._dataSource.store().remove(999);
     dataController.refresh();
     dataController.setViewportItemIndex(998);
@@ -3366,7 +3366,7 @@ QUnit.test('virtual items on end when visibleRowsCount < pageSize and last page 
     assert.strictEqual(dataController.items().length, 39);
 
     // act
-    var virtualItemsCount = dataController.virtualItemsCount();
+    const virtualItemsCount = dataController.virtualItemsCount();
 
     // assert
     assert.strictEqual(virtualItemsCount.begin, 960);
@@ -3390,10 +3390,10 @@ QUnit.test('getAllRowsCount for virtual scrolling', function(assert) {
 // T308521
 QUnit.test('change sorting in onContentReady', function(assert) {
     // arrange
-    var that = this,
-        countCallChanged = 0,
-        countCallDataSourceChanged = 0,
-        dataSource = that.dataController.dataSource();
+    const that = this;
+    let countCallChanged = 0;
+    let countCallDataSourceChanged = 0;
+    const dataSource = that.dataController.dataSource();
 
     that.dataController.changed.add(function() {
         that.columnOption('id', 'sortOrder', 'desc');
@@ -3415,8 +3415,8 @@ QUnit.test('change sorting in onContentReady', function(assert) {
 
 // T717716
 QUnit.test('rows should not be recreated on pageIndex event', function(assert) {
-    var rows = this.getVisibleRows(),
-        firstRow = rows[0];
+    const rows = this.getVisibleRows();
+    const firstRow = rows[0];
 
     // act
     this.dataController.dataSource().changed.fire({ changeType: 'pageIndex' });
@@ -3426,10 +3426,10 @@ QUnit.test('rows should not be recreated on pageIndex event', function(assert) {
     assert.strictEqual(this.getVisibleRows()[0], firstRow, 'first row is not changed');
 });
 
-var setupVirtualRenderingModule = function() {
-    var array = [];
+const setupVirtualRenderingModule = function() {
+    const array = [];
 
-    for(var i = 0; i < 100; i++) {
+    for(let i = 0; i < 100; i++) {
         array.push({
             id: i,
             value: 'value' + i.toString()
@@ -3439,7 +3439,7 @@ var setupVirtualRenderingModule = function() {
 
     this.clock = sinon.useFakeTimers();
 
-    var options = {
+    const options = {
         scrolling: { mode: 'virtual', rowRenderingMode: 'virtual' },
         keyExpr: 'id',
         paging: {
@@ -3462,14 +3462,14 @@ var setupVirtualRenderingModule = function() {
 
     this.changedArgs = [];
 
-    var that = this;
+    const that = this;
 
     this.dataController.changed.add(function(e) {
         that.changedArgs.push(e);
     });
 };
 
-var teardownVirtualRenderingModule = function() {
+const teardownVirtualRenderingModule = function() {
     this.dispose();
     this.clock.restore();
 };
@@ -3637,7 +3637,7 @@ QUnit.test('scroll to end if data if grouped and remoteOperations are enabled (s
     this.clock.tick();
 
     // assert
-    var itemCount = this.dataController.items().length;
+    const itemCount = this.dataController.items().length;
     assert.strictEqual(itemCount, 19);
     assert.deepEqual(this.dataController.items()[itemCount - 2].key, ['value99']);
     assert.strictEqual(this.dataController.items()[itemCount - 1].key, 99);
@@ -3780,7 +3780,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         };
 
         this.getDataItems = function(items) {
-            var dataItems = [];
+            const dataItems = [];
 
             items = items || this.dataController.items();
 
@@ -3810,7 +3810,7 @@ QUnit.test('preload next page after change viewport item index', function(assert
         pageSize: 3
     });
 
-    var changedArgs = [];
+    const changedArgs = [];
 
     this.dataController.viewportSize(2);
     this.dataController.changed.add(function(e) {
@@ -3830,8 +3830,8 @@ QUnit.test('preload next page after change viewport item index', function(assert
 
 // T103382
 QUnit.test('moving to loaded page rise changed event with changeType pageIndex', function(assert) {
-    var changedCallsCount = 0,
-        changedArgs;
+    let changedCallsCount = 0;
+    let changedArgs;
 
     this.setupDataSource({
         pageSize: 3
@@ -3859,7 +3859,7 @@ QUnit.test('moving to loaded page rise changed event with changeType pageIndex',
 });
 
 QUnit.test('load pages after change viewport item index to far', function(assert) {
-    var changedArgs = [];
+    const changedArgs = [];
 
     this.options.loadingTimeout = 0;
     this.setupDataSource({
@@ -3893,7 +3893,7 @@ QUnit.test('load pages after change viewport item index to far', function(assert
 
 // T103389
 QUnit.test('load several pages when pageSize less then viewportSize', function(assert) {
-    var changedArgs = [];
+    const changedArgs = [];
 
     this.options.loadingTimeout = 0;
     this.setupDataSource({
@@ -3920,7 +3920,7 @@ QUnit.test('load several pages when pageSize less then viewportSize', function(a
 
 // T103389
 QUnit.test('load several pages when pageSize less then viewportSize and preload enabled', function(assert) {
-    var changedArgs = [];
+    const changedArgs = [];
 
     this.options.loadingTimeout = 0;
     this.options.scrolling.preloadEnabled = true;
@@ -3942,15 +3942,15 @@ QUnit.test('load several pages when pageSize less then viewportSize and preload 
 
 // T120733
 QUnit.test('reload pages after change viewport item index to far', function(assert) {
-    var changedArgs = [],
-        virtualItems = [];
+    const changedArgs = [];
+    const virtualItems = [];
 
     this.options.loadingTimeout = 0;
     this.setupDataSource({
         pageSize: 2
     });
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
 
     this.clock.tick();
@@ -3986,7 +3986,7 @@ QUnit.test('reload pages after change viewport item index to far', function(asse
 });
 
 QUnit.test('preload pages after change viewport item index', function(assert) {
-    var changedArgs = [];
+    const changedArgs = [];
 
     this.options.scrolling.preloadEnabled = true;
 
@@ -3994,7 +3994,7 @@ QUnit.test('preload pages after change viewport item index', function(assert) {
         pageSize: 3
     });
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
     dataController.viewportSize(2);
     dataController.changed.add(function(e) {
@@ -4015,14 +4015,14 @@ QUnit.test('preload pages after change viewport item index', function(assert) {
 // T444542
 QUnit.test('Preload previous page after change viewport item index when preloadEnabled option is true', function(assert) {
     // arrange
-    var changedArgs = [];
+    const changedArgs = [];
 
     this.options.scrolling.preloadEnabled = true;
     this.setupDataSource({
         pageSize: 1
     });
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
     dataController.viewportSize(1);
     dataController.changed.add(function(e) {
@@ -4043,17 +4043,17 @@ QUnit.test('Preload previous page after change viewport item index when preloadE
 });
 
 QUnit.test('update loading on reload', function(assert) {
-    var finalized;
+    let finalized;
 
     this.options.loadingTimeout = 0;
     this.setupDataSource({
         pageSize: 3
     });
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
     dataController.load().done(function() {
-        var isLoadingByEvent;
+        let isLoadingByEvent;
         dataController.loadingChanged.add(function(isLoading) {
             isLoadingByEvent = isLoading;
             if(isLoading) {
@@ -4077,10 +4077,10 @@ QUnit.test('update loading on reload', function(assert) {
 
 // T152307
 QUnit.test('update loading on reload when error occurred', function(assert) {
-    var finalized;
-    var loadResult;
+    let finalized;
+    let loadResult;
 
-    var clock = this.clock;
+    const clock = this.clock;
 
     this.options.loadingTimeout = 0;
 
@@ -4091,9 +4091,9 @@ QUnit.test('update loading on reload when error occurred', function(assert) {
     });
     this.dataController.setDataSource(this.dataSource);
 
-    var dataController = this.dataController,
-        isLoadingByEvent,
-        changedArgs = [];
+    const dataController = this.dataController;
+    let isLoadingByEvent;
+    const changedArgs = [];
 
     dataController.load().done(function() {
         dataController.loadingChanged.add(function(isLoading) {
@@ -4139,14 +4139,14 @@ QUnit.test('update loading on reload when error occurred', function(assert) {
 // T103219
 QUnit.test('loadingChanged must be before changed', function(assert) {
     // arrange
-    var events = [];
+    const events = [];
 
     this.setupDataSource({
         asyncLoadEnabled: true,
         pageSize: 3
     });
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
 
     dataController.load();
@@ -4170,7 +4170,7 @@ QUnit.test('loadingChanged must be before changed', function(assert) {
 
 // B252337
 QUnit.test('update loading when grouping', function(assert) {
-    var array = $.map(TEN_NUMBERS, function(value) { return { value: value }; });
+    const array = $.map(TEN_NUMBERS, function(value) { return { value: value }; });
 
     this.setupDataSource({
         data: array,
@@ -4179,9 +4179,9 @@ QUnit.test('update loading when grouping', function(assert) {
     });
     this.dataSource.load();
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
-    var isLoadingByEvent;
+    let isLoadingByEvent;
     dataController.loadingChanged.add(function(isLoading) {
         isLoadingByEvent = isLoading;
     });
@@ -4192,7 +4192,7 @@ QUnit.test('update loading when grouping', function(assert) {
     // act
     dataController.setViewportItemIndex(9);
 
-    var items = [];
+    const items = [];
     $.each(TEN_NUMBERS, function(index, value) {
         items.push({ key: value, items: [{ value: value }] });
         items.push({ value: value });
@@ -4213,12 +4213,12 @@ QUnit.test('update loading when dataSource length less then pageSize', function(
     });
     this.dataSource.load();
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
 
     dataController.viewportSize(15);
 
-    var isLoadingByEvent;
+    let isLoadingByEvent;
     dataController.loadingChanged.add(function(isLoading) {
         isLoadingByEvent = isLoading;
     });
@@ -4237,14 +4237,14 @@ QUnit.test('update loading when dataSource length less then pageSize', function(
 
 // B254273
 QUnit.test('Loading state when dataSource loading completed and itemsCount less than viewportSize', function(assert) {
-    var array = $.map(TEN_NUMBERS, function(value) { return { value: value }; });
+    const array = $.map(TEN_NUMBERS, function(value) { return { value: value }; });
 
     this.setupDataSource({
         data: array,
         group: 'value'
     });
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
 
     dataController.viewportSize(25);
@@ -4259,7 +4259,7 @@ QUnit.test('Loading state when dataSource loading completed and itemsCount less 
 
 // B254146
 QUnit.test('changeRowExpand on second page when virtual scrolling enabled', function(assert) {
-    var array = $.map(TEN_NUMBERS, function(value) { return { value: value }; });
+    const array = $.map(TEN_NUMBERS, function(value) { return { value: value }; });
 
     this.setupDataSource({
         data: array,
@@ -4267,7 +4267,7 @@ QUnit.test('changeRowExpand on second page when virtual scrolling enabled', func
         pageSize: 3
     });
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
 
     dataController.viewportSize(3);
@@ -4285,8 +4285,8 @@ QUnit.test('changeRowExpand on second page when virtual scrolling enabled', func
 
 // B254113
 QUnit.test('Start loading after changeRowExpand when virtual scrolling enabled', function(assert) {
-    var array = $.map(TEN_NUMBERS, function(value) { return { value: value }; });
-    var isLoading = false;
+    const array = $.map(TEN_NUMBERS, function(value) { return { value: value }; });
+    let isLoading = false;
 
     this.options.loadingTimeout = 0;
 
@@ -4296,7 +4296,7 @@ QUnit.test('Start loading after changeRowExpand when virtual scrolling enabled',
         pageSize: 3
     });
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
 
     dataController.loadingChanged.add(function(state) {
@@ -4322,13 +4322,13 @@ QUnit.test('Start loading after changeRowExpand when virtual scrolling enabled',
 
 // T122785
 QUnit.test('not update pageSize on viewportSize', function(assert) {
-    var changedArgs = [];
+    const changedArgs = [];
 
     this.setupDataSource({
         data: TEN_NUMBERS.concat(TEN_NUMBERS)
     });
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
 
     dataController.changed.add(function(e) {
@@ -4347,8 +4347,8 @@ QUnit.test('not update pageSize on viewportSize', function(assert) {
 
 // T681470
 QUnit.test('remove invisible items if repaintChangesOnly and expanded grouping are enabled', function(assert) {
-    var array = [];
-    for(var i = 0; i < 100; i++) {
+    const array = [];
+    for(let i = 0; i < 100; i++) {
         array.push({ id: i, name: 'text ' + i });
     }
 
@@ -4360,7 +4360,7 @@ QUnit.test('remove invisible items if repaintChangesOnly and expanded grouping a
 
     this.dataController.viewportSize(10);
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -4372,7 +4372,7 @@ QUnit.test('remove invisible items if repaintChangesOnly and expanded grouping a
     this.dataController.setViewportItemIndex(40);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].key, [20]);
     assert.deepEqual(changedArgs.changeType, 'append');
     assert.deepEqual(changedArgs.removeCount, 40, 'removeCount is correct');
@@ -4382,7 +4382,7 @@ QUnit.module('Infinite scrolling', {
     beforeEach: function() {
         setupModule.apply(this);
 
-        var i, array = [];
+        let i; const array = [];
 
         for(i = 0; i < 50; i++) {
             array.push({
@@ -4391,7 +4391,7 @@ QUnit.module('Infinite scrolling', {
             });
         }
 
-        var dataSource = createDataSource(array, { key: 'id' }, {
+        const dataSource = createDataSource(array, { key: 'id' }, {
             pageSize: 20,
             paginate: true,
             requireTotalCount: false,
@@ -4432,7 +4432,7 @@ QUnit.test('setViewportItemIndex to end current page load next page', function(a
 
 // T193217
 QUnit.test('setViewportItemIndex to end current page several times load next page one time', function(assert) {
-    var loadingCount = 0;
+    let loadingCount = 0;
     this.dataController._dataSource.customizeStoreLoadOptions.add(function() {
         loadingCount++;
     });
@@ -4504,7 +4504,7 @@ QUnit.test('setViewportItemIndex before data loaded', function(assert) {
 
 // T103389
 QUnit.test('load several pages when pageSize less then viewportSize', function(assert) {
-    var changedArgs = [];
+    const changedArgs = [];
 
     this.dataController.changed.add(function(e) {
         changedArgs.push(e);
@@ -4527,7 +4527,7 @@ QUnit.test('load several pages when pageSize less then viewportSize', function(a
 
 // T103389
 QUnit.test('load several pages when pageSize less then viewportSize and preload enabled', function(assert) {
-    var changedArgs = [];
+    const changedArgs = [];
 
     this.options.scrolling.preloadEnabled = true;
     this.dataController.changed.add(function(e) {
@@ -4569,7 +4569,7 @@ QUnit.test('selectAll should works correctly if item count less than pageSize', 
 
 // T377458
 QUnit.test('last page does not be loaded several times then totalCount % pageSize === 0', function(assert) {
-    var changedArgs = [];
+    const changedArgs = [];
 
     this.dataController.changed.add(function(e) {
         changedArgs.push(e);
@@ -4595,7 +4595,7 @@ QUnit.test('last page does not be loaded several times then totalCount % pageSiz
 
 // T507750
 QUnit.test('last page does not be loaded several times then totalCount equals pageSize', function(assert) {
-    var changedArgs = [];
+    const changedArgs = [];
 
     this.dataController.changed.add(function(e) {
         changedArgs.push(e);
@@ -4633,7 +4633,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         };
 
         this.getDataItems = function(items) {
-            var dataItems = [];
+            const dataItems = [];
 
             items = items || this.dataController.items();
 
@@ -4647,13 +4647,13 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 });
 
 QUnit.test('not update pageSize on viewportSize', function(assert) {
-    var changedCallsCount = 0;
+    let changedCallsCount = 0;
 
     this.setupDataSource({
         data: TEN_NUMBERS.concat(TEN_NUMBERS)
     });
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
     dataController.changed.add(function(e) {
         changedCallsCount++;
@@ -4670,14 +4670,14 @@ QUnit.test('not update pageSize on viewportSize', function(assert) {
 });
 
 QUnit.test('change pageIndex', function(assert) {
-    var changedCallsCount = 0,
-        changedArgs;
+    let changedCallsCount = 0;
+    let changedArgs;
 
     this.setupDataSource({
         pageSize: 3
     });
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
     // act
     dataController.changed.add(function(e) {
@@ -4707,7 +4707,7 @@ QUnit.test('Load next page and return to previous', function(assert) {
 
     this.clock.tick();
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
     // act
     dataController.pageIndex(1);
@@ -4725,14 +4725,14 @@ QUnit.test('Load next page and return to previous', function(assert) {
 
 // B252339
 QUnit.test('reset pageIndex on reload', function(assert) {
-    var changedCallsCount = 0,
-        changedArgs;
+    let changedCallsCount = 0;
+    let changedArgs;
 
     this.setupDataSource({
         pageSize: 3
     });
 
-    var dataController = this.dataController;
+    const dataController = this.dataController;
 
 
     dataController.pageIndex(1);
@@ -4764,10 +4764,10 @@ QUnit.module('Filtering', {
             }
         });
 
-        var originalOption = this.option;
+        const originalOption = this.option;
 
         this.option = function(options, value) {
-            var result = originalOption.apply(this, arguments);
+            const result = originalOption.apply(this, arguments);
 
             if(options === 'searchPanel.text' && typeUtils.isDefined(value)) {
                 this.dataController.optionChanged({ fullName: options });
@@ -4954,7 +4954,7 @@ QUnit.test('grouping on date field defined as string assigned in customizeColumn
 
 QUnit.test('change filter as array argument', function(assert) {
     // arrange
-    var countCallPageChanged = 0;
+    let countCallPageChanged = 0;
 
     this.dataSource = createDataSource([
         { name: 'Alex', age: 15 },
@@ -4981,7 +4981,7 @@ QUnit.test('change filter as array argument', function(assert) {
 // T413302
 QUnit.test('filter as null - no apply when there is no dataSource filter', function(assert) {
     // arrange
-    var countCallPageChanged = 0;
+    let countCallPageChanged = 0;
 
     this.dataSource = createDataSource([
         { name: 'Alex', age: 15 },
@@ -5005,7 +5005,7 @@ QUnit.test('filter as null - no apply when there is no dataSource filter', funct
 // T413302
 QUnit.test('filter as arguments - no apply when the filter isn\'t changed', function(assert) {
     // arrange
-    var countCallPageChanged = 0;
+    let countCallPageChanged = 0;
 
     this.dataSource = createDataSource([
         { name: 'Alex', age: 15 },
@@ -5044,7 +5044,7 @@ QUnit.test('change filter as arguments', function(assert) {
 });
 
 QUnit.test('change filter as function', function(assert) {
-    var loadingCount = 0;
+    let loadingCount = 0;
     this.dataSource = createDataSource([
         { name: 'Alex', age: 15 },
         { name: 'Dan', age: 19 }
@@ -5311,7 +5311,7 @@ QUnit.test('get combinedFilter with filter on only one column', function(assert)
 
 QUnit.test('get combinedFilter with argument', function(assert) {
     // arrange
-    var filter;
+    let filter;
 
     this.dataSource = new DataSource({
         load: function() {
@@ -5346,12 +5346,12 @@ QUnit.test('get combinedFilter with argument', function(assert) {
 });
 
 QUnit.test('get combinedFilter with argument for date value with ISO8601 parsing', function(assert) {
-    var defaultForceIsoDateParsing = config().forceIsoDateParsing;
+    const defaultForceIsoDateParsing = config().forceIsoDateParsing;
     config().forceIsoDateParsing = true;
 
     try {
         // arrange
-        var filter;
+        let filter;
 
         this.dataSource = new DataSource({
             load: function() {
@@ -5378,12 +5378,12 @@ QUnit.test('get combinedFilter with argument for date value with ISO8601 parsing
 });
 
 QUnit.test('get combinedFilter with argument for date value without ISO8601 parsing', function(assert) {
-    var defaultForceIsoDateParsing = config().forceIsoDateParsing;
+    const defaultForceIsoDateParsing = config().forceIsoDateParsing;
     config().forceIsoDateParsing = false;
 
     try {
         // arrange
-        var filter;
+        let filter;
 
         this.dataSource = new DataSource({
             load: function() {
@@ -5412,8 +5412,8 @@ QUnit.test('get combinedFilter with argument for date value without ISO8601 pars
 // T353244
 QUnit.test('changing filterType without filterValues do not rise changed event', function(assert) {
     // arrange
-    var that = this,
-        countCallChanged = 0;
+    const that = this;
+    let countCallChanged = 0;
 
     that.options.loadingTimeout = 0;
     that.dataSource = createDataSource([
@@ -5448,10 +5448,10 @@ QUnit.test('changing filterType without filterValues do not rise changed event',
 // T238430
 QUnit.test('clearFilter without argument', function(assert) {
     // arrange
-    var that = this,
-        items,
-        columns,
-        countCallChanged = 0;
+    const that = this;
+    let items;
+    let columns;
+    let countCallChanged = 0;
 
     that.options.loadingTimeout = 0;
     that.dataSource = createDataSource([
@@ -5504,9 +5504,9 @@ QUnit.test('clearFilter without argument', function(assert) {
 // T238430
 QUnit.test('clearFilter for dataSource', function(assert) {
     // arrange
-    var that = this,
-        items,
-        columns;
+    const that = this;
+    let items;
+    let columns;
 
     that.dataSource = createDataSource([
         { name: 'Alex', age: 15 },
@@ -5553,9 +5553,9 @@ QUnit.test('clearFilter for dataSource', function(assert) {
 // T238430
 QUnit.test('clearFilter for search', function(assert) {
     // arrange
-    var that = this,
-        items,
-        columns;
+    const that = this;
+    let items;
+    let columns;
 
     that.dataSource = createDataSource([
         { name: 'Alex', age: 15 },
@@ -5602,9 +5602,9 @@ QUnit.test('clearFilter for search', function(assert) {
 // T238430
 QUnit.test('clearFilter for filter row', function(assert) {
     // arrange
-    var that = this,
-        items,
-        columns;
+    const that = this;
+    let items;
+    let columns;
 
     that.dataSource = createDataSource([
         { name: 'Alex', age: 15 },
@@ -5650,9 +5650,9 @@ QUnit.test('clearFilter for filter row', function(assert) {
 // T238430
 QUnit.test('clearFilter for header filter', function(assert) {
     // arrange
-    var that = this,
-        items,
-        columns;
+    const that = this;
+    let items;
+    let columns;
 
     that.dataSource = createDataSource([
         { name: 'Alex', age: 15 },
@@ -5698,9 +5698,9 @@ QUnit.test('clearFilter for header filter', function(assert) {
 // T238430
 QUnit.test('clearFilter didn\'t apply by incorrect filter name', function(assert) {
     // arrange
-    var that = this,
-        items,
-        columns;
+    const that = this;
+    let items;
+    let columns;
 
     that.dataSource = createDataSource([
         { name: 'Alex', age: 15 },
@@ -5838,9 +5838,9 @@ QUnit.test('search for lookup column with calculateDisplayValue', function(asser
 // B239940
 QUnit.test('Apply search for string column when change dataSource', function(assert) {
     // arrange
-    var that = this,
-        logId,
-        isDataSourceReloaded = false;
+    const that = this;
+    let logId;
+    let isDataSourceReloaded = false;
 
     that.setupFilterableData();
 
@@ -5868,7 +5868,7 @@ QUnit.test('Apply search for string column when change dataSource', function(ass
 
 QUnit.test('Apply search for string and number column when change dataSource', function(assert) {
     // arrange
-    var that = this;
+    const that = this;
 
     // act
     that.dataController.searchByText('20');
@@ -5897,7 +5897,7 @@ QUnit.test('Apply search for string and number column when change dataSource', f
 
 QUnit.test('Apply search when one empty column is without dataType', function(assert) {
     // arrange
-    var that = this;
+    const that = this;
 
     // act
     this.applyOptions({
@@ -5932,9 +5932,9 @@ QUnit.test('Apply search when one empty column is without dataType', function(as
 
 QUnit.test('Apply search for string column without reloading when all dataTypes defined', function(assert) {
     // arrange
-    var that = this,
-        logId,
-        loadCount = 0;
+    const that = this;
+    let logId;
+    let loadCount = 0;
 
     this.applyOptions({
         searchPanel: { text: 'Test' },
@@ -5966,8 +5966,8 @@ QUnit.test('Apply search for string column without reloading when all dataTypes 
 // T528684
 QUnit.test('Apply search for lookup column', function(assert) {
     // arrange
-    var that = this,
-        loadingArgs = [];
+    const that = this;
+    const loadingArgs = [];
 
     this.applyOptions({
         searchPanel: { text: 'Second' },
@@ -6010,12 +6010,12 @@ QUnit.test('column filter for one column', function(assert) {
 });
 
 QUnit.test('Filtering with additional filter when dataController\'s filter expression is function (assertT149995)', function(assert) {
-    var dataSource = createDataSource([
-            { name: 'Alex', age: 15, birthDate: new Date(1999, 2, 5), state: 0, processed: false },
-            { name: 'Alla', age: 21, birthDate: new Date(1993, 5, 2), state: 0, processed: false },
-            { name: 'Dan', age: 19, birthDate: new Date(1996, 1, 20), state: 1, processed: true }
-        ]),
-        columnFilterItemsCount;
+    const dataSource = createDataSource([
+        { name: 'Alex', age: 15, birthDate: new Date(1999, 2, 5), state: 0, processed: false },
+        { name: 'Alla', age: 21, birthDate: new Date(1993, 5, 2), state: 0, processed: false },
+        { name: 'Dan', age: 19, birthDate: new Date(1996, 1, 20), state: 1, processed: true }
+    ]);
+    let columnFilterItemsCount;
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -6148,7 +6148,7 @@ QUnit.test('column filter for column with calculateFilterExpression', function(a
 QUnit.test('calculateFilterExpression should be called once after filterValue change', function(assert) {
     this.setupFilterableData();
 
-    var calculateFilterExpressionCallCount = 0;
+    let calculateFilterExpressionCallCount = 0;
     this.columnsController.columnOption(3, 'calculateFilterExpression', function(text, operation) {
         calculateFilterExpressionCallCount++;
         return [['name', operation || 'contains', text], 'or', ['age', operation || 'contains', text]];
@@ -6165,7 +6165,7 @@ QUnit.test('calculateFilterExpression should be called once after filterValue ch
 QUnit.test('column filter for column with calculateFilterExpression using function selector when cache enabled', function(assert) {
     this.setupFilterableData();
 
-    var loadingCount = 0;
+    let loadingCount = 0;
     this.dataSource.store().on('loading', function() {
         loadingCount++;
     });
@@ -6193,7 +6193,7 @@ QUnit.test('column filter for column with calculateFilterExpression using functi
 QUnit.test('column filter for column with calculateFilterExpression using function selector as filter function', function(assert) {
     this.setupFilterableData();
 
-    var loadingCount = 0;
+    let loadingCount = 0;
     this.dataSource.store().on('loading', function() {
         loadingCount++;
     });
@@ -6223,7 +6223,7 @@ QUnit.test('column filter for column with calculateFilterExpression using functi
 QUnit.test('column filter for column with calculateFilterExpression returns filter function when cache enabled', function(assert) {
     this.setupFilterableData();
 
-    var loadingCount = 0;
+    let loadingCount = 0;
     this.dataSource.store().on('loading', function() {
         loadingCount++;
     });
@@ -6259,7 +6259,7 @@ QUnit.test('no loading when cache enabled and remote filtering is not changed', 
     this.dataController._isSharedDataSource = true;
     this.dataController.setDataSource(this.dataSource);
 
-    var loadingCount = 0;
+    let loadingCount = 0;
     this.dataSource.store().on('loading', function() {
         loadingCount++;
     });
@@ -6350,7 +6350,7 @@ QUnit.test('column filter when selectedFilterOperation and filterValue parameter
 QUnit.test('column filter when selectedFilterOperation defined and filterValue undefined', function(assert) {
     // arrange
     this.setupFilterableData();
-    var dataSourceChanged = false;
+    let dataSourceChanged = false;
 
     this.applyOptions({
         columns: [{ dataField: 'name', selectedFilterOperation: 'contains', filterValue: 'Al' }, 'age']
@@ -6371,7 +6371,7 @@ QUnit.test('column filter when selectedFilterOperation defined and filterValue u
 
 QUnit.test('column filter when selectedFilterOperation parameter null and column filterValue defined', function(assert) {
     // arrange
-    var dataSourceChanged = false;
+    let dataSourceChanged = false;
     this.setupFilterableData();
 
     this.applyOptions({
@@ -6394,7 +6394,7 @@ QUnit.test('column filter when selectedFilterOperation parameter null and column
 QUnit.test('column filter when selectedFilterOperation parameter defined and column filterValue is not defined', function(assert) {
     // arrange
     this.setupFilterableData();
-    var dataSourceChanged = false;
+    let dataSourceChanged = false;
 
     this.applyOptions({
         columns: [{ dataField: 'name', selectedFilterOperation: 'contains' }, 'age']
@@ -6429,8 +6429,8 @@ QUnit.test('column filter when selectedFilterOperation parameter defined and no 
 // B239940
 QUnit.test('Apply column filter when change dataSource', function(assert) {
     // arrange
-    var that = this,
-        isDataSourceReloaded = false;
+    const that = this;
+    let isDataSourceReloaded = false;
 
     that.setupFilterableData();
 
@@ -6485,8 +6485,8 @@ QUnit.test('Apply column filter on QUnit.start when data need converting', funct
 // B239940
 QUnit.test('Data source is not reloaded on set dataSource when no filters', function(assert) {
     // arrange
-    var that = this,
-        changedCallCount = 0;
+    const that = this;
+    let changedCallCount = 0;
 
     that.setupFilterableData();
 
@@ -6512,7 +6512,7 @@ QUnit.test('Data source is not reloaded on set dataSource when no filters', func
 });
 
 QUnit.test('Apply filter method is not used when apply filter is \'OnClick\' for filterRow', function(assert) {
-    var isApplyFilterCalled;
+    let isApplyFilterCalled;
 
     this.applyOptions({
         filterRow: {
@@ -6606,7 +6606,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule })
 // T161732
 QUnit.test('rows when multilevel grouping without key', function(assert) {
     // arrange
-    var items = [{
+    const items = [{
         items: [{
             key: 2,
             items: [
@@ -6615,7 +6615,7 @@ QUnit.test('rows when multilevel grouping without key', function(assert) {
         }]
     }];
 
-    var dataSource = new MockGridDataSource({
+    const dataSource = new MockGridDataSource({
         items: items,
         itemsCount: 2,
         group: ['field1', 'field2']
@@ -6628,7 +6628,7 @@ QUnit.test('rows when multilevel grouping without key', function(assert) {
     // act
     this.dataController.setDataSource(dataSource);
     dataSource.load();
-    var rows = this.dataController.items();
+    const rows = this.dataController.items();
 
     // assert
     assert.equal(rows.length, 4);
@@ -6645,7 +6645,7 @@ QUnit.test('rows when multilevel grouping without key', function(assert) {
 });
 
 QUnit.test('rows with simple grouping', function(assert) {
-    var items = [
+    const items = [
         {
             key: 1, items: [
                 { field1: 1, field2: 4 },
@@ -6655,7 +6655,7 @@ QUnit.test('rows with simple grouping', function(assert) {
         { key: 2, items: [{ field1: 2, field2: 3 }] }
     ];
 
-    var dataSource = new MockGridDataSource({
+    const dataSource = new MockGridDataSource({
         items: items,
         itemsCount: 3,
         group: 'field1'
@@ -6668,7 +6668,7 @@ QUnit.test('rows with simple grouping', function(assert) {
     // act
     this.dataController.setDataSource(dataSource);
     dataSource.load();
-    var rows = this.dataController.items();
+    const rows = this.dataController.items();
 
     // assert
     assert.equal(rows.length, 5);
@@ -6689,15 +6689,15 @@ QUnit.test('rows with simple grouping', function(assert) {
 });
 
 QUnit.test('rows with simple grouping on column with dataType', function(assert) {
-    var items = [
+    const items = [
         { field1: '1.0', field2: 4 },
         { field1: '1.0', field2: 5 },
         { field1: '2.5', field2: 3 }
     ];
 
-    var loadArgs = [];
+    const loadArgs = [];
 
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         load: function(e) {
             loadArgs.push(e);
             return items;
@@ -6717,7 +6717,7 @@ QUnit.test('rows with simple grouping on column with dataType', function(assert)
     this.dataController.setDataSource(dataSource);
     dataSource.load();
 
-    var rows = this.dataController.items();
+    const rows = this.dataController.items();
 
     // assert
     assert.equal(rows.length, 5);
@@ -6752,14 +6752,14 @@ QUnit.test('rows with simple grouping on column with dataType', function(assert)
 
 
 QUnit.test('load options should not contain function selectors when remote grouping enabled', function(assert) {
-    var items = [
+    const items = [
         { key: '1', count: 2, items: null },
         { key: '2', count: 1, items: null }
     ];
 
-    var loadArgs = [];
+    const loadArgs = [];
 
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         load: function(e) {
             loadArgs.push(e);
             return items;
@@ -6795,14 +6795,14 @@ QUnit.test('load options should not contain function selectors when remote group
 });
 
 QUnit.test('rows collapsed group with undefined key', function(assert) {
-    var items = [
+    const items = [
         {
             key: undefined, items: null
         },
         { key: 2, items: [{ field1: 2, field2: 3 }] }
     ];
 
-    var dataSource = new MockGridDataSource({
+    const dataSource = new MockGridDataSource({
         items: items,
         itemsCount: 3,
         group: 'field1'
@@ -6815,7 +6815,7 @@ QUnit.test('rows collapsed group with undefined key', function(assert) {
     // act
     this.dataController.setDataSource(dataSource);
     dataSource.load();
-    var rows = this.dataController.items();
+    const rows = this.dataController.items();
 
     // assert
     assert.equal(rows.length, 3);
@@ -6832,7 +6832,7 @@ QUnit.test('rows collapsed group with undefined key', function(assert) {
 });
 
 QUnit.test('rows with multilevel grouping', function(assert) {
-    var items = [{
+    const items = [{
         key: 1, items: [
             {
                 key: 2, items: [
@@ -6842,7 +6842,7 @@ QUnit.test('rows with multilevel grouping', function(assert) {
         ]
     }];
 
-    var dataSource = new MockGridDataSource({
+    const dataSource = new MockGridDataSource({
         items: items,
         itemsCount: 2,
         group: ['field1', 'field2']
@@ -6855,7 +6855,7 @@ QUnit.test('rows with multilevel grouping', function(assert) {
     // act
     this.dataController.setDataSource(dataSource);
     dataSource.load();
-    var rows = this.dataController.items();
+    const rows = this.dataController.items();
 
     // assert
     assert.equal(rows.length, 4);
@@ -6874,14 +6874,14 @@ QUnit.test('rows with multilevel grouping', function(assert) {
 });
 
 QUnit.test('collapsed group', function(assert) {
-    var items = [
+    const items = [
         {
             key: 1, items: null
         },
         { key: 2, items: [{ field1: 2, field2: 3 }] }
     ];
 
-    var dataSource = new MockGridDataSource({
+    const dataSource = new MockGridDataSource({
         items: items,
         itemsCount: 2,
         group: 'field1'
@@ -6894,7 +6894,7 @@ QUnit.test('collapsed group', function(assert) {
     // act
     this.dataController.setDataSource(dataSource);
     dataSource.load();
-    var rows = this.dataController.items();
+    const rows = this.dataController.items();
 
     // assert
     assert.equal(rows.length, 3);
@@ -6917,7 +6917,7 @@ QUnit.test('collapsed group', function(assert) {
 });
 
 QUnit.test('continue group', function(assert) {
-    var items = [
+    const items = [
         {
             key: 1, isContinuation: true, items: [
                 { field1: 1, field2: 4 },
@@ -6927,7 +6927,7 @@ QUnit.test('continue group', function(assert) {
         { key: 2, items: [{ field1: 2, field2: 3 }] }
     ];
 
-    var dataSource = new MockGridDataSource({
+    const dataSource = new MockGridDataSource({
         items: items,
         itemsCount: 3,
         group: 'field1'
@@ -6940,7 +6940,7 @@ QUnit.test('continue group', function(assert) {
     // act
     this.dataController.setDataSource(dataSource);
     dataSource.load();
-    var rows = this.dataController.items();
+    const rows = this.dataController.items();
 
     // assert
     assert.equal(rows.length, 5);
@@ -6958,7 +6958,7 @@ QUnit.test('continue group', function(assert) {
 });
 
 QUnit.test('continue group when virtual scrolling', function(assert) {
-    var items = [
+    const items = [
         {
             key: 1, isContinuation: true, items: [
                 { field1: 1, field2: 4 },
@@ -6968,7 +6968,7 @@ QUnit.test('continue group when virtual scrolling', function(assert) {
         { key: 2, items: [{ field1: 2, field2: 3 }] }
     ];
 
-    var dataSource = new MockGridDataSource({
+    const dataSource = new MockGridDataSource({
         items: items,
         itemsCount: 3,
         group: 'field1'
@@ -6982,7 +6982,7 @@ QUnit.test('continue group when virtual scrolling', function(assert) {
     // act
     this.dataController.setDataSource(dataSource);
     dataSource.load();
-    var rows = this.dataController.items();
+    const rows = this.dataController.items();
 
     // assert
     assert.equal(rows.length, 4);
@@ -6998,7 +6998,7 @@ QUnit.test('continue group when virtual scrolling', function(assert) {
 });
 
 QUnit.test('continue group when infinite scrolling', function(assert) {
-    var items = [
+    const items = [
         {
             key: 1, isContinuation: true, items: [
                 { field1: 1, field2: 4 },
@@ -7008,7 +7008,7 @@ QUnit.test('continue group when infinite scrolling', function(assert) {
         { key: 2, items: [{ field1: 2, field2: 3 }] }
     ];
 
-    var dataSource = new MockGridDataSource({
+    const dataSource = new MockGridDataSource({
         items: items,
         itemsCount: 3,
         group: 'field1'
@@ -7022,7 +7022,7 @@ QUnit.test('continue group when infinite scrolling', function(assert) {
     // act
     this.dataController.setDataSource(dataSource);
     dataSource.load();
-    var rows = this.dataController.items();
+    const rows = this.dataController.items();
 
     // assert
     assert.equal(rows.length, 4);
@@ -7038,7 +7038,7 @@ QUnit.test('continue group when infinite scrolling', function(assert) {
 });
 
 QUnit.test('continue multilevel group', function(assert) {
-    var items = [{
+    const items = [{
         key: 1, isContinuation: true, items: [
             {
                 key: 2, isContinuation: true, items: [
@@ -7054,7 +7054,7 @@ QUnit.test('continue multilevel group', function(assert) {
     }
     ];
 
-    var dataSource = new MockGridDataSource({
+    const dataSource = new MockGridDataSource({
         items: items,
         itemsCount: 3,
         group: ['field1', 'field2']
@@ -7067,7 +7067,7 @@ QUnit.test('continue multilevel group', function(assert) {
     // act
     this.dataController.setDataSource(dataSource);
     dataSource.load();
-    var rows = this.dataController.items();
+    const rows = this.dataController.items();
 
     // assert
     assert.equal(rows.length, 7);
@@ -7090,7 +7090,7 @@ QUnit.test('continue multilevel group', function(assert) {
 });
 
 QUnit.test('continue multilevel group when virtual scrolling', function(assert) {
-    var items = [{
+    const items = [{
         key: 1, isContinuation: true, items: [
             {
                 key: 2, isContinuation: true, items: [
@@ -7106,7 +7106,7 @@ QUnit.test('continue multilevel group when virtual scrolling', function(assert) 
     }
     ];
 
-    var dataSource = new MockGridDataSource({
+    const dataSource = new MockGridDataSource({
         items: items,
         itemsCount: 3,
         group: ['field1', 'field2']
@@ -7120,7 +7120,7 @@ QUnit.test('continue multilevel group when virtual scrolling', function(assert) 
     // act
     this.dataController.setDataSource(dataSource);
     dataSource.load();
-    var rows = this.dataController.items();
+    const rows = this.dataController.items();
 
     // assert
     assert.equal(rows.length, 5);
@@ -7139,11 +7139,11 @@ QUnit.test('continue multilevel group when virtual scrolling', function(assert) 
 });
 
 QUnit.test('changeRowExpand', function(assert) {
-    var countCallPageChanged = 0,
-        dataSourceOptions = {
-            items: [{ key: 1, items: [] }],
-            itemsCount: 1
-        };
+    let countCallPageChanged = 0;
+    const dataSourceOptions = {
+        items: [{ key: 1, items: [] }],
+        itemsCount: 1
+    };
 
     this.dataController.setDataSource(new MockGridDataSource(dataSourceOptions));
 
@@ -7162,7 +7162,7 @@ QUnit.test('changeRowExpand', function(assert) {
 });
 
 QUnit.test('collapseAll', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         items: [{}],
         itemsCount: 1,
         pageIndex: 1
@@ -7179,7 +7179,7 @@ QUnit.test('collapseAll', function(assert) {
 });
 
 QUnit.test('expandAll', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         items: [{}],
         itemsCount: 1,
         pageIndex: 1
@@ -7198,8 +7198,8 @@ QUnit.test('expandAll', function(assert) {
 // T648268
 QUnit.test('No exceptions on moving the column from group panel to headers (AngularJS)', function(assert) {
     // arrange
-    var that = this,
-        dataSource = createDataSource([]);
+    const that = this;
+    const dataSource = createDataSource([]);
 
     that.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -7232,7 +7232,7 @@ QUnit.test('Group row should have correct values if calculateDisplayValue is def
         }, 'City']
     });
 
-    var dataSource = createDataSource([{
+    const dataSource = createDataSource([{
         ID: 1,
         CompanyName: '123Super Mart of the West',
         City: 'Bentonville'
@@ -7252,12 +7252,12 @@ QUnit.test('Group row should have correct values if calculateDisplayValue is def
 QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test('Inserting Row', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Dan', phone: '98-75-21' }
     ];
 
-    var dataSource = createDataSource(array, { key: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -7279,7 +7279,7 @@ QUnit.test('Inserting Row', function(assert) {
 
 // T521968
 QUnit.test('Inserting several rows for cell editing mode', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Dan', phone: '98-75-21' }
     ];
@@ -7289,7 +7289,7 @@ QUnit.test('Inserting several rows for cell editing mode', function(assert) {
         allowAdding: true
     };
 
-    var dataSource = createDataSource(array, { key: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -7299,7 +7299,7 @@ QUnit.test('Inserting several rows for cell editing mode', function(assert) {
     this.addRow();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.equal(items.length, 4, 'two rows are added');
 
@@ -7311,7 +7311,7 @@ QUnit.test('Inserting several rows for cell editing mode', function(assert) {
 });
 
 QUnit.test('Inserting several rows for row editing mode', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Dan', phone: '98-75-21' }
     ];
@@ -7321,7 +7321,7 @@ QUnit.test('Inserting several rows for row editing mode', function(assert) {
         allowAdding: true
     };
 
-    var dataSource = createDataSource(array, { key: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -7331,7 +7331,7 @@ QUnit.test('Inserting several rows for row editing mode', function(assert) {
     this.addRow();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 3, 'only one row is added');
 
     assert.deepEqual(items[0].data, {}, 'row 1 data');
@@ -7341,12 +7341,12 @@ QUnit.test('Inserting several rows for row editing mode', function(assert) {
 
 // T327787, T333894
 QUnit.test('Inserting Row for grouped data', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Dan', phone: '98-75-21' }
     ];
 
-    var dataSource = createDataSource(array, { key: 'name' }, { group: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' }, { group: 'name' });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -7373,12 +7373,12 @@ QUnit.test('Inserting Row for grouped data', function(assert) {
 });
 
 QUnit.test('Double inserting Row', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Dan', phone: '98-75-21' }
     ];
 
-    var dataSource = createDataSource(array, { key: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -7398,12 +7398,12 @@ QUnit.test('Double inserting Row', function(assert) {
 });
 
 QUnit.test('Cancel Inserting Row', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Dan', phone: '98-75-21' }
     ];
 
-    var dataSource = createDataSource(array, { key: 'name' });
+    const dataSource = createDataSource(array, { key: 'name' });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -7420,13 +7420,13 @@ QUnit.test('Cancel Inserting Row', function(assert) {
 });
 
 QUnit.test('Cancel Inserting Row after change page', function(assert) {
-    var array = [
+    const array = [
         { name: 'Alex', phone: '55-55-55' },
         { name: 'Dan', phone: '98-75-21' },
         { name: 'Martin', phone: '12-34-56' }
     ];
 
-    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+    const dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -7443,13 +7443,13 @@ QUnit.test('Cancel Inserting Row after change page', function(assert) {
 });
 
 QUnit.test('Edit row after detail row', function(assert) {
-    var array = [
+    const array = [
         { id: 1 },
         { id: 2 },
         { id: 3 },
     ];
 
-    var dataSource = createDataSource(array, { key: 'id' });
+    const dataSource = createDataSource(array, { key: 'id' });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -7468,7 +7468,7 @@ QUnit.test('Edit row after detail row', function(assert) {
 
 // T677250
 QUnit.test('Expand detail row before edit form and detail rows', function(assert) {
-    var array = [
+    const array = [
         { id: 1 },
         { id: 2 },
         { id: 3 },
@@ -7478,7 +7478,7 @@ QUnit.test('Expand detail row before edit form and detail rows', function(assert
         mode: 'form'
     };
 
-    var dataSource = createDataSource(array, { key: 'id' });
+    const dataSource = createDataSource(array, { key: 'id' });
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -7516,8 +7516,8 @@ QUnit.module('Error handling', {
 });
 
 QUnit.test('load error', function(assert) {
-    var dataErrors = [],
-        callbackDataErrors = [];
+    const dataErrors = [];
+    const callbackDataErrors = [];
 
     this.options = {
         loadingTimeout: 0,
@@ -7548,11 +7548,11 @@ QUnit.test('load error', function(assert) {
 });
 
 QUnit.test('load error that occurs in array query', function(assert) {
-    var dataErrors = [],
-        callbackDataErrors = [];
+    const dataErrors = [];
+    const callbackDataErrors = [];
 
-    var selectorWithNullRef = function() {
-        var value = null;
+    const selectorWithNullRef = function() {
+        const value = null;
         return value.field;
     };
 
@@ -7583,8 +7583,8 @@ QUnit.test('load error that occurs in array query', function(assert) {
 });
 
 QUnit.test('return false on dataErrorOccurred', function(assert) {
-    var callbackDataErrors = [],
-        dataErrors = [];
+    const callbackDataErrors = [];
+    const dataErrors = [];
 
     this.options = {
         loadingTimeout: 0,
@@ -7618,7 +7618,7 @@ QUnit.test('return false on dataErrorOccurred', function(assert) {
 
 
 QUnit.test('insert error', function(assert) {
-    var dataErrors = [];
+    const dataErrors = [];
 
     this.options = {
         dataSource: {
@@ -7653,7 +7653,7 @@ QUnit.test('insert error', function(assert) {
 });
 
 QUnit.test('remove error', function(assert) {
-    var dataErrors = [];
+    const dataErrors = [];
 
     this.options = {
         dataSource: {
@@ -7691,7 +7691,7 @@ QUnit.test('remove error', function(assert) {
 });
 
 QUnit.test('update error', function(assert) {
-    var dataErrors = [];
+    const dataErrors = [];
 
     this.options = {
         columns: ['field1', { setCellValue: function(data, value) { data.field1 = value; }, allowEditing: true }],
@@ -7749,7 +7749,7 @@ QUnit.module('Remote Grouping', {
 
 // T320744
 QUnit.test('Exception when CustomStore returns plain data and remote grouping enabled', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             group: 'name',
@@ -7793,7 +7793,7 @@ QUnit.test('Exception when CustomStore returns plain data and remote grouping en
 
 // T366766
 QUnit.test('Exception when CustomStore returns groups without items', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             group: 'name',
@@ -7837,7 +7837,7 @@ QUnit.test('Exception when CustomStore returns groups without items', function(a
 
 // T317797
 QUnit.test('CustomStore load options when remote grouping and paging enabled and no groups', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             load: function(options) {
@@ -7941,7 +7941,7 @@ QUnit.test('No total summary items', function(assert) {
 });
 
 QUnit.test('CustomStore load options when remoteOperations auto and summary exists', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             group: 'name',
@@ -8010,7 +8010,7 @@ QUnit.test('No errors if wrong extra parameter is returned in CustomStore', func
 });
 
 QUnit.test('CustomStore load options when remote summary enabled', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             load: function(options) {
@@ -8038,7 +8038,7 @@ QUnit.test('CustomStore load options when remote summary enabled', function(asse
     };
 
 
-    var errorId;
+    let errorId;
 
     errors.log = function(id) {
         if(!errorId) {
@@ -8068,7 +8068,7 @@ QUnit.test('CustomStore load options when remote summary enabled', function(asse
 
 // T607606
 QUnit.test('CustomStore load options if remote summary enabled and summaryType is not defined', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             load: function(options) {
@@ -8109,7 +8109,7 @@ QUnit.test('CustomStore load options if remote summary enabled and summaryType i
 });
 
 QUnit.test('CustomStore load options when all remoteOperations enabled and summary is defined', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             load: function(options) {
@@ -8134,7 +8134,7 @@ QUnit.test('CustomStore load options when all remoteOperations enabled and summa
     };
 
 
-    var errorId;
+    let errorId;
 
     errors.log = function(id) {
         if(!errorId) {
@@ -8164,7 +8164,7 @@ QUnit.test('CustomStore load options when all remoteOperations enabled and summa
 
 // T306309
 QUnit.test('CustomStore load options when remote summary enabled and summary is not returned', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             load: function(options) {
@@ -8211,7 +8211,7 @@ QUnit.test('CustomStore load options when remote summary enabled and summary is 
 
 // T353923
 QUnit.test('CustomStore load options when remote paging/summary enabled and grouping is defined with summary.groupItems', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             group: 'name',
@@ -8288,7 +8288,7 @@ QUnit.test('CustomStore load options when remote paging/summary enabled and grou
 
 // T353923
 QUnit.test('CustomStore load options when remote paging/summary enabled and grouping is defined without summary.groupitems', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             group: 'name',
@@ -8355,7 +8355,7 @@ QUnit.test('CustomStore load options when remote paging/summary enabled and grou
 
 // T353923
 QUnit.test('CustomStore load options when remote paging/sorting/filtering/summary enabled and grouping is defined without summary.groupitems', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             group: 'name',
@@ -8421,7 +8421,7 @@ QUnit.test('CustomStore load options when remote paging/sorting/filtering/summar
 
 // T306309, T368811
 QUnit.test('CustomStore load options when remote summary enabled and summary is returned as strings', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             load: function(options) {
@@ -8478,7 +8478,7 @@ QUnit.test('CustomStore load options when remote summary enabled and summary is 
 
 
 QUnit.test('CustomStore load options when remote summary and remote grouping without paging enabled', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             group: 'name',
@@ -8541,7 +8541,7 @@ QUnit.test('CustomStore load options when remote summary and remote grouping wit
 });
 
 QUnit.test('CustomStore load options when remote summary and remote grouping and paging enabled', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             group: 'name',
@@ -8606,7 +8606,7 @@ QUnit.test('CustomStore load options when remote summary and remote grouping and
 });
 
 QUnit.test('CustomStore load options when remote operations enabled and grouping with sort by summary info is defined', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             group: 'group',
@@ -8659,7 +8659,7 @@ QUnit.test('CustomStore load options when remote operations enabled and grouping
     assert.deepEqual(storeLoadOptions.sort, [{ 'desc': false, 'isExpanded': true, 'selector': 'group' }], 'sort option');
     assert.equal(this.dataController.totalCount(), 3, 'totalCount');
     assert.equal(this.dataController.pageCount(), 2, 'pageCount');
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 4, 'item count');
     assert.deepEqual(items[0].key, ['Group1'], 'item 0');
     assert.equal(items[1].key, 2, 'item 1');
@@ -8721,7 +8721,7 @@ QUnit.test('Check second page when remote operations, paging, grouping with sort
     this.clock.tick();
     this.dataController.pageIndex(1);
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 4, 'item count');
     assert.deepEqual(items[0].key, ['Group1']);
     assert.equal(items[1].key, 10, 'last item of Group1');
@@ -8730,7 +8730,7 @@ QUnit.test('Check second page when remote operations, paging, grouping with sort
 });
 
 QUnit.test('CustomStore load options when remote operations enabled and multi-grouping with sort by summary info is defined', function(assert) {
-    var storeLoadOptions;
+    let storeLoadOptions;
     this.options = {
         dataSource: {
             group: ['group1', 'group2'],
@@ -8785,7 +8785,7 @@ QUnit.test('CustomStore load options when remote operations enabled and multi-gr
         [{ 'desc': false, 'isExpanded': true, 'selector': 'group1' }, { 'desc': false, 'isExpanded': true, 'selector': 'group2' }], 'sort option');
     assert.equal(this.dataController.totalCount(), 3, 'totalCount');
     assert.equal(this.dataController.pageCount(), 2, 'pageCount');
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 6, 'item count');
     assert.deepEqual(items[0].key, ['Group1'], 'item 0');
     assert.deepEqual(items[1].key, ['Group1', 'Group1_0'], 'item 1');
@@ -9228,7 +9228,7 @@ QUnit.test('total custom summary when calculateCustomSummary not implemented', f
         }
     };
 
-    var errorId;
+    let errorId;
 
     errors.log = function(id) {
         if(!errorId) {
@@ -9349,7 +9349,7 @@ QUnit.test('total custom summary by selection', function(assert) {
 
 // T719655
 QUnit.test('refresh group custom summary by selection if data is grouped to one group', function(assert) {
-    var that = this;
+    const that = this;
     this.options = {
         keyExpr: 'id',
         dataSource: [
@@ -9393,7 +9393,7 @@ QUnit.test('refresh group custom summary by selection if data is grouped to one 
     setupDataGridModules(this, ['data', 'columns', 'selection', 'summary', 'grouping']);
     this.clock.tick();
 
-    var changedSpy = sinon.spy();
+    const changedSpy = sinon.spy();
     this.dataController.changed.add(changedSpy);
 
     // act
@@ -9894,8 +9894,8 @@ QUnit.test('headerFilter items if sortByGroupSummaryInfo is defined', function(a
     this.setupDataGridModules();
     this.clock.tick();
 
-    var headerFilterDataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[1])),
-        headerFilterItems;
+    const headerFilterDataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[1]));
+    let headerFilterItems;
 
     headerFilterDataSource.load().done(function(data) {
         headerFilterItems = data;
@@ -9906,7 +9906,7 @@ QUnit.test('headerFilter items if sortByGroupSummaryInfo is defined', function(a
 });
 
 QUnit.test('findSummaryItem by custom name', function(assert) {
-    var summaryItems = [{
+    const summaryItems = [{
         name: 'testCount1',
         summaryType: 'count'
     }, {
@@ -10068,11 +10068,11 @@ QUnit.test('group sorting groupColumn fo grouped column only', function(assert) 
 });
 
 QUnit.test('group custom summary item', function(assert) {
-    var startCount = 0,
-        calculateCount = 0,
-        finalizeCount = 0;
+    let startCount = 0;
+    let calculateCount = 0;
+    let finalizeCount = 0;
 
-    var totalValue;
+    let totalValue;
     this.options = {
         columns: ['name', 'age'],
         dataSource: {
@@ -10443,7 +10443,7 @@ QUnit.test('groupFooter item when group by several fields and summary item is de
     this.clock.tick();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.ok(!this.dataController.isLoading());
     assert.strictEqual(items.length, 13);
     assert.strictEqual(items[0].rowType, 'group');
@@ -10608,7 +10608,7 @@ QUnit.module('Summary with Editing', {
         };
 
         this.setValue = function(rowIndex, value) {
-            var row = this.getVisibleRows()[rowIndex];
+            const row = this.getVisibleRows()[rowIndex];
             this.editingController.updateFieldValue({
                 key: row.key,
                 data: row.data,
@@ -10768,14 +10768,14 @@ QUnit.test('partial update after editing', function(assert) {
 
     this.addRow();
 
-    var changedSpy = sinon.spy();
+    const changedSpy = sinon.spy();
     this.dataController.changed.add(changedSpy);
 
     // act
     this.setValue(1, 100);
 
     // assert
-    var changedArgs = changedSpy.getCall(0).args[0];
+    const changedArgs = changedSpy.getCall(0).args[0];
 
     assert.deepEqual(this.getTotalValues(), [6, 118]);
 
@@ -10788,7 +10788,7 @@ QUnit.test('partial update after editing', function(assert) {
 QUnit.module('Master Detail', {
     beforeEach: function() {
         this.array = [];
-        for(var i = 0; i < 10; i++) {
+        for(let i = 0; i < 10; i++) {
             this.array.push({ id: i, group: i % 2, name: 'test' + i });
         }
         this.options = {
@@ -10827,10 +10827,10 @@ QUnit.test('items by default', function(assert) {
     this.setupDataGrid();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 5);
 
-    for(var i = 0; i < items.length; i++) {
+    for(let i = 0; i < items.length; i++) {
         assert.strictEqual(items[i].rowType, 'data');
         assert.strictEqual(items[i].isExpanded, false);
         assert.strictEqual(items[i].values[0], false);
@@ -10843,7 +10843,7 @@ QUnit.test('items after expand one row', function(assert) {
     this.dataController.changeRowExpand(1);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 6);
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[0].isExpanded, false);
@@ -10857,8 +10857,8 @@ QUnit.test('items after expand one row', function(assert) {
 });
 
 QUnit.test('expand events after expand/collapse one row', function(assert) {
-    var events = [];
-    var that = this;
+    const events = [];
+    const that = this;
     $.each(['onRowExpanding', 'onRowExpanded', 'onRowCollapsing', 'onRowCollapsed'], function(index, name) {
         that.options[name] = function(e) {
             events.push({ name: name, key: e.key });
@@ -10871,7 +10871,7 @@ QUnit.test('expand events after expand/collapse one row', function(assert) {
     this.dataController.changeRowExpand(1);
 
     // assert
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.strictEqual(items.length, 6);
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[1].rowType, 'data');
@@ -10905,7 +10905,7 @@ QUnit.test('items when autoExpandAll', function(assert) {
     this.setupDataGrid();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 10);
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[1].rowType, 'detail');
@@ -10920,7 +10920,7 @@ QUnit.test('items after expandAll', function(assert) {
     this.dataController.expandAll(-1);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 10);
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[0].isExpanded, true);
@@ -10939,7 +10939,7 @@ QUnit.test('items after collapseAll', function(assert) {
     this.dataController.collapseAll(-1);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 5);
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[1].rowType, 'data');
@@ -11009,8 +11009,8 @@ QUnit.test('collapseRow', function(assert) {
     this.dataController.changeRowExpand(2);
 
     // act
-    var collapseRowResult0 = this.dataController.collapseRow(0);
-    var collapseRowResult1 = this.dataController.collapseRow(1);
+    const collapseRowResult0 = this.dataController.collapseRow(0);
+    const collapseRowResult1 = this.dataController.collapseRow(1);
 
     // assert
     assert.ok(collapseRowResult0 && collapseRowResult0.done, 'collapseRow result 0 is deferred');
@@ -11029,7 +11029,7 @@ QUnit.test('items after expand several rows', function(assert) {
     this.dataController.changeRowExpand(2);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 7);
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[1].rowType, 'detail');
@@ -11043,8 +11043,8 @@ QUnit.test('items after expand several rows', function(assert) {
 });
 
 QUnit.test('expand events after expand several data rows', function(assert) {
-    var events = [];
-    var that = this;
+    const events = [];
+    const that = this;
     $.each(['onRowExpanding', 'onRowExpanded', 'onRowCollapsing', 'onRowCollapsed'], function(index, name) {
         that.options[name] = function(e) {
             events.push({ name: name, key: e.key });
@@ -11056,7 +11056,7 @@ QUnit.test('expand events after expand several data rows', function(assert) {
     this.dataController.changeRowExpand(2);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 7);
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[1].rowType, 'detail');
@@ -11078,8 +11078,8 @@ QUnit.test('expand events after expand several data rows', function(assert) {
 });
 
 QUnit.test('cancel expanding events', function(assert) {
-    var events = [];
-    var that = this;
+    const events = [];
+    const that = this;
     $.each(['onRowExpanding', 'onRowExpanded', 'onRowCollapsing', 'onRowCollapsed'], function(index, name) {
         that.options[name] = function(e) {
             if(e.key === 0) {
@@ -11094,7 +11094,7 @@ QUnit.test('cancel expanding events', function(assert) {
     this.dataController.changeRowExpand(2);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 6);
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[1].rowType, 'data');
@@ -11112,8 +11112,8 @@ QUnit.test('cancel expanding events', function(assert) {
 });
 
 QUnit.test('expand events after expand group row', function(assert) {
-    var events = [];
-    var that = this;
+    const events = [];
+    const that = this;
     $.each(['onRowExpanding', 'onRowExpanded', 'onRowCollapsing', 'onRowCollapsed'], function(index, name) {
         that.options[name] = function(e) {
             events.push({ name: name, key: e.key });
@@ -11135,7 +11135,7 @@ QUnit.test('expand events after expand group row', function(assert) {
     this.clock.tick();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 5);
     assert.strictEqual(items[0].rowType, 'group');
     assert.strictEqual(items[0].data.key, 0);
@@ -11155,7 +11155,7 @@ QUnit.test('items after expand and change page', function(assert) {
     this.dataController.pageIndex(1);
 
     // assert
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.strictEqual(items.length, 5);
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[0].key, 5);
@@ -11178,7 +11178,7 @@ QUnit.test('items after expand and refresh', function(assert) {
     this.dataController.refresh();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 6);
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[0].key, 0);
@@ -11196,7 +11196,7 @@ QUnit.test('items after collapse expanded row', function(assert) {
     this.dataController.changeRowExpand(0);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 7, 'count items');
     assert.strictEqual(items[0].rowType, 'data', 'rowType first item');
     assert.strictEqual(items[1].rowType, 'detail', 'rowType second item');
@@ -11221,7 +11221,7 @@ QUnit.test('items after collapse expanded second row', function(assert) {
     this.dataController.changeRowExpand(1);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 7, 'count items');
     assert.strictEqual(items[0].rowType, 'data', 'rowType first item');
     assert.strictEqual(items[1].rowType, 'data', 'rowType second item');
@@ -11245,7 +11245,7 @@ QUnit.test('expand row on invisible page', function(assert) {
     this.dataController.pageIndex(1);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 6);
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[1].rowType, 'data');
@@ -11263,7 +11263,7 @@ QUnit.test('items after expand data row when grouped column exists', function(as
     this.dataController.changeRowExpand(0);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 6);
     assert.strictEqual(items[0].rowType, 'group');
     assert.strictEqual(items[0].data.key, 0);
@@ -11291,7 +11291,7 @@ QUnit.test('items after expand data row and collapse its group', function(assert
     this.dataController.changeRowExpand([0]);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 2);
     assert.strictEqual(items[0].rowType, 'group');
     assert.strictEqual(items[1].rowType, 'group');
@@ -11306,7 +11306,7 @@ QUnit.test('detail items after disable masterDetail', function(assert) {
     this.dataController.optionChanged({ name: 'masterDetail', fullName: 'masterDetail.enabled' });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 5);
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[1].rowType, 'data');
@@ -11321,7 +11321,7 @@ QUnit.test('Not reset master detail items after reassign same masterDetail optio
     // act
     this.dataController.changeRowExpand(1);
 
-    var oldMasterDetail = this.options.masterDetail;
+    const oldMasterDetail = this.options.masterDetail;
 
     this.options.masterDetail = { enabled: true, autoExpandAll: false };
 
@@ -11337,7 +11337,7 @@ QUnit.test('Reset master detail items after change masterDetail options', functi
     // act
     this.dataController.changeRowExpand(1);
 
-    var oldMasterDetail = this.options.masterDetail;
+    const oldMasterDetail = this.options.masterDetail;
 
     this.options.masterDetail = { enabled: true, autoExpandAll: true };
 
@@ -11357,7 +11357,7 @@ QUnit.test('Visible item after expanded/collapsed', function(assert) {
     this.dataController.changeRowExpand(0);
 
     // assert
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[0].key, 0);
     assert.strictEqual(items[1].rowType, 'detail');
@@ -11375,7 +11375,7 @@ QUnit.test('Visible item after expanded/collapsed', function(assert) {
     assert.strictEqual(items[1].key, 0);
     assert.ok(!items[1].visible, 'visible master detail');
 
-    var callChanged = false;
+    let callChanged = false;
 
     this.dataController.changed.add(function(change) {
         callChanged = true;
@@ -11401,7 +11401,7 @@ QUnit.test('Remove invisible expanded items after change pageIndex', function(as
     this.dataController.changeRowExpand(0);
 
     // assert
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.strictEqual(items[0].rowType, 'data');
     assert.strictEqual(items[0].key, 0);
     assert.strictEqual(items[1].rowType, 'detail');
@@ -11431,7 +11431,7 @@ QUnit.test('SelectAll after expand and collapse row', function(assert) {
     this.selectAll();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 6, 'item count');
     assert.strictEqual(items[0].rowType, 'data');
     assert.ok(items[0].isSelected, 'first data row is selected');
@@ -11445,7 +11445,7 @@ QUnit.test('SelectAll after expand and collapse row', function(assert) {
 
 QUnit.module('Partial update', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         that.setupModules = function() {
             setupModule.call(that);
 
@@ -11464,10 +11464,10 @@ QUnit.module('Partial update', {
 
 QUnit.test('update one row', function(assert) {
     this.setupModules();
-    var dataSourceItems = this.dataController.dataSource().items();
+    const dataSourceItems = this.dataController.dataSource().items();
 
-    var oldItems = this.dataController.items().slice(0);
-    var changedArgs;
+    const oldItems = this.dataController.items().slice(0);
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11482,7 +11482,7 @@ QUnit.test('update one row', function(assert) {
 
     // assert
     dataSourceItems[0].age = 31;
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.deepEqual(this.dataController.items()[0].values, ['Alex', 31]);
     assert.deepEqual(this.dataController.items()[0].data, { name: 'Alex', age: 31 });
@@ -11496,10 +11496,10 @@ QUnit.test('update one row', function(assert) {
 
 QUnit.test('update several rows', function(assert) {
     this.setupModules();
-    var dataSourceItems = this.dataController.dataSource().items();
+    const dataSourceItems = this.dataController.dataSource().items();
 
-    var oldItems = this.dataController.items().slice(0);
-    var changedArgs;
+    const oldItems = this.dataController.items().slice(0);
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11514,7 +11514,7 @@ QUnit.test('update several rows', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.deepEqual(this.dataController.items()[0].values, ['Alex', 31]);
     assert.deepEqual(this.dataController.items()[0].data, { name: 'Alex', age: 31 });
@@ -11533,10 +11533,10 @@ QUnit.test('update several rows', function(assert) {
 
 QUnit.test('update with incorrect rowIndices', function(assert) {
     this.setupModules();
-    var dataSourceItems = this.dataController.dataSource().items();
+    const dataSourceItems = this.dataController.dataSource().items();
 
-    var oldItems = this.dataController.items().slice(0);
-    var changedArgs;
+    const oldItems = this.dataController.items().slice(0);
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11550,7 +11550,7 @@ QUnit.test('update with incorrect rowIndices', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.deepEqual(this.dataController.items()[0].values, ['Alex', 31]);
     assert.deepEqual(this.dataController.items()[0].data, { name: 'Alex', age: 31 });
@@ -11568,8 +11568,8 @@ QUnit.test('update with incorrect rowIndices', function(assert) {
 // T266696
 QUnit.test('insert item with editing of the first item', function(assert) {
     this.setupModules();
-    var dataSourceItems = this.dataController.dataSource().items(),
-        changedArgs;
+    const dataSourceItems = this.dataController.dataSource().items();
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11583,7 +11583,7 @@ QUnit.test('insert item with editing of the first item', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.equal(items.length, 4);
     assert.deepEqual(items[0].values, ['Mike', 40]);
@@ -11596,10 +11596,10 @@ QUnit.test('insert item with editing of the first item', function(assert) {
 
 QUnit.test('insert one item', function(assert) {
     this.setupModules();
-    var dataSourceItems = this.dataController.dataSource().items();
+    const dataSourceItems = this.dataController.dataSource().items();
 
-    var oldItems = this.dataController.items().slice(0);
-    var changedArgs;
+    const oldItems = this.dataController.items().slice(0);
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11613,7 +11613,7 @@ QUnit.test('insert one item', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.equal(items.length, 4);
     assert.deepEqual(items[0].values, ['Mike', 40]);
@@ -11633,10 +11633,10 @@ QUnit.test('insert one item', function(assert) {
 
 QUnit.test('update and insert', function(assert) {
     this.setupModules();
-    var dataSourceItems = this.dataController.dataSource().items();
+    const dataSourceItems = this.dataController.dataSource().items();
 
-    var oldItems = this.dataController.items().slice(0);
-    var changedArgs;
+    const oldItems = this.dataController.items().slice(0);
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11651,7 +11651,7 @@ QUnit.test('update and insert', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.equal(items.length, 4);
     assert.deepEqual(items[0].values, ['Alex', 31]);
@@ -11681,7 +11681,7 @@ QUnit.test('update and insert when edit mode is form_T318702', function(assert) 
 
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
     this.dataController.changed.add(function(e) {
         changedArgs = e;
     });
@@ -11690,7 +11690,7 @@ QUnit.test('update and insert when edit mode is form_T318702', function(assert) 
     this.editingController.addRow();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.equal(items[0].values[0], undefined, 'value 1');
     assert.equal(items[0].values[1], undefined, 'value 2');
@@ -11703,10 +11703,10 @@ QUnit.test('update and insert when edit mode is form_T318702', function(assert) 
 
 QUnit.test('remove one item', function(assert) {
     this.setupModules();
-    var dataSourceItems = this.dataController.dataSource().items();
+    const dataSourceItems = this.dataController.dataSource().items();
 
-    var oldItems = this.dataController.items().slice(0);
-    var changedArgs;
+    const oldItems = this.dataController.items().slice(0);
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11720,7 +11720,7 @@ QUnit.test('remove one item', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.equal(items.length, 2);
     assert.deepEqual(items[0].values, ['Alex', 30]);
@@ -11739,10 +11739,10 @@ QUnit.test('remove one item', function(assert) {
 
 QUnit.test('update and remove', function(assert) {
     this.setupModules();
-    var dataSourceItems = this.dataController.dataSource().items();
+    const dataSourceItems = this.dataController.dataSource().items();
 
-    var oldItems = this.dataController.items().slice(0);
-    var changedArgs;
+    const oldItems = this.dataController.items().slice(0);
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11757,7 +11757,7 @@ QUnit.test('update and remove', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.equal(items.length, 2);
     assert.deepEqual(items[1].values, ['Dan', 26]);
@@ -11776,10 +11776,10 @@ QUnit.test('update and remove', function(assert) {
 // T186415
 QUnit.test('remove and update next row', function(assert) {
     this.setupModules();
-    var dataSourceItems = this.dataController.dataSource().items();
+    const dataSourceItems = this.dataController.dataSource().items();
 
-    var oldItems = this.dataController.items().slice(0);
-    var changedArgs;
+    const oldItems = this.dataController.items().slice(0);
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11794,7 +11794,7 @@ QUnit.test('remove and update next row', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.equal(items.length, 2);
     assert.deepEqual(items[0].values, ['Dan', 26]);
@@ -11812,10 +11812,10 @@ QUnit.test('remove and update next row', function(assert) {
 
 QUnit.test('insert and remove', function(assert) {
     this.setupModules();
-    var dataSourceItems = this.dataController.dataSource().items();
+    const dataSourceItems = this.dataController.dataSource().items();
 
-    var oldItems = this.dataController.items().slice(0);
-    var changedArgs;
+    const oldItems = this.dataController.items().slice(0);
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11830,7 +11830,7 @@ QUnit.test('insert and remove', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.equal(items.length, 3);
     assert.deepEqual(items[0].values, ['Mike', 40]);
@@ -11850,7 +11850,7 @@ QUnit.test('insert and remove', function(assert) {
 
 QUnit.module('Refresh changesOnly', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         that.setupModules = function(options) {
             setupModule.call(that);
 
@@ -11865,7 +11865,7 @@ QUnit.module('Refresh changesOnly', {
         };
 
         that.setValue = function(rowIndex, columnId, value) {
-            var row = that.getVisibleRows()[rowIndex];
+            const row = that.getVisibleRows()[rowIndex];
             this.editingController.updateFieldValue({
                 row: row,
                 key: row.key,
@@ -11880,8 +11880,8 @@ QUnit.module('Refresh changesOnly', {
 QUnit.test('update one cell', function(assert) {
     this.setupModules();
 
-    var oldItems = this.dataController.items().slice(0);
-    var changedArgs;
+    const oldItems = this.dataController.items().slice(0);
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11893,7 +11893,7 @@ QUnit.test('update one cell', function(assert) {
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].values, [1, 'Alex', 31]);
     assert.notStrictEqual(oldItems[0], items[0]);
     assert.strictEqual(oldItems[1], items[1]);
@@ -11908,7 +11908,7 @@ QUnit.test('update one cell', function(assert) {
 QUnit.test('add one item', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11920,7 +11920,7 @@ QUnit.test('add one item', function(assert) {
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[1].values, [4, 'Vadim', 19]);
     assert.strictEqual(changedArgs.repaintChangesOnly, true);
     assert.deepEqual(changedArgs.changeType, 'update');
@@ -11933,7 +11933,7 @@ QUnit.test('add one item', function(assert) {
 QUnit.test('add one item to end', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11945,7 +11945,7 @@ QUnit.test('add one item to end', function(assert) {
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[3].values, [4, 'Vadim', 19]);
     assert.deepEqual(changedArgs.changeType, 'update');
     assert.deepEqual(changedArgs.changeTypes, ['insert']);
@@ -11957,7 +11957,7 @@ QUnit.test('add one item to end', function(assert) {
 QUnit.test('remove one item', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11969,7 +11969,7 @@ QUnit.test('remove one item', function(assert) {
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items.length, 2);
     assert.strictEqual(changedArgs.repaintChangesOnly, true);
     assert.deepEqual(changedArgs.changeType, 'update');
@@ -11981,7 +11981,7 @@ QUnit.test('remove one item', function(assert) {
 QUnit.test('remove two items', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -11993,7 +11993,7 @@ QUnit.test('remove two items', function(assert) {
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items.length, 1);
     assert.strictEqual(changedArgs.repaintChangesOnly, true);
     assert.deepEqual(changedArgs.changeType, 'update');
@@ -12005,7 +12005,7 @@ QUnit.test('remove two items', function(assert) {
 QUnit.test('add and remove item', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12018,7 +12018,7 @@ QUnit.test('add and remove item', function(assert) {
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].values, [4, 'Vadim', 19]);
     assert.deepEqual(changedArgs.changeType, 'update');
     assert.deepEqual(changedArgs.changeTypes, ['insert', 'remove']);
@@ -12030,7 +12030,7 @@ QUnit.test('add and remove item', function(assert) {
 QUnit.test('remove and add item', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12043,7 +12043,7 @@ QUnit.test('remove and add item', function(assert) {
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[2].values, [4, 'Vadim', 19]);
     assert.deepEqual(changedArgs.changeType, 'update');
     assert.deepEqual(changedArgs.changeTypes, ['remove', 'insert']);
@@ -12055,7 +12055,7 @@ QUnit.test('remove and add item', function(assert) {
 QUnit.test('add and change item', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12068,7 +12068,7 @@ QUnit.test('add and change item', function(assert) {
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].values, [4, 'Vadim', 19]);
     assert.deepEqual(items[1].values, [1, 'Alex', 99]);
     assert.deepEqual(changedArgs.changeType, 'update');
@@ -12081,20 +12081,20 @@ QUnit.test('add and change item', function(assert) {
 QUnit.test('reorder items', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
     });
 
     // act
-    var item = this.array.shift();
+    const item = this.array.shift();
     this.array.push(item);
 
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[2].values, [1, 'Alex', 30]);
     assert.deepEqual(changedArgs.changeType, 'refresh', 'full refresh is occured');
     assert.strictEqual(changedArgs.repaintChangesOnly, true);
@@ -12111,7 +12111,7 @@ QUnit.test('grouping if repaintChangesOnly', function(assert) {
 
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12121,7 +12121,7 @@ QUnit.test('grouping if repaintChangesOnly', function(assert) {
     this.columnOption('id', 'groupIndex', 0);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items.length, 6);
     assert.deepEqual(items[0].rowType, 'group');
     assert.deepEqual(changedArgs.changeType, 'refresh', 'full refresh is occured');
@@ -12137,7 +12137,7 @@ QUnit.test('search if repaintChangesOnly', function(assert) {
 
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12148,7 +12148,7 @@ QUnit.test('search if repaintChangesOnly', function(assert) {
     this.dataController.optionChanged({ name: 'searchPanel', fullName: 'searchPanel.text' });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items.length, 1);
     assert.deepEqual(items[0].data.name, 'Bob');
     assert.deepEqual(changedArgs.changeType, 'refresh', 'full refresh is occured');
@@ -12158,7 +12158,7 @@ QUnit.test('search if repaintChangesOnly', function(assert) {
 QUnit.test('full refresh after partial', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.options.loadingTimeout = 0;
 
@@ -12174,7 +12174,7 @@ QUnit.test('full refresh after partial', function(assert) {
     this.clock.tick();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].values, [1, 'Alex', 99]);
     assert.deepEqual(changedArgs.changeType, 'refresh', 'full refresh is occured');
     assert.deepEqual(changedArgs.items, items);
@@ -12183,7 +12183,7 @@ QUnit.test('full refresh after partial', function(assert) {
 QUnit.test('partial refresh after full', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.options.loadingTimeout = 0;
 
@@ -12199,7 +12199,7 @@ QUnit.test('partial refresh after full', function(assert) {
     this.clock.tick();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].values, [1, 'Alex', 99]);
     assert.deepEqual(changedArgs.changeType, 'update', 'partial refresh is occured');
     assert.deepEqual(changedArgs.items, [items[0]]);
@@ -12208,7 +12208,7 @@ QUnit.test('partial refresh after full', function(assert) {
 QUnit.test('several partial refresh', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.options.loadingTimeout = 0;
 
@@ -12224,7 +12224,7 @@ QUnit.test('several partial refresh', function(assert) {
     this.clock.tick();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].values, [1, 'Alex', 99]);
     assert.deepEqual(changedArgs.changeType, 'update', 'partial refresh is occured');
     assert.deepEqual(changedArgs.items, [items[0]]);
@@ -12272,7 +12272,7 @@ QUnit.test('edit row index should not be corrected after insert at end', functio
 QUnit.test('edit row should not be updated on data change', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12286,7 +12286,7 @@ QUnit.test('edit row should not be updated on data change', function(assert) {
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].values, [1, 'Alex', 99]);
     assert.deepEqual(items[1].values, [2, 'Dan', 99]);
     assert.deepEqual(changedArgs.changeType, 'update');
@@ -12308,7 +12308,7 @@ QUnit.test('edit row should be updated on cancel', function(assert) {
 
     this.editRow(0);
 
-    var changedArgs;
+    let changedArgs;
     this.dataController.changed.add(function(args) {
         changedArgs = args;
     });
@@ -12317,7 +12317,7 @@ QUnit.test('edit row should be updated on cancel', function(assert) {
     this.cancelEditData();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(changedArgs.changeType, 'update');
     assert.deepEqual(changedArgs.changeTypes, ['update', 'update']);
     assert.deepEqual(changedArgs.rowIndices, [0, 1]);
@@ -12328,7 +12328,7 @@ QUnit.test('edit row should be updated on cancel', function(assert) {
 QUnit.test('edit form row should not be updated on data change', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.options.editing = {
         mode: 'form'
@@ -12346,7 +12346,7 @@ QUnit.test('edit form row should not be updated on data change', function(assert
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].values, [1, 'Alex', 99]);
     assert.deepEqual(items[1].values, [2, 'Dan', 99]);
     assert.deepEqual(changedArgs.changeType, 'update');
@@ -12359,7 +12359,7 @@ QUnit.test('edit form row should not be updated on data change', function(assert
 QUnit.test('edit cell should not be updated on data change', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12375,7 +12375,7 @@ QUnit.test('edit cell should not be updated on data change', function(assert) {
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].values, [1, 'Mike', 99]);
     assert.deepEqual(changedArgs.changeType, 'update');
     assert.deepEqual(changedArgs.changeTypes, ['update']);
@@ -12387,7 +12387,7 @@ QUnit.test('edit cell should not be updated on data change', function(assert) {
 QUnit.test('command column cell should not be updated after cell value change if setCellValue is defined', function(assert) {
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12407,7 +12407,7 @@ QUnit.test('command column cell should not be updated after cell value change if
     this.setValue(0, 'age', 99);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(this.getVisibleColumns()[3].type, 'buttons', 'last column type is buttons');
     assert.deepEqual(items[0].values, [1, 'Alex', 99, null]);
     assert.deepEqual(changedArgs.changeType, 'update');
@@ -12420,7 +12420,7 @@ QUnit.test('change dataSource item field', function(assert) {
     this.setupModules();
 
     this.options.repaintChangesOnly = true;
-    var oldItems = this.dataController.items().slice();
+    const oldItems = this.dataController.items().slice();
 
     // act
     this.array[1].age = 99;
@@ -12428,7 +12428,7 @@ QUnit.test('change dataSource item field', function(assert) {
     this.dataController.optionChanged({ name: 'dataSource', fullName: 'dataSource', previousValue: this.array, value: this.array });
 
     // assert
-    var items = this.dataController.items().slice();
+    const items = this.dataController.items().slice();
     assert.equal(oldItems[0], items[0], 'first item is not changed');
     assert.notEqual(oldItems[1], items[1], 'second item is changed');
 });
@@ -12438,16 +12438,16 @@ QUnit.test('immutable change dataSource item field', function(assert) {
 
     this.options.columns = ['id', 'name'];
     this.options.repaintChangesOnly = true;
-    var oldItems = this.dataController.items().slice();
+    const oldItems = this.dataController.items().slice();
 
     // act
-    var changedArray = this.array.slice();
+    const changedArray = this.array.slice();
     changedArray[1] = $.extend({}, changedArray[1], { age: 99 });
 
     this.dataController.optionChanged({ name: 'dataSource', fullName: 'dataSource', previousValue: this.array, value: changedArray });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(oldItems[0], items[0], 'first item is not changed');
     assert.notEqual(oldItems[1], items[1], 'second item is changed');
     assert.equal(items[1].data, changedArray[1], 'second item data is changed');
@@ -12464,7 +12464,7 @@ QUnit.test('change dataSource to another type', function(assert) {
     this.dataController.optionChanged({ name: 'dataSource', fullName: 'dataSource', previousValue: this.array, value: this.options.dataSource });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, this.array.length - 1, 'item count');
 });
 
@@ -12472,8 +12472,8 @@ QUnit.test('change dataSource to another type', function(assert) {
 QUnit.test('update one cell using push', function(assert) {
     this.setupModules({ pushAggregationTimeout: 0 });
 
-    var oldItems = this.dataController.items().slice(0);
-    var changedArgs;
+    const oldItems = this.dataController.items().slice(0);
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12485,7 +12485,7 @@ QUnit.test('update one cell using push', function(assert) {
     this.dataSource.store().push([{ type: 'update', key: 1, data: { age: 31 } }]);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].values, [1, 'Alex', 31]);
     assert.notStrictEqual(oldItems[0], items[0]);
     assert.strictEqual(oldItems[1], items[1]);
@@ -12500,7 +12500,7 @@ QUnit.test('update one cell using push', function(assert) {
 QUnit.test('insert one row with index using push', function(assert) {
     this.setupModules({ pushAggregationTimeout: 0 });
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12512,7 +12512,7 @@ QUnit.test('insert one row with index using push', function(assert) {
     this.dataSource.store().push([{ type: 'insert', index: 0, data: { id: 999, name: 'Test', age: 99 } }]);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items.length, 4);
     assert.deepEqual(items[0].values, [999, 'Test', 99]);
     assert.deepEqual(changedArgs.changeType, 'update');
@@ -12524,7 +12524,7 @@ QUnit.test('insert one row with index using push', function(assert) {
 QUnit.test('insert one row with index using push if previous row is expanded', function(assert) {
     this.setupModules({ pushAggregationTimeout: 0 });
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12538,7 +12538,7 @@ QUnit.test('insert one row with index using push if previous row is expanded', f
     this.dataSource.store().push([{ type: 'insert', index: 2, data: { id: 999, name: 'Test', age: 99 } }]);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items.length, 5);
     assert.deepEqual(items[2].values, [999, 'Test', 99]);
     assert.deepEqual(changedArgs.changeType, 'update');
@@ -12550,7 +12550,7 @@ QUnit.test('insert one row with index using push if previous row is expanded', f
 QUnit.test('insert one row without index using push', function(assert) {
     this.setupModules({ pushAggregationTimeout: 0 });
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12562,7 +12562,7 @@ QUnit.test('insert one row without index using push', function(assert) {
     this.dataSource.store().push([{ type: 'insert', data: { id: 999, name: 'Test', age: 99 } }]);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items.length, 3);
     assert.deepEqual(changedArgs.changeType, 'update');
     assert.deepEqual(changedArgs.changeTypes, [], 'item is not inserted');
@@ -12573,7 +12573,7 @@ QUnit.test('insert one row without index using push', function(assert) {
 QUnit.test('insert one row without index using push if paging is disabled', function(assert) {
     this.setupModules({ pushAggregationTimeout: 0, paginate: false });
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12585,7 +12585,7 @@ QUnit.test('insert one row without index using push if paging is disabled', func
     this.dataSource.store().push([{ type: 'insert', data: { id: 999, name: 'Test', age: 99 } }]);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items.length, 4);
     assert.deepEqual(changedArgs.changeType, 'update');
     assert.deepEqual(changedArgs.changeTypes, ['insert'], 'item is inserted');
@@ -12601,7 +12601,7 @@ QUnit.test('remove one row using push', function(assert) {
     this.dataSource.store().push([{ type: 'remove', key: 1 }]);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items.length, 2);
 });
 
@@ -12616,7 +12616,7 @@ QUnit.test('update one cell using push with reshapeOnPush', function(assert) {
         filter: ['age', '>=', 18]
     });
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12629,7 +12629,7 @@ QUnit.test('update one cell using push with reshapeOnPush', function(assert) {
     this.clock.tick(1);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 2);
     assert.strictEqual(changedArgs.repaintChangesOnly, true);
     assert.deepEqual(changedArgs.changeType, 'update');
@@ -12641,7 +12641,7 @@ QUnit.test('update one cell using push with reshapeOnPush', function(assert) {
 QUnit.test('column hiding', function(assert) {
     this.setupModules({ reshapeOnPush: true, filter: ['age', '>=', 18] });
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12653,7 +12653,7 @@ QUnit.test('column hiding', function(assert) {
     this.columnOption('age', 'visible', false);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].values, [1, 'Alex']);
     assert.strictEqual(changedArgs.changeType, 'refresh');
     assert.strictEqual(changedArgs.repaintChangesOnly, undefined, 'full repaint');
@@ -12670,7 +12670,7 @@ QUnit.test('update one cell when summary values are changed', function(assert) {
     };
     this.setupModules();
 
-    var changedArgs;
+    let changedArgs;
 
     this.dataController.changed.add(function(args) {
         changedArgs = args;
@@ -12682,7 +12682,7 @@ QUnit.test('update one cell when summary values are changed', function(assert) {
     this.dataController.refresh(true);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(items[0].values, [1, 'Alex', 31]);
     assert.strictEqual(changedArgs.repaintChangesOnly, true);
     assert.deepEqual(changedArgs.changeType, 'update');
@@ -12745,7 +12745,7 @@ QUnit.test('change filter', function(assert) {
     this.clock.tick();
 
     // assert
-    var filter = this.dataSource.filter();
+    const filter = this.dataSource.filter();
     assert.deepEqual(this.dataSource.filter(), [filter[0], '=', 2], 'changed filter');
     assert.equal(this.dataController.items()[0].data.field3, 6);
     assert.equal(this.dataController.itemsCount(), 2);
@@ -12753,7 +12753,7 @@ QUnit.test('change filter', function(assert) {
 });
 
 QUnit.test('change group', function(assert) {
-    var changes = [];
+    const changes = [];
 
     this.setupDataGridModules({
         dataSource: this.dataSource,
@@ -12796,7 +12796,7 @@ QUnit.test('change group', function(assert) {
 });
 
 QUnit.test('change sort', function(assert) {
-    var changes = [];
+    const changes = [];
 
     this.setupDataGridModules({
         dataSource: this.dataSource
@@ -12873,7 +12873,7 @@ QUnit.test('reload reset pageIndex in infinite scrolling mode', function(assert)
     assert.equal(this.dataController.totalItemsCount(), 5);
     assert.equal(this.dataController.items().length, 5);
 
-    var spy = sinon.spy();
+    const spy = sinon.spy();
     this.dataSource.on('customizeStoreLoadOptions', spy);
 
     // act
@@ -12988,7 +12988,7 @@ QUnit.module('Exporting', {
 });
 
 QUnit.test('loadAll when no dataSource', function(assert) {
-    var allItems;
+    let allItems;
     this.setupDataGridModules({});
 
     this.clock.tick();
@@ -13007,9 +13007,9 @@ QUnit.test('loadAll when no dataSource', function(assert) {
 });
 
 QUnit.test('loadAll when error on loading', function(assert) {
-    var dataErrorOccurredArgs = [],
-        error,
-        changedArgs = [];
+    const dataErrorOccurredArgs = [];
+    let error;
+    const changedArgs = [];
     this.setupDataGridModules({
         dataSource: {
             load: function() {
@@ -13046,8 +13046,8 @@ QUnit.test('loadAll when error on loading', function(assert) {
 
 
 QUnit.test('loadAll skip paging', function(assert) {
-    var allItems,
-        changedCallCount = 0;
+    let allItems;
+    let changedCallCount = 0;
 
     this.setupDataGridModules({
         dataSource: this.array,
@@ -13086,8 +13086,8 @@ QUnit.test('loadAll skip paging', function(assert) {
 });
 
 QUnit.test('loadAll grouping when remoteOperations disabled', function(assert) {
-    var allItems,
-        changedCallCount = 0;
+    let allItems;
+    let changedCallCount = 0;
 
     this.setupDataGridModules({
         dataSource: {
@@ -13143,8 +13143,8 @@ QUnit.test('loadAll grouping when remoteOperations disabled', function(assert) {
 });
 
 QUnit.test('loadAll grouping when remote filtering/sorting/paging enabled', function(assert) {
-    var allItems,
-        changedCallCount = 0;
+    let allItems;
+    let changedCallCount = 0;
 
     this.setupDataGridModules({
         dataSource: {
@@ -13200,11 +13200,11 @@ QUnit.test('loadAll grouping when remote filtering/sorting/paging enabled', func
 });
 
 QUnit.test('loadAll when remote summary enabled', function(assert) {
-    var allItems,
-        allSummary,
-        changedCallCount = 0;
+    let allItems;
+    let allSummary;
+    let changedCallCount = 0;
 
-    var loadArgs = [];
+    const loadArgs = [];
 
     this.setupDataGridModules({
         dataSource: {
@@ -13263,11 +13263,11 @@ QUnit.test('loadAll when remote summary enabled', function(assert) {
 
 // T324247
 QUnit.test('loadAll when remote grouping and summary enabled', function(assert) {
-    var allItems,
-        allSummary,
-        changedCallCount = 0;
+    let allItems;
+    let allSummary;
+    let changedCallCount = 0;
 
-    var loadArgs = [];
+    const loadArgs = [];
 
     this.setupDataGridModules({
         dataSource: {
@@ -13353,11 +13353,11 @@ QUnit.test('loadAll when remote grouping and summary enabled', function(assert) 
 
 // T437259, T433659
 QUnit.test('loadAll by selected items when remote grouping and summary enabled', function(assert) {
-    var allItems,
-        allSummary,
-        changedCallCount = 0;
+    let allItems;
+    let allSummary;
+    let changedCallCount = 0;
 
-    var loadArgs = [];
+    let loadArgs = [];
 
     this.setupDataGridModules({
         dataSource: {
@@ -13429,7 +13429,7 @@ QUnit.test('loadAll by selected items when remote grouping and summary enabled',
 });
 
 QUnit.test('Skip detail row when loadAll is applied', function(assert) {
-    var allItems;
+    let allItems;
 
     this.setupDataGridModules({
         dataSource: this.array,
@@ -13465,7 +13465,7 @@ QUnit.test('Skip detail row when loadAll is applied', function(assert) {
 });
 
 QUnit.test('LoadAll and modified values', function(assert) {
-    var allItems;
+    let allItems;
 
     this.setupDataGridModules({
         dataSource: this.array,
@@ -13500,7 +13500,7 @@ QUnit.test('LoadAll and modified values', function(assert) {
 });
 
 QUnit.test('LoadAll and filtering', function(assert) {
-    var allItems;
+    let allItems;
 
     this.setupDataGridModules({
         dataSource: this.array,
@@ -13526,9 +13526,9 @@ QUnit.test('LoadAll and filtering', function(assert) {
 });
 
 QUnit.test('LoadAll and grouped field with dataType', function(assert) {
-    var allItems;
+    let allItems;
 
-    var array = [{ group: '1', id: 1 }, { group: '1', id: 2 }];
+    const array = [{ group: '1', id: 1 }, { group: '1', id: 2 }];
     this.setupDataGridModules({
         dataSource: array,
         columns: [{ dataField: 'group', dataType: 'number', groupIndex: 0 }, 'id']
@@ -13550,7 +13550,7 @@ QUnit.test('LoadAll and grouped field with dataType', function(assert) {
 });
 
 QUnit.test('loadAll during data loading', function(assert) {
-    var isLoadAllFailed;
+    let isLoadAllFailed;
 
     this.setupDataGridModules({
         dataSource: this.array,
@@ -13575,7 +13575,7 @@ QUnit.test('loadAll during data loading', function(assert) {
 
 // T713135
 QUnit.test('loadAll during custom loading', function(assert) {
-    var allItems;
+    let allItems;
 
     this.setupDataGridModules({
         dataSource: this.array,
@@ -13601,8 +13601,8 @@ QUnit.test('loadAll during custom loading', function(assert) {
 });
 
 QUnit.test('data loading during loadAll', function(assert) {
-    var isLoadAllFailed,
-        allItems;
+    let isLoadAllFailed;
+    let allItems;
 
     this.setupDataGridModules({
         dataSource: this.array,
@@ -13636,7 +13636,7 @@ QUnit.test('data loading during loadAll', function(assert) {
 });
 
 QUnit.test('LoadAll when scrolling mode is virtual', function(assert) {
-    var allItems;
+    let allItems;
 
     this.setupDataGridModules({
         dataSource: this.array,
@@ -13664,8 +13664,8 @@ QUnit.test('LoadAll when scrolling mode is virtual', function(assert) {
 });
 
 QUnit.test('Load ALL with data parameter', function(assert) {
-    var allItems,
-        changedCallCount = 0;
+    let allItems;
+    let changedCallCount = 0;
 
     this.setupDataGridModules({
         dataSource: this.array,
@@ -13705,8 +13705,8 @@ QUnit.test('Load ALL with data parameter', function(assert) {
 });
 
 QUnit.test('loadAll with data parameter and grouping', function(assert) {
-    var allItems,
-        changedCallCount = 0;
+    let allItems;
+    let changedCallCount = 0;
 
     this.setupDataGridModules({
         dataSource: {
@@ -13772,7 +13772,7 @@ QUnit.test('loadAll with data parameter and grouping', function(assert) {
 
 // T595243
 QUnit.test('loadAll with data parameter and filtering', function(assert) {
-    var allItems;
+    let allItems;
 
     this.setupDataGridModules({
         dataSource: this.array,
@@ -13795,7 +13795,7 @@ QUnit.test('loadAll with data parameter and filtering', function(assert) {
 });
 
 QUnit.test('LoadAll with data parameter and modified values', function(assert) {
-    var allItems;
+    let allItems;
 
     this.setupDataGridModules({
         dataSource: this.array,
@@ -13831,6 +13831,47 @@ QUnit.test('LoadAll with data parameter and modified values', function(assert) {
     assert.deepEqual(allItems[1].values, [1, 2, 4], 'item 1 values');
 });
 
+QUnit.module('Sorting', { beforeEach: setupModule, afterEach: teardownModule }, function() {
+    // T848348
+    QUnit.test('Sorting should work when columns have a calculateSortValue with the same instance', function(assert) {
+        // arrange
+        const dataSource = createDataSource([
+            { name: 'Alex', age: 19 },
+            { name: 'Dan', age: 15 }
+        ]);
+
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        const calculateSortValue = function(data) { return data[this.dataField]; };
+
+        this.applyOptions({
+            columns: [
+                { dataField: 'name', calculateSortValue: calculateSortValue },
+                { dataField: 'age', calculateSortValue: calculateSortValue }
+            ],
+            commonColumnSettings: { allowSorting: true },
+            sorting: { mode: 'single' }
+        });
+
+        // act
+        this.columnsController.changeSortOrder(0, 'asc');
+
+        // assert
+        let rows = this.getVisibleRows();
+        assert.deepEqual(rows[0].data, { name: 'Alex', age: 19 }, 'first row');
+        assert.deepEqual(rows[1].data, { name: 'Dan', age: 15 }, 'second row');
+
+        // act
+        this.columnsController.changeSortOrder(1, 'asc');
+
+        // assert
+        rows = this.getVisibleRows();
+        assert.deepEqual(rows[0].data, { name: 'Dan', age: 15 }, 'first row');
+        assert.deepEqual(rows[1].data, { name: 'Alex', age: 19 }, 'second row');
+    });
+});
+
 QUnit.module('onOptionChanged', {
     beforeEach: function() {
         this.array = [
@@ -13855,7 +13896,7 @@ QUnit.module('onOptionChanged', {
 }, function() {
     QUnit.test('Event should be fired when changing the pageSize', function(assert) {
         // arrange
-        var that = this;
+        const that = this;
 
         // act
         that.dataController.pageSize(4).done(function() {
@@ -13866,7 +13907,7 @@ QUnit.module('onOptionChanged', {
 
     QUnit.test('Event should be fired when changing the pageIndex', function(assert) {
         // arrange
-        var that = this;
+        const that = this;
 
         // act
         that.dataController.pageIndex(1).done(function(items) {
@@ -13878,8 +13919,8 @@ QUnit.module('onOptionChanged', {
 
     QUnit.test('Checking pageSize of the dataSource when optionChanged is fired', function(assert) {
         // arrange
-        var pageSize,
-            that = this;
+        let pageSize;
+        const that = this;
 
         that.option.restore();
         sinon.stub(that, 'option', function(optionName, value) {

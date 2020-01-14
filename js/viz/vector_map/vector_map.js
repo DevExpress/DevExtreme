@@ -1,21 +1,21 @@
-var _parseScalar = require('../core/utils').parseScalar,
-    projectionModule = require('./projection.main'),
-    controlBarModule = require('./control_bar'),
-    gestureHandlerModule = require('./gesture_handler'),
-    trackerModule = require('./tracker'),
-    dataExchangerModule = require('./data_exchanger'),
-    legendModule = require('./legend'),
-    layoutModule = require('./layout'),
-    mapLayerModule = require('./map_layer'),
-    tooltipViewerModule = require('./tooltip_viewer'),
+const _parseScalar = require('../core/utils').parseScalar;
+const projectionModule = require('./projection.main');
+const controlBarModule = require('./control_bar');
+const gestureHandlerModule = require('./gesture_handler');
+const trackerModule = require('./tracker');
+const dataExchangerModule = require('./data_exchanger');
+const legendModule = require('./legend');
+const layoutModule = require('./layout');
+const mapLayerModule = require('./map_layer');
+const tooltipViewerModule = require('./tooltip_viewer');
 
-    DEFAULT_WIDTH = 800,
-    DEFAULT_HEIGHT = 400,
+const DEFAULT_WIDTH = 800;
+const DEFAULT_HEIGHT = 400;
 
-    nextDataKey = 1,
+let nextDataKey = 1;
 
-    RE_STARTS_LAYERS = /^layers/,
-    RE_ENDS_DATA_SOURCE = /\.dataSource$/;
+const RE_STARTS_LAYERS = /^layers/;
+const RE_ENDS_DATA_SOURCE = /\.dataSource$/;
 
 require('./projection');
 
@@ -23,7 +23,7 @@ function generateDataKey() {
     return 'vectormap-data-' + nextDataKey++;
 }
 
-var dxVectorMap = require('../core/base_widget').inherit({
+const dxVectorMap = require('../core/base_widget').inherit({
     _eventsMap: {
         'onClick': { name: 'click' },
         'onCenterChanged': { name: 'centerChanged' },
@@ -45,7 +45,7 @@ var dxVectorMap = require('../core/base_widget').inherit({
     ],
 
     _initLayerCollection: function(dataKey) {
-        var that = this;
+        const that = this;
         that._layerCollection = new mapLayerModule.MapLayerCollection({
             renderer: that._renderer,
             projection: that._projection,
@@ -61,7 +61,7 @@ var dxVectorMap = require('../core/base_widget').inherit({
     },
 
     _initLegendsControl: function() {
-        var that = this;
+        const that = this;
         that._legendsControl = new legendModule.LegendsControl({
             renderer: that._renderer,
             container: that._root,
@@ -74,7 +74,7 @@ var dxVectorMap = require('../core/base_widget').inherit({
     },
 
     _initControlBar: function(dataKey) {
-        var that = this;
+        const that = this;
         that._controlBar = new controlBarModule.ControlBar({
             renderer: that._renderer,
             container: that._root,
@@ -86,10 +86,10 @@ var dxVectorMap = require('../core/base_widget').inherit({
     },
 
     _initElements: function() {
-        var that = this,
-            dataKey = generateDataKey(),
-            notifyCounter = 0,
-            preventProjectionEvents = true;
+        const that = this;
+        const dataKey = generateDataKey();
+        let notifyCounter = 0;
+        let preventProjectionEvents = true;
 
         that._notifyDirty = function() {
             that._resetIsReady();
@@ -141,7 +141,7 @@ var dxVectorMap = require('../core/base_widget').inherit({
     },
 
     _disposeCore: function() {
-        var that = this;
+        const that = this;
         that._controlBar.dispose();
         that._gestureHandler.dispose();
         that._tracker.dispose();
@@ -157,7 +157,7 @@ var dxVectorMap = require('../core/base_widget').inherit({
     },
 
     _setupInteraction: function() {
-        var options = {
+        const options = {
             centeringEnabled: !!_parseScalar(this._getOption('panningEnabled', true), true),
             zoomingEnabled: !!_parseScalar(this._getOption('zoomingEnabled', true), true)
         };
@@ -170,7 +170,7 @@ var dxVectorMap = require('../core/base_widget').inherit({
     },
 
     _applySize: function(rect) {
-        var layout = { left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1], right: 0, bottom: 0 };
+        const layout = { left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1], right: 0, bottom: 0 };
         this._projection.setSize(layout);
         this._layoutControl.setSize(layout);
         this._layerCollection.setRect([layout.left, layout.top, layout.width, layout.height]);
@@ -309,10 +309,10 @@ var dxVectorMap = require('../core/base_widget').inherit({
     },
 
     getLayers: function() {
-        var layers = this._layerCollection.items(),
-            list = [],
-            i,
-            ii = list.length = layers.length;
+        const layers = this._layerCollection.items();
+        const list = [];
+        let i;
+        const ii = list.length = layers.length;
         for(i = 0; i < ii; ++i) {
             list[i] = layers[i].proxy;
         }
@@ -320,19 +320,19 @@ var dxVectorMap = require('../core/base_widget').inherit({
     },
 
     getLayerByIndex: function(index) {
-        var layer = this._layerCollection.byIndex(index);
+        const layer = this._layerCollection.byIndex(index);
         return layer ? layer.proxy : null;
     },
 
     getLayerByName: function(name) {
-        var layer = this._layerCollection.byName(name);
+        const layer = this._layerCollection.byName(name);
         return layer ? layer.proxy : null;
     },
 
     clearSelection: function(_noEvent) {
-        var layers = this._layerCollection.items(),
-            i,
-            ii = layers.length;
+        const layers = this._layerCollection.items();
+        let i;
+        const ii = layers.length;
         for(i = 0; i < ii; ++i) {
             layers[i].clearSelection(_noEvent);
         }
@@ -340,7 +340,7 @@ var dxVectorMap = require('../core/base_widget').inherit({
     },
 
     center: function(value) {
-        var that = this;
+        const that = this;
         if(value === undefined) {
             return that._projection.getCenter();
         } else {
@@ -350,7 +350,7 @@ var dxVectorMap = require('../core/base_widget').inherit({
     },
 
     zoomFactor: function(value) {
-        var that = this;
+        const that = this;
         if(value === undefined) {
             return that._projection.getZoom();
         } else {
@@ -360,7 +360,7 @@ var dxVectorMap = require('../core/base_widget').inherit({
     },
 
     viewport: function(value) {
-        var that = this;
+        const that = this;
         if(value === undefined) {
             return that._projection.getViewport();
         } else {

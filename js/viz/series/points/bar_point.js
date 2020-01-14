@@ -1,20 +1,20 @@
-var extend = require('../../../core/utils/extend').extend,
+const extend = require('../../../core/utils/extend').extend;
 
-    _extend = extend,
+const _extend = extend;
 
-    _math = Math,
-    _floor = _math.floor,
-    _abs = _math.abs,
+const _math = Math;
+const _floor = _math.floor;
+const _abs = _math.abs;
 
-    symbolPoint = require('./symbol_point'),
+const symbolPoint = require('./symbol_point');
 
-    CANVAS_POSITION_DEFAULT = 'canvas_position_default',
-    DEFAULT_BAR_TRACKER_SIZE = 9,
-    CORRECTING_BAR_TRACKER_VALUE = 4,
-    RIGHT = 'right',
-    LEFT = 'left',
-    TOP = 'top',
-    BOTTOM = 'bottom';
+const CANVAS_POSITION_DEFAULT = 'canvas_position_default';
+const DEFAULT_BAR_TRACKER_SIZE = 9;
+const CORRECTING_BAR_TRACKER_VALUE = 4;
+const RIGHT = 'right';
+const LEFT = 'left';
+const TOP = 'top';
+const BOTTOM = 'bottom';
 
 module.exports = _extend({}, symbolPoint, {
 
@@ -47,13 +47,13 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _getLabelPosition: function() {
-        var that = this,
-            position,
-            initialValue = that.initialValue,
-            invert = that._getValTranslator().getBusinessRange().invert,
-            isDiscreteValue = that.series.valueAxisType === 'discrete',
-            isFullStacked = that.series.isFullStackedSeries(),
-            notAxisInverted = (!isDiscreteValue && ((initialValue >= 0 && !invert) ||
+        const that = this;
+        let position;
+        const initialValue = that.initialValue;
+        const invert = that._getValTranslator().getBusinessRange().invert;
+        const isDiscreteValue = that.series.valueAxisType === 'discrete';
+        const isFullStacked = that.series.isFullStackedSeries();
+        const notAxisInverted = (!isDiscreteValue && ((initialValue >= 0 && !invert) ||
                 (initialValue < 0 && invert))) ||
                 (isDiscreteValue && !invert) ||
                 (isFullStacked);
@@ -68,8 +68,8 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _getLabelCoords: function(label) {
-        var that = this,
-            coords;
+        const that = this;
+        let coords;
 
         if(that.initialValue === 0 && that.series.isFullStackedSeries()) {
             if(!this._options.rotated) {
@@ -86,8 +86,8 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _checkLabelPosition: function(label, coord) {
-        var that = this,
-            visibleArea = that._getVisibleArea();
+        const that = this;
+        const visibleArea = that._getVisibleArea();
 
         if(that._isPointInVisibleArea(visibleArea, that._getGraphicBBox())) {
             return that._moveLabelOnCanvas(coord, visibleArea, label.getBoundingRect());
@@ -97,8 +97,8 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     hideInsideLabel: function(label, coord) {
-        var graphicBBox = this._getGraphicBBox(),
-            labelBBox = label.getBoundingRect();
+        const graphicBBox = this._getGraphicBBox();
+        const labelBBox = label.getBoundingRect();
 
         if(this._options.resolveLabelsOverlapping) {
             if(((coord.y <= graphicBBox.y && coord.y + labelBBox.height >= graphicBBox.y + graphicBBox.height) ||
@@ -114,8 +114,8 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _moveLabelOnCanvas: function(coord, visibleArea, labelBBox) {
-        var x = coord.x,
-            y = coord.y;
+        let x = coord.x;
+        let y = coord.y;
         if(visibleArea.minX > x) {
             x = visibleArea.minX;
         }
@@ -161,11 +161,11 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _getSettingsForTracker: function() {
-        var that = this,
-            y = that.y,
-            height = that.height,
-            x = that.x,
-            width = that.width;
+        const that = this;
+        let y = that.y;
+        let height = that.height;
+        let x = that.x;
+        let width = that.width;
 
         if(that._options.rotated) {
             if(width === 1) {
@@ -188,7 +188,7 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     getGraphicSettings: function() {
-        var graphic = this.graphic;
+        const graphic = this.graphic;
         return {
             x: graphic.attr('x'),
             y: graphic.attr('y'),
@@ -264,19 +264,19 @@ module.exports = _extend({}, symbolPoint, {
 
     // TODO check & rework
     _translate: function() {
-        var that = this,
-            rotated = that._options.rotated,
-            valAxis = rotated ? 'x' : 'y',
-            argAxis = rotated ? 'y' : 'x',
-            valIntervalName = rotated ? 'width' : 'height',
-            argIntervalName = rotated ? 'height' : 'width',
-            argTranslator = that._getArgTranslator(),
-            valTranslator = that._getValTranslator(),
-            argVisibleArea = that.series.getArgumentAxis().getVisibleArea(),
-            valVisibleArea = that.series.getValueAxis().getVisibleArea(),
-            arg,
-            val,
-            minVal;
+        const that = this;
+        const rotated = that._options.rotated;
+        const valAxis = rotated ? 'x' : 'y';
+        const argAxis = rotated ? 'y' : 'x';
+        const valIntervalName = rotated ? 'width' : 'height';
+        const argIntervalName = rotated ? 'height' : 'width';
+        const argTranslator = that._getArgTranslator();
+        const valTranslator = that._getValTranslator();
+        const argVisibleArea = that.series.getArgumentAxis().getVisibleArea();
+        const valVisibleArea = that.series.getValueAxis().getVisibleArea();
+        let arg;
+        let val;
+        let minVal;
 
         arg = argTranslator.translate(that.argument);
 
@@ -321,7 +321,7 @@ module.exports = _extend({}, symbolPoint, {
     getMarkerCoords: function() {
         const that = this;
         let x = that.x;
-        let y = that.y;
+        const y = that.y;
         let width = that.width;
         let height = that.height;
         const argAxis = that.series.getArgumentAxis();
@@ -348,7 +348,7 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     coordsIn: function(x, y) {
-        var that = this;
+        const that = this;
         return (x >= that.x) && (x <= that.x + that.width) && (y >= that.y) && (y <= that.y + that.height);
     }
 });

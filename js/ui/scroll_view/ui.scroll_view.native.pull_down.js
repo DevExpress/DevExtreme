@@ -1,26 +1,26 @@
-var $ = require('../../core/renderer'),
-    Callbacks = require('../../core/utils/callbacks'),
-    translator = require('../../animation/translator'),
-    NativeStrategy = require('./ui.scrollable.native'),
-    LoadIndicator = require('../load_indicator'),
-    each = require('../../core/utils/iterator').each,
-    browser = require('../../core/utils/browser'),
-    Deferred = require('../../core/utils/deferred').Deferred;
+const $ = require('../../core/renderer');
+const Callbacks = require('../../core/utils/callbacks');
+const translator = require('../../animation/translator');
+const NativeStrategy = require('./ui.scrollable.native');
+const LoadIndicator = require('../load_indicator');
+const each = require('../../core/utils/iterator').each;
+const browser = require('../../core/utils/browser');
+const Deferred = require('../../core/utils/deferred').Deferred;
 
-var SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading',
-    SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready',
-    SCROLLVIEW_PULLDOWN_IMAGE_CLASS = 'dx-scrollview-pull-down-image',
-    SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator',
-    SCROLLVIEW_PULLDOWN_TEXT_CLASS = 'dx-scrollview-pull-down-text',
-    SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = 'dx-scrollview-pull-down-text-visible',
+const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
+const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';
+const SCROLLVIEW_PULLDOWN_IMAGE_CLASS = 'dx-scrollview-pull-down-image';
+const SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator';
+const SCROLLVIEW_PULLDOWN_TEXT_CLASS = 'dx-scrollview-pull-down-text';
+const SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = 'dx-scrollview-pull-down-text-visible';
 
-    STATE_RELEASED = 0,
-    STATE_READY = 1,
-    STATE_REFRESHING = 2,
-    STATE_LOADING = 3,
-    PULLDOWN_RELEASE_TIME = 400;
+const STATE_RELEASED = 0;
+const STATE_READY = 1;
+const STATE_REFRESHING = 2;
+const STATE_LOADING = 3;
+const PULLDOWN_RELEASE_TIME = 400;
 
-var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
+const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
     _init: function(scrollView) {
         this.callBase(scrollView);
@@ -46,10 +46,10 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _renderPullDown: function() {
-        var $image = $('<div>').addClass(SCROLLVIEW_PULLDOWN_IMAGE_CLASS),
-            $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS),
-            $loadIndicator = new LoadIndicator($('<div>')).$element(),
-            $text = this._$pullDownText = $('<div>').addClass(SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+        const $image = $('<div>').addClass(SCROLLVIEW_PULLDOWN_IMAGE_CLASS);
+        const $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS);
+        const $loadIndicator = new LoadIndicator($('<div>')).$element();
+        const $text = this._$pullDownText = $('<div>').addClass(SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
         this._$pullingDownText = $('<div>').text(this.option('pullingDownText')).appendTo($text);
         this._$pulledDownText = $('<div>').text(this.option('pulledDownText')).appendTo($text);
@@ -74,20 +74,20 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _refreshPullDownText: function() {
-        var that = this,
-            pullDownTextItems = [{
-                element: this._$pullingDownText,
-                visibleState: STATE_RELEASED
-            }, {
-                element: this._$pulledDownText,
-                visibleState: STATE_READY
-            }, {
-                element: this._$refreshingText,
-                visibleState: STATE_REFRESHING
-            }];
+        const that = this;
+        const pullDownTextItems = [{
+            element: this._$pullingDownText,
+            visibleState: STATE_RELEASED
+        }, {
+            element: this._$pulledDownText,
+            visibleState: STATE_READY
+        }, {
+            element: this._$refreshingText,
+            visibleState: STATE_REFRESHING
+        }];
 
         each(pullDownTextItems, function(_, item) {
-            var action = that._state === item.visibleState ? 'addClass' : 'removeClass';
+            const action = that._state === item.visibleState ? 'addClass' : 'removeClass';
             item.element[action](SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS);
         });
     },
@@ -110,7 +110,7 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _allowedDirections: function() {
-        var allowedDirections = this.callBase();
+        const allowedDirections = this.callBase();
         allowedDirections.vertical = allowedDirections.vertical || this._pullDownEnabled;
         return allowedDirections;
     },
@@ -154,8 +154,8 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
             return;
         }
 
-        var currentLocation = this.location().top,
-            scrollDelta = (this._location || 0) - currentLocation;
+        const currentLocation = this.location().top;
+        const scrollDelta = (this._location || 0) - currentLocation;
 
         this._location = currentLocation;
 
@@ -240,7 +240,7 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     release: function() {
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         this._updateDimensions();
         clearTimeout(this._releaseTimeout);

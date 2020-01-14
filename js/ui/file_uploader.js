@@ -1,61 +1,61 @@
-var $ = require('../core/renderer'),
-    Class = require('../core/class'),
-    Guid = require('../core/guid'),
-    window = require('../core/utils/window').getWindow(),
-    eventsEngine = require('../events/core/events_engine'),
-    registerComponent = require('../core/component_registrator'),
-    Callbacks = require('../core/utils/callbacks'),
-    isDefined = require('../core/utils/type').isDefined,
-    each = require('../core/utils/iterator').each,
-    extend = require('../core/utils/extend').extend,
-    inArray = require('../core/utils/array').inArray,
-    ajax = require('../core/utils/ajax'),
-    Editor = require('./editor/editor'),
-    Button = require('./button'),
-    ProgressBar = require('./progress_bar'),
-    browser = require('../core/utils/browser'),
-    devices = require('../core/devices'),
-    eventUtils = require('../events/utils'),
-    clickEvent = require('../events/click'),
-    messageLocalization = require('../localization/message'),
-    themes = require('./themes');
+const $ = require('../core/renderer');
+const Class = require('../core/class');
+const Guid = require('../core/guid');
+const window = require('../core/utils/window').getWindow();
+const eventsEngine = require('../events/core/events_engine');
+const registerComponent = require('../core/component_registrator');
+const Callbacks = require('../core/utils/callbacks');
+const isDefined = require('../core/utils/type').isDefined;
+const each = require('../core/utils/iterator').each;
+const extend = require('../core/utils/extend').extend;
+const inArray = require('../core/utils/array').inArray;
+const ajax = require('../core/utils/ajax');
+const Editor = require('./editor/editor');
+const Button = require('./button');
+const ProgressBar = require('./progress_bar');
+const browser = require('../core/utils/browser');
+const devices = require('../core/devices');
+const eventUtils = require('../events/utils');
+const clickEvent = require('../events/click');
+const messageLocalization = require('../localization/message');
+const themes = require('./themes');
 
-var FILEUPLOADER_CLASS = 'dx-fileuploader',
-    FILEUPLOADER_EMPTY_CLASS = 'dx-fileuploader-empty',
-    FILEUPLOADER_SHOW_FILE_LIST_CLASS = 'dx-fileuploader-show-file-list',
-    FILEUPLOADER_DRAGOVER_CLASS = 'dx-fileuploader-dragover',
+const FILEUPLOADER_CLASS = 'dx-fileuploader';
+const FILEUPLOADER_EMPTY_CLASS = 'dx-fileuploader-empty';
+const FILEUPLOADER_SHOW_FILE_LIST_CLASS = 'dx-fileuploader-show-file-list';
+const FILEUPLOADER_DRAGOVER_CLASS = 'dx-fileuploader-dragover';
 
-    FILEUPLOADER_WRAPPER_CLASS = 'dx-fileuploader-wrapper',
-    FILEUPLOADER_CONTAINER_CLASS = 'dx-fileuploader-container',
-    FILEUPLOADER_CONTENT_CLASS = 'dx-fileuploader-content',
-    FILEUPLOADER_INPUT_WRAPPER_CLASS = 'dx-fileuploader-input-wrapper',
-    FILEUPLOADER_INPUT_CONTAINER_CLASS = 'dx-fileuploader-input-container',
-    FILEUPLOADER_INPUT_LABEL_CLASS = 'dx-fileuploader-input-label',
-    FILEUPLOADER_INPUT_CLASS = 'dx-fileuploader-input',
-    FILEUPLOADER_FILES_CONTAINER_CLASS = 'dx-fileuploader-files-container',
-    FILEUPLOADER_FILE_CONTAINER_CLASS = 'dx-fileuploader-file-container',
-    FILEUPLOADER_FILE_INFO_CLASS = 'dx-fileuploader-file-info',
-    FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS = 'dx-fileuploader-file-status-message',
+const FILEUPLOADER_WRAPPER_CLASS = 'dx-fileuploader-wrapper';
+const FILEUPLOADER_CONTAINER_CLASS = 'dx-fileuploader-container';
+const FILEUPLOADER_CONTENT_CLASS = 'dx-fileuploader-content';
+const FILEUPLOADER_INPUT_WRAPPER_CLASS = 'dx-fileuploader-input-wrapper';
+const FILEUPLOADER_INPUT_CONTAINER_CLASS = 'dx-fileuploader-input-container';
+const FILEUPLOADER_INPUT_LABEL_CLASS = 'dx-fileuploader-input-label';
+const FILEUPLOADER_INPUT_CLASS = 'dx-fileuploader-input';
+const FILEUPLOADER_FILES_CONTAINER_CLASS = 'dx-fileuploader-files-container';
+const FILEUPLOADER_FILE_CONTAINER_CLASS = 'dx-fileuploader-file-container';
+const FILEUPLOADER_FILE_INFO_CLASS = 'dx-fileuploader-file-info';
+const FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS = 'dx-fileuploader-file-status-message';
 
-    FILEUPLOADER_FILE_CLASS = 'dx-fileuploader-file',
-    FILEUPLOADER_FILE_NAME_CLASS = 'dx-fileuploader-file-name',
-    FILEUPLOADER_FILE_SIZE_CLASS = 'dx-fileuploader-file-size',
+const FILEUPLOADER_FILE_CLASS = 'dx-fileuploader-file';
+const FILEUPLOADER_FILE_NAME_CLASS = 'dx-fileuploader-file-name';
+const FILEUPLOADER_FILE_SIZE_CLASS = 'dx-fileuploader-file-size';
 
-    FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button',
-    FILEUPLOADER_BUTTON_CONTAINER_CLASS = 'dx-fileuploader-button-container',
-    FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button',
-    FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button',
+const FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button';
+const FILEUPLOADER_BUTTON_CONTAINER_CLASS = 'dx-fileuploader-button-container';
+const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
+const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
 
-    FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid',
+const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
 
-    FILEUPLOADER_AFTER_LOAD_DELAY = 400,
-    FILEUPLOADER_CHUNK_META_DATA_NAME = 'chunkMetadata';
+const FILEUPLOADER_AFTER_LOAD_DELAY = 400;
+const FILEUPLOADER_CHUNK_META_DATA_NAME = 'chunkMetadata';
 
-var renderFileUploaderInput = function() {
+let renderFileUploaderInput = function() {
     return $('<input>').attr('type', 'file');
 };
 
-var isFormDataSupported = function() {
+const isFormDataSupported = function() {
     return !!window.FormData;
 };
 
@@ -65,13 +65,13 @@ var isFormDataSupported = function() {
 * @module ui/file_uploader
 * @export default
 */
-var FileUploader = Editor.inherit({
+const FileUploader = Editor.inherit({
     _uploadStrategy: null,
 
     _supportedKeys: function() {
-        var click = function(e) {
+        const click = function(e) {
             e.preventDefault();
-            var $selectButton = this._selectButton.$element();
+            const $selectButton = this._selectButton.$element();
             eventsEngine.trigger($selectButton, clickEvent.name);
         };
 
@@ -469,14 +469,14 @@ var FileUploader = Editor.inherit({
             return;
         }
 
-        var fileName = this._$fileInput.val().replace(/^.*\\/, ''),
-            files = this._$fileInput.prop('files');
+        const fileName = this._$fileInput.val().replace(/^.*\\/, '');
+        const files = this._$fileInput.prop('files');
 
         if(files && !files.length) {
             return;
         }
 
-        var value = files ? this._getFiles(files) : [{ name: fileName }];
+        const value = files ? this._getFiles(files) : [{ name: fileName }];
         this._changeValue(value);
 
         if(this.option('uploadMode') === 'instantly') {
@@ -489,9 +489,9 @@ var FileUploader = Editor.inherit({
     },
 
     _removeDuplicates: function(files, value) {
-        var result = [];
+        const result = [];
 
-        for(var i = 0; i < value.length; i++) {
+        for(let i = 0; i < value.length; i++) {
             if(!this._isFileInArray(files, value[i])) {
                 result.push(value[i]);
             }
@@ -501,8 +501,8 @@ var FileUploader = Editor.inherit({
     },
 
     _isFileInArray: function(files, file) {
-        for(var i = 0; i < files.length; i++) {
-            var item = files[i];
+        for(let i = 0; i < files.length; i++) {
+            const item = files[i];
             if(item.size === file.size && item.name === file.name) {
                 return true;
             }
@@ -512,7 +512,7 @@ var FileUploader = Editor.inherit({
     },
 
     _changeValue: function(value) {
-        var files = this._shouldFileListBeExtended() ? this.option('value').slice() : [];
+        const files = this._shouldFileListBeExtended() ? this.option('value').slice() : [];
 
         if(this.option('uploadMode') !== 'instantly') {
             value = this._removeDuplicates(files, value);
@@ -522,7 +522,7 @@ var FileUploader = Editor.inherit({
     },
 
     _getFiles: function(fileList) {
-        var values = [];
+        const values = [];
 
         each(fileList, function(_, value) {
             values.push(value);
@@ -588,7 +588,7 @@ var FileUploader = Editor.inherit({
     },
 
     _createFiles: function() {
-        var value = this.option('value');
+        const value = this.option('value');
 
         if(!this._files || value.length === 0 || !this._shouldFileListBeExtended()) {
             this._preventFilesUploading(this._files);
@@ -596,7 +596,7 @@ var FileUploader = Editor.inherit({
         }
 
         each(value.slice(this._files.length), function(_, value) {
-            var file = this._createFile(value);
+            const file = this._createFile(value);
             this._validateFile(file);
             this._files.push(file);
         }.bind(this));
@@ -615,12 +615,12 @@ var FileUploader = Editor.inherit({
     },
 
     _validateFileExtension: function(file) {
-        var allowedExtensions = this.option('allowedFileExtensions'),
-            fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
+        const allowedExtensions = this.option('allowedFileExtensions');
+        const fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
         if(allowedExtensions.length === 0) {
             return true;
         }
-        for(var i = 0; i < allowedExtensions.length; i++) {
+        for(let i = 0; i < allowedExtensions.length; i++) {
             if(fileExtension === allowedExtensions[i].toLowerCase()) {
                 return true;
             }
@@ -629,14 +629,14 @@ var FileUploader = Editor.inherit({
     },
 
     _validateMaxFileSize: function(file) {
-        var fileSize = file.value.size,
-            maxFileSize = this.option('maxFileSize');
+        const fileSize = file.value.size;
+        const maxFileSize = this.option('maxFileSize');
         return maxFileSize > 0 ? fileSize <= maxFileSize : true;
     },
 
     _validateMinFileSize: function(file) {
-        var fileSize = file.value.size,
-            minFileSize = this.option('minFileSize');
+        const fileSize = file.value.size;
+        const minFileSize = this.option('minFileSize');
         return minFileSize > 0 ? fileSize >= minFileSize : true;
     },
 
@@ -679,7 +679,7 @@ var FileUploader = Editor.inherit({
     },
 
     _renderFiles: function() {
-        var value = this.option('value');
+        const value = this.option('value');
 
         if(!this._$filesContainer) {
             this._$filesContainer = $('<div>')
@@ -689,9 +689,9 @@ var FileUploader = Editor.inherit({
             this._$filesContainer.empty();
         }
 
-        var showFileList = this.option('showFileList');
+        const showFileList = this.option('showFileList');
         if(showFileList) {
-            var that = this;
+            const that = this;
 
             each(this._files, function(_, file) {
                 if(!file.$file) {
@@ -708,9 +708,9 @@ var FileUploader = Editor.inherit({
     },
 
     _renderFile: function(file) {
-        var value = file.value;
+        const value = file.value;
 
-        var $fileContainer = $('<div>')
+        const $fileContainer = $('<div>')
             .addClass(FILEUPLOADER_FILE_CONTAINER_CLASS)
             .appendTo(this._$filesContainer);
 
@@ -720,7 +720,7 @@ var FileUploader = Editor.inherit({
             .addClass(FILEUPLOADER_FILE_CLASS)
             .appendTo($fileContainer);
 
-        var $fileInfo = $('<div>')
+        const $fileInfo = $('<div>')
             .addClass(FILEUPLOADER_FILE_INFO_CLASS)
             .appendTo(file.$file);
 
@@ -760,26 +760,26 @@ var FileUploader = Editor.inherit({
     },
 
     _updateFileNameMaxWidth: function() {
-        var cancelButtonsCount = this.option('allowCanceling') && this.option('uploadMode') !== 'useForm' ? 1 : 0,
-            uploadButtonsCount = this.option('uploadMode') === 'useButtons' ? 1 : 0,
-            filesContainerWidth = this._$filesContainer.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS).first().width() || this._$filesContainer.width(),
-            $buttonContainer = this._$filesContainer.find('.' + FILEUPLOADER_BUTTON_CONTAINER_CLASS).eq(0),
-            buttonsWidth = $buttonContainer.width() * (cancelButtonsCount + uploadButtonsCount),
-            $fileSize = this._$filesContainer.find('.' + FILEUPLOADER_FILE_SIZE_CLASS).eq(0);
+        const cancelButtonsCount = this.option('allowCanceling') && this.option('uploadMode') !== 'useForm' ? 1 : 0;
+        const uploadButtonsCount = this.option('uploadMode') === 'useButtons' ? 1 : 0;
+        const filesContainerWidth = this._$filesContainer.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS).first().width() || this._$filesContainer.width();
+        const $buttonContainer = this._$filesContainer.find('.' + FILEUPLOADER_BUTTON_CONTAINER_CLASS).eq(0);
+        const buttonsWidth = $buttonContainer.width() * (cancelButtonsCount + uploadButtonsCount);
+        const $fileSize = this._$filesContainer.find('.' + FILEUPLOADER_FILE_SIZE_CLASS).eq(0);
 
-        var prevFileSize = $fileSize.text();
+        const prevFileSize = $fileSize.text();
         $fileSize.text('1000 Mb');
-        var fileSizeWidth = $fileSize.width();
+        const fileSizeWidth = $fileSize.width();
         $fileSize.text(prevFileSize);
 
         this._$filesContainer.find('.' + FILEUPLOADER_FILE_NAME_CLASS).css('maxWidth', filesContainerWidth - buttonsWidth - fileSizeWidth);
     },
 
     _renderFileButtons: function(file, $container) {
-        var $cancelButton = this._getCancelButton(file);
+        const $cancelButton = this._getCancelButton(file);
         $cancelButton && $container.append($cancelButton);
 
-        var $uploadButton = this._getUploadButton(file);
+        const $uploadButton = this._getUploadButton(file);
         $uploadButton && $container.append($uploadButton);
     },
 
@@ -835,7 +835,7 @@ var FileUploader = Editor.inherit({
 
         this._files.splice(inArray(file, this._files), 1);
 
-        var value = this.option('value').slice();
+        const value = this.option('value').slice();
         value.splice(inArray(file.value, value), 1);
 
         this._preventRecreatingFiles = true;
@@ -853,7 +853,7 @@ var FileUploader = Editor.inherit({
         this.$element().toggleClass(FILEUPLOADER_EMPTY_CLASS, !this._files.length || this._hasInvalidFile(this._files));
     },
     _hasInvalidFile: function(files) {
-        for(var i = 0; i < files.length; i++) {
+        for(let i = 0; i < files.length; i++) {
             if(!files[i].isValid()) {
                 return true;
             }
@@ -862,14 +862,14 @@ var FileUploader = Editor.inherit({
     },
 
     _getFileSize: function(size) {
-        var i = 0,
-            labels = [
-                messageLocalization.format('dxFileUploader-bytes'),
-                messageLocalization.format('dxFileUploader-kb'),
-                messageLocalization.format('dxFileUploader-Mb'),
-                messageLocalization.format('dxFileUploader-Gb')
-            ],
-            count = labels.length - 1;
+        let i = 0;
+        const labels = [
+            messageLocalization.format('dxFileUploader-bytes'),
+            messageLocalization.format('dxFileUploader-kb'),
+            messageLocalization.format('dxFileUploader-Mb'),
+            messageLocalization.format('dxFileUploader-Gb')
+        ];
+        const count = labels.length - 1;
 
         while(i < count && size >= 1024) {
             size /= 1024;
@@ -880,7 +880,7 @@ var FileUploader = Editor.inherit({
     },
 
     _renderSelectButton: function() {
-        var $button = $('<div>')
+        const $button = $('<div>')
             .addClass(FILEUPLOADER_BUTTON_CLASS)
             .appendTo(this._$inputWrapper);
 
@@ -900,7 +900,7 @@ var FileUploader = Editor.inherit({
     },
 
     _selectButtonClickHandler: function() {
-        var that = this;
+        const that = this;
 
         if(that.option('useNativeInputClick')) {
             return;
@@ -920,7 +920,7 @@ var FileUploader = Editor.inherit({
             return;
         }
 
-        var $uploadButton = $('<div>')
+        const $uploadButton = $('<div>')
             .addClass(FILEUPLOADER_BUTTON_CLASS)
             .addClass(FILEUPLOADER_UPLOAD_BUTTON_CLASS)
             .appendTo(this._$content);
@@ -970,8 +970,8 @@ var FileUploader = Editor.inherit({
     },
 
     _selectButtonInputTemplate: function(data, content) {
-        var $content = $(content);
-        var $text = $('<span>')
+        const $content = $(content);
+        const $text = $('<span>')
             .addClass('dx-button-text')
             .text(data.text);
 
@@ -1040,8 +1040,8 @@ var FileUploader = Editor.inherit({
     },
 
     _updateEventTargets: function(e) {
-        var targetIndex = this._dragEventsTargets.indexOf(e.target),
-            isTargetExists = targetIndex !== -1;
+        const targetIndex = this._dragEventsTargets.indexOf(e.target);
+        const isTargetExists = targetIndex !== -1;
 
         if(e.type === 'dragenter') {
             !isTargetExists && this._dragEventsTargets.push(e.target);
@@ -1060,8 +1060,8 @@ var FileUploader = Editor.inherit({
 
         e.preventDefault();
 
-        var fileList = e.originalEvent.dataTransfer.files,
-            files = this._getFiles(fileList);
+        const fileList = e.originalEvent.dataTransfer.files;
+        const files = this._getFiles(fileList);
 
         if(!this.option('multiple') && files.length > 1) {
             return;
@@ -1079,16 +1079,16 @@ var FileUploader = Editor.inherit({
             return files;
         }
 
-        var accept = this.option('accept');
+        const accept = this.option('accept');
 
         if(!accept.length) {
             return files;
         }
 
-        var result = [],
-            allowedTypes = this._getAllowedFileTypes(accept);
+        const result = [];
+        const allowedTypes = this._getAllowedFileTypes(accept);
 
-        for(var i = 0, n = files.length; i < n; i++) {
+        for(let i = 0, n = files.length; i < n; i++) {
             if(this._isFileTypeAllowed(files[i], allowedTypes)) {
                 result.push(files[i]);
             }
@@ -1108,8 +1108,8 @@ var FileUploader = Editor.inherit({
     },
 
     _isFileTypeAllowed: function(file, allowedTypes) {
-        for(var i = 0, n = allowedTypes.length; i < n; i++) {
-            var allowedType = allowedTypes[i];
+        for(let i = 0, n = allowedTypes.length; i < n; i++) {
+            let allowedType = allowedTypes[i];
 
             if(allowedType[0] === '.') {
                 allowedType = allowedType.replace('.', '\\.');
@@ -1129,11 +1129,11 @@ var FileUploader = Editor.inherit({
     },
 
     _renderWrapper: function() {
-        var $wrapper = $('<div>')
+        const $wrapper = $('<div>')
             .addClass(FILEUPLOADER_WRAPPER_CLASS)
             .appendTo(this.$element());
 
-        var $container = $('<div>')
+        const $container = $('<div>')
             .addClass(FILEUPLOADER_CONTAINER_CLASS)
             .appendTo($wrapper);
 
@@ -1182,7 +1182,7 @@ var FileUploader = Editor.inherit({
         });
     },
     _updateTotalProgress: function(totalFilesSize, totalLoadedFilesSize) {
-        var progress = totalFilesSize ? Math.round(totalLoadedFilesSize / totalFilesSize * 100) : 0;
+        const progress = totalFilesSize ? Math.round(totalLoadedFilesSize / totalFilesSize * 100) : 0;
         this.option('progress', progress);
         this._setLoadedSize(totalLoadedFilesSize);
     },
@@ -1197,7 +1197,7 @@ var FileUploader = Editor.inherit({
             this._removeFile(file);
         }.bind(this));
 
-        var hideCancelButton = function() {
+        const hideCancelButton = function() {
             setTimeout(function() {
                 file.cancelButton.option({
                     visible: false
@@ -1257,7 +1257,7 @@ var FileUploader = Editor.inherit({
     },
 
     _optionChanged: function(args) {
-        var value = args.value;
+        const value = args.value;
 
         switch(args.name) {
             case 'height':
@@ -1379,7 +1379,7 @@ FileUploader.__internals = {
 };
 ///#ENDDEBUG
 
-var FileBlobReader = Class.inherit({
+const FileBlobReader = Class.inherit({
     ctor: function(file, chunkSize) {
         this.file = file;
         this.chunkSize = chunkSize;
@@ -1390,7 +1390,7 @@ var FileBlobReader = Class.inherit({
         if(!this.file) {
             return null;
         }
-        var result = this.createBlobResult(this.file, this.index, this.chunkSize);
+        const result = this.createBlobResult(this.file, this.index, this.chunkSize);
         if(result.isCompleted) {
             this.file = null;
         }
@@ -1399,7 +1399,7 @@ var FileBlobReader = Class.inherit({
     },
 
     createBlobResult: function(file, index, chunkSize) {
-        var currentPosition = index * chunkSize;
+        const currentPosition = index * chunkSize;
         return {
             blob: this.sliceFile(file, currentPosition, chunkSize),
             index: index,
@@ -1418,7 +1418,7 @@ var FileBlobReader = Class.inherit({
     }
 });
 
-var FileUploadStrategyBase = Class.inherit({
+const FileUploadStrategyBase = Class.inherit({
     ctor: function(fileUploader) {
         this.fileUploader = fileUploader;
     },
@@ -1487,11 +1487,11 @@ var FileUploadStrategyBase = Class.inherit({
 
     _onProgressHandler: function(file, e) {
         if(file) {
-            var totalFilesSize = this.fileUploader._getTotalFilesSize();
-            var totalLoadedFilesSize = this.fileUploader._getTotalLoadedFilesSize();
+            const totalFilesSize = this.fileUploader._getTotalFilesSize();
+            const totalLoadedFilesSize = this.fileUploader._getTotalLoadedFilesSize();
 
-            var loadedSize = Math.min(e.loaded, file.value.size);
-            var segmentSize = loadedSize - file.loadedSize;
+            const loadedSize = Math.min(e.loaded, file.value.size);
+            const segmentSize = loadedSize - file.loadedSize;
             file.loadedSize = loadedSize;
 
             this.fileUploader._updateTotalProgress(totalFilesSize, totalLoadedFilesSize + segmentSize);
@@ -1515,7 +1515,7 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
     },
 
     _uploadCore: function(file) {
-        var realFile = file.value;
+        const realFile = file.value;
         this._sendChunk(file, {
             name: realFile.name,
             loadedBytes: 0,
@@ -1528,7 +1528,7 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
     },
 
     _sendChunk: function(file, chunksData) {
-        var chunk = chunksData.blobReader.read();
+        const chunk = chunksData.blobReader.read();
         if(chunk) {
             chunksData.loadedBytes += chunk.blob.size;
             ajax.sendRequest({
@@ -1579,7 +1579,7 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
     },
 
     _createFormData: function(options) {
-        var formData = new window.FormData();
+        const formData = new window.FormData();
         formData.append(options.blobName, options.blob);
         formData.append(FILEUPLOADER_CHUNK_META_DATA_NAME, JSON.stringify({
             FileName: options.fileName,
@@ -1635,13 +1635,13 @@ var WholeFileUploadStrategy = FileUploadStrategyBase.inherit({
     },
 
     _createFormData: function(fieldName, fieldValue) {
-        var formData = new window.FormData();
+        const formData = new window.FormData();
         formData.append(fieldName, fieldValue);
         return formData;
     },
 
     _getLoadedData: function(loaded, total, segmentSize, event) {
-        var result = this.callBase(loaded, total, segmentSize, event);
+        const result = this.callBase(loaded, total, segmentSize, event);
         result.event = event;
         return result;
     }

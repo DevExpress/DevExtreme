@@ -1,7 +1,7 @@
 import { isString } from '../../core/utils/type';
 import errors from '../../core/errors';
 
-let templateEngines = {};
+const templateEngines = {};
 let currentTemplateEngine;
 
 const registerTemplateEngine = (name, templateEngine) => {

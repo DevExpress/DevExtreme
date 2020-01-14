@@ -14,11 +14,11 @@ const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
     }
 });
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
 
-        var that = this;
+        const that = this;
         this.tickGeneratorSpy = sinon.spy(function() {
             return {
                 ticks: that.generatedTicks || [],
@@ -46,7 +46,7 @@ var environment = {
         this.tickGenerator.restore();
     },
     updateOptions: function(options) {
-        var defaultOptions = {
+        const defaultOptions = {
             isHorizontal: true,
             label: {
                 visible: true,
@@ -77,13 +77,13 @@ Axis.prototype = $.extend({}, originalAxis.prototype, {
 QUnit.module('Creation', environment);
 
 QUnit.test('Create axis', function(assert) {
-    var renderer = this.renderer,
-        stripsGroup = renderer.g(),
-        labelAxesGroup = renderer.g(),
-        constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
-        axesContainerGroup = renderer.g(),
-        gridGroup = renderer.g(),
-        axis;
+    const renderer = this.renderer;
+    const stripsGroup = renderer.g();
+    const labelAxesGroup = renderer.g();
+    const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
+    const axesContainerGroup = renderer.g();
+    const gridGroup = renderer.g();
+    let axis;
 
     renderer.g.reset();
 
@@ -119,12 +119,12 @@ QUnit.test('Create axis', function(assert) {
 });
 
 QUnit.test('Create axis when axis class is undefined', function(assert) {
-    var renderer = this.renderer,
-        stripsGroup = renderer.g(),
-        labelAxesGroup = renderer.g(),
-        constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
-        axesContainerGroup = renderer.g(),
-        gridGroup = renderer.g();
+    const renderer = this.renderer;
+    const stripsGroup = renderer.g();
+    const labelAxesGroup = renderer.g();
+    const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
+    const axesContainerGroup = renderer.g();
+    const gridGroup = renderer.g();
 
     renderer.g.reset();
 
@@ -144,7 +144,7 @@ QUnit.test('Create axis when axis class is undefined', function(assert) {
 });
 
 QUnit.test('Update options', function(assert) {
-    var axis = new Axis({
+    const axis = new Axis({
         renderer: this.renderer
     });
 
@@ -160,19 +160,19 @@ QUnit.test('Update options', function(assert) {
 
 QUnit.module('API', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
 
         sinon.stub(translator2DModule, 'Translator2D', function() {
             return that.translator;
         });
         environment.beforeEach.call(this);
 
-        var renderer = that.renderer,
-            stripsGroup = renderer.g(),
-            labelAxesGroup = renderer.g(),
-            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
-            axesContainerGroup = renderer.g(),
-            gridGroup = renderer.g();
+        const renderer = that.renderer;
+        const stripsGroup = renderer.g();
+        const labelAxesGroup = renderer.g();
+        const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
+        const axesContainerGroup = renderer.g();
+        const gridGroup = renderer.g();
 
         renderer.g.reset();
 
@@ -210,7 +210,7 @@ QUnit.test('Get full ticks - concat and sort major, minor and boundary ticks', f
     this.generatedMinorTicks = [1.5, 2.5];
     this.axis.createTicks(this.canvas);
 
-    var fullTicks = this.axis.getFullTicks();
+    const fullTicks = this.axis.getFullTicks();
 
     assert.deepEqual(fullTicks, [0, 1, 1.5, 2, 2.5, 3, 4]);
 });
@@ -231,7 +231,7 @@ QUnit.test('Get full ticks for discrete axis - return categories', function(asse
     this.generatedTicks = ['a', 'b', 'c'];
     this.axis.createTicks(this.canvas);
 
-    var fullTicks = this.axis.getFullTicks();
+    const fullTicks = this.axis.getFullTicks();
 
     assert.deepEqual(fullTicks, ['a', 'b', 'c']);
 });
@@ -354,7 +354,7 @@ QUnit.test('Set types', function(assert) {
 QUnit.test('Update translator on setTypes pass old business range and canvas', function(assert) {
     this.updateOptions();
 
-    var translator = translator2DModule.Translator2D.lastCall.returnValue;
+    const translator = translator2DModule.Translator2D.lastCall.returnValue;
     this.axis.updateCanvas(this.canvas);
     // act
     this.axis.setTypes('someAxisType', 'someType', 'valueType');
@@ -374,10 +374,10 @@ QUnit.test('set undefined types', function(assert) {
 
 QUnit.test('applyClipRects', function(assert) {
     this.renderer.g.reset();
-    var renderer = this.renderer,
-        axis = new Axis({
-            renderer: renderer
-        });
+    const renderer = this.renderer;
+    const axis = new Axis({
+        renderer: renderer
+    });
 
     axis.applyClipRects('clipRectForElements', 'clipRectForCanvas');
 
@@ -386,7 +386,7 @@ QUnit.test('applyClipRects', function(assert) {
 });
 
 QUnit.test('Disposing', function(assert) {
-    var renderer = this.renderer;
+    const renderer = this.renderer;
 
     this.updateOptions();
 
@@ -418,7 +418,7 @@ QUnit.test('getCategoriesSorter returns categoriesSortingMethod option value', f
         categoriesSortingMethod: 'sorting method'
     });
 
-    var sort = this.axis.getCategoriesSorter();
+    const sort = this.axis.getCategoriesSorter();
 
     assert.equal(sort, 'sorting method');
 });
@@ -429,7 +429,7 @@ QUnit.test('categoriesSortingMethod returns \'categories\' option when \'categor
         categories: ['1', '2']
     });
 
-    var sort = this.axis.getCategoriesSorter();
+    const sort = this.axis.getCategoriesSorter();
 
     assert.deepEqual(sort, ['1', '2']);
 });
@@ -438,12 +438,12 @@ QUnit.module('Labels Settings', {
     beforeEach: function() {
         environment.beforeEach.call(this);
 
-        var renderer = this.renderer,
-            stripsGroup = renderer.g(),
-            labelAxesGroup = renderer.g(),
-            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
-            axesContainerGroup = renderer.g(),
-            gridGroup = renderer.g();
+        const renderer = this.renderer;
+        const stripsGroup = renderer.g();
+        const labelAxesGroup = renderer.g();
+        const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
+        const axesContainerGroup = renderer.g();
+        const gridGroup = renderer.g();
 
         renderer.g.reset();
 
@@ -523,12 +523,12 @@ QUnit.test('Customize color', function(assert) {
 QUnit.module('Validate', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        var renderer = this.renderer,
-            stripsGroup = renderer.g(),
-            labelAxesGroup = renderer.g(),
-            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
-            axesContainerGroup = renderer.g(),
-            gridGroup = renderer.g();
+        const renderer = this.renderer;
+        const stripsGroup = renderer.g();
+        const labelAxesGroup = renderer.g();
+        const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
+        const axesContainerGroup = renderer.g();
+        const gridGroup = renderer.g();
 
         renderer.g.reset();
 
@@ -597,8 +597,8 @@ QUnit.test('Validate, argumentType - datetime, max and min is wrong specified', 
     assert.ok(this.axis.parser);
     assert.ok(this.incidentOccurred.calledTwice);
 
-    var firstIdError = this.incidentOccurred.firstCall.args[0],
-        secondIdError = this.incidentOccurred.secondCall.args[0];
+    const firstIdError = this.incidentOccurred.firstCall.args[0];
+    const secondIdError = this.incidentOccurred.secondCall.args[0];
 
     assert.equal(firstIdError, 'E2106');
     assert.equal(dxErrors[firstIdError], 'Invalid visible range');
@@ -618,8 +618,8 @@ QUnit.test('Validate, argumentType - numeric, max and min is wrong specified', f
     assert.ok(this.axis.parser);
     assert.ok(this.incidentOccurred.calledTwice);
 
-    var firstIdError = this.incidentOccurred.firstCall.args[0],
-        secondIdError = this.incidentOccurred.secondCall.args[0];
+    const firstIdError = this.incidentOccurred.firstCall.args[0];
+    const secondIdError = this.incidentOccurred.secondCall.args[0];
 
     assert.equal(firstIdError, 'E2106');
     assert.equal(dxErrors[firstIdError], 'Invalid visible range');
@@ -639,8 +639,8 @@ QUnit.test('Validate, argumentType - numeric, max and min is wrong specified', f
     assert.ok(this.axis.parser);
     assert.ok(this.incidentOccurred.calledTwice);
 
-    var firstIdError = this.incidentOccurred.firstCall.args[0],
-        secondIdError = this.incidentOccurred.secondCall.args[0];
+    const firstIdError = this.incidentOccurred.firstCall.args[0];
+    const secondIdError = this.incidentOccurred.secondCall.args[0];
 
     assert.equal(firstIdError, 'E2106');
     assert.equal(dxErrors[firstIdError], 'Invalid visible range');
@@ -702,18 +702,18 @@ QUnit.test('Validate visualRange, option is set', function(assert) {
 
 QUnit.module('Zoom', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         sinon.stub(translator2DModule, 'Translator2D', function() {
             return that.translator;
         });
 
         environment.beforeEach.call(this);
-        var renderer = this.renderer,
-            stripsGroup = renderer.g(),
-            labelAxesGroup = renderer.g(),
-            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
-            axesContainerGroup = renderer.g(),
-            gridGroup = renderer.g();
+        const renderer = this.renderer;
+        const stripsGroup = renderer.g();
+        const labelAxesGroup = renderer.g();
+        const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
+        const axesContainerGroup = renderer.g();
+        const gridGroup = renderer.g();
 
         this.eventTrigger = sinon.spy();
 
@@ -756,7 +756,7 @@ QUnit.test('getViewport return object with field \'action\' if need', function(a
 });
 
 QUnit.test('hold min/max for single point series', function(assert) {
-    var businessRange;
+    let businessRange;
     this.updateOptions({
         tick: {
             visible: true
@@ -1145,12 +1145,12 @@ QUnit.module('VisualRange', {
     beforeEach: function() {
         environment.beforeEach.call(this);
 
-        var renderer = this.renderer,
-            stripsGroup = renderer.g(),
-            labelAxesGroup = renderer.g(),
-            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
-            axesContainerGroup = renderer.g(),
-            gridGroup = renderer.g();
+        const renderer = this.renderer;
+        const stripsGroup = renderer.g();
+        const labelAxesGroup = renderer.g();
+        const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
+        const axesContainerGroup = renderer.g();
+        const gridGroup = renderer.g();
 
         renderer.g.reset();
         this.incidentOccurred = sinon.stub();
@@ -1306,17 +1306,17 @@ const dataMarginsEnvironment = {
         environment.afterEach.call(this);
     },
     createAxis: function(isArgumentAxis, options) {
-        var renderer = this.renderer,
-            axis = new Axis({
-                renderer: renderer,
-                stripsGroup: renderer.g(),
-                labelAxesGroup: renderer.g(),
-                constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
-                axesContainerGroup: renderer.g(),
-                gridGroup: renderer.g(),
-                isArgumentAxis: isArgumentAxis,
-                eventTrigger: () => { }
-            });
+        const renderer = this.renderer;
+        const axis = new Axis({
+            renderer: renderer,
+            stripsGroup: renderer.g(),
+            labelAxesGroup: renderer.g(),
+            constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
+            axesContainerGroup: renderer.g(),
+            gridGroup: renderer.g(),
+            isArgumentAxis: isArgumentAxis,
+            eventTrigger: () => { }
+        });
 
         axis.updateOptions($.extend(true, {
             type: 'continuous',
@@ -1330,7 +1330,7 @@ const dataMarginsEnvironment = {
         return axis;
     },
     testMargins: function(assert, data) {
-        var axis = this.createAxis(data.isArgumentAxis, data.options);
+        const axis = this.createAxis(data.isArgumentAxis, data.options);
 
         this.generatedTicks = data.ticks;
         axis.setBusinessRange(data.range);
@@ -1346,7 +1346,7 @@ const dataMarginsEnvironment = {
 
         axis.draw(this.canvas);
 
-        var range = {
+        const range = {
             interval: translator.updateBusinessRange.lastCall.args[0].interval,
             minVisible: translator.from(this.canvas.left),
             maxVisible: translator.from(this.canvas.width - this.canvas.right),
@@ -1397,7 +1397,7 @@ QUnit.test('minValueMargin - apply margins to the min', function(assert) {
 
 // T603177
 QUnit.test('Margins for one point (dateTime)', function(assert) {
-    var date = new Date('2018/05/02');
+    const date = new Date('2018/05/02');
 
     this.testMargins(assert, {
         isArgumentAxis: true,
@@ -1422,7 +1422,7 @@ QUnit.test('Margins for one point (dateTime)', function(assert) {
 
 // T829705
 QUnit.test('Margins for one aggregated point (dateTime)', function(assert) {
-    var date = new Date('2018/05/02');
+    const date = new Date('2018/05/02');
     this.testMargins(assert, {
         isArgumentAxis: true,
         marginOptions: {
@@ -1645,7 +1645,7 @@ QUnit.test('margins calculation. Range interval with tickInterval', function(ass
 });
 
 QUnit.test('margins calculation. Range interval with tickInterval + tickInterval estimation', function(assert) {
-    var getTickGeneratorReturns = function(tickInterval) {
+    const getTickGeneratorReturns = function(tickInterval) {
         return {
             ticks: [],
             minorTicks: [],
@@ -2236,7 +2236,7 @@ QUnit.test('Logarithmic axis. valueMarginsEnabled false - calculate correct inte
 });
 
 QUnit.test('Calculate ticks on range with margins', function(assert) {
-    var axis = this.createAxis(true, {
+    const axis = this.createAxis(true, {
         valueMarginsEnabled: true,
         minValueMargin: 0.1,
         maxValueMargin: 0.2
@@ -2260,7 +2260,7 @@ QUnit.test('Calculate ticks on range with margins', function(assert) {
 });
 
 QUnit.test('Axis pass margin options for calculate ticks', function(assert) {
-    var axis = this.createAxis(true, {
+    const axis = this.createAxis(true, {
         valueMarginsEnabled: true
     });
 
@@ -2718,7 +2718,7 @@ QUnit.test('minValueMargin and maxValueMargin not defined - do not apply margins
 });
 
 QUnit.test('updateSize - margins and interval are recalculated', function(assert) {
-    var axis = this.createAxis(true, {
+    const axis = this.createAxis(true, {
         valueMarginsEnabled: true
     });
 
@@ -2746,7 +2746,7 @@ QUnit.test('updateSize - margins and interval are recalculated', function(assert
 
     const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
-    var range = translator.getBusinessRange();
+    const range = translator.getBusinessRange();
 
     assert.equal(range.min, 90);
     assert.equal(range.max, 210);
@@ -2758,7 +2758,7 @@ QUnit.test('updateSize - margins and interval are recalculated', function(assert
 });
 
 QUnit.test('updateSize, synchronized axis - do not recalculate margins/interval', function(assert) {
-    var axis = this.createAxis(true, {
+    const axis = this.createAxis(true, {
         valueMarginsEnabled: true
     });
 
@@ -2797,7 +2797,7 @@ QUnit.test('updateSize, synchronized axis - do not recalculate margins/interval'
 });
 
 QUnit.test('createTicks after synchronization (zoom chart) - recalculate margins/interval. T616166', function(assert) {
-    var axis = this.createAxis(true, {
+    const axis = this.createAxis(true, {
         valueMarginsEnabled: true
     });
 
@@ -2830,7 +2830,7 @@ QUnit.test('createTicks after synchronization (zoom chart) - recalculate margins
     });
 
     // assert
-    var range = translator2DModule.Translator2D.lastCall.returnValue.getBusinessRange();
+    const range = translator2DModule.Translator2D.lastCall.returnValue.getBusinessRange();
     assert.equal(range.min, 90);
     assert.equal(range.minVisible, 90);
     assert.equal(range.max, 210);
@@ -2841,7 +2841,7 @@ QUnit.test('createTicks after synchronization (zoom chart) - recalculate margins
 });
 
 QUnit.test('Boundary ticks calculated without margins', function(assert) {
-    var axis = this.createAxis(true, {
+    const axis = this.createAxis(true, {
         valueMarginsEnabled: true,
         showCustomBoundaryTicks: true
     });
@@ -2860,7 +2860,7 @@ QUnit.test('Boundary ticks calculated without margins', function(assert) {
 });
 
 QUnit.test('Pass paddings in translator via canvas', function(assert) {
-    var axis = this.createAxis(true, {
+    const axis = this.createAxis(true, {
         valueMarginsEnabled: true,
         showCustomBoundaryTicks: true
     });
