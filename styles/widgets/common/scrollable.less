@@ -213,6 +213,24 @@
         overflow-anchor: none;
     }
 
+    &.dx-scrollable-scrollbars-alwaysvisible {
+        &.dx-scrollable-vertical,
+        &.dx-scrollable-both {
+            .dx-scrollable-content {
+                .dx-scrollable-simulated:not(.dx-scrollable-scrollbars-alwaysvisible) {
+                    .dx-scrollable-content {
+                        padding-right: 0;
+
+                        .dx-rtl&,
+                        .dx-rtl & {
+                            padding-left: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     &.dx-scrollable-disabled {
         .dx-scrollable-scrollbar {
             pointer-events: none;
