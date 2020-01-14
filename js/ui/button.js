@@ -13,7 +13,6 @@ import { getImageContainer, getImageSourceType } from '../core/utils/icon';
 import { getPublicElement } from '../core/utils/dom';
 
 const ANONYMOUS_TEMPLATE_NAME = 'content';
-const INK_RIPPLE_NAMESPACE = 'inkRipple';
 
 /**
 * @name dxButton
@@ -39,10 +38,10 @@ class Button extends Widget {
 
     _attachActiveEvents(active, inactive) {
         const $el = this._eventBindingTarget();
-        const namespace = INK_RIPPLE_NAMESPACE;
+        const namespace = 'inkRipple';
         const selector = this._activeStateUnit;
 
-        this._detachActiveEvents($el);
+        activeEvents.off($el, { namespace, selector });
         activeEvents.on($el,
             new Action(active),
             new Action(inactive, { excludeValidators: ['disabled', 'readOnly'] }), {
@@ -52,10 +51,6 @@ class Button extends Widget {
                 namespace
             }
         );
-    }
-
-    _detachActiveEvents($el) {
-        activeEvents.off($el || this._eventBindingTarget(), { namespace: INK_RIPPLE_NAMESPACE, selector: this._activeStateUnit });
     }
 
     _defaultOptionsRules() {
@@ -324,9 +319,9 @@ class Button extends Widget {
                 isCentered: true
             } : {});
             const changeWaveVisibility = (event, visible) => {
-                const { activeStateEnabled } = this.option();
+                const { activeStateEnabled, useInkRipple } = this.option();
 
-                if(activeStateEnabled && !this._disposed) {
+                if(useInkRipple && activeStateEnabled && !this._disposed) {
                     const config = { element: this._$content(), event };
 
                     visible ? _inkRipple.showWave(config) : _inkRipple.hideWave(config);
