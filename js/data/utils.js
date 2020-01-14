@@ -7,9 +7,9 @@ import { toComparable } from '../core/utils/data';
 import { Deferred } from '../core/utils/deferred';
 import typeUtils from '../core/utils/type';
 
-var XHR_ERROR_UNLOAD = 'DEVEXTREME_XHR_ERROR_UNLOAD';
+const XHR_ERROR_UNLOAD = 'DEVEXTREME_XHR_ERROR_UNLOAD';
 
-var normalizeBinaryCriterion = function(crit) {
+const normalizeBinaryCriterion = function(crit) {
     return [
         crit[0],
         crit.length < 3 ? '=' : String(crit[1]).toLowerCase(),
@@ -17,13 +17,13 @@ var normalizeBinaryCriterion = function(crit) {
     ];
 };
 
-var normalizeSortingInfo = function(info) {
+const normalizeSortingInfo = function(info) {
     if(!Array.isArray(info)) {
         info = [info];
     }
 
     return map(info, function(i) {
-        var result = {
+        const result = {
             selector: (isFunction(i) || typeof i === 'string') ? i : (i.getter || i.field || i.selector),
             desc: !!(i.desc || String(i.dir).charAt(0).toLowerCase() === 'd')
         };
@@ -34,23 +34,23 @@ var normalizeSortingInfo = function(info) {
     });
 };
 
-var errorMessageFromXhr = (function() {
-    var textStatusMessages = {
+const errorMessageFromXhr = (function() {
+    const textStatusMessages = {
         'timeout': 'Network connection timeout',
         'error': 'Unspecified network error',
         'parsererror': 'Unexpected server response'
     };
 
     ///#DEBUG
-    var textStatusDetails = {
+    const textStatusDetails = {
         'timeout': 'possible causes: the remote host is not accessible, overloaded or is not included into the domain white-list when being run in the native container',
         'error': 'if the remote host is located on another domain, make sure it properly supports cross-origin resource sharing (CORS), or use the JSONP approach instead',
         'parsererror': 'the remote host did not respond with valid JSON data'
     };
     ///#ENDDEBUG
 
-    var explainTextStatus = function(textStatus) {
-        var result = textStatusMessages[textStatus];
+    const explainTextStatus = function(textStatus) {
+        let result = textStatusMessages[textStatus];
 
         if(!result) {
             return textStatus;
@@ -64,9 +64,9 @@ var errorMessageFromXhr = (function() {
     };
 
     // T542570, https://stackoverflow.com/a/18170879
-    var unloading;
+    let unloading;
     ready(function() {
-        var window = getWindow();
+        const window = getWindow();
         domAdapter.listen(window, 'beforeunload', function() { unloading = true; });
     });
 
@@ -81,7 +81,7 @@ var errorMessageFromXhr = (function() {
     };
 })();
 
-var aggregators = {
+const aggregators = {
     count: {
         seed: 0,
         step: function(count) { return 1 + count; }
@@ -107,30 +107,30 @@ var aggregators = {
     }
 };
 
-var processRequestResultLock = (function() {
-    var lockCount = 0,
-        lockDeferred;
+const processRequestResultLock = (function() {
+    let lockCount = 0;
+    let lockDeferred;
 
-    var obtain = function() {
+    const obtain = function() {
         if(lockCount === 0) {
             lockDeferred = new Deferred();
         }
         lockCount++;
     };
 
-    var release = function() {
+    const release = function() {
         lockCount--;
         if(lockCount < 1) {
             lockDeferred.resolve();
         }
     };
 
-    var promise = function() {
-        var deferred = lockCount === 0 ? new Deferred().resolve() : lockDeferred;
+    const promise = function() {
+        const deferred = lockCount === 0 ? new Deferred().resolve() : lockDeferred;
         return deferred.promise();
     };
 
-    var reset = function() {
+    const reset = function() {
         lockCount = 0;
         if(lockDeferred) {
             lockDeferred.resolve();
@@ -153,11 +153,11 @@ function isConjunctiveOperator(condition) {
     return /^(and|&&|&)$/i.test(condition);
 }
 
-var keysEqual = function(keyExpr, key1, key2) {
+const keysEqual = function(keyExpr, key1, key2) {
     if(Array.isArray(keyExpr)) {
-        var names = map(key1, function(v, k) { return k; }),
-            name;
-        for(var i = 0; i < names.length; i++) {
+        const names = map(key1, function(v, k) { return k; });
+        let name;
+        for(let i = 0; i < names.length; i++) {
             name = names[i];
             // eslint-disable-next-line eqeqeq
             if(toComparable(key1[name], true) != toComparable(key2[name], true)) {
@@ -170,24 +170,24 @@ var keysEqual = function(keyExpr, key1, key2) {
     return toComparable(key1, true) == toComparable(key2, true);
 };
 
-var BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 
-var base64_encode = function(input) {
+const base64_encode = function(input) {
     if(!Array.isArray(input)) {
         input = stringToByteArray(String(input));
     }
 
-    var result = '';
+    let result = '';
 
     function getBase64Char(index) {
         return BASE64_CHARS.charAt(index);
     }
 
-    for(var i = 0; i < input.length; i += 3) {
+    for(let i = 0; i < input.length; i += 3) {
 
-        var octet1 = input[i],
-            octet2 = input[i + 1],
-            octet3 = input[i + 2];
+        const octet1 = input[i];
+        const octet2 = input[i + 1];
+        const octet3 = input[i + 2];
 
         result += map(
             [
@@ -204,8 +204,8 @@ var base64_encode = function(input) {
 };
 
 var stringToByteArray = function(str) {
-    var bytes = [],
-        code, i;
+    const bytes = [];
+    let code; let i;
 
     for(i = 0; i < str.length; i++) {
         code = str.charCodeAt(i);
@@ -223,17 +223,17 @@ var stringToByteArray = function(str) {
     return bytes;
 };
 
-var isUnaryOperation = function(crit) {
+const isUnaryOperation = function(crit) {
     return crit[0] === '!' && Array.isArray(crit[1]);
 };
 
-var isGroupOperator = function(value) {
+const isGroupOperator = function(value) {
     return value === 'and' || value === 'or';
 };
 
-var isGroupCriterion = function(crit) {
-    var first = crit[0],
-        second = crit[1];
+const isGroupCriterion = function(crit) {
+    const first = crit[0];
+    const second = crit[1];
 
     if(Array.isArray(first)) {
         return true;
@@ -247,19 +247,19 @@ var isGroupCriterion = function(crit) {
     return false;
 };
 
-var trivialPromise = function() {
-    var d = new Deferred();
+const trivialPromise = function() {
+    const d = new Deferred();
     return d.resolve.apply(d, arguments).promise();
 };
 
-var rejectedPromise = function() {
-    var d = new Deferred();
+const rejectedPromise = function() {
+    const d = new Deferred();
     return d.reject.apply(d, arguments).promise();
 };
 
 function throttle(func, timeout) {
-    var timeoutId,
-        lastArgs;
+    let timeoutId;
+    let lastArgs;
     return function() {
         lastArgs = arguments;
         if(!timeoutId) {
@@ -275,11 +275,11 @@ function throttle(func, timeout) {
 }
 
 function throttleChanges(func, timeout) {
-    var cache = [],
-        throttled = throttle(function() {
-            func.call(this, cache);
-            cache = [];
-        }, timeout);
+    let cache = [];
+    const throttled = throttle(function() {
+        func.call(this, cache);
+        cache = [];
+    }, timeout);
 
     return function(changes) {
         if(Array.isArray(changes)) {
@@ -292,7 +292,7 @@ function throttleChanges(func, timeout) {
 /**
 * @name Utils
 */
-var utils = {
+const utils = {
     XHR_ERROR_UNLOAD: XHR_ERROR_UNLOAD,
 
     normalizeBinaryCriterion: normalizeBinaryCriterion,

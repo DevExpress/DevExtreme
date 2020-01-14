@@ -1,6 +1,6 @@
-const RADIO_BUTTON_CLASS = 'dx-radiobutton',
-    RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon',
-    RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
+const RADIO_BUTTON_CLASS = 'dx-radiobutton';
+const RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon';
+const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 
 import $ from 'jquery';
 import 'ui/radio_group/radio_button';
@@ -21,8 +21,8 @@ QUnit.module('button rendering', () => {
     });
 
     QUnit.test('icon should be rendered', (assert) => {
-        const $radioButton = $('#radioButton').dxRadioButton(),
-            $icon = $radioButton.children(toSelector(RADIO_BUTTON_ICON_CLASS));
+        const $radioButton = $('#radioButton').dxRadioButton();
+        const $icon = $radioButton.children(toSelector(RADIO_BUTTON_ICON_CLASS));
 
         assert.ok($icon.length, 'icon rendered');
     });

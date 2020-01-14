@@ -3,7 +3,7 @@ import { getDiagram } from './diagram_importer';
 const ShapeCategories = {
     load: function(showCustomShapes) {
         const ShapeCategory = getDiagram().ShapeCategory;
-        var result = [
+        const result = [
             {
                 category: ShapeCategory.General,
                 title: 'General'

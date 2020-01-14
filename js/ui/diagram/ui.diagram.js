@@ -99,7 +99,7 @@ class Diagram extends Widget {
             onShapeCategoryRendered: (e) => {
                 if(isServerSide) return;
 
-                var $toolboxContainer = $(e.$element);
+                const $toolboxContainer = $(e.$element);
                 this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8, { 'data-toggle': 'shape-toolbox-tooltip' }, e.category);
                 this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
             },
@@ -109,7 +109,7 @@ class Diagram extends Widget {
     }
     _createTooltips($container, targets) {
         targets.each((index, element) => {
-            var $target = $(element);
+            const $target = $(element);
             const $tooltip = $('<div>')
                 .html($target.attr('title'))
                 .appendTo($container);
@@ -268,7 +268,7 @@ class Diagram extends Widget {
         const { DiagramCommand } = getDiagram();
         this._diagramInstance.commandManager.getCommand(DiagramCommand.ImportDataSource).execute(data);
 
-        var dataSources = this._getDataSources();
+        const dataSources = this._getDataSources();
         dataSources[key] = data;
         this.option('dataSources', dataSources);
     }
@@ -282,7 +282,7 @@ class Diagram extends Widget {
         }
     }
     _deleteDiagramDataSource(key) {
-        var dataSources = this._getDataSources();
+        const dataSources = this._getDataSources();
         if(dataSources[key]) {
             const { DiagramCommand } = getDiagram();
             this._diagramInstance.commandManager.getCommand(DiagramCommand.CloseDataSource).execute(key);
@@ -310,11 +310,11 @@ class Diagram extends Widget {
         return dataCoreUtils.compileSetter(expr);
     }
     _createOptionGetter(optionName) {
-        var expr = this.option(optionName);
+        const expr = this.option(optionName);
         return this._createGetter(expr);
     }
     _createOptionSetter(optionName) {
-        var expr = this.option(optionName);
+        const expr = this.option(optionName);
         return this._createSetter(expr);
     }
     _bindDiagramData() {
@@ -416,7 +416,7 @@ class Diagram extends Widget {
         this._diagramInstance.updateLayout();
     }
     _changeNativeFullscreen(setModeOn) {
-        let window = getWindow();
+        const window = getWindow();
         if(window.self === window.top || setModeOn === this._inNativeFullscreen()) return;
 
         if(setModeOn) {
@@ -427,9 +427,9 @@ class Diagram extends Widget {
         this._setNativeFullscreen(setModeOn);
     }
     _setNativeFullscreen(on) {
-        let window = getWindow(),
-            document = window.self.document,
-            body = window.self.document.body;
+        const window = getWindow();
+        const document = window.self.document;
+        const body = window.self.document.body;
         if(on) {
             if(body.requestFullscreen) {
                 body.requestFullscreen();
@@ -453,21 +453,21 @@ class Diagram extends Widget {
         }
     }
     _inNativeFullscreen() {
-        let document = getWindow().document,
-            fullscreenElement = document.fullscreenElement || document.msFullscreenElement || document.webkitFullscreenElement,
-            isInFullscreen = fullscreenElement === document.body || document.webkitIsFullscreen;
+        const document = getWindow().document;
+        const fullscreenElement = document.fullscreenElement || document.msFullscreenElement || document.webkitFullscreenElement;
+        const isInFullscreen = fullscreenElement === document.body || document.webkitIsFullscreen;
         return !!isInFullscreen;
     }
     _subscribeFullscreenNativeChanged() {
-        let document = getWindow().document,
-            handler = this._onNativeFullscreenChangeHandler.bind(this);
+        const document = getWindow().document;
+        const handler = this._onNativeFullscreenChangeHandler.bind(this);
         eventsEngine.on(document, FULLSCREEN_CHANGE_EVENT_NAME, handler);
         eventsEngine.on(document, IE_FULLSCREEN_CHANGE_EVENT_NAME, handler);
         eventsEngine.on(document, WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME, handler);
         eventsEngine.on(document, MOZ_FULLSCREEN_CHANGE_EVENT_NAME, handler);
     }
     _unsubscribeFullscreenNativeChanged() {
-        let document = getWindow().document;
+        const document = getWindow().document;
         eventsEngine.off(document, FULLSCREEN_CHANGE_EVENT_NAME);
         eventsEngine.off(document, IE_FULLSCREEN_CHANGE_EVENT_NAME);
         eventsEngine.off(document, WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME);

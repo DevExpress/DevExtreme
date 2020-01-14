@@ -1,10 +1,10 @@
-var $ = require('jquery'),
-    TouchStrategy = require('events/pointer/touch'),
-    registerEvent = require('events/core/event_registrator'),
-    nativePointerMock = require('../../../helpers/nativePointerMock.js'),
-    noop = require('core/utils/common').noop,
-    special = require('../../../helpers/eventHelper.js').special,
-    eventsEngine = require('events/core/events_engine');
+const $ = require('jquery');
+const TouchStrategy = require('events/pointer/touch');
+const registerEvent = require('events/core/event_registrator');
+const nativePointerMock = require('../../../helpers/nativePointerMock.js');
+const noop = require('core/utils/common').noop;
+const special = require('../../../helpers/eventHelper.js').special;
+const eventsEngine = require('events/core/events_engine');
 
 QUnit.module('touch events', {
     beforeEach: function() {
@@ -26,12 +26,12 @@ QUnit.module('touch events', {
 });
 
 QUnit.test('pointer event should not trigger twice on real devices', function(assert) {
-    var containerHandler = sinon.stub(),
-        elementHandler = sinon.stub();
+    const containerHandler = sinon.stub();
+    const elementHandler = sinon.stub();
 
-    var $container = $('#container').on('dxpointerdown', containerHandler);
+    const $container = $('#container').on('dxpointerdown', containerHandler);
 
-    var $element = this.$element.on('dxpointerdown', elementHandler);
+    const $element = this.$element.on('dxpointerdown', elementHandler);
 
     nativePointerMock($element)
         .start()
@@ -52,13 +52,13 @@ QUnit.test('pointer event should not trigger twice on real devices', function(as
 });
 
 QUnit.test('dxpointerup triggers twice on real devices', function(assert) {
-    var triggered = 0;
+    let triggered = 0;
 
     this.$element.on('dxpointerup', function() {
         triggered++;
     });
 
-    var pointer = nativePointerMock(this.$element)
+    const pointer = nativePointerMock(this.$element)
         .start()
         .touchStart()
         .touchEnd();
@@ -118,7 +118,7 @@ $.each({
         this.$element.on(eventName, function(e) {
             if(eventName !== 'dxpointerup') {
                 assert.equal(e.pointers.length, 1, 'pointer was added');
-                var pointer = e.pointers[0];
+                const pointer = e.pointers[0];
 
                 $.each(['pageX', 'pageY'], function() {
                     assert.ok(this in pointer, 'event has \'' + this + '\' property');
@@ -144,10 +144,10 @@ QUnit.test('touchmove should not have a passive event listener', function(assert
         return;
     }
 
-    var $element = $('<div style="height: 20px; width: 20px;"></div>').appendTo('#qunit-fixture'),
-        element = $element.get(0),
-        origAddEventListener = element.addEventListener,
-        nonPassiveEvent = false;
+    const $element = $('<div style="height: 20px; width: 20px;"></div>').appendTo('#qunit-fixture');
+    const element = $element.get(0);
+    const origAddEventListener = element.addEventListener;
+    let nonPassiveEvent = false;
 
     element.addEventListener = function(event, handler, options) {
         if(event === 'touchmove' && options && options.passive === false) {

@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'common.css!';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="map"></div>';
 
     $('#qunit-fixture').html(markup);

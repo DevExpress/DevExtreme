@@ -31,9 +31,9 @@ class DiagramLeftPanel extends DiagramPanel {
         this._renderAccordion($accordion);
     }
     _getAccordionDataSource() {
-        var result = [];
-        var categories = ShapeCategories.load(this._customShapes.length > 0);
-        for(var i = 0; i < categories.length; i++) {
+        const result = [];
+        const categories = ShapeCategories.load(this._customShapes.length > 0);
+        for(let i = 0; i < categories.length; i++) {
             result.push({
                 category: categories[i].category,
                 title: categories[i].title,
@@ -42,7 +42,7 @@ class DiagramLeftPanel extends DiagramPanel {
                 }
             });
         }
-        for(var key in this._dataSources) {
+        for(const key in this._dataSources) {
             if(Object.prototype.hasOwnProperty.call(this._dataSources, key)) {
                 result.push({
                     key,
@@ -57,7 +57,7 @@ class DiagramLeftPanel extends DiagramPanel {
         return result;
     }
     _renderAccordion($container) {
-        var data = this._getAccordionDataSource();
+        const data = this._getAccordionDataSource();
         this._accordionInstance = this._createComponent($container, Accordion, {
             multiple: true,
             collapsible: true,

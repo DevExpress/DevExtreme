@@ -2,7 +2,7 @@ require('./core');
 require('./number');
 require('globalize/date');
 
-var timeData = {
+const timeData = {
     'supplemental': {
         'version': {
             '_cldrVersion': '28',
@@ -34,7 +34,7 @@ var timeData = {
     }
 };
 
-var enCaGregorian = {
+const enCaGregorian = {
     'main': {
         'en': {
             'identity': {
@@ -529,7 +529,7 @@ var enCaGregorian = {
     }
 };
 
-var weekData = {
+const weekData = {
     'supplemental': {
         'version': {
             '_cldrVersion': '28',
@@ -559,13 +559,13 @@ var weekData = {
     }
 };
 
-var ACCEPTABLE_JSON_FORMAT_PROPERTIES = ['skeleton', 'date', 'time', 'datetime', 'raw'];
+const ACCEPTABLE_JSON_FORMAT_PROPERTIES = ['skeleton', 'date', 'time', 'datetime', 'raw'];
 
-var Globalize = require('globalize'),
-    dateLocalization = require('../date'),
-    isObject = require('../../core/utils/type').isObject,
-    inArray = require('../../core/utils/array').inArray,
-    iteratorUtils = require('../../core/utils/iterator');
+const Globalize = require('globalize');
+const dateLocalization = require('../date');
+const isObject = require('../../core/utils/type').isObject;
+const inArray = require('../../core/utils/array').inArray;
+const iteratorUtils = require('../../core/utils/iterator');
 
 if(Globalize && Globalize.formatDate) {
 
@@ -579,9 +579,9 @@ if(Globalize && Globalize.formatDate) {
         Globalize.locale('en');
     }
 
-    var formattersCache = {};
+    const formattersCache = {};
 
-    var FORMATS_TO_GLOBALIZE_MAP = {
+    const FORMATS_TO_GLOBALIZE_MAP = {
         'shortdate': {
             path: 'dateTimeFormats/availableFormats/yMd'
         },
@@ -647,11 +647,11 @@ if(Globalize && Globalize.formatDate) {
         }
     };
 
-    var globalizeDateLocalization = {
+    const globalizeDateLocalization = {
         _getPatternByFormat: function(format) {
-            var that = this,
-                lowerFormat = format.toLowerCase(),
-                globalizeFormat = FORMATS_TO_GLOBALIZE_MAP[lowerFormat];
+            const that = this;
+            const lowerFormat = format.toLowerCase();
+            const globalizeFormat = FORMATS_TO_GLOBALIZE_MAP[lowerFormat];
 
             if(lowerFormat === 'datetime-local') {
                 return 'yyyy-MM-ddTHH\':\'mm\':\'ss';
@@ -661,7 +661,7 @@ if(Globalize && Globalize.formatDate) {
                 return;
             }
 
-            var result = globalizeFormat.path && that._getFormatStringByPath(globalizeFormat.path) || globalizeFormat.pattern;
+            let result = globalizeFormat.path && that._getFormatStringByPath(globalizeFormat.path) || globalizeFormat.pattern;
 
             if(globalizeFormat.parts) {
                 iteratorUtils.each(globalizeFormat.parts, function(index, part) {
@@ -676,18 +676,18 @@ if(Globalize && Globalize.formatDate) {
         },
 
         getPeriodNames: function() {
-            var json = Globalize.locale().main('dates/calendars/gregorian/dayPeriods/stand-alone/wide');
+            const json = Globalize.locale().main('dates/calendars/gregorian/dayPeriods/stand-alone/wide');
             return [json['am'], json['pm']];
         },
 
         getMonthNames: function(format, type) {
-            var months = Globalize.locale().main('dates/calendars/gregorian/months/' + (type === 'format' ? type : 'stand-alone') + '/' + (format || 'wide'));
+            const months = Globalize.locale().main('dates/calendars/gregorian/months/' + (type === 'format' ? type : 'stand-alone') + '/' + (format || 'wide'));
 
             return iteratorUtils.map(months, function(month) { return month; });
         },
 
         getDayNames: function(format) {
-            var days = Globalize.locale().main('dates/calendars/gregorian/days/stand-alone/' + (format || 'wide'));
+            const days = Globalize.locale().main('dates/calendars/gregorian/days/stand-alone/' + (format || 'wide'));
 
             return iteratorUtils.map(days, function(day) { return day; });
         },
@@ -705,8 +705,8 @@ if(Globalize && Globalize.formatDate) {
                 return date;
             }
 
-            var formatter,
-                formatCacheKey;
+            let formatter;
+            let formatCacheKey;
 
             if(typeof (format) === 'function') {
                 return format(date);
@@ -746,7 +746,7 @@ if(Globalize && Globalize.formatDate) {
 
             if(!format || typeof (format) === 'function' || isObject(format) && !this._isAcceptableFormat(format)) {
                 if(format) {
-                    var parsedValue = this.callBase(text, format);
+                    const parsedValue = this.callBase(text, format);
                     if(parsedValue) {
                         return parsedValue;
                     }
@@ -774,7 +774,7 @@ if(Globalize && Globalize.formatDate) {
                 return true;
             }
 
-            for(var i = 0; i < ACCEPTABLE_JSON_FORMAT_PROPERTIES.length; i++) {
+            for(let i = 0; i < ACCEPTABLE_JSON_FORMAT_PROPERTIES.length; i++) {
                 if(Object.prototype.hasOwnProperty.call(format, ACCEPTABLE_JSON_FORMAT_PROPERTIES[i])) {
                     return true;
                 }
@@ -782,13 +782,13 @@ if(Globalize && Globalize.formatDate) {
         },
 
         firstDayOfWeekIndex: function() {
-            var firstDay = Globalize.locale().supplemental.weekData.firstDay();
+            const firstDay = Globalize.locale().supplemental.weekData.firstDay();
 
             return inArray(firstDay, this._getDayKeys());
         },
 
         _getDayKeys: function() {
-            var days = Globalize.locale().main('dates/calendars/gregorian/days/format/short');
+            const days = Globalize.locale().main('dates/calendars/gregorian/days/format/short');
 
             return iteratorUtils.map(days, function(day, key) { return key; });
         }

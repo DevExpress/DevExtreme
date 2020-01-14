@@ -1,14 +1,14 @@
-var $ = require('../../core/renderer'),
-    registerComponent = require('../../core/component_registrator'),
-    each = require('../../core/utils/iterator').each,
-    List = require('../list/ui.list.base');
+const $ = require('../../core/renderer');
+const registerComponent = require('../../core/component_registrator');
+const each = require('../../core/utils/iterator').each;
+const List = require('../list/ui.list.base');
 
-var TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action',
-    TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button',
-    TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section',
-    TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
+const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
+const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
+const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
+const TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
 
-var ToolbarMenu = List.inherit({
+const ToolbarMenu = List.inherit({
     _activeStateUnit: '.' + TOOLBAR_MENU_ACTION_CLASS,
 
     _initMarkup: function() {
@@ -25,12 +25,12 @@ var ToolbarMenu = List.inherit({
     },
 
     _renderSections: function() {
-        var that = this,
-            $container = this._itemContainer();
+        const that = this;
+        const $container = this._itemContainer();
 
         each(['before', 'center', 'after', 'menu'], function() {
-            var sectionName = '_$' + this + 'Section',
-                $section = that[sectionName];
+            const sectionName = '_$' + this + 'Section';
+            let $section = that[sectionName];
 
             if(!$section) {
                 that[sectionName] = $section = $('<div>')
@@ -47,15 +47,15 @@ var ToolbarMenu = List.inherit({
     },
 
     _updateSections: function() {
-        var $sections = this.$element().find('.' + TOOLBAR_MENU_SECTION_CLASS);
+        const $sections = this.$element().find('.' + TOOLBAR_MENU_SECTION_CLASS);
         $sections.removeClass(TOOLBAR_MENU_LAST_SECTION_CLASS);
         $sections.not(':empty').eq(-1).addClass(TOOLBAR_MENU_LAST_SECTION_CLASS);
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
-        var location = item.location || 'menu',
-            $container = this['_$' + location + 'Section'],
-            itemElement;
+        const location = item.location || 'menu';
+        const $container = this['_$' + location + 'Section'];
+        let itemElement;
 
         itemElement = this.callBase(index, item, $container, $after);
 
@@ -77,10 +77,10 @@ var ToolbarMenu = List.inherit({
     },
 
     _getItemTemplateName: function(args) {
-        var template = this.callBase(args);
+        const template = this.callBase(args);
 
-        var data = args.itemData,
-            menuTemplate = data && data['menuItemTemplate'];
+        const data = args.itemData;
+        const menuTemplate = data && data['menuItemTemplate'];
 
         return menuTemplate || template;
     },

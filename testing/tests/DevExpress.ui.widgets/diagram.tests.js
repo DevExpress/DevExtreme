@@ -30,11 +30,11 @@ function getToolbarIcon(button) {
 
 QUnit.module('Diagram Toolbar', moduleConfig, () => {
     test('should fill toolbar with default items', (assert) => {
-        let toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar('instance');
+        const toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar('instance');
         assert.ok(toolbar.option('dataSource').length > 10);
     });
     test('should enable items on diagram request', (assert) => {
-        let undoButton = findToolbarItem(this.$element, 'undo').dxButton('instance');
+        const undoButton = findToolbarItem(this.$element, 'undo').dxButton('instance');
         assert.ok(undoButton.option('disabled'));
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageLandscape).execute(true);
         assert.notOk(undoButton.option('disabled'));
@@ -101,7 +101,7 @@ QUnit.module('Diagram Toolbar', moduleConfig, () => {
     });
     test('should toggle fullscreen class name on button click', (assert) => {
         assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-        let fullscreenButton = findToolbarItem(this.$element, 'fullscreen');
+        const fullscreenButton = findToolbarItem(this.$element, 'fullscreen');
         fullscreenButton.trigger('dxclick');
         assert.ok(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
         fullscreenButton.trigger('dxclick');

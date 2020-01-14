@@ -1,25 +1,25 @@
 /* global currentTest */
 
-var $ = require('jquery'),
-    renderer = require('core/renderer'),
-    version = require('core/version'),
-    resizeCallbacks = require('core/utils/resize_callbacks'),
-    registerComponent = require('core/component_registrator'),
-    logger = require('core/utils/console').logger,
-    errors = require('viz/core/errors_warnings'),
-    BaseWidget = require('viz/core/base_widget'),
-    BaseThemeManager = require('viz/core/base_theme_manager').BaseThemeManager,
-    rendererModule = require('viz/core/renderers/renderer'),
-    dxBaseWidgetTester,
-    StubThemeManager,
-    StubTitle,
-    vizMocks = require('../../helpers/vizMocks.js');
+const $ = require('jquery');
+const renderer = require('core/renderer');
+const version = require('core/version');
+const resizeCallbacks = require('core/utils/resize_callbacks');
+const registerComponent = require('core/component_registrator');
+const logger = require('core/utils/console').logger;
+const errors = require('viz/core/errors_warnings');
+const BaseWidget = require('viz/core/base_widget');
+const BaseThemeManager = require('viz/core/base_theme_manager').BaseThemeManager;
+const rendererModule = require('viz/core/renderers/renderer');
+let dxBaseWidgetTester;
+let StubThemeManager;
+let StubTitle;
+const vizMocks = require('../../helpers/vizMocks.js');
 
 // TODO: Move export tests to a separate file
 require('viz/core/export');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="container"></div>';
 
     $('#qunit-fixture').html(markup);
@@ -54,7 +54,7 @@ QUnit.begin(function() {
 
 });
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.themeManager = new StubThemeManager();
         this.title = new StubTitle();
@@ -164,7 +164,7 @@ QUnit.test('Event is triggered from "_clean"', function(assert) {
     this.onClean = function() {
         this._eventTrigger('testEvent', {});
     };
-    var callback = sinon.spy();
+    const callback = sinon.spy();
     this.createWidget({
         onTestEvent: callback
     });
@@ -176,7 +176,7 @@ QUnit.test('Event is triggered from "_clean"', function(assert) {
 });
 
 QUnit.test('T489065. Calls of begin/endUpdate during changes applying are safe', function(assert) {
-    var callback = sinon.spy();
+    const callback = sinon.spy();
     this.createWidget({
         onTestEvent: function(e) {
             e.component.beginUpdate();
@@ -202,7 +202,7 @@ QUnit.module('Option changing - mechanism', environment);
 
 QUnit.test('Handler is called once for all options', function(assert) {
     this.createWidget();
-    var spy = sinon.spy(this.widget, '_applyChanges');
+    const spy = sinon.spy(this.widget, '_applyChanges');
 
     this.widget.option({
         encodeHtml: true,
@@ -214,7 +214,7 @@ QUnit.test('Handler is called once for all options', function(assert) {
 
 QUnit.test('Handler is called on endUpdate', function(assert) {
     this.createWidget();
-    var spy = sinon.spy(this.widget, '_applyChanges');
+    const spy = sinon.spy(this.widget, '_applyChanges');
 
     this.widget.beginUpdate();
     this.widget.option('title', {});
@@ -240,7 +240,7 @@ QUnit.test('Handler is called on endUpdate', function(assert) {
 
 QUnit.test('Handler is not called if there are no changed options', function(assert) {
     this.createWidget();
-    var spy = sinon.spy(this.widget, '_applyChanges');
+    const spy = sinon.spy(this.widget, '_applyChanges');
 
     this.widget.beginUpdate();
     this.widget.endUpdate();
@@ -250,7 +250,7 @@ QUnit.test('Handler is not called if there are no changed options', function(ass
 
 QUnit.test('Handler is called inside the renderer lock', function(assert) {
     this.createWidget();
-    var spy = sinon.spy(this.widget, '_applyChanges');
+    const spy = sinon.spy(this.widget, '_applyChanges');
 
     this.widget.option('encodeHtml', false);
 
@@ -260,15 +260,15 @@ QUnit.test('Handler is called inside the renderer lock', function(assert) {
 // T318992
 QUnit.test('Another handler is called if option is changed inside the handler', function(assert) {
     this.createWidget();
-    var lock = false,
-        spy = sinon.stub(this.widget, '_applyChanges', function(options) {
-            if(!lock) {
-                lock = true;
-                this.option('rtlEnabled', 'rtl-enabled');
-            } else {
-                assert.deepEqual(this.option('rtlEnabled'), 'rtl-enabled', 'changed option');
-            }
-        });
+    let lock = false;
+    const spy = sinon.stub(this.widget, '_applyChanges', function(options) {
+        if(!lock) {
+            lock = true;
+            this.option('rtlEnabled', 'rtl-enabled');
+        } else {
+            assert.deepEqual(this.option('rtlEnabled'), 'rtl-enabled', 'changed option');
+        }
+    });
 
     this.widget.option('encodeHtml', false);
 
@@ -323,7 +323,7 @@ QUnit.test('encodeHtml', function(assert) {
 
 QUnit.test('Unknown option', function(assert) {
     this.createWidget();
-    var spy = sinon.spy(this.widget, '_invalidate');
+    const spy = sinon.spy(this.widget, '_invalidate');
 
     this.widget.option('test-option', 'test-value');
 
@@ -374,7 +374,7 @@ QUnit.test('get sizes from style on option changing', function(assert) {
 
 QUnit.module('Order of methods calls', $.extend({}, environment, {
     beforeEach: function() {
-        var test = this;
+        const test = this;
         environment.beforeEach.apply(test, arguments);
         test.spies = [
             'onInitCore',
@@ -393,16 +393,16 @@ QUnit.module('Order of methods calls', $.extend({}, environment, {
         this.tick(100);
     },
     checkOrder: function(assert, list) {
-        var i,
-            ii = list.length - 1,
-            result = true;
+        let i;
+        const ii = list.length - 1;
+        let result = true;
         for(i = 0; i < ii && result; ++i) {
             result = list[i].calledBefore(list[i + 1]);
             assert.ok(result, i.toString());
         }
     },
     reset: function() {
-        var test = this;
+        const test = this;
         $.each(test.spies, function(_, name) {
             test[name].reset();
         });
@@ -427,7 +427,7 @@ QUnit.module('Order of methods calls', $.extend({}, environment, {
 }));
 
 QUnit.test('Create and destroy', function(assert) {
-    var onInitialized = sinon.spy();
+    const onInitialized = sinon.spy();
     this.createWidget({
         onInitialized: onInitialized
     });
@@ -604,8 +604,8 @@ QUnit.test('no options and container has no sizes', function(assert) {
 // T665179
 QUnit.test('Do not get size from container if size option is set', function(assert) {
     try {
-        var width = sinon.stub(renderer.fn, 'width').returns(0);
-        var height = sinon.stub(renderer.fn, 'height').returns(0);
+        const width = sinon.stub(renderer.fn, 'width').returns(0);
+        const height = sinon.stub(renderer.fn, 'height').returns(0);
 
         this.createWidget({
             size: {
@@ -720,7 +720,7 @@ QUnit.test('Call render after container is resized', function(assert) {
 
     this.widget.render();
 
-    var size = this.widget.getSize();
+    const size = this.widget.getSize();
 
     // assert
     assert.equal(size.width, 400);
@@ -742,7 +742,7 @@ QUnit.test('size option changed', function(assert) {
     });
 
     // Act
-    var size = this.widget.getSize();
+    const size = this.widget.getSize();
 
     // assert
     assert.equal(size.width, 300);
@@ -766,7 +766,7 @@ QUnit.test('size option changed with initial size. negative width', function(ass
     });
 
     // Act
-    var size = this.widget.getSize();
+    const size = this.widget.getSize();
 
     // assert
     assert.equal(size.width, 0);
@@ -790,7 +790,7 @@ QUnit.test('size option changed with initial size. negative height', function(as
     });
 
     // Act
-    var size = this.widget.getSize();
+    const size = this.widget.getSize();
 
     // assert
     assert.equal(size.width, 0);
@@ -808,7 +808,7 @@ QUnit.test('size option changed with container size. negative height', function(
         }
     });
     // Act
-    var size = this.widget.getSize();
+    const size = this.widget.getSize();
 
     // assert
     assert.equal(size.width, 0);
@@ -828,7 +828,7 @@ QUnit.module('Redraw on resize', $.extend({}, environment, {
     },
 
     createWidget: function() {
-        var result = environment.createWidget.apply(this, arguments);
+        const result = environment.createWidget.apply(this, arguments);
         this.onApplySize.reset();
         return result;
     }
@@ -993,7 +993,7 @@ QUnit.test('default method use console.warn', function(assert) {
 QUnit.test('suppress default method if there is onIncidentOccurred subscription', function(assert) {
     this.createWidget();
 
-    var onIncidentOccurred = sinon.spy();
+    const onIncidentOccurred = sinon.spy();
     this.widget.on('incidentOccurred', onIncidentOccurred);
 
     this.triggerIncident('E100');
@@ -1003,7 +1003,7 @@ QUnit.test('suppress default method if there is onIncidentOccurred subscription'
 });
 
 QUnit.test('call with some arguments', function(assert) {
-    var onIncidentOccurred = sinon.spy();
+    const onIncidentOccurred = sinon.spy();
     this.createWidget({ onIncidentOccurred: onIncidentOccurred });
 
     this.triggerIncident('E100', ['argument1', 'argument2']);
@@ -1023,7 +1023,7 @@ QUnit.test('call with some arguments', function(assert) {
 });
 
 QUnit.test('call with some arguments. warning', function(assert) {
-    var onIncidentOccurred = sinon.spy();
+    const onIncidentOccurred = sinon.spy();
     this.createWidget({ onIncidentOccurred: onIncidentOccurred });
 
     this.triggerIncident('W100', ['argument1', 'argument2']);
@@ -1089,7 +1089,7 @@ QUnit.test('without set drawn handler', function(assert) {
 
 QUnit.test('with set drawn handler', function(assert) {
     // arrange
-    var onDrawnCallback = sinon.spy();
+    const onDrawnCallback = sinon.spy();
     this.createWidget({ onDrawn: onDrawnCallback });
 
     // act
@@ -1150,7 +1150,7 @@ QUnit.test('No options, no bindings', function(assert) {
 
 QUnit.test('Only binding', function(assert) {
     this.createWidget();
-    var callback = sinon.stub();
+    const callback = sinon.stub();
     this.widget.on('testEvent', callback);
 
     this.triggerEvent('testEvent', { data: 'test' });
@@ -1164,8 +1164,8 @@ QUnit.test('Only binding', function(assert) {
 
 QUnit.test('Trigger event with complete', function(assert) {
     this.createWidget();
-    var callback = sinon.stub(),
-        complete = sinon.stub();
+    const callback = sinon.stub();
+    const complete = sinon.stub();
     this.widget.on('testEvent', callback);
 
     this.triggerEvent('testEvent', { data: 'test' }, complete);
@@ -1176,7 +1176,7 @@ QUnit.test('Trigger event with complete', function(assert) {
 });
 
 QUnit.test('Only option', function(assert) {
-    var callback = sinon.stub();
+    const callback = sinon.stub();
     this.createWidget({ onTestEvent: callback });
 
     this.triggerEvent('testEvent', { data: 10 });
@@ -1189,8 +1189,8 @@ QUnit.test('Only option', function(assert) {
 });
 
 QUnit.test('Option and binding', function(assert) {
-    var callback1 = sinon.stub(),
-        callback2 = sinon.stub();
+    const callback1 = sinon.stub();
+    const callback2 = sinon.stub();
     this.createWidget({ onTestEvent: callback1 });
     this.widget.on('testEvent', callback2);
 
@@ -1209,9 +1209,9 @@ QUnit.test('Option and binding', function(assert) {
 });
 
 QUnit.test('Several bindings', function(assert) {
-    var callback1 = sinon.stub(),
-        callback2 = sinon.stub(),
-        callback3 = sinon.stub();
+    const callback1 = sinon.stub();
+    const callback2 = sinon.stub();
+    const callback3 = sinon.stub();
     this.createWidget({ onTestEvent: callback1 });
 
     this.triggerEvent('testEvent', { tag: 1 });
@@ -1276,7 +1276,7 @@ QUnit.test('Several bindings', function(assert) {
 });
 
 QUnit.test('Option changing - set callback', function(assert) {
-    var callback = sinon.stub();
+    const callback = sinon.stub();
     this.createWidget();
 
     this.widget.option('onTestEvent', callback);
@@ -1290,7 +1290,7 @@ QUnit.test('Option changing - set callback', function(assert) {
 });
 
 QUnit.test('Option changing - reset callback', function(assert) {
-    var callback = sinon.stub();
+    const callback = sinon.stub();
     this.createWidget({ onTestEvent: callback });
 
     this.widget.option('onTestEvent', null);
@@ -1316,8 +1316,8 @@ QUnit.module('createResizeHandler', {
 });
 
 QUnit.test('Callback is called after delay', function(assert) {
-    var callback = sinon.spy(),
-        handler = this.create(callback);
+    const callback = sinon.spy();
+    const handler = this.create(callback);
 
     handler();
 
@@ -1329,8 +1329,8 @@ QUnit.test('Callback is called after delay', function(assert) {
 });
 
 QUnit.test('Single callback is called for multiple calls', function(assert) {
-    var callback = sinon.spy(),
-        handler = this.create(callback);
+    const callback = sinon.spy();
+    const handler = this.create(callback);
 
     handler();
     handler();
@@ -1340,8 +1340,8 @@ QUnit.test('Single callback is called for multiple calls', function(assert) {
 });
 
 QUnit.test('Timeout is reset after new call', function(assert) {
-    var callback = sinon.spy(),
-        handler = this.create(callback);
+    const callback = sinon.spy();
+    const handler = this.create(callback);
 
     handler();
     this.tick(60);
@@ -1355,8 +1355,8 @@ QUnit.test('Timeout is reset after new call', function(assert) {
 });
 
 QUnit.test('Callback disposing', function(assert) {
-    var callback = sinon.spy(),
-        handler = this.create(callback);
+    const callback = sinon.spy();
+    const handler = this.create(callback);
 
     handler();
     this.tick(40);
@@ -1405,11 +1405,11 @@ QUnit.test('creation', function(assert) {
 
 QUnit.test('calling', function(assert) {
     this.callbackGetter.returns(this.callback);
-    var trigger = this.create({
+    const trigger = this.create({
         'name-1': { name: 'name-1-n' }
     });
-    var arg = { tag: 'arg' },
-        complete = sinon.spy();
+    const arg = { tag: 'arg' };
+    const complete = sinon.spy();
 
     trigger('name-1-n', arg, complete);
 
@@ -1418,7 +1418,7 @@ QUnit.test('calling', function(assert) {
 });
 
 QUnit.test('calling by unknown name', function(assert) {
-    var trigger = this.create({
+    const trigger = this.create({
         'name-1': { name: 'name-1-n' }
     });
 
@@ -1431,7 +1431,7 @@ QUnit.test('calling by unknown name', function(assert) {
 });
 
 QUnit.test('updating', function(assert) {
-    var trigger = this.create({
+    const trigger = this.create({
         'name-1': {}
     });
     this.callbackGetter.reset();
@@ -1483,7 +1483,7 @@ QUnit.test('Create with disabled state', function(assert) {
 
 QUnit.test('Set disabled state, initially not disabled', function(assert) {
     sinon.stub(this.renderer, 'getGrayScaleFilter').returns({ id: 'grayScaleFilterRef' });
-    var rs = this.createWidget();
+    const rs = this.createWidget();
 
     rs.option({
         disabled: true
@@ -1497,7 +1497,7 @@ QUnit.test('Set disabled state, initially not disabled', function(assert) {
 
 QUnit.test('Reset disabled state, initially disabled', function(assert) {
     sinon.stub(this.renderer, 'getGrayScaleFilter').returns({ id: 'grayScaleFilterRef' });
-    var rs = this.createWidget({
+    const rs = this.createWidget({
         disabled: true
     });
 
@@ -1515,7 +1515,7 @@ QUnit.test('Change disabled option if root has pointer-events attr', function(as
     sinon.stub(this.renderer, 'getGrayScaleFilter').returns({ id: 'grayScaleFilterRef' });
     this.renderer.root.attr({ 'pointer-events': 'some-value' });
 
-    var widget = this.createWidget({
+    const widget = this.createWidget({
         disabled: true
     });
 
@@ -1528,7 +1528,7 @@ QUnit.test('Change disabled option if root has empty pointer-events attr', funct
     sinon.stub(this.renderer, 'getGrayScaleFilter').returns({ id: 'grayScaleFilterRef' });
     this.renderer.root.attr({ 'pointer-events': '' });
 
-    var widget = this.createWidget({
+    const widget = this.createWidget({
         disabled: true
     });
 

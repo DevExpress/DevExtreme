@@ -175,7 +175,7 @@ QUnit.module('modify global action button config', {
     });
 
     QUnit.test('check main fab position after change', (assert) => {
-        var firstSDA = $('#fab-one').dxSpeedDialAction().dxSpeedDialAction('instance');
+        const firstSDA = $('#fab-one').dxSpeedDialAction().dxSpeedDialAction('instance');
         $('#fab-two').dxSpeedDialAction();
 
         const $fabMainElement = $('.' + FAB_MAIN_CLASS);
@@ -333,7 +333,7 @@ QUnit.module('check action buttons click args', {
         }).dxSpeedDialAction('instance');
 
         const $fabMainElement = $('.' + FAB_MAIN_CLASS);
-        let $fabMainContent = $fabMainElement.find('.dx-overlay-content');
+        const $fabMainContent = $fabMainElement.find('.dx-overlay-content');
 
         $fabMainContent.trigger('dxclick');
 

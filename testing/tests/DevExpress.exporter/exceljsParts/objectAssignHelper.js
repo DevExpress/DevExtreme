@@ -5,16 +5,16 @@ function assign(target) {
         throw new TypeError('Cannot convert first argument to object');
     }
 
-    let clone = Object(target);
+    const clone = Object(target);
     for(let currentIndex = 1; currentIndex < arguments.length; currentIndex++) {
-        let source = arguments[currentIndex];
+        const source = arguments[currentIndex];
         if(!typeUtils.isDefined(source)) {
             continue;
         }
 
-        let keysArray = Object.keys(Object(source));
+        const keysArray = Object.keys(Object(source));
         keysArray.forEach((key) => {
-            let descriptor = Object.getOwnPropertyDescriptor(source, key);
+            const descriptor = Object.getOwnPropertyDescriptor(source, key);
             if(typeUtils.isDefined(descriptor) && descriptor.enumerable) {
                 clone[key] = source[key];
             }

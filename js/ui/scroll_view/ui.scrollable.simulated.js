@@ -54,7 +54,7 @@ const KEY_CODES = {
     TAB: 'tab'
 };
 
-var InertiaAnimator = Animator.inherit({
+const InertiaAnimator = Animator.inherit({
     ctor: function(scroller) {
         this.callBase();
         this.scroller = scroller;
@@ -84,7 +84,7 @@ var InertiaAnimator = Animator.inherit({
     }
 });
 
-var BounceAnimator = InertiaAnimator.inherit({
+const BounceAnimator = InertiaAnimator.inherit({
     VELOCITY_LIMIT: BOUNCE_MIN_VELOCITY_LIMIT,
 
     _isFinished: function() {
@@ -101,7 +101,7 @@ var BounceAnimator = InertiaAnimator.inherit({
     }
 });
 
-var Scroller = Class.inherit({
+const Scroller = Class.inherit({
 
     ctor: function(options) {
         this._initOptions(options);
@@ -177,7 +177,7 @@ var Scroller = Class.inherit({
     },
 
     _moveContent: function() {
-        let location = this._location;
+        const location = this._location;
 
         this._$container[this._scrollProp](-location / this._getScaleRatio());
         this._moveContentByTranslator(location);
@@ -223,7 +223,7 @@ var Scroller = Class.inherit({
             return;
         }
 
-        let targetLocation = {};
+        const targetLocation = {};
         targetLocation[this._prop] = translateOffset;
         this._translateOffset = translateOffset;
 
@@ -495,7 +495,7 @@ var Scroller = Class.inherit({
         let contentSize = this._getRealDimension(this._$content.get(0), this._dimension);
 
         if(!isOverflowHidden) {
-            let containerScrollSize = this._$content[0]['scroll' + titleize(this._dimension)] * this._getScaleRatio();
+            const containerScrollSize = this._$content[0]['scroll' + titleize(this._dimension)] * this._getScaleRatio();
 
             contentSize = Math.max(containerScrollSize, contentSize);
         }
@@ -543,10 +543,10 @@ var Scroller = Class.inherit({
 });
 
 
-var hoveredScrollable,
-    activeScrollable;
+let hoveredScrollable;
+let activeScrollable;
 
-var SimulatedStrategy = Class.inherit({
+const SimulatedStrategy = Class.inherit({
 
     ctor: function(scrollable) {
         this._init(scrollable);
@@ -611,11 +611,11 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _applyScaleRatio: function(targetLocation) {
-        for(let direction in this._scrollers) {
-            let prop = this._getPropByDirection(direction);
+        for(const direction in this._scrollers) {
+            const prop = this._getPropByDirection(direction);
 
             if(isDefined(targetLocation[prop])) {
-                let scroller = this._scrollers[direction];
+                const scroller = this._scrollers[direction];
 
                 targetLocation[prop] *= scroller._getScaleRatio();
             }
@@ -811,7 +811,7 @@ var SimulatedStrategy = Class.inherit({
         const prop = this._wheelProp();
         const dimension = this._dimensionByProp(prop);
 
-        let distance = {};
+        const distance = {};
         distance[prop] = page * -this._$container[dimension]();
         this.scrollBy(distance);
     },
@@ -826,7 +826,7 @@ var SimulatedStrategy = Class.inherit({
 
     _scrollToHome: function() {
         const prop = this._wheelProp();
-        let distance = {};
+        const distance = {};
 
         distance[prop] = 0;
         this._component.scrollTo(distance);
@@ -836,7 +836,7 @@ var SimulatedStrategy = Class.inherit({
         const prop = this._wheelProp();
         const dimension = this._dimensionByProp(prop);
 
-        let distance = {};
+        const distance = {};
         distance[prop] = this._$content[dimension]() - this._$container[dimension]();
         this._component.scrollTo(distance);
     },
@@ -860,7 +860,7 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _createActionHandler: function(optionName) {
-        let actionHandler = this._createActionByOption(optionName);
+        const actionHandler = this._createActionByOption(optionName);
 
         return () => {
             actionHandler(extend(this._createActionArgs(), arguments));
@@ -889,7 +889,7 @@ var SimulatedStrategy = Class.inherit({
 
     _eventHandler: function(eventName) {
         const args = [].slice.call(arguments).slice(1);
-        let deferreds = map(this._scrollers, (scroller) => {
+        const deferreds = map(this._scrollers, (scroller) => {
             return scroller['_' + eventName + 'Handler'].apply(scroller, args);
         });
 
@@ -997,8 +997,8 @@ var SimulatedStrategy = Class.inherit({
     },
 
     scrollBy: function(distance) {
-        let verticalScroller = this._scrollers[VERTICAL];
-        let horizontalScroller = this._scrollers[HORIZONTAL];
+        const verticalScroller = this._scrollers[VERTICAL];
+        const horizontalScroller = this._scrollers[HORIZONTAL];
 
         if(verticalScroller) {
             distance.top = verticalScroller._boundLocation(distance.top + verticalScroller._location) - verticalScroller._location;

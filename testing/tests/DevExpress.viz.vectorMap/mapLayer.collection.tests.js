@@ -1,7 +1,7 @@
-var noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    mapLayerModule = require('viz/vector_map/map_layer'),
-    StubMapLayer;
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const mapLayerModule = require('viz/vector_map/map_layer');
+let StubMapLayer;
 
 QUnit.begin(function() {
     StubMapLayer = vizMocks.stubClass(mapLayerModule._TESTS_MapLayer, null, {
@@ -37,9 +37,9 @@ QUnit.module('Basic', {
 });
 
 QUnit.test('Construct', function(assert) {
-    var renderer = this.params.renderer,
-        container = renderer.g.lastCall.returnValue,
-        id = renderer.clipRect.lastCall.returnValue.id;
+    const renderer = this.params.renderer;
+    const container = renderer.g.lastCall.returnValue;
+    const id = renderer.clipRect.lastCall.returnValue.id;
 
     assert.deepEqual(renderer.clipRect.lastCall.args, [], 'clip rect is created');
     assert.deepEqual(renderer.rect.lastCall.args, [], 'background is created');
@@ -49,7 +49,7 @@ QUnit.test('Construct', function(assert) {
     assert.deepEqual(container.attr.lastCall.args, [{ 'class': 'dxm-layers', 'clip-path': id }], 'container settings');
     assert.deepEqual(container.append.lastCall.args, [renderer.root], 'container is appended to container');
     assert.deepEqual(container.enableLinks.lastCall.args, [], 'links are enabled');
-    var trackerHandlers = this.params.tracker.on.lastCall.args[0];
+    const trackerHandlers = this.params.tracker.on.lastCall.args[0];
     assert.strictEqual(typeof trackerHandlers['click'], 'function', 'tracker.click');
     assert.strictEqual(typeof trackerHandlers['hover-on'], 'function', 'tracker.hover-on');
     assert.strictEqual(typeof trackerHandlers['hover-off'], 'function', 'tracker.hover-off');

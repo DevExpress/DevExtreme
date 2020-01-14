@@ -1,4 +1,4 @@
-var utils = require('viz/core/utils');
+const utils = require('viz/core/utils');
 
 QUnit.module('decreaseGaps', {
     beforeEach: function() {
@@ -7,8 +7,8 @@ QUnit.module('decreaseGaps', {
 });
 
 QUnit.test('decrease one value', function(assert) {
-    var margin = { top: 10 },
-        decrease;
+    const margin = { top: 10 };
+    let decrease;
 
     decrease = this.decreaseGaps(margin, ['top'], 7);
 
@@ -17,8 +17,8 @@ QUnit.test('decrease one value', function(assert) {
 });
 
 QUnit.test('decrease two value', function(assert) {
-    var margin = { top: 10, bottom: 10 },
-        decrease;
+    const margin = { top: 10, bottom: 10 };
+    let decrease;
 
     decrease = this.decreaseGaps(margin, ['top', 'bottom'], 8);
 
@@ -28,8 +28,8 @@ QUnit.test('decrease two value', function(assert) {
 });
 
 QUnit.test('One value zero', function(assert) {
-    var margin = { top: 10, bottom: 0 },
-        decrease;
+    const margin = { top: 10, bottom: 0 };
+    let decrease;
 
     decrease = this.decreaseGaps(margin, ['top', 'bottom'], 2);
 
@@ -39,8 +39,8 @@ QUnit.test('One value zero', function(assert) {
 });
 
 QUnit.test('One value less decrease value', function(assert) {
-    var margin = { top: 10, bottom: 1 },
-        decrease;
+    const margin = { top: 10, bottom: 1 };
+    let decrease;
 
     decrease = this.decreaseGaps(margin, ['top', 'bottom'], 3);
 
@@ -50,8 +50,8 @@ QUnit.test('One value less decrease value', function(assert) {
 });
 
 QUnit.test('Sum margin less decrease', function(assert) {
-    var margin = { top: 5, bottom: 12 },
-        decrease;
+    const margin = { top: 5, bottom: 12 };
+    let decrease;
 
     decrease = this.decreaseGaps(margin, ['top', 'bottom'], 30);
 
@@ -61,8 +61,8 @@ QUnit.test('Sum margin less decrease', function(assert) {
 });
 
 QUnit.test('three value', function(assert) {
-    var margin = { top: 5, bottom: 12, left: 30 },
-        decrease;
+    const margin = { top: 5, bottom: 12, left: 30 };
+    let decrease;
 
     decrease = this.decreaseGaps(margin, ['top', 'bottom', 'left'], 30);
 
@@ -73,8 +73,8 @@ QUnit.test('three value', function(assert) {
 });
 
 QUnit.test('value round', function(assert) {
-    var margin = { top: 10, bottom: 10 },
-        decrease;
+    const margin = { top: 10, bottom: 10 };
+    let decrease;
 
     decrease = this.decreaseGaps(margin, ['top', 'bottom'], 5);
 
@@ -93,7 +93,7 @@ QUnit.test('parseScalar', function(assert) {
 });
 
 QUnit.test('enumParser', function(assert) {
-    var parser = utils.enumParser(['one', 'Two', 'THREE']);
+    const parser = utils.enumParser(['one', 'Two', 'THREE']);
     assert.strictEqual(parser('ONE', 'four'), 'one', 'ONE');
     assert.strictEqual(parser('ONE1', 'four'), 'four', 'ONE1');
     assert.strictEqual(parser('thREE', 'four'), 'three', 'thREE');
@@ -136,9 +136,9 @@ QUnit.test('Param is empty/undefined', function(assert) {
 });
 
 QUnit.test('Check options are processed', function(assert) {
-    var options = { font: { size: 14, family: 'FontFamily', weight: 300, color: 'red' } };
+    const options = { font: { size: 14, family: 'FontFamily', weight: 300, color: 'red' } };
 
-    var fontOptions = utils.patchFontOptions(options.font);
+    const fontOptions = utils.patchFontOptions(options.font);
 
     assert.deepEqual(options.font, { size: 14, family: 'FontFamily', weight: 300, color: 'red' });
 
@@ -151,9 +151,9 @@ QUnit.test('Check options are processed', function(assert) {
 });
 
 QUnit.test('Check exceptions', function(assert) {
-    var options = { font: { cursor: 'default', opacity: 0.3, size: 14 } };
+    const options = { font: { cursor: 'default', opacity: 0.3, size: 14 } };
 
-    var fontOptions = utils.patchFontOptions(options.font);
+    const fontOptions = utils.patchFontOptions(options.font);
 
     assert.deepEqual(options.font, { cursor: 'default', opacity: 0.3, size: 14 });
 
@@ -184,7 +184,7 @@ QUnit.module('utils graphic', {
 
 QUnit.test('getCategoriesInfo. Empty categories', function(assert) {
     // arrange,act
-    var info = utils.getCategoriesInfo([]);
+    const info = utils.getCategoriesInfo([]);
 
     // assert
     assert.deepEqual(info, {
@@ -194,7 +194,7 @@ QUnit.test('getCategoriesInfo. Empty categories', function(assert) {
 
 QUnit.test('getCategoriesInfo (no inverted)', function(assert) {
     // arrange,act
-    var info = utils.getCategoriesInfo(this.categories, 'a3', 'a5');
+    const info = utils.getCategoriesInfo(this.categories, 'a3', 'a5');
 
     // assert
     assert.deepEqual(info, {
@@ -207,7 +207,7 @@ QUnit.test('getCategoriesInfo (no inverted)', function(assert) {
 
 QUnit.test('getCategoriesInfo (inverted)', function(assert) {
     // arrange,act
-    var info = utils.getCategoriesInfo(this.categories, 'a5', 'a3');
+    const info = utils.getCategoriesInfo(this.categories, 'a5', 'a3');
 
     // assert
     assert.deepEqual(info, {
@@ -220,7 +220,7 @@ QUnit.test('getCategoriesInfo (inverted)', function(assert) {
 
 QUnit.test('getCategoriesInfo. start categories is not set', function(assert) {
     // arrange,act
-    var info = utils.getCategoriesInfo(this.categories, undefined, 'a3');
+    const info = utils.getCategoriesInfo(this.categories, undefined, 'a3');
 
     // assert
     assert.deepEqual(info, {
@@ -233,7 +233,7 @@ QUnit.test('getCategoriesInfo. start categories is not set', function(assert) {
 
 QUnit.test('getCategoriesInfo. end categories is not set', function(assert) {
     // arrange,act
-    var info = utils.getCategoriesInfo(this.categories, 'a3', undefined);
+    const info = utils.getCategoriesInfo(this.categories, 'a3', undefined);
 
     // assert
     assert.deepEqual(info, {
@@ -246,7 +246,7 @@ QUnit.test('getCategoriesInfo. end categories is not set', function(assert) {
 
 QUnit.test('getCategoriesInfo. categories is not contains start categories', function(assert) {
     // arrange,act
-    var info = utils.getCategoriesInfo(this.categories, 'someCategories', 'a3');
+    const info = utils.getCategoriesInfo(this.categories, 'someCategories', 'a3');
 
     // assert
     assert.deepEqual(info, {
@@ -259,7 +259,7 @@ QUnit.test('getCategoriesInfo. categories is not contains start categories', fun
 
 QUnit.test('getCategoriesInfo. categories is not contains end categories', function(assert) {
     // arrange,act
-    var info = utils.getCategoriesInfo(this.categories, 'a5', 'someCategories');
+    const info = utils.getCategoriesInfo(this.categories, 'a5', 'someCategories');
 
     // assert
     assert.deepEqual(info, {
@@ -284,7 +284,7 @@ QUnit.module('Layout canvas utils', {
 });
 
 QUnit.test('setCanvasValues', function(assert) {
-    var canvas = { top: 11, bottom: 22, left: 33, right: 44 };
+    const canvas = { top: 11, bottom: 22, left: 33, right: 44 };
 
     utils.setCanvasValues(canvas);
 
@@ -299,7 +299,7 @@ QUnit.test('setCanvasValues', function(assert) {
 });
 
 QUnit.test('Single pane - main case (no specific options provided)', function(assert) {
-    var pane = { name: 'default' };
+    const pane = { name: 'default' };
 
     utils.setCanvasValues(this.canvas);
     utils.updatePanesCanvases([pane], this.canvas);
@@ -325,17 +325,17 @@ QUnit.test('Single pane - main case (no specific options provided)', function(as
 });
 
 QUnit.test('Two equal panes - vertical alignment', function(assert) {
-    var topPane = {
-            name: 'topPane',
-            weight: 1
-        },
-        bottomPane = {
-            name: 'bottomPane',
-            weight: 1
-        },
-        chartCanvasHeight = this.canvas.height - this.canvas.top - this.canvas.bottom,
-        panePadding = 10,
-        expectedPaneHeight = (chartCanvasHeight - panePadding) / 2;
+    const topPane = {
+        name: 'topPane',
+        weight: 1
+    };
+    const bottomPane = {
+        name: 'bottomPane',
+        weight: 1
+    };
+    const chartCanvasHeight = this.canvas.height - this.canvas.top - this.canvas.bottom;
+    const panePadding = 10;
+    const expectedPaneHeight = (chartCanvasHeight - panePadding) / 2;
 
     utils.setCanvasValues(this.canvas);
     utils.updatePanesCanvases([topPane, bottomPane], this.canvas);
@@ -371,17 +371,17 @@ QUnit.test('Two equal panes - vertical alignment', function(assert) {
 });
 
 QUnit.test('Two equal panes - rotated, horizontal alignment', function(assert) {
-    var leftPane = {
-            name: 'leftPane',
-            weight: 1
-        },
-        rightPane = {
-            name: 'rightPane',
-            weight: 1
-        },
-        chartCanvasWidth = this.canvas.width - this.canvas.left - this.canvas.right,
-        panePadding = 10,
-        expectedPaneWidth = (chartCanvasWidth - panePadding) / 2;
+    const leftPane = {
+        name: 'leftPane',
+        weight: 1
+    };
+    const rightPane = {
+        name: 'rightPane',
+        weight: 1
+    };
+    const chartCanvasWidth = this.canvas.width - this.canvas.left - this.canvas.right;
+    const panePadding = 10;
+    const expectedPaneWidth = (chartCanvasWidth - panePadding) / 2;
 
     utils.setCanvasValues(this.canvas);
     utils.updatePanesCanvases([leftPane, rightPane], this.canvas, true);

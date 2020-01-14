@@ -1,24 +1,24 @@
-var Config = require('./config'),
-    domAdapter = require('./dom_adapter'),
-    extend = require('./utils/extend').extend,
-    Class = require('./class'),
-    Action = require('./action'),
-    errors = require('./errors'),
-    coreDataUtils = require('./utils/data'),
-    commonUtils = require('./utils/common'),
-    typeUtils = require('./utils/type'),
-    deferredUtils = require('../core/utils/deferred'),
-    Deferred = deferredUtils.Deferred,
-    when = deferredUtils.when,
-    Callbacks = require('./utils/callbacks'),
-    EventsMixin = require('./events_mixin'),
-    publicComponentUtils = require('./utils/public_component'),
-    devices = require('./devices'),
-    isFunction = typeUtils.isFunction,
-    noop = commonUtils.noop;
+const Config = require('./config');
+const domAdapter = require('./dom_adapter');
+const extend = require('./utils/extend').extend;
+const Class = require('./class');
+const Action = require('./action');
+const errors = require('./errors');
+const coreDataUtils = require('./utils/data');
+const commonUtils = require('./utils/common');
+const typeUtils = require('./utils/type');
+const deferredUtils = require('../core/utils/deferred');
+const Deferred = deferredUtils.Deferred;
+const when = deferredUtils.when;
+const Callbacks = require('./utils/callbacks');
+const EventsMixin = require('./events_mixin');
+const publicComponentUtils = require('./utils/public_component');
+const devices = require('./devices');
+const isFunction = typeUtils.isFunction;
+const noop = commonUtils.noop;
 
-var cachedGetters = {};
-var cachedSetters = {};
+const cachedGetters = {};
+const cachedSetters = {};
 
 /**
 * @name Component
@@ -39,7 +39,7 @@ class PostponedOperations {
         if(key in this._postponedOperations) {
             postponedPromise && this._postponedOperations[key].promises.push(postponedPromise);
         } else {
-            var completePromise = new Deferred();
+            const completePromise = new Deferred();
             this._postponedOperations[key] = {
                 fn: fn,
                 completePromise: completePromise,
@@ -51,8 +51,8 @@ class PostponedOperations {
     }
 
     callPostponedOperations() {
-        for(var key in this._postponedOperations) {
-            var operation = this._postponedOperations[key];
+        for(const key in this._postponedOperations) {
+            const operation = this._postponedOperations[key];
 
             if(typeUtils.isDefined(operation)) {
                 if(operation.promises && operation.promises.length) {
@@ -66,7 +66,7 @@ class PostponedOperations {
     }
 }
 
-var Component = Class.inherit({
+const Component = Class.inherit({
 
     _setDeprecatedOptions: function() {
         this._deprecatedOptions = {};
@@ -129,17 +129,17 @@ var Component = Class.inherit({
     },
 
     _setOptionsByDevice: function(customRules) {
-        var rules = this._defaultOptionsRules();
+        let rules = this._defaultOptionsRules();
 
         if(Array.isArray(customRules)) {
             rules = rules.concat(customRules);
         }
 
-        var rulesOptions = this._convertRulesToOptions(rules);
+        const rulesOptions = this._convertRulesToOptions(rules);
 
         extend(true, this._options, rulesOptions);
 
-        for(var fieldName in this._optionsByReference) {
+        for(const fieldName in this._optionsByReference) {
             if(Object.prototype.hasOwnProperty.call(rulesOptions, fieldName)) {
                 this._options[fieldName] = rulesOptions[fieldName];
             }
@@ -147,10 +147,10 @@ var Component = Class.inherit({
     },
 
     _convertRulesToOptions: function(rules) {
-        var options = {};
-        var currentDevice = devices.current();
-        var deviceMatch = function(device, filter) {
-            var filterArray = [];
+        const options = {};
+        const currentDevice = devices.current();
+        const deviceMatch = function(device, filter) {
+            const filterArray = [];
 
             Array.prototype.push.call(filterArray, filter);
 
@@ -158,10 +158,10 @@ var Component = Class.inherit({
                 || commonUtils.findBestMatches(device, filterArray).length > 0;
         };
 
-        for(var i = 0; i < rules.length; i++) {
-            var rule = rules[i],
-                deviceFilter = rule.device || { },
-                match;
+        for(let i = 0; i < rules.length; i++) {
+            const rule = rules[i];
+            const deviceFilter = rule.device || { };
+            var match;
 
             if(isFunction(deviceFilter)) {
                 match = deviceFilter(currentDevice);
@@ -177,9 +177,9 @@ var Component = Class.inherit({
     },
 
     _isInitialOptionValue: function(name) {
-        var optionValue = this.option(name),
-            initialOptionValue = this.initialOption(name),
-            isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : commonUtils.equalByValue(optionValue, initialOptionValue);
+        const optionValue = this.option(name);
+        const initialOptionValue = this.initialOption(name);
+        const isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : commonUtils.equalByValue(optionValue, initialOptionValue);
 
         return isInitialOption;
     },
@@ -243,8 +243,8 @@ var Component = Class.inherit({
             return newValue.is(oldValue);
         }
 
-        var oldValueIsNaN = oldValue !== oldValue,
-            newValueIsNaN = newValue !== newValue;
+        const oldValueIsNaN = oldValue !== oldValue;
+        const newValueIsNaN = newValue !== newValue;
         if(oldValueIsNaN && newValueIsNaN) {
             return true;
         }
@@ -334,7 +334,7 @@ var Component = Class.inherit({
     },
 
     _logWarningIfDeprecated: function(option) {
-        var info = this._deprecatedOptions[option];
+        const info = this._deprecatedOptions[option];
         if(info && !this._deprecatedOptionsSuppressed) {
             this._logDeprecatedWarning(option, info);
         }
@@ -343,7 +343,7 @@ var Component = Class.inherit({
     _logDeprecatedWarningCount: 0,
 
     _logDeprecatedWarning: function(option, info) {
-        var message = info.message || ('Use the \'' + info.alias + '\' option instead');
+        const message = info.message || ('Use the \'' + info.alias + '\' option instead');
         errors.log('W0001', this.NAME, option, info.since, message);
         ++this._logDeprecatedWarningCount;
     },
@@ -359,18 +359,18 @@ var Component = Class.inherit({
     _optionChanging: noop,
 
     _notifyOptionChanged: function(option, value, previousValue) {
-        var that = this;
+        const that = this;
 
         if(this._initialized) {
-            var optionNames = [option].concat(that._getOptionAliasesByName(option));
-            for(var i = 0; i < optionNames.length; i++) {
-                var name = optionNames[i],
-                    args = {
-                        name: name.split(/[.[]/)[0],
-                        fullName: name,
-                        value: value,
-                        previousValue: previousValue
-                    };
+            const optionNames = [option].concat(that._getOptionAliasesByName(option));
+            for(let i = 0; i < optionNames.length; i++) {
+                const name = optionNames[i];
+                const args = {
+                    name: name.split(/[.[]/)[0],
+                    fullName: name,
+                    value: value,
+                    previousValue: previousValue
+                };
 
                 that._optionChangedCallbacks.fireWith(that, [extend(that._defaultActionArgs(), args)]);
                 that._optionChangedAction(extend({}, args));
@@ -383,8 +383,8 @@ var Component = Class.inherit({
     },
 
     initialOption: function(optionName) {
-        var currentOptions,
-            currentInitialized = this._initialized;
+        let currentOptions;
+        const currentInitialized = this._initialized;
         if(!this._initialOptions) {
             currentOptions = this._options;
             this._options = {};
@@ -414,8 +414,8 @@ var Component = Class.inherit({
     },
 
     _createAction: function(actionSource, config) {
-        var that = this,
-            action;
+        const that = this;
+        let action;
 
         return function(e) {
             if(!arguments.length) {
@@ -433,12 +433,12 @@ var Component = Class.inherit({
     },
 
     _createActionByOption: function(optionName, config) {
-        var that = this,
-            action,
-            eventName,
-            actionFunc;
+        const that = this;
+        let action;
+        let eventName;
+        let actionFunc;
 
-        var result = function() {
+        let result = function() {
             if(!eventName) {
                 config = config || {};
 
@@ -463,7 +463,7 @@ var Component = Class.inherit({
             }
 
             if(!action) {
-                var beforeExecute = config.beforeExecute;
+                const beforeExecute = config.beforeExecute;
                 config.beforeExecute = function(args) {
                     beforeExecute && beforeExecute.apply(that, arguments);
                     that.fireEvent(eventName, args.args);
@@ -474,8 +474,8 @@ var Component = Class.inherit({
             }
 
             if(Config().wrapActionsBeforeExecute) {
-                var beforeActionExecute = that.option('beforeActionExecute') || noop;
-                var wrappedAction = beforeActionExecute(that, action, config) || action;
+                const beforeActionExecute = that.option('beforeActionExecute') || noop;
+                const wrappedAction = beforeActionExecute(that, action, config) || action;
                 return wrappedAction.apply(that, arguments);
             }
 
@@ -483,7 +483,7 @@ var Component = Class.inherit({
         };
 
         if(!Config().wrapActionsBeforeExecute) {
-            var onActionCreated = that.option('onActionCreated') || noop;
+            const onActionCreated = that.option('onActionCreated') || noop;
             result = onActionCreated(that, result, config) || result;
         }
 
@@ -500,7 +500,7 @@ var Component = Class.inherit({
     },
 
     isOptionDeprecated: function(name) {
-        var deprecatedOptions = this._getDeprecatedOptions();
+        const deprecatedOptions = this._getDeprecatedOptions();
         return Object.prototype.hasOwnProperty.call(deprecatedOptions, name);
     },
 
@@ -533,16 +533,16 @@ var Component = Class.inherit({
      * @param1 options:object
      */
     option: (function() {
-        var normalizeOptionName = function(that, name) {
-            var deprecate;
+        const normalizeOptionName = function(that, name) {
+            let deprecate;
             if(name) {
                 if(!that._cachedDeprecateNames) {
                     that._cachedDeprecateNames = [];
-                    for(var optionName in that._deprecatedOptions) {
+                    for(const optionName in that._deprecatedOptions) {
                         that._cachedDeprecateNames.push(optionName);
                     }
                 }
-                for(var i = 0; i < that._cachedDeprecateNames.length; i++) {
+                for(let i = 0; i < that._cachedDeprecateNames.length; i++) {
                     if(that._cachedDeprecateNames[i] === name) {
                         deprecate = that._deprecatedOptions[name];
                         break;
@@ -550,7 +550,7 @@ var Component = Class.inherit({
                 }
                 if(deprecate) {
                     that._logWarningIfDeprecated(name);
-                    var alias = deprecate.alias;
+                    const alias = deprecate.alias;
 
                     if(alias) {
                         name = alias;
@@ -561,19 +561,19 @@ var Component = Class.inherit({
             return name;
         };
 
-        var getPreviousName = function(fullName) {
-            var splitNames = fullName.split('.');
+        const getPreviousName = function(fullName) {
+            const splitNames = fullName.split('.');
             splitNames.pop();
             return splitNames.join('.');
         };
 
-        var getFieldName = function(fullName) {
-            var splitNames = fullName.split('.');
+        const getFieldName = function(fullName) {
+            const splitNames = fullName.split('.');
             return splitNames[splitNames.length - 1];
         };
 
-        var getOptionValue = function(options, name, unwrapObservables) {
-            var getter = cachedGetters[name];
+        const getOptionValue = function(options, name, unwrapObservables) {
+            let getter = cachedGetters[name];
             if(!getter) {
                 getter = cachedGetters[name] = coreDataUtils.compileGetter(name);
             }
@@ -581,21 +581,21 @@ var Component = Class.inherit({
             return getter(options, { functionsAsIs: true, unwrapObservables: unwrapObservables });
         };
 
-        var clearOptionsField = function(options, name) {
+        const clearOptionsField = function(options, name) {
             delete options[name];
 
-            var previousFieldName = getPreviousName(name),
-                fieldName = getFieldName(name),
-                fieldObject = previousFieldName ? getOptionValue(options, previousFieldName, false) : options;
+            const previousFieldName = getPreviousName(name);
+            const fieldName = getFieldName(name);
+            const fieldObject = previousFieldName ? getOptionValue(options, previousFieldName, false) : options;
 
             if(fieldObject) {
                 delete fieldObject[fieldName];
             }
         };
 
-        var setOptionsField = function(options, fullName, value) {
-            var fieldName = '',
-                fieldObject;
+        const setOptionsField = function(options, fullName, value) {
+            let fieldName = '';
+            let fieldObject;
 
             do {
                 if(fieldName) {
@@ -611,9 +611,9 @@ var Component = Class.inherit({
             fieldObject[fieldName] = value;
         };
 
-        var normalizeOptionValue = function(that, options, name, value) {
+        const normalizeOptionValue = function(that, options, name, value) {
             if(name) {
-                var alias = normalizeOptionName(that, name);
+                const alias = normalizeOptionName(that, name);
 
                 if(alias && alias !== name) {
                     setOptionsField(options, alias, value);
@@ -624,7 +624,7 @@ var Component = Class.inherit({
 
         var prepareOption = function(that, options, name, value) {
             if(typeUtils.isPlainObject(value)) {
-                for(var valueName in value) {
+                for(const valueName in value) {
                     prepareOption(that, options, name + '.' + valueName, value[valueName]);
                 }
             }
@@ -632,12 +632,12 @@ var Component = Class.inherit({
             normalizeOptionValue(that, options, name, value);
         };
 
-        var setOptionValue = function(that, name, value) {
+        const setOptionValue = function(that, name, value) {
             if(!cachedSetters[name]) {
                 cachedSetters[name] = coreDataUtils.compileSetter(name);
             }
 
-            var path = name.split(/[.[]/);
+            const path = name.split(/[.[]/);
 
             cachedSetters[name](that._options, value, {
                 functionsAsIs: true,
@@ -646,8 +646,8 @@ var Component = Class.inherit({
             });
         };
 
-        var setOption = function(that, name, value) {
-            var previousValue = getOptionValue(that._options, name, false);
+        const setOption = function(that, name, value) {
+            const previousValue = getOptionValue(that._options, name, false);
 
             if(that._optionValuesEqual(name, previousValue, value)) {
                 return;
@@ -662,8 +662,8 @@ var Component = Class.inherit({
         };
 
         return function(options, value) {
-            var that = this,
-                name = options;
+            const that = this;
+            let name = options;
 
             if(arguments.length < 2 && typeUtils.type(name) !== 'object') {
                 name = normalizeOptionName(that, name);
@@ -678,7 +678,7 @@ var Component = Class.inherit({
             that.beginUpdate();
 
             try {
-                var optionName;
+                let optionName;
                 for(optionName in options) {
                     prepareOption(that, options, optionName, options[optionName]);
                 }
@@ -692,7 +692,7 @@ var Component = Class.inherit({
     })(),
 
     _getOptionValue: function(name, context) {
-        var value = this.option(name);
+        const value = this.option(name);
 
         if(isFunction(value)) {
             return value.bind(context)();

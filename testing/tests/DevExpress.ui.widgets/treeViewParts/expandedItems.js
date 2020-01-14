@@ -55,13 +55,13 @@ module('Expanded items', {
     });
 
     test('onItemExpanded callback', assert => {
-        const data = $.extend(true, [], DATA[5]),
-            itemExpandedHandler = sinon.spy(noop),
-            $treeView = initTree({
-                items: data,
-                onItemExpanded: itemExpandedHandler
-            }),
-            treeView = $treeView.dxTreeView('instance');
+        const data = $.extend(true, [], DATA[5]);
+        const itemExpandedHandler = sinon.spy(noop);
+        const $treeView = initTree({
+            items: data,
+            onItemExpanded: itemExpandedHandler
+        });
+        const treeView = $treeView.dxTreeView('instance');
 
         const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
@@ -119,8 +119,8 @@ module('Expanded items', {
             onItemExpanded: itemExpandedHandler
         });
 
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0),
-            event = new $.Event('dxclick');
+        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+        const event = new $.Event('dxclick');
         $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger(event);
 
         const args = itemExpandedHandler.getCall(0).args[0];
@@ -162,15 +162,15 @@ module('Expanded items', {
 
         const data = $.extend(true, [], DATA[5]);
         data[0].expanded = true;
-        const itemCollapsedHandler = sinon.spy(noop),
-            $treeView = initTree({
-                items: data,
-                onItemCollapsed: itemCollapsedHandler
-            }),
-            treeView = $treeView.dxTreeView('instance');
+        const itemCollapsedHandler = sinon.spy(noop);
+        const $treeView = initTree({
+            items: data,
+            onItemCollapsed: itemCollapsedHandler
+        });
+        const treeView = $treeView.dxTreeView('instance');
 
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0),
-            event = new $.Event('dxclick');
+        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+        const event = new $.Event('dxclick');
         $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger(event);
 
         const args = itemCollapsedHandler.getCall(0).args[0];
@@ -202,11 +202,11 @@ module('Expanded items', {
         data[0].expanded = true;
         data[0].disabled = true;
         const $treeView = initTree({
-                items: data
-            }),
-            treeView = $treeView.dxTreeView('instance'),
-            $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0),
-            $icon = $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+            items: data
+        });
+        const treeView = $treeView.dxTreeView('instance');
+        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+        const $icon = $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
 
         $icon.trigger('dxclick');
 
@@ -218,10 +218,10 @@ module('Expanded items', {
         data[0].expanded = true;
 
         const $treeView = initTree({
-                items: data
-            }),
-            treeView = $treeView.dxTreeView('instance'),
-            items = treeView.option('items');
+            items: data
+        });
+        const treeView = $treeView.dxTreeView('instance');
+        const items = treeView.option('items');
 
         items[0].disabled = true;
         treeView.option('items', items);
@@ -233,9 +233,9 @@ module('Expanded items', {
         const data = $.extend(true, [], DATA[5]);
         data[0].items[1].expanded = true;
         const $treeView = initTree({
-                items: data
-            }),
-            $toggleExpandIcon = $($treeView.find('.dx-treeview-toggle-item-visibility').eq(0));
+            items: data
+        });
+        const $toggleExpandIcon = $($treeView.find('.dx-treeview-toggle-item-visibility').eq(0));
 
         $toggleExpandIcon.trigger('dxclick');
         assert.ok(!$toggleExpandIcon.hasClass('dx-treeview-toggle-item-visibility-opened'));

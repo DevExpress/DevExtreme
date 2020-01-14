@@ -1,26 +1,26 @@
-var dependencyInjector = require('../core/utils/dependency_injector'),
-    inArray = require('../core/utils/array').inArray,
-    escapeRegExp = require('../core/utils/common').escapeRegExp,
-    each = require('../core/utils/iterator').each,
-    isPlainObject = require('../core/utils/type').isPlainObject,
-    ldmlNumber = require('./ldml/number'),
-    config = require('../core/config'),
-    errors = require('../core/errors'),
-    toFixed = require('./utils').toFixed;
+const dependencyInjector = require('../core/utils/dependency_injector');
+const inArray = require('../core/utils/array').inArray;
+const escapeRegExp = require('../core/utils/common').escapeRegExp;
+const each = require('../core/utils/iterator').each;
+const isPlainObject = require('../core/utils/type').isPlainObject;
+const ldmlNumber = require('./ldml/number');
+const config = require('../core/config');
+const errors = require('../core/errors');
+const toFixed = require('./utils').toFixed;
 
-var MAX_LARGE_NUMBER_POWER = 4,
-    DECIMAL_BASE = 10;
+const MAX_LARGE_NUMBER_POWER = 4;
+const DECIMAL_BASE = 10;
 
-var NUMERIC_FORMATS = ['currency', 'fixedpoint', 'exponential', 'percent', 'decimal'];
+const NUMERIC_FORMATS = ['currency', 'fixedpoint', 'exponential', 'percent', 'decimal'];
 
-var LargeNumberFormatPostfixes = {
+const LargeNumberFormatPostfixes = {
     1: 'K', // kilo
     2: 'M', // mega
     3: 'B', // billions
     4: 'T' // tera
 };
 
-var LargeNumberFormatPowers = {
+const LargeNumberFormatPowers = {
     'largenumber': 'auto',
     'thousands': 1,
     'millions': 2,
@@ -28,14 +28,14 @@ var LargeNumberFormatPowers = {
     'trillions': 4
 };
 
-var numberLocalization = dependencyInjector({
+const numberLocalization = dependencyInjector({
     numericFormats: NUMERIC_FORMATS,
 
     defaultLargeNumberFormatPostfixes: LargeNumberFormatPostfixes,
 
     _parseNumberFormatString: function(formatType) {
-        var formatList,
-            formatObject = {};
+        let formatList;
+        const formatObject = {};
 
         if(!formatType || typeof formatType !== 'string') return;
 
@@ -58,8 +58,8 @@ var numberLocalization = dependencyInjector({
     },
 
     _calculateNumberPower: function(value, base, minPower, maxPower) {
-        var number = Math.abs(value),
-            power = 0;
+        let number = Math.abs(value);
+        let power = 0;
 
         if(number > 1) {
             while(number && number >= base && (maxPower === undefined || power < maxPower)) {
@@ -76,7 +76,7 @@ var numberLocalization = dependencyInjector({
         return power;
     },
     _getNumberByPower: function(number, power, base) {
-        var result = number;
+        let result = number;
 
         while(power > 0) {
             result = result / base;
@@ -91,8 +91,8 @@ var numberLocalization = dependencyInjector({
         return result;
     },
     _formatNumber: function(value, formatObject, formatConfig) {
-        var powerPostfix;
-        var result;
+        let powerPostfix;
+        let result;
 
         if(formatObject.power === 'auto') {
             formatObject.power = this._calculateNumberPower(value, 1000, 0, MAX_LARGE_NUMBER_POWER);
@@ -112,9 +112,9 @@ var numberLocalization = dependencyInjector({
     },
 
     _formatNumberExponential: function(value, formatConfig) {
-        var power = this._calculateNumberPower(value, DECIMAL_BASE),
-            number = this._getNumberByPower(value, power, DECIMAL_BASE),
-            powString;
+        let power = this._calculateNumberPower(value, DECIMAL_BASE);
+        let number = this._getNumberByPower(value, power, DECIMAL_BASE);
+        let powString;
 
         if(formatConfig.precision === undefined) {
             formatConfig.precision = 1;
@@ -131,12 +131,12 @@ var numberLocalization = dependencyInjector({
     },
 
     _addZeroes: function(value, precision) {
-        var multiplier = Math.pow(10, precision);
-        var sign = value < 0 ? '-' : '';
+        const multiplier = Math.pow(10, precision);
+        const sign = value < 0 ? '-' : '';
 
         value = ((Math.abs(value) * multiplier) >>> 0) / multiplier;
 
-        var result = value.toString();
+        let result = value.toString();
         while(result.length < precision) {
             result = '0' + result;
         }
@@ -145,7 +145,7 @@ var numberLocalization = dependencyInjector({
     },
 
     _addGroupSeparators: function(value) {
-        var parts = value.toString().split('.');
+        const parts = value.toString().split('.');
 
         return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, config().thousandsSeparator) + (parts[1] ? config().decimalSeparator + parts[1] : '');
     },
@@ -218,16 +218,16 @@ var numberLocalization = dependencyInjector({
     },
 
     convertDigits: function(value, toStandard) {
-        var digits = this.format(90, 'decimal');
+        const digits = this.format(90, 'decimal');
 
         if(typeof value !== 'string' || digits[1] === '0') {
             return value;
         }
 
-        var fromFirstDigit = toStandard ? digits[1] : '0',
-            toFirstDigit = toStandard ? '0' : digits[1],
-            fromLastDigit = toStandard ? digits[0] : '9',
-            regExp = new RegExp('[' + fromFirstDigit + '-' + fromLastDigit + ']', 'g');
+        const fromFirstDigit = toStandard ? digits[1] : '0';
+        const toFirstDigit = toStandard ? '0' : digits[1];
+        const fromLastDigit = toStandard ? digits[0] : '9';
+        const regExp = new RegExp('[' + fromFirstDigit + '-' + fromLastDigit + ']', 'g');
 
         return value.replace(regExp, function(char) {
             return String.fromCharCode(char.charCodeAt(0) + (toFirstDigit.charCodeAt(0) - fromFirstDigit.charCodeAt(0)));
@@ -242,10 +242,10 @@ var numberLocalization = dependencyInjector({
             return 1;
         }
 
-        var separators = this._getSeparators(),
-            regExp = new RegExp('[0-9' + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + ']+', 'g'),
-            negativeEtalon = this.format(-1, format).replace(regExp, '1'),
-            cleanedText = text.replace(regExp, '1');
+        const separators = this._getSeparators();
+        const regExp = new RegExp('[0-9' + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + ']+', 'g');
+        const negativeEtalon = this.format(-1, format).replace(regExp, '1');
+        const cleanedText = text.replace(regExp, '1');
 
         return cleanedText === negativeEtalon ? -1 : 1;
     },
@@ -271,7 +271,7 @@ var numberLocalization = dependencyInjector({
             format.type = 'decimal';
         }
 
-        var numberConfig = this._parseNumberFormatString(format.type);
+        const numberConfig = this._parseNumberFormatString(format.type);
 
         if(!numberConfig) {
             return this.convertDigits(ldmlNumber.getFormatter(format.type, this._getSeparators())(value));
@@ -295,12 +295,12 @@ var numberLocalization = dependencyInjector({
             errors.log('W0011');
         }
 
-        var decimalSeparator = this.getDecimalSeparator(),
-            regExp = new RegExp('[^0-9' + escapeRegExp(decimalSeparator) + ']', 'g'),
-            cleanedText = text
-                .replace(regExp, '')
-                .replace(decimalSeparator, '.')
-                .replace(/\.$/g, '');
+        const decimalSeparator = this.getDecimalSeparator();
+        const regExp = new RegExp('[^0-9' + escapeRegExp(decimalSeparator) + ']', 'g');
+        const cleanedText = text
+            .replace(regExp, '')
+            .replace(decimalSeparator, '.')
+            .replace(/\.$/g, '');
 
         if(cleanedText === '.' || cleanedText === '') {
             return null;

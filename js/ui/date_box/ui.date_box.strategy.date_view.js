@@ -1,13 +1,13 @@
-var $ = require('../../core/renderer'),
-    window = require('../../core/utils/window').getWindow(),
-    DateView = require('./ui.date_view'),
-    DateBoxStrategy = require('./ui.date_box.strategy'),
-    support = require('../../core/utils/support'),
-    extend = require('../../core/utils/extend').extend,
-    dateUtils = require('./ui.date_utils'),
-    messageLocalization = require('../../localization/message');
+const $ = require('../../core/renderer');
+const window = require('../../core/utils/window').getWindow();
+const DateView = require('./ui.date_view');
+const DateBoxStrategy = require('./ui.date_box.strategy');
+const support = require('../../core/utils/support');
+const extend = require('../../core/utils/extend').extend;
+const dateUtils = require('./ui.date_utils');
+const messageLocalization = require('../../localization/message');
 
-var DateViewStrategy = DateBoxStrategy.inherit({
+const DateViewStrategy = DateBoxStrategy.inherit({
 
     NAME: 'DateView',
 
@@ -55,8 +55,8 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                 },
                 {
                     device: function(device) {
-                        var platform = device.platform,
-                            version = device.version;
+                        const platform = device.platform;
+                        const version = device.version;
                         return platform === 'generic' || platform === 'ios' || (platform === 'win' && version && version[0] === 10);
                     },
                     options: {
@@ -66,8 +66,8 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                 },
                 {
                     device: function(device) {
-                        var platform = device.platform,
-                            phone = device.phone;
+                        const platform = device.platform;
+                        const phone = device.phone;
 
                         return platform === 'generic' && phone;
                     },
@@ -106,12 +106,12 @@ var DateViewStrategy = DateBoxStrategy.inherit({
             return;
         }
 
-        var popup = this._getPopup();
+        const popup = this._getPopup();
 
         if(this._widget) {
             this._widget.option(this._getWidgetOptions());
         } else {
-            var element = $('<div>').appendTo(popup.$content());
+            const element = $('<div>').appendTo(popup.$content());
             this._widget = this._createWidget(element);
         }
 

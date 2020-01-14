@@ -1,15 +1,15 @@
-var lineSeries = require('./line_series').chart.line,
-    scatterSeries = require('./scatter_series').chart,
-    areaSeries = require('./area_series').chart.area,
-    barSeries = require('./bar_series'),
-    chartBarSeries = barSeries.chart.bar,
-    polarBarSeries = barSeries.polar.bar,
-    extend = require('../../core/utils/extend').extend,
-    each = require('../../core/utils/iterator').each,
+const lineSeries = require('./line_series').chart.line;
+const scatterSeries = require('./scatter_series').chart;
+const areaSeries = require('./area_series').chart.area;
+const barSeries = require('./bar_series');
+const chartBarSeries = barSeries.chart.bar;
+const polarBarSeries = barSeries.polar.bar;
+const extend = require('../../core/utils/extend').extend;
+const each = require('../../core/utils/iterator').each;
 
-    _extend = extend,
-    _each = each,
-    _noop = require('../../core/utils/common').noop;
+const _extend = extend;
+const _each = each;
+const _noop = require('../../core/utils/common').noop;
 
 exports.chart = {};
 exports.chart.bubble = _extend({}, scatterSeries, {
@@ -82,12 +82,12 @@ exports.chart.bubble = _extend({}, scatterSeries, {
     },
 
     _animate: function() {
-        var that = this,
-            lastPointIndex = that._drawnPoints.length - 1,
-            labelsGroup = that._labelsGroup,
-            labelAnimFunc = function() {
-                labelsGroup && labelsGroup.animate({ opacity: 1 }, { duration: that._defaultDuration });
-            };
+        const that = this;
+        const lastPointIndex = that._drawnPoints.length - 1;
+        const labelsGroup = that._labelsGroup;
+        const labelAnimFunc = function() {
+            labelsGroup && labelsGroup.animate({ opacity: 1 }, { duration: that._defaultDuration });
+        };
 
         _each(that._drawnPoints || [], function(i, p) {
             p.animate(i === lastPointIndex ? labelAnimFunc : undefined, { r: p.bubbleSize, translateX: p.x, translateY: p.y });

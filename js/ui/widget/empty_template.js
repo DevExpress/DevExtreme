@@ -1,7 +1,7 @@
-var $ = require('../../core/renderer'),
-    TemplateBase = require('./ui.template_base');
+const $ = require('../../core/renderer');
+const TemplateBase = require('./ui.template_base');
 
-var EmptyTemplate = TemplateBase.inherit({
+const EmptyTemplate = TemplateBase.inherit({
 
     _renderCore: function() {
         return $();

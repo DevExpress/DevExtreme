@@ -1,15 +1,15 @@
 require('viz/tree_map/tree_map');
 
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    module = require('viz/core/tooltip');
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const tooltipModule = require('viz/core/tooltip');
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
 
 QUnit.module('Tooltip', {
     beforeEach: function() {
-        var tooltip = this.tooltip = new vizMocks.Tooltip();
-        module.Tooltip = sinon.spy(function() { return tooltip; });
+        const tooltip = this.tooltip = new vizMocks.Tooltip();
+        tooltipModule.Tooltip = sinon.spy(function() { return tooltip; });
         this.$container = $('#test-container');
     },
 
@@ -24,7 +24,7 @@ QUnit.test('Creation', function(assert) {
         pathModified: 'pathModified-option'
     });
 
-    var params = module.Tooltip.lastCall.args[0];
+    const params = tooltipModule.Tooltip.lastCall.args[0];
     assert.strictEqual(params.cssClass, 'dxtm-tooltip', 'param - css class');
     assert.strictEqual(params.pathModified, 'pathModified-option', 'param - path modified');
     assert.ok(typeof params.eventTrigger === 'function', 'param - event trigger');
@@ -50,7 +50,7 @@ QUnit.test('Options', function(assert) {
 });
 
 QUnit.test('Depends on theme', function(assert) {
-    var widget = this.createWidget();
+    const widget = this.createWidget();
     this.tooltip.update.reset();
     this.tooltip.setRendererOptions.reset();
 
@@ -62,7 +62,7 @@ QUnit.test('Depends on theme', function(assert) {
 
 // T279734
 QUnit.test('hide tooltip on render after hide container', function(assert) {
-    var widget = this.createWidget();
+    const widget = this.createWidget();
     this.$container.hide();
 
     widget.render();

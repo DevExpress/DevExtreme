@@ -1,15 +1,15 @@
-var dataUtils = require('../core/element_data'),
-    Callbacks = require('../core/utils/callbacks'),
-    errors = require('./widget/ui.errors'),
-    DOMComponent = require('../core/dom_component'),
-    extend = require('../core/utils/extend').extend,
-    map = require('../core/utils/iterator').map,
-    ValidationMixin = require('./validation/validation_mixin'),
-    ValidationEngine = require('./validation_engine'),
-    DefaultAdapter = require('./validation/default_adapter'),
-    registerComponent = require('../core/component_registrator');
+const dataUtils = require('../core/element_data');
+const Callbacks = require('../core/utils/callbacks');
+const errors = require('./widget/ui.errors');
+const DOMComponent = require('../core/dom_component');
+const extend = require('../core/utils/extend').extend;
+const map = require('../core/utils/iterator').map;
+const ValidationMixin = require('./validation/validation_mixin');
+const ValidationEngine = require('./validation_engine');
+const DefaultAdapter = require('./validation/default_adapter');
+const registerComponent = require('../core/component_registrator');
 
-var VALIDATOR_CLASS = 'dx-validator';
+const VALIDATOR_CLASS = 'dx-validator';
 
 /**
 * @name dxValidator
@@ -18,7 +18,7 @@ var VALIDATOR_CLASS = 'dx-validator';
 * @module ui/validator
 * @export default
 */
-var Validator = DOMComponent.inherit({
+const Validator = DOMComponent.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
@@ -110,7 +110,7 @@ var Validator = DOMComponent.inherit({
     },
 
     _initGroupRegistration: function() {
-        var group = this._findGroup();
+        const group = this._findGroup();
 
         if(!this._groupWasInit) {
             this.on('disposing', function(args) {
@@ -138,10 +138,10 @@ var Validator = DOMComponent.inherit({
     },
 
     _initAdapter: function() {
-        var that = this,
-            element = that.$element()[0],
-            dxStandardEditor = dataUtils.data(element, 'dx-validation-target'),
-            adapter = that.option('adapter');
+        const that = this;
+        const element = that.$element()[0];
+        const dxStandardEditor = dataUtils.data(element, 'dx-validation-target');
+        let adapter = that.option('adapter');
         if(!adapter) {
             if(dxStandardEditor) {
                 adapter = new DefaultAdapter(dxStandardEditor, this);
@@ -159,7 +159,7 @@ var Validator = DOMComponent.inherit({
             throw errors.Error('E0120');
         }
 
-        var callbacks = adapter.validationRequestsCallbacks;
+        const callbacks = adapter.validationRequestsCallbacks;
 
         if(callbacks) {
             if(Array.isArray(callbacks)) {
@@ -223,14 +223,14 @@ var Validator = DOMComponent.inherit({
     * @return dxValidatorResult
     */
     validate: function(args) {
-        var that = this,
-            adapter = that.option('adapter'),
-            name = that.option('name'),
-            bypass = adapter.bypass && adapter.bypass(),
-            value = (args && args.value !== undefined) ? args.value : adapter.getValue(),
-            currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
-            rules = this._getValidationRules(),
-            result;
+        const that = this;
+        const adapter = that.option('adapter');
+        const name = that.option('name');
+        const bypass = adapter.bypass && adapter.bypass();
+        const value = (args && args.value !== undefined) ? args.value : adapter.getValue();
+        const currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError();
+        const rules = this._getValidationRules();
+        let result;
 
         if(bypass) {
             result = { isValid: true };
@@ -252,12 +252,12 @@ var Validator = DOMComponent.inherit({
     * @publicName reset()
     */
     reset: function() {
-        var that = this,
-            adapter = that.option('adapter'),
-            result = {
-                isValid: true,
-                brokenRule: null
-            };
+        const that = this;
+        const adapter = that.option('adapter');
+        const result = {
+            isValid: true,
+            brokenRule: null
+        };
 
         this._skipValidation = true;
         adapter.reset();
@@ -267,7 +267,7 @@ var Validator = DOMComponent.inherit({
     },
 
     _applyValidationResult: function(result, adapter) {
-        var validatedAction = this._createActionByOption('onValidated');
+        const validatedAction = this._createActionByOption('onValidated');
         result.validator = this;
 
         adapter.applyValidationResults && adapter.applyValidationResults(result);
@@ -283,7 +283,7 @@ var Validator = DOMComponent.inherit({
     * @publicName focus()
     */
     focus: function() {
-        var adapter = this.option('adapter');
+        const adapter = this.option('adapter');
         adapter && adapter.focus && adapter.focus();
     }
 }).include(ValidationMixin);

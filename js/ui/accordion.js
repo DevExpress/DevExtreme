@@ -33,7 +33,7 @@ const ACCORDION_ITEM_DATA_KEY = 'dxAccordionItemData';
 * @module ui/accordion
 * @export default
 */
-var Accordion = CollectionWidget.inherit({
+const Accordion = CollectionWidget.inherit({
 
     _activeStateUnit: '.' + ACCORDION_ITEM_CLASS,
 
@@ -185,7 +185,7 @@ var Accordion = CollectionWidget.inherit({
         this.option('selectionRequired', !this.option('collapsible'));
         this.option('selectionMode', this.option('multiple') ? 'multiple' : 'single');
 
-        var $element = this.$element();
+        const $element = this.$element();
         $element.addClass(ACCORDION_CLASS);
 
         this._$container = $('<div>').addClass(ACCORDION_WRAPPER_CLASS);
@@ -292,7 +292,7 @@ var Accordion = CollectionWidget.inherit({
     },
 
     _renderItemContent: function(args) {
-        var itemTitle = this.callBase(extend({}, args, {
+        const itemTitle = this.callBase(extend({}, args, {
             contentClass: ACCORDION_ITEM_TITLE_CLASS,
             templateProperty: 'titleTemplate',
             defaultTemplateName: this.option('itemTitleTemplate')
@@ -300,7 +300,7 @@ var Accordion = CollectionWidget.inherit({
 
         this._attachItemTitleClickAction(itemTitle);
 
-        var deferred = new Deferred();
+        const deferred = new Deferred();
         if(isDefined(this._deferredItems[args.index])) {
             this._deferredItems[args.index] = deferred;
         } else {
@@ -318,7 +318,7 @@ var Accordion = CollectionWidget.inherit({
     },
 
     _attachItemTitleClickAction: function(itemTitle) {
-        var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
         eventsEngine.off(itemTitle, eventName);
         eventsEngine.on(itemTitle, eventName, this._itemTitleClickHandler.bind(this));
@@ -341,20 +341,20 @@ var Accordion = CollectionWidget.inherit({
     },
 
     _updateItems: function(addedSelection, removedSelection) {
-        var $items = this._itemElements(),
-            that = this;
+        const $items = this._itemElements();
+        const that = this;
 
         iteratorUtils.each(addedSelection, function(_, index) {
             that._deferredItems[index].resolve();
 
-            var $item = $items.eq(index)
+            const $item = $items.eq(index)
                 .addClass(ACCORDION_ITEM_OPENED_CLASS)
                 .removeClass(ACCORDION_ITEM_CLOSED_CLASS);
             that.setAria('hidden', false, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
         });
 
         iteratorUtils.each(removedSelection, function(_, index) {
-            var $item = $items.eq(index)
+            const $item = $items.eq(index)
                 .removeClass(ACCORDION_ITEM_OPENED_CLASS);
             that.setAria('hidden', true, $item.find('.' + ACCORDION_ITEM_BODY_CLASS));
         });
@@ -371,9 +371,9 @@ var Accordion = CollectionWidget.inherit({
     },
 
     _updateItemHeights: function(skipAnimation) {
-        var that = this,
-            deferredAnimate = that._deferredAnimate,
-            itemHeight = this._splitFreeSpace(this._calculateFreeSpace());
+        const that = this;
+        const deferredAnimate = that._deferredAnimate;
+        const itemHeight = this._splitFreeSpace(this._calculateFreeSpace());
 
         clearTimeout(this._animationTimer);
 
@@ -387,22 +387,22 @@ var Accordion = CollectionWidget.inherit({
     },
 
     _updateItemHeight: function($item, itemHeight, skipAnimation) {
-        var $title = $item.children('.' + ACCORDION_ITEM_TITLE_CLASS);
+        const $title = $item.children('.' + ACCORDION_ITEM_TITLE_CLASS);
 
         if(fx.isAnimating($item)) {
             fx.stop($item);
         }
 
-        var startItemHeight = $item.outerHeight(),
-            finalItemHeight = $item.hasClass(ACCORDION_ITEM_OPENED_CLASS)
-                ? itemHeight + $title.outerHeight() || $item.height('auto').outerHeight()
-                : $title.outerHeight();
+        const startItemHeight = $item.outerHeight();
+        const finalItemHeight = $item.hasClass(ACCORDION_ITEM_OPENED_CLASS)
+            ? itemHeight + $title.outerHeight() || $item.height('auto').outerHeight()
+            : $title.outerHeight();
 
         return this._animateItem($item, startItemHeight, finalItemHeight, skipAnimation, !!itemHeight);
     },
 
     _animateItem: function($element, startHeight, endHeight, skipAnimation, fixedHeight) {
-        var d;
+        let d;
         if(skipAnimation || startHeight === endHeight) {
             $element.css('height', endHeight);
             d = new Deferred().resolve();
@@ -436,13 +436,13 @@ var Accordion = CollectionWidget.inherit({
     },
 
     _calculateFreeSpace: function() {
-        var height = this.option('height');
+        const height = this.option('height');
         if(height === undefined || height === 'auto') {
             return;
         }
 
-        var $titles = this._itemTitles(),
-            itemsHeight = 0;
+        const $titles = this._itemTitles();
+        let itemsHeight = 0;
 
         iteratorUtils.each($titles, function(_, title) {
             itemsHeight += $(title).outerHeight();

@@ -11,7 +11,7 @@ QUnit.test('markup init', function(assert) {
         assert.ok(true, 'This test is not actual for mobile devices, dxclick add onclick=\'void(0)\' to every button in mobile');
         return;
     }
-    var $etalon = $('<div/>').html(
+    const $etalon = $('<div/>').html(
         '<div id="container" class="dx-filterbuilder dx-widget">'
             + '<div class="dx-filterbuilder-group">'
                 + '<div class="dx-filterbuilder-group-item">'
@@ -23,12 +23,12 @@ QUnit.test('markup init', function(assert) {
         + '</div>'
     );
 
-    var element = $('#container').dxFilterBuilder();
+    const element = $('#container').dxFilterBuilder();
     assert.equal(element.parent().html(), $etalon.html());
 });
 
 QUnit.test('filterbuilder is created by different values', function(assert) {
-    var instance = $('#container').dxFilterBuilder({
+    const instance = $('#container').dxFilterBuilder({
         fields: fields
     }).dxFilterBuilder('instance');
 
@@ -53,7 +53,7 @@ QUnit.test('filter Content init by one condition', function(assert) {
         assert.ok(true, 'This test is not actual for mobile devices, dxclick add onclick=\'void(0)\' to every button in mobile');
         return;
     }
-    var $etalon = $('<div/>').html(
+    const $etalon = $('<div/>').html(
         '<div class="dx-filterbuilder-group">'
             + '<div class="dx-filterbuilder-group-item">'
                 + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0"></div>'
@@ -75,7 +75,7 @@ QUnit.test('filter Content init by one condition', function(assert) {
         + '</div>'
     );
 
-    var element = $('#container').dxFilterBuilder({
+    const element = $('#container').dxFilterBuilder({
         fields: fields,
         value: [[['CompanyName', '=', 'K&S Music'], 'Or'], 'And']
     });
@@ -87,7 +87,7 @@ QUnit.test('filter Content init by several conditions', function(assert) {
         assert.ok(true, 'This test is not actual for mobile devices, because dxclick add onclick=\'void(0)\' to every button in mobile');
         return;
     }
-    var $etalon = $('<div/>').html(
+    const $etalon = $('<div/>').html(
         '<div class="dx-filterbuilder-group">'
             + '<div class="dx-filterbuilder-group-item">'
                 + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0"></div>'
@@ -110,7 +110,7 @@ QUnit.test('filter Content init by several conditions', function(assert) {
         + '</div>'
     );
 
-    var element = $('#container').dxFilterBuilder({
+    const element = $('#container').dxFilterBuilder({
         fields: fields,
         value: [['CompanyName', '=', 'K&S Music'], 'or', ['Zipcode', '=', '98027']]
     });

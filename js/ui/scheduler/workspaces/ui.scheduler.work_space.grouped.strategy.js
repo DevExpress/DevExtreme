@@ -1,10 +1,10 @@
-var Class = require('../../../core/class'),
-    abstract = Class.abstract;
+const Class = require('../../../core/class');
+const abstract = Class.abstract;
 
-var LAST_GROUP_CELL_CLASS = 'dx-scheduler-last-group-cell',
-    FIRST_GROUP_CELL_CLASS = 'dx-scheduler-first-group-cell';
+const LAST_GROUP_CELL_CLASS = 'dx-scheduler-last-group-cell';
+const FIRST_GROUP_CELL_CLASS = 'dx-scheduler-first-group-cell';
 
-var GroupedStrategy = Class.inherit({
+const GroupedStrategy = Class.inherit({
 
     ctor: function(workSpace) {
         this._workSpace = workSpace;

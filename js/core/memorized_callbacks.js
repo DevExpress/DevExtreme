@@ -1,10 +1,10 @@
-var each = require('../core/utils/iterator').each,
-    Callbacks = require('./utils/callbacks');
+const each = require('../core/utils/iterator').each;
+const Callbacks = require('./utils/callbacks');
 
-var MemorizedCallbacks = function() {
+const MemorizedCallbacks = function() {
 
-    var memory = [];
-    var callbacks = Callbacks();
+    const memory = [];
+    const callbacks = Callbacks();
 
     this.add = function(fn) {
         each(memory, function(_, item) {

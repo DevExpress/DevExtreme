@@ -2,8 +2,8 @@ require('../../helpers/qunitPerformanceExtension.js');
 
 require('common.css!');
 
-var $ = require('jquery'),
-    resizeCallbacks = require('core/utils/resize_callbacks');
+const $ = require('jquery');
+const resizeCallbacks = require('core/utils/resize_callbacks');
 
 require('ui/accordion');
 require('ui/tabs');
@@ -13,7 +13,7 @@ QUnit.testStart(function() {
 });
 
 QUnit.performanceTest('dxTabs should force minimum relayout count on creation', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('#element').dxTabs({
             items: [1, 2, 3],
             scrollingEnabled: false
@@ -29,7 +29,7 @@ QUnit.performanceTest('dxTabs without scrolling should not force relayout on dxs
         scrollingEnabled: false
     });
 
-    var measureFunction = function() {
+    const measureFunction = function() {
         resizeCallbacks.fire();
     };
 
@@ -37,7 +37,7 @@ QUnit.performanceTest('dxTabs without scrolling should not force relayout on dxs
 });
 
 QUnit.performanceTest('Accordion should force minimum relayout count on creation', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('#element').dxAccordion({
             items: [1, 2, 3, 4, 5, 6, 7]
         });
@@ -47,11 +47,11 @@ QUnit.performanceTest('Accordion should force minimum relayout count on creation
 });
 
 QUnit.performanceTest('Accordion should force minimum relayout count on selection change', function(assert) {
-    var $element = $('#element').dxAccordion({
+    const $element = $('#element').dxAccordion({
         items: [1, 2, 3, 4, 5, 6, 7]
     });
 
-    var measureFunction = function() {
+    const measureFunction = function() {
         $element.dxAccordion('option', 'selectedIndex', 1);
     };
 

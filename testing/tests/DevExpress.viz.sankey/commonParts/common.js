@@ -1,23 +1,23 @@
-var $ = require('jquery'),
-    vizMocks = require('../../../helpers/vizMocks.js'),
-    rendererModule = require('viz/core/renderers/renderer'),
-    find = function(array, predicate) {
-        return array.filter(predicate)[0];
-    };
+const $ = require('jquery');
+const vizMocks = require('../../../helpers/vizMocks.js');
+const rendererModule = require('viz/core/renderers/renderer');
+const find = function(array, predicate) {
+    return array.filter(predicate)[0];
+};
 
 require('viz/sankey/sankey');
 require('viz/themes');
 
-var layoutBuilder = require('viz/sankey/layout'),
-    spiesLayoutBuilder = {
-        computeLayout: sinon.spy(layoutBuilder, 'computeLayout'),
-        _computeNodes: sinon.spy(layoutBuilder, '_computeNodes')
-    };
+const layoutBuilder = require('viz/sankey/layout');
+const spiesLayoutBuilder = {
+    computeLayout: sinon.spy(layoutBuilder, 'computeLayout'),
+    _computeNodes: sinon.spy(layoutBuilder, '_computeNodes')
+};
 
 $('#qunit-fixture').append('<div id="test-container"></div>');
 
 function createSankey(options) {
-    var defaultOptions = {
+    const defaultOptions = {
         node: {
             width: 15
         }
@@ -25,9 +25,9 @@ function createSankey(options) {
     return $('#test-container').dxSankey($.extend({}, defaultOptions, options)).dxSankey('instance');
 }
 
-var environment = {
+const environment = {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.renderer = new vizMocks.Renderer();
 
         this.linksGroupIndex = 0;
@@ -80,7 +80,7 @@ var environment = {
     }
 };
 
-var testData = {
+const testData = {
     countriesData: [
         { source: 'Brazil', target: 'Portugal', weight: 5 },
         { source: 'Brazil', target: 'France', weight: 1 },

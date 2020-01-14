@@ -23,7 +23,7 @@ const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
 * @module ui/text_area
 * @export default
 */
-var TextArea = TextBox.inherit({
+const TextArea = TextBox.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
@@ -118,7 +118,7 @@ var TextArea = TextBox.inherit({
     },
 
     _createInput: function() {
-        var $input = $('<textarea>');
+        const $input = $('<textarea>');
         this._applyInputAttributes($input, this.option('inputAttr'));
         this._updateInputAutoResizeAppearance($input);
 
@@ -170,12 +170,12 @@ var TextArea = TextBox.inherit({
 
 
     _renderDimensions: function() {
-        var $element = this.$element();
-        var element = $element.get(0);
-        var width = this._getOptionValue('width', element);
-        var height = this._getOptionValue('height', element);
-        var minHeight = this.option('minHeight');
-        var maxHeight = this.option('maxHeight');
+        const $element = this.$element();
+        const element = $element.get(0);
+        const width = this._getOptionValue('width', element);
+        const height = this._getOptionValue('height', element);
+        const minHeight = this.option('minHeight');
+        const maxHeight = this.option('maxHeight');
 
         $element.css({
             minHeight: minHeight !== undefined ? minHeight : '',
@@ -214,8 +214,8 @@ var TextArea = TextBox.inherit({
     },
 
     _updateInputHeight: function() {
-        var $input = this._input();
-        var autoHeightResizing = this.option('height') === undefined && this.option('autoResizeEnabled');
+        const $input = this._input();
+        const autoHeightResizing = this.option('height') === undefined && this.option('autoResizeEnabled');
 
         if(!autoHeightResizing) {
             $input.css('height', '');
@@ -227,21 +227,21 @@ var TextArea = TextBox.inherit({
 
         $input.css('height', 0);
 
-        var heightDifference = this._getHeightDifference($input);
+        const heightDifference = this._getHeightDifference($input);
 
         this._renderDimensions();
 
-        var minHeight = this._getBoundaryHeight('minHeight'),
-            maxHeight = this._getBoundaryHeight('maxHeight'),
-            inputHeight = $input[0].scrollHeight;
+        const minHeight = this._getBoundaryHeight('minHeight');
+        const maxHeight = this._getBoundaryHeight('maxHeight');
+        let inputHeight = $input[0].scrollHeight;
 
         if(minHeight !== undefined) {
             inputHeight = Math.max(inputHeight, minHeight - heightDifference);
         }
 
         if(maxHeight !== undefined) {
-            var adjustedMaxHeight = maxHeight - heightDifference;
-            var needScroll = inputHeight > adjustedMaxHeight;
+            const adjustedMaxHeight = maxHeight - heightDifference;
+            const needScroll = inputHeight > adjustedMaxHeight;
 
             inputHeight = Math.min(inputHeight, adjustedMaxHeight);
             this._updateInputAutoResizeAppearance($input, !needScroll);
@@ -255,7 +255,7 @@ var TextArea = TextBox.inherit({
     },
 
     _getBoundaryHeight: function(optionName) {
-        var boundaryValue = this.option(optionName);
+        const boundaryValue = this.option(optionName);
 
         if(isDefined(boundaryValue)) {
             return typeof boundaryValue === 'number' ? boundaryValue : sizeUtils.parseHeight(boundaryValue, this._$textEditorContainer.get(0));
@@ -272,7 +272,7 @@ var TextArea = TextBox.inherit({
 
     _updateInputAutoResizeAppearance: function($input, isAutoResizeEnabled) {
         if($input) {
-            var autoResizeEnabled = ensureDefined(isAutoResizeEnabled, this.option('autoResizeEnabled'));
+            const autoResizeEnabled = ensureDefined(isAutoResizeEnabled, this.option('autoResizeEnabled'));
 
             $input.toggleClass(TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE, autoResizeEnabled);
         }

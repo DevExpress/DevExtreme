@@ -1,23 +1,23 @@
-var $ = require('../../core/renderer'),
-    domAdapter = require('../../core/dom_adapter'),
-    ko = require('knockout'),
-    typeUtils = require('../../core/utils/type'),
-    TemplateBase = require('../../ui/widget/ui.template_base'),
-    domUtils = require('../../core/utils/dom'),
-    getClosestNodeWithContext = require('./utils').getClosestNodeWithContext;
+const $ = require('../../core/renderer');
+const domAdapter = require('../../core/dom_adapter');
+const ko = require('knockout');
+const typeUtils = require('../../core/utils/type');
+const TemplateBase = require('../../ui/widget/ui.template_base');
+const domUtils = require('../../core/utils/dom');
+const getClosestNodeWithContext = require('./utils').getClosestNodeWithContext;
 
-var getParentContext = function(data) {
-    var parentNode = domAdapter.createElement('div');
+const getParentContext = function(data) {
+    const parentNode = domAdapter.createElement('div');
 
     ko.applyBindingsToNode(parentNode, null, data);
-    var parentContext = ko.contextFor(parentNode);
+    const parentContext = ko.contextFor(parentNode);
 
     ko.cleanNode(parentNode);
 
     return parentContext;
 };
 
-var KoTemplate = TemplateBase.inherit({
+const KoTemplate = TemplateBase.inherit({
 
     ctor: function(element) {
         this._element = element;
@@ -27,15 +27,15 @@ var KoTemplate = TemplateBase.inherit({
     },
 
     _registerKoTemplate: function() {
-        var template = this._template.get(0);
+        const template = this._template.get(0);
         new ko.templateSources.anonymousTemplate(template)['nodes'](template);
     },
 
     _prepareDataForContainer: function(data, container) {
         if(container && container.length) {
-            var containerElement = container.get(0);
-            var node = getClosestNodeWithContext(containerElement);
-            var containerContext = ko.contextFor(node);
+            const containerElement = container.get(0);
+            const node = getClosestNodeWithContext(containerElement);
+            const containerContext = ko.contextFor(node);
             data = data !== undefined ? data : ko.dataFor(node) || {};
 
             if(containerContext) {
@@ -50,15 +50,15 @@ var KoTemplate = TemplateBase.inherit({
     },
 
     _renderCore: function(options) {
-        var model = this._prepareDataForContainer(options.model, $(options.container));
+        const model = this._prepareDataForContainer(options.model, $(options.container));
 
         if(typeUtils.isDefined(options.index)) {
             model.$index = options.index;
         }
 
-        var $placeholder = $('<div>').appendTo(options.container);
+        const $placeholder = $('<div>').appendTo(options.container);
 
-        var $result;
+        let $result;
         ko.renderTemplate(this._template.get(0), model, {
             afterRender: function(nodes) {
                 $result = $(nodes);

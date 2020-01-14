@@ -1,12 +1,12 @@
-var eventsEngine = require('events/core/events_engine');
+const eventsEngine = require('events/core/events_engine');
 
 QUnit.testStart(function() {
-    var markup = '<div id="element"><div id="inner"></div></div>';
+    const markup = '<div id="element"><div id="inner"></div></div>';
     $('#qunit-fixture').html(markup);
 });
 
-var $ = require('jquery'),
-    removeEvent = require('core/remove_event');
+var $ = require('jquery');
+const removeEvent = require('core/remove_event');
 
 QUnit.module('event firing');
 
@@ -35,7 +35,7 @@ QUnit.test('dxremove event should be fired for nested removing element', functio
 });
 
 QUnit.test('dxremove event should not bubble', function(assert) {
-    var counter = 0;
+    let counter = 0;
     $('#element').on(removeEvent, function() {
         counter++;
     });
@@ -45,8 +45,8 @@ QUnit.test('dxremove event should not bubble', function(assert) {
 });
 
 QUnit.test('dxremove event should not triggers for element without any subscriptions', function(assert) {
-    var counter = 0,
-        originalTriggerHandler = eventsEngine.triggerHandler;
+    let counter = 0;
+    const originalTriggerHandler = eventsEngine.triggerHandler;
 
     try {
         eventsEngine.triggerHandler = function() {
@@ -67,7 +67,7 @@ QUnit.test('dxremove event should be fired on all elements', function(assert) {
         <div class="item"></div>\
     ');
 
-    var counter = 0;
+    let counter = 0;
     $('.item').on(removeEvent, function(e) {
         if(e.target.parentNode) {
             e.target.parentNode.removeChild(e.target);

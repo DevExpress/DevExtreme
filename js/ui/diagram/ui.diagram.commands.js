@@ -300,13 +300,13 @@ const DiagramCommands = {
         }
     },
     _getBlobByDataURI(window, dataURI, mimeString) {
-        var byteString = window.atob(dataURI.split(',')[1]);
-        var arrayBuffer = new ArrayBuffer(byteString.length);
-        var ia = new Uint8Array(arrayBuffer);
-        for(var i = 0; i < byteString.length; i++) {
+        const byteString = window.atob(dataURI.split(',')[1]);
+        const arrayBuffer = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(arrayBuffer);
+        for(let i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
-        var dataView = new DataView(arrayBuffer);
+        const dataView = new DataView(arrayBuffer);
         return new window.Blob([dataView], { type: mimeString });
     }
 };

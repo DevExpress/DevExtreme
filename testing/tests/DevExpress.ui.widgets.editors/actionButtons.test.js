@@ -232,7 +232,7 @@ module('rendering', () => {
 
         test('should render predefined button (\'clear\') configurated as object', (assert) => {
             const $textBox = $('<div>').dxTextBox({ showClearButton: true, buttons: [{ name: 'clear' }] });
-            let $after = getTextEditorButtons($textBox).$after;
+            const $after = getTextEditorButtons($textBox).$after;
             assert.ok(isClearButton($after.eq(0)));
         });
 

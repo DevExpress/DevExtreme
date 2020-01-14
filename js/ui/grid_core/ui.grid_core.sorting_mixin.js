@@ -1,21 +1,21 @@
 import { isDefined } from '../../core/utils/type';
 
-var SORT_CLASS = 'dx-sort',
-    SORT_NONE_CLASS = 'dx-sort-none',
-    SORTUP_CLASS = 'dx-sort-up',
-    SORTDOWN_CLASS = 'dx-sort-down',
-    HEADERS_ACTION_CLASS = 'action';
+const SORT_CLASS = 'dx-sort';
+const SORT_NONE_CLASS = 'dx-sort-none';
+const SORTUP_CLASS = 'dx-sort-up';
+const SORTDOWN_CLASS = 'dx-sort-down';
+const HEADERS_ACTION_CLASS = 'action';
 
 
 module.exports = {
     _applyColumnState: function(options) {
-        var that = this,
-            ariaSortState,
-            $sortIndicator,
-            sortingMode = that.option('sorting.mode'),
-            rootElement = options.rootElement,
-            column = options.column,
-            $indicatorsContainer = that._getIndicatorContainer(rootElement);
+        const that = this;
+        let ariaSortState;
+        let $sortIndicator;
+        const sortingMode = that.option('sorting.mode');
+        const rootElement = options.rootElement;
+        const column = options.column;
+        const $indicatorsContainer = that._getIndicatorContainer(rootElement);
 
         if(options.name === 'sort') {
             rootElement.find('.' + SORT_CLASS).remove();
@@ -50,10 +50,10 @@ module.exports = {
     },
 
     _renderIndicator: function(options) {
-        var rtlEnabled,
-            column = options.column,
-            $container = options.container,
-            $indicator = options.indicator;
+        let rtlEnabled;
+        const column = options.column;
+        const $container = options.container;
+        const $indicator = options.indicator;
 
         if(options.name === 'sort') {
             rtlEnabled = this.option('rtlEnabled');
@@ -80,7 +80,7 @@ module.exports = {
     },
 
     _getIndicatorElements: function($cell, returnAll) {
-        var $indicatorElements = this.callBase($cell);
+        const $indicatorElements = this.callBase($cell);
 
         return returnAll ? $indicatorElements : $indicatorElements && $indicatorElements.not('.' + SORT_NONE_CLASS);
     }

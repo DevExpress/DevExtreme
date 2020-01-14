@@ -1,8 +1,8 @@
-var _ln = Math.log,
-    _LN2 = Math.LN2;
+const _ln = Math.log;
+const _LN2 = Math.LN2;
 
 function GestureHandler(params) {
-    var that = this;
+    const that = this;
     that._projection = params.projection;
     that._renderer = params.renderer;
     that._x = that._y = 0;
@@ -18,8 +18,8 @@ GestureHandler.prototype = {
     },
 
     _subscribeToTracker: function(tracker) {
-        var that = this,
-            isActive = false;
+        const that = this;
+        let isActive = false;
         that._offTracker = tracker.on({
             'start': function(arg) {
                 // TODO: This is an implicit dependency on the ControlBar which must be removed
@@ -60,7 +60,7 @@ GestureHandler.prototype = {
     },
 
     _processMove: function(arg) {
-        var that = this;
+        const that = this;
         if(that._centeringEnabled) {
             that._renderer.root.attr({ cursor: 'move' });
             that._projection.moveCenter([that._x - arg.x, that._y - arg.y]);
@@ -77,10 +77,10 @@ GestureHandler.prototype = {
     },
 
     _processZoom: function(arg) {
-        var that = this,
-            delta,
-            screenPosition,
-            coords;
+        const that = this;
+        let delta;
+        let screenPosition;
+        let coords;
         if(that._zoomingEnabled) {
             if(arg.delta) {
                 delta = arg.delta;

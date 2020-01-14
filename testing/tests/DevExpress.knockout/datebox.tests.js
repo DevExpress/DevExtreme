@@ -1,16 +1,16 @@
-var $ = require('jquery'),
-    fx = require('animation/fx'),
-    support = require('core/utils/support'),
-    devices = require('core/devices'),
-    uiDateUtils = require('ui/date_box/ui.date_utils'),
-    dateLocalization = require('localization/date'),
-    ko = require('knockout');
+const $ = require('jquery');
+const fx = require('animation/fx');
+const support = require('core/utils/support');
+const devices = require('core/devices');
+const uiDateUtils = require('ui/date_box/ui.date_utils');
+const dateLocalization = require('localization/date');
+const ko = require('knockout');
 
 require('integration/knockout');
 require('ui/date_box');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="dateBox"></div>\
         \
         <div id="several">\
@@ -26,18 +26,18 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var toStandardDateFormat = uiDateUtils.toStandardDateFormat;
+const toStandardDateFormat = uiDateUtils.toStandardDateFormat;
 
-var FORMATS_MAP = uiDateUtils.FORMATS_MAP,
-    TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input',
-    widgetName = 'dxDateBox';
+const FORMATS_MAP = uiDateUtils.FORMATS_MAP;
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const widgetName = 'dxDateBox';
 
 
-var getInstanceWidget = function(instance) {
+const getInstanceWidget = function(instance) {
     return instance._strategy._widget;
 };
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers(new Date().valueOf());
 
@@ -50,8 +50,8 @@ var moduleConfig = {
     }
 };
 
-var getExpectedResult = function(date, mode, stringDate) {
-    var localizedDate;
+const getExpectedResult = function(date, mode, stringDate) {
+    let localizedDate;
 
     if(FORMATS_MAP[mode]) {
         localizedDate = dateLocalization.format(date, FORMATS_MAP[mode]);
@@ -66,20 +66,20 @@ var getExpectedResult = function(date, mode, stringDate) {
 QUnit.module('options changed callbacks', moduleConfig);
 
 QUnit.test('several editors for same value', function(assert) {
-    var value = new Date(2012, 10, 26, 16, 40, 0),
-        newValue = null,
-        vm = {
-            value: ko.observable(value)
-        };
+    const value = new Date(2012, 10, 26, 16, 40, 0);
+    let newValue = null;
+    const vm = {
+        value: ko.observable(value)
+    };
 
     ko.applyBindings(vm, $('#several').get(0));
 
-    var $date = $('#dateboxWithDateFormat').find('.dx-texteditor-input'),
-        $datetime = $('#dateboxWithDateTimeFormat').find('.dx-texteditor-input'),
-        $time = $('#dateboxWithTimeFormat').find('.dx-texteditor-input'),
-        dateMode = $('#dateboxWithDateFormat').dxDateBox().dxDateBox('instance').option('mode'),
-        datetimeMode = $('#dateboxWithDateTimeFormat').dxDateBox().dxDateBox('instance').option('mode'),
-        timeMode = $('#dateboxWithTimeFormat').dxDateBox().dxDateBox('instance').option('mode');
+    const $date = $('#dateboxWithDateFormat').find('.dx-texteditor-input');
+    const $datetime = $('#dateboxWithDateTimeFormat').find('.dx-texteditor-input');
+    const $time = $('#dateboxWithTimeFormat').find('.dx-texteditor-input');
+    const dateMode = $('#dateboxWithDateFormat').dxDateBox().dxDateBox('instance').option('mode');
+    const datetimeMode = $('#dateboxWithDateTimeFormat').dxDateBox().dxDateBox('instance').option('mode');
+    const timeMode = $('#dateboxWithTimeFormat').dxDateBox().dxDateBox('instance').option('mode');
 
     assert.equal($date.val(), getExpectedResult(value, dateMode, toStandardDateFormat(value, dateMode)), '\'date\' format is displayed correctly');
     assert.equal($datetime.val(), getExpectedResult(value, datetimeMode, toStandardDateFormat(value, datetimeMode)), '\'datetime\' format is displayed correctly');
@@ -147,7 +147,7 @@ QUnit.module('dateView integration', {
 });
 
 QUnit.test('B250640 - Unable to get property \'show\' of undefined or null reference', function(assert) {
-    var $element = $('#B250640');
+    const $element = $('#B250640');
 
     ko.applyBindings({}, $element.get(0));
     $element.find('.' + TEXTEDITOR_INPUT_CLASS).trigger('dxclick');
@@ -160,11 +160,11 @@ QUnit.test('Q468727 - dxDateBox - It is impossible to change a value if the init
         return;
     }
 
-    var vm = {
+    const vm = {
         value: ko.observable()
     };
 
-    var $dateBox = $('#Q468727');
+    const $dateBox = $('#Q468727');
     ko.applyBindings(vm, $dateBox[0]);
 
     $dateBox

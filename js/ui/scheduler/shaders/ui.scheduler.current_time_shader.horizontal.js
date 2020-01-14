@@ -1,14 +1,14 @@
-var Shader = require('./ui.scheduler.current_time_shader');
+const Shader = require('./ui.scheduler.current_time_shader');
 
-var HorizontalCurrentTimeShader = Shader.inherit({
+const HorizontalCurrentTimeShader = Shader.inherit({
     _renderShader: function() {
-        var groupCount = this._workspace.option('groupOrientation') === 'horizontal' ? this._workspace._getGroupCount() : 1;
+        const groupCount = this._workspace.option('groupOrientation') === 'horizontal' ? this._workspace._getGroupCount() : 1;
 
         this._customizeShader(this._$shader, 0);
 
         if(groupCount > 1) {
-            for(var i = 1; i < groupCount; i++) {
-                var $shader = this._createShader();
+            for(let i = 1; i < groupCount; i++) {
+                const $shader = this._createShader();
                 this._customizeShader($shader, 1);
                 this._shader.push($shader);
             }
@@ -16,8 +16,8 @@ var HorizontalCurrentTimeShader = Shader.inherit({
     },
 
     _customizeShader: function($shader, groupIndex) {
-        var shaderWidth = this._workspace.getIndicationWidth(),
-            maxWidth = this._$container.get(0).getBoundingClientRect().width;
+        let shaderWidth = this._workspace.getIndicationWidth();
+        const maxWidth = this._$container.get(0).getBoundingClientRect().width;
 
         if(shaderWidth > maxWidth) {
             shaderWidth = maxWidth;

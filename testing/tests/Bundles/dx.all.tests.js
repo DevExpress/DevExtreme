@@ -1,10 +1,10 @@
-var $ = require('jquery'),
-    angular = require('angular');
+const $ = require('jquery');
+const angular = require('angular');
 
 require('bundles/dx.all.js');
 
 QUnit.test('DevExpress namespaces', function(assert) {
-    var namespaces = [
+    const namespaces = [
         'Color', // from core
 
         'data',

@@ -2,7 +2,7 @@ import $ from 'jquery';
 import helper from '../../helpers/pivotGridExportTestsHelper.js';
 
 QUnit.testStart(function() {
-    var markup = '<div id="pivotGrid" style="width: 700px"></div>';
+    const markup = '<div id="pivotGrid" style="width: 700px"></div>';
     $('#qunit-fixture').html(markup);
 });
 

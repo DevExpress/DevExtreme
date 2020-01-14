@@ -4,15 +4,15 @@ import ContextMenu from 'ui/context_menu';
 import 'common.css!';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="simpleMenu"></div>';
 
     $('#qunit-fixture').html(markup);
 });
 
-var DX_HAS_CONTEXT_MENU_CLASS = 'dx-has-context-menu';
+const DX_HAS_CONTEXT_MENU_CLASS = 'dx-has-context-menu';
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#simpleMenu');
     }

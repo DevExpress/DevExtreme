@@ -1,13 +1,13 @@
-var eventUtils = require('./utils'),
-    GestureEmitter = require('./gesture/emitter.gesture'),
-    registerEmitter = require('./core/emitter_registrator');
+const eventUtils = require('./utils');
+const GestureEmitter = require('./gesture/emitter.gesture');
+const registerEmitter = require('./core/emitter_registrator');
 
-var SWIPE_START_EVENT = 'dxswipestart',
-    SWIPE_EVENT = 'dxswipe',
-    SWIPE_END_EVENT = 'dxswipeend';
+const SWIPE_START_EVENT = 'dxswipestart';
+const SWIPE_EVENT = 'dxswipe';
+const SWIPE_END_EVENT = 'dxswipeend';
 
 
-var HorizontalStrategy = {
+const HorizontalStrategy = {
     defaultItemSizeFunc: function() {
         return this.getElement().width();
     },
@@ -20,17 +20,17 @@ var HorizontalStrategy = {
     },
 
     calcOffsetRatio: function(e) {
-        var endEventData = eventUtils.eventData(e);
+        const endEventData = eventUtils.eventData(e);
         return (endEventData.x - (this._savedEventData && this._savedEventData.x || 0)) / this._itemSizeFunc().call(this, e);
     },
 
     isFastSwipe: function(e) {
-        var endEventData = eventUtils.eventData(e);
+        const endEventData = eventUtils.eventData(e);
         return this.FAST_SWIPE_SPEED_LIMIT * Math.abs(endEventData.x - this._tickData.x) >= (endEventData.time - this._tickData.time);
     }
 };
 
-var VerticalStrategy = {
+const VerticalStrategy = {
     defaultItemSizeFunc: function() {
         return this.getElement().height();
     },
@@ -43,23 +43,23 @@ var VerticalStrategy = {
     },
 
     calcOffsetRatio: function(e) {
-        var endEventData = eventUtils.eventData(e);
+        const endEventData = eventUtils.eventData(e);
         return (endEventData.y - (this._savedEventData && this._savedEventData.y || 0)) / this._itemSizeFunc().call(this, e);
     },
 
     isFastSwipe: function(e) {
-        var endEventData = eventUtils.eventData(e);
+        const endEventData = eventUtils.eventData(e);
         return this.FAST_SWIPE_SPEED_LIMIT * Math.abs(endEventData.y - this._tickData.y) >= (endEventData.time - this._tickData.time);
     }
 };
 
 
-var STRATEGIES = {
+const STRATEGIES = {
     'horizontal': HorizontalStrategy,
     'vertical': VerticalStrategy
 };
 
-var SwipeEmitter = GestureEmitter.inherit({
+const SwipeEmitter = GestureEmitter.inherit({
 
     TICK_INTERVAL: 300,
     FAST_SWIPE_SPEED_LIMIT: 10,
@@ -101,9 +101,9 @@ var SwipeEmitter = GestureEmitter.inherit({
     },
 
     _move: function(e) {
-        var strategy = this._getStrategy(),
-            moveEventData = eventUtils.eventData(e),
-            offset = strategy.calcOffsetRatio.call(this, e);
+        const strategy = this._getStrategy();
+        const moveEventData = eventUtils.eventData(e);
+        let offset = strategy.calcOffsetRatio.call(this, e);
 
         offset = this._fitOffset(offset, this.elastic);
 
@@ -119,11 +119,11 @@ var SwipeEmitter = GestureEmitter.inherit({
     },
 
     _end: function(e) {
-        var strategy = this._getStrategy(),
-            offsetRatio = strategy.calcOffsetRatio.call(this, e),
-            isFast = strategy.isFastSwipe.call(this, e),
-            startOffset = offsetRatio,
-            targetOffset = this._calcTargetOffset(offsetRatio, isFast);
+        const strategy = this._getStrategy();
+        const offsetRatio = strategy.calcOffsetRatio.call(this, e);
+        const isFast = strategy.isFastSwipe.call(this, e);
+        let startOffset = offsetRatio;
+        let targetOffset = this._calcTargetOffset(offsetRatio, isFast);
 
         startOffset = this._fitOffset(startOffset, this.elastic);
         targetOffset = this._fitOffset(targetOffset, false);
@@ -135,8 +135,8 @@ var SwipeEmitter = GestureEmitter.inherit({
     },
 
     _fitOffset: function(offset, elastic) {
-        var strategy = this._getStrategy(),
-            bounds = strategy.getBounds.call(this);
+        const strategy = this._getStrategy();
+        const bounds = strategy.getBounds.call(this);
 
         if(offset < -bounds[0]) {
             return elastic ? (-2 * bounds[0] + offset) / 3 : -bounds[0];
@@ -150,7 +150,7 @@ var SwipeEmitter = GestureEmitter.inherit({
     },
 
     _calcTargetOffset: function(offsetRatio, isFast) {
-        var result;
+        let result;
         if(isFast) {
             result = Math.ceil(Math.abs(offsetRatio));
             if(offsetRatio < 0) {

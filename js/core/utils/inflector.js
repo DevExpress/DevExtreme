@@ -1,31 +1,31 @@
-var map = require('./iterator').map;
+const map = require('./iterator').map;
 
-var _normalize = function(text) {
+const _normalize = function(text) {
     if(text === undefined || text === null) {
         return '';
     }
     return String(text);
 };
 
-var _upperCaseFirst = function(text) {
+const _upperCaseFirst = function(text) {
     return _normalize(text).charAt(0).toUpperCase() + text.substr(1);
 };
 
-var _chop = function(text) {
+const _chop = function(text) {
     return _normalize(text)
         .replace(/([a-z\d])([A-Z])/g, '$1 $2')
         .split(/[\s_-]+/);
 };
 
-var dasherize = function(text) {
+const dasherize = function(text) {
     return map(_chop(text), function(p) { return p.toLowerCase(); }).join('-');
 };
 
-var underscore = function(text) {
+const underscore = function(text) {
     return dasherize(text).replace(/-/g, '_');
 };
 
-var camelize = function(text, upperFirst) {
+const camelize = function(text, upperFirst) {
     return map(_chop(text), function(p, i) {
         p = p.toLowerCase();
         if(upperFirst || i > 0) {
@@ -35,24 +35,24 @@ var camelize = function(text, upperFirst) {
     }).join('');
 };
 
-var humanize = function(text) {
+const humanize = function(text) {
     return _upperCaseFirst(dasherize(text).replace(/-/g, ' '));
 };
 
-var titleize = function(text) {
+const titleize = function(text) {
     return map(_chop(text), function(p) {
         return _upperCaseFirst(p.toLowerCase());
     }).join(' ');
 };
 
-var DIGIT_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const DIGIT_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-var captionize = function(name) {
-    var captionList = [],
-        i,
-        char,
-        isPrevCharNewWord = false,
-        isNewWord = false;
+const captionize = function(name) {
+    const captionList = [];
+    let i;
+    let char;
+    let isPrevCharNewWord = false;
+    let isNewWord = false;
 
     for(i = 0; i < name.length; i++) {
         char = name.charAt(i);

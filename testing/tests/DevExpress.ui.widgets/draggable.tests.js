@@ -8,7 +8,7 @@ import 'common.css!';
 import 'ui/draggable';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="area" style="width: 300px; height: 250px; position: relative; background: green;">\
             <div style="width: 30px; height: 50px; background: yellow;" id="draggable"></div>\
         </div>\
@@ -17,14 +17,14 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var DRAGGABLE_CLASS = 'dx-draggable',
-    DRAGGABLE_ACTION_TO_EVENT_MAP = {
-        'onDragStart': dragEvents.start,
-        'onDrag': dragEvents.move,
-        'onDragEnd': dragEvents.end
-    };
+const DRAGGABLE_CLASS = 'dx-draggable';
+const DRAGGABLE_ACTION_TO_EVENT_MAP = {
+    'onDragStart': dragEvents.start,
+    'onDrag': dragEvents.move,
+    'onDragEnd': dragEvents.end
+};
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         $('#qunit-fixture').addClass('qunit-fixture-visible');
 
@@ -64,12 +64,12 @@ QUnit.test('\'immediate\' option', function(assert) {
 QUnit.module('callbacks', moduleConfig);
 
 $.each(DRAGGABLE_ACTION_TO_EVENT_MAP, function(callbackName, eventName) {
-    var checkCallback = function(draggable, spy, assert) {
+    const checkCallback = function(draggable, spy, assert) {
         assert.ok(spy.calledOnce, 'callback fired');
 
-        var firstCall = spy.getCall(0),
-            arg = firstCall.args[0],
-            context = firstCall.thisValue;
+        const firstCall = spy.getCall(0);
+        const arg = firstCall.args[0];
+        const context = firstCall.thisValue;
 
         assert.strictEqual(context, draggable, 'context equals to component');
         assert.strictEqual(arg.component, draggable);
@@ -78,9 +78,9 @@ $.each(DRAGGABLE_ACTION_TO_EVENT_MAP, function(callbackName, eventName) {
     };
 
     QUnit.test('\'' + callbackName + '\' callback fired', function(assert) {
-        var callbackSpy = sinon.spy(noop),
-            options = {},
-            draggable;
+        const callbackSpy = sinon.spy(noop);
+        const options = {};
+        let draggable;
 
         options[callbackName] = callbackSpy;
         draggable = this.createDraggable(options);
@@ -90,8 +90,8 @@ $.each(DRAGGABLE_ACTION_TO_EVENT_MAP, function(callbackName, eventName) {
     });
 
     QUnit.test('\'' + callbackName + '\' option changing', function(assert) {
-        var draggable = this.createDraggable(),
-            callbackSpy = sinon.spy(noop);
+        const draggable = this.createDraggable();
+        const callbackSpy = sinon.spy(noop);
         draggable.option(callbackName, callbackSpy);
 
         this.pointer.dragStart().drag().dragEnd();
@@ -100,7 +100,7 @@ $.each(DRAGGABLE_ACTION_TO_EVENT_MAP, function(callbackName, eventName) {
 });
 
 QUnit.test('\'disabled\' option', function(assert) {
-    var instance = this.createDraggable({ direction: 'horizontal' });
+    const instance = this.createDraggable({ direction: 'horizontal' });
 
     instance.option('disabled', true);
     this.pointer.down().move(100, 0).up();
@@ -112,7 +112,7 @@ QUnit.test('\'disabled\' option', function(assert) {
 });
 
 QUnit.test('\'dx-state-disabled\' class (T284305)', function(assert) {
-    var instance = this.createDraggable({ direction: 'horizontal' });
+    const instance = this.createDraggable({ direction: 'horizontal' });
 
     instance.$element().addClass('dx-state-disabled');
     this.pointer.down().move(100, 0).up();
@@ -153,7 +153,7 @@ QUnit.test('\'both\'', function(assert) {
 });
 
 QUnit.test('changing', function(assert) {
-    var draggable = this.createDraggable({ });
+    const draggable = this.createDraggable({ });
     draggable.option('direction', 'horizontal');
 
     this.pointer.down().move(100).up();
@@ -164,7 +164,7 @@ QUnit.test('changing', function(assert) {
 });
 
 QUnit.test('dragging-class toggling', function(assert) {
-    var draggable = this.createDraggable({});
+    const draggable = this.createDraggable({});
     draggable.option('direction', 'horizontal');
 
     assert.ok(!this.$element.hasClass('dx-draggable-dragging'), 'element has not appropriate class before dragging');
@@ -179,9 +179,9 @@ QUnit.test('dragging-class toggling', function(assert) {
 QUnit.module('bounds', moduleConfig);
 
 QUnit.test('\'area\' option as element', function(assert) {
-    var $area = $('#area'),
-        areaWidth = $area.width(),
-        areaHeight = $area.height();
+    const $area = $('#area');
+    const areaWidth = $area.width();
+    const areaHeight = $area.height();
 
     this.createDraggable({
         area: '#area'
@@ -193,9 +193,9 @@ QUnit.test('\'area\' option as element', function(assert) {
 });
 
 QUnit.test('\'area\' option as window', function(assert) {
-    var $area = $(window),
-        areaWidth = $area.width(),
-        areaHeight = $area.height();
+    const $area = $(window);
+    const areaWidth = $area.width();
+    const areaHeight = $area.height();
 
     this.createDraggable({
         area: $area
@@ -207,16 +207,16 @@ QUnit.test('\'area\' option as window', function(assert) {
 });
 
 QUnit.test('\'area\' option as function', function(assert) {
-    var $area = $('#area'),
-        areaWidth = $area.width(),
-        areaHeight = $area.height(),
-        lastAreaContext = null,
-        draggable = this.createDraggable({
-            area: function() {
-                lastAreaContext = this;
-                return $area;
-            }
-        });
+    const $area = $('#area');
+    const areaWidth = $area.width();
+    const areaHeight = $area.height();
+    let lastAreaContext = null;
+    const draggable = this.createDraggable({
+        area: function() {
+            lastAreaContext = this;
+            return $area;
+        }
+    });
 
     this.pointer.down().move(areaWidth + 150, areaHeight + 150).up();
 
@@ -225,13 +225,13 @@ QUnit.test('\'area\' option as function', function(assert) {
 });
 
 QUnit.test('\'boundOffsets\' option as plain object, pair', function(assert) {
-    var $area = $('#area'),
-        areaWidth = $area.width(),
-        areaHeight = $area.height(),
-        boundOffset = {
-            h: 1,
-            v: 2
-        };
+    const $area = $('#area');
+    const areaWidth = $area.width();
+    const areaHeight = $area.height();
+    const boundOffset = {
+        h: 1,
+        v: 2
+    };
 
     this.createDraggable({
         area: $area,
@@ -246,15 +246,15 @@ QUnit.test('\'boundOffsets\' option as plain object, pair', function(assert) {
 });
 
 QUnit.test('\'boundOffsets\' option as plain object, quad', function(assert) {
-    var $area = $('#area'),
-        areaWidth = $area.width(),
-        areaHeight = $area.height(),
-        boundOffset = {
-            left: 1,
-            top: 2,
-            right: 3,
-            bottom: 4
-        };
+    const $area = $('#area');
+    const areaWidth = $area.width();
+    const areaHeight = $area.height();
+    const boundOffset = {
+        left: 1,
+        top: 2,
+        right: 3,
+        bottom: 4
+    };
 
     this.createDraggable({
         area: $area,
@@ -269,20 +269,20 @@ QUnit.test('\'boundOffsets\' option as plain object, quad', function(assert) {
 });
 
 QUnit.test('\'boundOffsets\' option as function', function(assert) {
-    var $area = $('#area'),
-        areaWidth = $area.width(),
-        areaHeight = $area.height(),
-        boundOffset = {
-            h: 1,
-            v: -2
-        },
-        draggable = this.createDraggable({
-            area: $area,
-            boundOffset: function() {
-                assert.strictEqual(this, draggable);
-                return boundOffset;
-            }
-        });
+    const $area = $('#area');
+    const areaWidth = $area.width();
+    const areaHeight = $area.height();
+    const boundOffset = {
+        h: 1,
+        v: -2
+    };
+    var draggable = this.createDraggable({
+        area: $area,
+        boundOffset: function() {
+            assert.strictEqual(this, draggable);
+            return boundOffset;
+        }
+    });
 
     this.pointer.down().move(areaWidth + 150, areaHeight + 150).up();
     this.checkPosition(areaWidth - this.$element.width() - boundOffset.h, areaHeight - this.$element.height() - boundOffset.v, assert);
@@ -292,9 +292,9 @@ QUnit.test('\'boundOffsets\' option as function', function(assert) {
 });
 
 QUnit.test('\'boundOffset\' option as string, pair', function(assert) {
-    var $area = $('#area'),
-        areaWidth = $area.width(),
-        areaHeight = $area.height();
+    const $area = $('#area');
+    const areaWidth = $area.width();
+    const areaHeight = $area.height();
 
     this.createDraggable({
         area: $area,
@@ -309,9 +309,9 @@ QUnit.test('\'boundOffset\' option as string, pair', function(assert) {
 });
 
 QUnit.test('\'boundOffset\' option as string, quad', function(assert) {
-    var $area = $('#area'),
-        areaWidth = $area.width(),
-        areaHeight = $area.height();
+    const $area = $('#area');
+    const areaWidth = $area.width();
+    const areaHeight = $area.height();
 
     this.createDraggable({
         area: $area,
@@ -338,7 +338,7 @@ QUnit.test('enabled', function(assert) {
 });
 
 QUnit.test('enabled in rtl mode', function(assert) {
-    var $area = $('#area');
+    const $area = $('#area');
     $area.css('direction', 'rtl');
 
     this.createDraggable({
@@ -353,7 +353,7 @@ QUnit.test('enabled in rtl mode', function(assert) {
 });
 
 QUnit.test('changing', function(assert) {
-    var draggable = this.createDraggable({ });
+    const draggable = this.createDraggable({ });
 
     draggable.option('allowMoveByClick', true);
     pointerMock(window).down(100, 100);
@@ -362,7 +362,7 @@ QUnit.test('changing', function(assert) {
 });
 
 QUnit.test('behaviour depends from \'area\' option', function(assert) {
-    var $area = $('#area');
+    const $area = $('#area');
 
     this.createDraggable({
         'allowMoveByClick': true,
@@ -389,7 +389,7 @@ QUnit.test('start element position on second gesture should not be equal to init
 });
 
 QUnit.test('immediate drag after click should work correctly', function(assert) {
-    var $area = $('#area');
+    const $area = $('#area');
     this.createDraggable({
         area: $area,
         allowMoveByClick: true
@@ -402,8 +402,8 @@ QUnit.test('immediate drag after click should work correctly', function(assert) 
 });
 
 QUnit.test('\'onDrag\' callback should be fired on area click', function(assert) {
-    var $area = $('#area'),
-        onDragSpy = sinon.spy(noop);
+    const $area = $('#area');
+    const onDragSpy = sinon.spy(noop);
 
     this.createDraggable({
         area: $area,
@@ -416,9 +416,9 @@ QUnit.test('\'onDrag\' callback should be fired on area click', function(assert)
 });
 
 QUnit.test('element position on click should be updated considering direction', function(assert) {
-    var $area = $('#area'),
-        elementHeight = this.$element.height(),
-        elementPosition = this.$element.position();
+    const $area = $('#area');
+    const elementHeight = this.$element.height();
+    const elementPosition = this.$element.position();
 
     this.createDraggable({
         area: $area,

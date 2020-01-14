@@ -1,15 +1,15 @@
-var $ = require('../../core/renderer'),
-    TemplateBase = require('./ui.template_base'),
-    eventsEngine = require('../../events/core/events_engine'),
-    removeEvent = require('../../core/remove_event'),
-    iteratorUtils = require('../../core/utils/iterator'),
-    isPrimitive = require('../../core/utils/type').isPrimitive;
+const $ = require('../../core/renderer');
+const TemplateBase = require('./ui.template_base');
+const eventsEngine = require('../../events/core/events_engine');
+const removeEvent = require('../../core/remove_event');
+const iteratorUtils = require('../../core/utils/iterator');
+const isPrimitive = require('../../core/utils/type').isPrimitive;
 
-var watchChanges = (function() {
+const watchChanges = (function() {
 
-    var start = function(rawData, watchMethod, fields, fieldsMap, callback) {
-        var globalDispose,
-            fieldsDispose;
+    const start = function(rawData, watchMethod, fields, fieldsMap, callback) {
+        let globalDispose;
+        let fieldsDispose;
 
         globalDispose = globalWatch(rawData, watchMethod, function(dataWithRawFields) {
             fieldsDispose && fieldsDispose();
@@ -38,11 +38,11 @@ var watchChanges = (function() {
     };
 
     var fieldsWatch = function(data, watchMethod, fields, fieldsMap, callback) {
-        var resolvedData = {},
-            missedFields = fields.slice();
+        const resolvedData = {};
+        const missedFields = fields.slice();
 
-        var watchHandlers = iteratorUtils.map(fields, function(name) {
-            var fieldGetter = fieldsMap[name];
+        const watchHandlers = iteratorUtils.map(fields, function(name) {
+            const fieldGetter = fieldsMap[name];
 
             return watchMethod(
                 fieldGetter ?
@@ -52,7 +52,7 @@ var watchChanges = (function() {
                     resolvedData[name] = value;
 
                     if(missedFields.length) {
-                        var index = missedFields.indexOf(name);
+                        const index = missedFields.indexOf(name);
                         if(index >= 0) {
                             missedFields.splice(index, 1);
                         }
@@ -86,9 +86,9 @@ module.exports = TemplateBase.inherit({
     },
 
     _renderCore: function(options) {
-        var $container = $(options.container);
+        const $container = $(options.container);
 
-        var dispose = watchChanges(options.model, this._watchMethod, this._fields, this._fieldsMap, function(data) {
+        const dispose = watchChanges(options.model, this._watchMethod, this._fields, this._fieldsMap, function(data) {
             $container.empty();
             this._render($container, data, options.model);
         }.bind(this));

@@ -1,4 +1,4 @@
-var dataExchangerModule = require('viz/vector_map/data_exchanger');
+const dataExchangerModule = require('viz/vector_map/data_exchanger');
 
 QUnit.module('DataExchanger', {
     beforeEach: function() {
@@ -11,7 +11,7 @@ QUnit.module('DataExchanger', {
 });
 
 QUnit.test('bind when no data', function(assert) {
-    var callback = sinon.spy();
+    const callback = sinon.spy();
     this.dataExchanger.bind('test-category', 'test-data', callback);
     assert.strictEqual(callback.lastCall, null);
 });
@@ -22,8 +22,8 @@ QUnit.test('unbind when not bound', function(assert) {
 });
 
 QUnit.test('set then bind', function(assert) {
-    var data = { tag: 'data' },
-        callback = sinon.spy();
+    const data = { tag: 'data' };
+    const callback = sinon.spy();
     this.dataExchanger.set('test-category', 'test-data', data);
 
     this.dataExchanger.bind('test-category', 'test-data', callback);
@@ -32,8 +32,8 @@ QUnit.test('set then bind', function(assert) {
 });
 
 QUnit.test('bind then set', function(assert) {
-    var data = { tag: 'data' },
-        callback = sinon.spy();
+    const data = { tag: 'data' };
+    const callback = sinon.spy();
     this.dataExchanger.bind('test-category', 'test-data', callback);
 
     this.dataExchanger.set('test-category', 'test-data', data);
@@ -42,8 +42,8 @@ QUnit.test('bind then set', function(assert) {
 });
 
 QUnit.test('unbind', function(assert) {
-    var data = { tag: 'data' },
-        callback = sinon.spy();
+    const data = { tag: 'data' };
+    const callback = sinon.spy();
     this.dataExchanger.bind('test-category', 'test-data', callback);
     this.dataExchanger.unbind('test-category', 'test-data', callback);
 

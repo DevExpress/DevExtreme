@@ -14,7 +14,7 @@ $('<div id="test-container">').appendTo('#qunit-fixture');
 
 rendererModule.Renderer = sinon.stub();
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.container = createTestContainer('#test-container', { width: 800, height: 600 });
@@ -23,14 +23,14 @@ var environment = {
         rendererModule.Renderer.onCall(2).returns(new vizMocks.Renderer());
     },
     setupScrollBar: function() {
-        var originalScrollBar = scrollBarModule.ScrollBar,
-            scrollBarFakes = {
-                getMargins: sinon.stub()
-            };
+        const originalScrollBar = scrollBarModule.ScrollBar;
+        const scrollBarFakes = {
+            getMargins: sinon.stub()
+        };
 
         this.scrollBarStub = sinon.stub(scrollBarModule, 'ScrollBar', function(renderer, group) {
-            var scrollBar = new originalScrollBar(renderer, group),
-                originalUpdateSize = scrollBar.updateSize;
+            const scrollBar = new originalScrollBar(renderer, group);
+            const originalUpdateSize = scrollBar.updateSize;
 
             scrollBar.getMargins = scrollBarFakes.getMargins;
             scrollBarFakes.updateSize = scrollBar.updateSize = sinon.spy(function() { originalUpdateSize.apply(scrollBar, arguments); });
@@ -41,13 +41,13 @@ var environment = {
         return scrollBarFakes;
     },
     setupAxes: function(axesStubs) {
-        var axisIndex = 0,
-            originalAxis = axisModule.Axis;
+        let axisIndex = 0;
+        const originalAxis = axisModule.Axis;
 
         this.axisStub = sinon.stub(axisModule, 'Axis', function(renderingSettings) {
-            var axis = new originalAxis(renderingSettings);
+            const axis = new originalAxis(renderingSettings);
 
-            for(var stubName in axesStubs[axisIndex]) {
+            for(const stubName in axesStubs[axisIndex]) {
                 /* axis[stubName] && */(axis[stubName] = axesStubs[axisIndex][stubName]);
             }
             axisIndex++;
@@ -77,7 +77,7 @@ var environment = {
 };
 
 function createAxisStubs() {
-    var axisFakes = {
+    const axisFakes = {
         updateSizeArgs: [],
         estimateMargins: sinon.stub(),
         getMargins: sinon.stub(),
@@ -105,8 +105,8 @@ function createAxisStubs() {
 QUnit.module('Canvas processing', environment);
 
 QUnit.test('Pass canvas to axis\' estimateMargins', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
 
     this.setupAxes([argAxis, valAxis]);
 
@@ -132,8 +132,8 @@ QUnit.test('Pass canvas to axis\' estimateMargins', function(assert) {
 });
 
 QUnit.test('Take into account max margin on each side of pane', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
 
     argAxis
         .estimateMargins.returns({ left: 10, top: 8, right: 11, bottom: 20 });
@@ -214,9 +214,9 @@ QUnit.test('Take into account max margin on each side of pane', function(assert)
 });
 
 QUnit.test('Multiple value axes - margins are accumulated on left and right', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis_inner = createAxisStubs(),
-        valAxis_outer = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis_inner = createAxisStubs();
+    const valAxis_outer = createAxisStubs();
 
     argAxis
         .estimateMargins.returns({ left: 10, top: 8, right: 11, bottom: 20 });
@@ -341,9 +341,9 @@ QUnit.test('Multiple value axes - margins are accumulated on left and right', fu
 });
 
 QUnit.test('Rotated. Multiple value axes - margins are accumulated on top and bottom', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis_inner = createAxisStubs(),
-        valAxis_outer = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis_inner = createAxisStubs();
+    const valAxis_outer = createAxisStubs();
 
     argAxis
         .getMargins.returns({ bottom: 10, right: 7, top: 19, left: 13 });
@@ -473,12 +473,12 @@ QUnit.test('Rotated. Multiple value axes - margins are accumulated on top and bo
 });
 
 QUnit.test('Multiple panes - individual margins on top and bottom, common margins on left and right', function(assert) {
-    var argAxis_topPane = createAxisStubs(),
-        argAxis_bottomPane = createAxisStubs(),
-        valAxis_bottomPane_right_inner = createAxisStubs(),
-        valAxis_bottomPane_right_outer = createAxisStubs(),
-        valAxis_topPane_left_inner = createAxisStubs(),
-        valAxis_topPane_left_outer = createAxisStubs();
+    const argAxis_topPane = createAxisStubs();
+    const argAxis_bottomPane = createAxisStubs();
+    const valAxis_bottomPane_right_inner = createAxisStubs();
+    const valAxis_bottomPane_right_outer = createAxisStubs();
+    const valAxis_topPane_left_inner = createAxisStubs();
+    const valAxis_topPane_left_outer = createAxisStubs();
 
     argAxis_topPane
         .estimateMargins.returns({ left: 0, top: 9, right: 0, bottom: 6 });
@@ -712,12 +712,12 @@ QUnit.test('Multiple panes - individual margins on top and bottom, common margin
 });
 
 QUnit.test('Rotated. Multiple panes - individual margins on left and right, common margins on top and bottom. Rotated', function(assert) {
-    var argAxis_rightPane = createAxisStubs(),
-        argAxis_leftPane = createAxisStubs(),
-        valAxis_leftPane_top_inner = createAxisStubs(),
-        valAxis_leftPane_top_outer = createAxisStubs(),
-        valAxis_rightPane_bottom_inner = createAxisStubs(),
-        valAxis_rightPane_bottom_outer = createAxisStubs();
+    const argAxis_rightPane = createAxisStubs();
+    const argAxis_leftPane = createAxisStubs();
+    const valAxis_leftPane_top_inner = createAxisStubs();
+    const valAxis_leftPane_top_outer = createAxisStubs();
+    const valAxis_rightPane_bottom_inner = createAxisStubs();
+    const valAxis_rightPane_bottom_outer = createAxisStubs();
 
     argAxis_rightPane
         .getMargins.returns({ bottom: 0, right: 9, top: 0, left: 6 });
@@ -956,8 +956,8 @@ QUnit.test('Rotated. Multiple panes - individual margins on left and right, comm
 });
 
 QUnit.test('check call \'setInitRange\'', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
 
     valAxis.setInitRange = sinon.spy();
 
@@ -974,14 +974,14 @@ QUnit.test('check call \'setInitRange\'', function(assert) {
         legend: { visible: false }
     });
 
-    var valAxis1 = this.axisStub.getCall(1).returnValue;
+    const valAxis1 = this.axisStub.getCall(1).returnValue;
 
     assert.equal(valAxis1.setInitRange.callCount, 1);
 });
 
 QUnit.test('check call \'setInitRange\'. Rotated', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
 
     valAxis.setInitRange = sinon.spy();
 
@@ -999,7 +999,7 @@ QUnit.test('check call \'setInitRange\'. Rotated', function(assert) {
         legend: { visible: false }
     });
 
-    var valAxis1 = this.axisStub.getCall(1).returnValue;
+    const valAxis1 = this.axisStub.getCall(1).returnValue;
 
     assert.equal(valAxis1.setInitRange.callCount, 1);
 });
@@ -1009,11 +1009,11 @@ QUnit.module('Shift axes', environment);
 QUnit.test('Multiple axes - shift only to the right/left, multipleAxesSpacing is not passed directly to axis shift method', function(assert) {
     // NOTE
     // it is important to test 3 axes
-    var argAxis = createAxisStubs(),
-        valAxis_left_1 = createAxisStubs(),
-        valAxis_left_2 = createAxisStubs(),
-        valAxis_left_3 = createAxisStubs(),
-        valAxis_right = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis_left_1 = createAxisStubs();
+    const valAxis_left_2 = createAxisStubs();
+    const valAxis_left_3 = createAxisStubs();
+    const valAxis_right = createAxisStubs();
 
     valAxis_left_1
         .getMargins.returns({ left: 6, top: 0, right: 7, bottom: 0 });
@@ -1095,11 +1095,11 @@ QUnit.test('Multiple axes - shift only to the right/left, multipleAxesSpacing is
 QUnit.test('Rotated. Multiple axes - shift only to the top/bottom, multipleAxesSpacing is not passed directly to axis shift method', function(assert) {
     // NOTE
     // it is important to test 3 axes
-    var argAxis = createAxisStubs(),
-        valAxis_bottom_1 = createAxisStubs(),
-        valAxis_bottom_2 = createAxisStubs(),
-        valAxis_bottom_3 = createAxisStubs(),
-        valAxis_top = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis_bottom_1 = createAxisStubs();
+    const valAxis_bottom_2 = createAxisStubs();
+    const valAxis_bottom_3 = createAxisStubs();
+    const valAxis_top = createAxisStubs();
 
     valAxis_bottom_1
         .getMargins.returns({ bottom: 6, right: 0, top: 7, left: 0 });
@@ -1180,14 +1180,14 @@ QUnit.test('Rotated. Multiple axes - shift only to the top/bottom, multipleAxesS
 });
 
 QUnit.test('Multiple panes - shift axes by panes', function(assert) {
-    var argAxis_topPane = createAxisStubs(),
-        argAxis_bottomPane = createAxisStubs(),
-        valAxis_bottomPane_left = createAxisStubs(),
-        valAxis_bottomPane_right_inner = createAxisStubs(),
-        valAxis_bottomPane_right_outer = createAxisStubs(),
-        valAxis_topPane_left_inner = createAxisStubs(),
-        valAxis_topPane_left_outer = createAxisStubs(),
-        valAxis_topPane_right = createAxisStubs();
+    const argAxis_topPane = createAxisStubs();
+    const argAxis_bottomPane = createAxisStubs();
+    const valAxis_bottomPane_left = createAxisStubs();
+    const valAxis_bottomPane_right_inner = createAxisStubs();
+    const valAxis_bottomPane_right_outer = createAxisStubs();
+    const valAxis_topPane_left_inner = createAxisStubs();
+    const valAxis_topPane_left_outer = createAxisStubs();
+    const valAxis_topPane_right = createAxisStubs();
 
     valAxis_bottomPane_left
         .getMargins.returns({ left: 6, top: 0, right: 7, bottom: 0 });
@@ -1307,10 +1307,10 @@ QUnit.test('Multiple panes - shift axes by panes', function(assert) {
 QUnit.module('Misc', environment);
 
 QUnit.test('Draw - pass correct pane borders', function(assert) {
-    var argAxis_topPane = createAxisStubs(),
-        argAxis_bottomPane = createAxisStubs(),
-        valAxis_bottomPane = createAxisStubs(),
-        valAxis_topPane = createAxisStubs();
+    const argAxis_topPane = createAxisStubs();
+    const argAxis_bottomPane = createAxisStubs();
+    const valAxis_bottomPane = createAxisStubs();
+    const valAxis_topPane = createAxisStubs();
 
     this.setupAxes([argAxis_topPane,
         argAxis_bottomPane,
@@ -1345,10 +1345,10 @@ QUnit.test('Draw - pass correct pane borders', function(assert) {
 });
 
 QUnit.test('Update panes canvases', function(assert) {
-    var argAxis_topPane = createAxisStubs(),
-        argAxis_bottomPane = createAxisStubs(),
-        valAxis_bottomPane = createAxisStubs(),
-        valAxis_topPane = createAxisStubs();
+    const argAxis_topPane = createAxisStubs();
+    const argAxis_bottomPane = createAxisStubs();
+    const valAxis_bottomPane = createAxisStubs();
+    const valAxis_topPane = createAxisStubs();
 
     argAxis_topPane
         .getMargins.returns({ left: 0, top: 9, right: 0, bottom: 6 });
@@ -1367,7 +1367,7 @@ QUnit.test('Update panes canvases', function(assert) {
         valAxis_bottomPane,
         valAxis_topPane]);
 
-    var chart = new dxChart(this.container, {
+    const chart = new dxChart(this.container, {
         panes: [
             { name: 'top' },
             { name: 'bottom' }
@@ -1413,9 +1413,9 @@ QUnit.test('Update panes canvases', function(assert) {
 });
 
 QUnit.test('Do not recalculate canvas on zooming - only draw axes in old canvas', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs(),
-        scrollBar = this.setupScrollBar();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
 
     argAxis
         .getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
@@ -1428,14 +1428,14 @@ QUnit.test('Do not recalculate canvas on zooming - only draw axes in old canvas'
 
     this.setupAxes([argAxis, valAxis]);
 
-    var chart = new dxChart(this.container, {
+    const chart = new dxChart(this.container, {
         scrollBar: { visible: true },
         series: [{}],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false }
     });
 
-    var argAxisStub = this.axisStub.getCall(0).returnValue;
+    const argAxisStub = this.axisStub.getCall(0).returnValue;
 
     argAxisStub.draw.reset();
     argAxisStub.getMargins.reset();
@@ -1445,7 +1445,7 @@ QUnit.test('Do not recalculate canvas on zooming - only draw axes in old canvas'
     argAxisStub.createTicks.reset();
     argAxisStub.drawScaleBreaks.reset();
 
-    var valAxisStub = this.axisStub.getCall(1).returnValue;
+    const valAxisStub = this.axisStub.getCall(1).returnValue;
 
     valAxisStub.draw.reset();
     valAxisStub.getMargins.reset();
@@ -1505,9 +1505,9 @@ QUnit.test('Do not recalculate canvas on zooming - only draw axes in old canvas'
 
 // T690411
 QUnit.test('Recalculate canvas on zooming - draw axes in new canvas', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs(),
-        scrollBar = this.setupScrollBar();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
 
     argAxis
         .getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
@@ -1520,7 +1520,7 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas', function(a
 
     this.setupAxes([argAxis, valAxis]);
 
-    var chart = new dxChart(this.container, {
+    const chart = new dxChart(this.container, {
         scrollBar: { visible: true },
         series: [{}],
         dataSource: [{ arg: 1, val: 10 }],
@@ -1528,7 +1528,7 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas', function(a
         adjustAxesOnZoom: true
     });
 
-    var argAxisStub = this.axisStub.getCall(0).returnValue;
+    const argAxisStub = this.axisStub.getCall(0).returnValue;
 
     argAxisStub.draw.reset();
     argAxisStub.getMargins.reset();
@@ -1538,7 +1538,7 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas', function(a
     argAxisStub.createTicks.reset();
     argAxisStub.drawScaleBreaks.reset();
 
-    var valAxisStub = this.axisStub.getCall(1).returnValue;
+    const valAxisStub = this.axisStub.getCall(1).returnValue;
 
     valAxisStub.draw.reset();
     valAxisStub.getMargins.reset();
@@ -1597,9 +1597,9 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas', function(a
 });
 
 QUnit.test('Draw scale breaks', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs(),
-        scrollBar = this.setupScrollBar();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
 
     argAxis
         .getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
@@ -1619,8 +1619,8 @@ QUnit.test('Draw scale breaks', function(assert) {
         legend: { visible: false }
     });
 
-    var argAxisStub = this.axisStub.getCall(0).returnValue,
-        valAxisStub = this.axisStub.getCall(1).returnValue;
+    const argAxisStub = this.axisStub.getCall(0).returnValue;
+    const valAxisStub = this.axisStub.getCall(1).returnValue;
 
     assert.ok(valAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for value axis');
     assert.ok(argAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for argument axis');
@@ -1629,10 +1629,10 @@ QUnit.test('Draw scale breaks', function(assert) {
 QUnit.module('Axes synchronization', environment);
 
 QUnit.test('synchronizeMultiAxes true - only value axes are synchronized', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis_inner = createAxisStubs(),
-        valAxis_outer = createAxisStubs(),
-        synchronize = sinon.spy();
+    const argAxis = createAxisStubs();
+    const valAxis_inner = createAxisStubs();
+    const valAxis_outer = createAxisStubs();
+    const synchronize = sinon.spy();
 
     multiAxesSynchronizer.synchronize = synchronize;
 
@@ -1655,8 +1655,8 @@ QUnit.test('synchronizeMultiAxes true - only value axes are synchronized', funct
     });
 
     // assert
-    var valAxis1 = this.axisStub.getCall(1).returnValue,
-        valAxis2 = this.axisStub.getCall(2).returnValue;
+    const valAxis1 = this.axisStub.getCall(1).returnValue;
+    const valAxis2 = this.axisStub.getCall(2).returnValue;
 
     assert.equal(synchronize.callCount, 1);
     assert.deepEqual(synchronize.lastCall.args, [[valAxis1, valAxis2]]);
@@ -1672,10 +1672,10 @@ QUnit.test('synchronizeMultiAxes true - only value axes are synchronized', funct
 });
 
 QUnit.test('synchronizeMultiAxes true - only value axes are synchronized. Rotated', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis_inner = createAxisStubs(),
-        valAxis_outer = createAxisStubs(),
-        synchronize = sinon.spy();
+    const argAxis = createAxisStubs();
+    const valAxis_inner = createAxisStubs();
+    const valAxis_outer = createAxisStubs();
+    const synchronize = sinon.spy();
 
     multiAxesSynchronizer.synchronize = synchronize;
 
@@ -1699,8 +1699,8 @@ QUnit.test('synchronizeMultiAxes true - only value axes are synchronized. Rotate
     });
 
     // assert
-    var valAxis1 = this.axisStub.getCall(1).returnValue,
-        valAxis2 = this.axisStub.getCall(2).returnValue;
+    const valAxis1 = this.axisStub.getCall(1).returnValue;
+    const valAxis2 = this.axisStub.getCall(2).returnValue;
 
     assert.equal(synchronize.callCount, 1);
     assert.deepEqual(synchronize.lastCall.args, [[valAxis1, valAxis2]]);
@@ -1716,10 +1716,10 @@ QUnit.test('synchronizeMultiAxes true - only value axes are synchronized. Rotate
 });
 
 QUnit.test('synchronizeMultiAxes false - do not synchronize', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis_inner = createAxisStubs(),
-        valAxis_outer = createAxisStubs(),
-        synchronize = sinon.spy();
+    const argAxis = createAxisStubs();
+    const valAxis_inner = createAxisStubs();
+    const valAxis_outer = createAxisStubs();
+    const synchronize = sinon.spy();
 
     multiAxesSynchronizer.synchronize = synchronize;
 
@@ -1746,10 +1746,10 @@ QUnit.test('synchronizeMultiAxes false - do not synchronize', function(assert) {
 });
 
 QUnit.test('synchronizeMultiAxes false - do not synchronize. Rotated', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis_inner = createAxisStubs(),
-        valAxis_outer = createAxisStubs(),
-        synchronize = sinon.spy();
+    const argAxis = createAxisStubs();
+    const valAxis_inner = createAxisStubs();
+    const valAxis_outer = createAxisStubs();
+    const synchronize = sinon.spy();
 
     multiAxesSynchronizer.synchronize = synchronize;
 
@@ -1779,9 +1779,9 @@ QUnit.test('synchronizeMultiAxes false - do not synchronize. Rotated', function(
 QUnit.module('ScrollBar', environment);
 
 QUnit.test('ScrollBar margins accumulated with argument axis margins', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs(),
-        scrollBar = this.setupScrollBar();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
 
     argAxis
         .estimateMargins.returns({ left: 0, top: 10, right: 0, bottom: 20 });
@@ -1860,11 +1860,11 @@ QUnit.test('ScrollBar margins accumulated with argument axis margins', function(
 });
 
 QUnit.test('Multiple panes. ScrollBar on top. ScrollBar placed in correct pane', function(assert) {
-    var argAxis1 = createAxisStubs(),
-        argAxis2 = createAxisStubs(),
-        valAxis1 = createAxisStubs(),
-        valAxis2 = createAxisStubs(),
-        scrollBar = this.setupScrollBar();
+    const argAxis1 = createAxisStubs();
+    const argAxis2 = createAxisStubs();
+    const valAxis1 = createAxisStubs();
+    const valAxis2 = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
 
     argAxis1
         .estimateMargins.returns({ left: 0, top: 10, right: 0, bottom: 0 });
@@ -1920,11 +1920,11 @@ QUnit.test('Multiple panes. ScrollBar on top. ScrollBar placed in correct pane',
 });
 
 QUnit.test('Multiple panes. ScrollBar on bottom. ScrollBar placed in correct pane', function(assert) {
-    var argAxis1 = createAxisStubs(),
-        argAxis2 = createAxisStubs(),
-        valAxis1 = createAxisStubs(),
-        valAxis2 = createAxisStubs(),
-        scrollBar = this.setupScrollBar();
+    const argAxis1 = createAxisStubs();
+    const argAxis2 = createAxisStubs();
+    const valAxis1 = createAxisStubs();
+    const valAxis2 = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
 
     argAxis1
         .estimateMargins.returns({ left: 0, top: 10, right: 0, bottom: 0 });
@@ -1980,11 +1980,11 @@ QUnit.test('Multiple panes. ScrollBar on bottom. ScrollBar placed in correct pan
 });
 
 QUnit.test('Rotated. Multiple panes. ScrollBar on left. ScrollBar placed in correct pane', function(assert) {
-    var argAxis1 = createAxisStubs(),
-        argAxis2 = createAxisStubs(),
-        valAxis1 = createAxisStubs(),
-        valAxis2 = createAxisStubs(),
-        scrollBar = this.setupScrollBar();
+    const argAxis1 = createAxisStubs();
+    const argAxis2 = createAxisStubs();
+    const valAxis1 = createAxisStubs();
+    const valAxis2 = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
 
     argAxis1
         .getMargins.returns({ left: 10, top: 0, right: 0, bottom: 0 });
@@ -2036,11 +2036,11 @@ QUnit.test('Rotated. Multiple panes. ScrollBar on left. ScrollBar placed in corr
 });
 
 QUnit.test('Rotated. Multiple panes. ScrollBar on right. ScrollBar placed in correct pane', function(assert) {
-    var argAxis1 = createAxisStubs(),
-        argAxis2 = createAxisStubs(),
-        valAxis1 = createAxisStubs(),
-        valAxis2 = createAxisStubs(),
-        scrollBar = this.setupScrollBar();
+    const argAxis1 = createAxisStubs();
+    const argAxis2 = createAxisStubs();
+    const valAxis1 = createAxisStubs();
+    const valAxis2 = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
 
     argAxis1
         .getMargins.returns({ left: 10, top: 0, right: 0, bottom: 0 });
@@ -2092,7 +2092,7 @@ QUnit.test('Rotated. Multiple panes. ScrollBar on right. ScrollBar placed in cor
 });
 
 QUnit.test('ScrollBar on top. Shift argument axis by ScrollBar margin', function(assert) {
-    var scrollBar = this.setupScrollBar();
+    const scrollBar = this.setupScrollBar();
 
     scrollBar
         .getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
@@ -2118,7 +2118,7 @@ QUnit.test('ScrollBar on top. Shift argument axis by ScrollBar margin', function
 });
 
 QUnit.test('ScrollBar on bottom. Shift argument axis by ScrollBar margin', function(assert) {
-    var scrollBar = this.setupScrollBar();
+    const scrollBar = this.setupScrollBar();
 
     scrollBar
         .getMargins.returns({ left: 0, top: 0, right: 0, bottom: 15 });
@@ -2144,7 +2144,7 @@ QUnit.test('ScrollBar on bottom. Shift argument axis by ScrollBar margin', funct
 });
 
 QUnit.test('Rotated. ScrollBar on right. Shift argument axis by ScrollBar margin', function(assert) {
-    var scrollBar = this.setupScrollBar();
+    const scrollBar = this.setupScrollBar();
 
     scrollBar
         .getMargins.returns({ left: 0, top: 0, right: 15, bottom: 0 });
@@ -2171,7 +2171,7 @@ QUnit.test('Rotated. ScrollBar on right. Shift argument axis by ScrollBar margin
 });
 
 QUnit.test('Rotated. ScrollBar on left. Shift argument axis by ScrollBar margin', function(assert) {
-    var scrollBar = this.setupScrollBar();
+    const scrollBar = this.setupScrollBar();
 
     scrollBar
         .getMargins.returns({ left: 15, top: 0, right: 0, bottom: 0 });
@@ -2198,9 +2198,9 @@ QUnit.test('Rotated. ScrollBar on left. Shift argument axis by ScrollBar margin'
 });
 
 QUnit.test('UpdateSize - scrollBar gets canvas', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs(),
-        scrollBar = this.setupScrollBar();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
 
     argAxis
         .estimateMargins.returns({ left: 0, top: 10, right: 0, bottom: 20 });
@@ -2237,9 +2237,9 @@ QUnit.test('UpdateSize - scrollBar gets canvas', function(assert) {
 QUnit.module('Adaptive layout rendering', environment);
 
 QUnit.test('Multiple axes, vertical axes without titles are fit, horizontal axis without labels is fit - hide title for vertical axes, and all for horizontal', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis_inner = createAxisStubs(),
-        valAxis_outer = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis_inner = createAxisStubs();
+    const valAxis_outer = createAxisStubs();
 
     argAxis.getMargins.onCall(0).returns({ left: 0, top: 0, right: 0, bottom: 15 });
     argAxis.getMargins.onCall(1).returns({ left: 0, top: 0, right: 0, bottom: 15 });
@@ -2296,9 +2296,9 @@ QUnit.test('Multiple axes, vertical axes without titles are fit, horizontal axis
 });
 
 QUnit.test('Multiple axes, horizontal axes without titles are fit, vertical axis without labels is fit - hide title for horizontal axes, and all for vertical', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis_inner = createAxisStubs(),
-        valAxis_outer = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis_inner = createAxisStubs();
+    const valAxis_outer = createAxisStubs();
 
     argAxis.getMargins.onCall(0).returns({ left: 0, top: 0, right: 0, bottom: 15 });
     argAxis.getMargins.onCall(1).returns({ left: 0, top: 0, right: 0, bottom: 15 });
@@ -2355,10 +2355,10 @@ QUnit.test('Multiple axes, horizontal axes without titles are fit, vertical axis
 });
 
 QUnit.test('Update axes size and shift with new margins (there is also scrollBar)', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis_inner = createAxisStubs(),
-        valAxis_outer = createAxisStubs(),
-        scrollBar = this.setupScrollBar();
+    const argAxis = createAxisStubs();
+    const valAxis_inner = createAxisStubs();
+    const valAxis_outer = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
 
     scrollBar
         .getMargins.returns({ left: 0, top: 4, right: 0, bottom: 0 });
@@ -2388,7 +2388,7 @@ QUnit.test('Update axes size and shift with new margins (there is also scrollBar
         valAxis_inner,
         valAxis_outer]);
 
-    var chart = new dxChart(this.container, {
+    const chart = new dxChart(this.container, {
         size: { width: 220, height: 110 },
         adaptiveLayout: { width: 200, height: 100 },
         scrollBar: { visible: true },
@@ -2519,9 +2519,9 @@ QUnit.test('Update axes size and shift with new margins (there is also scrollBar
 });
 
 QUnit.test('Do not shrink axis on zooming - only draw axes in old canvas (T624446)', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs(),
-        scrollBar = this.setupScrollBar();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
+    const scrollBar = this.setupScrollBar();
 
     argAxis
         .getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
@@ -2534,7 +2534,7 @@ QUnit.test('Do not shrink axis on zooming - only draw axes in old canvas (T62444
 
     this.setupAxes([argAxis, valAxis]);
 
-    var chart = new dxChart(this.container, {
+    const chart = new dxChart(this.container, {
         size: { width: 220, height: 110 },
         adaptiveLayout: { width: 200, height: 100 },
         scrollBar: { visible: true },
@@ -2543,7 +2543,7 @@ QUnit.test('Do not shrink axis on zooming - only draw axes in old canvas (T62444
         legend: { visible: false }
     });
 
-    var argAxisStub = this.axisStub.getCall(0).returnValue;
+    const argAxisStub = this.axisStub.getCall(0).returnValue;
 
     argAxisStub.draw.reset();
     argAxisStub.getMargins.reset();
@@ -2553,7 +2553,7 @@ QUnit.test('Do not shrink axis on zooming - only draw axes in old canvas (T62444
     argAxisStub.createTicks.reset();
     argAxisStub.drawScaleBreaks.reset();
 
-    var valAxisStub = this.axisStub.getCall(1).returnValue;
+    const valAxisStub = this.axisStub.getCall(1).returnValue;
 
     valAxisStub.draw.reset();
     valAxisStub.getMargins.reset();
@@ -2596,8 +2596,8 @@ QUnit.test('Do not shrink axis on zooming - only draw axes in old canvas (T62444
 });
 
 QUnit.test('Hide legend and title - free space is enought for axis - no hide elements', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis_outer = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis_outer = createAxisStubs();
 
     argAxis.getMargins.onCall(0).returns({ left: 0, top: 0, right: 0, bottom: 15 });
     argAxis.getMargins.onCall(1).returns({ left: 0, top: 0, right: 0, bottom: 15 });
@@ -2659,8 +2659,8 @@ QUnit.test('Hide legend and title - free space is enought for axis - no hide ele
 });
 
 QUnit.test('Hide legend and title - free space is enought for axis - hide elements', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis_outer = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis_outer = createAxisStubs();
 
     argAxis.getMargins.onCall(0).returns({ left: 0, top: 0, right: 0, bottom: 60 });
     argAxis.getMargins.onCall(1).returns({ left: 0, top: 0, right: 0, bottom: 60 });
@@ -2722,8 +2722,8 @@ QUnit.test('Hide legend and title - free space is enought for axis - hide elemen
 QUnit.module('Animation', environment);
 
 QUnit.test('Pass animate true flag to the updateSize method', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
 
     this.setupAxes([argAxis, valAxis]);
 
@@ -2738,8 +2738,8 @@ QUnit.test('Pass animate true flag to the updateSize method', function(assert) {
 });
 
 QUnit.test('Pass animate false flag to the updateSize method if animation is disabled', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
 
     this.setupAxes([argAxis, valAxis]);
 
@@ -2757,14 +2757,14 @@ QUnit.test('Pass animate false flag to the updateSize method if animation is dis
 });
 
 QUnit.test('Pass animate false flag to the updateSize method if points limit is exceeded', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
 
     this.setupAxes([argAxis, valAxis]);
 
-    var dataSource = [];
+    const dataSource = [];
 
-    for(var i = 0; i < 12; i++) {
+    for(let i = 0; i < 12; i++) {
         dataSource.push({ arg: i, val: 1 });
     }
 
@@ -2783,14 +2783,14 @@ QUnit.test('Pass animate false flag to the updateSize method if points limit is 
 });
 
 QUnit.test('Pass animate false flag to the updateSize method if points limit is not exceeded', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
 
     this.setupAxes([argAxis, valAxis]);
 
-    var dataSource = [];
+    const dataSource = [];
 
-    for(var i = 0; i < 15; i++) {
+    for(let i = 0; i < 15; i++) {
         dataSource.push({ arg: i, val: 1 });
     }
 
@@ -2809,8 +2809,8 @@ QUnit.test('Pass animate false flag to the updateSize method if points limit is 
 });
 
 QUnit.test('Do not stop all current animations if no adaptive layout', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
 
     argAxis.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 15 });
     valAxis.getMargins.returns({ left: 7, top: 0, right: 0, bottom: 0 });
@@ -2825,15 +2825,15 @@ QUnit.test('Do not stop all current animations if no adaptive layout', function(
         legend: { visible: false }
     });
 
-    var valAxisStub = this.axisStub.getCall(1).returnValue;
+    const valAxisStub = this.axisStub.getCall(1).returnValue;
     assert.equal(valAxisStub.updateSize.callCount, 1);
 
     assert.ok(this.renderer.stopAllAnimations.lastCall.calledBefore(valAxisStub.updateSize.lastCall));
 });
 
 QUnit.test('Stop all current animations on adaptive layout', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
 
     argAxis.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 15 });
     valAxis.getMargins.returns({ left: 7, top: 0, right: 0, bottom: 0 });
@@ -2848,7 +2848,7 @@ QUnit.test('Stop all current animations on adaptive layout', function(assert) {
         legend: { visible: false }
     });
 
-    var valAxisStub = this.axisStub.getCall(1).returnValue;
+    const valAxisStub = this.axisStub.getCall(1).returnValue;
     assert.equal(valAxisStub.updateSize.callCount, 4);
 
     assert.strictEqual(this.renderer.stopAllAnimations.callCount, 2);
@@ -2860,8 +2860,8 @@ QUnit.test('Stop all current animations on adaptive layout', function(assert) {
 QUnit.module('Wrap axis title', environment);
 
 QUnit.test('With a pane; Position is right', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
 
 
     valAxis.hasWrap = () => true;
@@ -2888,8 +2888,8 @@ QUnit.test('With a pane; Position is right', function(assert) {
 });
 
 QUnit.test('With a pane', function(assert) {
-    var argAxis = createAxisStubs(),
-        valAxis = createAxisStubs();
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
 
 
     valAxis.hasWrap = () => true;
@@ -2919,10 +2919,10 @@ QUnit.test('With a pane', function(assert) {
 });
 
 QUnit.test('With two panes', function(assert) {
-    var argAxis1 = createAxisStubs(),
-        argAxis2 = createAxisStubs(),
-        valAxis1 = createAxisStubs(),
-        valAxis2 = createAxisStubs();
+    const argAxis1 = createAxisStubs();
+    const argAxis2 = createAxisStubs();
+    const valAxis1 = createAxisStubs();
+    const valAxis2 = createAxisStubs();
 
 
     valAxis1.hasWrap = valAxis2.hasWrap = () => true;

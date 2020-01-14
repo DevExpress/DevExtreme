@@ -7,7 +7,7 @@ import dataGridMocks from '../../helpers/dataGridMocks.js';
 const setupDataGridModules = dataGridMocks.setupDataGridModules;
 
 QUnit.testStart(function() {
-    var markup = `<div>
+    const markup = `<div>
         <div class="dx-datagrid">
             <div id="container"></div>
         </div>
@@ -43,8 +43,8 @@ QUnit.module('Common', {
 }, function() {
     QUnit.test('showFilterBuilderPopup & hideFilterBuilderPopup', function(assert) {
         // arrange
-        var handlerShow = sinon.spy(),
-            handlerHide = sinon.spy();
+        const handlerShow = sinon.spy();
+        const handlerHide = sinon.spy();
 
         // act
         this.initFilterBuilderView({
@@ -74,7 +74,7 @@ QUnit.module('Common', {
 
     QUnit.test('initFilterBuilder', function(assert) {
         // arrange
-        var handlerInit = sinon.spy();
+        const handlerInit = sinon.spy();
 
         // act
         this.initFilterBuilderView({
@@ -120,7 +120,7 @@ QUnit.module('Common', {
     });
 
     QUnit.test('the \'any of\' operation should throw an exception if filterOperations does not contain it', function(assert) {
-        var that = this;
+        const that = this;
         assert.throws(function() {
             that.initFilterBuilderView({
                 headerFilter: { visible: true },
@@ -278,7 +278,7 @@ QUnit.module('Common', {
 
     // T653737
     QUnit.test('Filter builder doesn\'t throw errors when boolean data type columns are used', function(assert) {
-        var handlerInit = sinon.spy();
+        const handlerInit = sinon.spy();
         this.initFilterBuilderView({
             columns: [
                 { dataField: 'field', dataType: 'boolean', filterOperations: [] }
@@ -368,7 +368,7 @@ QUnit.module('Real dataGrid', {
         $('.dx-popup-content .dx-filterbuilder-item-value-text').trigger('dxclick');
 
         // assert
-        var $valueText = $('.dx-popup-content .dx-filterbuilder-item-value-text');
+        const $valueText = $('.dx-popup-content .dx-filterbuilder-item-value-text');
         assert.equal($valueText.text(), 'Text 1|Text 2');
         assert.equal($valueText.children().length, 3, 'three children items');
     });

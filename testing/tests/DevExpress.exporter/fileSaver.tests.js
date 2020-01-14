@@ -20,19 +20,19 @@ QUnit.test('exportLinkElement generate', function(assert) {
         return;
     }
 
-    var URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
+    const URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
 
-    var helper = new ariaAccessibilityTestHelper(() => {});
+    const helper = new ariaAccessibilityTestHelper(() => {});
 
-    var href = URL.createObjectURL(new Blob([], { type: 'test/plain' }));
+    const href = URL.createObjectURL(new Blob([], { type: 'test/plain' }));
 
-    var testExportLink = fileSaver._linkDownloader('test.xlsx', href);
+    const testExportLink = fileSaver._linkDownloader('test.xlsx', href);
     testExportLink.id = 'link';
 
     helper.checkAttributes($(testExportLink), { id: 'link', target: '_blank', download: 'test.xlsx', href: href }, 'downloadLink');
     assert.equal(domAdapter.getDocument().getElementById('link'), null, 'download link not attached to a document');
 
-    var clickHandler = sinon.spy();
+    const clickHandler = sinon.spy();
     testExportLink.addEventListener('click', function(e) {
         clickHandler(e);
         e.preventDefault();
@@ -56,12 +56,12 @@ QUnit.test('saveAs - check revokeObjectURL', function(assert) {
     }
 
     assert.timeout(1000);
-    var done = assert.async();
+    const done = assert.async();
     assert.expect(5);
     assert.equal(fileSaver._revokeObjectURLTimeout, 30000, 'default fileSaver._revokeObjectURLTimeout');
 
-    var oldRevokeObjectURLTimeout = fileSaver._revokeObjectURLTimeout;
-    var oldFileSaverClick = fileSaver._click;
+    const oldRevokeObjectURLTimeout = fileSaver._revokeObjectURLTimeout;
+    const oldFileSaverClick = fileSaver._click;
     try {
         fileSaver._revokeObjectURLTimeout = 100;
         fileSaver._objectUrlRevoked = false;
@@ -97,10 +97,10 @@ QUnit.test('saveAs - check revokeObjectURL', function(assert) {
 });
 
 QUnit.test('Proxy Url exportForm generate', function(assert) {
-    var originalTrigger = eventsEngine.trigger;
+    const originalTrigger = eventsEngine.trigger;
     eventsEngine.trigger = $.noop;
     // act
-    var testForm = fileSaver._saveByProxy('#', 'testFile.xlsx', 'EXCEL', 'testData');
+    const testForm = fileSaver._saveByProxy('#', 'testFile.xlsx', 'EXCEL', 'testData');
 
     // assert
     assert.equal(testForm.attr('action'), '#', 'Set proxy as form action');
@@ -114,8 +114,8 @@ QUnit.test('Proxy Url exportForm generate', function(assert) {
 QUnit.test('Save blob by _winJSBlobSave on winJS devices', function(assert) {
     // arrange
     if(!browser.msie && typeUtils.isFunction(window.Blob)) {
-        var _winJSBlobSave = fileSaver._winJSBlobSave,
-            isCalled = false;
+        const _winJSBlobSave = fileSaver._winJSBlobSave;
+        let isCalled = false;
         try {
             window.WinJS = {};
             fileSaver._winJSBlobSave = function() { isCalled = true; };
@@ -141,8 +141,8 @@ QUnit.test('Save base 64 for Safari', function(assert) {
             return;
         }
         // arrange
-        var exportLinkElementClicked = false,
-            _linkDownloader = fileSaver._linkDownloader;
+        let exportLinkElementClicked = false;
+        const _linkDownloader = fileSaver._linkDownloader;
 
         fileSaver._linkDownloader = function() { exportLinkElementClicked = true; };
         fileSaver.saveAs('test', 'EXCEL');
@@ -163,11 +163,11 @@ QUnit.test('No E1034 on iPad', function(assert) {
         return;
     }
 
-    var done = assert.async();
-    var warningSend = null;
-    var _devExpressLog = errors.log;
-    var _fileSaverClick = fileSaver._click;
-    var oldRevokeObjectURLTimeout = fileSaver._revokeObjectURLTimeout;
+    const done = assert.async();
+    let warningSend = null;
+    const _devExpressLog = errors.log;
+    const _fileSaverClick = fileSaver._click;
+    const oldRevokeObjectURLTimeout = fileSaver._revokeObjectURLTimeout;
 
     try {
         fileSaver._click = () => { };
@@ -191,8 +191,8 @@ QUnit.test('No E1034 on iPad', function(assert) {
 QUnit.test('Blob is saved via msSaveOrOpenBlob method', function(assert) {
     if(browser.msie && parseInt(browser.version) > 9) {
         // arrange
-        var isCalled,
-            _msSaveOrOpenBlob = navigator.msSaveOrOpenBlob;
+        let isCalled;
+        const _msSaveOrOpenBlob = navigator.msSaveOrOpenBlob;
 
         navigator.msSaveOrOpenBlob = function(data, fileName) {
             isCalled = true;
@@ -219,8 +219,8 @@ QUnit.test('SaveBlobAs is called after saveAs', function(assert) {
     }
 
     // arrange
-    var saveBlobAs = fileSaver._saveBlobAs,
-        isSaveBlobAs = false;
+    const saveBlobAs = fileSaver._saveBlobAs;
+    let isSaveBlobAs = false;
 
     fileSaver._saveBlobAs = function() {
         isSaveBlobAs = true;

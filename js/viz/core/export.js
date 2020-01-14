@@ -489,7 +489,7 @@ extend(ExportMenu.prototype, {
 
     _subscribeEvents() {
         this._renderer.root.on(pointerEvents.up + '.export', e => {
-            var elementType = e.target[EXPORT_DATA_KEY];
+            const elementType = e.target[EXPORT_DATA_KEY];
 
             if(!elementType) {
                 if(this._button) {

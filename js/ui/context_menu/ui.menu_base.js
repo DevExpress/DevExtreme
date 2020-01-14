@@ -413,7 +413,7 @@ class MenuBase extends HierarchicalCollectionWidget {
     }
 
     _initEditStrategy() {
-        let Strategy = MenuBaseEditStrategy;
+        const Strategy = MenuBaseEditStrategy;
         this._editStrategy = new Strategy(this);
     }
 
@@ -500,7 +500,7 @@ class MenuBase extends HierarchicalCollectionWidget {
         if(nodes.length) {
             this.hasIcons = false;
 
-            let $nodeContainer = this._renderContainer(this.$element(), submenuContainer);
+            const $nodeContainer = this._renderContainer(this.$element(), submenuContainer);
             let firstVisibleIndex = -1;
             let nextGroupFirstIndex = -1;
 

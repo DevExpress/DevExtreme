@@ -1,17 +1,17 @@
-var $ = require('../../core/renderer'),
-    each = require('../../core/utils/iterator').each,
-    eventsEngine = require('../../events/core/events_engine'),
-    translator = require('../../animation/translator'),
-    fx = require('../../animation/fx'),
-    dragEvents = require('../../events/drag'),
-    mathUtils = require('../../core/utils/math'),
-    Animator = require('../scroll_view/animator'),
-    eventUtils = require('../../events/utils'),
-    registerDecorator = require('./ui.list.edit.decorator_registry').register,
-    EditDecorator = require('./ui.list.edit.decorator');
+const $ = require('../../core/renderer');
+const each = require('../../core/utils/iterator').each;
+const eventsEngine = require('../../events/core/events_engine');
+const translator = require('../../animation/translator');
+const fx = require('../../animation/fx');
+const dragEvents = require('../../events/drag');
+const mathUtils = require('../../core/utils/math');
+const Animator = require('../scroll_view/animator');
+const eventUtils = require('../../events/utils');
+const registerDecorator = require('./ui.list.edit.decorator_registry').register;
+const EditDecorator = require('./ui.list.edit.decorator');
 
 
-var ReorderScrollAnimator = Animator.inherit({
+const ReorderScrollAnimator = Animator.inherit({
 
     ctor: function(strategy) {
         this.callBase();
@@ -30,16 +30,16 @@ var ReorderScrollAnimator = Animator.inherit({
 });
 
 
-var LIST_EDIT_DECORATOR = 'dxListEditDecorator',
-    DRAG_START_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, LIST_EDIT_DECORATOR),
-    DRAG_UPDATE_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, LIST_EDIT_DECORATOR),
-    DRAG_END_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, LIST_EDIT_DECORATOR),
+const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
+const DRAG_START_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, LIST_EDIT_DECORATOR);
+const DRAG_UPDATE_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, LIST_EDIT_DECORATOR);
+const DRAG_END_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, LIST_EDIT_DECORATOR);
 
-    REORDER_HANDLE_CONTAINER_CLASS = 'dx-list-reorder-handle-container',
-    REORDER_HANDLE_CLASS = 'dx-list-reorder-handle',
+const REORDER_HANDLE_CONTAINER_CLASS = 'dx-list-reorder-handle-container';
+const REORDER_HANDLE_CLASS = 'dx-list-reorder-handle';
 
-    REOREDERING_ITEM_CLASS = 'dx-list-item-reordering',
-    REOREDERING_ITEM_GHOST_CLASS = 'dx-list-item-ghost-reordering';
+const REOREDERING_ITEM_CLASS = 'dx-list-item-reordering';
+const REOREDERING_ITEM_GHOST_CLASS = 'dx-list-item-ghost-reordering';
 
 registerDecorator(
     'reorder',
@@ -67,12 +67,12 @@ registerDecorator(
         },
 
         afterBag: function(config) {
-            var $itemElement = config.$itemElement,
-                $container = config.$container;
+            const $itemElement = config.$itemElement;
+            const $container = config.$container;
 
-            var $handle = $('<div>').addClass(REORDER_HANDLE_CLASS);
+            const $handle = $('<div>').addClass(REORDER_HANDLE_CLASS);
 
-            var lockedDrag = false;
+            let lockedDrag = false;
             eventsEngine.on($handle, 'dxpointerdown', function(e) {
                 lockedDrag = !eventUtils.isMouseEvent(e);
             });
@@ -112,14 +112,14 @@ registerDecorator(
 
             this._elementHeight = $itemElement.outerHeight();
 
-            var itemIndex = this._list.getFlatIndexByItemElement($itemElement);
+            const itemIndex = this._list.getFlatIndexByItemElement($itemElement);
             this._startIndex = itemIndex;
             this._lastIndex = itemIndex;
             this._dragRange = this._getDragRange(itemIndex);
 
             this._cacheScrollData();
 
-            var that = this;
+            const that = this;
             this._createGhostTimeout = setTimeout(function() {
                 that._createGhost($itemElement);
                 that._updateGhostPosition();
@@ -133,9 +133,9 @@ registerDecorator(
         },
 
         _cacheItemsPositions: function() {
-            var itemPositions = this._itemPositions = [];
+            const itemPositions = this._itemPositions = [];
             each(this._list.itemElements(), function(index, item) {
-                var cachedPosition = null;
+                let cachedPosition = null;
 
                 itemPositions.push(function() {
                     cachedPosition = (cachedPosition === null)
@@ -183,7 +183,7 @@ registerDecorator(
 
             this._updateItemPositions();
 
-            var pointerPosition = this._getPointerPosition();
+            const pointerPosition = this._getPointerPosition();
             this._toggleScroll(pointerPosition);
         },
 
@@ -196,13 +196,13 @@ registerDecorator(
                 return;
             }
 
-            var minOffset = this._elementHeight * 0.7,
+            const minOffset = this._elementHeight * 0.7;
 
-                topOffset = (this._clientHeight - (pointerPosition - this._scrollTop())),
-                topOffsetRatio = topOffset / minOffset,
+            const topOffset = (this._clientHeight - (pointerPosition - this._scrollTop()));
+            const topOffsetRatio = topOffset / minOffset;
 
-                bottomOffset = (pointerPosition - this._scrollTop()),
-                bottomOffsetRatio = bottomOffset / minOffset;
+            const bottomOffset = (pointerPosition - this._scrollTop());
+            const bottomOffsetRatio = bottomOffset / minOffset;
 
             if(topOffsetRatio < 1) {
                 this._stepSize = this._adjustRationIntoRange(topOffsetRatio);
@@ -233,32 +233,32 @@ registerDecorator(
         },
 
         _updateOthersPositions: function() {
-            var currentIndex = this._findItemIndexByPosition(this._getPointerPosition());
+            const currentIndex = this._findItemIndexByPosition(this._getPointerPosition());
 
             if(this._lastIndex === currentIndex || this._groupedEnabled && !this._sameParent(currentIndex)) {
                 return;
             }
 
-            var currentIndexOffset = currentIndex - this._startIndex,
-                currentDirection = mathUtils.sign(currentIndexOffset),
+            const currentIndexOffset = currentIndex - this._startIndex;
+            const currentDirection = mathUtils.sign(currentIndexOffset);
 
-                minIndex = Math.min(currentIndex, this._lastIndex),
-                maxIndex = Math.max(currentIndex, this._lastIndex);
+            const minIndex = Math.min(currentIndex, this._lastIndex);
+            const maxIndex = Math.max(currentIndex, this._lastIndex);
 
-            for(var itemIndex = minIndex; itemIndex <= maxIndex; itemIndex++) {
+            for(let itemIndex = minIndex; itemIndex <= maxIndex; itemIndex++) {
                 if(itemIndex === this._startIndex) {
                     continue;
                 }
 
-                var $item = this._list.getItemElementByFlatIndex(itemIndex),
-                    itemIndexOffset = itemIndex - this._startIndex,
-                    itemDirection = mathUtils.sign(itemIndexOffset),
+                const $item = this._list.getItemElementByFlatIndex(itemIndex);
+                const itemIndexOffset = itemIndex - this._startIndex;
+                const itemDirection = mathUtils.sign(itemIndexOffset);
 
-                    offsetsDifference = Math.abs(itemIndexOffset) <= Math.abs(currentIndexOffset),
-                    sameDirections = currentDirection === itemDirection,
+                const offsetsDifference = Math.abs(itemIndexOffset) <= Math.abs(currentIndexOffset);
+                const sameDirections = currentDirection === itemDirection;
 
-                    setupPosition = offsetsDifference && sameDirections,
-                    resetPosition = !offsetsDifference || !sameDirections;
+                const setupPosition = offsetsDifference && sameDirections;
+                const resetPosition = !offsetsDifference || !sameDirections;
 
                 fx.stop($item);
                 if(setupPosition) {
@@ -281,8 +281,8 @@ registerDecorator(
         },
 
         _sameParent: function(index) {
-            var $dragging = this._list.getItemElementByFlatIndex(this._startIndex),
-                $over = this._list.getItemElementByFlatIndex(index);
+            const $dragging = this._list.getItemElementByFlatIndex(this._startIndex);
+            const $over = this._list.getItemElementByFlatIndex(index);
 
             return $over.parent().get(0) === $dragging.parent().get(0);
         },
@@ -295,10 +295,10 @@ registerDecorator(
         },
 
         scrollFinished: function() {
-            var scrollTop = this._scrollTop(),
+            const scrollTop = this._scrollTop();
 
-                rejectScrollTop = scrollTop <= 0 && this._stepSize < 0,
-                rejectScrollBottom = scrollTop >= this._scrollHeight - this._clientHeight && this._stepSize > 0;
+            const rejectScrollTop = scrollTop <= 0 && this._stepSize < 0;
+            const rejectScrollBottom = scrollTop >= this._scrollHeight - this._clientHeight && this._stepSize > 0;
 
             return rejectScrollTop || rejectScrollBottom;
         },
@@ -329,11 +329,11 @@ registerDecorator(
         },
 
         _resetPositions: function() {
-            var minIndex = Math.min(this._startIndex, this._lastIndex),
-                maxIndex = Math.max(this._startIndex, this._lastIndex);
+            const minIndex = Math.min(this._startIndex, this._lastIndex);
+            const maxIndex = Math.max(this._startIndex, this._lastIndex);
 
-            for(var itemIndex = minIndex; itemIndex <= maxIndex; itemIndex++) {
-                var $item = this._list.getItemElementByFlatIndex(itemIndex);
+            for(let itemIndex = minIndex; itemIndex <= maxIndex; itemIndex++) {
+                const $item = this._list.getItemElementByFlatIndex(itemIndex);
 
                 translator.resetPosition($item);
             }
@@ -372,8 +372,8 @@ registerDecorator(
 
         _findItemIndexByPosition: function(position) {
             let { minIndex, maxIndex } = this._dragRange;
-            var currentIndex;
-            var currentPosition;
+            let currentIndex;
+            let currentPosition;
 
             while(minIndex <= maxIndex) {
                 currentIndex = (minIndex + maxIndex) / 2 | 0;

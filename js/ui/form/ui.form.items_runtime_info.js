@@ -8,7 +8,7 @@ export default class FormItemsRunTimeInfo {
     }
 
     _findWidgetInstance(condition) {
-        var result;
+        let result;
 
         each(this._map, function(guid, { widgetInstance, item }) {
             if(condition(item)) {
@@ -64,7 +64,7 @@ export default class FormItemsRunTimeInfo {
     }
 
     findItemContainerByItem(item) {
-        for(let key in this._map) {
+        for(const key in this._map) {
             if(this._map[key].item === item) {
                 return this._map[key].$itemContainer;
             }
@@ -73,7 +73,7 @@ export default class FormItemsRunTimeInfo {
     }
 
     findItemIndexByItem(targetItem) {
-        for(let key in this._map) {
+        for(const key in this._map) {
             if(this._map[key].item === targetItem) {
                 return this._map[key].itemIndex;
             }

@@ -5,9 +5,9 @@ import SeriesModule from 'viz/series/base_series';
 const Series = SeriesModule.Series;
 import { MockAxis, insertMockFactory, restoreMockFactory } from '../../helpers/chartMocks.js';
 
-var createSeries = function(options, renderSettings) {
+const createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
-    var renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    const renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
 
     options = $.extend(true, {
         widgetType: 'chart',
@@ -43,8 +43,8 @@ var createSeries = function(options, renderSettings) {
     return new Series(renderSettings, options);
 };
 
-var createPoint = function() {
-    var stub = sinon.createStubInstance(pointModule.Point);
+const createPoint = function() {
+    const stub = sinon.createStubInstance(pointModule.Point);
     stub.argument = 1;
     stub.hasValue.returns(true);
     stub.hasCoords.returns(true);
@@ -54,18 +54,18 @@ var createPoint = function() {
     return stub;
 };
 
-var mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint()];
+const mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint()];
 
-var environment = {
+const environment = {
     beforeEach: function() {
         insertMockFactory();
-        var mockPointIndex = 0;
+        let mockPointIndex = 0;
         this.renderer = new vizMocks.Renderer();
         this.seriesGroup = this.renderer.g();
         this.data = [{ arg: 1, val: 10, size: 1 }, { arg: 2, val: 20, size: 1 }, { arg: 3, val: 30, size: 1 }, { arg: 4, val: 40, size: 1 }];
 
         this.createPoint = sinon.stub(pointModule, 'Point', function() {
-            var stub = mockPoints[mockPointIndex++];
+            const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.hasValue.returns(true);
             stub.isInVisibleArea.returns(true);
@@ -80,10 +80,10 @@ var environment = {
     }
 };
 
-var checkTwoGroups = function(assert, series) {
-    var parentGroup = series._group,
-        renderer = series._renderer,
-        labelsGroup = series._extGroups.labelsGroup;
+const checkTwoGroups = function(assert, series) {
+    const parentGroup = series._group;
+    const renderer = series._renderer;
+    const labelsGroup = series._extGroups.labelsGroup;
     assert.ok(parentGroup, 'series created without group');
 
     assert.equal(renderer.stub('g').callCount, 3);
@@ -98,9 +98,9 @@ var checkTwoGroups = function(assert, series) {
 QUnit.module('Creation', environment);
 
 QUnit.test('Creation bubble point', function(assert) {
-    var series = createSeries({ type: 'bubble', sizeField: 'size', label: { visible: false } }),
-        data = [{ arg: 1, val: 3, size: 5 }],
-        points;
+    const series = createSeries({ type: 'bubble', sizeField: 'size', label: { visible: false } });
+    const data = [{ arg: 1, val: 3, size: 5 }];
+    let points;
     series.updateData(data);
     series.createPoints();
 
@@ -115,9 +115,9 @@ QUnit.test('Creation bubble point', function(assert) {
 });
 
 QUnit.test('Creation with errorBars', function(assert) {
-    var series = createSeries({ type: 'bubble', sizeField: 'size', errorBars: { lowErrorValueField: 'lowErrorField', highErrorValueField: 'highErrorField' } }),
-        data = [{ arg: 1, val: 3, size: 5, lowErrorField: 0, highErrorField: 4 }],
-        points;
+    const series = createSeries({ type: 'bubble', sizeField: 'size', errorBars: { lowErrorValueField: 'lowErrorField', highErrorValueField: 'highErrorField' } });
+    const data = [{ arg: 1, val: 3, size: 5, lowErrorField: 0, highErrorField: 4 }];
+    let points;
 
     series.updateData(data);
     series.createPoints();
@@ -134,7 +134,7 @@ QUnit.test('Creation with errorBars', function(assert) {
 });
 
 QUnit.test('getMarginOptions', function(assert) {
-    var series = createSeries({ type: 'bubble' });
+    const series = createSeries({ type: 'bubble' });
 
     assert.deepEqual(series.getMarginOptions(), {
         processBubbleSize: true,
@@ -169,11 +169,11 @@ QUnit.module('Bubble series. Draw', {
     }
 });
 
-var checkGroups = checkTwoGroups,
-    seriesType = 'bubble';
+const checkGroups = checkTwoGroups;
+const seriesType = 'bubble';
 
 QUnit.test('Draw without data', function(assert) {
-    var series = this.createSeries({
+    const series = this.createSeries({
         type: seriesType,
         point: { visible: false }
 
@@ -187,7 +187,7 @@ QUnit.test('Draw without data', function(assert) {
 });
 
 QUnit.test('Draw simple data without animation', function(assert) {
-    var series = this.createSeries({
+    const series = this.createSeries({
         type: seriesType,
         point: { visible: false }
 
@@ -209,11 +209,11 @@ QUnit.test('Draw simple data without animation', function(assert) {
 });
 
 QUnit.test('Draw simple data with animation', function(assert) {
-    var series = this.createSeries({
-            type: seriesType,
-            point: { visible: false }
-        }),
-        complete;
+    const series = this.createSeries({
+        type: seriesType,
+        point: { visible: false }
+    });
+    let complete;
     series.updateData(this.data);
     series.createPoints();
     $.each(series._points, function(i, pt) {
@@ -261,7 +261,7 @@ QUnit.module('Bubble. Points animation', {
 });
 
 QUnit.test('Draw without animation', function(assert) {
-    var series = this.series;
+    const series = this.series;
     // act
     series.draw(false);
     // assert
@@ -274,7 +274,7 @@ QUnit.test('Draw without animation', function(assert) {
 });
 
 QUnit.test('Draw with animation', function(assert) {
-    var series = this.series;
+    const series = this.series;
     // act
     series.draw(true);
     // assert
@@ -327,7 +327,7 @@ QUnit.module('Bubble. Point styles', {
 });
 
 QUnit.test('Style in point', function(assert) {
-    var series = createSeries(this.options);
+    const series = createSeries(this.options);
     series.updateData(this.data);
     series.createPoints();
 
@@ -357,7 +357,7 @@ QUnit.test('Style in point', function(assert) {
 });
 
 QUnit.test('Style in point group', function(assert) {
-    var series = createSeries(this.options, {
+    const series = createSeries(this.options, {
         argumentAxis: new MockAxis({ renderer: this.renderer }),
         valueAxis: new MockAxis({ renderer: this.renderer })
     });
@@ -378,7 +378,7 @@ QUnit.test('All options defined', function(assert) {
     this.options.border.dashStyle = 'n-b-dashStyle';
     this.options.hoverStyle.border.dashStyle = 'h-b-dashStyle';
     this.options.selectionStyle.border.dashStyle = 's-b-dashStyle';
-    var series = createSeries(this.options);
+    const series = createSeries(this.options);
     series.updateData(this.data);
     series.createPoints();
 
@@ -419,19 +419,19 @@ QUnit.module('Bubble. Customize point', {
 });
 
 QUnit.test('customizePoint object', function(assert) {
-    var spy = sinon.spy(),
-        series = createSeries({
-            type: seriesType,
-            customizePoint: spy,
-            name: 'seriesName'
-        });
+    const spy = sinon.spy();
+    const series = createSeries({
+        type: seriesType,
+        customizePoint: spy,
+        name: 'seriesName'
+    });
     series.updateData(this.data);
     series.createPoints();
 
     assert.ok(series);
     assert.equal(spy.callCount, 2);
 
-    var expectedArg = {
+    const expectedArg = {
         argument: 'arg1',
         value: 'val1',
         size: 'size1',
@@ -447,7 +447,7 @@ QUnit.test('customizePoint object', function(assert) {
 });
 
 QUnit.test('customize point color. all', function(assert) {
-    var series = createSeries({
+    const series = createSeries({
         type: seriesType,
         customizePoint: function() {
             return {
@@ -528,7 +528,7 @@ QUnit.module('Bubble. API', {
 });
 
 QUnit.test('getValueFields default', function(assert) {
-    var series = createSeries({
+    const series = createSeries({
         type: seriesType
     });
 
@@ -536,7 +536,7 @@ QUnit.test('getValueFields default', function(assert) {
 });
 
 QUnit.test('getValueFields', function(assert) {
-    var series = createSeries({
+    const series = createSeries({
         type: seriesType,
         valueField: 'customValueField',
         sizeField: 'customSizeField'
@@ -546,7 +546,7 @@ QUnit.test('getValueFields', function(assert) {
 });
 
 QUnit.test('getSizeField default', function(assert) {
-    var series = createSeries({
+    const series = createSeries({
         type: seriesType
     });
 
@@ -554,7 +554,7 @@ QUnit.test('getSizeField default', function(assert) {
 });
 
 QUnit.test('getSizeField', function(assert) {
-    var series = createSeries({
+    const series = createSeries({
         type: seriesType,
         valueField: 'customValueField',
         sizeField: 'customSizeField'
@@ -564,7 +564,7 @@ QUnit.test('getSizeField', function(assert) {
 });
 
 QUnit.test('getArgumentField default', function(assert) {
-    var series = createSeries({
+    const series = createSeries({
         type: seriesType
     });
 
@@ -572,7 +572,7 @@ QUnit.test('getArgumentField default', function(assert) {
 });
 
 QUnit.test('getArgumentField', function(assert) {
-    var series = createSeries({
+    const series = createSeries({
         type: seriesType,
         argumentField: 'customArgumentField'
     });
@@ -692,8 +692,8 @@ QUnit.module('Null points', {
 });
 
 QUnit.test('Argument is undefined', function(assert) {
-    var data = [{ arg: undefined, val: 1, size: 1 }],
-        series = createSeries(this.options);
+    const data = [{ arg: undefined, val: 1, size: 1 }];
+    const series = createSeries(this.options);
 
     series.updateData(data);
     series.createPoints();
@@ -702,8 +702,8 @@ QUnit.test('Argument is undefined', function(assert) {
 });
 
 QUnit.test('Argument is null', function(assert) {
-    var data = [{ arg: null, val: 1, size: 1 }],
-        series = createSeries(this.options);
+    const data = [{ arg: null, val: 1, size: 1 }];
+    const series = createSeries(this.options);
 
     series.updateData(data);
     series.createPoints();
@@ -712,8 +712,8 @@ QUnit.test('Argument is null', function(assert) {
 });
 
 QUnit.test('Value is undefined', function(assert) {
-    var data = [{ arg: 1, val: undefined, size: 1 }],
-        series = createSeries(this.options);
+    const data = [{ arg: 1, val: undefined, size: 1 }];
+    const series = createSeries(this.options);
 
     series.updateData(data);
     series.createPoints();
@@ -722,8 +722,8 @@ QUnit.test('Value is undefined', function(assert) {
 });
 
 QUnit.test('Value is null', function(assert) {
-    var data = [{ arg: 1, val: null, size: 1 }],
-        series = createSeries(this.options);
+    const data = [{ arg: 1, val: null, size: 1 }];
+    const series = createSeries(this.options);
 
     series.updateData(data);
     series.createPoints();
@@ -732,8 +732,8 @@ QUnit.test('Value is null', function(assert) {
 });
 
 QUnit.test('size is undefined', function(assert) {
-    var data = [{ arg: 1, val: 1, size: undefined }],
-        series = createSeries(this.options);
+    const data = [{ arg: 1, val: 1, size: undefined }];
+    const series = createSeries(this.options);
 
     series.updateData(data);
     series.createPoints();
@@ -742,8 +742,8 @@ QUnit.test('size is undefined', function(assert) {
 });
 
 QUnit.test('size is null', function(assert) {
-    var data = [{ arg: 1, val: 1, size: null }],
-        series = createSeries(this.options);
+    const data = [{ arg: 1, val: 1, size: null }];
+    const series = createSeries(this.options);
 
     series.updateData(data);
     series.createPoints();
@@ -754,7 +754,7 @@ QUnit.test('size is null', function(assert) {
 QUnit.module('Series visibility', environment);
 
 QUnit.test('Hide visible series', function(assert) {
-    var series = createSeries({
+    const series = createSeries({
         type: 'bubble',
         visible: true,
         visibilityChanged: sinon.spy(),
@@ -764,7 +764,7 @@ QUnit.test('Hide visible series', function(assert) {
     series.createPoints();
     series.hide();
 
-    var points = series.getPoints();
+    const points = series.getPoints();
     // see T243839
     $.each(points, function(_, point) {
         assert.ok(point._options.visible === false);
@@ -772,7 +772,7 @@ QUnit.test('Hide visible series', function(assert) {
 });
 
 QUnit.test('Show invisible series', function(assert) {
-    var series = createSeries({
+    const series = createSeries({
         type: 'bubble',
         visible: false,
         visibilityChanged: sinon.spy(),
@@ -783,7 +783,7 @@ QUnit.test('Show invisible series', function(assert) {
 
     series.show();
 
-    var points = series.getPoints();
+    const points = series.getPoints();
     // see T243839
     $.each(points, function(_, point) {
         assert.ok(point._options.visible === true);

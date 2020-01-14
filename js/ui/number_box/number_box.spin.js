@@ -1,24 +1,24 @@
-var $ = require('../../core/renderer'),
-    domAdapter = require('../../core/dom_adapter'),
-    eventsEngine = require('../../events/core/events_engine'),
-    Widget = require('../widget/ui.widget'),
-    extend = require('../../core/utils/extend').extend,
-    eventUtils = require('../../events/utils'),
-    pointerEvents = require('../../events/pointer'),
-    feedbackEvents = require('../../events/core/emitter.feedback'),
-    holdEvent = require('../../events/hold'),
-    Deferred = require('../../core/utils/deferred').Deferred;
+const $ = require('../../core/renderer');
+const domAdapter = require('../../core/dom_adapter');
+const eventsEngine = require('../../events/core/events_engine');
+const Widget = require('../widget/ui.widget');
+const extend = require('../../core/utils/extend').extend;
+const eventUtils = require('../../events/utils');
+const pointerEvents = require('../../events/pointer');
+const feedbackEvents = require('../../events/core/emitter.feedback');
+const holdEvent = require('../../events/hold');
+const Deferred = require('../../core/utils/deferred').Deferred;
 
-var SPIN_CLASS = 'dx-numberbox-spin',
-    SPIN_BUTTON_CLASS = 'dx-numberbox-spin-button',
+const SPIN_CLASS = 'dx-numberbox-spin';
+const SPIN_BUTTON_CLASS = 'dx-numberbox-spin-button';
 
-    SPIN_HOLD_DELAY = 100,
+const SPIN_HOLD_DELAY = 100;
 
-    NUMBER_BOX = 'dxNumberBox',
-    POINTERUP_EVENT_NAME = eventUtils.addNamespace(pointerEvents.up, NUMBER_BOX),
-    POINTERCANCEL_EVENT_NAME = eventUtils.addNamespace(pointerEvents.cancel, NUMBER_BOX);
+const NUMBER_BOX = 'dxNumberBox';
+const POINTERUP_EVENT_NAME = eventUtils.addNamespace(pointerEvents.up, NUMBER_BOX);
+const POINTERCANCEL_EVENT_NAME = eventUtils.addNamespace(pointerEvents.cancel, NUMBER_BOX);
 
-var SpinButton = Widget.inherit({
+const SpinButton = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -32,7 +32,7 @@ var SpinButton = Widget.inherit({
     _initMarkup: function() {
         this.callBase();
 
-        var direction = SPIN_CLASS + '-' + this.option('direction');
+        const direction = SPIN_CLASS + '-' + this.option('direction');
 
         this.$element()
             .addClass(SPIN_BUTTON_CLASS)
@@ -44,8 +44,8 @@ var SpinButton = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        var eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME),
-            $element = this.$element();
+        const eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        const $element = this.$element();
 
         eventsEngine.off($element, eventName);
         eventsEngine.on($element, eventName, this._spinDownHandler.bind(this));
@@ -65,7 +65,7 @@ var SpinButton = Widget.inherit({
             this._holdTimer = setInterval(this._spinChangeHandler, SPIN_HOLD_DELAY, { event: e });
         }).bind(this));
 
-        var document = domAdapter.getDocument();
+        const document = domAdapter.getDocument();
         eventsEngine.on(document, POINTERUP_EVENT_NAME, this._clearTimer.bind(this));
         eventsEngine.on(document, POINTERCANCEL_EVENT_NAME, this._clearTimer.bind(this));
 
@@ -80,7 +80,7 @@ var SpinButton = Widget.inherit({
     _clearTimer: function() {
         eventsEngine.off(this.$element(), holdEvent.name);
 
-        var document = domAdapter.getDocument();
+        const document = domAdapter.getDocument();
         eventsEngine.off(document, POINTERUP_EVENT_NAME);
         eventsEngine.off(document, POINTERCANCEL_EVENT_NAME);
 

@@ -790,9 +790,9 @@ const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
 const INKRIPPLE_MATERIAL_SHOW_TIMEOUT = 100;
 
 QUnit.test('button should have no inkRipple after fast swipe for Material theme', (assert) => {
-    const origIsMaterial = themes.isMaterial,
-        origCurrent = themes.current,
-        clock = sinon.useFakeTimers();
+    const origIsMaterial = themes.isMaterial;
+    const origCurrent = themes.current;
+    const clock = sinon.useFakeTimers();
 
     themes.isMaterial = () => { return true; };
     themes.current = () => { return 'material'; };
@@ -946,7 +946,7 @@ QUnit.test('multiple swipes should not break deletion', (assert) => {
 });
 
 QUnit.test('optimizations', (assert) => {
-    let origOuterWidth = renderer.fn.outerWidth;
+    const origOuterWidth = renderer.fn.outerWidth;
     const outerWidthStub = sinon.stub();
 
     try {

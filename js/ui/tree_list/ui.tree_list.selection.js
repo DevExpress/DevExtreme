@@ -6,14 +6,14 @@ import selectionModule from '../grid_core/ui.grid_core.selection';
 import errors from '../widget/ui.errors';
 import { extend } from '../../core/utils/extend';
 
-var TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all',
-    CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled',
-    SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
+const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
+const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
 
-var originalRowClick = selectionModule.extenders.views.rowsView._rowClick,
-    originalHandleDataChanged = selectionModule.extenders.controllers.data._handleDataChanged;
+const originalRowClick = selectionModule.extenders.views.rowsView._rowClick;
+const originalHandleDataChanged = selectionModule.extenders.controllers.data._handleDataChanged;
 
-var nodeExists = function(array, currentKey) {
+const nodeExists = function(array, currentKey) {
     return !!array.filter(function(key) { return key === currentKey; }).length;
 };
 
@@ -35,8 +35,8 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
         controllers: {
             data: {
                 _handleDataChanged: function(e) {
-                    var selectionController = this.getController('selection'),
-                        isRecursiveSelection = selectionController.isRecursiveSelection();
+                    const selectionController = this.getController('selection');
+                    const isRecursiveSelection = selectionController.isRecursiveSelection();
 
                     if(isRecursiveSelection && (!e || e.changeType !== 'updateSelectionState')) {
                         selectionController.updateSelectionState({
@@ -47,10 +47,10 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 loadDescendants: function() {
-                    var that = this,
-                        d = that.callBase.apply(that, arguments),
-                        selectionController = that.getController('selection'),
-                        isRecursiveSelection = selectionController.isRecursiveSelection();
+                    const that = this;
+                    const d = that.callBase.apply(that, arguments);
+                    const selectionController = that.getController('selection');
+                    const isRecursiveSelection = selectionController.isRecursiveSelection();
 
                     if(isRecursiveSelection) {
                         d.done(function() {
@@ -71,9 +71,9 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _getSelectionConfig: function() {
-                    let config = this.callBase.apply(this, arguments);
+                    const config = this.callBase.apply(this, arguments);
 
-                    var plainItems = config.plainItems;
+                    const plainItems = config.plainItems;
                     config.plainItems = (all) => {
                         if(all) {
                             return this._dataController.getCachedStoreData() || [];
@@ -82,7 +82,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                         return plainItems.apply(this, arguments).map(item => item.data);
                     };
                     config.isItemSelected = (item) => {
-                        let key = this._dataController.keyOf(item);
+                        const key = this._dataController.keyOf(item);
 
                         return this.isRowSelected(key);
                     };
@@ -97,12 +97,12 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 renderSelectCheckBoxContainer: function($container, model) {
-                    var that = this,
-                        rowsView = that.component.getView('rowsView');
+                    const that = this;
+                    const rowsView = that.component.getView('rowsView');
 
                     $container.addClass(CELL_FOCUS_DISABLED_CLASS);
 
-                    var $checkbox = rowsView._renderSelectCheckBox($container, {
+                    const $checkbox = rowsView._renderSelectCheckBox($container, {
                         value: model.row.isSelected,
                         row: model.row,
                         column: model.column
@@ -114,10 +114,10 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 _updateSelectColumn: noop,
 
                 _getVisibleNodeKeys: function(isRecursiveSelection) {
-                    var component = this.component,
-                        root = component.getRootNode(),
-                        cache = {},
-                        keys = [];
+                    const component = this.component;
+                    const root = component.getRootNode();
+                    const cache = {};
+                    const keys = [];
 
                     root && treeListCore.foreachNodes(root.children, function(node) {
                         if(node.key !== undefined && (node.visible || isRecursiveSelection)) {
@@ -131,11 +131,11 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 isSelectAll: function() {
-                    var component = this.component,
-                        hasIndeterminateState,
-                        visibleKeys = this._getVisibleNodeKeys();
+                    const component = this.component;
+                    let hasIndeterminateState;
+                    const visibleKeys = this._getVisibleNodeKeys();
 
-                    var selectedVisibleKeys = visibleKeys.filter(function(key) {
+                    const selectedVisibleKeys = visibleKeys.filter(function(key) {
                         return component.isRowSelected(key);
                     });
 
@@ -151,29 +151,29 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 selectAll: function() {
-                    var that = this,
-                        isRecursiveSelection = that.isRecursiveSelection(),
-                        visibleKeys = that._getVisibleNodeKeys(isRecursiveSelection).filter(function(key) {
-                            return !that.isRowSelected(key);
-                        });
+                    const that = this;
+                    const isRecursiveSelection = that.isRecursiveSelection();
+                    const visibleKeys = that._getVisibleNodeKeys(isRecursiveSelection).filter(function(key) {
+                        return !that.isRowSelected(key);
+                    });
 
                     return that.selectRows(visibleKeys, true);
                 },
 
                 deselectAll: function() {
-                    var isRecursiveSelection = this.isRecursiveSelection(),
-                        visibleKeys = this._getVisibleNodeKeys(isRecursiveSelection);
+                    const isRecursiveSelection = this.isRecursiveSelection();
+                    const visibleKeys = this._getVisibleNodeKeys(isRecursiveSelection);
 
                     return this.deselectRows(visibleKeys);
                 },
 
                 selectedItemKeys: function(value, preserve, isDeselect, isSelectAll) {
-                    var that = this,
-                        selectedRowKeys = that.option('selectedRowKeys'),
-                        isRecursiveSelection = this.isRecursiveSelection(),
-                        normalizedArgs = isRecursiveSelection && that._normalizeSelectionArgs({
-                            keys: value || []
-                        }, !isDeselect);
+                    const that = this;
+                    const selectedRowKeys = that.option('selectedRowKeys');
+                    const isRecursiveSelection = this.isRecursiveSelection();
+                    const normalizedArgs = isRecursiveSelection && that._normalizeSelectionArgs({
+                        keys: value || []
+                    }, !isDeselect);
 
                     if(normalizedArgs && !commonUtils.equalByValue(normalizedArgs.selectedRowKeys, selectedRowKeys)) {
                         that._isSelectionNormalizing = true;
@@ -191,10 +191,10 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 changeItemSelection: function(itemIndex, keyboardKeys) {
-                    var isRecursiveSelection = this.isRecursiveSelection();
+                    const isRecursiveSelection = this.isRecursiveSelection();
 
                     if(isRecursiveSelection && !keyboardKeys.shift) {
-                        var key = this._dataController.getKeyByRowIndex(itemIndex);
+                        const key = this._dataController.getKeyByRowIndex(itemIndex);
                         return this.selectedItemKeys(key, true, this.isRowSelected(key));
                     }
 
@@ -202,11 +202,11 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _updateParentSelectionState: function(node, isSelected) {
-                    var that = this,
-                        state = isSelected,
-                        parentNode = node.parent,
-                        hasNonSelectedState,
-                        hasSelectedState;
+                    const that = this;
+                    let state = isSelected;
+                    const parentNode = node.parent;
+                    let hasNonSelectedState;
+                    let hasSelectedState;
 
                     if(parentNode) {
                         if(parentNode.children.length > 1) {
@@ -234,8 +234,8 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _updateChildrenSelectionState: function(node, isSelected) {
-                    var that = this,
-                        children = node.children;
+                    const that = this;
+                    const children = node.children;
 
                     children && children.forEach(function(childNode) {
                         that._selectionStateByKey[childNode.key] = isSelected;
@@ -247,10 +247,10 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _updateSelectionStateCore: function(keys, isSelected) {
-                    var node,
-                        dataController = this._dataController;
+                    let node;
+                    const dataController = this._dataController;
 
-                    for(var i = 0; i < keys.length; i++) {
+                    for(let i = 0; i < keys.length; i++) {
                         this._selectionStateByKey[keys[i]] = isSelected;
                         node = dataController.getNodeByKey(keys[i]);
 
@@ -262,11 +262,11 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _getSelectedParentKeys: function(key, selectedItemKeys, useCash) {
-                    var isSelected,
-                        selectedParentNode,
-                        node = this._dataController.getNodeByKey(key),
-                        parentNode = node && node.parent,
-                        result = [];
+                    let isSelected;
+                    let selectedParentNode;
+                    const node = this._dataController.getNodeByKey(key);
+                    let parentNode = node && node.parent;
+                    let result = [];
 
                     while(parentNode && parentNode.level >= 0) {
                         result.unshift(parentNode.key);
@@ -287,11 +287,11 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _getSelectedChildKeys: function(node, keysToIgnore) {
-                    var that = this,
-                        childKeys = [];
+                    const that = this;
+                    const childKeys = [];
 
                     node && treeListCore.foreachNodes(node.children, function(childNode) {
-                        var ignoreKeyIndex = keysToIgnore.indexOf(childNode.key);
+                        const ignoreKeyIndex = keysToIgnore.indexOf(childNode.key);
 
                         if(ignoreKeyIndex < 0) {
                             childKeys.push(childNode.key);
@@ -304,12 +304,12 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _normalizeParentKeys: function(key, args) {
-                    var that = this,
-                        index,
-                        childKeys,
-                        parentNode,
-                        keysToIgnore = [key],
-                        parentNodeKeys = that._getSelectedParentKeys(key, args.selectedRowKeys);
+                    const that = this;
+                    let index;
+                    let childKeys;
+                    let parentNode;
+                    let keysToIgnore = [key];
+                    const parentNodeKeys = that._getSelectedParentKeys(key, args.selectedRowKeys);
 
                     if(parentNodeKeys.length) {
                         keysToIgnore = keysToIgnore.concat(parentNodeKeys);
@@ -329,9 +329,9 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _normalizeChildrenKeys: function(key, args) {
-                    var that = this,
-                        index,
-                        node = that._dataController.getNodeByKey(key);
+                    const that = this;
+                    let index;
+                    const node = that._dataController.getNodeByKey(key);
 
                     node && node.children.forEach(function(childNode) {
                         index = args.selectedRowKeys.indexOf(childNode.key);
@@ -344,8 +344,8 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _normalizeSelectedRowKeysCore: function(keys, args, isSelect) {
-                    var that = this,
-                        index;
+                    const that = this;
+                    let index;
 
                     keys.forEach(function(key) {
                         if(that.isRowSelected(key) === isSelect) {
@@ -371,9 +371,9 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _normalizeSelectionArgs: function(args, isSelect) {
-                    var result,
-                        keys = Array.isArray(args.keys) ? args.keys : [args.keys],
-                        selectedRowKeys = this.option('selectedRowKeys') || [];
+                    let result;
+                    const keys = Array.isArray(args.keys) ? args.keys : [args.keys];
+                    const selectedRowKeys = this.option('selectedRowKeys') || [];
 
                     if(keys.length) {
                         result = {
@@ -404,12 +404,12 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _getAllSelectedRowKeys: function(parentKeys) {
-                    var that = this,
-                        result = [];
+                    const that = this;
+                    let result = [];
                     parentKeys.forEach(function(key) {
-                        var insertIndex = result.length,
-                            parentKeys = that._getSelectedParentKeys(key, result, true),
-                            childKeys = that._dataController.getChildNodeKeys(key);
+                        const insertIndex = result.length;
+                        const parentKeys = that._getSelectedParentKeys(key, result, true);
+                        const childKeys = that._dataController.getChildNodeKeys(key);
 
                         result.splice.apply(result, [insertIndex, 0].concat(parentKeys));
                         result.push(key);
@@ -420,8 +420,8 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _getParentSelectedRowKeys: function(keys) {
-                    var that = this,
-                        result = [];
+                    const that = this;
+                    const result = [];
 
                     keys.forEach(key => {
                         const parentKeys = that._getSelectedParentKeys(key, keys);
@@ -432,12 +432,12 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _getLeafSelectedRowKeys: function(keys) {
-                    var that = this,
-                        result = [],
-                        dataController = that._dataController;
+                    const that = this;
+                    const result = [];
+                    const dataController = that._dataController;
 
                     keys.forEach(function(key) {
-                        var node = dataController.getNodeByKey(key);
+                        const node = dataController.getNodeByKey(key);
                         node && !node.hasChildren && result.push(key);
                     });
 
@@ -445,23 +445,23 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 isRecursiveSelection: function() {
-                    var selectionMode = this.option('selection.mode'),
-                        isRecursive = this.option('selection.recursive');
+                    const selectionMode = this.option('selection.mode');
+                    const isRecursive = this.option('selection.recursive');
 
                     return selectionMode === 'multiple' && isRecursive;
                 },
 
                 updateSelectionState: function(options) {
-                    var removedItemKeys = options.removedItemKeys || [],
-                        selectedItemKeys = options.selectedItemKeys || [];
+                    const removedItemKeys = options.removedItemKeys || [];
+                    const selectedItemKeys = options.selectedItemKeys || [];
 
                     this._updateSelectionStateCore(removedItemKeys, false);
                     this._updateSelectionStateCore(selectedItemKeys, true);
                 },
 
                 isRowSelected: function(key) {
-                    var result = this.callBase.apply(this, arguments),
-                        isRecursiveSelection = this.isRecursiveSelection();
+                    const result = this.callBase.apply(this, arguments);
+                    const isRecursiveSelection = this.isRecursiveSelection();
 
                     if(!result && isRecursiveSelection) {
                         if(key in this._selectionStateByKey) {
@@ -488,7 +488,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 * @return Array<any>
                 */
                 getSelectedRowKeys(mode) {
-                    var that = this;
+                    const that = this;
 
                     if(!that._dataController) {
                         return [];
@@ -498,7 +498,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                         errors.log('W0002', 'dxTreeList', 'getSelectedRowKeys(leavesOnly)', '18.1', 'Use the \'getSelectedRowKeys(mode)\' method with a string parameter instead');
                     }
 
-                    var selectedRowKeys = that.callBase.apply(that, arguments);
+                    let selectedRowKeys = that.callBase.apply(that, arguments);
 
                     if(mode) {
                         if(this.isRecursiveSelection()) {
@@ -528,13 +528,13 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 * @return Array<any>
                 */
                 getSelectedRowsData: function(mode) {
-                    var that = this,
-                        dataController = that._dataController,
-                        selectedKeys = this.getSelectedRowKeys(mode) || [],
-                        selectedRowsData = [];
+                    const that = this;
+                    const dataController = that._dataController;
+                    const selectedKeys = this.getSelectedRowKeys(mode) || [];
+                    const selectedRowsData = [];
 
                     selectedKeys.forEach(function(key) {
-                        var node = dataController.getNodeByKey(key);
+                        const node = dataController.getNodeByKey(key);
                         node && selectedRowsData.push(node.data);
                     });
 
@@ -550,11 +550,11 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
         views: {
             columnHeadersView: {
                 _processTemplate: function(template, options) {
-                    var that = this,
-                        resultTemplate,
-                        renderingTemplate = this.callBase(template, options);
+                    const that = this;
+                    let resultTemplate;
+                    const renderingTemplate = this.callBase(template, options);
 
-                    var firstDataColumnIndex = that._columnsController.getFirstDataColumnIndex();
+                    const firstDataColumnIndex = that._columnsController.getFirstDataColumnIndex();
 
                     if(renderingTemplate && options.rowType === 'header' && options.column.index === firstDataColumnIndex) {
                         resultTemplate = {
@@ -586,7 +586,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
             rowsView: {
                 _renderExpandIcon: function($container, options) {
-                    var $iconContainer = this.callBase($container, options);
+                    const $iconContainer = this.callBase($container, options);
 
                     if(this.option('selection.mode') === 'multiple') {
                         this.getController('selection').renderSelectCheckBoxContainer($iconContainer, options);
@@ -596,7 +596,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _rowClick: function(e) {
-                    var $targetElement = $(e.event.target);
+                    const $targetElement = $(e.event.target);
 
                     if(this.isExpandIcon($targetElement)) {
                         this.callBase.apply(this, arguments);

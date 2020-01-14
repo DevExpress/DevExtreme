@@ -1,26 +1,26 @@
-var $ = require('../../core/renderer'),
-    Callbacks = require('../../core/utils/callbacks'),
-    each = require('../../core/utils/iterator').each,
-    commonUtils = require('../../core/utils/common'),
-    extend = require('../../core/utils/extend').extend,
-    math = Math,
-    simulatedStrategy = require('./ui.scrollable.simulated'),
-    LoadIndicator = require('../load_indicator');
+const $ = require('../../core/renderer');
+const Callbacks = require('../../core/utils/callbacks');
+const each = require('../../core/utils/iterator').each;
+const commonUtils = require('../../core/utils/common');
+const extend = require('../../core/utils/extend').extend;
+const math = Math;
+const simulatedStrategy = require('./ui.scrollable.simulated');
+const LoadIndicator = require('../load_indicator');
 
-var SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading',
-    SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready',
-    SCROLLVIEW_PULLDOWN_IMAGE_CLASS = 'dx-scrollview-pull-down-image',
-    SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator',
-    SCROLLVIEW_PULLDOWN_TEXT_CLASS = 'dx-scrollview-pull-down-text',
-    SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = 'dx-scrollview-pull-down-text-visible',
+const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
+const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';
+const SCROLLVIEW_PULLDOWN_IMAGE_CLASS = 'dx-scrollview-pull-down-image';
+const SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator';
+const SCROLLVIEW_PULLDOWN_TEXT_CLASS = 'dx-scrollview-pull-down-text';
+const SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS = 'dx-scrollview-pull-down-text-visible';
 
-    STATE_RELEASED = 0,
-    STATE_READY = 1,
-    STATE_REFRESHING = 2,
-    STATE_LOADING = 3;
+const STATE_RELEASED = 0;
+const STATE_READY = 1;
+const STATE_REFRESHING = 2;
+const STATE_LOADING = 3;
 
 
-var ScrollViewScroller = simulatedStrategy.Scroller.inherit({
+const ScrollViewScroller = simulatedStrategy.Scroller.inherit({
 
     ctor: function() {
         this._topPocketSize = 0;
@@ -35,20 +35,20 @@ var ScrollViewScroller = simulatedStrategy.Scroller.inherit({
     },
 
     _refreshPullDownText: function() {
-        var that = this,
-            pullDownTextItems = [{
-                element: this._$pullingDownText,
-                visibleState: STATE_RELEASED
-            }, {
-                element: this._$pulledDownText,
-                visibleState: STATE_READY
-            }, {
-                element: this._$refreshingText,
-                visibleState: STATE_REFRESHING
-            }];
+        const that = this;
+        const pullDownTextItems = [{
+            element: this._$pullingDownText,
+            visibleState: STATE_RELEASED
+        }, {
+            element: this._$pulledDownText,
+            visibleState: STATE_READY
+        }, {
+            element: this._$refreshingText,
+            visibleState: STATE_REFRESHING
+        }];
 
         each(pullDownTextItems, function(_, item) {
-            var action = that._state === item.visibleState ? 'addClass' : 'removeClass';
+            const action = that._state === item.visibleState ? 'addClass' : 'removeClass';
             item.element[action](SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS);
         });
     },
@@ -60,7 +60,7 @@ var ScrollViewScroller = simulatedStrategy.Scroller.inherit({
     },
 
     _updateBounds: function() {
-        var considerPockets = this._direction !== 'horizontal';
+        const considerPockets = this._direction !== 'horizontal';
 
         this._topPocketSize = considerPockets ? Math.round(this._$topPocket[this._dimension]()) : 0;
         this._bottomPocketSize = considerPockets ? Math.round(this._$bottomPocket[this._dimension]()) : 0;
@@ -231,7 +231,7 @@ var ScrollViewScroller = simulatedStrategy.Scroller.inherit({
 });
 
 
-var SimulatedScrollViewStrategy = simulatedStrategy.SimulatedStrategy.inherit({
+const SimulatedScrollViewStrategy = simulatedStrategy.SimulatedStrategy.inherit({
 
     _init: function(scrollView) {
         this.callBase(scrollView);
@@ -253,10 +253,10 @@ var SimulatedScrollViewStrategy = simulatedStrategy.SimulatedStrategy.inherit({
     },
 
     _renderPullDown: function() {
-        var $image = $('<div>').addClass(SCROLLVIEW_PULLDOWN_IMAGE_CLASS),
-            $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS),
-            $loadIndicator = new LoadIndicator($('<div>')).$element(),
-            $text = this._$pullDownText = $('<div>').addClass(SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+        const $image = $('<div>').addClass(SCROLLVIEW_PULLDOWN_IMAGE_CLASS);
+        const $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS);
+        const $loadIndicator = new LoadIndicator($('<div>')).$element();
+        const $text = this._$pullDownText = $('<div>').addClass(SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
         this._$pullingDownText = $('<div>').text(this.option('pullingDownText')).appendTo($text);
         this._$pulledDownText = $('<div>').text(this.option('pulledDownText')).appendTo($text);
@@ -278,8 +278,8 @@ var SimulatedScrollViewStrategy = simulatedStrategy.SimulatedStrategy.inherit({
     },
 
     _createScroller: function(direction) {
-        var that = this;
-        var scroller = that._scrollers[direction] = new ScrollViewScroller(that._scrollerOptions(direction));
+        const that = this;
+        const scroller = that._scrollers[direction] = new ScrollViewScroller(that._scrollerOptions(direction));
         scroller.pullDownCallbacks.add(function() { that.pullDownCallbacks.fire(); });
         scroller.releaseCallbacks.add(function() { that.releaseCallbacks.fire(); });
         scroller.reachBottomCallbacks.add(function() { that.reachBottomCallbacks.fire(); });
@@ -306,7 +306,7 @@ var SimulatedScrollViewStrategy = simulatedStrategy.SimulatedStrategy.inherit({
     },
 
     location: function() {
-        var location = this.callBase();
+        const location = this.callBase();
         location.top += this._$topPocket.height();
         return location;
     },

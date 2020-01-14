@@ -1,20 +1,20 @@
-var $ = require('jquery'),
-    simpleProjection = require('viz/vector_map/projection').projection({
-        aspectRatio: 4 / 3,
-        to: function(coordinates) {
-            return [
-                (coordinates[0] - 200) / 200,
-                (coordinates[1] - 150) / 150
-            ];
-        },
+const $ = require('jquery');
+const simpleProjection = require('viz/vector_map/projection').projection({
+    aspectRatio: 4 / 3,
+    to: function(coordinates) {
+        return [
+            (coordinates[0] - 200) / 200,
+            (coordinates[1] - 150) / 150
+        ];
+    },
 
-        from: function(coordinates) {
-            return [
-                (coordinates[0] + 1) * 200,
-                (coordinates[1] + 1) * 150
-            ];
-        }
-    });
+    from: function(coordinates) {
+        return [
+            (coordinates[0] + 1) * 200,
+            (coordinates[1] + 1) * 150
+        ];
+    }
+});
 
 require('viz/vector_map/vector_map');
 
@@ -50,8 +50,8 @@ QUnit.module('Tests without stub', {
 });
 
 QUnit.test('VectorMap should not fire onCenterChanged and onZoomFactorChanged events on widget creation', function(assert) {
-    var onCenterChanged = sinon.spy(),
-        onZoomFactorChanged = sinon.spy();
+    const onCenterChanged = sinon.spy();
+    const onZoomFactorChanged = sinon.spy();
 
     $('#container').dxVectorMap({
         projection: simpleProjection,
@@ -69,10 +69,10 @@ QUnit.test('VectorMap should not fire onCenterChanged and onZoomFactorChanged ev
 });
 
 QUnit.test('VectorMap should fire onCenterChanged and onZoomFactorChanged events on option changing', function(assert) {
-    var onCenterChanged = sinon.spy(),
-        onZoomFactorChanged = sinon.spy();
+    const onCenterChanged = sinon.spy();
+    const onZoomFactorChanged = sinon.spy();
 
-    var map = $('#container').dxVectorMap({
+    const map = $('#container').dxVectorMap({
         projection: simpleProjection,
         layers: {
             dataSource: this.dataSource

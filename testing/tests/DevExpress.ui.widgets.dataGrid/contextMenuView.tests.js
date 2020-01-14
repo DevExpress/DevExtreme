@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<div>\
         <div id="container"  class="dx-datagrid">\
             <table id="columnHeaders"><tr class="dx-row"><td></td><td></td></tr></table>\
@@ -19,9 +19,9 @@ import 'ui/data_grid/ui.data_grid';
 
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
-var MockColumnsController = dataGridMocks.MockColumnsController,
-    MockDataController = dataGridMocks.MockDataController,
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
+const MockColumnsController = dataGridMocks.MockColumnsController;
+const MockDataController = dataGridMocks.MockDataController;
+const setupDataGridModules = dataGridMocks.setupDataGridModules;
 
 
 QUnit.module('Context menu', {
@@ -29,7 +29,7 @@ QUnit.module('Context menu', {
         this.element = function() {
             return $('#container');
         };
-        var that = this;
+        const that = this;
         setupDataGridModules(this, ['contextMenu'], {
             initViews: true,
             views: {
@@ -77,7 +77,7 @@ QUnit.module('Context menu', {
 
 QUnit.test('Render context menu', function(assert) {
     // arrange
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     // act
     this.contextMenuView.render(testElement);
@@ -90,10 +90,10 @@ QUnit.test('Render context menu', function(assert) {
 
 QUnit.test('Show context menu with defined menu items', function(assert) {
     // arrange
-    var that = this,
-        contextMenuInstance,
-        contextMenu = that.contextMenuView,
-        testElement = $('#container');
+    const that = this;
+    let contextMenuInstance;
+    const contextMenu = that.contextMenuView;
+    const testElement = $('#container');
 
     that.contextMenuItems1 = [
         { text: 'asc' },
@@ -115,10 +115,10 @@ QUnit.test('Show context menu with defined menu items', function(assert) {
 
 QUnit.test('Not show context menu with undefined menu items', function(assert) {
     // arrange
-    var that = this,
-        contextMenuInstance,
-        contextMenu = that.contextMenuView,
-        testElement = $('#container');
+    const that = this;
+    let contextMenuInstance;
+    const contextMenu = that.contextMenuView;
+    const testElement = $('#container');
 
     // act
     contextMenu.render(testElement);
@@ -131,14 +131,14 @@ QUnit.test('Not show context menu with undefined menu items', function(assert) {
 
 QUnit.test('Show context menu when several views', function(assert) {
     // arrange
-    var that = this,
-        contextMenuInstance,
-        contextMenu = that.contextMenuView,
-        testElement = $('#container'),
-        text,
-        onItemClick = function() {
-            text = this.text;
-        };
+    const that = this;
+    let contextMenuInstance;
+    const contextMenu = that.contextMenuView;
+    const testElement = $('#container');
+    let text;
+    const onItemClick = function() {
+        text = this.text;
+    };
 
     that.contextMenuItems1 = [
         { text: 'asc1', onItemClick: onItemClick },
@@ -188,10 +188,10 @@ QUnit.test('Show context menu when several views', function(assert) {
 
 QUnit.test('Datagrid save \'rtlEnabled\' class after contextMenu\'s invalidate', function(assert) {
     // arrange
-    var rtlClass = 'dx-rtl',
-        testElement = $('#secondContainer'),
-        contextMenu = this.contextMenuView,
-        instance;
+    const rtlClass = 'dx-rtl';
+    const testElement = $('#secondContainer');
+    const contextMenu = this.contextMenuView;
+    let instance;
 
     testElement.dxDataGrid({ rtlEnabled: true });
 
@@ -212,7 +212,7 @@ QUnit.test('Datagrid save \'rtlEnabled\' class after contextMenu\'s invalidate',
 
 QUnit.module('Context menu with rowsView', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
 
         that.element = function() {
             return $('#secondContainer');
@@ -243,10 +243,10 @@ QUnit.module('Context menu with rowsView', {
 
 QUnit.test('Context menu with option onContextMenuPreparing', function(assert) {
     // arrange
-    var that = this,
-        contextMenuInstance,
-        contextMenuOptions,
-        $testElement = $('#secondContainer');
+    const that = this;
+    let contextMenuInstance;
+    let contextMenuOptions;
+    const $testElement = $('#secondContainer');
 
     that.options = {
         onContextMenuPreparing: function(options) {
@@ -290,10 +290,10 @@ QUnit.test('Context menu with option onContextMenuPreparing', function(assert) {
 // T403458
 QUnit.test('Context menu with option onContextMenuPreparing when no data and scrollbar', function(assert) {
     // arrange
-    var that = this,
-        $rowsViewElement,
-        contextMenuInstance,
-        $testElement = $('#secondContainer');
+    const that = this;
+    let $rowsViewElement;
+    let contextMenuInstance;
+    const $testElement = $('#secondContainer');
 
     that.options = {
         onContextMenuPreparing: function(options) {
@@ -335,10 +335,10 @@ QUnit.test('Context menu with option onContextMenuPreparing when no data and scr
 
 QUnit.test('Context menu should not be shown without items', function(assert) {
     // arrange
-    var that = this,
-        contextMenuInstance,
-        contextMenuItems = [{ text: 'test' }],
-        $testElement = $('#secondContainer');
+    const that = this;
+    let contextMenuInstance;
+    let contextMenuItems = [{ text: 'test' }];
+    const $testElement = $('#secondContainer');
 
     that.options = {
         onContextMenuPreparing: function(options) {
@@ -368,10 +368,10 @@ QUnit.test('Context menu should not be shown without items', function(assert) {
 // T316422
 QUnit.test('Context menu with option onContextMenuPreparing for group row', function(assert) {
     // arrange
-    var that = this,
-        contextMenuInstance,
-        contextMenuPreparingArg,
-        $testElement = $('#secondContainer');
+    const that = this;
+    let contextMenuInstance;
+    let contextMenuPreparingArg;
+    const $testElement = $('#secondContainer');
 
     that.options = {
         onContextMenuPreparing: function(options) {
@@ -410,9 +410,9 @@ QUnit.test('Context menu with option onContextMenuPreparing for group row', func
 
 QUnit.test('Context menu with option onContextMenuPreparing for detail row if template contains table (T813135)', function(assert) {
     // arrange
-    var that = this,
-        contextMenuPreparingArg,
-        $testElement = $('#secondContainer');
+    const that = this;
+    let contextMenuPreparingArg;
+    const $testElement = $('#secondContainer');
 
     that.options = {
         onContextMenuPreparing: function(options) {
@@ -452,9 +452,9 @@ QUnit.test('Context menu with option onContextMenuPreparing for detail row if te
 // T827323
 QUnit.test('Context menu should works if rowTemplate is defined', function(assert) {
     // arrange
-    var that = this,
-        contextMenuPreparingArg,
-        $testElement = $('#secondContainer');
+    const that = this;
+    let contextMenuPreparingArg;
+    const $testElement = $('#secondContainer');
 
     that.options = {
         onContextMenuPreparing: function(options) {
@@ -463,7 +463,7 @@ QUnit.test('Context menu should works if rowTemplate is defined', function(asser
             }
         },
         rowTemplate: function(container, options) {
-            var data = options.data;
+            const data = options.data;
             $(container).append('<tbody class=\'employee dx-row\'>' +
                 '<tr class=\'main-row\'>' +
                     '<td class=\'click-me\'>CLICK ME</td>' +

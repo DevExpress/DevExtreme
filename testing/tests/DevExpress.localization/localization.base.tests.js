@@ -8,17 +8,17 @@ QUnit.module('Base localization', function() {
     sharedTests();
 
     QUnit.test('\'no parser\' errors', function(assert) {
-        var numberFormatter = function(value) {
-                return '1';
-            },
-            dateFormatter = function(value) {
-                return new Date(0, 0, 1);
-            },
-            warningIdPrefixLength = 8,
-            numberWarning = 'Number parsing is invoked while the parser is not defined',
-            dateWarning = 'Date parsing is invoked while the parser is not defined',
-            originalLoggerWarn = logger.warn,
-            warnLog = [];
+        const numberFormatter = function(value) {
+            return '1';
+        };
+        const dateFormatter = function(value) {
+            return new Date(0, 0, 1);
+        };
+        const warningIdPrefixLength = 8;
+        const numberWarning = 'Number parsing is invoked while the parser is not defined';
+        const dateWarning = 'Date parsing is invoked while the parser is not defined';
+        const originalLoggerWarn = logger.warn;
+        const warnLog = [];
 
         logger.warn = function(text) {
             warnLog.push(text);

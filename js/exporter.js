@@ -1,9 +1,9 @@
-var fileSaver = require('./exporter/file_saver').fileSaver,
-    excelCreator = require('./exporter/excel_creator'),
-    imageCreator = require('./exporter/image_creator'),
-    svgCreator = require('./exporter/svg_creator'),
-    _isFunction = require('./core/utils/type').isFunction,
-    Deferred = require('./core/utils/deferred').Deferred;
+const fileSaver = require('./exporter/file_saver').fileSaver;
+const excelCreator = require('./exporter/excel_creator');
+const imageCreator = require('./exporter/image_creator');
+const svgCreator = require('./exporter/svg_creator');
+const _isFunction = require('./core/utils/type').isFunction;
+const Deferred = require('./core/utils/deferred').Deferred;
 
 exports.export = function(data, options, getData) {
     if(!data) {
@@ -11,14 +11,14 @@ exports.export = function(data, options, getData) {
     }
 
     // TODO: Can the following actions be not defined? (since they are provided by a widget not by a user)
-    var exportingAction = options.exportingAction,
-        exportedAction = options.exportedAction,
-        fileSavingAction = options.fileSavingAction,
-        eventArgs = {
-            fileName: options.fileName,
-            format: options.format,
-            cancel: false
-        };
+    const exportingAction = options.exportingAction;
+    const exportedAction = options.exportedAction;
+    const fileSavingAction = options.fileSavingAction;
+    const eventArgs = {
+        fileName: options.fileName,
+        format: options.format,
+        cancel: false
+    };
 
     _isFunction(exportingAction) && exportingAction(eventArgs);
 

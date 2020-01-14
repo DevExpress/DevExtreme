@@ -4,10 +4,10 @@ import { grep } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { isDefined } from '../../core/utils/type';
 
-var MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell',
-    MASTER_DETAIL_ROW_CLASS = 'dx-master-detail-row',
-    CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled',
-    ROW_LINES_CLASS = 'dx-row-lines';
+const MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell';
+const MASTER_DETAIL_ROW_CLASS = 'dx-master-detail-row';
+const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const ROW_LINES_CLASS = 'dx-row-lines';
 
 
 module.exports = {
@@ -47,7 +47,7 @@ module.exports = {
         controllers: {
             columns: {
                 _getExpandColumnsCore: function() {
-                    var expandColumns = this.callBase();
+                    const expandColumns = this.callBase();
 
                     if(this.option('masterDetail.enabled')) {
                         expandColumns.push({
@@ -59,20 +59,20 @@ module.exports = {
                 }
             },
             data: (function() {
-                var initMasterDetail = function(that) {
+                const initMasterDetail = function(that) {
                     that._expandedItems = [];
                     that._isExpandAll = that.option('masterDetail.autoExpandAll');
                 };
 
                 return {
                     init: function() {
-                        var that = this;
+                        const that = this;
 
                         initMasterDetail(that);
                         that.callBase();
                     },
                     expandAll: function(groupIndex) {
-                        var that = this;
+                        const that = this;
 
                         if(groupIndex < 0) {
                             that._isExpandAll = true;
@@ -83,7 +83,7 @@ module.exports = {
                         }
                     },
                     collapseAll: function(groupIndex) {
-                        var that = this;
+                        const that = this;
 
                         if(groupIndex < 0) {
                             that._isExpandAll = false;
@@ -94,8 +94,8 @@ module.exports = {
                         }
                     },
                     isRowExpanded: function(key) {
-                        var that = this,
-                            expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
+                        const that = this;
+                        const expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
 
                         if(Array.isArray(key)) {
                             return that.callBase.apply(that, arguments);
@@ -104,21 +104,21 @@ module.exports = {
                         }
                     },
                     _getRowIndicesForExpand: function(key) {
-                        var rowIndex = this.getRowIndexByKey(key);
+                        const rowIndex = this.getRowIndexByKey(key);
 
                         return [rowIndex, rowIndex + 1];
                     },
                     _changeRowExpandCore: function(key) {
-                        var that = this,
-                            expandIndex,
-                            editingController;
+                        const that = this;
+                        let expandIndex;
+                        let editingController;
 
                         if(Array.isArray(key)) {
                             return that.callBase.apply(that, arguments);
                         } else {
                             expandIndex = gridCoreUtils.getIndexByKey(key, that._expandedItems);
                             if(expandIndex >= 0) {
-                                var visible = that._expandedItems[expandIndex].visible;
+                                const visible = that._expandedItems[expandIndex].visible;
 
                                 that._expandedItems[expandIndex].visible = !visible;
                             } else {
@@ -137,8 +137,8 @@ module.exports = {
                         }
                     },
                     _processDataItem: function(data, options) {
-                        var that = this,
-                            dataItem = that.callBase.apply(that, arguments);
+                        const that = this;
+                        const dataItem = that.callBase.apply(that, arguments);
 
                         dataItem.isExpanded = that.isRowExpanded(dataItem.key);
 
@@ -157,10 +157,10 @@ module.exports = {
                         return dataItem;
                     },
                     _processItems: function(items, change) {
-                        var that = this,
-                            changeType = change.changeType,
-                            expandIndex,
-                            result = [];
+                        const that = this;
+                        const changeType = change.changeType;
+                        let expandIndex;
+                        const result = [];
 
                         items = that.callBase.apply(that, arguments);
 
@@ -190,11 +190,11 @@ module.exports = {
                         return result;
                     },
                     optionChanged: function(args) {
-                        var that = this,
-                            value,
-                            previousValue,
-                            isEnabledChanged,
-                            isAutoExpandAllChanged;
+                        const that = this;
+                        let value;
+                        let previousValue;
+                        let isEnabledChanged;
+                        let isAutoExpandAllChanged;
 
                         if(args.name === 'masterDetail') {
                             args.name = 'dataSource';
@@ -228,11 +228,11 @@ module.exports = {
             rowsView: (function() {
                 return {
                     _getCellTemplate: function(options) {
-                        var that = this,
-                            column = options.column,
-                            editingController = that.getController('editing'),
-                            isEditRow = editingController && editingController.isEditRow(options.rowIndex),
-                            template;
+                        const that = this;
+                        const column = options.column;
+                        const editingController = that.getController('editing');
+                        const isEditRow = editingController && editingController.isEditRow(options.rowIndex);
+                        let template;
 
                         if(column.command === 'detail' && !isEditRow) {
                             template = that.option('masterDetail.template') || { allowRenderToDetachedContainer: false, render: that._getDefaultTemplate(column) };
@@ -244,14 +244,14 @@ module.exports = {
                     },
 
                     _cellPrepared: function($cell, options) {
-                        var that = this,
-                            masterGrid = that.component;
+                        const that = this;
+                        const masterGrid = that.component;
 
                         that.callBase.apply(that, arguments);
 
                         if(options.rowType === 'detail' && options.column.command === 'detail') {
                             $cell.find('.' + that.getWidgetContainerClass()).each(function() {
-                                var detailGrid = $(this).parent().data('dxDataGrid');
+                                const detailGrid = $(this).parent().data('dxDataGrid');
 
                                 if(detailGrid) {
                                     detailGrid.on('contentReady', () => {
@@ -264,13 +264,13 @@ module.exports = {
 
                     _handleDetailGridContentReady: function(masterGrid, masterRowIndex, detailGrid) {
                         if(this._isFixedColumns) {
-                            let $rows = $(masterGrid.getRowElement(masterRowIndex));
+                            const $rows = $(masterGrid.getRowElement(masterRowIndex));
                             if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
-                                let detailGridWidth = detailGrid.$element().width();
+                                const detailGridWidth = detailGrid.$element().width();
 
                                 masterGrid.updateDimensions().done(function() {
-                                    let isDetailHorizontalScrollCanBeShown = detailGrid.option('columnAutoWidth') && masterGrid.option('scrolling.useNative') === true,
-                                        isDetailGridWidthChanged = isDetailHorizontalScrollCanBeShown && detailGridWidth !== detailGrid.$element().width();
+                                    const isDetailHorizontalScrollCanBeShown = detailGrid.option('columnAutoWidth') && masterGrid.option('scrolling.useNative') === true;
+                                    const isDetailGridWidthChanged = isDetailHorizontalScrollCanBeShown && detailGridWidth !== detailGrid.$element().width();
 
                                     if(isDetailGridWidthChanged) {
                                         detailGrid.updateDimensions();
@@ -278,7 +278,7 @@ module.exports = {
                                 });
                             }
                         } else {
-                            let scrollable = masterGrid.getScrollable();
+                            const scrollable = masterGrid.getScrollable();
                             // T607490
                             scrollable && scrollable.update();
                         }
@@ -289,7 +289,7 @@ module.exports = {
                     },
 
                     _createRow: function(row) {
-                        var $row = this.callBase(row);
+                        const $row = this.callBase(row);
 
                         if(row && this._isDetailRow(row)) {
                             this.option('showRowLines') && $row.addClass(ROW_LINES_CLASS);
@@ -303,9 +303,9 @@ module.exports = {
                     },
 
                     _renderCells: function($row, options) {
-                        var row = options.row,
-                            $detailCell,
-                            visibleColumns = this._columnsController.getVisibleColumns();
+                        const row = options.row;
+                        let $detailCell;
+                        const visibleColumns = this._columnsController.getVisibleColumns();
 
                         if(row.rowType && this._isDetailRow(row)) {
                             $detailCell = this._renderCell($row, {

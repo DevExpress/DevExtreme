@@ -1,9 +1,9 @@
-var registerComponent = require('../../../core/component_registrator'),
-    SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
+const registerComponent = require('../../../core/component_registrator');
+const SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
 
-var DAY_CLASS = 'dx-scheduler-work-space-day';
+const DAY_CLASS = 'dx-scheduler-work-space-day';
 
-var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
+const SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     _getElementClass: function() {
         return DAY_CLASS;
     },
@@ -26,7 +26,7 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
             return this._firstViewDate;
         }
 
-        var resultDate = new Date(this._firstViewDate);
+        const resultDate = new Date(this._firstViewDate);
         resultDate.setDate(this._firstViewDate.getDate() + headerIndex);
         return resultDate;
     },
