@@ -58,6 +58,8 @@ const repeatEndTypes = [
 
 const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
+const DAYS_IN_WEEK = 7;
+
 class RecurrenceRule {
 
     constructor(recurrence) {
@@ -362,9 +364,9 @@ const RecurrenceEditor = Editor.inherit({
 
         this._daysOfWeek = [];
 
-        for(let i = 0; i < 7; i++) {
+        for(let i = 0; i < DAYS_IN_WEEK; i++) {
             const daysOffset = this._getFirstDayOfWeek() + i;
-            const dayIndex = daysOffset % 7;
+            const dayIndex = daysOffset % DAYS_IN_WEEK;
             const checkBoxText = localDaysNames[dayIndex].toUpperCase();
             const dayName = days[dayIndex];
             const $day = $('<div>').addClass(DAY_OF_WEEK);
@@ -396,7 +398,7 @@ const RecurrenceEditor = Editor.inherit({
 
         each(this._daysOfWeek, (index, day) => {
             if(day.option('value')) {
-                const dayName = days[(index + daysOffset) % 7];
+                const dayName = days[(index + daysOffset) % DAYS_IN_WEEK];
 
                 if(!byDayRule) {
                     byDayRule = dayName;
@@ -871,7 +873,7 @@ const RecurrenceEditor = Editor.inherit({
         const firstDayOfWeek = this._getFirstDayOfWeek();
 
         each(this._daysOfWeek, (index, day) => {
-            const dayName = days[(index + firstDayOfWeek) % 7];
+            const dayName = days[(index + firstDayOfWeek) % DAYS_IN_WEEK];
 
             day.option('value', inArray(dayName, daysByRule) > -1);
         });
