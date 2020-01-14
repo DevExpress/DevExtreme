@@ -582,41 +582,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _getSelectedKeysDiff(oldSelectedKeys, newSelectedKeys) {
-        let toSelect = [];
-        let toDeselect = [];
-        const isRecursiveSelection = this._isRecursiveSelection();
-
-        const oldKeys = oldSelectedKeys || [];
-        const newKeys = newSelectedKeys || [];
-        newKeys.forEach((newKey) => {
-            if(oldKeys.indexOf(newKey) !== -1) {
-                return;
-            }
-            toSelect.push(newKey);
-        });
-
-        oldKeys.forEach((oldKey) => {
-            if(newKeys.indexOf(oldKey) !== -1) {
-                return;
-            }
-
-            let isFind = false;
-            if(isRecursiveSelection) {
-                if(this._dataAdapter.isChildKey(oldKey, newKeys)) {
-                    return;
-                }
-                isFind = newKeys.some((newKey) => this._dataAdapter.isChildKey(newKey, [oldKey]));
-            }
-
-            if(!isFind) {
-                toDeselect.push(oldKey);
-            }
-        });
-
-        return { toSelect, toDeselect };
-    },
-
     _useCustomChildrenLoader: function() {
         return isFunction(this.option('createChildren')) && this._isDataStructurePlain();
     },
@@ -1945,18 +1910,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
      */
     selectNodesByKeys: function(keys) {
         const oldSelectedKeys = this.getSelectedNodesKeys();
-        const diff = this._getSelectedKeysDiff(oldSelectedKeys, keys);
-
-        diff.toDeselect.forEach((key) => {
-            this._setItemSelection(false, key);
-        });
-        diff.toSelect.forEach((key) => {
+        keys.forEach((key) => {
             this._setItemSelection(true, key);
         });
 
-        if(oldSelectedKeys !== this.getSelectedNodesKeys()) {
+        const actualSelectedKeys = this.getSelectedNodesKeys();
+        if(oldSelectedKeys !== actualSelectedKeys) {
             this._fireSelectionChanged();
         }
+
+        return actualSelectedKeys;
     },
 
     /**
