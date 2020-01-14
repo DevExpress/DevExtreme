@@ -11,19 +11,19 @@ QUnit.testStart(function() {
 });
 
 ['xs', 'sm', 'md', 'lg'].forEach(screenSize => {
-    const DEFAULT_PADDING_X = 40;
-    const DEFAULT_PADDING_Y = 86;
+    const DEFAULT_PADDING_RIGHT = 40;
+    const DEFAULT_PADDING_TOP = 86;
     QUnit.module(`Form have correct padding (T849353), screen size: ${screenSize}`);
 
     function getPadding($items, itemIndex1, itemIndex2) {
         const item1Rect = $items.get(itemIndex1).getBoundingClientRect();
         const item2Rect = $items.get(itemIndex2).getBoundingClientRect();
 
-        const paddingY = item2Rect.top - item1Rect.top;
+        const paddingTop = item2Rect.top - item1Rect.top;
         const paddingLeft = item2Rect.left - item1Rect.left;
         const paddingRight = item2Rect.left - item1Rect.right;
 
-        return { paddingY, paddingLeft, paddingRight };
+        return { paddingTop: paddingTop, paddingLeft, paddingRight };
     }
 
     QUnit.test('1 column -> 2 items without groups', function(assert) {
@@ -36,7 +36,7 @@ QUnit.testStart(function() {
         const actualPadding = getPadding($items, 0, 1);
 
         assert.equal(actualPadding.paddingLeft, 0);
-        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
     });
 
     QUnit.test('1 column -> 1 item and 1 group', function(assert) {
@@ -51,7 +51,7 @@ QUnit.testStart(function() {
         const actualPadding = getPadding($items, 0, 1);
 
         assert.equal(actualPadding.paddingLeft, 0);
-        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
     });
 
     QUnit.test('1 column -> 1 item and 1 group with nested group', function(assert) {
@@ -68,7 +68,7 @@ QUnit.testStart(function() {
         const actualPadding = getPadding($items, 0, 1);
 
         assert.equal(actualPadding.paddingLeft, 0);
-        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
     });
 
     QUnit.test('1 column -> 2 item and 1 group with nested group', function(assert) {
@@ -85,7 +85,7 @@ QUnit.testStart(function() {
         const actualPadding = getPadding($items, 1, 2);
 
         assert.equal(actualPadding.paddingLeft, 0);
-        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
     });
 
     QUnit.test('1 column -> 2 item and 1 group with sub-nested group', function(assert) {
@@ -104,7 +104,7 @@ QUnit.testStart(function() {
         const actualPadding = getPadding($items, 1, 2);
 
         assert.equal(actualPadding.paddingLeft, 0);
-        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
     });
 
     QUnit.test('2 columns -> 2 items without groups', function(assert) {
@@ -118,10 +118,10 @@ QUnit.testStart(function() {
 
         if(screenSize === 'xs') {
             assert.equal(actualPadding.paddingLeft, 0);
-            assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+            assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
         } else {
-            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_X);
-            assert.equal(actualPadding.paddingY, 0);
+            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_RIGHT);
+            assert.equal(actualPadding.paddingTop, 0);
         }
     });
 
@@ -138,10 +138,10 @@ QUnit.testStart(function() {
 
         if(screenSize === 'xs') {
             assert.equal(actualPadding.paddingLeft, 0);
-            assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+            assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
         } else {
-            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_X);
-            assert.equal(actualPadding.paddingY, 0);
+            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_RIGHT);
+            assert.equal(actualPadding.paddingTop, 0);
         }
     });
 
@@ -160,10 +160,10 @@ QUnit.testStart(function() {
 
         if(screenSize === 'xs') {
             assert.equal(actualPadding.paddingLeft, 0);
-            assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+            assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
         } else {
-            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_X);
-            assert.equal(actualPadding.paddingY, 0);
+            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_RIGHT);
+            assert.equal(actualPadding.paddingTop, 0);
         }
     });
 
@@ -183,10 +183,10 @@ QUnit.testStart(function() {
 
         if(screenSize === 'xs') {
             assert.equal(actualPadding.paddingLeft, 0);
-            assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+            assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
         } else {
-            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_X);
-            assert.equal(actualPadding.paddingY, 0);
+            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_RIGHT);
+            assert.equal(actualPadding.paddingTop, 0);
         }
     });
 
@@ -209,10 +209,10 @@ QUnit.testStart(function() {
 
         if(screenSize === 'xs') {
             assert.equal(actualPadding.paddingLeft, 0);
-            assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+            assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
         } else {
-            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_X);
-            assert.equal(actualPadding.paddingY, 0);
+            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_RIGHT);
+            assert.equal(actualPadding.paddingTop, 0);
         }
     });
 
@@ -229,7 +229,7 @@ QUnit.testStart(function() {
         const $items = $form.find('input');
         const actualPadding = getPadding($items, 1, 2);
 
-        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
     });
 
     QUnit.test('2 columns -> 2 groups with nested groups and 1 item', function(assert) {
@@ -254,7 +254,7 @@ QUnit.testStart(function() {
         const $items = $form.find('input');
         const actualPadding = getPadding($items, 1, 2);
 
-        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
     });
 
 
@@ -277,7 +277,7 @@ QUnit.testStart(function() {
         const $items = $form.find('input');
         const actualPadding = getPadding($items, 1, 2);
 
-        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
     });
 
     QUnit.test('form -> 4 columns and 3 groups with colspan', function(assert) {
@@ -299,7 +299,7 @@ QUnit.testStart(function() {
         const $items = $form.find('input');
         const actualPadding = getPadding($items, 1, 2);
 
-        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
     });
 });
 
