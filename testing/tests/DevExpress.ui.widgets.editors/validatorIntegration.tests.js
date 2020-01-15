@@ -26,8 +26,8 @@ import 'ui/switch';
 
 const Fixture = Class.inherit({
     createInstance: function(editor, editorOptions, validatorOptions, keyboard = true) {
-        const $element = $('<div/>')[editor](editorOptions).dxValidator(validatorOptions);
-        this.$element = $element;
+        const $element = $('<div/>').appendTo('#qunit-fixture');
+        this.$element = $element[editor](editorOptions).dxValidator(validatorOptions);
 
         this.$input = $element.find('.dx-texteditor-input');
         if(keyboard) {
@@ -251,6 +251,17 @@ const Fixture = Class.inherit({
             this.fixture.$input.val('').trigger('change');
 
             assert.strictEqual(this.fixture.editor.option('isValid'), false, 'Editor should be invalid because of empty value');
+        });
+
+        QUnit.test('Validator should not toggle the "dx-rtl" class', function(assert) {
+            this.fixture.createInstance('dxTextBox', { rtlEnabled: true }, {
+                rtlEnabled: false,
+                validationRules: [{
+                    type: 'required'
+                }]
+            }, false);
+
+            assert.ok(this.fixture.$element.hasClass('dx-rtl'), 'Root element has the "dx-rtl" class');
         });
     })('Regression');
 });

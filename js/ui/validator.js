@@ -180,6 +180,12 @@ const Validator = DOMComponent.inherit({
         this.callBase();
     },
 
+    _toggleRTLDirection: function(isRtl) {
+        const rtlEnabled = this.option('adapter')?.editor?.option('rtlEnabled') ?? isRtl;
+
+        this.callBase(rtlEnabled);
+    },
+
     _visibilityChanged: function(visible) {
         if(visible) {
             this._initGroupRegistration();
