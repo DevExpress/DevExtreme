@@ -384,6 +384,10 @@ class FileManager extends Widget {
             * @name dxFileManagerContextMenuItem
             * @inherits dxContextMenuItem
             */
+            /**
+            * @name dxFileManagerContextMenuItem.items
+            * @type Array<dxFileManagerContextMenuItem>
+            */
 
             contextMenu: {
                 items: [
