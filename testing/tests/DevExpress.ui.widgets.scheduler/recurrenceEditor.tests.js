@@ -788,3 +788,16 @@ QUnit.test('Repeat-on-week editor should process values from checkboxes correctl
 
     assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=SA,TU', 'Value was processed correctly');
 });
+
+QUnit.test('Repeat-count editor should have correct value after re-initializing values', function(assert) {
+    this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=SU,TU;COUNT=3' });
+
+    this.instance.option('value', '');
+
+    this.instance.option('value', 'FREQ=WEEKLY;BYDAY=SU,TU;COUNT=3');
+
+    const repeatCount = this.instance.$element().find('.' + REPEAT_COUNT_EDITOR).eq(0).dxNumberBox('instance');
+
+    assert.equal(repeatCount.option('value'), 3, 'Value was processed correctly');
+});
+
