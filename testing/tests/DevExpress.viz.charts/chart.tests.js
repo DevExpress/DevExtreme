@@ -14,8 +14,8 @@ const Legend = vizMocks.Legend;
 const ChartTitle = vizMocks.Title;
 const Axis = vizMocks.stubClass(axisModule.Axis);
 const Range = vizMocks.stubClass(rangeModule.Range);
-const DataSourceBase = require('data/data_source/data_source').DataSource;
-const DataSource = vizMocks.stubClass(DataSourceBase);
+const DataSource = require('data/data_source/data_source').DataSource;
+const DataSourceMock = vizMocks.stubClass(DataSource);
 
 require('viz/chart');
 
@@ -184,7 +184,7 @@ QUnit.test('Creation dataSource', function(assert) {
     this.options = { dataSource: [{}], series: [{}] };
     const chart = this.createChart();
 
-    assert.ok(chart.getDataSource() instanceof DataSourceBase, 'dataSource created');
+    assert.ok(chart.getDataSource() instanceof DataSource, 'dataSource created');
 });
 
 QUnit.test('Loading dataSource', function(assert) {
@@ -197,7 +197,7 @@ QUnit.test('Loading dataSource', function(assert) {
 });
 
 QUnit.test('dataSource instance', function(assert) {
-    const dataSource = new DataSource();
+    const dataSource = new DataSourceMock();
     this.options = { dataSource: dataSource, series: [{}] };
     const chart = this.createChart();
 
@@ -255,7 +255,7 @@ QUnit.test('update with null dataSource', function(assert) {
 });
 
 QUnit.test('changed event', function(assert) {
-    const dataSource = new DataSource();
+    const dataSource = new DataSourceMock();
     this.options = { dataSource: dataSource, series: [{}] };
     this.createChart();
 
@@ -266,7 +266,7 @@ QUnit.test('changed event', function(assert) {
 });
 
 QUnit.test('loadError event', function(assert) {
-    const dataSource = new DataSource();
+    const dataSource = new DataSourceMock();
     this.options = { dataSource: dataSource, series: [{}] };
     this.createChart();
 
@@ -277,7 +277,7 @@ QUnit.test('loadError event', function(assert) {
 });
 
 QUnit.test('disposing', function(assert) {
-    const dataSource = new DataSource();
+    const dataSource = new DataSourceMock();
     this.options = { dataSource: dataSource, series: [{}] };
     const chart = this.createChart();
 

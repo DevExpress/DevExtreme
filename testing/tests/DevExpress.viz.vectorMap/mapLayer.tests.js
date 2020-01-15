@@ -225,8 +225,8 @@ QUnit.test('Set options with data, load error', function(assert) {
     const labelRoot = this.context.labelRoot = new vizMocks.Element();
     this.context.grouping = { g1: 1, g2: 2 };
 
-    const DataSource = vizMocks.stubClass(DataSource);
-    const ds = new DataSource();
+    const DataSourceMock = vizMocks.stubClass(DataSource);
+    const ds = new DataSourceMock();
 
     this.layer.setOptions({
         dataSource: ds
