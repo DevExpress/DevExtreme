@@ -50,7 +50,7 @@ import '../../../node_modules/jsrender/jsrender.min.js';
 import DataGrid from 'ui/data_grid/ui.data_grid';
 import $ from 'jquery';
 import Class from 'core/class';
-import ODataUtils from 'data/odata/utils';
+import { EdmLiteral } from 'data/odata/utils';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { logger } from 'core/utils/console';
 import errors from 'ui/widget/ui.errors';
@@ -7574,7 +7574,7 @@ QUnit.test('Load count on start when EdmLiteral in calculatedFilterExpression is
             filterValue: 50,
             dataType: 'number',
             calculateFilterExpression: function(value, filterOperation) {
-                value = new ODataUtils.EdmLiteral(value + 'm');
+                value = new EdmLiteral(value + 'm');
                 return [this.dataField, filterOperation || '=', value];
             }
         }],
