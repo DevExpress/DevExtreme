@@ -9,7 +9,7 @@ import { focused } from '../widget/selectors';
 import * as eventUtils from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import { noop } from '../../core/utils/common';
-import { selectView } from '../shared/accessibility';
+import * as accessibility from '../shared/accessibility';
 import { isElementInCurrentGrid } from './ui.grid_core.utils';
 import browser from '../../core/utils/browser';
 import { keyboard } from '../../events/short';
@@ -83,6 +83,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const that = this;
 
         if(that.isKeyboardEnabled()) {
+            accessibility.subscribeVisibilityChange();
             that._dataController = that.getController('data');
             that._selectionController = that.getController('selection');
             that._editingController = that.getController('editing');
@@ -169,6 +170,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._focusedView = null;
         keyboard.off(this._keyDownListener);
         eventsEngine.off(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), this._documentClickHandler);
+        accessibility.unsubscribeVisibilityChange();
     },
     // #endregion Initialization
 
@@ -231,7 +233,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 case 'upArrow':
                 case 'downArrow':
                     if(e.ctrl) {
-                        selectView('rowsView', this, originalEvent);
+                        accessibility.selectView('rowsView', this, originalEvent);
                     } else {
                         this._upDownKeysHandler(e, isEditing);
                     }

@@ -32,7 +32,6 @@ const isPixelWidth = function(width) {
     return typeUtils.isString(width) && width.slice(-2) === 'px';
 };
 
-
 const mergeArraysByMaxValue = function(values1, values2) {
     let result = [];
     let i;
