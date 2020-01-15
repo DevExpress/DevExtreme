@@ -2156,6 +2156,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         $button.addClass('dx-icon' + (iconType === 'dxIcon' ? '-' : ' ') + icon).attr('title', button.text);
                     }
 
+                    $button.addClass('dx-link-icon');
                     $container.addClass(COMMAND_EDIT_WITH_ICONS_CLASS);
 
                     const localizationName = this.getButtonLocalizationNames()[button.name];
