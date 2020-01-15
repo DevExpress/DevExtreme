@@ -1919,8 +1919,14 @@ module.exports = {
                     this._keyboardNavigationController = this.getController('keyboardNavigation');
                 },
                 closeEditCell: function() {
-                    this.getController('keyboardNavigation')._fastEditingStarted = false;
-                    return this.callBase.apply(this, arguments);
+                    const keyboardNavigation = this.getController('keyboardNavigation');
+                    keyboardNavigation._fastEditingStarted = false;
+
+                    const result = this.callBase.apply(this, arguments);
+
+                    keyboardNavigation._updateFocus();
+
+                    return result;
                 },
                 _delayedInputFocus: function() {
                     this._keyboardNavigationController._isNeedScroll = true;

@@ -85,7 +85,7 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
             return true;
         },
         $element: function() {
-            return $('.dx-datagrid');
+            return $('.dx-datagrid').parent();
         }
     };
 
@@ -3809,7 +3809,7 @@ QUnit.test('Summary items are not displayed in a group row', function(assert) {
 
 QUnit.test('Scroll to element by focus', function(assert) {
     // arrange
-    const testElement = $('#container');
+    const $testElement = $('#container');
     const rowsView = this.createRowsView(this.items, null, null, null, {
         keyboardNavigation: {
             enabled: true
@@ -3819,16 +3819,18 @@ QUnit.test('Scroll to element by focus', function(assert) {
     let isScrollTo;
     const keyboardNavigationController = this.dataGrid.keyboardNavigationController;
 
-    rowsView.render(testElement);
     keyboardNavigationController._isNeedFocus = true;
     keyboardNavigationController._isNeedScroll = true;
     keyboardNavigationController._focusedView = rowsView;
+
+    rowsView.render($testElement);
+
     rowsView._scrollable.scrollToElement = function() {
         isScrollTo = true;
     };
 
     // act
-    this.dataGrid.editorFactoryController.focus(testElement.find('.dx-data-row td').eq(0));
+    this.dataGrid.editorFactoryController.focus($testElement.find('.dx-data-row td').eq(0));
     this.clock.tick(1);
 
     // assert
