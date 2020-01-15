@@ -784,7 +784,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
             } else {
                 const $target = event && $(event.target);
                 const isInteractiveTarget = $target && $target.not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR);
-                const isDisabled = !args.isHighlighted || isInteractiveTarget;
+                const isEditor = $cell.hasClass(EDITOR_CELL_CLASS);
+                const isDisabled = !isEditor && (!args.isHighlighted || isInteractiveTarget);
                 this._focus($cell, isDisabled, isInteractiveTarget);
             }
         } else {
