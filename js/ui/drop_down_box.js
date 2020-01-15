@@ -12,9 +12,12 @@ import { getElementMaxHeightByWindow } from '../ui/overlay/utils';
 import registerComponent from '../core/component_registrator';
 import { normalizeKeyName } from '../events/utils';
 import { keyboard } from '../events/short';
+import devices from '../core/devices';
 
 const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
+
+const realDevice = devices.real();
 
 /**
  * @name dxDropDownBox
@@ -265,6 +268,16 @@ const DropDownBox = DropDownEditor.inherit({
         return this.callBase();
     },
 
+    _preventCloseHandler: function() {
+        const isInputFocused = !!this._popup.$content().find('input:focus').length;
+
+        return realDevice.platform === 'desktop' && this._canShowVirtualKeyboard() && isInputFocused;
+    },
+
+    _canShowVirtualKeyboard: function() {
+        return realDevice.mac; // T845484
+    },
+
     _popupConfig: function() {
         const { focusStateEnabled } = this.option();
         const horizontalAlignment = this.option('rtlEnabled') ? 'right' : 'left';
@@ -277,6 +290,7 @@ const DropDownBox = DropDownEditor.inherit({
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled,
+            closeOnTargetScroll: this._preventCloseHandler.bind(this),
             position: {
                 of: this.$element(),
                 collision: 'flipfit',
