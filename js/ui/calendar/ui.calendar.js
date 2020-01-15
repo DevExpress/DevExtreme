@@ -1230,7 +1230,6 @@ const Calendar = Editor.inherit({
                 this._invalidate();
                 break;
             case 'hasFocus':
-            case 'navigateToSameDate':
                 break;
             default:
                 this.callBase(args);
