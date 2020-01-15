@@ -1827,8 +1827,7 @@ const PivotGrid = Widget.inherit({
             hasRowsScroll = that._hasHeight && calculateHasScroll(dataAreaHeight, totalHeight);
             hasColumnsScroll = calculateHasScroll(groupWidth, totalWidth);
 
-            const groupHeight = calculateGroupHeight(dataAreaHeight, totalHeight, hasRowsScroll, hasColumnsScroll);
-
+            const groupHeight = calculateGroupHeight(dataAreaHeight, totalHeight, hasRowsScroll, hasColumnsScroll, scrollBarWidth);
 
             deferRender(function() {
                 columnsArea.tableElement().append(dataArea.headElement());

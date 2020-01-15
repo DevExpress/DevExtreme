@@ -2838,6 +2838,25 @@ QUnit.test('bottom border if horizontal scroll', function(assert) {
     assert.ok(parseFloat(pivotGrid.$element().find('.dx-area-row-cell').css('borderBottomWidth')) > 0, 'row area border bottom width when no scrollbar width');
 });
 
+QUnit.test('Group height should take into account scrollbar width', function(assert) {
+    // act
+    $('#pivotGrid').width(300).height(900);
+    this.testOptions.scrolling = {
+        useNative: false
+    };
+    const pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    const dataAreaHeight = pivotGrid._dataArea.groupHeight();
+
+    pivotGrid.option({
+        scrolling: {
+            useNative: true
+        }
+    });
+    // assert
+    assert.roughEqual(pivotGrid._dataArea.groupHeight(), dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
+});
+
 QUnit.test('mergeArraysByMaxValue', function(assert) {
     const array1 = [10, 12, 35, 7];
     const array2 = [8, 12, 39, 5];
