@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import config from 'core/config';
 import fx from 'animation/fx';
+import devices from 'core/devices';
 
 import 'ui/speed_dial_action';
 import 'common.css!';
@@ -943,4 +944,83 @@ QUnit.module('check action buttons events', {
         assert.equal(disposingTwoStub.callCount, 1, 'second action disposing event calls once');
     });
 });
+
+
+QUnit.module('events on mobile device', {
+    beforeEach: function() {
+        fx.off = true;
+    },
+
+    afterEach: function() {
+        fx.off = false;
+
+        $('#fab-one').dxSpeedDialAction('instance').dispose();
+        $('#fab-two').dxSpeedDialAction('instance').dispose();
+
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: 'right bottom',
+                    my: 'right bottom',
+                    offset: '-16 -16'
+                }
+            }
+        });
+    },
+}, () => {
+    QUnit.test('check click on ios', function(assert) {
+
+        let originalPlatform;
+        try {
+            originalPlatform = devices.real().platform;
+            devices.real({ platform: 'ios' });
+
+            config({
+                floatingActionButtonConfig: {
+                    shading: true,
+                    position: {
+                        at: 'right bottom',
+                        my: 'right bottom',
+                        offset: '-16 -16'
+                    }
+                }
+            });
+
+            const clickStub = sinon.stub();
+            const clickTwoStub = sinon.stub();
+
+            $('#fab-one')
+                .dxSpeedDialAction({
+                    onClick: clickStub
+                });
+
+            $('#fab-two')
+                .dxSpeedDialAction({
+                    onClick: clickTwoStub
+                });
+
+            const $fabMainContent = $(FAB_MAIN_SELECTOR).find('.dx-overlay-content');
+
+            $fabMainContent.trigger('dxclick');
+
+            const $fabElement = $(FAB_SELECTOR);
+            const $fabContent = $fabElement.find('.dx-overlay-content');
+
+            $fabMainContent.trigger('dxclick');
+            $fabContent.eq(1).trigger('dxclick');
+
+            assert.equal(clickStub.callCount, 1, 'first action click work');
+
+            $fabMainContent.trigger('dxclick');
+            $fabContent.eq(2).trigger('dxclick');
+
+            assert.equal(clickStub.callCount, 1, 'second action click work');
+
+
+        } finally {
+            devices.real({ platform: originalPlatform });
+        }
+    });
+});
+
 
