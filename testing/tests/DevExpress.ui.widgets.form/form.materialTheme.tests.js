@@ -20,11 +20,11 @@ QUnit.testStart(function() {
         const item2Rect = item2.getBoundingClientRect();
 
         const paddingTop = item2Rect.top - item1Rect.bottom;
-        const paddingRight = item2Rect.left - item1Rect.right;
+        const paddingLeft = item2Rect.left - item1Rect.right;
         const locationDiffX = item2Rect.left - item1Rect.left;
         const locationDiffY = item2Rect.top - item1Rect.top;
 
-        return { paddingTop, paddingRight, locationDiffX, locationDiffY };
+        return { paddingTop, paddingLeft, locationDiffX, locationDiffY };
     }
 
     QUnit.test('1 column -> 2 items without groups', function(assert) {
@@ -131,7 +131,7 @@ QUnit.testStart(function() {
             assert.equal(labelToContentPadding.locationDiffX, 0);
             assert.equal(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP);
         } else {
-            assert.equal(labelToContentPadding.paddingRight, DEFAULT_PADDING_RIGHT);
+            assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_RIGHT);
             assert.equal(paddingBetweenContent.locationDiffY, 0);
         }
     });
@@ -154,7 +154,7 @@ QUnit.testStart(function() {
             assert.equal(labelToContentPadding.locationDiffX, 0);
             assert.equal(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP);
         } else {
-            assert.equal(labelToContentPadding.paddingRight, DEFAULT_PADDING_RIGHT);
+            assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_RIGHT);
             assert.equal(paddingBetweenContent.locationDiffY, 0);
         }
     });
@@ -179,7 +179,7 @@ QUnit.testStart(function() {
             assert.equal(labelToContentPadding.locationDiffX, 0);
             assert.equal(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP);
         } else {
-            assert.equal(labelToContentPadding.paddingRight, DEFAULT_PADDING_RIGHT);
+            assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_RIGHT);
             assert.equal(paddingBetweenContent.locationDiffY, 0);
         }
     });
@@ -205,7 +205,7 @@ QUnit.testStart(function() {
             assert.equal(labelToContentPadding.locationDiffX, 0);
             assert.equal(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP);
         } else {
-            assert.equal(labelToContentPadding.paddingRight, DEFAULT_PADDING_RIGHT);
+            assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_RIGHT);
             assert.equal(paddingBetweenContent.locationDiffY, 0);
         }
     });
@@ -234,7 +234,7 @@ QUnit.testStart(function() {
             assert.equal(labelToContentPadding.locationDiffX, 0);
             assert.equal(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP);
         } else {
-            assert.equal(labelToContentPadding.paddingRight, DEFAULT_PADDING_RIGHT);
+            assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_RIGHT);
             assert.equal(paddingBetweenContent.locationDiffY, 0);
         }
     });
