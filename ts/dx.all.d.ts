@@ -2736,8 +2736,6 @@ declare module DevExpress.ui {
         minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /** @name dxCalendar.Options.name */
         name?: string;
-        /** @name dxCalendar.Options.navigateToSameDay */
-        navigateToSameDay?: boolean;
         /** @name dxCalendar.Options.showTodayButton */
         showTodayButton?: boolean;
         /** @name dxCalendar.Options.value */

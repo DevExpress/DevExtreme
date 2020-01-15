@@ -169,13 +169,6 @@ const Calendar = Editor.inherit({
              */
             disabledDates: null,
 
-            /**
-             * @name dxCalendarOptions.navigateToSameDay
-             * @type boolean
-             * @default true
-             */
-            navigateToSameDay: true,
-
             onCellClick: null,
             onContouredChanged: null,
             hasFocus: function(element) {
@@ -559,12 +552,7 @@ const Calendar = Editor.inherit({
         date.setMonth(date.getMonth() + difference);
 
         const lastDay = dateUtils.getLastMonthDate(date).getDate();
-
-        if(this.option('navigateToSameDay')) {
-            date.setDate(currentDay > lastDay ? lastDay : currentDay);
-        } else {
-            offset === -1 && date.setDate(lastDay);
-        }
+        date.setDate(currentDay > lastDay ? lastDay : currentDay);
 
         return date;
     },
