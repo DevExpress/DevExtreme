@@ -10,10 +10,12 @@ import CustomStore from 'data/custom_store';
 import { isRenderer } from 'core/utils/type';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import Accordion from 'ui/accordion';
+import 'ui/button';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import themes from 'ui/themes';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -234,6 +236,21 @@ QUnit.module('widget rendering', moduleSetup, () => {
 
         themes.isMaterial = origIsMaterial;
     });
+
+    QUnit.test('itemTitleTemplate: dxButton { icon }', function(assert) {
+        this.$element.dxAccordion({
+            dataSource: [{ }],
+            itemTitleTemplate: function() {
+                return $('<div>').dxButton({ icon: 'myIcon' });
+            }
+        });
+
+        const iconRect = document.querySelector('.dx-icon-myIcon').getBoundingClientRect();
+        const iconParentRect = document.querySelector('.dx-icon-myIcon').parentElement.getBoundingClientRect();
+
+        assert.roughEqual(iconRect.left - iconParentRect.left, iconParentRect.right - iconRect.right, 0.1, `correct horizontal centering ${JSON.stringify(iconRect)} in ${JSON.stringify(iconParentRect)}`);
+        assert.roughEqual(iconRect.top - iconParentRect.top, iconParentRect.bottom - iconRect.bottom, 0.1, `correct vertical centering ${JSON.stringify(iconRect)} in ${JSON.stringify(iconParentRect)}`);
+    });
 });
 
 QUnit.module('nested accordion', moduleSetup, () => {
@@ -437,11 +454,12 @@ QUnit.module('widget options', moduleSetup, () => {
 
             assert.ok(!$item.hasClass(ACCORDION_ITEM_OPENED_CLASS), 'content is hidden before animation is started');
 
+            const itemHeight = $item.height();
             $($title).trigger('dxclick');
-            assert.roughEqual($item.height(), $title.outerHeight(), 0.1, 'height of the item is equal to the title height');
+            assert.roughEqual($item.height(), itemHeight, 0.1, `height of the item is not changed after click: ${$item.height()} > ${itemHeight}`);
             this.clock.tick(1000);
 
-            assert.ok($item.height() > $title.outerHeight(), 'height is not 0 when animation is complete');
+            assert.ok($item.height() > itemHeight, `height is greater when animation is complete: ${$item.height()} > ${itemHeight}`);
         } finally {
             fx.off = true;
         }
@@ -720,11 +738,12 @@ QUnit.module('widget options changed', moduleSetup, () => {
 
             assert.ok(!$item.hasClass(ACCORDION_ITEM_OPENED_CLASS), 'content is hidden before animation is started');
 
+            const itemHeight = $item.height();
             $($title).trigger('dxclick');
-            assert.roughEqual($item.height(), $title.outerHeight(), 0.1, 'height of the item is equal to the title height');
+            assert.roughEqual($item.height(), itemHeight, 0.1, `height of the item is not changed after click: ${$item.height()} > ${itemHeight}`);
             this.clock.tick(1000);
 
-            assert.ok($item.height() > $title.outerHeight(), 'height is not 0 when animation is complete');
+            assert.ok($item.height() > itemHeight, `height is greater when animation is complete: ${$item.height()} > ${itemHeight}`);
         } finally {
             fx.off = true;
         }
