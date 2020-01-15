@@ -371,10 +371,10 @@ const RecurrenceEditor = Editor.inherit({
 
         this._daysOfWeek = [];
 
-        const dayIndexFunction = this._getDayIndex();
+        const getDayIndex = this._getDayIndex();
 
         for(let i = 0; i < DAYS_IN_WEEK; i++) {
-            const dayIndex = dayIndexFunction(i);
+            const dayIndex = getDayIndex(i);
             const checkBoxText = localDaysNames[dayIndex].toUpperCase();
             const dayName = days[dayIndex];
             const $day = $('<div>').addClass(DAY_OF_WEEK);
@@ -402,11 +402,11 @@ const RecurrenceEditor = Editor.inherit({
 
     _repeatByDayValueChangeHandler() {
         let byDayRule = '';
-        const daysIndexFunction = this._getDayIndex();
+        const getDayIndex = this._getDayIndex();
 
         each(this._daysOfWeek, (index, day) => {
             if(day.option('value')) {
-                const dayName = days[daysIndexFunction(index)];
+                const dayName = days[getDayIndex(index)];
 
                 if(!byDayRule) {
                     byDayRule = dayName;
@@ -878,10 +878,10 @@ const RecurrenceEditor = Editor.inherit({
         }
 
         const daysByRule = this._daysOfWeekByRules();
-        const dayIndexFunction = this._getDayIndex();
+        const getDayIndex = this._getDayIndex();
 
         each(this._daysOfWeek, (index, day) => {
-            const dayName = days[dayIndexFunction(index)];
+            const dayName = days[getDayIndex(index)];
 
             day.option('value', inArray(dayName, daysByRule) > -1);
         });
