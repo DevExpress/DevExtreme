@@ -303,7 +303,12 @@ exports.FocusController = core.ViewController.inherit((function() {
                 $tableElement = $(element);
                 that._clearPreviousFocusedRow($tableElement, focusedRowIndex);
                 const isMainTable = index === 0;
-                $focusedRow = that._prepareFocusedRow(change.items[focusedRowIndex], $tableElement, focusedRowIndex);
+                $focusedRow = that._prepareFocusedRow({
+                    changedItem: change.items[focusedRowIndex],
+                    $tableElement: $tableElement,
+                    focusedRowIndex: focusedRowIndex,
+                    isMainTable: isMainTable
+                });
                 if(isMainTable) {
                     that.getController('keyboardNavigation')._fireFocusedRowChanged($focusedRow);
                 }
@@ -329,15 +334,23 @@ exports.FocusController = core.ViewController.inherit((function() {
                 $firstRow.removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr('tabIndex');
             }
         },
-        _prepareFocusedRow: function(changedItem, $tableElement, focusedRowIndex) {
+
+        _prepareFocusedRow: function(options) {
             let $row;
-            const tabIndex = this.option('tabindex') || 0;
-            const rowsView = this.getView('rowsView');
+            const changedItem = options.changedItem;
 
             if(changedItem && (changedItem.rowType === 'data' || changedItem.rowType === 'group')) {
+                const focusedRowIndex = options.focusedRowIndex;
+                const $tableElement = options.$tableElement;
+                const isMainTable = options.isMainTable;
+                const tabIndex = this.option('tabindex') || 0;
+                const rowsView = this.getView('rowsView');
+
                 $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
                 $row.addClass(ROW_FOCUSED_CLASS).attr('tabindex', tabIndex);
-                rowsView.scrollToElementVertically($row);
+                if(isMainTable) {
+                    rowsView.scrollToElementVertically($row);
+                }
             }
 
             return $row;

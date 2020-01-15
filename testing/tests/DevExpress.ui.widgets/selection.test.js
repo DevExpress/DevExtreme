@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const errors = require('ui/widget/ui.errors');
-const Selection = require('ui/selection/selection');
-const Guid = require('core/guid');
-const DataSource = require('data/data_source/data_source').DataSource;
-const CustomStore = require('data/custom_store');
-const ArrayStore = require('data/array_store');
+import $ from 'jquery';
+import errors from 'ui/widget/ui.errors';
+import Selection from 'ui/selection/selection';
+import Guid from 'core/guid';
+import { DataSource } from 'data/data_source/data_source';
+import CustomStore from 'data/custom_store';
+import ArrayStore from 'data/array_store';
 
 const createDataSource = function(data, storeOptions, dataSourceOptions) {
     const arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data);
