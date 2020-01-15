@@ -4905,6 +4905,70 @@ QUnit.test('deleteRow should not work if adding is started', function(assert) {
     assert.equal(testElement.find('.dx-data-row').length, 6, 'row is removed');
 });
 
+// T850905
+QUnit.test('deleteRow should works if updating is started', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'cell',
+        allowUpdating: true,
+        allowDeleting: true
+    };
+
+    rowsView.render(testElement);
+    that.editingController.init();
+
+    that.editCell(0, 0);
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 7, 'row count');
+    assert.strictEqual(testElement.find('input').length, 1, 'editor is rendered');
+
+    // act
+    that.deleteRow(1);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
+    assert.strictEqual(testElement.find('input').length, 0, 'no editors');
+});
+
+// T850905
+QUnit.test('deleteRow should works if cell value is changed', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'cell',
+        allowUpdating: true,
+        allowDeleting: true
+    };
+
+    rowsView.render(testElement);
+    that.editingController.init();
+
+    that.cellValue(0, 0, 'test');
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 7, 'row count');
+    assert.strictEqual(testElement.find('input').length, 1, 'editor is rendered');
+
+    // act
+    that.deleteRow(1);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
+    assert.strictEqual(testElement.find('input').length, 0, 'no editors');
+});
+
 // T804894
 QUnit.test('addRow should not work if updating is started with validation error', function(assert) {
     // arrange
@@ -7821,6 +7885,41 @@ QUnit.test('The command column caption should be applied', function(assert) {
     assert.ok($commandCellElement.hasClass('dx-command-edit'), 'has command column');
     assert.strictEqual($commandCellElement.text(), 'Command Column', 'caption');
     assert.strictEqual($commandCellElement.css('textAlign'), 'right', 'alignment');
+});
+
+QUnit.test('The command column buttons should not be trimmed', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = that.rowsView;
+    const $testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'row',
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    that.options.columns.push({
+        type: 'buttons',
+        buttons: ['edit', {
+            icon: 'clone'
+        }]
+    });
+    that.columnsController.reset();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    const $commandCellElement = $(rowsView.getRowElement(0)).children('.dx-command-edit');
+    assert.equal($commandCellElement.length, 1, 'command column is rendered');
+    // T848242
+    assert.equal($commandCellElement.css('text-overflow'), 'clip', 'text-overflow is clip instead of ellipsis');
+
+    const $links = $commandCellElement.children('.dx-link');
+    assert.equal($links.length, 2, 'link count');
+    assert.equal($links.eq(0).css('display'), 'inline', 'text link display style');
+    // T848364
+    assert.equal($links.eq(1).css('display'), 'inline-block', 'icon link display style');
 });
 
 // T741679
