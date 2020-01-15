@@ -23,6 +23,7 @@ ui.dxAutocomplete = require('../../../ui/autocomplete');
 ui.dxBox = require('../../../ui/box');
 ui.dxButton = require('../../../ui/button');
 ui.dxTestButton = require('../../../ui/test-button.j');
+ui.dxTestWidget = require('../../../ui/test-widget.j');
 ui.dxDropDownButton = require('../../../ui/drop_down_button');
 ui.dxButtonGroup = require('../../../ui/button_group');
 ui.dxCalendar = require('../../../ui/calendar');

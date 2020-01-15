@@ -1,4 +1,4 @@
-// import registerComponent from '../core/component_registrator';
+import registerComponent from '../core/component_registrator';
 import WidgetBase from './widget/ui.widget';
 import { extend } from '../core/utils/extend';
 import WidgetView from './test-widget.p';
@@ -71,6 +71,6 @@ function view(options) {
     return Preact.h(WidgetView, options);
 }
 
-// registerComponent('Widget', Widget);
+registerComponent('dxTestWidget', Widget);
 
 module.exports = Widget;

@@ -36,14 +36,17 @@ describe('Widget', () => {
         expect(widget.props().style.height)
             .toBe(75);
     });
-    it('should have `dx-state-disabled` css class', () => {
+    it('should have `disabled` state', () => {
         const model = new Widget();
         const tree = mount(viewFunction(viewModelFunction({ ...model, disabled: true })));
 
-        expect(tree.find('.dx-widget.dx-state-disabled').exists())
+        const widget = tree.find('.dx-widget.dx-state-disabled');
+        expect(widget.exists())
             .toBeTruthy();
+        expect(widget.props()['aria-disabled'])
+            .toBe('true');
     });
-    it('should have `dx-state-invisible` css class and `hidden` property', () => {
+    it('should have `hidden` state', () => {
         const model = new Widget();
         const tree = mount(viewFunction(viewModelFunction({ ...model, visible: false })));
 
@@ -52,6 +55,8 @@ describe('Widget', () => {
             .toBeTruthy();
         expect(widget.props().hidden)
             .toBeTruthy();
+        expect(widget.props()['aria-hidden'])
+            .toBe('true');
     });
     it('should have `dx-state-active` css class', () => {
         const model = new Widget();

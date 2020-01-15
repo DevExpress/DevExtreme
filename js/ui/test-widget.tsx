@@ -1,7 +1,7 @@
 import { Component, Prop, Event, InternalState, Listen, React, Slot } from "../component_declaration/common";
 import config from '../core/config';
 import { getDocument } from '../core/dom_adapter';
-import { hasWindow } from '../core/utils/window';
+import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 const document = getDocument();
 
@@ -12,9 +12,27 @@ const getStyles = ({ width, height }: any) => {
     }
 }
 
-const getAttributes = ({ elementAttr }: any) => {
-    const attrs = extend({}, elementAttr);
-    // delete attrs.class;
+const setAttribute = (name, value) => {
+    if (!value) return {};
+    const attrName = (name === 'role' || name === 'id') ? name : `aria-${name}`;
+    const attrValue = value && value.toString() || null;
+
+    return { [attrName]: attrValue };
+};
+
+const setAria = (args) => {
+    debugger
+    let attrs = {};
+    each(args, (name, value) => {
+        attrs = { ...attrs, ...setAttribute(name, value) };
+    });
+    return attrs;
+};
+
+const getAttributes = ({ elementAttr, disabled, visible }: any) => {
+    const arias = setAria({ disabled, hidden: !visible });
+    const attrs = extend({}, arias, elementAttr);
+    delete attrs.class;
 
     return attrs;
 };
@@ -42,9 +60,9 @@ const getCssClasses = (model: any) => {
     if (model.rtlEnabled) {
         className.push('dx-rtl');
     }
-    if (model.visibilityChanged && hasWindow()) {
-        className.push('dx-visibility-change-handler');
-    }
+    // if (model.visibilityChanged && hasWindow()) {
+    //     className.push('dx-visibility-change-handler');
+    // }
     if (model.elementAttr.class) {
         className.push(model.elementAttr.class);
     }
@@ -53,52 +71,31 @@ const getCssClasses = (model: any) => {
 };
 
 export const viewModelFunction = ({
-    hoveredElement = null,
-    isActive = false,
-    disabled = false,
-    visible = true,
-    hint = undefined,
-    activeStateEnabled = false,
-    onContentReady = null,
-    hoverStateEnabled = false,
-    focusStateEnabled = false,
-    tabIndex = 0,
-    accessKey = null,
-    onFocusIn = null,
-    onFocusOut = null,
-    onKeyboardHandled = null,
+    disabled,
+    visible,
+    hint,
+    tabIndex,
     width,
     height,
     focused,
     _active,
     _hovered,
     rtlEnabled,
-    visibilityChanged,
     elementAttr,
     default: children,
-}: any) => {
+}: Widget) => {
     const style = getStyles({ width, height });
-    const className = getCssClasses({ disabled, visible, focused, _active, _hovered, rtlEnabled, visibilityChanged, elementAttr });
-    const attrsWithoutClass = getAttributes({ elementAttr });
+    const className = getCssClasses({ disabled, visible, focused, _active, _hovered, rtlEnabled, elementAttr });
+    const attrsWithoutClass = getAttributes({ elementAttr, disabled, visible });
 
     return {
         children,
         style,
-        attrsWithoutClass,
-        hoveredElement,
-        isActive,
+        attributes: attrsWithoutClass,
         disabled,
         visible,
         title: hint,
-        activeStateEnabled,
-        onContentReady,
-        hoverStateEnabled,
-        focusStateEnabled,
         tabIndex,
-        accessKey,
-        onFocusIn,
-        onFocusOut,
-        onKeyboardHandled,
         className,
     };
 };
@@ -106,7 +103,7 @@ export const viewModelFunction = ({
 export const viewFunction = (viewModel: any) => {
     return (
         <div
-            {...viewModel.elementAttr}
+            {...viewModel.attributes}
             className={viewModel.className}
             title={viewModel.title}
             style={viewModel.style}
@@ -136,10 +133,10 @@ export default class Widget {
     @Prop() elementAttr?: { [name: string]: any } = {};
     @Prop() disabled?: boolean = false;
 
-    @Prop() clickArgs?: any = {};
-
     // == Widget ==
     @Prop() visible?: boolean = true;
+    @Prop() hint?: string | undefined = undefined;
+    @Prop() tabIndex?: number = 0;
 
     @Slot() default: any;
 
@@ -168,6 +165,7 @@ export default class Widget {
         this._active = false;
     }
 
+    @Prop() clickArgs?: any = {};
     @Listen("click")
     onClickHandler(e: any) {
         this.onClick!(this.clickArgs); // { type: this.type, text: this.text }
