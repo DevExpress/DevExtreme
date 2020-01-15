@@ -787,7 +787,9 @@ const subscribes = {
 
         extend(true, result, appointmentData, recurringData);
 
-        this._convertDatesByTimezoneBack(false, result);
+        if(this._isAppointmentRecurrence(appointmentData)) {
+            this._convertDatesByTimezoneBack(false, result);
+        }
 
         // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
