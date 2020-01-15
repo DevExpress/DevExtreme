@@ -169,7 +169,7 @@ const ODataStore = Store.inherit({
     * @param1 loadOptions:object
     * @return object
     */
-    createQuery(loadOptions = {}) {
+    createQuery(loadOptions) {
         let url;
         const queryOptions = {
             adapter: 'odata',
@@ -179,21 +179,21 @@ const ODataStore = Store.inherit({
             jsonp: this._jsonp,
             version: this._version,
             withCredentials: this._withCredentials,
-            expand: loadOptions.expand,
-            requireTotalCount: loadOptions.requireTotalCount,
+            expand: loadOptions?.expand,
+            requireTotalCount: loadOptions?.requireTotalCount,
             deserializeDates: this._deserializeDates,
             fieldTypes: this._fieldTypes
         };
 
         // NOTE: For AppBuilder, do not remove
-        url = loadOptions.urlOverride ?? this._url;
+        url = loadOptions?.urlOverride ?? this._url;
 
         if(isDefined(this._filterToLower)) {
             queryOptions.filterToLower = this._filterToLower;
         }
 
-        if(loadOptions.customQueryParams) {
-            const params = escapeServiceOperationParams(loadOptions.customQueryParams, this.version());
+        if(loadOptions?.customQueryParams) {
+            const params = escapeServiceOperationParams(loadOptions?.customQueryParams, this.version());
 
             if(this.version() === 4) {
                 url = formatFunctionInvocationUrl(url, params);
@@ -213,7 +213,7 @@ const ODataStore = Store.inherit({
         when(this._sendRequest(this._url, 'POST', null, values))
             .done(serverResponse =>
                 d.resolve(
-                    config().useLegacyStoreResult ? values : serverResponse || values,
+                    serverResponse && !config().useLegacyStoreResult ? serverResponse : values,
                     this.keyOf(serverResponse)
                 )
             )
