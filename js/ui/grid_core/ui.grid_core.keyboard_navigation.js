@@ -928,7 +928,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const that = this;
         setTimeout(function() {
             let $cell = that._getFocusedCell();
-            const isEditing = that._editingController.isEditing();
+            const isEditing = that.getController('editing').isEditing();
 
             if($cell && !(that._isMasterDetailCell($cell) && !that._isRowEditMode())) {
                 if(that._hasSkipRow($cell.parent())) {
