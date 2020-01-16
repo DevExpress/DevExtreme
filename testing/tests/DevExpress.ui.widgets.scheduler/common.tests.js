@@ -11,7 +11,7 @@ import Color from 'color';
 import fx from 'animation/fx';
 import config from 'core/config';
 import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
-import dxSchedulerWorkSpace from 'ui/scheduler/workspaces/ui.scheduler.work_space';
+import dxScheduler from 'ui/scheduler/ui.scheduler';
 import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dragEvents from 'events/drag';
@@ -3002,7 +3002,7 @@ QUnit.testStart(function() {
     });
 
     QUnit.test('onAppointmentRendered should not contain information about particular appt resources if there are not groups(T413561)', function(assert) {
-        const workSpaceSpy = sinon.spy(dxSchedulerWorkSpace.prototype, 'getCellDataByCoordinates');
+        const resourcesSpy = sinon.spy(dxScheduler.prototype, 'setTargetedAppointmentResources');
 
         this.createInstance({
             dataSource: new DataSource([
@@ -3018,7 +3018,7 @@ QUnit.testStart(function() {
             currentView: 'week'
         });
 
-        assert.equal(workSpaceSpy.callCount, 2, 'Resources aren\'t required');
+        assert.equal(resourcesSpy.callCount, 2, 'Resources aren\'t required');
     });
 
     QUnit.test('onAppointmentClick should fires when appointment is clicked', function(assert) {
