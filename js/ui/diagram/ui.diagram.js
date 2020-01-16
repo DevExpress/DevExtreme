@@ -1551,7 +1551,7 @@ class Diagram extends Widget {
                 * @type template|function
                 * @type_function_param1 container:dxElement
                 * @type_function_param2 data:object
-                * @type_function_param2_field1 item:dxDiagramItem
+                * @type_function_param2_field1 item:dxDiagramShape
                 */
                 /**
                 * @name dxDiagramOptions.customShapes.templateLeft
@@ -1575,7 +1575,7 @@ class Diagram extends Widget {
             * @type template|function
             * @type_function_param1 container:dxElement
             * @type_function_param2 data:object
-            * @type_function_param2_field1 item:dxDiagramItem
+            * @type_function_param2_field1 item:dxDiagramShape
             */
             /**
             * @name dxDiagramOptions.toolbox
