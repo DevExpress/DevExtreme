@@ -425,12 +425,8 @@ const LayoutManager = Widget.inherit({
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_COL_CLASS);
                 }
                 const isLastColumn = (e.location.col === colCount - 1) || (e.location.col + e.location.colspan === colCount);
-                const rowsCount = Math.floor(that._items.length / colCount);
-                let isLastRow = e.location.row === rowsCount - 1;
-                if(this._isSingleColumnScreen()) {
-                    isLastRow = isLastColumn && (e.location.row === rowsCount - 1);
-                }
-
+                const rowsCount = that._getRowsCount();
+                const isLastRow = e.location.row === rowsCount - 1;
                 if(isLastColumn) {
                     $fieldItem.addClass(LAYOUT_MANAGER_LAST_COL_CLASS);
                 }

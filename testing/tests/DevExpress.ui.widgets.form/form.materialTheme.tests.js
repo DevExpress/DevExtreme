@@ -13,7 +13,7 @@ QUnit.testStart(function() {
 
 const DEFAULT_PADDING_LEFT = 40;
 const DEFAULT_PADDING_TOP = 20;
-QUnit.module('Form have correct padding (T849353)');
+QUnit.module('Form scenarios');
 
 function getPaddings(item1, item2) {
     const item1Rect = item1.getBoundingClientRect();
@@ -27,7 +27,7 @@ function getPaddings(item1, item2) {
     return { paddingTop, paddingLeft, locationDiffX, locationDiffY };
 }
 
-QUnit.test('1 column -> 2 items without groups', function(assert) {
+QUnit.test('1 column -> [item1, item2]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -43,8 +43,7 @@ QUnit.test('1 column -> 2 items without groups', function(assert) {
     assert.roughEqual(actualPadding.locationDiffX, 0, 0.01);
 });
 
-
-QUnit.test('1 column -> 1 item and 1 group', function(assert) {
+QUnit.test('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -62,7 +61,7 @@ QUnit.test('1 column -> 1 item and 1 group', function(assert) {
     assert.roughEqual(actualPadding.locationDiffX, 0, 0.01);
 });
 
-QUnit.test('1 column -> 1 item and 1 group with nested group', function(assert) {
+QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -82,8 +81,7 @@ QUnit.test('1 column -> 1 item and 1 group with nested group', function(assert) 
     assert.roughEqual(actualPadding.locationDiffX, 0, 0.01);
 });
 
-
-QUnit.test('1 column -> 2 item and 1 group with nested group', function(assert) {
+QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -103,7 +101,7 @@ QUnit.test('1 column -> 2 item and 1 group with nested group', function(assert) 
     assert.roughEqual(actualPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
 });
 
-QUnit.test('1 column -> 2 item and 1 group with sub-nested group', function(assert) {
+QUnit.test('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item3]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -125,7 +123,63 @@ QUnit.test('1 column -> 2 item and 1 group with sub-nested group', function(asse
     assert.roughEqual(actualPadding.locationDiffX, 0, 0.01);
 });
 
-QUnit.test('2 columns -> 2 items without groups', function(assert) {
+QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
+    const $form = $('#form').dxForm({
+        screenByWidth: () => { return 'xs'; },
+        colCountByScreen: {
+            xs: 1
+        },
+        items: ['dataField1', {
+            itemType: 'group',
+            caption: 'Contact Information',
+            items: [{
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    deferRendering: false
+                },
+                tabs: [{
+                    title: 'dataField2',
+                    items: ['dataField2']
+                }]
+            }] }
+        ]
+    });
+    const $contents = $form.find('.dx-field-item-content');
+
+    const paddings = getPaddings($contents.get(0), $contents.get(1));
+    assert.roughEqual(paddings.paddingTop, DEFAULT_PADDING_TOP, 0.01);
+});
+
+QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
+    const $form = $('#form').dxForm({
+        screenByWidth: () => { return 'xs'; },
+        colCountByScreen: {
+            xs: 1
+        },
+        items: ['dataField1', {
+            itemType: 'group',
+            caption: 'Contact Information',
+            items: [{
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    deferRendering: false
+                },
+                tabs: [{
+                    title: 'dataField2',
+                    items: ['dataField2']
+                }]
+            }] }, 'dataField3'
+        ]
+    });
+
+    const $labels = $form.find('.dx-field-item-label');
+    const $contents = $form.find('.dx-field-item-content');
+
+    const paddings = getPaddings($contents.get(1), $labels.get(2));
+    assert.roughEqual(paddings.paddingTop, DEFAULT_PADDING_TOP, 0.01);
+});
+
+QUnit.test('2 columns -> [item1, item2]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -143,7 +197,7 @@ QUnit.test('2 columns -> 2 items without groups', function(assert) {
     assert.roughEqual(paddingBetweenContent.locationDiffY, 0, 0.01);
 });
 
-QUnit.test('2 columns -> 1 item and 1 group', function(assert) {
+QUnit.test('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -163,7 +217,7 @@ QUnit.test('2 columns -> 1 item and 1 group', function(assert) {
     assert.roughEqual(paddingBetweenContent.locationDiffY, 0, 0.01);
 });
 
-QUnit.test('2 columns -> 1 item and 1 group with nested group', function(assert) {
+QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -185,8 +239,7 @@ QUnit.test('2 columns -> 1 item and 1 group with nested group', function(assert)
     assert.roughEqual(paddingBetweenContent.locationDiffY, 0, 0.01);
 });
 
-
-QUnit.test('2 columns -> 2 groups', function(assert) {
+QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -208,7 +261,7 @@ QUnit.test('2 columns -> 2 groups', function(assert) {
     assert.roughEqual(paddingBetweenContent.locationDiffY, 0, 0.01);
 });
 
-QUnit.test('2 columns -> 2 groups with nested groups', function(assert) {
+QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }]]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -234,7 +287,7 @@ QUnit.test('2 columns -> 2 groups with nested groups', function(assert) {
     assert.roughEqual(paddingBetweenContent.locationDiffY, 0, 0.01);
 });
 
-QUnit.test('2 columns -> 2 item and 1 group with nested group', function(assert) {
+QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -253,7 +306,7 @@ QUnit.test('2 columns -> 2 item and 1 group with nested group', function(assert)
     assert.roughEqual(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
 });
 
-QUnit.test('2 columns -> 2 groups with nested groups and 1 item', function(assert) {
+QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }], { group [{ item3 }] }]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -281,8 +334,7 @@ QUnit.test('2 columns -> 2 groups with nested groups and 1 item', function(asser
     assert.roughEqual(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
 });
 
-
-QUnit.test('form -> 2 columns and 3 groups', function(assert) {
+QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group colspan:3 [{ item3 }] ]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -308,7 +360,7 @@ QUnit.test('form -> 2 columns and 3 groups', function(assert) {
     assert.roughEqual(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
 });
 
-QUnit.test('form -> 4 columns and 3 groups with colspan', function(assert) {
+QUnit.test('4 columns -> [{ group colSpan:3 [{ item1 }], { group colSpan:1 [{ item2 }], { group colspan:4 [{ item3 }] ]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
@@ -334,11 +386,11 @@ QUnit.test('form -> 4 columns and 3 groups with colspan', function(assert) {
     assert.roughEqual(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
 });
 
-QUnit.test('form -> 1 column and 1 items and 1 tab', function(assert) {
+QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
-            xs: 1
+            xs: 2
         },
         items: ['dataField1', {
             itemType: 'group',
@@ -357,15 +409,15 @@ QUnit.test('form -> 1 column and 1 items and 1 tab', function(assert) {
     });
     const $contents = $form.find('.dx-field-item-content');
 
-    const paddings = getPaddings($contents.get(0), $contents.get(1));
-    assert.roughEqual(paddings.paddingTop, DEFAULT_PADDING_TOP, 0.01);
+    const actualPadding = getPaddings($contents.get(0), $contents.get(1));
+    assert.roughEqual(actualPadding.paddingLeft, DEFAULT_PADDING_LEFT, 0.01);
 });
 
-QUnit.test('form -> 1 column and 2 items and 1 tab', function(assert) {
+QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
     const $form = $('#form').dxForm({
         screenByWidth: () => { return 'xs'; },
         colCountByScreen: {
-            xs: 1
+            xs: 2
         },
         items: ['dataField1', {
             itemType: 'group',
