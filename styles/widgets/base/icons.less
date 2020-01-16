@@ -150,16 +150,21 @@
     .dx-icon-arrowright { .dx-font-icon("\f00e"); }
     .dx-icon-arrowup { .dx-font-icon("\f013"); }
 
-    .dx-icon-spinleft { .dx-font-icon("\f04f"); }
-    .dx-icon-spinright { .dx-font-icon("\f04e"); }
+    .dx-icon-spinleft,
+    .dx-icon-spinprev {
+        .dx-font-icon("\f04f");
+    }
+
+    .dx-icon-spinright,
+    .dx-icon-spinnext {
+        .dx-font-icon("\f04e");
+    }
 
     .dx-icon-spinnext {
-        .dx-icon-spinright;
         .dx-rtl &:before { content: "\f04f"; } //.dx-icon-spinleft
     }
 
     .dx-icon-spinprev {
-        .dx-icon-spinleft;
         .dx-rtl &:before { content: "\f04e"; } //.dx-icon-spinright
     }
     .dx-icon-spindown { .dx-font-icon("\f001"); }
