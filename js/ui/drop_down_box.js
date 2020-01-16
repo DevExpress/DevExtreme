@@ -13,6 +13,7 @@ import registerComponent from '../core/component_registrator';
 import { normalizeKeyName } from '../events/utils';
 import { keyboard } from '../events/short';
 import devices from '../core/devices';
+import { getActiveElement } from '../core/dom_adapter';
 
 const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
@@ -268,14 +269,17 @@ const DropDownBox = DropDownEditor.inherit({
         return this.callBase();
     },
 
-    _preventCloseHandler: function() {
-        const isInputFocused = !!this._popup.$content().find('input:focus').length;
-
-        return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && isInputFocused;
-    },
-
     _canShowVirtualKeyboard: function() {
         return realDevice.mac; // T845484
+    },
+
+    _isNestedElementActive: function() {
+        const activeElement = getActiveElement();
+        return activeElement && this._popup.$content().get(0).contains(activeElement);
+    },
+
+    _shouldCloseOnTargetScroll: function() {
+        return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && this._isNestedElementActive();
     },
 
     _popupConfig: function() {
@@ -290,7 +294,7 @@ const DropDownBox = DropDownEditor.inherit({
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled,
-            closeOnTargetScroll: this._preventCloseHandler.bind(this),
+            closeOnTargetScroll: this._shouldCloseOnTargetScroll.bind(this),
             position: {
                 of: this.$element(),
                 collision: 'flipfit',
