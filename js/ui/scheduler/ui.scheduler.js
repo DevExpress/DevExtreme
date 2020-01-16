@@ -2529,7 +2529,7 @@ const Scheduler = Widget.inherit({
         const startDate = new Date(this.fire('getField', 'startDate', resultAppointmentData));
         const endDate = new Date(this.fire('getField', 'endDate', resultAppointmentData));
         const appointmentDuration = endDate.getTime() - startDate.getTime();
-        let updatedStartDate;
+        let updatedStartDate = startDate;
         let appointmentStartDate;
 
         if(typeUtils.isDefined($appointment) && (skipCheckUpdate === true || this._needUpdateAppointmentData($appointment))) {
@@ -2538,21 +2538,23 @@ const Scheduler = Widget.inherit({
             if(typeUtils.isFunction(apptDataCalculator)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
             } else {
-                const coordinates = translator.locate($appointment);
-                updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
-
-                if($appointment.hasClass('dx-scheduler-appointment-reduced')) {
-                    appointmentStartDate = $appointment.data('dxAppointmentStartDate');
-                    if(appointmentStartDate) {
-                        updatedStartDate = appointmentStartDate;
+                if(options.appointmentWasResized) {
+                    const coordinates = translator.locate($appointment);
+                    updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
+                } else {
+                    if($appointment.hasClass('dx-scheduler-appointment-reduced')) {
+                        appointmentStartDate = $appointment.data('dxAppointmentStartDate');
+                        if(appointmentStartDate) {
+                            updatedStartDate = appointmentStartDate;
+                        }
                     }
-                }
 
-                if(this._isAppointmentRecurrence(appointmentData)) {
-                    appointmentStartDate = $appointment.data('dxAppointmentSettings') && $appointment.data('dxAppointmentSettings').startDate;
-                    const isStartDateChanged = options.data && options.target && options.target.endDate && new Date(options.data.endDate).getTime() === new Date(options.target.endDate).getTime();
-                    if(appointmentStartDate && !isStartDateChanged) {
-                        updatedStartDate = appointmentStartDate;
+                    if(this._isAppointmentRecurrence(appointmentData)) {
+                        appointmentStartDate = $appointment.data('dxAppointmentSettings') && $appointment.data('dxAppointmentSettings').startDate;
+                        // const isStartDateChanged = options.data && options.target && options.target.endDate && new Date(options.data.endDate).getTime() === new Date(options.target.endDate).getTime();
+                        if(appointmentStartDate) {
+                            updatedStartDate = appointmentStartDate;
+                        }
                     }
                 }
 
