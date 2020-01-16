@@ -1065,18 +1065,25 @@ QUnit.test('Update expandedRowKeys', function(assert) {
     this.dataController.setDataSource(dataSource);
     dataSource.load();
 
+    let expandedRowKeys = this.dataController.option('expandedRowKeys');
+
     // act
     this.expandRow(1);
 
     // assert
     assert.equal(this.dataController.option('expandedRowKeys').length, 1, 'count of expanded items');
     assert.equal(this.dataController.option('expandedRowKeys')[0], 1, 'first item is expanded');
+    assert.notStrictEqual(this.dataController.option('expandedRowKeys'), expandedRowKeys, 'expandedRowKeys has a different instance');
+
+    // arrange
+    expandedRowKeys = this.dataController.option('expandedRowKeys');
 
     // act
     this.collapseRow(1);
 
     // assert
     assert.notOk(this.dataController.option('expandedRowKeys').length, 'count of expanded items');
+    assert.notStrictEqual(this.dataController.option('expandedRowKeys'), expandedRowKeys, 'expandedRowKeys has a different instance');
 });
 
 QUnit.test('Expand/collapse events', function(assert) {
