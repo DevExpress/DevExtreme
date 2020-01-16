@@ -72,15 +72,18 @@ exports.HeaderFilterView = modules.View.inherit({
     applyHeaderFilter: function(options) {
         const that = this;
         const list = that.getListContainer();
-        const isSelectAll = !list.option('searchValue') && !options.isFilterBuilder && list.$element().find('.dx-checkbox').eq(0).hasClass('dx-checkbox-checked');
+        const searchValue = list.option('searchValue');
+        const isSelectAll = !searchValue && !options.isFilterBuilder && list.$element().find('.dx-checkbox').eq(0).hasClass('dx-checkbox-checked');
         const filterValues = [];
 
         var fillSelectedItemKeys = function(filterValues, items, isExclude) {
             each(items, function(_, item) {
                 if(item.selected !== undefined && (!!item.selected) ^ isExclude) {
-                    const hasChildrenWithSelection = item.items && item.items.some((item) => item.selected !== undefined);
+                    const node = list._getNode(item);
+                    const hasChildren = list._hasChildren(node);
+                    const hasChildrenWithSelection = hasChildren && item.items && item.items.some((item) => item.selected);
 
-                    if(!list.option('searchValue') || !hasChildrenWithSelection) {
+                    if(!searchValue || !hasChildrenWithSelection) {
                         filterValues.push(item.value);
                         return;
                     }

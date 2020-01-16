@@ -1102,8 +1102,9 @@ const LayoutManager = Widget.inherit({
     },
 
     _resetWidget(instance) {
-        const defaultOptions = instance._getDefaultOptions();
-        instance._setOptionSilent('value', defaultOptions.value);
+        this._disableEditorValueChangedHandler = true;
+        instance.reset();
+        this._disableEditorValueChangedHandler = false;
         instance.option('isValid', true);
     },
 
@@ -1197,7 +1198,7 @@ const LayoutManager = Widget.inherit({
             }
         });
         editorInstance.on('valueChanged', args => {
-            if(!(isObject(args.value) && args.value === args.previousValue)) {
+            if(!this._disableEditorValueChangedHandler && !(isObject(args.value) && args.value === args.previousValue)) {
                 this._updateFieldValue(dataField, args.value);
             }
         });

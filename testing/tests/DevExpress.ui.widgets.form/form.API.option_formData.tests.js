@@ -13,6 +13,14 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
+const checkEditor = (form, dataField, expectedValue) => {
+    const editor = form.getEditor(dataField);
+    const $editor = editor.$element();
+    const $input = $editor.find('.dx-texteditor-input');
+    QUnit.assert.equal(editor.option('value'), expectedValue, `value option of editor for the ${dataField}`);
+    QUnit.assert.strictEqual($input.val(), expectedValue === null ? '' : expectedValue, `input value of editor for the ${dataField}`);
+};
+
 QUnit.module('Public API: option(formData, new value)');
 
 QUnit.test('Set { formData: null }, call option(formData, null)', function(assert) {
@@ -33,35 +41,35 @@ QUnit.test('Set { formData: null, items: [dataField1] }, call option(formData, {
     const formData = {};
     form.option('formData', formData);
     assert.equal(form.option('formData'), formData);
-    assert.equal(form.getEditor('dataField1').option('value'), '');
+    checkEditor(form, 'dataField1', '');
 });
 
 QUnit.test('Set { formData: null, items: [dataField1] }, call option(formData, null)', function(assert) {
     const form = $('#form').dxForm({ formData: null, items: ['dataField1'] }).dxForm('instance');
     form.option('formData', null);
     assert.propEqual(form.option('formData'), {});
-    assert.equal(form.getEditor('dataField1').option('value'), '');
+    checkEditor(form, 'dataField1', '');
 });
 
 QUnit.test('Set { formData: {}, items: [dataField1] }, call option(formData, null)', function(assert) {
     const form = $('#form').dxForm({ formData: {}, items: ['dataField1'] }).dxForm('instance');
     form.option('formData', null);
     assert.propEqual(form.option('formData'), {});
-    assert.equal(form.getEditor('dataField1').option('value'), '');
+    checkEditor(form, 'dataField1', '');
 });
 
 QUnit.test('Set { formData: {}, items: [dataField1] }, call option(formData, {})', function(assert) {
     const form = $('#form').dxForm({ formData: {}, items: ['dataField1'] }).dxForm('instance');
     form.option('formData', {});
     assert.propEqual(form.option('formData'), {});
-    assert.equal(form.getEditor('dataField1').option('value'), '');
+    checkEditor(form, 'dataField1', '');
 });
 
 QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, call option(formData, null)', function(assert) {
     const form = $('#form').dxForm({ formData: { dataField1: 'a' }, items: ['dataField1'] }).dxForm('instance');
     form.option('formData', null);
     assert.propEqual(form.option('formData'), { dataField1: '' });
-    assert.equal(form.getEditor('dataField1').option('value'), '');
+    checkEditor(form, 'dataField1', '');
 });
 
 QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, call option(formData, {})', function(assert) {
@@ -69,7 +77,7 @@ QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, call option(
     const formData = {};
     form.option('formData', formData);
     assert.equal(form.option('formData'), formData);
-    assert.equal(form.getEditor('dataField1').option('value'), '');
+    checkEditor(form, 'dataField1', '');
 });
 
 QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, call option(formData, {dataField1: undefined})', function(assert) {
@@ -77,7 +85,7 @@ QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, call option(
     const formData = { dataField1: undefined };
     form.option('formData', formData);
     assert.equal(form.option('formData'), formData);
-    assert.equal(form.getEditor('dataField1').option('value'), '');
+    checkEditor(form, 'dataField1', '');
 });
 
 QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, call option(formData, {dataField1: null})', function(assert) {
@@ -85,7 +93,7 @@ QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, call option(
     const formData = { dataField1: null };
     form.option('formData', formData);
     assert.equal(form.option('formData'), formData);
-    assert.equal(form.getEditor('dataField1').option('value'), null);
+    checkEditor(form, 'dataField1', null);
 });
 
 QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, call option(formData, {dataField1: b})', function(assert) {
@@ -93,10 +101,10 @@ QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, call option(
     const formData = { dataField1: 'b' };
     form.option('formData', formData);
     assert.equal(form.option('formData'), formData);
-    assert.equal(form.getEditor('dataField1').option('value'), 'b');
+    checkEditor(form, 'dataField1', 'b');
 });
 
-QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change editor value, call option(formData, null)', function(assert) {
+QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change editor value, call option(formData, null)', function() {
     const form = $('#form').dxForm({
         formData: { dataField1: 'a' },
         items: ['dataField1']
@@ -105,10 +113,10 @@ QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change edito
     form.getEditor('dataField1').option('value', 'val1');
 
     form.option('formData', null);
-    assert.equal(form.getEditor('dataField1').option('value'), '');
+    checkEditor(form, 'dataField1', '');
 });
 
-QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change editor value, call option(formData, {})', function(assert) {
+QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change editor value, call option(formData, {})', function() {
     const form = $('#form').dxForm({
         formData: { dataField1: 'a' },
         items: ['dataField1']
@@ -117,10 +125,10 @@ QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change edito
     form.getEditor('dataField1').option('value', 'val1');
 
     form.option('formData', {});
-    assert.equal(form.getEditor('dataField1').option('value'), '');
+    checkEditor(form, 'dataField1', '');
 });
 
-QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change editor value, call option(formData, {dataField1:undefined})', function(assert) {
+QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change editor value, call option(formData, {dataField1:undefined})', function() {
     const form = $('#form').dxForm({
         formData: { dataField1: 'a' },
         items: ['dataField1']
@@ -129,10 +137,10 @@ QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change edito
     form.getEditor('dataField1').option('value', 'val1');
 
     form.option('formData', { dataField1: undefined });
-    assert.equal(form.getEditor('dataField1').option('value'), '');
+    checkEditor(form, 'dataField1', '');
 });
 
-QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change editor value, call option(formData, {dataField1:null})', function(assert) {
+QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change editor value, call option(formData, {dataField1:null})', function() {
     const form = $('#form').dxForm({
         formData: { dataField1: 'a' },
         items: ['dataField1']
@@ -141,10 +149,10 @@ QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change edito
     form.getEditor('dataField1').option('value', 'val1');
 
     form.option('formData', { dataField1: null });
-    assert.equal(form.getEditor('dataField1').option('value'), null);
+    checkEditor(form, 'dataField1', null);
 });
 
-QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change editor value, call option(formData, {dataField1: b})', function(assert) {
+QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change editor value, call option(formData, {dataField1: b})', function() {
     const form = $('#form').dxForm({
         formData: { dataField1: 'a' },
         items: ['dataField1']
@@ -153,10 +161,10 @@ QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change edito
     form.getEditor('dataField1').option('value', 'val1');
 
     form.option('formData', { dataField1: 'b' });
-    assert.equal(form.getEditor('dataField1').option('value'), 'b');
+    checkEditor(form, 'dataField1', 'b');
 });
 
-QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change editor value, call option(formData, {dataField2:a})', function(assert) {
+QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change editor value, call option(formData, {dataField2:a})', function() {
     const form = $('#form').dxForm({
         formData: { dataField1: 'a' },
         items: ['dataField1']
@@ -165,10 +173,10 @@ QUnit.test('Set { formData: {dataField1: a}, items: [dataField1] }, change edito
     form.getEditor('dataField1').option('value', 'val1');
 
     form.option('formData', { dataField2: 'a' });
-    assert.equal(form.getEditor('dataField1').option('value'), '');
+    checkEditor(form, 'dataField1', '');
 });
 
-QUnit.test('Set { formData: {dataField1: a}, items: [dxTextArea] }, change editor value, call option(formData, {dataField1: b})', function(assert) {
+QUnit.test('Set { formData: {dataField1: a}, items: [dxTextArea] }, change editor value, call option(formData, {dataField1: b})', function() {
     const form = $('#form').dxForm({
         formData: { dataField1: 'a' },
         items: [{ name: 'custom1', editorType: 'dxTextArea' }]
@@ -177,7 +185,7 @@ QUnit.test('Set { formData: {dataField1: a}, items: [dxTextArea] }, change edito
     form.getEditor('custom1').option('value', 'val1');
 
     form.option('formData', { dataField1: 'b' });
-    assert.equal(form.getEditor('custom1').option('value'), 'val1');
+    checkEditor(form, 'custom1', 'val1');
 });
 
 QUnit.test('Set { formData: {dataField1: a, dataField2: b}, items: [dataField1, dataField2], call option(formData, {dataField3: c}', assert => {
@@ -193,13 +201,38 @@ QUnit.test('Set { formData: {dataField1: a, dataField2: b}, items: [dataField1, 
 
     form.option('formData', { dataField3: 'c' });
 
-    const calls = onFieldDataChangedStub.getCalls();
-    assert.propEqual(form.option('formData'), { dataField3: 'c' }, 'formData');
-    assert.equal(form.getEditor('dataField1').option('value'), '', 'editor\'s value of the dataField1');
-    assert.equal(form.getEditor('dataField2').option('value'), '', 'editor\'s value of the dataField2');
+    checkEditor(form, 'dataField1', '');
+    checkEditor(form, 'dataField2', '');
 
+    assert.propEqual(form.option('formData'), { dataField3: 'c' }, 'formData');
+
+    const calls = onFieldDataChangedStub.getCalls();
     assert.equal(onFieldDataChangedStub.callCount, 1, 'onFieldDataChanged event\'s calls count');
     assert.equal(calls[0].args[0].dataField, 'dataField3', 'dataField argument of the onFieldDataChanged event');
+    assert.equal(calls[0].args[0].value, 'c', 'value argument of the onFieldDataChanged event');
+});
+
+QUnit.test('Set { formData: {dataField1: a, dataField2: b}, items: [dataField1, dataField2], call option(formData, {dataField2: c}', assert => {
+    const onFieldDataChangedStub = sinon.stub();
+    const form = $('#form').dxForm({
+        formData: {
+            dataField1: 'a',
+            dataField2: 'b',
+        },
+        items: ['dataField1', 'dataField2'],
+        onFieldDataChanged: onFieldDataChangedStub
+    }).dxForm('instance');
+
+    form.option('formData', { dataField2: 'c' });
+
+    checkEditor(form, 'dataField1', '');
+    checkEditor(form, 'dataField2', 'c');
+
+    assert.propEqual(form.option('formData'), { dataField2: 'c' }, 'formData');
+
+    const calls = onFieldDataChangedStub.getCalls();
+    assert.equal(onFieldDataChangedStub.callCount, 1, 'onFieldDataChanged event\'s calls count');
+    assert.equal(calls[0].args[0].dataField, 'dataField2', 'dataField argument of the onFieldDataChanged event');
     assert.equal(calls[0].args[0].value, 'c', 'value argument of the onFieldDataChanged event');
 });
 
@@ -217,9 +250,9 @@ QUnit.test('Set { formData: {dataField1: a, dataField2: b}, items: [dataField1, 
     form.option('formData', { dataField3: 'c' });
     form.getEditor('dataField2').option('value', 'd');
 
+    checkEditor(form, 'dataField1', '');
+    checkEditor(form, 'dataField2', 'd');
     assert.propEqual(form.option('formData'), { dataField2: 'd', dataField3: 'c' }, 'formData');
-    assert.equal(form.getEditor('dataField1').option('value'), '', 'editor\'s value of the dataField1');
-    assert.equal(form.getEditor('dataField2').option('value'), 'd', 'editor\'s value of the dataField2');
 
     const calls = onFieldDataChangedStub.getCalls();
     assert.equal(onFieldDataChangedStub.callCount, 2, 'onFieldDataChanged event\'s calls count');
@@ -245,9 +278,10 @@ QUnit.test('Set { formData: {dataField3: c}, items: [dataField1, dataField2], ca
         dataField1: 'a',
         dataField2: 'b'
     });
+
+    checkEditor(form, 'dataField1', 'a');
+    checkEditor(form, 'dataField2', 'b');
     assert.propEqual(form.option('formData'), { dataField1: 'a', dataField2: 'b' }, 'formData after changing via API');
-    assert.equal(form.getEditor('dataField1').option('value'), 'a', 'editor\'s value of the dataField1');
-    assert.equal(form.getEditor('dataField2').option('value'), 'b', 'editor\'s value of the dataField2');
 
     const calls = onFieldDataChangedStub.getCalls();
     assert.equal(onFieldDataChangedStub.callCount, 2, 'onFieldDataChanged event\'s calls count');

@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const config = require('core/config');
-const typeUtils = require('core/utils/type');
-const windowUtils = require('core/utils/window');
+import $ from 'jquery';
+import config from 'core/config';
+import typeUtils from 'core/utils/type';
+import windowUtils from 'core/utils/window';
 
-require('common.css!');
-require('ui/slide_out_view');
+import 'common.css!';
+import 'ui/slide_out_view';
 
 const SLIDEOUTVIEW_CLASS = 'dx-slideoutview';
 const SLIDEOUTVIEW_WRAPPER_CLASS = 'dx-slideoutview-wrapper';

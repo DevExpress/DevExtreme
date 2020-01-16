@@ -27,6 +27,33 @@ export interface VectorMapProjectionConfig {
     to?: ((coordinates: Array<number>) => Array<number>);
 }
 
+type Projection = (data: VectorMapProjectionConfig) => any;
+
+type ProjectionMethods = {
+    /**
+     * @docid viz.map.projectionmethods.add
+     * @publicName add(name, projection)
+     * @param1 name:string
+     * @param2 projection:VectorMapProjectionConfig|object
+     * @namespace DevExpress.viz.map.projection
+     * @static
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    add(name: string, projection: VectorMapProjectionConfig | any): void;
+
+    /**
+     * @docid viz.map.projectionmethods.get
+     * @publicName get(name)
+     * @param1 name:Enums.VectorMapProjection|string
+     * @return object
+     * @namespace DevExpress.viz.map.projection
+     * @static
+     * @hidden
+     * @prevFileNamespace DevExpress.viz
+     */
+    get(name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string): any;
+}
 
 /**
  * @docid viz.mapmethods.projection
@@ -40,28 +67,5 @@ export interface VectorMapProjectionConfig {
  * @hidden
  * @prevFileNamespace DevExpress.viz
  */
-export function projection(data: VectorMapProjectionConfig): any;
+export const projection: Projection & ProjectionMethods;
 
-/**
- * @docid viz.map.projectionmethods.add
- * @publicName add(name, projection)
- * @param1 name:string
- * @param2 projection:VectorMapProjectionConfig|object
- * @namespace DevExpress.viz.map.projection
- * @static
- * @prevFileNamespace DevExpress.viz
- * @public
- */
-export function add(name: string, projection: VectorMapProjectionConfig | any): void;
-
-/**
- * @docid viz.map.projectionmethods.get
- * @publicName get(name)
- * @param1 name:Enums.VectorMapProjection|string
- * @return object
- * @namespace DevExpress.viz.map.projection
- * @static
- * @hidden
- * @prevFileNamespace DevExpress.viz
- */
-export function get(name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string): any;

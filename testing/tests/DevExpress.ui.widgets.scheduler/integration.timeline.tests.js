@@ -387,14 +387,10 @@ QUnit.test('Scheduler timeline groupTable should have right height if widget has
     assert.roughEqual(groupHeight, dateTableHeight, 1.5, 'Group table has correct height');
 });
 
-QUnit.test('Appointment has correct render with timelineWeek view & endHour outside of view bounds', function(assert) {
+QUnit.test('Appointment has correct render with timelineWeek view & endHour outside of view bounds (T754362)', function(assert) {
     const data = [{
         startDate: new Date('2014-07-14T09:00:00.000Z'),
         endDate: new Date('2014-07-14T23:01:00.000Z'),
-        text: 'blah',
-    }, {
-        startDate: new Date('2014-07-17T00:00:00.000Z'),
-        endDate: new Date('2014-07-18T00:00:00.000Z'),
         text: 'blah',
     }];
 
@@ -411,7 +407,11 @@ QUnit.test('Appointment has correct render with timelineWeek view & endHour outs
         currentDate: new Date(2014, 6, 14),
         crossScrollingEnabled: true,
         width: 1500,
+        timeZone: 'Etc/UTC'
     });
 
-    assert.ok(scheduler.appointments.getAppointmentCount() > 0, 'Appointments are rendered');
+    assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
+
+    const appointment = scheduler.appointments.getAppointment();
+    assert.roughEqual(appointment.outerWidth(), 175, 1, 'Appointment width is OK');
 });

@@ -1,5 +1,5 @@
-const $ = require('jquery');
-const List = require('ui/list');
+import $ from 'jquery';
+import List from 'ui/list';
 
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
 const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon';

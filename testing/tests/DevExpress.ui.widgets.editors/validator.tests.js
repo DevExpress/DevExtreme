@@ -5,18 +5,23 @@ import DefaultAdapter from 'ui/validation/default_adapter';
 import ValidationEngine from 'ui/validation_engine';
 import { Deferred } from 'core/utils/deferred';
 import { isPromise } from 'core/utils/type';
+import config from 'core/config';
 
 import 'ui/validator';
 
 const Fixture = Class.inherit({
     createValidator: function(options, element) {
         this.$element = element || this.$element || $('<div/>');
-        this.stubAdapter = sinon.createStubInstance(DefaultAdapter);
+        this.stubAdapter = this.stubAdapter || sinon.createStubInstance(DefaultAdapter);
         const validator = this.$element.dxValidator($.extend({
             adapter: this.stubAdapter
         }, options)).dxValidator('instance');
 
         return validator;
+    },
+
+    createAdapter: function() {
+        this.stubAdapter = sinon.createStubInstance(DefaultAdapter);
     },
 
     teardown: function() {
@@ -55,6 +60,39 @@ QUnit.module('General', {
         assert.strictEqual(result.isValid, true, 'Validator should be isValid - result');
         assert.ok(!result.brokenRule, 'There should not be brokenRule');
         assert.ok(this.fixture.stubAdapter.applyValidationResults.calledOnce, 'Adapter method should be called');
+    });
+
+    QUnit.test('Validator apply "rtlEnabled" value from global config by default', function(assert) {
+        const originalConfig = config();
+
+        try {
+            config({ rtlEnabled: true });
+
+            this.fixture.createValidator({
+                validationRules: [{
+                    type: 'required'
+                }]
+            });
+
+            assert.ok(this.fixture.$element.hasClass('dx-rtl'), 'Adapter method should be called');
+        } finally {
+            config(originalConfig);
+        }
+    });
+
+    QUnit.test('Validator apply "rtlEnabled" value from adapter', function(assert) {
+        this.fixture.createAdapter();
+        this.fixture.stubAdapter.editor = {
+            option: () => { return { rtlEnabled: true }; }
+        };
+
+        this.fixture.createValidator({
+            validationRules: [{
+                type: 'required'
+            }]
+        });
+
+        assert.ok(this.fixture.$element.hasClass('dx-rtl'), 'Adapter method should be called');
     });
 
     QUnit.test('ValidationEngine can validate Invalid against provided rules', function(assert) {

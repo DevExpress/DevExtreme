@@ -4943,6 +4943,65 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
         assert.equal(focusedRowChangedCount, 1, 'onFocusedRowChanged fires count');
     });
 
+    QUnit.testInActiveWindow('Focusing row should not scroll top if fixed column present (T848753)', function(assert) {
+        // arrange, act
+        this.data = [
+            { id: 5, c0: 'c0_0', c1: 'c1_0' },
+            { id: 6, c0: 'c0_1', c1: 'c1_1' },
+            { id: 7, c0: 'c0_2', c1: 'c1_2' },
+            { id: 8, c0: 'c0_3', c1: 'c1_3' }
+        ];
+
+        this.$element = () => $('#container');
+        this.columns = [
+            {
+                dataField: 'id',
+                fixed: true
+            },
+            'c0',
+            'c1'
+        ];
+        this.options = {
+            height: 40,
+            keyExpr: 'id',
+            focusedRowEnabled: true,
+            showColumnHeaders: false,
+            focusedRowKey: 5,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            columnFixing: {
+                enabled: true
+            },
+            paging: {
+                pageSize: 1
+            }
+        };
+        this.setupModule();
+        addOptionChangedHandlers(this);
+        this.gridView.render($('#container'));
+        const rowsView = this.gridView.getView('rowsView');
+        rowsView.height(40);
+        rowsView.resize();
+        this.clock.tick();
+
+        // arrange, act
+        const scrollable = this.getScrollable();
+
+        scrollable.scrollBy(80);
+        this.clock.tick();
+        scrollable.scrollBy(80);
+        this.clock.tick();
+        this.option('focusedRowKey', 8);
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.option('focusedRowKey'), 8, 'Focused row key');
+        assert.equal(this.option('focusedRowIndex'), 3, 'Focused row index');
+        assert.ok(this.pageIndex(), 3);
+    });
+
     QUnit.testInActiveWindow('onFocusedCellChanged event should not fire if cell position updates for not cell element', function(assert) {
         let rowsView;
         let focusedCellChangedCount = 0;
@@ -5092,8 +5151,6 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
 
     QUnit.test('Focused row should preserve on navigation to the other row in virual scrolling mode if page not loaded', function(assert) {
         // arrange
-        let rowsView;
-
         this.data = [
             { name: 'Alex', phone: '111111', room: 6 },
             { name: 'Dan', phone: '2222222', room: 5 },
@@ -5121,7 +5178,7 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
         this.setupModule();
 
         this.gridView.render($('#container'));
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         rowsView.height(100);
         rowsView.resize();
         this.clock.tick();

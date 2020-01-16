@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const devices = require('core/devices');
-const browser = require('core/utils/browser');
+import $ from 'jquery';
+import devices from 'core/devices';
+import browser from 'core/utils/browser';
 
-require('ui/text_box');
-require('common.css!');
+import 'ui/text_box';
+import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =

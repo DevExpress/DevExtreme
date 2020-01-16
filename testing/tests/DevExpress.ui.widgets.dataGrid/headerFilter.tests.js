@@ -1877,6 +1877,77 @@ QUnit.test('Check select all state after filtering if column dataType is date an
     assert.notEqual(column.filterType, 'exclude', 'filterType is correct');
 });
 
+// T850548
+QUnit.test('Filtering by year should be applied after select all -> deselect all', function(assert) {
+    // arrange
+    const that = this;
+    const $testElement = $('#container');
+
+    that.columns[0].dataType = 'date';
+    that.options.headerFilter.allowSearch = true;
+    that.items = [{ Test1: new Date(1986, 2, 1), Test2: 'test2' }, { Test1: new Date(1987, 3, 1), Test2: 'test4' }];
+
+    that.setupDataGrid();
+    that.columnHeadersView.render($testElement);
+    that.headerFilterView.render($testElement);
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    const $popupContent = that.headerFilterView.getPopupContainer().$content();
+    const treeView = $popupContent.find('.dx-treeview').dxTreeView('instance');
+    const $selectAll = treeView.$element().find('.dx-treeview-select-all-item');
+
+    $($selectAll).trigger('dxclick'); // select all
+    $($selectAll).trigger('dxclick'); // deselect all
+    treeView.option('searchValue', '1987'); // search by year
+
+    // assert
+    const $itemElements = $($popupContent.find('.dx-treeview-node'));
+    assert.strictEqual($itemElements.length, 1, 'item count');
+
+    // act
+    $itemElements.first().children('.dx-checkbox').trigger('dxclick'); // select first item
+    $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
+
+    // assert
+    const column = that.columnsController.getVisibleColumns()[0];
+    assert.deepEqual(column.filterValues, [1987], 'filterValues is correct');
+    assert.notEqual(column.filterType, 'include', 'filterType is correct');
+});
+
+QUnit.test('Filtering by month should be applied when there is a selected day in the month', function(assert) {
+    // arrange
+    const that = this;
+    const $testElement = $('#container');
+
+    that.columns[0].dataType = 'date';
+    that.columns[0].filterValues = ['1986/4/1'];
+    that.options.headerFilter.allowSearch = true;
+    that.items = [{ Test1: new Date(1986, 3, 1), Test2: 'test2' }, { Test1: new Date(1986, 3, 2), Test2: 'test4' }];
+
+    that.setupDataGrid();
+    that.columnHeadersView.render($testElement);
+    that.headerFilterView.render($testElement);
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    const $popupContent = that.headerFilterView.getPopupContainer().$content();
+    const treeView = $popupContent.find('.dx-treeview').dxTreeView('instance');
+
+    treeView.option('searchValue', 'April'); // search by month
+
+    // assert
+    const $itemElements = $($popupContent.find('.dx-treeview-node'));
+    assert.strictEqual($itemElements.length, 2, 'item count');
+
+    // act
+    $itemElements.eq(1).children('.dx-checkbox').trigger('dxclick'); // select second item
+    $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // apply filter
+
+    // assert
+    const column = that.columnsController.getVisibleColumns()[0];
+    assert.deepEqual(column.filterValues, ['1986/4'], 'filterValues is correct');
+    assert.notEqual(column.filterType, 'include', 'filterType is correct');
+});
+
 QUnit.test('Check filtering in column lookup with simple types', function(assert) {
     // arrange
     const that = this;
