@@ -18992,6 +18992,45 @@ QUnit.test('Popup should apply data changes after editorOptions changing (T81788
     assert.equal($popupEditors.eq(1).get(0).style.height, '100px', 'editorOptions applied');
 });
 
+QUnit.test('Datagrid should edit only allowed cells by tab press if editing.allowUpdating option set dynamically (T848707)', function(assert) {
+    ['cell', 'batch'].forEach(editingMode => {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{
+                'ID': 1,
+                'FirstName': 'John',
+                'LastName': 'Heart',
+            }, {
+                'ID': 2,
+                'FirstName': 'Robert',
+                'LastName': 'Reagan'
+            }],
+            showBorders: true,
+            keyExpr: 'ID',
+            editing: {
+                mode: editingMode,
+                allowUpdating: function(e) {
+                    return e.row.data.FirstName === 'Robert';
+                },
+            },
+            columns: ['FirstName', 'LastName']
+        });
+
+        // act
+        dataGrid.editCell(1, 0);
+        this.clock.tick();
+
+        const navigationController = dataGrid.getController('keyboardNavigation');
+        navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
+        this.clock.tick();
+
+        // assert
+        assert.equal($(dataGrid.getCellElement(0, 1)).find('input').length, 0, `cell is not being edited in '${editingMode}' editing mode`);
+        assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-focused'), 'cell is focused');
+    });
+});
+
 QUnit.test('Filter builder custom operations should update filterValue immediately (T817973)', function(assert) {
     // arrange
     const data = [

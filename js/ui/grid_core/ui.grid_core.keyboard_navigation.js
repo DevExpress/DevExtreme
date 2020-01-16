@@ -459,10 +459,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
     _editingCellTabHandler: function(eventArgs, direction) {
-        const editingOptions = this.option('editing');
         const eventTarget = eventArgs.originalEvent.target;
-        let column;
-        let row;
         let $cell = this._getCellElementFromTarget(eventTarget);
         let isEditingAllowed;
         const $event = eventArgs.originalEvent;
@@ -479,12 +476,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
             return false;
         }
 
-        column = this._columnsController.getVisibleColumns()[this.getView('rowsView').getCellIndex($cell)];
-        row = this._dataController.items()[this._getRowIndex($cell && $cell.parent())];
+        const column = this._columnsController.getVisibleColumns()[this.getView('rowsView').getCellIndex($cell)];
+        const row = this._dataController.items()[this._getRowIndex($cell && $cell.parent())];
 
         if(column.allowEditing) {
             const isDataRow = !row || row.rowType === 'data';
-            isEditingAllowed = editingOptions.allowUpdating ? isDataRow : row && row.isNewRow;
+            isEditingAllowed = this._editingController.allowUpdating({ row: row }) ? isDataRow : row && row.isNewRow;
         }
 
         if(!isEditingAllowed) {
