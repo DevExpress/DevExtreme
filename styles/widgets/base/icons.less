@@ -170,16 +170,22 @@
     .dx-icon-spindown { .dx-font-icon("\f001"); }
     .dx-icon-spinup { .dx-font-icon("\f002"); }
 
-    .dx-icon-chevronleft { .dx-font-icon("\f012"); }
-    .dx-icon-chevronright { .dx-font-icon("\f010"); }
+    .dx-icon-chevronleft,
+    .dx-icon-chevronprev,
+    .dx-icon-back {
+        .dx-font-icon("\f012");
+    }
+
+    .dx-icon-chevronright,
+    .dx-icon-chevronnext {
+        .dx-font-icon("\f010");
+    }
 
     .dx-icon-chevronnext {
-        .dx-icon-chevronright;
         .dx-rtl &:before { content: "\f012"; } //.dx-icon-chevronleft
     }
 
     .dx-icon-chevronprev {
-        .dx-icon-chevronleft;
         .dx-rtl &:before { content: "\f010"; } //.dx-icon-chevronright
     }
     .dx-icon-chevrondown { .dx-font-icon("\f016"); }
@@ -235,7 +241,6 @@
     .dx-icon-clearsquare { .dx-font-icon("\f068"); }
 
     .dx-icon-back {
-        .dx-icon-chevronleft;
         .dx-rtl &:before { content: "\f010"; } //.dx-icon-chevronright
     }
 
