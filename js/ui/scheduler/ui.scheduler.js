@@ -1861,7 +1861,7 @@ const Scheduler = Widget.inherit({
         this.fire('setField', 'endDate', targetAppointmentData, processedEndDate);
     },
 
-    _checkRecurringAppointment: function(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent) {
+    _checkRecurringAppointment: function(singleAppointment, targetAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent) {
         delete this._updatedRecAppointment;
 
         const recurrenceRule = this.fire('getField', 'recurrenceRule', targetAppointment);
