@@ -1,11 +1,11 @@
-import ajax from '../../core/utils/ajax';
+import { sendRequest } from '../../core/utils/ajax';
 import Store from '../abstract_store';
 import ArrayStore from '../array_store';
 import { each, map } from '../../core/utils/iterator';
 import CustomStore from '../custom_store';
 import { extend } from '../../core/utils/extend';
 import { isPlainObject } from '../../core/utils/type';
-import dataUtils from '../utils';
+import { normalizeSortingInfo } from '../utils';
 
 export const CANCELED_TOKEN = 'canceled';
 
@@ -47,7 +47,7 @@ const mapRecursive = (items, level, mapper) => {
 };
 
 export const mapDataRespectingGrouping = (items, mapper, groupInfo) => {
-    const level = groupInfo ? dataUtils.normalizeSortingInfo(groupInfo).length : 0;
+    const level = groupInfo ? normalizeSortingInfo(groupInfo).length : 0;
 
     return mapRecursive(items, level, mapper);
 };
@@ -89,7 +89,7 @@ const createStoreFromConfig = (storeConfig) => {
 
 const createCustomStoreFromUrl = (url, normalizationOptions) =>
     new CustomStore({
-        load: () => ajax.sendRequest({ url, dataType: 'json' }),
+        load: () => sendRequest({ url, dataType: 'json' }),
         loadMode: normalizationOptions?.fromUrlLoadMode
     });
 
