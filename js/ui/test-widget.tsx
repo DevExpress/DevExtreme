@@ -158,6 +158,7 @@ export const viewFunction = (viewModel: any) => {
 export default class Widget {
     /** Private properties */
     @Prop() clickArgs?: any = {};
+    @Prop() activeStateUnit?: string | undefined = undefined;
     @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
     @Prop() hoverEndHandler: (args: any) => any = (() => undefined);
 
@@ -234,7 +235,7 @@ export default class Widget {
     @Effect()
     hoverEffect() {
         const namespace = 'UIFeedback';
-        const selector = undefined; // ???
+        const selector = this.activeStateUnit;
 
         if(this.hoverStateEnabled) {
             hover.on(this.widgetRef, new Action(({ event, element }) => {
