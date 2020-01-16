@@ -8,7 +8,7 @@
  * @hidden
  * @prevFileNamespace DevExpress.core
  */
-export function registerComponent(name: string, componentClass: any): void;
+export default function registerComponent(name: string, componentClass: any): void;
 
 /**
  * @docid registerComponent
@@ -21,4 +21,4 @@ export function registerComponent(name: string, componentClass: any): void;
  * @hidden
  * @prevFileNamespace DevExpress.core
  */
-export function registerComponent(name: string, namespace: any, componentClass: any): void;
+export default function registerComponent(name: string, namespace: any, componentClass: any): void;

@@ -1,6 +1,6 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('ui/track_bar');
+import 'ui/track_bar';
 
 QUnit.testStart(function() {
     const markup =

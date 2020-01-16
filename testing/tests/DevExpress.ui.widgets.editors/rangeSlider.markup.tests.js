@@ -1,7 +1,8 @@
-const $ = require('jquery');
-const config = require('core/config');
+import $ from 'jquery';
+import config from 'core/config';
 
-require('ui/range_slider');
+import 'ui/range_slider';
+import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -9,8 +10,6 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
 });
-
-require('common.css!');
 
 const SLIDER_CLASS = 'dx-slider';
 

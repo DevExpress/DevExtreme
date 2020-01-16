@@ -80,6 +80,7 @@ class SpeedDialAction extends Widget {
             case 'label':
             case 'visible':
             case 'index':
+            case 'onInitializing':
                 initAction(this);
                 break;
             case 'animation':

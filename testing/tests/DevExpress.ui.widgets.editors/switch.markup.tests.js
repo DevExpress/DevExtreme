@@ -1,7 +1,7 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('common.css!');
-require('ui/switch');
+import 'common.css!';
+import 'ui/switch';
 
 QUnit.testStart(function() {
     const markup =

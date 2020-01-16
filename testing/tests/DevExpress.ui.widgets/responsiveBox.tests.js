@@ -1,12 +1,12 @@
-const $ = require('jquery');
-const devices = require('core/devices');
-const registerComponent = require('core/component_registrator');
-const Widget = require('ui/widget/ui.widget');
-const ResponsiveBox = require('ui/responsive_box');
-const responsiveBoxScreenMock = require('../../helpers/responsiveBoxScreenMock.js');
+import $ from 'jquery';
+import devices from 'core/devices';
+import registerComponent from 'core/component_registrator';
+import Widget from 'ui/widget/ui.widget';
+import ResponsiveBox from 'ui/responsive_box';
+import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 
-require('common.css!');
-require('ui/box');
+import 'common.css!';
+import 'ui/box';
 
 QUnit.testStart(function() {
     const markup =

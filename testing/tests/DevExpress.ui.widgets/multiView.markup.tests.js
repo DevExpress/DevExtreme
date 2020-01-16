@@ -1,6 +1,6 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('ui/multi_view');
+import 'ui/multi_view';
 
 QUnit.testStart(function() {
     const markup =
