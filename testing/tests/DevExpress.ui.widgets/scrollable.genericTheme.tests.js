@@ -8,7 +8,8 @@ import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
-    const markup = '<div id="outerScrollable">\
+    const markup =
+    '<div id="outerScrollable">\
         <div id="innerScrollable"></div>\
     </div>';
 
