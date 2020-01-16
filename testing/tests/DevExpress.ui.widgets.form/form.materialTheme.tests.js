@@ -11,7 +11,7 @@ QUnit.testStart(function() {
 });
 
 
-const DEFAULT_PADDING_RIGHT = 40;
+const DEFAULT_PADDING_LEFT = 40;
 const DEFAULT_PADDING_TOP = 20;
 QUnit.module('Form have correct padding (T849353)');
 
@@ -139,7 +139,7 @@ QUnit.test('2 columns -> 2 items without groups', function(assert) {
     const labelToContentPadding = getPaddings($contents.get(0), $labels.get(1));
     const paddingBetweenContent = getPaddings($contents.get(0), $contents.get(1));
 
-    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_RIGHT);
+    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT);
     assert.equal(paddingBetweenContent.locationDiffY, 0);
 });
 
@@ -159,7 +159,7 @@ QUnit.test('2 columns -> 1 item and 1 group', function(assert) {
     const labelToContentPadding = getPaddings($contents.get(0), $labels.get(1));
     const paddingBetweenContent = getPaddings($contents.get(0), $contents.get(2));
 
-    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_RIGHT);
+    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT);
     assert.equal(paddingBetweenContent.locationDiffY, 0);
 });
 
@@ -181,7 +181,7 @@ QUnit.test('2 columns -> 1 item and 1 group with nested group', function(assert)
     const labelToContentPadding = getPaddings($contents.get(0), $labels.get(1));
     const paddingBetweenContent = getPaddings($contents.get(0), $contents.get(3));
 
-    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_RIGHT);
+    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT);
     assert.equal(paddingBetweenContent.locationDiffY, 0);
 });
 
@@ -204,7 +204,7 @@ QUnit.test('2 columns -> 2 groups', function(assert) {
     const labelToContentPadding = getPaddings($contents.get(0), $labels.get(1));
     const paddingBetweenContent = getPaddings($contents.get(1), $contents.get(3));
 
-    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_RIGHT);
+    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT);
     assert.equal(paddingBetweenContent.locationDiffY, 0);
 });
 
@@ -230,7 +230,7 @@ QUnit.test('2 columns -> 2 groups with nested groups', function(assert) {
     const labelToContentPadding = getPaddings($contents.get(0), $labels.get(1));
     const paddingBetweenContent = getPaddings($contents.get(1), $contents.get(4));
 
-    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_RIGHT);
+    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT);
     assert.equal(paddingBetweenContent.locationDiffY, 0);
 });
 
