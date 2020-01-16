@@ -1,6 +1,6 @@
 import Guid from 'core/guid';
 import dataUtils from 'data/utils';
-import odataUtils from 'data/odata/utils';
+import { EdmLiteral } from 'data/odata/utils';
 
 const keysEqual = dataUtils.keysEqual;
 const processRequestResultLock = dataUtils.processRequestResultLock;
@@ -31,8 +31,6 @@ QUnit.test('toComparable is used for compound keys', function(assert) {
 
 // T364210
 QUnit.test('toComparable is used for EdmLiteral', function(assert) {
-
-    const EdmLiteral = odataUtils.EdmLiteral;
     const edm1 = new EdmLiteral('50m');
     const edm2 = new EdmLiteral('50m');
 

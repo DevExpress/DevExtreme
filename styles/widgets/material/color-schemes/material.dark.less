@@ -48,12 +48,6 @@
 */
 @base-border-color: #515159;
 
-/**
-* @name 120. Border radius
-* @type text
-*/
-@base-border-radius: @MATERIAL_BASE_BORDER_RADIUS;
-
 @base-inverted-bg: lighten(@base-bg, 100%);
 @base-element-bg: @base-bg;
 @base-shadow-color: #000;
@@ -677,6 +671,7 @@
 
 @list-icon-color: @base-icon-color;
 @list-item-chevron-icon-color: @base-spin-icon-color;
+@list-item-icon-toggle-delete-bg: data-uri('images/widgets/material/color-schemes/dark/list/delete.png');
 
 // Overlay
 @overlay-border-color: @base-border-color;
@@ -896,6 +891,7 @@
 * @type color
 */
 @load-indicator-segment-bg-color: @base-accent;
+@loadindicator-background-image: data-uri('images/widgets/material/color-schemes/dark/loader64.gif');
 
 
 // LoadPanel
@@ -1024,6 +1020,7 @@
 @colorbox-palette-cell-bg: @colorbox-overlay-bg;
 @colorview-border-color: @base-border-color;
 @colorview-label-color: @base-label-color;
+@colorbox-preview-empty-bg: data-uri('images/widgets/material/color-schemes/dark/colorbox/nocolor.png');
 
 //DataGrid
 
@@ -1521,18 +1518,16 @@
 @timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/hour-arrow.svg');
 @timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/min-arrow.svg');
 
-// theme-depends shadow parameters
-
-//DateView
+// DateView
 @dateview-shadow-up: 0deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
 @dateview-shadow-down: 180deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
 @dateview-color: @base-text-color;
 
-//ColorView
+// ColorView
 @COLORVIEW_HANDLE_COLOR: @base-bg;
 @COLORVIEW_HANDLE_BORDER_COLOR: fade(@base-inverted-bg, 20%);
 
-//Form
+// Form
 
 @form-field-item-color: lighten(@base-label-color, 46%);
 
@@ -1543,11 +1538,6 @@
 @form-group-border-color: @base-border-color;
 @form-field-required-color: @form-field-item-color;
 @form-field-mark-color: @form-field-item-color;
-
-// Images
-@list-item-icon-toggle-delete-bg: data-uri('images/widgets/material/color-schemes/dark/list/delete.png');
-@colorbox-preview-empty-bg: data-uri('images/widgets/material/color-schemes/dark/colorbox/nocolor.png');
-@loadindicator-background-image: data-uri('images/widgets/material/color-schemes/dark/loader64.gif');
 
 // Fieldset
 
