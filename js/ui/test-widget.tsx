@@ -21,7 +21,6 @@ const setAttribute = (name, value) => {
 };
 
 const setAria = (args) => {
-    debugger
     let attrs = {};
     each(args, (name, value) => {
         attrs = { ...attrs, ...setAttribute(name, value) };
@@ -37,7 +36,7 @@ const getAttributes = ({ elementAttr, disabled, visible }: any) => {
     return attrs;
 };
 
-const getCssClasses = (model: any) => {
+const getCssClasses = (model: Partial<Widget>) => {
     const className = ['dx-widget'];
 
     if (model.disabled) {
@@ -46,13 +45,13 @@ const getCssClasses = (model: any) => {
     if (!model.visible) {
         className.push('dx-state-invisible');
     }
-    if (model.focused) {
+    if (model._focused && model.focusStateEnabled && !model.disabled) {
         className.push('dx-state-focused');
     }
     if (model._active) {
         className.push('dx-state-active');
     }
-    if (model._hovered) {
+    if (model._hovered && model.hoverStateEnabled && !model.disabled && !model._active) {
         className.push('dx-state-hover');
     }
 
@@ -77,15 +76,26 @@ export const viewModelFunction = ({
     tabIndex,
     width,
     height,
-    focused,
+    _focused,
     _active,
     _hovered,
     rtlEnabled,
     elementAttr,
     default: children,
+
+    focusStateEnabled,
+    hoverStateEnabled,
+
+    onPointerOver,
+    onPointerOut,
+    onPointerDown,
+    onClickHandler,
 }: Widget) => {
     const style = getStyles({ width, height });
-    const className = getCssClasses({ disabled, visible, focused, _active, _hovered, rtlEnabled, elementAttr });
+    const className = getCssClasses({
+        disabled, visible, _focused, _active, _hovered, rtlEnabled, elementAttr, hoverStateEnabled,
+        focusStateEnabled,
+    });
     const attrsWithoutClass = getAttributes({ elementAttr, disabled, visible });
 
     return {
@@ -97,6 +107,14 @@ export const viewModelFunction = ({
         title: hint,
         tabIndex,
         className,
+
+        focusStateEnabled,
+        hoverStateEnabled,
+
+        onPointerOver,
+        onPointerOut,
+        onPointerDown,
+        onClickHandler,
     };
 };
 
@@ -104,11 +122,12 @@ export const viewFunction = (viewModel: any) => {
     return (
         <div
             {...viewModel.attributes}
+            {...viewModel.focusStateEnabled && !viewModel.disabled ? { tabIndex: viewModel.tabIndex } : {}}
             className={viewModel.className}
             title={viewModel.title}
             style={viewModel.style}
             hidden={!viewModel.visible}
-            onPointerOver={viewModel.onPointerOver}
+            {...viewModel.hoverStateEnabled ? { onPointerOver: viewModel.onPointerOver } : {}}
             onPointerOut={viewModel.onPointerOut}
             onPointerDown={viewModel.onPointerDown}
             onClick={viewModel.onClickHandler}
@@ -137,6 +156,8 @@ export default class Widget {
     @Prop() visible?: boolean = true;
     @Prop() hint?: string | undefined = undefined;
     @Prop() tabIndex?: number = 0;
+    @Prop() focusStateEnabled?: boolean = false;
+    @Prop() hoverStateEnabled?: boolean = false;
 
     @Slot() default: any;
 
@@ -144,6 +165,7 @@ export default class Widget {
 
     @InternalState() _hovered: boolean = false;
     @InternalState() _active: boolean = false;
+    @InternalState() _focused: boolean = false;
 
     @Listen("pointerover")
     onPointerOver() {
@@ -157,6 +179,9 @@ export default class Widget {
 
     @Listen("pointerdown")
     onPointerDown() {
+        if (this.focusStateEnabled) {
+            this._focused = true;
+        }
         this._active = true;
     }
 
