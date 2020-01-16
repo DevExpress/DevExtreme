@@ -36,3 +36,29 @@ test(`Drag-n-drop in the "timelineMonth" view`, async t => {
     currentView: "timelineMonth",
     dataSource: dataSource
 }));
+
+test(`Drag appointment through timezone change`, async t => {
+    const scheduler = new Scheduler("#container");
+    const draggableAppointment = scheduler.getAppointment("Staff Productivity Report");
+
+    await t
+        .debug()
+        .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 2))
+        .debug()
+        .expect(draggableAppointment.date.time).eql("12:00 AM - 12:00 AM")
+        .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 4))
+        .expect(draggableAppointment.date.time).eql("12:00 AM - 12:00 AM");
+
+}).before(() => createScheduler({
+    dataSource: [{
+        "text": "Staff Productivity Report",
+        startDate: '2019-11-04T00:00',
+        endDate: '2019-11-06T00:00',
+    }],
+    maxAppointmentsPerCell: 'unlimited',
+    views: ["timelineMonth"],
+    currentView: "timelineMonth",
+    currentDate: new Date(2019, 10, 1),
+    height: 300,
+    startDayHour: 0,
+}));
