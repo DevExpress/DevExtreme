@@ -428,6 +428,7 @@ var Overlay = Widget.inherit({
         if(this.option('shading')) {
             e.preventDefault();
         }
+
         this.hide();
     },
 
