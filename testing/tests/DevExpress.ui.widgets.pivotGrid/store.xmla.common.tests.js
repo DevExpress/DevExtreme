@@ -285,7 +285,7 @@ QUnit.test('T566739. Do not generate CrossJoin in select statement if skipValues
         skipValues: true
     });
 
-    assert.ok(this.getQuery().toLowerCase().indexOf('crossjoin') === -1);
+    assert.equal(this.getQuery().toLowerCase().indexOf('crossjoin'), -1);
 });
 
 QUnit.test('Use full item key in descendants expression. T620434', function(assert) {
@@ -547,12 +547,11 @@ QUnit.module('Send Request', {
 
 QUnit.test('send ajax request on load', function(assert) {
     const store = new Store(this.dataSource);
-    let ajaxArg;
 
     store.load(this.loadOptions);
 
     assert.ok(ajax.sendRequest.calledOnce);
-    ajaxArg = ajax.sendRequest.lastCall.args[0];
+    const ajaxArg = ajax.sendRequest.lastCall.args[0];
 
     assert.strictEqual(ajaxArg.url, this.dataSource.url, 'url');
     assert.strictEqual(ajaxArg.method, 'POST', 'method');
@@ -579,12 +578,11 @@ QUnit.test('send ajax request with before send callback', function(assert) {
     dataSource.beforeSend = beforeSend;
 
     const store = new Store(dataSource);
-    let ajaxArg;
 
     store.load(this.loadOptions);
     // assert
     assert.ok(ajax.sendRequest.calledOnce);
-    ajaxArg = ajax.sendRequest.lastCall.args[0];
+    const ajaxArg = ajax.sendRequest.lastCall.args[0];
 
     assert.strictEqual(ajaxArg.url, dataSource.url, 'url');
     assert.strictEqual(ajaxArg.method, 'POST', 'method');
