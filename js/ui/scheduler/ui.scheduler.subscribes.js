@@ -779,7 +779,7 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipCheckUpdate) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipCheckUpdate, skipTimezoneConvert) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
         const recurringData = this._getSingleAppointmentData(appointmentData, {
@@ -791,7 +791,7 @@ const subscribes = {
 
         extend(true, result, appointmentData, recurringData);
 
-        this._convertDatesByTimezoneBack(false, result);
+        !skipTimezoneConvert && this._convertDatesByTimezoneBack(false, result);
 
         // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
