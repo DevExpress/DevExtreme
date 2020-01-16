@@ -19,10 +19,10 @@ function getPaddings(item1, item2) {
     const item1Rect = item1.getBoundingClientRect();
     const item2Rect = item2.getBoundingClientRect();
 
-    const paddingTop = item2Rect.top - item1Rect.bottom;
-    const paddingLeft = item2Rect.left - item1Rect.right;
-    const locationDiffX = item2Rect.left - item1Rect.left;
-    const locationDiffY = item2Rect.top - item1Rect.top;
+    const paddingTop = Math.round(item2Rect.top - item1Rect.bottom);
+    const paddingLeft = Math.round(item2Rect.left - item1Rect.right);
+    const locationDiffX = Math.round(item2Rect.left - item1Rect.left);
+    const locationDiffY = Math.round(item2Rect.top - item1Rect.top);
 
     return { paddingTop, paddingLeft, locationDiffX, locationDiffY };
 }
