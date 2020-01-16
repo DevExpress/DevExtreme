@@ -1369,7 +1369,7 @@ QUnit.test('minWidth should not be assigned to expand column from columnMinWidth
     assert.strictEqual(visibleColumns[2].minWidth, 20);
 });
 
-QUnit.test('The E1057 error should be thrown when async rule is used for the row, cell or batch edit mode', function(assert) {
+QUnit.skip('The E1057 error should be thrown when async rule is used for the row, cell or batch edit mode', function(assert) {
     sinon.spy(errors, 'log');
     const options = {
         editing: {

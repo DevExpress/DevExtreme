@@ -2660,12 +2660,21 @@ module.exports = {
                     }
 
                     const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
-
-                    if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
+                    // test
+                    let isCellInvalidInNewRow = false;
+                    const validatingController = this.getController('validating');
+                    if(validatingController) {
+                        const cellValidationInfo = validatingController.getCellValidationInfo({
+                            keyValue: parameters.key,
+                            columnIndex: parameters.column.index
+                        });
+                        isCellInvalidInNewRow = parameters.row.isNewRow && validatingController.isRowValidated(parameters.key) && cellValidationInfo && !cellValidationInfo.isValid;
+                    }
+                    if(modifiedValues && (modifiedValues[columnIndex] !== undefined || isCellInvalidInNewRow) && parameters.column && !isCommandCell && parameters.column.setCellValue) {
+                    // endTest
+                    // if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
                         editingController.showHighlighting({
-                            $cell,
-                            columnIndex: parameters.column.index,
-                            keyValue: parameters.key
+                            $cell
                         });
                         $cell.addClass(CELL_MODIFIED);
                     } else if(isEditableCell) {
@@ -2673,9 +2682,7 @@ module.exports = {
 
                         editingController.showHighlighting({
                             $cell,
-                            skipValidation,
-                            columnIndex: parameters.column.index,
-                            keyValue: parameters.key
+                            skipValidation
                         });
                     }
 
