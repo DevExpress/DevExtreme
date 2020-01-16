@@ -85,8 +85,7 @@ export class TooltipStrategyBase {
             dataSource: dataList,
             onContentReady: this._onListRender.bind(this),
             onItemClick: e => this._onListItemClick(e),
-            itemTemplate: (item, index) =>
-                this._renderTemplate(this._tooltip.option('target'), item.data, item.currentData || item.data, index, item.color),
+            itemTemplate: (item, index) => this._renderTemplate(this._tooltip.option('target'), item.data, item.settings.targetedAppointmentData || item.currentData || item.data, index, item.color)
         };
     }
 
@@ -111,7 +110,7 @@ export class TooltipStrategyBase {
         });
 
         const template = this._options.getAppointmentTemplate(this._getItemListTemplateName() + 'Template');
-        return this._createFunctionTemplate(template, data, this._options.getTargetedAppointmentData(data, target), index);
+        return this._createFunctionTemplate(template, data, currentData, index);
     }
 
     _createFunctionTemplate(template, data, targetData, index) {

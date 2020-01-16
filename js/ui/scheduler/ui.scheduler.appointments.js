@@ -742,6 +742,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 buttonColor: color
             };
         }
+        const recurrenceRule = this.invoke('getField', 'recurrenceRule', appointmentData);
+
+        appointmentSetting.targetedAppointmentData = this.invoke('getTargetedAppointmentData', appointmentData, $appointment, !!recurrenceRule);
 
         this._virtualAppointments[virtualGroupIndex].items.settings.push(appointmentSetting);
         this._virtualAppointments[virtualGroupIndex].items.data.push(appointmentData);
