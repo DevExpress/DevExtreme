@@ -3860,6 +3860,25 @@ QUnit.module('Appointments', () => {
         recurrenceRule: 'FREQ=DAILY;COUNT=5'
     }];
 
+    const recurrenceAndCompactData = [{
+        text: 'Website Re-Design Plan',
+        startDate: new Date(2017, 4, 22, 9, 30),
+        endDate: new Date(2017, 4, 22, 11, 30),
+        recurrenceRule: 'FREQ=DAILY;COUNT=5'
+    },
+    {
+        text: 'Website Re-Design Plan1',
+        startDate: new Date(2017, 4, 22, 9, 35),
+        endDate: new Date(2017, 4, 22, 11, 20),
+        recurrenceRule: 'FREQ=DAILY;COUNT=5'
+    },
+    {
+        text: 'Website Re-Design Plan2',
+        startDate: new Date(2017, 4, 22, 9, 45),
+        endDate: new Date(2017, 4, 22, 11, 25),
+        recurrenceRule: 'FREQ=DAILY;COUNT=5'
+    }];
+
     QUnit.module('appointmentTemplate', () => {
         QUnit.test('model.targetedAppointmentData argument should have current appointment data', function(assert) {
             const scheduler = createScheduler(commonData);
@@ -3905,6 +3924,17 @@ QUnit.module('Appointments', () => {
 
             for(let i = 0; i < 5; i++) {
                 scheduler.appointments.click(i);
+            }
+
+            assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
+        });
+
+        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence in collector', function(assert) {
+            const scheduler = createScheduler(recurrenceAndCompactData);
+            scheduler.option({ appointmentTooltipTemplate: createTestForRecurrenceData(assert, scheduler) });
+
+            for(let i = 0; i < 5; i++) {
+                scheduler.appointments.compact.click(i);
             }
 
             assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
