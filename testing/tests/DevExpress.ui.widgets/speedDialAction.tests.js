@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import config from 'core/config';
 import fx from 'animation/fx';
+import SpeedDialItem from 'ui/speed_dial_action/speed_dial_item';
 
 import 'ui/speed_dial_action';
 import 'common.css!';
@@ -943,4 +944,24 @@ QUnit.module('check action buttons events', {
         assert.equal(disposingTwoStub.callCount, 1, 'second action disposing event calls once');
     });
 });
+
+
+QUnit.module('T850271', {}, () => {
+    QUnit.test('check peventDefault in _outsideClickHandler method', function(assert) {
+        var instance = $('#fab-one').dxSpeedDialAction().dxSpeedDialAction('instance');
+
+        const preventDefaultStub = sinon.stub();
+        const event = { preventDefault: preventDefaultStub };
+
+        const speedDialItem = instance._createComponent($('<div>'), SpeedDialItem, {
+            actions: [instance],
+            shading: true
+        });
+
+        speedDialItem._outsideClickHandler(event);
+
+        assert.equal(preventDefaultStub.callCount, 1, 'there is peventDefault in outsideClickHandler when shading is true');
+    });
+});
+
 
