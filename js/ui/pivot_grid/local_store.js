@@ -300,12 +300,11 @@ exports.LocalStore = Class.inherit((function() {
         each(dimension, function(_, field) {
             const filterValues = field.filterValues || [];
             const groupName = field.groupName;
-            let filter;
 
             if(groupName && isNumeric(field.groupIndex)) {
                 return;
             }
-            filter = function(dataItem) {
+            const filter = function(dataItem) {
                 const value = field.levels ? getGroupValue(field.levels, dataItem) : field.selector(dataItem);
                 let result = false;
                 for(let i = 0; i < filterValues.length; i++) {
@@ -359,12 +358,11 @@ exports.LocalStore = Class.inherit((function() {
         };
         const values = [];
         let aggregationCells;
-        let filter;
         let data;
         const d = new Deferred();
         let i = 0;
 
-        filter = createFilter(options);
+        const filter = createFilter(options);
 
         function processData() {
             const t = new Date();

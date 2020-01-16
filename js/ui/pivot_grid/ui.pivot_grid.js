@@ -89,7 +89,6 @@ function getScrollBarInfo(useNativeScrolling) {
     }
 
     let scrollBarWidth = 0;
-    let scrollBarUseNative;
     const options = {};
 
     const container = $(DIV).css({
@@ -113,7 +112,7 @@ function getScrollBarInfo(useNativeScrolling) {
 
     container.dxScrollable(options);
 
-    scrollBarUseNative = container.dxScrollable('instance').option('useNative');
+    const scrollBarUseNative = container.dxScrollable('instance').option('useNative');
     scrollBarWidth = scrollBarUseNative ? container.width() - content.width() : 0;
 
     container.remove();
@@ -948,9 +947,6 @@ const PivotGrid = Widget.inherit({
         that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
             onPositioning: function(actionArgs) {
                 const event = actionArgs.event;
-                let targetElement;
-                let args;
-                let items;
 
                 actionArgs.cancel = true;
 
@@ -958,13 +954,13 @@ const PivotGrid = Widget.inherit({
                     return;
                 }
 
-                targetElement = event.target.cellIndex >= 0 ? event.target : $(event.target).closest('td').get(0);
+                const targetElement = event.target.cellIndex >= 0 ? event.target : $(event.target).closest('td').get(0);
                 if(!targetElement) {
                     return;
                 }
 
-                args = that._createEventArgs(targetElement, event);
-                items = that._getContextMenuItems(args);
+                const args = that._createEventArgs(targetElement, event);
+                const items = that._getContextMenuItems(args);
                 if(items) {
                     actionArgs.component.option('items', items);
                     actionArgs.cancel = false;
@@ -1166,11 +1162,10 @@ const PivotGrid = Widget.inherit({
     _updateLoading: function(progress) {
         const that = this;
         const isLoading = that._dataController.isLoading();
-        let loadPanelVisible;
 
         if(!that._loadPanel) return;
 
-        loadPanelVisible = that._loadPanel.option('visible');
+        const loadPanelVisible = that._loadPanel.option('visible');
 
         if(!loadPanelVisible) {
             that._startLoadingTime = new Date();
@@ -1257,14 +1252,13 @@ const PivotGrid = Widget.inherit({
     _detectHasContainerHeight: function() {
         const that = this;
         const element = that.$element();
-        let testElement;
 
         if(isDefined(that._hasHeight) || element.is(':hidden')) {
             return;
         }
 
         that._pivotGridContainer.addClass('dx-hidden');
-        testElement = $(DIV).height(TEST_HEIGHT);
+        const testElement = $(DIV).height(TEST_HEIGHT);
         element.append(testElement);
         that._hasHeight = element.height() !== TEST_HEIGHT;
         that._pivotGridContainer.removeClass('dx-hidden');
@@ -1341,9 +1335,6 @@ const PivotGrid = Widget.inherit({
         let rowsAreaElement;
         let dataAreaElement;
         let tableElement;
-        let dataArea;
-        let rowsArea;
-        let columnsArea;
         const isFirstDrawing = !that._pivotGridContainer;
         let rowHeaderContainer;
         let columnHeaderContainer;
@@ -1411,9 +1402,9 @@ const PivotGrid = Widget.inherit({
             visible: that.option('visible')
         });
 
-        dataArea = that._renderDataArea(dataAreaElement);
-        rowsArea = that._renderRowsArea(rowsAreaElement);
-        columnsArea = that._renderColumnsArea(columnsAreaElement);
+        const dataArea = that._renderDataArea(dataAreaElement);
+        const rowsArea = that._renderRowsArea(rowsAreaElement);
+        const columnsArea = that._renderColumnsArea(columnsAreaElement);
 
         dataArea.tableElement().prepend(columnsArea.headElement());
 

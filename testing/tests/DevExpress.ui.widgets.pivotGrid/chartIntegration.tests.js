@@ -168,7 +168,7 @@ QUnit.test('Update bound chart when pivotGrid is changed', function(assert) {
 
     // assert
     const updatedChartOptions = this.getChartOptions();
-    assert.ok(chartDataSource !== updatedChartOptions.dataSource, 'chart dataSource is updated');
+    assert.notStrictEqual(chartDataSource !== updatedChartOptions.dataSource, 'chart dataSource is updated');
 });
 
 QUnit.test('Unbind chart from pivotGrid', function(assert) {
@@ -176,15 +176,14 @@ QUnit.test('Unbind chart from pivotGrid', function(assert) {
     const chart = createChart();
     const chartBinding = pivotGrid.bindChart(chart);
     const chartDataSource = this.getChartOptions().dataSource;
-    let newChartDS;
 
     chartBinding();
 
     pivotGrid.getDataSource().field(0, { area: null });
     pivotGrid.getDataSource().load();
 
-    newChartDS = this.getChartOptions().dataSource;
-    assert.ok(chartDataSource === newChartDS, 'chart dataSource is not updated');
+    const newChartDS = this.getChartOptions().dataSource;
+    assert.equal(chartDataSource, newChartDS, 'chart dataSource is not updated');
     assert.ok(!chart.$element().data('dxPivotGridUnbinding'));
 });
 
@@ -516,33 +515,6 @@ QUnit.test('Can Include all items', function(assert) {
     assert.strictEqual(series[2].getPoints()[3].argument, '1998');
     assert.strictEqual(series[2].getPoints()[4].argument, 'Grand Total');
 });
-
-QUnit.test('Generate data', function(assert) {
-    this.createBinding();
-    // assert
-
-    const series = this.dxChart.getAllSeries();
-
-    assert.strictEqual(series.length, 2);
-    assert.strictEqual(series[0].name, 'Argentina');
-    assert.strictEqual(series[0].getPoints().length, 2);
-
-    assert.strictEqual(series[0].getPoints()[0].argument, '1996');
-    assert.strictEqual(series[0].getPoints()[0].value, null);
-
-    assert.strictEqual(series[0].getPoints()[1].argument, '1997');
-    assert.strictEqual(series[0].getPoints()[1].value, 6);
-
-    assert.strictEqual(series[1].name, 'Brazil');
-    assert.strictEqual(series[1].getPoints().length, 2);
-
-    assert.strictEqual(series[1].getPoints()[0].argument, '1996');
-    assert.strictEqual(series[1].getPoints()[0].value, 13);
-
-    assert.strictEqual(series[1].getPoints()[1].argument, '1997');
-    assert.strictEqual(series[1].getPoints()[1].value, 42);
-});
-
 
 QUnit.module('Chart dataSource item generation with several dataFields', {
     beforeEach: function() {
