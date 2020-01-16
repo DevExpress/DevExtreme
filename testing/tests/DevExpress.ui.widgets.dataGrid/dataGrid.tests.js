@@ -3938,6 +3938,37 @@ QUnit.test('column headers visibility when hide removing row in batch editing mo
     assert.strictEqual($dataGrid.find('.dx-datagrid-headers').css('paddingRight'), '0px', 'no headers right padding');
 });
 
+// T852171
+QUnit.test('numberbox input right and left paddings should be equal if spin buttons are showed', function(assert) {
+    // arrange
+    const $dataGrid = $('#dataGrid').dxDataGrid({
+        dataSource: [{ field: 30 }],
+        loadingTimeout: undefined,
+        editing: {
+            mode: 'cell',
+            allowUpdating: true
+        },
+        columns: [{
+            dataField: 'field',
+            dataType: 'number',
+            editorOptions: {
+                showSpinButtons: true
+            }
+        }]
+    });
+
+    const dataGrid = $dataGrid.dxDataGrid('instance');
+
+    // act
+    dataGrid.editCell(0, 0);
+
+    const $input = $($dataGrid.find('.dx-editor-cell').find('.dx-texteditor-input'));
+
+    // assert
+    assert.equal($input.length, 1, 'input');
+    assert.equal($input.css('padding-right'), $input.css('padding-left'), 'paddings are equal');
+});
+
 // T712073
 QUnit.test('Delete two added rows after selection', function(assert) {
     // arrange, act
