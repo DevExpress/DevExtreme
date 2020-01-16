@@ -1517,7 +1517,6 @@ const PivotGrid = Widget.inherit({
     updateDimensions: function() {
         const that = this;
         let groupWidth;
-        let groupHeight;
         const tableElement = that._tableElement();
         const rowsArea = that._rowsArea;
         const columnsArea = that._columnsArea;
@@ -1580,6 +1579,11 @@ const PivotGrid = Widget.inherit({
         columnsArea.reset();
         rowFieldsHeader.reset();
 
+        const calculateHasScroll = (areaSize, totalSize) => totalSize - areaSize >= 1;
+        const calculateGroupHeight = (dataAreaHeight, totalHeight, hasRowsScroll, hasColumnsScroll, scrollBarWidth) => {
+            return hasRowsScroll ? dataAreaHeight : totalHeight + (hasColumnsScroll ? scrollBarWidth : 0);
+        };
+
         deferUpdate(function() {
             resultWidths = dataArea.getColumnsWidth();
 
@@ -1603,9 +1607,12 @@ const PivotGrid = Widget.inherit({
 
             rowsAreaColumnWidths = rowsArea.getColumnsWidth();
 
+            let filterAreaHeight = 0;
+            let dataAreaHeight = 0;
             if(that._hasHeight) {
+                filterAreaHeight = filterHeaderCell.height();
                 bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
-                groupHeight = that.$element().height() - filterHeaderCell.height() - tableElement.find('.dx-data-header').height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
+                dataAreaHeight = that.$element().height() - filterAreaHeight - tableElement.find('.dx-data-header').height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
             }
 
             totalWidth = dataArea.tableElement().width();
@@ -1626,11 +1633,10 @@ const PivotGrid = Widget.inherit({
 
             groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
 
-            hasRowsScroll = that._hasHeight && (totalHeight - groupHeight) >= 1;
-            hasColumnsScroll = (totalWidth - groupWidth) >= 1;
-            if(!hasRowsScroll) {
-                groupHeight = totalHeight + (hasColumnsScroll ? scrollBarWidth : 0);
-            }
+            hasRowsScroll = that._hasHeight && calculateHasScroll(dataAreaHeight, totalHeight);
+            hasColumnsScroll = calculateHasScroll(groupWidth, totalWidth);
+
+            const groupHeight = calculateGroupHeight(dataAreaHeight, totalHeight, hasRowsScroll, hasColumnsScroll, scrollBarWidth);
 
             deferRender(function() {
                 columnsArea.tableElement().append(dataArea.headElement());
@@ -1680,6 +1686,18 @@ const PivotGrid = Widget.inherit({
 
                     dataArea.groupWidth(groupWidth - diff);
                     columnsArea.groupWidth(groupWidth - diff);
+                }
+
+                if(that._hasHeight && that._filterFields.isVisible() &&
+                    filterHeaderCell.height() !== filterAreaHeight) {
+                    const diff = filterHeaderCell.height() - filterAreaHeight;
+                    if(diff > 0) {
+                        hasRowsScroll = calculateHasScroll(dataAreaHeight - diff, totalHeight);
+                        const groupHeight = calculateGroupHeight(dataAreaHeight - diff, totalHeight, hasRowsScroll, hasColumnsScroll, scrollBarWidth);
+
+                        dataArea.groupHeight(groupHeight);
+                        rowsArea.groupHeight(groupHeight);
+                    }
                 }
 
                 if(scrollingOptions.mode === 'virtual') {

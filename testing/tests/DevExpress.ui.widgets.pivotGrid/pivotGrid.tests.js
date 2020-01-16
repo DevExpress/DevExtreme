@@ -2839,6 +2839,25 @@ QUnit.test('bottom border if horizontal scroll', function(assert) {
     assert.ok(parseFloat(pivotGrid.$element().find('.dx-area-row-cell').css('borderBottomWidth')) > 0, 'row area border bottom width when no scrollbar width');
 });
 
+QUnit.test('Group height should take into account scrollbar width', function(assert) {
+    // act
+    $('#pivotGrid').width(300).height(900);
+    this.testOptions.scrolling = {
+        useNative: false
+    };
+    const pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    const dataAreaHeight = pivotGrid._dataArea.groupHeight();
+
+    pivotGrid.option({
+        scrolling: {
+            useNative: true
+        }
+    });
+    // assert
+    assert.roughEqual(pivotGrid._dataArea.groupHeight(), dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
+});
+
 QUnit.test('mergeArraysByMaxValue', function(assert) {
     const array1 = [10, 12, 35, 7];
     const array2 = [8, 12, 39, 5];
@@ -4223,6 +4242,138 @@ QUnit.test('Hide field headers at runtime', function(assert) {
     assert.ok(pivotGrid.$element().find('.dx-area-description-cell').hasClass('dx-pivotgrid-background'), 'description with background');
     assert.ok(!pivotGrid.$element().find('.dx-filter-header').hasClass('dx-bottom-border'));
     assert.ok(pivotGrid.$element().find('.dx-column-header').hasClass('dx-bottom-border'));
+});
+
+QUnit.test('PivotGrid should have correct height if filter fields take several lines', function(assert) {
+    const pivotGrid = createPivotGrid($.extend(true, this.testOptions, {
+        fieldPanel: {
+            showFilterFields: true,
+            showRowFields: false,
+            showColumnFields: false,
+            showDataFields: false
+        },
+        fieldChooser: {
+            enabled: true
+        },
+        'export': {
+            enabled: true
+        },
+        showBorders: true,
+        wordWrapEnabled: true,
+        dataSource: {
+            fields: [
+                { area: 'row', areaIndex: 0, caption: 'Row Field 1' },
+                { area: 'row', areaIndex: 1, caption: 'Row' },
+                { format: 'decimal', area: 'column', areaIndex: 0, caption: 'Column1' },
+                { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                { area: 'filter', areaIndex: 1, caption: 'Filter 2' },
+                { area: 'filter', areaIndex: 2, caption: 'Filter 2' },
+                { area: 'filter', areaIndex: 3, caption: 'Filter 3' },
+                { area: 'filter', areaIndex: 4, caption: 'Filter 4' },
+                { format: { format: 'quarter', dateType: 'full' }, area: 'column', areaIndex: 1, caption: 'Column1' },
+                { caption: 'Sum1', format: 'currency', area: 'data', areaIndex: 0 },
+                { caption: 'Sum2', format: 'percent', area: 'data', areaIndex: 1 }
+            ]
+        },
+        width: 400,
+        height: 300
+    }), assert);
+    const container = pivotGrid.$element().find('.dx-pivotgrid-container').first();
+    // assert
+    assert.roughEqual(container.height(), 300, 1, 'height');
+});
+
+QUnit.test('PivotGrid should have correct height if filter fields take several lines and pivot has not vertical scroll', function(assert) {
+    const pivotGrid = createPivotGrid($.extend(true, this.testOptions, {
+        fieldPanel: {
+            showFilterFields: true,
+            showRowFields: false,
+            showColumnFields: false,
+            showDataFields: false
+        },
+        scrolling: {
+            useNative: false
+        },
+        fieldChooser: {
+            enabled: true
+        },
+        'export': {
+            enabled: true
+        },
+        showBorders: true,
+        wordWrapEnabled: true,
+        dataSource: {
+            fields: [
+                { area: 'row', areaIndex: 0, caption: 'Row Field 1' },
+                { area: 'row', areaIndex: 1, caption: 'Row' },
+                { format: 'decimal', area: 'column', areaIndex: 0, caption: 'Column1' },
+                { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                { area: 'filter', areaIndex: 1, caption: 'Filter 2' },
+                { area: 'filter', areaIndex: 2, caption: 'Filter 2' },
+                { area: 'filter', areaIndex: 3, caption: 'Filter 3' },
+                { area: 'filter', areaIndex: 4, caption: 'Filter 4' },
+                { format: { format: 'quarter', dateType: 'full' }, area: 'column', areaIndex: 1, caption: 'Column1' },
+                { caption: 'Sum1', format: 'currency', area: 'data', areaIndex: 0 },
+                { caption: 'Sum2', format: 'percent', area: 'data', areaIndex: 1 }
+            ]
+        },
+        width: 400,
+        height: 600
+    }), assert);
+    const container = pivotGrid.$element().find('.dx-pivotgrid-container').first();
+    // assert
+    assert.ok(container.height() < 600, 'height');
+    assert.ok(!pivotGrid.hasScroll('row'), 'rows area has not scroll');
+});
+
+QUnit.test('PivotGrid should take into account horizontal scroll height if filter fields take several lines', function(assert) {
+    const pivotGrid = createPivotGrid($.extend(true, this.testOptions, {
+        fieldPanel: {
+            showFilterFields: true,
+            showRowFields: false,
+            showColumnFields: false,
+            showDataFields: false
+        },
+        scrolling: {
+            useNative: false
+        },
+        fieldChooser: {
+            enabled: true
+        },
+        'export': {
+            enabled: true
+        },
+        showBorders: true,
+        wordWrapEnabled: true,
+        dataSource: {
+            fields: [
+                { area: 'row', areaIndex: 0, caption: 'Row Field 1' },
+                { area: 'row', areaIndex: 1, caption: 'Row' },
+                { format: 'decimal', area: 'column', areaIndex: 0, caption: 'Column1' },
+                { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                { area: 'filter', areaIndex: 1, caption: 'Filter 2' },
+                { area: 'filter', areaIndex: 2, caption: 'Filter 2' },
+                { area: 'filter', areaIndex: 3, caption: 'Filter 3' },
+                { area: 'filter', areaIndex: 4, caption: 'Filter 4' },
+                { format: { format: 'quarter', dateType: 'full' }, area: 'column', areaIndex: 1, caption: 'Column1' },
+                { caption: 'Sum1', format: 'currency', area: 'data', areaIndex: 0 },
+                { caption: 'Sum2', format: 'percent', area: 'data', areaIndex: 1 }
+            ]
+        },
+        width: 400,
+        height: 600
+    }), assert);
+
+    const dataAreaHeight = pivotGrid._dataArea.groupHeight();
+
+    pivotGrid.option({
+        scrolling: {
+            useNative: true
+        }
+    });
+    // assert
+    assert.roughEqual(pivotGrid._dataArea.groupHeight(), dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
+    assert.roughEqual(pivotGrid._rowsArea.groupHeight(), dataAreaHeight + pivotGrid.__scrollBarWidth, 1);
 });
 
 QUnit.test('Data and column headers not visible', function(assert) {
