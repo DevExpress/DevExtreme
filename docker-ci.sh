@@ -44,7 +44,7 @@ function run_test {
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
-    [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true&jquery="
+    [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
 
     if [ "$NO_HEADLESS" == "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
