@@ -45,12 +45,14 @@ const getCssClasses = (model: Partial<Widget>) => {
     if (!model.visible) {
         className.push('dx-state-invisible');
     }
+    // should we remove `focusStateEnabled` and use it only in events?
     if (model._focused && model.focusStateEnabled && !model.disabled) {
         className.push('dx-state-focused');
     }
     if (model._active) {
         className.push('dx-state-active');
     }
+    // should we remove `hoverStateEnabled` and use it only in events?
     if (model._hovered && model.hoverStateEnabled && !model.disabled && !model._active) {
         className.push('dx-state-hover');
     }
@@ -128,9 +130,9 @@ export const viewFunction = (viewModel: any) => {
             style={viewModel.style}
             hidden={!viewModel.visible}
             {...viewModel.hoverStateEnabled ? { onPointerOver: viewModel.onPointerOver } : {}}
-            onPointerOut={viewModel.onPointerOut}
+            {...viewModel.hoverStateEnabled ? { onPointerOut: viewModel.onPointerOut } : {}}
             onPointerDown={viewModel.onPointerDown}
-            onClick={viewModel.onClickHandler}
+            {...viewModel.disabled ? { onClick: viewModel.onClickHandler } : {}}
         >
             {viewModel.children}
         </div>
@@ -158,6 +160,7 @@ export default class Widget {
     @Prop() tabIndex?: number = 0;
     @Prop() focusStateEnabled?: boolean = false;
     @Prop() hoverStateEnabled?: boolean = false;
+    @Prop() activeStateEnabled?: boolean = false;
 
     @Slot() default: any;
 
@@ -179,9 +182,7 @@ export default class Widget {
 
     @Listen("pointerdown")
     onPointerDown() {
-        if (this.focusStateEnabled) {
-            this._focused = true;
-        }
+        this._focused = true;
         this._active = true;
     }
 
