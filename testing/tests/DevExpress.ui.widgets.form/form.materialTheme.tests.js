@@ -27,8 +27,8 @@ function getPaddings(item1, item2) {
     return { paddingTop, paddingLeft, locationDiffX, locationDiffY };
 }
 
-QUnit.test('1 column -> [item1, item2]', function(assert) {
-    const $form = $('#form').dxForm({
+function createForm(colCount, items) {
+    return $('#form').dxForm({
         screenByWidth: () => {
             return 'xs';
         },
@@ -37,6 +37,10 @@ QUnit.test('1 column -> [item1, item2]', function(assert) {
         },
         items: ['dataField1', 'dataField2']
     });
+}
+
+QUnit.test('1 column -> [item1, item2]', function(assert) {
+    const $form = createForm(1, ['dataField1', 'dataField2']);
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
 
@@ -46,21 +50,14 @@ QUnit.test('1 column -> [item1, item2]', function(assert) {
 });
 
 QUnit.test('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 1
-        },
-        items: [
+    const $form = createForm(1,
+        [
             'dataField1',
             {
                 itemType: 'group',
                 items: ['dataField2']
             }
-        ]
-    });
+        ]);
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
 
@@ -70,14 +67,8 @@ QUnit.test('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
 });
 
 QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 1
-        },
-        items: [
+    const $form = createForm(1,
+        [
             'dataField1',
             {
                 itemType: 'group',
@@ -88,8 +79,7 @@ QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(ass
                     }
                 ]
             }
-        ]
-    });
+        ]);
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
 
@@ -99,14 +89,8 @@ QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(ass
 });
 
 QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 1
-        },
-        items: [
+    const $form = createForm(1,
+        [
             'dataField1',
             {
                 itemType: 'group',
@@ -117,8 +101,7 @@ QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', functi
                     }]
             },
             'dataField3'
-        ]
-    });
+        ]);
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
 
@@ -128,14 +111,8 @@ QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', functi
 });
 
 QUnit.test('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item3]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 1
-        },
-        items: [
+    const $form = createForm(1,
+        [
             'dataField1',
             {
                 itemType: 'group',
@@ -150,8 +127,7 @@ QUnit.test('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item
                     }]
             },
             'dataField3'
-        ]
-    });
+        ]);
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
 
@@ -161,14 +137,8 @@ QUnit.test('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item
 });
 
 QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 1
-        },
-        items: [
+    const $form = createForm(1,
+        [
             'dataField1',
             {
                 itemType: 'group',
@@ -185,8 +155,7 @@ QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(a
                         ]
                     }
                 ]
-            }]
-    });
+            }]);
     const $contents = $form.find('.dx-field-item-content');
 
     const paddings = getPaddings($contents.get(0), $contents.get(1));
@@ -194,14 +163,8 @@ QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(a
 });
 
 QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 1
-        },
-        items: [
+    const $form = createForm(1,
+        [
             'dataField1',
             {
                 itemType: 'group',
@@ -218,8 +181,7 @@ QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', fun
                     }
                 ]
             },
-            'dataField3']
-    });
+            'dataField3']);
 
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
@@ -229,15 +191,7 @@ QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', fun
 });
 
 QUnit.test('2 columns -> [item1, item2]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 2
-        },
-        items: ['dataField1', 'dataField2']
-    });
+    const $form = createForm(2, ['dataField1', 'dataField2']);
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
 
@@ -249,21 +203,14 @@ QUnit.test('2 columns -> [item1, item2]', function(assert) {
 });
 
 QUnit.test('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 2
-        },
-        items: [
+    const $form = createForm(2,
+        [
             'dataField1',
             {
                 itemType: 'group',
                 items: ['dataField2']
             }
-        ]
-    });
+        ]);
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
 
@@ -275,14 +222,8 @@ QUnit.test('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
 });
 
 QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 2
-        },
-        items: [
+    const $form = createForm(2,
+        [
             'dataField1',
             {
                 itemType: 'group',
@@ -293,8 +234,7 @@ QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(a
                     }
                 ]
             }
-        ]
-    });
+        ]);
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
 
@@ -306,14 +246,8 @@ QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(a
 });
 
 QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 2
-        },
-        items: [
+    const $form = createForm(2,
+        [
             {
                 itemType: 'group',
                 items: ['dataField1']
@@ -322,8 +256,7 @@ QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(a
                 itemType: 'group',
                 items: ['dataField2']
             }
-        ]
-    });
+        ]);
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
 
@@ -335,14 +268,8 @@ QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(a
 });
 
 QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }]]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 2
-        },
-        items: [
+    const $form = createForm(2,
+        [
             {
                 itemType: 'group',
                 items: [
@@ -361,8 +288,7 @@ QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group 
                     }
                 ]
             }
-        ]
-    });
+        ]);
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
 
@@ -374,14 +300,8 @@ QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group 
 });
 
 QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 2
-        },
-        items: [
+    const $form = createForm(2,
+        [
             'dataField1',
             {
                 itemType: 'group',
@@ -393,8 +313,7 @@ QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', funct
                 ]
             },
             'dataField3'
-        ]
-    });
+        ]);
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
 
@@ -403,14 +322,8 @@ QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', funct
 });
 
 QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }], { group [{ item3 }] }]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 2
-        },
-        items: [
+    const $form = createForm(2,
+        [
             {
                 itemType: 'group',
                 items: [
@@ -434,8 +347,7 @@ QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group 
                 colCount: 1,
                 items: ['dataField3']
             }
-        ]
-    });
+        ]);
 
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
@@ -445,14 +357,8 @@ QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group 
 });
 
 QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group colspan:3 [{ item3 }] ]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 2
-        },
-        items: [
+    const $form = createForm(2,
+        [
             {
                 itemType: 'group',
                 colSpan: 1,
@@ -468,8 +374,7 @@ QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group cols
                 colSpan: 2,
                 items: ['dataField3']
             }
-        ]
-    });
+        ]);
 
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
@@ -479,14 +384,8 @@ QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group cols
 });
 
 QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 2
-        },
-        items: [
+    const $form = createForm(2,
+        [
             'dataField1',
             {
                 itemType: 'group',
@@ -504,8 +403,7 @@ QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(a
                     }
                 ]
             }
-        ]
-    });
+        ]);
     const $contents = $form.find('.dx-field-item-content');
 
     const actualPadding = getPaddings($contents.get(0), $contents.get(1));
@@ -513,14 +411,8 @@ QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(a
 });
 
 QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 2
-        },
-        items: [
+    const $form = createForm(2,
+        [
             'dataField1',
             {
                 itemType: 'group',
@@ -538,8 +430,7 @@ QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', fun
                     }
                 ]
             },
-            'dataField3']
-    });
+            'dataField3']);
 
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
@@ -549,14 +440,8 @@ QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', fun
 });
 
 QUnit.test('4 columns -> [{ group colSpan:3 [{ item1 }], { group colSpan:1 [{ item2 }], { group colspan:4 [{ item3 }] ]', function(assert) {
-    const $form = $('#form').dxForm({
-        screenByWidth: () => {
-            return 'xs';
-        },
-        colCountByScreen: {
-            xs: 4
-        },
-        items: [
+    const $form = createForm(4,
+        [
             {
                 itemType: 'group',
                 colSpan: 3,
@@ -572,8 +457,7 @@ QUnit.test('4 columns -> [{ group colSpan:3 [{ item1 }], { group colSpan:1 [{ it
                 colSpan: 4,
                 items: ['dataField3']
             }
-        ]
-    });
+        ]);
 
     const $labels = $form.find('.dx-field-item-label');
     const $contents = $form.find('.dx-field-item-content');
