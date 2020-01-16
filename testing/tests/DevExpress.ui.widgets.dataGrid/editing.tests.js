@@ -7908,6 +7908,7 @@ QUnit.test('The command column buttons should not be trimmed', function(assert) 
     assert.equal($commandCellElement.length, 1, 'command column is rendered');
     // T848242
     assert.equal($commandCellElement.css('text-overflow'), 'clip', 'text-overflow is clip instead of ellipsis');
+    assert.equal($commandCellElement.css('white-space'), 'nowrap', 'white-space is nowrap');
 
     const $links = $commandCellElement.children('.dx-link');
     assert.equal($links.length, 2, 'link count');
