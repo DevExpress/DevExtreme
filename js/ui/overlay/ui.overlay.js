@@ -418,17 +418,17 @@ var Overlay = Widget.inherit({
         const outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
 
         if(outsideClick && closeOnOutsideClick) {
-            if(this.option('shading')) {
-                e.preventDefault();
-            }
-
             this._outsideClickHandler(e);
         }
 
         return this.option('propagateOutsideClick');
     },
 
-    _outsideClickHandler() {
+    _outsideClickHandler(e) {
+        if(this.option('shading')) {
+            e.preventDefault();
+        }
+
         this.hide();
     },
 
