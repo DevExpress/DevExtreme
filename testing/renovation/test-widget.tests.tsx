@@ -152,4 +152,11 @@ describe('Widget', () => {
         expect(widget.props().tabIndex)
             .toBe(undefined);
     });
+    it('should pass `accessKey` property', () => {
+        const model = new Widget();
+        const tree = mount(viewFunction(viewModelFunction({ ...model, accessKey: 'x' })));
+
+        expect(tree.find('.dx-widget').props().accessKey)
+            .toBe('x');
+    });
 });

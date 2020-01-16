@@ -1,8 +1,11 @@
-import { Component, Prop, Event, InternalState, Listen, React, Slot } from "../component_declaration/common";
+import { Component, Prop, Event, InternalState, Listen, React, Slot, Ref, Effect, State } from "../component_declaration/common";
 import config from '../core/config';
 import { getDocument } from '../core/dom_adapter';
+import Action from '../core/action';
+import { isFakeClickEvent } from '../events/utils';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
+import { dxClick, hover } from '../events/short';
 const document = getDocument();
 
 const getStyles = ({ width, height }: any) => {
@@ -28,9 +31,9 @@ const setAria = (args) => {
     return attrs;
 };
 
-const getAttributes = ({ elementAttr, disabled, visible }: any) => {
+const getAttributes = ({ elementAttr, disabled, visible, accessKey }: any) => {
     const arias = setAria({ disabled, hidden: !visible });
-    const attrs = extend({}, arias, elementAttr);
+    const attrs = extend({}, arias, elementAttr, accessKey && { accessKey });
     delete attrs.class;
 
     return attrs;
@@ -83,6 +86,7 @@ export const viewModelFunction = ({
     _hovered,
     rtlEnabled,
     elementAttr,
+    accessKey,
     default: children,
 
     focusStateEnabled,
@@ -92,15 +96,19 @@ export const viewModelFunction = ({
     onPointerOut,
     onPointerDown,
     onClickHandler,
+
+    widgetRef,
 }: Widget) => {
     const style = getStyles({ width, height });
     const className = getCssClasses({
         disabled, visible, _focused, _active, _hovered, rtlEnabled, elementAttr, hoverStateEnabled,
         focusStateEnabled,
     });
-    const attrsWithoutClass = getAttributes({ elementAttr, disabled, visible });
+    const attrsWithoutClass = getAttributes({ elementAttr, disabled, visible, accessKey });
 
     return {
+        widgetRef,
+
         children,
         style,
         attributes: attrsWithoutClass,
@@ -123,16 +131,17 @@ export const viewModelFunction = ({
 export const viewFunction = (viewModel: any) => {
     return (
         <div
+            ref={viewModel.widgetRef}
             {...viewModel.attributes}
             {...viewModel.focusStateEnabled && !viewModel.disabled ? { tabIndex: viewModel.tabIndex } : {}}
             className={viewModel.className}
             title={viewModel.title}
             style={viewModel.style}
             hidden={!viewModel.visible}
-            {...viewModel.hoverStateEnabled ? { onPointerOver: viewModel.onPointerOver } : {}}
-            {...viewModel.hoverStateEnabled ? { onPointerOut: viewModel.onPointerOut } : {}}
-            onPointerDown={viewModel.onPointerDown}
-            {...viewModel.disabled ? { onClick: viewModel.onClickHandler } : {}}
+            // {...viewModel.hoverStateEnabled ? { onPointerOver: viewModel.onPointerOver } : {}}
+            // {...viewModel.hoverStateEnabled ? { onPointerOut: viewModel.onPointerOut } : {}}
+            // onPointerDown={viewModel.onPointerDown}
+            // {...viewModel.disabled ? { onClick: viewModel.onClickHandler } : {}}
         >
             {viewModel.children}
         </div>
@@ -147,6 +156,13 @@ export const viewFunction = (viewModel: any) => {
 })
 
 export default class Widget {
+    /** Private properties */
+    @Prop() clickArgs?: any = {};
+    @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
+    @Prop() hoverEndHandler: (args: any) => any = (() => undefined);
+
+    /** === */
+
     // == DOMComponent ==
     @Prop() width?: string | number | null = null;
     @Prop() height?: string | number | null = null;
@@ -158,6 +174,7 @@ export default class Widget {
     @Prop() visible?: boolean = true;
     @Prop() hint?: string | undefined = undefined;
     @Prop() tabIndex?: number = 0;
+    @Prop() accessKey?: string | null = null;
     @Prop() focusStateEnabled?: boolean = false;
     @Prop() hoverStateEnabled?: boolean = false;
     @Prop() activeStateEnabled?: boolean = false;
@@ -166,34 +183,72 @@ export default class Widget {
 
     @Event() onClick?: (e: any) => void = (() => { });
 
+    @State() hoveredElement: HTMLDivElement | null = null;
     @InternalState() _hovered: boolean = false;
     @InternalState() _active: boolean = false;
     @InternalState() _focused: boolean = false;
 
-    @Listen("pointerover")
-    onPointerOver() {
-        this._hovered = true;
+    // @Listen("pointerover")
+    // onPointerOver() {
+    //     this._hovered = true;
+    // }
+
+    // @Listen("pointerout")
+    // onPointerOut() {
+    //     this._hovered = false;
+    // }
+
+    // @Listen("pointerdown")
+    // onPointerDown() {
+    //     this._focused = true;
+    //     this._active = true;
+    // }
+
+    // @Listen('pointerup', { target: document })
+    // onPointerUp() {
+    //     this._active = false;
+    // }
+
+    // @Listen("click")
+    // onClickHandler(e: any) {
+    //     this.onClick!(this.clickArgs); // { type: this.type, text: this.text }
+    // }
+
+    @Ref()
+    widgetRef!: HTMLDivElement;
+
+    @Effect()
+    clickEffect() {
+        const namespace = 'UIFeedback';
+        this.accessKey && dxClick.on(this.widgetRef, e => {
+            if(isFakeClickEvent(e)) {
+                e.stopImmediatePropagation();
+                this._focused = true;
+            }
+            this.onClick!(this.clickArgs);
+        }, { namespace });
+
+        return () => dxClick.off(this.widgetRef, { namespace });
     }
 
-    @Listen("pointerout")
-    onPointerOut() {
-        this._hovered = false;
-    }
+    @Effect()
+    hoverEffect() {
+        const namespace = 'UIFeedback';
+        const selector = undefined; // ???
 
-    @Listen("pointerdown")
-    onPointerDown() {
-        this._focused = true;
-        this._active = true;
-    }
+        if(this.hoverStateEnabled) {
+            hover.on(this.widgetRef, new Action(({ event, element }) => {
+                this.hoverStartHandler(event);
+                this.hoveredElement = this.widgetRef;
+                this._hovered = true;
+                debugger
+            }, { excludeValidators: ['readOnly'] }), event => {
+                this.hoveredElement = null;
+                this._hovered = false;
+                this.hoverEndHandler(event);
+            }, { selector, namespace });
+        }
 
-    @Listen('pointerup', { target: document })
-    onPointerUp() {
-        this._active = false;
-    }
-
-    @Prop() clickArgs?: any = {};
-    @Listen("click")
-    onClickHandler(e: any) {
-        this.onClick!(this.clickArgs); // { type: this.type, text: this.text }
+        return () => hover.off(this.widgetRef, { selector, namespace });
     }
 }
