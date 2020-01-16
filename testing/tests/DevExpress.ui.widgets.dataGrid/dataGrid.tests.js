@@ -3873,11 +3873,11 @@ QUnit.test('numberbox input right and left paddings should be equal if spin butt
     // act
     dataGrid.editCell(0, 0);
 
-    const input = $($dataGrid.find('.dx-editor-cell').find('input')).eq(1);
+    const $input = $($dataGrid.find('.dx-editor-cell').find('.dx-texteditor-input'));
 
     // assert
-    assert.ok(input);
-    assert.equal(input.css('padding-right'), input.css('padding-left'), 'paddings are equal');
+    assert.equal($input.length, 1, 'input');
+    assert.equal($input.css('padding-right'), $input.css('padding-left'), 'paddings are equal');
 });
 
 // T712073
