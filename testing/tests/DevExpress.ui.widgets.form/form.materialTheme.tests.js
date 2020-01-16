@@ -39,8 +39,8 @@ QUnit.test('1 column -> 2 items without groups', function(assert) {
     const $contents = $form.find('.dx-field-item-content');
 
     const actualPadding = getPaddings($contents.get(0), $labels.get(1));
-    assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
-    assert.equal(actualPadding.locationDiffX, 0);
+    assert.roughEqual(actualPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
+    assert.roughEqual(actualPadding.locationDiffX, 0, 0.01);
 });
 
 
@@ -58,8 +58,8 @@ QUnit.test('1 column -> 1 item and 1 group', function(assert) {
     const $contents = $form.find('.dx-field-item-content');
 
     const actualPadding = getPaddings($contents.get(0), $labels.get(1));
-    assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
-    assert.equal(actualPadding.locationDiffX, 0);
+    assert.roughEqual(actualPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
+    assert.roughEqual(actualPadding.locationDiffX, 0, 0.01);
 });
 
 QUnit.test('1 column -> 1 item and 1 group with nested group', function(assert) {
@@ -78,8 +78,8 @@ QUnit.test('1 column -> 1 item and 1 group with nested group', function(assert) 
     const $contents = $form.find('.dx-field-item-content');
 
     const actualPadding = getPaddings($contents.get(0), $labels.get(1));
-    assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
-    assert.equal(actualPadding.locationDiffX, 0);
+    assert.roughEqual(actualPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
+    assert.roughEqual(actualPadding.locationDiffX, 0, 0.01);
 });
 
 
@@ -99,8 +99,8 @@ QUnit.test('1 column -> 2 item and 1 group with nested group', function(assert) 
     const $contents = $form.find('.dx-field-item-content');
 
     const actualPadding = getPaddings($contents.get(0), $labels.get(1));
-    assert.equal(actualPadding.locationDiffX, 0);
-    assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
+    assert.roughEqual(actualPadding.locationDiffX, 0, 0.01);
+    assert.roughEqual(actualPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
 });
 
 QUnit.test('1 column -> 2 item and 1 group with sub-nested group', function(assert) {
@@ -121,8 +121,8 @@ QUnit.test('1 column -> 2 item and 1 group with sub-nested group', function(asse
     const $contents = $form.find('.dx-field-item-content');
 
     const actualPadding = getPaddings($contents.get(0), $labels.get(1));
-    assert.equal(actualPadding.paddingTop, DEFAULT_PADDING_TOP);
-    assert.equal(actualPadding.locationDiffX, 0);
+    assert.roughEqual(actualPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
+    assert.roughEqual(actualPadding.locationDiffX, 0, 0.01);
 });
 
 QUnit.test('2 columns -> 2 items without groups', function(assert) {
@@ -139,8 +139,8 @@ QUnit.test('2 columns -> 2 items without groups', function(assert) {
     const labelToContentPadding = getPaddings($contents.get(0), $labels.get(1));
     const paddingBetweenContent = getPaddings($contents.get(0), $contents.get(1));
 
-    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT);
-    assert.equal(paddingBetweenContent.locationDiffY, 0);
+    assert.roughEqual(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT, 0.01);
+    assert.roughEqual(paddingBetweenContent.locationDiffY, 0, 0.01);
 });
 
 QUnit.test('2 columns -> 1 item and 1 group', function(assert) {
@@ -159,8 +159,8 @@ QUnit.test('2 columns -> 1 item and 1 group', function(assert) {
     const labelToContentPadding = getPaddings($contents.get(0), $labels.get(1));
     const paddingBetweenContent = getPaddings($contents.get(0), $contents.get(2));
 
-    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT);
-    assert.equal(paddingBetweenContent.locationDiffY, 0);
+    assert.roughEqual(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT, 0.01);
+    assert.roughEqual(paddingBetweenContent.locationDiffY, 0, 0.01);
 });
 
 QUnit.test('2 columns -> 1 item and 1 group with nested group', function(assert) {
@@ -181,8 +181,8 @@ QUnit.test('2 columns -> 1 item and 1 group with nested group', function(assert)
     const labelToContentPadding = getPaddings($contents.get(0), $labels.get(1));
     const paddingBetweenContent = getPaddings($contents.get(0), $contents.get(3));
 
-    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT);
-    assert.equal(paddingBetweenContent.locationDiffY, 0);
+    assert.roughEqual(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT, 0.01);
+    assert.roughEqual(paddingBetweenContent.locationDiffY, 0, 0.01);
 });
 
 
@@ -204,8 +204,8 @@ QUnit.test('2 columns -> 2 groups', function(assert) {
     const labelToContentPadding = getPaddings($contents.get(0), $labels.get(1));
     const paddingBetweenContent = getPaddings($contents.get(1), $contents.get(3));
 
-    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT);
-    assert.equal(paddingBetweenContent.locationDiffY, 0);
+    assert.roughEqual(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT, 0.01);
+    assert.roughEqual(paddingBetweenContent.locationDiffY, 0, 0.01);
 });
 
 QUnit.test('2 columns -> 2 groups with nested groups', function(assert) {
@@ -230,8 +230,8 @@ QUnit.test('2 columns -> 2 groups with nested groups', function(assert) {
     const labelToContentPadding = getPaddings($contents.get(0), $labels.get(1));
     const paddingBetweenContent = getPaddings($contents.get(1), $contents.get(4));
 
-    assert.equal(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT);
-    assert.equal(paddingBetweenContent.locationDiffY, 0);
+    assert.roughEqual(labelToContentPadding.paddingLeft, DEFAULT_PADDING_LEFT, 0.01);
+    assert.roughEqual(paddingBetweenContent.locationDiffY, 0, 0.01);
 });
 
 QUnit.test('2 columns -> 2 item and 1 group with nested group', function(assert) {
@@ -250,7 +250,7 @@ QUnit.test('2 columns -> 2 item and 1 group with nested group', function(assert)
     const $contents = $form.find('.dx-field-item-content');
 
     const labelToContentPadding = getPaddings($contents.get(1), $labels.get(2));
-    assert.equal(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP);
+    assert.roughEqual(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
 });
 
 QUnit.test('2 columns -> 2 groups with nested groups and 1 item', function(assert) {
@@ -278,7 +278,7 @@ QUnit.test('2 columns -> 2 groups with nested groups and 1 item', function(asser
     const $contents = $form.find('.dx-field-item-content');
 
     const labelToContentPadding = getPaddings($contents.get(5), $labels.get(2));
-    assert.equal(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP);
+    assert.roughEqual(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
 });
 
 
@@ -305,7 +305,7 @@ QUnit.test('form -> 2 columns and 3 groups', function(assert) {
     const $contents = $form.find('.dx-field-item-content');
 
     const labelToContentPadding = getPaddings($contents.get(3), $labels.get(2));
-    assert.equal(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP);
+    assert.roughEqual(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
 });
 
 QUnit.test('form -> 4 columns and 3 groups with colspan', function(assert) {
@@ -331,7 +331,7 @@ QUnit.test('form -> 4 columns and 3 groups with colspan', function(assert) {
     const $contents = $form.find('.dx-field-item-content');
 
     const labelToContentPadding = getPaddings($contents.get(3), $labels.get(2));
-    assert.equal(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP);
+    assert.roughEqual(labelToContentPadding.paddingTop, DEFAULT_PADDING_TOP, 0.01);
 });
 
 QUnit.test('form -> 1 column and 1 items and 1 tab', function(assert) {
@@ -358,7 +358,7 @@ QUnit.test('form -> 1 column and 1 items and 1 tab', function(assert) {
     const $contents = $form.find('.dx-field-item-content');
 
     const paddings = getPaddings($contents.get(0), $contents.get(1));
-    assert.equal(paddings.paddingTop, DEFAULT_PADDING_TOP);
+    assert.roughEqual(paddings.paddingTop, DEFAULT_PADDING_TOP, 0.01);
 });
 
 QUnit.test('form -> 1 column and 2 items and 1 tab', function(assert) {
@@ -387,6 +387,6 @@ QUnit.test('form -> 1 column and 2 items and 1 tab', function(assert) {
     const $contents = $form.find('.dx-field-item-content');
 
     const paddings = getPaddings($contents.get(1), $labels.get(2));
-    assert.equal(paddings.paddingTop, DEFAULT_PADDING_TOP);
+    assert.roughEqual(paddings.paddingTop, DEFAULT_PADDING_TOP, 0.01);
 });
 
