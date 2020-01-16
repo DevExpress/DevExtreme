@@ -33,9 +33,9 @@ function createForm(colCount, items) {
             return 'xs';
         },
         colCountByScreen: {
-            xs: 1
+            xs: colCount
         },
-        items: ['dataField1', 'dataField2']
+        items
     });
 }
 
