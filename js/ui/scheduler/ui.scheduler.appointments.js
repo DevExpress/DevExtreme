@@ -640,6 +640,17 @@ const SchedulerAppointments = CollectionWidget.inherit({
             endTime = needCorrectDates ? this._correctEndDateByDelta(endDate, deltaTime) : endDate.getTime() + deltaTime;
         }
 
+        const targetStartDateTimezoneOffset = startDate.getTimezoneOffset(),
+            targetEndDateTimezoneOffset = endDate.getTimezoneOffset(),
+            updatedStartDateTimezoneOffset = new Date(startTime).getTimezoneOffset(),
+            updatedEndDateTimezoneOffset = new Date(endTime).getTimezoneOffset();
+
+        if(cond) {
+            startTime = startTime + ((targetEndDateTimezoneOffset - targetStartDateTimezoneOffset + updatedStartDateTimezoneOffset - updatedEndDateTimezoneOffset) * toMs('minute'));
+        } else {
+            endTime = endTime + ((targetEndDateTimezoneOffset - targetStartDateTimezoneOffset + updatedStartDateTimezoneOffset - updatedEndDateTimezoneOffset) * toMs('minute'));
+        }
+
         return [startTime, endTime];
     },
 

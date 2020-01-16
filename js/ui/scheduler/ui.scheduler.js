@@ -2033,6 +2033,14 @@ const Scheduler = Widget.inherit({
             }
         }
 
+        const targetStartDateTimezoneOffset = targetStartDate.getTimezoneOffset(),
+            targetEndDateTimezoneOffset = targetEndDate.getTimezoneOffset(),
+            updatedStartDateTimezoneOffset = date.getTimezoneOffset(),
+            updatedEndDateTimezoneOffset = endDate.getTimezoneOffset();
+
+        endDate = new Date(endDate.getTime() - ((targetEndDateTimezoneOffset - targetStartDateTimezoneOffset + updatedStartDateTimezoneOffset - updatedEndDateTimezoneOffset) * toMs('minute')));
+
+
         this.fire('setField', 'endDate', updatedData, endDate);
         this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
 
