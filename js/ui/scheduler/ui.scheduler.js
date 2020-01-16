@@ -52,6 +52,8 @@ import themes from '../themes';
 import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
 
+import { REDUCED_APPOINTMENT_CLASS, COMPACT_APPOINTMENT_CLASS, RECURRENCE_APPOINTMENT_CLASS } from './constants';
+
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
 
@@ -2542,7 +2544,7 @@ const Scheduler = Widget.inherit({
                     const coordinates = translator.locate($appointment);
                     updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
                 } else {
-                    if($appointment.hasClass('dx-scheduler-appointment-reduced')) {
+                    if($appointment.hasClass(REDUCED_APPOINTMENT_CLASS)) {
                         appointmentStartDate = $appointment.data('dxAppointmentStartDate');
                     }
 
@@ -2578,7 +2580,7 @@ const Scheduler = Widget.inherit({
     },
 
     _needUpdateAppointmentData: function($appointment) {
-        return $appointment.hasClass('dx-scheduler-appointment-compact') || $appointment.hasClass('dx-scheduler-appointment-recurrence');
+        return $appointment.hasClass(COMPACT_APPOINTMENT_CLASS) || $appointment.hasClass(RECURRENCE_APPOINTMENT_CLASS);
     },
 
     subscribe: function(subject, action) {
