@@ -2518,7 +2518,7 @@ const Scheduler = Widget.inherit({
         this._appointmentPopup.triggerResize();
     },
 
-    _getSingleAppointmentData: function(appointmentData, options, skipCheckUpdate) {
+    _getSingleAppointmentData: function(appointmentData, options) {
         options = options || {};
 
         const $appointment = options.$appointment;
@@ -2532,7 +2532,7 @@ const Scheduler = Widget.inherit({
         let updatedStartDate = startDate;
         let appointmentStartDate;
 
-        if(typeUtils.isDefined($appointment) && (skipCheckUpdate === true || this._needUpdateAppointmentData($appointment))) {
+        if(typeUtils.isDefined($appointment) && (options.skipCheckUpdate === true || this._needUpdateAppointmentData($appointment))) {
             const apptDataCalculator = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
 
             if(typeUtils.isFunction(apptDataCalculator)) {

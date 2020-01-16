@@ -788,8 +788,9 @@ const subscribes = {
         const recurringData = this._getSingleAppointmentData(appointmentData, {
             skipDateCalculation: true,
             $appointment: $appointmentElement,
-            skipHoursProcessing: true
-        }, skipCheckUpdate);
+            skipHoursProcessing: true,
+            skipCheckUpdate: skipCheckUpdate
+        });
         const result = {};
 
         extend(true, result, appointmentData, recurringData);
