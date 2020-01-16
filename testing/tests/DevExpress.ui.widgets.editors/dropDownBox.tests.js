@@ -518,7 +518,7 @@ QUnit.module('popup options', moduleConfig, () => {
 
     [true, false].forEach((isMac) => {
         QUnit.test(`Dropdownbox should ${isMac ? 'not' : ''} close the popup after window scroll for ${isMac ? '' : 'non'} Mac desktop devices (T845484)`, function(assert) {
-            if(devices.platform !== 'desktop') {
+            if(devices.deviceType !== 'desktop') {
                 assert.expect(0);
                 return;
             }
@@ -534,7 +534,7 @@ QUnit.module('popup options', moduleConfig, () => {
             this.clock.tick();
             $(window).trigger('scroll');
 
-            assert.strictEqual(instance.option('opened'), isMac && devices.platform === 'desktop');
+            assert.strictEqual(instance.option('opened'), isMac && devices.deviceType === 'desktop');
 
             canShowVirtualKeyboardMock.restore();
         });

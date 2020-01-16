@@ -271,7 +271,7 @@ const DropDownBox = DropDownEditor.inherit({
     _preventCloseHandler: function() {
         const isInputFocused = !!this._popup.$content().find('input:focus').length;
 
-        return realDevice.platform === 'desktop' && this._canShowVirtualKeyboard() && isInputFocused;
+        return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && isInputFocused;
     },
 
     _canShowVirtualKeyboard: function() {
