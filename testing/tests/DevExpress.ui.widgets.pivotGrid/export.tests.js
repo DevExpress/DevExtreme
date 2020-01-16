@@ -17,11 +17,8 @@ QUnit.testStart(function() {
 });
 
 const createPivotGrid = function(options) {
-    let pivotGrid;
     const pivotGridElement = $('#container').dxPivotGrid(options);
-
-    pivotGrid = pivotGridElement.dxPivotGrid('instance');
-    return pivotGrid;
+    return pivotGridElement.dxPivotGrid('instance');
 };
 
 QUnit.module('dxPivotGrid', {
@@ -282,9 +279,6 @@ QUnit.test('Loading indicator showing', function(assert) {
 
 QUnit.test('Export with empty cellsInfo', function(assert) {
     // arrange
-    let columnsInfo;
-    let rowsInfo;
-    let cellsInfo;
     const _getCellsInfo = this.pivotGrid._dataController.getCellsInfo;
     const dataProvider = this.pivotGrid.getDataProvider();
 
@@ -292,9 +286,9 @@ QUnit.test('Export with empty cellsInfo', function(assert) {
         return [];
     };
 
-    columnsInfo = this.pivotGrid._dataController.getColumnsInfo(true);
-    rowsInfo = this.pivotGrid._dataController.getRowsInfo(true);
-    cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
+    const columnsInfo = this.pivotGrid._dataController.getColumnsInfo(true);
+    const rowsInfo = this.pivotGrid._dataController.getRowsInfo(true);
+    const cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
 
     this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
 
