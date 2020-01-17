@@ -796,7 +796,7 @@ module.exports = {
                         const position = scrollable.getScrollElementPosition($row, 'vertical');
                         scrollable.scrollTo({ top: position });
                     }
-                },
+                }
             }
         }
     }
