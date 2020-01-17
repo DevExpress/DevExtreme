@@ -2534,7 +2534,7 @@ const Scheduler = Widget.inherit({
         let updatedStartDate = startDate;
         let appointmentStartDate;
 
-        if(typeUtils.isDefined($appointment) && (options.skipCheckUpdate === true || this._needUpdateAppointmentData($appointment))) {
+        if(typeUtils.isDefined($appointment) && (this._isAppointmentRecurrence(appointmentData) || this._needUpdateAppointmentData($appointment))) {
             const apptDataCalculator = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
 
             if(typeUtils.isFunction(apptDataCalculator)) {
