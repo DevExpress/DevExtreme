@@ -3221,7 +3221,7 @@ QUnit.module('default options', {
 
             $(lookup.field()).trigger('dxclick');
 
-            assert.equal(lookup.option('popupHeight')(), $('.dx-lookup-search-wrapper').outerHeight() + $('.dx-list-item').height() * 4 + $('.dx-popup-bottom').outerHeight() + 16, 'popup height contains 4 list items when there are search and cancel button');
+            assert.equal(lookup.option('popupHeight')(), $('.dx-lookup-search-wrapper').outerHeight() + $('.dx-list-item').height() * 4 + $('.dx-toolbar').outerHeight() + 16, 'popup height contains 4 list items when there are search and cancel button');
 
             lookup.close();
             lookup.option('popupWidth', 200);
