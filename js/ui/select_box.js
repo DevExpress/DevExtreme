@@ -501,7 +501,7 @@ const SelectBox = DropDownList.inherit({
         isVisible = arguments.length ? isVisible : !this.option('opened');
 
         if(!isVisible) {
-            this._restoreInputText();
+            this._restoreInputText(true);
         }
 
         if(this._wasSearch() && isVisible) {
@@ -553,16 +553,17 @@ const SelectBox = DropDownList.inherit({
         this.callBase();
     },
 
-    _restoreInputText: function() {
+    _restoreInputText: function(saveEditingValue) {
         if(this.option('readOnly')) {
             return;
         }
 
         this._loadItemDeferred && this._loadItemDeferred.always((function() {
             const initialSelectedItem = this.option('selectedItem');
+            const searchValue = this._searchValue();
 
             if(this.option('acceptCustomValue')) {
-                if(!this._isFocused()) {
+                if(!saveEditingValue) {
                     this._updateField(initialSelectedItem);
                     this._clearFilter();
                 }
@@ -570,7 +571,7 @@ const SelectBox = DropDownList.inherit({
             }
 
             if(this.option('searchEnabled')) {
-                if(!this._searchValue() && this.option('allowClearing')) {
+                if(!searchValue && this.option('allowClearing')) {
                     this._clearTextValue();
                     return;
                 }
