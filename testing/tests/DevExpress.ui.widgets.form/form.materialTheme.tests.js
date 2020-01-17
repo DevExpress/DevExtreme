@@ -36,22 +36,22 @@ function checkPosition($container, $element, expected) {
     QUnit.assert.roughEqual(elementRect.height, expected.height, epsilon, 'element height');
 }
 
-QUnit.test('1 column -> [item1]', function(assert) {
+function testOrSkip(name, callback) {
     if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
+        QUnit.skip(name + ' - skip test for firefox and ie', function() {});
+    } else {
+        QUnit.test(name, callback);
     }
+}
+
+testOrSkip('1 column -> [item1]', function(assert) {
     const $form = createForm(1, ['item1']);
     checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
     checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
     checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
 });
 
-QUnit.test('1 column -> [item1, item2]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('1 column -> [item1, item2]', function(assert) {
     const $form = createForm(1, ['item1', 'item2']);
     checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
     checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
@@ -60,11 +60,7 @@ QUnit.test('1 column -> [item1, item2]', function(assert) {
     checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
 });
 
-QUnit.test('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
     const $form = createForm(1, [
         'item1',
         {
@@ -78,11 +74,7 @@ QUnit.test('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
     checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
 });
 
-QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(assert) {
     const $form = createForm(1, [
         'item1',
         {
@@ -100,11 +92,7 @@ QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(ass
     checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
 });
 
-QUnit.test('1 column -> [item1, item2, item3]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('1 column -> [item1, item2, item3]', function(assert) {
     const $form = createForm(1, ['item1', 'item2', 'item3']);
     checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 245 });
     checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
@@ -115,11 +103,7 @@ QUnit.test('1 column -> [item1, item2, item3]', function(assert) {
     checkPosition($form, $form.find('[id$="item3"]'), { top: 204, left: 0, width: 1000, height: 31 });
 });
 
-QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
     const $form = createForm(1, [
         'item1',
         {
@@ -140,11 +124,7 @@ QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', functi
     checkPosition($form, $form.find('[id$="item3"]'), { top: 204, left: 0, width: 1000, height: 31 });
 });
 
-QUnit.test('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item3]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item3]', function(assert) {
     const $form = createForm(1, [
         'item1',
         {
@@ -170,11 +150,7 @@ QUnit.test('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item
     checkPosition($form, $form.find('[id$="item3"]'), { top: 204, left: 0, width: 1000, height: 31 });
 });
 
-QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
     const $form = createForm(1, [
         'item1',
         {
@@ -198,11 +174,7 @@ QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(a
     checkPosition($form, $form.find('[id$="item2"]'), { top: 239, left: 20, width: 960, height: 31 });
 });
 
-QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
     const $form = createForm(1, [
         'item1',
         {
@@ -230,11 +202,7 @@ QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', fun
     checkPosition($form, $form.find('[id$="item3"]'), { top: 364, left: 0, width: 1000, height: 31 });
 });
 
-QUnit.test('2 columns -> [item1, item2]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('2 columns -> [item1, item2]', function(assert) {
     const $form = createForm(2, ['item1', 'item2']);
     checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
     checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
@@ -243,11 +211,7 @@ QUnit.test('2 columns -> [item1, item2]', function(assert) {
     checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
 });
 
-QUnit.test('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
     const $form = createForm(2, [
         'item1',
         {
@@ -262,11 +226,7 @@ QUnit.test('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
     checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
 });
 
-QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(assert) {
     const $form = createForm(2, [
         'item1',
         {
@@ -284,11 +244,7 @@ QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(a
     checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
 });
 
-QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(assert) {
     const $form = createForm(2, [
         {
             itemType: 'group',
@@ -306,11 +262,7 @@ QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(a
     checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
 });
 
-QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }]]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }]]', function(assert) {
     const $form = createForm(2, [
         {
             itemType: 'group',
@@ -334,11 +286,7 @@ QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group 
     checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
 });
 
-QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
     const $form = createForm(2, [
         'item1',
         {
@@ -359,11 +307,7 @@ QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', funct
     checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 480, height: 31 });
 });
 
-QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }], { group [{ item3 }] }]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }], { group [{ item3 }] }]', function(assert) {
     const $form = createForm(2, [
         {
             itemType: 'group',
@@ -395,11 +339,7 @@ QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group 
     checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 480, height: 31 });
 });
 
-QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group colspan:3 [{ item3 }] ]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group colspan:3 [{ item3 }] ]', function(assert) {
     const $form = createForm(2, [
         {
             itemType: 'group',
@@ -426,11 +366,7 @@ QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group cols
     checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 1000, height: 31 });
 });
 
-QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
     const $form = createForm(2, [
         'item1',
         {
@@ -455,11 +391,7 @@ QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(a
     checkPosition($form, $form.find('[id$="item2"]'), { top: 154, left: 540, width: 440, height: 31 });
 });
 
-QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
     const $form = createForm(2, [
         'item1',
         {
@@ -487,11 +419,7 @@ QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', fun
     checkPosition($form, $form.find('[id$="item3"]'), { top: 279, left: 0, width: 480, height: 31 });
 });
 
-QUnit.test('4 columns -> [{ group colSpan:3 [{ item1 }], { group colSpan:1 [{ item2 }], { group colspan:4 [{ item3 }] ]', function(assert) {
-    if(!browser.chrome) {
-        assert.ok('skip for firefox and ie');
-        return;
-    }
+testOrSkip('4 columns -> [{ group colSpan:3 [{ item1 }], { group colSpan:1 [{ item2 }], { group colspan:4 [{ item3 }] ]', function(assert) {
     const $form = createForm(4, [
         {
             itemType: 'group',
