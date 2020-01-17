@@ -153,6 +153,14 @@ QUnit.test('addInterval day overflow', function(assert) {
     assert.deepEqual(newDate, new Date(2012, 1, 1));
 });
 
+QUnit.test('addInterval Day overflow', function(assert) {
+    // arrange, act
+    const newDate = dateUtils.addInterval(new Date(2012, 0, 31), 'Day');
+
+    // assert
+    assert.deepEqual(newDate, new Date(2012, 1, 1));
+});
+
 
 QUnit.test('addInterval date object', function(assert) {
     // arrange, act
@@ -196,29 +204,6 @@ QUnit.test('addInterval date object overflow', function(assert) {
 
     // assert
     assert.deepEqual(newDate, new Date(2014, 2, 4, 5, 6, 7, 8));
-});
-QUnit.test('addInterval date object overflow', function(assert) {
-    // arrange, act
-    const newDate = dateUtils.addInterval(new Date(2012, 12, 1, 1, 1, 1, 1), {
-        years: 1,
-        months: 2,
-        days: 3,
-        hours: 4,
-        minutes: 5,
-        seconds: 6,
-        milliseconds: 7
-    });
-
-    // assert
-    assert.deepEqual(newDate, new Date(2014, 2, 4, 5, 6, 7, 8));
-});
-
-QUnit.test('addInterval day overflow', function(assert) {
-    // arrange, act
-    const newDate = dateUtils.addInterval(new Date(2012, 0, 31), 'Day');
-
-    // assert
-    assert.deepEqual(newDate, new Date(2012, 1, 1));
 });
 
 QUnit.test('addInterval date with numeric interval', function(assert) {

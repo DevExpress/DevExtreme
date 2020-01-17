@@ -99,10 +99,8 @@ QUnit.test('saveAs - check revokeObjectURL', function(assert) {
 QUnit.test('Proxy Url exportForm generate', function(assert) {
     const originalTrigger = eventsEngine.trigger;
     eventsEngine.trigger = $.noop;
-    // act
     const testForm = fileSaver._saveByProxy('#', 'testFile.xlsx', 'EXCEL', 'testData');
 
-    // assert
     assert.equal(testForm.attr('action'), '#', 'Set proxy as form action');
     assert.equal(testForm.children('input[name=contentType]').eq(0).val(), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'Set contentType in form Post data');
     assert.equal(testForm.children('input[name=fileName]').eq(0).val(), 'testFile.xlsx', 'Set fileName in form Post data');
@@ -112,7 +110,6 @@ QUnit.test('Proxy Url exportForm generate', function(assert) {
 });
 
 QUnit.test('Save blob by _winJSBlobSave on winJS devices', function(assert) {
-    // arrange
     if(!browser.msie && typeUtils.isFunction(window.Blob)) {
         const _winJSBlobSave = fileSaver._winJSBlobSave;
         let isCalled = false;
@@ -120,10 +117,8 @@ QUnit.test('Save blob by _winJSBlobSave on winJS devices', function(assert) {
             window.WinJS = {};
             fileSaver._winJSBlobSave = function() { isCalled = true; };
 
-            // act
             fileSaver.saveAs('test', 'EXCEL', [], 'testUrl');
 
-            // assert
             assert.ok(isCalled);
         } finally {
             delete window.WinJS;
@@ -140,14 +135,12 @@ QUnit.test('Save base 64 for Safari', function(assert) {
             assert.ok(true, 'This test not for IE browsers');
             return;
         }
-        // arrange
         let exportLinkElementClicked = false;
         const _linkDownloader = fileSaver._linkDownloader;
 
         fileSaver._linkDownloader = function() { exportLinkElementClicked = true; };
         fileSaver.saveAs('test', 'EXCEL');
 
-        // assert
         assert.ok(exportLinkElementClicked, 'ExportLink href generated');
 
         fileSaver._linkDownloader = _linkDownloader;
@@ -178,7 +171,7 @@ QUnit.test('No E1034 on iPad', function(assert) {
         fileSaver.saveAs('test', 'EXCEL', new Blob([], { type: 'test/plain' }));
 
         setTimeout(() => {
-            assert.ok(warningSend !== 'E1034', 'Warning E1034 wasn\'t sent');
+            assert.notStrictEqual(warningSend, 'E1034', 'Warning E1034 wasn\'t sent');
             done();
         }, 150);
     } finally {
@@ -190,7 +183,6 @@ QUnit.test('No E1034 on iPad', function(assert) {
 
 QUnit.test('Blob is saved via msSaveOrOpenBlob method', function(assert) {
     if(browser.msie && parseInt(browser.version) > 9) {
-        // arrange
         let isCalled;
         const _msSaveOrOpenBlob = navigator.msSaveOrOpenBlob;
 
@@ -198,10 +190,8 @@ QUnit.test('Blob is saved via msSaveOrOpenBlob method', function(assert) {
             isCalled = true;
         };
 
-        // act
         fileSaver._saveBlobAs('test', 'EXCEL', new Blob([], { type: 'test/plain' }));
 
-        // assert
         assert.ok(fileSaver._blobSaved, 'blob is saved');
         assert.ok(isCalled, 'msSaveOrOpenBlob method is called');
 
@@ -218,7 +208,6 @@ QUnit.test('SaveBlobAs is called after saveAs', function(assert) {
         return;
     }
 
-    // arrange
     const saveBlobAs = fileSaver._saveBlobAs;
     let isSaveBlobAs = false;
 
@@ -226,22 +215,17 @@ QUnit.test('SaveBlobAs is called after saveAs', function(assert) {
         isSaveBlobAs = true;
     };
 
-    // act
     fileSaver.saveAs('test', 'EXCEl');
-
     fileSaver._saveBlobAs = saveBlobAs;
 
-    // assert
     assert.ok(isSaveBlobAs);
 });
 
 QUnit.test('Force using proxy', function(assert) {
     sinon.stub(eventsEngine, 'trigger');
     try {
-        // act
         fileSaver.saveAs('test', 'EXCEl', undefined, 'http://localhost/', true);
 
-        // assert
         assert.deepEqual(eventsEngine.trigger.lastCall.args[1], 'submit');
     } finally {
         eventsEngine.trigger.restore();
@@ -252,10 +236,8 @@ QUnit.test('Using proxyUrl is now deprecated', function(assert) {
     sinon.stub(eventsEngine, 'trigger');
     sinon.stub(errors, 'log');
     try {
-        // act
         fileSaver.saveAs('test', 'EXCEl', undefined, 'http://localhost/', true);
 
-        // assert
         assert.equal(errors.log.callCount, 1);
         assert.equal(errors.log.getCall(0).args[0], 'W0001');
     } finally {

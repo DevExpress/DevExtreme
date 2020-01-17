@@ -116,9 +116,8 @@ module('render', {
         assert.equal($itemContent.contents().text(), '1', 'item content placed inside content');
     });
 
-    test('custom render func, returns jquery', function(assert) {
+    test('custom render func, returns jquery. Items: [{ prop: 0 }, { prop: 1 }, { prop: 2 }]', function(assert) {
         const element = this.element;
-
         new TestComponent('#cmp', {
             items: [{
                 testProp: 0
@@ -137,7 +136,7 @@ module('render', {
         assert.equal($.trim(element.text()), 'Text is: 0;Text is: 1;Text is: 2;');
     });
 
-    test('custom render func, returns jquery', function(assert) {
+    test('custom render func, returns jquery. Items: [{ prop: 3 }, { prop: 4 }, { prop: 5 }]', function(assert) {
         const element = this.element;
         new TestComponent('#cmp', {
             items: [{
@@ -601,7 +600,6 @@ module('render', {
     test('render items with multiple templates, jquery scenario', function(assert) {
         const $element = $('#container-with-jq-template');
         const testSet = ['First Template', 'Second Template', 'eraser', 'abc', 'pencil', 'First Template'];
-        let $items;
 
         new TestComponent($element, {
             items: [
@@ -631,7 +629,7 @@ module('render', {
             ]
         });
 
-        $items = $element.find('.item');
+        const $items = $element.find('.item');
         assert.equal($items.length, testSet.length, 'quantity of a test set items and rendered items are equal');
 
         $items.each(function(index) {
@@ -1446,7 +1444,7 @@ module('keyboard navigation', {
         const focusedItemId = instance.getFocusedItemId();
 
         $element.focusin();
-        assert.ok($element.attr('aria-activedescendant') === String(focusedItemId), 'element has attribute aria-activedescendant, whose value active');
+        assert.equal($element.attr('aria-activedescendant'), String(focusedItemId), 'element has attribute aria-activedescendant, whose value active');
 
         $item.trigger('dxpointerdown');
         this.clock.tick();
@@ -1698,7 +1696,7 @@ module('focus policy', {
         assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), 'focus set to first item');
     });
 
-    test('option focusOnSelectedItem', function(assert) {
+    test('option focusOnSelectedItem: false', function(assert) {
         assert.expect(1);
 
         const $element = $('#cmp');
@@ -1715,7 +1713,7 @@ module('focus policy', {
         assert.ok($element.find('.item').eq(0).hasClass(FOCUSED_ITEM_CLASS), 'focus set to first item');
     });
 
-    test('option focusOnSelectedItem', function(assert) {
+    test('option focusOnSelectedItem: true', function(assert) {
         assert.expect(1);
 
         const $element = $('#cmp');
@@ -2081,7 +2079,7 @@ module('default template', {
         assert.equal($.trim($content.text()), '1');
     });
 
-    test('template should be rendered correctly with text', function(assert) {
+    test('template should be rendered correctly with object that has the text property', function(assert) {
         const $content = this.prepareItemTest({ text: 'custom' });
 
         assert.equal($.trim($content.text()), 'custom');

@@ -78,11 +78,10 @@ define(function(require) {
         const data = {};
         const handler = function() {
         };
-        let LOG;
 
         this.element.on('dxtestevent.test1.test2', data, handler);
 
-        LOG = this.testEventImplementer.LOG.setup;
+        const LOG = this.testEventImplementer.LOG.setup;
         assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
         assert.equal(LOG.arguments.length, 4, 'arguments count');
         assert.strictEqual(LOG.arguments[0], this.element[0], 'element');
@@ -95,13 +94,12 @@ define(function(require) {
         const data = {};
         const handler = function() {
         };
-        let LOG;
 
         this.element
             .on('dxtestevent.test1.test2', data, handler)
             .off('dxtestevent.test1.test2');
 
-        LOG = this.testEventImplementer.LOG.teardown;
+        const LOG = this.testEventImplementer.LOG.teardown;
 
         assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
         assert.equal(LOG.arguments.length, 3, 'arguments count');
@@ -114,12 +112,11 @@ define(function(require) {
         const data = {};
         const handler = function() {
         };
-        let LOG;
 
         this.element
             .on('dxtestevent.test1.test2', '.some', data, handler);
 
-        LOG = this.testEventImplementer.LOG.add;
+        const LOG = this.testEventImplementer.LOG.add;
 
         assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
         assert.equal(LOG.arguments.length, 2, 'arguments count');
@@ -136,13 +133,12 @@ define(function(require) {
         const data = {};
         const handler = function() {
         };
-        let LOG;
 
         this.element
             .on('dxtestevent.test1.test2', '.some', data, handler)
             .off('dxtestevent.test1.test2', handler);
 
-        LOG = this.testEventImplementer.LOG.add;
+        const LOG = this.testEventImplementer.LOG.add;
 
         assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
         assert.equal(LOG.arguments.length, 2, 'arguments count');
@@ -160,13 +156,12 @@ define(function(require) {
         const handler = function() {
         };
         const event = $.Event('dxtestevent');
-        let LOG;
 
         this.element
             .on('dxtestevent.test1.test2', handler)
             .trigger(event, data);
 
-        LOG = this.testEventImplementer.LOG.trigger;
+        const LOG = this.testEventImplementer.LOG.trigger;
         assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
         assert.equal(LOG.arguments.length, 3, 'arguments count');
         assert.strictEqual(LOG.arguments[0], this.element[0], 'element');
@@ -179,13 +174,12 @@ define(function(require) {
         const handler = function() {
         };
         const event = $.Event('dxtestevent');
-        let LOG;
 
         this.element
             .on('dxtestevent.test1.test2', data, handler)
             .trigger(event, data);
 
-        LOG = this.testEventImplementer.LOG._default;
+        const LOG = this.testEventImplementer.LOG._default;
         assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
         assert.equal(LOG.arguments.length, 3, 'arguments count');
         assert.strictEqual(LOG.arguments[1], event, 'event');
@@ -197,13 +191,12 @@ define(function(require) {
         const handler = function() {
         };
         const event = $.Event('dxtestevent');
-        let LOG;
 
         this.element
             .on('dxtestevent.test1.test2', data, handler)
             .trigger(event, data);
 
-        LOG = this.testEventImplementer.LOG.handle;
+        const LOG = this.testEventImplementer.LOG.handle;
         assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
         assert.equal(LOG.arguments.length, 3, 'arguments count');
         assert.strictEqual(LOG.arguments[0], this.element[0], 'element');

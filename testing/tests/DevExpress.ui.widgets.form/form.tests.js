@@ -1211,7 +1211,6 @@ QUnit.test('Align labels in columns when there are rows', function(assert) {
 });
 
 QUnit.test('Change option after group rendered (check for cycling template render)', function(assert) {
-    // arrange
     const $formContainer = $('#form').dxForm({
         formData: {
             firstName: 'John',
@@ -1231,14 +1230,11 @@ QUnit.test('Change option after group rendered (check for cycling template rende
                 ]
             }]
     });
-    let $fieldItemWidgets;
 
-    // act
     $formContainer.dxForm('instance').option('colCount', 4);
 
-    $fieldItemWidgets = $formContainer.find('.' + internals.FIELD_ITEM_CONTENT_CLASS);
+    const $fieldItemWidgets = $formContainer.find('.' + internals.FIELD_ITEM_CONTENT_CLASS);
 
-    // assert
     assert.equal($fieldItemWidgets.length, 3, 'Correct number of a widgets');
 });
 
@@ -1594,7 +1590,6 @@ QUnit.test('Get editor instance with group config', function(assert) {
 });
 
 QUnit.test('UpdateDimensions', function(assert) {
-    // arrange
     const $testContainer = $('#form');
 
     $testContainer.dxForm({
@@ -1609,7 +1604,6 @@ QUnit.test('UpdateDimensions', function(assert) {
         }]
     });
 
-    // act
     const form = $testContainer.dxForm('instance');
     let isSizeUpdated;
 
@@ -1619,7 +1613,6 @@ QUnit.test('UpdateDimensions', function(assert) {
     });
     this.clock.tick();
 
-    // assert
     assert.ok(isSizeUpdated);
 });
 
@@ -1630,9 +1623,7 @@ function triggerKeyUp($element, key) {
 }
 
 QUnit.test('Check component instance onEditorEnterKey', function(assert) {
-    // arrange
     let testArgs;
-    let editor;
     const form = $('#form').dxForm({
         formData: {
             name: 'Kyle',
@@ -1643,11 +1634,9 @@ QUnit.test('Check component instance onEditorEnterKey', function(assert) {
         }
     }).dxForm('instance');
 
-    // act
-    editor = form.getEditor('work');
+    const editor = form.getEditor('work');
     triggerKeyUp(editor.$element(), 'Enter');
 
-    // assert
     assert.notEqual(testArgs.component, undefined, 'component');
     assert.notEqual(testArgs.element, undefined, 'element');
     assert.notEqual(testArgs.event, undefined, 'Event');
@@ -1656,25 +1645,20 @@ QUnit.test('Check component instance onEditorEnterKey', function(assert) {
 });
 
 QUnit.test('Use \'itemOption\' with no items', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         height: 200,
         formData: { test1: 'abc', test2: 'xyz', test3: '123' }
     });
     const form = $testContainer.dxForm('instance');
-
-    // act
     const testItem = form.itemOption('test2');
 
     form.itemOption('test3', 'label', { text: 'NEWLABEL' });
 
-    // assert
     assert.deepEqual(testItem, { dataField: 'test2' }, 'corrected item received');
     assert.equal($testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS).last().text(), 'NEWLABEL:', 'new label rendered');
 });
 
 QUnit.test('Use \'itemOption\' do not change the order of an items', function(assert) {
-    // arrange
     const contentReadyStub = sinon.stub();
     const $testContainer = $('#form').dxForm({
         height: 200,
@@ -1689,8 +1673,6 @@ QUnit.test('Use \'itemOption\' do not change the order of an items', function(as
     const form = $testContainer.dxForm('instance');
 
     form.on('contentReady', contentReadyStub);
-
-    // act
     form.itemOption('FirstName', {
         visible: true,
         label: {
@@ -1704,7 +1686,6 @@ QUnit.test('Use \'itemOption\' do not change the order of an items', function(as
         }
     });
 
-    // assert
     assert.deepEqual(
         form.option('items'),
         [
@@ -1731,7 +1712,6 @@ QUnit.test('Use \'itemOption\' do not change the order of an items', function(as
 });
 
 QUnit.test('Use \'itemOption\' with groups', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         height: 200,
         formData: { EmployeeID: 1, LastName: 'John', FirstName: 'Dow', BirthData: '01/01/1970', HireDate: '12/11/1995' },
@@ -1760,7 +1740,6 @@ QUnit.test('Use \'itemOption\' with groups', function(assert) {
     );
     const form = $testContainer.dxForm('instance');
 
-    // act
     const unknownField = form.itemOption('FirstName');
     const firstGroup = form.itemOption('Personal');
     const secondGroup = form.itemOption('Personal.FullName');
@@ -1768,7 +1747,6 @@ QUnit.test('Use \'itemOption\' with groups', function(assert) {
 
     form.itemOption('Personal.Dates.HireDate', 'label', { text: 'NEWLABEL' });
 
-    // assert
     assert.equal(unknownField, undefined, 'corrected item received');
     assert.deepEqual({ itemType: firstGroup.itemType, caption: firstGroup.caption }, { itemType: 'group', caption: 'Personal' }, 'corrected item received');
     assert.deepEqual({ itemType: secondGroup.itemType, caption: secondGroup.caption }, { itemType: 'group', caption: 'Full Name' }, 'corrected item received');
@@ -1778,7 +1756,6 @@ QUnit.test('Use \'itemOption\' with groups', function(assert) {
 });
 
 QUnit.test('Use \'itemOption\' with groups and one group has empty caption (T359214)', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         height: 200,
         items: [
@@ -1836,15 +1813,12 @@ QUnit.test('Use \'itemOption\' with groups and one group has empty caption (T359
     );
     const form = $testContainer.dxForm('instance');
 
-    // act
     form.itemOption('TestGroup1.TestGroup2', 'caption', 'custom');
 
-    // assert
     assert.equal($testContainer.find('.' + internals.FORM_GROUP_CAPTION_CLASS).last().text(), 'custom', 'new caption rendered');
 });
 
 QUnit.test('Use \'itemOption\' with tabs', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         formData: { EmployeeID: 1, LastName: 'John', FirstName: 'Dow', BirthData: '01/01/1970', HireDate: '12/11/1995', Country: 'USA', City: 'Phoenix', Region: 'Arizona', Title: 'Ms' },
         items: [
@@ -1870,22 +1844,17 @@ QUnit.test('Use \'itemOption\' with tabs', function(assert) {
         ] }
     );
     const form = $testContainer.dxForm('instance');
-
-    // act
     const tabItem = form.itemOption('Address');
     const innerTabItem = form.itemOption('Address.Country');
 
     form.itemOption('Dates.HireDate', 'label', { text: 'NEWLABEL' });
 
-    // assert
     assert.deepEqual(tabItem, {
         title: 'Address',
         colCount: 2,
         items: [{ dataField: 'Country' }, { dataField: 'City' }, { dataField: 'Region' }]
     }, 'Correct tab\'s item');
-
     assert.equal(innerTabItem.dataField, 'Country', 'corrected item received');
-
     assert.equal($testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS).eq(4).text(), 'NEWLABEL:', 'new label rendered');
 });
 

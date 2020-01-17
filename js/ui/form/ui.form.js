@@ -660,7 +660,6 @@ const Form = Widget.inherit({
             .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, isDefined(item.caption) && item.caption.length)
             .addClass(FORM_GROUP_CLASS)
             .appendTo($container);
-        let $groupContent;
         let colCount;
         let layoutManager;
 
@@ -671,7 +670,7 @@ const Form = Widget.inherit({
                 .appendTo($group);
         }
 
-        $groupContent = $('<div>')
+        const $groupContent = $('<div>')
             .addClass(FORM_GROUP_CONTENT_CLASS)
             .appendTo($group);
 
@@ -705,7 +704,6 @@ const Form = Widget.inherit({
     _renderLayoutManager: function(items, $rootElement, options) {
         const $element = $('<div>');
         const that = this;
-        let instance;
         const config = that._getLayoutManagerConfig(items, options);
         const baseColCountByScreen = {
             lg: options.colCount,
@@ -716,7 +714,8 @@ const Form = Widget.inherit({
 
         that._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, options.colCountByScreen) });
         $element.appendTo($rootElement);
-        instance = that._createComponent($element, 'dxLayoutManager', config);
+
+        const instance = that._createComponent($element, 'dxLayoutManager', config);
         instance.on('autoColCountChanged', function() { that._refresh(); });
         that._cachedLayoutManagers.push(instance);
         return instance;

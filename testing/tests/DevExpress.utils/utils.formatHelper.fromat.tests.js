@@ -196,10 +196,9 @@ if(!isIosWithMSKTimeZone()) {
         // assert
         const date1 = new Date(2010, 0, 1, 2, 23, 33);
         const date2 = new Date(date1.getTime());
-        let format;
 
         date2.setMilliseconds(3000);
-        format = formatHelper.getDateFormatByDifferences(dateUtils.getDatesDifferences(date1, date2));
+        const format = formatHelper.getDateFormatByDifferences(dateUtils.getDatesDifferences(date1, date2));
         assert.equal(formatHelper.format(date2, format), '2:23:36 AM');
     });
     QUnit.test('getDateMarkerFormat for minute range', function(assert) {
@@ -287,11 +286,10 @@ QUnit.test('getDateMarkerFormat for year range', function(assert) {
     // assert
     const date1 = new Date(2010, 10, 29, 12, 23, 33, 990);
     const date2 = new Date(date1.getTime());
-    let format;
 
     // year
     date2.setFullYear(2031);
-    format = formatHelper.getDateFormatByDifferences(dateUtils.getDatesDifferences(date1, date2));
+    const format = formatHelper.getDateFormatByDifferences(dateUtils.getDatesDifferences(date1, date2));
     assert.equal(formatHelper.format(date2, format), '2031');
 });
 // B217749

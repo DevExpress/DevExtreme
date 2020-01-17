@@ -188,10 +188,9 @@ exports.DataProvider = Class.inherit({
 
     ready: function() {
         const that = this;
-        let options;
 
         that._initOptions();
-        options = this._options;
+        const options = this._options;
 
         return when(options.items).done(function(items) {
             options.customizeExportData && options.customizeExportData(that.getColumns(that.getHeaderRowCount() > 1), items);

@@ -365,30 +365,25 @@ QUnit.module('Form', () => {
     });
 
     test('Update of editor\'s value when formOption is changed and items is defined', function(assert) {
-        // arrange
         const $testContainer = $('#form');
-        let form;
-        let $textBoxes;
         const textBoxes = [];
 
-        form = $testContainer.dxForm({
+        const form = $testContainer.dxForm({
             items: ['name', 'lastName']
         }).dxForm('instance');
 
         sinon.spy(form._rootLayoutManager, '_invalidate');
 
-        $textBoxes = $testContainer.find('.dx-textbox');
+        const $textBoxes = $testContainer.find('.dx-textbox');
         $.each($textBoxes, (_, element) => {
             textBoxes.push($(element).dxTextBox('instance'));
         });
 
-        // act
         form.option('formData', {
             name: 'Test Name',
             lastName: 'Test Last Name'
         });
 
-        // assert
         assert.equal(textBoxes[0].option('value'), 'Test Name', 'first editor');
         assert.equal(textBoxes[1].option('value'), 'Test Last Name', 'second editor');
         assert.ok(!form._rootLayoutManager._invalidate.called, '_invalidate of layout manger is not called');
@@ -591,11 +586,10 @@ QUnit.module('Form', () => {
                 }
             ]
         });
-        let $summaryContents;
 
         // act
         $formContainer.dxForm('instance').validate();
-        $summaryContents = $formContainer.find('.dx-validationsummary-item-content');
+        const $summaryContents = $formContainer.find('.dx-validationsummary-item-content');
 
         // assert
         assert.equal($formContainer.find(`.${VALIDATION_SUMMARY_CLASS}`).length, 1);
@@ -1403,7 +1397,6 @@ QUnit.module('Tabs', {
     }
 }, () => {
     test('Render tabs', function(assert) {
-        // arrange, act
         const testContainer = $('#form');
 
         testContainer.dxForm({
@@ -1440,12 +1433,9 @@ QUnit.module('Tabs', {
                         }]
                 }]
         });
-
-        let tabPanelItems;
         const tabPanel = $('.dx-tabpanel').dxTabPanel('instance');
 
-        // assert
-        tabPanelItems = tabPanel.option('items');
+        const tabPanelItems = tabPanel.option('items');
         assert.equal(tabPanel.option('animationEnabled'), true, 'tab panel option');
         assert.equal(tabPanelItems.length, 2, 'items count in tab panel');
         assert.equal(tabPanelItems[0].title, 'Address1', 'title of tab 1');
