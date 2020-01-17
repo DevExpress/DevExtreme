@@ -36,14 +36,14 @@ function checkPosition($container, $element, expected) {
     QUnit.assert.roughEqual(elementRect.height, expected.height, epsilon, 'element height');
 }
 
-function checkOneColumnTwoItemsLayout($form) {
+function check_1Columns_2ItemsLayout($form) {
     checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
     checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
     checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
     checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
 }
 
-function checkOneColumnTreeItemsLayout($form) {
+function check_1Columns_3ItemsLayout($form) {
     checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 245 });
     checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
     checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
@@ -53,7 +53,7 @@ function checkOneColumnTreeItemsLayout($form) {
     checkPosition($form, $form.find('[id$="item3"]'), { top: 204, left: 0, width: 1000, height: 31 });
 }
 
-function checkTwoColumnsTwoItemsLayout($form) {
+function check_2Columns_2ItemsLayout($form) {
     checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
     checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
     checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
@@ -61,7 +61,7 @@ function checkTwoColumnsTwoItemsLayout($form) {
     checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
 }
 
-function checkTwoColumnsTreeItemsLayout($form) {
+function check_2Columns_3ItemsLayout($form) {
     checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
     checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
     checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
@@ -88,7 +88,7 @@ testOrSkip('1 column -> [item1]', function(assert) {
 
 testOrSkip('1 column -> [item1, item2]', function(assert) {
     const $form = createForm(1, ['item1', 'item2']);
-    checkOneColumnTwoItemsLayout($form);
+    check_1Columns_2ItemsLayout($form);
 });
 
 testOrSkip('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
@@ -98,7 +98,7 @@ testOrSkip('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
             itemType: 'group',
             items: ['item2']
         }]);
-    checkOneColumnTwoItemsLayout($form);
+    check_1Columns_2ItemsLayout($form);
 });
 
 testOrSkip('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(assert) {
@@ -112,12 +112,12 @@ testOrSkip('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(ass
             }]
         }
     ]);
-    checkOneColumnTwoItemsLayout($form);
+    check_1Columns_2ItemsLayout($form);
 });
 
 testOrSkip('1 column -> [item1, item2, item3]', function(assert) {
     const $form = createForm(1, ['item1', 'item2', 'item3']);
-    checkOneColumnTreeItemsLayout($form);
+    check_1Columns_3ItemsLayout($form);
 });
 
 testOrSkip('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
@@ -132,7 +132,7 @@ testOrSkip('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', functi
         },
         'item3'
     ]);
-    checkOneColumnTreeItemsLayout($form);
+    check_1Columns_3ItemsLayout($form);
 });
 
 testOrSkip('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item3]', function(assert) {
@@ -152,7 +152,7 @@ testOrSkip('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item
         },
         'item3'
     ]);
-    checkOneColumnTreeItemsLayout($form);
+    check_1Columns_3ItemsLayout($form);
 });
 
 testOrSkip('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
@@ -209,7 +209,7 @@ testOrSkip('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', fun
 
 testOrSkip('2 columns -> [item1, item2]', function(assert) {
     const $form = createForm(2, ['item1', 'item2']);
-    checkTwoColumnsTwoItemsLayout($form);
+    check_2Columns_2ItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
@@ -220,7 +220,7 @@ testOrSkip('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
             items: ['item2']
         }
     ]);
-    checkTwoColumnsTwoItemsLayout($form);
+    check_2Columns_2ItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(assert) {
@@ -234,7 +234,7 @@ testOrSkip('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(a
             }]
         }
     ]);
-    checkTwoColumnsTwoItemsLayout($form);
+    check_2Columns_2ItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(assert) {
@@ -248,7 +248,7 @@ testOrSkip('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(a
             items: ['item2']
         }
     ]);
-    checkTwoColumnsTwoItemsLayout($form);
+    check_2Columns_2ItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }]]', function(assert) {
@@ -268,7 +268,7 @@ testOrSkip('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group 
             }]
         }
     ]);
-    checkTwoColumnsTwoItemsLayout($form);
+    check_2Columns_2ItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
@@ -283,7 +283,7 @@ testOrSkip('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', funct
         },
         'item3'
     ]);
-    checkTwoColumnsTreeItemsLayout($form);
+    check_2Columns_3ItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }], { group [{ item3 }] }]', function(assert) {
@@ -308,7 +308,7 @@ testOrSkip('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group 
             items: ['item3']
         }
     ]);
-    checkTwoColumnsTreeItemsLayout($form);
+    check_2Columns_3ItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group colspan:3 [{ item3 }] ]', function(assert) {
