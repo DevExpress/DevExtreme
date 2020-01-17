@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import 'ui/form/ui.form';
-
+import browser from 'core/utils/browser';
 import 'common.css!';
 import 'material_blue_light.css!';
 
@@ -23,51 +23,66 @@ function createForm(colCount, items) {
     });
 }
 
-const QUNIT_FIXTURE_OFFSET = -10000;
-function checkPosition($element, expected) {
+function checkPosition($container, $element, expected) {
     const elementRect = $element.get(0).getBoundingClientRect();
 
-    let epsilon = 0.01;
-    QUnit.assert.roughEqual(elementRect.top, expected.top + QUNIT_FIXTURE_OFFSET, epsilon, 'top element offset');
-    QUnit.assert.roughEqual(elementRect.left, expected.left + QUNIT_FIXTURE_OFFSET, epsilon, 'left element offset');
+    let epsilon = 0.1;
+    if($container != null) {
+        const containerRect = $container.get(0).getBoundingClientRect();
+        QUnit.assert.roughEqual(elementRect.top - containerRect.top, expected.top, epsilon, 'top element offset');
+        QUnit.assert.roughEqual(elementRect.left - containerRect.left, expected.left, epsilon, 'left element offset');
+    }
     QUnit.assert.roughEqual(elementRect.width, expected.width, epsilon, 'element width');
     QUnit.assert.roughEqual(elementRect.height, expected.height, epsilon, 'element height');
 }
 
 QUnit.test('1 column -> [item1]', function(assert) {
-    // if(browser.chrome) {
-    //     assert.ok('skip for single');
-    // }
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(1, ['item1']);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 76 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
 });
 
 QUnit.test('1 column -> [item1, item2]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(1, ['item1', 'item2']);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 162 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 86, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 120, left: 0, width: 1000, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
 });
 
 QUnit.test('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(1, [
         'item1',
         {
             itemType: 'group',
             items: ['item2']
         }]);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 162 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 86, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 120, left: 0, width: 1000, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
 });
 
 QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(1, [
         'item1',
         {
@@ -78,25 +93,33 @@ QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(ass
             }]
         }
     ]);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 162 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 86, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 120, left: 0, width: 1000, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
 });
 
 QUnit.test('1 column -> [item1, item2, item3]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(1, ['item1', 'item2', 'item3']);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 248 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 86, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 120, left: 0, width: 1000, height: 32 });
-    checkPosition($form.find('[for$="item3"]'), { top: 172, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item3"]'), { top: 206, left: 0, width: 1000, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 245 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item3"]'), { top: 170, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item3"]'), { top: 204, left: 0, width: 1000, height: 31 });
 });
 
 QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(1, [
         'item1',
         {
@@ -108,16 +131,20 @@ QUnit.test('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', functi
         },
         'item3'
     ]);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 248 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 86, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 120, left: 0, width: 1000, height: 32 });
-    checkPosition($form.find('[for$="item3"]'), { top: 172, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item3"]'), { top: 206, left: 0, width: 1000, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 245 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item3"]'), { top: 170, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item3"]'), { top: 204, left: 0, width: 1000, height: 31 });
 });
 
 QUnit.test('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item3]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(1, [
         'item1',
         {
@@ -134,16 +161,20 @@ QUnit.test('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item
         },
         'item3'
     ]);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 248 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 86, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 120, left: 0, width: 1000, height: 32 });
-    checkPosition($form.find('[for$="item3"]'), { top: 172, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item3"]'), { top: 206, left: 0, width: 1000, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 245 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item3"]'), { top: 170, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item3"]'), { top: 204, left: 0, width: 1000, height: 31 });
 });
 
 QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(1, [
         'item1',
         {
@@ -160,14 +191,18 @@ QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(a
                         }]
                 }]
         }]);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 321 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 205, left: 20, width: 960, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 239, left: 20, width: 960, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 320 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 205, left: 20, width: 960, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 239, left: 20, width: 960, height: 31 });
 });
 
 QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(1, [
         'item1',
         {
@@ -186,25 +221,33 @@ QUnit.test('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', fun
         },
         'item3']);
 
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 407 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 205, left: 20, width: 960, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 239, left: 20, width: 960, height: 32 });
-    checkPosition($form.find('[for$="item3"]'), { top: 331, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item3"]'), { top: 365, left: 0, width: 1000, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 405 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 205, left: 20, width: 960, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 239, left: 20, width: 960, height: 31 });
+    checkPosition($form, $form.find('[for$="item3"]'), { top: 330, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item3"]'), { top: 364, left: 0, width: 1000, height: 31 });
 });
 
 QUnit.test('2 columns -> [item1, item2]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(2, ['item1', 'item2']);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 76 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
 });
 
 QUnit.test('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(2, [
         'item1',
         {
@@ -212,14 +255,18 @@ QUnit.test('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
             items: ['item2']
         }
     ]);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 76 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
 });
 
 QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(2, [
         'item1',
         {
@@ -230,14 +277,18 @@ QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(a
             }]
         }
     ]);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 76 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
 });
 
 QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(2, [
         {
             itemType: 'group',
@@ -248,14 +299,18 @@ QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(a
             items: ['item2']
         }
     ]);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 76 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
 });
 
 QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }]]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(2, [
         {
             itemType: 'group',
@@ -272,14 +327,18 @@ QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group 
             }]
         }
     ]);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 76 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
 });
 
 QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(2, [
         'item1',
         {
@@ -291,16 +350,20 @@ QUnit.test('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', funct
         },
         'item3'
     ]);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 162 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item3"]'), { top: 86, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item3"]'), { top: 120, left: 0, width: 480, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item3"]'), { top: 85, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 480, height: 31 });
 });
 
 QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }], { group [{ item3 }] }]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(2, [
         {
             itemType: 'group',
@@ -323,16 +386,20 @@ QUnit.test('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group 
         }
     ]);
 
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 162 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item3"]'), { top: 86, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item3"]'), { top: 120, left: 0, width: 480, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item3"]'), { top: 85, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 480, height: 31 });
 });
 
 QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group colspan:3 [{ item3 }] ]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(2, [
         {
             itemType: 'group',
@@ -350,16 +417,20 @@ QUnit.test('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group cols
             items: ['item3']
         }
     ]);
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 162 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item3"]'), { top: 86, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item3"]'), { top: 120, left: 0, width: 1000, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item3"]'), { top: 85, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 1000, height: 31 });
 });
 
 QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(2, [
         'item1',
         {
@@ -377,14 +448,18 @@ QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(a
         }
     ]);
 
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 235 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 119, left: 540, width: 440, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 153, left: 540, width: 440, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 235 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 120, left: 540, width: 440, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 154, left: 540, width: 440, height: 31 });
 });
 
 QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(2, [
         'item1',
         {
@@ -403,16 +478,20 @@ QUnit.test('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', fun
         },
         'item3']);
 
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 321 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 119, left: 540, width: 440, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 153, left: 540, width: 440, height: 32 });
-    checkPosition($form.find('[for$="item3"]'), { top: 245, left: 0, width: 480, height: 34 });
-    checkPosition($form.find('[id$="item3"]'), { top: 279, left: 0, width: 480, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 320 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 120, left: 540, width: 440, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 154, left: 540, width: 440, height: 31 });
+    checkPosition($form, $form.find('[for$="item3"]'), { top: 245, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item3"]'), { top: 279, left: 0, width: 480, height: 31 });
 });
 
 QUnit.test('4 columns -> [{ group colSpan:3 [{ item1 }], { group colSpan:1 [{ item2 }], { group colspan:4 [{ item3 }] ]', function(assert) {
+    if(!browser.chrome) {
+        assert.ok('skip for firefox and ie');
+        return;
+    }
     const $form = createForm(4, [
         {
             itemType: 'group',
@@ -431,11 +510,11 @@ QUnit.test('4 columns -> [{ group colSpan:3 [{ item1 }], { group colSpan:1 [{ it
         }
     ]);
 
-    checkPosition($form, { top: 0, left: 0, width: 1000, height: 162 });
-    checkPosition($form.find('[for$="item1"]'), { top: 0, left: 0, width: 730, height: 34 });
-    checkPosition($form.find('[id$="item1"]'), { top: 34, left: 0, width: 730, height: 32 });
-    checkPosition($form.find('[for$="item2"]'), { top: 0, left: 770, width: 230, height: 34 });
-    checkPosition($form.find('[id$="item2"]'), { top: 34, left: 770, width: 230, height: 32 });
-    checkPosition($form.find('[for$="item3"]'), { top: 86, left: 0, width: 1000, height: 34 });
-    checkPosition($form.find('[id$="item3"]'), { top: 120, left: 0, width: 1000, height: 32 });
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 730, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 730, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 770, width: 230, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 770, width: 230, height: 31 });
+    checkPosition($form, $form.find('[for$="item3"]'), { top: 85, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 1000, height: 31 });
 });
