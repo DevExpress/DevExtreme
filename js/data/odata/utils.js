@@ -349,13 +349,6 @@ const interpretLightJsonFormat = obj => ({
 
 // Serialization and parsing
 
-/**
-* @name EdmLiteral
-* @type object
-* @namespace DevExpress.data
-* @module data/odata/utils
-* @export EdmLiteral
-*/
 export const EdmLiteral = Class.inherit({
     /**
     * @name EdmLiteralMethods.ctor
@@ -366,11 +359,6 @@ export const EdmLiteral = Class.inherit({
         this._value = value;
     },
 
-    /**
-    * @name EdmLiteralMethods.valueOf
-    * @publicName valueOf()
-    * @return string
-    */
     valueOf() {
         return this._value;
     }
@@ -463,14 +451,6 @@ export const serializeKey = (key, protocolVersion) => {
     return serializeValue(key, protocolVersion);
 };
 
-/**
-* @const Utils.keyConverters
-* @publicName odata.keyConverters
-* @type object
-* @namespace DevExpress.data.utils.odata
-* @module data/odata/utils
-* @export keyConverters
-*/
 export const keyConverters = {
 
     String: value => `${value}`,

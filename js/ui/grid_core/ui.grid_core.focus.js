@@ -139,11 +139,6 @@ exports.FocusController = core.ViewController.inherit((function() {
             return ['navigateToRow', 'isRowFocused'];
         },
 
-        /**
-         * @name GridBaseMethods.navigateToRow
-         * @publicName navigateToRow(key)
-         * @param1 key:any
-         */
         navigateToRow: function(key) {
             if(!this.option('autoNavigateToFocusedRow')) {
                 this.option('focusedRowIndex', -1);
@@ -284,12 +279,6 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
         },
 
-        /**
-         * @name GridBaseMethods.isRowFocused
-         * @publicName isRowFocused(key)
-         * @param1 key:any
-         * @return boolean
-         */
         isRowFocused: function(key) {
             const focusedRowKey = this.option('focusedRowKey');
 
@@ -367,42 +356,14 @@ exports.FocusController = core.ViewController.inherit((function() {
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.focusedRowEnabled
-             * @type boolean
-             * @default false
-             */
             focusedRowEnabled: false,
 
-            /**
-             * @name GridBaseOptions.autoNavigateToFocusedRow
-             * @type boolean
-             * @default true
-             */
             autoNavigateToFocusedRow: true,
 
-            /**
-             * @name GridBaseOptions.focusedRowKey
-             * @type any
-             * @default undefined
-             * @fires GridBaseOptions.onFocusedRowChanged
-             */
             focusedRowKey: undefined,
 
-            /**
-             * @name GridBaseOptions.focusedRowIndex
-             * @type number
-             * @default -1
-             * @fires GridBaseOptions.onFocusedRowChanged
-             */
             focusedRowIndex: -1,
 
-            /**
-             * @name GridBaseOptions.focusedColumnIndex
-             * @type number
-             * @default -1
-             * @fires GridBaseOptions.onFocusedCellChanged
-             */
             focusedColumnIndex: -1
         };
     },
