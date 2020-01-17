@@ -488,7 +488,13 @@ const Lookup = DropDownList.inherit({
     },
 
     _getPopupHeight: function(listItemsCount) {
-        return (this._list && this._list.itemElements()) ? (this._list.itemElements().height() * listItemsCount) + MATERIAL_LOOKUP_LIST_PADDING * 2 : 'auto';
+        return (this._list && this._list.itemElements()) ?
+            (this._list.itemElements().height() * listItemsCount) +
+            MATERIAL_LOOKUP_LIST_PADDING * 2 +
+            (this._$searchWrapper ? this._$searchWrapper.outerHeight() : 0) +
+            (this._popup._$bottom ? this._popup._$bottom.outerHeight() : 0) +
+            (this._popup._$title ? this._popup._$title.outerHeight() : 0) :
+            'auto';
     },
 
     _renderPopup: function() {
