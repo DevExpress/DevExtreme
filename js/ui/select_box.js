@@ -562,7 +562,10 @@ const SelectBox = DropDownList.inherit({
             const initialSelectedItem = this.option('selectedItem');
 
             if(this.option('acceptCustomValue')) {
-                this._updateField(initialSelectedItem);
+                if(!this._isFocused()) {
+                    this._updateField(initialSelectedItem);
+                    this._clearFilter();
+                }
                 return;
             }
 
