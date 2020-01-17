@@ -3,15 +3,16 @@ const path = require('path');
 const replace = require('gulp-replace');
 const rename = require('gulp-rename');
 const del = require('del');
-const sass = require('gulp-dart-sass');
-const sassLint = require('gulp-sass-lint');
+
+
 const through = require('through2');
 const exec = require('child_process').exec;
 
 const fs = require('fs');
 
-const outputPath = 'scss';
-const unfixedScssPath = 'styles';
+const outputPath = require('./config').outputPath;
+const unfixedScssPath = require('./config').unfixedScssPath;
+const repositoryRoot = path.join(__dirname, '../../..');
 
 const importReplacement = /@import \((once|reference|)\) (".*\/)(.*?)\.(generic|material).scss(";)/gm;
 const compactMixinReplacementIndex = /@mixin dx-size-default\(\)\s*{([\w\W]*?)}\s*@mixin dx-size-compact\(\)\s*{([\w\W]*?)}/g;
@@ -21,7 +22,7 @@ const compactMixinUsageReplacement = /@include\s+dx-size-(compact|default);/g;
 
 let widgetsColorVariables = {};
 
-gulp.task('fix-scss-clean', () => del([outputPath]));
+gulp.task('fix-scss-clean', () => del([outputPath, `${unfixedScssPath}/**/*.scss`]));
 
 gulp.task('less2sass', (callback) => {
     exec('npx less2sass styles', (e, out, err) => {
@@ -32,7 +33,6 @@ gulp.task('less2sass', (callback) => {
 });
 
 gulp.task('fix-bundles', () => {
-    // TODO make as in spike
     return gulp
         .src(`${unfixedScssPath}/bundles/*.scss`)
         // next replaces make @use "../widgets/generic" with ();
@@ -49,7 +49,7 @@ gulp.task('fix-base', () => {
     return gulp
         .src(`${unfixedScssPath}/widgets/base/*.scss`)
         .pipe(replace(importReplacement, '@use "./$3";'))
-        .pipe(replace(/.dx-font-icon\("/g, '@include dx-font-icon("'))
+        .pipe(replace(/\.dx-font-icon\("/g, '@include dx-font-icon("'))
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;
         }))
@@ -67,16 +67,20 @@ gulp.task('fix-common', () => {
         .pipe(gulp.dest(`${outputPath}/widgets/common`));
 });
 
+gulp.task('fix-mixins', () => {
+    return gulp
+        .src(`${unfixedScssPath}/mixins.scss`)
+        .pipe(replace('user-select: $value;', 'user-select: $value;\n    @if $value == none {\n        -webkit-touch-callout: none;\n    }'))
+        .pipe(replace(/@mixin user-select\(\$value\) when \(\$value = none\)[\w\W]*?}/g, ''))
+        .pipe(rename((path) => {
+            path.basename = '_' + path.basename;
+        }))
+        .pipe(gulp.dest(`${outputPath}/widgets/base`));
+});
+
 const specificReplacement = (content, folder) => {
     const widget = path.basename(folder);
-    const replacementTable = {
-        // regex, replacement - replace
-        // import, type - additional import (simple - without 'with')
-        'typography': [
-            { regex: /\(css\)\s/, replacement: '' },
-            { import: '../common', type: 'simple' },
-        ]
-    };
+    const replacementTable = require('./replacements');
 
     if(replacementTable[widget]) {
         replacementTable[widget].forEach(r => {
@@ -115,7 +119,6 @@ gulp.task('fix-themes', () => {
             indexContent = specificReplacement(indexContent, folder);
             chunk.contents = new Buffer(indexContent);
 
-            // TODO - what about widget-specific color vars
             let colorsContent = '@use "sass:color";\n';
             colorsContent += '@forward "../base/colors";\n';
             colorsContent += '@use "../base/colors" as *;\n\n';
@@ -162,7 +165,7 @@ const generateDefaultVariablesBlock = (variables) => {
 };
 
 const createBaseWidgetFolder = (theme) => {
-    const baseWidgetPath = path.join(__dirname, '../..', outputPath, 'widgets', theme, 'base');
+    const baseWidgetPath = path.join(repositoryRoot, outputPath, 'widgets', theme, 'base');
     if(!fs.existsSync(baseWidgetPath)) fs.mkdirSync(baseWidgetPath);
     return baseWidgetPath;
 };
@@ -173,7 +176,7 @@ const makeIndent = (content) => {
 
 const fillWidgetColors = (theme) => {
     Object.keys(widgetsColorVariables).forEach(widget => {
-        const targetFilePath = path.join(__dirname, '../..', outputPath, 'widgets', theme, widget, '_colors.scss');
+        const targetFilePath = path.join(repositoryRoot, outputPath, 'widgets', theme, widget, '_colors.scss');
 
         if(!fs.existsSync(targetFilePath)) {
             console.log('Widget file not found: ', targetFilePath);
@@ -236,7 +239,7 @@ gulp.task('create-base-widget-generic-colors', (callback) => {
     // _colors
 
     // read all base variables (to the first widget-specific comment)
-    const sourcePath = path.join(__dirname, '../..', unfixedScssPath, 'widgets', 'generic', 'color-schemes');
+    const sourcePath = path.join(repositoryRoot, unfixedScssPath, 'widgets', 'generic', 'color-schemes');
     const genericLightPath = path.join(sourcePath, 'light', 'generic.light.scss');
     const genericLightIconsPath = path.join(sourcePath, 'light', 'generic.light.icons.scss');
     const themeIconsContent = fs.readFileSync(genericLightIconsPath).toString();
@@ -272,7 +275,7 @@ gulp.task('create-base-widget-material-colors', (callback) => {
     // _colors
 
     // read all base variables (to the first widget-specific comment)
-    const sourcePath = path.join(__dirname, '../..', unfixedScssPath, 'widgets', 'material', 'color-schemes');
+    const sourcePath = path.join(repositoryRoot, unfixedScssPath, 'widgets', 'material', 'color-schemes');
     const materialLightPath = path.join(sourcePath, 'material.light.scss');
     const materialLightIconsPath = path.join(sourcePath, 'material.light.icons.scss');
     const materialLightColorPath = path.join(sourcePath, 'blue/material.blue.scss');
@@ -312,7 +315,7 @@ gulp.task('create-base-widget-material-colors', (callback) => {
 gulp.task('create-base-widget-sizes', (callback) => {
     ['generic', 'material'].forEach(theme => {
         const baseWidgetPath = createBaseWidgetFolder(theme);
-        const sourcePath = path.join(__dirname, '../..', unfixedScssPath, 'widgets', theme, 'size-schemes');
+        const sourcePath = path.join(repositoryRoot, unfixedScssPath, 'widgets', theme, 'size-schemes');
         const sharedBasePath = path.join(sourcePath, 'shared/base.scss');
         const sharedMobilePath = path.join(sourcePath, 'shared/mobile.scss');
         const sharedBaseContent = fs.readFileSync(sharedBasePath).toString();
@@ -322,7 +325,7 @@ gulp.task('create-base-widget-sizes', (callback) => {
         const defaultSizeContent = fs.readFileSync(defaultSizePath).toString();
         const defaultSizeVariables = getVariableNames(defaultSizeContent);
 
-        let sizesContent = '$size: null !default;\n\n';
+        let sizesContent = '$size: null !default;\n@use "colors" as *;\n\n';
         sizesContent += generateDefaultVariablesBlock(defaultSizeVariables);
 
         ['default', 'compact'].forEach(size => {
@@ -351,30 +354,12 @@ gulp.task('create-base-widget', gulp.series(
 // TODO - core to the index
 
 gulp.task('generate-indexes', (callback) => {
-    const source = [
-        // each object has one of these tasks:
-        // widget - widget reference
-        // comment - comment
-        // newline - just new line
-        { task: 'comment', content: 'ex. core' },
-        // mixins - in place @use
-        // typography
-        { task: 'widget', content: 'typography' },
-        // common
-        // icons
-        // widget
-        // card
-        // fieldset
-
-        { task: 'comment', content: 'public widgets' },
-        // { task: 'widget', content: 'box' },
-        { task: 'newline' }
-    ];
+    const source = require('./index-data');
 
     const themes = ['generic', 'material'];
 
     themes.forEach(theme => {
-        const fileName = path.join(__dirname, '../..', outputPath, 'widgets', theme, '_index.scss');
+        const fileName = path.join(repositoryRoot, outputPath, 'widgets', theme, '_index.scss');
         let content = '$color: null !default;\n';
         content += '$size: null !default;\n';
         if(theme === 'material') {
@@ -383,7 +368,8 @@ gulp.task('generate-indexes', (callback) => {
             content += '\n';
         }
 
-        content += '@use "./base/colors" with ($color: $color, $mode: $mode);\n@use "./base/sizes" with ($size: $size);';
+        const modePart = theme === 'material' ? ', $mode: $mode' : '';
+        content += `@use "./base/colors" with ($color: $color${modePart});\n@use "./base/sizes" with ($size: $size);`;
 
         source.forEach(item => {
             if(item.task === 'comment') {
@@ -399,49 +385,4 @@ gulp.task('generate-indexes', (callback) => {
     });
 
     callback();
-});
-
-gulp.task('fix-lint', () => { // this does not work
-    return gulp.src(`${outputPath}/**/*.scss`)
-        .pipe(sassLint({
-            options: {
-                // formatter: 'stylish',
-                formatter: 'checkstyle',
-                'merge-default-rules': false
-            },
-            rules: {
-                'final-newline': true,
-                'indentation': { size: 4 }
-            }
-        }))
-        .pipe(sassLint.format())
-        .pipe(gulp.dest(outputPath + '1'));
-});
-
-gulp.task('convert-scss', gulp.series(
-    'fix-scss-clean',
-    'less2sass',
-    gulp.parallel(
-        'fix-bundles',
-        'fix-base',
-        'fix-common',
-        'fix-themes'
-        // TODO - create common bundle
-    ),
-    'create-base-widget',
-    'generate-indexes'
-    // 'fix-lint'
-));
-
-
-gulp.task('sass', () => {
-    return gulp.src(`${outputPath}/bundles/dx.material.blue.light.scss`)
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('scss-css'));
-});
-
-gulp.task('sass1', () => {
-    return gulp.src('spike-scss/bundles/dx.light.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('scss-css'));
 });
