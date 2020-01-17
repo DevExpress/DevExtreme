@@ -560,7 +560,6 @@ const SelectBox = DropDownList.inherit({
 
         this._loadItemDeferred && this._loadItemDeferred.always((function() {
             const initialSelectedItem = this.option('selectedItem');
-            const searchValue = this._searchValue();
 
             if(this.option('acceptCustomValue')) {
                 if(!saveEditingValue) {
@@ -571,7 +570,7 @@ const SelectBox = DropDownList.inherit({
             }
 
             if(this.option('searchEnabled')) {
-                if(!searchValue && this.option('allowClearing')) {
+                if(!this._searchValue() && this.option('allowClearing')) {
                     this._clearTextValue();
                     return;
                 }
