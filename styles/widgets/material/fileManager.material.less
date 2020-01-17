@@ -125,16 +125,16 @@
             background: @base-bg;
         }
 
-        .dx-filemanager-thumbnails-view-port .dx-filemanager-thumbnails-item .dx-filemanager-thumbnails-item-content .dx-filemanager-thumbnails-item-thumbnail {
-            width: @MATERIAL_BASE_ICON_SIZE * 2;
-            height: @MATERIAL_BASE_ICON_SIZE * 2;
-            font-size: @MATERIAL_BASE_ICON_SIZE * 2;
-        }
-
         .dx-filemanager-thumbnails-item {
             &.dx-filemanager-item-selected {
                 color: @filemanager-file-item-select-color;
                 background: @filemanager-file-item-select-bg;
+            }
+
+            .dx-filemanager-thumbnails-item-thumbnail {
+                width: @MATERIAL_BASE_ICON_SIZE * 2;
+                height: @MATERIAL_BASE_ICON_SIZE * 2;
+                font-size: @MATERIAL_BASE_ICON_SIZE * 2;
             }
 
             &.dx-filemanager-item-focused {
