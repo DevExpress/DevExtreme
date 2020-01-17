@@ -785,6 +785,9 @@ const subscribes = {
     getTargetedAppointmentData: function(appointmentData, appointmentElement, skipCheckUpdate, skipTimezoneConvert) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
+
+        // const recurrenceRule = this.invoke('getField', 'recurrenceRule', itemData);
+
         const recurringData = this._getSingleAppointmentData(appointmentData, {
             skipDateCalculation: true,
             $appointment: $appointmentElement,
