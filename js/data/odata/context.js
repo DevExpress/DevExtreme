@@ -1,15 +1,12 @@
-const Class = require('../../core/class');
-const extend = require('../../core/utils/extend').extend;
-const typeUtils = require('../../core/utils/type');
-const each = require('../../core/utils/iterator').each;
-const errorsModule = require('../errors');
-const ODataStore = require('./store');
-const mixins = require('./mixins');
-const deferredUtils = require('../../core/utils/deferred');
-const when = deferredUtils.when;
-const Deferred = deferredUtils.Deferred;
-
-require('./query_adapter');
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import { isDefined, isPlainObject } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import errorsModule from '../errors';
+import ODataStore from './store';
+import { SharedMethods, formatFunctionInvocationUrl, escapeServiceOperationParams } from './mixins';
+import { when, Deferred } from '../../core/utils/deferred';
+import './query_adapter';
 
 /**
 * @name ODataContext
@@ -19,9 +16,7 @@ require('./query_adapter');
 */
 const ODataContext = Class.inherit({
 
-    ctor: function(options) {
-        const that = this;
-
+    ctor(options) {
         /**
          * @name ODataContextOptions.url
          * @type string
@@ -62,7 +57,7 @@ const ODataContext = Class.inherit({
          * @name ODataContextOptions.deserializeDates
          * @type boolean
          */
-        that._extractServiceOptions(options);
+        this._extractServiceOptions(options);
 
         /**
          * @name ODataContextOptions.errorHandler
@@ -72,18 +67,18 @@ const ODataContext = Class.inherit({
          * @type_function_param1_field2 errorDetails:object
          * @type_function_param1_field3 requestOptions:object
          */
-        that._errorHandler = options.errorHandler;
+        this._errorHandler = options.errorHandler;
 
         /**
          * @name ODataContextOptions.entities
          * @type object
          */
-        each(options.entities || [], function(entityAlias, entityOptions) {
-            that[entityAlias] = new ODataStore(extend(
+        each(options.entities || [], (entityAlias, entityOptions) => {
+            this[entityAlias] = new ODataStore(extend(
                 {},
                 options,
                 {
-                    url: that._url + '/' + encodeURIComponent(entityOptions.name || entityAlias)
+                    url: `${this._url}/${encodeURIComponent(entityOptions.name || entityAlias)}`
                 },
                 entityOptions
             ));
@@ -97,7 +92,7 @@ const ODataContext = Class.inherit({
      * @param2 params:object
      * @return Promise<any>
      */
-    get: function(operationName, params) {
+    get(operationName, params) {
         return this.invoke(operationName, params, 'GET');
     },
 
@@ -109,17 +104,16 @@ const ODataContext = Class.inherit({
      * @param3 httpMethod:object
      * @return Promise<void>
      */
-    invoke: function(operationName, params, httpMethod) {
-        params = params || {};
-        httpMethod = (httpMethod || 'POST').toLowerCase();
+    invoke(operationName, params = {}, httpMethod = 'POST') {
+        httpMethod = httpMethod.toLowerCase();
 
         const d = new Deferred();
-        let url = this._url + '/' + encodeURIComponent(operationName);
+        let url = `${this._url}/${encodeURIComponent(operationName)}`;
         let payload;
 
         if(this.version() === 4) {
             if(httpMethod === 'get') {
-                url = mixins.formatFunctionInvocationUrl(url, mixins.escapeServiceOperationParams(params, this.version()));
+                url = formatFunctionInvocationUrl(url, escapeServiceOperationParams(params, this.version()));
                 params = null;
             } else if(httpMethod === 'post') {
                 payload = params;
@@ -127,9 +121,9 @@ const ODataContext = Class.inherit({
             }
         }
 
-        when(this._sendRequest(url, httpMethod, mixins.escapeServiceOperationParams(params, this.version()), payload))
-            .done(function(r) {
-                if(typeUtils.isPlainObject(r) && operationName in r) {
+        when(this._sendRequest(url, httpMethod, escapeServiceOperationParams(params, this.version()), payload))
+            .done((r) => {
+                if(isPlainObject(r) && operationName in r) {
                     r = r[operationName];
                 }
                 d.resolve(r);
@@ -148,13 +142,13 @@ const ODataContext = Class.inherit({
      * @param2 key:object|string|number
      * @return object
      */
-    objectLink: function(entityAlias, key) {
+    objectLink(entityAlias, key) {
         const store = this[entityAlias];
         if(!store) {
             throw errorsModule.errors.Error('E4015', entityAlias);
         }
 
-        if(!typeUtils.isDefined(key)) {
+        if(!isDefined(key)) {
             return null;
         }
 
@@ -166,6 +160,6 @@ const ODataContext = Class.inherit({
     }
 
 })
-    .include(mixins.SharedMethods);
+    .include(SharedMethods);
 
-module.exports = ODataContext;
+export default ODataContext;
