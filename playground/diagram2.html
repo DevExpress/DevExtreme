@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DevExtreme jQuery Example</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
+
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../node_modules/devexpress-diagram/dist/dx-diagram.css"/>
+
+    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+
+    <!-- <script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script> -->
+
+    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
+    <script type="text/javascript" src="../node_modules/devexpress-diagram/dist/dx-diagram.js"></script>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #diagram {
+            width: 100%;
+            height: 100%;
+            /* width: 1400px;
+            height: 600px; */
+        }
+    </style>
+    <script>
+    </script>
+</head>
+<body>
+    <div id="diagram"></div>
+    <script>
+$(function() {
+    let diagram = $("#diagram").dxDiagram({
+        nodes: {
+            dataSource: new DevExpress.data.ArrayStore({
+                key: "this",
+                data: employees,
+                onInserted: function(values, key) {
+					var generalShapes = diagram.option('toolbox').groups[0].shapes;
+					generalShapes.splice(generalShapes.indexOf(key.type),1);
+                    diagram.repaint();
+                  console.log('inserted');
+                  console.log(employees);
+				},
+				        onRemoved: function(key) {
+                            var generalShapes = diagram.option('toolbox').groups[0].shapes;
+					generalShapes.push(key.type);
+                    diagram.repaint();
+                  console.log('removed');
+                  console.log(key);
+                  console.log(employees);
+				        },
+				        onUpdated: function(key) {
+                  console.log('updated');
+                  console.log(key);
+					        console.log(employees);
+				        }
+            }),
+            keyExpr: "ID",
+            textExpr: "Title",
+            parentKeyExpr: "Head_ID"
+        },
+        toolbox: {
+            groups: [
+				{
+					category: "general",
+					title: "General",
+					expanded: true,
+					shapes: ['text', 'rectangle', 'ellipse', 'cross', 'triangle', 'diamond', 'heart', 'pentagon', 'hexagon', 'octagon', 'star', 'arrowTop',
+					'arrowBottom', 'arrowLeft', 'arrowRight', 'arrowNorthSouth', 'arrowEastWest']
+				}
+			]
+        }
+    }).dxDiagram("instance");
+});
+
+
+    var employees = [ {ID: 999, Title: "Test"} ];
+    </script>
+</body>
+</html>

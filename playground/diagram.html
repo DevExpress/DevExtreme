@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DevExtreme jQuery Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
+
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../node_modules/devexpress-diagram/dist/dx-diagram.css"/>
+
+    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+
+    <script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
+
+    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
+    <script type="text/javascript" src="../node_modules/devexpress-diagram/dist/dx-diagram.js"></script>
+
+    <!-- Required to convert named colors to RGB -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/1.4/rgbcolor.js"></script>
+    <!-- Optional if you want blur -->
+    <script src="https://cdn.jsdelivr.net/npm/stackblur-canvas@^1/dist/stackblur.js"></script>
+    <!-- Main canvg code -->
+    <script src="https://cdn.jsdelivr.net/npm/canvg/dist/browser/canvg.js"></script>
+
+    <script type="text/javascript" src="../artifacts/js/localization/dx.messages.ru.js"></script>
+
+    <script src="https://unpkg.com/devextreme-cldr-data/supplemental.js"></script>
+    <script src="https://unpkg.com/devextreme-cldr-data/ru.js"></script>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        #diagram {
+            width: 100%;
+            height: 99%;
+            /* width: 1400px;
+            height: 600px; */
+        }
+    </style>
+    <script>
+        var employees = [{
+            "ID": 1,
+            "Full_Name": "John Heart",
+            "Prefix": "Mr.",
+            "Title": "CEO",
+            "City": "Los Angeles",
+            "State": "California",
+            "Email": "jheart@dx-email.com",
+            "Skype": "jheart_DX_skype",
+            "Mobile_Phone": "(213) 555-9392",
+            "Birth_Date": "1964-03-16",
+            "Hire_Date": "1995-01-15",
+            "type1": "6"
+        }, {
+            "ID": 2,
+            "Head_ID": 1,
+            "Full_Name": "Samantha Bright",
+            "Prefix": "Dr.",
+            "Title": "COO",
+            "City": "Los Angeles",
+            "State": "California",
+            "Email": "samanthab@dx-email.com",
+            "Skype": "samanthab_DX_skype",
+            "Mobile_Phone": "(213) 555-2858",
+            "Birth_Date": "1966-05-02",
+            "Hire_Date": "2004-05-24",
+            "type1": "2"
+        }, {
+            "ID": 3,
+            "Head_ID": 1,
+            "Full_Name": "Arthur Miller",
+            "Prefix": "Mr.",
+            "Title": "CTO",
+            "City": "Denver",
+            "State": "Colorado",
+            "Email": "arthurm@dx-email.com",
+            "Skype": "arthurm_DX_skype",
+            "Mobile_Phone": "(310) 555-8583",
+            "Birth_Date": "1972-07-11",
+            "Hire_Date": "2007-12-18",
+            "type1": "3"
+        }, {
+            "ID": 4,
+            "Head_ID": 1,
+            "Full_Name": "Robert Reagan",
+            "Prefix": "Mr.",
+            "Title": "CMO",
+            "City": "Bentonville",
+            "State": "Arkansas",
+            "Email": "robertr@dx-email.com",
+            "Skype": "robertr_DX_skype",
+            "Mobile_Phone": "(818) 555-2387",
+            "Birth_Date": "1974-09-07",
+            "Hire_Date": "2002-11-08",
+            "type1": "4"
+        }, {
+            "ID": 5,
+            "Head_ID": 1,
+            "Full_Name": "Greta Sims",
+            "Prefix": "Ms.",
+            "Title": "HR Manager",
+            "City": "Atlanta",
+            "State": "Georgia",
+            "Email": "gretas@dx-email.com",
+            "Skype": "gretas_DX_skype",
+            "Mobile_Phone": "(818) 555-6546",
+            "Birth_Date": "1977-11-22",
+            "Hire_Date": "1998-04-23",
+            "type1": "5"
+        }];
+    </script>
+</head>
+<body>
+    <div id="diagram"></div>
+    <script>
+        DevExpress.localization.locale("ru");
+        Globalize.locale("ru");
+
+        $(function() {
+            var diagram = $("#diagram").dxDiagram({
+                // units: "cm",
+                // readOnly: true,
+                // diabled: true,
+                // viewUnits: "cm",
+                // gridSize: { value: 0.3, items: [0.3, 0.2] },
+                // gridSize: 0.3,
+                // showGrid: false,
+                // snapToGrid: false,
+                // fullScreen: true,
+                // pageSize: { width: 3, height: 2, items: [{width: 3, height: 2, text: "PS1"}, {width: 5, height: 4, text: "PS2"}] },
+                // pageSize: { width: 3, height: 2 },
+                // pageOrientation: "landscape",
+                // pageColor: "gray",
+                // zoomLevel: { value: 2, items: [1,2] },
+                // zoomLevel: 2,
+
+                nodes: {
+                    dataSource: new DevExpress.data.ArrayStore({
+                        key: "ID",
+                        data: employees
+                    }),
+                    keyExpr: "ID",
+                    typeExpr: function(item) { return "emp" + item.ID; },
+                    textExpr: null,
+                    parentKeyExpr: "Head_ID"
+                },
+                customShapes: employees.map(
+                    function(emp) {
+                        return {
+                            category: "employees",
+                            type: "emp" + emp.ID,
+                            baseType: "predefinedProcess",
+                            defaultText: emp.Full_Name,
+                            allowEditText: true
+                        }
+                    }
+                ).concat([
+                    {
+                        category: "templates",
+                        type: "template1",
+                        allowEditText: false,
+                        template: function(item, $container) {
+                            var $content = $("<svg><rect x='0' y='0' width='100%' height='100%'></rect><text x='50%' y='50%' dy='0.35em'>Tmp</text></svg>")
+                            $container.append($content);
+                            $content.click(function(evt) {
+                                console.dir(item);
+                            });
+                        }
+                    },
+                    {
+                        category: "templates",
+                        type: "template2",
+                        baseType: "rectangle",
+                        allowEditText: false,
+                        template: function(item, $container) {
+                            var $content = $("<svg><text x='50%' y='50%' dy='0.35em'>Tmp</text></svg>")
+                            $container.append($content);
+                            $content.click(function(evt) {
+                                console.dir(item);
+                            });
+                        }
+                    }
+                ]),
+                customShapeTemplate: function(item, $container) {
+                    var $content = $("<svg><text x='50%' y='50%' dy='0.35em'>A</text></svg>")
+                    $container.append($content);
+                    $content.click(function(evt) {
+                        console.dir(item);
+                    });
+                },
+                contextMenu: {
+                    // enabled: false,
+                    // commands: ["copy","cut","paste"]
+                },
+                propertiesPanel: {
+                    // enabled: false,
+                    // collapsible: false,
+                    // groups: [
+                    //     { commands: ["units"] },
+                    //     { commands: ["pageSize","pageLandscape","pageColor"] }
+                    // ]
+                },
+                toolbar: {
+                    // visible: false,
+                    // commands: ["export", "separator", "cut", "copy", "paste", "delete", "selectAll", "separator", "lock", "unlock"]
+                },
+                contextToolbox: {
+                    // enabled: false,
+                    // category: "containers"
+                },
+                toolbox: {
+                    // visible: false,
+                    groups: [
+                        { category: "general", title: "General", expanded: true },
+                        { category: "flowchart", title: "Flowchart", expanded: true },
+                        { category: "employees", title: "Employees", expanded: true, displayMode: "texts" },
+                        { category: "templates", title: "Templates", expanded: true }
+                    ]
+                }
+            }).dxDiagram("instance");
+        });
+    </script>
+</body>
+</html>
