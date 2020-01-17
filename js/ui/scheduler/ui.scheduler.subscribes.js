@@ -245,14 +245,13 @@ const subscribes = {
     },
 
     getTextAndFormatDate(data, currentData, format) {
-        const isAllDay = data.allDay;
-        const startDateTimeZone = data.startDateTimeZone;
-        const endDateTimeZone = data.endDateTimeZone;
-        const startDate = this.fire('convertDateByTimezone', currentData.startDate, startDateTimeZone);
-        const endDate = this.fire('convertDateByTimezone', currentData.endDate, endDateTimeZone);
+        const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
+        const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
+        const startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
+        const endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
         return {
-            text: this.fire('createAppointmentTitle', data),
-            formatDate: this.fire('_formatDates', startDate, endDate, isAllDay, format)
+            text: this.fire('createAppointmentTitle', appointmentFields),
+            formatDate: this.fire('_formatDates', startDate, endDate, appointmentFields.allDay, format)
         };
     },
 
@@ -262,6 +261,14 @@ const subscribes = {
         }
 
         return String(data);
+    },
+
+    _getAppointmentFields(data, arrayOfFields) {
+        const that = this;
+        return arrayOfFields.reduce((accumulator, field) => {
+            accumulator[field] = that.fire('getField', field, data);
+            return accumulator;
+        }, {});
     },
 
     _formatDates(startDate, endDate, isAllDay, format) {
