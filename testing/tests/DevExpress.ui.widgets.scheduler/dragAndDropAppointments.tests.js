@@ -687,6 +687,41 @@ module('Common', commonModuleConfig, () => {
         }, 'appointment position is correct');
         assert.deepEqual(scheduler.option('dataSource')[0].startDate, new Date(2015, 1, 9, 10, 30), 'Start date is OK');
     });
+
+    QUnit.test('Appointment should have correct dates after dragging through timezone change (T835544)', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                'text': 'Staff Productivity Report',
+                startDate: '2019-11-04T00:00',
+                endDate: '2019-11-06T00:00',
+            }],
+            views: ['timelineMonth'],
+            currentView: 'timelineMonth',
+            currentDate: new Date(2019, 10, 1),
+            height: 300,
+            startDayHour: 0,
+        });
+
+        const $element = $(scheduler.appointments.getAppointment());
+        const cellWidth = scheduler.workSpace.getCellWidth();
+        let pointer = pointerMock($element.find('.dx-scheduler-appointment-content').eq(0)).start();
+
+        pointer.dragStart().drag(-(cellWidth), 0);
+        pointer.dragEnd();
+
+        let appointmentContent = $element.find('.dx-scheduler-appointment-content-date').text();
+
+        assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
+
+        pointer = pointerMock($element.find('.dx-scheduler-appointment-content').eq(0)).start();
+
+        pointer.dragStart().drag(cellWidth, 0);
+        pointer.dragEnd();
+
+        appointmentContent = $element.find('.dx-scheduler-appointment-content-date').text();
+
+        assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
+    });
 });
 
 module('appointmentDragging customization', $.extend({}, {
