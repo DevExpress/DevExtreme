@@ -4006,6 +4006,37 @@ QUnit.test('Column area should be visible after change scrolling.mode to virtual
     assert.ok(widget.$element().find('.dx-area-column-cell').height() > 0, 'column area is visible');
 });
 
+// T845487
+QUnit.test('Header cell text should be rendered on the same line with expand icon', function(assert) {
+    const pivotGrid = createPivotGrid({
+        dataSource: {
+            fields: [{
+                dataField: 'field1',
+                area: 'row'
+            }, {
+                dataField: 'field2',
+                area: 'row'
+            }],
+            store: [{
+                field1: 'BigBigBigBigBigWord'
+            }]
+        }
+    }, assert);
+    this.clock.tick();
+
+    // assert
+    assert.ok(pivotGrid);
+
+    const $headerCellElements = $('#pivotGrid').find('td.dx-pivotgrid-collapsed').eq(0).children();
+    assert.strictEqual($headerCellElements.length, 2, 'two header cell elements');
+
+    const expandIconRect = $headerCellElements[0].getBoundingClientRect();
+    const textRect = $headerCellElements[1].getBoundingClientRect();
+
+    assert.ok(textRect.top < expandIconRect.bottom, 'elements are on the same line');
+    assert.strictEqual(textRect.left, expandIconRect.right, 'text is after expand icon');
+});
+
 QUnit.module('Field Panel', {
     beforeEach: function() {
         moduleConfig.beforeEach.apply(this, arguments);
