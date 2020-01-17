@@ -12836,7 +12836,8 @@ QUnit.testInActiveWindow('Datebox editor\'s enter key handler should be replaced
 
     // assert
     const dateBox = rowsViewWrapper.getEditor(0, 0).dxDateBox('instance');
-    assert.equal(dateBox._enterHandler, commonUtils.noop, 'dateBox enter key handler for mask is replaced');
+    const enterKeyHandler = dateBox._supportedKeys().enter;
+    assert.strictEqual(enterKeyHandler(), true, 'dateBox enter key handler is replaced');
 });
 
 QUnit.testInActiveWindow('Datebox editor\'s value should be selected from calendar by keyboard (T848039)', function(assert) {
