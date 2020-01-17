@@ -96,15 +96,13 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      */
     nodes?: { autoLayout?: 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'off' | 'tree' | 'layered' }, childrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DataSource | DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
     /**
-     * @docid dxDiagramOptions.onDataChanged
-     * @extends Action
-     * @type function(e)
-     * @type_function_param1 e:object
-     * @action
+     * @docid dxDiagramOptions.hasChanges
+     * @type Boolean
+     * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDataChanged?: ((e: { component?: dxDiagram, element?: dxElement, model?: any }) => any);
+    hasChanges?: boolean;
     /**
      * @docid dxDiagramOptions.onItemClick
      * @extends Action
