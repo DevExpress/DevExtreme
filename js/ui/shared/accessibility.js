@@ -1,3 +1,4 @@
+/* global document */
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import eventUtils from '../../events/utils';
@@ -80,9 +81,7 @@ function getActiveAccessibleElements(ariaLabel, viewElement) {
 function findFocusedViewElement(viewSelectors) {
     for(const index in viewSelectors) {
         const selector = viewSelectors[index];
-        let $focusViewElement;
-
-        $focusViewElement = $(selector).first();
+        const $focusViewElement = $(selector).first();
 
         if($focusViewElement.length) {
             return $focusViewElement;
@@ -105,7 +104,19 @@ function fireKeyDownEvent(instance, event, executeAction) {
     return args.handled;
 }
 
+function onDocumentVisibilityChange() {
+    isHiddenFocusing = document.visibilityState === 'visible';
+}
+
 module.exports = {
+    subscribeVisibilityChange: function() {
+        eventsEngine.on(document, 'visibilitychange', onDocumentVisibilityChange);
+    },
+
+    unsubscribeVisibilityChange: function() {
+        eventsEngine.off(document, 'visibilitychange', onDocumentVisibilityChange);
+    },
+
     hiddenFocus: function(element) {
         isHiddenFocusing = true;
         element.focus();
@@ -124,8 +135,10 @@ module.exports = {
             isMouseDown = true;
             $mainElement.removeClass(FOCUS_STATE_CLASS);
         });
+
         eventsEngine.on($element, 'focusin', selector, () => {
-            if(!isMouseDown && !isHiddenFocusing) {
+            const needShowOverlay = !isMouseDown && !isHiddenFocusing;
+            if(needShowOverlay) {
                 $mainElement.addClass(FOCUS_STATE_CLASS);
             }
 
