@@ -269,6 +269,12 @@ const DropDownBox = DropDownEditor.inherit({
         return this.callBase();
     },
 
+    ///#DEBUG
+    setRealDevice: function(deviceData) {
+        extend(realDevice, deviceData);
+    },
+    ///#ENDDEBUG
+
     _canShowVirtualKeyboard: function() {
         return realDevice.mac; // T845484
     },

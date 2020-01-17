@@ -529,16 +529,14 @@ QUnit.module('popup options', moduleConfig, () => {
             const instance = new DropDownBox($('#dropDownBox'), {
                 contentTemplate: () => $content
             });
-            const canShowVirtualKeyboardMock = sinon.stub(instance, '_canShowVirtualKeyboard').returns(isMac);
 
+            instance.setRealDevice({ mac: isMac });
             instance.open();
             $content.focus();
             this.clock.tick();
             $(window).trigger('scroll');
 
             assert.strictEqual(instance.option('opened'), isMac);
-
-            canShowVirtualKeyboardMock.restore();
         });
     });
 });
