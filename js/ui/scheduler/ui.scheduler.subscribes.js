@@ -792,7 +792,7 @@ const subscribes = {
             skipDateCalculation: true,
             $appointment: $appointmentElement,
             skipHoursProcessing: true,
-            skipCheckUpdate: skipCheckUpdate
+            skipCheckUpdate: this._isAppointmentRecurrence(appointmentData)
         });
         const result = {};
 

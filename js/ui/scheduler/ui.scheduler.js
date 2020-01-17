@@ -2534,7 +2534,7 @@ const Scheduler = Widget.inherit({
         let updatedStartDate = startDate;
         let appointmentStartDate;
 
-        if(typeUtils.isDefined($appointment) && (this._needUpdateAppointmentData($appointment))) {
+        if(typeUtils.isDefined($appointment) && (options.skipCheckUpdate === true || this._needUpdateAppointmentData($appointment))) {
             const apptDataCalculator = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
 
             if(typeUtils.isFunction(apptDataCalculator)) {
@@ -2544,11 +2544,11 @@ const Scheduler = Widget.inherit({
                     const coordinates = translator.locate($appointment);
                     updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
                 } else {
-                    if(this._isAppointmentRecurrence(appointmentData)) {
-                        appointmentStartDate = $appointment.data('dxAppointmentSettings') && $appointment.data('dxAppointmentSettings').startDate;
-                    }
                     if($appointment.hasClass(REDUCED_APPOINTMENT_CLASS)) {
                         appointmentStartDate = $appointment.data('dxAppointmentStartDate');
+                    }
+                    if(this._isAppointmentRecurrence(appointmentData)) {
+                        appointmentStartDate = $appointment.data('dxAppointmentSettings') && $appointment.data('dxAppointmentSettings').startDate;
                     }
 
                     if(appointmentStartDate) {
