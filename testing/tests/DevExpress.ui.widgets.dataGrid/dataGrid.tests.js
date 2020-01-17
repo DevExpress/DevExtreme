@@ -16789,6 +16789,39 @@ QUnit.test('Refresh with changesOnly and summary', function(assert) {
     assert.strictEqual($updatedCellElements.eq(1).text(), 'Sum: 500', 'cell value is updated');
 });
 
+// T851082
+QUnit.test('Row deleting should works if recalculateWhileEditing is enabled and refreshMode is repaint', function(assert) {
+    // arrange
+    const dataGrid = createDataGrid({
+        dataSource: [{ id: 1 }],
+        keyExpr: 'id',
+        editing: {
+            refreshMode: 'repaint',
+            mode: 'batch',
+            allowDeleting: true
+        },
+        summary: {
+            recalculateWhileEditing: true,
+            totalItems: [{
+                column: 'id',
+                summaryType: 'count'
+            }]
+        }
+    });
+    this.clock.tick();
+
+    // act
+    dataGrid.deleteRow(0);
+    this.clock.tick();
+
+    dataGrid.saveEditData();
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'row is removed');
+    assert.strictEqual(dataGrid.getTotalSummaryValue('id'), 0, 'summary is updated');
+});
+
 QUnit.test('Refresh with changesOnly for fixed columns', function(assert) {
     // arrange
     const dataSource = new DataSource({
