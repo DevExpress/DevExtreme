@@ -2253,11 +2253,11 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        resetRowAndPageIndices: function(alwaysRest) {
+        resetRowAndPageIndices: function() {
             const that = this;
 
             each(that._editData, function(_, editData) {
-                if(editData.pageIndex !== that._pageIndex || alwaysRest) {
+                if(editData.pageIndex !== that._pageIndex) {
                     delete editData.pageIndex;
                     delete editData.rowIndex;
                 }
@@ -2345,15 +2345,9 @@ module.exports = {
                     this.callBase();
                 },
                 reload: function(full, repaintChangesOnly) {
-                    let d;
-                    const editingController = this.getController('editing');
-
                     !repaintChangesOnly && this._editingController.refresh();
-                    d = this.callBase.apply(this, arguments);
 
-                    return d && d.done(function() {
-                        editingController.resetRowAndPageIndices(true);
-                    });
+                    return this.callBase.apply(this, arguments);
                 },
                 repaintRows: function() {
                     if(this.getController('editing').isSaving()) return;
