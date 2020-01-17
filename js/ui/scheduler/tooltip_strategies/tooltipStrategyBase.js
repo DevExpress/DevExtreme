@@ -86,7 +86,7 @@ export class TooltipStrategyBase {
             onContentReady: this._onListRender.bind(this),
             onItemClick: e => this._onListItemClick(e),
             itemTemplate: (item, index) =>
-                this._renderTemplate(this._tooltip.option('target'), item.data, item.currentData || item.data, index, item.color),
+                this._renderTemplate(item.data, item.currentData || item.data, index, item.color),
         };
     }
 
@@ -100,7 +100,7 @@ export class TooltipStrategyBase {
         return this._options.createComponent(listElement, List, this._createListOption(dataList));
     }
 
-    _renderTemplate(target, data, currentData, index, color) {
+    _renderTemplate(data, currentData, index, color) {
         const itemListContent = this._createItemListContent(data, currentData, color);
         this._options.setDefaultTemplate(
             this._getItemListTemplateName(),
@@ -111,7 +111,7 @@ export class TooltipStrategyBase {
             }));
 
         const template = this._options.getAppointmentTemplate(this._getItemListTemplateName() + 'Template');
-        return this._createFunctionTemplate(template, data, this._options.getTargetedAppointmentData(data, target), index);
+        return this._createFunctionTemplate(template, data, currentData, index); // TODO this._options.getTargetedAppointmentData(data, target)
     }
 
     _createFunctionTemplate(template, data, targetData, index) {
@@ -151,7 +151,8 @@ export class TooltipStrategyBase {
         $itemElement.append(this._createItemListInfo(this._options.getTextAndFormatDate(data, currentData)));
 
         if(!data.disabled && (editing && editing.allowDeleting === true || editing === true)) {
-            $itemElement.append(this._createDeleteButton(data, currentData));
+            const singleAppointmentData = this._options.getSingleAppointmentData(data, this._tooltip.option('target')); // TODO: temporary solution fox fix T848058, more information in the ticket
+            $itemElement.append(this._createDeleteButton(data, singleAppointmentData));
         }
 
         return $itemElement;

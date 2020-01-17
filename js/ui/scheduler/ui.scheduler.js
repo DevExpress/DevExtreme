@@ -1465,18 +1465,26 @@ const Scheduler = Widget.inherit({
     },
 
     _getAppointmentTooltipOptions: function() {
-        const that = this;
         return {
-            createComponent: that._createComponent.bind(that),
-            container: that.$element(),
-            getScrollableContainer: that.getWorkSpaceScrollableContainer.bind(that),
-            setDefaultTemplate: that.setDefaultTemplate.bind(that),
-            getAppointmentTemplate: that._getAppointmentTemplate.bind(that),
-            showAppointmentPopup: that.showAppointmentPopup.bind(that),
-            getTextAndFormatDate: (data, currentData, format) => that.fire('getTextAndFormatDate', data, currentData, format),
-            checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
-            getTargetedAppointmentData: (data, appointment) => that.fire('getTargetedAppointmentData', data, appointment),
-            isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
+            createComponent: this._createComponent.bind(this),
+            container: this.$element(),
+            getScrollableContainer: this.getWorkSpaceScrollableContainer.bind(this),
+            setDefaultTemplate: this.setDefaultTemplate.bind(this),
+            getAppointmentTemplate: this._getAppointmentTemplate.bind(this),
+            showAppointmentPopup: this.showAppointmentPopup.bind(this),
+            getTextAndFormatDate: (data, currentData, format) => this.fire('getTextAndFormatDate', data, currentData, format),
+            checkAndDeleteAppointment: this.checkAndDeleteAppointment.bind(this),
+            getTargetedAppointmentData: (data, appointment) => this.fire('getTargetedAppointmentData', data, appointment),
+            isAppointmentInAllDayPanel: this.isAppointmentInAllDayPanel.bind(this),
+            getSingleAppointmentData: (appointmentData, targetElement) => { // TODO: temporary solution fox fix T848058, more information in the ticket
+                const $appointment = $(targetElement);
+
+                return this._getSingleAppointmentData(appointmentData, {
+                    data: appointmentData,
+                    target: $appointment.get(0),
+                    $appointment: $appointment
+                });
+            }
         };
     },
 
