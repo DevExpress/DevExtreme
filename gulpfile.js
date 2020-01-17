@@ -52,7 +52,7 @@ function createMainBatch() {
     }
     tasks.push('style-compiler-batch', 'misc-batch');
     return DOCKER_CI
-        ? gulp.parallel(tasks)
+        ? gulp.series(tasks)
         : (callback) => multiProcess(tasks, callback, true);
 }
 
