@@ -21,7 +21,7 @@ class FileManagerFileActionsButton extends Widget {
 
         this._button = this._createComponent($button, Button, {
             icon: 'overflow',
-            stylingMode: 'icon',
+            stylingMode: 'text',
             onClick: e => this._raiseClick(e)
         });
 
