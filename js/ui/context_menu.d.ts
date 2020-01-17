@@ -2,10 +2,7 @@ import {
     positionConfig
 } from '../animation/position';
 
-import {
-    JQueryEventObject,
-    JQueryPromise
-} from '../common';
+import '../jquery_augmentation';
 
 import {
     dxElement

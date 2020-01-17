@@ -1,6 +1,4 @@
-import {
-    JQueryPromise
-} from '../common';
+import '../jquery_augmentation';
 
 export interface Query {
     /**

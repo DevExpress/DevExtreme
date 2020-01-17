@@ -1,6 +1,4 @@
-import {
-    JQueryEventObject
-} from '../common';
+import '../jquery_augmentation';
 
 import {
     dxElement
