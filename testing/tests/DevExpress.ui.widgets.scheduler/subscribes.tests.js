@@ -1153,7 +1153,6 @@ QUnit.test('getTextAndFormatDate with format TIME should work correct', function
         views: ['week'],
         currentView: 'week'
     });
-    this.clock.tick(300);
 
     assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data, 'TIME'), {
         formatDate: '10:00 AM - 11:00 AM',
@@ -1173,7 +1172,6 @@ QUnit.test('getTextAndFormatDate, appointment with allDay option, without format
         views: ['week'],
         currentView: 'week'
     });
-    this.clock.tick(300);
 
     assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
         formatDate: 'March 1',
@@ -1197,7 +1195,6 @@ QUnit.test('getTextAndFormatDate, with expr fields', function(assert) {
         endDateExpr: 'EndDate',
         allDayExpr: 'AllDay',
     });
-    this.clock.tick(300);
 
     assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
         formatDate: 'March 1',
@@ -1216,7 +1213,6 @@ QUnit.test('getTextAndFormatDate, simple appointment, without format', function(
         views: ['week'],
         currentView: 'week'
     });
-    this.clock.tick(300);
 
     assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
         formatDate: '10:00 AM - 11:00 AM',
@@ -1235,7 +1231,6 @@ QUnit.test('getTextAndFormatDate, simple appointment, month view, without format
         views: ['month'],
         currentView: 'month'
     });
-    this.clock.tick(300);
 
     assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
         formatDate: 'March 1, 10:00 AM - 11:00 AM',

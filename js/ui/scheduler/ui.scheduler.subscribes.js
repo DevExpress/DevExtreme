@@ -264,9 +264,8 @@ const subscribes = {
     },
 
     _getAppointmentFields(data, arrayOfFields) {
-        const that = this;
         return arrayOfFields.reduce((accumulator, field) => {
-            accumulator[field] = that.fire('getField', field, data);
+            accumulator[field] = this.fire('getField', field, data);
             return accumulator;
         }, {});
     },
