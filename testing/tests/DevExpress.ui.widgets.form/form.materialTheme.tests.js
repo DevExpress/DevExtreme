@@ -36,12 +36,47 @@ function checkPosition($container, $element, expected) {
     QUnit.assert.roughEqual(elementRect.height, expected.height, epsilon, 'element height');
 }
 
+function checkOneColumnTwoItemsLayout($form) {
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
+}
+
+function checkOneColumnTreeItemsLayout($form) {
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 245 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
+    checkPosition($form, $form.find('[for$="item3"]'), { top: 170, left: 0, width: 1000, height: 34 });
+    checkPosition($form, $form.find('[id$="item3"]'), { top: 204, left: 0, width: 1000, height: 31 });
+}
+
+function checkTwoColumnsTwoItemsLayout($form) {
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
+}
+
+function checkTwoColumnsTreeItemsLayout($form) {
+    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
+    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
+    checkPosition($form, $form.find('[for$="item3"]'), { top: 85, left: 0, width: 480, height: 34 });
+    checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 480, height: 31 });
+}
+
 function testOrSkip(name, callback) {
     if(!browser.chrome) {
-        QUnit.skip(name + ' - skip test for firefox and ie', function() {});
-    } else {
-        QUnit.test(name, callback);
+        return;
     }
+
+    QUnit.test(name, callback);
 }
 
 testOrSkip('1 column -> [item1]', function(assert) {
@@ -53,11 +88,7 @@ testOrSkip('1 column -> [item1]', function(assert) {
 
 testOrSkip('1 column -> [item1, item2]', function(assert) {
     const $form = createForm(1, ['item1', 'item2']);
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
+    checkOneColumnTwoItemsLayout($form);
 });
 
 testOrSkip('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
@@ -67,11 +98,7 @@ testOrSkip('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
             itemType: 'group',
             items: ['item2']
         }]);
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
+    checkOneColumnTwoItemsLayout($form);
 });
 
 testOrSkip('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(assert) {
@@ -85,22 +112,12 @@ testOrSkip('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(ass
             }]
         }
     ]);
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
+    checkOneColumnTwoItemsLayout($form);
 });
 
 testOrSkip('1 column -> [item1, item2, item3]', function(assert) {
     const $form = createForm(1, ['item1', 'item2', 'item3']);
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 245 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
-    checkPosition($form, $form.find('[for$="item3"]'), { top: 170, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item3"]'), { top: 204, left: 0, width: 1000, height: 31 });
+    checkOneColumnTreeItemsLayout($form);
 });
 
 testOrSkip('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
@@ -115,13 +132,7 @@ testOrSkip('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', functi
         },
         'item3'
     ]);
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 245 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
-    checkPosition($form, $form.find('[for$="item3"]'), { top: 170, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item3"]'), { top: 204, left: 0, width: 1000, height: 31 });
+    checkOneColumnTreeItemsLayout($form);
 });
 
 testOrSkip('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item3]', function(assert) {
@@ -141,13 +152,7 @@ testOrSkip('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item
         },
         'item3'
     ]);
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 245 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
-    checkPosition($form, $form.find('[for$="item3"]'), { top: 170, left: 0, width: 1000, height: 34 });
-    checkPosition($form, $form.find('[id$="item3"]'), { top: 204, left: 0, width: 1000, height: 31 });
+    checkOneColumnTreeItemsLayout($form);
 });
 
 testOrSkip('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
@@ -204,11 +209,7 @@ testOrSkip('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', fun
 
 testOrSkip('2 columns -> [item1, item2]', function(assert) {
     const $form = createForm(2, ['item1', 'item2']);
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
+    checkTwoColumnsTwoItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
@@ -219,11 +220,7 @@ testOrSkip('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
             items: ['item2']
         }
     ]);
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
+    checkTwoColumnsTwoItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(assert) {
@@ -237,11 +234,7 @@ testOrSkip('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(a
             }]
         }
     ]);
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
+    checkTwoColumnsTwoItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(assert) {
@@ -255,11 +248,7 @@ testOrSkip('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(a
             items: ['item2']
         }
     ]);
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
+    checkTwoColumnsTwoItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }]]', function(assert) {
@@ -279,11 +268,7 @@ testOrSkip('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group 
             }]
         }
     ]);
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
+    checkTwoColumnsTwoItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
@@ -298,13 +283,7 @@ testOrSkip('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', funct
         },
         'item3'
     ]);
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
-    checkPosition($form, $form.find('[for$="item3"]'), { top: 85, left: 0, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 480, height: 31 });
+    checkTwoColumnsTreeItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }], { group [{ item3 }] }]', function(assert) {
@@ -329,14 +308,7 @@ testOrSkip('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group 
             items: ['item3']
         }
     ]);
-
-    checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
-    checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
-    checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
-    checkPosition($form, $form.find('[for$="item3"]'), { top: 85, left: 0, width: 480, height: 34 });
-    checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 480, height: 31 });
+    checkTwoColumnsTreeItemsLayout($form);
 });
 
 testOrSkip('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group colspan:3 [{ item3 }] ]', function(assert) {
@@ -357,6 +329,7 @@ testOrSkip('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group cols
             items: ['item3']
         }
     ]);
+
     checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
     checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
     checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
