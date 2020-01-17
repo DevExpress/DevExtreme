@@ -3849,6 +3849,37 @@ QUnit.test('column headers visibility when hide removing row in batch editing mo
     assert.strictEqual($dataGrid.find('.dx-datagrid-headers').css('paddingRight'), '0px', 'no headers right padding');
 });
 
+// T852171
+QUnit.test('numberbox input right and left paddings should be equal if spin buttons are showed', function(assert) {
+    // arrange
+    const $dataGrid = $('#dataGrid').dxDataGrid({
+        dataSource: [{ field: 30 }],
+        loadingTimeout: undefined,
+        editing: {
+            mode: 'cell',
+            allowUpdating: true
+        },
+        columns: [{
+            dataField: 'field',
+            dataType: 'number',
+            editorOptions: {
+                showSpinButtons: true
+            }
+        }]
+    });
+
+    const dataGrid = $dataGrid.dxDataGrid('instance');
+
+    // act
+    dataGrid.editCell(0, 0);
+
+    const $input = $($dataGrid.find('.dx-editor-cell').find('.dx-texteditor-input'));
+
+    // assert
+    assert.equal($input.length, 1, 'input');
+    assert.equal($input.css('padding-right'), $input.css('padding-left'), 'paddings are equal');
+});
+
 // T712073
 QUnit.test('Delete two added rows after selection', function(assert) {
     // arrange, act
@@ -12656,14 +12687,14 @@ QUnit.testInActiveWindow('Focus should be correct after change value and click t
     assert.equal($(dataGrid.getRowElement(1)).find(':focus').length, 1, 'focus in second row');
 });
 
-// T819067
-QUnit.testInActiveWindow('Datebox editor\'s enter key handler should be replaced by noop', function(assert) {
+QUnit.testInActiveWindow('Datebox editor\'s enter key handler should be replaced by noop (T819067)', function(assert) {
     if(devices.real().deviceType !== 'desktop') {
         assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
         return;
     }
 
     // arrange
+    const rowsViewWrapper = dataGridWrapper.rowsView;
     const dataGrid = createDataGrid({
         dataSource: [{ dateField: '2000/01/01 12:42' }],
         editing: {
@@ -12672,22 +12703,59 @@ QUnit.testInActiveWindow('Datebox editor\'s enter key handler should be replaced
         },
         columns: [{
             dataField: 'dateField',
-            dataType: 'date',
+            dataType: 'date'
         }]
     });
-    let dateBox;
-    let enterKeyHandler;
-
     this.clock.tick();
 
     // act
     $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
 
-    dateBox = dataGrid.$element().find('.dx-datebox').dxDateBox('instance');
-    enterKeyHandler = dateBox._supportedKeys().enter;
-
     // assert
-    assert.equal(enterKeyHandler, commonUtils.noop, 'dateBox enter key handler was replaced');
+    const dateBox = rowsViewWrapper.getEditor(0, 0).dxDateBox('instance');
+    assert.equal(dateBox._enterHandler, commonUtils.noop, 'dateBox enter key handler for mask is replaced');
+});
+
+QUnit.testInActiveWindow('Datebox editor\'s value should be selected from calendar by keyboard (T848039)', function(assert) {
+    if(devices.real().deviceType !== 'desktop') {
+        assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+        return;
+    }
+
+    [true, false].forEach(useMaskBehavior => {
+        // arrange
+        const rowsViewWrapper = dataGridWrapper.rowsView;
+        const dataGrid = createDataGrid({
+            dataSource: [{ dateField: '01/01/2000' }],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            columns: [{
+                dataField: 'dateField',
+                dataType: 'date',
+                editorOptions: {
+                    useMaskBehavior: useMaskBehavior
+                }
+            }]
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.editCell(0, 0);
+        this.clock.tick();
+
+        const instance = rowsViewWrapper.getEditor(0, 0).dxDateBox('instance');
+        const keyboard = keyboardMock(rowsViewWrapper.getEditorInput(0, 0));
+
+        instance.open();
+        keyboard
+            .keyDown('left')
+            .press('enter');
+
+        // assert
+        assert.equal(rowsViewWrapper.getEditorInput(0, 0).val(), '12/31/1999', `dateBox value is changed if useMaskBehavior is ${useMaskBehavior}`);
+    });
 });
 
 QUnit.testInActiveWindow('dataGrid resize generates exception if fixed column presents and validation applied in cell edit mode (T629168)', function(assert) {

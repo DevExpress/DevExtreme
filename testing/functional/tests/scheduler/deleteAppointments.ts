@@ -9,6 +9,7 @@ const scheduler = new Scheduler("#container");
 
 test(`Recurrence appointments should be deleted by click on 'delete' button`, async t => {
     await t
+        .setTestSpeed(0.5)
         .expect(scheduler.getAppointmentCount()).eql(6)
         .click(scheduler.getAppointment("Text", 3).element)
 
