@@ -153,14 +153,22 @@ function isConjunctiveOperator(condition) {
     return /^(and|&&|&)$/i.test(condition);
 }
 
+function getKeyValue(keyName, key) {
+    let value;
+    keyName.split('.').forEach((name) => {
+        value = value ? value[name] : key[name];
+    });
+
+    return value;
+}
+
 const keysEqual = function(keyExpr, key1, key2) {
     if(Array.isArray(keyExpr)) {
-        const names = map(key1, function(v, k) { return k; });
-        let name;
-        for(let i = 0; i < names.length; i++) {
-            name = names[i];
+        for(let i = 0; i < keyExpr.length; i++) {
+            const key1Value = getKeyValue(keyExpr[i], key1);
+            const key2Value = getKeyValue(keyExpr[i], key2);
             // eslint-disable-next-line eqeqeq
-            if(toComparable(key1[name], true) != toComparable(key2[name], true)) {
+            if(toComparable(key1Value, true) != toComparable(key2Value, true)) {
                 return false;
             }
         }

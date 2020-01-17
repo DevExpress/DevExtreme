@@ -16,6 +16,10 @@ QUnit.test('non-strict comparison is used', function(assert) {
     assert.ok(keysEqual(['a', 'b'], { a: 1, b: 2 }, { a: '1', b: '2' }));
 });
 
+QUnit.test('compare compound keys', function(assert) {
+    assert.ok(keysEqual(['a.b', 'a.c'], { a: { b: 1, c: 2 } }, { a: { b: '1', c: '2' } }));
+});
+
 QUnit.test('toComparable is used for compound keys', function(assert) {
     const guid1 = new Guid();
     const guid2 = new Guid(guid1);
