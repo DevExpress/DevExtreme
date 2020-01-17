@@ -20,12 +20,9 @@ class FileManagerFileActionsButton extends Widget {
             .addClass(FILE_MANAGER_FILE_ACTIONS_BUTTON);
 
         this._button = this._createComponent($button, Button, {
-            text: '&vellip;',
-            stylingMode: 'text',
-            onClick: e => this._raiseClick(e),
-            template: () => {
-                return $('<i>').html('&vellip;');
-            }
+            icon: 'overflow',
+            stylingMode: 'icon',
+            onClick: e => this._raiseClick(e)
         });
 
         super._initMarkup();
