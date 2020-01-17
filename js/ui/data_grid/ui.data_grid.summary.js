@@ -1020,7 +1020,7 @@ gridCore.registerModule('summary', {
             editing: (function() {
                 return {
                     _refreshSummary: function() {
-                        if(recalculateWhileEditing(this)) {
+                        if(recalculateWhileEditing(this) && !this.isSaving()) {
                             this._dataController.refresh({
                                 load: true,
                                 changesOnly: true
