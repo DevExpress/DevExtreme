@@ -261,13 +261,26 @@ const ValidatingController = modules.Controller.inherit((function() {
                     options.brokenRule.columnIndex = column.index;
                     options.brokenRule.column = column;
                 }
-                // test
-                $container && options.status === VALIDATION_STATUS.pending && editingController.showHighlighting({
-                    $cell: $container,
-                    skipValidation: true
-                });
-                // endTest
-                if($container && !this.getDisableApplyValidationResults()) {
+                if($container) {
+                    let disableValidationResult = this.getDisableApplyValidationResults();
+                    const validationInfo = this.getCellValidationInfo({
+                        keyValue: parameters.key,
+                        columnIndex: column.index
+                    });
+                    if(validationInfo) {
+                        if(disableValidationResult && options.status === VALIDATION_STATUS.pending) {
+                            validationInfo.disabledPendingId = options.id;
+                        }
+                        /* TO-DO else if(options.status !== VALIDATION_STATUS.pending && validationInfo.disabledPendingId === options.id) {
+                            disableValidationResult = true;
+                        }*/
+                        if(options.status !== VALIDATION_STATUS.pending) {
+                            delete validationInfo.disabledPendingId;
+                        }
+                    }
+                    if(disableValidationResult) {
+                        return;
+                    }
                     if(!options.isValid) {
                         const $focus = $container.find(':focus');
                         editingController.showHighlighting({
@@ -279,9 +292,17 @@ const ValidatingController = modules.Controller.inherit((function() {
                             eventsEngine.trigger($focus, pointerEvents.down);
                         }
                     }
+                    if(options.status === VALIDATION_STATUS.pending) {
+                        editingController.showHighlighting({
+                            $cell: $container,
+                            skipValidation: true
+                        });
+                        renderCellPendingIndicator();
+                    } else {
+                        disposeCellPendingIndicator();
+                    }
                     $container.toggleClass(this.addWidgetPrefix(INVALIDATE_CLASS), !options.isValid);
                 }
-                $container && options.status === 'pending' ? renderCellPendingIndicator() : disposeCellPendingIndicator();
             };
             const getValue = () => {
                 const value = column.calculateCellValue(editData.data || {});
@@ -1119,7 +1140,11 @@ module.exports = {
                             }
                             validatingController.setValidator(validator);
 
-                            if(validator.option('adapter').getValue() !== undefined) {
+                            // if(validator.option('adapter').getValue() !== undefined) {
+                            // test
+                            const shouldValidate = rowOptions && rowOptions.isNewRow ? validatingController.isRowValidated(rowOptions.key) : true;
+                            if(shouldValidate) {
+                            // endTest
                                 // test
                                 when(validatingController.validateCell(validator)).done((validationResult) => {
                                     const currentValidator = validatingController.getValidator();
