@@ -171,7 +171,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                             if(that.isRowFocused(key)) {
                                 d.resolve(that._getFocusedRowIndexByKey(key));
                             } else {
-                                that._navigateToVisibleRow(key, d, needFocusRow);
+                                that._navigateTo(key, d, needFocusRow);
                             }
                         }).fail(d.reject);
                     } else {
@@ -199,10 +199,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             if(needFocusRow) {
                 this._triggerUpdateFocusedRow(key, deferred);
             } else {
-                const rowsView = this.getView('rowsView');
-                const rowIndex = this.getController('data').getRowIndexByKey(key);
-                const rowElement = rowsView.getRow(rowIndex);
-                rowsView.scrollToElementVertically(rowElement);
+                this.getView('rowsView').scrollToRowElement(key);
             }
         },
         _navigateToVirtualRow: function(key, deferred, needFocusRow) {
@@ -241,9 +238,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                         focusedRowKey: key
                     });
                 } else {
-                    const rowIndex = dataController.getRowIndexByKey(key);
-                    const rowsView = this.getView('rowsView');
-                    rowsView.scrollToElementVertically(rowsView.getRow(rowIndex));
+                    this.getView('rowsView').scrollToRowElement(key);
                 }
 
                 deferred && deferred.resolve(focusedRowIndex);
@@ -732,33 +727,28 @@ module.exports = {
                     const tabIndex = that.option('tabIndex') || 0;
                     let rowIndex = that._dataController.getRowIndexByKey(focusedRowKey);
                     let columnIndex = that.option('focusedColumnIndex');
-                    let rowElement = that._findRowElementForTabIndex();
+                    const $row = that._findRowElementForTabIndex();
 
-                    if(rowElement) {
-                        that._scrollToFocusOnResize = that._scrollToFocusOnResize || function() {
-                            rowElement = that._findRowElementForTabIndex();
-                            if(rowElement) {
-                                that.scrollToElementVertically(rowElement);
-                                that.resizeCompleted.remove(that._scrollToFocusOnResize);
-                            }
-                        };
+                    that._scrollToFocusOnResize = that._scrollToFocusOnResize || function() {
+                        that.scrollToElementVertically(that._findRowElementForTabIndex());
+                        that.resizeCompleted.remove(that._scrollToFocusOnResize);
+                    };
 
-                        $(rowElement).attr('tabIndex', tabIndex);
+                    $row.attr('tabIndex', tabIndex);
 
-                        if(rowIndex >= 0) {
-                            if(columnIndex < 0) {
-                                columnIndex = 0;
-                            }
+                    if(rowIndex >= 0) {
+                        if(columnIndex < 0) {
+                            columnIndex = 0;
+                        }
 
-                            rowIndex += that.getController('data').getRowIndexOffset();
-                            that.getController('keyboardNavigation').setFocusedCellPosition(rowIndex, columnIndex);
+                        rowIndex += that.getController('data').getRowIndexOffset();
+                        that.getController('keyboardNavigation').setFocusedCellPosition(rowIndex, columnIndex);
 
-                            const dataSource = that.component.getController('data')._dataSource;
-                            const operationTypes = dataSource && dataSource.operationTypes();
-                            if(operationTypes && !operationTypes.paging) {
-                                that.resizeCompleted.remove(that._scrollToFocusOnResize);
-                                that.resizeCompleted.add(that._scrollToFocusOnResize);
-                            }
+                        const dataSource = that.component.getController('data')._dataSource;
+                        const operationTypes = dataSource && dataSource.operationTypes();
+                        if(operationTypes && !operationTypes.paging) {
+                            that.resizeCompleted.remove(that._scrollToFocusOnResize);
+                            that.resizeCompleted.add(that._scrollToFocusOnResize);
                         }
                     }
                 },
@@ -768,13 +758,19 @@ module.exports = {
                     return $(this.getRowElement(rowIndex >= 0 ? rowIndex : 0));
                 },
 
-                scrollToElementVertically: function($element) {
+                scrollToRowElement: function(key) {
+                    const rowIndex = this.getController('data').getRowIndexByKey(key);
+                    const $row = $(this.getRow(rowIndex));
+                    this.scrollToElementVertically($row);
+                },
+
+                scrollToElementVertically: function($row) {
                     const scrollable = this.getScrollable();
                     if(scrollable) {
-                        const position = scrollable.getScrollElementPosition($element, 'vertical');
+                        const position = scrollable.getScrollElementPosition($row, 'vertical');
                         scrollable.scrollTo({ top: position });
                     }
-                }
+                },
             }
         }
     }

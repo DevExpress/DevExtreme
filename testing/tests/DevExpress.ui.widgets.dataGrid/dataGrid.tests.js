@@ -4415,6 +4415,38 @@ QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \
     assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, 'navigated row is visible');
 });
 
+['standard', 'infinite', 'virtual'].forEach((scrollingMode) => {
+    ['standard', 'virtual'].forEach((columnRenderingMode) => {
+        QUnit.test(`Grid should not scroll top after navigate to row on the same page if scrolling.mode is ${scrollingMode} and scrolling.rowRenderingMode is ${columnRenderingMode} (T836612)`, function(assert) {
+            // arrange
+            const data = [];
+
+            for(let i = 0; i < 100; ++i) {
+                data.push({ id: i });
+            }
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 200,
+                keyExpr: 'id',
+                dataSource: data,
+                scrolling: {
+                    mode: 'virtual',
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            // act
+            dataGrid.navigateToRow(35);
+            dataGrid.navigateToRow(20);
+
+            // assert
+            assert.equal(dataGrid.pageIndex(), 1, 'Page index');
+        });
+    });
+});
+
 QUnit.test('DataGrid - Focus row by visible content in \'rowRenderingMode\' should not render rows (T820296)', function(assert) {
     // arrange
     const data = [];
