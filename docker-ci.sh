@@ -139,6 +139,8 @@ function run_test_themebuilder {
 }
 
 function run_test_functional {
+	export DEVEXTREME_QUNIT_CI=true
+	
     npm i
     npm run build
 
