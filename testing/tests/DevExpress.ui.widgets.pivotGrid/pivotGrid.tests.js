@@ -2563,7 +2563,7 @@ QUnit.test('resize when columns stretched to less width', function(assert) {
 
 QUnit.test('no scroll after drawing data', function(assert) {
     const pivotGrid = createPivotGrid({
-        width: 400,
+        width: 410,
 
         dataSource: {
             rows: [],
