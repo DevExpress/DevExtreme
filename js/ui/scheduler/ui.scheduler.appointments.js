@@ -332,19 +332,15 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderAppointmentTemplate: function($container, data, model) {
-        let startDate = model.appointmentData.settings ? new Date(this.invoke('getField', 'startDate', model.appointmentData.settings)) : (data.recurrenceRule ? model.targetedAppointmentData.startDate : data.startDate);
-        let endDate = model.appointmentData.settings ? new Date(this.invoke('getField', 'endDate', model.appointmentData.settings)) : (data.recurrenceRule ? model.targetedAppointmentData.endDate : data.endDate);
-
-        if(isNaN(startDate) || isNaN(endDate)) {
-            startDate = data.startDate;
-            endDate = data.endDate;
-        }
-
-        var currentData = extend(data, { startDate: startDate, endDate: endDate });
-        var formatText = this.invoke('getTextAndFormatDate', currentData, currentData, 'TIME');
+        const formatText = this.invoke(
+            'getTextAndFormatDate',
+            model.appointmentData,
+            model.appointmentData.settings || (data.recurrenceRule && model.targetedAppointmentData) || {},
+            'TIME'
+        );
 
         $('<div>')
-            .text(this.invoke('createAppointmentTitle', data))
+            .text(formatText.text)
             .addClass(APPOINTMENT_TITLE_CLASS)
             .appendTo($container);
 
@@ -354,19 +350,17 @@ const SchedulerAppointments = CollectionWidget.inherit({
             }
         }
 
-        const recurrenceRule = data.recurrenceRule;
-        const allDay = data.allDay;
         const $contentDetails = $('<div>').addClass(APPOINTMENT_CONTENT_DETAILS_CLASS);
 
         $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(formatText.formatDate).appendTo($contentDetails);
 
         $contentDetails.appendTo($container);
 
-        if(recurrenceRule) {
+        if(data.recurrenceRule) {
             $('<span>').addClass(RECURRING_ICON_CLASS + ' dx-icon-repeat').appendTo($container);
         }
 
-        if(allDay) {
+        if(data.allDay) {
             $('<div>')
                 .text(' ' + messageLocalization.format('dxScheduler-allDay') + ': ')
                 .addClass(ALL_DAY_CONTENT_CLASS)
