@@ -34,7 +34,7 @@ function run_ts {
 }
 
 function run_test {
-    export DEVEXTREME_QUNIT_CI=true
+    export DEVEXTREME_TEST_CI=true
 
     local port=`node -e "console.log(require('./ports.json').qunit)"`
     local url="http://localhost:$port/run?notimers=true"
@@ -139,6 +139,8 @@ function run_test_themebuilder {
 }
 
 function run_test_functional {
+    export DEVEXTREME_TEST_CI=true
+
     npm i
     npm run build
 
