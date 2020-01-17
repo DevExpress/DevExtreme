@@ -28,17 +28,7 @@ const MULTI_ROW_HEADER_CLASS = 'dx-header-multi-row';
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.showColumnHeaders
-             * @type boolean
-             * @default true
-             */
             showColumnHeaders: true,
-            /**
-            * @name GridBaseOptions.cellHintEnabled
-            * @type boolean
-            * @default true
-            */
             cellHintEnabled: true
         };
     },

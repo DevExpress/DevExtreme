@@ -8,71 +8,13 @@ import { SharedMethods, formatFunctionInvocationUrl, escapeServiceOperationParam
 import { when, Deferred } from '../../core/utils/deferred';
 import './query_adapter';
 
-/**
-* @name ODataContext
-* @type object
-* @module data/odata/context
-* @export default
-*/
 const ODataContext = Class.inherit({
 
     ctor(options) {
-        /**
-         * @name ODataContextOptions.url
-         * @type string
-         */
-        /**
-         * @name ODataContextOptions.beforeSend
-         * @type function
-         * @type_function_param1 options:object
-         * @type_function_param1_field1 url:string
-         * @type_function_param1_field2 async:boolean
-         * @type_function_param1_field3 method:string
-         * @type_function_param1_field4 timeout:number
-         * @type_function_param1_field5 params:object
-         * @type_function_param1_field6 payload:object
-         * @type_function_param1_field7 headers:object
-         */
-        /**
-         * @name ODataContextOptions.jsonp
-         * @type boolean
-         * @default false
-         */
-        /**
-         * @name ODataContextOptions.version
-         * @type number
-         * @default 2
-         * @acceptValues 2|3|4
-         */
-        /**
-         * @name ODataContextOptions.withCredentials
-         * @type boolean
-         * @default false
-         */
-        /**
-         * @name ODataContextOptions.filterToLower
-         * @type boolean
-         */
-        /**
-         * @name ODataContextOptions.deserializeDates
-         * @type boolean
-         */
         this._extractServiceOptions(options);
 
-        /**
-         * @name ODataContextOptions.errorHandler
-         * @type function
-         * @type_function_param1 e:Error
-         * @type_function_param1_field1 httpStatus:number
-         * @type_function_param1_field2 errorDetails:object
-         * @type_function_param1_field3 requestOptions:object
-         */
         this._errorHandler = options.errorHandler;
 
-        /**
-         * @name ODataContextOptions.entities
-         * @type object
-         */
         each(options.entities || [], (entityAlias, entityOptions) => {
             this[entityAlias] = new ODataStore(extend(
                 {},
@@ -85,25 +27,10 @@ const ODataContext = Class.inherit({
         });
     },
 
-    /**
-     * @name ODataContextmethods.get
-     * @publicName get(operationName, params)
-     * @param1 operationName:string
-     * @param2 params:object
-     * @return Promise<any>
-     */
     get(operationName, params) {
         return this.invoke(operationName, params, 'GET');
     },
 
-    /**
-     * @name ODataContextmethods.invoke
-     * @publicName invoke(operationName, params, httpMethod)
-     * @param1 operationName:string
-     * @param2 params:object
-     * @param3 httpMethod:object
-     * @return Promise<void>
-     */
     invoke(operationName, params = {}, httpMethod = 'POST') {
         httpMethod = httpMethod.toLowerCase();
 
@@ -135,13 +62,6 @@ const ODataContext = Class.inherit({
         return d.promise();
     },
 
-    /**
-     * @name ODataContextmethods.objectLink
-     * @publicName objectLink(entityAlias, key)
-     * @param1 entityAlias:string
-     * @param2 key:object|string|number
-     * @return object
-     */
     objectLink(entityAlias, key) {
         const store = this[entityAlias];
         if(!store) {

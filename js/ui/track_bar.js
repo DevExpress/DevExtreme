@@ -10,26 +10,11 @@ const TRACKBAR_CONTAINER_CLASS = 'dx-trackbar-container';
 const TRACKBAR_RANGE_CLASS = 'dx-trackbar-range';
 const TRACKBAR_WRAPPER_CLASS = 'dx-trackbar-wrapper';
 
-/**
-* @name dxTrackBar
-* @inherits Editor
-* @hidden
-*/
 const TrackBar = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxTrackBarOptions.min
-            * @type number
-            * @default 0
-            */
             min: 0,
 
-            /**
-            * @name dxTrackBarOptions.max
-            * @type number
-            * @default 100
-            */
             max: 100,
 
             value: 0
