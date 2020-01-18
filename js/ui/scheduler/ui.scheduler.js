@@ -2540,7 +2540,7 @@ const Scheduler = Widget.inherit({
             if(typeUtils.isFunction(apptDataCalculator)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
             } else {
-                if(options.appointmentWasResized) {
+                if(options.isAppointmentResized) {
                     const coordinates = translator.locate($appointment);
                     updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
                 } else {

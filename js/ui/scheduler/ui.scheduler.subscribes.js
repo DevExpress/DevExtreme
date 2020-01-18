@@ -138,7 +138,7 @@ const subscribes = {
     updateAppointmentAfterResize: function(options) {
         const targetAppointment = options.target;
 
-        options.appointmentWasResized = true;
+        options.isAppointmentResized = true;
 
         const singleAppointment = this._getSingleAppointmentData(targetAppointment, options);
         const startDate = this.fire('getField', 'startDate', singleAppointment);
