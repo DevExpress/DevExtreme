@@ -1238,6 +1238,27 @@ QUnit.test('getTextAndFormatDate, simple appointment, month view, without format
     });
 });
 
+QUnit.test('getTextAndFormatData, recurrance appointment with different data', function(assert) {
+    const initialData = {
+        text: 'Appointment test text',
+        startDate: new Date(2018, 2, 1, 10),
+        endDate: new Date(2018, 2, 1, 11),
+    };
+    const dataRecur = {
+        startDate: new Date(2018, 2, 2, 10),
+        endDate: new Date(2018, 2, 2, 11),
+    };
+    this.createInstance({
+        dataSource: [initialData],
+        views: ['month'],
+        currentView: 'month'
+    });
+    assert.deepEqual(this.instance.fire('getTextAndFormatDate', initialData, dataRecur), {
+        formatDate: 'March 2, 10:00 AM - 11:00 AM',
+        text: 'Appointment test text'
+    });
+});
+
 QUnit.module('Agenda', {
     beforeEach: function() {
         this.createInstance = function(options) {
