@@ -1830,15 +1830,15 @@ QUnit.test('Text decoration', function(assert) {
             assert.roughEqual(noDisplayDecoration.args.y, 186.16, 0.5, 'noDisplay line-through decoration line y');
             assert.equal(noDisplayDecoration.args.height, 1, 'noDisplay line-through decoration line height');
             assert.strictEqual(noDisplayDecoration.args.width, 100, ' noDisplay line-through decoration line width');
-            assert.noStrictEqual(that.drawnElements[14].type, 'stroke', 'noDisplay line-through decoration has no stroke');
-            assert.noStrictEqual(that.drawnElements[14].type, 'fill', 'noDisplay line-through decoration has no fill');
+            assert.notStrictEqual(that.drawnElements[14].type, 'stroke', 'noDisplay line-through decoration has no stroke');
+            assert.notStrictEqual(that.drawnElements[14].type, 'fill', 'noDisplay line-through decoration has no fill');
 
             // noFill (only stroke) decoration assert
             assert.equal(noFillDecoration.args.x, 250, 'noFill line-through decoration line x');
             assert.roughEqual(noFillDecoration.args.y, 186.16, 0.5, 'noFill line-through decoration line y');
             assert.equal(noFillDecoration.args.height, 1, 'noFill line-through decoration line height');
             assert.strictEqual(noFillDecoration.args.width, 100, ' noFill line-through decoration line width');
-            assert.noStrictEqual(that.drawnElements[17].type, 'stroke', 'noFill line-through decoration has stroke');
+            assert.notStrictEqual(that.drawnElements[17].type, 'stroke', 'noFill line-through decoration has stroke');
         } finally {
             done();
         }

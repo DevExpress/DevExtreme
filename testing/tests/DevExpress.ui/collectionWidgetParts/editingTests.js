@@ -901,7 +901,7 @@ module('selecting of item keys', {
         assert.deepEqual(instance.option('selectedItems'), [ { id: 1 }, { id: 2 }], 'selectedItems is correct');
         assert.deepEqual(instance.option('selectedItem'), { id: 1 }, 'selectedItem is correct');
         assert.equal(instance.option('selectedIndex'), 1, 'selectedIndex is correct');
-        assert.ok(instance.find('.' + ITEM_CLASS).eq(1).hasClass('dx-item-selected'), 'first item has selected class');
+        assert.ok(this.$element.find('.' + ITEM_CLASS).eq(1).hasClass('dx-item-selected'), 'first item has selected class');
     });
 });
 
