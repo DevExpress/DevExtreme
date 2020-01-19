@@ -1838,7 +1838,7 @@ QUnit.test('Text decoration', function(assert) {
             assert.roughEqual(noFillDecoration.args.y, 186.16, 0.5, 'noFill line-through decoration line y');
             assert.equal(noFillDecoration.args.height, 1, 'noFill line-through decoration line height');
             assert.strictEqual(noFillDecoration.args.width, 100, ' noFill line-through decoration line width');
-            assert.notStrictEqual(that.drawnElements[17].type, 'stroke', 'noFill line-through decoration has stroke');
+            assert.strictEqual(that.drawnElements[17].type, 'stroke', 'noFill line-through decoration has stroke');
         } finally {
             done();
         }
