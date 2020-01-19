@@ -2243,7 +2243,6 @@ QUnit.test('getData returns Blob when it supported by Browser', function(assert)
     assert.expect(1);
     $.when(deferred).done(function(data) {
         try {
-            // assert
             assert.equal(data, 'blobData', '_getBlob was called');
         } finally {
             imageCreator._getBlob = _getBlob;
@@ -2277,7 +2276,6 @@ QUnit.test('getData returns Base64 when Blob not supported by Browser', function
     assert.expect(1);
     $.when(deferred).done(function(data) {
         try {
-            // assert
             assert.equal(data, 'base64Data', '_getBase64 was called');
         } finally {
             imageCreator._getBlob = _getBlob;
@@ -2296,7 +2294,6 @@ QUnit.test('Read computed style of elements if export target is attached element
     $('#qunit-fixture').append(element);
     this.stubGetComputedStyle(element.childNodes[0], { fill: '#ff0000', 'font-size': '25px', 'font-style': '' });
 
-    // act
     const imageBlob = getData(element);
 
     assert.expect(9);
@@ -2329,7 +2326,6 @@ QUnit.test('Read computed style of elements. Ignore default opacity', function(a
     $('#qunit-fixture').append(element);
     this.stubGetComputedStyle(element.childNodes[0], { fill: '#ff0000', 'opacity': '1', 'stroke-opacity': '0.1', 'fill-opacity': '' });
 
-    // act
     const imageBlob = getData(element);
 
     assert.expect(4);

@@ -239,7 +239,7 @@ const DOMComponent = Component.inherit({
             value => !(value in config)
         );
 
-        const { integrationOptions } = this.options();
+        const { integrationOptions } = this.option();
         let { nestedComponentOptions } = this.option();
 
         nestedComponentOptions = nestedComponentOptions || noop;

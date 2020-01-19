@@ -85,7 +85,6 @@ QUnit.test('getData. markup with special symbols', function(assert) {
 QUnit.test('getData. markup with image', function(assert) {
     if(!checkForBlob.call(this, assert)) return;
 
-    // arrange. act
     const done = assert.async();
     const imageHtml = '<image xlink:href="../../testing/content/exporterTestsContent/test-image.png" width="300" height="200"></image>';
     const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'>' + imageHtml + '</svg>';
@@ -94,7 +93,6 @@ QUnit.test('getData. markup with image', function(assert) {
     assert.expect(1);
     $.when(deferred).done(function(blob) {
         try {
-            // assert
             assert.notStrictEqual(blob.arrayBuffer[0].indexOf('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1'), -1, 'Image href was replaced on dataURI');
         } finally {
             done();
@@ -142,7 +140,6 @@ QUnit.test('getData. markup with image with href', function(assert) {
 QUnit.test('getData. markup with background-color', function(assert) {
     if(!checkForBlob.call(this, assert)) return;
 
-    // arrange. act
     const done = assert.async();
     const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
     const deferred = svgCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
@@ -150,7 +147,6 @@ QUnit.test('getData. markup with background-color', function(assert) {
     assert.expect(1);
     $.when(deferred).done(function(blob) {
         try {
-            // assert
             assert.equal($(blob.arrayBuffer[0]).eq(1).css('background-color'), 'rgb(170, 170, 170)', 'Svg elementbackground color is correct');
         } finally {
             done();
@@ -161,7 +157,6 @@ QUnit.test('getData. markup with background-color', function(assert) {
 QUnit.test('getData. markup with background-color. Source element hasn\'t background color', function(assert) {
     if(!checkForBlob.call(this, assert)) return;
 
-    // arrange. act
     const done = assert.async();
     const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
     const testingElement = svgUtils.getSvgElement(testingMarkup);

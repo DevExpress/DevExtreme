@@ -412,7 +412,6 @@ QUnit.test('xl\\_rels\\workbook.xml.rels file content', function(assert) {
     assert.expect(1);
     this.excelCreator._zip.folder(internals.XL_FOLDER_NAME).folder('_' + internals.RELATIONSHIP_PART_NAME).file(internals.WORKBOOK_FILE_NAME + '.rels').async('string').then(function(content) {
         try {
-            // assert
             assert.strictEqual(content, expected, 'content of file');
         } finally {
             done();
@@ -431,7 +430,6 @@ QUnit.test('xl\\workbook.xml file content', function(assert) {
     assert.expect(1);
     this.excelCreator._zip.folder(internals.XL_FOLDER_NAME).file(internals.WORKBOOK_FILE_NAME).async('string').then(function(content) {
         try {
-            // assert
             assert.strictEqual(content, expected, 'content of file');
         } finally {
             done();
@@ -482,7 +480,6 @@ QUnit.test('xl\\styles.xml file content', function(assert) {
     assert.expect(1);
     this.excelCreator._zip.folder(internals.XL_FOLDER_NAME).file(internals.STYLE_FILE_NAME).async('string').then(function(content) {
         try {
-            // assert
             assert.strictEqual(content, expected, 'content of file');
         } finally {
             done();
@@ -499,7 +496,6 @@ QUnit.test('xl\\sharedStrings.xml file content', function(assert) {
     assert.expect(1);
     this.excelCreator._zip.folder(internals.XL_FOLDER_NAME).file(internals.SHAREDSTRING_FILE_NAME).async('string').then(function(content) {
         try {
-            // assert
             assert.strictEqual(content, expected, 'content of file');
         } finally {
             done();
@@ -518,7 +514,6 @@ QUnit.test('xl\\worksheets\\sheet1.xml file content', function(assert) {
     assert.expect(1);
     this.excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).async('string').then(function(content) {
         try {
-            // assert
             assert.strictEqual(content, expected, 'content of file');
         } finally {
             done();
@@ -537,7 +532,6 @@ QUnit.test('Disable ignore errors', function(assert) {
     const worksheetFile = this.excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME);
     worksheetFile.async('string').then(function(content) {
         try {
-            // assert
             assert.strictEqual(content.indexOf('ignoredError'), -1);
         } finally {
             done();
@@ -613,7 +607,6 @@ QUnit.test('Add rtl property to sheet view', function(assert) {
     assert.expect(1);
     excelCreatorRTL._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).async('string').then(function(content) {
         try {
-            // assert
             assert.strictEqual($(content).find('sheetView').attr('rightToLeft'), '1');
         } finally {
             done();
@@ -636,7 +629,6 @@ QUnit.test('Workwheet XML content is valid', function(assert) {
     assert.expect(4);
     excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).async('string').then(function(content) {
         try {
-            // assert
             assert.strictEqual(content.indexOf('<v />'), -1, 'No empty cell values <v /> in worksheet XML content');
             assert.strictEqual(content.indexOf('undefined'), -1, 'No undefined variables in worksheetXML content');
             assert.strictEqual(content.indexOf('NaN'), -1, 'No undefined NaN in worksheetXML content');
@@ -663,7 +655,6 @@ QUnit.test('Generating worksheet with groups and three rows of the header', func
     assert.expect(3);
     this.excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).async('string').then(function(content) {
         try {
-            // assert
             assert.notStrictEqual(content.indexOf('row r="5" spans="1:4" outlineLevel="1"'), -1, 'Excel worksheet outlineLevel correct');
             assert.notStrictEqual(content.indexOf(internals.GROUP_SHEET_PR_XML), -1, 'Excel worksheet sheetPr correct');
             assert.strictEqual(content.indexOf(internals.SINGLE_SHEET_PR_XML), -1, 'Excel worksheet sheetPr single correct');
@@ -685,7 +676,6 @@ QUnit.test('Style XML content is valid', function(assert) {
     assert.expect(4);
     excelCreator._zip.folder(internals.XL_FOLDER_NAME).file(internals.STYLE_FILE_NAME).async('string').then(function(content) {
         try {
-            // assert
             assert.strictEqual(content.indexOf('<v />'), -1, 'No empty cell values <v /> in worksheet XML content');
             assert.strictEqual(content.indexOf('undefined'), -1, 'No undefined variables in worksheetXML content');
             assert.strictEqual(content.indexOf('NaN'), -1, 'No undefined NaN in worksheetXML content');
@@ -711,7 +701,6 @@ QUnit.test('SharedString XML content is valid', function(assert) {
     assert.expect(4);
     excelCreator._zip.folder(internals.XL_FOLDER_NAME).file(internals.SHAREDSTRING_FILE_NAME).async('string').then(function(content) {
         try {
-            // assert
             assert.strictEqual(content.indexOf('<v />'), -1, 'No empty cell values <v /> in worksheet XML content');
             assert.strictEqual(content.indexOf('undefined'), -1, 'No undefined variables in worksheetXML content');
             assert.strictEqual(content.indexOf('NaN'), -1, 'No undefined NaN in worksheetXML content');
@@ -768,7 +757,6 @@ QUnit.test('xl\\worksheets\\sheet1.xml file content', function(assert) {
     assert.expect(2);
     this.excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).async('string').then(function(content) {
         try {
-            // assert
             assert.strictEqual($(content).find('mergeCells').children().length, 1, 'merged cells count');
             assert.strictEqual($(content).find('mergeCells').find('mergeCell').attr('ref'), 'A1:C1', 'merge cell');
         } finally {

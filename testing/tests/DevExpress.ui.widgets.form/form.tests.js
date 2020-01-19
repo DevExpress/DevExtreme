@@ -55,7 +55,6 @@ if(device.current().deviceType === 'desktop') {
 }
 
 QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(assert) {
-    // arrange, act
     let screen = 'md';
     const $formContainer = $('#form').dxForm({
         screenByWidth: function() {
@@ -81,14 +80,12 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
     screen = 'sm';
     resizeCallbacks.fire();
 
-    // assert
     const formData = $formContainer.dxForm('instance').option('formData');
 
     assert.deepEqual(formData, { name: 'test' }, 'value updates');
 });
 
 QUnit.test('Check field  wodth on render form with colspan', function(assert) {
-    // arrange, act
     const $testContainer = $('#form');
 
     $testContainer.dxForm({
@@ -116,7 +113,6 @@ QUnit.test('Check field  wodth on render form with colspan', function(assert) {
         HireDate: $fieldItems.eq(4).width()
     };
 
-    // assert
     assert.equal($fieldItems.length, 5, '4 simple items + 1 group item');
     assert.equal(fieldWidths.ID, fieldWidths.HireDate, 'fields with colspan 2 have the same width');
     assert.equal(fieldWidths.FirstName, fieldWidths.LastName, 'fields without colspan have the same width');
@@ -124,7 +120,6 @@ QUnit.test('Check field  wodth on render form with colspan', function(assert) {
 });
 
 QUnit.test('Change of the formData field change value of the editor', function(assert) {
-    // arrange
     const $testContainer = $('#form');
 
     $testContainer.dxForm({
@@ -133,22 +128,18 @@ QUnit.test('Change of the formData field change value of the editor', function(a
 
     const formInstance = $testContainer.dxForm('instance');
 
-    // act
     formInstance.option('formData.FamousPirate', 'Cpt. Jack Sparrow');
 
-    // assert
     assert.equal(formInstance.getEditor('FamousPirate').option('value'), 'Cpt. Jack Sparrow', 'Correct value');
 });
 
 QUnit.test('Change editor value after formOption is changed and items is defined', function(assert) {
-    // arrange
     const $testContainer = $('#form');
     const form = $testContainer.dxForm({
         formData: { pirateName: 'Blackbeard', type: 'captain', isSought: true },
         items: ['pirateName', 'type', 'isSought']
     }).dxForm('instance');
 
-    // act
     form.option('formData', {
         pirateName: 'John Morgan',
         type: 'captain',
@@ -156,7 +147,6 @@ QUnit.test('Change editor value after formOption is changed and items is defined
     });
 
     form.getEditor('isSought').option('value', false);
-    // assert
     assert.deepEqual(form.option('formData'), {
         pirateName: 'John Morgan',
         type: 'captain',
@@ -165,14 +155,12 @@ QUnit.test('Change editor value after formOption is changed and items is defined
 });
 
 QUnit.test('Reset editor value after formData changing only if dataField is defined', function(assert) {
-    // arrange
     const $testContainer = $('#form');
     const form = $testContainer.dxForm({
         formData: { pirateName: 'Blackbeard', type: 'captain', isSought: 'Test', gender: 'Male' },
         items: [{ dataField: 'gender' }, { dataField: 'pirateName' }, { dataField: 'type' }, { name: 'isSought', editorType: 'dxTextBox' }]
     }).dxForm('instance');
 
-    // act
     form.getEditor('isSought').option('value', 'Changed');
     form.getEditor('gender').option('value', 'Female');
 
@@ -181,26 +169,22 @@ QUnit.test('Reset editor value after formData changing only if dataField is defi
         type: 'captain'
     });
 
-    // assert
     assert.equal(form.getEditor('isSought').option('value'), 'Changed', '\'isSought\' editor wasn\'t reseted');
     assert.equal(form.getEditor('gender').option('value'), '', '\'gender\' editor was reseted');
 });
 
 QUnit.test('Invalid field name when item is defined not as string and not as object', function(assert) {
-    // arrange, act
     const form = $('#form').dxForm({
         formData: { name: 'Batman', lastName: 'Klark' },
         items: [1, 'lastName']
     }).dxForm('instance');
 
-    // assert
     assert.equal(form.$element().find('.' + internals.FIELD_ITEM_CLASS).length, 1, 'items count');
     assert.equal(form.getEditor('name'), undefined, 'editor by name field');
     assert.equal(form.getEditor('lastName').option('value'), 'Klark', 'editor by lastName field');
 });
 
 QUnit.test('dxshown event fire when visible option changed to true', function(assert) {
-    // arrange
     const form = $('#form').dxForm({
         formData: { id: 1 }
     }).dxForm('instance');
@@ -213,7 +197,6 @@ QUnit.test('dxshown event fire when visible option changed to true', function(as
             dxShownEventCounter++;
         });
 
-    // act, assert
     form.option('visible', false);
     assert.equal(dxShownEventCounter, 0, 'dxshown event does not fire');
 
@@ -222,7 +205,6 @@ QUnit.test('dxshown event fire when visible option changed to true', function(as
 });
 
 QUnit.test('Reset editor\'s value when the formData option is empty object', function(assert) {
-    // arrange
     let values = [];
     const form = $('#form').dxForm({
         formData: {
@@ -238,10 +220,8 @@ QUnit.test('Reset editor\'s value when the formData option is empty object', fun
         }
     }).dxForm('instance');
 
-    // act
     form.option('formData', {});
 
-    // assert
     assert.equal(form.getEditor('name').option('value'), '', 'editor for the name dataField');
     assert.equal(form.getEditor('room').option('value'), null, 'editor for the room dataField');
 
@@ -257,7 +237,6 @@ QUnit.test('Reset editor\'s value when the formData option is empty object', fun
 });
 
 QUnit.test('Reset editor\'s value when the formData option is null', function(assert) {
-    // arrange
     const form = $('#form').dxForm({
         formData: {
             name: 'User',
@@ -266,16 +245,13 @@ QUnit.test('Reset editor\'s value when the formData option is null', function(as
         items: ['name', 'room']
     }).dxForm('instance');
 
-    // act
     form.option('formData', null);
 
-    // assert
     assert.equal(form.getEditor('name').option('value'), '', 'editor for the name dataField');
     assert.equal(form.getEditor('room').option('value'), null, 'editor for the room dataField');
 });
 
 QUnit.test('Reset editor\'s value when the formData option is undefined', function(assert) {
-    // arrange
     const form = $('#form').dxForm({
         formData: {
             name: 'User',
@@ -284,16 +260,13 @@ QUnit.test('Reset editor\'s value when the formData option is undefined', functi
         items: ['name', 'room']
     }).dxForm('instance');
 
-    // act
     form.option('formData', undefined);
 
-    // assert
     assert.equal(form.getEditor('name').option('value'), '', 'editor for the name dataField');
     assert.equal(form.getEditor('room').option('value'), null, 'editor for the room dataField');
 });
 
 QUnit.test('Reset editor\'s value with validation', function(assert) {
-    // arrange
     const form = $('#form').dxForm({
         formData: {
             name: 'User',
@@ -302,10 +275,8 @@ QUnit.test('Reset editor\'s value with validation', function(assert) {
         items: ['name', { dataField: 'lastName', isRequired: true }]
     }).dxForm('instance');
 
-    // act
     form.option('formData', undefined);
 
-    // assert
     assert.equal(form.getEditor('name').option('value'), '', 'editor for the name dataField');
     assert.equal(form.getEditor('lastName').option('value'), '', 'editor for the lastName dataField');
 
@@ -336,7 +307,6 @@ QUnit.test('The \'dataField\' option of a simple item should not affect existing
 });
 
 QUnit.test('Refresh form when visibility changed to \'true\' in msie browser', function(assert) {
-    // arrange, act
     const $testContainer = $('#form');
     const expectedRefreshCount = browser.msie ? 1 : 0;
     const form = $testContainer.dxForm({
@@ -348,7 +318,6 @@ QUnit.test('Refresh form when visibility changed to \'true\' in msie browser', f
     domUtils.triggerHidingEvent($testContainer);
     domUtils.triggerShownEvent($testContainer);
 
-    // assert
     assert.equal(refreshStub.callCount, expectedRefreshCount, 'Refresh on visibility changed to \'true\' if browser is IE or Edge');
     refreshStub.restore();
 });
@@ -395,60 +364,50 @@ QUnit.test('Hide helper text when validation message shows for material theme', 
 });
 
 QUnit.test('The formData is updated correctly when formData has \'undefined\' value', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         formData: undefined,
         items: [{ dataField: 'City' }]
     });
     const form = $testContainer.dxForm('instance');
 
-    // act
     const editor = form.getEditor('City');
     editor.option('value', 'New York');
 
-    // assert
     const formData = form.option('formData');
     assert.deepEqual(formData, { City: 'New York' }, 'updated formData');
     assert.equal($testContainer.find('.dx-field-item').length, 1, 'form item is rendered');
 });
 
 QUnit.test('The formData with composite object is updated correctly when formData has \'undefined\' value', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         formData: undefined,
         items: [{ dataField: 'Employee.City' }]
     });
     const form = $testContainer.dxForm('instance');
 
-    // act
     const editor = form.getEditor('Employee.City');
     editor.option('value', 'New York');
 
-    // assert
     const formData = form.option('formData');
     assert.deepEqual(formData, { Employee: { City: 'New York' } }, 'formData is updated');
     assert.equal($testContainer.find('.dx-field-item').length, 1, 'form item is rendered');
 });
 
 QUnit.test('From renders the right types of editors by default', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         formData: { id: 1, name: 'Name' }
     });
 
-    // assert
     assert.ok($testContainer.find('.dx-field-item .dx-numberbox').hasClass('dx-editor-outlined'), 'right class rendered');
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-outlined'), 'right class rendered');
 });
 
 QUnit.test('From renders the right types of editors according to stylingMode option', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         formData: { id: 1, name: 'Name' },
         stylingMode: 'underlined'
     });
 
-    // assert
     assert.ok($testContainer.find('.dx-field-item .dx-numberbox').hasClass('dx-editor-underlined'), 'right class rendered');
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
 });
@@ -468,7 +427,6 @@ QUnit.module('Tabs', {
     }
 });
 QUnit.test('items aren\'t tiny', function(assert) {
-    // arrange, act
     const testContainer = $('#form');
 
     testContainer.dxForm({
@@ -505,12 +463,10 @@ QUnit.test('items aren\'t tiny', function(assert) {
                     }]
             }]
     });
-    // assert
     assert.ok(testContainer.find('.dx-multiview-item .dx-textbox').first().width() / testContainer.width() > 0.5, 'Editors are not tiny');
 });
 
 QUnit.test('Render tabs when formData is changed', function(assert) {
-    // arrange, act
     const testContainer = $('#form');
     const form = testContainer.dxForm({
         formData: {
@@ -552,7 +508,6 @@ QUnit.test('Render tabs when formData is changed', function(assert) {
     }).dxForm('instance');
     let $groups = testContainer.find('.dx-item-selected ' + '.' + internals.FORM_GROUP_CLASS);
 
-    // act
     form.option('formData', {
         firstName: 'Test Name',
         lastName: 'Test Last Name',
@@ -567,24 +522,20 @@ QUnit.test('Render tabs when formData is changed', function(assert) {
 
     this.clock.tick();
 
-    // assert
     $groups = testContainer.find('.dx-item-selected ' + '.' + internals.FORM_GROUP_CLASS);
     assert.equal($groups.length, 2);
     assert.equal($groups.eq(0).find('.' + internals.FIELD_ITEM_CLASS).length, 2, 'group 1');
     assert.equal($groups.eq(1).find('.' + internals.FIELD_ITEM_CLASS).length, 2, 'group 2');
 
-    // act
     testContainer.find('.dx-tabpanel').dxTabPanel('instance').option('selectedIndex', 1);
     this.clock.tick();
     $groups = testContainer.find('.dx-item-selected ' + '.' + internals.FORM_GROUP_CLASS);
 
-    // assert
     assert.equal($groups.length, 1);
     assert.equal($groups.eq(0).find('.' + internals.FIELD_ITEM_CLASS).length, 2, 'group 1');
 });
 
 QUnit.test('Check align labels', function(assert) {
-    // arrange, act
     const testContainer = $('#form');
     const form = testContainer.dxForm({
         formData: {
@@ -624,7 +575,6 @@ QUnit.test('Check align labels', function(assert) {
     let $layoutManager;
     let $layoutManagers = testContainer.find('.' + internals.FORM_LAYOUT_MANAGER_CLASS);
 
-    // assert
     $layoutManager = $layoutManagers.eq(0);
     $labelTexts = findLabelTextsInColumn($layoutManager, 0);
     assert.roughEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 1, 'col 1');
@@ -638,11 +588,9 @@ QUnit.test('Check align labels', function(assert) {
     labelWidth = getLabelWidth($layoutManager, form, 'Address house:');
     assert.roughEqual($labelTexts.eq(1).width(), labelWidth, 1, 'tab 1 col 2');
 
-    // act
     testContainer.find('.dx-tabpanel').dxTabPanel('instance').option('selectedIndex', 1);
     this.clock.tick();
 
-    // assert
     $layoutManagers = testContainer.find('.' + internals.FORM_LAYOUT_MANAGER_CLASS);
     $layoutManager = $layoutManagers.eq(3);
     $labelTexts = findLabelTextsInColumn($layoutManager, 0);
@@ -655,7 +603,6 @@ QUnit.test('Check align labels', function(assert) {
 });
 
 QUnit.test('Check align labels when layout is changed by default_T306106', function(assert) {
-    // arrange, act
     this.updateScreenSize(500);
 
     const testContainer = $('#form');
@@ -699,7 +646,6 @@ QUnit.test('Check align labels when layout is changed by default_T306106', funct
     let $layoutManagers = testContainer.find('.' + internals.FORM_LAYOUT_MANAGER_CLASS);
     let i;
 
-    // assert
     $layoutManager = $layoutManagers.eq(1);
     $labelsContent = $layoutManager.find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'Address house:');
@@ -709,11 +655,9 @@ QUnit.test('Check align labels when layout is changed by default_T306106', funct
         assert.roughEqual(labelContentWidth, labelWidth, 1, 'tab 1, item ' + i);
     }
 
-    // act
     testContainer.find('.dx-tabpanel').dxTabPanel('instance').option('selectedIndex', 1);
     this.clock.tick();
 
-    // assert
     $layoutManagers = testContainer.find('.' + internals.FORM_LAYOUT_MANAGER_CLASS);
     $layoutManager = $layoutManagers.eq(3);
     $labelsContent = $layoutManager.find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
@@ -726,7 +670,6 @@ QUnit.test('Check align labels when layout is changed by default_T306106', funct
 });
 
 QUnit.test('Check align labels when layout is changed_T306106', function(assert) {
-    // arrange
     const testContainer = $('#form');
     const form = testContainer.dxForm({
         formData: {
@@ -768,10 +711,8 @@ QUnit.test('Check align labels when layout is changed_T306106', function(assert)
     let $layoutManagers = testContainer.find('.' + internals.FORM_LAYOUT_MANAGER_CLASS);
     let i;
 
-    // act
     this.updateScreenSize(500);
 
-    // assert
     $layoutManager = $layoutManagers.eq(1);
     $labelsContent = $layoutManager.find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'Address house:');
@@ -781,11 +722,9 @@ QUnit.test('Check align labels when layout is changed_T306106', function(assert)
         assert.roughEqual(labelContentWidth, labelWidth, 1, 'tab 1, item ' + i);
     }
 
-    // act
     testContainer.find('.dx-tabpanel').dxTabPanel('instance').option('selectedIndex', 1);
     this.clock.tick();
 
-    // assert
     $layoutManagers = testContainer.find('.' + internals.FORM_LAYOUT_MANAGER_CLASS);
     $layoutManager = $layoutManagers.eq(3);
     $labelsContent = $layoutManager.find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
@@ -798,7 +737,6 @@ QUnit.test('Check align labels when layout is changed_T306106', function(assert)
 });
 
 QUnit.test('Data is updated correctly_T353275', function(assert) {
-    // arrange
     const testContainer = $('#form');
     const form = testContainer.dxForm({
         formData: {
@@ -814,15 +752,12 @@ QUnit.test('Data is updated correctly_T353275', function(assert) {
             }]
     }).dxForm('instance');
 
-    // act
     form.updateData('firstName', 'Test First Name');
 
-    // assert
     assert.equal(form.getEditor('firstName').option('value'), 'Test First Name', 'value of editor by \'firstName\' field');
 });
 
 QUnit.test('Update editorOptions of an editor inside the tab', function(assert) {
-    // arrange
     const testContainer = $('#form');
     const form = testContainer.dxForm({
         formData: {
@@ -843,10 +778,8 @@ QUnit.test('Update editorOptions of an editor inside the tab', function(assert) 
 
     assert.equal(form.getEditor('firstName').option('disabled'), true, 'initial state: editor is disabled');
 
-    // act
     form.option('items[0].tabs[0].items[0].editorOptions.disabled', false);
 
-    // assert
     assert.equal(form.getEditor('firstName').option('disabled'), false, '\'disabled\' option was successfully changed');
 });
 
@@ -889,7 +822,6 @@ function findLabelTextsInColumn($container, columnIndex) {
 }
 
 QUnit.test('Align labels in column', function(assert) {
-    // arrange, act
     const testContainer = $('#form');
     const form = testContainer.dxForm({
         formData: this.testObject,
@@ -922,7 +854,6 @@ QUnit.test('Align labels in column', function(assert) {
     let i;
     let labelWidth;
 
-    // assert
     for(i = 0; i < 4; i++) {
         labelWidth = $col1.eq(i).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
 
@@ -954,7 +885,6 @@ QUnit.test('Align labels in column', function(assert) {
 });
 
 QUnit.test('Align labels in column when labels text is identical', function(assert) {
-    // arrange, act
     const testContainer = $('#form');
     const form = testContainer.dxForm({
         formData: { TestBool: true, ShipName: 'Test' }
@@ -964,7 +894,6 @@ QUnit.test('Align labels in column when labels text is identical', function(asse
     const $maxLabelWidth = getLabelWidth(testContainer, form, 'Ship Name:');
     let i;
 
-    // assert
     for(i = 0; i < 2; i++) {
         const labelWidth = $col1.eq(i).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
 
@@ -973,7 +902,6 @@ QUnit.test('Align labels in column when labels text is identical', function(asse
 });
 
 QUnit.test('Disable alignItemLabels', function(assert) {
-    // arrange, act
     const testContainer = $('#form');
 
     testContainer.dxForm({
@@ -983,12 +911,10 @@ QUnit.test('Disable alignItemLabels', function(assert) {
 
     const $labelTexts = $('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
 
-    // assert
     assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width());
 });
 
 QUnit.test('Disable alignItemLabels in group', function(assert) {
-    // arrange, act
     const testContainer = $('#form');
 
     testContainer.dxForm({
@@ -1009,7 +935,6 @@ QUnit.test('Disable alignItemLabels in group', function(assert) {
     const $groups = $('.' + internals.FORM_GROUP_CLASS);
     let $labelTexts = $groups.eq(0).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
 
-    // assert
     assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 1');
 
     $labelTexts = $groups.eq(1).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
@@ -1017,7 +942,6 @@ QUnit.test('Disable alignItemLabels in group', function(assert) {
 });
 
 QUnit.test('Align labels in column when alignItemLabelsInAllGroups is enabled', function(assert) {
-    // arrange, act
     const testContainer = $('#form');
     const form = testContainer.dxForm({
         colCount: 2,
@@ -1062,7 +986,6 @@ QUnit.test('Align labels in column when alignItemLabelsInAllGroups is enabled', 
     let $texts;
     let i;
 
-    // assert
     $groups = form._getGroupElementsInColumn(testContainer, 0);
     $texts = findLabelTextsInColumn($groups, 0);
     labelWidth = getLabelWidth(testContainer, form, 'Address city:');
@@ -1099,7 +1022,6 @@ QUnit.test('Align labels in column when alignItemLabelsInAllGroups is enabled', 
 });
 
 QUnit.test('Align labels in column when alignItemLabelsInAllGroups is disabled', function(assert) {
-    // arrange, act
     const testContainer = $('#form');
     const form = testContainer.dxForm({
         colCount: 2,
@@ -1140,7 +1062,6 @@ QUnit.test('Align labels in column when alignItemLabelsInAllGroups is disabled',
     }).dxForm('instance');
     let $groups;
 
-    // assert
     $groups = form._getGroupElementsInColumn(testContainer, 0);
     assert.notEqual(findLabelTextsInColumn($groups.eq(0), 0).eq(0).width(), findLabelTextsInColumn($groups.eq(1), 0).eq(0).width(), 'compare group1 with group2');
 
@@ -1149,7 +1070,6 @@ QUnit.test('Align labels in column when alignItemLabelsInAllGroups is disabled',
 });
 
 QUnit.test('Align labels in columns when there are rows', function(assert) {
-    // arrange, act
     const testContainer = $('#form');
     const form = testContainer.dxForm({
         formData: this.testObject,
@@ -1195,7 +1115,6 @@ QUnit.test('Align labels in columns when there are rows', function(assert) {
     let i;
     let labelWidth;
 
-    // assert
     for(i = 0; i < 2; i++) {
         labelWidth = $col1.eq(i).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
 
@@ -1239,7 +1158,6 @@ QUnit.test('Change option after group rendered (check for cycling template rende
 });
 
 QUnit.test('Align labels when layout is changed in responsive box_T306106', function(assert) {
-    // arrange
     const testContainer = $('#form');
     const form = testContainer.dxForm({
         formData: this.testObject,
@@ -1268,10 +1186,8 @@ QUnit.test('Align labels when layout is changed in responsive box_T306106', func
     const $maxLabelWidth = getLabelWidth(testContainer, form, 'First Name:');
     let i;
 
-    // act
     this.updateScreenSize(500);
 
-    // assert
     for(i = 0; i < 11; i++) {
         const labelWidth = $labelsContent.eq(i).width();
 
@@ -1282,7 +1198,6 @@ QUnit.test('Align labels when layout is changed in responsive box_T306106', func
 });
 
 QUnit.test('Align labels when layout is changed when small window size by default_T306106', function(assert) {
-    // arrange
     this.updateScreenSize(500);
 
     const testContainer = $('#form');
@@ -1313,7 +1228,6 @@ QUnit.test('Align labels when layout is changed when small window size by defaul
     const $maxLabelWidth = getLabelWidth(testContainer, form, 'First Name:');
     let i;
 
-    // assert
     for(i = 0; i < 11; i++) {
         const labelWidth = $labelsContent.eq(i).width();
 
@@ -1414,24 +1328,20 @@ QUnit.module('Public API', {
 });
 
 QUnit.test('UpdateData, simple case', function(assert) {
-    // arrange
     const $testContainer = $('#form');
 
     $testContainer.dxForm({
         formData: { test1: 'abc', test2: 'xyz' }
     });
 
-    // act
     const form = $testContainer.dxForm('instance');
 
     form.updateData('test2', 'qwerty');
 
-    // assert
     assert.equal(form.option('formData.test2'), 'qwerty', 'Correct data');
 });
 
 QUnit.test('UpdateData, update with object', function(assert) {
-    // arrange
     const $testContainer = $('#form');
 
     $testContainer.dxForm({
@@ -1446,7 +1356,6 @@ QUnit.test('UpdateData, update with object', function(assert) {
         }
     });
 
-    // act
     const form = $testContainer.dxForm('instance');
 
     form.updateData({
@@ -1458,7 +1367,6 @@ QUnit.test('UpdateData, update with object', function(assert) {
         }
     });
 
-    // assert
     assert.deepEqual(form.option('formData'), {
         test1: 'xyz', test2: 'qwerty', test3: {
             SuperMan: 'KAndrew',
@@ -1542,7 +1450,6 @@ QUnit.testInActiveWindow('Change \'Button.icon\'', function(assert) {
 });
 
 QUnit.test('Get editor instance', function(assert) {
-    // arrange
     const $testContainer = $('#form');
 
     $testContainer.dxForm({
@@ -1550,10 +1457,8 @@ QUnit.test('Get editor instance', function(assert) {
         items: ['test1', { name: 'test3', editorType: 'dxNumberBox' }]
     });
 
-    // act
     const form = $testContainer.dxForm('instance');
 
-    // assert
     assert.ok(!typeUtils.isDefined(form.getEditor('test2')), 'We hasn\'t instance for \'test2\' field');
     assert.ok(typeUtils.isDefined(form.getEditor('test1')), 'We have instance for \'test1\' field');
     assert.ok(typeUtils.isDefined(form.getEditor('test3')), 'We have instance for \'test3\' field');
@@ -1563,7 +1468,6 @@ QUnit.test('Get editor instance', function(assert) {
 });
 
 QUnit.test('Get editor instance with group config', function(assert) {
-    // arrange
     const $testContainer = $('#form');
 
     $testContainer.dxForm({
@@ -1577,10 +1481,8 @@ QUnit.test('Get editor instance with group config', function(assert) {
         ]
     });
 
-    // act
     const form = $testContainer.dxForm('instance');
 
-    // assert
     assert.ok(typeUtils.isDefined(form.getEditor('test1')), 'We have instance for \'test1\' field');
     assert.ok(typeUtils.isDefined(form.getEditor('test2')), 'We have instance for \'test2\' field');
     assert.ok(typeUtils.isDefined(form.getEditor('test3')), 'We have instance for \'test3\' field');
@@ -1859,7 +1761,6 @@ QUnit.test('Use \'itemOption\' with tabs', function(assert) {
 });
 
 QUnit.test('\'itemOption\' should get an item with several spaces in the caption', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         formData: { EmployeeID: 1, LastName: 'John', FirstName: 'Dow' },
         items: [
@@ -1875,7 +1776,6 @@ QUnit.test('\'itemOption\' should get an item with several spaces in the caption
     );
     const form = $testContainer.dxForm('instance');
 
-    // act
     const groupItem = form.itemOption('Testgroupitem');
     const innerGroupItem = form.itemOption('Testgroupitem.FirstName');
 
@@ -1887,13 +1787,11 @@ QUnit.test('\'itemOption\' should get an item with several spaces in the caption
 
     form.itemOption('Testgroupitem.LastName', 'label', { text: 'NEWLABEL' });
 
-    // assert
     assert.equal(innerGroupItem.dataField, 'FirstName', 'corrected item received');
     assert.equal($testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS).last().text(), 'NEWLABEL:', 'new label rendered');
 });
 
 QUnit.test('\'itemOption\' should get an item with several spaces in the caption and long path', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         formData: { EmployeeID: 1, LastName: 'John', FirstName: 'Dow' },
         items: [
@@ -1911,15 +1809,12 @@ QUnit.test('\'itemOption\' should get an item with several spaces in the caption
     );
     const form = $testContainer.dxForm('instance');
 
-    // act
     const innerGroupItem = form.itemOption('Testgroup1.Testgroup2.FirstName');
 
-    // assert
     assert.deepEqual(innerGroupItem, { dataField: 'FirstName' }, 'corrected item received');
 });
 
 QUnit.test('\'itemOption\' should get an group inner item located into tabbed item', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         formData: { EmployeeID: 1, LastName: 'John', FirstName: 'Dow' },
         items: [
@@ -1940,15 +1835,12 @@ QUnit.test('\'itemOption\' should get an group inner item located into tabbed it
     });
     const form = $testContainer.dxForm('instance');
 
-    // act
     const innerGroupItem = form.itemOption('TestTab2.TestGroup1.FirstName');
 
-    // assert
     assert.deepEqual(innerGroupItem, { dataField: 'FirstName' }, 'corrected item received');
 });
 
 QUnit.test('\'itemOption\' should get item by composite path use the name option', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         formData: {
             LastName: 'Last Name'
@@ -1972,15 +1864,12 @@ QUnit.test('\'itemOption\' should get item by composite path use the name option
     });
     const form = $testContainer.dxForm('instance');
 
-    // act
     const item = form.itemOption('testGroup.tab1.simpleItem');
 
-    // assert
     assert.deepEqual(item.dataField, 'LastName', 'data field of item');
 });
 
 QUnit.test('\'itemOption\' should get a group item by the name option', function(assert) {
-    // arrange
     const $testContainer = $('#form').dxForm({
         formData: {
             LastName: 'Last Name'
@@ -1995,10 +1884,8 @@ QUnit.test('\'itemOption\' should get a group item by the name option', function
         }]
     });
 
-    // act
     const item = $testContainer.dxForm('instance').itemOption('testGroup');
 
-    // assert
     assert.ok(!!item, 'get a group item');
     assert.equal(item.itemType, 'group', 'It\'s a group item');
     assert.deepEqual(item.items, [{
@@ -2022,7 +1909,6 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
 [false, true].forEach(useItemOption => {
     const optionWay = useItemOption ? 'itemOption' : 'option';
     QUnit.test(`Changing an editor/button options without re-render Form when use the ${optionWay} method (T311892, T681241)`, function(assert) {
-        // arrange
         const form = $('#form').dxForm({
             formData: {
                 lastName: 'Kyle',
@@ -2039,7 +1925,6 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
         const editorOptions = { width: 80, height: 40 };
         const buttonOptions = { width: 10, height: 20 };
 
-        // act
         if(useItemOption) {
             form.itemOption('lastName', 'editorOptions', editorOptions);
             form.itemOption('button', 'buttonOptions', buttonOptions);
@@ -2048,7 +1933,6 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
             form.option('items[2].buttonOptions', buttonOptions);
         }
 
-        // assert
         const editor = $('#form .dx-textbox').last().dxTextBox('instance');
         const button = $('#form .dx-button').last().dxButton('instance');
 
@@ -2064,7 +1948,6 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
     });
 
     QUnit.test(`Changing the editorOptions of a sub item without re-render Form when use the ${optionWay} method (T316522)`, function(assert) {
-        // arrange
         const form = $('#form').dxForm({
             formData: {
                 lastName: 'Kyle',
@@ -2092,7 +1975,6 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
             ]
         }).dxForm('instance');
 
-        // act
         const editorOptions = { width: 80, height: 40 };
         if(useItemOption) {
             form.itemOption('lastName', 'editorOptions', editorOptions);
@@ -2100,7 +1982,6 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
             form.option('items[0].items[0].items[1].editorOptions', editorOptions);
         }
 
-        // assert
         const secondEditor = $('#form .dx-textbox').last().dxTextBox('instance');
 
         assert.equal(secondEditor.option('width'), 80, 'Correct width');
@@ -2108,7 +1989,6 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
     });
 
     QUnit.test(`The editorOptions correctly updates in case when only item name is defined and use the ${optionWay} method`, function(assert) {
-        // arrange
         const form = $('#form').dxForm({
             items: [
                 {
@@ -2134,7 +2014,6 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
 
         const invalidateSpy = sinon.spy(form, '_invalidate');
 
-        // act
         const editorOptions = { width: 80, height: 40 };
         if(useItemOption) {
             form.itemOption('lastName', 'editorOptions', editorOptions);
@@ -2142,7 +2021,6 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
             form.option('items[0].items[0].items[1].editorOptions', editorOptions);
         }
 
-        // assert
         const secondEditor = $('#form .dx-textbox').last().dxTextBox('instance');
 
         assert.equal(invalidateSpy.callCount, 0, 'dxForm wasn\'t invalidated');
@@ -2235,7 +2113,6 @@ QUnit.test('Changing the item\'s option via the itemOption when these options ar
 });
 
 QUnit.test('resetValues - old test', function(assert) {
-    // arrange
     const form = $('#form').dxForm({
         formData: {
             name: 'User',
@@ -2246,10 +2123,8 @@ QUnit.test('resetValues - old test', function(assert) {
         items: ['name', 'lastName', 'room', 'isDeveloper']
     }).dxForm('instance');
 
-    // act
     form.resetValues();
 
-    // assert
     assert.strictEqual(form.getEditor('name').option('value'), '', 'editor for the name dataField');
     assert.strictEqual(form.getEditor('lastName').option('value'), '', 'editor for the lastName dataField');
     assert.strictEqual(form.getEditor('room').option('value'), null, 'editor for the room dataField');
@@ -2382,7 +2257,6 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
 QUnit.module('Adaptivity');
 
 QUnit.test('One column screen should be customizable with screenByWidth option on init', function(assert) {
-    // arrange
     const $form = $('#form');
 
     $form.dxForm({
@@ -2397,13 +2271,11 @@ QUnit.test('One column screen should be customizable with screenByWidth option o
         items: ['name', 'lastName', 'room', 'isDeveloper']
     });
 
-    // assert
     assert.equal($form.find('.dx-layout-manager-one-col').length, 1, 'single column screen was changed');
     assert.equal($form.find('.dx-single-column-item-content').length, 4, 'There are 4 items in the column');
 });
 
 QUnit.test('One column screen should be customizable with screenByWidth option on option change', function(assert) {
-    // arrange
     const $form = $('#form');
     const form = $form.dxForm({
         formData: {
@@ -2420,16 +2292,13 @@ QUnit.test('One column screen should be customizable with screenByWidth option o
 
     assert.equal($form.find('.dx-single-column-item-content').length, 0, 'There are no single column items');
 
-    // act
     form.option('screenByWidth', function() { return 'xs'; });
 
-    // assert
     assert.equal($form.find('.dx-single-column-item-content').length, 4, 'There are 4 items in the column');
     assert.equal($form.find('.dx-layout-manager-one-col').length, 1, 'single column screen was changed');
 });
 
 QUnit.test('Column count may depend on screen factor', function(assert) {
-    // arrange
     const $form = $('#form');
     let screen = 'md';
 
@@ -2450,11 +2319,9 @@ QUnit.test('Column count may depend on screen factor', function(assert) {
 
     assert.equal($form.find('.dx-first-col.dx-last-col').length, 0, 'more than one column exists');
 
-    // act
     screen = 'sm';
     resizeCallbacks.fire();
 
-    // assert
     assert.equal($form.find('.dx-first-col.dx-last-col').length, 4, 'only one column exists');
 });
 
@@ -2509,7 +2376,6 @@ QUnit.test('Column count ignores hide/show scroller when rerendering if screen f
 });
 
 QUnit.test('Form should repaint once when screen factor changed', function(assert) {
-    // arrange
     const $form = $('#form');
     let screen = 'md';
     const form = $form.dxForm({
@@ -2528,17 +2394,14 @@ QUnit.test('Form should repaint once when screen factor changed', function(asser
     }).dxForm('instance');
     const refreshStub = sinon.stub(form, '_refresh');
 
-    // act
     screen = 'sm';
     resizeCallbacks.fire();
     resizeCallbacks.fire();
 
-    // assert
     assert.equal(refreshStub.callCount, 1, 'refresh called once');
 });
 
 QUnit.test('Form doesn\'t redraw layout when colCount doesn\'t changed', function(assert) {
-    // arrange
     const $form = $('#form');
     let screen = 'md';
     const form = $form.dxForm({
@@ -2554,17 +2417,14 @@ QUnit.test('Form doesn\'t redraw layout when colCount doesn\'t changed', functio
         }]
     }).dxForm('instance');
 
-    // act
     form.getEditor('test').option('value', 'Changed');
     screen = 'sm';
     resizeCallbacks.fire();
 
-    // assert
     assert.equal(form.getEditor('test').option('value'), 'Changed', 'Editor keeps old value');
 });
 
 QUnit.test('Form doesn\'t redraw layout when colCount doesn\'t changed and colCountByScreen option defined', function(assert) {
-    // arrange
     const $form = $('#form');
     let screen = 'md';
     const form = $form.dxForm({
@@ -2584,17 +2444,14 @@ QUnit.test('Form doesn\'t redraw layout when colCount doesn\'t changed and colCo
         }]
     }).dxForm('instance');
 
-    // act
     form.getEditor('test').option('value', 'Changed');
     screen = 'sm';
     resizeCallbacks.fire();
 
-    // assert
     assert.equal(form.getEditor('test').option('value'), 'Changed', 'Editor keeps old value');
 });
 
 QUnit.test('Form is not redrawn when colCount doesn\'t change (\'colCount\' and \'colCountByScreen\' options are defined)', function(assert) {
-    // arrange
     const $form = $('#form');
     let screen = 'md';
     let initCount = 0;
@@ -2619,7 +2476,6 @@ QUnit.test('Form is not redrawn when colCount doesn\'t change (\'colCount\' and 
         }]
     });
 
-    // act, assert
     assert.equal(initCount, 1, 'Editor is initialized');
 
     screen = 'sm';
@@ -2637,7 +2493,6 @@ QUnit.test('Form is not redrawn when colCount doesn\'t change (\'colCount\' and 
 });
 
 QUnit.test('Column count for group may depend on screen factor', function(assert) {
-    // arrange
     const $form = $('#form');
     let screen = 'md';
 
@@ -2676,17 +2531,14 @@ QUnit.test('Column count for group may depend on screen factor', function(assert
     assert.equal($form.find('.dx-group-colcount-3').length, 1, 'first group should have 3 columns');
     assert.equal($form.find('.dx-group-colcount-1').length, 1, 'second group should have 1 column');
 
-    // act
     screen = 'sm';
     resizeCallbacks.fire();
 
-    // assert
     assert.equal($form.find('.dx-group-colcount-2').length, 1, 'first group should have 2 columns');
     assert.equal($form.find('.dx-group-colcount-4').length, 1, 'second group should have 4 columns');
 });
 
 QUnit.test('Column count for tabs may depend on screen factor', function(assert) {
-    // arrange
     const $form = $('#form');
     let screen = 'md';
 
@@ -2713,17 +2565,14 @@ QUnit.test('Column count for tabs may depend on screen factor', function(assert)
 
     assert.equal($form.find('.dx-field-item-tab.dx-col-2').length, 1, 'tab has 3 groups on md screen');
 
-    // act
     screen = 'sm';
     resizeCallbacks.fire();
 
-    // assert
     assert.notOk($form.find('.dx-field-item-tab.dx-col-2').length, 'tab has not 3 groups on sm screen');
     assert.ok($form.find('.dx-field-item-tab.dx-col-1').length, 'tab has 2 groups on sm screen');
 });
 
 QUnit.test('Cached colCount options doesn\'t leak', function(assert) {
-    // arrange
     const $form = $('#form');
     const instance = $form.dxForm({
         formData: {
@@ -2746,15 +2595,12 @@ QUnit.test('Cached colCount options doesn\'t leak', function(assert) {
 
     assert.equal(instance._cachedColCountOptions.length, 2, 'root + group item colCount options cached');
 
-    // act
     instance.option('items', ['name']);
 
-    // assert
     assert.equal(instance._cachedColCountOptions.length, 1, 'only root colCount options cached');
 });
 
 QUnit.test('Form refreshes only one time on dimension changed with group layout', function(assert) {
-    // arrange
     const $form = $('#form').width(300);
     const screen = 'md';
     const form = $form.dxForm({
@@ -2780,15 +2626,12 @@ QUnit.test('Form refreshes only one time on dimension changed with group layout'
 
     const refreshSpy = sinon.spy(form, '_refresh');
 
-    // act
     $form.width(100);
     resizeCallbacks.fire();
-    // assert
     assert.equal(refreshSpy.callCount, 1, 'form has been redraw layout one time');
 });
 
 QUnit.test('Form redraw layout when colCount is \'auto\' and an calculated colCount changed', function(assert) {
-    // arrange
     const $form = $('#form').width(300);
     const screen = 'md';
     const form = $form.dxForm({
@@ -2808,11 +2651,9 @@ QUnit.test('Form redraw layout when colCount is \'auto\' and an calculated colCo
 
     const refreshSpy = sinon.spy(form, '_refresh');
 
-    // act
     $form.width(100);
     resizeCallbacks.fire();
 
-    // assert
     assert.equal(refreshSpy.callCount, 1, 'form has been redraw layout');
 });
 

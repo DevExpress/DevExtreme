@@ -187,25 +187,21 @@ exports.DataProvider = Class.inherit({
     },
 
     ready: function() {
-        const that = this;
-
-        that._initOptions();
+        this._initOptions();
         const options = this._options;
 
-        return when(options.items).done(function(items) {
-            options.customizeExportData && options.customizeExportData(that.getColumns(that.getHeaderRowCount() > 1), items);
+        return when(options.items).done((items) => {
+            options.customizeExportData && options.customizeExportData(this.getColumns(this.getHeaderRowCount() > 1), items);
             options.items = items;
-        }).fail(function() {
+        }).fail(() => {
             options.items = [];
         });
     },
 
     _convertFromGridGroupSummaryItems: function(gridGroupSummaryItems) {
-        let result;
         if(isDefined(gridGroupSummaryItems) && gridGroupSummaryItems.length > 0) {
-            result = gridGroupSummaryItems.map(function(item) { return { value: item.value, name: item.name }; });
+            return gridGroupSummaryItems.map(function(item) { return { value: item.value, name: item.name }; });
         }
-        return result;
     },
 
     getCellData: function(rowIndex, cellIndex, isExcelJS) {

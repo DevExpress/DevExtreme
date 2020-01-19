@@ -4686,10 +4686,8 @@ QUnit.module('DateBox number and string value support', {
             }
         }).dxDateBox('instance');
 
-        // act
         dateBox.option('opened', true);
 
-        // assert
         assert.ok(!isValueChangedCalled, 'onValueChanged is not called');
     });
 
@@ -4706,10 +4704,8 @@ QUnit.module('DateBox number and string value support', {
         const dateBox = $dateBox.dxDateBox('instance');
         dateBox.open();
 
-        // act
         $('.dx-calendar-cell').eq(0).trigger('dxclick');
 
-        // assert
         assert.deepEqual(dateBox.option('value'), new Date(2017, 10, 26), 'value is changed');
 
         Calendar.defaultOptions({
