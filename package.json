@@ -139,6 +139,7 @@
     "build-themes": "gulp style-compiler-themes",
     "build-themebuilder-assets": "gulp style-compiler-tb-assets",
     "dev": "gulp dev",
+    "dev-map": "gulp dev --sourceMap",
     "test-env": "node testing/launch",
     "update-ts": "dx-tools update-ts-bundle",
     "internal-tool": "dx-tools",
