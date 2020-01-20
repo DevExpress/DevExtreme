@@ -1199,7 +1199,7 @@ class Diagram extends Widget {
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout
                  * @type Enums.DiagramDataLayoutType|Object
-                 * @default "tree"
+                 * @default "layered"
                  */
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout.type
@@ -1209,7 +1209,7 @@ class Diagram extends Widget {
                  * @name dxDiagramOptions.nodes.autoLayout.orientation
                  * @type Enums.DiagramDataLayoutOrientation
                  */
-                autoLayout: 'tree'
+                autoLayout: 'layered'
             },
             edges: {
                 /**
