@@ -2036,7 +2036,6 @@ const Scheduler = Widget.inherit({
 
         endDate = new Date(endDate.getTime() - Utils.getTimezoneChangeDurationInMs(targetStartDate, targetEndDate, date, endDate));
 
-
         this.fire('setField', 'endDate', updatedData, endDate);
         this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
 
