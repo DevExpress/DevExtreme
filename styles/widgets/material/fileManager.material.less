@@ -189,6 +189,11 @@
 }
 
 .dx-filemanager-dirs-tree.dx-treeview {
+    .dx-treeview-item {
+        padding-top: @FILEMANAGER_TREEVIEW_ITEM_TOP_BOTTOM_PADDING;
+        padding-bottom: @FILEMANAGER_TREEVIEW_ITEM_TOP_BOTTOM_PADDING;
+    }
+
     .dx-state-focused > .dx-treeview-item {
         background: transparent;
 
@@ -226,8 +231,8 @@
 
 .dx-filemanager-file-actions-button {
     .dx-button {
-        min-width: @FILEMANAGER_FILE_ACTIONS_BUTTON_HEIGHT;
-        height: @FILEMANAGER_FILE_ACTIONS_BUTTON_HEIGHT;
+        min-width: @FILEMANAGER_FILE_ACTIONS_BUTTON_SIZE;
+        height: @FILEMANAGER_FILE_ACTIONS_BUTTON_SIZE;
 
         .dx-button-content {
             padding: @FILEMANAGER_FILE_ACTIONS_BUTTON_TOP_BOTTOM_PADDING 6px;
