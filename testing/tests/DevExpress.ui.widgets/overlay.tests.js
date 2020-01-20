@@ -2430,7 +2430,7 @@ testModule('target', moduleConfig, () => {
 });
 
 
-testModule('back button callback', moduleConfig, () => {
+testModule('hide overlay by callback', moduleConfig, () => {
     test('callback should not be added if hideTopOverlayHandler option equals \'null\' (B251263, B251262)', function(assert) {
         const instance = $('#overlay').dxOverlay({
             hideTopOverlayHandler: null
@@ -2441,14 +2441,38 @@ testModule('back button callback', moduleConfig, () => {
         assert.ok(!hideTopOverlayCallback.hasCallback());
     });
 
-    test('hideTopOverlayCallback callback should not be added if hideTopOverlayHandler option equals \'false\'', function(assert) {
+    test('custom callback should be added via hideTopOverlayHandler', function(assert) {
+        const customCallback = sinon.stub();
         const instance = $('#overlay').dxOverlay({
-            closeOnBackButton: false
+            hideTopOverlayHandler: customCallback
         }).dxOverlay('instance');
-        assert.ok(!hideTopOverlayCallback.hasCallback());
+
+        assert.ok(customCallback.notCalled);
 
         instance.show();
-        assert.ok(!hideTopOverlayCallback.hasCallback());
+        hideTopOverlayCallback.fire();
+
+        assert.ok(customCallback.calledOnce);
+    });
+
+    test('custom callback should be correctly changed by another one', function(assert) {
+        const initialCallback = sinon.stub();
+        const newCallback = sinon.stub();
+
+        const instance = $('#overlay').dxOverlay({
+            hideTopOverlayHandler: initialCallback,
+            visible: true
+        }).dxOverlay('instance');
+
+        instance.option('hideTopOverlayHandler', newCallback);
+
+        assert.ok(initialCallback.notCalled);
+        assert.ok(newCallback.notCalled);
+
+        hideTopOverlayCallback.fire();
+
+        assert.ok(initialCallback.notCalled);
+        assert.ok(newCallback.calledOnce);
     });
 
     test('hideTopOverlayCallback callback should be unsubscribing before hide animation start', function(assert) {
@@ -2471,6 +2495,7 @@ testModule('back button callback', moduleConfig, () => {
 
         instance.show();
         hideTopOverlayCallback.fire();
+
         assert.strictEqual(instance.option('visible'), false, 'hidden after back button event');
     });
 
@@ -2479,6 +2504,7 @@ testModule('back button callback', moduleConfig, () => {
 
         instance.option('visible', true);
         hideTopOverlayCallback.fire();
+
         assert.strictEqual(instance.option('visible'), false, 'hidden after back button event');
     });
 });

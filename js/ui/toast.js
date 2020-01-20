@@ -84,7 +84,7 @@ const Toast = Overlay.inherit({
 
             height: 'auto',
 
-            closeOnBackButton: false,
+            hideTopOverlayHandler: null,
 
             closeOnSwipe: true,
 
