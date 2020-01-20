@@ -65,6 +65,15 @@ const subscribes = {
             dates = dates.map((date) => {
                 return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption('startDayHour'));
             });
+            for(let i = 0; i < dates.length; i++) {
+                const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
+                // const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointmentData);
+                const daylightOffset1 = this._subscribes.getDaylightOffsetByOption(this, originalStartDate, dates[i]);
+                const daylightOffset2 = this._subscribes.getDaylightOffsetByAppointment(this, originalStartDate, dates[i], startDateTimeZone);
+                const diff = daylightOffset1 - daylightOffset2;
+
+                dates[i] = new Date(dates[i].getTime() - diff * toMs('hour'));
+            }
         }
 
         if(renderingStrategy.needSeparateAppointment(allDay)) {
@@ -762,6 +771,18 @@ const subscribes = {
     getDaylightOffset: function(startDate, endDate) {
         return startDate.getTimezoneOffset() - endDate.getTimezoneOffset();
     },
+
+    getDaylightOffsetByOption: function(scheduler, startDate, endDate) {
+        return scheduler._getTimezoneOffsetByOption(startDate) - scheduler._getTimezoneOffsetByOption(endDate);
+    },
+
+    getDaylightOffsetByAppointment: function(scheduler, startDate, endDate, appointmentTimezone) {
+        return scheduler._calculateTimezoneByValue(appointmentTimezone, startDate) - scheduler._calculateTimezoneByValue(appointmentTimezone, endDate);
+    },
+
+    // getComplexDaylightOffset: function(scheduler, startDate, endDate, appointmentTimezone) {
+    //     return scheduler._getTimezoneOffsetByOption(date)
+    // },
 
     getTimezonesDisplayName: function() {
         return SchedulerTimezones.getTimezonesDisplayName();
