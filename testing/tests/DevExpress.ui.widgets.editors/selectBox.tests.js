@@ -1753,9 +1753,9 @@ QUnit.module('editing', moduleSetup, () => {
         const instance = $element.dxSelectBox('instance');
         const $ddButton = $element.find(toSelector(DX_DROP_DOWN_BUTTON));
 
-        $input.get(0).setSelectionRange(0, 2);
-        keyboard.caret({ start: 0, end: 2 });
-        keyboard.press('backspace');
+        keyboard
+            .caret({ start: 0, end: 2 })
+            .press('backspace');
         $ddButton.trigger('dxclick');
         $input.trigger('dxclick');
 
