@@ -187,13 +187,15 @@ exports.DataProvider = Class.inherit({
     },
 
     ready: function() {
-        this._initOptions();
-        const options = this._options;
+        const that = this;
 
-        return when(options.items).done((items) => {
-            options.customizeExportData && options.customizeExportData(this.getColumns(this.getHeaderRowCount() > 1), items);
+        that._initOptions();
+        const options = that._options;
+
+        return when(options.items).done(function(items) {
+            options.customizeExportData && options.customizeExportData(that.getColumns(that.getHeaderRowCount() > 1), items);
             options.items = items;
-        }).fail(() => {
+        }).fail(function() {
             options.items = [];
         });
     },

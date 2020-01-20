@@ -31,8 +31,6 @@ QUnit.test('Call all of the Callbacks with the argument', function(assert) {
 });
 
 QUnit.test('Fired method', function(assert) {
-    // arrange
-
     this.Callbacks.add(function() {});
 
     assert.notOk(this.Callbacks.fired(), 'Callback not fired yet');
