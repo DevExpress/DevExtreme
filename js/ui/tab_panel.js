@@ -310,18 +310,19 @@ const TabPanel = MultiView.inherit({
                 this._tabs.repaint();
                 break;
             case 'selectedIndex':
-            case 'selectedItem':
+            case 'selectedItem': {
+                this._setTabsOption(fullName, value);
+                this.callBase(args);
+                const selectedIndex = this.option('selectedIndex');
+                const selectedTabContent = this._itemElements()[selectedIndex];
+                this.option('focusedElement', getPublicElement($(selectedTabContent)));
+                break;
+            }
             case 'itemHoldTimeout':
             case 'focusStateEnabled':
             case 'hoverStateEnabled':
                 this._setTabsOption(fullName, value);
                 this.callBase(args);
-
-                if(name === 'selectedIndex' || name === 'selectedItem') {
-                    const selectedIndex = this.option('selectedIndex');
-                    const selectedTabContent = this._itemElements()[selectedIndex];
-                    this.option('focusedElement', getPublicElement($(selectedTabContent)));
-                }
                 break;
             case 'scrollingEnabled':
             case 'scrollByContent':
