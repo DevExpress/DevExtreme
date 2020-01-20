@@ -129,20 +129,6 @@ QUnit.module('render', {
         });
     });
 
-    test('items - location', function(assert) {
-        const element = this.element.dxToolbar({
-            items: [
-                { location: 'before', text: 'before' },
-                { location: 'after', text: 'after' },
-                { location: 'center', text: 'center' }
-            ]
-        });
-
-        $.each(['before', 'after', 'center'], function() {
-            assert.equal(element.find('.' + TOOLBAR_CLASS + '-' + this).text(), this);
-        });
-    });
-
     test('add a custom CSS class to item', function(assert) {
         this.element.dxToolbar({
             items: [
@@ -378,7 +364,7 @@ QUnit.module('default template', () => {
         assert.equal($.trim($content.text()), '1');
     });
 
-    test('template should be rendered correctly with text', function(assert) {
+    test('template should be rendered correctly with object that contains the "text" property', function(assert) {
         const $content = prepareItemTest({ text: 'custom' });
 
         assert.equal($.trim($content.text()), 'custom');

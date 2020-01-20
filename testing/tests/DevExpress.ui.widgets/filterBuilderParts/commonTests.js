@@ -1172,8 +1172,8 @@ QUnit.module('on value changed', function() {
 
     QUnit.test('Should remove the group if the last condition in it is removed (T846991)', function(assert) {
         // arrange
-        let container = $('#container');
-        let value = [['CompanyName', 'K&S Music']];
+        const container = $('#container');
+        const value = [['CompanyName', 'K&S Music']];
 
         container.dxFilterBuilder({
             value: value,

@@ -32,7 +32,7 @@ QUnit.module('Form scenarios', () => {
     function checkPosition($container, $element, expected) {
         const elementRect = $element.get(0).getBoundingClientRect();
 
-        let epsilon = 0.1;
+        const epsilon = 0.1;
         if($container != null) {
             const containerRect = $container.get(0).getBoundingClientRect();
             QUnit.assert.roughEqual(elementRect.top - containerRect.top, expected.top, epsilon, 'top element offset');

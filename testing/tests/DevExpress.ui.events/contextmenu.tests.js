@@ -23,7 +23,7 @@ QUnit.test('contextmenu should be fired on hold event', function(assert) {
     const $element = $('#element');
 
     $element.on(contextMenuEvent.name, function(e) {
-        assert.ok(e.target === $element[0]);
+        assert.strictEqual(e.target, $element[0]);
     });
 
     $element.trigger($.Event(holdEvent.name, { pointerType: 'touch' }));
@@ -49,7 +49,7 @@ QUnit.test('contextmenu should be fired on contextmenu event', function(assert) 
     const $element = $('#element');
 
     $element.on(contextMenuEvent.name, function(e) {
-        assert.ok(e.target === $element[0]);
+        assert.strictEqual(e.target, $element[0]);
     });
 
     $element.trigger('contextmenu');
@@ -65,7 +65,7 @@ QUnit.test('contextmenu should be fired on dxhold in simulator', function(assert
         const $element = $('#element');
 
         $element.on(contextMenuEvent.name, function(e) {
-            assert.ok(e.target === $element[0]);
+            assert.strictEqual(e.target, $element[0]);
         });
 
         $element.trigger($.Event(holdEvent.name, { pointerType: 'mouse' }));

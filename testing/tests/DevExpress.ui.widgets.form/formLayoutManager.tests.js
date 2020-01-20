@@ -18,7 +18,6 @@ QUnit.testStart(function() {
 QUnit.module('Layout manager');
 
 QUnit.test('Layout strategy when flex is not supported', function(assert) {
-    // arrange, act
     const items = [
         {
             dataField: 'test1',
@@ -45,19 +44,16 @@ QUnit.test('Layout strategy when flex is not supported', function(assert) {
     const $testContainer = $('#container').dxLayoutManager();
     const layoutManager = $testContainer.dxLayoutManager('instance');
 
-    // act
     layoutManager._hasBrowserFlex = function() {
         return false;
     };
     layoutManager.option('items', items);
 
-    // assert
     assert.equal(layoutManager._responsiveBox.option('_layoutStrategy'), 'fallback');
     assert.equal($testContainer.find('.' + internals.FIELD_ITEM_CLASS + '.' + internals.FLEX_LAYOUT_CLASS).length, 0, 'flex layout class');
 });
 
 QUnit.test('Layout strategy when flex is supported', function(assert) {
-    // arrange, act
     const items = [
         {
             dataField: 'test1',
@@ -84,19 +80,16 @@ QUnit.test('Layout strategy when flex is supported', function(assert) {
     const $testContainer = $('#container').dxLayoutManager();
     const layoutManager = $testContainer.dxLayoutManager('instance');
 
-    // act
     layoutManager._hasBrowserFlex = function() {
         return true;
     };
     layoutManager.option('items', items);
 
-    // assert
     assert.equal(layoutManager._responsiveBox.option('_layoutStrategy'), 'flex');
     assert.equal($testContainer.find('.' + internals.FIELD_ITEM_CLASS + '.' + internals.FLEX_LAYOUT_CLASS).length, 5, 'flex layout class');
 });
 
 QUnit.test('Check label alignment classes when browser is not supported flex', function(assert) {
-    // arrange, act
     const items = [
         {
             dataField: 'test1',
@@ -122,16 +115,13 @@ QUnit.test('Check label alignment classes when browser is not supported flex', f
     ];
     const $testContainer = $('#container').dxLayoutManager();
     const layoutManager = $testContainer.dxLayoutManager('instance');
-    let $items;
 
-    // act
     layoutManager._hasBrowserFlex = function() {
         return false;
     };
     layoutManager.option('items', items);
-    $items = $testContainer.find('.' + internals.FIELD_ITEM_CLASS);
+    const $items = $testContainer.find('.' + internals.FIELD_ITEM_CLASS);
 
-    // assert
     assert.ok(!$items.eq(0).hasClass(internals.FIELD_ITEM_LABEL_ALIGN_CLASS), 'item doesn\'t have baseline alignment class');
     assert.ok($items.eq(1).hasClass(internals.FIELD_ITEM_LABEL_ALIGN_CLASS), 'item have baseline alignment class');
     assert.ok($items.eq(2).hasClass(internals.FIELD_ITEM_LABEL_ALIGN_CLASS), 'item have baseline alignment class');
@@ -140,7 +130,6 @@ QUnit.test('Check label alignment classes when browser is not supported flex', f
 });
 
 QUnit.test('Check clickable fielditem', function(assert) {
-    // arrange
     const clock = sinon.useFakeTimers();
     const $testContainer = $('#container').dxLayoutManager({
         items: [
@@ -159,7 +148,6 @@ QUnit.test('Check clickable fielditem', function(assert) {
     const $fieldItemLabels = $testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS);
     const instance = $testContainer.dxLayoutManager('instance');
 
-    // act
     assert.deepEqual(instance.option('layoutData'), { isRich: false, hasMansion: false }, 'Correct initial data');
 
     $($fieldItemLabels.eq(0)).trigger('dxclick');
@@ -168,13 +156,11 @@ QUnit.test('Check clickable fielditem', function(assert) {
     $($fieldItemLabels.eq(1)).trigger('dxclick');
     clock.tick(200);
 
-    // assert
     assert.deepEqual(instance.option('layoutData'), { isRich: true, hasMansion: true }, 'Correct data');
     clock.restore();
 });
 
 QUnit.test('Generate several various widgets in layout', function(assert) {
-    // arrange, act
     const $testContainer = $('#container').dxLayoutManager({
         items: [
             {
@@ -198,7 +184,6 @@ QUnit.test('Generate several various widgets in layout', function(assert) {
     const $dateBox = $fieldItems.eq(2).find('.dx-datebox');
 
 
-    // assert
     assert.ok($fieldItems.eq(0).find('.dx-textbox').length, 'First item is dxTextBox');
     assert.ok($fieldItems.eq(1).find('.dx-numberbox').length, 'Second item is dxNumberBox');
     assert.ok($dateBox.length, 'Third item is dxDateBox');
@@ -206,8 +191,6 @@ QUnit.test('Generate several various widgets in layout', function(assert) {
 });
 
 QUnit.test('Editors with object value correctly work with values from data', function(assert) {
-    // arrange, act
-    let layoutManager;
     const $testContainer = $('#container');
     const items = [
         { myText: 'test1', number: 1 },
@@ -215,7 +198,7 @@ QUnit.test('Editors with object value correctly work with values from data', fun
         { myText: 'test3', number: 3 }
     ];
 
-    layoutManager = $testContainer.dxLayoutManager({
+    const layoutManager = $testContainer.dxLayoutManager({
         layoutData: { testItem: items[1] },
         items: [
             {
@@ -231,17 +214,13 @@ QUnit.test('Editors with object value correctly work with values from data', fun
 
     const lookupCurrentItemText = layoutManager.$element().find('.dx-lookup-field').text();
 
-    // assert
     assert.equal(lookupCurrentItemText, 'test2', 'lookup has correct current item');
 });
 
 QUnit.test('Change a layoutData object', function(assert) {
-    // arrange
-    let $editors;
-    let layoutManager;
     const $testContainer = $('#container');
 
-    layoutManager = $testContainer.dxLayoutManager({
+    const layoutManager = $testContainer.dxLayoutManager({
         layoutData: {
             name: 'Patti',
             active: true,
@@ -255,7 +234,6 @@ QUnit.test('Change a layoutData object', function(assert) {
         }
     }).dxLayoutManager('instance');
 
-    // act
     layoutManager.option('layoutData', {
         name: 'Vadim',
         active: null,
@@ -263,9 +241,8 @@ QUnit.test('Change a layoutData object', function(assert) {
         birthDate: new Date('1/1/2001')
     });
 
-    $editors = $testContainer.find('.dx-texteditor, .dx-switch');
+    const $editors = $testContainer.find('.dx-texteditor, .dx-switch');
 
-    // assert
     assert.equal($editors.eq(0).dxTextBox('instance').option('value'), 'Vadim');
     assert.equal($editors.eq(1).dxSwitch('instance').option('value'), false);
     assert.equal($editors.eq(2).dxNumberBox('instance').option('value'), 450);
@@ -279,7 +256,6 @@ function triggerKeyUp($element, key) {
 }
 
 QUnit.test('onEditorEnterKey', function(assert) {
-    // arrange
     let testArgs;
     let editor;
     const layoutManager = $('#container').dxLayoutManager({
@@ -292,22 +268,18 @@ QUnit.test('onEditorEnterKey', function(assert) {
         }
     }).dxLayoutManager('instance');
 
-    // act
     editor = layoutManager.getEditor('profession');
     triggerKeyUp(editor.$element(), 'Enter');
 
-    // assert
     assert.notEqual(testArgs.component, undefined, 'component');
     assert.notEqual(testArgs.element, undefined, 'element');
     assert.notEqual(testArgs.event, undefined, 'Event');
     assert.equal(testArgs.dataField, 'profession', 'dataField');
     assert.equal(testArgs.component.NAME, 'dxLayoutManager', 'correct component');
 
-    // act
     editor = layoutManager.getEditor('name');
     triggerKeyUp(editor.$element(), 'Enter');
 
-    // assert
     assert.notEqual(testArgs.component, undefined, 'component');
     assert.notEqual(testArgs.element, undefined, 'element');
     assert.notEqual(testArgs.event, undefined, 'Event');
@@ -360,7 +332,6 @@ QUnit.test('Change items from [1] -> []', function(assert) {
 QUnit.module('Render multiple columns');
 
 QUnit.test('Change from fixed colCount to auto and vice versa', function(assert) {
-    // arrange
     const $testContainer = $('#container').width(450);
 
     $testContainer.dxLayoutManager({
@@ -369,10 +340,8 @@ QUnit.test('Change from fixed colCount to auto and vice versa', function(assert)
         minColWidth: 200
     });
 
-    // act
     const instance = $testContainer.dxLayoutManager('instance');
 
-    // assert
     assert.equal(instance._getColCount(), 1, 'We have only 1 column');
 
     instance.option('colCount', 'auto');

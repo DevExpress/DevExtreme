@@ -701,9 +701,7 @@ QUnit.module('Lookup', {
     });
 
     QUnit.test('userDataSource: byKey', function(assert) {
-        // arrange
         let initialLoadCalled = false;
-
         let searchLoadCalled = false;
         let searchString = null;
         const lookupKeys = [];
@@ -751,10 +749,8 @@ QUnit.module('Lookup', {
 
         const search = this.search;
 
-        // act
         search.option('value', 'thr');
 
-        // assert
         assert.ok(initialLoadCalled, 'initial load');
         assert.ok(searchLoadCalled, 'load should be called with search params');
         assert.equal(searchString, 'thr', 'Correct search string should be passed');
@@ -763,7 +759,6 @@ QUnit.module('Lookup', {
     });
 
     QUnit.test('userDataSource: lookup with not defined value', function(assert) {
-        // arrange
         const lookupKeys = [];
         const userDataSource = {
             load: function(loadOptions) {
@@ -776,7 +771,6 @@ QUnit.module('Lookup', {
             }
         };
 
-        // act
         this.instance.option({
             dataSource: userDataSource,
             displayExpr: 'name',
@@ -786,7 +780,6 @@ QUnit.module('Lookup', {
 
         this.togglePopup();
 
-        // assert
         assert.equal(lookupKeys.length, 0, 'Lookup callback should never be called');
     });
 
@@ -1041,7 +1034,6 @@ QUnit.module('Lookup', {
         openPopupWithList(secondLookup);
         assert.equal($('.' + LIST_ITEM_SELECTED_CLASS).length, 2);
 
-        // mouse = pointerMock($firstListItem);
         mouse.start().down().move(0, 10).up();
 
         openPopupWithList(firstLookup);

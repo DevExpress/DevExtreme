@@ -60,7 +60,7 @@ $.each(['horizontal', 'vertical'], function(_, direction) {
             },
             direction: direction
         }, function(e) {
-            assert.ok(e.target === element[0]);
+            assert.strictEqual(e.target, element[0]);
             updateHistory.push(e.offset);
         });
 
@@ -87,7 +87,7 @@ $.each(['horizontal', 'vertical'], function(_, direction) {
             }, function() {
                 updateCount++;
             }).on(swipeEvents.end, function(e) {
-                assert.ok(e.target === element[0]);
+                assert.strictEqual(e.target, element[0]);
                 assert.equal(e.offset, pixelOffset / itemSize);
                 assert.equal(e.targetOffset, expectedItemOffset);
                 assert.equal(updateCount, 1);

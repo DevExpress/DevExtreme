@@ -31,10 +31,9 @@ const TransitionExecutor = Class.inherit({
     _createAnimations: function($elements, initialConfig, configModifier, type) {
         const that = this;
         const result = [];
-        let animationConfig;
 
         configModifier = configModifier || {};
-        animationConfig = this._prepareElementAnimationConfig(initialConfig, configModifier, type);
+        const animationConfig = this._prepareElementAnimationConfig(initialConfig, configModifier, type);
 
         if(animationConfig) {
             $elements.each(function() {
