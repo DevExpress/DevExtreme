@@ -530,11 +530,11 @@ QUnit.module('keyboard navigation', {
             this.instance.option('selectedIndex', selectedIndex);
             this.$element.focusin();
 
-            const $selectedTabContents = this.$element.find(toSelector(SELECTED_ITEM_CLASS));
-            assert.equal(selectedIndex, $selectedTabContents.index(), 'selected tab content must match selected index');
+            const $selectedTabContent = this.$element.find(toSelector(SELECTED_ITEM_CLASS));
+            assert.equal(selectedIndex, $selectedTabContent.index(), 'selected tab content must match selected index');
 
             const focusedElement = this.instance.option('focusedElement');
-            assert.equal(focusedElement.outerHTML, $selectedTabContents.get(0).outerHTML, 'selected tab content must match focused element');
+            assert.equal(focusedElement.outerHTML, $selectedTabContent.get(0).outerHTML, 'selected tab content must match focused element');
         });
     });
 
@@ -544,11 +544,11 @@ QUnit.module('keyboard navigation', {
             this.instance.option('selectedItem', this.instance._tabs.option('items')[selectedIndex]);
             this.$element.focusin();
 
-            const $selectedTabContents = this.$element.find(toSelector(SELECTED_ITEM_CLASS));
-            assert.equal(selectedIndex, $selectedTabContents.index(), 'selected tab content must match selected index');
+            const $selectedTabContent = this.$element.find(toSelector(SELECTED_ITEM_CLASS));
+            assert.equal(selectedIndex, $selectedTabContent.index(), 'selected tab content must match selected index');
 
             const focusedElement = this.instance.option('focusedElement');
-            assert.equal(focusedElement.outerHTML, $selectedTabContents.get(0).outerHTML, 'selected tab content must match focused element');
+            assert.equal(focusedElement.outerHTML, $selectedTabContent.get(0).outerHTML, 'selected tab content must match focused element');
         });
     });
 
