@@ -524,6 +524,28 @@ QUnit.module('keyboard navigation', {
         assert.equal(multiViewFocusedIndex, $(this.tabs.option('focusedElement')).index(), 'tabs focused element is equal multiView focused element');
     });
 
+    [0, 1].forEach(selectedIndex => {
+        QUnit.test(`focus -> setSelectedIndex(${selectedIndex});`, function(assert) {
+            this.$element.focusin();
+            this.instance.option('selectedIndex', selectedIndex);
+            this.$element.focusin();
+
+            const $selectedTabContents = this.$element.find(toSelector(SELECTED_ITEM_CLASS));
+            assert.equal(selectedIndex, $selectedTabContents.index(), 'selected tab content must match selected index');
+        });
+    });
+
+    [0, 1].forEach(selectedIndex => {
+        QUnit.test(`focus -> setSelectedItem(item_${selectedIndex});`, function(assert) {
+            this.$element.focusin();
+            this.instance.option('selectedItem', this.instance._tabs.option('items')[selectedIndex]);
+            this.$element.focusin();
+
+            const $selectedTabContents = this.$element.find(toSelector(SELECTED_ITEM_CLASS));
+            assert.equal(selectedIndex, $selectedTabContents.index(), 'selected tab content must match selected index');
+        });
+    });
+
     QUnit.test('tabPanels focusedElement dependence on tabs focusedElement', function(assert) {
         assert.expect(3);
 

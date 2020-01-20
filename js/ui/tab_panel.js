@@ -314,11 +314,14 @@ const TabPanel = MultiView.inherit({
             case 'itemHoldTimeout':
             case 'focusStateEnabled':
             case 'hoverStateEnabled':
-                if(name === 'selectedIndex' || name === 'selectedItem') {
-                    this.option('focusedElement', null);
-                }
                 this._setTabsOption(fullName, value);
                 this.callBase(args);
+
+                if(name === 'selectedIndex' || name === 'selectedItem') {
+                    const selectedIndex = this.option('selectedIndex');
+                    const selectedTabContent = this._itemElements()[selectedIndex];
+                    this.option('focusedElement', getPublicElement($(selectedTabContent)));
+                }
                 break;
             case 'scrollingEnabled':
             case 'scrollByContent':
@@ -352,6 +355,8 @@ const TabPanel = MultiView.inherit({
                 break;
             case 'badgeExpr':
                 this._invalidate();
+                break;
+            case 'hoveredElement':
                 break;
             default:
                 this.callBase(args);
