@@ -157,7 +157,8 @@ exports.GroupingHelper = Class.inherit((function() {
                         return false;
                     }
                     if(!groupsInfo[i].data || groupsInfo[i].data.isExpanded || foreachCollapsedGroups) {
-                        const callbackResult = foreachGroupsCore(groupsInfo[i].children, callback, childrenAtFirst, parents);
+                        const children = groupsInfo[i].children;
+                        const callbackResult = children.length && foreachGroupsCore(children, callback, childrenAtFirst, parents);
                         callbackResult && callbackResults.push(callbackResult);
                         if(callbackResult === false) {
                             return false;
@@ -173,7 +174,7 @@ exports.GroupingHelper = Class.inherit((function() {
                 }
 
                 const currentParents = updateParentOffsets && parents.slice(0);
-                return updateOffsets && groupsInfo.length && when.apply($, callbackResults).always(function() {
+                return updateOffsets && when.apply($, callbackResults).always(function() {
                     that._updateGroupInfoOffsets(groupsInfo, currentParents);
                 });
             }
