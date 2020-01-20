@@ -38,8 +38,12 @@ QUnit.module('Form scenarios', () => {
         QUnit.assert.roughEqual(elementRect.height, expected.height, epsilon, 'element height');
     }
 
+    function isMobileDevice() {
+        return navigator.maxTouchPoints > 0;
+    }
+
     function testOrSkip(name, callback) {
-        if(!browser.chrome) {
+        if(!browser.chrome || isMobileDevice()) {
             return;
         }
 
