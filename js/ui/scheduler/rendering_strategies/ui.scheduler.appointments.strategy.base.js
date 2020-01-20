@@ -548,17 +548,11 @@ class BaseRenderingStrategy {
     }
 
     _getAppointmentDurationInMs(startDate, endDate, allDay) {
-        let result;
-        this.instance.fire('getAppointmentDurationInMs', {
+        return this.instance.fire('getAppointmentDurationInMs', {
             startDate: startDate,
             endDate: endDate,
             allDay: allDay,
-            callback: function(duration) {
-                result = duration;
-            }
         });
-
-        return result;
     }
 
     _getMaxNeighborAppointmentCount() {
