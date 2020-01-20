@@ -90,7 +90,7 @@ const subscribes = {
         const itemResources = this._resourcesManager.getResourcesFromItem(appointmentData);
         allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
 
-        options.callback(this._getCoordinates(initialDates, dates, itemResources, allDay));
+        return this._getCoordinates(initialDates, dates, itemResources, allDay);
     },
 
     isGroupedByDate: function() {
