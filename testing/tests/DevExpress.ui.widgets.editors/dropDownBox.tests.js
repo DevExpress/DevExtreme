@@ -525,18 +525,24 @@ QUnit.module('popup options', moduleConfig, () => {
                 return;
             }
 
-            const $content = $('<input type="text" />');
-            const instance = new DropDownBox($('#dropDownBox'), {
-                contentTemplate: () => $content
-            });
+            const originalRealDeviceIsMac = DropDownBox.realDevice.mac;
+            DropDownBox.realDevice.mac = isMac;
 
-            instance.setRealDevice({ mac: isMac });
-            instance.open();
-            $content.focus();
-            this.clock.tick();
-            $(window).trigger('scroll');
+            try {
+                const $content = $('<input type="text" />');
+                const instance = new DropDownBox($('#dropDownBox'), {
+                    contentTemplate: () => $content
+                });
 
-            assert.strictEqual(instance.option('opened'), isMac);
+                instance.open();
+                $content.focus();
+                this.clock.tick();
+                $(window).trigger('scroll');
+
+                assert.strictEqual(instance.option('opened'), isMac);
+            } finally {
+                DropDownBox.realDevice.mac = originalRealDeviceIsMac;
+            }
         });
     });
 });
