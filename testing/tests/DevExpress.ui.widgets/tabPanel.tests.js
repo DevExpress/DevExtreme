@@ -532,6 +532,9 @@ QUnit.module('keyboard navigation', {
 
             const $selectedTabContents = this.$element.find(toSelector(SELECTED_ITEM_CLASS));
             assert.equal(selectedIndex, $selectedTabContents.index(), 'selected tab content must match selected index');
+
+            const focusedElement = this.instance.option('focusedElement');
+            assert.equal(focusedElement.outerHTML, $selectedTabContents.get(0).outerHTML, 'selected tab content must match focused element');
         });
     });
 
@@ -543,6 +546,9 @@ QUnit.module('keyboard navigation', {
 
             const $selectedTabContents = this.$element.find(toSelector(SELECTED_ITEM_CLASS));
             assert.equal(selectedIndex, $selectedTabContents.index(), 'selected tab content must match selected index');
+
+            const focusedElement = this.instance.option('focusedElement');
+            assert.equal(focusedElement.outerHTML, $selectedTabContents.get(0).outerHTML, 'selected tab content must match focused element');
         });
     });
 
