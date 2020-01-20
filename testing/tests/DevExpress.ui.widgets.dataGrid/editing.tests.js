@@ -8413,7 +8413,7 @@ QUnit.module('Editing with validation', {
             return renderer('.dx-datagrid');
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary'], {
             initViews: true
         });
 
@@ -9141,6 +9141,7 @@ QUnit.test('Cell\'s height is increasing on resize if validation applied and bat
     };
 
     rowsView.render(testElement);
+    this.footerView.render(testElement);
 
     that.applyOptions({
         dataSource: [{ Test: 'a' }],
@@ -10739,6 +10740,140 @@ QUnit.test('Edit cell with edit mode batch and change page', function(assert) {
     assert.equal(testElement.find('tbody > tr').length, 3, 'count rows');
     assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
     assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
+});
+
+// T836508
+QUnit.test('Edit invalid cell from another page if edit mode is batch and recalculateWhileEditing is true', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        loadingTimeout: 0,
+        editing: {
+            mode: 'batch'
+        },
+        summary: {
+            recalculateWhileEditing: true
+        },
+        columns: ['name', {
+            dataField: 'age',
+            validationRules: [{ type: 'range', min: 1, max: 100 }]
+        }, 'lastName']
+    });
+    that.clock.tick();
+
+    that.dataController.pageSize(2);
+    that.clock.tick();
+
+    that.cellValue(0, 1, 101);
+    that.clock.tick();
+    that.dataController.pageIndex(1);
+    that.clock.tick();
+    that.saveEditData();
+    that.clock.tick();
+
+    // act
+    that.editCell(0, 1);
+    that.clock.tick();
+
+    // assert
+    const $cell = $(that.getCellElement(0, 1));
+    assert.ok($cell.hasClass('dx-editor-cell'), 'editor is rendered');
+    assert.ok($cell.hasClass('dx-datagrid-invalid'), 'invalid border is shown');
+    assert.equal(that.cellValue(0, 1), 101, 'modified row is moved to current page');
+});
+
+QUnit.test('Row with invalid cell from another page should not be removed after refresh', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        loadingTimeout: 0,
+        editing: {
+            mode: 'batch'
+        },
+        columns: ['name', {
+            dataField: 'age',
+            validationRules: [{ type: 'range', min: 1, max: 100 }]
+        }, 'lastName']
+    });
+    that.clock.tick();
+
+    that.dataController.pageSize(2);
+    that.clock.tick();
+    that.cellValue(0, 1, 101);
+    that.clock.tick();
+    that.dataController.pageIndex(1);
+    that.clock.tick();
+    that.saveEditData();
+    that.clock.tick();
+
+    // act
+    that.refresh();
+    that.clock.tick();
+    that.refresh();
+    that.clock.tick();
+
+    // assert
+    const $cell = $(that.getCellElement(0, 1));
+    assert.ok($cell.hasClass('dx-datagrid-invalid'), 'invalid border is shown');
+    assert.equal(that.cellValue(0, 1), 101, 'modified row is moved to current page');
+});
+
+QUnit.test('Row with invalid cell from another page should not be removed after paging', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        loadingTimeout: 0,
+        editing: {
+            mode: 'batch'
+        },
+        scrolling: {
+            mode: 'standard'
+        },
+        columns: ['name', {
+            dataField: 'age',
+            validationRules: [{ type: 'range', min: 1, max: 100 }]
+        }, 'lastName']
+    });
+    that.clock.tick();
+
+    // act
+    that.pageSize(2);
+    that.clock.tick();
+    that.cellValue(0, 1, 101);
+    that.clock.tick();
+    that.pageIndex(1);
+    that.clock.tick();
+    that.saveEditData();
+    that.clock.tick();
+
+    // assert
+    assert.equal(that.getVisibleRows().length, 2, 'visible row count');
+    assert.ok($(that.getCellElement(0, 1)).hasClass('dx-datagrid-invalid'), 'invalid border is shown');
+
+    // act
+    that.pageIndex(0);
+    that.clock.tick();
+    that.pageIndex(1);
+    that.clock.tick();
+
+    // assert
+    assert.equal(that.getVisibleRows().length, 1, 'visible row count');
+    assert.notOk($(that.getCellElement(0, 1)).hasClass('dx-datagrid-invalid'), 'invalid border is shown');
 });
 
 // T709466
