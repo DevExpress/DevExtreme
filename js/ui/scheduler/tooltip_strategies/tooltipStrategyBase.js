@@ -86,8 +86,8 @@ export class TooltipStrategyBase {
             onContentReady: this._onListRender.bind(this),
             onItemClick: e => this._onListItemClick(e),
             itemTemplate: (item, index) => {
-                const currentData = (item.settings && item.settings.targetedAppointmentData) || item.currentData || item.data;
-                return this._renderTemplate(this._tooltip.option('target'), item.data, currentData, index, item.color);
+                const targetedData = (item.settings && item.settings.targetedAppointmentData) || item.data;
+                return this._renderTemplate(this._tooltip.option('target'), item.data, targetedData, index, item.color);
             }
         };
     }
