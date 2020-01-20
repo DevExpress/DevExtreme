@@ -610,21 +610,33 @@ class Diagram extends Widget {
     }
     _getDataBindingLayoutParameters() {
         const { DataLayoutType, DataLayoutOrientation } = getDiagram();
-        const layoutParametersOption = this.option('nodes.autoLayout');
-        if(!layoutParametersOption || layoutParametersOption === 'off' || layoutParametersOption.type === 'off') return undefined;
-        const parameters = {};
+        const layoutParametersOption = this.option('nodes.autoLayout') || 'off';
         const layoutType = layoutParametersOption.type || layoutParametersOption;
-        if(layoutType === 'tree') {
-            parameters.type = DataLayoutType.Tree;
-        } else if(layoutType === 'layered') {
-            parameters.type = DataLayoutType.Sugiyama;
+        if(layoutType === 'off' || (layoutType === 'auto' && this._hasNodePositionExprs())) {
+            return undefined;
+        } else {
+            const parameters = {};
+            switch(layoutType) {
+                case 'tree':
+                    parameters.type = DataLayoutType.Tree;
+                    break;
+                default:
+                    parameters.type = DataLayoutType.Sugiyama;
+                    break;
+            }
+            switch(layoutParametersOption.orientation) {
+                case 'vertical':
+                    parameters.orientation = DataLayoutOrientation.Vertical;
+                    break;
+                case 'horizontal':
+                    parameters.orientation = DataLayoutOrientation.Horizontal;
+                    break;
+            }
+            return parameters;
         }
-        if(layoutParametersOption.orientation === 'vertical') {
-            parameters.orientation = DataLayoutOrientation.Vertical;
-        } else if(layoutParametersOption.orientation === 'horizontal') {
-            parameters.orientation = DataLayoutOrientation.Horizontal;
-        }
-        return parameters;
+    }
+    _hasNodePositionExprs() {
+        return this.option('nodes.topExpr') && this.option('nodes.leftExpr');
     }
     _getAutoZoomValue(option) {
         const { AutoZoomMode } = getDiagram();
@@ -1209,7 +1221,7 @@ class Diagram extends Widget {
                  * @name dxDiagramOptions.nodes.autoLayout.orientation
                  * @type Enums.DiagramDataLayoutOrientation
                  */
-                autoLayout: 'layered'
+                autoLayout: 'auto'
             },
             edges: {
                 /**
