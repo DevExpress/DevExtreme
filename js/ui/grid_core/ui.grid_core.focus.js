@@ -155,7 +155,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 return d.reject().promise();
             }
 
-            const rowIndexByKey = that._getFocusedRowIndexByKey(key);
+            const rowIndexByKey = that.getFocusedRowIndexByKey(key);
             const isPaginate = dataController.getDataSource().paginate();
 
             if(!isAutoNavigate && needFocusRow || !isPaginate || rowIndexByKey >= 0) {
@@ -169,7 +169,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                     if(pageIndex === dataController.pageIndex()) {
                         dataController.reload().done(function() {
                             if(that.isRowFocused(key)) {
-                                d.resolve(that._getFocusedRowIndexByKey(key));
+                                d.resolve(that.getFocusedRowIndexByKey(key));
                             } else {
                                 that._navigateToVisibleRow(key, d, needFocusRow);
                             }
@@ -230,7 +230,7 @@ exports.FocusController = core.ViewController.inherit((function() {
 
         _triggerUpdateFocusedRow: function(key, deferred) {
             const dataController = this.getController('data');
-            const focusedRowIndex = this._getFocusedRowIndexByKey(key);
+            const focusedRowIndex = this.getFocusedRowIndexByKey(key);
 
             if(this._isValidFocusedRowIndex(focusedRowIndex)) {
                 this.getController('keyboardNavigation').setFocusedRowIndex(focusedRowIndex);
@@ -252,7 +252,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
         },
 
-        _getFocusedRowIndexByKey: function(key) {
+        getFocusedRowIndexByKey: function(key) {
             const dataController = this.getController('data');
             const rowIndex = dataController.getRowIndexByKey(key);
             return rowIndex >= 0 ? rowIndex + dataController.getRowIndexOffset() : -1;
