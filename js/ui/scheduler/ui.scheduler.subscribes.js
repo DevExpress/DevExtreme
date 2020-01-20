@@ -844,7 +844,7 @@ const subscribes = {
 
             result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs('minute');
         }
-        options.callback(result);
+        return result;
     },
 
     fixWrongEndDate: function(appointment, startDate, endDate) {

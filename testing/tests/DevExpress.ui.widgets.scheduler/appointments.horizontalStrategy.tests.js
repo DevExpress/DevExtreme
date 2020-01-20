@@ -59,7 +59,7 @@ const moduleOptions = {
             }
 
             if(command === 'getAppointmentDurationInMs') {
-                options.callback(options.endDate.getTime() - options.startDate.getTime());
+                return options.endDate.getTime() - options.startDate.getTime();
             }
 
         }, this);

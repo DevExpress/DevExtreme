@@ -99,7 +99,7 @@ const moduleOptions = {
                 return new Date(2150, 1, 1);
             },
             getAppointmentDurationInMs: function(options) {
-                options.callback(options.endDate.getTime() - options.startDate.getTime());
+                return options.endDate.getTime() - options.startDate.getTime();
             },
             getResourcesFromItem: function(options) {
                 options.callback({ someId: ['with space'] });

@@ -798,13 +798,11 @@ QUnit.test('\'convertDateByTimezone\' should return date according to the custom
 QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration', function(assert) {
     this.createInstance();
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 8),
         endDate: new Date(2015, 2, 2, 20),
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration considering startDayHour and endDayHour', function(assert) {
@@ -815,13 +813,11 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment dur
         endDayHour: 20
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 8),
         endDate: new Date(2015, 2, 4, 20),
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration considering startDayHour and endDayHour for stricly allDay appointment without allDay field', function(assert) {
@@ -832,13 +828,11 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment dur
         endDayHour: 20
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 8),
         endDate: new Date(2015, 2, 3, 0),
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration considering hours of startDate and endDate', function(assert) {
@@ -849,13 +843,11 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment dur
         endDayHour: 22
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 4, 25, 21),
         endDate: new Date(2015, 4, 26, 3),
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 3, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 3, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible long appointment duration considering hours of startDate and endDate', function(assert) {
@@ -866,13 +858,11 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible long appointmen
         endDayHour: 20
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 10),
         endDate: new Date(2015, 2, 4, 17),
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 31, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 31, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration considering hours of ultraboundary startDate and endDate', function(assert) {
@@ -883,13 +873,11 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment dur
         endDayHour: 20
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 7),
         endDate: new Date(2015, 2, 4, 21),
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible allDay appointment duration', function(assert) {
@@ -900,14 +888,12 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible allDay appointm
         endDayHour: 20
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 7),
         endDate: new Date(2015, 2, 4, 21),
         allDay: true,
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration if last cell has small duration (T664073)', function(assert) {
@@ -919,14 +905,12 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment dur
         cellDuration: 61
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 7),
         endDate: new Date(2015, 2, 4, 21),
         allDay: true,
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 48.8, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 48.8, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentColor\' by certain group', function(assert) {
