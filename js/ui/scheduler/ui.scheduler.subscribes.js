@@ -231,12 +231,8 @@ const subscribes = {
         options.callback(this._resourcesManager.getResourcesFromItem(options.itemData));
     },
 
-    getBoundOffset: function(options) {
-        options.callback({ top: -this.getWorkSpaceAllDayHeight() });
-    },
-
-    appointmentTakesAllDay: function(options) {
-        options.callback(this.appointmentTakesAllDay(options.appointment));
+    getBoundOffset: function() {
+        return { top: -this.getWorkSpaceAllDayHeight() };
     },
 
     appointmentTakesSeveralDays: function(appointment) {
