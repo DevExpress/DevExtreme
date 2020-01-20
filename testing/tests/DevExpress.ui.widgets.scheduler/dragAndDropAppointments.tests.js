@@ -702,25 +702,23 @@ module('Common', commonModuleConfig, () => {
             startDayHour: 0,
         });
 
-        const $element = $(scheduler.appointments.getAppointment());
+        const $element = scheduler.appointments.getAppointment();
+        let elementPosition = getAbsolutePosition($element);
         const cellWidth = scheduler.workSpace.getCellWidth();
-        let pointer = pointerMock($element.find('.dx-scheduler-appointment-content').eq(0)).start();
+        let pointer = pointerMock($element).start();
 
-        pointer.dragStart().drag(-(cellWidth), 0);
-        pointer.dragEnd();
+        pointer.down(elementPosition.left, elementPosition.top).move(-(cellWidth * 2), 0);
+        pointer.up();
 
-        let appointmentContent = $element.find('.dx-scheduler-appointment-content-date').text();
+        let appointmentContent = scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
+        assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates when dragging to timezone change are correct');
 
-        assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
+        elementPosition = getAbsolutePosition($element);
+        pointer.down(elementPosition.left, elementPosition.top).move(cellWidth * 2, 0);
+        pointer.up();
 
-        pointer = pointerMock($element.find('.dx-scheduler-appointment-content').eq(0)).start();
-
-        pointer.dragStart().drag(cellWidth, 0);
-        pointer.dragEnd();
-
-        appointmentContent = $element.find('.dx-scheduler-appointment-content-date').text();
-
-        assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
+        appointmentContent = scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
+        assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates when dragging from timezone change are correct');
     });
 });
 
