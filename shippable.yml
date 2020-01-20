@@ -11,6 +11,7 @@ env:
     - TARGET=test CONSTEL=ui.grid
     - TARGET=test CONSTEL=ui.scheduler
     - TARGET=test CONSTEL=viz
+    - TARGET=test PERF=true JQUERY=true NO_HEADLESS=true
     - TARGET=test MOBILE_UA=ios9 CONSTEL=ui
     - TARGET=test MOBILE_UA=ios9 CONSTEL=ui.editors NO_HEADLESS=true
     - TARGET=test MOBILE_UA=ios9 CONSTEL=ui.grid

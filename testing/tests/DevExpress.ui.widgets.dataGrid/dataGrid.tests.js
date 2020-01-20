@@ -4326,6 +4326,38 @@ QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \
     assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, 'navigated row is visible');
 });
 
+['standard', 'infinite', 'virtual'].forEach((scrollingMode) => {
+    ['standard', 'virtual'].forEach((columnRenderingMode) => {
+        QUnit.test(`Grid should not scroll top after navigate to row on the same page if scrolling.mode is ${scrollingMode} and scrolling.rowRenderingMode is ${columnRenderingMode} (T836612)`, function(assert) {
+            // arrange
+            const data = [];
+
+            for(let i = 0; i < 100; ++i) {
+                data.push({ id: i });
+            }
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 200,
+                keyExpr: 'id',
+                dataSource: data,
+                scrolling: {
+                    mode: 'virtual',
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            // act
+            dataGrid.navigateToRow(35);
+            dataGrid.navigateToRow(20);
+
+            // assert
+            assert.equal(dataGrid.pageIndex(), 1, 'Page index');
+        });
+    });
+});
+
 QUnit.test('DataGrid - Focus row by visible content in \'rowRenderingMode\' should not render rows (T820296)', function(assert) {
     // arrange
     const data = [];
@@ -12713,7 +12745,8 @@ QUnit.testInActiveWindow('Datebox editor\'s enter key handler should be replaced
 
     // assert
     const dateBox = rowsViewWrapper.getEditor(0, 0).dxDateBox('instance');
-    assert.equal(dateBox._enterHandler, commonUtils.noop, 'dateBox enter key handler for mask is replaced');
+    const enterKeyHandler = dateBox._supportedKeys().enter;
+    assert.strictEqual(enterKeyHandler(), true, 'dateBox enter key handler is replaced');
 });
 
 QUnit.testInActiveWindow('Datebox editor\'s value should be selected from calendar by keyboard (T848039)', function(assert) {
@@ -16669,6 +16702,39 @@ QUnit.test('Refresh with changesOnly and summary', function(assert) {
     assert.strictEqual($updatedCellElements.eq(1).text(), 'Sum: 500', 'cell value is updated');
 });
 
+// T851082
+QUnit.test('Row deleting should works if recalculateWhileEditing is enabled and refreshMode is repaint', function(assert) {
+    // arrange
+    const dataGrid = createDataGrid({
+        dataSource: [{ id: 1 }],
+        keyExpr: 'id',
+        editing: {
+            refreshMode: 'repaint',
+            mode: 'batch',
+            allowDeleting: true
+        },
+        summary: {
+            recalculateWhileEditing: true,
+            totalItems: [{
+                column: 'id',
+                summaryType: 'count'
+            }]
+        }
+    });
+    this.clock.tick();
+
+    // act
+    dataGrid.deleteRow(0);
+    this.clock.tick();
+
+    dataGrid.saveEditData();
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'row is removed');
+    assert.strictEqual(dataGrid.getTotalSummaryValue('id'), 0, 'summary is updated');
+});
+
 QUnit.test('Refresh with changesOnly for fixed columns', function(assert) {
     // arrange
     const dataSource = new DataSource({
@@ -18836,6 +18902,45 @@ QUnit.test('Popup should apply data changes after editorOptions changing (T81788
     $popupEditors = $('.dx-popup-content').find('.dx-texteditor');
     assert.equal($popupEditors.eq(0).find('input').eq(0).val(), 'new name', 'value changed');
     assert.equal($popupEditors.eq(1).get(0).style.height, '100px', 'editorOptions applied');
+});
+
+QUnit.test('Datagrid should edit only allowed cells by tab press if editing.allowUpdating option set dynamically (T848707)', function(assert) {
+    ['cell', 'batch'].forEach(editingMode => {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{
+                'ID': 1,
+                'FirstName': 'John',
+                'LastName': 'Heart',
+            }, {
+                'ID': 2,
+                'FirstName': 'Robert',
+                'LastName': 'Reagan'
+            }],
+            showBorders: true,
+            keyExpr: 'ID',
+            editing: {
+                mode: editingMode,
+                allowUpdating: function(e) {
+                    return e.row.data.FirstName === 'Robert';
+                },
+            },
+            columns: ['FirstName', 'LastName']
+        });
+
+        // act
+        dataGrid.editCell(1, 0);
+        this.clock.tick();
+
+        const navigationController = dataGrid.getController('keyboardNavigation');
+        navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
+        this.clock.tick();
+
+        // assert
+        assert.equal($(dataGrid.getCellElement(0, 1)).find('input').length, 0, `cell is not being edited in '${editingMode}' editing mode`);
+        assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-focused'), 'cell is focused');
+    });
 });
 
 QUnit.test('Filter builder custom operations should update filterValue immediately (T817973)', function(assert) {

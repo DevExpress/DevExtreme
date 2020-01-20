@@ -14,10 +14,6 @@ const ROW_LINES_CLASS = 'dx-row-lines';
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name dxDataGridOptions.masterDetail
-             * @type object
-             */
             masterDetail: {
                 /**
                  * @name dxDataGridOptions.masterDetail.enabled

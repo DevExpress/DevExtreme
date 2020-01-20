@@ -95,6 +95,7 @@
     "less": "3.9.0",
     "less-plugin-autoprefix": "^2.0.0",
     "lint-staged": "^3.4.0",
+    "map-stream": "0.0.7",
     "merge-stream": "^2.0.0",
     "minimist": "^1.2.0",
     "mustache": "2.3.0",
@@ -136,7 +137,8 @@
     "build-themebuilder-assets": "gulp style-compiler-tb-assets",
     "dev": "gulp dev",
     "test-env": "node testing/launch",
-    "update-ts": "dx-tools update-ts",
+    "update-ts": "dx-tools update-ts-bundle",
+    "internal-tool": "dx-tools",
     "validate-declarations": "dx-tools declaration-validator",
     "test-functional": "node ./testing/functional/runner"
   },

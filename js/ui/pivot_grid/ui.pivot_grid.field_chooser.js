@@ -94,55 +94,12 @@ function getScrollable(container) {
 const FieldChooser = BaseFieldChooser.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxPivotGridFieldChooserOptions.height
-            * @type number|string|function
-            * @default 400
-            * @type_function_return number|string
-            */
             height: 400,
-            /**
-             * @name dxPivotGridFieldChooserOptions.layout
-             * @type Enums.PivotGridFieldChooserLayout
-             * @default 0
-             */
             layout: 0,
-            /**
-             * @name dxPivotGridFieldChooserOptions.dataSource
-             * @type PivotGridDataSource
-             * @default null
-             * @ref
-             */
             dataSource: null,
-            /**
-            * @name dxPivotGridFieldChooserOptions.onContextMenuPreparing
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 items:Array<Object>
-            * @type_function_param1_field5 area:string
-            * @type_function_param1_field6 field:PivotGridDataSourceOptions.fields
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @extends Action
-            * @action
-            */
             onContextMenuPreparing: null,
-            /**
-            * @name dxPivotGridFieldChooserOptions.allowSearch
-            * @type boolean
-            * @default false
-            */
             allowSearch: false,
-            /**
-            * @name dxPivotGridFieldChooserOptions.searchTimeout
-            * @type number
-            * @default 500
-            */
             searchTimeout: 500,
-            /**
-             * @name dxPivotGridFieldChooserOptions.texts
-             * @type object
-             */
             texts: {
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.columnFields
@@ -175,20 +132,6 @@ const FieldChooser = BaseFieldChooser.inherit({
                  */
                 allFields: format('dxPivotGrid-allFields')
             },
-            /**
-            * @name dxPivotGridFieldChooserOptions.applyChangesMode
-            * @type Enums.ApplyChangesMode
-            * @default "instantly"
-            */
-            /**
-            * @name dxPivotGridFieldChooserOptions.state
-            * @type object
-            * @default null
-            */
-            /**
-             * @name dxPivotGridFieldChooserOptions.headerFilter
-             * @type object
-             */
             /**
              * @name dxPivotGridFieldChooserOptions.headerFilter.width
              * @type number
@@ -724,10 +667,6 @@ const FieldChooser = BaseFieldChooser.inherit({
         }
     },
 
-    /**
-    * @name dxPivotGridFieldChooserMethods.applyChanges
-    * @publicName applyChanges()
-    */
     applyChanges: function() {
         const state = this.option('state');
 
@@ -736,10 +675,6 @@ const FieldChooser = BaseFieldChooser.inherit({
         }
     },
 
-    /**
-    * @name dxPivotGridFieldChooserMethods.cancelChanges
-    * @publicName cancelChanges()
-    */
     cancelChanges: function() {
         const dataSource = this._dataSource;
 
@@ -750,19 +685,10 @@ const FieldChooser = BaseFieldChooser.inherit({
         return false;
     },
 
-    /**
-    * @name dxPivotGridFieldChooserMethods.getDataSource
-    * @publicName getDataSource()
-    * @return PivotGridDataSource
-    */
     getDataSource: function() {
         return this._dataSource;
     },
 
-    /**
-    * @name dxPivotGridFieldChooserMethods.updateDimensions
-    * @publicName updateDimensions()
-    */
     updateDimensions: function() {
         const $scrollableElements = this.$element().find('.dx-area .dx-scrollable');
         $scrollableElements.dxScrollable('update');

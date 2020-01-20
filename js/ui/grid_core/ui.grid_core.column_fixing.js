@@ -885,10 +885,6 @@ const FooterViewFixedColumnsExtender = baseFixedColumns;
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.columnFixing
-             * @type object
-             */
             columnFixing: {
                 /**
                 * @name GridBaseOptions.columnFixing.enabled

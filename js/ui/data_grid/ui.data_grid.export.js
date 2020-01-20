@@ -621,11 +621,6 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 
         return new exports.DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
     },
-    /**
-    * @name dxDataGridMethods.exportToExcel
-    * @publicName exportToExcel(selectionOnly)
-    * @param1 selectionOnly:boolean
-    */
     exportToExcel: function(selectionOnly) {
         const that = this;
 
@@ -661,10 +656,6 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 dataGridCore.registerModule('export', {
     defaultOptions: function() {
         return {
-            /**
-            * @name dxDataGridOptions.export
-            * @type object
-            */
             'export': {
                 /**
                  * @name dxDataGridOptions.export.enabled
@@ -750,37 +741,6 @@ dataGridCore.registerModule('export', {
                  * @type_function_param1_field11 gridCell:ExcelDataGridCell
                  */
             }
-            /**
-             * @name dxDataGridOptions.onExporting
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 fileName:string
-             * @type_function_param1_field5 cancel:boolean
-             * @extends Action
-             * @action
-             */
-            /**
-            * @name dxDataGridOptions.onFileSaving
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field3 fileName:string
-            * @type_function_param1_field4 format:string
-            * @type_function_param1_field5 data:BLOB
-            * @type_function_param1_field6 cancel:boolean
-            * @extends Action
-            * @action
-            */
-            /**
-             * @name dxDataGridOptions.onExported
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name dxDataGridOptions.customizeExportData
-             * @type function(columns, rows)
-             * @type_function_param1 columns:Array<dxDataGridColumn>
-             * @type_function_param2 rows:Array<dxDataGridRowObject>
-             */
         };
     },
     controllers: {
