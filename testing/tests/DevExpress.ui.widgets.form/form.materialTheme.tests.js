@@ -13,7 +13,7 @@ QUnit.testStart(function() {
 
 QUnit.module('Form scenarios', () => {
     function createForm(colCount, items) {
-        return $('#form').dxForm({
+        const $form = $('#form').dxForm({
             width: 1000,
             screenByWidth: () => {
                 return 'xs';
@@ -23,6 +23,10 @@ QUnit.module('Form scenarios', () => {
             },
             items
         });
+
+        $form.find('*').css('font-family', 'Helvetica');
+
+        return $form;
     }
 
     function checkPosition($container, $element, expected) {
@@ -34,16 +38,13 @@ QUnit.module('Form scenarios', () => {
             QUnit.assert.roughEqual(elementRect.top - containerRect.top, expected.top, epsilon, 'top element offset');
             QUnit.assert.roughEqual(elementRect.left - containerRect.left, expected.left, epsilon, 'left element offset');
         }
+
         QUnit.assert.roughEqual(elementRect.width, expected.width, epsilon, 'element width');
         QUnit.assert.roughEqual(elementRect.height, expected.height, epsilon, 'element height');
     }
 
-    function isMobileDevice() {
-        return navigator.maxTouchPoints > 0;
-    }
-
     function testOrSkip(name, callback) {
-        if(!browser.chrome || isMobileDevice()) {
+        if(!browser.chrome) {
             return;
         }
 
