@@ -690,13 +690,11 @@ QUnit.test('UpdateAppointmentEndDate should return corrected endDate', function(
         endDate: new Date(2015, 2, 3, 10, 30)
     };
 
-    this.instance.fire('updateAppointmentEndDate', {
+    const result = this.instance.fire('updateAppointmentEndDate', {
         appointment: appointment,
         endDate: appointment.endDate,
-        callback: function(result) {
-            assert.deepEqual(result, new Date(2015, 2, 3, 10), 'Updated date is correct');
-        }
     });
+    assert.deepEqual(result, new Date(2015, 2, 3, 10), 'Updated date is correct');
 });
 
 QUnit.test('UpdateAppointmentEndDate should return corrected endDate for long appointment', function(assert) {
@@ -713,13 +711,11 @@ QUnit.test('UpdateAppointmentEndDate should return corrected endDate for long ap
         endDate: new Date(2015, 2, 3, 10, 30)
     };
 
-    this.instance.fire('updateAppointmentEndDate', {
+    const result = this.instance.fire('updateAppointmentEndDate', {
         appointment: appointment,
         endDate: appointment.endDate,
-        callback: function(result) {
-            assert.deepEqual(result, new Date(2015, 2, 3, 10), 'Updated date is correct');
-        }
     });
+    assert.deepEqual(result, new Date(2015, 2, 3, 10), 'Updated date is correct');
 });
 
 QUnit.test('UpdateAppointmentEndDate should return corrected endDate by certain endDayHour', function(assert) {
@@ -739,13 +735,11 @@ QUnit.test('UpdateAppointmentEndDate should return corrected endDate by certain 
         endDate: new Date(2015, 2, 3, 20, 30)
     };
 
-    this.instance.fire('updateAppointmentEndDate', {
+    const result = this.instance.fire('updateAppointmentEndDate', {
         appointment: appointment,
         endDate: appointment.endDate,
-        callback: function(result) {
-            assert.deepEqual(result, new Date(2015, 2, 3, 18), 'Updated date is correct');
-        }
     });
+    assert.deepEqual(result, new Date(2015, 2, 3, 18), 'Updated date is correct');
 });
 
 QUnit.test('\'convertDateByTimezone\' should return date according to the custom timeZone', function(assert) {

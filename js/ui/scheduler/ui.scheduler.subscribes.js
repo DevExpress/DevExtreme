@@ -459,7 +459,7 @@ const subscribes = {
             updatedEndDate = new Date(updatedEndDate.getTime() - toMs('day'));
             updatedEndDate.setHours(endDayHour, 0, 0, 0);
         }
-        options.callback(updatedEndDate);
+        return updatedEndDate;
     },
 
     renderCompactAppointments: function(options) {
