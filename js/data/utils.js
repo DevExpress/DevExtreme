@@ -3,11 +3,12 @@ import domAdapter from '../core/dom_adapter';
 import { add as ready } from '../core/utils/ready_callbacks';
 import { getWindow } from '../core/utils/window';
 import { map } from '../core/utils/iterator';
-import { toComparable } from '../core/utils/data';
+import { toComparable, compileGetter } from '../core/utils/data';
 import { Deferred } from '../core/utils/deferred';
 import typeUtils from '../core/utils/type';
 
 const XHR_ERROR_UNLOAD = 'DEVEXTREME_XHR_ERROR_UNLOAD';
+let keyCompileGetters = {};
 
 const normalizeBinaryCriterion = function(crit) {
     return [
@@ -153,29 +154,26 @@ function isConjunctiveOperator(condition) {
     return /^(and|&&|&)$/i.test(condition);
 }
 
-function getKeyValue(keyName, key) {
-    let value;
-    keyName.split('.').forEach((name) => {
-        value = value ? value[name] : key[name];
-    });
-
-    return value;
+function getKeyCompileGetter(name) {
+    if(!keyCompileGetters[name]) {
+        keyCompileGetters[name] = compileGetter(name);
+    }
+    return keyCompileGetters[name];
 }
 
-const keysEqual = function(keyExpr, key1, key2) {
+const keysEqual = function(keyExpr, key1Value, key2Value) {
     if(Array.isArray(keyExpr)) {
         for(let i = 0; i < keyExpr.length; i++) {
-            const key1Value = getKeyValue(keyExpr[i], key1);
-            const key2Value = getKeyValue(keyExpr[i], key2);
+            const keyCompileGetter = getKeyCompileGetter(keyExpr[i]);
             // eslint-disable-next-line eqeqeq
-            if(toComparable(key1Value, true) != toComparable(key2Value, true)) {
+            if(toComparable(keyCompileGetter(key1Value), true) != toComparable(keyCompileGetter(key2Value), true)) {
                 return false;
             }
         }
         return true;
     }
     // eslint-disable-next-line eqeqeq
-    return toComparable(key1, true) == toComparable(key2, true);
+    return toComparable(key1Value, true) == toComparable(key2Value, true);
 };
 
 const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
