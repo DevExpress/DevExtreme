@@ -55,7 +55,7 @@ const moduleOptions = {
             }
 
             if(command === 'updateAppointmentStartDate') {
-                this.viewStartDate && options.callback(this.viewStartDate);
+                this.viewStartDate;
             }
 
             if(command === 'getAppointmentDurationInMs') {

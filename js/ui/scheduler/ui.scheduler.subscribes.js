@@ -450,9 +450,7 @@ const subscribes = {
             updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));
         }
 
-        updatedStartDate = dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
-
-        options.callback(updatedStartDate);
+        return dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
     },
 
     updateAppointmentEndDate: function(options) {

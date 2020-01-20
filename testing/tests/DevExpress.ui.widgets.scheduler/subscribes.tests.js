@@ -348,12 +348,9 @@ QUnit.test('\'updateAppointmentStartDate\' should work correct with custom data 
         startDateExpr: 'Start'
     });
 
-    this.instance.fire('updateAppointmentStartDate', {
+    assert.ok(this.instance.fire('updateAppointmentStartDate', {
         startDate: new Date(2015, 2, 2, 0),
-        callback: function(result) {
-            assert.ok(result, 'There is some result');
-        }
-    });
+    }));
 });
 
 QUnit.test('\'mapAppointmentFields\' should call getTargetedAppointmentData', function(assert) {
@@ -602,12 +599,10 @@ QUnit.test('UpdateAppointmentStartDate should return corrected startDate', funct
         endDate: new Date(2016, 1, 2, 7)
     };
 
-    this.instance.fire('updateAppointmentStartDate', {
+    const result = this.instance.fire('updateAppointmentStartDate', {
         startDate: appointment.startDate,
-        callback: function(result) {
-            assert.deepEqual(result, new Date(2016, 1, 2, 5), 'Updated date is correct');
-        }
     });
+    assert.deepEqual(result, new Date(2016, 1, 2, 5), 'Updated date is correct');
 });
 
 QUnit.test('UpdateAppointmentStartDate should return corrected startDate when appointment is short', function(assert) {
@@ -623,12 +618,10 @@ QUnit.test('UpdateAppointmentStartDate should return corrected startDate when ap
         endDate: new Date(2016, 1, 2, 9, 1)
     };
 
-    this.instance.fire('updateAppointmentStartDate', {
+    const result = this.instance.fire('updateAppointmentStartDate', {
         startDate: appointment.startDate,
-        callback: function(result) {
-            assert.deepEqual(result, new Date(2016, 1, 2, 9, 0), 'Updated date is correct');
-        }
     });
+    assert.deepEqual(result, new Date(2016, 1, 2, 9, 0), 'Updated date is correct');
 });
 
 QUnit.test('appointmentTakesSeveralDays should return true, if startDate and endDate is different days', function(assert) {
@@ -667,13 +660,11 @@ QUnit.test('UpdateAppointmentStartDate should return corrected startDate for lon
         endDate: new Date(2016, 1, 4, 7)
     };
 
-    this.instance.fire('updateAppointmentStartDate', {
+    const result = this.instance.fire('updateAppointmentStartDate', {
         startDate: appointment.startDate,
         appointment: appointment,
-        callback: function(result) {
-            assert.deepEqual(result, new Date(2016, 1, 2, 5), 'Date is correct');
-        }
     });
+    assert.deepEqual(result, new Date(2016, 1, 2, 5), 'Date is correct');
 });
 
 QUnit.test('UpdateAppointmentEndDate should return corrected endDate', function(assert) {
