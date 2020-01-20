@@ -109,14 +109,6 @@ const uaParsers = {
     }
 };
 
-/**
- * @name DevicesObject
- * @publicName devices
- * @section Utils
- * @namespace DevExpress
- * @module core/devices
- * @export default
- */
 class Devices {
     /**
     * @name DevicesObjectevents.orientationChanged
@@ -145,16 +137,7 @@ class Devices {
             resizeCallbacks.add(this._recalculateOrientation.bind(this));
         }
     }
-    /**
-    * @name DevicesObjectmethods.current
-    * @publicName current()
-    * @return Device
-    */
-    /**
-    * @name DevicesObjectmethods.current
-    * @publicName current(deviceName)
-    * @param1 deviceName:string|Device
-    */
+
     current(deviceOrName) {
         if(deviceOrName) {
             this._currentDevice = this._getDevice(deviceOrName);
@@ -184,11 +167,6 @@ class Devices {
         return this._currentDevice;
     }
 
-    /**
-    * @name DevicesObjectMethods.real
-    * @publicName real()
-    * @return Device
-    */
     real(forceDevice) {
         ///#DEBUG
         if(isPlainObject(forceDevice)) {
@@ -199,11 +177,6 @@ class Devices {
         return extend({}, this._realDevice);
     }
 
-    /**
-     * @name DevicesObjectMethods.orientation
-     * @publicName orientation()
-     * @return String
-     */
     orientation() {
         return this._currentOrientation;
     }
