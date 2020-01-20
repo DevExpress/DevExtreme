@@ -43,7 +43,7 @@ const moduleOptions = {
             }
 
             if(command === 'getMaxAppointmentWidth') {
-                options.callback(this.maxAppointmentWidth);
+                return this.maxAppointmentWidth;
             }
 
             if(command === 'getAppointmentColor') {
@@ -55,7 +55,7 @@ const moduleOptions = {
             }
 
             if(command === 'updateAppointmentStartDate') {
-                this.viewStartDate;
+                return this.viewStartDate;
             }
 
             if(command === 'getAppointmentDurationInMs') {
