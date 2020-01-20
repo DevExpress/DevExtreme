@@ -2145,15 +2145,15 @@ QUnit.module('disabledDates option', {
         }
     });
 
-    QUnit.test('left/right/up/downArrow should try focus the same date on the previous/next month when forced to change the month', function(assert) {
+    QUnit.test('left/right/up/downArrow should focus the closest date on the previous/next month when forced to change the month', function(assert) {
         const isAnimationOff = fx.off;
         const animate = fx.animate;
 
         try {
             this.calendar.option({
-                value: new Date(2020, 0, 9),
+                value: new Date(2020, 0, 14),
                 disabledDates: (args) => {
-                    return args.date.getDate() >= 10 || args.date.getDate() <= 7;
+                    return args.date.getDate() >= 15 || args.date.getDate() <= 4;
                 }
             });
 
@@ -2166,35 +2166,26 @@ QUnit.module('disabledDates option', {
                 return animate.apply(fx, args);
             };
 
-            const firstAvailableDateOnJanuary = new Date(2020, 0, 8);
-            const firstAvailableDateOnFebruary = new Date(2020, 1, 9);
-
             this.$element.trigger('focusin');
 
             triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
-            assert.deepEqual(this.calendar.option('currentDate'), firstAvailableDateOnFebruary, 'closest available date has been focused');
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 1, 5), 'closest available date has been focused');
             assert.equal(animateCount, 1, 'view has been changed');
-
-            triggerKeydown(this.$element, HOME_KEY_CODE);
 
             triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
-            assert.deepEqual(this.calendar.option('currentDate'), firstAvailableDateOnJanuary, 'closest available date has been focused');
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 14), 'closest available date has been focused');
             assert.equal(animateCount, 2, 'view has been changed');
-
-            triggerKeydown(this.$element, END_KEY_CODE);
 
             triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
-            assert.deepEqual(this.calendar.option('currentDate'), firstAvailableDateOnFebruary, 'closest available date has been focused');
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 1, 11), 'closest available date has been focused');
             assert.equal(animateCount, 3, 'view has been changed');
-
-            triggerKeydown(this.$element, HOME_KEY_CODE);
 
             triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
-            assert.deepEqual(this.calendar.option('currentDate'), firstAvailableDateOnJanuary, 'closest available date has been focused');
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 14), 'closest available date has been focused');
             assert.equal(animateCount, 4, 'view has been changed');
         } finally {
             fx.off = isAnimationOff;
@@ -2214,16 +2205,16 @@ QUnit.module('disabledDates option', {
         this.$element.trigger('focusin');
 
         triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
-        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 20), 'closest date by offset has benn focused');
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 20), 'closest date by offset has been focused');
 
         triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
-        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 22), 'closest date by offset has benn focused');
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 22), 'closest date by offset has been focused');
 
         triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
-        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 8), 'closest date by offset has benn focused');
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 8), 'closest date by offset has been focused');
 
         triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
-        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest date by offset has benn focused');
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest date by offset has been focused');
     });
 
     QUnit.test('left/right arrows should try focus the month moved by offset in a year view', function(assert) {
@@ -2239,10 +2230,10 @@ QUnit.module('disabledDates option', {
         this.$element.trigger('focusin');
 
         triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
-        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 2, 6), 'closest month by offset has benn focused');
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 2, 6), 'closest month by offset has been focused');
 
         triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
-        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest month by offset has benn focused');
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest month by offset has been focused');
     });
 
     QUnit.test('up/down arrows should try focus the month moved by offset in a year view', function(assert) {
@@ -2259,11 +2250,11 @@ QUnit.module('disabledDates option', {
 
         triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
         this.clock.tick(VIEW_ANIMATION_DURATION);
-        assert.deepEqual(this.calendar.option('currentDate'), new Date(2019, 4, 6), 'closest month by offset has benn focused');
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2019, 4, 6), 'closest month by offset has been focused');
 
         triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
         this.clock.tick(VIEW_ANIMATION_DURATION);
-        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 4, 6), 'closest month by offset has benn focused');
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 4, 6), 'closest month by offset has been focused');
     });
 
     QUnit.test('left/right/up/downArrow should work like pageUp/Down when navigating to the disabled month', function(assert) {
