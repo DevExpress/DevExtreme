@@ -87,7 +87,7 @@ export class TooltipStrategyBase {
             onItemClick: e => this._onListItemClick(e),
             itemTemplate: (item, index) => {
                 const currentData = (item.settings && item.settings.targetedAppointmentData) || item.currentData || item.data;
-                return this._renderTemplate(this._tooltip.option('target'), item.data, currentData, index, item.color);
+                return this._renderTemplate(item.data, currentData, index, item.color);
             }
         };
     }
@@ -102,7 +102,7 @@ export class TooltipStrategyBase {
         return this._options.createComponent(listElement, List, this._createListOption(dataList));
     }
 
-    _renderTemplate(target, data, currentData, index, color) {
+    _renderTemplate(data, currentData, index, color) {
         const itemListContent = this._createItemListContent(data, currentData, color);
         this._options.addDefaultTemplates({
             [this._getItemListTemplateName()]: new FunctionTemplate(options => {
