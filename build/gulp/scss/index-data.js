@@ -13,8 +13,12 @@ module.exports = [
     // widget
     { content: 'widget', task: 'widget' },
     // card
+    { content: 'card', task: 'widget' },
     // fieldset
+    { content: 'fieldset', task: 'widget' },
 
+
+    //
     { content: 'public widgets', task: 'comment' },
     // { task: 'widget', content: 'box' },
     { task: 'newline' }

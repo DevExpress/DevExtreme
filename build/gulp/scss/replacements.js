@@ -1,6 +1,9 @@
 module.exports = {
     // regex, replacement - replace
-    // import, type - additional import (simple - without 'with')
+    // import, type - additional import (
+    //    simple - without 'with',
+    //    useinsizes - use in _sizes.scss,
+    //    useincolors - use in _colors.scss)
     'typography': [
         { regex: /\(css\)\s/, replacement: '' },
         { import: '../common', type: 'simple' },
@@ -18,5 +21,10 @@ module.exports = {
     ],
     'widget': [
         { import: '../common', type: 'simple' },
+    ],
+    'fieldset': [
+        { import: '../common/sizes', type: 'simple' },
+        { import: '../common', type: 'simple' },
+        { import: '../typography', type: 'simple' },
     ]
 };

@@ -15,6 +15,7 @@ const unfixedScssPath = require('./config').unfixedScssPath;
 const repositoryRoot = path.join(__dirname, '../../..');
 
 const importReplacement = /@import \((once|reference|)\) (".*\/)(.*?)\.(generic|material).scss(";)/gm;
+const allImportReplacement = /@import \((once|reference|)\) (".*\/)(.*?).scss(";)/g;
 const compactMixinReplacementIndex = /@mixin dx-size-default\(\)\s*{([\w\W]*?)}\s*@mixin dx-size-compact\(\)\s*{([\w\W]*?)}/g;
 const compactMixinReplacementSizes = /[\w\W]*?@mixin dx-size-default\(\)\s*{([\w\W]*?)}\s*@mixin dx-size-compact\(\)\s*{([\w\W]*?)}([\w\W]*)/g;
 
@@ -101,6 +102,7 @@ gulp.task('fix-themes', () => {
         .pipe(replace(importReplacement, '@use "../$3";'))
         // .pipe(replace.apply(gulp, compactMixinReplacement))
         .pipe(replace(compactMixinUsageReplacement, ''))
+        .pipe(replace(allImportReplacement, '')) // remove all dependency imports
         .pipe(rename((path) => {
             const widgetName = path.basename.replace(/\.(material|generic)/g, '');
             path.dirname += `/${widgetName}`;
@@ -113,21 +115,26 @@ gulp.task('fix-themes', () => {
 
             // remove size mixins from _index
             let indexContent = '@use "colors" as *;\n';
+            indexContent += '@use "../base/colors" as *;\n';
             indexContent += '@use "sizes" as *;\n';
+            indexContent += '@use "../base/sizes" as *;\n';
+
             indexContent += '// adduse\n';
             indexContent += content.replace(compactMixinReplacementIndex, '');
             indexContent = specificReplacement(indexContent, folder);
+            // replace parent selector (https://github.com/sass/sass/issues/1425)
+            indexContent = indexContent.replace(/^(\s*)([.\w\s-]*[\w])&/mg, '$1@at-root $2#{&}');
             chunk.contents = new Buffer(indexContent);
 
             let colorsContent = '@use "sass:color";\n';
-            colorsContent += '@forward "../base/colors";\n';
+            // colorsContent += '@forward "../base/colors";\n';
             colorsContent += '@use "../base/colors" as *;\n\n';
 
             fs.writeFileSync(path.join(folder, '_colors.scss'), colorsContent);
 
             // add size mixins into _sizes
-            let sizesContent = '@forward "../base/sizes";\n';
-            sizesContent += '@use "../base/sizes" as *;\n\n';
+            // let sizesContent = '@forward "../base/sizes";\n';
+            let sizesContent = '@use "../base/sizes" as *;\n\n';
             if(compactMixinReplacementSizes.test(content)) {
                 sizesContent += content.replace(compactMixinReplacementSizes, (match, defaultSize, compactSize) => {
                     const defaultDefinition = defaultSize.replace(/^\s*(\$.*?):.*?;/gm, '$1: null !default;');
@@ -188,7 +195,7 @@ const fillWidgetColors = (theme) => {
         let widgetVariablesContent = '';
 
         Object.keys(widgetsColorVariables[widget]).forEach(colorScheme => {
-            const variableName = theme === 'material' ? 'mode' : 'color-scheme';
+            const variableName = theme === 'material' ? 'mode' : 'color';
             const variablesContent = widgetsColorVariables[widget][colorScheme];
             widgetVariablesContent += variablesContent;
             additionalContent += `@if $${variableName} == "${colorScheme}" {\n${makeIndent(variablesContent)}\n}\n\n`;
