@@ -314,6 +314,9 @@ const TabPanel = MultiView.inherit({
             case 'itemHoldTimeout':
             case 'focusStateEnabled':
             case 'hoverStateEnabled':
+                if(name === 'selectedIndex' || name === 'selectedItem') {
+                    this.option('focusedElement', null);
+                }
                 this._setTabsOption(fullName, value);
                 this.callBase(args);
                 break;
