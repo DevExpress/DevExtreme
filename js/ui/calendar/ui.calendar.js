@@ -368,14 +368,15 @@ const Calendar = Editor.inherit({
         const dateForward = new Date(currentDate);
 
         while(isDateForwardInRange) {
-            isDateForwardInStartView = this._isDatesInNeighborView(zoomLevel, dateForward, baseDate);
-            isDateForwardInRange = inRange(dateForward, minDate, maxDate) && isDateForwardInStartView;
             if(isDateForwardInRange && !this._view.isDateDisabled(dateForward)) {
                 currentDate = dateForward;
                 break;
             }
 
             this._shiftDate(zoomLevel, dateForward, offset, 1);
+
+            isDateForwardInStartView = this._isDatesInNeighborView(zoomLevel, dateForward, baseDate);
+            isDateForwardInRange = inRange(dateForward, minDate, maxDate) && isDateForwardInStartView;
         }
 
         if(this._view.isDateDisabled(baseDate) || this._view.isDateDisabled(currentDate)) {
@@ -399,20 +400,20 @@ const Calendar = Editor.inherit({
     },
 
     _isDatesInNeighborView(zoomLevel, date1, date2) {
-        const diffAbs = (a, b) => {
+        const monthDiffAbs = (a, b) => {
             const abs = Math.abs(a - b);
             return Math.min(abs, 12 - abs);
         };
 
         switch(zoomLevel) {
             case ZOOM_LEVEL.MONTH:
-                return diffAbs(date1.getMonth(), date2.getMonth()) <= 1;
+                return monthDiffAbs(date1.getMonth(), date2.getMonth()) <= 1;
             case ZOOM_LEVEL.YEAR:
-                return diffAbs(date1.getYear(), date2.getYear()) <= 1;
+                return Math.abs(date1.getYear() - date2.getYear()) <= 1;
             case ZOOM_LEVEL.DECADE:
-                return parseInt(diffAbs(date1.getYear(), date2.getYear())) / 10;
+                return Math.abs(date1.getYear(), date2.getYear()) <= 10;
             case ZOOM_LEVEL.CENTURY:
-                return parseInt(diffAbs(date1.getYear(), date2.getYear())) / 100;
+                return Math.abs(date1.getYear(), date2.getYear()) <= 100;
         }
     },
 
