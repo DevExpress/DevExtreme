@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const typeUtils = require('core/utils/type');
-const executeAsyncMock = require('../../../helpers/executeAsyncMock.js');
-const keyboardMock = require('../../../helpers/keyboardMock.js');
-const DataSource = require('data/data_source/data_source').DataSource;
-const ArrayStore = require('data/array_store');
+import $ from 'jquery';
+import typeUtils from 'core/utils/type';
+import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
+import keyboardMock from '../../../helpers/keyboardMock.js';
+import { DataSource } from 'data/data_source/data_source';
+import ArrayStore from 'data/array_store';
 
-require('ui/list');
+import 'ui/list';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 

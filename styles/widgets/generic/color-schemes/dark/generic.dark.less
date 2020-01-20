@@ -111,6 +111,9 @@
 
 @base-inverted-text-color: #2a2a2a;
 @base-inverted-icon-color: @base-inverted-text-color;
+@base-disabled-opacity: 0.5;
+@base-dropdown-shadow-color: fade(@base-shadow-color, 17.5%);
+
 
 // Validation
 
@@ -184,8 +187,6 @@
 */
 @texteditor-focused-border-color: @base-focus-bg;
 @texteditor-hover-bg: @base-bg;
-
-@texteditor-disabled-opacity: 0.5;
 
 @texteditor-button-clear-icon-color: darken(@texteditor-color, 40%);
 
@@ -647,6 +648,7 @@
 @list-group-header-default-padding-top: 20px;
 @list-group-header-compact-padding-top: 10px;
 @list-item-chevron-icon-color: @base-icon-color;
+@list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/dark/list/delete.png');
 
 // Overlay
 @overlay-content-shadow-color: fade(@base-shadow-color, 30%);
@@ -728,6 +730,11 @@
 */
 @toast-success-bg: @base-success;
 
+@toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/info.png');
+@toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/warning.png');
+@toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/error.png');
+@toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/success.png');
+
 // DropDownEditor
 
 
@@ -765,7 +772,6 @@
 * @type color
 */
 @selectbox-list-bg: @base-bg;
-@selectbox-shadow-color: fade(@base-shadow-color, 17.5%);
 
 // Tabs
 
@@ -884,9 +890,15 @@
 @scrollable-scrollbar-msie-shadow-color: @scrollable-bg;
 @scrollable-scrollbar-msie-track-color: @scrollable-bg;
 
+@scrollbar-button-horizontal-decrement-bg: data-uri('images/widgets/generic/color-schemes/dark/scrollable/scrollbar-horizontal-arrow-start.png') no-repeat;
+@scrollbar-button-horizontal-increment-bg: data-uri('images/widgets/generic/color-schemes/dark/scrollable/scrollbar-horizontal-arrow-end.png') no-repeat;
+@scrollbar-button-vertical-decrement-bg: data-uri('images/widgets/generic/color-schemes/dark/scrollable/scrollbar-vertical-arrow-up.png') no-repeat;
+@scrollbar-button-vertical-increment-bg: data-uri('images/widgets/generic/color-schemes/dark/scrollable/scrollbar-vertical-arrow-down.png') no-repeat;
+
 // ScrollView
 
 @scrollview-shadow-color: fade(@base-shadow-color, 37%);
+@scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') 0 0 no-repeat;
 
 // Toolbar
 
@@ -905,6 +917,7 @@
 */
 @loadindicator-bg: darken(@base-text-color, 17.5%);
 @loadindicator-segment-shadow-color: fade(@base-shadow-color, 20%);
+@loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif');
 
 // LoadPanel
 @loadpanel-border-color: @overlay-border-color;
@@ -1020,6 +1033,7 @@
 @colorbox-palette-cell-bg: @colorbox-overlay-bg;
 @colorview-border-color: @base-border-color;
 @colorview-label-color: @base-label-color;
+@colorbox-preview-empty-bg: data-uri('images/widgets/generic/color-schemes/dark/colorbox/nocolor.png');
 
 // DataGrid
 
@@ -1485,6 +1499,8 @@
 */
 @calendar-shevron-icon-color: @base-accent;
 
+@calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/dark/calendar/empty-cell.png') center center no-repeat;
+
 // Tooltip
 
 /**
@@ -1564,8 +1580,6 @@
 @timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/dark/timeView/hour-arrow.svg');
 @timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/dark/timeView/min-arrow.svg');
 
-// theme-depends shadow parameters
-
 // DateView
 @dateview-border-color: @base-border-color;
 @dateview-shadow-up: 0deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
@@ -1587,22 +1601,6 @@
 @form-group-border-color: @base-border-color;
 @form-field-required-color: saturate(darken(@form-field-item-color, 39.2%), 80%);
 @form-field-mark-color: darken(@form-field-item-color, 48.5%);
-
-// Images
-@list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/dark/list/delete.png');
-@scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') 0 0 no-repeat;
-@loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif');
-@toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/info.png');
-@toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/warning.png');
-@toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/error.png');
-@toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/success.png');
-@scrollbar-button-horizontal-decrement-bg: data-uri('images/widgets/generic/color-schemes/dark/scrollable/scrollbar-horizontal-arrow-start.png') no-repeat;
-@scrollbar-button-horizontal-increment-bg: data-uri('images/widgets/generic/color-schemes/dark/scrollable/scrollbar-horizontal-arrow-end.png') no-repeat;
-@scrollbar-button-vertical-decrement-bg: data-uri('images/widgets/generic/color-schemes/dark/scrollable/scrollbar-vertical-arrow-up.png') no-repeat;
-@scrollbar-button-vertical-increment-bg: data-uri('images/widgets/generic/color-schemes/dark/scrollable/scrollbar-vertical-arrow-down.png') no-repeat;
-@colorbox-preview-empty-bg: data-uri('images/widgets/generic/color-schemes/dark/colorbox/nocolor.png');
-
-@calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/dark/calendar/empty-cell.png') center center no-repeat;
 
 // Fieldset
 

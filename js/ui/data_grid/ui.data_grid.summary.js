@@ -378,10 +378,6 @@ exports.renderSummaryCell = renderSummaryCell;
 gridCore.registerModule('summary', {
     defaultOptions: function() {
         return {
-            /**
-             * @name dxDataGridOptions.summary
-             * @type object
-             */
             summary: {
                 /**
                  * @name dxDataGridOptions.summary.groupItems
@@ -584,11 +580,6 @@ gridCore.registerModule('summary', {
                     count: messageLocalization.getFormatter('dxDataGrid-summaryCount')
                 }
             },
-            /**
-             * @name dxDataGridOptions.sortByGroupSummaryInfo
-             * @type Array<Object>
-             * @default undefined
-             */
             sortByGroupSummaryInfo: undefined
             /**
              * @name dxDataGridOptions.sortByGroupSummaryInfo.summaryItem
@@ -985,12 +976,6 @@ gridCore.registerModule('summary', {
                         return methods;
                     },
 
-                    /**
-                     * @name dxDataGridMethods.getTotalSummaryValue
-                     * @publicName getTotalSummaryValue(summaryItemName)
-                     * @param1 summaryItemName:String
-                     * @return any
-                     */
                     getTotalSummaryValue: function(summaryItemName) {
                         const summaryItemIndex = this._findSummaryItem(this.option('summary.totalItems'), summaryItemName);
                         const aggregates = this._dataSource.totalAggregates();
@@ -1020,7 +1005,7 @@ gridCore.registerModule('summary', {
             editing: (function() {
                 return {
                     _refreshSummary: function() {
-                        if(recalculateWhileEditing(this)) {
+                        if(recalculateWhileEditing(this) && !this.isSaving()) {
                             this._dataController.refresh({
                                 load: true,
                                 changesOnly: true

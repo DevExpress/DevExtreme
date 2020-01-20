@@ -176,7 +176,6 @@ QUnit.test('getEditor returns [tabbed1.tab1_1.tabbed2.tab2_1.item] editor', func
 });
 
 QUnit.test('Get editor instance', function(assert) {
-    // arrange
     const $testContainer = $('#form');
 
     $testContainer.dxForm({
@@ -184,10 +183,8 @@ QUnit.test('Get editor instance', function(assert) {
         items: ['test1', { name: 'test3', editorType: 'dxNumberBox' }]
     });
 
-    // act
     const form = $testContainer.dxForm('instance');
 
-    // assert
     assert.ok(!isDefined(form.getEditor('test2')), 'We hasn\'t instance for \'test2\' field');
     assert.ok(isDefined(form.getEditor('test1')), 'We have instance for \'test1\' field');
     assert.ok(isDefined(form.getEditor('test3')), 'We have instance for \'test3\' field');
@@ -197,7 +194,7 @@ QUnit.test('Get editor instance', function(assert) {
 });
 
 QUnit.test('Get editor instance with group config', function(assert) {
-    // arrange
+
     const $testContainer = $('#form');
 
     $testContainer.dxForm({
@@ -211,10 +208,8 @@ QUnit.test('Get editor instance with group config', function(assert) {
         ]
     });
 
-    // act
     const form = $testContainer.dxForm('instance');
 
-    // assert
     assert.ok(isDefined(form.getEditor('test1')), 'We have instance for \'test1\' field');
     assert.ok(isDefined(form.getEditor('test2')), 'We have instance for \'test2\' field');
     assert.ok(isDefined(form.getEditor('test3')), 'We have instance for \'test3\' field');

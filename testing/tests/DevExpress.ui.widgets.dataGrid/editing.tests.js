@@ -4905,6 +4905,70 @@ QUnit.test('deleteRow should not work if adding is started', function(assert) {
     assert.equal(testElement.find('.dx-data-row').length, 6, 'row is removed');
 });
 
+// T850905
+QUnit.test('deleteRow should works if updating is started', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'cell',
+        allowUpdating: true,
+        allowDeleting: true
+    };
+
+    rowsView.render(testElement);
+    that.editingController.init();
+
+    that.editCell(0, 0);
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 7, 'row count');
+    assert.strictEqual(testElement.find('input').length, 1, 'editor is rendered');
+
+    // act
+    that.deleteRow(1);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
+    assert.strictEqual(testElement.find('input').length, 0, 'no editors');
+});
+
+// T850905
+QUnit.test('deleteRow should works if cell value is changed', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'cell',
+        allowUpdating: true,
+        allowDeleting: true
+    };
+
+    rowsView.render(testElement);
+    that.editingController.init();
+
+    that.cellValue(0, 0, 'test');
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 7, 'row count');
+    assert.strictEqual(testElement.find('input').length, 1, 'editor is rendered');
+
+    // act
+    that.deleteRow(1);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
+    assert.strictEqual(testElement.find('input').length, 0, 'no editors');
+});
+
 // T804894
 QUnit.test('addRow should not work if updating is started with validation error', function(assert) {
     // arrange
@@ -7823,6 +7887,42 @@ QUnit.test('The command column caption should be applied', function(assert) {
     assert.strictEqual($commandCellElement.css('textAlign'), 'right', 'alignment');
 });
 
+QUnit.test('The command column buttons should not be trimmed', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = that.rowsView;
+    const $testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'row',
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    that.options.columns.push({
+        type: 'buttons',
+        buttons: ['edit', {
+            icon: 'clone'
+        }]
+    });
+    that.columnsController.reset();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    const $commandCellElement = $(rowsView.getRowElement(0)).children('.dx-command-edit');
+    assert.equal($commandCellElement.length, 1, 'command column is rendered');
+    // T848242
+    assert.equal($commandCellElement.css('text-overflow'), 'clip', 'text-overflow is clip instead of ellipsis');
+    assert.equal($commandCellElement.css('white-space'), 'nowrap', 'white-space is nowrap');
+
+    const $links = $commandCellElement.children('.dx-link');
+    assert.equal($links.length, 2, 'link count');
+    assert.equal($links.eq(0).css('display'), 'inline', 'text link display style');
+    // T848364
+    assert.equal($links.eq(1).css('display'), 'inline-block', 'icon link display style');
+});
+
 // T741679
 QUnit.test('A dependent cascading editor should be updated when a master cell value is changed if showEditorAlways is enabled in batch mode', function(assert) {
     // arrange
@@ -8319,7 +8419,7 @@ QUnit.module('Editing with validation', {
             return renderer('.dx-datagrid');
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity'], {
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary'], {
             initViews: true
         });
 
@@ -9047,6 +9147,7 @@ QUnit.test('Cell\'s height is increasing on resize if validation applied and bat
     };
 
     rowsView.render(testElement);
+    this.footerView.render(testElement);
 
     that.applyOptions({
         dataSource: [{ Test: 'a' }],
@@ -10645,6 +10746,140 @@ QUnit.test('Edit cell with edit mode batch and change page', function(assert) {
     assert.equal(testElement.find('tbody > tr').length, 3, 'count rows');
     assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
     assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
+});
+
+// T836508
+QUnit.test('Edit invalid cell from another page if edit mode is batch and recalculateWhileEditing is true', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        loadingTimeout: 0,
+        editing: {
+            mode: 'batch'
+        },
+        summary: {
+            recalculateWhileEditing: true
+        },
+        columns: ['name', {
+            dataField: 'age',
+            validationRules: [{ type: 'range', min: 1, max: 100 }]
+        }, 'lastName']
+    });
+    that.clock.tick();
+
+    that.dataController.pageSize(2);
+    that.clock.tick();
+
+    that.cellValue(0, 1, 101);
+    that.clock.tick();
+    that.dataController.pageIndex(1);
+    that.clock.tick();
+    that.saveEditData();
+    that.clock.tick();
+
+    // act
+    that.editCell(0, 1);
+    that.clock.tick();
+
+    // assert
+    const $cell = $(that.getCellElement(0, 1));
+    assert.ok($cell.hasClass('dx-editor-cell'), 'editor is rendered');
+    assert.ok($cell.hasClass('dx-datagrid-invalid'), 'invalid border is shown');
+    assert.equal(that.cellValue(0, 1), 101, 'modified row is moved to current page');
+});
+
+QUnit.test('Row with invalid cell from another page should not be removed after refresh', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        loadingTimeout: 0,
+        editing: {
+            mode: 'batch'
+        },
+        columns: ['name', {
+            dataField: 'age',
+            validationRules: [{ type: 'range', min: 1, max: 100 }]
+        }, 'lastName']
+    });
+    that.clock.tick();
+
+    that.dataController.pageSize(2);
+    that.clock.tick();
+    that.cellValue(0, 1, 101);
+    that.clock.tick();
+    that.dataController.pageIndex(1);
+    that.clock.tick();
+    that.saveEditData();
+    that.clock.tick();
+
+    // act
+    that.refresh();
+    that.clock.tick();
+    that.refresh();
+    that.clock.tick();
+
+    // assert
+    const $cell = $(that.getCellElement(0, 1));
+    assert.ok($cell.hasClass('dx-datagrid-invalid'), 'invalid border is shown');
+    assert.equal(that.cellValue(0, 1), 101, 'modified row is moved to current page');
+});
+
+QUnit.test('Row with invalid cell from another page should not be removed after paging', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        loadingTimeout: 0,
+        editing: {
+            mode: 'batch'
+        },
+        scrolling: {
+            mode: 'standard'
+        },
+        columns: ['name', {
+            dataField: 'age',
+            validationRules: [{ type: 'range', min: 1, max: 100 }]
+        }, 'lastName']
+    });
+    that.clock.tick();
+
+    // act
+    that.pageSize(2);
+    that.clock.tick();
+    that.cellValue(0, 1, 101);
+    that.clock.tick();
+    that.pageIndex(1);
+    that.clock.tick();
+    that.saveEditData();
+    that.clock.tick();
+
+    // assert
+    assert.equal(that.getVisibleRows().length, 2, 'visible row count');
+    assert.ok($(that.getCellElement(0, 1)).hasClass('dx-datagrid-invalid'), 'invalid border is shown');
+
+    // act
+    that.pageIndex(0);
+    that.clock.tick();
+    that.pageIndex(1);
+    that.clock.tick();
+
+    // assert
+    assert.equal(that.getVisibleRows().length, 1, 'visible row count');
+    assert.notOk($(that.getCellElement(0, 1)).hasClass('dx-datagrid-invalid'), 'invalid border is shown');
 });
 
 // T709466

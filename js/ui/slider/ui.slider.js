@@ -29,11 +29,6 @@ const SLIDER_TOOLTIP_POSITION_CLASS_PREFIX = 'dx-slider-tooltip-position-';
 const INVALID_MESSAGE_VISIBLE_CLASS = 'dx-invalid-message-visible';
 const SLIDER_VALIDATION_NAMESPACE = 'Validation';
 
-/**
-* @name dxSliderBase
-* @inherits dxTrackBar
-* @hidden
-*/
 const Slider = TrackBar.inherit({
 
     _activeStateUnit: SLIDER_HANDLE_SELECTOR,
@@ -113,46 +108,17 @@ const Slider = TrackBar.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxSliderOptions.value
-            * @type number
-            * @default 50
-            */
             value: 50,
 
-            /**
-             * @name dxSliderBaseOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxSliderBaseOptions.activeStateEnabled
-            * @type boolean
-            * @default true
-            */
 
             activeStateEnabled: true,
 
-            /**
-            * @name dxSliderBaseOptions.step
-            * @type number
-            * @default 1
-            */
             step: 1,
 
-            /**
-            * @name dxSliderBaseOptions.showRange
-            * @type boolean
-            * @default true
-            */
             showRange: true,
 
-            /**
-            * @name dxSliderBaseOptions.tooltip
-            * @type object
-            */
             tooltip: {
                 /**
                 * @name dxSliderBaseOptions.tooltip.enabled
@@ -185,10 +151,6 @@ const Slider = TrackBar.inherit({
                 showMode: 'onHover'
             },
 
-            /**
-            * @name dxSliderBaseOptions.label
-            * @type object
-            */
             label: {
                 /**
                 * @name dxSliderBaseOptions.label.visible
@@ -214,11 +176,6 @@ const Slider = TrackBar.inherit({
                 }
             },
 
-            /**
-           * @name dxSliderBaseOptions.keyStep
-           * @type number
-           * @default 1
-           */
             keyStep: 1,
 
             useInkRipple: false,
@@ -227,11 +184,6 @@ const Slider = TrackBar.inherit({
 
             focusStateEnabled: true
 
-            /**
-            * @name dxSliderBaseOptions.name
-            * @type string
-            * @hidden false
-            */
         });
     },
 
@@ -249,10 +201,6 @@ const Slider = TrackBar.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxSliderBaseOptions.focusStateEnabled
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },
@@ -509,8 +457,6 @@ const Slider = TrackBar.inherit({
 
     _swipeStartHandler: function(e) {
         const rtlEnabled = this.option('rtlEnabled');
-        let startOffset;
-        let endOffset;
 
         if(eventUtils.isTouchEvent(e.event)) {
             this._createAction(this._startHandler.bind(this))({ event: e.event });
@@ -521,8 +467,8 @@ const Slider = TrackBar.inherit({
         this._toggleActiveState(this._activeHandle(), this.option('activeStateEnabled'));
 
         this._startOffset = this._currentRatio;
-        startOffset = this._startOffset * this._swipePixelRatio();
-        endOffset = (1 - this._startOffset) * this._swipePixelRatio();
+        const startOffset = this._startOffset * this._swipePixelRatio();
+        const endOffset = (1 - this._startOffset) * this._swipePixelRatio();
         e.event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
         e.event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
 

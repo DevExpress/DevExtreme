@@ -100,12 +100,6 @@
     @MATERIAL_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: @MATERIAL_BASE_ICON_SIZE;
     @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING: round((@MATERIAL_GRID_BASE_CELL_HEIGHT - @MATERIAL_GRID_BASE_CELL_LINE_HEIGHT)/2);
 
-    .dx-set-checkbox-border-color-as-background() when (@MATERIAL_COLOR_POSTFIX = ".contrast") {
-        .dx-selection .dx-checkbox-icon {
-            border-color: ~"@{@{widgetName}-base-background-color}";
-        }
-    }
-
     .dx-@{widgetName},
     .dx-@{widgetName}-container {
         .dx-menu {
@@ -916,8 +910,6 @@
             border-top: 1px solid ~"@{@{widgetName}-cell-modified-border-color}";
             border-bottom: 1px solid ~"@{@{widgetName}-cell-modified-border-color}";
         }
-
-        .dx-set-checkbox-border-color-as-background();
 
         .dx-adaptive-detail-row {
             .dx-field-item-label {

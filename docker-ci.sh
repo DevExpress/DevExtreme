@@ -30,11 +30,11 @@ function run_ts {
         echo "TS is up-to-date"
     fi
 
-    npx gulp ts-compilation-check ts-jquery-check npm-ts-modules-check
+    npx gulp ts-compilation-check ts-jquery-check ts-modules-check
 }
 
 function run_test {
-    export DEVEXTREME_QUNIT_CI=true
+    export DEVEXTREME_TEST_CI=true
 
     local port=`node -e "console.log(require('./ports.json').qunit)"`
     local url="http://localhost:$port/run?notimers=true"
@@ -44,6 +44,7 @@ function run_test {
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
+    [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
 
     if [ "$NO_HEADLESS" == "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
@@ -90,6 +91,16 @@ function run_test {
                     --no-first-run \
                     --no-default-browser-check \
                     --disable-translate";
+            fi
+
+            if [ "$PERF" == "true" ]; then
+                echo "Performance tests"
+                chrome_command="$chrome_command \
+                    --disable-popup-blocking \
+                    --remote-debugging-port=9223 \
+                    --enable-impl-side-painting \
+                    --enable-skia-benchmarking \
+                    --disable-web-security"
             fi
 
             if [ -n "$MOBILE_UA" ]; then
@@ -139,6 +150,8 @@ function run_test_themebuilder {
 }
 
 function run_test_functional {
+    export DEVEXTREME_TEST_CI=true
+
     npm i
     npm run build
 

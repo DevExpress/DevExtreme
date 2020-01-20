@@ -122,12 +122,6 @@ ko.extenders.dxValidator = function(target, option) {
 
 // TODO: MODULARITY: Move this to another place?
 
-/**
-* @name validationEngineMethods.registerModelForValidation
-* @publicName registerModelForValidation(model)
-* @param1 model:object
-* @static
-*/
 ValidationEngine.registerModelForValidation = function(model) {
     each(model, function(name, member) {
         if(ko.isObservable(member) && member.dxValidator) {
@@ -136,12 +130,6 @@ ValidationEngine.registerModelForValidation = function(model) {
     });
 };
 
-/**
-* @name validationEngineMethods.unregisterModelForValidation
-* @publicName unregisterModelForValidation(model)
-* @param1 model:object
-* @static
-*/
 ValidationEngine.unregisterModelForValidation = function(model) {
     each(model, function(name, member) {
         if(ko.isObservable(member) && member.dxValidator) {
@@ -150,11 +138,4 @@ ValidationEngine.unregisterModelForValidation = function(model) {
     });
 };
 
-/**
-* @name validationEngineMethods.validateModel
-* @publicName validateModel(model)
-* @param1 model:object
-* @return object
-* @static
-*/
 ValidationEngine.validateModel = ValidationEngine.validateGroup;

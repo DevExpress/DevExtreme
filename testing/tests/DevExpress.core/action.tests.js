@@ -1,7 +1,7 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const errors = require('core/errors');
-const Action = require('core/action');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import errors from 'core/errors';
+import Action from 'core/action';
 
 const noJquery = QUnit.urlParams['nojquery'];
 

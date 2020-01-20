@@ -34,77 +34,13 @@ const mergeFieldTypesWithKeyType = (fieldTypes, keyType) => {
     return result;
 };
 
-/**
-* @name ODataStore
-* @inherits Store
-* @type object
-* @module data/odata/store
-* @export default
-*/
 const ODataStore = Store.inherit({
 
     ctor(options) {
         this.callBase(options);
 
-        /**
-         * @name ODataStoreOptions.url
-         * @type string
-         */
-        /**
-         * @name ODataStoreOptions.beforeSend
-         * @type function
-         * @type_function_param1 options:object
-         * @type_function_param1_field1 url:string
-         * @type_function_param1_field2 async:boolean
-         * @type_function_param1_field3 method:string
-         * @type_function_param1_field4 timeout:number
-         * @type_function_param1_field5 params:object
-         * @type_function_param1_field6 payload:object
-         * @type_function_param1_field7 headers:object
-         */
-        /**
-         * @name ODataStoreOptions.jsonp
-         * @type boolean
-         * @default false
-         */
-        /**
-         * @name ODataStoreOptions.version
-         * @type number
-         * @default 2
-         * @acceptValues 2|3|4
-         */
-        /**
-         * @name ODataStoreOptions.withCredentials
-         * @type boolean
-         * @default false
-         */
-        /**
-         * @name ODataStoreOptions.filterToLower
-         * @type boolean
-         */
-        /**
-         * @name ODataStoreOptions.deserializeDates
-         * @type boolean
-         */
-        /**
-         * @name ODataStoreOptions.errorHandler
-         * @type function
-         * @type_function_param1 e:Error
-         * @type_function_param1_field1 httpStatus:number
-         * @type_function_param1_field2 errorDetails:object
-         * @type_function_param1_field3 requestOptions:object
-         */
-        /**
-         * @name ODataStoreOptions.onLoading
-         * @action
-         */
         this._extractServiceOptions(options);
 
-        /**
-         * @name ODataStoreOptions.keyType
-         * @type string|object
-         * @acceptValues "String"|"Int32"|"Int64"|"Guid"|"Boolean"|"Single"|"Decimal"
-         */
 
         let key = this.key();
         let fieldTypes = options.fieldTypes;
@@ -125,11 +61,6 @@ const ODataStore = Store.inherit({
             fieldTypes = mergeFieldTypesWithKeyType(fieldTypes, keyType);
         }
 
-        /**
-         * @name ODataStoreOptions.fieldTypes
-         * @type object
-         * @default {}
-         */
         this._fieldTypes = fieldTypes || {};
 
         if(this.version() === 2) {
@@ -143,15 +74,6 @@ const ODataStore = Store.inherit({
         return ['expand', 'customQueryParams'];
     },
 
-    /**
-    * @name ODataStoreMethods.byKey
-    * @publicName byKey(key, extraOptions)
-    * @param1 key:object|string|number
-    * @param2 extraOptions:object
-    * @param2_field1 expand:string|Array<string>
-    * @param2_field2 select:string|Array<string>
-    * @return Promise<any>
-    */
     _byKeyImpl(key, extraOptions) {
         const params = {};
 
@@ -163,12 +85,6 @@ const ODataStore = Store.inherit({
         return this._sendRequest(this._byKeyUrl(key), 'GET', params);
     },
 
-    /**
-    * @name ODataStoreMethods.createQuery
-    * @publicName createQuery(loadOptions)
-    * @param1 loadOptions:object
-    * @return object
-    */
     createQuery(loadOptions) {
         let url;
         const queryOptions = {

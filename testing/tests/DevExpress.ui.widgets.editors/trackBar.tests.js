@@ -1,7 +1,7 @@
-const $ = require('jquery');
-const fx = require('animation/fx');
+import $ from 'jquery';
+import fx from 'animation/fx';
 
-require('ui/track_bar');
+import 'ui/track_bar';
 
 QUnit.testStart(function() {
     const markup =
