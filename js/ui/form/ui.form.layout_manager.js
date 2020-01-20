@@ -53,6 +53,7 @@ const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
 
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
+const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
 const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
 const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
 const LAYOUT_MANAGER_ONE_COLUMN = 'dx-layout-manager-one-col';
@@ -423,8 +424,14 @@ const LayoutManager = Widget.inherit({
                 if(e.location.col === 0) {
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_COL_CLASS);
                 }
-                if((e.location.col === colCount - 1) || (e.location.col + e.location.colspan === colCount)) {
+                const isLastColumn = (e.location.col === colCount - 1) || (e.location.col + e.location.colspan === colCount);
+                const rowsCount = that._getRowsCount();
+                const isLastRow = e.location.row === rowsCount - 1;
+                if(isLastColumn) {
                     $fieldItem.addClass(LAYOUT_MANAGER_LAST_COL_CLASS);
+                }
+                if(isLastRow) {
+                    $fieldItem.addClass(LAYOUT_MANAGER_LAST_ROW_CLASS);
                 }
             },
             cols: that._generateRatio(colCount),
