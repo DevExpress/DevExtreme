@@ -370,23 +370,6 @@ QUnit.test('\'mapAppointmentFields\' should call getTargetedAppointmentData', fu
     }, 'Appointment data is OK');
 });
 
-QUnit.test('\'appointmentTakesAllDay\' should work correct with custom data fields', function(assert) {
-    this.createInstance({
-        startDateExpr: 'Start',
-        endDateExpr: 'End',
-    });
-
-    this.instance.fire('appointmentTakesAllDay', {
-        appointment: {
-            Start: new Date(2015, 2, 2, 0),
-            End: new Date(2015, 2, 3, 0)
-        },
-        callback: function(result) {
-            assert.ok(result, 'There is some result');
-        }
-    });
-});
-
 QUnit.test('\'showAddAppointmentPopup\' should update appointment data if there is some custom data fields', function(assert) {
     this.createInstance();
     const stub = sinon.stub(this.instance, 'showAppointmentPopup');
