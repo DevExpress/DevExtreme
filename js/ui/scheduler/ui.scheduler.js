@@ -1934,7 +1934,6 @@ const Scheduler = Widget.inherit({
             showAppointmentPopup: that.showAppointmentPopup.bind(that),
             getTextAndFormatDate: (data, currentData, format) => that.fire('getTextAndFormatDate', data, currentData, format),
             checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
-            getTargetedAppointmentData: (data, appointment) => that.fire('getTargetedAppointmentData', data, appointment),
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
         };
     },
