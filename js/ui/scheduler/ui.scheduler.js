@@ -2291,25 +2291,16 @@ const Scheduler = Widget.inherit({
     },
 
     _getEndDate: function(appointment, skipNormalize) {
-        let endDate = new Date(this.fire('getField', 'endDate', appointment));
+        const endDate = new Date(this.fire('getField', 'endDate', appointment));
         const startDate = new Date(this.fire('getField', 'startDate', appointment));
         const isSameDate = dateUtils.sameDate(startDate, endDate);
 
         if(endDate) {
-
             const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointment);
-
-            endDate = dateUtils.makeDate(endDate);
-
-            endDate = this.fire('convertDateByTimezone', endDate, endDateTimeZone);
-
-            !skipNormalize && this.fire('updateAppointmentEndDate', {
-                endDate: endDate,
+            return !skipNormalize ? this.fire('updateAppointmentEndDate', {
+                endDate: this.fire('convertDateByTimezone', dateUtils.makeDate(endDate), endDateTimeZone),
                 isSameDate: isSameDate,
-                callback: function(result) {
-                    endDate = result;
-                }
-            });
+            }) : endDate;
         }
         return endDate;
     },
