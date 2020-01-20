@@ -357,8 +357,6 @@ const TabPanel = MultiView.inherit({
             case 'badgeExpr':
                 this._invalidate();
                 break;
-            case 'hoveredElement':
-                break;
             default:
                 this.callBase(args);
         }
