@@ -5486,12 +5486,11 @@ QUnit.test('Get page start with begin of header element. Columns', function(asse
         },
         texts: texts
     }));
-    let columnsInfo;
 
     dataController.columnPageSize(2);
     dataController._columnsScrollController.beginPageIndex.returns(4);
     dataController._columnsScrollController.endPageIndex.returns(5);
-    columnsInfo = dataController.getColumnsInfo();
+    const columnsInfo = dataController.getColumnsInfo();
 
     assert.strictEqual(columnsInfo.length, 2);
 
@@ -5527,12 +5526,11 @@ QUnit.test('Get all data when paging. Columns', function(assert) {
         },
         texts: texts
     }));
-    let columnsInfo;
 
     dataController.columnPageSize(2);
     dataController._columnsScrollController.beginPageIndex.returns(4);
     dataController._columnsScrollController.endPageIndex.returns(5);
-    columnsInfo = dataController.getColumnsInfo(true);
+    const columnsInfo = dataController.getColumnsInfo(true);
 
     assert.strictEqual(columnsInfo.length, 2);
     assert.strictEqual(columnsInfo[0].length, 9);

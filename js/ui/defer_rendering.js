@@ -30,51 +30,15 @@ const ANONYMOUS_TEMPLATE_NAME = 'content';
 
 const ACTIONS = ['onRendered', 'onShown'];
 
-/**
-* @name dxDeferRendering
-* @inherits Widget
-* @module ui/defer_rendering
-* @export default
-*/
 const DeferRendering = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxDeferRenderingOptions.showLoadIndicator
-            * @type bool
-            * @default false
-            */
             showLoadIndicator: false,
-            /**
-            * @name dxDeferRenderingOptions.renderWhen
-            * @type Promise<void> | bool
-            * @default undefined
-            */
             renderWhen: undefined,
-            /**
-            * @name dxDeferRenderingOptions.animation
-            * @type animationConfig
-            * @default undefined
-            */
             animation: undefined,
-            /**
-            * @name dxDeferRenderingOptions.staggerItemSelector
-            * @type string
-            * @default undefined
-            */
             staggerItemSelector: undefined,
-            /**
-            * @name dxDeferRenderingOptions.onRendered
-            * @extends Action
-            * @action
-            */
             onRendered: null,
-            /**
-            * @name dxDeferRenderingOptions.onShown
-            * @extends Action
-            * @action
-            */
             onShown: null
         });
     },

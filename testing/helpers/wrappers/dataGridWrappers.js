@@ -15,6 +15,7 @@ const SELECTED_ROW_CLASS = 'dx-selection';
 const DATA_GRID_PREFIX = 'dx-datagrid';
 const DATA_ROW_CLASS = 'dx-data-row';
 const TREELIST_PREFIX = 'dx-treelist';
+const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const NEW_ROW_CLASS = 'dx-row-inserted';
 const FIXED_CONTENT_CLASS = 'dx-datagrid-content-fixed';
@@ -138,8 +139,12 @@ export class RowsViewWrapper extends GridTableElement {
         return !this.getRowAdaptiveElement(rowIndex).hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
     }
 
+    getEditor(rowIndex, columnIndex) {
+        return this.getDataRowElement(rowIndex).find('td').eq(columnIndex).find(`.${TEXTEDITOR_CLASS}`);
+    }
+
     getEditorInput(rowIndex, columnIndex) {
-        return this.getDataRowElement(rowIndex).find('td').eq(columnIndex).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        return this.getEditor(rowIndex, columnIndex).find(`.${TEXTEDITOR_INPUT_CLASS}`);
     }
 
     hasEditorInputElement(rowIndex, columnIndex) {

@@ -68,20 +68,6 @@ class ContextMenu extends MenuBase {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
-             * @name dxContextMenuOptions.dataSource
-             * @type string|Array<dxContextMenuItem>|DataSource|DataSourceOptions
-             * @default null
-             */
-            /**
-            * @name dxContextMenuOptions.items
-            * @type Array<dxContextMenuItem>
-            */
-            /**
-            * @name dxContextMenuOptions.showEvent
-            * @type Object|string
-            * @default "dxcontextmenu"
-            */
-            /**
             * @name dxContextMenuOptions.showEvent.name
             * @type string
             * @default undefined
@@ -93,95 +79,29 @@ class ContextMenu extends MenuBase {
             */
             showEvent: DEFAULT_SHOW_EVENT,
 
-            /**
-            * @name dxContextMenuOptions.closeOnOutsideClick
-            * @type boolean|function
-            * @default true
-            * @type_function_param1 event:event
-            * @type_function_return Boolean
-            */
             closeOnOutsideClick: true,
 
-            /**
-            * @name dxContextMenuOptions.position
-            * @type positionConfig
-            * @default { my: 'top left', at: 'top left' }
-            * @ref
-            */
             position: {
                 at: 'top left',
                 my: 'top left'
             },
 
-            /**
-            * @name dxContextMenuOptions.onShowing
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 cancel:boolean
-            * @action
-            */
             onShowing: null,
 
-            /**
-            * @name dxContextMenuOptions.onShown
-            * @extends Action
-            * @action
-            */
             onShown: null,
 
             onSubmenuCreated: null,
 
-            /**
-            * @name dxContextMenuOptions.onHiding
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 cancel:boolean
-            * @action
-            */
             onHiding: null,
 
-            /**
-            * @name dxContextMenuOptions.onHidden
-            * @extends Action
-            * @action
-            */
             onHidden: null,
 
-            /**
-            * @name dxContextMenuOptions.onPositioning
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 position:positionConfig
-            * @action
-            */
             onPositioning: null,
 
-            /**
-            * @name dxContextMenuOptions.submenuDirection
-            * @type Enums.ContextMenuSubmenuDirection
-            * @default "auto"
-            */
             submenuDirection: 'auto',
 
-            /**
-            * @name dxContextMenuOptions.visible
-            * @type boolean
-            * @default false
-            * @fires dxContextMenuOptions.onShowing
-            * @fires dxContextMenuOptions.onHiding
-            */
             visible: false,
 
-            /**
-            * @name dxContextMenuOptions.target
-            * @type string|Node|jQuery
-            * @default undefined
-            */
             target: undefined,
 
             /**
@@ -202,10 +122,6 @@ class ContextMenu extends MenuBase {
             * @name dxContextMenuItem
             * @inherits dxMenuBaseItem
             * @type object
-            */
-            /**
-            * @name dxContextMenuItem.items
-            * @type Array<dxContextMenuItem>
             */
 
             onLeftFirstItem: null,
@@ -999,12 +915,6 @@ class ContextMenu extends MenuBase {
         return promise || new Deferred().reject().promise();
     }
 
-    /**
-    * @name dxContextMenuMethods.toggle
-    * @publicName toggle(showing)
-    * @param1 showing:boolean
-    * @return Promise<void>
-    */
     toggle(showing) {
         const visible = this.option('visible');
 
@@ -1013,20 +923,10 @@ class ContextMenu extends MenuBase {
         return this._renderVisibility(showing);
     }
 
-    /**
-    * @name dxContextMenuMethods.show
-    * @publicName show()
-    * @return Promise<void>
-    */
     show() {
         return this.toggle(true);
     }
 
-    /**
-    * @name dxContextMenuMethods.hide
-    * @publicName hide()
-    * @return Promise<void>
-    */
     hide() {
         return this.toggle(false);
     }

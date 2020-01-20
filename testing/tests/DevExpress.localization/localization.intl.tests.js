@@ -13,6 +13,13 @@ if(Intl.__disableRegExpRestore) {
 }
 
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
+const ROUNDING_BUG_NUMBERS = [4.645, -4.645, 35.855, -35.855];
+const ROUNDING_CORRECTION = {
+    '4.64': '4.65',
+    '-4.64': '-4.65',
+    '35.85': '35.86',
+    '-35.85': '-35.86'
+};
 const patchPolyfillResults = () => {
     dateLocalization.inject({
         format: function(value, format) {
@@ -29,8 +36,8 @@ const patchPolyfillResults = () => {
         format: function(value, format) {
             // NOTE: IntlPolifill rounding bug. In real Intl it works OK.
             let result = this.callBase.apply(this, arguments);
-            if(value === 4.645 && format.type === 'fixedPoint' && format.precision === 2 && result === '4.64') {
-                result = '4.65';
+            if(ROUNDING_BUG_NUMBERS.indexOf(value) !== -1 && format.type === 'fixedPoint' && format.precision === 2 && !!ROUNDING_CORRECTION[result]) {
+                result = ROUNDING_CORRECTION[result];
             }
             return result;
         }

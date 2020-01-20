@@ -184,11 +184,11 @@ const draggingFromTooltipConfig = $.extend({}, {
             priorityId: 2
         }
     ],
-    createScheduler: function(views, rtlEnabled) {
+    createScheduler: function(views, currentView, rtlEnabled) {
         return createWrapper({
             dataSource: $.extend(true, [], this.data),
             views: views,
-            currentView: views[0].name,
+            currentView: currentView,
             currentDate: new Date(2017, 4, 25),
             startDayHour: 9,
             width: 800,
@@ -229,13 +229,10 @@ const draggingFromTooltipConfig = $.extend({}, {
         };
     },
 
-    testViews: function(views, assert, rtlEnabled) {
-        const scheduler = this.createScheduler(views, rtlEnabled);
+    testViews: function(views, currentView, rtlEnabled, assert) {
+        const scheduler = this.createScheduler(views, currentView, rtlEnabled);
 
-        views.forEach(view => {
-            scheduler.option('currentView', view.name);
-            this.testFakeAppointmentPosition(scheduler, scheduler.appointments.compact.getButton(0), 0, view.name, assert);
-        });
+        this.testFakeAppointmentPosition(scheduler, scheduler.appointments.compact.getButton(0), 0, currentView, assert);
     },
 
     testFakeAppointmentPosition: function(scheduler, button, index, viewName, assert) {
@@ -269,9 +266,15 @@ module('Appointment should move a same distance in dragging from tooltip case, r
     if(!isDesktopEnvironment()) {
         return;
     }
-    test('Common Views', function(assert) { this.testViews(commonViews, assert, false); });
-    test('Time Line Views', function(assert) { this.testViews(timeLineViews, assert, false); });
-    test('Group Views', function(assert) { this.testViews(groupViews, assert, false); });
+    commonViews.forEach((view) => {
+        test(`Common Views: ${view.name}`, function(assert) { this.testViews(commonViews, view.name, false, assert); });
+    });
+    timeLineViews.forEach((view) => {
+        test(`Time Line Views: ${view.name}`, function(assert) { this.testViews(timeLineViews, view.name, false, assert); });
+    });
+    groupViews.forEach((view) => {
+        test(`Group Views: ${view.name}`, function(assert) { this.testViews(groupViews, view.name, false, assert); });
+    });
 });
 
 
@@ -279,9 +282,15 @@ module('Appointment should move a same distance in dragging from tooltip case, r
     if(!isDesktopEnvironment()) {
         return;
     }
-    test('Common Views', function(assert) { this.testViews(commonViews, assert, true); });
-    test('Time Line Views', function(assert) { this.testViews(timeLineViews, assert, true); });
-    test('Group Views', function(assert) { this.testViews(groupViews, assert, true); });
+    commonViews.forEach((view) => {
+        test(`Common Views: ${view.name}`, function(assert) { this.testViews(commonViews, view.name, true, assert); });
+    });
+    timeLineViews.forEach((view) => {
+        test(`Time Line Views: ${view.name}`, function(assert) { this.testViews(timeLineViews, view.name, true, assert); });
+    });
+    groupViews.forEach((view) => {
+        test(`Group Views: ${view.name}`, function(assert) { this.testViews(groupViews, view.name, true, assert); });
+    });
 });
 
 const moveAsMouseConfig = $.extend({}, {

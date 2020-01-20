@@ -20,14 +20,6 @@ const ANONYMOUS_TEMPLATE_NAME = 'content';
 
 const realDevice = devices.real();
 
-/**
- * @name dxDropDownBox
- * @isEditor
- * @inherits DataExpressionMixin, dxDropDownEditor
- * @hasTranscludedContent
- * @module ui/drop_down_box
- * @export default
- */
 const DropDownBox = DropDownEditor.inherit({
     _supportedKeys: function() {
         return extend({}, this.callBase(), {
@@ -60,39 +52,10 @@ const DropDownBox = DropDownEditor.inherit({
              * @hidden
              */
 
-            /**
-             * @name dxDropDownBoxOptions.acceptCustomValue
-             * @type boolean
-             * @default false
-             */
             acceptCustomValue: false,
 
-            /**
-             * @name dxDropDownBoxOptions.contentTemplate
-             * @type template|function
-             * @default 'content'
-             * @type_function_param1 templateData:object
-             * @type_function_param1_field1 component:dxDropDownBox
-             * @type_function_param1_field2 value:any
-             * @type_function_param2 contentElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
             contentTemplate: 'content',
 
-            /**
-             * @name dxDropDownBoxOptions.dropDownOptions
-             * @type dxPopupOptions
-             * @default {}
-             */
-
-            /**
-             * @name dxDropDownBoxOptions.fieldTemplate
-             * @type template|function
-             * @default null
-             * @type_function_param1 value:object
-             * @type_function_param2 fieldElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
 
             /**
             * @name dxDropDownBoxOptions.onContentReady
@@ -122,24 +85,9 @@ const DropDownBox = DropDownEditor.inherit({
              * @hidden
              */
 
-            /**
-             * @name dxDropDownBoxOptions.openOnFieldClick
-             * @default true
-             */
             openOnFieldClick: true,
 
-            /**
-             * @name dxDropDownBoxOptions.valueChangeEvent
-             * @type string
-             * @default "change"
-             */
 
-            /**
-             * @name dxDropDownBoxOptions.displayValueFormatter
-             * @type function(value)
-             * @type_function_param1 value:string|Array<any>
-             * @type_function_return string
-             */
             displayValueFormatter: function(value) {
                 return Array.isArray(value) ? value.join(', ') : value;
             },

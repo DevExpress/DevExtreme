@@ -1,7 +1,7 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('common.css!');
-require('ui/resizable');
+import 'common.css!';
+import 'ui/resizable';
 
 QUnit.testStart(function() {
     const markup = '<div id="resizable" style="height: 50px; width: 50px; position: absolute"></div>';

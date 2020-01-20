@@ -5,26 +5,9 @@
 * @inherits basePointObject
 */
 const piePointObject = {
-    /**
-    * @name piePointObjectFields.percent
-    * @type string|number|date
-    */
     percent: null,
-    /**
-    * @name piePointObjectMethods.isVisible
-    * @publicName isVisible()
-    * @return boolean
-    */
     isVisible: function() { },
-    /**
-   * @name piePointObjectMethods.show
-   * @publicName show()
-   */
     show: function() { },
-    /**
-  * @name piePointObjectMethods.hide
-  * @publicName hide()
-  */
     hide: function() { }
 };
 
@@ -62,24 +45,8 @@ const pieChartSeriesObject = {
 * @inherits BaseLegendItem
 */
 const legendItem = {
-    /**
-    * @name PieChartLegendItem.text
-    * @type any
-    */
     text: undefined,
-    /**
-    * @name PieChartLegendItem.points
-    * @type Array<piePointObject>
-    */
     points: [],
-    /**
-    * @name PieChartLegendItem.argument
-    * @type string|Date|number
-    */
     argument: undefined,
-    /**
-    * @name PieChartLegendItem.argumentIndex
-    * @type number
-    */
     argumentIndex: undefined
 };
