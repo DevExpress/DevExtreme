@@ -2563,9 +2563,7 @@ const Scheduler = Widget.inherit({
                     );
                 }
             }
-        }
 
-        if(updatedStartDate) {
             this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
             this.fire('setField', 'endDate', resultAppointmentData, new Date(updatedStartDate.getTime() + appointmentDuration));
         }
