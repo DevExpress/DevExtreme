@@ -1444,7 +1444,7 @@ module('keyboard navigation', {
         const focusedItemId = instance.getFocusedItemId();
 
         $element.focusin();
-        assert.equal($element.attr('aria-activedescendant'), String(focusedItemId), 'element has attribute aria-activedescendant, whose value active');
+        assert.strictEqual($element.attr('aria-activedescendant'), String(focusedItemId), 'element has attribute aria-activedescendant, whose value active');
 
         $item.trigger('dxpointerdown');
         this.clock.tick();
