@@ -71,7 +71,7 @@ const moduleOptions = {
 
         const subscribes = {
             needCoordinates: function(options) {
-                options.callback(that.getCoordinates.apply(that));
+                return that.getCoordinates.apply(that);
             },
             getAppointmentColor: function(options) {
                 options.callback($.Deferred().resolve('red').promise());

@@ -31,7 +31,7 @@ const moduleOptions = {
 
         this.instance.notifyObserver = $.proxy(function(command, options) {
             if(command === 'needCoordinates') {
-                options.callback(this.getCoordinates.apply(this));
+                return this.getCoordinates.apply(this);
             }
 
             if(command === 'getCellDimensions') {
