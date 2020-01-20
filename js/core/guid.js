@@ -1,12 +1,5 @@
 const Class = require('./class');
 
-/**
-* @name Guid
-* @type object
-* @namespace DevExpress.data
-* @module core/guid
-* @export default
-*/
 const Guid = Class.inherit({
 
     /**
@@ -47,20 +40,10 @@ const Guid = Class.inherit({
         return value;
     },
 
-    /**
-    * @name Guidmethods.toString
-    * @publicName toString()
-    * @return string
-    */
     toString: function() {
         return this._value;
     },
 
-    /**
-    * @name Guidmethods.valueOf
-    * @publicName valueOf()
-    * @return string
-    */
     valueOf: function() {
         return this._value;
     },

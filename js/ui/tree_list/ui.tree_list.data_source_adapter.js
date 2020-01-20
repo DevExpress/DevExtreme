@@ -720,7 +720,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _changeRowExpandCore: function(key) {
-            const expandedRowKeys = this.option('expandedRowKeys');
+            const expandedRowKeys = this.option('expandedRowKeys').slice();
             const indexExpandedNodeKey = gridCoreUtils.getIndexByKey(key, expandedRowKeys, null);
 
             if(indexExpandedNodeKey < 0) {

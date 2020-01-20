@@ -15,10 +15,6 @@ const DATA_STYLE_OFFSET = 2;
 const DEFAUL_COLUMN_WIDTH = 100;
 
 exports.ExportMixin = extend({}, exportMixin, {
-    /**
-    * @name dxPivotGridMethods.exportToExcel
-    * @publicName exportToExcel()
-    */
     exportToExcel: function() {
         const that = this;
 

@@ -111,11 +111,13 @@
 
 @base-inverted-text-color: #2a2a2a;
 @base-inverted-icon-color: @base-inverted-text-color;
+@base-disabled-opacity: 0.5;
 
 @base-header-color: #8894a0;
 @base-row-alternation-background: #1d2026;
 @base-selected-border: #6c48a8;
 @base-accent-highlight-color: #6b2bd9;
+@base-dropdown-shadow-color: fade(@base-shadow-color, 17.5%);
 
 // Validation
 
@@ -188,9 +190,6 @@
 */
 @texteditor-focused-border-color: @base-focus-bg;
 @texteditor-hover-bg: @base-bg;
-
-
-@texteditor-disabled-opacity: 0.5;
 
 @texteditor-button-clear-icon-color: @base-icon-color;
 
@@ -775,7 +774,6 @@
 * @type color
 */
 @selectbox-list-bg: @base-bg;
-@selectbox-shadow-color: fade(@base-shadow-color, 17.5%);
 
 // Tabs
 

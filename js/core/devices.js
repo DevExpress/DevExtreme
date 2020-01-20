@@ -36,53 +36,14 @@ const KNOWN_UA_TABLE = {
 * @export default
 */
 const DEFAULT_DEVICE = {
-    /**
-    * @name Device.deviceType
-    * @type string
-    * @acceptValues 'phone'|'tablet'|'desktop'
-    */
     deviceType: 'desktop',
-    /**
-    * @name Device.platform
-    * @type string
-    * @acceptValues 'android'|'ios'|'generic'
-    */
     platform: 'generic',
-    /**
-    * @name Device.version
-    * @type Array<number>
-    */
     version: [],
-    /**
-    * @name Device.phone
-    * @type boolean
-    */
     phone: false,
-    /**
-    * @name Device.tablet
-    * @type boolean
-    */
     tablet: false,
-    /**
-    * @name Device.android
-    * @type boolean
-    */
     android: false,
-    /**
-    * @name Device.ios
-    * @type boolean
-    */
     ios: false,
-    /**
-    * @name Device.generic
-    * @type boolean
-    */
     generic: true,
-    /**
-    * @name Device.grade
-    * @type string
-    * @acceptValues 'A'|'B'|'C'
-    */
     grade: 'A',
 
     // TODO: For internal use (draft, do not document these options!)
@@ -414,37 +375,11 @@ class Devices {
 
     }
 
-    /**
-     * @name DevicesObjectMethods.on
-     * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    /**
-     * @name DevicesObjectMethods.on
-     * @publicName on(events)
-     * @param1 events:object
-     * @return this
-     */
     on(eventName, eventHandler) {
         this._eventsStrategy.on(eventName, eventHandler);
         return this;
     }
 
-    /**
-     * @name DevicesObjectMethods.off
-     * @publicName off(eventName)
-     * @param1 eventName:string
-     * @return this
-     */
-    /**
-     * @name DevicesObjectMethods.off
-     * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
     off(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;
@@ -458,10 +393,4 @@ viewPort.changeCallback.add((viewPort, prevViewport) => {
     devices.attachCssClasses(viewPort);
 });
 
-/**
- * @const devices
- * @type DevicesObject
- * @namespace DevExpress
- * @hidden
- */
 module.exports = devices;

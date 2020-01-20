@@ -1153,7 +1153,6 @@ QUnit.test('getTextAndFormatDate with format TIME should work correct', function
         views: ['week'],
         currentView: 'week'
     });
-    this.clock.tick(300);
 
     assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data, 'TIME'), {
         formatDate: '10:00 AM - 11:00 AM',
@@ -1173,7 +1172,29 @@ QUnit.test('getTextAndFormatDate, appointment with allDay option, without format
         views: ['week'],
         currentView: 'week'
     });
-    this.clock.tick(300);
+
+    assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
+        formatDate: 'March 1',
+        text: 'Appointment test text'
+    });
+});
+
+QUnit.test('getTextAndFormatDate, with expr fields', function(assert) {
+    const data = {
+        Text: 'Appointment test text',
+        StartDate: new Date(2018, 2, 1, 10),
+        EndDate: new Date(2018, 2, 1, 11),
+        AllDay: true,
+    };
+    this.createInstance({
+        dataSource: [data],
+        views: ['week'],
+        currentView: 'week',
+        textExpr: 'Text',
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+    });
 
     assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
         formatDate: 'March 1',
@@ -1192,7 +1213,6 @@ QUnit.test('getTextAndFormatDate, simple appointment, without format', function(
         views: ['week'],
         currentView: 'week'
     });
-    this.clock.tick(300);
 
     assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
         formatDate: '10:00 AM - 11:00 AM',
@@ -1211,10 +1231,30 @@ QUnit.test('getTextAndFormatDate, simple appointment, month view, without format
         views: ['month'],
         currentView: 'month'
     });
-    this.clock.tick(300);
 
     assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
         formatDate: 'March 1, 10:00 AM - 11:00 AM',
+        text: 'Appointment test text'
+    });
+});
+
+QUnit.test('getTextAndFormatData, recurrance appointment with different data', function(assert) {
+    const initialData = {
+        text: 'Appointment test text',
+        startDate: new Date(2018, 2, 1, 10),
+        endDate: new Date(2018, 2, 1, 11),
+    };
+    const dataRecur = {
+        startDate: new Date(2018, 2, 2, 10),
+        endDate: new Date(2018, 2, 2, 11),
+    };
+    this.createInstance({
+        dataSource: [initialData],
+        views: ['month'],
+        currentView: 'month'
+    });
+    assert.deepEqual(this.instance.fire('getTextAndFormatDate', initialData, dataRecur), {
+        formatDate: 'March 2, 10:00 AM - 11:00 AM',
         text: 'Appointment test text'
     });
 });
