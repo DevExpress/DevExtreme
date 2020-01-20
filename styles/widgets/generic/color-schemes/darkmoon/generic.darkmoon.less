@@ -119,6 +119,8 @@
 @base-inverted-icon-color: @base-inverted-text-color;
 @base-disabled-opacity: 0.5;
 @base-dropdown-shadow-color: fade(darken(@base-shadow-color, 100%), 17.5%);
+@base-invalid-color: @base-danger;
+@base-invalid-faded-border-color: fade(@base-invalid-color, 40%);
 
 
 // Badges
@@ -140,15 +142,12 @@
 @base-grid-selected-border-color: #45c7de;
 
 // Validation
-@base-invalid-color: @base-danger;
 
 @VALIDATION_MESSAGE_COLOR: @base-inverted-text-color;
 @VALIDATION_MESSAGE_BACKGROUND_COLOR: @base-invalid-color;
-
 @VALIDATION_SUMMARY_COLOR: @base-invalid-color;
-
 @validation-overlay-border-radius: @base-border-radius;
-@base-invalid-faded-border-color: fade(@base-invalid-color, 40%);
+
 
 // TextEditor
 
