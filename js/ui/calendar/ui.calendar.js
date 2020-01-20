@@ -214,7 +214,7 @@ const Calendar = Editor.inherit({
                 if(e.ctrlKey) {
                     this._waitRenderView(1);
                 } else {
-                    this._moveCurrentDate(1 * this._getRtlCorrection());
+                    this._moveCurrentDateByOffset(1 * this._getRtlCorrection());
                 }
             },
             leftArrow: function(e) {
@@ -222,7 +222,7 @@ const Calendar = Editor.inherit({
                 if(e.ctrlKey) {
                     this._waitRenderView(-1);
                 } else {
-                    this._moveCurrentDate(-1 * this._getRtlCorrection());
+                    this._moveCurrentDateByOffset(-1 * this._getRtlCorrection());
                 }
             },
             upArrow: function(e) {
@@ -233,7 +233,7 @@ const Calendar = Editor.inherit({
                     if(fx.isAnimating(this._view.$element())) {
                         return;
                     }
-                    this._moveCurrentDate(-1 * this._view.option('colCount'));
+                    this._moveCurrentDateByOffset(-1 * this._view.option('colCount'));
                 }
             },
             downArrow: function(e) {
@@ -244,7 +244,7 @@ const Calendar = Editor.inherit({
                     if(fx.isAnimating(this._view.$element())) {
                         return;
                     }
-                    this._moveCurrentDate(1 * this._view.option('colCount'));
+                    this._moveCurrentDateByOffset(1 * this._view.option('colCount'));
                 }
             },
             home: function(e) {
@@ -254,11 +254,15 @@ const Calendar = Editor.inherit({
                 const currentDate = this.option('currentDate');
                 const min = this._dateOption('min');
 
+                if(this._view.isDateDisabled(currentDate)) {
+                    return;
+                }
+
                 const date = dateUtils.sameView(zoomLevel, currentDate, min)
                     ? min
                     : dateUtils.getViewFirstCellDate(zoomLevel, currentDate);
 
-                this._moveToClosestAvailableDate(date, 1);
+                this._moveToClosestAvailableDate(date);
             },
             end: function(e) {
                 e.preventDefault();
@@ -267,25 +271,29 @@ const Calendar = Editor.inherit({
                 const currentDate = this.option('currentDate');
                 const max = this._dateOption('max');
 
+                if(this._view.isDateDisabled(currentDate)) {
+                    return;
+                }
+
                 const date = dateUtils.sameView(zoomLevel, currentDate, max)
                     ? max
                     : dateUtils.getViewLastCellDate(zoomLevel, currentDate);
 
-                this._moveToClosestAvailableDate(date, -1);
+                this._moveToClosestAvailableDate(date);
             },
             pageUp: function(e) {
                 e.preventDefault();
-                this._waitRenderView(-1);
+                this._waitRenderView(-1 * this._getRtlCorrection());
             },
             pageDown: function(e) {
                 e.preventDefault();
-                this._waitRenderView(1);
+                this._waitRenderView(1 * this._getRtlCorrection());
             },
             tab: noop,
             enter: function(e) {
                 if(!this._isMaxZoomLevel()) {
                     this._navigateDown();
-                } else {
+                } else if(!this._view.isDateDisabled(this.option('currentDate'))) {
                     const value = this._updateTimeComponent(this.option('currentDate'));
                     this._dateValue(value, e);
                 }
@@ -329,58 +337,115 @@ const Calendar = Editor.inherit({
         this.option(optionName, dateSerialization.serializeDate(optionValue, serializationFormat));
     },
 
-    _moveCurrentDate: function(offset, baseDate) {
-        let currentDate = baseDate || new Date(this.option('currentDate'));
+    _shiftDate: function(zoomLevel, date, offset, reverse) {
+        switch(zoomLevel) {
+            case ZOOM_LEVEL.MONTH:
+                date.setDate(date.getDate() + offset * reverse);
+                break;
+            case ZOOM_LEVEL.YEAR:
+                date.setMonth(date.getMonth() + offset * reverse);
+                break;
+            case ZOOM_LEVEL.DECADE:
+                date.setFullYear(date.getFullYear() + offset * reverse);
+                break;
+            case ZOOM_LEVEL.CENTURY:
+                date.setFullYear(date.getFullYear() + 10 * offset * reverse);
+                break;
+        }
+    },
+
+    _moveCurrentDateByOffset: function(offset) {
+        const baseDate = this.option('currentDate');
+        let currentDate = new Date(baseDate);
+        const zoomLevel = this.option('zoomLevel');
+        this._shiftDate(zoomLevel, currentDate, offset, 1);
+
         const maxDate = this._getMaxDate();
         const minDate = this._getMinDate();
-        const zoomLevel = this.option('zoomLevel');
-        const isCurrentDateInRange = inRange(currentDate, minDate, maxDate);
-        const dateForward = new Date(currentDate);
-        const dateBackward = new Date(currentDate);
-        let isDateForwardInRange = isCurrentDateInRange;
-        let isDateBackwardInRange = isCurrentDateInRange;
-        const step = offset || 1;
 
-        while((!offset && (isDateForwardInRange || isDateBackwardInRange)) || (offset && isDateForwardInRange)) {
-            switch(zoomLevel) {
-                case ZOOM_LEVEL.MONTH:
-                    dateForward.setDate(dateForward.getDate() + step);
-                    dateBackward.setDate(dateBackward.getDate() - step);
-                    break;
-                case ZOOM_LEVEL.YEAR:
-                    dateForward.setMonth(dateForward.getMonth() + step);
-                    dateBackward.setMonth(dateBackward.getMonth() - step);
-                    break;
-                case ZOOM_LEVEL.DECADE:
-                    dateForward.setFullYear(dateForward.getFullYear() + step);
-                    dateBackward.setFullYear(dateBackward.getFullYear() - step);
-                    break;
-                case ZOOM_LEVEL.CENTURY:
-                    dateForward.setFullYear(dateForward.getFullYear() + 10 * step);
-                    dateBackward.setFullYear(dateBackward.getFullYear() - 10 * step);
-                    break;
-            }
+        let isDateForwardInStartView = this._isDatesInSameView(zoomLevel, currentDate, baseDate);
+        let isDateForwardInRange = inRange(currentDate, minDate, maxDate) && isDateForwardInStartView;
+        const dateForward = new Date(currentDate);
+
+        while(isDateForwardInRange) {
+            isDateForwardInStartView = this._isDatesInSameView(zoomLevel, dateForward, baseDate);
+            isDateForwardInRange = inRange(dateForward, minDate, maxDate) && isDateForwardInStartView;
 
             if(isDateForwardInRange && !this._view.isDateDisabled(dateForward)) {
                 currentDate = dateForward;
                 break;
             }
 
-            if(isDateBackwardInRange && !offset && !this._view.isDateDisabled(dateBackward)) {
+            this._shiftDate(zoomLevel, dateForward, offset, 1);
+        }
+
+        if(this._view.isDateDisabled(currentDate)) {
+            this._waitRenderView(offset > 0 ? 1 : -1);
+        } else {
+            this.option('currentDate', currentDate);
+        }
+    },
+
+    _isDatesInSameView(zoomLevel, date1, date2) {
+        switch(zoomLevel) {
+            case ZOOM_LEVEL.MONTH:
+                return date1.getMonth() === date2.getMonth();
+            case ZOOM_LEVEL.YEAR:
+                return date1.getYear() === date2.getYear();
+            case ZOOM_LEVEL.DECADE:
+                return parseInt(date1.getYear() / 10) === parseInt(date2.getYear() / 10);
+            case ZOOM_LEVEL.CENTURY:
+                return parseInt(date1.getYear() / 100) === parseInt(date2.getYear() / 100);
+        }
+    },
+
+    _moveCurrentDate: function(baseDate) {
+        let currentDate = new Date(baseDate);
+        const zoomLevel = this.option('zoomLevel');
+
+        const isCurrentDateAvailable = !this._isDateAvailable(currentDate);
+
+        let isDateForwardAvailable = isCurrentDateAvailable;
+        let isDateBackwardAvailable = isCurrentDateAvailable;
+        let isDateForwardInStartView = true;
+        let isDateBackwardInStartView = true;
+
+        const dateForward = new Date(currentDate);
+        const dateBackward = new Date(currentDate);
+
+        while(isDateForwardInStartView || isDateBackwardInStartView) {
+            isDateForwardInStartView = this._isDatesInSameView(zoomLevel, dateForward, baseDate);
+            isDateBackwardInStartView = this._isDatesInSameView(zoomLevel, dateBackward, baseDate);
+
+            isDateForwardAvailable = !this._isDateAvailable(dateForward) && isDateForwardInStartView;
+            isDateBackwardAvailable = !this._isDateAvailable(dateBackward) && isDateBackwardInStartView;
+
+            if(isDateForwardAvailable) {
+                currentDate = dateForward;
+                break;
+            }
+
+            if(isDateBackwardAvailable) {
                 currentDate = dateBackward;
                 break;
             }
 
-            isDateBackwardInRange = inRange(dateBackward, minDate, maxDate);
-            isDateForwardInRange = inRange(dateForward, minDate, maxDate);
+            this._shiftDate(zoomLevel, dateForward, 1, 1);
+            this._shiftDate(zoomLevel, dateBackward, 1, -1);
         }
-
         this.option('currentDate', currentDate);
     },
 
-    _moveToClosestAvailableDate: function(baseDate, offset) {
-        if(this._view.isDateDisabled(baseDate)) {
-            this._moveCurrentDate(offset, baseDate);
+    _isDateAvailable: function(date) {
+        const maxDate = this._getMaxDate();
+        const minDate = this._getMinDate();
+
+        return this._view.isDateDisabled(date) || !inRange(date, minDate, maxDate);
+    },
+
+    _moveToClosestAvailableDate: function(baseDate) {
+        if(this._isDateAvailable(baseDate)) {
+            this._moveCurrentDate(baseDate);
         } else {
             this.option('currentDate', baseDate);
         }
@@ -531,9 +596,9 @@ const Calendar = Editor.inherit({
 
         const date = this._getDateByOffset(offset * this._getRtlCorrection());
 
-        this._moveToClosestAvailableDate(date, offset);
+        this._moveToClosestAvailableDate(date);
 
-        setTimeout((function() {
+        this._waitRenderViewTimeout = setTimeout((function() {
             this._alreadyViewRender = false;
         }).bind(this));
     },
@@ -588,7 +653,7 @@ const Calendar = Editor.inherit({
         this._updateAriaId();
 
         if(this._view.isDateDisabled(this.option('currentDate'))) {
-            this._moveCurrentDate(0);
+            this._moveCurrentDate(this.option('currentDate'));
         }
 
     },
@@ -782,7 +847,7 @@ const Calendar = Editor.inherit({
     _navigatorClickHandler: function(e) {
         const currentDate = this._getDateByOffset(e.direction, this.option('currentDate'));
 
-        this._moveToClosestAvailableDate(currentDate, 1 * e.direction);
+        this._moveToClosestAvailableDate(currentDate);
         this._updateNavigatorCaption(-e.direction * this._getRtlCorrection());
     },
 
@@ -1106,6 +1171,11 @@ const Calendar = Editor.inherit({
         delete this._view;
         delete this._beforeView;
         delete this._afterView;
+    },
+
+    _dispose: function() {
+        clearTimeout(this._waitRenderViewTimeout);
+        this.callBase();
     },
 
     _refreshViews: function() {
