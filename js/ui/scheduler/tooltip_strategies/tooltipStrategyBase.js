@@ -111,7 +111,7 @@ export class TooltipStrategyBase {
             }));
 
         const template = this._options.getAppointmentTemplate(this._getItemListTemplateName() + 'Template');
-        return this._createFunctionTemplate(template, data, currentData, index); // TODO this._options.getTargetedAppointmentData(data, target)
+        return this._createFunctionTemplate(template, data, currentData, index);
     }
 
     _createFunctionTemplate(template, data, targetData, index) {

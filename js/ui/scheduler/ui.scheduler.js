@@ -1474,7 +1474,6 @@ const Scheduler = Widget.inherit({
             showAppointmentPopup: this.showAppointmentPopup.bind(this),
             getTextAndFormatDate: (data, currentData, format) => this.fire('getTextAndFormatDate', data, currentData, format),
             checkAndDeleteAppointment: this.checkAndDeleteAppointment.bind(this),
-            getTargetedAppointmentData: (data, appointment) => this.fire('getTargetedAppointmentData', data, appointment),
             isAppointmentInAllDayPanel: this.isAppointmentInAllDayPanel.bind(this),
             getSingleAppointmentData: (appointmentData, targetElement) => { // TODO: temporary solution fox fix T848058, more information in the ticket
                 const $appointment = $(targetElement);
