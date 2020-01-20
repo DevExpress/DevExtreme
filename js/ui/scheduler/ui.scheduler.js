@@ -2565,9 +2565,9 @@ const Scheduler = Widget.inherit({
             }
         }
 
-        if(!updatedStartDate && options.startDate) {
-            updatedStartDate = options.startDate;
-        }
+        // if(!updatedStartDate && options.startDate) {
+        //     updatedStartDate = options.startDate;
+        // }
 
         if(updatedStartDate) {
             this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
