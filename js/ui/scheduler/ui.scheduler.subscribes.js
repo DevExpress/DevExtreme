@@ -415,9 +415,7 @@ const subscribes = {
 
     getFullWeekAppointmentWidth: function(options) {
         const groupIndex = options.groupIndex;
-        const groupWidth = this._workSpace.getGroupWidth(groupIndex);
-
-        options.callback(groupWidth);
+        return this._workSpace.getGroupWidth(groupIndex);
     },
 
     getMaxAppointmentWidth: function(options) {

@@ -39,7 +39,7 @@ const moduleOptions = {
             }
 
             if(command === 'getFullWeekAppointmentWidth') {
-                options.callback(this.fullWeekAppointmentWidth);
+                return this.fullWeekAppointmentWidth;
             }
 
             if(command === 'getMaxAppointmentWidth') {
