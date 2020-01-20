@@ -157,6 +157,10 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM}:visible`);
     }
 
+    getToolbarDropDownButton() {
+        return this._$element.find(`.${Consts.DROP_DOWN_BUTTON_CLASS}`);
+    }
+
     getToolbarDropDownMenuButton() {
         return this._$element.find(`.${Consts.DROPDOWN_MENU_BUTTON_CLASS}`);
     }
