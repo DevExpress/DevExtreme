@@ -52,6 +52,8 @@ import themes from '../themes';
 import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
 
+import { REDUCED_APPOINTMENT_CLASS, COMPACT_APPOINTMENT_CLASS, RECURRENCE_APPOINTMENT_CLASS } from './constants';
+
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
 
@@ -216,12 +218,6 @@ const Scheduler = Widget.inherit({
                 * @type_function_return string|Node|jQuery
                 */
 
-            /**
-                * @name dxSchedulerOptions.views
-                * @type Array<string, object>
-                * @default ['day', 'week']
-                * @acceptValues 'day'|'week'|'workWeek'|'month'|'timelineDay'|'timelineWeek'|'timelineWorkWeek'|'timelineMonth'|'agenda'
-                */
             views: ['day', 'week'],
 
             /**
@@ -343,55 +339,15 @@ const Scheduler = Widget.inherit({
                 * @type Enums.Orientation
                 */
 
-            /**
-                * @name dxSchedulerOptions.currentView
-                * @type Enums.SchedulerViewType
-                * @default "day"
-                * @fires dxSchedulerOptions.onOptionChanged
-                */
             currentView: 'day', // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
-            /**
-                * @name dxSchedulerOptions.currentDate
-                * @type Date|number|string
-                * @default new Date()
-                * @fires dxSchedulerOptions.onOptionChanged
-                */
             currentDate: dateUtils.trimTime(new Date()),
-            /**
-                * @name dxSchedulerOptions.min
-                * @type Date|number|string
-                * @default undefined
-                */
             min: undefined,
-            /**
-                * @name dxSchedulerOptions.max
-                * @type Date|number|string
-                * @default undefined
-                */
             max: undefined,
-            /**
-                * @name dxSchedulerOptions.dateSerializationFormat
-                * @type string
-                * @default undefined
-                */
             dateSerializationFormat: undefined,
-            /**
-                * @name dxSchedulerOptions.firstDayOfWeek
-                * @extends FirstDayOfWeek
-                */
             firstDayOfWeek: undefined,
 
-            /**
-                * @name dxSchedulerOptions.groups
-                * @extends Groups
-                */
             groups: [],
 
-            /**
-                * @name dxSchedulerOptions.resources
-                * @type Array<Object>
-                * @default []
-                */
             resources: [
                 /**
                     * @name dxSchedulerOptions.resources.fieldExpr
@@ -444,91 +400,28 @@ const Scheduler = Widget.inherit({
                     */
             ],
 
-            /**
-                * @name dxSchedulerOptions.dataSource
-                * @type string|Array<dxSchedulerAppointment>|DataSource|DataSourceOptions
-                * @default null
-                */
             dataSource: null,
 
-            /**
-                * @name dxSchedulerOptions.customizeDateNavigatorText
-                * @type function(info)
-                * @type_function_param1 info:object
-                * @type_function_param1_field1 startDate:date
-                * @type_function_param1_field2 endDate:date
-                * @type_function_param1_field3 text:string
-                * @type_function_return string
-                * @default undefined
-                */
             customizeDateNavigatorText: undefined,
 
-            /**
-                * @name dxSchedulerOptions.appointmentTemplate
-                * @extends AppointmentTemplate
-                */
             appointmentTemplate: 'item',
 
-            /**
-                * @name dxSchedulerOptions.dropDownAppointmentTemplate
-                * @type template|function
-                * @default "dropDownAppointment"
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 contentElement:dxElement
-                * @type_function_return string|Node|jQuery
-                * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
-                */
             dropDownAppointmentTemplate: 'dropDownAppointment',
 
-            /**
-                * @name dxSchedulerOptions.appointmentCollectorTemplate
-                * @default "appointmentCollector"
-                * @extends AppointmentCollectorTemplate
-                */
             appointmentCollectorTemplate: 'appointmentCollector',
 
-            /**
-                * @name dxSchedulerOptions.dataCellTemplate
-                * @extends DataCellTemplate
-                */
             dataCellTemplate: null,
 
-            /**
-                * @name dxSchedulerOptions.timeCellTemplate
-                * @extends TimeCellTemplate
-                */
             timeCellTemplate: null,
 
-            /**
-                * @name dxSchedulerOptions.resourceCellTemplate
-                * @extends ResourceCellTemplate
-                */
             resourceCellTemplate: null,
 
-            /**
-                * @name dxSchedulerOptions.dateCellTemplate
-                * @extends DateCellTemplate
-                */
             dateCellTemplate: null,
 
-            /**
-                * @name dxSchedulerOptions.startDayHour
-                * @extends StartDayHour
-                */
             startDayHour: 0,
 
-            /**
-                * @name dxSchedulerOptions.endDayHour
-                * @extends EndDayHour
-                */
             endDayHour: 24,
 
-            /**
-                * @name dxSchedulerOptions.editing
-                * @type boolean|object
-                * @default true
-                */
             editing: {
                 allowAdding: true,
                 allowDeleting: true,
@@ -553,26 +446,19 @@ const Scheduler = Widget.inherit({
                 * @default true
                 */
             /**
-                * @name dxSchedulerOptions.editing.allowResizing
-                * @type boolean
-                * @default true
+                 * @name dxSchedulerOptions.editing.allowResizing
+                 * @type boolean
+                 * @default true
+                 * @default false @for Android|iOS
                 */
             /**
-                * @name dxSchedulerOptions.editing.allowDragging
-                * @type boolean
-                * @default true
+                 * @name dxSchedulerOptions.editing.allowDragging
+                 * @type boolean
+                 * @default true
+                 * @default false @for Android|iOS
                 */
 
-            /**
-                * @name dxSchedulerOptions.showAllDayPanel
-                * @type boolean
-                * @default true
-                */
 
-            /**
-                * @name dxSchedulerOptions.appointmentDragging
-                * @type object
-                */
             /**
                * @name dxSchedulerOptions.appointmentDragging.autoScroll
                * @type boolean
@@ -659,25 +545,10 @@ const Scheduler = Widget.inherit({
                */
             showAllDayPanel: true,
 
-            /**
-                * @name dxSchedulerOptions.showCurrentTimeIndicator
-                * @type boolean
-                * @default true
-                */
             showCurrentTimeIndicator: true,
 
-            /**
-                * @name dxSchedulerOptions.shadeUntilCurrentTime
-                * @type boolean
-                * @default false
-                */
             shadeUntilCurrentTime: false,
 
-            /**
-                * @name dxSchedulerOptions.indicatorUpdateInterval
-                * @type number
-                * @default 300000
-                */
             indicatorUpdateInterval: 300000,
 
             /**
@@ -688,207 +559,42 @@ const Scheduler = Widget.inherit({
                 */
             indicatorTime: undefined,
 
-            /**
-                * @name dxSchedulerOptions.recurrenceEditMode
-                * @type Enums.SchedulerRecurrenceEditMode
-                * @default "dialog"
-                */
             recurrenceEditMode: 'dialog',
 
-            /**
-                * @name dxSchedulerOptions.cellDuration
-                * @extends CellDuration
-                */
             cellDuration: 30,
 
-            /**
-                * @name dxSchedulerOptions.maxAppointmentsPerCell
-                * @type number|Enums.MaxAppointmentsPerCell
-                * @default "auto"
-                */
             maxAppointmentsPerCell: 'auto',
 
-            /**
-                * @name dxSchedulerOptions.selectedCellData
-                * @readonly
-                * @type Array<any>
-                * @default []
-                */
             selectedCellData: [],
 
-            /**
-                * @name dxSchedulerOptions.groupByDate
-                * @type boolean
-                * @default false
-                */
             groupByDate: false,
 
-            /**
-                * @name dxSchedulerOptions.onAppointmentRendered
-                * @extends Action
-                * @type function(e)
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 appointmentData:object
-                * @type_function_param1_field5 targetedAppointmentData:object
-                * @type_function_param1_field6 appointmentElement:dxElement
-                * @action
-                */
             onAppointmentRendered: null,
 
-            /**
-                * @name dxSchedulerOptions.onAppointmentClick
-                * @type function(e)|string
-                * @extends Action
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 appointmentData:object
-                * @type_function_param1_field5 targetedAppointmentData:object
-                * @type_function_param1_field6 appointmentElement:dxElement
-                * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-                * @type_function_param1_field8 event:event
-                * @type_function_param1_field9 cancel:Boolean
-                * @action
-                */
             onAppointmentClick: null,
 
-            /**
-                * @name dxSchedulerOptions.onAppointmentDblClick
-                * @type function(e)|string
-                * @extends Action
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 appointmentData:object
-                * @type_function_param1_field5 targetedAppointmentData:object
-                * @type_function_param1_field6 appointmentElement:dxElement
-                * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-                * @type_function_param1_field8 event:event
-                * @type_function_param1_field9 cancel:Boolean
-                * @action
-                */
             onAppointmentDblClick: null,
 
-            /**
-                * @name dxSchedulerOptions.onAppointmentContextMenu
-                * @type function(e)|string
-                * @extends Action
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 appointmentData:object
-                * @type_function_param1_field5 targetedAppointmentData:object
-                * @type_function_param1_field6 appointmentElement:dxElement
-                * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-                * @type_function_param1_field8 event:event
-                * @action
-                */
             onAppointmentContextMenu: null,
 
-            /**
-                * @name dxSchedulerOptions.onCellClick
-                * @type function(e)|string
-                * @extends Action
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 cellData:object
-                * @type_function_param1_field5 cellElement:dxElement
-                * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-                * @type_function_param1_field7 event:event
-                * @type_function_param1_field8 cancel:Boolean
-                * @action
-                */
             onCellClick: null,
 
-            /**
-                * @name dxSchedulerOptions.onCellContextMenu
-                * @type function(e)|string
-                * @extends Action
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 cellData:object
-                * @type_function_param1_field5 cellElement:dxElement
-                * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-                * @type_function_param1_field7 event:event
-                * @action
-                */
             onCellContextMenu: null,
 
-            /**
-                * @name dxSchedulerOptions.onAppointmentAdding
-                * @extends Action
-                * @type function(e)
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
-                * @action
-                */
             onAppointmentAdding: null,
 
-            /**
-                * @name dxSchedulerOptions.onAppointmentAdded
-                * @extends Action
-                * @type function(e)
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 error:Error
-                * @action
-                */
             onAppointmentAdded: null,
 
-            /**
-                * @name dxSchedulerOptions.onAppointmentUpdating
-                * @extends Action
-                * @type function(e)
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 oldData:Object
-                * @type_function_param1_field5 newData:Object
-                * @type_function_param1_field6 cancel:Boolean|Promise<Boolean>
-                * @action
-                */
             onAppointmentUpdating: null,
 
-            /**
-                * @name dxSchedulerOptions.onAppointmentUpdated
-                * @extends Action
-                * @type function(e)
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 error:Error
-                * @action
-                */
             onAppointmentUpdated: null,
 
-            /**
-                * @name dxSchedulerOptions.onAppointmentDeleting
-                * @extends Action
-                * @type function(e)
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
-                * @action
-                */
             onAppointmentDeleting: null,
 
-            /**
-                * @name dxSchedulerOptions.onAppointmentDeleted
-                * @extends Action
-                * @type function(e)
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 error:Error
-                * @action
-                */
             onAppointmentDeleted: null,
 
-            /**
-                * @name dxSchedulerOptions.onAppointmentFormOpening
-                * @extends Action
-                * @type function(e)
-                * @type_function_param1 e:object
-                * @type_function_param1_field4 appointmentData:object
-                * @type_function_param1_field5 form:dxForm
-                * @type_function_param1_field6 cancel:Boolean
-                * @action
-               */
             onAppointmentFormOpening: null,
 
-            /**
-                * @name dxSchedulerOptions.appointmentTooltipTemplate
-                * @extends AppointmentTooltipTemplate
-                */
             appointmentTooltipTemplate: 'appointmentTooltip',
 
             /**
@@ -902,109 +608,34 @@ const Scheduler = Widget.inherit({
                 */
             appointmentPopupTemplate: 'appointmentPopup',
 
-            /**
-                * @name dxSchedulerOptions.crossScrollingEnabled
-                * @type boolean
-                * @default false
-                */
             crossScrollingEnabled: false,
 
-            /**
-                * @name dxSchedulerOptions.useDropDownViewSwitcher
-                * @type boolean
-                * @default false
-                */
             useDropDownViewSwitcher: false,
 
-            /**
-                * @name dxSchedulerOptions.startDateExpr
-                * @type string
-                * @default 'startDate'
-                */
             startDateExpr: 'startDate',
 
-            /**
-                * @name dxSchedulerOptions.endDateExpr
-                * @type string
-                * @default 'endDate'
-                */
             endDateExpr: 'endDate',
 
-            /**
-                * @name dxSchedulerOptions.textExpr
-                * @type string
-                * @default 'text'
-                */
             textExpr: 'text',
 
-            /**
-                * @name dxSchedulerOptions.descriptionExpr
-                * @type string
-                * @default 'description'
-                */
             descriptionExpr: 'description',
 
-            /**
-                * @name dxSchedulerOptions.allDayExpr
-                * @type string
-                * @default 'allDay'
-                */
             allDayExpr: 'allDay',
 
-            /**
-                * @name dxSchedulerOptions.recurrenceRuleExpr
-                * @type string
-                * @default 'recurrenceRule'
-                */
             recurrenceRuleExpr: 'recurrenceRule',
 
-            /**
-                * @name dxSchedulerOptions.recurrenceExceptionExpr
-                * @type string
-                * @default 'recurrenceException'
-                */
             recurrenceExceptionExpr: 'recurrenceException',
 
-            /**
-                * @name dxSchedulerOptions.remoteFiltering
-                * @type boolean
-                * @default false
-                */
             remoteFiltering: false,
 
-            /**
-                * @name dxSchedulerOptions.timeZone
-                * @type string
-                * @default ""
-                */
             timeZone: '',
 
-            /**
-                * @name dxSchedulerOptions.startDateTimeZoneExpr
-                * @type string
-                * @default 'startDateTimeZone'
-                */
             startDateTimeZoneExpr: 'startDateTimeZone',
 
-            /**
-                * @name dxSchedulerOptions.endDateTimeZoneExpr
-                * @type string
-                * @default 'endDateTimeZone'
-                */
             endDateTimeZoneExpr: 'endDateTimeZone',
 
-            /**
-                * @name dxSchedulerOptions.noDataText
-                * @type string
-                * @default "No data to display"
-                */
             noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
-            /**
-            * @name dxSchedulerOptions.adaptivityEnabled
-            * @type boolean
-            * @default false
-            */
             adaptivityEnabled: false,
 
             allowMultipleCellSelection: true,
@@ -1031,60 +662,6 @@ const Scheduler = Widget.inherit({
                 * @inherits CollectionWidgetItem
                 * @type object
                 */
-            /**
-                * @name dxSchedulerAppointment.html
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointment.disabled
-                * @type boolean
-                * @default false
-                */
-            /**
-                * @name dxSchedulerAppointment.visible
-                * @type boolean
-                * @default true
-                */
-            /**
-                * @name dxSchedulerAppointment.template
-                * @type template
-                */
-            /**
-                * @name dxSchedulerAppointment.text
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointment.startDate
-                * @type Date
-                */
-            /**
-                * @name dxSchedulerAppointment.endDate
-                * @type Date
-                */
-            /**
-                * @name dxSchedulerAppointment.description
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointment.recurrenceRule
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointment.recurrenceException
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointment.allDay
-                * @type Boolean
-                */
-            /**
-                * @name dxSchedulerAppointment.startDateTimeZone
-                * @type String
-                */
-            /**
-                * @name dxSchedulerAppointment.endDateTimeZone
-                * @type String
-                */
         });
     },
 
@@ -1095,11 +672,6 @@ const Scheduler = Widget.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                        * @name dxSchedulerOptions.focusStateEnabled
-                        * @type boolean
-                        * @default true @for desktop
-                        */
                     focusStateEnabled: true
                 }
             },
@@ -1108,21 +680,9 @@ const Scheduler = Widget.inherit({
                     return !devices.current().generic;
                 },
                 options: {
-                    /**
-                       * @name dxSchedulerOptions.useDropDownViewSwitcher
-                       * @default true @for Android|iOS
-                       */
                     useDropDownViewSwitcher: true,
 
-                    /**
-                       * @name dxSchedulerOptions.editing.allowResizing
-                       * @default false @for Android|iOS
-                       */
 
-                    /**
-                       * @name dxSchedulerOptions.editing.allowDragging
-                       * @default false @for Android|iOS
-                       */
                     editing: {
                         allowDragging: false,
                         allowResizing: false
@@ -1134,10 +694,6 @@ const Scheduler = Widget.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    /**
-                         * @name dxSchedulerOptions.useDropDownViewSwitcher
-                         * @default true @for Material
-                         */
                     useDropDownViewSwitcher: true,
                     dateCellTemplate: function(data, index, element) {
                         const text = data.text;
@@ -1168,16 +724,6 @@ const Scheduler = Widget.inherit({
         this.callBase();
 
         extend(this._deprecatedOptions, {
-            /**
-             * @name dxSchedulerOptions.onAppointmentFormCreated
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 appointmentData:object
-             * @type_function_param1_field5 form:dxForm
-             * @action
-             * @deprecated dxSchedulerOptions.onAppointmentFormOpening
-             */
             onAppointmentFormCreated: { since: '18.2', alias: 'onAppointmentFormOpening' },
             dropDownAppointmentTemplate: { since: '19.2', message: 'appointmentTooltipTemplate' }
         });
@@ -1932,7 +1478,6 @@ const Scheduler = Widget.inherit({
             showAppointmentPopup: that.showAppointmentPopup.bind(that),
             getTextAndFormatDate: (data, currentData, format) => that.fire('getTextAndFormatDate', data, currentData, format),
             checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
-            getTargetedAppointmentData: (data, appointment) => that.fire('getTargetedAppointmentData', data, appointment),
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
         };
     },
@@ -2518,7 +2063,7 @@ const Scheduler = Widget.inherit({
         this._appointmentPopup.triggerResize();
     },
 
-    _getSingleAppointmentData: function(appointmentData, options, skipCheckUpdate) {
+    _getSingleAppointmentData: function(appointmentData, options) {
         options = options || {};
 
         const $appointment = options.$appointment;
@@ -2529,29 +2074,26 @@ const Scheduler = Widget.inherit({
         const startDate = new Date(this.fire('getField', 'startDate', resultAppointmentData));
         const endDate = new Date(this.fire('getField', 'endDate', resultAppointmentData));
         const appointmentDuration = endDate.getTime() - startDate.getTime();
-        let updatedStartDate;
+        let updatedStartDate = startDate;
         let appointmentStartDate;
 
-        if(typeUtils.isDefined($appointment) && (skipCheckUpdate === true || this._needUpdateAppointmentData($appointment))) {
+        if(typeUtils.isDefined($appointment) && (this._isAppointmentRecurrence(appointmentData) || this._needUpdateAppointmentData($appointment))) {
             const apptDataCalculator = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
 
             if(typeUtils.isFunction(apptDataCalculator)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
             } else {
-                const coordinates = translator.locate($appointment);
-                updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
-
-                if($appointment.hasClass('dx-scheduler-appointment-reduced')) {
-                    appointmentStartDate = $appointment.data('dxAppointmentStartDate');
-                    if(appointmentStartDate) {
-                        updatedStartDate = appointmentStartDate;
-                    }
-                }
-
-                if(this._isAppointmentRecurrence(appointmentData)) {
+                if(options.isAppointmentResized) {
+                    const coordinates = translator.locate($appointment);
+                    updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
+                } else {
                     appointmentStartDate = $appointment.data('dxAppointmentSettings') && $appointment.data('dxAppointmentSettings').startDate;
-                    const isStartDateChanged = options.data && options.target && options.target.endDate && new Date(options.data.endDate).getTime() === new Date(options.target.endDate).getTime();
-                    if(appointmentStartDate && !isStartDateChanged) {
+
+                    if($appointment.hasClass(REDUCED_APPOINTMENT_CLASS)) {
+                        appointmentStartDate = $appointment.data('dxAppointmentStartDate');
+                    }
+
+                    if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
                     }
                 }
@@ -2564,13 +2106,7 @@ const Scheduler = Widget.inherit({
                     );
                 }
             }
-        }
 
-        if(!updatedStartDate && options.startDate) {
-            updatedStartDate = options.startDate;
-        }
-
-        if(updatedStartDate) {
             this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
             this.fire('setField', 'endDate', resultAppointmentData, new Date(updatedStartDate.getTime() + appointmentDuration));
         }
@@ -2579,7 +2115,7 @@ const Scheduler = Widget.inherit({
     },
 
     _needUpdateAppointmentData: function($appointment) {
-        return $appointment.hasClass('dx-scheduler-appointment-compact') || $appointment.hasClass('dx-scheduler-appointment-recurrence');
+        return $appointment.hasClass(COMPACT_APPOINTMENT_CLASS) || $appointment.hasClass(RECURRENCE_APPOINTMENT_CLASS);
     },
 
     subscribe: function(subject, action) {
@@ -2751,7 +2287,9 @@ const Scheduler = Widget.inherit({
     },
 
     _getEndDate: function(appointment, skipNormalize) {
-        let endDate = this.fire('getField', 'endDate', appointment);
+        let endDate = new Date(this.fire('getField', 'endDate', appointment));
+        const startDate = new Date(this.fire('getField', 'startDate', appointment));
+        const isSameDate = dateUtils.sameDate(startDate, endDate);
 
         if(endDate) {
 
@@ -2763,6 +2301,7 @@ const Scheduler = Widget.inherit({
 
             !skipNormalize && this.fire('updateAppointmentEndDate', {
                 endDate: endDate,
+                isSameDate: isSameDate,
                 callback: function(result) {
                     endDate = result;
                 }
@@ -2869,31 +2408,14 @@ const Scheduler = Widget.inherit({
         }
     },
 
-    /**
-        * @name dxSchedulerMethods.getStartViewDate
-        * @publicName getStartViewDate()
-        * @return Date
-        */
     getStartViewDate: function() {
         return this._workSpace.getStartViewDate();
     },
 
-    /**
-        * @name dxSchedulerMethods.getEndViewDate
-        * @publicName getEndViewDate()
-        * @return Date
-        */
     getEndViewDate: function() {
         return this._workSpace.getEndViewDate();
     },
 
-    /**
-        * @name dxSchedulerMethods.showAppointmentPopup
-        * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)
-        * @param1 appointmentData:Object|undefined
-        * @param2 createNewAppointment:Boolean|undefined
-        * @param3 currentAppointmentData:Object|undefined
-        */
     showAppointmentPopup: function(appointmentData, createNewAppointment, currentAppointmentData) {
         const singleAppointment = currentAppointmentData || this._getSingleAppointmentData(appointmentData, { skipDateCalculation: true });
         const startDate = this.fire('getField', 'startDate', currentAppointmentData || appointmentData);
@@ -2909,11 +2431,6 @@ const Scheduler = Widget.inherit({
         }.bind(this), false, true);
     },
 
-    /**
-        * @name dxSchedulerMethods.hideAppointmentPopup
-        * @publicName hideAppointmentPopup(saveChanges)
-        * @param1 saveChanges:Boolean|undefined
-        */
     hideAppointmentPopup: function(saveChanges) {
         if(this._appointmentPopup.isVisible()) {
             saveChanges && this._appointmentPopup.saveChanges();
@@ -2921,13 +2438,6 @@ const Scheduler = Widget.inherit({
         }
     },
 
-    /**
-        * @name dxSchedulerMethods.showAppointmentTooltip
-        * @publicName showAppointmentTooltip(appointmentData, target, currentAppointmentData)
-        * @param1 appointmentData:Object
-        * @param2 target:string|Node|jQuery
-        * @param3 currentAppointmentData:Object|undefined
-        */
     showAppointmentTooltip: function(appointmentData, target, currentAppointmentData) {
         if(appointmentData) {
             this.showAppointmentTooltipCore(target, [{
@@ -2948,30 +2458,14 @@ const Scheduler = Widget.inherit({
         }
     },
 
-    /**
-        * @name dxSchedulerMethods.hideAppointmentTooltip
-        * @publicName hideAppointmentTooltip()
-        */
     hideAppointmentTooltip: function() {
         this._appointmentTooltip.hide();
     },
 
-    /**
-        * @name dxSchedulerMethods.scrollToTime
-        * @publicName scrollToTime(hours, minutes, date)
-        * @param1 hours:Number
-        * @param2 minutes:Number
-        * @param3 date:Date|undefined
-        */
     scrollToTime: function(hours, minutes, date) {
         this._workSpace.scrollToTime(hours, minutes, date);
     },
 
-    /**
-        * @name dxSchedulerMethods.addAppointment
-        * @publicName addAppointment(appointment)
-        * @param1 appointment:Object
-        */
     addAppointment: function(appointment) {
         const text = this.fire('getField', 'text', appointment);
 
@@ -3001,21 +2495,10 @@ const Scheduler = Widget.inherit({
         });
     },
 
-    /**
-        * @name dxSchedulerMethods.updateAppointment
-        * @publicName updateAppointment(target, appointment)
-        * @param1 target:Object
-        * @param2 appointment:Object
-        */
     updateAppointment: function(target, appointment) {
         this._updateAppointment(target, appointment);
     },
 
-    /**
-        * @name dxSchedulerMethods.deleteAppointment
-        * @publicName deleteAppointment(appointment)
-        * @param1 appointment:Object
-        */
     deleteAppointment: function(appointment) {
         const deletingOptions = {
             appointmentData: appointment,

@@ -125,21 +125,29 @@
 .dx-scrollable-scrollbars-alwaysvisible {
     &.dx-scrollable-vertical,
     &.dx-scrollable-both {
-        .dx-scrollable-content {
-            padding-right: @SCROLLBAR_SIZE_THIN;
+        > .dx-scrollable-wrapper {
+            > .dx-scrollable-container {
+                > .dx-scrollable-content {
+                    padding-right: @SCROLLBAR_SIZE_THIN;
 
-            .dx-rtl&,
-            .dx-rtl & {
-                padding-right: 0;
-                padding-left: @SCROLLBAR_SIZE_THIN;
+                    .dx-rtl&,
+                    .dx-rtl & {
+                        padding-right: 0;
+                        padding-left: @SCROLLBAR_SIZE_THIN;
+                    }
+                }
             }
         }
     }
 
     &.dx-scrollable-horizontal,
     &.dx-scrollable-both {
-        .dx-scrollable-content {
-            padding-bottom: @SCROLLBAR_SIZE_THIN;
+        > .dx-scrollable-wrapper {
+            > .dx-scrollable-container {
+                > .dx-scrollable-content {
+                    padding-bottom: @SCROLLBAR_SIZE_THIN;
+                }
+            }
         }
     }
 }

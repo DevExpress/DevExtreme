@@ -2,8 +2,8 @@
   {
     "name": "animation/frame",
     "exports": {
-      "cancel": { "path": "utils.cancelAnimationFrame" },
-      "request": { "path": "utils.requestAnimationFrame" }
+      "cancelAnimationFrame": { "path": "utils.cancelAnimationFrame" },
+      "requestAnimationFrame": { "path": "utils.requestAnimationFrame" }
     }
   },
   {

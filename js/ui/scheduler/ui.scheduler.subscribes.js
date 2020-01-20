@@ -137,6 +137,9 @@ const subscribes = {
 
     updateAppointmentAfterResize: function(options) {
         const targetAppointment = options.target;
+
+        options.isAppointmentResized = true;
+
         const singleAppointment = this._getSingleAppointmentData(targetAppointment, options);
         const startDate = this.fire('getField', 'startDate', singleAppointment);
         const updatedData = extend(true, {}, options.data);
@@ -245,14 +248,13 @@ const subscribes = {
     },
 
     getTextAndFormatDate(data, currentData, format) {
-        const isAllDay = data.allDay;
-        const startDateTimeZone = data.startDateTimeZone;
-        const endDateTimeZone = data.endDateTimeZone;
-        const startDate = this.fire('convertDateByTimezone', currentData.startDate, startDateTimeZone);
-        const endDate = this.fire('convertDateByTimezone', currentData.endDate, endDateTimeZone);
+        const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
+        const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
+        const startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
+        const endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
         return {
-            text: this.fire('createAppointmentTitle', data),
-            formatDate: this.fire('_formatDates', startDate, endDate, isAllDay, format)
+            text: this.fire('createAppointmentTitle', appointmentFields),
+            formatDate: this.fire('_formatDates', startDate, endDate, appointmentFields.allDay, format)
         };
     },
 
@@ -262,6 +264,13 @@ const subscribes = {
         }
 
         return String(data);
+    },
+
+    _getAppointmentFields(data, arrayOfFields) {
+        return arrayOfFields.reduce((accumulator, field) => {
+            accumulator[field] = this.fire('getField', field, data);
+            return accumulator;
+        }, {});
     },
 
     _formatDates(startDate, endDate, isAllDay, format) {
@@ -447,14 +456,15 @@ const subscribes = {
     },
 
     updateAppointmentEndDate: function(options) {
-        const endDate = new Date(options.endDate);
+        const endDate = options.endDate;
         const endDayHour = this._getCurrentViewOption('endDayHour');
         const startDayHour = this._getCurrentViewOption('startDayHour');
+
         let updatedEndDate = endDate;
 
         if(endDate.getHours() >= endDayHour) {
             updatedEndDate.setHours(endDayHour, 0, 0, 0);
-        } else if(startDayHour > 0 && (endDate.getHours() * 60 + endDate.getMinutes() < (startDayHour * 60))) {
+        } else if(!options.isSameDate && startDayHour > 0 && (endDate.getHours() * 60 + endDate.getMinutes() < (startDayHour * 60))) {
             updatedEndDate = new Date(updatedEndDate.getTime() - toMs('day'));
             updatedEndDate.setHours(endDayHour, 0, 0, 0);
         }
@@ -778,21 +788,21 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipCheckUpdate) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipTimezoneConvert) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
+
         const recurringData = this._getSingleAppointmentData(appointmentData, {
             skipDateCalculation: true,
             $appointment: $appointmentElement,
             skipHoursProcessing: true
-        }, skipCheckUpdate);
+        });
         const result = {};
 
         extend(true, result, appointmentData, recurringData);
 
-        this._convertDatesByTimezoneBack(false, result);
+        !skipTimezoneConvert && this._convertDatesByTimezoneBack(false, result);
 
-        // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 
         return result;

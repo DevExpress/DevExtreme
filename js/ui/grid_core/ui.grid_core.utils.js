@@ -65,7 +65,7 @@ module.exports = (function() {
     const equalSelectors = function(selector1, selector2) {
         if(isFunction(selector1) && isFunction(selector2)) {
             if(selector1.originalCallback && selector2.originalCallback) {
-                return selector1.originalCallback === selector2.originalCallback;
+                return selector1.originalCallback === selector2.originalCallback && selector1.columnIndex === selector2.columnIndex;
             }
         }
 

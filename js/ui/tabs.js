@@ -47,13 +47,6 @@ const FEEDBACK_SCROLL_TIMEOUT = 300;
 const TAB_OFFSET = 30;
 
 
-/**
-* @name dxTabs
-* @inherits CollectionWidget
-* @module ui/tabs
-* @export default
-*/
-
 const Tabs = CollectionWidget.inherit({
 
     _activeStateUnit: '.' + TABS_ITEM_CLASS,
@@ -61,73 +54,23 @@ const Tabs = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-            /**
-            * @name dxTabsOptions.repaintChangesOnly
-            * @type boolean
-            * @default false
-            */
 
-            /**
-             * @name dxTabsOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxTabsOptions.showNavButtons
-            * @type boolean
-            * @default true
-            */
             showNavButtons: true,
 
-            /**
-            * @name dxTabsOptions.scrollByContent
-            * @type boolean
-            * @default true
-            */
             scrollByContent: true,
 
-            /**
-            * @name dxTabsOptions.scrollingEnabled
-            * @type boolean
-            * @default true
-            */
             scrollingEnabled: true,
 
-            /**
-            * @name dxTabsOptions.selectionMode
-            * @type Enums.NavSelectionMode
-            * @default 'single'
-            */
             selectionMode: 'single',
 
             /**
-            * @name dxTabsOptions.activeStateEnabled
-            * @hidden
-            */
-
-            /**
-            * @name dxTabsOptions.selectedItems
-            * @type Array<string,number,Object>
-            */
-
-            /**
              * @name dxTabsOptions.activeStateEnabled
+             * @hidden
              * @default true
-             */
+            */
 
-            /**
-             * @name dxTabsOptions.dataSource
-             * @type string|Array<string,dxTabsItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
-
-            /**
-             * @name dxTabsOptions.items
-             * @type Array<string, dxTabsItem, object>
-             * @fires dxTabsOptions.onOptionChanged
-             */
 
             activeStateEnabled: true,
             selectionRequired: false,
@@ -139,14 +82,6 @@ const Tabs = CollectionWidget.inherit({
             * @name dxTabsItem
             * @inherits CollectionWidgetItem
             * @type object
-            */
-            /**
-            * @name dxTabsItem.icon
-            * @type String
-            */
-            /**
-            * @name dxTabsItem.badge
-            * @type String
             */
         });
     },
@@ -160,20 +95,12 @@ const Tabs = CollectionWidget.inherit({
                     return devices.real().deviceType !== 'desktop';
                 },
                 options: {
-                    /**
-                    * @name dxTabsOptions.showNavButtons
-                    * @default false @for mobile_devices
-                    */
                     showNavButtons: false
                 }
             },
             {
                 device: { deviceType: 'desktop' },
                 options: {
-                    /**
-                    * @name dxTabsOptions.scrollByContent
-                    * @default false @for desktop
-                    */
                     scrollByContent: false
                 }
             },
@@ -182,11 +109,6 @@ const Tabs = CollectionWidget.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxTabsOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },

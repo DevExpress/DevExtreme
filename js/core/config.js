@@ -12,56 +12,14 @@ import errors from './errors';
 * @export default
 */
 const config = {
-    /**
-    * @name globalConfig.rtlEnabled
-    * @type boolean
-    * @default false
-    */
     rtlEnabled: false,
-    /**
-    * @name globalConfig.defaultCurrency
-    * @default "USD"
-    * @type string
-    */
     defaultCurrency: 'USD',
-    /**
-    * @name globalConfig.oDataFilterToLower
-    * @default true
-    * @type boolean
-    */
     oDataFilterToLower: true,
-    /**
-    * @name globalConfig.serverDecimalSeparator
-    * @type string
-    * @default "."
-    */
     serverDecimalSeparator: '.',
-    /**
-    * @name globalConfig.decimalSeparator
-    * @type string
-    * @default "."
-    * @deprecated
-    */
     decimalSeparator: '.',
-    /**
-    * @name globalConfig.thousandsSeparator
-    * @type string
-    * @default ","
-    * @deprecated
-    */
     thousandsSeparator: ',',
-    /**
-    * @name globalConfig.forceIsoDateParsing
-    * @type boolean
-    * @default true
-    */
     forceIsoDateParsing: true,
     wrapActionsBeforeExecute: true,
-    /**
-    * @name globalConfig.useLegacyStoreResult
-    * @type boolean
-    * @default false
-    */
     useLegacyStoreResult: false,
     /**
     * @name globalConfig.useJQuery
@@ -69,23 +27,9 @@ const config = {
     * @hidden
     */
     useJQuery: undefined,
-    /**
-    * @name globalConfig.editorStylingMode
-    * @type Enums.EditorStylingMode
-    * @default undefined
-    */
     editorStylingMode: undefined,
-    /**
-    * @name globalConfig.useLegacyVisibleIndex
-    * @type boolean
-    * @default false
-    */
     useLegacyVisibleIndex: false,
 
-    /**
-    * @name globalConfig.floatingActionButtonConfig
-    * @type object
-    */
     floatingActionButtonConfig: {
         /**
         * @name globalConfig.floatingActionButtonConfig.icon
@@ -180,21 +124,4 @@ if(typeof DevExpress !== 'undefined' && DevExpress.config) {
     configMethod(DevExpress.config);
 }
 
-/**
- * @name config
- * @publicName config()
- * @type method
- * @return globalConfig
- * @namespace DevExpress
- * @module core/config
- * @export default
- */
-/**
- * @name config
- * @publicName config(config)
- * @param1 config:globalConfig
- * @namespace DevExpress
- * @module core/config
- * @export default
- */
 module.exports = configMethod;

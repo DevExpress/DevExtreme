@@ -10,12 +10,6 @@ const DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD = '_dataSourceFromUrlLoadMode';
 const SPECIFIC_DATA_SOURCE_OPTION = '_getSpecificDataSourceOption';
 
 
-/**
-* @name DataHelperMixin
-* @module data_helper
-* @export default
-* @hidden
-*/
 const DataHelperMixin = {
 
     postCtor: function() {
@@ -140,11 +134,6 @@ const DataHelperMixin = {
         }
     },
 
-    /**
-    * @name DataHelperMixinMethods.getDataSource
-    * @publicName getDataSource()
-    * @return DataSource
-    */
     getDataSource: function() {
         return this._dataSource || null;
     }

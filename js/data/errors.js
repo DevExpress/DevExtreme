@@ -159,14 +159,6 @@ function handleError(error) {
     errors.log(id, error);
 }
 
-/**
-* @name Utils.errorHandler
-* @type function
-* @type_function_param1 e:Error
-* @module data/errors
-* @export errorHandler
-* @namespace DevExpress.data
-*/
 const errorHandler = null;
 const _errorHandler = function(error) {
     ///#DEBUG

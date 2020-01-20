@@ -3815,7 +3815,35 @@ QUnit.module('Appointments', () => {
             const expectedEndDate = appointmentData[endDateExpr].getDate() + eventCallCount;
 
             assert.equal(targetedAppointmentData[startDateExpr].getDate(), expectedStartDate, `start date of targetedAppointmentData should be equal ${expectedStartDate}`);
-            assert.equal(targetedAppointmentData[endDateExpr].getDate(), expectedEndDate, `edn date of targetedAppointmentData should be equal ${expectedEndDate}`);
+            assert.equal(targetedAppointmentData[endDateExpr].getDate(), expectedEndDate, `end date of targetedAppointmentData should be equal ${expectedEndDate}`);
+
+            assert.equal(index, 0, 'index argument should be 0');
+            assert.equal(appointmentData[textExpr], targetedAppointmentData[textExpr], 'appointmentData.text and targetedAppointmentData.text arguments should be equal');
+
+            eventCallCount++;
+        };
+    };
+    const createTestForHourlyRecurrenceData = (assert, scheduler) => {
+        eventCallCount = 0;
+
+        return (model, index, container) => {
+            const { appointmentData, targetedAppointmentData } = model;
+
+            const startDateExpr = scheduler.option('startDateExpr');
+            const endDateExpr = scheduler.option('endDateExpr');
+            const textExpr = scheduler.option('textExpr');
+
+            const expectedStartDateHours = appointmentData[startDateExpr].getHours() + eventCallCount;
+            const expectedStartDateMinutes = appointmentData[startDateExpr].getMinutes();
+
+            const expectedEndDateHours = appointmentData[endDateExpr].getHours() + eventCallCount;
+            const expectedEndDateMinutes = appointmentData[endDateExpr].getMinutes();
+
+            assert.equal(targetedAppointmentData[startDateExpr].getHours(), expectedStartDateHours, `start date of targetedAppointmentData should be equal ${expectedStartDateHours}`);
+            assert.equal(targetedAppointmentData[startDateExpr].getMinutes(), expectedStartDateMinutes, `start date of targetedAppointmentData should be equal ${expectedStartDateMinutes}`);
+
+            assert.equal(targetedAppointmentData[endDateExpr].getHours(), expectedEndDateHours, `end date of targetedAppointmentData should be equal ${expectedEndDateHours}`);
+            assert.equal(targetedAppointmentData[endDateExpr].getMinutes(), expectedEndDateMinutes, `end date of targetedAppointmentData should be equal ${expectedEndDateMinutes}`);
 
             assert.equal(index, 0, 'index argument should be 0');
             assert.equal(appointmentData[textExpr], targetedAppointmentData[textExpr], 'appointmentData.text and targetedAppointmentData.text arguments should be equal');
@@ -3858,6 +3886,38 @@ QUnit.module('Appointments', () => {
         startDateCustom: new Date(2017, 4, 22, 9, 30),
         endDateCustom: new Date(2017, 4, 22, 11, 30),
         recurrenceRule: 'FREQ=DAILY;COUNT=5'
+    }];
+
+    const recurrenceAndCompactData = [{
+        text: 'Website Re-Design Plan',
+        startDate: new Date(2017, 4, 22, 9, 30),
+        endDate: new Date(2017, 4, 22, 11, 30),
+        recurrenceRule: 'FREQ=DAILY;COUNT=5'
+    },
+    {
+        text: 'Website Re-Design Plan1',
+        startDate: new Date(2017, 4, 22, 9, 35),
+        endDate: new Date(2017, 4, 22, 11, 20),
+        recurrenceRule: 'FREQ=DAILY;COUNT=5'
+    },
+    {
+        text: 'Website Re-Design Plan2',
+        startDate: new Date(2017, 4, 22, 9, 45),
+        endDate: new Date(2017, 4, 22, 11, 25),
+        recurrenceRule: 'FREQ=DAILY;COUNT=5'
+    }];
+
+    const hourlyRecurrenceData = [{
+        textCustom: 'Website Re-Design Plan',
+        startDateCustom: new Date(2017, 4, 25, 9, 30),
+        endDateCustom: new Date(2017, 4, 25, 10),
+        recurrenceRule: 'FREQ=HOURLY;COUNT=5'
+    },
+    {
+        textCustom: 'Website Re-Design Plan1',
+        startDateCustom: new Date(2017, 4, 25, 9, 35),
+        endDateCustom: new Date(2017, 4, 25, 11, 20),
+        recurrenceRule: 'FREQ=HOURLY;COUNT=5'
     }];
 
     QUnit.module('appointmentTemplate', () => {
@@ -3905,6 +3965,34 @@ QUnit.module('Appointments', () => {
 
             for(let i = 0; i < 5; i++) {
                 scheduler.appointments.click(i);
+            }
+
+            assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
+        });
+
+        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence in collector', function(assert) {
+            const scheduler = createScheduler(recurrenceAndCompactData);
+            scheduler.option({ appointmentTooltipTemplate: createTestForRecurrenceData(assert, scheduler) });
+
+            for(let i = 0; i < 5; i++) {
+                scheduler.appointments.compact.click(i);
+            }
+
+            assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
+        });
+
+        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case hourly recurrence in collector', function(assert) {
+            const scheduler = createScheduler(hourlyRecurrenceData, {
+                textExpr: 'textCustom',
+                startDateExpr: 'startDateCustom',
+                endDateExpr: 'endDateCustom',
+                currentView: 'week'
+            });
+
+            scheduler.option({ appointmentTooltipTemplate: createTestForHourlyRecurrenceData(assert, scheduler) });
+
+            for(let i = 0; i < 5; i++) {
+                scheduler.appointments.compact.click(i);
             }
 
             assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');

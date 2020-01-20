@@ -4269,7 +4269,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
 
     // T837927
     QUnit.test('grouping with paginate. Expand group if filterValue is defined', function(assert) {
-        let source = this.createDataSource({
+        const source = this.createDataSource({
             group: ['field1', 'field2'],
             pageSize: 5
         });

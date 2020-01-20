@@ -53,6 +53,7 @@ const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
 
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
+const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
 const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
 const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
 const LAYOUT_MANAGER_ONE_COLUMN = 'dx-layout-manager-one-col';
@@ -171,12 +172,10 @@ const LayoutManager = Widget.inherit({
         const userItems = this.option('items');
         const isUserItemsExist = isDefined(userItems);
         const customizeItem = that.option('customizeItem');
-        let items;
-        let processedItems;
 
-        items = isUserItemsExist ? userItems : this._generateItemsByData(layoutData);
+        const items = isUserItemsExist ? userItems : this._generateItemsByData(layoutData);
         if(isDefined(items)) {
-            processedItems = [];
+            const processedItems = [];
 
             each(items, function(index, item) {
                 if(that._isAcceptableItem(item)) {
@@ -323,11 +322,10 @@ const LayoutManager = Widget.inherit({
         if(that._items && that._items.length) {
             const colCount = that._getColCount();
             const $container = $('<div>').appendTo(that.$element());
-            let layoutItems;
 
             that._prepareItemsWithMerging(colCount);
 
-            layoutItems = that._generateLayoutItems();
+            const layoutItems = that._generateLayoutItems();
             that._extendItemsWithDefaultTemplateOptions(layoutItems, that._items);
 
             that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
@@ -423,8 +421,14 @@ const LayoutManager = Widget.inherit({
                 if(e.location.col === 0) {
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_COL_CLASS);
                 }
-                if((e.location.col === colCount - 1) || (e.location.col + e.location.colspan === colCount)) {
+                const isLastColumn = (e.location.col === colCount - 1) || (e.location.col + e.location.colspan === colCount);
+                const rowsCount = that._getRowsCount();
+                const isLastRow = e.location.row === rowsCount - 1;
+                if(isLastColumn) {
                     $fieldItem.addClass(LAYOUT_MANAGER_LAST_COL_CLASS);
+                }
+                if(isLastRow) {
+                    $fieldItem.addClass(LAYOUT_MANAGER_LAST_ROW_CLASS);
                 }
             },
             cols: that._generateRatio(colCount),
@@ -784,7 +788,6 @@ const LayoutManager = Widget.inherit({
         const dataValue = this._getDataByField(options.dataField);
         const defaultEditorOptions = dataValue !== undefined ? { value: dataValue } : {};
         const isDeepExtend = true;
-        let editorOptions;
 
         if(EDITORS_WITH_ARRAY_VALUE.indexOf(options.editorType) !== -1) {
             defaultEditorOptions.value = defaultEditorOptions.value || [];
@@ -792,7 +795,7 @@ const LayoutManager = Widget.inherit({
 
         const formInstance = this.option('form');
 
-        editorOptions = extend(isDeepExtend, defaultEditorOptions, options.editorOptions, {
+        const editorOptions = extend(isDeepExtend, defaultEditorOptions, options.editorOptions, {
             inputAttr: {
                 id: options.id
             },
@@ -1100,8 +1103,9 @@ const LayoutManager = Widget.inherit({
     },
 
     _resetWidget(instance) {
-        const defaultOptions = instance._getDefaultOptions();
-        instance._setOptionWithoutOptionChange('value', defaultOptions.value);
+        this._disableEditorValueChangedHandler = true;
+        instance.reset();
+        this._disableEditorValueChangedHandler = false;
         instance.option('isValid', true);
     },
 
@@ -1195,7 +1199,7 @@ const LayoutManager = Widget.inherit({
             }
         });
         editorInstance.on('valueChanged', args => {
-            if(!(isObject(args.value) && args.value === args.previousValue)) {
+            if(!this._disableEditorValueChangedHandler && !(isObject(args.value) && args.value === args.previousValue)) {
                 this._updateFieldValue(dataField, args.value);
             }
         });
