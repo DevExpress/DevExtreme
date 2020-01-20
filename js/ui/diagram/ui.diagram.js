@@ -1076,8 +1076,7 @@ class Diagram extends Widget {
             */
             pageOrientation: DIAGRAM_DEFAULT_PAGE_ORIENTATION,
             pageColor: DIAGRAM_DEFAULT_PAGE_COLOR,
-
-            onDataChanged: null,
+            hasChanges: false,
             nodes: {
                 /**
                 * @name dxDiagramOptions.nodes.dataSource
@@ -1595,14 +1594,8 @@ class Diagram extends Widget {
         });
     }
 
-    _createDataChangeAction() {
-        this._dataChangeAction = this._createActionByOption('onDataChanged');
-    }
     _raiseDataChangeAction() {
-        if(!this._dataChangeAction) {
-            this._createDataChangeAction();
-        }
-        this._dataChangeAction();
+        this.option('hasChanges', true);
     }
     _raiseEdgeInsertedAction(data, callback, errorCallback) {
         if(this._edgesOption) {
@@ -1812,9 +1805,6 @@ class Diagram extends Widget {
                     this._invalidate();
                 }
                 break;
-            case 'onDataChanged':
-                this._createDataChangeAction();
-                break;
             case 'onItemClick':
                 this._createItemClickAction();
                 break;
@@ -1828,6 +1818,8 @@ class Diagram extends Widget {
                 if(this._toolbarInstance) {
                     this._toolbarInstance.option('export', args.value);
                 }
+                break;
+            case 'hasChanges':
                 break;
             default:
                 super._optionChanged(args);
