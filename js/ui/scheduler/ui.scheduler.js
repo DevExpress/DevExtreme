@@ -51,6 +51,7 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 import themes from '../themes';
 import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
+import Utils from './utils';
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -2033,12 +2034,7 @@ const Scheduler = Widget.inherit({
             }
         }
 
-        const targetStartDateTimezoneOffset = targetStartDate.getTimezoneOffset(),
-            targetEndDateTimezoneOffset = targetEndDate.getTimezoneOffset(),
-            updatedStartDateTimezoneOffset = date.getTimezoneOffset(),
-            updatedEndDateTimezoneOffset = endDate.getTimezoneOffset();
-
-        endDate = new Date(endDate.getTime() - ((targetEndDateTimezoneOffset - targetStartDateTimezoneOffset + updatedStartDateTimezoneOffset - updatedEndDateTimezoneOffset) * toMs('minute')));
+        endDate = new Date(endDate.getTime() - Utils.getTimezoneChangeDurationInMs(targetStartDate, targetEndDate, date, endDate));
 
 
         this.fire('setField', 'endDate', updatedData, endDate);

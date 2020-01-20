@@ -21,6 +21,8 @@ import messageLocalization from '../../localization/message';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import { Deferred } from '../../core/utils/deferred';
 
+import Utils from './utils.js';
+
 const APPOINTMENT_SETTINGS_NAME = 'dxAppointmentSettings';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
@@ -640,15 +642,10 @@ const SchedulerAppointments = CollectionWidget.inherit({
             endTime = needCorrectDates ? this._correctEndDateByDelta(endDate, deltaTime) : endDate.getTime() + deltaTime;
         }
 
-        const targetStartDateTimezoneOffset = startDate.getTimezoneOffset(),
-            targetEndDateTimezoneOffset = endDate.getTimezoneOffset(),
-            updatedStartDateTimezoneOffset = new Date(startTime).getTimezoneOffset(),
-            updatedEndDateTimezoneOffset = new Date(endTime).getTimezoneOffset();
-
         if(cond) {
-            startTime = startTime + ((targetEndDateTimezoneOffset - targetStartDateTimezoneOffset + updatedStartDateTimezoneOffset - updatedEndDateTimezoneOffset) * toMs('minute'));
+            startTime = startTime + Utils.getTimezoneChangeDurationInMs(startDate, endDate, startTime, endTime);
         } else {
-            endTime = endTime + ((targetEndDateTimezoneOffset - targetStartDateTimezoneOffset + updatedStartDateTimezoneOffset - updatedEndDateTimezoneOffset) * toMs('minute'));
+            endTime = endTime + Utils.getTimezoneChangeDurationInMs(startDate, endDate, startTime, endTime);
         }
 
         return [startTime, endTime];
