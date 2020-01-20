@@ -2577,7 +2577,7 @@ QUnit.test('resize when columns stretched to less width', function(assert) {
 
 QUnit.test('no scroll after drawing data', function(assert) {
     const pivotGrid = createPivotGrid({
-        width: 410,
+        width: 400,
 
         dataSource: {
             rows: [],
@@ -2604,13 +2604,13 @@ QUnit.test('no scroll after drawing data', function(assert) {
                 { value: 'Clothing', index: 1 }
             ],
             columns: [{
-                value: 'CY 2010', index: 0
+                value: '10', index: 0
             }, {
-                value: 'CY 2012', index: 1
+                value: '12', index: 1
             }, {
-                value: 'CY 2013', index: 2
+                value: '13', index: 2
             }, {
-                value: 'CY 2014', index: 3
+                value: '14', index: 3
             }],
             values: [
                 [[null], [null], [15], [36], [43], [100]],
