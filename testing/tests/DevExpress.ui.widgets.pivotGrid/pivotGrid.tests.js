@@ -2604,13 +2604,13 @@ QUnit.test('no scroll after drawing data', function(assert) {
                 { value: 'Clothing', index: 1 }
             ],
             columns: [{
-                value: 'CY 2010', index: 0
+                value: '10', index: 0
             }, {
-                value: 'CY 2012', index: 1
+                value: '12', index: 1
             }, {
-                value: 'CY 2013', index: 2
+                value: '13', index: 2
             }, {
-                value: 'CY 2014', index: 3
+                value: '14', index: 3
             }],
             values: [
                 [[null], [null], [15], [36], [43], [100]],
@@ -4023,6 +4023,37 @@ QUnit.test('Column area should be visible after change scrolling.mode to virtual
     });
 
     assert.ok(widget.$element().find('.dx-area-column-cell').height() > 0, 'column area is visible');
+});
+
+// T845487
+QUnit.test('Header cell text should be rendered on the same line with expand icon', function(assert) {
+    const pivotGrid = createPivotGrid({
+        dataSource: {
+            fields: [{
+                dataField: 'field1',
+                area: 'row'
+            }, {
+                dataField: 'field2',
+                area: 'row'
+            }],
+            store: [{
+                field1: 'BigBigBigBigBigWord'
+            }]
+        }
+    }, assert);
+    this.clock.tick();
+
+    // assert
+    assert.ok(pivotGrid);
+
+    const $headerCellElements = $('#pivotGrid').find('td.dx-pivotgrid-collapsed').eq(0).children();
+    assert.strictEqual($headerCellElements.length, 2, 'two header cell elements');
+
+    const expandIconRect = $headerCellElements[0].getBoundingClientRect();
+    const textRect = $headerCellElements[1].getBoundingClientRect();
+
+    assert.ok(textRect.top < expandIconRect.bottom, 'elements are on the same line');
+    assert.strictEqual(textRect.left, expandIconRect.right, 'text is after expand icon');
 });
 
 QUnit.module('Field Panel', {
