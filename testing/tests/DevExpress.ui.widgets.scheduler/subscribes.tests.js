@@ -120,13 +120,8 @@ QUnit.test('\'setCellDataCacheAlias\' should call workSpace method with right ar
 
 QUnit.test('\'getDraggableAppointmentArea\' should return workSpace date table scrollable', function(assert) {
     this.createInstance();
-    let draggableArea;
 
-    this.instance.fire('getDraggableAppointmentArea', {
-        callback: function(result) {
-            draggableArea = result;
-        }
-    });
+    const draggableArea = this.instance.fire('getDraggableAppointmentArea');
 
     assert.deepEqual(draggableArea.get(0), this.instance.$element().find('.dx-scheduler-date-table-scrollable .dx-scrollable-container').get(0), 'Draggable area is OK');
 });
