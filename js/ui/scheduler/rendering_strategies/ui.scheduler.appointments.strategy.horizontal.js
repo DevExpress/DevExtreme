@@ -116,15 +116,9 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getMaxAppointmentWidth(startDate) {
-        let result;
-        this.instance.fire('getMaxAppointmentWidth', {
+        return this.instance.fire('getMaxAppointmentWidth', {
             date: startDate,
-            callback: function(width) {
-                result = width;
-            }
         });
-
-        return result;
     }
 
     getDropDownAppointmentWidth() {

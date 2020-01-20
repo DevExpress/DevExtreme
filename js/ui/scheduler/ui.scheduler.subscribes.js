@@ -430,8 +430,8 @@ const subscribes = {
     },
 
     getMaxAppointmentWidth: function(options) {
-        const cellCountToLastViewDate = this._workSpace.getCellCountToLastViewDate(options.date);
-        options.callback(cellCountToLastViewDate * this._workSpace.getCellWidth());
+        const workSpace = this._workSpace;
+        return workSpace.getCellCountToLastViewDate(options.date) * workSpace.getCellWidth();
     },
 
     updateAppointmentStartDate: function(options) {
