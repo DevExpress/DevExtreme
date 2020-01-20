@@ -352,7 +352,7 @@ const subscribes = {
     },
 
     getDraggableAppointmentArea: function(options) {
-        options.callback(this.getWorkSpaceScrollableContainer());
+        return this.getWorkSpaceScrollableContainer();
     },
 
     getAppointmentGeometry: function(settings) {
