@@ -1819,6 +1819,8 @@ class Diagram extends Widget {
                     this._toolbarInstance.option('export', args.value);
                 }
                 break;
+            case 'hasChanges':
+                break;
             default:
                 super._optionChanged(args);
         }
