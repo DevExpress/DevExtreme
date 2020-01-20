@@ -42,6 +42,9 @@ const getAttributes = ({ elementAttr, disabled, visible, accessKey }: any) => {
 const getCssClasses = (model: Partial<Widget>) => {
     const className = ['dx-widget'];
 
+    if (!!model.className) {
+        className.push(model.className);
+    }
     if (model.disabled) {
         className.push('dx-state-disabled');
     }
@@ -87,22 +90,18 @@ export const viewModelFunction = ({
     rtlEnabled,
     elementAttr,
     accessKey,
-    default: children,
+    children,
+    className,
 
     focusStateEnabled,
     hoverStateEnabled,
 
-    onPointerOver,
-    onPointerOut,
-    onPointerDown,
-    onClickHandler,
-
     widgetRef,
 }: Widget) => {
     const style = getStyles({ width, height });
-    const className = getCssClasses({
+    const cssClasses = getCssClasses({
         disabled, visible, _focused, _active, _hovered, rtlEnabled, elementAttr, hoverStateEnabled,
-        focusStateEnabled,
+        focusStateEnabled, className,
     });
     const attrsWithoutClass = getAttributes({ elementAttr, disabled, visible, accessKey });
 
@@ -116,15 +115,10 @@ export const viewModelFunction = ({
         visible,
         title: hint,
         tabIndex,
-        className,
+        cssClasses,
 
         focusStateEnabled,
         hoverStateEnabled,
-
-        onPointerOver,
-        onPointerOut,
-        onPointerDown,
-        onClickHandler,
     };
 };
 
@@ -134,14 +128,10 @@ export const viewFunction = (viewModel: any) => {
             ref={viewModel.widgetRef}
             {...viewModel.attributes}
             {...viewModel.focusStateEnabled && !viewModel.disabled ? { tabIndex: viewModel.tabIndex } : {}}
-            className={viewModel.className}
+            className={viewModel.cssClasses}
             title={viewModel.title}
             style={viewModel.style}
             hidden={!viewModel.visible}
-            // {...viewModel.hoverStateEnabled ? { onPointerOver: viewModel.onPointerOver } : {}}
-            // {...viewModel.hoverStateEnabled ? { onPointerOut: viewModel.onPointerOut } : {}}
-            // onPointerDown={viewModel.onPointerDown}
-            // {...viewModel.disabled ? { onClick: viewModel.onClickHandler } : {}}
         >
             {viewModel.children}
         </div>
@@ -157,6 +147,7 @@ export const viewFunction = (viewModel: any) => {
 
 export default class Widget {
     /** Private properties */
+    @Prop() className?: string | undefined = '';
     @Prop() clickArgs?: any = {};
     @Prop() activeStateUnit?: string | undefined = undefined;
     @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
@@ -180,7 +171,7 @@ export default class Widget {
     @Prop() hoverStateEnabled?: boolean = false;
     @Prop() activeStateEnabled?: boolean = false;
 
-    @Slot() default: any;
+    @Slot() children: any;
 
     @Event() onClick?: (e: any) => void = (() => { });
 

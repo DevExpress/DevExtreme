@@ -15,7 +15,7 @@ describe('Widget', () => {
     });
     it('should render children', () => {
         const model = new Widget();
-        model.default = <div className="custom-content" />;
+        model.children = <div className="custom-content" />;
 
         const tree = mount(viewFunction(viewModelFunction(model)));
 
