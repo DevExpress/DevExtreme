@@ -490,14 +490,18 @@ QUnit.module('focus policy', {
         const actualSelectedIndex = tabPanel.option('selectedIndex');
         QUnit.assert.equal(actualSelectedIndex, expectedSelectedIndex, 'selected index in the option must be correct');
 
+        const actualSelectedItem = tabPanel.option('selectedItem');
+        const expectedSelectedItem = tabPanel.option('items')[expectedSelectedIndex];
+        QUnit.assert.equal(actualSelectedItem, expectedSelectedItem, 'selected item in the option must be correct');
+
         const $selectedTabContent = tabPanel.$element().find(toSelector(SELECTED_ITEM_CLASS));
         QUnit.assert.equal($selectedTabContent.index(), expectedSelectedIndex, 'selected tab content must match selected index');
 
         const focusedElement = tabPanel.option('focusedElement');
-        const focusedTab = $tabsContainer.find(toSelector(FOCUSED_CLASS));
+        const $focusedTab = $tabsContainer.find(toSelector(FOCUSED_CLASS));
 
         if(tabPanel.option('focusStateEnabled') === true) {
-            QUnit.assert.equal(focusedTab.index(), expectedSelectedIndex, 'selected tab must match focused tab');
+            QUnit.assert.equal($focusedTab.index(), expectedSelectedIndex, 'selected tab must match focused tab');
             if(config().useJQuery) {
                 QUnit.assert.notEqual(focusedElement.jquery, undefined, 'in jquery mode focused element must be a jquery object');
                 QUnit.assert.equal(focusedElement.get(0).outerHTML, $selectedTabContent.get(0).outerHTML, 'in jquery mode selected tab content must match focused element');
@@ -507,7 +511,7 @@ QUnit.module('focus policy', {
             }
 
         } else {
-            QUnit.assert.equal(focusedTab.index(), -1, 'there is no focused tab if focusState is disabled');
+            QUnit.assert.equal($focusedTab.length, 0, 'there is no focused tab if focusState is disabled');
             QUnit.assert.equal(focusedElement, null, 'there is no focused element if focusState is disabled');
         }
     }
