@@ -483,7 +483,7 @@ QUnit.module('focus policy', {
 
     function checkSelectedIndexAndContent(tabPanel, expectedSelectedIndex) {
         const actualSelectedIndex = tabPanel.option('selectedIndex');
-        QUnit.assert.equal(actualSelectedIndex, expectedSelectedIndex);
+        QUnit.assert.equal(actualSelectedIndex, expectedSelectedIndex, 'selected index in the option must be correct');
 
         const $selectedTabContent = tabPanel.$element().find(toSelector(SELECTED_ITEM_CLASS));
         QUnit.assert.equal($selectedTabContent.index(), expectedSelectedIndex, 'selected tab content must match selected index');
