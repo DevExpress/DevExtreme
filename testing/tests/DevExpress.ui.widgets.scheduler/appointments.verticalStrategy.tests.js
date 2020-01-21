@@ -46,16 +46,6 @@ const moduleOptions = {
 
         this.instance = $('#scheduler-appointments').dxSchedulerAppointments().dxSchedulerAppointments('instance');
 
-        this.instance.notifyObserver = $.proxy(function(command, options) {
-            if(command === 'needCoordinates') {
-                return this.coordinates;
-            }
-
-            if(command === 'getAppointmentDurationInMs') {
-                return options.endDate.getTime() - options.startDate.getTime();
-            }
-        }, this);
-
         this.instance.invoke = $.proxy(function(command, field, obj, value) {
             const dataAccessors = {
                 getter: {
