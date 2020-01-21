@@ -2369,6 +2369,20 @@ QUnit.module('disabledDates option', {
         assert.deepEqual(this.calendar.option('currentDate'), new Date(2021, 0, 7), 'closest date has been focused');
     });
 
+    QUnit.test('zoomLevel option change should contour the current view even if current date has not been changed', function(assert) {
+        const currentDate = new Date(2020, 0, 6);
+        this.calendar.option({
+            value: currentDate,
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, true);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), currentDate, 'currentDate has not been changed');
+        assert.deepEqual(this.calendar._view.option('contouredDate'), currentDate, 'contoured date is correct');
+    });
+
     QUnit.test('left/right/up/downArrow should work like pageUp/Down when navigating to the disabled month', function(assert) {
         const isAnimationOff = fx.off;
         const animate = fx.animate;

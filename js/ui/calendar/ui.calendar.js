@@ -574,7 +574,7 @@ const Calendar = Editor.inherit({
         this._updateAriaSelected();
         this._updateAriaId();
 
-        this._moveToClosestAvailableDate(this.option('currentDate'));
+        this._moveToClosestAvailableDate();
     },
 
     _render: function() {
@@ -742,9 +742,8 @@ const Calendar = Editor.inherit({
         this._renderNavigator();
         this._animateShowView();
 
-        this._setViewContoured(this._getNormalizedDate(this.option('currentDate')));
-
         this._moveToClosestAvailableDate();
+        this._setViewContoured(this._getNormalizedDate(this.option('currentDate')));
     },
 
     _renderNavigator: function() {
@@ -780,16 +779,14 @@ const Calendar = Editor.inherit({
             return;
         }
 
-        const contouredDate = this._view.option('contouredDate');
-
         this.option('zoomLevel', nextView);
-        this.option('currentDate', contouredDate || this._view.option('date'));
 
         this._renderNavigator();
 
         this._animateShowView();
 
         this._moveToClosestAvailableDate();
+        this._setViewContoured(this._getNormalizedDate(this.option('currentDate')));
     },
 
     _isMinZoomLevel: function(zoomLevel) {
