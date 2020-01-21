@@ -773,11 +773,11 @@ const subscribes = {
     },
 
     getDaylightOffsetByOption: function(scheduler, startDate, endDate) {
-        return scheduler._getTimezoneOffsetByOption(startDate) - scheduler._getTimezoneOffsetByOption(endDate);
+        return typeUtils.isDefined(scheduler._getTimezoneOffsetByOption(startDate)) ? scheduler._getTimezoneOffsetByOption(startDate) - scheduler._getTimezoneOffsetByOption(endDate) : 0;
     },
 
     getDaylightOffsetByAppointment: function(scheduler, startDate, endDate, appointmentTimezone) {
-        return scheduler._calculateTimezoneByValue(appointmentTimezone, startDate) - scheduler._calculateTimezoneByValue(appointmentTimezone, endDate);
+        return typeUtils.isDefined(scheduler._calculateTimezoneByValue(appointmentTimezone, startDate)) ? scheduler._calculateTimezoneByValue(appointmentTimezone, startDate) - scheduler._calculateTimezoneByValue(appointmentTimezone, endDate) : 0;
     },
 
     // getComplexDaylightOffset: function(scheduler, startDate, endDate, appointmentTimezone) {
