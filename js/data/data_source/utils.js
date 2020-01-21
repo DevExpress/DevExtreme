@@ -21,15 +21,6 @@ export const normalizeStoreLoadOptionAccessorArguments = (originalArguments) => 
     return [].slice.call(originalArguments);
 };
 
-export const generateStoreLoadOptionAccessor = (optionName) => function() {
-    const args = normalizeStoreLoadOptionAccessorArguments(arguments);
-    if(args === undefined) {
-        return this._storeLoadOptions[optionName];
-    }
-
-    this._storeLoadOptions[optionName] = args;
-};
-
 const mapGroup = (group, level, mapper) => map(group, item => {
     const result = {
         key: item.key,

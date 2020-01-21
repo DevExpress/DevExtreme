@@ -14,7 +14,6 @@ import { Deferred, when } from '../../core/utils/deferred';
 import OperationManager from './operation_manager';
 import {
     normalizeDataSourceOptions,
-    generateStoreLoadOptionAccessor,
     normalizeStoreLoadOptionAccessorArguments,
     CANCELED_TOKEN,
     isPending,
@@ -200,7 +199,20 @@ export const DataSource = Class.inherit({
         return this._isLastPage;
     },
 
-    sort: generateStoreLoadOptionAccessor('sort'),
+    generateStoreLoadOptionAccessor(optionName) {
+        return (args) => {
+            const normalizedArgs = normalizeStoreLoadOptionAccessorArguments(args);
+            if(normalizedArgs === undefined) {
+                return this._storeLoadOptions[optionName];
+            }
+
+            this._storeLoadOptions[optionName] = normalizedArgs;
+        };
+    },
+
+    sort(...args) {
+        return this.generateStoreLoadOptionAccessor('sort')(args);
+    },
 
     filter() {
         const newFilter = normalizeStoreLoadOptionAccessorArguments(arguments);
@@ -212,9 +224,13 @@ export const DataSource = Class.inherit({
         this.pageIndex(0);
     },
 
-    group: generateStoreLoadOptionAccessor('group'),
+    group(...args) {
+        return this.generateStoreLoadOptionAccessor('group')(args);
+    },
 
-    select: generateStoreLoadOptionAccessor('select'),
+    select(...args) {
+        return this.generateStoreLoadOptionAccessor('select')(args);
+    },
 
     requireTotalCount(value) {
         if(!isBoolean(value)) {
