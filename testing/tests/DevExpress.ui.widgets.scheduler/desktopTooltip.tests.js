@@ -14,9 +14,8 @@ const stubCreateComponent = sinon.stub().returns(stubComponent);
 const stubShowAppointmentPopup = sinon.stub();
 const stubAddDefaultTemplates = sinon.stub();
 const stubGetAppointmentTemplate = sinon.stub().returns('template');
-const stubGetTargetedAppointmentData = sinon.stub().returns('targetedAppointmentData');
 const stubCheckAndDeleteAppointment = sinon.stub();
-const stubGetText = sinon.stub().returns('text');
+const stubGetTextAndFormatDate = sinon.stub().returns('text');
 const stubIsAppointmentInAllDayPanel = sinon.stub().returns(true);
 const environment = {
     createSimpleTooltip: function(tooltipOptions) {
@@ -28,9 +27,8 @@ const environment = {
         addDefaultTemplates: stubAddDefaultTemplates,
         getAppointmentTemplate: stubGetAppointmentTemplate,
         showAppointmentPopup: stubShowAppointmentPopup,
-        getText: stubGetText,
+        getTextAndFormatDate: stubGetTextAndFormatDate,
         checkAndDeleteAppointment: stubCheckAndDeleteAppointment,
-        getTargetedAppointmentData: stubGetTargetedAppointmentData,
         isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel
     },
     extraOptions: {
@@ -46,9 +44,8 @@ const environment = {
         stubShowAppointmentPopup.reset();
         stubAddDefaultTemplates.reset();
         stubGetAppointmentTemplate.reset();
-        stubGetText.reset();
+        stubGetTextAndFormatDate.reset();
         stubCheckAndDeleteAppointment.reset();
-        stubGetTargetedAppointmentData.reset();
     }
 };
 
@@ -277,7 +274,7 @@ QUnit.test('itemTemplate passed to createComponent should work correct', functio
     assert.ok(itemTemplate instanceof FunctionTemplate);
     assert.ok(stubAddDefaultTemplates.getCall(0).args[0]['appointmentTooltip'] instanceof FunctionTemplate);
     assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], 'appointmentTooltipTemplate');
-    assert.deepEqual(stubGetText.getCall(0).args, [item.data, item.currentData]);
+    assert.deepEqual(stubGetTextAndFormatDate.getCall(0).args, [item.data, item.currentData]);
 
     // create delete button
     assert.equal(stubCreateComponent.getCall(2).args[0][0].className, 'dx-tooltip-appointment-item-delete-button');

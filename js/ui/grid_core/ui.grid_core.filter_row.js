@@ -727,10 +727,6 @@ exports.ApplyFilterViewController = modules.ViewController.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-         * @name GridBaseOptions.filterRow
-         * @type object
-         */
             filterRow: {
                 /**
                  * @name GridBaseOptions.filterRow.visible

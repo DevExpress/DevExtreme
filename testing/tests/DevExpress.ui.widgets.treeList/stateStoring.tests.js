@@ -188,3 +188,43 @@ QUnit.test('customSave should be fired after expand', function(assert) {
     assert.strictEqual(customSaveCallCount, 1, 'customSave is called once after expandRow');
     assert.deepEqual(state.expandedRowKeys, [1, 2], 'expandedRowKeys in state is correct');
 });
+
+// T851561
+QUnit.test('The expandedRowKeys should be updated in the state storing when expanding/collapsing nodes', function(assert) {
+    // arrange
+    let state = {};
+
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return state;
+            },
+            customSave: function(arg) {
+                state = arg;
+            },
+            savingTimeout: 0
+        }
+    });
+
+    // act
+    this.expandRow(1);
+    this.clock.tick();
+
+    // assert
+    let expandedRowKeys = this.option('expandedRowKeys');
+    assert.deepEqual(expandedRowKeys, [1], 'expandedRowKeys');
+    assert.deepEqual(state.expandedRowKeys, [1], 'expandedRowKeys has been updated in the state storage');
+    assert.notStrictEqual(state.expandedRowKeys, this.option('expandedRowKeys'), 'expandedRowKeys has a different instance in the state storage');
+
+    // act
+    this.collapseRow(1);
+    this.clock.tick();
+
+    // assert
+    expandedRowKeys = this.option('expandedRowKeys');
+    assert.deepEqual(expandedRowKeys, [], 'expandedRowKeys');
+    assert.deepEqual(state.expandedRowKeys, [], 'expandedRowKeys has been updated in the state storage');
+    assert.notStrictEqual(state.expandedRowKeys, this.option('expandedRowKeys'), 'expandedRowKeys has a different instance in the state storage');
+});

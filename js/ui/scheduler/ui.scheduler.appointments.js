@@ -17,7 +17,6 @@ import publisherMixin from './ui.scheduler.publisher_mixin';
 import Appointment from './ui.scheduler.appointment';
 import * as eventUtils from '../../events/utils';
 import dblclickEvent from '../../events/double_click';
-import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import { Deferred } from '../../core/utils/deferred';
@@ -333,16 +332,15 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderAppointmentTemplate: function($container, data, model) {
-        let startDate = model.appointmentData.settings ? new Date(this.invoke('getField', 'startDate', model.appointmentData.settings)) : (data.recurrenceRule ? model.targetedAppointmentData.startDate : data.startDate);
-        let endDate = model.appointmentData.settings ? new Date(this.invoke('getField', 'endDate', model.appointmentData.settings)) : (data.recurrenceRule ? model.targetedAppointmentData.endDate : data.endDate);
-
-        if(isNaN(startDate) || isNaN(endDate)) {
-            startDate = data.startDate;
-            endDate = data.endDate;
-        }
+        const formatText = this.invoke(
+            'getTextAndFormatDate',
+            model.appointmentData,
+            model.appointmentData.settings || (data.recurrenceRule && model.targetedAppointmentData) || {},
+            'TIME'
+        );
 
         $('<div>')
-            .text(this._createAppointmentTitle(data))
+            .text(formatText.text)
             .addClass(APPOINTMENT_TITLE_CLASS)
             .appendTo($container);
 
@@ -352,27 +350,17 @@ const SchedulerAppointments = CollectionWidget.inherit({
             }
         }
 
-        const recurrenceRule = data.recurrenceRule;
-        const allDay = data.allDay;
         const $contentDetails = $('<div>').addClass(APPOINTMENT_CONTENT_DETAILS_CLASS);
 
-        const apptStartTz = data.startDateTimeZone;
-        const apptEndTz = data.endDateTimeZone;
-
-        startDate = this.invoke('convertDateByTimezone', startDate, apptStartTz);
-        endDate = this.invoke('convertDateByTimezone', endDate, apptEndTz);
-
-        $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(dateLocalization.format(startDate, 'shorttime')).appendTo($contentDetails);
-        $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(' - ').appendTo($contentDetails);
-        $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(dateLocalization.format(endDate, 'shorttime')).appendTo($contentDetails);
+        $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(formatText.formatDate).appendTo($contentDetails);
 
         $contentDetails.appendTo($container);
 
-        if(recurrenceRule) {
+        if(data.recurrenceRule) {
             $('<span>').addClass(RECURRING_ICON_CLASS + ' dx-icon-repeat').appendTo($container);
         }
 
-        if(allDay) {
+        if(data.allDay) {
             $('<div>')
                 .text(' ' + messageLocalization.format('dxScheduler-allDay') + ': ')
                 .addClass(ALL_DAY_CONTENT_CLASS)
@@ -380,22 +368,10 @@ const SchedulerAppointments = CollectionWidget.inherit({
         }
     },
 
-    _createAppointmentTitle: function(data) {
-        if(typeUtils.isPlainObject(data)) {
-            return data.text;
-        }
-
-        return String(data);
-    },
-
     _executeItemRenderAction: function(index, itemData, itemElement) {
         const action = this._getItemRenderAction();
         if(action) {
-            action({
-                appointmentElement: itemElement,
-                appointmentData: itemData,
-                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, itemElement)
-            });
+            action(this.invoke('mapAppointmentFields', { itemData: itemData, itemElement: itemElement }));
         }
         delete this._currentAppointmentSettings;
     },
@@ -481,12 +457,11 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
     _createItemByTemplate: function(itemTemplate, renderArgs) {
         const { itemData, container, index } = renderArgs;
-        const recurrenceRule = this.invoke('getField', 'recurrenceRule', itemData);
 
         return itemTemplate.render({
             model: {
                 appointmentData: itemData,
-                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent(), !!recurrenceRule)
+                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent())
             },
             container: container,
             index: index
@@ -755,13 +730,15 @@ const SchedulerAppointments = CollectionWidget.inherit({
                     top: virtualAppointment.top,
                     left: virtualAppointment.left
                 },
-                items: { data: [], colors: [] },
+                items: { data: [], colors: [], settings: [] },
                 isAllDay: virtualAppointment.isAllDay ? true : false,
                 buttonColor: color
             };
         }
 
-        appointmentData.settings = [appointmentSetting];
+        appointmentSetting.targetedAppointmentData = this.invoke('getTargetedAppointmentData', appointmentData, $appointment, true);
+
+        this._virtualAppointments[virtualGroupIndex].items.settings.push(appointmentSetting);
         this._virtualAppointments[virtualGroupIndex].items.data.push(appointmentData);
         this._virtualAppointments[virtualGroupIndex].items.colors.push(color);
 
@@ -780,14 +757,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
             const virtualCoordinates = virtualGroup.coordinates;
             const $container = virtualGroup.isAllDay ? this.option('allDayContainer') : this.$element();
             const left = virtualCoordinates.left;
-
             const buttonWidth = this.invoke('getDropDownAppointmentWidth', virtualGroup.isAllDay);
             const buttonHeight = this.invoke('getDropDownAppointmentHeight');
-            let rtlOffset = 0;
-
-            if(this.option('rtlEnabled')) {
-                rtlOffset = buttonWidth;
-            }
+            const rtlOffset = this.option('rtlEnabled') ? buttonWidth : 0;
 
             this.notifyObserver('renderCompactAppointments', {
                 $container: $container,
@@ -797,10 +769,11 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 },
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
-                itemTemplate: this.option('itemTemplate'),
                 width: buttonWidth - this.option('_collectorOffset'),
                 height: buttonHeight,
                 onAppointmentClick: this.option('onItemClick'),
+                allowDrag: this.option('allowDrag'),
+                cellWidth: this.invoke('getCellWidth'),
                 isCompact: this.invoke('isAdaptive') || this._isGroupCompact(virtualGroup),
                 applyOffset: !virtualGroup.isAllDay && this.invoke('isApplyCompactAppointmentOffset')
             });

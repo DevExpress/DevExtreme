@@ -116,11 +116,6 @@ const DateBoxMask = DateBoxBase.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
 
-            /**
-             * @name dxDateBoxOptions.useMaskBehavior
-             * @type boolean
-             * @default false
-             */
             useMaskBehavior: false,
 
             emptyDateValue: new Date(2000, 0, 1, 0, 0, 0),

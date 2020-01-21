@@ -348,8 +348,6 @@
         };
 
         const simulateGestureEvent = function(target, type, bubbles, cancelable, view, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, scale, rotation) {
-            let customEvent;
-
             if(!UA.ios || UA.ios < 2.0) {
                 throw Error('Native gesture DOM eventframe is not available in this platform.');
             }
@@ -384,7 +382,7 @@
             if(!$.isNumeric(scale)) { scale = 1.0; }
             if(!$.isNumeric(rotation)) { rotation = 0.0; }
 
-            customEvent = document.createEvent('GestureEvent');
+            const customEvent = document.createEvent('GestureEvent');
 
             customEvent.initGestureEvent(type, bubbles, cancelable, view, detail,
                 screenX, screenY, clientX, clientY,

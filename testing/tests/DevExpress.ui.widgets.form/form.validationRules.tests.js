@@ -130,7 +130,6 @@ QUnit.test('The validation result is valid when item has validation rules', func
 });
 
 QUnit.test('Validate with template wrapper', function(assert) {
-    // arrange
     const validationSpy = sinon.spy();
     const form = $('#form').dxForm({
         formData: {
@@ -151,15 +150,12 @@ QUnit.test('Validate with template wrapper', function(assert) {
         }]
     }).dxForm('instance');
 
-    // act
     form.validate();
 
-    // assert
     assert.equal(validationSpy.callCount, 1, 'invalid editors count');
 });
 
 QUnit.test('CustomRule.validationCallback accepts formItem', function(assert) {
-    // arrange
     const validationSpy = sinon.spy();
     const form = $('#form').dxForm({
         formData: {
@@ -176,10 +172,8 @@ QUnit.test('CustomRule.validationCallback accepts formItem', function(assert) {
         }]
     }).dxForm('instance');
 
-    // act
     form.validate();
 
-    // assert
     assert.equal(validationSpy.callCount, 1, 'valdiationCallback should be called once');
 
     const params = validationSpy.getCall(0).args[0];
@@ -191,7 +185,6 @@ QUnit.test('CustomRule.validationCallback accepts formItem', function(assert) {
 });
 
 QUnit.test('AsyncRule.validationCallback accepts formItem', function(assert) {
-    // arrange
     const validationSpy = sinon.spy(function() { return new Deferred().resolve().promise(); });
     const form = $('#form').dxForm({
         formData: {
@@ -208,10 +201,8 @@ QUnit.test('AsyncRule.validationCallback accepts formItem', function(assert) {
         }]
     }).dxForm('instance');
 
-    // act
     form.validate();
 
-    // assert
     assert.equal(validationSpy.callCount, 1, 'valdiationCallback should be called once');
 
     const params = validationSpy.getCall(0).args[0];
@@ -223,7 +214,6 @@ QUnit.test('AsyncRule.validationCallback accepts formItem', function(assert) {
 });
 
 QUnit.test('Validate with a custom validation group', function(assert) {
-    // arrange
     const form = $('#form').dxForm({
         validationGroup: 'Custom validation group',
         formData: {
@@ -238,10 +228,8 @@ QUnit.test('Validate with a custom validation group', function(assert) {
         }
     }).dxForm('instance');
 
-    // act
     form.validate();
 
-    // assert
     const invalidSelector = '.' + INVALID_CLASS;
     assert.equal(form.$element().find(invalidSelector).length, 2, 'invalid editors count');
     assert.equal(form.$element().find(invalidSelector + ' [id=' + getID(form, 'name') + ']').length, 1, 'invalid name editor');
@@ -249,7 +237,6 @@ QUnit.test('Validate with a custom validation group', function(assert) {
 });
 
 QUnit.test('Reset validation summary items when using a custom validation group', function(assert) {
-    // arrange
     const form = $('#form').dxForm({
         validationGroup: 'Custom validation group',
         showValidationSummary: true,
@@ -265,11 +252,9 @@ QUnit.test('Reset validation summary items when using a custom validation group'
         }
     }).dxForm('instance');
 
-    // act
     form.validate();
     form.resetValues();
 
-    // assert
     const $invalidElements = form.$element().find('.' + INVALID_CLASS);
 
     const $validationSummaryItems = form.$element().find('.' + VALIDATION_SUMMARY_ITEM_CLASS);
@@ -279,7 +264,6 @@ QUnit.test('Reset validation summary items when using a custom validation group'
 });
 
 QUnit.test('Validate form when several forms are rendered', function(assert) {
-    // arrange
     const form1 = $('#form').dxForm({
         formData: {
             name: '',
@@ -306,10 +290,8 @@ QUnit.test('Validate form when several forms are rendered', function(assert) {
         }
     }).dxForm('instance');
 
-    // act
     form1.validate();
 
-    // assert
     const invalidSelector = '.' + INVALID_CLASS;
     assert.equal(form1.$element().find(invalidSelector).length, 2, 'invalid editors count');
     assert.equal(form1.$element().find(invalidSelector + ' [id=' + getID(form1, 'name') + ']').length, 1, 'invalid name editor');
@@ -321,7 +303,6 @@ QUnit.test('Validate form when several forms are rendered', function(assert) {
 });
 
 QUnit.test('Validate via \'isRequired\' item option', function(assert) {
-    // arrange
     const form = $('#form').dxForm({
         formData: {
             name: '',
@@ -338,10 +319,8 @@ QUnit.test('Validate via \'isRequired\' item option', function(assert) {
         }
     }).dxForm('instance');
 
-    // act
     form.validate();
 
-    // assert
     const invalidSelector = '.' + INVALID_CLASS;
     assert.equal(form.$element().find(invalidSelector).length, 2, 'invalid editors count');
     assert.equal(form.$element().find(invalidSelector + ' [id=' + getID(form, 'name') + ']').length, 1, 'invalid name editor');
@@ -351,7 +330,6 @@ QUnit.test('Validate via \'isRequired\' item option', function(assert) {
 });
 
 QUnit.test('Validate via validationRules when rules and \'isRequired\' item option are both defined', function(assert) {
-    // arrange
     const form = $('#form').dxForm({
         formData: {
             name: '',
@@ -364,17 +342,14 @@ QUnit.test('Validate via validationRules when rules and \'isRequired\' item opti
         }
     }).dxForm('instance');
 
-    // act
     form.validate();
 
-    // assert
     const invalidSelector = '.' + INVALID_CLASS;
     assert.equal(form.$element().find(invalidSelector).length, 1, 'invalid editors count');
     assert.equal(form.$element().find(invalidSelector + ' [id=' + getID(form, 'lastName') + ']').length, 1, 'invalid lastName editor');
 });
 
 QUnit.test('validate -> resetValues old test', function(assert) {
-    // arrange
     const form = $('#form').dxForm({
         formData: {
             name: '',
@@ -387,11 +362,9 @@ QUnit.test('validate -> resetValues old test', function(assert) {
         }
     }).dxForm('instance');
 
-    // act
     form.validate();
     form.resetValues();
 
-    // assert
     assert.equal($('.' + VALIDATION_SUMMARY_ITEM_CLASS).length, 0, 'validation summary items');
 });
 
@@ -478,7 +451,6 @@ QUnit.test('validate -> resetValues when there are invalid validation rules', fu
 });
 
 QUnit.test('Changing an validationRules options of an any item does not invalidate whole form (T673188)', function(assert) {
-    // arrange
     const form = $('#form').dxForm({
         formData: {
             lastName: 'Kyle',

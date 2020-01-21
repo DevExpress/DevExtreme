@@ -1,4 +1,4 @@
-const maskCaret = require('ui/number_box/number_box.caret');
+import maskCaret from 'ui/number_box/number_box.caret';
 
 QUnit.module('format caret', () => {
     QUnit.test('getCaretWithOffset', function(assert) {
