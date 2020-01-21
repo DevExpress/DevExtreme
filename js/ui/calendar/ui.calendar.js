@@ -275,7 +275,7 @@ const Calendar = Editor.inherit({
         const maxDate = this._getMaxDate();
         const minDate = this._getMinDate();
 
-        let isDateForwardInNeighborView = this._isDatesInNeighborView(zoomLevel, currentDate, baseDate);
+        let isDateForwardInNeighborView = this._areDatesInNeighborView(zoomLevel, currentDate, baseDate);
         let isDateForwardInRange = inRange(currentDate, minDate, maxDate) && isDateForwardInNeighborView;
         const dateForward = new Date(currentDate);
 
@@ -287,7 +287,7 @@ const Calendar = Editor.inherit({
 
             this._shiftDate(zoomLevel, dateForward, offset, 1);
 
-            isDateForwardInNeighborView = this._isDatesInNeighborView(zoomLevel, dateForward, baseDate);
+            isDateForwardInNeighborView = this._areDatesInNeighborView(zoomLevel, dateForward, baseDate);
             isDateForwardInRange = inRange(dateForward, minDate, maxDate) && isDateForwardInNeighborView;
         }
 
@@ -298,7 +298,7 @@ const Calendar = Editor.inherit({
         }
     },
 
-    _isDatesInSameView(zoomLevel, date1, date2) {
+    _areDatesInSameView(zoomLevel, date1, date2) {
         switch(zoomLevel) {
             case ZOOM_LEVEL.MONTH:
                 return date1.getMonth() === date2.getMonth();
@@ -311,15 +311,15 @@ const Calendar = Editor.inherit({
         }
     },
 
-    _isDatesInNeighborView(zoomLevel, date1, date2) {
-        const monthDiffAbs = (a, b) => {
+    _areDatesInNeighborView(zoomLevel, date1, date2) {
+        const monthMinDistance = (a, b) => {
             const abs = Math.abs(a - b);
             return Math.min(abs, 12 - abs);
         };
 
         switch(zoomLevel) {
             case ZOOM_LEVEL.MONTH:
-                return monthDiffAbs(date1.getMonth(), date2.getMonth()) <= 1;
+                return monthMinDistance(date1.getMonth(), date2.getMonth()) <= 1;
             case ZOOM_LEVEL.YEAR:
                 return Math.abs(date1.getYear() - date2.getYear()) <= 1;
             case ZOOM_LEVEL.DECADE:
@@ -357,8 +357,8 @@ const Calendar = Editor.inherit({
             this._shiftDate(zoomLevel, dateForward, 1, 1);
             this._shiftDate(zoomLevel, dateBackward, 1, -1);
 
-            isDateForwardInStartView = this._isDatesInSameView(zoomLevel, dateForward, baseDate);
-            isDateBackwardInStartView = this._isDatesInSameView(zoomLevel, dateBackward, baseDate);
+            isDateForwardInStartView = this._areDatesInSameView(zoomLevel, dateForward, baseDate);
+            isDateBackwardInStartView = this._areDatesInSameView(zoomLevel, dateBackward, baseDate);
 
             isDateForwardAvailable = isDateForwardInStartView && !this._isDateNotAvailable(dateForward);
             isDateBackwardAvailable = isDateBackwardInStartView && !this._isDateNotAvailable(dateBackward);

@@ -2082,7 +2082,7 @@ QUnit.module('disabledDates option', {
         }
     });
 
-    QUnit.test('navigating to next/previous month should focus the closest available date', function(assert) {
+    QUnit.test('navigating to next/previous month should focus the closest available date and change the view', function(assert) {
         const isAnimationOff = fx.off;
         const animate = fx.animate;
 
@@ -2465,6 +2465,25 @@ QUnit.module('disabledDates option', {
 
         triggerKeydown(this.$element, END_KEY_CODE);
         assert.deepEqual(this.calendar.option('currentDate'), this.calendar.option('value'));
+    });
+
+    QUnit.test('enter key should not change selected value if focused date is disabled', function(assert) {
+        const startDate = new Date(2020, 0, 6);
+        this.calendar.option({
+            value: startDate,
+            disabledDates: (args) => {
+                return args.date.getMonth() === 1;
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE, true);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 1, 6), 'current date is correct');
+
+        triggerKeydown(this.$element, ENTER_KEY_CODE);
+        assert.deepEqual(this.calendar.option('value'), startDate, 'selected value has not been changed');
     });
 
     QUnit.test('home/end keys should focus the first/last available date in the current month', function(assert) {
