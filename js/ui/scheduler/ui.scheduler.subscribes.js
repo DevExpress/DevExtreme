@@ -192,10 +192,6 @@ const subscribes = {
         this.checkAndDeleteAppointment(appointmentData, singleAppointmentData);
     },
 
-    getResourceForPainting: function() {
-        return this._resourcesManager.getResourceForPainting(this._getCurrentViewOption('groups'));
-    },
-
     getAppointmentColor: function(options) {
         const resourcesManager = this._resourcesManager;
         const resourceForPainting = resourcesManager.getResourceForPainting(this._getCurrentViewOption('groups'));
@@ -217,7 +213,7 @@ const subscribes = {
 
             response = resourcesManager.getResourceColor(field, groupId);
         }
-        options.callback(response);
+        return response;
     },
 
     getHeaderHeight: function() {

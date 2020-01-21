@@ -897,17 +897,15 @@ QUnit.test('\'getAppointmentColor\' by certain group', function(assert) {
         ]
     });
 
-    this.instance.fire('getAppointmentColor', {
+    const result = this.instance.fire('getAppointmentColor', {
         itemData: {
             typeId: 1,
             priorityId: 1
         },
         groupIndex: 0,
-        callback: function(result) {
-            result.done(function(color) {
-                appointmentColor = color;
-            });
-        }
+    });
+    result.done(function(color) {
+        appointmentColor = color;
     });
 
     assert.strictEqual(appointmentColor, 'red', 'appointment color');
@@ -946,7 +944,7 @@ QUnit.test('\'getAppointmentColor\' with fieldExpr for complex resource', functi
         }]
     });
 
-    this.instance.fire('getAppointmentColor', {
+    const result = this.instance.fire('getAppointmentColor', {
         itemData: {
             'Price': 10,
             'startDate': new Date(2015, 4, 24, 9, 10, 0, 0),
@@ -957,11 +955,10 @@ QUnit.test('\'getAppointmentColor\' with fieldExpr for complex resource', functi
             'TheatreId': 1
         },
         groupIndex: 0,
-        callback: function(result) {
-            result.done(function(color) {
-                appointmentColor = color;
-            });
-        }
+    });
+
+    result.done(function(color) {
+        appointmentColor = color;
     });
 
     assert.strictEqual(appointmentColor, 'red', 'appointment color is OK');
