@@ -1,9 +1,10 @@
-const registerEventCallbacks = require('events/core/event_registrator_callbacks');
+import registerEventCallbacks from 'events/core/event_registrator_callbacks';
 
-const special = {};
+export const special = {};
 
 registerEventCallbacks.add(function(name, eventObject) {
     special[name] = eventObject;
 });
 
-exports.special = special;
+// NOTE: workaround for compatibility
+export default { special };

@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const registerEvent = require('events/core/event_registrator');
-const eventsEngine = require('events/core/events_engine');
-const registerEventCallbacks = require('events/core/event_registrator_callbacks');
-const Class = require('core/class');
+import $ from 'jquery';
+import registerEvent from 'events/core/event_registrator';
+import eventsEngine from 'events/core/events_engine';
+import registerEventCallbacks from 'events/core/event_registrator_callbacks';
+import Class from 'core/class';
 
-const eventHelper = require('../../helpers/eventHelper.js');
+import eventHelper from '../../helpers/eventHelper.js';
 
 registerEventCallbacks.add(function(name, eventObject) {
     eventHelper.special[name] = eventObject;
