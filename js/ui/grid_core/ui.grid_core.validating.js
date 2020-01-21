@@ -270,10 +270,9 @@ const ValidatingController = modules.Controller.inherit((function() {
                     if(validationInfo) {
                         if(disableValidationResult && options.status === VALIDATION_STATUS.pending) {
                             validationInfo.disabledPendingId = options.id;
-                        }
-                        /* TO-DO else if(options.status !== VALIDATION_STATUS.pending && validationInfo.disabledPendingId === options.id) {
+                        } else if(options.status !== VALIDATION_STATUS.pending && isDefined(options.id) && validationInfo.disabledPendingId === options.id) {
                             disableValidationResult = true;
-                        }*/
+                        }
                         if(options.status !== VALIDATION_STATUS.pending) {
                             delete validationInfo.disabledPendingId;
                         }
@@ -432,7 +431,9 @@ const ValidatingController = modules.Controller.inherit((function() {
 
         setRowInfoValidated: function({ keyValue, value }) {
             const rowInfo = this._validationInfo[this.getRowValidationInfoKey(keyValue)];
-            rowInfo.isValidated = value;
+            if(rowInfo) {
+                rowInfo.isValidated = value;
+            }
         },
 
         isRowValidated: function(keyValue) {
@@ -820,19 +821,16 @@ module.exports = {
                     }
                 },
 
-                // updateFieldValue: function(e) {
-                //     // const editMode = this.getEditMode();
-                //     const currentValidator = this.getController('validating').getValidator();
-                //     if(currentValidator) {
-                //         currentValidator._valueUpdated = true;
-                //     }
-                //     this.callBase.apply(this, arguments);
+                updateFieldValue: function(e) {
+                    const editMode = this.getEditMode();
+                    this.callBase.apply(this, arguments);
 
-                //     // if(editMode === EDIT_MODE_ROW || (editMode === EDIT_MODE_BATCH && e.column.showEditorAlways)) {
-                //     //     const currentValidator = this.getController('validating').getValidator();
-                //     //     currentValidator && currentValidator.validate();
-                //     // }
-                // },
+                    if(editMode === EDIT_MODE_ROW || (editMode === EDIT_MODE_BATCH && e.column.showEditorAlways)) {
+                        const validatingController = this.getController('validating');
+                        const currentValidator = validatingController.getValidator();
+                        currentValidator && validatingController.validateCell(currentValidator);
+                    }
+                },
 
                 showHighlighting: function({ $cell, skipValidation }) {
                     let isValid = true;
