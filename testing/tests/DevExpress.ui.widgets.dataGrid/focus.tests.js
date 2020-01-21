@@ -790,6 +790,76 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
         assert.equal(visibleRows.length, 2, 'visible rows count');
     });
 
+    // T848606
+    QUnit.testInActiveWindow('DataGrid should not infinitly load data when filter with no suitable rows was applied', function(assert) {
+        // arrange
+        let visibleRows;
+        let loadCallCount = 0;
+        let items = [];
+
+        for(let i = 0; i < 60; i++) {
+            items.push({
+                id: i + 1,
+                team: `some${i}`,
+                name: `name${i}`
+            });
+        }
+
+        this.data = {
+            key: 'id',
+            load: function(options) {
+                loadCallCount++;
+
+                const d = $.Deferred();
+                setTimeout(function() {
+                    if(!options.filter) {
+                        d.resolve({
+                            data: items.slice(options.skip, options.skip + options.take),
+                            totalCount: items.length
+                        });
+                    } else {
+                        d.resolve({
+                            data: [],
+                            totalCount: options.requireTotalCount ? 0 : undefined
+                        });
+                    }
+                }, 10);
+                return d;
+            }
+        };
+
+        this.options = {
+            height: 100,
+            focusedRowEnabled: true,
+            focusedRowKey: 40,
+            scrolling: { mode: 'virtual' },
+            remoteOperations: true,
+            columns: ['team', {
+                dataField: 'id',
+                sortOrder: 'asc'
+            }, 'name']
+        };
+
+        this.setupModule();
+        addOptionChangedHandlers(this);
+        this.gridView.render($('#container'));
+
+        this.clock.tick(30);
+
+        // act
+        this.dataController.filter('team', 'contains', '22222');
+        this.dataController.load();
+        this.clock.tick(100);
+
+        visibleRows = this.dataController.getVisibleRows();
+
+        // assert
+        assert.equal(this.option('focusedRowKey'), 40, 'focusedRowKey');
+        assert.equal(this.option('focusedRowIndex'), 39, 'focusedRowIndex');
+        assert.equal(visibleRows.length, 0, 'visible rows count');
+        assert.equal(loadCallCount, 5, 'load call count');
+    });
+
     QUnit.testInActiveWindow('Tab index should not exist for the previous focused row', function(assert) {
         let rowsView;
 
