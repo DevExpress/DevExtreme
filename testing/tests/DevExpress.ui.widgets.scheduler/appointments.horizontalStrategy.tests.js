@@ -26,29 +26,6 @@ const moduleOptions = {
         this.coordinates = [{ top: 0, left: 0 }];
         this.instance = $('#scheduler-appointments').dxSchedulerAppointments().dxSchedulerAppointments('instance');
 
-        this.instance.notifyObserver = $.proxy(function(command, options) {
-            if(command === 'needCoordinates') {
-                return this.coordinates;
-            }
-
-            if(command === 'getFullWeekAppointmentWidth') {
-                return this.fullWeekAppointmentWidth;
-            }
-
-            if(command === 'getMaxAppointmentWidth') {
-                return this.maxAppointmentWidth;
-            }
-
-            if(command === 'updateAppointmentStartDate') {
-                return this.viewStartDate;
-            }
-
-            if(command === 'getAppointmentDurationInMs') {
-                return options.endDate.getTime() - options.startDate.getTime();
-            }
-
-        }, this);
-
         this.instance.invoke = $.proxy(function(command, field, obj, value) {
             const dataAccessors = {
                 getter: {
