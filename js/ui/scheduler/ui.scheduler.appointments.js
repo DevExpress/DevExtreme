@@ -622,19 +622,19 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const itemData = this._getItemData(e.element);
         const deltaTime = this.invoke('getDeltaTime', e, this._initialSize, itemData);
         const renderingStrategyDirection = this.invoke('getRenderingStrategyDirection');
-        let cond = false;
+        let isStartDateChanged = false;
         const isAllDay = this.invoke('isAllDay', itemData);
         const needCorrectDates = this.invoke('needCorrectAppointmentDates') && !isAllDay;
         let startTime;
         let endTime;
 
         if(renderingStrategyDirection !== 'vertical' || isAllDay) {
-            cond = this.option('rtlEnabled') ? e.handles.right : e.handles.left;
+            isStartDateChanged = this.option('rtlEnabled') ? e.handles.right : e.handles.left;
         } else {
-            cond = e.handles.top;
+            isStartDateChanged = e.handles.top;
         }
 
-        if(cond) {
+        if(isStartDateChanged) {
             startTime = needCorrectDates ? this._correctStartDateByDelta(startDate, deltaTime) : startDate.getTime() - deltaTime;
             startTime += utils.getTimezoneOffsetChangeInMs(startDate, endDate, startTime, endDate);
             endTime = endDate.getTime();
