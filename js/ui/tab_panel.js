@@ -313,7 +313,8 @@ const TabPanel = MultiView.inherit({
             case 'selectedItem': {
                 this._setTabsOption(fullName, value);
                 this.callBase(args);
-                if(devices.real().deviceType === 'desktop') {
+                const isFocusStateEnabled = this.option('focusStateEnabled') === true;
+                if(isFocusStateEnabled) {
                     const selectedIndex = this.option('selectedIndex');
                     const selectedTabContent = this._itemElements()[selectedIndex];
                     this.option('focusedElement', getPublicElement($(selectedTabContent)));
