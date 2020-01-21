@@ -54,16 +54,12 @@ const moduleOptions = {
                 return this.getCoordinates.apply(this);
             }
 
-            if(command === 'getCellDimensions') {
-                options.callback(this.cellWidth, this.cellHeight, this.allDayHeight);
-            }
-
             if(command === 'getAppointmentColor') {
                 options.callback($.Deferred().resolve('red').promise());
             }
 
             if(command === 'getResourceForPainting') {
-                options.callback({ field: 'roomId' });
+                return { field: 'roomId' };
             }
 
             if(command === 'getAppointmentDurationInMs') {
