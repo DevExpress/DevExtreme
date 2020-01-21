@@ -1,7 +1,7 @@
-const $ = require('./renderer');
-const callbacks = require('./component_registrator_callbacks');
-const errors = require('./errors');
-const publicComponentUtils = require('./utils/public_component');
+import $ from './renderer';
+import callbacks from './component_registrator_callbacks';
+import errors from './errors';
+import publicComponentUtils from './utils/public_component';
 
 /**
  * @name registerComponent
