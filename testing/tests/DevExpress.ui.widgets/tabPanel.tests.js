@@ -478,6 +478,50 @@ QUnit.module('focus policy', {
         $tabPanel.trigger('focusin');
         assert.equal(tabNativeFocus.callCount, 0, 'native focus should not be triggered');
     });
+
+    function checkSelectedIndexAndContent(tabPanel, expectedSelectedIndex) {
+        const actualSelectedIndex = tabPanel.option('selectedIndex');
+        const $selectedTabContent = tabPanel.$element().find(toSelector(SELECTED_ITEM_CLASS));
+        QUnit.assert.equal(actualSelectedIndex, expectedSelectedIndex);
+        QUnit.assert.equal($selectedTabContent.index(), expectedSelectedIndex, 'selected tab content must match selected index');
+
+        const focusedElement = tabPanel.option('focusedElement');
+        if(config().useJQuery) {
+            QUnit.assert.notEqual(focusedElement.jquery, undefined, 'in jquery mode focused element must be a jquery object');
+            QUnit.assert.equal(focusedElement.get(0).outerHTML, $selectedTabContent.get(0).outerHTML, 'in jquery mode selected tab content must match focused element');
+        } else {
+            QUnit.assert.equal(focusedElement.jquery, undefined, 'in pure javascript mode focused element must be a DOM object');
+            QUnit.assert.equal(focusedElement.outerHTML, $selectedTabContent.get(0).outerHTML, 'in pure javascript mode selected tab content must match focused element');
+        }
+    }
+
+    [0, 1].forEach(selectedIndex => {
+        QUnit.test(`focus -> setSelectedIndex(${selectedIndex});`, function(assert) {
+            const tabPanel = new TabPanel($('#tabPanel'), {
+                items: [{ title: 'item 1' }, { title: 'item 2' }]
+            });
+
+            tabPanel.$element().focusin();
+            tabPanel.option('selectedIndex', selectedIndex);
+            tabPanel.$element().focusin();
+
+            checkSelectedIndexAndContent(tabPanel, selectedIndex);
+        });
+    });
+
+    [0, 1].forEach(selectedIndex => {
+        QUnit.test(`focus -> setSelectedItem(item_${selectedIndex});`, function(assert) {
+            const tabPanel = new TabPanel($('#tabPanel'), {
+                items: [{ title: 'item 1' }, { title: 'item 2' }]
+            });
+
+            tabPanel.$element().focusin();
+            tabPanel.option('selectedItem', tabPanel._tabs.option('items')[selectedIndex]);
+            tabPanel.$element().focusin();
+
+            checkSelectedIndexAndContent(tabPanel, selectedIndex);
+        });
+    });
 });
 
 QUnit.module('keyboard navigation', {
@@ -524,34 +568,6 @@ QUnit.module('keyboard navigation', {
         assert.equal(multiViewFocusedIndex, $(this.tabs.option('focusedElement')).index(), 'tabs focused element is equal multiView focused element');
     });
 
-    [0, 1].forEach(selectedIndex => {
-        QUnit.test(`focus -> setSelectedIndex(${selectedIndex});`, function(assert) {
-            this.$element.focusin();
-            this.instance.option('selectedIndex', selectedIndex);
-            this.$element.focusin();
-
-            const $selectedTabContent = this.$element.find(toSelector(SELECTED_ITEM_CLASS));
-            assert.equal(selectedIndex, $selectedTabContent.index(), 'selected tab content must match selected index');
-
-            const focusedElement = this.instance.option('focusedElement');
-            assert.equal(focusedElement.outerHTML, $selectedTabContent.get(0).outerHTML, 'selected tab content must match focused element');
-        });
-    });
-
-    [0, 1].forEach(selectedIndex => {
-        QUnit.test(`focus -> setSelectedItem(item_${selectedIndex});`, function(assert) {
-            this.$element.focusin();
-            this.instance.option('selectedItem', this.instance._tabs.option('items')[selectedIndex]);
-            this.$element.focusin();
-
-            const $selectedTabContent = this.$element.find(toSelector(SELECTED_ITEM_CLASS));
-            assert.equal(selectedIndex, $selectedTabContent.index(), 'selected tab content must match selected index');
-
-            const focusedElement = this.instance.option('focusedElement');
-            assert.equal(focusedElement.outerHTML, $selectedTabContent.get(0).outerHTML, 'selected tab content must match focused element');
-        });
-    });
-
     QUnit.test('tabPanels focusedElement dependence on tabs focusedElement', function(assert) {
         assert.expect(3);
 
@@ -560,7 +576,6 @@ QUnit.module('keyboard navigation', {
         this.clock.tick();
 
         const tabsFocusedIndex = $(this.instance.option('focusedElement')).index();
-
         assert.equal(isRenderer(this.instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.equal(tabsFocusedIndex, 1, 'second tabs element has been focused');
         assert.equal(tabsFocusedIndex, $(this.instance.option('focusedElement')).index(), 'multiView focused element is equal tabs focused element');
