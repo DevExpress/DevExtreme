@@ -6,8 +6,12 @@ import DropDownBox from 'ui/drop_down_box';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import browser from 'core/utils/browser';
+import typeUtils from 'core/utils/type';
+import devices from 'core/devices';
 
 import 'common.css!';
+
+const realDevice = devices.real();
 
 QUnit.testStart(() => {
     const markup =
@@ -501,6 +505,45 @@ QUnit.module('popup options', moduleConfig, () => {
 
         $('<div>').height(50).appendTo($content);
         assert.strictEqual($popupContent.height(), popupHeight + 50, 'popup height has been changed');
+    });
+
+    QUnit.test('Dropdownbox popup should have function as closeOnTargetScroll option value (T845484)', assert => {
+        const $content = $('<div>').attr('id', 'content');
+
+        const instance = new DropDownBox($('#dropDownBox'), {
+            opened: true,
+            contentTemplate: () => $content
+        });
+
+        assert.ok(typeUtils.isFunction(instance.option('dropDownOptions.closeOnTargetScroll')));
+    });
+
+    [true, false].forEach((isMac) => {
+        QUnit.test(`Dropdownbox should ${isMac ? 'not' : ''} close the popup after window scroll for ${isMac ? '' : 'non'} Mac desktop devices (T845484)`, assert => {
+            if(realDevice.deviceType !== 'desktop') {
+                assert.expect(0);
+                return;
+            }
+
+            const originalRealDeviceIsMac = DropDownBox.realDevice.mac;
+            DropDownBox.realDevice.mac = isMac;
+
+            try {
+                const $content = $('<input type="text" />');
+                const instance = new DropDownBox($('#dropDownBox'), {
+                    contentTemplate: () => $content
+                });
+
+                instance.open();
+                $content.focus();
+                this.clock.tick();
+                $(window).trigger('scroll');
+
+                assert.strictEqual(instance.option('opened'), isMac);
+            } finally {
+                DropDownBox.realDevice.mac = originalRealDeviceIsMac;
+            }
+        });
     });
 });
 
