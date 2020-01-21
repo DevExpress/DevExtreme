@@ -28,8 +28,8 @@ describe('Migration LessTemplateLoader', () => {
         };
 
         const less = `
-        div { color: @base-bg; }
-        div { color: @base-text-color; }
+        div .class1 { color: @base-bg; }
+        div .class2 { color: @base-text-color; }
         .dx-datagrid {
             color: @datagrid-base-color;
         }
@@ -51,10 +51,10 @@ describe('Migration LessTemplateLoader', () => {
             'datagrid-base-color': 'red',
             'treelist-base-color': 'green'
         }, metadataVariables).then(data => {
-            assert.equal(data.css, `.dx-swatch-my-custom div {
+            assert.equal(data.css, `.dx-swatch-my-custom div .class1 {
   color: #fff;
 }
-.dx-swatch-my-custom div {
+.dx-swatch-my-custom div .class2 {
   color: #000;
 }
 .dx-swatch-my-custom .dx-datagrid {
@@ -63,7 +63,6 @@ describe('Migration LessTemplateLoader', () => {
 .dx-swatch-my-custom .dx-treelist {
   color: green;
 }
-
 `);
         });
     });
