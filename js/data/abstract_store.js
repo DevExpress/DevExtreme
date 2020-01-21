@@ -9,6 +9,7 @@ const storeHelper = require('./store_helper');
 const queryByOptions = storeHelper.queryByOptions;
 const Deferred = require('../core/utils/deferred').Deferred;
 const noop = require('../core/utils/common').noop;
+const isEmptyObject = require('../core/utils/type').isEmptyObject;
 
 const storeImpl = {};
 
@@ -53,6 +54,8 @@ const Store = Class.inherit({
         this._errorHandler = options.errorHandler;
 
         this._useDefaultSearch = true;
+
+        this._keyCompileGetters = {};
     },
 
     _customLoadOptions: function() {
@@ -76,6 +79,18 @@ const Store = Class.inherit({
             throw errorsModule.errors.Error('E4005');
         }
     },
+
+    _getKeyCompileGetters: function() {
+        const key = this.key();
+        if(isEmptyObject(this._keyCompileGetters) && Array.isArray(key)) {
+            key.forEach(k => {
+                this._keyCompileGetters[k] = compileGetter(k);
+            });
+        }
+
+        return this._keyCompileGetters;
+    },
+
     load: function(options) {
         const that = this;
 
