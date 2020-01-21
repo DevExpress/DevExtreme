@@ -3275,7 +3275,7 @@ QUnit.module('default options', {
             $(lookup.field()).trigger('dxclick');
 
             assert.roughEqual($popup.find('.dx-overlay-content').position().top, -3.5, 1, 'offset of the lookup after scrolling and cut-off item selecting');
-            assert.roughEqual($('.dx-list-item').eq(1).position().top, 39, 1, 'position of the selected item after scrolling and cut-off item selecting');
+            assert.roughEqual($('.dx-list-item').eq(1).position().top, lookup._list.scrollTop(), 2, 'position of the selected item after scrolling and cut-off item selecting');
 
             lookup.close();
 
