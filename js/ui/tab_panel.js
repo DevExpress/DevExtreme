@@ -313,9 +313,11 @@ const TabPanel = MultiView.inherit({
             case 'selectedItem': {
                 this._setTabsOption(fullName, value);
                 this.callBase(args);
-                const selectedIndex = this.option('selectedIndex');
-                const selectedTabContent = this._itemElements()[selectedIndex];
-                this.option('focusedElement', getPublicElement($(selectedTabContent)));
+                if(devices.real().deviceType === 'desktop') {
+                    const selectedIndex = this.option('selectedIndex');
+                    const selectedTabContent = this._itemElements()[selectedIndex];
+                    this.option('focusedElement', getPublicElement($(selectedTabContent)));
+                }
                 break;
             }
             case 'itemHoldTimeout':

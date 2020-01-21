@@ -481,10 +481,6 @@ QUnit.module('focus policy', {
         assert.equal(tabNativeFocus.callCount, 0, 'native focus should not be triggered');
     });
 
-    function isMobileDevice() {
-        return navigator.maxTouchPoints > 0;
-    }
-
     function checkSelectionAndFocus(tabPanel, expectedSelectedIndex) {
         const $tabsContainer = tabPanel.$element().find(toSelector(TABS_CLASS));
 
@@ -499,10 +495,8 @@ QUnit.module('focus policy', {
 
         const focusedElement = tabPanel.option('focusedElement');
         const focusedTab = $tabsContainer.find(toSelector(FOCUSED_CLASS));
-        if(isMobileDevice()) {
-            QUnit.assert.equal(focusedTab.length, 0, 'on mobile device there is no focused tab');
-            QUnit.assert.equal(focusedElement, null, 'on mobile device focused element must be null');
-        } else {
+
+        if(devices.current().deviceType === 'desktop') {
             QUnit.assert.equal(focusedTab.index(), expectedSelectedIndex, 'selected tab must match focused tab');
             if(config().useJQuery) {
                 QUnit.assert.notEqual(focusedElement.jquery, undefined, 'in jquery mode focused element must be a jquery object');
@@ -511,6 +505,9 @@ QUnit.module('focus policy', {
                 QUnit.assert.equal(focusedElement.jquery, undefined, 'in pure javascript mode focused element must be a DOM object');
                 QUnit.assert.equal(focusedElement.outerHTML, $selectedTabContent.get(0).outerHTML, 'in pure javascript mode selected tab content must match focused element');
             }
+        } else {
+            QUnit.assert.equal(focusedTab.index(), -1, 'on mobile device there is no focused tab');
+            QUnit.assert.equal(focusedElement, null, 'on mobile device there is no focused content');
         }
     }
 
