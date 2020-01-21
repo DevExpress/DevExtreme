@@ -3554,6 +3554,7 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
     assert.roughEqual($appointment.position().left, 0, 1.1, 'Left coordinate is correct');
 });
 
+// Timezone-sensitive test, use US/Pacific for proper testing
 QUnit.test('Appointment should have correct dates after resizing through timezone change (T835544)', function(assert) {
     this.createInstance({
         dataSource: [{
@@ -3568,23 +3569,22 @@ QUnit.test('Appointment should have correct dates after resizing through timezon
         startDayHour: 0,
     });
 
-    const $element = $(this.instance.$element());
-    const cellWidth = $element.find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
-    let pointer = pointerMock($element.find('.dx-resizable-handle-left').eq(0)).start();
+    const cellWidth = this.scheduler.workSpace.getCellWidth();
+    let pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find('.dx-resizable-handle-left').eq(0)).start();
 
     pointer.dragStart().drag(-(cellWidth), 0);
     pointer.dragEnd();
 
-    let appointmentContent = $element.find('.' + APPOINTMENT_CLASS).eq(0).find('.dx-scheduler-appointment-content-date').text();
+    let appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
 
     assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
 
-    pointer = pointerMock($element.find('.dx-resizable-handle-left').eq(0)).start();
+    pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find('.dx-resizable-handle-left').eq(0)).start();
 
     pointer.dragStart().drag((cellWidth), 0);
     pointer.dragEnd();
 
-    appointmentContent = $element.find('.' + APPOINTMENT_CLASS).eq(0).find('.dx-scheduler-appointment-content-date').text();
+    appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
 
     assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
 });

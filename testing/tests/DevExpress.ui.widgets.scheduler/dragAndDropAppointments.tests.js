@@ -688,6 +688,7 @@ module('Common', commonModuleConfig, () => {
         assert.deepEqual(scheduler.option('dataSource')[0].startDate, new Date(2015, 1, 9, 10, 30), 'Start date is OK');
     });
 
+    // Timezone-sensitive test, use US/Pacific for proper testing
     QUnit.test('Appointment should have correct dates after dragging through timezone change (T835544)', function(assert) {
         const scheduler = createWrapper({
             dataSource: [{

@@ -636,16 +636,12 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
         if(cond) {
             startTime = needCorrectDates ? this._correctStartDateByDelta(startDate, deltaTime) : startDate.getTime() - deltaTime;
+            startTime += Utils.getTimezoneOffsetChangeInMs(startDate, endDate, startTime, endDate);
             endTime = endDate.getTime();
         } else {
             startTime = startDate.getTime();
             endTime = needCorrectDates ? this._correctEndDateByDelta(endDate, deltaTime) : endDate.getTime() + deltaTime;
-        }
-
-        if(cond) {
-            startTime = startTime + Utils.getTimezoneChangeDurationInMs(startDate, endDate, startTime, endTime);
-        } else {
-            endTime = endTime + Utils.getTimezoneChangeDurationInMs(startDate, endDate, startTime, endTime);
+            endTime += Utils.getTimezoneOffsetChangeInMs(startDate, endDate, startDate, endTime);
         }
 
         return [startTime, endTime];
