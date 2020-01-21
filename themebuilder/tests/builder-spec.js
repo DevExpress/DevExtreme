@@ -23,6 +23,8 @@ const lessCompiler = require('less/lib/less-node');
 
 const lessPaths = [ path.join(__dirname, '..', 'data', 'less', 'bundles') ];
 
+const buildTimeout = 10000;
+
 lessCompiler.options = lessCompiler.options || {};
 lessCompiler.options['paths'] = lessPaths;
 
@@ -39,7 +41,7 @@ describe('Builder - testing exported function', () => {
             assert.notEqual(result.css, '', 'Has css in result');
             assert.equal(result.swatchSelector, '.dx-swatch-custom-scheme');
         });
-    }).timeout(5000);
+    }).timeout(buildTimeout);
 
     it('Build theme according to bootstrap', () => {
         const config = {
@@ -53,7 +55,7 @@ describe('Builder - testing exported function', () => {
         return buildTheme(config).then((result) => {
             assert.notEqual(result.css, '', 'Has css in result');
         });
-    }).timeout(5000);
+    }).timeout(buildTimeout);
 
     it('Build theme with changed color constants (generic)', () => {
         const config = {
@@ -67,7 +69,7 @@ describe('Builder - testing exported function', () => {
             assert.notEqual(result.css, '', 'Has css in result');
             assert.ok(/#abcdef/.test(result.css), 'Color was changed');
         });
-    }).timeout(5000);
+    }).timeout(buildTimeout);
 
     it('Build theme with changed color constants (material)', () => {
         const config = {
@@ -82,7 +84,7 @@ describe('Builder - testing exported function', () => {
             assert.notEqual(result.css, '', 'Has css in result');
             assert.ok(/#abcdef/.test(result.css), 'Color was changed');
         });
-    }).timeout(5000);
+    }).timeout(buildTimeout);
 
     it('Theme built without parameters is the same that in distribution (generic)', () => {
         const config = {
@@ -97,7 +99,7 @@ describe('Builder - testing exported function', () => {
             const distributionCss = normalizeCss(fs.readFileSync(path.join(__dirname, '../../artifacts/css/dx.light.css'), 'utf8'));
             assert.ok(themeBuilderCss === distributionCss);
         });
-    }).timeout(5000);
+    }).timeout(buildTimeout);
 
     it('Theme built without parameters is the same that in distribution (material)', () => {
         const config = {
@@ -113,7 +115,7 @@ describe('Builder - testing exported function', () => {
             const distributionCss = normalizeCss(fs.readFileSync(path.join(__dirname, '../../artifacts/css/dx.material.blue.light.css'), 'utf8'));
             assert.ok(themeBuilderCss === distributionCss);
         });
-    }).timeout(5000);
+    }).timeout(buildTimeout);
 
 
     ['generic.light', 'material.blue.light'].forEach(theme => {
