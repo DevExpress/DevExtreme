@@ -44,7 +44,7 @@ QUnit.module('General', {
         assert.ok(summary, 'Summary can be created');
     });
 
-    QUnit.test('Widget can be created via jQuery', function(assert) {
+    QUnit.test('Widget can be created via jQuery 1', function(assert) {
         const summary = this.fixture.createSummary();
         assert.strictEqual(this.fixture.$summaryContainer.find('.dx-empty-message').length, 0, 'Validation Summary should be empty by default');
         assert.ok(summary, 'Summary can be created');
@@ -153,6 +153,8 @@ QUnit.module('General', {
         itemElements.trigger('click');
         assert.ok(validator.focus.calledOnce, 'Validator should be focused');
     });
+
+
 });
 
 QUnit.module('Regression', {
@@ -230,6 +232,7 @@ QUnit.module('Regression', {
         assert.ok(summary._groupValidationHandler.notCalled, 'Handler should not be called');
 
     });
+
 });
 
 QUnit.module('Update on validator\'s validation', {
@@ -450,6 +453,91 @@ QUnit.module('Update on validator\'s validation', {
         validator.validate();
 
         assert.equal(itemsChangedCallCount, 1, 'items should not be changed if the validator state is not changed');
+    });
+});
+
+
+QUnit.module('events', {
+    // beforeEach: function() {
+    //     this.fixture = new Fixture();
+    // },
+    // afterEach: function() {
+
+    //     this.fixture.$summaryContainer.dxValidationSummary('instance').dispose();
+    // }
+}, () => {
+
+    QUnit.test('Check item click event subscription', function(assert) {
+        // debugger;
+        const itemClickEventHandler = sinon.spy(function() {
+            // debugger;
+        });
+
+
+        // const summary = this.fixture.createSummary();
+        const validator = sinon.createStubInstance(Validator);
+
+
+        const $summary = $('#dxSummary').dxValidationSummary({
+
+        });
+
+        const summary = $summary.dxValidationSummary('instance');
+
+        summary.on('itemClick', itemClickEventHandler);
+
+        // summary._groupValidationHandler({
+        //     isValid: false,
+        //     brokenRules: [{
+        //         type: 'required',
+        //         validator: validator
+        //     }],
+        //     validators: [validator]
+        // });
+
+        // assert
+        const itemElements = $('#dxSummary').find('.dx-validationsummary-item');
+
+        itemElements.trigger('click');
+        assert.ok(validator.focus.calledOnce, 'Validator should be focused');
+        assert.ok(itemClickEventHandler.calledOnce, 'Item click has been handled');
+        assert.strictEqual(itemClickEventHandler.lastCall.args[0].itemIndex, 0, 'Item click handler should have arguments');
+
+        // itemClickHandler.restore();
+
+    });
+
+    QUnit.test('Check item onClick subscription', function(assert) {
+        // const clock = sinon.useFakeTimers();
+
+        const itemClickHandler = sinon.spy();
+        const summary = this.fixture.createSummary($('#dxSummary'), {
+            onItemClick: itemClickHandler
+        });
+        // clock.tick(100);
+        const validator = sinon.createStubInstance(Validator);
+        // clock.tick(100);
+
+        summary._groupValidationHandler({
+            isValid: false,
+            brokenRules: [{
+                type: 'required',
+                validator: validator
+            }],
+            validators: [validator]
+        });
+
+        // assert
+        const itemElements = this.fixture.$summaryContainer.find('.dx-validationsummary-item');
+
+        itemElements.trigger('click');
+        // clock.tick(100);
+        assert.ok(validator.focus.calledOnce, 'Validator should be focused');
+        assert.ok(itemClickHandler.calledOnce, 'Item click has been handled');
+        assert.strictEqual(itemClickHandler.lastCall.args[0].itemIndex, 0, 'Item click handler should have arguments');
+
+        // itemClickHandler.restore();
+        // clock.restore();
     });
 });
 
