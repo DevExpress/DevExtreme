@@ -24,7 +24,7 @@ const setAttribute = (name, value) => {
     return { [attrName]: attrValue };
 };
 
-const setAria = (args) => {
+const getAria = (args) => {
     let attrs = {};
     each(args, (name, value) => {
         attrs = { ...attrs, ...setAttribute(name, value) };
@@ -32,9 +32,8 @@ const setAria = (args) => {
     return attrs;
 };
 
-const getAttributes = ({ elementAttr, disabled, visible, accessKey }: any) => {
-    const arias = setAria({ disabled, hidden: !visible });
-    const attrs = extend({}, arias, elementAttr, accessKey && { accessKey });
+const getAttributes = ({ elementAttr, accessKey }: any) => {
+    const attrs = extend({}, elementAttr, accessKey && { accessKey });
     delete attrs.class;
 
     return attrs;
@@ -96,6 +95,7 @@ export const viewModelFunction = ({
 
     focusStateEnabled,
     hoverStateEnabled,
+    aria,
 
     widgetRef,
 }: Widget) => {
@@ -105,13 +105,14 @@ export const viewModelFunction = ({
         focusStateEnabled, className,
     });
     const attrsWithoutClass = getAttributes({ elementAttr, disabled, visible, accessKey });
+    const arias = getAria({ ...aria, disabled, hidden: !visible });
 
     return {
         widgetRef,
 
         children,
         style,
-        attributes: attrsWithoutClass,
+        attributes: { ...attrsWithoutClass, ...arias },
         disabled,
         visible,
         title: hint,
@@ -151,6 +152,7 @@ export default class Widget {
     @Prop() name?: string | undefined = '';
     @Prop() className?: string | undefined = '';
     @Prop() clickArgs?: any = {};
+    @Prop() aria?: any = {};
     @Prop() activeStateUnit?: string | undefined = undefined;
     @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
     @Prop() hoverEndHandler: (args: any) => any = (() => undefined);

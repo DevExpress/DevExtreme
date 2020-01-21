@@ -67,6 +67,8 @@ export const viewModelFunction = (model: Button) => {
 
     return {
         ...model,
+        elementAttr: { ...model.elementAttr, role: 'button' },
+        aria: { label: model.text.trim() },
         cssClasses: getCssClasses(model),
         icon,
         supportedKeys,
@@ -90,6 +92,7 @@ export const viewFunction = (viewModel: Button) => (
         hoverStateEnabled={viewModel.hoverStateEnabled}
         activeStateEnabled={viewModel.activeStateEnabled}
         supportedKeys={viewModel.supportedKeys}
+        aria={viewModel.aria}
     >
         {viewModel.contentRender && (
             <div className="dx-button-content">
