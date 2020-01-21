@@ -507,8 +507,8 @@ QUnit.module('focus policy', {
             }
 
         } else {
-            QUnit.assert.equal(focusedTab.index(), -1, 'there is no focused tab if focusStateEnabled is disabled');
-            QUnit.assert.equal(focusedElement, null, 'there is no focused content if focusStateEnabled is disabled');
+            QUnit.assert.equal(focusedTab.index(), -1, 'there is no focused tab if focusState is disabled');
+            QUnit.assert.equal(focusedElement, null, 'there is no focused element if focusState is disabled');
         }
     }
 
