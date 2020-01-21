@@ -6,10 +6,12 @@ const gulpLess = require('gulp-less');
 const plumber = require('gulp-plumber');
 const lessCompiler = require('less');
 const LessAutoPrefix = require('less-plugin-autoprefix');
+const cleanCss = require('gulp-clean-css');
 const parseArguments = require('minimist');
 const fs = require('fs');
 
 const generator = require('../../themebuilder/modules/metadata-generator');
+const cleanCssOptions = require('../../themebuilder/modules/clean-css-options');
 const context = require('./context');
 const browsersList = require('../../package.json').browserslist;
 const starLicense = require('./header-pipes').starLicense;
@@ -33,6 +35,7 @@ const compileBundles = (bundles) => {
             plugins: [ autoPrefix ],
             useFileCache: true
         }))
+        .pipe(cleanCss(cleanCssOptions))
         .pipe(replace(commentsRegex, ''))
         .pipe(starLicense())
         .pipe(gulp.dest(cssArtifactsPath));

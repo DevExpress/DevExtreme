@@ -60,6 +60,7 @@
     "globalize": "^1.3.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
+    "gulp-clean-css": "^4.2.0",
     "gulp-concat": "^2.6.0",
     "gulp-eslint": "^6.0.0",
     "gulp-eol": "^0.1.2",
