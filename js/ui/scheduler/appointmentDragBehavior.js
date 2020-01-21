@@ -26,7 +26,7 @@ export default class AppointmentDragBehavior {
     }
 
     getDraggableArea() {
-        return this.appointments.notifyObserver('getDraggableAppointmentArea');
+        return this.appointments.invoke('getDraggableAppointmentArea');
     }
 
     getContainerShift(isAllDay) {

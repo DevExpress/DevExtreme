@@ -709,7 +709,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _calculateBoundOffset: function() {
-        return this.notifyObserver('getBoundOffset');
+        return this.invoke('getBoundOffset');
     },
 
     _virtualAppointments: {},

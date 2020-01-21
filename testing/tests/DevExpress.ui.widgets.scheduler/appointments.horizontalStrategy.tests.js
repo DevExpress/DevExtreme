@@ -34,10 +34,6 @@ const moduleOptions = {
                 return this.getCoordinates.apply(this);
             }
 
-            if(command === 'getCellDimensions') {
-                options.callback(this.width, this.height, this.allDayHeight);
-            }
-
             if(command === 'getFullWeekAppointmentWidth') {
                 return this.fullWeekAppointmentWidth;
             }
@@ -51,7 +47,7 @@ const moduleOptions = {
             }
 
             if(command === 'getResourceForPainting') {
-                options.callback({ field: 'roomId' });
+                return { field: 'roomId' };
             }
 
             if(command === 'updateAppointmentStartDate') {

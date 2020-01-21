@@ -77,7 +77,7 @@ const moduleOptions = {
                 options.callback($.Deferred().resolve('red').promise());
             },
             getResourceForPainting: function(options) {
-                options.callback({ field: 'roomId' });
+                return { field: 'roomId' };
             },
             getField: function(field, obj) {
                 if(!typeUtils.isDefined(dataAccessors.getter[field])) {
