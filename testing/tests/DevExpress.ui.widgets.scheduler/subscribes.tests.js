@@ -1833,18 +1833,16 @@ QUnit.test('\'getResizableAppointmentArea\' should return correct area when grou
     const lastCellPosition = $lastCell.offset();
     const cellWidth = $lastCell.get(0).getBoundingClientRect().width;
 
-    this.instance.fire('getResizableAppointmentArea', {
+    const result = this.instance.fire('getResizableAppointmentArea', {
         allDay: false,
         coordinates: {
             groupIndex: 1,
             left: 550,
             top: 0
         },
-        callback: function(result) {
-            assert.roughEqual(result.left, firstCellPosition.left - cellWidth / 2, 3, 'Area left is OK');
-            assert.roughEqual(result.right, lastCellPosition.left + 1.5 * cellWidth, 3, 'Area right is OK');
-        }
     });
+    assert.roughEqual(result.left, firstCellPosition.left - cellWidth / 2, 3, 'Area left is OK');
+    assert.roughEqual(result.right, lastCellPosition.left + 1.5 * cellWidth, 3, 'Area right is OK');
 });
 
 QUnit.test('\'getResizableStep\' should return correct step, groupByDate = true, Month view', function(assert) {

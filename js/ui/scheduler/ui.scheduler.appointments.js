@@ -566,23 +566,16 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _calculateResizableArea: function(itemSetting, appointmentData) {
-        let area = this.$element().closest('.dx-scrollable-content');
+        const area = this.$element().closest('.dx-scrollable-content');
 
-        this.notifyObserver('getResizableAppointmentArea', {
+        return this.notifyObserver('getResizableAppointmentArea', {
             coordinates: {
                 left: itemSetting.left,
                 top: 0,
                 groupIndex: itemSetting.groupIndex
             },
             allDay: itemSetting.allDay,
-            callback: function(result) {
-                if(result) {
-                    area = result;
-                }
-            }
-        });
-
-        return area;
+        }) || area;
     },
 
     _resizeEndHandler: function(e) {

@@ -309,15 +309,13 @@ const subscribes = {
     },
 
     getResizableAppointmentArea: function(options) {
-        let area;
         const allDay = options.allDay;
         const groups = this._getCurrentViewOption('groups');
-        const isGrouped = groups && groups.length;
 
-        if(isGrouped) {
+        if(groups && groups.length) {
             if(allDay || this.getLayoutManager().getRenderingStrategyInstance()._needHorizontalGroupBounds()) {
                 const horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
-                area = {
+                return {
                     left: horizontalGroupBounds.left,
                     right: horizontalGroupBounds.right,
                     top: 0,
@@ -327,7 +325,7 @@ const subscribes = {
 
             if(this.getLayoutManager().getRenderingStrategyInstance()._needVerticalGroupBounds(allDay) && this._workSpace._isVerticalGroupedWorkSpace()) {
                 const verticalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
-                area = {
+                return {
                     left: 0,
                     right: 0,
                     top: verticalGroupBounds.top,
@@ -335,8 +333,6 @@ const subscribes = {
                 };
             }
         }
-
-        options.callback(area);
     },
 
     needRecalculateResizableArea: function() {
