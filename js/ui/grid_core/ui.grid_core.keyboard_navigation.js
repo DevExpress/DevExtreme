@@ -125,7 +125,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     _initViewHandlers: function() {
         const that = this;
-        const clickAction = that.createAction(that._clickHandler);
+        const pointerDownAction = that.createAction(that._pointerDownHandler);
+        const pointerUpAction = that.createAction(that._clickHandler);
         const rowsView = that.getView('rowsView');
 
         rowsView.renderCompleted.add(function(e) {
@@ -138,8 +139,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const $focusedElement = $(':focus');
             const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length || (browser.msie && $focusedElement.is('body'));
 
-            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickAction);
-            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickSelector, clickAction);
+            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), pointerDownAction);
+            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), clickSelector, pointerDownAction);
+
+            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), pointerUpAction);
+            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickSelector, pointerUpAction);
 
             that._initKeyDownProcessor(that, $rowsView, that._keyDownHandler);
 
@@ -749,6 +753,14 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     _isEventInCurrentGrid: function(event) {
         return isElementInCurrentGrid(this, $(event.target));
+    },
+
+    _pointerDownHandler: function(e) {
+        const $target = $(e.event.target);
+
+        if(!$target.hasClass('dx-focused')) {
+            $target.addClass(CELL_FOCUS_DISABLED_CLASS);
+        }
     },
 
     _clickTargetCellHandler: function(event, $cell) {
