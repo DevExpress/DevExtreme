@@ -696,11 +696,11 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
     _getAppointmentColor: function($appointment, groupIndex) {
         const res = new Deferred();
-        this.notifyObserver('getAppointmentColor', {
+        const response = this.invoke('getAppointmentColor', {
             itemData: this._getItemData($appointment),
             groupIndex: groupIndex,
-            callback: d => d.done(color => res.resolve(color))
         });
+        response.done(color => res.resolve(color));
 
         return res.promise();
     },

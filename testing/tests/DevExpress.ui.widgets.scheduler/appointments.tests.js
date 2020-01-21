@@ -43,9 +43,6 @@ const moduleOptions = {
         this.allDayHeight = 20;
         this.items = [];
         this.coordinates = [{ top: 0, left: 0 }];
-        this.getCoordinates = function() {
-            return this.coordinates;
-        };
 
         const dataAccessors = {
             getter: {
@@ -71,13 +68,10 @@ const moduleOptions = {
 
         const subscribes = {
             needCoordinates: function(options) {
-                return that.getCoordinates.apply(that);
+                return that.coordinates;
             },
             getAppointmentColor: function(options) {
-                options.callback($.Deferred().resolve('red').promise());
-            },
-            getResourceForPainting: function(options) {
-                return { field: 'roomId' };
+                return $.Deferred().resolve('red').promise();
             },
             getField: function(field, obj) {
                 if(!typeUtils.isDefined(dataAccessors.getter[field])) {

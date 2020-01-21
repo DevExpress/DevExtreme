@@ -21,9 +21,6 @@ const moduleOptions = {
         fx.off = true;
 
         this.coordinates = [{ top: 0, left: 0 }];
-        this.getCoordinates = function() {
-            return this.coordinates;
-        };
         this.clock = sinon.useFakeTimers();
         this.cellWidth = 25;
         this.cellHeight = 20;
@@ -51,15 +48,7 @@ const moduleOptions = {
 
         this.instance.notifyObserver = $.proxy(function(command, options) {
             if(command === 'needCoordinates') {
-                return this.getCoordinates.apply(this);
-            }
-
-            if(command === 'getAppointmentColor') {
-                options.callback($.Deferred().resolve('red').promise());
-            }
-
-            if(command === 'getResourceForPainting') {
-                return { field: 'roomId' };
+                return this.coordinates;
             }
 
             if(command === 'getAppointmentDurationInMs') {
@@ -99,6 +88,9 @@ const moduleOptions = {
             }
             if(command === 'convertDateByTimezone') {
                 return field;
+            }
+            if(command === 'getAppointmentColor') {
+                return $.Deferred().resolve('red').promise();
             }
             if(command === 'getAppointmentGeometry') {
                 return {
