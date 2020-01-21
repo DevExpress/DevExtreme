@@ -918,9 +918,10 @@ const FilterBuilder = Widget.inherit({
             position: options.menu.position,
             animation: options.menu.animation,
             contentTemplate: function(contentElement) {
-                const $menuContainer = $('<div>');
+                const $menuContainer = $('<div>').appendTo(contentElement);
                 that._createComponent($menuContainer, TreeView, options.menu);
-                return $menuContainer;
+                // T852701
+                this.repaint();
             },
             maxHeight: function() {
                 return getElementMaxHeightByWindow(options.menu.position.of);
