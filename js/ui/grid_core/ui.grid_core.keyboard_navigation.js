@@ -1502,7 +1502,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _fireFocusedRowChanged: function($rowElement) {
         let row;
         let dataController;
-        const focusedRowIndex = this.option('focusedRowIndex');
+
+        const focusedRowKey = this.option('focusedRowKey');
+
+        const focusController = this.getController('focus');
+        const focusedRowIndex = focusController?.getFocusedRowIndexByKey(focusedRowKey);
 
         if(this.option('focusedRowEnabled')) {
             if(focusedRowIndex >= 0) {
