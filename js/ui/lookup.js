@@ -408,8 +408,20 @@ const Lookup = DropDownList.inherit({
             return;
         }
 
-        this._$field.text(this.option('displayValue') || this.option('placeholder'));
+        this._updateField(this.option('displayValue') || this.option('placeholder'));
         this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option('selectedItem'));
+    },
+
+    _renderDisplayText: function(text) {
+        if(this._input().length) {
+            this.callBase(text);
+        } else {
+            this._updateField(text);
+        }
+    },
+
+    _updateField: function(text) {
+        this._$field.text(text);
     },
 
     _renderFieldTemplate: function(template) {
