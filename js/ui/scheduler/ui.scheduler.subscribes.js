@@ -224,8 +224,8 @@ const subscribes = {
         return this._header._$element && parseInt(this._header._$element.outerHeight(), 10);
     },
 
-    getResourcesFromItem: function(options) {
-        options.callback(this._resourcesManager.getResourcesFromItem(options.itemData));
+    getResourcesFromItem: function(itemData) {
+        return this._resourcesManager.getResourcesFromItem(itemData);
     },
 
     getBoundOffset: function() {

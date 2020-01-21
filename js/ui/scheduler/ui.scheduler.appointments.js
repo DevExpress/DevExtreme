@@ -532,19 +532,15 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
 
     _applyResourceDataAttr: function($appointment) {
-        this.notifyObserver('getResourcesFromItem', {
-            itemData: this._getItemData($appointment),
-            callback: function(resources) {
-                if(resources) {
-                    each(resources, function(name, values) {
-                        const attr = 'data-' + commonUtils.normalizeKey(name.toLowerCase()) + '-';
-                        for(let i = 0; i < values.length; i++) {
-                            $appointment.attr(attr + commonUtils.normalizeKey(values[i]), true);
-                        }
-                    });
+        const resources = this.invoke('getResourcesFromItem', this._getItemData($appointment));
+        if(resources) {
+            each(resources, function(name, values) {
+                const attr = 'data-' + commonUtils.normalizeKey(name.toLowerCase()) + '-';
+                for(let i = 0; i < values.length; i++) {
+                    $appointment.attr(attr + commonUtils.normalizeKey(values[i]), true);
                 }
-            }
-        });
+            });
+        }
     },
 
     _resizableConfig: function(appointmentData, itemSetting) {
