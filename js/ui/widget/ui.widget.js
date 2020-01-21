@@ -471,7 +471,7 @@ const Widget = DOMComponent.inherit({
         if(activeStateEnabled) {
             active.on($el,
                 new Action(({ event, element }) => this._toggleActiveState($(element), true, event)),
-                new Action(({ event, element }) => this._toggleActiveState($(element), false, event),
+                new Action(({ event, element }) => { debugger; this._toggleActiveState($(element), false, event); },
                     { excludeValidators: ['disabled', 'readOnly'] }
                 ), {
                     showTimeout: this._feedbackShowTimeout,

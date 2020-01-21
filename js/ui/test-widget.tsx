@@ -5,8 +5,9 @@ import Action from '../core/action';
 import { isFakeClickEvent } from '../events/utils';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
-import { dxClick, hover } from '../events/short';
-const document = getDocument();
+import { hasWindow } from '../core/utils/window';
+import { dxClick, hover, resize, visibility, active } from '../events/short';
+// const document = getDocument();
 
 const getStyles = ({ width, height }: any) => {
     return {
@@ -146,19 +147,23 @@ export const viewFunction = (viewModel: any) => {
 })
 
 export default class Widget {
-    /** Private properties */
+    /** Private properties and callbacks */
+    @Prop() name?: string | undefined = '';
     @Prop() className?: string | undefined = '';
     @Prop() clickArgs?: any = {};
     @Prop() activeStateUnit?: string | undefined = undefined;
     @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
     @Prop() hoverEndHandler: (args: any) => any = (() => undefined);
-
+    @Prop() _dimensionChanged: () => any = (() => undefined);
+    @Prop() _visibilityChanged: (args: any) => any | undefined = undefined;
+    @Prop() _feedbackHideTimeout: number = 400;
+    @Prop() _feedbackShowTimeout: number = 30;
     /** === */
 
     // == DOMComponent ==
     @Prop() width?: string | number | null = null;
     @Prop() height?: string | number | null = null;
-    @Prop() rtlEnabled?: { [name: string]: any } = config().rtlEnabled;
+    @Prop() rtlEnabled?: boolean = config().rtlEnabled;
     @Prop() elementAttr?: { [name: string]: any } = {};
     @Prop() disabled?: boolean = false;
 
@@ -180,34 +185,32 @@ export default class Widget {
     @InternalState() _active: boolean = false;
     @InternalState() _focused: boolean = false;
 
-    // @Listen("pointerover")
-    // onPointerOver() {
-    //     this._hovered = true;
-    // }
-
-    // @Listen("pointerout")
-    // onPointerOut() {
-    //     this._hovered = false;
-    // }
-
-    // @Listen("pointerdown")
-    // onPointerDown() {
-    //     this._focused = true;
-    //     this._active = true;
-    // }
-
-    // @Listen('pointerup', { target: document })
-    // onPointerUp() {
-    //     this._active = false;
-    // }
-
-    // @Listen("click")
-    // onClickHandler(e: any) {
-    //     this.onClick!(this.clickArgs); // { type: this.type, text: this.text }
-    // }
-
     @Ref()
     widgetRef!: HTMLDivElement;
+
+    @Effect()
+    visibilityEffect() {
+        if(this._visibilityChanged !== undefined && hasWindow()) {
+            const namespace = `${this.name}VisibilityChange`;
+
+            visibility.off(this.widgetRef, { namespace });
+            visibility.on(this.widgetRef,
+                () => this.visible && this._visibilityChanged(true),
+                () => this.visible && this._visibilityChanged(false),
+                { namespace }
+            );
+        }
+    }
+
+    @Effect()
+    resizeEffect() {
+        if (this._dimensionChanged) {
+            const namespace = `${this.name}VisibilityChange`;
+
+            resize.off(this.widgetRef, { namespace });
+            resize.on(this.widgetRef, () => this._dimensionChanged(), { namespace });
+        }
+    }
 
     @Effect()
     clickEffect() {
@@ -233,7 +236,6 @@ export default class Widget {
                 this.hoverStartHandler(event);
                 this.hoveredElement = this.widgetRef;
                 this._hovered = true;
-                debugger
             }, { excludeValidators: ['readOnly'] }), event => {
                 this.hoveredElement = null;
                 this._hovered = false;
@@ -242,5 +244,28 @@ export default class Widget {
         }
 
         return () => hover.off(this.widgetRef, { selector, namespace });
+    }
+
+    @Effect()
+    activeEffect() {
+        const selector = this.activeStateUnit;
+        const namespace = 'UIFeedback';
+
+        // active.off(this.widgetRef, { namespace, selector }); // We should add empty array to useEffect(..., [])
+
+        if(this.activeStateEnabled) {
+            active.on(this.widgetRef,
+                new Action(() => { this._active = true; }),
+                new Action(
+                    () => { this._active = false; },
+                    { excludeValidators: ['disabled', 'readOnly'] }
+                ), {
+                    showTimeout: this._feedbackShowTimeout,
+                    hideTimeout: this._feedbackHideTimeout,
+                    selector,
+                    namespace
+                }
+            );
+        }
     }
 }

@@ -66,7 +66,7 @@ export const viewModelFunction = (model: Button) => {
 
 export const viewFunction = (viewModel: Button) => (
     <Widget
-        className={'viewModel.cssClasses'}
+        className={viewModel.cssClasses}
         onClick={viewModel.onClick}
         width={viewModel.width}
         height={viewModel.height}
