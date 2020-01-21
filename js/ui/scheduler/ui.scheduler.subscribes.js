@@ -797,7 +797,7 @@ const subscribes = {
 
         extend(true, result, appointmentData, recurringData);
 
-        if(this._isAppointmentRecurrence(appointmentData) || !skipTimezoneConvert) {
+        if(this._isAppointmentRecurrence(appointmentData) && !skipTimezoneConvert) {
             this._convertDatesByTimezoneBack(false, result);
         }
 
