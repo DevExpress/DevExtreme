@@ -482,15 +482,15 @@ QUnit.module('focus policy', {
     });
 
     function checkSelectedIndexAndContent(tabPanel, expectedSelectedIndex) {
-        const $selectedTabContent = tabPanel.$element().find(toSelector(SELECTED_ITEM_CLASS));
-        const $tabsContainer = tabPanel.$element().find(toSelector(TABS_CLASS));
         const actualSelectedIndex = tabPanel.option('selectedIndex');
         QUnit.assert.equal(actualSelectedIndex, expectedSelectedIndex);
+
+        const $selectedTabContent = tabPanel.$element().find(toSelector(SELECTED_ITEM_CLASS));
         QUnit.assert.equal($selectedTabContent.index(), expectedSelectedIndex, 'selected tab content must match selected index');
 
+        const $tabsContainer = tabPanel.$element().find(toSelector(TABS_CLASS));
         const selectedTab = $tabsContainer.find(toSelector(SELECTED_TAB_CLASS));
         QUnit.assert.equal(selectedTab.index(), expectedSelectedIndex, 'selected tab must match selected index');
-
         const focusedTab = $tabsContainer.find(toSelector(FOCUSED_CLASS));
         QUnit.assert.equal(focusedTab.index(), expectedSelectedIndex, 'selected tab must match focused tab');
 
@@ -506,13 +506,14 @@ QUnit.module('focus policy', {
 
     [0, 1].forEach(selectedIndex => {
         QUnit.test(`focus -> setSelectedIndex(${selectedIndex});`, function(assert) {
-            const tabPanel = new TabPanel($('#tabPanel'), {
+            const tabPanel = $('#tabPanel').dxTabPanel({
                 items: [{ title: 'item 1' }, { title: 'item 2' }]
-            });
+            }).dxTabPanel('instance');
 
-            tabPanel.$element().focusin();
+            const $tabPanel = $(tabPanel.$element());
+            $tabPanel.focusin();
             tabPanel.option('selectedIndex', selectedIndex);
-            tabPanel.$element().focusin();
+            $tabPanel.focusin();
 
             checkSelectedIndexAndContent(tabPanel, selectedIndex);
         });
@@ -520,13 +521,14 @@ QUnit.module('focus policy', {
 
     [0, 1].forEach(selectedIndex => {
         QUnit.test(`focus -> setSelectedItem(item_${selectedIndex});`, function(assert) {
-            const tabPanel = new TabPanel($('#tabPanel'), {
+            const tabPanel = $('#tabPanel').dxTabPanel({
                 items: [{ title: 'item 1' }, { title: 'item 2' }]
-            });
+            }).dxTabPanel('instance');
 
-            tabPanel.$element().focusin();
+            const $tabPanel = $(tabPanel.$element());
+            $tabPanel.focusin();
             tabPanel.option('selectedItem', tabPanel._tabs.option('items')[selectedIndex]);
-            tabPanel.$element().focusin();
+            $tabPanel.focusin();
 
             checkSelectedIndexAndContent(tabPanel, selectedIndex);
         });
