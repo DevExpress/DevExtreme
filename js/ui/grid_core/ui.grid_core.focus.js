@@ -499,7 +499,7 @@ module.exports = {
                             this.callBase(e);
                         }
 
-                        if(e.changeType === 'refresh' || isPartialUpdateWithDeleting) {
+                        if(e.changeType === 'refresh' && e.items.length || isPartialUpdateWithDeleting) {
                             this.processUpdateFocusedRow();
                         }
                     }
