@@ -18812,6 +18812,22 @@ QUnit.test('The edited cell should be closed on click inside another dataGrid', 
     assert.ok($(dataGrid2.getCellElement(0, 0)).find('input').length > 0, 'has input');
 });
 
+QUnit.test('The cell should not be focused on pointerEvents.down event (T850219)', function(assert) {
+    // arrange
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 'test1' }],
+    });
+    this.clock.tick();
+
+    // act
+    $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.down);
+    this.clock.tick();
+
+    // assert
+    assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-focus-disabled'), 'cell has dx-cell-focus-disabled class');
+    assert.equal($(dataGrid.$element()).find('.dx-datagrid-focus-overlay').length, 0, 'focus overlay is not rendered');
+});
+
 QUnit.test('onFocusedRowChanging, onFocusedRowChanged event if click selection checkBox (T812681)', function(assert) {
     // arrange
     const rowsViewWrapper = dataGridWrapper.rowsView;
