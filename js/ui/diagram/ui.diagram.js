@@ -632,6 +632,9 @@ class Diagram extends Widget {
                     parameters.orientation = DataLayoutOrientation.Horizontal;
                     break;
             }
+            if(this.option('edges.fromPointIndexExpr') || this.option('edges.toPointIndexExpr')) {
+                parameters.skipPointIndices = true;
+            }
             return parameters;
         }
     }

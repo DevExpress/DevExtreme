@@ -89,7 +89,7 @@ QUnit.module('Diagram DOM Layout', {
     function assertSizes(assert, $scrollContainer, $actualContainer, inst) {
         assert.equal($scrollContainer.width(), $actualContainer.width());
         assert.equal($scrollContainer.height(), $actualContainer.height());
-        const coreScrollSize = inst._diagramInstance.render.view.scroll.getSize();
+        const coreScrollSize = inst._diagramInstance.render.view.scrollView.getSize();
         assert.equal(coreScrollSize.width, $actualContainer.width());
         assert.equal(coreScrollSize.height, $actualContainer.height());
     }
@@ -615,7 +615,7 @@ QUnit.module('ClientSideEvents', {
     test('hasChanges changes on import or editing of an unbound diagram', function(assert) {
         assert.equal(this.instance.option('hasChanges'), false, 'on init');
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
-        assert.equal(this.instance.option('hasChanges'), false, 'on import');
+        assert.equal(this.instance.option('hasChanges'), true, 'on import');
         this.instance.option('hasChanges', false);
         this.instance._diagramInstance.selection.set(['107']);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).execute(true);
