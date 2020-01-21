@@ -2236,6 +2236,56 @@ QUnit.module('disabledDates option', {
         assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest month by offset has been focused');
     });
 
+    QUnit.test('left/right/up/down arrows should try focus the year moved by offset in a decade view', function(assert) {
+        this.calendar.option({
+            value: new Date(2020, 0, 6),
+            zoomLevel: 'decade',
+            disabledDates: (args) => {
+                const year = args.date.getYear();
+                return year === 121 || year === 124;
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2022, 0, 6), 'closest year by offset has been focused');
+
+        triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest year by offset has been focused');
+
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2028, 0, 6), 'closest year by offset has been focused');
+
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest year by offset has been focused');
+    });
+
+    QUnit.test('left/right/up/down arrows should try focus the decade moved by offset in a century view', function(assert) {
+        this.calendar.option({
+            value: new Date(2000, 0, 6),
+            zoomLevel: 'century',
+            disabledDates: (args) => {
+                const year = args.date.getYear();
+                return year >= 110 && year < 120 || year >= 140 && year < 150;
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest decade by offset has been focused');
+
+        triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2000, 0, 6), 'closest decade by offset has been focused');
+
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2080, 0, 6), 'closest decade by offset has been focused');
+
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2000, 0, 6), 'closest decade by offset has been focused');
+    });
+
     QUnit.test('disabled decade/century should not be skipped during navigation', function(assert) {
         this.calendar.option({
             value: new Date(2020, 0, 6),
@@ -2288,6 +2338,35 @@ QUnit.module('disabledDates option', {
         triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
         this.clock.tick(VIEW_ANIMATION_DURATION);
         assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 4, 6), 'closest month by offset has been focused');
+    });
+
+    QUnit.test('zoomLevel option change should focus the closest available date', function(assert) {
+        this.calendar.option({
+            value: new Date(2020, 0, 6),
+            zoomLevel: 'year',
+            disabledDates: (args) => {
+                const year = args.date.getYear();
+                const date = args.date.getDate();
+
+                if(args.view === 'decade') {
+                    return year === 120;
+                }
+
+                return date === 6;
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE, true);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 7), 'closest date has been focused');
+
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, true);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, true);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2021, 0, 7), 'closest date has been focused');
     });
 
     QUnit.test('left/right/up/downArrow should work like pageUp/Down when navigating to the disabled month', function(assert) {

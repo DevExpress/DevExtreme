@@ -363,8 +363,8 @@ const Calendar = Editor.inherit({
         const maxDate = this._getMaxDate();
         const minDate = this._getMinDate();
 
-        let isDateForwardInStartView = this._isDatesInNeighborView(zoomLevel, currentDate, baseDate);
-        let isDateForwardInRange = inRange(currentDate, minDate, maxDate) && isDateForwardInStartView;
+        let isDateForwardInNeighborView = this._isDatesInNeighborView(zoomLevel, currentDate, baseDate);
+        let isDateForwardInRange = inRange(currentDate, minDate, maxDate) && isDateForwardInNeighborView;
         const dateForward = new Date(currentDate);
 
         while(isDateForwardInRange) {
@@ -375,8 +375,8 @@ const Calendar = Editor.inherit({
 
             this._shiftDate(zoomLevel, dateForward, offset, 1);
 
-            isDateForwardInStartView = this._isDatesInNeighborView(zoomLevel, dateForward, baseDate);
-            isDateForwardInRange = inRange(dateForward, minDate, maxDate) && isDateForwardInStartView;
+            isDateForwardInNeighborView = this._isDatesInNeighborView(zoomLevel, dateForward, baseDate);
+            isDateForwardInRange = inRange(dateForward, minDate, maxDate) && isDateForwardInNeighborView;
         }
 
         if(this._view.isDateDisabled(baseDate) || this._view.isDateDisabled(currentDate)) {
@@ -411,13 +411,13 @@ const Calendar = Editor.inherit({
             case ZOOM_LEVEL.YEAR:
                 return Math.abs(date1.getYear() - date2.getYear()) <= 1;
             case ZOOM_LEVEL.DECADE:
-                return Math.abs(date1.getYear(), date2.getYear()) <= 10;
+                return Math.abs(date1.getYear() - date2.getYear()) <= 10;
             case ZOOM_LEVEL.CENTURY:
-                return Math.abs(date1.getYear(), date2.getYear()) <= 100;
+                return Math.abs(date1.getYear() - date2.getYear()) <= 100;
         }
     },
 
-    _moveToClosestAvailableDate: function(baseDate) {
+    _moveToClosestAvailableDate: function(baseDate = this.option('currentDate')) {
         let currentDate = new Date(baseDate);
         const zoomLevel = this.option('zoomLevel');
 
@@ -451,7 +451,6 @@ const Calendar = Editor.inherit({
             isDateForwardAvailable = isDateForwardInStartView && !this._isDateNotAvailable(dateForward);
             isDateBackwardAvailable = isDateBackwardInStartView && !this._isDateNotAvailable(dateBackward);
         }
-
         this.option('currentDate', currentDate);
     },
 
@@ -831,7 +830,9 @@ const Calendar = Editor.inherit({
         this._renderNavigator();
         this._animateShowView();
 
-        this._setViewContoured(this._getNormalizedDate(newCurrentDate));
+        this._setViewContoured(this._getNormalizedDate(this.option('currentDate')));
+
+        this._moveToClosestAvailableDate();
     },
 
     _renderNavigator: function() {
@@ -874,9 +875,9 @@ const Calendar = Editor.inherit({
 
         this._renderNavigator();
 
-        this._animateShowView().done((function() {
-            this._setViewContoured(contouredDate);
-        }).bind(this));
+        this._animateShowView();
+
+        this._moveToClosestAvailableDate();
     },
 
     _isMinZoomLevel: function(zoomLevel) {
