@@ -6,7 +6,7 @@ import { isFakeClickEvent } from '../events/utils';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { hasWindow } from '../core/utils/window';
-import { dxClick, hover, resize, visibility, active } from '../events/short';
+import { dxClick, hover, resize, visibility, active, keyboard } from '../events/short';
 // const document = getDocument();
 
 const getStyles = ({ width, height }: any) => {
@@ -158,6 +158,7 @@ export default class Widget {
     @Prop() _visibilityChanged: (args: any) => any | undefined = undefined;
     @Prop() _feedbackHideTimeout: number = 400;
     @Prop() _feedbackShowTimeout: number = 30;
+    @Prop() supportedKeys?: (args: any) => any | undefined = undefined;
     /** === */
 
     // == DOMComponent ==
@@ -175,6 +176,7 @@ export default class Widget {
     @Prop() focusStateEnabled?: boolean = false;
     @Prop() hoverStateEnabled?: boolean = false;
     @Prop() activeStateEnabled?: boolean = false;
+    @Prop() onKeyboardHandled?: (args: any) => any | undefined = undefined;
 
     @Slot() children: any;
 
@@ -184,32 +186,35 @@ export default class Widget {
     @InternalState() _hovered: boolean = false;
     @InternalState() _active: boolean = false;
     @InternalState() _focused: boolean = false;
+    @InternalState() _keyboardListenerId: string | null = null;
 
     @Ref()
     widgetRef!: HTMLDivElement;
 
     @Effect()
     visibilityEffect() {
+        const namespace = `${this.name}VisibilityChange`;
         if(this._visibilityChanged !== undefined && hasWindow()) {
-            const namespace = `${this.name}VisibilityChange`;
 
-            visibility.off(this.widgetRef, { namespace });
             visibility.on(this.widgetRef,
                 () => this.visible && this._visibilityChanged(true),
                 () => this.visible && this._visibilityChanged(false),
                 { namespace }
             );
         }
+
+        return () => visibility.off(this.widgetRef, { namespace });
     }
 
     @Effect()
     resizeEffect() {
+        const namespace = `${this.name}VisibilityChange`;
         if (this._dimensionChanged) {
-            const namespace = `${this.name}VisibilityChange`;
 
-            resize.off(this.widgetRef, { namespace });
             resize.on(this.widgetRef, () => this._dimensionChanged(), { namespace });
         }
+
+        return () => resize.off(this.widgetRef, { namespace });
     }
 
     @Effect()
@@ -267,5 +272,42 @@ export default class Widget {
                 }
             );
         }
+
+        return () => hover.off(this.widgetRef, { selector, namespace });
+    }
+
+    @Effect()
+    keyboardEffect() {
+        // keyboard.off();
+        // this._keyboardListenerId = null;
+
+        const hasKeyboardEventHandler = !!this.onKeyboardHandled;
+        const shouldAttach = this.focusStateEnabled || hasKeyboardEventHandler;
+
+        if(shouldAttach) {
+            const keyboardHandler = (options: any) => {
+                const { originalEvent, keyName, which } = options;
+                const keys = this.supportedKeys(originalEvent);
+                const func = keys[keyName] || keys[which];
+
+                if(func !== undefined) {
+                    const handler = func.bind(this);
+                    const result = handler(originalEvent, options);
+
+                    if(!result) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            /*this._keyboardListenerId = */keyboard.on(
+                this.widgetRef,
+                this.widgetRef,
+                opts => keyboardHandler(opts),
+            );
+        }
+
+        return () => keyboard.off(this._keyboardListenerId);
     }
 }

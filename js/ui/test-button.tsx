@@ -56,11 +56,20 @@ export const viewModelFunction = (model: Button) => {
     if(model.icon || model.type === 'back') {
         icon = getImageContainerJSX(model.icon || 'back');
     }
+    const supportedKeys = () => {
+        const click = e => {
+            e.preventDefault();
+            model.onClick(e);
+        };
+
+        return { space: click, enter: click };
+    }
 
     return {
         ...model,
         cssClasses: getCssClasses(model),
-        icon
+        icon,
+        supportedKeys,
     };
 }
 
@@ -80,6 +89,7 @@ export const viewFunction = (viewModel: Button) => (
         focusStateEnabled={viewModel.focusStateEnabled}
         hoverStateEnabled={viewModel.hoverStateEnabled}
         activeStateEnabled={viewModel.activeStateEnabled}
+        supportedKeys={viewModel.supportedKeys}
     >
         {viewModel.contentRender && (
             <div className="dx-button-content">
@@ -113,6 +123,7 @@ export default class Button {
     @Prop() width?: string;
     @Prop() elementAttr?: { [name: string]: any } = {};
     @Prop() visible?: boolean = true;
+    @Prop() onClick?: (args: any) => any = () => undefined;
 
     @Prop() contentRender?: any;
 }
