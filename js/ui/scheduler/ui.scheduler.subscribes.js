@@ -68,11 +68,13 @@ const subscribes = {
             for(let i = 0; i < dates.length; i++) {
                 const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
                 // const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointmentData);
-                const daylightOffset1 = this._subscribes.getDaylightOffsetByOption(this, originalStartDate, dates[i]);
-                const daylightOffset2 = this._subscribes.getDaylightOffsetByAppointment(this, originalStartDate, dates[i], startDateTimeZone);
-                const diff = daylightOffset1 - daylightOffset2;
+                if(typeUtils.isDefined(startDateTimeZone)) {
+                    const daylightOffset1 = this._subscribes.getDaylightOffsetByOption(this, originalStartDate, dates[i]);
+                    const daylightOffset2 = this._subscribes.getDaylightOffsetByAppointment(this, originalStartDate, dates[i], startDateTimeZone);
+                    const diff = daylightOffset1 - daylightOffset2;
 
-                dates[i] = new Date(dates[i].getTime() - diff * toMs('hour'));
+                    dates[i] = new Date(dates[i].getTime() - diff * toMs('hour'));
+                }
             }
         }
 
