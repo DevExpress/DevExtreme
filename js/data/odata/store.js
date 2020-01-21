@@ -121,10 +121,10 @@ const ODataStore = Store.inherit({
         }
 
         if(loadOptions.customQueryParams) {
-            const params = mixins.escapeServiceOperationParams(loadOptions.customQueryParams, this.version());
+            const params = odataUtils.escapeServiceOperationParams(loadOptions.customQueryParams, this.version());
 
             if(this.version() === 4) {
-                url = mixins.formatFunctionInvocationUrl(url, params);
+                url = odataUtils.formatFunctionInvocationUrl(url, params);
             } else {
                 queryOptions.params = params;
             }

@@ -4,7 +4,8 @@ import { isDefined, isPlainObject } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import errorsModule from '../errors';
 import ODataStore from './store';
-import { SharedMethods, formatFunctionInvocationUrl, escapeServiceOperationParams } from './mixins';
+import { SharedMethods } from './mixins';
+import { escapeServiceOperationParams, formatFunctionInvocationUrl } from './utils';
 import { when, Deferred } from '../../core/utils/deferred';
 import './query_adapter';
 
