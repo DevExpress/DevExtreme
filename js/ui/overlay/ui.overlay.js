@@ -198,8 +198,6 @@ const Overlay = Widget.inherit({
 
             closeOnOutsideClick: false,
 
-            closeOnBackButton: true,
-
             onShowing: null,
 
             onShown: null,
@@ -223,7 +221,7 @@ const Overlay = Widget.inherit({
             target: undefined,
             container: undefined,
 
-            hideTopOverlayHandler: undefined,
+            hideTopOverlayHandler: function() { this.hide(); }.bind(this),
             closeOnTargetScroll: false,
             onPositioned: null,
             boundaryOffset: { h: 0, v: 0 },
@@ -316,13 +314,13 @@ const Overlay = Widget.inherit({
         eventsEngine.on(this._$wrapper, 'focusin', function(e) { e.stopPropagation(); });
 
         this._toggleViewPortSubscription(true);
+        this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
     },
 
     _initOptions: function(options) {
         this._initTarget(options.target);
         const container = options.container === undefined ? this.option('container') : options.container;
         this._initContainer(container);
-        this._initHideTopOverlayHandler(options.hideTopOverlayHandler);
 
         this.callBase(options);
     },
@@ -374,11 +372,7 @@ const Overlay = Widget.inherit({
     },
 
     _initHideTopOverlayHandler: function(handler) {
-        this._hideTopOverlayHandler = handler !== undefined ? handler : this._defaultHideTopOverlayHandler.bind(this);
-    },
-
-    _defaultHideTopOverlayHandler: function() {
-        this.hide();
+        this._hideTopOverlayHandler = handler;
     },
 
     _initActions: function() {
@@ -806,7 +800,7 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        if(subscribe && this.option('closeOnBackButton')) {
+        if(subscribe) {
             hideTopOverlayCallback.add(this._hideTopOverlayHandler);
         } else {
             hideTopOverlayCallback.remove(this._hideTopOverlayHandler);
@@ -1419,7 +1413,9 @@ const Overlay = Widget.inherit({
                 this._clean();
                 this._invalidate();
                 break;
-            case 'closeOnBackButton':
+            case 'hideTopOverlayHandler':
+                this._toggleHideTopOverlayCallback(false);
+                this._initHideTopOverlayHandler(args.value);
                 this._toggleHideTopOverlayCallback(this.option('visible'));
                 break;
             case 'closeOnTargetScroll':

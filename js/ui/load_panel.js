@@ -48,7 +48,7 @@ const LoadPanel = Overlay.inherit({
 
             delay: 0,
 
-            closeOnBackButton: false,
+            hideTopOverlayHandler: null,
 
             /**
             * @name dxLoadPanelOptions.resizeEnabled
