@@ -3554,6 +3554,41 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
     assert.roughEqual($appointment.position().left, 0, 1.1, 'Left coordinate is correct');
 });
 
+// Timezone-sensitive test, use US/Pacific for proper testing
+QUnit.test('Appointment should have correct dates after resizing through timezone change (T835544)', function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: 'Staff Productivity Report',
+            startDate: '2019-11-04T00:00',
+            endDate: '2019-11-06T00:00',
+        }],
+        views: ['timelineMonth'],
+        currentView: 'timelineMonth',
+        currentDate: new Date(2019, 10, 1),
+        height: 300,
+        startDayHour: 0,
+    });
+
+    const cellWidth = this.scheduler.workSpace.getCellWidth();
+    let pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find('.dx-resizable-handle-left').eq(0)).start();
+
+    pointer.dragStart().drag(-(cellWidth), 0);
+    pointer.dragEnd();
+
+    let appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
+
+    assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
+
+    pointer = pointerMock($(this.scheduler.appointments.getAppointment()).find('.dx-resizable-handle-left').eq(0)).start();
+
+    pointer.dragStart().drag((cellWidth), 0);
+    pointer.dragEnd();
+
+    appointmentContent = this.scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
+
+    assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates are correct');
+});
+
 QUnit.test('Tail of long appointment should have a right position, groupByDate = true', function(assert) {
     this.createInstance({
         dataSource: [

@@ -21,6 +21,8 @@ import messageLocalization from '../../localization/message';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import { Deferred } from '../../core/utils/deferred';
 
+import utils from './utils.js';
+
 const APPOINTMENT_SETTINGS_NAME = 'dxAppointmentSettings';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
@@ -613,24 +615,26 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const itemData = this._getItemData(e.element);
         const deltaTime = this.invoke('getDeltaTime', e, this._initialSize, itemData);
         const renderingStrategyDirection = this.invoke('getRenderingStrategyDirection');
-        let cond = false;
+        let isStartDateChanged = false;
         const isAllDay = this.invoke('isAllDay', itemData);
         const needCorrectDates = this.invoke('needCorrectAppointmentDates') && !isAllDay;
         let startTime;
         let endTime;
 
         if(renderingStrategyDirection !== 'vertical' || isAllDay) {
-            cond = this.option('rtlEnabled') ? e.handles.right : e.handles.left;
+            isStartDateChanged = this.option('rtlEnabled') ? e.handles.right : e.handles.left;
         } else {
-            cond = e.handles.top;
+            isStartDateChanged = e.handles.top;
         }
 
-        if(cond) {
+        if(isStartDateChanged) {
             startTime = needCorrectDates ? this._correctStartDateByDelta(startDate, deltaTime) : startDate.getTime() - deltaTime;
+            startTime += utils.getTimezoneOffsetChangeInMs(startDate, endDate, startTime, endDate);
             endTime = endDate.getTime();
         } else {
             startTime = startDate.getTime();
             endTime = needCorrectDates ? this._correctEndDateByDelta(endDate, deltaTime) : endDate.getTime() + deltaTime;
+            endTime += utils.getTimezoneOffsetChangeInMs(startDate, endDate, startDate, endTime);
         }
 
         return [startTime, endTime];

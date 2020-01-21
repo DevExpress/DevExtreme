@@ -20,19 +20,3 @@ fixture `Drag-and-drop appointments in the Scheduler timeline views`
     currentView: view,
     dataSource: dataSource
 })));
-
-test(`Drag-n-drop in the "timelineMonth" view`, async t => {
-    const scheduler = new Scheduler("#container");
-    const draggableAppointment = scheduler.getAppointment("Brochure Design Review");
-
-    await t
-        .dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 4))
-        .expect(draggableAppointment.size.height).eql("140px")
-        .expect(draggableAppointment.size.width).eql("200px")
-        .expect(draggableAppointment.date.time).eql("9:00 AM - 9:30 AM")
-
-}).before(() => createScheduler({
-    views: ["timelineMonth"],
-    currentView: "timelineMonth",
-    dataSource: dataSource
-}));
