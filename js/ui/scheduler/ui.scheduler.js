@@ -51,6 +51,7 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 import themes from '../themes';
 import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
+import utils from './utils';
 
 import { REDUCED_APPOINTMENT_CLASS, COMPACT_APPOINTMENT_CLASS, RECURRENCE_APPOINTMENT_CLASS } from './constants';
 
@@ -2032,6 +2033,8 @@ const Scheduler = Widget.inherit({
                 endDate.setHours(this._getCurrentViewOption('endDayHour'));
             }
         }
+
+        endDate = new Date(endDate.getTime() - utils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
 
         this.fire('setField', 'endDate', updatedData, endDate);
         this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
