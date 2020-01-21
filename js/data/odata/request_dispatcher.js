@@ -1,16 +1,10 @@
-// import { format } from '../../core/utils/string';
-// import { map } from '../../core/utils/iterator';
 import { sendRequest } from './utils';
-
 import './query_adapter';
 
 const DEFAULT_PROTOCOL_VERSION = 2;
 
-
-// TODO: remake this mixin into component
-export const SharedMethods = {
-
-    _extractServiceOptions: function(options) {
+export default class RequestDispatcher {
+    constructor(options) {
         options = options || {};
 
         this._url = String(options.url).replace(/\/+$/, '');
@@ -20,10 +14,10 @@ export const SharedMethods = {
         this._withCredentials = options.withCredentials;
         this._deserializeDates = options.deserializeDates;
         this._filterToLower = options.filterToLower;
-    },
+    }
 
-    _sendRequest: function(url, method, params, payload) {
-        return sendRequest(this.version(),
+    sendRequest(url, method, params, payload) {
+        return sendRequest(this.version,
             {
                 url,
                 method,
@@ -37,9 +31,25 @@ export const SharedMethods = {
                 deserializeDates: this._deserializeDates
             }
         );
-    },
+    }
 
-    version: function() {
+    get version() {
         return this._version;
     }
-};
+
+    get beforeSend() {
+        return this._beforeSend;
+    }
+
+    get url() {
+        return this._url;
+    }
+
+    get jsonp() {
+        return this._jsonp;
+    }
+
+    get filterToLower() {
+        return this._filterToLower;
+    }
+}
