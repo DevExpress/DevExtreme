@@ -13,9 +13,9 @@ const getTimezoneOffsetChangeInMs = (startDate, endDate, updatedStartDate, updat
     return getTimezoneOffsetChangeInMinutes(startDate, endDate, updatedStartDate, updatedEndDate) * toMs('minute');
 };
 
-const Utils = {
+const utils = {
     getTimezoneOffsetChangeInMinutes: getTimezoneOffsetChangeInMinutes,
     getTimezoneOffsetChangeInMs: getTimezoneOffsetChangeInMs
 };
 
-module.exports = Utils;
+module.exports = utils;

@@ -51,7 +51,7 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 import themes from '../themes';
 import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
-import Utils from './utils';
+import utils from './utils';
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -2034,7 +2034,7 @@ const Scheduler = Widget.inherit({
             }
         }
 
-        endDate = new Date(endDate.getTime() - Utils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
+        endDate = new Date(endDate.getTime() - utils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
 
         this.fire('setField', 'endDate', updatedData, endDate);
         this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);

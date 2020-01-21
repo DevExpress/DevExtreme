@@ -21,7 +21,7 @@ import messageLocalization from '../../localization/message';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import { Deferred } from '../../core/utils/deferred';
 
-import Utils from './utils.js';
+import utils from './utils.js';
 
 const APPOINTMENT_SETTINGS_NAME = 'dxAppointmentSettings';
 
@@ -636,12 +636,12 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
         if(cond) {
             startTime = needCorrectDates ? this._correctStartDateByDelta(startDate, deltaTime) : startDate.getTime() - deltaTime;
-            startTime += Utils.getTimezoneOffsetChangeInMs(startDate, endDate, startTime, endDate);
+            startTime += utils.getTimezoneOffsetChangeInMs(startDate, endDate, startTime, endDate);
             endTime = endDate.getTime();
         } else {
             startTime = startDate.getTime();
             endTime = needCorrectDates ? this._correctEndDateByDelta(endDate, deltaTime) : endDate.getTime() + deltaTime;
-            endTime += Utils.getTimezoneOffsetChangeInMs(startDate, endDate, startDate, endTime);
+            endTime += utils.getTimezoneOffsetChangeInMs(startDate, endDate, startDate, endTime);
         }
 
         return [startTime, endTime];
