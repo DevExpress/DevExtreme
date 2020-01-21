@@ -58,11 +58,6 @@ const getClassMethod = (initClass, methodName) => {
     }
 };
 
-/**
- * @name DOMComponentOptions.bindingOptions
- * @type object
- * @default {}
- */
 
 let ComponentBuilder = Class.inherit({
 

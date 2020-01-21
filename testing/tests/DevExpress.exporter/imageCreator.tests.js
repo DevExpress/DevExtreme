@@ -1276,6 +1276,27 @@ QUnit.test('Text', function(assert) {
     });
 });
 
+// T849504
+QUnit.test('Text with zero opacity in parent group', function(assert) {
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<g opacity="0"><text x="20" y="30">Test</text></g>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+
+    $.when(imageBlob).done(function() {
+        try {
+            assert.equal(that.drawnElements.length, 2, 'Canvas elements count');
+
+            const textElem = that.drawnElements[1];
+
+            assert.roughEqual(textElem.style.globalAlpha, 0, 0.1, 'Style opacity');
+            assert.equal(textElem.args[0], 'Test', 'Text');
+        } finally {
+            done();
+        }
+    });
+});
+
 QUnit.test('Text offset position calculation with start alignment', function(assert) {
     const that = this;
     const done = assert.async();
@@ -1809,15 +1830,15 @@ QUnit.test('Text decoration', function(assert) {
             assert.roughEqual(noDisplayDecoration.args.y, 186.16, 0.5, 'noDisplay line-through decoration line y');
             assert.equal(noDisplayDecoration.args.height, 1, 'noDisplay line-through decoration line height');
             assert.strictEqual(noDisplayDecoration.args.width, 100, ' noDisplay line-through decoration line width');
-            assert.ok(that.drawnElements[14].type !== 'stroke', 'noDisplay line-through decoration has no stroke');
-            assert.ok(that.drawnElements[14].type !== 'fill', 'noDisplay line-through decoration has no fill');
+            assert.notStrictEqual(that.drawnElements[14].type, 'stroke', 'noDisplay line-through decoration has no stroke');
+            assert.notStrictEqual(that.drawnElements[14].type, 'fill', 'noDisplay line-through decoration has no fill');
 
             // noFill (only stroke) decoration assert
             assert.equal(noFillDecoration.args.x, 250, 'noFill line-through decoration line x');
             assert.roughEqual(noFillDecoration.args.y, 186.16, 0.5, 'noFill line-through decoration line y');
             assert.equal(noFillDecoration.args.height, 1, 'noFill line-through decoration line height');
             assert.strictEqual(noFillDecoration.args.width, 100, ' noFill line-through decoration line width');
-            assert.ok(that.drawnElements[17].type === 'stroke', 'noFill line-through decoration has stroke');
+            assert.strictEqual(that.drawnElements[17].type, 'stroke', 'noFill line-through decoration has stroke');
         } finally {
             done();
         }
@@ -2204,8 +2225,6 @@ QUnit.test('getData returns Blob when it supported by Browser', function(assert)
         return;
     }
 
-    // arrange. act
-    let deferred;
     const done = assert.async();
     const _getBlob = imageCreator._getBlob;
     const _getBase64 = imageCreator._getBase64;
@@ -2219,12 +2238,11 @@ QUnit.test('getData returns Blob when it supported by Browser', function(assert)
         return 'base64Data';
     };
 
-    deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
+    const deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
 
     assert.expect(1);
     $.when(deferred).done(function(data) {
         try {
-            // assert
             assert.equal(data, 'blobData', '_getBlob was called');
         } finally {
             imageCreator._getBlob = _getBlob;
@@ -2240,8 +2258,6 @@ QUnit.test('getData returns Base64 when Blob not supported by Browser', function
         return;
     }
 
-    // arrange. act
-    let deferred;
     const done = assert.async();
     const _getBlob = imageCreator._getBlob;
     const _getBase64 = imageCreator._getBase64;
@@ -2255,48 +2271,11 @@ QUnit.test('getData returns Base64 when Blob not supported by Browser', function
         return 'base64Data';
     };
 
-    deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
+    const deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
 
     assert.expect(1);
     $.when(deferred).done(function(data) {
         try {
-            // assert
-            assert.equal(data, 'base64Data', '_getBase64 was called');
-        } finally {
-            imageCreator._getBlob = _getBlob;
-            imageCreator._getBase64 = _getBase64;
-            done();
-        }
-    });
-});
-
-QUnit.test('getData returns Base64 when Blob not supported by Browser', function(assert) {
-    if(typeUtils.isFunction(window.Blob)) {
-        assert.ok(true, 'Skip if there isn\'t Blob');
-        return;
-    }
-
-    // arrange. act
-    let deferred;
-    const done = assert.async();
-    const _getBlob = imageCreator._getBlob;
-    const _getBase64 = imageCreator._getBase64;
-    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
-
-    imageCreator._getBlob = function() {
-        return 'blobData';
-    };
-
-    imageCreator._getBase64 = function() {
-        return 'base64Data';
-    };
-
-    deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
-
-    assert.expect(1);
-    $.when(deferred).done(function(data) {
-        try {
-            // assert
             assert.equal(data, 'base64Data', '_getBase64 was called');
         } finally {
             imageCreator._getBlob = _getBlob;
@@ -2315,7 +2294,6 @@ QUnit.test('Read computed style of elements if export target is attached element
     $('#qunit-fixture').append(element);
     this.stubGetComputedStyle(element.childNodes[0], { fill: '#ff0000', 'font-size': '25px', 'font-style': '' });
 
-    // act
     const imageBlob = getData(element);
 
     assert.expect(9);
@@ -2348,7 +2326,6 @@ QUnit.test('Read computed style of elements. Ignore default opacity', function(a
     $('#qunit-fixture').append(element);
     this.stubGetComputedStyle(element.childNodes[0], { fill: '#ff0000', 'opacity': '1', 'stroke-opacity': '0.1', 'fill-opacity': '' });
 
-    // act
     const imageBlob = getData(element);
 
     assert.expect(4);

@@ -754,7 +754,7 @@ testModule('visibility', moduleConfig, () => {
             const $wrapper = $content.parent();
 
             assert.notOk(result, 'result === false');
-            assert.ok($wrapper.closest('#overlay').length === 1, 'overlay wrapper is inside the overlay root element');
+            assert.strictEqual($wrapper.closest('#overlay').length, 1, 'overlay wrapper is inside the overlay root element');
             assert.ok($wrapper.is(':hidden'));
             assert.ok($content.is(':hidden'));
             assert.ok($overlay.is(':hidden'));
@@ -2644,7 +2644,7 @@ testModule('integration tests', moduleConfig, () => {
 
 
 testModule('widget sizing render', moduleConfig, () => {
-    test('default', function(assert) {
+    test('outerWidth', function(assert) {
         const $element = $('#widget').dxOverlay();
         const instance = $element.dxOverlay('instance');
 
@@ -3108,7 +3108,7 @@ testModule('keyboard navigation', {
         assert.strictEqual(this.$overlayContent.position().top, this.position.top - offset, 'overlay position was change after pressing up arrow');
     });
 
-    test('overlay should not be dragged when container size less than overlay content', function(assert) {
+    test('overlay should not be dragged when container size less than overlay content, position: { my: "center center", at: "center center", of: $container }', function(assert) {
         const $container = $('<div>').appendTo('#qunit-fixture').height(14).width(14);
         const $overlay = $('#overlay').dxOverlay({
             dragEnabled: true,

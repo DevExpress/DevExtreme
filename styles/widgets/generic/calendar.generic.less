@@ -234,8 +234,8 @@
         color: @calendar-cell-hover-color;
     }
 
-    &.dx-calendar-other-view,
-    &.dx-calendar-empty-cell {
+    &.dx-calendar-other-view:not(.dx-calendar-selected-date),
+    &.dx-calendar-empty-cell:not(.dx-calendar-selected-date) {
         color: @calendar-cell-other-color;
 
         &.dx-state-hover,
@@ -248,7 +248,7 @@
         cursor: default;
         background: @calendar-cell-empty-bg;
 
-        &.dx-state-hover {
+        &.dx-state-hover:not(.dx-calendar-selected-date) {
             box-shadow: none;
         }
     }

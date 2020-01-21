@@ -160,10 +160,6 @@ const PagerView = modules.View.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.pager
-             * @type object
-             */
             pager: {
                 /**
                  * @name GridBaseOptions.pager.visible

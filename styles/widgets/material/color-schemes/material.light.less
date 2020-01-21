@@ -48,12 +48,6 @@
 */
 @base-border-color: #e0e0e0;
 
-/**
-* @name 120. Border radius
-* @type text
-*/
-@base-border-radius: @MATERIAL_BASE_BORDER_RADIUS;
-
 @base-inverted-bg: darken(@base-bg, 100%);
 @base-element-bg: @base-bg;
 @base-shadow-color: @base-inverted-bg;
@@ -109,6 +103,8 @@
 
 @base-inverted-text-color: #fff;
 @base-inverted-icon-color: @base-inverted-text-color;
+@base-disabled-opacity: 0.38;
+@base-dropdown-shadow-color: fade(@base-shadow-color, 20%);
 
 // Validation
 @base-invalid-color: @base-danger;
@@ -179,7 +175,6 @@
 */
 @texteditor-focused-border-color: @base-accent;
 @texteditor-hover-bg: fade(@base-text-color, 7%);
-@texteditor-disabled-opacity: 0.38;
 @texteditor-button-clear-icon-color: lighten(@texteditor-color, 46%);
 @texteditor-button-clear-icon-color-bg: lighten(@texteditor-color, 76%);
 @texteditor-invalid-focused-border-color: @base-invalid-color;
@@ -648,6 +643,7 @@
 
 @list-icon-color: @base-icon-color;
 @list-item-chevron-icon-color: @base-spin-icon-color;
+@list-item-icon-toggle-delete-bg: data-uri('images/widgets/material/color-schemes/light/list/delete.png');
 
 // Overlay
 @overlay-border-color: @base-border-color;
@@ -700,7 +696,6 @@
 * @type color
 */
 @selectbox-list-bg: @base-bg;
-@selectbox-shadow-color: fade(@base-shadow-color, 20%);
 
 // Tabs
 
@@ -868,6 +863,7 @@
 * @type color
 */
 @load-indicator-segment-bg-color: @base-accent;
+@loadindicator-background-image: data-uri('images/widgets/material/color-schemes/light/loader64.gif');
 
 
 // LoadPanel
@@ -994,6 +990,7 @@
 @colorbox-palette-cell-bg: @colorbox-overlay-bg;
 @colorview-border-color: @base-border-color;
 @colorview-label-color: @base-label-color;
+@colorbox-preview-empty-bg: data-uri('images/widgets/material/color-schemes/light/colorbox/nocolor.png');
 
 //DataGrid
 
@@ -1477,8 +1474,6 @@
 @timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/hour-arrow.svg');
 @timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/min-arrow.svg');
 
-// theme-depends shadow parameters
-
 //DateView
 @dateview-shadow-up: 0deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
 @dateview-shadow-down: 180deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
@@ -1499,11 +1494,6 @@
 @form-group-border-color: @base-border-color;
 @form-field-required-color: @form-field-item-color;
 @form-field-mark-color: @form-field-item-color;
-
-// Images
-@list-item-icon-toggle-delete-bg: data-uri('images/widgets/material/color-schemes/light/list/delete.png');
-@colorbox-preview-empty-bg: data-uri('images/widgets/material/color-schemes/light/colorbox/nocolor.png');
-@loadindicator-background-image: data-uri('images/widgets/material/color-schemes/light/loader64.gif');
 
 // Fieldset
 

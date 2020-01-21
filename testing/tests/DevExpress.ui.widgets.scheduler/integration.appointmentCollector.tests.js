@@ -47,7 +47,7 @@ QUnit.module('Integration: Appointments Collector Base Tests', {
 
         this.renderAppointmentsCollectorContainer = (items, options) => {
             const helper = new CompactAppointmentsHelper(this.widgetMock);
-            items = items || { data: [{ text: 'a', startDate: new Date(2015, 1, 1) }], colors: [] };
+            items = items || { data: [{ text: 'a', startDate: new Date(2015, 1, 1) }], colors: [], settings: [] };
             return helper.render($.extend(options, {
                 $container: $('#ddAppointments'),
                 coordinates: { top: 0, left: 0 },
@@ -81,7 +81,8 @@ QUnit.module('Integration: Appointments Collector Base Tests', {
                 { text: 'a', startDate: new Date(2015, 1, 1) },
                 { text: 'b', startDate: new Date(2015, 1, 1) }
             ],
-            colors: ['#fff000', '#000fff']
+            colors: ['#fff000', '#000fff'],
+            settings: []
         });
 
         assert.notEqual(new Color($collector.css('backgroundColor')).toHex(), this.color, 'Color is OK');

@@ -8,9 +8,9 @@ import translator from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
-import dateLocalization from '../../localization/date';
 import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 import { Deferred } from '../../core/utils/deferred';
+import dateLocalization from '../../localization/date';
 
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
@@ -137,6 +137,9 @@ const subscribes = {
 
     updateAppointmentAfterResize: function(options) {
         const targetAppointment = options.target;
+
+        options.isAppointmentResized = true;
+
         const singleAppointment = this._getSingleAppointmentData(targetAppointment, options);
         const startDate = this.fire('getField', 'startDate', singleAppointment);
         const updatedData = extend(true, {}, options.data);
@@ -242,6 +245,75 @@ const subscribes = {
     // NOTE: T312051, remove after fix scrollable bug T324196
     appointmentFocused: function() {
         this._workSpace.restoreScrollTop();
+    },
+
+    getTextAndFormatDate(data, currentData, format) {
+        const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
+        const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
+        const startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
+        const endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
+        return {
+            text: this.fire('createAppointmentTitle', appointmentFields),
+            formatDate: this.fire('_formatDates', startDate, endDate, appointmentFields.allDay, format)
+        };
+    },
+
+    createAppointmentTitle: function(data) {
+        if(typeUtils.isPlainObject(data)) {
+            return data.text;
+        }
+
+        return String(data);
+    },
+
+    _getAppointmentFields(data, arrayOfFields) {
+        return arrayOfFields.reduce((accumulator, field) => {
+            accumulator[field] = this.fire('getField', field, data);
+            return accumulator;
+        }, {});
+    },
+
+    _formatDates(startDate, endDate, isAllDay, format) {
+        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, isAllDay);
+
+        const formatTypes = {
+            'DATETIME': function() {
+                const dateTimeFormat = 'mediumdatemediumtime';
+                const startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
+
+                const endDateString = (startDate.getDate() === endDate.getDate()) ?
+                    dateLocalization.format(endDate, 'shorttime') :
+                    dateLocalization.format(endDate, dateTimeFormat);
+
+                return startDateString + endDateString;
+            },
+            'TIME': function() {
+                return dateLocalization.format(startDate, 'shorttime') + ' - ' + dateLocalization.format(endDate, 'shorttime');
+            },
+            'DATE': function() {
+                const dateTimeFormat = 'monthAndDay';
+                const startDateString = dateLocalization.format(startDate, dateTimeFormat);
+                const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
+
+                const endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
+                    ' - ' + dateLocalization.format(endDate, dateTimeFormat) :
+                    '';
+
+                return startDateString + endDateString;
+            }
+        };
+
+        return formatTypes[formatType]();
+    },
+
+    _getTypeFormat(startDate, endDate, isAllDay) {
+        if(isAllDay) {
+            return 'DATE';
+        }
+        if(this.option('currentView') !== 'month' && dateUtils.sameDate(startDate, endDate)) {
+            return 'TIME';
+        }
+        return 'DATETIME';
     },
 
     getResizableAppointmentArea: function(options) {
@@ -350,41 +422,6 @@ const subscribes = {
         return this.getWorkSpaceDateTableOffset();
     },
 
-    formatDates: function(options) {
-        const startDate = options.startDate;
-        const endDate = options.endDate;
-        const formatType = options.formatType;
-
-        const formatTypes = {
-            'DATETIME': function() {
-                const dateTimeFormat = 'mediumdatemediumtime';
-                const startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
-
-                const endDateString = (startDate.getDate() === endDate.getDate()) ?
-                    dateLocalization.format(endDate, 'shorttime') :
-                    dateLocalization.format(endDate, dateTimeFormat);
-
-                return startDateString + endDateString;
-            },
-            'TIME': function() {
-                return dateLocalization.format(startDate, 'shorttime') + ' - ' + dateLocalization.format(endDate, 'shorttime');
-            },
-            'DATE': function() {
-                const dateTimeFormat = 'monthAndDay';
-                const startDateString = dateLocalization.format(startDate, dateTimeFormat);
-                const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
-
-                const endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
-                    ' - ' + dateLocalization.format(endDate, dateTimeFormat) :
-                    '';
-
-                return startDateString + endDateString;
-            }
-        };
-
-        options.callback(formatTypes[formatType]());
-    },
-
     getFullWeekAppointmentWidth: function(options) {
         const groupIndex = options.groupIndex;
         const groupWidth = this._workSpace.getGroupWidth(groupIndex);
@@ -419,14 +456,15 @@ const subscribes = {
     },
 
     updateAppointmentEndDate: function(options) {
-        const endDate = new Date(options.endDate);
+        const endDate = options.endDate;
         const endDayHour = this._getCurrentViewOption('endDayHour');
         const startDayHour = this._getCurrentViewOption('startDayHour');
+
         let updatedEndDate = endDate;
 
         if(endDate.getHours() >= endDayHour) {
             updatedEndDate.setHours(endDayHour, 0, 0, 0);
-        } else if(startDayHour > 0 && (endDate.getHours() * 60 + endDate.getMinutes() < (startDayHour * 60))) {
+        } else if(!options.isSameDate && startDayHour > 0 && (endDate.getHours() * 60 + endDate.getMinutes() < (startDayHour * 60))) {
             updatedEndDate = new Date(updatedEndDate.getTime() - toMs('day'));
             updatedEndDate.setHours(endDayHour, 0, 0, 0);
         }
@@ -454,16 +492,11 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) {
-        const result = {
+        return {
             appointmentData: config.itemData,
-            appointmentElement: config.itemElement
+            appointmentElement: config.itemElement,
+            targetedAppointmentData: this.fire('getTargetedAppointmentData', config.itemData, config.itemElement),
         };
-
-        if(config.itemData) {
-            result.targetedAppointmentData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement);
-        }
-
-        return result;
     },
 
     getOffsetByAllDayPanel: function(groupIndex) {
@@ -755,21 +788,21 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipCheckUpdate) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipTimezoneConvert) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
+
         const recurringData = this._getSingleAppointmentData(appointmentData, {
             skipDateCalculation: true,
             $appointment: $appointmentElement,
             skipHoursProcessing: true
-        }, skipCheckUpdate);
+        });
         const result = {};
 
         extend(true, result, appointmentData, recurringData);
 
-        this._convertDatesByTimezoneBack(false, result);
+        !skipTimezoneConvert && this._convertDatesByTimezoneBack(false, result);
 
-        // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 
         return result;

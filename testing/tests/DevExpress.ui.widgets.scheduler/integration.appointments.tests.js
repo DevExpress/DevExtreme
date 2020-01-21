@@ -2508,10 +2508,10 @@ QUnit.test('Appointment should be rendered correctly with expressions on init', 
 
     const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
     const $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(1);
+    const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
     assert.equal($appointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'abc', 'Text is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(startDate, 'shorttime'), 'Start Date is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(endDate, 'shorttime'), 'End Date is correct on init');
+    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
     assert.notOk($appointment.find('.dx-scheduler-appointment-recurrence-icon').length, 'Repeat icon isn\'t rendered');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Repeat icon is rendered');
 });
@@ -2537,11 +2537,11 @@ QUnit.test('Appointment should be rendered correctly with recurrenceRule express
     });
 
     const $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
+    const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'def', 'Text is correct on init');
 
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(startDate, 'shorttime'), 'Start Date is correct on init');
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(endDate, 'shorttime'), 'End Date is correct on init');
+    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Recurrence icon is rendered');
 });
 
@@ -2577,10 +2577,10 @@ QUnit.test('Appointment should be rendered correctly with expressions on optionC
     });
 
     const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+    const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
     assert.equal($appointment.find('.dx-scheduler-appointment-content .dx-scheduler-appointment-title').eq(0).text(), 'xyz', 'Text is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(startDate, 'shorttime'), 'Start Date is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(endDate, 'shorttime'), 'End Date is correct on init');
+    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
 });
 
 QUnit.test('Appointment should be rendered correctly with expressions on custom template', function(assert) {
@@ -3815,7 +3815,35 @@ QUnit.module('Appointments', () => {
             const expectedEndDate = appointmentData[endDateExpr].getDate() + eventCallCount;
 
             assert.equal(targetedAppointmentData[startDateExpr].getDate(), expectedStartDate, `start date of targetedAppointmentData should be equal ${expectedStartDate}`);
-            assert.equal(targetedAppointmentData[endDateExpr].getDate(), expectedEndDate, `edn date of targetedAppointmentData should be equal ${expectedEndDate}`);
+            assert.equal(targetedAppointmentData[endDateExpr].getDate(), expectedEndDate, `end date of targetedAppointmentData should be equal ${expectedEndDate}`);
+
+            assert.equal(index, 0, 'index argument should be 0');
+            assert.equal(appointmentData[textExpr], targetedAppointmentData[textExpr], 'appointmentData.text and targetedAppointmentData.text arguments should be equal');
+
+            eventCallCount++;
+        };
+    };
+    const createTestForHourlyRecurrenceData = (assert, scheduler) => {
+        eventCallCount = 0;
+
+        return (model, index, container) => {
+            const { appointmentData, targetedAppointmentData } = model;
+
+            const startDateExpr = scheduler.option('startDateExpr');
+            const endDateExpr = scheduler.option('endDateExpr');
+            const textExpr = scheduler.option('textExpr');
+
+            const expectedStartDateHours = appointmentData[startDateExpr].getHours() + eventCallCount;
+            const expectedStartDateMinutes = appointmentData[startDateExpr].getMinutes();
+
+            const expectedEndDateHours = appointmentData[endDateExpr].getHours() + eventCallCount;
+            const expectedEndDateMinutes = appointmentData[endDateExpr].getMinutes();
+
+            assert.equal(targetedAppointmentData[startDateExpr].getHours(), expectedStartDateHours, `start date of targetedAppointmentData should be equal ${expectedStartDateHours}`);
+            assert.equal(targetedAppointmentData[startDateExpr].getMinutes(), expectedStartDateMinutes, `start date of targetedAppointmentData should be equal ${expectedStartDateMinutes}`);
+
+            assert.equal(targetedAppointmentData[endDateExpr].getHours(), expectedEndDateHours, `end date of targetedAppointmentData should be equal ${expectedEndDateHours}`);
+            assert.equal(targetedAppointmentData[endDateExpr].getMinutes(), expectedEndDateMinutes, `end date of targetedAppointmentData should be equal ${expectedEndDateMinutes}`);
 
             assert.equal(index, 0, 'index argument should be 0');
             assert.equal(appointmentData[textExpr], targetedAppointmentData[textExpr], 'appointmentData.text and targetedAppointmentData.text arguments should be equal');
@@ -3858,6 +3886,38 @@ QUnit.module('Appointments', () => {
         startDateCustom: new Date(2017, 4, 22, 9, 30),
         endDateCustom: new Date(2017, 4, 22, 11, 30),
         recurrenceRule: 'FREQ=DAILY;COUNT=5'
+    }];
+
+    const recurrenceAndCompactData = [{
+        text: 'Website Re-Design Plan',
+        startDate: new Date(2017, 4, 22, 9, 30),
+        endDate: new Date(2017, 4, 22, 11, 30),
+        recurrenceRule: 'FREQ=DAILY;COUNT=5'
+    },
+    {
+        text: 'Website Re-Design Plan1',
+        startDate: new Date(2017, 4, 22, 9, 35),
+        endDate: new Date(2017, 4, 22, 11, 20),
+        recurrenceRule: 'FREQ=DAILY;COUNT=5'
+    },
+    {
+        text: 'Website Re-Design Plan2',
+        startDate: new Date(2017, 4, 22, 9, 45),
+        endDate: new Date(2017, 4, 22, 11, 25),
+        recurrenceRule: 'FREQ=DAILY;COUNT=5'
+    }];
+
+    const hourlyRecurrenceData = [{
+        textCustom: 'Website Re-Design Plan',
+        startDateCustom: new Date(2017, 4, 25, 9, 30),
+        endDateCustom: new Date(2017, 4, 25, 10),
+        recurrenceRule: 'FREQ=HOURLY;COUNT=5'
+    },
+    {
+        textCustom: 'Website Re-Design Plan1',
+        startDateCustom: new Date(2017, 4, 25, 9, 35),
+        endDateCustom: new Date(2017, 4, 25, 11, 20),
+        recurrenceRule: 'FREQ=HOURLY;COUNT=5'
     }];
 
     QUnit.module('appointmentTemplate', () => {
@@ -3909,5 +3969,108 @@ QUnit.module('Appointments', () => {
 
             assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
         });
+
+        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence in collector', function(assert) {
+            const scheduler = createScheduler(recurrenceAndCompactData);
+            scheduler.option({ appointmentTooltipTemplate: createTestForRecurrenceData(assert, scheduler) });
+
+            for(let i = 0; i < 5; i++) {
+                scheduler.appointments.compact.click(i);
+            }
+
+            assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
+        });
+
+        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case hourly recurrence in collector', function(assert) {
+            const scheduler = createScheduler(hourlyRecurrenceData, {
+                textExpr: 'textCustom',
+                startDateExpr: 'startDateCustom',
+                endDateExpr: 'endDateCustom',
+                currentView: 'week'
+            });
+
+            scheduler.option({ appointmentTooltipTemplate: createTestForHourlyRecurrenceData(assert, scheduler) });
+
+            for(let i = 0; i < 5; i++) {
+                scheduler.appointments.compact.click(i);
+            }
+
+            assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
+        });
+    });
+
+    QUnit.test('Remote filter should apply after change view type', function(assert) {
+        const model = [{
+            text: 'New Brochures',
+            startDate: '2017-05-23T14:30:00',
+            endDate: '2017-05-23T15:45:00'
+        }, {
+            text: 'Install New Database',
+            startDate: '2017-05-24T09:45:00',
+            endDate: '2017-05-24T11:15:00'
+        }, {
+            text: 'Approve New Online Marketing Strategy',
+            startDate: '2017-05-24T12:00:00',
+            endDate: '2017-05-24T14:00:00'
+        }, {
+            text: 'Upgrade Personal Computers',
+            startDate: '2017-05-24T15:15:00',
+            endDate: '2017-05-24T16:30:00'
+        }, {
+            text: 'Customer Workshop',
+            startDate: '2017-05-25T11:00:00',
+            endDate: '2017-05-25T12:00:00',
+            allDay: true
+        }, {
+            text: 'Prepare 2015 Marketing Plan',
+            startDate: '2017-05-25T11:00:00',
+            endDate: '2017-05-25T13:30:00'
+        }, {
+            text: 'Brochure Design Review',
+            startDate: '2017-05-25T14:00:00',
+            endDate: '2017-05-25T15:30:00'
+        }, {
+            text: 'Create Icons for Website',
+            startDate: '2017-05-26T10:00:00',
+            endDate: '2017-05-26T11:30:00'
+        }, {
+            text: 'Upgrade Server Hardware',
+            startDate: '2017-05-26T14:30:00',
+            endDate: '2017-05-26T16:00:00'
+        }];
+
+        const dataSource = new DataSource({
+            store: model
+        });
+
+        const scheduler = createWrapper({
+            dataSource: dataSource,
+            dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ss',
+            remoteFiltering: true,
+            views: ['workWeek', 'month'],
+            currentView: 'month',
+            currentDate: new Date(2017, 4, 23),
+            maxAppointmentsPerCell: 'unlimited',
+            height: 600,
+        });
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 9, `Appointment count should be equal ${model.length} items`);
+
+        const filter = dataSource.filter();
+        filter.push([
+            ['startDate', '>', '2017-05-25T21:00:00'],
+            'and',
+            ['endDate', '<', '2017-05-26T21:00:00']
+        ]);
+
+        dataSource.filter(filter);
+        dataSource.load();
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered after call load method of dataSource');
+
+        scheduler.instance.option('currentView', 'workWeek');
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Work Week"');
+
+        scheduler.instance.option('currentView', 'month');
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Month"');
     });
 });

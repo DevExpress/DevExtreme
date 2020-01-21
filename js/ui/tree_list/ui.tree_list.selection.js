@@ -21,11 +21,6 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
         return extend(true, selectionModule.defaultOptions(), {
             selection: {
                 showCheckBoxesMode: 'always',
-                /**
-                 * @name dxTreeListOptions.selection.recursive
-                 * @type boolean
-                 * @default false
-                 */
                 recursive: false
             }
         });
@@ -472,20 +467,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     return result;
                 },
 
-                /**
-                * @name dxTreeListMethods.getSelectedRowKeys
-                * @publicName getSelectedRowKeys(leavesOnly)
-                * @param1 leavesOnly:boolean
-                * @return Array<any>
-                * @deprecated
-                */
 
-                /**
-                * @name dxTreeListMethods.getSelectedRowKeys
-                * @publicName getSelectedRowKeys(mode)
-                * @param1 mode:string
-                * @return Array<any>
-                */
                 getSelectedRowKeys(mode) {
                     const that = this;
 
@@ -515,17 +497,6 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     return selectedRowKeys;
                 },
 
-                /**
-                * @name dxTreeListMethods.getSelectedRowsData
-                * @publicName getSelectedRowsData()
-                * @return Array<any>
-                */
-                /**
-                * @name dxTreeListMethods.getSelectedRowsData
-                * @publicName getSelectedRowsData(mode)
-                * @param1 mode:string
-                * @return Array<any>
-                */
                 getSelectedRowsData: function(mode) {
                     const that = this;
                     const dataController = that._dataController;
@@ -584,8 +555,8 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
             },
 
             rowsView: {
-                _renderExpandIcon: function($container, options) {
-                    const $iconContainer = this.callBase($container, options);
+                _renderIcons: function($iconContainer, options) {
+                    this.callBase.apply(this, arguments);
 
                     if(this.option('selection.mode') === 'multiple') {
                         this.getController('selection').renderSelectCheckBoxContainer($iconContainer, options);

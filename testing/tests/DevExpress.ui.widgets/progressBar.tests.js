@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const fx = require('animation/fx');
+import $ from 'jquery';
+import fx from 'animation/fx';
 
-require('ui/progress_bar');
-require('common.css!');
+import 'ui/progress_bar';
+import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =

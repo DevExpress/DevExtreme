@@ -2,7 +2,7 @@ import $ from 'jquery';
 const { test } = QUnit;
 import 'common.css!';
 import 'ui/diagram';
-import { DiagramCommand } from 'devexpress-diagram';
+import { DiagramCommand, DataLayoutType } from 'devexpress-diagram';
 
 QUnit.testStart(() => {
     const markup = '<style>.dxdi-control { width: 100%; height: 100%; overflow: auto; box-sizing: border-box; position: relative; }</style><div id="diagram"></div>';
@@ -89,7 +89,7 @@ QUnit.module('Diagram DOM Layout', {
     function assertSizes(assert, $scrollContainer, $actualContainer, inst) {
         assert.equal($scrollContainer.width(), $actualContainer.width());
         assert.equal($scrollContainer.height(), $actualContainer.height());
-        const coreScrollSize = inst._diagramInstance.render.view.scroll.getSize();
+        const coreScrollSize = inst._diagramInstance.render.view.scrollView.getSize();
         assert.equal(coreScrollSize.width, $actualContainer.width());
         assert.equal(coreScrollSize.height, $actualContainer.height());
     }
@@ -516,6 +516,31 @@ QUnit.module('Options', moduleConfig, () => {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ToggleSimpleView).execute(true);
         assert.equal(this.instance.option('simpleView'), true);
     });
+    test('should return correct autoLayout parameters based on the nodes.autoLayout option', function(assert) {
+        assert.equal(this.instance.option('nodes.autoLayout'), 'auto');
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama });
+
+        this.instance.option('nodes.leftExpr', 'left');
+        this.instance.option('nodes.topExpr', 'left');
+        assert.equal(this.instance._getDataBindingLayoutParameters(), undefined);
+        this.instance.option('nodes.autoLayout', { type: 'auto' });
+        assert.equal(this.instance._getDataBindingLayoutParameters(), undefined);
+
+        this.instance.option('nodes.leftExpr', '');
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama });
+        this.instance.option('nodes.topExpr', '');
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Sugiyama });
+
+        this.instance.option('nodes.autoLayout', 'off');
+        assert.equal(this.instance._getDataBindingLayoutParameters(), undefined);
+        this.instance.option('nodes.autoLayout', { type: 'off' });
+        assert.equal(this.instance._getDataBindingLayoutParameters(), undefined);
+
+        this.instance.option('nodes.autoLayout', 'tree');
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree });
+        this.instance.option('nodes.autoLayout', { type: 'tree' });
+        assert.deepEqual(this.instance._getDataBindingLayoutParameters(), { type: DataLayoutType.Tree });
+    });
 });
 
 QUnit.module('ClientSideEvents', {
@@ -585,6 +610,16 @@ QUnit.module('ClientSideEvents', {
         assert.equal(clickedItem.dataItem.key, '1');
         assert.equal(clickedItem.fromKey, '123');
         assert.equal(clickedItem.toKey, '345');
+    });
+
+    test('hasChanges changes on import or editing of an unbound diagram', function(assert) {
+        assert.equal(this.instance.option('hasChanges'), false, 'on init');
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
+        assert.equal(this.instance.option('hasChanges'), true, 'on import');
+        this.instance.option('hasChanges', false);
+        this.instance._diagramInstance.selection.set(['107']);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Bold).execute(true);
+        assert.equal(this.instance.option('hasChanges'), true, 'on edit');
     });
 });
 

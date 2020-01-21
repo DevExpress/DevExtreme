@@ -68,14 +68,13 @@ function adjust(value, interval) {
 
 function getPrecision(value) {
     const str = value.toString();
-    let mantissa;
-    let positionOfDelimiter;
 
     if(str.indexOf('.') < 0) {
         return 0;
     }
-    mantissa = str.split('.');
-    positionOfDelimiter = mantissa[1].indexOf('e');
+
+    const mantissa = str.split('.');
+    const positionOfDelimiter = mantissa[1].indexOf('e');
 
     return positionOfDelimiter >= 0 ? positionOfDelimiter : mantissa[1].length;
 }

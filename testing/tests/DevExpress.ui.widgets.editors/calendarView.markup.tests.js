@@ -1,12 +1,12 @@
-const $ = require('jquery');
-const dateUtils = require('core/utils/date');
-const BaseView = require('ui/calendar/ui.calendar.base_view');
-const Views = require('ui/calendar/ui.calendar.views');
-const fx = require('animation/fx');
-const dateSerialization = require('core/utils/date_serialization');
+import $ from 'jquery';
+import dateUtils from 'core/utils/date';
+import BaseView from 'ui/calendar/ui.calendar.base_view';
+import Views from 'ui/calendar/ui.calendar.views';
+import fx from 'animation/fx';
+import dateSerialization from 'core/utils/date_serialization';
 
-require('common.css!');
-require('ui/calendar');
+import 'common.css!';
+import 'ui/calendar';
 
 const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_TODAY_CLASS = 'dx-calendar-today';
@@ -516,14 +516,16 @@ QUnit.module('DecadeView min/max', {
     beforeEach: function() {
         fx.off = true;
 
-        this.min = new Date(2013, 0, 18);
-        this.max = new Date(2018, 6, 18);
+        const min = new Date(2013, 0, 18);
+        const max = new Date(2018, 6, 18);
+        const currentDate = new Date(2015, 3, 15);
 
         this.$element = $('<div>').appendTo('body');
         this.view = new Views['decade'](this.$element, {
-            min: this.min,
-            value: new Date(2015, 3, 15),
-            max: this.max
+            min,
+            max,
+            value: currentDate,
+            date: currentDate
         });
     },
     afterEach: function() {
@@ -546,6 +548,7 @@ QUnit.module('DecadeView disabledDates', {
     beforeEach: function() {
         fx.off = true;
 
+        const currentDate = new Date(2015, 3, 15);
         this.disabledDates = function(args) {
             if(args.date.getFullYear() < 2013) {
                 return true;
@@ -555,7 +558,8 @@ QUnit.module('DecadeView disabledDates', {
         this.$element = $('<div>').appendTo('body');
         this.view = new Views['decade'](this.$element, {
             disabledDates: this.disabledDates,
-            value: new Date(2015, 3, 15),
+            value: currentDate,
+            date: currentDate
         });
     },
     afterEach: function() {
