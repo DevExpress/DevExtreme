@@ -6,4 +6,5 @@ registerEventCallbacks.add(function(name, eventObject) {
     special[name] = eventObject;
 });
 
+// NOTE: workaround for compatibility
 export default { special };
