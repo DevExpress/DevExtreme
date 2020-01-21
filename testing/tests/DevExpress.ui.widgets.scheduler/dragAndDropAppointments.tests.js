@@ -692,7 +692,7 @@ module('Common', commonModuleConfig, () => {
     QUnit.test('Appointment should have correct dates after dragging through timezone change (T835544)', function(assert) {
         const scheduler = createWrapper({
             dataSource: [{
-                'text': 'Staff Productivity Report',
+                text: 'Staff Productivity Report',
                 startDate: '2019-11-04T00:00',
                 endDate: '2019-11-06T00:00',
             }],

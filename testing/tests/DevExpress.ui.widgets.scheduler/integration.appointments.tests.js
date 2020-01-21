@@ -3558,7 +3558,7 @@ QUnit.test('Appointment should be resized correctly to left side in horizontal g
 QUnit.test('Appointment should have correct dates after resizing through timezone change (T835544)', function(assert) {
     this.createInstance({
         dataSource: [{
-            'text': 'Staff Productivity Report',
+            text: 'Staff Productivity Report',
             startDate: '2019-11-04T00:00',
             endDate: '2019-11-06T00:00',
         }],
