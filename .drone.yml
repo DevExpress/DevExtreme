@@ -8,16 +8,7 @@ clone:
       event: [ push, tag ]
 
   git-pr:
-    image: alpine/git
-    commands:
-      - "echo \"PR $DRONE_PULL_REQUEST: $DRONE_REPO#$DRONE_BRANCH \u2190 $DRONE_COMMIT_SHA\""
-      - git init
-      - git config user.email "devextreme-ci@devexpress.com"
-      - git remote add origin "https://github.com/$DRONE_REPO.git"
-      - git fetch origin "$DRONE_BRANCH"
-      - git fetch origin "+refs/pull/$DRONE_PULL_REQUEST/head:"
-      - git checkout -qf "$DRONE_BRANCH"
-      - git merge --squash "$DRONE_COMMIT_SHA"
+    image: devexpress/devextreme-build-git-pr
     when:
       event: [ pull_request ]
 
