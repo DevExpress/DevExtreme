@@ -2768,6 +2768,53 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
         assert.equal(focusedRowChangedCount, 1, 'focusedRowChanged does not fired during loading');
     });
 
+    // T850527
+    QUnit.testInActiveWindow('onFocusedChanged args should be correct after data change', function(assert) {
+        // arrange
+        let onFocusedRowChangedSpy = sinon.spy();
+
+        this.data = [
+            { id: 1 },
+            { id: 2 },
+            { id: 3 }
+        ];
+
+        this.options = {
+            columns: ['id'],
+            keyExpr: 'id',
+            focusedRowEnabled: true,
+            onFocusedRowChanged: onFocusedRowChangedSpy
+        };
+
+        this.setupModule();
+        addOptionChangedHandlers(this);
+
+        this.gridView.render($('#container'));
+        this.clock.tick();
+
+        // act
+        $(this.gridView.getView('rowsView').getRow(0).find('td').eq(0)).trigger(pointerEvents.up).click();
+        this.clock.tick();
+
+        assert.equal(onFocusedRowChangedSpy.callCount, 1, 'focusedRowChanged count');
+        assert.equal(this.getController('keyboardNavigation').getVisibleRowIndex(), 0, 'Focused row index is 1');
+
+        this.data.reverse();
+        this.refresh();
+        this.clock.tick();
+
+        // assert
+        assert.equal(onFocusedRowChangedSpy.callCount, 2, 'focusedRowChanged count');
+        assert.equal(this.getController('keyboardNavigation').getVisibleRowIndex(), 2, 'Focused row index is 3');
+
+        const onFocusedRowChangedArgs = onFocusedRowChangedSpy.secondCall.args[0];
+
+        assert.equal(onFocusedRowChangedArgs.rowIndex, 2, 'row index');
+        assert.equal(onFocusedRowChangedArgs.row.key, 1, 'key');
+        assert.deepEqual(onFocusedRowChangedArgs.row.values, [1, undefined, undefined], 'values');
+        assert.equal(onFocusedRowChangedArgs.row.data.id, 1, 'data');
+    });
+
     QUnit.testInActiveWindow('onFocusedCellChanged event the inserted row (T743086)', function(assert) {
         let focusedCellChangedCount = 0;
 
