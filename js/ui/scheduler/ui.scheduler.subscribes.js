@@ -330,10 +330,6 @@ const subscribes = {
         return this.getWorkSpace().needRecalculateResizableArea();
     },
 
-    getDraggableAppointmentArea: function(options) {
-        return this.getWorkSpaceScrollableContainer();
-    },
-
     getAppointmentGeometry: function(settings) {
         return this.getLayoutManager().getRenderingStrategyInstance().getAppointmentGeometry(settings);
     },
