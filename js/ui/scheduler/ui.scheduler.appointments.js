@@ -457,12 +457,11 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
     _createItemByTemplate: function(itemTemplate, renderArgs) {
         const { itemData, container, index } = renderArgs;
-        const recurrenceRule = this.invoke('getField', 'recurrenceRule', itemData);
 
         return itemTemplate.render({
             model: {
                 appointmentData: itemData,
-                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent(), !!recurrenceRule)
+                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent())
             },
             container: container,
             index: index
@@ -736,6 +735,8 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 buttonColor: color
             };
         }
+
+        appointmentSetting.targetedAppointmentData = this.invoke('getTargetedAppointmentData', appointmentData, $appointment, true);
 
         this._virtualAppointments[virtualGroupIndex].items.settings.push(appointmentSetting);
         this._virtualAppointments[virtualGroupIndex].items.data.push(appointmentData);

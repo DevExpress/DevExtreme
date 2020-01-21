@@ -136,6 +136,9 @@ const subscribes = {
 
     updateAppointmentAfterResize: function(options) {
         const targetAppointment = options.target;
+
+        options.isAppointmentResized = true;
+
         const singleAppointment = this._getSingleAppointmentData(targetAppointment, options);
         const startDate = this.fire('getField', 'startDate', singleAppointment);
         const updatedData = extend(true, {}, options.data);
@@ -784,21 +787,21 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipCheckUpdate) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipTimezoneConvert) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
+
         const recurringData = this._getSingleAppointmentData(appointmentData, {
             skipDateCalculation: true,
             $appointment: $appointmentElement,
             skipHoursProcessing: true
-        }, skipCheckUpdate);
+        });
         const result = {};
 
         extend(true, result, appointmentData, recurringData);
 
-        this._convertDatesByTimezoneBack(false, result);
+        !skipTimezoneConvert && this._convertDatesByTimezoneBack(false, result);
 
-        // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 
         return result;
