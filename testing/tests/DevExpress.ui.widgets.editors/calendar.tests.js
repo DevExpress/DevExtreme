@@ -2028,63 +2028,56 @@ QUnit.module('disabledDates option', {
 }, () => {
     QUnit.test('navigating to the disabled month should not skip the month and should focus the current date', function(assert) {
         const isAnimationOff = fx.off;
-        const animate = fx.animate;
+        const animationSpy = sinon.spy(fx, 'animate');
 
         try {
-            let animateCount = 0;
-
             fx.off = false;
-
-            fx.animate = (...args) => {
-                animateCount++;
-                return animate.apply(fx, args);
-            };
 
             this.$element.trigger('focusin');
 
             triggerKeydown(this.$element, PAGE_UP_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 9, 10), 'same date has been focused');
-            assert.equal(animateCount, 1, 'view is changed with animation after the \'page up\' key press the first time');
+            assert.equal(animationSpy.callCount, 1, 'view is changed with animation after the \'page up\' key press the first time');
 
             triggerKeydown(this.$element, PAGE_UP_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 8, 10), 'same date has been focused');
-            assert.equal(animateCount, 2, 'view is changed after the \'page up\' key press the second time');
+            assert.equal(animationSpy.callCount, 2, 'view is changed after the \'page up\' key press the second time');
 
             triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 9, 10), 'same date has been focused');
-            assert.equal(animateCount, 3, 'view is changed with animation after the \'page down\' key press the first time');
+            assert.equal(animationSpy.callCount, 3, 'view is changed with animation after the \'page down\' key press the first time');
 
             triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 10, 10), 'same date has been focused');
-            assert.equal(animateCount, 4, 'view is changed with animation after the \'page down\' key press the first time');
+            assert.equal(animationSpy.callCount, 4, 'view is changed with animation after the \'page down\' key press the first time');
 
             triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 11, 10), 'same date has been focused');
-            assert.equal(animateCount, 5, 'view is changed after the \'page down\' key press the third time');
+            assert.equal(animationSpy.callCount, 5, 'view is changed after the \'page down\' key press the third time');
 
             $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS))).trigger('dxclick');
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 10, 10), 'same date has been focused');
-            assert.equal(animateCount, 6, 'view is changed after the click on previous arrow on UI');
+            assert.equal(animationSpy.callCount, 6, 'view is changed after the click on previous arrow on UI');
 
             $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS))).trigger('dxclick');
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 11, 10), 'same date has been focused');
-            assert.equal(animateCount, 7, 'view is changed after the click on next arrow on UI');
+            assert.equal(animationSpy.callCount, 7, 'view is changed after the click on next arrow on UI');
         } finally {
             fx.off = isAnimationOff;
-            fx.animate = animate;
+            animationSpy.restore();
         }
     });
 
     QUnit.test('navigating to next/previous month should focus the closest available date and change the view', function(assert) {
         const isAnimationOff = fx.off;
-        const animate = fx.animate;
+        const animationSpy = sinon.spy(fx, 'animate');
 
         try {
             this.calendar.option({
@@ -2096,14 +2089,8 @@ QUnit.module('disabledDates option', {
                 }
             });
 
-            let animateCount = 0;
-
             fx.off = false;
-
-            fx.animate = (...args) => {
-                animateCount++;
-                return animate.apply(fx, args);
-            };
+            animationSpy.reset();
 
             const lastAvailableDateOnJanuary = new Date(2020, 0, 19);
             const firstAvailableDateOnFebruary = new Date(2020, 1, 20);
@@ -2113,41 +2100,41 @@ QUnit.module('disabledDates option', {
             triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), firstAvailableDateOnFebruary, 'closest available date has been focused');
-            assert.equal(animateCount, 1, 'view has been changed');
+            assert.equal(animationSpy.callCount, 1, 'view has been changed');
 
             triggerKeydown(this.$element, PAGE_UP_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), lastAvailableDateOnJanuary, 'closest available date has been focused');
-            assert.equal(animateCount, 2, 'view has been changed');
+            assert.equal(animationSpy.callCount, 2, 'view has been changed');
 
             triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE, true);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), firstAvailableDateOnFebruary, 'closest available date has been focused');
-            assert.equal(animateCount, 3, 'view has been changed');
+            assert.equal(animationSpy.callCount, 3, 'view has been changed');
 
             triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE, true);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), lastAvailableDateOnJanuary, 'closest available date has been focused');
-            assert.equal(animateCount, 4, 'view has been changed');
+            assert.equal(animationSpy.callCount, 4, 'view has been changed');
 
             $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS))).trigger('dxclick');
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), firstAvailableDateOnFebruary, 'closest available date has been focused');
-            assert.equal(animateCount, 5, 'view has been changed');
+            assert.equal(animationSpy.callCount, 5, 'view has been changed');
 
             $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS))).trigger('dxclick');
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), lastAvailableDateOnJanuary, 'closest available date has been focused');
-            assert.equal(animateCount, 6, 'view has been changed');
+            assert.equal(animationSpy.callCount, 6, 'view has been changed');
         } finally {
             fx.off = isAnimationOff;
-            fx.animate = animate;
+            animationSpy.restore();
         }
     });
 
     QUnit.test('left/right/up/downArrow should focus the closest date on the previous/next month when forced to change the month', function(assert) {
         const isAnimationOff = fx.off;
-        const animate = fx.animate;
+        const animationSpy = sinon.spy(fx, 'animate');
 
         try {
             this.calendar.option({
@@ -2157,39 +2144,33 @@ QUnit.module('disabledDates option', {
                 }
             });
 
-            let animateCount = 0;
-
             fx.off = false;
-
-            fx.animate = (...args) => {
-                animateCount++;
-                return animate.apply(fx, args);
-            };
+            animationSpy.reset();
 
             this.$element.trigger('focusin');
 
             triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 1, 5), 'closest available date has been focused');
-            assert.equal(animateCount, 1, 'view has been changed');
+            assert.equal(animationSpy.callCount, 1, 'view has been changed');
 
             triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 14), 'closest available date has been focused');
-            assert.equal(animateCount, 2, 'view has been changed');
+            assert.equal(animationSpy.callCount, 2, 'view has been changed');
 
             triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 1, 11), 'closest available date has been focused');
-            assert.equal(animateCount, 3, 'view has been changed');
+            assert.equal(animationSpy.callCount, 3, 'view has been changed');
 
             triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 14), 'closest available date has been focused');
-            assert.equal(animateCount, 4, 'view has been changed');
+            assert.equal(animationSpy.callCount, 4, 'view has been changed');
         } finally {
             fx.off = isAnimationOff;
-            fx.animate = animate;
+            animationSpy.restore();
         }
     });
 
@@ -2385,7 +2366,7 @@ QUnit.module('disabledDates option', {
 
     QUnit.test('left/right/up/downArrow should work like pageUp/Down when navigating to the disabled month', function(assert) {
         const isAnimationOff = fx.off;
-        const animate = fx.animate;
+        const animationSpy = sinon.spy(fx, 'animate');
 
         try {
             const currentDateOnJanuary = new Date(2020, 0, 15);
@@ -2401,50 +2382,44 @@ QUnit.module('disabledDates option', {
                 }
             });
 
-            let animateCount = 0;
-
             fx.off = false;
-
-            fx.animate = (...args) => {
-                animateCount++;
-                return animate.apply(fx, args);
-            };
+            animationSpy.reset();
 
             this.$element.trigger('focusin');
 
             triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE, true);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), currentDateOnFebruary, 'the same date has been focused');
-            assert.equal(animateCount, 1, 'view has been changed');
+            assert.equal(animationSpy.callCount, 1, 'view has been changed');
 
             triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), currentDateOnMarch, 'the same date has been focused');
-            assert.equal(animateCount, 2, 'view has been changed');
+            assert.equal(animationSpy.callCount, 2, 'view has been changed');
 
             triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), currentDateOnApril, 'the same date has been focused');
-            assert.equal(animateCount, 3, 'view has been changed');
+            assert.equal(animationSpy.callCount, 3, 'view has been changed');
 
             triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE, true);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), currentDateOnMarch, 'the same date has been focused');
-            assert.equal(animateCount, 4, 'view has been changed');
+            assert.equal(animationSpy.callCount, 4, 'view has been changed');
 
             triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), currentDateOnFebruary, 'the same date has been focused');
-            assert.equal(animateCount, 5, 'view has been changed');
+            assert.equal(animationSpy.callCount, 5, 'view has been changed');
 
             triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), currentDateOnJanuary, 'the same date has been focused');
-            assert.equal(animateCount, 6, 'view has been changed');
+            assert.equal(animationSpy.callCount, 6, 'view has been changed');
 
         } finally {
             fx.off = isAnimationOff;
-            fx.animate = animate;
+            animationSpy.restore();
         }
     });
 
@@ -2520,7 +2495,7 @@ QUnit.module('disabledDates option', {
 
     QUnit.test('the focused date should always be in the [min, max] range', function(assert) {
         const isAnimationOff = fx.off;
-        const animate = fx.animate;
+        const animationSpy = sinon.spy(fx, 'animate');
 
         try {
             this.calendar.option({
@@ -2533,36 +2508,30 @@ QUnit.module('disabledDates option', {
                 min: new Date(2020, 0, 25)
             });
 
-            let animateCount = 0;
-
             fx.off = false;
-
-            fx.animate = (...args) => {
-                animateCount++;
-                return animate.apply(fx, args);
-            };
+            animationSpy.reset();
 
             this.$element.trigger('focusin');
 
             triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 1, 4), 'focused date is in the range (min, max)');
-            assert.equal(animateCount, 1, 'view has been changed');
+            assert.equal(animationSpy.callCount, 1, 'view has been changed');
 
             triggerKeydown(this.$element, PAGE_UP_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 25), 'focused date is in the range (min, max)');
-            assert.equal(animateCount, 2, 'view has been changed');
+            assert.equal(animationSpy.callCount, 2, 'view has been changed');
 
         } finally {
             fx.off = isAnimationOff;
-            fx.animate = animate;
+            animationSpy.restore();
         }
     });
 
     QUnit.test('up/downArrow should try focus the same date in the next/previous month when the column is disabled', function(assert) {
         const isAnimationOff = fx.off;
-        const animate = fx.animate;
+        const animationSpy = sinon.spy(fx, 'animate');
 
         try {
             this.calendar.option({
@@ -2575,30 +2544,24 @@ QUnit.module('disabledDates option', {
                 }
             });
 
-            let animateCount = 0;
-
             fx.off = false;
-
-            fx.animate = (...args) => {
-                animateCount++;
-                return animate.apply(fx, args);
-            };
+            animationSpy.reset();
 
             this.$element.trigger('focusin');
 
             triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 5), 'the closest available date has been focused');
-            assert.equal(animateCount, 1, 'view has been changed');
+            assert.equal(animationSpy.callCount, 1, 'view has been changed');
 
             triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 1, 5), 'the closest available date has been focused');
-            assert.equal(animateCount, 2, 'view has been changed');
+            assert.equal(animationSpy.callCount, 2, 'view has been changed');
 
         } finally {
             fx.off = isAnimationOff;
-            fx.animate = animate;
+            animationSpy.restore();
         }
     });
 
