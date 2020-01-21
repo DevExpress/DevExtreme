@@ -482,17 +482,19 @@ QUnit.module('focus policy', {
     });
 
     function checkSelectedIndexAndContent(tabPanel, expectedSelectedIndex) {
+        const $tabsContainer = tabPanel.$element().find(toSelector(TABS_CLASS));
+
+        const selectedTab = $tabsContainer.find(toSelector(SELECTED_TAB_CLASS));
+        QUnit.assert.equal(selectedTab.index(), expectedSelectedIndex, 'selected tab must match selected index');
+
+        const focusedTab = $tabsContainer.find(toSelector(FOCUSED_CLASS));
+        QUnit.assert.equal(focusedTab.index(), expectedSelectedIndex, 'selected tab must match focused tab');
+
         const actualSelectedIndex = tabPanel.option('selectedIndex');
         QUnit.assert.equal(actualSelectedIndex, expectedSelectedIndex, 'selected index in the option must be correct');
 
         const $selectedTabContent = tabPanel.$element().find(toSelector(SELECTED_ITEM_CLASS));
         QUnit.assert.equal($selectedTabContent.index(), expectedSelectedIndex, 'selected tab content must match selected index');
-
-        const $tabsContainer = tabPanel.$element().find(toSelector(TABS_CLASS));
-        const selectedTab = $tabsContainer.find(toSelector(SELECTED_TAB_CLASS));
-        QUnit.assert.equal(selectedTab.index(), expectedSelectedIndex, 'selected tab must match selected index');
-        const focusedTab = $tabsContainer.find(toSelector(FOCUSED_CLASS));
-        QUnit.assert.equal(focusedTab.index(), expectedSelectedIndex, 'selected tab must match focused tab');
 
         const focusedElement = tabPanel.option('focusedElement');
         if(config().useJQuery) {
