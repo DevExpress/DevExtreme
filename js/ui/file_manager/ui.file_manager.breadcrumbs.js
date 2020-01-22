@@ -57,7 +57,7 @@ class FileManagerBreadcrumbs extends Widget {
 
         const result = [
             {
-                icon: 'arrowup',
+                icon: 'parentfolder',
                 directory: this._currentDirectory.parentDirectory,
                 isPathItem: true,
                 cssClass: FILE_MANAGER_BREADCRUMBS_PARENT_FOLDER_ITEM_CLASS
