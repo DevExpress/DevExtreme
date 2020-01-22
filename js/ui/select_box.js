@@ -115,7 +115,7 @@ const SelectBox = DropDownList.inherit({
                         e.preventDefault();
 
                         if(isCustomText) {
-                            this._valueChangeEventHandler();
+                            this._valueChangeEventHandler(e);
                             if(isOpened) this._toggleOpenState();
                         }
 
@@ -659,9 +659,9 @@ const SelectBox = DropDownList.inherit({
         return !selectedItemText || searchValue !== selectedItemText.toString();
     },
 
-    _valueChangeEventHandler: function() {
+    _valueChangeEventHandler: function(e) {
         if(this.option('acceptCustomValue') && this._isCustomItemSelected()) {
-            this._customItemAddedHandler();
+            this._customItemAddedHandler(e);
         }
     },
 
@@ -683,9 +683,11 @@ const SelectBox = DropDownList.inherit({
         return item;
     },
 
-    _customItemAddedHandler: function() {
+    _customItemAddedHandler: function(e) {
         const searchValue = this._searchValue();
         const item = this._createCustomItem(searchValue);
+
+        this._saveValueChangeEvent(e);
 
         if(item === undefined) {
             this._renderValue();
