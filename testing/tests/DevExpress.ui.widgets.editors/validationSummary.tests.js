@@ -155,8 +155,6 @@ QUnit.module('General', {
         itemElements.trigger('click');
         assert.ok(validator.focus.calledOnce, 'Validator should be focused');
     });
-
-
 });
 
 QUnit.module('Regression', {
@@ -234,7 +232,6 @@ QUnit.module('Regression', {
         assert.ok(summary._groupValidationHandler.notCalled, 'Handler should not be called');
 
     });
-
 });
 
 QUnit.module('Update on validator\'s validation', {
