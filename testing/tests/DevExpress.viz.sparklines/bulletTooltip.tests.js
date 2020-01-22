@@ -46,7 +46,7 @@ const environment = {
             font: {}
         });
         this.renderer = new vizMocks.Renderer();
-        this.$container = createTestContainer('#container');
+        this.$container = $(createTestContainer('#container'));
         this.createBullet = function(options) {
             return this.$container.dxBullet($.extend(true, {
                 tooltip: {
