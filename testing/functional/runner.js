@@ -14,7 +14,6 @@ createTestCafe('localhost', 1437, 1438)
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         const browsers = args.browsers.split(' ');
-        const quarantineMode = args.quarantineMode;
 
         const runner = testCafe.createRunner()
             .browsers(browsers)
@@ -25,7 +24,7 @@ createTestCafe('localhost', 1437, 1438)
         }
 
         return runner.run({
-            quarantineMode: quarantineMode
+            quarantineMode: args.quarantineMode
         });
     })
     .then(failedCount => {
