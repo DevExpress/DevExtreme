@@ -18813,19 +18813,47 @@ QUnit.test('The edited cell should be closed on click inside another dataGrid', 
 });
 
 QUnit.test('The cell should not be focused on pointerEvents.down event (T850219)', function(assert) {
+    ['row', 'cell'].forEach(editingMode => {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1' }],
+            editing: {
+                mode: editingMode,
+                allowUpdating: true
+            }
+        });
+        this.clock.tick();
+
+        // act
+        $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.down);
+        this.clock.tick();
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-focus-disabled'), `cell has dx-cell-focus-disabled class in '${editingMode}' editing mode`);
+        assert.equal($(dataGrid.$element()).find('.dx-datagrid-focus-overlay').length, 0, `focus overlay is not rendered in '${editingMode}' editing mode`);
+    });
+});
+
+QUnit.test('The cell should not have dx-cell-focus-disabled class on pointerEvents.down event with row editing mode if row in editing state (T850219)', function(assert) {
     // arrange
     const dataGrid = createDataGrid({
-        dataSource: [{ field1: 'test1' }],
+        dataSource: [{ field1: 'test1', field2: 'test2' }],
+        editing: {
+            mode: 'row',
+            allowUpdating: true
+        }
     });
     this.clock.tick();
 
+    dataGrid.editRow(0);
+    this.clock.tick();
+
     // act
-    $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.down);
+    $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.down);
     this.clock.tick();
 
     // assert
-    assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-focus-disabled'), 'cell has dx-cell-focus-disabled class');
-    assert.equal($(dataGrid.$element()).find('.dx-datagrid-focus-overlay').length, 0, 'focus overlay is not rendered');
+    assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-focus-disabled'), 'cell has not dx-cell-focus-disabled class');
 });
 
 QUnit.test('onFocusedRowChanging, onFocusedRowChanged event if click selection checkBox (T812681)', function(assert) {
