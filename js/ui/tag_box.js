@@ -99,7 +99,7 @@ const TagBox = SelectBox.inherit({
 
                 if(isCustomItem) {
                     e.preventDefault();
-                    (this._searchValue() !== '') && this._customItemAddedHandler();
+                    (this._searchValue() !== '') && this._customItemAddedHandler(e);
                     return;
                 }
 
