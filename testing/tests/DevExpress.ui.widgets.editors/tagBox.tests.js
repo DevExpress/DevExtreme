@@ -1261,6 +1261,28 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
         assert.equal($listItems.length, 1, 'list item should be selected after enter press');
         assert.equal(checkbox.option('value'), true, 'checkbox is checked');
     });
+
+    QUnit.test('onValueChanged event should have correct "event" field after adding a custom item', function(assert) {
+        const valueChangedStub = sinon.stub();
+        const $tagBox = $('#tagBox').dxTagBox({
+            acceptCustomValue: true,
+            items: [1, 2, 3],
+            onValueChanged: valueChangedStub,
+            onCustomItemCreating: (e) => {
+                e.customItem = e.text;
+            }
+        });
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+
+        keyboardMock($input)
+            .type('test')
+            .press('enter');
+
+        const event = valueChangedStub.getCall(0).args[0].event;
+        assert.ok(valueChangedStub.calledOnce);
+        assert.ok(!!event);
+        assert.strictEqual(event.type, 'keydown');
+    });
 });
 
 QUnit.module('placeholder', () => {
