@@ -658,7 +658,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                             filter: storeLoadOptions.filter,
                             group: group
                         }),
-                        group: group.slice(groupInfo.path.length - 1, 1),
+                        group: group.slice(groupInfo.path.length - 1, groupInfo.path.length),
                         select: storeLoadOptions.select
                     });
 

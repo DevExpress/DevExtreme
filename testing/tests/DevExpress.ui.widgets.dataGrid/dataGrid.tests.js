@@ -9550,6 +9550,42 @@ QUnit.testInActiveWindow('Focus should not return to cell from filter row after 
     assert.ok($('.dx-datagrid-filter-row .dx-texteditor-input').is(':focus'), 'filter row\'s cell is focused');
 });
 
+function createRemoteDataSourceWithGroupPaging(arrayStore, key) {
+    return {
+        key,
+        load: function(options) {
+            const d = $.Deferred();
+            setTimeout(function() {
+                const result = {};
+                arrayStore.load(options).done(function(data) {
+                    result.data = data;
+
+                    if(options.group) {
+                        data.forEach(item => {
+                            item.count = item.items.length;
+                            item.items = null;
+                        });
+                    }
+                });
+                if(options.requireGroupCount) {
+                    arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
+                        result.groupCount = groupedData.length;
+                    });
+                }
+                if(options.requireTotalCount) {
+                    arrayStore.totalCount(options).done(function(totalCount) {
+                        result.totalCount = totalCount;
+                    });
+                }
+
+                d.resolve(result);
+            }, 10);
+
+            return d;
+        }
+    };
+}
+
 // T716207
 QUnit.test('Filtering should works correctly if groupPaging is enabled and group is expanded', function(assert) {
     // arrange
@@ -9561,39 +9597,7 @@ QUnit.test('Filtering should works correctly if groupPaging is enabled and group
         { id: 4, group: 'group', type: 2 }
     ]);
     const dataGrid = $('#dataGrid').dxDataGrid({
-        dataSource: {
-            key: 'id',
-            load: function(options) {
-                const d = $.Deferred();
-                setTimeout(function() {
-                    const result = {};
-                    arrayStore.load(options).done(function(data) {
-                        result.data = data;
-
-                        if(options.group) {
-                            data.forEach(item => {
-                                item.count = item.items.length;
-                                item.items = null;
-                            });
-                        }
-                    });
-                    if(options.requireGroupCount) {
-                        arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
-                            result.groupCount = groupedData.length;
-                        });
-                    }
-                    if(options.requireTotalCount) {
-                        arrayStore.totalCount(options).done(function(totalCount) {
-                            result.totalCount = totalCount;
-                        });
-                    }
-
-                    d.resolve(result);
-                }, 10);
-
-                return d;
-            }
-        },
+        dataSource: createRemoteDataSourceWithGroupPaging(arrayStore, 'id'),
         remoteOperations: { groupPaging: true },
         height: 400,
         filterSyncEnabled: true,
@@ -9628,6 +9632,78 @@ QUnit.test('Filtering should works correctly if groupPaging is enabled and group
     // assert
     assert.notOk(dataGrid.getDataSource().isLoading(), 'not loading');
     assert.equal(dataGrid.getVisibleRows().length, 4, 'visible row count is correct');
+});
+
+// T850299
+QUnit.test('Remote group paging should work correctly after sorting if grouping by 2 columns', function(assert) {
+    // arrange
+    const data = [];
+
+    for(let j = 0; j < 3; j++) {
+        for(let k = 0; k < 15; k++) {
+            data.push({
+                group1: 'main group',
+                group2: `group #${j}`,
+                field: k
+            });
+        }
+    }
+
+    const arrayStore = new ArrayStore(data);
+
+    const pageSize = 7;
+
+    const dataGrid = $('#dataGrid').dxDataGrid({
+        dataSource: createRemoteDataSourceWithGroupPaging(arrayStore),
+        remoteOperations: { groupPaging: true },
+        height: 200,
+        loadingTimeout: undefined,
+        grouping: {
+            autoExpandAll: false
+        },
+        paging: {
+            pageSize
+        },
+        columns: [{
+            dataField: 'group1',
+            groupIndex: 0
+        }, {
+            dataField: 'group2',
+            groupIndex: 1
+        }, {
+            dataField: 'field'
+        }]
+    }).dxDataGrid('instance');
+    this.clock.tick(100);
+
+
+    // assert
+    assert.notOk(dataGrid.getDataSource().isLoading(), 'not loading');
+    assert.equal(dataGrid.getVisibleRows().length, 1, 'visible row count is correct');
+
+    // act
+    dataGrid.expandRow(['main group']);
+    this.clock.tick(100);
+
+    // assert
+    assert.notOk(dataGrid.getDataSource().isLoading(), 'not loading');
+    assert.equal(dataGrid.getVisibleRows().length, 4, 'visible row count is correct');
+
+    // act
+    dataGrid.expandRow(['main group', 'group #1']);
+    this.clock.tick(100);
+
+    // assert
+    assert.notOk(dataGrid.getDataSource().isLoading(), 'not loading');
+    assert.equal(dataGrid.getVisibleRows().length, pageSize, 'visible row count is correct');
+
+    // act
+    dataGrid.columnOption(2, 'sortOrder', 'asc');
+    this.clock.tick(100);
+
+    // assert
+    assert.notOk(dataGrid.getDataSource().isLoading(), 'not loading');
+    assert.equal(dataGrid.getVisibleRows().length, pageSize, 'visible row count is correct');
 });
 
 // T641931
