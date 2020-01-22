@@ -12,9 +12,13 @@ import { extend } from '../core/utils/extend';
 import { getElementMaxHeightByWindow } from '../ui/overlay/utils';
 import registerComponent from '../core/component_registrator';
 import { normalizeKeyName } from '../events/utils';
+import devices from '../core/devices';
+import { getActiveElement } from '../core/dom_adapter';
 
 const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
+
+const realDevice = devices.real();
 
 const DropDownBox = DropDownEditor.inherit({
     _supportedKeys: function() {
@@ -213,6 +217,19 @@ const DropDownBox = DropDownEditor.inherit({
         return this.callBase();
     },
 
+    _canShowVirtualKeyboard: function() {
+        return realDevice.mac; // T845484
+    },
+
+    _isNestedElementActive: function() {
+        const activeElement = getActiveElement();
+        return activeElement && this._popup.$content().get(0).contains(activeElement);
+    },
+
+    _shouldCloseOnTargetScroll: function() {
+        return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && this._isNestedElementActive();
+    },
+
     _popupConfig: function() {
         const horizontalAlignment = this.option('rtlEnabled') ? 'right' : 'left';
 
@@ -224,6 +241,7 @@ const DropDownBox = DropDownEditor.inherit({
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled: this.option('focusStateEnabled'),
+            closeOnTargetScroll: this._shouldCloseOnTargetScroll.bind(this),
             position: {
                 of: this.$element(),
                 collision: 'flipfit',
@@ -273,3 +291,7 @@ const DropDownBox = DropDownEditor.inherit({
 registerComponent('dxDropDownBox', DropDownBox);
 
 module.exports = DropDownBox;
+
+///#DEBUG
+module.exports.realDevice = realDevice;
+///#ENDDEBUG
