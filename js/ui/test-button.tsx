@@ -64,7 +64,6 @@ export const viewModelFunction = (model: Button) => {
 
         return { space: click, enter: click };
     }
-
     return {
         ...model,
         elementAttr: { ...model.elementAttr, role: 'button' },
@@ -114,19 +113,12 @@ export const viewFunction = (viewModel: Button) => (
     view: viewFunction,
 })
 
-export default class Button {
+export default class Button extends Widget {
     @Prop() classNames?: string[]
-    @Prop() height?: string;
-    @Prop() hint?: string;
     @Prop() icon?: string;
     @Prop() pressed?: boolean;
     @Prop() stylingMode?: string;
     @Prop() text?: string;
     @Prop() type?: string;
-    @Prop() width?: string;
-    @Prop() elementAttr?: { [name: string]: any } = {};
-    @Prop() visible?: boolean = true;
-    @Prop() onClick?: (args: any) => any = () => undefined;
-
     @Prop() contentRender?: any;
 }

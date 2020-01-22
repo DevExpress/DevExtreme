@@ -1,6 +1,6 @@
-import { Component, Prop, Event, InternalState, Listen, React, Slot, Ref, Effect, State } from "../component_declaration/common";
+import { Component, Prop, Event, InternalState, React, Slot, Ref, Effect, State } from "../component_declaration/common";
 import config from '../core/config';
-import { getDocument } from '../core/dom_adapter';
+// import { getDocument } from '../core/dom_adapter';
 import Action from '../core/action';
 import { isFakeClickEvent } from '../events/utils';
 import { each } from '../core/utils/iterator';
@@ -153,14 +153,14 @@ export default class Widget {
     @Prop() className?: string | undefined = '';
     @Prop() clickArgs?: any = {};
     @Prop() aria?: any = {};
-    @Prop() activeStateUnit?: string | undefined = undefined;
+    @Prop() activeStateUnit?: string;
     @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
     @Prop() hoverEndHandler: (args: any) => any = (() => undefined);
     @Prop() _dimensionChanged: () => any = (() => undefined);
-    @Prop() _visibilityChanged: (args: any) => any | undefined = undefined;
+    @Prop() _visibilityChanged?: (args: any) => any;
     @Prop() _feedbackHideTimeout: number = 400;
     @Prop() _feedbackShowTimeout: number = 30;
-    @Prop() supportedKeys?: (args: any) => any | undefined = undefined;
+    @Prop() supportedKeys?: (args: any) => any;
     /** === */
 
     // == DOMComponent ==
@@ -199,8 +199,8 @@ export default class Widget {
         if(this._visibilityChanged !== undefined && hasWindow()) {
 
             visibility.on(this.widgetRef,
-                () => this.visible && this._visibilityChanged(true),
-                () => this.visible && this._visibilityChanged(false),
+                () => this.visible && this._visibilityChanged!(true),
+                () => this.visible && this._visibilityChanged!(false),
                 { namespace }
             );
         }
@@ -289,7 +289,7 @@ export default class Widget {
         if(shouldAttach) {
             const keyboardHandler = (options: any) => {
                 const { originalEvent, keyName, which } = options;
-                const keys = this.supportedKeys(originalEvent);
+                const keys = this.supportedKeys && this.supportedKeys(originalEvent) || {};
                 const func = keys[keyName] || keys[which];
 
                 if(func !== undefined) {
