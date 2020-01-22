@@ -516,7 +516,7 @@ QUnit.module('focus policy', {
 
     [0, 1].forEach(selectedIndex => {
         ['selectedIndex', 'selectedItem'].forEach(optionName => {
-            QUnit.test(`focus -> setSelectedTab(${selectedIndex}) -> focus`, function(assert) {
+            QUnit.testInActiveWindow(`focus -> setSelectedTab(${selectedIndex}) -> focus`, function(assert) {
                 const tabPanel = $('#tabPanel').dxTabPanel({
                     items: [{ title: 'item 1' }, { title: 'item 2' }]
                 }).dxTabPanel('instance');
