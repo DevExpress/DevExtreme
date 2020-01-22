@@ -169,12 +169,13 @@ function remove(keyInfo, array, key, isBatch) {
 }
 
 function indexByKey(keyInfo, array, key) {
+    const keyExpr = keyInfo.key();
     if(!getHasKeyCacheValue(array, key)) {
         return -1;
     }
 
     for(let i = 0, arrayLength = array.length; i < arrayLength; i++) {
-        if(keysEqual(keyInfo.key(), keyInfo.keyOf(array[i]), key)) {
+        if(keysEqual(keyExpr, keyInfo.keyOf(array[i]), key)) {
             return i;
         }
     }

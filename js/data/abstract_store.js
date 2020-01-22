@@ -76,7 +76,6 @@ const Store = Class.inherit({
             throw errorsModule.errors.Error('E4005');
         }
     },
-
     load: function(options) {
         const that = this;
 
