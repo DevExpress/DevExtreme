@@ -296,10 +296,7 @@ const objectsEqualByValue = function(object1, object2, depth, strict) {
 
 const maxEqualityDepth = 3;
 
-const equalByValue = function(object1, object2, depth, strict) {
-    depth = depth || 0;
-    strict = isDefined(strict) ? strict : true;
-
+const equalByValue = function(object1, object2, depth = 0, strict = true) {
     object1 = toComparable(object1, true);
     object2 = toComparable(object2, true);
 
