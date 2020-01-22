@@ -275,11 +275,11 @@ const arraysEqualByValue = function(array1, array2, depth) {
     return true;
 };
 
-const objectsEqualByValue = function(object1, object2, depth) {
+const objectsEqualByValue = function(object1, object2, depth, strict) {
     for(const propertyName in object1) {
         if(
             Object.prototype.hasOwnProperty.call(object1, propertyName) &&
-            !equalByValue(object1[propertyName], object2[propertyName], depth + 1)
+            !equalByValue(object1[propertyName], object2[propertyName], depth + 1, strict)
         ) {
             return false;
         }
@@ -296,18 +296,19 @@ const objectsEqualByValue = function(object1, object2, depth) {
 
 const maxEqualityDepth = 3;
 
-const equalByValue = function(object1, object2, depth) {
-    depth = depth || 0;
-
+const equalByValue = function(object1, object2, depth = 0, strict = true) {
     object1 = toComparable(object1, true);
     object2 = toComparable(object2, true);
 
-    if(object1 === object2 || depth >= maxEqualityDepth) {
+    // eslint-disable-next-line eqeqeq
+    const comparisonResult = strict ? object1 === object2 : object1 == object2;
+
+    if(comparisonResult || depth >= maxEqualityDepth) {
         return true;
     }
 
     if(isObject(object1) && isObject(object2)) {
-        return objectsEqualByValue(object1, object2, depth);
+        return objectsEqualByValue(object1, object2, depth, strict);
     } else if(Array.isArray(object1) && Array.isArray(object2)) {
         return arraysEqualByValue(object1, object2, depth);
     }

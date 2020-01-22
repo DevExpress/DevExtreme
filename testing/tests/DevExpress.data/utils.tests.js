@@ -14,6 +14,8 @@ QUnit.test('non-strict comparison is used', function(assert) {
     // NOTE there is no point in considering "1" and 1 as different keys
     assert.ok(keysEqual('id', 1, '1'));
     assert.ok(keysEqual(['a', 'b'], { a: 1, b: 2 }, { a: '1', b: '2' }));
+    assert.ok(keysEqual(['a.b', 'a.c']), { a: { b: 1, c: 2 } }, { a: { b: '1', c: '2' } });
+    assert.ok(keysEqual('a', { b: 1, c: 2 }, { b: '1', c: '2' }));
 });
 
 QUnit.test('toComparable is used for compound keys', function(assert) {
