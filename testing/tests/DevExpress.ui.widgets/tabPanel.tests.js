@@ -483,44 +483,40 @@ QUnit.module('focus policy', {
 
     function checkSelectionAndFocus(tabPanel, expectedSelectedIndex) {
         const expectedSelectedItem = tabPanel.option('items')[expectedSelectedIndex];
-
         const actualSelectedItem = tabPanel.option('selectedItem');
+
         QUnit.assert.equal(actualSelectedItem, expectedSelectedItem, 'selected item in the option must be correct');
 
         const actualSelectedTabItem = tabPanel._tabs.option('selectedItem');
+
         QUnit.assert.equal(actualSelectedTabItem, expectedSelectedItem, 'selected item in the tabs option must be correct');
 
         const expectedSelectedContent = tabPanel.itemElements()[expectedSelectedIndex];
-        const actualSelectedContent = tabPanel.$element().find(toSelector(SELECTED_ITEM_CLASS)).get(0);
+        const actualSelectedContent = tabPanel.$element().find(`.${SELECTED_ITEM_CLASS}`).get(0);
+
         QUnit.assert.equal(expectedSelectedContent, actualSelectedContent, 'selected content must be correct');
 
-        const $tabsContainer = tabPanel.$element().find(toSelector(TABS_CLASS));
-        const $focusedTab = $tabsContainer.find(toSelector(FOCUSED_CLASS));
-        const $selectedTab = $tabsContainer.find(toSelector(SELECTED_TAB_CLASS));
-        if(tabPanel.option('focusStateEnabled') === true) {
-            const focusedElement = tabPanel.option('focusedElement');
-            QUnit.assert.equal($focusedTab.get(0), $selectedTab.get(0), 'selected tab must match focused tab');
-            if(config().useJQuery) {
-                QUnit.assert.notEqual(focusedElement.jquery, undefined, 'in jquery mode focused element must be a jquery object');
-                QUnit.assert.equal(focusedElement.get(0), actualSelectedContent, 'in jquery mode selected tab content must match focused element');
-            } else {
-                QUnit.assert.equal(focusedElement.jquery, undefined, 'in pure javascript mode focused element must be a DOM object');
-                QUnit.assert.equal(focusedElement, actualSelectedContent, 'in pure javascript mode selected tab content must match focused element');
-            }
+        const $tabsContainer = tabPanel.$element().find(`.${TABS_CLASS}`);
+        const $focusedTab = $tabsContainer.find(`.${FOCUSED_CLASS}`);
+        const $selectedTab = $tabsContainer.find(`.${SELECTED_TAB_CLASS}`);
 
+        const focusedElement = tabPanel.option('focusedElement');
+        if(tabPanel.option('focusStateEnabled') === true) {
+            QUnit.assert.equal($focusedTab.get(0), $selectedTab.get(0), 'selected tab must match focused tab');
+            QUnit.assert.equal($(focusedElement).get(0), actualSelectedContent, 'selected content must match focused element');
         } else {
             QUnit.assert.equal($focusedTab.length, 0, 'there is no focused tab if focusState is disabled');
-            QUnit.assert.equal(tabPanel.option('focusedElement'), null, 'there is no focused element if focusState is disabled');
+            QUnit.assert.equal(focusedElement, null, 'there is no focused element if focusState is disabled');
         }
     }
 
     [0, 1].forEach(selectedIndex => {
         ['selectedIndex', 'selectedItem'].forEach(optionName => {
-            QUnit.testInActiveWindow(`focus -> setSelectedTab(${selectedIndex}) -> focus`, function(assert) {
-                const tabPanel = $('#tabPanel').dxTabPanel({
+            QUnit.test(`focus -> setSelectedTab(${selectedIndex}) -> focus`, function(assert) {
+                const $tabPanel = $('#tabPanel').dxTabPanel({
                     items: [{ title: 'item 1' }, { title: 'item 2' }]
-                }).dxTabPanel('instance');
-                const $tabPanel = $(tabPanel.$element());
+                });
+                const tabPanel = $tabPanel.dxTabPanel('instance');
 
                 $tabPanel.focusin();
                 if(optionName === 'selectedIndex') {
@@ -652,4 +648,3 @@ QUnit.module('dataSource integration', () => {
         assert.equal(dataSourceLoadCalled, 1, 'dataSource load called once');
     });
 });
-
