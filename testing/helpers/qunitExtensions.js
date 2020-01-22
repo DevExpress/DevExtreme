@@ -444,7 +444,7 @@
         };
 
         const applyUnregister = function() {
-            jQuery.map(checkersToUnregister, unregisterSingle);
+            checkersToUnregister.forEach(unregisterSingle);
             checkersToUnregister = [];
         };
 
@@ -456,7 +456,7 @@
         const needSkip = function(timerInfo) {
             let skip = false;
 
-            jQuery.each(checkers, function(i, checker) {
+            checkers.forEach(function(checker) {
                 if(checker(timerInfo)) {
                     skip = true;
                     return false;
@@ -483,10 +483,6 @@
     });
 
     QUnit.testDone(function(args) {
-        if(!jQuery) {
-            return;
-        }
-
         if(suppressLogOnTest()) {
             return;
         }
@@ -539,18 +535,19 @@
 
         log.stop();
 
-        jQuery.each(['timeouts', 'intervals', 'animationFrames'], function() {
-            const type = String(this);
+        ['timeouts', 'intervals', 'animationFrames'].forEach(function(type) {
             const currentInfo = log.get()[type];
 
-            if(!jQuery.isEmptyObject(currentInfo)) {
+            if(Object.keys(currentInfo).length) {
                 const timerId = Object.keys(currentInfo)[0];
-                const normalizedTimerInfo = jQuery.extend({
-                    timerType: type,
-                    timerId: timerId
-                }, currentInfo, currentInfo[timerId]);
 
-                delete normalizedTimerInfo[timerId];
+                const normalizedTimerInfo = {
+                    timerType: type,
+                    timerId: timerId,
+                    callback: currentInfo[timerId].callback || currentInfo.callback,
+                    timeout: currentInfo[timerId].timeout || currentInfo.timeout,
+                    stack: currentInfo[timerId].stack || currentInfo.stack
+                };
 
                 if(isThirdPartyLibraryTimer(normalizedTimerInfo)) {
                     return;
