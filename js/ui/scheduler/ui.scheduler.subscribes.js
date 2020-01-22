@@ -90,7 +90,7 @@ const subscribes = {
         const itemResources = this._resourcesManager.getResourcesFromItem(appointmentData);
         allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
 
-        options.callback(this._getCoordinates(initialDates, dates, itemResources, allDay));
+        return this._getCoordinates(initialDates, dates, itemResources, allDay);
     },
 
     isGroupedByDate: function() {
@@ -195,10 +195,6 @@ const subscribes = {
         this.checkAndDeleteAppointment(appointmentData, singleAppointmentData);
     },
 
-    getResourceForPainting: function() {
-        return this._resourcesManager.getResourceForPainting(this._getCurrentViewOption('groups'));
-    },
-
     getAppointmentColor: function(options) {
         const resourcesManager = this._resourcesManager;
         const resourceForPainting = resourcesManager.getResourceForPainting(this._getCurrentViewOption('groups'));
@@ -220,23 +216,19 @@ const subscribes = {
 
             response = resourcesManager.getResourceColor(field, groupId);
         }
-        options.callback(response);
+        return response;
     },
 
     getHeaderHeight: function() {
         return this._header._$element && parseInt(this._header._$element.outerHeight(), 10);
     },
 
-    getResourcesFromItem: function(options) {
-        options.callback(this._resourcesManager.getResourcesFromItem(options.itemData));
+    getResourcesFromItem: function(itemData) {
+        return this._resourcesManager.getResourcesFromItem(itemData);
     },
 
-    getBoundOffset: function(options) {
-        options.callback({ top: -this.getWorkSpaceAllDayHeight() });
-    },
-
-    appointmentTakesAllDay: function(options) {
-        options.callback(this.appointmentTakesAllDay(options.appointment));
+    getBoundOffset: function() {
+        return { top: -this.getWorkSpaceAllDayHeight() };
     },
 
     appointmentTakesSeveralDays: function(appointment) {
@@ -317,15 +309,13 @@ const subscribes = {
     },
 
     getResizableAppointmentArea: function(options) {
-        let area;
         const allDay = options.allDay;
         const groups = this._getCurrentViewOption('groups');
-        const isGrouped = groups && groups.length;
 
-        if(isGrouped) {
+        if(groups && groups.length) {
             if(allDay || this.getLayoutManager().getRenderingStrategyInstance()._needHorizontalGroupBounds()) {
                 const horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
-                area = {
+                return {
                     left: horizontalGroupBounds.left,
                     right: horizontalGroupBounds.right,
                     top: 0,
@@ -335,7 +325,7 @@ const subscribes = {
 
             if(this.getLayoutManager().getRenderingStrategyInstance()._needVerticalGroupBounds(allDay) && this._workSpace._isVerticalGroupedWorkSpace()) {
                 const verticalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
-                area = {
+                return {
                     left: 0,
                     right: 0,
                     top: verticalGroupBounds.top,
@@ -343,16 +333,10 @@ const subscribes = {
                 };
             }
         }
-
-        options.callback(area);
     },
 
     needRecalculateResizableArea: function() {
         return this.getWorkSpace().needRecalculateResizableArea();
-    },
-
-    getDraggableAppointmentArea: function(options) {
-        options.callback(this.getWorkSpaceScrollableContainer());
     },
 
     getAppointmentGeometry: function(settings) {
@@ -424,14 +408,12 @@ const subscribes = {
 
     getFullWeekAppointmentWidth: function(options) {
         const groupIndex = options.groupIndex;
-        const groupWidth = this._workSpace.getGroupWidth(groupIndex);
-
-        options.callback(groupWidth);
+        return this._workSpace.getGroupWidth(groupIndex);
     },
 
     getMaxAppointmentWidth: function(options) {
-        const cellCountToLastViewDate = this._workSpace.getCellCountToLastViewDate(options.date);
-        options.callback(cellCountToLastViewDate * this._workSpace.getCellWidth());
+        const workSpace = this._workSpace;
+        return workSpace.getCellCountToLastViewDate(options.date) * workSpace.getCellWidth();
     },
 
     updateAppointmentStartDate: function(options) {
@@ -450,9 +432,7 @@ const subscribes = {
             updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));
         }
 
-        updatedStartDate = dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
-
-        options.callback(updatedStartDate);
+        return dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
     },
 
     updateAppointmentEndDate: function(options) {
@@ -468,7 +448,7 @@ const subscribes = {
             updatedEndDate = new Date(updatedEndDate.getTime() - toMs('day'));
             updatedEndDate.setHours(endDayHour, 0, 0, 0);
         }
-        options.callback(updatedEndDate);
+        return updatedEndDate;
     },
 
     renderCompactAppointments: function(options) {
@@ -853,7 +833,7 @@ const subscribes = {
 
             result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs('minute');
         }
-        options.callback(result);
+        return result;
     },
 
     fixWrongEndDate: function(appointment, startDate, endDate) {

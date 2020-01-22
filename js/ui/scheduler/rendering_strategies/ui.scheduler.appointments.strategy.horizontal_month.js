@@ -67,11 +67,8 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
     }
 
     _getFullWeekAppointmentWidth(groupIndex) {
-        this.instance.fire('getFullWeekAppointmentWidth', {
+        this._maxFullWeekAppointmentWidth = this.instance.fire('getFullWeekAppointmentWidth', {
             groupIndex: groupIndex,
-            callback: (function(width) {
-                this._maxFullWeekAppointmentWidth = width;
-            }).bind(this)
         });
 
         return this._maxFullWeekAppointmentWidth;
