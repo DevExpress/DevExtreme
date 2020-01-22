@@ -163,6 +163,7 @@ const keysEqual = function(keyExpr, key1, key2) {
                 return false;
             }
         }
+        return true;
     }
     return equalByValue(key1, key2, 0, false);
 };
