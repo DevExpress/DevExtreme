@@ -252,6 +252,28 @@ module('options', {
         assert.equal(instance.option('displayValue'), 1, 'displayValue is selected item value');
     });
 
+    test('displayValue should be correctly rendered after updating an dataSource', function(assert) {
+        const dataSource = [{ id: 1, text: 'test1' }, { id: 2, text: 'test2' }];
+        const instance = $('#lookup').dxLookup({ value: 2, displayExpr: 'text', valueExpr: 'id' }).dxLookup('instance');
+        const $field = $(instance._$field);
+
+        instance.option({ dataSource });
+
+        assert.equal($field.text(), 'test2', 'field text is selected item value');
+        assert.equal(instance.option('displayValue'), 'test2', 'displayValue is selected item value');
+    });
+
+    test('displayValue should be correctly rendered after updating an items', function(assert) {
+        const items = [{ id: 1, text: 'test1' }, { id: 2, text: 'test2' }];
+        const instance = $('#lookup').dxLookup({ value: 2, displayExpr: 'text', valueExpr: 'id' }).dxLookup('instance');
+        const $field = $(instance._$field);
+
+        instance.option({ items });
+
+        assert.equal($field.text(), 'test2', 'field text is selected item value');
+        assert.equal(instance.option('displayValue'), 'test2', 'displayValue is selected item value');
+    });
+
     test('value should be assigned by reference', (assert) => {
         const items = [{ name: 'name' }];
         const instance = $('#lookup').dxLookup({
