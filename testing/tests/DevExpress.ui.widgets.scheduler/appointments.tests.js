@@ -43,9 +43,6 @@ const moduleOptions = {
         this.allDayHeight = 20;
         this.items = [];
         this.coordinates = [{ top: 0, left: 0 }];
-        this.getCoordinates = function() {
-            return this.coordinates;
-        };
 
         const dataAccessors = {
             getter: {
@@ -71,13 +68,10 @@ const moduleOptions = {
 
         const subscribes = {
             needCoordinates: function(options) {
-                options.callback(that.getCoordinates.apply(that));
+                return that.coordinates;
             },
             getAppointmentColor: function(options) {
-                options.callback($.Deferred().resolve('red').promise());
-            },
-            getResourceForPainting: function(options) {
-                options.callback({ field: 'roomId' });
+                return $.Deferred().resolve('red').promise();
             },
             getField: function(field, obj) {
                 if(!typeUtils.isDefined(dataAccessors.getter[field])) {
@@ -99,10 +93,10 @@ const moduleOptions = {
                 return new Date(2150, 1, 1);
             },
             getAppointmentDurationInMs: function(options) {
-                options.callback(options.endDate.getTime() - options.startDate.getTime());
+                return options.endDate.getTime() - options.startDate.getTime();
             },
             getResourcesFromItem: function(options) {
-                options.callback({ someId: ['with space'] });
+                return { someId: ['with space'] };
             },
             getAppointmentGeometry: function(settings) {
                 return {
@@ -1041,6 +1035,7 @@ QUnit.test('Focus method should call focus on appointment', function(assert) {
     const $appointment = $('.dx-scheduler-appointment').eq(0);
 
     $($appointment).trigger('focusin');
+    const initialTrigger = eventsEngine.trigger;
 
     const focusedElement = $(this.instance.option('focusedElement')).get(0);
     const focusSpy = sinon.spy(eventsEngine, 'trigger').withArgs(sinon.match(function($element) {
@@ -1054,6 +1049,8 @@ QUnit.test('Focus method should call focus on appointment', function(assert) {
     assert.ok(focusSpy.called, 'focus is called');
     assert.ok(appointmentFocusedStub.called, 'appointmentFocused is fired');
     sinon.restore();
+
+    eventsEngine.trigger = initialTrigger;
 });
 
 QUnit.test('Default behavior of tab button should be prevented for apps', function(assert) {

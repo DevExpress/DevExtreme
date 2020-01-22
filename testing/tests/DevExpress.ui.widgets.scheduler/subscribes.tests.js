@@ -4,7 +4,6 @@ import 'ui/scheduler/ui.scheduler.subscribes';
 import 'ui/scheduler/ui.scheduler';
 
 import $ from 'jquery';
-import { noop } from 'core/utils/common';
 import fx from 'animation/fx';
 import recurrenceUtils from 'ui/scheduler/utils.recurrence';
 import dateUtils from 'core/utils/date';
@@ -119,19 +118,6 @@ QUnit.test('\'setCellDataCacheAlias\' should call workSpace method with right ar
     }
 });
 
-QUnit.test('\'getDraggableAppointmentArea\' should return workSpace date table scrollable', function(assert) {
-    this.createInstance();
-    let draggableArea;
-
-    this.instance.fire('getDraggableAppointmentArea', {
-        callback: function(result) {
-            draggableArea = result;
-        }
-    });
-
-    assert.deepEqual(draggableArea.get(0), this.instance.$element().find('.dx-scheduler-date-table-scrollable .dx-scrollable-container').get(0), 'Draggable area is OK');
-});
-
 QUnit.test('\'needCoordinates\' should return workSpace date table scrollable', function(assert) {
     this.createInstance({
         currentView: 'day',
@@ -140,17 +126,14 @@ QUnit.test('\'needCoordinates\' should return workSpace date table scrollable', 
         currentDate: 1425416400000
     });
 
-    this.instance.fire('needCoordinates', {
+    const coordinate = this.instance.fire('needCoordinates', {
         appointmentData: {
             'startDate': new Date(2015, 2, 3, 22),
             'endDate': new Date(2015, 2, 17, 10, 30)
         },
         startDate: new Date(2015, 2, 3, 22),
-        callback: function(result) {
-            const coordinate = result[0];
-            assert.roughEqual(coordinate.top, 0, 1.001, 'Top coordinate is OK');
-        }
     });
+    assert.roughEqual(coordinate[0].top, 0, 1.001, 'Top coordinate is OK');
 });
 
 QUnit.test('\'needRecalculateResizableArea\' should return false for horizontal grouped workspace', function(assert) {
@@ -219,17 +202,15 @@ QUnit.test('\'needCoordinates\' should return correct count of coordinates for a
         firstDayOfWeek: 1
     });
 
-    this.instance.fire('needCoordinates', {
+    const result = this.instance.fire('needCoordinates', {
         appointmentData: {
             'startDate': new Date(2015, 2, 2, 0),
             'endDate': new Date(2015, 2, 3, 0),
             'recurrenceRule': 'FREQ=DAILY'
         },
         startDate: new Date(2015, 2, 2, 0),
-        callback: function(result) {
-            assert.equal(result.length, 7, 'count is OK');
-        }
     });
+    assert.equal(result.length, 7, 'count is OK');
 });
 
 QUnit.test('\'needCoordinates\' should return correct count of coordinates for allDay recurrence appointment, allDay = true', function(assert) {
@@ -242,7 +223,7 @@ QUnit.test('\'needCoordinates\' should return correct count of coordinates for a
         firstDayOfWeek: 1
     });
 
-    this.instance.fire('needCoordinates', {
+    const result = this.instance.fire('needCoordinates', {
         appointmentData: {
             'startDate': new Date(2015, 2, 2, 0),
             'endDate': new Date(2015, 2, 3, 0),
@@ -250,10 +231,8 @@ QUnit.test('\'needCoordinates\' should return correct count of coordinates for a
             allDay: true
         },
         startDate: new Date(2015, 2, 2, 0),
-        callback: function(result) {
-            assert.equal(result.length, 7, 'count is OK');
-        }
     });
+    assert.equal(result.length, 7, 'count is OK');
 });
 
 QUnit.test('\'needCoordinates\' should not change dateRange', function(assert) {
@@ -276,10 +255,8 @@ QUnit.test('\'needCoordinates\' should not change dateRange', function(assert) {
             allDay: true
         },
         startDate: new Date(2015, 2, 2, 0),
-        callback: function(result) {
-            assert.deepEqual(dateRange, instance._workSpace.getDateRange(), 'Date range wasn\'t changed');
-        }
     });
+    assert.deepEqual(dateRange, instance._workSpace.getDateRange(), 'Date range wasn\'t changed');
 });
 
 QUnit.test('\'needCoordinates\' should calculate correct dates fo recurring appts (T408509)', function(assert) {
@@ -305,7 +282,6 @@ QUnit.test('\'needCoordinates\' should calculate correct dates fo recurring appt
             },
             startDate: new Date(2015, 2, 2, 0),
             originalStartDate: new Date(2015, 2, 2, 1),
-            callback: noop
         });
 
         const startDate = getDatesByRecurrenceStub.getCall(0).args[0].start;
@@ -327,17 +303,14 @@ QUnit.test('Long appointment in Timeline view should have right left coordinate'
     const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(1);
     const expectedLeftCoordinate = $expectedCell.position().left;
 
-    this.instance.fire('needCoordinates', {
+    const coordinate = this.instance.fire('needCoordinates', {
         appointmentData: {
             'startDate': new Date(2015, 2, 3, 0, 30),
             'endDate': new Date(2015, 2, 5, 15, 30)
         },
         startDate: new Date(2015, 2, 3, 0, 30),
-        callback: function(result) {
-            const coordinate = result[0];
-            assert.equal(coordinate.left, expectedLeftCoordinate, 'left coordinate is OK');
-        }
     });
+    assert.equal(coordinate[0].left, expectedLeftCoordinate, 'left coordinate is OK');
 });
 
 QUnit.test('\'needCoordinates\' should work correct with custom data fields', function(assert) {
@@ -348,15 +321,13 @@ QUnit.test('\'needCoordinates\' should work correct with custom data fields', fu
         startDateExpr: 'Start'
     });
 
-    this.instance.fire('needCoordinates', {
+    const result = this.instance.fire('needCoordinates', {
         appointmentData: {
             startDate: new Date(2015, 2, 2, 0)
         },
         startDate: new Date(2015, 2, 2, 0),
-        callback: function(result) {
-            assert.equal(result.length, 1, 'Coordinates are OK');
-        }
     });
+    assert.equal(result.length, 1, 'Coordinates are OK');
 });
 
 QUnit.test('\'updateAppointmentStartDate\' should work correct with custom data fields', function(assert) {
@@ -364,12 +335,9 @@ QUnit.test('\'updateAppointmentStartDate\' should work correct with custom data 
         startDateExpr: 'Start'
     });
 
-    this.instance.fire('updateAppointmentStartDate', {
+    assert.ok(this.instance.fire('updateAppointmentStartDate', {
         startDate: new Date(2015, 2, 2, 0),
-        callback: function(result) {
-            assert.ok(result, 'There is some result');
-        }
-    });
+    }));
 });
 
 QUnit.test('\'mapAppointmentFields\' should call getTargetedAppointmentData', function(assert) {
@@ -392,23 +360,6 @@ QUnit.test('\'mapAppointmentFields\' should call getTargetedAppointmentData', fu
         endDate: new Date(2015, 1, 1, 1),
         allDay: true
     }, 'Appointment data is OK');
-});
-
-QUnit.test('\'appointmentTakesAllDay\' should work correct with custom data fields', function(assert) {
-    this.createInstance({
-        startDateExpr: 'Start',
-        endDateExpr: 'End',
-    });
-
-    this.instance.fire('appointmentTakesAllDay', {
-        appointment: {
-            Start: new Date(2015, 2, 2, 0),
-            End: new Date(2015, 2, 3, 0)
-        },
-        callback: function(result) {
-            assert.ok(result, 'There is some result');
-        }
-    });
 });
 
 QUnit.test('\'showAddAppointmentPopup\' should update appointment data if there is some custom data fields', function(assert) {
@@ -618,12 +569,10 @@ QUnit.test('UpdateAppointmentStartDate should return corrected startDate', funct
         endDate: new Date(2016, 1, 2, 7)
     };
 
-    this.instance.fire('updateAppointmentStartDate', {
+    const result = this.instance.fire('updateAppointmentStartDate', {
         startDate: appointment.startDate,
-        callback: function(result) {
-            assert.deepEqual(result, new Date(2016, 1, 2, 5), 'Updated date is correct');
-        }
     });
+    assert.deepEqual(result, new Date(2016, 1, 2, 5), 'Updated date is correct');
 });
 
 QUnit.test('UpdateAppointmentStartDate should return corrected startDate when appointment is short', function(assert) {
@@ -639,12 +588,10 @@ QUnit.test('UpdateAppointmentStartDate should return corrected startDate when ap
         endDate: new Date(2016, 1, 2, 9, 1)
     };
 
-    this.instance.fire('updateAppointmentStartDate', {
+    const result = this.instance.fire('updateAppointmentStartDate', {
         startDate: appointment.startDate,
-        callback: function(result) {
-            assert.deepEqual(result, new Date(2016, 1, 2, 9, 0), 'Updated date is correct');
-        }
     });
+    assert.deepEqual(result, new Date(2016, 1, 2, 9, 0), 'Updated date is correct');
 });
 
 QUnit.test('appointmentTakesSeveralDays should return true, if startDate and endDate is different days', function(assert) {
@@ -683,13 +630,11 @@ QUnit.test('UpdateAppointmentStartDate should return corrected startDate for lon
         endDate: new Date(2016, 1, 4, 7)
     };
 
-    this.instance.fire('updateAppointmentStartDate', {
+    const result = this.instance.fire('updateAppointmentStartDate', {
         startDate: appointment.startDate,
         appointment: appointment,
-        callback: function(result) {
-            assert.deepEqual(result, new Date(2016, 1, 2, 5), 'Date is correct');
-        }
     });
+    assert.deepEqual(result, new Date(2016, 1, 2, 5), 'Date is correct');
 });
 
 QUnit.test('UpdateAppointmentEndDate should return corrected endDate', function(assert) {
@@ -706,13 +651,11 @@ QUnit.test('UpdateAppointmentEndDate should return corrected endDate', function(
         endDate: new Date(2015, 2, 3, 10, 30)
     };
 
-    this.instance.fire('updateAppointmentEndDate', {
+    const result = this.instance.fire('updateAppointmentEndDate', {
         appointment: appointment,
         endDate: appointment.endDate,
-        callback: function(result) {
-            assert.deepEqual(result, new Date(2015, 2, 3, 10), 'Updated date is correct');
-        }
     });
+    assert.deepEqual(result, new Date(2015, 2, 3, 10), 'Updated date is correct');
 });
 
 QUnit.test('UpdateAppointmentEndDate should return corrected endDate for long appointment', function(assert) {
@@ -729,13 +672,11 @@ QUnit.test('UpdateAppointmentEndDate should return corrected endDate for long ap
         endDate: new Date(2015, 2, 3, 10, 30)
     };
 
-    this.instance.fire('updateAppointmentEndDate', {
+    const result = this.instance.fire('updateAppointmentEndDate', {
         appointment: appointment,
         endDate: appointment.endDate,
-        callback: function(result) {
-            assert.deepEqual(result, new Date(2015, 2, 3, 10), 'Updated date is correct');
-        }
     });
+    assert.deepEqual(result, new Date(2015, 2, 3, 10), 'Updated date is correct');
 });
 
 QUnit.test('UpdateAppointmentEndDate should return corrected endDate by certain endDayHour', function(assert) {
@@ -755,13 +696,11 @@ QUnit.test('UpdateAppointmentEndDate should return corrected endDate by certain 
         endDate: new Date(2015, 2, 3, 20, 30)
     };
 
-    this.instance.fire('updateAppointmentEndDate', {
+    const result = this.instance.fire('updateAppointmentEndDate', {
         appointment: appointment,
         endDate: appointment.endDate,
-        callback: function(result) {
-            assert.deepEqual(result, new Date(2015, 2, 3, 18), 'Updated date is correct');
-        }
     });
+    assert.deepEqual(result, new Date(2015, 2, 3, 18), 'Updated date is correct');
 });
 
 QUnit.test('\'convertDateByTimezone\' should return date according to the custom timeZone', function(assert) {
@@ -814,13 +753,11 @@ QUnit.test('\'convertDateByTimezone\' should return date according to the custom
 QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration', function(assert) {
     this.createInstance();
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 8),
         endDate: new Date(2015, 2, 2, 20),
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration considering startDayHour and endDayHour', function(assert) {
@@ -831,13 +768,11 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment dur
         endDayHour: 20
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 8),
         endDate: new Date(2015, 2, 4, 20),
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration considering startDayHour and endDayHour for stricly allDay appointment without allDay field', function(assert) {
@@ -848,13 +783,11 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment dur
         endDayHour: 20
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 8),
         endDate: new Date(2015, 2, 3, 0),
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration considering hours of startDate and endDate', function(assert) {
@@ -865,13 +798,11 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment dur
         endDayHour: 22
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 4, 25, 21),
         endDate: new Date(2015, 4, 26, 3),
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 3, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 3, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible long appointment duration considering hours of startDate and endDate', function(assert) {
@@ -882,13 +813,11 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible long appointmen
         endDayHour: 20
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 10),
         endDate: new Date(2015, 2, 4, 17),
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 31, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 31, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration considering hours of ultraboundary startDate and endDate', function(assert) {
@@ -899,13 +828,11 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment dur
         endDayHour: 20
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 7),
         endDate: new Date(2015, 2, 4, 21),
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible allDay appointment duration', function(assert) {
@@ -916,14 +843,12 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible allDay appointm
         endDayHour: 20
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 7),
         endDate: new Date(2015, 2, 4, 21),
         allDay: true,
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment duration if last cell has small duration (T664073)', function(assert) {
@@ -935,14 +860,12 @@ QUnit.test('\'getAppointmentDurationInMs\' should return visible appointment dur
         cellDuration: 61
     });
 
-    this.instance.fire('getAppointmentDurationInMs', {
+    const result = this.instance.fire('getAppointmentDurationInMs', {
         startDate: new Date(2015, 2, 2, 7),
         endDate: new Date(2015, 2, 4, 21),
         allDay: true,
-        callback: function(result) {
-            assert.equal(result / dateUtils.dateToMilliseconds('hour'), 48.8, '\'getAppointmentDurationInMs\' works fine');
-        }
     });
+    assert.equal(result / dateUtils.dateToMilliseconds('hour'), 48.8, '\'getAppointmentDurationInMs\' works fine');
 });
 
 QUnit.test('\'getAppointmentColor\' by certain group', function(assert) {
@@ -966,17 +889,15 @@ QUnit.test('\'getAppointmentColor\' by certain group', function(assert) {
         ]
     });
 
-    this.instance.fire('getAppointmentColor', {
+    const result = this.instance.fire('getAppointmentColor', {
         itemData: {
             typeId: 1,
             priorityId: 1
         },
         groupIndex: 0,
-        callback: function(result) {
-            result.done(function(color) {
-                appointmentColor = color;
-            });
-        }
+    });
+    result.done(function(color) {
+        appointmentColor = color;
     });
 
     assert.strictEqual(appointmentColor, 'red', 'appointment color');
@@ -1015,7 +936,7 @@ QUnit.test('\'getAppointmentColor\' with fieldExpr for complex resource', functi
         }]
     });
 
-    this.instance.fire('getAppointmentColor', {
+    const result = this.instance.fire('getAppointmentColor', {
         itemData: {
             'Price': 10,
             'startDate': new Date(2015, 4, 24, 9, 10, 0, 0),
@@ -1026,11 +947,10 @@ QUnit.test('\'getAppointmentColor\' with fieldExpr for complex resource', functi
             'TheatreId': 1
         },
         groupIndex: 0,
-        callback: function(result) {
-            result.done(function(color) {
-                appointmentColor = color;
-            });
-        }
+    });
+
+    result.done(function(color) {
+        appointmentColor = color;
     });
 
     assert.strictEqual(appointmentColor, 'red', 'appointment color is OK');
@@ -1514,6 +1434,13 @@ QUnit.module('Grouping By Date', {
     },
     afterEach: function() {
         fx.off = false;
+    },
+
+    checkNeedCoordinatesResult: (assert, result, cellIndex, rowIndex, top, left, epsilon) => {
+        assert.equal(result.cellIndex, cellIndex, 'cellIndex is correct');
+        assert.equal(result.rowIndex, rowIndex, 'rowIndex is correct');
+        assert.equal(result.top, top, 'top is correct');
+        assert.roughEqual(result.left, left, epsilon, 'left is correct');
     }
 });
 
@@ -1586,35 +1513,22 @@ QUnit.test('\'needCoordinates\' should work correct when groupByDate = true, Day
         ],
     });
 
-    this.instance.fire('needCoordinates', {
+    this.checkNeedCoordinatesResult(assert, this.instance.fire('needCoordinates', {
         appointmentData: {
             startDate: new Date(2018, 4, 21, 9, 0),
             priorityId: 2
         },
         startDate: new Date(2018, 4, 21, 9, 0),
-        callback: function(result) {
-            result = result[0];
-            assert.equal(result.cellIndex, 0, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 0, 'Coordinates are OK');
-            assert.equal(result.top, 0, 'Coordinates are OK');
-            assert.roughEqual(result.left, 324, 1.1, 'Coordinates are OK');
-        }
-    });
+    })[0], 0, 0, 0, 324, 1.1);
 
-    this.instance.fire('needCoordinates', {
+
+    this.checkNeedCoordinatesResult(assert, this.instance.fire('needCoordinates', {
         appointmentData: {
             startDate: new Date(2018, 4, 22, 9, 0),
             priorityId: 1
         },
         startDate: new Date(2018, 4, 22, 9, 0),
-        callback: function(result) {
-            result = result[0];
-            assert.equal(result.cellIndex, 1, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 0, 'Coordinates are OK');
-            assert.equal(result.top, 0, 'Coordinates are OK');
-            assert.roughEqual(result.left, 548, 1.1, 'Coordinates are OK');
-        }
-    });
+    })[0], 1, 0, 0, 548, 1.1);
 });
 
 QUnit.test('\'needCoordinates\' should work correct for allDay appointment when groupByDate = true, Week view', function(assert) {
@@ -1650,7 +1564,7 @@ QUnit.test('\'needCoordinates\' should work correct for allDay appointment when 
         ],
     });
 
-    this.instance.fire('needCoordinates', {
+    const results = this.instance.fire('needCoordinates', {
         appointmentData: {
             startDate: new Date(2018, 4, 21, 9, 0),
             endDate: new Date(2018, 4, 23, 9, 0),
@@ -1658,22 +1572,11 @@ QUnit.test('\'needCoordinates\' should work correct for allDay appointment when 
             allDay: true
         },
         startDate: new Date(2018, 4, 21, 9, 0),
-        callback: function(results) {
-            assert.equal(results.length, 2, 'Result length is OK');
-
-            let result = results[0];
-            assert.equal(result.cellIndex, 1, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 0, 'Coordinates are OK');
-            assert.equal(result.top, 0, 'Coordinates are OK');
-            assert.roughEqual(result.left, 196, 1.1, 'Coordinates are OK');
-
-            result = results[1];
-            assert.equal(result.cellIndex, 2, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 0, 'Coordinates are OK');
-            assert.equal(result.top, 0, 'Coordinates are OK');
-            assert.roughEqual(result.left, 260, 1.1, 'Coordinates are OK');
-        }
     });
+
+    assert.equal(results.length, 2, 'Result length is OK');
+    this.checkNeedCoordinatesResult(assert, results[0], 1, 0, 0, 196, 1.1);
+    this.checkNeedCoordinatesResult(assert, results[1], 2, 0, 0, 260, 1.1);
 });
 
 QUnit.test('\'needCoordinates\' should work correct when groupByDate = true, Week view', function(assert) {
@@ -1705,35 +1608,21 @@ QUnit.test('\'needCoordinates\' should work correct when groupByDate = true, Wee
         ],
     });
 
-    this.instance.fire('needCoordinates', {
+    this.checkNeedCoordinatesResult(assert, this.instance.fire('needCoordinates', {
         appointmentData: {
             startDate: new Date(2018, 4, 22, 10, 0),
             priorityId: 2
         },
         startDate: new Date(2018, 4, 22, 10, 0),
-        callback: function(result) {
-            result = result[0];
-            assert.equal(result.cellIndex, 2, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 2, 'Coordinates are OK');
-            assert.equal(result.top, 100, 'Coordinates are OK');
-            assert.roughEqual(result.left, 420, 1.5, 'Coordinates are OK');
-        }
-    });
+    })[0], 2, 2, 100, 420, 1.5);
 
-    this.instance.fire('needCoordinates', {
+    this.checkNeedCoordinatesResult(assert, this.instance.fire('needCoordinates', {
         appointmentData: {
             startDate: new Date(2018, 4, 25, 1, 0),
             priorityId: 1
         },
         startDate: new Date(2018, 4, 25, 11, 0),
-        callback: function(result) {
-            result = result[0];
-            assert.equal(result.cellIndex, 5, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 4, 'Coordinates are OK');
-            assert.equal(result.top, 200, 'Coordinates are OK');
-            assert.roughEqual(result.left, 740, 1.5, 'Coordinates are OK');
-        }
-    });
+    })[0], 5, 4, 200, 740, 1.5);
 });
 
 
@@ -1773,29 +1662,18 @@ QUnit.test('\'needCoordinates\' should work correct when groupByDate = true, Mon
     const cellWidth = $cell.getBoundingClientRect().width;
     const cellHeight = $cell.getBoundingClientRect().height;
 
-    this.instance.fire('needCoordinates', {
+    const results = this.instance.fire('needCoordinates', {
         appointmentData: {
             startDate: new Date(2018, 4, 22, 10, 0),
             endDate: new Date(2018, 4, 24),
             priorityId: 2
         },
         startDate: new Date(2018, 4, 22, 10, 0),
-        callback: function(results) {
-            assert.equal(results.length, 2, 'Coordinates count is ok');
-
-            let result = results[0];
-            assert.equal(result.cellIndex, 2, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 3, 'Coordinates are OK');
-            assert.equal(result.top, cellHeight * 3, 'Coordinates are OK');
-            assert.roughEqual(result.left, cellWidth * 5, 1.5, 'Coordinates are OK');
-
-            result = results[1];
-            assert.equal(result.cellIndex, 3, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 3, 'Coordinates are OK');
-            assert.equal(result.top, cellHeight * 3, 'Coordinates are OK');
-            assert.roughEqual(result.left, cellWidth * 7, 1.5, 'Coordinates are OK');
-        }
     });
+
+    assert.equal(results.length, 2, 'Coordinates count is ok');
+    this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3, cellWidth * 5, 1.5);
+    this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3, cellWidth * 7, 1.5);
 });
 
 QUnit.test('\'needCoordinates\' should work correct for recurrenceAppointment when groupByDate = true, Month view', function(assert) {
@@ -1834,7 +1712,7 @@ QUnit.test('\'needCoordinates\' should work correct for recurrenceAppointment wh
     const cellWidth = $cell.getBoundingClientRect().width;
     const cellHeight = $cell.getBoundingClientRect().height;
 
-    this.instance.fire('needCoordinates', {
+    const results = this.instance.fire('needCoordinates', {
         appointmentData: {
             startDate: new Date(2018, 4, 22, 10, 0),
             endDate: new Date(2018, 4, 23, 12),
@@ -1842,46 +1720,15 @@ QUnit.test('\'needCoordinates\' should work correct for recurrenceAppointment wh
             recurrenceRule: 'FREQ=DAILY;COUNT=3'
         },
         startDate: new Date(2018, 4, 22, 10, 0),
-        callback: function(results) {
-            assert.equal(results.length, 6, 'Coordinates count is ok');
-
-            let result = results[0];
-            assert.equal(result.cellIndex, 2, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 3, 'Coordinates are OK');
-            assert.equal(result.top, cellHeight * 3, 'Coordinates are OK');
-            assert.roughEqual(result.left, cellWidth * 5, 1.5, 'Coordinates are OK');
-
-            result = results[1];
-            assert.equal(result.cellIndex, 3, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 3, 'Coordinates are OK');
-            assert.equal(result.top, cellHeight * 3, 'Coordinates are OK');
-            assert.roughEqual(result.left, cellWidth * 7, 1.5, 'Coordinates are OK');
-
-            result = results[2];
-            assert.equal(result.cellIndex, 3, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 3, 'Coordinates are OK');
-            assert.equal(result.top, cellHeight * 3, 'Coordinates are OK');
-            assert.roughEqual(result.left, cellWidth * 7, 1.5, 'Coordinates are OK');
-
-            result = results[3];
-            assert.equal(result.cellIndex, 4, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 3, 'Coordinates are OK');
-            assert.equal(result.top, cellHeight * 3, 'Coordinates are OK');
-            assert.roughEqual(result.left, cellWidth * 9, 1.5, 'Coordinates are OK');
-
-            result = results[4];
-            assert.equal(result.cellIndex, 4, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 3, 'Coordinates are OK');
-            assert.equal(result.top, cellHeight * 3, 'Coordinates are OK');
-            assert.roughEqual(result.left, cellWidth * 9, 1.5, 'Coordinates are OK');
-
-            result = results[5];
-            assert.equal(result.cellIndex, 5, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 3, 'Coordinates are OK');
-            assert.equal(result.top, cellHeight * 3, 'Coordinates are OK');
-            assert.roughEqual(result.left, cellWidth * 11, 1.5, 'Coordinates are OK');
-        }
     });
+
+    assert.equal(results.length, 6, 'Coordinates count is ok');
+    this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3, cellWidth * 5, 1.5);
+    this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3, cellWidth * 7, 1.5);
+    this.checkNeedCoordinatesResult(assert, results[2], 3, 3, cellHeight * 3, cellWidth * 7, 1.5);
+    this.checkNeedCoordinatesResult(assert, results[3], 4, 3, cellHeight * 3, cellWidth * 9, 1.5);
+    this.checkNeedCoordinatesResult(assert, results[4], 4, 3, cellHeight * 3, cellWidth * 9, 1.5);
+    this.checkNeedCoordinatesResult(assert, results[5], 5, 3, cellHeight * 3, cellWidth * 11, 1.5);
 });
 
 QUnit.test('\'needCoordinates\' should work correct when groupByDate = true, Timeline view', function(assert) {
@@ -1921,25 +1768,17 @@ QUnit.test('\'needCoordinates\' should work correct when groupByDate = true, Tim
 
     const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().width;
 
-    this.instance.fire('needCoordinates', {
+    const results = this.instance.fire('needCoordinates', {
         appointmentData: {
             startDate: new Date(2018, 4, 21, 10, 0),
             endDate: new Date(2018, 4, 21, 12, 0),
             priorityId: 2
         },
         startDate: new Date(2018, 4, 21, 10, 0),
-        callback: function(results) {
-            let result = results[0];
-            assert.equal(result.cellIndex, 2, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 0, 'Coordinates are OK');
-            assert.roughEqual(result.left, cellWidth * 5, 1.5, 'Coordinates are OK');
-
-            result = results[1];
-            assert.equal(result.cellIndex, 3, 'Coordinates are OK');
-            assert.equal(result.rowIndex, 0, 'Coordinates are OK');
-            assert.roughEqual(result.left, cellWidth * 7, 1.5, 'Coordinates are OK');
-        }
     });
+
+    this.checkNeedCoordinatesResult(assert, results[0], 2, 0, 0, cellWidth * 5, 1.5);
+    this.checkNeedCoordinatesResult(assert, results[1], 3, 0, 0, cellWidth * 7, 1.5);
 });
 
 QUnit.test('\'getResizableAppointmentArea\' should return correct area when groupByDate = true, Month view', function(assert) {
@@ -1986,18 +1825,16 @@ QUnit.test('\'getResizableAppointmentArea\' should return correct area when grou
     const lastCellPosition = $lastCell.offset();
     const cellWidth = $lastCell.get(0).getBoundingClientRect().width;
 
-    this.instance.fire('getResizableAppointmentArea', {
+    const result = this.instance.fire('getResizableAppointmentArea', {
         allDay: false,
         coordinates: {
             groupIndex: 1,
             left: 550,
             top: 0
         },
-        callback: function(result) {
-            assert.roughEqual(result.left, firstCellPosition.left - cellWidth / 2, 3, 'Area left is OK');
-            assert.roughEqual(result.right, lastCellPosition.left + 1.5 * cellWidth, 3, 'Area right is OK');
-        }
     });
+    assert.roughEqual(result.left, firstCellPosition.left - cellWidth / 2, 3, 'Area left is OK');
+    assert.roughEqual(result.right, lastCellPosition.left + 1.5 * cellWidth, 3, 'Area right is OK');
 });
 
 QUnit.test('\'getResizableStep\' should return correct step, groupByDate = true, Month view', function(assert) {

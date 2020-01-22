@@ -25,12 +25,6 @@ export default class AppointmentDragBehavior {
         return appointment.data('dxAppointmentSettings').allDay;
     }
 
-    getDraggableArea() {
-        let result = null;
-        this.appointments.notifyObserver('getDraggableAppointmentArea', { callback: appointmentArea => result = appointmentArea });
-        return result;
-    }
-
     getContainerShift(isAllDay) {
         const appointmentContainer = this.appointments._getAppointmentContainer(isAllDay);
         const dragAndDropContainer = this.appointments.option(FIXED_CONTAINER_PROP_NAME);

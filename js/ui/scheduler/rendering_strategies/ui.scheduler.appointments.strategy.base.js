@@ -186,20 +186,11 @@ class BaseRenderingStrategy {
     }
 
     _getAppointmentCoordinates(itemData) {
-        let coordinates = [{
-            top: 0,
-            left: 0
-        }];
-        this.instance.fire('needCoordinates', {
+        return this.instance.fire('needCoordinates', {
             startDate: this.startDate(itemData),
             originalStartDate: this.startDate(itemData, true),
             appointmentData: itemData,
-            callback: function(value) {
-                coordinates = value;
-            }
         });
-
-        return coordinates;
     }
 
     _isRtl() {
@@ -557,17 +548,11 @@ class BaseRenderingStrategy {
     }
 
     _getAppointmentDurationInMs(startDate, endDate, allDay) {
-        let result;
-        this.instance.fire('getAppointmentDurationInMs', {
+        return this.instance.fire('getAppointmentDurationInMs', {
             startDate: startDate,
             endDate: endDate,
             allDay: allDay,
-            callback: function(duration) {
-                result = duration;
-            }
         });
-
-        return result;
     }
 
     _getMaxNeighborAppointmentCount() {

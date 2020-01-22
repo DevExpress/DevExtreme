@@ -527,19 +527,15 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
 
     _applyResourceDataAttr: function($appointment) {
-        this.notifyObserver('getResourcesFromItem', {
-            itemData: this._getItemData($appointment),
-            callback: function(resources) {
-                if(resources) {
-                    each(resources, function(name, values) {
-                        const attr = 'data-' + commonUtils.normalizeKey(name.toLowerCase()) + '-';
-                        for(let i = 0; i < values.length; i++) {
-                            $appointment.attr(attr + commonUtils.normalizeKey(values[i]), true);
-                        }
-                    });
+        const resources = this.invoke('getResourcesFromItem', this._getItemData($appointment));
+        if(resources) {
+            each(resources, function(name, values) {
+                const attr = 'data-' + commonUtils.normalizeKey(name.toLowerCase()) + '-';
+                for(let i = 0; i < values.length; i++) {
+                    $appointment.attr(attr + commonUtils.normalizeKey(values[i]), true);
                 }
-            }
-        });
+            });
+        }
     },
 
     _resizableConfig: function(appointmentData, itemSetting) {
@@ -570,23 +566,16 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _calculateResizableArea: function(itemSetting, appointmentData) {
-        let area = this.$element().closest('.dx-scrollable-content');
+        const area = this.$element().closest('.dx-scrollable-content');
 
-        this.notifyObserver('getResizableAppointmentArea', {
+        return this.invoke('getResizableAppointmentArea', {
             coordinates: {
                 left: itemSetting.left,
                 top: 0,
                 groupIndex: itemSetting.groupIndex
             },
             allDay: itemSetting.allDay,
-            callback: function(result) {
-                if(result) {
-                    area = result;
-                }
-            }
-        });
-
-        return area;
+        }) || area;
     },
 
     _resizeEndHandler: function(e) {
@@ -700,26 +689,17 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
     _getAppointmentColor: function($appointment, groupIndex) {
         const res = new Deferred();
-        this.notifyObserver('getAppointmentColor', {
+        const response = this.invoke('getAppointmentColor', {
             itemData: this._getItemData($appointment),
             groupIndex: groupIndex,
-            callback: d => d.done(color => res.resolve(color))
         });
+        response.done(color => res.resolve(color));
 
         return res.promise();
     },
 
     _calculateBoundOffset: function() {
-        let result = {
-            top: 0
-        };
-
-        this.notifyObserver('getBoundOffset', {
-            callback: function(offset) {
-                result = offset;
-            }
-        });
-        return result;
+        return this.invoke('getBoundOffset');
     },
 
     _virtualAppointments: {},
