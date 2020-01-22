@@ -355,9 +355,8 @@ class FileManagerToolbar extends Widget {
         const items = toolbar.option('items');
 
         items.forEach((item, index) => {
-            const itemVisible = item.available;
-
             if(item.name !== 'separator') {
+                const itemVisible = item.available;
                 item.available = this._isToolbarItemAvailable(item, fileItems);
                 if(item.available !== itemVisible) {
                     const optionName = `items[${index}].visible`;
