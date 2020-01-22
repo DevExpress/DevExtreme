@@ -490,9 +490,9 @@ QUnit.module('focus policy', {
         const actualSelectedTabItem = tabPanel._tabs.option('selectedItem');
         QUnit.assert.equal(actualSelectedTabItem, expectedSelectedItem, 'selected item in the tabs option must be correct');
 
-        const expectedSelectedTabContent = tabPanel.itemElements()[expectedSelectedIndex];
-        const actualSelectedTabContent = tabPanel.$element().find(toSelector(SELECTED_ITEM_CLASS)).get(0);
-        QUnit.assert.equal(expectedSelectedTabContent, actualSelectedTabContent, 'selected content must be correct');
+        const expectedSelectedContent = tabPanel.itemElements()[expectedSelectedIndex];
+        const actualSelectedContent = tabPanel.$element().find(toSelector(SELECTED_ITEM_CLASS)).get(0);
+        QUnit.assert.equal(expectedSelectedContent, actualSelectedContent, 'selected content must be correct');
 
         const $tabsContainer = tabPanel.$element().find(toSelector(TABS_CLASS));
         const $focusedTab = $tabsContainer.find(toSelector(FOCUSED_CLASS));
@@ -502,10 +502,10 @@ QUnit.module('focus policy', {
             QUnit.assert.equal($focusedTab.get(0), $selectedTab.get(0), 'selected tab must match focused tab');
             if(config().useJQuery) {
                 QUnit.assert.notEqual(focusedElement.jquery, undefined, 'in jquery mode focused element must be a jquery object');
-                QUnit.assert.equal(focusedElement.get(0), actualSelectedTabContent, 'in jquery mode selected tab content must match focused element');
+                QUnit.assert.equal(focusedElement.get(0), actualSelectedContent, 'in jquery mode selected tab content must match focused element');
             } else {
                 QUnit.assert.equal(focusedElement.jquery, undefined, 'in pure javascript mode focused element must be a DOM object');
-                QUnit.assert.equal(focusedElement, actualSelectedTabContent, 'in pure javascript mode selected tab content must match focused element');
+                QUnit.assert.equal(focusedElement, actualSelectedContent, 'in pure javascript mode selected tab content must match focused element');
             }
 
         } else {
