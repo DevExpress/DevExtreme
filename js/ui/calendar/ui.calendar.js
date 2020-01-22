@@ -337,13 +337,14 @@ const Calendar = Editor.inherit({
 
         let isDateForwardAvailable = isCurrentDateAvailable;
         let isDateBackwardAvailable = isCurrentDateAvailable;
-        let isDateForwardInStartView = true;
-        let isDateBackwardInStartView = true;
+
+        let isDateForwardInStartView;
+        let isDateBackwardInStartView;
 
         const dateForward = new Date(currentDate);
         const dateBackward = new Date(currentDate);
 
-        while(isDateForwardInStartView || isDateBackwardInStartView) {
+        do {
             if(isDateForwardAvailable) {
                 currentDate = dateForward;
                 break;
@@ -362,7 +363,8 @@ const Calendar = Editor.inherit({
 
             isDateForwardAvailable = isDateForwardInStartView && !this._isDateNotAvailable(dateForward);
             isDateBackwardAvailable = isDateBackwardInStartView && !this._isDateNotAvailable(dateBackward);
-        }
+        } while(isDateForwardInStartView || isDateBackwardInStartView);
+
         this.option('currentDate', currentDate);
     },
 
