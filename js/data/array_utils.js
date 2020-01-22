@@ -170,6 +170,7 @@ function remove(keyInfo, array, key, isBatch) {
 
 function indexByKey(keyInfo, array, key) {
     const keyExpr = keyInfo.key();
+
     if(!getHasKeyCacheValue(array, key)) {
         return -1;
     }
