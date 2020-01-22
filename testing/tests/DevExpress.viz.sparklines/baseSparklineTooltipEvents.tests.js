@@ -26,7 +26,7 @@ QUnit.begin(function() {
 
 const environment = {
     beforeEach: function() {
-        this.$container = createTestContainer('#container');
+        this.$container = $(createTestContainer('#container'));
         this.createSparkline = function(options) {
             return this.$container.dxSparkline(options).dxSparkline('instance');
         };

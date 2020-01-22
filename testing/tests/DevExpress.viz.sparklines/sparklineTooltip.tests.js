@@ -48,7 +48,7 @@ const environment = {
             font: {}
         });
 
-        this.$container = createTestContainer('#container');
+        this.$container = $(createTestContainer('#container'));
         this.createSparkline = function(options) {
             return this.$container.dxSparkline($.extend(true, {
                 tooltip: {

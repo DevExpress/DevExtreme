@@ -42,7 +42,7 @@ tooltipModule.Tooltip = sinon.spy(function() {
 
 const environment = {
     beforeEach: function() {
-        this.$container = createTestContainer('#container');
+        this.$container = $(createTestContainer('#container'));
         this.resetTranslators();
         this.tooltip = new StubTooltip();
     },
