@@ -59,7 +59,7 @@ export const viewModelFunction = (model: Button) => {
     const supportedKeys = () => {
         const click = e => {
             e.preventDefault();
-            model.onClick(e);
+            model.onClick && model.onClick(e);
         };
 
         return { space: click, enter: click };
@@ -68,7 +68,7 @@ export const viewModelFunction = (model: Button) => {
     return {
         ...model,
         elementAttr: { ...model.elementAttr, role: 'button' },
-        aria: { label: model.text.trim() },
+        aria: { label: model.text && model.text.trim() },
         cssClasses: getCssClasses(model),
         icon,
         supportedKeys,
