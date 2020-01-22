@@ -170,4 +170,11 @@ describe('Widget', () => {
         expect(tree.find('.dx-widget').props().accessKey)
             .toBe('x');
     });
+    it('should pass `disabled` state', () => {
+        const model = new Widget();
+        const tree = mount(viewFunction(viewModelFunction({ ...model, disabled: true })));
+
+        expect(tree.find('.dx-widget').is('.dx-widget.dx-state-disabled'))
+            .toBeTruthy();
+    });
 });
