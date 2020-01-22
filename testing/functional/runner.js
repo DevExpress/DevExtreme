@@ -13,10 +13,9 @@ createTestCafe('localhost', 1437, 1438)
         let componentFolder = args.componentFolder.trim();
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
-        const browsers = args.browsers.split(' ');
 
         const runner = testCafe.createRunner()
-            .browsers(browsers)
+            .browsers(args.browsers.split(' '))
             .src([`./testing/functional/tests/${componentFolder}/*.ts`]);
 
         if(testName) {
