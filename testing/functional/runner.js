@@ -13,9 +13,11 @@ createTestCafe('localhost', 1437, 1438)
         let componentFolder = args.componentFolder.trim();
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
+        const browsers = args.browsers.split(' ');
+        const quarantineMode = args.quarantineMode;
 
         const runner = testCafe.createRunner()
-            .browsers(args.browsers.split(' '))
+            .browsers(browsers)
             .src([`./testing/functional/tests/${componentFolder}/*.ts`]);
 
         if(testName) {
@@ -23,7 +25,7 @@ createTestCafe('localhost', 1437, 1438)
         }
 
         return runner.run({
-            quarantineMode: false
+            quarantineMode: quarantineMode
         });
     })
     .then(failedCount => {
@@ -38,7 +40,8 @@ function getArgs() {
         default: {
             browsers: 'chrome',
             test: '',
-            componentFolder: ''
+            componentFolder: '',
+            quarantineMode: false
         }
     });
 }
