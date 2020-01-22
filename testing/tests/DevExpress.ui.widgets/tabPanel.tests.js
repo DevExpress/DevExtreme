@@ -482,67 +482,56 @@ QUnit.module('focus policy', {
     });
 
     function checkSelectionAndFocus(tabPanel, expectedSelectedIndex) {
-        const $tabsContainer = tabPanel.$element().find(toSelector(TABS_CLASS));
-
-        const selectedTab = $tabsContainer.find(toSelector(SELECTED_TAB_CLASS));
-        QUnit.assert.equal(selectedTab.index(), expectedSelectedIndex, 'selected tab must match selected index');
-
-        const actualSelectedIndex = tabPanel.option('selectedIndex');
-        QUnit.assert.equal(actualSelectedIndex, expectedSelectedIndex, 'selected index in the option must be correct');
+        const expectedSelectedItem = tabPanel.option('items')[expectedSelectedIndex];
 
         const actualSelectedItem = tabPanel.option('selectedItem');
-        const expectedSelectedItem = tabPanel.option('items')[expectedSelectedIndex];
         QUnit.assert.equal(actualSelectedItem, expectedSelectedItem, 'selected item in the option must be correct');
 
-        const $selectedTabContent = tabPanel.$element().find(toSelector(SELECTED_ITEM_CLASS));
-        QUnit.assert.equal($selectedTabContent.index(), expectedSelectedIndex, 'selected tab content must match selected index');
+        const actualSelectedTabItem = tabPanel._tabs.option('selectedItem');
+        QUnit.assert.equal(actualSelectedTabItem, expectedSelectedItem, 'selected item in the tabs option must be correct');
 
-        const focusedElement = tabPanel.option('focusedElement');
+        const expectedSelectedTabContent = tabPanel.itemElements()[expectedSelectedIndex];
+        const actualSelectedTabContent = tabPanel.$element().find(toSelector(SELECTED_ITEM_CLASS)).get(0);
+        QUnit.assert.equal(expectedSelectedTabContent, actualSelectedTabContent, 'selected content must be correct');
+
+        const $tabsContainer = tabPanel.$element().find(toSelector(TABS_CLASS));
         const $focusedTab = $tabsContainer.find(toSelector(FOCUSED_CLASS));
-
+        const $selectedTab = $tabsContainer.find(toSelector(SELECTED_TAB_CLASS));
         if(tabPanel.option('focusStateEnabled') === true) {
-            QUnit.assert.equal($focusedTab.index(), expectedSelectedIndex, 'selected tab must match focused tab');
+            const focusedElement = tabPanel.option('focusedElement');
+            QUnit.assert.equal($focusedTab.get(0), $selectedTab.get(0), 'selected tab must match focused tab');
             if(config().useJQuery) {
                 QUnit.assert.notEqual(focusedElement.jquery, undefined, 'in jquery mode focused element must be a jquery object');
-                QUnit.assert.equal(focusedElement.get(0).outerHTML, $selectedTabContent.get(0).outerHTML, 'in jquery mode selected tab content must match focused element');
+                QUnit.assert.equal(focusedElement.get(0), actualSelectedTabContent, 'in jquery mode selected tab content must match focused element');
             } else {
                 QUnit.assert.equal(focusedElement.jquery, undefined, 'in pure javascript mode focused element must be a DOM object');
-                QUnit.assert.equal(focusedElement.outerHTML, $selectedTabContent.get(0).outerHTML, 'in pure javascript mode selected tab content must match focused element');
+                QUnit.assert.equal(focusedElement, actualSelectedTabContent, 'in pure javascript mode selected tab content must match focused element');
             }
 
         } else {
             QUnit.assert.equal($focusedTab.length, 0, 'there is no focused tab if focusState is disabled');
-            QUnit.assert.equal(focusedElement, null, 'there is no focused element if focusState is disabled');
+            QUnit.assert.equal(tabPanel.option('focusedElement'), null, 'there is no focused element if focusState is disabled');
         }
     }
 
     [0, 1].forEach(selectedIndex => {
-        QUnit.test(`focus -> setSelectedIndex(${selectedIndex});`, function(assert) {
-            const tabPanel = $('#tabPanel').dxTabPanel({
-                items: [{ title: 'item 1' }, { title: 'item 2' }]
-            }).dxTabPanel('instance');
+        ['selectedIndex', 'selectedItem'].forEach(optionName => {
+            QUnit.test(`focus -> setSelectedTab(${selectedIndex}) -> focus`, function(assert) {
+                const tabPanel = $('#tabPanel').dxTabPanel({
+                    items: [{ title: 'item 1' }, { title: 'item 2' }]
+                }).dxTabPanel('instance');
+                const $tabPanel = $(tabPanel.$element());
 
-            const $tabPanel = $(tabPanel.$element());
-            $tabPanel.focusin();
-            tabPanel.option('selectedIndex', selectedIndex);
-            $tabPanel.focusin();
+                $tabPanel.focusin();
+                if(optionName === 'selectedIndex') {
+                    tabPanel.option('selectedIndex', selectedIndex);
+                } else {
+                    tabPanel.option('selectedItem', tabPanel.option('items')[selectedIndex]);
+                }
+                $tabPanel.focusin();
 
-            checkSelectionAndFocus(tabPanel, selectedIndex);
-        });
-    });
-
-    [0, 1].forEach(selectedIndex => {
-        QUnit.test(`focus -> setSelectedItem(item_${selectedIndex});`, function(assert) {
-            const tabPanel = $('#tabPanel').dxTabPanel({
-                items: [{ title: 'item 1' }, { title: 'item 2' }]
-            }).dxTabPanel('instance');
-
-            const $tabPanel = $(tabPanel.$element());
-            $tabPanel.focusin();
-            tabPanel.option('selectedItem', tabPanel._tabs.option('items')[selectedIndex]);
-            $tabPanel.focusin();
-
-            checkSelectionAndFocus(tabPanel, selectedIndex);
+                checkSelectionAndFocus(tabPanel, selectedIndex);
+            });
         });
     });
 });
