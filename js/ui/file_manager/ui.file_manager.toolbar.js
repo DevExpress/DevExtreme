@@ -175,15 +175,16 @@ class FileManagerToolbar extends Widget {
         return items;
     }
 
-    _groupHasItems(items, separatorIndex, isBefore) {
-        const delta = isBefore ? -1 : 1;
+    _groupHasItems(items, separatorIndex, isBeforeGroup) {
+        const delta = isBeforeGroup ? -1 : 1;
         let i = separatorIndex + delta;
-        let result = false;
         while(items[i] && items[i].name !== 'separator') {
-            result = result || items[i].visible;
+            if(items[i].visible) {
+                return true;
+            }
             i += delta;
         }
-        return result;
+        return false;
     }
 
     _configureItemByCommandName(commandName, item) {
@@ -356,15 +357,12 @@ class FileManagerToolbar extends Widget {
         items.forEach((item, index) => {
             const itemVisible = item.available;
 
-            let showItem = false;
             if(item.name !== 'separator') {
                 item.available = this._isToolbarItemAvailable(item, fileItems);
-                showItem = item.available;
-            }
-
-            if(showItem !== itemVisible) {
-                const optionName = `items[${index}].visible`;
-                toolbar.option(optionName, showItem);
+                if(item.available !== itemVisible) {
+                    const optionName = `items[${index}].visible`;
+                    toolbar.option(optionName, item.available);
+                }
             }
         });
 
