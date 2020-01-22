@@ -2388,6 +2388,28 @@ QUnit.module('editing', moduleSetup, () => {
         assert.deepEqual(list.option('selectedItems'), [customValue], 'selected item is correct');
     });
 
+    QUnit.test('onValueChanged event should have correct "event" field after adding a custom item', function(assert) {
+        const valueChangedStub = sinon.stub();
+        const $selectBox = $('#selectBox').dxSelectBox({
+            acceptCustomValue: true,
+            items: [1, 2, 3],
+            onValueChanged: valueChangedStub,
+            onCustomItemCreating: (e) => {
+                e.customItem = e.text;
+            }
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input)
+            .type('test')
+            .change();
+
+        const event = valueChangedStub.getCall(0).args[0].event;
+        assert.ok(valueChangedStub.calledOnce);
+        assert.ok(!!event);
+        assert.strictEqual(event.type, 'change');
+    });
+
     QUnit.test('Selection should not be cleared if the user select existing item after the search', (assert) => {
         const items = [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }];
         const $selectBox = $('#selectBox').dxSelectBox({
