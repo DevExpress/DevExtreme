@@ -65,6 +65,17 @@ const subscribes = {
             dates = dates.map((date) => {
                 return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption('startDayHour'));
             });
+            for(let i = 0; i < initialDates.length; i++) {
+                const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
+                // const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointmentData);
+                if(typeUtils.isDefined(startDateTimeZone)) {
+                    const daylightOffset1 = this._subscribes.getDaylightOffsetByOption(this, originalStartDate, initialDates[i]);
+                    const daylightOffset2 = this._subscribes.getDaylightOffsetByAppointment(this, originalStartDate, initialDates[i], startDateTimeZone);
+                    const diff = daylightOffset1 - daylightOffset2;
+
+                    initialDates[i] = new Date(initialDates[i].getTime() - diff * toMs('hour'));
+                }
+            }
             for(let i = 0; i < dates.length; i++) {
                 const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
                 // const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointmentData);

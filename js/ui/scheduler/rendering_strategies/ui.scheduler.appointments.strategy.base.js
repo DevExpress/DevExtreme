@@ -501,7 +501,7 @@ class BaseRenderingStrategy {
         const viewStartDate = this.startDate(appointment, false, position);
 
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
-            const recurrencePartStartDate = position ? position.startDate || position.initialStartDate : realStartDate;
+            const recurrencePartStartDate = position ? position.initialStartDate || position.startDate : realStartDate;
             const recurrencePartCroppedByViewStartDate = position ? position.startDate : realStartDate;
 
             let fullDuration = viewStartDate.getTime() > endDate.getTime() ?
