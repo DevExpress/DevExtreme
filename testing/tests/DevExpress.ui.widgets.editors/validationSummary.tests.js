@@ -46,7 +46,7 @@ QUnit.module('General', {
         assert.ok(summary, 'Summary can be created');
     });
 
-    QUnit.test('Widget can be created via jQuery 1', function(assert) {
+    QUnit.test('Widget can be empty by default', function(assert) {
         const summary = this.fixture.createSummary();
         assert.strictEqual(this.fixture.$summaryContainer.find('.dx-empty-message').length, 0, 'Validation Summary should be empty by default');
         assert.ok(summary, 'Summary can be created');
