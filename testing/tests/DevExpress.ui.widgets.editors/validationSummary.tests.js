@@ -458,65 +458,39 @@ QUnit.module('Update on validator\'s validation', {
 
 
 QUnit.module('events', {
-    // beforeEach: function() {
-    //     this.fixture = new Fixture();
-    // },
-    // afterEach: function() {
-
-    //     this.fixture.$summaryContainer.dxValidationSummary('instance').dispose();
-    // }
+    beforeEach: function() {
+        this.fixture = new Fixture();
+    }
 }, () => {
-
     QUnit.test('Check item click event subscription', function(assert) {
-        // debugger;
-        const itemClickEventHandler = sinon.spy(function() {
-            // debugger;
+        const itemClickHandler = sinon.spy();
+        const summary = this.fixture.createSummary(null, {
         });
 
-
-        // const summary = this.fixture.createSummary();
+        summary.on('itemClick', itemClickHandler);
         const validator = sinon.createStubInstance(Validator);
 
-
-        const $summary = $('#dxSummary').dxValidationSummary({
-
+        summary._groupValidationHandler({
+            isValid: false,
+            brokenRules: [{
+                type: 'required',
+                validator: validator
+            }],
+            validators: [validator]
         });
+        const itemElements = this.fixture.$summaryContainer.find('.dx-validationsummary-item');
+        itemElements.trigger('dxclick');
 
-        const summary = $summary.dxValidationSummary('instance');
-
-        summary.on('itemClick', itemClickEventHandler);
-
-        // summary._groupValidationHandler({
-        //     isValid: false,
-        //     brokenRules: [{
-        //         type: 'required',
-        //         validator: validator
-        //     }],
-        //     validators: [validator]
-        // });
-
-        // assert
-        const itemElements = $('#dxSummary').find('.dx-validationsummary-item');
-
-        itemElements.trigger('click');
-        assert.ok(validator.focus.calledOnce, 'Validator should be focused');
-        assert.ok(itemClickEventHandler.calledOnce, 'Item click has been handled');
-        assert.strictEqual(itemClickEventHandler.lastCall.args[0].itemIndex, 0, 'Item click handler should have arguments');
-
-        // itemClickHandler.restore();
-
+        assert.ok(itemClickHandler.calledOnce, 'Item click has been handled');
+        assert.strictEqual(itemClickHandler.lastCall.args[0].itemIndex, 0, 'Item click handler should have arguments');
     });
 
     QUnit.test('Check item onClick subscription', function(assert) {
-        // const clock = sinon.useFakeTimers();
-
         const itemClickHandler = sinon.spy();
-        const summary = this.fixture.createSummary($('#dxSummary'), {
+        const summary = this.fixture.createSummary(null, {
             onItemClick: itemClickHandler
         });
-        // clock.tick(100);
         const validator = sinon.createStubInstance(Validator);
-        // clock.tick(100);
 
         summary._groupValidationHandler({
             isValid: false,
@@ -527,17 +501,51 @@ QUnit.module('events', {
             validators: [validator]
         });
 
-        // assert
         const itemElements = this.fixture.$summaryContainer.find('.dx-validationsummary-item');
+        itemElements.trigger('dxclick');
 
-        itemElements.trigger('click');
-        // clock.tick(100);
-        assert.ok(validator.focus.calledOnce, 'Validator should be focused');
         assert.ok(itemClickHandler.calledOnce, 'Item click has been handled');
         assert.strictEqual(itemClickHandler.lastCall.args[0].itemIndex, 0, 'Item click handler should have arguments');
+    });
 
-        // itemClickHandler.restore();
-        // clock.restore();
+    QUnit.test('Check item onContentReady subscription', function(assert) {
+        const contentReadyHandler = sinon.spy();
+        const group = 'group1';
+        const validator = sinon.createStubInstance(Validator);
+        validator.validate.returns({ isValid: true, brokenRule: null });
+        ValidationEngine.registerValidatorInGroup(group, validator);
+
+        this.fixture.createSummary(null, {
+            validationGroup: group,
+            onContentReady: contentReadyHandler
+        });
+
+        assert.strictEqual(contentReadyHandler.callCount, 1, 'contentReady has been handled');
+        assert.ok(contentReadyHandler.lastCall.args[0].component, 'contentReady handler should have arguments');
+
+        ValidationEngine.validateGroup(group);
+        assert.strictEqual(contentReadyHandler.callCount, 2, 'contentReady has been handled');
+    });
+
+    QUnit.test('Check item contentReady event subscription', function(assert) {
+        const contentReadyHandler = sinon.spy();
+        const group = 'group1';
+        const validator = sinon.createStubInstance(Validator);
+        validator.validate.returns({ isValid: true, brokenRule: null });
+        ValidationEngine.registerValidatorInGroup(group, validator);
+
+        this.fixture.createSummary(null, {
+            validationGroup: group,
+            onInitialized: (e) => {
+                e.component.on('contentReady', contentReadyHandler);
+            }
+        });
+
+        assert.strictEqual(contentReadyHandler.callCount, 1, 'contentReady has been handled');
+        assert.ok(contentReadyHandler.lastCall.args[0].component, 'contentReady handler should have arguments');
+
+        ValidationEngine.validateGroup(group);
+        assert.strictEqual(contentReadyHandler.callCount, 2, 'contentReady has been handled');
     });
 });
 
