@@ -51,7 +51,7 @@ QUnit.begin(function() {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
 
-            this.$container = createTestContainer('#container');
+            this.$container = $(createTestContainer('#container'));
             this.renderer = new vizMocks.Renderer();
             this.translator = new FakeTranslator();
             this.series = new StubSeries();

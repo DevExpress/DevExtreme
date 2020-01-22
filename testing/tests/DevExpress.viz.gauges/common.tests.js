@@ -183,7 +183,7 @@ const environment = {
         rangeModule.Range.reset();
         axisModule.Axis.reset();
         this.renderer = new vizMocks.Renderer();
-        this.container = createTestContainer('#test-container', { width: 800, height: 600 });
+        this.container = $(createTestContainer('#test-container', { width: '800px', height: '600px' }));
     },
     createTestGauge: function(options) {
         return new dxTestGauge(this.container, $.extend(true, {}, {
