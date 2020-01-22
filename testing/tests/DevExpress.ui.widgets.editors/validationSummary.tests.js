@@ -6,6 +6,8 @@ import Validator from 'ui/validator';
 
 import 'ui/validation_summary';
 
+const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
+
 const Fixture = Class.inherit({
     createSummary: function(container, options) {
         this.$summaryContainer = $(container || '#dxSummary');
@@ -522,6 +524,7 @@ QUnit.module('events', {
 
         assert.strictEqual(contentReadyHandler.callCount, 1, 'contentReady has been handled');
         assert.ok(contentReadyHandler.lastCall.args[0].component, 'contentReady handler should have arguments');
+        assert.ok(this.fixture.$summaryContainer.hasClass(VALIDATION_SUMMARY_CLASS), 'validation summary should be rendered');
 
         ValidationEngine.validateGroup(group);
         assert.strictEqual(contentReadyHandler.callCount, 2, 'contentReady has been handled');
@@ -543,6 +546,7 @@ QUnit.module('events', {
 
         assert.strictEqual(contentReadyHandler.callCount, 1, 'contentReady has been handled');
         assert.ok(contentReadyHandler.lastCall.args[0].component, 'contentReady handler should have arguments');
+        assert.ok(this.fixture.$summaryContainer.hasClass(VALIDATION_SUMMARY_CLASS), 'validation summary should be rendered');
 
         ValidationEngine.validateGroup(group);
         assert.strictEqual(contentReadyHandler.callCount, 2, 'contentReady has been handled');
