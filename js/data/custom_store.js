@@ -204,7 +204,7 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
 
         for(let i = 0, len = rawData.length; i < len; i++) {
             item = rawData[i];
-            if(dataUtils.keysEqual(store._getKeyCompileGetters(), store.keyOf(rawData[i]), key)) {
+            if(dataUtils.keysEqual(store.key(), store.keyOf(rawData[i]), key)) {
                 pendingDeferred.resolve(item);
                 return;
             }

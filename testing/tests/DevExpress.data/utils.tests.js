@@ -1,34 +1,21 @@
 import Guid from 'core/guid';
 import dataUtils from 'data/utils';
 import odataUtils from 'data/odata/utils';
-import { compileGetter } from 'core/utils/data';
 
 const keysEqual = dataUtils.keysEqual;
 const processRequestResultLock = dataUtils.processRequestResultLock;
 const b64 = dataUtils.base64_encode;
 const throttleChanges = dataUtils.throttleChanges;
 const isGroupCriterion = dataUtils.isGroupCriterion;
-const getCompileGetter = (key) => {
-    const compileGetters = {};
-    if(Array.isArray(key)) {
-        key.forEach(k => {
-            compileGetters[k] = compileGetter(k);
-        });
-    }
-
-    return compileGetters;
-};
 
 QUnit.module('keysEqual');
 
 QUnit.test('non-strict comparison is used', function(assert) {
     // NOTE there is no point in considering "1" and 1 as different keys
-    assert.ok(keysEqual(getCompileGetter('id'), 1, '1'));
-    assert.ok(keysEqual(getCompileGetter(['a', 'b']), { a: 1, b: 2 }, { a: '1', b: '2' }));
-});
-
-QUnit.test('compare compound keys', function(assert) {
-    assert.ok(keysEqual(getCompileGetter(['a.b', 'a.c']), { a: { b: 1, c: 2 } }, { a: { b: '1', c: '2' } }));
+    assert.ok(keysEqual('id', 1, '1'));
+    assert.ok(keysEqual(['a', 'b'], { a: 1, b: 2 }, { a: '1', b: '2' }));
+    assert.ok(keysEqual(['a.b', 'a.c']), { a: { b: 1, c: 2 } }, { a: { b: '1', c: '2' } });
+    assert.ok(keysEqual('a', { b: 1, c: 2 }, { b: '1', c: '2' }));
 });
 
 QUnit.test('toComparable is used for compound keys', function(assert) {
@@ -38,7 +25,7 @@ QUnit.test('toComparable is used for compound keys', function(assert) {
     assert.ok(guid1 !== guid2);
 
     assert.ok(keysEqual(
-        getCompileGetter(['a', 'b']),
+        ['a', 'b'],
         { a: 1, b: guid1 },
         { a: 1, b: guid2 }
     ));
