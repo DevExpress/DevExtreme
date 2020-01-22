@@ -126,7 +126,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         const $row = component.$element().closest(this._getItemSelector());
         const fileItemInfo = $row.data('item');
         this._selectItem(fileItemInfo);
-        this._showContextMenu(this.getSelectedItems(), element);
+        this._showContextMenu(this._getFileItemsForContextMenu(fileItemInfo), element);
         this._activeFileActionsButton = component;
         this._activeFileActionsButton.setActive(true);
     }
@@ -218,7 +218,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         if(e.row && e.row.rowType === 'data') {
             const item = e.row.data;
             this._selectItem(item);
-            fileItems = this.getSelectedItems();
+            fileItems = this._getFileItemsForContextMenu(item);
         }
 
         e.items = this._contextMenu.createContextMenuItems(fileItems);
@@ -311,6 +311,14 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             }
         }
         return null;
+    }
+
+    _getFileItemsForContextMenu(fileItem) {
+        const selectedItems = this.getSelectedItems();
+        if(selectedItems.length) {
+            return selectedItems;
+        }
+        return this._isParentDirectoryItem(fileItem) ? [ fileItem ] : [];
     }
 
     _isParentDirectoryItem(itemInfo) {

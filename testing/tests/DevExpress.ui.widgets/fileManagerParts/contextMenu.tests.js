@@ -401,4 +401,15 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         assert.equal(this.wrapper.getDetailsItemName(0), 'New name.txt', 'file is renamed');
     });
 
+    test('context menu for parent directory item contains no edit actions', function(assert) {
+        const fileManager = this.$element.dxFileManager('instance');
+        fileManager.option('currentPath', 'Folder 1');
+        this.clock.tick(400);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
+        const menuItems = this.wrapper.getContextMenuItems();
+        assert.strictEqual(menuItems.length, 1, 'one menu item shown');
+        assert.strictEqual(menuItems.eq(0).text(), 'Refresh', '\'refresh\' menu item shown');
+    });
+
 });
