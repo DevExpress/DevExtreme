@@ -89,7 +89,6 @@ const subscribes = {
 
         const itemResources = this._resourcesManager.getResourcesFromItem(appointmentData);
         allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
-
         options.callback(this._getCoordinates(initialDates, dates, itemResources, allDay));
     },
 
@@ -98,12 +97,9 @@ const subscribes = {
     },
 
     showAppointmentTooltip: function(options) {
-        options.skipDateCalculation = true;
-        options.$appointment = $(options.target);
         const appointmentData = options.data;
-        const singleAppointmentData = this._getSingleAppointmentData(appointmentData, options);
-
-        this.showAppointmentTooltip(appointmentData, options.target, singleAppointmentData);
+        const targetData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target));
+        this.showAppointmentTooltip(appointmentData, options.target, targetData);
     },
 
     hideAppointmentTooltip: function() {
@@ -137,6 +133,9 @@ const subscribes = {
 
     updateAppointmentAfterResize: function(options) {
         const targetAppointment = options.target;
+
+        options.isAppointmentResized = true;
+
         const singleAppointment = this._getSingleAppointmentData(targetAppointment, options);
         const startDate = this.fire('getField', 'startDate', singleAppointment);
         const updatedData = extend(true, {}, options.data);
@@ -245,14 +244,13 @@ const subscribes = {
     },
 
     getTextAndFormatDate(data, currentData, format) {
-        const isAllDay = data.allDay;
-        const startDateTimeZone = data.startDateTimeZone;
-        const endDateTimeZone = data.endDateTimeZone;
-        const startDate = this.fire('convertDateByTimezone', currentData.startDate, startDateTimeZone);
-        const endDate = this.fire('convertDateByTimezone', currentData.endDate, endDateTimeZone);
+        const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
+        const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
+        const startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
+        const endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
         return {
-            text: this.fire('createAppointmentTitle', data),
-            formatDate: this.fire('_formatDates', startDate, endDate, isAllDay, format)
+            text: this.fire('createAppointmentTitle', appointmentFields),
+            formatDate: this.fire('_formatDates', startDate, endDate, appointmentFields.allDay, format)
         };
     },
 
@@ -262,6 +260,13 @@ const subscribes = {
         }
 
         return String(data);
+    },
+
+    _getAppointmentFields(data, arrayOfFields) {
+        return arrayOfFields.reduce((accumulator, field) => {
+            accumulator[field] = this.fire('getField', field, data);
+            return accumulator;
+        }, {});
     },
 
     _formatDates(startDate, endDate, isAllDay, format) {
@@ -779,21 +784,23 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipCheckUpdate) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipTimezoneConvert) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
+
         const recurringData = this._getSingleAppointmentData(appointmentData, {
             skipDateCalculation: true,
             $appointment: $appointmentElement,
             skipHoursProcessing: true
-        }, skipCheckUpdate);
+        });
         const result = {};
 
         extend(true, result, appointmentData, recurringData);
 
-        this._convertDatesByTimezoneBack(false, result);
+        if(this._isAppointmentRecurrence(appointmentData) && !skipTimezoneConvert) {
+            this._convertDatesByTimezoneBack(false, result); // TODO: temporary solution fox fix T848058, more information in the ticket
+        }
 
-        // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 
         return result;

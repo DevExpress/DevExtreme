@@ -1934,6 +1934,15 @@ const Scheduler = Widget.inherit({
             checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
             getTargetedAppointmentData: (data, appointment) => that.fire('getTargetedAppointmentData', data, appointment),
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
+            getSingleAppointmentData: (appointmentData, targetElement) => { // TODO: temporary solution fox fix T848058, more information in the ticket
+                const $appointment = $(targetElement);
+
+                return this._getSingleAppointmentData(appointmentData, {
+                    data: appointmentData,
+                    target: $appointment.get(0),
+                    $appointment: $appointment
+                });
+            }
         };
     },
 
