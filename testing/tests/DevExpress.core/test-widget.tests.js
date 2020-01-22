@@ -26,6 +26,7 @@ QUnit.module('Markup tests', {
     }
 });
 
+
 QUnit.test('initial markup', function(assert) {
     const $element = $('#component').TestComponent({});
 
@@ -78,4 +79,60 @@ QUnit.test('init with custom dimensions', function(assert) {
         assert.equal(element.style.width, getExpectedValue(width), `width => ${width}, value is correct`);
         assert.equal(element.style.height, getExpectedValue(height), `height => ${height}, value is correct`);
     });
+});
+
+QUnit.module('accessKey');
+
+QUnit.test('should set "accesskey" attribute if "focusStateEnabled" is true and "disable" is false', function(assert) {
+    const $widget = $('#component').dxTestWidget({
+        focusStateEnabled: false,
+        accessKey: 'y'
+    });
+    const instance = $widget.dxTestWidget('instance');
+
+    assert.strictEqual($widget.attr('accesskey'), void 0);
+
+    instance.option('focusStateEnabled', true);
+    assert.strictEqual($widget.attr('accesskey'), 'y');
+
+    instance.option('accessKey', 'g');
+    assert.strictEqual($widget.attr('accesskey'), 'g');
+
+    instance.option('disabled', true);
+    assert.strictEqual($widget.attr('accesskey'), void 0);
+});
+
+QUnit.testInActiveWindow('should take a focus if the accessKey is pressed', function(assert) {
+    const done = assert.async();
+    const $widget = $('#component').dxTestWidget({
+        focusStateEnabled: true,
+        accessKey: 'y'
+    });
+
+    window.setTimeout(() => {
+        $widget.trigger($.Event('dxclick', { screenX: 0, offsetX: 0, pageX: 0 }));
+
+        window.setTimeout(() => {
+            assert.ok($widget.hasClass('dx-state-focused'));
+            done();
+        }, 0);
+    }, 50);
+});
+
+QUnit.test('should not fire click event if the accessKey is pressed', function(assert) {
+    const done = assert.async();
+    let isImmediatePropagationStopped = true;
+    const $widget = $('#component').dxTestWidget({
+        focusStateEnabled: true,
+        accessKey: 'y'
+    });
+
+    window.setTimeout(() => {
+        $widget.on('dxclick', () => isImmediatePropagationStopped = false);
+        $widget.trigger($.Event('dxclick', { screenX: 0, offsetX: 0, pageX: 0 }));
+        window.setTimeout(() => {
+            assert.ok(isImmediatePropagationStopped);
+            done();
+        }, 0);
+    }, 50);
 });

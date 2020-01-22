@@ -34,6 +34,7 @@ const getAria = (args) => {
 
 const getAttributes = ({ elementAttr, accessKey }: any) => {
     const attrs = extend({}, elementAttr, accessKey && { accessKey });
+
     delete attrs.class;
 
     return attrs;
@@ -104,6 +105,9 @@ export const viewModelFunction = ({
         disabled, visible, _focused, _active, _hovered, rtlEnabled, elementAttr, hoverStateEnabled,
         focusStateEnabled, className,
     });
+
+    accessKey = focusStateEnabled && !disabled && accessKey;
+
     const attrsWithoutClass = getAttributes({ elementAttr, disabled, visible, accessKey });
     const arias = getAria({ ...aria, disabled, hidden: !visible });
 
@@ -222,7 +226,7 @@ export default class Widget {
     @Effect()
     clickEffect() {
         const namespace = 'UIFeedback';
-        this.accessKey && dxClick.on(this.widgetRef, e => {
+        this.focusStateEnabled && !this.disabled && this.accessKey && dxClick.on(this.widgetRef, e => {
             if(isFakeClickEvent(e)) {
                 e.stopImmediatePropagation();
                 this._focused = true;

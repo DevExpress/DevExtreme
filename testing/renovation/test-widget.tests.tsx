@@ -2,7 +2,43 @@ import Widget, { viewModelFunction, viewFunction } from '../../js/ui/test-widget
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 
+const model = new Widget();
+const render = props => {
+    props = Object.assign({}, model, props);
+
+    return mount(viewFunction(viewModelFunction(props)));
+};
+
+
 describe('Widget', () => {
+    describe('accessKey', () => {
+        it('should render "accesskey" attribute', () => {
+            const tree = render({ accessKey: 'y', focusStateEnabled: true });
+
+            expect(tree.find('.dx-widget').props().accessKey).toBe('y');
+        });
+
+        it('should not render if disabled', () => {
+            let tree = render({ accessKey: 'y', focusStateEnabled: true, disabled: false });
+
+            expect(tree.find('.dx-widget').props().accessKey).toBe('y');
+
+            tree = render({ accessKey: 'y', focusStateEnabled: true, disabled: true });
+
+            expect(tree.find('.dx-widget').props().accessKey).toBe(void 0);
+        });
+
+        it('should not render if focusStateEnabled is false', () => {
+            let tree = render({ accessKey: 'y', focusStateEnabled: false });
+
+            expect(tree.find('.dx-widget').props().accessKey).toBe(void 0);
+
+            tree = render({ accessKey: 'y', focusStateEnabled: true });
+
+            expect(tree.find('.dx-widget').props().accessKey).toBe('y');
+        });
+    });
+
     it('should be rendered', () => {
         const model = new Widget();
         const tree = shallow(viewFunction(viewModelFunction(model)));
@@ -162,19 +198,5 @@ describe('Widget', () => {
             .toBeFalsy();
         expect(widget.props().tabIndex)
             .toBe(undefined);
-    });
-    it('should pass `accessKey` property', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, accessKey: 'x' })));
-
-        expect(tree.find('.dx-widget').props().accessKey)
-            .toBe('x');
-    });
-    it('should pass `disabled` state', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, disabled: true })));
-
-        expect(tree.find('.dx-widget').is('.dx-widget.dx-state-disabled'))
-            .toBeTruthy();
     });
 });
