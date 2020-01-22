@@ -2,9 +2,14 @@
 
 const domAdapter = require('../dom_adapter');
 
-const windowObject = window ?? { window: windowObject };
-
 const hasWindow = () => typeof window !== 'undefined';
+
+let windowObject = hasWindow() && window;
+
+if(!windowObject) {
+    windowObject = {};
+    windowObject.window = windowObject;
+}
 
 const getWindow = () => windowObject;
 
