@@ -476,7 +476,7 @@ const Lookup = DropDownList.inherit({
 
         const selectedListItem = $(this._list.element()).find('.' + LIST_ITEM_SELECTED_CLASS);
 
-        if(selectedListItem.offset().top < 0) {
+        if(selectedListItem.offset().top < 0 || this._list.scrollTop() !== selectedListItem.position().top) {
             this._scrollToSelectedItem();
         }
 
