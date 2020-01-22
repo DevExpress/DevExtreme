@@ -25,6 +25,12 @@
     }
   },
   {
+    "name": "core/component_registrator",
+    "exports": {
+      "default": { "path": "registerComponent" }
+    }
+  },
+  {
     "name": "core/config",
     "exports": {
       "default": { "path": "config" }
