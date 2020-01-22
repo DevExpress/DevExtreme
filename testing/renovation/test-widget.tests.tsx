@@ -1,7 +1,6 @@
 import Widget, { viewModelFunction, viewFunction } from '../../js/ui/test-widget';
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import { toComparable } from '../../js/core/utils/data';
 
 describe('Widget', () => {
     it('should be rendered', () => {
@@ -58,6 +57,18 @@ describe('Widget', () => {
             .toBeTruthy();
         expect(widget.props()['aria-hidden'])
             .toBe('true');
+    });
+    it('should pass custom ARIA attributes', () => {
+        const model = new Widget();
+        const tree = mount(viewFunction(viewModelFunction({ ...model, aria: { label: 'custom-aria-label', role: 'button', id: 'custom-id' } })));
+
+        const widget = tree.find('.dx-widget');
+        expect(widget.props()['aria-label'])
+            .toBe('custom-aria-label');
+        expect(widget.props().role)
+            .toBe('button');
+        expect(widget.props().id)
+            .toBe('custom-id');
     });
     it('should have `dx-state-active` css class', () => {
         const model = new Widget();
