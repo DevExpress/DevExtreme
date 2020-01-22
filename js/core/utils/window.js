@@ -2,18 +2,20 @@
 
 const domAdapter = require('../dom_adapter');
 
-const hasWindow = () => typeof window !== 'undefined';
+const hasWindow = typeof window !== 'undefined';
 
-let windowObject = hasWindow() && window;
+let windowObject = hasWindow && window;
 
 if(!windowObject) {
     windowObject = {};
     windowObject.window = windowObject;
 }
 
+const hasWindowFn = () => hasWindow;
+
 const getWindow = () => windowObject;
 
-const hasProperty = (prop) => hasWindow() && prop in windowObject;
+const hasProperty = (prop) => hasWindowFn() && prop in windowObject;
 
 const defaultScreenFactorFunc = (width) => {
     if(width < 768) {
@@ -34,10 +36,10 @@ const getCurrentScreenFactor = (screenFactorCallback) => {
     return screenFactorFunc(windowWidth);
 };
 
-const getNavigator = () => hasWindow() ? windowObject.navigator : { userAgent: '' };
+const getNavigator = () => hasWindowFn() ? windowObject.navigator : { userAgent: '' };
 
 module.exports = {
-    hasWindow,
+    hasWindow: hasWindowFn,
     getWindow,
     hasProperty,
     defaultScreenFactorFunc,
