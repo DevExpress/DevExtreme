@@ -106,8 +106,6 @@
 */
 @base-focus-bg: @base-accent;
 
-@base-border-radius-exsmall: @base-border-radius - 2px;
-
 @base-inverted-bg: darken(@base-bg, 100%);
 @base-element-bg: @base-bg;
 @base-shadow-color: @base-inverted-bg;
@@ -121,6 +119,18 @@
 @base-dropdown-shadow-color: fade(darken(@base-shadow-color, 100%), 17.5%);
 @base-invalid-color: @base-danger;
 @base-invalid-faded-border-color: fade(@base-invalid-color, 40%);
+
+/**
+* @name 80. Border radius
+* @type text
+*/
+@base-border-radius-small: @base-border-radius - 1px;
+
+/**
+* @name 30. Border radius
+* @type text
+*/
+@base-border-radius-large: @base-border-radius + 2px;
 
 
 // Badges
@@ -203,12 +213,6 @@
 
 @texteditor-border-radius: @base-border-radius;
 @texteditor-input-border-radius: @base-border-radius;
-
-/**
-* @name 80. Border radius
-* @type text
-*/
-@base-border-radius-small: @base-border-radius - 1px;
 
 // TextBox
 
@@ -671,12 +675,6 @@
 * @type color
 */
 @overlay-shader-bg: fade(@base-bg, 80%);
-
-/**
-* @name 30. Border radius
-* @type text
-*/
-@base-border-radius-large: @base-border-radius + 2px;
 
 // Popup
 

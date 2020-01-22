@@ -116,6 +116,18 @@
 @base-invalid-color: @base-danger;
 @base-invalid-faded-border-color: fade(@base-invalid-color, 40%);
 
+/**
+* @name 80. Border radius
+* @type text
+*/
+@base-border-radius-small: @base-border-radius - 1px;
+
+/**
+* @name 30. Border radius
+* @type text
+*/
+@base-border-radius-large: @base-border-radius + 2px;
+
 
 // Validation
 
@@ -195,12 +207,6 @@
 
 @texteditor-border-radius: @base-border-radius;
 @texteditor-input-border-radius: @base-border-radius;
-
-/**
-* @name 80. Border radius
-* @type text
-*/
-@base-border-radius-small: @base-border-radius - 1px;
 
 // TextBox
 
@@ -664,12 +670,6 @@
 * @type color
 */
 @overlay-shader-bg: fade(@base-bg, 80%);
-
-/**
-* @name 30. Border radius
-* @type text
-*/
-@base-border-radius-large: @base-border-radius + 2px;
 
 // Popup
 
