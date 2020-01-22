@@ -153,7 +153,8 @@ export class TooltipStrategyBase {
         $itemElement.append(this._createItemListInfo(this._options.getTextAndFormatDate(data, currentData)));
 
         if(!data.disabled && (editing && editing.allowDeleting === true || editing === true)) {
-            $itemElement.append(this._createDeleteButton(data, currentData));
+            const singleAppointmentData = this._options.getSingleAppointmentData(data, this._tooltip.option('target')); // TODO: temporary solution fox fix T848058, more information in the ticket
+            $itemElement.append(this._createDeleteButton(data, singleAppointmentData));
         }
 
         return $itemElement;
