@@ -314,11 +314,13 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _getFileItemsForContextMenu(fileItem) {
-        const selectedItems = this.getSelectedItems();
-        if(selectedItems.length) {
-            return selectedItems;
+        const result = this.getSelectedItems();
+
+        if(this._isParentDirectoryItem(fileItem)) {
+            result.push(fileItem);
         }
-        return this._isParentDirectoryItem(fileItem) ? [ fileItem ] : [];
+
+        return result;
     }
 
     _isParentDirectoryItem(itemInfo) {
