@@ -20,6 +20,11 @@ module.exports = [
 
     //
     { content: 'public widgets', task: 'comment' },
-    // { task: 'widget', content: 'box' },
+    // box
+    { content: 'box', task: 'widget' },
+    // responsivebox
+    { content: 'responsiveBox', task: 'widget' },
+    // button
+    // { content: 'button', task: 'widget' },
     { task: 'newline' }
 ];

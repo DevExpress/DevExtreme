@@ -1,14 +1,11 @@
 const gulp = require('gulp');
 const path = require('path');
+const fs = require('fs');
 const replace = require('gulp-replace');
 const rename = require('gulp-rename');
 const del = require('del');
-
-
 const through = require('through2');
 const exec = require('child_process').exec;
-
-const fs = require('fs');
 
 const outputPath = require('./config').outputPath;
 const unfixedScssPath = require('./config').unfixedScssPath;

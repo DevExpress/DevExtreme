@@ -1,9 +1,7 @@
 module.exports = {
     // regex, replacement - replace
     // import, type - additional import (
-    //    simple - without 'with',
-    //    useinsizes - use in _sizes.scss,
-    //    useincolors - use in _colors.scss)
+    //    simple - without 'with'
     'typography': [
         { regex: /\(css\)\s/, replacement: '' },
         { import: '../common', type: 'simple' },
@@ -26,5 +24,15 @@ module.exports = {
         { import: '../common/sizes', type: 'simple' },
         { import: '../common', type: 'simple' },
         { import: '../typography', type: 'simple' },
+    ],
+    'button': [
+        { import: '../icons', type: 'simple' },
+        { regex: /@mixin dx-icon-sizing\(\$ICON_SIZE\),/, replacement: '@include dx-icon-sizing($ICON_SIZE);' },
+        { regex: /\.dx-icon-margin\(\$ICON_MARGIN\),/, replacement: '@include dx-icon-margin($ICON_MARGIN);' },
+        { regex: /@mixin dx-button-onlyicon-sizing\(\),/, replacement: '@include dx-button-onlyicon-sizing();' },
+        { regex: /.dx-button-onlyicon-sizing\(\),/, replacement: '@include dx-button-onlyicon-sizing();' },
+        { regex: /.dx-button-withtext-sizing\(\),/, replacement: '@include dx-button-withtext-sizing();' },
+        { regex: /.dx-button-text-and-icon-sizing\(\),/, replacement: '@include dx-button-text-and-icon-sizing();' },
+        { regex: /\$MATERIAL_BUTTON_MIN_WIDTH,/, replacement: '$MATERIAL_BUTTON_MIN_WIDTH;' }
     ]
 };
