@@ -748,9 +748,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     _pointerDownHandler: function(e) {
         const $target = $(e.event.target);
-        const isEditedRow = $target.closest('tr').hasClass('dx-edit-row');
+        const isEditRow = $target.closest('tr').hasClass(EDIT_ROW_CLASS);
 
-        if(!isEditedRow) {
+        if(!isEditRow) {
             const $targetCell = $target.closest('td');
             $targetCell.addClass(CELL_FOCUS_DISABLED_CLASS);
         }
