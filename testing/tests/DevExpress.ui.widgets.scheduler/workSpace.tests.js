@@ -3180,6 +3180,17 @@ QUnit.testStart(function() {
         assert.deepEqual(lastCellData.endDate, new Date(2017, 6, 10, 1), 'cell has right endtDate');
     });
 
+    QUnit.test('\'getCoordinatesByDateInGroup\' method should return only work week days (t853629)', function(assert) {
+        this.createInstance({
+            intervalCount: 2,
+            currentDate: new Date(2018, 4, 21),
+        });
+
+        assert.ok(!this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 26))[0]);
+        assert.ok(!this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 27))[0]);
+        assert.ok(this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 23))[0]);
+        assert.ok(this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 28))[0]);
+    });
 })('Work Space Work Week with intervalCount');
 
 (function() {
