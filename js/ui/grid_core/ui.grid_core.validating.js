@@ -4,7 +4,7 @@ import modules from './ui.grid_core.modules';
 import { createObjectWithChanges, getIndexByKey } from './ui.grid_core.utils';
 import { deferUpdate, equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isEmptyObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { focused } from '../widget/selectors';
 import messageLocalization from '../../localization/message';
@@ -175,16 +175,23 @@ const ValidatingController = modules.Controller.inherit((function() {
             let validationResults;
 
             if(validateGroup && validateGroup.validators.length) {
-                validationResults = ValidationEngine.validateGroup(editData);
+                // validationResults = ValidationEngine.validateGroup(editData);
                 // test
-                this.setRowInfoValidated({
+                validationResults = this.validateRow(editData);
+                this.updateRowValidationInfo({
                     keyValue: editData.key,
-                    value: true
+                    validationResult: validationResults
                 });
                 // endTest
             }
 
             when(validationResults && validationResults.complete || validationResults).done((validationResults) => {
+                // test
+                validationResults && this.updateRowValidationInfo({
+                    keyValue: editData.key,
+                    validationResult: validationResults
+                });
+                // endTest
                 when(this._rowValidating(editData, validationResults)).done(result.resolve);
             });
 
@@ -195,10 +202,19 @@ const ValidatingController = modules.Controller.inherit((function() {
             const editMode = this._editingController.getEditMode();
 
             if(FORM_BASED_MODES.indexOf(editMode) === -1) {
+                // test
+                if(editData.type === 'insert' && (!isDefined(editData.data) || isEmptyObject(editData.data))) {
+                    editData.isValid = true;
+                    return;
+                }
+                // endTest
                 this.markCellValidationInfoUpdated(editData);
                 this.setDisableApplyValidationResults(true);
                 if(ValidationEngine.getGroupConfig(editData)) {
-                    const validationResult = ValidationEngine.validateGroup(editData);
+                    // const validationResult = ValidationEngine.validateGroup(editData);
+                    // test
+                    const validationResult = this.validateRow(editData);
+                    // endTest
                     when(validationResult.complete || validationResult).done((validationResult) => {
                         editData.isValid = validationResult.isValid;
 
@@ -257,9 +273,11 @@ const ValidatingController = modules.Controller.inherit((function() {
                 }
             };
             const defaultValidationResult = (options) => {
-                if(options.brokenRule) {
-                    options.brokenRule.columnIndex = column.index;
-                    options.brokenRule.column = column;
+                if(options.brokenRules) {
+                    options.brokenRules.forEach((rule) => {
+                        rule.columnIndex = column.index;
+                        rule.column = column;
+                    });
                 }
                 if($container) {
                     let disableValidationResult = this.getDisableApplyValidationResults();
@@ -318,14 +336,29 @@ const ValidatingController = modules.Controller.inherit((function() {
                 this.updateCellValidationInfo({
                     keyValue: editData.key,
                     columnIndex: column.index,
-                    validationResult: result
+                    validationResult: result,
+                    validator: result.validator
                 });
             };
             const onValidatorInitialized = (arg) => {
+                const info = this.getCellValidationInfo({
+                    keyValue: parameters.key,
+                    columnIndex: column.index
+                });
+                if(info) {
+                    info.validator = arg.component;
+                }
                 arg.component.on('validating', validationStatusChanged);
                 arg.component.on('validated', validationStatusChanged);
             };
             const onValidatorDisposing = (arg) => {
+                const info = this.getCellValidationInfo({
+                    keyValue: parameters.key,
+                    columnIndex: column.index
+                });
+                if(info) {
+                    delete info.validator;
+                }
                 arg.component.off('validating', validationStatusChanged);
                 arg.component.off('validated', validationStatusChanged);
             };
@@ -395,7 +428,8 @@ const ValidatingController = modules.Controller.inherit((function() {
 
         // test
         validateCell: function(validator) {
-            let validationResult = this.getCellValidationInfo(validator.option('cellInfo'));
+            const info = this.getCellValidationInfo(validator.option('cellInfo'));
+            let validationResult = info && info.result;
             let stateRestored = false;
             if(validationResult) {
                 stateRestored = true;
@@ -409,6 +443,52 @@ const ValidatingController = modules.Controller.inherit((function() {
                 deferred.resolve(validationResult);
             });
             return deferred.promise();
+        },
+
+        validateRow: function(editData) {
+            const rowKey = this.getRowValidationInfoKey(editData.key);
+            let rowInfo = this._validationInfo[rowKey];
+            if(!rowInfo) {
+                rowInfo = this.getNewRowInfo();
+                this._validationInfo[rowKey] = rowInfo;
+            }
+            let validationResult = rowInfo.result;
+            if(!validationResult) {
+                validationResult = ValidationEngine.validateGroup(editData);
+            } else {
+                for(let index in rowInfo.cellInfo) {
+                    const validator = rowInfo.cellInfo[index].validator;
+                    validator && this.validateCell(validator);
+                }
+            }
+            return validationResult;
+        },
+
+        getValidationResult: function(validationResult) {
+            return {
+                isValid: validationResult.isValid,
+                brokenRules: validationResult.brokenRules,
+                complete: validationResult.complete,
+                status: validationResult.status
+            };
+        },
+
+        updateRowValidationInfo: function({ keyValue, validationResult }) {
+            const rowInfo = this._validationInfo[this.getRowValidationInfoKey(keyValue)];
+            if(!rowInfo) {
+                return;
+            }
+            if(!validationResult) {
+                delete rowInfo.result;
+                return;
+            }
+            rowInfo.result = this.getValidationResult(validationResult);
+        },
+
+        getNewRowInfo: function() {
+            return {
+                cellInfo: {}
+            };
         },
 
         markCellValidationInfoUpdated: function(editData) {
@@ -429,26 +509,16 @@ const ValidatingController = modules.Controller.inherit((function() {
             }
         },
 
-        setRowInfoValidated: function({ keyValue, value }) {
-            const rowInfo = this._validationInfo[this.getRowValidationInfoKey(keyValue)];
-            if(rowInfo) {
-                rowInfo.isValidated = value;
-            }
-        },
-
         isRowValidated: function(keyValue) {
             const rowInfo = this._validationInfo[this.getRowValidationInfoKey(keyValue)];
-            return rowInfo ? rowInfo.isValidated : false;
+            return rowInfo ? !!rowInfo.result : false;
         },
 
-        updateCellValidationInfo: function({ keyValue, columnIndex, validationResult, valueUpdated }) {
+        updateCellValidationInfo: function({ keyValue, columnIndex, validationResult, valueUpdated, validator }) {
             const rowKey = this.getRowValidationInfoKey(keyValue);
             let rowValidationInfo = this._validationInfo[rowKey];
             if(!rowValidationInfo) {
-                rowValidationInfo = {
-                    cellInfo: {},
-                    isValidated: false
-                };
+                rowValidationInfo = this.getNewRowInfo();
                 this._validationInfo[rowKey] = rowValidationInfo;
             }
             const cellKey = this.getCellValidationInfoKey({
@@ -463,13 +533,13 @@ const ValidatingController = modules.Controller.inherit((function() {
                 rowValidationInfo.cellInfo[columnIndex] = info;
             }
             if(validationResult) {
-                info.status = validationResult.status;
-                info.isValid = validationResult.isValid;
-                info.complete = validationResult.complete;
-                info.brokenRules = validationResult.brokenRules;
+                info.result = this.getValidationResult(validationResult);
             }
             if(isDefined(valueUpdated)) {
                 info.valueUpdated = valueUpdated;
+            }
+            if(isDefined(validator)) {
+                info.validator = validator;
             }
         },
 
@@ -480,7 +550,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 if(rowInfo) {
                     for(const colIndex in rowInfo.cellInfo) {
                         const cellInfo = rowInfo.cellInfo[colIndex];
-                        if(cellInfo.status === VALIDATION_STATUS.pending) {
+                        if(cellInfo.result && cellInfo.result.status === VALIDATION_STATUS.pending) {
                             info = cellInfo;
                             break;
                         }
@@ -507,7 +577,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         removeRowValidationInfo: function(keyValue) {
-            delete this._validationInfo[this.getPendingCellValidationInfo(keyValue)];
+            delete this._validationInfo[this.getRowValidationInfoKey(keyValue)];
         },
 
         resetValidationInfo: function() {
@@ -759,20 +829,20 @@ module.exports = {
                                 columnIndex: cellInfo.columnIndex
                             });
                             if(info && info.valueUpdated) {
-                                if(info.complete) {
+                                if(info.result.complete) {
                                     const deferred = new Deferred();
-                                    when(info.complete).done((validationResult) => {
+                                    when(info.result.complete).done((validationResult) => {
                                         deferred.resolve(validationResult.status !== VALIDATION_STATUS.invalid);
                                     });
                                     return deferred.promise();
                                 }
-                                return info.status !== VALIDATION_STATUS.invalid;
+                                return info.result.status !== VALIDATION_STATUS.invalid;
                             }
                         }
                         const pendingInfo = validatingController.getPendingCellValidationInfo();
                         if(pendingInfo && pendingInfo.valueUpdated) {
                             const deferred = new Deferred();
-                            when(pendingInfo.complete).done((validationResult) => {
+                            when(pendingInfo.result.complete).done((validationResult) => {
                                 deferred.resolve(validationResult.status === VALIDATION_STATUS.invalid);
                             });
                             return deferred.promise();
@@ -823,6 +893,11 @@ module.exports = {
 
                 updateFieldValue: function(e) {
                     const editMode = this.getEditMode();
+                    // test
+                    this.getController('validating').updateRowValidationInfo({
+                        keyValue: e.key
+                    });
+                    // endTest
                     this.callBase.apply(this, arguments);
 
                     if(editMode === EDIT_MODE_ROW || (editMode === EDIT_MODE_BATCH && e.column.showEditorAlways)) {
@@ -1133,7 +1208,7 @@ module.exports = {
                             const cellKey = validatingController.getCellValidationInfoKey(cellInfo);
                             if(this.getController('editing').getEditMode() === EDIT_MODE_CELL && pendingCellValidationInfo && pendingCellValidationInfo.valueUpdated
                                 && pendingCellValidationInfo.cellKey !== cellKey
-                                && (!cellValidationInfo || !(cellValidationInfo.valueUpdated && cellValidationInfo.status === VALIDATION_STATUS.invalid))) {
+                                && (!cellValidationInfo || !(cellValidationInfo.valueUpdated && cellValidationInfo.result && cellValidationInfo.result.status === VALIDATION_STATUS.invalid))) {
                                 return;
                             }
                             validatingController.setValidator(validator);
