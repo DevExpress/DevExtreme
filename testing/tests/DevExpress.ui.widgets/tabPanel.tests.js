@@ -492,10 +492,10 @@ QUnit.module('focus policy', {
 
         QUnit.assert.equal(actualSelectedTabItem, expectedSelectedItem, 'selected item in the tabs option must be correct');
 
-        const expectedSelectedContent = tabPanel.itemElements()[expectedSelectedIndex];
-        const actualSelectedContent = $tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}.${SELECTED_ITEM_CLASS}`).get(0);
+        const expectedSelectedMultiView = tabPanel.itemElements()[expectedSelectedIndex];
+        const actualSelectedMultiView = $tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}.${SELECTED_ITEM_CLASS}`).get(0);
 
-        QUnit.assert.equal(expectedSelectedContent, actualSelectedContent, 'selected content must be correct');
+        QUnit.assert.equal(expectedSelectedMultiView, actualSelectedMultiView, 'selected multiView must be correct');
 
         const $focusedTab = $tabPanel.find(`.${TABS_CLASS} .${FOCUSED_CLASS}`);
         const $selectedTab = $tabPanel.find(`.${TABS_CLASS} .${SELECTED_TAB_CLASS}`);
@@ -503,7 +503,7 @@ QUnit.module('focus policy', {
         const focusedElement = tabPanel.option('focusedElement');
         if(tabPanel.option('focusStateEnabled') === true) {
             QUnit.assert.equal($focusedTab.get(0), $selectedTab.get(0), 'selected tab must match focused tab');
-            QUnit.assert.equal($(focusedElement).get(0), actualSelectedContent, 'selected content must match focused element');
+            QUnit.assert.equal($(focusedElement).get(0), actualSelectedMultiView, 'selected multiView must match focused element');
         } else {
             QUnit.assert.equal($focusedTab.length, 0, 'there is no focused tab if focusState is disabled');
             QUnit.assert.equal(focusedElement, null, 'there is no focused element if focusState is disabled');
