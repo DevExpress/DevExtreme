@@ -423,8 +423,8 @@
 @button-group-normal-selected-color: @base-text-color;
 
 @button-group-normal-contained-selected-bg: darken(@button-normal-bg, 17%);
-@button-group-normal-contained-selected-bg-hover: darken(@button-group-normal-contained-selected-bg, -6%);
-@button-group-normal-contained-selected-bg-focused: darken(@button-group-normal-contained-selected-bg, -3%);
+@button-group-normal-contained-selected-bg-hover: lighten(@button-group-normal-contained-selected-bg, 6%);
+@button-group-normal-contained-selected-bg-focused: lighten(@button-group-normal-contained-selected-bg, 3%);
 
 /**
 * @name 20. Selected item background color
@@ -1727,6 +1727,7 @@
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-text-color;
 @filemanager-file-item-select-bg: #d1e0ed;
+@filemanager-item-focused-color: @base-inverted-text-color;
 @filemanager-progressbox-shadow-color: fade(@base-shadow-color, 17.5%);
 
 // SpeedDialAction

@@ -610,21 +610,36 @@ class Diagram extends Widget {
     }
     _getDataBindingLayoutParameters() {
         const { DataLayoutType, DataLayoutOrientation } = getDiagram();
-        const layoutParametersOption = this.option('nodes.autoLayout');
-        if(!layoutParametersOption || layoutParametersOption === 'off' || layoutParametersOption.type === 'off') return undefined;
-        const parameters = {};
+        const layoutParametersOption = this.option('nodes.autoLayout') || 'off';
         const layoutType = layoutParametersOption.type || layoutParametersOption;
-        if(layoutType === 'tree') {
-            parameters.type = DataLayoutType.Tree;
-        } else if(layoutType === 'layered') {
-            parameters.type = DataLayoutType.Sugiyama;
+        if(layoutType === 'off' || (layoutType === 'auto' && this._hasNodePositionExprs())) {
+            return undefined;
+        } else {
+            const parameters = {};
+            switch(layoutType) {
+                case 'tree':
+                    parameters.type = DataLayoutType.Tree;
+                    break;
+                default:
+                    parameters.type = DataLayoutType.Sugiyama;
+                    break;
+            }
+            switch(layoutParametersOption.orientation) {
+                case 'vertical':
+                    parameters.orientation = DataLayoutOrientation.Vertical;
+                    break;
+                case 'horizontal':
+                    parameters.orientation = DataLayoutOrientation.Horizontal;
+                    break;
+            }
+            if(this.option('edges.fromPointIndexExpr') || this.option('edges.toPointIndexExpr')) {
+                parameters.skipPointIndices = true;
+            }
+            return parameters;
         }
-        if(layoutParametersOption.orientation === 'vertical') {
-            parameters.orientation = DataLayoutOrientation.Vertical;
-        } else if(layoutParametersOption.orientation === 'horizontal') {
-            parameters.orientation = DataLayoutOrientation.Horizontal;
-        }
-        return parameters;
+    }
+    _hasNodePositionExprs() {
+        return this.option('nodes.topExpr') && this.option('nodes.leftExpr');
     }
     _getAutoZoomValue(option) {
         const { AutoZoomMode } = getDiagram();
@@ -1076,8 +1091,7 @@ class Diagram extends Widget {
             */
             pageOrientation: DIAGRAM_DEFAULT_PAGE_ORIENTATION,
             pageColor: DIAGRAM_DEFAULT_PAGE_COLOR,
-
-            onDataChanged: null,
+            hasChanges: false,
             nodes: {
                 /**
                 * @name dxDiagramOptions.nodes.dataSource
@@ -1200,7 +1214,7 @@ class Diagram extends Widget {
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout
                  * @type Enums.DiagramDataLayoutType|Object
-                 * @default "tree"
+                 * @default "layered"
                  */
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout.type
@@ -1210,7 +1224,7 @@ class Diagram extends Widget {
                  * @name dxDiagramOptions.nodes.autoLayout.orientation
                  * @type Enums.DiagramDataLayoutOrientation
                  */
-                autoLayout: 'tree'
+                autoLayout: 'auto'
             },
             edges: {
                 /**
@@ -1595,14 +1609,8 @@ class Diagram extends Widget {
         });
     }
 
-    _createDataChangeAction() {
-        this._dataChangeAction = this._createActionByOption('onDataChanged');
-    }
     _raiseDataChangeAction() {
-        if(!this._dataChangeAction) {
-            this._createDataChangeAction();
-        }
-        this._dataChangeAction();
+        this.option('hasChanges', true);
     }
     _raiseEdgeInsertedAction(data, callback, errorCallback) {
         if(this._edgesOption) {
@@ -1812,9 +1820,6 @@ class Diagram extends Widget {
                     this._invalidate();
                 }
                 break;
-            case 'onDataChanged':
-                this._createDataChangeAction();
-                break;
             case 'onItemClick':
                 this._createItemClickAction();
                 break;
@@ -1828,6 +1833,8 @@ class Diagram extends Widget {
                 if(this._toolbarInstance) {
                     this._toolbarInstance.option('export', args.value);
                 }
+                break;
+            case 'hasChanges':
                 break;
             default:
                 super._optionChanged(args);

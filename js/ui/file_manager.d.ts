@@ -215,7 +215,7 @@ export interface dxFileManagerToolbar {
     /**
      * @docid dxFileManagerToolbar.fileSelectionItems
      * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
-     * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear" ]
+     * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "clear", { name: "separator", location: "after" }, "refresh" ]
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -223,7 +223,7 @@ export interface dxFileManagerToolbar {
     /**
      * @docid dxFileManagerToolbar.items
      * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
-     * @default [ "showNavPane", "create", "upload", "refresh", { name: "separator", location: "after" }, "viewSwitcher" ]
+     * @default [ "showNavPane", "create", "upload", "viewSwitcher", { name: "separator", location: "after" }, "refresh" ]
      * @prevFileNamespace DevExpress.ui
      * @public
      */

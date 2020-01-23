@@ -894,7 +894,7 @@ QUnit.module('adaptivity', {
         assert.equal($dropDownMenu.length, 1);
     });
 
-    QUnit.test('dropdown menu strategy should be used if there is overflow widget', function(assert) {
+    QUnit.test('dropdown menu strategy should be used if there is overflow widget, items: [{ locateInMenu: "auto", widget: "dxButton", showText: "inMenu" }]', function(assert) {
         const $element = $('#widget').dxToolbar({
             items: [
                 { locateInMenu: 'auto', widget: 'dxButton', options: { text: 'test' }, showText: 'inMenu' }
@@ -907,7 +907,7 @@ QUnit.module('adaptivity', {
         assert.ok($buttonText.is(':hidden'));
     });
 
-    QUnit.test('dropdown menu strategy should be used if there is overflow widget', function(assert) {
+    QUnit.test('dropdown menu strategy should be used if there is overflow widget, items: [{ location: "center", locateInMenu: "auto" }]', function(assert) {
         const $element = $('#widget').dxToolbar({
             items: [
                 { location: 'center', locateInMenu: 'auto', text: 'test' }

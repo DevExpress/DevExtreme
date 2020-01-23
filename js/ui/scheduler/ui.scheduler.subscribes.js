@@ -90,7 +90,7 @@ const subscribes = {
         const itemResources = this._resourcesManager.getResourcesFromItem(appointmentData);
         allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
 
-        options.callback(this._getCoordinates(initialDates, dates, itemResources, allDay));
+        return this._getCoordinates(initialDates, dates, itemResources, allDay);
     },
 
     isGroupedByDate: function() {
@@ -98,12 +98,9 @@ const subscribes = {
     },
 
     showAppointmentTooltip: function(options) {
-        options.skipDateCalculation = true;
-        options.$appointment = $(options.target);
         const appointmentData = options.data;
-        const singleAppointmentData = this._getSingleAppointmentData(appointmentData, options);
-
-        this.showAppointmentTooltip(appointmentData, options.target, singleAppointmentData);
+        const targetData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target));
+        this.showAppointmentTooltip(appointmentData, options.target, targetData);
     },
 
     hideAppointmentTooltip: function() {
@@ -137,6 +134,9 @@ const subscribes = {
 
     updateAppointmentAfterResize: function(options) {
         const targetAppointment = options.target;
+
+        options.isAppointmentResized = true;
+
         const singleAppointment = this._getSingleAppointmentData(targetAppointment, options);
         const startDate = this.fire('getField', 'startDate', singleAppointment);
         const updatedData = extend(true, {}, options.data);
@@ -192,10 +192,6 @@ const subscribes = {
         this.checkAndDeleteAppointment(appointmentData, singleAppointmentData);
     },
 
-    getResourceForPainting: function() {
-        return this._resourcesManager.getResourceForPainting(this._getCurrentViewOption('groups'));
-    },
-
     getAppointmentColor: function(options) {
         const resourcesManager = this._resourcesManager;
         const resourceForPainting = resourcesManager.getResourceForPainting(this._getCurrentViewOption('groups'));
@@ -217,23 +213,19 @@ const subscribes = {
 
             response = resourcesManager.getResourceColor(field, groupId);
         }
-        options.callback(response);
+        return response;
     },
 
     getHeaderHeight: function() {
         return this._header._$element && parseInt(this._header._$element.outerHeight(), 10);
     },
 
-    getResourcesFromItem: function(options) {
-        options.callback(this._resourcesManager.getResourcesFromItem(options.itemData));
+    getResourcesFromItem: function(itemData) {
+        return this._resourcesManager.getResourcesFromItem(itemData);
     },
 
-    getBoundOffset: function(options) {
-        options.callback({ top: -this.getWorkSpaceAllDayHeight() });
-    },
-
-    appointmentTakesAllDay: function(options) {
-        options.callback(this.appointmentTakesAllDay(options.appointment));
+    getBoundOffset: function() {
+        return { top: -this.getWorkSpaceAllDayHeight() };
     },
 
     appointmentTakesSeveralDays: function(appointment) {
@@ -245,14 +237,13 @@ const subscribes = {
     },
 
     getTextAndFormatDate(data, currentData, format) {
-        const isAllDay = data.allDay;
-        const startDateTimeZone = data.startDateTimeZone;
-        const endDateTimeZone = data.endDateTimeZone;
-        const startDate = this.fire('convertDateByTimezone', currentData.startDate, startDateTimeZone);
-        const endDate = this.fire('convertDateByTimezone', currentData.endDate, endDateTimeZone);
+        const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
+        const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
+        const startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
+        const endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
         return {
-            text: this.fire('createAppointmentTitle', data),
-            formatDate: this.fire('_formatDates', startDate, endDate, isAllDay, format)
+            text: this.fire('createAppointmentTitle', appointmentFields),
+            formatDate: this.fire('_formatDates', startDate, endDate, appointmentFields.allDay, format)
         };
     },
 
@@ -262,6 +253,13 @@ const subscribes = {
         }
 
         return String(data);
+    },
+
+    _getAppointmentFields(data, arrayOfFields) {
+        return arrayOfFields.reduce((accumulator, field) => {
+            accumulator[field] = this.fire('getField', field, data);
+            return accumulator;
+        }, {});
     },
 
     _formatDates(startDate, endDate, isAllDay, format) {
@@ -308,15 +306,13 @@ const subscribes = {
     },
 
     getResizableAppointmentArea: function(options) {
-        let area;
         const allDay = options.allDay;
         const groups = this._getCurrentViewOption('groups');
-        const isGrouped = groups && groups.length;
 
-        if(isGrouped) {
+        if(groups && groups.length) {
             if(allDay || this.getLayoutManager().getRenderingStrategyInstance()._needHorizontalGroupBounds()) {
                 const horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
-                area = {
+                return {
                     left: horizontalGroupBounds.left,
                     right: horizontalGroupBounds.right,
                     top: 0,
@@ -326,7 +322,7 @@ const subscribes = {
 
             if(this.getLayoutManager().getRenderingStrategyInstance()._needVerticalGroupBounds(allDay) && this._workSpace._isVerticalGroupedWorkSpace()) {
                 const verticalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
-                area = {
+                return {
                     left: 0,
                     right: 0,
                     top: verticalGroupBounds.top,
@@ -334,16 +330,10 @@ const subscribes = {
                 };
             }
         }
-
-        options.callback(area);
     },
 
     needRecalculateResizableArea: function() {
         return this.getWorkSpace().needRecalculateResizableArea();
-    },
-
-    getDraggableAppointmentArea: function(options) {
-        options.callback(this.getWorkSpaceScrollableContainer());
     },
 
     getAppointmentGeometry: function(settings) {
@@ -415,14 +405,12 @@ const subscribes = {
 
     getFullWeekAppointmentWidth: function(options) {
         const groupIndex = options.groupIndex;
-        const groupWidth = this._workSpace.getGroupWidth(groupIndex);
-
-        options.callback(groupWidth);
+        return this._workSpace.getGroupWidth(groupIndex);
     },
 
     getMaxAppointmentWidth: function(options) {
-        const cellCountToLastViewDate = this._workSpace.getCellCountToLastViewDate(options.date);
-        options.callback(cellCountToLastViewDate * this._workSpace.getCellWidth());
+        const workSpace = this._workSpace;
+        return workSpace.getCellCountToLastViewDate(options.date) * workSpace.getCellWidth();
     },
 
     updateAppointmentStartDate: function(options) {
@@ -441,9 +429,7 @@ const subscribes = {
             updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));
         }
 
-        updatedStartDate = dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
-
-        options.callback(updatedStartDate);
+        return dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
     },
 
     updateAppointmentEndDate: function(options) {
@@ -459,7 +445,7 @@ const subscribes = {
             updatedEndDate = new Date(updatedEndDate.getTime() - toMs('day'));
             updatedEndDate.setHours(endDayHour, 0, 0, 0);
         }
-        options.callback(updatedEndDate);
+        return updatedEndDate;
     },
 
     renderCompactAppointments: function(options) {
@@ -779,21 +765,23 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipCheckUpdate) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipTimezoneConvert) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
+
         const recurringData = this._getSingleAppointmentData(appointmentData, {
             skipDateCalculation: true,
             $appointment: $appointmentElement,
             skipHoursProcessing: true
-        }, skipCheckUpdate);
+        });
         const result = {};
 
         extend(true, result, appointmentData, recurringData);
 
-        this._convertDatesByTimezoneBack(false, result);
+        if(this._isAppointmentRecurrence(appointmentData) && !skipTimezoneConvert) {
+            this._convertDatesByTimezoneBack(false, result); // TODO: temporary solution fox fix T848058, more information in the ticket
+        }
 
-        // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 
         return result;
@@ -844,7 +832,7 @@ const subscribes = {
 
             result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs('minute');
         }
-        options.callback(result);
+        return result;
     },
 
     fixWrongEndDate: function(appointment, startDate, endDate) {

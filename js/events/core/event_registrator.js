@@ -1,5 +1,5 @@
-const each = require('../../core/utils/iterator').each;
-const callbacks = require('./event_registrator_callbacks');
+import { each } from '../../core/utils/iterator';
+import callbacks from './event_registrator_callbacks';
 
 const registerEvent = function(name, eventObject) {
     const strategy = {};

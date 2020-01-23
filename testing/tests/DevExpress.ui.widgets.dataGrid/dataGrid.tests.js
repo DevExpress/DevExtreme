@@ -18724,6 +18724,50 @@ QUnit.test('The edited cell should be closed on click inside another dataGrid', 
     assert.ok($(dataGrid2.getCellElement(0, 0)).find('input').length > 0, 'has input');
 });
 
+QUnit.test('The cell should not be focused on pointerEvents.down event (T850219)', function(assert) {
+    ['row', 'cell'].forEach(editingMode => {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1' }],
+            editing: {
+                mode: editingMode,
+                allowUpdating: true
+            }
+        });
+        this.clock.tick();
+
+        // act
+        $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.down);
+        this.clock.tick();
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-focus-disabled'), `cell has dx-cell-focus-disabled class in '${editingMode}' editing mode`);
+        assert.equal($(dataGrid.$element()).find('.dx-datagrid-focus-overlay').length, 0, `focus overlay is not rendered in '${editingMode}' editing mode`);
+    });
+});
+
+QUnit.test('The cell should not have dx-cell-focus-disabled class on pointerEvents.down event with row editing mode if row in editing state (T850219)', function(assert) {
+    // arrange
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 'test1', field2: 'test2' }],
+        editing: {
+            mode: 'row',
+            allowUpdating: true
+        }
+    });
+    this.clock.tick();
+
+    dataGrid.editRow(0);
+    this.clock.tick();
+
+    // act
+    $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.down);
+    this.clock.tick();
+
+    // assert
+    assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-focus-disabled'), 'cell has not dx-cell-focus-disabled class');
+});
+
 QUnit.test('onFocusedRowChanging, onFocusedRowChanged event if click selection checkBox (T812681)', function(assert) {
     // arrange
     const rowsViewWrapper = dataGridWrapper.rowsView;
@@ -18902,6 +18946,45 @@ QUnit.test('Popup should apply data changes after editorOptions changing (T81788
     $popupEditors = $('.dx-popup-content').find('.dx-texteditor');
     assert.equal($popupEditors.eq(0).find('input').eq(0).val(), 'new name', 'value changed');
     assert.equal($popupEditors.eq(1).get(0).style.height, '100px', 'editorOptions applied');
+});
+
+QUnit.test('Datagrid should edit only allowed cells by tab press if editing.allowUpdating option set dynamically (T848707)', function(assert) {
+    ['cell', 'batch'].forEach(editingMode => {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{
+                'ID': 1,
+                'FirstName': 'John',
+                'LastName': 'Heart',
+            }, {
+                'ID': 2,
+                'FirstName': 'Robert',
+                'LastName': 'Reagan'
+            }],
+            showBorders: true,
+            keyExpr: 'ID',
+            editing: {
+                mode: editingMode,
+                allowUpdating: function(e) {
+                    return e.row.data.FirstName === 'Robert';
+                },
+            },
+            columns: ['FirstName', 'LastName']
+        });
+
+        // act
+        dataGrid.editCell(1, 0);
+        this.clock.tick();
+
+        const navigationController = dataGrid.getController('keyboardNavigation');
+        navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
+        this.clock.tick();
+
+        // assert
+        assert.equal($(dataGrid.getCellElement(0, 1)).find('input').length, 0, `cell is not being edited in '${editingMode}' editing mode`);
+        assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-focused'), 'cell is focused');
+    });
 });
 
 QUnit.test('Filter builder custom operations should update filterValue immediately (T817973)', function(assert) {

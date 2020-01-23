@@ -14,10 +14,11 @@ const stubCreateComponent = sinon.stub().returns(stubComponent);
 const stubShowAppointmentPopup = sinon.stub();
 const stubAddDefaultTemplates = sinon.stub();
 const stubGetAppointmentTemplate = sinon.stub().returns('template');
-const stubGetTargetedAppointmentData = sinon.stub().returns('targetedAppointmentData');
 const stubCheckAndDeleteAppointment = sinon.stub();
 const stubGetTextAndFormatDate = sinon.stub().returns('text');
 const stubIsAppointmentInAllDayPanel = sinon.stub().returns(true);
+const stubGetSingleAppointmentData = sinon.stub().returns('currentData');
+
 const environment = {
     createSimpleTooltip: function(tooltipOptions) {
         return new DesktopTooltipStrategy(tooltipOptions);
@@ -30,8 +31,8 @@ const environment = {
         showAppointmentPopup: stubShowAppointmentPopup,
         getTextAndFormatDate: stubGetTextAndFormatDate,
         checkAndDeleteAppointment: stubCheckAndDeleteAppointment,
-        getTargetedAppointmentData: stubGetTargetedAppointmentData,
-        isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel
+        isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel,
+        getSingleAppointmentData: stubGetSingleAppointmentData
     },
     extraOptions: {
         rtlEnabled: true,
@@ -48,7 +49,7 @@ const environment = {
         stubGetAppointmentTemplate.reset();
         stubGetTextAndFormatDate.reset();
         stubCheckAndDeleteAppointment.reset();
-        stubGetTargetedAppointmentData.reset();
+        stubGetSingleAppointmentData.reset();
     }
 };
 

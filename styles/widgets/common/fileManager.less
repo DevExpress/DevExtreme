@@ -236,6 +236,7 @@
         }
 
         &.dx-selection .dx-filemanager-file-actions-button,
+        &.dx-row-focused .dx-filemanager-file-actions-button,
         &.dx-state-hover .dx-filemanager-file-actions-button {
             visibility: visible;
         }
@@ -310,6 +311,10 @@
 
         & > div {
             height: 100%;
+        }
+
+        .dx-datagrid-rowsview .dx-datagrid-table > tbody > tr.dx-filemanager-parent-directory-item > td > .dx-select-checkbox {
+            display: none;
         }
 
         .dx-filemanager-details-item-name-wrapper {

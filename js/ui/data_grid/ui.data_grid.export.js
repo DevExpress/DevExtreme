@@ -188,10 +188,9 @@ exports.DataProvider = Class.inherit({
 
     ready: function() {
         const that = this;
-        let options;
 
         that._initOptions();
-        options = this._options;
+        const options = that._options;
 
         return when(options.items).done(function(items) {
             options.customizeExportData && options.customizeExportData(that.getColumns(that.getHeaderRowCount() > 1), items);
@@ -202,11 +201,9 @@ exports.DataProvider = Class.inherit({
     },
 
     _convertFromGridGroupSummaryItems: function(gridGroupSummaryItems) {
-        let result;
         if(isDefined(gridGroupSummaryItems) && gridGroupSummaryItems.length > 0) {
-            result = gridGroupSummaryItems.map(function(item) { return { value: item.value, name: item.name }; });
+            return gridGroupSummaryItems.map(function(item) { return { value: item.value, name: item.name }; });
         }
-        return result;
     },
 
     getCellData: function(rowIndex, cellIndex, isExcelJS) {

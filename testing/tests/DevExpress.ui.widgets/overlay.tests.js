@@ -754,7 +754,7 @@ testModule('visibility', moduleConfig, () => {
             const $wrapper = $content.parent();
 
             assert.notOk(result, 'result === false');
-            assert.ok($wrapper.closest('#overlay').length === 1, 'overlay wrapper is inside the overlay root element');
+            assert.strictEqual($wrapper.closest('#overlay').length, 1, 'overlay wrapper is inside the overlay root element');
             assert.ok($wrapper.is(':hidden'));
             assert.ok($content.is(':hidden'));
             assert.ok($overlay.is(':hidden'));
@@ -2430,7 +2430,7 @@ testModule('target', moduleConfig, () => {
 });
 
 
-testModule('back button callback', moduleConfig, () => {
+testModule('hide overlay by callback', moduleConfig, () => {
     test('callback should not be added if hideTopOverlayHandler option equals \'null\' (B251263, B251262)', function(assert) {
         const instance = $('#overlay').dxOverlay({
             hideTopOverlayHandler: null
@@ -2441,14 +2441,38 @@ testModule('back button callback', moduleConfig, () => {
         assert.ok(!hideTopOverlayCallback.hasCallback());
     });
 
-    test('hideTopOverlayCallback callback should not be added if hideTopOverlayHandler option equals \'false\'', function(assert) {
+    test('custom callback should be added via hideTopOverlayHandler', function(assert) {
+        const customCallback = sinon.stub();
         const instance = $('#overlay').dxOverlay({
-            closeOnBackButton: false
+            hideTopOverlayHandler: customCallback
         }).dxOverlay('instance');
-        assert.ok(!hideTopOverlayCallback.hasCallback());
+
+        assert.ok(customCallback.notCalled);
 
         instance.show();
-        assert.ok(!hideTopOverlayCallback.hasCallback());
+        hideTopOverlayCallback.fire();
+
+        assert.ok(customCallback.calledOnce);
+    });
+
+    test('custom callback should be correctly changed by another one', function(assert) {
+        const initialCallback = sinon.stub();
+        const newCallback = sinon.stub();
+
+        const instance = $('#overlay').dxOverlay({
+            hideTopOverlayHandler: initialCallback,
+            visible: true
+        }).dxOverlay('instance');
+
+        instance.option('hideTopOverlayHandler', newCallback);
+
+        assert.ok(initialCallback.notCalled);
+        assert.ok(newCallback.notCalled);
+
+        hideTopOverlayCallback.fire();
+
+        assert.ok(initialCallback.notCalled);
+        assert.ok(newCallback.calledOnce);
     });
 
     test('hideTopOverlayCallback callback should be unsubscribing before hide animation start', function(assert) {
@@ -2471,6 +2495,7 @@ testModule('back button callback', moduleConfig, () => {
 
         instance.show();
         hideTopOverlayCallback.fire();
+
         assert.strictEqual(instance.option('visible'), false, 'hidden after back button event');
     });
 
@@ -2479,6 +2504,7 @@ testModule('back button callback', moduleConfig, () => {
 
         instance.option('visible', true);
         hideTopOverlayCallback.fire();
+
         assert.strictEqual(instance.option('visible'), false, 'hidden after back button event');
     });
 });
@@ -2644,7 +2670,7 @@ testModule('integration tests', moduleConfig, () => {
 
 
 testModule('widget sizing render', moduleConfig, () => {
-    test('default', function(assert) {
+    test('outerWidth', function(assert) {
         const $element = $('#widget').dxOverlay();
         const instance = $element.dxOverlay('instance');
 
@@ -3108,7 +3134,7 @@ testModule('keyboard navigation', {
         assert.strictEqual(this.$overlayContent.position().top, this.position.top - offset, 'overlay position was change after pressing up arrow');
     });
 
-    test('overlay should not be dragged when container size less than overlay content', function(assert) {
+    test('overlay should not be dragged when container size less than overlay content, position: { my: "center center", at: "center center", of: $container }', function(assert) {
         const $container = $('<div>').appendTo('#qunit-fixture').height(14).width(14);
         const $overlay = $('#overlay').dxOverlay({
             dragEnabled: true,

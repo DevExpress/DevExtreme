@@ -157,54 +157,42 @@ QUnit.test('T266166 - color should be converted from hsv to rgb correctly when h
 QUnit.module('Darkening and highlighting');
 
 QUnit.test('Highlight color on the edge', function(assert) {
-    // arrange
-    // act
     const color = new Color('red');
-    // assert
+
     assert.ok(color);
     assert.equal(color.highlight(), '#ff0a0a');
 
 });
 
 QUnit.test('Highlight intermediate color with custom step', function(assert) {
-    // arrange
-    // act
     const color = new Color('#010101');
-    // assert
+
     assert.ok(color);
     assert.equal(color.highlight(11), '#0c0c0c');
 });
 
 QUnit.test('Highlight intermediate color', function(assert) {
-    // arrange
-    // act
     const color = new Color('#010101');
-    // assert
+
     assert.ok(color);
     assert.equal(color.highlight(), '#0b0b0b');
 });
 
 QUnit.test('Darken color on the edge', function(assert) {
-    // arrange
-    // act
     const color = new Color('#001F00');
-    // assert
+
     assert.equal(color.darken(), '#001500');
 });
 
 QUnit.test('Darken intermediate color', function(assert) {
-    // arrange
-    // act
     const color = new Color('#1F1F1F');
-    // assert
+
     assert.equal(color.darken(), '#151515');
 });
 
 QUnit.test('Darken intermediate color with custom step', function(assert) {
-    // arrange
-    // act
     const color = new Color('#1F1F1F');
-    // assert
+
     assert.equal(color.darken(11), '#141414');
 });
 

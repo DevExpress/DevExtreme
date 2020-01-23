@@ -51,6 +51,9 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 import themes from '../themes';
 import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
+import utils from './utils';
+
+import { REDUCED_APPOINTMENT_CLASS, COMPACT_APPOINTMENT_CLASS, RECURRENCE_APPOINTMENT_CLASS } from './constants';
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -1476,8 +1479,16 @@ const Scheduler = Widget.inherit({
             showAppointmentPopup: that.showAppointmentPopup.bind(that),
             getTextAndFormatDate: (data, currentData, format) => that.fire('getTextAndFormatDate', data, currentData, format),
             checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
-            getTargetedAppointmentData: (data, appointment) => that.fire('getTargetedAppointmentData', data, appointment),
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
+            getSingleAppointmentData: (appointmentData, targetElement) => { // TODO: temporary solution fox fix T848058, more information in the ticket
+                const $appointment = $(targetElement);
+
+                return this._getSingleAppointmentData(appointmentData, {
+                    data: appointmentData,
+                    target: $appointment.get(0),
+                    $appointment: $appointment
+                });
+            }
         };
     },
 
@@ -2032,6 +2043,8 @@ const Scheduler = Widget.inherit({
             }
         }
 
+        endDate = new Date(endDate.getTime() - utils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
+
         this.fire('setField', 'endDate', updatedData, endDate);
         this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
 
@@ -2062,7 +2075,7 @@ const Scheduler = Widget.inherit({
         this._appointmentPopup.triggerResize();
     },
 
-    _getSingleAppointmentData: function(appointmentData, options, skipCheckUpdate) {
+    _getSingleAppointmentData: function(appointmentData, options) {
         options = options || {};
 
         const $appointment = options.$appointment;
@@ -2073,29 +2086,26 @@ const Scheduler = Widget.inherit({
         const startDate = new Date(this.fire('getField', 'startDate', resultAppointmentData));
         const endDate = new Date(this.fire('getField', 'endDate', resultAppointmentData));
         const appointmentDuration = endDate.getTime() - startDate.getTime();
-        let updatedStartDate;
+        let updatedStartDate = startDate;
         let appointmentStartDate;
 
-        if(typeUtils.isDefined($appointment) && (skipCheckUpdate === true || this._needUpdateAppointmentData($appointment))) {
+        if(typeUtils.isDefined($appointment) && (this._isAppointmentRecurrence(appointmentData) || this._needUpdateAppointmentData($appointment))) {
             const apptDataCalculator = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
 
             if(typeUtils.isFunction(apptDataCalculator)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
             } else {
-                const coordinates = translator.locate($appointment);
-                updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
-
-                if($appointment.hasClass('dx-scheduler-appointment-reduced')) {
-                    appointmentStartDate = $appointment.data('dxAppointmentStartDate');
-                    if(appointmentStartDate) {
-                        updatedStartDate = appointmentStartDate;
-                    }
-                }
-
-                if(this._isAppointmentRecurrence(appointmentData)) {
+                if(options.isAppointmentResized) {
+                    const coordinates = translator.locate($appointment);
+                    updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
+                } else {
                     appointmentStartDate = $appointment.data('dxAppointmentSettings') && $appointment.data('dxAppointmentSettings').startDate;
-                    const isStartDateChanged = options.data && options.target && options.target.endDate && new Date(options.data.endDate).getTime() === new Date(options.target.endDate).getTime();
-                    if(appointmentStartDate && !isStartDateChanged) {
+
+                    if($appointment.hasClass(REDUCED_APPOINTMENT_CLASS)) {
+                        appointmentStartDate = $appointment.data('dxAppointmentStartDate');
+                    }
+
+                    if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
                     }
                 }
@@ -2108,13 +2118,7 @@ const Scheduler = Widget.inherit({
                     );
                 }
             }
-        }
 
-        if(!updatedStartDate && options.startDate) {
-            updatedStartDate = options.startDate;
-        }
-
-        if(updatedStartDate) {
             this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
             this.fire('setField', 'endDate', resultAppointmentData, new Date(updatedStartDate.getTime() + appointmentDuration));
         }
@@ -2123,7 +2127,7 @@ const Scheduler = Widget.inherit({
     },
 
     _needUpdateAppointmentData: function($appointment) {
-        return $appointment.hasClass('dx-scheduler-appointment-compact') || $appointment.hasClass('dx-scheduler-appointment-recurrence');
+        return $appointment.hasClass(COMPACT_APPOINTMENT_CLASS) || $appointment.hasClass(RECURRENCE_APPOINTMENT_CLASS);
     },
 
     subscribe: function(subject, action) {
@@ -2278,20 +2282,11 @@ const Scheduler = Widget.inherit({
     _getStartDate: function(appointment, skipNormalize) {
         let startDate = this.fire('getField', 'startDate', appointment);
         const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointment);
-
-        startDate = dateUtils.makeDate(startDate);
-
-        startDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
-
-        !skipNormalize && this.fire('updateAppointmentStartDate', {
+        startDate = this.fire('convertDateByTimezone', dateUtils.makeDate(startDate), startDateTimeZone);
+        return !skipNormalize ? this.fire('updateAppointmentStartDate', {
             startDate: startDate,
             appointment: appointment,
-            callback: function(result) {
-                startDate = result;
-            }
-        });
-
-        return startDate;
+        }) : startDate;
     },
 
     _getEndDate: function(appointment, skipNormalize) {
@@ -2300,20 +2295,12 @@ const Scheduler = Widget.inherit({
         const isSameDate = dateUtils.sameDate(startDate, endDate);
 
         if(endDate) {
-
             const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointment);
-
-            endDate = dateUtils.makeDate(endDate);
-
-            endDate = this.fire('convertDateByTimezone', endDate, endDateTimeZone);
-
-            !skipNormalize && this.fire('updateAppointmentEndDate', {
+            endDate = this.fire('convertDateByTimezone', dateUtils.makeDate(endDate), endDateTimeZone);
+            return !skipNormalize ? this.fire('updateAppointmentEndDate', {
                 endDate: endDate,
                 isSameDate: isSameDate,
-                callback: function(result) {
-                    endDate = result;
-                }
-            });
+            }) : endDate;
         }
         return endDate;
     },
