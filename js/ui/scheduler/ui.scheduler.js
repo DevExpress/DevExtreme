@@ -1060,6 +1060,22 @@ const Scheduler = Widget.inherit({
         return this._calculateTimezoneByValue(this.option('timeZone'), date);
     },
 
+    _getDaylightOffsetByCustomTimezone: function(startDate, endDate) {
+        return this._getTimezoneOffsetByOption(startDate) - this._getTimezoneOffsetByOption(endDate);
+    },
+
+    _getDaylightOffsetByAppointmentTimezone: function(startDate, endDate, appointmentTimezone) {
+        return this._calculateTimezoneByValue(appointmentTimezone, startDate) - this._calculateTimezoneByValue(appointmentTimezone, endDate);
+    },
+
+    correctDateByDaylightOffsets: function(originalStartDate, date, startDateTimezone) {
+        const daylightOffsetByOption = this._getDaylightOffsetByCustomTimezone(originalStartDate, date);
+        const daylightOffsetByAppointment = this._getDaylightOffsetByAppointmentTimezone(originalStartDate, date, startDateTimezone);
+        const diff = daylightOffsetByOption - daylightOffsetByAppointment;
+
+        return new Date(date.getTime() - diff * toMs('hour'));
+    },
+
     _calculateTimezoneByValue: function(timezone, date) {
         let result = timezone;
 

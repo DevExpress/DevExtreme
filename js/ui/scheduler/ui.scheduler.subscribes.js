@@ -54,9 +54,6 @@ const subscribes = {
             firstDayOfWeek: firstDayOfWeek
         };
 
-        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
-        const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
-
         let dates = recurrenceUtils.getDatesByRecurrence(recurrenceOptions);
         let initialDates;
 
@@ -68,23 +65,17 @@ const subscribes = {
             dates = dates.map((date) => {
                 return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption('startDayHour'));
             });
-            for(let i = 0; i < initialDates.length; i++) {
-                if(needCheckTimezoneOffset) {
-                    const daylightOffset1 = this._subscribes.getDaylightOffsetByOption(this, originalStartDate, initialDates[i]);
-                    const daylightOffset2 = this._subscribes.getDaylightOffsetByAppointment(this, originalStartDate, initialDates[i], startDateTimeZone);
-                    const diff = daylightOffset1 - daylightOffset2;
 
-                    initialDates[i] = new Date(initialDates[i].getTime() - diff * toMs('hour'));
-                }
-            }
-            for(let i = 0; i < dates.length; i++) {
-                if(needCheckTimezoneOffset) {
-                    const daylightOffset1 = this._subscribes.getDaylightOffsetByOption(this, originalStartDate, dates[i]);
-                    const daylightOffset2 = this._subscribes.getDaylightOffsetByAppointment(this, originalStartDate, dates[i], startDateTimeZone);
-                    const diff = daylightOffset1 - daylightOffset2;
+            const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
+            const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
 
-                    dates[i] = new Date(dates[i].getTime() - diff * toMs('hour'));
-                }
+            if(needCheckTimezoneOffset) {
+                initialDates = initialDates.map((date) => {
+                    return this.correctDateByDaylightOffsets(originalStartDate, date, startDateTimeZone);
+                });
+                dates = dates.map((date) => {
+                    return this.correctDateByDaylightOffsets(originalStartDate, date, startDateTimeZone);
+                });
             }
         }
 
@@ -784,13 +775,14 @@ const subscribes = {
         return startDate.getTimezoneOffset() - endDate.getTimezoneOffset();
     },
 
-    getDaylightOffsetByOption: function(scheduler, startDate, endDate) {
-        return typeUtils.isDefined(scheduler._getTimezoneOffsetByOption(startDate)) ? scheduler._getTimezoneOffsetByOption(startDate) - scheduler._getTimezoneOffsetByOption(endDate) : 0;
-    },
+    // getDaylightOffsetByOption: function(scheduler, startDate, endDate) {
+    //     debugger;
+    //     return typeUtils.isDefined(scheduler._getTimezoneOffsetByOption(startDate)) ? scheduler._getTimezoneOffsetByOption(startDate) - scheduler._getTimezoneOffsetByOption(endDate) : 0;
+    // },
 
-    getDaylightOffsetByAppointment: function(scheduler, startDate, endDate, appointmentTimezone) {
-        return typeUtils.isDefined(scheduler._calculateTimezoneByValue(appointmentTimezone, startDate)) ? scheduler._calculateTimezoneByValue(appointmentTimezone, startDate) - scheduler._calculateTimezoneByValue(appointmentTimezone, endDate) : 0;
-    },
+    // getDaylightOffsetByAppointment: function(scheduler, startDate, endDate, appointmentTimezone) {
+    //     return typeUtils.isDefined(scheduler._calculateTimezoneByValue(appointmentTimezone, startDate)) ? scheduler._calculateTimezoneByValue(appointmentTimezone, startDate) - scheduler._calculateTimezoneByValue(appointmentTimezone, endDate) : 0;
+    // },
 
     // getComplexDaylightOffset: function(scheduler, startDate, endDate, appointmentTimezone) {
     //     return scheduler._getTimezoneOffsetByOption(date)
