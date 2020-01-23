@@ -4032,6 +4032,24 @@ QUnit.module('Appointments', () => {
 
             assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
         });
+
+        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case hourly recurrence in collector, custom timezone is set', function(assert) {
+            const scheduler = createScheduler(hourlyRecurrenceData, {
+                textExpr: 'textCustom',
+                startDateExpr: 'startDateCustom',
+                endDateExpr: 'endDateCustom',
+                currentView: 'week',
+                timeZone: 'Asia/Yekaterinburg'
+            });
+
+            scheduler.option({ appointmentTooltipTemplate: createTestForHourlyRecurrenceData(assert, scheduler) });
+
+            for(let i = 0; i < 5; i++) {
+                scheduler.appointments.compact.click(i);
+            }
+
+            assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
+        });
     });
 
     QUnit.test('Remote filter should apply after change view type', function(assert) {
