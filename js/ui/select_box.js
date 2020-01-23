@@ -449,7 +449,7 @@ const SelectBox = DropDownList.inherit({
         isVisible = arguments.length ? isVisible : !this.option('opened');
 
         if(!isVisible) {
-            this._restoreInputText();
+            this._restoreInputText(true);
         }
 
         if(this._wasSearch() && isVisible) {
@@ -501,7 +501,7 @@ const SelectBox = DropDownList.inherit({
         this.callBase();
     },
 
-    _restoreInputText: function() {
+    _restoreInputText: function(saveEditingValue) {
         if(this.option('readOnly')) {
             return;
         }
@@ -510,7 +510,10 @@ const SelectBox = DropDownList.inherit({
             const initialSelectedItem = this.option('selectedItem');
 
             if(this.option('acceptCustomValue')) {
-                this._updateField(initialSelectedItem);
+                if(!saveEditingValue) {
+                    this._updateField(initialSelectedItem);
+                    this._clearFilter();
+                }
                 return;
             }
 
