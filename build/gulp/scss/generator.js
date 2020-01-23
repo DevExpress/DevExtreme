@@ -18,6 +18,10 @@ const compactMixinReplacementSizes = /[\w\W]*?@mixin dx-size-default\(\)\s*{([\w
 
 const compactMixinUsageReplacement = /@include\s+dx-size-(compact|default);/g;
 
+// replacement for parent selector (https://github.com/sass/sass/issues/1425)
+const parentSelectorRegex = /^(\s*)([.\w\s-]*[\w])&/mg;
+const parentSelectorReplacement = '$1@at-root $2#{&}';
+
 let widgetsColorVariables = {};
 
 gulp.task('fix-scss-clean', () => del([outputPath, `${unfixedScssPath}/**/*.scss`]));
@@ -29,6 +33,12 @@ gulp.task('less2sass', (callback) => {
         callback(e);
     });
 });
+
+const replaceColorFunctions = (content) => {
+    // TODO lighten and darken is not included directly in the new module system (https://sass-lang.com/documentation/modules/color#lighten), but it works
+    content = content.replace(/fade\((.*?),\s*(\d+)%\);/g, 'color.change($1, $alpha: 0.$2);'); // change fade() to the color.change()
+    return content;
+};
 
 gulp.task('fix-bundles', () => {
     return gulp
@@ -48,6 +58,7 @@ gulp.task('fix-base', () => {
         .src(`${unfixedScssPath}/widgets/base/*.scss`)
         .pipe(replace(importReplacement, '@use "./$3";'))
         .pipe(replace(/\.dx-font-icon\("/g, '@include dx-font-icon("'))
+        .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;
         }))
@@ -56,6 +67,7 @@ gulp.task('fix-base', () => {
 
 gulp.task('fix-common', () => {
     // for dx.common.css
+    // TODO
     return gulp
         .src(`${unfixedScssPath}/widgets/common/*.scss`)
         .pipe(replace(importReplacement, '@use "./$3";'))
@@ -119,12 +131,12 @@ gulp.task('fix-themes', () => {
             indexContent += '// adduse\n';
             indexContent += content.replace(compactMixinReplacementIndex, '');
             indexContent = specificReplacement(indexContent, folder);
-            // replace parent selector (https://github.com/sass/sass/issues/1425)
-            indexContent = indexContent.replace(/^(\s*)([.\w\s-]*[\w])&/mg, '$1@at-root $2#{&}');
+            indexContent = indexContent.replace(parentSelectorRegex, parentSelectorReplacement);
             chunk.contents = new Buffer(indexContent);
 
             let colorsContent = '@use "sass:color";\n';
             // colorsContent += '@forward "../base/colors";\n';
+            colorsContent += '@use "../base/sizes" as *;\n';
             colorsContent += '@use "../base/colors" as *;\n\n';
 
             fs.writeFileSync(path.join(folder, '_colors.scss'), colorsContent);
@@ -193,7 +205,8 @@ const fillWidgetColors = (theme) => {
 
         Object.keys(widgetsColorVariables[widget]).forEach(colorScheme => {
             const variableName = theme === 'material' ? 'mode' : 'color';
-            const variablesContent = widgetsColorVariables[widget][colorScheme];
+            let variablesContent = widgetsColorVariables[widget][colorScheme];
+            variablesContent = replaceColorFunctions(variablesContent);
             widgetVariablesContent += variablesContent;
             additionalContent += `@if $${variableName} == "${colorScheme}" {\n${makeIndent(variablesContent)}\n}\n\n`;
         });
@@ -262,6 +275,7 @@ gulp.task('create-base-widget-generic-colors', (callback) => {
             const themeIconsContent = fs.readFileSync(path.join(themeDir, `generic.${file}.icons.scss`)).toString();
             const baseThemeContent = getBaseContent(themeContent);
             colorsContent += `@if $color == "${file}" {\n${makeIndent(baseThemeContent + themeIconsContent)}\n}\n\n`;
+            colorsContent = replaceColorFunctions(colorsContent);
 
             collectWidgetColorVariables(themeContent, file);
         });
@@ -305,6 +319,7 @@ gulp.task('create-base-widget-material-colors', (callback) => {
             const themeContent = fs.readFileSync(path.join(sourcePath, `material.${mode}.scss`)).toString();
             const themeIconsContent = fs.readFileSync(path.join(sourcePath, `material.${mode}.icons.scss`)).toString();
             colorsContent += `@if $mode == "${mode}" {\n${makeIndent([getBaseContent(themeContent), themeIconsContent].join('\n'))}\n}\n\n`;
+            colorsContent = replaceColorFunctions(colorsContent);
 
             collectWidgetColorVariables(themeContent, mode);
         });

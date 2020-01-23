@@ -26,7 +26,7 @@ module.exports = {
         { import: '../typography', type: 'simple' },
     ],
     'button': [
-        { import: '../icons', type: 'simple' },
+        { import: '../../base/icons', type: 'simple' },
         { regex: /@mixin dx-icon-sizing\(\$ICON_SIZE\),/, replacement: '@include dx-icon-sizing($ICON_SIZE);' },
         { regex: /\.dx-icon-margin\(\$ICON_MARGIN\),/, replacement: '@include dx-icon-margin($ICON_MARGIN);' },
         { regex: /@mixin dx-button-onlyicon-sizing\(\),/, replacement: '@include dx-button-onlyicon-sizing();' },

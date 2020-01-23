@@ -25,6 +25,6 @@ module.exports = [
     // responsivebox
     { content: 'responsiveBox', task: 'widget' },
     // button
-    // { content: 'button', task: 'widget' },
+    { content: 'button', task: 'widget' },
     { task: 'newline' }
 ];
