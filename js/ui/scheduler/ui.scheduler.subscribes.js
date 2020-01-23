@@ -775,19 +775,6 @@ const subscribes = {
         return startDate.getTimezoneOffset() - endDate.getTimezoneOffset();
     },
 
-    // getDaylightOffsetByOption: function(scheduler, startDate, endDate) {
-    //     debugger;
-    //     return typeUtils.isDefined(scheduler._getTimezoneOffsetByOption(startDate)) ? scheduler._getTimezoneOffsetByOption(startDate) - scheduler._getTimezoneOffsetByOption(endDate) : 0;
-    // },
-
-    // getDaylightOffsetByAppointment: function(scheduler, startDate, endDate, appointmentTimezone) {
-    //     return typeUtils.isDefined(scheduler._calculateTimezoneByValue(appointmentTimezone, startDate)) ? scheduler._calculateTimezoneByValue(appointmentTimezone, startDate) - scheduler._calculateTimezoneByValue(appointmentTimezone, endDate) : 0;
-    // },
-
-    // getComplexDaylightOffset: function(scheduler, startDate, endDate, appointmentTimezone) {
-    //     return scheduler._getTimezoneOffsetByOption(date)
-    // },
-
     getTimezonesDisplayName: function() {
         return SchedulerTimezones.getTimezonesDisplayName();
     },
