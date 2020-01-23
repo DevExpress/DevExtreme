@@ -411,7 +411,6 @@ function getFirstCollapsedIndex(fields) {
 function getRequestsData(options) {
     const rowExpandedLevel = getExpandedLevel(options, 'rows');
     const columnExpandedLevel = getExpandedLevel(options, 'columns');
-    let columnTotalsOptions;
     let filters = options.filters || [];
     const columnExpandedIndex = getExpandedIndex(options, 'columns');
     const firstCollapsedColumnIndex = getFirstCollapsedIndex(options.columns);
@@ -423,7 +422,7 @@ function getRequestsData(options) {
         .concat(getFiltersForDimension(options.columns))
         .concat(getFiltersForExpandedDimension(options));
 
-    columnTotalsOptions = getGrandTotalRequest(options, 'columns', columnExpandedIndex, columnExpandedLevel, filters, firstCollapsedColumnIndex);
+    const columnTotalsOptions = getGrandTotalRequest(options, 'columns', columnExpandedIndex, columnExpandedLevel, filters, firstCollapsedColumnIndex);
 
     if(options.rows.length && options.columns.length) {
         if(options.headerName !== 'rows') {

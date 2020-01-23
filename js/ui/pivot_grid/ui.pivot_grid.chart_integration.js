@@ -295,7 +295,6 @@ module.exports = {
             const chartOptions = createChartOptions(that.getDataSource(), integrationOptions);
             chart.option(chartOptions);
         };
-        let disposeBinding;
 
         chart = getChartInstance(chart);
 
@@ -308,7 +307,7 @@ module.exports = {
         that.on('changed', updateChart);
         updateChart();
 
-        disposeBinding = function() {
+        const disposeBinding = function() {
             chart.$element().removeData(UNBIND_KEY);
             that.off('changed', updateChart);
         };

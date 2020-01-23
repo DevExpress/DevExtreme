@@ -267,19 +267,17 @@ const FieldChooser = BaseFieldChooser.inherit({
 
     _renderLayout0: function($container) {
         const that = this;
-        let $col1; let $col2; let $col3; let $col4;
-        let $row1; let $row2;
 
         $container.addClass('dx-layout-0');
 
-        $row1 = $(DIV).addClass('dx-row').appendTo($container);
-        $row2 = $(DIV).addClass('dx-row').appendTo($container);
+        const $row1 = $(DIV).addClass('dx-row').appendTo($container);
+        const $row2 = $(DIV).addClass('dx-row').appendTo($container);
 
-        $col1 = $(DIV).addClass('dx-col').appendTo($row1);
-        $col2 = $(DIV).addClass('dx-col').appendTo($row1);
+        const $col1 = $(DIV).addClass('dx-col').appendTo($row1);
+        const $col2 = $(DIV).addClass('dx-col').appendTo($row1);
 
-        $col3 = $(DIV).addClass('dx-col').appendTo($row2);
-        $col4 = $(DIV).addClass('dx-col').appendTo($row2);
+        const $col3 = $(DIV).addClass('dx-col').appendTo($row2);
+        const $col4 = $(DIV).addClass('dx-col').appendTo($row2);
 
         that._renderArea($col1, 'all');
         that._renderArea($col2, 'row');
@@ -290,10 +288,9 @@ const FieldChooser = BaseFieldChooser.inherit({
 
     _renderLayout1: function($container) {
         const that = this;
-        let $col1; let $col2;
 
-        $col1 = $(DIV).addClass('dx-col').appendTo($container);
-        $col2 = $(DIV).addClass('dx-col').appendTo($container);
+        const $col1 = $(DIV).addClass('dx-col').appendTo($container);
+        const $col2 = $(DIV).addClass('dx-col').appendTo($container);
 
         that._renderArea($col1, 'all');
         that._renderArea($col2, 'filter');
@@ -304,17 +301,15 @@ const FieldChooser = BaseFieldChooser.inherit({
 
     _renderLayout2: function($container) {
         const that = this;
-        let $col1; let $col2;
-        let $row1; let $row2;
 
         $container.addClass('dx-layout-2');
 
-        $row1 = $(DIV).addClass('dx-row').appendTo($container);
+        const $row1 = $(DIV).addClass('dx-row').appendTo($container);
         that._renderArea($row1, 'all');
 
-        $row2 = $(DIV).addClass('dx-row').appendTo($container);
-        $col1 = $(DIV).addClass('dx-col').appendTo($row2);
-        $col2 = $(DIV).addClass('dx-col').appendTo($row2);
+        const $row2 = $(DIV).addClass('dx-row').appendTo($container);
+        const $col1 = $(DIV).addClass('dx-col').appendTo($row2);
+        const $col2 = $(DIV).addClass('dx-col').appendTo($row2);
 
         that._renderArea($col1, 'filter');
         that._renderArea($col1, 'row');
@@ -402,13 +397,12 @@ const FieldChooser = BaseFieldChooser.inherit({
         that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
             onPositioning: function(actionArgs) {
                 const event = actionArgs.event;
-                let args;
 
                 if(!event) {
                     return;
                 }
 
-                args = that._getContextMenuArgs(event);
+                const args = that._getContextMenuArgs(event);
 
                 that._trigger('onContextMenuPreparing', args);
 
@@ -495,13 +489,12 @@ const FieldChooser = BaseFieldChooser.inherit({
 
     _createFieldsDataSource: function(dataSource) {
         let fields = dataSource && dataSource.fields() || [];
-        let treeItems;
 
         fields = fields.filter(field => {
             return field.visible !== false && !isDefined(field.groupIndex);
         });
 
-        treeItems = this._createTreeItems(fields, ['dimension', 'displayFolder']);
+        const treeItems = this._createTreeItems(fields, ['dimension', 'displayFolder']);
 
         foreachDataLevel(treeItems, function(items) {
             items.sort(compareItems);
@@ -620,7 +613,6 @@ const FieldChooser = BaseFieldChooser.inherit({
         const $areaContainer = $(DIV).addClass('dx-area').appendTo(container);
         const $fieldsHeaderContainer = $(DIV).addClass('dx-area-fields-header').appendTo($areaContainer);
         const caption = that.option('texts.' + area + 'Fields');
-        let $fieldsContainer;
         let $fieldsContent;
         let render;
 
@@ -636,7 +628,7 @@ const FieldChooser = BaseFieldChooser.inherit({
             .text(caption)
             .appendTo($fieldsHeaderContainer);
 
-        $fieldsContainer = $(DIV).addClass('dx-area-fields')
+        const $fieldsContainer = $(DIV).addClass('dx-area-fields')
             .addClass(AREA_DRAG_CLASS)
             .appendTo($areaContainer);
 
