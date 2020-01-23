@@ -200,12 +200,11 @@ function runRawLoadWithQuery(pendingDeferred, store, options, countOnly) {
 
 function runRawLoadWithKey(pendingDeferred, store, key) {
     runRawLoad(pendingDeferred, store, {}, function(rawData) {
-        const keyExpr = store.key();
         let item;
 
         for(let i = 0, len = rawData.length; i < len; i++) {
             item = rawData[i];
-            if(dataUtils.keysEqual(keyExpr, store.keyOf(rawData[i]), key)) {
+            if(dataUtils.keysEqual(store.keyOf(rawData[i]), key)) {
                 pendingDeferred.resolve(item);
                 return;
             }
