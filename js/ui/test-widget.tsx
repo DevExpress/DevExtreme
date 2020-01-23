@@ -256,7 +256,7 @@ export default class Widget {
                         this._hovered = true;
                     }
                 }, { excludeValidators: ['readOnly'] }),
-                () => this._hovered = false,
+                () => { this._hovered = false; },
                 { selector, namespace }
             );
         }
@@ -271,9 +271,9 @@ export default class Widget {
 
         if(this.activeStateEnabled) {
             active.on(this.widgetRef,
-                new Action(() => this._active = true),
+                new Action(() => { this._active = true; }),
                 new Action(
-                    () => this._active = false,
+                    () => { this._active = false; },
                     { excludeValidators: ['disabled', 'readOnly'] }
                 ), {
                     showTimeout: this._feedbackShowTimeout,
@@ -284,7 +284,7 @@ export default class Widget {
             );
         }
 
-        return () => hover.off(this.widgetRef, { selector, namespace });
+        return () => active.off(this.widgetRef, { selector, namespace });
     }
 
     @Effect()

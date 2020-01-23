@@ -58,7 +58,7 @@ describe('Widget', () => {
                 id: 'custom-id'
             }});
 
-            expect(tree.find('.dx-widget').props()).toEqual({
+            expect(tree.find('.dx-widget').props()).toMatchObject({
                 'aria-label': 'custom-aria-label',
                 role: 'button',
                 id: 'custom-id'
