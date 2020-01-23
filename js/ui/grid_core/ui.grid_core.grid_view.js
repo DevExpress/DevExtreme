@@ -588,7 +588,7 @@ const ResizingController = modules.ViewController.inherit({
         const $rootElement = that.component.$element();
         const groupElement = $rootElement.children().get(0);
         const rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || $rootElement.height());
-        const maxHeight = parseFloat($rootElement.css('maxHeight'));
+        const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
         const height = that.option('height') || $rootElement.get(0).style.height;
         const editorFactory = that.getController('editorFactory');

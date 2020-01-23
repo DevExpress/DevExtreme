@@ -5913,6 +5913,21 @@ QUnit.test('max-height from styles', function(assert) {
     assert.ok($dataGrid.find('.dx-datagrid').height() < 400, 'height is less then max-height');
 });
 
+// T849902
+QUnit.test('max-height as float number from styles', function(assert) {
+    // arrange, act
+    const dataGrid = $('#dataGrid').css('maxHeight', '100.2px').dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+        columns: ['field1']
+    }).dxDataGrid('instance');
+
+    // assert
+    const scrollable = dataGrid.getScrollable();
+    assert.ok(scrollable, 'scrollable is created');
+    assert.ok(scrollable.$content().height() > scrollable._container().height(), 'scroll is exists');
+});
+
 // T820186
 QUnit.test('width 100% should be applied if container width is zero on render', function(assert) {
     // arrange
