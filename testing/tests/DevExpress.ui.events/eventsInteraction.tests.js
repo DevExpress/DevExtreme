@@ -1008,7 +1008,7 @@ QUnit.module('gesture cover', {
         const $element = $('#element');
         const pointer = pointerMock($element);
 
-        $element.on('dxscrollstart', $.noop);
+        $element.on('dxscrollstart', noop);
         pointer.start().down().move(20).up();
         $element.off('dxscrollstart');
     }
@@ -1026,7 +1026,7 @@ QUnit.module('gesture cover', {
             const $element = $('#element');
             const pointer = pointerMock($element);
 
-            $element.on('dxscrollstart', { isNative: true }, $.noop);
+            $element.on('dxscrollstart', { isNative: true }, noop);
 
             pointer.start().down().move(20);
             assert.equal(getGestureCover().css('pointerEvents'), 'none', 'gestureCover is disabled');
