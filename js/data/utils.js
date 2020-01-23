@@ -153,17 +153,7 @@ function isConjunctiveOperator(condition) {
     return /^(and|&&|&)$/i.test(condition);
 }
 
-const keysEqual = function(keyExpr, key1, key2) {
-    if(Array.isArray(keyExpr)) {
-        const names = map(key1, function(v, k) { return k; });
-        let name;
-        for(let i = 0; i < names.length; i++) {
-            name = names[i];
-            if(!equalByValue(key1[name], key2[name], 0, false)) {
-                return false;
-            }
-        }
-    }
+const keysEqual = function(key1, key2) {
     return equalByValue(key1, key2, 0, false);
 };
 

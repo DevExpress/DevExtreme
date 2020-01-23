@@ -50,7 +50,7 @@ export default CollectionWidget.inherit({
         this.itemElements().each((_, item) => {
             const $item = $(item);
             const itemData = this._getItemData($item);
-            if(keyExpr ? keysEqual(keyExpr, this.keyOf(itemData), key) : this._isItemEquals(itemData, key)) {
+            if(keyExpr ? keysEqual(this.keyOf(itemData), key) : this._isItemEquals(itemData, key)) {
                 result = $item;
                 return false;
             }
