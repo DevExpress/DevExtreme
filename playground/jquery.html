@@ -26,85 +26,12 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="scheduler"></div>
-        <div class="options">
-            <div class="caption">Options</div>
-            <div class="option">
-                <span>Office Location</span>
-                <div id="location-switcher"></div>
-            </div>    
-        </div>
+    <div id="button"></div>
     <script>
         $(function() {
-            var data = [
-{
-    text: "Daily meeting",
-    startDate: "2019-03-01T09:00:00+01:00",
-    endDate: "2019-03-01T12:00:00+01:00",
-    recurrenceRule: "FREQ=DAILY",
-    startDateTimeZone: "Europe/Paris",
-    endDateTimeZone: "Europe/Paris"
-  },
-//   {
-//     text: "Test",
-//     startDate: "2019-03-11T09:00:00+01:00",
-//     endDate: "2019-03-11T12:00:00+01:00",
-//     startDateTimeZone: "Europe/Paris",
-//     endDateTimeZone: "Europe/Paris"
-//   }
-  ];
-
-var locations = [{
-    value: "America/Montreal",
-    text: "Montreal",
-    color: "#56ca85"
-  },
-  {
-    value: "Europe/Paris",
-    text: "Paris",
-    color: "#ff9747"
-  }];
-
-            var dataSource = new DevExpress.data.DataSource({
-        store: data,
-        // filter: ["startDateTimeZone", locations[0].value]
-    });
-
-
-
-            var scheduler = $("#scheduler").dxScheduler({
-                dataSource: dataSource,
-                views: ["day"],
-                currentView: "day",
-                currentDate: new Date(2019, 2, 11),
-                startDayHour: 0,
-                height: 600,
-                timeZone: locations[0].value,
-                showCurrentTimeIndicator: false,
-                dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx',
-                resources: [
-                    {
-                        fieldExpr: "startDateTimeZone",
-                        valueExpr: "value",
-                        dataSource: locations
-                    }
-                ],
-                onAppointmentFormOpening: function(e){
-                    e.form.itemOption("startDateTimeZone", { visible: true });
-                    e.form.itemOption("endDateTimeZone", { visible: true });
-                }
-            }).dxScheduler("instance");
-
-             $("#location-switcher").dxSelectBox({
-                items: locations,
-                width: 200,
-                value: locations[0].value,
-                displayExpr: "text",
-                valueExpr: "value",
-                onValueChanged: function(data) {
-                    dataSource.filter(["startDateTimeZone", data.value]);
-                    scheduler.option("timeZone", data.value);
-                }
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
