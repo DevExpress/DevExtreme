@@ -11,7 +11,8 @@ const pointerEvents = require('../../events/pointer');
 const holdEvent = require('../../events/hold');
 const addNamespace = require('../../events/utils').addNamespace;
 const isDefined = require('../../core/utils/type').isDefined;
-const _normalizeEnum = require('../core/utils').normalizeEnum;
+const _normalizeEnum = vizUtils.normalizeEnum;
+const inCanvas = vizUtils.pointInCanvas;
 const _floor = Math.floor;
 const _each = each;
 const _noop = require('../../core/utils/common').noop;
@@ -43,10 +44,6 @@ function getData(event, dataKey) {
 
 function eventCanceled(event, target) {
     return event.cancel || !target.getOptions();
-}
-
-function inCanvas(canvas, x, y) {
-    return (x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom);
 }
 
 function correctLegendHoverMode(mode) {

@@ -960,7 +960,7 @@ QUnit.test('B239673 - Tooltip does not update location after resize', function(a
         target: 8
     });
 
-    bullet._showTooltipCallback();
+    bullet._showTooltip();
     bullet._tooltip.hide = sinon.spy();
     this.resetTranslators();
 
