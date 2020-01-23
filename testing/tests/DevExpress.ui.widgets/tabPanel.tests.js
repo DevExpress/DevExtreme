@@ -34,7 +34,6 @@ const TABS_CLASS = 'dx-tabs';
 const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
 const TABS_ITEM_CLASS = 'dx-tab';
 const SELECTED_TAB_CLASS = 'dx-tab-selected';
-const FOCUSED_CLASS = 'dx-state-focused';
 const SELECTED_ITEM_CLASS = 'dx-item-selected';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 
@@ -484,29 +483,19 @@ QUnit.module('focus policy', {
     function checkSelectionAndFocus(tabPanel, expectedSelectedIndex) {
         const $tabPanel = tabPanel.$element();
         const expectedSelectedItem = tabPanel.option('items')[expectedSelectedIndex];
-        const actualSelectedItem = tabPanel.option('selectedItem');
 
-        QUnit.assert.equal(actualSelectedItem, expectedSelectedItem, 'selected item in the option must be correct');
+        QUnit.assert.equal(tabPanel.option('selectedItem'), expectedSelectedItem, 'tabPanel.option(selectedItem)');
+        QUnit.assert.equal($tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}.${SELECTED_ITEM_CLASS}`).get(0).innerText, 'content ' + expectedSelectedIndex, 'tabPanel.SELECTED_ITEM_CLASS');
 
-        const actualSelectedTabItem = tabPanel._tabs.option('selectedItem');
+        QUnit.assert.equal(tabPanel._tabs.option('selectedItem'), expectedSelectedItem, 'tabPanel._tabs.option(selectedItem)');
+        QUnit.assert.equal($tabPanel.find(`.${TABS_ITEM_CLASS}.${SELECTED_TAB_CLASS}`).get(0).innerText, 'tab ' + expectedSelectedIndex, 'tabPanel._tabs.SELECTED_TAB_CLASS');
 
-        QUnit.assert.equal(actualSelectedTabItem, expectedSelectedItem, 'selected item in the tabs option must be correct');
-
-        const expectedSelectedMultiView = tabPanel.itemElements()[expectedSelectedIndex];
-        const actualSelectedMultiView = $tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}.${SELECTED_ITEM_CLASS}`).get(0);
-
-        QUnit.assert.equal(expectedSelectedMultiView, actualSelectedMultiView, 'selected multiView must be correct');
-
-        const $focusedTab = $tabPanel.find(`.${TABS_CLASS} .${FOCUSED_CLASS}`);
-        const $selectedTab = $tabPanel.find(`.${TABS_CLASS} .${SELECTED_TAB_CLASS}`);
-
-        const focusedElement = tabPanel.option('focusedElement');
         if(tabPanel.option('focusStateEnabled') === true) {
-            QUnit.assert.equal($focusedTab.get(0), $selectedTab.get(0), 'selected tab must match focused tab');
-            QUnit.assert.equal($(focusedElement).get(0), expectedSelectedMultiView, 'selected multiView must match focused element');
+            QUnit.assert.equal($(tabPanel.option('focusedElement')).text(), 'content ' + expectedSelectedIndex, 'tabPanel.options(focusedElement)');
+            QUnit.assert.equal($(tabPanel._tabs.option('focusedElement')).text(), 'tab ' + expectedSelectedIndex, 'tabPanel._tabs.focusedElement');
         } else {
-            QUnit.assert.equal($focusedTab.length, 0, 'there is no focused tab if focusState is disabled');
-            QUnit.assert.equal(focusedElement, null, 'there is no focused element if focusState is disabled');
+            QUnit.assert.equal(tabPanel.option('focusedElement'), null, 'tabPanel.option(focusedElement)');
+            QUnit.assert.equal(tabPanel._tabs.option('focusedElement'), null, 'tabPanel._tabs.options(focusedElement)');
         }
     }
 
@@ -514,7 +503,7 @@ QUnit.module('focus policy', {
         ['selectedIndex', 'selectedItem'].forEach(optionName => {
             QUnit.test(`focus -> setSelectedTab(${selectedIndex}) -> focus`, function(assert) {
                 const $tabPanel = $('#tabPanel').dxTabPanel({
-                    items: [{ title: 'item 1' }, { title: 'item 2' }]
+                    items: [{ tabTemplate: 'tab 0', template: 'content 0' }, { tabTemplate: 'tab 1', template: 'content 1' }]
                 });
                 const tabPanel = $tabPanel.dxTabPanel('instance');
 
