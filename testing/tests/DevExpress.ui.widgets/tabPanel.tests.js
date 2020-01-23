@@ -503,7 +503,7 @@ QUnit.module('focus policy', {
         const focusedElement = tabPanel.option('focusedElement');
         if(tabPanel.option('focusStateEnabled') === true) {
             QUnit.assert.equal($focusedTab.get(0), $selectedTab.get(0), 'selected tab must match focused tab');
-            QUnit.assert.equal($(focusedElement).get(0), actualSelectedMultiView, 'selected multiView must match focused element');
+            QUnit.assert.equal($(focusedElement).get(0), expectedSelectedMultiView, 'selected multiView must match focused element');
         } else {
             QUnit.assert.equal($focusedTab.length, 0, 'there is no focused tab if focusState is disabled');
             QUnit.assert.equal(focusedElement, null, 'there is no focused element if focusState is disabled');
