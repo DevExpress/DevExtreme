@@ -2,7 +2,7 @@ import { Component, Prop, React } from "../component_declaration/common";
 import { getImageSourceType } from '../core/utils/icon';
 
 import Widget from './test-widget';
-import JSXConstructor from "../component_declaration/jsx";
+import JSXConstructor from '../component_declaration/jsx';
 
 const WidgetJSX = JSXConstructor<Widget>(Widget);
 
