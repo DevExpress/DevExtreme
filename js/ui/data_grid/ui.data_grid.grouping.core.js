@@ -77,28 +77,6 @@ exports.GroupingHelper = Class.inherit((function() {
         return index;
     };
 
-    const updateGroupInfoOffsets = function(groupsInfo, parents) {
-        let groupInfo;
-        let index;
-        parents = parents || [];
-
-        for(index = 0; index < groupsInfo.length; index++) {
-            groupInfo = groupsInfo[index];
-
-            if(groupInfo.data && groupInfo.data.offset !== groupInfo.offset) {
-                groupInfo.offset = groupInfo.data.offset;
-
-                for(let parentIndex = 0; parentIndex < parents.length; parentIndex++) {
-                    parents[parentIndex].offset = groupInfo.offset;
-                }
-            }
-        }
-
-        groupsInfo.sort(function(a, b) {
-            return a.offset - b.offset;
-        });
-    };
-
     var cleanGroupsInfo = function(groupsInfo, groupIndex, groupsCount) {
         let i;
 
@@ -165,8 +143,6 @@ exports.GroupingHelper = Class.inherit((function() {
             const that = this;
 
             function foreachGroupsCore(groupsInfo, callback, childrenAtFirst, parents) {
-                let i;
-                let callbackResult;
                 const callbackResults = [];
 
                 function executeCallback(callback, data, parents, callbackResults) {
@@ -175,13 +151,14 @@ exports.GroupingHelper = Class.inherit((function() {
                     return callbackResult;
                 }
 
-                for(i = 0; i < groupsInfo.length; i++) {
+                for(let i = 0; i < groupsInfo.length; i++) {
                     parents.push(groupsInfo[i].data);
                     if(!childrenAtFirst && executeCallback(callback, groupsInfo[i].data, parents, callbackResults) === false) {
                         return false;
                     }
                     if(!groupsInfo[i].data || groupsInfo[i].data.isExpanded || foreachCollapsedGroups) {
-                        callbackResult = foreachGroupsCore(groupsInfo[i].children, callback, childrenAtFirst, parents);
+                        const children = groupsInfo[i].children;
+                        const callbackResult = children.length && foreachGroupsCore(children, callback, childrenAtFirst, parents);
                         callbackResult && callbackResults.push(callbackResult);
                         if(callbackResult === false) {
                             return false;
@@ -198,11 +175,30 @@ exports.GroupingHelper = Class.inherit((function() {
 
                 const currentParents = updateParentOffsets && parents.slice(0);
                 return updateOffsets && when.apply($, callbackResults).always(function() {
-                    updateGroupInfoOffsets(groupsInfo, currentParents);
+                    that._updateGroupInfoOffsets(groupsInfo, currentParents);
                 });
             }
 
             return foreachGroupsCore(that._groupsInfo, callback, childrenAtFirst, []);
+        },
+        _updateGroupInfoOffsets: function(groupsInfo, parents) {
+            parents = parents || [];
+
+            for(let index = 0; index < groupsInfo.length; index++) {
+                const groupInfo = groupsInfo[index];
+
+                if(groupInfo.data && groupInfo.data.offset !== groupInfo.offset) {
+                    groupInfo.offset = groupInfo.data.offset;
+
+                    for(let parentIndex = 0; parentIndex < parents.length; parentIndex++) {
+                        parents[parentIndex].offset = groupInfo.offset;
+                    }
+                }
+            }
+
+            groupsInfo.sort(function(a, b) {
+                return a.offset - b.offset;
+            });
         },
         findGroupInfo: function(path) {
             const that = this;
@@ -242,7 +238,7 @@ exports.GroupingHelper = Class.inherit((function() {
                 if(pathIndex === path.length - 1) {
                     groupInfo.data = groupInfoData;
                     if(groupInfo.offset !== groupInfoData.offset) {
-                        updateGroupInfoOffsets(groupsInfo);
+                        that._updateGroupInfoOffsets(groupsInfo);
                     }
                 }
                 groupsInfo = groupInfo.children;
