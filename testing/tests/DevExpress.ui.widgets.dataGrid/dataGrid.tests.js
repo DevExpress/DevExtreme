@@ -9550,6 +9550,42 @@ QUnit.testInActiveWindow('Focus should not return to cell from filter row after 
     assert.ok($('.dx-datagrid-filter-row .dx-texteditor-input').is(':focus'), 'filter row\'s cell is focused');
 });
 
+function createRemoteDataSourceWithGroupPaging(arrayStore, key) {
+    return {
+        key,
+        load: function(options) {
+            const d = $.Deferred();
+            setTimeout(function() {
+                const result = {};
+                arrayStore.load(options).done(function(data) {
+                    result.data = data;
+
+                    if(options.group) {
+                        data.forEach(item => {
+                            item.count = item.items.length;
+                            item.items = null;
+                        });
+                    }
+                });
+                if(options.requireGroupCount) {
+                    arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
+                        result.groupCount = groupedData.length;
+                    });
+                }
+                if(options.requireTotalCount) {
+                    arrayStore.totalCount(options).done(function(totalCount) {
+                        result.totalCount = totalCount;
+                    });
+                }
+
+                d.resolve(result);
+            }, 10);
+
+            return d;
+        }
+    };
+}
+
 // T716207
 QUnit.test('Filtering should works correctly if groupPaging is enabled and group is expanded', function(assert) {
     // arrange
@@ -9561,39 +9597,7 @@ QUnit.test('Filtering should works correctly if groupPaging is enabled and group
         { id: 4, group: 'group', type: 2 }
     ]);
     const dataGrid = $('#dataGrid').dxDataGrid({
-        dataSource: {
-            key: 'id',
-            load: function(options) {
-                const d = $.Deferred();
-                setTimeout(function() {
-                    const result = {};
-                    arrayStore.load(options).done(function(data) {
-                        result.data = data;
-
-                        if(options.group) {
-                            data.forEach(item => {
-                                item.count = item.items.length;
-                                item.items = null;
-                            });
-                        }
-                    });
-                    if(options.requireGroupCount) {
-                        arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
-                            result.groupCount = groupedData.length;
-                        });
-                    }
-                    if(options.requireTotalCount) {
-                        arrayStore.totalCount(options).done(function(totalCount) {
-                            result.totalCount = totalCount;
-                        });
-                    }
-
-                    d.resolve(result);
-                }, 10);
-
-                return d;
-            }
-        },
+        dataSource: createRemoteDataSourceWithGroupPaging(arrayStore, 'id'),
         remoteOperations: { groupPaging: true },
         height: 400,
         filterSyncEnabled: true,
