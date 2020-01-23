@@ -1,7 +1,7 @@
 import Button, { viewModelFunction, viewFunction } from '../../js/ui/test-button';
 
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 
 describe('Button', () => {
     it('should render text', () => {
@@ -17,20 +17,20 @@ describe('Button', () => {
         const model = new Button();
         model.text = 'My button';
 
-        model.contentRender = ({text}) => (<div className="custom-content">{text}</div>);
+        model.contentRender = ({text}) => (<div className="custom-content">{text+"123"}</div>);
 
-        const tree = mount(viewFunction(viewModelFunction(model)));
+        const tree = shallow(viewFunction(viewModelFunction(model)));
 
         expect(tree.find('.dx-button-content').children().props().text).toBe('My button');
-        expect(tree.find('.dx-button-content .custom-content').text()).toBe('My button');
+        expect(tree.find('.dx-button-content').children().render().text()).toBe('My button123');
     });
 
-    it('should have dx-widget class', () => {
+    it('should have dx-button class', () => {
         const model = new Button();
 
         const tree = shallow(viewFunction(viewModelFunction(model)));
 
-        expect(tree.is('.dx-widget')).toBeTruthy();
+        expect(tree.is('.dx-button')).toBeTruthy();
     });
 
     it('should be of success type', () => {
@@ -42,19 +42,4 @@ describe('Button', () => {
         expect(tree.is('.dx-button.dx-button-success')).toBeTruthy();
     });
 
-    it('should change hover state on pointerover/pointerout', () => {
-        const model = new Button();
-        model.type = 'success';
-
-        let tree = shallow(viewFunction(viewModelFunction(model)));
-        expect(tree.is('.dx-button.dx-state-hover')).toBeFalsy();
-
-        model.onPointerOver();
-        tree = shallow(viewFunction(viewModelFunction(model)));
-        expect(tree.is('.dx-button.dx-state-hover')).toBeTruthy();
-
-        model.onPointerOut();
-        tree = shallow(viewFunction(viewModelFunction(model)));
-        expect(tree.is('.dx-button.dx-state-hover')).toBeFalsy();
-    });
 });

@@ -2,6 +2,9 @@ import { Component, Prop, React } from "../component_declaration/common";
 import { getImageSourceType } from '../core/utils/icon';
 
 import Widget from './test-widget';
+import JSXConstructor from '../component_declaration/jsx';
+
+const WidgetJSX = JSXConstructor<Widget>(Widget);
 
 const ICON_CLASS = 'dx-icon';
 const SVG_ICON_CLASS = 'dx-svg-icon';
@@ -75,7 +78,7 @@ export const viewModelFunction = (model: Button) => {
 }
 
 export const viewFunction = (viewModel: Button) => (
-    <Widget
+    <WidgetJSX
         className={viewModel.cssClasses}
         onClick={viewModel.onClick}
         width={viewModel.width}
@@ -103,7 +106,7 @@ export const viewFunction = (viewModel: Button) => (
                 {viewModel.text && <span className="dx-button-text">{viewModel.text}</span>}
             </div>
         )}
-    </Widget>
+    </WidgetJSX>
 );
 
 @Component({
