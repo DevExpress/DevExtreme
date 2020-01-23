@@ -144,8 +144,9 @@ function run_test_functional {
     npm i
     npm run build
 
-    local args="--browsers chrome:headless";
-    [ "$COMPONENT" ] && args="$args --componentFolder $COMPONENT";
+    local args="--browsers=chrome:headless";
+    [ -n "$COMPONENT" ] && args="$args --componentFolder=$COMPONENT";
+    [ -n "$QUARANTINE_MODE" ] && args="$args --quarantineMode=true";
 
     npm run test-functional -- $args
 }
