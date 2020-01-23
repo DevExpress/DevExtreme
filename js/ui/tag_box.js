@@ -570,8 +570,10 @@ const TagBox = SelectBox.inherit({
         this.callBase(e);
     },
 
-    _restoreInputText: function() {
-        this._clearTextValue();
+    _restoreInputText: function(saveEditingValue) {
+        if(!saveEditingValue) {
+            this._clearTextValue();
+        }
     },
 
     _focusOutHandler: function(e) {
