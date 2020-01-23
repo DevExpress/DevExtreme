@@ -61,22 +61,19 @@ const subscribes = {
             dates.push(startDate);
             initialDates = dates;
         } else {
-            initialDates = dates;
-            dates = dates.map((date) => {
-                return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption('startDayHour'));
-            });
-
             const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
             const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
 
             if(needCheckTimezoneOffset) {
-                initialDates = initialDates.map((date) => {
-                    return this.correctDateByDaylightOffsets(originalStartDate, date, startDateTimeZone);
-                });
                 dates = dates.map((date) => {
                     return this.correctDateByDaylightOffsets(originalStartDate, date, startDateTimeZone);
                 });
             }
+
+            initialDates = dates;
+            dates = dates.map((date) => {
+                return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption('startDayHour'));
+            });
         }
 
         if(renderingStrategy.needSeparateAppointment(allDay)) {
