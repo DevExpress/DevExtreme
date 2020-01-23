@@ -19,7 +19,7 @@ const SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
         return workWeekUtils.getFirstDayOfWeek(this.option('firstDayOfWeek'));
     },
 
-    _isSkipData: workWeekUtils.isDataOnWeekend,
+    _isSkippedData: workWeekUtils.isDataOnWeekend,
 
     _incrementDate: function(date) {
         const day = date.getDay();
