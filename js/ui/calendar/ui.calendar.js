@@ -522,9 +522,9 @@ const Calendar = Editor.inherit({
 
         this._moveToClosestAvailableDate(date);
 
-        this._waitRenderViewTimeout = setTimeout((function() {
+        this._waitRenderViewTimeout = setTimeout(() => {
             this._alreadyViewRender = false;
-        }).bind(this));
+        });
     },
 
     _getRtlCorrection: function() {
