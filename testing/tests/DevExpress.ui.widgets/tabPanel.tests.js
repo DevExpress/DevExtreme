@@ -482,6 +482,7 @@ QUnit.module('focus policy', {
     });
 
     function checkSelectionAndFocus(tabPanel, expectedSelectedIndex) {
+        const $tabPanel = tabPanel.$element();
         const expectedSelectedItem = tabPanel.option('items')[expectedSelectedIndex];
         const actualSelectedItem = tabPanel.option('selectedItem');
 
@@ -492,13 +493,12 @@ QUnit.module('focus policy', {
         QUnit.assert.equal(actualSelectedTabItem, expectedSelectedItem, 'selected item in the tabs option must be correct');
 
         const expectedSelectedContent = tabPanel.itemElements()[expectedSelectedIndex];
-        const actualSelectedContent = tabPanel.$element().find(`.${SELECTED_ITEM_CLASS}`).get(0);
+        const actualSelectedContent = $tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}.${SELECTED_ITEM_CLASS}`).get(0);
 
         QUnit.assert.equal(expectedSelectedContent, actualSelectedContent, 'selected content must be correct');
 
-        const $tabsContainer = tabPanel.$element().find(`.${TABS_CLASS}`);
-        const $focusedTab = $tabsContainer.find(`.${FOCUSED_CLASS}`);
-        const $selectedTab = $tabsContainer.find(`.${SELECTED_TAB_CLASS}`);
+        const $focusedTab = $tabPanel.find(`.${TABS_CLASS} .${FOCUSED_CLASS}`);
+        const $selectedTab = $tabPanel.find(`.${TABS_CLASS} .${SELECTED_TAB_CLASS}`);
 
         const focusedElement = tabPanel.option('focusedElement');
         if(tabPanel.option('focusStateEnabled') === true) {
