@@ -24,7 +24,7 @@ const SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
         return workWeekUtils.getFirstDayOfWeek(this.option('firstDayOfWeek'));
     },
 
-    _isSkipData: workWeekUtils.isDataOnWeekend,
+    _isSkippedData: workWeekUtils.isDataOnWeekend,
 
     _getDateByIndex: function(headerIndex) {
         const resultDate = new Date(this._firstViewDate);
