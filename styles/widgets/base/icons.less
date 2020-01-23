@@ -1,4 +1,4 @@
-.dx-icon-sizing(@icon_size, @container_size, @borders_size: 0) {
+.dx-icon-sizing(@icon_size, @container_size: @icon_size, @borders_size: 0) {
     @icon_paddings_dirty: @container_size - @icon_size;
     @icon_paddings: @icon_paddings_dirty - @borders_size;
     @icon_padding: floor(@icon_paddings/2);
@@ -19,12 +19,6 @@
     text-align: center;
     line-height: @container_size - @icon_paddings_dirty;
 }
-
-// NOTE: use @container_size: @icon_size parameter declaration in previous mixin when upgrade less
-.dx-icon-sizing(@icon_size) {
-    .dx-icon-sizing(@icon_size, @icon_size);
-}
-
 
 .dx-icon-font-centered-sizing(@icon_size) {
     font-size: @icon_size;
