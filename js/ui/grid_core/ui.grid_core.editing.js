@@ -2598,9 +2598,11 @@ module.exports = {
                     });
                 },
                 _rowClick: function(e) {
+                    const isEditRow = $(e.rowElement).hasClass(EDIT_ROW);
+
                     e.event[TARGET_COMPONENT_NAME] = this.component;
 
-                    if(!this._editCellByClick(e, 'click')) {
+                    if(!this._editCellByClick(e, 'click') && !isEditRow) {
                         this.callBase.apply(this, arguments);
                     }
                 },
