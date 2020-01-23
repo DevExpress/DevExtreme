@@ -4586,6 +4586,40 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
                 }
             ], 'items');
         });
+
+        // T851306
+        QUnit.test('change sortOrder of group with many unique values', function(assert) {
+            const source = this.createDataSource({
+                store: [{
+                    field1: 1
+                }, {
+                    field1: 2
+                }, {
+                    field1: 3
+                }, {
+                    field1: 4
+                }, {
+                    field1: 5
+                }],
+                pageSize: 2,
+                group: [{ selector: 'field1', isExpanded: true }]
+            });
+            source.load();
+
+            sinon.spy(source._grouping, '_updateGroupInfoOffsets');
+
+            // act
+            source.group([{ selector: 'field1', isExpanded: true, desc: true }]);
+            source.reload();
+
+            // assert
+            assert.equal(source.pageCount(), 5, 'pageCount');
+            assert.deepEqual(source.items(), [{
+                key: 5,
+                items: [{ field1: 5 }]
+            }], 'items');
+            assert.equal(source._grouping._updateGroupInfoOffsets.callCount, 1, '_updateGroupInfoOffsets is called once');
+        });
     }
 });
 
