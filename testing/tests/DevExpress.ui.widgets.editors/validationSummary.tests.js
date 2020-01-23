@@ -40,7 +40,7 @@ QUnit.module('events', {
         this.fixture = new Fixture();
     }
 }, () => {
-    QUnit.test('Check item click event subscription', (assert) => {
+    QUnit.test('Check item click event subscription', function(assert) {
         const itemClickHandler = sinon.spy();
         const summary = this.fixture.createSummary(null, {
         });
@@ -63,7 +63,7 @@ QUnit.module('events', {
         assert.strictEqual(itemClickHandler.lastCall.args[0].itemIndex, 0, 'Item click handler should have arguments');
     });
 
-    QUnit.test('Check item onClick subscription', (assert) => {
+    QUnit.test('Check item onClick subscription', function(assert) {
         const itemClickHandler = sinon.spy();
         const summary = this.fixture.createSummary(null, {
             onItemClick: itemClickHandler
@@ -86,7 +86,7 @@ QUnit.module('events', {
         assert.strictEqual(itemClickHandler.lastCall.args[0].itemIndex, 0, 'Item click handler should have arguments');
     });
 
-    QUnit.test('Check item onContentReady subscription', (assert) => {
+    QUnit.test('Check item onContentReady subscription', function(assert) {
         const contentReadyHandler = sinon.spy();
         const group = 'group1';
         const validator = sinon.createStubInstance(Validator);
@@ -106,7 +106,7 @@ QUnit.module('events', {
         assert.strictEqual(contentReadyHandler.callCount, 2, 'contentReady has been handled');
     });
 
-    QUnit.test('Check item contentReady event subscription', (assert) => {
+    QUnit.test('Check item contentReady event subscription', function(assert) {
         const contentReadyHandler = sinon.spy();
         const group = 'group1';
         const validator = sinon.createStubInstance(Validator);
