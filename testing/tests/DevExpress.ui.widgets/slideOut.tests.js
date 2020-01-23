@@ -1,12 +1,12 @@
-const $ = require('jquery');
-const fx = require('animation/fx');
-const config = require('core/config');
-const typeUtils = require('core/utils/type');
-const hideTopOverlayCallback = require('mobile/hide_top_overlay').hideCallback;
-const pointerMock = require('../../helpers/pointerMock.js');
+import $ from 'jquery';
+import fx from 'animation/fx';
+import config from 'core/config';
+import typeUtils from 'core/utils/type';
+import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_top_overlay';
+import pointerMock from '../../helpers/pointerMock.js';
 
-require('ui/slide_out');
-require('common.css!');
+import 'ui/slide_out';
+import 'common.css!';
 
 const SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container';
 const SLIDEOUT_SHIELD = 'dx-slideoutview-shield';

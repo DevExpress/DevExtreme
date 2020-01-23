@@ -34,11 +34,6 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
             useMaskBehavior: true,
 
-            /**
-             * @name dxNumberBoxOptions.format
-             * @type format
-             * @default ""
-             */
             format: null
         });
     },

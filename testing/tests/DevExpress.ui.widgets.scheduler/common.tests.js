@@ -11,7 +11,7 @@ import Color from 'color';
 import fx from 'animation/fx';
 import config from 'core/config';
 import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
-import dxSchedulerWorkSpace from 'ui/scheduler/workspaces/ui.scheduler.work_space';
+import dxScheduler from 'ui/scheduler/ui.scheduler';
 import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dragEvents from 'events/drag';
@@ -1088,37 +1088,6 @@ QUnit.testStart(function() {
 
         assert.equal(this.instance.getWorkSpaceScrollableScrollTop(), 400, 'Returned value is right for not allDay appt and vertical grouping');
         assert.equal(this.instance.getWorkSpaceScrollableScrollTop(true), 400, 'Returned value is right for allDay appt and vertical grouping');
-    });
-
-    QUnit.test('Get text', function(assert) {
-        const data = [{
-            text: 'a',
-            startDate: new Date(2015, 6, 8, 8, 0),
-            endDate: new Date(2015, 6, 8, 17, 0),
-        }];
-        this.createInstance({
-            dataSource: data,
-        });
-
-        const textOption = this.instance.getText(data[0], data[0]);
-        assert.equal(textOption.text, 'a');
-        assert.equal(textOption.formatDate, '8:00 AM - 5:00 PM');
-    });
-
-    QUnit.test('Get text, all day', function(assert) {
-        const data = [{
-            text: 'a',
-            startDate: new Date(2015, 6, 8, 8, 0),
-            endDate: new Date(2015, 6, 8, 17, 0),
-            allDay: true
-        }];
-        this.createInstance({
-            dataSource: data,
-        });
-
-        const textOption = this.instance.getText(data[0], data[0]);
-        assert.equal(textOption.text, 'a');
-        assert.equal(textOption.formatDate, 'July 8');
     });
 
     QUnit.test('checkAndDeleteAppointment', function(assert) {
@@ -3033,7 +3002,7 @@ QUnit.testStart(function() {
     });
 
     QUnit.test('onAppointmentRendered should not contain information about particular appt resources if there are not groups(T413561)', function(assert) {
-        const workSpaceSpy = sinon.spy(dxSchedulerWorkSpace.prototype, 'getCellDataByCoordinates');
+        const resourcesSpy = sinon.spy(dxScheduler.prototype, 'setTargetedAppointmentResources');
 
         this.createInstance({
             dataSource: new DataSource([
@@ -3049,7 +3018,7 @@ QUnit.testStart(function() {
             currentView: 'week'
         });
 
-        assert.equal(workSpaceSpy.callCount, 2, 'Resources aren\'t required');
+        assert.equal(resourcesSpy.callCount, 2, 'Resources aren\'t required');
     });
 
     QUnit.test('onAppointmentClick should fires when appointment is clicked', function(assert) {

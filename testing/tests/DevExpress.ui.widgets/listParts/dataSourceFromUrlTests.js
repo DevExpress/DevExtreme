@@ -1,6 +1,6 @@
-const $ = require('jquery');
-const List = require('ui/list');
-const ajaxMock = require('../../../helpers/ajaxMock.js');
+import $ from 'jquery';
+import List from 'ui/list';
+import ajaxMock from '../../../helpers/ajaxMock.js';
 
 QUnit.module(
     'data source from url',

@@ -10,7 +10,8 @@ const context = require('./context.js');
 
 require('./generator');
 
-const SRC = 'js/**/*.js*';
+const GLOB_TS = require('./ts').GLOB_TS;
+const SRC = ['js/**/*.*', '!' + GLOB_TS, '!js/**/*.tsx', '!js/component_declaration/*.ts'];
 const TESTS_PATH = 'testing';
 const TESTS_SRC = TESTS_PATH + '/**/*.js';
 

@@ -17,11 +17,8 @@ QUnit.testStart(function() {
 });
 
 const createPivotGrid = function(options) {
-    let pivotGrid;
     const pivotGridElement = $('#container').dxPivotGrid(options);
-
-    pivotGrid = pivotGridElement.dxPivotGrid('instance');
-    return pivotGrid;
+    return pivotGridElement.dxPivotGrid('instance');
 };
 
 QUnit.module('dxPivotGrid', {
@@ -154,30 +151,25 @@ QUnit.module('dxPivotGrid', {
 });
 
 QUnit.test('getFrozenArea', function(assert) {
-    // act, assert
     assert.strictEqual(this.dataProvider.getFrozenArea().x, 2, 'Frozen area width is correct');
     assert.strictEqual(this.dataProvider.getFrozenArea().y, 3, 'Frozen area height is correct');
 });
 
 QUnit.test('Data provider base stub testing', function(assert) {
-    // act, assert
     assert.strictEqual(this.dataProvider.getGroupLevel(3), 0, 'getGroupLevel returns 0');
 });
 
 QUnit.test('getRowsCount', function(assert) {
-    // act, assert
     assert.strictEqual(this.dataProvider.getRowsCount(), 10, 'Rows count is correct');
 });
 
 QUnit.test('getCellType', function(assert) {
-    // act, assert
     assert.strictEqual(this.dataProvider.getCellType(5, 5), 'number', 'Cells dataType is correct');
     assert.strictEqual(this.dataProvider.getCellType(1, 2), 'string', 'RowPart dataType is correct');
     assert.strictEqual(this.dataProvider.getCellType(5, 0), 'string', 'ColsPart dataType is correct');
 });
 
 QUnit.test('getCellData', function(assert) {
-    // act, assert
     assert.strictEqual(this.dataProvider.getCellData(5, 5).value, 0.1, 'CellsInfo cellValue is correct');
     assert.strictEqual(this.dataProvider.getCellData(1, 2).value, 'Q1', 'Header part cellText is correct');
 
@@ -186,16 +178,13 @@ QUnit.test('getCellData', function(assert) {
 });
 
 QUnit.test('exportToExcel', function(assert) {
-    // arrange
     const pivotGrid = this.pivotGrid;
 
     sinon.stub(pivotGrid, 'getDataProvider');
     sinon.stub(clientExporter, 'export');
 
-    // act
     pivotGrid.exportToExcel();
 
-    // assert
     assert.equal(clientExporter.export.callCount, 1, 'exporting is called');
     assert.deepEqual(clientExporter.export.getCall(0).args[0], pivotGrid.getDataProvider.getCall(0).returnValue, 'First arg is data');
 
@@ -215,7 +204,6 @@ QUnit.test('exportToExcel', function(assert) {
 });
 
 QUnit.test('getAllItems', function(assert) {
-    // act, assert
     assert.strictEqual(this.items.length, 10, 'All rows are collected');
     assert.strictEqual(this.items[1].length, 16, 'All columns are collected');
     assert.deepEqual(this.items[3][3], {
@@ -281,10 +269,6 @@ QUnit.test('Loading indicator showing', function(assert) {
 });
 
 QUnit.test('Export with empty cellsInfo', function(assert) {
-    // arrange
-    let columnsInfo;
-    let rowsInfo;
-    let cellsInfo;
     const _getCellsInfo = this.pivotGrid._dataController.getCellsInfo;
     const dataProvider = this.pivotGrid.getDataProvider();
 
@@ -292,15 +276,13 @@ QUnit.test('Export with empty cellsInfo', function(assert) {
         return [];
     };
 
-    columnsInfo = this.pivotGrid._dataController.getColumnsInfo(true);
-    rowsInfo = this.pivotGrid._dataController.getRowsInfo(true);
-    cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
+    const columnsInfo = this.pivotGrid._dataController.getColumnsInfo(true);
+    const rowsInfo = this.pivotGrid._dataController.getRowsInfo(true);
+    const cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
 
     this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
 
-    // act
     dataProvider.ready();
-    // assert
     assert.strictEqual(this.dataProvider.getColumns().length, 16, 'Columns length is correct');
     assert.strictEqual(this.dataProvider.getRowsCount(), 10, 'Rows count is length is correct');
     assert.strictEqual(this.dataProvider.getCellMerging(0, 0).colspan, 1, 'colspan count is correct');
@@ -314,14 +296,12 @@ QUnit.test('Export with empty cellsInfo', function(assert) {
 });
 
 QUnit.test('Context menu with export', function(assert) {
-    // act
     const $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
 
     $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 
     this.clock.tick();
 
-    // assert
     assert.equal($('.dx-menu-item-text').eq(1).text(), 'Export to Excel file');
 
     checkDxFontIcon(assert, '.dx-context-menu .dx-menu-item .dx-icon-xlsxfile', DX_ICON_XLSX_FILE_CONTENT_CODE);
@@ -329,7 +309,6 @@ QUnit.test('Context menu with export', function(assert) {
 });
 
 QUnit.test('Hide export from the context menu when the export.enabled option is disabled', function(assert) {
-    // act
     this.pivotGrid.option('export.enabled', false);
 
     const $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
@@ -338,29 +317,23 @@ QUnit.test('Hide export from the context menu when the export.enabled option is 
 
     this.clock.tick();
 
-    // assert
     assert.equal($('.dx-menu-item-text').eq(1).text(), '');
 });
 
 // T311313:
 QUnit.test('Row column alignment', function(assert) {
-    // act
     const columnsInfo = $.extend(true, [], this.pivotGrid._dataController.getColumnsInfo(true));
     const rowsInfo = $.extend(true, [], this.pivotGrid._dataController.getRowsInfo(true));
     const cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
     const dataProvider = this.pivotGrid.getDataProvider();
 
     let items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
-    // act
     dataProvider.ready();
-    // assert
     assert.equal(items[0][0].alignment, 'left', 'Not RTL export data');
 
     this.pivotGrid._options.rtlEnabled = true;
     items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
-    // act
     dataProvider.ready();
-    // assert
     this.pivotGrid._options.rtlEnabled = false;
     assert.equal(items[0][0].alignment, 'right', 'RTL export data');
 });
@@ -481,7 +454,6 @@ QUnit.test('getCellMerging', function(assert) {
 
     dataProvider.ready();
 
-    // act, assert
     assert.strictEqual(dataProvider.getCellMerging(0, 0).colspan, 1, 'colspan count is correct');
     assert.strictEqual(dataProvider.getCellMerging(0, 0).rowspan, 2, 'rowspan count is correct');
 

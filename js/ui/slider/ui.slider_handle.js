@@ -70,7 +70,7 @@ const SliderHandle = Widget.inherit({
             target: this.$element(),
             closeOnOutsideClick: false,
             container: this.$element(),
-            closeOnBackButton: false,
+            hideTopOverlayHandler: null,
             closeOnTargetScroll: false,
             onPositioned: (function(args) {
                 this._saveTooltipElements(args.component);

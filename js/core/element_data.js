@@ -1,7 +1,7 @@
-const WeakMap = require('./polyfills/weak_map');
-const domAdapter = require('./dom_adapter');
-const eventsEngine = require('../events/core/events_engine');
-const MemorizedCallbacks = require('./memorized_callbacks');
+import WeakMap from './polyfills/weak_map';
+import domAdapter from './dom_adapter';
+import eventsEngine from '../events/core/events_engine';
+import MemorizedCallbacks from './memorized_callbacks';
 
 const dataMap = new WeakMap();
 let strategy;

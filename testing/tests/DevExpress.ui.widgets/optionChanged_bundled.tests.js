@@ -51,7 +51,7 @@ define(function(require) {
             this.$element.remove();
             executeAsyncMock.teardown();
         }
-    }, () => {
+    }, function() {
         const excludedComponents = [
             'dxLayoutManager'
         ];
@@ -142,6 +142,6 @@ define(function(require) {
                 });
             }
         });
-    });
+    }.bind(this));
 });
 

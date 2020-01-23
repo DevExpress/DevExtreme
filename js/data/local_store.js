@@ -87,20 +87,9 @@ const localStoreBackends = {
 };
 
 
-/**
-* @name LocalStore
-* @inherits ArrayStore
-* @type object
-* @module data/local_store
-* @export default
-*/
 const LocalStore = ArrayStore.inherit({
 
     ctor: function(options) {
-        /**
-         * @name LocalStoreOptions.name
-         * @type string
-         */
         if(typeof options === 'string') {
             options = { name: options };
         } else {
@@ -109,24 +98,10 @@ const LocalStore = ArrayStore.inherit({
 
         this.callBase(options);
 
-        /**
-         * @name LocalStoreOptions.immediate
-         * @type boolean
-         * @default false
-         */
-        /**
-         * @name LocalStoreOptions.flushInterval
-         * @type number
-         * @default 10000
-         */
         this._backend = new localStoreBackends[options.backend || 'dom'](this, options);
         this._backend.load();
     },
 
-    /**
-    * @name LocalStoreMethods.clear
-    * @publicName clear()
-    */
     clear: function() {
         this.callBase();
         this._backend.notifyChanged();

@@ -788,6 +788,76 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
         assert.equal(visibleRows.length, 2, 'visible rows count');
     });
 
+    // T848606
+    QUnit.testInActiveWindow('DataGrid should not infinitly load data when filter with no suitable rows was applied', function(assert) {
+        // arrange
+        let visibleRows;
+        let loadCallCount = 0;
+        let items = [];
+
+        for(let i = 0; i < 60; i++) {
+            items.push({
+                id: i + 1,
+                team: `some${i}`,
+                name: `name${i}`
+            });
+        }
+
+        this.data = {
+            key: 'id',
+            load: function(options) {
+                loadCallCount++;
+
+                const d = $.Deferred();
+                setTimeout(function() {
+                    if(!options.filter) {
+                        d.resolve({
+                            data: items.slice(options.skip, options.skip + options.take),
+                            totalCount: items.length
+                        });
+                    } else {
+                        d.resolve({
+                            data: [],
+                            totalCount: options.requireTotalCount ? 0 : undefined
+                        });
+                    }
+                }, 10);
+                return d;
+            }
+        };
+
+        this.options = {
+            height: 100,
+            focusedRowEnabled: true,
+            focusedRowKey: 40,
+            scrolling: { mode: 'virtual' },
+            remoteOperations: true,
+            columns: ['team', {
+                dataField: 'id',
+                sortOrder: 'asc'
+            }, 'name']
+        };
+
+        this.setupModule();
+        addOptionChangedHandlers(this);
+        this.gridView.render($('#container'));
+
+        this.clock.tick(30);
+
+        // act
+        this.dataController.filter('team', 'contains', '22222');
+        this.dataController.load();
+        this.clock.tick(100);
+
+        visibleRows = this.dataController.getVisibleRows();
+
+        // assert
+        assert.equal(this.option('focusedRowKey'), 40, 'focusedRowKey');
+        assert.equal(this.option('focusedRowIndex'), 39, 'focusedRowIndex');
+        assert.equal(visibleRows.length, 0, 'visible rows count');
+        assert.equal(loadCallCount, 5, 'load call count');
+    });
+
     QUnit.testInActiveWindow('Tab index should not exist for the previous focused row', function(assert) {
         let rowsView;
 
@@ -2764,6 +2834,53 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
         // assert
         assert.equal(focusedRowChangingCount, 2, 'focusedRowChanging does not fired during loading');
         assert.equal(focusedRowChangedCount, 1, 'focusedRowChanged does not fired during loading');
+    });
+
+    // T850527
+    QUnit.testInActiveWindow('onFocusedChanged args should be correct after data change', function(assert) {
+        // arrange
+        let onFocusedRowChangedSpy = sinon.spy();
+
+        this.data = [
+            { id: 1 },
+            { id: 2 },
+            { id: 3 }
+        ];
+
+        this.options = {
+            columns: ['id'],
+            keyExpr: 'id',
+            focusedRowEnabled: true,
+            onFocusedRowChanged: onFocusedRowChangedSpy
+        };
+
+        this.setupModule();
+        addOptionChangedHandlers(this);
+
+        this.gridView.render($('#container'));
+        this.clock.tick();
+
+        // act
+        $(this.gridView.getView('rowsView').getRow(0).find('td').eq(0)).trigger(pointerEvents.up).click();
+        this.clock.tick();
+
+        assert.equal(onFocusedRowChangedSpy.callCount, 1, 'focusedRowChanged count');
+        assert.equal(this.getController('keyboardNavigation').getVisibleRowIndex(), 0, 'Focused row index is 1');
+
+        this.data.reverse();
+        this.refresh();
+        this.clock.tick();
+
+        // assert
+        assert.equal(onFocusedRowChangedSpy.callCount, 2, 'focusedRowChanged count');
+        assert.equal(this.getController('keyboardNavigation').getVisibleRowIndex(), 2, 'Focused row index is 3');
+
+        const onFocusedRowChangedArgs = onFocusedRowChangedSpy.secondCall.args[0];
+
+        assert.equal(onFocusedRowChangedArgs.rowIndex, 2, 'row index');
+        assert.equal(onFocusedRowChangedArgs.row.key, 1, 'key');
+        assert.deepEqual(onFocusedRowChangedArgs.row.values, [1, undefined, undefined], 'values');
+        assert.equal(onFocusedRowChangedArgs.row.data.id, 1, 'data');
     });
 
     QUnit.testInActiveWindow('onFocusedCellChanged event the inserted row (T743086)', function(assert) {
@@ -4940,6 +5057,65 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
         assert.equal(focusedRowChangedCount, 1, 'onFocusedRowChanged fires count');
     });
 
+    QUnit.testInActiveWindow('Focusing row should not scroll top if fixed column present (T848753)', function(assert) {
+        // arrange, act
+        this.data = [
+            { id: 5, c0: 'c0_0', c1: 'c1_0' },
+            { id: 6, c0: 'c0_1', c1: 'c1_1' },
+            { id: 7, c0: 'c0_2', c1: 'c1_2' },
+            { id: 8, c0: 'c0_3', c1: 'c1_3' }
+        ];
+
+        this.$element = () => $('#container');
+        this.columns = [
+            {
+                dataField: 'id',
+                fixed: true
+            },
+            'c0',
+            'c1'
+        ];
+        this.options = {
+            height: 40,
+            keyExpr: 'id',
+            focusedRowEnabled: true,
+            showColumnHeaders: false,
+            focusedRowKey: 5,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            columnFixing: {
+                enabled: true
+            },
+            paging: {
+                pageSize: 1
+            }
+        };
+        this.setupModule();
+        addOptionChangedHandlers(this);
+        this.gridView.render($('#container'));
+        const rowsView = this.gridView.getView('rowsView');
+        rowsView.height(40);
+        rowsView.resize();
+        this.clock.tick();
+
+        // arrange, act
+        const scrollable = this.getScrollable();
+
+        scrollable.scrollBy(80);
+        this.clock.tick();
+        scrollable.scrollBy(80);
+        this.clock.tick();
+        this.option('focusedRowKey', 8);
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.option('focusedRowKey'), 8, 'Focused row key');
+        assert.equal(this.option('focusedRowIndex'), 3, 'Focused row index');
+        assert.ok(this.pageIndex(), 3);
+    });
+
     QUnit.testInActiveWindow('onFocusedCellChanged event should not fire if cell position updates for not cell element', function(assert) {
         let rowsView;
         let focusedCellChangedCount = 0;
@@ -5089,8 +5265,6 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
 
     QUnit.test('Focused row should preserve on navigation to the other row in virual scrolling mode if page not loaded', function(assert) {
         // arrange
-        let rowsView;
-
         this.data = [
             { name: 'Alex', phone: '111111', room: 6 },
             { name: 'Dan', phone: '2222222', room: 5 },
@@ -5118,7 +5292,7 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
         this.setupModule();
 
         this.gridView.render($('#container'));
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
         rowsView.height(100);
         rowsView.resize();
         this.clock.tick();

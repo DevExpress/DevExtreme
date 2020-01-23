@@ -1,12 +1,12 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const swipeEvents = require('events/swipe');
-const mathUtils = require('core/utils/math');
-const domUtils = require('core/utils/dom');
-const Action = require('core/action');
-const devices = require('core/devices');
-const GestureEmitter = require('events/gesture/emitter.gesture');
-const pointerMock = require('../../helpers/pointerMock.js');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import swipeEvents from 'events/swipe';
+import mathUtils from 'core/utils/math';
+import domUtils from 'core/utils/dom';
+import Action from 'core/action';
+import devices from 'core/devices';
+import GestureEmitter from 'events/gesture/emitter.gesture';
+import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -60,7 +60,7 @@ $.each(['horizontal', 'vertical'], function(_, direction) {
             },
             direction: direction
         }, function(e) {
-            assert.ok(e.target === element[0]);
+            assert.strictEqual(e.target, element[0]);
             updateHistory.push(e.offset);
         });
 
@@ -87,7 +87,7 @@ $.each(['horizontal', 'vertical'], function(_, direction) {
             }, function() {
                 updateCount++;
             }).on(swipeEvents.end, function(e) {
-                assert.ok(e.target === element[0]);
+                assert.strictEqual(e.target, element[0]);
                 assert.equal(e.offset, pixelOffset / itemSize);
                 assert.equal(e.targetOffset, expectedItemOffset);
                 assert.equal(updateCount, 1);

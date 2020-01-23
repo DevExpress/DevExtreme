@@ -1,27 +1,8 @@
-const $ = require('./renderer');
-const callbacks = require('./component_registrator_callbacks');
-const errors = require('./errors');
-const publicComponentUtils = require('./utils/public_component');
+import $ from './renderer';
+import callbacks from './component_registrator_callbacks';
+import errors from './errors';
+import publicComponentUtils from './utils/public_component';
 
-/**
- * @name registerComponent
- * @publicName registerComponent(name, componentClass)
- * @param1 name:string
- * @param2 componentClass:object
- * @module core/component_registrator
- * @namespace DevExpress
- * @hidden
- */
-/**
- * @name registerComponent
- * @publicName registerComponent(name, namespace, componentClass)
- * @param1 name:string
- * @param2 namespace:object
- * @param3 componentClass:object
- * @module core/component_registrator
- * @namespace DevExpress
- * @hidden
- */
 const registerComponent = function(name, namespace, componentClass) {
     if(!componentClass) {
         componentClass = namespace;

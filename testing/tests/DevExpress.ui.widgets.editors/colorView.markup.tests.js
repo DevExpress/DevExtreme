@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const fx = require('animation/fx');
+import $ from 'jquery';
+import fx from 'animation/fx';
 
-require('common.css!');
-require('ui/color_box/color_view');
+import 'common.css!';
+import 'ui/color_box/color_view';
 
 QUnit.testStart(function() {
     const markup =

@@ -328,12 +328,7 @@ const Sortable = DOMComponent.inherit({
             });
             eventsEngine.on($eventListener, addNamespace(dragEvents.move, SORTABLE_NAMESPACE), function(e) {
                 let $item;
-                let $itemContainer;
-                let $items;
                 let $lastItem;
-                let itemsOffset = [];
-                let isVertical;
-                let itemOffset;
                 let $prevItem;
 
                 if(!$sourceItem) {
@@ -372,16 +367,16 @@ const Sortable = DOMComponent.inherit({
                 }
 
                 $targetGroup.addClass(targetClass);
-                $itemContainer = $targetGroup.find(itemContainerSelector);
-                $items = $itemContainer.find(itemSelector);
+                const $itemContainer = $targetGroup.find(itemContainerSelector);
+                const $items = $itemContainer.find(itemSelector);
 
                 const targetSortable = $targetGroup.closest('.' + SORTABLE_CLASS).data('dxSortableOld');
                 const useIndicator = targetSortable.option('useIndicator');
 
-                isVertical = (targetSortable || that).option('direction') === 'vertical';
-                itemsOffset = getItemsOffset($items, isVertical, $itemContainer);
+                const isVertical = (targetSortable || that).option('direction') === 'vertical';
+                const itemsOffset = getItemsOffset($items, isVertical, $itemContainer);
 
-                itemOffset = that._getItemOffset(isVertical, itemsOffset, e);
+                const itemOffset = that._getItemOffset(isVertical, itemsOffset, e);
 
                 if(itemOffset) {
                     $item = itemOffset.item;

@@ -1,7 +1,7 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('ui/tile_view');
-require('common.css!');
+import 'ui/tile_view';
+import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =

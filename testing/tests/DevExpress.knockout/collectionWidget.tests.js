@@ -205,7 +205,6 @@ QUnit.test('render items with multiple templates, ko scenario', function(assert)
     try {
         const $element = $('#container-with-ko-template');
         const testSet = ['First: book', 'Second: pen', 'eraser', 'abc', 'pencil', 'First: liner'];
-        let $items;
 
         registerComponent('dxTestComponent', TestComponent);
 
@@ -237,7 +236,7 @@ QUnit.test('render items with multiple templates, ko scenario', function(assert)
             ]
         }, $element.get(0));
 
-        $items = $element.find('.item');
+        const $items = $element.find('.item');
         assert.equal($items.length, testSet.length, 'quantity of a test set items and rendered items are equal');
 
         $items.each(function(index) {

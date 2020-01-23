@@ -622,66 +622,12 @@ module('selecting of items', {
                 if(args.name !== 'selectedItems') {
                     return;
                 }
-                assert.ok(args.previousValue !== args.value, 'values are not equal');
+                assert.notStrictEqual(args.previousValue, args.value, 'values are not equal');
             }
         });
 
         instance.selectItem(1);
         instance.unselectItem(1);
-    });
-});
-
-
-module('selecting of item keys', {
-    beforeEach: function() {
-        const items = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }];
-        this.items = items;
-        this.$element = $('#cmp');
-        this.instance = new TestComponent(this.$element, {
-            dataSource: new DataSource({
-                store: new ArrayStore({
-                    key: 'id',
-                    data: items
-                })
-            }),
-            selectionMode: 'multiple'
-        });
-    }
-}, () => {
-    test('selecting options should be synchronized when selectedItemKeys is set ', function(assert) {
-        this.instance.option('selectedItemKeys', [1, 2]);
-
-        assert.deepEqual(this.instance.option('selectedItems'), [ { id: 1 }, { id: 2 }], 'selectedItems is correct');
-        assert.deepEqual(this.instance.option('selectedItem'), { id: 1 }, 'selectedItem is correct');
-        assert.equal(this.instance.option('selectedIndex'), 1, 'selectedIndex is correct');
-        assert.ok(this.$element.find('.' + ITEM_CLASS).eq(1).hasClass('dx-item-selected'), 'first item has selected class');
-    });
-
-    test('selecting options should be synchronized when selectedItemKeys is set with complex keys', function(assert) {
-        const items = [
-            { id: 1, key: 'key1', text: 'Item 1' },
-            { id: 2, key: 'key2', text: 'Item 2' },
-            { id: 3, key: 'key3', text: 'Item 3' }
-        ];
-
-        const instance = new TestComponent(this.$element, {
-            dataSource: new DataSource({
-                store: new ArrayStore({
-                    key: ['id', 'key'],
-                    data: items
-                })
-            }),
-            selectionMode: 'multiple'
-        });
-
-        const $item = this.$element.find('.' + ITEM_CLASS).eq(1);
-
-        instance.option('selectedItems', [{ id: 2, key: 'key2', text: 'Item 2' }]);
-
-        assert.deepEqual(instance.option('selectedItemKeys'), [{ id: items[1].id, key: items[1].key }], 'selectedItems is correct');
-        assert.deepEqual(instance.option('selectedItem'), items[1], 'selectedItem is correct');
-        assert.equal(instance.option('selectedIndex'), 1, 'selectedIndex is correct');
-        assert.ok($item.hasClass('dx-item-selected'), 'item has selected class');
     });
 });
 
@@ -875,7 +821,7 @@ module('selecting of item keys', {
         assert.ok($item.hasClass('dx-item-selected'), 'item has selected class');
     });
 
-    test('using dataSource and selectedItems with unexisting key', function(assert) {
+    test('using dataSource: [] and selectedItems with unexisting key', function(assert) {
         const items = ['item 1', 'item 2', 'item 3'];
         const instance = new TestComponent(this.$element, {
             dataSource: [],
@@ -893,7 +839,7 @@ module('selecting of item keys', {
         assert.ok($item.hasClass('dx-item-selected'), 'item has selected class');
     });
 
-    test('using dataSource and selectedItems with unexisting key', function(assert) {
+    test('using dataSource: ["item 1", "item 2", "item 3"] and selectedItems with unexisting key', function(assert) {
         const items = ['item 1', 'item 2', 'item 3'];
         const instance = new TestComponent(this.$element, {
             dataSource: items,
@@ -908,6 +854,54 @@ module('selecting of item keys', {
         assert.equal(instance.option('selectedIndex'), 1, 'selectedIndex is correct');
         assert.deepEqual(instance.option('selectedItem'), items[1], 'selectedItem is correct');
         assert.ok($item.hasClass('dx-item-selected'), 'item has selected class');
+    });
+
+    test('selecting options should be synchronized when selectedItemKeys is set with complex keys', function(assert) {
+        const items = [
+            { id: 1, key: 'key1', text: 'Item 1' },
+            { id: 2, key: 'key2', text: 'Item 2' },
+            { id: 3, key: 'key3', text: 'Item 3' }
+        ];
+
+        const instance = new TestComponent(this.$element, {
+            dataSource: new DataSource({
+                store: new ArrayStore({
+                    key: ['id', 'key'],
+                    data: items
+                })
+            }),
+            selectionMode: 'multiple'
+        });
+
+        const $item = this.$element.find('.' + ITEM_CLASS).eq(1);
+
+        instance.option('selectedItems', [{ id: 2, key: 'key2', text: 'Item 2' }]);
+
+        assert.deepEqual(instance.option('selectedItemKeys'), [{ id: items[1].id, key: items[1].key }], 'selectedItems is correct');
+        assert.deepEqual(instance.option('selectedItem'), items[1], 'selectedItem is correct');
+        assert.equal(instance.option('selectedIndex'), 1, 'selectedIndex is correct');
+        assert.ok($item.hasClass('dx-item-selected'), 'item has selected class');
+    });
+
+    test('selecting options should be synchronized when selectedItemKeys is set ', function(assert) {
+        const items = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }];
+
+        const instance = new TestComponent(this.$element, {
+            dataSource: new DataSource({
+                store: new ArrayStore({
+                    key: 'id',
+                    data: items
+                })
+            }),
+            selectionMode: 'multiple'
+        });
+
+        instance.option('selectedItemKeys', [1, 2]);
+
+        assert.deepEqual(instance.option('selectedItems'), [ { id: 1 }, { id: 2 }], 'selectedItems is correct');
+        assert.deepEqual(instance.option('selectedItem'), { id: 1 }, 'selectedItem is correct');
+        assert.equal(instance.option('selectedIndex'), 1, 'selectedIndex is correct');
+        assert.ok(this.$element.find('.' + ITEM_CLASS).eq(1).hasClass('dx-item-selected'), 'first item has selected class');
     });
 });
 

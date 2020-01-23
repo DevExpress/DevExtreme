@@ -1,6 +1,6 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('ui/nav_bar');
+import 'ui/nav_bar';
 
 QUnit.testStart(function() {
     const markup =

@@ -85,8 +85,10 @@ export class TooltipStrategyBase {
             dataSource: dataList,
             onContentReady: this._onListRender.bind(this),
             onItemClick: e => this._onListItemClick(e),
-            itemTemplate: (item, index) =>
-                this._renderTemplate(this._tooltip.option('target'), item.data, item.currentData || item.data, index, item.color),
+            itemTemplate: (item, index) => {
+                const currentData = (item.settings && item.settings.targetedAppointmentData) || item.currentData || item.data;
+                return this._renderTemplate(item.data, currentData, index, item.color);
+            }
         };
     }
 
@@ -100,7 +102,7 @@ export class TooltipStrategyBase {
         return this._options.createComponent(listElement, List, this._createListOption(dataList));
     }
 
-    _renderTemplate(target, data, currentData, index, color) {
+    _renderTemplate(data, currentData, index, color) {
         const itemListContent = this._createItemListContent(data, currentData, color);
         this._options.addDefaultTemplates({
             [this._getItemListTemplateName()]: new FunctionTemplate(options => {
@@ -111,7 +113,7 @@ export class TooltipStrategyBase {
         });
 
         const template = this._options.getAppointmentTemplate(this._getItemListTemplateName() + 'Template');
-        return this._createFunctionTemplate(template, data, this._options.getTargetedAppointmentData(data, target), index);
+        return this._createFunctionTemplate(template, data, currentData, index);
     }
 
     _createFunctionTemplate(template, data, targetData, index) {
@@ -148,10 +150,11 @@ export class TooltipStrategyBase {
         const editing = this._extraOptions.editing;
         const $itemElement = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM);
         $itemElement.append(this._createItemListMarker(color));
-        $itemElement.append(this._createItemListInfo(this._options.getText(data, currentData)));
+        $itemElement.append(this._createItemListInfo(this._options.getTextAndFormatDate(data, currentData)));
 
         if(!data.disabled && (editing && editing.allowDeleting === true || editing === true)) {
-            $itemElement.append(this._createDeleteButton(data, currentData));
+            const singleAppointmentData = this._options.getSingleAppointmentData(data, this._tooltip.option('target')); // TODO: temporary solution fox fix T848058, more information in the ticket
+            $itemElement.append(this._createDeleteButton(data, singleAppointmentData));
         }
 
         return $itemElement;
