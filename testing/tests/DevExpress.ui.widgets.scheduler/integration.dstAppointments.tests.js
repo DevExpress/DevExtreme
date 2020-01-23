@@ -100,6 +100,7 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth() * 2, 2, 'Appointment width is correct');
     });
 
+    // NOTE: Timezone-sensitive test, use US/Pacific for proper testing
     QUnit.test('Appointment which started in DST and ended in STD time should have right width, timeline view', function(assert) {
         const startDate = new Date(2018, 10, 4, 1);
         const endDate = new Date(2018, 10, 4, 3);
@@ -119,7 +120,7 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         });
 
         const duration = (endDate - startDate) / toMs('hour');
-        const tzDiff = (startDate.getTimezoneOffset() - endDate.getTimezoneOffset()) / toMs('second');
+        const tzDiff = (startDate.getTimezoneOffset() - endDate.getTimezoneOffset()) / 60;
 
         assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth() * (duration + tzDiff), 2.001, 'Appt width is correct on the day of the time ajusting');
     });
