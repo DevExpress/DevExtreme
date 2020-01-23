@@ -195,4 +195,105 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
 
         assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth(), 2.001, 'Appointment width is correct after translation oт STD');
     });
+
+    QUnit.test('Recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', function(assert) {
+        // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
+        const scheduler = createWrapper({
+            dataSource: [
+                {
+                    text: 'Daily meeting',
+                    startDate: '2019-03-01T09:00:00+01:00',
+                    endDate: '2019-03-01T12:00:00+01:00',
+                    recurrenceRule: 'FREQ=DAILY',
+                    startDateTimeZone: 'Europe/Paris',
+                    endDateTimeZone: 'Europe/Paris'
+                }
+            ],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2019, 2, 11), // NOTE: DST Montreal
+            startDayHour: 0,
+            height: 600,
+            timeZone: 'America/Montreal',
+            dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx'
+        });
+
+        let targetCell = scheduler.workSpace.getCell(8);
+        let appointment = scheduler.appointments.getAppointment(0);
+
+        assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
+        assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
+
+        scheduler.instance.option('currentDate', new Date(2019, 3, 1)); // NOTE: DST Paris
+
+        targetCell = scheduler.workSpace.getCell(6);
+        appointment = scheduler.appointments.getAppointment(0);
+
+        assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
+        assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
+    });
+
+    QUnit.test('Recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone', function(assert) {
+        // NOTE: The daylight saving changed in Montreal on 10.03.2019
+        const scheduler = createWrapper({
+            dataSource: [
+                {
+                    text: 'Daily meeting',
+                    startDate: '2019-03-01T09:00:00+01:00',
+                    endDate: '2019-03-01T12:00:00+01:00',
+                    recurrenceRule: 'FREQ=DAILY'
+                }
+            ],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2019, 2, 5), // NOTE: STD Montreal
+            startDayHour: 0,
+            height: 600,
+            timeZone: 'America/Montreal',
+            dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx'
+        });
+
+        let targetCell = scheduler.workSpace.getCell(6);
+        let appointment = scheduler.appointments.getAppointment(0);
+
+        assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
+        assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
+
+        scheduler.instance.option('currentDate', new Date(2019, 3, 1)); // NOTE: DST Montreal
+
+        targetCell = scheduler.workSpace.getCell(6);
+        appointment = scheduler.appointments.getAppointment(0);
+
+        assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
+        assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
+    });
+
+    QUnit.test('Recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST, appointment timezone is set', function(assert) {
+        // NOTE: The daylight saving changed in Paris on 31.03.2019
+        const scheduler = createWrapper({
+            dataSource: [
+                {
+                    text: 'Daily meeting',
+                    startDate: '2019-03-01T09:00:00+01:00',
+                    endDate: '2019-03-01T12:00:00+01:00',
+                    recurrenceRule: 'FREQ=DAILY',
+                    startDateTimeZone: 'Europe/Paris',
+                    endDateTimeZone: 'Europe/Paris'
+                }
+            ],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2019, 2, 30), // NOTE: STD Paris
+            startDayHour: 0,
+            height: 600,
+            dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx'
+        });
+
+        const appointmentPosition = scheduler.appointments.getAppointment(0).position().top;
+
+        scheduler.instance.option('currentDate', new Date(2019, 3, 1)); // NOTE: DST Paris
+
+        const appointment = scheduler.appointments.getAppointment(0);
+        assert.equal(appointment.position().top, appointmentPosition, 'Recurrence appointment part positions are the same and independent of time changing');
+    });
 });

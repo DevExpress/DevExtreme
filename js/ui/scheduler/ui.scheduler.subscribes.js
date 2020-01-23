@@ -54,6 +54,9 @@ const subscribes = {
             firstDayOfWeek: firstDayOfWeek
         };
 
+        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
+        const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
+
         let dates = recurrenceUtils.getDatesByRecurrence(recurrenceOptions);
         let initialDates;
 
@@ -66,9 +69,7 @@ const subscribes = {
                 return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption('startDayHour'));
             });
             for(let i = 0; i < initialDates.length; i++) {
-                const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
-                // const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointmentData);
-                if(typeUtils.isDefined(startDateTimeZone)) {
+                if(needCheckTimezoneOffset) {
                     const daylightOffset1 = this._subscribes.getDaylightOffsetByOption(this, originalStartDate, initialDates[i]);
                     const daylightOffset2 = this._subscribes.getDaylightOffsetByAppointment(this, originalStartDate, initialDates[i], startDateTimeZone);
                     const diff = daylightOffset1 - daylightOffset2;
@@ -77,9 +78,7 @@ const subscribes = {
                 }
             }
             for(let i = 0; i < dates.length; i++) {
-                const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
-                // const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointmentData);
-                if(typeUtils.isDefined(startDateTimeZone)) {
+                if(needCheckTimezoneOffset) {
                     const daylightOffset1 = this._subscribes.getDaylightOffsetByOption(this, originalStartDate, dates[i]);
                     const daylightOffset2 = this._subscribes.getDaylightOffsetByAppointment(this, originalStartDate, dates[i], startDateTimeZone);
                     const diff = daylightOffset1 - daylightOffset2;
