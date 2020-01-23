@@ -5667,7 +5667,7 @@ QUnit.module('regression', {
         assert.notOk($tagBox.hasClass(FOCUSED_CLASS), 'focused class was removed');
     });
 
-    QUnit.test('search filter should be cleared on close', (assert) => {
+    QUnit.test('search filter should not be cleared on close without focusout (T851874)', (assert) => {
         const $tagBox = $('#tagBox').dxTagBox({
             items: ['111', '222', '333'],
             searchTimeout: 0,
@@ -5686,6 +5686,29 @@ QUnit.module('regression', {
 
         $tagContainer.trigger('dxclick');
         $tagContainer.trigger('dxclick');
+
+        assert.equal($input.val(), '111', 'input is not cleared');
+        assert.equal($(instance.content()).find('.' + LIST_ITEM_CLASS).length, 1, 'filter is not cleared');
+    });
+
+    QUnit.test('search filter should be cleared on focusout', (assert) => {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: ['111', '222', '333'],
+            searchTimeout: 0,
+            opened: true,
+            searchEnabled: true
+        });
+
+        const instance = $tagBox.dxTagBox('instance');
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const kb = keyboardMock($input);
+
+        kb.type('111');
+        instance.close();
+        $($input).trigger('focusout');
+
+        $($input).trigger('dxclick');
+        this.clock.tick();
 
         assert.equal($input.val(), '', 'input was cleared');
         assert.equal($(instance.content()).find('.' + LIST_ITEM_CLASS).length, 3, 'filter was cleared');

@@ -1740,6 +1740,29 @@ QUnit.module('editing', moduleSetup, () => {
         assert.equal($input.val(), 'item 1', 'value has been reverted');
     });
 
+    QUnit.test('selectBox should not restore initial value and reset filter after the popup hiding without focusout event (T851874, T851715)', (assert) => {
+        const $element = $('#selectBox').dxSelectBox({
+            items: ['item 1', 'item 2'],
+            value: 'item 1',
+            acceptCustomValue: true,
+            searchEnabled: true,
+            searchTimeout: 0
+        });
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+        const instance = $element.dxSelectBox('instance');
+        const $ddButton = $element.find(toSelector(DX_DROP_DOWN_BUTTON));
+
+        keyboard
+            .caret({ start: 0, end: 2 })
+            .press('backspace');
+        $ddButton.trigger('dxclick');
+        $input.trigger('dxclick');
+
+        assert.strictEqual($input.val(), 'em 1', 'value has not been restored');
+        assert.strictEqual($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'filter has not been reseted');
+    });
+
     QUnit.test('selectBox should restore old value after esc if custom value is accepted', (assert) => {
         const $element = $('#selectBox').dxSelectBox({
             items: ['item 1', 'item 2'],
