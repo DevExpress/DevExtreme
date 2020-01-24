@@ -1,6 +1,4 @@
 const escapeRegExp = require('../../core/utils/common').escapeRegExp;
-const checkDigit = require('./date.format').checkDigit;
-const Globalize = require('globalize');
 
 const FORMAT_TYPES = {
     '3': 'abbreviated',
@@ -140,18 +138,6 @@ const PATTERN_SETTERS = {
     S: 'setMilliseconds'
 };
 
-const localizeDigits = function(str) {
-    if(!Globalize.formatNumber) {
-        return str;
-    }
-
-    let res = '';
-    for(let i = 0; i < str.length; ++i) {
-        res += checkDigit(str[i]) ? Globalize.formatNumber(+str[i]) : str[i];
-    }
-    return res;
-};
-
 const getSameCharCount = function(text, index) {
     const char = text[index];
     let count = 0;
@@ -216,7 +202,6 @@ const getRegExpInfo = function(format, dateParts) {
     }
 
     addPreviousStub();
-    regexpText = localizeDigits(regexpText);
 
     return {
         patterns: patterns,

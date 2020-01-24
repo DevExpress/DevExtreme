@@ -200,4 +200,3 @@ const getFormat = function(formatter) {
 };
 
 exports.getFormat = getFormat;
-exports.checkDigit = checkDigit;

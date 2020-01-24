@@ -86,7 +86,7 @@ QUnit.test('DateBox should localize whole date in arabic locale', function(asser
     }
 });
 
-QUnit.test('DateBox should not rasie error when digits are not default arabic digits', function(assert) {
+QUnit.test('DateBox should not raise error when digits are not default arabic digits', function(assert) {
     const originalCulture = Globalize.locale().locale;
 
     try {
@@ -101,8 +101,8 @@ QUnit.test('DateBox should not rasie error when digits are not default arabic di
 
         const date = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR).val();
         assert.equal(date, '١٠/١١/٢٠١٥', 'date is localized');
-    } catch (e) {
-        assert.ok(false, "Error occured: " + e.message);
+    } catch(e) {
+        assert.ok(false, 'Error occured: ' + e.message);
     } finally {
         Globalize.locale(originalCulture);
     }
