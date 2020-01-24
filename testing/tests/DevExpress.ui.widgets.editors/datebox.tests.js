@@ -3611,7 +3611,7 @@ QUnit.module('datebox w/ time list', {
         assert.ok($timeListItems.length > 0);
     });
 
-    QUnit.test('should works correctly with serialized dates (T854579)', function(assert) {
+    QUnit.test('should works correctly with serialized dates (T854579)', (assert) => {
         this.dateBox.option({
             opened: true,
             dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx',
