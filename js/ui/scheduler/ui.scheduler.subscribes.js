@@ -31,6 +31,20 @@ const subscribes = {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
 
+    _correctDatesByDaylightOffset: function(dates, appointmentData, originalStartDate) {
+        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
+        const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
+        let result = dates;
+
+        if(needCheckTimezoneOffset) {
+            result = result.map((date) => {
+                return this.correctDateByDaylightOffsets(originalStartDate, date, startDateTimeZone);
+            });
+        }
+
+        return result;
+    },
+
     needCoordinates: function(options) {
         const appointmentData = options.appointmentData;
         const startDate = options.startDate;
@@ -61,16 +75,9 @@ const subscribes = {
             dates.push(startDate);
             initialDates = dates;
         } else {
-            const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
-            const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
-
-            if(needCheckTimezoneOffset) {
-                dates = dates.map((date) => {
-                    return this.correctDateByDaylightOffsets(originalStartDate, date, startDateTimeZone);
-                });
-            }
-
+            dates = this.correctDatesByDaylightOffset(dates, appointmentData, originalStartDate);
             initialDates = dates;
+
             dates = dates.map((date) => {
                 return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption('startDayHour'));
             });
