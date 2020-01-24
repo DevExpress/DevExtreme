@@ -177,11 +177,7 @@ const ValidatingController = modules.Controller.inherit((function() {
             if(validateGroup && validateGroup.validators.length) {
                 // validationResults = ValidationEngine.validateGroup(editData);
                 // test
-                validationResults = this.validateRow(editData);
-                this.updateRowValidationInfo({
-                    keyValue: editData.key,
-                    validationResult: validationResults
-                });
+                validationResults = this.validateRow({ editData });
                 // endTest
             }
 
@@ -213,11 +209,10 @@ const ValidatingController = modules.Controller.inherit((function() {
                 if(ValidationEngine.getGroupConfig(editData)) {
                     // const validationResult = ValidationEngine.validateGroup(editData);
                     // test
-                    const validationResult = this.validateRow(editData);
+                    const validationResult = this.validateRow({ editData, skipUpdate: true });
                     // endTest
                     when(validationResult.complete || validationResult).done((validationResult) => {
                         editData.isValid = validationResult.isValid;
-
                         editData.brokenRules = validationResult.brokenRules;
                     });
                 } else if(!editData.brokenRules || !editData.brokenRules.length) {
@@ -285,15 +280,9 @@ const ValidatingController = modules.Controller.inherit((function() {
                         keyValue: parameters.key,
                         columnIndex: column.index
                     });
-                    if(validationInfo) {
-                        if(disableValidationResult && options.status === VALIDATION_STATUS.pending) {
-                            validationInfo.disabledPendingId = options.id;
-                        } else if(options.status !== VALIDATION_STATUS.pending && isDefined(options.id) && validationInfo.disabledPendingId === options.id) {
-                            disableValidationResult = true;
-                        }
-                        if(options.status !== VALIDATION_STATUS.pending) {
-                            delete validationInfo.disabledPendingId;
-                        }
+                    if(validationInfo && options.status !== VALIDATION_STATUS.pending && validationInfo.disabledPendingIds
+                        && validationInfo.disabledPendingIds.indexOf(options.id) >= 0) {
+                        disableValidationResult = true;
                     }
                     if(disableValidationResult) {
                         return;
@@ -336,29 +325,29 @@ const ValidatingController = modules.Controller.inherit((function() {
                 this.updateCellValidationInfo({
                     keyValue: editData.key,
                     columnIndex: column.index,
-                    validationResult: result,
-                    validator: result.validator
+                    validationResult: result/* ,
+                    validator: result.validator*/
                 });
             };
             const onValidatorInitialized = (arg) => {
-                const info = this.getCellValidationInfo({
-                    keyValue: parameters.key,
-                    columnIndex: column.index
-                });
-                if(info) {
-                    info.validator = arg.component;
-                }
+                // const info = this.getCellValidationInfo({
+                //     keyValue: parameters.key,
+                //     columnIndex: column.index
+                // });
+                // if(info) {
+                //     info.validator = arg.component;
+                // }
                 arg.component.on('validating', validationStatusChanged);
                 arg.component.on('validated', validationStatusChanged);
             };
             const onValidatorDisposing = (arg) => {
-                const info = this.getCellValidationInfo({
-                    keyValue: parameters.key,
-                    columnIndex: column.index
-                });
-                if(info) {
-                    delete info.validator;
-                }
+                // const info = this.getCellValidationInfo({
+                //     keyValue: parameters.key,
+                //     columnIndex: column.index
+                // });
+                // if(info) {
+                //     delete info.validator;
+                // }
                 arg.component.off('validating', validationStatusChanged);
                 arg.component.off('validated', validationStatusChanged);
             };
@@ -445,7 +434,7 @@ const ValidatingController = modules.Controller.inherit((function() {
             return deferred.promise();
         },
 
-        validateRow: function(editData) {
+        validateRow: function({ editData, skipUpdate }) {
             const rowKey = this.getRowValidationInfoKey(editData.key);
             let rowInfo = this._validationInfo[rowKey];
             if(!rowInfo) {
@@ -455,22 +444,24 @@ const ValidatingController = modules.Controller.inherit((function() {
             let validationResult = rowInfo.result;
             if(!validationResult) {
                 validationResult = ValidationEngine.validateGroup(editData);
-            } else {
-                for(let index in rowInfo.cellInfo) {
-                    const validator = rowInfo.cellInfo[index].validator;
-                    validator && this.validateCell(validator);
+                if(!skipUpdate) {
+                    rowInfo.result = this.getValidationResult(validationResult);
                 }
             }
             return validationResult;
         },
 
         getValidationResult: function(validationResult) {
-            return {
+            const result = {
                 isValid: validationResult.isValid,
                 brokenRules: validationResult.brokenRules,
                 complete: validationResult.complete,
                 status: validationResult.status
             };
+            if(isDefined(validationResult.id)) {
+                result.id = validationResult.id;
+            }
+            return result;
         },
 
         updateRowValidationInfo: function({ keyValue, validationResult }) {
@@ -514,7 +505,7 @@ const ValidatingController = modules.Controller.inherit((function() {
             return rowInfo ? !!rowInfo.result : false;
         },
 
-        updateCellValidationInfo: function({ keyValue, columnIndex, validationResult, valueUpdated, validator }) {
+        updateCellValidationInfo: function({ keyValue, columnIndex, validationResult, valueUpdated/* , validator*/ }) {
             const rowKey = this.getRowValidationInfoKey(keyValue);
             let rowValidationInfo = this._validationInfo[rowKey];
             if(!rowValidationInfo) {
@@ -534,13 +525,27 @@ const ValidatingController = modules.Controller.inherit((function() {
             }
             if(validationResult) {
                 info.result = this.getValidationResult(validationResult);
+                const disableValidationResult = this.getDisableApplyValidationResults();
+                if(disableValidationResult && validationResult.status === VALIDATION_STATUS.pending) {
+                    if(!info.disabledPendingIds) {
+                        info.disabledPendingIds = [];
+                    }
+                    info.disabledPendingIds.indexOf(validationResult.id) < 0 && info.disabledPendingIds.push(validationResult.id);
+                }
+                if(validationResult.status !== VALIDATION_STATUS.pending && info.disabledPendingIds) {
+                    const index = info.disabledPendingIds.indexOf(validationResult.id);
+                    if(index > 0) {
+                        info.disabledPendingIds.splice(index, 1);
+                    }
+                    !info.disabledPendingIds.length && delete info.disabledPendingIds;
+                }
             }
             if(isDefined(valueUpdated)) {
                 info.valueUpdated = valueUpdated;
             }
-            if(isDefined(validator)) {
-                info.validator = validator;
-            }
+            // if(isDefined(validator)) {
+            //     info.validator = validator;
+            // }
         },
 
         getPendingCellValidationInfo: function() {
