@@ -1079,15 +1079,14 @@ const Scheduler = Widget.inherit({
     correctDatesByDaylightOffsets: function(dates, appointmentData, originalStartDate) {
         const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
         const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
-        let result = dates;
 
         if(needCheckTimezoneOffset) {
-            result = result.map((date) => {
+            dates = dates.map((date) => {
                 return this._correctDateByDaylightOffsets(originalStartDate, date, startDateTimeZone);
             });
         }
 
-        return result;
+        return dates;
     },
 
     _calculateTimezoneByValue: function(timezone, date) {
