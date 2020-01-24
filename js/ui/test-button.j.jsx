@@ -1,25 +1,18 @@
 import registerComponent from '../core/component_registrator';
-import Widget from './widget/ui.widget';
+import Widget from './widget/preact_wrapper';
 import { extend } from '../core/utils/extend';
 import ButtonView from './test-button.p';
-import * as Preact from 'preact';
 
 class Button extends Widget {
-    _initMarkup() { }
-
-    _render() {
-        this._renderContent();
+    getView() {
+        return ButtonView;
     }
 
-    _renderContent() {
-        const options = this.option();
-        const isFirstRender = this.$element().children().length === 0;
-        const container = isFirstRender ? this.$element().get(0) : undefined;
-
-        let contentRender;
-        if(options.contentRender) {
-            contentRender = (data) => {
-                const template = this._getTemplate(options.contentRender);
+    getProps(isFirstRender) {
+        const props = super.getProps(isFirstRender);
+        if(props.contentRender) {
+            props.contentRender = (data) => {
+                const template = this._getTemplate(props.contentRender);
 
                 return (<div style={{ display: 'none' }} ref={(element) => {
                     if(element && element.parentElement) {
@@ -33,20 +26,7 @@ class Button extends Widget {
                 }}/>);
             };
         }
-
-        Preact.render(view(
-            extend({}, options, {
-                onClick: this._createActionByOption('onClick', {
-                    excludeValidators: ['readOnly'],
-                    afterExecute: () => {
-                        const { useSubmitBehavior } = this.option();
-
-                        useSubmitBehavior && setTimeout(() => this._submitInput().click());
-                    }
-                }),
-                contentRender: contentRender
-            })
-        ), this.$element().get(0), container);
+        return props;
     }
 
     _getDefaultOptions() {
@@ -54,18 +34,6 @@ class Button extends Widget {
             focusStateEnabled: true
         });
     }
-
-    _optionChanged() {
-        this._invalidate();
-    }
-
-    _refresh() {
-        this._renderComponent();
-    }
-}
-
-function view(options) {
-    return Preact.h(ButtonView, options);
 }
 
 registerComponent('dxTestButton', Button);
