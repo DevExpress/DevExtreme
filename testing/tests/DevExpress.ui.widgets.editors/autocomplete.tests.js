@@ -832,9 +832,8 @@ QUnit.module('dxAutocomplete', {
             filterOperator: 'startswith'
         });
 
-        // act
         keyboard.type('t');
-        // assert
+
         assert.equal(searchedString, 't', 'Search string should be passed to user-defined load method');
     });
 

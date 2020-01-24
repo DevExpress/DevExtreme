@@ -5,11 +5,6 @@ import { extend } from '../../core/utils/extend';
 gridCore.registerModule('columns', {
     defaultOptions: function() {
         return extend(true, {}, columnsControllerModule.defaultOptions(), {
-            /**
-            * @name dxDataGridColumn.allowExporting
-            * @type boolean
-            * @default true
-            */
             commonColumnSettings: {
                 allowExporting: true
             }

@@ -26,13 +26,11 @@ function loadCss(frame, cssFileName) {
     frameDoc.write('<link rel=stylesheet href=\'' + cssUrl + '\'>');
 
     return () => {
-        let ourSheet;
-
         if(frameDoc.styleSheets.length <= defaultSheetCount) {
             return false;
         }
 
-        ourSheet = $.grep(frameDoc.styleSheets, function(i) { return i.href.indexOf(cssUrl) > -1; })[0];
+        const ourSheet = $.grep(frameDoc.styleSheets, function(i) { return i.href.indexOf(cssUrl) > -1; })[0];
         return rulesFromSheet(ourSheet).length > 0;
     };
 }

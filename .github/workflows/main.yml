@@ -19,7 +19,7 @@ jobs:
       run: node .\node_modules\gulp\bin\gulp.js transpile-tests
     - name: Run npm run build
       env:
-        DEVEXTREME_QUNIT_CI: true
+        DEVEXTREME_TEST_CI: true
       run: npm run build
     - name: Run QUnit tests
       env:

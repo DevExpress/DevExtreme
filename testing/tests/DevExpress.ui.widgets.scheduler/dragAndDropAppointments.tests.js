@@ -184,11 +184,11 @@ const draggingFromTooltipConfig = $.extend({}, {
             priorityId: 2
         }
     ],
-    createScheduler: function(views, rtlEnabled) {
+    createScheduler: function(views, currentView, rtlEnabled) {
         return createWrapper({
             dataSource: $.extend(true, [], this.data),
             views: views,
-            currentView: views[0].name,
+            currentView: currentView,
             currentDate: new Date(2017, 4, 25),
             startDayHour: 9,
             width: 800,
@@ -229,13 +229,10 @@ const draggingFromTooltipConfig = $.extend({}, {
         };
     },
 
-    testViews: function(views, assert, rtlEnabled) {
-        const scheduler = this.createScheduler(views, rtlEnabled);
+    testViews: function(views, currentView, rtlEnabled, assert) {
+        const scheduler = this.createScheduler(views, currentView, rtlEnabled);
 
-        views.forEach(view => {
-            scheduler.option('currentView', view.name);
-            this.testFakeAppointmentPosition(scheduler, scheduler.appointments.compact.getButton(0), 0, view.name, assert);
-        });
+        this.testFakeAppointmentPosition(scheduler, scheduler.appointments.compact.getButton(0), 0, currentView, assert);
     },
 
     testFakeAppointmentPosition: function(scheduler, button, index, viewName, assert) {
@@ -269,9 +266,15 @@ module('Appointment should move a same distance in dragging from tooltip case, r
     if(!isDesktopEnvironment()) {
         return;
     }
-    test('Common Views', function(assert) { this.testViews(commonViews, assert, false); });
-    test('Time Line Views', function(assert) { this.testViews(timeLineViews, assert, false); });
-    test('Group Views', function(assert) { this.testViews(groupViews, assert, false); });
+    commonViews.forEach((view) => {
+        test(`Common Views: ${view.name}`, function(assert) { this.testViews(commonViews, view.name, false, assert); });
+    });
+    timeLineViews.forEach((view) => {
+        test(`Time Line Views: ${view.name}`, function(assert) { this.testViews(timeLineViews, view.name, false, assert); });
+    });
+    groupViews.forEach((view) => {
+        test(`Group Views: ${view.name}`, function(assert) { this.testViews(groupViews, view.name, false, assert); });
+    });
 });
 
 
@@ -279,9 +282,15 @@ module('Appointment should move a same distance in dragging from tooltip case, r
     if(!isDesktopEnvironment()) {
         return;
     }
-    test('Common Views', function(assert) { this.testViews(commonViews, assert, true); });
-    test('Time Line Views', function(assert) { this.testViews(timeLineViews, assert, true); });
-    test('Group Views', function(assert) { this.testViews(groupViews, assert, true); });
+    commonViews.forEach((view) => {
+        test(`Common Views: ${view.name}`, function(assert) { this.testViews(commonViews, view.name, true, assert); });
+    });
+    timeLineViews.forEach((view) => {
+        test(`Time Line Views: ${view.name}`, function(assert) { this.testViews(timeLineViews, view.name, true, assert); });
+    });
+    groupViews.forEach((view) => {
+        test(`Group Views: ${view.name}`, function(assert) { this.testViews(groupViews, view.name, true, assert); });
+    });
 });
 
 const moveAsMouseConfig = $.extend({}, {
@@ -446,8 +455,7 @@ module('Common', commonModuleConfig, () => {
 
         const phantomAppointment = scheduler.appointments.getAppointment();
 
-        assert.equal(phantomAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '1:00 AM', 'Appointment start is correct');
-        assert.equal(phantomAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), '2:00 AM', 'Appointment edn is correct');
+        assert.equal(phantomAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '1:00 AM - 2:00 AM', 'Appointment start is correct');
 
         pointer.dragEnd();
     });
@@ -678,6 +686,40 @@ module('Common', commonModuleConfig, () => {
             top: positionBeforeDrag.top - cellHeight
         }, 'appointment position is correct');
         assert.deepEqual(scheduler.option('dataSource')[0].startDate, new Date(2015, 1, 9, 10, 30), 'Start date is OK');
+    });
+
+    // Timezone-sensitive test, use US/Pacific for proper testing
+    QUnit.test('Appointment should have correct dates after dragging through timezone change (T835544)', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'Staff Productivity Report',
+                startDate: '2019-11-04T00:00',
+                endDate: '2019-11-06T00:00',
+            }],
+            views: ['timelineMonth'],
+            currentView: 'timelineMonth',
+            currentDate: new Date(2019, 10, 1),
+            height: 300,
+            startDayHour: 0,
+        });
+
+        const $element = scheduler.appointments.getAppointment();
+        let elementPosition = getAbsolutePosition($element);
+        const cellWidth = scheduler.workSpace.getCellWidth();
+        let pointer = pointerMock($element).start();
+
+        pointer.down(elementPosition.left, elementPosition.top).move(-(cellWidth * 2), 0);
+        pointer.up();
+
+        let appointmentContent = scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
+        assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates when dragging to timezone change are correct');
+
+        elementPosition = getAbsolutePosition($element);
+        pointer.down(elementPosition.left, elementPosition.top).move(cellWidth * 2, 0);
+        pointer.up();
+
+        appointmentContent = scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
+        assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates when dragging from timezone change are correct');
     });
 });
 

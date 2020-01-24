@@ -156,6 +156,11 @@ const AdvancedChart = BaseChart.inherit({
         return paneIndex;
     },
 
+    _updateSize() {
+        this.callBase();
+        vizUtils.setCanvasValues(this._canvas);
+    },
+
     _reinitAxes: function() {
         this.panes = this._createPanes();
         this._populateAxes();

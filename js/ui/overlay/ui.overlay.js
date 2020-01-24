@@ -111,12 +111,6 @@ ready(function() {
     });
 });
 
-/**
-* @name dxOverlay
-* @type object
-* @inherits Widget
-* @hidden
-*/
 const Overlay = Widget.inherit({
 
     _supportedKeys: function() {
@@ -155,107 +149,32 @@ const Overlay = Widget.inherit({
             */
             activeStateEnabled: false,
 
-            /**
-            * @name dxOverlayOptions.visible
-            * @type Boolean
-            * @default false
-            * @fires dxOverlayOptions.onShowing
-            * @fires dxOverlayOptions.onHiding
-            */
             visible: false,
 
-            /**
-             * @name dxOverlayOptions.deferRendering
-             * @type Boolean
-             * @default true
-             */
             deferRendering: true,
 
-            /**
-            * @name dxOverlayOptions.shading
-            * @type Boolean
-            * @default true
-            */
             shading: true,
 
-            /**
-            * @name dxOverlayOptions.shadingColor
-            * @type string
-            * @default ''
-            */
             shadingColor: '',
 
-            /**
-            * @name dxOverlayOptions.position
-            * @default { my: 'center', at: 'center', of: window }
-            * @fires dxOverlayOptions.onPositioning
-            * @fires dxOverlayOptions.onPositioned
-            */
             position: {
                 my: 'center',
                 at: 'center'
             },
 
-            /**
-             * @name dxOverlayOptions.width
-             * @type number|string|function
-             * @default function() {return $(window).width() * 0.8 }
-             * @type_function_return number|string
-             */
             width: function() { return $(window).width() * 0.8; },
 
-            /**
-             * @name dxOverlayOptions.minWidth
-             * @type number|string|function
-             * @default null
-             * @type_function_return number|string
-             */
             minWidth: null,
 
-            /**
-             * @name dxOverlayOptions.maxWidth
-             * @type number|string|function
-             * @default null
-             * @type_function_return number|string
-             */
             maxWidth: null,
 
-            /**
-             * @name dxOverlayOptions.height
-             * @type number|string|function
-             * @default function() { return $(window).height() * 0.8 }
-             * @type_function_return number|string
-             */
             height: function() { return $(window).height() * 0.8; },
 
-            /**
-             * @name dxOverlayOptions.minHeight
-             * @type number|string|function
-             * @default null
-             * @type_function_return number|string
-             */
             minHeight: null,
 
-            /**
-             * @name dxOverlayOptions.maxHeight
-             * @type number|string|function
-             * @default null
-             * @type_function_return number|string
-             */
             maxHeight: null,
 
-            /**
-            * @name dxOverlayOptions.animation
-            * @type object
-            * @default { show: { type: "pop", duration: 300, from: { scale: 0.55 } }, hide: { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
-            * @ref
-            */
             animation: {
-                /**
-                * @name dxOverlayOptions.animation.show
-                * @type animationConfig
-                * @default { type: "pop", duration: 400, from: { scale: 0.55 } }
-                */
                 show: {
                     type: 'pop',
                     duration: 300,
@@ -263,11 +182,6 @@ const Overlay = Widget.inherit({
                         scale: 0.55
                     }
                 },
-                /**
-                * @name dxOverlayOptions.animation.hide
-                * @type animationConfig
-                * @default { type: "pop", duration: 300, to: { opacity: 0, scale: 0.55 }, from: { opacity: 1, scale: 1 } } }
-                */
                 hide: {
                     type: 'pop',
                     duration: 300,
@@ -282,62 +196,18 @@ const Overlay = Widget.inherit({
                 }
             },
 
-            /**
-            * @name dxOverlayOptions.closeOnOutsideClick
-            * @type boolean|function
-            * @default false
-            * @type_function_param1 event:event
-            * @type_function_return Boolean
-            */
             closeOnOutsideClick: false,
 
-            closeOnBackButton: true,
-
-            /**
-            * @name dxOverlayOptions.onShowing
-            * @extends Action
-            * @action
-            */
             onShowing: null,
 
-            /**
-            * @name dxOverlayOptions.onShown
-            * @extends Action
-            * @action
-            */
             onShown: null,
 
-            /**
-            * @name dxOverlayOptions.onHiding
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 cancel:boolean
-            * @action
-            */
             onHiding: null,
 
-            /**
-            * @name dxOverlayOptions.onHidden
-            * @extends Action
-            * @action
-            */
             onHidden: null,
 
-            /**
-            * @name dxOverlayOptions.contentTemplate
-            * @type template|function
-            * @default "content"
-            * @type_function_param1 contentElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             contentTemplate: 'content',
 
-            /**
-            * @name dxOverlayOptions.dragEnabled
-            * @type boolean
-            * @default false
-            */
             dragEnabled: false,
 
             resizeEnabled: false,
@@ -351,7 +221,7 @@ const Overlay = Widget.inherit({
             target: undefined,
             container: undefined,
 
-            hideTopOverlayHandler: undefined,
+            hideTopOverlayHandler: function() { this.hide(); }.bind(this),
             closeOnTargetScroll: false,
             onPositioned: null,
             boundaryOffset: { h: 0, v: 0 },
@@ -371,10 +241,6 @@ const Overlay = Widget.inherit({
                 return realPlatform === 'android' && compareVersions(realVersion, [4, 2]) < 0;
             },
             options: {
-                /**
-                 * @name dxOverlayOptions.animation
-                 * @default { show: { type: 'fade', duration: 400 }, hide: { type: 'fade', duration: 400, to: { opacity: 0 }, from: { opacity: 1 } }} @for Android_below_version_4.2
-                 */
                 animation: {
                     show: {
                         type: 'fade',
@@ -448,13 +314,13 @@ const Overlay = Widget.inherit({
         eventsEngine.on(this._$wrapper, 'focusin', function(e) { e.stopPropagation(); });
 
         this._toggleViewPortSubscription(true);
+        this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
     },
 
     _initOptions: function(options) {
         this._initTarget(options.target);
         const container = options.container === undefined ? this.option('container') : options.container;
         this._initContainer(container);
-        this._initHideTopOverlayHandler(options.hideTopOverlayHandler);
 
         this.callBase(options);
     },
@@ -506,11 +372,7 @@ const Overlay = Widget.inherit({
     },
 
     _initHideTopOverlayHandler: function(handler) {
-        this._hideTopOverlayHandler = handler !== undefined ? handler : this._defaultHideTopOverlayHandler.bind(this);
-    },
-
-    _defaultHideTopOverlayHandler: function() {
-        this.hide();
+        this._hideTopOverlayHandler = handler;
     },
 
     _initActions: function() {
@@ -547,17 +409,17 @@ const Overlay = Widget.inherit({
         const outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
 
         if(outsideClick && closeOnOutsideClick) {
-            if(this.option('shading')) {
-                e.preventDefault();
-            }
-
             this._outsideClickHandler(e);
         }
 
         return this.option('propagateOutsideClick');
     },
 
-    _outsideClickHandler() {
+    _outsideClickHandler(e) {
+        if(this.option('shading')) {
+            e.preventDefault();
+        }
+
         this.hide();
     },
 
@@ -938,7 +800,7 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        if(subscribe && this.option('closeOnBackButton')) {
+        if(subscribe) {
             hideTopOverlayCallback.add(this._hideTopOverlayHandler);
         } else {
             hideTopOverlayCallback.remove(this._hideTopOverlayHandler);
@@ -1551,7 +1413,9 @@ const Overlay = Widget.inherit({
                 this._clean();
                 this._invalidate();
                 break;
-            case 'closeOnBackButton':
+            case 'hideTopOverlayHandler':
+                this._toggleHideTopOverlayCallback(false);
+                this._initHideTopOverlayHandler(args.value);
                 this._toggleHideTopOverlayCallback(this.option('visible'));
                 break;
             case 'closeOnTargetScroll':
@@ -1570,12 +1434,6 @@ const Overlay = Widget.inherit({
         }
     },
 
-    /**
-    * @name dxOverlaymethods.toggle
-    * @publicName toggle(showing)
-    * @param1 showing:boolean
-    * @return Promise<boolean>
-    */
     toggle: function(showing) {
         showing = showing === undefined ? !this.option('visible') : showing;
         const result = new Deferred();
@@ -1600,37 +1458,18 @@ const Overlay = Widget.inherit({
         return this._$content;
     },
 
-    /**
-    * @name dxOverlaymethods.show
-    * @publicName show()
-    * @return Promise<boolean>
-    */
     show: function() {
         return this.toggle(true);
     },
 
-    /**
-    * @name dxOverlaymethods.hide
-    * @publicName hide()
-    * @return Promise<boolean>
-    */
     hide: function() {
         return this.toggle(false);
     },
 
-    /**
-    * @name dxOverlaymethods.content
-    * @publicName content()
-    * @return dxElement
-    */
     content: function() {
         return getPublicElement(this._$content);
     },
 
-    /**
-    * @name dxOverlaymethods.repaint
-    * @publicName repaint()
-    */
     repaint: function() {
         this._renderGeometry();
         domUtils.triggerResizeEvent(this._$content);
@@ -1640,15 +1479,6 @@ const Overlay = Widget.inherit({
 /**
 * @name ui.dxOverlay
 * @section utils
-*/
-/**
-* @name ui.dxOverlayMethods.baseZIndex
-* @publicName baseZIndex(zIndex)
-* @param1 zIndex:number
-* @namespace DevExpress.ui.dxOverlay
-* @module ui/overlay
-* @export dxOverlay.baseZIndex
-* @static
 */
 Overlay.baseZIndex = function(zIndex) {
     return zIndexPool.base(zIndex);

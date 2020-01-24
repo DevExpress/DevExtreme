@@ -9,7 +9,7 @@ import { focused } from '../widget/selectors';
 import * as eventUtils from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import { noop } from '../../core/utils/common';
-import { selectView } from '../shared/accessibility';
+import * as accessibility from '../shared/accessibility';
 import { isElementInCurrentGrid } from './ui.grid_core.utils';
 import browser from '../../core/utils/browser';
 import { keyboard } from '../../events/short';
@@ -83,6 +83,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const that = this;
 
         if(that.isKeyboardEnabled()) {
+            accessibility.subscribeVisibilityChange();
             that._dataController = that.getController('data');
             that._selectionController = that.getController('selection');
             that._editingController = that.getController('editing');
@@ -124,7 +125,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     _initViewHandlers: function() {
         const that = this;
-        const clickAction = that.createAction(that._clickHandler);
+        const pointerDownAction = that.createAction(that._pointerDownHandler);
+        const pointerUpAction = that.createAction(that._clickHandler);
         const rowsView = that.getView('rowsView');
 
         rowsView.renderCompleted.add(function(e) {
@@ -137,8 +139,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const $focusedElement = $(':focus');
             const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length || (browser.msie && $focusedElement.is('body'));
 
-            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickAction);
-            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickSelector, clickAction);
+            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), pointerDownAction);
+            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), clickSelector, pointerDownAction);
+
+            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), pointerUpAction);
+            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickSelector, pointerUpAction);
 
             that._initKeyDownHandler($rowsView, e => that._keyDownHandler(e));
 
@@ -169,6 +174,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._focusedView = null;
         keyboard.off(this._keyDownListener);
         eventsEngine.off(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), this._documentClickHandler);
+        accessibility.unsubscribeVisibilityChange();
     },
     // #endregion Initialization
 
@@ -231,7 +237,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 case 'upArrow':
                 case 'downArrow':
                     if(e.ctrl) {
-                        selectView('rowsView', this, originalEvent);
+                        accessibility.selectView('rowsView', this, originalEvent);
                     } else {
                         this._upDownKeysHandler(e, isEditing);
                     }
@@ -448,10 +454,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
     _editingCellTabHandler: function(eventArgs, direction) {
-        const editingOptions = this.option('editing');
         const eventTarget = eventArgs.originalEvent.target;
-        let column;
-        let row;
         let $cell = this._getCellElementFromTarget(eventTarget);
         let isEditingAllowed;
         const $event = eventArgs.originalEvent;
@@ -468,12 +471,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
             return false;
         }
 
-        column = this._columnsController.getVisibleColumns()[this.getView('rowsView').getCellIndex($cell)];
-        row = this._dataController.items()[this._getRowIndex($cell && $cell.parent())];
+        const column = this._columnsController.getVisibleColumns()[this.getView('rowsView').getCellIndex($cell)];
+        const row = this._dataController.items()[this._getRowIndex($cell && $cell.parent())];
 
         if(column.allowEditing) {
             const isDataRow = !row || row.rowType === 'data';
-            isEditingAllowed = editingOptions.allowUpdating ? isDataRow : row && row.isNewRow;
+            isEditingAllowed = this._editingController.allowUpdating({ row: row }) ? isDataRow : row && row.isNewRow;
         }
 
         if(!isEditingAllowed) {
@@ -743,6 +746,16 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return isElementInCurrentGrid(this, $(event.target));
     },
 
+    _pointerDownHandler: function(e) {
+        const $target = $(e.event.target);
+        const isEditRow = $target.closest('tr').hasClass(EDIT_ROW_CLASS);
+
+        if(!isEditRow) {
+            const $targetCell = $target.closest('td');
+            $targetCell.addClass(CELL_FOCUS_DISABLED_CLASS);
+        }
+    },
+
     _clickTargetCellHandler: function(event, $cell) {
         const columnIndex = this.getView('rowsView').getCellIndex($cell);
         const column = this._columnsController.getVisibleColumns()[columnIndex];
@@ -797,11 +810,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
     // #endregion Click_Handler
 
     // #region Focusing
-    /**
-    * @name GridBaseMethods.focus
-    * @publicName focus(element)
-    * @param1 element:Node|jQuery
-    */
     focus: function(element) {
         let activeElementSelector;
         const focusedRowEnabled = this.option('focusedRowEnabled');
@@ -1508,7 +1516,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _fireFocusedRowChanged: function($rowElement) {
         let row;
         let dataController;
-        const focusedRowIndex = this.option('focusedRowIndex');
+
+        const focusedRowKey = this.option('focusedRowKey');
+
+        const focusController = this.getController('focus');
+        const focusedRowIndex = focusController?.getFocusedRowIndexByKey(focusedRowKey);
 
         if(this.option('focusedRowEnabled')) {
             if(focusedRowIndex >= 0) {
@@ -1700,10 +1712,6 @@ module.exports = {
         return {
             useLegacyKeyboardNavigation: false,
 
-            /**
-             * @name GridBaseOptions.keyboardNavigation
-             * @type object
-             */
             keyboardNavigation: {
                 /**
                  * @name GridBaseOptions.keyboardNavigation.enabled
@@ -1732,124 +1740,7 @@ module.exports = {
                 editOnKeyPress: false
             }
 
-            /**
-             * @name GridBaseOptions.onKeyDown
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-             * @type_function_param1_field5 event:event
-             * @type_function_param1_field6 handled:boolean
-             * @extends Action
-             * @action
-             */
 
-            /**
-             * @name dxDataGridOptions.onFocusedCellChanging
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 cellElement:dxElement
-             * @type_function_param1_field5 prevColumnIndex:number
-             * @type_function_param1_field6 prevRowIndex:number
-             * @type_function_param1_field7 newColumnIndex:number
-             * @type_function_param1_field8 newRowIndex:number
-             * @type_function_param1_field9 event:event
-             * @type_function_param1_field10 rows:Array<dxDataGridRowObject>
-             * @type_function_param1_field11 columns:Array<dxDataGridColumn>
-             * @type_function_param1_field12 cancel:boolean
-             * @type_function_param1_field13 isHighlighted:boolean
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name dxTreeListOptions.onFocusedCellChanging
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 cellElement:dxElement
-             * @type_function_param1_field5 prevColumnIndex:number
-             * @type_function_param1_field6 prevRowIndex:number
-             * @type_function_param1_field7 newColumnIndex:number
-             * @type_function_param1_field8 newRowIndex:number
-             * @type_function_param1_field9 event:event
-             * @type_function_param1_field10 rows:Array<dxTreeListRowObject>
-             * @type_function_param1_field11 columns:Array<dxTreeListColumn>
-             * @type_function_param1_field12 cancel:boolean
-             * @type_function_param1_field13 isHighlighted:boolean
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name dxDataGridOptions.onFocusedCellChanged
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 cellElement:dxElement
-             * @type_function_param1_field5 columnIndex:number
-             * @type_function_param1_field6 rowIndex:number
-             * @type_function_param1_field7 row:dxDataGridRowObject
-             * @type_function_param1_field8 column:dxDataGridColumn
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name dxTreeListOptions.onFocusedCellChanged
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 cellElement:dxElement
-             * @type_function_param1_field5 columnIndex:number
-             * @type_function_param1_field6 rowIndex:number
-             * @type_function_param1_field7 row:dxTreeListRowObject
-             * @type_function_param1_field8 column:dxTreeListColumn
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name dxDataGridOptions.onFocusedRowChanging
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 rowElement:dxElement
-             * @type_function_param1_field5 prevRowIndex:number
-             * @type_function_param1_field6 newRowIndex:number
-             * @type_function_param1_field7 event:event
-             * @type_function_param1_field8 rows:Array<dxDataGridRowObject>
-             * @type_function_param1_field9 cancel:boolean
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name dxTreeListOptions.onFocusedRowChanging
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 rowElement:dxElement
-             * @type_function_param1_field5 prevRowIndex:number
-             * @type_function_param1_field6 newRowIndex:number
-             * @type_function_param1_field7 event:event
-             * @type_function_param1_field8 rows:Array<dxTreeListRowObject>
-             * @type_function_param1_field9 cancel:boolean
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name dxDataGridOptions.onFocusedRowChanged
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 rowElement:dxElement
-             * @type_function_param1_field5 rowIndex:number
-             * @type_function_param1_field6 row:dxDataGridRowObject
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name dxTreeListOptions.onFocusedRowChanged
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 rowElement:dxElement
-             * @type_function_param1_field5 rowIndex:number
-             * @type_function_param1_field6 row:dxTreeListRowObject
-             * @extends Action
-             * @action
-             */
         };
     },
     controllers: {

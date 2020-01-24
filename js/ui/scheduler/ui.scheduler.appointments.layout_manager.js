@@ -21,7 +21,11 @@ class AppointmentLayoutManager {
 
     getCellDimensions(options) {
         if(this.instance._workSpace) {
-            options.callback(this.instance._workSpace.getCellWidth(), this.instance._workSpace.getCellHeight(), this.instance._workSpace.getAllDayHeight());
+            return {
+                width: this.instance._workSpace.getCellWidth(),
+                height: this.instance._workSpace.getCellHeight(),
+                allDayHeight: this.instance._workSpace.getAllDayHeight()
+            };
         }
     }
 
@@ -38,13 +42,10 @@ class AppointmentLayoutManager {
     }
 
     createAppointmentsMap(items) {
-        this.getCellDimensions({
-            callback: (width, height, allDayHeight) => {
-                this.instance._cellWidth = width;
-                this.instance._cellHeight = height;
-                this.instance._allDayCellHeight = allDayHeight;
-            }
-        });
+        const { width, height, allDayHeight } = this.getCellDimensions();
+        this.instance._cellWidth = width;
+        this.instance._cellHeight = height;
+        this.instance._allDayCellHeight = allDayHeight;
         this.getGroupOrientation({
             callback: groupOrientation => this.instance._groupOrientation = groupOrientation
         });

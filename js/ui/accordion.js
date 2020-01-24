@@ -27,12 +27,6 @@ const ACCORDION_ITEM_TITLE_CAPTION_CLASS = 'dx-accordion-item-title-caption';
 
 const ACCORDION_ITEM_DATA_KEY = 'dxAccordionItemData';
 
-/**
-* @name dxAccordion
-* @inherits CollectionWidget
-* @module ui/accordion
-* @export default
-*/
 const Accordion = CollectionWidget.inherit({
 
     _activeStateUnit: '.' + ACCORDION_ITEM_CLASS,
@@ -40,107 +34,25 @@ const Accordion = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-            /**
-            * @name dxAccordionOptions.repaintChangesOnly
-            * @type boolean
-            * @default false
-            */
 
-            /**
-             * @name dxAccordionOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxAccordionOptions.height
-            * @type number|string|function
-            * @default undefined
-            * @type_function_return number|string
-            */
             height: undefined,
 
-            /**
-            * @name dxAccordionOptions.itemTitleTemplate
-            * @type template|function
-            * @default "title"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             itemTitleTemplate: 'title',
 
-            /**
-            * @name dxAccordionOptions.onItemTitleClick
-            * @type function(e)|string
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 event:event
-            * @action
-            */
             onItemTitleClick: null,
 
-            /**
-            * @name dxAccordionOptions.selectedIndex
-            * @type number
-            * @default 0
-            */
             selectedIndex: 0,
 
-            /**
-            * @name dxAccordionOptions.collapsible
-            * @type boolean
-            * @default false
-            */
             collapsible: false,
 
-            /**
-            * @name dxAccordionOptions.multiple
-            * @type boolean
-            * @default false
-            */
             multiple: false,
 
-            /**
-            * @name dxAccordionOptions.animationDuration
-            * @type number
-            * @default 300
-            */
             animationDuration: 300,
 
-            /**
-            * @name dxAccordionOptions.deferRendering
-            * @type boolean
-            * @default true
-            */
             deferRendering: true,
 
-            /**
-             * @name dxAccordionOptions.dataSource
-             * @type string|Array<string,dxAccordionItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
-
-            /**
-             * @name dxAccordionOptions.items
-             * @type Array<string, dxAccordionItem, object>
-             * @fires dxAccordionOptions.onOptionChanged
-             */
-
-            /**
-            * @name dxAccordionOptions.itemTemplate
-            * @type template|function
-            * @default "item"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
 
             selectionByClick: true,
             activeStateEnabled: true,
@@ -156,11 +68,6 @@ const Accordion = CollectionWidget.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxAccordionOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },
@@ -169,11 +76,6 @@ const Accordion = CollectionWidget.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    /**
-                    * @name dxAccordionOptions.animationDuration
-                    * @type number
-                    * @default 200 @for Material
-                    */
                     animationDuration: 200,
                     _animationEasing: 'cubic-bezier(0.4, 0, 0.2, 1)'
                 }
@@ -204,14 +106,6 @@ const Accordion = CollectionWidget.inherit({
         * @name dxAccordionItem
         * @inherits CollectionWidgetItem
         * @type object
-        */
-        /**
-        * @name dxAccordionItem.title
-        * @type String
-        */
-        /**
-        * @name dxAccordionItem.icon
-        * @type String
         */
         this._templateManager.addDefaultTemplates({
             title: new BindableTemplate(function($container, data) {
@@ -496,12 +390,6 @@ const Accordion = CollectionWidget.inherit({
         }
     },
 
-    /**
-    * @name dxAccordionMethods.expandItem
-    * @publicName expandItem(index)
-    * @param1 index:numeric
-    * @return Promise<void>
-    */
     expandItem: function(index) {
         this._deferredAnimate = new Deferred();
 
@@ -510,12 +398,6 @@ const Accordion = CollectionWidget.inherit({
         return this._deferredAnimate.promise();
     },
 
-    /**
-    * @name dxAccordionMethods.collapseItem
-    * @publicName collapseItem(index)
-    * @param1 index:numeric
-    * @return Promise<void>
-    */
     collapseItem: function(index) {
         this._deferredAnimate = new Deferred();
 
@@ -524,11 +406,6 @@ const Accordion = CollectionWidget.inherit({
         return this._deferredAnimate.promise();
     },
 
-    /**
-    * @name dxAccordionMethods.updateDimensions
-    * @publicName updateDimensions()
-    * @return Promise<void>
-    */
     updateDimensions: function() {
         return this._updateItemHeights(false);
     }

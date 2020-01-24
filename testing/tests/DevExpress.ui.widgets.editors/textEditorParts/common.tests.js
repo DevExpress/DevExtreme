@@ -982,9 +982,9 @@ QUnit.module('api', moduleConfig, () => {
 
     QUnit.test('reset()', function(assert) {
         const textBox = this.instance;
-        // act
+
         textBox.reset();
-        // assert
+
         assert.strictEqual(textBox.option('value'), '', 'Value should be reset');
     });
 

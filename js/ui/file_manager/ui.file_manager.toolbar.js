@@ -145,24 +145,46 @@ class FileManagerToolbar extends Widget {
     }
 
     _getPreparedItems(items) {
-        let groupHasItems = false;
-
-        return items.map(item => {
+        items = items.map(item => {
             const commandName = isString(item) ? item : item.name;
             const preparedItem = this._configureItemByCommandName(commandName, item);
 
-            if(commandName === 'separator') {
-                preparedItem.visible = groupHasItems;
-                groupHasItems = false;
-            } else {
+            if(commandName !== 'separator') {
                 preparedItem.available = this._isToolbarItemAvailable(preparedItem);
                 const itemVisible = preparedItem.available;
                 preparedItem.visible = itemVisible;
-                groupHasItems = groupHasItems || itemVisible;
             }
 
             return preparedItem;
         });
+        return this._updateSeparatorsVisibility(items);
+    }
+
+    _updateSeparatorsVisibility(items, toolbar) {
+        for(let i = 0; i < items.length; i++) {
+            if(items[i].name === 'separator') {
+                const isSeparatorVisible = this._groupHasItems(items, i, true) && this._groupHasItems(items, i, false);
+                if(toolbar) {
+                    const optionName = `items[${i}].visible`;
+                    toolbar.option(optionName, isSeparatorVisible);
+                } else {
+                    items[i].visible = isSeparatorVisible;
+                }
+            }
+        }
+        return items;
+    }
+
+    _groupHasItems(items, separatorIndex, isBeforeGroup) {
+        const delta = isBeforeGroup ? -1 : 1;
+        let i = separatorIndex + delta;
+        while(items[i] && items[i].name !== 'separator') {
+            if(items[i].visible) {
+                return true;
+            }
+            i += delta;
+        }
+        return false;
     }
 
     _configureItemByCommandName(commandName, item) {
@@ -330,28 +352,20 @@ class FileManagerToolbar extends Widget {
     _ensureAvailableCommandsVisible(toolbar, fileItems) {
         toolbar.beginUpdate();
 
-        let groupHasItems = false;
         const items = toolbar.option('items');
 
         items.forEach((item, index) => {
-            const itemVisible = item.available;
-
-            let showItem = false;
-            if(item.name === 'separator') {
-                showItem = groupHasItems;
-                groupHasItems = false;
-            } else {
+            if(item.name !== 'separator') {
+                const itemVisible = item.available;
                 item.available = this._isToolbarItemAvailable(item, fileItems);
-                showItem = item.available;
-                groupHasItems = groupHasItems || showItem;
-            }
-
-            if(showItem !== itemVisible) {
-                const optionName = `items[${index}].visible`;
-                toolbar.option(optionName, showItem);
+                if(item.available !== itemVisible) {
+                    const optionName = `items[${index}].visible`;
+                    toolbar.option(optionName, item.available);
+                }
             }
         });
 
+        this._updateSeparatorsVisibility(toolbar.option('items'), toolbar);
         toolbar.endUpdate();
     }
 

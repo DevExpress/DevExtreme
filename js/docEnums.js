@@ -1068,7 +1068,7 @@
 
 /**
  * @typedef {string} Enums.DiagramDataLayoutType
- * @enum {'off'|'tree'|'layered'}
+ * @enum {'auto'|'off'|'tree'|'layered'}
  */
 /**
  * @typedef {string} Enums.DiagramDataLayoutOrientation
@@ -1128,6 +1128,11 @@
 /**
  * @typedef {string} Enums.DiagramAutoZoom
  * @enum {'fitContent'|'fitWidth'|'disabled'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramItemType
+ * @enum {'shape'|'connector'}
  */
 
 /**
