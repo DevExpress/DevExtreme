@@ -31,20 +31,6 @@ const subscribes = {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
 
-    _correctDatesByDaylightOffset: function(dates, appointmentData, originalStartDate) {
-        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
-        const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
-        let result = dates;
-
-        if(needCheckTimezoneOffset) {
-            result = result.map((date) => {
-                return this.correctDateByDaylightOffsets(originalStartDate, date, startDateTimeZone);
-            });
-        }
-
-        return result;
-    },
-
     needCoordinates: function(options) {
         const appointmentData = options.appointmentData;
         const startDate = options.startDate;
