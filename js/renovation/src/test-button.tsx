@@ -11,14 +11,10 @@ const SVG_ICON_CLASS = 'dx-svg-icon';
 
 const getImageContainerJSX = (source: string) => {
     const type = getImageSourceType(source);
-    if(type === 'image')
-        return (<img src={source} className={ICON_CLASS}></img>);
-    if(type === 'fontIcon')
-        return (<i className={`${ICON_CLASS} ${source}`}></i>);
-    if(type === 'dxIcon')
-        return (<i className={`${ICON_CLASS} ${ICON_CLASS}-${source}`}></i>);
-    if(type === 'svg')
-        return (<i className={`${ICON_CLASS} ${SVG_ICON_CLASS}`}>{source}></i>);
+    if (type === 'image') return <img src={source} className={ICON_CLASS} />;
+    if (type === 'fontIcon') return <i className={`${ICON_CLASS} ${source}`} />;
+    if (type === 'dxIcon') return <i className={`${ICON_CLASS} ${ICON_CLASS}-${source}`} />;
+    if (type === 'svg') return <i className={`${ICON_CLASS} ${SVG_ICON_CLASS}`}>{source}</i>;
     return null;
 };
 
@@ -45,12 +41,8 @@ const getCssClasses = (model: any) => {
         classNames.push('dx-button-normal');
     }
 
-    if (model.text) {
-        classNames.push('dx-button-has-text');
-    }
-    if (model.icon) {
-        classNames.push('dx-button-has-icon');
-    }
+    model.text && classNames.push('dx-button-has-text');
+    model.icon && classNames.push('dx-button-has-icon');
     return classNames.concat(model.classNames).join('');
 };
 
@@ -117,7 +109,7 @@ export const viewFunction = (viewModel: Button) => (
 })
 
 export default class Button extends Widget {
-    @Prop() classNames?: string[]
+    @Prop() classNames?: string[];
     @Prop() icon?: string;
     @Prop() pressed?: boolean;
     @Prop() stylingMode?: string;
