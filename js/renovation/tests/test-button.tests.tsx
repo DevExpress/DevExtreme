@@ -3,7 +3,7 @@ import Button, { viewModelFunction, viewFunction } from '../src/test-button';
 import React from 'react';
 import { shallow } from 'enzyme';
 
-describe("Button", () => {
+describe('Button', () => {
     it('should render text', () => {
         const model = new Button();
         model.text = 'My button';
@@ -17,7 +17,7 @@ describe("Button", () => {
         const model = new Button();
         model.text = 'My button';
 
-        model.contentRender = ({text}) => (<div className="custom-content">{text+"123"}</div>);
+        model.contentRender = ({text}) => (<div className="custom-content">{text + "123"}</div>);
 
         const tree = shallow(viewFunction(viewModelFunction(model)));
 

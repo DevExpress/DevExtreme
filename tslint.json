@@ -35,7 +35,8 @@
     "no-this-assignment": [true, {"allow-destructuring": true}],
     "ter-indent": [true, 4],
     "import-name": [false],
-    "no-unused-expression": [true, "allow-fast-null-checks"]
+    "no-unused-expression": [true, "allow-fast-null-checks"],
+    "no-object-literal-type-assertion": [false]
   },
   "jsRules": {
     "object-literal-sort-keys": false
