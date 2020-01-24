@@ -269,8 +269,8 @@ module.exports = {
                  * @type_function_param1_field4 itemElement:dxElement
                  * @type_function_param1_field5 fromIndex:number
                  * @type_function_param1_field6 toIndex:number
-                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
                  * @type_function_param1_field9 fromData:any
                  * @type_function_param1_field10 toData:any
                  * @type_function_param1_field11 dropInsideItem:boolean
@@ -285,8 +285,8 @@ module.exports = {
                  * @type_function_param1_field4 itemElement:dxElement
                  * @type_function_param1_field5 fromIndex:number
                  * @type_function_param1_field6 toIndex:number
-                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
                  * @type_function_param1_field9 fromData:any
                  * @type_function_param1_field10 toData:any
                  * @type_function_param1_field11 dropInsideItem:boolean
@@ -301,8 +301,8 @@ module.exports = {
                  * @type_function_param1_field4 itemElement:dxElement
                  * @type_function_param1_field5 fromIndex:number
                  * @type_function_param1_field6 toIndex:number
-                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
                  * @type_function_param1_field9 fromData:any
                  * @type_function_param1_field10 toData:any
                  * @type_function_param1_field11 dropInsideItem:boolean
@@ -316,8 +316,8 @@ module.exports = {
                  * @type_function_param1_field3 itemElement:dxElement
                  * @type_function_param1_field4 fromIndex:number
                  * @type_function_param1_field5 toIndex:number
-                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
                  * @type_function_param1_field8 fromData:any
                  * @type_function_param1_field9 toData:any
                  * @type_function_param1_field10 dropInsideItem:boolean
@@ -331,8 +331,8 @@ module.exports = {
                  * @type_function_param1_field3 itemElement:dxElement
                  * @type_function_param1_field4 fromIndex:number
                  * @type_function_param1_field5 toIndex:number
-                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
                  * @type_function_param1_field8 fromData:any
                  * @type_function_param1_field9 toData:any
                  */
@@ -345,8 +345,8 @@ module.exports = {
                  * @type_function_param1_field3 itemElement:dxElement
                  * @type_function_param1_field4 fromIndex:number
                  * @type_function_param1_field5 toIndex:number
-                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
                  * @type_function_param1_field8 fromData:any
                  * @type_function_param1_field9 toData:any
                  * @type_function_param1_field10 dropInsideItem:boolean

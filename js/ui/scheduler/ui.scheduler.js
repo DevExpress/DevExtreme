@@ -503,8 +503,8 @@ const Scheduler = Widget.inherit({
                * @type_function_param1_field2 cancel:boolean
                * @type_function_param1_field3 itemData:any
                * @type_function_param1_field4 itemElement:dxElement
-               * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
-               * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+               * @type_function_param1_field6 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
                * @type_function_param1_field7 fromData:any
                * @type_function_param1_field8 toData:any
                */
@@ -516,8 +516,8 @@ const Scheduler = Widget.inherit({
                * @type_function_param1_field2 cancel:boolean
                * @type_function_param1_field3 itemData:any
                * @type_function_param1_field4 itemElement:dxElement
-               * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
-               * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+               * @type_function_param1_field6 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
                * @type_function_param1_field7 fromData:any
                * @type_function_param1_field8 toData:any
                */
@@ -528,8 +528,8 @@ const Scheduler = Widget.inherit({
                * @type_function_param1_field1 event:event
                * @type_function_param1_field2 itemData:any
                * @type_function_param1_field3 itemElement:dxElement
-               * @type_function_param1_field4 fromComponent:dxSortable|dxDraggable
-               * @type_function_param1_field5 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field4 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+               * @type_function_param1_field5 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
                * @type_function_param1_field6 fromData:any
                * @type_function_param1_field7 toData:any
                */
@@ -540,8 +540,8 @@ const Scheduler = Widget.inherit({
                * @type_function_param1_field1 event:event
                * @type_function_param1_field2 itemData:any
                * @type_function_param1_field3 itemElement:dxElement
-               * @type_function_param1_field4 fromComponent:dxSortable|dxDraggable
-               * @type_function_param1_field5 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field4 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+               * @type_function_param1_field5 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
                * @type_function_param1_field6 fromData:any
                */
             showAllDayPanel: true,
