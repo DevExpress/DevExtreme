@@ -212,15 +212,23 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
             ],
             views: ['day'],
             currentView: 'day',
-            currentDate: new Date(2019, 2, 11), // NOTE: DST Montreal
+            currentDate: new Date(2019, 2, 1), // NOTE: STD Montreal
             startDayHour: 0,
             height: 600,
             timeZone: 'America/Montreal',
             dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx'
         });
 
-        let targetCell = scheduler.workSpace.getCell(8);
+        let targetCell = scheduler.workSpace.getCell(6);
         let appointment = scheduler.appointments.getAppointment(0);
+
+        assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
+        assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
+
+        scheduler.instance.option('currentDate', new Date(2019, 2, 11)); // NOTE: DST Montreal, STD Paris
+
+        targetCell = scheduler.workSpace.getCell(8);
+        appointment = scheduler.appointments.getAppointment(0);
 
         assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
         assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
