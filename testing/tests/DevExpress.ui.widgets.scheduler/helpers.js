@@ -129,7 +129,7 @@ export class SchedulerTestWrapper {
                 },
                 getSubject: () => {
                     const textBox = this.appointmentPopup.form.getSubjectTextBox();
-                    return textBox.option('value');
+                    return textBox ? textBox.option('value') : null;
                 },
                 isRecurrenceEditorVisible: () => $('.dx-recurrence-editor-container').is(':visible')
             },
