@@ -2166,7 +2166,7 @@ const SchedulerWorkSpace = Widget.inherit({
             : 0;
     },
 
-    _isSkippedData: noop,
+    _isSkippedData: function() { return false; },
 
     getCoordinatesByDateInGroup: function(date, appointmentResources, inAllDayRow) {
         const indexes = this._getGroupIndexes(appointmentResources);
