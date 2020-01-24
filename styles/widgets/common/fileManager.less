@@ -28,7 +28,7 @@
 
     .dx-filemanager-notification-popup {
         & > .dx-overlay-content {
-            min-width: 400px;
+            min-width: 240px;
             max-width: 400px;
         }
 
@@ -44,6 +44,7 @@
             padding-bottom: 10px;
             border-bottom-width: 1px;
             border-bottom-style: solid;
+            text-align: center;
         }
 
         .dx-filemanager-notification-common-no-item {
@@ -111,6 +112,10 @@
 
         .dx-filemanager-progress-box-common {
             padding: 5px 0;
+            max-width: 330px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .dx-filemanager-progress-box-progress-bar {
@@ -134,6 +139,8 @@
         font-size: 0.85em;
         line-height: normal;
         word-wrap: break-word;
+        overflow-y: auto;
+        max-height: 150px;
     }
 
     .dx-filemanager-toolbar {
