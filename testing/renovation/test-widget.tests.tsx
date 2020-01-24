@@ -1,180 +1,225 @@
 import Widget, { viewModelFunction, viewFunction } from '../../js/ui/test-widget';
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
+
+const model = new Widget();
+const render = (props = {}) => {
+    props = Object.assign({}, model, props);
+
+    return mount(viewFunction(viewModelFunction(props as Widget)));
+};
 
 describe('Widget', () => {
-    it('should be rendered', () => {
-        const model = new Widget();
-        const tree = shallow(viewFunction(viewModelFunction(model)));
+    describe('accessKey', () => {
+        it('should render "accesskey" attribute', () => {
+            const tree = render({ accessKey: 'y', focusStateEnabled: true });
 
-        expect(tree.find('.dx-widget').exists())
-            .toBeTruthy();
-        expect(tree.find('.dx-rtl').exists())
-            .not.toBeTruthy();
+            expect(tree.find('.dx-widget').props().accessKey).toBe('y');
+        });
+
+        it('should not render if disabled', () => {
+            let tree = render({ accessKey: 'y', focusStateEnabled: true, disabled: false });
+
+            expect(tree.find('.dx-widget').props().accessKey).toBe('y');
+
+            tree = render({ accessKey: 'y', focusStateEnabled: true, disabled: true });
+
+            expect(tree.find('.dx-widget').props().accessKey).toBe(void 0);
+        });
+
+        it('should not render if focusStateEnabled is false', () => {
+            let tree = render({ accessKey: 'y', focusStateEnabled: false });
+
+            expect(tree.find('.dx-widget').props().accessKey).toBe(void 0);
+
+            tree = render({ accessKey: 'y', focusStateEnabled: true });
+
+            expect(tree.find('.dx-widget').props().accessKey).toBe('y');
+        });
     });
-    it('should render children', () => {
-        const model = new Widget();
-        model.children = <div className="custom-content" />;
 
-        const tree = mount(viewFunction(viewModelFunction(model)));
+    describe('RTL', () => {
+        it('should be rendered rtl marker class', () => {
+            let tree = render();
 
-        expect(tree.find('.dx-widget').children().length > 0)
-            .toBeTruthy();
-        expect(tree.find('.custom-content').exists())
-            .toBeTruthy();
+            expect(tree.find('.dx-widget.dx-rtl').exists()).not.toBeTruthy();
+
+            tree = render({ rtlEnabled: true });
+
+            expect(tree.find('.dx-widget.dx-rtl').exists()).toBeTruthy();
+        });
     });
-    it('should be init with custom dimensions', () => {
-        const model = new Widget();
-        model.width = 50;
-        model.height = 75;
 
-        const widget = mount(viewFunction(viewModelFunction(model)))
-            .find('.dx-widget');
+    describe('aria', () => {
+        it('should pass custom "aria" attributes', () => {
+            const tree = render({ aria: {
+                label: 'custom-aria-label',
+                role: 'button',
+                id: 'custom-id'
+            }});
 
-        expect(widget.props().style.width)
-            .toBe(50);
-        expect(widget.props().style.height)
-            .toBe(75);
+            expect(tree.find('.dx-widget').props()).toMatchObject({
+                'aria-label': 'custom-aria-label',
+                role: 'button',
+                id: 'custom-id'
+            });
+        });
     });
-    it('should have `disabled` state', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, disabled: true })));
 
-        const widget = tree.find('.dx-widget.dx-state-disabled');
-        expect(widget.exists())
-            .toBeTruthy();
-        expect(widget.props()['aria-disabled'])
-            .toBe('true');
+    describe('Children', () => {
+        it('should render child component', () => {
+            const tree = render({ children: <div className="custom-content" /> });
+            const children = tree.find('.dx-widget').children();
+
+            expect(children).toHaveLength(1);
+            expect(children.at(0).is('.custom-content')).toBeTruthy();
+        });
     });
-    it('should have `hidden` state', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, visible: false })));
 
-        const widget = tree.find('.dx-widget.dx-state-invisible');
-        expect(widget.exists())
-            .toBeTruthy();
-        expect(widget.props().hidden)
-            .toBeTruthy();
-        expect(widget.props()['aria-hidden'])
-            .toBe('true');
+    describe('width/height', () => {
+        it('should be init with custom dimensions', () => {
+            const tree = render({ width: 50, height: 70 });
+            const root = tree.find('.dx-widget');
+
+            expect(root.props().style).toEqual({ width: 50, height: 70 });
+        });
     });
-    it('should pass custom ARIA attributes', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, aria: { label: 'custom-aria-label', role: 'button', id: 'custom-id' } })));
 
-        const widget = tree.find('.dx-widget');
-        expect(widget.props()['aria-label'])
-            .toBe('custom-aria-label');
-        expect(widget.props().role)
-            .toBe('button');
-        expect(widget.props().id)
-            .toBe('custom-id');
+    describe('disabled', () => {
+        it('should add css marker class', () => {
+            const tree = render({ disabled: true });
+
+            expect(tree.find('.dx-widget').hasClass('dx-state-disabled')).toBeTruthy();
+        });
+
+        it('should add aria attribute', () => {
+            const tree = render({ disabled: true });
+
+            expect(tree.find('.dx-widget').prop('aria-disabled')).toBe('true');
+        });
     });
-    it('should have `dx-state-active` css class', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, _active: true })));
 
-        expect(tree.find('.dx-widget.dx-state-active').exists())
-            .toBeTruthy();
+    describe('Visibility', () => {
+        it('should add css marker class', () => {
+            const tree = render({ visible: false });
+
+            expect(tree.find('.dx-widget').hasClass('dx-state-invisible')).toBeTruthy();
+        });
+
+        it('should add aria attribute', () => {
+            const tree = render({ visible: false });
+
+            expect(tree.find('.dx-widget').prop('aria-hidden')).toBe('true');
+        });
+
+        it('should add hidden attribute', () => {
+            const tree = render({ visible: false });
+
+            expect(tree.find('.dx-widget').prop('hidden')).toBe(true);
+        });
     });
-    it('should have `dx-state-hover` css class', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, _hovered: true, hoverStateEnabled: true })));
 
-        expect(tree.find('.dx-widget.dx-state-hover').exists())
-            .toBeTruthy();
+    describe('States', () => {
+        describe('Active', () => {
+            it('should add `dx-state-active` css class', () => {
+                const tree = render({ _active: true });
+
+                expect(tree.find('.dx-widget').hasClass('dx-state-active')).toBeTruthy();
+            });
+        });
+
+        describe('Focus', () => {
+            it('should add `dx-state-focused` css class', () => {
+                const tree = render({ _focused: true, focusStateEnabled: true });
+
+                expect(tree.find('.dx-widget').hasClass('dx-state-focused')).toBeTruthy();
+            });
+
+            it('should not add marker class if the "focusStateEnabled" is false', () => {
+                const tree = render({ _focused: true, focusStateEnabled: false });
+
+                expect(tree.find('.dx-widget').hasClass('dx-state-focused')).toBeFalsy();
+            });
+
+            it('should not add marker class if the "disabled" is true', () => {
+                const tree = render({ _focused: true, focusStateEnabled: true, disabled: true });
+
+                expect(tree.find('.dx-widget').hasClass('dx-state-focused')).toBeFalsy();
+            });
+        });
+
+        describe('Hover', () => {
+            it('should add `dx-state-hover` css class', () => {
+                const tree = render({ _hovered: true, hoverStateEnabled: true });
+
+                expect(tree.find('.dx-widget').hasClass('dx-state-hover')).toBeTruthy();
+            });
+
+            it('should not add `dx-state-hover` css class if the "hoverStateEnabled" is false', () => {
+                const tree = render({ _hovered: true, hoverStateEnabled: false });
+
+                expect(tree.find('.dx-widget').hasClass('dx-state-hover')).toBeFalsy();
+            });
+
+            it('should not add `dx-state-hover` css class in the `active` state', () => {
+                const tree = render({ _hovered: true, hoverStateEnabled: true, _active: true });
+
+                expect(tree.find('.dx-widget').hasClass('dx-state-hover')).toBeFalsy();
+            });
+
+            it('should not have `dx-state-hover` css class in the `disabled` state', () => {
+                const tree = render({ _hovered: true, hoverStateEnabled: true, disabled: true });
+
+                expect(tree.find('.dx-widget').hasClass('dx-state-hover')).toBeFalsy();
+            });
+        });
     });
-    it('should not have `dx-state-hover` css class with `active` state', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, _hovered: true, hoverStateEnabled: true, _active: true })));
 
-        expect(tree.find('.dx-widget.dx-state-hover').exists())
-            .toBeFalsy();
+    describe('tabIndex', () => {
+        it('should add tabIndex attribute by default', () => {
+            const tree = render({ focusStateEnabled: true });
+
+            expect(tree.find('.dx-widget').prop('tabIndex')).toBe(0);
+        });
+
+        it('should add custom tabIndex attribute', () => {
+            const tree = render({ focusStateEnabled: true, tabIndex: 10 });
+
+            expect(tree.find('.dx-widget').prop('tabIndex')).toBe(10);
+        });
+
+        it('should not add tabIndex attribute if the "disabled" is true', () => {
+            const tree = render({ focusStateEnabled: true, tabIndex: 10, disabled: true });
+
+            expect(tree.find('.dx-widget').prop('tabIndex')).toBeFalsy();
+        });
+
+        it('should not add tabIndex attribute if the "focusStateEnabled" is false', () => {
+            const tree = render({ focusStateEnabled: false, tabIndex: 10 });
+
+            expect(tree.find('.dx-widget').prop('tabIndex')).toBeFalsy();
+        });
     });
-    it('should not have `dx-state-hover` css class with `disabled` state', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, _hovered: true, hoverStateEnabled: true, disabled: true })));
 
-        expect(tree.find('.dx-widget.dx-state-hover').exists())
-            .toBeFalsy();
+    describe('elementAttr', () => {
+        it('should pass custom css class name via elementAttr', () => {
+            const tree = render({ elementAttr: { class: 'custom-class' }});
+
+            expect(tree.find('.dx-widget').hasClass('custom-class')).toBeTruthy();
+        });
+
+        it('should pass custom attributes', () => {
+            const tree = render({ elementAttr: { 'data-custom': 'custom-attribute-value' }});
+
+            expect(tree.find('.dx-widget').prop('data-custom')).toBe('custom-attribute-value');
+        });
     });
-    it('should have `dx-rtl` css class', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, rtlEnabled: true })));
 
-        expect(tree.find('.dx-widget.dx-rtl').exists())
-            .toBeTruthy();
-    });
-    it('should pass custom css class name via elementAttributes', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, elementAttr: { class: 'custom-class' }} )));
+    describe('Hint', () => {
+        it('should add "title" attribute with the hint value', () => {
+            const tree = render({ hint: 'hint-text' });
 
-        expect(tree.find('.dx-widget.custom-class').exists())
-            .toBeTruthy();
-    });
-    it('should pass attributes', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, elementAttr: { class: 'custom-class' }} )));
-
-        expect(tree.find('.dx-widget.custom-class').exists())
-            .toBeTruthy();
-    });
-    it('should pass `hint` property as a title', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, hint: 'custom-hint' })));
-
-        expect(tree.find('.dx-widget').props().title)
-            .toBe('custom-hint');
-    });
-    it('should have `focus` state', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, focusStateEnabled: true, _focused: true })));
-
-        expect(tree.find('.dx-widget.dx-state-focused').exists())
-            .toBeTruthy();
-    });
-    it('should provide `tabIndex`', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, focusStateEnabled: true })));
-
-        expect(tree.find('.dx-widget.dx-state-focused').exists())
-            .toBeFalsy();
-        expect(tree.find('.dx-widget').props().tabIndex)
-            .toBe(0);
-    });
-    it('should provide custom `tabIndex`', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, focusStateEnabled: true, tabIndex: 10 })));
-
-        expect(tree.find('.dx-widget.dx-state-focused').exists())
-            .toBeFalsy();
-        expect(tree.find('.dx-widget').props().tabIndex)
-            .toBe(10);
-    });
-    it('should not have `focus` state with `disabled` property', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, focusStateEnabled: true, _focused: true, disabled: true })));
-
-        const widget = tree.find('.dx-widget');
-        expect(widget.exists())
-            .toBeTruthy();
-        expect(widget.is('.dx-widget.dx-state-focused'))
-            .toBeFalsy();
-        expect(widget.props().tabIndex)
-            .toBe(undefined);
-    });
-    it('should pass `accessKey` property', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, accessKey: 'x' })));
-
-        expect(tree.find('.dx-widget').props().accessKey)
-            .toBe('x');
-    });
-    it('should pass `disabled` state', () => {
-        const model = new Widget();
-        const tree = mount(viewFunction(viewModelFunction({ ...model, disabled: true })));
-
-        expect(tree.find('.dx-widget').is('.dx-widget.dx-state-disabled'))
-            .toBeTruthy();
+            expect(tree.find('.dx-widget').prop('title')).toBe('hint-text');
+        });
     });
 });
