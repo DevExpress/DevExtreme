@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import registerComponent from 'core/component_registrator';
-import Widget from 'ui/test-widget.j';
+import Widget from 'renovation/src/test-widget.j';
 
 const nameSpace = {};
 

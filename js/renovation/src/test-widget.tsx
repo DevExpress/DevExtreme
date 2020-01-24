@@ -1,12 +1,12 @@
-import { Component, Prop, Event, InternalState, React, Slot, Ref, Effect, State } from "../component_declaration/common";
-import config from '../core/config';
+import { Component, Prop, Event, InternalState, React, Slot, Ref, Effect, State } from "../../component_declaration/common";
+import config from '../../core/config';
 // import { getDocument } from '../core/dom_adapter';
-import Action from '../core/action';
-import { isFakeClickEvent } from '../events/utils';
-import { each } from '../core/utils/iterator';
-import { extend } from '../core/utils/extend';
-import { hasWindow } from '../core/utils/window';
-import { dxClick, hover, resize, visibility, active, keyboard } from '../events/short';
+import Action from '../../core/action';
+import { isFakeClickEvent } from '../../events/utils';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { hasWindow } from '../../core/utils/window';
+import { dxClick, hover, resize, visibility, active, keyboard } from '../../events/short';
 // const document = getDocument();
 
 const getStyles = ({ width, height }: any) => {

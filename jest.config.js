@@ -13,10 +13,10 @@ module.exports = {
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
-        path.join(path.resolve('.'), './testing/renovation/setup-enzyme.js'),
+        path.join(path.resolve('.'), './js/renovation/tests/setup-enzyme.js'),
     ],
     testMatch: [
-        path.join(path.resolve('.'), 'testing/renovation/**/*.tests.[jt]s?(x)')
+        path.join(path.resolve('.'), './js/renovation/tests/**/*.tests.[jt]s?(x)')
     ],
     transform: {
         '.(js|jsx|ts|tsx)': resolve.sync('ts-jest')

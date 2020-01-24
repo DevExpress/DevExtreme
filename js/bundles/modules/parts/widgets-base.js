@@ -22,8 +22,6 @@ ui.dxActionSheet = require('../../../ui/action_sheet');
 ui.dxAutocomplete = require('../../../ui/autocomplete');
 ui.dxBox = require('../../../ui/box');
 ui.dxButton = require('../../../ui/button');
-ui.dxTestButton = require('../../../ui/test-button.j');
-ui.dxTestWidget = require('../../../ui/test-widget.j');
 ui.dxDropDownButton = require('../../../ui/drop_down_button');
 ui.dxButtonGroup = require('../../../ui/button_group');
 ui.dxCalendar = require('../../../ui/calendar');
@@ -90,5 +88,10 @@ ui.CollectionWidget = require('../../../ui/collection/ui.collection_widget.edit'
 // Reports
 ui.dxDropDownEditor = require('../../../ui/drop_down_editor/ui.drop_down_editor');
 // Reports
+
+// Renovation
+ui.dxTestButton = require('../../../renovation/src/test-button.j');
+ui.dxTestWidget = require('../../../renovation/src/test-widget.j');
+// Renovation
 
 module.exports = ui;

@@ -1,9 +1,9 @@
-import Button, { viewModelFunction, viewFunction } from '../../js/ui/test-button';
+import Button, { viewModelFunction, viewFunction } from '../src/test-button';
 
 import React from 'react';
 import { shallow } from 'enzyme';
 
-describe('Button', () => {
+describe("Button", () => {
     it('should render text', () => {
         const model = new Button();
         model.text = 'My button';

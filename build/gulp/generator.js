@@ -5,7 +5,7 @@ const ts = require('gulp-typescript');
 const lint = require('gulp-eslint');
 const plumber = require('gulp-plumber');
 
-const SRC = 'js/**/*.tsx';
+const SRC = 'js/renovation/src/**/*.tsx';
 const DEST = 'js';
 
 const knownErrors = [

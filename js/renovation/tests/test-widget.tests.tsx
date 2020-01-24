@@ -1,4 +1,4 @@
-import Widget, { viewModelFunction, viewFunction } from '../../js/ui/test-widget';
+import Widget, { viewModelFunction, viewFunction } from '../src/test-widget';
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 
