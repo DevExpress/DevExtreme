@@ -180,8 +180,8 @@ const DropDownEditor = TextBox.inherit({
         });
     },
 
-    _getDefaultPopupPosition: function() {
-        const position = getDefaultAlignment();
+    _getDefaultPopupPosition: function(isRtlEnabled) {
+        const position = getDefaultAlignment(isRtlEnabled);
 
         return {
             offset: { h: 0, v: -1 },
@@ -213,7 +213,15 @@ const DropDownEditor = TextBox.inherit({
         this.callBase();
         this._initVisibilityActions();
         this._initPopupInitializedAction();
+        this._updatePopupPosition(this.option('rtlEnabled'));
         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
+    },
+
+    _updatePopupPosition: function(isRtlEnabled) {
+        const { my, at } = this._getDefaultPopupPosition(isRtlEnabled);
+        const currentPosition = this.option('popupPosition');
+
+        this.option('popupPosition', extend({}, currentPosition, { my, at }));
     },
 
     _initVisibilityActions: function() {
@@ -806,6 +814,10 @@ const DropDownEditor = TextBox.inherit({
                 }
 
                 this._renderSubmitElement();
+                break;
+            case 'rtlEnabled':
+                this._updatePopupPosition(args.value);
+                this.callBase(args);
                 break;
             default:
                 this.callBase(args);
