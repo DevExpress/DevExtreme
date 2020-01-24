@@ -23,8 +23,8 @@
     "jsx-no-lambda": false,
     "jsx-boolean-value": false,
     "jsx-no-multiline-js": false,
-    "member-access": [ true, "no-public" ],
-    "variable-name": [ true, "allow-pascal-case" ],
+    "member-access": [true, "no-public"],
+    "variable-name": [true, "allow-pascal-case", "allow-leading-underscore", "require-const-for-all-caps"],
     "no-empty": [true, "allow-empty-functions"],
     "no-implicit-dependencies": false,
     "object-shorthand-properties-first": false,
@@ -33,7 +33,9 @@
     "member-ordering": false,
     "jsx-wrap-multiline": false,
     "no-this-assignment": [true, {"allow-destructuring": true}],
-    "ter-indent": [true, 4]
+    "ter-indent": [true, 4],
+    "import-name": [false],
+    "no-unused-expression": [true, "allow-fast-null-checks"]
   },
   "jsRules": {
     "object-literal-sort-keys": false

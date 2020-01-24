@@ -16,13 +16,11 @@ import { isFakeClickEvent } from '../../events/utils';
 import { hasWindow } from '../../core/utils/window';
 import Action from '../../core/action';
 
-const getStyles = ({ width, height, ...other }) => {
-    return {
-        width: width === null ? '' : width,
-        height: height === null ? '' : height,
-        ...other,
-    };
-};
+const getStyles = ({ width, height, ...restArgs }) => ({
+    width: width === null ? '' : width,
+    height: height === null ? '' : height,
+    ...restArgs,
+});
 
 const setAttribute = (name, value) => {
     const result = {};
@@ -64,7 +62,8 @@ const getCssClasses = (model: Partial<Widget>) => {
     model._active && className.push('dx-state-active');
     model._hovered && isHoverable && !model._active && className.push('dx-state-hover');
     model.rtlEnabled && className.push('dx-rtl');
-    model.elementAttr.class && className.push(model.elementAttr.class);
+    // use `object?.field` syntax in the future
+    model.elementAttr && model.elementAttr.class && className.push(model.elementAttr.class);
 
     return className.join(' ');
 };
@@ -91,11 +90,11 @@ export const viewModelFunction = ({
 
     widgetRef,
 }: Widget) => {
-    accessKey = focusStateEnabled && !disabled && accessKey;
-    tabIndex = focusStateEnabled && !disabled && tabIndex;
-
     const styles = getStyles({ width, height });
-    const attrsWithoutClass = getAttributes({ elementAttr, accessKey });
+    const attrsWithoutClass = getAttributes({
+        elementAttr,
+        accessKey: focusStateEnabled && !disabled && accessKey,
+    });
     const arias = getAria({ ...aria, disabled, hidden: !visible });
     const cssClasses = getCssClasses({
         disabled, visible, _focused, _active, _hovered, rtlEnabled,
@@ -104,7 +103,6 @@ export const viewModelFunction = ({
 
     return {
         widgetRef,
-
         attributes: { ...attrsWithoutClass, ...arias },
         children,
         cssClasses,
@@ -113,7 +111,7 @@ export const viewModelFunction = ({
         hoverStateEnabled,
         styles,
         visible,
-        tabIndex,
+        tabIndex: focusStateEnabled && !disabled && tabIndex,
         title: hint,
     };
 };
@@ -170,24 +168,10 @@ export default class Widget {
     @Prop() tabIndex?: number = 0;
     @Prop() accessKey?: string | null = null;
     @Prop() activeStateEnabled?: boolean = false;
-    @Prop() activeStateUnit?: string | undefined = undefined;
-    @Prop() aria?: any = {};
-    @Prop() className?: string | undefined = '';
-    @Prop() clickArgs?: any = {};
-    @Prop() disabled?: boolean = false;
-    @Prop() elementAttr?: { [name: string]: any } = {};
     @Prop() focusStateEnabled?: boolean = false;
-    @Prop() height?: string | number | null = null;
-    @Prop() hint?: string | undefined = undefined;
     @Prop() hoverStateEnabled?: boolean = false;
-    @Prop() name?: string | undefined = '';
     @Prop() onDimensionChanged: () => any = (() => undefined);
     @Prop() onKeyboardHandled?: (args: any) => any | undefined = undefined;
-    @Prop() rtlEnabled?: boolean = config().rtlEnabled;
-    @Prop() supportedKeys?: (args: any) => any | undefined = undefined;
-    @Prop() tabIndex?: number = 0;
-    @Prop() visible?: boolean = true;
-    @Prop() width?: string | number | null = null;
 
     @Slot() children: any;
 
@@ -232,7 +216,7 @@ export default class Widget {
         const isFocusable = this.focusStateEnabled && !this.disabled;
         const canBeFocusedByKey = isFocusable && this.accessKey;
 
-        canBeFocusedByKey && dxClick.on(this.widgetRef, e => {
+        canBeFocusedByKey && dxClick.on(this.widgetRef, (e) => {
             if (isFakeClickEvent(e)) {
                 e.stopImmediatePropagation();
                 this._focused = true;
@@ -257,7 +241,7 @@ export default class Widget {
                     }
                 }, { excludeValidators: ['readOnly'] }),
                 () => { this._hovered = false; },
-                { selector, namespace }
+                { selector, namespace },
             );
         }
 
@@ -274,7 +258,7 @@ export default class Widget {
                 new Action(() => { this._active = true; }),
                 new Action(
                     () => { this._active = false; },
-                    { excludeValidators: ['disabled', 'readOnly'] }
+                    { excludeValidators: ['disabled', 'readOnly'] },
                 ), {
                     showTimeout: this._feedbackShowTimeout,
                     hideTimeout: this._feedbackHideTimeout,
