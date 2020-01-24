@@ -12,7 +12,6 @@ import dateUtils from 'core/utils/date';
 import dateLocalization from 'localization/date';
 import dragEvents from 'events/drag';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
-import devices from 'core/devices';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -161,16 +160,6 @@ QUnit.testStart(function() {
 
         assert.equal(stub.callCount, 0, 'Tables were not updated');
     });
-
-    if(devices.real().deviceType === 'desktop') {
-        QUnit.test('Workspace should restore scrollTop after restoreScrollTop call', function(assert) {
-            this.instance.$element().scrollTop(30);
-            assert.equal(this.instance.$element().scrollTop(), 30, 'scrollTop is right');
-
-            this.instance.restoreScrollTop();
-            assert.equal(this.instance.$element().scrollTop(), 0, 'scrollTop is restored');
-        });
-    }
 
     QUnit.test('dateUtils.getTimezonesDifference should be called when calculating interval between dates', function(assert) {
         const stub = sinon.stub(dateUtils, 'getTimezonesDifference');
