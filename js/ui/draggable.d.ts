@@ -137,8 +137,8 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
      * @type_function_param1_field7 itemElement:dxElement
-     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
      * @type_function_param1_field10 fromData:any
      * @type_function_param1_field11 toData:any
      * @action
@@ -155,8 +155,8 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1_field5 cancel:boolean
      * @type_function_param1_field6 itemData:any
      * @type_function_param1_field7 itemElement:dxElement
-     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
      * @type_function_param1_field10 fromData:any
      * @type_function_param1_field11 toData:any
      * @action

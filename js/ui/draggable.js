@@ -237,8 +237,8 @@ const Draggable = DOMComponent.inherit({
              * @type_function_param1_field4 event:event
              * @type_function_param1_field5 itemData:any
              * @type_function_param1_field6 itemElement:dxElement
-             * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
-             * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+             * @type_function_param1_field8 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
              * @type_function_param1_field9 fromData:any
              * @type_function_param1_field10 toData:any
              * @action
