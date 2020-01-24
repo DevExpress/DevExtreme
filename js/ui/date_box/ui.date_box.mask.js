@@ -253,14 +253,16 @@ const DateBoxMask = DateBoxBase.inherit({
         return this.option('useMaskBehavior') && this.option('mode') === 'text';
     },
 
+    _prepareRegExpInfo() {
+        this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
+        const convertedRegExp = numberLocalization.convertDigits(String(this._regExpInfo.regexp), false);
+        this._regExpInfo.regexp = RegExp(convertedRegExp.slice(1, -2));
+    },
+
     _initMaskState() {
         this._activePartIndex = 0;
         this._formatPattern = null;
-        this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
-
-        const convertedRegExp = numberLocalization.convertDigits(String(this._regExpInfo.regexp), false);
-        this._regExpInfo.regexp = RegExp(convertedRegExp.slice(1, -2));
-
+        this._prepareRegExpInfo();
         this._loadMaskValue();
     },
 
