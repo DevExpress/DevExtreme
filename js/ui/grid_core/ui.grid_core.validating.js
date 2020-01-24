@@ -275,16 +275,13 @@ const ValidatingController = modules.Controller.inherit((function() {
                     });
                 }
                 if($container) {
-                    let disableValidationResult = this.getDisableApplyValidationResults();
                     const validationInfo = this.getCellValidationInfo({
                         keyValue: parameters.key,
                         columnIndex: column.index
                     });
-                    if(validationInfo && options.status !== VALIDATION_STATUS.pending && validationInfo.disabledPendingIds
-                        && validationInfo.disabledPendingIds.indexOf(options.id) >= 0) {
-                        disableValidationResult = true;
-                    }
-                    if(disableValidationResult) {
+                    const requestIsDisabled = validationInfo && validationInfo.disabledPendingIds && validationInfo.disabledPendingIds.indexOf(options.id) >= 0;
+                    const isCurrentValidator = !!validationInfo && this.isCurrentValidatorProcessing(validationInfo.cellKey);
+                    if(this.getDisableApplyValidationResults() && !isCurrentValidator || requestIsDisabled) {
                         return;
                     }
                     if(!options.isValid) {
@@ -416,6 +413,16 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         // test
+        isCurrentValidatorProcessing: function(cellKey) {
+            const validator = this.getValidator();
+            let result = false;
+            if(validator) {
+                const info = this.getCellValidationInfo(validator.option('cellInfo'));
+                result = !!info && info.cellKey === cellKey;
+            }
+            return result;
+        },
+
         validateCell: function(validator) {
             const info = this.getCellValidationInfo(validator.option('cellInfo'));
             let validationResult = info && info.result;
@@ -526,7 +533,8 @@ const ValidatingController = modules.Controller.inherit((function() {
             if(validationResult) {
                 info.result = this.getValidationResult(validationResult);
                 const disableValidationResult = this.getDisableApplyValidationResults();
-                if(disableValidationResult && validationResult.status === VALIDATION_STATUS.pending) {
+                const isCurrentValidator = this.isCurrentValidatorProcessing(info.cellKey);
+                if(disableValidationResult && !isCurrentValidator && validationResult.status === VALIDATION_STATUS.pending) {
                     if(!info.disabledPendingIds) {
                         info.disabledPendingIds = [];
                     }
@@ -833,7 +841,7 @@ module.exports = {
                                 keyValue: cellInfo.keyValue,
                                 columnIndex: cellInfo.columnIndex
                             });
-                            if(info && info.valueUpdated) {
+                            if(info && (info.valueUpdated || validatingController.isRowValidated(cellInfo.keyValue))) {
                                 if(info.result.complete) {
                                     const deferred = new Deferred();
                                     when(info.result.complete).done((validationResult) => {
@@ -897,7 +905,7 @@ module.exports = {
                 },
 
                 updateFieldValue: function(e) {
-                    const editMode = this.getEditMode();
+                    // const editMode = this.getEditMode();
                     // test
                     this.getController('validating').updateRowValidationInfo({
                         keyValue: e.key
@@ -905,11 +913,11 @@ module.exports = {
                     // endTest
                     this.callBase.apply(this, arguments);
 
-                    if(editMode === EDIT_MODE_ROW || (editMode === EDIT_MODE_BATCH && e.column.showEditorAlways)) {
-                        const validatingController = this.getController('validating');
-                        const currentValidator = validatingController.getValidator();
-                        currentValidator && validatingController.validateCell(currentValidator);
-                    }
+                    // if(editMode === EDIT_MODE_ROW || (editMode === EDIT_MODE_BATCH && e.column.showEditorAlways)) {
+                    //     const validatingController = this.getController('validating');
+                    //     const currentValidator = validatingController.getValidator();
+                    //     currentValidator && validatingController.validateCell(currentValidator);
+                    // }
                 },
 
                 showHighlighting: function({ $cell, skipValidation }) {
