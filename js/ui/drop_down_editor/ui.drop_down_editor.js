@@ -18,7 +18,7 @@ import { addNamespace } from '../../events/utils';
 import TextBox from '../text_box';
 import clickEvent from '../../events/click';
 import devices from '../../core/devices';
-import { FunctionTemplate } from '../../core/templates/function_template';
+import FunctionTemplate from '../widget/function_template';
 import Popup from '../popup';
 
 const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
