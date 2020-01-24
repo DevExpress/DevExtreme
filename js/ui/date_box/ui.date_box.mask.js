@@ -12,6 +12,7 @@ import { getFormat } from '../../localization/ldml/date.format';
 import { isString } from '../../core/utils/type';
 import { sign } from '../../core/utils/math';
 import DateBoxBase from './ui.date_box.base';
+import numberLocalization from '../../localization/number';
 
 const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
@@ -256,6 +257,10 @@ const DateBoxMask = DateBoxBase.inherit({
         this._activePartIndex = 0;
         this._formatPattern = null;
         this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
+
+        const convertedRegExp = numberLocalization.convertDigits(String(this._regExpInfo.regexp), false);
+        this._regExpInfo.regexp = RegExp(convertedRegExp.slice(1, -2));
+
         this._loadMaskValue();
     },
 
