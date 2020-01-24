@@ -255,8 +255,10 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _prepareRegExpInfo() {
         this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
-        const convertedRegExp = numberLocalization.convertDigits(String(this._regExpInfo.regexp), false);
-        this._regExpInfo.regexp = RegExp(convertedRegExp.slice(1, -2));
+        const regExp = this._regExpInfo.regexp;
+        const flags = regExp.flags;
+        const convertedRegExp = numberLocalization.convertDigits(String(this._regExpInfo.regexp.source), false);
+        this._regExpInfo.regexp = RegExp(convertedRegExp, flags);
     },
 
     _initMaskState() {
