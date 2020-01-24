@@ -5,6 +5,7 @@ const workWeekUtils = require('./utils.work_week');
 const toMs = dateUtils.dateToMilliseconds;
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
+const LAST_DAY_WEEK_INDEX = 5;
 
 const SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
     _getElementClass: function() {
@@ -23,7 +24,7 @@ const SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
 
     _incrementDate: function(date) {
         const day = date.getDay();
-        if(day === 5) {
+        if(day === LAST_DAY_WEEK_INDEX) {
             date.setDate(date.getDate() + 2);
         }
         this.callBase(date);
