@@ -239,8 +239,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         $folderNodes = this.wrapper.getFolderNodes();
         assert.equal($folderNodes.length, initialCount - 1, 'folders count decreased');
-        assert.ok($folderNodes.eq(1).find('span').text().indexOf('Folder 1') === -1, 'first folder is not target folder');
-        assert.ok($folderNodes.eq(2).find('span').text().indexOf('Folder 1') === -1, 'second folder is not target folder');
+        assert.strictEqual($folderNodes.eq(1).find('span').text().indexOf('Folder 1'), -1, 'first folder is not target folder');
+        assert.strictEqual($folderNodes.eq(2).find('span').text().indexOf('Folder 1'), -1, 'second folder is not target folder');
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
     });
@@ -259,8 +259,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         const $rows = this.wrapper.getRowsInDetailsView();
         assert.equal($rows.length, initialCount - 1, 'files count decreased');
-        assert.ok($rows.eq(0).text().indexOf('File 1.txt') === -1, 'first folder is not target folder');
-        assert.ok($rows.eq(1).text().indexOf('File 1.txt') === -1, 'second folder is not target folder');
+        assert.strictEqual($rows.eq(0).text().indexOf('File 1.txt'), -1, 'first folder is not target folder');
+        assert.strictEqual($rows.eq(1).text().indexOf('File 1.txt'), -1, 'second folder is not target folder');
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
     });
@@ -285,8 +285,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         $rows = this.wrapper.getRowsInDetailsView();
         assert.equal($rows.length, initialCount - 1, 'files count decreased');
-        assert.ok($rows.eq(0).text().indexOf('File 1-1.txt') === -1, 'first folder is not target folder');
-        assert.ok($rows.eq(1).text().indexOf('File 1-1.txt') === -1, 'second folder is not target folder');
+        assert.strictEqual($rows.eq(0).text().indexOf('File 1-1.txt'), -1, 'first folder is not target folder');
+        assert.strictEqual($rows.eq(1).text().indexOf('File 1-1.txt'), -1, 'second folder is not target folder');
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Folder 1', 'sub folder selected');
     });
@@ -306,7 +306,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         $folderNodes = this.wrapper.getFolderNodes(true);
         $folderNodes.eq(3).trigger('dxclick');
 
-        this.wrapper.getDialogButton('Select').trigger('dxclick');
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
         this.clock.tick(400);
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Folder 3', 'destination folder should be selected');
@@ -343,7 +343,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         $folderNodes = this.wrapper.getFolderNodes(true);
         $folderNodes.eq(3).trigger('dxclick');
 
-        this.wrapper.getDialogButton('Select').trigger('dxclick');
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
         this.clock.tick(400);
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Folder 3', 'target folder should be selected');
@@ -377,7 +377,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         let $folderNodes = this.wrapper.getFolderNodes(true);
         $folderNodes.eq(3).trigger('dxclick');
 
-        this.wrapper.getDialogButton('Select').trigger('dxclick');
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
         this.clock.tick(400);
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Folder 3', 'destination folder should be selected');
@@ -411,7 +411,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         let $folderNodes = this.wrapper.getFolderNodes(true);
         $folderNodes.eq(3).trigger('dxclick');
 
-        this.wrapper.getDialogButton('Select').trigger('dxclick');
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
         this.clock.tick(400);
 
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'file moved to another folder');
@@ -510,7 +510,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getFolderNode(5, true).trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getDialogButton('Select').trigger('dxclick');
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
         this.clock.tick(1200);
 
         assert.equal(this.wrapper.getDetailsItemName(0), 'Special deep file.txt', 'has specail file');
@@ -562,7 +562,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.clock.tick(800);
 
         const items = this.wrapper.getRowsInDetailsView();
-        assert.ok((initialItemsLength + 1) === items.length, 'One item added');
+        assert.strictEqual(items.length, initialItemsLength + 1, 'One item added');
         assert.ok(items.eq(items.length - 1).text().indexOf('Untitled directory') > -1, 'Directory created');
         assert.equal(this.progressPanelWrapper.getInfos()[0].common.commonText, 'Created a directory inside Files', 'common text is correct');
     });

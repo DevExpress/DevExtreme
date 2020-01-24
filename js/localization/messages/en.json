@@ -316,7 +316,9 @@
 		"dxFileManager-commandClear": "Clear selection",
 
 		"dxFileManager-dialogDirectoryChooserTitle": "Select Destination Directory",
-		"dxFileManager-dialogDirectoryChooserButtonText": "Select",
+        "dxFileManager-dialogDirectoryChooserButtonText": "Select",
+        "dxFileManager-dialogDirectoryChooserButtonTextMove": "Move to",
+        "dxFileManager-dialogDirectoryChooserButtonTextCopy": "Copy to",
 		"dxFileManager-dialogRenameItemTitle": "Rename",
 		"dxFileManager-dialogRenameItemButtonText": "Save",
 		"dxFileManager-dialogCreateDirectoryTitle": "New directory",

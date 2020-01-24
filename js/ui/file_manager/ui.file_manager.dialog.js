@@ -94,8 +94,13 @@ class FileManagerDialogBase extends Widget {
         this._onClosedAction = this._createActionByOption('onClosed');
     }
 
+    _setButtonText(newText) {
+        this._popup.option('toolbarItems')[0].options['text'] = newText;
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
+            buttonText: 'ButtonText',
             onClosed: null
         });
     }
@@ -104,6 +109,9 @@ class FileManagerDialogBase extends Widget {
         const name = args.name;
 
         switch(name) {
+            case 'buttonText':
+                this._setButtonText(args.value);
+                break;
             case 'onClosed':
                 this._createOnPathChangedAction();
                 break;

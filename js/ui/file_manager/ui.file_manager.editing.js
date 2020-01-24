@@ -287,12 +287,14 @@ class FileManagerEditingControl extends Widget {
 
     _tryMove(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        this._chooseFolderDialog.option('buttonText', messageLocalization.format('dxFileManager-dialogDirectoryChooserButtonTextMove'));
         return this._showDialog(this._chooseFolderDialog)
             .then(({ folder }) => this._controller.moveItems(itemInfos, folder));
     }
 
     _tryCopy(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        this._chooseFolderDialog.option('buttonText', messageLocalization.format('dxFileManager-dialogDirectoryChooserButtonTextCopy'));
         return this._showDialog(this._chooseFolderDialog)
             .then(({ folder }) => this._controller.copyItems(itemInfos, folder));
     }
