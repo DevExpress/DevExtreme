@@ -1,11 +1,11 @@
 const dateUtils = require('../../../core/utils/date');
 const MONDAY_INDEX = 1;
-const SATURDAY_iNDEX = 6;
-const SUNDAY_iNDEX = 0;
+const SATURDAY_INDEX = 6;
+const SUNDAY_INDEX = 0;
 
 export const isDataOnWeekend = (date) => {
     const day = date.getDay();
-    return day === SATURDAY_iNDEX || day === SUNDAY_iNDEX;
+    return day === SATURDAY_INDEX || day === SUNDAY_INDEX;
 };
 
 export const getFirstDayOfWeek = (firstDayOfWeekOption) => {
