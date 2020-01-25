@@ -61,7 +61,7 @@ const subscribes = {
             dates.push(startDate);
             initialDates = dates;
         } else {
-            dates = this.correctDatesByDaylightOffsets(dates, appointmentData, originalStartDate);
+            dates = this.getCorrectedDatesByDaylightOffsets(originalStartDate, dates, appointmentData);
             initialDates = dates;
 
             dates = dates.map((date) => {
