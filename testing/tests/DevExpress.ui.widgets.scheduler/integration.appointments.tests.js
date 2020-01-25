@@ -3821,7 +3821,7 @@ QUnit.module('Appointments', () => {
         return createWrapper($.extend(config, options));
     };
 
-    const createTestForCommonData = (assert, skipCallCount = false) => {
+    const createTestForCommonData = (assert, scheduler, skipCallCount = false) => {
         eventCallCount = 0;
 
         return (model, index, container) => {
@@ -3985,23 +3985,17 @@ QUnit.module('Appointments', () => {
         const cases = [
             {
                 data: commonData,
-                setAppointmentTooltip: (assert, scheduler) => {
-                    scheduler.option('appointmentTooltipTemplate', createTestForCommonData(assert, true));
-                },
+                appointmentTooltip: createTestForCommonData,
                 name: 'common'
             },
             {
                 data: recurrenceData,
-                setAppointmentTooltip: (assert, scheduler) => {
-                    scheduler.option('appointmentTooltipTemplate', createTestForRecurrenceData(assert, scheduler));
-                },
+                appointmentTooltip: createTestForRecurrenceData,
                 name: 'recurrence'
             },
             {
                 data: recurrenceAndCompactData,
-                setAppointmentTooltip: (assert, scheduler) => {
-                    scheduler.option('appointmentTooltipTemplate', createTestForRecurrenceData(assert, scheduler));
-                },
+                appointmentTooltip: createTestForRecurrenceData,
                 name: 'recurrence in collector'
             },
             {
@@ -4012,9 +4006,7 @@ QUnit.module('Appointments', () => {
                     endDateExpr: 'endDateCustom',
                     currentView: 'week'
                 },
-                setAppointmentTooltip: (assert, scheduler) => {
-                    scheduler.option('appointmentTooltipTemplate', createTestForHourlyRecurrenceData(assert, scheduler));
-                },
+                appointmentTooltip: createTestForHourlyRecurrenceData,
                 name: 'hourly recurrence in collector'
             },
             {
@@ -4026,9 +4018,7 @@ QUnit.module('Appointments', () => {
                     currentView: 'week',
                     timeZone: 'Asia/Yekaterinburg'
                 },
-                setAppointmentTooltip: (assert, scheduler) => {
-                    scheduler.option('appointmentTooltipTemplate', createTestForHourlyRecurrenceData(assert, scheduler));
-                },
+                appointmentTooltip: createTestForHourlyRecurrenceData,
                 name: 'hourly recurrence in collector, custom timezone is set'
             }
         ];
@@ -4036,7 +4026,7 @@ QUnit.module('Appointments', () => {
         cases.forEach(testCase => {
             QUnit.test(`model.targetedAppointmentData argument should have current appointment data, ${testCase.name} case`, function(assert) {
                 const scheduler = createScheduler(testCase.data, testCase.options);
-                testCase.setAppointmentTooltip(assert, scheduler);
+                scheduler.option('appointmentTooltipTemplate', testCase.appointmentTooltip(assert, scheduler, true));
 
                 for(let i = 0; i < 5; i++) {
                     scheduler.appointments.click(i);
