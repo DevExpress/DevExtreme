@@ -6548,11 +6548,11 @@ QUnit.module('_getFullOptions', () => {
     });
 
     QUnit.test('autoFilterEnabled', function(assert) {
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false }).autoFilterEnabled, false, 'no member');
+        assert.deepEqual(_getFullOptions({}).autoFilterEnabled, false, 'no member');
         assert.deepEqual(_getFullOptions({ autoFilterEnabled: undefined }).autoFilterEnabled, false, 'undefined');
         assert.deepEqual(_getFullOptions({ autoFilterEnabled: null }).autoFilterEnabled, false, 'null');
 
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false }).autoFilterEnabled, true, 'false');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false }).autoFilterEnabled, false, 'false');
         assert.deepEqual(_getFullOptions({ autoFilterEnabled: true }).autoFilterEnabled, true, 'true');
     });
 
