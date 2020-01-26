@@ -6548,15 +6548,12 @@ QUnit.module('_getFullOptions', () => {
     });
 
     QUnit.test('autoFilterEnabled', function(assert) {
-        function _getComponent(exportExcelFilterEnabled) { return { option: function() { return exportExcelFilterEnabled; } }; }
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false }).autoFilterEnabled, false, 'no member');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: undefined }).autoFilterEnabled, false, 'undefined');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: null }).autoFilterEnabled, false, 'null');
 
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false, component: _getComponent(undefined) }).autoFilterEnabled, false, 'false && grid.exportExcelFilterEnabled: undefined');
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false, component: _getComponent(false) }).autoFilterEnabled, false, 'false && grid.exportExcelFilterEnabled: false');
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false, component: _getComponent(true) }).autoFilterEnabled, false, 'false && grid.exportExcelFilterEnabled: true');
-
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: true, component: _getComponent(undefined) }).autoFilterEnabled, true, 'true && grid.exportExcelFilterEnabled: undefined');
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: true, component: _getComponent(false) }).autoFilterEnabled, true, 'true && grid.exportExcelFilterEnabled: false');
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: true, component: _getComponent(true) }).autoFilterEnabled, true, 'true && grid.exportExcelFilterEnabled: true');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false }).autoFilterEnabled, true, 'false');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: true }).autoFilterEnabled, true, 'true');
     });
 
     QUnit.test('loadPanel', function(assert) {
