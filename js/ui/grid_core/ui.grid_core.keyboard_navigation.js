@@ -465,7 +465,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
 
         this._updateFocusedCellPosition($cell);
-        $cell = this._getNextCellByTabKey($event, direction, elementType);
+        const nextCellInfo = this._getNextCellByTabKey($event, direction, elementType);
+        $cell = nextCellInfo.$cell;
 
         if(!$cell || this._handleTabKeyOnMasterDetailCell($cell, direction)) {
             return false;
@@ -483,7 +484,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._editingController.closeEditCell();
         }
 
-        if(this._focusCell($cell)) {
+        if(this._focusCell($cell, !nextCellInfo.isHighlighted)) {
             if(!this._isRowEditMode() && isEditingAllowed) {
                 this._editingController.editCell(this.getVisibleRowIndex(), this._focusedCellPosition.columnIndex);
             } else {
@@ -517,7 +518,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 }
             }
 
-            $cell = this._getNextCellByTabKey($event, direction, elementType);
+            const nextCellInfo = this._getNextCellByTabKey($event, direction, elementType);
+            $cell = nextCellInfo.$cell;
+
             if(!$cell) {
                 return false;
             }
@@ -527,7 +530,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 return false;
             }
 
-            this._focusCell($cell);
+            this._focusCell($cell, !nextCellInfo.isHighlighted);
 
             if(!isEditorCell(this, $cell)) {
                 this._focusInteractiveElement($cell, eventArgs.shift);
@@ -541,13 +544,17 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const args = $cell && this._fireFocusedCellChanging($event, $cell, true);
 
         if(!args || args.cancel) {
-            return;
+            return {};
         }
 
         if(args.$newCellElement) {
             $cell = args.$newCellElement;
         }
-        return $cell;
+
+        return {
+            $cell,
+            isHighlighted: args.isHighlighted
+        };
     },
     _checkNewLineTransition: function($event, $cell) {
         const rowIndex = this.getVisibleRowIndex();
@@ -1009,9 +1016,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
-    _focusCell: function($cell) {
+    _focusCell: function($cell, isDisabled) {
         if(this._isCellValid($cell)) {
-            this._focus($cell);
+            this._focus($cell, isDisabled);
             return true;
         }
     },
