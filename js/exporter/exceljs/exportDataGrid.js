@@ -116,8 +116,8 @@ function _getFullOptions(options) {
     if(!isDefined(fullOptions.loadPanel.text)) {
         fullOptions.loadPanel.text = messageLocalization.format('dxDataGrid-exporting');
     }
-    if(!isDefined(fullOptions.autoFilterEnabled) && isDefined(fullOptions.component)) {
-        fullOptions.autoFilterEnabled = !!fullOptions.component.option('export.excelFilterEnabled');
+    if(!isDefined(fullOptions.autoFilterEnabled)) {
+        fullOptions.autoFilterEnabled = false;
     }
 
     return fullOptions;
