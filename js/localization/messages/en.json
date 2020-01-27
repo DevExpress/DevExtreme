@@ -317,8 +317,8 @@
 
 		"dxFileManager-dialogDirectoryChooserTitle": "Select Destination Directory",
         "dxFileManager-dialogDirectoryChooserButtonText": "Select",
-        "dxFileManager-dialogDirectoryChooserButtonTextMove": "Move to",
-        "dxFileManager-dialogDirectoryChooserButtonTextCopy": "Copy to",
+        "dxFileManager-dialogDirectoryChooserButtonTextMove": "Move",
+        "dxFileManager-dialogDirectoryChooserButtonTextCopy": "Copy",
 		"dxFileManager-dialogRenameItemTitle": "Rename",
 		"dxFileManager-dialogRenameItemButtonText": "Save",
 		"dxFileManager-dialogCreateDirectoryTitle": "New directory",
