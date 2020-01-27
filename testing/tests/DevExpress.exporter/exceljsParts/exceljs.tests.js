@@ -4,7 +4,6 @@ import devices from 'core/devices';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
 import messageLocalization from 'localization/message';
-import { isDefined } from 'core/utils/type';
 import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
 import ExcelJSTestHelper from './ExcelJSTestHelper.js';
@@ -818,42 +817,6 @@ const moduleConfig = {
                 helper.checkValues(expectedCells, topLeft);
                 helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
                 done();
-            });
-        });
-
-        [true, false, undefined].forEach((gridExcelFilterEnabled) => {
-            QUnit.test(`Data - 1 column & 2 rows, grid.export.excelFilterEnabled: ${gridExcelFilterEnabled}`, function(assert) {
-                const done = assert.async();
-                const ds = [{ f1: '1' }];
-                const dataGrid = $('#dataGrid').dxDataGrid({
-                    dataSource: ds,
-                    loadingTimeout: undefined,
-                    export: {
-                        excelFilterEnabled: gridExcelFilterEnabled
-                    }
-                }).dxDataGrid('instance');
-
-                const expectedCells = [[
-                    { excelCell: { value: 'F1' }, gridCell: { rowType: 'header', column: dataGrid.columnOption(0) } },
-                ], [
-                    { excelCell: { value: ds[0].f1 }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } }
-                ]];
-
-                helper._extendExpectedCells(expectedCells, topLeft);
-
-                let expectedAutoFilterEnabled = !!gridExcelFilterEnabled;
-                if(isDefined(autoFilterEnabled)) {
-                    expectedAutoFilterEnabled = autoFilterEnabled;
-                }
-
-                exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
-                    helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                    helper.checkAutoFilter(expectedAutoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
-                    helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
-                    done();
-                });
             });
         });
 
@@ -6585,19 +6548,12 @@ QUnit.module('_getFullOptions', () => {
     });
 
     QUnit.test('autoFilterEnabled', function(assert) {
-        function _getComponent(exportExcelFilterEnabled) { return { option: function() { return exportExcelFilterEnabled; } }; }
+        assert.deepEqual(_getFullOptions({}).autoFilterEnabled, false, 'no member');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: undefined }).autoFilterEnabled, false, 'undefined');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: null }).autoFilterEnabled, false, 'null');
 
-        assert.deepEqual(_getFullOptions({ component: _getComponent(undefined) }).autoFilterEnabled, false, 'no member && grid.exportExcelFilterEnabled: undefined');
-        assert.deepEqual(_getFullOptions({ component: _getComponent(false) }).autoFilterEnabled, false, 'no member && grid.exportExcelFilterEnabled: false');
-        assert.deepEqual(_getFullOptions({ component: _getComponent(true) }).autoFilterEnabled, true, 'no member && grid.exportExcelFilterEnabled: true');
-
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false, component: _getComponent(undefined) }).autoFilterEnabled, false, 'false && grid.exportExcelFilterEnabled: undefined');
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false, component: _getComponent(false) }).autoFilterEnabled, false, 'false && grid.exportExcelFilterEnabled: false');
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false, component: _getComponent(true) }).autoFilterEnabled, false, 'false && grid.exportExcelFilterEnabled: true');
-
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: true, component: _getComponent(undefined) }).autoFilterEnabled, true, 'true && grid.exportExcelFilterEnabled: undefined');
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: true, component: _getComponent(false) }).autoFilterEnabled, true, 'true && grid.exportExcelFilterEnabled: false');
-        assert.deepEqual(_getFullOptions({ autoFilterEnabled: true, component: _getComponent(true) }).autoFilterEnabled, true, 'true && grid.exportExcelFilterEnabled: true');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false }).autoFilterEnabled, false, 'false');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: true }).autoFilterEnabled, true, 'true');
     });
 
     QUnit.test('loadPanel', function(assert) {
