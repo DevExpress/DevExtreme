@@ -11,6 +11,38 @@ QUnit.test('Init tree view', function(assert) {
 
 ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
     [false, true].forEach((virtualModeEnabled) => {
+        function createOptions(options) {
+            const result = $.extend({ dataStructure: 'plain', rootValue: 1 }, options);
+            if(result.dataSourceOption === 'createChildren') {
+                const createChildFunction = (parent) => {
+                    return parent == null
+                        ? [ options.testItems[options.testRootItemIndex] ]
+                        : options.testItems.filter(function(item) { return parent.itemData.id === item.parentId; });
+                };
+                result.createChildren = createChildFunction;
+            } else {
+                result[options.dataSourceOption] = options.testItems;
+            }
+            return result;
+        }
+
+        [0, -1, 1.1, '0', 'aaa', null, undefined].forEach(rootValue => {
+            QUnit.test(`rootValue = ${rootValue}, dataSource: ${dataSourceOption}, virtualModeEnabled: ${virtualModeEnabled}`, function(assert) {
+                const options = createOptions({
+                    rootValue, testRootItemIndex: 0,
+                    dataSourceOption, virtualModeEnabled, testItems: [
+                        { id: 1, text: 'item1', parentId: rootValue },
+                        { id: 2, text: 'item2', parentId: 1 }]
+                });
+
+                const wrapper = new TreeViewTestWrapper(options);
+                const $item1 = wrapper.getElement().find('[aria-level="1"]');
+
+                assert.notEqual(wrapper.instance, undefined);
+                assert.notEqual($item1.length, 0, 'item1 must be rendered');
+            });
+        });
+
         QUnit.module(`Initialization with cycle/loop keys. DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
             QUnit.test('rootValue', function(assert) {
                 const configs = [
@@ -45,21 +77,6 @@ QUnit.test('Init tree view', function(assert) {
                     wrapper.instance.dispose();
                 });
             });
-
-            function createOptions(options) {
-                const result = $.extend({ dataStructure: 'plain', rootValue: 1 }, options);
-                if(result.dataSourceOption === 'createChildren') {
-                    const createChildFunction = (parent) => {
-                        return parent == null
-                            ? [ options.testItems[options.testRootItemIndex] ]
-                            : options.testItems.filter(function(item) { return parent.itemData.id === item.parentId; });
-                    };
-                    result.createChildren = createChildFunction;
-                } else {
-                    result[options.dataSourceOption] = options.testItems;
-                }
-                return result;
-            }
         });
     });
 });
