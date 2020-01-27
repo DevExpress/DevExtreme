@@ -208,8 +208,8 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
      * @type_function_param1_field6 itemElement:dxElement
      * @type_function_param1_field7 fromIndex:number
      * @type_function_param1_field8 toIndex:number
-     * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
-     * @type_function_param1_field10 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+     * @type_function_param1_field9 fromComponent:dxSortable
+     * @type_function_param1_field10 toComponent:dxSortable
      * @type_function_param1_field11 fromData:any
      * @type_function_param1_field12 toData:any
      * @type_function_param1_field13 dropInsideItem:boolean
