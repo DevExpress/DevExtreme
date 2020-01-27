@@ -57,7 +57,7 @@ QUnit.module('Intl localization', {
     QUnit.module('DateBox', commonEnvironment, () => {
         QUnit.test('DateBox should not raise error when digits are not default arabic digits', function(assert) {
             try {
-                locale('ar');
+                locale('ar-u-nu-arab');
 
                 const $dateBox = $('#dateBox').dxDateBox({
                     value: new Date(2015, 10, 10),
@@ -71,7 +71,7 @@ QUnit.module('Intl localization', {
             } catch(e) {
                 assert.ok(false, 'Error occured: ' + e.message);
             } finally {
-                locale('en');
+                // locale('en');
             }
         });
     });
