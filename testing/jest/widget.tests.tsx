@@ -1,4 +1,4 @@
-import Widget, { viewModelFunction, viewFunction } from '../src/test-widget';
+import Widget, { viewModelFunction, viewFunction } from '../../js/renovation/widget';
 import React from 'react';
 import { mount } from 'enzyme';
 

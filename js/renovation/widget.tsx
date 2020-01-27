@@ -1,4 +1,4 @@
-import config from '../../core/config';
+import config from '../core/config';
 import {
     Component,
     Effect,
@@ -8,13 +8,13 @@ import {
     React,
     Ref,
     Slot,
-} from '../../component_declaration/common';
-import { active, dxClick, hover, keyboard, resize, visibility } from '../../events/short';
-import { each } from '../../core/utils/iterator';
-import { extend } from '../../core/utils/extend';
-import { isFakeClickEvent } from '../../events/utils';
-import { hasWindow } from '../../core/utils/window';
-import Action from '../../core/action';
+} from '../component_declaration/common';
+import { active, dxClick, hover, keyboard, resize, visibility } from '../events/short';
+import { each } from '../core/utils/iterator';
+import { extend } from '../core/utils/extend';
+import { isFakeClickEvent } from '../events/utils';
+import { hasWindow } from '../core/utils/window';
+import Action from '../core/action';
 
 const getStyles = ({ width, height, ...restArgs }) => ({
     width: width === null ? '' : width,

@@ -1,10 +1,14 @@
 import registerComponent from '../../core/component_registrator';
-import Widget from '../../ui/widget/ui.widget';
+import WidgetBase from '../../ui/widget/ui.widget';
 import { extend } from '../../core/utils/extend';
-import ButtonView from './test-button.p';
+import WidgetView from '../widget.p';
 import * as Preact from 'preact';
 
-class Button extends Widget {
+class Widget extends WidgetBase {
+    getInstance() {
+        return this;
+    }
+
     _initMarkup() { }
 
     _render() {
@@ -13,8 +17,7 @@ class Button extends Widget {
 
     _renderContent() {
         const options = this.option();
-        const isFirstRender = this.$element().children().length === 0;
-        const container = isFirstRender ? this.$element().get(0) : undefined;
+        const container = this.$element().children().length === 0 /** isFirstRender*/ ? this.$element().get(0) : undefined;
 
         let contentRender;
         if(options.contentRender) {
@@ -65,9 +68,9 @@ class Button extends Widget {
 }
 
 function view(options) {
-    return Preact.h(ButtonView, options);
+    return Preact.h(WidgetView, options);
 }
 
-registerComponent('dxTestButton', Button);
+registerComponent('dxTestWidget', Widget);
 
-module.exports = Button;
+module.exports = Widget;

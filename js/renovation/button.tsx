@@ -1,8 +1,8 @@
-import { Component, Prop, React } from "../../component_declaration/common";
-import { getImageSourceType } from '../../core/utils/icon';
+import { Component, Prop, React } from '../component_declaration/common';
+import { getImageSourceType } from '../core/utils/icon';
 
-import Widget from './test-widget';
-import JSXConstructor from '../../component_declaration/jsx';
+import Widget from './widget';
+import JSXConstructor from '../component_declaration/jsx';
 
 const WidgetJSX = JSXConstructor<Widget>(Widget);
 
@@ -52,7 +52,7 @@ export const viewModelFunction = (model: Button) => {
         icon = getImageContainerJSX(model.icon || 'back');
     }
     const supportedKeys = () => {
-        const click = e => {
+        const click = (e) => {
             e.preventDefault();
             model.onClick && model.onClick(e);
         };

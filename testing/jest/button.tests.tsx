@@ -1,4 +1,4 @@
-import Button, { viewModelFunction, viewFunction } from '../src/test-button';
+import Button, { viewModelFunction, viewFunction } from '../../js/renovation/button';
 
 import React from 'react';
 import { shallow } from 'enzyme';
