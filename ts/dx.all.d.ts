@@ -6228,8 +6228,6 @@ declare module DevExpress.ui {
         getSelectedNodeKeys(): Array<any>;
         /** @name dxTreeView.getSelectedNodes() */
         getSelectedNodes(): Array<dxTreeViewNode>;
-        /** @name dxTreeView.getSelectedNodesKeys() */
-        getSelectedNodesKeys(): Array<any>;
         /** @name dxTreeView.selectAll() */
         selectAll(): void;
         /** @name dxTreeView.selectItem(itemData) */
