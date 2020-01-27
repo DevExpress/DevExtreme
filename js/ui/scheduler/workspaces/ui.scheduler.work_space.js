@@ -2338,7 +2338,7 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     _adjustEndViewDateByDaylightDiff: function(startDate, endDate) {
-        const daylightDiff = utils.getDaylightOffsetInMs(startDate, endDate) || 0;
+        const daylightDiff = utils.getDaylightOffsetInMs(startDate, endDate);
 
         const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
 
