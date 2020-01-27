@@ -1,194 +1,27 @@
-const Class = require('../../core/class');
-const extend = require('../../core/utils/extend').extend;
-const commonUtils = require('../../core/utils/common');
-const iteratorUtils = require('../../core/utils/iterator');
-const ajax = require('../../core/utils/ajax');
-const typeUtils = require('../../core/utils/type');
-const dataUtils = require('../utils');
-const arrayUtils = require('../array_utils');
-const Store = require('../abstract_store');
-const ArrayStore = require('../array_store');
-const CustomStore = require('../custom_store');
-const EventsStrategy = require('../../core/events_strategy').EventsStrategy;
-const errors = require('../errors').errors;
-const array = require('../../core/utils/array');
-const queue = require('../../core/utils/queue');
-const deferredUtils = require('../../core/utils/deferred');
-const when = deferredUtils.when;
-const Deferred = deferredUtils.Deferred;
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import commonUtils from '../../core/utils/common';
+import { each } from '../../core/utils/iterator';
+import { isString, isNumeric, isBoolean, isDefined, isPlainObject } from '../../core/utils/type';
+import { throttleChanges } from '../utils';
+import arrayUtils from '../array_utils';
+import CustomStore from '../custom_store';
+import { EventsStrategy } from '../../core/events_strategy';
+import { errors } from '../errors';
+import array from '../../core/utils/array';
+import queue from '../../core/utils/queue';
+import { Deferred, when } from '../../core/utils/deferred';
+import OperationManager from './operation_manager';
+import {
+    normalizeDataSourceOptions,
+    normalizeStoreLoadOptionAccessorArguments,
+    CANCELED_TOKEN,
+    isPending,
+    normalizeLoadResult,
+    mapDataRespectingGrouping
+} from './utils';
 
-const __isString = typeUtils.isString;
-const __isNumber = typeUtils.isNumeric;
-const __isBoolean = typeUtils.isBoolean;
-const __isDefined = typeUtils.isDefined;
-
-const CANCELED_TOKEN = 'canceled';
-
-function OperationManager() {
-    this._counter = -1;
-    this._deferreds = {};
-}
-
-OperationManager.prototype.constructor = OperationManager;
-OperationManager.prototype.add = function(deferred) {
-    this._counter += 1;
-    this._deferreds[this._counter] = deferred;
-    return this._counter;
-};
-OperationManager.prototype.remove = function(operationId) {
-    return delete this._deferreds[operationId];
-};
-OperationManager.prototype.cancel = function(operationId) {
-    if(operationId in this._deferreds) {
-        this._deferreds[operationId].reject(CANCELED_TOKEN);
-        return true;
-    }
-
-    return false;
-};
-OperationManager.prototype.cancelAll = function() {
-    while(this._counter > -1) {
-        this.cancel(this._counter);
-        this._counter--;
-    }
-};
-
-function isPending(deferred) {
-    return deferred.state() === 'pending';
-}
-
-function normalizeDataSourceOptions(options, normalizationOptions) {
-    let store;
-
-    function createCustomStoreFromLoadFunc() {
-        const storeConfig = {};
-
-        iteratorUtils.each(['useDefaultSearch', 'key', 'load', 'loadMode', 'cacheRawData', 'byKey', 'lookup', 'totalCount', 'insert', 'update', 'remove'], function() {
-            storeConfig[this] = options[this];
-            delete options[this];
-        });
-
-        return new CustomStore(storeConfig);
-    }
-
-    function createStoreFromConfig(storeConfig) {
-        const alias = storeConfig.type;
-
-        delete storeConfig.type;
-
-        return Store.create(alias, storeConfig);
-    }
-
-    function createCustomStoreFromUrl(url) {
-        return new CustomStore({
-            load: function() {
-                return ajax.sendRequest({
-                    url: url,
-                    dataType: 'json'
-                });
-            },
-            loadMode: normalizationOptions && normalizationOptions.fromUrlLoadMode
-        });
-    }
-
-    if(typeof options === 'string') {
-        options = {
-            paginate: false,
-            store: createCustomStoreFromUrl(options)
-        };
-    }
-
-    if(options === undefined) {
-        options = [];
-    }
-
-    if(Array.isArray(options) || options instanceof Store) {
-        options = { store: options };
-    } else {
-        options = extend({}, options);
-    }
-
-    if(options.store === undefined) {
-        options.store = [];
-    }
-
-    store = options.store;
-
-    if('load' in options) {
-        store = createCustomStoreFromLoadFunc();
-    } else if(Array.isArray(store)) {
-        store = new ArrayStore(store);
-    } else if(typeUtils.isPlainObject(store)) {
-        store = createStoreFromConfig(extend({}, store));
-    }
-
-    options.store = store;
-
-    return options;
-}
-
-
-function normalizeStoreLoadOptionAccessorArguments(originalArguments) {
-    switch(originalArguments.length) {
-        case 0:
-            return undefined;
-        case 1:
-            return originalArguments[0];
-    }
-    return [].slice.call(originalArguments);
-}
-
-function generateStoreLoadOptionAccessor(optionName) {
-    return function() {
-        const args = normalizeStoreLoadOptionAccessorArguments(arguments);
-        if(args === undefined) {
-            return this._storeLoadOptions[optionName];
-        }
-
-        this._storeLoadOptions[optionName] = args;
-    };
-}
-
-function mapDataRespectingGrouping(items, mapper, groupInfo) {
-
-    function mapRecursive(items, level) {
-        if(!Array.isArray(items)) return items;
-        return level ? mapGroup(items, level) : iteratorUtils.map(items, mapper);
-    }
-
-    function mapGroup(group, level) {
-        return iteratorUtils.map(group, function(item) {
-            const result = {
-                key: item.key,
-                items: mapRecursive(item.items, level - 1)
-            };
-            if('aggregates' in item) {
-                result.aggregates = item.aggregates;
-            }
-            return result;
-        });
-    }
-
-    return mapRecursive(items, groupInfo ? dataUtils.normalizeSortingInfo(groupInfo).length : 0);
-}
-
-function normalizeLoadResult(data, extra) {
-    if(data && !Array.isArray(data) && data.data) {
-        extra = data;
-        data = data.data;
-    }
-
-    if(!Array.isArray(data)) {
-        data = [data];
-    }
-
-    return {
-        data,
-        extra
-    };
-}
-
-const DataSource = Class.inherit({
+export const DataSource = Class.inherit({
     /**
     * @name DataSourceMethods.ctor
     * @publicName ctor(url)
@@ -213,8 +46,7 @@ const DataSource = Class.inherit({
     * @param1 options:CustomStoreOptions|DataSourceOptions
     * @hidden
     */
-    ctor: function(options) {
-        const that = this;
+    ctor(options) {
         options = normalizeDataSourceOptions(options);
         this._eventsStrategy = new EventsStrategy(this);
 
@@ -224,12 +56,11 @@ const DataSource = Class.inherit({
         */
 
         const onPushHandler = options.pushAggregationTimeout !== 0
-            ? dataUtils.throttleChanges(this._onPush, function() {
-                if(options.pushAggregationTimeout === undefined) {
-                    return that._changedTime * 5;
-                }
-                return options.pushAggregationTimeout;
-            })
+            ? throttleChanges(this._onPush, () =>
+                options.pushAggregationTimeout === undefined
+                    ? this._changedTime * 5
+                    : options.pushAggregationTimeout
+            )
             : this._onPush;
 
         this._changedTime = 0;
@@ -263,9 +94,9 @@ const DataSource = Class.inherit({
 
         this._paginate = options.paginate;
 
-        this._reshapeOnPush = __isDefined(options.reshapeOnPush) ? options.reshapeOnPush : false;
+        this._reshapeOnPush = options.reshapeOnPush ?? false;
 
-        iteratorUtils.each(
+        each(
             [
                 'onChanged',
 
@@ -276,9 +107,9 @@ const DataSource = Class.inherit({
                 'onCustomizeLoadResult',
                 'onCustomizeStoreLoadOptions'
             ],
-            function(_, optionName) {
+            (_, optionName) => {
                 if(optionName in options) {
-                    that.on(optionName.substr(2, 1).toLowerCase() + optionName.substr(3), options[optionName]);
+                    this.on(optionName.substr(2, 1).toLowerCase() + optionName.substr(3), options[optionName]);
                 }
             });
 
@@ -286,36 +117,34 @@ const DataSource = Class.inherit({
         this._init();
     },
 
-    _init: function() {
+    _init() {
         this._items = [];
         this._userData = {};
         this._totalCount = -1;
         this._isLoaded = false;
 
-        if(!__isDefined(this._paginate)) {
+        if(!isDefined(this._paginate)) {
             this._paginate = !this.group();
         }
 
         this._isLastPage = !this._paginate;
     },
 
-    dispose: function() {
+    dispose() {
         this._store.off('push', this._onPushHandler);
         this._eventsStrategy.dispose();
         clearTimeout(this._aggregationTimeoutId);
 
         delete this._store;
 
-        if(this._delayedLoadTask) {
-            this._delayedLoadTask.abort();
-        }
+        this._delayedLoadTask?.abort();
 
         this._operationManager.cancelAll();
 
         this._disposed = true;
     },
 
-    _extractLoadOptions: function(options) {
+    _extractLoadOptions(options) {
         const result = {};
         let names = ['sort', 'filter', 'select', 'group', 'requireTotalCount'];
         const customNames = this._store._customLoadOptions();
@@ -324,22 +153,22 @@ const DataSource = Class.inherit({
             names = names.concat(customNames);
         }
 
-        iteratorUtils.each(names, function() {
+        each(names, function() {
             result[this] = options[this];
         });
         return result;
     },
 
-    loadOptions: function() {
+    loadOptions() {
         return this._storeLoadOptions;
     },
 
-    items: function() {
+    items() {
         return this._items;
     },
 
-    pageIndex: function(newIndex) {
-        if(!__isNumber(newIndex)) {
+    pageIndex(newIndex) {
+        if(!isNumeric(newIndex)) {
             return this._pageIndex;
         }
 
@@ -347,8 +176,8 @@ const DataSource = Class.inherit({
         this._isLastPage = !this._paginate;
     },
 
-    paginate: function(value) {
-        if(!__isBoolean(value)) {
+    paginate(value) {
+        if(!isBoolean(value)) {
             return this._paginate;
         }
 
@@ -358,21 +187,34 @@ const DataSource = Class.inherit({
         }
     },
 
-    pageSize: function(value) {
-        if(!__isNumber(value)) {
+    pageSize(value) {
+        if(!isNumeric(value)) {
             return this._pageSize;
         }
 
         this._pageSize = value;
     },
 
-    isLastPage: function() {
+    isLastPage() {
         return this._isLastPage;
     },
 
-    sort: generateStoreLoadOptionAccessor('sort'),
+    generateStoreLoadOptionAccessor(optionName) {
+        return (args) => {
+            const normalizedArgs = normalizeStoreLoadOptionAccessorArguments(args);
+            if(normalizedArgs === undefined) {
+                return this._storeLoadOptions[optionName];
+            }
 
-    filter: function() {
+            this._storeLoadOptions[optionName] = normalizedArgs;
+        };
+    },
+
+    sort(...args) {
+        return this.generateStoreLoadOptionAccessor('sort')(args);
+    },
+
+    filter() {
         const newFilter = normalizeStoreLoadOptionAccessorArguments(arguments);
         if(newFilter === undefined) {
             return this._storeLoadOptions.filter;
@@ -382,19 +224,23 @@ const DataSource = Class.inherit({
         this.pageIndex(0);
     },
 
-    group: generateStoreLoadOptionAccessor('group'),
+    group(...args) {
+        return this.generateStoreLoadOptionAccessor('group')(args);
+    },
 
-    select: generateStoreLoadOptionAccessor('select'),
+    select(...args) {
+        return this.generateStoreLoadOptionAccessor('select')(args);
+    },
 
-    requireTotalCount: function(value) {
-        if(!__isBoolean(value)) {
+    requireTotalCount(value) {
+        if(!isBoolean(value)) {
             return this._storeLoadOptions.requireTotalCount;
         }
 
         this._storeLoadOptions.requireTotalCount = value;
     },
 
-    searchValue: function(value) {
+    searchValue(value) {
         if(arguments.length < 1) {
             return this._searchValue;
         }
@@ -403,8 +249,8 @@ const DataSource = Class.inherit({
         this.pageIndex(0);
     },
 
-    searchOperation: function(op) {
-        if(!__isString(op)) {
+    searchOperation(op) {
+        if(!isString(op)) {
             return this._searchOperation;
         }
 
@@ -412,7 +258,7 @@ const DataSource = Class.inherit({
         this.pageIndex(0);
     },
 
-    searchExpr: function(expr) {
+    searchExpr(expr) {
         const argc = arguments.length;
 
         if(argc === 0) {
@@ -427,39 +273,39 @@ const DataSource = Class.inherit({
         this.pageIndex(0);
     },
 
-    store: function() {
+    store() {
         return this._store;
     },
 
-    key: function() {
-        return this._store && this._store.key();
+    key() {
+        return this._store?.key();
     },
 
-    totalCount: function() {
+    totalCount() {
         return this._totalCount;
     },
 
-    isLoaded: function() {
+    isLoaded() {
         return this._isLoaded;
     },
 
-    isLoading: function() {
+    isLoading() {
         return this._loadingCount > 0;
     },
 
-    beginLoading: function() {
+    beginLoading() {
         this._changeLoadingCount(1);
     },
 
-    endLoading: function() {
+    endLoading() {
         this._changeLoadingCount(-1);
     },
 
-    _createLoadQueue: function() {
+    _createLoadQueue() {
         return queue.create();
     },
 
-    _changeLoadingCount: function(increment) {
+    _changeLoadingCount(increment) {
         const oldLoading = this.isLoading();
 
         this._loadingCount += increment;
@@ -470,55 +316,47 @@ const DataSource = Class.inherit({
         }
     },
 
-    _scheduleLoadCallbacks: function(deferred) {
-        const that = this;
+    _scheduleLoadCallbacks(deferred) {
+        this.beginLoading();
 
-        that.beginLoading();
-
-        deferred.always(function() {
-            that.endLoading();
+        deferred.always(() => {
+            this.endLoading();
         });
     },
 
-    _scheduleFailCallbacks: function(deferred) {
-        const that = this;
-
-        deferred.fail(function() {
-            if(arguments[0] === CANCELED_TOKEN) {
+    _scheduleFailCallbacks(deferred) {
+        deferred.fail((...args) => {
+            if(args[0] === CANCELED_TOKEN) {
                 return;
             }
 
-            that._eventsStrategy.fireEvent('loadError', arguments);
+            this._eventsStrategy.fireEvent('loadError', args);
         });
     },
 
-    _fireChanged: function(args) {
+    _fireChanged(args) {
         const date = new Date();
         this._eventsStrategy.fireEvent('changed', args);
         this._changedTime = new Date() - date;
     },
 
-    _scheduleChangedCallbacks: function(deferred) {
-        deferred.done(() => {
-            this._fireChanged();
-        });
+    _scheduleChangedCallbacks(deferred) {
+        deferred.done(() => this._fireChanged());
     },
 
-    loadSingle: function(propName, propValue) {
-        const that = this;
-
+    loadSingle(propName, propValue) {
         const d = new Deferred();
         const key = this.key();
         const store = this._store;
         const options = this._createStoreLoadOptions();
-        const handleDone = function(data) {
-            if(!__isDefined(data) || array.isEmpty(data)) {
+        const handleDone = (data) => {
+            if(!isDefined(data) || array.isEmpty(data)) {
                 d.reject(new errors.Error('E4009'));
             } else {
                 if(!Array.isArray(data)) {
                     data = [data];
                 }
-                d.resolve(that._applyMapFunction(data)[0]);
+                d.resolve(this._applyMapFunction(data)[0]);
             }
         };
 
@@ -535,11 +373,9 @@ const DataSource = Class.inherit({
         delete options.pageIndex;
         delete options.searchString;
 
-        function shouldForceByKey() {
-            return (store instanceof CustomStore) && !store._byKeyViaLoad();
-        }
+        const shouldForceByKey = () => (store instanceof CustomStore) && !store._byKeyViaLoad();
 
-        (function() {
+        (() => {
 
             // NOTE for CustomStore always using byKey for backward compatibility with "old user datasource"
             if(propName === key || shouldForceByKey()) {
@@ -558,12 +394,11 @@ const DataSource = Class.inherit({
         return d.promise();
     },
 
-    load: function() {
-        const that = this;
+    load() {
         const d = new Deferred();
 
-        function loadTask() {
-            if(that._disposed) {
+        const loadTask = () => {
+            if(this._disposed) {
                 return undefined;
             }
 
@@ -571,8 +406,8 @@ const DataSource = Class.inherit({
                 return;
             }
 
-            return that._loadFromStore(loadOperation, d);
-        }
+            return this._loadFromStore(loadOperation, d);
+        };
 
         this._scheduleLoadCallbacks(d);
         this._scheduleFailCallbacks(d);
@@ -582,9 +417,9 @@ const DataSource = Class.inherit({
 
         this._eventsStrategy.fireEvent('customizeStoreLoadOptions', [loadOperation]);
 
-        this._loadQueue.add(function() {
+        this._loadQueue.add(() => {
             if(typeof loadOperation.delay === 'number') {
-                that._delayedLoadTask = commonUtils.executeAsync(loadTask, loadOperation.delay);
+                this._delayedLoadTask = commonUtils.executeAsync(loadTask, loadOperation.delay);
             } else {
                 loadTask();
             }
@@ -596,11 +431,11 @@ const DataSource = Class.inherit({
         });
     },
 
-    _onPush: function(changes) {
+    _onPush(changes) {
         if(this._reshapeOnPush) {
             this.load();
         } else {
-            this._eventsStrategy.fireEvent('changing', [{ changes: changes }]);
+            this._eventsStrategy.fireEvent('changing', [{ changes }]);
 
             const group = this.group();
             const items = this.items();
@@ -624,21 +459,19 @@ const DataSource = Class.inherit({
         }
     },
 
-    _createLoadOperation: function(deferred) {
-        const id = this._operationManager.add(deferred);
-        const options = this._createStoreLoadOptions();
+    _createLoadOperation(deferred) {
+        const operationId = this._operationManager.add(deferred);
+        const storeLoadOptions = this._createStoreLoadOptions();
 
-        deferred.always(function() {
-            this._operationManager.remove(id);
-        }.bind(this));
+        deferred.always(() => this._operationManager.remove(operationId));
 
         return {
-            operationId: id,
-            storeLoadOptions: options
+            operationId,
+            storeLoadOptions
         };
     },
 
-    reload: function() {
+    reload() {
         const store = this.store();
         if(store instanceof CustomStore) {
             store.clearRawDataCache();
@@ -648,15 +481,15 @@ const DataSource = Class.inherit({
         return this.load();
     },
 
-    cancel: function(operationId) {
+    cancel(operationId) {
         return this._operationManager.cancel(operationId);
     },
 
-    cancelAll: function() {
+    cancelAll() {
         return this._operationManager.cancelAll();
     },
 
-    _addSearchOptions: function(storeLoadOptions) {
+    _addSearchOptions(storeLoadOptions) {
         if(this._disposed) {
             return;
         }
@@ -670,7 +503,7 @@ const DataSource = Class.inherit({
         }
     },
 
-    _createStoreLoadOptions: function() {
+    _createStoreLoadOptions() {
         const result = extend({}, this._storeLoadOptions);
         this._addSearchOptions(result);
 
@@ -686,7 +519,7 @@ const DataSource = Class.inherit({
         return result;
     },
 
-    _addSearchFilter: function(storeLoadOptions) {
+    _addSearchFilter(storeLoadOptions) {
         const value = this._searchValue;
         const op = this._searchOperation;
         let selector = this._searchExpr;
@@ -706,7 +539,7 @@ const DataSource = Class.inherit({
 
         // TODO optimize for byKey case
 
-        iteratorUtils.each(selector, function(i, item) {
+        each(selector, function(i, item) {
             if(searchFilter.length) {
                 searchFilter.push('or');
             }
@@ -721,21 +554,9 @@ const DataSource = Class.inherit({
         }
     },
 
-    _loadFromStore: function(loadOptions, pendingDeferred) {
-        const that = this;
-
-        function handleSuccess(data, extra) {
-            function processResult() {
-                const loadResult = extend(normalizeLoadResult(data, extra), loadOptions);
-
-                that._eventsStrategy.fireEvent('customizeLoadResult', [loadResult]);
-                when(loadResult.data).done(function(data) {
-                    loadResult.data = data;
-                    that._processStoreLoadResult(loadResult, pendingDeferred);
-                }).fail(pendingDeferred.reject);
-            }
-
-            if(that._disposed) {
+    _loadFromStore(loadOptions, pendingDeferred) {
+        const handleSuccess = (data, extra) => {
+            if(this._disposed) {
                 return;
             }
 
@@ -743,8 +564,15 @@ const DataSource = Class.inherit({
                 return;
             }
 
-            processResult();
-        }
+            // Process result
+            const loadResult = extend(normalizeLoadResult(data, extra), loadOptions);
+
+            this._eventsStrategy.fireEvent('customizeLoadResult', [loadResult]);
+            when(loadResult.data).done((data) => {
+                loadResult.data = data;
+                this._processStoreLoadResult(loadResult, pendingDeferred);
+            }).fail(pendingDeferred.reject);
+        };
 
         if(loadOptions.data) {
             return new Deferred().resolve(loadOptions.data).done(handleSuccess);
@@ -755,44 +583,42 @@ const DataSource = Class.inherit({
             .fail(pendingDeferred.reject);
     },
 
-    _processStoreLoadResult: function(loadResult, pendingDeferred) {
-        const that = this;
+    _processStoreLoadResult(loadResult, pendingDeferred) {
         let data = loadResult.data;
         let extra = loadResult.extra;
         const storeLoadOptions = loadResult.storeLoadOptions;
 
-        function resolvePendingDeferred() {
-            that._isLoaded = true;
-            that._totalCount = isFinite(extra.totalCount) ? extra.totalCount : -1;
+        const resolvePendingDeferred = () => {
+            this._isLoaded = true;
+            this._totalCount = isFinite(extra.totalCount) ? extra.totalCount : -1;
             return pendingDeferred.resolve(data, extra);
-        }
+        };
 
-        function proceedLoadingTotalCount() {
-
-            that.store().totalCount(storeLoadOptions)
+        const proceedLoadingTotalCount = () => {
+            this.store().totalCount(storeLoadOptions)
                 .done(function(count) {
                     extra.totalCount = count;
                     resolvePendingDeferred();
                 })
                 .fail(pendingDeferred.reject);
-        }
+        };
 
-        if(that._disposed) {
+        if(this._disposed) {
             return;
         }
 
         // todo: if operation is canceled there is no need to do data transformation
 
-        data = that._applyPostProcessFunction(that._applyMapFunction(data));
+        data = this._applyPostProcessFunction(this._applyMapFunction(data));
 
-        if(!typeUtils.isPlainObject(extra)) {
+        if(!isPlainObject(extra)) {
             extra = {};
         }
 
-        that._items = data;
+        this._items = data;
 
-        if(!data.length || !that._paginate || (that._pageSize && (data.length < that._pageSize))) {
-            that._isLastPage = true;
+        if(!data.length || !this._paginate || (this._pageSize && (data.length < this._pageSize))) {
+            this._isLastPage = true;
         }
 
         if(storeLoadOptions.requireTotalCount && !isFinite(extra.totalCount)) {
@@ -802,7 +628,7 @@ const DataSource = Class.inherit({
         }
     },
 
-    _applyMapFunction: function(data) {
+    _applyMapFunction(data) {
         if(this._mapFunc) {
             return mapDataRespectingGrouping(data, this._mapFunc, this.group());
         }
@@ -810,7 +636,7 @@ const DataSource = Class.inherit({
         return data;
     },
 
-    _applyPostProcessFunction: function(data) {
+    _applyPostProcessFunction(data) {
         if(this._postProcessFunc) {
             return this._postProcessFunc(data);
         }
@@ -828,7 +654,3 @@ const DataSource = Class.inherit({
         return this;
     },
 });
-
-exports.DataSource = DataSource;
-exports.normalizeDataSourceOptions = normalizeDataSourceOptions;
-exports.normalizeLoadResult = normalizeLoadResult;

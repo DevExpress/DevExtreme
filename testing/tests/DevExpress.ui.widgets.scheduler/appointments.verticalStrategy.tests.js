@@ -21,9 +21,6 @@ const moduleOptions = {
         fx.off = true;
 
         this.coordinates = [{ top: 0, left: 0 }];
-        this.getCoordinates = function() {
-            return this.coordinates;
-        };
         this.clock = sinon.useFakeTimers();
         this.cellWidth = 25;
         this.cellHeight = 20;
@@ -48,28 +45,6 @@ const moduleOptions = {
         };
 
         this.instance = $('#scheduler-appointments').dxSchedulerAppointments().dxSchedulerAppointments('instance');
-
-        this.instance.notifyObserver = $.proxy(function(command, options) {
-            if(command === 'needCoordinates') {
-                options.callback(this.getCoordinates.apply(this));
-            }
-
-            if(command === 'getCellDimensions') {
-                options.callback(this.cellWidth, this.cellHeight, this.allDayHeight);
-            }
-
-            if(command === 'getAppointmentColor') {
-                options.callback($.Deferred().resolve('red').promise());
-            }
-
-            if(command === 'getResourceForPainting') {
-                options.callback({ field: 'roomId' });
-            }
-
-            if(command === 'getAppointmentDurationInMs') {
-                options.callback(options.endDate.getTime() - options.startDate.getTime());
-            }
-        }, this);
 
         this.instance.invoke = $.proxy(function(command, field, obj, value) {
             const dataAccessors = {
@@ -103,6 +78,9 @@ const moduleOptions = {
             }
             if(command === 'convertDateByTimezone') {
                 return field;
+            }
+            if(command === 'getAppointmentColor') {
+                return $.Deferred().resolve('red').promise();
             }
             if(command === 'getAppointmentGeometry') {
                 return {

@@ -31,7 +31,7 @@ const environment = {
     beforeEach: function() {
         baseSparkline._DEBUG_reset();
         // this._originalRendererType = dxSparkline.prototype._rendererType;
-        this.$container = createTestContainer('#container');
+        this.$container = $(createTestContainer('#container'));
         this.createSparkline = function(options) {
             return this.$container.dxSparkline(options).dxSparkline('instance');
         };

@@ -1068,7 +1068,7 @@
 
 /**
  * @typedef {string} Enums.DiagramDataLayoutType
- * @enum {'off'|'tree'|'layered'}
+ * @enum {'auto'|'off'|'tree'|'layered'}
  */
 /**
  * @typedef {string} Enums.DiagramDataLayoutOrientation

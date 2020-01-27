@@ -51,6 +51,7 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 import themes from '../themes';
 import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
+import utils from './utils';
 
 import { REDUCED_APPOINTMENT_CLASS, COMPACT_APPOINTMENT_CLASS, RECURRENCE_APPOINTMENT_CLASS } from './constants';
 
@@ -1479,6 +1480,15 @@ const Scheduler = Widget.inherit({
             getTextAndFormatDate: (data, currentData, format) => that.fire('getTextAndFormatDate', data, currentData, format),
             checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
+            getSingleAppointmentData: (appointmentData, targetElement) => { // TODO: temporary solution fox fix T848058, more information in the ticket
+                const $appointment = $(targetElement);
+
+                return this._getSingleAppointmentData(appointmentData, {
+                    data: appointmentData,
+                    target: $appointment.get(0),
+                    $appointment: $appointment
+                });
+            }
         };
     },
 
@@ -2033,6 +2043,8 @@ const Scheduler = Widget.inherit({
             }
         }
 
+        endDate = new Date(endDate.getTime() - utils.getTimezoneOffsetChangeInMs(targetStartDate, targetEndDate, date, endDate));
+
         this.fire('setField', 'endDate', updatedData, endDate);
         this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
 
@@ -2270,20 +2282,11 @@ const Scheduler = Widget.inherit({
     _getStartDate: function(appointment, skipNormalize) {
         let startDate = this.fire('getField', 'startDate', appointment);
         const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointment);
-
-        startDate = dateUtils.makeDate(startDate);
-
-        startDate = this.fire('convertDateByTimezone', startDate, startDateTimeZone);
-
-        !skipNormalize && this.fire('updateAppointmentStartDate', {
+        startDate = this.fire('convertDateByTimezone', dateUtils.makeDate(startDate), startDateTimeZone);
+        return !skipNormalize ? this.fire('updateAppointmentStartDate', {
             startDate: startDate,
             appointment: appointment,
-            callback: function(result) {
-                startDate = result;
-            }
-        });
-
-        return startDate;
+        }) : startDate;
     },
 
     _getEndDate: function(appointment, skipNormalize) {
@@ -2292,20 +2295,12 @@ const Scheduler = Widget.inherit({
         const isSameDate = dateUtils.sameDate(startDate, endDate);
 
         if(endDate) {
-
             const endDateTimeZone = this.fire('getField', 'endDateTimeZone', appointment);
-
-            endDate = dateUtils.makeDate(endDate);
-
-            endDate = this.fire('convertDateByTimezone', endDate, endDateTimeZone);
-
-            !skipNormalize && this.fire('updateAppointmentEndDate', {
+            endDate = this.fire('convertDateByTimezone', dateUtils.makeDate(endDate), endDateTimeZone);
+            return !skipNormalize ? this.fire('updateAppointmentEndDate', {
                 endDate: endDate,
                 isSameDate: isSameDate,
-                callback: function(result) {
-                    endDate = result;
-                }
-            });
+            }) : endDate;
         }
         return endDate;
     },

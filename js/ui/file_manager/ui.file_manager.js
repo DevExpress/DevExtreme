@@ -361,16 +361,21 @@ class FileManager extends Widget {
 
             toolbar: {
                 items: [
-                    'showNavPane', 'create', 'upload', 'refresh',
+                    'showNavPane', 'create', 'upload', 'viewSwitcher',
                     {
                         name: 'separator',
                         location: 'after'
                     },
-                    'viewSwitcher'
+                    'refresh'
                 ],
 
                 fileSelectionItems: [
-                    'download', 'separator', 'move', 'copy', 'rename', 'separator', 'delete', 'refresh', 'clear'
+                    'download', 'separator', 'move', 'copy', 'rename', 'separator', 'delete', 'clear',
+                    {
+                        name: 'separator',
+                        location: 'after'
+                    },
+                    'refresh'
                 ]
             },
 

@@ -229,24 +229,6 @@ QUnit.module('Keyboard controller', {
         assert.ok(!navigationController._focusedViews);
     });
 
-    QUnit.testInActiveWindow('Init keyboardController when rowsView is hidden', function(assert) {
-        // arrange
-        const navigationController = new KeyboardNavigationController(this.component);
-        let element;
-
-        this.getView('rowsView').isVisible = () => false;
-
-        // act
-        navigationController.init();
-        navigationController._focusView();
-        element = navigationController.getFocusedView().element();
-
-        callViewsRenderCompleted(this.component._views);
-
-        // assert
-        assert.notOk(element.eventsInfo[eventUtils.addNamespace('dxpointerdown', 'dxDataGridKeyboardNavigation')], 'No event handler');
-    });
-
     QUnit.testInActiveWindow('Element of view is subscribed to events', function(assert) {
         // arrange
         const navigationController = new KeyboardNavigationController(this.component);
@@ -261,6 +243,7 @@ QUnit.module('Keyboard controller', {
 
         // assert
         assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation')].subscribeToEventCounter, 1, 'Subscribed');
+        assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation')].subscribeToEventCounter, 1, 'Subscribed');
     });
 
     QUnit.testInActiveWindow('Element of view is unsubscribed from events', function(assert) {
@@ -277,6 +260,7 @@ QUnit.module('Keyboard controller', {
 
         // assert
         assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation')].unsubscribeFromEventCounter, 1, 'Unsubscribed');
+        assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation')].unsubscribeFromEventCounter, 1, 'Unsubscribed');
     });
 
     // T579521

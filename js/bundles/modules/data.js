@@ -56,4 +56,4 @@ DevExpress.data.utils.toComparable = require('../../core/utils/data').toComparab
 DevExpress.data.utils.multiLevelGroup = require('../../data/store_helper').multiLevelGroup;
 DevExpress.data.utils.arrangeSortingInfo = require('../../data/store_helper').arrangeSortingInfo;
 
-DevExpress.data.utils.normalizeDataSourceOptions = require('../../data/data_source/data_source').normalizeDataSourceOptions;
+DevExpress.data.utils.normalizeDataSourceOptions = require('../../data/data_source/utils').normalizeDataSourceOptions;

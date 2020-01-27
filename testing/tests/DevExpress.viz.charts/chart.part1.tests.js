@@ -2,7 +2,7 @@ const $ = require('jquery');
 const noop = require('core/utils/common').noop;
 const vizMocks = require('../../helpers/vizMocks.js');
 const commons = require('./chartParts/commons.js');
-const dataSourceModule = require('data/data_source/data_source');
+const DataSource = require('data/data_source/data_source').DataSource;
 const BaseChart = require('viz/chart_components/base_chart').BaseChart;
 const rendererModule = require('viz/core/renderers/renderer');
 const layoutManagerModule = require('viz/chart_components/layout_manager');
@@ -460,7 +460,7 @@ QUnit.test('hide on reinit', function(assert) {
 
 QUnit.test('not hide on reinit, when dataSource is not loaded', function(assert) {
     // arrange
-    const ds = new dataSourceModule.DataSource();
+    const ds = new DataSource();
     const chart = this.createChart({
         dataSource: ds
     });
@@ -976,7 +976,7 @@ QUnit.module('isReady', $.extend({}, commons.environment, {
 }));
 
 QUnit.test('isReady with not loaded dataSource', function(assert) {
-    const ds = new dataSourceModule.DataSource();
+    const ds = new DataSource();
     ds.isLoaded = sinon.stub().returns(false);
     const chart = this.createChart({ dataSource: ds });
 

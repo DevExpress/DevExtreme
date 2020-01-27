@@ -10,14 +10,12 @@ import titleModule from 'viz/core/title';
 import rendererModule from 'viz/core/renderers/renderer';
 import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
 
-$('<div id="test-container">').appendTo('#qunit-fixture');
-
 rendererModule.Renderer = sinon.stub();
 
 const environment = {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
-        this.container = createTestContainer('#test-container', { width: 800, height: 600 });
+        this.container = $(createTestContainer('#qunit-fixture', { width: '800px', height: '600px' }));
         rendererModule.Renderer.onCall(0).returns(this.renderer);
         rendererModule.Renderer.onCall(1).returns(new vizMocks.Renderer());
         rendererModule.Renderer.onCall(2).returns(new vizMocks.Renderer());
@@ -66,7 +64,6 @@ const environment = {
         });
     },
     afterEach: function() {
-        this.container.remove();
         this.renderer = null;
         rendererModule.Renderer.reset();
         this.axisStub.restore();
