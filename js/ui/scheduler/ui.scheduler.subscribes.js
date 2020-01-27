@@ -233,10 +233,6 @@ const subscribes = {
     appointmentTakesSeveralDays: function(appointment) {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },
-    // NOTE: T312051, remove after fix scrollable bug T324196
-    appointmentFocused: function() {
-        this._workSpace.restoreScrollTop();
-    },
 
     getTextAndFormatDate(data, currentData, format) {
         const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
@@ -745,10 +741,6 @@ const subscribes = {
             common: commonTimezoneOffset,
             appointment: appointmentTimezoneOffset
         };
-    },
-
-    getDaylightOffset: function(startDate, endDate) {
-        return startDate.getTimezoneOffset() - endDate.getTimezoneOffset();
     },
 
     getTimezonesDisplayName: function() {
