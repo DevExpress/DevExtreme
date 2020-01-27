@@ -272,7 +272,7 @@ export default class Widget {
         const namespace = 'UIFeedback';
         const isFocusable = this.focusStateEnabled && !this.disabled;
 
-        if(this.focusStateEnabled) {
+        if (isFocusable) {
             focus.on(this.widgetRef,
                 (e) => {
                     if(!e.isDefaultPrevented()) {
