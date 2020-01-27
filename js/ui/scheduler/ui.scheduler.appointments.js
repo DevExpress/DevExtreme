@@ -109,15 +109,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _focusInHandler: function(e) {
-        clearTimeout(this._appointmentFocusedTimeout);
         this.callBase.apply(this, arguments);
         this._$currentAppointment = $(e.target);
         this.option('focusedElement', getPublicElement($(e.target)));
-        const that = this;
-
-        this._appointmentFocusedTimeout = setTimeout(function() {
-            that.notifyObserver('appointmentFocused');
-        });
     },
 
     _focusOutHandler: function() {

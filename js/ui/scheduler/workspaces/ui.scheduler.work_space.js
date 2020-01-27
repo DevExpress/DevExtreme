@@ -29,6 +29,7 @@ const tableCreator = require('../ui.scheduler.table_creator');
 const VerticalShader = require('../shaders/ui.scheduler.current_time_shader.vertical');
 const AppointmentDragBehavior = require('../appointmentDragBehavior');
 const FIXED_CONTAINER_CLASS = require('../constants').FIXED_CONTAINER_CLASS;
+const utils = require('../utils');
 
 const COMPONENT_CLASS = 'dx-scheduler-work-space';
 const GROUPED_WORKSPACE_CLASS = 'dx-scheduler-work-space-grouped';
@@ -2343,7 +2344,7 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     _adjustEndViewDateByDaylightDiff: function(startDate, endDate) {
-        const daylightDiff = this.invoke('getDaylightOffset', startDate, endDate) * toMs('minute') || 0;
+        const daylightDiff = utils.getDaylightOffsetInMs(startDate, endDate);
 
         const endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
 
@@ -2478,11 +2479,6 @@ const SchedulerWorkSpace = Widget.inherit({
         }
 
         return result;
-    },
-
-    // NOTE: T312051, remove after fix scrollable bug T324196
-    restoreScrollTop: function() {
-        this.$element().scrollTop(0);
     },
 
     scrollToTime: function(hours, minutes, date) {
