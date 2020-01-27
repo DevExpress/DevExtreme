@@ -124,3 +124,64 @@ QUnit.test('should change "accesskey" attribute', function(assert) {
 //         }, 0);
 //     }, 50);
 // });
+
+QUnit.module('$element attributes', config);
+
+QUnit.test('should not remove attributes from container', function(assert) {
+    const $container = $('#component').attr({
+        'custom-attr': 'v1',
+        'class': 'my-widget-class'
+    });
+    const widget = $container.dxTestWidget({}).dxTestWidget('instance');
+
+    assert.equal(widget.$element().attr('id'), 'component');
+    assert.equal(widget.$element().attr('custom-attr'), 'v1');
+    assert.ok($container.hasClass('my-widget-class'));
+    assert.deepEqual(widget.option.elementAttr, undefined);
+});
+
+QUnit.test('can redefine attribute on conteiner using option', function(assert) {
+    const $container = $('#component').attr({
+        'custom-attr': 'v1',
+    });
+    const widget = $container.dxTestWidget({
+        elementAttr: {
+            'custom-attr': 'v2'
+        }
+    }).dxTestWidget('instance');
+
+    assert.equal(widget.$element().attr('custom-attr'), 'v2');
+    assert.deepEqual(widget.option().elementAttr, { 'custom-attr': 'v2' });
+});
+
+QUnit.test('Element should have all attributes after refresh', function(assert) {
+    const widget = $('#component').dxTestWidget({
+        elementAttr: {
+            'custom-attr': 'v2'
+        }
+    }).dxTestWidget('instance');
+
+    widget.option('elementAttr', {
+        'a': 'v'
+    });
+
+    assert.equal(widget.$element().attr('id'), 'component');
+});
+
+QUnit.module('Widget container', config);
+
+QUnit.test('widget.$element() is instance of container', function(assert) {
+    const $container = $('#component');
+    const widget = $container.dxTestWidget({}).dxTestWidget('instance');
+
+    assert.equal(widget.$element().get(0), $container.get(0));
+});
+
+QUnit.test('widget.$element() is instance of container after refresh', function(assert) {
+    const $container = $('#component');
+    const widget = $container.dxTestWidget({}).dxTestWidget('instance');
+
+    widget.option('elementAttr', { 'a': 'v' });
+
+    assert.equal(widget.$element().get(0), $container.get(0));
+});
