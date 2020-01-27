@@ -144,248 +144,49 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name  dxTreeViewOptions.dataSource
-            * @type string|Array<dxTreeViewItem>|DataSource|DataSourceOptions
-            * @default null
-            */
-            /**
-            * @name dxTreeViewOptions.items
-            * @type Array<dxTreeViewItem>
-            */
-            /**
-            * @name dxTreeViewOptions.animationEnabled
-            * @type boolean
-            * @default true
-            */
             animationEnabled: true,
 
-            /**
-            * @name dxTreeViewOptions.dataStructure
-            * @type Enums.TreeViewDataStructure
-            * @default 'tree'
-            */
             dataStructure: 'tree',
 
             deferRendering: true,
 
-            /**
-            * @name dxTreeViewOptions.expandAllEnabled
-            * @type boolean
-            * @default false
-            */
             expandAllEnabled: false,
 
-            /**
-            * @name dxTreeViewOptions.hasItemsExpr
-            * @type string|function
-            * @default 'hasItems'
-            */
             hasItemsExpr: 'hasItems',
 
-            /**
-             * @name dxTreeViewOptions.selectNodesRecursive
-             * @type boolean
-             * @default true
-             */
             selectNodesRecursive: true,
 
-            /**
-             * @name dxTreeViewOptions.expandNodesRecursive
-             * @type boolean
-             * @default true
-             */
             expandNodesRecursive: true,
 
-            /**
-             * @name dxTreeViewOptions.showCheckBoxesMode
-             * @type Enums.TreeViewCheckBoxMode
-             * @default 'none'
-             */
             showCheckBoxesMode: 'none',
 
-            /**
-             * @name dxTreeViewOptions.selectAllText
-             * @type string
-             * @default "Select All"
-             */
             selectAllText: messageLocalization.format('dxList-selectAll'),
 
-            /**
-            * @name dxTreeViewOptions.onItemSelectionChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 node:dxTreeViewNode
-            * @type_function_param1_field5 itemElement:dxElement
-            * @action
-            */
             onItemSelectionChanged: null,
 
-            /**
-            * @name dxTreeViewOptions.onItemClick
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number | object
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @type_function_param1_field9 node:dxTreeViewNode
-            * @action
-            */
 
-            /**
-            * @name dxTreeViewOptions.onItemContextMenu
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number | object
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @type_function_param1_field9 node:dxTreeViewNode
-            * @action
-            */
-
-            /**
-            * @name dxTreeViewOptions.onItemRendered
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 node:dxTreeViewNode
-            * @action
-            */
-
-            /**
-            * @name dxTreeViewOptions.onItemHold
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 event:event
-            * @type_function_param1_field8 node:dxTreeViewNode
-            * @action
-            */
-
-            /**
-            * @name dxTreeViewOptions.onItemExpanded
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:Number
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @type_function_param1_field9 node:dxTreeViewNode
-            * @action
-            */
             onItemExpanded: null,
 
-            /**
-            * @name dxTreeViewOptions.onItemCollapsed
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:Number
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @type_function_param1_field9 node:dxTreeViewNode
-            * @action
-            */
             onItemCollapsed: null,
 
-            /**
-            * @name dxTreeViewOptions.scrollDirection
-            * @type Enums.ScrollDirection
-            * @default "vertical"
-            */
             scrollDirection: 'vertical',
 
-            /**
-            * @name dxTreeViewOptions.virtualModeEnabled
-            * @type boolean
-            * @default false
-            */
             virtualModeEnabled: false,
 
-            /**
-            * @name dxTreeViewOptions.rootValue
-            * @type Object
-            * @default 0
-            */
             rootValue: 0,
 
             focusStateEnabled: false,
 
-            /**
-             * @name dxTreeViewOptions.selectionMode
-             * @type Enums.NavSelectionMode
-             * @default "multiple"
-             */
             selectionMode: 'multiple',
 
-            /**
-             * @name dxTreeViewOptions.expandEvent
-             * @type Enums.TreeViewExpandEvent
-             * @default "dblclick"
-             */
             expandEvent: 'dblclick',
 
-            /**
-            * @name dxTreeViewOptions.selectByClick
-            * @type boolean
-            * @default false
-            */
             selectByClick: false,
 
-            /**
-            * @name dxTreeViewOptions.createChildren
-            * @type function
-            * @type_function_param1 parentNode:dxTreeViewNode
-            * @type_function_return Promise<any>|Array<Object>
-            */
             createChildren: null,
 
-            /**
-             * @name dxTreeViewOptions.onSelectAllValueChanged
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 value:boolean
-             * @action
-             */
             onSelectAllValueChanged: null
 
-            /**
-             * @name dxTreeViewOptions.onSelectionChanged
-             * @extends Action
-             * @action
-             */
-
-            /**
-            * @name dxTreeViewOptions.parentIdExpr
-            * @type string|function
-            * @default 'parentId'
-            * @hidden false
-            */
-
-            /**
-            * @name dxTreeViewOptions.expandedExpr
-            * @type string|function
-            * @default 'expanded'
-            * @hidden false
-            */
 
             /**
             * @name dxTreeViewOptions.selectedItem
@@ -410,34 +211,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewItem
             * @inherits CollectionWidgetItem
             * @type object
-            */
-            /**
-            * @name dxTreeViewItem.selected
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name dxTreeViewItem.expanded
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name dxTreeViewItem.icon
-            * @type String
-            */
-            /**
-            * @name dxTreeViewItem.items
-            * @type Array<dxTreeViewItem>
-            */
-            /**
-            * @name dxTreeViewItem.parentId
-            * @type number|string
-            * @default undefined
-            */
-            /**
-            * @name dxTreeViewItem.hasItems
-            * @type boolean
-            * @default undefined
             */
         });
     },
@@ -1360,7 +1133,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _isLastRequired: function(node) {
         const selectionRequired = this.option('selectionRequired');
         const isSingleMode = this._isSingleSelection();
-        const selectedNodesKeys = this.getSelectedNodeKeys();
+        const selectedNodesKeys = this.getSelectedNodesKeys();
 
         if(!selectionRequired) {
             return;
@@ -1375,16 +1148,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _updateItemSelection: function(value, itemElement, dxEvent) {
-        if(this._setItemSelection(value, itemElement, dxEvent)) {
-            this._fireSelectionChanged();
-        }
-    },
-
-    _setItemSelection: function(value, itemElement, dxEvent) {
         const node = this._getNode(itemElement);
 
         if(!node || node.internalFields.selected === value) {
-            return false;
+            return;
         }
 
         if(!value && this._isLastRequired(node)) {
@@ -1394,10 +1161,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
                 checkbox && checkbox.option('value', true);
             }
-            return false;
+            return;
         }
 
-        const selectedNodesKeys = this.getSelectedNodeKeys();
+        const selectedNodesKeys = this.getSelectedNodesKeys();
         if(this._isSingleSelection() && value) {
             each(selectedNodesKeys, (index, nodeKey) => {
                 this.unselectItem(nodeKey);
@@ -1415,7 +1182,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             itemData: node.internalFields.item
         });
 
-        return true;
+        this._fireSelectionChanged();
     },
 
     _getCheckBoxInstance: function($node) {
@@ -1728,11 +1495,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             : value;
     },
 
-    /**
-    * @name dxTreeViewMethods.updateDimensions
-    * @publicName updateDimensions()
-    * @return Promise<void>
-    */
     updateDimensions: function() {
         const deferred = new Deferred();
 
@@ -1747,194 +1509,36 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return deferred.promise();
     },
 
-    /**
-    * @name dxTreeViewMethods.selectItem
-    * @publicName selectItem(itemElement)
-    * @param1 itemElement:Node
-    */
-    /**
-    * @name dxTreeViewMethods.selectItem
-    * @publicName selectItem(itemData)
-    * @param1 itemData:Object
-    */
-    /**
-    * @name dxTreeViewMethods.selectItem
-    * @publicName selectItem(key)
-    * @param1 key:any
-    */
     selectItem: function(itemElement) {
         this._updateItemSelection(true, itemElement);
     },
 
-    /**
-    * @name dxTreeViewMethods.unselectItem
-    * @publicName unselectItem(itemElement)
-    * @param1 itemElement:Node
-    */
-    /**
-    * @name dxTreeViewMethods.unselectItem
-    * @publicName unselectItem(itemData)
-    * @param1 itemData:Object
-    */
-    /**
-    * @name dxTreeViewMethods.unselectItem
-    * @publicName unselectItem(key)
-    * @param1 key:any
-    */
     unselectItem: function(itemElement) {
         this._updateItemSelection(false, itemElement);
     },
 
-    /**
-    * @name dxTreeViewMethods.expandItem
-    * @publicName expandItem(itemElement)
-    * @param1 itemElement:Node
-    */
-    /**
-    * @name dxTreeViewMethods.expandItem
-    * @publicName expandItem(itemData)
-    * @param1 itemData:Object
-    */
-    /**
-    * @name dxTreeViewMethods.expandItem
-    * @publicName expandItem(key)
-    * @param1 key:any
-    */
     expandItem: function(itemElement) {
         this._toggleExpandedState(itemElement, true);
     },
 
-    /**
-    * @name dxTreeViewMethods.collapseItem
-    * @publicName collapseItem(itemElement)
-    * @param1 itemElement:Node
-    */
-    /**
-    * @name dxTreeViewMethods.collapseItem
-    * @publicName collapseItem(itemData)
-    * @param1 itemData:Object
-    */
-    /**
-    * @name dxTreeViewMethods.collapseItem
-    * @publicName collapseItem(key)
-    * @param1 key:any
-    */
     collapseItem: function(itemElement) {
         this._toggleExpandedState(itemElement, false);
     },
 
     /**
-    * @name dxTreeViewMethods.getNodes
-    * @publicName getNodes()
-    * @return Array<dxTreeViewNode>
-    */
-    /**
          * @name dxTreeViewNode
          * @type object
          */
-    /**
-         * @name dxTreeViewNode.children
-         * @type Array<dxTreeViewNode>
-         */
 
-    /**
-         * @name dxTreeViewNode.disabled
-         * @type boolean
-         */
-
-    /**
-         * @name dxTreeViewNode.expanded
-         * @type boolean
-         */
-
-    /**
-         * @name dxTreeViewNode.itemData
-         * @type object
-         */
-
-    /**
-         * @name dxTreeViewNode.key
-         * @type any
-         */
-
-    /**
-         * @name dxTreeViewNode.parent
-         * @type dxTreeViewNode
-         */
-
-    /**
-         * @name dxTreeViewNode.selected
-         * @type boolean
-         */
-
-    /**
-         * @name dxTreeViewNode.text
-         * @type string
-         */
 
     getNodes: function() {
         return this._dataAdapter.getTreeNodes();
     },
 
-
-    /**
-     * @name dxTreeViewMethods.getSelectedNodes
-     * @publicName getSelectedNodes()
-     * @return Array<dxTreeViewNode>
-     */
-    getSelectedNodes: function() {
-        let items = [];
-
-        each(this.getSelectedNodeKeys(), (index, key) => {
-            let node = this._dataAdapter.getNodeByKey(key);
-            let publicNode = this._dataAdapter.getPublicNode(node);
-            items.push(publicNode);
-        });
-
-        return items;
-    },
-
-    /**
-     * @name dxTreeViewMethods.getSelectedNodesKeys
-     * @publicName getSelectedNodesKeys()
-     * @return Array<any>
-     */
     getSelectedNodesKeys: function() {
-        return this.getSelectedNodeKeys();
-    },
-
-    /**
-     * @name dxTreeViewMethods.getSelectedNodeKeys
-     * @publicName getSelectedNodeKeys()
-     * @return Array<any>
-     */
-    getSelectedNodeKeys: function() {
         return this._dataAdapter.getSelectedNodesKeys();
     },
 
-    /**
-     * @name dxTreeViewMethods.selectNodesByKeys
-     * @publicName selectNodesByKeys(keys)
-     * @param1 keys:Array<any>
-     */
-    selectNodesByKeys: function(keys) {
-        const oldSelectedKeys = this.getSelectedNodeKeys();
-        keys.forEach((key) => {
-            this._setItemSelection(true, key);
-        });
-
-        const actualSelectedKeys = this.getSelectedNodeKeys();
-        if(oldSelectedKeys !== actualSelectedKeys) {
-            this._fireSelectionChanged();
-        }
-
-        return actualSelectedKeys;
-    },
-
-    /**
-    * @name dxTreeViewMethods.selectAll
-    * @publicName selectAll()
-    */
     selectAll: function() {
         if(this._selectAllEnabled()) {
             this._$selectAllItem.dxCheckBox('instance').option('value', true);
@@ -1943,10 +1547,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    /**
-    * @name dxTreeViewMethods.unselectAll
-    * @publicName unselectAll()
-    */
     unselectAll: function() {
         if(this._selectAllEnabled()) {
             this._$selectAllItem.dxCheckBox('instance').option('value', false);
@@ -1955,20 +1555,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    /**
-    * @name dxTreeViewMethods.expandAll
-    * @publicName expandAll()
-    */
     expandAll: function() {
         const dataAdapter = this._dataAdapter;
         each(dataAdapter.getData(), (_, node) => dataAdapter.toggleExpansion(node.internalFields.key, true));
         this.repaint();
     },
 
-    /**
-     * @name dxTreeViewMethods.collapseAll
-     * @publicName collapseAll()
-     */
     collapseAll: function() {
         each(this._dataAdapter.getExpandedNodesKeys(), (function(_, key) {
             this._toggleExpandedState(key, false);

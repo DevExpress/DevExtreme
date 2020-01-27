@@ -3,6 +3,17 @@ module.exports = (currencySymbol, accountingFormat) => {
         return;
     }
 
+    let encodedCurrencySymbol = currencySymbol;
+    if(typeof currencySymbol === 'string') {
+        encodedCurrencySymbol = '';
+        for(let i = 0; i < currencySymbol.length; i++) {
+            if(currencySymbol[i] !== '$') {
+                encodedCurrencySymbol += '\\';
+            }
+            encodedCurrencySymbol += currencySymbol[i];
+        }
+    }
+
     const encodeSymbols = {
         '.00': '{0}',
         '\'': '\\\'',
@@ -10,7 +21,7 @@ module.exports = (currencySymbol, accountingFormat) => {
         '\\)': '\\)',
         ' ': '\\ ',
         '"': '&quot;',
-        '\\¤': currencySymbol
+        '\\¤': encodedCurrencySymbol
     };
 
     const result = accountingFormat.split(';');

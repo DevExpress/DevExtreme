@@ -50,7 +50,6 @@ const moduleSetup = {
 QUnit.module('Knockout integration', moduleSetup);
 
 QUnit.test('Generate items from layoutData with unacceptable data', function(assert) {
-    // arrange, act
     const viewModel = {
         formData: ko.observable({
             firstName: 'John',
@@ -62,7 +61,6 @@ QUnit.test('Generate items from layoutData with unacceptable data', function(ass
 
     const layoutManager = $('#simpleDataForm').find('.dx-layout-manager').dxLayoutManager('instance');
 
-    // assert
     assert.deepEqual(layoutManager._items, [
         {
             dataField: 'firstName',
@@ -375,7 +373,6 @@ QUnit.test('Form correctly work with a data contains computed fields without def
 });
 
 QUnit.test('Reset editor\'s value when the formData option is empty object', function(assert) {
-    // arrange
     const viewModel = function() {
         this.formData = ko.observable({
             name: 'User',
@@ -388,16 +385,13 @@ QUnit.test('Reset editor\'s value when the formData option is empty object', fun
         this.items = ['name', 'lastName', 'sex', 'room', 'isDeveloper'];
     };
     const $form = $('#simpleTemplateForm');
-    let form;
     const vm = new viewModel();
 
     ko.applyBindings(vm, $form.get(0));
-    form = $form.dxForm('instance');
+    const form = $form.dxForm('instance');
 
-    // act
     vm.formData({});
 
-    // assert
     assert.strictEqual(form.getEditor('name').option('value'), '', 'editor for the name dataField');
     assert.strictEqual(form.getEditor('lastName').option('value'), '', 'editor for the lastName dataField');
     assert.strictEqual(form.getEditor('sex').option('value'), '', 'editor for the sex dataField');
@@ -446,7 +440,6 @@ QUnit.test('Form items should have correct model', function(assert) {
 });
 
 QUnit.test('Editor doesn\'t update the field data if it\'s already up to date', function(assert) {
-    // arrange
     const viewModel = {
         formData: {
             testObj: ko.observable({ name: 'John' })
@@ -463,13 +456,11 @@ QUnit.test('Editor doesn\'t update the field data if it\'s already up to date', 
     ko.applyBindings(viewModel, $form.get(0));
     const formInstance = $form.dxForm('instance');
 
-    // act
     const editor = formInstance.getEditor('testObj');
 
     const updateFieldValueSpy = sinon.spy(formInstance, '_updateFieldValue');
     editor.option('value', { name: 'Alex' });
 
-    // assert
     assert.equal(updateFieldValueSpy.callCount, 0, 'Editor doesn\'t update actual value');
     assert.equal(formInstance.option('formData.testObj.name'), 'Alex', 'FormData is correct');
 });
@@ -478,7 +469,6 @@ QUnit.test('Editor doesn\'t update the field data if it\'s already up to date', 
 QUnit.module('Templates');
 
 QUnit.test('Render template', function(assert) {
-    // arrange
     const viewModel = {
         formData: {
             test: ko.observable('John Morgan')
@@ -489,19 +479,16 @@ QUnit.test('Render template', function(assert) {
 
     ko.applyBindings(viewModel, $form.get(0));
 
-    // act
     const $fieldItemWidget = $form.find('.' + internals.FIELD_ITEM_CONTENT_CLASS);
     const spanText = $fieldItemWidget.find('span').text();
     const textArea = $fieldItemWidget.find('.dx-textarea').dxTextArea('instance');
     const form = $form.dxForm('instance');
 
-    // assert
     assert.equal(spanText, 'KO template');
     assert.equal(textArea.option('value'), form.option('formData.test'), 'Widget\'s value equal to bound datafield');
 });
 
 QUnit.test('Check template bound to data', function(assert) {
-    // arrange
     const viewModel = {
         formData: {
             test: ko.observable('John Morgan')
@@ -512,34 +499,28 @@ QUnit.test('Check template bound to data', function(assert) {
 
     ko.applyBindings(viewModel, $form.get(0));
 
-    // act
     const $fieldItemWidget = $form.find('.' + internals.FIELD_ITEM_CONTENT_CLASS);
     const textArea = $fieldItemWidget.find('.dx-textarea').dxTextArea('instance');
     const form = $form.dxForm('instance');
 
     textArea.option('value', 'qwerty');
 
-    // assert
     assert.equal(form.option('formData.test'), 'qwerty', 'Correct data');
 });
 
 QUnit.test('Redraw layout manager when labelLocation changes', function(assert) {
-    // arrange
     const $form = $('#simpleTemplateForm').dxForm({ formData: { testField: 'test' } });
     const form = $form.dxForm('instance');
 
     assert.equal($form.find('.' + internals.FIELD_ITEM_LABEL_LOCATION_CLASS + 'left').length, 1, 'We have 1 label with location left');
 
-    // act
     form.option('labelLocation', 'bottom');
 
-    // assert
     assert.equal($form.find('.' + internals.FIELD_ITEM_LABEL_LOCATION_CLASS + 'bottom').length, 1, 'We have 1 label with location bottom');
     assert.equal($form.find('.' + internals.FIELD_ITEM_LABEL_LOCATION_CLASS + 'left').length, 0, 'We has\'t labels with location left');
 });
 
 QUnit.test('Item content class should depend on the \'labelLocation\' option', function(assert) {
-    // arrange
     const $form = $('#simpleTemplateForm').dxForm({ formData: { testField: 'test' } });
     const form = $form.dxForm('instance');
 
@@ -553,7 +534,6 @@ QUnit.test('Item content class should depend on the \'labelLocation\' option', f
 });
 
 QUnit.test('Tab template', function(assert) {
-    // arrange
     const viewModel = {
         formData: {
             test: ko.observable('John Morgan')
@@ -570,28 +550,23 @@ QUnit.test('Tab template', function(assert) {
     };
     const $form = $('#simpleTemplateForm');
 
-    // act
     ko.applyBindings(viewModel, $form.get(0));
 
-    // assert
     assert.equal($form.find('#tabTemplate').length, 1);
     assert.equal($form.find('#tabTemplate').first().text(), 'Test tab template');
 });
 
 QUnit.test('The formData is empty object when formData has \'undefined\' value', function(assert) {
-    // arrange
     const viewModel = {
         formData: ko.observable(),
         items: [{ dataField: 'City' }]
     };
     ko.applyBindings(viewModel, $('#formWithItems').get(0));
 
-    // assert
     assert.deepEqual(viewModel.formData(), { });
 });
 
 QUnit.test('Check name argument of the simple item template when name is defined', function(assert) {
-    // arrange
     const viewModel = {
         items: [{ name: 'TestName', template: 'simpleTemplate2' }]
     };
@@ -599,12 +574,10 @@ QUnit.test('Check name argument of the simple item template when name is defined
 
     ko.applyBindings(viewModel, $form.get(0));
 
-    // assert
     assert.strictEqual($('#name').text(), 'TestName', 'the name argument of template');
 });
 
 QUnit.test('Check name argument of the simple item template when name and dataField are defined', function(assert) {
-    // arrange
     const viewModel = {
         items: [{ name: 'TestName', dataField: 'TestDataField', template: 'simpleTemplate2' }]
     };
@@ -612,12 +585,10 @@ QUnit.test('Check name argument of the simple item template when name and dataFi
 
     ko.applyBindings(viewModel, $form.get(0));
 
-    // assert
     assert.strictEqual($('#name').text(), 'TestName', 'the name argument of template');
 });
 
 QUnit.test('Check name argument of the simple item template when name is undefined', function(assert) {
-    // arrange
     const viewModel = {
         items: [{ template: 'simpleTemplate2' }]
     };
@@ -625,12 +596,10 @@ QUnit.test('Check name argument of the simple item template when name is undefin
 
     ko.applyBindings(viewModel, $form.get(0));
 
-    // assert
     assert.strictEqual($('#name').text(), '', 'the name argument of template');
 });
 
 QUnit.test('Check name argument of the simple item template when name is undefined and dataField is defined', function(assert) {
-    // arrange
     const viewModel = {
         items: [{ dataField: 'TestDataField', template: 'simpleTemplate2' }]
     };
@@ -638,6 +607,5 @@ QUnit.test('Check name argument of the simple item template when name is undefin
 
     ko.applyBindings(viewModel, $form.get(0));
 
-    // assert
     assert.strictEqual($('#name').text(), '', 'the name argument of template');
 });

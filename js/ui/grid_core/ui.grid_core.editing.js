@@ -744,11 +744,6 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        /**
-         * @name dxDataGridMethods.insertRow
-         * @publicName insertRow()
-         * @deprecated dxDataGridMethods.addRow
-         */
         insertRow: function() {
             errors.log('W0002', 'dxDataGrid', 'insertRow', '15.2', 'Use the \'addRow\' method instead');
             return this.addRow();
@@ -826,19 +821,6 @@ const EditingController = modules.ViewController.inherit((function() {
             return maxInsertIndex + 1;
         },
 
-        /**
-         * @name dxDataGridMethods.addRow
-         * @publicName addRow()
-         */
-        /**
-         * @name dxTreeListMethods.addRow
-         * @publicName addRow()
-         */
-        /**
-         * @name dxTreeListMethods.addRow
-         * @publicName addRow(parentId)
-         * @param1 parentId:any
-         */
         addRow: function(parentKey) {
             const that = this;
             const dataController = that._dataController;
@@ -954,11 +936,6 @@ const EditingController = modules.ViewController.inherit((function() {
             return this._editRowIndex >= 0 ? this._editRowIndex - this._dataController.getRowIndexOffset() : -1;
         },
 
-        /**
-         * @name GridBaseMethods.editRow
-         * @publicName editRow(rowIndex)
-         * @param1 rowIndex:number
-         */
         editRow: function(rowIndex) {
             const that = this;
             const dataController = that._dataController;
@@ -1113,18 +1090,6 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        /**
-         * @name GridBaseMethods.editCell
-         * @publicName editCell(rowIndex, visibleColumnIndex)
-         * @param1 rowIndex:number
-         * @param2 visibleColumnIndex:number
-         */
-        /**
-         * @name GridBaseMethods.editCell
-         * @publicName editCell(rowIndex, dataField)
-         * @param1 rowIndex:number
-         * @param2 dataField:string
-         */
         editCell: function(rowIndex, columnIndex) {
             const d = new Deferred();
             let coreResult;
@@ -1276,81 +1241,74 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
 
-        /**
-         * @name dxDataGridMethods.removeRow
-         * @publicName removeRow(rowIndex)
-         * @param1 rowIndex:number
-         * @deprecated GridBaseMethods.deleteRow
-         */
         removeRow: function(rowIndex) {
             errors.log('W0002', 'dxDataGrid', 'removeRow', '15.2', 'Use the \'deleteRow\' method instead');
             return this.deleteRow(rowIndex);
         },
 
-        /**
-         * @name GridBaseMethods.deleteRow
-         * @publicName deleteRow(rowIndex)
-         * @param1 rowIndex:number
-         */
         deleteRow: function(rowIndex) {
+            if(this.option('editing.mode') === 'cell' && this.isEditing()) {
+                // T850905
+                this.closeEditCell().always(() => {
+                    this._checkAndDeleteRow(rowIndex);
+                });
+            } else {
+                this._checkAndDeleteRow(rowIndex);
+            }
+        },
+        _checkAndDeleteRow: function(rowIndex) {
             const that = this;
             const editingOptions = that.option('editing');
             const editingTexts = editingOptions && editingOptions.texts;
-            const confirmDeleteTitle = editingTexts && editingTexts.confirmDeleteTitle;
             const isBatchMode = editingOptions && editingOptions.mode === EDIT_MODE_BATCH;
             const confirmDelete = editingOptions && editingOptions.confirmDelete;
             const confirmDeleteMessage = editingTexts && editingTexts.confirmDeleteMessage;
-            const dataController = that._dataController;
-            let removeByKey;
-            let showDialogTitle;
-            const oldEditRowIndex = that._getVisibleEditRowIndex();
-            const item = dataController.items()[rowIndex];
-            const key = item && item.key;
-            const allowDeleting = isBatchMode || !this.isEditing(); // T741746
+            const item = that._dataController.items()[rowIndex];
+            const allowDeleting = isBatchMode || !that.isEditing(); // T741746
 
             if(item && allowDeleting) {
-                removeByKey = function(key) {
-                    that.refresh();
-
-                    const editIndex = getIndexByKey(key, that._editData);
-
-                    if(editIndex >= 0) {
-                        if(that._editData[editIndex].type === DATA_EDIT_DATA_INSERT_TYPE) {
-                            that._removeEditDataItem(editIndex);
-                        } else {
-                            that._addEditData({ key: key, type: DATA_EDIT_DATA_REMOVE_TYPE });
-                        }
-                    } else {
-                        that._addEditData({ key: key, oldData: item.data, type: DATA_EDIT_DATA_REMOVE_TYPE });
-                    }
-
-                    if(isBatchMode) {
-                        dataController.updateItems({
-                            changeType: 'update',
-                            rowIndices: [oldEditRowIndex, rowIndex]
-                        });
-                    } else {
-                        that.saveEditData();
-                    }
-                };
-
                 if(isBatchMode || !confirmDelete || !confirmDeleteMessage) {
-                    removeByKey(key);
+                    that._deleteRowCore(rowIndex);
                 } else {
-                    showDialogTitle = typeUtils.isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
+                    const confirmDeleteTitle = editingTexts && editingTexts.confirmDeleteTitle;
+                    const showDialogTitle = typeUtils.isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
                     dialog.confirm(confirmDeleteMessage, confirmDeleteTitle, showDialogTitle).done(function(confirmResult) {
                         if(confirmResult) {
-                            removeByKey(key);
+                            that._deleteRowCore(rowIndex);
                         }
                     });
                 }
             }
         },
-        /**
-         * @name GridBaseMethods.undeleteRow
-         * @publicName undeleteRow(rowIndex)
-         * @param1 rowIndex:number
-         */
+        _deleteRowCore: function(rowIndex) {
+            const dataController = this._dataController;
+            const item = dataController.items()[rowIndex];
+            const key = item && item.key;
+            const editIndex = getIndexByKey(key, this._editData);
+            const oldEditRowIndex = this._getVisibleEditRowIndex();
+            const isBatchMode = this.option('editing.mode') === EDIT_MODE_BATCH;
+
+            this.refresh();
+
+            if(editIndex >= 0) {
+                if(this._editData[editIndex].type === DATA_EDIT_DATA_INSERT_TYPE) {
+                    this._removeEditDataItem(editIndex);
+                } else {
+                    this._addEditData({ key: key, type: DATA_EDIT_DATA_REMOVE_TYPE });
+                }
+            } else {
+                this._addEditData({ key: key, oldData: item.data, type: DATA_EDIT_DATA_REMOVE_TYPE });
+            }
+
+            if(isBatchMode) {
+                dataController.updateItems({
+                    changeType: 'update',
+                    rowIndices: [oldEditRowIndex, rowIndex]
+                });
+            } else {
+                this.saveEditData();
+            }
+        },
         undeleteRow: function(rowIndex) {
             const that = this;
             const dataController = that._dataController;
@@ -1526,11 +1484,6 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
             });
         },
-        /**
-         * @name GridBaseMethods.saveEditData
-         * @publicName saveEditData()
-         * @return Promise<void>
-         */
         saveEditData: function() {
             const deferred = new Deferred();
             const afterSaveEditData = () => {
@@ -1711,10 +1664,6 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _beforeCloseEditCellInBatchMode: function() { },
 
-        /**
-         * @name GridBaseMethods.cancelEditData
-         * @publicName cancelEditData()
-         */
         cancelEditData: function() {
             const that = this;
             const editMode = getEditMode(that);
@@ -1745,18 +1694,9 @@ const EditingController = modules.ViewController.inherit((function() {
             this._editPopup && this._editPopup.option('visible', false);
         },
 
-        /**
-         * @name GridBaseMethods.hasEditData
-         * @publicName hasEditData()
-         * @return boolean
-         */
         hasEditData: function() {
             return this.hasChanges();
         },
-        /**
-         * @name GridBaseMethods.closeEditCell
-         * @publicName closeEditCell()
-         */
         closeEditCell: function(isError) {
             const that = this;
             let result = deferredUtils.when();
@@ -2215,6 +2155,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         $button.addClass('dx-icon' + (iconType === 'dxIcon' ? '-' : ' ') + icon).attr('title', button.text);
                     }
 
+                    $button.addClass('dx-link-icon');
                     $container.addClass(COMMAND_EDIT_WITH_ICONS_CLASS);
 
                     const localizationName = this.getButtonLocalizationNames()[button.name];
@@ -2311,11 +2252,11 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        resetRowAndPageIndices: function(alwaysRest) {
+        resetRowAndPageIndices: function() {
             const that = this;
 
             each(that._editData, function(_, editData) {
-                if(editData.pageIndex !== that._pageIndex || alwaysRest) {
+                if(editData.pageIndex !== that._pageIndex) {
                     delete editData.pageIndex;
                     delete editData.rowIndex;
                 }
@@ -2360,291 +2301,35 @@ const EditingController = modules.ViewController.inherit((function() {
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.onInitNewRow
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 data:object
-             * @type_function_param1_field5 promise:Promise<void>
-             * @extends Action
-             * @action
-             */
 
-            /**
-             * @name GridBaseOptions.onRowInserting
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 data:object
-             * @type_function_param1_field5 cancel:boolean|Promise<void>
-             * @extends Action
-             * @action
-             */
 
-            /**
-             * @name GridBaseOptions.onRowInserted
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 data:object
-             * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 error:Error
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name dxDataGridOptions.onEditingStart
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 data:object
-             * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 cancel:boolean
-             * @type_function_param1_field7 column:object
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name dxTreeListOptions.onEditingStart
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 data:object
-             * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 cancel:boolean
-             * @type_function_param1_field7 column:object
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name GridBaseOptions.onRowUpdating
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 oldData:object
-             * @type_function_param1_field5 newData:object
-             * @type_function_param1_field6 key:any
-             * @type_function_param1_field7 cancel:boolean|Promise<void>
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name GridBaseOptions.onRowUpdated
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 data:object
-             * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 error:Error
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name GridBaseOptions.onRowRemoving
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 data:object
-             * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 cancel:boolean|Promise<void>
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name GridBaseOptions.onRowRemoved
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 data:object
-             * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 error:Error
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name dxDataGridOptions.editing
-             * @type object
-             */
-            /**
-             * @name dxTreeListOptions.editing
-             * @type object
-             */
-            /**
-             * @name GridBaseOptions.editing
-             * @type object
-             */
             editing: {
-                /**
-                 * @name GridBaseOptions.editing.mode
-                 * @type Enums.GridEditMode
-                 * @default "row"
-                 */
                 mode: 'row', // "batch"
-                /**
-                 * @name GridBaseOptions.editing.refreshMode
-                 * @type Enums.GridEditRefreshMode
-                 * @default "full"
-                 */
                 refreshMode: 'full',
-                /**
-                 * @name dxDataGridOptions.editing.allowAdding
-                 * @type boolean
-                 * @default false
-                 */
-                /**
-                 * @name dxTreeListOptions.editing.allowAdding
-                 * @type boolean|function
-                 * @default false
-                 * @type_function_param1 options:object
-                 * @type_function_param1_field1 component:dxTreeList
-                 * @type_function_param1_field2 row:dxTreeListRowObject
-                 * @type_function_return Boolean
-                 */
                 allowAdding: false,
-                /**
-                 * @name dxDataGridOptions.editing.allowUpdating
-                 * @type boolean|function
-                 * @default false
-                 * @type_function_param1 options:object
-                 * @type_function_param1_field1 component:dxDataGrid
-                 * @type_function_param1_field2 row:dxDataGridRowObject
-                 * @type_function_return Boolean
-                 */
-                /**
-                 * @name dxTreeListOptions.editing.allowUpdating
-                 * @type boolean|function
-                 * @default false
-                 * @type_function_param1 options:object
-                 * @type_function_param1_field1 component:dxTreeList
-                 * @type_function_param1_field2 row:dxTreeListRowObject
-                 * @type_function_return Boolean
-                 */
                 allowUpdating: false,
-                /**
-                 * @name dxDataGridOptions.editing.allowDeleting
-                 * @type boolean|function
-                 * @default false
-                 * @type_function_param1 options:object
-                 * @type_function_param1_field1 component:dxDataGrid
-                 * @type_function_param1_field2 row:dxDataGridRowObject
-                 * @type_function_return Boolean
-                 */
-                /**
-                 * @name dxTreeListOptions.editing.allowDeleting
-                 * @type boolean|function
-                 * @default false
-                 * @type_function_param1 options:object
-                 * @type_function_param1_field1 component:dxTreeList
-                 * @type_function_param1_field2 row:dxTreeListRowObject
-                 * @type_function_return Boolean
-                 */
                 allowDeleting: false,
-                /**
-                 * @name GridBaseOptions.editing.useIcons
-                 * @type boolean
-                 * @default false
-                 */
                 useIcons: false,
-                /**
-                 * @name GridBaseOptions.editing.selectTextOnEditStart
-                 * @type boolean
-                 * @default false
-                 */
                 selectTextOnEditStart: false,
-                /**
-                 * @name GridBaseOptions.editing.confirmDelete
-                 * @type boolean
-                 * @default true
-                 */
                 confirmDelete: true,
-                /**
-                 * @name dxDataGridOptions.editing.texts
-                 * @type object
-                 */
-                /**
-                 * @name GridBaseOptions.editing.texts
-                 * @type object
-                 */
                 texts: {
-                    /**
-                     * @name GridBaseOptions.editing.texts.editRow
-                     * @type string
-                     * @default "Edit"
-                     */
                     editRow: messageLocalization.format('dxDataGrid-editingEditRow'),
-                    /**
-                     * @name GridBaseOptions.editing.texts.saveAllChanges
-                     * @type string
-                     * @default "Save changes"
-                     */
                     saveAllChanges: messageLocalization.format('dxDataGrid-editingSaveAllChanges'),
-                    /**
-                     * @name GridBaseOptions.editing.texts.saveRowChanges
-                     * @type string
-                     * @default "Save"
-                     */
                     saveRowChanges: messageLocalization.format('dxDataGrid-editingSaveRowChanges'),
-                    /**
-                     * @name GridBaseOptions.editing.texts.cancelAllChanges
-                     * @type string
-                     * @default "Discard changes"
-                     */
                     cancelAllChanges: messageLocalization.format('dxDataGrid-editingCancelAllChanges'),
-                    /**
-                     * @name GridBaseOptions.editing.texts.cancelRowChanges
-                     * @type string
-                     * @default "Cancel"
-                     */
                     cancelRowChanges: messageLocalization.format('dxDataGrid-editingCancelRowChanges'),
-                    /**
-                     * @name GridBaseOptions.editing.texts.addRow
-                     * @type string
-                     * @default "Add a row"
-                     */
                     addRow: messageLocalization.format('dxDataGrid-editingAddRow'),
-                    /**
-                     * @name GridBaseOptions.editing.texts.deleteRow
-                     * @type string
-                     * @default "Delete"
-                     */
                     deleteRow: messageLocalization.format('dxDataGrid-editingDeleteRow'),
-                    /**
-                     * @name GridBaseOptions.editing.texts.undeleteRow
-                     * @type string
-                     * @default "Undelete"
-                     */
                     undeleteRow: messageLocalization.format('dxDataGrid-editingUndeleteRow'),
-                    /**
-                     * @name GridBaseOptions.editing.texts.confirmDeleteMessage
-                     * @type string
-                     * @default "Are you sure you want to delete this record?"
-                     */
                     confirmDeleteMessage: messageLocalization.format('dxDataGrid-editingConfirmDeleteMessage'),
-                    /**
-                     * @name GridBaseOptions.editing.texts.confirmDeleteTitle
-                     * @type string
-                     * @default ""
-                     */
                     confirmDeleteTitle: ''
                 },
-                /**
-                 * @name GridBaseOptions.editing.form
-                 * @type dxFormOptions
-                 */
                 form: {
                     colCount: 2
                 },
 
-                /**
-                 * @name GridBaseOptions.editing.popup
-                 * @type dxPopupOptions
-                 */
                 popup: {},
 
-                /**
-                 * @name GridBaseOptions.editing.startEditAction
-                 * @type Enums.GridStartEditAction
-                 * @default "click"
-                 */
                 startEditAction: 'click'
             }
         };
@@ -2660,14 +2345,9 @@ module.exports = {
                     this.callBase();
                 },
                 reload: function(full, repaintChangesOnly) {
-                    const editingController = this.getController('editing');
-
                     !repaintChangesOnly && this._editingController.refresh();
-                    const d = this.callBase.apply(this, arguments);
 
-                    return d && d.done(function() {
-                        editingController.resetRowAndPageIndices(true);
-                    });
+                    return this.callBase.apply(this, arguments);
                 },
                 repaintRows: function() {
                     if(this.getController('editing').isSaving()) return;
@@ -2918,9 +2598,11 @@ module.exports = {
                     });
                 },
                 _rowClick: function(e) {
+                    const isEditForm = $(e.rowElement).hasClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
+
                     e.event[TARGET_COMPONENT_NAME] = this.component;
 
-                    if(!this._editCellByClick(e, 'click')) {
+                    if(!this._editCellByClick(e, 'click') && !isEditForm) {
                         this.callBase.apply(this, arguments);
                     }
                 },
@@ -3000,34 +2682,6 @@ module.exports = {
 
                     this.callBase.apply(this, arguments);
                 },
-                /**
-                 * @name GridBaseMethods.cellValue
-                 * @publicName cellValue(rowIndex, visibleColumnIndex)
-                 * @param1 rowIndex:number
-                 * @param2 visibleColumnIndex:number
-                 * @return any
-                 */
-                /**
-                 * @name GridBaseMethods.cellValue
-                 * @publicName cellValue(rowIndex, dataField)
-                 * @param1 rowIndex:number
-                 * @param2 dataField:string
-                 * @return any
-                 */
-                /**
-                 * @name GridBaseMethods.cellValue
-                 * @publicName cellValue(rowIndex, visibleColumnIndex, value)
-                 * @param1 rowIndex:number
-                 * @param2 visibleColumnIndex:number
-                 * @param3 value:any
-                 */
-                /**
-                 * @name GridBaseMethods.cellValue
-                 * @publicName cellValue(rowIndex, dataField, value)
-                 * @param1 rowIndex:number
-                 * @param2 dataField:string
-                 * @param3 value:any
-                 */
                 cellValue: function(rowIndex, columnIdentifier, value, text) {
                     const cellOptions = this.getCellOptions(rowIndex, columnIdentifier);
 

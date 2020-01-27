@@ -180,7 +180,7 @@ QUnit.module('Default template', moduleConfig, () => {
         assert.equal($.trim($content.text()), '1');
     });
 
-    QUnit.test('template should be rendered correctly with text', function(assert) {
+    QUnit.test('template should be rendered correctly with object that contains the "text" property', function(assert) {
         const $content = this.prepareItemTest({ text: 'custom' });
 
         assert.equal($.trim($content.text()), 'custom');
@@ -211,12 +211,6 @@ QUnit.module('Default template', moduleConfig, () => {
 
     QUnit.test('template should be rendered correctly with tab text wrapper for data with text field', function(assert) {
         const $content = this.prepareItemTest({ text: 'test' });
-
-        assert.equal($content.filter('.' + TABS_ITEM_TEXT_CLASS).text(), 'test');
-    });
-
-    QUnit.test('template should be rendered correctly with tab text wrapper for string data', function(assert) {
-        const $content = this.prepareItemTest('test');
 
         assert.equal($content.filter('.' + TABS_ITEM_TEXT_CLASS).text(), 'test');
     });

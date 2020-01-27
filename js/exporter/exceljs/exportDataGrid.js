@@ -17,21 +17,20 @@ function exportDataGrid(options) {
         customizeCell,
         component,
         worksheet,
-        topLeftCell = { row: 1, column: 1 },
+        topLeftCell,
         autoFilterEnabled,
-        keepColumnWidths = true,
-        selectedRowsOnly = false,
-        loadPanel = {
-            enabled: true,
-            text: messageLocalization.format('dxDataGrid-exporting')
-        }
-    } = options;
+        keepColumnWidths,
+        selectedRowsOnly,
+        loadPanel
+    } = _getFullOptions(options);
 
     const initialLoadPanelOptions = extend({}, component.option('loadPanel'));
     if('animation' in component.option('loadPanel')) {
         loadPanel.animation = null;
     }
     component.option('loadPanel', loadPanel);
+
+    const wrapText = !!component.option('wordWrapEnabled');
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
@@ -61,7 +60,7 @@ function exportDataGrid(options) {
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(cellsRange.from.row + rowIndex);
 
-                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges);
+                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText);
 
                 if(rowIndex >= headerRowCount) {
                     row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
@@ -99,7 +98,34 @@ function exportDataGrid(options) {
     });
 }
 
-function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges) {
+function _getFullOptions(options) {
+    const fullOptions = extend({}, options);
+    if(!isDefined(fullOptions.topLeftCell)) {
+        fullOptions.topLeftCell = { row: 1, column: 1 };
+    }
+    if(!isDefined(fullOptions.keepColumnWidths)) {
+        fullOptions.keepColumnWidths = true;
+    }
+    if(!isDefined(fullOptions.selectedRowsOnly)) {
+        fullOptions.selectedRowsOnly = false;
+    }
+    if(!isDefined(fullOptions.loadPanel)) {
+        fullOptions.loadPanel = {};
+    }
+    if(!isDefined(fullOptions.loadPanel.enabled)) {
+        fullOptions.loadPanel.enabled = true;
+    }
+    if(!isDefined(fullOptions.loadPanel.text)) {
+        fullOptions.loadPanel.text = messageLocalization.format('dxDataGrid-exporting');
+    }
+    if(!isDefined(fullOptions.autoFilterEnabled)) {
+        fullOptions.autoFilterEnabled = false;
+    }
+
+    return fullOptions;
+}
+
+function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText) {
     const styles = dataProvider.getStyles();
 
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
@@ -110,7 +136,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         excelCell.value = cellData.value;
 
         if(isDefined(excelCell.value)) {
-            const { bold, alignment, wrapText, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
+            const { bold, alignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
             if(isDefined(numberFormat)) {
@@ -142,10 +168,6 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 }
 
 function _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilterEnabled) {
-    if(!isDefined(autoFilterEnabled)) {
-        autoFilterEnabled = !!component.option('export.excelFilterEnabled');
-    }
-
     if(autoFilterEnabled) {
         if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
             worksheet.autoFilter = cellsRange;
@@ -240,4 +262,4 @@ function _mergeCells(worksheet, topLeftCell, mergeRanges) {
     });
 }
 
-export { exportDataGrid, MAX_EXCEL_COLUMN_WIDTH };
+export { exportDataGrid, MAX_EXCEL_COLUMN_WIDTH, _getFullOptions };

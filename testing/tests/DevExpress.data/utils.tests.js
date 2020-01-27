@@ -1,6 +1,6 @@
 import Guid from 'core/guid';
 import dataUtils from 'data/utils';
-import odataUtils from 'data/odata/utils';
+import { EdmLiteral } from 'data/odata/utils';
 
 const keysEqual = dataUtils.keysEqual;
 const processRequestResultLock = dataUtils.processRequestResultLock;
@@ -14,6 +14,8 @@ QUnit.test('non-strict comparison is used', function(assert) {
     // NOTE there is no point in considering "1" and 1 as different keys
     assert.ok(keysEqual('id', 1, '1'));
     assert.ok(keysEqual(['a', 'b'], { a: 1, b: 2 }, { a: '1', b: '2' }));
+    assert.ok(keysEqual(['a.b', 'a.c'], { a: { b: 1, c: 2 } }, { a: { b: '1', c: '2' } }));
+    assert.ok(keysEqual('a', { b: 1, c: 2 }, { b: '1', c: '2' }));
 });
 
 QUnit.test('toComparable is used for compound keys', function(assert) {
@@ -31,8 +33,6 @@ QUnit.test('toComparable is used for compound keys', function(assert) {
 
 // T364210
 QUnit.test('toComparable is used for EdmLiteral', function(assert) {
-
-    const EdmLiteral = odataUtils.EdmLiteral;
     const edm1 = new EdmLiteral('50m');
     const edm2 = new EdmLiteral('50m');
 

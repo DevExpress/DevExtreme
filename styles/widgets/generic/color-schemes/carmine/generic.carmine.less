@@ -112,7 +112,11 @@
 
 @base-inverted-text-color: #fff;
 @base-inverted-icon-color: @base-inverted-text-color;
+@base-disabled-opacity: 0.5;
+@base-dropdown-shadow-color: fade(@base-shadow-color, 17.5%);
 
+
+@base-header-color: #627789;
 
 // Validation
 @base-invalid-color: @base-danger;
@@ -124,9 +128,6 @@
 
 @validation-overlay-border-radius: @base-border-radius;
 @base-invalid-faded-border-color: fade(@base-invalid-color, 40%);
-
-// Additional base colors
-@base-header-color: #627789;
 
 // Badges
 
@@ -185,7 +186,6 @@
 * @type color
 */
 @texteditor-hover-border-color: fade(@base-accent, 40%);
-@texteditor-disabled-opacity: 0.5;
 
 @texteditor-button-clear-icon-color: @base-icon-color;
 
@@ -410,8 +410,8 @@
 @button-group-normal-selected-color: @base-text-color;
 
 @button-group-normal-contained-selected-bg: darken(@button-normal-bg, 17%);
-@button-group-normal-contained-selected-bg-hover: darken(@button-group-normal-contained-selected-bg, -6%);
-@button-group-normal-contained-selected-bg-focused: darken(@button-group-normal-contained-selected-bg, -3%);
+@button-group-normal-contained-selected-bg-hover: lighten(@button-group-normal-contained-selected-bg, 6%);
+@button-group-normal-contained-selected-bg-focused: lighten(@button-group-normal-contained-selected-bg, 3%);
 
 /**
 * @name 20. Selected item background color
@@ -647,6 +647,7 @@
 @list-group-header-default-padding-top: 20px;
 @list-group-header-compact-padding-top: 10px;
 @list-item-chevron-icon-color: @base-icon-color;
+@list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/light/list/delete.png');
 
 // Overlay
 @overlay-content-shadow-color: fade(@base-shadow-color, 17.5%);
@@ -728,6 +729,11 @@
 */
 @toast-success-bg: @base-success;
 
+@toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png');
+@toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png');
+@toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png');
+@toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png');
+
 // DropDownEditor
 
 @dropdowneditor-button-hover-bg: darken(@base-bg, 4%); // #fff => #f5f6f7
@@ -763,7 +769,6 @@
 * @type color
 */
 @selectbox-list-bg: @base-bg;
-@selectbox-shadow-color: fade(@base-shadow-color, 17.5%);
 
 // Tabs
 
@@ -880,9 +885,15 @@
 @scrollable-scrollbar-msie-shadow-color: @scrollable-bg;
 @scrollable-scrollbar-msie-track-color: @scrollable-bg;
 
+@scrollbar-button-horizontal-decrement-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-horizontal-arrow-start.png') no-repeat;
+@scrollbar-button-horizontal-increment-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-horizontal-arrow-end.png') no-repeat;
+@scrollbar-button-vertical-decrement-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-vertical-arrow-up.png') no-repeat;
+@scrollbar-button-vertical-increment-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-vertical-arrow-down.png') no-repeat;
+
 // ScrollView
 
 @scrollview-shadow-color: fade(@base-shadow-color, 37%);
+@scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat;
 
 // Toolbar
 
@@ -902,6 +913,7 @@
 */
 @loadindicator-bg: @base-accent;
 @loadindicator-segment-shadow-color: fade(@base-shadow-color, 20%);
+@loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif');
 
 // LoadPanel
 @loadpanel-border-color: @overlay-border-color;
@@ -1017,6 +1029,7 @@
 @colorbox-palette-cell-bg: @colorbox-overlay-bg;
 @colorview-border-color: @base-border-color;
 @colorview-label-color: @base-label-color;
+@colorbox-preview-empty-bg: data-uri('images/widgets/generic/color-schemes/light/colorbox/nocolor.png');
 
 // DataGrid
 
@@ -1487,6 +1500,8 @@
 */
 @calendar-shevron-icon-color: @base-accent;
 
+@calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/light/calendar/empty-cell.png') center center no-repeat;
+
 // Tooltip
 
 /**
@@ -1566,8 +1581,6 @@
 @timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/hour-arrow.svg');
 @timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/min-arrow.svg');
 
-// theme-depends shadow parameters
-
 // DateView
 @dateview-border-color: @base-border-color;
 @dateview-shadow-up: 0deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
@@ -1589,22 +1602,6 @@
 @form-group-border-color: #edc1b9;
 @form-field-required-color: saturate(lighten(@form-field-item-color, 39.3%), 80%);
 @form-field-mark-color: lighten(@form-field-item-color, 48.5%);
-
-// Images
-@list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/light/list/delete.png');
-@scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat;
-@loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif');
-@toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png');
-@toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png');
-@toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png');
-@toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png');
-@scrollbar-button-horizontal-decrement-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-horizontal-arrow-start.png') no-repeat;
-@scrollbar-button-horizontal-increment-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-horizontal-arrow-end.png') no-repeat;
-@scrollbar-button-vertical-decrement-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-vertical-arrow-up.png') no-repeat;
-@scrollbar-button-vertical-increment-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-vertical-arrow-down.png') no-repeat;
-@colorbox-preview-empty-bg: data-uri('images/widgets/generic/color-schemes/light/colorbox/nocolor.png');
-
-@calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/light/calendar/empty-cell.png') center center no-repeat;
 
 // Fieldset
 
@@ -1687,6 +1684,7 @@
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-bg;
 @filemanager-file-item-select-bg: @base-accent;
+@filemanager-item-focused-color: @base-inverted-text-color;
 @filemanager-progressbox-shadow-color: fade(@base-shadow-color, 17.5%);
 
 // SpeedDialAction

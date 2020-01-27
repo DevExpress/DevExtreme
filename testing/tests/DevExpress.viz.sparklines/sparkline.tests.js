@@ -8,7 +8,7 @@ const rendererModule = require('viz/core/renderers/renderer');
 const dataValidatorModule = require('viz/components/data_validator');
 const translator2DModule = require('viz/translators/translator2d');
 const seriesModule = require('viz/series/base_series');
-const dataSourceModule = require('data/data_source/data_source');
+const DataSource = require('data/data_source/data_source').DataSource;
 
 require('viz/sparkline');
 
@@ -51,7 +51,7 @@ QUnit.begin(function() {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
 
-            this.$container = createTestContainer('#container');
+            this.$container = $(createTestContainer('#container'));
             this.renderer = new vizMocks.Renderer();
             this.translator = new FakeTranslator();
             this.series = new StubSeries();
@@ -2082,7 +2082,7 @@ QUnit.begin(function() {
         beforeEach: function() {
             environment.beforeEach.call(this);
             sinon.stub(BaseWidget.prototype, '_drawn', sinon.spy());
-            this.data = new dataSourceModule.DataSource();
+            this.data = new DataSource();
             this.isLoadedStub = sinon.stub(this.data, 'isLoaded');
         },
         afterEach: function() {
@@ -2127,7 +2127,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('isReady with not loaded dataSource', function(assert) {
-        const data = new dataSourceModule.DataSource();
+        const data = new DataSource();
         sinon.stub(data, 'isLoaded', function() { return false; });
 
         const sparkline = this.createSparkline({ dataSource: data });
@@ -2158,7 +2158,7 @@ QUnit.begin(function() {
         const widget = this.createSparkline({ dataSource: [1, 2, 3] });
         const ds = widget.getDataSource();
 
-        assert.ok(ds instanceof dataSourceModule.DataSource);
+        assert.ok(ds instanceof DataSource);
         assert.ok(ds.isLoaded());
         assert.deepEqual(ds.items(), [1, 2, 3]);
     });

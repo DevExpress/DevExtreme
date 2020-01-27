@@ -10,16 +10,14 @@ QUnit.testStart(function() {
 import $ from 'jquery';
 import windowUtils from 'core/utils/window';
 
-const createPivotGrid = function(options, assert) {
+const createPivotGrid = function(options) {
     const pivotGridElement = $('#pivotGrid').dxPivotGrid(options);
-    // assert
-    assert.ok(pivotGridElement);
     return pivotGridElement.dxPivotGrid('instance');
 };
 
 QUnit.test('Init markup with sizes', function(assert) {
     // arrange
-    const pivotGrid = createPivotGrid({ width: '600', height: '800' }, assert);
+    const pivotGrid = createPivotGrid({ width: '600', height: '800' });
 
     // assert
     assert.ok(pivotGrid.$element().hasClass('dx-pivotgrid'), 'has dx-pivotgrid class');
@@ -45,7 +43,7 @@ QUnit.test('Render empty data', function(assert) {
                 area: 'data'
             }]
         }
-    }, assert);
+    });
 
     // assert
     assert.ok(pivotGrid.$element().hasClass('dx-pivotgrid'), 'has dx-pivotgrid class');
@@ -76,7 +74,7 @@ QUnit.test('Render with data', function(assert) {
                 'amount': 1740
             }]
         }
-    }, assert);
+    });
 
     clock.tick();
 

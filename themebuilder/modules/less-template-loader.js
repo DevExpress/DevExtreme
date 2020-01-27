@@ -1,4 +1,6 @@
 const LessPluginAutoPrefix = require('less-plugin-autoprefix');
+const CleanCss = require('clean-css');
+const cleanCssOptions = require('./clean-css-options');
 const getBundleName = require('./bundle-resolver');
 const ModulesHandler = require('./modules-handler');
 
@@ -78,6 +80,8 @@ class LessMetadataPostCompiler {
                 .replace(/\s\.dx-theme-.*?-typography/g, '')
                 .replace(themeMarkerRegex, '$1' + this.colorScheme + '$3');
         }
+
+        css = new CleanCss(cleanCssOptions).minify(css).styles;
 
         return css.replace(metadataRegex, '');
     }

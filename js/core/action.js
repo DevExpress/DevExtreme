@@ -1,17 +1,15 @@
-const $ = require('./renderer');
-const config = require('./config');
-const window = require('./utils/window').getWindow();
-const typeUtils = require('./utils/type');
-const each = require('./utils/iterator').each;
-const Class = require('./class');
-const errors = require('./errors');
+import $ from './renderer';
+import config from './config';
+import { getWindow } from './utils/window';
+import { isPlainObject, isFunction } from './utils/type';
+import { each } from './utils/iterator';
+import errors from './errors';
 
-const Action = Class.inherit({
-
-    ctor: function(action, config) {
+export default class Action {
+    constructor(action, config) {
         config = config || {};
         this._action = action;
-        this._context = config.context || window;
+        this._context = config.context || getWindow();
         this._beforeExecute = config.beforeExecute;
         this._afterExecute = config.afterExecute;
         this._component = config.component;
@@ -23,9 +21,9 @@ const Action = Class.inherit({
                 excludeValidators[config.excludeValidators[i]] = true;
             }
         }
-    },
+    }
 
-    execute: function() {
+    execute() {
         const e = {
             action: this._action,
             args: Array.prototype.slice.call(arguments),
@@ -64,7 +62,7 @@ const Action = Class.inherit({
             return;
         }
 
-        beforeExecute && beforeExecute.call(this._context, e);
+        beforeExecute?.call(this._context, e);
 
         if(e.cancel) {
             return;
@@ -76,21 +74,19 @@ const Action = Class.inherit({
             return;
         }
 
-        afterExecute && afterExecute.call(this._context, e);
+        afterExecute?.call(this._context, e);
 
         return result;
-    },
+    }
 
-    _validateAction: function(e) {
+    _validateAction(e) {
         const excludeValidators = this._excludeValidators;
-        const executors = Action.executors;
+        const { executors } = Action;
 
         for(const name in executors) {
             if(!excludeValidators[name]) {
                 const executor = executors[name];
-                if(executor.validate) {
-                    executor.validate(e);
-                }
+                executor.validate?.(e);
 
                 if(e.cancel) {
                     return false;
@@ -99,17 +95,15 @@ const Action = Class.inherit({
         }
 
         return true;
-    },
+    }
 
-    _executeAction: function(e) {
+    _executeAction(e) {
         let result;
-        const executors = Action.executors;
+        const { executors } = Action;
 
         for(const name in executors) {
             const executor = executors[name];
-            if(executor.execute) {
-                executor.execute(e);
-            }
+            executor.execute?.(e);
 
             if(e.handled) {
                 result = e.result;
@@ -119,30 +113,51 @@ const Action = Class.inherit({
 
         return result;
     }
-});
+
+    static registerExecutor(name, executor) {
+        if(isPlainObject(name)) {
+            each(name, Action.registerExecutor);
+            return;
+        }
+        Action.executors[name] = executor;
+    }
+
+    static unregisterExecutor(...args) {
+        each(args, function() {
+            delete Action.executors[this];
+        });
+    }
+}
 
 Action.executors = {};
 
-Action.registerExecutor = function(name, executor) {
-    if(typeUtils.isPlainObject(name)) {
-        each(name, Action.registerExecutor);
+const createValidatorByTargetElement = (condition) => (e) => {
+    if(!e.args.length) {
         return;
     }
-    Action.executors[name] = executor;
+
+    const args = e.args[0];
+    const element = args[e.validatingTargetName] || args.element;
+
+    if(element && condition($(element))) {
+        e.cancel = true;
+    }
 };
-
-Action.unregisterExecutor = function() {
-    const args = [].slice.call(arguments);
-
-    each(args, function() {
-        delete Action.executors[this];
-    });
-};
-
 
 Action.registerExecutor({
+    'disabled': {
+        validate: createValidatorByTargetElement(($target) =>
+            $target.is('.dx-state-disabled, .dx-state-disabled *')
+        )
+    },
+
+    'readOnly': {
+        validate: createValidatorByTargetElement(($target) =>
+            $target.is('.dx-state-readonly, .dx-state-readonly *')
+        )
+    },
     'undefined': {
-        execute: function(e) {
+        execute: (e) => {
             if(!e.action) {
                 e.result = undefined;
                 e.handled = true;
@@ -150,44 +165,11 @@ Action.registerExecutor({
         }
     },
     'func': {
-        execute: function(e) {
-            if(typeUtils.isFunction(e.action)) {
+        execute: (e) => {
+            if(isFunction(e.action)) {
                 e.result = e.action.call(e.context, e.args[0]);
                 e.handled = true;
             }
         }
     }
 });
-
-
-const createValidatorByTargetElement = function(condition) {
-    return function(e) {
-        if(!e.args.length) {
-            return;
-        }
-
-        const args = e.args[0];
-        const element = args[e.validatingTargetName] || args.element;
-
-        if(element && condition($(element))) {
-            e.cancel = true;
-        }
-    };
-};
-
-Action.registerExecutor({
-    'disabled': {
-        validate: createValidatorByTargetElement(function($target) {
-            return $target.is('.dx-state-disabled, .dx-state-disabled *');
-        })
-    },
-
-    'readOnly': {
-        validate: createValidatorByTargetElement(function($target) {
-            return $target.is('.dx-state-readonly, .dx-state-readonly *');
-        })
-    }
-});
-
-
-module.exports = Action;

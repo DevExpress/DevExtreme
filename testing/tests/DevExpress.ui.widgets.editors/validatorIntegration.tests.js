@@ -1,32 +1,32 @@
-const $ = require('jquery');
-const Class = require('core/class');
-const ValidationEngine = require('ui/validation_engine');
-const Validator = require('ui/validator');
-const keyboardMock = require('../../helpers/keyboardMock.js');
+import $ from 'jquery';
+import Class from 'core/class';
+import ValidationEngine from 'ui/validation_engine';
+import Validator from 'ui/validator';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
-require('common.css!');
-require('generic_light.css!');
-require('ui/text_box');
-require('ui/date_box');
-require('ui/number_box');
-require('ui/autocomplete');
-require('ui/calendar');
-require('ui/check_box');
-require('ui/drop_down_box');
-require('ui/html_editor');
-require('ui/lookup');
-require('ui/radio_group');
-require('ui/select_box');
-require('ui/tag_box');
-require('ui/text_area');
-require('ui/slider');
-require('ui/range_slider');
-require('ui/switch');
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/text_box';
+import 'ui/date_box';
+import 'ui/number_box';
+import 'ui/autocomplete';
+import 'ui/calendar';
+import 'ui/check_box';
+import 'ui/drop_down_box';
+import 'ui/html_editor';
+import 'ui/lookup';
+import 'ui/radio_group';
+import 'ui/select_box';
+import 'ui/tag_box';
+import 'ui/text_area';
+import 'ui/slider';
+import 'ui/range_slider';
+import 'ui/switch';
 
 const Fixture = Class.inherit({
     createInstance: function(editor, editorOptions, validatorOptions, keyboard = true) {
-        const $element = $('<div/>')[editor](editorOptions).dxValidator(validatorOptions);
-        this.$element = $element;
+        const $element = $('<div/>').appendTo('#qunit-fixture');
+        this.$element = $element[editor](editorOptions).dxValidator(validatorOptions);
 
         this.$input = $element.find('.dx-texteditor-input');
 
@@ -249,6 +249,17 @@ QUnit.module('Regression', {
         this.fixture.validator.reset();
 
         assert.notOk(validationCallback.called, 'validationCallback should not be called');
+    });
+
+    QUnit.test('Validator should not toggle the "dx-rtl" class', function(assert) {
+        this.fixture.createInstance('dxTextBox', { rtlEnabled: true }, {
+            rtlEnabled: false,
+            validationRules: [{
+                type: 'required'
+            }]
+        }, false);
+
+        assert.ok(this.fixture.$element.hasClass('dx-rtl'), 'Root element has the "dx-rtl" class');
     });
 });
 

@@ -22,13 +22,6 @@ const SELECTBOX_POPUP_CLASS = 'dx-selectbox-popup';
 const SELECTBOX_CONTAINER_CLASS = 'dx-selectbox-container';
 const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
 
-/**
-* @name dxSelectBox
-* @isEditor
-* @inherits dxDropDownList
-* @module ui/select_box
-* @export default
-*/
 const SelectBox = DropDownList.inherit({
 
     _supportedKeys: function() {
@@ -122,7 +115,7 @@ const SelectBox = DropDownList.inherit({
                         e.preventDefault();
 
                         if(isCustomText) {
-                            this._valueChangeEventHandler();
+                            this._valueChangeEventHandler(e);
                             if(isOpened) this._toggleOpenState();
                         }
 
@@ -153,58 +146,20 @@ const SelectBox = DropDownList.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxSelectBoxOptions.placeholder
-            * @type string
-            * @default "Select"
-            */
             placeholder: messageLocalization.format('Select'),
 
-            /**
-            * @name dxSelectBoxOptions.fieldTemplate
-            * @type template|function
-            * @default null
-            * @type_function_param1 selectedItem:object
-            * @type_function_param2 fieldElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             fieldTemplate: null,
 
-            /**
-            * @name dxSelectBoxOptions.valueChangeEvent
-            * @type string
-            * @default "change"
-            */
             valueChangeEvent: 'change',
 
-            /**
-            * @name dxSelectBoxOptions.acceptCustomValue
-            * @type boolean
-            * @default false
-            */
             acceptCustomValue: false,
 
-            /**
-            * @name dxSelectBoxOptions.onCustomItemCreating
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 text:string
-            * @type_function_param1_field5 customItem:string|object|Promise<any>
-            * @action
-            * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
-            */
             onCustomItemCreating: function(e) {
                 if(!isDefined(e.customItem)) {
                     e.customItem = e.text;
                 }
             },
 
-            /**
-            * @name dxSelectBoxOptions.showSelectionControls
-            * @type boolean
-            * @default false
-            */
             showSelectionControls: false,
 
             /**
@@ -225,15 +180,8 @@ const SelectBox = DropDownList.inherit({
 
             tooltipEnabled: false,
 
-            /**
-             * @name dxSelectBoxOptions.openOnFieldClick
-             * @default true
-             */
             openOnFieldClick: true,
 
-            /**
-             * @name dxSelectBoxOptions.showDropDownButton
-             */
             showDropDownButton: true,
 
             displayCustomValue: false,
@@ -424,7 +372,7 @@ const SelectBox = DropDownList.inherit({
 
         this.callBase(isUnknownItem ? null : item);
 
-        if(!isUnknownItem) {
+        if(!isUnknownItem && (!this._isEditable() || this._isCustomItemSelected())) {
             this._setListOption('selectedItem', this.option('selectedItem'));
         }
     },
@@ -501,7 +449,7 @@ const SelectBox = DropDownList.inherit({
         isVisible = arguments.length ? isVisible : !this.option('opened');
 
         if(!isVisible) {
-            this._restoreInputText();
+            this._restoreInputText(true);
         }
 
         if(this._wasSearch() && isVisible) {
@@ -553,7 +501,7 @@ const SelectBox = DropDownList.inherit({
         this.callBase();
     },
 
-    _restoreInputText: function() {
+    _restoreInputText: function(saveEditingValue) {
         if(this.option('readOnly')) {
             return;
         }
@@ -562,7 +510,10 @@ const SelectBox = DropDownList.inherit({
             const initialSelectedItem = this.option('selectedItem');
 
             if(this.option('acceptCustomValue')) {
-                this._updateField(initialSelectedItem);
+                if(!saveEditingValue) {
+                    this._updateField(initialSelectedItem);
+                    this._clearFilter();
+                }
                 return;
             }
 
@@ -591,7 +542,7 @@ const SelectBox = DropDownList.inherit({
             this._clearSearchTimer();
             this._restoreInputText();
 
-            if(this._isEditable() && !this._isOverlayNestedTarget(e.relatedTarget)) {
+            if(!this.option('acceptCustomValue') && this.option('searchEnabled') && !this._isOverlayNestedTarget(e.relatedTarget)) {
                 this._searchCanceled();
             }
         }
@@ -711,9 +662,9 @@ const SelectBox = DropDownList.inherit({
         return !selectedItemText || searchValue !== selectedItemText.toString();
     },
 
-    _valueChangeEventHandler: function() {
+    _valueChangeEventHandler: function(e) {
         if(this.option('acceptCustomValue') && this._isCustomItemSelected()) {
-            this._customItemAddedHandler();
+            this._customItemAddedHandler(e);
         }
     },
 
@@ -735,9 +686,11 @@ const SelectBox = DropDownList.inherit({
         return item;
     },
 
-    _customItemAddedHandler: function() {
+    _customItemAddedHandler: function(e) {
         const searchValue = this._searchValue();
         const item = this._createCustomItem(searchValue);
+
+        this._saveValueChangeEvent(e);
 
         if(item === undefined) {
             this._renderValue();

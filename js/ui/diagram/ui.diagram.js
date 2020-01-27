@@ -610,21 +610,36 @@ class Diagram extends Widget {
     }
     _getDataBindingLayoutParameters() {
         const { DataLayoutType, DataLayoutOrientation } = getDiagram();
-        const layoutParametersOption = this.option('nodes.autoLayout');
-        if(!layoutParametersOption || layoutParametersOption === 'off' || layoutParametersOption.type === 'off') return undefined;
-        const parameters = {};
+        const layoutParametersOption = this.option('nodes.autoLayout') || 'off';
         const layoutType = layoutParametersOption.type || layoutParametersOption;
-        if(layoutType === 'tree') {
-            parameters.type = DataLayoutType.Tree;
-        } else if(layoutType === 'layered') {
-            parameters.type = DataLayoutType.Sugiyama;
+        if(layoutType === 'off' || (layoutType === 'auto' && this._hasNodePositionExprs())) {
+            return undefined;
+        } else {
+            const parameters = {};
+            switch(layoutType) {
+                case 'tree':
+                    parameters.type = DataLayoutType.Tree;
+                    break;
+                default:
+                    parameters.type = DataLayoutType.Sugiyama;
+                    break;
+            }
+            switch(layoutParametersOption.orientation) {
+                case 'vertical':
+                    parameters.orientation = DataLayoutOrientation.Vertical;
+                    break;
+                case 'horizontal':
+                    parameters.orientation = DataLayoutOrientation.Horizontal;
+                    break;
+            }
+            if(this.option('edges.fromPointIndexExpr') || this.option('edges.toPointIndexExpr')) {
+                parameters.skipPointIndices = true;
+            }
+            return parameters;
         }
-        if(layoutParametersOption.orientation === 'vertical') {
-            parameters.orientation = DataLayoutOrientation.Vertical;
-        } else if(layoutParametersOption.orientation === 'horizontal') {
-            parameters.orientation = DataLayoutOrientation.Horizontal;
-        }
-        return parameters;
+    }
+    _hasNodePositionExprs() {
+        return this.option('nodes.topExpr') && this.option('nodes.leftExpr');
     }
     _getAutoZoomValue(option) {
         const { AutoZoomMode } = getDiagram();
@@ -996,20 +1011,9 @@ class Diagram extends Widget {
         return texts;
     }
 
-    /**
-    * @name dxDiagramMethods.export
-    * @publicName export()
-    * @return string
-    */
     export() {
         return this._getDiagramData();
     }
-    /**
-    * @name dxDiagramMethods.exportTo
-    * @publicName exportTo(format, callback)
-    * @param1 format:Enums.DiagramExportFormat
-    * @param2 callback:function
-    */
     exportTo(format, callback) {
         const command = this._getDiagramExportToCommand(format);
         this._executeDiagramCommand(command, callback);
@@ -1025,12 +1029,6 @@ class Diagram extends Widget {
                 return DiagramCommand.ExportSvg;
         }
     }
-    /**
-    * @name dxDiagramMethods.import
-    * @publicName import(data, updateExistingItemsOnly)
-    * @param1 data:string
-    * @param2 updateExistingItemsOnly?:boolean
-    */
     import(data, updateExistingItemsOnly) {
         this._setDiagramData(data, updateExistingItemsOnly);
         this._raiseDataChangeAction();
@@ -1038,17 +1036,7 @@ class Diagram extends Widget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            /**
-            * @name dxDiagramOptions.readOnly
-            * @type boolean
-            * @default false
-            */
             readOnly: false,
-            /**
-            * @name dxDiagramOptions.zoomLevel
-            * @type Number|Object
-            * @default 1
-            */
             /**
             * @name dxDiagramOptions.zoomLevel.value
             * @type Number
@@ -1060,40 +1048,11 @@ class Diagram extends Widget {
             * @default undefined
             */
             zoomLevel: DIAGRAM_DEFAULT_ZOOMLEVEL,
-            /**
-            * @name dxDiagramOptions.simpleView
-            * @type Boolean
-            * @default false
-            */
             simpleView: false,
-            /**
-            * @name dxDiagramOptions.autoZoom
-            * @type Enums.DiagramAutoZoom
-            * @default "disabled"
-            */
             autoZoom: DIAGRAM_DEFAULT_AUTOZOOM,
-            /**
-            * @name dxDiagramOptions.fullScreen
-            * @type Boolean
-            * @default false
-            */
             fullScreen: false,
-            /**
-            * @name dxDiagramOptions.showGrid
-            * @type Boolean
-            * @default true
-            */
             showGrid: true,
-            /**
-            * @name dxDiagramOptions.snapToGrid
-            * @type Boolean
-            * @default true
-            */
             snapToGrid: true,
-            /**
-            * @name dxDiagramOptions.gridSize
-            * @type Number|Object
-            */
             /**
             * @name dxDiagramOptions.gridSize.value
             * @type Number
@@ -1103,23 +1062,9 @@ class Diagram extends Widget {
             * @type Array<Number>
             */
 
-            /**
-            * @name dxDiagramOptions.units
-            * @type Enums.DiagramUnits
-            * @default "in"
-            */
             units: DIAGRAM_DEFAULT_UNIT,
-            /**
-            * @name dxDiagramOptions.viewUnits
-            * @type Enums.DiagramUnits
-            * @default "in"
-            */
             viewUnits: DIAGRAM_DEFAULT_UNIT,
 
-            /**
-            * @name dxDiagramOptions.pageSize
-            * @type Object
-            */
             /**
             * @name dxDiagramOptions.pageSize.width
             * @type Number
@@ -1144,32 +1089,9 @@ class Diagram extends Widget {
             * @name dxDiagramOptions.pageSize.items.text
             * @type String
             */
-            /**
-            * @name dxDiagramOptions.pageOrientation
-            * @type Enums.DiagramPageOrientation
-            * @default "portrait"
-            */
             pageOrientation: DIAGRAM_DEFAULT_PAGE_ORIENTATION,
-            /**
-            * @name dxDiagramOptions.pageColor
-            * @type String
-            * @default "white"
-            */
             pageColor: DIAGRAM_DEFAULT_PAGE_COLOR,
-
-            /**
-            * @name dxDiagramOptions.onDataChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @action
-            */
-            onDataChanged: null,
-            /**
-            * @name dxDiagramOptions.nodes
-            * @type Object
-            * @default null
-            */
+            hasChanges: false,
             nodes: {
                 /**
                 * @name dxDiagramOptions.nodes.dataSource
@@ -1292,7 +1214,7 @@ class Diagram extends Widget {
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout
                  * @type Enums.DiagramDataLayoutType|Object
-                 * @default "tree"
+                 * @default "layered"
                  */
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout.type
@@ -1302,13 +1224,8 @@ class Diagram extends Widget {
                  * @name dxDiagramOptions.nodes.autoLayout.orientation
                  * @type Enums.DiagramDataLayoutOrientation
                  */
-                autoLayout: 'tree'
+                autoLayout: 'auto'
             },
-            /**
-            * @name dxDiagramOptions.edges
-            * @type Object
-            * @default null
-            */
             edges: {
                 /**
                 * @name dxDiagramOptions.edges.dataSource
@@ -1416,11 +1333,6 @@ class Diagram extends Widget {
                 toLineEndExpr: undefined
             },
 
-            /**
-            * @name dxDiagramOptions.customShapes
-            * @type Array<Object>
-            * @default []
-            */
             customShapes: [
                 /**
                 * @name dxDiagramOptions.customShapes.category
@@ -1551,7 +1463,7 @@ class Diagram extends Widget {
                 * @type template|function
                 * @type_function_param1 container:dxElement
                 * @type_function_param2 data:object
-                * @type_function_param2_field1 item:dxDiagramItem
+                * @type_function_param2_field1 item:dxDiagramShape
                 */
                 /**
                 * @name dxDiagramOptions.customShapes.templateLeft
@@ -1570,18 +1482,6 @@ class Diagram extends Widget {
                 * @type Number
                 */
             ],
-            /**
-            * @name dxDiagramOptions.customShapeTemplate
-            * @type template|function
-            * @type_function_param1 container:dxElement
-            * @type_function_param2 data:object
-            * @type_function_param2_field1 item:dxDiagramItem
-            */
-            /**
-            * @name dxDiagramOptions.toolbox
-            * @type Object
-            * @default {}
-            */
             toolbox: {
                 /**
                 * @name dxDiagramOptions.toolbox.visible
@@ -1615,11 +1515,6 @@ class Diagram extends Widget {
                 * @type Array<Enums.DiagramShapeType>|Array<String>
                 */
             },
-            /**
-            * @name dxDiagramOptions.toolbar
-            * @type Object
-            * @default {}
-            */
             toolbar: {
                 /**
                 * @name dxDiagramOptions.toolbar.visible
@@ -1633,11 +1528,6 @@ class Diagram extends Widget {
                 * @default undefined
                 */
             },
-            /**
-            * @name dxDiagramOptions.contextMenu
-            * @type Object
-            * @default {}
-            */
             contextMenu: {
                 /**
                 * @name dxDiagramOptions.contextMenu.enabled
@@ -1651,11 +1541,6 @@ class Diagram extends Widget {
                 * @default undefined
                 */
             },
-            /**
-            * @name dxDiagramOptions.contextToolbox
-            * @type Object
-            * @default {}
-            */
             contextToolbox: {
                 /**
                 * @name dxDiagramOptions.contextToolbox.enabled
@@ -1676,11 +1561,6 @@ class Diagram extends Widget {
                 * @type Array<Enums.DiagramShapeType>|Array<String>
                 */
             },
-            /**
-            * @name dxDiagramOptions.propertiesPanel
-            * @type Object
-            * @default {}
-            */
             propertiesPanel: {
                 /**
                 * @name dxDiagramOptions.propertiesPanel.enabled
@@ -1705,10 +1585,6 @@ class Diagram extends Widget {
                 */
             },
 
-            /**
-             * @name dxDiagramOptions.export
-             * @type object
-             */
             export: {
                 /**
                  * @name dxDiagramOptions.export.fileName
@@ -1725,46 +1601,16 @@ class Diagram extends Widget {
                 proxyUrl: undefined
             },
 
-            /**
-             * @name dxDiagramOptions.onItemClick
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 item:dxDiagramItem
-             * @action
-             */
             onItemClick: null,
 
-            /**
-             * @name dxDiagramOptions.onItemDblClick
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 item:dxDiagramItem
-             * @action
-             */
             onItemDblClick: null,
 
-            /**
-             * @name dxDiagramOptions.onSelectionChanged
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 items:Array<dxDiagramItem>
-             * @action
-             */
             onSelectionChanged: null
         });
     }
 
-    _createDataChangeAction() {
-        this._dataChangeAction = this._createActionByOption('onDataChanged');
-    }
     _raiseDataChangeAction() {
-        if(!this._dataChangeAction) {
-            this._createDataChangeAction();
-        }
-        this._dataChangeAction();
+        this.option('hasChanges', true);
     }
     _raiseEdgeInsertedAction(data, callback, errorCallback) {
         if(this._edgesOption) {
@@ -1846,6 +1692,7 @@ class Diagram extends Widget {
     _nativeShapeToDiagramShape(nativeShape) {
         return {
             dataItem: this._nodesOption && this._nodesOption.findItem(nativeShape.key),
+            itemType: 'shape',
             text: nativeShape.text,
             type: nativeShape.type
         };
@@ -1853,6 +1700,7 @@ class Diagram extends Widget {
     _nativeConnectorToDiagramConnector(nativeConnector) {
         return {
             dataItem: this._edgesOption && this._edgesOption.findItem(nativeConnector.key),
+            itemType: 'connector',
             texts: nativeConnector.texts,
             fromKey: nativeConnector.fromKey,
             toKey: nativeConnector.toKey
@@ -1972,9 +1820,6 @@ class Diagram extends Widget {
                     this._invalidate();
                 }
                 break;
-            case 'onDataChanged':
-                this._createDataChangeAction();
-                break;
             case 'onItemClick':
                 this._createItemClickAction();
                 break;
@@ -1988,6 +1833,8 @@ class Diagram extends Widget {
                 if(this._toolbarInstance) {
                     this._toolbarInstance.option('export', args.value);
                 }
+                break;
+            case 'hasChanges':
                 break;
             default:
                 super._optionChanged(args);

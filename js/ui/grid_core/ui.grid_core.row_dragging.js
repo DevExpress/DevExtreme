@@ -149,10 +149,6 @@ const RowDraggingExtender = {
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.rowDragging
-             * @type object
-             */
             rowDragging: {
                 /**
                 * @name GridBaseOptions.rowDragging.showDragIcons

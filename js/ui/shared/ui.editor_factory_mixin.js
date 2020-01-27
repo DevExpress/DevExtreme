@@ -8,7 +8,7 @@ const browser = require('../../core/utils/browser');
 const extend = require('../../core/utils/extend').extend;
 const devices = require('../../core/devices');
 const getPublicElement = require('../../core/utils/dom').getPublicElement;
-const normalizeDataSourceOptions = require('../../data/data_source/data_source').normalizeDataSourceOptions;
+const normalizeDataSourceOptions = require('../../data/data_source/utils').normalizeDataSourceOptions;
 const normalizeKeyName = require('../../events/utils').normalizeKeyName;
 
 require('../text_box');
@@ -235,7 +235,7 @@ const EditorFactoryMixin = (function() {
             }
 
             if(options.editorName === 'dxDateBox') {
-                $editorElement.dxDateBox('instance').registerKeyHandler('enter', noop);
+                $editorElement.dxDateBox('instance').registerKeyHandler('enter', () => true);
             }
 
             if(options.editorName === 'dxTextArea') {

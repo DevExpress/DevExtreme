@@ -94,55 +94,12 @@ function getScrollable(container) {
 const FieldChooser = BaseFieldChooser.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxPivotGridFieldChooserOptions.height
-            * @type number|string|function
-            * @default 400
-            * @type_function_return number|string
-            */
             height: 400,
-            /**
-             * @name dxPivotGridFieldChooserOptions.layout
-             * @type Enums.PivotGridFieldChooserLayout
-             * @default 0
-             */
             layout: 0,
-            /**
-             * @name dxPivotGridFieldChooserOptions.dataSource
-             * @type PivotGridDataSource
-             * @default null
-             * @ref
-             */
             dataSource: null,
-            /**
-            * @name dxPivotGridFieldChooserOptions.onContextMenuPreparing
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 items:Array<Object>
-            * @type_function_param1_field5 area:string
-            * @type_function_param1_field6 field:PivotGridDataSourceOptions.fields
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @extends Action
-            * @action
-            */
             onContextMenuPreparing: null,
-            /**
-            * @name dxPivotGridFieldChooserOptions.allowSearch
-            * @type boolean
-            * @default false
-            */
             allowSearch: false,
-            /**
-            * @name dxPivotGridFieldChooserOptions.searchTimeout
-            * @type number
-            * @default 500
-            */
             searchTimeout: 500,
-            /**
-             * @name dxPivotGridFieldChooserOptions.texts
-             * @type object
-             */
             texts: {
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.columnFields
@@ -175,20 +132,6 @@ const FieldChooser = BaseFieldChooser.inherit({
                  */
                 allFields: format('dxPivotGrid-allFields')
             },
-            /**
-            * @name dxPivotGridFieldChooserOptions.applyChangesMode
-            * @type Enums.ApplyChangesMode
-            * @default "instantly"
-            */
-            /**
-            * @name dxPivotGridFieldChooserOptions.state
-            * @type object
-            * @default null
-            */
-            /**
-             * @name dxPivotGridFieldChooserOptions.headerFilter
-             * @type object
-             */
             /**
              * @name dxPivotGridFieldChooserOptions.headerFilter.width
              * @type number
@@ -324,19 +267,17 @@ const FieldChooser = BaseFieldChooser.inherit({
 
     _renderLayout0: function($container) {
         const that = this;
-        let $col1; let $col2; let $col3; let $col4;
-        let $row1; let $row2;
 
         $container.addClass('dx-layout-0');
 
-        $row1 = $(DIV).addClass('dx-row').appendTo($container);
-        $row2 = $(DIV).addClass('dx-row').appendTo($container);
+        const $row1 = $(DIV).addClass('dx-row').appendTo($container);
+        const $row2 = $(DIV).addClass('dx-row').appendTo($container);
 
-        $col1 = $(DIV).addClass('dx-col').appendTo($row1);
-        $col2 = $(DIV).addClass('dx-col').appendTo($row1);
+        const $col1 = $(DIV).addClass('dx-col').appendTo($row1);
+        const $col2 = $(DIV).addClass('dx-col').appendTo($row1);
 
-        $col3 = $(DIV).addClass('dx-col').appendTo($row2);
-        $col4 = $(DIV).addClass('dx-col').appendTo($row2);
+        const $col3 = $(DIV).addClass('dx-col').appendTo($row2);
+        const $col4 = $(DIV).addClass('dx-col').appendTo($row2);
 
         that._renderArea($col1, 'all');
         that._renderArea($col2, 'row');
@@ -347,10 +288,9 @@ const FieldChooser = BaseFieldChooser.inherit({
 
     _renderLayout1: function($container) {
         const that = this;
-        let $col1; let $col2;
 
-        $col1 = $(DIV).addClass('dx-col').appendTo($container);
-        $col2 = $(DIV).addClass('dx-col').appendTo($container);
+        const $col1 = $(DIV).addClass('dx-col').appendTo($container);
+        const $col2 = $(DIV).addClass('dx-col').appendTo($container);
 
         that._renderArea($col1, 'all');
         that._renderArea($col2, 'filter');
@@ -361,17 +301,15 @@ const FieldChooser = BaseFieldChooser.inherit({
 
     _renderLayout2: function($container) {
         const that = this;
-        let $col1; let $col2;
-        let $row1; let $row2;
 
         $container.addClass('dx-layout-2');
 
-        $row1 = $(DIV).addClass('dx-row').appendTo($container);
+        const $row1 = $(DIV).addClass('dx-row').appendTo($container);
         that._renderArea($row1, 'all');
 
-        $row2 = $(DIV).addClass('dx-row').appendTo($container);
-        $col1 = $(DIV).addClass('dx-col').appendTo($row2);
-        $col2 = $(DIV).addClass('dx-col').appendTo($row2);
+        const $row2 = $(DIV).addClass('dx-row').appendTo($container);
+        const $col1 = $(DIV).addClass('dx-col').appendTo($row2);
+        const $col2 = $(DIV).addClass('dx-col').appendTo($row2);
 
         that._renderArea($col1, 'filter');
         that._renderArea($col1, 'row');
@@ -459,13 +397,12 @@ const FieldChooser = BaseFieldChooser.inherit({
         that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
             onPositioning: function(actionArgs) {
                 const event = actionArgs.event;
-                let args;
 
                 if(!event) {
                     return;
                 }
 
-                args = that._getContextMenuArgs(event);
+                const args = that._getContextMenuArgs(event);
 
                 that._trigger('onContextMenuPreparing', args);
 
@@ -552,13 +489,12 @@ const FieldChooser = BaseFieldChooser.inherit({
 
     _createFieldsDataSource: function(dataSource) {
         let fields = dataSource && dataSource.fields() || [];
-        let treeItems;
 
         fields = fields.filter(field => {
             return field.visible !== false && !isDefined(field.groupIndex);
         });
 
-        treeItems = this._createTreeItems(fields, ['dimension', 'displayFolder']);
+        const treeItems = this._createTreeItems(fields, ['dimension', 'displayFolder']);
 
         foreachDataLevel(treeItems, function(items) {
             items.sort(compareItems);
@@ -677,7 +613,6 @@ const FieldChooser = BaseFieldChooser.inherit({
         const $areaContainer = $(DIV).addClass('dx-area').appendTo(container);
         const $fieldsHeaderContainer = $(DIV).addClass('dx-area-fields-header').appendTo($areaContainer);
         const caption = that.option('texts.' + area + 'Fields');
-        let $fieldsContainer;
         let $fieldsContent;
         let render;
 
@@ -693,7 +628,7 @@ const FieldChooser = BaseFieldChooser.inherit({
             .text(caption)
             .appendTo($fieldsHeaderContainer);
 
-        $fieldsContainer = $(DIV).addClass('dx-area-fields')
+        const $fieldsContainer = $(DIV).addClass('dx-area-fields')
             .addClass(AREA_DRAG_CLASS)
             .appendTo($areaContainer);
 
@@ -732,10 +667,6 @@ const FieldChooser = BaseFieldChooser.inherit({
         }
     },
 
-    /**
-    * @name dxPivotGridFieldChooserMethods.applyChanges
-    * @publicName applyChanges()
-    */
     applyChanges: function() {
         const state = this.option('state');
 
@@ -744,27 +675,20 @@ const FieldChooser = BaseFieldChooser.inherit({
         }
     },
 
-    /**
-    * @name dxPivotGridFieldChooserMethods.cancelChanges
-    * @publicName cancelChanges()
-    */
     cancelChanges: function() {
-        this.option('state', this._dataSource.state());
+        const dataSource = this._dataSource;
+
+        if(!dataSource.isLoading()) {
+            this.option('state', dataSource.state());
+            return true;
+        }
+        return false;
     },
 
-    /**
-    * @name dxPivotGridFieldChooserMethods.getDataSource
-    * @publicName getDataSource()
-    * @return PivotGridDataSource
-    */
     getDataSource: function() {
         return this._dataSource;
     },
 
-    /**
-    * @name dxPivotGridFieldChooserMethods.updateDimensions
-    * @publicName updateDimensions()
-    */
     updateDimensions: function() {
         const $scrollableElements = this.$element().find('.dx-area .dx-scrollable');
         $scrollableElements.dxScrollable('update');

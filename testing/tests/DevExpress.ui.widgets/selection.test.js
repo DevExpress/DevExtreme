@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const errors = require('ui/widget/ui.errors');
-const Selection = require('ui/selection/selection');
-const Guid = require('core/guid');
-const DataSource = require('data/data_source/data_source').DataSource;
-const CustomStore = require('data/custom_store');
-const ArrayStore = require('data/array_store');
+import $ from 'jquery';
+import errors from 'ui/widget/ui.errors';
+import Selection from 'ui/selection/selection';
+import Guid from 'core/guid';
+import { DataSource } from 'data/data_source/data_source';
+import CustomStore from 'data/custom_store';
+import ArrayStore from 'data/array_store';
 
 const createDataSource = function(data, storeOptions, dataSourceOptions) {
     const arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data);
@@ -220,7 +220,7 @@ QUnit.test('Select all by one page and changeItemSelection', function(assert) {
     assert.strictEqual(selection.getSelectAllState(true), undefined, 'select all is true');
 });
 
-QUnit.test('Select all by one page', function(assert) {
+QUnit.test('Deselect all by one page', function(assert) {
     const dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
 
     const expectedData = [];
@@ -1108,7 +1108,7 @@ QUnit.test('Key is required', function(assert) {
         const selection = createDeferredSelection(this.data, {}, createDataSource(this.data, { }, { }));
         selection.selectedItemKeys();
     }, function(ex) {
-        assert.ok(ex.message.indexOf('E1042') === 0);
+        assert.strictEqual(ex.message.indexOf('E1042'), 0);
         return true;
     });
 });
@@ -1457,7 +1457,7 @@ QUnit.test('changeItemSelection before selectAll', function(assert) {
     assert.strictEqual(selection.getSelectAllState(), true, 'select all is true');
 });
 
-QUnit.test('changeItemSelection after selectAll', function(assert) {
+QUnit.test('dataSource filter -> changeItemSelection after selectAll', function(assert) {
     const selection = this.createDeferredSelection(this.data);
 
     // act
@@ -1810,8 +1810,7 @@ QUnit.test('selectedItemKeys with preserve', function(assert) {
 });
 
 QUnit.test('selectedItemKeys deselect item', function(assert) {
-    const selection = this.createDeferredSelection(this.data, {
-    });
+    const selection = this.createDeferredSelection(this.data, {});
 
     // act
     selection.selectedItemKeys([1, 2, 4]);
@@ -1823,7 +1822,7 @@ QUnit.test('selectedItemKeys deselect item', function(assert) {
 
 });
 
-QUnit.test('selectedItemKeys deselect item', function(assert) {
+QUnit.test('onSelectionChanged should be fired after selectedItemKeys deselect item', function(assert) {
     let selectionChangedIsCalled = false;
     const selection = this.createDeferredSelection(this.data, {
         onSelectionChanged: function() {
@@ -1840,7 +1839,6 @@ QUnit.test('selectedItemKeys deselect item', function(assert) {
     });
 
     assert.ok(selectionChangedIsCalled);
-
 });
 
 QUnit.module('Deferred mode. Complex key', {

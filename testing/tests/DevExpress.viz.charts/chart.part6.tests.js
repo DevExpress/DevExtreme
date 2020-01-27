@@ -803,6 +803,8 @@ QUnit.test('change container options', function(assert) {
     // assert
     assert.equal(chart.getSize().width, 400);
     assert.equal(chart.getSize().height, 300);
+    assert.strictEqual(chart._canvas.originalLeft, 0);
+    assert.strictEqual(chart._canvas.originalRight, 0);
 
     // assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
@@ -863,6 +865,8 @@ QUnit.test('size option changed', function(assert) {
 
     assert.equal(chart._canvas.width, 300);
     assert.equal(chart._canvas.height, 300);
+    assert.strictEqual(chart._canvas.originalLeft, 0);
+    assert.strictEqual(chart._canvas.originalRight, 0);
     assert.strictEqual(this.validateData.callCount, 1, 'validation');
 });
 

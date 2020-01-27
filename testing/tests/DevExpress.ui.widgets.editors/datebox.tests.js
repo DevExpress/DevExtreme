@@ -1265,7 +1265,7 @@ QUnit.module('dateView integration', {
             devices.real({ platform: 'android', version: [4, 3], android: true });
 
             const dateBox = $('#dateBox').dxDateBox().dxDateBox('instance');
-            assert.ok(dateBox.option('pickerType') !== 'native');
+            assert.notStrictEqual(dateBox.option('pickerType'), 'native');
         } finally {
             support.inputType = this.originalInputType;
             devices.real(originalDevice);
@@ -1285,7 +1285,7 @@ QUnit.module('dateView integration', {
             devices.current({ platform: 'android' });
 
             const dateBox = $('#dateBoxWithPicker').dxDateBox().dxDateBox('instance');
-            assert.ok(dateBox.option('pickerType') === 'native');
+            assert.strictEqual(dateBox.option('pickerType'), 'native');
         } finally {
             support.inputType = this.originalInputType;
             devices.real(originalDevice);
@@ -1900,7 +1900,7 @@ QUnit.module('datebox and calendar integration', () => {
             opened: true
         }).dxDateBox('instance');
 
-        assert.equal(callCount, 14, 'disabledDates has been called 6 times on init, 6 times on [min; max] for focusing and 2 times on min-max border dates');
+        assert.equal(callCount, 12, 'disabledDates has been called 6 times on init, 6 times on [min; max] for focusing');
     });
 
     QUnit.test('disabledDates correctly displays after optionChanged', function(assert) {
@@ -2094,7 +2094,7 @@ QUnit.module('datebox w/ calendar', {
         $(this.fixture.dateBox._input()).focus();
         this.fixture.dateBox.open();
         pointerMock(this.fixture.dateBox._strategy._calendarContainer).start().swipeStart().swipeEnd(1);
-        assert.ok(this.fixture.dateBox._input()[0] === document.activeElement);
+        assert.strictEqual(this.fixture.dateBox._input()[0], document.activeElement);
     });
 
     QUnit.test('Pressing escape must hide the calendar and clean focus', function(assert) {
@@ -3610,6 +3610,22 @@ QUnit.module('datebox w/ time list', {
         const $timeListItems = $('.dx-list .dx-list-item');
         assert.ok($timeListItems.length > 0);
     });
+
+    QUnit.test('should works correctly with serialized dates (T854579)', function(assert) {
+        this.dateBox.option({
+            opened: true,
+            dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx',
+        });
+        const $input = $(this.dateBox.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $items = $(this.dateBox.content()).find(LIST_ITEM_SELECTOR);
+
+        $items.eq(1).trigger('dxclick');
+        assert.strictEqual($input.val(), $items.eq(1).text(), 'time is applied');
+
+        this.dateBox.open();
+        $items.eq(3).trigger('dxclick');
+        assert.strictEqual($input.val(), $items.eq(3).text(), 'new time is applied');
+    });
 });
 
 QUnit.module('keyboard navigation', {
@@ -4686,10 +4702,8 @@ QUnit.module('DateBox number and string value support', {
             }
         }).dxDateBox('instance');
 
-        // act
         dateBox.option('opened', true);
 
-        // assert
         assert.ok(!isValueChangedCalled, 'onValueChanged is not called');
     });
 
@@ -4706,10 +4720,8 @@ QUnit.module('DateBox number and string value support', {
         const dateBox = $dateBox.dxDateBox('instance');
         dateBox.open();
 
-        // act
         $('.dx-calendar-cell').eq(0).trigger('dxclick');
 
-        // assert
         assert.deepEqual(dateBox.option('value'), new Date(2017, 10, 26), 'value is changed');
 
         Calendar.defaultOptions({

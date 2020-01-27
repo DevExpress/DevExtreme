@@ -32,7 +32,6 @@ const isPixelWidth = function(width) {
     return typeUtils.isString(width) && width.slice(-2) === 'px';
 };
 
-
 const mergeArraysByMaxValue = function(values1, values2) {
     let result = [];
     let i;
@@ -508,10 +507,6 @@ const ResizingController = modules.ViewController.inherit({
         return !this.component._requireResize && this.updateDimensions();
     },
 
-    /**
-    * @name GridBaseMethods.updateDimensions
-    * @publicName updateDimensions()
-    */
     updateDimensions: function(checkSize) {
         const that = this;
 
@@ -592,7 +587,7 @@ const ResizingController = modules.ViewController.inherit({
         const $rootElement = that.component.$element();
         const groupElement = $rootElement.children().get(0);
         const rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || $rootElement.height());
-        const maxHeight = parseFloat($rootElement.css('maxHeight'));
+        const maxHeight = parseInt($rootElement.css('maxHeight'));
         const maxHeightHappened = maxHeight && rootElementHeight >= maxHeight;
         const height = that.option('height') || $rootElement.get(0).style.height;
         const editorFactory = that.getController('editorFactory');
@@ -786,17 +781,7 @@ const GridView = modules.View.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.showBorders
-             * @type boolean
-             * @default false
-             */
             showBorders: false,
-            /**
-             * @name GridBaseOptions.renderAsync
-             * @type boolean
-             * @default false
-             */
             renderAsync: false,
             legacyRendering: false,
         };

@@ -50,7 +50,7 @@ import '../../../node_modules/jsrender/jsrender.min.js';
 import DataGrid from 'ui/data_grid/ui.data_grid';
 import $ from 'jquery';
 import Class from 'core/class';
-import ODataUtils from 'data/odata/utils';
+import { EdmLiteral } from 'data/odata/utils';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { logger } from 'core/utils/console';
 import errors from 'ui/widget/ui.errors';
@@ -3849,6 +3849,37 @@ QUnit.test('column headers visibility when hide removing row in batch editing mo
     assert.strictEqual($dataGrid.find('.dx-datagrid-headers').css('paddingRight'), '0px', 'no headers right padding');
 });
 
+// T852171
+QUnit.test('numberbox input right and left paddings should be equal if spin buttons are showed', function(assert) {
+    // arrange
+    const $dataGrid = $('#dataGrid').dxDataGrid({
+        dataSource: [{ field: 30 }],
+        loadingTimeout: undefined,
+        editing: {
+            mode: 'cell',
+            allowUpdating: true
+        },
+        columns: [{
+            dataField: 'field',
+            dataType: 'number',
+            editorOptions: {
+                showSpinButtons: true
+            }
+        }]
+    });
+
+    const dataGrid = $dataGrid.dxDataGrid('instance');
+
+    // act
+    dataGrid.editCell(0, 0);
+
+    const $input = $($dataGrid.find('.dx-editor-cell').find('.dx-texteditor-input'));
+
+    // assert
+    assert.equal($input.length, 1, 'input');
+    assert.equal($input.css('padding-right'), $input.css('padding-left'), 'paddings are equal');
+});
+
 // T712073
 QUnit.test('Delete two added rows after selection', function(assert) {
     // arrange, act
@@ -4293,6 +4324,38 @@ QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \
 
     // assert
     assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, 'navigated row is visible');
+});
+
+['standard', 'infinite', 'virtual'].forEach((scrollingMode) => {
+    ['standard', 'virtual'].forEach((columnRenderingMode) => {
+        QUnit.test(`Grid should not scroll top after navigate to row on the same page if scrolling.mode is ${scrollingMode} and scrolling.rowRenderingMode is ${columnRenderingMode} (T836612)`, function(assert) {
+            // arrange
+            const data = [];
+
+            for(let i = 0; i < 100; ++i) {
+                data.push({ id: i });
+            }
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 200,
+                keyExpr: 'id',
+                dataSource: data,
+                scrolling: {
+                    mode: 'virtual',
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            // act
+            dataGrid.navigateToRow(35);
+            dataGrid.navigateToRow(20);
+
+            // assert
+            assert.equal(dataGrid.pageIndex(), 1, 'Page index');
+        });
+    });
 });
 
 QUnit.test('DataGrid - Focus row by visible content in \'rowRenderingMode\' should not render rows (T820296)', function(assert) {
@@ -5759,6 +5822,21 @@ QUnit.test('max-height from styles', function(assert) {
     // assert
     assert.equal(dataGrid.totalCount(), 0, 'no items');
     assert.ok($dataGrid.find('.dx-datagrid').height() < 400, 'height is less then max-height');
+});
+
+// T849902
+QUnit.test('max-height as float number from styles', function(assert) {
+    // arrange, act
+    const dataGrid = $('#dataGrid').css('maxHeight', '100.2px').dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+        columns: ['field1']
+    }).dxDataGrid('instance');
+
+    // assert
+    const scrollable = dataGrid.getScrollable();
+    assert.ok(scrollable, 'scrollable is created');
+    assert.ok(scrollable.$content().height() > scrollable._container().height(), 'scroll is exists');
 });
 
 // T820186
@@ -7574,7 +7652,7 @@ QUnit.test('Load count on start when EdmLiteral in calculatedFilterExpression is
             filterValue: 50,
             dataType: 'number',
             calculateFilterExpression: function(value, filterOperation) {
-                value = new ODataUtils.EdmLiteral(value + 'm');
+                value = new EdmLiteral(value + 'm');
                 return [this.dataField, filterOperation || '=', value];
             }
         }],
@@ -9398,6 +9476,42 @@ QUnit.testInActiveWindow('Focus should not return to cell from filter row after 
     assert.ok($('.dx-datagrid-filter-row .dx-texteditor-input').is(':focus'), 'filter row\'s cell is focused');
 });
 
+function createRemoteDataSourceWithGroupPaging(arrayStore, key) {
+    return {
+        key,
+        load: function(options) {
+            const d = $.Deferred();
+            setTimeout(function() {
+                const result = {};
+                arrayStore.load(options).done(function(data) {
+                    result.data = data;
+
+                    if(options.group) {
+                        data.forEach(item => {
+                            item.count = item.items.length;
+                            item.items = null;
+                        });
+                    }
+                });
+                if(options.requireGroupCount) {
+                    arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
+                        result.groupCount = groupedData.length;
+                    });
+                }
+                if(options.requireTotalCount) {
+                    arrayStore.totalCount(options).done(function(totalCount) {
+                        result.totalCount = totalCount;
+                    });
+                }
+
+                d.resolve(result);
+            }, 10);
+
+            return d;
+        }
+    };
+}
+
 // T716207
 QUnit.test('Filtering should works correctly if groupPaging is enabled and group is expanded', function(assert) {
     // arrange
@@ -9409,39 +9523,7 @@ QUnit.test('Filtering should works correctly if groupPaging is enabled and group
         { id: 4, group: 'group', type: 2 }
     ]);
     const dataGrid = $('#dataGrid').dxDataGrid({
-        dataSource: {
-            key: 'id',
-            load: function(options) {
-                const d = $.Deferred();
-                setTimeout(function() {
-                    const result = {};
-                    arrayStore.load(options).done(function(data) {
-                        result.data = data;
-
-                        if(options.group) {
-                            data.forEach(item => {
-                                item.count = item.items.length;
-                                item.items = null;
-                            });
-                        }
-                    });
-                    if(options.requireGroupCount) {
-                        arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
-                            result.groupCount = groupedData.length;
-                        });
-                    }
-                    if(options.requireTotalCount) {
-                        arrayStore.totalCount(options).done(function(totalCount) {
-                            result.totalCount = totalCount;
-                        });
-                    }
-
-                    d.resolve(result);
-                }, 10);
-
-                return d;
-            }
-        },
+        dataSource: createRemoteDataSourceWithGroupPaging(arrayStore, 'id'),
         remoteOperations: { groupPaging: true },
         height: 400,
         filterSyncEnabled: true,
@@ -12656,14 +12738,14 @@ QUnit.testInActiveWindow('Focus should be correct after change value and click t
     assert.equal($(dataGrid.getRowElement(1)).find(':focus').length, 1, 'focus in second row');
 });
 
-// T819067
-QUnit.testInActiveWindow('Datebox editor\'s enter key handler should be replaced by noop', function(assert) {
+QUnit.testInActiveWindow('Datebox editor\'s enter key handler should be replaced by noop (T819067)', function(assert) {
     if(devices.real().deviceType !== 'desktop') {
         assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
         return;
     }
 
     // arrange
+    const rowsViewWrapper = dataGridWrapper.rowsView;
     const dataGrid = createDataGrid({
         dataSource: [{ dateField: '2000/01/01 12:42' }],
         editing: {
@@ -12672,22 +12754,60 @@ QUnit.testInActiveWindow('Datebox editor\'s enter key handler should be replaced
         },
         columns: [{
             dataField: 'dateField',
-            dataType: 'date',
+            dataType: 'date'
         }]
     });
-    let dateBox;
-    let enterKeyHandler;
-
     this.clock.tick();
 
     // act
     $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
 
-    dateBox = dataGrid.$element().find('.dx-datebox').dxDateBox('instance');
-    enterKeyHandler = dateBox._supportedKeys().enter;
-
     // assert
-    assert.equal(enterKeyHandler, commonUtils.noop, 'dateBox enter key handler was replaced');
+    const dateBox = rowsViewWrapper.getEditor(0, 0).dxDateBox('instance');
+    const enterKeyHandler = dateBox._supportedKeys().enter;
+    assert.strictEqual(enterKeyHandler(), true, 'dateBox enter key handler is replaced');
+});
+
+QUnit.testInActiveWindow('Datebox editor\'s value should be selected from calendar by keyboard (T848039)', function(assert) {
+    if(devices.real().deviceType !== 'desktop') {
+        assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+        return;
+    }
+
+    [true, false].forEach(useMaskBehavior => {
+        // arrange
+        const rowsViewWrapper = dataGridWrapper.rowsView;
+        const dataGrid = createDataGrid({
+            dataSource: [{ dateField: '01/01/2000' }],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            columns: [{
+                dataField: 'dateField',
+                dataType: 'date',
+                editorOptions: {
+                    useMaskBehavior: useMaskBehavior
+                }
+            }]
+        });
+        this.clock.tick();
+
+        // act
+        dataGrid.editCell(0, 0);
+        this.clock.tick();
+
+        const instance = rowsViewWrapper.getEditor(0, 0).dxDateBox('instance');
+        const keyboard = keyboardMock(rowsViewWrapper.getEditorInput(0, 0));
+
+        instance.open();
+        keyboard
+            .keyDown('left')
+            .press('enter');
+
+        // assert
+        assert.equal(rowsViewWrapper.getEditorInput(0, 0).val(), '12/31/1999', `dateBox value is changed if useMaskBehavior is ${useMaskBehavior}`);
+    });
 });
 
 QUnit.testInActiveWindow('dataGrid resize generates exception if fixed column presents and validation applied in cell edit mode (T629168)', function(assert) {
@@ -16601,6 +16721,39 @@ QUnit.test('Refresh with changesOnly and summary', function(assert) {
     assert.strictEqual($updatedCellElements.eq(1).text(), 'Sum: 500', 'cell value is updated');
 });
 
+// T851082
+QUnit.test('Row deleting should works if recalculateWhileEditing is enabled and refreshMode is repaint', function(assert) {
+    // arrange
+    const dataGrid = createDataGrid({
+        dataSource: [{ id: 1 }],
+        keyExpr: 'id',
+        editing: {
+            refreshMode: 'repaint',
+            mode: 'batch',
+            allowDeleting: true
+        },
+        summary: {
+            recalculateWhileEditing: true,
+            totalItems: [{
+                column: 'id',
+                summaryType: 'count'
+            }]
+        }
+    });
+    this.clock.tick();
+
+    // act
+    dataGrid.deleteRow(0);
+    this.clock.tick();
+
+    dataGrid.saveEditData();
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'row is removed');
+    assert.strictEqual(dataGrid.getTotalSummaryValue('id'), 0, 'summary is updated');
+});
+
 QUnit.test('Refresh with changesOnly for fixed columns', function(assert) {
     // arrange
     const dataSource = new DataSource({
@@ -18221,6 +18374,38 @@ QUnit.testInActiveWindow('DataGrid - Master grid should not render it\'s overlay
     assert.ok(detailRowsViewWrapper.isFocusOverlayVisible(), 'Detail grid focus overlay is visible');
 });
 
+QUnit.testInActiveWindow('Not highlight cell if isHighlighted set false in the onFocusedCellChanging event by Tab key (T853599)', function(assert) {
+    // arrange
+    let focusedCellChangingCount = 0;
+    this.dataGrid.option({
+        dataSource: [{ name: 'Alex', phone: '111111', room: 6 }],
+        keyExpr: 'name',
+        onFocusedCellChanging: function(e) {
+            ++focusedCellChangingCount;
+            e.isHighlighted = false;
+        }
+    });
+    this.clock.tick();
+
+    $(this.dataGrid.getCellElement(0, 0))
+        .trigger(pointerEvents.up)
+        .click();
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.dataGrid.option('focusedRowIndex'), 0, 'focusedRowIndex');
+    assert.equal(this.dataGrid.option('focusedColumnIndex'), 0, 'focusedColumnIndex');
+
+    // act
+    const navigationController = this.dataGrid.getController('keyboardNavigation');
+    navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(this.dataGrid.getCellElement(0, 0)) }) });
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedCellChangingCount, 2, 'onFocusedCellChanging fires count');
+    assert.notOk($(this.dataGrid.getCellElement(0, 1)).hasClass('dx-focused'), 'cell is not focused');
+});
+
 QUnit.test('Focus row element should support native DOM', function(assert) {
     // arrange
     let $focusedCell;
@@ -18344,7 +18529,9 @@ QUnit.test('Should open master detail by click if row is edited in row mode (T84
         this.dataGrid.option({
             loadingTimeout: undefined,
             dataSource: [{ id: 1 }],
-            startEditAction: startEditAction,
+            editing: {
+                startEditAction: startEditAction
+            },
             masterDetail: {
                 enabled: true,
                 template: function(container, options) {
@@ -18588,6 +18775,50 @@ QUnit.test('The edited cell should be closed on click inside another dataGrid', 
     assert.ok($(dataGrid2.getCellElement(0, 0)).find('input').length > 0, 'has input');
 });
 
+QUnit.test('The cell should not be focused on pointerEvents.down event (T850219)', function(assert) {
+    ['row', 'cell'].forEach(editingMode => {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1' }],
+            editing: {
+                mode: editingMode,
+                allowUpdating: true
+            }
+        });
+        this.clock.tick();
+
+        // act
+        $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.down);
+        this.clock.tick();
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-focus-disabled'), `cell has dx-cell-focus-disabled class in '${editingMode}' editing mode`);
+        assert.equal($(dataGrid.$element()).find('.dx-datagrid-focus-overlay').length, 0, `focus overlay is not rendered in '${editingMode}' editing mode`);
+    });
+});
+
+QUnit.test('The cell should not have dx-cell-focus-disabled class on pointerEvents.down event with row editing mode if row in editing state (T850219)', function(assert) {
+    // arrange
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 'test1', field2: 'test2' }],
+        editing: {
+            mode: 'row',
+            allowUpdating: true
+        }
+    });
+    this.clock.tick();
+
+    dataGrid.editRow(0);
+    this.clock.tick();
+
+    // act
+    $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.down);
+    this.clock.tick();
+
+    // assert
+    assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-focus-disabled'), 'cell has not dx-cell-focus-disabled class');
+});
+
 QUnit.test('onFocusedRowChanging, onFocusedRowChanged event if click selection checkBox (T812681)', function(assert) {
     // arrange
     const rowsViewWrapper = dataGridWrapper.rowsView;
@@ -18766,6 +18997,45 @@ QUnit.test('Popup should apply data changes after editorOptions changing (T81788
     $popupEditors = $('.dx-popup-content').find('.dx-texteditor');
     assert.equal($popupEditors.eq(0).find('input').eq(0).val(), 'new name', 'value changed');
     assert.equal($popupEditors.eq(1).get(0).style.height, '100px', 'editorOptions applied');
+});
+
+QUnit.test('Datagrid should edit only allowed cells by tab press if editing.allowUpdating option set dynamically (T848707)', function(assert) {
+    ['cell', 'batch'].forEach(editingMode => {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{
+                'ID': 1,
+                'FirstName': 'John',
+                'LastName': 'Heart',
+            }, {
+                'ID': 2,
+                'FirstName': 'Robert',
+                'LastName': 'Reagan'
+            }],
+            showBorders: true,
+            keyExpr: 'ID',
+            editing: {
+                mode: editingMode,
+                allowUpdating: function(e) {
+                    return e.row.data.FirstName === 'Robert';
+                },
+            },
+            columns: ['FirstName', 'LastName']
+        });
+
+        // act
+        dataGrid.editCell(1, 0);
+        this.clock.tick();
+
+        const navigationController = dataGrid.getController('keyboardNavigation');
+        navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
+        this.clock.tick();
+
+        // assert
+        assert.equal($(dataGrid.getCellElement(0, 1)).find('input').length, 0, `cell is not being edited in '${editingMode}' editing mode`);
+        assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-focused'), 'cell is focused');
+    });
 });
 
 QUnit.test('Filter builder custom operations should update filterValue immediately (T817973)', function(assert) {

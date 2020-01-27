@@ -226,15 +226,13 @@ QUnit.test('Selection works correct with custom rootValue', function(assert) {
         rootValue: 'none'
     }).dxTreeView('instance');
     const $icon = $(treeView.$element()).find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
-    let $checkbox;
-    let nodes;
 
     $icon.trigger('dxclick');
     assert.equal(treeView.option('items').length, 5);
 
-    $checkbox = treeView.$element().find('.dx-checkbox');
+    const $checkbox = treeView.$element().find('.dx-checkbox');
     $($checkbox.eq(1)).trigger('dxclick');
-    nodes = treeView.getNodes();
+    const nodes = treeView.getNodes();
     assert.ok(nodes[0].items[0].selected, 'item was selected');
     assert.strictEqual(nodes[0].selected, undefined, 'item selection has undefined state');
 });

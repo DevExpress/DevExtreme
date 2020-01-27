@@ -401,7 +401,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         fileManagerInstance.option('itemView.mode', 'thumbnails');
         this.clock.tick(400);
 
-        let $dropDownButton = this.wrapper.getGeneralToolbarElements().last();
+        let $dropDownButton = this.wrapper.getToolbarDropDownButton();
         assert.equal($dropDownButton.attr('title'), 'Thumbnails View', 'Thumbnails View');
 
         $dropDownButton.find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
@@ -410,7 +410,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $(detailsViewSelector).trigger('dxclick');
         this.clock.tick(400);
 
-        $dropDownButton = this.wrapper.getGeneralToolbarElements().last();
+        $dropDownButton = this.wrapper.getToolbarDropDownButton();
         assert.equal($dropDownButton.attr('title'), 'Details View', 'Details View');
 
         this.wrapper.findDetailsItem('File 1.txt').trigger('dxclick');
@@ -425,7 +425,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         this.clock.tick(400);
         assert.equal(this.wrapper.getDetailsItemName(0), 'New filename.txt', 'File renamed');
 
-        $dropDownButton = this.wrapper.getGeneralToolbarElements().last();
+        $dropDownButton = this.wrapper.getToolbarDropDownButton();
         assert.equal($dropDownButton.attr('title'), 'Details View', 'Details View');
 
         $dropDownButton.find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
@@ -434,7 +434,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $(detailsViewSelector).trigger('dxclick');
         this.clock.tick(400);
 
-        $dropDownButton = this.wrapper.getGeneralToolbarElements().last();
+        $dropDownButton = this.wrapper.getToolbarDropDownButton();
         assert.equal($dropDownButton.attr('title'), 'Thumbnails View', 'Thumbnails View');
     });
 

@@ -131,6 +131,12 @@
                 background: @filemanager-file-item-select-bg;
             }
 
+            .dx-filemanager-thumbnails-item-thumbnail {
+                width: @MATERIAL_BASE_ICON_SIZE * 2;
+                height: @MATERIAL_BASE_ICON_SIZE * 2;
+                font-size: @MATERIAL_BASE_ICON_SIZE * 2;
+            }
+
             &.dx-filemanager-item-focused {
                 border-color: @base-text-color;
             }
@@ -161,6 +167,10 @@
                     padding-right: 0;
                     padding-left: 0;
                 }
+            }
+
+            .dx-row-focused .dx-filemanager-file-actions-button .dx-button {
+                color: @filemanager-item-focused-color;
             }
         }
     }
