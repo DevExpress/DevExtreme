@@ -3610,6 +3610,22 @@ QUnit.module('datebox w/ time list', {
         const $timeListItems = $('.dx-list .dx-list-item');
         assert.ok($timeListItems.length > 0);
     });
+
+    QUnit.test('should works correctly with serialized dates (T854579)', (assert) => {
+        this.dateBox.option({
+            opened: true,
+            dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx',
+        });
+        const $input = $(this.dateBox.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $items = $(this.dateBox.content()).find(LIST_ITEM_SELECTOR);
+
+        $items.eq(1).trigger('dxclick');
+        assert.strictEqual($input.val(), $items.eq(1).text(), 'time is applied');
+
+        this.dateBox.open();
+        $items.eq(3).trigger('dxclick');
+        assert.strictEqual($input.val(), $items.eq(3).text(), 'new time is applied');
+    });
 });
 
 QUnit.module('keyboard navigation', {
