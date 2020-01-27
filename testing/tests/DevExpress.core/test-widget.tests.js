@@ -124,10 +124,8 @@ QUnit.test('should not fire click event if the accessKey is pressed', function(a
     window.setTimeout(() => {
         $widget.on('dxclick', () => isImmediatePropagationStopped = false);
         $widget.trigger($.Event('dxclick', { screenX: 0, offsetX: 0, pageX: 0 }));
-        window.setTimeout(() => {
-            assert.ok(isImmediatePropagationStopped);
-            done();
-        }, 0);
+        assert.ok(isImmediatePropagationStopped);
+        done();
     }, 50);
 });
 
