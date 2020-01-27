@@ -14924,6 +14924,48 @@ QUnit.test('The edit form should not be rerendered when setCellValue is set for 
     assert.strictEqual($editForm.find('.dx-datagrid-edit-form-item').first().find('.dx-texteditor-input').val(), 'Test', 'first cell value is changed');
 });
 
+// T848729
+QUnit.test('The onRowClick event should not be fired when clicking on a save button in the edit form', function(assert) {
+    // arrange
+    this.options.loadingTimeout = 30;
+    this.options.repaintChangesOnly = true;
+    this.options.editing.texts = {
+        saveRowChanges: 'Save'
+    };
+    const onRowClick = this.options.onRowClick = sinon.spy((e) => {
+        this.editRow(e.rowIndex);
+    });
+    this.options.rowTemplate = function(container) {
+        $('<tbody class="dx-row dx-data-row"><tr><td></td></tr></tbody>').appendTo(container);
+    };
+    this.setupModules(this);
+    this.clock.tick(30);
+
+    const rowsView = this.rowsView;
+    const $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    this.editRow(0);
+    this.cellValue(0, 'name', 'Test');
+
+    let $rowElement = $(this.getRowElement(0));
+    const $saveButton = $rowElement.find('.dx-button').first();
+
+    // assert
+    assert.ok($rowElement.hasClass('dx-datagrid-edit-form'), 'has edit form');
+    assert.strictEqual($saveButton.text(), 'Save', 'has save button');
+
+    // act
+    $saveButton.trigger('dxclick');
+    this.clock.tick(30);
+
+    // assert
+    $rowElement = $(this.getRowElement(0));
+    assert.notOk($rowElement.hasClass('dx-datagrid-edit-form'), 'has not edit form');
+    assert.strictEqual(onRowClick.callCount, 0, 'onRowClick event is not fired');
+});
+
 
 QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {
