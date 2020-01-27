@@ -2015,7 +2015,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.rowAlternationEnabled */
         rowAlternationEnabled?: boolean;
         /** @name GridBase.Options.rowDragging */
-        rowDragging?: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | Element | JQuery, container?: string | Element | JQuery, cursorOffset?: string | { x?: number, y?: number }, data?: any, dragDirection?: 'both' | 'horizontal' | 'vertical', dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery), dropFeedbackMode?: 'push' | 'indicate', filter?: string, group?: string, handle?: string, onAdd?: ((e: { event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragChange?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragEnd?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragMove?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragStart?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, fromData?: any }) => any), onRemove?: ((e: { event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any }) => any), onReorder?: ((e: { event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean };
+        rowDragging?: GridBaseRowDragging;
         /** @name GridBase.Options.scrolling */
         scrolling?: GridBaseScrolling;
         /** @name GridBase.Options.searchPanel */
@@ -2093,6 +2093,53 @@ declare module DevExpress.ui {
         pageIndex?: number;
         /** @name GridBase.Options.paging.pageSize */
         pageSize?: number;
+    }
+    /** @name GridBase.Options.rowDragging */
+    export interface GridBaseRowDragging {
+        /** @name GridBase.Options.rowDragging.allowDropInsideItem */
+        allowDropInsideItem?: boolean;
+        /** @name GridBase.Options.rowDragging.allowReordering */
+        allowReordering?: boolean;
+        /** @name GridBase.Options.rowDragging.autoScroll */
+        autoScroll?: boolean;
+        /** @name GridBase.Options.rowDragging.boundary */
+        boundary?: string | Element | JQuery;
+        /** @name GridBase.Options.rowDragging.container */
+        container?: string | Element | JQuery;
+        /** @name GridBase.Options.rowDragging.cursorOffset */
+        cursorOffset?: string | { x?: number, y?: number };
+        /** @name GridBase.Options.rowDragging.data */
+        data?: any;
+        /** @name GridBase.Options.rowDragging.dragDirection */
+        dragDirection?: 'both' | 'horizontal' | 'vertical';
+        /** @name GridBase.Options.rowDragging.dragTemplate */
+        dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** @name GridBase.Options.rowDragging.dropFeedbackMode */
+        dropFeedbackMode?: 'push' | 'indicate';
+        /** @name GridBase.Options.rowDragging.filter */
+        filter?: string;
+        /** @name GridBase.Options.rowDragging.group */
+        group?: string;
+        /** @name GridBase.Options.rowDragging.handle */
+        handle?: string;
+        /** @name GridBase.Options.rowDragging.onAdd */
+        onAdd?: ((e: { event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+        /** @name GridBase.Options.rowDragging.onDragChange */
+        onDragChange?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+        /** @name GridBase.Options.rowDragging.onDragEnd */
+        onDragEnd?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+        /** @name GridBase.Options.rowDragging.onDragMove */
+        onDragMove?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+        /** @name GridBase.Options.rowDragging.onDragStart */
+        onDragStart?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, fromData?: any }) => any);
+        /** @name GridBase.Options.rowDragging.onRemove */
+        onRemove?: ((e: { event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any }) => any);
+        /** @name GridBase.Options.rowDragging.scrollSensitivity */
+        scrollSensitivity?: number;
+        /** @name GridBase.Options.rowDragging.scrollSpeed */
+        scrollSpeed?: number;
+        /** @name GridBase.Options.rowDragging.showDragIcons */
+        showDragIcons?: boolean;
     }
     /** @name GridBase.Options.scrolling */
     export interface GridBaseScrolling {
@@ -2900,6 +2947,8 @@ declare module DevExpress.ui {
         onRowPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** @name dxDataGrid.Options.remoteOperations */
         remoteOperations?: boolean | { filtering?: boolean, groupPaging?: boolean, grouping?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean } | 'auto';
+        /** @name dxDataGrid.Options.rowDragging */
+        rowDragging?: dxDataGridRowDragging;
         /** @name dxDataGrid.Options.rowTemplate */
         rowTemplate?: DevExpress.core.template | ((rowElement: DevExpress.core.dxElement, rowInfo: any) => any);
         /** @name dxDataGrid.Options.scrolling */
@@ -2923,6 +2972,11 @@ declare module DevExpress.ui {
         allowUpdating?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject }) => boolean);
         /** @name dxDataGrid.Options.editing.texts */
         texts?: any;
+    }
+    /** @name dxDataGrid.Options.rowDragging */
+    export interface dxDataGridRowDragging extends DevExpress.ui.GridBaseRowDragging {
+        /** @name dxDataGrid.Options.rowDragging.onReorder */
+        onReorder?: ((e: { event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxDataGrid, toComponent?: dxDataGrid, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
     }
     /** @name dxDataGrid.Options.scrolling */
     export interface dxDataGridScrolling extends GridBaseScrolling {
@@ -5505,7 +5559,7 @@ declare module DevExpress.ui {
         /** @name dxSortable.Options.onRemove */
         onRemove?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any }) => any);
         /** @name dxSortable.Options.onReorder */
-        onReorder?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, toComponent?: dxSortable | dxDraggable | dxDataGrid | dxScheduler | dxList | dxTreeList, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+        onReorder?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable, toComponent?: dxSortable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
     }
     /** @name dxSortable */
     export class dxSortable extends DraggableBase {
@@ -5984,6 +6038,8 @@ declare module DevExpress.ui {
         remoteOperations?: { filtering?: boolean, grouping?: boolean, sorting?: boolean } | 'auto';
         /** @name dxTreeList.Options.rootValue */
         rootValue?: any;
+        /** @name dxTreeList.Options.rowDragging */
+        rowDragging?: dxTreeListRowDragging;
         /** @name dxTreeList.Options.scrolling */
         scrolling?: dxTreeListScrolling;
         /** @name dxTreeList.Options.selection */
@@ -6009,6 +6065,11 @@ declare module DevExpress.ui {
     export interface dxTreeListPaging extends GridBasePaging {
         /** @name dxTreeList.Options.paging.enabled */
         enabled?: boolean;
+    }
+    /** @name dxTreeList.Options.rowDragging */
+    export interface dxTreeListRowDragging extends DevExpress.ui.GridBaseRowDragging {
+        /** @name dxTreeList.Options.rowDragging.onReorder */
+        onReorder?: ((e: { event?: event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxTreeList, toComponent?: dxTreeList, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
     }
     /** @name dxTreeList.Options.scrolling */
     export interface dxTreeListScrolling extends GridBaseScrolling {
