@@ -17,7 +17,7 @@ describe('Button', () => {
         const model = new Button();
         model.text = 'My button';
 
-        model.contentRender = ({text}) => (<div className="custom-content">{text + "123"}</div>);
+        model.contentRender = ({text}) => (<div className="custom-content">{`${text}123`}</div>);
 
         const tree = shallow(viewFunction(viewModelFunction(model)));
 
