@@ -17,7 +17,7 @@ pipeline:
   build:
     image: devexpress/devextreme-build:20_1
     environment:
-      - TERM=color
+      - TERM=xterm
       - TRAVIS=true
     commands:
       - ./drone-cache.sh restore
