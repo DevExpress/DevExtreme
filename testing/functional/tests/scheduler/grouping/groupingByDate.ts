@@ -12,7 +12,7 @@ test("Drag-n-drop between dateTable and allDay panel, groupByDate=true", async t
 
     await t
         .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(1))
-        .expect(draggableAppointment.size.width).eql("111px")
+        .expect(draggableAppointment.element.exists).ok()
         .expect(draggableAppointment.isAllDay).ok();
 
 }).before(() => createScheduler({
