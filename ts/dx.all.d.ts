@@ -6218,6 +6218,8 @@ declare module DevExpress.ui {
         expandItem(key: any): void;
         /** @name dxTreeView.getNodes() */
         getNodes(): Array<dxTreeViewNode>;
+        /** @name dxTreeView.getSelectedNodeKeys() */
+        getSelectedNodeKeys(): Array<any>;
         /** @name dxTreeView.getSelectedNodes() */
         getSelectedNodes(): Array<dxTreeViewNode>;
         /** @name dxTreeView.getSelectedNodesKeys() */

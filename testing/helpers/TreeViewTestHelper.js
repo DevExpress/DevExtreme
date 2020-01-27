@@ -82,8 +82,8 @@ class TreeViewTestWrapper {
     }
 
     checkSelectedKeys(expectedSelectedKeys, additionalErrorMessage) {
-        const selectedKeys = this.instance.getSelectedNodesKeys();
-        assert.deepEqual(selectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method ' + additionalErrorMessage);
+        const selectedKeys = this.instance.getSelectedNodeKeys();
+        assert.deepEqual(selectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodeKeys method ' + additionalErrorMessage);
 
         const selectedKeysByAdapter = this.instance._dataAdapter.getSelectedNodesKeys();
         assert.deepEqual(selectedKeysByAdapter.sort(), expectedSelectedKeys.sort(), 'selectedKeys from dataAdapter' + additionalErrorMessage);

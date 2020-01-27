@@ -1360,7 +1360,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _isLastRequired: function(node) {
         const selectionRequired = this.option('selectionRequired');
         const isSingleMode = this._isSingleSelection();
-        const selectedNodesKeys = this.getSelectedNodesKeys();
+        const selectedNodesKeys = this.getSelectedNodeKeys();
 
         if(!selectionRequired) {
             return;
@@ -1397,7 +1397,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return false;
         }
 
-        const selectedNodesKeys = this.getSelectedNodesKeys();
+        const selectedNodesKeys = this.getSelectedNodeKeys();
         if(this._isSingleSelection() && value) {
             each(selectedNodesKeys, (index, nodeKey) => {
                 this.unselectItem(nodeKey);
@@ -1885,7 +1885,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     getSelectedNodes: function() {
         let items = [];
 
-        each(this.getSelectedNodesKeys(), (index, key) => {
+        each(this.getSelectedNodeKeys(), (index, key) => {
             let node = this._dataAdapter.getNodeByKey(key);
             let publicNode = this._dataAdapter.getPublicNode(node);
             items.push(publicNode);
@@ -1900,6 +1900,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
      * @return Array<any>
      */
     getSelectedNodesKeys: function() {
+        return this.getSelectedNodeKeys();
+    },
+
+    /**
+     * @name dxTreeViewMethods.getSelectedNodeKeys
+     * @publicName getSelectedNodeKeys()
+     * @return Array<any>
+     */
+    getSelectedNodeKeys: function() {
         return this._dataAdapter.getSelectedNodesKeys();
     },
 
@@ -1909,12 +1918,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
      * @param1 keys:Array<any>
      */
     selectNodesByKeys: function(keys) {
-        const oldSelectedKeys = this.getSelectedNodesKeys();
+        const oldSelectedKeys = this.getSelectedNodeKeys();
         keys.forEach((key) => {
             this._setItemSelection(true, key);
         });
 
-        const actualSelectedKeys = this.getSelectedNodesKeys();
+        const actualSelectedKeys = this.getSelectedNodeKeys();
         if(oldSelectedKeys !== actualSelectedKeys) {
             this._fireSelectionChanged();
         }
