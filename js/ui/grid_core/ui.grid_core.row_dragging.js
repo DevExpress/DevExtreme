@@ -337,7 +337,7 @@ module.exports = {
                  * @type_function_param1_field9 toData:any
                  */
                 /**
-                 * @name GridBaseOptions.rowDragging.onReorder
+                 * @name dxDataGridOptions.rowDragging.onReorder
                  * @type function(e)
                  * @type_function_param1 e:object
                  * @type_function_param1_field1 event:event
@@ -345,8 +345,23 @@ module.exports = {
                  * @type_function_param1_field3 itemElement:dxElement
                  * @type_function_param1_field4 fromIndex:number
                  * @type_function_param1_field5 toIndex:number
-                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
-                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable|dxDataGrid|dxScheduler|dxList|dxTreeList
+                 * @type_function_param1_field6 fromComponent:dxDataGrid
+                 * @type_function_param1_field7 toComponent:dxDataGrid
+                 * @type_function_param1_field8 fromData:any
+                 * @type_function_param1_field9 toData:any
+                 * @type_function_param1_field10 dropInsideItem:boolean
+                 */
+                /**
+                 * @name dxTreeListOptions.rowDragging.onReorder
+                 * @type function(e)
+                 * @type_function_param1 e:object
+                 * @type_function_param1_field1 event:event
+                 * @type_function_param1_field2 itemData:any
+                 * @type_function_param1_field3 itemElement:dxElement
+                 * @type_function_param1_field4 fromIndex:number
+                 * @type_function_param1_field5 toIndex:number
+                 * @type_function_param1_field6 fromComponent:dxTreeList
+                 * @type_function_param1_field7 toComponent:dxTreeList
                  * @type_function_param1_field8 fromData:any
                  * @type_function_param1_field9 toData:any
                  * @type_function_param1_field10 dropInsideItem:boolean
