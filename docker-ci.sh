@@ -161,6 +161,15 @@ function run_test_functional {
     npm run test-functional -- $args
 }
 
+function run_test_jest {
+    export DEVEXTREME_TEST_CI=true
+
+    npm i
+    npm run build
+
+    npm run test-jest
+}
+
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
 case "$TARGET" in
@@ -169,6 +178,7 @@ case "$TARGET" in
     "test") run_test ;;
     "test_themebuilder") run_test_themebuilder ;;
     "test_functional") run_test_functional ;;
+    "test_jest") run_test_jest ;;
 
     *)
         echo "Unknown target"
