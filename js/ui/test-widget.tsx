@@ -270,6 +270,7 @@ export default class Widget {
     @Effect()
     focusEffect() {
         const namespace = 'UIFeedback';
+        const isFocusable = this.focusStateEnabled && !this.disabled;
 
         if(this.focusStateEnabled) {
             focus.on(this.widgetRef,
@@ -285,7 +286,7 @@ export default class Widget {
                 },
                 {
                     namespace,
-                    isFocusable: this.focusStateEnabled && !this.disabled,
+                    isFocusable,
                 }
             );
         }
