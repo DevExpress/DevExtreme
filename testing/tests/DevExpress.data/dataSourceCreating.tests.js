@@ -86,7 +86,7 @@ QUnit.test('options.store is ODataStore config', function(assert) {
     });
 
     assert.ok(source.store() instanceof ODataStore);
-    assert.equal(source.store()._url, url);
+    assert.equal(source.store()._requestDispatcher.url, url);
 });
 
 QUnit.test('options.store is LocalStore config', function(assert) {

@@ -5,7 +5,7 @@ const proxyUrlFormatter = require('../proxy_url_formatter');
 const errors = require('../errors').errors;
 const query = require('../query');
 const Store = require('../abstract_store');
-const mixins = require('./mixins');
+const RequestDispatcher = require('./request_dispatcher').default;
 const deferredUtils = require('../../core/utils/deferred');
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -45,8 +45,7 @@ const ODataStore = Store.inherit({
     ctor: function(options) {
         this.callBase(options);
 
-        this._extractServiceOptions(options);
-
+        this._requestDispatcher = new RequestDispatcher(options);
 
         let key = this.key();
         let fieldTypes = options.fieldTypes;
@@ -84,11 +83,11 @@ const ODataStore = Store.inherit({
         const params = {};
 
         if(extraOptions) {
-            params['$expand'] = odataUtils.generateExpand(this._version, extraOptions.expand, extraOptions.select) || undefined;
-            params['$select'] = odataUtils.generateSelect(this._version, extraOptions.select) || undefined;
+            params['$expand'] = odataUtils.generateExpand(this.version(), extraOptions.expand, extraOptions.select) || undefined;
+            params['$select'] = odataUtils.generateSelect(this.version(), extraOptions.select) || undefined;
         }
 
-        return this._sendRequest(this._byKeyUrl(key), 'GET', params);
+        return this._requestDispatcher.sendRequest(this._byKeyUrl(key), 'GET', params);
     },
 
     createQuery: function(loadOptions) {
@@ -98,14 +97,14 @@ const ODataStore = Store.inherit({
         const queryOptions = {
             adapter: 'odata',
 
-            beforeSend: this._beforeSend,
+            beforeSend: this._requestDispatcher.beforeSend,
             errorHandler: this._errorHandler,
-            jsonp: this._jsonp,
-            version: this._version,
-            withCredentials: this._withCredentials,
+            jsonp: this._requestDispatcher.jsonp,
+            version: this._requestDispatcher.version,
+            withCredentials: this._requestDispatcher._withCredentials,
             expand: loadOptions.expand,
             requireTotalCount: loadOptions.requireTotalCount,
-            deserializeDates: this._deserializeDates,
+            deserializeDates: this._requestDispatcher._deserializeDates,
             fieldTypes: this._fieldTypes
         };
 
@@ -113,18 +112,18 @@ const ODataStore = Store.inherit({
         if(isDefined(loadOptions.urlOverride)) {
             url = loadOptions.urlOverride;
         } else {
-            url = this._url;
+            url = this._requestDispatcher.url;
         }
 
-        if(isDefined(this._filterToLower)) {
-            queryOptions.filterToLower = this._filterToLower;
+        if(isDefined(this._requestDispatcher.filterToLower)) {
+            queryOptions.filterToLower = this._requestDispatcher.filterToLower;
         }
 
         if(loadOptions.customQueryParams) {
-            const params = mixins.escapeServiceOperationParams(loadOptions.customQueryParams, this.version());
+            const params = odataUtils.escapeServiceOperationParams(loadOptions.customQueryParams, this.version());
 
             if(this.version() === 4) {
-                url = mixins.formatFunctionInvocationUrl(url, params);
+                url = odataUtils.formatFunctionInvocationUrl(url, params);
             } else {
                 queryOptions.params = params;
             }
@@ -139,7 +138,7 @@ const ODataStore = Store.inherit({
         const that = this;
         const d = new Deferred();
 
-        when(this._sendRequest(this._url, 'POST', null, values))
+        when(this._requestDispatcher.sendRequest(this._requestDispatcher.url, 'POST', null, values))
             .done(function(serverResponse) {
                 d.resolve(config().useLegacyStoreResult ? values : (serverResponse || values), that.keyOf(serverResponse));
             })
@@ -152,7 +151,7 @@ const ODataStore = Store.inherit({
         const d = new Deferred();
 
         when(
-            this._sendRequest(this._byKeyUrl(key), this._updateMethod, null, values)
+            this._requestDispatcher.sendRequest(this._byKeyUrl(key), this._updateMethod, null, values)
         ).done(
             function(serverResponse) {
                 if(config().useLegacyStoreResult) {
@@ -170,7 +169,7 @@ const ODataStore = Store.inherit({
         const d = new Deferred();
 
         when(
-            this._sendRequest(this._byKeyUrl(key), 'DELETE')
+            this._requestDispatcher.sendRequest(this._byKeyUrl(key), 'DELETE')
         ).done(
             function() {
                 d.resolve(key);
@@ -200,14 +199,18 @@ const ODataStore = Store.inherit({
 
     _byKeyUrl: function(value, useOriginalHost) {
         const baseUrl = useOriginalHost
-            ? proxyUrlFormatter.formatLocalUrl(this._url)
-            : this._url;
+            ? proxyUrlFormatter.formatLocalUrl(this._requestDispatcher.url)
+            : this._requestDispatcher.url;
 
         const convertedKey = this._convertKey(value);
 
-        return baseUrl + '(' + encodeURIComponent(odataUtils.serializeKey(convertedKey, this._version)) + ')';
+        return baseUrl + '(' + encodeURIComponent(odataUtils.serializeKey(convertedKey, this.version())) + ')';
+    },
+
+    version() {
+        return this._requestDispatcher.version;
     }
 
-}, 'odata').include(mixins.SharedMethods);
+}, 'odata');
 
 module.exports = ODataStore;
