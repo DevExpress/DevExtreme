@@ -463,7 +463,9 @@
             if(timerInfo.timerType === 'animationFrames' &&
                 [
                     'function(){for(vara=0;a<d.length;a++)d[a]();d=[]}',
-                    'function(){for(vari=0;i<waitQueue.length;i++){waitQueue[i]();}waitQueue=[];}'
+                    'function(){for(vari=0;i<waitQueue.length;i++){waitQueue[i]();}waitQueue=[];}',
+                    'function(){clearTimeout(u),cancelAnimationFrame(t),setTimeout(n)}', // NOTE: Preact
+                    'function l(){o.some(function(n){n.__P&&(n.__H.u.forEach(m),n.__H.u.forEach(d),n.__H.u=[])}),o=[]}' // NOTE: Preact hooks
                 ].indexOf(callback) > -1) {
                 // NOTE: Special thanks for Angular team
                 // 1. Implementation: https://github.com/angular/angular.js/blob/v1.5.x/src/ng/raf.js#L29
@@ -474,7 +476,9 @@
 
             if(timerInfo.timerType === 'timeouts' &&
                 (callback.indexOf('.Deferred.exceptionHook') > -1 || // NOTE: jQuery.Deferred are now asynchronous
-                callback.indexOf('e._drain()') > -1)) { // NOTE: SystemJS Promise polyfill
+                callback.indexOf('e._drain()') > -1 || // NOTE: SystemJS Promise polyfill
+                callback === 'function(){clearTimeout(u),cancelAnimationFrame(t),setTimeout(n)}' || // NOTE: Preact
+                callback === 'function l(){o.some(function(n){n.__P&&(n.__H.u.forEach(m),n.__H.u.forEach(d),n.__H.u=[])}),o=[]}')) { // NOTE: Preact hooks
                 return true;
             }
 
