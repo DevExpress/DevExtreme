@@ -162,6 +162,11 @@ function run_test_functional {
     npm run test-functional -- $args
 }
 
+function run_test_scss {
+    npm i
+    npx gulp convert-scss
+}
+
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
 case "$TARGET" in
@@ -170,6 +175,7 @@ case "$TARGET" in
     "test") run_test ;;
     "test_themebuilder") run_test_themebuilder ;;
     "test_functional") run_test_functional ;;
+    "test_scss") run_test_scss ;;
 
     *)
         echo "Unknown target"
