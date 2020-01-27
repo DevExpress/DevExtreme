@@ -21,7 +21,6 @@ function exportDataGrid(options) {
         autoFilterEnabled,
         keepColumnWidths,
         selectedRowsOnly,
-        wrapText,
         loadPanel
     } = _getFullOptions(options);
 
@@ -59,7 +58,7 @@ function exportDataGrid(options) {
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(cellsRange.from.row + rowIndex);
 
-                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText);
+                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges);
 
                 if(rowIndex >= headerRowCount) {
                     row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
@@ -120,14 +119,11 @@ function _getFullOptions(options) {
     if(!isDefined(fullOptions.autoFilterEnabled) && isDefined(fullOptions.component)) {
         fullOptions.autoFilterEnabled = !!fullOptions.component.option('export.excelFilterEnabled');
     }
-    if(!isDefined(fullOptions.wrapText)) {
-        fullOptions.wrapText = false;
-    }
 
     return fullOptions;
 }
 
-function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText) {
+function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges) {
     const styles = dataProvider.getStyles();
 
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
@@ -138,7 +134,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         excelCell.value = cellData.value;
 
         if(isDefined(excelCell.value)) {
-            const { bold, alignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
+            const { bold, alignment, wrapText, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
             if(isDefined(numberFormat)) {
