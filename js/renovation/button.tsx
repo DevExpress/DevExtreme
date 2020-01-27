@@ -43,7 +43,7 @@ const getCssClasses = (model: any) => {
 
     model.text && classNames.push('dx-button-has-text');
     model.icon && classNames.push('dx-button-has-icon');
-    return classNames.concat(model.classNames).join('');
+    return classNames.concat(model.classNames).join(' ');
 };
 
 export const viewModelFunction = (model: Button) => {

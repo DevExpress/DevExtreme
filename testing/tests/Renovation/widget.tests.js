@@ -22,13 +22,13 @@ const config = {
 QUnit.module('RTL', config);
 
 QUnit.test('should not add rtl marker class by default', function(assert) {
-    const $element = $('#component').dxTestWidget();
+    const $element = $('#component').Widget();
 
     assert.notOk($element.hasClass('dx-rtl'));
 });
 
 QUnit.test('should add rtl marker class if the "rtlEnabled" is true', function(assert) {
-    const $element = $('#component').dxTestWidget({ rtlEnabled: true });
+    const $element = $('#component').Widget({ rtlEnabled: true });
 
     assert.ok($element.hasClass('dx-rtl'));
 });
@@ -36,8 +36,8 @@ QUnit.test('should add rtl marker class if the "rtlEnabled" is true', function(a
 QUnit.module('Width/Height', config);
 
 QUnit.test('should render dimensions', function(assert) {
-    const $element = $('#component').dxTestWidget({ width: 150, height: 75 });
-    const instance = $element.dxTestWidget('instance');
+    const $element = $('#component').Widget({ width: 150, height: 75 });
+    const instance = $element.Widget('instance');
 
     assert.deepEqual($element.css(['width', 'height']), { width: '150px', height: '75px' });
 
@@ -46,9 +46,9 @@ QUnit.test('should render dimensions', function(assert) {
 });
 
 QUnit.test('should ignore incorrect dimensions', function(assert) {
-    const $element = $('#component').dxTestWidget({ width: 100, height: 100 });
+    const $element = $('#component').Widget({ width: 100, height: 100 });
     const style = $element.get(0).style;
-    const instance = $element.dxTestWidget('instance');
+    const instance = $element.Widget('instance');
 
     assert.strictEqual(style.width, '100px');
     assert.strictEqual(style.height, '100px');
@@ -65,7 +65,7 @@ QUnit.test('should ignore incorrect dimensions', function(assert) {
 QUnit.module('accessKey', config);
 
 QUnit.test('should not add "accesskey" attribute if "focusStateEnabled" is false', function(assert) {
-    const $widget = $('#component').dxTestWidget({
+    const $widget = $('#component').Widget({
         focusStateEnabled: false,
         accessKey: 'y'
     });
@@ -74,7 +74,7 @@ QUnit.test('should not add "accesskey" attribute if "focusStateEnabled" is false
 });
 
 QUnit.test('should not add "accesskey" attribute if "disabled" is true', function(assert) {
-    const $widget = $('#component').dxTestWidget({
+    const $widget = $('#component').Widget({
         focusStateEnabled: true,
         disabled: true,
         accessKey: 'y'
@@ -84,18 +84,18 @@ QUnit.test('should not add "accesskey" attribute if "disabled" is true', functio
 });
 
 QUnit.test('should change "accesskey" attribute', function(assert) {
-    const $widget = $('#component').dxTestWidget({
+    const $widget = $('#component').Widget({
         focusStateEnabled: true,
         accessKey: 'y'
     });
-    const instance = $widget.dxTestWidget('instance');
+    const instance = $widget.Widget('instance');
 
     instance.option('accessKey', 'g');
     assert.strictEqual($widget.attr('accesskey'), 'g');
 });
 
 // QUnit.testInActiveWindow('should take a focus if the accessKey is pressed', function(assert) {
-//     const $widget = $('#component').dxTestWidget({
+//     const $widget = $('#component').Widget({
 //         focusStateEnabled: true,
 //         accessKey: 'y'
 //     });
@@ -110,7 +110,7 @@ QUnit.test('should change "accesskey" attribute', function(assert) {
 // QUnit.test('should not fire click event if the accessKey is pressed', function(assert) {
 //     const done = assert.async();
 //     let isImmediatePropagationStopped = true;
-//     const $widget = $('#component').dxTestWidget({
+//     const $widget = $('#component').Widget({
 //         focusStateEnabled: true,
 //         accessKey: 'y'
 //     });
@@ -132,7 +132,7 @@ QUnit.test('should not remove attributes from container', function(assert) {
         'custom-attr': 'v1',
         'class': 'my-widget-class'
     });
-    const widget = $container.dxTestWidget({}).dxTestWidget('instance');
+    const widget = $container.Widget({}).Widget('instance');
 
     assert.equal(widget.$element().attr('id'), 'component');
     assert.equal(widget.$element().attr('custom-attr'), 'v1');
@@ -144,22 +144,22 @@ QUnit.test('can redefine attribute on conteiner using option', function(assert) 
     const $container = $('#component').attr({
         'custom-attr': 'v1',
     });
-    const widget = $container.dxTestWidget({
+    const widget = $container.Widget({
         elementAttr: {
             'custom-attr': 'v2'
         }
-    }).dxTestWidget('instance');
+    }).Widget('instance');
 
     assert.equal(widget.$element().attr('custom-attr'), 'v2');
     assert.deepEqual(widget.option().elementAttr, { 'custom-attr': 'v2' });
 });
 
 QUnit.test('Element should have all attributes after refresh', function(assert) {
-    const widget = $('#component').dxTestWidget({
+    const widget = $('#component').Widget({
         elementAttr: {
             'custom-attr': 'v2'
         }
-    }).dxTestWidget('instance');
+    }).Widget('instance');
 
     widget.option('elementAttr', {
         'a': 'v'
@@ -172,14 +172,14 @@ QUnit.module('Widget container', config);
 
 QUnit.test('widget.$element() is instance of container', function(assert) {
     const $container = $('#component');
-    const widget = $container.dxTestWidget({}).dxTestWidget('instance');
+    const widget = $container.Widget({}).Widget('instance');
 
     assert.equal(widget.$element().get(0), $container.get(0));
 });
 
 QUnit.test('widget.$element() is instance of container after refresh', function(assert) {
     const $container = $('#component');
-    const widget = $container.dxTestWidget({}).dxTestWidget('instance');
+    const widget = $container.Widget({}).Widget('instance');
 
     widget.option('elementAttr', { 'a': 'v' });
 
