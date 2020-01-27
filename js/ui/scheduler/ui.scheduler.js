@@ -1062,6 +1062,35 @@ const Scheduler = Widget.inherit({
         return this._calculateTimezoneByValue(this.option('timeZone'), date);
     },
 
+    _getDaylightOffsetByCustomTimezone: function(startDate, endDate) {
+        return this._getTimezoneOffsetByOption(startDate) - this._getTimezoneOffsetByOption(endDate);
+    },
+
+    _getDaylightOffsetByAppointmentTimezone: function(startDate, endDate, appointmentTimezone) {
+        return this._calculateTimezoneByValue(appointmentTimezone, startDate) - this._calculateTimezoneByValue(appointmentTimezone, endDate);
+    },
+
+    _getCorrectedDateByDaylightOffsets: function(originalStartDate, date, startDateTimezone) {
+        const daylightOffsetByOption = this._getDaylightOffsetByCustomTimezone(originalStartDate, date);
+        const daylightOffsetByAppointment = this._getDaylightOffsetByAppointmentTimezone(originalStartDate, date, startDateTimezone);
+        const diff = daylightOffsetByOption - daylightOffsetByAppointment;
+
+        return new Date(date.getTime() - diff * toMs('hour'));
+    },
+
+    getCorrectedDatesByDaylightOffsets: function(originalStartDate, dates, appointmentData) {
+        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
+        const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
+
+        if(needCheckTimezoneOffset) {
+            dates = dates.map((date) => {
+                return this._getCorrectedDateByDaylightOffsets(originalStartDate, date, startDateTimeZone);
+            });
+        }
+
+        return dates;
+    },
+
     _calculateTimezoneByValue: function(timezone, date) {
         let result = timezone;
 

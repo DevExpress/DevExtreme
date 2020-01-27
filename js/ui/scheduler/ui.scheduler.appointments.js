@@ -780,6 +780,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _processRecurrenceAppointment: function(appointment, index, skipLongAppointments) {
+        // NOTE: this method is actual only for agenda
         const recurrenceRule = this.invoke('getField', 'recurrenceRule', appointment);
         const result = {
             parts: [],
