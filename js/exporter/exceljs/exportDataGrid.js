@@ -117,7 +117,7 @@ function _getFullOptions(options) {
         fullOptions.loadPanel.text = messageLocalization.format('dxDataGrid-exporting');
     }
     if(!isDefined(fullOptions.autoFilterEnabled)) {
-        fullOptions.autoFilterEnabled = true;
+        fullOptions.autoFilterEnabled = false;
     }
 
     return fullOptions;
