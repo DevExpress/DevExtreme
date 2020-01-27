@@ -6225,11 +6225,11 @@ declare module DevExpress.ui {
         /** @name dxTreeView.getNodes() */
         getNodes(): Array<dxTreeViewNode>;
         /** @name dxTreeView.getSelectedNodeKeys() */
-        getSelectedNodeKeys(): void;
+        getSelectedNodeKeys(): Array<any>;
         /** @name dxTreeView.getSelectedNodes() */
         getSelectedNodes(): Array<dxTreeViewNode>;
         /** @name dxTreeView.getSelectedNodesKeys() */
-        getSelectedNodesKeys(): void;
+        getSelectedNodesKeys(): Array<any>;
         /** @name dxTreeView.selectAll() */
         selectAll(): void;
         /** @name dxTreeView.selectItem(itemData) */
@@ -6239,7 +6239,7 @@ declare module DevExpress.ui {
         /** @name dxTreeView.selectItem(key) */
         selectItem(key: any): void;
         /** @name dxTreeView.selectNodesByKeys(keys) */
-        selectNodesByKeys(keys: Array<any>): void;
+        selectNodesByKeys(keys: Array<any>): Array<any>;
         /** @name dxTreeView.unselectAll() */
         unselectAll(): void;
         /** @name dxTreeView.unselectItem(itemData) */
