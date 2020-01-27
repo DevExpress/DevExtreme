@@ -2661,16 +2661,16 @@ module.exports = {
 
                     const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
                     // test
-                    let isCellInvalidInNewRow = false;
+                    let isCellValidatedInRow = false;
                     const validatingController = this.getController('validating');
                     if(validatingController) {
                         const cellValidationInfo = validatingController.getCellValidationInfo({
                             keyValue: parameters.key,
                             columnIndex: parameters.column.index
                         });
-                        isCellInvalidInNewRow = parameters.row.isNewRow && validatingController.isRowValidated(parameters.key) && cellValidationInfo && !cellValidationInfo.isValid;
+                        isCellValidatedInRow = validatingController.isRowValidated(parameters.key) && !!cellValidationInfo;
                     }
-                    if(modifiedValues && (modifiedValues[columnIndex] !== undefined || isCellInvalidInNewRow) && parameters.column && !isCommandCell && parameters.column.setCellValue) {
+                    if(modifiedValues && (modifiedValues[columnIndex] !== undefined || isCellValidatedInRow) && parameters.column && !isCommandCell && parameters.column.setCellValue) {
                     // endTest
                     // if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
                         editingController.showHighlighting({
