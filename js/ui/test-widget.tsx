@@ -273,8 +273,16 @@ export default class Widget {
 
         if(this.focusStateEnabled) {
             focus.on(this.widgetRef,
-                () => { this._focused = true; },
-                () => { this._focused = false; },
+                (e) => {
+                  if(!e.isDefaultPrevented()) {
+                      this._focused = true;
+                  }
+                },
+                (e) => {
+                  if(!e.isDefaultPrevented()) {
+                      this._focused = false;
+                  }
+                },
                 {
                     namespace,
                     isFocusable: this.focusStateEnabled && !this.disabled,
