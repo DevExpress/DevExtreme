@@ -1133,7 +1133,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _isLastRequired: function(node) {
         const selectionRequired = this.option('selectionRequired');
         const isSingleMode = this._isSingleSelection();
-        const selectedNodesKeys = this.getSelectedNodesKeys();
+        const selectedNodesKeys = this.getSelectedNodeKeys();
 
         if(!selectionRequired) {
             return;
@@ -1148,10 +1148,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _updateItemSelection: function(value, itemElement, dxEvent) {
+        if(this._setItemSelection(value, itemElement, dxEvent)) {
+            this._fireSelectionChanged();
+        }
+    },
+
+    _setItemSelection: function(value, itemElement, dxEvent) {
         const node = this._getNode(itemElement);
 
         if(!node || node.internalFields.selected === value) {
-            return;
+            return false;
         }
 
         if(!value && this._isLastRequired(node)) {
@@ -1161,10 +1167,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
                 checkbox && checkbox.option('value', true);
             }
-            return;
+            return false;
         }
 
-        const selectedNodesKeys = this.getSelectedNodesKeys();
+        const selectedNodesKeys = this.getSelectedNodeKeys();
         if(this._isSingleSelection() && value) {
             each(selectedNodesKeys, (index, nodeKey) => {
                 this.unselectItem(nodeKey);
@@ -1182,7 +1188,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             itemData: node.internalFields.item
         });
 
-        this._fireSelectionChanged();
+        return true;
     },
 
     _getCheckBoxInstance: function($node) {
@@ -1536,7 +1542,25 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     getSelectedNodesKeys: function() {
+        return this.getSelectedNodeKeys();
+    },
+
+    getSelectedNodeKeys: function() {
         return this._dataAdapter.getSelectedNodesKeys();
+    },
+
+    selectNodesByKeys: function(keys) {
+        const oldSelectedKeys = this.getSelectedNodeKeys();
+        keys.forEach((key) => {
+            this._setItemSelection(true, key);
+        });
+
+        const actualSelectedKeys = this.getSelectedNodeKeys();
+        if(oldSelectedKeys !== actualSelectedKeys) {
+            this._fireSelectionChanged();
+        }
+
+        return actualSelectedKeys;
     },
 
     selectAll: function() {
