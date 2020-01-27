@@ -11,11 +11,10 @@ const outputPath = require('./config').outputPath;
 const unfixedScssPath = require('./config').unfixedScssPath;
 const repositoryRoot = path.join(__dirname, '../../..');
 
-const importReplacement = /@import \((once|reference|)\) (".*\/)(.*?)\.(generic|material).scss(";)/gm;
 const allImportReplacement = /@import \((once|reference|)\) (".*\/)(.*?).scss(";)/g;
+
 const compactMixinReplacementIndex = /@mixin dx-size-default\(\)\s*{([\w\W]*?)}\s*@mixin dx-size-compact\(\)\s*{([\w\W]*?)}/g;
 const compactMixinReplacementSizes = /[\w\W]*?@mixin dx-size-default\(\)\s*{([\w\W]*?)}\s*@mixin dx-size-compact\(\)\s*{([\w\W]*?)}([\w\W]*)/g;
-
 const compactMixinUsageReplacement = /@include\s+dx-size-(compact|default);/g;
 
 // replacement for parent selector (https://github.com/sass/sass/issues/1425)
@@ -24,7 +23,7 @@ const parentSelectorReplacement = '$1@at-root $2#{&}';
 
 let widgetsColorVariables = {};
 
-gulp.task('fix-scss-clean', () => del([outputPath, `${unfixedScssPath}/**/*.scss`]));
+gulp.task('scss-clean', () => del([outputPath, `${unfixedScssPath}/**/*.scss`]));
 
 gulp.task('less2sass', (callback) => {
     exec('npx less2sass styles', (e, out, err) => {
@@ -36,7 +35,10 @@ gulp.task('less2sass', (callback) => {
 
 const replaceColorFunctions = (content) => {
     // TODO lighten and darken is not included directly in the new module system (https://sass-lang.com/documentation/modules/color#lighten), but it works
-    content = content.replace(/fade\((.*?),\s*(\d+)%\);/g, 'color.change($1, $alpha: 0.$2);'); // change fade() to the color.change()
+    // change fade($color, 20%) to the color.change($color, $alpha: 0.20), $color can be other function
+    content = content.replace(/fade\(([$\d\w-#]*|[\w]*\(.*\)),\s*(\d+)%\)(;|,)/g, 'color.change($1, $alpha: 0.$2)$3');
+    // change fadein($color, 20%) to the color.adjust($color, $alpha: 0.20), $color can be other function
+    content = content.replace(/fadein\(([$\d\w-#]*|[\w]*\(.*\)),\s*(\d+)%\)(;|,)/g, 'color.adjust($1, $alpha: 0.$2)$3');
     return content;
 };
 
@@ -56,7 +58,6 @@ gulp.task('fix-base', () => {
     // the same code for different themes
     return gulp
         .src(`${unfixedScssPath}/widgets/base/*.scss`)
-        .pipe(replace(importReplacement, '@use "./$3";'))
         .pipe(replace(/\.dx-font-icon\("/g, '@include dx-font-icon("'))
         .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
         .pipe(rename((path) => {
@@ -70,7 +71,6 @@ gulp.task('fix-common', () => {
     // TODO
     return gulp
         .src(`${unfixedScssPath}/widgets/common/*.scss`)
-        .pipe(replace(importReplacement, '@use "./$3";'))
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;
         }))
@@ -88,30 +88,30 @@ gulp.task('fix-mixins', () => {
         .pipe(gulp.dest(`${outputPath}/widgets/base`));
 });
 
-const specificReplacement = (content, folder) => {
+const specificReplacement = (content, folder, file) => {
     const widget = path.basename(folder);
     const replacementTable = require('./replacements');
 
     if(replacementTable[widget]) {
         replacementTable[widget].forEach(r => {
-            if(r.regex) {
+            if(r.regex && file === 'index') {
                 content = content.replace(r.regex, r.replacement);
-            } else if(r.import && r.type === 'simple') {
-                content = content.replace(/\/\/\sadduse/, `// adduse\n@use "${r.import}" as *; // TODO refactor '*'`);
+            } else if(r.import && r.type === file) {
+                content = content.replace(/\/\/\sadduse/, `// adduse\n@use "${r.import}" as *;`);
             }
+
         });
     }
 
     return content;
 };
 
-gulp.task('fix-themes', () => {
+gulp.task('create-widgets', () => {
     return gulp
         .src([`${unfixedScssPath}/widgets/generic/*.scss`, `${unfixedScssPath}/widgets/material/*.scss`], { base: `${unfixedScssPath}/` })
-        .pipe(replace(importReplacement, '@use "../$3";'))
-        // .pipe(replace.apply(gulp, compactMixinReplacement))
         .pipe(replace(compactMixinUsageReplacement, ''))
-        .pipe(replace(allImportReplacement, '')) // remove all dependency imports
+        // remove all dependency imports
+        .pipe(replace(allImportReplacement, ''))
         .pipe(rename((path) => {
             const widgetName = path.basename.replace(/\.(material|generic)/g, '');
             path.dirname += `/${widgetName}`;
@@ -123,27 +123,31 @@ gulp.task('fix-themes', () => {
             const content = chunk.contents.toString();
 
             // remove size mixins from _index
-            let indexContent = '@use "colors" as *;\n';
-            indexContent += '@use "../base/colors" as *;\n';
+            let indexContent = '@use "sass:color";\n';
+            indexContent += '@use "colors" as *;\n';
+            indexContent += '@use "../colors" as *;\n';
             indexContent += '@use "sizes" as *;\n';
-            indexContent += '@use "../base/sizes" as *;\n';
+            indexContent += '@use "../sizes" as *;\n';
 
             indexContent += '// adduse\n';
             indexContent += content.replace(compactMixinReplacementIndex, '');
-            indexContent = specificReplacement(indexContent, folder);
+            indexContent = specificReplacement(indexContent, folder, 'index');
+            indexContent = replaceColorFunctions(indexContent);
             indexContent = indexContent.replace(parentSelectorRegex, parentSelectorReplacement);
             chunk.contents = new Buffer(indexContent);
 
             let colorsContent = '@use "sass:color";\n';
-            // colorsContent += '@forward "../base/colors";\n';
-            colorsContent += '@use "../base/sizes" as *;\n';
-            colorsContent += '@use "../base/colors" as *;\n\n';
+            colorsContent += '@use "../sizes" as *;\n';
+            colorsContent += '@use "../colors" as *;\n';
+            colorsContent += '// adduse\n\n';
+            colorsContent = specificReplacement(colorsContent, folder, 'colors');
 
             fs.writeFileSync(path.join(folder, '_colors.scss'), colorsContent);
 
             // add size mixins into _sizes
-            // let sizesContent = '@forward "../base/sizes";\n';
-            let sizesContent = '@use "../base/sizes" as *;\n\n';
+            let sizesContent = '@use "../sizes" as *;\n';
+            sizesContent += '// adduse\n\n';
+            sizesContent = specificReplacement(sizesContent, folder, 'sizes');
             if(compactMixinReplacementSizes.test(content)) {
                 sizesContent += content.replace(compactMixinReplacementSizes, (match, defaultSize, compactSize) => {
                     const defaultDefinition = defaultSize.replace(/^\s*(\$.*?):.*?;/gm, '$1: null !default;');
@@ -181,7 +185,7 @@ const generateDefaultVariablesBlock = (variables) => {
 };
 
 const createBaseWidgetFolder = (theme) => {
-    const baseWidgetPath = path.join(repositoryRoot, outputPath, 'widgets', theme, 'base');
+    const baseWidgetPath = path.join(repositoryRoot, outputPath, 'widgets', theme);
     if(!fs.existsSync(baseWidgetPath)) fs.mkdirSync(baseWidgetPath);
     return baseWidgetPath;
 };
@@ -230,7 +234,11 @@ const collectWidgetColorVariables = (content, schemeName) => {
         'success button': 'button',
         'flat button': 'button',
         'badges': 'badge',
-        'color view': 'colorview'
+        'color view': 'colorview',
+        'normal button (buttongroup)': 'buttonGroup',
+        'default button (buttongroup)': 'buttonGroup',
+        'danger button (buttongroup)': 'buttonGroup',
+        'success button (buttongroup)': 'buttonGroup',
     };
 
     let regResult;
@@ -368,11 +376,9 @@ gulp.task('create-base-widget', gulp.series(
     'create-base-widget-sizes'
 ));
 
-// TODO - mixin - we need to @use it where we need
 // TODO - ui - need only into dx.common.css bundle
-// TODO - core to the index
 
-gulp.task('generate-indexes', (callback) => {
+gulp.task('create-theme-index', (callback) => {
     const source = require('./index-data');
 
     const themes = ['generic', 'material'];
@@ -388,7 +394,7 @@ gulp.task('generate-indexes', (callback) => {
         }
 
         const modePart = theme === 'material' ? ', $mode: $mode' : '';
-        content += `@use "./base/colors" with ($color: $color${modePart});\n@use "./base/sizes" with ($size: $size);`;
+        content += `@use "colors" with ($color: $color${modePart});\n@use "sizes" with ($size: $size);`;
 
         source.forEach(item => {
             if(item.task === 'comment') {

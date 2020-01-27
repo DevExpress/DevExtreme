@@ -18,7 +18,6 @@ module.exports = [
     { content: 'fieldset', task: 'widget' },
 
 
-    //
     { content: 'public widgets', task: 'comment' },
     // box
     { content: 'box', task: 'widget' },
@@ -26,5 +25,13 @@ module.exports = [
     { content: 'responsiveBox', task: 'widget' },
     // button
     { content: 'button', task: 'widget' },
+    // buttonGroup
+    { content: 'buttonGroup', task: 'widget' },
+    // scrollable - non-public
+    { content: 'scrollable', task: 'widget' },
+    // scrollview
+    { content: 'scrollView', task: 'widget' },
+    // checkbox
+    // { content: 'checkBox', task: 'widget' },
     { task: 'newline' }
 ];

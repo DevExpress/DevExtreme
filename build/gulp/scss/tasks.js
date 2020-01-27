@@ -22,19 +22,19 @@ gulp.task('fix-lint', () => { // this does not work
         .pipe(gulp.dest(outputPath + '1'));
 });
 
-gulp.task('convert-scss', gulp.series(
-    'fix-scss-clean',
+gulp.task('generate-scss', gulp.series(
+    'scss-clean',
     'less2sass',
     gulp.parallel(
         'fix-bundles',
         'fix-base',
         'fix-common',
-        'fix-themes',
+        'create-widgets',
         'fix-mixins'
         // TODO - create common bundle
     ),
     'create-base-widget',
-    'generate-indexes',
+    'create-theme-index',
     // 'fix-lint'
     'sass-material',
     'sass-generic'

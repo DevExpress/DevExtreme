@@ -3,14 +3,11 @@ const gulp = require('gulp');
 
 const outputPath = require('./config').outputPath;
 
-gulp.task('sass-material', () => {
-    return gulp.src(`${outputPath}/bundles/dx.material.blue.light.scss`)
+const compileBundle = (bundleName) => {
+    return gulp.src(bundleName)
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest('scss-css'));
-});
+};
 
-gulp.task('sass-generic', () => {
-    return gulp.src(`${outputPath}/bundles/dx.light.scss`)
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('scss-css'));
-});
+gulp.task('sass-material', () => compileBundle(`${outputPath}/bundles/dx.material.blue.light.scss`));
+gulp.task('sass-generic', () => compileBundle(`${outputPath}/bundles/dx.light.scss`));
