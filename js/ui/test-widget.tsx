@@ -9,7 +9,7 @@ import {
     Ref,
     Slot
 } from '../component_declaration/common';
-import { active, dxClick, hover, keyboard, resize, visibility } from '../events/short';
+import { active, dxClick, hover, keyboard, resize, visibility, focus } from '../events/short';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { isFakeClickEvent } from '../events/utils';
@@ -265,6 +265,24 @@ export default class Widget {
         }
 
         return () => active.off(this.widgetRef, { selector, namespace });
+    }
+
+    @Effect()
+    focusEffect() {
+        const namespace = 'UIFeedback';
+
+        if(this.focusStateEnabled) {
+            focus.on(this.widgetRef,
+                () => { this._focused = true; },
+                () => { this._focused = false; },
+                {
+                    namespace,
+                    isFocusable: this.focusStateEnabled && !this.disabled,
+                }
+            );
+        }
+
+        return () => focus.off(this.widgetRef, { namespace });
     }
 
     @Effect()
