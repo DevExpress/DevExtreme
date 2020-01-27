@@ -42,4 +42,16 @@ describe('Button', () => {
         expect(tree.is('.dx-button.dx-button-success')).toBeTruthy();
     });
 
+    it('should render icon', () => {
+        const model = new Button();
+        model.icon = 'test';
+
+        const tree = shallow(viewFunction(viewModelFunction(model)));
+
+        expect(tree.is('.dx-button-has-icon'))
+            .toBeTruthy();
+        expect(tree.find('.dx-icon.dx-icon-test').exists())
+            .toBeTruthy();
+    });
+
 });
