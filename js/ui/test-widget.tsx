@@ -142,35 +142,13 @@ export const viewFunction = (viewModel: any) => {
 })
 
 export default class Widget {
-    /** Private properties and callbacks */
-    @Prop() name?: string | undefined = '';
-    @Prop() className?: string | undefined = '';
-    @Prop() clickArgs?: any = {};
-    @Prop() aria?: any = {};
-    @Prop() activeStateUnit?: string;
-    @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
-    @Prop() hoverEndHandler: (args: any) => any = (() => undefined);
     @Prop() _dimensionChanged: () => any = (() => undefined);
-    @Prop() _visibilityChanged?: (args: any) => undefined;
     @Prop() _feedbackHideTimeout: number = 400;
     @Prop() _feedbackShowTimeout: number = 30;
-    @Prop() supportedKeys?: (args: any) => any;
-    /** === */
-
-    // == DOMComponent ==
-    @Prop() width?: string | number | null = null;
-    @Prop() height?: string | number | null = null;
-    @Prop() rtlEnabled?: boolean = config().rtlEnabled;
-    @Prop() elementAttr?: { [name: string]: any } = {};
-    @Prop() disabled?: boolean = false;
-
-    // == Widget ==
-    @Prop() visible?: boolean = true;
-    @Prop() hint?: string | undefined = undefined;
-    @Prop() tabIndex?: number = 0;
+    @Prop() _visibilityChanged?: (args: any) => undefined;
     @Prop() accessKey?: string | null = null;
     @Prop() activeStateEnabled?: boolean = false;
-    @Prop() activeStateUnit?: string | undefined = undefined;
+    @Prop() activeStateUnit?: string;
     @Prop() aria?: any = {};
     @Prop() className?: string | undefined = '';
     @Prop() clickArgs?: any = {};
@@ -178,13 +156,15 @@ export default class Widget {
     @Prop() elementAttr?: { [name: string]: any } = {};
     @Prop() focusStateEnabled?: boolean = false;
     @Prop() height?: string | number | null = null;
-    @Prop() hint?: string | undefined = undefined;
+    @Prop() hint?: string;
+    @Prop() hoverEndHandler: (args: any) => any = (() => undefined);
+    @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
     @Prop() hoverStateEnabled?: boolean = false;
     @Prop() name?: string | undefined = '';
     @Prop() onDimensionChanged: () => any = (() => undefined);
-    @Prop() onKeyboardHandled?: (args: any) => any | undefined = undefined;
+    @Prop() onKeyboardHandled?: (args: any) => any | undefined;
     @Prop() rtlEnabled?: boolean = config().rtlEnabled;
-    @Prop() supportedKeys?: (args: any) => any | undefined = undefined;
+    @Prop() supportedKeys?: (args: any) => any | undefined;
     @Prop() tabIndex?: number = 0;
     @Prop() visible?: boolean = true;
     @Prop() width?: string | number | null = null;
