@@ -18462,6 +18462,38 @@ QUnit.testInActiveWindow('DataGrid - Master grid should not render it\'s overlay
     assert.ok(detailRowsViewWrapper.isFocusOverlayVisible(), 'Detail grid focus overlay is visible');
 });
 
+QUnit.testInActiveWindow('Not highlight cell if isHighlighted set false in the onFocusedCellChanging event by Tab key (T853599)', function(assert) {
+    // arrange
+    let focusedCellChangingCount = 0;
+    this.dataGrid.option({
+        dataSource: [{ name: 'Alex', phone: '111111', room: 6 }],
+        keyExpr: 'name',
+        onFocusedCellChanging: function(e) {
+            ++focusedCellChangingCount;
+            e.isHighlighted = false;
+        }
+    });
+    this.clock.tick();
+
+    $(this.dataGrid.getCellElement(0, 0))
+        .trigger(pointerEvents.up)
+        .click();
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.dataGrid.option('focusedRowIndex'), 0, 'focusedRowIndex');
+    assert.equal(this.dataGrid.option('focusedColumnIndex'), 0, 'focusedColumnIndex');
+
+    // act
+    const navigationController = this.dataGrid.getController('keyboardNavigation');
+    navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(this.dataGrid.getCellElement(0, 0)) }) });
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedCellChangingCount, 2, 'onFocusedCellChanging fires count');
+    assert.notOk($(this.dataGrid.getCellElement(0, 1)).hasClass('dx-focused'), 'cell is not focused');
+});
+
 QUnit.test('Focus row element should support native DOM', function(assert) {
     // arrange
     let $focusedCell;
