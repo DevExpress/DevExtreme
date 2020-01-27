@@ -62,7 +62,7 @@ QUnit.test('should ignore incorrect dimensions', function(assert) {
     assert.strictEqual(style.height, '');
 });
 
-QUnit.module('accessKey', config);
+QUnit.module('accessKey');
 
 QUnit.test('should not add "accesskey" attribute if "focusStateEnabled" is false', function(assert) {
     const $widget = $('#component').dxTestWidget({
@@ -94,94 +94,94 @@ QUnit.test('should change "accesskey" attribute', function(assert) {
     assert.strictEqual($widget.attr('accesskey'), 'g');
 });
 
-// QUnit.testInActiveWindow('should take a focus if the accessKey is pressed', function(assert) {
-//     const $widget = $('#component').dxTestWidget({
-//         focusStateEnabled: true,
-//         accessKey: 'y'
-//     });
+// NOTE: get rid of async qunit tests
+QUnit.testInActiveWindow('should take a focus if the accessKey is pressed', function(assert) {
+    const done = assert.async();
+    const $widget = $('#component').dxTestWidget({
+        focusStateEnabled: true,
+        accessKey: 'y'
+    });
 
-//     this.clock.tick(1000);
-//     // NOTE: accessKey pressing emulation
-//     $widget.trigger($.Event('dxclick', { screenX: 0, offsetX: 0, pageX: 0 }));
-//     this.clock.tick(1000);
-//     assert.ok($widget.hasClass('dx-state-focused'));
-// });
+    window.setTimeout(() => {
+        // NOTE: access key pressing emulation
+        $widget.trigger($.Event('dxclick', { screenX: 0, offsetX: 0, pageX: 0 }));
+        window.setTimeout(() => {
+            assert.ok($widget.hasClass('dx-state-focused'));
+            done();
+        }, 0);
+    }, 50);
+});
 
-// QUnit.test('should not fire click event if the accessKey is pressed', function(assert) {
-//     const done = assert.async();
-//     let isImmediatePropagationStopped = true;
-//     const $widget = $('#component').dxTestWidget({
-//         focusStateEnabled: true,
-//         accessKey: 'y'
-//     });
+// NOTE: get rid of async qunit tests
+QUnit.test('should not fire click event if the accessKey is pressed', function(assert) {
+    const done = assert.async();
+    let isImmediatePropagationStopped = true;
+    const $widget = $('#component').dxTestWidget({
+        focusStateEnabled: true,
+        accessKey: 'y'
+    });
 
-//     window.setTimeout(() => {
-//         $widget.on('dxclick', () => isImmediatePropagationStopped = false);
-//         $widget.trigger($.Event('dxclick', { screenX: 0, offsetX: 0, pageX: 0 }));
-//         window.setTimeout(() => {
-//             assert.ok(isImmediatePropagationStopped);
-//             done();
-//         }, 0);
-//     }, 50);
-// });
+    window.setTimeout(() => {
+        $widget.on('dxclick', () => isImmediatePropagationStopped = false);
+        $widget.trigger($.Event('dxclick', { screenX: 0, offsetX: 0, pageX: 0 }));
+        window.setTimeout(() => {
+            assert.ok(isImmediatePropagationStopped);
+            done();
+        }, 0);
+    }, 50);
+});
 
-QUnit.module('$element attributes', config);
+QUnit.module('Container', config);
 
-QUnit.test('should not remove attributes from container', function(assert) {
+QUnit.test('should not remove attributes from container after render', function(assert) {
     const $container = $('#component').attr({
         'custom-attr': 'v1',
         'class': 'my-widget-class'
     });
     const widget = $container.dxTestWidget({}).dxTestWidget('instance');
 
-    assert.equal(widget.$element().attr('id'), 'component');
-    assert.equal(widget.$element().attr('custom-attr'), 'v1');
+    assert.strictEqual(widget.$element().attr('id'), 'component');
+    assert.strictEqual(widget.$element().attr('custom-attr'), 'v1');
     assert.ok($container.hasClass('my-widget-class'));
     assert.deepEqual(widget.option.elementAttr, undefined);
 });
 
-QUnit.test('can redefine attribute on conteiner using option', function(assert) {
-    const $container = $('#component').attr({
-        'custom-attr': 'v1',
-    });
+QUnit.test('should rewrite container attributes after render', function(assert) {
+    const $container = $('#component').attr({ 'custom-attr': 'v1' });
     const widget = $container.dxTestWidget({
-        elementAttr: {
-            'custom-attr': 'v2'
-        }
+        elementAttr: { 'custom-attr': 'v2' }
     }).dxTestWidget('instance');
 
-    assert.equal(widget.$element().attr('custom-attr'), 'v2');
+    assert.strictEqual(widget.$element().attr('custom-attr'), 'v2');
     assert.deepEqual(widget.option().elementAttr, { 'custom-attr': 'v2' });
 });
 
-QUnit.test('Element should have all attributes after refresh', function(assert) {
+QUnit.test('should save attributes after rerender', function(assert) {
     const widget = $('#component').dxTestWidget({
-        elementAttr: {
-            'custom-attr': 'v2'
-        }
+        elementAttr: { 'custom-attr': 'v2' }
     }).dxTestWidget('instance');
 
-    widget.option('elementAttr', {
-        'a': 'v'
-    });
-
-    assert.equal(widget.$element().attr('id'), 'component');
-});
-
-QUnit.module('Widget container', config);
-
-QUnit.test('widget.$element() is instance of container', function(assert) {
-    const $container = $('#component');
-    const widget = $container.dxTestWidget({}).dxTestWidget('instance');
-
-    assert.equal(widget.$element().get(0), $container.get(0));
-});
-
-QUnit.test('widget.$element() is instance of container after refresh', function(assert) {
-    const $container = $('#component');
-    const widget = $container.dxTestWidget({}).dxTestWidget('instance');
-
+    // NOTE: force rerender
     widget.option('elementAttr', { 'a': 'v' });
 
-    assert.equal(widget.$element().get(0), $container.get(0));
+    assert.strictEqual(widget.$element().attr('id'), 'component');
+});
+
+QUnit.test('should not recreate container element', function(assert) {
+    const $container = $('#component');
+    const container = $container.get(0);
+    const widget = $container.dxTestWidget({}).dxTestWidget('instance');
+
+    assert.strictEqual(widget.$element().get(0), container);
+});
+
+QUnit.test('should not recreate container element after rerender', function(assert) {
+    const $container = $('#component');
+    const container = $container.get(0);
+    const widget = $container.dxTestWidget({}).dxTestWidget('instance');
+
+    // NOTE: force rerender
+    widget.option('elementAttr', { 'a': 'v' });
+
+    assert.strictEqual(widget.$element().get(0), container);
 });
