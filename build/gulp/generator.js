@@ -5,8 +5,8 @@ const ts = require('gulp-typescript');
 const lint = require('gulp-eslint');
 const plumber = require('gulp-plumber');
 
-const SRC = 'js/renovation/src/**/*.tsx';
-const DEST = 'js/renovation/src/';
+const SRC = 'js/renovation/**/*.tsx';
+const DEST = 'js/renovation/';
 
 const knownErrors = [
     'Cannot find module \'preact\'.',
