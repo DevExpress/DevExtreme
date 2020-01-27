@@ -274,14 +274,14 @@ export default class Widget {
         if(this.focusStateEnabled) {
             focus.on(this.widgetRef,
                 (e) => {
-                  if(!e.isDefaultPrevented()) {
-                      this._focused = true;
-                  }
+                    if(!e.isDefaultPrevented()) {
+                        this._focused = true;
+                    }
                 },
                 (e) => {
-                  if(!e.isDefaultPrevented()) {
-                      this._focused = false;
-                  }
+                    if(!e.isDefaultPrevented()) {
+                        this._focused = false;
+                    }
                 },
                 {
                     namespace,
