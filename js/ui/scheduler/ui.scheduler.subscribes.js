@@ -61,7 +61,9 @@ const subscribes = {
             dates.push(startDate);
             initialDates = dates;
         } else {
+            dates = this.getCorrectedDatesByDaylightOffsets(originalStartDate, dates, appointmentData);
             initialDates = dates;
+
             dates = dates.map((date) => {
                 return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption('startDayHour'));
             });
