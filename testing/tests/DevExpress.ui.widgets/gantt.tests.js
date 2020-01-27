@@ -497,7 +497,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
         this.clock.tick();
-        const $taskWrapper = this.$element.find(TASK_WRAPPER_SELECTOR).eq(0);
+        const $taskWrapper = this.$element.find(TASK_WRAPPER_SELECTOR).last();
         const firstTitle = $taskWrapper.children().children().first().text();
         assert.equal(firstTitle, testTitle, 'title text was modified');
 
