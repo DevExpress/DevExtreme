@@ -427,6 +427,37 @@
         };
     })();
 
+    QUnit.timerIgnoringCheckers.register(function isThirdPartyLibraryTimer(timerInfo) {
+        if(!timerInfo || !timerInfo.callback) {
+            return false;
+        }
+        const callback = String(timerInfo.callback).replace(/\s|"use strict";/g, '');
+
+        if(timerInfo.timerType === 'animationFrames' &&
+            [
+                'function(){for(vara=0;a<d.length;a++)d[a]();d=[]}',
+                'function(){for(vari=0;i<waitQueue.length;i++){waitQueue[i]();}waitQueue=[];}'
+            ].indexOf(callback) > -1) {
+            // NOTE: Special thanks for Angular team
+            // 1. Implementation: https://github.com/angular/angular.js/blob/v1.5.x/src/ng/raf.js#L29
+            // 2. Usage: https://github.com/angular/angular.js/blob/v1.5.x/src/ng/animateRunner.js#L10
+
+            return true;
+        }
+
+        if(timerInfo.timerType === 'timeouts' &&
+            (callback.indexOf('.Deferred.exceptionHook') > -1 || // NOTE: jQuery.Deferred are now asynchronous
+            callback.indexOf('e._drain()') > -1)) { // NOTE: SystemJS Promise polyfill
+            return true;
+        }
+
+        if(timerInfo.timerType === 'timeouts' &&
+            window.navigator.userAgent.indexOf('Edge/') > -1 && // NOTE: Only in Edge
+            callback.indexOf('function(){[nativecode]}') > -1) { // NOTE: Native Promise
+            return true;
+        }
+    });
+
     QUnit.testStart(function() {
         if(suppressLogOnTest()) {
             return;
@@ -454,37 +485,6 @@
             QUnit.test(details.testName, testCallback);
         };
 
-        const isThirdPartyLibraryTimer = function(timerInfo) {
-            if(!timerInfo || !timerInfo.callback) {
-                return false;
-            }
-            const callback = String(timerInfo.callback).replace(/\s|"use strict";/g, '');
-
-            if(timerInfo.timerType === 'animationFrames' &&
-                [
-                    'function(){for(vara=0;a<d.length;a++)d[a]();d=[]}',
-                    'function(){for(vari=0;i<waitQueue.length;i++){waitQueue[i]();}waitQueue=[];}'
-                ].indexOf(callback) > -1) {
-                // NOTE: Special thanks for Angular team
-                // 1. Implementation: https://github.com/angular/angular.js/blob/v1.5.x/src/ng/raf.js#L29
-                // 2. Usage: https://github.com/angular/angular.js/blob/v1.5.x/src/ng/animateRunner.js#L10
-
-                return true;
-            }
-
-            if(timerInfo.timerType === 'timeouts' &&
-                (callback.indexOf('.Deferred.exceptionHook') > -1 || // NOTE: jQuery.Deferred are now asynchronous
-                callback.indexOf('e._drain()') > -1)) { // NOTE: SystemJS Promise polyfill
-                return true;
-            }
-
-            if(timerInfo.timerType === 'timeouts' &&
-                window.navigator.userAgent.indexOf('Edge/') > -1 && // NOTE: Only in Edge
-                callback.indexOf('function(){[nativecode]}') > -1) { // NOTE: Native Promise
-                return true;
-            }
-        };
-
         log.stop();
 
         ['timeouts', 'intervals', 'animationFrames'].forEach(function(type) {
@@ -500,10 +500,6 @@
                     timeout: currentInfo[timerId].timeout || currentInfo.timeout,
                     stack: currentInfo[timerId].stack || currentInfo.stack
                 };
-
-                if(isThirdPartyLibraryTimer(normalizedTimerInfo)) {
-                    return;
-                }
 
                 if(QUnit.timerIgnoringCheckers.needSkip(normalizedTimerInfo)) {
                     return;
