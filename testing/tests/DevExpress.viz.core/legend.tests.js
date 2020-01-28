@@ -2492,6 +2492,20 @@ QUnit.test('Shift simple title; itemTextPosition = \'bottom\'', function(assert)
     assert.deepEqual(this.title.shift.lastCall.args, [2, 2], 'title must have moved');
 });
 
+// T854736
+QUnit.test('Shift legend with title after erase. Title position - bottom', function(assert) {
+    this.options.title = { text: 'Simple title', verticalAlignment: 'bottom' };
+
+    this.titleLayout.width = 16;
+
+    const legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.erase();
+    legend.shift(0, 0);
+    assert.deepEqual(this.title.shift.lastCall.args, [0, 2], 'title must have moved');
+});
+
+
 QUnit.test('Shift simple title; horizontalAlignment = \'right\' verticalAlignment = \'top\' title.horizontalAlignment = \'center\'; margins not zero', function(assert) {
     this.options.title = {
         text: 'Simple title',
