@@ -17,12 +17,12 @@ import { hasWindow } from '../core/utils/window';
 import Action from '../core/action';
 
 const getStyles = ({ width, height, ...other }) => {
-    width = typeof width === 'function' ? width() : width;
-    height = typeof height === 'function' ? height() : height;
+    const computedWidth = typeof width === 'function' ? width() : width;
+    const computedHeight = typeof height === 'function' ? height() : height;
 
     return {
-        width: width ?? void 0,
-        height:  height ?? void 0,
+        width: computedWidth ?? void 0,
+        height: computedHeight ?? void 0,
         ...other
     };
 };
@@ -56,9 +56,9 @@ const getAttributes = ({ elementAttr, accessKey }) => {
 };
 
 const getCssClasses = (model: Partial<Widget>) => {
+    const className = ['dx-widget'];
     const isFocusable = model.focusStateEnabled && !model.disabled;
     const isHoverable = model.hoverStateEnabled && !model.disabled;
-    const className = ['dx-widget'];
 
     model.className && className.push(model.className);
     model.disabled && className.push('dx-state-disabled');
@@ -151,18 +151,19 @@ export default class Widget {
     @Prop() _visibilityChanged?: (args: any) => undefined;
     @Prop() accessKey?: string | null = null;
     @Prop() activeStateEnabled?: boolean = false;
-    @Prop() focusStateEnabled?: boolean = false;
     @Prop() activeStateUnit?: string;
     @Prop() aria?: any = {};
     @Prop() className?: string | undefined = '';
     @Prop() clickArgs?: any = {};
     @Prop() disabled?: boolean = false;
     @Prop() elementAttr?: { [name: string]: any } = {};
+    @Prop() focusStateEnabled?: boolean = false;
     @Prop() height?: string | number | null = null;
     @Prop() hint?: string;
     @Prop() hoverEndHandler: (args: any) => any = (() => undefined);
     @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
     @Prop() hoverStateEnabled?: boolean = false;
+    @Prop() name?: string = 'widget';
     @Prop() onDimensionChanged: () => any = (() => undefined);
     @Prop() onKeyboardHandled?: (args: any) => any | undefined;
     @Prop() rtlEnabled?: boolean = config().rtlEnabled;
@@ -170,15 +171,14 @@ export default class Widget {
     @Prop() tabIndex?: number = 0;
     @Prop() visible?: boolean = true;
     @Prop() width?: string | number | null = null;
-    @Prop() name?: string = 'widget';
 
     @Slot() children: any;
 
     @Event() onClick?: (e: any) => void = (() => { });
 
-    @InternalState() _hovered: boolean = false;
     @InternalState() _active: boolean = false;
     @InternalState() _focused: boolean = false;
+    @InternalState() _hovered: boolean = false;
     @InternalState() _keyboardListenerId: string | null = null;
 
     @Ref()

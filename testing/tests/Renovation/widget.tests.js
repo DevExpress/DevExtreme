@@ -38,15 +38,19 @@ QUnit.module('Props: width/height', config);
 QUnit.test('should render dimensions', function(assert) {
 
     const $element = $('#component').Widget({ width: 150, height: '60%' });
+    const style = $element.get(0).style;
     const instance = $element.Widget('instance');
 
-    assert.deepEqual($element.css(['width', 'height']), { width: '150px', height: '60%' });
+    assert.strictEqual(style.width, '150px');
+    assert.strictEqual(style.height, '60%');
 
     instance.option({ width: 200, height: 'auto' });
-    assert.deepEqual($element.css(['width', 'height']), { width: '200px', height: 'auto' });
+    assert.strictEqual(style.width, '200px');
+    assert.strictEqual(style.height, 'auto');
 
     instance.option({ width: () => 'auto', height: () => 500 });
-    assert.deepEqual($element.css(['width', 'height']), { width: 'auto', height: '500px' });
+    assert.strictEqual(style.width, 'auto');
+    assert.strictEqual(style.height, '500px');
 });
 
 QUnit.test('should ignore incorrect dimensions', function(assert) {
@@ -58,8 +62,8 @@ QUnit.test('should ignore incorrect dimensions', function(assert) {
     assert.strictEqual(style.height, '100px');
 
     instance.option({ width: void 0, height: void 0 });
-    assert.strictEqual(style.width, '100px');
-    assert.strictEqual(style.height, '100px');
+    assert.strictEqual(style.width, '');
+    assert.strictEqual(style.height, '');
 
     instance.option({ width: null, height: null });
     assert.strictEqual(style.width, '');

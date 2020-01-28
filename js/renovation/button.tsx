@@ -7,13 +7,13 @@ const WidgetJSX = JSXConstructor<Widget>(Widget);
 
 const getImageContainerJSX = (source: string) => {
     switch(getImageSourceType(source)) {
-        case 'dxIcon': return (<i className={`dx-icon dx-icon-${source}`}></i>); break;
-        case 'fontIcon': return (<i className={`dx-icon ${source}`}></i>); break;
-        case 'image': return (<img src={source} className="dx-icon"></img>); break;
+        case 'dxIcon': return (<i className={`dx-icon dx-icon-${source}`}/>); break;
+        case 'fontIcon': return (<i className={`dx-icon ${source}`}/>); break;
+        case 'image': return (<img src={source} className="dx-icon"/>); break;
         case 'svg': return (<i className="dx-icon dx-svg-icon">{source}></i>); break;
         default: return null;
     }
-}
+};
 
 const getCssClasses = (model: any) => {
     const classNames = ['dx-button'].concat(model.classNames);
@@ -29,7 +29,7 @@ const getCssClasses = (model: any) => {
 }
 
 export const viewModelFunction = (model: Button) => {
-    let icon = void 0;
+    let icon: any = void 0;
     const supportedKeys = () => {
         const click = (e) => {
             e.preventDefault();
@@ -39,7 +39,7 @@ export const viewModelFunction = (model: Button) => {
         return { space: click, enter: click };
     };
 
-    if(model.icon || model.type === 'back') {
+    if (model.icon || model.type === 'back') {
         icon = getImageContainerJSX(model.icon || 'back');
     }
 
@@ -93,7 +93,7 @@ export const viewFunction = (viewModel: Button) => (
 })
 
 export default class Button extends Widget {
-    @Prop() classNames?: string[]
+    @Prop() classNames?: string[];
     @Prop() contentRender?: any;
     @Prop() icon?: string;
     @Prop() pressed?: boolean;
