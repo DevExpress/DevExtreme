@@ -234,7 +234,7 @@ const collectWidgetColorVariables = (content, schemeName) => {
         'success button': 'button',
         'flat button': 'button',
         'badges': 'badge',
-        'color view': 'colorview',
+        'color view': 'colorView',
         'normal button (buttongroup)': 'buttonGroup',
         'default button (buttongroup)': 'buttonGroup',
         'danger button (buttongroup)': 'buttonGroup',
@@ -243,8 +243,10 @@ const collectWidgetColorVariables = (content, schemeName) => {
 
     let regResult;
     while((regResult = widgetContentRegex.exec(content)) !== null) {
-        let widget = regResult[2].toLowerCase();
-        if(aliases[widget]) widget = aliases[widget];
+        let widget = regResult[2];
+        widget = widget[0].toLowerCase() + widget.slice(1);
+        const lowerCaseWidget = widget.toLowerCase();
+        if(aliases[lowerCaseWidget]) widget = aliases[lowerCaseWidget];
         const widgetContent = regResult[3];
         widgetContentRegex.lastIndex -= 2;
 
