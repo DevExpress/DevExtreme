@@ -6,7 +6,7 @@ import Widget from './widget';
 const WidgetJSX = JSXConstructor<Widget>(Widget);
 
 const getImageContainerJSX = (source: string) => {
-    switch(getImageSourceType(source)) {
+    switch (getImageSourceType(source)) {
         case 'dxIcon': return (<i className={`dx-icon dx-icon-${source}`}/>);
         case 'fontIcon': return (<i className={`dx-icon ${source}`}/>);
         case 'image': return (<img src={source} className="dx-icon"/>);
@@ -15,9 +15,11 @@ const getImageContainerJSX = (source: string) => {
     }
 };
 
+const stylingModes = ['outlined', 'text', 'contained'];
+
 const getCssClasses = (model: any) => {
     const classNames = ['dx-button'].concat(model.classNames);
-    const isValidStylingMode = ['outlined', 'text', 'contained'].indexOf(model.stylingMode) !== -1;
+    const isValidStylingMode = stylingModes.indexOf(model.stylingMode) !== -1;
 
     classNames.push(`dx-button-mode-${isValidStylingMode ? model.stylingMode : 'contained'}`);
     classNames.push(`dx-button-${model.type || 'normal'}`);

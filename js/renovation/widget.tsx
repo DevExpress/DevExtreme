@@ -67,8 +67,7 @@ const getCssClasses = (model: Partial<Widget>) => {
     model._active && className.push('dx-state-active');
     model._hovered && isHoverable && !model._active && className.push('dx-state-hover');
     model.rtlEnabled && className.push('dx-rtl');
-    // use `object?.field` syntax in the future
-    model.elementAttr && model.elementAttr.class && className.push(model.elementAttr.class);
+    model.elementAttr?.class && className.push(model.elementAttr.class);
 
     return className.join(' ');
 };
