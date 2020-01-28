@@ -68,7 +68,8 @@ class FileManager extends Widget {
         this._notificationControl = this._createComponent($notificationControl, FileManagerNotificationControl, {
             progressPanelContainer: this.$element(),
             contentTemplate: container => this._createWrapper(container),
-            onActionProgress: e => this._onActionProgress(e)
+            onActionProgress: e => this._onActionProgress(e),
+            positionTarget: `.${FILE_MANAGER_CONTAINER_CLASS}`
         });
         this._editing.option('notificationControl', this._notificationControl);
     }
