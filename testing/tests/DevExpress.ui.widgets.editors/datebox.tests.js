@@ -925,27 +925,6 @@ QUnit.module('options changed callbacks', moduleConfig, () => {
 
         assert.equal($buttons.length, 0, 'no buttons are rendered');
     });
-
-    QUnit.test('closeOnValueChange option still affects on buttons rendering', function(assert) {
-        const dateBox = $('#dateBox').dxDateBox({
-            type: 'date',
-            closeOnValueChange: false,
-            pickerType: 'calendar',
-            value: new Date()
-        }).dxDateBox('instance');
-
-        dateBox.open();
-        let $buttons = $('.dx-datebox-wrapper .dx-toolbar .dx-button');
-
-        assert.equal($buttons.length, 3, 'two buttons are rendered');
-
-        dateBox.close();
-        dateBox.option('closeOnValueChange', true);
-        dateBox.open();
-        $buttons = $('.dx-datebox-wrapper .dx-toolbar .dx-button');
-
-        assert.equal($buttons.length, 0, 'no buttons are rendered');
-    });
 });
 
 QUnit.module('merging dates', moduleConfig, () => {
@@ -2470,7 +2449,6 @@ QUnit.module('datebox w/ calendar', {
         this.reinitFixture({
             type: 'date',
             value,
-            closeOnValueChange: true,
             pickerType: 'calendar'
         });
 
