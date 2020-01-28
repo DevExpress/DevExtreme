@@ -1927,7 +1927,7 @@ QUnit.begin(function() {
         const sparkline = this.createSparkline({
             dataSource: [4]
         });
-        sparkline._showTooltipCallback();
+        sparkline._showTooltip();
 
         sparkline.option('size', { width: 300, height: 100 });
         assert.ok(sparkline._tooltip.hide.calledOnce, 'Tooltip should be hidden');
