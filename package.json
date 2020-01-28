@@ -143,8 +143,7 @@
     "update-ts": "dx-tools update-ts-bundle",
     "internal-tool": "dx-tools",
     "validate-declarations": "dx-tools declaration-validator",
-    "test-functional": "node ./testing/functional/runner",
-    "convert-scss": "less2sass ./styles && gulp fix-scss"
+    "test-functional": "node ./testing/functional/runner"
   },
   "browserslist": [
     "last 2 versions",
