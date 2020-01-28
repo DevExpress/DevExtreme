@@ -4016,7 +4016,9 @@ QUnit.module('Appointments', () => {
                     startDateExpr: 'startDateCustom',
                     endDateExpr: 'endDateCustom',
                     currentView: 'week',
-                    timeZone: 'Asia/Yekaterinburg'
+                    timeZone: 'Asia/Yekaterinburg',
+                    startDayHour: 0,
+                    endDayHour: 24
                 },
                 appointmentTooltip: createTestForHourlyRecurrenceData,
                 name: 'hourly recurrence in collector, custom timezone is set'
