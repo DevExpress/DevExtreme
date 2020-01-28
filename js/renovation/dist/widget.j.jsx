@@ -1,5 +1,5 @@
 import registerComponent from '../../core/component_registrator';
-import WidgetBase from '../../ui/widget/preact_wrapper';
+import WidgetBase from '../preact_wrapper';
 import { extend } from '../../core/utils/extend';
 import WidgetView from '../widget.p';
 

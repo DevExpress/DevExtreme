@@ -1,5 +1,5 @@
 import registerComponent from '../../core/component_registrator';
-import Widget from '../../ui/widget/preact_wrapper';
+import Widget from '../preact_wrapper';
 import { extend } from '../../core/utils/extend';
 import ButtonView from '../button.p';
 
