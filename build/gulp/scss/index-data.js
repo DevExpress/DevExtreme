@@ -26,12 +26,12 @@ module.exports = [
     // button
     { content: 'button', task: 'widget' },
     // buttonGroup
-    { content: 'buttonGroup', task: 'widget' },
+    { content: 'buttongroup', task: 'widget' },
     // scrollable - non-public
     { content: 'scrollable', task: 'widget' },
     // scrollview
-    { content: 'scrollView', task: 'widget' },
+    { content: 'scrollview', task: 'widget' },
     // checkbox
-    // { content: 'checkBox', task: 'widget' },
+    // { content: 'checkbox', task: 'widget' },
     { task: 'newline' }
 ];
