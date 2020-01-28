@@ -676,9 +676,6 @@ const DateBox = DropDownEditor.inherit({
                 this.option('text', this._getDisplayedText(this.dateOption('value')));
                 this._renderInputValue();
                 break;
-            case 'applyValueMode':
-                this.callBase.apply(this, arguments);
-                break;
             case 'text':
                 this._strategy.textChangedHandler(args.value);
                 this.callBase.apply(this, arguments);
