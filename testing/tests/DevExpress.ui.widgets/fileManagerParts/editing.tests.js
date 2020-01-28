@@ -300,7 +300,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         $folderNode.trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Move').trigger('dxclick');
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
         this.clock.tick(400);
 
         $folderNodes = this.wrapper.getFolderNodes(true);
@@ -337,7 +337,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         $folderNode.trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Copy').trigger('dxclick');
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
         this.clock.tick(400);
 
         $folderNodes = this.wrapper.getFolderNodes(true);
@@ -371,7 +371,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         $cell.trigger(pointerEvents.up).click();
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Move').trigger('dxclick');
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
         this.clock.tick(400);
 
         let $folderNodes = this.wrapper.getFolderNodes(true);
@@ -403,7 +403,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         $cell.trigger(pointerEvents.up).click();
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Copy').trigger('dxclick');
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
         this.clock.tick(400);
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
@@ -497,7 +497,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         $cell.trigger(pointerEvents.up).click();
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Copy').trigger('dxclick');
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
         this.clock.tick(400);
         this.wrapper.getFolderToggle(1, true).trigger('dxclick');
         this.clock.tick(400);
