@@ -239,6 +239,9 @@ const collectWidgetColorVariables = (content, schemeName) => {
         'default button (buttongroup)': 'buttonGroup',
         'danger button (buttongroup)': 'buttonGroup',
         'success button (buttongroup)': 'buttonGroup',
+        'checkbox': 'checkBox',
+        'fileuploader': 'fileUploader',
+        'selectbox': 'selectBox'
     };
 
     let regResult;
