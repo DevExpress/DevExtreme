@@ -6,7 +6,8 @@
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
-    var isIntlTest = Model.ScriptVirtualPath.Contains("intl.tests");
+    var isIntlTest = Model.ScriptVirtualPath.Contains("intl.tests")
+        || Model.ScriptVirtualPath.Contains("intl.widgets.tests");
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
