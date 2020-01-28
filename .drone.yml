@@ -18,9 +18,10 @@ pipeline:
     image: devexpress/devextreme-build:19_1
     environment:
       - HEADLESS=true
+      - TRAVIS=true      
     commands:
       - ./drone-cache.sh restore
-      - ./docker-ci.sh
+      - script -qefc ./docker-ci.sh /dev/null
       - ./drone-cache.sh rebuild
 
 matrix:
