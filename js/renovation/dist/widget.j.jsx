@@ -1,7 +1,7 @@
-import registerComponent from '../core/component_registrator';
-import WidgetBase from './widget/preact_wrapper';
-import { extend } from '../core/utils/extend';
-import WidgetView from './test-widget.p';
+import registerComponent from '../../core/component_registrator';
+import WidgetBase from '../preact_wrapper';
+import { extend } from '../../core/utils/extend';
+import WidgetView from '../widget.p';
 
 class Widget extends WidgetBase {
     getView() {
@@ -28,6 +28,6 @@ class Widget extends WidgetBase {
     }
 }
 
-registerComponent('dxTestWidget', Widget);
+registerComponent('Widget', Widget);
 
 module.exports = Widget;

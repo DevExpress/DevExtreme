@@ -1,13 +1,10 @@
-import Widget, { viewModelFunction, viewFunction } from '../../js/ui/test-widget';
+import Widget, { viewModelFunction, viewFunction } from '../../js/renovation/widget';
 import React from 'react';
 import { mount } from 'enzyme';
 
 const model = new Widget();
-const render = (props = {}) => {
-    props = Object.assign({}, model, props);
-
-    return mount(viewFunction(viewModelFunction(props as Widget)));
-};
+const render = (props = {}) =>
+    mount(viewFunction(viewModelFunction({ ...model, ...props } as Widget)));
 
 describe('Widget', () => {
     describe('accessKey', () => {
@@ -55,13 +52,13 @@ describe('Widget', () => {
             const tree = render({ aria: {
                 label: 'custom-aria-label',
                 role: 'button',
-                id: 'custom-id'
+                id: 'custom-id',
             }});
 
             expect(tree.find('.dx-widget').props()).toMatchObject({
                 'aria-label': 'custom-aria-label',
                 role: 'button',
-                id: 'custom-id'
+                id: 'custom-id',
             });
         });
     });

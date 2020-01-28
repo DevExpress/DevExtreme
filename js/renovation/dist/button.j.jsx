@@ -1,7 +1,7 @@
-import registerComponent from '../core/component_registrator';
-import Widget from './widget/preact_wrapper';
-import { extend } from '../core/utils/extend';
-import ButtonView from './test-button.p';
+import registerComponent from '../../core/component_registrator';
+import Widget from '../preact_wrapper';
+import { extend } from '../../core/utils/extend';
+import ButtonView from '../button.p';
 
 class Button extends Widget {
     getView() {
@@ -44,6 +44,6 @@ class Button extends Widget {
     }
 }
 
-registerComponent('dxTestButton', Button);
+registerComponent('Button', Button);
 
 module.exports = Button;

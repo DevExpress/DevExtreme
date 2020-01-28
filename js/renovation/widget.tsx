@@ -7,7 +7,7 @@ import {
     Prop,
     React,
     Ref,
-    Slot
+    Slot,
 } from '../component_declaration/common';
 import { active, dxClick, hover, keyboard, resize, visibility } from '../events/short';
 import { each } from '../core/utils/iterator';
@@ -16,13 +16,11 @@ import { isFakeClickEvent } from '../events/utils';
 import { hasWindow } from '../core/utils/window';
 import Action from '../core/action';
 
-const getStyles = ({ width, height, ...other }) => {
-    return {
-        width: width === null ? '' : width,
-        height: height === null ? '' : height,
-        ...other
-    };
-};
+const getStyles = ({ width, height, ...restArgs }) => ({
+    width: width === null ? '' : width,
+    height: height === null ? '' : height,
+    ...restArgs,
+});
 
 const setAttribute = (name, value) => {
     const result = {};
@@ -36,7 +34,7 @@ const setAttribute = (name, value) => {
     return result;
 };
 
-const getAria = args => {
+const getAria = (args) => {
     let attrs = {};
 
     each(args, (name, value) => attrs = { ...attrs, ...setAttribute(name, value) });
@@ -64,7 +62,8 @@ const getCssClasses = (model: Partial<Widget>) => {
     model._active && className.push('dx-state-active');
     model._hovered && isHoverable && !model._active && className.push('dx-state-hover');
     model.rtlEnabled && className.push('dx-rtl');
-    model.elementAttr.class && className.push(model.elementAttr.class);
+    // use `object?.field` syntax in the future
+    model.elementAttr && model.elementAttr.class && className.push(model.elementAttr.class);
 
     return className.join(' ');
 };
@@ -91,20 +90,19 @@ export const viewModelFunction = ({
 
     widgetRef,
 }: Widget) => {
-    accessKey = focusStateEnabled && !disabled && accessKey;
-    tabIndex = focusStateEnabled && !disabled && tabIndex;
-
     const styles = getStyles({ width, height });
-    const attrsWithoutClass = getAttributes({ elementAttr, accessKey });
+    const attrsWithoutClass = getAttributes({
+        elementAttr,
+        accessKey: focusStateEnabled && !disabled && accessKey,
+    });
     const arias = getAria({ ...aria, disabled, hidden: !visible });
     const cssClasses = getCssClasses({
         disabled, visible, _focused, _active, _hovered, rtlEnabled,
-        elementAttr, hoverStateEnabled, focusStateEnabled, className
+        elementAttr, hoverStateEnabled, focusStateEnabled, className,
     });
 
     return {
         widgetRef,
-
         attributes: { ...attrsWithoutClass, ...arias },
         children,
         cssClasses,
@@ -113,7 +111,7 @@ export const viewModelFunction = ({
         hoverStateEnabled,
         styles,
         visible,
-        tabIndex,
+        tabIndex: focusStateEnabled && !disabled && tabIndex,
         title: hint,
     };
 };
@@ -148,19 +146,18 @@ export default class Widget {
     @Prop() _visibilityChanged?: (args: any) => undefined;
     @Prop() accessKey?: string | null = null;
     @Prop() activeStateEnabled?: boolean = false;
+    @Prop() focusStateEnabled?: boolean = false;
     @Prop() activeStateUnit?: string;
     @Prop() aria?: any = {};
     @Prop() className?: string | undefined = '';
     @Prop() clickArgs?: any = {};
     @Prop() disabled?: boolean = false;
     @Prop() elementAttr?: { [name: string]: any } = {};
-    @Prop() focusStateEnabled?: boolean = false;
     @Prop() height?: string | number | null = null;
     @Prop() hint?: string;
     @Prop() hoverEndHandler: (args: any) => any = (() => undefined);
     @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
     @Prop() hoverStateEnabled?: boolean = false;
-    @Prop() name?: string | undefined = '';
     @Prop() onDimensionChanged: () => any = (() => undefined);
     @Prop() onKeyboardHandled?: (args: any) => any | undefined;
     @Prop() rtlEnabled?: boolean = config().rtlEnabled;
@@ -168,6 +165,7 @@ export default class Widget {
     @Prop() tabIndex?: number = 0;
     @Prop() visible?: boolean = true;
     @Prop() width?: string | number | null = null;
+    @Prop() name?: string = 'widget';
 
     @Slot() children: any;
 
@@ -185,11 +183,11 @@ export default class Widget {
     visibilityEffect() {
         const namespace = `${this.name}VisibilityChange`;
 
-        if(this._visibilityChanged !== undefined && hasWindow()) {
+        if (this._visibilityChanged !== undefined && hasWindow()) {
             visibility.on(this.widgetRef,
                 () => this.visible && this._visibilityChanged!(true),
                 () => this.visible && this._visibilityChanged!(false),
-                { namespace }
+                { namespace },
             );
         }
 
@@ -212,8 +210,8 @@ export default class Widget {
         const isFocusable = this.focusStateEnabled && !this.disabled;
         const canBeFocusedByKey = isFocusable && this.accessKey;
 
-        canBeFocusedByKey && dxClick.on(this.widgetRef, e => {
-            if(isFakeClickEvent(e)) {
+        canBeFocusedByKey && dxClick.on(this.widgetRef, (e) => {
+            if (isFakeClickEvent(e)) {
                 e.stopImmediatePropagation();
                 this._focused = true;
             }
@@ -229,7 +227,7 @@ export default class Widget {
         const selector = this.activeStateUnit;
         const isHoverable = this.hoverStateEnabled && !this.disabled;
 
-        if(isHoverable) {
+        if (isHoverable) {
             hover.on(this.widgetRef,
                 new Action(() => {
                     if (!this._active) {
@@ -237,7 +235,7 @@ export default class Widget {
                     }
                 }, { excludeValidators: ['readOnly'] }),
                 () => { this._hovered = false; },
-                { selector, namespace }
+                { selector, namespace },
             );
         }
 
@@ -249,18 +247,18 @@ export default class Widget {
         const selector = this.activeStateUnit;
         const namespace = 'UIFeedback';
 
-        if(this.activeStateEnabled) {
+        if (this.activeStateEnabled) {
             active.on(this.widgetRef,
                 new Action(() => { this._active = true; }),
                 new Action(
                     () => { this._active = false; },
-                    { excludeValidators: ['disabled', 'readOnly'] }
+                    { excludeValidators: ['disabled', 'readOnly'] },
                 ), {
                     showTimeout: this._feedbackShowTimeout,
                     hideTimeout: this._feedbackHideTimeout,
                     selector,
-                    namespace
-                }
+                    namespace,
+                },
             );
         }
 
@@ -272,22 +270,22 @@ export default class Widget {
         const hasKeyboardEventHandler = !!this.onKeyboardHandled;
         const shouldAttach = this.focusStateEnabled || hasKeyboardEventHandler;
 
-        if(shouldAttach) {
+        if (shouldAttach) {
             const keyboardHandler = (options: any) => {
                 const { originalEvent, keyName, which } = options;
                 const keys = this.supportedKeys && this.supportedKeys(originalEvent) || {};
                 const func = keys[keyName] || keys[which];
 
-                if(func !== undefined) {
+                if (func !== undefined) {
                     const handler = func.bind(this);
                     const result = handler(originalEvent, options);
 
-                    if(!result) {
+                    if (!result) {
                         return false;
                     }
                 }
                 return true;
-            }
+            };
 
             keyboard.on(
                 this.widgetRef,

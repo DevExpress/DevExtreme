@@ -1,4 +1,4 @@
-import Button, { viewModelFunction, viewFunction } from '../../js/ui/test-button';
+import Button, { viewModelFunction, viewFunction } from '../../js/renovation/button';
 
 import React from 'react';
 import { shallow } from 'enzyme';
@@ -17,7 +17,7 @@ describe('Button', () => {
         const model = new Button();
         model.text = 'My button';
 
-        model.contentRender = ({text}) => (<div className="custom-content">{text+"123"}</div>);
+        model.contentRender = ({text}) => (<div className="custom-content">{`${text}123`}</div>);
 
         const tree = shallow(viewFunction(viewModelFunction(model)));
 
