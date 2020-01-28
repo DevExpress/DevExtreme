@@ -124,6 +124,26 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         });
     });
 
+    QUnit.test('Appointment popup should be with correct dates after change allDay switch and w/o saving (T832711)', function(assert) {
+        const scheduler = createScheduler({ dataSource: [] });
+        const data = {
+            text: 'all day apo',
+            startDate: new Date(2017, 4, 1, 9, 30),
+            endDate: new Date(2017, 4, 1, 11),
+            allDay: true
+        };
+
+        scheduler.instance.showAppointmentPopup(data);
+        const allDayEditor = scheduler.appointmentForm.getEditor('allDay');
+        allDayEditor.option('value', false);
+        scheduler.appointmentPopup.clickCancelButton();
+
+        scheduler.instance.showAppointmentPopup(data);
+
+        assert.deepEqual(scheduler.appointmentForm.getEditor('startDate').option('value'), data.startDate);
+        assert.deepEqual(scheduler.appointmentForm.getEditor('endDate').option('value'), data.endDate);
+    });
+
     QUnit.test('onAppointmentFormOpening event should handle e.cancel value', function(assert) {
         const data = [{
             text: 'Website Re-Design Plan',
@@ -741,7 +761,6 @@ QUnit.test('Popup should contains allDay editor', function(assert) {
 });
 
 QUnit.test('allDay changing should switch date & type in editors', function(assert) {
-
     this.instance.option('startDayHour', 5);
     this.instance.showAppointmentPopup({
         startDate: new Date(2015, 1, 1, 6),
@@ -753,7 +772,6 @@ QUnit.test('allDay changing should switch date & type in editors', function(asse
     const allDayEditor = $allDayEditor.dxSwitch('instance');
 
     allDayEditor.option('value', true);
-
 
     const startDate = $popupContent.find('.dx-datebox').eq(0).dxDateBox('instance');
     const endDate = $popupContent.find('.dx-datebox').eq(1).dxDateBox('instance');
