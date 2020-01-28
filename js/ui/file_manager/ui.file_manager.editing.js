@@ -8,7 +8,7 @@ import messageLocalization from '../../localization/message';
 
 import Widget from '../widget/ui.widget';
 
-import FileManagerDialogManager from './ui.file_manager.dialogManager';
+import FileManagerDialogManager from './ui.file_manager.dialog_manager';
 import FileManagerFileUploader from './ui.file_manager.file_uploader';
 import { FileManagerMessages } from './ui.file_manager.messages';
 
@@ -30,17 +30,14 @@ class FileManagerEditingControl extends Widget {
         this._model = this.option('model');
         this._uploadOperationInfoMap = {};
 
-        this._dialogManager = new FileManagerDialogManager(this.$element());
-        this._dialogManager.createDirectoryChooserDialog({
-            provider: this._controller._fileProvider,
-            getDirectories: this._controller.getDirectories.bind(this._controller),
-            getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
-            onClosed: this._onDialogClosed.bind(this)
+        this._dialogManager = new FileManagerDialogManager(this.$element(), {
+            chooseDirectoryDialog: {
+                provider: this._controller._fileProvider,
+                getDirectories: this._controller.getDirectories.bind(this._controller),
+                getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
+            },
+            onDialogClosed: this._onDialogClosed.bind(this)
         });
-        this._dialogManager.createRenameItemDialog({ onClosed: this._onDialogClosed.bind(this) });
-        this._dialogManager.createCreateItemDialog({ onClosed: this._onDialogClosed.bind(this) });
-
-        this._confirmationDialog = this._createConfirmationDialog();
 
         this._fileUploader = this._createFileUploader();
 
@@ -74,16 +71,6 @@ class FileManagerEditingControl extends Widget {
             chunkSize: this._controller.getFileUploadChunkSize(),
             uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, uploadDirectory),
             abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, uploadDirectory)
-        };
-    }
-
-    _createConfirmationDialog() {
-        return { // TODO implement this dialog
-            show: () => {
-                setTimeout(() => {
-                    this._onDialogClosed({ dialogResult: {} });
-                });
-            }
         };
     }
 
@@ -266,7 +253,7 @@ class FileManagerEditingControl extends Widget {
 
     _tryDelete(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        return this._showDialog(this._confirmationDialog)
+        return this._showDialog(this._dialogManager.getConfirmationDialog())
             .then(() => this._controller.deleteItems(itemInfos));
     }
 
