@@ -2927,7 +2927,7 @@ QUnit.test('items should reset positions after dragend', function(assert) {
 });
 
 // T856292
-QUnit.test('Drag and drop item to the top of the list should not work when allowReordering is false', (assert) => {
+QUnit.test('Drag and drop item to the top of the list should not work when allowReordering is false', function(assert) {
     const $list = $('#list').dxList({
         items: ['0', '1', '2'],
         itemDragging: {
