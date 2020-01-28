@@ -104,7 +104,6 @@ class FileManagerDialogBase extends Widget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            buttonText: 'ButtonText',
             onClosed: null
         });
     }

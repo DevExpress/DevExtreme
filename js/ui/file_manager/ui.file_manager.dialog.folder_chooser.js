@@ -30,7 +30,6 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
     _getDialogOptions() {
         return extend(super._getDialogOptions(), {
-            title: messageLocalization.format('dxFileManager-dialogDirectoryChooserTitle'),
             contentCssClass: FILE_MANAGER_DIALOG_FOLDER_CHOOSER,
             popupCssClass: FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP
         });
