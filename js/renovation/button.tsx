@@ -1,56 +1,35 @@
-import { Component, Prop, React } from '../component_declaration/common';
 import { getImageSourceType } from '../core/utils/icon';
-
-import Widget from './widget';
+import { Component, Prop, React } from '../component_declaration/common';
 import JSXConstructor from '../component_declaration/jsx';
+import Widget from './widget';
 
 const WidgetJSX = JSXConstructor<Widget>(Widget);
 
-const ICON_CLASS = 'dx-icon';
-const SVG_ICON_CLASS = 'dx-svg-icon';
-
 const getImageContainerJSX = (source: string) => {
-    const type = getImageSourceType(source);
-    if (type === 'image') return <img src={source} className={ICON_CLASS} />;
-    if (type === 'fontIcon') return <i className={`${ICON_CLASS} ${source}`} />;
-    if (type === 'dxIcon') return <i className={`${ICON_CLASS} ${ICON_CLASS}-${source}`} />;
-    if (type === 'svg') return <i className={`${ICON_CLASS} ${SVG_ICON_CLASS}`}>{source}</i>;
-    return null;
-};
+    switch(getImageSourceType(source)) {
+        case 'dxIcon': return (<i className={`dx-icon dx-icon-${source}`}></i>); break;
+        case 'fontIcon': return (<i className={`dx-icon ${source}`}></i>); break;
+        case 'image': return (<img src={source} className="dx-icon"></img>); break;
+        case 'svg': return (<i className="dx-icon dx-svg-icon">{source}></i>); break;
+        default: return null;
+    }
+}
 
 const getCssClasses = (model: any) => {
-    const classNames = ['dx-button'];
+    const classNames = ['dx-button'].concat(model.classNames);
+    const isValidStylingMode = ['outlined', 'text', 'contained'].indexOf(model.stylingMode) !== -1;
 
-    if (model.stylingMode === 'outlined') {
-        classNames.push('dx-button-mode-outlined');
-    } else if (model.stylingMode === 'text') {
-        classNames.push('dx-button-mode-text');
-    } else {
-        classNames.push('dx-button-mode-contained');
-    }
-
-    if (model.type === 'danger') {
-        classNames.push('dx-button-danger');
-    } else if (model.type === 'default') {
-        classNames.push('dx-button-default');
-    } else if (model.type === 'success') {
-        classNames.push('dx-button-success');
-    } else if (model.type === 'back') {
-        classNames.push('dx-button-back');
-    } else {
-        classNames.push('dx-button-normal');
-    }
+    classNames.push(`dx-button-mode-${isValidStylingMode ? model.stylingMode : 'contained'}`);
+    classNames.push(`dx-button-${model.type || 'normal'}`);
 
     model.text && classNames.push('dx-button-has-text');
     model.icon && classNames.push('dx-button-has-icon');
-    return classNames.concat(model.classNames).join(' ');
-};
+
+    return classNames.join(' ');
+}
 
 export const viewModelFunction = (model: Button) => {
-    let icon;
-    if (model.icon || model.type === 'back') {
-        icon = getImageContainerJSX(model.icon || 'back');
-    }
+    let icon = void 0;
     const supportedKeys = () => {
         const click = (e) => {
             e.preventDefault();
@@ -59,6 +38,11 @@ export const viewModelFunction = (model: Button) => {
 
         return { space: click, enter: click };
     };
+
+    if(model.icon || model.type === 'back') {
+        icon = getImageContainerJSX(model.icon || 'back');
+    }
+
     return {
         ...model,
         elementAttr: { ...model.elementAttr, role: 'button' },
@@ -71,22 +55,22 @@ export const viewModelFunction = (model: Button) => {
 
 export const viewFunction = (viewModel: Button) => (
     <WidgetJSX
-        className={viewModel.cssClasses}
-        onClick={viewModel.onClick}
-        width={viewModel.width}
-        height={viewModel.height}
-        rtlEnabled={viewModel.rtlEnabled}
-        elementAttr={viewModel.elementAttr}
-        disabled={viewModel.disabled}
-        visible={viewModel.visible}
-        hint={viewModel.hint}
-        tabIndex={viewModel.tabIndex}
         accessKey={viewModel.accessKey}
-        focusStateEnabled={viewModel.focusStateEnabled}
-        hoverStateEnabled={viewModel.hoverStateEnabled}
         activeStateEnabled={viewModel.activeStateEnabled}
-        supportedKeys={viewModel.supportedKeys}
         aria={viewModel.aria}
+        className={viewModel.cssClasses}
+        disabled={viewModel.disabled}
+        elementAttr={viewModel.elementAttr}
+        focusStateEnabled={viewModel.focusStateEnabled}
+        height={viewModel.height}
+        hint={viewModel.hint}
+        hoverStateEnabled={viewModel.hoverStateEnabled}
+        onClick={viewModel.onClick}
+        rtlEnabled={viewModel.rtlEnabled}
+        supportedKeys={viewModel.supportedKeys}
+        tabIndex={viewModel.tabIndex}
+        visible={viewModel.visible}
+        width={viewModel.width}
     >
         {viewModel.contentRender && (
             <div className="dx-button-content">
@@ -109,11 +93,11 @@ export const viewFunction = (viewModel: Button) => (
 })
 
 export default class Button extends Widget {
-    @Prop() classNames?: string[];
+    @Prop() classNames?: string[]
+    @Prop() contentRender?: any;
     @Prop() icon?: string;
     @Prop() pressed?: boolean;
     @Prop() stylingMode?: string;
     @Prop() text?: string;
     @Prop() type?: string;
-    @Prop() contentRender?: any;
 }

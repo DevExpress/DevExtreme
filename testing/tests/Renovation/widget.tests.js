@@ -19,7 +19,7 @@ const config = {
     }
 };
 
-QUnit.module('RTL', config);
+QUnit.module('Props: rtlEnabled', config);
 
 QUnit.test('should not add rtl marker class by default', function(assert) {
     const $element = $('#component').Widget();
@@ -33,16 +33,20 @@ QUnit.test('should add rtl marker class if the "rtlEnabled" is true', function(a
     assert.ok($element.hasClass('dx-rtl'));
 });
 
-QUnit.module('Width/Height', config);
+QUnit.module('Props: width/height', config);
 
 QUnit.test('should render dimensions', function(assert) {
-    const $element = $('#component').Widget({ width: 150, height: 75 });
+
+    const $element = $('#component').Widget({ width: 150, height: '60%' });
     const instance = $element.Widget('instance');
 
-    assert.deepEqual($element.css(['width', 'height']), { width: '150px', height: '75px' });
+    assert.deepEqual($element.css(['width', 'height']), { width: '150px', height: '60%' });
 
-    instance.option({ width: 200, height: 300 });
-    assert.deepEqual($element.css(['width', 'height']), { width: '200px', height: '300px' });
+    instance.option({ width: 200, height: 'auto' });
+    assert.deepEqual($element.css(['width', 'height']), { width: '200px', height: 'auto' });
+
+    instance.option({ width: () => 'auto', height: () => 500 });
+    assert.deepEqual($element.css(['width', 'height']), { width: 'auto', height: '500px' });
 });
 
 QUnit.test('should ignore incorrect dimensions', function(assert) {
@@ -50,6 +54,10 @@ QUnit.test('should ignore incorrect dimensions', function(assert) {
     const style = $element.get(0).style;
     const instance = $element.Widget('instance');
 
+    assert.strictEqual(style.width, '100px');
+    assert.strictEqual(style.height, '100px');
+
+    instance.option({ width: void 0, height: void 0 });
     assert.strictEqual(style.width, '100px');
     assert.strictEqual(style.height, '100px');
 
@@ -62,7 +70,7 @@ QUnit.test('should ignore incorrect dimensions', function(assert) {
     assert.strictEqual(style.height, '');
 });
 
-QUnit.module('accessKey');
+QUnit.module('Props: accessKey');
 
 QUnit.test('should not add "accesskey" attribute if "focusStateEnabled" is false', function(assert) {
     const $widget = $('#component').Widget({

@@ -16,11 +16,16 @@ import { isFakeClickEvent } from '../events/utils';
 import { hasWindow } from '../core/utils/window';
 import Action from '../core/action';
 
-const getStyles = ({ width, height, ...restArgs }) => ({
-    width: width === null ? '' : width,
-    height: height === null ? '' : height,
-    ...restArgs,
-});
+const getStyles = ({ width, height, ...other }) => {
+    width = typeof width === 'function' ? width() : width;
+    height = typeof height === 'function' ? height() : height;
+
+    return {
+        width: width ?? void 0,
+        height:  height ?? void 0,
+        ...other
+    };
+};
 
 const setAttribute = (name, value) => {
     const result = {};
