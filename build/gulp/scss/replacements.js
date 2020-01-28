@@ -3,7 +3,7 @@ module.exports = {
     // import, type - additional import (
     //    index - in _index.scss file
     //    colors - in _colors.scss file
-    //    sizes - in _sizes.scss file
+    //    sizes - in _sizes.scss file)
     'typography': [
         { regex: /\(css\)\s/, replacement: '' },
         { import: '../common', type: 'index' },

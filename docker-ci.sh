@@ -164,7 +164,7 @@ function run_test_functional {
 
 function run_test_scss {
     npm i
-    npx gulp convert-scss
+    npx gulp generate-scss
 }
 
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
