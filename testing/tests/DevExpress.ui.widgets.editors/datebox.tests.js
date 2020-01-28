@@ -2816,12 +2816,10 @@ QUnit.module('datebox with time component', {
         }
     });
 
-    QUnit.test('date box should chenge behavior if adaptivityEnabled option is changed at runtime', function(assert) {
-        const originalWidthFunction = renderer.fn.width;
+    QUnit.test('date box should change behavior if adaptivityEnabled option is changed to false at runtime', function(assert) {
+        const widthStub = sinon.stub(renderer.fn, 'width').returns(300);
 
         try {
-            sinon.stub(renderer.fn, 'width').returns(300);
-
             const $element = $('#dateBox').dxDateBox({
                 type: 'datetime',
                 pickerType: 'calendar',
@@ -2834,25 +2832,41 @@ QUnit.module('datebox with time component', {
             instance.close();
             instance.open();
 
-            let $content = $(instance._popup.$content());
-            let box = Box.getInstance($content.find(`.${BOX_CLASS}`));
-            let $clock = $content.find(`.${TIMEVIEW_CLOCK_CLASS}`);
+            const $content = $(instance._popup.$content());
+            const box = Box.getInstance($content.find(`.${BOX_CLASS}`));
+            const $clock = $content.find(`.${TIMEVIEW_CLOCK_CLASS}`);
 
             assert.strictEqual(box.itemElements().eq(0).find(`.${TIMEVIEW_CLASS}`).length, 0, 'timeview is not rendered');
             assert.strictEqual($clock.length, 1, 'clock is rendered');
+        } finally {
+            widthStub.restore();
+        }
+    });
+
+    QUnit.test('date box should change behavior if adaptivityEnabled option is changed to true at runtime', function(assert) {
+        const widthStub = sinon.stub(renderer.fn, 'width').returns(300);
+
+        try {
+            const $element = $('#dateBox').dxDateBox({
+                type: 'datetime',
+                pickerType: 'calendar',
+                adaptivityEnabled: false,
+                opened: true
+            });
+            const instance = $element.dxDateBox('instance');
 
             instance.option('adaptivityEnabled', true);
             instance.close();
             instance.open();
 
-            $content = $(instance._popup.$content());
-            box = Box.getInstance($content.find(`.${BOX_CLASS}`));
-            $clock = $content.find(`.${TIMEVIEW_CLOCK_CLASS}`);
+            const $content = $(instance._popup.$content());
+            const box = Box.getInstance($content.find(`.${BOX_CLASS}`));
+            const $clock = $content.find(`.${TIMEVIEW_CLOCK_CLASS}`);
 
             assert.strictEqual(box.itemElements().eq(0).find(`.${TIMEVIEW_CLASS}`).length, 1, 'timeview is rendered');
             assert.strictEqual($clock.length, 0, 'clock is not rendered');
         } finally {
-            renderer.fn.width = originalWidthFunction;
+            widthStub.restore();
         }
     });
 
@@ -2877,7 +2891,7 @@ QUnit.module('datebox with time component', {
         assert.equal($clock.length, 0, 'clock was not rendered');
     });
 
-    QUnit.test('date box should chenge behavior if showAnalogClock option is changed at runtime', function(assert) {
+    QUnit.test('date box should change behavior if showAnalogClock option is changed at runtime', function(assert) {
         const $element = $('#dateBox').dxDateBox({
             type: 'datetime',
             pickerType: 'calendar',
@@ -4322,7 +4336,7 @@ QUnit.module('datebox validation', {}, () => {
         dateBox.option('dateOutOfRangeMessage', 'another test message');
         $($input).trigger('change');
 
-        const validationError = $dateBox.dxDateBox('instance').option('validationError').message;
+        const validationError = dateBox.option('validationError.message');
         assert.equal(validationError, 'another test message', 'validation message is correct');
     });
 
