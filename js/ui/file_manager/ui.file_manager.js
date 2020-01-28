@@ -311,7 +311,7 @@ class FileManager extends Widget {
                     const itemInfosCopy = [...items];
                     itemInfosCopy.unshift({
                         fileItem: parentDirItem,
-                        icon: 'folder'
+                        icon: 'parentfolder'
                     });
                     return itemInfosCopy;
                 });
