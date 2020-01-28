@@ -1131,40 +1131,6 @@ module('Advanced caret', setupModule, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret was moved');
     });
 
-    test('Move caret to the next group if advanceCaret is changed at runtime', function(assert) {
-        const startDate = new Date('10/10/2012 13:07');
-        const $dateBox = $('#dateBox').dxDateBox({
-            advanceCaret: true,
-            displayFormat: 'dd.MM',
-            value: startDate,
-            pickerType: 'calendar'
-        });
-        const dateBox = $dateBox.dxDateBox('instance');
-        const $input = this.$element.find('.dx-texteditor-input');
-        const keyboard = keyboardMock($input, true);
-
-        keyboard.type('15');
-        assert.deepEqual(keyboard.caret(), { start: 3, end: 5 }, 'caret was moved');
-
-        $input.trigger('focusout');
-        dateBox.option({
-            'value': startDate,
-            'advanceCaret': false
-        });
-
-        keyboard.type('15');
-        assert.deepEqual(keyboard.caret(), { start: 0, end: 2 }, 'caret was not moved if advanceCaret is false');
-
-        $input.trigger('focusout');
-        dateBox.option({
-            'value': startDate,
-            'advanceCaret': true
-        });
-
-        keyboard.type('15');
-        assert.deepEqual(keyboard.caret(), { start: 3, end: 5 }, 'caret was moved after option was changed at runtime');
-    });
-
     test('Move caret to the next group when next digit will overflow', function(assert) {
         this.instance.option({
             advanceCaret: true,
