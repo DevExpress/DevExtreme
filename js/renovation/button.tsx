@@ -16,16 +16,18 @@ const getImageContainerJSX = (source: string) => {
 };
 
 const stylingModes = ['outlined', 'text', 'contained'];
+const defaultClassNames = ['dx-button'];
 
 const getCssClasses = (model: any) => {
-    const classNames = ['dx-button'].concat(model.classNames);
-    const isValidStylingMode = stylingModes.indexOf(model.stylingMode) !== -1;
+    const { text, icon, stylingMode, type } = model;
+    const classNames = defaultClassNames.concat(model.classNames);
+    const isValidStylingMode = stylingModes.indexOf(stylingMode) !== -1;
 
-    classNames.push(`dx-button-mode-${isValidStylingMode ? model.stylingMode : 'contained'}`);
-    classNames.push(`dx-button-${model.type || 'normal'}`);
+    classNames.push(`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`);
+    classNames.push(`dx-button-${type || 'normal'}`);
 
-    model.text && classNames.push('dx-button-has-text');
-    model.icon && classNames.push('dx-button-has-icon');
+    text && classNames.push('dx-button-has-text');
+    icon && classNames.push('dx-button-has-icon');
 
     return classNames.join(' ');
 }
