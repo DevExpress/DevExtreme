@@ -97,6 +97,7 @@
     "lazypipe": "^1.0.1",
     "less": "3.9.0",
     "less-plugin-autoprefix": "^2.0.0",
+    "less2sass": "^1.0.3",
     "lint-staged": "^3.4.0",
     "map-stream": "0.0.7",
     "merge-stream": "^2.0.0",
