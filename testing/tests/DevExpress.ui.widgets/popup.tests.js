@@ -1217,16 +1217,16 @@ QUnit.module('resize', {
     });
 
     QUnit.test('resize callbacks', function(assert) {
-        let onResizeStartFired = 0;
-        let onResizeFired = 0;
-        let onResizeEndFired = 0;
+        const onResizeStartStub = sinon.stub();
+        const onResizeStub = sinon.stub();
+        const onResizeEndStub = sinon.stub();
 
         const instance = $('#popup').dxPopup({
             resizeEnabled: true,
             visible: true,
-            onResizeStart: function() { onResizeStartFired++; },
-            onResize: function() { onResizeFired++; },
-            onResizeEnd: function() { onResizeEndFired++; }
+            onResizeStart: onResizeStartStub,
+            onResize: onResizeStub,
+            onResizeEnd: onResizeEndStub
         }).dxPopup('instance');
 
         const $content = instance.overlayContent();
@@ -1235,9 +1235,34 @@ QUnit.module('resize', {
 
         pointer.start().dragStart().drag(0, 50).dragEnd();
 
-        assert.equal(onResizeStartFired, 1, 'onResizeStart fired');
-        assert.equal(onResizeFired, 1, 'onResize fired');
-        assert.equal(onResizeEndFired, 1, 'onResizeEnd fired');
+        assert.ok(onResizeStartStub.calledOnce, 'onResizeStart fired');
+        assert.ok(onResizeStub.calledOnce, 'onResize fired');
+        assert.ok(onResizeEndStub.calledOnce, 'onResizeEnd fired');
+    });
+
+    QUnit.test('resize event handlers should correctly added via "on" method', function(assert) {
+        const onResizeStartStub = sinon.stub();
+        const onResizeStub = sinon.stub();
+        const onResizeEndStub = sinon.stub();
+
+        const instance = $('#popup').dxPopup({
+            resizeEnabled: true
+        }).dxPopup('instance');
+
+        instance.on('resize', onResizeStub);
+        instance.on('resizeStart', onResizeStartStub);
+        instance.on('resizeEnd', onResizeEndStub);
+        instance.show();
+
+        const $content = instance.overlayContent();
+        const $handle = $content.find('.dx-resizable-handle-top');
+        const pointer = pointerMock($handle);
+
+        pointer.start().dragStart().drag(0, 50).dragEnd();
+
+        assert.ok(onResizeStartStub.calledOnce, 'onResizeStart fired');
+        assert.ok(onResizeStub.calledOnce, 'onResize fired');
+        assert.ok(onResizeEndStub.calledOnce, 'onResizeEnd fired');
     });
 });
 
@@ -1451,6 +1476,23 @@ QUnit.module('templates', () => {
         });
 
         assert.equal($popupContent.find(toSelector('changed-test-title-renderer')).length, 1, 'option \'titleTemplate\' successfully passed to the popup widget');
+    });
+
+    QUnit.test('titleRendered event should be fired if was set thought method', function(assert) {
+        assert.expect(1);
+
+        const $element = $('#popup').dxPopup({
+            visible: true,
+            showTitle: true
+        });
+        const instance = $element.dxPopup('instance');
+
+        instance.on('titleRendered', function(e) {
+            assert.ok(true, 'titleRendered event handled');
+        });
+
+        instance.option('titleTemplate', () => $('<div>').text('new title'));
+        instance.show();
     });
 
     QUnit.test('\'bottomTemplate\' options test', function(assert) {
