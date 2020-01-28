@@ -109,7 +109,7 @@ QUnit.testInActiveWindow('should take a focus if the accessKey is pressed', func
             assert.ok($widget.hasClass('dx-state-focused'));
             done();
         }, 0);
-    }, 200);
+    }, 50);
 });
 
 // NOTE: get rid of async qunit tests
@@ -126,7 +126,7 @@ QUnit.test('should not fire click event if the accessKey is pressed', function(a
         $widget.trigger($.Event('dxclick', { screenX: 0, offsetX: 0, pageX: 0 }));
         assert.ok(isImmediatePropagationStopped);
         done();
-    }, 200);
+    }, 50);
 });
 
 QUnit.module('Container', config);
