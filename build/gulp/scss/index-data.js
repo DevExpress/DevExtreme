@@ -22,7 +22,7 @@ module.exports = [
     // box
     { content: 'box', task: 'widget' },
     // responsivebox
-    { content: 'responsiveBox', task: 'widget' },
+    { content: 'responsivebox', task: 'widget' },
     // button
     { content: 'button', task: 'widget' },
     // buttonGroup
