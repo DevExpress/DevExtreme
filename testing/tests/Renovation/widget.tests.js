@@ -36,7 +36,6 @@ QUnit.test('should add rtl marker class if the "rtlEnabled" is true', function(a
 QUnit.module('Props: width/height', config);
 
 QUnit.test('should render dimensions', function(assert) {
-
     const $element = $('#component').Widget({ width: 150, height: '60%' });
     const style = $element.get(0).style;
     const instance = $element.Widget('instance');
@@ -53,23 +52,39 @@ QUnit.test('should render dimensions', function(assert) {
     assert.strictEqual(style.height, '500px');
 });
 
-QUnit.test('should ignore incorrect dimensions', function(assert) {
-    const $element = $('#component').Widget({ width: 100, height: 100 });
+QUnit.test('should overwrite predefined dimensions', function(assert) {
+    const $element = $('#component');
     const style = $element.get(0).style;
-    const instance = $element.Widget('instance');
 
+    $element.css({ width: '20px', height: '30px' });
+    assert.strictEqual(style.width, '20px');
+    assert.strictEqual(style.height, '30px');
+
+    $element.Widget({ width: () => 100, height: 'auto' });
     assert.strictEqual(style.width, '100px');
-    assert.strictEqual(style.height, '100px');
+    assert.strictEqual(style.height, 'auto');
 
-    instance.option({ width: void 0, height: void 0 });
-    assert.strictEqual(style.width, '');
-    assert.strictEqual(style.height, '');
+    $element.css({ width: '20px', height: '30px' });
+    assert.strictEqual(style.width, '20px');
+    assert.strictEqual(style.height, '30px');
 
-    instance.option({ width: null, height: null });
-    assert.strictEqual(style.width, '');
-    assert.strictEqual(style.height, '');
+    $element.Widget({ width: void 0, height: void 0 });
+    // assert.strictEqual(style.width, '20px');
+    // assert.strictEqual(style.height, '30px');
 
-    instance.option({ width: '', height: '' });
+    $element.css({ width: '20px', height: '30px' });
+    assert.strictEqual(style.width, '20px');
+    assert.strictEqual(style.height, '30px');
+
+    $element.Widget({ width: null, height: null });
+    // assert.strictEqual(style.width, '');
+    // assert.strictEqual(style.height, '');
+
+    $element.css({ width: '20px', height: '30px' });
+    assert.strictEqual(style.width, '20px');
+    assert.strictEqual(style.height, '30px');
+
+    $element.Widget({ width: '', height: '' });
     assert.strictEqual(style.width, '');
     assert.strictEqual(style.height, '');
 });
