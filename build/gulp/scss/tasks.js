@@ -25,14 +25,12 @@ gulp.task('fix-lint', () => { // this does not work
 gulp.task('generate-scss', gulp.series(
     'scss-clean',
     'less2sass',
-    gulp.parallel(
-        'fix-bundles',
-        'fix-base',
-        'fix-common',
-        'create-widgets',
-        'fix-mixins'
-        // TODO - create common bundle
-    ),
+    'fix-bundles',
+    'fix-base',
+    'fix-common',
+    'create-widgets',
+    'fix-mixins',
+    // TODO - create common bundle
     'create-base-widget',
     'create-theme-index',
     // 'fix-lint'

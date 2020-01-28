@@ -369,10 +369,8 @@ gulp.task('create-base-widget-sizes', (callback) => {
 });
 
 gulp.task('create-base-widget', gulp.series(
-    gulp.parallel(
-        'create-base-widget-generic-colors',
-        'create-base-widget-material-colors'
-    ),
+    'create-base-widget-generic-colors',
+    'create-base-widget-material-colors',
     'create-base-widget-sizes'
 ));
 
