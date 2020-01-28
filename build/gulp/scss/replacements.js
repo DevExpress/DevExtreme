@@ -37,12 +37,12 @@ module.exports = {
         { regex: /.dx-button-text-and-icon-sizing\(\),/, replacement: '@include dx-button-text-and-icon-sizing();' },
         { regex: /\$MATERIAL_BUTTON_MIN_WIDTH,/, replacement: '$MATERIAL_BUTTON_MIN_WIDTH;' }
     ],
-    'buttongroup': [
+    'buttonGroup': [
         { import: '../button', type: 'index' },
         { import: '../button/colors', type: 'index' },
         { import: '../button/colors', type: 'colors' },
     ],
-    'scrollview': [
+    'scrollView': [
         { import: '../scrollable/colors', type: 'index' },
     ],
     'checkBox': [

@@ -113,7 +113,7 @@ gulp.task('create-widgets', () => {
         // remove all dependency imports
         .pipe(replace(allImportReplacement, ''))
         .pipe(rename((path) => {
-            const widgetName = path.basename.replace(/\.(material|generic)/g, '').toLowerCase();
+            const widgetName = path.basename.replace(/\.(material|generic)/g, '');
             path.dirname += `/${widgetName}`;
             path.basename = '_index';
         }))
@@ -235,10 +235,10 @@ const collectWidgetColorVariables = (content, schemeName) => {
         'flat button': 'button',
         'badges': 'badge',
         'color view': 'colorview',
-        'normal button (buttongroup)': 'buttongroup',
-        'default button (buttongroup)': 'buttongroup',
-        'danger button (buttongroup)': 'buttongroup',
-        'success button (buttongroup)': 'buttongroup',
+        'normal button (buttongroup)': 'buttonGroup',
+        'default button (buttongroup)': 'buttonGroup',
+        'danger button (buttongroup)': 'buttonGroup',
+        'success button (buttongroup)': 'buttonGroup',
     };
 
     let regResult;
