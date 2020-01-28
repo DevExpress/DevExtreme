@@ -4,6 +4,7 @@ const path = require('path');
 const assert = require('chai').assert;
 const buildTheme = require('../modules/builder').buildTheme;
 const commands = require('../modules/commands');
+const mock = require('mock-require');
 
 const fileReader = (filename) => {
     filename = filename.replace('devextreme-themebuilder/', '');
@@ -116,7 +117,25 @@ describe('Builder - testing exported function', () => {
             assert.ok(themeBuilderCss === distributionCss);
         });
     }).timeout(buildTimeout);
+});
 
+describe('Check if all widgets can be compiled separately', () => {
+    let buildThemeWithMockedCleanCss = {};
+
+    beforeEach(() => {
+        mock('clean-css', class CleanCss {
+            minify(css) {
+                return { styles: css };
+            }
+        });
+        mock.reRequire('clean-css');
+        mock.reRequire('../modules/less-template-loader');
+        buildThemeWithMockedCleanCss = mock.reRequire('../modules/builder').buildTheme;
+    });
+
+    afterEach(() => {
+        mock.stopAll();
+    });
 
     ['generic.light', 'material.blue.light'].forEach(theme => {
         const ModulesHandler = require('../modules/modules-handler');
@@ -135,14 +154,13 @@ describe('Builder - testing exported function', () => {
             };
 
             it(`We can build bundle for every widget (${theme}, ${widgetName})`, () => {
-                return buildTheme(config).then((result) => {
+                return buildThemeWithMockedCleanCss(config).then((result) => {
                     assert.isString(result.css, `${widgetName} bundle builded`);
                     assert.deepEqual(result.widgets, [ widgetName ]);
                 });
             });
         });
     });
-
 });
 
 
