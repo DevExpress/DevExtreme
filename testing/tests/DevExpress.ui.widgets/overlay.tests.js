@@ -1421,6 +1421,23 @@ testModule('content', moduleConfig, () => {
         assert.ok(newContentReadyStub.calledOnce);
     });
 
+    test('content ready action should be fired if was set thought method', function(assert) {
+        const contentReadyStub = sinon.stub();
+        const instance = $('#overlay').dxOverlay({
+            onContentReady: contentReadyStub
+        }).dxOverlay('instance');
+
+        const newContentReadyStub = sinon.stub();
+        instance.on('contentReady', newContentReadyStub);
+
+        instance.show();
+        instance.hide();
+        instance.show();
+
+        assert.ok(contentReadyStub.calledOnce);
+        assert.ok(newContentReadyStub.calledOnce);
+    });
+
     test('content should be rendered only once after repaint', (assert) => {
         const contentReadyStub = sinon.stub();
         const instance = $('#overlay').dxOverlay({
