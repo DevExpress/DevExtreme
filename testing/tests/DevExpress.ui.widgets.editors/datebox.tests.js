@@ -1520,7 +1520,7 @@ QUnit.module('widget sizing render', {}, () => {
 
     QUnit.test('component width calculation should consider buttons containers element', function(assert) {
         const $parent = $('#parent-div');
-        $parent.css('width', 200);
+        $parent.css('display', 'inline-block');
 
         const $element = $('#dateBox').appendTo($parent);
         const component = $('#dateBox').dxDateBox({
