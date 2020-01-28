@@ -23,7 +23,7 @@ createTestCafe('localhost', 1437, 1438)
         }
 
         return runner.run({
-            quarantineMode: false
+            quarantineMode: args.quarantineMode
         });
     })
     .then(failedCount => {
@@ -38,7 +38,8 @@ function getArgs() {
         default: {
             browsers: 'chrome',
             test: '',
-            componentFolder: ''
+            componentFolder: '',
+            quarantineMode: false
         }
     });
 }

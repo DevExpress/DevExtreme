@@ -1,8 +1,8 @@
 const registerComponent = require('../../../core/component_registrator');
 const dateUtils = require('../../../core/utils/date');
+const workWeekUtils = require('./utils.work_week');
 const toMs = dateUtils.dateToMilliseconds;
 const SchedulerWorkSpaceWeek = require('./ui.scheduler.work_space_week');
-const dateLocalization = require('../../../localization/date');
 
 const WORK_WEEK_CLASS = 'dx-scheduler-work-space-work-week';
 
@@ -21,8 +21,10 @@ const SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
     },
 
     _firstDayOfWeek: function() {
-        return this.option('firstDayOfWeek') || 1;
+        return workWeekUtils.getFirstDayOfWeek(this.option('firstDayOfWeek'));
     },
+
+    _isSkippedData: workWeekUtils.isDataOnWeekend,
 
     _getDateByIndex: function(headerIndex) {
         const resultDate = new Date(this._firstViewDate);
@@ -48,15 +50,10 @@ const SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
         this.callBase();
     },
 
-    _getWeekendsCount: function(days) {
-        return 2 * Math.floor(days / 7);
-    },
+    _getWeekendsCount: workWeekUtils.getWeekendsCount,
 
     _setFirstViewDate: function() {
-        this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
-
-        this._firstViewDate = dateUtils.normalizeDateByWeek(this._firstViewDate, this._getViewStartByOptions());
-
+        this._firstViewDate = workWeekUtils.getFirstViewDate(this._getViewStartByOptions(), this._firstDayOfWeek());
         this._setStartDayHour(this._firstViewDate);
     },
 
