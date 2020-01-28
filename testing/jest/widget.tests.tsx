@@ -200,16 +200,26 @@ describe('Widget', () => {
 
     describe('elementAttr', () => {
         it('should pass custom css class name via elementAttr', () => {
-            const tree = render({ elementAttr: { class: 'custom-class' }});
+            const tree = render({ elementAttr: { class: 'custom-class' } });
 
             expect(tree.find('.dx-widget').hasClass('custom-class')).toBeTruthy();
         });
 
         it('should pass custom attributes', () => {
-            const tree = render({ elementAttr: { 'data-custom': 'custom-attribute-value' }});
+            const tree = render({ elementAttr: { 'data-custom': 'custom-attribute-value' } });
 
             expect(tree.find('.dx-widget').prop('data-custom')).toBe('custom-attribute-value');
         });
+
+        it('should not provide `class` property', () => {
+            const tree = render({ elementAttr: { class: 'custom-class' } });
+
+            const widget = tree.find('.dx-widget');
+            expect(widget.prop('className').indexOf('custom-class') > -1).toBeTruthy();
+            expect(widget.prop('className').indexOf('dx-widget') > -1).toBeTruthy();
+            expect(widget.prop('class')).toBeFalsy();
+        });
+
     });
 
     describe('Hint', () => {

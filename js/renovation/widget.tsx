@@ -62,8 +62,7 @@ const getCssClasses = (model: Partial<Widget>) => {
     model._active && className.push('dx-state-active');
     model._hovered && isHoverable && !model._active && className.push('dx-state-hover');
     model.rtlEnabled && className.push('dx-rtl');
-    // use `object?.field` syntax in the future
-    model.elementAttr && model.elementAttr.class && className.push(model.elementAttr.class);
+    model?.elementAttr?.class && className.push(model.elementAttr.class);
 
     return className.join(' ');
 };
@@ -121,8 +120,8 @@ export const viewFunction = (viewModel: any) => {
         <div
             ref={viewModel.widgetRef}
             {...viewModel.attributes}
-            tabIndex={viewModel.tabIndex}
             className={viewModel.cssClasses}
+            tabIndex={viewModel.tabIndex}
             title={viewModel.title}
             style={viewModel.styles}
             hidden={!viewModel.visible}
@@ -146,18 +145,19 @@ export default class Widget {
     @Prop() _visibilityChanged?: (args: any) => undefined;
     @Prop() accessKey?: string | null = null;
     @Prop() activeStateEnabled?: boolean = false;
-    @Prop() focusStateEnabled?: boolean = false;
     @Prop() activeStateUnit?: string;
     @Prop() aria?: any = {};
     @Prop() className?: string | undefined = '';
     @Prop() clickArgs?: any = {};
     @Prop() disabled?: boolean = false;
     @Prop() elementAttr?: { [name: string]: any } = {};
+    @Prop() focusStateEnabled?: boolean = false;
     @Prop() height?: string | number | null = null;
     @Prop() hint?: string;
     @Prop() hoverEndHandler: (args: any) => any = (() => undefined);
     @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
     @Prop() hoverStateEnabled?: boolean = false;
+    @Prop() name?: string = '';
     @Prop() onDimensionChanged: () => any = (() => undefined);
     @Prop() onKeyboardHandled?: (args: any) => any | undefined;
     @Prop() rtlEnabled?: boolean = config().rtlEnabled;
@@ -165,7 +165,6 @@ export default class Widget {
     @Prop() tabIndex?: number = 0;
     @Prop() visible?: boolean = true;
     @Prop() width?: string | number | null = null;
-    @Prop() name?: string = 'widget';
 
     @Slot() children: any;
 
