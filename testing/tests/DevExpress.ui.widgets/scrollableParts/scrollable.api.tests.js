@@ -704,8 +704,9 @@ class ScrollableTestHelper {
     }
 }
 
-[0, 10].forEach((pushBackValue) => {
-    [true, false].forEach((useNative) => {
+
+[true, false].forEach((useNative) => {
+    [0, 10].forEach((pushBackValue) => {
         QUnit.module(`Scroll arguments, native: ${useNative}, pushBackValue: ${pushBackValue}`, moduleConfig, () => {
             QUnit.test('Direction: \'vertical\', rtl: false, scrollPosition: { top: 0 } -> { top: 1 } -> { top: center } -> { top: max-1 } -> { top: max }', function() {
                 const helper = new ScrollableTestHelper({ direction: 'vertical', useNative: useNative, rtlEnabled: false, pushBackValue: pushBackValue });
@@ -874,6 +875,44 @@ class ScrollableTestHelper {
                 helper.$container.trigger('scroll');
                 helper.checkScrollEvent({ reachedTop: false, reachedBottom: true, reachedLeft: true, reachedRight: false });
             });
+        });
+    });
+
+    QUnit.module(`Update(), native: ${useNative}`, moduleConfig, () => {
+        QUnit.test('Direction: \'horizontal\', rtl: false, scrollPosition: { left: 0 } -> { left: 1 } -> { left: center } -> { left: max-1 } -> { left: max }', function() {
+            const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative: useNative, rtlEnabled: false, pushBackValue: 0 });
+            const maxOffset = helper.getMaxScrollOffset();
+
+            helper.scrollable.update();
+            helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: true, reachedRight: false });
+
+            helper.onScrollHandler.reset();
+            helper.scrollable.scrollTo({ left: 25 });
+            helper.scrollable.update();
+            helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: false });
+
+            helper.onScrollHandler.reset();
+            helper.scrollable.scrollTo({ left: maxOffset.horizontal });
+            helper.scrollable.update();
+            helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: true });
+        });
+
+        QUnit.test('Direction: \'horizontal\', rtl: true, scrollPosition: { left: max } -> { left: max-1 } -> { left: center } -> { left: 1 } -> { left: 0 }', function() {
+            const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative: useNative, rtlEnabled: true, pushBackValue: 0 });
+            // const maxOffset = helper.getMaxScrollOffset();
+
+            helper.scrollable.update();
+            helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: true });
+
+            helper.onScrollHandler.reset();
+            helper.scrollable.scrollTo({ left: 25 });
+            helper.scrollable.update();
+            helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: false });
+
+            helper.onScrollHandler.reset();
+            helper.scrollable.scrollTo({ left: 0 });
+            helper.scrollable.update();
+            helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: true, reachedRight: false });
         });
     });
 });
