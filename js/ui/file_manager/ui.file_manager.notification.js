@@ -208,7 +208,7 @@ export default class FileManagerNotificationControl extends Widget {
                 position: {
                     my: 'right top',
                     at: 'right top',
-                    of: `.${this.option('positionedRelativeTo')}`,
+                    of: this.option('positionTarget'),
                     offset: '-10 -5'
                 }
             });

@@ -69,7 +69,7 @@ class FileManager extends Widget {
             progressPanelContainer: this.$element(),
             contentTemplate: container => this._createWrapper(container),
             onActionProgress: e => this._onActionProgress(e),
-            positionedRelativeTo: FILE_MANAGER_CONTAINER_CLASS
+            positionTarget: `.${FILE_MANAGER_CONTAINER_CLASS}`
         });
         this._editing.option('notificationControl', this._notificationControl);
     }
