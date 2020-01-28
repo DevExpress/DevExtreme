@@ -5,7 +5,7 @@ const outputPath = require('./config').outputPath;
 
 const compileBundle = (bundleName) => {
     return gulp.src(bundleName)
-        .pipe(sass().on('error', sass.logError))
+        .pipe(sass())
         .pipe(gulp.dest('scss-css'));
 };
 
