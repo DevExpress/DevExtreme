@@ -2926,3 +2926,26 @@ QUnit.test('items should reset positions after dragend', (assert) => {
     });
 });
 
+// T856292
+QUnit.test('Drag and drop item to the top of the list should not work when allowReordering is false', (assert) => {
+    const $list = $('#list').dxList({
+        items: ['0', '1', '2'],
+        itemDragging: {
+            allowReordering: false,
+            group: 'shared'
+        }
+    });
+
+    let $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    const $item3 = $items.eq(2);
+    const pointer = reorderingPointerMock($item3, this.clock);
+
+    pointer.dragStart(0.5).drag(-1).drag(-1.5).dragEnd();
+
+    $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    $.each($items, (index, item) => {
+        const $item = $(item);
+
+        assert.equal($item.text(), index, 'item text');
+    });
+});
