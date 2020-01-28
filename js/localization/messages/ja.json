@@ -270,11 +270,11 @@
         "dxFileManager-errorMaxFileSizeExceeded": "ファイルのサイズが最大許容サイズを超えています。",
         "dxFileManager-errorInvalidSymbols": "名前に無効な文字が含まれています。",
         "dxFileManager-errorDefault": "特定できないエラー",
-        
+
         "dxFileManager-commandCreate": "新しいディレクトリ",
         "dxFileManager-commandRename": "名前の変更",
-        "dxFileManager-commandMove": "移動",
-        "dxFileManager-commandCopy": "コピー",
+        "dxFileManager-commandMove": "TODO",
+        "dxFileManager-commandCopy": "TODO",
         "dxFileManager-commandDelete": "削除",
         "dxFileManager-commandDownload": "ダウンロード",
         "dxFileManager-commandUpload": "ファイルのアップロード",
@@ -283,8 +283,10 @@
         "dxFileManager-commandDetails": "詳細表示",
         "dxFileManager-commandClear": "選択のクリア",
 
-        "dxFileManager-dialogDirectoryChooserTitle": "移動先のディレクトリを選択してください",
-        "dxFileManager-dialogDirectoryChooserButtonText": "選択",
+        "dxFileManager-dialogDirectoryChooserMoveTitle": "TODO",
+        "dxFileManager-dialogDirectoryChooserMoveButtonText": "移動",
+        "dxFileManager-dialogDirectoryChooserCopyTitle": "TODO",
+        "dxFileManager-dialogDirectoryChooserCopyButtonText": "コピー",
         "dxFileManager-dialogRenameItemTitle": "名前の変更",
         "dxFileManager-dialogRenameItemButtonText": "保存",
         "dxFileManager-dialogCreateDirectoryTitle": "新しいディレクトリ",

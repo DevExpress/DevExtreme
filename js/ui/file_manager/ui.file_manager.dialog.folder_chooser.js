@@ -16,6 +16,18 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
         super.show();
     }
 
+    getCopyDialog() {
+        this._setTitle(messageLocalization.format('dxFileManager-dialogDirectoryChooserCopyTitle'));
+        this._setButtonText(messageLocalization.format('dxFileManager-dialogDirectoryChooserCopyButtonText'));
+        return this._popup;
+    }
+
+    getMoveDialog() {
+        this._setTitle(messageLocalization.format('dxFileManager-dialogDirectoryChooserMoveTitle'));
+        this._setButtonText(messageLocalization.format('dxFileManager-dialogDirectoryChooserMoveButtonText'));
+        return this._popup;
+    }
+
     _getDialogOptions() {
         return extend(super._getDialogOptions(), {
             title: messageLocalization.format('dxFileManager-dialogDirectoryChooserTitle'),

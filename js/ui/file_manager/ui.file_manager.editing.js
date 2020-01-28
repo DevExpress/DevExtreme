@@ -8,8 +8,7 @@ import messageLocalization from '../../localization/message';
 
 import Widget from '../widget/ui.widget';
 
-import FileManagerNameEditorDialog from './ui.file_manager.dialog.name_editor';
-import FileManagerFolderChooserDialog from './ui.file_manager.dialog.folder_chooser';
+import FileManagerDialogManager from './ui.file_manager.dialogManager';
 import FileManagerFileUploader from './ui.file_manager.file_uploader';
 import { FileManagerMessages } from './ui.file_manager.messages';
 
@@ -31,20 +30,15 @@ class FileManagerEditingControl extends Widget {
         this._model = this.option('model');
         this._uploadOperationInfoMap = {};
 
-        this._renameItemDialog = this._createEnterNameDialog(
-            messageLocalization.format('dxFileManager-dialogRenameItemTitle'),
-            messageLocalization.format('dxFileManager-dialogRenameItemButtonText'));
-        this._createFolderDialog = this._createEnterNameDialog(
-            messageLocalization.format('dxFileManager-dialogCreateDirectoryTitle'),
-            messageLocalization.format('dxFileManager-dialogCreateDirectoryButtonText'));
-
-        const $chooseFolderDialog = $('<div>').appendTo(this.$element());
-        this._chooseFolderDialog = this._createComponent($chooseFolderDialog, FileManagerFolderChooserDialog, {
+        this._dialogManager = new FileManagerDialogManager(this.$element());
+        this._dialogManager.createDirectoryChooserDialog({
             provider: this._controller._fileProvider,
             getDirectories: this._controller.getDirectories.bind(this._controller),
             getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
             onClosed: this._onDialogClosed.bind(this)
         });
+        this._dialogManager.createRenameItemDialog({ onClosed: this._onDialogClosed.bind(this) });
+        this._dialogManager.createCreateItemDialog({ onClosed: this._onDialogClosed.bind(this) });
 
         this._confirmationDialog = this._createConfirmationDialog();
 
@@ -81,15 +75,6 @@ class FileManagerEditingControl extends Widget {
             uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, uploadDirectory),
             abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, uploadDirectory)
         };
-    }
-
-    _createEnterNameDialog(title, buttonText) {
-        const $dialog = $('<div>').appendTo(this.$element());
-        return this._createComponent($dialog, FileManagerNameEditorDialog, {
-            title: title,
-            buttonText: buttonText,
-            onClosed: this._onDialogClosed.bind(this)
-        });
     }
 
     _createConfirmationDialog() {
@@ -269,13 +254,13 @@ class FileManagerEditingControl extends Widget {
     _tryCreate(parentDirectories) {
         const parentDirectoryInfo = parentDirectories && parentDirectories[0] || this._getCurrentDirectory();
         const newDirName = messageLocalization.format('dxFileManager-newDirectoryName');
-        return this._showDialog(this._createFolderDialog, newDirName)
+        return this._showDialog(this._dialogManager.getCreateItemDialog(), newDirName)
             .then(({ name }) => this._controller.createDirectory(parentDirectoryInfo, name));
     }
 
     _tryRename(itemInfos) {
         const itemInfo = itemInfos && itemInfos[0] || this._model.getMultipleSelectedItems()[0];
-        return this._showDialog(this._renameItemDialog, itemInfo.fileItem.name)
+        return this._showDialog(this._dialogManager.getRenameItemDialog(), itemInfo.fileItem.name)
             .then(({ name }) => this._controller.renameItem(itemInfo, name));
     }
 
@@ -287,15 +272,13 @@ class FileManagerEditingControl extends Widget {
 
     _tryMove(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        this._chooseFolderDialog.option('buttonText', messageLocalization.format('dxFileManager-dialogDirectoryChooserButtonTextMove'));
-        return this._showDialog(this._chooseFolderDialog)
+        return this._showDialog(this._dialogManager.getMoveDialog())
             .then(({ folder }) => this._controller.moveItems(itemInfos, folder));
     }
 
     _tryCopy(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        this._chooseFolderDialog.option('buttonText', messageLocalization.format('dxFileManager-dialogDirectoryChooserButtonTextCopy'));
-        return this._showDialog(this._chooseFolderDialog)
+        return this._showDialog(this._dialogManager.getCopyDialog())
             .then(({ folder }) => this._controller.copyItems(itemInfos, folder));
     }
 
