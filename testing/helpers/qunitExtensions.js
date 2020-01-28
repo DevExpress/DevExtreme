@@ -460,10 +460,12 @@
             }
             const callback = String(timerInfo.callback).replace(/\s|"use strict";/g, '');
 
+            if(callback.indexOf('function(){clearTimeout(u),cancelAnimationFrame(t),setTimeout(n)}') > -1) return true; // NOTE: Preact
+            if(callback.indexOf('.__H.u.forEach(') > -1) return true; // NOTE: Preact hooks
             if(timerInfo.timerType === 'animationFrames' &&
                 [
                     'function(){for(vara=0;a<d.length;a++)d[a]();d=[]}',
-                    'function(){for(vari=0;i<waitQueue.length;i++){waitQueue[i]();}waitQueue=[];}'
+                    'function(){for(vari=0;i<waitQueue.length;i++){waitQueue[i]();}waitQueue=[];}',
                 ].indexOf(callback) > -1) {
                 // NOTE: Special thanks for Angular team
                 // 1. Implementation: https://github.com/angular/angular.js/blob/v1.5.x/src/ng/raf.js#L29

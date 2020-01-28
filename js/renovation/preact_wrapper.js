@@ -1,6 +1,6 @@
-import Widget from './ui.widget';
+import Widget from '../ui/widget/ui.widget';
 import * as Preact from 'preact';
-import { extend } from '../../core/utils/extend';
+import { extend } from '../core/utils/extend';
 
 export default class PreactWrapper extends Widget {
     getInstance() {
