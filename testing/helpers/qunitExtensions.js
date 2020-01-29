@@ -137,13 +137,30 @@
         });
     };
 
+    const beforeTestDoneCallbacks = [];
+
+    QUnit.beforeTestDone = function(callback) {
+        beforeTestDoneCallbacks.push(callback);
+    };
+
+    QUnit.testStart(function() {
+        const after = QUnit.config.current.after;
+
+        QUnit.config.current.after = function() {
+            beforeTestDoneCallbacks.forEach(function(callback) {
+                callback();
+            });
+            return after.apply(this, arguments);
+        };
+    });
+
 }();
 
 
 (function clearQUnitFixtureByJQuery() {
     const isMsEdge = 'CollectGarbage' in window && !('ActiveXObject' in window);
 
-    QUnit.testDone(function(options) {
+    QUnit.beforeTestDone(function(options) {
         if(!jQuery) {
             return;
         }
@@ -389,10 +406,6 @@
         return;
     }
 
-    const suppressLogOnTest = function() {
-        return /Not cleared timers detected/.test(QUnit.config.current.testName);
-    };
-
     const log = spyWindowMethods();
 
     ignoreRules.register(function isThirdPartyLibraryTimer(timerInfo) {
@@ -416,33 +429,26 @@
         }
     });
 
+    const logTestFailure = function(timerInfo) {
+        const timeoutString = timerInfo.timeout ? '\nTimeout: ' + timerInfo.timeout : '';
+
+        const message = [
+            'Not cleared timer detected.\n',
+            '\n',
+            'Timer type: ', timerInfo.timerType, '\n',
+            'Id: ', timerInfo.timerId, '\n',
+            'Callback:\n', timerInfo.callback, '\n',
+            timeoutString
+        ].join('');
+
+        QUnit.pushFailure(message, timerInfo.stack);
+    };
+
     QUnit.testStart(function() {
-        if(suppressLogOnTest()) {
-            return;
-        }
         log.start();
     });
 
-    QUnit.testDone(function(args) {
-        if(suppressLogOnTest()) {
-            return;
-        }
-
-        const logGlobalFailure = function(details) {
-            const timerInfo = details.timerInfo;
-            const timeoutString = timerInfo.timeout ? ', timeout: ' + timerInfo.timeout : '';
-            const message = ['Timer type: ', timerInfo.timerType, ', Id: ', timerInfo.timerId, timeoutString, '\nCallback:\n', timerInfo.callback].join('');
-
-            const testCallback = function() {
-                QUnit.pushFailure(message, timerInfo.stack || '1 timer');
-            };
-
-            testCallback.validTest = true;
-
-            QUnit.module('Not cleared timers detected! ' + details.moduleName);
-            QUnit.test(details.testName, testCallback);
-        };
-
+    QUnit.beforeTestDone(function() {
         log.stop();
 
         ['timeouts', 'intervals', 'animationFrames'].forEach(function(type) {
@@ -456,11 +462,7 @@
                     return;
                 }
 
-                logGlobalFailure({
-                    moduleName: args.module,
-                    testName: args.name,
-                    timerInfo: timerInfo
-                });
+                logTestFailure(timerInfo);
             }
         });
 
@@ -470,15 +472,15 @@
 
 (function checkSinonFakeTimers() {
 
+    let dateOnTestStart;
     QUnit.testStart(function() {
-        const dateOnTestStart = Date; const after = QUnit.config.current.after;
+        dateOnTestStart = Date;
+    });
 
-        QUnit.config.current.after = function() {
-            if(dateOnTestStart !== Date) {
-                QUnit.pushFailure('Not restored Sinon timers detected!', this.stack);
-            }
-            return after.apply(this, arguments);
-        };
+    QUnit.beforeTestDone(function() {
+        if(dateOnTestStart !== Date) {
+            QUnit.pushFailure('Not restored Sinon timers detected!', this.stack);
+        }
     });
 
 })();
