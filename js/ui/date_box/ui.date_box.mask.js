@@ -119,8 +119,7 @@ const DateBoxMask = DateBoxBase.inherit({
 
             useMaskBehavior: false,
 
-            emptyDateValue: new Date(2000, 0, 1, 0, 0, 0),
-            advanceCaret: true
+            emptyDateValue: new Date(2000, 0, 1, 0, 0, 0)
         });
     },
 
@@ -197,15 +196,13 @@ const DateBoxMask = DateBoxBase.inherit({
 
         this._setActivePartValue(this._searchValue);
 
-        if(this.option('advanceCaret')) {
-            const isShortFormat = formatLength === 1;
-            const maxSearchLength = isShortFormat ? maxLimitLength : Math.min(formatLength, maxLimitLength);
-            const isLengthExceeded = this._searchValue.length === maxSearchLength;
-            const isValueOverflowed = parseInt(this._searchValue + '0') > max;
+        const isShortFormat = formatLength === 1;
+        const maxSearchLength = isShortFormat ? maxLimitLength : Math.min(formatLength, maxLimitLength);
+        const isLengthExceeded = this._searchValue.length === maxSearchLength;
+        const isValueOverflowed = parseInt(this._searchValue + '0') > max;
 
-            if(isLengthExceeded || isValueOverflowed) {
-                this._selectNextPart(FORWARD);
-            }
+        if(isLengthExceeded || isValueOverflowed) {
+            this._selectNextPart(FORWARD);
         }
     },
 
@@ -528,7 +525,6 @@ const DateBoxMask = DateBoxBase.inherit({
                 this.callBase(args);
                 this._renderDateParts();
                 break;
-            case 'advanceCaret':
             case 'emptyDateValue':
                 break;
             default:
