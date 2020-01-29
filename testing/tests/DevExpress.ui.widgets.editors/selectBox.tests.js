@@ -945,7 +945,7 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(count, 4);
     });
 
-    QUnit.test('selectionChanged - subscribtion by "on" method', function(assert) {
+    QUnit.test('selectionChanged - subscription by "on" method', function(assert) {
         const selectionChangedHandler = sinon.spy();
         const items = [1, 2, 3];
 
