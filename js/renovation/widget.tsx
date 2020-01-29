@@ -270,7 +270,7 @@ export default class Widget {
 
     @Effect()
     clickEffect() {
-        const namespace = 'UIFeedback';
+        const namespace = this.name;
 
         dxClick.on(this.widgetRef,
             () => this.onClick!(this.clickArgs),
