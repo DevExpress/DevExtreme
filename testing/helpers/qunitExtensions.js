@@ -164,17 +164,6 @@
         tooltip: 'Enabling this will test if any test introduces timers (setTimeout, setInterval, ....) and does not cleared them on test finalization. Stored as query-strings.'
     });
 
-    QUnit.timerIgnoringCheckers = (function() {
-        const noop = function() { };
-
-        return {
-            register: noop,
-            unregister: noop,
-            clear: noop,
-            needSkip: noop
-        };
-    })();
-
     const createMethodWrapper = function(method, callbacks) {
         const originalMethod = method;
         const beforeCall = callbacks['beforeCall'];
@@ -217,7 +206,6 @@
         info.callback = info.callback.toString();
         logObject[id] = info;
     };
-
 
     const spyWindowMethods = function(windowObj) {
         let log;
@@ -362,45 +350,31 @@
         };
     };
 
-    QUnit.timersDetector = {
-        spyWindowMethods: spyWindowMethods
-    };
-
-    if(!QUnit.urlParams['notimers']) {
-        return;
-    }
-
-    const suppressLogOnTest = function() {
-        return /Not cleared timers detected/.test(QUnit.config.current.testName);
-    };
-
-    const log = spyWindowMethods();
-
-    QUnit.timerIgnoringCheckers = (function() {
-        let checkers = [];
+    const ignoreRules = (function() {
+        let rules = [];
 
         const register = function() {
-            Array.prototype.push.apply(checkers, arguments);
+            Array.prototype.push.apply(rules, arguments);
         };
 
         const unregisterSingle = function(checker) {
-            const index = checkers.indexOf(checker);
-            checkers.splice(index, 1);
+            const index = rules.indexOf(checker);
+            rules.splice(index, 1);
         };
 
         const unregister = function() {
-            const checkersToUnregister = Array.prototype.slice.call(arguments);
-            checkersToUnregister.forEach(unregisterSingle);
+            const rulesToUnregister = Array.prototype.slice.call(arguments);
+            rulesToUnregister.forEach(unregisterSingle);
         };
 
         const clear = function() {
-            checkers = [];
+            rules = [];
         };
 
         const needSkip = function(timerInfo) {
             let skip = false;
 
-            checkers.forEach(function(checker) {
+            rules.forEach(function(checker) {
                 if(checker(timerInfo)) {
                     skip = true;
                     return false;
@@ -418,7 +392,22 @@
         };
     })();
 
-    QUnit.timerIgnoringCheckers.register(function isThirdPartyLibraryTimer(timerInfo) {
+    QUnit.timersDetector = {
+        spyWindowMethods: spyWindowMethods,
+        ignoreRules: ignoreRules
+    };
+
+    if(!QUnit.urlParams['notimers']) {
+        return;
+    }
+
+    const suppressLogOnTest = function() {
+        return /Not cleared timers detected/.test(QUnit.config.current.testName);
+    };
+
+    const log = spyWindowMethods();
+
+    ignoreRules.register(function isThirdPartyLibraryTimer(timerInfo) {
         if(!timerInfo || !timerInfo.callback) {
             return false;
         }
@@ -492,7 +481,7 @@
                     stack: currentInfo[timerId].stack || currentInfo.stack
                 };
 
-                if(QUnit.timerIgnoringCheckers.needSkip(normalizedTimerInfo)) {
+                if(ignoreRules.needSkip(normalizedTimerInfo)) {
                     return;
                 }
 

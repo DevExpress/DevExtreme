@@ -43,12 +43,12 @@ QUnit.module('ngmodel editor integration', {
 
         registerComponent('dxWidget', Widget);
 
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
     },
     afterEach() {
         this.$fixtureElement.remove();
 
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 
