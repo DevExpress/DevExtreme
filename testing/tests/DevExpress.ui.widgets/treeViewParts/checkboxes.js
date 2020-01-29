@@ -1025,7 +1025,7 @@ QUnit.test('all.selected: false -> selectItem(1) -> reload dataSource', function
         wrapper.instance.getDataSource().reload().done(function() {
             const $item1 = wrapper.getElement().find('[aria-level="1"]');
 
-            assert.equal($item1.length, 5, 'item1 is rendered');
+            assert.equal($item1.length, 1, 'item1 is rendered');
             wrapper.checkSelectedKeys([], 'nothing is selected');
             wrapper.checkSelectedNodes([], 'there is no selected nodes');
             wrapper.checkEventLog([], 'there is no selection events');
