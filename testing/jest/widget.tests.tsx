@@ -2,13 +2,11 @@ import Widget, { viewModelFunction, viewFunction } from '../../js/renovation/wid
 import React from 'react';
 import { shallow } from 'enzyme';
 
-const render = (props = {}) => {
-    props = Object.assign({}, new Widget(), props);
-
-    return shallow(viewFunction(viewModelFunction(props as Widget)));
-};
-
 describe('Widget', () => {
+    const render = (props = {}) => shallow(
+        viewFunction(viewModelFunction({ ...new Widget(), ...props } as Widget)),
+    );
+
     describe('Props', () => {
         describe('accessKey', () => {
             it('should render "accesskey" attribute', () => {
@@ -132,7 +130,7 @@ describe('Widget', () => {
 
         describe('elementAttr', () => {
             it('should pass custom css class name via elementAttr', () => {
-                const widget = render({ elementAttr: { class: 'custom-class' }});
+                const widget = render({ elementAttr: { class: 'custom-class' } });
 
                 expect(widget.hasClass('custom-class')).toBeTruthy();
             });
@@ -141,6 +139,14 @@ describe('Widget', () => {
                 const widget = render({ elementAttr: { 'data-custom': 'custom-attribute-value' }});
 
                 expect(widget.prop('data-custom')).toBe('custom-attribute-value');
+            });
+
+            it('should not provide `class` property', () => {
+                const widget = render({ elementAttr: { class: 'custom-class' } });
+
+                expect(widget.hasClass('custom-class')).toBeTruthy();
+                expect(widget.hasClass('dx-widget')).toBeTruthy();
+                expect(widget.prop('class')).toBeFalsy();
             });
         });
 
@@ -164,13 +170,13 @@ describe('Widget', () => {
             const widget = render({ aria: {
                 label: 'custom-aria-label',
                 role: 'button',
-                id: 'custom-id'
+                id: 'custom-id',
             }});
 
             expect(widget.props()).toMatchObject({
                 'aria-label': 'custom-aria-label',
                 role: 'button',
-                id: 'custom-id'
+                id: 'custom-id',
             });
         });
     });

@@ -125,8 +125,8 @@ export const viewFunction = (viewModel: any) => {
         <div
             ref={viewModel.widgetRef}
             {...viewModel.attributes}
-            tabIndex={viewModel.tabIndex}
             className={viewModel.cssClasses}
+            tabIndex={viewModel.tabIndex}
             title={viewModel.title}
             style={viewModel.styles}
             hidden={!viewModel.visible}
@@ -162,7 +162,7 @@ export default class Widget {
     @Prop() hoverEndHandler: (args: any) => any = (() => undefined);
     @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
     @Prop() hoverStateEnabled?: boolean = false;
-    @Prop() name?: string = 'widget';
+    @Prop() name?: string = '';
     @Prop() onDimensionChanged: () => any = (() => undefined);
     @Prop() onKeyboardHandled?: (args: any) => any | undefined;
     @Prop() rtlEnabled?: boolean = config().rtlEnabled;
