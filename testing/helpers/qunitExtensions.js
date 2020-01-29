@@ -170,7 +170,6 @@
         return {
             register: noop,
             unregister: noop,
-            applyUnregister: noop,
             clear: noop,
             needSkip: noop
         };
@@ -379,30 +378,23 @@
 
     QUnit.timerIgnoringCheckers = (function() {
         let checkers = [];
-        let checkersToUnregister = [];
 
         const register = function() {
             Array.prototype.push.apply(checkers, arguments);
         };
 
-        const unregister = function() {
-            Array.prototype.push.apply(checkersToUnregister, arguments);
-        };
-
         const unregisterSingle = function(checker) {
             const index = checkers.indexOf(checker);
-
             checkers.splice(index, 1);
         };
 
-        const applyUnregister = function() {
+        const unregister = function() {
+            const checkersToUnregister = Array.prototype.slice.call(arguments);
             checkersToUnregister.forEach(unregisterSingle);
-            checkersToUnregister = [];
         };
 
         const clear = function() {
             checkers = [];
-            checkersToUnregister = [];
         };
 
         const needSkip = function(timerInfo) {
@@ -421,7 +413,6 @@
         return {
             register: register,
             unregister: unregister,
-            applyUnregister: applyUnregister,
             clear: clear,
             needSkip: needSkip
         };
@@ -513,7 +504,6 @@
             }
         });
 
-        QUnit.timerIgnoringCheckers.applyUnregister();
         log.clear();
     });
 })();
