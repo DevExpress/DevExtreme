@@ -6,13 +6,13 @@ import Widget from './widget';
 const WidgetJSX = JSXConstructor<Widget>(Widget);
 
 const getImageContainerJSX = (source: string, position: string) => {
-    const icon_right_class = position !== 'left' ? 'dx-icon-right' : '';
+    const iconRightClass = position !== 'left' ? 'dx-icon-right' : '';
 
     switch (getImageSourceType(source)) {
-        case 'dxIcon': return (<i className={`dx-icon dx-icon-${source} ${icon_right_class}`}/>);
-        case 'fontIcon': return (<i className={`dx-icon ${source} ${icon_right_class}`}/>);
-        case 'image': return (<img src={source} className={`dx-icon ${icon_right_class}`}/>);
-        case 'svg': return (<i className={`dx-icon dx-svg-icon ${icon_right_class}`}>{source}></i>);
+        case 'dxIcon': return (<i className={`dx-icon dx-icon-${source} ${iconRightClass}`}/>);
+        case 'fontIcon': return (<i className={`dx-icon ${source} ${iconRightClass}`}/>);
+        case 'image': return (<img src={source} className={`dx-icon ${iconRightClass}`}/>);
+        case 'svg': return (<i className={`dx-icon dx-svg-icon ${iconRightClass}`}>{source}></i>);
         default: return null;
     }
 };
