@@ -130,7 +130,7 @@ describe('Widget', () => {
 
         describe('elementAttr', () => {
             it('should pass custom css class name via elementAttr', () => {
-                const widget = render({ elementAttr: { class: 'custom-class' }});
+                const widget = render({ elementAttr: { class: 'custom-class' } });
 
                 expect(widget.hasClass('custom-class')).toBeTruthy();
             });
@@ -142,11 +142,10 @@ describe('Widget', () => {
             });
 
             it('should not provide `class` property', () => {
-                const tree = render({ elementAttr: { class: 'custom-class' } });
+                const widget = render({ elementAttr: { class: 'custom-class' } });
 
-                const widget = tree.find('.dx-widget');
-                expect(widget.prop('className').indexOf('custom-class') > -1).toBeTruthy();
-                expect(widget.prop('className').indexOf('dx-widget') > -1).toBeTruthy();
+                expect(widget.hasClass('custom-class')).toBeTruthy();
+                expect(widget.hasClass('dx-widget')).toBeTruthy();
                 expect(widget.prop('class')).toBeFalsy();
             });
         });
@@ -251,6 +250,6 @@ describe('Widget', () => {
     it('should have dx-widget class', () => {
         const tree = render();
 
-        expect(tree.find('.dx-widget').exists()).toBeTruthy();
+        expect(tree.is('.dx-widget')).toBeTruthy();
     });
 });
