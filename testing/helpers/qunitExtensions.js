@@ -165,34 +165,28 @@
     });
 
     const createMethodWrapper = function(method, callbacks) {
-        const originalMethod = method;
-        const beforeCall = callbacks['beforeCall'];
-        const afterCall = callbacks['afterCall'];
-        const info = {
-            originalMethod: originalMethod
-        };
+        const beforeCall = callbacks.beforeCall;
+        const afterCall = callbacks.afterCall;
 
-        const wrapper = function() {
-            info['context'] = this;
-            info['args'] = Array.prototype.slice.call(arguments);
+        return function() {
+            const info = {
+                method: method,
+                context: this,
+                args: Array.prototype.slice.call(arguments)
+            };
 
             if(typeof beforeCall === 'function') {
                 beforeCall(info);
             }
 
-            info['result'] = originalMethod.apply(info.context, info.args);
+            info.returnValue = method.apply(info.context, info.args);
 
             if(typeof afterCall === 'function') {
                 afterCall(info);
             }
 
-            return info['result'];
+            return info.returnValue;
         };
-
-        info['wrapper'] = wrapper;
-        wrapper['info'] = info;
-
-        return wrapper;
     };
 
     const getStack = function() {
@@ -224,12 +218,12 @@
                     }
 
                     info.callback = info.args[0];
-                    const callbackWrapper = info.args[0] = createMethodWrapper(info.callback, {
+                    info.args[0] = createMethodWrapper(info.callback, {
                         afterCall: function() {
                             if(!logEnabled) {
                                 return;
                             }
-                            delete timeouts[callbackWrapper.timerId];
+                            delete timeouts[info.returnValue];
                         }
                     });
                 },
@@ -239,10 +233,9 @@
                         return;
                     }
 
-                    const timerId = info.args[0]['timerId'] = info.result;
                     saveTimerInfo(timeouts, {
                         timerType: 'timeouts',
-                        timerId: timerId,
+                        timerId: info.returnValue,
                         callback: info.callback,
                         timeout: info.args[1]
                     });
@@ -263,7 +256,7 @@
                     if(!logEnabled) {
                         return;
                     }
-                    const timerId = info.result;
+                    const timerId = info.returnValue;
                     saveTimerInfo(intervals, {
                         timerType: 'intervals',
                         timerId: timerId,
@@ -289,12 +282,12 @@
                     }
 
                     info.callback = info.args[0];
-                    const callbackWrapper = info.args[0] = createMethodWrapper(info.callback, {
+                    info.args[0] = createMethodWrapper(info.callback, {
                         afterCall: function() {
                             if(!logEnabled) {
                                 return;
                             }
-                            delete animationFrames[callbackWrapper.timerId];
+                            delete animationFrames[info.returnValue];
                         }
                     });
                 },
@@ -303,10 +296,9 @@
                         return;
                     }
 
-                    const timerId = info.args[0]['timerId'] = info.result;
                     saveTimerInfo(animationFrames, {
                         timerType: 'animationFrames',
-                        timerId: timerId,
+                        timerId: info.returnValue,
                         callback: info.callback
                     });
                 }
@@ -330,8 +322,8 @@
 
         const initLog = function() {
             log = {};
-            timeouts = log['timeouts'] = {},
-            intervals = log['intervals'] = {},
+            timeouts = log['timeouts'] = {};
+            intervals = log['intervals'] = {};
             animationFrames = log['animationFrames'] = {};
         };
 
