@@ -443,7 +443,7 @@
         };
 
         var applyUnregister = function() {
-            jQuery.map(checkersToUnregister, unregisterSingle);
+            checkersToUnregister.forEach(unregisterSingle);
             checkersToUnregister = [];
         };
 
@@ -455,7 +455,7 @@
         var needSkip = function(timerInfo) {
             var skip = false;
 
-            jQuery.each(checkers, function(i, checker) {
+            checkers.forEach(function(checker) {
                 if(checker(timerInfo)) {
                     skip = true;
                     return false;
@@ -482,10 +482,6 @@
     });
 
     QUnit.testDone(function(args) {
-        if(!jQuery) {
-            return;
-        }
-
         if(suppressLogOnTest()) {
             return;
         }
@@ -538,18 +534,19 @@
 
         log.stop();
 
-        jQuery.each(['timeouts', 'intervals', 'animationFrames'], function() {
-            var type = String(this),
-                currentInfo = log.get()[type];
+        ['timeouts', 'intervals', 'animationFrames'].forEach(function(type) {
+            var currentInfo = log.get()[type];
 
-            if(!jQuery.isEmptyObject(currentInfo)) {
-                var timerId = Object.keys(currentInfo)[0],
-                    normalizedTimerInfo = jQuery.extend({
-                        timerType: type,
-                        timerId: timerId
-                    }, currentInfo, currentInfo[timerId]);
+            if(Object.keys(currentInfo).length) {
+                var timerId = Object.keys(currentInfo)[0];
 
-                delete normalizedTimerInfo[timerId];
+                var normalizedTimerInfo = {
+                    timerType: type,
+                    timerId: timerId,
+                    callback: currentInfo[timerId].callback || currentInfo.callback,
+                    timeout: currentInfo[timerId].timeout || currentInfo.timeout,
+                    stack: currentInfo[timerId].stack || currentInfo.stack
+                };
 
                 if(isThirdPartyLibraryTimer(normalizedTimerInfo)) {
                     return;
