@@ -651,10 +651,10 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
         const that = this;
         const item = that._legend.getItemByCoord(x, y);
 
-        that._resetHoveredArgument();
-        if(item) {
+        if(item && that._hoveredArgument !== item.argument) {
+            that._resetHoveredArgument();
             that._hoverArgument(item.argument, item.argumentIndex);
-        } else {
+        } else if(!item) {
             that.clearHover();
         }
     },
