@@ -9,12 +9,13 @@ import DOMComponent from 'core/dom_component';
 import Widget from 'ui/widget/ui.widget';
 import { NgTemplate } from 'integration/angular/template';
 import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
-import ignoreAngularTimers from '../../helpers/ignoreAngularTimers.js';
 
 import 'integration/angular';
 
 import 'ui/list';
 import 'ui/button';
+
+import '../../helpers/ignoreAngularTimers.js';
 
 const FIXTURE_ELEMENT = () => $('#qunit-fixture');
 
@@ -45,11 +46,6 @@ QUnit.module('simple component tests', {
             .appendTo(this.$container);
 
         registerComponent('dxTest', TestComponent);
-
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
-    },
-    afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -1420,11 +1416,6 @@ QUnit.module('nested Widget with templates enabled', {
 
         registerComponent('dxTestContainer', TestContainer);
         registerComponent('dxTestWidget', TestWidget);
-
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
-    },
-    afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -1637,11 +1628,6 @@ QUnit.test('Multi-slot transclusion should work with dx temapltes', function(ass
 QUnit.module('Widget & CollectionWidget with templates enabled', {
     beforeEach() {
         this.testApp = angular.module('testApp', ['dx']);
-
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
-    },
-    afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -1969,14 +1955,7 @@ QUnit.test('Widget options does not override scope properties', function(assert)
     assert.equal($.trim($markup.text()), 'Controller model');
 });
 
-QUnit.module('ui.collectionWidget', {
-    beforeEach() {
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
-    },
-    afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
-    }
-});
+QUnit.module('ui.collectionWidget');
 
 const initMarkup = ($markup, controller) => {
     const TestCollectionContainer = CollectionWidget.inherit({
@@ -2349,10 +2328,6 @@ QUnit.test('$id in item model not caused exception', function(assert) {
 QUnit.module('misc and regressions', {
     beforeEach() {
         this.testApp = angular.module('testApp', ['dx']);
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
-    },
-    afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -2737,11 +2712,6 @@ QUnit.module('component action context', {
             .appendTo(this.$container);
 
         registerComponent('dxActionTest', TestComponent);
-
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
-    },
-    afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -2898,11 +2868,6 @@ QUnit.module('dxComponent as a template', {
         this.$container = $('<div/>').appendTo(FIXTURE_ELEMENT());
 
         registerComponent('dxTemplateComponent', TemplateComponent);
-
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
-    },
-    afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 

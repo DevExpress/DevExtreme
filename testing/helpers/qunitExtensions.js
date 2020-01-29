@@ -396,19 +396,8 @@
     const log = spyWindowMethods();
 
     ignoreRules.register(function isThirdPartyLibraryTimer(timerInfo) {
-        const callback = String(timerInfo.callback).replace(/\s|"use strict";/g, '');
+        const callback = String(timerInfo.callback).replace(/\s/g, '');
         const timerType = timerInfo.timerType;
-
-        // NOTE: See
-        // 1. Implementation: https://github.com/angular/angular.js/blob/v1.5.x/src/ng/raf.js#L29
-        // 2. Usage: https://github.com/angular/angular.js/blob/v1.5.x/src/ng/animateRunner.js#L10
-        if(timerType === 'animationFrames' &&
-        [
-            'function(){for(vara=0;a<d.length;a++)d[a]();d=[]}',
-            'function(){for(vari=0;i<waitQueue.length;i++){waitQueue[i]();}waitQueue=[];}'
-        ].indexOf(callback) > -1) {
-            return true;
-        }
 
         if(timerType === 'timeouts') {
             if(

@@ -5,11 +5,11 @@ import registerComponent from 'core/component_registrator';
 import Widget from 'ui/widget/ui.widget';
 import Editor from 'ui/editor/editor';
 import inflector from 'core/utils/inflector';
-import ignoreAngularTimers from '../../helpers/ignoreAngularTimers.js';
 
 import 'ui/tag_box';
 import 'integration/angular';
 
+import '../../helpers/ignoreAngularTimers.js';
 
 QUnit.module('ngmodel editor integration', {
     beforeEach() {
@@ -40,13 +40,9 @@ QUnit.module('ngmodel editor integration', {
         registerComponent('dxMultiEditor', MultiEditor);
 
         registerComponent('dxWidget', Widget);
-
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach() {
         this.$fixtureElement.remove();
-
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
