@@ -353,42 +353,31 @@
     const ignoreRules = (function() {
         let rules = [];
 
-        const register = function() {
-            Array.prototype.push.apply(rules, arguments);
-        };
-
-        const unregisterSingle = function(checker) {
-            const index = rules.indexOf(checker);
-            rules.splice(index, 1);
-        };
-
-        const unregister = function() {
-            const rulesToUnregister = Array.prototype.slice.call(arguments);
-            rulesToUnregister.forEach(unregisterSingle);
-        };
-
-        const clear = function() {
-            rules = [];
-        };
-
-        const needSkip = function(timerInfo) {
-            let skip = false;
-
-            rules.forEach(function(checker) {
-                if(checker(timerInfo)) {
-                    skip = true;
-                    return false;
-                }
-            });
-
-            return skip;
-        };
-
         return {
-            register: register,
-            unregister: unregister,
-            clear: clear,
-            needSkip: needSkip
+            register: function() {
+                Array.prototype.push.apply(rules, arguments);
+            },
+            unregister: function() {
+                Array.prototype.forEach.call(arguments, function(rule) {
+                    const index = rules.indexOf(rule);
+                    rules.splice(index, 1);
+                });
+            },
+            clear: function() {
+                rules = [];
+            },
+            shouldIgnore: function(timerInfo) {
+                let skip = false;
+
+                rules.forEach(function(rule) {
+                    if(rule(timerInfo)) {
+                        skip = true;
+                        return false;
+                    }
+                });
+
+                return skip;
+            }
         };
     })();
 
@@ -481,7 +470,7 @@
                     stack: currentInfo[timerId].stack || currentInfo.stack
                 };
 
-                if(ignoreRules.needSkip(normalizedTimerInfo)) {
+                if(ignoreRules.shouldIgnore(normalizedTimerInfo)) {
                     return;
                 }
 
