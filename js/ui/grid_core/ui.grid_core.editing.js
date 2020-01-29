@@ -2661,16 +2661,17 @@ module.exports = {
 
                     const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
                     // test
-                    let isCellValidatedInRow = false;
+                    let isCellInvalidInNewRow = false;
                     const validatingController = this.getController('validating');
                     if(validatingController) {
-                        const cellValidationInfo = validatingController.getCellValidationInfo({
+                        const info = validatingController.getCellValidationInfo({
                             keyValue: parameters.key,
                             columnIndex: parameters.column.index
                         });
-                        isCellValidatedInRow = validatingController.isRowValidated(parameters.key) && !!cellValidationInfo;
+                        const editData = editingController.getEditDataByKey(parameters.key);
+                        isCellInvalidInNewRow = info && info.result && info.result.status === 'invalid' && parameters.row && parameters.row.isNewRow && editData && editData.validated;
                     }
-                    if(modifiedValues && (modifiedValues[columnIndex] !== undefined || isCellValidatedInRow) && parameters.column && !isCommandCell && parameters.column.setCellValue) {
+                    if(((modifiedValues && modifiedValues[columnIndex] !== undefined) || isCellInvalidInNewRow) && parameters.column && !isCommandCell && parameters.column.setCellValue) {
                     // endTest
                     // if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
                         editingController.showHighlighting({
