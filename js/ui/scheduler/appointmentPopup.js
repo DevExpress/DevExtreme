@@ -15,7 +15,7 @@ const toMs = dateUtils.dateToMilliseconds;
 const WIDGET_CLASS = 'dx-scheduler';
 const APPOINTMENT_POPUP_CLASS = `${WIDGET_CLASS}-appointment-popup`;
 
-const APPOINTMENT_POPUP_WIDTH = 610;
+const APPOINTMENT_POPUP_WIDTH = 440;
 const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH = 768;
 
 const TOOLBAR_ITEM_AFTER_LOCATION = 'after';

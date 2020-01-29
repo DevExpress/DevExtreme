@@ -674,50 +674,6 @@ QUnit.test('Recurrence editor should have default value if freq editor value cha
     assert.equal(recurrenceEditor.option('value'), '', 'recEditor has right value');
 });
 
-QUnit.test('Popup should not contain recurrence editor, if recurrenceRuleExpr is null', function(assert) {
-    const appointment = {
-        startDate: new Date(2015, 1, 1, 1),
-        endDate: new Date(2015, 1, 1, 2),
-        text: 'caption',
-        recurrenceRule: 'FREQ=YEARLY'
-    };
-
-    this.instance.option('recurrenceRuleExpr', null);
-    this.instance.showAppointmentPopup(appointment);
-
-    let $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
-    let $recurrenceEditor = $popupContent.find('.dx-recurrence-editor');
-
-    assert.equal($recurrenceEditor.length, 0, 'Recurrence editor was not rendered');
-
-    this.instance.option('recurrenceRuleExpr', 'recurrenceRule');
-
-    this.instance.showAppointmentPopup(appointment);
-    $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
-
-    $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
-    $recurrenceEditor = $popupContent.find('.dx-recurrence-editor');
-
-    assert.equal($recurrenceEditor.length, 1, 'Recurrence editor was rendered');
-});
-
-QUnit.test('Popup should not contain recurrence editor, if recurrenceRuleExpr is \'\'', function(assert) {
-    const appointment = {
-        startDate: new Date(2015, 1, 1, 1),
-        endDate: new Date(2015, 1, 1, 2),
-        text: 'caption',
-        recurrenceRule: 'FREQ=YEARLY'
-    };
-
-    this.instance.option('recurrenceRuleExpr', '');
-    this.instance.showAppointmentPopup(appointment);
-
-    const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
-    const $recurrenceEditor = $popupContent.find('.dx-recurrence-editor');
-
-    assert.equal($recurrenceEditor.length, 0, 'Recurrence editor was not rendered');
-});
-
 QUnit.test('Recurrence editor should has right startDate after form items change', function(assert) {
     this.instance.option('onAppointmentFormOpening', function(e) {
         const items = e.form.option('items');
@@ -1072,26 +1028,6 @@ QUnit.test('focus is called on popup hiding', function(assert) {
     $('.dx-scheduler-appointment-popup .dx-overlay-content .dx-popup-cancel').trigger('dxclick');
 
     assert.ok(spy.calledOnce, 'focus is called');
-});
-
-QUnit.test('Popup should has close button in mobile theme when allowUpdating: false', function(assert) {
-    this.instance.option({
-        editing: {
-            allowUpdating: false
-        }
-    });
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
-
-    const popup = this.instance.getAppointmentPopup();
-
-    assert.equal(popup.option('showCloseButton'), true, 'popup has closeButton');
-});
-
-QUnit.test('Popup should has default close button in current mobile theme', function(assert) {
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
-
-    const popup = this.instance.getAppointmentPopup();
-    assert.equal(popup.option('showCloseButton'), popup.initialOption('showCloseButton'), 'popup has closeButton');
 });
 
 QUnit.test('Clicking on \'Repeat\' label should focus freq editor', function(assert) {

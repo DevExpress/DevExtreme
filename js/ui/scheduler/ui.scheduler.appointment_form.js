@@ -14,8 +14,7 @@ import '../switch';
 
 const RECURRENCE_EDITOR_ITEM_CLASS = 'dx-scheduler-recurrence-rule-item';
 
-const SCREEN_SIZE_OF_TOP_LABEL_LOCATION = 608;
-const SCREEN_SIZE_OF_SINGLE_COLUMN = 460;
+const SCREEN_SIZE_OF_SINGLE_COLUMN = 350;
 
 const SchedulerAppointmentForm = {
     _appointmentForm: {},
@@ -41,12 +40,6 @@ const SchedulerAppointmentForm = {
         return new Date(new Date(startDate).setHours(startDayHour));
     },
 
-    _updateLabelLocation: function(formWidth) {
-        if(formWidth > 0 && this._appointmentForm._rootLayoutManager._contentReadyAction) {
-            this._appointmentForm.option('labelLocation', formWidth < SCREEN_SIZE_OF_TOP_LABEL_LOCATION ? 'top' : 'left');
-        }
-    },
-
     create: function(componentCreator, $container, isReadOnly, formData) {
         this._appointmentForm = componentCreator($container, Form, {
             items: this._editors,
@@ -56,9 +49,9 @@ const SchedulerAppointmentForm = {
             colCount: 2,
             formData: formData,
             showColonAfterLabel: false,
+            labelLocation: 'top',
             screenByWidth: () => {
                 const formWidth = $container.parent().outerWidth();
-                this._updateLabelLocation(formWidth);
                 return formWidth < SCREEN_SIZE_OF_SINGLE_COLUMN ? 'xs' : 'lg';
             }
         });
@@ -158,9 +151,9 @@ const SchedulerAppointmentForm = {
             {
                 dataField: dataExprs.allDayExpr,
                 editorType: 'dxSwitch',
-                colSpan: 2,
                 label: {
-                    text: messageLocalization.format('dxScheduler-allDay')
+                    text: messageLocalization.format('dxScheduler-allDay'),
+                    location: 'right',
                 },
                 editorOptions: {
                     onValueChanged: function(args) {
@@ -185,6 +178,12 @@ const SchedulerAppointmentForm = {
                         endDateEditor.option('type', value ? 'date' : 'datetime');
                     }
                 }
+            }, {
+                editorType: 'dxSwitch',
+                label: {
+                    text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
+                    location: 'right',
+                },
             },
             {
                 itemType: 'empty',
@@ -229,10 +228,6 @@ const SchedulerAppointmentForm = {
                 }
             }
         ];
-
-        if(!dataExprs.recurrenceRuleExpr) {
-            this._editors.splice(9, 2);
-        }
 
         return this._editors;
     },

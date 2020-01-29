@@ -113,7 +113,7 @@ module('Mobile tooltip', moduleConfig, () => {
             appointmentTooltipTemplate: (model, index, contentElement) => {
                 assert.equal(model.targetedAppointmentData.text, model.appointmentData.text, 'targetedAppointmentData should be not empty');
                 assert.equal(index, templateCallCount, 'Index should be correct pass in template callback');
-                assert.strictEqual($(contentElement).length, 1, 'contentElement should be DOM element');
+                assert.equal($(contentElement).length, 1, 'contentElement should be DOM element');
                 templateCallCount++;
 
                 return $('<div />').addClass(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME).text(`template item index - ${index}`);
@@ -152,29 +152,9 @@ module('Appointment form', {
         resetWindowWidth();
     }
 }, () => {
-    test('Label location is left when the form\'s width > 610px on first show', function(assert) {
+    test('Items has layout has one column when the form\'s width < 350px on first show', function(assert) {
         const scheduler = createInstance();
-        scheduler.appointmentPopup.setInitialPopupSize({ width: 700 });
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-
-        const form = scheduler.appointmentForm.getFormInstance();
-        assert.equal(form.option('labelLocation'), 'left', 'label location of Form');
-    });
-
-    test('Label location is top when the form\'s width < 610px on first show', function(assert) {
-        const scheduler = createInstance();
-        scheduler.appointmentPopup.setInitialPopupSize({ width: 600 });
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-
-        const form = scheduler.appointmentForm.getFormInstance();
-        assert.equal(form.option('labelLocation'), 'top', 'label location of Form');
-    });
-
-    test('Items has layout has one column when the form\'s width < 460px on first show', function(assert) {
-        const scheduler = createInstance();
-        scheduler.appointmentPopup.setInitialPopupSize({ width: 400 });
+        scheduler.appointmentPopup.setInitialPopupSize({ width: 300 });
         scheduler.appointments.compact.click();
         scheduler.tooltip.clickOnItem();
 
@@ -190,22 +170,9 @@ module('Appointment form', {
         assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
     });
 
-    test('Label location is left when the form\'s width > 610px on window resizing', function(assert) {
+    test('Label location is top when the form\'s width < 440px on window resizing', function(assert) {
         const scheduler = createInstance();
         scheduler.appointmentPopup.setInitialPopupSize({ width: 400 });
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-
-        scheduler.appointmentPopup.setPopupWidth(620);
-        resizeCallbacks.fire();
-
-        const form = scheduler.appointmentForm.getFormInstance();
-        assert.equal(form.option('labelLocation'), 'left', 'label location of Form');
-    });
-
-    test('Label location is top when the form\'s width < 610px on window resizing', function(assert) {
-        const scheduler = createInstance();
-        scheduler.appointmentPopup.setInitialPopupSize({ width: 700 });
         scheduler.appointments.compact.click();
         scheduler.tooltip.clickOnItem();
 
@@ -217,19 +184,19 @@ module('Appointment form', {
         assert.equal(form.option('labelLocation'), 'top', 'label location of Form');
     });
 
-    test('Items has layout has one column when the form\'s width < 460px on window resizing', function(assert) {
+    test('Items has layout has one column when the form\'s width < 350 on window resizing', function(assert) {
         const scheduler = createInstance();
-        scheduler.appointmentPopup.setInitialPopupSize({ width: 500 });
+        scheduler.appointmentPopup.setInitialPopupSize({ width: 300 });
         scheduler.appointments.compact.click();
         scheduler.tooltip.clickOnItem();
 
-        scheduler.appointmentPopup.setPopupWidth(400);
+        scheduler.appointmentPopup.setPopupWidth(200);
         resizeCallbacks.fire();
 
         assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
     });
 
-    test('Items has layout has non-one column when the form\'s width > 460px on window resizing', function(assert) {
+    test('Items has layout has non-one column when the form\'s width > 350px on window resizing', function(assert) {
         const scheduler = createInstance();
         scheduler.appointmentPopup.setInitialPopupSize({ width: 460 });
         scheduler.appointments.compact.click();
@@ -328,7 +295,7 @@ module('Appointment popup', moduleConfig, () => {
         const popup = scheduler.appointmentPopup.getPopupInstance();
 
         assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
-        assert.equal(popup.option('maxWidth'), 610, 'maxWidth');
+        assert.equal(popup.option('maxWidth'), 440, 'maxWidth');
 
         resetWindowWidth();
     });
@@ -362,7 +329,7 @@ module('Appointment popup', moduleConfig, () => {
         resizeCallbacks.fire();
 
         assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
-        assert.equal(popup.option('maxWidth'), 610, 'maxWidth');
+        assert.equal(popup.option('maxWidth'), 440, 'maxWidth');
 
         resetWindowWidth();
     });

@@ -3,7 +3,6 @@ import { noop } from 'core/utils/common';
 import errors from 'ui/widget/ui.errors';
 import translator from 'animation/translator';
 import dateLocalization from 'localization/date';
-import messageLocalization from 'localization/message';
 import dblclickEvent from 'events/dblclick';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -660,40 +659,6 @@ QUnit.test('Appointment dates should not be normalized before sending to the det
     } finally {
         this.instance._appointmentPopup.show.restore();
     }
-});
-
-QUnit.test('Appointment labels should be localized before sending to the details view', function(assert) {
-    const startDate = 1429776000000;
-    const endDate = 1429794000000;
-    const task = {
-        text: 'Task 1',
-        startDate: startDate,
-        endDate: endDate
-    };
-
-    this.createInstance({
-        dataSource: new DataSource({
-            store: [task]
-        }),
-        currentDate: new Date(2015, 3, 23)
-    });
-
-    this.clock.tick();
-    this.instance.showAppointmentPopup(task);
-
-    const detailsForm = this.instance.getAppointmentDetailsForm();
-    const formItems = detailsForm.option('items');
-
-    assert.equal(formItems[0].label.text, messageLocalization.format('dxScheduler-editorLabelTitle'), 'Title is OK');
-    assert.equal(formItems[1].label.text, messageLocalization.format('dxScheduler-editorLabelStartDate'), 'Start date is OK');
-    assert.equal(formItems[2].label.text, ' ', 'Start date tz is OK');
-    assert.equal(formItems[3].label.text, messageLocalization.format('dxScheduler-editorLabelEndDate'), 'End date is OK');
-    assert.equal(formItems[4].label.text, ' ', 'End date tz is OK');
-    assert.equal(formItems[5].label.text, messageLocalization.format('dxScheduler-allDay'), 'All-day is OK');
-    assert.equal(formItems[6].itemType, 'empty', 'Item is empty');
-    assert.equal(formItems[7].label.text, messageLocalization.format('dxScheduler-editorLabelDescription'), 'Description is OK');
-    assert.equal(formItems[8].itemType, 'empty', 'Item is empty');
-    assert.equal(formItems[9].label.text, messageLocalization.format('dxScheduler-editorLabelRecurrence'), 'Recurrence is OK');
 });
 
 QUnit.test('Appointment should be copied before sending to the details view', function(assert) {
