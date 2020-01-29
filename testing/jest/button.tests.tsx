@@ -42,4 +42,39 @@ describe('Button', () => {
         expect(tree.is('.dx-button.dx-button-success')).toBeTruthy();
     });
 
+    describe('icon', () => {
+        it('should render icon before text if iconPosition is left', () => {
+            const model = new Button();
+            model.text = 'My Button';
+            model.icon = 'test';
+
+            const tree = shallow(viewFunction(viewModelFunction(model)));
+
+            const content = tree.find('.dx-button-content');
+
+            expect(content.children().at(0).is('.dx-icon.dx-icon-test'))
+                .toBeTruthy();
+            expect(content.children().at(1).is('.dx-button-text'))
+                .toBeTruthy();
+        });
+
+        it('should render icon after text if iconPosition is right', () => {
+            const model = new Button();
+            model.text = 'My Button';
+            model.icon = 'test';
+            model.iconPosition = 'right';
+
+            const tree = shallow(viewFunction(viewModelFunction(model)));
+
+            const content = tree.find('.dx-button-content');
+
+            expect(tree.hasClass('dx-button-icon-right'))
+                .toBeTruthy();
+            expect(content.children().at(0).is('.dx-button-text'))
+                .toBeTruthy();
+            expect(content.children().at(1).is('.dx-icon.dx-icon-test.dx-icon-right'))
+                .toBeTruthy();
+        });
+    });
+
 });
