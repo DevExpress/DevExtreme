@@ -60,6 +60,7 @@ const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const TODAY_CELL_CLASS = 'dx-calendar-today';
 const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdowneditor-button';
+const DROP_DOWN_BUTTON_VISIBLE_CLASS = 'dx-dropdowneditor-button-visible';
 
 const CALENDAR_APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 
@@ -905,7 +906,25 @@ QUnit.module('options changed callbacks', moduleConfig, () => {
         assert.deepEqual(secondValue, calendar.option('value'), 'value in calendar is changed');
     });
 
-    QUnit.test('buttons are removed after applyValueMode option is changed', assert => {
+    QUnit.test('dxDateBox should hide or show its DDButton on showDropDownButton option change', (assert) => {
+        const $dateBox = $('#dateBox').dxDateBox({
+            showDropDownButton: true,
+            value: new Date(),
+            type: 'date',
+            pickerType: 'calendar'
+        });
+        const dateBox = $dateBox.dxDateBox('instance');
+
+        assert.ok($dateBox.hasClass(DROP_DOWN_BUTTON_VISIBLE_CLASS));
+
+        dateBox.option('showDropDownButton', false);
+        assert.notOk($dateBox.hasClass(DROP_DOWN_BUTTON_VISIBLE_CLASS));
+
+        dateBox.option('showDropDownButton', true);
+        assert.ok($dateBox.hasClass(DROP_DOWN_BUTTON_VISIBLE_CLASS));
+    });
+
+    QUnit.test('buttons are removed after applyValueMode option is changed', (assert) => {
         const dateBox = $('#dateBox').dxDateBox({
             type: 'date',
             applyValueMode: 'useButtons',
@@ -1501,7 +1520,7 @@ QUnit.module('widget sizing render', {}, () => {
 
     QUnit.test('component width calculation should consider buttons containers element', assert => {
         const $parent = $('#parent-div');
-        $parent.css('width', 200);
+        $parent.css('display', 'inline-block');
 
         const $element = $('#dateBox').appendTo($parent);
         const component = $('#dateBox').dxDateBox({
@@ -2797,25 +2816,80 @@ QUnit.module('datebox with time component', {
         }
     });
 
-    QUnit.test('date box should have compact view when showAnalogClock option is false', assert => {
-        const $element = $('#dateBox').dxDateBox({
-            type: 'datetime',
-            pickerType: 'calendar'
+    [true, false].forEach((adaptivityEnabledValue) => {
+        QUnit.test(`date box should change behavior if adaptivityEnabled option is changed to ${adaptivityEnabledValue} at runtime`, (assert) => {
+            const widthStub = sinon.stub(renderer.fn, 'width').returns(300);
+
+            try {
+                const $element = $('#dateBox').dxDateBox({
+                    type: 'datetime',
+                    pickerType: 'calendar',
+                    adaptivityEnabled: !adaptivityEnabledValue,
+                    opened: true
+                });
+                const instance = $element.dxDateBox('instance');
+
+                instance.option('adaptivityEnabled', adaptivityEnabledValue);
+                instance.close();
+                instance.open();
+
+                const $content = $(instance._popup.$content());
+                const box = Box.getInstance($content.find(`.${BOX_CLASS}`));
+                const $clock = $content.find(`.${TIMEVIEW_CLOCK_CLASS}`);
+                const timeViewExpectedMessage = `timeview is ${adaptivityEnabledValue ? '' : 'not'} rendered`;
+                const clockExpectedMessage = `clock is ${adaptivityEnabledValue ? 'not' : ''} rendered`;
+
+                assert.strictEqual(box.itemElements().eq(0).find(`.${TIMEVIEW_CLASS}`).length, (adaptivityEnabledValue ? 1 : 0), timeViewExpectedMessage);
+                assert.strictEqual($clock.length, (adaptivityEnabledValue ? 0 : 1), clockExpectedMessage);
+            } finally {
+                widthStub.restore();
+            }
+        });
+    });
+
+    [true, false].forEach((showAnalogClockValue) => {
+        const timeViewExpectedMessage = `timeview is ${showAnalogClockValue ? 'not' : ''} rendered`;
+        const clockExpectedMessage = `clock is ${showAnalogClockValue ? '' : 'not'} rendered`;
+
+        QUnit.test(`date box should ${showAnalogClockValue ? 'not' : ''} have compact view when showAnalogClock option is ${showAnalogClockValue}`, (assert) => {
+            const $element = $('#dateBox').dxDateBox({
+                type: 'datetime',
+                pickerType: 'calendar',
+                showAnalogClock: showAnalogClockValue
+            });
+
+            const instance = $element.dxDateBox('instance');
+            instance.open();
+
+            const $content = $(instance._popup.$content());
+            const box = Box.getInstance($content.find(`.${BOX_CLASS}`));
+            const $clock = $content.find('.dx-timeview-clock');
+
+            assert.strictEqual(box.option('direction'), 'row', 'correct box direction specified');
+            assert.strictEqual(box.itemElements().eq(0).find(`.${CALENDAR_CLASS}`).length, 1, 'calendar rendered');
+            assert.strictEqual(box.itemElements().eq(0).find(`.${TIMEVIEW_CLASS}`).length, (showAnalogClockValue ? 0 : 1), timeViewExpectedMessage);
+            assert.strictEqual($clock.length, (showAnalogClockValue ? 1 : 0), clockExpectedMessage);
         });
 
-        const instance = $element.dxDateBox('instance');
+        QUnit.test(`date box should change behavior if showAnalogClock option is changed to ${showAnalogClockValue} at runtime`, (assert) => {
+            const $element = $('#dateBox').dxDateBox({
+                type: 'datetime',
+                pickerType: 'calendar',
+                showAnalogClock: !showAnalogClockValue,
+                opened: true
+            });
+            const instance = $element.dxDateBox('instance');
 
-        instance.option('showAnalogClock', false);
-        instance.open();
+            instance.option('showAnalogClock', showAnalogClockValue);
+            instance.close();
+            instance.open();
 
-        const $content = $(instance._popup.$content());
-        const box = Box.getInstance($content.find('.' + BOX_CLASS));
-        const $clock = $content.find('.dx-timeview-clock');
-
-        assert.equal(box.option('direction'), 'row', 'correct box direction specified');
-        assert.ok(box.itemElements().eq(0).find('.' + CALENDAR_CLASS).length, 'calendar rendered');
-        assert.ok(box.itemElements().eq(0).find('.' + TIMEVIEW_CLASS).length, 'timeview rendered');
-        assert.equal($clock.length, 0, 'clock was not rendered');
+            const $content = $(instance._popup.$content());
+            const box = Box.getInstance($content.find(`.${BOX_CLASS}`));
+            const $clock = $content.find(`.${TIMEVIEW_CLOCK_CLASS}`);
+            assert.strictEqual(box.itemElements().eq(0).find(`.${TIMEVIEW_CLASS}`).length, (showAnalogClockValue ? 0 : 1), timeViewExpectedMessage);
+            assert.strictEqual($clock.length, (showAnalogClockValue ? 1 : 0), clockExpectedMessage);
+        });
     });
 
     QUnit.test('date box wrapper adaptivity class depends on the screen size', assert => {
@@ -4189,7 +4263,25 @@ QUnit.module('datebox validation', {}, () => {
         assert.equal(validationError, 'A lorem ipsum...', 'validation message is correct');
     });
 
-    QUnit.test('dateOutOfRangeMessage', assert => {
+    QUnit.test('change invalidDateMessage at runtime', (assert) => {
+        const $dateBox = $('#dateBox').dxDateBox({
+            pickerType: 'calendar',
+            invalidDateMessage: 'test message'
+        });
+        const dateBox = $dateBox.dxDateBox('instance');
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        $input.val('ips');
+        $($input).trigger('change');
+
+        dateBox.option('invalidDateMessage', 'another test message');
+        $($input).trigger('change');
+
+        const validationError = $dateBox.dxDateBox('instance').option('validationError').message;
+        assert.equal(validationError, 'another test message', 'validation message is correct');
+    });
+
+    QUnit.test('dateOutOfRangeMessage', (assert) => {
         const $dateBox = $('#dateBox').dxDateBox({
             dateOutOfRangeMessage: 'A lorem ipsum...',
             min: new Date(2015, 5, 5),
@@ -4205,7 +4297,25 @@ QUnit.module('datebox validation', {}, () => {
         assert.equal(validationError, 'A lorem ipsum...', 'validation message is correct');
     });
 
-    QUnit.test('year is too big', assert => {
+    QUnit.test('change dateOutOfRangeMessage at runtime', (assert) => {
+        const $dateBox = $('#dateBox').dxDateBox({
+            dateOutOfRangeMessage: 'test message',
+            min: new Date(2015, 5, 5),
+            max: new Date(2016, 5, 5),
+            value: new Date(2017, 5, 5)
+        });
+        const dateBox = $dateBox.dxDateBox('instance');
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        $($input).trigger('change');
+        dateBox.option('dateOutOfRangeMessage', 'another test message');
+        $($input).trigger('change');
+
+        const validationError = dateBox.option('validationError.message');
+        assert.equal(validationError, 'another test message', 'validation message is correct');
+    });
+
+    QUnit.test('year is too big', (assert) => {
         const $dateBox = $('#dateBox').dxDateBox({
             displayFormat: 'd/M/y',
             valueChangeEvent: 'change',
