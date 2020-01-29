@@ -1,57 +1,102 @@
-import Button, { viewModelFunction, viewFunction } from '../../js/renovation/button';
-
 import React from 'react';
+import Button, { viewModelFunction, viewFunction } from '../../js/renovation/button';
 import { shallow } from 'enzyme';
 
+const render = (props = {}) => {
+    props = Object.assign({}, new Button(), props);
+
+    return shallow(viewFunction(viewModelFunction(props as Button)));
+};
+
 describe('Button', () => {
-    it('should render text', () => {
-        const model = new Button();
-        model.text = 'My button';
+    describe('Props', () => {
+        describe('stylingMode', () => {
+            it('should use "contained" as a default value', () => {
+                const button = render();
 
-        const tree = shallow(viewFunction(viewModelFunction(model)));
+                expect(button.hasClass('dx-button-mode-contained')).toBeTruthy();
+                expect(button.hasClass('dx-button-mode-text')).toBeFalsy();
+                expect(button.hasClass('dx-button-mode-outlined')).toBeFalsy();
+            });
 
-        expect(tree.find('.dx-button-text').text()).toBe('My button');
-    });
+            it('should add "dx-button-mode-text" class if the stylingMode is "text"', () => {
+                const button = render({ stylingMode: 'text' });
 
-    it('should render template', () => {
-        const model = new Button();
-        model.text = 'My button';
+                expect(button.hasClass('dx-button-mode-text')).toBeTruthy();
+                expect(button.hasClass('dx-button-mode-contained')).toBeFalsy();
+                expect(button.hasClass('dx-button-mode-outlined')).toBeFalsy();
+            });
 
-        model.contentRender = ({text}) => (<div className="custom-content">{`${text}123`}</div>);
+            it('should add "dx-button-mode-contained" class if the stylingMode is "contained"', () => {
+                const button = render({ stylingMode: 'contained' });
 
-        const tree = shallow(viewFunction(viewModelFunction(model)));
+                expect(button.hasClass('dx-button-mode-contained')).toBeTruthy();
+                expect(button.hasClass('dx-button-mode-text')).toBeFalsy();
+                expect(button.hasClass('dx-button-mode-outlined')).toBeFalsy();
+            });
 
-        expect(tree.find('.dx-button-content').children().props().text).toBe('My button');
-        expect(tree.find('.dx-button-content').children().render().text()).toBe('My button123');
+            it('should add "dx-button-mode-outlined" class if the stylingMode is "outlined"', () => {
+                const button = render({ stylingMode: 'outlined' });
+
+                expect(button.hasClass('dx-button-mode-outlined')).toBeTruthy();
+                expect(button.hasClass('dx-button-mode-text')).toBeFalsy();
+                expect(button.hasClass('dx-button-mode-contained')).toBeFalsy();
+            });
+        });
+
+        describe('text', () => {
+            it('should render text', () => {
+                const button = render({ text: 'My button' });
+
+                expect(button.find('.dx-button-text').text()).toBe('My button');
+            });
+        });
+
+        describe('type', () => {
+            it('should use "normal" as a default value', () => {
+                const button = render();
+
+                expect(button.hasClass('dx-button-normal')).toBeTruthy();
+            });
+
+            it('should add "dx-button-*" if the type is defined', () => {
+                const button = render({ type: 'custom' });
+
+                expect(button.hasClass('dx-button-custom')).toBeTruthy();
+                expect(button.hasClass('dx-button-normal')).toBeFalsy();
+            });
+        });
+
+        describe('contentRender', () => {
+            it('should render template', () => {
+                const button = render({
+                    text: 'My button',
+                    contentRender: ({ text }) => (<div className="custom-content">{ text+'123' }</div>)
+                });
+                const buttonContentChildren = button.find('.dx-button-content').children();
+
+                expect(buttonContentChildren.props().text).toBe('My button');
+                expect(buttonContentChildren.render().text()).toBe('My button123');
+            });
+        });
+
+        describe('icon', () => {
+            it('should render icon', () => {
+                const button = render({
+                    icon: 'test',
+                })
+
+                expect(button.is('.dx-button-has-icon'))
+                    .toBeTruthy();
+                expect(button.find('.dx-icon.dx-icon-test').exists())
+                    .toBeTruthy();
+            });
+        });
     });
 
     it('should have dx-button class', () => {
-        const model = new Button();
-
-        const tree = shallow(viewFunction(viewModelFunction(model)));
+        const tree = render();
 
         expect(tree.is('.dx-button')).toBeTruthy();
     });
-
-    it('should be of success type', () => {
-        const model = new Button();
-        model.type = 'success';
-
-        const tree = shallow(viewFunction(viewModelFunction(model)));
-
-        expect(tree.is('.dx-button.dx-button-success')).toBeTruthy();
-    });
-
-    it('should render icon', () => {
-        const model = new Button();
-        model.icon = 'test';
-
-        const tree = shallow(viewFunction(viewModelFunction(model)));
-
-        expect(tree.is('.dx-button-has-icon'))
-            .toBeTruthy();
-        expect(tree.find('.dx-icon.dx-icon-test').exists())
-            .toBeTruthy();
-    });
-
 });
