@@ -67,7 +67,7 @@ const SchedulerAppointmentForm = {
     },
 
     _dateBoxValueChanged: function(args, dateExpr, isNeedCorrect) {
-        this._validateAppointmentFormDate(args.component, args.value, args.previousValue); // TODO: WHF
+        this._validateAppointmentFormDate(args.component, args.value, args.previousValue);
 
         const value = dateSerialization.deserializeDate(args.value);
         const previousValue = dateSerialization.deserializeDate(args.previousValue);
