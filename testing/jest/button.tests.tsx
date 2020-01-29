@@ -82,13 +82,12 @@ describe('Button', () => {
 
         describe('iconPosition', () => {
             it('should render icon before text if iconPosition is left', () => {
-                const model = new Button();
-                model.text = 'My Button';
-                model.icon = 'test';
+                const button = render({
+                    text: 'myButton',
+                    icon: 'test',
+                });
 
-                const tree = shallow(viewFunction(viewModelFunction(model)));
-
-                const content = tree.find('.dx-button-content');
+                const content = button.find('.dx-button-content');
 
                 expect(content.children().at(0).is('.dx-icon.dx-icon-test'))
                     .toBeTruthy();
@@ -97,16 +96,15 @@ describe('Button', () => {
             });
 
             it('should render icon after text if iconPosition is right', () => {
-                const model = new Button();
-                model.text = 'My Button';
-                model.icon = 'test';
-                model.iconPosition = 'right';
+                const button = render({
+                    text: 'myButton',
+                    icon: 'test',
+                    iconPosition: 'right',
+                });
 
-                const tree = shallow(viewFunction(viewModelFunction(model)));
+                const content = button.find('.dx-button-content');
 
-                const content = tree.find('.dx-button-content');
-
-                expect(tree.hasClass('dx-button-icon-right'))
+                expect(button.hasClass('dx-button-icon-right'))
                     .toBeTruthy();
                 expect(content.children().at(0).is('.dx-button-text'))
                     .toBeTruthy();
