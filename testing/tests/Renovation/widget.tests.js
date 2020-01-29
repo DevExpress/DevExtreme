@@ -19,7 +19,7 @@ const config = {
     }
 };
 
-QUnit.module('RTL', config);
+QUnit.module('Props: rtlEnabled', config);
 
 QUnit.test('should not add rtl marker class by default', function(assert) {
     const $element = $('#component').Widget();
@@ -33,36 +33,63 @@ QUnit.test('should add rtl marker class if the "rtlEnabled" is true', function(a
     assert.ok($element.hasClass('dx-rtl'));
 });
 
-QUnit.module('Width/Height', config);
+QUnit.module('Props: width/height', config);
 
 QUnit.test('should render dimensions', function(assert) {
-    const $element = $('#component').Widget({ width: 150, height: 75 });
-    const instance = $element.Widget('instance');
-
-    assert.deepEqual($element.css(['width', 'height']), { width: '150px', height: '75px' });
-
-    instance.option({ width: 200, height: 300 });
-    assert.deepEqual($element.css(['width', 'height']), { width: '200px', height: '300px' });
-});
-
-QUnit.test('should ignore incorrect dimensions', function(assert) {
-    const $element = $('#component').Widget({ width: 100, height: 100 });
+    const $element = $('#component').Widget({ width: 150, height: '60%' });
     const style = $element.get(0).style;
     const instance = $element.Widget('instance');
 
+    assert.strictEqual(style.width, '150px');
+    assert.strictEqual(style.height, '60%');
+
+    instance.option({ width: 200, height: 'auto' });
+    assert.strictEqual(style.width, '200px');
+    assert.strictEqual(style.height, 'auto');
+
+    instance.option({ width: () => 'auto', height: () => 500 });
+    assert.strictEqual(style.width, 'auto');
+    assert.strictEqual(style.height, '500px');
+});
+
+QUnit.test('should overwrite predefined dimensions', function(assert) {
+    const $element = $('#component');
+    const style = $element.get(0).style;
+
+    $element.css({ width: '20px', height: '30px' });
+    assert.strictEqual(style.width, '20px');
+    assert.strictEqual(style.height, '30px');
+
+    $element.Widget({ width: () => 100, height: 'auto' });
     assert.strictEqual(style.width, '100px');
-    assert.strictEqual(style.height, '100px');
+    assert.strictEqual(style.height, 'auto');
 
-    instance.option({ width: null, height: null });
-    assert.strictEqual(style.width, '');
-    assert.strictEqual(style.height, '');
+    $element.css({ width: '20px', height: '30px' });
+    assert.strictEqual(style.width, '20px');
+    assert.strictEqual(style.height, '30px');
 
-    instance.option({ width: '', height: '' });
+    $element.Widget({ width: void 0, height: void 0 });
+    // assert.strictEqual(style.width, '20px');
+    // assert.strictEqual(style.height, '30px');
+
+    $element.css({ width: '20px', height: '30px' });
+    assert.strictEqual(style.width, '20px');
+    assert.strictEqual(style.height, '30px');
+
+    $element.Widget({ width: null, height: null });
+    // assert.strictEqual(style.width, '');
+    // assert.strictEqual(style.height, '');
+
+    $element.css({ width: '20px', height: '30px' });
+    assert.strictEqual(style.width, '20px');
+    assert.strictEqual(style.height, '30px');
+
+    $element.Widget({ width: '', height: '' });
     assert.strictEqual(style.width, '');
     assert.strictEqual(style.height, '');
 });
 
-QUnit.module('accessKey');
+QUnit.module('Props: accessKey');
 
 QUnit.test('should not add "accesskey" attribute if "focusStateEnabled" is false', function(assert) {
     const $widget = $('#component').Widget({
