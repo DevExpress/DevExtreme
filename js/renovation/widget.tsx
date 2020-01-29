@@ -16,11 +16,16 @@ import { isFakeClickEvent } from '../events/utils';
 import { hasWindow } from '../core/utils/window';
 import Action from '../core/action';
 
-const getStyles = ({ width, height, ...restArgs }) => ({
-    width: width === null ? '' : width,
-    height: height === null ? '' : height,
-    ...restArgs,
-});
+const getStyles = ({ width, height, ...other }) => {
+    const computedWidth = typeof width === 'function' ? width() : width;
+    const computedHeight = typeof height === 'function' ? height() : height;
+
+    return {
+        width: computedWidth ?? void 0,
+        height: computedHeight ?? void 0,
+        ...other
+    };
+};
 
 const setAttribute = (name, value) => {
     const result = {};
@@ -51,9 +56,9 @@ const getAttributes = ({ elementAttr, accessKey }) => {
 };
 
 const getCssClasses = (model: Partial<Widget>) => {
+    const className = ['dx-widget'];
     const isFocusable = model.focusStateEnabled && !model.disabled;
     const isHoverable = model.hoverStateEnabled && !model.disabled;
-    const className = ['dx-widget'];
 
     model.className && className.push(model.className);
     model.disabled && className.push('dx-state-disabled');
@@ -62,7 +67,7 @@ const getCssClasses = (model: Partial<Widget>) => {
     model._active && className.push('dx-state-active');
     model._hovered && isHoverable && !model._active && className.push('dx-state-hover');
     model.rtlEnabled && className.push('dx-rtl');
-    model?.elementAttr?.class && className.push(model.elementAttr.class);
+    model.elementAttr?.class && className.push(model.elementAttr.class);
 
     return className.join(' ');
 };
@@ -170,9 +175,9 @@ export default class Widget {
 
     @Event() onClick?: (e: any) => void = (() => { });
 
-    @InternalState() _hovered: boolean = false;
     @InternalState() _active: boolean = false;
     @InternalState() _focused: boolean = false;
+    @InternalState() _hovered: boolean = false;
     @InternalState() _keyboardListenerId: string | null = null;
 
     @Ref()

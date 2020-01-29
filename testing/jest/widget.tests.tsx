@@ -1,232 +1,258 @@
 import Widget, { viewModelFunction, viewFunction } from '../../js/renovation/widget';
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
-const model = new Widget();
-const render = (props = {}) =>
-    mount(viewFunction(viewModelFunction({ ...model, ...props } as Widget)));
+const render = (props = {}) => {
+    props = Object.assign({}, new Widget(), props);
+
+    return shallow(viewFunction(viewModelFunction(props as Widget)));
+};
 
 describe('Widget', () => {
-    describe('accessKey', () => {
-        it('should render "accesskey" attribute', () => {
-            const tree = render({ accessKey: 'y', focusStateEnabled: true });
+    describe('Props', () => {
+        describe('accessKey', () => {
+            it('should render "accesskey" attribute', () => {
+                const widget = render({ accessKey: 'y', focusStateEnabled: true });
 
-            expect(tree.find('.dx-widget').props().accessKey).toBe('y');
+                expect(widget.props().accessKey).toBe('y');
+            });
+
+            it('should not render if disabled', () => {
+                const widget = render({ accessKey: 'y', focusStateEnabled: true, disabled: true });
+
+                expect(widget.props().accessKey).toBe(void 0);
+            });
+
+            it('should not render if focusStateEnabled is false', () => {
+                const widget = render({ accessKey: 'y', focusStateEnabled: false });
+
+                expect(widget.props().accessKey).toBe(void 0);
+            });
         });
 
-        it('should not render if disabled', () => {
-            let tree = render({ accessKey: 'y', focusStateEnabled: true, disabled: false });
+        describe('rtlEnabled', () => {
+            it('should not add rtl marker class by default', () => {
+                const widget = render();
 
-            expect(tree.find('.dx-widget').props().accessKey).toBe('y');
+                expect(widget.hasClass('dx-rtl')).toBeFalsy();
+            });
 
-            tree = render({ accessKey: 'y', focusStateEnabled: true, disabled: true });
+            it('should add rtl marker class if "rtlEnabled" is true', () => {
+                const widget = render({ rtlEnabled: true });
 
-            expect(tree.find('.dx-widget').props().accessKey).toBe(void 0);
+                expect(widget.hasClass('dx-rtl')).toBeTruthy();
+            });
         });
 
-        it('should not render if focusStateEnabled is false', () => {
-            let tree = render({ accessKey: 'y', focusStateEnabled: false });
+        describe('width/height', () => {
+            it('should have the ability to be a function', () => {
+                const widget = render({ width: () => 50, height: () => 'auto' });
 
-            expect(tree.find('.dx-widget').props().accessKey).toBe(void 0);
+                expect(widget.props().style).toEqual({ width: 50, height: 'auto' });
+            });
 
-            tree = render({ accessKey: 'y', focusStateEnabled: true });
+            it('should process string values', () => {
+                const widget = render({ width: '50px', height: () => '100%' });
 
-            expect(tree.find('.dx-widget').props().accessKey).toBe('y');
+                expect(widget.props().style).toEqual({ width: '50px', height: '100%' });
+            });
+
+            it('should process number values', () => {
+                const widget = render({ width: 50, height: 70 });
+
+                expect(widget.props().style).toEqual({ width: 50, height: 70 });
+            });
+
+            it('should ignore null/undefined values', () => {
+                const widget = render({ width: null, height: void 0 });
+
+                expect(widget.props().style).toEqual({});
+            });
         });
-    });
 
-    describe('RTL', () => {
-        it('should be rendered rtl marker class', () => {
-            let tree = render();
+        describe('disabled', () => {
+            it('should add css marker class', () => {
+                const widget = render({ disabled: true });
 
-            expect(tree.find('.dx-widget.dx-rtl').exists()).not.toBeTruthy();
+                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
+            });
 
-            tree = render({ rtlEnabled: true });
+            it('should add aria attribute', () => {
+                const widget = render({ disabled: true });
 
-            expect(tree.find('.dx-widget.dx-rtl').exists()).toBeTruthy();
+                expect(widget.prop('aria-disabled')).toBe('true');
+            });
+        });
+
+        describe('visible', () => {
+            it('should add css marker class', () => {
+                const widget = render({ visible: false });
+
+                expect(widget.hasClass('dx-state-invisible')).toBeTruthy();
+            });
+
+            it('should add aria attribute', () => {
+                const widget = render({ visible: false });
+
+                expect(widget.prop('aria-hidden')).toBe('true');
+            });
+
+            it('should add hidden attribute', () => {
+                const widget = render({ visible: false });
+
+                expect(widget.prop('hidden')).toBe(true);
+            });
+        });
+
+        describe('tabIndex', () => {
+            it('should add tabIndex attribute by default', () => {
+                const widget = render({ focusStateEnabled: true });
+
+                expect(widget.prop('tabIndex')).toBe(0);
+            });
+
+            it('should add custom tabIndex attribute', () => {
+                const widget = render({ focusStateEnabled: true, tabIndex: 10 });
+
+                expect(widget.prop('tabIndex')).toBe(10);
+            });
+
+            it('should not add tabIndex attribute if the "disabled" is true', () => {
+                const widget = render({ focusStateEnabled: true, tabIndex: 10, disabled: true });
+
+                expect(widget.prop('tabIndex')).toBeFalsy();
+            });
+
+            it('should not add tabIndex attribute if the "focusStateEnabled" is false', () => {
+                const widget = render({ focusStateEnabled: false, tabIndex: 10 });
+
+                expect(widget.prop('tabIndex')).toBeFalsy();
+            });
+        });
+
+        describe('elementAttr', () => {
+            it('should pass custom css class name via elementAttr', () => {
+                const widget = render({ elementAttr: { class: 'custom-class' }});
+
+                expect(widget.hasClass('custom-class')).toBeTruthy();
+            });
+
+            it('should pass custom attributes', () => {
+                const widget = render({ elementAttr: { 'data-custom': 'custom-attribute-value' }});
+
+                expect(widget.prop('data-custom')).toBe('custom-attribute-value');
+            });
+
+            it('should not provide `class` property', () => {
+                const tree = render({ elementAttr: { class: 'custom-class' } });
+
+                const widget = tree.find('.dx-widget');
+                expect(widget.prop('className').indexOf('custom-class') > -1).toBeTruthy();
+                expect(widget.prop('className').indexOf('dx-widget') > -1).toBeTruthy();
+                expect(widget.prop('class')).toBeFalsy();
+            });
+        });
+
+        describe('hint', () => {
+            it('should not add "title" attribute by default', () => {
+                const widget = render();
+
+                expect(widget.prop('title')).toBe(void 0);
+            });
+
+            it('should add "title" attribute with the hint value', () => {
+                const widget = render({ hint: 'hint-text' });
+
+                expect(widget.prop('title')).toBe('hint-text');
+            });
         });
     });
 
     describe('aria', () => {
         it('should pass custom "aria" attributes', () => {
-            const tree = render({ aria: {
+            const widget = render({ aria: {
                 label: 'custom-aria-label',
                 role: 'button',
-                id: 'custom-id',
+                id: 'custom-id'
             }});
 
-            expect(tree.find('.dx-widget').props()).toMatchObject({
+            expect(widget.props()).toMatchObject({
                 'aria-label': 'custom-aria-label',
                 role: 'button',
-                id: 'custom-id',
+                id: 'custom-id'
             });
         });
     });
 
     describe('Children', () => {
         it('should render child component', () => {
-            const tree = render({ children: <div className="custom-content" /> });
-            const children = tree.find('.dx-widget').children();
+            const widget = render({ children: <div className="custom-content" /> });
+            const children = widget.children();
 
             expect(children).toHaveLength(1);
             expect(children.at(0).is('.custom-content')).toBeTruthy();
         });
     });
 
-    describe('width/height', () => {
-        it('should be init with custom dimensions', () => {
-            const tree = render({ width: 50, height: 70 });
-            const root = tree.find('.dx-widget');
-
-            expect(root.props().style).toEqual({ width: 50, height: 70 });
-        });
-    });
-
-    describe('disabled', () => {
-        it('should add css marker class', () => {
-            const tree = render({ disabled: true });
-
-            expect(tree.find('.dx-widget').hasClass('dx-state-disabled')).toBeTruthy();
-        });
-
-        it('should add aria attribute', () => {
-            const tree = render({ disabled: true });
-
-            expect(tree.find('.dx-widget').prop('aria-disabled')).toBe('true');
-        });
-    });
-
-    describe('Visibility', () => {
-        it('should add css marker class', () => {
-            const tree = render({ visible: false });
-
-            expect(tree.find('.dx-widget').hasClass('dx-state-invisible')).toBeTruthy();
-        });
-
-        it('should add aria attribute', () => {
-            const tree = render({ visible: false });
-
-            expect(tree.find('.dx-widget').prop('aria-hidden')).toBe('true');
-        });
-
-        it('should add hidden attribute', () => {
-            const tree = render({ visible: false });
-
-            expect(tree.find('.dx-widget').prop('hidden')).toBe(true);
-        });
-    });
-
     describe('States', () => {
         describe('Active', () => {
             it('should add `dx-state-active` css class', () => {
-                const tree = render({ _active: true });
+                const widget = render({ _active: true });
 
-                expect(tree.find('.dx-widget').hasClass('dx-state-active')).toBeTruthy();
+                expect(widget.hasClass('dx-state-active')).toBeTruthy();
             });
         });
 
         describe('Focus', () => {
             it('should add `dx-state-focused` css class', () => {
-                const tree = render({ _focused: true, focusStateEnabled: true });
+                const widget = render({ _focused: true, focusStateEnabled: true });
 
-                expect(tree.find('.dx-widget').hasClass('dx-state-focused')).toBeTruthy();
+                expect(widget.hasClass('dx-state-focused')).toBeTruthy();
             });
 
             it('should not add marker class if the "focusStateEnabled" is false', () => {
-                const tree = render({ _focused: true, focusStateEnabled: false });
+                const widget = render({ _focused: true, focusStateEnabled: false });
 
-                expect(tree.find('.dx-widget').hasClass('dx-state-focused')).toBeFalsy();
+                expect(widget.hasClass('dx-state-focused')).toBeFalsy();
             });
 
             it('should not add marker class if the "disabled" is true', () => {
-                const tree = render({ _focused: true, focusStateEnabled: true, disabled: true });
+                const widget = render({ _focused: true, focusStateEnabled: true, disabled: true });
 
-                expect(tree.find('.dx-widget').hasClass('dx-state-focused')).toBeFalsy();
+                expect(widget.hasClass('dx-state-focused')).toBeFalsy();
             });
         });
 
         describe('Hover', () => {
             it('should add `dx-state-hover` css class', () => {
-                const tree = render({ _hovered: true, hoverStateEnabled: true });
+                const widget = render({ _hovered: true, hoverStateEnabled: true });
 
-                expect(tree.find('.dx-widget').hasClass('dx-state-hover')).toBeTruthy();
+                expect(widget.hasClass('dx-state-hover')).toBeTruthy();
             });
 
             it('should not add `dx-state-hover` css class if the "hoverStateEnabled" is false', () => {
-                const tree = render({ _hovered: true, hoverStateEnabled: false });
+                const widget = render({ _hovered: true, hoverStateEnabled: false });
 
-                expect(tree.find('.dx-widget').hasClass('dx-state-hover')).toBeFalsy();
+                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
             });
 
             it('should not add `dx-state-hover` css class in the `active` state', () => {
-                const tree = render({ _hovered: true, hoverStateEnabled: true, _active: true });
+                const widget = render({ _hovered: true, hoverStateEnabled: true, _active: true });
 
-                expect(tree.find('.dx-widget').hasClass('dx-state-hover')).toBeFalsy();
+                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
             });
 
             it('should not have `dx-state-hover` css class in the `disabled` state', () => {
-                const tree = render({ _hovered: true, hoverStateEnabled: true, disabled: true });
+                const widget = render({ _hovered: true, hoverStateEnabled: true, disabled: true });
 
-                expect(tree.find('.dx-widget').hasClass('dx-state-hover')).toBeFalsy();
+                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
             });
         });
     });
 
-    describe('tabIndex', () => {
-        it('should add tabIndex attribute by default', () => {
-            const tree = render({ focusStateEnabled: true });
+    it('should have dx-widget class', () => {
+        const tree = render();
 
-            expect(tree.find('.dx-widget').prop('tabIndex')).toBe(0);
-        });
-
-        it('should add custom tabIndex attribute', () => {
-            const tree = render({ focusStateEnabled: true, tabIndex: 10 });
-
-            expect(tree.find('.dx-widget').prop('tabIndex')).toBe(10);
-        });
-
-        it('should not add tabIndex attribute if the "disabled" is true', () => {
-            const tree = render({ focusStateEnabled: true, tabIndex: 10, disabled: true });
-
-            expect(tree.find('.dx-widget').prop('tabIndex')).toBeFalsy();
-        });
-
-        it('should not add tabIndex attribute if the "focusStateEnabled" is false', () => {
-            const tree = render({ focusStateEnabled: false, tabIndex: 10 });
-
-            expect(tree.find('.dx-widget').prop('tabIndex')).toBeFalsy();
-        });
-    });
-
-    describe('elementAttr', () => {
-        it('should pass custom css class name via elementAttr', () => {
-            const tree = render({ elementAttr: { class: 'custom-class' } });
-
-            expect(tree.find('.dx-widget').hasClass('custom-class')).toBeTruthy();
-        });
-
-        it('should pass custom attributes', () => {
-            const tree = render({ elementAttr: { 'data-custom': 'custom-attribute-value' } });
-
-            expect(tree.find('.dx-widget').prop('data-custom')).toBe('custom-attribute-value');
-        });
-
-        it('should not provide `class` property', () => {
-            const tree = render({ elementAttr: { class: 'custom-class' } });
-
-            const widget = tree.find('.dx-widget');
-            expect(widget.prop('className').indexOf('custom-class') > -1).toBeTruthy();
-            expect(widget.prop('className').indexOf('dx-widget') > -1).toBeTruthy();
-            expect(widget.prop('class')).toBeFalsy();
-        });
-
-    });
-
-    describe('Hint', () => {
-        it('should add "title" attribute with the hint value', () => {
-            const tree = render({ hint: 'hint-text' });
-
-            expect(tree.find('.dx-widget').prop('title')).toBe('hint-text');
-        });
+        expect(tree.find('.dx-widget').exists()).toBeTruthy();
     });
 });
