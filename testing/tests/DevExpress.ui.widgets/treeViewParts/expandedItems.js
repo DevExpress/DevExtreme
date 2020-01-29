@@ -56,13 +56,13 @@ module('Expanded items', {
     });
 
     test('onItemExpanded callback', function(assert) {
-        const data = $.extend(true, [], DATA[5]),
-            itemExpandedHandler = sinon.spy(noop),
-            $treeView = initTree({
-                items: data,
-                onItemExpanded: itemExpandedHandler
-            }),
-            treeView = $treeView.dxTreeView('instance');
+        const data = $.extend(true, [], DATA[5]);
+        const itemExpandedHandler = sinon.spy(noop);
+        const $treeView = initTree({
+            items: data,
+            onItemExpanded: itemExpandedHandler
+        });
+        const treeView = $treeView.dxTreeView('instance');
 
         const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
 
@@ -120,8 +120,8 @@ module('Expanded items', {
             onItemExpanded: itemExpandedHandler
         });
 
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0),
-            event = new $.Event('dxclick');
+        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+        const event = new $.Event('dxclick');
         $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger(event);
 
         const args = itemExpandedHandler.getCall(0).args[0];
@@ -163,15 +163,15 @@ module('Expanded items', {
 
         const data = $.extend(true, [], DATA[5]);
         data[0].expanded = true;
-        const itemCollapsedHandler = sinon.spy(noop),
-            $treeView = initTree({
-                items: data,
-                onItemCollapsed: itemCollapsedHandler
-            }),
-            treeView = $treeView.dxTreeView('instance');
+        const itemCollapsedHandler = sinon.spy(noop);
+        const $treeView = initTree({
+            items: data,
+            onItemCollapsed: itemCollapsedHandler
+        });
+        const treeView = $treeView.dxTreeView('instance');
 
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0),
-            event = new $.Event('dxclick');
+        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+        const event = new $.Event('dxclick');
         $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger(event);
 
         const args = itemCollapsedHandler.getCall(0).args[0];
@@ -203,11 +203,11 @@ module('Expanded items', {
         data[0].expanded = true;
         data[0].disabled = true;
         const $treeView = initTree({
-                items: data
-            }),
-            treeView = $treeView.dxTreeView('instance'),
-            $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0),
-            $icon = $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+            items: data
+        });
+        const treeView = $treeView.dxTreeView('instance');
+        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+        const $icon = $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
 
         $icon.trigger('dxclick');
 
@@ -219,10 +219,10 @@ module('Expanded items', {
         data[0].expanded = true;
 
         const $treeView = initTree({
-                items: data
-            }),
-            treeView = $treeView.dxTreeView('instance'),
-            items = treeView.option('items');
+            items: data
+        });
+        const treeView = $treeView.dxTreeView('instance');
+        const items = treeView.option('items');
 
         items[0].disabled = true;
         treeView.option('items', items);
@@ -234,9 +234,9 @@ module('Expanded items', {
         const data = $.extend(true, [], DATA[5]);
         data[0].items[1].expanded = true;
         const $treeView = initTree({
-                items: data
-            }),
-            $toggleExpandIcon = $($treeView.find('.dx-treeview-toggle-item-visibility').eq(0));
+            items: data
+        });
+        const $toggleExpandIcon = $($treeView.find('.dx-treeview-toggle-item-visibility').eq(0));
 
         $toggleExpandIcon.trigger('dxclick');
         assert.ok(!$toggleExpandIcon.hasClass('dx-treeview-toggle-item-visibility-opened'));
@@ -703,9 +703,9 @@ module('Expanded items', {
                             [{ id: 1, text: 'item1', parentId: 2, expanded }, { id: 2, text: 'item1_1', parentId: 1, expanded }]
                         );
 
-                        const wrapper = new TreeViewTestWrapper(options),
-                            $item1 = wrapper.getElement().find('[aria-level="1"]'),
-                            $item2 = wrapper.getElement().find('[aria-level="2"]');
+                        const wrapper = new TreeViewTestWrapper(options);
+                        const $item1 = wrapper.getElement().find('[aria-level="1"]');
+                        const $item2 = wrapper.getElement().find('[aria-level="2"]');
 
                         assert.notEqual(wrapper.instance, undefined);
                         assert.equal($item1.is(':visible'), true);
@@ -716,14 +716,14 @@ module('Expanded items', {
 
 
                 function runExpandItemTest(assert, expanded, argumentGetter) {
-                    let options = createOptions(
+                    const options = createOptions(
                         { dataSourceOption, virtualModeEnabled },
                         [ { id: 1, text: 'item1', parentId: 2, expanded }, { id: 2, text: 'item1_1', parentId: 1, expanded }]);
-                    let wrapper = new TreeViewTestWrapper(options),
-                        $item1 = wrapper.getElement().find('[aria-level="1"]');
+                    const wrapper = new TreeViewTestWrapper(options);
+                    const $item1 = wrapper.getElement().find('[aria-level="1"]');
                     wrapper.instance.expandItem(argumentGetter($item1));
 
-                    let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+                    const $item1_1 = wrapper.getElement().find('[aria-level="2"]');
                     assert.equal($item1_1.is(':visible'), true);
                     wrapper.instance.dispose();
                 }
@@ -741,10 +741,10 @@ module('Expanded items', {
                 });
 
                 QUnit.test('ExpandAll', function(assert) {
-                    let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
+                    const options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                         { id: 1, text: 'item1', parentId: 2, expanded: false },
                         { id: 2, text: 'item1_1', parentId: 1, expanded: false }]);
-                    let wrapper = new TreeViewTestWrapper(options);
+                    const wrapper = new TreeViewTestWrapper(options);
 
                     wrapper.instance.expandAll();
 
@@ -755,14 +755,14 @@ module('Expanded items', {
                 });
 
                 function runCollapseItemTest(assert, expanded, argumentGetter) {
-                    let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
+                    const options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                         { id: 1, text: 'item1', parentId: 2, expanded },
                         { id: 2, text: 'item1_1', parentId: 1, expanded }]);
-                    let wrapper = new TreeViewTestWrapper(options),
-                        $item1 = wrapper.getElement().find('[aria-level="1"]');
+                    const wrapper = new TreeViewTestWrapper(options);
+                    const $item1 = wrapper.getElement().find('[aria-level="1"]');
                     wrapper.instance.collapseItem(argumentGetter($item1));
 
-                    let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+                    const $item1_1 = wrapper.getElement().find('[aria-level="2"]');
                     if(expanded) {
                         assert.equal($item1_1.is(':hidden'), true);
                     } else {
@@ -784,14 +784,14 @@ module('Expanded items', {
                 });
 
                 QUnit.test('CollapseAll', function(assert) {
-                    let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
+                    const options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                         { id: 1, text: 'item1', parentId: 2, expanded: true },
                         { id: 2, text: 'item1_1', parentId: 1, expanded: true }]);
-                    let wrapper = new TreeViewTestWrapper(options);
+                    const wrapper = new TreeViewTestWrapper(options);
 
                     wrapper.instance.collapseAll();
 
-                    let $item1_1 = wrapper.getElement().find('[aria-level="2"]');
+                    const $item1_1 = wrapper.getElement().find('[aria-level="2"]');
                     assert.equal($item1_1.length, 1);
                     assert.equal($item1_1.is(':hidden'), true);
                     wrapper.instance.dispose();

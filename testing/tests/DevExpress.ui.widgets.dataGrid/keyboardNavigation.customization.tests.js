@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    let markup = `
+    const markup = `
         <div>
             <div id="container" class="dx-datagrid"></div>
         </div>`;
@@ -75,7 +75,7 @@ QUnit.module('Customize keyboard navigation', {
 }, function() {
     testInDesktop('Editing navigation mode - arrow keys should operate with drop down if it is expanded', function(assert) {
         // arrange
-        var rooms = [
+        const rooms = [
             { id: 0, name: 'room0' },
             { id: 1, name: 'room1' },
             { id: 2, name: 'room2' },
@@ -128,7 +128,7 @@ QUnit.module('Customize keyboard navigation', {
         this.triggerKeyDown('enter');
         this.clock.tick();
 
-        var $input = $('.dx-row .dx-texteditor-container input').eq(0);
+        let $input = $('.dx-row .dx-texteditor-container input').eq(0);
         assert.equal($input.length, 0, 'input');
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 2 }, 'focusedCellPosition');
@@ -497,7 +497,7 @@ QUnit.module('Customize keyboard navigation', {
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition');
 
 
-        var changedSpy = sinon.spy();
+        const changedSpy = sinon.spy();
         this.dataController.changed.add(changedSpy);
 
         // act
@@ -687,7 +687,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Enter key for changed editing cell if \'editOnKeyPress\' and cell edit mode', function(assert) {
         // arrange
-        var $input;
+        let $input;
 
         this.options = {
             editing: {
@@ -721,7 +721,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Enter key for changed editing cell if \'editOnKeyPress\' and batch edit mode', function(assert) {
         // arrange
-        var $input;
+        let $input;
 
         this.options = {
             editing: {
@@ -823,7 +823,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Press DELETE key if \'editOnKeyPress: true\', \'enterKeyDirection: column\' and cell edit mode', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             editing: {
@@ -875,7 +875,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Press DELETE key if \'editOnKeyPress: true\', \'enterKeyDirection: column\' and batch edit mode', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             editing: {
@@ -927,7 +927,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Press BACKSPACE key if \'editOnKeyPress: true\', \'enterKeyDirection: column\' and cell edit mode', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             editing: {
@@ -979,7 +979,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Press BACKSPACE key if \'editOnKeyPress: true\', \'enterKeyDirection: column\' and batch edit mode', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             editing: {
@@ -1031,7 +1031,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('\'editOnKeyPress\', \'enterKeyDirection\' is column and cell edit mode', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             editing: {
@@ -1083,7 +1083,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('\'editOnKeyPress\', \'enterKeyDirection\' is row and cell edit mode', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             editing: {
@@ -1134,7 +1134,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('\'editOnKeyPress\', \'enterKeyDirection\' is column and batch edit mode', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             editing: {
@@ -1186,7 +1186,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('\'editOnKeyPress\', \'enterKeyDirection\' is \'row\' and batch edit mode', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             editing: {
@@ -1237,7 +1237,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('\'editOnKeyPress\', \'enterKeyDirection\' is row, \'rtlEnabled\' and cell edit mode', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             rtlEnabled: true,
@@ -1315,7 +1315,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('RightArrow key if \'keyboardNavigation.editOnKeyPress\' and editing has began by key press', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             editing: {
@@ -1365,7 +1365,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('LeftArrow key if \'keyboardNavigation.editOnKeyPress\' and editing has began by key press', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             editing: {
@@ -1415,7 +1415,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('UpArrow key if \'keyboardNavigation.editOnKeyPress\' and editing has began by key press', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             editing: {
@@ -1465,7 +1465,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('DownArrow key if \'keyboardNavigation.editOnKeyPress\' and editing has began by key press', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         this.options = {
             editing: {
@@ -1515,7 +1515,7 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('DownArrow key if \'keyboardNavigation.editOnKeyPress\' and editing began 2nd time by the key press', function(assert) {
         // arrange
-        var $editor;
+        let $editor;
 
         // act
         this.options = {
@@ -1594,7 +1594,7 @@ QUnit.module('Customize keyboard navigation', {
         this.clock.tick();
 
         // arrange, assert
-        var $input = $('.dx-row .dx-texteditor-input').eq(0);
+        let $input = $('.dx-row .dx-texteditor-input').eq(0);
         assert.equal(this.editingController._editRowIndex, 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
         assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
@@ -1654,7 +1654,7 @@ QUnit.module('Customize keyboard navigation', {
         this.clock.tick(300);
 
         // arrange, assert
-        var $input = $('.dx-row .dx-texteditor-input').eq(0);
+        const $input = $('.dx-row .dx-texteditor-input').eq(0);
         assert.equal($input.val(), '$2.00', 'input value');
         assert.equal($input.get(0).selectionStart, 2, 'caret start position');
         assert.equal($input.get(0).selectionEnd, 2, 'caret end position');
@@ -1680,7 +1680,7 @@ QUnit.module('Customize keyboard navigation', {
         this.clock.tick();
 
         // arrange, assert
-        var $input = $('.dx-row .dx-texteditor-container input').eq(0);
+        let $input = $('.dx-row .dx-texteditor-container input').eq(0);
         assert.equal(this.editingController._editRowIndex, 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
         assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
@@ -1730,7 +1730,7 @@ QUnit.module('Customize keyboard navigation', {
         this.clock.tick();
 
         // arrange, assert
-        var $input = $('.dx-texteditor-input').eq(0);
+        let $input = $('.dx-texteditor-input').eq(0);
         assert.equal(this.editingController._editRowIndex, 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, 'focusedCellPosition');
         assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
@@ -1781,7 +1781,7 @@ QUnit.module('Customize keyboard navigation', {
         this.clock.tick();
 
         // arrange, assert
-        var $input = $('.dx-row .dx-texteditor-input').eq(0);
+        let $input = $('.dx-row .dx-texteditor-input').eq(0);
         assert.equal(this.editingController._editRowIndex, 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, 'focusedCellPosition');
         assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
@@ -1847,7 +1847,7 @@ QUnit.module('Customize keyboard navigation', {
         this.clock.tick();
 
         // arrange, assert
-        var $input = $('.dx-texteditor-input').eq(0);
+        let $input = $('.dx-texteditor-input').eq(0);
         assert.equal(this.editingController._editRowIndex, 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, 'focusedCellPosition');
         assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
@@ -1912,7 +1912,7 @@ QUnit.module('Customize keyboard navigation', {
         this.clock.tick();
 
         // arrange, assert
-        var $input = $('.dx-texteditor-input').eq(0);
+        let $input = $('.dx-texteditor-input').eq(0);
         assert.equal(this.editingController._editRowIndex, 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, 'focusedCellPosition');
         assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
@@ -1975,7 +1975,7 @@ QUnit.module('Customize keyboard navigation', {
         this.clock.tick();
 
         // arrange, assert
-        var $input = $('.dx-row .dx-texteditor-container input').eq(0);
+        let $input = $('.dx-row .dx-texteditor-container input').eq(0);
         assert.equal(this.editingController._editRowIndex, 1, 'cell is editing');
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, 'focusedCellPosition');
         assert.ok(this.keyboardNavigationController._isFastEditingStarted(), 'Fast editing mode');
@@ -2024,8 +2024,8 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Input should have a correct value in fast editing mode in Microsoft Edge Browser (T808348)', function(assert) {
         // arrange
-        let rowsViewWrapper = dataGridWrapper.rowsView,
-            $input;
+        const rowsViewWrapper = dataGridWrapper.rowsView;
+        let $input;
 
         this.options = {
             editing: {
@@ -2057,14 +2057,14 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Select all text if editing mode is batch', function(assert) {
         // arrange
-        var rooms = [
-                { id: 0, name: 'room0' },
-                { id: 1, name: 'room1' },
-                { id: 2, name: 'room2' },
-                { id: 3, name: 'room3' },
-                { id: 222, name: 'room222' }
-            ],
-            input;
+        const rooms = [
+            { id: 0, name: 'room0' },
+            { id: 1, name: 'room1' },
+            { id: 2, name: 'room2' },
+            { id: 3, name: 'room3' },
+            { id: 222, name: 'room222' }
+        ];
+        let input;
 
         this.options = {
             editing: {
@@ -2136,7 +2136,7 @@ QUnit.module('Customize keyboard navigation', {
     // T744711
     testInDesktop('Select all text for editor with remote data source', function(assert) {
         // arrange
-        var rooms = [
+        const rooms = [
             { id: 0, name: 'room0' },
             { id: 1, name: 'room1' },
             { id: 2, name: 'room2' },
@@ -2159,7 +2159,7 @@ QUnit.module('Customize keyboard navigation', {
                             return rooms;
                         },
                         byKey: function(key) {
-                            var d = $.Deferred();
+                            const d = $.Deferred();
 
                             setTimeout(function() {
                                 d.resolve(rooms.filter(room => room.id === key)[0]);
@@ -2181,7 +2181,7 @@ QUnit.module('Customize keyboard navigation', {
         $(this.getCellElement(0, 1)).focus().trigger('dxclick');
 
         // assert
-        var input = $('.dx-texteditor-input').get(0);
+        const input = $('.dx-texteditor-input').get(0);
         assert.equal(input.value, '', 'editor input value is empty');
 
         // act
@@ -2194,14 +2194,14 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Not select all text if editing mode is batch', function(assert) {
         // arrange
-        var rooms = [
-                { id: 0, name: 'room0' },
-                { id: 1, name: 'room1' },
-                { id: 2, name: 'room2' },
-                { id: 3, name: 'room3' },
-                { id: 222, name: 'room222' }
-            ],
-            input;
+        const rooms = [
+            { id: 0, name: 'room0' },
+            { id: 1, name: 'room1' },
+            { id: 2, name: 'room2' },
+            { id: 3, name: 'room3' },
+            { id: 222, name: 'room222' }
+        ];
+        let input;
 
         this.options = {
             editing: {
@@ -2274,14 +2274,14 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Select all text if editing mode is cell', function(assert) {
         // arrange
-        var rooms = [
-                { id: 0, name: 'room0' },
-                { id: 1, name: 'room1' },
-                { id: 2, name: 'room2' },
-                { id: 3, name: 'room3' },
-                { id: 222, name: 'room222' }
-            ],
-            input;
+        const rooms = [
+            { id: 0, name: 'room0' },
+            { id: 1, name: 'room1' },
+            { id: 2, name: 'room2' },
+            { id: 3, name: 'room3' },
+            { id: 222, name: 'room222' }
+        ];
+        let input;
 
         this.options = {
             editing: {
@@ -2355,14 +2355,14 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Not select all text if editing mode is cell', function(assert) {
         // arrange
-        var rooms = [
-                { id: 0, name: 'room0' },
-                { id: 1, name: 'room1' },
-                { id: 2, name: 'room2' },
-                { id: 3, name: 'room3' },
-                { id: 222, name: 'room222' }
-            ],
-            input;
+        const rooms = [
+            { id: 0, name: 'room0' },
+            { id: 1, name: 'room1' },
+            { id: 2, name: 'room2' },
+            { id: 3, name: 'room3' },
+            { id: 222, name: 'room222' }
+        ];
+        let input;
 
         this.options = {
             editing: {
@@ -2435,14 +2435,14 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Select all text if editing mode is form', function(assert) {
         // arrange
-        var rooms = [
-                { id: 0, name: 'room0' },
-                { id: 1, name: 'room1' },
-                { id: 2, name: 'room2' },
-                { id: 3, name: 'room3' },
-                { id: 222, name: 'room222' }
-            ],
-            input;
+        const rooms = [
+            { id: 0, name: 'room0' },
+            { id: 1, name: 'room1' },
+            { id: 2, name: 'room2' },
+            { id: 3, name: 'room3' },
+            { id: 222, name: 'room222' }
+        ];
+        let input;
 
         this.options = {
             editing: {
@@ -2504,14 +2504,14 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Not select all text if editing mode is form', function(assert) {
         // arrange
-        var rooms = [
-                { id: 0, name: 'room0' },
-                { id: 1, name: 'room1' },
-                { id: 2, name: 'room2' },
-                { id: 3, name: 'room3' },
-                { id: 222, name: 'room222' }
-            ],
-            input;
+        const rooms = [
+            { id: 0, name: 'room0' },
+            { id: 1, name: 'room1' },
+            { id: 2, name: 'room2' },
+            { id: 3, name: 'room3' },
+            { id: 222, name: 'room222' }
+        ];
+        let input;
 
         this.options = {
             editing: {
@@ -2571,14 +2571,14 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Select all text if editing mode is popup', function(assert) {
         // arrange
-        var rooms = [
-                { id: 0, name: 'room0' },
-                { id: 1, name: 'room1' },
-                { id: 2, name: 'room2' },
-                { id: 3, name: 'room3' },
-                { id: 222, name: 'room222' }
-            ],
-            input;
+        const rooms = [
+            { id: 0, name: 'room0' },
+            { id: 1, name: 'room1' },
+            { id: 2, name: 'room2' },
+            { id: 3, name: 'room3' },
+            { id: 222, name: 'room222' }
+        ];
+        let input;
 
         this.options = {
             editing: {
@@ -2640,14 +2640,14 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Not select all text if editing mode is popup', function(assert) {
         // arrange
-        var rooms = [
-                { id: 0, name: 'room0' },
-                { id: 1, name: 'room1' },
-                { id: 2, name: 'room2' },
-                { id: 3, name: 'room3' },
-                { id: 222, name: 'room222' }
-            ],
-            input;
+        const rooms = [
+            { id: 0, name: 'room0' },
+            { id: 1, name: 'room1' },
+            { id: 2, name: 'room2' },
+            { id: 3, name: 'room3' },
+            { id: 222, name: 'room222' }
+        ];
+        let input;
 
         this.options = {
             editing: {
@@ -2707,14 +2707,14 @@ QUnit.module('Customize keyboard navigation', {
 
     testInDesktop('Select all text if editOnKeyPress is true', function(assert) {
         // arrange
-        var rooms = [
-                { id: 0, name: 'room0' },
-                { id: 1, name: 'room1' },
-                { id: 2, name: 'room2' },
-                { id: 3, name: 'room3' },
-                { id: 222, name: 'room222' }
-            ],
-            input;
+        const rooms = [
+            { id: 0, name: 'room0' },
+            { id: 1, name: 'room1' },
+            { id: 2, name: 'room2' },
+            { id: 3, name: 'room3' },
+            { id: 222, name: 'room222' }
+        ];
+        let input;
 
         this.options = {
             editing: {

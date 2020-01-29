@@ -1,30 +1,30 @@
-var $ = require('../../core/renderer'),
-    eventsEngine = require('../../events/core/events_engine'),
-    clickEvent = require('../../events/click'),
-    extend = require('../../core/utils/extend').extend,
-    errors = require('../widget/ui.errors'),
-    CheckBox = require('../check_box'),
-    RadioButton = require('../radio_group/radio_button'),
-    eventUtils = require('../../events/utils'),
-    registerDecorator = require('./ui.list.edit.decorator_registry').register,
-    EditDecorator = require('./ui.list.edit.decorator');
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const clickEvent = require('../../events/click');
+const extend = require('../../core/utils/extend').extend;
+const errors = require('../widget/ui.errors');
+const CheckBox = require('../check_box');
+const RadioButton = require('../radio_group/radio_button');
+const eventUtils = require('../../events/utils');
+const registerDecorator = require('./ui.list.edit.decorator_registry').register;
+const EditDecorator = require('./ui.list.edit.decorator');
 
 
-var SELECT_DECORATOR_ENABLED_CLASS = 'dx-list-select-decorator-enabled',
+const SELECT_DECORATOR_ENABLED_CLASS = 'dx-list-select-decorator-enabled';
 
-    SELECT_DECORATOR_SELECT_ALL_CLASS = 'dx-list-select-all',
-    SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox',
-    SELECT_DECORATOR_SELECT_ALL_LABEL_CLASS = 'dx-list-select-all-label',
+const SELECT_DECORATOR_SELECT_ALL_CLASS = 'dx-list-select-all';
+const SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
+const SELECT_DECORATOR_SELECT_ALL_LABEL_CLASS = 'dx-list-select-all-label';
 
-    SELECT_CHECKBOX_CONTAINER_CLASS = 'dx-list-select-checkbox-container',
-    SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox',
+const SELECT_CHECKBOX_CONTAINER_CLASS = 'dx-list-select-checkbox-container';
+const SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
 
-    SELECT_RADIO_BUTTON_CONTAINER_CLASS = 'dx-list-select-radiobutton-container',
-    SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton',
+const SELECT_RADIO_BUTTON_CONTAINER_CLASS = 'dx-list-select-radiobutton-container';
+const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 
-    FOCUSED_STATE_CLASS = 'dx-state-focused';
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
-var CLICK_EVENT_NAME = eventUtils.addNamespace(clickEvent.name, 'dxListEditDecorator');
+const CLICK_EVENT_NAME = eventUtils.addNamespace(clickEvent.name, 'dxListEditDecorator');
 
 registerDecorator(
     'selection',
@@ -34,7 +34,7 @@ registerDecorator(
         _init: function() {
             this.callBase.apply(this, arguments);
 
-            var selectionMode = this._list.option('selectionMode');
+            const selectionMode = this._list.option('selectionMode');
 
             this._singleStrategy = selectionMode === 'single';
             this._containerClass = this._singleStrategy ? SELECT_RADIO_BUTTON_CONTAINER_CLASS : SELECT_CHECKBOX_CONTAINER_CLASS;
@@ -46,10 +46,10 @@ registerDecorator(
         },
 
         beforeBag: function(config) {
-            var $itemElement = config.$itemElement,
-                $container = config.$container;
+            const $itemElement = config.$itemElement;
+            const $container = config.$container;
 
-            var $control = $('<div>').addClass(this._controlClass);
+            const $control = $('<div>').addClass(this._controlClass);
             new this._controlWidget($control, extend(this._commonOptions(), {
                 value: this._isSelected($itemElement),
                 focusStateEnabled: false,
@@ -67,8 +67,8 @@ registerDecorator(
         modifyElement: function(config) {
             this.callBase.apply(this, arguments);
 
-            var $itemElement = config.$itemElement,
-                control = this._controlWidget.getInstance($itemElement.find('.' + this._controlClass));
+            const $itemElement = config.$itemElement;
+            const control = this._controlWidget.getInstance($itemElement.find('.' + this._controlClass));
 
             eventsEngine.on($itemElement, 'stateChanged', (function(e, state) {
                 control.option('value', state);
@@ -122,9 +122,9 @@ registerDecorator(
         },
 
         _renderSelectAll: function() {
-            var $selectAll = this._$selectAll = $('<div>').addClass(SELECT_DECORATOR_SELECT_ALL_CLASS),
-                list = this._list,
-                downArrowHandler = list._supportedKeys().downArrow.bind(list);
+            const $selectAll = this._$selectAll = $('<div>').addClass(SELECT_DECORATOR_SELECT_ALL_CLASS);
+            const list = this._list;
+            const downArrowHandler = list._supportedKeys().downArrow.bind(list);
 
             this._selectAllCheckBox = list._createComponent(
                 $('<div>')
@@ -158,9 +158,9 @@ registerDecorator(
         _selectAllHandler: function(e) {
             e.event && e.event.stopPropagation();
 
-            var isSelectedAll = this._selectAllCheckBox.option('value');
+            const isSelectedAll = this._selectAllCheckBox.option('value');
 
-            var result = this._list._createActionByOption('onSelectAllValueChanged')({ value: isSelectedAll });
+            const result = this._list._createActionByOption('onSelectAllValueChanged')({ value: isSelectedAll });
             if(result === false) {
                 return;
             }
@@ -173,8 +173,8 @@ registerDecorator(
         },
 
         _checkSelectAllCapability: function() {
-            var list = this._list,
-                dataSource = list.getDataSource();
+            const list = this._list;
+            const dataSource = list.getDataSource();
 
             if(list.option('selectAllMode') === 'allPages' && list.option('grouped') && (!dataSource || !dataSource.group())) {
                 errors.log('W1010');

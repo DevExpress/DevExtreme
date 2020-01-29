@@ -1,3 +1,4 @@
+import Intl from 'intl';
 import sharedTests from './sharedParts/localization.shared.js';
 import dateLocalization from 'localization/date';
 import numberLocalization from 'localization/number';
@@ -13,6 +14,13 @@ if(Intl.__disableRegExpRestore) {
 }
 
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
+const ROUNDING_BUG_NUMBERS = [4.645, -4.645, 35.855, -35.855];
+const ROUNDING_CORRECTION = {
+    '4.64': '4.65',
+    '-4.64': '-4.65',
+    '35.85': '35.86',
+    '-35.85': '-35.86'
+};
 const patchPolyfillResults = () => {
     dateLocalization.inject({
         format: function(value, format) {
@@ -29,8 +37,8 @@ const patchPolyfillResults = () => {
         format: function(value, format) {
             // NOTE: IntlPolifill rounding bug. In real Intl it works OK.
             let result = this.callBase.apply(this, arguments);
-            if(value === 4.645 && format.type === 'fixedPoint' && format.precision === 2 && result === '4.64') {
-                result = '4.65';
+            if(ROUNDING_BUG_NUMBERS.indexOf(value) !== -1 && format.type === 'fixedPoint' && format.precision === 2 && !!ROUNDING_CORRECTION[result]) {
+                result = ROUNDING_CORRECTION[result];
             }
             return result;
         }
@@ -238,46 +246,6 @@ QUnit.module('Intl localization', {
             assert.ok(isNaN(numberLocalization.parse('1111111111111111111111111111111111111')));
         });
 
-        QUnit.module('currency', {
-            beforeEach: function() {
-                locale('en');
-            },
-            afterEach: function() {
-                locale('en');
-            }
-        });
-
-        QUnit.test('getOpenXmlCurrencyFormat', function(assert) {
-            const nonBreakingSpace = '\xa0',
-                expectedResults = {
-                    RUB: {
-                        de: '#,##0{0} RUB',
-                        en: 'RUB#,##0{0}_);\\(RUB#,##0{0}\\)',
-                        ja: 'RUB#,##0{0}_);\\(RUB#,##0{0}\\)',
-                        ru: '#,##0{0} ₽'
-                    },
-                    USD: {
-                        de: '#,##0{0} $',
-                        en: '$#,##0{0}_);\\($#,##0{0}\\)',
-                        ja: '$#,##0{0}_);\\($#,##0{0}\\)',
-                        ru: '#,##0{0} $'
-                    }
-                };
-
-            for(const currency in expectedResults) {
-                for(const localeId in expectedResults[currency]) {
-                    const expected = expectedResults[currency][localeId];
-
-                    locale(localeId);
-                    assert.equal(numberLocalization.getOpenXmlCurrencyFormat(currency), expected.replace(' ', nonBreakingSpace));
-                }
-            }
-        });
-
-        QUnit.test('getOpenXmlCurrencyFormat should return default format when currency is undefined', function(assert) {
-            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '$#,##0{0}_);\\($#,##0{0}\\)');
-        });
-
         const getIntlDateFormatter = format => {
             return date => {
                 return (new Intl.DateTimeFormat(localeId, format))
@@ -303,7 +271,7 @@ QUnit.module('Intl localization', {
                 });
             };
 
-            const monthsWide = getIntlMonthNames('long'), monthsAbbr = getIntlMonthNames('short'), monthsNarrow = getIntlMonthNames('narrow');
+            const monthsWide = getIntlMonthNames('long'); const monthsAbbr = getIntlMonthNames('short'); const monthsNarrow = getIntlMonthNames('narrow');
 
             assert.deepEqual(dateLocalization.getMonthNames(), monthsWide, 'Array of month names without format');
             assert.deepEqual(dateLocalization.getMonthNames('wide'), monthsWide, 'Array of month names (wide format)');
@@ -624,10 +592,59 @@ QUnit.module('Intl localization', {
         });
     });
 
+    QUnit.module('getOpenXmlCurrencyFormat');
+
+    QUnit.test('getOpenXmlCurrencyFormat: check conversion for some cultures (T835933)', function(assert) {
+        try {
+            locale('de');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '#,##0{0}\xA0$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '#,##0{0}\xA0$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '#,##0{0}\xA0\\R\\U\\B');
+
+            locale('en');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '\\R\\U\\B#,##0{0}_);\\(\\R\\U\\B#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('CNY'), '\\C\\N\\¥#,##0{0}_);\\(\\C\\N\\¥#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('NOK'), '\\N\\O\\K#,##0{0}_);\\(\\N\\O\\K#,##0{0}\\)');
+
+            locale('en-ru'); // switch to parent if there are no settings for the passed culture
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '\\R\\U\\B#,##0{0}_);\\(\\R\\U\\B#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('CNY'), '\\C\\N\\¥#,##0{0}_);\\(\\C\\N\\¥#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('NOK'), '\\N\\O\\K#,##0{0}_);\\(\\N\\O\\K#,##0{0}\\)');
+
+            locale('et');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '#,##0{0}\xA0$_);\\(#,##0{0}\xA0$\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '#,##0{0}\xA0$_);\\(#,##0{0}\xA0$\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '#,##0{0}\xA0\\R\\U\\B_);\\(#,##0{0}\xA0\\R\\U\\B\\)');
+
+            locale('ja');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '\\R\\U\\B#,##0{0}_);\\(\\R\\U\\B#,##0{0}\\)');
+
+            locale('ru');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '#,##0{0}\xA0$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '#,##0{0}\xA0$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '#,##0{0}\xA0\\₽');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('CNY'), '#,##0{0}\xA0\\C\\N\\¥');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('NOK'), '#,##0{0}\xA0\\N\\O\\K');
+
+            locale('sv');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '#,##0{0}\xA0\\U\\S$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '#,##0{0}\xA0\\U\\S$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '#,##0{0}\xA0\\R\\U\\B');
+        } finally {
+            locale('en');
+        }
+    });
+
     QUnit.module('defaultCurrency');
 
     QUnit.test('config.defaultCurrency affects on localization', function(assert) {
-        var originalConfig = config();
+        const originalConfig = config();
 
         try {
             assert.equal(numberLocalization.getCurrencySymbol().symbol, '$');
@@ -736,9 +753,9 @@ QUnit.module('Intl localization', {
 
 ExcelJSLocalizationFormatTests.runCurrencyTests([
     { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
-    { value: 'RUB', expected: 'RUB#,##0_);\\(RUB#,##0\\)' },
-    { value: 'JPY', expected: '¥#,##0_);\\(¥#,##0\\)' },
-    { value: 'KPW', expected: 'KPW#,##0_);\\(KPW#,##0\\)' },
-    { value: 'LBP', expected: 'LBP#,##0_);\\(LBP#,##0\\)' },
-    { value: 'SEK', expected: 'SEK#,##0_);\\(SEK#,##0\\)' }
+    { value: 'RUB', expected: '\\R\\U\\B#,##0_);\\(\\R\\U\\B#,##0\\)' },
+    { value: 'JPY', expected: '\\¥#,##0_);\\(\\¥#,##0\\)' },
+    { value: 'KPW', expected: '\\K\\P\\W#,##0_);\\(\\K\\P\\W#,##0\\)' },
+    { value: 'LBP', expected: '\\L\\B\\P#,##0_);\\(\\L\\B\\P#,##0\\)' },
+    { value: 'SEK', expected: '\\S\\E\\K#,##0_);\\(\\S\\E\\K#,##0\\)' }
 ]);

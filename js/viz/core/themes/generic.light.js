@@ -1,25 +1,25 @@
-var WHITE = '#ffffff',
-    BLACK = '#000000',
-    LIGHT_GREY = '#d3d3d3',
-    GREY_GREEN = '#303030',
-    SOME_GREY = '#2b2b2b',
-    RED = '#ff0000',
-    PRIMARY_TITLE_COLOR = '#232323',
-    SECONDARY_TITLE_COLOR = '#767676',
+const WHITE = '#ffffff';
+const BLACK = '#000000';
+const LIGHT_GREY = '#d3d3d3';
+const GREY_GREEN = '#303030';
+const SOME_GREY = '#2b2b2b';
+const RED = '#ff0000';
+const PRIMARY_TITLE_COLOR = '#232323';
+const SECONDARY_TITLE_COLOR = '#767676';
 
-    NONE = 'none',
-    SOLID = 'solid',
-    TOP = 'top',
-    RIGHT = 'right',
-    BOTTOM = 'bottom',
-    LEFT = 'left',
-    CENTER = 'center',
-    INSIDE = 'inside',
-    OUTSIDE = 'outside',
+const NONE = 'none';
+const SOLID = 'solid';
+const TOP = 'top';
+const RIGHT = 'right';
+const BOTTOM = 'bottom';
+const LEFT = 'left';
+const CENTER = 'center';
+const INSIDE = 'inside';
+const OUTSIDE = 'outside';
 
-    themeModule = require('../../themes'),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias;
+const themeModule = require('../../themes');
+const registerTheme = themeModule.registerTheme;
+const registerThemeAlias = themeModule.registerThemeAlias;
 
 registerTheme({
     name: 'generic.light',
@@ -310,6 +310,38 @@ registerTheme({
         marker: {
             label: {}
         }
+    },
+    'chart:common:annotation': {
+        font: {
+            color: '#333333'
+        },
+        tooltipEnabled: true,
+        border: {
+            width: 1,
+            color: '#dddddd',
+            dashStyle: SOLID,
+            visible: true
+        },
+        color: WHITE,
+        opacity: 0.9,
+        arrowLength: 14,
+        arrowWidth: 14,
+        paddingLeftRight: 10,
+        paddingTopBottom: 10,
+        shadow: {
+            opacity: 0.15,
+            offsetX: 0,
+            offsetY: 1,
+            blur: 4,
+            color: BLACK
+        },
+        image: {
+            width: 30,
+            height: 30
+        },
+        wordWrap: 'normal',
+        textOverflow: 'ellipsis',
+        allowDragging: false
     },
     chart: {
         commonSeriesSettings: {
@@ -759,38 +791,6 @@ registerTheme({
             panKey: 'shift',
             allowMouseWheel: true,
             allowTouchGestures: true
-        },
-        commonAnnotationSettings: {
-            font: {
-                color: '#333333'
-            },
-            tooltipEnabled: true,
-            border: {
-                width: 1,
-                color: '#dddddd',
-                dashStyle: SOLID,
-                visible: true
-            },
-            color: WHITE,
-            opacity: 0.9,
-            arrowLength: 14,
-            arrowWidth: 14,
-            paddingLeftRight: 10,
-            paddingTopBottom: 10,
-            shadow: {
-                opacity: 0.15,
-                offsetX: 0,
-                offsetY: 1,
-                blur: 4,
-                color: BLACK
-            },
-            image: {
-                width: 30,
-                height: 30
-            },
-            wordWrap: 'normal',
-            textOverflow: 'ellipsis',
-            allowDragging: false
         }
     },
     pie: {

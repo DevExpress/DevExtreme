@@ -30,13 +30,6 @@
 
 .dx-dropdownbutton-action {
     &.dx-button .dx-button-content {
-        padding-right: 10px;
-        padding-left: 10px;
-    }
-}
-
-.dx-dropdownbutton-action:not(.dx-buttongroup-last-item) {
-    &.dx-button .dx-button-content {
         padding-left: 10px;
         padding-right: 4px;
 
@@ -45,7 +38,21 @@
             padding-right: 10px;
         }
     }
+}
 
+.dx-dropdownbutton-action.dx-buttongroup-last-item {
+    &.dx-button .dx-button-content {
+        padding-left: 10px;
+        padding-right: 0;
+
+        .dx-rtl & {
+            padding-left: 0;
+            padding-right: 10px;
+        }
+    }
+}
+
+.dx-dropdownbutton-action:not(.dx-buttongroup-last-item) {
     &.dx-button {
         border-right-width: 0;
         border-left-width: 1px;

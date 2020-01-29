@@ -7,20 +7,20 @@ import { Axis } from 'viz/axes/base_axis';
 import { MockSeries } from '../../helpers/chartMocks.js';
 import { patchFontOptions } from 'viz/core/utils';
 
-var Translator2D = translator2DModule.Translator2D;
+const Translator2D = translator2DModule.Translator2D;
 
 function getStub2DTranslatorWithSettings() {
-    var translator = sinon.createStubInstance(Translator2D);
+    const translator = sinon.createStubInstance(Translator2D);
     translator.getBusinessRange.returns(new rangeModule.Range({ min: 0, max: 10 }));
     return translator;
 }
 
 function spyRendererText(markersBBoxes) {
-    var that = this,
-        baseCreateText = this.renderer.stub('text');
+    const that = this;
+    const baseCreateText = this.renderer.stub('text');
     return sinon.spy(function() {
-        var element = baseCreateText.apply(this, arguments),
-            text = arguments[0];
+        const element = baseCreateText.apply(this, arguments);
+        const text = arguments[0];
         element.getBBox = function() { if(that.bBoxCount >= markersBBoxes.length) { that.bBoxCount = 0; } return markersBBoxes[that.bBoxCount++]; };
         element.remove = function() {
             that.arrayRemovedElements.push(text);
@@ -29,172 +29,172 @@ function spyRendererText(markersBBoxes) {
     });
 }
 
-var environment = {
-        beforeEach: function() {
-            var that = this;
+const environment = {
+    beforeEach: function() {
+        const that = this;
 
-            this.renderer = new vizMocks.Renderer();
-            this.tickGeneratorSpy = sinon.spy(function(_a, _b, _c, _d, _e, _f, _g, breaks) {
-                return {
-                    ticks: that.generatedTicks || [],
-                    minorTicks: that.generatedMinorTicks || [],
-                    tickInterval: that.generatedTickInterval,
-                    breaks: breaks
-                };
-            });
-            this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator', function() {
-                return that.tickGeneratorSpy;
-            });
-
-            sinon.stub(translator2DModule, 'Translator2D', function() {
-                return that.translator;
-            });
-
-            this.canvas = {
-                top: 10,
-                left: 20,
-                right: 90,
-                bottom: 200,
-                width: 1000,
-                height: 800
+        this.renderer = new vizMocks.Renderer();
+        this.tickGeneratorSpy = sinon.spy(function(_a, _b, _c, _d, _e, _f, _g, breaks) {
+            return {
+                ticks: that.generatedTicks || [],
+                minorTicks: that.generatedMinorTicks || [],
+                tickInterval: that.generatedTickInterval,
+                breaks: breaks
             };
+        });
+        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator', function() {
+            return that.tickGeneratorSpy;
+        });
 
-            this.options = {
-                isHorizontal: true,
-                valueMarginsEnabled: true,
-                marker: {
-                    visible: false,
-                    separatorHeight: 33,
-                    textLeftIndent: 7,
-                    textTopIndent: 11,
-                    topIndent: 10,
-                    color: 'black',
-                    width: 1,
-                    opacity: 1,
-                    label: {
-                        font: {
-                            size: 12,
-                            color: 'green'
-                        }
-                    }
-                },
-                width: 1,
-                color: 'red',
-                opacity: 1,
+        sinon.stub(translator2DModule, 'Translator2D', function() {
+            return that.translator;
+        });
+
+        this.canvas = {
+            top: 10,
+            left: 20,
+            right: 90,
+            bottom: 200,
+            width: 1000,
+            height: 800
+        };
+
+        this.options = {
+            isHorizontal: true,
+            valueMarginsEnabled: true,
+            marker: {
                 visible: false,
-                tick: { color: 'red', width: 1, visible: false, opacity: 1 },
+                separatorHeight: 33,
+                textLeftIndent: 7,
+                textTopIndent: 11,
+                topIndent: 10,
+                color: 'black',
+                width: 1,
+                opacity: 1,
                 label: {
-                    visible: true,
-                    alignment: 'center',
-                    font: { size: 12, color: 'black' },
-                    opacity: 1,
-                    style: {},
-                    overlappingBehavior: 'ignore'
-                },
-                axisDivisionFactor: 30,
-                stripStyle: {},
-                constantLineStyle: {},
-                position: 'left',
-                discreteAxisDivisionMode: 'crossLabels'
-            };
+                    font: {
+                        size: 12,
+                        color: 'green'
+                    }
+                }
+            },
+            width: 1,
+            color: 'red',
+            opacity: 1,
+            visible: false,
+            tick: { color: 'red', width: 1, visible: false, opacity: 1 },
+            label: {
+                visible: true,
+                alignment: 'center',
+                font: { size: 12, color: 'black' },
+                opacity: 1,
+                style: {},
+                overlappingBehavior: 'ignore'
+            },
+            axisDivisionFactor: 30,
+            stripStyle: {},
+            constantLineStyle: {},
+            position: 'left',
+            discreteAxisDivisionMode: 'crossLabels'
+        };
 
-            this.incidentOccurred = sinon.spy();
-            this.renderSettings = {
-                stripsGroup: this.renderer.g(),
-                labelAxesGroup: this.renderer.g(),
-                constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
-                axesContainerGroup: this.renderer.g(),
-                gridGroup: this.renderer.g(),
-                renderer: this.renderer,
-                axisType: 'xyAxes',
-                drawingType: 'linear',
-                incidentOccurred: this.incidentOccurred,
-                eventTrigger: () => { }
-            };
-            this.range = new rangeModule.Range();
-            this.range.min = 0;
-            this.range.max = 100;
+        this.incidentOccurred = sinon.spy();
+        this.renderSettings = {
+            stripsGroup: this.renderer.g(),
+            labelAxesGroup: this.renderer.g(),
+            constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
+            axesContainerGroup: this.renderer.g(),
+            gridGroup: this.renderer.g(),
+            renderer: this.renderer,
+            axisType: 'xyAxes',
+            drawingType: 'linear',
+            incidentOccurred: this.incidentOccurred,
+            eventTrigger: () => { }
+        };
+        this.range = new rangeModule.Range();
+        this.range.min = 0;
+        this.range.max = 100;
 
-            this.css = patchFontOptions(this.options.marker.label.font);
-        },
-        afterEach: function() {
-            this.tickGenerator.restore();
-            translator2DModule.Translator2D.restore();
-        },
-        createAxis: function(renderSettings, options) {
-            var axis = new Axis(renderSettings);
-            axis.updateOptions(options);
+        this.css = patchFontOptions(this.options.marker.label.font);
+    },
+    afterEach: function() {
+        this.tickGenerator.restore();
+        translator2DModule.Translator2D.restore();
+    },
+    createAxis: function(renderSettings, options) {
+        const axis = new Axis(renderSettings);
+        axis.updateOptions(options);
 
-            return axis;
-        },
-        createSimpleAxis: function(options) {
-            options = $.extend(true, this.options, options);
-            var axis;
+        return axis;
+    },
+    createSimpleAxis: function(options) {
+        options = $.extend(true, this.options, options);
+        let axis;
 
-            this.range.categories = options.categories;
-            this.range.minVisible = options.min;
-            this.range.maxVisible = options.max;
+        this.range.categories = options.categories;
+        this.range.minVisible = options.min;
+        this.range.maxVisible = options.max;
 
-            axis = this.createAxis(this.renderSettings, options);
+        axis = this.createAxis(this.renderSettings, options);
 
-            axis.validate();
-            axis.setBusinessRange(this.range);
+        axis.validate();
+        axis.setBusinessRange(this.range);
 
-            return axis;
-        },
-        createDrawnAxis: function(opt) {
-            var axis = this.createSimpleAxis(opt);
+        return axis;
+    },
+    createDrawnAxis: function(opt) {
+        const axis = this.createSimpleAxis(opt);
+        axis.draw(this.canvas);
+        return axis;
+    }
+};
+const environment2DTranslator = $.extend({}, environment, {
+    beforeEach: function() {
+        environment.beforeEach.apply(this, arguments);
+        this.translator = getStub2DTranslatorWithSettings();
+        this.translator.getCanvasVisibleArea.returns({ min: 0, max: 1000 });
+
+        this.options.position = 'bottom';
+        this.options.label = {
+            overlappingBehavior: 'ignore',
+            alignment: 'center',
+            indentFromAxis: 10
+        };
+        this.options.isHorizontal = false;
+    }
+});
+const overlappingEnvironment = $.extend({}, environment, {
+    beforeEach: function() {
+        environment.beforeEach.apply(this, arguments);
+        const that = this;
+
+        this.canvas.left = this.canvas.right = 0;
+
+        that.generatedTicks = [1, 3, 5, 7, 9];
+
+        this.translator = getStub2DTranslatorWithSettings();
+        this.translator.translate.withArgs(1).returns(10);
+        this.translator.translate.withArgs(3).returns(20);
+        this.translator.translate.withArgs(5).returns(30);
+        this.translator.translate.withArgs(7).returns(40);
+        this.translator.translate.withArgs(9).returns(50);
+        this.translator.getCanvasVisibleArea.returns({ min: 0, max: 1000 });
+
+        this.options.drawingType = 'linear';
+        this.options.axisType = 'xyAxes';
+
+        this.options.label.displayMode = 'standard';
+
+        this.arrayRemovedElements = [];
+        this.bBoxCount = 0;
+
+        that.drawAxisWithOptions = function(options) {
+            const axis = that.createSimpleAxis(options);
             axis.draw(this.canvas);
             return axis;
-        }
-    },
-    environment2DTranslator = $.extend({}, environment, {
-        beforeEach: function() {
-            environment.beforeEach.apply(this, arguments);
-            this.translator = getStub2DTranslatorWithSettings();
-            this.translator.getCanvasVisibleArea.returns({ min: 0, max: 1000 });
-
-            this.options.position = 'bottom';
-            this.options.label = {
-                overlappingBehavior: 'ignore',
-                alignment: 'center',
-                indentFromAxis: 10
-            };
-            this.options.isHorizontal = false;
-        }
-    }),
-    overlappingEnvironment = $.extend({}, environment, {
-        beforeEach: function() {
-            environment.beforeEach.apply(this, arguments);
-            var that = this;
-
-            this.canvas.left = this.canvas.right = 0;
-
-            that.generatedTicks = [1, 3, 5, 7, 9];
-
-            this.translator = getStub2DTranslatorWithSettings();
-            this.translator.translate.withArgs(1).returns(10);
-            this.translator.translate.withArgs(3).returns(20);
-            this.translator.translate.withArgs(5).returns(30);
-            this.translator.translate.withArgs(7).returns(40);
-            this.translator.translate.withArgs(9).returns(50);
-            this.translator.getCanvasVisibleArea.returns({ min: 0, max: 1000 });
-
-            this.options.drawingType = 'linear';
-            this.options.axisType = 'xyAxes';
-
-            this.options.label.displayMode = 'standard';
-
-            this.arrayRemovedElements = [];
-            this.bBoxCount = 0;
-
-            that.drawAxisWithOptions = function(options) {
-                var axis = that.createSimpleAxis(options);
-                axis.draw(this.canvas);
-                return axis;
-            };
-        }
-    });
+        };
+    }
+});
 
 QUnit.module('Translators in axis', {
     beforeEach: function() {
@@ -208,7 +208,7 @@ QUnit.module('Translators in axis', {
 });
 
 QUnit.test('Linear axis creates 2d translator on creation', function(assert) {
-    var axis = new Axis({
+    const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
         drawingType: 'linear'
@@ -219,13 +219,13 @@ QUnit.test('Linear axis creates 2d translator on creation', function(assert) {
 });
 
 QUnit.test('Linear axis updates translator on option changed', function(assert) {
-    var axis = new Axis({
-            renderer: this.renderer,
-            axisType: 'xyAxes',
-            drawingType: 'linear',
-            isArgumentAxis: true
-        }),
-        translator = translator2DModule.Translator2D.lastCall.returnValue;
+    const axis = new Axis({
+        renderer: this.renderer,
+        axisType: 'xyAxes',
+        drawingType: 'linear',
+        isArgumentAxis: true
+    });
+    const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
     sinon.spy(translator, 'update');
 
@@ -242,12 +242,12 @@ QUnit.test('Linear axis updates translator on option changed', function(assert) 
 });
 
 QUnit.test('Linear axis updates translator, valueMarginsEnabled = true - stick false', function(assert) {
-    var axis = new Axis({
-            renderer: this.renderer,
-            axisType: 'xyAxes',
-            drawingType: 'linear'
-        }),
-        translator = translator2DModule.Translator2D.lastCall.returnValue;
+    const axis = new Axis({
+        renderer: this.renderer,
+        axisType: 'xyAxes',
+        drawingType: 'linear'
+    });
+    const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
     sinon.spy(translator, 'update');
 
@@ -260,12 +260,12 @@ QUnit.test('Linear axis updates translator, valueMarginsEnabled = true - stick f
 });
 
 QUnit.test('Linear axis with scale breaks', function(assert) {
-    var axis = new Axis({
-            renderer: this.renderer,
-            axisType: 'xyAxes',
-            drawingType: 'linear'
-        }),
-        translator = translator2DModule.Translator2D.lastCall.returnValue;
+    const axis = new Axis({
+        renderer: this.renderer,
+        axisType: 'xyAxes',
+        drawingType: 'linear'
+    });
+    const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
     sinon.spy(translator, 'update');
 
@@ -282,12 +282,12 @@ QUnit.test('Linear axis with scale breaks', function(assert) {
 });
 
 QUnit.test('Linear axis with scale breaks, breaksSize is not set', function(assert) {
-    var axis = new Axis({
-            renderer: this.renderer,
-            axisType: 'xyAxes',
-            drawingType: 'linear'
-        }),
-        translator = translator2DModule.Translator2D.lastCall.returnValue;
+    const axis = new Axis({
+        renderer: this.renderer,
+        axisType: 'xyAxes',
+        drawingType: 'linear'
+    });
+    const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
     sinon.spy(translator, 'update');
 
@@ -303,7 +303,7 @@ QUnit.test('Linear axis with scale breaks, breaksSize is not set', function(asse
 });
 
 QUnit.test('Update canvas', function(assert) {
-    var axis = new Axis({
+    const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
         drawingType: 'linear'
@@ -327,7 +327,7 @@ QUnit.test('Update canvas', function(assert) {
 });
 
 QUnit.test('set business range and canvas', function(assert) {
-    var axis = new Axis({
+    const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
         drawingType: 'linear'
@@ -354,7 +354,7 @@ QUnit.test('set business range and canvas', function(assert) {
 });
 
 QUnit.test('set business range with constant lines', function(assert) {
-    var axis = new Axis({
+    const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
         drawingType: 'linear'
@@ -386,7 +386,7 @@ QUnit.test('set business range with constant lines', function(assert) {
 QUnit.module('Ticks skipping. Normal axis', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        var that = this;
+        const that = this;
 
         that.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
 
@@ -401,7 +401,7 @@ QUnit.module('Ticks skipping. Normal axis', $.extend({}, environment, {
 QUnit.module('Semidiscrete axis', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        var that = this;
+        const that = this;
 
         that.generatedTicks = [1, 2, 3, 4];
 
@@ -429,8 +429,8 @@ QUnit.module('checkAlignmentConstantLineLabels', environment2DTranslator);
 
 QUnit.test('Horizontal Axis, outside', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createSimpleAxis(),
-        labelOptions = { position: 'outside', verticalAlignment: 'center', horizontalAlignment: 'left' };
+    const axis = this.createSimpleAxis();
+    const labelOptions = { position: 'outside', verticalAlignment: 'center', horizontalAlignment: 'left' };
 
     axis._checkAlignmentConstantLineLabels(labelOptions);
 
@@ -440,8 +440,8 @@ QUnit.test('Horizontal Axis, outside', function(assert) {
 
 QUnit.test('Horizontal Axis, inside', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createSimpleAxis(),
-        labelOptions = { position: 'inside', verticalAlignment: 'center', horizontalAlignment: 'center' };
+    const axis = this.createSimpleAxis();
+    const labelOptions = { position: 'inside', verticalAlignment: 'center', horizontalAlignment: 'center' };
 
     axis._checkAlignmentConstantLineLabels(labelOptions);
 
@@ -450,8 +450,8 @@ QUnit.test('Horizontal Axis, inside', function(assert) {
 });
 
 QUnit.test('Vertical Axis, outside', function(assert) {
-    var axis = this.createSimpleAxis(),
-        labelOptions = { position: 'outside', verticalAlignment: 'left', horizontalAlignment: 'center' };
+    const axis = this.createSimpleAxis();
+    const labelOptions = { position: 'outside', verticalAlignment: 'left', horizontalAlignment: 'center' };
 
     axis._checkAlignmentConstantLineLabels(labelOptions);
 
@@ -460,8 +460,8 @@ QUnit.test('Vertical Axis, outside', function(assert) {
 });
 
 QUnit.test('Vertical Axis, inside', function(assert) {
-    var axis = this.createSimpleAxis(),
-        labelOptions = { position: 'inside', verticalAlignment: 'center', horizontalAlignment: 'center' };
+    const axis = this.createSimpleAxis();
+    const labelOptions = { position: 'inside', verticalAlignment: 'center', horizontalAlignment: 'center' };
 
     axis._checkAlignmentConstantLineLabels(labelOptions);
 
@@ -471,8 +471,8 @@ QUnit.test('Vertical Axis, inside', function(assert) {
 
 QUnit.test('verticalAlignment and horizontalAlignment specify wrong', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createSimpleAxis(),
-        labelOptions = { position: 'outside', verticalAlignment: 'ToP', horizontalAlignment: 'CeNtEr' };
+    const axis = this.createSimpleAxis();
+    const labelOptions = { position: 'outside', verticalAlignment: 'ToP', horizontalAlignment: 'CeNtEr' };
 
     axis._checkAlignmentConstantLineLabels(labelOptions);
 
@@ -483,7 +483,7 @@ QUnit.test('verticalAlignment and horizontalAlignment specify wrong', function(a
 QUnit.module('Formats for constant line labels', environment2DTranslator);
 
 QUnit.test('Currency format', function(assert) {
-    var axis = this.createSimpleAxis({ label: { format: 'currency' } });
+    const axis = this.createSimpleAxis({ label: { format: 'currency' } });
     axis.updateCanvas(this.canvas);
 
     axis._drawConstantLineLabels(30, {}, 0, this.renderer.g());
@@ -492,7 +492,7 @@ QUnit.test('Currency format', function(assert) {
 });
 
 QUnit.test('Percent format', function(assert) {
-    var axis = this.createSimpleAxis({ label: { format: 'percent' } });
+    const axis = this.createSimpleAxis({ label: { format: 'percent' } });
     axis.updateCanvas(this.canvas);
     axis._drawConstantLineLabels(30, {}, 0, this.renderer.g());
 
@@ -500,7 +500,7 @@ QUnit.test('Percent format', function(assert) {
 });
 
 QUnit.test('Date format with month', function(assert) {
-    var axis = this.createSimpleAxis({ label: { format: 'month' } });
+    const axis = this.createSimpleAxis({ label: { format: 'month' } });
     axis.updateCanvas(this.canvas);
     axis._drawConstantLineLabels(new Date(2010, 0, 10), {}, 0, this.renderer.g());
 
@@ -511,13 +511,13 @@ QUnit.module('Axis shift', environment2DTranslator);
 
 QUnit.test('axis without shifting', function(assert) {
     this.options.isHorizontal = false;
-    var axis = this.createDrawnAxis({ position: 'left' });
+    const axis = this.createDrawnAxis({ position: 'left' });
     assert.deepEqual(axis.getAxisShift(), 0);
 });
 
 QUnit.test('axis shifted', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createDrawnAxis({ position: 'bottom' });
+    const axis = this.createDrawnAxis({ position: 'bottom' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
     assert.deepEqual(axis.getAxisShift(), 40);
@@ -526,7 +526,7 @@ QUnit.test('axis shifted', function(assert) {
 QUnit.test('axis shifted (multipleAxesSpacing)', function(assert) {
     this.options.isHorizontal = true;
     this.options.multipleAxesSpacing = 10;
-    var axis = this.createDrawnAxis({ position: 'top' });
+    const axis = this.createDrawnAxis({ position: 'top' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
     assert.deepEqual(axis.getAxisShift(), 20);
@@ -536,32 +536,32 @@ QUnit.module('API methods', environment2DTranslator);
 
 QUnit.test('axis position is top', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createDrawnAxis({ position: 'top' });
+    const axis = this.createDrawnAxis({ position: 'top' });
     assert.deepEqual(axis.getLabelsPosition(), 0);
 });
 
 QUnit.test('axis position is bottom', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createDrawnAxis({ position: 'bottom' });
+    const axis = this.createDrawnAxis({ position: 'bottom' });
 
     assert.deepEqual(axis.getLabelsPosition(), 610);
 });
 
 QUnit.test('axis position is left', function(assert) {
-    var axis = this.createDrawnAxis({ position: 'left' });
+    const axis = this.createDrawnAxis({ position: 'left' });
 
     assert.deepEqual(axis.getLabelsPosition(), 10);
 });
 
 QUnit.test('axis position is right', function(assert) {
-    var axis = this.createDrawnAxis({ position: 'right' });
+    const axis = this.createDrawnAxis({ position: 'right' });
 
     assert.deepEqual(axis.getLabelsPosition(), 920);
 });
 
 QUnit.test('getLabelsPosition. shifted axis in top position', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createDrawnAxis({ position: 'top' });
+    const axis = this.createDrawnAxis({ position: 'top' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
     assert.deepEqual(axis.getLabelsPosition(), -10);
@@ -569,21 +569,21 @@ QUnit.test('getLabelsPosition. shifted axis in top position', function(assert) {
 
 QUnit.test('getLabelsPosition. shifted axis in bottom position', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createDrawnAxis({ position: 'bottom' });
+    const axis = this.createDrawnAxis({ position: 'bottom' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
     assert.deepEqual(axis.getLabelsPosition(), 650);
 });
 
 QUnit.test('getLabelsPosition. shifted axis in left position', function(assert) {
-    var axis = this.createDrawnAxis({ position: 'left' });
+    const axis = this.createDrawnAxis({ position: 'left' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
     assert.deepEqual(axis.getLabelsPosition(), 0);
 });
 
 QUnit.test('getLabelsPosition. shifted axis in right position', function(assert) {
-    var axis = this.createDrawnAxis({ position: 'right' });
+    const axis = this.createDrawnAxis({ position: 'right' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
     assert.deepEqual(axis.getLabelsPosition(), 940);
@@ -591,7 +591,7 @@ QUnit.test('getLabelsPosition. shifted axis in right position', function(assert)
 
 QUnit.test('getLabelsPosition. With outer constantline label', function(assert) {
     this.translator.translate.withArgs(10).returns(50);
-    var axis = this.createDrawnAxis({
+    const axis = this.createDrawnAxis({
         position: 'left',
         constantLines: [{
             value: 10,
@@ -609,9 +609,9 @@ QUnit.test('getLabelsPosition. With outer constantline label', function(assert) 
 });
 
 QUnit.test('measure labels, one label', function(assert) {
-    var that = this;
+    const that = this;
     that.translator.translate.withArgs(0).returns({ y: 4 });
-    var axis = this.createSimpleAxis({ label: { visible: true } });
+    const axis = this.createSimpleAxis({ label: { visible: true } });
 
     assert.deepEqual(axis.measureLabels(this.canvas), {
         width: 20,
@@ -622,7 +622,7 @@ QUnit.test('measure labels, one label', function(assert) {
 });
 
 QUnit.test('measuring label, label visibility is false', function(assert) {
-    var axis = this.createSimpleAxis({ label: { visible: false } });
+    const axis = this.createSimpleAxis({ label: { visible: false } });
 
     assert.deepEqual(axis.measureLabels(this.canvas), {
         width: 0,
@@ -634,8 +634,8 @@ QUnit.test('measuring label, label visibility is false', function(assert) {
 
 QUnit.test('measuring label, label creation', function(assert) {
     this.generatedTicks = [0, 1, 2];
-    var axis = this.createSimpleAxis({ label: { visible: true, customizeText: function() { return this.value + ' sec'; }, font: { color: 'color' } } }),
-        text;
+    const axis = this.createSimpleAxis({ label: { visible: true, customizeText: function() { return this.value + ' sec'; }, font: { color: 'color' } } });
+    let text;
 
     axis.measureLabels(this.canvas);
 
@@ -654,7 +654,7 @@ QUnit.test('measuring label, label creation', function(assert) {
 
 QUnit.test('measure labels, several labels', function(assert) {
     this.generatedTicks = [1, 2, 300, 4, 5];
-    var axis = this.createSimpleAxis({ label: { visible: true } });
+    const axis = this.createSimpleAxis({ label: { visible: true } });
     axis.measureLabels(this.canvas);
 
     assert.equal(this.renderer.text.args[0][0], '300', 'text of the label');
@@ -663,9 +663,9 @@ QUnit.test('measure labels, several labels', function(assert) {
 QUnit.test('measuring label on axis with empty range - do not render texts', function(assert) {
     this.generatedTicks = [0, 1, 2];
     this.range = {};
-    var axis = this.createSimpleAxis({ label: { visible: true }, valueType: 'datetime' });
+    const axis = this.createSimpleAxis({ label: { visible: true }, valueType: 'datetime' });
 
-    var measurements = axis.measureLabels(this.canvas);
+    const measurements = axis.measureLabels(this.canvas);
 
     // assert
     assert.deepEqual(measurements, {
@@ -685,7 +685,7 @@ QUnit.test('IncidentOccured on measure labels', function(assert) {
             isEmpty: function() { return true; }
         };
     };
-    var axis = this.createSimpleAxis({ label: { visible: true } });
+    const axis = this.createSimpleAxis({ label: { visible: true } });
 
     axis.setMarginOptions({ checkInterval: true });
     axis.measureLabels(this.canvas);
@@ -695,7 +695,7 @@ QUnit.test('IncidentOccured on measure labels', function(assert) {
 
 QUnit.test('call measure labels after axis draw - use ticks generated on draw', function(assert) {
     this.generatedTicks = [1, 2, 300, 4, 5];
-    var axis = this.createSimpleAxis({ label: { visible: true } });
+    const axis = this.createSimpleAxis({ label: { visible: true } });
     axis.createTicks(this.canvas);
     this.generatedTicks = [2, 3, 4];
 
@@ -711,7 +711,7 @@ QUnit.test('Datetime, no custom format - use auto format based on estimated tick
     ];
     this.generatedTickInterval = 'month';
 
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         valueType: 'datetime',
         label: {
             visible: true
@@ -733,7 +733,7 @@ QUnit.test('Datetime, custom format - use provided format', function(assert) {
     ];
     this.generatedTickInterval = 'month';
 
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         valueType: 'datetime',
         label: {
             visible: true,
@@ -753,7 +753,7 @@ QUnit.test('Datetime, custom format - use provided format', function(assert) {
 QUnit.module('Label overlapping, \'hide\' mode', overlappingEnvironment);
 
 QUnit.test('horizontal axis', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
         { x: 20, y: 0, width: 20, height: 5 },
@@ -768,7 +768,7 @@ QUnit.test('horizontal axis', function(assert) {
 });
 
 QUnit.test('labels are not overlapping', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 5, height: 5 },
         { x: 15, y: 0, width: 5, height: 5 },
         { x: 30, y: 0, width: 5, height: 5 },
@@ -783,7 +783,7 @@ QUnit.test('labels are not overlapping', function(assert) {
 });
 
 QUnit.test('one very long label', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
         { x: 20, y: 0, width: 100, height: 5 },
@@ -803,7 +803,7 @@ QUnit.test('vertical axis', function(assert) {
     this.translator.translate.withArgs(5).returns(30);
     this.translator.translate.withArgs(7).returns(20);
     this.translator.translate.withArgs(9).returns(10);
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 60, height: 10, width: 5 },
         { x: 0, y: 45, height: 10, width: 5 },
         { x: 0, y: 20, height: 30, width: 5 },
@@ -819,7 +819,7 @@ QUnit.test('vertical axis', function(assert) {
 });
 
 QUnit.test('Overlapping shouldn\'t apply if there is only one tick', function(assert) {
-    var markersBBoxes = [{ x: 0, y: 0, width: 20, height: 5 }];
+    const markersBBoxes = [{ x: 0, y: 0, width: 20, height: 5 }];
 
     this.generatedTicks = [5];
 
@@ -829,7 +829,7 @@ QUnit.test('Overlapping shouldn\'t apply if there is only one tick', function(as
 });
 
 QUnit.test('Not valid mode, default is hide', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
         { x: 20, y: 0, width: 20, height: 5 },
@@ -844,7 +844,7 @@ QUnit.test('Not valid mode, default is hide', function(assert) {
 });
 
 QUnit.test('Labels are empty', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
         { x: 20, y: 0, width: 20, height: 5 },
@@ -865,7 +865,7 @@ QUnit.test('Labels are empty', function(assert) {
 
 // T497323
 QUnit.test('frequent ticks', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 1, height: 2 },
         { x: 0, y: 0, width: 2, height: 2 },
         { x: 0, y: 0, width: 2, height: 2 },
@@ -901,7 +901,7 @@ QUnit.test('frequent ticks', function(assert) {
 });
 
 QUnit.test('There is no real overlap of the labels', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
         { x: 30, y: 0, width: 10, height: 5 },
@@ -916,7 +916,7 @@ QUnit.test('There is no real overlap of the labels', function(assert) {
 });
 
 QUnit.test('There is no real overlap of the labels. Alignment value is left', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 10, y: 0, width: 20, height: 5 },
         { x: 40, y: 0, width: 10, height: 5 },
@@ -931,7 +931,7 @@ QUnit.test('There is no real overlap of the labels. Alignment value is left', fu
 });
 
 QUnit.test('There is real overlap of the labels. Alignment value is left', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 8, y: 0, width: 10, height: 5 },
         { x: 16, y: 0, width: 10, height: 5 },
@@ -946,7 +946,7 @@ QUnit.test('There is real overlap of the labels. Alignment value is left', funct
 });
 
 QUnit.test('There is real overlap of the labels. Alignment value is center', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 10, y: 0, width: 10, height: 5 },
         { x: 20, y: 0, width: 10, height: 5 },
@@ -961,7 +961,7 @@ QUnit.test('There is real overlap of the labels. Alignment value is center', fun
 });
 
 QUnit.test('There is real overlap of the labels. Alignment value is right', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 10, y: 0, width: 10, height: 5 },
         { x: 20, y: 0, width: 10, height: 5 },
@@ -976,7 +976,7 @@ QUnit.test('There is real overlap of the labels. Alignment value is right', func
 });
 
 QUnit.test('There is not real overlap of the labels. Alignment value is right', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 20, height: 5 },
         { x: 20, y: 0, width: 10, height: 5 },
         { x: 40, y: 0, width: 10, height: 5 },
@@ -991,7 +991,7 @@ QUnit.test('There is not real overlap of the labels. Alignment value is right', 
 });
 
 QUnit.test('Check title offset after olerlap resolving', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
@@ -1021,14 +1021,15 @@ QUnit.test('Check title offset after olerlap resolving', function(assert) {
 QUnit.module('Label overlapping, \'rotate\' mode', overlappingEnvironment);
 
 QUnit.test('horizontal axis, labels overlap, rotationAngle is 90', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts, i;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: 90, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
@@ -1045,14 +1046,14 @@ QUnit.test('alignment of labels after rotate', function(assert) {
     this.translator.translate.withArgs(5).returns(20);
     this.translator.translate.withArgs(7).returns(45);
     this.translator.translate.withArgs(9).returns(60);
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: 90, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
@@ -1069,14 +1070,14 @@ QUnit.test('alignment of labels after rotate, angle less than 0', function(asser
     this.translator.translate.withArgs(7).returns(45);
     this.translator.translate.withArgs(9).returns(60);
 
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: -40, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
@@ -1091,14 +1092,14 @@ QUnit.test('custom alignment for labels', function(assert) { // TODO: remove use
     this.translator.translate.withArgs(5).returns(20);
     this.translator.translate.withArgs(7).returns(45);
     this.translator.translate.withArgs(9).returns(60);
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { alignment: 'right', userAlignment: true, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
@@ -1114,14 +1115,15 @@ QUnit.test('vertical labels overlap but shouldn\'t rotate', function(assert) {
     this.translator.translate.withArgs(5).returns(20);
     this.translator.translate.withArgs(7).returns(15);
     this.translator.translate.withArgs(9).returns(0);
-    var markersBBoxes = [
-            { x: 0, y: 60, height: 10, width: 4 },
-            { x: 0, y: 45, height: 10, width: 4 },
-            { x: 0, y: 20, height: 30, width: 4 },
-            { x: 0, y: 15, height: 10, width: 4 },
-            { x: 0, y: 0, height: 10, width: 4 }
-        ],
-        texts, i;
+    const markersBBoxes = [
+        { x: 0, y: 60, height: 10, width: 4 },
+        { x: 0, y: 45, height: 10, width: 4 },
+        { x: 0, y: 20, height: 30, width: 4 },
+        { x: 0, y: 15, height: 10, width: 4 },
+        { x: 0, y: 0, height: 10, width: 4 }
+    ];
+    let texts;
+    let i;
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', indentFromAxis: 0 } });
@@ -1141,15 +1143,15 @@ QUnit.test('Check title offset after olerlap resolving', function(assert) {
     this.translator.translate.withArgs(5).returns(20);
     this.translator.translate.withArgs(7).returns(45);
     this.translator.translate.withArgs(9).returns(60);
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 },
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 },
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
 
     this.drawAxisWithOptions({
@@ -1171,14 +1173,14 @@ QUnit.test('Check title offset after olerlap resolving', function(assert) {
 });
 
 QUnit.test('labels overlap after rotation', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 20 },
-            { x: 15, y: 0, width: 10, height: 20 },
-            { x: 20, y: 0, width: 20, height: 20 },
-            { x: 45, y: 0, width: 10, height: 20 },
-            { x: 60, y: 0, width: 10, height: 20 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 20 },
+        { x: 15, y: 0, width: 10, height: 20 },
+        { x: 20, y: 0, width: 20, height: 20 },
+        { x: 45, y: 0, width: 10, height: 20 },
+        { x: 60, y: 0, width: 10, height: 20 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 90 } });
 
@@ -1193,14 +1195,14 @@ QUnit.test('labels overlap after rotation', function(assert) {
 });
 
 QUnit.test('labels overlap, rotationAngle is zero', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 0 } });
 
@@ -1215,14 +1217,14 @@ QUnit.test('labels overlap, rotationAngle is zero', function(assert) {
 });
 
 QUnit.test('labels overlap, rotationAngle less then zero', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 8 },
-            { x: 15, y: 0, width: 10, height: 8 },
-            { x: 20, y: 0, width: 20, height: 8 },
-            { x: 45, y: 0, width: 10, height: 8 },
-            { x: 60, y: 0, width: 10, height: 8 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 8 },
+        { x: 15, y: 0, width: 10, height: 8 },
+        { x: 20, y: 0, width: 20, height: 8 },
+        { x: 45, y: 0, width: 10, height: 8 },
+        { x: 60, y: 0, width: 10, height: 8 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: -30 } });
 
@@ -1237,14 +1239,14 @@ QUnit.test('labels overlap, rotationAngle less then zero', function(assert) {
 });
 
 QUnit.test('labels overlap, rotationAngle is 180', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 180 } });
 
@@ -1259,14 +1261,14 @@ QUnit.test('labels overlap, rotationAngle is 180', function(assert) {
 });
 
 QUnit.test('labels overlap, rotationAngle less then 90', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 20 } });
 
@@ -1281,14 +1283,14 @@ QUnit.test('labels overlap, rotationAngle less then 90', function(assert) {
 });
 
 QUnit.test('labels overlap, rotationAngle more then 90', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 160 } });
 
@@ -1303,16 +1305,17 @@ QUnit.test('labels overlap, rotationAngle more then 90', function(assert) {
 });
 
 QUnit.test('Alignment of labels after their rotation and updating width of canvas', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts, i;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    var axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 40 } });
+    const axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 40 } });
 
     // updating
     this.translator.translate.withArgs(1).returns(10);
@@ -1331,14 +1334,14 @@ QUnit.test('Alignment of labels after their rotation and updating width of canva
 QUnit.module('Label overlapping, \'stagger\' mode', overlappingEnvironment);
 
 QUnit.test('Labels overlap', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 6 },
-            { x: 20, y: 0, width: 10, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 6 },
+        { x: 20, y: 0, width: 10, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -1361,16 +1364,16 @@ QUnit.test('Labels overlap', function(assert) {
 });
 
 QUnit.test('Check title offset after olerlap resolving', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 6 },
-            { x: 20, y: 0, width: 10, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 6 },
+        { x: 20, y: 0, width: 10, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
 
     this.drawAxisWithOptions({
@@ -1394,17 +1397,17 @@ QUnit.test('Check title offset after olerlap resolving', function(assert) {
 });
 
 QUnit.test('Labels overlap, some of them hide', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 20, height: 5 },
-            { x: 15, y: 0, width: 20, height: 6 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 15, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 },
-            { x: 85, y: 0, width: 10, height: 5 },
-            { x: 100, y: 0, width: 10, height: 5 },
-            { x: 115, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 20, height: 5 },
+        { x: 15, y: 0, width: 20, height: 6 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 15, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 },
+        { x: 85, y: 0, width: 10, height: 5 },
+        { x: 100, y: 0, width: 10, height: 5 },
+        { x: 115, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
 
     this.generatedTicks = [1, 3, 5, 7, 9, 11, 13, 15];
 
@@ -1433,7 +1436,7 @@ QUnit.test('Labels overlap, some of them hide', function(assert) {
 });
 
 QUnit.test('Do not update removed label position on update size', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 20, height: 5 },
         { x: 15, y: 0, width: 20, height: 6 },
         { x: 20, y: 0, width: 20, height: 5 },
@@ -1473,14 +1476,14 @@ QUnit.test('Do not update removed label position on update size', function(asser
 });
 
 QUnit.test('Axis position is top', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 6 },
-            { x: 20, y: 0, width: 10, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 6 },
+        { x: 20, y: 0, width: 10, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -1504,14 +1507,14 @@ QUnit.test('Axis position is top', function(assert) {
 });
 
 QUnit.test('staggeringSpacing more than zero', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 6 },
-            { x: 20, y: 0, width: 10, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 6 },
+        { x: 20, y: 0, width: 10, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -1536,14 +1539,14 @@ QUnit.test('staggeringSpacing more than zero', function(assert) {
 QUnit.module('Label overlapping, \'auto\' mode', overlappingEnvironment);
 
 QUnit.test('Labels overlap and apply stagger mode', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 6 },
-            { x: 30, y: 0, width: 15, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 6 },
+        { x: 30, y: 0, width: 15, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -1566,14 +1569,15 @@ QUnit.test('Labels overlap and apply stagger mode', function(assert) {
 });
 
 QUnit.test('Labels overlap and rotate -45 degrees', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 30, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts, i;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 30, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'auto' } });
 
@@ -1585,14 +1589,15 @@ QUnit.test('Labels overlap and rotate -45 degrees', function(assert) {
 });
 
 QUnit.test('Labels overlap and rotate -90 degrees', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 10, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 30, y: 0, width: 10, height: 5 },
-            { x: 40, y: 0, width: 10, height: 5 }
-        ],
-        texts, i;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 10, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 30, y: 0, width: 10, height: 5 },
+        { x: 40, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'auto' } });
 
@@ -1604,14 +1609,14 @@ QUnit.test('Labels overlap and rotate -90 degrees', function(assert) {
 });
 
 QUnit.test('Labels overlap, rotate -90 degrees and hide', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 10 },
-            { x: 10, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 20 },
-            { x: 30, y: 0, width: 10, height: 5 },
-            { x: 40, y: 0, width: 10, height: 10 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 10 },
+        { x: 10, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 20 },
+        { x: 30, y: 0, width: 10, height: 5 },
+        { x: 40, y: 0, width: 10, height: 10 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'auto' } });
 
@@ -1628,7 +1633,7 @@ QUnit.test('Labels overlap, rotate -90 degrees and hide', function(assert) {
 QUnit.module('Label overlapping, \'none\' mode', overlappingEnvironment);
 
 QUnit.test('horizontal axis', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 4 },
         { x: 15, y: 0, width: 10, height: 4 },
         { x: 20, y: 0, width: 20, height: 4 },
@@ -1648,7 +1653,7 @@ QUnit.test('vertical axis', function(assert) {
     this.translator.translate.withArgs(5).returns(30);
     this.translator.translate.withArgs(7).returns(20);
     this.translator.translate.withArgs(9).returns(10);
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 60, height: 10, width: 4 },
         { x: 0, y: 45, height: 10, width: 4 },
         { x: 0, y: 20, height: 30, width: 4 },
@@ -1666,19 +1671,20 @@ QUnit.test('vertical axis', function(assert) {
 QUnit.module('Label overlapping, change mode on axis redrawing', overlappingEnvironment);
 
 QUnit.test('Auto mode. After first draw - rotate, after second - stagger. Reset all rotation artifacts', function(assert) {
-    var that = this,
-        markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 10, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 30, y: 0, width: 10, height: 5 },
-            { x: 40, y: 0, width: 10, height: 5 }
-        ],
-        texts, i;
+    const that = this;
+    let markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 10, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 30, y: 0, width: 10, height: 5 },
+        { x: 40, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
 
     // first draw
-    var axis = this.drawAxisWithOptions({
+    const axis = this.drawAxisWithOptions({
         min: 1,
         max: 10,
         label: {
@@ -1728,19 +1734,20 @@ QUnit.test('Auto mode. After first draw - rotate, after second - stagger. Reset 
 });
 
 QUnit.test('Auto mode. After first draw - stagger, after second - rotate. Reset all stagger artifacts', function(assert) {
-    var that = this,
-        markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 6 },
-            { x: 30, y: 0, width: 15, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts, i;
+    const that = this;
+    let markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 6 },
+        { x: 30, y: 0, width: 15, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
 
     // first draw
-    var axis = this.drawAxisWithOptions({
+    const axis = this.drawAxisWithOptions({
         min: 1,
         max: 10,
         label: {
@@ -1791,18 +1798,18 @@ QUnit.test('Rotated mode with positive angle. No overlapping after second draw. 
     this.translator.translate.withArgs(5).returns(20);
     this.translator.translate.withArgs(7).returns(45);
     this.translator.translate.withArgs(9).returns(60);
-    var that = this,
-        markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 5 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts,
-        i;
+    const that = this;
+    let markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    var axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: -89, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
+    const axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: -89, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
     texts = this.renderer.text;
     for(i = 0; i < texts.callCount; i++) {
@@ -1847,15 +1854,15 @@ QUnit.test('Rotated mode with positive angle. No overlapping after second draw. 
 QUnit.module('Display mode for label', overlappingEnvironment);
 
 QUnit.test('Custom rotation angle, overlapping mode is none', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 10 },
-            { x: 10, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 20 },
-            { x: 30, y: 0, width: 10, height: 5 },
-            { x: 40, y: 0, width: 10, height: 10 }
-        ],
-        texts,
-        i;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 10 },
+        { x: 10, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 20 },
+        { x: 30, y: 0, width: 10, height: 5 },
+        { x: 40, y: 0, width: 10, height: 10 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'none' } });
 
@@ -1868,15 +1875,15 @@ QUnit.test('Custom rotation angle, overlapping mode is none', function(assert) {
 });
 
 QUnit.test('Custom rotation angle, overlapping mode is ignore', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 10 },
-            { x: 10, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 20 },
-            { x: 30, y: 0, width: 10, height: 5 },
-            { x: 40, y: 0, width: 10, height: 10 }
-        ],
-        texts,
-        i;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 10 },
+        { x: 10, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 20 },
+        { x: 30, y: 0, width: 10, height: 5 },
+        { x: 40, y: 0, width: 10, height: 10 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'ignore' } });
 
@@ -1889,15 +1896,15 @@ QUnit.test('Custom rotation angle, overlapping mode is ignore', function(assert)
 });
 
 QUnit.test('Custom rotation angle, overlapping mode is hide, labels are not overlap', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 10, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 10, height: 5 },
-            { x: 30, y: 0, width: 10, height: 5 },
-            { x: 40, y: 0, width: 10, height: 5 }
-        ],
-        texts,
-        i;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 10, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 10, height: 5 },
+        { x: 30, y: 0, width: 10, height: 5 },
+        { x: 40, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'hide' } });
 
@@ -1910,15 +1917,15 @@ QUnit.test('Custom rotation angle, overlapping mode is hide, labels are not over
 });
 
 QUnit.test('Custom rotation angle, overlapping mode is hide, labels are overlap', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 10 },
-            { x: 10, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 10 },
-            { x: 30, y: 0, width: 10, height: 5 },
-            { x: 40, y: 0, width: 10, height: 10 }
-        ],
-        texts,
-        i;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 10 },
+        { x: 10, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 10 },
+        { x: 30, y: 0, width: 10, height: 5 },
+        { x: 40, y: 0, width: 10, height: 10 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'hide' } });
 
@@ -1931,7 +1938,7 @@ QUnit.test('Custom rotation angle, overlapping mode is hide, labels are overlap'
 });
 
 QUnit.test('Custom rotation angle, overlapping mode is hide, one tick', function(assert) {
-    var markersBBoxes = [{ x: 0, y: 0, width: 20, height: 5 }];
+    const markersBBoxes = [{ x: 0, y: 0, width: 20, height: 5 }];
 
     this.generatedTicks = [5];
 
@@ -1942,15 +1949,15 @@ QUnit.test('Custom rotation angle, overlapping mode is hide, one tick', function
 });
 
 QUnit.test('Custom rotation angle, overlapping mode besides hide, none or ignor shouldn\'t apply', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 10 },
-            { x: 10, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 10 },
-            { x: 30, y: 0, width: 10, height: 5 },
-            { x: 40, y: 0, width: 10, height: 10 }
-        ],
-        texts,
-        i;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 10 },
+        { x: 10, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 10 },
+        { x: 30, y: 0, width: 10, height: 5 },
+        { x: 40, y: 0, width: 10, height: 10 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'stagger' } });
 
@@ -1965,14 +1972,14 @@ QUnit.test('Custom rotation angle, overlapping mode besides hide, none or ignor 
 });
 
 QUnit.test('Custom staggering spacing, overlapping mode is hide, labels are not overlap', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 6 },
-            { x: 20, y: 0, width: 10, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 6 },
+        { x: 20, y: 0, width: 10, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -1996,14 +2003,14 @@ QUnit.test('Custom staggering spacing, overlapping mode is hide, labels are not 
 });
 
 QUnit.test('Custom staggering spacing, overlapping mode is hide, labels are overlap', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 20, height: 6 },
-            { x: 20, y: 0, width: 10, height: 5 },
-            { x: 45, y: 0, width: 20, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 20, height: 6 },
+        { x: 20, y: 0, width: 10, height: 5 },
+        { x: 45, y: 0, width: 20, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -2025,14 +2032,14 @@ QUnit.test('Custom staggering spacing, overlapping mode is hide, labels are over
 });
 
 QUnit.test('Custom staggering spacing, overlapping mode is none, labels are not overlap', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 6 },
-            { x: 20, y: 0, width: 10, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 6 },
+        { x: 20, y: 0, width: 10, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -2056,14 +2063,14 @@ QUnit.test('Custom staggering spacing, overlapping mode is none, labels are not 
 });
 
 QUnit.test('Custom staggering spacing, overlapping mode is ignore, labels are not overlap', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 6 },
-            { x: 20, y: 0, width: 10, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 6 },
+        { x: 20, y: 0, width: 10, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -2087,14 +2094,14 @@ QUnit.test('Custom staggering spacing, overlapping mode is ignore, labels are no
 });
 
 QUnit.test('Custom staggering spacing, overlapping mode is none, labels are overlap', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 6 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 20, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 6 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 20, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -2118,14 +2125,14 @@ QUnit.test('Custom staggering spacing, overlapping mode is none, labels are over
 });
 
 QUnit.test('Custom staggering spacing, overlapping mode is ignore, labels are overlap', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 6 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 20, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 6 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 20, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -2154,15 +2161,15 @@ QUnit.test('For value axis shouldn\'t apply display mode', function(assert) {
     this.translator.translate.withArgs(5).returns(30);
     this.translator.translate.withArgs(7).returns(20);
     this.translator.translate.withArgs(9).returns(10);
-    var markersBBoxes = [
-            { x: 0, y: 60, height: 10, width: 4 },
-            { x: 0, y: 45, height: 10, width: 4 },
-            { x: 0, y: 20, height: 30, width: 4 },
-            { x: 0, y: 15, height: 10, width: 4 },
-            { x: 0, y: 0, height: 10, width: 4 }
-        ],
-        i,
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 60, height: 10, width: 4 },
+        { x: 0, y: 45, height: 10, width: 4 },
+        { x: 0, y: 20, height: 30, width: 4 },
+        { x: 0, y: 15, height: 10, width: 4 },
+        { x: 0, y: 0, height: 10, width: 4 }
+    ];
+    let i;
+    let texts;
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 30, overlappingBehavior: 'hide' } });
@@ -2177,15 +2184,15 @@ QUnit.test('For value axis shouldn\'t apply display mode', function(assert) {
 });
 
 QUnit.test('Invalid display mode', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 20, height: 5 },
-            { x: 15, y: 0, width: 10, height: 5 },
-            { x: 20, y: 0, width: 20, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts,
-        i;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 20, height: 5 },
+        { x: 15, y: 0, width: 10, height: 5 },
+        { x: 20, y: 0, width: 20, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'invalid', overlappingBehavior: 'hide' } });
 
@@ -2199,7 +2206,7 @@ QUnit.test('Invalid display mode', function(assert) {
 });
 
 QUnit.test('Labels are empty', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
         { x: 20, y: 0, width: 20, height: 5 },
@@ -2220,14 +2227,14 @@ QUnit.test('Labels are empty', function(assert) {
 });
 
 QUnit.test('Temporary _auto mode support', function(assert) {
-    var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 15, y: 0, width: 10, height: 6 },
-            { x: 30, y: 0, width: 15, height: 5 },
-            { x: 45, y: 0, width: 10, height: 7 },
-            { x: 60, y: 0, width: 10, height: 5 }
-        ],
-        texts;
+    const markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 15, y: 0, width: 10, height: 6 },
+        { x: 30, y: 0, width: 15, height: 5 },
+        { x: 45, y: 0, width: 10, height: 7 },
+        { x: 60, y: 0, width: 10, height: 5 }
+    ];
+    let texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1,
@@ -2251,7 +2258,7 @@ QUnit.test('Temporary _auto mode support', function(assert) {
 QUnit.module('Label overlapping, \'none\' mode', overlappingEnvironment);
 
 QUnit.test('horizontal axis', function(assert) {
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 4 },
         { x: 15, y: 0, width: 10, height: 4 },
         { x: 20, y: 0, width: 20, height: 4 },
@@ -2272,7 +2279,7 @@ QUnit.test('vertical axis', function(assert) {
     this.translator.translate.withArgs(5).returns(30);
     this.translator.translate.withArgs(7).returns(20);
     this.translator.translate.withArgs(9).returns(10);
-    var markersBBoxes = [
+    const markersBBoxes = [
         { x: 0, y: 60, height: 10, width: 4 },
         { x: 0, y: 45, height: 10, width: 4 },
         { x: 0, y: 20, height: 30, width: 4 },
@@ -2290,7 +2297,7 @@ QUnit.test('vertical axis', function(assert) {
 QUnit.module('Estimate size', $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         environment2DTranslator.beforeEach.call(this);
-        var that = this;
+        const that = this;
         this.range.min = 100;
         this.range.max = 1000;
 
@@ -2313,7 +2320,7 @@ QUnit.module('Estimate size', $.extend({}, environment2DTranslator, {
 }));
 
 QUnit.test('no estimate margins without ticks', function(assert) {
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         type: 'discrete',
         categories: ['cat1', 'cat2'],
@@ -2328,13 +2335,13 @@ QUnit.test('no estimate margins without ticks', function(assert) {
 });
 
 QUnit.test('Estimate left/right margin. Visible labels', function(assert) {
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true
         }
     });
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.left, 10, 'left margin');
     assert.strictEqual(margins.right, 22, 'right margin');
@@ -2342,7 +2349,7 @@ QUnit.test('Estimate left/right margin. Visible labels', function(assert) {
 
 QUnit.test('Estimate top/bottom margin. Bottom axis', function(assert) {
     this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
@@ -2350,7 +2357,7 @@ QUnit.test('Estimate top/bottom margin. Bottom axis', function(assert) {
         }
     });
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.top, 0, 'top margin');
     assert.strictEqual(margins.bottom, 17, 'bottom margin');
@@ -2358,7 +2365,7 @@ QUnit.test('Estimate top/bottom margin. Bottom axis', function(assert) {
 
 QUnit.test('Estimate top/bottom margin. Top axis', function(assert) {
     this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         position: 'top',
         label: {
@@ -2367,14 +2374,14 @@ QUnit.test('Estimate top/bottom margin. Top axis', function(assert) {
         }
     });
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.top, 17, 'top margin');
     assert.strictEqual(margins.bottom, 0, 'bottom margin');
 });
 
 QUnit.test('Estimate left/right margin. Invisible labels', function(assert) {
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: false
@@ -2388,7 +2395,7 @@ QUnit.test('Estimate left/right margin. Invisible labels', function(assert) {
         height: 0
     }];
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(this.renderer.stub('text').callCount, 0);
     assert.strictEqual(margins.left, 0, 'left margin');
@@ -2399,7 +2406,7 @@ QUnit.test('Estimate left/right margin. Invisible labels', function(assert) {
 
 QUnit.test('Estimate draws title text and remove it', function(assert) {
     this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true
@@ -2420,7 +2427,7 @@ QUnit.test('Estimate draws title text and remove it', function(assert) {
     assert.strictEqual(this.renderer.text.callCount, 2);
     assert.deepEqual(this.renderer.text.getCall(1).args, ['Title text', 0, 0], 'cteate text args');
 
-    var textElement = this.renderer.text.getCall(1).returnValue;
+    const textElement = this.renderer.text.getCall(1).returnValue;
     assert.deepEqual(textElement.attr.lastCall.args[0], {
         opacity: 0.3,
         align: 'center',
@@ -2475,7 +2482,7 @@ QUnit.test('Check title rest', function(assert) {
 
 QUnit.test('Estimate top/bottom margin. Axis with title', function(assert) {
     this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
@@ -2495,7 +2502,7 @@ QUnit.test('Estimate top/bottom margin. Axis with title', function(assert) {
         height: 44
     });
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.bottom, 17 + (44 + 7), 'bottom margin');
     assert.strictEqual(margins.top, 0, 'top margin');
@@ -2503,7 +2510,7 @@ QUnit.test('Estimate top/bottom margin. Axis with title', function(assert) {
 
 QUnit.test('Estimate margin. Staggered labels', function(assert) {
     this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
@@ -2513,14 +2520,14 @@ QUnit.test('Estimate margin. Staggered labels', function(assert) {
         }
     });
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, 'bottom margin');
 });
 
 QUnit.test('Estimate margin. Overlapping mode stagger', function(assert) {
     this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
@@ -2530,14 +2537,14 @@ QUnit.test('Estimate margin. Overlapping mode stagger', function(assert) {
         }
     });
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, 'bottom margin');
 });
 
 QUnit.test('Estimate margin. Rotated labels', function(assert) {
     this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
@@ -2547,14 +2554,14 @@ QUnit.test('Estimate margin. Rotated labels', function(assert) {
         }
     });
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.equal(margins.bottom, 35, 'bottom margin');
 });
 
 QUnit.test('Estimate margin. Overlapping mode is rotate', function(assert) {
     this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
@@ -2564,14 +2571,14 @@ QUnit.test('Estimate margin. Overlapping mode is rotate', function(assert) {
         }
     });
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.equal(margins.bottom, 35, 'bottom margin');
 });
 
 QUnit.test('Estimate margin. Overlapping mode is stagger, drawing type is rotate', function(assert) {
     this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
@@ -2583,14 +2590,14 @@ QUnit.test('Estimate margin. Overlapping mode is stagger, drawing type is rotate
         }
     });
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.bottom, 35, 'bottom margin');
 });
 
 QUnit.test('Estimate margin. Overlapping mode is rotate, drawing type is stagger', function(assert) {
     this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
@@ -2601,13 +2608,13 @@ QUnit.test('Estimate margin. Overlapping mode is rotate, drawing type is stagger
         }
     });
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, 'bottom margin');
 });
 
 QUnit.test('Estimate draws constant lines with outside labels', function(assert) {
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         position: 'bottom',
         label: {
@@ -2655,7 +2662,7 @@ QUnit.test('Estimate draws constant lines with outside labels', function(assert)
 
     axis.estimateMargins(this.canvas);
 
-    var group = this.renderer.g.getCall(0).returnValue;
+    const group = this.renderer.g.getCall(0).returnValue;
 
     assert.strictEqual(group.append.lastCall.args[0], this.renderer.root, 'element appended');
     assert.strictEqual(group.remove.callCount, 1, 'element removed');
@@ -2663,7 +2670,7 @@ QUnit.test('Estimate draws constant lines with outside labels', function(assert)
     assert.strictEqual(this.renderer.text.callCount, 2);
     assert.deepEqual(this.renderer.text.getCall(0).args, ['Text1', 0, 0], 'cteate text args');
 
-    var textElement = this.renderer.text.getCall(0).returnValue;
+    let textElement = this.renderer.text.getCall(0).returnValue;
     assert.deepEqual(textElement.attr.lastCall.args[0], {
         align: 'center'
     }, 'lebel settings');
@@ -2688,7 +2695,7 @@ QUnit.test('Estimate draws constant lines with outside labels', function(assert)
 });
 
 QUnit.test('Include constant line labels in bottom margin', function(assert) {
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         position: 'bottom',
         label: {
@@ -2716,14 +2723,14 @@ QUnit.test('Include constant line labels in bottom margin', function(assert) {
 
     this.renderer.g.reset();
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.top, 0);
     assert.strictEqual(margins.bottom, 14 + 10);
 });
 
 QUnit.test('Include constant line labels in top margin', function(assert) {
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         position: 'bottom',
         label: {
@@ -2742,14 +2749,14 @@ QUnit.test('Include constant line labels in top margin', function(assert) {
 
     this.renderer.g.reset();
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.top, 14 + 10, 'top margin');
     assert.strictEqual(margins.bottom, 0, 'bottom margin');
 });
 
 QUnit.test('Label is wider than constant line label - get label as margin', function(assert) {
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         position: 'bottom',
         label: {
@@ -2777,7 +2784,7 @@ QUnit.test('Label is wider than constant line label - get label as margin', func
 
     this.renderer.g.reset();
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.left, 10, 'top margin');
     assert.strictEqual(margins.right, 22, 'right margin');
@@ -2785,7 +2792,7 @@ QUnit.test('Label is wider than constant line label - get label as margin', func
 
 QUnit.test('Constant line label is wider than label - get constant line label as margin', function(assert) {
     this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         position: 'bottom',
         label: {
@@ -2813,21 +2820,21 @@ QUnit.test('Constant line label is wider than label - get constant line label as
 
     this.renderer.g.reset();
 
-    var margins = axis.estimateMargins(this.canvas);
+    const margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.left, 12, 'top margin');
     assert.strictEqual(margins.right, 32, 'right margin');
 });
 
 QUnit.test('Estimate margins does not include labels if stub data', function(assert) {
-    var customizeText = sinon.stub(),
-        axis = this.createSimpleAxis({
-            isHorizontal: true,
-            label: {
-                customizeText: customizeText,
-                visible: true
-            }
-        });
+    const customizeText = sinon.stub();
+    const axis = this.createSimpleAxis({
+        isHorizontal: true,
+        label: {
+            customizeText: customizeText,
+            visible: true
+        }
+    });
 
     axis.estimateMargins(this.canvas);
 
@@ -2843,7 +2850,7 @@ QUnit.test('no custom format - use auto format based on estimated tickInterval',
     ];
     this.generatedTickInterval = 'month';
 
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isHorizontal: true,
         type: 'continuous',
         valueType: 'datetime',
@@ -2928,7 +2935,7 @@ QUnit.module('API: Shift', environment2DTranslator);
 
 QUnit.test('All margins are zero', function(assert) {
     this.options.multipleAxesSpacing = 5;
-    var axis = this.createDrawnAxis();
+    const axis = this.createDrawnAxis();
 
     this.renderer.g.getCall(6).returnValue.attr.reset();
 
@@ -2942,7 +2949,7 @@ QUnit.test('All margins are zero', function(assert) {
 
 QUnit.test('getLabelsPosition returns correct value after empty shift', function(assert) {
     this.options.multipleAxesSpacing = 5;
-    var axis = this.createDrawnAxis();
+    const axis = this.createDrawnAxis();
 
     axis.shift({ top: 0, bottom: 0, left: 0, right: 0 });
 
@@ -2952,10 +2959,10 @@ QUnit.test('getLabelsPosition returns correct value after empty shift', function
 QUnit.test('Vertical axis position is left', function(assert) {
     this.options.isHorizontal = false;
     this.options.position = 'left';
-    var axis = this.createDrawnAxis();
+    const axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(6).returnValue;
+    const axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, -50);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, 0);
@@ -2965,10 +2972,10 @@ QUnit.test('Vertical axis with multipleAxesSpacing option', function(assert) {
     this.options.multipleAxesSpacing = 5;
     this.options.isHorizontal = false;
     this.options.position = 'left';
-    var axis = this.createDrawnAxis();
+    const axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(6).returnValue;
+    const axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, -55);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, 0);
@@ -2977,10 +2984,10 @@ QUnit.test('Vertical axis with multipleAxesSpacing option', function(assert) {
 QUnit.test('Vertical axis position is right', function(assert) {
     this.options.isHorizontal = false;
     this.options.position = 'right';
-    var axis = this.createDrawnAxis();
+    const axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(6).returnValue;
+    const axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, 76);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, 0);
@@ -2989,10 +2996,10 @@ QUnit.test('Vertical axis position is right', function(assert) {
 QUnit.test('Horizontal axis position is top', function(assert) {
     this.options.isHorizontal = true;
     this.options.position = 'top';
-    var axis = this.createDrawnAxis();
+    const axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(6).returnValue;
+    const axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, 0);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, -64);
@@ -3001,10 +3008,10 @@ QUnit.test('Horizontal axis position is top', function(assert) {
 QUnit.test('Horizontal axis position is bottom', function(assert) {
     this.options.isHorizontal = true;
     this.options.position = 'bottom';
-    var axis = this.createDrawnAxis();
+    const axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(6).returnValue;
+    const axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, 0);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, 45);
@@ -3013,17 +3020,17 @@ QUnit.test('Horizontal axis position is bottom', function(assert) {
 QUnit.test('Horizontal axis. Shift outside constant line groups vertically', function(assert) {
     this.options.multipleAxesSpacing = 5;
     this.options.isHorizontal = true;
-    var axis = this.createDrawnAxis();
+    const axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var groupAboveSeries = {
-            topGroup: this.renderer.g.getCall(13).returnValue,
-            bottomGroup: this.renderer.g.getCall(14).returnValue
-        },
-        groupUnderSeries = {
-            topGroup: this.renderer.g.getCall(16).returnValue,
-            bottomGroup: this.renderer.g.getCall(17).returnValue
-        };
+    const groupAboveSeries = {
+        topGroup: this.renderer.g.getCall(13).returnValue,
+        bottomGroup: this.renderer.g.getCall(14).returnValue
+    };
+    const groupUnderSeries = {
+        topGroup: this.renderer.g.getCall(16).returnValue,
+        bottomGroup: this.renderer.g.getCall(17).returnValue
+    };
 
     assert.deepEqual(groupAboveSeries.topGroup.attr.lastCall.args, [{ translateY: -(64 + 5), translateX: 0 }]);
     assert.deepEqual(groupUnderSeries.topGroup.attr.lastCall.args, [{ translateY: -(64 + 5), translateX: 0 }]);
@@ -3034,17 +3041,17 @@ QUnit.test('Horizontal axis. Shift outside constant line groups vertically', fun
 QUnit.test('Vertical axis. Shift outside constant line groups horizontally', function(assert) {
     this.options.multipleAxesSpacing = 5;
     this.options.isHorizontal = false;
-    var axis = this.createDrawnAxis();
+    const axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var groupAboveSeries = {
-            leftGroup: this.renderer.g.getCall(13).returnValue,
-            rightGroup: this.renderer.g.getCall(14).returnValue
-        },
-        groupUnderSeries = {
-            leftGroup: this.renderer.g.getCall(16).returnValue,
-            rightGroup: this.renderer.g.getCall(17).returnValue
-        };
+    const groupAboveSeries = {
+        leftGroup: this.renderer.g.getCall(13).returnValue,
+        rightGroup: this.renderer.g.getCall(14).returnValue
+    };
+    const groupUnderSeries = {
+        leftGroup: this.renderer.g.getCall(16).returnValue,
+        rightGroup: this.renderer.g.getCall(17).returnValue
+    };
     assert.deepEqual(groupAboveSeries.leftGroup.attr.lastCall.args, [{ translateX: -(50 + 5), translateY: 0 }]);
     assert.deepEqual(groupUnderSeries.leftGroup.attr.lastCall.args, [{ translateX: -(50 + 5), translateY: 0 }]);
 
@@ -3055,8 +3062,8 @@ QUnit.test('Vertical axis. Shift outside constant line groups horizontally', fun
 QUnit.test('Inside constant line group is not shifted', function(assert) {
     this.options.multipleAxesSpacing = 5;
     this.options.isHorizontal = true;
-    var axis = this.createDrawnAxis();
-    var group = this.renderer.g.getCall(11).returnValue;
+    const axis = this.createDrawnAxis();
+    const group = this.renderer.g.getCall(11).returnValue;
     group.attr.reset();
 
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
@@ -3094,7 +3101,7 @@ QUnit.test('Get scale breaks in the viewport', function(assert) {
     this.axis.visualRange(250, 540);
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [
         { from: 250, to: 300, cumulativeWidth: 10 },
@@ -3111,7 +3118,7 @@ QUnit.test('Do not get scale break if viewport inside it', function(assert) {
     this.axis.visualRange(250, 340);
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, []);
 });
@@ -3245,7 +3252,7 @@ QUnit.test('Datetime axis, breaks values are string', function(assert) {
 
 QUnit.test('Remove groups on disposing', function(assert) {
     this.renderSettings.scaleBreaksGroup = this.renderer.g();
-    var axis = this.createAxis(this.renderSettings, $.extend(true, this.options, {
+    const axis = this.createAxis(this.renderSettings, $.extend(true, this.options, {
         breaks: [
             { startValue: 50, endValue: 100 },
             { startValue: 70, endValue: 150 }
@@ -3286,7 +3293,7 @@ QUnit.test('Remove groups on disposing', function(assert) {
 
 QUnit.module('Datetime scale breaks. Weekends and holidays', $.extend({}, environment2DTranslator, {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         environment2DTranslator.beforeEach.call(that);
 
         that.axis = that.createSimpleAxis({
@@ -3295,7 +3302,7 @@ QUnit.module('Datetime scale breaks. Weekends and holidays', $.extend({}, enviro
     },
     updateOptions: function(opt) {
 
-        var options = $.extend(true, this.options, {
+        const options = $.extend(true, this.options, {
             dataType: 'datetime',
             breakStyle: { width: 0 },
             workdaysOnly: true
@@ -3316,7 +3323,7 @@ QUnit.test('Generate weekend breaks', function(assert) {
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [{
         from: new Date(2017, 8, 9),
@@ -3338,7 +3345,7 @@ QUnit.test('Generate weekend breaks for 3 days workweek', function(assert) {
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [{
         from: new Date(2017, 8, 1),
@@ -3362,7 +3369,7 @@ QUnit.test('Do not generate weekend breaks if dataType is not datetime', functio
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, []);
 });
@@ -3374,7 +3381,7 @@ QUnit.test('Do not generate weekend breaks if workdaysOnly is set to false', fun
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, []);
 });
@@ -3387,7 +3394,7 @@ QUnit.test('Do not generate weekend breaks if axis type is discrete', function(a
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, []);
 });
@@ -3399,7 +3406,7 @@ QUnit.test('Generate two breaks when two days off on week', function(assert) {
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [
         {
@@ -3426,7 +3433,7 @@ QUnit.test('The break starts with min if the range starts on a weekend', functio
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [
         {
@@ -3457,7 +3464,7 @@ QUnit.test('End of the scale break is max of the range if range ends on a weeken
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [
         {
@@ -3481,7 +3488,7 @@ QUnit.test('All range is in weekend', function(assert) {
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, []);
 });
@@ -3495,7 +3502,7 @@ QUnit.test('Exclude exactWorkDays from weekend when it at the end of the weekend
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [{
         from: new Date(2017, 8, 9),
@@ -3514,7 +3521,7 @@ QUnit.test('Exclude exactWorkDays from weekend when it at the begin of the weeke
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [{
         from: new Date(2017, 8, 10),
@@ -3534,7 +3541,7 @@ QUnit.test('Separate a weekend if exactWorkDays in the middle of the break', fun
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [
         { from: new Date(2017, 8, 9), to: new Date(2017, 8, 10), gapSize: { days: 1 }, cumulativeWidth: 0 },
@@ -3551,7 +3558,7 @@ QUnit.test('Axis has not breaks if exactWorkDays in the weekend', function(asser
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, []);
 });
@@ -3566,7 +3573,7 @@ QUnit.test('Generate breaks for holidays', function(assert) {
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [{
         from: new Date(2017, 8, 10),
@@ -3586,7 +3593,7 @@ QUnit.test('The break starts with min range if holiday starts early then min', f
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [{
         from: new Date(2017, 8, 6, 8, 0, 0),
@@ -3608,7 +3615,7 @@ QUnit.test('The break ends with max range if holiday ends later then max', funct
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [{
         from: new Date(2017, 8, 13),
@@ -3629,7 +3636,7 @@ QUnit.test('Do not generate the breaks for holiday if it in the weekend', functi
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [{
         from: new Date(2017, 8, 9),
@@ -3650,7 +3657,7 @@ QUnit.test('sort generated breaks', function(assert) {
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [
         {
@@ -3686,7 +3693,7 @@ QUnit.test('Recalculate the breaks on zoom', function(assert) {
     this.axis.createTicks(this.canvas);
 
     // assert
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
     assert.deepEqual(breaks, [
         {
             from: new Date(2017, 8, 9),
@@ -3707,7 +3714,7 @@ QUnit.test('Correct generation of the breaks if workdays set with uppercase', fu
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [{
         from: new Date(2017, 8, 9),
@@ -3729,7 +3736,7 @@ QUnit.test('Correct generation of the breaks if holidays set with string', funct
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [{
         from: new Date(2017, 8, 11),
@@ -3751,7 +3758,7 @@ QUnit.test('Correct generation of the breaks if exactWorkdays set with string', 
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [{
         from: new Date(2017, 8, 9),
@@ -3772,7 +3779,7 @@ QUnit.test('Concatenate generated breaks with user breaks', function(assert) {
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [
         {
@@ -3801,7 +3808,7 @@ QUnit.test('Merge generated breaks with user breaks', function(assert) {
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [
         {
@@ -3828,7 +3835,7 @@ QUnit.module('Auto scale breaks', $.extend({}, environment2DTranslator, {
         this.axis.setBusinessRange({ min: opt.min, max: opt.max });
     },
     stubSeries: function(values) {
-        var series = new vizMocks.stubClass();
+        const series = new vizMocks.stubClass();
 
         series.getPointsInViewPort = sinon.stub().returns(values);
         return series;
@@ -3904,7 +3911,7 @@ QUnit.test('Argument axis. Without breaks', function(assert) {
     this.series = [
         this.stubSeries([[5500, 5100, 300, 5], []])
     ];
-    var axis = this.createSimpleAxis({
+    const axis = this.createSimpleAxis({
         isArgumentAxis: true
     });
     axis.updateOptions({
@@ -4247,7 +4254,7 @@ QUnit.module('XY axes margin calculation', {
         environment.afterEach.call(this);
     },
     createAxis: function(renderSettings, options) {
-        var axis = new Axis(renderSettings);
+        const axis = new Axis(renderSettings);
 
         axis.updateOptions($.extend(true, {
             type: 'continuous',
@@ -4262,7 +4269,7 @@ QUnit.module('XY axes margin calculation', {
     },
     testMargins: function(assert, data) {
         this.renderSettings.isArgumentAxis = data.isArgumentAxis;
-        var axis = this.createAxis(this.renderSettings, data.options);
+        const axis = this.createAxis(this.renderSettings, data.options);
 
         this.generatedTicks = data.ticks;
         this.generatedBreaks = (data.options.breaks || []).map((b) => { return { from: b.startValue, to: b.endValue, cumulativeWidth: b.cumulativeWidth }; });
@@ -4285,7 +4292,7 @@ QUnit.module('XY axes margin calculation', {
 
         axis.draw(this.canvas);
 
-        var range = {
+        const range = {
             interval: translator.updateBusinessRange.lastCall.args[0].interval,
             minVisible: translator.from(this.canvas.left),
             maxVisible: translator.from(this.canvas.width - this.canvas.right),
@@ -4573,7 +4580,7 @@ QUnit.module('Adjust value axis', {
         environment2DTranslator.afterEach.call(this);
     },
     updateOptions: function(options) {
-        var defaultOptions = {
+        const defaultOptions = {
             isHorizontal: true,
             label: {
                 visible: true,
@@ -4683,7 +4690,7 @@ QUnit.test('Recalculate scale breaks', function(assert) {
 
     this.axis.createTicks(this.canvas);
 
-    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+    const breaks = this.tickGeneratorSpy.lastCall.args[7];
 
     assert.deepEqual(breaks, [
         { from: 250, to: 300, cumulativeWidth: 10 },

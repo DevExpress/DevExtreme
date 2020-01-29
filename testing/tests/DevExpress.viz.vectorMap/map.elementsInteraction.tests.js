@@ -1,10 +1,10 @@
-var $ = require('jquery'),
-    renderer = require('core/renderer'),
-    commons = require('./vectorMapParts/commons.js'),
-    mapLayerModule = require('viz/vector_map/map_layer'),
-    projectionModule = require('viz/vector_map/projection.main'),
-    resizeCallbacks = require('core/utils/resize_callbacks'),
-    vizMocks = require('../../helpers/vizMocks.js');
+const $ = require('jquery');
+const renderer = require('core/renderer');
+const commons = require('./vectorMapParts/commons.js');
+const mapLayerModule = require('viz/vector_map/map_layer');
+const projectionModule = require('viz/vector_map/projection.main');
+const resizeCallbacks = require('core/utils/resize_callbacks');
+const vizMocks = require('../../helpers/vizMocks.js');
 
 QUnit.module('Map - projection events', $.extend({}, commons.environment, {
     beforeEach: function() {
@@ -14,8 +14,8 @@ QUnit.module('Map - projection events', $.extend({}, commons.environment, {
 }));
 
 QUnit.test('On center', function(assert) {
-    var onCenterChanged = sinon.spy(),
-        spy = sinon.spy(projectionModule, 'Projection');
+    const onCenterChanged = sinon.spy();
+    const spy = sinon.spy(projectionModule, 'Projection');
     this.createMap({ onCenterChanged: onCenterChanged });
 
     spy.lastCall.args[0].centerChanged('test-center');
@@ -24,8 +24,8 @@ QUnit.test('On center', function(assert) {
 });
 
 QUnit.test('On zoom', function(assert) {
-    var onZoomFactorChanged = sinon.spy(),
-        spy = sinon.spy(projectionModule, 'Projection');
+    const onZoomFactorChanged = sinon.spy();
+    const spy = sinon.spy(projectionModule, 'Projection');
     this.createMap({ onZoomFactorChanged: onZoomFactorChanged });
 
     spy.lastCall.args[0].zoomChanged('test-zoom');
@@ -35,7 +35,7 @@ QUnit.test('On zoom', function(assert) {
 
 QUnit.module('Map - event trigger interaction', $.extend({}, commons.environment, {
     createMap: function() {
-        var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+        const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
         commons.environment.createMap.apply(this, arguments);
         this.eventTrigger = spy.lastCall.args[0].eventTrigger;
     },
@@ -45,7 +45,7 @@ QUnit.module('Map - event trigger interaction', $.extend({}, commons.environment
     }
 }));
 
-var environmentForSize = $.extend({}, commons.environment, {
+const environmentForSize = $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.apply(this, arguments);
         this.layerCollection.stub('items').returns([]);
@@ -246,7 +246,7 @@ QUnit.test('Resizing via *render* method - not resized', function(assert) {
 
 QUnit.test('resize via option', function(assert) {
     this.createMap();
-    var invalidate = sinon.stub(this.map, '_invalidate');
+    const invalidate = sinon.stub(this.map, '_invalidate');
 
     this.map.option('size', { width: 100, height: 200 });
 

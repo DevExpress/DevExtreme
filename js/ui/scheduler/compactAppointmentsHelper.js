@@ -4,10 +4,13 @@ import translator from '../../animation/translator';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import deferredUtils from '../../core/utils/deferred';
+import { extendFromObject } from '../../core/utils/extend';
+import { LIST_ITEM_DATA_KEY, FIXED_CONTAINER_CLASS, LIST_ITEM_CLASS } from './constants';
 
-const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector',
-    COMPACT_APPOINTMENT_COLLECTOR_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-compact',
-    APPOINTMENT_COLLECTOR_CONTENT_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-content';
+
+const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
+const COMPACT_APPOINTMENT_COLLECTOR_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-compact';
+const APPOINTMENT_COLLECTOR_CONTENT_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-content';
 
 const WEEK_VIEW_COLLECTOR_OFFSET = 5;
 const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
@@ -19,10 +22,10 @@ export class CompactAppointmentsHelper {
     }
 
     render(options) {
-        const { $container, width, height, items, isCompact, applyOffset, coordinates, buttonColor } = options;
+        const { isCompact, items, buttonColor } = options;
 
         const template = this._createTemplate(items.data.length, isCompact);
-        const button = this._createCompactButton($container, width, height, template, items, isCompact, applyOffset, coordinates);
+        const button = this._createCompactButton(template, options);
         const $button = button.$element();
 
         this._makeBackgroundColor($button, items.colors, buttonColor);
@@ -46,27 +49,102 @@ export class CompactAppointmentsHelper {
         return items.data.map((item, index) => {
             return {
                 data: item,
-                color: items.colors[index]
+                color: items.colors[index],
+                settings: items.settings[index],
             };
         });
     }
 
-    _onButtonClick(e) {
+    _onButtonClick(e, options) {
         const $button = $(e.element);
         this.instance.showAppointmentTooltipCore(
             $button,
             $button.data('items'),
-            {
-                clickEvent: this.instance.raiseClickEvent.bind(this.instance),
-                dragBehavior: this.instance.createTooltipDragBehavior.bind(this.instance),
-                dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // deprecated option
-                isButtonClick: true,
-            }
+            this._getExtraOptionsForTooltip(options)
         );
     }
 
-    _getCollectorOffset(width) {
-        return this.instance.fire('getCellWidth') - width - this._getCollectorRightOffset();
+    _getExtraOptionsForTooltip(options) {
+        return {
+            clickEvent: this._clickEvent(options.onAppointmentClick).bind(this),
+            dragBehavior: options.allowDrag && this._createTooltipDragBehavior(options).bind(this),
+            dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // deprecated option
+            isButtonClick: true
+        };
+    }
+
+    _clickEvent(onAppointmentClick) {
+        return (e) => {
+            const config = {
+                itemData: e.itemData.data,
+                itemElement: e.itemElement
+            };
+            const createClickEvent = extendFromObject(this.instance.fire('mapAppointmentFields', config), e, false);
+            delete createClickEvent.itemData;
+            delete createClickEvent.itemIndex;
+            delete createClickEvent.itemElement;
+            onAppointmentClick(createClickEvent);
+        };
+    }
+
+    _createTooltipDragBehavior(options) {
+        return (e) => {
+            let dragElement;
+            const $element = $(e.element);
+            const dragBehavior = this.instance.getWorkSpace().dragBehavior;
+
+            dragBehavior.addTo($element, {
+                filter: `.${LIST_ITEM_CLASS}`,
+                container: this.instance.$element().find(`.${FIXED_CONTAINER_CLASS}`),
+                cursorOffset: () => {
+                    const $dragElement = $(dragElement);
+                    return {
+                        x: $dragElement.width() / 2,
+                        y: $dragElement.height() / 2
+                    };
+                },
+                dragTemplate: () => {
+                    return dragElement;
+                },
+                onDragStart: (e) => {
+                    const event = e.event;
+                    const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+
+                    if(itemData && !itemData.data.disabled) {
+                        event.data = event.data || {};
+                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.settings);
+
+                        dragBehavior.onDragStart(event.data);
+                        translator.resetPosition($(dragElement));
+                    }
+                },
+                onDragEnd: (e) => {
+                    const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+                    if(itemData && !itemData.data.disabled) {
+                        dragBehavior.onDragEnd(e);
+                    }
+                }
+            });
+        };
+    }
+
+    _createDragAppointment(itemData, settings) {
+        const appointments = this.instance.getAppointmentsInstance();
+        const appointmentIndex = appointments.option('items').length;
+
+        settings.isCompact = false;
+        settings.virtual = false;
+
+        appointments._renderItem(appointmentIndex, {
+            itemData: itemData,
+            settings: [settings]
+        });
+
+        return appointments._findItemElementByItem(itemData)[0];
+    }
+
+    _getCollectorOffset(width, cellWidth) {
+        return cellWidth - width - this._getCollectorRightOffset();
     }
 
     _getCollectorRightOffset() {
@@ -84,8 +162,8 @@ export class CompactAppointmentsHelper {
     }
 
     _makeBackgroundColorCore($button, color, itemsColors) {
-        let paintButton = true,
-            currentItemColor;
+        let paintButton = true;
+        let currentItemColor;
 
         color && color.done(function(color) {
             if(itemsColors.length) {
@@ -110,25 +188,25 @@ export class CompactAppointmentsHelper {
         });
     }
 
-    _createCompactButton($container, width, height, template, items, isCompact, applyOffset, coordinates) {
-        const $button = this._createCompactButtonElement($container, width, isCompact, applyOffset, coordinates);
+    _createCompactButton(template, options) {
+        const $button = this._createCompactButtonElement(options);
 
         return this.instance._createComponent($button, Button, {
             type: 'default',
-            width: width,
-            height: height,
-            onClick: (e) => this._onButtonClick(e),
-            template: this._renderTemplate(template, items, isCompact)
+            width: options.width,
+            height: options.height,
+            onClick: (e) => this._onButtonClick(e, options),
+            template: this._renderTemplate(template, options.items, options.isCompact)
         });
     }
 
-    _createCompactButtonElement($container, width, isCompact, applyOffset, coordinates) {
+    _createCompactButtonElement({ isCompact, $container, width, coordinates, applyOffset, cellWidth }) {
         const result = $('<div>')
             .addClass(APPOINTMENT_COLLECTOR_CLASS)
             .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
             .appendTo($container);
 
-        const offset = applyOffset ? this._getCollectorOffset(width) : 0;
+        const offset = applyOffset ? this._getCollectorOffset(width, cellWidth) : 0;
         this._setPosition(result, { top: coordinates.top, left: coordinates.left + offset });
 
         return result;

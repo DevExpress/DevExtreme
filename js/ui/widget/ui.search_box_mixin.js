@@ -5,56 +5,20 @@ import TextBox from '../text_box';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
 
-/**
-* @name SearchBoxMixin
-* @module ui/widget/ui.search_box_mixin
-* @export default
-* @hidden
-*/
 
 module.exports = {
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name SearchBoxMixinOptions.searchMode
-            * @type Enums.CollectionSearchMode
-            * @default 'contains'
-            */
             searchMode: '',
 
-            /**
-            * @name SearchBoxMixinOptions.searchExpr
-            * @type getter|Array<getter>
-            * @default null
-            */
             searchExpr: null,
 
-            /**
-            * @name SearchBoxMixinOptions.searchValue
-            * @type String
-            * @default ""
-            */
             searchValue: '',
 
-            /**
-            * @name SearchBoxMixinOptions.searchEnabled
-            * @type boolean
-            * @default false
-            */
             searchEnabled: false,
 
-            /**
-             * @name SearchBoxMixinOptions.searchEditorOptions
-             * @type dxTextBoxOptions
-             * @default {}
-             */
             searchEditorOptions: {},
 
-            /**
-            * @name SearchBoxMixinOptions.searchTimeout
-            * @type number
-            * @default undefined
-            */
         });
     },
 
@@ -64,11 +28,10 @@ module.exports = {
     },
 
     _renderSearch: function() {
-        var editorOptions,
-            $element = this.$element(),
-            searchEnabled = this.option('searchEnabled'),
-            searchBoxClassName = this._addWidgetPrefix('search'),
-            rootElementClassName = this._addWidgetPrefix('with-search');
+        const $element = this.$element();
+        const searchEnabled = this.option('searchEnabled');
+        const searchBoxClassName = this._addWidgetPrefix('search');
+        const rootElementClassName = this._addWidgetPrefix('with-search');
 
         if(!searchEnabled) {
             $element.removeClass(rootElementClassName);
@@ -76,7 +39,7 @@ module.exports = {
             return;
         }
 
-        editorOptions = this._getSearchEditorOptions();
+        const editorOptions = this._getSearchEditorOptions();
 
         if(this._searchEditor) {
             this._searchEditor.option(editorOptions);
@@ -94,9 +57,9 @@ module.exports = {
     },
 
     _getSearchEditorOptions: function() {
-        var that = this,
-            userEditorOptions = that.option('searchEditorOptions'),
-            searchText = messageLocalization.format('Search');
+        const that = this;
+        const userEditorOptions = that.option('searchEditorOptions');
+        const searchText = messageLocalization.format('Search');
 
         return extend({
             mode: 'search',
@@ -108,7 +71,7 @@ module.exports = {
                 'aria-label': searchText
             },
             onValueChanged: function(e) {
-                var searchTimeout = that.option('searchTimeout');
+                const searchTimeout = that.option('searchTimeout');
                 that._valueChangeDeferred = new Deferred();
                 clearTimeout(that._valueChangeTimeout);
 

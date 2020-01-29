@@ -1,35 +1,20 @@
-var $ = require('../core/renderer'),
-    Editor = require('./editor/editor'),
-    registerComponent = require('../core/component_registrator'),
-    extend = require('../core/utils/extend').extend,
-    windowUtils = require('../core/utils/window'),
-    fx = require('../animation/fx');
+const $ = require('../core/renderer');
+const Editor = require('./editor/editor');
+const registerComponent = require('../core/component_registrator');
+const extend = require('../core/utils/extend').extend;
+const windowUtils = require('../core/utils/window');
+const fx = require('../animation/fx');
 
-var TRACKBAR_CLASS = 'dx-trackbar',
-    TRACKBAR_CONTAINER_CLASS = 'dx-trackbar-container',
-    TRACKBAR_RANGE_CLASS = 'dx-trackbar-range',
-    TRACKBAR_WRAPPER_CLASS = 'dx-trackbar-wrapper';
+const TRACKBAR_CLASS = 'dx-trackbar';
+const TRACKBAR_CONTAINER_CLASS = 'dx-trackbar-container';
+const TRACKBAR_RANGE_CLASS = 'dx-trackbar-range';
+const TRACKBAR_WRAPPER_CLASS = 'dx-trackbar-wrapper';
 
-/**
-* @name dxTrackBar
-* @inherits Editor
-* @hidden
-*/
-var TrackBar = Editor.inherit({
+const TrackBar = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxTrackBarOptions.min
-            * @type number
-            * @default 0
-            */
             min: 0,
 
-            /**
-            * @name dxTrackBarOptions.max
-            * @type number
-            * @default 100
-            */
             max: 100,
 
             value: 0
@@ -73,9 +58,9 @@ var TrackBar = Editor.inherit({
     },
 
     _renderValue: function() {
-        var val = this.option('value'),
-            min = this.option('min'),
-            max = this.option('max');
+        const val = this.option('value');
+        const min = this.option('min');
+        const max = this.option('max');
 
         if(min > max) {
             return;
@@ -93,7 +78,7 @@ var TrackBar = Editor.inherit({
             return;
         }
 
-        var ratio = (min === max) ? 0 : (val - min) / (max - min);
+        const ratio = (min === max) ? 0 : (val - min) / (max - min);
         !this._needPreventAnimation && this._setRangeStyles({ width: ratio * 100 + '%' });
 
         this.setAria({

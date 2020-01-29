@@ -1,15 +1,15 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    commons = require('./chartParts/commons.js'),
-    scrollBarClassModule = require('viz/chart_components/scroll_bar'),
-    trackerModule = require('viz/chart_components/tracker'),
-    chartMocks = require('../../helpers/chartMocks.js'),
-    MockSeries = chartMocks.MockSeries,
-    categories = chartMocks.categories;
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const commons = require('./chartParts/commons.js');
+const scrollBarClassModule = require('viz/chart_components/scroll_bar');
+const trackerModule = require('viz/chart_components/tracker');
+const chartMocks = require('../../helpers/chartMocks.js');
+const MockSeries = chartMocks.MockSeries;
+const categories = chartMocks.categories;
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
-var OldEventsName = {
+const OldEventsName = {
     'seriesClick': 'onSeriesClick',
     'pointClick': 'onPointClick',
     'argumentAxisClick': 'onArgumentAxisClick',
@@ -26,15 +26,15 @@ QUnit.module('Zooming', commons.environment);
 
 QUnit.test('chart with single value axis. Zooming with all null/undefined values', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries());
-    var chart = this.createChart({
-            argumentAxis: {
-                argumentType: 'numeric'
-            },
-            series: [{
-                type: 'line'
-            }]
-        }),
-        chartRenderSpy = sinon.spy(chart, '_doRender');
+    const chart = this.createChart({
+        argumentAxis: {
+            argumentType: 'numeric'
+        },
+        series: [{
+            type: 'line'
+        }]
+    });
+    const chartRenderSpy = sinon.spy(chart, '_doRender');
 
     // act
     chart.zoomArgument(undefined, undefined);
@@ -45,17 +45,17 @@ QUnit.test('chart with single value axis. Zooming with all null/undefined values
 QUnit.test('chart with single value axis. Zooming with one null/undefined values', function(assert) {
     chartMocks.seriesMockData.series.push(new MockSeries());
     chartMocks.seriesMockData.series.push(new MockSeries());
-    var chart = this.createChart({
-            argumentAxis: {
-                argumentType: 'numeric'
-            },
-            series: [{
-                type: 'line'
-            }, {
-                type: 'line'
-            }]
-        }),
-        chartRenderSpy = sinon.spy(chart, '_doRender');
+    const chart = this.createChart({
+        argumentAxis: {
+            argumentType: 'numeric'
+        },
+        series: [{
+            type: 'line'
+        }, {
+            type: 'line'
+        }]
+    });
+    const chartRenderSpy = sinon.spy(chart, '_doRender');
 
     // act
     chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), {});
@@ -65,13 +65,13 @@ QUnit.test('chart with single value axis. Zooming with one null/undefined values
 });
 
 QUnit.test('No reset zooming on series changed', function(assert) {
-    var series1 = new MockSeries(),
-        series2 = new MockSeries();
+    const series1 = new MockSeries();
+    const series2 = new MockSeries();
 
     chartMocks.seriesMockData.series.push(series1);
     chartMocks.seriesMockData.series.push(series2);
 
-    var chart = this.createChart({
+    const chart = this.createChart({
         argumentAxis: {
             argumentType: 'numeric'
         },
@@ -102,13 +102,13 @@ QUnit.test('No reset zooming on series changed', function(assert) {
 });
 
 QUnit.test('No reset zooming on series changed with not zoomed axis', function(assert) {
-    var series1 = new MockSeries(),
-        series2 = new MockSeries();
+    const series1 = new MockSeries();
+    const series2 = new MockSeries();
 
     chartMocks.seriesMockData.series.push(series1);
     chartMocks.seriesMockData.series.push(series2);
 
-    var chart = this.createChart({
+    const chart = this.createChart({
         argumentAxis: {
             argumentType: 'numeric'
         },
@@ -139,12 +139,12 @@ QUnit.test('No reset zooming on series changed with not zoomed axis', function(a
 });
 
 QUnit.test('chart with single value axis. Adjust on zoom = false', function(assert) {
-    var series1 = new MockSeries({}),
-        series2 = new MockSeries({});
+    const series1 = new MockSeries({});
+    const series2 = new MockSeries({});
 
     chartMocks.seriesMockData.series.push(series1, series2);
 
-    var chart = this.createChart({
+    const chart = this.createChart({
         series: [{ type: 'line' }, { type: 'line' }],
         adjustOnZoom: false
     });
@@ -156,12 +156,12 @@ QUnit.test('chart with single value axis. Adjust on zoom = false', function(asse
 });
 
 QUnit.test('MultiAxis chart', function(assert) {
-    var series1 = new MockSeries({}),
-        series2 = new MockSeries({});
+    const series1 = new MockSeries({});
+    const series2 = new MockSeries({});
 
     chartMocks.seriesMockData.series.push(series1, series2);
 
-    var chart = this.createChart({
+    const chart = this.createChart({
 
         series: [{
             type: 'line',
@@ -189,12 +189,12 @@ QUnit.test('MultiAxis chart', function(assert) {
 });
 
 QUnit.test('Set visual range for all argument axis except original target one', function(assert) {
-    var series1 = new MockSeries({}),
-        series2 = new MockSeries({});
+    const series1 = new MockSeries({});
+    const series2 = new MockSeries({});
 
     chartMocks.seriesMockData.series.push(series1, series2);
 
-    var chart = this.createChart({
+    const chart = this.createChart({
         series: [{
             type: 'line',
             pane: 'p1'
@@ -218,7 +218,7 @@ QUnit.test('Set visual range for all argument axis except original target one', 
 });
 
 QUnit.test('chart with single value with aggregation. Adjust on zoom = true', function(assert) {
-    var series1 = new MockSeries({});
+    const series1 = new MockSeries({});
 
     series1.useAggregation.returns(true);
     series1.getViewport.returns({
@@ -240,7 +240,7 @@ QUnit.test('chart with single value with aggregation. Adjust on zoom = true', fu
 });
 
 QUnit.test('Aggregation with min and max on argument axis, without zooming', function(assert) {
-    var series1 = new MockSeries({
+    const series1 = new MockSeries({
         range: {
             val: { min: 0, max: 1 },
             arg: { max: 100, min: 0 }
@@ -263,8 +263,8 @@ QUnit.test('Aggregation with min and max on argument axis, without zooming', fun
 
 // T557040
 QUnit.test('Aggregation. One of the series without points', function(assert) {
-    var series1 = new MockSeries({}),
-        series2 = new MockSeries({});
+    const series1 = new MockSeries({});
+    const series2 = new MockSeries({});
 
     series1.useAggregation.returns(true);
 
@@ -294,13 +294,13 @@ QUnit.module('Pane synchronization', commons.environment);
 
 QUnit.test('simple chart with two panes', function(assert) {
     // arrange
-    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 } } }),
-        stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
+    const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 } } });
+    const stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
 
     chartMocks.seriesMockData.series.push(stubSeries1);
     chartMocks.seriesMockData.series.push(stubSeries2);
     // act
-    var chart = this.createChart({
+    const chart = this.createChart({
         argumentAxis: {
             categories: categories
         },
@@ -332,13 +332,13 @@ QUnit.test('simple chart with two panes', function(assert) {
 
 QUnit.test('Rotated chart with two panes', function(assert) {
     // arrange
-    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 } } }),
-        stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
+    const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 } } });
+    const stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
 
     chartMocks.seriesMockData.series.push(stubSeries1);
     chartMocks.seriesMockData.series.push(stubSeries2);
     // act
-    var chart = this.createChart({
+    const chart = this.createChart({
         rotated: true,
         argumentAxis: {
             categories: categories
@@ -369,12 +369,12 @@ QUnit.test('Rotated chart with two panes', function(assert) {
 });
 
 QUnit.test('chart with one empty pane', function(assert) {
-    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
     chartMocks.seriesMockData.series.push(stubSeries1);
     // chartMocks.seriesMockData.series.push(stubSeries2);
     // act
-    var chart = this.createChart({
+    const chart = this.createChart({
         argumentAxis: {
             categories: categories
         },
@@ -403,11 +403,11 @@ QUnit.test('chart with one empty pane', function(assert) {
 });
 
 QUnit.test('Rotated chart with one empty pane', function(assert) {
-    var stubSeries1 = new MockSeries({ range: { val: { min: 15, max: 80 }, arg: { min: -1, max: 10 } } });
+    const stubSeries1 = new MockSeries({ range: { val: { min: 15, max: 80 }, arg: { min: -1, max: 10 } } });
 
     chartMocks.seriesMockData.series.push(stubSeries1);
     // act
-    var chart = this.createChart({
+    const chart = this.createChart({
         rotated: true,
         argumentAxis: {
             categories: categories
@@ -438,7 +438,7 @@ QUnit.test('Rotated chart with one empty pane', function(assert) {
 
 QUnit.test('Update axis canvas. One pane', function(assert) {
     // act
-    var chart = this.createChart({});
+    const chart = this.createChart({});
     // assert
     assert.deepEqual(chart._argumentAxes[0].updateSize.lastCall.args[0], chart.panes[0].canvas);
     assert.deepEqual(chart._valueAxes[0].updateSize.lastCall.args[0], chart.panes[0].canvas);
@@ -446,7 +446,7 @@ QUnit.test('Update axis canvas. One pane', function(assert) {
 
 QUnit.test('Update axis canvas. Two panes', function(assert) {
     // act
-    var chart = this.createChart({
+    const chart = this.createChart({
         panes: [
             { name: 'top' },
             { name: 'bottom' }
@@ -482,13 +482,13 @@ QUnit.test('chart with invisible scrollBar', function(assert) {
 });
 
 QUnit.test('chart with visible scrollBar', function(assert) {
-    var chart = this.createChart({
-            scrollBar: {
-                visible: true
-            }
-        }),
-        scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue,
-        range = chart._argumentAxes[0].getTranslator().getBusinessRange();
+    const chart = this.createChart({
+        scrollBar: {
+            visible: true
+        }
+    });
+    const scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
+    const range = chart._argumentAxes[0].getTranslator().getBusinessRange();
 
     assert.ok(scrollBarClassModule.ScrollBar.calledOnce);
     assert.deepEqual(scrollBarClassModule.ScrollBar.lastCall.args, [chart._renderer, chart._scrollBarGroup]);
@@ -513,14 +513,14 @@ QUnit.test('chart with visible scrollBar', function(assert) {
 });
 
 QUnit.test('chart with visible scrollBar. Rotated', function(assert) {
-    var chart = this.createChart({
-            rotated: true,
-            scrollBar: {
-                visible: true
-            }
-        }),
-        scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue,
-        range = chart._argumentAxes[0].getTranslator().getBusinessRange();
+    const chart = this.createChart({
+        rotated: true,
+        scrollBar: {
+            visible: true
+        }
+    });
+    const scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
+    const range = chart._argumentAxes[0].getTranslator().getBusinessRange();
 
     assert.ok(scrollBarClassModule.ScrollBar.calledOnce);
     assert.deepEqual(scrollBarClassModule.ScrollBar.lastCall.args, [chart._renderer, chart._scrollBarGroup]);
@@ -558,20 +558,20 @@ QUnit.test('chart with visible scrollBar, argumentAxis.valueMarginsEnabled = tru
 });
 
 QUnit.test('T172802. Scroll bar after zooming. One categories', function(assert) {
-    var chart = this.createChart({
-            scrollBar: {
-                visible: true
-            },
-            argumentAxis: {
-                mockRange: {
-                    axisType: 'discrete',
-                    categories: ['January'],
-                    minVisible: 'January',
-                    maxVisible: 'January'
-                }
+    const chart = this.createChart({
+        scrollBar: {
+            visible: true
+        },
+        argumentAxis: {
+            mockRange: {
+                axisType: 'discrete',
+                categories: ['January'],
+                minVisible: 'January',
+                maxVisible: 'January'
             }
-        }),
-        scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
+        }
+    });
+    const scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
 
     scrollBar.setPosition.reset();
 
@@ -587,9 +587,9 @@ QUnit.test('applyTheme', function(assert) {
         visible: true
     });
 
-    var chart = this.createChart({
-        }),
-        scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
+    const chart = this.createChart({
+    });
+    const scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
 
     assert.ok(scrollBarClassModule.ScrollBar.calledOnce);
     assert.deepEqual(scrollBarClassModule.ScrollBar.lastCall.args, [chart._renderer, chart._scrollBarGroup]);
@@ -603,14 +603,14 @@ QUnit.test('applyTheme', function(assert) {
 });
 
 QUnit.test('ScrollBar option changed', function(assert) {
-    var chart = this.createChart({
-            scrollBar: {
-                visible: true,
-                color: 'old'
-            }
-        }),
-        scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue,
-        range;
+    const chart = this.createChart({
+        scrollBar: {
+            visible: true,
+            color: 'old'
+        }
+    });
+    const scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
+    let range;
 
     scrollBar.init.reset();
     scrollBar.setPosition.reset();
@@ -647,13 +647,13 @@ QUnit.test('ScrollBar option changed', function(assert) {
 });
 
 QUnit.test('Options changed - hide scrollBar', function(assert) {
-    var chart = this.createChart({
-            scrollBar: {
-                visible: true,
-                color: 'old'
-            }
-        }),
-        scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
+    const chart = this.createChart({
+        scrollBar: {
+            visible: true,
+            color: 'old'
+        }
+    });
+    const scrollBar = scrollBarClassModule.ScrollBar.lastCall.returnValue;
     scrollBar.init.reset();
     scrollBar.setPosition.reset();
 
@@ -679,14 +679,14 @@ QUnit.test('Options changed - hide scrollBar', function(assert) {
 });
 
 QUnit.test('Options changed - show scrollBar', function(assert) {
-    var chart = this.createChart({
-            scrollBar: {
-                visible: false,
-                color: 'old'
-            }
-        }),
-        scrollBar,
-        range;
+    const chart = this.createChart({
+        scrollBar: {
+            visible: false,
+            color: 'old'
+        }
+    });
+    let scrollBar;
+    let range;
 
     this.themeManager.getOptions.withArgs('scrollBar').returns({
         visible: true,
@@ -722,13 +722,13 @@ QUnit.test('Options changed - show scrollBar', function(assert) {
 // T207760
 QUnit.test('Options changed - rotated (false->true)', function(assert) {
     // arrange
-    var chart = this.createChart({
-            rotated: false,
-            scrollBar: {
-                visible: true
-            }
-        }),
-        scrollBar;
+    const chart = this.createChart({
+        rotated: false,
+        scrollBar: {
+            visible: true
+        }
+    });
+    let scrollBar;
 
     this.themeManager.getOptions.withArgs('rotated').returns(true);
 
@@ -743,13 +743,13 @@ QUnit.test('Options changed - rotated (false->true)', function(assert) {
 // T207760
 QUnit.test('Options changed - rotated (true->false)', function(assert) {
     // arrange
-    var chart = this.createChart({
-            rotated: true,
-            scrollBar: {
-                visible: true
-            }
-        }),
-        scrollBar;
+    const chart = this.createChart({
+        rotated: true,
+        scrollBar: {
+            visible: true
+        }
+    });
+    let scrollBar;
 
     this.themeManager.getOptions.withArgs('rotated').returns(false);
 
@@ -769,19 +769,19 @@ QUnit.test('empty categories in axis & continuous data', function(assert) {
             val: { min: 0, max: 10 }, arg: { categories: [], axisType: 'continuous', min: 1, max: 3 }
         }
     }));
-    var chart = this.createChart({
-            dataSource: [{ x: 1, y: 3 }, { x: 3, y: 3 }],
-            series: [{
-                type: 'bar',
-                argumentField: 'x',
-                valueField: 'y'
-            }],
-            argumentAxis: { categories: [] },
-            scrollBar: { visible: true },
-            zoomingMode: 'all',
-            scrollingMode: 'all'
-        }),
-        businessRange = chart._argumentAxes[0].getTranslator().getBusinessRange();
+    const chart = this.createChart({
+        dataSource: [{ x: 1, y: 3 }, { x: 3, y: 3 }],
+        series: [{
+            type: 'bar',
+            argumentField: 'x',
+            valueField: 'y'
+        }],
+        argumentAxis: { categories: [] },
+        scrollBar: { visible: true },
+        zoomingMode: 'all',
+        scrollingMode: 'all'
+    });
+    const businessRange = chart._argumentAxes[0].getTranslator().getBusinessRange();
 
     // act
     chart.zoomArgument(1, 2);
@@ -803,10 +803,10 @@ QUnit.module('Map events', $.extend({}, commons.environment, {
 }));
 
 QUnit.test('chart events', function(assert) {
-    var events = {},
-        target = { isTarget: true },
-        event = { isEvent: true },
-        targetArg = { target: target, event: event, argument: 'argument' };
+    const events = {};
+    const target = { isTarget: true };
+    const event = { isEvent: true };
+    const targetArg = { target: target, event: event, argument: 'argument' };
 
     $.each(OldEventsName, function(oldName, newName) {
         events[newName] = sinon.stub();

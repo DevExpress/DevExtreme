@@ -8,28 +8,28 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const TREELIST_SELECTOR = '.dx-treelist',
-    TREELIST_DATA_ROW_SELECTOR = '.dx-data-row',
-    TREELIST_WRAPPER_SELECTOR = '.dx-gantt-treelist-wrapper',
-    TREELIST_HEADER_ROW_SELECTOR = '.dx-header-row',
-    GANTT_VIEW_SELECTOR = '.dx-gantt-view',
-    GANTT_VIEW_ROW_SELECTOR = '.dx-gantt-altRow',
-    TASK_WRAPPER_SELECTOR = '.dx-gantt-taskWrapper',
-    TASK_RESOURCES_SELECTOR = '.dx-gantt-taskRes',
-    TASK_ARROW_SELECTOR = '.dx-gantt-arrow',
-    TASK_TITLE_IN_SELECTOR = '.dx-gantt-titleIn',
-    TASK_TITLE_OUT_SELECTOR = '.dx-gantt-titleOut',
-    TREELIST_EXPANDED_SELECTOR = '.dx-treelist-expanded',
-    TREELIST_COLLAPSED_SELECTOR = '.dx-treelist-collapsed',
-    SELECTION_SELECTOR = '.dx-gantt-sel',
-    SPLITTER_WRAPPER_SELECTOR = '.dx-splitter-wrapper',
-    SPLITTER_SELECTOR = '.dx-splitter',
-    POPUP_SELECTOR = '.dx-popup-normal',
-    GANTT_VIEW_HORIZONTAL_BORDER_SELECTOR = '.dx-gantt-hb',
-    TIME_MARKER_SELECTOR = '.dx-gantt-tm',
-    OVERLAY_WRAPPER_SELECTOR = '.dx-overlay-wrapper',
-    CONTEXT_MENU_SELECTOR = '.dx-context-menu',
-    INPUT_TEXT_EDITOR_SELECTOR = '.dx-texteditor-input';
+const TREELIST_SELECTOR = '.dx-treelist';
+const TREELIST_DATA_ROW_SELECTOR = '.dx-data-row';
+const TREELIST_WRAPPER_SELECTOR = '.dx-gantt-treelist-wrapper';
+const TREELIST_HEADER_ROW_SELECTOR = '.dx-header-row';
+const GANTT_VIEW_SELECTOR = '.dx-gantt-view';
+const GANTT_VIEW_ROW_SELECTOR = '.dx-gantt-altRow';
+const TASK_WRAPPER_SELECTOR = '.dx-gantt-taskWrapper';
+const TASK_RESOURCES_SELECTOR = '.dx-gantt-taskRes';
+const TASK_ARROW_SELECTOR = '.dx-gantt-arrow';
+const TASK_TITLE_IN_SELECTOR = '.dx-gantt-titleIn';
+const TASK_TITLE_OUT_SELECTOR = '.dx-gantt-titleOut';
+const TREELIST_EXPANDED_SELECTOR = '.dx-treelist-expanded';
+const TREELIST_COLLAPSED_SELECTOR = '.dx-treelist-collapsed';
+const SELECTION_SELECTOR = '.dx-gantt-sel';
+const SPLITTER_WRAPPER_SELECTOR = '.dx-splitter-wrapper';
+const SPLITTER_SELECTOR = '.dx-splitter';
+const POPUP_SELECTOR = '.dx-popup-normal';
+const GANTT_VIEW_HORIZONTAL_BORDER_SELECTOR = '.dx-gantt-hb';
+const TIME_MARKER_SELECTOR = '.dx-gantt-tm';
+const OVERLAY_WRAPPER_SELECTOR = '.dx-overlay-wrapper';
+const CONTEXT_MENU_SELECTOR = '.dx-context-menu';
+const INPUT_TEXT_EDITOR_SELECTOR = '.dx-texteditor-input';
 
 
 const tasks = [
@@ -616,7 +616,7 @@ QUnit.module('Context Menu', moduleConfig, () => {
             return $('body').find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
         };
         assert.equal(getContextMenuElement().length, 0, 'menu is hidden on create');
-        var $cellElement = $(this.instance._treeList.getCellElement(0, 0));
+        const $cellElement = $(this.instance._treeList.getCellElement(0, 0));
         $cellElement.trigger('contextmenu');
         assert.equal(getContextMenuElement().length, 2, 'menu is visible after right click in tree list');
     });

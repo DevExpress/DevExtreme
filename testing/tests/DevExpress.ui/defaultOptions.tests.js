@@ -1,52 +1,52 @@
 window.includeThemesLinks();
 
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    browser = require('core/utils/browser'),
-    devices = require('core/devices'),
-    themes = require('ui/themes'),
-    support = require('core/utils/support'),
-    publicComponentUtils = require('core/utils/public_component'),
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+let browser = require('core/utils/browser');
+const devices = require('core/devices');
+const themes = require('ui/themes');
+const support = require('core/utils/support');
+const publicComponentUtils = require('core/utils/public_component');
 
-    ActionSheet = require('ui/action_sheet'),
-    Accordion = require('ui/accordion'),
-    Box = require('ui/box'),
-    ColorBox = require('ui/color_box'),
-    DataGrid = require('ui/data_grid'),
-    DateBox = require('ui/date_box'),
-    FakeDialogComponent = require('ui/dialog').FakeDialogComponent,
-    DropDownEditor = require('ui/drop_down_editor/ui.drop_down_editor'),
-    DropDownBox = require('ui/drop_down_box'),
-    DropDownButton = require('ui/drop_down_button'),
-    DropDownList = require('ui/drop_down_editor/ui.drop_down_list'),
-    DropDownMenu = require('ui/drop_down_menu'),
-    TextEditor = require('ui/text_box/ui.text_editor'),
-    Gallery = require('ui/gallery'),
-    Lookup = require('ui/lookup'),
-    LoadIndicator = require('ui/load_indicator'),
-    LoadPanel = require('ui/load_panel'),
-    List = require('ui/list'),
-    MenuBase = require('ui/context_menu/ui.menu_base'),
-    Menu = require('ui/menu/ui.menu'),
-    ContextMenu = require('ui/context_menu/ui.context_menu'),
-    NumberBox = require('ui/number_box'),
-    NavBar = require('ui/nav_bar'),
-    Popup = require('ui/popup'),
-    Popover = require('ui/popover'),
-    RadioGroup = require('ui/radio_group'),
-    Scheduler = require('ui/scheduler/ui.scheduler'),
-    Scrollable = require('ui/scroll_view/ui.scrollable'),
-    ScrollView = require('ui/scroll_view'),
-    SelectBox = require('ui/select_box'),
-    Tabs = require('ui/tabs'),
-    TabPanel = require('ui/tab_panel'),
-    TagBox = require('ui/tag_box'),
-    Toast = require('ui/toast'),
-    TreeList = require('ui/tree_list'),
-    TreeView = require('ui/tree_view'),
-    FileUploader = require('ui/file_uploader'),
-    Toolbar = require('ui/toolbar'),
-    Form = require('ui/form');
+const ActionSheet = require('ui/action_sheet');
+const Accordion = require('ui/accordion');
+const Box = require('ui/box');
+const ColorBox = require('ui/color_box');
+const DataGrid = require('ui/data_grid');
+const DateBox = require('ui/date_box');
+const FakeDialogComponent = require('ui/dialog').FakeDialogComponent;
+const DropDownEditor = require('ui/drop_down_editor/ui.drop_down_editor');
+const DropDownBox = require('ui/drop_down_box');
+const DropDownButton = require('ui/drop_down_button');
+const DropDownList = require('ui/drop_down_editor/ui.drop_down_list');
+const DropDownMenu = require('ui/drop_down_menu');
+const TextEditor = require('ui/text_box/ui.text_editor');
+const Gallery = require('ui/gallery');
+const Lookup = require('ui/lookup');
+const LoadIndicator = require('ui/load_indicator');
+const LoadPanel = require('ui/load_panel');
+const List = require('ui/list');
+const MenuBase = require('ui/context_menu/ui.menu_base');
+const Menu = require('ui/menu/ui.menu');
+const ContextMenu = require('ui/context_menu/ui.context_menu');
+const NumberBox = require('ui/number_box');
+const NavBar = require('ui/nav_bar');
+const Popup = require('ui/popup');
+const Popover = require('ui/popover');
+const RadioGroup = require('ui/radio_group');
+const Scheduler = require('ui/scheduler/ui.scheduler');
+const Scrollable = require('ui/scroll_view/ui.scrollable');
+const ScrollView = require('ui/scroll_view');
+const SelectBox = require('ui/select_box');
+const Tabs = require('ui/tabs');
+const TabPanel = require('ui/tab_panel');
+const TagBox = require('ui/tag_box');
+const Toast = require('ui/toast');
+const TreeList = require('ui/tree_list');
+const TreeView = require('ui/tree_view');
+const FileUploader = require('ui/file_uploader');
+const Toolbar = require('ui/toolbar');
+const Form = require('ui/form');
 
 
 QUnit.testStart(function() {
@@ -55,23 +55,23 @@ QUnit.testStart(function() {
 
 QUnit.module('widgets defaults');
 
-var testComponentDefaults = function(componentClass, forcedDevices, options, before, after) {
-    var componentName = publicComponentUtils.name(componentClass);
+const testComponentDefaults = function(componentClass, forcedDevices, options, before, after) {
+    const componentName = publicComponentUtils.name(componentClass);
 
     forcedDevices = $.isArray(forcedDevices) ? forcedDevices : [forcedDevices];
     before = before || noop;
     after = after || noop;
 
     QUnit.test(componentName + ' default options', function(assert) {
-        var originalDevice = devices._currentDevice;
+        const originalDevice = devices._currentDevice;
         before.call(this);
 
         $.each(forcedDevices, function(_, device) {
             devices._currentDevice = device;
-            var component = new componentClass('#cmp');
+            const component = new componentClass('#cmp');
             options = $.isFunction(options) ? options.call(component) : options;
 
-            var defaults = component.option();
+            const defaults = component.option();
             checkOptions.apply(component, [options, defaults, JSON.stringify(device), assert]);
         });
 
@@ -80,11 +80,11 @@ var testComponentDefaults = function(componentClass, forcedDevices, options, bef
     });
 };
 
-var checkOptions = function(expectedOptions, resultOptions, deviceString, assert) {
-    var that = this;
+const checkOptions = function(expectedOptions, resultOptions, deviceString, assert) {
+    const that = this;
 
     $.each(expectedOptions, function(optionName, expectedValue) {
-        var resultValue = resultOptions[optionName];
+        let resultValue = resultOptions[optionName];
 
         resultValue = $.isFunction(resultValue) ? resultValue.call(that) : resultValue;
 
@@ -130,7 +130,7 @@ testComponentDefaults(DateBox,
     { pickerType: 'rollers' },
     function() {
         this._origDevice = devices.real();
-        var deviceConfig = { platform: 'android', android: true, version: [4, 3] };
+        const deviceConfig = { platform: 'android', android: true, version: [4, 3] };
         devices.real(deviceConfig);
     },
     function() {

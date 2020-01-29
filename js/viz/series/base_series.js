@@ -1,53 +1,53 @@
-var seriesNS = {},
-    typeUtils = require('../../core/utils/type'),
-    _extend = require('../../core/utils/extend').extend,
-    _each = require('../../core/utils/iterator').each,
-    pointModule = require('./points/base_point'),
-    _isDefined = typeUtils.isDefined,
-    vizUtils = require('../core/utils'),
-    _isEmptyObject = typeUtils.isEmptyObject,
-    _normalizeEnum = vizUtils.normalizeEnum,
-    _noop = require('../../core/utils/common').noop,
-    states = require('../components/consts').states,
+const seriesNS = {};
+const typeUtils = require('../../core/utils/type');
+const _extend = require('../../core/utils/extend').extend;
+const _each = require('../../core/utils/iterator').each;
+const pointModule = require('./points/base_point');
+const _isDefined = typeUtils.isDefined;
+const vizUtils = require('../core/utils');
+const _isEmptyObject = typeUtils.isEmptyObject;
+const _normalizeEnum = vizUtils.normalizeEnum;
+const _noop = require('../../core/utils/common').noop;
+const states = require('../components/consts').states;
 
-    rangeCalculator = require('./helpers/range_data_calculator'),
+const rangeCalculator = require('./helpers/range_data_calculator');
 
-    scatterSeries = require('./scatter_series'),
-    lineSeries = require('./line_series'),
-    areaSeries = require('./area_series'),
-    barSeries = require('./bar_series'),
-    rangeSeries = require('./range_series'),
-    bubbleSeries = require('./bubble_series'),
-    pieSeries = require('./pie_series'),
-    financialSeries = require('./financial_series'),
-    stackedSeries = require('./stacked_series'),
+const scatterSeries = require('./scatter_series');
+const lineSeries = require('./line_series');
+const areaSeries = require('./area_series');
+const barSeries = require('./bar_series');
+const rangeSeries = require('./range_series');
+const bubbleSeries = require('./bubble_series');
+const pieSeries = require('./pie_series');
+const financialSeries = require('./financial_series');
+const stackedSeries = require('./stacked_series');
 
-    DISCRETE = 'discrete',
-    SELECTED_STATE = states.selectedMark,
-    HOVER_STATE = states.hoverMark,
-    HOVER = states.hover,
-    NORMAL = states.normal,
-    SELECTION = states.selection,
-    APPLY_SELECTED = states.applySelected,
-    APPLY_HOVER = states.applyHover,
-    RESET_ITEM = states.resetItem,
-    NONE_MODE = 'none',
-    INCLUDE_POINTS = 'includepoints',
-    NEAREST_POINT = 'nearestpoint',
-    SERIES_SELECTION_CHANGED = 'seriesSelectionChanged',
-    POINT_SELECTION_CHANGED = 'pointSelectionChanged',
-    SERIES_HOVER_CHANGED = 'seriesHoverChanged',
-    POINT_HOVER_CHANGED = 'pointHoverChanged',
-    ALL_SERIES_POINTS = 'allseriespoints',
-    ALL_ARGUMENT_POINTS = 'allargumentpoints',
-    POINT_HOVER = 'pointHover',
-    CLEAR_POINT_HOVER = 'clearPointHover',
-    SERIES_SELECT = 'seriesSelect',
-    POINT_SELECT = 'pointSelect',
-    POINT_DESELECT = 'pointDeselect',
-    getEmptyBusinessRange = function() {
-        return { arg: {}, val: {} };
-    };
+const DISCRETE = 'discrete';
+const SELECTED_STATE = states.selectedMark;
+const HOVER_STATE = states.hoverMark;
+const HOVER = states.hover;
+const NORMAL = states.normal;
+const SELECTION = states.selection;
+const APPLY_SELECTED = states.applySelected;
+const APPLY_HOVER = states.applyHover;
+const RESET_ITEM = states.resetItem;
+const NONE_MODE = 'none';
+const INCLUDE_POINTS = 'includepoints';
+const NEAREST_POINT = 'nearestpoint';
+const SERIES_SELECTION_CHANGED = 'seriesSelectionChanged';
+const POINT_SELECTION_CHANGED = 'pointSelectionChanged';
+const SERIES_HOVER_CHANGED = 'seriesHoverChanged';
+const POINT_HOVER_CHANGED = 'pointHoverChanged';
+const ALL_SERIES_POINTS = 'allseriespoints';
+const ALL_ARGUMENT_POINTS = 'allargumentpoints';
+const POINT_HOVER = 'pointHover';
+const CLEAR_POINT_HOVER = 'clearPointHover';
+const SERIES_SELECT = 'seriesSelect';
+const POINT_SELECT = 'pointSelect';
+const POINT_DESELECT = 'pointDeselect';
+const getEmptyBusinessRange = function() {
+    return { arg: {}, val: {} };
+};
 
 function triggerEvent(element, event, point) {
     element && element.trigger(event, point);
@@ -74,20 +74,20 @@ function includePointsMode(mode) {
 }
 
 function getLabelOptions(labelOptions, defaultColor) {
-    var opt = labelOptions || {},
-        labelFont = _extend({}, opt.font) || {},
-        labelBorder = opt.border || {},
-        labelConnector = opt.connector || {},
-        backgroundAttr = {
-            fill: opt.backgroundColor || defaultColor,
-            'stroke-width': labelBorder.visible ? labelBorder.width || 0 : 0,
-            stroke: labelBorder.visible && labelBorder.width ? labelBorder.color : 'none',
-            dashStyle: labelBorder.dashStyle
-        },
-        connectorAttr = {
-            stroke: labelConnector.visible && labelConnector.width ? labelConnector.color || defaultColor : 'none',
-            'stroke-width': labelConnector.visible ? labelConnector.width || 0 : 0
-        };
+    const opt = labelOptions || {};
+    const labelFont = _extend({}, opt.font) || {};
+    const labelBorder = opt.border || {};
+    const labelConnector = opt.connector || {};
+    const backgroundAttr = {
+        fill: opt.backgroundColor || defaultColor,
+        'stroke-width': labelBorder.visible ? labelBorder.width || 0 : 0,
+        stroke: labelBorder.visible && labelBorder.width ? labelBorder.color : 'none',
+        dashStyle: labelBorder.dashStyle
+    };
+    const connectorAttr = {
+        stroke: labelConnector.visible && labelConnector.width ? labelConnector.color || defaultColor : 'none',
+        'stroke-width': labelConnector.visible ? labelConnector.width || 0 : 0
+    };
 
     labelFont.color = (opt.backgroundColor === 'none' && _normalizeEnum(labelFont.color) === '#ffffff' && opt.position !== 'inside') ? defaultColor : labelFont.color;
 
@@ -134,13 +134,13 @@ function releasePointSelectedState(point, legendCallback) {
 }
 
 function mergePointOptionsCore(base, extra) {
-    var options = _extend({}, base, extra);
+    const options = _extend({}, base, extra);
     options.border = _extend({}, base && base.border, extra && extra.border);
     return options;
 }
 
 function mergePointOptions(base, extra) {
-    var options = mergePointOptionsCore(base, extra);
+    const options = mergePointOptionsCore(base, extra);
     options.image = _extend(true, {}, base.image, extra.image);
     options.selectionStyle = mergePointOptionsCore(base.selectionStyle, extra.selectionStyle);
     options.hoverStyle = mergePointOptionsCore(base.hoverStyle, extra.hoverStyle);
@@ -148,7 +148,7 @@ function mergePointOptions(base, extra) {
 }
 
 function Series(settings, options) {
-    var that = this;
+    const that = this;
     that.fullState = 0;
     that._extGroups = settings;
     that._renderer = settings.renderer;
@@ -187,8 +187,8 @@ Series.prototype = {
     },
 
     _createStyles: function(options) {
-        var that = this,
-            mainSeriesColor = options.mainSeriesColor;
+        const that = this;
+        const mainSeriesColor = options.mainSeriesColor;
         that._styles = {
             normal: that._parseStyle(options, mainSeriesColor, mainSeriesColor),
             hover: that._parseStyle(options.hoverStyle || {}, mainSeriesColor, mainSeriesColor),
@@ -234,12 +234,12 @@ Series.prototype = {
 
     _createPoint: function(data, index, oldPoint) {
         data.index = index;
-        var that = this,
-            pointsByArgument = that.pointsByArgument,
-            options = that._getCreatingPointOptions(data),
-            arg = data.argument.valueOf(),
-            point = oldPoint,
-            pointByArgument;
+        const that = this;
+        const pointsByArgument = that.pointsByArgument;
+        const options = that._getCreatingPointOptions(data);
+        const arg = data.argument.valueOf();
+        let point = oldPoint;
+        let pointByArgument;
 
         if(point) {
             point.update(data, options);
@@ -276,7 +276,7 @@ Series.prototype = {
     },
 
     _deleteGroup: function(groupName) {
-        var group = this[groupName];
+        const group = this[groupName];
         if(group) {
             group.dispose();
             this[groupName] = null;
@@ -348,7 +348,7 @@ Series.prototype = {
     },
 
     updateDataType: function(settings) {
-        var that = this;
+        const that = this;
         that.argumentType = settings.argumentType;
         that.valueType = settings.valueType;
         that.argumentAxisType = settings.argumentAxisType;
@@ -373,8 +373,8 @@ Series.prototype = {
     },
 
     _getOldPoint: function(data, oldPointsByArgument, index) {
-        var arg = data.argument && data.argument.valueOf(),
-            point = (oldPointsByArgument[arg] || [])[0];
+        const arg = data.argument && data.argument.valueOf();
+        const point = (oldPointsByArgument[arg] || [])[0];
 
         if(point) {
             oldPointsByArgument[arg].splice(0, 1);
@@ -427,7 +427,7 @@ Series.prototype = {
     },
 
     useAggregation: function() {
-        var aggregation = this.getOptions().aggregation;
+        const aggregation = this.getOptions().aggregation;
 
         return aggregation && aggregation.enabled;
     },
@@ -446,10 +446,10 @@ Series.prototype = {
     },
 
     _createPoints: function() {
-        var that = this,
-            oldPointsByArgument = that.pointsByArgument || {},
-            data = that._getData(),
-            points;
+        const that = this;
+        const oldPointsByArgument = that.pointsByArgument || {};
+        const data = that._getData();
+        let points;
 
         that.pointsByArgument = {};
 
@@ -467,7 +467,7 @@ Series.prototype = {
             return points;
         }, []);
 
-        for(let field in skippedFields) {
+        for(const field in skippedFields) {
             if(skippedFields[field] === data.length) {
                 that._incidentOccurred('W2002', [that.name, field]);
             }
@@ -478,8 +478,8 @@ Series.prototype = {
     },
 
     _removeOldSegments: function() {
-        var that = this,
-            startIndex = that._segments.length;
+        const that = this;
+        const startIndex = that._segments.length;
 
         _each(that._graphics.splice(startIndex, that._graphics.length) || [], function(_, elem) {
             that._removeElement(elem);
@@ -492,21 +492,21 @@ Series.prototype = {
     },
 
     _drawElements: function(animationEnabled, firstDrawing, translateAllPoints) {
-        var that = this,
-            points = that._points || [],
-            closeSegment = points[0] && points[0].hasValue() && that._options.closed,
-            groupForPoint = {
-                markers: that._markersGroup,
-                errorBars: that._errorBarGroup
-            },
-            segments;
+        const that = this;
+        const points = that._points || [];
+        const closeSegment = points[0] && points[0].hasValue() && that._options.closed;
+        const groupForPoint = {
+            markers: that._markersGroup,
+            errorBars: that._errorBarGroup
+        };
+        let segments;
 
         that._drawnPoints = [];
         that._graphics = that._graphics || [];
         that._segments = [];
 
         segments = points.reduce(function(segments, p) {
-            var segment = segments[segments.length - 1];
+            const segment = segments[segments.length - 1];
 
             if(!p.translated || translateAllPoints) {
                 p.translate();
@@ -538,8 +538,8 @@ Series.prototype = {
     },
 
     draw: function(animationEnabled, hideLayoutLabels, legendCallback) {
-        var that = this,
-            firstDrawing = that._firstDrawing;
+        const that = this;
+        const firstDrawing = that._firstDrawing;
 
         that._legendCallback = legendCallback || that._legendCallback;
 
@@ -567,7 +567,7 @@ Series.prototype = {
     },
 
     _setLabelGroupSettings: function(animationEnabled) {
-        var settings = { 'class': 'dxc-labels', 'pointer-events': 'none' };
+        const settings = { 'class': 'dxc-labels', 'pointer-events': 'none' };
         this._clipLabels && this._applyElementsClipRect(settings);
         this._applyClearingSettings(settings);
         animationEnabled && (settings.opacity = 0.001);
@@ -583,8 +583,8 @@ Series.prototype = {
     },
 
     _resetType: function(seriesType, widgetType) {
-        var methodName,
-            methods;
+        let methodName;
+        let methods;
 
         if(seriesType) {
             methods = seriesNS.mixins[widgetType][seriesType];
@@ -595,8 +595,8 @@ Series.prototype = {
     },
 
     _setType: function(seriesType, widgetType) {
-        var methodName,
-            methods = seriesNS.mixins[widgetType][seriesType];
+        let methodName;
+        const methods = seriesNS.mixins[widgetType][seriesType];
 
         for(methodName in methods) {
             this[methodName] = methods[methodName];
@@ -620,13 +620,13 @@ Series.prototype = {
     },
 
     _resetNearestPoint: function() {
-        var that = this;
+        const that = this;
         that._nearestPoint && that._nearestPoint.series !== null && that._nearestPoint.resetView(HOVER);
         that._nearestPoint = null;
     },
 
     _setSelectedState: function(mode) {
-        var that = this;
+        const that = this;
 
         that.lastSelectionMode = _normalizeEnum(mode || that._options.selectionMode);
 
@@ -641,7 +641,7 @@ Series.prototype = {
     },
 
     _releaseSelectedState: function() {
-        var that = this;
+        const that = this;
 
         that.fullState = that.fullState & ~SELECTED_STATE;
 
@@ -669,9 +669,9 @@ Series.prototype = {
     },
 
     _changeStyle: function(mode, resetView, skipPoints) {
-        var that = this,
-            state = that.fullState,
-            styles = [NORMAL, HOVER, SELECTION, SELECTION];
+        const that = this;
+        let state = that.fullState;
+        const styles = [NORMAL, HOVER, SELECTION, SELECTION];
 
         if(that.lastHoverMode === 'none') {
             state &= ~HOVER_STATE;
@@ -694,9 +694,9 @@ Series.prototype = {
     },
 
     updateHover: function(x, y) {
-        var that = this,
-            currentNearestPoint = that._nearestPoint,
-            point = that.isHovered() && that.lastHoverMode === NEAREST_POINT && that.getNeighborPoint(x, y);
+        const that = this;
+        const currentNearestPoint = that._nearestPoint;
+        const point = that.isHovered() && that.lastHoverMode === NEAREST_POINT && that.getNeighborPoint(x, y);
 
         if(point !== currentNearestPoint && !(that.isSelected() && that.lastSelectionMode !== NONE_MODE)) {
             that._resetNearestPoint();
@@ -720,16 +720,16 @@ Series.prototype = {
     },
 
     customizePoint: function(point, pointData) {
-        var that = this,
-            options = that._options,
-            customizePoint = options.customizePoint,
-            customizeObject,
-            pointOptions,
-            customLabelOptions,
-            customOptions,
-            customizeLabel = options.customizeLabel,
-            useLabelCustomOptions,
-            usePointCustomOptions;
+        const that = this;
+        const options = that._options;
+        const customizePoint = options.customizePoint;
+        let customizeObject;
+        let pointOptions;
+        let customLabelOptions;
+        let customOptions;
+        const customizeLabel = options.customizeLabel;
+        let useLabelCustomOptions;
+        let usePointCustomOptions;
 
         if(customizeLabel && customizeLabel.call) {
             customizeObject = _extend({ seriesName: that.name }, pointData);
@@ -768,7 +768,7 @@ Series.prototype = {
     },
 
     _changeVisibility: function(visibility) {
-        var that = this;
+        const that = this;
         that._visible = that._options.visible = visibility;
         that._updatePointsVisibility();
         that.hidePointTooltip();
@@ -786,16 +786,16 @@ Series.prototype = {
     },
 
     _parsePointOptions: function(pointOptions, labelOptions, data, point) {
-        var that = this,
-            options = that._options,
-            styles = that._createPointStyles(pointOptions, data, point),
-            parsedOptions = _extend({}, pointOptions, {
-                type: options.type,
-                rotated: options.rotated,
-                styles: styles,
-                widgetType: options.widgetType,
-                visibilityChanged: options.visibilityChanged
-            });
+        const that = this;
+        const options = that._options;
+        const styles = that._createPointStyles(pointOptions, data, point);
+        const parsedOptions = _extend({}, pointOptions, {
+            type: options.type,
+            rotated: options.rotated,
+            styles: styles,
+            widgetType: options.widgetType,
+            visibilityChanged: options.visibilityChanged
+        });
 
         parsedOptions.label = getLabelOptions(labelOptions, styles.normal.fill);
 
@@ -807,7 +807,7 @@ Series.prototype = {
     },
 
     _preparePointOptions: function(customOptions) {
-        var pointOptions = this._getOptionsForPoint();
+        const pointOptions = this._getOptionsForPoint();
         return customOptions ? mergePointOptions(pointOptions, customOptions) : pointOptions;
     },
 
@@ -832,30 +832,30 @@ Series.prototype = {
     },
 
     _resample({ interval, ticks, aggregateByCategory }, data) {
-        var that = this,
-            isDiscrete = that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE,
-            dataIndex = 0,
-            dataSelector = this._getPointDataSelector(),
-            options = that.getOptions(),
-            addAggregatedData = (target, data, aggregationInfo) => {
-                if(!data) {
-                    return;
+        const that = this;
+        const isDiscrete = that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE;
+        let dataIndex = 0;
+        const dataSelector = this._getPointDataSelector();
+        const options = that.getOptions();
+        const addAggregatedData = (target, data, aggregationInfo) => {
+            if(!data) {
+                return;
+            }
+            const processData = (d) => {
+                const pointData = d && dataSelector(d, options);
+                if(pointData && that._checkData(pointData)) {
+                    pointData.aggregationInfo = aggregationInfo;
+                    target.push(pointData);
                 }
-                const processData = (d) => {
-                    const pointData = d && dataSelector(d, options);
-                    if(pointData && that._checkData(pointData)) {
-                        pointData.aggregationInfo = aggregationInfo;
-                        target.push(pointData);
-                    }
-                };
+            };
 
-                if(data.length) {
-                    data.forEach(processData);
-                } else {
-                    processData(data);
-                }
-            },
-            aggregationMethod = this._getAggregationMethod(isDiscrete, aggregateByCategory);
+            if(data.length) {
+                data.forEach(processData);
+            } else {
+                processData(data);
+            }
+        };
+        const aggregationMethod = this._getAggregationMethod(isDiscrete, aggregateByCategory);
 
         if(isDiscrete) {
             if(aggregateByCategory) {
@@ -921,7 +921,7 @@ Series.prototype = {
     },
 
     canRenderCompleteHandle: function() {
-        var result = this._canRenderCompleteHandle;
+        const result = this._canRenderCompleteHandle;
         delete this._canRenderCompleteHandle;
         return !!result;
     },
@@ -969,8 +969,8 @@ Series.prototype = {
     },
 
     hover: function(mode) {
-        var that = this,
-            eventTrigger = that._eventTrigger;
+        const that = this;
+        const eventTrigger = that._eventTrigger;
 
         if(that.isHovered()) {
             return;
@@ -986,8 +986,8 @@ Series.prototype = {
     },
 
     clearHover: function() {
-        var that = this,
-            eventTrigger = that._eventTrigger;
+        const that = this;
+        const eventTrigger = that._eventTrigger;
 
         if(!that.isHovered()) {
             return;
@@ -1002,7 +1002,7 @@ Series.prototype = {
     },
 
     hoverPoint: function(point) {
-        var that = this;
+        const that = this;
 
         if(!point.isHovered()) {
             point.clearHover();
@@ -1014,7 +1014,7 @@ Series.prototype = {
     },
 
     clearPointHover: function() {
-        var that = this;
+        const that = this;
 
         that.getPoints().some(function(currentPoint) {
             if(currentPoint.isHovered()) {
@@ -1037,7 +1037,7 @@ Series.prototype = {
     },
 
     select: function() {
-        var that = this;
+        const that = this;
 
         if(!that.isSelected()) {
             that._setSelectedState(that._options.selectionMode);
@@ -1048,7 +1048,7 @@ Series.prototype = {
     },
 
     clearSelection: function clearSelection() {
-        var that = this;
+        const that = this;
 
         if(that.isSelected()) {
             that._releaseSelectedState();
@@ -1057,9 +1057,9 @@ Series.prototype = {
     },
 
     getPointsByArg: function(arg, skipPointsCreation) {
-        var that = this,
-            argValue = arg.valueOf(),
-            points = that.pointsByArgument[argValue];
+        const that = this;
+        const argValue = arg.valueOf();
+        let points = that.pointsByArgument[argValue];
 
         if(!points && !skipPointsCreation && that._createAllAggregatedPoints()) {
             points = that.pointsByArgument[argValue];
@@ -1080,13 +1080,13 @@ Series.prototype = {
     },
 
     notify: function(data) {
-        var that = this,
-            action = data.action,
-            seriesModes = that._seriesModes,
-            target = data.target,
-            targetOptions = target.getOptions(),
-            pointHoverMode = _normalizeEnum(targetOptions.hoverMode),
-            selectionModeOfPoint = _normalizeEnum(targetOptions.selectionMode);
+        const that = this;
+        const action = data.action;
+        const seriesModes = that._seriesModes;
+        const target = data.target;
+        const targetOptions = target.getOptions();
+        const pointHoverMode = _normalizeEnum(targetOptions.hoverMode);
+        const selectionModeOfPoint = _normalizeEnum(targetOptions.selectionMode);
 
         if(action === POINT_HOVER) {
             that._hoverPointHandler(target, pointHoverMode, data.notifyLegend);
@@ -1111,7 +1111,7 @@ Series.prototype = {
     },
 
     _selectPointHandler: function(target, mode) {
-        var that = this;
+        const that = this;
 
         if(mode === ALL_SERIES_POINTS) {
             (target.series === that) && that._setPointsView(SELECTION, target);
@@ -1133,7 +1133,7 @@ Series.prototype = {
     },
 
     _hoverPointHandler: function(target, mode, notifyLegend) {
-        var that = this;
+        const that = this;
 
         if(target.series !== that && mode === ALL_ARGUMENT_POINTS) {
             that.getPointsByKeys(target.argument, target.argumentIndex).forEach(function(currentPoint) {
@@ -1146,7 +1146,7 @@ Series.prototype = {
     },
 
     _clearPointHoverHandler: function(target, mode, notifyLegend) {
-        var that = this;
+        const that = this;
 
         if(mode === ALL_ARGUMENT_POINTS) {
             (target.series !== that) && that.getPointsByKeys(target.argument, target.argumentIndex).forEach(function(currentPoint) {
@@ -1159,13 +1159,13 @@ Series.prototype = {
     },
 
     _deletePoints: function() {
-        var that = this;
+        const that = this;
         that._disposePoints(that._points);
         that._points = that._drawnPoints = null;
     },
 
     _deleteTrackers: function() {
-        var that = this;
+        const that = this;
         _each(that._trackers || [], function(_, tracker) {
             tracker.remove();
         });
@@ -1174,7 +1174,7 @@ Series.prototype = {
     },
 
     dispose: function() {
-        var that = this;
+        const that = this;
         that._deletePoints();
         that._group.dispose();
         that._labelsGroup && that._labelsGroup.dispose();
@@ -1235,7 +1235,7 @@ Series.prototype = {
     },
 
     getPointByCoord: function(x, y) {
-        var point = this.getNeighborPoint(x, y);
+        const point = this.getNeighborPoint(x, y);
         return point && point.coordsIn(x, y) ? point : null;
     },
 

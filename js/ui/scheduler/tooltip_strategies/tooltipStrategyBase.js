@@ -3,15 +3,15 @@ import { FunctionTemplate } from '../../../core/templates/function_template';
 import $ from '../../../core/renderer';
 import List from '../../list/ui.list.edit';
 
-const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item',
-    TOOLTIP_APPOINTMENT_ITEM_CONTENT = TOOLTIP_APPOINTMENT_ITEM + '-content',
-    TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT = TOOLTIP_APPOINTMENT_ITEM + '-content-subject',
-    TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE = TOOLTIP_APPOINTMENT_ITEM + '-content-date',
-    TOOLTIP_APPOINTMENT_ITEM_MARKER = TOOLTIP_APPOINTMENT_ITEM + '-marker',
-    TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY = TOOLTIP_APPOINTMENT_ITEM + '-marker-body',
+const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item';
+const TOOLTIP_APPOINTMENT_ITEM_CONTENT = TOOLTIP_APPOINTMENT_ITEM + '-content';
+const TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT = TOOLTIP_APPOINTMENT_ITEM + '-content-subject';
+const TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE = TOOLTIP_APPOINTMENT_ITEM + '-content-date';
+const TOOLTIP_APPOINTMENT_ITEM_MARKER = TOOLTIP_APPOINTMENT_ITEM + '-marker';
+const TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY = TOOLTIP_APPOINTMENT_ITEM + '-marker-body';
 
-    TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = TOOLTIP_APPOINTMENT_ITEM + '-delete-button-container',
-    TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = TOOLTIP_APPOINTMENT_ITEM + '-delete-button';
+const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = TOOLTIP_APPOINTMENT_ITEM + '-delete-button-container';
+const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = TOOLTIP_APPOINTMENT_ITEM + '-delete-button';
 
 export class TooltipStrategyBase {
     constructor(options) {
@@ -47,6 +47,12 @@ export class TooltipStrategyBase {
         };
     }
 
+    isAlreadyShown(target) {
+        if(this._tooltip && this._tooltip.option('visible')) {
+            return this._tooltip.option('target')[0] === target[0];
+        }
+    }
+
     _onShown() {
         this._list.option('focusStateEnabled', this._extraOptions.focusStateEnabled);
     }
@@ -79,8 +85,10 @@ export class TooltipStrategyBase {
             dataSource: dataList,
             onContentReady: this._onListRender.bind(this),
             onItemClick: e => this._onListItemClick(e),
-            itemTemplate: (item, index) =>
-                this._renderTemplate(this._tooltip.option('target'), item.data, item.currentData || item.data, index, item.color),
+            itemTemplate: (item, index) => {
+                const currentData = (item.settings && item.settings.targetedAppointmentData) || item.currentData || item.data;
+                return this._renderTemplate(item.data, currentData, index, item.color);
+            }
         };
     }
 
@@ -94,7 +102,7 @@ export class TooltipStrategyBase {
         return this._options.createComponent(listElement, List, this._createListOption(dataList));
     }
 
-    _renderTemplate(target, data, currentData, index, color) {
+    _renderTemplate(data, currentData, index, color) {
         const itemListContent = this._createItemListContent(data, currentData, color);
         this._options.addDefaultTemplates({
             [this._getItemListTemplateName()]: new FunctionTemplate(options => {
@@ -105,7 +113,7 @@ export class TooltipStrategyBase {
         });
 
         const template = this._options.getAppointmentTemplate(this._getItemListTemplateName() + 'Template');
-        return this._createFunctionTemplate(template, data, this._options.getTargetedAppointmentData(data, target), index);
+        return this._createFunctionTemplate(template, data, currentData, index);
     }
 
     _createFunctionTemplate(template, data, targetData, index) {
@@ -142,10 +150,11 @@ export class TooltipStrategyBase {
         const editing = this._extraOptions.editing;
         const $itemElement = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM);
         $itemElement.append(this._createItemListMarker(color));
-        $itemElement.append(this._createItemListInfo(this._options.getText(data, currentData)));
+        $itemElement.append(this._createItemListInfo(this._options.getTextAndFormatDate(data, currentData)));
 
         if(!data.disabled && (editing && editing.allowDeleting === true || editing === true)) {
-            $itemElement.append(this._createDeleteButton(data, currentData));
+            const singleAppointmentData = this._options.getSingleAppointmentData(data, this._tooltip.option('target')); // TODO: temporary solution fox fix T848058, more information in the ticket
+            $itemElement.append(this._createDeleteButton(data, singleAppointmentData));
         }
 
         return $itemElement;
@@ -170,8 +179,8 @@ export class TooltipStrategyBase {
     }
 
     _createDeleteButton(data, currentData) {
-        const $container = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER),
-            $deleteButton = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON);
+        const $container = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER);
+        const $deleteButton = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON);
 
         $container.append($deleteButton);
         this._options.createComponent($deleteButton, Button, {

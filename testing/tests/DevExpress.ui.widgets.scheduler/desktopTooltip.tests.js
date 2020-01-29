@@ -14,10 +14,11 @@ const stubCreateComponent = sinon.stub().returns(stubComponent);
 const stubShowAppointmentPopup = sinon.stub();
 const stubAddDefaultTemplates = sinon.stub();
 const stubGetAppointmentTemplate = sinon.stub().returns('template');
-const stubGetTargetedAppointmentData = sinon.stub().returns('targetedAppointmentData');
 const stubCheckAndDeleteAppointment = sinon.stub();
-const stubGetText = sinon.stub().returns('text');
+const stubGetTextAndFormatDate = sinon.stub().returns('text');
 const stubIsAppointmentInAllDayPanel = sinon.stub().returns(true);
+const stubGetSingleAppointmentData = sinon.stub().returns('currentData');
+
 const environment = {
     createSimpleTooltip: function(tooltipOptions) {
         return new DesktopTooltipStrategy(tooltipOptions);
@@ -28,10 +29,10 @@ const environment = {
         addDefaultTemplates: stubAddDefaultTemplates,
         getAppointmentTemplate: stubGetAppointmentTemplate,
         showAppointmentPopup: stubShowAppointmentPopup,
-        getText: stubGetText,
+        getTextAndFormatDate: stubGetTextAndFormatDate,
         checkAndDeleteAppointment: stubCheckAndDeleteAppointment,
-        getTargetedAppointmentData: stubGetTargetedAppointmentData,
-        isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel
+        isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel,
+        getSingleAppointmentData: stubGetSingleAppointmentData
     },
     extraOptions: {
         rtlEnabled: true,
@@ -46,9 +47,9 @@ const environment = {
         stubShowAppointmentPopup.reset();
         stubAddDefaultTemplates.reset();
         stubGetAppointmentTemplate.reset();
-        stubGetText.reset();
+        stubGetTextAndFormatDate.reset();
         stubCheckAndDeleteAppointment.reset();
-        stubGetTargetedAppointmentData.reset();
+        stubGetSingleAppointmentData.reset();
     }
 };
 
@@ -277,7 +278,7 @@ QUnit.test('itemTemplate passed to createComponent should work correct', functio
     assert.ok(itemTemplate instanceof FunctionTemplate);
     assert.ok(stubAddDefaultTemplates.getCall(0).args[0]['appointmentTooltip'] instanceof FunctionTemplate);
     assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], 'appointmentTooltipTemplate');
-    assert.deepEqual(stubGetText.getCall(0).args, [item.data, item.currentData]);
+    assert.deepEqual(stubGetTextAndFormatDate.getCall(0).args, [item.data, item.currentData]);
 
     // create delete button
     assert.equal(stubCreateComponent.getCall(2).args[0][0].className, 'dx-tooltip-appointment-item-delete-button');
@@ -317,6 +318,44 @@ QUnit.test('Delete button shouldn\'t created, appointment is disabled', function
     stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
 
     assert.equal(stubCreateComponent.getCall(2), undefined);
+});
+
+QUnit.test('isAlreadyShown method, tooltip is not created', function(assert) {
+    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+    const target = ['target'];
+
+    assert.ok(!tooltip.isAlreadyShown(target), 'tooltip is not created and haven\'t data');
+});
+
+QUnit.test('isAlreadyShown method, tooltip is created and shown', function(assert) {
+    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+    const dataList = [{ data: 'data1' }, { data: 'data2' }];
+    const target = ['target'];
+    const callback = sinon.stub();
+
+    callback.withArgs('target').returns(target);
+    callback.withArgs('visible').returns(true);
+    stubComponent.option = callback;
+
+    tooltip.show(target, dataList, this.extraOptions);
+    stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
+
+    assert.ok(tooltip.isAlreadyShown(target), 'tooltip is shown and have the same target');
+    assert.ok(!tooltip.isAlreadyShown(['target_1']), 'tooltip is shown and have another target');
+});
+
+QUnit.test('isAlreadyShown method, tooltip is hide', function(assert) {
+    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+    const dataList = [{ data: 'data1' }, { data: 'data2' }];
+    const target = ['target'];
+    const callback = sinon.stub();
+
+    callback.withArgs('target').returns(target);
+    callback.withArgs('visible').returns(false);
+    stubComponent.option = callback;
+    tooltip.show(target, dataList, this.extraOptions);
+
+    assert.ok(!tooltip.isAlreadyShown(target), 'tooltip is hidden');
 });
 
 // deprecated option

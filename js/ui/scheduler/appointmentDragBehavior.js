@@ -2,11 +2,11 @@ import $ from '../../core/renderer';
 import Draggable from '../draggable';
 import translator from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
+import { LIST_ITEM_DATA_KEY } from './constants';
 
 const FIXED_CONTAINER_PROP_NAME = 'fixedContainer';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
-const LIST_ITEM_DATA_KEY = 'dxListItemData';
 
 export default class AppointmentDragBehavior {
     constructor(scheduler) {
@@ -23,12 +23,6 @@ export default class AppointmentDragBehavior {
 
     isAllDay(appointment) {
         return appointment.data('dxAppointmentSettings').allDay;
-    }
-
-    getDraggableArea() {
-        let result = null;
-        this.appointments.notifyObserver('getDraggableAppointmentArea', { callback: appointmentArea => result = appointmentArea });
-        return result;
     }
 
     getContainerShift(isAllDay) {
@@ -71,13 +65,19 @@ export default class AppointmentDragBehavior {
     }
 
     getItemData(appointment) {
-        let itemData = $(appointment).data(LIST_ITEM_DATA_KEY);
+        const itemData = $(appointment).data(LIST_ITEM_DATA_KEY);
         return itemData && itemData.data || this.appointments._getItemData(appointment);
+    }
+
+    getItemSettings(appointment) {
+        const itemData = $(appointment).data(LIST_ITEM_DATA_KEY);
+        return itemData && itemData.settings || [];
     }
 
     createDragStartHandler(options, appointmentDragging) {
         return (e) => {
             e.itemData = this.getItemData(e.itemElement);
+            e.itemSettings = this.getItemSettings(e.itemElement);
 
             appointmentDragging.onDragStart && appointmentDragging.onDragStart(e);
 
@@ -113,15 +113,15 @@ export default class AppointmentDragBehavior {
     }
 
     addTo(container, config) {
-        let appointmentDragging = this.scheduler.option('appointmentDragging') || {},
-            options = extend({
-                component: this.scheduler,
-                contentTemplate: null,
-                filter: `.${APPOINTMENT_ITEM_CLASS}`,
-                immediate: false,
-                onDragStart: this.onDragStart.bind(this),
-                onDragEnd: this.onDragEnd.bind(this)
-            }, config);
+        const appointmentDragging = this.scheduler.option('appointmentDragging') || {};
+        const options = extend({
+            component: this.scheduler,
+            contentTemplate: null,
+            filter: `.${APPOINTMENT_ITEM_CLASS}`,
+            immediate: false,
+            onDragStart: this.onDragStart.bind(this),
+            onDragEnd: this.onDragEnd.bind(this)
+        }, config);
 
         this.appointments._createComponent(container, Draggable, extend({}, options, appointmentDragging, {
             onDragStart: this.createDragStartHandler(options, appointmentDragging),

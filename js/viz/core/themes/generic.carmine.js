@@ -1,12 +1,12 @@
-var themeModule = require('../../themes'),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias,
-    ACCENT_COLOR = '#f05b41',
-    BACKGROUND_COLOR = '#fff',
-    TITLE_COLOR = '#333',
-    SUBTITLE_COLOR = '#8899a8',
-    TEXT_COLOR = '#707070',
-    BORDER_COLOR = '#dee1e3';
+const themeModule = require('../../themes');
+const registerTheme = themeModule.registerTheme;
+const registerThemeAlias = themeModule.registerThemeAlias;
+const ACCENT_COLOR = '#f05b41';
+const BACKGROUND_COLOR = '#fff';
+const TITLE_COLOR = '#333';
+const SUBTITLE_COLOR = '#8899a8';
+const TEXT_COLOR = '#707070';
+const BORDER_COLOR = '#dee1e3';
 
 registerTheme({
     name: 'generic.carmine',
@@ -68,6 +68,15 @@ registerTheme({
             }
         }
     },
+    'chart:common:annotation': {
+        font: {
+            color: TITLE_COLOR
+        },
+        border: {
+            color: BORDER_COLOR
+        },
+        color: BACKGROUND_COLOR
+    },
     chart: {
         commonPaneSettings: {
             border: {
@@ -76,15 +85,6 @@ registerTheme({
         },
         commonAxisSettings: {
             breakStyle: { color: '#c1c5c7' }
-        },
-        commonAnnotationSettings: {
-            font: {
-                color: TITLE_COLOR
-            },
-            border: {
-                color: BORDER_COLOR
-            },
-            color: BACKGROUND_COLOR
         }
     },
     rangeSelector: {

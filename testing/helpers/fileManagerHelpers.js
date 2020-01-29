@@ -45,6 +45,7 @@ export const Consts = {
     MENU_ITEM_WITH_SUBMENU_CLASS: 'dx-menu-item-has-submenu',
     SUBMENU_CLASS: 'dx-submenu',
     SELECTION_CLASS: 'dx-selection',
+    FOCUSED_ROW_CLASS: 'dx-row-focused',
     SPLITTER_CLASS: 'dx-splitter',
     DISABLED_STATE_CLASS: 'dx-state-disabled',
     UPLOAD_ICON_CLASS: 'dx-icon-upload',
@@ -157,6 +158,10 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM}:visible`);
     }
 
+    getToolbarDropDownButton() {
+        return this._$element.find(`.${Consts.DROP_DOWN_BUTTON_CLASS}`);
+    }
+
     getToolbarDropDownMenuButton() {
         return this._$element.find(`.${Consts.DROPDOWN_MENU_BUTTON_CLASS}`);
     }
@@ -221,7 +226,7 @@ export class FileManagerWrapper {
     }
 
     getRowNameCellInDetailsView(index) {
-        return this.getRowInDetailsView(index).find('td').eq(1);
+        return this.getDetailsCell('Name', index - 1);
     }
 
     getRowsInDetailsView() {
@@ -240,11 +245,43 @@ export class FileManagerWrapper {
         return this._$element.find('[id*=dx-col]').eq(index);
     }
 
-    getDetailsCellText(columnCaption, rowIndex) {
+    getDetailsCell(columnCaption, rowIndex) {
         const $itemList = this.getDetailsItemList();
         const columnIndex = $itemList.find(`.dx-header-row > td:contains('${columnCaption}')`).index();
         const $row = this.getRowInDetailsView(rowIndex + 1);
-        return $row.children('td').eq(columnIndex).text();
+        return $row.children('td').eq(columnIndex);
+    }
+
+    getDetailsCellText(columnCaption, rowIndex) {
+        return this.getDetailsCell(columnCaption, rowIndex).text();
+    }
+
+    getSelectAllCheckBox() {
+        const $itemList = this.getDetailsItemList();
+        return $itemList.find('.dx-header-row > td.dx-command-select .dx-select-checkbox');
+    }
+
+    getSelectAllCheckBoxState() {
+        const $checkBox = this.getSelectAllCheckBox();
+        if($checkBox.is('.dx-checkbox-indeterminate')) {
+            return 'indeterminate';
+        } else if($checkBox.is('.dx-checkbox-checked')) {
+            return 'checked';
+        } else {
+            return 'clear';
+        }
+    }
+
+    getRowSelectCheckBox(index) {
+        return this.getRowInDetailsView(index).find('td.dx-command-select .dx-select-checkbox:visible');
+    }
+
+    isDetailsRowSelected(index) {
+        return this.getRowInDetailsView(index).is(`.${Consts.SELECTION_CLASS}`);
+    }
+
+    isDetailsRowFocused(index) {
+        return this.getRowInDetailsView(index).is(`.${Consts.FOCUSED_ROW_CLASS}`);
     }
 
     getContextMenuItems(visible) {
@@ -484,7 +521,7 @@ export const stringify = obj => {
         return JSON.stringify(obj);
     }
 
-    let props = Object
+    const props = Object
         .keys(obj)
         .map(key => `${key}: ${stringify(obj[key])}`)
         .join(', ');
@@ -623,7 +660,7 @@ export const createSampleFileItems = () => {
 };
 
 const createFileManagerItem = (parentPath, dataObj) => {
-    let item = new FileManagerItem(parentPath, dataObj.name, dataObj.isDirectory);
+    const item = new FileManagerItem(parentPath, dataObj.name, dataObj.isDirectory);
     item.dateModified = deserializeDate(dataObj.dateModified);
     item.size = dataObj.size;
     item.dataItem = dataObj;

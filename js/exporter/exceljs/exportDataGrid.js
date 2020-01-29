@@ -1,5 +1,6 @@
 import { isDefined, isString, isObject } from '../../core/utils/type';
 import excelFormatConverter from '../excel_format_converter';
+import messageLocalization from '../../localization/message';
 import { extend } from '../../core/utils/extend';
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
@@ -12,45 +13,54 @@ const MAX_EXCEL_COLUMN_WIDTH = 255;
 function exportDataGrid(options) {
     if(!isDefined(options)) return;
 
-    let {
+    const {
         customizeCell,
         component,
         worksheet,
-        topLeftCell = { row: 1, column: 1 },
-        autoFilterEnabled = undefined,
-        keepColumnWidths = true,
-        selectedRowsOnly = false
-    } = options;
+        topLeftCell,
+        autoFilterEnabled,
+        keepColumnWidths,
+        selectedRowsOnly,
+        loadPanel
+    } = _getFullOptions(options);
+
+    const initialLoadPanelOptions = extend({}, component.option('loadPanel'));
+    if('animation' in component.option('loadPanel')) {
+        loadPanel.animation = null;
+    }
+    component.option('loadPanel', loadPanel);
+
+    const wrapText = !!component.option('wordWrapEnabled');
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
         summaryRight: false
     };
 
-    let cellsRange = {
+    const cellsRange = {
         from: { row: topLeftCell.row, column: topLeftCell.column },
         to: { row: topLeftCell.row, column: topLeftCell.column }
     };
 
-    let dataProvider = component.getDataProvider(selectedRowsOnly);
+    const dataProvider = component.getDataProvider(selectedRowsOnly);
 
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
-            let columns = dataProvider.getColumns();
-            let headerRowCount = dataProvider.getHeaderRowCount();
-            let dataRowsCount = dataProvider.getRowsCount();
+            const columns = dataProvider.getColumns();
+            const headerRowCount = dataProvider.getHeaderRowCount();
+            const dataRowsCount = dataProvider.getRowsCount();
 
             if(keepColumnWidths) {
                 _setColumnsWidth(worksheet, columns, cellsRange.from.column);
             }
 
-            let mergedCells = [];
-            let mergeRanges = [];
+            const mergedCells = [];
+            const mergeRanges = [];
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(cellsRange.from.row + rowIndex);
 
-                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges);
+                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText);
 
                 if(rowIndex >= headerRowCount) {
                     row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
@@ -64,7 +74,7 @@ function exportDataGrid(options) {
 
             cellsRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
-            let worksheetViewSettings = worksheet.views[0] || {};
+            const worksheetViewSettings = worksheet.views[0] || {};
 
             if(component.option('rtlEnabled')) {
                 worksheetViewSettings.rightToLeft = true;
@@ -82,11 +92,40 @@ function exportDataGrid(options) {
             }
 
             resolve(cellsRange);
+        }).always(() => {
+            component.option('loadPanel', initialLoadPanelOptions);
         });
     });
 }
 
-function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges) {
+function _getFullOptions(options) {
+    const fullOptions = extend({}, options);
+    if(!isDefined(fullOptions.topLeftCell)) {
+        fullOptions.topLeftCell = { row: 1, column: 1 };
+    }
+    if(!isDefined(fullOptions.keepColumnWidths)) {
+        fullOptions.keepColumnWidths = true;
+    }
+    if(!isDefined(fullOptions.selectedRowsOnly)) {
+        fullOptions.selectedRowsOnly = false;
+    }
+    if(!isDefined(fullOptions.loadPanel)) {
+        fullOptions.loadPanel = {};
+    }
+    if(!isDefined(fullOptions.loadPanel.enabled)) {
+        fullOptions.loadPanel.enabled = true;
+    }
+    if(!isDefined(fullOptions.loadPanel.text)) {
+        fullOptions.loadPanel.text = messageLocalization.format('dxDataGrid-exporting');
+    }
+    if(!isDefined(fullOptions.autoFilterEnabled)) {
+        fullOptions.autoFilterEnabled = false;
+    }
+
+    return fullOptions;
+}
+
+function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText) {
     const styles = dataProvider.getStyles();
 
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
@@ -97,7 +136,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         excelCell.value = cellData.value;
 
         if(isDefined(excelCell.value)) {
-            const { bold, alignment, wrapText, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
+            const { bold, alignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
             if(isDefined(numberFormat)) {
@@ -129,10 +168,6 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 }
 
 function _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilterEnabled) {
-    if(!isDefined(autoFilterEnabled)) {
-        autoFilterEnabled = !!component.option('export.excelFilterEnabled');
-    }
-
     if(autoFilterEnabled) {
         if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
             worksheet.autoFilter = cellsRange;
@@ -155,7 +190,7 @@ function _tryConvertToExcelNumberFormat(format, dataType) {
 }
 
 function _formatObjectConverter(format, dataType) {
-    var result = {
+    const result = {
         format: format,
         precision: format && format.precision,
         dataType: dataType
@@ -203,7 +238,7 @@ function _setColumnsWidth(worksheet, columns, startColumnIndex) {
 
 function _tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider) {
     if(!mergedCells[rowIndex] || !mergedCells[rowIndex][cellIndex]) {
-        let cellMerge = dataProvider.getCellMerging(rowIndex, cellIndex);
+        const cellMerge = dataProvider.getCellMerging(rowIndex, cellIndex);
         if(cellMerge.colspan || cellMerge.rowspan) {
             for(let i = rowIndex; i <= rowIndex + cellMerge.rowspan || 0; i++) {
                 for(let j = cellIndex; j <= cellIndex + cellMerge.colspan || 0; j++) {
@@ -227,4 +262,4 @@ function _mergeCells(worksheet, topLeftCell, mergeRanges) {
     });
 }
 
-export { exportDataGrid, MAX_EXCEL_COLUMN_WIDTH };
+export { exportDataGrid, MAX_EXCEL_COLUMN_WIDTH, _getFullOptions };

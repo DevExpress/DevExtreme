@@ -10,18 +10,11 @@ import registerComponent from '../core/component_registrator';
 import { Deferred } from '../core/utils/deferred';
 import Guid from '../core/guid';
 
-const VALIDATOR_CLASS = 'dx-validator',
-    VALIDATION_STATUS_VALID = 'valid',
-    VALIDATION_STATUS_INVALID = 'invalid',
-    VALIDATION_STATUS_PENDING = 'pending';
+const VALIDATOR_CLASS = 'dx-validator';
+const VALIDATION_STATUS_VALID = 'valid';
+const VALIDATION_STATUS_INVALID = 'invalid';
+const VALIDATION_STATUS_PENDING = 'pending';
 
-/**
-* @name dxValidator
-* @inherits DOMComponent
-* @extension
-* @module ui/validator
-* @export default
-*/
 const Validator = DOMComponent.inherit({
     _initOptions: function(options) {
         this.callBase.apply(this, arguments);
@@ -30,25 +23,8 @@ const Validator = DOMComponent.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            /**
-            * @name dxValidatorOptions.validationRules
-            * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-            */
             validationRules: []
-            /**
-            * @name dxValidatorOptions.validationGroup
-            * @type string
-            * @ref
-            */
-            /**
-            * @name dxValidatorOptions.name
-            * @type string
-            */
 
-            /**
-            * @name dxValidatorOptions.adapter
-            * @type Object
-            */
             /**
             * @name dxValidatorOptions.adapter.getValue
             * @type function
@@ -74,19 +50,6 @@ const Validator = DOMComponent.inherit({
             * @type function
             */
 
-            /**
-            * @name dxValidatorOptions.onValidated
-            * @type function(validatedInfo)
-            * @type_function_param1 validatedInfo:Object
-            * @type_function_param1_field1 name:string
-            * @type_function_param1_field2 isValid:boolean
-            * @type_function_param1_field3 value:Object
-            * @type_function_param1_field4 validationRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-            * @type_function_param1_field5 brokenRule:RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
-            * @type_function_param1_field6 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-            * @type_function_param1_field7 status:Enums.ValidationStatus
-            * @action
-            */
 
             /**
             * @name dxValidatorOptions.rtlEnabled
@@ -146,8 +109,8 @@ const Validator = DOMComponent.inherit({
     },
 
     _initAdapter() {
-        const element = this.$element()[0],
-            dxStandardEditor = dataUtils.data(element, 'dx-validation-target');
+        const element = this.$element()[0];
+        const dxStandardEditor = dataUtils.data(element, 'dx-validation-target');
         let adapter = this.option('adapter');
         if(!adapter) {
             if(dxStandardEditor) {
@@ -176,6 +139,12 @@ const Validator = DOMComponent.inherit({
                 });
             }
         }
+    },
+
+    _toggleRTLDirection(isRtl) {
+        const rtlEnabled = this.option('adapter')?.editor?.option('rtlEnabled') ?? isRtl;
+
+        this.callBase(rtlEnabled);
     },
 
     _initMarkup() {
@@ -233,18 +202,13 @@ const Validator = DOMComponent.inherit({
         delete this._validationRules;
     },
 
-    /**
-    * @name dxValidatorMethods.validate
-    * @publicName validate()
-    * @return dxValidatorResult
-    */
     validate(args) {
-        const adapter = this.option('adapter'),
-            name = this.option('name'),
-            bypass = adapter.bypass && adapter.bypass(),
-            value = (args && args.value !== undefined) ? args.value : adapter.getValue(),
-            currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
-            rules = this._getValidationRules();
+        const adapter = this.option('adapter');
+        const name = this.option('name');
+        const bypass = adapter.bypass && adapter.bypass();
+        const value = (args && args.value !== undefined) ? args.value : adapter.getValue();
+        const currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError();
+        const rules = this._getValidationRules();
         const currentResult = this._validationInfo && this._validationInfo.result;
         if(currentResult && currentResult.status === VALIDATION_STATUS_PENDING && currentResult.value === value) {
             return extend({}, currentResult);
@@ -268,21 +232,17 @@ const Validator = DOMComponent.inherit({
         return extend({}, this._validationInfo.result);
     },
 
-    /**
-    * @name dxValidatorMethods.reset
-    * @publicName reset()
-    */
     reset() {
-        const adapter = this.option('adapter'),
-            result = {
-                id: null,
-                isValid: true,
-                brokenRule: null,
-                brokenRules: null,
-                pendingRules: null,
-                status: VALIDATION_STATUS_VALID,
-                complete: null
-            };
+        const adapter = this.option('adapter');
+        const result = {
+            id: null,
+            isValid: true,
+            brokenRule: null,
+            brokenRules: null,
+            pendingRules: null,
+            status: VALIDATION_STATUS_VALID,
+            complete: null
+        };
 
         this._validationInfo.skipValidation = true;
         adapter.reset();
@@ -296,7 +256,7 @@ const Validator = DOMComponent.inherit({
             const complete = this._validationInfo.deferred && this._validationInfo.result.complete;
             this._validationInfo.result = extend({}, result, { complete });
         } else {
-            for(let prop in result) {
+            for(const prop in result) {
                 if(prop !== 'id' && prop !== 'complete') {
                     this._validationInfo.result[prop] = result[prop];
                 }
@@ -328,10 +288,6 @@ const Validator = DOMComponent.inherit({
             }
         }
     },
-    /**
-    * @name dxValidatorMethods.focus
-    * @publicName focus()
-    */
     focus() {
         const adapter = this.option('adapter');
         adapter && adapter.focus && adapter.focus();

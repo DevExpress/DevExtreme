@@ -72,10 +72,10 @@ module('DropDownEditor markup', {
 
     test('correct buttons order after rendering', function(assert) {
         const $dropDownEditor = this.rootElement.dxDropDownEditor({
-                showClearButton: true
-            }),
-            $buttonsContainer = $dropDownEditor.find('.dx-texteditor-buttons-container'),
-            $buttons = $buttonsContainer.children();
+            showClearButton: true
+        });
+        const $buttonsContainer = $dropDownEditor.find('.dx-texteditor-buttons-container');
+        const $buttons = $buttonsContainer.children();
 
         assert.equal($buttons.length, 2, 'clear button and drop button were rendered');
         assert.ok($buttons.eq(0).hasClass('dx-clear-button-area'), 'clear button is the first one');
@@ -114,8 +114,8 @@ module('DropDownEditor markup', {
 
 module('aria accessibility', () => {
     test('aria role', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor(),
-            $input = $dropDownEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor();
+        const $input = $dropDownEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.strictEqual($input.attr('role'), 'combobox', 'aria role on input is correct');
         assert.strictEqual($dropDownEditor.attr('role'), undefined, 'aria role on element is not exist');
@@ -127,3 +127,33 @@ module('aria accessibility', () => {
     });
 });
 
+
+module('option change', function() {
+    const getStartDirection = (isRtlEnabled) => isRtlEnabled ? 'right' : 'left';
+
+    [false, true].forEach((rtlEnabled) => {
+        test(`after updating of the "rtlEnabled" option to "${rtlEnabled}" Popup should update its position`, function(assert) {
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ rtlEnabled }).dxDropDownEditor('instance');
+            const { my: initialMyPosition, at: initialAtPosition } = dropDownEditor.option('popupPosition');
+            const initialStartDirection = getStartDirection(rtlEnabled);
+
+            assert.strictEqual(initialAtPosition, `${initialStartDirection} bottom`, 'correct initial "at" position');
+            assert.strictEqual(initialMyPosition, `${initialStartDirection} top`, 'correct initial "my" position');
+
+            dropDownEditor.option('rtlEnabled', !rtlEnabled);
+
+            const { my: newMyPosition, at: newAtPosition } = dropDownEditor.option('popupPosition');
+            const newStartDirection = getStartDirection(!rtlEnabled);
+
+            assert.strictEqual(newAtPosition, `${newStartDirection} bottom`, 'correct new "at" position');
+            assert.strictEqual(newMyPosition, `${newStartDirection} top`, 'correct new "my" position');
+
+            dropDownEditor.option('rtlEnabled', rtlEnabled);
+
+            const { my: revertedMyPosition, at: revertedAtPosition } = dropDownEditor.option('popupPosition');
+
+            assert.strictEqual(revertedAtPosition, `${initialStartDirection} bottom`, 'correct initial "at" position');
+            assert.strictEqual(revertedMyPosition, `${initialStartDirection} top`, 'correct initial "my" position');
+        });
+    });
+});

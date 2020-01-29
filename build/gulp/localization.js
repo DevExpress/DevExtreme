@@ -1,24 +1,24 @@
-var gulp = require('gulp');
-var path = require('path');
-var rename = require('gulp-rename');
-var template = require('gulp-template');
-var lint = require('gulp-eslint');
-var fs = require('fs');
+const gulp = require('gulp');
+const path = require('path');
+const rename = require('gulp-rename');
+const template = require('gulp-template');
+const lint = require('gulp-eslint');
+const fs = require('fs');
 
-var headerPipes = require('./header-pipes.js');
-var compressionPipes = require('./compression-pipes.js');
-var context = require('./context.js');
+const headerPipes = require('./header-pipes.js');
+const compressionPipes = require('./compression-pipes.js');
+const context = require('./context.js');
 
-var Cldr = require('cldrjs');
-var locales = require('cldr-core/availableLocales.json').availableLocales.full;
-var weekData = require('cldr-core/supplemental/weekData.json');
-var likelySubtags = require('cldr-core/supplemental/likelySubtags.json');
-var parentLocales = require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale;
+const Cldr = require('cldrjs');
+const locales = require('cldr-core/availableLocales.json').availableLocales.full;
+const weekData = require('cldr-core/supplemental/weekData.json');
+const likelySubtags = require('cldr-core/supplemental/likelySubtags.json');
+const parentLocales = require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale;
 
-var getParentLocale = require('../../js/localization/parentLocale.js');
+const getParentLocale = require('../../js/localization/parentLocale.js');
 
-var firstDayOfWeekData = function() {
-    var DAY_INDEXES = {
+const firstDayOfWeekData = function() {
+    const DAY_INDEXES = {
         'sun': 0,
         'mon': 1,
         'tue': 2,
@@ -27,21 +27,21 @@ var firstDayOfWeekData = function() {
         'fri': 5,
         'sat': 6
     };
-    var DEFAULT_DAY_OF_WEEK_INDEX = 0;
+    const DEFAULT_DAY_OF_WEEK_INDEX = 0;
 
-    var result = {};
+    const result = {};
 
     Cldr.load(weekData, likelySubtags);
 
-    var getFirstIndex = (locale) => {
-        var firstDay = new Cldr(locale).supplemental.weekData.firstDay();
+    const getFirstIndex = (locale) => {
+        const firstDay = new Cldr(locale).supplemental.weekData.firstDay();
         return DAY_INDEXES[firstDay];
     };
 
     locales.forEach(function(locale) {
-        var firstDayIndex = getFirstIndex(locale);
+        const firstDayIndex = getFirstIndex(locale);
 
-        var parentLocale = getParentLocale(parentLocales, locale);
+        const parentLocale = getParentLocale(parentLocales, locale);
         if(firstDayIndex !== DEFAULT_DAY_OF_WEEK_INDEX && (!parentLocale || firstDayIndex !== getFirstIndex(parentLocale))) {
             result[locale] = firstDayIndex;
         }
@@ -50,29 +50,29 @@ var firstDayOfWeekData = function() {
     return result;
 };
 
-var accountingFormats = function() {
-    var result = {};
+const accountingFormats = function() {
+    const result = {};
 
     locales.forEach(function(locale) {
-        var numbersData = require(path.join(`../../node_modules/cldr-numbers-full/main/${locale}/numbers.json`));
+        const numbersData = require(path.join(`../../node_modules/cldr-numbers-full/main/${locale}/numbers.json`));
         result[locale] = numbersData.main[locale].numbers['currencyFormats-numberSystem-latn'].accounting;
     });
 
     return result;
 };
 
-var RESULT_PATH = path.join(context.RESULT_JS_PATH, 'localization');
-var DICTIONARY_SOURCE_FOLDER = 'js/localization/messages';
+const RESULT_PATH = path.join(context.RESULT_JS_PATH, 'localization');
+const DICTIONARY_SOURCE_FOLDER = 'js/localization/messages';
 
-var getLocales = function(directory) {
+const getLocales = function(directory) {
     return fs.readdirSync(directory).map(file => {
         return file.split('.')[0];
     });
 };
 
-var serializeObject = function(obj, shift) {
-    var tab = '    ';
-    var result = JSON.stringify(obj, null, tab);
+const serializeObject = function(obj, shift) {
+    const tab = '    ';
+    let result = JSON.stringify(obj, null, tab);
 
     if(shift) {
         result = result.replace(/(\n)/g, '$1' + tab);
@@ -81,8 +81,8 @@ var serializeObject = function(obj, shift) {
     return result;
 };
 
-var getMessages = function(directory, locale) {
-    var json = require(path.join('../../', directory, locale + '.json'));
+const getMessages = function(directory, locale) {
+    const json = require(path.join('../../', directory, locale + '.json'));
 
     return serializeObject(json, true);
 };

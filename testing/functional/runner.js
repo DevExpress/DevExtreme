@@ -3,14 +3,14 @@ const process = require('process');
 const parseArgs = require('minimist');
 require('nconf').argv();
 
-var testCafe;
+let testCafe;
 createTestCafe('localhost', 1437, 1438)
     .then(tc => {
         testCafe = tc;
 
-        let args = getArgs(),
-            testName = args.test.trim(),
-            componentFolder = args.componentFolder.trim();
+        const args = getArgs();
+        const testName = args.test.trim();
+        let componentFolder = args.componentFolder.trim();
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
 
@@ -23,7 +23,7 @@ createTestCafe('localhost', 1437, 1438)
         }
 
         return runner.run({
-            quarantineMode: false
+            quarantineMode: args.quarantineMode
         });
     })
     .then(failedCount => {
@@ -38,7 +38,8 @@ function getArgs() {
         default: {
             browsers: 'chrome',
             test: '',
-            componentFolder: ''
+            componentFolder: '',
+            quarantineMode: false
         }
     });
 }

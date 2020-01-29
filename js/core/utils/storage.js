@@ -1,7 +1,7 @@
-var window = require('../../core/utils/window').getWindow();
+const window = require('../../core/utils/window').getWindow();
 
-var getSessionStorage = function() {
-    var sessionStorage;
+const getSessionStorage = function() {
+    let sessionStorage;
 
     try {
         sessionStorage = window.sessionStorage;

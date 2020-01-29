@@ -240,8 +240,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         this.clock.tick();
         scheduler.instance.showAppointmentPopup(task1);
 
-        var taskDetailsView = scheduler.instance.getAppointmentDetailsForm(),
-            ownerEditor = taskDetailsView.option('items')[10];
+        let taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
+        const ownerEditor = taskDetailsView.option('items')[10];
 
         ownerEditor.editorOptions.dataSource.load();
 
@@ -254,7 +254,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         scheduler.instance.showAppointmentPopup(task2);
         taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
 
-        var roomEditor = taskDetailsView.option('items')[11];
+        const roomEditor = taskDetailsView.option('items')[11];
 
         roomEditor.editorOptions.dataSource.load();
 
@@ -266,29 +266,29 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
     });
 
     QUnit.test('Editor for resource should be passed to details view for scheduler with groups', function(assert) {
-        var task = {
-                text: 'Task 1',
-                ownerId: 1,
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            },
-            resources = [{
-                field: 'ownerId',
-                allowMultiple: true,
-                displayExpr: 'name',
-                dataSource: [
-                    {
-                        name: 'Jack',
-                        id: 1,
-                        color: '#606060'
-                    },
-                    {
-                        name: 'Mike',
-                        id: 2,
-                        color: '#ff0000'
-                    }
-                ]
-            }];
+        const task = {
+            text: 'Task 1',
+            ownerId: 1,
+            startDate: new Date(2015, 1, 9, 1, 0),
+            endDate: new Date(2015, 1, 9, 2, 0)
+        };
+        const resources = [{
+            field: 'ownerId',
+            allowMultiple: true,
+            displayExpr: 'name',
+            dataSource: [
+                {
+                    name: 'Jack',
+                    id: 1,
+                    color: '#606060'
+                },
+                {
+                    name: 'Mike',
+                    id: 2,
+                    color: '#ff0000'
+                }
+            ]
+        }];
 
         const scheduler = createWrapper({
             resources: resources,
@@ -302,8 +302,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         this.clock.tick();
         scheduler.instance.showAppointmentPopup(task);
 
-        var taskDetailsView = scheduler.instance.getAppointmentDetailsForm(),
-            ownerEditor = taskDetailsView.option('items')[10];
+        const taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
+        const ownerEditor = taskDetailsView.option('items')[10];
 
 
         assert.equal(ownerEditor.editorType, 'dxTagBox', 'Editor is dxTagBox');
@@ -312,7 +312,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
     });
 
     QUnit.test('Editor for resource with right value should be passed to details view when fieldExpr is used', function(assert) {
-        var appointment = {
+        const appointment = {
             'Price': 10,
             'startDate': new Date(2015, 4, 24, 9, 10, 0, 0),
             'endDate': new Date(2015, 4, 24, 11, 1, 0, 0),
@@ -322,7 +322,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             'TheatreId': 1
         };
 
-        var resources = [{
+        const resources = [{
             fieldExpr: 'Movie.ID',
             useColorAsDefault: true,
             allowMultiple: false,
@@ -353,8 +353,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         this.clock.tick();
         scheduler.instance.showAppointmentPopup(appointment);
 
-        var taskDetailsView = scheduler.instance.getAppointmentDetailsForm(),
-            movieEditor = taskDetailsView.option('items')[10];
+        const taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
+        const movieEditor = taskDetailsView.option('items')[10];
 
         movieEditor.editorOptions.dataSource.load();
 
@@ -376,7 +376,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             }]
         });
 
-        var done = assert.async();
+        const done = assert.async();
 
         scheduler.instance.getResourceManager().getResourceDataByValue('ownerId', 1).done(function(resource) {
             assert.deepEqual(resource, {
@@ -421,7 +421,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
     });
 
     QUnit.test('Resources should be loaded only once to calculate appts color', function(assert) {
-        var loadStub = sinon.stub().returns([
+        const loadStub = sinon.stub().returns([
             { text: 'o1', id: 1 },
             { text: 'o2', id: 2 }
         ]);
@@ -491,19 +491,19 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             }]
         });
 
-        var $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
+        const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
 
         assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Color is OK');
         assert.equal(new Color($appointments.eq(1).css('backgroundColor')).toHex(), '#0000ff', 'Color is OK');
     });
 
     QUnit.test('Resources should not be reloaded when details popup is opening', function(assert) {
-        var loadStub = sinon.stub().returns([
+        const loadStub = sinon.stub().returns([
             { text: 'o1', id: 1 },
             { text: 'o2', id: 2 }
         ]);
-        var byKeyStub = sinon.stub();
-        var data = [{
+        const byKeyStub = sinon.stub();
+        const data = [{
             text: 'a',
             startDate: new Date(2015, 4, 26, 5),
             endDate: new Date(2015, 4, 26, 5, 30),
@@ -537,7 +537,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
     });
 
     QUnit.test('Resources should be set correctly is the resources[].dataSource option is changed(T396746)', function(assert) {
-        var resourceData = [{ id: 1, text: 'John', color: 'red' }];
+        const resourceData = [{ id: 1, text: 'John', color: 'red' }];
 
         const scheduler = createWrapper({
             dataSource: [],
@@ -550,7 +550,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         });
 
         scheduler.instance.option('resources[0].dataSource', resourceData);
-        var resources = scheduler.instance.getResourceManager().getResources();
+        const resources = scheduler.instance.getResourceManager().getResources();
 
         assert.deepEqual(resources, [{
             fieldExpr: 'ownerId',
@@ -581,7 +581,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                 ]
             }]);
 
-        var $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
+        const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
         assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Color is OK');
     });
 });
@@ -608,7 +608,7 @@ if(devices.real().deviceType === 'desktop') {
 
         QUnit.test('Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)', function(assert) {
             const getData = function(count) {
-                let result = [];
+                const result = [];
                 for(let i = 0; i < count; i++) {
                     result.push({
                         facilityId: i,

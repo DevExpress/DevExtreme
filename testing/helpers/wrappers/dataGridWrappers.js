@@ -15,6 +15,7 @@ const SELECTED_ROW_CLASS = 'dx-selection';
 const DATA_GRID_PREFIX = 'dx-datagrid';
 const DATA_ROW_CLASS = 'dx-data-row';
 const TREELIST_PREFIX = 'dx-treelist';
+const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const NEW_ROW_CLASS = 'dx-row-inserted';
 const FIXED_CONTENT_CLASS = 'dx-datagrid-content-fixed';
@@ -22,6 +23,8 @@ const HEADER_COLUMN_INDICATORS_CLASS = 'dx-column-indicators';
 const GRID_TABLE_CLASS = 'dx-datagrid-table';
 const FREE_SPACE_ROW = 'dx-freespace-row';
 const ROW_CLASS = 'dx-row';
+const COMMAND_EDIT_CLASS = 'dx-command-edit';
+const COMMAND_BUTTON_CLASS = 'dx-link';
 
 class GridWrapper extends WrapperBase {
     constructor(containerSelector, widgetPrefix) {
@@ -122,6 +125,17 @@ export class RowsViewWrapper extends GridTableElement {
         return this.getDataRowElement(rowIndex).find('td').eq(columnIndex);
     }
 
+    getCommandButton(rowIndex, commandColumnIndex, buttonIndex) {
+        const $dataRow = this.getDataRowElement(rowIndex);
+        const $commandCell = $dataRow
+            .find(`.${COMMAND_EDIT_CLASS}`)
+            .eq(commandColumnIndex);
+
+        return $commandCell
+            .find(`.${COMMAND_BUTTON_CLASS}`)
+            .eq(buttonIndex);
+    }
+
     getFixedDataCellElement(rowIndex, columnIndex) {
         return this.getFixedDataRowElement(rowIndex).find('td').eq(columnIndex);
     }
@@ -138,8 +152,12 @@ export class RowsViewWrapper extends GridTableElement {
         return !this.getRowAdaptiveElement(rowIndex).hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
     }
 
+    getEditor(rowIndex, columnIndex) {
+        return this.getDataRowElement(rowIndex).find('td').eq(columnIndex).find(`.${TEXTEDITOR_CLASS}`);
+    }
+
     getEditorInput(rowIndex, columnIndex) {
-        return this.getDataRowElement(rowIndex).find('td').eq(columnIndex).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        return this.getEditor(rowIndex, columnIndex).find(`.${TEXTEDITOR_INPUT_CLASS}`);
     }
 
     hasEditorInputElement(rowIndex, columnIndex) {

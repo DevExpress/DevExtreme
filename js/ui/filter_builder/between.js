@@ -1,23 +1,23 @@
-var $ = require('../../core/renderer'),
-    extend = require('../../core/utils/extend').extend;
+const $ = require('../../core/renderer');
+const extend = require('../../core/utils/extend').extend;
 
-var FILTER_BUILDER_RANGE_CLASS = 'dx-filterbuilder-range',
-    FILTER_BUILDER_RANGE_START_CLASS = FILTER_BUILDER_RANGE_CLASS + '-start',
-    FILTER_BUILDER_RANGE_END_CLASS = FILTER_BUILDER_RANGE_CLASS + '-end',
-    FILTER_BUILDER_RANGE_SEPARATOR_CLASS = FILTER_BUILDER_RANGE_CLASS + '-separator';
+const FILTER_BUILDER_RANGE_CLASS = 'dx-filterbuilder-range';
+const FILTER_BUILDER_RANGE_START_CLASS = FILTER_BUILDER_RANGE_CLASS + '-start';
+const FILTER_BUILDER_RANGE_END_CLASS = FILTER_BUILDER_RANGE_CLASS + '-end';
+const FILTER_BUILDER_RANGE_SEPARATOR_CLASS = FILTER_BUILDER_RANGE_CLASS + '-separator';
 
-var SEPARATOR = '\u2013';
+const SEPARATOR = '\u2013';
 
 function editorTemplate(conditionInfo, container) {
-    var $editorStart = $('<div>').addClass(FILTER_BUILDER_RANGE_START_CLASS),
-        $editorEnd = $('<div>').addClass(FILTER_BUILDER_RANGE_END_CLASS),
-        values = conditionInfo.value || [],
-        getStartValue = function(values) {
-            return values && values.length > 0 ? values[0] : null;
-        },
-        getEndValue = function(values) {
-            return values && values.length === 2 ? values[1] : null;
-        };
+    const $editorStart = $('<div>').addClass(FILTER_BUILDER_RANGE_START_CLASS);
+    const $editorEnd = $('<div>').addClass(FILTER_BUILDER_RANGE_END_CLASS);
+    let values = conditionInfo.value || [];
+    const getStartValue = function(values) {
+        return values && values.length > 0 ? values[0] : null;
+    };
+    const getEndValue = function(values) {
+        return values && values.length === 2 ? values[1] : null;
+    };
 
     container.append($editorStart);
     container.append($('<span>').addClass(FILTER_BUILDER_RANGE_SEPARATOR_CLASS).text(SEPARATOR));

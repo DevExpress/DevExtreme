@@ -179,7 +179,7 @@ describe('Metadata generator - parse imports', () => {
 
 describe('Metadata generator - meta normalizer', () => {
     it('normalize', () => {
-        var raw = {
+        const raw = {
             'DataGrid': ['DataGrid', 'GridBase'],
             'GridBase': ['Form', 'Button', 'TreeView', 'Popup', 'ContextMenu'],
             'ContextMenu': ['Overlay', 'MenuBase'],
@@ -188,7 +188,7 @@ describe('Metadata generator - meta normalizer', () => {
             'Validation': [ 'Form' ]
         };
 
-        var normalized = {
+        const normalized = {
             'DataGrid': ['GridBase', 'Form', 'Button', 'TreeView', 'Popup', 'ContextMenu', 'ResponsiveBox', 'TabPanel', 'Validation', 'Overlay', 'MenuBase', 'Menu'],
             'GridBase': ['Form', 'Button', 'TreeView', 'Popup', 'ContextMenu', 'ResponsiveBox', 'TabPanel', 'Validation', 'Overlay', 'MenuBase', 'Menu'],
             'ContextMenu': ['Overlay', 'MenuBase', 'Menu'],
@@ -201,7 +201,7 @@ describe('Metadata generator - meta normalizer', () => {
     });
 
     it('exclude non-public widgets', () => {
-        var withoutDuplicates = {
+        const withoutDuplicates = {
             'DataGrid': ['GridBase', 'Form', 'Button', 'TreeView', 'Popup', 'ContextMenu', 'Overlay', 'MenuBase', 'ResponsiveBox', 'TabPanel', 'Validation'],
             'GridBase': ['Form', 'Button', 'TreeView', 'Popup', 'ContextMenu', 'Overlay', 'MenuBase', 'ResponsiveBox', 'TabPanel', 'Validation'],
             'ContextMenu': ['Overlay', 'MenuBase'],
@@ -209,7 +209,7 @@ describe('Metadata generator - meta normalizer', () => {
             'Validation': [ 'Form', 'ResponsiveBox', 'TabPanel' ]
         };
 
-        var result = {
+        const result = {
             'DataGrid': ['Form', 'Button', 'TreeView', 'Popup', 'ContextMenu', 'ResponsiveBox', 'TabPanel', 'Validation'],
             'ContextMenu': [],
             'Form': ['ResponsiveBox', 'TabPanel', 'Validation'],

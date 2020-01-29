@@ -13,9 +13,9 @@ import { DataSource } from '../../data/data_source/data_source';
 import ArrayStore from '../../data/array_store';
 import { when, Deferred } from '../../core/utils/deferred';
 
-var setFieldProperty = exports.setFieldProperty = function(field, property, value, isInitialization) {
-    var initProperties = field._initProperties = field._initProperties || {},
-        initValue = isInitialization ? value : field[property];
+const setFieldProperty = exports.setFieldProperty = function(field, property, value, isInitialization) {
+    const initProperties = field._initProperties = field._initProperties || {};
+    const initValue = isInitialization ? value : field[property];
 
     if(!Object.prototype.hasOwnProperty.call(initProperties, property) || isInitialization) {
         initProperties[property] = initValue;
@@ -28,17 +28,17 @@ exports.sendRequest = function(options) {
     return sendRequest(options);
 };
 
-var foreachTreeAsyncDate = new Date();
+let foreachTreeAsyncDate = new Date();
 
 function createForeachTreeFunc(isAsync) {
-    var foreachTreeFunc = function(items, callback, parentAtFirst, members, index, isChildrenProcessing) {
+    const foreachTreeFunc = function(items, callback, parentAtFirst, members, index, isChildrenProcessing) {
         members = members || [];
         items = items || [];
 
-        var item,
-            i,
-            deferred,
-            childrenDeferred;
+        let item;
+        let i;
+        let deferred;
+        let childrenDeferred;
 
         index = index || 0;
 
@@ -97,8 +97,8 @@ exports.foreachTree = createForeachTreeFunc(false);
 exports.foreachTreeAsync = createForeachTreeFunc(true);
 
 exports.findField = function(fields, id) {
-    var i,
-        field;
+    let i;
+    let field;
 
     if(fields && isDefined(id)) {
         for(i = 0; i < fields.length; i++) {
@@ -112,7 +112,7 @@ exports.findField = function(fields, id) {
 };
 
 exports.formatValue = function(value, options) {
-    var formatObject = {
+    const formatObject = {
         value: value,
         valueText: format(value, options.format) || ''
     };
@@ -121,11 +121,11 @@ exports.formatValue = function(value, options) {
 
 exports.getCompareFunction = function(valueSelector) {
     return function(a, b) {
-        var result = 0,
-            valueA = valueSelector(a),
-            valueB = valueSelector(b),
-            aIsDefined = isDefined(valueA),
-            bIsDefined = isDefined(valueB);
+        let result = 0;
+        const valueA = valueSelector(a);
+        const valueB = valueSelector(b);
+        const aIsDefined = isDefined(valueA);
+        const bIsDefined = isDefined(valueB);
 
         if(aIsDefined && bIsDefined) {
             if(valueA > valueB) {
@@ -148,8 +148,8 @@ exports.getCompareFunction = function(valueSelector) {
 };
 
 exports.createPath = function(items) {
-    var result = [],
-        i;
+    const result = [];
+    let i;
     for(i = items.length - 1; i >= 0; i--) {
         result.push(items[i].key || items[i].value);
     }
@@ -157,8 +157,8 @@ exports.createPath = function(items) {
 };
 
 exports.foreachDataLevel = function foreachDataLevel(data, callback, index, childrenField) {
-    var item,
-        i;
+    let item;
+    let i;
     index = index || 0;
     childrenField = childrenField || 'children';
 
@@ -176,8 +176,8 @@ exports.foreachDataLevel = function foreachDataLevel(data, callback, index, chil
 
 
 exports.mergeArraysByMaxValue = function(values1, values2) {
-    var result = [],
-        i;
+    const result = [];
+    let i;
 
     for(i = 0; i < values1.length; i++) {
         result.push(Math.max(values1[i] || 0, values2[i] || 0));
@@ -186,9 +186,9 @@ exports.mergeArraysByMaxValue = function(values1, values2) {
 };
 
 exports.getExpandedLevel = function(options, axisName) {
-    var dimensions = options[axisName],
-        expandLevel = 0,
-        expandedPaths = (axisName === 'columns' ? options.columnExpandedPaths : options.rowExpandedPaths) || [];
+    const dimensions = options[axisName];
+    let expandLevel = 0;
+    const expandedPaths = (axisName === 'columns' ? options.columnExpandedPaths : options.rowExpandedPaths) || [];
 
     if(options.headerName === axisName) {
         expandLevel = options.path.length;
@@ -214,16 +214,16 @@ function createGroupFields(item) {
 }
 
 function parseFields(dataSource, fieldsList, path, fieldsDataType) {
-    var result = [];
+    const result = [];
 
     each(fieldsList || [], function(field, value) {
         if(field && field.indexOf('__') === 0) return;
 
-        var dataIndex = 1,
-            currentPath = path.length ? path + '.' + field : field,
-            dataType = fieldsDataType[currentPath],
-            getter = compileGetter(currentPath),
-            items;
+        let dataIndex = 1;
+        const currentPath = path.length ? path + '.' + field : field;
+        let dataType = fieldsDataType[currentPath];
+        const getter = compileGetter(currentPath);
+        let items;
 
         while(!isDefined(value) && dataSource[dataIndex]) {
             value = getter(dataSource[dataIndex]);
@@ -255,19 +255,19 @@ function parseFields(dataSource, fieldsList, path, fieldsDataType) {
 }
 
 exports.discoverObjectFields = function(items, fields) {
-    var fieldsDataType = exports.getFieldsDataType(fields);
+    const fieldsDataType = exports.getFieldsDataType(fields);
     return parseFields(items, items[0], '', fieldsDataType);
 };
 
 exports.getFieldsDataType = function(fields) {
-    var result = {};
+    const result = {};
     each(fields, function(_, field) {
         result[field.dataField] = result[field.dataField] || field.dataType;
     });
     return result;
 };
 
-var DATE_INTERVAL_FORMATS = {
+const DATE_INTERVAL_FORMATS = {
     'month': function(value) {
         return getMonthNames()[value - 1];
     },
@@ -285,12 +285,12 @@ exports.setDefaultFieldValueFormatting = function(field) {
             setFieldProperty(field, 'format', DATE_INTERVAL_FORMATS[field.groupInterval]);
         }
     } else if(field.dataType === 'number') {
-        var groupInterval = isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
+        const groupInterval = isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
 
         if(groupInterval && !field.customizeText) {
             setFieldProperty(field, 'customizeText', function(formatObject) {
-                var secondValue = formatObject.value + groupInterval,
-                    secondValueText = format(secondValue, field.format);
+                const secondValue = formatObject.value + groupInterval;
+                const secondValueText = format(secondValue, field.format);
 
                 return formatObject.valueText && secondValueText ? formatObject.valueText + ' - ' + secondValueText : '';
             });
@@ -299,10 +299,10 @@ exports.setDefaultFieldValueFormatting = function(field) {
 };
 
 exports.getFiltersByPath = function(fields, path) {
-    var result = [];
+    const result = [];
     path = path || [];
 
-    for(var i = 0; i < path.length; i++) {
+    for(let i = 0; i < path.length; i++) {
         result.push(extend({}, fields[i], {
             groupIndex: null,
             groupName: null,
@@ -316,9 +316,10 @@ exports.getFiltersByPath = function(fields, path) {
 
 exports.storeDrillDownMixin = {
     createDrillDownDataSource: function(descriptions, params) {
+        const items = this.getDrillDownItems(descriptions, params);
         function createCustomStoreMethod(methodName) {
             return function(options) {
-                var d;
+                let d;
 
                 if(arrayStore) {
                     d = arrayStore[methodName](options);
@@ -334,13 +335,12 @@ exports.storeDrillDownMixin = {
             };
         }
 
-        var items = this.getDrillDownItems(descriptions, params),
-            arrayStore,
-            dataSource = new DataSource({
-                load: createCustomStoreMethod('load'),
-                totalCount: createCustomStoreMethod('totalCount'),
-                key: this.key()
-            });
+        let arrayStore;
+        const dataSource = new DataSource({
+            load: createCustomStoreMethod('load'),
+            totalCount: createCustomStoreMethod('totalCount'),
+            key: this.key()
+        });
 
         return dataSource;
     }

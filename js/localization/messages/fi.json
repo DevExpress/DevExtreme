@@ -137,6 +137,7 @@
         "dxDataGrid-columnFixingRightPosition": "Oikealle",
         "dxDataGrid-exportTo": "Vie",
         "dxDataGrid-exportToExcel": "Vie Exceliin",
+        "dxDataGrid-exporting": "Vienti...",
         "dxDataGrid-excelFormat": "Excel-tiedostot",
         "dxDataGrid-selectedRows": "Valitut tietueet",
         "dxDataGrid-exportSelectedRows": "Vie valitut tietueet",

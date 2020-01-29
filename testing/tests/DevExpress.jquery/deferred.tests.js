@@ -1,6 +1,6 @@
-var $ = require('jquery');
-var deferredUtils = require('core/utils/deferred');
-var useJQuery = require('core/config')().useJQuery;
+const $ = require('jquery');
+const deferredUtils = require('core/utils/deferred');
+const useJQuery = require('core/config')().useJQuery;
 
 require('integration/jquery');
 
@@ -12,8 +12,8 @@ QUnit.test('jQuery strategy should be used if useJQuery flag was set', function(
         return;
     }
 
-    var d1 = new deferredUtils.Deferred();
-    var d2 = new $.Deferred();
+    const d1 = new deferredUtils.Deferred();
+    const d2 = new $.Deferred();
 
     assert.equal(d1.constructor, d2.constructor, 'deferred is jQuery.Deferred');
 });
@@ -21,10 +21,10 @@ QUnit.test('jQuery strategy should be used if useJQuery flag was set', function(
 QUnit.module('when');
 
 QUnit.test('when should be resolved synchronously', function(assert) {
-    var log = [];
+    const log = [];
 
-    var d1 = new $.Deferred();
-    var d2 = new $.Deferred();
+    const d1 = new $.Deferred();
+    const d2 = new $.Deferred();
 
     deferredUtils.when().done(function() {
         assert.deepEqual(arguments.length, 0, 'correct args');

@@ -1,12 +1,12 @@
-var themeModule = require('../../themes'),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias,
-    ACCENT_COLOR = '#3debd3',
-    BACKGROUND_COLOR = '#465672',
-    TITLE_COLOR = '#fff',
-    SUBTITLE_COLOR = '#919bac',
-    TEXT_COLOR = '#c7ccd4',
-    BORDER_COLOR = '#596980';
+const themeModule = require('../../themes');
+const registerTheme = themeModule.registerTheme;
+const registerThemeAlias = themeModule.registerThemeAlias;
+const ACCENT_COLOR = '#3debd3';
+const BACKGROUND_COLOR = '#465672';
+const TITLE_COLOR = '#fff';
+const SUBTITLE_COLOR = '#919bac';
+const TEXT_COLOR = '#c7ccd4';
+const BORDER_COLOR = '#596980';
 
 registerTheme({
     name: 'generic.darkmoon',
@@ -68,6 +68,15 @@ registerTheme({
             }
         }
     },
+    'chart:common:annotation': {
+        font: {
+            color: TITLE_COLOR
+        },
+        border: {
+            color: BORDER_COLOR
+        },
+        color: '#62789e'
+    },
     chart: {
         commonPaneSettings: {
             border: {
@@ -76,15 +85,6 @@ registerTheme({
         },
         commonAxisSettings: {
             breakStyle: { color: '#73869e' }
-        },
-        commonAnnotationSettings: {
-            font: {
-                color: TITLE_COLOR
-            },
-            border: {
-                color: BORDER_COLOR
-            },
-            color: '#62789e'
         }
     },
     gauge: {

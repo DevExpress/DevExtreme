@@ -13,7 +13,7 @@ QUnit.testStart(function() {
                                 <div id="fixedContainer"></div>');
 });
 
-var moduleOptions = {
+const moduleOptions = {
     beforeEach: function() {
         fx.off = true;
 
@@ -24,48 +24,10 @@ var moduleOptions = {
         this.compactAppointmentOffset = 3;
         this.viewStartDate = undefined;
         this.coordinates = [{ top: 0, left: 0 }];
-        this.getCoordinates = function() {
-            return this.coordinates;
-        };
         this.instance = $('#scheduler-appointments').dxSchedulerAppointments().dxSchedulerAppointments('instance');
 
-        this.instance.notifyObserver = $.proxy(function(command, options) {
-            if(command === 'needCoordinates') {
-                options.callback(this.getCoordinates.apply(this));
-            }
-
-            if(command === 'getCellDimensions') {
-                options.callback(this.width, this.height, this.allDayHeight);
-            }
-
-            if(command === 'getFullWeekAppointmentWidth') {
-                options.callback(this.fullWeekAppointmentWidth);
-            }
-
-            if(command === 'getMaxAppointmentWidth') {
-                options.callback(this.maxAppointmentWidth);
-            }
-
-            if(command === 'getAppointmentColor') {
-                options.callback($.Deferred().resolve('red').promise());
-            }
-
-            if(command === 'getResourceForPainting') {
-                options.callback({ field: 'roomId' });
-            }
-
-            if(command === 'updateAppointmentStartDate') {
-                this.viewStartDate && options.callback(this.viewStartDate);
-            }
-
-            if(command === 'getAppointmentDurationInMs') {
-                options.callback(options.endDate.getTime() - options.startDate.getTime());
-            }
-
-        }, this);
-
         this.instance.invoke = $.proxy(function(command, field, obj, value) {
-            var dataAccessors = {
+            const dataAccessors = {
                 getter: {
                     startDate: compileGetter('startDate'),
                     endDate: compileGetter('endDate'),
@@ -96,6 +58,9 @@ var moduleOptions = {
             }
             if(command === 'convertDateByTimezone') {
                 return field;
+            }
+            if(command === 'getAppointmentColor') {
+                return $.Deferred().resolve('red').promise();
             }
             if(command === 'getEndDayHour') {
                 if(this.instance.option('renderingStrategy') === 'horizontalMonthLine') {
@@ -137,7 +102,7 @@ var moduleOptions = {
     QUnit.module('Horizontal Month Strategy', moduleOptions);
 
     QUnit.test('AllDay appointment should be displayed right when endDate > startDate and duration < 24', function(assert) {
-        var items = [{
+        const items = [{
             itemData: {
                 text: 'Appointment 1',
                 startDate: new Date(2015, 2, 5, 10),
@@ -150,13 +115,13 @@ var moduleOptions = {
         this.items = items;
         this.instance.option('items', items);
 
-        var $appointment = this.instance.$element().find('.dx-scheduler-appointment'),
-            allDayAppointmentWidth = this.width * 2;
+        const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        const allDayAppointmentWidth = this.width * 2;
         assert.equal($appointment.eq(0).outerWidth(), allDayAppointmentWidth, 'appointment has right width');
     });
 
     QUnit.test('Appointment should not be multiweek when its width some more than maxAllowedPosition(ie & ff pixels)', function(assert) {
-        var items = [{
+        const items = [{
             itemData: {
                 text: 'Appointment 1',
                 startDate: new Date(2015, 2, 1),
@@ -173,13 +138,13 @@ var moduleOptions = {
             renderingStrategy: 'horizontalMonth'
         });
 
-        var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
 
         assert.equal($appointment.length, 1, 'appointment is not multiline');
     });
 
     QUnit.test('Collapsing appointments should have specific class', function(assert) {
-        var items = [{
+        const items = [{
             itemData: {
                 text: 'Appointment 1',
                 startDate: new Date(2015, 1, 9, 11),
@@ -194,12 +159,12 @@ var moduleOptions = {
         this.items = items;
         this.instance.option('items', items);
 
-        var $appointment = this.instance.$element().find('.dx-scheduler-appointment').eq(0);
+        const $appointment = this.instance.$element().find('.dx-scheduler-appointment').eq(0);
         assert.ok($appointment.hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
     });
 
     QUnit.test('Small width appointments should have specific class', function(assert) {
-        var items = [{
+        const items = [{
             itemData: {
                 text: 'Appointment 1',
                 startDate: new Date(2015, 1, 9, 8),
@@ -212,12 +177,12 @@ var moduleOptions = {
         this.instance.option('renderingStrategy', 'horizontalMonth');
         this.instance.option('items', items);
 
-        var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
         assert.ok($appointment.eq(0).hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
     });
 
     QUnit.test('Small height appointments should have specific class', function(assert) {
-        var items = [{
+        const items = [{
             itemData: {
                 text: 'Appointment 1',
                 startDate: new Date(2015, 1, 9, 8),
@@ -230,7 +195,7 @@ var moduleOptions = {
         this.instance.option('renderingStrategy', 'horizontalMonth');
         this.instance.option('items', items);
 
-        var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
         assert.ok($appointment.eq(0).hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
     });
 
@@ -240,7 +205,7 @@ var moduleOptions = {
     QUnit.module('Horizontal Strategy', moduleOptions);
 
     QUnit.test('All-day appointment should have a correct css class', function(assert) {
-        var items = [{
+        const items = [{
             itemData: {
                 text: 'Appointment 1',
                 startDate: new Date(2015, 1, 9, 1),
@@ -257,13 +222,13 @@ var moduleOptions = {
         this.instance.option('renderingStrategy', 'horizontal');
         this.instance.option('items', items);
 
-        var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
 
         assert.ok($appointment.eq(0).hasClass('dx-scheduler-all-day-appointment'), 'Appointment has a right css class');
     });
 
     QUnit.test('Appointment should have a correct min width', function(assert) {
-        var items = [{
+        const items = [{
             itemData: {
                 text: 'Appointment 1',
                 startDate: new Date(2015, 1, 9, 1),
@@ -275,7 +240,7 @@ var moduleOptions = {
         this.instance.option('renderingStrategy', 'horizontal');
         this.instance.option('items', items);
 
-        var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+        const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
 
         assert.equal($appointment.outerWidth(), 2, 'Min width is OK');
     });

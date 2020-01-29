@@ -18,106 +18,26 @@ const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
-/**
-* @name dxTabPanel
-* @inherits dxMultiView
-* @module ui/tab_panel
-* @export default
-*/
-var TabPanel = MultiView.inherit({
+const TabPanel = MultiView.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxTabPanelOptions.repaintChangesOnly
-            * @type boolean
-            * @default false
-            */
 
-            /**
-             * @name dxTabPanelOptions.dataSource
-             * @type string|Array<string,dxTabPanelItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
 
-            /**
-             * @name dxTabPanelOptions.items
-             * @type Array<string, dxTabPanelItem, object>
-             * @fires dxTabPanelOptions.onOptionChanged
-             */
-
-            /**
-            * @name dxTabPanelOptions.itemTitleTemplate
-            * @type template|function
-            * @default "title"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             itemTitleTemplate: 'title',
 
-            /**
-             * @name dxTabPanelOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxTabPanelOptions.showNavButtons
-            * @type boolean
-            * @default false
-            */
             showNavButtons: false,
 
-            /**
-            * @name dxTabPanelOptions.scrollByContent
-            * @type boolean
-            * @default true
-            */
             scrollByContent: true,
 
-            /**
-            * @name dxTabPanelOptions.scrollingEnabled
-            * @type boolean
-            * @default true
-            */
             scrollingEnabled: true,
 
-            /**
-            * @name dxTabPanelOptions.onTitleClick
-            * @extends Action
-            * @type function(e)|string
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 event:event
-            * @action
-            */
             onTitleClick: null,
 
-            /**
-            * @name dxTabPanelOptions.onTitleHold
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 event:event
-            * @action
-            */
             onTitleHold: null,
 
-            /**
-            * @name dxTabPanelOptions.onTitleRendered
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @action
-            */
             onTitleRendered: null,
 
             badgeExpr: function(data) { return data ? data.badge : undefined; }
@@ -127,27 +47,10 @@ var TabPanel = MultiView.inherit({
             * @inherits dxMultiViewItem
             * @type object
             */
-            /**
-            * @name dxTabPanelItem.tabTemplate
-            * @type template|function
-            * @type_function_return string|Node|jQuery
-            */
 
             /**
             * @name dxTabPanelItem.visible
             * @hidden
-            */
-            /**
-            * @name dxTabPanelItem.title
-            * @type String
-            */
-            /**
-            * @name dxTabPanelItem.icon
-            * @type String
-            */
-            /**
-            * @name dxTabPanelItem.badge
-            * @type String
             */
         });
     },
@@ -159,11 +62,6 @@ var TabPanel = MultiView.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxTabPanelOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },
@@ -172,23 +70,12 @@ var TabPanel = MultiView.inherit({
                     return !support.touch;
                 },
                 options: {
-                    /**
-                    * @name dxTabPanelOptions.swipeEnabled
-                    * @type boolean
-                    * @default false @for non-touch_devices
-                    */
                     swipeEnabled: false
                 }
             },
             {
                 device: { platform: 'generic' },
                 options: {
-                    /**
-                    * @name dxTabPanelOptions.animationEnabled
-                    * @type boolean
-                    * @default false
-                    * @default true @for Android|iOS
-                    */
                     animationEnabled: false
                 }
             }
@@ -251,7 +138,7 @@ var TabPanel = MultiView.inherit({
     },
 
     _renderContent: function() {
-        var that = this;
+        const that = this;
 
         this.callBase();
         if(this.option('templatesRenderAsynchronously')) {
@@ -266,13 +153,13 @@ var TabPanel = MultiView.inherit({
             return;
         }
 
-        var $element = this.$element();
+        const $element = this.$element();
 
         this._$tabContainer = $('<div>')
             .addClass(TABPANEL_TABS_CLASS)
             .appendTo($element);
 
-        var $tabs = $('<div>').appendTo(this._$tabContainer);
+        const $tabs = $('<div>').appendTo(this._$tabContainer);
 
         this._tabs = this._createComponent($tabs, Tabs, this._tabConfig());
 
@@ -286,7 +173,7 @@ var TabPanel = MultiView.inherit({
 
     _updateLayout: function() {
         if(windowUtils.hasWindow()) {
-            var tabsHeight = this._$tabContainer.outerHeight();
+            const tabsHeight = this._$tabContainer.outerHeight();
             this._$container.css({
                 'marginTop': -tabsHeight,
                 'paddingTop': tabsHeight
@@ -299,10 +186,10 @@ var TabPanel = MultiView.inherit({
             return;
         }
 
-        var tabs = this._tabs,
-            tabItems = tabs.itemElements(),
-            $activeTab = $(tabItems[tabs.option('selectedIndex')]),
-            id = this.getFocusedItemId();
+        const tabs = this._tabs;
+        const tabItems = tabs.itemElements();
+        const $activeTab = $(tabItems[tabs.option('selectedIndex')]);
+        const id = this.getFocusedItemId();
 
         this.setAria('controls', undefined, $(tabItems));
         this.setAria('controls', id, $activeTab);
@@ -337,8 +224,8 @@ var TabPanel = MultiView.inherit({
             onOptionChanged: (function(args) {
                 if(args.name === 'focusedElement') {
                     if(args.value) {
-                        var $value = $(args.value);
-                        var $newItem = this._itemElements().eq($value.index());
+                        const $value = $(args.value);
+                        const $newItem = this._itemElements().eq($value.index());
                         this.option('focusedElement', getPublicElement($newItem));
                     } else {
                         this.option('focusedElement', args.value);
@@ -402,9 +289,9 @@ var TabPanel = MultiView.inherit({
     },
 
     _optionChanged: function(args) {
-        var name = args.name,
-            value = args.value,
-            fullName = args.fullName;
+        const name = args.name;
+        const value = args.value;
+        const fullName = args.fullName;
 
         switch(name) {
             case 'dataSource':
@@ -423,7 +310,17 @@ var TabPanel = MultiView.inherit({
                 this._tabs.repaint();
                 break;
             case 'selectedIndex':
-            case 'selectedItem':
+            case 'selectedItem': {
+                this._setTabsOption(fullName, value);
+                this.callBase(args);
+
+                if(this.option('focusStateEnabled') === true) {
+                    const selectedIndex = this.option('selectedIndex');
+                    const selectedTabContent = this._itemElements().eq(selectedIndex);
+                    this.option('focusedElement', getPublicElement(selectedTabContent));
+                }
+                break;
+            }
             case 'itemHoldTimeout':
             case 'focusStateEnabled':
             case 'hoverStateEnabled':
@@ -435,12 +332,13 @@ var TabPanel = MultiView.inherit({
             case 'showNavButtons':
                 this._setTabsOption(fullName, value);
                 break;
-            case 'focusedElement':
-                var id = value ? $(value).index() : value;
-                var newItem = value ? this._tabs._itemElements().eq(id) : value;
+            case 'focusedElement': {
+                const id = value ? $(value).index() : value;
+                const newItem = value ? this._tabs._itemElements().eq(id) : value;
                 this._setTabsOption('focusedElement', getPublicElement(newItem));
                 this.callBase(args);
                 break;
+            }
             case 'itemTitleTemplate':
                 this._setTabsOption('itemTemplate', this._getTemplateByOption('itemTitleTemplate'));
                 break;

@@ -1,4 +1,4 @@
-var gridBaseMock;
+let gridBaseMock;
 
 /* global jQuery */
 if(typeof define === 'function' && define.amd) {

@@ -22,47 +22,41 @@ import themes from './themes';
 
 const window = getWindow();
 
-const FILEUPLOADER_CLASS = 'dx-fileuploader',
-    FILEUPLOADER_EMPTY_CLASS = 'dx-fileuploader-empty',
-    FILEUPLOADER_SHOW_FILE_LIST_CLASS = 'dx-fileuploader-show-file-list',
-    FILEUPLOADER_DRAGOVER_CLASS = 'dx-fileuploader-dragover',
+const FILEUPLOADER_CLASS = 'dx-fileuploader';
+const FILEUPLOADER_EMPTY_CLASS = 'dx-fileuploader-empty';
+const FILEUPLOADER_SHOW_FILE_LIST_CLASS = 'dx-fileuploader-show-file-list';
+const FILEUPLOADER_DRAGOVER_CLASS = 'dx-fileuploader-dragover';
 
-    FILEUPLOADER_WRAPPER_CLASS = 'dx-fileuploader-wrapper',
-    FILEUPLOADER_CONTAINER_CLASS = 'dx-fileuploader-container',
-    FILEUPLOADER_CONTENT_CLASS = 'dx-fileuploader-content',
-    FILEUPLOADER_INPUT_WRAPPER_CLASS = 'dx-fileuploader-input-wrapper',
-    FILEUPLOADER_INPUT_CONTAINER_CLASS = 'dx-fileuploader-input-container',
-    FILEUPLOADER_INPUT_LABEL_CLASS = 'dx-fileuploader-input-label',
-    FILEUPLOADER_INPUT_CLASS = 'dx-fileuploader-input',
-    FILEUPLOADER_FILES_CONTAINER_CLASS = 'dx-fileuploader-files-container',
-    FILEUPLOADER_FILE_CONTAINER_CLASS = 'dx-fileuploader-file-container',
-    FILEUPLOADER_FILE_INFO_CLASS = 'dx-fileuploader-file-info',
-    FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS = 'dx-fileuploader-file-status-message',
+const FILEUPLOADER_WRAPPER_CLASS = 'dx-fileuploader-wrapper';
+const FILEUPLOADER_CONTAINER_CLASS = 'dx-fileuploader-container';
+const FILEUPLOADER_CONTENT_CLASS = 'dx-fileuploader-content';
+const FILEUPLOADER_INPUT_WRAPPER_CLASS = 'dx-fileuploader-input-wrapper';
+const FILEUPLOADER_INPUT_CONTAINER_CLASS = 'dx-fileuploader-input-container';
+const FILEUPLOADER_INPUT_LABEL_CLASS = 'dx-fileuploader-input-label';
+const FILEUPLOADER_INPUT_CLASS = 'dx-fileuploader-input';
+const FILEUPLOADER_FILES_CONTAINER_CLASS = 'dx-fileuploader-files-container';
+const FILEUPLOADER_FILE_CONTAINER_CLASS = 'dx-fileuploader-file-container';
+const FILEUPLOADER_FILE_INFO_CLASS = 'dx-fileuploader-file-info';
+const FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS = 'dx-fileuploader-file-status-message';
 
-    FILEUPLOADER_FILE_CLASS = 'dx-fileuploader-file',
-    FILEUPLOADER_FILE_NAME_CLASS = 'dx-fileuploader-file-name',
-    FILEUPLOADER_FILE_SIZE_CLASS = 'dx-fileuploader-file-size',
+const FILEUPLOADER_FILE_CLASS = 'dx-fileuploader-file';
+const FILEUPLOADER_FILE_NAME_CLASS = 'dx-fileuploader-file-name';
+const FILEUPLOADER_FILE_SIZE_CLASS = 'dx-fileuploader-file-size';
 
-    FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button',
-    FILEUPLOADER_BUTTON_CONTAINER_CLASS = 'dx-fileuploader-button-container',
-    FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button',
-    FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button',
+const FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button';
+const FILEUPLOADER_BUTTON_CONTAINER_CLASS = 'dx-fileuploader-button-container';
+const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
+const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
 
-    FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid',
+const FILEUPLOADER_INVALID_CLASS = 'dx-fileuploader-invalid';
 
-    FILEUPLOADER_AFTER_LOAD_DELAY = 400,
-    FILEUPLOADER_CHUNK_META_DATA_NAME = 'chunkMetadata';
+const FILEUPLOADER_AFTER_LOAD_DELAY = 400;
+const FILEUPLOADER_CHUNK_META_DATA_NAME = 'chunkMetadata';
 
 let renderFileUploaderInput = () => $('<input>').attr('type', 'file');
 
 const isFormDataSupported = () => !!window.FormData;
 
-/**
-* @name dxFileUploader
-* @inherits Editor
-* @module ui/file_uploader
-* @export default
-*/
 class FileUploader extends Editor {
 
     _supportedKeys() {
@@ -88,240 +82,61 @@ class FileUploader extends Editor {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            /**
-            * @name dxFileUploaderOptions.chunkSize
-            * @type number
-            * @default 0
-            */
             chunkSize: 0,
-            /**
-            * @name dxFileUploaderOptions.value
-            * @type Array<File>
-            * @default []
-            */
             value: [],
 
-            /**
-            * @name dxFileUploaderOptions.selectButtonText
-            * @type string
-            * @default "Select File"
-            */
             selectButtonText: messageLocalization.format('dxFileUploader-selectFile'),
 
-            /**
-            * @name dxFileUploaderOptions.uploadButtonText
-            * @type string
-            * @default "Upload"
-            */
             uploadButtonText: messageLocalization.format('dxFileUploader-upload'),
 
-            /**
-            * @name dxFileUploaderOptions.labelText
-            * @type string
-            * @default "or Drop file here"
-            */
             labelText: messageLocalization.format('dxFileUploader-dropFile'),
 
-            /**
-            * @name dxFileUploaderOptions.name
-            * @type string
-            * @default "files[]"
-            */
             name: 'files[]',
 
-            /**
-            * @name dxFileUploaderOptions.multiple
-            * @type boolean
-            * @default false
-            */
             multiple: false,
 
-            /**
-            * @name dxFileUploaderOptions.accept
-            * @type string
-            * @default ""
-            */
             accept: '',
 
-            /**
-            * @name dxFileUploaderOptions.uploadUrl
-            * @type string
-            * @default "/"
-            */
             uploadUrl: '/',
 
-            /**
-            * @name dxFileUploaderOptions.allowCanceling
-            * @type boolean
-            * @default true
-            */
             allowCanceling: true,
 
-            /**
-            * @name dxFileUploaderOptions.showFileList
-            * @type boolean
-            * @default true
-            */
             showFileList: true,
 
-            /**
-            * @name dxFileUploaderOptions.progress
-            * @type number
-            * @default 0
-            */
             progress: 0,
 
-            /**
-            * @name dxFileUploaderOptions.readyToUploadMessage
-            * @type string
-            * @default "Ready to upload"
-            */
             readyToUploadMessage: messageLocalization.format('dxFileUploader-readyToUpload'),
 
-            /**
-            * @name dxFileUploaderOptions.uploadedMessage
-            * @type string
-            * @default "Uploaded"
-            */
             uploadedMessage: messageLocalization.format('dxFileUploader-uploaded'),
 
-            /**
-            * @name dxFileUploaderOptions.uploadFailedMessage
-            * @type string
-            * @default "Upload failed"
-            */
             uploadFailedMessage: messageLocalization.format('dxFileUploader-uploadFailedMessage'),
 
-            /**
-            * @name dxFileUploaderOptions.uploadMode
-            * @type Enums.FileUploadMode
-            * @default "instantly"
-            */
             uploadMode: 'instantly',
 
-            /**
-            * @name dxFileUploaderOptions.uploadMethod
-            * @type Enums.UploadHttpMethod
-            * @default "POST"
-            */
             uploadMethod: 'POST',
 
-            /**
-            * @name dxFileUploaderOptions.uploadHeaders
-            * @type object
-            * @default {}
-            */
             uploadHeaders: {},
 
-            /**
-            * @name dxFileUploaderOptions.onUploadStarted
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 file:File
-            * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field6 event:event
-            * @type_function_param1_field7 request:XMLHttpRequest
-            * @action
-            */
             onUploadStarted: null,
 
-            /**
-            * @name dxFileUploaderOptions.onUploaded
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 file:File
-            * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field6 event:event
-            * @type_function_param1_field7 request:XMLHttpRequest
-            * @action
-            */
             onUploaded: null,
 
-            /**
-            * @name dxFileUploaderOptions.onProgress
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 file:File
-            * @type_function_param1_field5 segmentSize:Number
-            * @type_function_param1_field6 bytesLoaded:Number
-            * @type_function_param1_field7 bytesTotal:Number
-            * @type_function_param1_field8 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field9 event:event
-            * @type_function_param1_field10 request:XMLHttpRequest
-            * @action
-            */
             onProgress: null,
 
-            /**
-            * @name dxFileUploaderOptions.onUploadError
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 file:File
-            * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field6 event:event
-            * @type_function_param1_field7 request:XMLHttpRequest
-            * @type_function_param1_field8 error:any
-            * @action
-            */
             onUploadError: null,
 
-            /**
-            * @name dxFileUploaderOptions.onUploadAborted
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 file:File
-            * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field6 event:event
-            * @type_function_param1_field7 request:XMLHttpRequest
-            * @action
-            */
             onUploadAborted: null,
 
-            /**
-            * @name dxFileUploaderOptions.allowedFileExtensions
-            * @type Array<string>
-            * @default []
-            */
             allowedFileExtensions: [],
 
-            /**
-            * @name dxFileUploaderOptions.maxFileSize
-            * @type number
-            * @default 0
-            */
             maxFileSize: 0,
 
-            /**
-            * @name dxFileUploaderOptions.minFileSize
-            * @type number
-            * @default 0
-            */
             minFileSize: 0,
 
-            /**
-            * @name dxFileUploaderOptions.invalidFileExtensionMessage
-            * @type string
-            * @default "File type is not allowed"
-            */
             invalidFileExtensionMessage: messageLocalization.format('dxFileUploader-invalidFileExtension'),
 
-            /**
-            * @name dxFileUploaderOptions.invalidMaxFileSizeMessage
-            * @type string
-            * @default "File is too large"
-            */
             invalidMaxFileSizeMessage: messageLocalization.format('dxFileUploader-invalidMaxFileSize'),
 
-            /**
-            * @name dxFileUploaderOptions.invalidMinFileSizeMessage
-            * @type string
-            * @default "File is too small"
-            */
             invalidMinFileSizeMessage: messageLocalization.format('dxFileUploader-invalidMinFileSize'),
 
 
@@ -339,53 +154,11 @@ class FileUploader extends Editor {
             */
             validationMessageMode: 'always',
 
-            /**
-            * @name dxFileUploaderOptions.onValueChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 value:Array<File>
-            * @type_function_param1_field5 previousValue:Array<File>
-            * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field7 event:event
-            * @action
-            */
 
-            /**
-            * @name dxFileUploaderOptions.uploadFile
-            * @type function
-            * @type_function_param1 file:File
-            * @type_function_param2 progressCallback:Function
-            * @type_function_return Promise<any>|any
-            */
             uploadFile: null,
 
-            /**
-            * @name dxFileUploaderOptions.uploadChunk
-            * @type function
-            * @type_function_param1 file:File
-            * @type_function_param2 uploadInfo:object
-            * @type_function_param2_field1 bytesUploaded:Number
-            * @type_function_param2_field2 chunkCount:Number
-            * @type_function_param2_field3 customData:object
-            * @type_function_param2_field4 chunkBlob:Blob
-            * @type_function_param2_field5 chunkIndex:Number
-            * @type_function_return Promise<any>|any
-            */
             uploadChunk: null,
 
-            /**
-            * @name dxFileUploaderOptions.abortUpload
-            * @type function
-            * @type_function_param1 file:File
-            * @type_function_param2 uploadInfo:object
-            * @type_function_param2_field1 bytesUploaded:Number
-            * @type_function_param2_field2 chunkCount:Number
-            * @type_function_param2_field3 customData:object
-            * @type_function_param2_field4 chunkBlob:Blob
-            * @type_function_param2_field5 chunkIndex:Number
-            * @type_function_return Promise<any>|any
-            */
             abortUpload: null,
 
             validationMessageOffset: { h: 0, v: 0 },
@@ -402,11 +175,6 @@ class FileUploader extends Editor {
             {
                 device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
                 options: {
-                    /**
-                    * @name dxFileUploaderOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },
@@ -501,8 +269,8 @@ class FileUploader extends Editor {
             return;
         }
 
-        const fileName = this._$fileInput.val().replace(/^.*\\/, ''),
-            files = this._$fileInput.prop('files');
+        const fileName = this._$fileInput.val().replace(/^.*\\/, '');
+        const files = this._$fileInput.prop('files');
 
         if(files && !files.length) {
             return;
@@ -647,8 +415,8 @@ class FileUploader extends Editor {
     }
 
     _validateFileExtension(file) {
-        const allowedExtensions = this.option('allowedFileExtensions'),
-            fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
+        const allowedExtensions = this.option('allowedFileExtensions');
+        const fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
         if(allowedExtensions.length === 0) {
             return true;
         }
@@ -661,14 +429,14 @@ class FileUploader extends Editor {
     }
 
     _validateMaxFileSize(file) {
-        const fileSize = file.value.size,
-            maxFileSize = this.option('maxFileSize');
+        const fileSize = file.value.size;
+        const maxFileSize = this.option('maxFileSize');
         return maxFileSize > 0 ? fileSize <= maxFileSize : true;
     }
 
     _validateMinFileSize(file) {
-        const fileSize = file.value.size,
-            minFileSize = this.option('minFileSize');
+        const fileSize = file.value.size;
+        const minFileSize = this.option('minFileSize');
         return minFileSize > 0 ? fileSize >= minFileSize : true;
     }
 
@@ -790,12 +558,12 @@ class FileUploader extends Editor {
     }
 
     _updateFileNameMaxWidth() {
-        const cancelButtonsCount = this.option('allowCanceling') && this.option('uploadMode') !== 'useForm' ? 1 : 0,
-            uploadButtonsCount = this.option('uploadMode') === 'useButtons' ? 1 : 0,
-            filesContainerWidth = this._$filesContainer.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS).first().width() || this._$filesContainer.width(),
-            $buttonContainer = this._$filesContainer.find('.' + FILEUPLOADER_BUTTON_CONTAINER_CLASS).eq(0),
-            buttonsWidth = $buttonContainer.width() * (cancelButtonsCount + uploadButtonsCount),
-            $fileSize = this._$filesContainer.find('.' + FILEUPLOADER_FILE_SIZE_CLASS).eq(0);
+        const cancelButtonsCount = this.option('allowCanceling') && this.option('uploadMode') !== 'useForm' ? 1 : 0;
+        const uploadButtonsCount = this.option('uploadMode') === 'useButtons' ? 1 : 0;
+        const filesContainerWidth = this._$filesContainer.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS).first().width() || this._$filesContainer.width();
+        const $buttonContainer = this._$filesContainer.find('.' + FILEUPLOADER_BUTTON_CONTAINER_CLASS).eq(0);
+        const buttonsWidth = $buttonContainer.width() * (cancelButtonsCount + uploadButtonsCount);
+        const $fileSize = this._$filesContainer.find('.' + FILEUPLOADER_FILE_SIZE_CLASS).eq(0);
 
         const prevFileSize = $fileSize.text();
         $fileSize.text('1000 Mb');
@@ -888,12 +656,12 @@ class FileUploader extends Editor {
     _getFileSize(size) {
         let i = 0;
         const labels = [
-                messageLocalization.format('dxFileUploader-bytes'),
-                messageLocalization.format('dxFileUploader-kb'),
-                messageLocalization.format('dxFileUploader-Mb'),
-                messageLocalization.format('dxFileUploader-Gb')
-            ],
-            count = labels.length - 1;
+            messageLocalization.format('dxFileUploader-bytes'),
+            messageLocalization.format('dxFileUploader-kb'),
+            messageLocalization.format('dxFileUploader-Mb'),
+            messageLocalization.format('dxFileUploader-Gb')
+        ];
+        const count = labels.length - 1;
 
         while(i < count && size >= 1024) {
             size /= 1024;
@@ -1062,8 +830,8 @@ class FileUploader extends Editor {
     }
 
     _updateEventTargets(e) {
-        const targetIndex = this._dragEventsTargets.indexOf(e.target),
-            isTargetExists = targetIndex !== -1;
+        const targetIndex = this._dragEventsTargets.indexOf(e.target);
+        const isTargetExists = targetIndex !== -1;
 
         if(e.type === 'dragenter') {
             !isTargetExists && this._dragEventsTargets.push(e.target);
@@ -1082,8 +850,8 @@ class FileUploader extends Editor {
 
         e.preventDefault();
 
-        const fileList = e.originalEvent.dataTransfer.files,
-            files = this._getFiles(fileList);
+        const fileList = e.originalEvent.dataTransfer.files;
+        const files = this._getFiles(fileList);
 
         if(!this.option('multiple') && files.length > 1) {
             return;
@@ -1107,8 +875,8 @@ class FileUploader extends Editor {
             return files;
         }
 
-        const result = [],
-            allowedTypes = this._getAllowedFileTypes(accept);
+        const result = [];
+        const allowedTypes = this._getAllowedFileTypes(accept);
 
         for(let i = 0, n = files.length; i < n; i++) {
             if(this._isFileTypeAllowed(files[i], allowedTypes)) {

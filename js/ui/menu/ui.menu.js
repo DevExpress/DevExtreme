@@ -56,34 +56,10 @@ class Menu extends MenuBase {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            /**
-             * @name dxMenuOptions.dataSource
-             * @type string|Array<dxMenuItem>|DataSource|DataSourceOptions
-             * @default null
-             */
-            /**
-            * @name dxMenuOptions.items
-            * @type Array<dxMenuItem>
-            */
-            /**
-            * @name dxMenuOptions.orientation
-            * @type Enums.Orientation
-            * @default "horizontal"
-            */
             orientation: 'horizontal',
 
-            /**
-            * @name dxMenuOptions.submenuDirection
-            * @type Enums.SubmenuDirection
-            * @default "auto"
-            */
             submenuDirection: 'auto',
 
-            /**
-            * @name dxMenuOptions.showFirstSubmenuMode
-            * @type Object|Enums.ShowSubmenuMode
-            * @default { name: "onClick", delay: { show: 50, hide: 300 } }
-            */
             showFirstSubmenuMode: {
                 /**
                 * @name dxMenuOptions.showFirstSubmenuMode.name
@@ -114,59 +90,16 @@ class Menu extends MenuBase {
                 }
             },
 
-            /**
-            * @name dxMenuOptions.hideSubmenuOnMouseLeave
-            * @type boolean
-            * @default false
-            */
             hideSubmenuOnMouseLeave: false,
 
-            /**
-            * @name dxMenuOptions.onSubmenuShowing
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 rootItem:dxElement
-            * @action
-            */
             onSubmenuShowing: null,
 
-            /**
-            * @name dxMenuOptions.onSubmenuShown
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 rootItem:dxElement
-            * @action
-            */
             onSubmenuShown: null,
 
-            /**
-            * @name dxMenuOptions.onSubmenuHiding
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 rootItem:dxElement
-            * @type_function_param1_field5 cancel:boolean
-            * @action
-            */
             onSubmenuHiding: null,
 
-            /**
-            * @name dxMenuOptions.onSubmenuHidden
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 rootItem:dxElement
-            * @action
-            */
             onSubmenuHidden: null,
 
-            /**
-            * @name dxMenuOptions.adaptivityEnabled
-            * @type boolean
-            * @default false
-            */
             adaptivityEnabled: false
 
             /**
@@ -188,10 +121,6 @@ class Menu extends MenuBase {
             * @name dxMenuItem
             * @inherits dxMenuBaseItem
             * @type object
-            */
-            /**
-            * @name dxMenuItem.items
-            * @type Array<dxMenuItem>
             */
         });
     }
@@ -450,7 +379,7 @@ class Menu extends MenuBase {
     }
 
     _getTreeViewOptions() {
-        let menuOptions = {};
+        const menuOptions = {};
         const optionsToTransfer = [
             'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation', 'dataSource',
             'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
@@ -554,14 +483,14 @@ class Menu extends MenuBase {
         const $submenuContainer = $('<div>').addClass(DX_CONTEXT_MENU_CLASS)
             .appendTo($rootItem);
 
-        const items = this._getChildNodes(node),
-            result = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
-                _dataAdapter: this._dataAdapter,
-                _parentKey: node.internalFields.key,
-                items: items,
-                onHoverStart: this._clearTimeouts.bind(this),
-                position: this.getSubmenuPosition($rootItem)
-            }));
+        const items = this._getChildNodes(node);
+        const result = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
+            _dataAdapter: this._dataAdapter,
+            _parentKey: node.internalFields.key,
+            items: items,
+            onHoverStart: this._clearTimeouts.bind(this),
+            position: this.getSubmenuPosition($rootItem)
+        }));
 
         this._attachSubmenuHandlers($rootItem, result);
 
@@ -657,7 +586,7 @@ class Menu extends MenuBase {
 
             if((isOtherItem && $selectedItem.length) || cleanAllSubmenus) {
                 $selectedItem.removeClass(this._selectedItemClass());
-                let selectedItemData = this._getItemData($selectedItem);
+                const selectedItemData = this._getItemData($selectedItem);
 
                 if(selectedItemData) {
                     selectedItemData.selected = false;
@@ -672,9 +601,7 @@ class Menu extends MenuBase {
         const $prevSelectedItem = this.$element().find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`).first().children().children().filter(`.${this._selectedItemClass()}`);
 
         if($prevSelectedItem.length) {
-            let prevSelectedItemData;
-
-            prevSelectedItemData = this._getItemData($prevSelectedItem);
+            const prevSelectedItemData = this._getItemData($prevSelectedItem);
             prevSelectedItemData.selected = false;
             $prevSelectedItem.removeClass(this._selectedItemClass());
         }
@@ -724,7 +651,7 @@ class Menu extends MenuBase {
 
     _submenuOnHidingHandler($rootItem, submenu, eventArgs) {
         const $border = $rootItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
-        let args = eventArgs;
+        const args = eventArgs;
 
         args.rootItem = getPublicElement($rootItem);
         args.submenu = submenu;
@@ -785,7 +712,7 @@ class Menu extends MenuBase {
         const isHorizontalMenu = this._isMenuHorizontal();
         const submenuDirection = this.option('submenuDirection').toLowerCase();
         const rtlEnabled = this.option('rtlEnabled');
-        let submenuPosition = {
+        const submenuPosition = {
             collision: 'flip',
             of: $rootItem
         };

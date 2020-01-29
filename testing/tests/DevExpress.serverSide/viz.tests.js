@@ -1,8 +1,8 @@
-var BaseVizWidget = require('viz/core/base_widget');
+const BaseVizWidget = require('viz/core/base_widget');
 
 QUnit.module('Viz', {
     beforeEach: function() {
-        var fixture = document.getElementById('qunit-fixture');
+        const fixture = document.getElementById('qunit-fixture');
         this.element = document.createElement('div');
         fixture.appendChild(this.element);
     },
@@ -12,7 +12,7 @@ QUnit.module('Viz', {
 });
 
 QUnit.test('Sized element when sizes are defined', function(assert) {
-    var TestVizBaseVizWidget = BaseVizWidget.inherit();
+    const TestVizBaseVizWidget = BaseVizWidget.inherit();
 
     this.instance = new TestVizBaseVizWidget(this.element, {
         width: 500,
@@ -24,7 +24,7 @@ QUnit.test('Sized element when sizes are defined', function(assert) {
 });
 
 QUnit.test('Sized element when sizes are not defined', function(assert) {
-    var TestVizBaseVizWidget = BaseVizWidget.inherit({
+    const TestVizBaseVizWidget = BaseVizWidget.inherit({
         _getDefaultSize: function() {
             return { width: 200, height: 200 };
         }
@@ -37,7 +37,7 @@ QUnit.test('Sized element when sizes are not defined', function(assert) {
 });
 
 QUnit.test('element method should return correct value', function(assert) {
-    var TestVizBaseVizWidget = BaseVizWidget.inherit({
+    const TestVizBaseVizWidget = BaseVizWidget.inherit({
         _getDefaultSize: function() {
             return { width: 200, height: 200 };
         }

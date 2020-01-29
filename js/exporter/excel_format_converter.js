@@ -28,10 +28,10 @@ const SQUARE_OPEN_BRACKET_REGEXP = /\[/g;
 const SQUARE_CLOSE_BRACKET_REGEXP = /]/g;
 const ANY_REGEXP = /./g;
 
-var excelFormatConverter = module.exports = {
+const excelFormatConverter = module.exports = {
     _applyPrecision: function(format, precision) {
-        var result,
-            i;
+        let result;
+        let i;
 
         if(precision > 0) {
             result = format !== 'decimal' ? '.' : '';
@@ -45,9 +45,9 @@ var excelFormatConverter = module.exports = {
     },
 
     _hasArabicDigits: function(text) {
-        var code;
+        let code;
 
-        for(var i = 0; i < text.length; i++) {
+        for(let i = 0; i < text.length; i++) {
             code = text.charCodeAt(i);
             if(code >= ARABIC_ZERO_CODE && code < ARABIC_ZERO_CODE + 10) {
                 return true;
@@ -87,9 +87,9 @@ var excelFormatConverter = module.exports = {
     },
 
     _getLanguageInfo: function(defaultPattern) {
-        var languageID = getLanguageId(),
-            languageIDStr = languageID ? languageID.toString(16) : '',
-            languageInfo = '';
+        const languageID = getLanguageId();
+        let languageIDStr = languageID ? languageID.toString(16) : '';
+        let languageInfo = '';
 
         if(this._hasArabicDigits(defaultPattern)) {
             while(languageIDStr.length < 3) {
@@ -104,8 +104,8 @@ var excelFormatConverter = module.exports = {
     },
 
     _convertNumberFormat: function(format, precision, currency) {
-        let result,
-            excelFormat;
+        let result;
+        let excelFormat;
 
         if(format === 'currency') {
             excelFormat = numberFormatter.getOpenXmlCurrencyFormat(currency);

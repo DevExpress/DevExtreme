@@ -1,20 +1,14 @@
-var registerComponent = require('../core/component_registrator'),
-    extend = require('../core/utils/extend').extend,
-    NavBarItem = require('./nav_bar/item'),
-    Tabs = require('./tabs');
+const registerComponent = require('../core/component_registrator');
+const extend = require('../core/utils/extend').extend;
+const NavBarItem = require('./nav_bar/item');
+const Tabs = require('./tabs');
 
-var NAVBAR_CLASS = 'dx-navbar',
-    ITEM_CLASS = 'dx-item-content',
-    NAVBAR_ITEM_CLASS = 'dx-nav-item',
-    NAVBAR_ITEM_CONTENT_CLASS = 'dx-nav-item-content';
+const NAVBAR_CLASS = 'dx-navbar';
+const ITEM_CLASS = 'dx-item-content';
+const NAVBAR_ITEM_CLASS = 'dx-nav-item';
+const NAVBAR_ITEM_CONTENT_CLASS = 'dx-nav-item-content';
 
-/**
-* @name dxNavBar
-* @inherits dxTabs
-* @module ui/nav_bar
-* @export default
-*/
-var NavBar = Tabs.inherit({
+const NavBar = Tabs.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
@@ -30,9 +24,6 @@ var NavBar = Tabs.inherit({
             * @hidden
             */
 
-            /**
-            * @name dxNavBarOptions.scrollByContent
-            */
         });
     },
 
@@ -45,8 +36,8 @@ var NavBar = Tabs.inherit({
     _postprocessRenderItem: function(args) {
         this.callBase(args);
 
-        var $itemElement = args.itemElement,
-            itemData = args.itemData;
+        const $itemElement = args.itemElement;
+        const itemData = args.itemData;
 
         $itemElement.addClass(NAVBAR_ITEM_CLASS);
         $itemElement.find('.' + ITEM_CLASS)
@@ -61,10 +52,6 @@ var NavBar = Tabs.inherit({
 * @name dxNavBarItem
 * @inherits dxTabsItem
 * @type object
-*/
-/**
-* @name dxNavBarItem.badge
-* @type String
 */
 NavBar.ItemClass = NavBarItem;
 

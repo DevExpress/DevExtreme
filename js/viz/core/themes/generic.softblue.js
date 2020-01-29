@@ -1,12 +1,12 @@
-var themeModule = require('../../themes'),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias,
-    ACCENT_COLOR = '#7ab8eb',
-    BACKGROUND_COLOR = '#fff',
-    TITLE_COLOR = '#333',
-    SUBTITLE_COLOR = '#99a1a8',
-    TEXT_COLOR = '#707070',
-    BORDER_COLOR = '#e8eaeb';
+const themeModule = require('../../themes');
+const registerTheme = themeModule.registerTheme;
+const registerThemeAlias = themeModule.registerThemeAlias;
+const ACCENT_COLOR = '#7ab8eb';
+const BACKGROUND_COLOR = '#fff';
+const TITLE_COLOR = '#333';
+const SUBTITLE_COLOR = '#99a1a8';
+const TEXT_COLOR = '#707070';
+const BORDER_COLOR = '#e8eaeb';
 
 registerTheme({
     name: 'generic.softblue',
@@ -68,6 +68,15 @@ registerTheme({
             }
         }
     },
+    'chart:common:annotation': {
+        color: BACKGROUND_COLOR,
+        border: {
+            color: BORDER_COLOR
+        },
+        font: {
+            color: TITLE_COLOR
+        }
+    },
     chart: {
         commonPaneSettings: {
             border: {
@@ -76,15 +85,6 @@ registerTheme({
         },
         commonAxisSettings: {
             breakStyle: { color: '#cfd2d3' }
-        },
-        commonAnnotationSettings: {
-            color: BACKGROUND_COLOR,
-            border: {
-                color: BORDER_COLOR
-            },
-            font: {
-                color: TITLE_COLOR
-            }
         }
     },
     rangeSelector: {

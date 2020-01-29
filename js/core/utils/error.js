@@ -1,13 +1,13 @@
-var extend = require('./extend').extend,
-    consoleUtils = require('./console'),
-    stringUtils = require('./string'),
-    version = require('../version');
+const extend = require('./extend').extend;
+const consoleUtils = require('./console');
+const stringUtils = require('./string');
+const version = require('../version');
 
-var ERROR_URL = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/';
+const ERROR_URL = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/';
 
 module.exports = function(baseErrors, errors) {
 
-    var exports = {
+    const exports = {
 
         ERROR_MESSAGES: extend(errors, baseErrors),
 
@@ -16,7 +16,7 @@ module.exports = function(baseErrors, errors) {
         },
 
         log: function(id) {
-            var method = 'log';
+            let method = 'log';
 
             if(/^E\d+$/.test(id)) {
                 method = 'error';
@@ -28,40 +28,38 @@ module.exports = function(baseErrors, errors) {
         }
     };
 
-    var combineMessage = function(args) {
-        var id = args[0];
+    function combineMessage(args) {
+        const id = args[0];
         args = args.slice(1);
         return formatMessage(id, formatDetails(id, args));
-    };
+    }
 
-    var formatDetails = function(id, args) {
+    function formatDetails(id, args) {
         args = [exports.ERROR_MESSAGES[id]].concat(args);
         return stringUtils.format.apply(this, args).replace(/\.*\s*?$/, '');
-    };
+    }
 
-    var formatMessage = function(id, details) {
+    function formatMessage(id, details) {
         return stringUtils.format.apply(this, ['{0} - {1}. See:\n{2}', id, details, getErrorUrl(id)]);
-    };
+    }
 
-    var makeError = function(args) {
-        var id, details, message, url;
-
-        id = args[0];
+    function makeError(args) {
+        const id = args[0];
         args = args.slice(1);
-        details = formatDetails(id, args);
-        url = getErrorUrl(id);
-        message = formatMessage(id, details);
+        const details = formatDetails(id, args);
+        const url = getErrorUrl(id);
+        const message = formatMessage(id, details);
 
         return extend(new Error(message), {
             __id: id,
             __details: details,
             url: url
         });
-    };
+    }
 
-    var getErrorUrl = function(id) {
+    function getErrorUrl(id) {
         return ERROR_URL + id;
-    };
+    }
 
     return exports;
 

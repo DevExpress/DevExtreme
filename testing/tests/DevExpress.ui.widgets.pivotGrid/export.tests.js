@@ -10,18 +10,15 @@ import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="container"></div>';
 
     $('#qunit-fixture').html(markup);
 });
 
-var createPivotGrid = function(options) {
-    var pivotGrid,
-        pivotGridElement = $('#container').dxPivotGrid(options);
-
-    pivotGrid = pivotGridElement.dxPivotGrid('instance');
-    return pivotGrid;
+const createPivotGrid = function(options) {
+    const pivotGridElement = $('#container').dxPivotGrid(options);
+    return pivotGridElement.dxPivotGrid('instance');
 };
 
 QUnit.module('dxPivotGrid', {
@@ -138,9 +135,9 @@ QUnit.module('dxPivotGrid', {
         };
 
         this.pivotGrid = createPivotGrid(this.testOptions);
-        var columnsInfo = $.extend(true, [], this.pivotGrid._dataController.getColumnsInfo(true)),
-            rowsInfo = $.extend(true, [], this.pivotGrid._dataController.getRowsInfo(true)),
-            cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
+        const columnsInfo = $.extend(true, [], this.pivotGrid._dataController.getColumnsInfo(true));
+        const rowsInfo = $.extend(true, [], this.pivotGrid._dataController.getRowsInfo(true));
+        const cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
 
         this.dataProvider = this.pivotGrid.getDataProvider();
         this.items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
@@ -154,30 +151,25 @@ QUnit.module('dxPivotGrid', {
 });
 
 QUnit.test('getFrozenArea', function(assert) {
-    // act, assert
     assert.strictEqual(this.dataProvider.getFrozenArea().x, 2, 'Frozen area width is correct');
     assert.strictEqual(this.dataProvider.getFrozenArea().y, 3, 'Frozen area height is correct');
 });
 
 QUnit.test('Data provider base stub testing', function(assert) {
-    // act, assert
     assert.strictEqual(this.dataProvider.getGroupLevel(3), 0, 'getGroupLevel returns 0');
 });
 
 QUnit.test('getRowsCount', function(assert) {
-    // act, assert
     assert.strictEqual(this.dataProvider.getRowsCount(), 10, 'Rows count is correct');
 });
 
 QUnit.test('getCellType', function(assert) {
-    // act, assert
     assert.strictEqual(this.dataProvider.getCellType(5, 5), 'number', 'Cells dataType is correct');
     assert.strictEqual(this.dataProvider.getCellType(1, 2), 'string', 'RowPart dataType is correct');
     assert.strictEqual(this.dataProvider.getCellType(5, 0), 'string', 'ColsPart dataType is correct');
 });
 
 QUnit.test('getCellData', function(assert) {
-    // act, assert
     assert.strictEqual(this.dataProvider.getCellData(5, 5).value, 0.1, 'CellsInfo cellValue is correct');
     assert.strictEqual(this.dataProvider.getCellData(1, 2).value, 'Q1', 'Header part cellText is correct');
 
@@ -186,16 +178,13 @@ QUnit.test('getCellData', function(assert) {
 });
 
 QUnit.test('exportToExcel', function(assert) {
-    // arrange
-    var pivotGrid = this.pivotGrid;
+    const pivotGrid = this.pivotGrid;
 
     sinon.stub(pivotGrid, 'getDataProvider');
     sinon.stub(clientExporter, 'export');
 
-    // act
     pivotGrid.exportToExcel();
 
-    // assert
     assert.equal(clientExporter.export.callCount, 1, 'exporting is called');
     assert.deepEqual(clientExporter.export.getCall(0).args[0], pivotGrid.getDataProvider.getCall(0).returnValue, 'First arg is data');
 
@@ -215,7 +204,6 @@ QUnit.test('exportToExcel', function(assert) {
 });
 
 QUnit.test('getAllItems', function(assert) {
-    // act, assert
     assert.strictEqual(this.items.length, 10, 'All rows are collected');
     assert.strictEqual(this.items[1].length, 16, 'All columns are collected');
     assert.deepEqual(this.items[3][3], {
@@ -266,11 +254,11 @@ QUnit.test('getAllItems', function(assert) {
 
 
 QUnit.test('Loading indicator showing', function(assert) {
-    var pivotGrid = createPivotGrid(this.testOptions),
-        spyBegin = sinon.spy(pivotGrid._dataController, 'beginLoading'),
-        spyEnd = sinon.spy(pivotGrid._dataController, 'endLoading'),
-        dataProvider = this.pivotGrid.getDataProvider(),
-        showingBeforeReady = spyEnd.callCount === 0 && spyBegin.callCount === 1;
+    const pivotGrid = createPivotGrid(this.testOptions);
+    const spyBegin = sinon.spy(pivotGrid._dataController, 'beginLoading');
+    const spyEnd = sinon.spy(pivotGrid._dataController, 'endLoading');
+    const dataProvider = this.pivotGrid.getDataProvider();
+    const showingBeforeReady = spyEnd.callCount === 0 && spyBegin.callCount === 1;
 
     dataProvider.ready();
     this.clock.tick();
@@ -281,26 +269,20 @@ QUnit.test('Loading indicator showing', function(assert) {
 });
 
 QUnit.test('Export with empty cellsInfo', function(assert) {
-    // arrange
-    var columnsInfo,
-        rowsInfo,
-        cellsInfo,
-        _getCellsInfo = this.pivotGrid._dataController.getCellsInfo,
-        dataProvider = this.pivotGrid.getDataProvider();
+    const _getCellsInfo = this.pivotGrid._dataController.getCellsInfo;
+    const dataProvider = this.pivotGrid.getDataProvider();
 
     this.pivotGrid._dataController.getCellsInfo = function() {
         return [];
     };
 
-    columnsInfo = this.pivotGrid._dataController.getColumnsInfo(true);
-    rowsInfo = this.pivotGrid._dataController.getRowsInfo(true);
-    cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
+    const columnsInfo = this.pivotGrid._dataController.getColumnsInfo(true);
+    const rowsInfo = this.pivotGrid._dataController.getRowsInfo(true);
+    const cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
 
     this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
 
-    // act
     dataProvider.ready();
-    // assert
     assert.strictEqual(this.dataProvider.getColumns().length, 16, 'Columns length is correct');
     assert.strictEqual(this.dataProvider.getRowsCount(), 10, 'Rows count is length is correct');
     assert.strictEqual(this.dataProvider.getCellMerging(0, 0).colspan, 1, 'colspan count is correct');
@@ -314,14 +296,12 @@ QUnit.test('Export with empty cellsInfo', function(assert) {
 });
 
 QUnit.test('Context menu with export', function(assert) {
-    // act
-    var $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
+    const $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
 
     $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 
     this.clock.tick();
 
-    // assert
     assert.equal($('.dx-menu-item-text').eq(1).text(), 'Export to Excel file');
 
     checkDxFontIcon(assert, '.dx-context-menu .dx-menu-item .dx-icon-xlsxfile', DX_ICON_XLSX_FILE_CONTENT_CODE);
@@ -329,38 +309,31 @@ QUnit.test('Context menu with export', function(assert) {
 });
 
 QUnit.test('Hide export from the context menu when the export.enabled option is disabled', function(assert) {
-    // act
     this.pivotGrid.option('export.enabled', false);
 
-    var $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
+    const $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
 
     $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 
     this.clock.tick();
 
-    // assert
     assert.equal($('.dx-menu-item-text').eq(1).text(), '');
 });
 
 // T311313:
 QUnit.test('Row column alignment', function(assert) {
-    // act
-    var columnsInfo = $.extend(true, [], this.pivotGrid._dataController.getColumnsInfo(true)),
-        rowsInfo = $.extend(true, [], this.pivotGrid._dataController.getRowsInfo(true)),
-        cellsInfo = this.pivotGrid._dataController.getCellsInfo(true),
-        dataProvider = this.pivotGrid.getDataProvider();
+    const columnsInfo = $.extend(true, [], this.pivotGrid._dataController.getColumnsInfo(true));
+    const rowsInfo = $.extend(true, [], this.pivotGrid._dataController.getRowsInfo(true));
+    const cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
+    const dataProvider = this.pivotGrid.getDataProvider();
 
-    var items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
-    // act
+    let items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
     dataProvider.ready();
-    // assert
     assert.equal(items[0][0].alignment, 'left', 'Not RTL export data');
 
     this.pivotGrid._options.rtlEnabled = true;
     items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
-    // act
     dataProvider.ready();
-    // assert
     this.pivotGrid._options.rtlEnabled = false;
     assert.equal(items[0][0].alignment, 'right', 'RTL export data');
 });
@@ -368,14 +341,14 @@ QUnit.test('Row column alignment', function(assert) {
 QUnit.module('Data Provider');
 
 QUnit.test('Initialization. Get styles', function(assert) {
-    var dataProvider = new DataProvider();
+    const dataProvider = new DataProvider();
 
     assert.ok(dataProvider.getStyles() instanceof Array);
     assert.deepEqual(dataProvider.getStyles(), []);
 });
 
 QUnit.test('getCellType. fields dataType is not defined', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1 }, {}, {}, {}, {}, {}],
             [{ text: 'row1' },
@@ -407,7 +380,7 @@ QUnit.test('getCellType. fields dataType is not defined', function(assert) {
 });
 
 QUnit.test('getCellType. Data fields have customizeText', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1 }, {}, {}, {}, {}, {}, {}],
             [{ text: 'row1' },
@@ -441,7 +414,7 @@ QUnit.test('getCellType. Data fields have customizeText', function(assert) {
 });
 
 QUnit.test('getCellType for headers', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 2, colspan: 2 }, { text: 'a1', value: 1, format: 'fixedPoint' }, { text: 'a2', value: 2 }],
             [{ text: 'b1', value: 1, format: 'fixedPoint' }, { text: 'b2', value: 2 }],
@@ -470,7 +443,7 @@ QUnit.test('getCellType for headers', function(assert) {
 });
 
 QUnit.test('getCellMerging', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 3, colspan: 2 }, { rowspan: 1, colspan: 1 }, {}],
             [{}, {}, {}],
@@ -481,7 +454,6 @@ QUnit.test('getCellMerging', function(assert) {
 
     dataProvider.ready();
 
-    // act, assert
     assert.strictEqual(dataProvider.getCellMerging(0, 0).colspan, 1, 'colspan count is correct');
     assert.strictEqual(dataProvider.getCellMerging(0, 0).rowspan, 2, 'rowspan count is correct');
 
@@ -490,7 +462,7 @@ QUnit.test('getCellMerging', function(assert) {
 });
 
 QUnit.test('Get columns', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1 }, {}],
             [{ text: 'row1' }, {}]
@@ -500,7 +472,7 @@ QUnit.test('Get columns', function(assert) {
 
     dataProvider.ready();
 
-    var columns = dataProvider.getColumns();
+    const columns = dataProvider.getColumns();
 
     assert.strictEqual(columns.length, 2);
 
@@ -516,7 +488,7 @@ QUnit.test('Get columns', function(assert) {
 });
 
 QUnit.test('Data alignment', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1, colspan: 1 }, {}, {}],
             [{ text: 'row1' }, {}, {}]
@@ -526,7 +498,7 @@ QUnit.test('Data alignment', function(assert) {
 
     dataProvider.ready();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].alignment, 'center', 'description cell alignment');
     assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, 'center', 'column header alignment');
@@ -535,7 +507,7 @@ QUnit.test('Data alignment', function(assert) {
 });
 
 QUnit.test('Data alignment without data fields', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1, colspan: 1 }, {}, {}],
             [{ text: 'row1' }, { }, { }]
@@ -545,7 +517,7 @@ QUnit.test('Data alignment without data fields', function(assert) {
 
     dataProvider.ready();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].alignment, 'center', 'description cell alignment');
     assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, 'center', 'column header alignment');
@@ -554,7 +526,7 @@ QUnit.test('Data alignment without data fields', function(assert) {
 });
 
 QUnit.test('Data alignment. RTL', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1, colspan: 1 }, {}, {}],
             [{ text: 'row1' }, {}, {}]
@@ -565,7 +537,7 @@ QUnit.test('Data alignment. RTL', function(assert) {
 
     dataProvider.ready();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, 'center', 'column header alignment');
     assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].alignment, 'right', 'row header alignment');
@@ -573,7 +545,7 @@ QUnit.test('Data alignment. RTL', function(assert) {
 });
 
 QUnit.test('Data format', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1, colspan: 1 }, {}, {}],
             [{ text: 'row1' }, { dataIndex: 0 }, { dataIndex: 1 }]
@@ -586,7 +558,7 @@ QUnit.test('Data format', function(assert) {
 
     dataProvider.ready();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     assert.deepEqual(styles[dataProvider.getStyleId(1, 1)].format, { type: 'fixedPoint', precision: 0 });
     assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].dataType, 'number');

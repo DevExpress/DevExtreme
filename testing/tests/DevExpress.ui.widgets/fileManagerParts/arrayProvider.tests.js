@@ -172,7 +172,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
     test('throw error when try moving folder with incorrect parameters', function(assert) {
         let errorCount = 0;
         let lastErrorId = -1;
-        let items = this.provider.getItems();
+        const items = this.provider.getItems();
 
         try {
             this.provider.moveItems([ items[0] ], items[0]);
@@ -185,7 +185,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
         assert.equal(lastErrorId, ErrorCode.Other);
 
         const pathInfo = [ { key: 'F1', name: 'F1' } ];
-        let subFolders = this.provider.getItems(pathInfo);
+        const subFolders = this.provider.getItems(pathInfo);
         try {
             this.provider.moveItems([ subFolders[0] ], subFolders[0]);
         } catch(e) {
@@ -239,7 +239,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
     test('throw error when try copying folder with incorrect parameters', function(assert) {
         let errorCount = 0;
         let lastErrorId = -1;
-        let folders = this.provider.getItems();
+        const folders = this.provider.getItems();
 
         try {
             this.provider.copyItems([ folders[0] ], folders[0]);
@@ -252,7 +252,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
         assert.equal(lastErrorId, ErrorCode.Other);
 
         const pathInfo = [ { key: 'F1', name: 'F1' } ];
-        let subFolders = this.provider.getItems(pathInfo);
+        const subFolders = this.provider.getItems(pathInfo);
         try {
             this.provider.copyItems([ subFolders[0] ], subFolders[0]);
         } catch(e) {

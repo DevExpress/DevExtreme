@@ -19,50 +19,50 @@ import 'common.css!';
 import 'generic_light.css!';
 
 // calendar
-const CALENDAR_BODY_CLASS = 'dx-calendar-body',
-    CALENDAR_CELL_CLASS = 'dx-calendar-cell',
-    CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS = 'dx-calendar-disabled-navigator-link',
-    CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS = 'dx-calendar-navigator-next-month',
-    CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view',
-    CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view',
-    CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button',
-    CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button',
-    CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view',
-    CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper',
+const CALENDAR_BODY_CLASS = 'dx-calendar-body';
+const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
+const CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS = 'dx-calendar-disabled-navigator-link';
+const CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS = 'dx-calendar-navigator-next-month';
+const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
+const CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view';
+const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
+const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
+const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
+const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 
-    // calendar view
-    CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date',
-    CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date',
+// calendar view
+const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
+const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 
-    CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey',
+const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
-    VIEW_ANIMATION_DURATION = 350,
+const VIEW_ANIMATION_DURATION = 350;
 
-    ACTIVE_STATE_CLASS = 'dx-state-active',
+const ACTIVE_STATE_CLASS = 'dx-state-active';
 
-    ENTER_KEY_CODE = 'Enter',
-    PAGE_UP_KEY_CODE = 'PageUp',
-    PAGE_DOWN_KEY_CODE = 'PageDown',
-    END_KEY_CODE = 'End',
-    HOME_KEY_CODE = 'Home',
-    LEFT_ARROW_KEY_CODE = 'ArrowLeft',
-    UP_ARROW_KEY_CODE = 'ArrowUp',
-    RIGHT_ARROW_KEY_CODE = 'ArrowRight',
-    DOWN_ARROW_KEY_CODE = 'ArrowDown';
+const ENTER_KEY_CODE = 'Enter';
+const PAGE_UP_KEY_CODE = 'PageUp';
+const PAGE_DOWN_KEY_CODE = 'PageDown';
+const END_KEY_CODE = 'End';
+const HOME_KEY_CODE = 'Home';
+const LEFT_ARROW_KEY_CODE = 'ArrowLeft';
+const UP_ARROW_KEY_CODE = 'ArrowUp';
+const RIGHT_ARROW_KEY_CODE = 'ArrowRight';
+const DOWN_ARROW_KEY_CODE = 'ArrowDown';
 
 const getShortDate = (date) => {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
 };
 
 const getBeforeViewInstance = (calendar) => {
-        return calendar._beforeView;
-    },
-    getCurrentViewInstance = (calendar) => {
-        return calendar._view;
-    },
-    getAfterViewInstance = (calendar) => {
-        return calendar._afterView;
-    };
+    return calendar._beforeView;
+};
+const getCurrentViewInstance = (calendar) => {
+    return calendar._view;
+};
+const getAfterViewInstance = (calendar) => {
+    return calendar._afterView;
+};
 
 const toSelector = (className) => {
     return '.' + className;
@@ -74,13 +74,13 @@ const iterateViews = (callback) => {
 };
 
 function triggerKeydown($element, key, ctrl) {
-    var options = { key: key };
+    const options = { key: key };
 
     if(ctrl) {
         options.ctrlKey = ctrl;
     }
 
-    var e = $.Event('keydown', options);
+    const e = $.Event('keydown', options);
     $element.trigger(e);
 }
 
@@ -126,14 +126,14 @@ QUnit.module('Navigator', {
     }
 }, () => {
     QUnit.test('Navigator links must prevent default click browser action', function(assert) {
-        const $window = $(window),
-            brick = $('<div style=\'height:50000px;\'></div>'),
-            immediateClick = (element) => {
-                const event = document.createEvent('MouseEvent');
+        const $window = $(window);
+        const brick = $('<div style=\'height:50000px;\'></div>');
+        const immediateClick = (element) => {
+            const event = document.createEvent('MouseEvent');
 
-                event.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-                element.dispatchEvent(event);
-            };
+            event.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            element.dispatchEvent(event);
+        };
         let actualScrollTop;
         try {
             brick.appendTo('body');
@@ -187,9 +187,9 @@ QUnit.module('Navigator integration', {
 }, () => {
 
     QUnit.test('calendar must change the current date when navigating to previous and next view', function(assert) {
-        const calendar = this.calendar,
-            $navigatorPrev = this.$navigatorPrev,
-            $navigatorNext = this.$navigatorNext;
+        const calendar = this.calendar;
+        const $navigatorPrev = this.$navigatorPrev;
+        const $navigatorNext = this.$navigatorNext;
 
         $.each(['month', 'year', 'decade', 'century'], (_, type) => {
             calendar.option('zoomLevel', type);
@@ -208,9 +208,9 @@ QUnit.module('Navigator integration', {
             rtlEnabled: true
         });
 
-        const calendar = this.calendar,
-            $navigatorPrev = this.$navigatorPrev,
-            $navigatorNext = this.$navigatorNext;
+        const calendar = this.calendar;
+        const $navigatorPrev = this.$navigatorPrev;
+        const $navigatorNext = this.$navigatorNext;
 
         $.each(['month', 'year', 'decade', 'century'], (_, type) => {
             calendar.option('zoomLevel', type);
@@ -266,8 +266,8 @@ QUnit.module('Navigator integration', {
             value: new Date(2015, 5, 9)
         });
 
-        const $navigatorCaption = this.$navigatorCaption,
-            instance = this.calendar;
+        const $navigatorCaption = this.$navigatorCaption;
+        const instance = this.calendar;
 
         assert.equal($navigatorCaption.text(), 'June 2015', 'navigator caption is correct');
 
@@ -281,8 +281,8 @@ QUnit.module('Navigator integration', {
             currentDate: new Date(2015, 5, 1)
         });
 
-        const $navigatorCaption = this.$navigatorCaption,
-            calendar = this.calendar;
+        const $navigatorCaption = this.$navigatorCaption;
+        const calendar = this.calendar;
 
         assert.equal($navigatorCaption.text(), 'June 2015', 'navigator caption is correct');
 
@@ -291,8 +291,8 @@ QUnit.module('Navigator integration', {
     });
 
     QUnit.test('navigator caption should be changed during swipe', function(assert) {
-        const $element = this.$element,
-            $navigatorCaption = this.$navigatorCaption;
+        const $element = this.$element;
+        const $navigatorCaption = this.$navigatorCaption;
 
         assert.equal($navigatorCaption.text(), 'June 2015', 'start caption');
 
@@ -312,8 +312,8 @@ QUnit.module('Navigator integration', {
             value: new Date(2015, 5, 13)
         });
 
-        const $element = this.$element,
-            $navigatorCaption = this.$navigatorCaption;
+        const $element = this.$element;
+        const $navigatorCaption = this.$navigatorCaption;
 
         assert.equal($navigatorCaption.text(), 'June 2015', 'start caption');
 
@@ -329,8 +329,8 @@ QUnit.module('Navigator integration', {
             value: new Date(2015, 3, 14)
         });
 
-        const $element = this.$element,
-            instance = $element.dxCalendar('instance');
+        const $element = this.$element;
+        const instance = $element.dxCalendar('instance');
 
         instance.option({
             max: new Date(2015, 3, 25),
@@ -360,9 +360,9 @@ QUnit.module('Navigator integration', {
     });
 
     QUnit.test('view change buttons should have feedback', function(assert) {
-        const prevChangeMonthButton = this.$navigatorPrev,
-            nextChangeMonthButton = this.$navigatorNext,
-            prevMouse = pointerMock(prevChangeMonthButton).start();
+        const prevChangeMonthButton = this.$navigatorPrev;
+        const nextChangeMonthButton = this.$navigatorNext;
+        const prevMouse = pointerMock(prevChangeMonthButton).start();
 
         prevMouse.active();
         assert.ok($(prevChangeMonthButton).hasClass(ACTIVE_STATE_CLASS));
@@ -423,8 +423,8 @@ QUnit.module('Navigator integration', {
         const pointer = pointerMock(this.$element).start();
         pointer.down().move(10).up();
 
-        const navigatorText = this.$navigatorCaption.text(),
-            expectedText = 'May 2015';
+        const navigatorText = this.$navigatorCaption.text();
+        const expectedText = 'May 2015';
 
         assert.equal(navigatorText, expectedText, 'navigator caption is correct');
     });
@@ -436,8 +436,8 @@ QUnit.module('Navigator integration', {
         const pointer = pointerMock(this.$element).start();
         pointer.down().move(-10).up();
 
-        const navigatorText = this.$navigatorCaption.text(),
-            expectedText = 'July 2015';
+        const navigatorText = this.$navigatorCaption.text();
+        const expectedText = 'July 2015';
 
         assert.equal(navigatorText, expectedText, 'navigator caption is correct');
     });
@@ -493,8 +493,8 @@ QUnit.module('Views initial positions', {
     });
 
     QUnit.test('calendar views position', function(assert) {
-        const $view = $(getCurrentViewInstance(this.instance).$element()),
-            viewWidth = $view.width();
+        const $view = $(getCurrentViewInstance(this.instance).$element());
+        const viewWidth = $view.width();
 
         assert.equal($view.position().left, 0, 'main view is at 0');
         assert.equal(getBeforeViewInstance(this.instance).$element().position().left, -viewWidth, 'main view is at the left');
@@ -510,8 +510,8 @@ QUnit.module('Views initial positions', {
 
         this.reinit({ rtlEnabled: true });
 
-        const $view = $(getCurrentViewInstance(this.instance).$element()),
-            viewWidth = $view.width();
+        const $view = $(getCurrentViewInstance(this.instance).$element());
+        const viewWidth = $view.width();
 
         assert.equal($view.position().left, 0, 'main view is at 0');
         assert.equal(getBeforeViewInstance(this.instance).$element().position().left, viewWidth, 'main view is at the left');
@@ -577,10 +577,10 @@ QUnit.module('Views integration', {
     });
 
     QUnit.test('changing calendar \'value\' option to the date of different view should change current view', function(assert) {
-        const calendar = this.calendar,
-            oldMonthView = getCurrentViewInstance(calendar),
-            newDate = new Date(2015, 8, 11),
-            testNewDate = new Date(newDate);
+        const calendar = this.calendar;
+        const oldMonthView = getCurrentViewInstance(calendar);
+        const newDate = new Date(2015, 8, 11);
+        const testNewDate = new Date(newDate);
 
         calendar.option('value', newDate);
         const newMonthView = getCurrentViewInstance(calendar);
@@ -605,13 +605,13 @@ QUnit.module('Views integration', {
 
         calendar.option('value', new Date(2015, 9, 1));
 
-        const $currentView = $(getCurrentViewInstance(calendar).$element()),
-            afterViewBeforeClick = getAfterViewInstance(calendar);
+        const $currentView = $(getCurrentViewInstance(calendar).$element());
+        const afterViewBeforeClick = getAfterViewInstance(calendar);
 
         $($currentView.find('td[data-value=\'2015/11/06\']')).trigger('dxclick');
 
         const currentViewAfterClick = getCurrentViewInstance(calendar);
-        assert.ok(afterViewBeforeClick === currentViewAfterClick, 'after view should become a current view after click on other month date cell');
+        assert.strictEqual(afterViewBeforeClick, currentViewAfterClick, 'after view should become a current view after click on other month date cell');
     });
 
     QUnit.test('selected value should be rendered correctly on views with different maxZoomLevel', function(assert) {
@@ -844,8 +844,8 @@ QUnit.module('Keyboard navigation', {
     });
 
     QUnit.test('Event should be passed to the valueChanged action after selecting a cell via the keyboard', function(assert) {
-        const keyboard = keyboardMock(this.$element),
-            valueChangedHandler = sinon.stub();
+        const keyboard = keyboardMock(this.$element);
+        const valueChangedHandler = sinon.stub();
 
         this.calendar.option({
             onValueChanged: valueChangedHandler,
@@ -861,8 +861,8 @@ QUnit.module('Keyboard navigation', {
     });
 
     QUnit.test('pressing ctrl+arrows or pageup/pagedown keys must change view correctly', function(assert) {
-        const $element = this.$element,
-            calendar = this.calendar;
+        const $element = this.$element;
+        const calendar = this.calendar;
 
         const expectedDates = {
             'month': [new Date(2013, 8, 13), new Date(2013, 9, 13)],
@@ -894,6 +894,33 @@ QUnit.module('Keyboard navigation', {
         });
     });
 
+    QUnit.test('pressing pageup/pagedown keys must change view correctly when rtlEnabled is true', function(assert) {
+        const $element = this.$element;
+        const calendar = this.calendar;
+        calendar.option('rtlEnabled', true);
+
+        const expectedDates = {
+            'month': [new Date(2013, 8, 13), new Date(2013, 9, 13)],
+            'year': [new Date(2012, 9, 13), new Date(2013, 9, 13)],
+            'decade': [new Date(2003, 9, 13), new Date(2013, 9, 13)],
+            'century': [new Date(1913, 9, 13), new Date(2013, 9, 13)]
+        };
+
+        const clock = this.clock;
+
+        iterateViews((_, type) => {
+            calendar.option('zoomLevel', type);
+
+            clock.tick();
+            triggerKeydown($element, PAGE_UP_KEY_CODE);
+            assert.deepEqual(calendar.option('currentDate'), expectedDates[type][0], 'pageUp navigates correctly');
+
+            clock.tick();
+            triggerKeydown($element, PAGE_DOWN_KEY_CODE);
+            assert.deepEqual(calendar.option('currentDate'), expectedDates[type][1], 'pageDown navigates correctly');
+        });
+    });
+
     QUnit.test('pressing ctrl+arrows must navigate in inverse direction in RTL mode', function(assert) {
         this.reinit({
             value: this.value,
@@ -919,8 +946,8 @@ QUnit.module('Keyboard navigation', {
             focusStateEnabled: true
         });
 
-        const $element = this.$element,
-            calendar = this.calendar;
+        const $element = this.$element;
+        const calendar = this.calendar;
 
         $element.trigger('focusin');
 
@@ -952,8 +979,8 @@ QUnit.module('Keyboard navigation', {
             focusStateEnabled: true
         });
 
-        const calendar = this.calendar,
-            keyboard = keyboardMock(this.$element);
+        const calendar = this.calendar;
+        const keyboard = keyboardMock(this.$element);
 
         calendar.option('value', new Date(2015, 8, 1));
 
@@ -993,8 +1020,8 @@ QUnit.module('Keyboard navigation', {
             value: new Date(2013, 11, 15)
         });
 
-        const calendar = this.calendar,
-            $element = this.$element;
+        const calendar = this.calendar;
+        const $element = this.$element;
 
         $($element).trigger('focusin');
 
@@ -1119,8 +1146,8 @@ QUnit.module('Preserve time component on value change', {
     });
 
     QUnit.test('T277555 - time should not be reset if keyboard is used', function(assert) {
-        const calendar = this.calendar,
-            $calendar = this.$element;
+        const calendar = this.calendar;
+        const $calendar = this.$element;
 
         calendar.option('value', new Date(2015, 8, 1, 12, 57));
 
@@ -1166,8 +1193,8 @@ QUnit.module('Calendar footer', {
 
         $($todayButton).trigger('dxclick');
 
-        const currentDate = calendar.option('currentDate'),
-            today = new Date();
+        const currentDate = calendar.option('currentDate');
+        const today = new Date();
 
         currentDate.setHours(0, 0, 0, 0);
         today.setHours(0, 0, 0, 0);
@@ -1176,8 +1203,8 @@ QUnit.module('Calendar footer', {
     });
 
     QUnit.test('today view already has a current', function(assert) {
-        const calendar = this.calendar,
-            $todayButton = this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
+        const calendar = this.calendar;
+        const $todayButton = this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
 
         const dateInTodayView = new Date();
         dateInTodayView.setDate(15);
@@ -1196,8 +1223,8 @@ QUnit.module('Calendar footer', {
             zoomLevel: 'decade'
         });
 
-        const calendar = this.calendar,
-            $todayButton = this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
+        const calendar = this.calendar;
+        const $todayButton = this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
 
         $($todayButton).trigger('dxclick');
         assert.equal(calendar.option('zoomLevel'), 'month', 'calendar view is changed correctly');
@@ -1206,8 +1233,8 @@ QUnit.module('Calendar footer', {
     });
 
     QUnit.test('today view is visible after \'today\' button click', function(assert) {
-        const $element = this.$element,
-            $todayButton = $element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
+        const $element = this.$element;
+        const $todayButton = $element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
 
         $($todayButton).trigger('dxclick');
 
@@ -1220,11 +1247,11 @@ QUnit.module('Calendar footer', {
     });
 
     QUnit.test('navigator caption should be changed after \'today\' button click', function(assert) {
-        const $element = this.$element,
-            $todayButton = $element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
+        const $element = this.$element;
+        const $todayButton = $element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
 
-        const $navigator = $element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS)),
-            prevText = $navigator.text();
+        const $navigator = $element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
+        const prevText = $navigator.text();
 
         $($todayButton).trigger('dxclick');
 
@@ -1235,18 +1262,18 @@ QUnit.module('Calendar footer', {
     QUnit.test('correct today view position before animation (currentDate < today)', function(assert) {
         assert.expect(2);
 
-        const fxState = fx.off,
-            origAnimate = fx.animate;
+        const fxState = fx.off;
+        const origAnimate = fx.animate;
 
-        const $element = this.$element,
-            calendar = this.calendar,
-            viewWidth = $element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').eq(0).width();
+        const $element = this.$element;
+        const calendar = this.calendar;
+        const viewWidth = $element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').eq(0).width();
 
         try {
             fx.off = false;
             fx.animate = () => {
-                const todayView = getAfterViewInstance(calendar),
-                    $todayView = $(todayView.$element());
+                const todayView = getAfterViewInstance(calendar);
+                const $todayView = $(todayView.$element());
 
                 assert.equal(getShortDate(todayView.option('date')), getShortDate(new Date()), 'today view is created');
                 assert.equal($todayView.position().left, viewWidth, 'today view position is correct');
@@ -1265,20 +1292,20 @@ QUnit.module('Calendar footer', {
     QUnit.test('correct today view position before animation (currentDate > today)', function(assert) {
         assert.expect(2);
 
-        const fxState = fx.off,
-            origAnimate = fx.animate;
+        const fxState = fx.off;
+        const origAnimate = fx.animate;
 
-        const calendar = this.calendar,
-            viewWidth = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').eq(0).width(),
-            today = new Date();
+        const calendar = this.calendar;
+        const viewWidth = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').eq(0).width();
+        const today = new Date();
 
         calendar.option('currentDate', new Date(today.getFullYear() + 2, 2, 7));
 
         try {
             fx.off = false;
             fx.animate = () => {
-                const todayView = getBeforeViewInstance(calendar),
-                    $todayView = $(todayView.$element());
+                const todayView = getBeforeViewInstance(calendar);
+                const $todayView = $(todayView.$element());
 
                 assert.equal(getShortDate(todayView.option('date')), getShortDate(new Date()), 'today view is created');
                 assert.equal($todayView.position().left, -viewWidth, 'today view position is correct');
@@ -1296,14 +1323,14 @@ QUnit.module('Calendar footer', {
     });
 
     QUnit.test('correct views are rendered after animation', function(assert) {
-        const calendar = this.calendar,
-            $todayButton = this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
+        const calendar = this.calendar;
+        const $todayButton = this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS));
 
         $($todayButton).trigger('dxclick');
 
-        const beforeViewDate = getBeforeViewInstance(calendar).option('date'),
-            afterViewDate = getAfterViewInstance(calendar).option('date'),
-            today = calendar.option('currentDate');
+        const beforeViewDate = getBeforeViewInstance(calendar).option('date');
+        const afterViewDate = getAfterViewInstance(calendar).option('date');
+        const today = calendar.option('currentDate');
 
         assert.equal(beforeViewDate.getFullYear(), new Date(today.getFullYear(), today.getMonth() - 1).getFullYear(), 'before view year is correct');
         assert.equal(beforeViewDate.getMonth(), new Date(today.getFullYear(), today.getMonth() - 1).getMonth(), 'before view month is correct');
@@ -1440,8 +1467,8 @@ QUnit.module('Options', {
     });
 
     QUnit.test('calendar view should be changed on the \'currentDate\' option change', function(assert) {
-        const calendar = this.calendar,
-            oldDate = getCurrentViewInstance(calendar).option('date');
+        const calendar = this.calendar;
+        const oldDate = getCurrentViewInstance(calendar).option('date');
 
         calendar.option('currentDate', new Date(2013, 11, 15));
         assert.notDeepEqual(getCurrentViewInstance(calendar).option('date'), oldDate, 'view is changed');
@@ -1537,8 +1564,8 @@ QUnit.module('ZoomLevel option', {
     });
 
     QUnit.test('do not go up if minZoomLevel is reached', function(assert) {
-        const $element = this.$element,
-            instance = $element.dxCalendar().dxCalendar('instance');
+        const $element = this.$element;
+        const instance = $element.dxCalendar().dxCalendar('instance');
 
         $.each(['month', 'year', 'decade'], (_, type) => {
             instance.option({
@@ -1552,11 +1579,11 @@ QUnit.module('ZoomLevel option', {
     });
 
     QUnit.test('\'zoomLevel\' should be aligned after \'minZoomLevel\' option change if out of bounds', function(assert) {
-        const $element = this.$element,
-            instance = $element.dxCalendar({
-                minZoomLevel: 'century',
-                zoomLevel: 'century'
-            }).dxCalendar('instance');
+        const $element = this.$element;
+        const instance = $element.dxCalendar({
+            minZoomLevel: 'century',
+            zoomLevel: 'century'
+        }).dxCalendar('instance');
 
         $.each(['decade', 'year', 'month'], (_, type) => {
             instance.option('minZoomLevel', type);
@@ -1599,7 +1626,7 @@ QUnit.module('ZoomLevel option', {
             calendar.option('zoomLevel', type);
 
             $($element.find(toSelector(CALENDAR_CELL_CLASS)).not(toSelector(CALENDAR_OTHER_VIEW_CLASS)).eq(3)).trigger('dxclick');
-            assert.ok(calendar.option('zoomLevel') !== type, 'zoomLevel option view is changed');
+            assert.notStrictEqual(calendar.option('zoomLevel'), type, 'zoomLevel option view is changed');
         });
     });
 
@@ -1615,7 +1642,7 @@ QUnit.module('ZoomLevel option', {
             calendar.option('zoomLevel', type);
             $($element).trigger('focusin');
             triggerKeydown($element, ENTER_KEY_CODE);
-            assert.ok(calendar.option('zoomLevel') !== type, 'zoomLevel option view is changed');
+            assert.notStrictEqual(calendar.option('zoomLevel'), type, 'zoomLevel option view is changed');
         });
     });
 
@@ -1630,7 +1657,7 @@ QUnit.module('ZoomLevel option', {
             calendar.option('zoomLevel', type);
 
             $($element.find(toSelector(CALENDAR_OTHER_VIEW_CLASS)).first()).trigger('dxclick');
-            assert.ok(calendar.option('zoomLevel') !== type, 'zoomLevel option view is changed');
+            assert.notStrictEqual(calendar.option('zoomLevel'), type, 'zoomLevel option view is changed');
         });
     });
 
@@ -1727,8 +1754,8 @@ QUnit.module('Min & Max options', {
     });
 
     QUnit.test('calendar should not allow to navigate to a date earlier than min and later than max via keyboard events', function(assert) {
-        const isAnimationOff = fx.off,
-            animate = fx.animate;
+        const isAnimationOff = fx.off;
+        const animate = fx.animate;
 
         try {
             let animateCount = 0;
@@ -1776,11 +1803,11 @@ QUnit.module('Min & Max options', {
     });
 
     QUnit.test('calendar should set currentDate to min when setting to an earlier date; and to max when setting to a later date', function(assert) {
-        const calendar = this.calendar,
-            min = calendar.option('min'),
-            max = calendar.option('max'),
-            earlyDate = new Date(this.minDate.getFullYear(), this.minDate.getMonth() - 1, 1),
-            lateDate = new Date(this.maxDate.getFullYear(), this.maxDate.getMonth() + 1, 1);
+        const calendar = this.calendar;
+        const min = calendar.option('min');
+        const max = calendar.option('max');
+        const earlyDate = new Date(this.minDate.getFullYear(), this.minDate.getMonth() - 1, 1);
+        const lateDate = new Date(this.maxDate.getFullYear(), this.maxDate.getMonth() + 1, 1);
 
         calendar.option('currentDate', earlyDate);
         assert.deepEqual(calendar.option('currentDate'), new Date(this.minDate.getFullYear(), this.minDate.getMonth(), min.getDate()));
@@ -1857,9 +1884,9 @@ QUnit.module('Min & Max options', {
             value: value
         });
 
-        const calendar = this.calendar,
-            minDate = new Date(value),
-            maxDate = new Date(value);
+        const calendar = this.calendar;
+        const minDate = new Date(value);
+        const maxDate = new Date(value);
 
         minDate.setYear(2014);
         maxDate.setYear(2015);
@@ -1908,8 +1935,8 @@ QUnit.module('Min & Max options', {
             max: new Date(2015, 9, 20)
         });
 
-        const calendar = this.calendar,
-            $viewsWrapper = $(calendar.$element().find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)));
+        const calendar = this.calendar;
+        const $viewsWrapper = $(calendar.$element().find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)));
 
         assert.equal($viewsWrapper.children().length, 2, 'the number of views is correct when current view contain min date');
         assert.ok(!getBeforeViewInstance(calendar), 'there is no after view');
@@ -1927,8 +1954,8 @@ QUnit.module('Min & Max options', {
             max: new Date(2015, 9, 20)
         });
 
-        const calendar = this.calendar,
-            $views = $(calendar.$element().find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).children());
+        const calendar = this.calendar;
+        const $views = $(calendar.$element().find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).children());
 
         assert.equal($views.length, 2, 'the number of views is correct when current view contain min date');
     });
@@ -1999,51 +2026,400 @@ QUnit.module('disabledDates option', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('calendar should not allow to navigate to a disabled date via keyboard events', function(assert) {
-        const isAnimationOff = fx.off,
-            animate = fx.animate;
+    QUnit.test('navigating to the disabled month should not skip the month and should focus the current date', function(assert) {
+        const isAnimationOff = fx.off;
+        const animationSpy = sinon.spy(fx, 'animate');
 
         try {
-            let animateCount = 0;
-
             fx.off = false;
-
-            fx.animate = (...args) => {
-                animateCount++;
-                return animate.apply(fx, args);
-            };
 
             this.$element.trigger('focusin');
 
             triggerKeydown(this.$element, PAGE_UP_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
-
-            assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 8, 30), 'Skip disabled dates');
-            assert.equal(animateCount, 1, 'view is changed with animation after the \'page up\' key press the first time');
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 9, 10), 'same date has been focused');
+            assert.equal(animationSpy.callCount, 1, 'view is changed with animation after the \'page up\' key press the first time');
 
             triggerKeydown(this.$element, PAGE_UP_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
-
-            assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 7, 30));
-            assert.equal(animateCount, 2, 'view is changed after the \'page up\' key press the second time');
-
-            triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
-            this.clock.tick(VIEW_ANIMATION_DURATION);
-            assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 8, 30));
-            assert.equal(animateCount, 3, 'view is changed with animation after the \'page down\' key press the first time');
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 8, 10), 'same date has been focused');
+            assert.equal(animationSpy.callCount, 2, 'view is changed after the \'page up\' key press the second time');
 
             triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
-            assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 10, 1));
-            assert.equal(animateCount, 4, 'view is changed with animation after the \'page down\' key press the first time');
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 9, 10), 'same date has been focused');
+            assert.equal(animationSpy.callCount, 3, 'view is changed with animation after the \'page down\' key press the first time');
 
             triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
-            assert.deepEqual(this.calendar.option('currentDate'), new Date(2011, 0, 1), 'Skip disabled dates');
-            assert.equal(animateCount, 5, 'view is changed after the \'page down\' key press the second time');
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 10, 10), 'same date has been focused');
+            assert.equal(animationSpy.callCount, 4, 'view is changed with animation after the \'page down\' key press the first time');
+
+            triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 11, 10), 'same date has been focused');
+            assert.equal(animationSpy.callCount, 5, 'view is changed after the \'page down\' key press the third time');
+
+            $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS))).trigger('dxclick');
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 10, 10), 'same date has been focused');
+            assert.equal(animationSpy.callCount, 6, 'view is changed after the click on previous arrow on UI');
+
+            $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS))).trigger('dxclick');
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 11, 10), 'same date has been focused');
+            assert.equal(animationSpy.callCount, 7, 'view is changed after the click on next arrow on UI');
         } finally {
             fx.off = isAnimationOff;
-            fx.animate = animate;
+            animationSpy.restore();
+        }
+    });
+
+    QUnit.test('navigating to next/previous month should focus the closest available date and change the view', function(assert) {
+        const isAnimationOff = fx.off;
+        const animationSpy = sinon.spy(fx, 'animate');
+
+        try {
+            this.calendar.option({
+                value: new Date(2020, 0, 15),
+                disabledDates: (args) => {
+                    const date = args.date.getDate();
+                    const month = args.date.getMonth();
+                    return month === 0 && date >= 20 || month === 1 && date < 20;
+                }
+            });
+
+            fx.off = false;
+            animationSpy.reset();
+
+            const lastAvailableDateOnJanuary = new Date(2020, 0, 19);
+            const firstAvailableDateOnFebruary = new Date(2020, 1, 20);
+
+            this.$element.trigger('focusin');
+
+            triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), firstAvailableDateOnFebruary, 'closest available date has been focused');
+            assert.equal(animationSpy.callCount, 1, 'view has been changed');
+
+            triggerKeydown(this.$element, PAGE_UP_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), lastAvailableDateOnJanuary, 'closest available date has been focused');
+            assert.equal(animationSpy.callCount, 2, 'view has been changed');
+
+            triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE, true);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), firstAvailableDateOnFebruary, 'closest available date has been focused');
+            assert.equal(animationSpy.callCount, 3, 'view has been changed');
+
+            triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE, true);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), lastAvailableDateOnJanuary, 'closest available date has been focused');
+            assert.equal(animationSpy.callCount, 4, 'view has been changed');
+
+            $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS))).trigger('dxclick');
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), firstAvailableDateOnFebruary, 'closest available date has been focused');
+            assert.equal(animationSpy.callCount, 5, 'view has been changed');
+
+            $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS))).trigger('dxclick');
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), lastAvailableDateOnJanuary, 'closest available date has been focused');
+            assert.equal(animationSpy.callCount, 6, 'view has been changed');
+        } finally {
+            fx.off = isAnimationOff;
+            animationSpy.restore();
+        }
+    });
+
+    QUnit.test('left/right/up/downArrow should focus the closest date on the previous/next month when forced to change the month', function(assert) {
+        const isAnimationOff = fx.off;
+        const animationSpy = sinon.spy(fx, 'animate');
+
+        try {
+            this.calendar.option({
+                value: new Date(2020, 0, 14),
+                disabledDates: (args) => {
+                    return args.date.getDate() >= 15 || args.date.getDate() <= 4;
+                }
+            });
+
+            fx.off = false;
+            animationSpy.reset();
+
+            this.$element.trigger('focusin');
+
+            triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 1, 5), 'closest available date has been focused');
+            assert.equal(animationSpy.callCount, 1, 'view has been changed');
+
+            triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 14), 'closest available date has been focused');
+            assert.equal(animationSpy.callCount, 2, 'view has been changed');
+
+            triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 1, 11), 'closest available date has been focused');
+            assert.equal(animationSpy.callCount, 3, 'view has been changed');
+
+            triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 14), 'closest available date has been focused');
+            assert.equal(animationSpy.callCount, 4, 'view has been changed');
+        } finally {
+            fx.off = isAnimationOff;
+            animationSpy.restore();
+        }
+    });
+
+    QUnit.test('left/right/up/downArrow should try focus the date moved by offset in a month', function(assert) {
+        this.calendar.option({
+            value: new Date(2020, 0, 6),
+            disabledDates: (args) => {
+                const date = args.date.getDate();
+                return date > 10 && date < 16 || date === 7 || date === 21;
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 20), 'closest date by offset has been focused');
+
+        triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 22), 'closest date by offset has been focused');
+
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 8), 'closest date by offset has been focused');
+
+        triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest date by offset has been focused');
+    });
+
+    QUnit.test('left/right arrows should try focus the month moved by offset in a year view', function(assert) {
+        this.calendar.option({
+            value: new Date(2020, 0, 6),
+            zoomLevel: 'year',
+            disabledDates: (args) => {
+                const month = args.date.getMonth();
+                return month % 2;
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 2, 6), 'closest month by offset has been focused');
+
+        triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest month by offset has been focused');
+    });
+
+    QUnit.test('left/right/up/down arrows should try focus the year moved by offset in a decade view', function(assert) {
+        this.calendar.option({
+            value: new Date(2020, 0, 6),
+            zoomLevel: 'decade',
+            disabledDates: (args) => {
+                const year = args.date.getYear();
+                return year === 121 || year === 124;
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2022, 0, 6), 'closest year by offset has been focused');
+
+        triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest year by offset has been focused');
+
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2028, 0, 6), 'closest year by offset has been focused');
+
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest year by offset has been focused');
+    });
+
+    QUnit.test('left/right/up/down arrows should try focus the decade moved by offset in a century view', function(assert) {
+        this.calendar.option({
+            value: new Date(2000, 0, 6),
+            zoomLevel: 'century',
+            disabledDates: (args) => {
+                const year = args.date.getYear();
+                return year >= 110 && year < 120 || year >= 140 && year < 150;
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 6), 'closest decade by offset has been focused');
+
+        triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2000, 0, 6), 'closest decade by offset has been focused');
+
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2080, 0, 6), 'closest decade by offset has been focused');
+
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2000, 0, 6), 'closest decade by offset has been focused');
+    });
+
+    QUnit.test('disabled decade/century should not be skipped during navigation', function(assert) {
+        this.calendar.option({
+            value: new Date(2020, 0, 6),
+            zoomLevel: 'decade',
+            disabledDates: (args) => {
+                const view = args.view;
+                const year = args.date.getYear();
+                if(view === 'decade') {
+                    return year >= 130 && year < 140;
+                } else if(view === 'century') {
+                    return year >= 100 && year < 200;
+                }
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE, true);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2030, 0, 6), 'current date is correct');
+
+        triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2040, 0, 6), 'current date is correct');
+
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, true);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+
+        triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(1940, 0, 6), 'current date is correct');
+    });
+
+    QUnit.test('up/down arrows should try focus the month moved by offset in a year view', function(assert) {
+        this.calendar.option({
+            value: new Date(2020, 4, 6),
+            zoomLevel: 'year',
+            disabledDates: (args) => {
+                const month = args.date.getMonth();
+                return month < 4 || month > 7;
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2019, 4, 6), 'closest month by offset has been focused');
+
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 4, 6), 'closest month by offset has been focused');
+    });
+
+    QUnit.test('zoomLevel option change should focus the closest available date', function(assert) {
+        this.calendar.option({
+            value: new Date(2020, 0, 6),
+            zoomLevel: 'year',
+            disabledDates: (args) => {
+                const year = args.date.getYear();
+                const date = args.date.getDate();
+
+                if(args.view === 'decade') {
+                    return year === 120;
+                }
+
+                return date === 6;
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE, true);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 7), 'closest date has been focused');
+
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, true);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, true);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2021, 0, 7), 'closest date has been focused');
+    });
+
+    QUnit.test('zoomLevel option change should contour the current view even if current date has not been changed', function(assert) {
+        const currentDate = new Date(2020, 0, 6);
+        this.calendar.option({
+            value: currentDate,
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE, true);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), currentDate, 'currentDate has not been changed');
+        assert.deepEqual(this.calendar._view.option('contouredDate'), currentDate, 'contoured date is correct');
+    });
+
+    QUnit.test('left/right/up/downArrow should work like pageUp/Down when navigating to the disabled month', function(assert) {
+        const isAnimationOff = fx.off;
+        const animationSpy = sinon.spy(fx, 'animate');
+
+        try {
+            const currentDateOnJanuary = new Date(2020, 0, 15);
+            const currentDateOnFebruary = new Date(2020, 1, 15);
+            const currentDateOnMarch = new Date(2020, 2, 15);
+            const currentDateOnApril = new Date(2020, 3, 15);
+
+            this.calendar.option({
+                value: currentDateOnJanuary,
+                disabledDates: (args) => {
+                    const month = args.date.getMonth();
+                    return month === 1 || month === 2;
+                }
+            });
+
+            fx.off = false;
+            animationSpy.reset();
+
+            this.$element.trigger('focusin');
+
+            triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE, true);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), currentDateOnFebruary, 'the same date has been focused');
+            assert.equal(animationSpy.callCount, 1, 'view has been changed');
+
+            triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), currentDateOnMarch, 'the same date has been focused');
+            assert.equal(animationSpy.callCount, 2, 'view has been changed');
+
+            triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), currentDateOnApril, 'the same date has been focused');
+            assert.equal(animationSpy.callCount, 3, 'view has been changed');
+
+            triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE, true);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), currentDateOnMarch, 'the same date has been focused');
+            assert.equal(animationSpy.callCount, 4, 'view has been changed');
+
+            triggerKeydown(this.$element, LEFT_ARROW_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), currentDateOnFebruary, 'the same date has been focused');
+            assert.equal(animationSpy.callCount, 5, 'view has been changed');
+
+            triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), currentDateOnJanuary, 'the same date has been focused');
+            assert.equal(animationSpy.callCount, 6, 'view has been changed');
+
+        } finally {
+            fx.off = isAnimationOff;
+            animationSpy.restore();
         }
     });
 
@@ -2068,6 +2444,127 @@ QUnit.module('disabledDates option', {
         assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 10, 29));
     });
 
+    QUnit.test('home/end keys should not do anything if all dates in the current month are disabled', function(assert) {
+        this.calendar.option('value', new Date(2010, 11, 10));
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, HOME_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), this.calendar.option('value'));
+
+        triggerKeydown(this.$element, END_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), this.calendar.option('value'));
+    });
+
+    QUnit.test('enter key should not change selected value if focused date is disabled', function(assert) {
+        const startDate = new Date(2020, 0, 6);
+        this.calendar.option({
+            value: startDate,
+            disabledDates: (args) => {
+                return args.date.getMonth() === 1;
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, RIGHT_ARROW_KEY_CODE, true);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 1, 6), 'current date is correct');
+
+        triggerKeydown(this.$element, ENTER_KEY_CODE);
+        assert.deepEqual(this.calendar.option('value'), startDate, 'selected value has not been changed');
+    });
+
+    QUnit.test('home/end keys should focus the first/last available date in the current month', function(assert) {
+        this.calendar.option({
+            value: new Date(2020, 0, 15),
+            disabledDates: (args) => {
+                const date = args.date.getDate();
+                return date <= 7 || date >= 23;
+            }
+        });
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, HOME_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 8));
+
+        triggerKeydown(this.$element, END_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 22));
+    });
+
+    QUnit.test('the focused date should always be in the [min, max] range', function(assert) {
+        const isAnimationOff = fx.off;
+        const animationSpy = sinon.spy(fx, 'animate');
+
+        try {
+            this.calendar.option({
+                value: new Date(2020, 0, 25),
+                disabledDates: (args) => {
+                    const date = args.date.getDate();
+                    return date >= 5 && date <= 20;
+                },
+                max: new Date(2020, 1, 20),
+                min: new Date(2020, 0, 25)
+            });
+
+            fx.off = false;
+            animationSpy.reset();
+
+            this.$element.trigger('focusin');
+
+            triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 1, 4), 'focused date is in the range (min, max)');
+            assert.equal(animationSpy.callCount, 1, 'view has been changed');
+
+            triggerKeydown(this.$element, PAGE_UP_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 25), 'focused date is in the range (min, max)');
+            assert.equal(animationSpy.callCount, 2, 'view has been changed');
+
+        } finally {
+            fx.off = isAnimationOff;
+            animationSpy.restore();
+        }
+    });
+
+    QUnit.test('up/downArrow should try focus the same date in the next/previous month when the column is disabled', function(assert) {
+        const isAnimationOff = fx.off;
+        const animationSpy = sinon.spy(fx, 'animate');
+
+        try {
+            this.calendar.option({
+                value: new Date(2020, 1, 5),
+                disabledDates: (args) => {
+                    const day = args.date.getDay();
+                    const month = args.date.getMonth();
+                    const date = args.date.getDate();
+                    return month === 0 && day === 3 || month === 1 && day === 0 || month === 0 && day === 0 && date !== 5;
+                }
+            });
+
+            fx.off = false;
+            animationSpy.reset();
+
+            this.$element.trigger('focusin');
+
+            triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 5), 'the closest available date has been focused');
+            assert.equal(animationSpy.callCount, 1, 'view has been changed');
+
+            triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
+            this.clock.tick(VIEW_ANIMATION_DURATION);
+            assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 1, 5), 'the closest available date has been focused');
+            assert.equal(animationSpy.callCount, 2, 'view has been changed');
+
+        } finally {
+            fx.off = isAnimationOff;
+            animationSpy.restore();
+        }
+    });
+
     QUnit.test('calendar should properly initialize currentDate when initial value is disabled', function(assert) {
         this.reinit({
             disabledDates: (args) => {
@@ -2083,12 +2580,30 @@ QUnit.module('disabledDates option', {
         assert.ok(dateUtils.sameView(calendar.option('zoomLevel'), calendar.option('currentDate'), new Date(2010, 10, 11)));
     });
 
-    QUnit.test('value should not be changed when disabledDates option is set', function(assert) {
+    QUnit.test('arrowUp/Down should focus cell on top/bottom', function(assert) {
+        this.calendar.option({
+            disabledDates: (args) => {
+                return args.date.getDate() === 15 || args.date.getDate() === 11;
+            },
+            value: new Date(2020, 0, 16)
+        });
+
+
+        this.$element.trigger('focusin');
+
+        triggerKeydown(this.$element, UP_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 9), 'cell on top has been focused');
+
+        triggerKeydown(this.$element, DOWN_ARROW_KEY_CODE);
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2020, 0, 16), 'cell on bottom has been focused');
+    });
+
+    QUnit.test('value can be changed to disabled date', function(assert) {
         const calendar = this.calendar;
         const disabledDate = new Date(2010, 9, 10);
 
         calendar.option('value', disabledDate);
-        assert.equal(calendar.option('value'), disabledDate, 'value is not changed');
+        assert.strictEqual(calendar.option('value'), disabledDate, 'value is changed');
     });
 
     QUnit.test('disabledDates argument contains correct component parameter', function(assert) {
@@ -2104,48 +2619,21 @@ QUnit.module('disabledDates option', {
         assert.equal(component.NAME, 'dxCalendar', 'Correct component');
     });
 
-    QUnit.test('current day is moved to a next day while it is less a max date when all days are disabled', function(assert) {
-        this.reinit({
-            max: new Date(2018, 0, 10),
-            value: new Date(2018, 0, 2),
-            disabledDates: () => {
-                return true;
+    QUnit.test('current day should be the same as selected on init when current month is disabled', function(assert) {
+        this.calendar.option('value', new Date(2010, 11, 10));
+
+        assert.deepEqual(this.calendar.option('currentDate'), this.calendar.option('value'), 'currentDate is the same as selected date');
+    });
+
+    QUnit.test('current day should be set to the closest available date on init when there is available date on the current month', function(assert) {
+        this.calendar.option({
+            value: new Date(2010, 10, 14),
+            disabledDates: (args) => {
+                return args.date.getDate() > 10 && args.date.getDate() <= 20;
             }
         });
 
-        assert.ok(this.calendar.option('currentDate') <= this.calendar.option('max'));
-    });
-
-    QUnit.test('current day is moved to the next day when it is more a min date when all days are disabled', function(assert) {
-        this.reinit({
-            min: new Date(2018, 0, 10),
-            value: new Date(2018, 1, 2),
-            disabledDates: () => {
-                return true;
-            }
-        });
-
-        $('.' + CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS).click();
-
-        assert.ok(this.calendar.option('currentDate') >= this.calendar.option('min'));
-    });
-
-    QUnit.test('current day should be moved to the closest available date on init', function(assert) {
-        const newDateMock = sinon.useFakeTimers(new Date(2017, 11, 30).valueOf());
-        const maxAvailableDate = new Date(2017, 10, 25);
-
-        try {
-            this.reinit({
-                focusStateEnabled: true,
-                disabledDates: (args) => {
-                    return args.date > maxAvailableDate;
-                }
-            });
-
-            assert.deepEqual(this.calendar.option('currentDate'), maxAvailableDate);
-        } finally {
-            newDateMock.restore();
-        }
+        assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 10, 10), 'currentDate is the closest available date');
     });
 });
 
@@ -2365,13 +2853,13 @@ QUnit.module('Navigation - click on other view cell', {
 
     QUnit.test('click on other view cell forces view change', function(assert) {
         const calendar = this.$element.dxCalendar({
-                maxZoomLevel: 'month',
-                value: new Date(2015, 3, 15)
-            }).dxCalendar('instance'),
-            $element = this.$element;
+            maxZoomLevel: 'month',
+            value: new Date(2015, 3, 15)
+        }).dxCalendar('instance');
+        const $element = this.$element;
 
-        const $cell = $element.find(toSelector(CALENDAR_CELL_CLASS)).eq(2),
-            expectedDate = dataUtils.data($cell.get(0), CALENDAR_DATE_VALUE_KEY);
+        const $cell = $element.find(toSelector(CALENDAR_CELL_CLASS)).eq(2);
+        const expectedDate = dataUtils.data($cell.get(0), CALENDAR_DATE_VALUE_KEY);
 
         expectedDate.setDate(1);
         $($cell).trigger('dxclick');
@@ -2381,15 +2869,15 @@ QUnit.module('Navigation - click on other view cell', {
 
     QUnit.test('click on other view cell must set value and contoured date on boundary view ', function(assert) {
         const calendar = this.$element.dxCalendar({
-                zoomLevel: 'month',
-                value: new Date(2015, 3, 15),
-                min: new Date(2015, 2, 5),
-                focusStateEnabled: true
-            }).dxCalendar('instance'),
-            $element = this.$element;
+            zoomLevel: 'month',
+            value: new Date(2015, 3, 15),
+            min: new Date(2015, 2, 5),
+            focusStateEnabled: true
+        }).dxCalendar('instance');
+        const $element = this.$element;
 
-        const $cell = $element.find(toSelector(CALENDAR_CELL_CLASS)).eq(1),
-            expectedDate = dataUtils.data($cell.get(0), CALENDAR_DATE_VALUE_KEY);
+        const $cell = $element.find(toSelector(CALENDAR_CELL_CLASS)).eq(1);
+        const expectedDate = dataUtils.data($cell.get(0), CALENDAR_DATE_VALUE_KEY);
 
         $($element).trigger('focusin');
         $($cell).trigger('dxclick');
@@ -2453,13 +2941,13 @@ QUnit.module('Navigation - swiping', {
     });
 
     QUnit.test('views offset on continuous right swipe', function(assert) {
-        const width = this.$element.width(),
-            offset = 0.5 * width;
+        const width = this.$element.width();
+        const offset = 0.5 * width;
 
         this.pointer.swipeStart().swipe(0.5);
 
-        const $tables = this.$element.find(toSelector(CALENDAR_BODY_CLASS) + ' .dx-widget'),
-            $wrapper = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).eq(0);
+        const $tables = this.$element.find(toSelector(CALENDAR_BODY_CLASS) + ' .dx-widget');
+        const $wrapper = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).eq(0);
 
         assert.equal(translator.locate($wrapper).left, offset, 'Views wrapper position is correct');
         assert.equal(translator.locate($tables.eq(0)).left, 0, 'First view position is correct');
@@ -2467,13 +2955,13 @@ QUnit.module('Navigation - swiping', {
     });
 
     QUnit.test('views offset on continuous left swipe', function(assert) {
-        const width = this.$element.width(),
-            offset = 0.5 * width;
+        const width = this.$element.width();
+        const offset = 0.5 * width;
 
         this.pointer.swipeStart().swipe(-0.5);
 
-        const $tables = this.$element.find(toSelector(CALENDAR_BODY_CLASS) + ' .dx-widget'),
-            $wrapper = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).eq(0);
+        const $tables = this.$element.find(toSelector(CALENDAR_BODY_CLASS) + ' .dx-widget');
+        const $wrapper = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS)).eq(0);
 
         assert.equal(translator.locate($wrapper).left, -offset, 'Views wrapper position is correct');
         assert.equal(translator.locate($tables.eq(0)).left, 0, 'First view position is correct');
@@ -2618,8 +3106,8 @@ QUnit.module('Navigation - swiping', {
         const origAnimate = fx.animate;
 
         try {
-            const $views = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget'),
-                viewWidth = $views.eq(0).width();
+            const $views = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget');
+            const viewWidth = $views.eq(0).width();
 
             fx.animate = ($element, config) => {
                 assert.equal(config.to.left, -viewWidth, 'view will be animated to bound');
@@ -2639,8 +3127,8 @@ QUnit.module('Navigation - swiping', {
         const origAnimate = fx.animate;
 
         try {
-            const $views = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget'),
-                viewWidth = $views.eq(0).width();
+            const $views = this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget');
+            const viewWidth = $views.eq(0).width();
 
             fx.animate = ($element, config) => {
                 assert.equal(config.to.left, viewWidth, 'view will be animated to bound');
@@ -3011,9 +3499,9 @@ QUnit.module('dxCalendar number and string value support', {
     });
 
     QUnit.test('widget should work correct if the \'value\', \'min\' and \'max\' options have number type', function(assert) {
-        const value = new Date(2016, 3, 11),
-            min = new Date(2016, 2, 11),
-            max = new Date(2016, 4, 11);
+        const value = new Date(2016, 3, 11);
+        const min = new Date(2016, 2, 11);
+        const max = new Date(2016, 4, 11);
 
         this.$element.dxCalendar({
             value: value.getTime(),
@@ -3025,8 +3513,8 @@ QUnit.module('dxCalendar number and string value support', {
     });
 
     QUnit.test('widget should work correct if the only \'min\' and \'max\' options have number type', function(assert) {
-        const min = new Date(2016, 2, 11),
-            max = new Date(2016, 4, 11);
+        const min = new Date(2016, 2, 11);
+        const max = new Date(2016, 4, 11);
 
         this.$element.dxCalendar({
             min: min.getTime(),

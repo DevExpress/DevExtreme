@@ -58,11 +58,6 @@ const getClassMethod = (initClass, methodName) => {
     }
 };
 
-/**
- * @name DOMComponentOptions.bindingOptions
- * @type object
- * @default {}
- */
 
 let ComponentBuilder = Class.inherit({
 
@@ -178,21 +173,21 @@ let ComponentBuilder = Class.inherit({
 
             optionDependencies[optionForSubscribe][optionPath] = valuePath;
 
-            const watchCallback = (newValue, oldValue) => {
-                if(this._ngLocker.locked(optionPath)) {
-                    return;
-                }
+            const updateWatcher = () => {
+                const watchCallback = (newValue, oldValue) => {
+                    if(this._ngLocker.locked(optionPath)) {
+                        return;
+                    }
 
-                this._ngLocker.obtain(optionPath);
-                this._component.option(optionPath, newValue);
-                updateWatcher();
+                    this._ngLocker.obtain(optionPath);
+                    this._component.option(optionPath, newValue);
+                    updateWatcher();
 
-                if(equals(oldValue, newValue) && this._ngLocker.locked(optionPath)) {
-                    this._ngLocker.release(optionPath);
-                }
-            };
+                    if(equals(oldValue, newValue) && this._ngLocker.locked(optionPath)) {
+                        this._ngLocker.release(optionPath);
+                    }
+                };
 
-            var updateWatcher = () => {
                 const watchMethod = Array.isArray(this._scope.$eval(valuePath)) && !forcePlainWatchMethod ? '$watchCollection' : '$watch';
 
                 if(prevWatchMethod !== watchMethod) {
@@ -370,7 +365,6 @@ let ComponentBuilder = Class.inherit({
         const innerPathSuffix = fieldPath === this._itemAlias ? '' : '.' + fieldPath;
         const collectionField = itemIndex !== undefined;
         const optionOuterBag = [parentPrefix];
-        let optionOuterPath;
 
         if(collectionField) {
             if(!typeUtils.isNumeric(itemIndex)) return;
@@ -379,7 +373,7 @@ let ComponentBuilder = Class.inherit({
         }
 
         optionOuterBag.push(innerPathSuffix);
-        optionOuterPath = optionOuterBag.join('');
+        const optionOuterPath = optionOuterBag.join('');
 
         const clearParentWatcher = parentScope.$watch(optionOuterPath, (newValue, oldValue) => {
             if(newValue !== oldValue) {

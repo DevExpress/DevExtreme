@@ -85,16 +85,12 @@ module('runtime utils', {
             called = true;
         }, 20);
 
-        // act
         this.clock.tick(19);
 
-        // assert
         assert.ok(!called, 'action is not called');
 
-        // act
         this.clock.tick(1);
 
-        // assert
         assert.ok(called, 'action is called');
     });
 });
@@ -160,11 +156,11 @@ module('findBestMatches', () => {
             b: 2,
             c: 3
         }];
-        let filter = {
+        const filter = {
             a: 1,
             b: 2
         };
-        let filteredItems = findBestMatches(filter, items);
+        const filteredItems = findBestMatches(filter, items);
 
         assert.equal(filteredItems.length, 2);
     });
@@ -235,7 +231,6 @@ module('defer render/update', {
     test('deferRender execute immediately without deferUpdate', function(assert) {
         const logs = [];
 
-        // act
         deferRender(() => {
             logs.push('before inner render');
 
@@ -246,7 +241,6 @@ module('defer render/update', {
             logs.push('after inner render');
         });
 
-        // assert
         assert.equal(logs.length, 3, '3 log texts');
         assert.equal(logs[0], 'before inner render', 'before inner render');
         assert.equal(logs[1], 'inner render', 'inner render');
@@ -256,7 +250,6 @@ module('defer render/update', {
     test('deferUpdate execute immediately without deferRender', function(assert) {
         const logs = [];
 
-        // act
         deferRender(() => {
             logs.push('before inner update');
 
@@ -267,7 +260,6 @@ module('defer render/update', {
             logs.push('after inner update');
         });
 
-        // assert
         assert.equal(logs.length, 3, '3 log texts');
         assert.equal(logs[0], 'before inner update', 'before inner update');
         assert.equal(logs[1], 'inner update', 'inner update');
@@ -277,7 +269,6 @@ module('defer render/update', {
     test('deferRender execute delayed in deferUpdate', function(assert) {
         const logs = [];
 
-        // act
         deferUpdate(() => {
             logs.push('before inner render');
 
@@ -292,7 +283,6 @@ module('defer render/update', {
             logs.push('update deferred done');
         });
 
-        // assert
         assert.equal(logs.length, 5, '5 log texts');
         assert.equal(logs[0], 'before inner render', 'before inner render');
         assert.equal(logs[1], 'after inner render', 'after inner render');
@@ -304,7 +294,6 @@ module('defer render/update', {
     test('deferUpdate execute delayed in deferRender', function(assert) {
         const logs = [];
 
-        // act
         deferRender(() => {
             logs.push('before inner update');
 
@@ -319,7 +308,6 @@ module('defer render/update', {
             logs.push('render deferred done');
         });
 
-        // assert
         assert.equal(logs.length, 5, '5 log texts');
         assert.equal(logs[0], 'before inner update', 'before inner update');
         assert.equal(logs[1], 'after inner update', 'after inner update');
@@ -331,7 +319,6 @@ module('defer render/update', {
     test('several deferUpdate in one deferRender', function(assert) {
         const logs = [];
 
-        // act
         deferRender(() => {
             logs.push('render');
 
@@ -352,7 +339,6 @@ module('defer render/update', {
             logs.push('render completed');
         });
 
-        // assert
         assert.equal(logs.length, 6, '6 log texts');
         assert.equal(logs[0], 'render');
         assert.equal(logs[1], 'update 1');
@@ -365,7 +351,6 @@ module('defer render/update', {
     test('Return deferred in deferRender and using deferUpdater', function(assert) {
         const logs = [];
 
-        // act
         deferRender(() => {
             const d = $.Deferred();
 
@@ -381,13 +366,10 @@ module('defer render/update', {
             logs.push('render completed');
         });
 
-        // assert
         assert.equal(logs.length, 1, '1 log texts');
 
-        // act
         this.clock.tick(1000);
 
-        // assert
         assert.equal(logs.length, 3, '4 log texts');
         assert.equal(logs[0], 'render');
         assert.equal(logs[1], 'update');
@@ -397,7 +379,6 @@ module('defer render/update', {
     test('Return deferred in deferUpdate and using deferRenderer', function(assert) {
         const logs = [];
 
-        // act
         deferUpdate(() => {
             const d = $.Deferred();
 
@@ -413,13 +394,10 @@ module('defer render/update', {
             logs.push('update completed');
         });
 
-        // assert
         assert.equal(logs.length, 1, '1 log texts');
 
-        // act
         this.clock.tick(1000);
 
-        // assert
         assert.equal(logs.length, 3, '4 log texts');
         assert.equal(logs[0], 'update');
         assert.equal(logs[1], 'render');

@@ -26,13 +26,7 @@ const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
 const DX_BUTTON_TEXT_CLASS = 'dx-button-text';
 const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
 
-/**
- * @name dxDropDownButton
- * @inherits Widget, DataHelperMixin
- * @module ui/drop_down_button
- * @export default
- */
-let DropDownButton = Widget.inherit({
+const DropDownButton = Widget.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
@@ -51,195 +45,52 @@ let DropDownButton = Widget.inherit({
              * @hidden
              */
 
-            /**
-             * @name dxDropDownButtonOptions.itemTemplate
-             * @type template|function
-             * @default "item"
-             * @type_function_param1 itemData:object
-             * @type_function_param2 itemIndex:number
-             * @type_function_param3 itemElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
             itemTemplate: 'item',
 
-            /**
-             * @name dxDropDownButtonOptions.keyExpr
-             * @type string
-             * @default 'this'
-             */
             keyExpr: 'this',
 
-            /**
-             * @name dxDropDownButtonOptions.displayExpr
-             * @type string|function
-             * @default 'this'
-             * @type_function_param1 itemData:object
-             * @type_function_return string
-             */
             displayExpr: 'this',
 
-            /**
-             * @name dxDropDownButtonOptions.selectedItem
-             * @type string|integer|object
-             * @default null
-             * @readonly
-             */
             selectedItem: null,
 
-            /**
-             * @name dxDropDownButtonOptions.selectedItemKey
-             * @type string|integer
-             * @default null
-             */
             selectedItemKey: null,
 
-            /**
-             * @name dxDropDownButtonOptions.stylingMode
-             * @type Enums.ButtonStylingMode
-             * @default 'outlined'
-             */
             stylingMode: 'outlined',
 
-            /**
-             * @name dxDropDownButtonOptions.deferRendering
-             * @type boolean
-             * @default true
-             */
             deferRendering: true,
 
-            /**
-             * @name dxDropDownButtonOptions.noDataText
-             * @type string
-             * @default 'No data to display'
-             */
             noDataText: formatMessage('dxCollectionWidget-noDataText'),
 
-            /**
-             * @name dxDropDownButtonOptions.useSelectMode
-             * @type boolean
-             * @default false
-             */
             useSelectMode: false,
 
-            /**
-             * @name dxDropDownButtonOptions.splitButton
-             * @type boolean
-             * @default false
-             */
             splitButton: false,
 
-            /**
-             * @name dxDropDownButtonOptions.showArrowIcon
-             * @type boolean
-             * @default true
-             */
             showArrowIcon: true,
 
-            /**
-             * @name dxDropDownButtonOptions.text
-             * @type string
-             * @default ""
-             */
             text: '',
 
-            /**
-             * @name dxDropDownButtonOptions.icon
-             * @type string
-             * @default undefined
-             */
             icon: undefined,
 
-            /**
-             * @name dxDropDownButtonOptions.onButtonClick
-             * @type function(e)|string
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 selectedItem:object
-             * @action
-             */
             onButtonClick: null,
 
-            /**
-             * @name dxDropDownButtonOptions.onSelectionChanged
-             * @type function(e)|string
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 item:object
-             * @type_function_param1_field5 previousItem:object
-             * @action
-             */
             onSelectionChanged: null,
 
-            /**
-             * @name dxDropDownButtonOptions.onItemClick
-             * @type function(e)|string
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 itemData:object
-             * @type_function_param1_field6 itemElement:dxElement
-             * @action
-             */
             onItemClick: null,
 
-            /**
-             * @name dxDropDownButtonOptions.opened
-             * @type boolean
-             * @default false
-             */
             opened: false,
 
-            /**
-             * @name dxDropDownButtonOptions.items
-             * @type Array<dxDropDownButtonItem, object>
-             * @default null
-             */
             items: null,
 
-            /**
-             * @name dxDropDownButtonOptions.dataSource
-             * @type string|Array<dxDropDownButtonItem, object>|DataSource|DataSourceOptions
-             * @default null
-             */
             dataSource: null,
 
-            /**
-             * @name dxDropDownButtonOptions.focusStateEnabled
-             * @type boolean
-             * @default true
-             */
             focusStateEnabled: true,
 
-            /**
-             * @name dxDropDownButtonOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-             * @name dxDropDownButtonOptions.dropDownOptions
-             * @type dxPopupOptions
-             * @default {}
-             */
             dropDownOptions: {},
 
-            /**
-             * @name dxDropDownButtonOptions.dropDownContentTemplate
-             * @type template|function
-             * @default "content"
-             * @type_function_param1 data:Array<string,number,Object>|DataSource
-             * @type_function_param2 contentElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
             dropDownContentTemplate: 'content',
 
-            /**
-             * @name dxDropDownButtonOptions.wrapItemText
-             * @type boolean
-             * @default false
-             */
             wrapItemText: false,
 
             grouped: false,
@@ -316,8 +167,10 @@ let DropDownButton = Widget.inherit({
         const d = new Deferred();
 
         if(this._list) {
-            return d.resolve(this._list.option('selectedItem'));
+            const cachedResult = this.option('useSelectMode') ? this._list.option('selectedItem') : this._lastSelectedItemData;
+            return d.resolve(cachedResult);
         }
+        this._lastSelectedItemData = undefined;
 
         const selectedItemKey = this.option('selectedItemKey');
         this._loadSingle(this.option('keyExpr'), selectedItemKey)
@@ -370,7 +223,6 @@ let DropDownButton = Widget.inherit({
         if(this.option('splitButton')) {
             items.push({
                 icon: 'spindown',
-                width: 26,
                 elementAttr: { class: DROP_DOWN_BUTTON_TOGGLE_CLASS }
             });
         }
@@ -471,13 +323,14 @@ let DropDownButton = Widget.inherit({
 
     _listOptions() {
         const selectedItemKey = this.option('selectedItemKey');
+        const useSelectMode = this.option('useSelectMode');
         return {
-            selectionMode: 'single',
+            selectionMode: useSelectMode ? 'single' : 'none',
             wrapItemText: this.option('wrapItemText'),
             focusStateEnabled: this.option('focusStateEnabled'),
             hoverStateEnabled: this.option('hoverStateEnabled'),
             showItemDataTitle: true,
-            selectedItemKeys: selectedItemKey ? [selectedItemKey] : [],
+            selectedItemKeys: selectedItemKey && useSelectMode ? [selectedItemKey] : [],
             grouped: this.option('grouped'),
             keyExpr: this.option('keyExpr'),
             noDataText: this.option('noDataText'),
@@ -486,6 +339,9 @@ let DropDownButton = Widget.inherit({
             items: this.option('items'),
             dataSource: this._dataSource,
             onItemClick: (e) => {
+                if(!this.option('useSelectMode')) {
+                    this._lastSelectedItemData = e.itemData;
+                }
                 this.option('selectedItemKey', this._keyGetter(e.itemData));
                 const actionResult = this._fireItemClickAction(e);
                 if(actionResult !== false) {
@@ -538,7 +394,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _renderButtonGroup() {
-        let $buttonGroup = (this._buttonGroup && this._buttonGroup.$element()) || $('<div>');
+        const $buttonGroup = (this._buttonGroup && this._buttonGroup.$element()) || $('<div>');
         if(!this._buttonGroup) {
             this.$element().append($buttonGroup);
         }
@@ -553,36 +409,15 @@ let DropDownButton = Widget.inherit({
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
     },
 
-    /**
-     * @name dxDropDownButton.toggle
-     * @publicName toggle()
-     * @return Promise<void>
-     */
-    /**
-     * @name dxDropDownButton.toggle
-     * @publicName toggle(visibility)
-     * @param1 visibility:boolean
-     * @return Promise<void>
-     */
     toggle(visible) {
         this._popup || this._renderPopup();
         return this._popup.toggle(visible);
     },
 
-    /**
-     * @name dxDropDownButton.open
-     * @publicName open()
-     * @return Promise<void>
-     */
     open() {
         return this.toggle(true);
     },
 
-    /**
-     * @name dxDropDownButton.close
-     * @publicName close()
-     * @return Promise<void>
-     */
     close() {
         return this.toggle(false);
     },
@@ -606,6 +441,7 @@ let DropDownButton = Widget.inherit({
         }
 
         this._setOptionWithoutOptionChange('selectedItem', selectedItem);
+        this._setOptionWithoutOptionChange('selectedItemKey', this._keyGetter(selectedItem));
     },
 
     _clean() {
@@ -614,7 +450,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _selectedItemKeyChanged(value) {
-        this._setListOption('selectedItemKeys', value ? [value] : []);
+        this._setListOption('selectedItemKeys', this.option('useSelectMode') && value ? [value] : []);
         const previousItem = this.option('selectedItem');
         this._loadSelectedItem().done((selectedItem) => {
             this._updateActionButton(selectedItem);
@@ -635,6 +471,20 @@ let DropDownButton = Widget.inherit({
         this._popup && this._popup.repaint();
     },
 
+    _selectModeChanged(value) {
+        if(value) {
+            this._setListOption('selectionMode', 'single');
+            const selectedItemKey = this.option('selectedItemKey');
+            this._setListOption('selectedItemKeys', selectedItemKey ? [selectedItemKey] : []);
+        } else {
+            this._setListOption('selectionMode', 'none');
+            this.option({
+                'selectedItemKey': undefined,
+                'selectedItem': undefined
+            });
+        }
+    },
+
     _updateItemCollection(optionName) {
         this._setWidgetOption('_list', [optionName]);
         this._setListOption('selectedItemKeys', []);
@@ -645,6 +495,7 @@ let DropDownButton = Widget.inherit({
         const { name, value } = args;
         switch(args.name) {
             case 'useSelectMode':
+                this._selectModeChanged(args.value);
                 break;
             case 'splitButton':
                 this._renderButtonGroup();

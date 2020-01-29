@@ -1,10 +1,10 @@
-var Class = require('../../core/class'),
-    extend = require('../../core/utils/extend').extend,
-    errors = require('../../ui/widget/ui.errors'),
-    each = require('../../core/utils/iterator').each,
-    typeUtils = require('../../core/utils/type');
+const Class = require('../../core/class');
+const extend = require('../../core/utils/extend').extend;
+const errors = require('../../ui/widget/ui.errors');
+const each = require('../../core/utils/iterator').each;
+const typeUtils = require('../../core/utils/type');
 
-var DataConverter = Class.inherit({
+const DataConverter = Class.inherit({
 
     ctor: function() {
         this._dataStructure = [];
@@ -15,11 +15,11 @@ var DataConverter = Class.inherit({
     _indexByKey: {},
 
     _convertItemsToNodes: function(items, parentKey) {
-        var that = this;
+        const that = this;
 
         each(items, function(_, item) {
-            var parentId = typeUtils.isDefined(parentKey) ? parentKey : that._getParentId(item),
-                node = that._convertItemToNode(item, parentId);
+            const parentId = typeUtils.isDefined(parentKey) ? parentKey : that._getParentId(item);
+            const node = that._convertItemToNode(item, parentId);
 
             that._dataStructure.push(node);
 
@@ -46,14 +46,14 @@ var DataConverter = Class.inherit({
         if(this._dataType === 'plain') {
             return;
         }
-        var items = this._dataAccessors.getters.items(item);
+        const items = this._dataAccessors.getters.items(item);
         return items && items.length;
     },
 
     _getUniqueKey: function(item) {
-        var keyGetter = this._dataAccessors.getters.key,
-            itemKey = keyGetter(item),
-            isCorrectKey = keyGetter && (itemKey || itemKey === 0) && typeUtils.isPrimitive(itemKey);
+        const keyGetter = this._dataAccessors.getters.key;
+        const itemKey = keyGetter(item);
+        const isCorrectKey = keyGetter && (itemKey || itemKey === 0) && typeUtils.isPrimitive(itemKey);
 
         return isCorrectKey ? itemKey : this.getItemsCount();
     },
@@ -62,18 +62,18 @@ var DataConverter = Class.inherit({
         this._itemsCount++;
         item.visible !== false && this._visibleItemsCount++;
 
-        var that = this,
-            node = {
-                internalFields: {
-                    disabled: that._dataAccessors.getters.disabled(item, { defaultValue: false }),
-                    expanded: that._dataAccessors.getters.expanded(item, { defaultValue: false }),
-                    selected: that._dataAccessors.getters.selected(item, { defaultValue: false }),
-                    key: that._getUniqueKey(item),
-                    parentKey: typeUtils.isDefined(parentKey) ? parentKey : that._rootValue,
-                    item: that._makeObjectFromPrimitive(item),
-                    childrenKeys: []
-                }
-            };
+        const that = this;
+        const node = {
+            internalFields: {
+                disabled: that._dataAccessors.getters.disabled(item, { defaultValue: false }),
+                expanded: that._dataAccessors.getters.expanded(item, { defaultValue: false }),
+                selected: that._dataAccessors.getters.selected(item, { defaultValue: false }),
+                key: that._getUniqueKey(item),
+                parentKey: typeUtils.isDefined(parentKey) ? parentKey : that._rootValue,
+                item: that._makeObjectFromPrimitive(item),
+                childrenKeys: []
+            }
+        };
 
         extend(node, item);
 
@@ -83,19 +83,19 @@ var DataConverter = Class.inherit({
     },
 
     setChildrenKeys: function() {
-        var that = this;
+        const that = this;
 
         each(this._dataStructure, function(_, node) {
             if(node.internalFields.parentKey === that._rootValue) return;
 
-            var parent = that.getParentNode(node);
+            const parent = that.getParentNode(node);
             parent && parent.internalFields.childrenKeys.push(node.internalFields.key);
         });
     },
 
     _makeObjectFromPrimitive: function(item) {
         if(typeUtils.isPrimitive(item)) {
-            var key = item;
+            const key = item;
             item = {};
             this._dataAccessors.setters.key(item, key);
         }
@@ -107,7 +107,7 @@ var DataConverter = Class.inherit({
             return null;
         }
 
-        var publicNode = {
+        const publicNode = {
             text: this._dataAccessors.getters.display(node),
             key: node.internalFields.key,
             selected: node.internalFields.selected,
@@ -131,13 +131,13 @@ var DataConverter = Class.inherit({
 
         if(!data.length) return [];
 
-        var that = this,
-            publicNodes = [];
+        const that = this;
+        const publicNodes = [];
 
         each(data, function(_, node) {
             node = typeUtils.isPrimitive(node) ? that._getByKey(node) : node;
 
-            var publicNode = that._convertToPublicNode(node, parent);
+            const publicNode = that._convertToPublicNode(node, parent);
 
             publicNode.children = that.convertToPublicNodes(node.internalFields.childrenKeys, publicNode);
 
@@ -162,13 +162,13 @@ var DataConverter = Class.inherit({
     },
 
     getByKey: function(data, key) {
-        var result = null,
-            that = this;
+        let result = null;
+        const that = this;
 
-        var getByKey = function(data, key) {
+        const getByKey = function(data, key) {
             each(data, function(_, element) {
-                var currentElementKey = element.internalFields && element.internalFields.key || that._dataAccessors.getters.key(element),
-                    items = that._dataAccessors.getters.items(element);
+                const currentElementKey = element.internalFields && element.internalFields.key || that._dataAccessors.getters.key(element);
+                const items = that._dataAccessors.getters.items(element);
 
                 if(currentElementKey.toString() === key.toString()) {
                     result = element;
@@ -195,7 +195,7 @@ var DataConverter = Class.inherit({
     },
 
     updateIndexByKey: function() {
-        var that = this;
+        const that = this;
         this._indexByKey = {};
         each(this._dataStructure, function(index, node) {
             that._checkForDuplicateId(node.internalFields.key);

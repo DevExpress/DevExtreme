@@ -1,4 +1,4 @@
-/* eslint-disable no-console, no-undef*/
+/* eslint-disable no-console, no-undef, no-var, one-var*/
 
 var path = require('path');
 
@@ -131,9 +131,9 @@ var COMMAND_LINE_ARG_KEYS = [
 ];
 
 function parseCommandLineArgs() {
-    var args = process.argv.slice(2),
-        options = { isEmpty: !args.length },
-        map = {};
+    var args = process.argv.slice(2);
+    var options = { isEmpty: !args.length };
+    var map = {};
     args.forEach(function(arg, i) {
         map[arg] = args[i + 1] || true;
     });
@@ -151,12 +151,12 @@ function parseCommandLineArgs() {
 }
 
 function printCommandLineHelp() {
-    var parts = ['node ', path.basename(process.argv[1]), ' Source '],
-        lines = [],
-        maxLength = Math.max.apply(null, COMMAND_LINE_ARG_KEYS.map(function(info) {
-            return info.key.length;
-        })) + 2,
-        message;
+    var parts = ['node ', path.basename(process.argv[1]), ' Source '];
+    var lines = [];
+    var maxLength = Math.max.apply(null, COMMAND_LINE_ARG_KEYS.map(function(info) {
+        return info.key.length;
+    })) + 2;
+    var message;
     COMMAND_LINE_ARG_KEYS.forEach(function(info) {
         var key = info.key;
         parts.push(key, ' ');

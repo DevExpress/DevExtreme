@@ -7,8 +7,8 @@ import { compare as compareVersion } from 'core/utils/version';
 QUnit.module('base');
 
 QUnit.test('on/one/trigger/off', function(assert) {
-    var element = document.createElement('div');
-    var handlerSpy = sinon.spy();
+    const element = document.createElement('div');
+    let handlerSpy = sinon.spy();
 
     eventsEngine.on(element, 'myEvent', handlerSpy);
     eventsEngine.trigger(element, 'myEvent');
@@ -30,10 +30,10 @@ QUnit.test('on/one/trigger/off', function(assert) {
 });
 
 QUnit.test('using the array of DOM elements', function(assert) {
-    var element1 = document.createElement('div');
-    var element2 = document.createElement('div');
-    var element3 = document.createElement('div');
-    var handlerSpy = sinon.spy();
+    const element1 = document.createElement('div');
+    const element2 = document.createElement('div');
+    const element3 = document.createElement('div');
+    const handlerSpy = sinon.spy();
 
     eventsEngine.on([ element1, element2, element3 ], 'myEvent', handlerSpy);
     eventsEngine.trigger([ element1, element2 ], 'myEvent');
@@ -49,9 +49,9 @@ QUnit.test('using the array of DOM elements', function(assert) {
 QUnit.module('namespaces');
 
 QUnit.test('Event is not removed if \'off\' has extra namespace', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var element = document.createElement('div');
+    const element = document.createElement('div');
 
     eventsEngine.on(element, 'click.ns1.ns2.ns3', function() {
         assert.ok(true);
@@ -63,9 +63,9 @@ QUnit.test('Event is not removed if \'off\' has extra namespace', function(asser
 
 QUnit.test('Event is removed for any namespace', function(assert) {
     assert.expect(0);
-    var done = assert.async();
+    const done = assert.async();
 
-    var element = document.createElement('div');
+    const element = document.createElement('div');
 
     eventsEngine.on(element, 'click.ns1.ns2.ns3', function() {
         assert.ok(true);
@@ -85,10 +85,10 @@ QUnit.test('Event is removed for any namespace', function(assert) {
 });
 
 QUnit.test('Trigger custom events', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
     assert.expect(4);
 
-    var element = document.createElement('div');
+    const element = document.createElement('div');
 
     eventsEngine.on(element, 'click.ns1.ns2.ns3', function() {
         assert.ok(true);
@@ -105,13 +105,13 @@ QUnit.test('Trigger custom events', function(assert) {
 QUnit.module('native handler');
 
 QUnit.test('add single native handler for one element, handler removed', function(assert) {
-    var element = document.createElement('div');
+    const element = document.createElement('div');
 
-    var addListener = sinon.spy(HTMLElement.prototype, 'addEventListener');
-    var delListener = sinon.spy(HTMLElement.prototype, 'removeEventListener');
+    const addListener = sinon.spy(HTMLElement.prototype, 'addEventListener');
+    const delListener = sinon.spy(HTMLElement.prototype, 'removeEventListener');
 
-    var handler1 = function() { };
-    var handler2 = function() {
+    const handler1 = function() { };
+    const handler2 = function() {
         assert.ok(false);
     };
 
@@ -132,14 +132,14 @@ QUnit.test('add single native handler for one element, handler removed', functio
 });
 
 QUnit.test('triggering \'click\' event for checkbox calls native click method', function(assert) {
-    var counter = 0;
+    let counter = 0;
 
-    var checkbox = document.createElement('input');
+    const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
 
-    var click = sinon.spy(HTMLElement.prototype, 'click');
+    const click = sinon.spy(HTMLElement.prototype, 'click');
 
-    var handler = function() { counter++; };
+    const handler = function() { counter++; };
 
     document.body.appendChild(checkbox);
 
@@ -159,9 +159,9 @@ QUnit.test('triggering \'click\' event for checkbox calls native click method', 
 });
 
 QUnit.test(' trigering \'click\' event for <a> does not calls native click method', function(assert) {
-    var a = document.createElement('a');
+    const a = document.createElement('a');
 
-    var click = sinon.spy(HTMLElement.prototype, 'click');
+    const click = sinon.spy(HTMLElement.prototype, 'click');
 
     document.body.appendChild(a);
 
@@ -173,11 +173,11 @@ QUnit.test(' trigering \'click\' event for <a> does not calls native click metho
 });
 
 QUnit.test('\'focusin\' and \'focus\' events call element.focus, \'focusout\' and \'blur\' - element.blur', function(assert) {
-    var textBox = document.createElement('input');
+    const textBox = document.createElement('input');
     textBox.type = 'text';
 
-    var focus = sinon.spy(HTMLElement.prototype, 'focus');
-    var blur = sinon.spy(HTMLElement.prototype, 'blur');
+    const focus = sinon.spy(HTMLElement.prototype, 'focus');
+    const blur = sinon.spy(HTMLElement.prototype, 'blur');
 
     document.body.appendChild(textBox);
 
@@ -199,9 +199,9 @@ QUnit.test('\'focusin\' and \'focus\' events call element.focus, \'focusout\' an
 });
 
 QUnit.test('focusin event bubbling', function(assert) {
-    var textBox = document.createElement('input');
-    var container = document.createElement(container);
-    var handlerSpy = sinon.spy();
+    const textBox = document.createElement('input');
+    const container = document.createElement(container);
+    const handlerSpy = sinon.spy();
 
     container.appendChild(textBox);
 
@@ -213,8 +213,8 @@ QUnit.test('focusin event bubbling', function(assert) {
 });
 
 QUnit.test('prevent triggered \'load\' event bubbling to body', function(assert) {
-    var done = assert.async();
-    var image = document.createElement('img');
+    const done = assert.async();
+    const image = document.createElement('img');
 
     eventsEngine.on(image, 'load', function() {
         assert.ok(true);
@@ -231,21 +231,21 @@ QUnit.test('prevent triggered \'load\' event bubbling to body', function(assert)
 });
 
 QUnit.test('Simulate clicks, check which property', function(assert) {
-    var testData = [
+    const testData = [
         { button: 2, which: 3 },
         { button: 0, which: 1 },
         { button: 1, which: 2 },
         { button: 3, which: 4 },
         { button: 4, which: 5 },
     ];
-    var i = 0;
-    var div = document.createElement('div');
-    var handler = function(e) {
+    let i = 0;
+    const div = document.createElement('div');
+    const handler = function(e) {
         assert.equal(e.which, testData[i].which);
     };
 
-    var fireEvent = function(button) {
-        var event = div.ownerDocument.createEvent('MouseEvents');
+    const fireEvent = function(button) {
+        const event = div.ownerDocument.createEvent('MouseEvents');
         event.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, button, null);
         div.dispatchEvent(event);
     };
@@ -259,10 +259,10 @@ QUnit.test('Simulate clicks, check which property', function(assert) {
 });
 
 QUnit.test('Simulate tab press, check key property', function(assert) {
-    var done = assert.async();
-    var input = document.createElement('input');
+    const done = assert.async();
+    const input = document.createElement('input');
     input.type = 'text';
-    var handler = function(e) {
+    const handler = function(e) {
         assert.equal(e.key, 'Tab');
         done();
     };
@@ -270,25 +270,26 @@ QUnit.test('Simulate tab press, check key property', function(assert) {
     document.body.appendChild(input);
     eventsEngine.on(input, 'keydown', handler);
 
-    var keyboard = keyboardMock(input);
+    const keyboard = keyboardMock(input);
     keyboard.press('tab');
 });
 
 QUnit.test('Event bubbling', function(assert) {
-    var fired = {
+    const fired = {
         focus: 0,
         click: 0,
         load: 0
     };
 
-    var div = document.createElement('div');
+    const div = document.createElement('div');
     document.body.appendChild(div);
 
-    var handler = function() {
+    let event;
+    const handler = function() {
         fired[event]++;
     };
 
-    for(var event in fired) {
+    for(event in fired) {
         eventsEngine.on(window, event, handler);
         eventsEngine.on(document, event, handler);
         eventsEngine.on(document.body, event, handler);
@@ -302,9 +303,9 @@ QUnit.test('Event bubbling', function(assert) {
 });
 
 QUnit.test('Should not fire event when relatedTarget is children of a target', function(assert) {
-    var div = document.createElement('div'),
-        childNode = document.createElement('div'),
-        fired = 0;
+    const div = document.createElement('div');
+    const childNode = document.createElement('div');
+    let fired = 0;
     div.appendChild(childNode);
 
     document.body.appendChild(div);
@@ -313,7 +314,7 @@ QUnit.test('Should not fire event when relatedTarget is children of a target', f
         fired++;
     });
 
-    var event = new eventsEngine.Event('mouseleave', { target: div, relatedTarget: childNode });
+    const event = new eventsEngine.Event('mouseleave', { target: div, relatedTarget: childNode });
 
     eventsEngine.trigger(div, event);
 
@@ -326,14 +327,14 @@ QUnit.test('On/trigger/off event listeners', function(assert) {
         return;
     }
 
-    var eventNames = ['mouseover', 'mouseout', 'pointerover', 'pointerout'].concat(eventsEngine.forcePassiveFalseEventNames),
-        div = document.createElement('div'),
-        callbackIsCalled;
+    const eventNames = ['mouseover', 'mouseout', 'pointerover', 'pointerout'].concat(eventsEngine.forcePassiveFalseEventNames);
+    const div = document.createElement('div');
+    let callbackIsCalled;
 
     document.body.appendChild(div);
 
-    var addListener = sinon.spy(HTMLElement.prototype, 'addEventListener');
-    var removeListener = sinon.spy(HTMLElement.prototype, 'removeEventListener');
+    const addListener = sinon.spy(HTMLElement.prototype, 'addEventListener');
+    const removeListener = sinon.spy(HTMLElement.prototype, 'removeEventListener');
 
     eventNames.forEach(function(eventName) {
         addListener.reset();
@@ -385,15 +386,15 @@ QUnit.test('Passive event listeners support detection, negative case', function(
 });
 
 QUnit.test('\'on\' signatures', function(assert) {
-    var fired = 0;
-    var hasData = 0;
-    var event = 'click';
-    var div = document.createElement('div');
-    var handler = function(e) {
+    let fired = 0;
+    let hasData = 0;
+    const event = 'click';
+    const div = document.createElement('div');
+    const handler = function(e) {
         fired++;
         if(e.data && e.data.testData) hasData++;
     };
-    var eventObj = {};
+    const eventObj = {};
     eventObj[event] = handler;
 
     div.className += ' someclass';
@@ -413,9 +414,9 @@ QUnit.test('\'on\' signatures', function(assert) {
 });
 
 QUnit.test('mouseenter bubble to document (throught catching native \'mouseover\'), has delegateTarget', function(assert) {
-    var div = document.createElement('div');
+    const div = document.createElement('div');
     div.className = 'selector';
-    var handler = function(e) {
+    const handler = function(e) {
         assert.ok(true);
         assert.equal(e.delegateTarget, document);
     };
@@ -424,8 +425,8 @@ QUnit.test('mouseenter bubble to document (throught catching native \'mouseover\
 
     eventsEngine.on(document, 'mouseenter', '.selector', handler);
 
-    var triggerEvent = function(name, bubble) {
-        var mouseMoveEvent = document.createEvent('MouseEvents');
+    const triggerEvent = function(name, bubble) {
+        const mouseMoveEvent = document.createEvent('MouseEvents');
 
         mouseMoveEvent.initMouseEvent(
             name, // event type : click, mousedown, mouseup, mouseover, mousemove, mouseout.
@@ -453,23 +454,23 @@ QUnit.test('mouseenter bubble to document (throught catching native \'mouseover\
 });
 
 QUnit.test('delegateTarget', function(assert) {
-    var event = 'click';
-    var div = document.createElement('div');
-    var p = document.createElement('p');
+    const event = 'click';
+    const div = document.createElement('div');
+    const p = document.createElement('p');
 
-    var divHandler = function(e) {
+    const divHandler = function(e) {
         assert.equal(e.delegateTarget, div);
         assert.equal(e.target, p);
         assert.equal(this, div);
     };
 
-    var docHandler = function(e) {
+    const docHandler = function(e) {
         assert.equal(e.delegateTarget, document);
         assert.equal(e.target, p);
         assert.equal(this, div);
     };
 
-    var pHandler = function(e) {
+    const pHandler = function(e) {
         assert.equal(e.delegateTarget, p);
         assert.equal(e.target, p);
         assert.equal(this, p);
@@ -487,8 +488,8 @@ QUnit.test('delegateTarget', function(assert) {
 });
 
 QUnit.test('nativeEvents should work for window', function(assert) {
-    var focusCount = 0;
-    var windowMock = {
+    let focusCount = 0;
+    const windowMock = {
         focus: function() {
             focusCount++;
         }
@@ -501,7 +502,7 @@ QUnit.test('nativeEvents should work for window', function(assert) {
 });
 
 QUnit.test('removeEventListener should not be called if native handler is not exist', function(assert) {
-    var eventName = 'event-without-native-handler';
+    const eventName = 'event-without-native-handler';
 
     registerEvent(eventName, {
         setup: function(element) {
@@ -509,16 +510,16 @@ QUnit.test('removeEventListener should not be called if native handler is not ex
         }
     });
 
-    var element = document.createElement('div');
-    var delListener = sinon.spy(HTMLElement.prototype, 'removeEventListener');
+    const element = document.createElement('div');
+    const delListener = sinon.spy(HTMLElement.prototype, 'removeEventListener');
 
-    var handler = function() { };
+    const handler = function() { };
 
     eventsEngine.on(element, eventName, handler);
     eventsEngine.off(element, eventName);
 
-    var notCalled = delListener.notCalled;
-    var calledWithCorrectSecondArg = delListener.calledOnce && delListener.args[0][1];
+    const notCalled = delListener.notCalled;
+    const calledWithCorrectSecondArg = delListener.calledOnce && delListener.args[0][1];
     assert.ok(notCalled || calledWithCorrectSecondArg);
 
     delListener.restore();
@@ -527,7 +528,7 @@ QUnit.test('removeEventListener should not be called if native handler is not ex
 QUnit.module('Memory');
 
 QUnit.test('removing subscriptions should remove data from elementDataMap', function(assert) {
-    var div = document.createElement('div');
+    const div = document.createElement('div');
 
     eventsEngine.on(div, 'testEvent', function() {});
     eventsEngine.off(div);
@@ -536,12 +537,12 @@ QUnit.test('removing subscriptions should remove data from elementDataMap', func
 });
 
 QUnit.test('removing subscriptions should not remove data from elementDataMap if some handlers left', function(assert) {
-    var div = document.createElement('div');
+    const div = document.createElement('div');
 
     eventsEngine.on(div, 'testEvent.ns', function() {});
     eventsEngine.on(div, 'testEvent.anotherNs', function() {});
 
-    var hasData = eventsEngine.elementDataMap.has(div);
+    const hasData = eventsEngine.elementDataMap.has(div);
     eventsEngine.off(div, '.anotherNs');
 
     assert.equal(eventsEngine.elementDataMap.has(div), hasData);
@@ -551,9 +552,9 @@ QUnit.module('Strategy');
 
 QUnit.test('it should be possible to set only one method for strategy', function(assert) {
     assert.expect(1);
-    var div = document.createElement('div');
+    const div = document.createElement('div');
 
-    var originalOn;
+    let originalOn;
     eventsEngine.set({
         'on': function() {
             originalOn = this.callBase;
@@ -572,14 +573,14 @@ QUnit.test('it should be possible to set only one method for strategy', function
 QUnit.module('Delegate subscription');
 
 QUnit.test('delegate subscription should handle all matched elements', function(assert) {
-    var container = document.createElement('div');
-    var target = document.createElement('span');
-    var nestedContainer = document.createElement('div');
-    var nestedTarget = document.createElement('span');
+    const container = document.createElement('div');
+    const target = document.createElement('span');
+    const nestedContainer = document.createElement('div');
+    const nestedTarget = document.createElement('span');
 
-    var log = [];
+    const log = [];
 
-    var handler = function() {
+    const handler = function() {
         log.push(arguments);
     };
 
@@ -596,8 +597,8 @@ QUnit.test('delegate subscription should handle all matched elements', function(
 });
 
 QUnit.test('Hover events should be ignored if the target is a child of the current target (T731134)', function(assert) {
-    var container = document.createElement('div');
-    var childNode = document.createElement('div');
+    const container = document.createElement('div');
+    const childNode = document.createElement('div');
 
     container.appendChild(childNode);
 
@@ -611,7 +612,7 @@ QUnit.test('Hover events should be ignored if the target is a child of the curre
         }
     };
 
-    var handlerSpy = sinon.spy();
+    const handlerSpy = sinon.spy();
 
     eventsEngine.on(container, 'mouseenter', handlerSpy);
 

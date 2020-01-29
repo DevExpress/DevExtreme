@@ -2,12 +2,12 @@ import '../DevExpress.ui.widgets/box.markup.tests.js';
 import Box from 'ui/box';
 import DOMAdapter from 'core/dom_adapter';
 
-var BOX_ITEM_CLASS = 'dx-box-item';
+const BOX_ITEM_CLASS = 'dx-box-item';
 
-var emulateServerSideFlexBehavior = function(element) {
+const emulateServerSideFlexBehavior = function(element) {
     // NOTE: https://github.com/fgnass/domino/issues/119
     [ 'flex', 'flexDirection', 'flexBasis', 'flexGrow', 'flexShrink' ].forEach(function(prop) {
-        var originalPropValue = element.style[prop];
+        let originalPropValue = element.style[prop];
         Object.defineProperty(element.style, prop, {
             get: function() {
                 return originalPropValue;
@@ -21,7 +21,7 @@ var emulateServerSideFlexBehavior = function(element) {
 
 QUnit.module('SSR specific for Box', {
     beforeEach: function() {
-        var fixture = document.getElementById('qunit-fixture');
+        const fixture = document.getElementById('qunit-fixture');
         this.element = document.createElement('div');
         fixture.appendChild(this.element);
 
@@ -30,7 +30,7 @@ QUnit.module('SSR specific for Box', {
         this.originalCreateElement = DOMAdapter.createElement;
 
         DOMAdapter.createElement = function(tagName) {
-            var result = this.originalCreateElement.apply(this, arguments);
+            const result = this.originalCreateElement.apply(this, arguments);
             emulateServerSideFlexBehavior(result);
             return result;
         }.bind(this);
@@ -53,7 +53,7 @@ QUnit.test('Flex props should exist in style attribute', function(assert) {
         'flex-direction: row;'
     ].forEach(style => assert.ok(this.element.attributes.style.value.indexOf(style) > -1));
 
-    var itemElement = this.element.querySelectorAll('.' + BOX_ITEM_CLASS)[0];
+    const itemElement = this.element.querySelectorAll('.' + BOX_ITEM_CLASS)[0];
 
     [
         'display: flex;',

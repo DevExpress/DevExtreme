@@ -46,12 +46,21 @@
 @typography-bg: @base-bg;
 @typography-color: @base-text-color;
 @typography-link-color: @base-link-color;
+@base-disabled-opacity: 0.5;
 
 /**
 * @name 1. Invalid widget state - active color
 * @type color
 */
 @base-invalid-color: #EA4444;
+
+/**
+* @name 2. Invalid widget state - border color
+* @type color
+*/
+@base-invalid-faded-border-color: @base-invalid-color;
+
+// Validation
 
 @VALIDATION_MESSAGE_COLOR: @base-text-color;
 @VALIDATION_MESSAGE_BACKGROUND_COLOR: @base-invalid-color;
@@ -63,16 +72,12 @@
 @datagrid-row-hovered-color: @base-text-color;
 
 /**
-* @name 2. Invalid widget state - border color
-* @type color
-*/
-@base-invalid-faded-border-color: @base-invalid-color;
-
-/**
 * @name 20. Label color
 * @type color
 */
 @base-label-color: @base-text-color;
+
+@base-dropdown-shadow-color: @base-shadow-color;
 
 // Badges
 
@@ -81,7 +86,6 @@
 * @type color
 */
 @badge-color: @base-inverted-text-color;
-@badge-invalid-bg: @base-invalid-color;
 
 /**
 * @name 20. Badge background color
@@ -119,7 +123,6 @@
 @texteditor-hover-border-color: @base-border-color;
 
 @texteditor-color: @base-text-color;
-@texteditor-disabled-opacity: 0.5;
 
 @texteditor-placeholder-color: @base-text-color;
 
@@ -314,6 +317,7 @@
 
 // ButtonGroup
 
+@button-group-normal-contained-selected-bg: @base-inverted-bg;
 @button-group-normal-selected-bg: @base-inverted-bg;
 @button-group-default-selected-bg: @base-default;
 @button-group-danger-selected-bg: @base-danger;
@@ -324,16 +328,17 @@
 @button-group-danger-selected-color: @base-inverted-text-color;
 @button-group-success-selected-color: @base-inverted-text-color;
 
+@button-group-normal-contained-selected-bg-hover: @base-inverted-bg;
 @button-group-normal-selected-bg-hover: @base-inverted-bg;
 @button-group-default-selected-bg-hover: @base-inverted-bg;
 @button-group-danger-selected-bg-hover: @base-inverted-bg;
 @button-group-success-selected-bg-hover: @base-inverted-bg;
 
+@button-group-normal-contained-selected-bg-focused: @base-inverted-bg;
 @button-group-normal-selected-bg-focused: @base-inverted-bg;
 @button-group-default-selected-bg-focused: @base-inverted-bg;
 @button-group-danger-selected-bg-focused: @base-inverted-bg;
 @button-group-success-selected-bg-focused: @base-inverted-bg;
-
 
 // Checkbox
 
@@ -553,6 +558,7 @@
 @list-group-header-default-padding-top: 10px;
 @list-group-header-compact-padding-top: 5px;
 @list-item-chevron-icon-color: @base-icon-color;
+@list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/contrast/list/delete.png');
 
 // Overlay
 @overlay-content-shadow-color: @base-shadow-color;
@@ -593,16 +599,7 @@
 // Popover
 @popover-arrow-bg: @base-bg;
 
-// Toast
-@toast-shadow-color: @base-shadow-color;
-
-@toast-border-radius: @base-border-radius + 2px;
-
-/**
-* @name 10. Text color
-* @type color
-*/
-@toast-color: #fff;
+// DropDownEditor
 
 @dropdowneditor-button-hover-border-color: @base-border-color;
 @dropdowneditor-button-active-border-color: transparent;
@@ -630,7 +627,6 @@
 * @type color
 */
 @selectbox-list-bg: @base-bg;
-@selectbox-shadow-color: @base-shadow-color;
 
 // Tabs
 @tabs-tab-color: @base-text-color;
@@ -740,6 +736,11 @@
 */
 @scrollable-scrollbar-active-bg: fade(@base-accent, 80%);
 
+@scrollbar-button-horizontal-decrement-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-horizontal-arrow-start.png') no-repeat;
+@scrollbar-button-horizontal-increment-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-horizontal-arrow-end.png') no-repeat;
+@scrollbar-button-vertical-decrement-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-vertical-arrow-up.png') no-repeat;
+@scrollbar-button-vertical-increment-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-vertical-arrow-down.png') no-repeat;
+
 
 // Toolbar
 
@@ -750,7 +751,16 @@
 @toolbar-bg: @base-bg;
 
 @toolbar-color: @base-text-color;
+
 // Toast
+@toast-shadow-color: @base-shadow-color;
+@toast-border-radius: @base-border-radius + 2px;
+
+/**
+* @name 10. Text color
+* @type color
+*/
+@toast-color: #fff;
 
 /**
 * @name 20. Info background color
@@ -776,6 +786,11 @@
 */
 @toast-success-bg: @base-success;
 
+@toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png');
+@toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png');
+@toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png');
+@toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png');
+
 // LoadIndicator
 
 /**
@@ -784,6 +799,7 @@
 */
 @loadindicator-bg: @base-inverted-bg;
 @loadindicator-segment-shadow-color: @base-shadow-color;
+@loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif');
 
 // LoadPanel
 @loadpanel-border-color: @base-border-color;
@@ -874,6 +890,7 @@
 // ScrollView
 
 @scrollview-shadow-color: @base-shadow-color;
+@scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat;
 
 //Pager
 
@@ -899,6 +916,7 @@
 */
 @colorbox-overlay-bg: @base-bg;
 @colorbox-palette-cell-bg: @base-bg;
+@colorbox-preview-empty-bg: data-uri('images/widgets/generic/color-schemes/contrast/colorbox/nocolor.png');
 
 // DataGrid
 
@@ -986,7 +1004,7 @@
 */
 @datagrid-cell-modified-border-color: @base-text-color;
 
-@datagrid-row-removed-bg: @base-text-color;
+@datagrid-row-removed-bg: fade(@base-success, 50%);
 
 /**
 * @name 73. Invalidate data faded color
@@ -1179,7 +1197,7 @@
 */
 @treelist-cell-modified-border-color: @base-text-color;
 
-@treelist-row-removed-bg: @base-text-color;
+@treelist-row-removed-bg: fade(@base-success, 50%);
 
 /**
 * @name 73. Invalidate data faded color
@@ -1480,6 +1498,8 @@
 */
 @calendar-shevron-icon-color: @base-icon-color;
 
+@calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/contrast/calendar/empty-cell.png') center center no-repeat;
+
 // Tooltip
 
 /**
@@ -1575,8 +1595,6 @@
 @timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/contrast/timeView/hour-arrow.svg');
 @timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/contrast/timeView/min-arrow.svg');
 
-// theme-depends shadow parameters
-
 // DateView
 @dateview-border-color: @base-border-color;
 @dateview-shadow-up: 0deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
@@ -1604,21 +1622,6 @@
 @form-group-border-color: @base-border-color;
 @form-field-required-color: saturate(darken(@base-text-color, 40.8%), 80%);
 @form-field-mark-color: @base-accent;
-
-// Images
-@list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/contrast/list/delete.png');
-@scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat;
-@loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif');
-@toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png');
-@toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png');
-@toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png');
-@toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png');
-@scrollbar-button-horizontal-decrement-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-horizontal-arrow-start.png') no-repeat;
-@scrollbar-button-horizontal-increment-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-horizontal-arrow-end.png') no-repeat;
-@scrollbar-button-vertical-decrement-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-vertical-arrow-up.png') no-repeat;
-@scrollbar-button-vertical-increment-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-vertical-arrow-down.png') no-repeat;
-@colorbox-preview-empty-bg: data-uri('images/widgets/generic/color-schemes/contrast/colorbox/nocolor.png');
-@calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/contrast/calendar/empty-cell.png') center center no-repeat;
 
 // Fieldset
 
@@ -1701,6 +1704,7 @@
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-inverted-text-color;
 @filemanager-file-item-select-bg: @base-inverted-bg;
+@filemanager-item-focused-color: @base-text-color;
 @filemanager-progressbox-shadow-color: @base-shadow-color;
 
 // SpeedDialAction

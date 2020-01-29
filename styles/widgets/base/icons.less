@@ -1,4 +1,4 @@
-.dx-icon-sizing(@icon_size, @container_size, @borders_size: 0) {
+.dx-icon-sizing(@icon_size, @container_size: @icon_size, @borders_size: 0) {
     @icon_paddings_dirty: @container_size - @icon_size;
     @icon_paddings: @icon_paddings_dirty - @borders_size;
     @icon_padding: floor(@icon_paddings/2);
@@ -19,12 +19,6 @@
     text-align: center;
     line-height: @container_size - @icon_paddings_dirty;
 }
-
-// NOTE: use @container_size: @icon_size parameter declaration in previous mixin when upgrade less
-.dx-icon-sizing(@icon_size) {
-    .dx-icon-sizing(@icon_size, @icon_size);
-}
-
 
 .dx-icon-font-centered-sizing(@icon_size) {
     font-size: @icon_size;
@@ -47,8 +41,8 @@
     margin-right: @size;
     margin-left: 0;
 
-    .dx-rtl &,
-    .dx-rtl& {
+    .dx-rtl&,
+    .dx-rtl & {
         margin-left: @size;
         margin-right: 0;
     }
@@ -57,49 +51,23 @@
         margin-left: @size;
         margin-right: 0;
 
-        .dx-rtl &,
-        .dx-rtl& {
+        .dx-rtl&,
+        .dx-rtl & {
             margin-right: @size;
             margin-left: 0;
         }
     }
 }
 
+.dx-font-icon(@glyph) {
+    font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
 
-.dx-font-icons(@font-file: "dxicons", @font-name: "DevExtreme Generic Icons", @font-name-safari: "devextreme_generic_icons") {
-    @font-face {
-        font-family: 'DXIcons';
-        src:
-            local("@{font-name}"),
-            local("@{font-name-safari}"),
-            url(~"icons/@{font-file}.woff2") format('woff2'),
-            url(~"icons/@{font-file}.woff") format('woff'),
-            url(~"icons/@{font-file}.ttf") format('truetype');
-        font-weight: normal;
-        font-style: normal;
+    &:before {
+        content: @glyph;
     }
-
-    .dx-icon {
-        display: inline-block;
-        font-size: inherit;
-        text-rendering: auto;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-
-    .dx-font-icon(@glyph) {
-        font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
-
-        &:before {
-            content: @glyph;
-        }
-    }
-
-    .dx-font-icons-list();
 }
 
 .dx-font-icons-list() {
-
     .dx-icon-add { .dx-font-icon("\f00b"); }
     .dx-icon-airplane { .dx-font-icon("\f000"); }
     .dx-icon-bookmark { .dx-font-icon("\f017"); }
@@ -114,7 +82,11 @@
     .dx-icon-close { .dx-font-icon("\f00a"); }
     .dx-icon-coffee { .dx-font-icon("\f02a"); }
     .dx-icon-comment { .dx-font-icon("\f01e"); }
-    .dx-icon-doc { .dx-font-icon("\f021"); }
+
+    .dx-icon-doc,
+    .dx-icon-file {
+        .dx-font-icon("\f021");
+    }
     .dx-icon-download { .dx-font-icon("\f022"); }
     .dx-icon-dragvertical { .dx-font-icon("\f038"); }
     .dx-icon-edit { .dx-font-icon("\f023"); }
@@ -123,7 +95,11 @@
     .dx-icon-favorites { .dx-font-icon("\f025"); }
     .dx-icon-find { .dx-font-icon("\f027"); }
     .dx-icon-filter { .dx-font-icon("\f050"); }
-    .dx-icon-folder { .dx-font-icon("\f028"); }
+
+    .dx-icon-folder,
+    .dx-icon-activefolder {
+        .dx-font-icon("\f028");
+    }
     .dx-icon-food { .dx-font-icon("\f029"); }
     .dx-icon-gift { .dx-font-icon("\f02b"); }
     .dx-icon-globe { .dx-font-icon("\f02c"); }
@@ -168,31 +144,42 @@
     .dx-icon-arrowright { .dx-font-icon("\f00e"); }
     .dx-icon-arrowup { .dx-font-icon("\f013"); }
 
-    .dx-icon-spinleft { .dx-font-icon("\f04f"); }
-    .dx-icon-spinright { .dx-font-icon("\f04e"); }
+    .dx-icon-spinleft,
+    .dx-icon-spinprev {
+        .dx-font-icon("\f04f");
+    }
+
+    .dx-icon-spinright,
+    .dx-icon-spinnext {
+        .dx-font-icon("\f04e");
+    }
 
     .dx-icon-spinnext {
-        .dx-icon-spinright;
         .dx-rtl &:before { content: "\f04f"; } //.dx-icon-spinleft
     }
 
     .dx-icon-spinprev {
-        .dx-icon-spinleft;
         .dx-rtl &:before { content: "\f04e"; } //.dx-icon-spinright
     }
     .dx-icon-spindown { .dx-font-icon("\f001"); }
     .dx-icon-spinup { .dx-font-icon("\f002"); }
 
-    .dx-icon-chevronleft { .dx-font-icon("\f012"); }
-    .dx-icon-chevronright { .dx-font-icon("\f010"); }
+    .dx-icon-chevronleft,
+    .dx-icon-chevronprev,
+    .dx-icon-back {
+        .dx-font-icon("\f012");
+    }
+
+    .dx-icon-chevronright,
+    .dx-icon-chevronnext {
+        .dx-font-icon("\f010");
+    }
 
     .dx-icon-chevronnext {
-        .dx-icon-chevronright;
         .dx-rtl &:before { content: "\f012"; } //.dx-icon-chevronleft
     }
 
     .dx-icon-chevronprev {
-        .dx-icon-chevronleft;
         .dx-rtl &:before { content: "\f010"; } //.dx-icon-chevronright
     }
     .dx-icon-chevrondown { .dx-font-icon("\f016"); }
@@ -248,7 +235,6 @@
     .dx-icon-clearsquare { .dx-font-icon("\f068"); }
 
     .dx-icon-back {
-        .dx-icon-chevronleft;
         .dx-rtl &:before { content: "\f010"; } //.dx-icon-chevronright
     }
 
@@ -262,7 +248,11 @@
     .dx-icon-italic { .dx-font-icon("\f078"); }
     .dx-icon-underline { .dx-font-icon("\f079"); }
     .dx-icon-strike { .dx-font-icon("\f07a"); }
-    .dx-icon-indent { .dx-font-icon("\f07b"); }
+
+    .dx-icon-indent,
+    .dx-icon-increaselinespacing {
+        .dx-font-icon("\f07b");
+    }
     .dx-icon-font { .dx-font-icon("\f11b"); }
     .dx-icon-fontsize { .dx-font-icon("\f07c"); }
     .dx-icon-shrinkfont { .dx-font-icon("\f07d"); }
@@ -281,7 +271,6 @@
     .dx-icon-bulletlist { .dx-font-icon("\f087"); }
     .dx-icon-increaseindent { .dx-font-icon("\f088"); }
     .dx-icon-decreaseindent { .dx-font-icon("\f089"); }
-    .dx-icon-increaselinespacing { .dx-icon-indent; }
     .dx-icon-decreaselinespacing { .dx-font-icon("\f106"); }
     .dx-icon-alignleft { .dx-font-icon("\f08a"); }
     .dx-icon-alignright { .dx-font-icon("\f08b"); }
@@ -295,7 +284,6 @@
     .dx-icon-fullscreen { .dx-font-icon("\f11a"); }
     .dx-icon-hierarchy { .dx-font-icon("\f124"); }
 
-    .dx-icon-file { .dx-icon-doc; }
     .dx-icon-docfile { .dx-font-icon("\f111"); }
     .dx-icon-docxfile { .dx-font-icon("\f110"); }
     .dx-icon-pdffile { .dx-font-icon("\f118"); }
@@ -311,7 +299,6 @@
     .dx-icon-paste { .dx-font-icon("\f108"); }
     .dx-icon-share { .dx-font-icon("\f11f"); }
 
-    .dx-icon-activefolder { .dx-icon-folder; }
     .dx-icon-inactivefolder { .dx-font-icon("\f105"); }
     .dx-icon-newfolder { .dx-font-icon("\f123"); }
     .dx-icon-movetofolder { .dx-font-icon("\f121"); }
@@ -344,3 +331,29 @@
         .dx-rtl &:before { content: "\f11c"; } // hidepanel icon
     }
 }
+
+
+.dx-font-icons(@font-file: "dxicons", @font-name: "DevExtreme Generic Icons", @font-name-safari: "devextreme_generic_icons") {
+    @font-face {
+        font-family: 'DXIcons';
+        src:
+            local("@{font-name}"),
+            local("@{font-name-safari}"),
+            url(~"icons/@{font-file}.woff2") format('woff2'),
+            url(~"icons/@{font-file}.woff") format('woff'),
+            url(~"icons/@{font-file}.ttf") format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    .dx-icon {
+        display: inline-block;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .dx-font-icons-list();
+}
+

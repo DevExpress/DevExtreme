@@ -1,26 +1,28 @@
 // there are line, stepline, stackedline, fullstackedline, spline
-var series = require('./scatter_series'),
-    chartScatterSeries = series.chart,
-    polarScatterSeries = series.polar,
-    objectUtils = require('../../core/utils/object'),
-    extend = require('../../core/utils/extend').extend,
-    each = require('../../core/utils/iterator').each,
-    vizUtils = require('../core/utils'),
-    mathUtils = require('../../core/utils/math'),
-    normalizeAngle = vizUtils.normalizeAngle,
+const series = require('./scatter_series');
+const chartScatterSeries = series.chart;
+const polarScatterSeries = series.polar;
+const objectUtils = require('../../core/utils/object');
+const extend = require('../../core/utils/extend').extend;
+const each = require('../../core/utils/iterator').each;
+const vizUtils = require('../core/utils');
+const mathUtils = require('../../core/utils/math');
+const normalizeAngle = vizUtils.normalizeAngle;
 
-    DISCRETE = 'discrete',
+const DISCRETE = 'discrete';
 
-    _map = vizUtils.map,
+const _map = vizUtils.map;
 
-    _extend = extend,
-    _each = each;
+const _extend = extend;
+const _each = each;
+
+const { round, sqrt, pow, min, max, abs } = Math;
 
 exports.chart = {};
 exports.polar = {};
 
 function clonePoint(point, newX, newY, newAngle) {
-    var p = objectUtils.clone(point);
+    const p = objectUtils.clone(point);
     p.x = newX;
     p.y = newY;
     p.angle = newAngle;
@@ -28,10 +30,10 @@ function clonePoint(point, newX, newY, newAngle) {
 }
 
 function getTangentPoint(point, prevPoint, centerPoint, tan, nextStepAngle) {
-    var correctAngle = point.angle + nextStepAngle,
-        cosSin = vizUtils.getCosAndSin(correctAngle),
-        x = centerPoint.x + (point.radius + tan * nextStepAngle) * cosSin.cos,
-        y = centerPoint.y - (point.radius + tan * nextStepAngle) * cosSin.sin;
+    const correctAngle = point.angle + nextStepAngle;
+    const cosSin = vizUtils.getCosAndSin(correctAngle);
+    const x = centerPoint.x + (point.radius + tan * nextStepAngle) * cosSin.cos;
+    const y = centerPoint.y - (point.radius + tan * nextStepAngle) * cosSin.sin;
 
     return clonePoint(prevPoint, x, y, correctAngle);
 }
@@ -45,21 +47,21 @@ function obtainCubicBezierTCoef(p, p0, p1, p2, p3) {
     return mathUtils.solveCubicEquation(a, b, c, d);
 }
 
-var lineMethods = {
+const lineMethods = {
     autoHidePointMarkersEnabled() {
         return true;
     },
 
     _applyGroupSettings: function(style, settings, group) {
-        var that = this;
+        const that = this;
         settings = _extend(settings, style);
         that._applyElementsClipRect(settings);
         group.attr(settings);
     },
 
     _setGroupsSettings: function(animationEnabled) {
-        var that = this,
-            style = that._styles.normal;
+        const that = this;
+        const style = that._styles.normal;
 
         that._applyGroupSettings(style.elements, { 'class': 'dxc-elements' }, that._elementsGroup);
         that._bordersGroup && that._applyGroupSettings(style.border, { 'class': 'dxc-borders' }, that._bordersGroup);
@@ -69,7 +71,7 @@ var lineMethods = {
     },
 
     _createGroups: function() {
-        var that = this;
+        const that = this;
         that._createGroup('_elementsGroup', that, that._group);
         that._areBordersVisible() && that._createGroup('_bordersGroup', that, that._group);
         chartScatterSeries._createGroups.call(that);
@@ -104,7 +106,7 @@ var lineMethods = {
     },
 
     _applyStyle: function(style) {
-        var that = this;
+        const that = this;
         that._elementsGroup && that._elementsGroup.attr(style.elements);
         _each(that._graphics || [], function(_, graphic) {
             graphic.line && graphic.line.attr({ 'stroke-width': style.elements['stroke-width'] }).sharp();
@@ -120,23 +122,23 @@ var lineMethods = {
     },
 
     _updateElement: function(element, segment, animate, animationComplete) {
-        var params = { points: segment.line },
-            lineElement = element.line;
+        const params = { points: segment.line };
+        const lineElement = element.line;
 
         animate ? lineElement.animate(params, {}, animationComplete) : lineElement.attr(params);
     },
 
     _animateComplete: function() {
-        var that = this;
+        const that = this;
         chartScatterSeries._animateComplete.call(that);
         that._markersGroup && that._markersGroup.animate({ opacity: 1 }, { duration: that._defaultDuration });
     },
 
     _animate: function() {
-        var that = this,
-            lastIndex = that._graphics.length - 1;
+        const that = this;
+        const lastIndex = that._graphics.length - 1;
         _each(that._graphics || [], function(i, elem) {
-            var complete;
+            let complete;
             if(i === lastIndex) {
                 complete = function() {
                     that._animateComplete();
@@ -163,10 +165,10 @@ var lineMethods = {
     },
 
     _drawSegment: function(points, animationEnabled, segmentCount, lastSegment) {
-        var that = this,
-            rotated = that._options.rotated,
-            forceDefaultSegment = false,
-            segment = that._prepareSegment(points, rotated, lastSegment);
+        const that = this;
+        const rotated = that._options.rotated;
+        const forceDefaultSegment = false;
+        const segment = that._prepareSegment(points, rotated, lastSegment);
 
         that._segments.push(segment);
         if(!that._graphics[segmentCount]) {
@@ -179,9 +181,9 @@ var lineMethods = {
     },
 
     _getTrackerSettings: function() {
-        var that = this,
-            defaultTrackerWidth = that._defaultTrackerWidth,
-            strokeWidthFromElements = that._styles.normal.elements['stroke-width'];
+        const that = this;
+        const defaultTrackerWidth = that._defaultTrackerWidth;
+        const strokeWidthFromElements = that._styles.normal.elements['stroke-width'];
         return {
             'stroke-width': strokeWidthFromElements > defaultTrackerWidth ? strokeWidthFromElements : defaultTrackerWidth,
             fill: 'none'
@@ -197,7 +199,7 @@ var lineMethods = {
     },
 
     _updateTrackerElement: function(segment, element) {
-        var settings = this._getTrackerSettings(segment);
+        const settings = this._getTrackerSettings(segment);
         settings.points = this._getMainPointsFromSegment(segment);
         element.attr(settings);
     },
@@ -215,6 +217,13 @@ var lineMethods = {
         return (axis.isArgumentAxis && (!rotated && !inverted || rotated && inverted) ||
             !axis.isArgumentAxis && (rotated && !inverted || !rotated && inverted)) ?
             coord >= min && coord <= max : coord >= max && coord <= min;
+    }
+};
+
+const lineSeries = exports.chart['line'] = _extend({}, chartScatterSeries, lineMethods, {
+    getPointCenterByArg(arg) {
+        const value = this.getArgumentAxis().getTranslator().translate(arg);
+        return { x: value, y: value };
     },
 
     getSeriesPairCoord(coord, isArgument) {
@@ -242,13 +251,6 @@ var lineMethods = {
         }
 
         return oppositeCoord;
-    }
-};
-
-var lineSeries = exports.chart['line'] = _extend({}, chartScatterSeries, lineMethods, {
-    getPointCenterByArg(arg) {
-        const value = this.getArgumentAxis().getTranslator().translate(arg);
-        return { x: value, y: value };
     }
 });
 
@@ -310,26 +312,36 @@ exports.chart['stepline'] = _extend({}, lineSeries, {
 exports.chart['spline'] = _extend({}, lineSeries, {
 
     _calculateBezierPoints: function(src, rotated) {
-        var bezierPoints = [],
-            pointsCopy = src,
-            checkExtremum = function(otherPointCoord, pointCoord, controlCoord) {
-                return ((otherPointCoord > pointCoord && controlCoord > otherPointCoord) || (otherPointCoord < pointCoord && controlCoord < otherPointCoord)) ? otherPointCoord : controlCoord;
-            };
+        const bezierPoints = [];
+        const pointsCopy = src;
+        const checkExtremum = function(otherPointCoord, pointCoord, controlCoord) {
+            return ((otherPointCoord > pointCoord && controlCoord > otherPointCoord) || (otherPointCoord < pointCoord && controlCoord < otherPointCoord)) ? otherPointCoord : controlCoord;
+        };
 
         if(pointsCopy.length !== 1) {
             pointsCopy.forEach(function(curPoint, i) {
-                var leftControlX, leftControlY,
-                    rightControlX, rightControlY,
-                    prevPoint = pointsCopy[i - 1],
-                    nextPoint = pointsCopy[i + 1],
-                    xCur,
-                    yCur,
-                    x1, x2,
-                    y1, y2,
-                    lambda = 0.5,
-                    curIsExtremum,
-                    leftPoint, rightPoint,
-                    a, b, c, xc, yc, shift;
+                let leftControlX;
+                let leftControlY;
+                let rightControlX;
+                let rightControlY;
+                const prevPoint = pointsCopy[i - 1];
+                const nextPoint = pointsCopy[i + 1];
+                let xCur;
+                let yCur;
+                let x1;
+                let x2;
+                let y1;
+                let y2;
+                const lambda = 0.5;
+                let curIsExtremum;
+                let leftPoint;
+                let rightPoint;
+                let a;
+                let b;
+                let c;
+                let xc;
+                let yc;
+                let shift;
 
                 if(!i || i === pointsCopy.length - 1) {
                     bezierPoints.push(curPoint, curPoint);
@@ -493,9 +505,9 @@ exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
     },
 
     _prepareSegment: function(points, rotated, lastSegment) {
-        var preparedPoints = [],
-            centerPoint = this.getValueAxis().getCenter(),
-            i;
+        let preparedPoints = [];
+        const centerPoint = this.getValueAxis().getCenter();
+        let i;
         lastSegment && this._closeSegment(points);
 
         if(this.argumentAxisType !== DISCRETE && this.valueAxisType !== DISCRETE) {
@@ -513,35 +525,43 @@ exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
     },
 
     _getRemainingAngle: function(angle) {
-        var normAngle = normalizeAngle(angle);
+        const normAngle = normalizeAngle(angle);
         return angle >= 0 ? 360 - normAngle : -normAngle;
     },
 
-    _closeSegment: function(points) {
-        var point,
-            differenceAngle;
+    _closeSegment(points) {
+        let point;
 
         if(this._segments.length) {
             point = this._segments[0].line[0];
         } else {
             point = clonePoint(points[0], points[0].x, points[0].y, points[0].angle);
         }
-        if(points[points.length - 1].angle !== point.angle) {
-            if(normalizeAngle(Math.round(points[points.length - 1].angle)) === normalizeAngle(Math.round(point.angle))) {
-                point.angle = points[points.length - 1].angle;
-            } else {
-                differenceAngle = points[points.length - 1].angle - point.angle;
-                point.angle = points[points.length - 1].angle + this._getRemainingAngle(differenceAngle);
-            }
+        point = this._modifyReflectedPoint(point, points[points.length - 1]);
+        if(point) {
             points.push(point);
         }
     },
 
+    _modifyReflectedPoint(point, lastPoint) {
+        if(lastPoint.angle === point.angle) {
+            return undefined;
+        }
+
+        if(normalizeAngle(round(lastPoint.angle)) === normalizeAngle(round(point.angle))) {
+            point.angle = lastPoint.angle;
+        } else {
+            const differenceAngle = lastPoint.angle - point.angle;
+            point.angle = lastPoint.angle + this._getRemainingAngle(differenceAngle);
+        }
+        return point;
+    },
+
     _getTangentPoints: function(point, prevPoint, centerPoint) {
-        var tangentPoints = [],
-            betweenAngle = Math.round(prevPoint.angle - point.angle),
-            tan = (prevPoint.radius - point.radius) / betweenAngle,
-            i;
+        let tangentPoints = [];
+        const betweenAngle = Math.round(prevPoint.angle - point.angle);
+        const tan = (prevPoint.radius - point.radius) / betweenAngle;
+        let i;
 
         if(betweenAngle === 0) {
             tangentPoints = [prevPoint, point];
@@ -556,5 +576,120 @@ exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
         }
 
         return tangentPoints;
+    },
+
+    getSeriesPairCoord(params, isArgument) {
+        const that = this;
+        const argAxis = that.getArgumentAxis();
+        const paramName = isArgument ? 'angle' : 'radius';
+        const coordParam = params[paramName];
+        const centerPoint = argAxis.getCenter();
+        const getLengthByCoords = (p1, p2) => {
+            return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+        };
+        const isInsideInterval = (prevPoint, point, { x, y }) => {
+            return getLengthByCoords({ x, y }, centerPoint) <= argAxis.getRadius() &&
+                min(prevPoint.x, point.x) <= x && max(prevPoint.x, point.x) >= x &&
+                min(prevPoint.y, point.y) <= y && max(prevPoint.y, point.y) >= y;
+        };
+        let coords;
+
+        const neighborPoints = that.getNeighborPoints(coordParam, paramName);
+
+        if(neighborPoints.length === 1) {
+            coords = neighborPoints[0];
+        } else if(neighborPoints.length > 1) {
+            const prevPoint = neighborPoints[0];
+            const point = neighborPoints[1];
+
+            if(that.argumentAxisType !== DISCRETE && that.valueAxisType !== DISCRETE) {
+                let tan;
+                let stepAngle;
+
+                if(isArgument) {
+                    tan = (prevPoint.radius - point.radius) / (prevPoint.angle - point.angle);
+                    stepAngle = coordParam - point.angle;
+                } else {
+                    tan = (prevPoint.radius - point.radius) / (prevPoint.angle - point.angle);
+                    stepAngle = (coordParam - point.radius) / tan;
+                }
+                coords = getTangentPoint(point, prevPoint, centerPoint, tan, stepAngle);
+            } else {
+                if(isArgument) {
+                    const cosSin = vizUtils.getCosAndSin(-coordParam);
+                    const k1 = (point.y - prevPoint.y) / (point.x - prevPoint.x);
+                    const b1 = prevPoint.y - prevPoint.x * k1;
+                    const k2 = cosSin.sin / cosSin.cos;
+                    const b2 = centerPoint.y - k2 * centerPoint.x;
+
+                    const x = (b2 - b1) / (k1 - k2);
+                    const y = k1 * x + b1;
+                    if(isInsideInterval(prevPoint, point, { x, y })) {
+                        const quarter = abs(mathUtils.trunc((360 + coordParam) / 90) % 4);
+                        if(quarter === 0 && x >= centerPoint.x && y <= centerPoint.y ||
+                            quarter === 1 && x <= centerPoint.x && y <= centerPoint.y ||
+                            quarter === 2 && x <= centerPoint.x && y >= centerPoint.y ||
+                            quarter === 3 && x >= centerPoint.x && y >= centerPoint.y) {
+                            coords = { x, y };
+                        }
+                    }
+                } else {
+                    const k = (point.y - prevPoint.y) / (point.x - prevPoint.x);
+                    const y0 = prevPoint.y - prevPoint.x * k;
+
+                    const a = 1 + k * k;
+                    const b = -2 * centerPoint.x + 2 * k * y0 - 2 * k * centerPoint.y;
+                    const c = -pow(coordParam, 2) + pow(y0 - centerPoint.y, 2) + pow(centerPoint.x, 2);
+                    const d = b * b - 4 * a * c;
+                    if(d >= 0) {
+                        const x1 = (-b - sqrt(d)) / (2 * a);
+                        const x2 = (-b + sqrt(d)) / (2 * a);
+                        const y1 = k * x1 + y0;
+                        const y2 = k * x2 + y0;
+                        coords = isInsideInterval(prevPoint, point, { x: x1, y: y1 }) ? { x: x1, y: y1 } :
+                            (isInsideInterval(prevPoint, point, { x: x2, y: y2 }) ? { x: x2, y: y2 } : undefined);
+                    }
+                }
+            }
+        }
+
+        return coords;
+    },
+
+    getNeighborPoints(param, paramName) {
+        let points = this.getPoints();
+        const neighborPoints = [];
+
+        if(this.getOptions().closed) {
+            points = _extend(true, [], points);
+            const lastPoint = points[points.length - 1];
+            const firstPointCopy = clonePoint(points[0], points[0].x, points[0].y, points[0].angle);
+            const lastPointCopy = clonePoint(lastPoint, lastPoint.x, lastPoint.y, lastPoint.angle);
+            const rearwardRefPoint = this._modifyReflectedPoint(firstPointCopy, lastPoint);
+            const forwardRefPoint = this._modifyReflectedPoint(lastPointCopy, points[0]);
+            if(forwardRefPoint) {
+                points.unshift(forwardRefPoint);
+            }
+            if(rearwardRefPoint) {
+                points.push(rearwardRefPoint);
+            }
+        }
+
+        for(let i = 1; i < points.length; i++) {
+            if(points[i - 1][paramName] === param) {
+                neighborPoints.push(points[i - 1]);
+            } else if(points[i][paramName] === param) {
+                neighborPoints.push(points[i]);
+            } else if(points[i][paramName] > param && points[i - 1][paramName] < param ||
+                points[i - 1][paramName] > param && points[i][paramName] < param) {
+                neighborPoints.push(points[i - 1]);
+                neighborPoints.push(points[i]);
+            }
+            if(neighborPoints.length > 0) {
+                break;
+            }
+        }
+
+        return neighborPoints;
     }
 });

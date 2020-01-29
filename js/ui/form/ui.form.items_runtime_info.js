@@ -100,7 +100,7 @@ export default class FormItemsRunTimeInfo {
     }
 
     findItemContainerByItem(item) {
-        for(let key in this._map) {
+        for(const key in this._map) {
             if(this._map[key].item === item) {
                 return this._map[key].$itemContainer;
             }

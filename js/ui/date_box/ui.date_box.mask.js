@@ -12,6 +12,7 @@ import { getFormat } from '../../localization/ldml/date.format';
 import { isString } from '../../core/utils/type';
 import { sign } from '../../core/utils/math';
 import DateBoxBase from './ui.date_box.base';
+import numberLocalization from '../../localization/number';
 
 const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
@@ -116,11 +117,6 @@ const DateBoxMask = DateBoxBase.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
 
-            /**
-             * @name dxDateBoxOptions.useMaskBehavior
-             * @type boolean
-             * @default false
-             */
             useMaskBehavior: false,
 
             emptyDateValue: new Date(2000, 0, 1, 0, 0, 0),
@@ -136,7 +132,7 @@ const DateBoxMask = DateBoxBase.inherit({
     _keyboardHandler(e) {
         const key = e.originalEvent.key;
 
-        let result = this.callBase(e);
+        const result = this.callBase(e);
 
         if(!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
             return result;
@@ -182,7 +178,7 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _setNewDateIfEmpty() {
         if(!this._maskValue) {
-            var value = this.option('type') === 'time' ? new Date(null) : new Date();
+            const value = this.option('type') === 'time' ? new Date(null) : new Date();
             this._maskValue = value;
             this._initialMaskValue = value;
             this._renderDateParts();
@@ -218,9 +214,9 @@ const DateBoxMask = DateBoxBase.inherit({
             return;
         }
 
-        let limits = this._getActivePartProp('limits')(this._maskValue),
-            startString = this._searchValue + char.toLowerCase(),
-            endLimit = limits.max - limits.min;
+        const limits = this._getActivePartProp('limits')(this._maskValue);
+        const startString = this._searchValue + char.toLowerCase();
+        const endLimit = limits.max - limits.min;
 
         for(let i = 0; i <= endLimit; i++) {
             this._loadMaskValue(this._initialMaskValue);
@@ -257,10 +253,18 @@ const DateBoxMask = DateBoxBase.inherit({
         return this.option('useMaskBehavior') && this.option('mode') === 'text';
     },
 
+    _prepareRegExpInfo() {
+        this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
+        const regExp = this._regExpInfo.regexp;
+        const flags = regExp.flags;
+        const convertedRegExp = numberLocalization.convertDigits(this._regExpInfo.regexp.source, false);
+        this._regExpInfo.regexp = RegExp(convertedRegExp, flags);
+    },
+
     _initMaskState() {
         this._activePartIndex = 0;
         this._formatPattern = null;
-        this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
+        this._prepareRegExpInfo();
         this._loadMaskValue();
     },
 
@@ -333,7 +337,7 @@ const DateBoxMask = DateBoxBase.inherit({
 
         let index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
         if(this._dateParts[index].isStub) {
-            let isBoundaryIndex = index === 0 && step < 0 || index === this._dateParts.length - 1 && step > 0;
+            const isBoundaryIndex = index === 0 && step < 0 || index === this._dateParts.length - 1 && step > 0;
             if(!isBoundaryIndex) {
                 this._selectNextPart(step >= 0 ? step + 1 : step - 1);
                 return;
@@ -368,17 +372,17 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _addLeadingZeroes(value) {
-        const zeroes = this._searchValue.match(/^0+/),
-            limits = this._getActivePartLimits(),
-            maxLimitLength = String(limits.max).length;
+        const zeroes = this._searchValue.match(/^0+/);
+        const limits = this._getActivePartLimits();
+        const maxLimitLength = String(limits.max).length;
 
         return ((zeroes && zeroes[0] || '') + String(value)).substr(-maxLimitLength);
     },
 
     _setActivePartValue(value, dateValue) {
         dateValue = dateValue || this._maskValue;
-        const setter = this._getActivePartProp('setter'),
-            limits = this._getActivePartLimits();
+        const setter = this._getActivePartProp('setter');
+        const limits = this._getActivePartLimits();
 
         value = inRange(value, limits.min, limits.max) ? value : value % 10;
         value = this._addLeadingZeroes(fitIntoRange(value, limits.min, limits.max));
@@ -457,8 +461,8 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _maskPasteHandler(e) {
-        let newText = this._replaceSelectedText(this.option('text'), this._caret(), clipboardText(e));
-        let date = dateLocalization.parse(newText, this._getFormatPattern());
+        const newText = this._replaceSelectedText(this.option('text'), this._caret(), clipboardText(e));
+        const date = dateLocalization.parse(newText, this._getFormatPattern());
 
         if(date) {
             this._maskValue = date;

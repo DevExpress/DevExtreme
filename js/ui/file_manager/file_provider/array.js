@@ -15,14 +15,6 @@ import { pathCombine } from '../ui.file_manager.utils';
 
 const window = getWindow();
 
-/**
-* @name ArrayFileProvider
-* @inherits FileProvider
-* @type object
-* @module ui/file_manager/file_provider/array
-* @namespace DevExpress.fileProvider
-* @export default
-*/
 class ArrayFileProvider extends FileProvider {
 
     constructor(options) {
@@ -34,18 +26,6 @@ class ArrayFileProvider extends FileProvider {
             throw errors.Error('E4006');
         }
 
-        /**
-         * @name ArrayFileProviderOptions.data
-         * @type Array<any>
-         */
-        /**
-         * @name ArrayFileProviderOptions.itemsExpr
-         * @type string|function(fileItem)
-         */
-        /**
-         * @name ArrayFileProviderOptions.content
-         * @type string|function(fileItem)
-         */
 
         const itemsExpr = options.itemsExpr || 'items';
         this._subFileItemsGetter = compileGetter(itemsExpr);

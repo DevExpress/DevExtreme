@@ -1,11 +1,11 @@
-var extend = require('../../core/utils/extend').extend,
-    ToolbarStrategy = require('./ui.toolbar.strategy'),
-    ToolbarMenu = require('./ui.toolbar.menu'),
-    DropDownMenu = require('../drop_down_menu');
+const extend = require('../../core/utils/extend').extend;
+const ToolbarStrategy = require('./ui.toolbar.strategy');
+const ToolbarMenu = require('./ui.toolbar.menu');
+const DropDownMenu = require('../drop_down_menu');
 
-var MENU_INVISIBLE_CLASS = 'dx-state-invisible';
+const MENU_INVISIBLE_CLASS = 'dx-state-invisible';
 
-var DropDownMenuStrategy = ToolbarStrategy.inherit({
+const DropDownMenuStrategy = ToolbarStrategy.inherit({
 
     NAME: 'dropDownMenu',
 
@@ -34,7 +34,7 @@ var DropDownMenuStrategy = ToolbarStrategy.inherit({
     },
 
     _widgetOptions: function() {
-        var that = this;
+        const that = this;
         return extend(this.callBase(), {
             deferRendering: true,
             container: that._toolbar.option('menuContainer'),
@@ -52,8 +52,8 @@ var DropDownMenuStrategy = ToolbarStrategy.inherit({
     },
 
     _updateMenuVisibility: function(menuItems) {
-        var items = menuItems || this._getMenuItems(),
-            isMenuVisible = items.length && this._hasVisibleMenuItems(items);
+        const items = menuItems || this._getMenuItems();
+        const isMenuVisible = items.length && this._hasVisibleMenuItems(items);
         this._toggleMenuVisibility(isMenuVisible);
     },
 

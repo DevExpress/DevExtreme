@@ -1,4 +1,4 @@
-var standardColorNames = {
+const standardColorNames = {
     'aliceblue': 'f0f8ff',
     'antiquewhite': 'faebd7',
     'aqua': '00ffff',
@@ -147,7 +147,7 @@ var standardColorNames = {
 
 
 // array of color definition objects
-var standardColorTypes = [
+const standardColorTypes = [
     {
         re: /^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/,
         process: function(colorString) {
@@ -192,10 +192,10 @@ var standardColorTypes = [
     {
         re: /^hsv\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/,
         process: function(colorString) {
-            var h = parseInt(colorString[1], 10),
-                s = parseInt(colorString[2], 10),
-                v = parseInt(colorString[3], 10),
-                rgb = hsvToRgb(h, s, v);
+            const h = parseInt(colorString[1], 10);
+            const s = parseInt(colorString[2], 10);
+            const v = parseInt(colorString[3], 10);
+            const rgb = hsvToRgb(h, s, v);
 
             return [
                 rgb[0],
@@ -209,10 +209,10 @@ var standardColorTypes = [
     {
         re: /^hsl\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/,
         process: function(colorString) {
-            var h = parseInt(colorString[1], 10),
-                s = parseInt(colorString[2], 10),
-                l = parseInt(colorString[3], 10),
-                rgb = hslToRgb(h, s, l);
+            const h = parseInt(colorString[1], 10);
+            const s = parseInt(colorString[2], 10);
+            const l = parseInt(colorString[3], 10);
+            const rgb = hslToRgb(h, s, l);
 
             return [
                 rgb[0],
@@ -226,9 +226,11 @@ var standardColorTypes = [
     }
 ];
 
+const _round = Math.round;
+
 function Color(value) {
     this.baseColor = value;
-    var color;
+    let color;
     if(value) {
         color = String(value).toLowerCase().replace(/ /g, '');
         color = standardColorNames[color] ? '#' + standardColorNames[color] : color;
@@ -260,7 +262,9 @@ function parseColor(color) {
         return [0, 0, 0, 0];
     }
 
-    var i = 0, ii = standardColorTypes.length, str;
+    let i = 0;
+    const ii = standardColorTypes.length;
+    let str;
     for(; i < ii; ++i) {
         str = standardColorTypes[i].re.exec(color);
         if(str) {
@@ -281,14 +285,12 @@ function toHexFromRgb(r, g, b) {
 }
 
 function toHsvFromRgb(r, g, b) {
-    var max = Math.max(r, g, b),
-        min = Math.min(r, g, b),
-        delta = max - min,
-        H,
-        S,
-        V;
-
-    V = max;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const delta = max - min;
+    let H;
+    let S;
+    let V = max;
     S = (max === 0 ? 0 : 1 - min / max);
 
     if(max === min) {
@@ -321,20 +323,15 @@ function toHsvFromRgb(r, g, b) {
 }
 
 function hsvToRgb(h, s, v) {
-    var vDec,
-        vInc,
-        vMin,
-        index,
-        a,
-        r,
-        g,
-        b;
+    const index = Math.floor((h % 360) / 60);
+    const vMin = ((100 - s) * v) / 100;
+    const a = (v - vMin) * ((h % 60) / 60);
+    const vInc = vMin + a;
+    const vDec = v - a;
 
-    index = Math.floor((h % 360) / 60);
-    vMin = ((100 - s) * v) / 100;
-    a = (v - vMin) * ((h % 60) / 60);
-    vInc = vMin + a;
-    vDec = v - a;
+    let r;
+    let g;
+    let b;
 
     switch(index) {
         /* eslint-disable no-multi-spaces */
@@ -351,7 +348,7 @@ function hsvToRgb(h, s, v) {
 }
 
 function calculateHue(r, g, b, delta) {
-    var max = Math.max(r, g, b);
+    const max = Math.max(r, g, b);
     switch(max) {
         case r:
             return (g - b) / delta + (g < b ? 6 : 0);
@@ -367,17 +364,17 @@ function toHslFromRgb(r, g, b) {
     g = convertTo01Bounds(g, 255);
     b = convertTo01Bounds(b, 255);
 
-    var max = Math.max(r, g, b),
-        min = Math.min(r, g, b),
-        maxMinSum = max + min,
-        h,
-        s,
-        l = maxMinSum / 2;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const maxMinSum = max + min;
+    let h;
+    let s;
+    const l = maxMinSum / 2;
 
     if(max === min) {
         h = s = 0;
     } else {
-        var delta = max - min;
+        const delta = max - min;
 
         if(l > 0.5) {
             s = delta / (2 - maxMinSum);
@@ -393,7 +390,7 @@ function toHslFromRgb(r, g, b) {
 }
 
 function makeColorTint(colorPart, h) {
-    var colorTint = h;
+    let colorTint = h;
     if(colorPart === 'r') {
         colorTint = h + 1 / 3;
     }
@@ -430,7 +427,9 @@ function hueToRgb(p, q, colorTint) {
 }
 
 function hslToRgb(h, s, l) {
-    var r, g, b;
+    let r;
+    let g;
+    let b;
 
     h = convertTo01Bounds(h, 360);
     s = convertTo01Bounds(s, 100);
@@ -439,8 +438,8 @@ function hslToRgb(h, s, l) {
     if(s === 0) {
         r = g = b = l;
     } else {
-        var q = l < 0.5 ? l * (1 + s) : l + s - l * s,
-            p = 2 * l - q;
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
         r = hueToRgb(p, q, makeColorTint('r', h));
         g = hueToRgb(p, q, makeColorTint('g', h));
         b = hueToRgb(p, q, makeColorTint('b', h));
@@ -472,8 +471,6 @@ function isIntegerBetweenMinAndMax(number, min, max) {
     return true;
 }
 
-var _round = Math.round;
-
 Color.prototype = {
     constructor: Color,
 
@@ -489,7 +486,7 @@ Color.prototype = {
     },
 
     alter: function(step) {
-        var result = new Color();
+        const result = new Color();
         result.r = normalize(this.r + step);
         result.g = normalize(this.g + step);
         result.b = normalize(this.b + step);
@@ -497,8 +494,8 @@ Color.prototype = {
     },
 
     blend: function(blendColor, opacity) {
-        var other = blendColor instanceof Color ? blendColor : new Color(blendColor),
-            result = new Color();
+        const other = blendColor instanceof Color ? blendColor : new Color(blendColor);
+        const result = new Color();
         result.r = normalize(_round(this.r * (1 - opacity) + other.r * opacity));
         result.g = normalize(_round(this.g * (1 - opacity) + other.g * opacity));
         result.b = normalize(_round(this.b * (1 - opacity) + other.b * opacity));
@@ -510,7 +507,7 @@ Color.prototype = {
     },
 
     getPureColor: function() {
-        var rgb = hsvToRgb(this.hsv.h, 100, 100);
+        const rgb = hsvToRgb(this.hsv.h, 100, 100);
         return new Color('rgb(' + rgb.join(',') + ')');
     },
 
@@ -535,8 +532,8 @@ Color.prototype = {
     colorIsInvalid: false,
 
     fromHSL: function(hsl) {
-        var color = new Color(),
-            rgb = hslToRgb(hsl.h, hsl.s, hsl.l);
+        const color = new Color();
+        const rgb = hslToRgb(hsl.h, hsl.s, hsl.l);
 
         color.r = rgb[0];
         color.g = rgb[1];

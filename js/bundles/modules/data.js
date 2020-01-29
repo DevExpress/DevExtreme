@@ -1,4 +1,4 @@
-var DevExpress = require('./core');
+const DevExpress = require('./core');
 
 module.exports = DevExpress.data = DevExpress.data || {};
 
@@ -40,7 +40,7 @@ DevExpress.EndpointSelector = require('../../data/endpoint_selector');
 DevExpress.data.queryImpl = require('../../data/query').queryImpl;
 DevExpress.data.queryAdapters = require('../../data/query_adapters');
 
-var dataUtils = require('../../data/utils');
+const dataUtils = require('../../data/utils');
 
 DevExpress.data.utils.normalizeBinaryCriterion = dataUtils.normalizeBinaryCriterion;
 DevExpress.data.utils.normalizeSortingInfo = dataUtils.normalizeSortingInfo;
@@ -56,4 +56,4 @@ DevExpress.data.utils.toComparable = require('../../core/utils/data').toComparab
 DevExpress.data.utils.multiLevelGroup = require('../../data/store_helper').multiLevelGroup;
 DevExpress.data.utils.arrangeSortingInfo = require('../../data/store_helper').arrangeSortingInfo;
 
-DevExpress.data.utils.normalizeDataSourceOptions = require('../../data/data_source/data_source').normalizeDataSourceOptions;
+DevExpress.data.utils.normalizeDataSourceOptions = require('../../data/data_source/utils').normalizeDataSourceOptions;

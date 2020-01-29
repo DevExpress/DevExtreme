@@ -1,15 +1,15 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    dragEvents = require('events/drag'),
-    support = require('core/utils/support'),
-    browser = require('core/utils/browser'),
-    GestureEmitter = require('events/gesture/emitter.gesture'),
-    dropTargets = dragEvents.dropTargets,
-    pointerMock = require('../../helpers/pointerMock.js');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const dragEvents = require('events/drag');
+const support = require('core/utils/support');
+const browser = require('core/utils/browser');
+const GestureEmitter = require('events/gesture/emitter.gesture');
+const dropTargets = dragEvents.dropTargets;
+const pointerMock = require('../../helpers/pointerMock.js');
 
 $('#qunit-fixture').addClass('qunit-fixture-visible');
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<style>\
             #container {\
                 position: relative;\
@@ -57,8 +57,8 @@ QUnit.module('dragging');
 QUnit.test('dragstart should be fired', function(assert) {
     assert.expect(1);
 
-    var $element = $('#element'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
     $element.on(dragEvents.start, function(e) {
         assert.ok(e.target === $element[0]);
@@ -68,8 +68,8 @@ QUnit.test('dragstart should be fired', function(assert) {
 });
 
 QUnit.test('dragstart should be fired with down event arguments', function(assert) {
-    var $element = $('#element'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
     $element.on(dragEvents.start, function(e) {
         assert.equal(e.pageX, 0);
@@ -80,10 +80,10 @@ QUnit.test('dragstart should be fired with down event arguments', function(asser
 });
 
 QUnit.test('drag should be fired', function(assert) {
-    var $element = $('#element'),
-        pointer = pointerMock($element),
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
-        lastDragOffset;
+    let lastDragOffset;
 
     $element.on(dragEvents.move, function(e) {
         assert.ok(e.target === $element[0]);
@@ -108,8 +108,8 @@ QUnit.test('drag should be fired', function(assert) {
 QUnit.test('dragend should be fired', function(assert) {
     assert.expect(2);
 
-    var $element = $('#element'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
     $element.on(dragEvents.end, function(e) {
         assert.ok(e.target === $element[0]);
@@ -124,10 +124,10 @@ QUnit.test('dragend should be fired', function(assert) {
 });
 
 QUnit.test('y offset should be equal zero with horizontal direction', function(assert) {
-    var $element = $('#element'),
-        pointer = pointerMock($element),
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
-        lastDragOffset;
+    let lastDragOffset;
 
     $element.on(dragEvents.move, {
         direction: 'horizontal'
@@ -145,10 +145,10 @@ QUnit.test('y offset should be equal zero with horizontal direction', function(a
 });
 
 QUnit.test('x offset should be equal zero with vertical direction', function(assert) {
-    var $element = $('#element'),
-        pointer = pointerMock($element),
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
-        lastDragOffset;
+    let lastDragOffset;
 
     $element.on(dragEvents.move, {
         direction: 'vertical'
@@ -166,8 +166,8 @@ QUnit.test('x offset should be equal zero with vertical direction', function(ass
 });
 
 QUnit.test('maxLeftOffset', function(assert) {
-    var $element = $('#element'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
     $element.on(dragEvents.start, function(e) {
         e.maxLeftOffset = 100;
@@ -182,8 +182,8 @@ QUnit.test('maxLeftOffset', function(assert) {
 });
 
 QUnit.test('maxRightOffset', function(assert) {
-    var $element = $('#element'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
     $element.on(dragEvents.start, function(e) {
         e.maxRightOffset = 100;
@@ -199,8 +199,8 @@ QUnit.test('maxRightOffset', function(assert) {
 });
 
 QUnit.test('maxTopOffset', function(assert) {
-    var $element = $('#element'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
     $element.on(dragEvents.start, function(e) {
         e.maxTopOffset = 100;
@@ -216,8 +216,8 @@ QUnit.test('maxTopOffset', function(assert) {
 });
 
 QUnit.test('maxBottomOffset', function(assert) {
-    var $element = $('#element'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
     $element.on(dragEvents.start, function(e) {
         e.maxBottomOffset = 100;
@@ -235,7 +235,7 @@ QUnit.test('maxBottomOffset', function(assert) {
 QUnit.module('drop targets registration');
 
 QUnit.test('element should be pushed to drop targets on dragenter subscription', function(assert) {
-    var $dropTarget = $('<div>').appendTo('#qunit-fixture');
+    const $dropTarget = $('<div>').appendTo('#qunit-fixture');
 
     $dropTarget.on(dragEvents.enter, noop);
     assert.equal(dropTargets.length, 1, 'drop target added');
@@ -243,7 +243,7 @@ QUnit.test('element should be pushed to drop targets on dragenter subscription',
 });
 
 QUnit.test('element should be removed from drop targets on dragenter unsubscription', function(assert) {
-    var $dropTarget = $('<div>').appendTo('#qunit-fixture');
+    const $dropTarget = $('<div>').appendTo('#qunit-fixture');
 
     $dropTarget.on(dragEvents.enter, noop);
     $dropTarget.off(dragEvents.enter);
@@ -251,7 +251,7 @@ QUnit.test('element should be removed from drop targets on dragenter unsubscript
 });
 
 QUnit.test('element should be pushed to drop targets on dragleave subscription', function(assert) {
-    var $dropTarget = $('<div>').appendTo('#qunit-fixture');
+    const $dropTarget = $('<div>').appendTo('#qunit-fixture');
 
     $dropTarget.on(dragEvents.leave, noop);
     assert.equal(dropTargets.length, 1, 'drop target added');
@@ -259,7 +259,7 @@ QUnit.test('element should be pushed to drop targets on dragleave subscription',
 });
 
 QUnit.test('element should be removed from drop targets on dragleave unsubscription', function(assert) {
-    var $dropTarget = $('<div>').appendTo('#qunit-fixture');
+    const $dropTarget = $('<div>').appendTo('#qunit-fixture');
 
     $dropTarget.on(dragEvents.leave, noop);
     $dropTarget.off(dragEvents.leave);
@@ -267,7 +267,7 @@ QUnit.test('element should be removed from drop targets on dragleave unsubscript
 });
 
 QUnit.test('element should be pushed to drop targets on drop subscription', function(assert) {
-    var $dropTarget = $('<div>').appendTo('#qunit-fixture');
+    const $dropTarget = $('<div>').appendTo('#qunit-fixture');
 
     $dropTarget.on(dragEvents.drop, noop);
     assert.equal(dropTargets.length, 1, 'drop target added');
@@ -275,7 +275,7 @@ QUnit.test('element should be pushed to drop targets on drop subscription', func
 });
 
 QUnit.test('element should be removed from drop targets on drop unsubscription', function(assert) {
-    var $dropTarget = $('<div>').appendTo('#qunit-fixture');
+    const $dropTarget = $('<div>').appendTo('#qunit-fixture');
 
     $dropTarget.on(dragEvents.drop, noop);
     $dropTarget.off(dragEvents.drop);
@@ -283,7 +283,7 @@ QUnit.test('element should be removed from drop targets on drop unsubscription',
 });
 
 QUnit.test('element should be pushed to drop targets only once on dragenter, dragleave and drop subscription', function(assert) {
-    var $dropTarget = $('<div>').appendTo('#qunit-fixture');
+    const $dropTarget = $('<div>').appendTo('#qunit-fixture');
 
     $dropTarget.on(dragEvents.enter, noop);
     $dropTarget.on(dragEvents.leave, noop);
@@ -292,7 +292,7 @@ QUnit.test('element should be pushed to drop targets only once on dragenter, dra
 });
 
 QUnit.test('element should not be removed from drop targets if it has dragleave or dragenter or drop subscription after unsubscription', function(assert) {
-    var $dropTarget = $('<div>').appendTo('#qunit-fixture');
+    const $dropTarget = $('<div>').appendTo('#qunit-fixture');
 
     $dropTarget.on(dragEvents.enter, noop);
     $dropTarget.on(dragEvents.leave, noop);
@@ -304,8 +304,8 @@ QUnit.test('element should not be removed from drop targets if it has dragleave 
 });
 
 QUnit.test('all elements should be removed from drop targets after unsubscription', function(assert) {
-    var $dropTarget = $('<div>').appendTo('#qunit-fixture'),
-        $secondDropTarget = $('<div>').appendTo('#qunit-fixture');
+    const $dropTarget = $('<div>').appendTo('#qunit-fixture');
+    const $secondDropTarget = $('<div>').appendTo('#qunit-fixture');
 
     $dropTarget.on(dragEvents.enter, noop);
     $secondDropTarget.on(dragEvents.enter, noop);
@@ -315,7 +315,7 @@ QUnit.test('all elements should be removed from drop targets after unsubscriptio
 });
 
 QUnit.test('element should be removed from drop targets if it has not any subscription after unsubscription', function(assert) {
-    var $dropTarget = $('<div>').appendTo('#qunit-fixture');
+    const $dropTarget = $('<div>').appendTo('#qunit-fixture');
 
     $dropTarget.on(dragEvents.enter, noop);
     $dropTarget.on(dragEvents.leave, noop);
@@ -327,8 +327,8 @@ QUnit.test('element should be removed from drop targets if it has not any subscr
 });
 
 QUnit.test('There are no exceptions when dragging an element when it has several subscriptions with and without a selector to the dragenter event', function(assert) {
-    var $element = $('#element'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
     $('#container').on(dragEvents.enter, noop);
     $('#container').on(dragEvents.enter, '#dropTarget', noop);
@@ -347,10 +347,10 @@ QUnit.test('There are no exceptions when dragging an element when it has several
 QUnit.module('dropping');
 
 QUnit.test('dxdragenter should be fired when draggable enter drop target', function(assert) {
-    var $element = $('#element'),
-        $dropTarget = $('#dropTarget'),
-        pointer = pointerMock($element),
-        dragEnterFired = 0;
+    const $element = $('#element');
+    const $dropTarget = $('#dropTarget');
+    const pointer = pointerMock($element);
+    let dragEnterFired = 0;
 
     $dropTarget.on(dragEvents.enter, function(e) {
         dragEnterFired++;
@@ -366,10 +366,10 @@ QUnit.test('dxdragenter should be fired when draggable enter drop target', funct
 });
 
 QUnit.test('dxdragenter should be fired only if pointer above drop target', function(assert) {
-    var $element = $('#element'),
-        $dropTarget = $('#dropTarget'),
-        pointer = pointerMock($element),
-        dragEnterFired = 0;
+    const $element = $('#element');
+    const $dropTarget = $('#dropTarget');
+    const pointer = pointerMock($element);
+    let dragEnterFired = 0;
 
     $dropTarget.on(dragEvents.enter, function(e) {
         dragEnterFired++;
@@ -383,11 +383,11 @@ QUnit.test('dxdragenter should be fired only if pointer above drop target', func
 });
 
 QUnit.test('dxdragleave should not be fired if drag started on the element', function(assert) {
-    var $element;
+    let $element;
 
     try {
-        var $dropTarget = $('#dropTarget'),
-            dragLeaveFired = 0;
+        const $dropTarget = $('#dropTarget');
+        let dragLeaveFired = 0;
 
         $element = $('#element');
         pointerMock($element);
@@ -421,10 +421,10 @@ QUnit.test('dxdragleave should not be fired if drag started on the element', fun
 });
 
 QUnit.test('dxdragleave should be fired when draggable leave drop target', function(assert) {
-    var $element = $('#element'),
-        $dropTarget = $('#dropTarget'),
-        pointer = pointerMock($element),
-        dragLeaveFired = 0;
+    const $element = $('#element');
+    const $dropTarget = $('#dropTarget');
+    const pointer = pointerMock($element);
+    let dragLeaveFired = 0;
 
     $dropTarget.on(dragEvents.leave, function(e) {
         dragLeaveFired++;
@@ -440,12 +440,12 @@ QUnit.test('dxdragleave should be fired when draggable leave drop target', funct
 });
 
 QUnit.test('dxdragleave and dxdragenter should be fired when draggable moves from one drop target to another', function(assert) {
-    var $element = $('#element'),
-        $dropTarget = $('#dropTarget'),
-        $anotherDropTarget = $('#anotherDropTarget'),
-        pointer = pointerMock($element),
-        dragLeaveFired = 0,
-        dragEnterFired = 0;
+    const $element = $('#element');
+    const $dropTarget = $('#dropTarget');
+    const $anotherDropTarget = $('#anotherDropTarget');
+    const pointer = pointerMock($element);
+    let dragLeaveFired = 0;
+    let dragEnterFired = 0;
 
     $dropTarget.on(dragEvents.leave, function(e) {
         dragLeaveFired++;
@@ -462,9 +462,9 @@ QUnit.test('dxdragleave and dxdragenter should be fired when draggable moves fro
 });
 
 QUnit.test('dxdragenter should not be fired on drag element', function(assert) {
-    var $element = $('#element'),
-        pointer = pointerMock($element),
-        dragEnterFired = 0;
+    const $element = $('#element');
+    const pointer = pointerMock($element);
+    let dragEnterFired = 0;
 
     $element.on(dragEvents.enter, function(e) {
         dragEnterFired++;
@@ -477,11 +477,11 @@ QUnit.test('dxdragenter should not be fired on drag element', function(assert) {
 });
 
 QUnit.test('drop targets should be overridden by e.targetElements (array of jQuery)', function(assert) {
-    var $element = $('#element'),
-        $dropTarget = $('#dropTarget'),
-        $anotherDropTarget = $('#anotherDropTarget'),
-        pointer = pointerMock($element),
-        dragEnterFired = 0;
+    const $element = $('#element');
+    const $dropTarget = $('#dropTarget');
+    const $anotherDropTarget = $('#anotherDropTarget');
+    const pointer = pointerMock($element);
+    let dragEnterFired = 0;
 
     $dropTarget.on(dragEvents.enter, function(e) {
         dragEnterFired++;
@@ -499,11 +499,11 @@ QUnit.test('drop targets should be overridden by e.targetElements (array of jQue
 });
 
 QUnit.test('drop targets should be overridden by e.targetElements (DOMNode)', function(assert) {
-    var $element = $('#element'),
-        $dropTarget = $('#dropTarget'),
-        $anotherDropTarget = $('#anotherDropTarget'),
-        pointer = pointerMock($element),
-        dragEnterFired = 0;
+    const $element = $('#element');
+    const $dropTarget = $('#dropTarget');
+    const $anotherDropTarget = $('#anotherDropTarget');
+    const pointer = pointerMock($element);
+    let dragEnterFired = 0;
 
     $dropTarget.on(dragEvents.enter, function(e) {
         dragEnterFired++;
@@ -521,11 +521,11 @@ QUnit.test('drop targets should be overridden by e.targetElements (DOMNode)', fu
 });
 
 QUnit.test('drop targets should be overridden by e.targetElements (null)', function(assert) {
-    var $element = $('#element'),
-        $dropTarget = $('#dropTarget'),
-        $anotherDropTarget = $('#anotherDropTarget'),
-        pointer = pointerMock($element),
-        dragEnterFired = 0;
+    const $element = $('#element');
+    const $dropTarget = $('#dropTarget');
+    const $anotherDropTarget = $('#anotherDropTarget');
+    const pointer = pointerMock($element);
+    let dragEnterFired = 0;
 
     $dropTarget.on(dragEvents.enter, function(e) {
         dragEnterFired++;
@@ -543,12 +543,12 @@ QUnit.test('drop targets should be overridden by e.targetElements (null)', funct
 });
 
 QUnit.test('drop targets should be overridden by e.targetElements (container)', function(assert) {
-    var $element = $('#element'),
-        $dropTargetContainer = $('#dropTarget'),
-        $innerDropTarget = $('#innerDropTarget'),
-        $anotherDropTarget = $('#anotherDropTarget'),
-        pointer = pointerMock($element),
-        dragEnterFired = 0;
+    const $element = $('#element');
+    const $dropTargetContainer = $('#dropTarget');
+    const $innerDropTarget = $('#innerDropTarget');
+    const $anotherDropTarget = $('#anotherDropTarget');
+    const pointer = pointerMock($element);
+    let dragEnterFired = 0;
 
     $innerDropTarget.on(dragEvents.enter, function(e) {
         dragEnterFired++;
@@ -566,10 +566,10 @@ QUnit.test('drop targets should be overridden by e.targetElements (container)', 
 });
 
 QUnit.test('dxdrop should be fired when draggable drop to the target', function(assert) {
-    var $element = $('#element'),
-        $dropTarget = $('#dropTarget'),
-        pointer = pointerMock($element),
-        dropFired = 0;
+    const $element = $('#element');
+    const $dropTarget = $('#dropTarget');
+    const pointer = pointerMock($element);
+    let dropFired = 0;
 
     $dropTarget.on(dragEvents.drop, function(e) {
         dropFired++;
@@ -584,9 +584,9 @@ QUnit.test('dxdrop should be fired when draggable drop to the target', function(
 QUnit.test('dxdragenter, dxdragleave, dxdrop should be fired with current dragging element', function(assert) {
     assert.expect(4);
 
-    var $element = $('#element'),
-        $dropTarget = $('#dropTarget'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const $dropTarget = $('#dropTarget');
+    const pointer = pointerMock($element);
 
     $dropTarget.on(dragEvents.enter, function(e) {
         assert.equal(e.draggingElement, $element.get(0));
@@ -606,9 +606,9 @@ QUnit.test('dxdragenter, dxdragleave, dxdrop should be fired with current draggi
 QUnit.test('dxdragenter, dxdragleave, dxdrop should have correct target', function(assert) {
     assert.expect(4);
 
-    var $element = $('#element'),
-        $dropTarget = $('#dropTarget'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const $dropTarget = $('#dropTarget');
+    const pointer = pointerMock($element);
 
     $dropTarget.on(dragEvents.enter, function(e) {
         assert.equal(e.target, $dropTarget.get(0));
@@ -628,9 +628,9 @@ QUnit.test('dxdragenter, dxdragleave, dxdrop should have correct target', functi
 QUnit.test('dxdragenter, dxdragleave, dxdrop should support delegated subscriptions', function(assert) {
     assert.expect(4);
 
-    var $element = $('#element'),
-        $dropContainer = $('#container'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const $dropContainer = $('#container');
+    const pointer = pointerMock($element);
 
     $dropContainer.on(dragEvents.enter, '#dropTarget', function(e) {
         assert.ok(true);
@@ -650,9 +650,9 @@ QUnit.test('dxdragenter, dxdragleave, dxdrop should support delegated subscripti
 QUnit.test('dxdragenter, dxdragleave, dxdrop should be fired on closest delegated target', function(assert) {
     assert.expect(8);
 
-    var $element = $('#element'),
-        $dropContainer = $('#container'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const $dropContainer = $('#container');
+    const pointer = pointerMock($element);
 
     $dropContainer
         .on(dragEvents.enter, '#dropTarget', function(e) { assert.ok(true); })
@@ -672,9 +672,9 @@ QUnit.test('dxdragenter, dxdragleave, dxdrop should be fired on closest delegate
 QUnit.test('dxdragenter, dxdragleave, dxdrop should not be fired on unsubscribed delegated target', function(assert) {
     assert.expect(4);
 
-    var $element = $('#element'),
-        $dropContainer = $('#container'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const $dropContainer = $('#container');
+    const pointer = pointerMock($element);
 
     $dropContainer
         .on(dragEvents.enter, '#dropTarget', function(e) { assert.ok(true); })
@@ -696,13 +696,13 @@ QUnit.test('dxdragenter, dxdragleave, dxdrop should not be fired on unsubscribed
 QUnit.module('hacks');
 
 QUnit.test('default behaviour on dxpointermove should be prevented to reduce user selection while drag', function(assert) {
-    var $element = $('#element');
+    const $element = $('#element');
 
     $element.on(dragEvents.start, noop);
 
     $element.trigger($.Event('dxpointerdown', { pointerType: 'mouse', pageX: 200, pageY: 200, pointers: [0] }));
 
-    var moveEvent = $.Event('dxpointermove', { pointerType: 'mouse', pageX: 210, pageY: 200, pointers: [0] });
+    const moveEvent = $.Event('dxpointermove', { pointerType: 'mouse', pageX: 210, pageY: 200, pointers: [0] });
     $element.trigger(moveEvent);
     assert.ok(moveEvent.isDefaultPrevented(), 'default prevented');
 
@@ -715,10 +715,10 @@ QUnit.test('drag should not crash with multiple touches', function(assert) {
         return;
     }
 
-    var $element = $('#element');
+    const $element = $('#element');
 
-    var startFired = 0,
-        endFired = 0;
+    let startFired = 0;
+    let endFired = 0;
 
     $element.on(dragEvents.start, function() {
         startFired++;
@@ -745,11 +745,11 @@ QUnit.test('drag correctly works with FireFox on touch-based devices (T602186)',
         return;
     }
 
-    var $element = $('#element'),
-        extendTarget = function(config, pageX, pageY) {
-            config.pageX = pageX;
-            config.pageY = pageY;
-        };
+    const $element = $('#element');
+    const extendTarget = function(config, pageX, pageY) {
+        config.pageX = pageX;
+        config.pageY = pageY;
+    };
 
     $element.on(dragEvents.start, function(e) {
         assert.equal(e.pageX, 45, 'correct drag start pageX argument');
@@ -760,9 +760,9 @@ QUnit.test('drag correctly works with FireFox on touch-based devices (T602186)',
         assert.equal(e.pageY, 75, 'correct drag move pageY argument');
     });
 
-    var touchStartParams = { pageX: 0, pageY: 0, touches: [{ identifier: 1, pageX: 45, pageY: 50 }], targetTouches: [1], changedTouches: [{ identifier: 1, pageX: 45, pageY: 50 }] },
-        touchMoveParams = { pageX: 145, pageY: 100, touches: [{ identifier: 1, pageX: 70, pageY: 75 }], targetTouches: [1], changedTouches: [{ identifier: 1, pageX: 70, pageY: 75 }] },
-        touchEndParams = { touches: [], targetTouches: [1], changedTouches: [{ identifier: 1 }] };
+    const touchStartParams = { pageX: 0, pageY: 0, touches: [{ identifier: 1, pageX: 45, pageY: 50 }], targetTouches: [1], changedTouches: [{ identifier: 1, pageX: 45, pageY: 50 }] };
+    const touchMoveParams = { pageX: 145, pageY: 100, touches: [{ identifier: 1, pageX: 70, pageY: 75 }], targetTouches: [1], changedTouches: [{ identifier: 1, pageX: 70, pageY: 75 }] };
+    const touchEndParams = { touches: [], targetTouches: [1], changedTouches: [{ identifier: 1 }] };
 
     if(QUnit.urlParams['nojquery']) {
         extendTarget(touchStartParams, 0, 0);
@@ -778,14 +778,14 @@ QUnit.test('drag correctly works with FireFox on touch-based devices (T602186)',
 });
 
 QUnit.test('drag move should not prevent default if e._cancelPreventDefault is true', function(assert) {
-    var $element = $('#element'),
-        pointer = pointerMock($element);
+    const $element = $('#element');
+    const pointer = pointerMock($element);
 
     $element.on(dragEvents.move, function(e) {
         e._cancelPreventDefault = true;
     });
 
-    var e = pointer.start().down().move(250, 250).lastEvent();
+    const e = pointer.start().down().move(250, 250).lastEvent();
     assert.notOk(e.isDefaultPrevented(), 'prevent default is cancelled');
 });
 
@@ -793,10 +793,10 @@ QUnit.test('drag move should not prevent default if e._cancelPreventDefault is t
 QUnit.module('performance');
 
 QUnit.test('override dropTarget position function', function(assert) {
-    var $element = $('#element'),
-        $dropTarget = $('#dropTarget'),
-        pointer = pointerMock($element),
-        dragEnterFired = 0;
+    const $element = $('#element');
+    const $dropTarget = $('#dropTarget');
+    const pointer = pointerMock($element);
+    let dragEnterFired = 0;
 
     $dropTarget.on(dragEvents.enter, {
         itemPositionFunc: function() {
@@ -816,10 +816,10 @@ QUnit.test('override dropTarget position function', function(assert) {
 });
 
 QUnit.test('override dropTarget size function', function(assert) {
-    var $element = $('#element'),
-        $dropTarget = $('#dropTarget'),
-        pointer = pointerMock($element),
-        dragEnterFired = 0;
+    const $element = $('#element');
+    const $dropTarget = $('#dropTarget');
+    const pointer = pointerMock($element);
+    let dragEnterFired = 0;
 
     $dropTarget.on(dragEvents.enter, {
         itemSizeFunc: function() {

@@ -16,49 +16,11 @@ module.exports = {
     defaultOptions: function() {
         return {
             loadingTimeout: 0,
-            /**
-             * @name GridBaseOptions.dataSource
-             * @type string|Array<Object>|DataSource|DataSourceOptions
-             * @default null
-             */
             dataSource: null,
-            /**
-             * @name GridBaseOptions.cacheEnabled
-             * @type boolean
-             * @default true
-             */
             cacheEnabled: true,
-            /**
-             * @name GridBaseOptions.repaintChangesOnly
-             * @type boolean
-             * @default false
-             */
             repaintChangesOnly: false,
-            /**
-             * @name GridBaseOptions.highlightChanges
-             * @type boolean
-             * @default false
-             */
             highlightChanges: false,
-            /**
-             * @name GridBaseOptions.onDataErrorOccurred
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 error:Error
-             * @action
-            */
             onDataErrorOccurred: null,
-            /**
-             * @name dxDataGridOptions.remoteOperations
-             * @type boolean|object|Enums.Mode
-             * @default "auto"
-             */
-            /**
-             * @name dxTreeListOptions.remoteOperations
-             * @type object|Enums.Mode
-             * @default "auto"
-             */
             remoteOperations: 'auto',
             /**
              * @name dxDataGridOptions.remoteOperations.sorting
@@ -105,72 +67,17 @@ module.exports = {
              * @type boolean
              * @default false
              */
-            /**
-             * @name GridBaseOptions.paging
-             * @type object
-             */
             paging: {
-                /**
-                 * @name GridBaseOptions.paging.enabled
-                 * @type boolean
-                 * @default true
-                 */
                 enabled: true,
-                /**
-                 * @name GridBaseOptions.paging.pageSize
-                 * @type number
-                 * @default 20
-                 * @fires GridBaseOptions.onOptionChanged
-                 */
                 pageSize: undefined,
-                /**
-                 * @name GridBaseOptions.paging.pageIndex
-                 * @type number
-                 * @default 0
-                 * @fires GridBaseOptions.onOptionChanged
-                 */
                 pageIndex: undefined
             }
-            /**
-             * @name GridBaseOptions.onRowExpanding
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 key:any
-             * @type_function_param1_field5 cancel:boolean
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name GridBaseOptions.onRowExpanded
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 key:any
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name GridBaseOptions.onRowCollapsing
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 key:any
-             * @type_function_param1_field5 cancel:boolean
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name GridBaseOptions.onRowCollapsed
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 key:any
-             * @extends Action
-             * @action
-             */
         };
     },
     controllers: {
         data: modules.Controller.inherit({}).include(DataHelperMixin).inherit((function() {
-            var changePaging = function(that, optionName, value) {
-                var dataSource = that._dataSource;
+            const changePaging = function(that, optionName, value) {
+                const dataSource = that._dataSource;
 
                 if(dataSource) {
                     if(value !== undefined) {
@@ -195,9 +102,9 @@ module.exports = {
                 return 0;
             };
 
-            var members = {
+            const members = {
                 init: function() {
-                    var that = this;
+                    const that = this;
                     that._items = [];
                     that._columnsController = that.getController('columns');
 
@@ -260,8 +167,8 @@ module.exports = {
                     this._refreshDataSource();
                 },
                 optionChanged: function(args) {
-                    var that = this,
-                        dataSource;
+                    const that = this;
+                    let dataSource;
 
                     function handled() {
                         args.handled = true;
@@ -269,7 +176,7 @@ module.exports = {
 
                     if(args.name === 'dataSource' && args.name === args.fullName && (args.value === args.previousValue || (that.option('columns') && Array.isArray(args.value) && Array.isArray(args.previousValue)))) {
                         if(args.value !== args.previousValue) {
-                            var store = that.store();
+                            const store = that.store();
                             if(store) {
                                 store._array = args.value;
                             }
@@ -320,25 +227,14 @@ module.exports = {
                 getDataSource: function() {
                     return this._dataSource && this._dataSource._dataSource;
                 },
-                /**
-                 * @name GridBaseMethods.getCombinedFilter
-                 * @publicName getCombinedFilter()
-                 * @return any
-                 */
-                /**
-                 * @name GridBaseMethods.getCombinedFilter
-                 * @publicName getCombinedFilter(returnDataField)
-                 * @param1 returnDataField:boolean
-                 * @return any
-                 */
                 getCombinedFilter: function(returnDataField) {
                     return this.combinedFilter(undefined, returnDataField);
                 },
                 combinedFilter: function(filter, returnDataField) {
-                    var that = this,
-                        dataSource = that._dataSource,
-                        columnsController = that._columnsController,
-                        additionalFilter;
+                    const that = this;
+                    const dataSource = that._dataSource;
+                    const columnsController = that._columnsController;
+                    let additionalFilter;
 
                     if(dataSource) {
                         if(filter === undefined) {
@@ -364,11 +260,11 @@ module.exports = {
                     return when();
                 },
                 _endUpdateCore: function() {
-                    var changes = this._changes;
+                    const changes = this._changes;
 
                     if(changes.length) {
                         this._changes = [];
-                        var repaintChangesOnly = changes.every(change => change.repaintChangesOnly);
+                        const repaintChangesOnly = changes.every(change => change.repaintChangesOnly);
                         this.updateItems(changes.length === 1 ? changes[0] : { repaintChangesOnly: repaintChangesOnly });
                     }
 
@@ -379,9 +275,9 @@ module.exports = {
                 },
                 // Handlers
                 _handleCustomizeStoreLoadOptions: function(e) {
-                    var columnsController = this._columnsController,
-                        dataSource = this._dataSource,
-                        storeLoadOptions = e.storeLoadOptions;
+                    const columnsController = this._columnsController;
+                    const dataSource = this._dataSource;
+                    const storeLoadOptions = e.storeLoadOptions;
 
                     if(e.isCustomLoading && !storeLoadOptions.isLoadingAll) {
                         return;
@@ -406,15 +302,15 @@ module.exports = {
                     e.group = columnsController.getGroupDataSourceParameters(!dataSource.remoteOperations().grouping);
                 },
                 _handleColumnsChanged: function(e) {
-                    var that = this,
-                        changeTypes = e.changeTypes,
-                        optionNames = e.optionNames,
-                        filterValue,
-                        filterValues,
-                        filterApplied;
+                    const that = this;
+                    const changeTypes = e.changeTypes;
+                    const optionNames = e.optionNames;
+                    let filterValue;
+                    let filterValues;
+                    let filterApplied;
 
                     // B255430
-                    var updateItemsHandler = function() {
+                    const updateItemsHandler = function() {
                         that._columnsController.columnsChanged.remove(updateItemsHandler);
                         that.updateItems();
                     };
@@ -442,7 +338,7 @@ module.exports = {
                         }
 
                         if(typeUtils.isDefined(optionNames.visible)) {
-                            var column = that._columnsController.columnOption(e.columnIndex);
+                            const column = that._columnsController.columnOption(e.columnIndex);
                             if(column && (typeUtils.isDefined(column.filterValue) || typeUtils.isDefined(column.filterValues))) {
                                 that._applyFilter();
                                 filterApplied = true;
@@ -454,10 +350,10 @@ module.exports = {
                     }
                 },
                 _handleDataChanged: function(e) {
-                    var that = this,
-                        dataSource = that._dataSource,
-                        columnsController = that._columnsController,
-                        isAsyncDataSourceApplying = false;
+                    const that = this;
+                    const dataSource = that._dataSource;
+                    const columnsController = that._columnsController;
+                    let isAsyncDataSourceApplying = false;
 
                     this._isFirstLoading = false;
 
@@ -475,11 +371,11 @@ module.exports = {
 
                             that._isDataSourceApplying = false;
 
-                            var hasAdditionalFilter = () => {
-                                    var additionalFilter = that._calculateAdditionalFilter();
-                                    return additionalFilter && additionalFilter.length;
-                                },
-                                needApplyFilter = that._needApplyFilter;
+                            const hasAdditionalFilter = () => {
+                                const additionalFilter = that._calculateAdditionalFilter();
+                                return additionalFilter && additionalFilter.length;
+                            };
+                            const needApplyFilter = that._needApplyFilter;
 
                             that._needApplyFilter = false;
 
@@ -512,14 +408,14 @@ module.exports = {
                     this.dataErrorOccurred.fire(errors.Error.apply(errors, arguments));
                 },
                 _setPagingOptions: function(dataSource) {
-                    var pageIndex = this.option('paging.pageIndex'),
-                        pageSize = this.option('paging.pageSize'),
-                        pagingEnabled = this.option('paging.enabled'),
-                        scrollingMode = this.option('scrolling.mode'),
-                        appendMode = scrollingMode === 'infinite',
-                        virtualMode = scrollingMode === 'virtual',
-                        paginate = pagingEnabled || virtualMode || appendMode,
-                        isChanged = false;
+                    const pageIndex = this.option('paging.pageIndex');
+                    const pageSize = this.option('paging.pageSize');
+                    const pagingEnabled = this.option('paging.enabled');
+                    const scrollingMode = this.option('scrolling.mode');
+                    const appendMode = scrollingMode === 'infinite';
+                    const virtualMode = scrollingMode === 'virtual';
+                    const paginate = pagingEnabled || virtualMode || appendMode;
+                    let isChanged = false;
 
                     dataSource.requireTotalCount(!appendMode);
                     if(pagingEnabled !== undefined && dataSource.paginate() !== paginate) {
@@ -538,7 +434,7 @@ module.exports = {
                     return isChanged;
                 },
                 _getSpecificDataSourceOption: function() {
-                    var dataSource = this.option('dataSource');
+                    const dataSource = this.option('dataSource');
 
                     if(Array.isArray(dataSource)) {
                         return {
@@ -553,9 +449,9 @@ module.exports = {
                     return dataSource;
                 },
                 _initDataSource: function() {
-                    var that = this,
-                        dataSource = this.option('dataSource'),
-                        oldDataSource = this._dataSource;
+                    const that = this;
+                    let dataSource = this.option('dataSource');
+                    const oldDataSource = this._dataSource;
 
                     that.callBase();
                     dataSource = that._dataSource;
@@ -568,9 +464,9 @@ module.exports = {
                     }
                 },
                 _loadDataSource: function() {
-                    var that = this,
-                        dataSource = that._dataSource,
-                        result = new Deferred();
+                    const that = this;
+                    const dataSource = that._dataSource;
+                    const result = new Deferred();
 
                     when(this._columnsController.refresh(true)).always(function() {
                         if(dataSource) {
@@ -589,17 +485,17 @@ module.exports = {
                     return 0;
                 },
                 _processItems: function(items, change) {
-                    var that = this,
-                        rowIndexDelta = that.getRowIndexDelta(),
-                        changeType = change.changeType,
-                        visibleColumns = that._columnsController.getVisibleColumns(null, changeType === 'loadingAll'),
-                        visibleItems = that._items,
-                        dataIndex = changeType === 'append' && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0,
-                        options = {
-                            visibleColumns: visibleColumns,
-                            dataIndex: dataIndex
-                        },
-                        result = [];
+                    const that = this;
+                    const rowIndexDelta = that.getRowIndexDelta();
+                    const changeType = change.changeType;
+                    const visibleColumns = that._columnsController.getVisibleColumns(null, changeType === 'loadingAll');
+                    const visibleItems = that._items;
+                    const dataIndex = changeType === 'append' && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0;
+                    const options = {
+                        visibleColumns: visibleColumns,
+                        dataIndex: dataIndex
+                    };
+                    const result = [];
 
                     each(items, function(index, item) {
                         if(typeUtils.isDefined(item)) {
@@ -628,11 +524,11 @@ module.exports = {
                     return dataItem;
                 },
                 generateDataValues: function(data, columns, isModified) {
-                    var values = [],
-                        column,
-                        value;
+                    const values = [];
+                    let column;
+                    let value;
 
-                    for(var i = 0; i < columns.length; i++) {
+                    for(let i = 0; i < columns.length; i++) {
                         column = columns[i];
                         value = isModified ? undefined : null;
                         if(!column.command) {
@@ -648,7 +544,7 @@ module.exports = {
                     return values;
                 },
                 _applyChange: function(change) {
-                    var that = this;
+                    const that = this;
 
                     if(change.changeType === 'update') {
                         that._applyChangeUpdate(change);
@@ -662,12 +558,12 @@ module.exports = {
                     this._items = change.items.slice(0);
                 },
                 _getRowIndices: function(change) {
-                    var rowIndices = change.rowIndices.slice(0),
-                        rowIndexDelta = this.getRowIndexDelta();
+                    const rowIndices = change.rowIndices.slice(0);
+                    const rowIndexDelta = this.getRowIndexDelta();
 
                     rowIndices.sort(function(a, b) { return a - b; });
 
-                    for(var i = 0; i < rowIndices.length; i++) {
+                    for(let i = 0; i < rowIndices.length; i++) {
                         let correctedRowIndex = rowIndices[i];
 
                         if(change.allowInvisibleRowIndices) {
@@ -683,22 +579,22 @@ module.exports = {
                     return rowIndices;
                 },
                 _applyChangeUpdate: function(change) {
-                    var that = this,
-                        items = change.items,
-                        rowIndices = that._getRowIndices(change),
-                        rowIndexDelta = that.getRowIndexDelta(),
-                        repaintChangesOnly = that.option('repaintChangesOnly'),
-                        prevIndex = -1,
-                        rowIndexCorrection = 0,
-                        changeType;
+                    const that = this;
+                    const items = change.items;
+                    const rowIndices = that._getRowIndices(change);
+                    const rowIndexDelta = that.getRowIndexDelta();
+                    const repaintChangesOnly = that.option('repaintChangesOnly');
+                    let prevIndex = -1;
+                    let rowIndexCorrection = 0;
+                    let changeType;
 
                     change.items = [];
                     change.rowIndices = [];
                     change.columnIndices = [];
                     change.changeTypes = [];
 
-                    var equalItems = function(item1, item2, strict) {
-                        var result = item1 && item2 && equalByValue(item1.key, item2.key);
+                    const equalItems = function(item1, item2, strict) {
+                        let result = item1 && item2 && equalByValue(item1.key, item2.key);
                         if(result && strict) {
                             result = item1.rowType === item2.rowType && (item2.rowType !== 'detail' || item1.isEditing === item2.isEditing);
                         }
@@ -706,12 +602,12 @@ module.exports = {
                     };
 
                     each(rowIndices, function(index, rowIndex) {
-                        var oldItem,
-                            newItem,
-                            oldNextItem,
-                            newNextItem,
-                            strict,
-                            columnIndices;
+                        let oldItem;
+                        let newItem;
+                        let oldNextItem;
+                        let newNextItem;
+                        let strict;
+                        let columnIndices;
 
                         rowIndex += rowIndexCorrection + rowIndexDelta;
 
@@ -777,14 +673,14 @@ module.exports = {
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
                     if(oldItem.rowType === newItem.rowType && newItem.rowType !== 'group' && newItem.rowType !== 'groupFooter') {
-                        var columnIndices = [];
+                        const columnIndices = [];
 
                         if(newItem.rowType !== 'detail') {
-                            for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
+                            for(let columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
                                 if(this._isCellChanged(oldItem, newItem, visibleRowIndex, columnIndex, isLiveUpdate)) {
                                     columnIndices.push(columnIndex);
                                 } else {
-                                    var cell = oldItem.cells && oldItem.cells[columnIndex];
+                                    const cell = oldItem.cells && oldItem.cells[columnIndex];
                                     if(cell && cell.update) {
                                         cell.update(newItem);
                                     }
@@ -797,12 +693,30 @@ module.exports = {
                         return columnIndices;
                     }
                 },
+                _isItemEquals: function(item1, item2) {
+                    if(JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
+                        return false;
+                    }
+
+                    const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'];
+                    if(compareFields.some(field => item1[field] !== item2[field])) {
+                        return false;
+                    }
+
+                    if(item1.rowType === 'group' || item1.rowType === 'groupFooter') {
+                        if(item1.isExpanded !== item2.isExpanded || JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                },
                 _applyChangesOnly: function(change) {
-                    var rowIndices = [],
-                        columnIndices = [],
-                        changeTypes = [],
-                        items = [],
-                        newIndexByKey = {};
+                    const rowIndices = [];
+                    const columnIndices = [];
+                    const changeTypes = [];
+                    const items = [];
+                    const newIndexByKey = {};
 
                     function getRowKey(row) {
                         if(row) {
@@ -810,20 +724,9 @@ module.exports = {
                         }
                     }
 
-                    function isItemEquals(item1, item2) {
-                        if(JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
+                    const isItemEquals = (item1, item2) => {
+                        if(!this._isItemEquals(item1, item2)) {
                             return false;
-                        }
-
-                        const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'];
-                        if(compareFields.some(field => item1[field] !== item2[field])) {
-                            return false;
-                        }
-
-                        if(item1.rowType === 'group' || item1.rowType === 'groupFooter') {
-                            if(item1.isExpanded !== item2.isExpanded || JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
-                                return false;
-                            }
                         }
 
                         if(item1.cells) {
@@ -836,16 +739,16 @@ module.exports = {
                         }
 
                         return true;
-                    }
+                    };
 
-                    var oldItems = this._items.slice();
+                    const oldItems = this._items.slice();
                     change.items.forEach(function(item, index) {
-                        var key = getRowKey(item);
+                        const key = getRowKey(item);
                         newIndexByKey[key] = index;
                         item.rowIndex = index;
                     });
 
-                    var result = findChanges(oldItems, change.items, getRowKey, isItemEquals);
+                    const result = findChanges(oldItems, change.items, getRowKey, isItemEquals);
 
                     if(!result) {
                         this._applyChangeFull(change);
@@ -855,10 +758,10 @@ module.exports = {
                     result.forEach((change) => {
                         switch(change.type) {
                             case 'update': {
-                                let index = change.index,
-                                    newItem = change.data,
-                                    oldItem = change.oldItem,
-                                    currentColumnIndices = this._getChangedColumnIndices(oldItem, newItem, index, true);
+                                const index = change.index;
+                                const newItem = change.data;
+                                const oldItem = change.oldItem;
+                                const currentColumnIndices = this._getChangedColumnIndices(oldItem, newItem, index, true);
 
                                 rowIndices.push(index);
                                 changeTypes.push('update');
@@ -897,20 +800,20 @@ module.exports = {
                     }
 
                     this._correctRowIndices(function getRowIndexCorrection(rowIndex) {
-                        var oldItem = oldItems[rowIndex],
-                            key = getRowKey(oldItem),
-                            newRowIndex = newIndexByKey[key];
+                        const oldItem = oldItems[rowIndex];
+                        const key = getRowKey(oldItem);
+                        const newRowIndex = newIndexByKey[key];
 
                         return newRowIndex >= 0 ? newRowIndex - rowIndex : 0;
                     });
                 },
                 _correctRowIndices: noop,
                 _updateItemsCore: function(change) {
-                    var that = this,
-                        items,
-                        oldItems,
-                        dataSource = that._dataSource,
-                        changeType = change.changeType || 'refresh';
+                    const that = this;
+                    let items;
+                    let oldItems;
+                    const dataSource = that._dataSource;
+                    const changeType = change.changeType || 'refresh';
 
                     change.changeType = changeType;
 
@@ -935,17 +838,17 @@ module.exports = {
                     }
                 },
                 _handleChanging: function(e) {
-                    var that = this,
-                        rows = that.getVisibleRows(),
-                        dataSource = that.dataSource();
+                    const that = this;
+                    const rows = that.getVisibleRows();
+                    const dataSource = that.dataSource();
 
                     if(dataSource) {
                         e.changes.forEach(function(change) {
                             if(change.type === 'insert' && change.index >= 0) {
-                                var dataIndex = 0,
-                                    row;
+                                let dataIndex = 0;
+                                let row;
 
-                                for(var i = 0; i < change.index; i++) {
+                                for(let i = 0; i < change.index; i++) {
                                     row = rows[i];
                                     if(row && (row.rowType === 'data' || row.rowType === 'group')) {
                                         dataIndex++;
@@ -959,14 +862,14 @@ module.exports = {
                 },
                 updateItems: function(change, isDataChanged) {
                     change = change || {};
-                    var that = this;
+                    const that = this;
 
                     if(that._repaintChangesOnly !== undefined) {
                         change.repaintChangesOnly = that._repaintChangesOnly;
                     } else if(change.changes) {
                         change.repaintChangesOnly = that.option('repaintChangesOnly');
                     } else if(isDataChanged) {
-                        var operationTypes = that.dataSource().operationTypes();
+                        const operationTypes = that.dataSource().operationTypes();
 
                         change.repaintChangesOnly = operationTypes && !operationTypes.grouping && !operationTypes.filtering && that.option('repaintChangesOnly');
                         change.isDataChanged = true;
@@ -987,12 +890,12 @@ module.exports = {
                     that._fireChanged(change);
                 },
                 loadingOperationTypes: function() {
-                    var dataSource = this.dataSource();
+                    const dataSource = this.dataSource();
 
                     return dataSource && dataSource.loadingOperationTypes() || {};
                 },
                 _fireChanged: function(change) {
-                    var that = this;
+                    const that = this;
                     deferRender(function() {
                         that.changed.fire(change);
                     });
@@ -1007,8 +910,8 @@ module.exports = {
                     return null;
                 },
                 _applyFilter: function() {
-                    var that = this,
-                        dataSource = that._dataSource;
+                    const that = this;
+                    const dataSource = that._dataSource;
 
                     if(dataSource) {
                         dataSource.pageIndex(0);
@@ -1016,19 +919,9 @@ module.exports = {
                         return that.reload().done(that.pageChanged.fire.bind(that.pageChanged));
                     }
                 },
-                /**
-                 * @name GridBaseMethods.filter
-                 * @publicName filter(filterExpr)
-                 * @param1 filterExpr:any
-                 */
-                /**
-                 * @name GridBaseMethods.filter
-                 * @publicName filter()
-                 * @return any
-                 */
                 filter: function(filterExpr) {
-                    var dataSource = this._dataSource,
-                        filter = dataSource && dataSource.filter();
+                    const dataSource = this._dataSource;
+                    const filter = dataSource && dataSource.filter();
 
                     if(arguments.length === 0) {
                         return filter;
@@ -1044,26 +937,17 @@ module.exports = {
                     }
                     this._applyFilter();
                 },
-                /**
-                * @name GridBaseMethods.clearFilter
-                * @publicName clearFilter()
-                */
-                /**
-                 * @name GridBaseMethods.clearFilter
-                 * @publicName clearFilter(filterName)
-                 * @param1 filterName:string
-                 */
                 clearFilter: function(filterName) {
-                    var that = this,
-                        columnsController = that._columnsController,
-                        clearColumnOption = function(optionName) {
-                            var columnCount = columnsController.columnCount(),
-                                index;
+                    const that = this;
+                    const columnsController = that._columnsController;
+                    const clearColumnOption = function(optionName) {
+                        const columnCount = columnsController.columnCount();
+                        let index;
 
-                            for(index = 0; index < columnCount; index++) {
-                                columnsController.columnOption(index, optionName, undefined);
-                            }
-                        };
+                        for(index = 0; index < columnCount; index++) {
+                            columnsController.columnOption(index, optionName, undefined);
+                        }
+                    };
 
                     that.component.beginUpdate();
 
@@ -1093,9 +977,9 @@ module.exports = {
                     that.component.endUpdate();
                 },
                 _fireDataSourceChanged: function() {
-                    var that = this;
+                    const that = this;
 
-                    var changedHandler = function() {
+                    const changedHandler = function() {
                         that.changed.remove(changedHandler);
                         that.dataSourceChanged.fire();
                     };
@@ -1104,8 +988,8 @@ module.exports = {
                 },
                 _getDataSourceAdapter: noop,
                 _createDataSourceAdapterCore: function(dataSource, remoteOperations) {
-                    var dataSourceAdapterProvider = this._getDataSourceAdapter(),
-                        dataSourceAdapter = dataSourceAdapterProvider.create(this.component);
+                    const dataSourceAdapterProvider = this._getDataSourceAdapter();
+                    const dataSourceAdapter = dataSourceAdapterProvider.create(this.component);
 
                     dataSourceAdapter.init(dataSource, remoteOperations);
                     return dataSourceAdapter;
@@ -1119,9 +1003,9 @@ module.exports = {
                     return store instanceof CustomStore;
                 },
                 _createDataSourceAdapter: function(dataSource) {
-                    var remoteOperations = this.option('remoteOperations'),
-                        store = dataSource.store(),
-                        enabledRemoteOperations = { filtering: true, sorting: true, paging: true, grouping: true, summary: true };
+                    let remoteOperations = this.option('remoteOperations');
+                    const store = dataSource.store();
+                    const enabledRemoteOperations = { filtering: true, sorting: true, paging: true, grouping: true, summary: true };
 
                     if(remoteOperations && remoteOperations.groupPaging) {
                         remoteOperations = extend({}, enabledRemoteOperations, remoteOperations);
@@ -1137,8 +1021,8 @@ module.exports = {
                     return this._createDataSourceAdapterCore(dataSource, remoteOperations);
                 },
                 setDataSource: function(dataSource) {
-                    var that = this,
-                        oldDataSource = that._dataSource;
+                    const that = this;
+                    const oldDataSource = that._dataSource;
 
                     if(!dataSource && oldDataSource) {
                         oldDataSource.changed.remove(that._dataChangedHandler);
@@ -1174,11 +1058,6 @@ module.exports = {
                 isEmpty: function() {
                     return !this.items().length;
                 },
-                /**
-                 * @name GridBaseMethods.pageCount
-                 * @publicName pageCount()
-                 * @return numeric
-                 */
                 pageCount: function() {
                     return this._dataSource ? this._dataSource.pageCount() : 1;
                 },
@@ -1186,17 +1065,17 @@ module.exports = {
                     return this._dataSource;
                 },
                 store: function() {
-                    var dataSource = this._dataSource;
+                    const dataSource = this._dataSource;
                     return dataSource && dataSource.store();
                 },
                 loadAll: function(data) {
-                    var that = this,
-                        d = new Deferred(),
-                        dataSource = that._dataSource;
+                    const that = this;
+                    const d = new Deferred();
+                    const dataSource = that._dataSource;
 
                     if(dataSource) {
                         if(data) {
-                            var options = {
+                            const options = {
                                 data: data,
                                 isCustomLoading: true,
                                 storeLoadOptions: { isLoadingAll: true },
@@ -1213,7 +1092,7 @@ module.exports = {
                             }).fail(d.reject);
                         } else {
                             if(!dataSource.isLoading()) {
-                                var loadOptions = extend({}, dataSource.loadOptions(), { isLoadingAll: true, requireTotalCount: false });
+                                const loadOptions = extend({}, dataSource.loadOptions(), { isLoadingAll: true, requireTotalCount: false });
                                 dataSource.load(loadOptions).done(function(items, extra) {
                                     items = that._beforeProcessItems(items);
                                     items = that._processItems(items, { changeType: 'loadingAll' });
@@ -1228,49 +1107,25 @@ module.exports = {
                     }
                     return d;
                 },
-                /**
-                * @name GridBaseMethods.getKeyByRowIndex
-                * @publicName getKeyByRowIndex(rowIndex)
-                * @param1 rowIndex:numeric
-                * @return any
-                */
                 getKeyByRowIndex: function(rowIndex) {
-                    var item = this.items()[rowIndex];
+                    const item = this.items()[rowIndex];
                     if(item) {
                         return item.key;
                     }
                 },
-                /**
-                * @name GridBaseMethods.getRowIndexByKey
-                * @publicName getRowIndexByKey(key)
-                * @param1 key:object|string|number
-                * @return numeric
-                */
                 getRowIndexByKey: function(key) {
                     return gridCoreUtils.getIndexByKey(key, this.items());
                 },
-                /**
-                * @name GridBaseMethods.keyOf
-                * @publicName keyOf(obj)
-                * @param1 obj:object
-                * @return any
-                */
                 keyOf: function(data) {
-                    var store = this.store();
+                    const store = this.store();
                     if(store) {
                         return store.keyOf(data);
                     }
                 },
-                /**
-                * @name GridBaseMethods.byKey
-                * @publicName byKey(key)
-                * @param1 key:object|string|number
-                * @return Promise<Object>
-                */
                 byKey: function(key) {
-                    var store = this.store(),
-                        rowIndex = this.getRowIndexByKey(key),
-                        result;
+                    const store = this.store();
+                    const rowIndex = this.getRowIndexByKey(key);
+                    let result;
 
                     if(!store) return;
 
@@ -1281,7 +1136,7 @@ module.exports = {
                     return result || store.byKey(key);
                 },
                 key: function() {
-                    var store = this.store();
+                    const store = this.store();
 
                     if(store) {
                         return store.key();
@@ -1291,10 +1146,10 @@ module.exports = {
                     return 0;
                 },
                 getDataByKeys: function(rowKeys) {
-                    var that = this,
-                        result = new Deferred(),
-                        deferreds = [],
-                        data = [];
+                    const that = this;
+                    const result = new Deferred();
+                    const deferreds = [];
+                    const data = [];
 
                     each(rowKeys, function(index, key) {
                         deferreds.push(that.byKey(key).done(function(keyData) {
@@ -1308,63 +1163,22 @@ module.exports = {
 
                     return result;
                 },
-                /**
-                * @name GridBaseMethods.pageIndex
-                * @publicName pageIndex()
-                * @return numeric
-                */
-                /**
-                * @name GridBaseMethods.pageIndex
-                * @publicName pageIndex(newIndex)
-                * @param1 newIndex:numeric
-                * @return Promise<void>
-                */
                 pageIndex: function(value) {
                     return changePaging(this, 'pageIndex', value);
                 },
-                /**
-                * @name GridBaseMethods.pageSize
-                * @publicName pageSize()
-                * @return numeric
-                */
-                /**
-                * @name GridBaseMethods.pageSize
-                * @publicName pageSize(value)
-                * @param1 value:numeric
-                */
                 pageSize: function(value) {
                     return changePaging(this, 'pageSize', value);
                 },
-                /**
-                 * @name GridBaseMethods.beginCustomLoading
-                 * @publicName beginCustomLoading(messageText)
-                 * @param1 messageText:string
-                 */
                 beginCustomLoading: function(messageText) {
                     this._isCustomLoading = true;
                     this._loadingText = messageText || '';
                     this._fireLoadingChanged();
                 },
-                /**
-                 * @name GridBaseMethods.endCustomLoading
-                 * @publicName endCustomLoading()
-                 */
                 endCustomLoading: function() {
                     this._isCustomLoading = false;
                     this._loadingText = undefined;
                     this._fireLoadingChanged();
                 },
-                /**
-                 * @name GridBaseMethods.refresh
-                 * @publicName refresh()
-                 * @return Promise<void>
-                 */
-                /**
-                 * @name GridBaseMethods.refresh
-                 * @publicName refresh(changesOnly)
-                 * @param1 changesOnly:boolean
-                 * @return Promise<void>
-                 */
                 refresh: function(options) {
                     if(options === true) {
                         options = { reload: true, changesOnly: true };
@@ -1372,13 +1186,13 @@ module.exports = {
                         options = { lookup: true, selection: true, reload: true };
                     }
 
-                    var that = this,
-                        dataSource = that.getDataSource(),
-                        changesOnly = options.changesOnly,
-                        d = new Deferred();
+                    const that = this;
+                    const dataSource = that.getDataSource();
+                    const changesOnly = options.changesOnly;
+                    const d = new Deferred();
 
 
-                    var customizeLoadResult = function() {
+                    const customizeLoadResult = function() {
                         that._repaintChangesOnly = !!changesOnly;
                     };
 
@@ -1398,16 +1212,6 @@ module.exports = {
 
                     return d.promise();
                 },
-                /**
-                 * @name dxDataGridMethods.getVisibleRows
-                 * @publicName getVisibleRows()
-                 * @return Array<dxDataGridRowObject>
-                 */
-                /**
-                 * @name dxTreeListMethods.getVisibleRows
-                 * @publicName getVisibleRows()
-                 * @return Array<dxTreeListRowObject>
-                 */
                 getVisibleRows: function() {
                     return this.items();
                 },
@@ -1419,11 +1223,6 @@ module.exports = {
                     this.callBase.apply(this, arguments);
                 },
 
-                /**
-                * @name GridBaseMethods.repaintRows
-                * @publicName repaintRows(rowIndexes)
-                * @param1 rowIndexes:Array<number>
-                */
                 repaintRows: function(rowIndexes, changesOnly) {
                     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
@@ -1456,11 +1255,6 @@ module.exports = {
             gridCoreUtils.proxyMethod(members, 'totalItemsCount', 0);
             gridCoreUtils.proxyMethod(members, 'hasKnownLastPage', true);
             gridCoreUtils.proxyMethod(members, 'isLoaded', true);
-            /**
-            * @name dxDataGridMethods.totalCount
-            * @publicName totalCount()
-            * @return numeric
-            */
             gridCoreUtils.proxyMethod(members, 'totalCount', 0);
 
             return members;

@@ -17,7 +17,7 @@ import messageLocalization from '../localization/message';
 import { addNamespace, normalizeKeyName } from '../events/utils';
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
-import { normalizeLoadResult } from '../data/data_source/data_source';
+import { normalizeLoadResult } from '../data/data_source/utils';
 
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -40,13 +40,6 @@ const NATIVE_CLICK_CLASS = 'dx-native-click';
 
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
-/**
-* @name dxTagBox
-* @isEditor
-* @inherits dxSelectBox
-* @module ui/tag_box
-* @export default
-*/
 const TagBox = SelectBox.inherit({
 
     _supportedKeys: function() {
@@ -106,7 +99,7 @@ const TagBox = SelectBox.inherit({
 
                 if(isCustomItem) {
                     e.preventDefault();
-                    (this._searchValue() !== '') && this._customItemAddedHandler();
+                    (this._searchValue() !== '') && this._customItemAddedHandler(e);
                     return;
                 }
 
@@ -266,96 +259,30 @@ const TagBox = SelectBox.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxTagBoxOptions.value
-            * @type Array<string,number,Object>
-            * @default []
-            */
             value: [],
 
-            /**
-             * @name dxTagBoxOptions.showDropDownButton
-             * @default false
-             */
             showDropDownButton: false,
 
             maxFilterLength: 1500,
 
-            /**
-            * @name dxTagBoxOptions.tagTemplate
-            * @type template|function
-            * @default "tag"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             tagTemplate: 'tag',
 
             selectAllText: messageLocalization.format('dxList-selectAll'),
 
-            /**
-            * @name dxTagBoxOptions.hideSelectedItems
-            * @type boolean
-            * @default false
-            */
             hideSelectedItems: false,
 
-            /**
-            * @name dxTagBoxOptions.selectedItems
-            * @type Array<string,number,Object>
-            * @readonly
-            */
             selectedItems: [],
 
-            /**
-             * @name dxTagBoxOptions.selectAllMode
-             * @type Enums.SelectAllMode
-             * @default 'page'
-             */
             selectAllMode: 'page',
 
-            /**
-            * @name dxTagBoxOptions.onSelectAllValueChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 value:boolean
-            * @action
-            */
             onSelectAllValueChanged: null,
 
-            /**
-             * @name dxTagBoxOptions.maxDisplayedTags
-             * @type number
-             * @default undefined
-             */
             maxDisplayedTags: undefined,
 
-            /**
-             * @name dxTagBoxOptions.showMultiTagOnly
-             * @type boolean
-             * @default true
-             */
             showMultiTagOnly: true,
 
-            /**
-            * @name dxTagBoxOptions.onMultiTagPreparing
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 multiTagElement:dxElement
-            * @type_function_param1_field5 selectedItems:Array<string,number,Object>
-            * @type_function_param1_field6 text:string
-            * @type_function_param1_field7 cancel:boolean
-            * @action
-            */
             onMultiTagPreparing: null,
 
-            /**
-            * @name dxTagBoxOptions.multiline
-            * @type boolean
-            * @default true
-            */
             multiline: true,
 
             /**
@@ -366,21 +293,6 @@ const TagBox = SelectBox.inherit({
              */
             useSubmitBehavior: true,
 
-            /**
-            * @name dxTagBoxOptions.applyValueMode
-            * @type Enums.EditorApplyValueMode
-            * @default "instantly"
-            */
-
-            /**
-            * @name dxTagBoxOptions.onSelectionChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 addedItems:Array<string,number,Object>
-            * @type_function_param1_field5 removedItems:Array<string,number,Object>
-            * @action
-            */
 
             /**
             * @name dxTagBoxOptions.closeAction
@@ -658,8 +570,10 @@ const TagBox = SelectBox.inherit({
         this.callBase(e);
     },
 
-    _restoreInputText: function() {
-        this._clearTextValue();
+    _restoreInputText: function(saveEditingValue) {
+        if(!saveEditingValue) {
+            this._clearTextValue();
+        }
     },
 
     _focusOutHandler: function(e) {
@@ -904,9 +818,9 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemsByValues: function(values) {
-        var resultItems = [];
+        const resultItems = [];
         values.forEach(function(value) {
-            var item = this._getItemFromPlain(value);
+            const item = this._getItemFromPlain(value);
             if(isDefined(item)) {
                 resultItems.push(item);
             }
@@ -915,7 +829,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _getFilteredGroupedItems: function(values) {
-        var selectedItems = new Deferred();
+        const selectedItems = new Deferred();
         if(!this._dataSource.items().length) {
             this._dataSource.load().done(function() {
                 selectedItems.resolve(this._getItemsByValues(values));
@@ -933,7 +847,7 @@ const TagBox = SelectBox.inherit({
 
         this._selectedItems = [];
 
-        var filteredItemsPromise = this._isGroupedData() ? this._getFilteredGroupedItems(values) : this._getFilteredItems(values);
+        const filteredItemsPromise = this._isGroupedData() ? this._getFilteredGroupedItems(values) : this._getFilteredItems(values);
 
         filteredItemsPromise
             .done((filteredItems) => {
@@ -1077,8 +991,8 @@ const TagBox = SelectBox.inherit({
         let result = false;
 
         for(let i = 0; i < tagsLength; i++) {
-            const $tag = $tags[i],
-                tagData = dataUtils.data($tag, TAGBOX_TAG_DATA_KEY);
+            const $tag = $tags[i];
+            const tagData = dataUtils.data($tag, TAGBOX_TAG_DATA_KEY);
 
             if(value === tagData || (equalByValue(value, tagData))) {
                 result = $($tag);
@@ -1397,8 +1311,8 @@ const TagBox = SelectBox.inherit({
 
     reset: function() {
         this._restoreInputText();
-        const defaultValue = this._getDefaultOptions().value,
-            currentValue = this.option('value');
+        const defaultValue = this._getDefaultOptions().value;
+        const currentValue = this.option('value');
         if(defaultValue && defaultValue.length === 0 && currentValue && defaultValue.length === currentValue.length) {
             return;
         }

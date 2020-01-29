@@ -93,7 +93,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $toolbar = this.wrapper.getToolbar();
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
 
-        let $folderNode = this.wrapper.getFolderNode(0);
+        const $folderNode = this.wrapper.getFolderNode(0);
         $folderNode.trigger('dxclick');
         $folderNode.trigger('click');
         this.clock.tick(400);
@@ -148,7 +148,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $toolbar = this.wrapper.getToolbar();
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
 
-        let $folderNode = this.wrapper.getFolderNode(0);
+        const $folderNode = this.wrapper.getFolderNode(0);
         $folderNode.trigger('dxclick');
         $folderNode.trigger('click');
         this.clock.tick(400);
@@ -231,7 +231,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        let $elements = this.wrapper.getGeneralToolbarElements();
+        const $elements = this.wrapper.getGeneralToolbarElements();
         assert.equal($elements.length, 5, 'general toolbar has elements');
 
         assert.ok($elements.eq(0).find('.dx-icon').hasClass(Consts.UPLOAD_ICON_CLASS), 'show tree view button is rendered with new icon');
@@ -252,7 +252,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $item.trigger('click');
         this.clock.tick(400);
 
-        let $toolbar = this.wrapper.getToolbar();
+        const $toolbar = this.wrapper.getToolbar();
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
     });
 
@@ -379,7 +379,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        let $elements = this.wrapper.getToolbarElements();
+        const $elements = this.wrapper.getToolbarElements();
         assert.equal($elements.length, 4, 'general toolbar has elements');
 
         assert.notStrictEqual($elements.eq(2).text().indexOf('Move'), -1, 'move is rendered in new position');
@@ -389,7 +389,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $item.trigger('click');
         this.clock.tick(400);
 
-        let $toolbar = this.wrapper.getToolbar();
+        const $toolbar = this.wrapper.getToolbar();
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
     });
 
@@ -401,7 +401,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         fileManagerInstance.option('itemView.mode', 'thumbnails');
         this.clock.tick(400);
 
-        let $dropDownButton = this.wrapper.getGeneralToolbarElements().last();
+        let $dropDownButton = this.wrapper.getToolbarDropDownButton();
         assert.equal($dropDownButton.attr('title'), 'Thumbnails View', 'Thumbnails View');
 
         $dropDownButton.find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
@@ -410,7 +410,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $(detailsViewSelector).trigger('dxclick');
         this.clock.tick(400);
 
-        $dropDownButton = this.wrapper.getGeneralToolbarElements().last();
+        $dropDownButton = this.wrapper.getToolbarDropDownButton();
         assert.equal($dropDownButton.attr('title'), 'Details View', 'Details View');
 
         this.wrapper.findDetailsItem('File 1.txt').trigger('dxclick');
@@ -425,7 +425,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         this.clock.tick(400);
         assert.equal(this.wrapper.getDetailsItemName(0), 'New filename.txt', 'File renamed');
 
-        $dropDownButton = this.wrapper.getGeneralToolbarElements().last();
+        $dropDownButton = this.wrapper.getToolbarDropDownButton();
         assert.equal($dropDownButton.attr('title'), 'Details View', 'Details View');
 
         $dropDownButton.find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
@@ -434,7 +434,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         $(detailsViewSelector).trigger('dxclick');
         this.clock.tick(400);
 
-        $dropDownButton = this.wrapper.getGeneralToolbarElements().last();
+        $dropDownButton = this.wrapper.getToolbarDropDownButton();
         assert.equal($dropDownButton.attr('title'), 'Thumbnails View', 'Thumbnails View');
     });
 

@@ -1622,8 +1622,8 @@ declare module DevExpress.fileProvider {
     }
     /** @name ArrayFileProvider.Options */
     export interface ArrayFileProviderOptions extends FileProviderOptions<ArrayFileProvider> {
-        /** @name ArrayFileProvider.Options.content */
-        content?: string | Function;
+        /** @name ArrayFileProvider.Options.contentExpr */
+        contentExpr?: string | Function;
         /** @name ArrayFileProvider.Options.data */
         data?: Array<any>;
         /** @name ArrayFileProvider.Options.itemsExpr */
@@ -3124,9 +3124,9 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.contextToolbox */
         contextToolbox?: { category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string, displayMode?: 'icons' | 'texts', enabled?: boolean, shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string> };
         /** @name dxDiagram.Options.customShapeTemplate */
-        customShapeTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, data: { item?: dxDiagramItem }) => any);
+        customShapeTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, data: { item?: dxDiagramShape }) => any);
         /** @name dxDiagram.Options.customShapes */
-        customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: DevExpress.core.template | ((container: DevExpress.core.dxElement, data: { item?: dxDiagramItem }) => any), templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, type?: string }>;
+        customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: DevExpress.core.template | ((container: DevExpress.core.dxElement, data: { item?: dxDiagramShape }) => any), templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, type?: string }>;
         /** @name dxDiagram.Options.edges */
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), fromLineEndExpr?: string | ((data: any) => any), fromPointIndexExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), lineTypeExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), pointsExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any), toLineEndExpr?: string | ((data: any) => any), toPointIndexExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.export */
@@ -3135,10 +3135,10 @@ declare module DevExpress.ui {
         fullScreen?: boolean;
         /** @name dxDiagram.Options.gridSize */
         gridSize?: number | { items?: Array<number>, value?: number };
+        /** @name dxDiagram.Options.hasChanges */
+        hasChanges?: boolean;
         /** @name dxDiagram.Options.nodes */
-        nodes?: { autoLayout?: 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'off' | 'tree' | 'layered' }, childrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
-        /** @name dxDiagram.Options.onDataChanged */
-        onDataChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any }) => any);
+        nodes?: { autoLayout?: 'auto' | 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'auto' | 'off' | 'tree' | 'layered' }, childrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onItemClick */
         onItemClick?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, item?: dxDiagramItem }) => any);
         /** @name dxDiagram.Options.onItemDblClick */
@@ -3194,8 +3194,12 @@ declare module DevExpress.ui {
     }
     /** @name dxDiagramItem */
     export interface dxDiagramItem {
+        /** @name dxDiagramItem.dataItem */
+        dataItem?: any;
         /** @name dxDiagramItem.id */
         id?: string;
+        /** @name dxDiagramItem.itemType */
+        itemType?: 'shape' | 'connector';
     }
     /** @name dxDiagramShape */
     export interface dxDiagramShape extends dxDiagramItem {
@@ -3526,6 +3530,8 @@ declare module DevExpress.ui {
     }
     /** @name dxFileManagerContextMenuItem */
     export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
+        /** @name dxFileManagerContextMenuItem.items */
+        items?: Array<dxFileManagerContextMenuItem>;
         /** @name dxFileManagerContextMenuItem.name */
         name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
         /** @name dxFileManagerContextMenuItem.visible */
@@ -5805,7 +5811,7 @@ declare module DevExpress.ui {
         /** @name dxTileView.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTileView.Options.height */
-        height?: number | string;
+        height?: number | string | (() => number | string);
         /** @name dxTileView.Options.hoverStateEnabled */
         hoverStateEnabled?: boolean;
         /** @name dxTileView.Options.itemMargin */
@@ -6351,15 +6357,6 @@ declare module DevExpress.ui {
     }
     /** @name format */
     export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | { currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date), precision?: number, type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' };
-    /** @name ui.dialog */
-    export class dialog {
-        /** @name ui.dialog.alert(messageHtml,title) */
-        static alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
-        /** @name ui.dialog.confirm(messageHtml,title) */
-        static confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
-        /** @name ui.dialog.custom(options) */
-        static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
-    }
     /** @deprecated */
     /** @name ui.template */
     export type template = DevExpress.core.template;
@@ -6372,6 +6369,14 @@ declare module DevExpress.ui {
         /** @name ui.themes.ready(callback) */
         static ready(callback: Function): void;
     }
+}
+declare module DevExpress.ui.dialog {
+    /** @name ui.dialog.alert(messageHtml,title) */
+    export function alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
+    /** @name ui.dialog.confirm(messageHtml,title) */
+    export function confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
+    /** @name ui.dialog.custom(options) */
+    export function custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
 }
 declare module DevExpress.ui.dxOverlay {
     /** @name ui.dxOverlay.baseZIndex(zIndex) */
@@ -9054,6 +9059,8 @@ declare module DevExpress.viz {
     export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
         /** @name dxPolarChart.Options.adaptiveLayout */
         adaptiveLayout?: dxPolarChartAdaptiveLayout;
+        /** @name dxPolarChart.Options.annotations */
+        annotations?: Array<dxPolarChartAnnotationConfig | any>;
         /** @name dxPolarChart.Options.argumentAxis */
         argumentAxis?: dxPolarChartArgumentAxis;
         /** @name dxPolarChart.Options.barGroupPadding */
@@ -9063,6 +9070,8 @@ declare module DevExpress.viz {
         /** @deprecated */
         /** @name dxPolarChart.Options.barWidth */
         barWidth?: number;
+        /** @name dxPolarChart.Options.commonAnnotationSettings */
+        commonAnnotationSettings?: dxPolarChartCommonAnnotationConfig;
         /** @name dxPolarChart.Options.commonAxisSettings */
         commonAxisSettings?: dxPolarChartCommonAxisSettings;
         /** @name dxPolarChart.Options.commonSeriesSettings */
@@ -9434,6 +9443,18 @@ declare module DevExpress.viz {
         getValueAxis(): chartAxisObject;
         /** @name dxPolarChart.resetVisualRange() */
         resetVisualRange(): void;
+    }
+    /** @name dxPolarChartAnnotationConfig */
+    export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotationConfig {
+        /** @name dxPolarChartAnnotationConfig.name */
+        name?: string;
+    }
+    /** @name dxPolarChartCommonAnnotationConfig */
+    export interface dxPolarChartCommonAnnotationConfig extends dxChartCommonAnnotationConfig {
+        /** @name dxPolarChartCommonAnnotationConfig.angle */
+        angle?: number;
+        /** @name dxPolarChartCommonAnnotationConfig.radius */
+        radius?: number;
     }
     /** @name dxPolarChartSeriesTypes */
     export interface dxPolarChartSeriesTypes {

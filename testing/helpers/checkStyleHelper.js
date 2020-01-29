@@ -26,7 +26,7 @@ export function getBackgroundColor(element) {
     let elementBackgroundColor = window.getComputedStyle(element).backgroundColor;
     let currentElement = element.parentNode;
     while(currentElement.parentNode !== document.documentElement && typeUtils.isDefined(currentElement.parentNode)) {
-        let currentStyle = window.getComputedStyle(currentElement);
+        const currentStyle = window.getComputedStyle(currentElement);
         if(elementBackgroundColor !== currentStyle.backgroundColor) {
             elementBackgroundColor = currentStyle.backgroundColor;
             break;

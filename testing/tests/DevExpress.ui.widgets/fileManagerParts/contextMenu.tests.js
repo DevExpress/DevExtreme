@@ -2,6 +2,7 @@ import $ from 'jquery';
 const { test } = QUnit;
 import 'ui/file_manager';
 import fx from 'animation/fx';
+import pointerEvents from 'events/pointer';
 import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
 
 const moduleConfig = {
@@ -399,6 +400,26 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         this.clock.tick(400);
 
         assert.equal(this.wrapper.getDetailsItemName(0), 'New name.txt', 'file is renamed');
+    });
+
+    test('context menu for parent directory item contains no edit actions', function(assert) {
+        const fileManager = this.$element.dxFileManager('instance');
+        fileManager.option('currentPath', 'Folder 1');
+        this.clock.tick(400);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
+        let menuItems = this.wrapper.getContextMenuItems();
+        assert.strictEqual(menuItems.length, 1, 'one menu item shown');
+        assert.strictEqual(menuItems.eq(0).text(), 'Refresh', '\'refresh\' menu item shown');
+
+        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxclick');
+        this.wrapper.getRowNameCellInDetailsView(2).trigger(pointerEvents.up);
+        this.clock.tick(400);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
+        menuItems = this.wrapper.getContextMenuItems();
+        assert.strictEqual(menuItems.length, 1, 'one menu item shown');
+        assert.strictEqual(menuItems.eq(0).text(), 'Refresh', '\'refresh\' menu item shown');
     });
 
 });

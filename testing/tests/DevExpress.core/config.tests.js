@@ -5,7 +5,7 @@ import 'bundles/modules/core';
 QUnit.module('DevExtreme global config');
 
 QUnit.test('get/set', function(assert) {
-    var originalConfig = config();
+    const originalConfig = config();
 
     try {
         assert.equal(originalConfig.rtlEnabled, false);
@@ -35,7 +35,7 @@ QUnit.test('default DevExpress.config contains \'serverDecimalSeparator\' with \
 });
 
 QUnit.test('set custom \'serverDecimalSeparator\'', function(assert) {
-    var originalConfig = config();
+    const originalConfig = config();
     try {
         config({ serverDecimalSeparator: '|' });
         assert.equal(config().serverDecimalSeparator, '|');

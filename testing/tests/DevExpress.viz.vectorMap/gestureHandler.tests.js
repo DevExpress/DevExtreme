@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    gestureHandlerModule = require('viz/vector_map/gesture_handler'),
-    projectionModule = require('viz/vector_map/projection.main'),
-    StubProjection;
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const gestureHandlerModule = require('viz/vector_map/gesture_handler');
+const projectionModule = require('viz/vector_map/projection.main');
+let StubProjection;
 
 QUnit.begin(function() {
     StubProjection = vizMocks.stubClass(projectionModule.Projection);
@@ -38,7 +38,7 @@ QUnit.module('GestureHandler', {
 });
 
 QUnit.test('subscription to tracker', function(assert) {
-    var trackerHandlers = this.tracker.on.lastCall.args[0];
+    const trackerHandlers = this.tracker.on.lastCall.args[0];
     assert.strictEqual(typeof trackerHandlers['start'], 'function', 'start');
     assert.strictEqual(typeof trackerHandlers['move'], 'function', 'move');
     assert.strictEqual(typeof trackerHandlers['end'], 'function', 'end');

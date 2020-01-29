@@ -1,16 +1,16 @@
-var $ = require('jquery'),
-    CustomStore = require('data/custom_store'),
-    processRequestResultLock = require('data/utils').processRequestResultLock,
-    config = require('core/config'),
-    ERRORS = {
-        INVALID_RETURN: 'E4012',
-        MISSING_USER_FUNC: 'E4011',
-        MISSING_TOTAL_COUNT: 'E4021',
-        QUERY_NOT_SUPPORTED: 'E4010',
-        REQUEST_ERROR: 'E4013'
-    },
-    ErrorHandlingHelper = require('../../helpers/data.errorHandlingHelper.js'),
-    ajaxMock = require('../../helpers/ajaxMock.js');
+const $ = require('jquery');
+const CustomStore = require('data/custom_store');
+const processRequestResultLock = require('data/utils').processRequestResultLock;
+const config = require('core/config');
+const ERRORS = {
+    INVALID_RETURN: 'E4012',
+    MISSING_USER_FUNC: 'E4011',
+    MISSING_TOTAL_COUNT: 'E4021',
+    QUERY_NOT_SUPPORTED: 'E4010',
+    REQUEST_ERROR: 'E4013'
+};
+const ErrorHandlingHelper = require('../../helpers/data.errorHandlingHelper.js');
+const ajaxMock = require('../../helpers/ajaxMock.js');
 
 QUnit.testDone(function() {
     ajaxMock.clear();
@@ -25,7 +25,7 @@ function mustNotReach() {
 }
 
 QUnit.test('custom store does not use default search', function(assert) {
-    var store = new CustomStore();
+    const store = new CustomStore();
     assert.strictEqual(store._useDefaultSearch, false);
 });
 
@@ -39,7 +39,7 @@ QUnit.test('custom stores do not support createQuery', function(assert) {
 });
 
 QUnit.test('missing required options throw', function(assert) {
-    var store = new CustomStore();
+    const store = new CustomStore();
 
     function assertError(error) {
         assertErrorCore(error, ERRORS.MISSING_USER_FUNC, assert);
@@ -89,9 +89,9 @@ QUnit.test('missing required options throw', function(assert) {
 });
 
 QUnit.test('load, promise result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         load: function(options) {
             assert.equal(options.test, 123);
             return $.Deferred().resolve([1, 2, 3]);
@@ -105,16 +105,16 @@ QUnit.test('load, promise result', function(assert) {
 });
 
 QUnit.test('load, promise result with lock', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         load: function(options) {
             assert.equal(options.test, 123);
             return $.Deferred().resolve([1, 2, 3]);
         }
     });
 
-    var promise = store.load({ test: 123 });
+    let promise = store.load({ test: 123 });
     assert.equal(promise.state(), 'resolved', 'resolved when no lock');
 
     processRequestResultLock.obtain();
@@ -131,9 +131,9 @@ QUnit.test('load, promise result with lock', function(assert) {
 });
 
 QUnit.test('load, array result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         load: function(options) {
             return [1, 2, 3];
         }
@@ -146,7 +146,7 @@ QUnit.test('load, array result', function(assert) {
 });
 
 QUnit.test('B250267 backward compat', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     $.when(
         new CustomStore({ load: function() { return null; } })
@@ -163,7 +163,7 @@ QUnit.test('B250267 backward compat', function(assert) {
 });
 
 QUnit.test('load, invalid result', function(assert) {
-    var store = new CustomStore({
+    const store = new CustomStore({
         load: function() {
             return 'nonsense';
         }
@@ -178,9 +178,9 @@ QUnit.test('load, invalid result', function(assert) {
 });
 
 QUnit.test('load with inline totalCount', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         load: function() {
             return $.Deferred().resolve([], { totalCount: 123 });
         }
@@ -193,8 +193,8 @@ QUnit.test('load with inline totalCount', function(assert) {
 });
 
 QUnit.test('load, ajax error', function(assert) {
-    var done = assert.async(),
-        helper = new ErrorHandlingHelper();
+    const done = assert.async();
+    const helper = new ErrorHandlingHelper();
 
     helper.extraChecker = function(error) {
         assert.equal(error.message, 'Internal Server Error');
@@ -214,7 +214,7 @@ QUnit.test('load, ajax error', function(assert) {
 });
 
 QUnit.test('load, promise result, error as text', function(assert) {
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
     helper.extraChecker = function(error) {
         assert.equal(error.message, 'custom error');
     };
@@ -230,9 +230,9 @@ QUnit.test('load, promise result, error as text', function(assert) {
 });
 
 QUnit.test('totalCount, promise result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         totalCount: function(options) {
             return $.Deferred().resolve(42);
         }
@@ -245,9 +245,9 @@ QUnit.test('totalCount, promise result', function(assert) {
 });
 
 QUnit.test('totalCount, scalar result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         totalCount: function(options) {
             return '42';
         }
@@ -260,7 +260,7 @@ QUnit.test('totalCount, scalar result', function(assert) {
 });
 
 QUnit.test('totalCount, invalid result', function(assert) {
-    var store = new CustomStore({
+    const store = new CustomStore({
         totalCount: function() {
             return 'not a number';
         }
@@ -275,9 +275,9 @@ QUnit.test('totalCount, invalid result', function(assert) {
 });
 
 QUnit.test('totalCount, options are passed to user impl', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         totalCount: function(options) {
             assert.equal(options.test, 123);
             done();
@@ -289,8 +289,8 @@ QUnit.test('totalCount, options are passed to user impl', function(assert) {
 });
 
 QUnit.test('totalCount, error handling', function(assert) {
-    var done = assert.async(),
-        helper = new ErrorHandlingHelper();
+    const done = assert.async();
+    const helper = new ErrorHandlingHelper();
 
     helper.extraChecker = function(error) {
         assert.equal(error.message, 'Unknown error');
@@ -307,9 +307,9 @@ QUnit.test('totalCount, error handling', function(assert) {
 });
 
 QUnit.test('byKey, promise result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         byKey: function(key) {
             return $.Deferred().resolve('item #' + key);
         }
@@ -322,15 +322,15 @@ QUnit.test('byKey, promise result', function(assert) {
 });
 
 QUnit.test('byKey, promise result with lock', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         byKey: function(key) {
             return $.Deferred().resolve('item #' + key);
         }
     });
 
-    var promise = store.byKey(123);
+    let promise = store.byKey(123);
     assert.equal(promise.state(), 'resolved', 'resolved when no lock');
 
     processRequestResultLock.obtain();
@@ -348,9 +348,9 @@ QUnit.test('byKey, promise result with lock', function(assert) {
 
 
 QUnit.test('byKey, non-promise result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         byKey: function(key) {
             return 'item #' + key;
         }
@@ -363,9 +363,9 @@ QUnit.test('byKey, non-promise result', function(assert) {
 });
 
 QUnit.test('byKey, extraOptions', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         byKey: function(key, extraOptions) {
             return extraOptions.foo;
         }
@@ -379,9 +379,9 @@ QUnit.test('byKey, extraOptions', function(assert) {
 });
 
 QUnit.test('byKey, error handling', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
     helper.extraChecker = function(error) {
         assert.equal(error.message, 'test error');
     };
@@ -397,9 +397,9 @@ QUnit.test('byKey, error handling', function(assert) {
 });
 
 QUnit.test('insert, promise result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         key: 'id',
         insert: function(values) {
             return $.Deferred().resolve({ id: 123, a: 1 });
@@ -414,9 +414,9 @@ QUnit.test('insert, promise result', function(assert) {
 });
 
 QUnit.test('insert, non-promise result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         key: 'id',
         insert: function(values) {
             return { id: 123, a: 1 };
@@ -431,11 +431,11 @@ QUnit.test('insert, non-promise result', function(assert) {
 });
 
 QUnit.test('insert with useLegacyStoreResult, promise result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     config({ useLegacyStoreResult: true });
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         insert: function(values) {
             return $.Deferred().resolve(123);
         }
@@ -450,11 +450,11 @@ QUnit.test('insert with useLegacyStoreResult, promise result', function(assert) 
 });
 
 QUnit.test('insert with useLegacyStoreResult, non-promise result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     config({ useLegacyStoreResult: true });
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         insert: function(values) {
             return 123;
         }
@@ -469,8 +469,8 @@ QUnit.test('insert with useLegacyStoreResult, non-promise result', function(asse
 });
 
 QUnit.test('insert, error handling', function(assert) {
-    var done = assert.async();
-    var helper = new ErrorHandlingHelper();
+    const done = assert.async();
+    const helper = new ErrorHandlingHelper();
     helper.extraChecker = function(error) {
         assert.equal(error.message, 'insert error');
     };
@@ -486,11 +486,11 @@ QUnit.test('insert, error handling', function(assert) {
 });
 
 QUnit.test('update with useLegacyStoreResult, promise result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     config({ useLegacyStoreResult: true });
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         update: function(key, values) {
             assert.strictEqual(key, 123);
             assert.deepEqual(values, { a: 1 });
@@ -507,12 +507,12 @@ QUnit.test('update with useLegacyStoreResult, promise result', function(assert) 
 });
 
 QUnit.test('update with useLegacyStoreResult, non-promise result', function(assert) {
-    var done = assert.async(),
-        updateCalled;
+    const done = assert.async();
+    let updateCalled;
 
     config({ useLegacyStoreResult: true });
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         update: function(key, values) {
             assert.strictEqual(key, 123);
             assert.deepEqual(values, { a: 1 });
@@ -530,9 +530,9 @@ QUnit.test('update with useLegacyStoreResult, non-promise result', function(asse
 });
 
 QUnit.test('update, promise result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         key: 'id',
         update: function(key, values) {
             assert.strictEqual(key, 123);
@@ -549,9 +549,9 @@ QUnit.test('update, promise result', function(assert) {
 });
 
 QUnit.test('update, promise result as data', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         update: function(key, values) {
             assert.strictEqual(key, 123);
             assert.deepEqual(values, { a: 1 });
@@ -567,10 +567,10 @@ QUnit.test('update, promise result as data', function(assert) {
 });
 
 QUnit.test('update, non-promise result', function(assert) {
-    var done = assert.async(),
-        updateCalled;
+    const done = assert.async();
+    let updateCalled;
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         update: function(key, values) {
             assert.strictEqual(key, 123);
             assert.deepEqual(values, { a: 1 });
@@ -587,10 +587,10 @@ QUnit.test('update, non-promise result', function(assert) {
 });
 
 QUnit.test('update, non-promise result as data', function(assert) {
-    var done = assert.async(),
-        updateCalled;
+    const done = assert.async();
+    let updateCalled;
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         update: function(key, values) {
             assert.strictEqual(key, 123);
             assert.deepEqual(values, { a: 1 });
@@ -608,9 +608,9 @@ QUnit.test('update, non-promise result as data', function(assert) {
 });
 
 QUnit.test('update, error handling', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
 
     helper.extraChecker = function(error) {
         assert.equal(error.message, 'Internal Server Error');
@@ -630,10 +630,10 @@ QUnit.test('update, error handling', function(assert) {
 });
 
 QUnit.test('remove, promise result', function(assert) {
-    var done = assert.async(),
-        removedKey;
+    const done = assert.async();
+    let removedKey;
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         remove: function(key) {
             removedKey = key;
             return $.Deferred().resolve();
@@ -648,10 +648,10 @@ QUnit.test('remove, promise result', function(assert) {
 });
 
 QUnit.test('remove, non-promise result', function(assert) {
-    var done = assert.async(),
-        removedKey;
+    const done = assert.async();
+    let removedKey;
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         remove: function(key) {
             removedKey = key;
         }
@@ -665,8 +665,8 @@ QUnit.test('remove, non-promise result', function(assert) {
 });
 
 QUnit.test('remove, error handling', function(assert) {
-    var done = assert.async(),
-        helper = new ErrorHandlingHelper();
+    const done = assert.async();
+    const helper = new ErrorHandlingHelper();
 
     helper.extraChecker = function(error) {
         assert.equal(error.message, 'my error');
@@ -683,10 +683,10 @@ QUnit.test('remove, error handling', function(assert) {
 });
 
 QUnit.test('should support Promise/A standard', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     function createPromiseAPretenderAndResolveIt() {
-        var d = $.Deferred();
+        const d = $.Deferred();
         d.resolve();
         return {
             then: function(onWinCallback, onFailCallback) {
@@ -697,7 +697,7 @@ QUnit.test('should support Promise/A standard', function(assert) {
     }
 
     function createPromiseAPretenderAndRejectIt(args) {
-        var d = $.Deferred();
+        const d = $.Deferred();
         d.reject();
         return {
             then: function(onWinCallback, onFailCallback) {
@@ -730,8 +730,8 @@ QUnit.test('should support Promise/A standard', function(assert) {
 QUnit.test('function context is current Store\'s instance', function(assert) {
     assert.expect(12);
 
-    var key = 'key';
-    var store = new CustomStore({
+    const key = 'key';
+    const store = new CustomStore({
         key: key,
         load: ensureThis,
         byKey: ensureThis,
@@ -758,11 +758,11 @@ QUnit.test('function context is current Store\'s instance', function(assert) {
 });
 
 QUnit.test('push', function(assert) {
-    var onPushSpy = sinon.spy(),
-        changes = [{ type: 'remove', key: 0 }],
-        store = new CustomStore({
-            onPush: onPushSpy
-        });
+    const onPushSpy = sinon.spy();
+    const changes = [{ type: 'remove', key: 0 }];
+    const store = new CustomStore({
+        onPush: onPushSpy
+    });
 
     store.push(changes);
     assert.equal(onPushSpy.callCount, 1);

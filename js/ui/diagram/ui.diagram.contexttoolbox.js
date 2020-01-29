@@ -54,7 +54,7 @@ class DiagramContextToolbox extends Widget {
     _show(x, y, side, category, callback) {
         this._popoverInstance.hide();
 
-        var $content = $('<div>')
+        const $content = $('<div>')
             .addClass(DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS);
         this._$popoverTargetElement
             .css({
@@ -70,7 +70,7 @@ class DiagramContextToolbox extends Widget {
             },
             contentTemplate: $content,
             onContentReady: function() {
-                var $element = this.$element().find('.' + DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS);
+                const $element = this.$element().find('.' + DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS);
                 this._onShownAction({ category, callback, $element });
             }.bind(this)
         });

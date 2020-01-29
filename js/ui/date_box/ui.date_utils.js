@@ -1,21 +1,21 @@
-var $ = require('../../core/renderer'),
-    dateSerialization = require('../../core/utils/date_serialization'),
-    isDate = require('../../core/utils/type').isDate,
-    each = require('../../core/utils/iterator').each,
-    dateLocalization = require('../../localization/date');
+const $ = require('../../core/renderer');
+const dateSerialization = require('../../core/utils/date_serialization');
+const isDate = require('../../core/utils/type').isDate;
+const each = require('../../core/utils/iterator').each;
+const dateLocalization = require('../../localization/date');
 
 // TODO: move to dx.utils
 
-var dateComponents = function() {
+const dateComponents = function() {
     return ['year', 'day', 'month', 'day'];
 };
 
-var ONE_MINUTE = 1000 * 60;
-var ONE_DAY = ONE_MINUTE * 60 * 24;
-var ONE_YEAR = ONE_DAY * 365;
+const ONE_MINUTE = 1000 * 60;
+const ONE_DAY = ONE_MINUTE * 60 * 24;
+const ONE_YEAR = ONE_DAY * 365;
 
-var getStringFormat = function(format) {
-    var formatType = typeof format;
+const getStringFormat = function(format) {
+    const formatType = typeof format;
 
     if(formatType === 'string') {
         return 'format';
@@ -28,13 +28,13 @@ var getStringFormat = function(format) {
     return null;
 };
 
-var dateUtils = {
+const dateUtils = {
 
     SUPPORTED_FORMATS: ['date', 'time', 'datetime'],
 
     // TODO: move to dateView
     DATE_COMPONENT_TEXT_FORMATTER: function(value, name) {
-        var $container = $('<div>').addClass('dx-dateview-formatter-container');
+        const $container = $('<div>').addClass('dx-dateview-formatter-container');
 
         $('<span>').text(value).addClass('dx-dateview-value-formatter').appendTo($container);
         $('<span>').text(name).addClass('dx-dateview-name-formatter').appendTo($container);
@@ -48,7 +48,7 @@ var dateUtils = {
 
     MIN_DATEVIEW_DEFAULT_DATE: new Date(1900, 0, 1),
     MAX_DATEVIEW_DEFAULT_DATE: function() {
-        var newDate = new Date();
+        const newDate = new Date();
         return new Date(newDate.getFullYear() + 50, newDate.getMonth(), newDate.getDate(), 23, 59, 59);
     }(),
 
@@ -67,13 +67,13 @@ var dateUtils = {
         },
         'datetime': {
             getStandardPattern: function() {
-                var standardPattern;
+                let standardPattern;
 
                 (function androidFormatDetection() {
-                    var androidFormatPattern = 'yyyy-MM-ddTHH:mmZ',
-                        testDateString = '2000-01-01T01:01Z';
+                    const androidFormatPattern = 'yyyy-MM-ddTHH:mmZ';
+                    const testDateString = '2000-01-01T01:01Z';
 
-                    var $input = $('<input>').attr('type', 'datetime');
+                    const $input = $('<input>').attr('type', 'datetime');
                     $input.val(testDateString);
 
                     if($input.val()) {
@@ -114,13 +114,13 @@ var dateUtils = {
     },
 
     toStandardDateFormat: function(date, type) {
-        var pattern = dateUtils.FORMATS_INFO[type].getStandardPattern();
+        const pattern = dateUtils.FORMATS_INFO[type].getStandardPattern();
 
         return dateSerialization.serializeDate(date, pattern);
     },
 
     fromStandardDateFormat: function(text) {
-        var date = dateSerialization.dateParser(text);
+        const date = dateSerialization.dateParser(text);
         return isDate(date) ? date : undefined;
     },
 
@@ -133,15 +133,15 @@ var dateUtils = {
             return newValue || null;
         }
         if(!oldValue || isNaN(oldValue.getTime())) {
-            var now = new Date(null);
+            const now = new Date(null);
             oldValue = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         }
 
-        var result = new Date(oldValue.valueOf());
-        var formatInfo = dateUtils.FORMATS_INFO[format];
+        const result = new Date(oldValue.valueOf());
+        const formatInfo = dateUtils.FORMATS_INFO[format];
 
         each(formatInfo.components, function() {
-            var componentInfo = dateUtils.DATE_COMPONENTS_INFO[this];
+            const componentInfo = dateUtils.DATE_COMPONENTS_INFO[this];
             result[componentInfo.setter](newValue[componentInfo.getter]());
         });
 
@@ -149,9 +149,9 @@ var dateUtils = {
     },
 
     getLongestCaptionIndex: function(captionArray) {
-        var longestIndex = 0,
-            longestCaptionLength = 0,
-            i;
+        let longestIndex = 0;
+        let longestCaptionLength = 0;
+        let i;
         for(i = 0; i < captionArray.length; ++i) {
             if(captionArray[i].length > longestCaptionLength) {
                 longestIndex = i;
@@ -170,17 +170,17 @@ var dateUtils = {
     },
 
     getLongestDate: function(format, monthNames, dayNames) {
-        var stringFormat = getStringFormat(format),
-            month = 9;
+        const stringFormat = getStringFormat(format);
+        let month = 9;
 
         if(!stringFormat || dateUtils.formatUsesMonthName(stringFormat)) {
             month = dateUtils.getLongestCaptionIndex(monthNames);
         }
 
-        var longestDate = new Date(1888, month, 21, 23, 59, 59, 999);
+        const longestDate = new Date(1888, month, 21, 23, 59, 59, 999);
 
         if(!stringFormat || dateUtils.formatUsesDayName(stringFormat)) {
-            var date = longestDate.getDate() - longestDate.getDay() + dateUtils.getLongestCaptionIndex(dayNames);
+            const date = longestDate.getDate() - longestDate.getDay() + dateUtils.getLongestCaptionIndex(dayNames);
             longestDate.setDate(date);
         }
 
@@ -199,7 +199,7 @@ dateUtils.DATE_COMPONENTS_INFO = {
         getter: 'getFullYear',
         setter: 'setFullYear',
         formatter: function(value, date) {
-            var formatDate = new Date(date.getTime());
+            const formatDate = new Date(date.getTime());
             formatDate.setFullYear(value);
             return dateLocalization.format(formatDate, 'yyyy');
         },
@@ -211,7 +211,7 @@ dateUtils.DATE_COMPONENTS_INFO = {
         getter: 'getDate',
         setter: 'setDate',
         formatter: function(value, date) {
-            var formatDate = new Date(date.getTime());
+            const formatDate = new Date(date.getTime());
             formatDate.setDate(value);
             return dateLocalization.format(formatDate, 'd');
         },

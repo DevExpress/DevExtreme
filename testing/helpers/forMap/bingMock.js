@@ -1,6 +1,6 @@
 /* global jQuery */
 
-var Microsoft = window.Microsoft = {};
+const Microsoft = window.Microsoft = {};
 
 Microsoft.Maps = {
     MapTypeId: {
@@ -14,7 +14,7 @@ Microsoft.Maps = {
     },
     Directions: {
         DirectionsManager: function(map) {
-            var waypoints = [];
+            const waypoints = [];
 
             Microsoft.directionsMapSpecified = map instanceof Microsoft.Maps.Map;
             Microsoft.directionsInstance = (Microsoft.directionsInstance || 0) + 1;
@@ -79,12 +79,12 @@ Microsoft.Maps = {
                 case 'click':
                     Microsoft.clickActionCallback = callback;
                     return 'clickHandler';
-                case 'directionsUpdated':
+                case 'directionsUpdated': {
                     if(Microsoft.abortDirectionsUpdate) {
                         return;
                     }
 
-                    var lastDirectionPoints = Microsoft.lastDirectionPoints;
+                    const lastDirectionPoints = Microsoft.lastDirectionPoints;
                     setTimeout(function() {
                         callback({
                             routeSummary: [{
@@ -94,6 +94,7 @@ Microsoft.Maps = {
                         });
                     });
                     return 'directionsUpdatedHandler';
+                }
                 case 'directionsError':
                     if(!Microsoft.abortDirectionsUpdate) {
                         return;
@@ -236,7 +237,7 @@ Microsoft.Maps = {
     LocationRect: function(location) {
         this.points = [location];
         this.clone = function() {
-            var clone = new Microsoft.Maps.LocationRect();
+            const clone = new Microsoft.Maps.LocationRect();
             clone.points = this.points;
             return clone;
         };
@@ -268,7 +269,7 @@ Microsoft.Maps = {
     Color: {
         a: 0,
         fromHex: function(hex) {
-            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
             this.r = parseInt(result[1], 16);
             this.g = parseInt(result[2], 16);
             this.b = parseInt(result[3], 16);
@@ -339,7 +340,7 @@ Microsoft.Maps = {
         SearchManager: function(options) {
             this.geocode = function(options) {
                 Microsoft.geocodeCalled = (Microsoft.geocodeCalled || 0) + 1;
-                var results = [];
+                const results = [];
                 if(options.where !== '') {
                     results.push({
                         name: options.where,
@@ -379,7 +380,7 @@ Microsoft.Maps.LocationRect.prototype = {
     }
 };
 Microsoft.Maps.LocationRect.fromLocations = function() {
-    var locationRect = new Microsoft.Maps.LocationRect();
+    const locationRect = new Microsoft.Maps.LocationRect();
     locationRect.points = [];
     locationRect.points.push.apply(locationRect.points, arguments);
     return locationRect;

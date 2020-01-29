@@ -1,30 +1,30 @@
 import HorizontalMonthLineAppointmentsStrategy from './ui.scheduler.appointments.strategy.horizontal_month_line';
 import { extend } from '../../../core/utils/extend';
 
-var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
-    MONTH_APPOINTMENT_MIN_OFFSET = 26,
-    MONTH_APPOINTMENT_MAX_OFFSET = 30,
-    MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36,
-    MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
+const MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6;
+const MONTH_APPOINTMENT_MIN_OFFSET = 26;
+const MONTH_APPOINTMENT_MAX_OFFSET = 30;
+const MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36;
+const MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
 
 class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsStrategy {
 
     _getAppointmentParts(appointmentGeometry, appointmentSettings, startDate) {
-        var deltaWidth = appointmentGeometry.sourceAppointmentWidth - appointmentGeometry.reducedWidth,
-            height = appointmentGeometry.height,
-            fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(appointmentSettings.groupIndex),
-            maxAppointmentWidth = this._getMaxAppointmentWidth(startDate),
-            longPartCount = Math.ceil((deltaWidth) / fullWeekAppointmentWidth) - 1,
-            tailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth) || fullWeekAppointmentWidth,
-            result = [],
-            totalWidth = appointmentGeometry.reducedWidth + tailWidth,
-            currentPartTop = appointmentSettings.top + this.getDefaultCellHeight(),
-            left = this._calculateMultiWeekAppointmentLeftOffset(appointmentSettings.hMax, fullWeekAppointmentWidth);
+        const deltaWidth = appointmentGeometry.sourceAppointmentWidth - appointmentGeometry.reducedWidth;
+        const height = appointmentGeometry.height;
+        const fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(appointmentSettings.groupIndex);
+        const maxAppointmentWidth = this._getMaxAppointmentWidth(startDate);
+        const longPartCount = Math.ceil((deltaWidth) / fullWeekAppointmentWidth) - 1;
+        const tailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth) || fullWeekAppointmentWidth;
+        const result = [];
+        let totalWidth = appointmentGeometry.reducedWidth + tailWidth;
+        let currentPartTop = appointmentSettings.top + this.getDefaultCellHeight();
+        let left = this._calculateMultiWeekAppointmentLeftOffset(appointmentSettings.hMax, fullWeekAppointmentWidth);
 
         if(this.instance._groupOrientation === 'vertical') {
             left += this.instance.fire('getWorkSpaceDateTableOffset');
         }
-        for(var i = 0; i < longPartCount; i++) {
+        for(let i = 0; i < longPartCount; i++) {
             if(totalWidth > maxAppointmentWidth) {
                 break;
             }
@@ -67,11 +67,8 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
     }
 
     _getFullWeekAppointmentWidth(groupIndex) {
-        this.instance.fire('getFullWeekAppointmentWidth', {
+        this._maxFullWeekAppointmentWidth = this.instance.fire('getFullWeekAppointmentWidth', {
             groupIndex: groupIndex,
-            callback: (function(width) {
-                this._maxFullWeekAppointmentWidth = width;
-            }).bind(this)
         });
 
         return this._maxFullWeekAppointmentWidth;
@@ -92,13 +89,8 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
     }
 
     _columnCondition(a, b) {
-        var isSomeEdge = this._isSomeEdge(a, b);
-
-        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
-            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge),
-            cellPositionCondition = this._normalizeCondition(a.cellPosition, b.cellPosition, isSomeEdge);
-
-        return rowCondition ? rowCondition : columnCondition ? columnCondition : cellPositionCondition ? cellPositionCondition : a.isStart - b.isStart;
+        const conditions = this._getConditions(a, b);
+        return conditions.rowCondition || conditions.columnCondition || conditions.cellPositionCondition;
     }
 
     createTaskPositionMap(items) {
@@ -110,7 +102,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
     }
 
     _customizeAppointmentGeometry(coordinates) {
-        var config = this._calculateGeometryConfig(coordinates);
+        const config = this._calculateGeometryConfig(coordinates);
 
         return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
     }
@@ -130,7 +122,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         if(this.instance.fire('isAdaptive')) {
             return this.getDropDownButtonAdaptiveSize();
         }
-        var offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;
+        const offset = intervalCount > 1 ? MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET : MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET;
         return this.getDefaultCellWidth() - offset;
     }
 

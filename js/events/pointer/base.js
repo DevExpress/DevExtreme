@@ -1,13 +1,13 @@
-var eventsEngine = require('../../events/core/events_engine'),
-    browser = require('../../core/utils/browser'),
-    domAdapter = require('../../core/dom_adapter'),
-    Class = require('../../core/class'),
-    eventUtils = require('../utils');
+const eventsEngine = require('../../events/core/events_engine');
+const browser = require('../../core/utils/browser');
+const domAdapter = require('../../core/dom_adapter');
+const Class = require('../../core/class');
+const eventUtils = require('../utils');
 
-var POINTER_EVENTS_NAMESPACE = 'dxPointerEvents';
+const POINTER_EVENTS_NAMESPACE = 'dxPointerEvents';
 
 
-var BaseStrategy = Class.inherit({
+const BaseStrategy = Class.inherit({
 
     ctor: function(eventName, originalEvents) {
         this._eventName = eventName;
@@ -17,14 +17,14 @@ var BaseStrategy = Class.inherit({
     },
 
     _isNoBubble: function() {
-        var eventName = this._eventName;
+        const eventName = this._eventName;
 
         return eventName === 'dxpointerenter' ||
                eventName === 'dxpointerleave';
     },
 
     _handler: function(e) {
-        var delegateTarget = this._getDelegateTarget(e);
+        const delegateTarget = this._getDelegateTarget(e);
 
         return this._fireEvent({
             type: this._eventName,
@@ -37,7 +37,7 @@ var BaseStrategy = Class.inherit({
     },
 
     _getDelegateTarget: function(e) {
-        var delegateTarget;
+        let delegateTarget;
 
         if(this.noBubble) {
             delegateTarget = e.delegateTarget;
@@ -67,7 +67,7 @@ var BaseStrategy = Class.inherit({
             element = this.noBubble ? element : domAdapter.getDocument();
             this._setSelector(handleObj);
 
-            var that = this;
+            const that = this;
             eventsEngine.on(element, this._originalEvents, this._getSelector(), function(e) {
                 that._handler(e);
             });

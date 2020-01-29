@@ -34,23 +34,44 @@ define(function(require, exports, module) {
     require('localization/globalize/date');
     require('localization/globalize/message');
 
-    var generateExpectedDate = require('../../helpers/dateHelper.js').generateDate;
+    const generateExpectedDate = require('../../helpers/dateHelper.js').generateDate;
 
-    var $ = require('jquery'),
-        Globalize = require('globalize'),
-        numberLocalization = require('localization/number'),
-        dateLocalization = require('localization/date'),
-        messageLocalization = require('localization/message'),
-        config = require('core/config');
+    const $ = require('jquery');
+    const Globalize = require('globalize');
+    const numberLocalization = require('localization/number');
+    const dateLocalization = require('localization/date');
+    const messageLocalization = require('localization/message');
+    const config = require('core/config');
 
-    var likelySubtags = require('../../../node_modules/cldr-core/supplemental/likelySubtags.json!');
+    const likelySubtags = require('../../../node_modules/cldr-core/supplemental/likelySubtags.json!');
     Globalize.load(likelySubtags);
 
-    var NBSP = String.fromCharCode(160);
+    const NBSP = String.fromCharCode(160);
 
-    var sharedTests = require('./sharedParts/localization.shared.js');
+    const sharedTests = require('./sharedParts/localization.shared.js');
 
-    QUnit.module('Globalize common', null, function() {
+    const NEGATIVE_NUMBERS = [-4.645, -35.855];
+    const ROUNDING_CORRECTION = {
+        '-4.64': '-4.65',
+        '-35.85': '-35.86'
+    };
+    QUnit.module('Globalize common', {
+        before: function() {
+            numberLocalization.inject({
+                format: function(value, format) {
+                    // NOTE: Globalizejs implementation of negative number rounding differs from Intl.
+                    // https://github.com/globalizejs/globalize/issues/884
+                    // If the fractional portion is exactly 0.5 and the argument is negative,
+                    // the argument is rounded to the next integer in the positive direction
+                    let result = this.callBase.apply(this, arguments);
+                    if(NEGATIVE_NUMBERS.indexOf(value) !== -1 && format.type === 'fixedPoint' && format.precision === 2 && !!ROUNDING_CORRECTION[result]) {
+                        result = ROUNDING_CORRECTION[result];
+                    }
+                    return result;
+                }
+            });
+        }
+    }, function() {
 
         QUnit.test('engine', function(assert) {
             assert.equal(numberLocalization.engine(), 'globalize');
@@ -111,32 +132,32 @@ define(function(require, exports, module) {
     });
 
     QUnit.test('format', function(assert) {
-        var expectedValues = {
-                'day': '2',
-                'dayofweek': 'понедельник',
-                'hour': '03',
-                'longdate': 'понедельник, 2 марта 2015 г.',
-                'longdatelongtime': 'понедельник, 2 марта 2015 г., 3:04:05',
-                'longtime': '3:04:05',
-                'millisecond': '006',
-                'minute': '04',
-                'month': 'март',
-                'monthandday': '2 марта',
-                'monthandyear': 'март 2015 г.',
-                'quarter': '1-й кв.',
-                'quarterandyear': '1-й кв. 2015 г.',
-                'second': '05',
-                'shortdate': '02.03.2015',
-                'shortdateshorttime': '02.03.2015, 3:04',
-                'shorttime': '3:04',
-                'shortyear': '15',
-                'year': '2015',
+        const expectedValues = {
+            'day': '2',
+            'dayofweek': 'понедельник',
+            'hour': '03',
+            'longdate': 'понедельник, 2 марта 2015 г.',
+            'longdatelongtime': 'понедельник, 2 марта 2015 г., 3:04:05',
+            'longtime': '3:04:05',
+            'millisecond': '006',
+            'minute': '04',
+            'month': 'март',
+            'monthandday': '2 марта',
+            'monthandyear': 'март 2015 г.',
+            'quarter': '1-й кв.',
+            'quarterandyear': '1-й кв. 2015 г.',
+            'second': '05',
+            'shortdate': '02.03.2015',
+            'shortdateshorttime': '02.03.2015, 3:04',
+            'shorttime': '3:04',
+            'shortyear': '15',
+            'year': '2015',
 
-                'datetime-local': '2015-03-02T03:04:05',
-                'yyyy MMMM d': '2015 марта 2',
-                'ss SSS': '05 006'
-            },
-            date = new Date(2015, 2, 2, 3, 4, 5);
+            'datetime-local': '2015-03-02T03:04:05',
+            'yyyy MMMM d': '2015 марта 2',
+            'ss SSS': '05 006'
+        };
+        const date = new Date(2015, 2, 2, 3, 4, 5);
 
         date.setMilliseconds(6);
 
@@ -149,8 +170,8 @@ define(function(require, exports, module) {
     });
 
     QUnit.test('format cache for different locales', function(assert) {
-        var originalLocale = Globalize.locale().locale,
-            date = new Date(2015, 2, 2, 3, 4, 5);
+        const originalLocale = Globalize.locale().locale;
+        const date = new Date(2015, 2, 2, 3, 4, 5);
         try {
             Globalize.locale('en');
             assert.equal(dateLocalization.format(date, 'month'), 'March');
@@ -161,7 +182,7 @@ define(function(require, exports, module) {
     });
 
     QUnit.test('parse', function(assert) {
-        var assertData = {
+        const assertData = {
             'day': {
                 text: '2',
                 expectedConfig: { day: 2 }
@@ -267,7 +288,7 @@ define(function(require, exports, module) {
     });
 
     QUnit.test('Fallback to neutral culture', function(assert) {
-        var originalLocale = Globalize.locale().locale;
+        const originalLocale = Globalize.locale().locale;
 
         messageLocalization.load({
             'ru': {
@@ -294,7 +315,7 @@ define(function(require, exports, module) {
 
 
     QUnit.test('Fallback to default (en) culture', function(assert) {
-        var originalLocale = Globalize.locale().locale;
+        const originalLocale = Globalize.locale().locale;
         try {
             Globalize.locale('ru');
 
@@ -306,7 +327,7 @@ define(function(require, exports, module) {
     });
 
     QUnit.test('Extended culture with empty string value (T271323)', function(assert) {
-        var originalLocale = Globalize.locale().locale;
+        const originalLocale = Globalize.locale().locale;
 
         Globalize.load({
             'supplemental': {
@@ -338,7 +359,7 @@ define(function(require, exports, module) {
             }
         });
         Globalize.locale('ru');
-        var localized = messageLocalization.localizeString('@ruAddedKey @@ruAddedKey @');
+        const localized = messageLocalization.localizeString('@ruAddedKey @@ruAddedKey @');
         assert.equal(localized, 'ruValue @ruAddedKey @');
 
         Globalize.locale('en');
@@ -414,12 +435,28 @@ define(function(require, exports, module) {
         Globalize.locale('en');
     });
 
-    QUnit.test('getOpenXmlCurrencyFormat RUB', function(assert) {
-        assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), 'RUB#,##0{0}_);\\(RUB#,##0{0}\\)');
+    QUnit.test('getOpenXmlCurrencyFormat: check conversion for some cultures (T835933)', function(assert) {
         try {
+            Globalize.locale('en');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '\\R\\U\\B#,##0{0}_);\\(\\R\\U\\B#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('CNY'), '\\C\\N\\¥#,##0{0}_);\\(\\C\\N\\¥#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('NOK'), '\\N\\O\\K#,##0{0}_);\\(\\N\\O\\K#,##0{0}\\)');
+
+            Globalize.locale('en-ru'); // switch to parent if there are no settings for the passed culture
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '\\R\\U\\B#,##0{0}_);\\(\\R\\U\\B#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('CNY'), '\\C\\N\\¥#,##0{0}_);\\(\\C\\N\\¥#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('NOK'), '\\N\\O\\K#,##0{0}_);\\(\\N\\O\\K#,##0{0}\\)');
+
             Globalize.locale('ru');
-            // TODO: is it correct format?
-            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '#,##0{0}' + NBSP + '₽');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '#,##0{0}\xA0$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '#,##0{0}\xA0$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '#,##0{0}\xA0\\₽');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('CNY'), '#,##0{0}\xA0\\C\\N\\¥');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('NOK'), '#,##0{0}\xA0\\N\\O\\K');
         } finally {
             Globalize.locale('en');
         }
@@ -433,7 +470,7 @@ define(function(require, exports, module) {
     });
 
     QUnit.test('getCurrencySymbol and config.defaultCurrency', function(assert) {
-        var originalConfig = config();
+        const originalConfig = config();
 
         try {
             assert.equal(numberLocalization.getCurrencySymbol().symbol, '$');
@@ -448,15 +485,15 @@ define(function(require, exports, module) {
         }
     });
 
-    var ExcelJSLocalizationFormatTests = require('../DevExpress.exporter/exceljsParts/exceljs.format.tests.js');
+    const ExcelJSLocalizationFormatTests = require('../DevExpress.exporter/exceljsParts/exceljs.format.tests.js');
 
     ExcelJSLocalizationFormatTests.default.runCurrencyTests([
         { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
-        { value: 'RUB', expected: 'RUB#,##0_);\\(RUB#,##0\\)' },
-        { value: 'JPY', expected: '¥#,##0_);\\(¥#,##0\\)' },
-        { value: 'KPW', expected: 'KPW#,##0_);\\(KPW#,##0\\)' },
-        { value: 'LBP', expected: 'LBP#,##0_);\\(LBP#,##0\\)' },
-        { value: 'SEK', expected: 'SEK#,##0_);\\(SEK#,##0\\)' }
+        { value: 'RUB', expected: '\\R\\U\\B#,##0_);\\(\\R\\U\\B#,##0\\)' },
+        { value: 'JPY', expected: '\\¥#,##0_);\\(\\¥#,##0\\)' },
+        { value: 'KPW', expected: '\\K\\P\\W#,##0_);\\(\\K\\P\\W#,##0\\)' },
+        { value: 'LBP', expected: '\\L\\B\\P#,##0_);\\(\\L\\B\\P#,##0\\)' },
+        { value: 'SEK', expected: '\\S\\E\\K#,##0_);\\(\\S\\E\\K#,##0\\)' }
     ]);
 });
 

@@ -1,8 +1,8 @@
 /* global jQuery */
 
-var dataStrategy = require('core/element_data');
+import dataStrategy from 'core/element_data';
 
-var originalCleanData;
+let originalCleanData;
 
 QUnit.testStart(function() {
     if(!jQuery) {

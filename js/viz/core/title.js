@@ -1,11 +1,11 @@
-var _Number = Number,
-    _isString = require('../../core/utils/type').isString,
-    extend = require('../../core/utils/extend').extend,
-    _patchFontOptions = require('./utils').patchFontOptions,
-    parseHorizontalAlignment = require('./utils').enumParser(['left', 'center', 'right']),
-    parseVerticalAlignment = require('./utils').enumParser(['top', 'bottom']),
+const _Number = Number;
+const _isString = require('../../core/utils/type').isString;
+const extend = require('../../core/utils/extend').extend;
+const _patchFontOptions = require('./utils').patchFontOptions;
+const parseHorizontalAlignment = require('./utils').enumParser(['left', 'center', 'right']);
+const parseVerticalAlignment = require('./utils').enumParser(['top', 'bottom']);
 
-    DEFAULT_MARGIN = 10;
+const DEFAULT_MARGIN = 10;
 
 function hasText(text) {
     return !!(text && String(text).length > 0);
@@ -22,7 +22,7 @@ function pickMarginValue(value) {
 }
 
 function validateMargin(margin) {
-    var result;
+    let result;
     if(margin >= 0) {
         result = { left: _Number(margin), top: _Number(margin), right: _Number(margin), bottom: _Number(margin) };
     } else {
@@ -49,7 +49,7 @@ function Title(params) {
 // There is no normal inheritance from LayoutElement because it is actually a container of methods rather than a class.
 extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
     dispose: function() {
-        var that = this;
+        const that = this;
         that._group.linkRemove();
         that._group.linkOff();
         if(that._titleElement) {
@@ -90,14 +90,14 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
     },
 
     _updateTexts: function() {
-        var that = this,
-            options = that._options,
-            subtitleOptions = options.subtitle,
-            titleElement = that._titleElement,
-            subtitleElement = that._subtitleElement,
-            testText = 'A',
-            titleBox,
-            y;
+        const that = this;
+        const options = that._options;
+        const subtitleOptions = options.subtitle;
+        const titleElement = that._titleElement;
+        const subtitleElement = that._subtitleElement;
+        const testText = 'A';
+        let titleBox;
+        let y;
 
         titleElement.attr({ text: testText, y: 0 }).css(_patchFontOptions(options.font));
         titleBox = titleElement.getBBox(); // for multiline text
@@ -124,8 +124,8 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
     },
 
     _updateBoundingRectAlignment: function() {
-        var boundingRect = this._boundingRect,
-            options = this._options;
+        const boundingRect = this._boundingRect;
+        const options = this._options;
 
         boundingRect.verticalAlignment = options.verticalAlignment;
         boundingRect.horizontalAlignment = options.horizontalAlignment;
@@ -142,10 +142,10 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
     },
 
     update: function(themeOptions, userOptions) {
-        var that = this,
-            options = extend(true, {}, themeOptions, processTitleOptions(userOptions)),
-            _hasText = hasText(options.text),
-            isLayoutChanged = _hasText || _hasText !== that._hasText;
+        const that = this;
+        const options = extend(true, {}, themeOptions, processTitleOptions(userOptions));
+        const _hasText = hasText(options.text);
+        const isLayoutChanged = _hasText || _hasText !== that._hasText;
 
         that._baseLineCorrection = 0;
 
@@ -164,7 +164,7 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
     },
 
     draw: function(width, height) {
-        var that = this;
+        const that = this;
 
         if(that._hasText) {
             that._group.linkAppend();
@@ -211,21 +211,19 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
     },
 
     shift: function(x, y) {
-        var that = this,
-            box = that.getLayoutOptions();
+        const that = this;
+        const box = that.getLayoutOptions();
         that._group.move(x - box.x, y - box.y);
 
         return that;
     },
 
     _updateBoundingRect: function() {
-        var that = this,
-            options = that._options,
-            margin = options.margin,
-            boundingRect = that._boundingRect,
-            box;
-
-        box = that._hasText ? that._group.getBBox() : { width: 0, height: 0, x: 0, y: 0, isEmpty: true };
+        const that = this;
+        const options = that._options;
+        const margin = options.margin;
+        const boundingRect = that._boundingRect;
+        const box = that._hasText ? that._group.getBBox() : { width: 0, height: 0, x: 0, y: 0, isEmpty: true };
 
         if(!box.isEmpty) {
             box.height += margin.top + margin.bottom - that._baseLineCorrection;
@@ -272,7 +270,7 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
     },
 
     move: function(rect, fitRect) {
-        var boundingRect = this._boundingRect;
+        const boundingRect = this._boundingRect;
         if(checkRect(rect, boundingRect)) {
             this.shift(fitRect[0], fitRect[1]);
         } else {
@@ -281,7 +279,7 @@ extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
     },
 
     freeSpace: function() {
-        var that = this;
+        const that = this;
         that._params.incidentOccurred('W2103');
         that._group.linkRemove();
         that._boundingRect.width = that._boundingRect.height = 0;
@@ -305,7 +303,7 @@ Title.prototype.DEBUG_getOptions = function() { return this._options; };
 ///#ENDDEBUG
 
 function processTitleOptions(options) {
-    var newOptions = _isString(options) ? { text: options } : (options || {});
+    const newOptions = _isString(options) ? { text: options } : (options || {});
     newOptions.subtitle = _isString(newOptions.subtitle) ? { text: newOptions.subtitle } : (newOptions.subtitle || {});
     return newOptions;
 }
@@ -313,7 +311,7 @@ function processTitleOptions(options) {
 exports.plugin = {
     name: 'title',
     init: function() {
-        var that = this;
+        const that = this;
         // "exports" is used for testing purposes.
         that._title = new exports.Title({
             renderer: that._renderer,

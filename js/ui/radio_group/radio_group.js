@@ -8,17 +8,17 @@ import CollectionWidget from '../collection/ui.collection_widget.edit';
 import DataExpressionMixin from '../editor/ui.data_expression';
 import Editor from '../editor/editor';
 
-const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked',
-    RADIO_BUTTON_CLASS = 'dx-radiobutton',
-    RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked',
-    RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon',
-    RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot',
-    RADIO_GROUP_HORIZONTAL_CLASS = 'dx-radiogroup-horizontal',
-    RADIO_GROUP_VERTICAL_CLASS = 'dx-radiogroup-vertical',
-    RADIO_VALUE_CONTAINER_CLASS = 'dx-radio-value-container',
-    RADIO_GROUP_CLASS = 'dx-radiogroup',
+const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
+const RADIO_BUTTON_CLASS = 'dx-radiobutton';
+const RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';
+const RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon';
+const RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot';
+const RADIO_GROUP_HORIZONTAL_CLASS = 'dx-radiogroup-horizontal';
+const RADIO_GROUP_VERTICAL_CLASS = 'dx-radiogroup-vertical';
+const RADIO_VALUE_CONTAINER_CLASS = 'dx-radio-value-container';
+const RADIO_GROUP_CLASS = 'dx-radiogroup';
 
-    RADIO_FEEDBACK_HIDE_TIMEOUT = 100;
+const RADIO_FEEDBACK_HIDE_TIMEOUT = 100;
 
 class RadioCollection extends CollectionWidget {
     _focusTarget() {
@@ -121,20 +121,11 @@ class RadioGroup extends Editor {
         return defaultOptionsRules.concat([{
             device: { tablet: true },
             options: {
-                /**
-                 * @name dxRadioGroupOptions.layout
-                 * @default 'horizontal' @for tablets
-                 */
                 layout: 'horizontal'
             }
         }, {
             device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
             options: {
-                /**
-                * @name dxRadioGroupOptions.focusStateEnabled
-                * @type boolean
-                * @default true @for desktop
-                */
                 focusStateEnabled: true
             }
         }]);
@@ -157,39 +148,15 @@ class RadioGroup extends Editor {
 
         return extend(defaultOptions, extend(DataExpressionMixin._dataExpressionDefaultOptions(), {
 
-            /**
-             * @name dxRadioGroupOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxRadioGroupOptions.activeStateEnabled
-            * @type boolean
-            * @default true
-            */
             activeStateEnabled: true,
 
-            /**
-            * @name dxRadioGroupOptions.layout
-            * @type Enums.Orientation
-            * @default "vertical"
-            */
             layout: 'vertical',
 
             useInkRipple: false
 
-            /**
-            * @name dxRadioGroupOptions.value
-            * @ref
-            */
 
-            /**
-            * @name dxRadioGroupOptions.name
-            * @type string
-            * @hidden false
-            */
         }));
     }
 
@@ -285,8 +252,8 @@ class RadioGroup extends Editor {
     }
 
     _renderLayout() {
-        const layout = this.option('layout'),
-            $element = this.$element();
+        const layout = this.option('layout');
+        const $element = this.$element();
 
         $element.toggleClass(RADIO_GROUP_VERTICAL_CLASS, layout === 'vertical');
         $element.toggleClass(RADIO_GROUP_HORIZONTAL_CLASS, layout === 'horizontal');

@@ -1,21 +1,21 @@
-var $ = require('../../core/renderer'),
-    eventsEngine = require('../../events/core/events_engine'),
-    domAdapter = require('../../core/dom_adapter'),
-    callOnce = require('../../core/utils/call_once'),
-    registerEvent = require('./event_registrator'),
-    eventUtils = require('../utils');
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const domAdapter = require('../../core/dom_adapter');
+const callOnce = require('../../core/utils/call_once');
+const registerEvent = require('./event_registrator');
+const eventUtils = require('../utils');
 
-var EVENT_NAME = 'dxmousewheel',
-    EVENT_NAMESPACE = 'dxWheel';
+const EVENT_NAME = 'dxmousewheel';
+const EVENT_NAMESPACE = 'dxWheel';
 
-var getWheelEventName = callOnce(function() {
+const getWheelEventName = callOnce(function() {
     return domAdapter.hasDocumentProperty('onwheel') ? 'wheel' : 'mousewheel';
 });
 
-var wheel = {
+const wheel = {
 
     setup: function(element) {
-        var $element = $(element);
+        const $element = $(element);
         eventsEngine.on($element, eventUtils.addNamespace(getWheelEventName(), EVENT_NAMESPACE), wheel._wheelHandler.bind(wheel));
     },
 
@@ -24,7 +24,7 @@ var wheel = {
     },
 
     _wheelHandler: function(e) {
-        var delta = this._getWheelDelta(e.originalEvent);
+        const delta = this._getWheelDelta(e.originalEvent);
 
         eventUtils.fireEvent({
             type: EVENT_NAME,

@@ -1,11 +1,11 @@
-var jQuery = require('jquery');
-var deferredUtils = require('../../core/utils/deferred');
-var useJQuery = require('./use_jquery')();
-var compareVersion = require('../../core/utils/version').compare;
+const jQuery = require('jquery');
+const deferredUtils = require('../../core/utils/deferred');
+const useJQuery = require('./use_jquery')();
+const compareVersion = require('../../core/utils/version').compare;
 
 if(useJQuery) {
-    var Deferred = jQuery.Deferred;
-    var strategy = { Deferred: Deferred };
+    const Deferred = jQuery.Deferred;
+    const strategy = { Deferred: Deferred };
 
     strategy.when = compareVersion(jQuery.fn.jquery, [3]) < 0
         ? jQuery.when

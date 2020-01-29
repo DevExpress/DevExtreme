@@ -61,6 +61,12 @@
     @GENERIC_COMMAND_EDIT_ICON_MARGIN: 1px;
 }
 
+.dx-set-checkbox-border-color-as-background() when (@GENERIC_COLOR_POSTFIX = ".contrast") {
+    .dx-selection .dx-checkbox-icon {
+        border-color: ~"@{@{widgetName}-base-background-color}";
+    }
+}
+
 .grid-base(@widgetName) {
     @GENERIC_GRID_BASE_BORDER_HIDDEN: 1px solid transparent;
     @GENERIC_GRID_BASE_ROW_BORDER: 1px solid transparent;
@@ -69,12 +75,6 @@
     @GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0 0 1px ~"@{@{widgetName}-drag-header-shadow-color}";
     @GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
     @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
-
-    .dx-set-checkbox-border-color-as-background() when (@GENERIC_COLOR_POSTFIX = ".contrast") {
-        .dx-selection .dx-checkbox-icon {
-            border-color: ~"@{@{widgetName}-base-background-color}";
-        }
-    }
 
     .dx-@{widgetName},
     .dx-@{widgetName}-container {
@@ -155,6 +155,9 @@
             & > td,
             & > tr > td {
                 background-color: ~"@{@{widgetName}-row-alternation-bg}";
+                // T838734
+                border-top: ~"1px solid @{@{widgetName}-row-alternation-bg}";
+                border-bottom: ~"1px solid @{@{widgetName}-row-alternation-bg}";
             }
 
             &.dx-row:not(.dx-row-removed) {
@@ -255,8 +258,8 @@
             .dx-placeholder:before {
                 padding-left: @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
 
-                .dx-rtl &,
-                .dx-rtl& {
+                .dx-rtl&,
+                .dx-rtl & {
                     padding-right: @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
                 }
             }
@@ -277,14 +280,6 @@
 
             .dx-texteditor-input {
                 background: ~"@{@{widgetName}-editor-bg}";
-            }
-
-            &.dx-numberbox-spin .dx-texteditor-input {
-                padding-right: @GENERIC_NUMBERBOX_SPIN_CONTAINER_WIDTH;
-            }
-
-            &.dx-numberbox-spin-touch-friendly .dx-texteditor-input {
-                padding-right: @GENERIC_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
             }
         }
 

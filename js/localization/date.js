@@ -143,7 +143,6 @@ const dateLocalization = dependencyInjector({
 
     parse: function(text, format) {
         const that = this;
-        let result;
         let ldmlFormat;
         let formatter;
 
@@ -177,7 +176,7 @@ const dateLocalization = dependencyInjector({
         }
 
         errors.log('W0012');
-        result = new Date(text);
+        const result = new Date(text);
 
         if(!result || isNaN(result.getTime())) {
             return;

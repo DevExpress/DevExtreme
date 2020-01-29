@@ -247,7 +247,7 @@ class Gantt extends Widget {
         }
     }
     _getSpecificDataSourceOption(name) {
-        var dataSource = this.option(`${name}.dataSource`);
+        const dataSource = this.option(`${name}.dataSource`);
         if(Array.isArray(dataSource)) {
             return {
                 store: {
@@ -262,7 +262,7 @@ class Gantt extends Widget {
     _compileGettersByOption(optionName) {
         const getters = {};
         const optionValue = this.option(optionName);
-        for(let field in optionValue) {
+        for(const field in optionValue) {
             const exprMatches = field.match(/(\w*)Expr/);
             if(exprMatches) {
                 getters[exprMatches[1]] = dataCoreUtils.compileGetter(optionValue[exprMatches[0]]);
@@ -273,7 +273,7 @@ class Gantt extends Widget {
     _compileSettersByOption(optionName) {
         const setters = {};
         const optionValue = this.option(optionName);
-        for(let field in optionValue) {
+        for(const field in optionValue) {
             const exprMatches = field.match(/(\w*)Expr/);
             if(exprMatches) {
                 setters[exprMatches[1]] = dataCoreUtils.compileSetter(optionValue[exprMatches[0]]);
@@ -434,34 +434,12 @@ class Gantt extends Widget {
             * @name dxGanttTimeMarker
             * @type object
             */
-            /**
-            * @name dxGanttTimeMarker.dateTime
-            * @type Date|number|string|function
-            * @type_function_return Date|number|string
-            * @default undefined
-            */
-            /**
-            /**
-            * @name dxGanttTimeMarker.title
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxGanttTimeMarker.cssClass
-            * @type string
-            * @default undefined
-            */
 
             /**
             * @name dxGanttOptions.rtlEnabled
             * @hidden
             */
 
-            /**
-            * @name dxGanttOptions.tasks
-            * @type Object
-            * @default null
-            */
             tasks: {
                 /**
                 * @name dxGanttOptions.tasks.dataSource
@@ -506,11 +484,6 @@ class Gantt extends Widget {
                 */
                 titleExpr: 'title'
             },
-            /**
-            * @name dxGanttOptions.dependencies
-            * @type Object
-            * @default null
-            */
             dependencies: {
                 /**
                 * @name dxGanttOptions.dependencies.dataSource
@@ -543,11 +516,6 @@ class Gantt extends Widget {
                 */
                 typeExpr: 'type'
             },
-            /**
-            * @name dxGanttOptions.resources
-            * @type Object
-            * @default null
-            */
             resources: {
                 /**
                 * @name dxGanttOptions.resources.dataSource
@@ -568,11 +536,6 @@ class Gantt extends Widget {
                 */
                 textExpr: 'text'
             },
-            /**
-            * @name dxGanttOptions.resourceAssignments
-            * @type Object
-            * @default null
-            */
             resourceAssignments: {
                 /**
                 * @name dxGanttOptions.resourceAssignments.dataSource
@@ -599,73 +562,16 @@ class Gantt extends Widget {
                 */
                 resourceIdExpr: 'resourceId'
             },
-            /**
-             * @name dxGanttOptions.columns
-             * @type Array<dxTreeListColumn,string>
-             * @default undefined
-             */
             columns: undefined,
-            /**
-            * @name dxGanttOptions.taskListWidth
-            * @type number
-            * @default 300
-            */
             taskListWidth: 300,
-            /**
-            * @name dxGanttOptions.showResources
-            * @type boolean
-            * @default true
-            */
             showResources: true,
-            /**
-            * @name dxGanttOptions.taskTitlePosition
-            * @type Enums.GanttTaskTitlePosition
-            * @default "inside"
-            */
             taskTitlePosition: 'inside',
-            /**
-            * @name dxGanttOptions.selectedRowKey
-            * @type any
-            * @default undefined
-            */
             selectedRowKey: undefined,
-            /**
-            * @name dxGanttOptions.onSelectionChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 selectedRowKey:any
-            * @action
-            */
             onSelectionChanged: null,
-            /**
-            * @name dxGanttOptions.allowSelection
-            * @type boolean
-            * @default true
-            */
             allowSelection: true,
-            /**
-            * @name dxGanttOptions.showRowLines
-            * @type boolean
-            * @default true
-            */
             showRowLines: true,
-            /**
-            * @name dxGanttOptions.timeMarkers
-            * @type Array<dxGanttTimeMarker>
-            * @default undefined
-            */
             timeMarkers: undefined,
-            /**
-            * @name dxGanttOptions.scaleType
-            * @type Enums.GanttScaleType
-            * @default "auto"
-            */
             scaleType: 'auto',
-            /**
-            * @name dxGanttOptions.editing
-            * @type Object
-            */
             editing: {
                 /**
                 * @name dxGanttOptions.editing.enabled

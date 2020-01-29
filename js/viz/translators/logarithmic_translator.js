@@ -1,7 +1,7 @@
-var vizUtils = require('../core/utils'),
-    isDefined = require('../../core/utils/type').isDefined,
-    raiseTo = vizUtils.raiseToExt,
-    getLog = vizUtils.getLogExt;
+const vizUtils = require('../core/utils');
+const isDefined = require('../../core/utils/type').isDefined;
+const raiseTo = vizUtils.raiseToExt;
+const getLog = vizUtils.getLogExt;
 
 module.exports = {
     _fromValue: function(value) {
@@ -13,19 +13,19 @@ module.exports = {
     },
 
     getMinBarSize: function(minBarSize) {
-        var visibleArea = this.getCanvasVisibleArea(),
-            minValue = this.from(visibleArea.min + minBarSize),
-            canvasOptions = this._canvasOptions;
+        const visibleArea = this.getCanvasVisibleArea();
+        const minValue = this.from(visibleArea.min + minBarSize);
+        const canvasOptions = this._canvasOptions;
 
         return Math.pow(canvasOptions.base, canvasOptions.rangeMinVisible + this._fromValue(this.from(visibleArea.min)) - this._fromValue(!isDefined(minValue) ? this.from(visibleArea.max) : minValue));
     },
 
     checkMinBarSize: function(initialValue, minShownValue, stackValue) {
-        var canvasOptions = this._canvasOptions,
-            prevValue = stackValue - initialValue,
-            baseMethod = this.constructor.prototype.checkMinBarSize,
-            minBarSize,
-            updateValue;
+        const canvasOptions = this._canvasOptions;
+        const prevValue = stackValue - initialValue;
+        const baseMethod = this.constructor.prototype.checkMinBarSize;
+        let minBarSize;
+        let updateValue;
 
         if(isDefined(minShownValue) && prevValue > 0) {
             minBarSize = baseMethod(this._fromValue(stackValue / prevValue), this._fromValue(minShownValue) - canvasOptions.rangeMinVisible);

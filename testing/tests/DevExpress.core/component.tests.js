@@ -368,7 +368,7 @@ QUnit.module('default', {}, () => {
         const checkTriggered = (optionName, value, expectedTriggered) => {
             triggered = false;
             instance.option(optionName, value);
-            assert.ok(expectedTriggered === triggered);
+            assert.strictEqual(expectedTriggered, triggered);
         };
 
         const plainObj = {};
@@ -987,38 +987,6 @@ QUnit.module('default', {}, () => {
         };
 
         instance.option('option1', 2);
-    });
-
-    QUnit.test('T359818 - option changed should be called when deprecated option is changed', function(assert) {
-        const instance = new TestComponent();
-        const value = 5;
-
-        instance._resetTraceLog();
-        instance.option('deprecated', value);
-
-        const logRecord = instance._getTraceLogByMethod('_optionChanged');
-
-        assert.equal(logRecord[0].arguments[0].name, 'deprecatedAlias', 'the \'optionChanged\' method option name is correct');
-        assert.equal(logRecord[0].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
-
-        assert.equal(logRecord[1].arguments[0].name, 'deprecated', 'the \'optionChanged\' method option name is correct');
-        assert.equal(logRecord[1].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
-    });
-
-    QUnit.test('T359818 - option changed should be called when the second level deprecated option is changed', function(assert) {
-        const instance = new TestComponent();
-        const value = 5;
-
-        instance._resetTraceLog();
-        instance.option('secondLevel.deprecatedOption', value);
-
-        const logRecord = instance._getTraceLogByMethod('_optionChanged');
-
-        assert.equal(logRecord[0].arguments[0].fullName, 'secondLevel.deprecatedOptionAlias', 'the \'optionChanged\' method option name is correct');
-        assert.equal(logRecord[0].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
-
-        assert.equal(logRecord[1].arguments[0].fullName, 'secondLevel.deprecatedOption', 'the \'optionChanged\' method option name is correct');
-        assert.equal(logRecord[1].arguments[0].value, value, 'the \'optionChanged\' method option value is correct');
     });
 
     QUnit.test('T359818 - option changed should be called when deprecated option is changed', function(assert) {

@@ -7,7 +7,7 @@ import TreeViewBase from './ui.tree_view.base';
 const WIDGET_CLASS = 'dx-treeview';
 const NODE_CONTAINER_CLASS = `${WIDGET_CLASS}-node-container`;
 
-var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
+const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     _addWidgetPrefix: function(className) {
         return `${WIDGET_CLASS}-${className}`;
     },
@@ -54,14 +54,14 @@ var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
 
     _updateSearch: function() {
         if(this._searchEditor) {
-            var editorOptions = this._getSearchEditorOptions();
+            const editorOptions = this._getSearchEditorOptions();
             this._searchEditor.option(editorOptions);
         }
     },
 
     _repaintContainer: function() {
-        var $container = this.$element().find(`.${NODE_CONTAINER_CLASS}`).first(),
-            rootNodes;
+        const $container = this.$element().find(`.${NODE_CONTAINER_CLASS}`).first();
+        let rootNodes;
 
         if($container.length) {
             $container.empty();

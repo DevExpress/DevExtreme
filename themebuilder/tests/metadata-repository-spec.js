@@ -31,7 +31,7 @@ describe('MetadataRepository', () => {
         mock('../data/metadata/dx-theme-builder-metadata', metadata);
     });
     it('Init', () => {
-        let metadataRepository = new MetadataRepository(new MetadataLoader());
+        const metadataRepository = new MetadataRepository(new MetadataLoader());
         return metadataRepository.init(themes).then(() => {
             let genericLightMetadata = metadataRepository.getData({
                 name: 'generic',
@@ -57,7 +57,7 @@ describe('MetadataRepository', () => {
     });
 
     it('Version', () => {
-        let metadataRepository = new MetadataRepository(new MetadataLoader());
+        const metadataRepository = new MetadataRepository(new MetadataLoader());
         assert.equal(metadataRepository.getVersion(), '18.2.0');
     });
 

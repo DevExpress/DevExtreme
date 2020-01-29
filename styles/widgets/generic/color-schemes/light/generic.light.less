@@ -7,18 +7,6 @@
 @base-font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Verdana, sans-serif;
 
 /**
-* @name 20. Label color
-* @type color
-*/
-@base-label-color: @base-text-color;
-
-/**
-* @name 30. Link color
-* @type color
-*/
-@base-link-color: @base-accent;
-
-/**
 * @name 40. Icon color
 * @type color
 */
@@ -35,6 +23,18 @@
 * @type color
 */
 @base-text-color: #333;
+
+/**
+* @name 20. Label color
+* @type color
+*/
+@base-label-color: @base-text-color;
+
+/**
+* @name 30. Link color
+* @type color
+*/
+@base-link-color: @base-accent;
 
 /**
 * @name 30. Background color
@@ -113,16 +113,29 @@
 
 @base-inverted-text-color: #fff;
 @base-inverted-icon-color: @base-inverted-text-color;
+@base-disabled-opacity: 0.5;
+@base-dropdown-shadow-color: fade(@base-shadow-color, 17.5%);
+@base-invalid-color: @base-danger;
+@base-invalid-faded-border-color: fade(@base-invalid-color, 40%);
+
+/**
+* @name 80. Border radius
+* @type text
+*/
+@base-border-radius-small: @base-border-radius - 1px;
+
+/**
+* @name 30. Border radius
+* @type text
+*/
+@base-border-radius-large: @base-border-radius + 2px;
 
 // Validation
-@base-invalid-color: @base-danger;
 
 @VALIDATION_MESSAGE_COLOR: @base-inverted-text-color;
 @VALIDATION_MESSAGE_BACKGROUND_COLOR: @base-invalid-color;
 @VALIDATION_SUMMARY_COLOR: @base-invalid-color;
-
 @validation-overlay-border-radius: @base-border-radius;
-@base-invalid-faded-border-color: fade(@base-invalid-color, 40%);
 
 // Badges
 
@@ -137,7 +150,6 @@
 * @type color
 */
 @badge-bg: @base-accent;
-@badge-invalid-bg: @base-invalid-color;
 
 
 // TextEditor
@@ -186,7 +198,6 @@
 */
 @texteditor-focused-border-color: @base-focus-bg;
 
-@texteditor-disabled-opacity: 0.5;
 @texteditor-button-clear-icon-color: lighten(@texteditor-color, 40%);
 
 @texteditor-invalid-focused-border-color: @base-invalid-color;
@@ -195,12 +206,6 @@
 
 @texteditor-border-radius: @base-border-radius;
 @texteditor-input-border-radius: @base-border-radius;
-
-/**
-* @name 80. Border radius
-* @type text
-*/
-@base-border-radius-small: @base-border-radius - 1px;
 
 // TextBox
 
@@ -320,9 +325,9 @@
 */
 @button-default-border-color: darken(@base-accent, 5%);
 
-@button-default-contained-bg-hover: darken(@button-default-bg, 20%);
-@button-default-contained-bg-focused: darken(@button-default-bg, 25%);
-@button-default-contained-bg-active: darken(@button-default-bg, 50%);
+@button-default-contained-bg-hover: darken(@button-default-bg, 9%);
+@button-default-contained-bg-focused: darken(@button-default-bg, 12%);
+@button-default-contained-bg-active: darken(@button-default-bg, 23%);
 
 @button-default-outlined-bg-hover: fade(@button-default-border-color, 10%);
 @button-default-outlined-bg-focused: fade(@button-default-border-color, 10%);
@@ -353,9 +358,9 @@
 */
 @button-danger-border-color: darken(@base-danger, 5%);
 
-@button-danger-contained-bg-hover: darken(@button-danger-bg, 20%);
-@button-danger-contained-bg-focused: darken(@button-danger-bg, 25%);
-@button-danger-contained-bg-active: darken(@button-danger-bg, 50%);
+@button-danger-contained-bg-hover: darken(@button-danger-bg, 9%);
+@button-danger-contained-bg-focused: darken(@button-danger-bg, 12%);
+@button-danger-contained-bg-active: darken(@button-danger-bg, 23%);
 
 @button-danger-outlined-bg-hover: fade(@button-danger-border-color, 10%);
 @button-danger-outlined-bg-focused: fade(@button-danger-border-color, 10%);
@@ -386,9 +391,9 @@
 */
 @button-success-border-color: darken(@base-success, 5%);
 
-@button-success-contained-bg-hover: darken(@button-success-bg, 20%);
-@button-success-contained-bg-focused: darken(@button-success-bg, 25%);
-@button-success-contained-bg-active: darken(@button-success-bg, 50%);
+@button-success-contained-bg-hover: darken(@button-success-bg, 9%);
+@button-success-contained-bg-focused: darken(@button-success-bg, 12%);
+@button-success-contained-bg-active: darken(@button-success-bg, 23%);
 
 @button-success-outlined-bg-hover: fade(@button-success-border-color, 10%);
 @button-success-outlined-bg-focused: fade(@button-success-border-color, 10%);
@@ -401,13 +406,17 @@
 
 // ButtonGroup
 
-// Normal Button
+// Normal Button (ButtonGroup)
 
 /**
 * @name 10. Selected item text color
 * @type color
 */
 @button-group-normal-selected-color: @base-text-color;
+
+@button-group-normal-contained-selected-bg: darken(@button-normal-bg, 17%);
+@button-group-normal-contained-selected-bg-hover: lighten(@button-group-normal-contained-selected-bg, 6%);
+@button-group-normal-contained-selected-bg-focused: lighten(@button-group-normal-contained-selected-bg, 3%);
 
 /**
 * @name 20. Selected item background color
@@ -418,7 +427,7 @@
 @button-group-normal-selected-bg-hover: fade(@button-group-normal-selected-bg, 11%);
 @button-group-normal-selected-bg-focused: fade(@button-group-normal-selected-bg, 14%);
 
-// Default Button
+// Default Button (ButtonGroup)
 
 /**
 * @name 10. Selected item text color
@@ -435,7 +444,7 @@
 @button-group-default-selected-bg-hover: fade(@button-group-default-selected-bg, 20%);
 @button-group-default-selected-bg-focused: fade(@button-group-default-selected-bg, 20%);
 
-// Danger Button
+// Danger Button (ButtonGroup)
 
 /**
 * @name 10. Selected item text color
@@ -452,7 +461,7 @@
 @button-group-danger-selected-bg-hover: fade(@button-group-danger-selected-bg, 20%);
 @button-group-danger-selected-bg-focused: fade(@button-group-danger-selected-bg, 20%);
 
-// Success Button
+// Success Button (ButtonGroup)
 
 /**
 * @name 10. Selected item text color
@@ -642,6 +651,7 @@
 @list-group-header-default-padding-top: 20px;
 @list-group-header-compact-padding-top: 10px;
 @list-item-chevron-icon-color: @base-icon-color;
+@list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/light/list/delete.png');
 
 // Overlay
 @overlay-content-shadow-color: fade(@base-shadow-color, 17.5%);
@@ -658,12 +668,6 @@
 * @type color
 */
 @overlay-shader-bg: fade(@base-bg, 80%);
-
-/**
-* @name 30. Border radius
-* @type text
-*/
-@base-border-radius-large: @base-border-radius + 2px;
 
 // Popup
 
@@ -723,6 +727,11 @@
 */
 @toast-success-bg: @base-success;
 
+@toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png');
+@toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png');
+@toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png');
+@toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png');
+
 // DropDownEditor
 
 @dropdowneditor-button-hover-bg: darken(@button-normal-bg ,10%);
@@ -758,7 +767,6 @@
 * @type color
 */
 @selectbox-list-bg: @base-bg;
-@selectbox-shadow-color: fade(@base-shadow-color, 17.5%);
 
 // Tabs
 
@@ -876,9 +884,15 @@
 @scrollable-scrollbar-msie-shadow-color: @scrollable-bg;
 @scrollable-scrollbar-msie-track-color: @scrollable-bg;
 
+@scrollbar-button-horizontal-decrement-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-horizontal-arrow-start.png') no-repeat;
+@scrollbar-button-horizontal-increment-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-horizontal-arrow-end.png') no-repeat;
+@scrollbar-button-vertical-decrement-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-vertical-arrow-up.png') no-repeat;
+@scrollbar-button-vertical-increment-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-vertical-arrow-down.png') no-repeat;
+
 // ScrollView
 
 @scrollview-shadow-color: fade(@base-shadow-color, 37%);
+@scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat;
 
 // Toolbar
 
@@ -897,6 +911,7 @@
 */
 @loadindicator-bg: lighten(@base-text-color, 17.5%);
 @loadindicator-segment-shadow-color: fade(@base-shadow-color, 20%);
+@loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif');
 
 // LoadPanel
 @loadpanel-border-color: @overlay-border-color;
@@ -1012,6 +1027,7 @@
 @colorbox-palette-cell-bg: @colorbox-overlay-bg;
 @colorview-border-color: @base-border-color;
 @colorview-label-color: @base-label-color;
+@colorbox-preview-empty-bg: data-uri('images/widgets/generic/color-schemes/light/colorbox/nocolor.png');
 
 // DataGrid
 @datagrid-base-color: @base-text-color;
@@ -1049,7 +1065,7 @@
 * @name 55. Selected row background color
 * @type color
 */
-@datagrid-selection-bg: @base-select-bg;
+@datagrid-selection-bg: #e6e6e6;
 
 /**
 * @name 60. Selected row border color
@@ -1468,6 +1484,8 @@
 */
 @calendar-shevron-icon-color: @base-accent;
 
+@calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/light/calendar/empty-cell.png') center center no-repeat;
+
 // Tooltip
 
 /**
@@ -1548,8 +1566,6 @@
 @timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/hour-arrow.svg');
 @timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/min-arrow.svg');
 
-// theme-depends shadow parameters
-
 // DateView
 @dateview-border-color: @base-border-color;
 @dateview-shadow-up: 0deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
@@ -1571,22 +1587,6 @@
 @form-group-border-color: @base-border-color;
 @form-field-required-color: saturate(lighten(@form-field-item-color, 39.3%), 80%);
 @form-field-mark-color: lighten(@form-field-item-color, 48.5%);
-
-// Images
-@list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/light/list/delete.png');
-@scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat;
-@loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif');
-@toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png');
-@toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png');
-@toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png');
-@toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png');
-@scrollbar-button-horizontal-decrement-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-horizontal-arrow-start.png') no-repeat;
-@scrollbar-button-horizontal-increment-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-horizontal-arrow-end.png') no-repeat;
-@scrollbar-button-vertical-decrement-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-vertical-arrow-up.png') no-repeat;
-@scrollbar-button-vertical-increment-bg: data-uri('images/widgets/generic/color-schemes/light/scrollable/scrollbar-vertical-arrow-down.png') no-repeat;
-@colorbox-preview-empty-bg: data-uri('images/widgets/generic/color-schemes/light/colorbox/nocolor.png');
-
-@calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/light/calendar/empty-cell.png') center center no-repeat;
 
 // Fieldset
 
@@ -1668,6 +1668,7 @@
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-text-color;
 @filemanager-file-item-select-bg: darken(@base-bg, 10%);
+@filemanager-item-focused-color: @base-inverted-text-color;
 @filemanager-progressbox-shadow-color: fade(@base-shadow-color, 17.5%);
 
 // SpeedDialAction

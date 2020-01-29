@@ -21,9 +21,9 @@ import {
 
 const SCROLLBAR_MIN_HEIGHT = 15;
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
-        var markup = '\
+        const markup = '\
         <div id="scrollable" style="height: 50px; width: 50px;">\
             <div class="content1" style="height: 100px; width: 100px;"></div>\
             <div class="content2"></div>\
@@ -58,14 +58,14 @@ var moduleConfig = {
 QUnit.module('scrollbar', moduleConfig);
 
 QUnit.test('markup', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false
     });
 
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        $scrollbar = $container.children().eq(1),
-        $scroll = $scrollbar.children().eq(0),
-        $scrollContent = $scroll.children().eq(0);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $scrollbar = $container.children().eq(1);
+    const $scroll = $scrollbar.children().eq(0);
+    const $scrollContent = $scroll.children().eq(0);
 
     assert.equal($container.find('.' + SCROLLABLE_SCROLLBAR_CLASS).length, 1, 'single scrollbar added');
     assert.ok($scrollbar.hasClass(SCROLLABLE_SCROLLBAR_CLASS), 'dx-scrollable-scrollbar class attached');
@@ -74,7 +74,7 @@ QUnit.test('markup', function(assert) {
 });
 
 QUnit.test('direction css classes', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         direction: 'both'
     });
@@ -84,13 +84,13 @@ QUnit.test('direction css classes', function(assert) {
 });
 
 QUnit.test('scrollbar appears when scrolling is begun', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         useSimulatedScrollbar: true,
         inertiaEnabled: false
     });
 
-    var scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLBAR_VERTICAL_CLASS));
+    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLBAR_VERTICAL_CLASS));
 
     assert.equal(scrollbar.option('visible'), false, 'scrollbar is hidden before scrolling');
 
@@ -103,14 +103,14 @@ QUnit.test('scrollbar appears when scrolling is begun', function(assert) {
 });
 
 QUnit.test('scrollbar is hidden when scrolling is completed', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
             assert.equal(scrollbar.option('visible'), false, 'scrollbar is hidden');
         }
     });
 
-    var scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLBAR_VERTICAL_CLASS));
+    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLBAR_VERTICAL_CLASS));
 
     pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
         .start()
@@ -120,17 +120,17 @@ QUnit.test('scrollbar is hidden when scrolling is completed', function(assert) {
 });
 
 QUnit.test('scrollbar height calculated correctly', function(assert) {
-    var containerHeight = 50,
-        contentHeight = 100,
-        scrollHeight = (containerHeight / contentHeight) * containerHeight;
+    const containerHeight = 50;
+    const contentHeight = 100;
+    const scrollHeight = (containerHeight / contentHeight) * containerHeight;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false
     });
 
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS),
-        $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.height(containerHeight);
     $content.height(contentHeight);
@@ -141,7 +141,7 @@ QUnit.test('scrollbar height calculated correctly', function(assert) {
 });
 
 QUnit.test('scrollbar min height', function(assert) {
-    var $scrollable = $('#scrollable');
+    const $scrollable = $('#scrollable');
     $scrollable.height(10);
     $scrollable.children().height(10000);
 
@@ -150,15 +150,15 @@ QUnit.test('scrollbar min height', function(assert) {
         useSimulatedScrollbar: true
     });
 
-    var $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
     assert.roughEqual($scrollbar.height(), SCROLLBAR_MIN_HEIGHT, 0.01);
 });
 
 QUnit.test('scrollbar position calculated correctly when content much greater than container', function(assert) {
-    var containerSize = 100,
-        contentSize = 10000;
+    const containerSize = 100;
+    const contentSize = 10000;
 
-    var $scrollable = $('#scrollable');
+    const $scrollable = $('#scrollable');
     $scrollable.height(containerSize);
     $scrollable.wrapInner('<div>').children().height(contentSize);
 
@@ -166,26 +166,26 @@ QUnit.test('scrollbar position calculated correctly when content much greater th
         useSimulatedScrollbar: true,
         useNative: false
     });
-    var $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $scrollable.dxScrollable('scrollTo', contentSize - containerSize);
 
-    var scrollBarPosition = translator.locate($scrollbar);
+    const scrollBarPosition = translator.locate($scrollbar);
     assert.equal(scrollBarPosition.top, containerSize - SCROLLBAR_MIN_HEIGHT);
 });
 
 QUnit.test('scrollbar position calculated correctly with scaled content', function(assert) {
-    var $scrollable = $('#scaledScrollable'),
-        instance = $scrollable.dxScrollable({
-            useSimulatedScrollbar: true,
-            useNative: false,
-            showScrollbar: 'always',
-            direction: 'both'
-        }).dxScrollable('instance'),
-        $scrollbars = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS),
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        $hScrollBar = $scrollbars.eq(0),
-        $vScrollBar = $scrollbars.eq(1);
+    const $scrollable = $('#scaledScrollable');
+    const instance = $scrollable.dxScrollable({
+        useSimulatedScrollbar: true,
+        useNative: false,
+        showScrollbar: 'always',
+        direction: 'both'
+    }).dxScrollable('instance');
+    const $scrollbars = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $hScrollBar = $scrollbars.eq(0);
+    const $vScrollBar = $scrollbars.eq(1);
 
     instance.scrollTo({ left: 200, top: 200 });
     assert.strictEqual(translator.locate($hScrollBar).left, 100, 'Correct scrollbar position');
@@ -195,8 +195,8 @@ QUnit.test('scrollbar position calculated correctly with scaled content', functi
     assert.strictEqual(translator.locate($hScrollBar).left, 50, 'Correct scrollbar position');
     assert.strictEqual(translator.locate($vScrollBar).top, 50, 'Correct scrollbar position');
 
-    var hScrollbarRect = $hScrollBar.get(0).getBoundingClientRect(),
-        vScrollbarRect = $vScrollBar.get(0).getBoundingClientRect();
+    const hScrollbarRect = $hScrollBar.get(0).getBoundingClientRect();
+    const vScrollbarRect = $vScrollBar.get(0).getBoundingClientRect();
 
     assert.roughEqual(vScrollbarRect.height, 125, 0.01, 'Correct vertical scrollbar size');
     assert.strictEqual(hScrollbarRect.width, 50, 'Correct horizontal scrollbar size');
@@ -205,20 +205,20 @@ QUnit.test('scrollbar position calculated correctly with scaled content', functi
 });
 
 QUnit.test('scrollbar in scaled container has correct position after update', function(assert) {
-    var containerHeight = 500,
-        contentHeight = 1000,
-        scaleRatio = 0.5,
-        distance = -100,
-        scrollbarDistance = -distance * (containerHeight / (contentHeight * 5)) / scaleRatio;
+    const containerHeight = 500;
+    const contentHeight = 1000;
+    const scaleRatio = 0.5;
+    const distance = -100;
+    const scrollbarDistance = -distance * (containerHeight / (contentHeight * 5)) / scaleRatio;
 
-    var $scrollable = $('#scaledScrollable').dxScrollable({
+    const $scrollable = $('#scaledScrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false
     });
 
-    var $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS),
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.height(containerHeight);
     $content.height(contentHeight);
@@ -234,22 +234,22 @@ QUnit.test('scrollbar in scaled container has correct position after update', fu
     $scrollable.dxScrollable('instance').update();
     $scroll.css('opacity', 1);
 
-    var location = translator.locate($scroll);
+    const location = translator.locate($scroll);
     assert.equal(location.top, scrollbarDistance, 'scrollbar correctly positioned');
 });
 
 QUnit.test('scrollbar width calculated correctly', function(assert) {
-    var containerWidth = 50,
-        contentWidth = 100,
-        scrollWidth = (containerWidth / contentWidth) * containerWidth;
+    const containerWidth = 50;
+    const contentWidth = 100;
+    const scrollWidth = (containerWidth / contentWidth) * containerWidth;
 
-    var $scrollable = $('#scrollable').dxScrollable({
-            useNative: false,
-            direction: 'horizontal'
-        }),
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS),
-        $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $scrollable = $('#scrollable').dxScrollable({
+        useNative: false,
+        direction: 'horizontal'
+    });
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.width(containerWidth);
     $content.width(contentWidth);
@@ -260,13 +260,13 @@ QUnit.test('scrollbar width calculated correctly', function(assert) {
 });
 
 QUnit.test('moving scrollable moves scrollbar', function(assert) {
-    var containerHeight = 50,
-        contentHeight = 100,
-        location,
-        distance = -10,
-        scrollbarDistance = -distance * (containerHeight / contentHeight);
+    const containerHeight = 50;
+    const contentHeight = 100;
+    let location;
+    const distance = -10;
+    const scrollbarDistance = -distance * (containerHeight / contentHeight);
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false,
         onEnd: function() {
@@ -275,9 +275,9 @@ QUnit.test('moving scrollable moves scrollbar', function(assert) {
         }
     });
 
-    var $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS),
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.height(containerHeight);
     $content.height(contentHeight);
@@ -292,19 +292,19 @@ QUnit.test('moving scrollable moves scrollbar', function(assert) {
 });
 
 QUnit.test('scrollbar has correct position after update', function(assert) {
-    var containerHeight = 200,
-        contentHeight = 400,
-        distance = -10,
-        scrollbarDistance = -distance * (containerHeight / (contentHeight * 5));
+    const containerHeight = 200;
+    const contentHeight = 400;
+    const distance = -10;
+    const scrollbarDistance = -distance * (containerHeight / (contentHeight * 5));
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false
     });
 
-    var $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS),
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.height(containerHeight);
     $content.height(contentHeight);
@@ -320,16 +320,16 @@ QUnit.test('scrollbar has correct position after update', function(assert) {
     $scrollable.dxScrollable('instance').update();
     $scroll.css('opacity', 1);
 
-    var location = translator.locate($scroll);
+    const location = translator.locate($scroll);
     assert.equal(location.top, scrollbarDistance, 'scrollbar correctly positioned');
 });
 
 QUnit.test('scroll updated before start', function(assert) {
-    var scrollHeight = 100;
-    var $scrollable = $('#scrollable').height(scrollHeight);
-    var $innerWrapper = $scrollable.wrapInner('<div>').children().eq(0).height(scrollHeight / 2);
+    const scrollHeight = 100;
+    const $scrollable = $('#scrollable').height(scrollHeight);
+    const $innerWrapper = $scrollable.wrapInner('<div>').children().eq(0).height(scrollHeight / 2);
 
-    var scrollable = $scrollable.dxScrollable({
+    const scrollable = $scrollable.dxScrollable({
         useNative: false,
         inertiaEnabled: false,
         direction: 'vertical',
@@ -347,11 +347,11 @@ QUnit.test('scroll updated before start', function(assert) {
 });
 
 QUnit.test('scroll not updated before start if auto update is prevented', function(assert) {
-    var scrollHeight = 100;
-    var $scrollable = $('#scrollable').height(scrollHeight);
-    var $innerWrapper = $scrollable.wrapInner('<div>').children().eq(0).height(scrollHeight / 2);
+    const scrollHeight = 100;
+    const $scrollable = $('#scrollable').height(scrollHeight);
+    const $innerWrapper = $scrollable.wrapInner('<div>').children().eq(0).height(scrollHeight / 2);
 
-    var scrollable = $scrollable.dxScrollable({
+    const scrollable = $scrollable.dxScrollable({
         useNative: false,
         inertiaEnabled: false,
         direction: 'vertical',
@@ -370,11 +370,11 @@ QUnit.test('scroll not updated before start if auto update is prevented', functi
 });
 
 QUnit.test('scroll not updated after scrollTo if auto update is prevented', function(assert) {
-    var scrollHeight = 100;
-    var $scrollable = $('#scrollable').height(scrollHeight);
-    var $innerWrapper = $scrollable.wrapInner('<div>').children().eq(0).height(scrollHeight / 2);
+    const scrollHeight = 100;
+    const $scrollable = $('#scrollable').height(scrollHeight);
+    const $innerWrapper = $scrollable.wrapInner('<div>').children().eq(0).height(scrollHeight / 2);
 
-    var scrollable = $scrollable.dxScrollable({
+    const scrollable = $scrollable.dxScrollable({
         useNative: false,
         inertiaEnabled: false,
         direction: 'vertical',
@@ -391,19 +391,19 @@ QUnit.test('scroll not updated after scrollTo if auto update is prevented', func
 });
 
 QUnit.test('native scrollable should be updated before dxscrollinit', function(assert) {
-    var $scrollable = $('#scrollable1').dxScrollable({
+    const $scrollable = $('#scrollable1').dxScrollable({
         useNative: true,
         direction: 'vertical'
     });
 
     $scrollable.hide();
 
-    var $scrollableNested = $('#scrollable2').dxScrollable({
-            useNative: true,
-            direction: 'vertical'
-        }),
-        $scrollableNestedContainer = $scrollableNested.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        $content = $scrollableNested.find('.innerContent').eq(0);
+    const $scrollableNested = $('#scrollable2').dxScrollable({
+        useNative: true,
+        direction: 'vertical'
+    });
+    const $scrollableNestedContainer = $scrollableNested.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $content = $scrollableNested.find('.innerContent').eq(0);
 
     $scrollableNestedContainer.on('dxscrollinit', function() {
         assert.ok(true, 'scroll action fired for nested dxScrollable');
@@ -416,7 +416,7 @@ QUnit.test('native scrollable should be updated before dxscrollinit', function(a
 });
 
 QUnit.test('scrollbar removed when direction changed', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         direction: 'vertical'
     });
@@ -429,7 +429,7 @@ QUnit.test('scrollbar removed when direction changed', function(assert) {
 });
 
 QUnit.test('direction class was changed when direction changed', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         direction: 'vertical'
     });
@@ -452,16 +452,16 @@ QUnit.test('direction class was changed when direction changed', function(assert
 });
 
 QUnit.test('scrollbar does not appear during scrolling when content is less than container', function(assert) {
-    var containerHeight = 50,
-        contentHeight = containerHeight;
+    const containerHeight = 50;
+    const contentHeight = containerHeight;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false
     });
 
-    var $content = $scrollable.find('.content1'),
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $content = $scrollable.find('.content1');
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
     $container.height(containerHeight);
     $content.height(contentHeight);
@@ -478,11 +478,11 @@ QUnit.test('scrollbar does not appear during scrolling when content is less than
 QUnit.test('scrollbar jumps to the mouse click point on scrollbar area', function(assert) {
     $('#qunit-fixture').css('top', 0);
 
-    var containerSize = 50,
-        contentHeight = 100,
-        moveDistance = 20;
+    const containerSize = 50;
+    const contentHeight = 100;
+    const moveDistance = 20;
 
-    var $scrollable = $('#scrollable')
+    const $scrollable = $('#scrollable')
         .height(containerSize)
         .wrapInner('<div>');
     $scrollable.children().height(contentHeight);
@@ -495,14 +495,14 @@ QUnit.test('scrollbar jumps to the mouse click point on scrollbar area', functio
         scrollByContent: false
     });
 
-    var $scrollbarContainer = $scrollable.find('.dx-scrollbar-vertical');
-    var pointer = pointerMock($scrollbarContainer)
+    const $scrollbarContainer = $scrollable.find('.dx-scrollbar-vertical');
+    const pointer = pointerMock($scrollbarContainer)
         .start()
         .move(0, moveDistance)
         .down();
 
-    var scrollable = $scrollable.dxScrollable('instance');
-    var scrollOffset = (moveDistance / containerSize) * contentHeight - containerSize / 2;
+    const scrollable = $scrollable.dxScrollable('instance');
+    const scrollOffset = (moveDistance / containerSize) * contentHeight - containerSize / 2;
 
     assert.roughEqual(scrollable.scrollOffset().top, scrollOffset, 0.5);
 
@@ -511,15 +511,15 @@ QUnit.test('scrollbar jumps to the mouse click point on scrollbar area', functio
 });
 
 QUnit.test('scrollbar add active class when thumb is clicked', function(assert) {
-    var SCROLLBAR_ACTIVE_CLASS = SCROLLABLE_SCROLLBAR_ACTIVE_CLASS;
-    var $scrollable = $('#scrollable').dxScrollable({
+    const SCROLLBAR_ACTIVE_CLASS = SCROLLABLE_SCROLLBAR_ACTIVE_CLASS;
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         showScrollbar: 'onHover',
         scrollByThumb: true
     });
 
-    var $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS);
-    var $thumb = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS);
+    const $thumb = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
 
     assert.equal($scrollbar.hasClass(SCROLLBAR_ACTIVE_CLASS), false, 'active class was not attached before mouse down on thumb');
@@ -532,17 +532,17 @@ QUnit.test('scrollbar add active class when thumb is clicked', function(assert) 
 });
 
 QUnit.test('scrollbar add active class when click on scrollbar area', function(assert) {
-    var SCROLLBAR_ACTIVE_CLASS = SCROLLABLE_SCROLLBAR_ACTIVE_CLASS;
+    const SCROLLBAR_ACTIVE_CLASS = SCROLLABLE_SCROLLBAR_ACTIVE_CLASS;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false,
         showScrollbar: 'onHover',
         scrollByThumb: true
     });
 
-    var $scrollbar = $scrollable.find('.dx-scrollbar-vertical');
-    var pointer = pointerMock($scrollbar)
+    const $scrollbar = $scrollable.find('.dx-scrollbar-vertical');
+    const pointer = pointerMock($scrollbar)
         .start()
         .down();
 
@@ -554,7 +554,7 @@ QUnit.test('scrollbar add active class when click on scrollbar area', function(a
 });
 
 QUnit.test('useSimulatedScrollbar is false when useNative option set to true', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
 
@@ -562,7 +562,7 @@ QUnit.test('useSimulatedScrollbar is false when useNative option set to true', f
 });
 
 QUnit.test('useSimulatedScrollbar option dependence from useNative option', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         useSimulatedScrollbar: true
     });
@@ -573,19 +573,19 @@ QUnit.test('useSimulatedScrollbar option dependence from useNative option', func
 });
 
 QUnit.test('scrollBar is not hoverable when scrollByThumb options is false', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         showScrollBar: 'onHover',
         scrollByThumb: false
     });
 
-    var scrollbar = Scrollbar.getInstance($scrollable.find('.dx-scrollable-scrollbar'));
+    const scrollbar = Scrollbar.getInstance($scrollable.find('.dx-scrollable-scrollbar'));
 
     assert.equal(scrollbar.option('hoverStateEnabled'), false, 'scrollbar is not hoverable');
 });
 
 QUnit.test('container size should be rounded to prevent unexpected scrollbar appearance', function(assert) {
-    var scrollbar = new Scrollbar($('#scrollable'), {
+    const scrollbar = new Scrollbar($('#scrollable'), {
         containerSize: 100.8,
         contentSize: 101
     });
@@ -594,7 +594,7 @@ QUnit.test('container size should be rounded to prevent unexpected scrollbar app
 });
 
 QUnit.test('content size should be rounded to prevent unexpected scrollbar appearance', function(assert) {
-    var scrollbar = new Scrollbar($('#scrollable'), {
+    const scrollbar = new Scrollbar($('#scrollable'), {
         containerSize: 100,
         contentSize: 100.4
     });

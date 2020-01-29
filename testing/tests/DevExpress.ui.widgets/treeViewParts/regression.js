@@ -1,12 +1,12 @@
 /* global internals */
 
-var $ = require('jquery');
+const $ = require('jquery');
 
 QUnit.module('Regression');
 
 QUnit.test('Widget should work right if item is class instance', function(assert) {
-    var User = function(name) { this.name = name; };
-    var treeView = $('#treeView').dxTreeView({
+    const User = function(name) { this.name = name; };
+    const treeView = $('#treeView').dxTreeView({
         items: [
             new User('Alex'),
             new User('Jack'),
@@ -21,7 +21,7 @@ QUnit.test('Widget should work right if item is class instance', function(assert
 });
 
 QUnit.test('\'No data\' text should be rendered if tree view has no items', function(assert) {
-    var treeView = $('#treeView').dxTreeView({
+    const treeView = $('#treeView').dxTreeView({
         items: []
     }).dxTreeView('instance');
 
@@ -38,7 +38,7 @@ QUnit.test('\'No data\' text should be rendered if tree view has no items', func
 });
 
 QUnit.test('T217916: dxTreeView does not render a node if ID is less than ParentID', function(assert) {
-    var treeView = $('#treeView').dxTreeView({
+    const treeView = $('#treeView').dxTreeView({
         items: [
             { id: 1, text: 'Cats', parentId: 0, expanded: true },
             { id: 4, text: 'Sub Bob', parentId: 2, expanded: true },

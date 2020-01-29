@@ -28,7 +28,7 @@ QUnit.module('Context menu', () => {
             pageY: 50
         }));
 
-        var $target = $(menuTargetSelector);
+        const $target = $(menuTargetSelector);
         new Promise((resolve) => {
             instance.option('onShown', (e) => {
                 const position = e.component._overlay.option('position');
