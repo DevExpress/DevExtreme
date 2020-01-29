@@ -1,5 +1,7 @@
 /* global DATA, data2, internals, initTree */
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import { Deferred } from 'core/utils/deferred';
+import CustomStore from 'data/custom_store';
 import $ from 'jquery';
 
 QUnit.module('Checkboxes');
@@ -968,4 +970,66 @@ configs.forEach(config => {
             });
         });
     });
+});
+
+function executeDelayed(action, timeout) {
+    const deferred = new Deferred();
+    setTimeout(() => {
+        try {
+            const result = action();
+            deferred.resolve(result);
+        } catch(e) {
+            deferred.reject(e);
+        }
+    }, timeout);
+    return deferred.promise();
+}
+
+QUnit.test('all.selected: false -> selectItem(1) -> dataSource is loaded', function(assert) {
+    const done = assert.async();
+    const wrapper = new TreeViewTestWrapper({
+        dataSource: new CustomStore({
+            load: () => executeDelayed(() => { return [ { id: 1, text: 'item1' }]; }, 1)
+        }),
+        showCheckBoxesMode: 'normal',
+        dataStructure: 'plain'
+    });
+
+    wrapper.instance.selectItem(1);
+
+    setTimeout(() => {
+        const $item1 = wrapper.getElement().find('[aria-level="1"]');
+
+        assert.equal($item1.length, 1, 'item1 is rendered');
+        wrapper.checkSelectedKeys([], 'nothing is selected');
+        wrapper.checkSelectedNodes([], 'there is no selected nodes');
+        wrapper.checkEventLog([], 'there is no selection events');
+        done();
+    }, 2);
+});
+
+QUnit.test('all.selected: false -> selectItem(1) -> reload dataSource', function(assert) {
+    const done = assert.async();
+    const wrapper = new TreeViewTestWrapper({
+        dataSource: new CustomStore({
+            load: () => executeDelayed(() => { return [ { id: 1, text: 'item1' }]; }, 1)
+        }),
+        showCheckBoxesMode: 'normal',
+        dataStructure: 'plain'
+    });
+
+    setTimeout(() => {
+        wrapper.instance.selectItem(1);
+        wrapper.clearEventLog();
+
+        wrapper.instance.getDataSource().reload().done(function() {
+            const $item1 = wrapper.getElement().find('[aria-level="1"]');
+
+            assert.equal($item1.length, 5, 'item1 is rendered');
+            wrapper.checkSelectedKeys([], 'nothing is selected');
+            wrapper.checkSelectedNodes([], 'there is no selected nodes');
+            wrapper.checkEventLog([], 'there is no selection events');
+            done();
+        });
+    }, 2);
 });
