@@ -82,14 +82,10 @@ describe('Button', () => {
 
         describe('icon', () => {
             it('should render icon', () => {
-                const button = render({
-                    icon: 'test',
-                })
+                const button = render({ icon: 'test' });
 
-                expect(button.is('.dx-button-has-icon'))
-                    .toBeTruthy();
-                expect(button.find('.dx-icon.dx-icon-test').exists())
-                    .toBeTruthy();
+                expect(button.is('.dx-button-has-icon')).toBeTruthy();
+                expect(button.exists('.dx-icon.dx-icon-test')).toBeTruthy();
             });
         });
     });
