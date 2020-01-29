@@ -201,10 +201,10 @@
         return stack;
     };
 
-    const saveTimerInfo = function(logObject, id, info) {
+    const saveTimerInfo = function(logObject, info) {
         info.stack = getStack();
         info.callback = info.callback.toString();
-        logObject[id] = info;
+        logObject[info.timerId] = info;
     };
 
     const spyWindowMethods = function(windowObj) {
@@ -223,13 +223,13 @@
                         return;
                     }
 
-                    info.originalCallback = info.args[0];
-                    const callbackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
+                    info.callback = info.args[0];
+                    const callbackWrapper = info.args[0] = createMethodWrapper(info.callback, {
                         afterCall: function() {
                             if(!logEnabled) {
                                 return;
                             }
-                            delete timeouts[callbackWrapper.timerID];
+                            delete timeouts[callbackWrapper.timerId];
                         }
                     });
                 },
@@ -239,9 +239,11 @@
                         return;
                     }
 
-                    info.args[0]['timerID'] = info.result;
-                    saveTimerInfo(timeouts, info.result, {
-                        callback: info.originalCallback,
+                    const timerId = info.args[0]['timerId'] = info.result;
+                    saveTimerInfo(timeouts, {
+                        timerType: 'timeouts',
+                        timerId: timerId,
+                        callback: info.callback,
                         timeout: info.args[1]
                     });
                 }
@@ -261,7 +263,10 @@
                     if(!logEnabled) {
                         return;
                     }
-                    saveTimerInfo(intervals, info.result, {
+                    const timerId = info.result;
+                    saveTimerInfo(intervals, {
+                        timerType: 'intervals',
+                        timerId: timerId,
                         callback: info.args[0],
                         timeout: info.args[1]
                     });
@@ -283,13 +288,13 @@
                         return;
                     }
 
-                    info.originalCallback = info.args[0];
-                    const callBackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
+                    info.callback = info.args[0];
+                    const callbackWrapper = info.args[0] = createMethodWrapper(info.callback, {
                         afterCall: function() {
                             if(!logEnabled) {
                                 return;
                             }
-                            delete animationFrames[callBackWrapper.timerID];
+                            delete animationFrames[callbackWrapper.timerId];
                         }
                     });
                 },
@@ -298,9 +303,11 @@
                         return;
                     }
 
-                    info.args[0]['timerID'] = info.result;
-                    saveTimerInfo(animationFrames, info.result, {
-                        callback: info.originalCallback
+                    const timerId = info.args[0]['timerId'] = info.result;
+                    saveTimerInfo(animationFrames, {
+                        timerType: 'animationFrames',
+                        timerId: timerId,
+                        callback: info.callback
                     });
                 }
             },
@@ -462,23 +469,16 @@
 
             if(Object.keys(currentInfo).length) {
                 const timerId = Object.keys(currentInfo)[0];
+                const timerInfo = currentInfo[timerId];
 
-                const normalizedTimerInfo = {
-                    timerType: type,
-                    timerId: timerId,
-                    callback: currentInfo[timerId].callback || currentInfo.callback,
-                    timeout: currentInfo[timerId].timeout || currentInfo.timeout,
-                    stack: currentInfo[timerId].stack || currentInfo.stack
-                };
-
-                if(ignoreRules.shouldIgnore(normalizedTimerInfo)) {
+                if(ignoreRules.shouldIgnore(timerInfo)) {
                     return;
                 }
 
                 logGlobalFailure({
                     moduleName: args.module,
                     testName: args.name,
-                    timerInfo: normalizedTimerInfo
+                    timerInfo: timerInfo
                 });
             }
         });
