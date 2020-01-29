@@ -5,14 +5,14 @@ import Widget from './widget';
 
 const WidgetJSX = JSXConstructor<Widget>(Widget);
 
-const getImageContainerJSX = (source: string, position: string = '') => {
-    const ICON_RIGHT_CLASS = position !== 'left' ? 'dx-icon-right' : '';
+const getImageContainerJSX = (source: string, position: string) => {
+    const icon_right_class = position !== 'left' ? 'dx-icon-right' : '';
 
     switch (getImageSourceType(source)) {
-        case 'dxIcon': return (<i className={`dx-icon dx-icon-${source} ${ICON_RIGHT_CLASS}`}/>);
-        case 'fontIcon': return (<i className={`dx-icon ${source} ${ICON_RIGHT_CLASS}`}/>);
-        case 'image': return (<img src={source} className={`dx-icon ${ICON_RIGHT_CLASS}`}/>);
-        case 'svg': return (<i className={`dx-icon dx-svg-icon ${ICON_RIGHT_CLASS}`}>{source}></i>);
+        case 'dxIcon': return (<i className={`dx-icon dx-icon-${source} ${icon_right_class}`}/>);
+        case 'fontIcon': return (<i className={`dx-icon ${source} ${icon_right_class}`}/>);
+        case 'image': return (<img src={source} className={`dx-icon ${icon_right_class}`}/>);
+        case 'svg': return (<i className={`dx-icon dx-svg-icon ${icon_right_class}`}>{source}></i>);
         default: return null;
     }
 };
@@ -30,10 +30,7 @@ const getCssClasses = (model: any) => {
 
     text && classNames.push('dx-button-has-text');
     icon && classNames.push('dx-button-has-icon');
-
-    if (iconPosition !== 'left') {
-        classNames.push('dx-button-icon-right');
-    }
+    iconPosition !== 'left' && classNames.push('dx-button-icon-right');
 
     return classNames.join(' ');
 };
@@ -63,38 +60,42 @@ export const viewModelFunction = (model: Button) => {
     };
 };
 
-export const viewFunction = (viewModel: Button) => (
-    <WidgetJSX
-        accessKey={viewModel.accessKey}
-        activeStateEnabled={viewModel.activeStateEnabled}
-        aria={viewModel.aria}
-        className={viewModel.cssClasses}
-        disabled={viewModel.disabled}
-        elementAttr={viewModel.elementAttr}
-        focusStateEnabled={viewModel.focusStateEnabled}
-        height={viewModel.height}
-        hint={viewModel.hint}
-        hoverStateEnabled={viewModel.hoverStateEnabled}
-        onClick={viewModel.onClick}
-        rtlEnabled={viewModel.rtlEnabled}
-        supportedKeys={viewModel.supportedKeys}
-        tabIndex={viewModel.tabIndex}
-        visible={viewModel.visible}
-        width={viewModel.width}
-    >
-        {viewModel.contentRender && (
-            <div className="dx-button-content">
-                <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} />
-            </div>
-        ) || (
-            <div className="dx-button-content">
-                {viewModel.iconPosition === 'left' && viewModel.icon}
-                {viewModel.text && <span className="dx-button-text">{viewModel.text}</span>}
-                {viewModel.iconPosition !== 'left' && viewModel.icon}
-            </div>
-        )}
-    </WidgetJSX>
-);
+export const viewFunction = (viewModel: Button) => {
+    const isIconLeft = viewModel.iconPosition === 'left';
+
+    return (
+        <WidgetJSX
+            accessKey={viewModel.accessKey}
+            activeStateEnabled={viewModel.activeStateEnabled}
+            aria={viewModel.aria}
+            className={viewModel.cssClasses}
+            disabled={viewModel.disabled}
+            elementAttr={viewModel.elementAttr}
+            focusStateEnabled={viewModel.focusStateEnabled}
+            height={viewModel.height}
+            hint={viewModel.hint}
+            hoverStateEnabled={viewModel.hoverStateEnabled}
+            onClick={viewModel.onClick}
+            rtlEnabled={viewModel.rtlEnabled}
+            supportedKeys={viewModel.supportedKeys}
+            tabIndex={viewModel.tabIndex}
+            visible={viewModel.visible}
+            width={viewModel.width}
+        >
+            {viewModel.contentRender && (
+                <div className="dx-button-content">
+                    <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} />
+                </div>
+            ) || (
+                <div className="dx-button-content">
+                    {isIconLeft && viewModel.icon}
+                    {viewModel.text && <span className="dx-button-text">{viewModel.text}</span>}
+                    {!isIconLeft && viewModel.icon}
+                </div>
+            )}
+        </WidgetJSX>
+    );
+}
 
 @Component({
     name: 'Button',
@@ -106,10 +107,10 @@ export const viewFunction = (viewModel: Button) => (
 export default class Button extends Widget {
     @Prop() classNames?: string[];
     @Prop() contentRender?: any;
-    @Prop() icon?: string = '';
+    @Prop() icon?: String = '';
+    @Prop() iconPosition?: string = 'left';
     @Prop() pressed?: boolean;
     @Prop() stylingMode?: string;
     @Prop() text?: string;
     @Prop() type?: string;
-    @Prop() iconPosition?: string = 'left';
 }

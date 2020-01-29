@@ -81,18 +81,16 @@ describe('Button', () => {
         });
 
         describe('iconPosition', () => {
-            it('should render icon before text if iconPosition is left', () => {
+            it('should render icon before text if iconPosition is left (by default)', () => {
                 const button = render({
                     text: 'myButton',
                     icon: 'test',
                 });
 
-                const content = button.find('.dx-button-content');
+                const elements = button.find('.dx-button-content').children();
 
-                expect(content.children().at(0).is('.dx-icon.dx-icon-test'))
-                    .toBeTruthy();
-                expect(content.children().at(1).is('.dx-button-text'))
-                    .toBeTruthy();
+                expect(elements.at(0).is('.dx-icon.dx-icon-test')).toBeTruthy();
+                expect(elements.at(1).is('.dx-button-text')).toBeTruthy();
             });
 
             it('should render icon after text if iconPosition is right', () => {
@@ -102,14 +100,11 @@ describe('Button', () => {
                     iconPosition: 'right',
                 });
 
-                const content = button.find('.dx-button-content');
+                const elements = button.find('.dx-button-content').children();
 
-                expect(button.hasClass('dx-button-icon-right'))
-                    .toBeTruthy();
-                expect(content.children().at(0).is('.dx-button-text'))
-                    .toBeTruthy();
-                expect(content.children().at(1).is('.dx-icon.dx-icon-test.dx-icon-right'))
-                    .toBeTruthy();
+                expect(button.hasClass('dx-button-icon-right')).toBeTruthy();
+                expect(elements.at(0).is('.dx-button-text')).toBeTruthy();
+                expect(elements.at(1).is('.dx-icon.dx-icon-test.dx-icon-right')).toBeTruthy();
             });
         });
     });
