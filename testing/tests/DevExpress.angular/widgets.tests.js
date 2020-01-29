@@ -8,6 +8,7 @@ const inflector = require('core/utils/inflector');
 const fx = require('animation/fx');
 const positionUtils = require('animation/position');
 const ValidationGroup = require('ui/validation_group');
+const ignoreAngularTimers = require('../../helpers/ignoreAngularTimers.js');
 
 require('common.css!');
 require('generic_light.css!');
@@ -30,9 +31,6 @@ require('ui/toolbar');
 const FILTERING_TIMEOUT = 700;
 
 fx.off = true;
-const ignoreAngularBrowserDeferTimer = function(args) {
-    return args.timerType === 'timeouts' && (args.callback.toString().indexOf('delete pendingDeferIds[timeoutId];') > -1 || args.callback.toString().indexOf('delete F[c];e(a)}') > -1);
-};
 
 const initMarkup = function($markup, controller, context) {
     context.testApp = angular.module('testApp', ['dx']);
@@ -372,11 +370,11 @@ QUnit.test('dxTabs - navigation buttons should show/hide after showing/hiding it
 
 QUnit.module('dxDataGrid', {
     beforeEach: function() {
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
         this.clock.restore();
     }
 });
@@ -627,10 +625,10 @@ QUnit.test('Scope refreshing count on init', function(assert) {
 
 QUnit.module('Adaptive menu', {
     beforeEach: function() {
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach: function() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -732,10 +730,10 @@ QUnit.test('The hamburger button should be visible on small screen (T377800)', f
 
 QUnit.module('toolbar', {
     beforeEach: function() {
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach: function() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -900,10 +898,10 @@ QUnit.test('not cleared timers not detected', function(assert) {
 
 QUnit.module('box', {
     beforeEach: function() {
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach: function() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -955,10 +953,10 @@ QUnit.test('dxDateBox with list strategy automatically scrolls to selected item 
 
 QUnit.module('tree view', {
     beforeEach: function() {
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach: function() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -994,11 +992,11 @@ QUnit.test('tree view should not crash with complex ids', function(assert) {
 
 QUnit.module('dxScheduler', {
     beforeEach: function() {
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
         this.clock.restore();
     }
 });
@@ -1040,11 +1038,11 @@ QUnit.test('Custom store with ISO8601 dates', function(assert) {
 QUnit.module('Widgets without model for template', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach: function() {
         this.clock.restore();
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -1160,10 +1158,10 @@ QUnit.test('Scope for template with \'noModel\' option is not destroyed after cl
 QUnit.module('dxValidator', {
     beforeEach: function() {
         this.testApp = angular.module('testApp', ['dx']);
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach: function() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 

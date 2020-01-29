@@ -9,6 +9,7 @@ import DOMComponent from 'core/dom_component';
 import Widget from 'ui/widget/ui.widget';
 import { NgTemplate } from 'integration/angular/template';
 import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
+import ignoreAngularTimers from '../../helpers/ignoreAngularTimers.js';
 
 import 'integration/angular';
 
@@ -16,8 +17,6 @@ import 'ui/list';
 import 'ui/button';
 
 const FIXTURE_ELEMENT = () => $('#qunit-fixture');
-
-const ignoreAngularBrowserDeferTimer = args => args.timerType === 'timeouts' && (args.callback.toString().indexOf('delete pendingDeferIds[timeoutId];') > -1 || args.callback.toString().indexOf('delete F[c];e(a)}') > -1);
 
 QUnit.module('simple component tests', {
     beforeEach() {
@@ -47,10 +46,10 @@ QUnit.module('simple component tests', {
 
         registerComponent('dxTest', TestComponent);
 
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -1422,10 +1421,10 @@ QUnit.module('nested Widget with templates enabled', {
         registerComponent('dxTestContainer', TestContainer);
         registerComponent('dxTestWidget', TestWidget);
 
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -1639,10 +1638,10 @@ QUnit.module('Widget & CollectionWidget with templates enabled', {
     beforeEach() {
         this.testApp = angular.module('testApp', ['dx']);
 
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -1972,10 +1971,10 @@ QUnit.test('Widget options does not override scope properties', function(assert)
 
 QUnit.module('ui.collectionWidget', {
     beforeEach() {
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -2350,10 +2349,10 @@ QUnit.test('$id in item model not caused exception', function(assert) {
 QUnit.module('misc and regressions', {
     beforeEach() {
         this.testApp = angular.module('testApp', ['dx']);
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -2739,10 +2738,10 @@ QUnit.module('component action context', {
 
         registerComponent('dxActionTest', TestComponent);
 
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
@@ -2900,10 +2899,10 @@ QUnit.module('dxComponent as a template', {
 
         registerComponent('dxTemplateComponent', TemplateComponent);
 
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach() {
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 

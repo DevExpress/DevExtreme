@@ -5,13 +5,11 @@ import registerComponent from 'core/component_registrator';
 import Widget from 'ui/widget/ui.widget';
 import Editor from 'ui/editor/editor';
 import inflector from 'core/utils/inflector';
+import ignoreAngularTimers from '../../helpers/ignoreAngularTimers.js';
 
 import 'ui/tag_box';
 import 'integration/angular';
 
-const ignoreAngularBrowserDeferTimer = args => {
-    return args.timerType === 'timeouts' && (args.callback.toString().indexOf('delete pendingDeferIds[timeoutId];') > -1 || args.callback.toString().indexOf('delete F[c];e(a)}') > -1);
-};
 
 QUnit.module('ngmodel editor integration', {
     beforeEach() {
@@ -43,12 +41,12 @@ QUnit.module('ngmodel editor integration', {
 
         registerComponent('dxWidget', Widget);
 
-        QUnit.timersDetector.ignoreRules.register(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.register(ignoreAngularTimers);
     },
     afterEach() {
         this.$fixtureElement.remove();
 
-        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularBrowserDeferTimer);
+        QUnit.timersDetector.ignoreRules.unregister(ignoreAngularTimers);
     }
 });
 
