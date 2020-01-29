@@ -7,8 +7,6 @@
 /themebuilder/data/less
 /themebuilder/data/metadata
 /scss
-/scss-css
-/styles/**/*.scss
 bin
 node_modules
 obj

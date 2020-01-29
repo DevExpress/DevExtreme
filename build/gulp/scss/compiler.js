@@ -6,7 +6,7 @@ const outputPath = require('./config').outputPath;
 const compileBundle = (bundleName) => {
     return gulp.src(bundleName)
         .pipe(sass())
-        .pipe(gulp.dest('scss-css'));
+        .pipe(gulp.dest('artifacts/scss-css'));
 };
 
 gulp.task('sass-material', () => compileBundle(`${outputPath}/bundles/dx.material.blue.light.scss`));

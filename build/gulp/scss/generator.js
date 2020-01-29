@@ -23,7 +23,11 @@ const parentSelectorReplacement = '$1@at-root $2#{&}';
 
 let widgetsColorVariables = {};
 
-gulp.task('scss-clean', () => del([outputPath, `${unfixedScssPath}/**/*.scss`]));
+gulp.task('scss-raw-scss-clean', () => del(`${unfixedScssPath}/**/*.scss`));
+gulp.task('scss-clean', gulp.series(
+    'scss-raw-scss-clean',
+    () => del(outputPath)
+));
 
 gulp.task('less2sass', (callback) => {
     exec('npx less2sass styles', (e, out, err) => {
