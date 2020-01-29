@@ -50,7 +50,7 @@ export const viewModelFunction = (model: Button) => {
     };
 
     if (model.icon || model.type === 'back') {
-        icon = getImageContainerJSX(model.icon || 'back');
+        icon = getImageContainerJSX(model.icon || 'back', model.iconPosition);
     }
 
     return {
