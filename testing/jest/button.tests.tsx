@@ -10,6 +10,27 @@ const render = (props = {}) => {
 
 describe('Button', () => {
     describe('Props', () => {
+        describe('default props', () => {
+            it('should be initialized with default props', () => {
+                const button = render();
+
+                expect(button.props().focusStateEnabled).toBe(true);
+                expect(button.props().activeStateEnabled).toBe(true);
+                expect(button.props().hoverStateEnabled).toBe(true);
+            });
+
+            it('should be clickable with onClick only', () => {
+                const clickHandler = jest.fn();
+                const button = render({ onClick: clickHandler });
+
+                expect(clickHandler).toHaveBeenCalledTimes(0);
+
+                button.simulate('click');
+
+                expect(clickHandler).toHaveBeenCalledTimes(1);
+            })
+        });
+
         describe('stylingMode', () => {
             it('should use "contained" as a default value', () => {
                 const button = render();
