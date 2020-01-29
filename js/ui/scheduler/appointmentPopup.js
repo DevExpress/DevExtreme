@@ -51,7 +51,8 @@ export default class AppointmentPopup {
 
         this._popup.option({
             toolbarItems: showButtons ? this._getPopupToolbarItems() : [],
-            showCloseButton: showButtons ? this._popup.initialOption('showCloseButton') : true
+            showCloseButton: false,
+            showTitle: false
         });
 
         this._popup.option('onShowing', e => {
@@ -244,6 +245,7 @@ export default class AppointmentPopup {
         return [
             {
                 shortcut: 'done',
+                options: { text: 'Done' },
                 location: TOOLBAR_ITEM_AFTER_LOCATION,
                 onClick: (e) => this._doneButtonClickHandler(e)
             },
