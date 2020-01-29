@@ -220,7 +220,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _normalizeSelectedItems: commonUtils.noop,
 
-    _initSelectionBySelectedKeysOption: function(items, selectedKeys, keyGetter, itemGetter) {
+    _initSelectionBySelectedKeysOption: function(items, keyGetter, itemGetter) {
+        const selectedKeys = this.option('selectedItemKeys') || this._getItemKeys(keyGetter, this.option('selectedItems'));
         if(this._initialized || selectedKeys === null) {
             return;
         }
@@ -249,7 +250,25 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }).bind(this));
     },
 
+    _getItemKeys(keyGetter, items) {
+        if(!items) {
+            return null;
+        }
+
+        return items.map(item => keyGetter(item));
+    },
+
+    _selectedItemsOptionChange: function(items) {
+        const keyGetter = this._dataAdapter.options.dataAccessors.getters['key'];
+        let selectedKeys = this._getItemKeys(keyGetter, items);
+        this._selectedItemKeysOptionChange(selectedKeys);
+    },
+
     _selectedItemKeysOptionChange: function(keys) {
+        if(keys === null || keys === undefined) {
+            return;
+        }
+
         const oldSelectedKeys = this.getSelectedNodesKeys();
         const diff = this._getSelectedKeysDiff(oldSelectedKeys, keys);
 
@@ -390,6 +409,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             case 'animationEnabled':
             case 'virtualModeEnabled':
             case 'selectByClick':
+                break;
+            case 'selectedItems':
+                this._selectedItemsOptionChange(args.value);
                 break;
             case 'selectedItemKeys':
                 this._selectedItemKeysOptionChange(args.value);

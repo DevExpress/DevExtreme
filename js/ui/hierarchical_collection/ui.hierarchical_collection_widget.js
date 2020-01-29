@@ -63,8 +63,7 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
         const accessors = this._createDataAdapterAccessors();
 
         const items = this.option('items');
-        const selectedKeys = this.option('selectedItemKeys');
-        this._initSelectionBySelectedKeysOption(items, selectedKeys, accessors.getters['key'], accessors.getters['items']);
+        this._initSelectionBySelectedKeysOption(items, accessors.getters['key'], accessors.getters['items']);
 
         this._dataAdapter = new HierarchicalDataAdapter(
             extend({
