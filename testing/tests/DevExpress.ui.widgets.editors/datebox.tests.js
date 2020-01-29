@@ -2873,25 +2873,44 @@ QUnit.module('datebox with time component', {
     QUnit.test('date box should have compact view when showAnalogClock option is false', function(assert) {
         const $element = $('#dateBox').dxDateBox({
             type: 'datetime',
-            pickerType: 'calendar'
+            pickerType: 'calendar',
+            showAnalogClock: false
         });
 
         const instance = $element.dxDateBox('instance');
-
-        instance.option('showAnalogClock', false);
         instance.open();
 
         const $content = $(instance._popup.$content());
-        const box = Box.getInstance($content.find('.' + BOX_CLASS));
+        const box = Box.getInstance($content.find(`.${BOX_CLASS}`));
         const $clock = $content.find('.dx-timeview-clock');
 
-        assert.equal(box.option('direction'), 'row', 'correct box direction specified');
-        assert.ok(box.itemElements().eq(0).find('.' + CALENDAR_CLASS).length, 'calendar rendered');
-        assert.ok(box.itemElements().eq(0).find('.' + TIMEVIEW_CLASS).length, 'timeview rendered');
-        assert.equal($clock.length, 0, 'clock was not rendered');
+        assert.strictEqual(box.option('direction'), 'row', 'correct box direction specified');
+        assert.strictEqual(box.itemElements().eq(0).find(`.${CALENDAR_CLASS}`).length, 1, 'calendar rendered');
+        assert.strictEqual(box.itemElements().eq(0).find(`.${TIMEVIEW_CLASS}`).length, 1, 'timeview is rendered');
+        assert.strictEqual($clock.length, 0, 'clock was not rendered');
     });
 
-    QUnit.test('date box should change behavior if showAnalogClock option is changed at runtime', function(assert) {
+    QUnit.test('date box should not have compact view when showAnalogClock option is true', function(assert) {
+        const $element = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            pickerType: 'calendar',
+            showAnalogClock: true
+        });
+
+        const instance = $element.dxDateBox('instance');
+        instance.open();
+
+        const $content = $(instance._popup.$content());
+        const box = Box.getInstance($content.find(`.${BOX_CLASS}`));
+        const $clock = $content.find('.dx-timeview-clock');
+
+        assert.strictEqual(box.option('direction'), 'row', 'correct box direction specified');
+        assert.strictEqual(box.itemElements().eq(0).find(`.${CALENDAR_CLASS}`).length, 1, 'calendar rendered');
+        assert.strictEqual(box.itemElements().eq(0).find(`.${TIMEVIEW_CLASS}`).length, 0, 'timeview is rendered');
+        assert.strictEqual($clock.length, 1, 'clock was not rendered');
+    });
+
+    QUnit.test('date box should change behavior if showAnalogClock option is changed to true at runtime', function(assert) {
         const $element = $('#dateBox').dxDateBox({
             type: 'datetime',
             pickerType: 'calendar',
@@ -2900,21 +2919,35 @@ QUnit.module('datebox with time component', {
         });
         const instance = $element.dxDateBox('instance');
 
-        let $content = $(instance._popup.$content());
-        let box = Box.getInstance($content.find(`.${BOX_CLASS}`));
-        let $clock = $content.find(`.${TIMEVIEW_CLOCK_CLASS}`);
-        assert.strictEqual(box.itemElements().eq(0).find(`.${TIMEVIEW_CLASS}`).length, 1, 'timeview is rendered');
-        assert.strictEqual($clock.length, 0, 'clock is not rendered');
-
         instance.option('showAnalogClock', true);
         instance.close();
         instance.open();
 
-        $content = $(instance._popup.$content());
-        box = Box.getInstance($content.find(`.${BOX_CLASS}`));
-        $clock = $content.find(`.${TIMEVIEW_CLOCK_CLASS}`);
+        const $content = $(instance._popup.$content());
+        const box = Box.getInstance($content.find(`.${BOX_CLASS}`));
+        const $clock = $content.find(`.${TIMEVIEW_CLOCK_CLASS}`);
         assert.strictEqual(box.itemElements().eq(0).find(`.${TIMEVIEW_CLASS}`).length, 0, 'timeview is not rendered');
         assert.strictEqual($clock.length, 1, 'clock is rendered');
+    });
+
+    QUnit.test('date box should change behavior if showAnalogClock option changed to false at runtime', function(assert) {
+        const $element = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            pickerType: 'calendar',
+            showAnalogClock: false,
+            opened: true
+        });
+        const instance = $element.dxDateBox('instance');
+
+        instance.option('showAnalogClock', false);
+        instance.close();
+        instance.open();
+
+        const $content = $(instance._popup.$content());
+        const box = Box.getInstance($content.find(`.${BOX_CLASS}`));
+        const $clock = $content.find(`.${TIMEVIEW_CLOCK_CLASS}`);
+        assert.strictEqual(box.itemElements().eq(0).find(`.${TIMEVIEW_CLASS}`).length, 1, 'timeview is rendered');
+        assert.strictEqual($clock.length, 0, 'clock is not rendered');
     });
 
     QUnit.test('date box wrapper adaptivity class depends on the screen size', function(assert) {
