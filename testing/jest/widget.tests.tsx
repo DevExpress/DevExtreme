@@ -2,13 +2,11 @@ import Widget, { viewModelFunction, viewFunction } from '../../js/renovation/wid
 import React from 'react';
 import { shallow } from 'enzyme';
 
-const render = (props = {}) => {
-    props = Object.assign({}, new Widget(), props);
-
-    return shallow(viewFunction(viewModelFunction(props as Widget)));
-};
-
 describe('Widget', () => {
+    const render = (props = {}) => shallow(
+        viewFunction(viewModelFunction({ ...new Widget(), ...props } as Widget)),
+    );
+
     describe('Props', () => {
         describe('accessKey', () => {
             it('should render "accesskey" attribute', () => {
@@ -173,13 +171,13 @@ describe('Widget', () => {
             const widget = render({ aria: {
                 label: 'custom-aria-label',
                 role: 'button',
-                id: 'custom-id'
+                id: 'custom-id',
             }});
 
             expect(widget.props()).toMatchObject({
                 'aria-label': 'custom-aria-label',
                 role: 'button',
-                id: 'custom-id'
+                id: 'custom-id',
             });
         });
     });

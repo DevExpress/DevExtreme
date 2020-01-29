@@ -2,13 +2,11 @@ import React from 'react';
 import Button, { viewModelFunction, viewFunction } from '../../js/renovation/button';
 import { shallow } from 'enzyme';
 
-const render = (props = {}) => {
-    props = Object.assign({}, new Button(), props);
-
-    return shallow(viewFunction(viewModelFunction(props as Button)));
-};
-
 describe('Button', () => {
+    const render = (props = {}) => shallow(
+        viewFunction(viewModelFunction({ ...new Button(), ...props } as Button)),
+    );
+
     describe('Props', () => {
         describe('stylingMode', () => {
             it('should use "contained" as a default value', () => {
@@ -71,7 +69,7 @@ describe('Button', () => {
             it('should render template', () => {
                 const button = render({
                     text: 'My button',
-                    contentRender: ({ text }) => (<div className="custom-content">{ text+'123' }</div>)
+                    contentRender: ({ text }) => (<div className="custom-content">{`${text}123`}</div>),
                 });
                 const buttonContentChildren = button.find('.dx-button-content').children();
 
