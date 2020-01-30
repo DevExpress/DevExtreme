@@ -76,16 +76,21 @@
 .dx-dropdowneditor-button-visible {
     .dx-texteditor-input {
         padding-right: 0;
+    }
+}
 
-        .dx-rtl&,
-        .dx-rtl & {
+.dx-rtl {
+    .dx-dropdowneditor-button-visible,
+    &.dx-dropdowneditor-button-visible {
+        .dx-texteditor-input {
             padding-right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
             padding-left: 0;
         }
 
-        .dx-rtl.dx-editor-underlined&,
-        .dx-rtl .dx-editor-underlined& {
-            padding-right: 0;
+        &.dx-editor-underlined {
+            .dx-texteditor-input {
+                padding-right: 0;
+            }
         }
     }
 }
