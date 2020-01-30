@@ -83,9 +83,13 @@ QUnit.module('uncleared timers detection', {
 
         const log = this.log.get();
         assert.strictEqual(Object.keys(log.timeouts).length, 1);
-        assert.strictEqual(log.timeouts[0].callback, callback.toString());
-        assert.strictEqual(log.timeouts[0].timeout, 123);
-        assert.ok(log.timeouts[0].stack.indexOf('codeThatSchedulesTimer') > -1);
+
+        const timerInfo = log.timeouts[0];
+        assert.strictEqual(timerInfo.timerType, 'timeouts');
+        assert.strictEqual(timerInfo.timerId, 0);
+        assert.strictEqual(timerInfo.callback, callback.toString());
+        assert.strictEqual(timerInfo.timeout, 123);
+        assert.ok(timerInfo.stack.indexOf('codeThatSchedulesTimer') > -1);
     });
 
     QUnit.test('expired setTimeout', function(assert) {
@@ -116,9 +120,13 @@ QUnit.module('uncleared timers detection', {
 
         const log = this.log.get();
         assert.strictEqual(Object.keys(log.intervals).length, 1);
-        assert.strictEqual(log.intervals[0].callback, callback.toString());
-        assert.strictEqual(log.intervals[0].timeout, 321);
-        assert.ok(log.intervals[0].stack.indexOf('codeThatSchedulesTimer') > -1);
+
+        const timerInfo = log.intervals[0];
+        assert.strictEqual(timerInfo.timerType, 'intervals');
+        assert.strictEqual(timerInfo.timerId, 0);
+        assert.strictEqual(timerInfo.callback, callback.toString());
+        assert.strictEqual(timerInfo.timeout, 321);
+        assert.ok(timerInfo.stack.indexOf('codeThatSchedulesTimer') > -1);
     });
 
     QUnit.test('uncleared requestAnimationFrame', function(assert) {
@@ -130,8 +138,12 @@ QUnit.module('uncleared timers detection', {
 
         const log = this.log.get();
         assert.strictEqual(Object.keys(log.animationFrames).length, 1);
-        assert.strictEqual(log.animationFrames[0].callback, callback.toString());
-        assert.ok(log.animationFrames[0].stack.indexOf('codeThatSchedulesTimer') > -1);
+
+        const timerInfo = log.animationFrames[0];
+        assert.strictEqual(timerInfo.timerType, 'animationFrames');
+        assert.strictEqual(timerInfo.timerId, 0);
+        assert.strictEqual(timerInfo.callback, callback.toString());
+        assert.ok(timerInfo.stack.indexOf('codeThatSchedulesTimer') > -1);
     });
 
     QUnit.test('cleared setTimeout', function(assert) {
