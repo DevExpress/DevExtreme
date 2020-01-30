@@ -81,4 +81,22 @@ module.exports = {
         { regex: /\$texteditor-input-border-radius,/g, replacement: '$texteditor-input-border-radius;' },
         { regex: /relative,/g, replacement: 'relative;' }
     ],
+    'textBox': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../textEditor', type: 'index' },
+        { import: '../textEditor/colors', type: 'index' },
+        { import: '../textEditor/sizes', type: 'index' },
+    ],
+    'dropDownEditor': [
+        { import: '../common', type: 'index' },
+        { import: '../common/sizes', type: 'index' },
+        { import: '../textEditor/sizes', type: 'index' },
+        { import: '../button/colors', type: 'colors' },
+        { import: '../button/colors', type: 'index' },
+        { import: '../textEditor/colors', type: 'colors' },
+        { import: '../../base/icons', type: 'index' },
+    ],
+    'dropDownBox': [
+        { import: '../dropDownEditor', type: 'index' },
+    ]
 };

@@ -41,9 +41,15 @@ module.exports = [
     { content: 'tabs', task: 'widget' },
     // navBar
     { content: 'navBar', task: 'widget' },
-    // validation - TODO
+    // validation
     { content: 'validation', task: 'widget', private: true },
     // textEditor
     { content: 'textEditor', task: 'widget', private: true },
+    // textBox
+    { content: 'textBox', task: 'widget', private: true },
+    // dropDownEditor
+    { content: 'dropDownEditor', task: 'widget', private: true },
+    // dropDownBox
+    { content: 'dropDownBox', task: 'widget' },
     { task: 'newline' }
 ];
