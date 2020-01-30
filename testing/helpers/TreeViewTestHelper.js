@@ -20,15 +20,11 @@ const { assert } = QUnit;
 class TreeViewTestWrapper {
     constructor(options) {
         if(!options.onItemSelectionChanged) {
-            options.onItemSelectionChanged = () => {
-                this.eventLog.push('itemSelectionChanged');
-            };
+            options.onItemSelectionChanged = () => this.eventLog.push('itemSelectionChanged');
         }
 
         if(!options.onSelectionChanged) {
-            options.onSelectionChanged = () => {
-                this.eventLog.push('selectionChanged');
-            };
+            options.onSelectionChanged = () => this.eventLog.push('selectionChanged');
         }
 
         this.eventLog = [];
