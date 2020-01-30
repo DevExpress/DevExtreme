@@ -119,8 +119,7 @@ const DateBoxMask = DateBoxBase.inherit({
 
             useMaskBehavior: false,
 
-            emptyDateValue: new Date(2000, 0, 1, 0, 0, 0),
-            advanceCaret: true
+            emptyDateValue: new Date(2000, 0, 1, 0, 0, 0)
         });
     },
 
@@ -185,10 +184,20 @@ const DateBoxMask = DateBoxBase.inherit({
         }
     },
 
+    _partLimitsReached(max) {
+        const maxLimitLength = String(max).length;
+        const formatLength = this._getActivePartProp('pattern').length;
+        const isShortFormat = formatLength === 1;
+        const maxSearchLength = isShortFormat ? maxLimitLength : Math.min(formatLength, maxLimitLength);
+        const isLengthExceeded = this._searchValue.length === maxSearchLength;
+        const isValueOverflowed = parseInt(this._searchValue + '0') > max;
+
+        return isLengthExceeded || isValueOverflowed;
+    },
+
     _searchNumber(char) {
         const { max } = this._getActivePartLimits();
         const maxLimitLength = String(max).length;
-        const formatLength = this._getActivePartProp('pattern').length;
 
         this._searchValue = (this._searchValue + char).substr(-maxLimitLength);
         if(isNaN(this._searchValue)) {
@@ -197,15 +206,8 @@ const DateBoxMask = DateBoxBase.inherit({
 
         this._setActivePartValue(this._searchValue);
 
-        if(this.option('advanceCaret')) {
-            const isShortFormat = formatLength === 1;
-            const maxSearchLength = isShortFormat ? maxLimitLength : Math.min(formatLength, maxLimitLength);
-            const isLengthExceeded = this._searchValue.length === maxSearchLength;
-            const isValueOverflowed = parseInt(this._searchValue + '0') > max;
-
-            if(isLengthExceeded || isValueOverflowed) {
-                this._selectNextPart(FORWARD);
-            }
+        if(this._partLimitsReached(max)) {
+            this._selectNextPart(FORWARD);
         }
     },
 
@@ -528,7 +530,6 @@ const DateBoxMask = DateBoxBase.inherit({
                 this.callBase(args);
                 this._renderDateParts();
                 break;
-            case 'advanceCaret':
             case 'emptyDateValue':
                 break;
             default:
