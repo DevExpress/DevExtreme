@@ -17,10 +17,6 @@ testModule('Init and dispose', {
     fx.off = true;
     GoogleStaticProvider.remapConstant('/mapURL?');
 
-    const excludedComponents = [
-        'dxLayoutManager'
-    ];
-
     const getOptions = function(componentName, assert, done) {
         const options = {
             onInitialized: () => {
@@ -45,7 +41,7 @@ testModule('Init and dispose', {
     };
 
     each(DevExpress.ui, function(componentName, componentConstructor) {
-        if(excludedComponents.indexOf(componentName) !== -1 || componentName.indexOf('dx') !== 0) {
+        if(componentName.indexOf('dx') !== 0) {
             return;
         }
 
