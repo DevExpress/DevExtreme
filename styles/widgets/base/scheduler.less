@@ -630,7 +630,7 @@
         .dx-scheduler-date-time-indicator {
             margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
             height: @SCHEDULER_TIME_INDICATOR_SIZE;
-            .dx-icon-spinright;
+            .dx-icon(spinright);
 
             .dx-scheduler-small & {
                 margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
@@ -672,7 +672,7 @@
         &.dx-rtl {
             .dx-scheduler-date-time-indicator {
                 margin-left: 0;
-                .dx-icon-spinleft;
+                .dx-icon(spinleft);
 
                 &:before {
                     margin-right: -@SCHEDULER_TIME_INDICATOR_LEFT;
@@ -731,7 +731,7 @@
         .dx-scheduler-date-time-indicator {
             width: @SCHEDULER_TIME_INDICATOR_SIZE;
             top: 0;
-            .dx-icon-spindown;
+            .dx-icon(spindown);
 
             &:before {
                 margin-left: -@SCHEDULER_TIME_INDICATOR_TOP;
@@ -1819,12 +1819,12 @@
             position: absolute;
             top: 3px;
             right: @SCHEDULER_REDUCED_ICON_OFFSET;
-            .dx-icon-arrowright;
+            .dx-icon(arrowright);
 
             .dx-rtl & {
                 right: auto;
                 left: 3px;
-                .dx-icon-arrowleft;
+                .dx-icon(arrowleft);
             }
         }
 

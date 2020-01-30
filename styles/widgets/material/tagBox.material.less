@@ -61,8 +61,8 @@
         padding-left: 0;
         margin-top: @MATERIAL_TAGBOX_TAG_MARGIN;
 
-        .dx-rtl &,
-        .dx-rtl& {
+        .dx-rtl&,
+        .dx-rtl & {
             padding-right: 0;
             padding-left: 0;
             margin-right: 0;
@@ -106,7 +106,7 @@
     height: 100%;
     right: @MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT;
 
-    .dx-icon-clear;
+    .dx-icon(clear);
 
     font-size: 10px;
 
@@ -148,8 +148,8 @@
 .tagbox-editor-container-offset() {
     right: @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
 
-    .dx-rtl &,
-    .dx-rtl& {
+    .dx-rtl&,
+    .dx-rtl & {
         left: @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
     }
 }

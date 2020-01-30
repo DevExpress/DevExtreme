@@ -1,3 +1,8 @@
+.dx-s-font-mixin() {
+    font-weight: 500;
+    font-size: @GENERIC_S_FONT_SIZE;
+}
+
 .dx-theme-generic-typography {
     background-color: @typography-bg;
     .dx-base-typography();
@@ -26,8 +31,7 @@
 
     h4,
     .dx-font-s {
-        font-weight: 500;
-        font-size: @GENERIC_S_FONT_SIZE;
+        .dx-s-font-mixin();
     }
 
     h5 {

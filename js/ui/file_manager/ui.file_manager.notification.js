@@ -205,7 +205,12 @@ export default class FileManagerNotificationControl extends Widget {
                 visible: false,
                 closeOnOutsideClick: true,
                 animation: { duration: 0 },
-                position: { my: 'right top', at: 'right bottom', of: '.dx-filemanager-toolbar', offset: '-50 -5' } // TODO make option for this
+                position: {
+                    my: 'right top',
+                    at: 'right top',
+                    of: this.option('positionTarget'),
+                    offset: '-10 -5'
+                }
             });
         }
         return this._notificationPopup;
