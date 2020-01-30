@@ -259,17 +259,12 @@ const ValidatingController = modules.Controller.inherit((function() {
                 });
 
                 if($container) {
-                    // const validationInfo = this.getCellValidationInfo({
-                    //     keyValue: parameters.key,
-                    //     columnIndex: column.index
-                    // });
-                    // const requestIsDisabled = !!validationInfo && !!validationInfo.disabledPendingIds && validationInfo.disabledPendingIds.indexOf(options.id) >= 0;
-                    // const isCurrentValidator = !!validationInfo && this.isCurrentValidatorProcessing({
-                    //     keyValue: parameters.key,
-                    //     columnIndex: column.index
-                    // });
-                    // if(this._disableApplyValidationResults && !isCurrentValidator || requestIsDisabled) {
-                    if(this._disableApplyValidationResults) {
+                    const validationInfo = this.getCellValidationInfo({
+                        keyValue: parameters.key,
+                        columnIndex: column.index
+                    });
+                    const requestIsDisabled = validationInfo && validationInfo.disabledPendingId === options.id;
+                    if(this._disableApplyValidationResults || requestIsDisabled) {
                         return;
                     }
                     if(options.status === VALIDATION_STATUS.invalid) {
@@ -398,17 +393,21 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         validateCell: function(validator) {
-            const info = this.getCellValidationInfo({
+            const cellParams = {
                 keyValue: validator.option('validationGroup').key,
                 columnIndex: validator.option('dataGetter')().column.index
-            });
+            };
+            const info = this.getCellValidationInfo(cellParams);
             let validationResult = info && info.result;
             const stateRestored = !!validationResult;
             if(!validationResult) {
                 validationResult = validator.validate();
             }
             const deferred = new Deferred();
-            stateRestored && validationResult.complete && validator.option('adapter').applyValidationResults(validationResult);
+            if(stateRestored && validationResult.complete) {
+                this.updateCellValidationInfo(extend({}, cellParams, { enablePending: true }));
+                validator.option('adapter').applyValidationResults(validationResult);
+            }
             when(validationResult.complete || validationResult).done((validationResult) => {
                 stateRestored && validator.option('adapter').applyValidationResults(validationResult);
                 deferred.resolve(validationResult);
@@ -424,12 +423,7 @@ const ValidatingController = modules.Controller.inherit((function() {
             };
         },
 
-        // isRowValidated: function(keyValue) {
-        //     const rowInfo = this._validationInfo[this.getRowValidationInfoKey(keyValue)];
-        //     return rowInfo ? !!rowInfo.result : false;
-        // },
-
-        updateCellValidationInfo: function({ keyValue, columnIndex, validationResult }) {
+        updateCellValidationInfo: function({ keyValue, columnIndex, validationResult, enablePending }) {
             const editData = this._editingController.getEditDataByKey(keyValue);
             if(!editData && !validationResult) {
                 return;
@@ -438,33 +432,24 @@ const ValidatingController = modules.Controller.inherit((function() {
                 editData.validationInfo = {};
             }
             let info = editData.validationInfo[columnIndex];
-            // if(validationResult.status !== VALIDATION_STATUS.pending && info && info.disabledPendingIds) {
-            //     const index = info.disabledPendingIds.indexOf(validationResult.id);
-            //     if(index >= 0) {
-            //         info.disabledPendingIds.splice(index, 1);
-            //         !info.disabledPendingIds.length && delete info.disabledPendingIds;
-            //         if(info.result && info.result.id !== validationResult.id) {
-            //             return;
-            //         }
-            //     }
-            // }
             if(!info) {
                 info = {};
                 editData.validationInfo[columnIndex] = info;
+            } else if((validationResult.status !== VALIDATION_STATUS.pending
+                && (info.disabledPendingId === validationResult.id || info.disabledPendingId !== validationResult.id)) || enablePending) {
+                delete info.disabledPendingId;
+            }
+            if(!validationResult) {
+                return;
             }
             info.result = this.createCellValidationResult(validationResult);
-            // const disableValidationResult = this._disableApplyValidationResults;
-            // const isCurrentValidator = this.isCurrentValidatorProcessing({ keyValue, columnIndex });
             editData.brokenRules = editData.brokenRules ? editData.brokenRules.filter(r => r.columnIndex !== columnIndex) : [];
             if(validationResult.status === VALIDATION_STATUS.invalid) {
                 editData.brokenRules = editData.brokenRules.concat(validationResult.brokenRules);
             }
-            // if(disableValidationResult && !isCurrentValidator && validationResult.status === VALIDATION_STATUS.pending) {
-            //     if(!info.disabledPendingIds) {
-            //         info.disabledPendingIds = [];
-            //     }
-            //     info.disabledPendingIds.indexOf(validationResult.id) < 0 && info.disabledPendingIds.push(validationResult.id);
-            // }
+            if(this._disableApplyValidationResults && validationResult.status === VALIDATION_STATUS.pending) {
+                info.disabledPendingId = validationResult.id;
+            }
         },
 
         getCellValidationInfo: function({ keyValue, columnIndex }) {
@@ -734,7 +719,7 @@ module.exports = {
                             const validatingController = this.getController('validating');
                             const deferred = new Deferred();
                             when(validatingController.validateCell(validator), result).done((validationResult, result) => {
-                                deferred.resolve(validationResult.isValid === VALIDATION_STATUS.valid && result);
+                                deferred.resolve(validationResult.status === VALIDATION_STATUS.valid && result);
                             });
                             return deferred.promise();
                         }
