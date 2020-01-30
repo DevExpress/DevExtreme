@@ -623,7 +623,7 @@ QUnit.test('Recurrence repeat-type editor should have default \'never\' value af
 
     freqEditor.option('value', 'daily');
 
-    assert.ok(repeatTypeEditor.option('value'), 'never', 'Repeat-type editor value is ok');
+    assert.strictEqual(repeatTypeEditor.option('value'), 'never', 'Repeat-type editor value is ok');
 });
 
 QUnit.test('Appointment dates should not be normalized before sending to the details view', function(assert) {
@@ -1660,7 +1660,7 @@ QUnit.test('Appointment should push correct data to the onAppointmentUpdating ev
         width: 800
     });
 
-    const stub = sinon.stub(this.instance._options, 'onAppointmentUpdating');
+    const stub = sinon.stub(this.instance.option(), 'onAppointmentUpdating');
     const $appointment = this.scheduler.appointments.getAppointment(0);
 
     const pointer = pointerMock($appointment).start().down().move(10, 10);
@@ -3955,21 +3955,21 @@ QUnit.module('Appointments', () => {
     }];
 
     QUnit.module('appointmentTemplate', () => {
-        QUnit.test('model.targetedAppointmentData argument should have current appointment data', assert => {
+        QUnit.test('model.targetedAppointmentData argument should have current appointment data', function(assert) {
             const scheduler = createScheduler(commonData);
             scheduler.option({ appointmentTemplate: createTestForCommonData(assert) });
 
             assert.ok(eventCallCount === 5, 'appointmentTemplate should be raised');
         });
 
-        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence', assert => {
+        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence', function(assert) {
             const scheduler = createScheduler(recurrenceData);
             scheduler.option({ appointmentTemplate: createTestForRecurrenceData(assert, scheduler) });
 
             assert.ok(eventCallCount === 5, 'appointmentTemplate should be raised');
         });
 
-        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence and custom data properties', assert => {
+        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence and custom data properties', function(assert) {
             const scheduler = createScheduler(recurrenceDataWithCustomNames, {
                 textExpr: 'textCustom',
                 startDateExpr: 'startDateCustom',
