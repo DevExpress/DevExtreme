@@ -242,6 +242,22 @@ QUnit.test('Selection works correct with custom rootValue', function(assert) {
 
 function createWrapper(config, options, items) {
     const result = $.extend({}, config, options, { dataStructure: 'plain', rootValue: ROOT_ID, showCheckBoxesMode: 'normal' });
+
+    if(config.selectOption === 'selectedItemKeys') {
+        const selectedKeys = items.filter(item => item.selected).map(item => item.id);
+        result['selectedItemKeys'] = selectedKeys;
+        items.forEach(item => {
+            delete item.selected;
+        });
+    }
+
+    if(config.selectOption === 'selectedItems') {
+        result['selectedItems'] = items.filter(item => item.selected);
+        items.forEach(item => {
+            delete item.selected;
+        });
+    }
+
     if(result.dataSourceOption === 'createChildren') {
         const createChildFunction = (parent) => {
             const parentId = (parent !== null)
@@ -261,10 +277,14 @@ function isLazyDataSourceMode(wrapper) {
     return options.dataSource && options.virtualModeEnabled || options.createChildren;
 }
 
-function isSelectByOptions(func) {
+function isSelectFuncByOptions(func) {
     const funcContent = func.toString();
     return funcContent.indexOf('selectedItemKeys') > 0
         || funcContent.indexOf('selectedItems') > 0;
+}
+
+function isSelectedKeysOrItemsOptions(config) {
+    return config.selectOption === 'selectedItemKeys' || config.selectOption === 'selectedItems';
 }
 
 function getItemsByKeys(treeView, keys) {
@@ -277,7 +297,9 @@ const configs = [];
         [false, true].forEach((expanded) => {
             [false, true].forEach(selectNodesRecursive => {
                 ['multiple', 'single'].forEach(selectionMode => {
-                    configs.push({ dataSourceOption, virtualModeEnabled, expanded, selectNodesRecursive, selectionMode });
+                    ['selectedField', 'selectedItemKeys', 'selectedItems'].forEach(selectOption => {
+                        configs.push({ dataSourceOption, virtualModeEnabled, expanded, selectNodesRecursive, selectionMode, selectOption });
+                    });
                 });
             });
         });
@@ -286,19 +308,24 @@ const configs = [];
 
 const ROOT_ID = -1;
 configs.forEach(config => {
-    QUnit.module(`SelectionMode: ${config.selectionMode}, dataSource: ${config.dataSourceOption}, virtualModeEnabled: ${config.virtualModeEnabled}, expanded: ${config.expanded}, selectNodesRecursive: ${config.selectNodesRecursive}`, () => {
+    QUnit.module(`SelectionMode: ${config.selectionMode}, dataSource: ${config.dataSourceOption}, virtualModeEnabled: ${config.virtualModeEnabled}, expanded: ${config.expanded}, selectNodesRecursive: ${config.selectNodesRecursive}, selectOption: ${config.selectOption}`, () => {
         QUnit.test('all.selected: false', function(assert) {
-            // check via dataSource
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
+
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
+
             wrapper.checkSelectedKeys([]);
             wrapper.checkSelectedNodes([]);
             wrapper.checkEventLog([]);
         });
 
         [treeView => treeView.selectAll(), treeView => treeView.option('selectedItemKeys', [0, 1]), treeView => treeView.option('selectedItems', getItemsByKeys(treeView, [0, 1]))].forEach(selectFunc => {
-            QUnit.test(`all.selected: false -> selectAll -> expandAll: ${selectFunc.toString()}`, function(assert) {
+            QUnit.test(`all.selected: false -> selectAll -> expandAll, selectFunc: ${selectFunc.toString()}`, function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
                     return;
@@ -307,6 +334,12 @@ configs.forEach(config => {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
+
+                if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                    assert.ok('not supported case');
+                    return;
+                }
+
                 selectFunc(wrapper.instance);
 
                 let expectedKeys = [0, 1];
@@ -321,7 +354,7 @@ configs.forEach(config => {
                     expectedNodes = [0];
                 }
 
-                if(isSelectByOptions(selectFunc)) {
+                if(isSelectFuncByOptions(selectFunc)) {
                     expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
                     if(config.selectNodesRecursive || (!config.expanded && isLazyDataSourceMode(wrapper))) {
                         expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
@@ -358,6 +391,12 @@ configs.forEach(config => {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
+
+                if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                    assert.ok('not supported case');
+                    return;
+                }
+
                 selectItemFunc(wrapper.instance);
 
                 let expectedKeys = [0];
@@ -406,6 +445,12 @@ configs.forEach(config => {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
+
+                if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                    assert.ok('not supported case');
+                    return;
+                }
+
                 selectItemFunc(wrapper.instance);
 
                 let expectedKeys = [1];
@@ -463,6 +508,11 @@ configs.forEach(config => {
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
 
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
+
             let expectedKeys = [0, 1];
             let expectedNodes = [0, 1];
             if(!config.expanded) {
@@ -487,6 +537,11 @@ configs.forEach(config => {
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
 
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
+
             wrapper.instance.expandAll();
 
             wrapper.checkSelectedKeys([0, 1], 'after expand');
@@ -503,6 +558,11 @@ configs.forEach(config => {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
+
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
 
             wrapper.instance.unselectAll();
 
@@ -539,6 +599,11 @@ configs.forEach(config => {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
+
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
 
             wrapper.instance.unselectItem(0);
 
@@ -585,6 +650,11 @@ configs.forEach(config => {
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
 
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
+
             wrapper.instance.unselectItem(1);
 
             let expectedKeys = [0];
@@ -612,11 +682,16 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        QUnit.test('item1.selected: true', function() {
+        QUnit.test('item1.selected: true', function(assert) {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
+
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
 
             let expectedKeys = [0];
             let expectedNodes = [0];
@@ -639,11 +714,16 @@ configs.forEach(config => {
             wrapper.checkEventLog([]);
         });
 
-        QUnit.test('item1.selected: true -> expandAll', function() {
+        QUnit.test('item1.selected: true -> expandAll', function(assert) {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
+
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
 
             wrapper.instance.expandAll();
 
@@ -664,7 +744,7 @@ configs.forEach(config => {
         });
 
         [treeView => treeView.selectAll(), treeView => treeView.option('selectedItemKeys', [0, 1, 2]), treeView => treeView.option('selectedItems', getItemsByKeys(treeView, [0, 1, 2]))].forEach(selectFunc => {
-            QUnit.test(`item1.selected: true -> selectAll -> expandAll ${selectFunc.toString()}`, function(assert) {
+            QUnit.test(`item1.selected: true -> selectAll -> expandAll, selectFunc: ${selectFunc.toString()}`, function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
                     return;
@@ -674,6 +754,11 @@ configs.forEach(config => {
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                     { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
+
+                if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                    assert.ok('not supported case');
+                    return;
+                }
 
                 selectFunc(wrapper.instance);
 
@@ -688,7 +773,7 @@ configs.forEach(config => {
                 }
 
                 let expectedEventLog = ['selectionChanged'];
-                if(isSelectByOptions(selectFunc)) {
+                if(isSelectFuncByOptions(selectFunc)) {
                     expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
                     if(config.selectNodesRecursive || (!config.expanded && isLazyDataSourceMode(wrapper))) {
                         // unexpected result
@@ -727,12 +812,16 @@ configs.forEach(config => {
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
 
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
+
             wrapper.instance.unselectAll();
 
-            let expectedEventLog = ['selectionChanged'];
             wrapper.checkSelectedKeys([], 'after unselect');
             wrapper.checkSelectedNodes([], 'after unselect');
-            wrapper.checkEventLog(expectedEventLog, 'after unselect');
+            wrapper.checkEventLog(['selectionChanged'], 'after unselect');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -741,11 +830,16 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        QUnit.test('item1_1.selected: true', function() {
+        QUnit.test('item1_1.selected: true', function(assert) {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
+
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
 
             let expectedKeys = [1];
             if(config.selectionMode === 'multiple') {
@@ -765,11 +859,16 @@ configs.forEach(config => {
         });
 
 
-        QUnit.test('item1_1.selected: true -> expandAll', function() {
+        QUnit.test('item1_1.selected: true -> expandAll', function(assert) {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
+
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
 
             wrapper.instance.expandAll();
 
@@ -793,7 +892,7 @@ configs.forEach(config => {
         });
 
         [treeView => treeView.selectAll(), treeView => treeView.option('selectedItemKeys', [0, 1, 2]), treeView => treeView.option('selectedItems', getItemsByKeys(treeView, [0, 1, 2]))].forEach(selectFunc => {
-            QUnit.test('item1_1.selected: true -> selectAll -> expandAll', function(assert) {
+            QUnit.test(`item1_1.selected: true -> selectAll -> expandAll, selectFunc: ${selectFunc.toString()}`, function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
                     return;
@@ -803,6 +902,12 @@ configs.forEach(config => {
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
                     { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
+
+                if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                    assert.ok('not supported case');
+                    return;
+                }
+
                 selectFunc(wrapper.instance);
 
                 let expectedKeys = [0, 1, 2];
@@ -812,7 +917,7 @@ configs.forEach(config => {
                 }
 
                 let expectedEventLog = ['selectionChanged'];
-                if(isSelectByOptions(selectFunc)) {
+                if(isSelectFuncByOptions(selectFunc)) {
                     expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
                     if(config.selectNodesRecursive) {
                         expectedEventLog = [];
@@ -829,7 +934,6 @@ configs.forEach(config => {
                 wrapper.clearEventLog();
 
                 wrapper.instance.expandAll();
-
                 if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                     // unexpected result
                     expectedKeys = [0, 1];
@@ -846,10 +950,15 @@ configs.forEach(config => {
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
 
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
+
             wrapper.instance.unselectAll();
 
             let expectedKeys = [];
-            let expectedEventLog = ['selectionChanged'];
+            const expectedEventLog = ['selectionChanged'];
 
             wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
@@ -869,11 +978,16 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        QUnit.test('item1_1_1.selected: true', function() {
+        QUnit.test('item1_1_1.selected: true', function(assert) {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: true, expanded: config.expanded }]);
+
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
 
             let expectedKeys = [2];
             if(config.selectionMode === 'multiple') {
@@ -891,11 +1005,16 @@ configs.forEach(config => {
             wrapper.clearEventLog();
         });
 
-        QUnit.test('item1_1_1.selected: true -> expandAll', function() {
+        QUnit.test('item1_1_1.selected: true -> expandAll', function(assert) {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: true, expanded: config.expanded }]);
+
+            if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                assert.ok('not supported case');
+                return;
+            }
 
             wrapper.instance.expandAll();
 
@@ -915,7 +1034,7 @@ configs.forEach(config => {
         });
 
         [treeView => treeView.selectAll(), treeView => treeView.option('selectedItemKeys', [0, 1, 2]), treeView => treeView.option('selectedItems', getItemsByKeys(treeView, [0, 1, 2]))].forEach(selectFunc => {
-            QUnit.test('item1_1_1.selected: true -> selectAll -> expandAll', function(assert) {
+            QUnit.test(`item1_1_1.selected: true -> selectAll -> expandAll, selectFunc: ${selectFunc.toString()}`, function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
                     return;
@@ -925,6 +1044,11 @@ configs.forEach(config => {
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                     { id: 2, text: 'item1_1_1', parentId: 1, selected: true, expanded: config.expanded }]);
 
+                if(isSelectedKeysOrItemsOptions(config) && isLazyDataSourceMode(wrapper)) {
+                    assert.ok('not supported case');
+                    return;
+                }
+
                 selectFunc(wrapper.instance);
 
                 let expectedKeys = [0, 1, 2];
@@ -933,7 +1057,7 @@ configs.forEach(config => {
                     // unexpected result
                     expectedKeys = [0];
                 }
-                if(isSelectByOptions(selectFunc)) {
+                if(isSelectFuncByOptions(selectFunc)) {
                     expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
                     if(config.selectNodesRecursive) {
                         expectedEventLog = [];
