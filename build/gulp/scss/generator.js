@@ -75,7 +75,6 @@ gulp.task('fix-base', () => {
         .pipe(replace('f11d",', 'f11d"'))
         .pipe(replace(/each\(\$icons,\s{([\w\W]*)}\);/, '@each $key, $val in $icons {$1}'))
 
-
         .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;

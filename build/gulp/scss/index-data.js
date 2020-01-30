@@ -27,7 +27,7 @@ module.exports = [
     { content: 'button', task: 'widget' },
     // buttonGroup
     { content: 'buttonGroup', task: 'widget' },
-    // scrollable - non-public
+    // scrollable
     { content: 'scrollable', task: 'widget', private: true },
     // scrollview
     { content: 'scrollView', task: 'widget' },
@@ -41,5 +41,9 @@ module.exports = [
     { content: 'tabs', task: 'widget' },
     // navBar
     { content: 'navBar', task: 'widget' },
+    // validation - TODO
+    { content: 'validation', task: 'widget', private: true },
+    // textEditor
+    { content: 'textEditor', task: 'widget', private: true },
     { task: 'newline' }
 ];
