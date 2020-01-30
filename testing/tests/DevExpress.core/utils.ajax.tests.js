@@ -283,7 +283,7 @@ QUnit.test('Jsonp request (same domain)', function(assert) {
 
     const xhr = this.requests[0];
     xhr.respond(200, { 'Content-Type': 'application/json' }, 'callbackName(1)');
-    assert.ok(xhr.url.indexOf(expectedUrlStart) === 0, 'url: ' + xhr.url);
+    assert.strictEqual(xhr.url.indexOf(expectedUrlStart), 0, 'url: ' + xhr.url);
 
     const noCache = xhr.url.substring(expectedUrlStart.length);
     assert.ok(noCache.length > 0);
@@ -332,7 +332,7 @@ QUnit.test('Send data with request (jsonp)', function(assert) {
     });
 
     let callbackName = getCallbackName(this.requests[0].url);
-    assert.ok(callbackName === 'callback', 'callback name: ' + callbackName);
+    assert.strictEqual(callbackName, 'callback', 'callback name: ' + callbackName);
     assert.ok(getHash(this.requests[0].url).length > 0);
 
     callbackName = getCallbackName(this.requests[1].url);
@@ -478,6 +478,7 @@ QUnit.test('Post process of data with different dataType (same domain)', functio
     ];
     let error;
     let status;
+    let i;
     const setResult = function(data) {
         result[i] = data;
     };
@@ -487,7 +488,7 @@ QUnit.test('Post process of data with different dataType (same domain)', functio
         status = statusText;
     };
 
-    for(var i = 0; i < dataTypes.length; i++) {
+    for(i = 0; i < dataTypes.length; i++) {
         ajax.sendRequest({
             url: '/json-url',
             dataType: dataTypes[i].type
