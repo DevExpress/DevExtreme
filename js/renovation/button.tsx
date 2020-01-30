@@ -97,6 +97,7 @@ export const viewFunction = (viewModel: Button) => (
 })
 
 export default class Button extends Widget {
+    @Prop() activeStateEnabled?: boolean = true;
     @Prop() classNames?: string[];
     @Prop() contentRender?: any;
     @Prop() icon?: string;

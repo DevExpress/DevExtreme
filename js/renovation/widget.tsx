@@ -250,7 +250,7 @@ export default class Widget {
         const selector = this.activeStateUnit;
         const namespace = 'UIFeedback';
 
-        if (this.activeStateEnabled) {
+        if (this.activeStateEnabled && !this.disabled) {
             active.on(this.widgetRef,
                 new Action(() => { this._active = true; }),
                 new Action(

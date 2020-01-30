@@ -1,11 +1,10 @@
-import Widget, { viewModelFunction, viewFunction } from '../../js/renovation/widget';
-import React from 'react';
+import Widget from '../../js/renovation/widget.p.js';
+import { createElement } from 'preact';
+import { emit, EVENT } from './utils/events-mock';
 import { shallow } from 'enzyme';
 
 describe('Widget', () => {
-    const render = (props = {}) => shallow(
-        viewFunction(viewModelFunction({ ...new Widget(), ...props } as Widget)),
-    );
+    const render = (props = {}) => shallow(createElement(Widget, props));
 
     describe('Props', () => {
         describe('accessKey', () => {
@@ -150,6 +149,33 @@ describe('Widget', () => {
             });
         });
 
+        describe('activeStateEnabled', () => {
+            it('should be disabled by default', () => {
+                const widget = render();
+
+                expect(widget.prop('activeStateEnabled')).toBeFalsy();
+                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+            });
+        });
+
+        describe('hoverStateEnabled', () => {
+            it('should be disabled by default', () => {
+                const widget = render();
+
+                expect(widget.prop('hoverStateEnabled')).toBeFalsy();
+                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
+            });
+        });
+
+        describe('focusStateEnabled', () => {
+            it('should be disabled by default', () => {
+                const widget = render();
+
+                expect(widget.prop('focusStateEnabled')).toBeFalsy();
+                expect(widget.hasClass('dx-state-focus')).toBeFalsy();
+            });
+        });
+
         describe('hint', () => {
             it('should not add "title" attribute by default', () => {
                 const widget = render();
@@ -183,7 +209,7 @@ describe('Widget', () => {
 
     describe('Children', () => {
         it('should render child component', () => {
-            const widget = render({ children: <div className="custom-content" /> });
+            const widget = render({ children: createElement('div', { className: 'custom-content' })});
             const children = widget.children();
 
             expect(children).toHaveLength(1);
@@ -193,56 +219,108 @@ describe('Widget', () => {
 
     describe('States', () => {
         describe('Active', () => {
-            it('should add `dx-state-active` css class', () => {
-                const widget = render({ _active: true });
+            it('should change state by mouse events', () => {
+                const widget = render({ activeStateEnabled: true });
 
+                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+
+                emit(EVENT.active);
                 expect(widget.hasClass('dx-state-active')).toBeTruthy();
+
+                emit(EVENT.inactive);
+                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+            });
+
+            it('should not change state if disabled', () => {
+                const widget = render({ activeStateEnabled: true, disabled: true });
+
+                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
+                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+
+                emit(EVENT.active);
+                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
+                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+
+                emit(EVENT.inactive);
+                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
+                expect(widget.hasClass('dx-state-active')).toBeFalsy();
             });
         });
 
         describe('Focus', () => {
-            it('should add `dx-state-focused` css class', () => {
-                const widget = render({ _focused: true, focusStateEnabled: true });
+            // it('should change state by mouse events', () => {
+            //     const widget = render();
 
-                expect(widget.hasClass('dx-state-focused')).toBeTruthy();
-            });
+            //     expect(widget.hasClass('dx-state-focus')).toBeFalsy();
 
-            it('should not add marker class if the "focusStateEnabled" is false', () => {
-                const widget = render({ _focused: true, focusStateEnabled: false });
+            //     emit(EVENT.focus);
+            //     expect(widget.hasClass('dx-state-focus')).toBeTruthy();
 
-                expect(widget.hasClass('dx-state-focused')).toBeFalsy();
-            });
+            //     emit(EVENT.blur);
+            //     expect(widget.hasClass('dx-state-focus')).toBeFalsy();
+            // });
 
-            it('should not add marker class if the "disabled" is true', () => {
-                const widget = render({ _focused: true, focusStateEnabled: true, disabled: true });
+            // it('should not change state if disabled', () => {
+            //     const widget = render({ disabled: true });
 
-                expect(widget.hasClass('dx-state-focused')).toBeFalsy();
-            });
+            //     expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
+            //     expect(widget.hasClass('dx-state-focus')).toBeFalsy();
+
+            //     emit(EVENT.focus);
+            //     expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
+            //     expect(widget.hasClass('dx-state-focus')).toBeFalsy();
+
+            //     emit(EVENT.blur);
+            //     expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
+            //     expect(widget.hasClass('dx-state-focus')).toBeFalsy();
+            // });
         });
 
         describe('Hover', () => {
-            it('should add `dx-state-hover` css class', () => {
-                const widget = render({ _hovered: true, hoverStateEnabled: true });
+            it('should change state by mouse events', () => {
+                const widget = render({ hoverStateEnabled: true });
 
+                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
+
+                emit(EVENT.hoverStart);
                 expect(widget.hasClass('dx-state-hover')).toBeTruthy();
-            });
 
-            it('should not add `dx-state-hover` css class if the "hoverStateEnabled" is false', () => {
-                const widget = render({ _hovered: true, hoverStateEnabled: false });
-
+                emit(EVENT.hoverEnd);
                 expect(widget.hasClass('dx-state-hover')).toBeFalsy();
             });
 
-            it('should not add `dx-state-hover` css class in the `active` state', () => {
-                const widget = render({ _hovered: true, hoverStateEnabled: true, _active: true });
+            it('should not change state if disabled', () => {
+                const widget = render({ hoverStateEnabled: true, disabled: true });
 
+                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
+                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
+
+                emit(EVENT.hoverStart);
+                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
+                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
+
+                emit(EVENT.hoverEnd);
+                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
                 expect(widget.hasClass('dx-state-hover')).toBeFalsy();
             });
 
-            it('should not have `dx-state-hover` css class in the `disabled` state', () => {
-                const widget = render({ _hovered: true, hoverStateEnabled: true, disabled: true });
+            it('should clear hover state if active', () => {
+                const widget = render({  hoverStateEnabled: true, activeStateEnabled: true });
 
                 expect(widget.hasClass('dx-state-hover')).toBeFalsy();
+                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+
+                emit(EVENT.hoverStart);
+                expect(widget.hasClass('dx-state-hover')).toBeTruthy();
+                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+
+                emit(EVENT.active);
+                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
+                expect(widget.hasClass('dx-state-active')).toBeTruthy();
+
+                emit(EVENT.inactive);
+                expect(widget.hasClass('dx-state-hover')).toBeTruthy();
+                expect(widget.hasClass('dx-state-active')).toBeFalsy();
             });
         });
     });

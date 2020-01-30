@@ -19,20 +19,6 @@ const config = {
     }
 };
 
-QUnit.module('Props: rtlEnabled', config);
-
-QUnit.test('should not add rtl marker class by default', function(assert) {
-    const $element = $('#component').Widget();
-
-    assert.notOk($element.hasClass('dx-rtl'));
-});
-
-QUnit.test('should add rtl marker class if the "rtlEnabled" is true', function(assert) {
-    const $element = $('#component').Widget({ rtlEnabled: true });
-
-    assert.ok($element.hasClass('dx-rtl'));
-});
-
 QUnit.module('Props: width/height', config);
 
 QUnit.test('should render dimensions', function(assert) {
