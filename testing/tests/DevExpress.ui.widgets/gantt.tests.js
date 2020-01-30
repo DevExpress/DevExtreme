@@ -661,5 +661,9 @@ QUnit.module('Time Markers', moduleConfig, () => {
         assert.equal($timeMarkers.length, 2, 'gantt has time markers');
         $timeIntervals = this.$element.find(TIME_INTERVAL_SELECTOR);
         assert.equal($timeIntervals.length, 1, 'gantt has time interval');
+
+        this.instance.option('timeMarkers', []);
+        $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($timeMarkers.length, 0, 'gantt has not time markers');
     });
 });
