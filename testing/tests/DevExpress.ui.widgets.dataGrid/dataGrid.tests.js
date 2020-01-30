@@ -73,6 +73,7 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 import themes from 'ui/themes';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
+import 'ui/scroll_view';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -8884,6 +8885,47 @@ QUnit.test('Editor should be rendered for hidden columns while editing in row mo
 
     // assert
     assert.notOk($(dataGrid.getRowElement(1)).find('.dx-texteditor').length, 'row doesn\'t have editor');
+});
+
+QUnit.test('Scrollable should have the correct padding when the grid inside the ScrollView', function(assert) {
+    // arrange, act
+    $('#container').dxScrollView({
+        showScrollbar: 'always'
+    });
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 1 }],
+        columnAutoWidth: true,
+        scrolling: {
+            showScrollbar: 'always'
+        }
+    });
+    this.clock.tick(30);
+
+    // assert
+    const $scrollableContent = $(dataGrid.getScrollable().content());
+    assert.strictEqual($scrollableContent.css('paddingRight'), '0px', 'paddingRight');
+    assert.strictEqual($scrollableContent.css('paddingLeft'), '0px', 'paddingLeft');
+});
+
+QUnit.test('Scrollable should have the correct padding when the grid inside the ScrollView in RTL', function(assert) {
+    // arrange, act
+    $('#container').dxScrollView({
+        showScrollbar: 'always'
+    });
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 1 }],
+        columnAutoWidth: true,
+        rtlEnabled: true,
+        scrolling: {
+            showScrollbar: 'always'
+        }
+    });
+    this.clock.tick(30);
+
+    // assert
+    const $scrollableContent = $(dataGrid.getScrollable().content());
+    assert.strictEqual($scrollableContent.css('paddingRight'), '0px', 'paddingRight');
+    assert.strictEqual($scrollableContent.css('paddingLeft'), '0px', 'paddingLeft');
 });
 
 QUnit.module('Virtual row rendering', baseModuleConfig);
