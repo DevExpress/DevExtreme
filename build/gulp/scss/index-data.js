@@ -32,6 +32,8 @@ module.exports = [
     // scrollview
     { content: 'scrollView', task: 'widget' },
     // checkbox
-    // { content: 'checkBox', task: 'widget' },
+    { content: 'checkBox', task: 'widget' },
+    // switch
+    { content: 'switch', task: 'widget' },
     { task: 'newline' }
 ];

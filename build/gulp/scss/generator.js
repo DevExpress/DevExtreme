@@ -62,7 +62,17 @@ gulp.task('fix-base', () => {
     // the same code for different themes
     return gulp
         .src(`${unfixedScssPath}/widgets/base/*.scss`)
-        .pipe(replace(/\.dx-font-icon\("/g, '@include dx-font-icon("'))
+        // .pipe(replace(/\.dx-font-icon\("/g, '@include dx-font-icon("'))
+        // icons
+        .pipe(replace('@mixin dx-icon-sizing', '@use "sass:map";\n\n@mixin dx-icon-sizing'))
+        .pipe(replace('@mixin dx-font-icon($icons[$$name]),', '@include dx-font-icon(map.get($icons, $name));'))
+        .pipe(replace(/\$icons:\s{([\w\W]*?)}/, (_, p1) => {
+            return `$icons: (${p1.replace(/;/g, ',')});`;
+        }))
+        .pipe(replace('f11d",', 'f11d"'))
+        .pipe(replace(/each\(\$icons,\s{([\w\W]*)}\);/, '@each $key, $val in $icons {$1}'))
+
+
         .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;

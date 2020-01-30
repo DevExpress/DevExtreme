@@ -47,5 +47,9 @@ module.exports = {
     ],
     'checkBox': [
         { import: 'colors', type: 'sizes' },
+        { import: '../../base/icons', type: 'index' },
+    ],
+    'switch': [
+        { import: '../../base/mixins', type: 'index' },
     ]
 };
