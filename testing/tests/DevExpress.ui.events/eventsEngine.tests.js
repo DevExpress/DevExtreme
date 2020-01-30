@@ -200,7 +200,7 @@ QUnit.test('\'focusin\' and \'focus\' events call element.focus, \'focusout\' an
 
 QUnit.test('focusin event bubbling', function(assert) {
     const textBox = document.createElement('input');
-    var container = document.createElement(container);
+    const container = document.createElement(container);
     const handlerSpy = sinon.spy();
 
     container.appendChild(textBox);
@@ -284,11 +284,12 @@ QUnit.test('Event bubbling', function(assert) {
     const div = document.createElement('div');
     document.body.appendChild(div);
 
+    let event;
     const handler = function() {
         fired[event]++;
     };
 
-    for(var event in fired) {
+    for(event in fired) {
         eventsEngine.on(window, event, handler);
         eventsEngine.on(document, event, handler);
         eventsEngine.on(document.body, event, handler);
@@ -363,7 +364,7 @@ QUnit.test('On/trigger/off event listeners', function(assert) {
     removeListener.restore();
 });
 
-QUnit.test('Passive event listeners support detection, positive case', assert => {
+QUnit.test('Passive event listeners support detection, positive case', function(assert) {
     const addEventListenerStub = sinon.stub(window, 'addEventListener', (name, handler, options) => {
         options.passive;
     });
@@ -374,7 +375,7 @@ QUnit.test('Passive event listeners support detection, positive case', assert =>
     addEventListenerStub.restore();
 });
 
-QUnit.test('Passive event listeners support detection, negative case', assert => {
+QUnit.test('Passive event listeners support detection, negative case', function(assert) {
     const addEventListenerStub = sinon.stub(window, 'addEventListener', (name, handler) => {
     });
 
