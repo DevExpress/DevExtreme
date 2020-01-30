@@ -31,10 +31,10 @@ const createMenu = (options) => {
 const toSelector = cssClass => '.' + cssClass;
 
 QUnit.module('Menu rendering', {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
     }
 }, () => {
@@ -75,11 +75,11 @@ QUnit.module('Menu rendering', {
 });
 
 QUnit.module('Menu - selection', {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
         fx.off = false;
     }
@@ -95,10 +95,10 @@ QUnit.module('Menu - selection', {
 });
 
 QUnit.module('Menu with templates', {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
     }
 }, () => {
@@ -130,7 +130,7 @@ QUnit.module('Menu with templates', {
 let helper;
 
 QUnit.module('Aria accessibility', {
-    beforeEach: () => {
+    beforeEach: function() {
         helper = new ariaAccessibilityTestHelper({
             createWidget: ($element, options) => new Menu($element,
                 $.extend({
@@ -138,7 +138,7 @@ QUnit.module('Aria accessibility', {
                 }, options))
         });
     },
-    afterEach: () => {
+    afterEach: function() {
         helper.$widget.remove();
     }
 }, () => {

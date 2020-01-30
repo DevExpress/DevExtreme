@@ -128,6 +128,7 @@ QUnit.module('api', () => {
         const $element = $('#slideOutView').dxSlideOutView({
             menuVisible: false
         });
+
         const instance = $element.dxSlideOutView('instance');
         let count = 0;
         const done = assert.async();
