@@ -178,7 +178,7 @@ QUnit.test('No E1034 on iPad', function(assert) {
         fileSaver.saveAs('test', 'EXCEL', new Blob([], { type: 'test/plain' }));
 
         setTimeout(() => {
-            assert.ok(warningSend !== 'E1034', 'Warning E1034 wasn\'t sent');
+            assert.notStrictEqual(warningSend, 'E1034', 'Warning E1034 wasn\'t sent');
             done();
         }, 150);
     } finally {
