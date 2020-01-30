@@ -984,7 +984,7 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(selectionChangedSecondHandler.callCount, 1, 'selectionChanged handler is correct');
     });
 
-    QUnit.test('options displayExpr, valueExpr', function(assert) {
+    QUnit.test('options displayExpr, valueExpr', (assert) => {
         assert.expect(5);
 
         const items = [
