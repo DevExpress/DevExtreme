@@ -3200,7 +3200,7 @@ QUnit.module('search substitution', {
         assert.equal(this.$input.val(), this.testItem[0] + this.testItem[1], 'search value is not substituted after option runtime change');
     });
 
-    QUnit.test('search value is substituted while typing', function(assert) {
+    QUnit.test('search value is substituted while typing', (assert) => {
         const itemLength = this.testItem.length;
         const inputElement = this.$input.get(0);
 
