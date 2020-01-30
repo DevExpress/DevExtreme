@@ -2208,23 +2208,15 @@ QUnit.test('mouseout from legend item', function(assert) {
     assert.strictEqual(this.series.notify.lastCall.args[0].target.getOptions().hoverMode, 'allargumentpoints');
 });
 
-QUnit.test('mouseout from legend item', function(assert) {
+QUnit.test('mousedown on legend item', function(assert) {
     this.legend.coordsIn.withArgs(97, 45).returns(true);
     this.legend.getItemByCoord.withArgs(97, 45).returns({ id: 0, argument: 'argument1', argumentIndex: 11 });
 
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
-
     this.series.notify.reset();
+    $(this.renderer.root.element).trigger(getEvent('dxpointerdown', { pageX: 100, pageY: 50 }));
 
-    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 80, pageY: 50 }));
-
-    assert.strictEqual(this.series.notify.callCount, 1);
-    assert.strictEqual(this.series.notify.lastCall.args[0].action, 'clearPointHover');
-    assert.strictEqual(this.series.notify.lastCall.args[0].notifyLegend, true);
-    assert.strictEqual(this.series.notify.lastCall.args[0].target.fullState, 0);
-    assert.strictEqual(this.series.notify.lastCall.args[0].target.argumentIndex, 11);
-    assert.strictEqual(this.series.notify.lastCall.args[0].target.argument, 'argument1');
-    assert.strictEqual(this.series.notify.lastCall.args[0].target.getOptions().hoverMode, 'allargumentpoints');
+    assert.strictEqual(this.series.notify.callCount, 0);
 });
 
 QUnit.test('mouseout from chart after hover point on legend', function(assert) {

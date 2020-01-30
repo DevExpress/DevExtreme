@@ -465,7 +465,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
 
         this._updateFocusedCellPosition($cell);
-        $cell = this._getNextCellByTabKey($event, direction, elementType);
+        const nextCellInfo = this._getNextCellByTabKey($event, direction, elementType);
+        $cell = nextCellInfo.$cell;
 
         if(!$cell || this._handleTabKeyOnMasterDetailCell($cell, direction)) {
             return false;
@@ -483,7 +484,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             this._editingController.closeEditCell();
         }
 
-        if(this._focusCell($cell)) {
+        if(this._focusCell($cell, !nextCellInfo.isHighlighted)) {
             if(!this._isRowEditMode() && isEditingAllowed) {
                 this._editingController.editCell(this.getVisibleRowIndex(), this._focusedCellPosition.columnIndex);
             } else {
@@ -517,7 +518,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 }
             }
 
-            $cell = this._getNextCellByTabKey($event, direction, elementType);
+            const nextCellInfo = this._getNextCellByTabKey($event, direction, elementType);
+            $cell = nextCellInfo.$cell;
+
             if(!$cell) {
                 return false;
             }
@@ -527,7 +530,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 return false;
             }
 
-            this._focusCell($cell);
+            this._focusCell($cell, !nextCellInfo.isHighlighted);
 
             if(!isEditorCell(this, $cell)) {
                 this._focusInteractiveElement($cell, eventArgs.shift);
@@ -541,13 +544,17 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const args = $cell && this._fireFocusedCellChanging($event, $cell, true);
 
         if(!args || args.cancel) {
-            return;
+            return {};
         }
 
         if(args.$newCellElement) {
             $cell = args.$newCellElement;
         }
-        return $cell;
+
+        return {
+            $cell,
+            isHighlighted: args.isHighlighted
+        };
     },
     _checkNewLineTransition: function($event, $cell) {
         const rowIndex = this.getVisibleRowIndex();
@@ -722,6 +729,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const $parent = $target.parent();
         const isEditingRow = $parent.hasClass(EDIT_ROW_CLASS);
         const isInteractiveElement = $(event.target).is(INTERACTIVE_ELEMENTS_SELECTOR);
+        const isCommandButtonTarget = $(event.target).hasClass('dx-link');
+
+        if(isCommandButtonTarget) {
+            this.setCellFocusType();
+            return;
+        }
 
         if(this._isEventInCurrentGrid(event) && this._isCellValid($target, !isInteractiveElement)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
@@ -886,7 +899,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _focus: function($cell, disableFocus, isInteractiveElement) {
-        const $row = ($cell && $cell.is('td')) ? $cell.parent() : $cell;
+        const $row = ($cell && !$cell.hasClass(ROW_CLASS)) ? $cell.closest(`.${ROW_CLASS}`) : $cell;
 
         if($row && isNotFocusedRow($row)) {
             return;
@@ -1009,9 +1022,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
-    _focusCell: function($cell) {
+    _focusCell: function($cell, isDisabled) {
         if(this._isCellValid($cell)) {
-            this._focus($cell);
+            this._focus($cell, isDisabled);
             return true;
         }
     },
@@ -1571,8 +1584,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _getRowIndex: function($row) {
-        const that = this;
-        const focusedView = that._focusedView;
+        const focusedView = this._focusedView;
         let rowIndex = -1;
 
         if(focusedView) {
@@ -1580,7 +1592,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
 
         if(rowIndex >= 0) {
-            rowIndex += that._dataController.getRowIndexOffset();
+            rowIndex += this.getController('data').getRowIndexOffset();
         }
 
         return rowIndex;
@@ -1680,7 +1692,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _getCellElementFromTarget: function(target) {
-        return $(target).closest('.' + ROW_CLASS + '> td');
+        return $(target).closest(`.${ROW_CLASS} > td`);
     },
 
     _getRowsViewElement: function() {
@@ -1739,8 +1751,6 @@ module.exports = {
                  */
                 editOnKeyPress: false
             }
-
-
         };
     },
     controllers: {

@@ -73,7 +73,7 @@ QUnit.test('Enabled tooltip', function(assert) {
             enabled: true
         }
     });
-    bullet._showTooltipCallback();
+    bullet._showTooltip();
 
     const arg = bullet._tooltip.ctorArgs;
     assert.strictEqual(arg.length, 1);
@@ -101,7 +101,7 @@ QUnit.test('Enabled tooltip. Empty data', function(assert) {
             enabled: true
         }
     });
-    bullet._showTooltipCallback();
+    bullet._showTooltip();
 
     const arg = bullet._tooltip.ctorArgs;
     assert.strictEqual(arg.length, 1);
@@ -129,7 +129,7 @@ QUnit.test('Disabled tooltip', function(assert) {
         }
     });
 
-    bullet._showTooltipCallback();
+    bullet._showTooltip();
 
     assert.equal(bullet._tooltip.update.callCount, 1, 'update is called');
     assert.equal(bullet._tooltip.update.lastCall.args[0].enabled, false);
@@ -143,7 +143,7 @@ QUnit.test('dxBullet get TooltipFormatObject', function(assert) {
             enabled: true
         }
     });
-    bullet._showTooltipCallback();
+    bullet._showTooltip();
 
     assert.deepEqual(bullet._tooltip.show.lastCall.args, [{
         originalTarget: 20,
@@ -168,7 +168,7 @@ QUnit.test('Default Tooltip text', function(assert) {
         }
     });
 
-    bullet._showTooltipCallback();
+    bullet._showTooltip();
     bullet._tooltip.formatValue = function(value, format) { return value; };
 
     const ctResult = bullet._tooltip.update.lastCall.args[0].customizeTooltip(bullet._getTooltipData());
@@ -189,7 +189,7 @@ QUnit.test('Default Tooltip text. Rtl', function(assert) {
         rtlEnabled: true
     });
 
-    bullet._showTooltipCallback();
+    bullet._showTooltip();
     bullet._tooltip.formatValue = function(value, format) { return value; };
 
     const ctResult = bullet._tooltip.update.lastCall.args[0].customizeTooltip(bullet._getTooltipData());

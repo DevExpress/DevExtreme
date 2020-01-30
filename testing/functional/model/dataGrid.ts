@@ -1,4 +1,4 @@
-import { ClientFunction } from "testcafe";
+import { ClientFunction, Selector } from "testcafe";
 import Widget from "./internal/widget";
 
 const CLASS = {
@@ -25,7 +25,14 @@ const CLASS = {
     pagerPrevNavButton: 'dx-prev-button',
     pagerNextNavButton: 'dx-next-button',
     pagerPage: 'dx-page',
-    selection: 'dx-selection'
+    selection: 'dx-selection',
+    form: 'dx-form',
+    textEditor: 'dx-texteditor',
+    textEditorInput: 'dx-texteditor-input',
+    invalid: 'dx-invalid',
+    editFormRow: 'dx-datagrid-edit-form',
+    button: 'dx-button',
+    formButtonsContainer: 'dx-datagrid-form-buttons-container'
 };
 
 class DxElement {
@@ -196,6 +203,31 @@ class Pager extends DxElement {
     }
 }
 
+export class EditForm extends DxElement {
+    selector: string;
+    form: Selector;
+    saveButton: Selector;
+    cancelButton: Selector;
+
+    constructor(parentSelector: Selector) {
+        const selector = parentSelector ? parentSelector.find(`.${CLASS.editFormRow}`) :  Selector(`.${CLASS.editFormRow}`);
+        super(selector);
+        this.form = this.element.find(`.${CLASS.form}`);
+
+        const buttons = this.element.find(`.${CLASS.formButtonsContainer} .${CLASS.button}`);
+        this.saveButton = buttons.nth(0);
+        this.cancelButton = buttons.nth(1);
+    }
+
+    getItem(id): Selector {
+        return this.form.find(`.${CLASS.textEditorInput}[id*=_${id}]`)
+    }
+
+    getInvalids(): Selector {
+        return this.form.find(`.${CLASS.textEditor}.${CLASS.invalid}`);
+    }
+}
+
 export default class DataGrid extends Widget {
     dataRows: Selector;
     getGridInstance: ClientFunction<any>;
@@ -267,6 +299,39 @@ export default class DataGrid extends Widget {
         return ClientFunction(
             () => getGridInstance().getView('rowsView').getScrollbarWidth(isHorizontal),
             { dependencies: { getGridInstance, isHorizontal } }
+        )();
+    }
+
+    getEditForm() {
+        return new EditForm(this.element);
+    }
+
+    api_option(name: any, value = 'undefined') : Promise<any> {
+        const getGridInstance: any = this.getGridInstance;
+
+        return ClientFunction(
+            () => {
+                const dataGrid = getGridInstance();
+                return value !== 'undefined' ? dataGrid.option(name, value) : dataGrid.option(name);
+            },
+            { dependencies: { getGridInstance, name, value } }
+        )();
+    }
+
+    api_editRow(rowIndex: number) : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+
+        return ClientFunction(
+            () => getGridInstance().editRow(rowIndex),
+            { dependencies: { getGridInstance, rowIndex } }
+        )();
+    }
+
+    api_cancelEditData() : Promise<void> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(
+            () => getGridInstance().cancelEditData(),
+            { dependencies: { getGridInstance } }
         )();
     }
 }

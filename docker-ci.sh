@@ -46,6 +46,11 @@ function run_test {
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
     [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
 
+    if [ -n "$TZ" ]; then
+        echo "Time-Zone: $TZ"
+        date
+    fi
+
     if [ "$NO_HEADLESS" == "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
         x11vnc -display :99 2>/dev/null &
@@ -73,34 +78,40 @@ function run_test {
         ;;
 
         *)
-            local chrome_command="google-chrome-stable \
-                --no-sandbox \
-                --disable-dev-shm-usage \
-                --disable-gpu \
-                --disable-extensions \
-                --user-data-dir=/tmp/chrome";
+            local chrome_command=google-chrome-stable
+            local chrome_args=(
+                --no-sandbox
+                --disable-dev-shm-usage
+                --disable-gpu
+                --disable-extensions
+                --user-data-dir=/tmp/chrome
+            )
 
             if [ "$NO_HEADLESS" != "true" ]; then
                 echo "Headless mode"
-                chrome_command="$chrome_command \
-                    --headless \
-                    --remote-debugging-address=0.0.0.0 \
-                    --remote-debugging-port=9222";
+                chrome_args+=(
+                    --headless
+                    --remote-debugging-address=0.0.0.0
+                    --remote-debugging-port=9222
+                )
             else
-                chrome_command="dbus-launch --exit-with-session $chrome_command \
-                    --no-first-run \
-                    --no-default-browser-check \
-                    --disable-translate";
+                chrome_command="dbus-launch --exit-with-session $chrome_command"
+                chrome_args+=(
+                    --no-first-run
+                    --no-default-browser-check
+                    --disable-translate
+                )
             fi
 
             if [ "$PERF" == "true" ]; then
                 echo "Performance tests"
-                chrome_command="$chrome_command \
-                    --disable-popup-blocking \
-                    --remote-debugging-port=9223 \
-                    --enable-impl-side-painting \
-                    --enable-skia-benchmarking \
-                    --disable-web-security"
+                chrome_args+=(
+                    --disable-popup-blocking
+                    --remote-debugging-port=9223
+                    --enable-impl-side-painting
+                    --enable-skia-benchmarking
+                    --disable-web-security
+                )
             fi
 
             if [ -n "$MOBILE_UA" ]; then
@@ -112,25 +123,24 @@ function run_test {
                     exit 1
                 fi
 
-                echo "User agent: $user_agent"
+                echo "Mobile user agent: $MOBILE_UA"
 
-                chrome_command="$chrome_command \
-                    --user-agent=\"$user_agent\" \
-                    --enable-viewport \
-                    --touch-events \
-                    --enable-overlay-scrollbar \
-                    --enable-features=OverlayScrollbar"
-            else
-                chrome_command="$chrome_command --user-data-dir=/tmp/chrome"
+                chrome_args+=(
+                    --user-agent="'$user_agent'"
+                    --enable-viewport
+                    --touch-events
+                    --enable-overlay-scrollbar
+                    --enable-features=OverlayScrollbar
+                )
             fi
 
-            chrome_command="$chrome_command \"$url\""
-            echo "Chrome cmd: $chrome_command"
+            tput setaf 6
+            echo "$chrome_command"
+            printf '  %s\n' "${chrome_args[@]}"
+            tput setaf 9
 
             google-chrome-stable --version
-
-            eval "$chrome_command" &>chrome.log &
-
+            eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
         ;;
 
     esac
@@ -155,10 +165,16 @@ function run_test_functional {
     npm i
     npm run build
 
-    local args="--browsers chrome:headless";
-    [ "$COMPONENT" ] && args="$args --componentFolder $COMPONENT";
+    local args="--browsers=chrome:headless";
+    [ -n "$COMPONENT" ] && args="$args --componentFolder=$COMPONENT";
+    [ -n "$QUARANTINE_MODE" ] && args="$args --quarantineMode=true";
 
     npm run test-functional -- $args
+}
+
+function run_test_scss {
+    npm i
+    npx gulp generate-scss
 }
 
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
@@ -169,6 +185,7 @@ case "$TARGET" in
     "test") run_test ;;
     "test_themebuilder") run_test_themebuilder ;;
     "test_functional") run_test_functional ;;
+    "test_scss") run_test_scss ;;
 
     *)
         echo "Unknown target"

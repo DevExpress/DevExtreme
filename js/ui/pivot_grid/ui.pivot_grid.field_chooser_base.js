@@ -341,6 +341,14 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
                             } else {
                                 const d = new Deferred();
                                 dataSource.getFieldValues(mainGroupField.index, that.option('headerFilter.showRelevantValues'), paginate ? options : undefined).done(function(data) {
+                                    const emptyValue = that.option('headerFilter.texts.emptyValue');
+
+                                    data.forEach((element) => {
+                                        if(!element.text) {
+                                            element.text = emptyValue;
+                                        }
+                                    });
+
                                     if(paginate) {
                                         d.resolve(data);
                                     } else {

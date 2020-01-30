@@ -616,6 +616,10 @@ function rangesAreEqual(range, rangeFromOptions) {
     }
 }
 
+function pointInCanvas(canvas, x, y) {
+    return (x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom);
+}
+
 exports.getVizRangeObject = getVizRangeObject;
 exports.convertVisualRangeObject = convertVisualRangeObject;
 exports.adjustVisualRange = adjustVisualRange;
@@ -642,3 +646,4 @@ exports.normalizeBBox = normalizeBBox;
 exports.PANE_PADDING = PANE_PADDING;
 
 exports.rangesAreEqual = rangesAreEqual;
+exports.pointInCanvas = pointInCanvas;

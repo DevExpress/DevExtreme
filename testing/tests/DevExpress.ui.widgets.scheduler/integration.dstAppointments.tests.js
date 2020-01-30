@@ -1,233 +1,308 @@
-const $ = require('jquery');
+import { initTestMarkup, createWrapper } from './helpers.js';
+import dateLocalization from 'localization/date';
+import fx from 'animation/fx';
+import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
+import { dateToMilliseconds as toMs } from 'core/utils/date';
 
-QUnit.testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler"></div>');
-});
+import 'ui/scheduler/ui.scheduler';
+import 'common.css!';
+import 'generic_light.css!';
 
-require('common.css!');
-require('generic_light.css!');
-
-
-const dateLocalization = require('localization/date');
-const fx = require('animation/fx');
-const subscribes = require('ui/scheduler/ui.scheduler.subscribes');
-
-require('ui/scheduler/ui.scheduler');
-
-const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
-const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
-
-function getDeltaTz(schedulerTz, date) {
-    const defaultTz = date.getTimezoneOffset() * 60000;
-    return schedulerTz * 3600000 + defaultTz;
-}
-
-QUnit.module('Integration: Appointments', {
-    beforeEach: function() {
+QUnit.testStart(() => initTestMarkup());
+const moduleConfig = {
+    beforeEach() {
         fx.off = true;
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
-        };
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: function() {
-        fx.off = false;
+
+    afterEach() {
         this.clock.restore();
+        fx.off = false;
     }
-});
+};
 
-QUnit.test('Appointment wich started in DST and ended in STD time should have correct start & end dates', function(assert) {
-    let startDate = 1541311200000;
-    let endDate = 1541319000000;
+QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
+    const getDeltaTz = (schedulerTz, date) => schedulerTz * toMs('hour') + date.getTimezoneOffset() * toMs('minute');
 
-    this.createInstance({
-        currentDate: new Date(2018, 10, 4),
-        views: ['week'],
-        currentView: 'week',
-        dataSource: [{
-            text: 'DST',
-            startDate: startDate,
-            endDate: endDate
-        }],
-        timeZone: 'America/Chicago'
-    });
+    QUnit.test('Appointment wich started in DST and ended in STD time should have correct start & end dates', function(assert) {
+        const startDate = new Date(1541311200000);
+        const endDate = new Date(1541319000000);
 
-    startDate = new Date(startDate);
-    endDate = new Date(endDate);
-
-    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-    const deltaTzStart = getDeltaTz(-5, startDate);
-    const deltaTzEnd = getDeltaTz(-6, endDate);
-    const startDateByTz = new Date(startDate.setHours(startDate.getHours() + deltaTzStart / 3600000));
-    const endDateByTz = new Date(endDate.setHours(endDate.getHours() + deltaTzEnd / 3600000));
-    const resultDate = `${dateLocalization.format(startDateByTz, 'shorttime')} - ${dateLocalization.format(endDateByTz, 'shorttime')}`;
-
-    assert.equal($appointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'DST', 'Text is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
-});
-
-QUnit.test('Appointment wich started in STD and ended in DST time should have correct start & end dates', function(assert) {
-    let startDate = new Date(1520748000000);
-    let endDate = new Date(1520751600000);
-
-    this.createInstance({
-        currentDate: new Date(2018, 2, 11),
-        views: ['timelineDay'],
-        maxAppointmentsPerCell: null,
-        currentView: 'timelineDay',
-        dataSource: [{
-            text: 'DST',
-            startDate: startDate,
-            endDate: endDate
-        }],
-        timeZone: 'America/New_York'
-    });
-
-    startDate = new Date(startDate);
-    endDate = new Date(endDate);
-
-    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-    const deltaTzStart = getDeltaTz(-5, startDate);
-    const deltaTzEnd = getDeltaTz(-4, endDate);
-    const startDateByTz = new Date(startDate.setHours(startDate.getHours() + deltaTzStart / 3600000));
-    const endDateByTz = new Date(endDate.setHours(endDate.getHours() + deltaTzEnd / 3600000));
-    const resultDate = `${dateLocalization.format(startDateByTz, 'shorttime')} - ${dateLocalization.format(endDateByTz, 'shorttime')}`;
-
-    assert.equal($appointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'DST', 'Text is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
-});
-
-QUnit.test('Second recurring appointment wich started in STD and ended in DST time should have correct start & end dates & position', function(assert) {
-    let startDate = new Date(1520748000000);
-    let endDate = new Date(1520751600000);
-
-    this.createInstance({
-        currentDate: new Date(2018, 2, 12),
-        views: ['timelineDay'],
-        currentView: 'timelineDay',
-        maxAppointmentsPerCell: null,
-        dataSource: [{
-            text: 'DST',
-            startDate: startDate,
-            endDate: endDate,
-            recurrenceRule: 'FREQ=DAILY'
-        }],
-        timeZone: 'America/New_York'
-    });
-
-    startDate = new Date(startDate);
-    endDate = new Date(endDate);
-
-    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-
-    assert.equal($appointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'DST', 'Text is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '1:00 AM - 2:00 AM', 'Start Date is correct on init');
-
-    assert.roughEqual($appointment.get(0).getBoundingClientRect().width, $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).get(0).getBoundingClientRect().width * 2, 2, 'Appointment width is correct');
-});
-
-QUnit.test('Appointment which started in DST and ended in STD time should have right width, timeline view', function(assert) {
-    const startDate = new Date(2018, 10, 4, 1);
-    const endDate = new Date(2018, 10, 4, 3);
-    const currentDate = new Date(2018, 10, 4);
-
-    this.createInstance({
-        views: ['timelineWeek'],
-        currentView: 'timelineWeek',
-        cellDuration: 60,
-        currentDate: currentDate,
-        maxAppointmentsPerCell: null,
-        dataSource: [{
-            text: 'DST',
-            startDate: startDate,
-            endDate: endDate
-        }]
-    });
-
-    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).first();
-    const cellWidth = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).first().outerWidth();
-    const duration = (endDate - startDate) / 3600000;
-    const tzDiff = (startDate.getTimezoneOffset() - endDate.getTimezoneOffset()) / 60;
-
-    assert.roughEqual($appointment.outerWidth(), cellWidth * (duration + tzDiff), 2.001, 'Appt width is correct on the day of the time ajusting');
-});
-
-QUnit.test('Second recurring appointment should have right width if previous appt started in STD and ended in DST, timeline view', function(assert) {
-    const startDate = new Date(1520758800000);
-    const endDate = new Date(1520762400000);
-    const currentDate = new Date(2018, 2, 12);
-
-    this.createInstance({
-        currentDate: currentDate,
-        views: ['timelineDay'],
-        currentView: 'timelineDay',
-        maxAppointmentsPerCell: null,
-        dataSource: [{
-            text: 'DST',
-            startDate: startDate,
-            endDate: endDate,
-            recurrenceRule: 'FREQ=DAILY'
-        }],
-        cellDuration: 60,
-        timeZone: 'America/New_York'
-    });
-    this.instance.option('currentDate', this.instance.fire('convertDateByTimezone', currentDate, -5));
-
-    const $secondRecAppointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).first();
-    const cellWidth = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).first().outerWidth();
-    const duration = (endDate - startDate) / 3600000;
-
-    assert.roughEqual($secondRecAppointment.outerWidth(), cellWidth * duration, 2.001, 'Appt width is correct after the day of the time ajusting');
-});
-
-QUnit.test('Recurrence exception should not be rendered if exception goes after adjusting AEST-> AEDT (T619455)', function(assert) {
-    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-39600000);
-    try {
-        this.createInstance({
+        const scheduler = createWrapper({
+            currentDate: new Date(2018, 10, 4),
+            views: ['week'],
+            currentView: 'week',
             dataSource: [{
-                text: 'Recruiting students',
-                startDate: new Date(2018, 2, 30, 10, 0),
-                endDate: new Date(2018, 2, 30, 11, 0),
-                recurrenceRule: 'FREQ=DAILY',
-                recurrenceException: '20180401T100000'
+                text: 'DST',
+                startDate: startDate,
+                endDate: endDate
+            }],
+            timeZone: 'America/Chicago'
+        });
+
+        const deltaTzStart = getDeltaTz(-5, startDate);
+        const deltaTzEnd = getDeltaTz(-6, endDate);
+        const startDateByTz = new Date(startDate.setHours(startDate.getHours() + deltaTzStart / toMs('hour')));
+        const endDateByTz = new Date(endDate.setHours(endDate.getHours() + deltaTzEnd / toMs('hour')));
+        const resultDateText = `${dateLocalization.format(startDateByTz, 'shorttime')} - ${dateLocalization.format(endDateByTz, 'shorttime')}`;
+
+        assert.equal(scheduler.appointments.getTitleText(), 'DST', 'Text is correct on init');
+        assert.equal(scheduler.appointments.getDateText(), resultDateText, 'Date is correct on init');
+    });
+
+    QUnit.test('Appointment wich started in STD and ended in DST time should have correct start & end dates', function(assert) {
+        const startDate = new Date(1520748000000);
+        const endDate = new Date(1520751600000);
+
+        const scheduler = createWrapper({
+            currentDate: new Date(2018, 2, 11),
+            views: ['timelineDay'],
+            maxAppointmentsPerCell: null,
+            currentView: 'timelineDay',
+            dataSource: [{
+                text: 'DST',
+                startDate: startDate,
+                endDate: endDate
+            }],
+            timeZone: 'America/New_York'
+        });
+
+        const deltaTzStart = getDeltaTz(-5, startDate);
+        const deltaTzEnd = getDeltaTz(-4, endDate);
+        const startDateByTz = new Date(startDate.setHours(startDate.getHours() + deltaTzStart / toMs('hour')));
+        const endDateByTz = new Date(endDate.setHours(endDate.getHours() + deltaTzEnd / toMs('hour')));
+        const resultDateText = `${dateLocalization.format(startDateByTz, 'shorttime')} - ${dateLocalization.format(endDateByTz, 'shorttime')}`;
+
+        assert.equal(scheduler.appointments.getTitleText(), 'DST', 'Text is correct on init');
+        assert.equal(scheduler.appointments.getDateText(), resultDateText, 'Date is correct on init');
+    });
+
+    QUnit.test('Second recurring appointment wich started in STD and ended in DST time should have correct start & end dates & position', function(assert) {
+        const startDate = new Date(1520748000000);
+        const endDate = new Date(1520751600000);
+
+        const scheduler = createWrapper({
+            currentDate: new Date(2018, 2, 12),
+            views: ['timelineDay'],
+            currentView: 'timelineDay',
+            maxAppointmentsPerCell: null,
+            dataSource: [{
+                text: 'DST',
+                startDate: startDate,
+                endDate: endDate,
+                recurrenceRule: 'FREQ=DAILY'
+            }],
+            timeZone: 'America/New_York'
+        });
+
+        assert.equal(scheduler.appointments.getTitleText(), 'DST', 'Text is correct on init');
+        assert.equal(scheduler.appointments.getDateText(), '1:00 AM - 2:00 AM', 'Start Date is correct on init');
+        assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth() * 2, 2, 'Appointment width is correct');
+    });
+
+    // NOTE: Timezone-sensitive test, use US/Pacific for proper testing
+    QUnit.test('Appointment which started in DST and ended in STD time should have right width, timeline view', function(assert) {
+        const startDate = new Date(2018, 10, 4, 1);
+        const endDate = new Date(2018, 10, 4, 3);
+        const currentDate = new Date(2018, 10, 4);
+
+        const scheduler = createWrapper({
+            views: ['timelineWeek'],
+            currentView: 'timelineWeek',
+            cellDuration: 60,
+            currentDate: currentDate,
+            maxAppointmentsPerCell: null,
+            dataSource: [{
+                text: 'DST',
+                startDate: startDate,
+                endDate: endDate
+            }]
+        });
+
+        const duration = (endDate - startDate) / toMs('hour');
+        const tzDiff = (startDate.getTimezoneOffset() - endDate.getTimezoneOffset()) / 60;
+
+        assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth() * (duration + tzDiff), 2.001, 'Appt width is correct on the day of the time ajusting');
+    });
+
+    QUnit.test('Second recurring appointment should have right width if previous appt started in STD and ended in DST, timeline view', function(assert) {
+        const startDate = new Date(1520758800000);
+        const endDate = new Date(1520762400000);
+        const currentDate = new Date(2018, 2, 12);
+
+        const scheduler = createWrapper({
+            currentDate: currentDate,
+            views: ['timelineDay'],
+            currentView: 'timelineDay',
+            maxAppointmentsPerCell: null,
+            dataSource: [{
+                text: 'DST',
+                startDate: startDate,
+                endDate: endDate,
+                recurrenceRule: 'FREQ=DAILY'
+            }],
+            cellDuration: 60,
+            timeZone: 'America/New_York'
+        });
+
+        scheduler.instance.option('currentDate', scheduler.instance.fire('convertDateByTimezone', currentDate, -5));
+        const duration = (endDate - startDate) / toMs('hour');
+
+        assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth() * duration, 2.001, 'Appt width is correct after the day of the time ajusting');
+    });
+
+    QUnit.test('Recurrence exception should not be rendered if exception goes after adjusting AEST-> AEDT (T619455)', function(assert) {
+        const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-39600000);
+        try {
+            const scheduler = createWrapper({
+                dataSource: [{
+                    text: 'Recruiting students',
+                    startDate: new Date(2018, 2, 30, 10, 0),
+                    endDate: new Date(2018, 2, 30, 11, 0),
+                    recurrenceRule: 'FREQ=DAILY',
+                    recurrenceException: '20180401T100000'
+                }],
+                views: ['month'],
+                currentView: 'month',
+                currentDate: new Date(2018, 2, 30),
+                timeZone: 'Australia/Sydney',
+                height: 600
+            });
+            assert.equal(scheduler.appointments.getAppointmentCount(), 8, 'correct number of the events');
+
+            scheduler.instance.option('currentView', 'day');
+            scheduler.instance.option('currentDate', new Date(2018, 3, 1));
+
+            assert.notOk(scheduler.appointments.getAppointmentCount(), 'event is an exception');
+        } finally {
+            tzOffsetStub.restore();
+        }
+    });
+
+    QUnit.test('Appointment should rendered correctly if end date appointment coincided translation oт STD', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'November 4',
+                startDate: new Date(2018, 10, 4, 18, 0),
+                endDate: new Date(2018, 10, 5, 0, 0),
             }],
             views: ['month'],
             currentView: 'month',
-            currentDate: new Date(2018, 2, 30),
-            timeZone: 'Australia/Sydney',
-            height: 600
+            currentDate: new Date(2018, 10, 1),
+            firstDayOfWeek: 0,
+            cellDuration: 60,
+            height: 800
         });
 
-        const $appointments = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS);
-
-        assert.equal($appointments.length, 8, 'correct number of the events');
-
-        this.instance.option('currentView', 'day');
-        this.instance.option('currentDate', new Date(2018, 3, 1));
-
-        assert.notOk($(this.instance.$element()).find('.' + APPOINTMENT_CLASS).length, 'event is an exception');
-    } finally {
-        tzOffsetStub.restore();
-    }
-});
-
-QUnit.test('Appointment should rendered correctly if end date appointment coincided translation oт STD', function(assert) {
-    this.createInstance({
-        dataSource: [{
-            text: 'November 4',
-            startDate: new Date(2018, 10, 4, 18, 0),
-            endDate: new Date(2018, 10, 5, 0, 0),
-        }],
-        views: ['month'],
-        currentView: 'month',
-        currentDate: new Date(2018, 10, 1),
-        firstDayOfWeek: 0,
-        cellDuration: 60,
-        height: 800
+        assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth(), 2.001, 'Appointment width is correct after translation oт STD');
     });
 
-    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).first();
-    const cellWidth = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).first().outerWidth();
+    QUnit.test('Recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', function(assert) {
+        // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
+        const scheduler = createWrapper({
+            dataSource: [
+                {
+                    text: 'Daily meeting',
+                    startDate: '2019-03-01T09:00:00+01:00',
+                    endDate: '2019-03-01T12:00:00+01:00',
+                    recurrenceRule: 'FREQ=DAILY',
+                    startDateTimeZone: 'Europe/Paris',
+                    endDateTimeZone: 'Europe/Paris'
+                }
+            ],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2019, 2, 1), // NOTE: STD Montreal
+            startDayHour: 0,
+            height: 600,
+            timeZone: 'America/Montreal',
+            dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx'
+        });
 
-    assert.roughEqual($appointment.outerWidth(), cellWidth, 1.1, 'Appointment width is correct after translation oт STD');
+        let targetCell = scheduler.workSpace.getCell(6);
+        let appointment = scheduler.appointments.getAppointment(0);
+
+        assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
+        assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
+
+        scheduler.instance.option('currentDate', new Date(2019, 2, 11)); // NOTE: DST Montreal, STD Paris
+
+        targetCell = scheduler.workSpace.getCell(8);
+        appointment = scheduler.appointments.getAppointment(0);
+
+        assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
+        assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
+
+        scheduler.instance.option('currentDate', new Date(2019, 3, 1)); // NOTE: DST Paris
+
+        targetCell = scheduler.workSpace.getCell(6);
+        appointment = scheduler.appointments.getAppointment(0);
+
+        assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
+        assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
+    });
+
+    QUnit.test('Recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone', function(assert) {
+        // NOTE: The daylight saving changed in Montreal on 10.03.2019
+        const scheduler = createWrapper({
+            dataSource: [
+                {
+                    text: 'Daily meeting',
+                    startDate: '2019-03-01T09:00:00+01:00',
+                    endDate: '2019-03-01T12:00:00+01:00',
+                    recurrenceRule: 'FREQ=DAILY'
+                }
+            ],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2019, 2, 5), // NOTE: STD Montreal
+            startDayHour: 0,
+            height: 600,
+            timeZone: 'America/Montreal',
+            dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx'
+        });
+
+        let targetCell = scheduler.workSpace.getCell(6);
+        let appointment = scheduler.appointments.getAppointment(0);
+
+        assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
+        assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
+
+        scheduler.instance.option('currentDate', new Date(2019, 3, 1)); // NOTE: DST Montreal
+
+        targetCell = scheduler.workSpace.getCell(6);
+        appointment = scheduler.appointments.getAppointment(0);
+
+        assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
+        assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
+    });
+
+    QUnit.test('Recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST, appointment timezone is set', function(assert) {
+        // NOTE: The daylight saving changed in Paris on 31.03.2019
+        const scheduler = createWrapper({
+            dataSource: [
+                {
+                    text: 'Daily meeting',
+                    startDate: '2019-03-01T09:00:00+01:00',
+                    endDate: '2019-03-01T12:00:00+01:00',
+                    recurrenceRule: 'FREQ=DAILY',
+                    startDateTimeZone: 'Europe/Paris',
+                    endDateTimeZone: 'Europe/Paris'
+                }
+            ],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2019, 2, 30), // NOTE: STD Paris
+            startDayHour: 0,
+            height: 600,
+            dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx'
+        });
+
+        const appointmentPosition = scheduler.appointments.getAppointment(0).position().top;
+
+        scheduler.instance.option('currentDate', new Date(2019, 3, 1)); // NOTE: DST Paris
+
+        const appointment = scheduler.appointments.getAppointment(0);
+        assert.equal(appointment.position().top, appointmentPosition, 'Recurrence appointment part positions are the same and independent of time changing');
+    });
 });

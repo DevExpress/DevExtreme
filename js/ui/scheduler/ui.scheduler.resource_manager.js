@@ -7,8 +7,9 @@ import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import query from '../../data/query';
 import dataCoreUtils from '../../core/utils/data';
-import DataSourceModule from '../../data/data_source/data_source';
+import { DataSource } from '../../data/data_source/data_source';
 import { when, Deferred } from '../../core/utils/deferred';
+import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 
 const getValueExpr = resource => resource.valueExpr || 'id';
 const getDisplayExpr = resource => resource.displayExpr || 'text';
@@ -20,11 +21,11 @@ export default class ResourceManager {
     }
 
     _wrapDataSource(dataSource) {
-        if(dataSource instanceof DataSourceModule.DataSource) {
+        if(dataSource instanceof DataSource) {
             return dataSource;
         } else {
-            return new DataSourceModule.DataSource({
-                store: DataSourceModule.normalizeDataSourceOptions(dataSource).store,
+            return new DataSource({
+                store: normalizeDataSourceOptions(dataSource).store,
                 pageSize: 0
             });
         }
