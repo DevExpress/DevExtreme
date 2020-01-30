@@ -51,5 +51,11 @@ module.exports = {
     ],
     'switch': [
         { import: '../../base/mixins', type: 'index' },
+    ],
+    'tabs': [
+        { import: '../button', type: 'index' },
+        { import: '../button/colors', type: 'index' },
+        { import: '../button/colors', type: 'colors' },
+        { import: '../../base/icons', type: 'index' },
     ]
 };

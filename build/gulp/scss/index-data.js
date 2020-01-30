@@ -35,5 +35,7 @@ module.exports = [
     { content: 'checkBox', task: 'widget' },
     // switch
     { content: 'switch', task: 'widget' },
+    // tabs
+    { content: 'tabs', task: 'widget' },
     { task: 'newline' }
 ];

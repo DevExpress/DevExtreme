@@ -40,9 +40,12 @@ gulp.task('less2sass', (callback) => {
 const replaceColorFunctions = (content) => {
     // TODO lighten and darken is not included directly in the new module system (https://sass-lang.com/documentation/modules/color#lighten), but it works
     // change fade($color, 20%) to the color.change($color, $alpha: 0.20), $color can be other function
-    content = content.replace(/fade\(([$\d\w-#]*|[\w]*\(.*\)),\s*(\d+)%\)(;|,)/g, 'color.change($1, $alpha: 0.$2)$3');
     // change fadein($color, 20%) to the color.adjust($color, $alpha: 0.20), $color can be other function
-    content = content.replace(/fadein\(([$\d\w-#]*|[\w]*\(.*\)),\s*(\d+)%\)(;|,)/g, 'color.adjust($1, $alpha: 0.$2)$3');
+
+    content = content.replace(/(fadein|fade)\(([$\d\w-#]*|[\w]*\(.*\)),\s*(\d+)%\)(;|,|\))/g, (match, func, color, percent, sign) => {
+        const colorFunction = func === 'fade' ? 'change' : 'adjust';
+        return `color.${colorFunction}(${color}, $alpha: ${percent / 100})${sign}`;
+    });
     return content;
 };
 
