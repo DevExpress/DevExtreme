@@ -69,8 +69,8 @@ gulp.task('fix-base', () => {
         // icons
         .pipe(replace('@mixin dx-icon-sizing', '@use "sass:map";\n\n@mixin dx-icon-sizing'))
         .pipe(replace('@mixin dx-font-icon($icons[$$name]),', '@include dx-font-icon(map.get($icons, $name));'))
-        .pipe(replace(/\$icons:\s{([\w\W]*?)}/, (_, p1) => {
-            return `$icons: (${p1.replace(/;/g, ',')});`;
+        .pipe(replace(/\$icons:\s{([\w\W]*?)}/, (_, codes) => {
+            return `$icons: (${codes.replace(/;/g, ',')});`;
         }))
         .pipe(replace('f11d",', 'f11d"'))
         .pipe(replace(/each\(\$icons,\s{([\w\W]*)}\);/, '@each $key, $val in $icons {$1}'))
