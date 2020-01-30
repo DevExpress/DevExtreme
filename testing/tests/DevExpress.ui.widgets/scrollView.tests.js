@@ -2341,112 +2341,110 @@ QUnit.module('default value', {
 
         assert.equal(scrollView.option('refreshStrategy'), 'swipeDown');
     });
+});
 
+module('pullDown, reachBottom events', moduleConfig, () => {
+    test('topPocket visibility depends on pullDown event', (assert) => {
+        const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
+        const $topPocket = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_CLASS);
 
-    module('pullDown, reachBottom events', moduleConfig, () => {
-        test('topPocket visibility depends on pullDown event', (assert) => {
-            const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
-            const $topPocket = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_CLASS);
+        $scrollView.dxScrollView('instance').on('pullDown', noop);
 
-            $scrollView.dxScrollView('instance').on('pullDown', noop);
+        assert.ok($topPocket.is(':visible'), 'topPocket is visible');
+    });
 
-            assert.ok($topPocket.is(':visible'), 'topPocket is visible');
+    test('pullDown event should be fired after refresh method call', (assert) => {
+        assert.expect(1);
+
+        const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
+        const instance = $scrollView.dxScrollView('instance');
+
+        instance.on('pullDown', () => {
+            assert.ok(true, 'pullDown is fired on refresh');
         });
 
-        test('pullDown event should be fired after refresh method call', (assert) => {
-            assert.expect(1);
+        instance.refresh();
+    });
 
-            const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
-            const instance = $scrollView.dxScrollView('instance');
+    test('bottomPocket element depends on reachBottom event', (assert) => {
+        const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
 
-            instance.on('pullDown', () => {
-                assert.ok(true, 'pullDown is fired on refresh');
-            });
+        $scrollView.dxScrollView('instance').on('reachBottom', noop);
 
-            instance.refresh();
+        const $reachBottom = $scrollView.find('.' + SCROLLVIEW_REACHBOTTOM_CLASS);
+
+        assert.ok($reachBottom.is(':visible'), 'reach bottom is visible');
+    });
+
+    test('scrollview events support chains', (assert) => {
+        const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
+
+        $scrollView.dxScrollView('instance').on('reachBottom', noop).on('pullDown', noop);
+
+        assert.ok(true, 'chains is supported');
+    });
+
+    test('scrollview events support chains', (assert) => {
+        const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
+
+        $scrollView.dxScrollView('instance').on('reachBottom', noop).on('pullDown', noop);
+
+        assert.ok(true, 'chains is supported');
+    });
+
+    ['config', 'onInitialized'].forEach(assignMethod => {
+        test('Check pullDown event handler - ' + assignMethod, (assert) => {
+            const config = {};
+            const pullDownHandler = sinon.stub();
+
+            if(assignMethod === 'config') {
+                config.onPullDown = pullDownHandler;
+            } else if(assignMethod === 'onInitialized') {
+                config.onInitialized = (e) => {
+                    e.component.on('pullDown', pullDownHandler);
+                };
+            } else {
+                assert.ok(false);
+            }
+
+            const $scrollView = $('#scrollView').dxScrollView($.extend(config, { useNative: false }));
+            assert.ok(true, 'no exceptions');
+
+            const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
+            const $topPocket = $scrollView.find(`.${SCROLLVIEW_TOP_POCKET_CLASS}`);
+            pointerMock($content)
+                .start()
+                .down()
+                .move(0, $topPocket.height() + 10)
+                .up();
+            assert.strictEqual(pullDownHandler.callCount, 1, 'pullDownHandler.callCount');
         });
 
-        test('bottomPocket element depends on reachBottom event', (assert) => {
-            const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
+        test('Check reachBottom event handler - ' + assignMethod, (assert) => {
+            const config = {};
+            const reachBottomHandler = sinon.stub();
 
-            $scrollView.dxScrollView('instance').on('reachBottom', noop);
+            if(assignMethod === 'config') {
+                config.onReachBottom = reachBottomHandler;
+            } else if(assignMethod === 'onInitialized') {
+                config.onInitialized = (e) => {
+                    e.component.on('reachBottom', reachBottomHandler);
+                };
+            } else {
+                assert.ok(false);
+            }
 
-            const $reachBottom = $scrollView.find('.' + SCROLLVIEW_REACHBOTTOM_CLASS);
+            const $scrollView = $('#scrollView').dxScrollView($.extend(config, { useNative: false }));
+            assert.ok(true, 'no exceptions');
 
-            assert.ok($reachBottom.is(':visible'), 'reach bottom is visible');
-        });
+            const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
 
-        test('scrollview events support chains', (assert) => {
-            const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
-
-            $scrollView.dxScrollView('instance').on('reachBottom', noop).on('pullDown', noop);
-
-            assert.ok(true, 'chains is supported');
-        });
-
-        test('scrollview events support chains', (assert) => {
-            const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
-
-            $scrollView.dxScrollView('instance').on('reachBottom', noop).on('pullDown', noop);
-
-            assert.ok(true, 'chains is supported');
-        });
-
-        ['config', 'onInitialized'].forEach(assignMethod => {
-            test('Check pullDown event handler - ' + assignMethod, (assert) => {
-                const config = {};
-                const pullDownHandler = sinon.stub();
-
-                if(assignMethod === 'config') {
-                    config.onPullDown = pullDownHandler;
-                } else if(assignMethod === 'onInitialized') {
-                    config.onInitialized = (e) => {
-                        e.component.on('pullDown', pullDownHandler);
-                    };
-                } else {
-                    assert.ok(false);
-                }
-
-                const $scrollView = $('#scrollView').dxScrollView($.extend(config, { useNative: false }));
-                assert.ok(true, 'no exceptions');
-
-                const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
-                const $topPocket = $scrollView.find(`.${SCROLLVIEW_TOP_POCKET_CLASS}`);
-                pointerMock($content)
-                    .start()
-                    .down()
-                    .move(0, $topPocket.height() + 10)
-                    .up();
-                assert.strictEqual(pullDownHandler.callCount, 1, 'pullDownHandler.callCount');
-            });
-
-            test('Check reachBottom event handler - ' + assignMethod, (assert) => {
-                const config = {};
-                const reachBottomHandler = sinon.stub();
-
-                if(assignMethod === 'config') {
-                    config.onReachBottom = reachBottomHandler;
-                } else if(assignMethod === 'onInitialized') {
-                    config.onInitialized = (e) => {
-                        e.component.on('reachBottom', reachBottomHandler);
-                    };
-                } else {
-                    assert.ok(false);
-                }
-
-                const $scrollView = $('#scrollView').dxScrollView($.extend(config, { useNative: false }));
-                assert.ok(true, 'no exceptions');
-
-                const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
-
-                pointerMock($content)
-                    .start()
-                    .down()
-                    .move(0, -$content.height() - 10)
-                    .up();
-                assert.strictEqual(reachBottomHandler.callCount, 1, 'reachBottomHandler.callCount');
-            });
+            pointerMock($content)
+                .start()
+                .down()
+                .move(0, -$content.height() - 10)
+                .up();
+            assert.strictEqual(reachBottomHandler.callCount, 1, 'reachBottomHandler.callCount');
         });
     });
 });
-
