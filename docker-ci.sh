@@ -46,6 +46,11 @@ function run_test {
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
     [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
 
+    if [ -n "$TZ" ]; then
+        echo "Time-Zone: $TZ"
+        date
+    fi
+
     if [ "$NO_HEADLESS" == "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
         x11vnc -display :99 2>/dev/null &
