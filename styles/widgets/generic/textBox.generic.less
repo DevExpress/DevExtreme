@@ -2,7 +2,7 @@
 
 .dx-searchbox {
     .dx-icon-search {
-        .dx-icon-search;
+        .dx-icon(search);
         .dx-texteditor-icon();
 
         font-size: @GENERIC_TEXTEDITOR_ICON_SIZE - 1;
@@ -24,10 +24,15 @@
         .dx-rtl & {
             padding-right: @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
         }
+    }
 
-        .dx-rtl.dx-editor-underlined&,
-        .dx-rtl .dx-editor-underlined& {
-            padding-right: 0;
+    &.dx-editor-underlined {
+        .dx-texteditor-input,
+        .dx-placeholder:before {
+            .dx-rtl&,
+            .dx-rtl & {
+                padding-right: 0;
+            }
         }
     }
 }
