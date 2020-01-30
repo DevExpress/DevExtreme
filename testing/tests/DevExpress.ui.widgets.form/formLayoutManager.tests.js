@@ -122,14 +122,13 @@ QUnit.test('Check label alignment classes when browser is not supported flex', f
     ];
     const $testContainer = $('#container').dxLayoutManager();
     const layoutManager = $testContainer.dxLayoutManager('instance');
-    let $items;
 
     // act
     layoutManager._hasBrowserFlex = function() {
         return false;
     };
     layoutManager.option('items', items);
-    $items = $testContainer.find('.' + internals.FIELD_ITEM_CLASS);
+    const $items = $testContainer.find('.' + internals.FIELD_ITEM_CLASS);
 
     // assert
     assert.ok(!$items.eq(0).hasClass(internals.FIELD_ITEM_LABEL_ALIGN_CLASS), 'item doesn\'t have baseline alignment class');
@@ -207,7 +206,6 @@ QUnit.test('Generate several various widgets in layout', function(assert) {
 
 QUnit.test('Editors with object value correctly work with values from data', function(assert) {
     // arrange, act
-    let layoutManager;
     const $testContainer = $('#container');
     const items = [
         { myText: 'test1', number: 1 },
@@ -215,7 +213,7 @@ QUnit.test('Editors with object value correctly work with values from data', fun
         { myText: 'test3', number: 3 }
     ];
 
-    layoutManager = $testContainer.dxLayoutManager({
+    const layoutManager = $testContainer.dxLayoutManager({
         layoutData: { testItem: items[1] },
         items: [
             {
@@ -237,11 +235,9 @@ QUnit.test('Editors with object value correctly work with values from data', fun
 
 QUnit.test('Change a layoutData object', function(assert) {
     // arrange
-    let $editors;
-    let layoutManager;
     const $testContainer = $('#container');
 
-    layoutManager = $testContainer.dxLayoutManager({
+    const layoutManager = $testContainer.dxLayoutManager({
         layoutData: {
             name: 'Patti',
             active: true,
@@ -263,7 +259,7 @@ QUnit.test('Change a layoutData object', function(assert) {
         birthDate: new Date('1/1/2001')
     });
 
-    $editors = $testContainer.find('.dx-texteditor, .dx-switch');
+    const $editors = $testContainer.find('.dx-texteditor, .dx-switch');
 
     // assert
     assert.equal($editors.eq(0).dxTextBox('instance').option('value'), 'Vadim');
@@ -282,9 +278,8 @@ QUnit.test('onEditorEnterKey', function(assert) {
     // arrange
     let testArgs;
     let editor;
-    let layoutManager;
 
-    layoutManager = $('#container').dxLayoutManager({
+    const layoutManager = $('#container').dxLayoutManager({
         layoutData: {
             name: 'Test Name',
             profession: 'Test profession'
@@ -316,7 +311,7 @@ QUnit.test('onEditorEnterKey', function(assert) {
     assert.equal(testArgs.dataField, 'name', 'dataField');
 });
 
-QUnit.test('Should save layoutData properties by reference (T706177)', (assert) => {
+QUnit.test('Should save layoutData properties by reference (T706177)', function(assert) {
     const done = assert.async();
 
     const items = [
