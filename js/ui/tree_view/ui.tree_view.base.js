@@ -218,7 +218,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return new Deferred().resolve().promise();
     },
 
-    _initSelectionBySelectedKeysOption: function(items, keyGetter, itemGetter) {
+    _setSelectedItemsBySelectionOption: function(items, keyGetter, itemGetter) {
         const selectedKeys = this.option('selectedItemKeys') || this._getItemKeys(keyGetter, this.option('selectedItems'));
         if(this._initialized || selectedKeys === null) {
             return;
@@ -1665,20 +1665,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     getSelectedNodeKeys: function() {
         return this._dataAdapter.getSelectedNodesKeys();
-    },
-
-    selectNodesByKeys: function(keys) {
-        const oldSelectedKeys = this.getSelectedNodeKeys();
-        keys.forEach((key) => {
-            this._setItemSelection(true, key);
-        });
-
-        const actualSelectedKeys = this.getSelectedNodeKeys();
-        if(oldSelectedKeys !== actualSelectedKeys) {
-            this._fireSelectionChanged();
-        }
-
-        return actualSelectedKeys;
     },
 
     selectAll: function() {
