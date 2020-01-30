@@ -39,7 +39,9 @@ class Button extends Widget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            focusStateEnabled: true
+            focusStateEnabled: true,
+            activeStateEnabled: true,
+            hoverStateEnabled: true,
         });
     }
 }
