@@ -211,14 +211,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     // TODO: implement these functions
     _initSelectedItems: commonUtils.noop,
+    _normalizeSelectedItems: commonUtils.noop,
 
     _syncSelectionOptions: function(option) {
         this._updateSelectionOptions();
         return new Deferred().resolve().promise();
     },
-
-
-    _normalizeSelectedItems: commonUtils.noop,
 
     _initSelectionBySelectedKeysOption: function(items, keyGetter, itemGetter) {
         const selectedKeys = this.option('selectedItemKeys') || this._getItemKeys(keyGetter, this.option('selectedItems'));
@@ -273,13 +271,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const diff = this._getSelectedKeysDiff(oldSelectedKeys, keys);
 
         diff.toDeselect.forEach((key) => {
-            this._updateItemSelection(false, key, null, true);
+            this._setItemSelection(false, key);
         });
         diff.toSelect.forEach((key) => {
-            this._updateItemSelection(true, key, null, true);
+            this._setItemSelection(true, key);
         });
 
-        if(oldSelectedKeys !== this.option('selectedItemKeys')) {
+        this._updateSelectionOptions();
+        const newSelectedKeys = this.getSelectedNodesKeys();
+        const isKeysEquals = oldSelectedKeys.length === newSelectedKeys.length && oldSelectedKeys.every((key, index) => key === newSelectedKeys[index]);
+        if(!isKeysEquals) {
             this._fireSelectionChanged();
         }
     },
@@ -927,7 +928,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
-
         this._updateExpandedItemsUI(node, state, e);
     },
 
@@ -1053,6 +1053,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _appendItems: function(newItems) {
         this.option().items = this.option('items').concat(newItems);
         this._initDataAdapter();
+        this._updateSelectionOptions();
     },
 
     _updateExpandedItem: function(node, state, e) {
