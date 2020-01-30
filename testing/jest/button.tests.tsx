@@ -1,6 +1,6 @@
 import React from 'react';
-import Button, { viewModelFunction, viewFunction } from '../../js/renovation/button';
 import { shallow } from 'enzyme';
+import Button, { viewModelFunction, viewFunction } from '../../js/renovation/button';
 
 describe('Button', () => {
     const render = (props = {}) => shallow(
@@ -75,6 +75,20 @@ describe('Button', () => {
 
                 expect(buttonContentChildren.props().text).toBe('My button');
                 expect(buttonContentChildren.render().text()).toBe('My button123');
+            });
+        });
+
+        describe('hoverStateEnabled', () => {
+            it('should have default value', () => {
+                const button = render();
+
+                expect(button.prop('hoverStateEnabled')).toBe(true);
+            });
+
+            it('should provide custom value', () => {
+                const button = render({ hoverStateEnabled: false });
+
+                expect(button.prop('hoverStateEnabled')).toBe(false);
             });
         });
     });

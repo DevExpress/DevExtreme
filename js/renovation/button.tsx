@@ -7,11 +7,11 @@ const WidgetJSX = JSXConstructor<Widget>(Widget);
 
 const getImageContainerJSX = (source: string) => {
     switch (getImageSourceType(source)) {
-        case 'dxIcon': return (<i className={`dx-icon dx-icon-${source}`}/>);
-        case 'fontIcon': return (<i className={`dx-icon ${source}`}/>);
-        case 'image': return (<img src={source} className="dx-icon"/>);
-        case 'svg': return (<i className="dx-icon dx-svg-icon">{source}></i>);
-        default: return null;
+    case 'dxIcon': return (<i className={`dx-icon dx-icon-${source}`}/>);
+    case 'fontIcon': return (<i className={`dx-icon ${source}`}/>);
+    case 'image': return (<img src={source} className="dx-icon"/>);
+    case 'svg': return (<i className="dx-icon dx-svg-icon">{source}></i>);
+    default: return null;
     }
 };
 
@@ -30,7 +30,7 @@ const getCssClasses = (model: any) => {
     icon && classNames.push('dx-button-has-icon');
 
     return classNames.join(' ');
-}
+};
 
 export const viewModelFunction = (model: Button) => {
     let icon: any = void 0;
@@ -99,6 +99,7 @@ export const viewFunction = (viewModel: Button) => (
 export default class Button extends Widget {
     @Prop() classNames?: string[];
     @Prop() contentRender?: any;
+    @Prop() hoverStateEnabled?: boolean = true;
     @Prop() icon?: string;
     @Prop() pressed?: boolean;
     @Prop() stylingMode?: string;

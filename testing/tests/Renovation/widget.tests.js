@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import 'renovation/dist/widget.j';
 
+// const HOVER_STATE_CLASS = 'dx-state-hover';
+
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
         <div id="component"></div>
@@ -155,6 +157,48 @@ QUnit.test('should not fire click event if the accessKey is pressed', function(a
         done();
     }, 50);
 });
+
+// QUnit.module('Props: hoverStateEnabled');
+
+// QUnit.test('option \'hoverStateEnabled\' - default', function(assert) {
+//     const done = assert.async();
+//     const element = $('#component').Widget();
+//     const instance = element.Widget('instance');
+
+//     element.trigger('dxhoverstart');
+//     assert.ok(!instance.option('hoverStateEnabled'));
+//     assert.ok(!element.hasClass(HOVER_STATE_CLASS));
+
+//     instance.option('hoverStateEnabled', true);
+//     window.setTimeout(() => {
+//         element.trigger('dxhoverstart');
+//     }, 50);
+//     window.setTimeout(() => {
+//         assert.ok(element.hasClass(HOVER_STATE_CLASS));
+//         done();
+//     }, 50);
+// });
+
+// QUnit.test('option \'hoverStateEnabled\' when disabled', function(assert) {
+//     const element = $('#component').Widget({ hoverStateEnabled: true, disabled: true });
+//     const instance = element.Widget('instance');
+
+//     element.trigger('dxhoverstart');
+//     assert.ok(!element.hasClass(HOVER_STATE_CLASS));
+
+//     instance.option('disabled', false);
+//     assert.ok(!element.hasClass(HOVER_STATE_CLASS));
+
+//     element.trigger('dxhoverstart');
+//     assert.ok(element.hasClass(HOVER_STATE_CLASS));
+
+//     instance.option('disabled', true);
+//     assert.ok(!element.hasClass(HOVER_STATE_CLASS));
+
+//     element.trigger('dxhoverend');
+//     instance.option('disabled', false);
+//     assert.ok(!element.hasClass(HOVER_STATE_CLASS));
+// });
 
 QUnit.module('Container', config);
 
