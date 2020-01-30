@@ -945,7 +945,7 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(count, 4);
     });
 
-    QUnit.test('selectionChanged - subscription by "on" method', function(assert) {
+    QUnit.test('selectionChanged - subscription by "on" method', (assert) => {
         const selectionChangedHandler = sinon.spy();
         const items = [1, 2, 3];
 
@@ -965,7 +965,7 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(selectionChangedHandler.callCount, 1, 'selectionChanged has been fired');
     });
 
-    QUnit.test('selectionChanged - runtime change', function(assert) {
+    QUnit.test('selectionChanged - runtime change', (assert) => {
         const selectionChangedFirstHandler = sinon.spy();
         const selectionChangedSecondHandler = sinon.spy();
 
@@ -2450,7 +2450,7 @@ QUnit.module('editing', moduleSetup, () => {
         assert.deepEqual(list.option('selectedItems'), [customValue], 'selected item is correct');
     });
 
-    QUnit.test('onValueChanged event should have correct "event" field after adding a custom item', function(assert) {
+    QUnit.test('onValueChanged event should have correct "event" field after adding a custom item', (assert) => {
         const valueChangedStub = sinon.stub();
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true,
@@ -2785,7 +2785,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.ok(selectBox.option('opened'), 'selectBox should be opened');
     });
 
-    QUnit.testInActiveWindow('Filter should be canceled after focusout (T838753)', function(assert) {
+    QUnit.testInActiveWindow('Filter should be canceled after focusout (T838753)', (assert) => {
         const items = ['111', '222', '333'];
 
         const $selectBox = $('#selectBox').dxSelectBox({
@@ -3179,7 +3179,7 @@ QUnit.module('search substitution', {
         assert.equal(this.$input.val(), this.testItem[0], 'search value is not substituted');
     });
 
-    QUnit.test('autocompletionEnabled - runtime change', function(assert) {
+    QUnit.test('autocompletionEnabled - runtime change', (assert) => {
         this.reinit({
             items: [this.testItem],
             searchTimeout: 0,
