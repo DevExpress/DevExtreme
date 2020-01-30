@@ -194,12 +194,6 @@
         };
     })();
 
-    if(!QUnit.urlParams['notimers']) {
-        return;
-    }
-
-    var runAllMode = window.parent !== window.self;
-
     var createMethodWrapper = function(method, callbacks) {
         var originalMethod = method,
             beforeCall = callbacks['beforeCall'],
@@ -238,52 +232,20 @@
     };
 
     var saveTimerInfo = function(logObject, id, info) {
-        if(!runAllMode) {
-            info.stack = getStack();
-            info.callback = info.callback.toString();
-        }
+        info.stack = getStack();
+        info.callback = info.callback.toString();
         logObject[id] = info;
     };
 
-    var requestAnimationFrameMethodName = (function() {
-        var candidates = [
-            'requestAnimationFrame',
-            'msRequestAnimationFrame',
-            'mozRequestAnimationFrame',
-            'webkitRequestAnimationFrame'
-        ];
 
-        while(candidates.length) {
-            var candidate = candidates.shift();
-            if(candidate in window) {
-                return candidate;
-            }
-        }
-    })();
-
-    var cancelAnimationFrameMethodName = (function() {
-        var candidates = [
-            'cancelAnimationFrame',
-            'msCancelAnimationFrame',
-            'mozCancelAnimationFrame',
-            'webkitCancelAnimationFrame'
-        ];
-
-        while(candidates.length) {
-            var candidate = candidates.shift();
-            if(candidate in window) {
-                return candidate;
-            }
-        }
-    })();
-
-
-    var spyWindowMethods = function() {
+    var spyWindowMethods = function(windowObj) {
         var log,
             logEnabled,
             timeouts,
             intervals,
             animationFrames;
+
+        windowObj = windowObj || window;
 
         var methodHooks = {
             'setTimeout': {
@@ -344,49 +306,49 @@
                     }
                     delete intervals[info.args[0]];
                 }
-            }
-        };
-
-        methodHooks[requestAnimationFrameMethodName] = {
-            'beforeCall': function(info) {
-                if(!logEnabled) {
-                    return;
-                }
-
-                info.originalCallback = info.args[0];
-                var callBackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
-                    afterCall: function() {
-                        if(!logEnabled) {
-                            return;
-                        }
-                        delete animationFrames[callBackWrapper.timerID];
-                    }
-                });
             },
-            'afterCall': function(info) {
-                if(!logEnabled) {
-                    return;
+
+            'requestAnimationFrame': {
+                'beforeCall': function(info) {
+                    if(!logEnabled) {
+                        return;
+                    }
+
+                    info.originalCallback = info.args[0];
+                    var callBackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
+                        afterCall: function() {
+                            if(!logEnabled) {
+                                return;
+                            }
+                            delete animationFrames[callBackWrapper.timerID];
+                        }
+                    });
+                },
+                'afterCall': function(info) {
+                    if(!logEnabled) {
+                        return;
+                    }
+
+                    info.args[0]['timerID'] = info.result;
+                    saveTimerInfo(animationFrames, info.result, {
+                        callback: info.originalCallback
+                    });
                 }
+            },
 
-                info.args[0]['timerID'] = info.result;
-                saveTimerInfo(animationFrames, info.result, {
-                    callback: info.originalCallback
-                });
-            }
-        };
+            'cancelAnimationFrame': {
+                'afterCall': function(info) {
+                    if(!logEnabled) {
+                        return;
+                    }
 
-        methodHooks[cancelAnimationFrameMethodName] = {
-            'afterCall': function(info) {
-                if(!logEnabled) {
-                    return;
+                    delete animationFrames[info.args[0]];
                 }
-
-                delete animationFrames[info.args[0]];
             }
         };
 
         for(var name in methodHooks) {
-            window[name] = createMethodWrapper(window[name], methodHooks[name]);
+            windowObj[name] = createMethodWrapper(windowObj[name], methodHooks[name]);
         }
 
         var initLog = function() {
@@ -418,6 +380,14 @@
         };
     };
 
+    QUnit.timersDetector = {
+        spyWindowMethods: spyWindowMethods
+    };
+
+    if(!QUnit.urlParams['notimers']) {
+        return;
+    }
+
     var suppressLogOnTest = function() {
         return /Not cleared timers detected/.test(QUnit.config.current.testName);
     };
@@ -443,7 +413,7 @@
         };
 
         var applyUnregister = function() {
-            jQuery.map(checkersToUnregister, unregisterSingle);
+            checkersToUnregister.forEach(unregisterSingle);
             checkersToUnregister = [];
         };
 
@@ -455,7 +425,7 @@
         var needSkip = function(timerInfo) {
             var skip = false;
 
-            jQuery.each(checkers, function(i, checker) {
+            checkers.forEach(function(checker) {
                 if(checker(timerInfo)) {
                     skip = true;
                     return false;
@@ -482,10 +452,6 @@
     });
 
     QUnit.testDone(function(args) {
-        if(!jQuery) {
-            return;
-        }
-
         if(suppressLogOnTest()) {
             return;
         }
@@ -538,18 +504,19 @@
 
         log.stop();
 
-        jQuery.each(['timeouts', 'intervals', 'animationFrames'], function() {
-            var type = String(this),
-                currentInfo = log.get()[type];
+        ['timeouts', 'intervals', 'animationFrames'].forEach(function(type) {
+            var currentInfo = log.get()[type];
 
-            if(!jQuery.isEmptyObject(currentInfo)) {
-                var timerId = Object.keys(currentInfo)[0],
-                    normalizedTimerInfo = jQuery.extend({
-                        timerType: type,
-                        timerId: timerId
-                    }, currentInfo, currentInfo[timerId]);
+            if(Object.keys(currentInfo).length) {
+                var timerId = Object.keys(currentInfo)[0];
 
-                delete normalizedTimerInfo[timerId];
+                var normalizedTimerInfo = {
+                    timerType: type,
+                    timerId: timerId,
+                    callback: currentInfo[timerId].callback || currentInfo.callback,
+                    timeout: currentInfo[timerId].timeout || currentInfo.timeout,
+                    stack: currentInfo[timerId].stack || currentInfo.stack
+                };
 
                 if(isThirdPartyLibraryTimer(normalizedTimerInfo)) {
                     return;
@@ -570,4 +537,20 @@
         QUnit.timerIgnoringCheckers.applyUnregister();
         log.clear();
     });
+})();
+
+(function checkSinonFakeTimers() {
+
+    QUnit.testStart(function() {
+        var dateOnTestStart = Date,
+            after = QUnit.config.current.after;
+
+        QUnit.config.current.after = function() {
+            if(dateOnTestStart !== Date) {
+                QUnit.pushFailure('Not restored Sinon timers detected!', this.stack);
+            }
+            return after.apply(this, arguments);
+        };
+    });
+
 })();

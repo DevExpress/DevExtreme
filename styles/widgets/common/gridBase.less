@@ -443,16 +443,22 @@
             }
 
             .dx-command-edit {
+                text-overflow: clip;
                 width: @GRID_COMMAND_EDIT_COLUMN_WIDTH;
                 min-width: @GRID_COMMAND_EDIT_COLUMN_WIDTH;
 
                 &.dx-command-edit-with-icons {
                     width: @GRID_COMMAND_EDIT_COLUMN_WITH_ICONS_WIDTH;
                     min-width: @GRID_COMMAND_EDIT_COLUMN_WITH_ICONS_WIDTH;
+                    white-space: nowrap;
 
                     .dx-link {
                         text-decoration: none;
                     }
+                }
+
+                .dx-link-icon {
+                    display: inline-block;
                 }
             }
 

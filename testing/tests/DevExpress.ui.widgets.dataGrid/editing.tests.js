@@ -7811,6 +7811,42 @@ QUnit.test('The command column caption should be applied', function(assert) {
     assert.strictEqual($commandCellElement.css('textAlign'), 'right', 'alignment');
 });
 
+QUnit.test('The command column buttons should not be trimmed', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = that.rowsView;
+    const $testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'row',
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    that.options.columns.push({
+        type: 'buttons',
+        buttons: ['edit', {
+            icon: 'clone'
+        }]
+    });
+    that.columnsController.reset();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    const $commandCellElement = $(rowsView.getRowElement(0)).children('.dx-command-edit');
+    assert.equal($commandCellElement.length, 1, 'command column is rendered');
+    // T848242
+    assert.equal($commandCellElement.css('text-overflow'), 'clip', 'text-overflow is clip instead of ellipsis');
+    assert.equal($commandCellElement.css('white-space'), 'nowrap', 'white-space is nowrap');
+
+    const $links = $commandCellElement.children('.dx-link');
+    assert.equal($links.length, 2, 'link count');
+    assert.equal($links.eq(0).css('display'), 'inline', 'text link display style');
+    // T848364
+    assert.equal($links.eq(1).css('display'), 'inline-block', 'icon link display style');
+});
+
 // T741679
 QUnit.test('A dependent cascading editor should be updated when a master cell value is changed if showEditorAlways is enabled in batch mode', function(assert) {
     // arrange

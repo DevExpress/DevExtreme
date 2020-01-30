@@ -108,7 +108,7 @@ const TagBox = SelectBox.inherit({
 
                 if(isCustomItem) {
                     e.preventDefault();
-                    (this._searchValue() !== '') && this._customItemAddedHandler();
+                    (this._searchValue() !== '') && this._customItemAddedHandler(e);
                     return;
                 }
 
@@ -659,8 +659,10 @@ const TagBox = SelectBox.inherit({
         this.callBase(e);
     },
 
-    _restoreInputText: function() {
-        this._clearTextValue();
+    _restoreInputText: function(saveEditingValue) {
+        if(!saveEditingValue) {
+            this._clearTextValue();
+        }
     },
 
     _focusOutHandler: function(e) {

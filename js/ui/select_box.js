@@ -122,7 +122,7 @@ const SelectBox = DropDownList.inherit({
                         e.preventDefault();
 
                         if(isCustomText) {
-                            this._valueChangeEventHandler();
+                            this._valueChangeEventHandler(e);
                             if(isOpened) this._toggleOpenState();
                         }
 
@@ -498,7 +498,7 @@ const SelectBox = DropDownList.inherit({
         isVisible = arguments.length ? isVisible : !this.option('opened');
 
         if(!isVisible) {
-            this._restoreInputText();
+            this._restoreInputText(true);
         }
 
         if(this._wasSearch() && isVisible) {
@@ -550,7 +550,7 @@ const SelectBox = DropDownList.inherit({
         this.callBase();
     },
 
-    _restoreInputText: function() {
+    _restoreInputText: function(saveEditingValue) {
         if(this.option('readOnly')) {
             return;
         }
@@ -559,7 +559,10 @@ const SelectBox = DropDownList.inherit({
             const initialSelectedItem = this.option('selectedItem');
 
             if(this.option('acceptCustomValue')) {
-                this._updateField(initialSelectedItem);
+                if(!saveEditingValue) {
+                    this._updateField(initialSelectedItem);
+                    this._clearFilter();
+                }
                 return;
             }
 
@@ -708,9 +711,9 @@ const SelectBox = DropDownList.inherit({
         return !selectedItemText || searchValue !== selectedItemText.toString();
     },
 
-    _valueChangeEventHandler: function() {
+    _valueChangeEventHandler: function(e) {
         if(this.option('acceptCustomValue') && this._isCustomItemSelected()) {
-            this._customItemAddedHandler();
+            this._customItemAddedHandler(e);
         }
     },
 
@@ -732,9 +735,11 @@ const SelectBox = DropDownList.inherit({
         return item;
     },
 
-    _customItemAddedHandler: function() {
+    _customItemAddedHandler: function(e) {
         const searchValue = this._searchValue();
         const item = this._createCustomItem(searchValue);
+
+        this._saveValueChangeEvent(e);
 
         if(item === undefined) {
             this._renderValue();
