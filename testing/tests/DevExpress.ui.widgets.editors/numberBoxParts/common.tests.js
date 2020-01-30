@@ -24,6 +24,8 @@ const PLACEHOLDER_CLASS = 'dx-placeholder';
 const ACTIVE_STATE_CLASS = 'dx-state-active';
 const CLEAR_BUTTON_CLASS = 'dx-clear-button-area';
 
+const INVALID_MESSAGE_POPUP_CONTENT_SELECTOR = '.dx-invalid-message .dx-overlay-content';
+
 QUnit.module('basics', {}, () => {
     QUnit.test('markup init', function(assert) {
         const element = $('#numberbox').dxNumberBox();
@@ -2019,7 +2021,19 @@ QUnit.module('number validation', {}, () => {
 
         const instance = $numberBox.dxNumberBox('instance');
 
-        assert.equal($numberBox.find('.dx-invalid-message .dx-overlay-content').text(), instance.option('invalidValueMessage'), 'validation message is rendered');
+        assert.equal($numberBox.find(INVALID_MESSAGE_POPUP_CONTENT_SELECTOR).text(), instance.option('invalidValueMessage'), 'validation message is rendered');
+    });
+
+    QUnit.test('custom validation message can be changed at runtime', function(assert) {
+        const $numberBox = $('#numberbox').dxNumberBox({
+            value: 'abc'
+        });
+        const instance = $numberBox.dxNumberBox('instance');
+
+        instance.option('invalidValueMessage', 'test message');
+        instance.option('value', 'ab');
+
+        assert.strictEqual($numberBox.find(INVALID_MESSAGE_POPUP_CONTENT_SELECTOR).text(), 'test message', 'new validation message is applyed after the value change');
     });
 
     QUnit.test('the validation message should be shown if value is invalid after \'enter\' key was pressed', function(assert) {
@@ -2042,11 +2056,11 @@ QUnit.module('number validation', {}, () => {
 
         keyboard.type('2');
         keyboard.change();
-        assert.equal($numberBox.find('.dx-invalid-message .dx-overlay-content').text(), instance.option('validationError').message, 'validation message is rendered');
+        assert.equal($numberBox.find(INVALID_MESSAGE_POPUP_CONTENT_SELECTOR).text(), instance.option('validationError').message, 'validation message is rendered');
 
         keyboard.press('enter');
 
-        assert.equal($numberBox.find('.dx-invalid-message .dx-overlay-content').text(), 'Value is not in range', 'validation message is not empty');
+        assert.equal($numberBox.find(INVALID_MESSAGE_POPUP_CONTENT_SELECTOR).text(), 'Value is not in range', 'validation message is not empty');
     });
 
     QUnit.test('onValueChanged should be fired after \'enter\' key was pressed', function(assert) {
