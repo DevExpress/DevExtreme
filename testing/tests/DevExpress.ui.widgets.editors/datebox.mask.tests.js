@@ -1119,10 +1119,9 @@ module('Regression', () => {
     });
 });
 
-module('Advanced caret', setupModule, () => {
+module('Caret moving', setupModule, () => {
     test('Move caret to the next group', function(assert) {
         this.instance.option({
-            advanceCaret: true,
             displayFormat: 'dd.MM'
         });
 
@@ -1133,7 +1132,6 @@ module('Advanced caret', setupModule, () => {
 
     test('Move caret to the next group when next digit will overflow', function(assert) {
         this.instance.option({
-            advanceCaret: true,
             displayFormat: 'MM.dd'
         });
 
@@ -1144,7 +1142,6 @@ module('Advanced caret', setupModule, () => {
 
     test('Move caret to the next group after limit overflow', function(assert) {
         this.instance.option({
-            advanceCaret: true,
             displayFormat: 'dd.MM'
         });
 
@@ -1154,7 +1151,6 @@ module('Advanced caret', setupModule, () => {
 
     test('Move caret to the next group after format length overflow', function(assert) {
         this.instance.option({
-            advanceCaret: true,
             displayFormat: 'yy MM'
         });
 
@@ -1165,7 +1161,6 @@ module('Advanced caret', setupModule, () => {
 
     test('Don\'t move caret to next group when format length is less than limit length', function(assert) {
         this.instance.option({
-            advanceCaret: true,
             displayFormat: 'y MM'
         });
 
@@ -1176,7 +1171,6 @@ module('Advanced caret', setupModule, () => {
 
     test('Typed year and value should be in the same century when short year format is used', function(assert) {
         this.instance.option({
-            advanceCaret: true,
             displayFormat: 'yy MM',
             value: new Date(1995, 10, 11)
         });
@@ -1198,7 +1192,6 @@ module('Advanced caret', setupModule, () => {
 
     test('Move caret to the next group after string length overflow', function(assert) {
         this.instance.option({
-            advanceCaret: true,
             displayFormat: 'dd.MM'
         });
 
