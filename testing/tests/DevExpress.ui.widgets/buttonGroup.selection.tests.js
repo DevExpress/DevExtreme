@@ -165,7 +165,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     helper.checkSelectedItems([items[1].id]);
                 });
 
-                QUnit.test(`${selectedOption}: ['btn1', 'btn2']` + config, (assert) => {
+                QUnit.test(`${selectedOption}: ['btn1', 'btn2']` + config, function(assert) {
                     if(selectionMode === 'single') {
                         assert.ok('skip');
                         return;
@@ -371,7 +371,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                     }
                 });
 
-                QUnit.test(`${selectedOption}: ['btn1', 'btn2'], click(btn1)` + config, (assert) => {
+                QUnit.test(`${selectedOption}: ['btn1', 'btn2'], click(btn1)` + config, function(assert) {
                     const helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
 
                     if(selectedOption === 'selectedItems') {
