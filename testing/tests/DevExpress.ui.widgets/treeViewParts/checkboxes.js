@@ -527,40 +527,48 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        test('all.selected: true -> unselectAll -> expandAll', function(assert) {
-            if(config.selectionMode === 'single') {
-                assert.ok('skip for single');
-                return;
-            }
-
-            const wrapper = createWrapper(config, {}, [
-                { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
-                { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
-
-            wrapper.instance.unselectAll();
-
-            let expectedKeys = [];
-            let expectedNodes = [];
-            let expectedEventLog = ['selectionChanged'];
-
-            wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
-            wrapper.checkSelectedNodes(expectedNodes, 'after unselect');
-            wrapper.checkEventLog(expectedEventLog, 'after unselect');
-            wrapper.clearEventLog();
-
-            wrapper.instance.expandAll();
-            if(!config.expanded && isLazyDataSource(config)) {
-                // unexpected result
-                expectedKeys = [1];
-                expectedNodes = [1];
-                if(config.selectNodesRecursive) {
-                    expectedKeys = [0, 1];
-                    expectedNodes = [0, 1];
+        [treeView => treeView.unselectAll(), treeView => treeView.option('selectedItemKeys', []), treeView => treeView.option('selectedItems', [])].forEach(unselectFunc => {
+            test(`all.selected: true -> unselectAll -> expandAll, unselectFunc: ${unselectFunc.toString()}`, function(assert) {
+                if(config.selectionMode === 'single') {
+                    assert.ok('skip for single');
+                    return;
                 }
-            }
-            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expand');
-            wrapper.checkEventLog([], 'after expand');
+
+                const wrapper = createWrapper(config, {}, [
+                    { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
+                    { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
+
+                unselectFunc(wrapper.instance);
+
+                let expectedKeys = [];
+                let expectedNodes = [];
+                let expectedEventLog = ['selectionChanged'];
+                if(isSelectFuncByOptions(unselectFunc)) {
+                    expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                    if(config.selectNodesRecursive || (!config.expanded && isLazyDataSource(config))) {
+                        expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
+                    }
+                }
+
+                wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
+                wrapper.checkSelectedNodes(expectedNodes, 'after unselect');
+                wrapper.checkEventLog(expectedEventLog, 'after unselect');
+                wrapper.clearEventLog();
+
+                wrapper.instance.expandAll();
+                if(!config.expanded && isLazyDataSource(config)) {
+                    // unexpected result
+                    expectedKeys = [1];
+                    expectedNodes = [1];
+                    if(config.selectNodesRecursive) {
+                        expectedKeys = [0, 1];
+                        expectedNodes = [0, 1];
+                    }
+                }
+                wrapper.checkSelectedKeys(expectedKeys, 'after expand');
+                // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+                wrapper.checkEventLog([], 'after expand');
+            });
         });
 
         test('all.selected: true -> unselectItem(0) -> expandAll', function(assert) {
@@ -754,23 +762,31 @@ configs.forEach(config => {
             });
         });
 
-        test('item1.selected: true -> unselectAll -> expandAll', function() {
-            const wrapper = createWrapper(config, {}, [
-                { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
-                { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
-                { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
 
-            wrapper.instance.unselectAll();
+        [treeView => treeView.unselectAll(), treeView => treeView.option('selectedItemKeys', []), treeView => treeView.option('selectedItems', [])].forEach(unselectFunc => {
+            test(`item1.selected: true -> unselectAll -> expandAll, unselectFunc: ${unselectFunc.toString()}`, function() {
+                const wrapper = createWrapper(config, {}, [
+                    { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
+                    { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
+                    { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
 
-            wrapper.checkSelectedKeys([], 'after unselect');
-            wrapper.checkSelectedNodes([], 'after unselect');
-            wrapper.checkEventLog(['selectionChanged'], 'after unselect');
-            wrapper.clearEventLog();
+                unselectFunc(wrapper.instance);
 
-            wrapper.instance.expandAll();
-            wrapper.checkSelectedKeys([], 'after expand');
-            wrapper.checkSelectedNodes([], 'after expand');
-            wrapper.checkEventLog([], 'after expand');
+                let expectedEventLog = ['selectionChanged'];
+                if(isSelectFuncByOptions(unselectFunc)) {
+                    expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
+                }
+
+                wrapper.checkSelectedKeys([], 'after unselect');
+                wrapper.checkSelectedNodes([], 'after unselect');
+                wrapper.checkEventLog(expectedEventLog, 'after unselect');
+                wrapper.clearEventLog();
+
+                wrapper.instance.expandAll();
+                wrapper.checkSelectedKeys([], 'after expand');
+                wrapper.checkSelectedNodes([], 'after expand');
+                wrapper.checkEventLog([], 'after expand');
+            });
         });
 
         test('item1_1.selected: true', function() {
