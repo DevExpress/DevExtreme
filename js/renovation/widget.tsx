@@ -209,7 +209,7 @@ export default class Widget {
     }
 
     @Effect()
-    clickEffect() {
+    accessKeyEffect() {
         const namespace = 'UIFeedback';
         const isFocusable = this.focusStateEnabled && !this.disabled;
         const canBeFocusedByKey = isFocusable && this.accessKey;
@@ -219,7 +219,6 @@ export default class Widget {
                 e.stopImmediatePropagation();
                 this._focused = true;
             }
-            this.onClick!(this.clickArgs);
         }, { namespace });
 
         return () => dxClick.off(this.widgetRef, { namespace });
@@ -267,6 +266,18 @@ export default class Widget {
         }
 
         return () => active.off(this.widgetRef, { selector, namespace });
+    }
+
+    @Effect()
+    clickEffect() {
+        const namespace = this.name;
+
+        dxClick.on(this.widgetRef,
+            () => this.onClick!(this.clickArgs),
+            { namespace }
+        );
+
+        return () => dxClick.off(this.widgetRef, { namespace });
     }
 
     @Effect()

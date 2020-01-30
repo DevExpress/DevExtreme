@@ -8,6 +8,19 @@ describe('Button', () => {
     );
 
     describe('Props', () => {
+        describe('onClick', () => {
+            it('should be clickable with onClick property only', () => {
+                const clickHandler = jest.fn();
+                const button = render({ onClick: clickHandler });
+
+                expect(clickHandler).toHaveBeenCalledTimes(0);
+
+                button.simulate('click');
+
+                expect(clickHandler).toHaveBeenCalledTimes(1);
+            })
+        });
+
         describe('stylingMode', () => {
             it('should use "contained" as a default value', () => {
                 const button = render();
