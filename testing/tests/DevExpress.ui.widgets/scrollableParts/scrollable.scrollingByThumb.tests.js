@@ -314,7 +314,7 @@ QUnit.test('scrolling by thumb does not cause inertia', function(assert) {
     const containerHeight = 50;
     const contentHeight = 100;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         scrollByThumb: true,
         useNative: false,
         onEnd: function() {
@@ -327,8 +327,8 @@ QUnit.test('scrolling by thumb does not cause inertia', function(assert) {
 
     const $thumb = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
     const mouse = pointerMock($thumb).start();
-    var distance = 10;
-    var containerToContentRatio = (containerHeight / contentHeight);
+    const distance = 10;
+    const containerToContentRatio = (containerHeight / contentHeight);
 
     $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS).height(containerHeight);
 

@@ -1931,7 +1931,7 @@ QUnit.module('Show/Hide', {
 });
 
 QUnit.module('renderGeometry', () => {
-    QUnit.test('option change', (assert) => {
+    QUnit.test('option change', function(assert) {
         fixtures.simple.create();
         try {
             const $popover = $('#what');

@@ -890,7 +890,7 @@ QUnit.module('Keyboard navigation', () => {
 let helper;
 
 QUnit.module('Aria accessibility', {
-    beforeEach: () => {
+    beforeEach: function() {
         helper = new ariaAccessibilityTestHelper({
             createWidget: ($element, options) => new TestComponent($element,
                 $.extend({
@@ -898,7 +898,7 @@ QUnit.module('Aria accessibility', {
                 }, options))
         });
     },
-    afterEach: () => {
+    afterEach: function() {
         helper.$widget.remove();
     }
 }, () => {

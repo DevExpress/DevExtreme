@@ -948,7 +948,7 @@ QUnit.module('check action buttons events', {
 
 QUnit.module('T850271', {}, () => {
     QUnit.test('check peventDefault in _outsideClickHandler method', function(assert) {
-        var instance = $('#fab-one').dxSpeedDialAction().dxSpeedDialAction('instance');
+        const instance = $('#fab-one').dxSpeedDialAction().dxSpeedDialAction('instance');
 
         const preventDefaultStub = sinon.stub();
         const event = { preventDefault: preventDefaultStub };
