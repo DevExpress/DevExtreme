@@ -483,7 +483,6 @@ configs.forEach(config => {
                 assert.ok('skip for single');
                 return;
             }
-
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
@@ -1028,3 +1027,48 @@ QUnit.test('all.selected: false -> selectItem(1) -> reload dataSource', function
         });
     }, 2);
 });
+
+QUnit.test('selectedItemKeys: [0] -> reload dataSource', function(assert) {
+    const done = assert.async();
+    const wrapper = new TreeViewTestWrapper({
+        dataSource: new CustomStore({
+            load: () => executeDelayed(() => { return [ { id: 0, text: 'item1' }]; }, 1)
+        }),
+        selectedItemKeys: [0],
+        showCheckBoxesMode: 'normal',
+        dataStructure: 'plain'
+    });
+
+    setTimeout(() => {
+        const $item1 = wrapper.getElement().find('[aria-level="1"]');
+
+        assert.equal($item1.length, 1, 'item1 is rendered');
+        wrapper.checkSelectedKeys([0], 'item1 is selected');
+        wrapper.checkSelectedNodes([0], 'item1 is selected node');
+        wrapper.checkEventLog([], 'there is no selection events');
+        done();
+    }, 2);
+});
+
+QUnit.test('selectedItemKeys: [0] -> dataSource is loaded', function(assert) {
+    const done = assert.async();
+    const wrapper = new TreeViewTestWrapper({
+        dataSource: new CustomStore({
+            load: () => executeDelayed(() => { return [ { id: 0, text: 'item1' }]; }, 1)
+        }),
+        selectedItemKeys: [0],
+        showCheckBoxesMode: 'normal',
+        dataStructure: 'plain'
+    });
+
+    setTimeout(() => {
+        const $item1 = wrapper.getElement().find('[aria-level="1"]');
+
+        assert.equal($item1.length, 1, 'item1 is rendered');
+        wrapper.checkSelectedKeys([0], 'item1 is selected');
+        wrapper.checkSelectedNodes([0], 'item1 is selected node');
+        wrapper.checkEventLog([], 'there is no selection events');
+        done();
+    }, 2);
+});
+

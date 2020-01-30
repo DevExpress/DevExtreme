@@ -220,21 +220,28 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _setSelectedItemsBySelectionOption: function(items, keyGetter, itemGetter) {
         const selectedKeys = this.option('selectedItemKeys') || this._getItemKeys(keyGetter, this.option('selectedItems'));
-        if(this._initialized || selectedKeys === null) {
+        if(selectedKeys === null || this._initialized) {
             return;
         }
 
-        this._setItemsSelectionBySelectedKeysOption(items, selectedKeys, keyGetter, itemGetter);
+        const isDataSourceLoading = this._dataSource && this._dataSource.isLoading();
+        if(isDataSourceLoading) {
+            this._dataSource.on('loadingChanged', (arg1, arg2) => {
+                this._updateSelectedItemsByKeys(this._dataSource.items(), selectedKeys, keyGetter, itemGetter);
+            });
+        } else {
+            this._updateSelectedItemsByKeys(items, selectedKeys, keyGetter, itemGetter);
+        }
     },
 
-    _setItemsSelectionBySelectedKeysOption: function(items, selectedKeys, keyGetter, itemGetter) {
+    _updateSelectedItemsByKeys: function(items, selectedKeys, keyGetter, itemGetter) {
         items.forEach((item) => {
             const itemKey = keyGetter(item);
             item.selected = selectedKeys.indexOf(itemKey) !== -1;
 
             let children = itemGetter(item);
             if(children && children.length) {
-                this._setItemsSelectionBySelectedKeysOption(children, selectedKeys, keyGetter, itemGetter);
+                this._updateSelectedItemsByKeys(children, selectedKeys, keyGetter, itemGetter);
             }
         });
     },
