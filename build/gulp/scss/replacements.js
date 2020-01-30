@@ -14,6 +14,7 @@ module.exports = {
         { regex: /@mixin badge-settings\(\),/, replacement: '@include badge-settings();' },
         { regex: /@mixin validation-badge-animation\(\),/, replacement: '@include validation-badge-animation();' },
         { import: '../../base/mixins', type: 'index' },
+        { import: '../../base/validation', type: 'index' },
     ],
     'icons': [
         { regex: /@import \(once\) "..\/base\/icons.scss";/, replacement: '' },
@@ -47,5 +48,55 @@ module.exports = {
     ],
     'checkBox': [
         { import: 'colors', type: 'sizes' },
+        { import: '../../base/icons', type: 'index' },
+    ],
+    'switch': [
+        { import: '../../base/mixins', type: 'index' },
+    ],
+    'tabs': [
+        { import: '../button', type: 'index' },
+        { import: '../button/colors', type: 'index' },
+        { import: '../button/colors', type: 'colors' },
+        { import: '../../base/icons', type: 'index' },
+    ],
+    'navBar': [
+        { import: '../../base/icons', type: 'index' },
+    ],
+    'validation': [
+        { import: '../../base/validation', type: 'index' },
+    ],
+    'textEditor': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../common/sizes', type: 'index' },
+        { import: '../button/sizes', type: 'index' },
+        { import: '../common', type: 'index' },
+        { import: '../button', type: 'index' },
+        { regex: /@mixin texteditor-input-padding-filled\(\),/g, replacement: '@inclide texteditor-input-padding-filled();' },
+        { regex: /@mixin texteditor-input-padding\(\),/g, replacement: '@inclide texteditor-input-padding();' },
+        { regex: /.texteditor-validation-icon-offset-filled\(\),/g, replacement: '@include texteditor-validation-icon-offset-filled();' },
+        { regex: /.texteditor-validation-icon-offset\(\),/g, replacement: '@include texteditor-validation-icon-offset();' },
+        { regex: /@mixin dx-icon-sizing\(\$MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE\),/, replacement: '@include dx-icon-sizing($MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);' },
+        { regex: /@mixin dx-texteditor-icon\(\),/, replacement: '@include dx-texteditor-icon();' },
+        { regex: /.dx-icon-font-centered-sizing\(\$MATERIAL_TEXTEDITOR_CLEAR_ICON_SIZE\),/, replacement: '@include dx-icon-font-centered-sizing($MATERIAL_TEXTEDITOR_CLEAR_ICON_SIZE);' },
+        { regex: /\$texteditor-input-border-radius,/g, replacement: '$texteditor-input-border-radius;' },
+        { regex: /relative,/g, replacement: 'relative;' }
+    ],
+    'textBox': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../textEditor', type: 'index' },
+        { import: '../textEditor/colors', type: 'index' },
+        { import: '../textEditor/sizes', type: 'index' },
+    ],
+    'dropDownEditor': [
+        { import: '../common', type: 'index' },
+        { import: '../common/sizes', type: 'index' },
+        { import: '../textEditor/sizes', type: 'index' },
+        { import: '../button/colors', type: 'colors' },
+        { import: '../button/colors', type: 'index' },
+        { import: '../textEditor/colors', type: 'colors' },
+        { import: '../../base/icons', type: 'index' },
+    ],
+    'dropDownBox': [
+        { import: '../dropDownEditor', type: 'index' },
     ]
 };
