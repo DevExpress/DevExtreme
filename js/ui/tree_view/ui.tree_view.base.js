@@ -218,9 +218,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return new Deferred().resolve().promise();
     },
 
-    _setSelectedItemsBySelectionOption: function(items, keyGetter, itemGetter) {
+    _setSelectedItemsByOptions: function(items, keyGetter, itemGetter) {
         const selectedKeys = this.option('selectedItemKeys') || this._getItemKeys(keyGetter, this.option('selectedItems'));
-        if(selectedKeys === null || this._initialized) {
+        if(!selectedKeys || this._initialized) {
             return;
         }
 
