@@ -120,7 +120,6 @@ testComponentDefaults(DateBox,
     {},
     {
         useMaskBehavior: false,
-        advanceCaret: true,
         adaptivityEnabled: false
     }
 );

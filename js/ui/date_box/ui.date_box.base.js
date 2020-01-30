@@ -686,6 +686,7 @@ const DateBox = DropDownEditor.inherit({
                 break;
             case 'showDropDownButton':
                 this._formatValidationIcon();
+                this.callBase.apply(this, arguments);
                 break;
             case 'readOnly':
                 this.callBase.apply(this, arguments);
