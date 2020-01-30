@@ -269,20 +269,14 @@ const ValidatingController = modules.Controller.inherit((function() {
                     }
                     if(options.status === VALIDATION_STATUS.invalid) {
                         const $focus = $container.find(':focus');
-                        editingController.showHighlighting({
-                            $cell: $container,
-                            skipValidation: true
-                        });
+                        editingController.showHighlighting($container, true);
                         if(!focused($focus)) {
                             eventsEngine.trigger($focus, 'focus');
                             eventsEngine.trigger($focus, pointerEvents.down);
                         }
                     }
                     if(options.status === VALIDATION_STATUS.pending) {
-                        editingController.showHighlighting({
-                            $cell: $container,
-                            skipValidation: true
-                        });
+                        editingController.showHighlighting($container, true);
                         renderCellPendingIndicator();
                     } else {
                         disposeCellPendingIndicator();
@@ -397,7 +391,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 keyValue: validator.option('validationGroup').key,
                 columnIndex: validator.option('dataGetter')().column.index
             };
-            const info = this.getCellValidationInfo(cellParams);
+            const info = !validator.option('adapter').editor && this.getCellValidationInfo(cellParams);
             let validationResult = info && info.result;
             const stateRestored = !!validationResult;
             if(!validationResult) {
@@ -482,11 +476,6 @@ module.exports = {
         return {
             editing: {
                 texts: {
-                    /**
-                     * @name GridBaseOptions.editing.texts.validationCancelChanges
-                     * @type string
-                     * @default 'Cancel changes'
-                     */
                     validationCancelChanges: messageLocalization.format('dxDataGrid-validationCancelChanges')
                 }
             }
@@ -769,7 +758,7 @@ module.exports = {
                     }
                 },
 
-                showHighlighting: function({ $cell, skipValidation }) {
+                showHighlighting: function($cell, skipValidation) {
                     let isValid = true;
                     const callBase = this.callBase;
                     let validator;
@@ -783,7 +772,7 @@ module.exports = {
                                 isValid = validationResult.status === VALIDATION_STATUS.valid;
                                 // endTest
                                 if(isValid) {
-                                    callBase.apply(this, arguments);
+                                    callBase.call(this, $cell);
                                 }
                             });
                             return;
@@ -791,7 +780,7 @@ module.exports = {
                     }
 
                     if(isValid) {
-                        callBase.apply(this, arguments);
+                        callBase.call(this, $cell);
                     }
                 },
                 getEditDataByKey: function(key) {
@@ -1081,7 +1070,7 @@ module.exports = {
                                 // test
                                 when(validatingController.validateCell(validator)).done((result) => {
                                     validationResult = result;
-                                    if(!validatingController.isCurrentValidatorProcessing({ keyValue: editData.key, columnIndex: column.index })) {
+                                    if(editData && column && !validatingController.isCurrentValidatorProcessing({ keyValue: editData.key, columnIndex: column.index })) {
                                         return;
                                     }
                                     // if(!validationResult.isValid) {

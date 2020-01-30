@@ -2674,17 +2674,12 @@ module.exports = {
                     if(((modifiedValues && modifiedValues[columnIndex] !== undefined) || isCellInvalidInNewRow) && parameters.column && !isCommandCell && parameters.column.setCellValue) {
                     // endTest
                     // if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
-                        editingController.showHighlighting({
-                            $cell
-                        });
+                        editingController.showHighlighting($cell);
                         $cell.addClass(CELL_MODIFIED);
                     } else if(isEditableCell) {
                         const skipValidation = parameters.row.isNewRow;
 
-                        editingController.showHighlighting({
-                            $cell,
-                            skipValidation
-                        });
+                        editingController.showHighlighting($cell, skipValidation);
                     }
 
                     this.callBase.apply(this, arguments);
