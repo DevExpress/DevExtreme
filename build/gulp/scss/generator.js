@@ -40,9 +40,12 @@ gulp.task('less2sass', (callback) => {
 const replaceColorFunctions = (content) => {
     // TODO lighten and darken is not included directly in the new module system (https://sass-lang.com/documentation/modules/color#lighten), but it works
     // change fade($color, 20%) to the color.change($color, $alpha: 0.20), $color can be other function
-    content = content.replace(/fade\(([$\d\w-#]*|[\w]*\(.*\)),\s*(\d+)%\)(;|,)/g, 'color.change($1, $alpha: 0.$2)$3');
     // change fadein($color, 20%) to the color.adjust($color, $alpha: 0.20), $color can be other function
-    content = content.replace(/fadein\(([$\d\w-#]*|[\w]*\(.*\)),\s*(\d+)%\)(;|,)/g, 'color.adjust($1, $alpha: 0.$2)$3');
+
+    content = content.replace(/(fadein|fade)\(([$\d\w-#]*|[\w]*\(.*\)),\s*(\d+)%\)(;|,|\))/g, (match, func, color, percent, sign) => {
+        const colorFunction = func === 'fade' ? 'change' : 'adjust';
+        return `color.${colorFunction}(${color}, $alpha: ${percent / 100})${sign}`;
+    });
     return content;
 };
 
@@ -62,7 +65,16 @@ gulp.task('fix-base', () => {
     // the same code for different themes
     return gulp
         .src(`${unfixedScssPath}/widgets/base/*.scss`)
-        .pipe(replace(/\.dx-font-icon\("/g, '@include dx-font-icon("'))
+        // .pipe(replace(/\.dx-font-icon\("/g, '@include dx-font-icon("'))
+        // icons
+        .pipe(replace('@mixin dx-icon-sizing', '@use "sass:map";\n\n@mixin dx-icon-sizing'))
+        .pipe(replace('@mixin dx-font-icon($icons[$$name]),', '@include dx-font-icon(map.get($icons, $name));'))
+        .pipe(replace(/\$icons:\s{([\w\W]*?)}/, (_, codes) => {
+            return `$icons: (${codes.replace(/;/g, ',')});`;
+        }))
+        .pipe(replace('f11d",', 'f11d"'))
+        .pipe(replace(/each\(\$icons,\s{([\w\W]*)}\);/, '@each $key, $val in $icons {$1}'))
+
         .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;
@@ -407,7 +419,8 @@ gulp.task('create-theme-index', (callback) => {
             if(item.task === 'comment') {
                 content += `// ${item.content}\n`;
             } else if(item.task === 'widget') {
-                content += `@use "./${item.content}";\n`;
+                const privateComment = item.private ? ' // private' : '';
+                content += `@use "./${item.content}";${privateComment}\n`;
             } else if(item.task === 'newline') {
                 content += '\n';
             }

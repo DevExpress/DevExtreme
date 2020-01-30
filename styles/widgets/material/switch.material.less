@@ -182,19 +182,21 @@
 }
 
 .dx-invalid {
-    .dx-switch-container {
-        .dx-switch&:before {
+    &.dx-switch {
+        .dx-switch-container:before {
             background-color: @switch-invalid-container-bg;
         }
+    }
 
-        .dx-switch-handle:before {
-            .dx-switch-on-value:not(.dx-state-readonly):not(.dx-state-disabled)& {
-                background-color: @switch-invalid-handle-bg;
+    &.dx-switch-on-value:not(.dx-state-readonly):not(.dx-state-disabled) {
+        .dx-switch-container .dx-switch-handle:before {
+            background-color: @switch-invalid-handle-bg;
+        }
 
-                .dx-state-active&,
-                .dx-state-focused& {
-                    box-shadow: @MATERIAL_INVALID_SWITCH_SHADOW;
-                }
+        &.dx-state-active,
+        &.dx-state-focused {
+            .dx-switch-container .dx-switch-handle:before {
+                box-shadow: @MATERIAL_INVALID_SWITCH_SHADOW;
             }
         }
     }
