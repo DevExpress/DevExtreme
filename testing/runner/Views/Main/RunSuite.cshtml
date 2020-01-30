@@ -6,7 +6,6 @@
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
-    var isIntlTest = Model.ScriptVirtualPath.Contains("intl.tests");
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
@@ -35,9 +34,6 @@
         }
 
         yield return Url.Content("~/testing/helpers/noIntl.js");
-        if(isIntlTest) {
-            yield return Url.Content("~/node_modules/intl/index.js");
-        }
     }
 }
 <!DOCTYPE html>
@@ -167,6 +163,7 @@
                 map: {
                     // Deps
                     'globalize': '@Url.Content("~/artifacts/js/globalize")',
+                    'intl': '@Url.Content("~/node_modules/intl/index.js")',
                     'cldr': '@Url.Content("~/artifacts/js/cldr")',
                     'jquery': '@GetJQueryUrl()',
                     'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',

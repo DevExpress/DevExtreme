@@ -3,7 +3,7 @@ import { renderValueText } from '../filter_builder/filter_builder';
 const $ = require('../../core/renderer');
 const messageLocalization = require('../../localization/message');
 const extend = require('../../core/utils/extend').extend;
-const DataSourceModule = require('../../data/data_source/data_source');
+const DataSource = require('../../data/data_source/data_source').DataSource;
 const deferredUtils = require('../../core/utils/deferred');
 const utils = require('../filter_builder/utils');
 
@@ -57,7 +57,7 @@ function baseOperation(grid) {
             if(!headerFilterDataSource && lookup.items) {
                 dataSourceOptions.store = lookup.items;
             }
-            const dataSource = new DataSourceModule.DataSource(dataSourceOptions);
+            const dataSource = new DataSource(dataSourceOptions);
             const result = new deferredUtils.Deferred();
 
             dataSource.load().done(items => {

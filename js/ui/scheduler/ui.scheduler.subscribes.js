@@ -61,7 +61,9 @@ const subscribes = {
             dates.push(startDate);
             initialDates = dates;
         } else {
+            dates = this.getCorrectedDatesByDaylightOffsets(originalStartDate, dates, appointmentData);
             initialDates = dates;
+
             dates = dates.map((date) => {
                 return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption('startDayHour'));
             });
@@ -230,10 +232,6 @@ const subscribes = {
 
     appointmentTakesSeveralDays: function(appointment) {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
-    },
-    // NOTE: T312051, remove after fix scrollable bug T324196
-    appointmentFocused: function() {
-        this._workSpace.restoreScrollTop();
     },
 
     getTextAndFormatDate(data, currentData, format) {
@@ -745,10 +743,6 @@ const subscribes = {
         };
     },
 
-    getDaylightOffset: function(startDate, endDate) {
-        return startDate.getTimezoneOffset() - endDate.getTimezoneOffset();
-    },
-
     getTimezonesDisplayName: function() {
         return SchedulerTimezones.getTimezonesDisplayName();
     },
@@ -765,7 +759,7 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipTimezoneConvert) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
 
@@ -778,7 +772,7 @@ const subscribes = {
 
         extend(true, result, appointmentData, recurringData);
 
-        if(this._isAppointmentRecurrence(appointmentData) && !skipTimezoneConvert) {
+        if(this._isAppointmentRecurrence(appointmentData)) {
             this._convertDatesByTimezoneBack(false, result); // TODO: temporary solution fox fix T848058, more information in the ticket
         }
 

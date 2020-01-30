@@ -9,9 +9,7 @@ import inflector from 'core/utils/inflector';
 import 'ui/tag_box';
 import 'integration/angular';
 
-const ignoreAngularBrowserDeferTimer = args => {
-    return args.timerType === 'timeouts' && (args.callback.toString().indexOf('delete pendingDeferIds[timeoutId];') > -1 || args.callback.toString().indexOf('delete F[c];e(a)}') > -1);
-};
+import '../../helpers/ignoreAngularTimers.js';
 
 QUnit.module('ngmodel editor integration', {
     beforeEach() {
@@ -42,13 +40,9 @@ QUnit.module('ngmodel editor integration', {
         registerComponent('dxMultiEditor', MultiEditor);
 
         registerComponent('dxWidget', Widget);
-
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
     },
     afterEach() {
         this.$fixtureElement.remove();
-
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 

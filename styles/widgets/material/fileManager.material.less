@@ -18,6 +18,7 @@
 
     .dx-filemanager-notification-common {
         border-color: @filemanager-border-color;
+        color: @base-danger;
     }
 
     .dx-filemanager-progress-panel {
@@ -169,7 +170,7 @@
                 }
             }
 
-            .dx-row-focused .dx-filemanager-file-actions-button .dx-button {
+            .dx-row-focused .dx-filemanager-file-actions-button .dx-button .dx-icon {
                 color: @filemanager-item-focused-color;
             }
         }
@@ -183,6 +184,11 @@
 }
 
 .dx-filemanager-dirs-tree.dx-treeview {
+    .dx-treeview-item {
+        padding-top: @FILEMANAGER_TREEVIEW_ITEM_TOP_BOTTOM_PADDING;
+        padding-bottom: @FILEMANAGER_TREEVIEW_ITEM_TOP_BOTTOM_PADDING;
+    }
+
     .dx-state-focused > .dx-treeview-item {
         background: transparent;
 
@@ -214,10 +220,14 @@
     }
 }
 
+.dx-filemanager-dirs-tree.dx-treeview .dx-filemanager-file-actions-button .dx-button .dx-button-content {
+    padding: 0;
+}
+
 .dx-filemanager-file-actions-button {
     .dx-button {
-        min-width: @FILEMANAGER_FILE_ACTIONS_BUTTON_WIDTH;
-        height: @FILEMANAGER_FILE_ACTIONS_BUTTON_HEIGHT;
+        min-width: @FILEMANAGER_FILE_ACTIONS_BUTTON_SIZE;
+        height: @FILEMANAGER_FILE_ACTIONS_BUTTON_SIZE;
 
         .dx-button-content {
             padding: @FILEMANAGER_FILE_ACTIONS_BUTTON_TOP_BOTTOM_PADDING 6px;
