@@ -37,5 +37,7 @@ module.exports = [
     { content: 'switch', task: 'widget' },
     // tabs
     { content: 'tabs', task: 'widget' },
+    // navBar
+    { content: 'navBar', task: 'widget' },
     { task: 'newline' }
 ];

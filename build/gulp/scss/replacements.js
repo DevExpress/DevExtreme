@@ -57,5 +57,8 @@ module.exports = {
         { import: '../button/colors', type: 'index' },
         { import: '../button/colors', type: 'colors' },
         { import: '../../base/icons', type: 'index' },
+    ],
+    'navBar': [
+        { import: '../../base/icons', type: 'index' },
     ]
 };
