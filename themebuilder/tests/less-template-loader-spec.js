@@ -588,4 +588,52 @@ describe('LessTemplateLoader', () => {
             assert.equal(data.version, version);
         });
     });
+
+    it('clean-css works with noClean = false', () => {
+        const config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            reader: path => {
+                assert.equal(path, 'devextreme-themebuilder/data/less/bundles/dx.light.less');
+                return new Promise(resolve => {
+                    resolve('@base-bg: #fff;@base-font-family:\'default\';@base-text-color:#0f0;div { font: 14px/1 DXIcons; font-size: 20px; line-height: 20px; }');
+                });
+            }
+        };
+
+        const lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+
+        const promises = [];
+
+        promises.push(lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata,
+            []
+        ).then(data => {
+            assert.equal(data.css, `div {
+  font: 20px/20px DXIcons;
+}`);
+        }));
+
+        config.noClean = true;
+        const lessTemplateLoaderNoClean = new LessTemplateLoader(config);
+        lessTemplateLoaderNoClean._makeInfoHeader = emptyHeader;
+        promises.push(lessTemplateLoaderNoClean.load(
+            themeName,
+            colorScheme,
+            metadata,
+            []
+        ).then(data => {
+            assert.equal(data.css, `div {
+  font: 14px/1 DXIcons;
+  font-size: 20px;
+  line-height: 20px;
+}
+`);
+        }));
+
+        return promises;
+    });
 });
