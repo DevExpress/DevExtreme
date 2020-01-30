@@ -420,7 +420,8 @@ gulp.task('create-theme-index', (callback) => {
             if(item.task === 'comment') {
                 content += `// ${item.content}\n`;
             } else if(item.task === 'widget') {
-                content += `@use "./${item.content}";\n`;
+                const privateComment = item.private ? ' // private' : '';
+                content += `@use "./${item.content}";${privateComment}\n`;
             } else if(item.task === 'newline') {
                 content += '\n';
             }
