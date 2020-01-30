@@ -286,7 +286,7 @@ function isSelectedKeysOrItemsOptions(config) {
     return config.selectOption === 'selectedItemKeys' || config.selectOption === 'selectedItems';
 }
 
-function getItemsByKeys(treeView, keys) {
+function getItems(treeView, keys) {
     return treeView.option('items').filter(item => keys.indexOf(item.id) !== -1);
 }
 
@@ -326,7 +326,7 @@ configs.forEach(config => {
             wrapper.checkEventLog([]);
         });
 
-        [treeView => treeView.selectAll(), treeView => treeView.option('selectedItemKeys', [0, 1]), treeView => treeView.option('selectedItems', getItemsByKeys(treeView, [0, 1]))].forEach(selectFunc => {
+        [treeView => treeView.selectAll(), treeView => treeView.option('selectedItemKeys', [0, 1]), treeView => treeView.option('selectedItems', getItems(treeView, [0, 1]))].forEach(selectFunc => {
             test(`all.selected: false -> selectAll -> expandAll, selectFunc: ${selectFunc.toString()}`, function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
@@ -383,7 +383,7 @@ configs.forEach(config => {
             });
         });
 
-        [treeView => treeView.selectItem(0), treeView => treeView.option('selectedItemKeys', [0]), treeView => treeView.option('selectedItems', getItemsByKeys(treeView, [0]))].forEach(selectItemFunc => {
+        [treeView => treeView.selectItem(0), treeView => treeView.option('selectedItemKeys', [0]), treeView => treeView.option('selectedItems', getItems(treeView, [0]))].forEach(selectItemFunc => {
             test('all.selected: false -> selectItem(0) -> expandAll', function(assert) {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
@@ -433,7 +433,7 @@ configs.forEach(config => {
             });
         });
 
-        [treeView => treeView.selectItem(1), treeView => treeView.option('selectedItemKeys', [1]), treeView => treeView.option('selectedItems', getItemsByKeys(treeView, [1]))].forEach(selectItemFunc => {
+        [treeView => treeView.selectItem(1), treeView => treeView.option('selectedItemKeys', [1]), treeView => treeView.option('selectedItems', getItems(treeView, [1]))].forEach(selectItemFunc => {
             test(`all.selected: false -> selectItem(1) -> expandAll ${selectItemFunc.toString()}`, function(assert) {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
@@ -704,7 +704,7 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        [treeView => treeView.selectAll(), treeView => treeView.option('selectedItemKeys', [0, 1, 2]), treeView => treeView.option('selectedItems', getItemsByKeys(treeView, [0, 1, 2]))].forEach(selectFunc => {
+        [treeView => treeView.selectAll(), treeView => treeView.option('selectedItemKeys', [0, 1, 2]), treeView => treeView.option('selectedItems', getItems(treeView, [0, 1, 2]))].forEach(selectFunc => {
             test(`item1.selected: true -> selectAll -> expandAll, selectFunc: ${selectFunc.toString()}`, function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
@@ -840,7 +840,7 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        [treeView => treeView.selectAll(), treeView => treeView.option('selectedItemKeys', [0, 1, 2]), treeView => treeView.option('selectedItems', getItemsByKeys(treeView, [0, 1, 2]))].forEach(selectFunc => {
+        [treeView => treeView.selectAll(), treeView => treeView.option('selectedItemKeys', [0, 1, 2]), treeView => treeView.option('selectedItems', getItems(treeView, [0, 1, 2]))].forEach(selectFunc => {
             test(`item1_1.selected: true -> selectAll -> expandAll, selectFunc: ${selectFunc.toString()}`, function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
@@ -962,7 +962,7 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        [treeView => treeView.selectAll(), treeView => treeView.option('selectedItemKeys', [0, 1, 2]), treeView => treeView.option('selectedItems', getItemsByKeys(treeView, [0, 1, 2]))].forEach(selectFunc => {
+        [treeView => treeView.selectAll(), treeView => treeView.option('selectedItemKeys', [0, 1, 2]), treeView => treeView.option('selectedItems', getItems(treeView, [0, 1, 2]))].forEach(selectFunc => {
             test(`item1_1_1.selected: true -> selectAll -> expandAll, selectFunc: ${selectFunc.toString()}`, function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
