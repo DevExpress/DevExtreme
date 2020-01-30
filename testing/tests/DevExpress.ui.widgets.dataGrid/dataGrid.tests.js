@@ -74,6 +74,7 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 import themes from 'ui/themes';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
+import 'ui/scroll_view';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -9145,6 +9146,47 @@ QUnit.test('Editor should be rendered for hidden columns while editing in row mo
 
         assert.ok(true, 'no exception');
     });
+});
+
+QUnit.test('Scrollable should have the correct padding when the grid inside the ScrollView', function(assert) {
+    // arrange, act
+    $('#container').dxScrollView({
+        showScrollbar: 'always'
+    });
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 1 }],
+        columnAutoWidth: true,
+        scrolling: {
+            showScrollbar: 'always'
+        }
+    });
+    this.clock.tick(30);
+
+    // assert
+    const $scrollableContent = $(dataGrid.getScrollable().content());
+    assert.strictEqual($scrollableContent.css('paddingRight'), '0px', 'paddingRight');
+    assert.strictEqual($scrollableContent.css('paddingLeft'), '0px', 'paddingLeft');
+});
+
+QUnit.test('Scrollable should have the correct padding when the grid inside the ScrollView in RTL', function(assert) {
+    // arrange, act
+    $('#container').dxScrollView({
+        showScrollbar: 'always'
+    });
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 1 }],
+        columnAutoWidth: true,
+        rtlEnabled: true,
+        scrolling: {
+            showScrollbar: 'always'
+        }
+    });
+    this.clock.tick(30);
+
+    // assert
+    const $scrollableContent = $(dataGrid.getScrollable().content());
+    assert.strictEqual($scrollableContent.css('paddingRight'), '0px', 'paddingRight');
+    assert.strictEqual($scrollableContent.css('paddingLeft'), '0px', 'paddingLeft');
 });
 
 QUnit.module('Virtual row rendering', baseModuleConfig);
