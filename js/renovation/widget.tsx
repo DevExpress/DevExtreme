@@ -23,7 +23,7 @@ const getStyles = ({ width, height, ...other }) => {
     return {
         width: computedWidth ?? void 0,
         height: computedHeight ?? void 0,
-        ...other
+        ...other,
     };
 };
 
@@ -178,7 +178,6 @@ export default class Widget {
     @InternalState() _active: boolean = false;
     @InternalState() _focused: boolean = false;
     @InternalState() _hovered: boolean = false;
-    @InternalState() _keyboardListenerId: string | null = null;
 
     @Ref()
     widgetRef!: HTMLDivElement;
@@ -274,7 +273,7 @@ export default class Widget {
 
         dxClick.on(this.widgetRef,
             () => this.onClick!(this.clickArgs),
-            { namespace }
+            { namespace },
         );
 
         return () => dxClick.off(this.widgetRef, { namespace });
@@ -284,6 +283,7 @@ export default class Widget {
     keyboardEffect() {
         const hasKeyboardEventHandler = !!this.onKeyboardHandled;
         const shouldAttach = this.focusStateEnabled || hasKeyboardEventHandler;
+        let id: string | null = null;
 
         if (shouldAttach) {
             const keyboardHandler = (options: any) => {
@@ -302,13 +302,13 @@ export default class Widget {
                 return true;
             };
 
-            keyboard.on(
+            id = keyboard.on(
                 this.widgetRef,
                 this.widgetRef,
                 opts => keyboardHandler(opts),
             );
         }
 
-        return () => keyboard.off(this._keyboardListenerId);
+        return () => keyboard.off(id);
     }
 }
