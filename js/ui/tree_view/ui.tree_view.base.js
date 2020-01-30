@@ -270,7 +270,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _selectedItemKeysOptionChange: function(keys) {
-        if(keys === null || keys === undefined) {
+        if(!keys) {
             return;
         }
 
@@ -283,8 +283,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         diff.toSelect.forEach((key) => {
             this._setItemSelection(true, key);
         });
-
         this._updateSelectionOptions();
+
         const newSelectedKeys = this.getSelectedNodesKeys();
         const isKeysEquals = oldSelectedKeys.length === newSelectedKeys.length && oldSelectedKeys.every((key, index) => key === newSelectedKeys[index]);
         if(!isKeysEquals) {

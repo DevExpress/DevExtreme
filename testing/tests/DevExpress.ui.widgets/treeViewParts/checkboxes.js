@@ -148,15 +148,15 @@ QUnit.test('T173381', function(assert) {
                 id: 777, text: 'root', items: [
                     {
                         id: 1, text: 'a', items:
-                        [
-                            {
-                                id: 11, text: 'a.1', expanded: true,
-                                items: [
-                                    { id: 111, text: 'a.1.1' },
-                                    { id: 112, text: 'a.1.2' }
-                                ]
-                            },
-                            { id: 12, text: 'a.2' }]
+                            [
+                                {
+                                    id: 11, text: 'a.1', expanded: true,
+                                    items: [
+                                        { id: 111, text: 'a.1.1' },
+                                        { id: 112, text: 'a.1.2' }
+                                    ]
+                                },
+                                { id: 12, text: 'a.2' }]
                     },
                     {
                         id: 2, text: 'b', expanded: true,
@@ -190,15 +190,15 @@ QUnit.test('T195986', function(assert) {
                 items: [
                     {
                         id: 1, text: 'a', expanded: true, selected: true, items:
-                        [
-                            {
-                                id: 11, text: 'a.1', expanded: true, selected: true,
-                                items: [
-                                    { id: 111, text: 'a.1.1', selected: true },
-                                    { id: 112, text: 'a.1.2', selected: true }
-                                ]
-                            }
-                        ]
+                            [
+                                {
+                                    id: 11, text: 'a.1', expanded: true, selected: true,
+                                    items: [
+                                        { id: 111, text: 'a.1.1', selected: true },
+                                        { id: 112, text: 'a.1.2', selected: true }
+                                    ]
+                                }
+                            ]
                     }
                 ]
             }
