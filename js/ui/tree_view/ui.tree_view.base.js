@@ -1549,20 +1549,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this._dataAdapter.getSelectedNodesKeys();
     },
 
-    selectNodesByKeys: function(keys) {
-        const oldSelectedKeys = this.getSelectedNodeKeys();
-        keys.forEach((key) => {
-            this._setItemSelection(true, key);
-        });
-
-        const actualSelectedKeys = this.getSelectedNodeKeys();
-        if(oldSelectedKeys !== actualSelectedKeys) {
-            this._fireSelectionChanged();
-        }
-
-        return actualSelectedKeys;
-    },
-
     selectAll: function() {
         if(this._selectAllEnabled()) {
             this._$selectAllItem.dxCheckBox('instance').option('value', true);
