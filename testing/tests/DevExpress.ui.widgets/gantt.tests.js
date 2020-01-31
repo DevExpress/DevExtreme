@@ -649,9 +649,9 @@ QUnit.module('Time Markers', moduleConfig, () => {
         this.clock.tick();
 
         let $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
-        assert.equal($timeMarkers.length, 0, 'gantt has not time markers');
+        assert.equal($timeMarkers.length, 0, 'gantt has no time markers');
         let $timeIntervals = this.$element.find(TIME_INTERVAL_SELECTOR);
-        assert.equal($timeIntervals.length, 0, 'gantt has not time intervals');
+        assert.equal($timeIntervals.length, 0, 'gantt has no time intervals');
 
         this.instance.option('timeMarkers', [
             { start: tasks[0].start },
@@ -664,6 +664,6 @@ QUnit.module('Time Markers', moduleConfig, () => {
 
         this.instance.option('timeMarkers', []);
         $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
-        assert.equal($timeMarkers.length, 0, 'gantt has not time markers');
+        assert.equal($timeMarkers.length, 0, 'gantt has no time markers');
     });
 });
