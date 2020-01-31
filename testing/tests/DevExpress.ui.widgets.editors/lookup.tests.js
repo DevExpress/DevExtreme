@@ -3141,7 +3141,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.$widget.remove();
             }
         }, () => {
-            QUnit.test(`opened: true, searchEnabled: ${searchEnabled}`, () => {
+            QUnit.test(`opened: true, searchEnabled: ${searchEnabled}`, function() {
                 helper.createWidget({ opened: true });
 
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
@@ -3166,7 +3166,7 @@ if(devices.real().deviceType === 'desktop') {
                 }
             });
 
-            QUnit.test(`Opened: false, searchEnabled: ${searchEnabled}`, () => {
+            QUnit.test(`Opened: false, searchEnabled: ${searchEnabled}`, function() {
                 helper.createWidget({ opened: false });
 
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
