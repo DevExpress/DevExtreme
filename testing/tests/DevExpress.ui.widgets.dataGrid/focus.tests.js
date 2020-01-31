@@ -3550,7 +3550,7 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
         rowsView = this.gridView.getView('rowsView');
         rowsView.scrollToElementVertically = $row => {
             ++counter;
-            assert.ok($row.find('td').eq(0).text(), 'Smith', 'Row');
+            assert.strictEqual($row.find('td').eq(0).text(), 'Smith', 'Row');
         };
         rowsView.height(100);
         this.gridView.component.updateDimensions();
