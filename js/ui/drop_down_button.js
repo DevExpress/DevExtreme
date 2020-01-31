@@ -156,9 +156,22 @@ const DropDownButton = Widget.inherit({
         this.$element().addClass(DROP_DOWN_BUTTON_CLASS);
         this._renderButtonGroup();
         this._loadSelectedItem().done(this._updateActionButton.bind(this));
+    },
+
+    _render() {
         if(!this.option('deferRendering') || this.option('opened')) {
             this._renderPopup();
         }
+
+        this.callBase();
+    },
+
+    _renderContentImpl() {
+        if(this._popup) {
+            this._renderPopupContent();
+        }
+
+        return this.callBase();
     },
 
     _loadSelectedItem() {
@@ -329,8 +342,10 @@ const DropDownButton = Widget.inherit({
             focusStateEnabled: this.option('focusStateEnabled'),
             hoverStateEnabled: this.option('hoverStateEnabled'),
             showItemDataTitle: true,
+            onContentReady: () => this._fireContentReadyAction(),
             selectedItemKeys: selectedItemKey && useSelectMode ? [selectedItemKey] : [],
             grouped: this.option('grouped'),
+            groupTemplate: this.option('groupTemplate'),
             keyExpr: this.option('keyExpr'),
             noDataText: this.option('noDataText'),
             displayExpr: this.option('displayExpr'),
@@ -372,7 +387,6 @@ const DropDownButton = Widget.inherit({
         this._popup._wrapper().addClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS);
         this._popup.on('hiding', this._popupHidingHandler.bind(this));
         this._popup.on('showing', this._popupShowingHandler.bind(this));
-        this._renderPopupContent();
         this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
     },
 
@@ -409,7 +423,10 @@ const DropDownButton = Widget.inherit({
     },
 
     toggle(visible) {
-        this._popup || this._renderPopup();
+        if(!this._popup) {
+            this._renderPopup();
+            this._renderContent();
+        }
         return this._popup.toggle(visible);
     },
 
@@ -492,9 +509,9 @@ const DropDownButton = Widget.inherit({
 
     _optionChanged(args) {
         const { name, value } = args;
-        switch(args.name) {
+        switch(name) {
             case 'useSelectMode':
-                this._selectModeChanged(args.value);
+                this._selectModeChanged(value);
                 break;
             case 'splitButton':
                 this._renderButtonGroup();
@@ -518,6 +535,7 @@ const DropDownButton = Widget.inherit({
             case 'hoverStateEnabled':
                 this._setListOption(name, value);
                 this._buttonGroup.option(name, value);
+                this.callBase(args);
                 break;
             case 'items':
                 this._dataSource = null;
@@ -552,7 +570,7 @@ const DropDownButton = Widget.inherit({
                 this._setListOption(name, value);
                 break;
             case 'dropDownContentTemplate':
-                this._popup && this._renderPopupContent();
+                this._renderContent();
                 break;
             case 'selectedItemKey':
                 this._selectedItemKeyChanged(value);
@@ -571,6 +589,7 @@ const DropDownButton = Widget.inherit({
             case 'deferRendering':
                 if(!value && !this._popup) {
                     this._renderPopup();
+                    this._renderContent();
                 }
                 break;
             default:
