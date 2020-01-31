@@ -1,4 +1,4 @@
-import ItemsOption from './ui.diagram.items';
+import ItemsOption from './diagram.items_option';
 
 class NodesOption extends ItemsOption {
     _getKeyExpr() {

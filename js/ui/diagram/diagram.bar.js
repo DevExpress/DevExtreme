@@ -1,4 +1,4 @@
-import { getDiagram } from './diagram_importer';
+import { getDiagram } from './diagram.importer';
 
 class DiagramBar {
     constructor(owner) {

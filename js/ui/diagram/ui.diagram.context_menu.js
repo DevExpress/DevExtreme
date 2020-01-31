@@ -2,9 +2,9 @@ import $ from '../../core/renderer';
 
 import Widget from '../widget/ui.widget';
 import ContextMenu from '../context_menu';
-import DiagramCommands from './ui.diagram.commands';
-import DiagramBar from './diagram_bar';
-import { getDiagram } from './diagram_importer';
+import DiagramCommands from './diagram.commands';
+import DiagramBar from './diagram.bar';
+import { getDiagram } from './diagram.importer';
 
 const DIAGRAM_TOUCHBAR_CLASS = 'dx-diagram-touchbar';
 const DIAGRAM_TOUCHBAR_TARGET_CLASS = 'dx-diagram-touchbar-target';
