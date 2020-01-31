@@ -121,7 +121,7 @@ var TestPointerElement = TestElement.inherit({
     const environment = {
         beforeEach: function() {
             this.renderer = new vizMocks.Renderer();
-            this.container = createTestContainer('#test-container', { width: 800, height: 600 });
+            this.container = $(createTestContainer('#test-container', { width: '800px', height: '600px' }));
             rendererModule.Renderer.onCall(0).returns(this.renderer);
             const tooltipRenderer = new vizMocks.Renderer();
             rendererModule.Renderer.onCall(1).returns(tooltipRenderer);
