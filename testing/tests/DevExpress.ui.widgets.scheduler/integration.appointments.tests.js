@@ -676,7 +676,7 @@ QUnit.test('Recurrence repeat-type editor should have default \'never\' value af
 
     freqEditor.option('value', 'daily');
 
-    assert.ok(repeatTypeEditor.option('value'), 'never', 'Repeat-type editor value is ok');
+    assert.strictEqual(repeatTypeEditor.option('value'), 'never', 'Repeat-type editor value is ok');
 });
 
 QUnit.test('Disabled appointment could not be focused', function(assert) {
@@ -1724,7 +1724,7 @@ QUnit.test('Appointment should push correct data to the onAppointmentUpdating ev
         width: 800
     });
 
-    const stub = sinon.stub(this.instance._options, 'onAppointmentUpdating');
+    const stub = sinon.stub(this.instance.option(), 'onAppointmentUpdating');
     const $appointment = this.scheduler.appointments.getAppointment(0);
 
     $appointment.trigger(dragEvents.start);

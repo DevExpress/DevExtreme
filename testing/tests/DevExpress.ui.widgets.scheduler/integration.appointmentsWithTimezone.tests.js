@@ -659,8 +659,6 @@ QUnit.test('Recurrence appointment with custom tz that isn\'t equal to scheduler
             recurrenceRule: 'FREQ=DAILY'
         };
 
-        let initialPosition;
-
         this.createInstance({
             currentDate: new Date(2016, 5, 7),
             views: ['week'],
@@ -674,7 +672,7 @@ QUnit.test('Recurrence appointment with custom tz that isn\'t equal to scheduler
         const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(1);
 
         $appointment.trigger('dxdblclick');
-        initialPosition = $appointment.position();
+        const initialPosition = $appointment.position();
 
         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
         const updatedPosition = this.instance.$element().find('.' + APPOINTMENT_CLASS).not('.dx-scheduler-appointment-recurrence').position();
@@ -731,8 +729,6 @@ QUnit.test('Recurrence appointment with the same custom timezones should be open
             recurrenceRule: 'FREQ=DAILY'
         };
 
-        let initialPosition;
-
         this.createInstance({
             currentDate: new Date(2015, 4, 25),
             views: ['week'],
@@ -746,7 +742,7 @@ QUnit.test('Recurrence appointment with the same custom timezones should be open
         const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(1);
 
         $appointment.trigger('dxdblclick');
-        initialPosition = $appointment.position();
+        const initialPosition = $appointment.position();
 
         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
         const updatedPosition = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).not('.dx-scheduler-appointment-recurrence').position();
