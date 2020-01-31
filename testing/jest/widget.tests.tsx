@@ -1,6 +1,6 @@
 import Widget from '../../js/renovation/widget.p.js';
 import { createElement } from 'preact';
-import { emit, EVENT } from './utils/events-mock';
+import { emit, fakeClickEvent, EVENT } from './utils/events-mock';
 import { shallow } from 'enzyme';
 
 describe('Widget', () => {
@@ -24,6 +24,26 @@ describe('Widget', () => {
                 const widget = render({ accessKey: 'y', focusStateEnabled: false });
 
                 expect(widget.props().accessKey).toBe(void 0);
+            });
+
+            it('should take a focus if the accessKey is pressed', () => {
+                const widget = render({ accessKey: 'y', focusStateEnabled: true });
+
+                emit(EVENT.click, fakeClickEvent);
+                expect(widget.hasClass('dx-state-focused')).toBeTruthy();
+            });
+
+            it('should not fire click event if the accessKey is pressed', () => {
+                const clickHandler = jest.fn();
+                const stopImmediatePropagation = jest.fn();
+                const fakeClickEventClone = Object.assign({}, fakeClickEvent);
+
+                fakeClickEventClone.stopImmediatePropagation = stopImmediatePropagation;
+
+                render({ accessKey: 'y', focusStateEnabled: true, onClick: clickHandler });
+                emit(EVENT.click, fakeClickEvent);
+                expect(stopImmediatePropagation).toHaveBeenCalledTimes(0);
+                expect(clickHandler).toHaveBeenCalledTimes(1);
             });
         });
 

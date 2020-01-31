@@ -3,13 +3,20 @@ import eventsEngine from '../../../js/events/core/events_engine';
 const eventHandlers = {};
 
 export const EVENT = {
-    active: 'dxactive.UIFeedback',
-    blur: 'focusout.UIFeedback',
+    active: 'dxactive',
+    blur: 'focusout',
     click: 'dxclick',
-    focus: 'focusin.UIFeedback',
-    hoverEnd: 'dxhoverend.UIFeedback',
-    hoverStart: 'dxhoverstart.UIFeedback',
-    inactive: 'dxinactive.UIFeedback'
+    focus: 'focusin',
+    hoverEnd: 'dxhoverend',
+    hoverStart: 'dxhoverstart',
+    inactive: 'dxinactive'
+};
+
+export const fakeClickEvent = {
+    screenX: 0,
+    offsetX: 0,
+    pageX: 0,
+    stopImmediatePropagation: () => void 0
 };
 
 export const emit = (event, e = {}, element) => {
@@ -21,11 +28,13 @@ export const emit = (event, e = {}, element) => {
 };
 
 eventsEngine.on = (...args) => {
-    if(!eventHandlers[args[1]]) {
-        eventHandlers[args[1]] = [];
+    const event = args[1].split('.')[0];
+
+    if(!eventHandlers[event]) {
+        eventHandlers[event] = [];
     }
 
-    eventHandlers[args[1]].push({
+    eventHandlers[event].push({
         handler: args[args.length - 1],
         el: args[0]
     });
