@@ -2318,6 +2318,10 @@ const EditingController = modules.ViewController.inherit((function() {
 
         allowDeleting: function(options) {
             return this._allowEditAction('allowDeleting', options);
+        },
+
+        isInvalidCell: function() {
+            return false;
         }
     };
 })());
@@ -2648,7 +2652,8 @@ module.exports = {
                         $cell
                             .addClass(EDITOR_CELL_CLASS)
                             .toggleClass(this.addWidgetPrefix(READONLY_CLASS), !isEditableCell)
-                            .toggleClass(CELL_FOCUS_DISABLED_CLASS, !isEditableCell);
+                            .toggleClass(CELL_FOCUS_DISABLED_CLASS, !isEditableCell); // test???????this prevents validation messages from showing
+
 
                         if(alignment) {
                             $cell.find(EDITORS_INPUT_SELECTOR).first().css('textAlign', alignment);
@@ -2661,16 +2666,10 @@ module.exports = {
 
                     const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
                     // test
-                    let isCellInvalidInNewRow = false;
-                    const validatingController = this.getController('validating');
-                    if(validatingController) {
-                        const result = validatingController.getCellValidationResult({
-                            keyValue: parameters.key,
-                            columnIndex: parameters.column.index
-                        });
-                        const editData = editingController.getEditDataByKey(parameters.key);
-                        isCellInvalidInNewRow = result && result.status === 'invalid' && parameters.row && parameters.row.isNewRow && editData && editData.validated;
-                    }
+                    const isCellInvalidInNewRow = parameters.row && parameters.row.isNewRow && editingController.isInvalidCell({
+                        rowKey: parameters.key,
+                        columnIndex: parameters.column.index
+                    });
                     if(((modifiedValues && modifiedValues[columnIndex] !== undefined) || isCellInvalidInNewRow) && parameters.column && !isCommandCell && parameters.column.setCellValue) {
                     // endTest
                     // if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
