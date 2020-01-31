@@ -4451,7 +4451,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         assert.equal(this.spy.callCount, 1, 'count is correct');
     });
 
-    QUnit.test('the \'selectAllValueChanged\' event is fired one time after all items selection changing', function(assert) {
+    QUnit.test('the "selectAllValueChanged" event is fired one time after all items selection changing', function(assert) {
         const spy = sinon.spy();
 
         this.reinit({
@@ -5276,7 +5276,7 @@ QUnit.module('performance', () => {
         assert.strictEqual(load.getCall(0).args[0].filter, undefined);
     });
 
-    QUnit.test('load filter should be undefined when tagBox has some initial values and \'maxFilterLength\' was changed at runtime', function(assert) {
+    QUnit.test('load filter should be undefined when tagBox has some initial values and "maxFilterLength" was changed at runtime', function(assert) {
         const load = sinon.stub();
 
         const instance = $('#tagBox').dxTagBox({
