@@ -3992,8 +3992,10 @@ declare module DevExpress.ui {
     export interface dxGanttTimeMarker {
         /** @name dxGanttTimeMarker.cssClass */
         cssClass?: string;
-        /** @name dxGanttTimeMarker.dateTime */
-        dateTime?: Date | number | string | (() => Date | number | string);
+        /** @name dxGanttTimeMarker.end */
+        end?: Date | number | string | (() => Date | number | string);
+        /** @name dxGanttTimeMarker.start */
+        start?: Date | number | string | (() => Date | number | string);
         /** @name dxGanttTimeMarker.title */
         title?: string;
     }

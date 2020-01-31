@@ -136,7 +136,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         excelCell.value = cellData.value;
 
         if(isDefined(excelCell.value)) {
-            const { bold, alignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
+            const { bold, alignment: horizontalAlignment, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
             if(isDefined(numberFormat)) {
@@ -147,7 +147,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 
             _setNumberFormat(excelCell, numberFormat);
             _setFont(excelCell, bold);
-            _setAlignment(excelCell, wrapText, alignment);
+            _setAlignment(excelCell, wrapText, horizontalAlignment);
         }
 
         if(isDefined(customizeCell)) {
@@ -215,12 +215,15 @@ function _setFont(excelCell, bold) {
 
 function _setAlignment(excelCell, wrapText, horizontalAlignment) {
     excelCell.alignment = excelCell.alignment || {};
+
     if(isDefined(wrapText)) {
         excelCell.alignment.wrapText = wrapText;
     }
     if(isDefined(horizontalAlignment)) {
         excelCell.alignment.horizontal = horizontalAlignment;
     }
+
+    excelCell.alignment.vertical = 'top';
 }
 
 function _setColumnsWidth(worksheet, columns, startColumnIndex) {
