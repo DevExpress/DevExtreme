@@ -3700,6 +3700,23 @@ QUnit.module('datebox w/ time list', {
         $items.eq(3).trigger('dxclick');
         assert.strictEqual($input.val(), $items.eq(3).text(), 'new time is applied');
     });
+
+    QUnit.test('event field should be defined after value has been changed via List', function(assert) {
+        assert.expect(2);
+
+        this.dateBox.option({
+            opened: true,
+            onValueChanged: ({ event }) => {
+                assert.ok(!!event, 'event field is defined');
+                assert.strictEqual(event.type, 'dxclick');
+            }
+        });
+
+        $(this.dateBox.content())
+            .find('.dx-list-item')
+            .first()
+            .trigger('dxclick');
+    });
 });
 
 QUnit.module('keyboard navigation', {

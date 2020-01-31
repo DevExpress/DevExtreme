@@ -251,7 +251,7 @@ const ListStrategy = DateBoxStrategy.inherit({
             date = new Date(year, month, day, hours, minutes, 0, 0);
         }
 
-        this.dateBoxValue(date);
+        this.dateBoxValue(date, e.event);
     },
 
     attachKeyboardEvents: function(keyboardProcessor) {
