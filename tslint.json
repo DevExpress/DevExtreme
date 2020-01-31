@@ -33,7 +33,7 @@
     "member-ordering": false,
     "jsx-wrap-multiline": false,
     "no-this-assignment": [true, {"allow-destructuring": true}],
-    "ter-indent": [true, 4],
+    "ter-indent": [true, 4, { "SwitchCase": 1 }],
     "import-name": [false],
     "no-unused-expression": [true, "allow-fast-null-checks"],
     "no-object-literal-type-assertion": [false]
