@@ -113,4 +113,7 @@ export default class Button extends Widget {
     @Prop() stylingMode?: string;
     @Prop() text?: string;
     @Prop() type?: string;
+    @Prop() focusStateEnabled?: boolean = true;
+    @Prop() activeStateEnabled?: boolean = true;
+    @Prop() hoverStateEnabled?: boolean = true;
 }

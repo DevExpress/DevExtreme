@@ -39,7 +39,9 @@ class Button extends Widget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
+            activeStateEnabled: true,
             focusStateEnabled: true,
+            hoverStateEnabled: true,
             icon: '',
             iconPosition: 'left',
         });
