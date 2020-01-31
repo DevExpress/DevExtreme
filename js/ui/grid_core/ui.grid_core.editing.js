@@ -2664,12 +2664,12 @@ module.exports = {
                     let isCellInvalidInNewRow = false;
                     const validatingController = this.getController('validating');
                     if(validatingController) {
-                        const info = validatingController.getCellValidationInfo({
+                        const result = validatingController.getCellValidationResult({
                             keyValue: parameters.key,
                             columnIndex: parameters.column.index
                         });
                         const editData = editingController.getEditDataByKey(parameters.key);
-                        isCellInvalidInNewRow = info && info.result && info.result.status === 'invalid' && parameters.row && parameters.row.isNewRow && editData && editData.validated;
+                        isCellInvalidInNewRow = result && result.status === 'invalid' && parameters.row && parameters.row.isNewRow && editData && editData.validated;
                     }
                     if(((modifiedValues && modifiedValues[columnIndex] !== undefined) || isCellInvalidInNewRow) && parameters.column && !isCommandCell && parameters.column.setCellValue) {
                     // endTest
