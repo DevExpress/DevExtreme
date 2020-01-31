@@ -1,24 +1,40 @@
-import React from 'react';
-import Button, { viewModelFunction, viewFunction } from '../../js/renovation/button';
-import { shallow } from 'enzyme';
+import Button from '../../js/renovation/button.p.js';
+import Widget from '../../js/renovation/widget.p.js';
+import { createElement } from 'preact';
+import { emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
+import { mount } from 'enzyme';
 
 describe('Button', () => {
-    const render = (props = {}) => shallow(
-        viewFunction(viewModelFunction({ ...new Button(), ...props } as Button)),
-    );
+    const render = (props = {}) => mount(createElement(Button, props)).childAt(0);
 
     describe('Props', () => {
         describe('onClick', () => {
-            it('should be clickable with onClick property only', () => {
+            it('should be called by mouse click', () => {
                 const clickHandler = jest.fn();
-                const button = render({ onClick: clickHandler });
 
+                render({ onClick: clickHandler });
                 expect(clickHandler).toHaveBeenCalledTimes(0);
-
-                button.simulate('click');
-
+                emit(EVENT.click);
                 expect(clickHandler).toHaveBeenCalledTimes(1);
-            })
+            });
+
+            it('should be called by Enter', () => {
+                const clickHandler = jest.fn();
+
+                render({ onClick: clickHandler });
+                expect(clickHandler).toHaveBeenCalledTimes(0);
+                emitKeyboard(KEY.enter);
+                expect(clickHandler).toHaveBeenCalledTimes(1);
+            });
+
+            it('should be called by Space', () => {
+                const clickHandler = jest.fn();
+
+                render({ onClick: clickHandler });
+                expect(clickHandler).toHaveBeenCalledTimes(0);
+                emitKeyboard(KEY.space);
+                expect(clickHandler).toHaveBeenCalledTimes(1);
+            });
         });
 
         describe('stylingMode', () => {
@@ -78,11 +94,20 @@ describe('Button', () => {
             });
         });
 
+        describe('activeStateEnabled', () => {
+            it('should be enabled by default', () => {
+                const button = render();
+
+                expect(button.prop('activeStateEnabled')).toBeTruthy();
+                expect(button.hasClass('dx-state-active')).toBeFalsy();
+            });
+        });
+
         describe('contentRender', () => {
             it('should render template', () => {
                 const button = render({
                     text: 'My button',
-                    contentRender: ({ text }) => (<div className="custom-content">{`${text}123`}</div>),
+                    contentRender: ({ text }) => createElement('div', { className: 'custom-content', children: `${text}123`})
                 });
                 const buttonContentChildren = button.find('.dx-button-content').children();
 
@@ -116,6 +141,20 @@ describe('Button', () => {
                 expect(button.hasClass('dx-button-icon-right')).toBeTruthy();
                 expect(elements.at(0).is('.dx-button-text')).toBeTruthy();
                 expect(elements.at(1).is('.dx-icon.dx-icon-test.dx-icon-right')).toBeTruthy();
+            });
+        });
+
+        describe('hoverStateEnabled', () => {
+            it('should pass a default value into Widget component', () => {
+                const tree = render();
+
+                expect(tree.find(Widget).prop('hoverStateEnabled')).toBe(true);
+            });
+
+            it('should pass a custom value into Widget component', () => {
+                const tree = render({ hoverStateEnabled: false });
+
+                expect(tree.find(Widget).prop('hoverStateEnabled')).toBe(false);
             });
         });
     });
