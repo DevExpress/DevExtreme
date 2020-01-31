@@ -1508,10 +1508,10 @@ QUnit.module('events', {}, () => {
             onContentReady: contentReadyHandler
         });
 
-        assert.strictEqual(contentReadyHandler.callCount, 1, 'event is fired after init');
+        assert.strictEqual(contentReadyHandler.callCount, 2, 'Popup is ready, then List is ready');
 
         dropDownButton.option('dataSource', ['first', 'second', 'third']);
-        assert.strictEqual(contentReadyHandler.callCount, 2, 'event is fired after dataSource option change');
+        assert.strictEqual(contentReadyHandler.callCount, 3, 'List is ready after updating Popup content');
     });
 
     QUnit.test('onContentReady should be fired after widget rendering when subscription uses "on" method', function(assert) {
@@ -1522,16 +1522,15 @@ QUnit.module('events', {}, () => {
                 load: sinon.stub().returns([1, 2, 3]),
                 byKey: sinon.stub().returns(1)
             },
-            opened: true,
-            deferRendering: false
+            deferRendering: true
         });
 
         dropDownButton.on('contentReady', contentReadyHandler);
-
-        assert.strictEqual(contentReadyHandler.callCount, 1, 'event is fired after init');
+        dropDownButton.open();
+        assert.strictEqual(contentReadyHandler.callCount, 2, 'Popup is ready, then List is ready');
 
         dropDownButton.option('dataSource', [1, 2, 3]);
-        assert.strictEqual(contentReadyHandler.callCount, 2, 'event is fired after dataSource option change');
+        assert.strictEqual(contentReadyHandler.callCount, 3, 'List is ready after updating Popup content');
     });
 
     QUnit.test('onContentReady should be fired after widget with custom content template rendering', function(assert) {
@@ -1567,11 +1566,11 @@ QUnit.module('events', {}, () => {
                 byKey: sinon.stub().returns(1)
             },
             dropDownContentTemplate: firstTemplateHandler,
-            deferRendering: false,
-            opened: true
+            deferRendering: true
         });
 
         dropDownButton.on('contentReady', contentReadyHandler);
+        dropDownButton.open();
         assert.strictEqual(contentReadyHandler.callCount, 1, 'event is fired');
 
         dropDownButton.option('dropDownContentTemplate', secondTemplateHandler);
