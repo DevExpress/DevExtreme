@@ -1495,6 +1495,23 @@ QUnit.module('events', {}, () => {
         assert.strictEqual(dropDownButton.option('selectedItem'), 3, 'selectedItem is correct');
     });
 
+    QUnit.test('onContentReady should be fired after widget rendering and take into account Popup rendering', function(assert) {
+        const contentReadyHandler = sinon.spy();
+
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            dataSource: {
+                load: sinon.stub().returns([1, 2, 3]),
+                byKey: sinon.stub().returns(1)
+            },
+            deferRendering: true,
+            onContentReady: contentReadyHandler
+        });
+
+        assert.strictEqual(contentReadyHandler.callCount, 1, 'Widget is ready');
+        dropDownButton.open();
+        assert.strictEqual(contentReadyHandler.callCount, 3, 'Popup is ready, then List is ready');
+    });
+
     QUnit.test('onContentReady should be fired after widget rendering', function(assert) {
         const contentReadyHandler = sinon.spy();
 
