@@ -54,7 +54,7 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         return createWrapper($.extend(defaultOption, options));
     };
 
-    QUnit.test('showAppointmentPopup method should be work properly with no argument', assert => {
+    QUnit.test('showAppointmentPopup method should be work properly with no argument', function(assert) {
         const cases = [
             () => {
                 const appointmentText = 'app';
@@ -124,7 +124,7 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         });
     });
 
-    QUnit.test('onAppointmentFormOpening event should handle e.cancel value', assert => {
+    QUnit.test('onAppointmentFormOpening event should handle e.cancel value', function(assert) {
         const data = [{
             text: 'Website Re-Design Plan',
             startDate: new Date(2017, 4, 22, 9, 30),
@@ -162,7 +162,7 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Appointment popup should work properly', assert => {
+    QUnit.test('Appointment popup should work properly', function(assert) {
         const NEW_EXPECTED_SUBJECT = 'NEW SUBJECT';
         const scheduler = createScheduler();
 
@@ -1322,3 +1322,4 @@ QUnit.test('Popup should not be closed until the valid value is typed', function
 
     assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, 'the only pending editor is displayed in the form');
 });
+
