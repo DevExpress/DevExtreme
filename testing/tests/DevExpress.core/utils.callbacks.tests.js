@@ -40,7 +40,7 @@ QUnit.test('Fired method', function(assert) {
     this.Callbacks.add(function(param) {});
 
     // assert
-    assert.ok(!this.Callbacks.fired(), 'Callback not fired at start');
+    assert.notOk(this.Callbacks.fired(), 'Callback not fired at start');
 
     // act
     this.Callbacks.fire();
@@ -123,14 +123,14 @@ QUnit.test('Remove a callback from a callback list when firing', function(assert
         callOrder.push(2);
         that.Callbacks.remove(callBack3);
     };
-    var callBack3 = function() {
+    const callBack3 = function() {
         callOrder.push(3);
     };
     const callBack4 = function() {
         callOrder.push(4);
         that.Callbacks.remove(callBack1);
     };
-    var callBack5 = function() {
+    const callBack5 = function() {
         callOrder.push(5);
         that.Callbacks.remove(callBack5);
         that.Callbacks.fire();
@@ -372,14 +372,14 @@ QUnit.test('Remove a callback from a callback list when firing for sync strategy
         callOrder.push(2);
         that.Callbacks.remove(callBack3);
     };
-    var callBack3 = function() {
+    const callBack3 = function() {
         callOrder.push(3);
     };
     const callBack4 = function() {
         callOrder.push(4);
         that.Callbacks.remove(callBack1);
     };
-    var callBack5 = function() {
+    const callBack5 = function() {
         callOrder.push(5);
         that.Callbacks.remove(callBack5);
         that.Callbacks.fire();
