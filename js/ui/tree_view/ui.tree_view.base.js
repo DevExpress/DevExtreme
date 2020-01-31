@@ -185,66 +185,39 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
             createChildren: null,
 
-            onSelectAllValueChanged: null,
+            onSelectAllValueChanged: null
 
 
             /**
-            * @name dxTreeViewOptions.selectedItem
-            * @hidden
-            */
-
-            selectedItems: null,
-
-            selectedItemKeys: null,
+             * @name dxTreeViewOptions.selectedItem
+             * @hidden
+             */
 
             /**
-            * @name dxTreeViewOptions.selectedIndex
-            * @hidden
-            */
+             * @name dxTreeViewOptions.selectedItems
+             * @hidden
+             */
+
             /**
-            * @name dxTreeViewItem
-            * @inherits CollectionWidgetItem
-            * @type object
-            */
+             * @name dxTreeViewOptions.selectedItemKeys
+             * @hidden
+             */
+
+            /**
+             * @name dxTreeViewOptions.selectedIndex
+             * @hidden
+             */
+            /**
+             * @name dxTreeViewItem
+             * @inherits CollectionWidgetItem
+             * @type object
+             */
         });
     },
 
     // TODO: implement these functions
     _initSelectedItems: commonUtils.noop,
-    _normalizeSelectedItems: commonUtils.noop,
-
-    _syncSelectionOptions: function(option) {
-        this._updateSelectionOptions();
-        return new Deferred().resolve().promise();
-    },
-
-    _setSelectedItemsByOptions: function(items, keyGetter, itemGetter) {
-        const selectedKeys = this.option('selectedItemKeys') || this._getItemKeys(keyGetter, this.option('selectedItems'));
-        if(!selectedKeys || this._initialized) {
-            return;
-        }
-
-        const isDataSourceLoading = this._dataSource && this._dataSource.isLoading();
-        if(isDataSourceLoading) {
-            this._dataSource.on('loadingChanged', (arg1, arg2) => {
-                this._updateSelectedItemsByKeys(this._dataSource.items(), selectedKeys, keyGetter, itemGetter);
-            });
-        } else {
-            this._updateSelectedItemsByKeys(items, selectedKeys, keyGetter, itemGetter);
-        }
-    },
-
-    _updateSelectedItemsByKeys: function(items, selectedKeys, keyGetter, itemGetter) {
-        items.forEach((item) => {
-            const itemKey = keyGetter(item);
-            item.selected = selectedKeys.indexOf(itemKey) !== -1;
-
-            let children = itemGetter(item);
-            if(children && children.length) {
-                this._updateSelectedItemsByKeys(children, selectedKeys, keyGetter, itemGetter);
-            }
-        });
-    },
+    _syncSelectionOptions: commonUtils.asyncNoop,
 
     _fireSelectionChanged: function() {
         const selectionChangePromise = this._selectionChangePromise;
@@ -253,83 +226,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 excludeValidators: ['disabled', 'readOnly']
             })();
         }).bind(this));
-    },
-
-    _getItemKeys(keyGetter, items) {
-        if(!items) {
-            return null;
-        }
-
-        return items.map(item => keyGetter(item));
-    },
-
-    _selectedItemsOptionChange: function(items) {
-        const keyGetter = this._dataAdapter.options.dataAccessors.getters['key'];
-        let selectedKeys = this._getItemKeys(keyGetter, items);
-        this._selectedItemKeysOptionChange(selectedKeys);
-    },
-
-    _selectedItemKeysOptionChange: function(keys) {
-        if(!keys) {
-            return;
-        }
-
-        const oldSelectedKeys = this.getSelectedNodesKeys();
-        const diff = this._getSelectedKeysDiff(oldSelectedKeys, keys);
-
-        diff.toDeselect.forEach((key) => {
-            this._setItemSelection(false, key);
-        });
-        diff.toSelect.forEach((key) => {
-            this._setItemSelection(true, key);
-        });
-        this._updateSelectionOptions();
-
-        const newSelectedKeys = this.getSelectedNodesKeys();
-        const isKeysEquals = oldSelectedKeys.length === newSelectedKeys.length && oldSelectedKeys.every((key, index) => key === newSelectedKeys[index]);
-        if(!isKeysEquals) {
-            this._fireSelectionChanged();
-        }
-    },
-
-    _getSelectedKeysDiff(oldSelectedKeys, newSelectedKeys) {
-        const toSelect = [];
-        const toDeselect = [];
-
-        newSelectedKeys.forEach((newKey) => {
-            if(oldSelectedKeys.indexOf(newKey) !== -1) {
-                return;
-            }
-            toSelect.push(newKey);
-        });
-
-        oldSelectedKeys.forEach((oldKey) => {
-            if(newSelectedKeys.indexOf(oldKey) !== -1) {
-                return;
-            }
-
-            if(this._isRecursiveSelection() && this._dataAdapter.isChildKey(oldKey, newSelectedKeys)) {
-                return;
-            }
-
-            toDeselect.push(oldKey);
-        });
-
-        return { toSelect, toDeselect };
-    },
-
-    _updateSelectionOptions: function() {
-        const selectedKeys = this.getSelectedNodeKeys();
-        this._setOptionWithoutOptionChange('selectedItemKeys', selectedKeys);
-
-        const items = [];
-        each(selectedKeys, (index, key) => {
-            let node = this._dataAdapter.getNodeByKey(key);
-            let itemData = this._dataAdapter.getPublicNode(node).itemData;
-            items.push(itemData);
-        });
-
-        this._setOptionWithoutOptionChange('selectedItems', items);
     },
 
     _createSelectAllValueChangedAction: function() {
@@ -417,12 +313,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             case 'animationEnabled':
             case 'virtualModeEnabled':
             case 'selectByClick':
-                break;
-            case 'selectedItems':
-                this._selectedItemsOptionChange(args.value);
-                break;
-            case 'selectedItemKeys':
-                this._selectedItemKeysOptionChange(args.value);
                 break;
             case 'selectionMode':
                 this._initDataAdapter();
@@ -935,6 +825,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
+
         this._updateExpandedItemsUI(node, state, e);
     },
 
@@ -1020,7 +911,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 return;
             }
 
-            this._updateSelectionOptions();
             this._fireContentReadyAction();
             this._updateExpandedItem(actualNodeData, state, e);
         });
@@ -1060,7 +950,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _appendItems: function(newItems) {
         this.option().items = this.option('items').concat(newItems);
         this._initDataAdapter();
-        this._updateSelectionOptions();
     },
 
     _updateExpandedItem: function(node, state, e) {
@@ -1159,7 +1048,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _toggleSelectAll: function(args) {
         this._dataAdapter.toggleSelectAll(args.value);
         this._updateItemsUI();
-        this._updateSelectionOptions();
         this._fireSelectionChanged();
     },
 
@@ -1291,7 +1179,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._dataAdapter.toggleSelection(node.internalFields.key, value);
         this._updateItemsUI();
-        this._updateSelectionOptions();
 
         const initiator = dxEvent || this._findItemElementByItem(node.internalFields.item);
         const handler = dxEvent ? this._itemDXEventHandler : this._itemEventHandler;
@@ -1645,25 +1532,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-         * @name dxTreeViewNode
-         * @type object
-         */
+     * @name dxTreeViewNode
+     * @type object
+     */
 
 
     getNodes: function() {
         return this._dataAdapter.getTreeNodes();
-    },
-
-    getSelectedNodes: function() {
-        let items = [];
-
-        each(this.getSelectedNodeKeys(), (index, key) => {
-            let node = this._dataAdapter.getNodeByKey(key);
-            let publicNode = this._dataAdapter.getPublicNode(node);
-            items.push(publicNode);
-        });
-
-        return items;
     },
 
     getSelectedNodesKeys: function() {
@@ -1672,6 +1547,20 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     getSelectedNodeKeys: function() {
         return this._dataAdapter.getSelectedNodesKeys();
+    },
+
+    selectNodesByKeys: function(keys) {
+        const oldSelectedKeys = this.getSelectedNodeKeys();
+        keys.forEach((key) => {
+            this._setItemSelection(true, key);
+        });
+
+        const actualSelectedKeys = this.getSelectedNodeKeys();
+        if(oldSelectedKeys !== actualSelectedKeys) {
+            this._fireSelectionChanged();
+        }
+
+        return actualSelectedKeys;
     },
 
     selectAll: function() {

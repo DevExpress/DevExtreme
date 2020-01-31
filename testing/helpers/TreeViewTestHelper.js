@@ -88,12 +88,6 @@ class TreeViewTestWrapper {
         const keysByAdapter = this.instance._dataAdapter.getSelectedNodesKeys();
         assert.deepEqual(keysByAdapter.sort(), expectedSelectedKeys.sort(), 'selectedKeys from dataAdapter' + additionalErrorMessage);
 
-        const keysFromKeysOption = this.instance.option('selectedItemKeys');
-        assert.deepEqual(keysFromKeysOption.sort(), expectedSelectedKeys.sort(), 'selected keys option ' + additionalErrorMessage);
-
-        const keysFromItemsOption = this.instance.option('selectedItems').map(item => { return item.id; });
-        assert.deepEqual(keysFromItemsOption.sort(), expectedSelectedKeys.sort(), 'selected items option ' + additionalErrorMessage);
-
         const selectedKeysByNodes = this.instance.getSelectedNodes().map(node => { return node.key; });
         assert.deepEqual(selectedKeysByNodes.sort(), expectedSelectedKeys.sort(), 'getSelectedNodes method ' + additionalErrorMessage);
     }
