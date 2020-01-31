@@ -1339,7 +1339,7 @@ QUnit.module('events', {}, () => {
         assert.strictEqual(handler.callCount, 1, 'handler was called');
     });
 
-    QUnit.test('keyExp option change', function(assert) {
+    QUnit.test('keyExpr option change', function(assert) {
         const items = [{
             name: 'A', id: 1
         }, {
