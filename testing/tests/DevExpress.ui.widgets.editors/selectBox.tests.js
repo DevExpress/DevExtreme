@@ -2450,7 +2450,7 @@ QUnit.module('editing', moduleSetup, () => {
         assert.deepEqual(list.option('selectedItems'), [customValue], 'selected item is correct');
     });
 
-    QUnit.test('onValueChanged event should have correct "event" field after adding a custom item', (assert) => {
+    QUnit.test('onValueChanged event should have correct "event" field after adding a custom item', function(assert) {
         const valueChangedStub = sinon.stub();
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true,
@@ -2785,7 +2785,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.ok(selectBox.option('opened'), 'selectBox should be opened');
     });
 
-    QUnit.testInActiveWindow('Filter should be canceled after focusout (T838753)', (assert) => {
+    QUnit.testInActiveWindow('Filter should be canceled after focusout (T838753)', function(assert) {
         const items = ['111', '222', '333'];
 
         const $selectBox = $('#selectBox').dxSelectBox({
@@ -5198,7 +5198,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.$widget.remove();
             }
         }, () => {
-            QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}`, () => {
+            QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}`, function() {
                 helper.createWidget({ opened: true });
 
                 helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox' }, 'list');
@@ -5240,7 +5240,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
             });
 
-            QUnit.test(`opened: false -> searchEnabled: ${!searchEnabled}`, () => {
+            QUnit.test(`opened: false -> searchEnabled: ${!searchEnabled}`, function() {
                 helper.createWidget({ opened: false });
 
                 const inputAttributes = {

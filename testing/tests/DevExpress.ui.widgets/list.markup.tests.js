@@ -268,7 +268,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.$widget.remove();
             }
         }, () => {
-            QUnit.test('Selected: [], selectionMode: "none"', () => {
+            QUnit.test('Selected: [], selectionMode: "none"', function() {
                 helper.createWidget();
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', tabindex: '0' });
@@ -276,7 +276,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkItemsAttributes([], { role: 'option' });
             });
 
-            QUnit.test('Selected: ["Item_2"], change searchEnabled after initialize', () => {
+            QUnit.test('Selected: ["Item_2"], change searchEnabled after initialize', function() {
                 helper.createWidget({ selectedItemKeys: ['Item_2'], keyExpr: 'text', selectionMode: 'single' });
                 helper.widget.option('searchEnabled', !searchEnabled);
 
@@ -285,7 +285,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'option' });
             });
 
-            QUnit.test('Selected: ["Item_2"], selectionMode: "single"', () => {
+            QUnit.test('Selected: ["Item_2"], selectionMode: "single"', function() {
                 helper.createWidget({ selectedItemKeys: ['Item_2'], keyExpr: 'text', selectionMode: 'single' });
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', tabindex: '0' });
@@ -293,7 +293,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'option' });
             });
 
-            QUnit.test('Selected: ["Item_2", "Item_3"], selectionMode: "multiple"', () => {
+            QUnit.test('Selected: ["Item_2", "Item_3"], selectionMode: "multiple"', function() {
                 helper.createWidget({ selectedItemKeys: ['Item_2', 'Item_3'], keyExpr: 'text', selectionMode: 'multiple' });
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'listbox', tabindex: '0' });
@@ -301,7 +301,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkItemsAttributes([1, 2], { attributes: ['aria-selected'], role: 'option' });
             });
 
-            QUnit.test('Selected: ["Item_1"] -> set focusedElement -> clean focusedElement', () => {
+            QUnit.test('Selected: ["Item_1"] -> set focusedElement -> clean focusedElement', function() {
                 helper.createWidget({ selectedItemKeys: ['Item_1'], keyExpr: 'text', selectionMode: 'single' });
 
                 helper.widget.option('focusedElement', helper.getItems().eq(0));
