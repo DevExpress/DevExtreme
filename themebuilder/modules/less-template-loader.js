@@ -50,10 +50,11 @@ class LessMetadataPreCompiler {
 }
 
 class LessMetadataPostCompiler {
-    constructor(compiledMetadata, swatchSelector, colorScheme) {
+    constructor(compiledMetadata, swatchSelector, colorScheme, noClean) {
         this._metadata = compiledMetadata;
         this.swatchSelector = swatchSelector;
         this.colorScheme = colorScheme;
+        this.useCleanCss = !noClean;
     }
 
     process(css) {
@@ -81,7 +82,9 @@ class LessMetadataPostCompiler {
                 .replace(themeMarkerRegex, '$1' + this.colorScheme + '$3');
         }
 
-        css = new CleanCss(cleanCssOptions).minify(css).styles;
+        if(this.useCleanCss) {
+            css = new CleanCss(cleanCssOptions).minify(css).styles;
+        }
 
         return css.replace(metadataRegex, '');
     }
@@ -110,6 +113,7 @@ class LessTemplateLoader {
         this.swatchSelector = config.makeSwatch ? SWATCH_SELECTOR_PREFIX + config.outColorScheme : '';
         this.outColorScheme = config.outColorScheme;
         this.version = version;
+        this.noClean = config.noClean;
     }
 
     load(theme, colorScheme, metadata, modifiedItems, widgets) {
@@ -157,7 +161,7 @@ class LessTemplateLoader {
             };
 
             const preCompiler = new LessMetadataPreCompiler(metadata, this.swatchSelector, modifyVars);
-            const postCompiler = new LessMetadataPostCompiler(compiledMetadata, this.swatchSelector, this.outColorScheme);
+            const postCompiler = new LessMetadataPostCompiler(compiledMetadata, this.swatchSelector, this.outColorScheme, this.noClean);
 
             less = preCompiler.process(less);
 
