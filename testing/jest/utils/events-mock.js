@@ -5,7 +5,7 @@ const eventHandlers = {};
 export const EVENT = {
     active: 'dxactive.UIFeedback',
     blur: 'focusout.UIFeedback',
-    click: 'dxclick.UIFeedback',
+    click: 'dxclick',
     focus: 'focusin.UIFeedback',
     hoverEnd: 'dxhoverend.UIFeedback',
     hoverStart: 'dxhoverstart.UIFeedback',

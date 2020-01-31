@@ -1,22 +1,39 @@
 import Button from '../../js/renovation/button.p.js';
 import { createElement } from 'preact';
-import { shallow } from 'enzyme';
+import { emit, EVENT } from './utils/events-mock';
+import { mount } from 'enzyme';
 
 describe('Button', () => {
-    const render = (props = {}) => shallow(createElement(Button, props));
+    const render = (props = {}) => mount(createElement(Button, props)).childAt(0);
 
     describe('Props', () => {
         describe('onClick', () => {
-            it('should be clickable with onClick property only', () => {
+            it('should be called by mouse click', () => {
                 const clickHandler = jest.fn();
-                const button = render({ onClick: clickHandler });
 
+                render({ onClick: clickHandler });
                 expect(clickHandler).toHaveBeenCalledTimes(0);
-
-                button.simulate('click');
-
+                emit(EVENT.click);
                 expect(clickHandler).toHaveBeenCalledTimes(1);
-            })
+            });
+
+            // it('should be called by Enter', () => {
+            //     const clickHandler = jest.fn();
+
+            //     render({ onClick: clickHandler });
+            //     expect(clickHandler).toHaveBeenCalledTimes(0);
+            //     emit(EVENT.click);
+            //     expect(clickHandler).toHaveBeenCalledTimes(1);
+            // });
+
+            // it('should be called by Space', () => {
+            //     const clickHandler = jest.fn();
+
+            //     render({ onClick: clickHandler });
+            //     expect(clickHandler).toHaveBeenCalledTimes(0);
+            //     emit(EVENT.click);
+            //     expect(clickHandler).toHaveBeenCalledTimes(1);
+            // });
         });
 
         describe('stylingMode', () => {
