@@ -708,7 +708,7 @@ QUnit.module('multi tag support', {
         assert.equal($tagBox.find('.' + TAGBOX_TAG_CLASS).length, 4, '4 tags when option was disabled');
     });
 
-    QUnit.test('onMultitagPreparing option change', function(assert) {
+    QUnit.test('onMultiTagPreparing option change', function(assert) {
         assert.expect(4);
 
         const onMultiTagPreparing = e => {
@@ -3834,7 +3834,7 @@ QUnit.module('the \'onSelectionChanged\' option', moduleSetup, () => {
         assert.equal(spy.args[1][0].addedItems.length, 0, 'the \'addedItems\' argument');
     });
 
-    QUnit.test('selectionChanged event should be rised if selected items was changed', function(assert) {
+    QUnit.test('selectionChanged event should be raised if selected items were changed', function(assert) {
         const items = [1, 2, 3];
         const selectionChangedHandler = sinon.spy();
         const tagBox = $('#tagBox').dxTagBox({
@@ -3845,7 +3845,7 @@ QUnit.module('the \'onSelectionChanged\' option', moduleSetup, () => {
         tagBox.on('selectionChanged', selectionChangedHandler);
         tagBox.option('value', [1]);
 
-        assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged event was rised');
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged event was raised');
     });
 });
 
