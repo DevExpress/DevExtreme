@@ -1532,9 +1532,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-     * @name dxTreeViewNode
-     * @type object
-     */
+         * @name dxTreeViewNode
+         * @type object
+         */
 
 
     getNodes: function() {
