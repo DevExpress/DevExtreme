@@ -3735,7 +3735,7 @@ QUnit.test('Set Hover point with point.selected. ', function(assert) {
     this.series.hoverPoint(this.point);
 
     assert.equal(this.point.fullState, 2 | 1, 'fullState');
-    assert.ok(this.point.applyView.callCount, 2, 'Point style');
+    assert.strictEqual(this.point.applyView.callCount, 2, 'Point style');
 });
 
 QUnit.test('Set Hover point view without change state with point.selected. ', function(assert) {
@@ -3746,7 +3746,7 @@ QUnit.test('Set Hover point view without change state with point.selected. ', fu
 
     this.series.notify({ action: 'pointHover', target: this.series.getAllPoints()[1] });
 
-    assert.ok(this.point.setView.lastCall.args[0], 'hover', 'Point style');
+    assert.strictEqual(this.point.setView.lastCall.args[0], 'hover', 'Point style');
 });
 
 // Release hover
@@ -3776,7 +3776,7 @@ QUnit.test('Release hover point with point.selected. ', function(assert) {
     });
 
     assert.equal(this.point.fullState, 2, 'fullState');
-    assert.ok(this.point.resetView.lastCall.args[0], 'selection', 'Point style');
+    assert.strictEqual(this.point.resetView.lastCall.args[0], 'hover', 'Reset hover view');
 });
 
 QUnit.test('Release hover view point with series.hover. ', function(assert) {
@@ -3822,7 +3822,7 @@ QUnit.test('Release hover view point with series.selected. ', function(assert) {
     // act
     this.series.notify({ action: 'clearPointHover', target: this.series.getAllPoints()[1] });
 
-    assert.ok(this.point.resetView.lastCall.args[0], 'selection', 'Point style');
+    assert.strictEqual(this.point.resetView.lastCall.args[0], 'hover', 'Reset hover view');
 });
 
 QUnit.test('Release hover view point with point.selected. ', function(assert) {
@@ -3831,7 +3831,7 @@ QUnit.test('Release hover view point with point.selected. ', function(assert) {
     // act
     this.series.notify({ action: 'clearPointHover', target: this.series.getAllPoints()[1] });
 
-    assert.ok(this.point.resetView.lastCall.args[0], 'selection', 'Point style');
+    assert.strictEqual(this.point.resetView.lastCall.args[0], 'hover', 'Reset hover view');
 });
 
 QUnit.test('apply point view after drawing selected series', function(assert) {

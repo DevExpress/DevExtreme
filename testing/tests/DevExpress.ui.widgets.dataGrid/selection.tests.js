@@ -3352,7 +3352,7 @@ QUnit.test('changeRowSelection for edited data if batch edit mode (T357814)', fu
 
     // assert
     assert.equal(rowsViewWrapper.getDataCellElement(0, 1).text(), 'Test', 'Text of the first cell');
-    assert.ok(rowsViewWrapper.isSelectedRow(0), 'Test', 'First row is selected');
+    assert.ok(rowsViewWrapper.isSelectedRow(0), 'First row is selected');
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', age: 15 }], 'selected row key of the first row');
 
     // act
@@ -3382,7 +3382,7 @@ QUnit.test('changeRowSelection for edited data if cell edit mode (T357814)', fun
 
     // assert
     assert.equal(rowsViewWrapper.getDataCellElement(0, 1).text(), 'Test', 'Text of the first cell');
-    assert.ok(rowsViewWrapper.isSelectedRow(0), 'Test', 'First row is selected');
+    assert.ok(rowsViewWrapper.isSelectedRow(0), 'First row is selected');
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', age: 15 }], 'selected row key of the first row');
 
     // act

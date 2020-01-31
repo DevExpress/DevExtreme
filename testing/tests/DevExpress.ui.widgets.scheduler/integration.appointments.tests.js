@@ -676,7 +676,7 @@ QUnit.test('Recurrence repeat-type editor should have default \'never\' value af
 
     freqEditor.option('value', 'daily');
 
-    assert.ok(repeatTypeEditor.option('value'), 'never', 'Repeat-type editor value is ok');
+    assert.strictEqual(repeatTypeEditor.option('value'), 'never', 'Repeat-type editor value is ok');
 });
 
 QUnit.test('Disabled appointment could not be focused', function(assert) {

@@ -3369,7 +3369,7 @@ function getEvent(options) {
 
         // assert
         assert.ok($draggingHeader.length === 1, 'draggingHeader element');
-        assert.ok($draggingHeader.css('display'), 'none', 'display is none');
+        assert.strictEqual($draggingHeader.css('display'), 'none', 'display is none');
         assert.ok($draggingHeader.hasClass('dx-widget'), 'Widget class');
     });
 
@@ -3393,7 +3393,7 @@ function getEvent(options) {
 
         // assert
         assert.ok($draggingHeader.length === 1, 'draggingHeader element');
-        assert.ok($draggingHeader.css('display'), 'none', 'display is none');
+        assert.strictEqual($draggingHeader.css('display'), 'none', 'display is none');
     });
 
     QUnit.test('Init dragging header when allowReordering true and allowGrouping false', function(assert) {
@@ -3416,7 +3416,7 @@ function getEvent(options) {
 
         // assert
         assert.ok($draggingHeader.length === 1, 'draggingHeader element');
-        assert.ok($draggingHeader.css('display'), 'none', 'display is none');
+        assert.strictEqual($draggingHeader.css('display'), 'none', 'display is none');
     });
 
     // T112084

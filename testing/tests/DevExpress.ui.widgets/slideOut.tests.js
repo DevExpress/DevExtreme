@@ -251,7 +251,7 @@ QUnit.module('widget options', {
 
         instance.option('items[0].text', 'c');
         const $items = this.$element.find('.dx-list-item');
-        assert.ok($items.text(), 'cb', 'items rendered correctly');
+        assert.strictEqual($items.text(), 'cb', 'items rendered correctly');
     });
 
     QUnit.test('grouped options', function(assert) {

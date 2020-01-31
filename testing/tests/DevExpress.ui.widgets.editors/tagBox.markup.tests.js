@@ -54,7 +54,7 @@ QUnit.module('base markup', moduleSetup, () => {
         assert.notOk($tagBox.hasClass(SKIP_GESTURE_EVENT_CLASS), 'tagbox has no skip gesture event class');
 
         const $tagContainer = $tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        assert.equal($tagContainer.length, 1, 'tag container exists', 'tagbox should have tag container');
+        assert.equal($tagContainer.length, 1, 'tag container exists');
 
         const $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
         const $tagContent = $tags.find('.' + TAGBOX_TAG_CONTENT_CLASS);
