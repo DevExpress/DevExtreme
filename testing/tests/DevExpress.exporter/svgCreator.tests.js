@@ -78,7 +78,7 @@ QUnit.test('getData. markup with special symbols', function(assert) {
     $.when(deferred).done(function(blob) {
         try {
             // assert
-            assert.ok(blob.arrayBuffer[0].indexOf(testString) !== -1, 'Special symbols was added to result document');
+            assert.notStrictEqual(blob.arrayBuffer[0].indexOf(testString), -1, 'Special symbols was added to result document');
         } finally {
             done();
         }
@@ -98,7 +98,7 @@ QUnit.test('getData. markup with image', function(assert) {
     $.when(deferred).done(function(blob) {
         try {
             // assert
-            assert.ok(blob.arrayBuffer[0].indexOf('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1') !== -1, 'Image href was replaced on dataURI');
+            assert.notStrictEqual(blob.arrayBuffer[0].indexOf('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1'), -1, 'Image href was replaced on dataURI');
         } finally {
             done();
         }
@@ -118,8 +118,8 @@ QUnit.test('getData. correct process two images with similar href', function(ass
     $.when(deferred).done(function(blob) {
         try {
             // assert
-            assert.ok(blob.arrayBuffer[0].indexOf('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/j') !== -1);
-            assert.ok(blob.arrayBuffer[0].indexOf('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2B') !== -1);
+            assert.notStrictEqual(blob.arrayBuffer[0].indexOf('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/j'), -1);
+            assert.notStrictEqual(blob.arrayBuffer[0].indexOf('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2B'), -1);
         } finally {
             done();
         }
@@ -139,7 +139,7 @@ QUnit.test('getData. markup with image with href', function(assert) {
     $.when(deferred).done(function(blob) {
         try {
             // assert
-            assert.ok(blob.arrayBuffer[0].indexOf('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1') !== -1, 'Image href was replaced on dataURI');
+            assert.notStrictEqual(blob.arrayBuffer[0].indexOf('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1'), -1, 'Image href was replaced on dataURI');
         } finally {
             done();
         }
@@ -188,7 +188,6 @@ QUnit.test('getData returns base64 when blob is not supported', function(assert)
     }
 
     // arrange. act
-    let deferred;
     const done = assert.async();
     const _getBlob = svgCreator._getBlob;
     const _getBase64 = svgCreator._getBase64;
@@ -202,7 +201,7 @@ QUnit.test('getData returns base64 when blob is not supported', function(assert)
         return 'base64Data';
     };
 
-    deferred = svgCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
+    const deferred = svgCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
 
     assert.expect(1);
     $.when(deferred).done(function(data) {
