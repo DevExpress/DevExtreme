@@ -12,6 +12,7 @@ const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
 const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
 const BUTTON_GROUP_WRAPPER = 'dx-buttongroup-wrapper';
+const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 
 QUnit.testStart(() => {
     const markup =
@@ -465,6 +466,19 @@ QUnit.module('list integration', {}, () => {
         assert.strictEqual(list.option('keyExpr'), 'this', 'keyExpr is \'this\'');
     });
 
+    QUnit.test('deferRendering option change', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            items: ['Item 1']
+        });
+
+        const list = getList(dropDownButton);
+        assert.strictEqual(list, undefined, 'list has not been rendered');
+
+        dropDownButton.option('deferRendering', false);
+        const $listItems = getList(dropDownButton).itemElements();
+        assert.strictEqual($listItems.eq(0).text(), 'Item 1', 'list has been rendered');
+    });
+
     QUnit.test('data expressions should work with dropDownButton', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', {
             items: [{ key: 1, name: 'Item 1', icon: 'box' }],
@@ -490,11 +504,45 @@ QUnit.module('list integration', {}, () => {
             useSelectMode: false
         });
 
-        const list = getList(dropDownButton);
+        let list = getList(dropDownButton);
 
         assert.strictEqual(list.option('grouped'), true, 'grouped option transfered');
         assert.strictEqual(list.option('noDataText'), 'No data', 'noDataText option transfered');
         assert.strictEqual(list.option('selectionMode'), 'none', 'selectionMode is none for useSelectMode: false');
+
+        dropDownButton.option({
+            grouped: false,
+            noDataText: 'nothing',
+            useSelectMode: true
+        });
+
+        list = getList(dropDownButton);
+
+        assert.strictEqual(list.option('grouped'), false, 'grouped option transfered');
+        assert.strictEqual(list.option('noDataText'), 'nothing', 'noDataText option transfered');
+        assert.strictEqual(list.option('selectionMode'), 'single', 'selectionMode is single for useSelectMode: true');
+    });
+
+    QUnit.test('groupTemplate should be transfered to list', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            items: [{ key: 1, name: 'Item 1', icon: 'box' }],
+            deferRendering: false,
+            grouped: true,
+            groupTemplate: (data) => {
+                return $('<div>').text(`${data.key}: ${data.name}`);
+            }
+        });
+        const $element = dropDownButton.$element();
+
+        let groupHeaders = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+        assert.equal(groupHeaders.eq(0).text(), '1: Item 1', 'groupTemplate is transfered to list on init');
+
+        dropDownButton.option('groupTemplate', (data) => {
+            return $('<div>').text(`Group #${data.key}`);
+        });
+
+        groupHeaders = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+        assert.equal(groupHeaders.eq(0).text(), 'Group #1', 'groupTemplate is transfered to list after option change');
     });
 
     QUnit.test('list should have single selection mode if useSelectMode: true', function(assert) {
@@ -722,6 +770,45 @@ QUnit.module('common use cases', {
         assert.strictEqual(selectionChangeHandler.callCount, 2, 'onSelectionChange is raised');
     });
 
+    QUnit.test('click on item should raise selectionChanged - subscription by "on" method', function(assert) {
+        const selectionChangeHandler = sinon.spy();
+        const items = [{
+            id: 1, name: 'a'
+        }, {
+            id: 2, name: 'b'
+        }];
+
+        this.dropDownButton.option({
+            items,
+            useSelectMode: true
+        });
+
+        this.dropDownButton.on('selectionChanged', selectionChangeHandler);
+
+        const firstListItems = getList(this.dropDownButton).itemElements();
+        eventsEngine.trigger(firstListItems[0], 'dxclick');
+
+        assert.strictEqual(selectionChangeHandler.callCount, 1, 'selectionChanged is raised');
+    });
+
+    QUnit.test('click on item should change selectedItem option', function(assert) {
+        const items = [{
+            id: 1, name: 'a'
+        }, {
+            id: 2, name: 'b'
+        }];
+
+        this.dropDownButton.option({
+            items,
+            useSelectMode: true
+        });
+
+        const firstListItems = getList(this.dropDownButton).itemElements();
+        eventsEngine.trigger(firstListItems[0], 'dxclick');
+
+        assert.strictEqual(this.dropDownButton.option('selectedItem'), items[0], 'selectedItem is correct');
+    });
+
     QUnit.test('spindown secondary icon should not be rendered when showArrowIcon is false', function(assert) {
         this.dropDownButton.option({
             splitButton: false,
@@ -913,6 +1000,19 @@ QUnit.module('items changing', {
         });
     }
 }, () => {
+    QUnit.test('items option runtime change', function(assert) {
+        this.dropDownButton.option({
+            items: [{
+                id: 10, name: 'changed'
+            }],
+            deferRendering: false
+        });
+
+        const $firstItem = getList(this.dropDownButton).itemElements().eq(0);
+
+        assert.strictEqual($firstItem.text(), 'changed', 'items has been changed');
+    });
+
     QUnit.test('changing of items should load new selected item', function(assert) {
         this.dropDownButton.option({
             selectedItemKey: 2
@@ -1096,6 +1196,29 @@ QUnit.module('events', {}, () => {
         assert.strictEqual($(e.itemElement).get(0), $item.get(0), 'itemElement is correct');
     });
 
+    QUnit.test('itemClick event - subscription using "on" method', function(assert) {
+        const handler = sinon.spy();
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            items: [1, 2, 3]
+        });
+
+        dropDownButton.on('itemClick', handler);
+
+        dropDownButton.open();
+        const $item = getList(dropDownButton).itemElements().eq(0);
+
+        eventsEngine.trigger($item, 'dxclick');
+        const e = handler.getCall(0).args[0];
+
+        assert.strictEqual(handler.callCount, 1, 'handler was called');
+        assert.strictEqual(Object.keys(e).length, 5, 'event has 5 properties');
+        assert.strictEqual(e.component, dropDownButton, 'component is correct');
+        assert.strictEqual(e.element, dropDownButton.element(), 'element is correct');
+        assert.strictEqual(e.event.type, 'dxclick', 'event is correct');
+        assert.strictEqual(e.itemData, 1, 'itemData is correct');
+        assert.strictEqual($(e.itemElement).get(0), $item.get(0), 'itemElement is correct');
+    });
+
     QUnit.test('onItemClick event change', function(assert) {
         const handler = sinon.spy();
         const dropDownButton = new DropDownButton('#dropDownButton2', {
@@ -1104,6 +1227,55 @@ QUnit.module('events', {}, () => {
 
         dropDownButton.open();
         dropDownButton.option('onItemClick', handler);
+
+        const $item = getList(dropDownButton).itemElements().eq(0);
+        eventsEngine.trigger($item, 'dxclick');
+
+        assert.strictEqual(handler.callCount, 1, 'handler was called');
+    });
+
+    QUnit.test('keyExpr option change', function(assert) {
+        const items = [{
+            name: 'A', id: 1
+        }, {
+            name: 'B', id: 2
+        }];
+
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            items,
+            keyExpr: 'name',
+            selectedItemKey: 'B',
+            useSelectMode: true,
+            displayExpr: 'name'
+        });
+
+        assert.strictEqual(dropDownButton.option('text'), 'B', 'value is correct');
+
+        dropDownButton.option('keyExpr', 'id');
+        dropDownButton.option('selectedItemKey', 'A');
+        assert.strictEqual(dropDownButton.option('text'), '', 'text is empty because keyExpt has been changed');
+
+        dropDownButton.option('selectedItemKey', 1);
+        assert.strictEqual(dropDownButton.option('text'), 'A', 'value is correct');
+    });
+
+    QUnit.test('focusStateEnabled option change', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton2');
+
+        dropDownButton.option('focusStateEnabled', false);
+
+        assert.strictEqual(dropDownButton.$element().attr('tabindex'), undefined, 'element is not focusable');
+    });
+
+    QUnit.test('itemClick event change - subscription by "on" method', function(assert) {
+        const handler = sinon.spy();
+
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            items: [1, 2, 3]
+        });
+
+        dropDownButton.open();
+        dropDownButton.on('itemClick', handler);
 
         const $item = getList(dropDownButton).itemElements().eq(0);
         eventsEngine.trigger($item, 'dxclick');
@@ -1147,6 +1319,21 @@ QUnit.module('events', {}, () => {
         assert.strictEqual(handler.callCount, 1, 'handler was called');
     });
 
+    QUnit.test('buttonClick - subscription using "on" method', function(assert) {
+        const handler = sinon.spy();
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            items: [1, 2, 3],
+            splitButton: false
+        });
+
+        dropDownButton.on('buttonClick', handler);
+
+        const $actionButton = getActionButton(dropDownButton);
+        eventsEngine.trigger($actionButton, 'dxclick');
+
+        assert.strictEqual(handler.callCount, 1, 'handler was called');
+    });
+
     QUnit.test('onButtonClick event change', function(assert) {
         const handler = sinon.spy();
         const dropDownButton = new DropDownButton('#dropDownButton2', {
@@ -1161,6 +1348,145 @@ QUnit.module('events', {}, () => {
         eventsEngine.trigger($actionButton, 'dxclick');
 
         assert.strictEqual(handler.callCount, 1, 'handler was called');
+    });
+
+    QUnit.test('selectedItemKey option change should raise selectionChanged event', function(assert) {
+        const handler = sinon.spy();
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            items: [1, 2, 3],
+            splitButton: true,
+            selectedItemKey: 2,
+            onSelectionChanged: handler
+        });
+
+        dropDownButton.option('selectedItemKey', 3);
+
+        assert.strictEqual(handler.callCount, 1, 'selectionChanged has been raised');
+    });
+
+    QUnit.test('selectedItemKey option change should raise selectionChanged event - subscription using "on" method', function(assert) {
+        const handler = sinon.spy();
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            items: [1, 2, 3],
+            splitButton: true,
+            selectedItemKey: 2
+        });
+
+        dropDownButton.on('selectionChanged', handler);
+        dropDownButton.option('selectedItemKey', 3);
+
+        assert.strictEqual(handler.callCount, 1, 'selectionChanged has been raised');
+    });
+
+    QUnit.test('selectedItemKey option change should change selectedItem option', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            items: [1, 2, 3],
+            splitButton: true,
+            selectedItemKey: 2
+        });
+
+        dropDownButton.option('selectedItemKey', 3);
+
+        assert.strictEqual(dropDownButton.option('selectedItem'), 3, 'selectedItem is correct');
+    });
+
+    QUnit.test('onContentReady should be fired after widget rendering and take into account Popup rendering', function(assert) {
+        const contentReadyHandler = sinon.spy();
+
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            dataSource: {
+                load: sinon.stub().returns([1, 2, 3]),
+                byKey: sinon.stub().returns(1)
+            },
+            deferRendering: true,
+            onContentReady: contentReadyHandler
+        });
+
+        assert.strictEqual(contentReadyHandler.callCount, 1, 'Widget is ready');
+        dropDownButton.open();
+        assert.strictEqual(contentReadyHandler.callCount, 3, 'Popup is ready, then List is ready');
+    });
+
+    QUnit.test('onContentReady should be fired after widget rendering', function(assert) {
+        const contentReadyHandler = sinon.spy();
+
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            dataSource: {
+                load: sinon.stub().returns([1, 2, 3]),
+                byKey: sinon.stub().returns(1)
+            },
+            opened: true,
+            deferRendering: false,
+            onContentReady: contentReadyHandler
+        });
+
+        assert.strictEqual(contentReadyHandler.callCount, 2, 'Popup is ready, then List is ready');
+
+        dropDownButton.option('dataSource', ['first', 'second', 'third']);
+        assert.strictEqual(contentReadyHandler.callCount, 3, 'List is ready after updating Popup content');
+    });
+
+    QUnit.test('onContentReady should be fired after widget rendering when subscription uses "on" method', function(assert) {
+        const contentReadyHandler = sinon.spy();
+
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            dataSource: {
+                load: sinon.stub().returns([1, 2, 3]),
+                byKey: sinon.stub().returns(1)
+            },
+            deferRendering: true
+        });
+
+        dropDownButton.on('contentReady', contentReadyHandler);
+        dropDownButton.open();
+        assert.strictEqual(contentReadyHandler.callCount, 2, 'Popup is ready, then List is ready');
+
+        dropDownButton.option('dataSource', [1, 2, 3]);
+        assert.strictEqual(contentReadyHandler.callCount, 3, 'List is ready after updating Popup content');
+    });
+
+    QUnit.test('onContentReady should be fired after widget with custom content template rendering', function(assert) {
+        const contentReadyHandler = sinon.spy();
+        const firstTemplateHandler = sinon.stub().returns('Template 1');
+        const secondTemplateHandler = sinon.stub().returns('Template 2');
+
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            dataSource: {
+                load: sinon.stub().returns([1, 2, 3]),
+                byKey: sinon.stub().returns(1)
+            },
+            dropDownContentTemplate: firstTemplateHandler,
+            deferRendering: false,
+            onContentReady: contentReadyHandler,
+            opened: true
+        });
+
+        assert.strictEqual(contentReadyHandler.callCount, 1, 'event is fired');
+
+        dropDownButton.option('dropDownContentTemplate', secondTemplateHandler);
+        assert.strictEqual(contentReadyHandler.callCount, 2, 'event is fired after template change');
+    });
+
+    QUnit.test('onContentReady should be fired after widget with custom content template rendering - subscription uses "on" method', function(assert) {
+        const contentReadyHandler = sinon.spy();
+        const firstTemplateHandler = sinon.stub().returns('Template 1');
+        const secondTemplateHandler = sinon.stub().returns('Template 2');
+
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            dataSource: {
+                load: sinon.stub().returns([1, 2, 3]),
+                byKey: sinon.stub().returns(1)
+            },
+            dropDownContentTemplate: firstTemplateHandler,
+            deferRendering: true
+        });
+
+        dropDownButton.on('contentReady', contentReadyHandler);
+        dropDownButton.open();
+        assert.strictEqual(contentReadyHandler.callCount, 1, 'event is fired');
+
+        dropDownButton.option('dropDownContentTemplate', secondTemplateHandler);
+        assert.strictEqual(contentReadyHandler.callCount, 2, 'event is fired after template change');
     });
 
     QUnit.test('onSelectionChanged event', function(assert) {
@@ -1183,6 +1509,28 @@ QUnit.module('events', {}, () => {
         assert.strictEqual(e.element, dropDownButton.element(), 'element is correct');
         assert.strictEqual(e.previousItem, 2, 'previousItem is correct');
         assert.strictEqual(e.item, 1, 'item is correct');
+    });
+
+    QUnit.test('onSelectionChanged option runtime change', function(assert) {
+        const firstHandler = sinon.spy();
+        const secondHandler = sinon.spy();
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            items: [1, 2, 3],
+            selectedItemKey: 2,
+            onSelectionChanged: firstHandler
+        });
+
+        dropDownButton.open();
+
+        const $firstItem = getList(dropDownButton).itemElements().eq(0);
+        eventsEngine.trigger($firstItem, 'dxclick');
+        assert.strictEqual(firstHandler.callCount, 1, 'first handler was called');
+
+        dropDownButton.option('onSelectionChanged', secondHandler);
+
+        const $secondItem = getList(dropDownButton).itemElements().eq(1);
+        eventsEngine.trigger($secondItem, 'dxclick');
+        assert.strictEqual(secondHandler.callCount, 1, 'second handler was called');
     });
 
     QUnit.test('onSelectionChanged event with data expressions', function(assert) {
@@ -1260,6 +1608,120 @@ QUnit.module('keyboard navigation', {
 
         this.keyboard.press('space');
         assert.strictEqual(handler.callCount, 2, 'action button pressed twice');
+    });
+
+    QUnit.testInActiveWindow('enter/space press should raise itemClick event when list item is focused', function(assert) {
+        const handler = sinon.spy();
+        this.dropDownButton.option('onItemClick', handler);
+
+        this.keyboard
+            .press('right')
+            .press('enter')
+            .press('down');
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+
+        listKeyboard.press('enter');
+        assert.strictEqual(handler.callCount, 1, 'itemClick has been raised');
+
+        listKeyboard
+            .press('down')
+            .press('space');
+        assert.strictEqual(handler.callCount, 2, 'itemClick has been raised');
+    });
+
+    QUnit.testInActiveWindow('enter/space press should raise itemClick event when list item is focused - subscription by "on" method', function(assert) {
+        const handler = sinon.spy();
+
+        this.dropDownButton.on('itemClick', handler);
+
+        this.keyboard
+            .press('right')
+            .press('enter')
+            .press('down');
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+
+        listKeyboard.press('enter');
+        assert.strictEqual(handler.callCount, 1, 'itemClick has been raised');
+
+        listKeyboard
+            .press('down')
+            .press('space');
+        assert.strictEqual(handler.callCount, 2, 'itemClick has been raised');
+    });
+
+    QUnit.test('enter/space press should raise selectionChanged event when list item is focused', function(assert) {
+        const handler = sinon.spy();
+
+        this.dropDownButton.option('onSelectionChanged', handler);
+
+        this.keyboard
+            .press('right')
+            .press('enter')
+            .press('down');
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+
+        listKeyboard.press('enter');
+        assert.strictEqual(handler.callCount, 1, 'selectionChanged is raised');
+
+        listKeyboard
+            .press('down')
+            .press('space');
+        assert.strictEqual(handler.callCount, 2, 'selectionChanged has been raised');
+    });
+
+    QUnit.test('enter/space press should change selectedItem option when list item is focused', function(assert) {
+        const items = this.dropDownButton.option('items');
+
+        this.keyboard
+            .press('right')
+            .press('enter')
+            .press('down');
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+
+        listKeyboard.press('enter');
+
+        assert.strictEqual(this.dropDownButton.option('selectedItem'), items[0], 'selectedItem is correct');
+
+        listKeyboard
+            .press('down')
+            .press('space');
+        assert.strictEqual(this.dropDownButton.option('selectedItem'), items[1], 'selectedItem is correct');
+    });
+
+    QUnit.test('enter/space press should raise selectionChanged event when list item is focused - subscription using "on" method', function(assert) {
+        const handler = sinon.spy();
+
+        this.dropDownButton.on('selectionChanged', handler);
+
+        this.keyboard
+            .press('right')
+            .press('enter')
+            .press('down');
+
+        const listKeyboard = keyboardMock(getList(this.dropDownButton).element());
+
+        listKeyboard.press('enter');
+        assert.strictEqual(handler.callCount, 1, 'onSelectionChanged is raised');
+
+        listKeyboard
+            .press('down')
+            .press('space');
+        assert.strictEqual(handler.callCount, 2, 'selectionChanged has been raised');
+    });
+
+    QUnit.testInActiveWindow('enter/space press should rise buttonClick event when action button is focused - subscription using "on" method', function(assert) {
+        const handler = sinon.spy();
+        this.dropDownButton.on('buttonClick', handler);
+
+        this.keyboard.press('enter');
+        assert.strictEqual(handler.callCount, 1, 'buttonClick event has been raised after enter press');
+
+        this.keyboard.press('space');
+        assert.strictEqual(handler.callCount, 2, 'buttonClick event has been raised after space press');
     });
 
     QUnit.testInActiveWindow('toggle button should be clicked on enter or space', function(assert) {
@@ -1432,5 +1894,31 @@ QUnit.module('custom content template', {}, () => {
         });
 
         assert.deepEqual(templateHandler.getCall(0).args[0], dropDownButton.getDataSource(), 'data is correct');
+    });
+
+    QUnit.test('itemTemplate option', function(assert) {
+        const items = [
+            { id: 1, name: 'A' },
+            { id: 2, name: 'B' }
+        ];
+
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            items,
+            deferRendering: false,
+            itemTemplate: function(itemData) {
+                return $('<div>')
+                    .text(`${ itemData.id }: ${ itemData.name }`);
+            }
+        });
+
+        let $listItems = getList(dropDownButton).itemElements();
+        assert.strictEqual($listItems.eq(0).text(), '1: A', 'itemTemlate has changed item text');
+
+        dropDownButton.option('itemTemplate', function(itemData) {
+            return $('<div>')
+                .text(`#${ itemData.id }`);
+        });
+        $listItems = getList(dropDownButton).itemElements();
+        assert.strictEqual($listItems.eq(0).text(), '#1', 'itemTemlate has changed item text after option change');
     });
 });
