@@ -404,7 +404,7 @@ QUnit.module('position', {
         const defaultPosition = { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 4 } };
 
         assert.deepEqual(defaultPosition, instance.option('popupPosition'));
-        assert.equal(false, instance.option('usePopover'));
+        assert.equal(instance.option('usePopover'), false);
     });
 
     QUnit.test('check position for LTR and RTL', function(assert) {
