@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import 'renovation/dist/widget.j';
 
-// const HOVER_STATE_CLASS = 'dx-state-hover';
-
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
         <div id="component"></div>
