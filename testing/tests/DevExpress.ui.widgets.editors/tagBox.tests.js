@@ -3604,7 +3604,7 @@ QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
         assert.deepEqual(tagBox.option('selectedItems'), [items[1]], 'the \'selectedItems\' option value is correct');
     });
 
-    QUnit.test('selectionChanged event should be rised if selected items was changed at runtime', function(assert) {
+    QUnit.test('onSelectionChanged handler should be called if selected items was changed at runtime', function(assert) {
         const items = [1, 2, 3];
         const selectionChangedHandler = sinon.spy();
 
@@ -3616,7 +3616,7 @@ QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
 
         const callCountOnInit = selectionChangedHandler.callCount;
         tagBox.option('selectedItems', [items[0], items[1]]);
-        assert.strictEqual(selectionChangedHandler.callCount, callCountOnInit + 1, 'selectionChanged event was rised');
+        assert.strictEqual(selectionChangedHandler.callCount, callCountOnInit + 1, 'onSelectionChanged handler was called');
     });
 
     QUnit.test('The \'selectedItems\' option changes after the \'value\' option', function(assert) {
@@ -3832,6 +3832,20 @@ QUnit.module('the \'onSelectionChanged\' option', moduleSetup, () => {
 
         assert.deepEqual(spy.args[1][0].removedItems, [data[2]], 'the \'removedItems\' argument');
         assert.equal(spy.args[1][0].addedItems.length, 0, 'the \'addedItems\' argument');
+    });
+
+    QUnit.test('selectionChanged event should be rised if selected items was changed', function(assert) {
+        const items = [1, 2, 3];
+        const selectionChangedHandler = sinon.spy();
+        const tagBox = $('#tagBox').dxTagBox({
+            items,
+            opened: true
+        }).dxTagBox('instance');
+
+        tagBox.on('selectionChanged', selectionChangedHandler);
+        tagBox.option('value', [1]);
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged event was rised');
     });
 });
 
@@ -4435,6 +4449,26 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         const $list = this.instance._list.$element();
         $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
         assert.equal(this.spy.callCount, 1, 'count is correct');
+    });
+
+    QUnit.test('the \'selectAllValueChanged\' event is fired one time after all items selection changing', function(assert) {
+        const spy = sinon.spy();
+
+        this.reinit({
+            items: this.items,
+            value: this.items.splice(),
+            onSelectAllValueChanged: null
+        });
+
+        const $list = this.instance._list.$element();
+        const $selectAllElement = $($list.find('.dx-list-select-all-checkbox'));
+        $selectAllElement.trigger('dxclick');
+        assert.equal(this.spy.callCount, 0, 'count is correct');
+
+        this.instance.on('selectAllValueChanged', spy);
+        $selectAllElement.trigger('dxclick');
+
+        assert.equal(spy.callCount, 1, 'count is correct');
     });
 });
 
