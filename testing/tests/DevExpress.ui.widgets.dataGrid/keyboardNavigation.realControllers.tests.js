@@ -632,7 +632,7 @@ QUnit.module('Real DataController and ColumnsController', {
         // act
         this.refresh();
         // assert
-        assert.equal(focusedRowChangedFiresCount, 2, 'onFocusedRowChanged fires count');
+        assert.equal(focusedRowChangedFiresCount, 1, 'onFocusedRowChanged fires count');
     });
 
     // T804439
