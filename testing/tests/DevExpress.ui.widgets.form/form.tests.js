@@ -2425,7 +2425,7 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
             }
         }
 
-        QUnit.test('Change the badge option', () => {
+        QUnit.test('Change the badge option', function() {
             const testWrapper = new FormTestWrapper(useItemOption);
             testWrapper.setTabOption(0, 'badge', 'TestBadge1');
             testWrapper.checkFormsReRender();
@@ -2436,7 +2436,7 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
             testWrapper.checkTabBadge(1, 'TestBadge2');
         });
 
-        QUnit.test('Change the disabled option', () => {
+        QUnit.test('Change the disabled option', function() {
             const testWrapper = new FormTestWrapper(useItemOption);
             testWrapper.setTabOption(0, 'disabled', true);
             testWrapper.checkFormsReRender();
@@ -2455,7 +2455,7 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
             testWrapper.checkTabDisabled(1, false);
         });
 
-        QUnit.test('Change the icon option', () => {
+        QUnit.test('Change the icon option', function() {
             const testWrapper = new FormTestWrapper(useItemOption);
 
             testWrapper.setTabOption(0, 'icon', 'plus');
@@ -2467,7 +2467,7 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
             testWrapper.checkTabIcon(1, 'trash');
         });
 
-        QUnit.test('Change the template option', () => {
+        QUnit.test('Change the template option', function() {
             const testWrapper = new FormTestWrapper(useItemOption);
 
             const template1 = '<div class=\'custom-template-1\'></div>';
@@ -2482,7 +2482,7 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
             testWrapper.checkTabContentTemplate(1, $(template2));
         });
 
-        QUnit.test('Change the tab template option', () => {
+        QUnit.test('Change the tab template option', function() {
             const testWrapper = new FormTestWrapper(useItemOption);
 
             const template1 = '<div class=\'custom-tab-template-1\'></div>';
@@ -2497,7 +2497,7 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
             testWrapper.checkTabTemplate(1, $(template2));
         });
 
-        QUnit.test('Change the title option', () => {
+        QUnit.test('Change the title option', function() {
             const testWrapper = new FormTestWrapper(useItemOption);
             testWrapper.setTabOption(0, 'title', 'TestTitle1');
             testWrapper.checkFormsReRender();
@@ -2508,7 +2508,7 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
             testWrapper.checkTabTitle(1, 'TestTitle2');
         });
 
-        QUnit.test('Title is set correctly when it is changed on the onInitialized event', () => {
+        QUnit.test('Title is set correctly when it is changed on the onInitialized event', function() {
             const testWrapper = new FormTestWrapper(useItemOption, ({ component }) => {
                 if(useItemOption) {
                     component.itemOption('tabbedItem.title0', 'title', 'New Title');
@@ -2522,7 +2522,7 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
         });
 
         ['badge', 'icon', 'template', 'tabTemplate', 'title'].forEach(optionName => {
-            QUnit.test(`Change the ${optionName} of a tab when tabbed item is hidden via api`, () => {
+            QUnit.test(`Change the ${optionName} of a tab when tabbed item is hidden via api`, function() {
                 const testWrapper = new FormTestWrapper(useItemOption);
 
                 testWrapper.setTabbedItemOption('visible', false);

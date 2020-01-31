@@ -357,7 +357,7 @@ QUnit.module('render', moduleConfig(), () => {
         assert.ok(popoverInstance.option('visible'), 'popup is visible');
     });
 
-    QUnit.test('popup should be placed into container specified in the \'container\' option', (assert) => {
+    QUnit.test('popup should be placed into container specified in the \'container\' option', function(assert) {
         const $container = $('#dropDownMenuSecond');
         const $dropDownMenu = $container.dxDropDownMenu({
             container: $container,
@@ -369,7 +369,7 @@ QUnit.module('render', moduleConfig(), () => {
         assert.strictEqual($content.closest($container).length, 1, 'Popover content located into desired container');
     });
 
-    QUnit.test('popup should be placed into new container after changing the \'container\' option', (assert) => {
+    QUnit.test('popup should be placed into new container after changing the \'container\' option', function(assert) {
         const $container = $('#dropDownMenuSecond');
         const $dropDownMenu = $container.dxDropDownMenu({
             opened: true

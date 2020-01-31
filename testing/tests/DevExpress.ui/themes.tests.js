@@ -523,7 +523,7 @@ QUnit.module('misc', () => {
         assert.equal(element.className, '', 'attached classes was removed');
     });
 
-    test('themeNameFromDevice for iOS', (assert) => {
+    test('themeNameFromDevice for iOS', function(assert) {
         const themeNameFromDevice = themes.themeNameFromDevice;
 
         assert.equal('ios7', themeNameFromDevice({ platform: 'ios', version: [1] }));
@@ -531,7 +531,7 @@ QUnit.module('misc', () => {
         assert.equal('ios7', themeNameFromDevice({ platform: 'ios' }));
     });
 
-    test('themeNameFromDevice for removed mobile themes (breaking change BC4928)', (assert) => {
+    test('themeNameFromDevice for removed mobile themes (breaking change BC4928)', function(assert) {
         assert.equal(themes.themeNameFromDevice({ platform: 'android' }), 'generic');
         assert.equal(themes.themeNameFromDevice({ platform: 'win' }), 'generic');
     });

@@ -359,7 +359,7 @@ QUnit.module('default title template', {
         { title: new Date(2019, 10, 13), expected: String(new Date(2019, 10, 13)) },
         { title: { value: 'title' }, expected: '' }
     ].forEach((value) => {
-        QUnit.test(`DefaultTemplate: title template property - ${value.title}`, (assert) => {
+        QUnit.test(`DefaultTemplate: title template property - ${value.title}`, function(assert) {
             const $element = $('<div>').appendTo('#qunit-fixture');
 
             const widget = new Accordion($element, { items: [ { title: value.title }] });
@@ -369,7 +369,7 @@ QUnit.module('default title template', {
             assert.strictEqual($itemElements.eq(0).find(`.${ACCORDION_ITEM_TITLE_CLASS}`).text(), value.expected, 'item.title');
         });
 
-        QUnit.test(`DefaultTemplate: items["${value.title}"] as primitive`, (assert) => {
+        QUnit.test(`DefaultTemplate: items["${value.title}"] as primitive`, function(assert) {
             const $element = $('<div>').appendTo('#qunit-fixture');
 
             const widget = new Accordion($element, { items: [ value.title ] });

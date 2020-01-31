@@ -144,7 +144,7 @@ QUnit.module('markup', {
         assert.strictEqual(newButtonGroupWrapper.eq(0).height(), 450, 'height after option change in runtime is right');
     });
 
-    QUnit.test('splitButton height should be equal to main button height when height depends on content', (assert) => {
+    QUnit.test('splitButton height should be equal to main button height when height depends on content', function(assert) {
         const $dropDownButton = $('#dropDownButton').dxDropDownButton({
             splitButton: true,
             icon: 'icon.png'

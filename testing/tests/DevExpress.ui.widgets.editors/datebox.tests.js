@@ -331,7 +331,7 @@ QUnit.module('datebox tests', moduleConfig, () => {
         assert.ok(dateBox.option('isValid'), 'widget is valid');
     });
 
-    QUnit.test('T252737 - the \'acceptCustomValue\' option correct behavior', assert => {
+    QUnit.test('T252737 - the \'acceptCustomValue\' option correct behavior', function(assert) {
         const $dateBox = $('#dateBox').dxDateBox({
             acceptCustomValue: false,
             valueChangeEvent: 'change keyup',
@@ -346,7 +346,7 @@ QUnit.module('datebox tests', moduleConfig, () => {
         assert.equal($input.val(), '', 'text is not rendered');
     });
 
-    QUnit.test('T278148 - picker type should be \'rollers\' if the real device is phone in generic theme', assert => {
+    QUnit.test('T278148 - picker type should be \'rollers\' if the real device is phone in generic theme', function(assert) {
         const realDevice = devices.real();
         const currentDevice = devices.current();
 
@@ -1405,7 +1405,7 @@ QUnit.module('widget sizing render', {}, () => {
         assert.ok($element.outerWidth() <= 100, 'outer width of the element must be less or equal to a container width');
     });
 
-    QUnit.test('component should have correct width when it was rendered in a scaled container (T584097)', assert => {
+    QUnit.test('component should have correct width when it was rendered in a scaled container (T584097)', function(assert) {
         const $parent = $('#parent-div');
         $parent.css('width', 200);
 
@@ -1457,7 +1457,7 @@ QUnit.module('widget sizing render', {}, () => {
         assert.strictEqual($element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
     });
 
-    QUnit.test('it should update widget size after toggle the \'readOnly\' option', (assert) => {
+    QUnit.test('it should update widget size after toggle the \'readOnly\' option', function(assert) {
         if(devices.current().platform !== 'generic') {
             assert.ok(true, 'automatic size fitting working with generic devices only');
             return;
@@ -1483,7 +1483,7 @@ QUnit.module('widget sizing render', {}, () => {
         assert.ok(actualWidth > initialWidth, 'actual width takes action buttons into account');
     });
 
-    QUnit.test('it should update widget size after the \'buttons\' option changed (T809858)', (assert) => {
+    QUnit.test('it should update widget size after the \'buttons\' option changed (T809858)', function(assert) {
         if(devices.current().platform !== 'generic') {
             assert.ok(true, 'automatic size fitting working with generic devices only');
             return;
@@ -1861,7 +1861,7 @@ QUnit.module('datebox and calendar integration', () => {
         assert.equal($disabledCell.text(), '13', 'Correct cell is disabled');
     });
 
-    QUnit.test('disabledDates correctly displays after optionChanged', assert => {
+    QUnit.test('disabledDates correctly displays after optionChanged', function(assert) {
         const instance = $('#dateBox').dxDateBox({
             type: 'date',
             pickerType: 'calendar',

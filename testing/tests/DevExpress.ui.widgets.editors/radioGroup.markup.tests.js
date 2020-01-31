@@ -284,20 +284,20 @@ QUnit.module('Aria accessibility', {
         helper.$widget.remove();
     }
 }, () => {
-    QUnit.test('Items: []', () => {
+    QUnit.test('Items: []', function() {
         helper.createWidget({ });
 
         helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
     });
 
-    QUnit.test('Items: [1, 2, 3], Item.selected: true', () => {
+    QUnit.test('Items: [1, 2, 3], Item.selected: true', function() {
         helper.createWidget({ items: [1, 2, 3], value: 1 });
 
         helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
         helper.checkItemsAttributes([0], { attributes: ['aria-selected', 'aria-checked'], role: 'radio' });
     });
 
-    QUnit.test('Items: [1, 2, 3], Item.selected: true, set focusedElement -> clean focusedElement', () => {
+    QUnit.test('Items: [1, 2, 3], Item.selected: true, set focusedElement -> clean focusedElement', function() {
         helper.createWidget({ items: [1, 2, 3], value: 1 });
 
         helper.widget.option('focusedElement', helper.getItems().eq(0));

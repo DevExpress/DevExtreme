@@ -8,7 +8,7 @@ const { module, test } = QUnit;
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
 module('selection common', () => {
-    test('selection should work without checkboxes on init', () => {
+    test('selection should work without checkboxes on init', function() {
         const items = [{ text: 'item 1', selected: true }, { text: 'item 2' }];
         const treeView = createInstance({
             items: items,
@@ -18,7 +18,7 @@ module('selection common', () => {
         treeView.checkSelected([0], items);
     });
 
-    test('selection methods should work with item keys', () => {
+    test('selection methods should work with item keys', function() {
         const items = [{ text: 'item 1', selected: true }, { text: 'item 2' }];
         const treeView = createInstance({
             items: items
@@ -31,7 +31,7 @@ module('selection common', () => {
         treeView.checkSelected([1], items);
     });
 
-    test('selection methods should work with itemElements', () => {
+    test('selection methods should work with itemElements', function() {
         const items = [{ text: 'item 1', selected: true }, { text: 'item 2' }];
         const treeView = createInstance({
             items: items
