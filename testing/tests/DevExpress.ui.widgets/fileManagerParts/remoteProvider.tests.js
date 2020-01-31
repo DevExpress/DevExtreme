@@ -176,12 +176,12 @@ QUnit.module('Remote Provider', moduleConfig, () => {
         let provider = new RemoteFileProvider({
             endpointUrl: 'myEndpoint'
         });
-        assert.ok(provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?command=myCommand') !== -1);
+        assert.notStrictEqual(provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?command=myCommand'), -1);
 
         provider = new RemoteFileProvider({
             endpointUrl: 'myEndpoint?param1=value'
         });
-        assert.ok(provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?param1=value&command=myCommand') !== -1);
+        assert.notStrictEqual(provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?param1=value&command=myCommand'), -1);
     });
 
 });

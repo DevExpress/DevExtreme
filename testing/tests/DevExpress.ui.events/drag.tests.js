@@ -61,7 +61,7 @@ QUnit.test('dragstart should be fired', function(assert) {
     const pointer = pointerMock($element);
 
     $element.on(dragEvents.start, function(e) {
-        assert.ok(e.target === $element[0]);
+        assert.strictEqual(e.target, $element[0]);
     });
 
     pointer.start().down().move(10).up();
@@ -86,7 +86,7 @@ QUnit.test('drag should be fired', function(assert) {
     let lastDragOffset;
 
     $element.on(dragEvents.move, function(e) {
-        assert.ok(e.target === $element[0]);
+        assert.strictEqual(e.target, $element[0]);
         lastDragOffset = e.offset;
     });
 
@@ -112,7 +112,7 @@ QUnit.test('dragend should be fired', function(assert) {
     const pointer = pointerMock($element);
 
     $element.on(dragEvents.end, function(e) {
-        assert.ok(e.target === $element[0]);
+        assert.strictEqual(e.target, $element[0]);
 
         assert.deepEqual(e.offset, {
             x: 10,

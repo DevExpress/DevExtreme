@@ -1777,7 +1777,7 @@ function createThemeManager(options, themeGroupName) {
 
         themeManager.resetOptions('firstLevelOption2');
 
-        assert.ok(themeManager.getOptions('firstLevelOption2') !== result1);
+        assert.notStrictEqual(themeManager.getOptions('firstLevelOption2'), result1);
         assert.deepEqual(themeManager.getOptions('firstLevelObject'), result2);
 
         assert.strictEqual(themeManager.getOptions('firstLevelOption2'), 'new value');

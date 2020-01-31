@@ -523,7 +523,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         markupString = svg.markup();
 
         // assert
-        assert.ok(markupString.indexOf('&#38;&#60;&#62;&#160; ©Ø') !== -1);
+        assert.notStrictEqual(markupString.indexOf('&#38;&#60;&#62;&#160; ©Ø'), -1);
     });
 
     QUnit.test('Change multiple entries of entity to numeric code', function(assert) {
@@ -537,7 +537,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         markupString = svg.markup();
 
         // assert
-        assert.ok(markupString.indexOf('1&#160;2&#160;3') !== -1);
+        assert.notStrictEqual(markupString.indexOf('1&#160;2&#160;3'), -1);
     });
 
     QUnit.module('SvgElement jQuery API', {
@@ -5925,7 +5925,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
             assert.deepEqual(result, { rowCount: 3, textChanged: true, textIsEmpty: false });
 
-            assert.ok(text.element.childNodes[1].textContent.indexOf('...') !== -1);
+            assert.notStrictEqual(text.element.childNodes[1].textContent.indexOf('...'), -1);
 
             assert.ok(text.getBBox().width <= 110);
         });
@@ -6122,7 +6122,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 wordWrap: 'normal',
                 textOverflow: 'ellipsis'
             });
-            assert.ok(text.getBBox().height !== 0);
+            assert.notStrictEqual(text.getBBox().height, 0);
         });
 
         QUnit.test('Set max height. TextOverflow = \'none\'. Show all texts ', function(assert) {
@@ -6137,7 +6137,7 @@ function checkDashStyle(assert, elem, result, style, value) {
                 textOverflow: 'none'
             });
 
-            assert.ok(text.getBBox().height !== 0);
+            assert.notStrictEqual(text.getBBox().height, 0);
         });
 
         QUnit.test('Set max height. textOverflow ellipsis. multi line text, Last text width less than maxWidth - add ... at the end', function(assert) {
