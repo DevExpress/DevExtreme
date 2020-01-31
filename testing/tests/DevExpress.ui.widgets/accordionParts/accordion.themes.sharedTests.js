@@ -4,10 +4,10 @@ import 'ui/button';
 
 export const runThemesSharedTests = function(moduleNamePostfix) {
     QUnit.module('Scenarios.' + moduleNamePostfix, {
-        beforeEach: () => {
+        beforeEach: function() {
             $('#qunit-fixture').html('<div id="accordion"></div>');
         }
-    }, () => {
+    }, function() {
         QUnit.test('itemTitleTemplate: dxButton { icon }', function(assert) {
             $('#accordion').dxAccordion({
                 dataSource: [{ }],

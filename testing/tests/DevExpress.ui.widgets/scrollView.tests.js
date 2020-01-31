@@ -198,7 +198,7 @@ QUnit.module('dimension', moduleConfig, () => {
     });
 
     QUnit.test('bottom position calculation', function(assert) {
-        var $scrollView = $('#scrollView').dxScrollView({
+        const $scrollView = $('#scrollView').dxScrollView({
             useNative: false,
             inertiaEnabled: false,
             onEnd: function() {

@@ -80,7 +80,7 @@ const testComponentDefaults = function(componentClass, forcedDevices, options, b
     });
 };
 
-var checkOptions = function(expectedOptions, resultOptions, deviceString, assert) {
+const checkOptions = function(expectedOptions, resultOptions, deviceString, assert) {
     const that = this;
 
     $.each(expectedOptions, function(optionName, expectedValue) {

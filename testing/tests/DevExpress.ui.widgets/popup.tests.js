@@ -1570,7 +1570,7 @@ QUnit.module('templates', () => {
 });
 
 QUnit.module('renderGeometry', () => {
-    QUnit.test('option change', (assert) => {
+    QUnit.test('option change', function(assert) {
         const instance = $('#popup').dxPopup({
             visible: true
         }).dxPopup('instance');
