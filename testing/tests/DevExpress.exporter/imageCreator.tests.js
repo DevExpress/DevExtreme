@@ -1768,7 +1768,7 @@ QUnit.test('Text decoration', function(assert) {
             assert.equal(overlineDecoration.args.x, 250, 'Overline decoration line x');
             assert.roughEqual(overlineDecoration.args.y, 7.2, 0.5, 'Overline decoration line y');
             assert.roughEqual(overlineDecoration.args.height, 1.2, 0.1, 'Overline decoration line height');
-            assert.strictEqual(overlineDecoration.args.width, 100, 8, 'Overline decoration line width');
+            assert.strictEqual(overlineDecoration.args.width, 100, 'Overline decoration line width');
             assert.equal(that.drawnElements[7].style.fillStyle, '#aaff23', 'Overline decoration line fill color');
 
             // Line-through decoration assert
@@ -1784,15 +1784,15 @@ QUnit.test('Text decoration', function(assert) {
             assert.roughEqual(noDisplayDecoration.args.y, 186.16, 0.5, 'noDisplay line-through decoration line y');
             assert.equal(noDisplayDecoration.args.height, 1, 'noDisplay line-through decoration line height');
             assert.strictEqual(noDisplayDecoration.args.width, 100, ' noDisplay line-through decoration line width');
-            assert.ok(that.drawnElements[14].type !== 'stroke', 'noDisplay line-through decoration has no stroke');
-            assert.ok(that.drawnElements[14].type !== 'fill', 'noDisplay line-through decoration has no fill');
+            assert.notStrictEqual(that.drawnElements[14].type, 'stroke', 'noDisplay line-through decoration has no stroke');
+            assert.notStrictEqual(that.drawnElements[14].type, 'fill', 'noDisplay line-through decoration has no fill');
 
             // noFill (only stroke) decoration assert
             assert.equal(noFillDecoration.args.x, 250, 'noFill line-through decoration line x');
             assert.roughEqual(noFillDecoration.args.y, 186.16, 0.5, 'noFill line-through decoration line y');
             assert.equal(noFillDecoration.args.height, 1, 'noFill line-through decoration line height');
             assert.strictEqual(noFillDecoration.args.width, 100, ' noFill line-through decoration line width');
-            assert.ok(that.drawnElements[17].type === 'stroke', 'noFill line-through decoration has stroke');
+            assert.strictEqual(that.drawnElements[17].type, 'stroke', 'noFill line-through decoration has stroke');
         } finally {
             done();
         }
@@ -2180,7 +2180,6 @@ QUnit.test('getData returns Blob when it supported by Browser', function(assert)
     }
 
     // arrange. act
-    let deferred;
     const done = assert.async();
     const _getBlob = imageCreator._getBlob;
     const _getBase64 = imageCreator._getBase64;
@@ -2194,7 +2193,7 @@ QUnit.test('getData returns Blob when it supported by Browser', function(assert)
         return 'base64Data';
     };
 
-    deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
+    const deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
 
     assert.expect(1);
     $.when(deferred).done(function(data) {
@@ -2216,7 +2215,6 @@ QUnit.test('getData returns Base64 when Blob not supported by Browser', function
     }
 
     // arrange. act
-    let deferred;
     const done = assert.async();
     const _getBlob = imageCreator._getBlob;
     const _getBase64 = imageCreator._getBase64;
@@ -2230,7 +2228,7 @@ QUnit.test('getData returns Base64 when Blob not supported by Browser', function
         return 'base64Data';
     };
 
-    deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
+    const deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
 
     assert.expect(1);
     $.when(deferred).done(function(data) {
