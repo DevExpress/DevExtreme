@@ -945,6 +945,45 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(count, 4);
     });
 
+    QUnit.test('selectionChanged - subscription by "on" method', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+        const items = [1, 2, 3];
+
+        const selectBox = $('#selectBox').dxSelectBox({
+            dataSource: items,
+            value: items[0]
+        }).dxSelectBox('instance');
+
+        selectBox.on('selectionChanged', selectionChangedHandler);
+
+        assert.strictEqual(selectBox.option('selectedItem'), items[0], 'selectedItem is correct on init');
+
+        selectBox.option('value', items[0]);
+        assert.equal(selectionChangedHandler.callCount, 0, 'selectionChanged should not fire twice');
+
+        selectBox.option('value', items[1]);
+        assert.equal(selectionChangedHandler.callCount, 1, 'selectionChanged has been fired');
+    });
+
+    QUnit.test('selectionChanged - runtime change', function(assert) {
+        const selectionChangedFirstHandler = sinon.spy();
+        const selectionChangedSecondHandler = sinon.spy();
+
+        const items = [1, 2, 3];
+
+        const selectBox = $('#selectBox').dxSelectBox({
+            dataSource: items,
+            value: items[0],
+            onSelectionChanged: selectionChangedFirstHandler
+        }).dxSelectBox('instance');
+
+        assert.equal(selectionChangedFirstHandler.callCount, 1, 'selectionChanged handler is correct');
+
+        selectBox.option('onSelectionChanged', selectionChangedSecondHandler);
+        selectBox.option('value', items[1]);
+        assert.equal(selectionChangedSecondHandler.callCount, 1, 'selectionChanged handler is correct');
+    });
+
     QUnit.test('options displayExpr, valueExpr', function(assert) {
         assert.expect(5);
 
@@ -2411,7 +2450,7 @@ QUnit.module('editing', moduleSetup, () => {
         assert.deepEqual(list.option('selectedItems'), [customValue], 'selected item is correct');
     });
 
-    QUnit.test('onValueChanged event should have correct "event" field after adding a custom item', function(assert) {
+    QUnit.test('onValueChanged event should have correct "event" field after adding a custom item', (assert) => {
         const valueChangedStub = sinon.stub();
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true,
@@ -2746,7 +2785,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.ok(selectBox.option('opened'), 'selectBox should be opened');
     });
 
-    QUnit.testInActiveWindow('Filter should be canceled after focusout (T838753)', function(assert) {
+    QUnit.testInActiveWindow('Filter should be canceled after focusout (T838753)', (assert) => {
         const items = ['111', '222', '333'];
 
         const $selectBox = $('#selectBox').dxSelectBox({
@@ -3138,6 +3177,27 @@ QUnit.module('search substitution', {
             .type(this.testItem[0]);
 
         assert.equal(this.$input.val(), this.testItem[0], 'search value is not substituted');
+    });
+
+    QUnit.test('autocompletionEnabled - runtime change', function(assert) {
+        this.reinit({
+            items: [this.testItem],
+            searchTimeout: 0,
+            searchEnabled: true,
+            focusStateEnabled: true,
+            searchMode: 'startswith'
+        });
+
+        this.keyboard
+            .focus()
+            .type(this.testItem[0]);
+
+        this.selectBox.option('autocompletionEnabled', false);
+        this.keyboard
+            .focus()
+            .type(this.testItem[1]);
+
+        assert.equal(this.$input.val(), this.testItem[0] + this.testItem[1], 'search value is not substituted after option runtime change');
     });
 
     QUnit.test('search value is substituted while typing', function(assert) {
