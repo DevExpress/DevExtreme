@@ -1146,7 +1146,7 @@ module('keyboard navigation', moduleOptions, () => {
         const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
 
         keyboardMock($handle).press('left');
-        assert.ok(spy.called === false, 'the onValueChanged is not called');
+        assert.strictEqual(spy.called, false, 'the onValueChanged is not called');
     });
 
     test('T380070 - the value should not be changed on the \'right\' key press if the value is max', function(assert) {
@@ -1160,7 +1160,7 @@ module('keyboard navigation', moduleOptions, () => {
         const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
 
         keyboardMock($handle).press('right');
-        assert.ok(spy.called === false, 'the onValueChanged is not called');
+        assert.strictEqual(spy.called, false, 'the onValueChanged is not called');
     });
 });
 

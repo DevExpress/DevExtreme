@@ -132,7 +132,7 @@ QUnit.test('Subscription to projection', function(assert) {
     const arg = this.projection.on.lastCall.args[0];
     assert.strictEqual(typeof arg.center, 'function', 'center handler');
     assert.strictEqual(typeof arg.zoom, 'function', 'zoom handler');
-    assert.ok(arg.center === arg.zoom, 'same handler for both events');
+    assert.strictEqual(arg.center, arg.zoom, 'same handler for both events');
 });
 
 QUnit.test('Event emitter methods are injected', function(assert) {

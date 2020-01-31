@@ -109,11 +109,11 @@ QUnit.module('Details View', moduleConfig, () => {
             });
         this.clock.tick(400);
 
-        assert.ok(getCellValueInDetailsView(this.$element, 1, 2).indexOf('Folder') === 0);
+        assert.strictEqual(getCellValueInDetailsView(this.$element, 1, 2).indexOf('Folder'), 0);
         assert.equal(getCellValueInDetailsView(this.$element, 1, 3).trim(), '2/2/2000');
         assert.equal(getCellValueInDetailsView(this.$element, 1, 4).trim(), '');
 
-        assert.ok(getCellValueInDetailsView(this.$element, 2, 2).indexOf('Title.txt') === 0);
+        assert.strictEqual(getCellValueInDetailsView(this.$element, 2, 2).indexOf('Title.txt'), 0);
         assert.equal(getCellValueInDetailsView(this.$element, 2, 3).trim(), '1/1/2000');
         assert.equal(getCellValueInDetailsView(this.$element, 2, 4).trim(), '55 B');
     });

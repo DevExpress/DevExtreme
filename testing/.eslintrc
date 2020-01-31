@@ -17,6 +17,7 @@
         "qunit/assert-args": "error",
         "qunit/literal-compare-order": "error",
         "qunit/no-arrow-tests": "error",
+        "qunit/no-ok-equality": "error",
         "qunit/no-setup-teardown": "error"
     }
 }

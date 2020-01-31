@@ -855,7 +855,7 @@ QUnit.test('inkRipple feedback should not be broken if swipe in opposite directi
     clock.tick(100);
     const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
 
-    assert.ok(inkRippleShowingWave.length === 1, 'inkripple feedback works right after swipe in opposite direction');
+    assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works right after swipe in opposite direction');
 
     pointer.start('touch').up();
     clock.restore();

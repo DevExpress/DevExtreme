@@ -3712,9 +3712,9 @@ QUnit.test('Long term appoinment inflict index shift in other appointments (T737
     });
 
     const appointments = this.instance._getAppointmentsToRepaint();
-    assert.ok(appointments[0].settings[1].index === 0, 'Long term appointment tail has right index');
-    assert.ok(appointments[1].settings[0].index === 1, 'Appointment next to long term appointment head has right index');
-    assert.ok(appointments[2].settings[0].index === 1, 'Appointment next to long term appointment tail has right index');
+    assert.strictEqual(appointments[0].settings[1].index, 0, 'Long term appointment tail has right index');
+    assert.strictEqual(appointments[1].settings[0].index, 1, 'Appointment next to long term appointment head has right index');
+    assert.strictEqual(appointments[2].settings[0].index, 1, 'Appointment next to long term appointment tail has right index');
 });
 
 QUnit.test('Multi-day appointment should be rendered when started after endDayHour (T819852)', function(assert) {
@@ -3959,14 +3959,14 @@ QUnit.module('Appointments', () => {
             const scheduler = createScheduler(commonData);
             scheduler.option({ appointmentTemplate: createTestForCommonData(assert) });
 
-            assert.ok(eventCallCount === 5, 'appointmentTemplate should be raised');
+            assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
         });
 
         QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence', function(assert) {
             const scheduler = createScheduler(recurrenceData);
             scheduler.option({ appointmentTemplate: createTestForRecurrenceData(assert, scheduler) });
 
-            assert.ok(eventCallCount === 5, 'appointmentTemplate should be raised');
+            assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
         });
 
         QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence and custom data properties', function(assert) {
@@ -3977,7 +3977,7 @@ QUnit.module('Appointments', () => {
             });
             scheduler.option({ appointmentTemplate: createTestForRecurrenceData(assert, scheduler) });
 
-            assert.ok(eventCallCount === 5, 'appointmentTemplate should be raised');
+            assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
         });
     });
 
@@ -4034,7 +4034,7 @@ QUnit.module('Appointments', () => {
                     scheduler.appointments.click(i);
                 }
 
-                assert.ok(eventCallCount === 5, 'appointmentTemplate should be raised');
+                assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
             });
         });
     });

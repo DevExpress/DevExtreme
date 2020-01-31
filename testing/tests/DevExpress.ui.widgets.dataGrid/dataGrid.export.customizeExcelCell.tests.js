@@ -24,7 +24,7 @@ QUnit.test('Check e.component', function(assert) {
             export: {
                 customizeExcelCell: e => {
                     assert.ok(isDefined(onCellPreparedComponent));
-                    assert.ok(e.component === onCellPreparedComponent);
+                    assert.strictEqual(e.component, onCellPreparedComponent);
                 }
             },
         }

@@ -1294,9 +1294,9 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.strictEqual(this.labels[0].draw.callCount, 0);
         assert.deepEqual(this.labels[1].draw.lastCall.args, [false]);
 
-        assert.ok(series === chart.getAllSeries()[0], 'Series should not be recreated');
-        assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-        assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+        assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
+        assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+        assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
     });
 
     QUnit.module('resolveLabelOverlapping. stack', $.extend({}, commons.environment, {

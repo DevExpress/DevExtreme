@@ -409,14 +409,14 @@ QUnit.test('Appointment should not be deleted, if allowUpdating || allowDeleting
     });
 
     let appointments = this.instance.$element().find('.dx-scheduler-scrollable-appointments').dxSchedulerAppointments('instance');
-    assert.ok(appointments.option('allowDelete') === false, 'Delete is not allowed');
+    assert.strictEqual(appointments.option('allowDelete'), false, 'Delete is not allowed');
 
     this.instance.option('editing', {
         allowUpdating: false,
         allowDeleting: true
     });
 
-    assert.ok(appointments.option('allowDelete') === false, 'Delete is not allowed');
+    assert.strictEqual(appointments.option('allowDelete'), false, 'Delete is not allowed');
 
     this.instance.option('editing', {
         allowUpdating: true,
@@ -424,5 +424,5 @@ QUnit.test('Appointment should not be deleted, if allowUpdating || allowDeleting
     });
 
     appointments = this.instance.$element().find('.dx-scheduler-scrollable-appointments').dxSchedulerAppointments('instance');
-    assert.ok(appointments.option('allowDelete') === true, 'Delete is allowed');
+    assert.strictEqual(appointments.option('allowDelete'), true, 'Delete is allowed');
 });

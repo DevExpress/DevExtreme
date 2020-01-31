@@ -490,8 +490,8 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
 
         assert.ok(isString(rootKey), 'root key has type of string');
         assert.ok(rootKey.length > 10, 'root key contains many characters');
-        assert.ok(rootKey.indexOf('Files') === -1, 'root key doesn\'t contain root directory name');
-        assert.ok(rootKey.indexOf('__dxfmroot_') === 0, 'root key starts with internal prefix');
+        assert.strictEqual(rootKey.indexOf('Files'), -1, 'root key doesn\'t contain root directory name');
+        assert.strictEqual(rootKey.indexOf('__dxfmroot_'), 0, 'root key starts with internal prefix');
     });
 
 });
