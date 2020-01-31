@@ -6236,8 +6236,6 @@ declare module DevExpress.ui {
         selectItem(itemElement: Element): void;
         /** @name dxTreeView.selectItem(key) */
         selectItem(key: any): void;
-        /** @name dxTreeView.selectNodesByKeys(keys) */
-        selectNodesByKeys(keys: Array<any>): Array<any>;
         /** @name dxTreeView.unselectAll() */
         unselectAll(): void;
         /** @name dxTreeView.unselectItem(itemData) */
