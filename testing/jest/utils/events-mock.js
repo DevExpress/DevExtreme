@@ -56,8 +56,6 @@ keyboard.on = (el, focusTarget, handler) => {
     return keyboardSubscriberId;
 };
 
-keyboard.off = (id) => keyboardHandlers[id] = {};
-
 eventsEngine.on = (...args) => {
     const event = args[1].split('.')[0];
 
@@ -71,6 +69,5 @@ eventsEngine.on = (...args) => {
     });
 };
 
-eventsEngine.off = (el, event) => {
-    eventHandlers[event] = [];
-};
+eventsEngine.off = (el, event) => eventHandlers[event] = [];
+keyboard.off = id => delete keyboardHandlers[id];
