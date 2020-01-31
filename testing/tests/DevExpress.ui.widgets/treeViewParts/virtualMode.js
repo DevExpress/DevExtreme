@@ -1448,7 +1448,7 @@ module('Loadindicator', () => {
                 assert.equal($toggleItem.css('display') === 'none', contentReadyCount ? false : true, 'toggle item is hidden');
             };
 
-            test(`Loadindicator: ${config}`, () => {
+            test(`Loadindicator: ${config}`, function() {
                 const clock = sinon.useFakeTimers();
 
                 try {

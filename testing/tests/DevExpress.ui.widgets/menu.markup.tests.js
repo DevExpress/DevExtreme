@@ -142,13 +142,13 @@ QUnit.module('Aria accessibility', {
         helper.$widget.remove();
     }
 }, () => {
-    QUnit.test('Items: []', () => {
+    QUnit.test('Items: []', function() {
         helper.createWidget({ items: [] });
         helper.checkAttributes(helper.$widget, { role: 'menubar', tabindex: '0' }, 'widget');
         helper.checkItemsAttributes([], { role: 'menuitem', tabindex: '-1' });
     });
 
-    QUnit.test('Items: [{items[{}, {}], {}] -> set focusedElement: items[0]', () => {
+    QUnit.test('Items: [{items[{}, {}], {}] -> set focusedElement: items[0]', function() {
         helper.createWidget({
             items: [{ text: 'Item1_1', items: [{ text: 'Item2_1' }, { text: 'Item2_2' }] }, { text: 'item1_2' }]
         });

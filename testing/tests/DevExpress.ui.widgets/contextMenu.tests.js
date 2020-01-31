@@ -1601,7 +1601,7 @@ QUnit.module('Aria accessibility', {
         helper.$widget.remove();
     }
 }, () => {
-    QUnit.test('Items: [] -> show() -> hide()', () => {
+    QUnit.test('Items: [] -> show() -> hide()', function() {
         helper.createWidget({ items: [] });
         helper.checkAttributes(helper.$widget, { }, 'widget');
         helper.checkItemsAttributes([], { });
@@ -1616,7 +1616,7 @@ QUnit.module('Aria accessibility', {
         helper.checkItemsAttributes([], { });
     });
 
-    QUnit.test('Items: [1, 2, 3] -> show() -> hide()', () => {
+    QUnit.test('Items: [1, 2, 3] -> show() -> hide()', function() {
         helper.createWidget({ items: [1, 2, 3] });
         helper.checkAttributes(helper.$widget, { }, 'widget');
         helper.checkItemsAttributes([], { });
@@ -1631,7 +1631,7 @@ QUnit.module('Aria accessibility', {
         helper.checkItemsAttributes([], { role: 'menuitem', tabindex: '-1' });
     });
 
-    QUnit.test('Items: [1, 2, 3] -> set focusedElement: item[0] -> clean focusedElement', () => {
+    QUnit.test('Items: [1, 2, 3] -> set focusedElement: item[0] -> clean focusedElement', function() {
         helper.createWidget({ items: [1, 2, 3] });
         helper.checkAttributes(helper.$widget, { }, 'widget');
         helper.checkItemsAttributes([], { });
@@ -1648,7 +1648,7 @@ QUnit.module('Aria accessibility', {
         helper.checkItemsAttributes([], { role: 'menuitem', tabindex: '-1' });
     });
 
-    QUnit.test('Items: [{items[{}, {}], {}] -> set focusedElement by keyboard on inner level', () => {
+    QUnit.test('Items: [{items[{}, {}], {}] -> set focusedElement by keyboard on inner level', function() {
         helper.createWidget({
             focusStateEnabled: true,
             items: [{ text: 'Item1_1', items: [{ text: 'Item2_1' }, { text: 'Item2_2' }] }, { text: 'item1_2' }]
