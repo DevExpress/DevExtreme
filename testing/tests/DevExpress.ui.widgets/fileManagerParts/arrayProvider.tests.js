@@ -60,7 +60,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
         assert.notOk(folders[1].hasSubDirs);
 
         folders = this.provider.getFolders('F1');
-        assert.equal(3, folders.length);
+        assert.equal(folders.length, 3);
         assert.equal(folders[0].name, 'F1.1');
         assert.notOk(folders[0].hasSubDirs);
         assert.equal(folders[1].name, 'F1.2');
