@@ -22,6 +22,8 @@
     @DIAGRAM_TOOLBOX_INPUT_V_PADDING: 8px;
     @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE: 18px;
     @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING: 8px 0 4px 4px;
+
+    @DIAGRAM_TOUCHBAR_ITEM_PADDING: 10px;
 }
 
 .dx-size-compact() {
@@ -31,13 +33,7 @@
     @DIAGRAM_TOOLBOX_INPUT_V_PADDING: 6px;
     @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE: 14px;
     @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING: 4px 0 4px 4px;
-}
 
-.dx-size-default() {
-    @DIAGRAM_TOUCHBAR_ITEM_PADDING: 10px;
-}
-
-.dx-size-compact() {
     @DIAGRAM_TOUCHBAR_ITEM_PADDING: 7px;
 }
 
@@ -128,25 +124,31 @@
         font-size: 0.8em;
         min-height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
     }
+
     .dx-popup-title.dx-toolbar .dx-toolbar-items-container {
         height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
     }
+
     .dx-popup-title .dx-button.dx-button-has-icon:not(.dx-button-has-text),
     .dx-popup-title .dx-button-content {
         width: @DIAGRAM_TOOLBOX_TITLE_SIZE;
         height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
     }
+
     .dx-diagram-toolbox-input .dx-button .dx-button-content {
         padding: @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING;
     }
+
     .dx-diagram-toolbox-input .dx-button .dx-icon {
         font-size: @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE;
     }
+
     .dx-popup-title .dx-closebutton {
         width: @DIAGRAM_TOOLBOX_TITLE_SIZE;
         height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
         margin: 1px 0 0;
     }
+
     .dx-popup-title .dx-closebutton .dx-icon {
         width: 14px;
         height: 14px;
@@ -167,32 +169,33 @@
     .dx-accordion {
         margin: 0;
     }
+
     .dx-accordion-item {
         border-bottom: 1px solid @accordion-item-border-color;
-    }
-    .dx-accordion-item {
         border-top: none;
     }
+
     .dx-accordion-item-opened {
         margin: 0;
     }
+
     .dxdi-toolbox .dxdi-canvas .dxdi-shape-text { // stylelint-disable-line selector-class-pattern
         opacity: @diagram-toolbox-shape-text-opacity;
     }
+
     .dx-item-content.dx-accordion-item-title {
         height: 32px;
 
         .dx-accordion-item-title-caption {
             font-size: 0.8em;
-
             left: @DIAGRAM_TOOLBOX_ACCORDION_H_PADDING;
             top: @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING;
             right: 32px;
         }
+
         &::before {
             font-size: 1em;
             line-height: 0.8em;
-
             right: 0;
             top: @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING;
         }
