@@ -107,7 +107,7 @@ describe('Button', () => {
             it('should render template', () => {
                 const button = render({
                     text: 'My button',
-                    contentRender: ({ text }) => createElement('div', { className: 'custom-content', children: `${text}123` })
+                    contentRender: ({ text }) => createElement('div', { className: 'custom-content', children: `${text}123` }),
                 });
                 const buttonContentChildren = button.find('.dx-button-content').children();
 

@@ -36,7 +36,7 @@ describe('Widget', () => {
             it('should not fire click event if the accessKey is pressed', () => {
                 const clickHandler = jest.fn();
                 const stopImmediatePropagation = jest.fn();
-                const fakeClickEventClone = Object.assign({}, fakeClickEvent);
+                const fakeClickEventClone = { ...fakeClickEvent };
 
                 fakeClickEventClone.stopImmediatePropagation = stopImmediatePropagation;
 
@@ -165,7 +165,7 @@ describe('Widget', () => {
 
                 expect(widget.hasClass('custom-class')).toBe(true);
                 expect(widget.hasClass('dx-widget')).toBe(true);
-                expect(widget.prop('class')).toBe(false);
+                expect(widget.prop('class')).toBe(void 0);
             });
         });
 
@@ -173,7 +173,7 @@ describe('Widget', () => {
             it('should be disabled by default', () => {
                 const widget = render();
 
-                expect(widget.prop('activeStateEnabled')).toBe(false);
+                expect(widget.instance().props.activeStateEnabled).toBe(false);
                 expect(widget.hasClass('dx-state-active')).toBe(false);
             });
         });
@@ -182,7 +182,7 @@ describe('Widget', () => {
             it('should be disabled by default', () => {
                 const widget = render();
 
-                expect(widget.prop('hoverStateEnabled')).toBe(false);
+                expect(widget.instance().props.hoverStateEnabled).toBe(false);
                 expect(widget.hasClass('dx-state-hover')).toBe(false);
             });
         });
@@ -191,7 +191,7 @@ describe('Widget', () => {
             it('should be disabled by default', () => {
                 const widget = render();
 
-                expect(widget.prop('focusStateEnabled')).toBe(false);
+                expect(widget.instance().props.focusStateEnabled).toBe(false);
                 expect(widget.hasClass('dx-state-focus')).toBe(false);
             });
         });
