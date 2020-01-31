@@ -1,4 +1,5 @@
 import Button from '../../js/renovation/button.p.js';
+import Widget from '../../js/renovation/widget.p.js';
 import { createElement } from 'preact';
 import { emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
 import { mount } from 'enzyme';
@@ -95,10 +96,10 @@ describe('Button', () => {
 
         describe('activeStateEnabled', () => {
             it('should be enabled by default', () => {
-                const widget = render();
+                const button = render();
 
-                expect(widget.prop('activeStateEnabled')).toBeTruthy();
-                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+                expect(button.prop('activeStateEnabled')).toBeTruthy();
+                expect(button.hasClass('dx-state-active')).toBeFalsy();
             });
         });
 
@@ -112,6 +113,20 @@ describe('Button', () => {
 
                 expect(buttonContentChildren.props().text).toBe('My button');
                 expect(buttonContentChildren.render().text()).toBe('My button123');
+            });
+        });
+
+        describe('hoverStateEnabled', () => {
+            it('should pass a default value into Widget component', () => {
+                const tree = render();
+
+                expect(tree.find(Widget).prop('hoverStateEnabled')).toBe(true);
+            });
+
+            it('should pass a custom value into Widget component', () => {
+                const tree = render({ hoverStateEnabled: false });
+
+                expect(tree.find(Widget).prop('hoverStateEnabled')).toBe(false);
             });
         });
     });
