@@ -290,22 +290,18 @@ export default class Widget {
             const keyboardHandler = (options: any) => {
                 const { originalEvent, keyName, which } = options;
                 const keys = this.supportedKeys && this.supportedKeys(originalEvent) || {};
-                const func = keys[keyName] || keys[which];
+                const handler = keys[keyName] || keys[which];
 
-                if (func !== undefined) {
-                    const handler = func.bind(this);
-                    const result = handler(originalEvent, options);
-
-                    if (!result) {
+                if (handler) {
+                    if (!handler(originalEvent, options)) {
                         return false;
                     }
                 }
+
                 return true;
             };
 
-            id = keyboard.on(
-                this.widgetRef,
-                this.widgetRef,
+            id = keyboard.on(this.widgetRef, this.widgetRef,
                 opts => keyboardHandler(opts),
             );
         }

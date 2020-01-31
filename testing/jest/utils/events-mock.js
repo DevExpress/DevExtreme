@@ -1,6 +1,13 @@
 import eventsEngine from '../../../js/events/core/events_engine';
+import { keyboard } from '../../../js/events/short';
 
 const eventHandlers = {};
+const keyboardHandlers = {};
+
+export const KEY = {
+    enter: 'enter',
+    space: 'space'
+};
 
 export const EVENT = {
     active: 'dxactive',
@@ -12,11 +19,23 @@ export const EVENT = {
     inactive: 'dxinactive'
 };
 
-export const fakeClickEvent = {
+const defaultEvent = {
+    stopImmediatePropagation: () => void 0,
+    preventDefault: () => void 0
+};
+
+export const fakeClickEvent = Object.assign(defaultEvent, {
     screenX: 0,
     offsetX: 0,
-    pageX: 0,
-    stopImmediatePropagation: () => void 0
+    pageX: 0
+});
+
+export const emitKeyboard = (key, e = defaultEvent) => {
+    for(const id in keyboardHandlers) {
+        keyboardHandlers[id].forEach(
+            handler => handler({ originalEvent: e, keyName: key })
+        );
+    }
 };
 
 export const emit = (event, e = {}, element) => {
@@ -26,6 +45,18 @@ export const emit = (event, e = {}, element) => {
         }
     });
 };
+
+let keyboardSubscriberId = 0;
+
+keyboard.on = (el, focusTarget, handler) => {
+    keyboardSubscriberId++;
+    keyboardHandlers[keyboardSubscriberId] = keyboardHandlers[keyboardSubscriberId] || [];
+    keyboardHandlers[keyboardSubscriberId].push(handler);
+
+    return keyboardSubscriberId;
+};
+
+keyboard.off = (id) => keyboardHandlers[id] = {};
 
 eventsEngine.on = (...args) => {
     const event = args[1].split('.')[0];

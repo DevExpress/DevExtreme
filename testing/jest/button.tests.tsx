@@ -1,6 +1,6 @@
 import Button from '../../js/renovation/button.p.js';
 import { createElement } from 'preact';
-import { emit, EVENT } from './utils/events-mock';
+import { emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
 import { mount } from 'enzyme';
 
 describe('Button', () => {
@@ -17,23 +17,23 @@ describe('Button', () => {
                 expect(clickHandler).toHaveBeenCalledTimes(1);
             });
 
-            // it('should be called by Enter', () => {
-            //     const clickHandler = jest.fn();
+            it('should be called by Enter', () => {
+                const clickHandler = jest.fn();
 
-            //     render({ onClick: clickHandler });
-            //     expect(clickHandler).toHaveBeenCalledTimes(0);
-            //     emit(EVENT.click);
-            //     expect(clickHandler).toHaveBeenCalledTimes(1);
-            // });
+                render({ onClick: clickHandler });
+                expect(clickHandler).toHaveBeenCalledTimes(0);
+                emitKeyboard(KEY.enter);
+                expect(clickHandler).toHaveBeenCalledTimes(1);
+            });
 
-            // it('should be called by Space', () => {
-            //     const clickHandler = jest.fn();
+            it('should be called by Space', () => {
+                const clickHandler = jest.fn();
 
-            //     render({ onClick: clickHandler });
-            //     expect(clickHandler).toHaveBeenCalledTimes(0);
-            //     emit(EVENT.click);
-            //     expect(clickHandler).toHaveBeenCalledTimes(1);
-            // });
+                render({ onClick: clickHandler });
+                expect(clickHandler).toHaveBeenCalledTimes(0);
+                emitKeyboard(KEY.space);
+                expect(clickHandler).toHaveBeenCalledTimes(1);
+            });
         });
 
         describe('stylingMode', () => {
