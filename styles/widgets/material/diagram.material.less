@@ -13,11 +13,27 @@
 @MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE: @MATERIAL_BASE_ICON_SIZE;
 @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH: 3px;
 
+@DIAGRAM_TOOLBOX_TITLE_SIZE: 18px;
+
 .dx-size-default() {
+    @DIAGRAM_TOOLBOX_ACCORDION_H_PADDING: 10px;
+    @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING: 8px;
+    @DIAGRAM_TOOLBOX_INPUT_H_PADDING: 10px;
+    @DIAGRAM_TOOLBOX_INPUT_V_PADDING: 8px;
+    @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE: 18px;
+    @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING: 8px 0 4px 4px;
+
     @DIAGRAM_TOUCHBAR_ITEM_PADDING: 10px;
 }
 
 .dx-size-compact() {
+    @DIAGRAM_TOOLBOX_ACCORDION_H_PADDING: 8px;
+    @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING: 6px;
+    @DIAGRAM_TOOLBOX_INPUT_H_PADDING: 8px;
+    @DIAGRAM_TOOLBOX_INPUT_V_PADDING: 6px;
+    @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE: 14px;
+    @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING: 4px 0 4px 4px;
+
     @DIAGRAM_TOUCHBAR_ITEM_PADDING: 7px;
 }
 
@@ -58,43 +74,6 @@
         border-bottom: 1px solid @diagram-toolbar-border-color;
     }
 
-    .dx-diagram-left-panel,
-    .dx-diagram-right-panel {
-        background: @overlay-content-bg;
-
-        .dx-accordion {
-            .dx-accordion-item {
-                border-left: none;
-                border-right: none;
-
-                .dx-diagram-right-panel-begin-group {
-                    padding-top: 24px;
-                }
-            }
-
-            .dx-accordion-item:first-of-type {
-                border-top: none;
-            }
-
-            .dx-state-focused {
-                &.dx-accordion-item {
-                    border-color: @accordion-item-border-color;
-                }
-
-                &.dx-accordion-item-closed:not(:last-of-type) {
-                    border-bottom-color: transparent;
-                }
-            }
-        }
-    }
-
-    .dx-diagram-left-panel {
-        border-right-color: @diagram-toolbar-border-color;
-
-        .dxdi-toolbox .dxdi-canvas .dxdi-shape-text { // stylelint-disable-line selector-class-pattern
-            opacity: @diagram-toolbox-shape-text-opacity;
-        }
-    }
 
     .dx-diagram-right-panel {
         border-left-color: @diagram-toolbar-border-color;
@@ -102,6 +81,128 @@
 
     &.dx-diagram-fullscreen {
         background-color: @base-bg;
+    }
+}
+
+.dx-diagram-toolbox-panel,
+.dx-diagram-right-panel {
+    background: @overlay-content-bg;
+
+    .dx-accordion {
+        .dx-accordion-item {
+            border-left: none;
+            border-right: none;
+            box-shadow: none;
+
+            .dx-diagram-right-panel-begin-group {
+                padding-top: 24px;
+            }
+        }
+
+        .dx-state-focused {
+            &.dx-accordion-item {
+                border-color: @accordion-item-border-color;
+            }
+
+            &.dx-accordion-item-closed:not(:last-of-type) {
+                border-bottom-color: transparent;
+            }
+        }
+    }
+}
+
+.dx-diagram-right-panel {
+    .dx-accordion {
+        .dx-accordion-item:first-of-type {
+            border-top: none;
+        }
+    }
+}
+
+.dx-diagram-toolbox-popup {
+    .dx-popup-title.dx-toolbar {
+        font-size: 0.8em;
+        min-height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
+    }
+
+    .dx-popup-title.dx-toolbar .dx-toolbar-items-container {
+        height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
+    }
+
+    .dx-popup-title .dx-button.dx-button-has-icon:not(.dx-button-has-text),
+    .dx-popup-title .dx-button-content {
+        width: @DIAGRAM_TOOLBOX_TITLE_SIZE;
+        height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
+    }
+
+    .dx-diagram-toolbox-input .dx-button .dx-button-content {
+        padding: @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING;
+    }
+
+    .dx-diagram-toolbox-input .dx-button .dx-icon {
+        font-size: @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE;
+    }
+
+    .dx-popup-title .dx-closebutton {
+        width: @DIAGRAM_TOOLBOX_TITLE_SIZE;
+        height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
+        margin: 1px 0 0;
+    }
+
+    .dx-popup-title .dx-closebutton .dx-icon {
+        width: 14px;
+        height: 14px;
+        padding: 2px;
+        font-size: 12px;
+        line-height: 12px;
+        background-position: 2px 2px;
+        background-size: 12px 12px;
+    }
+
+    .dx-diagram-toolbox-input .dx-texteditor-input,
+    .dx-diagram-toolbox-input .dx-placeholder:before {
+        padding: @DIAGRAM_TOOLBOX_INPUT_V_PADDING + 4px @DIAGRAM_TOOLBOX_INPUT_H_PADDING @DIAGRAM_TOOLBOX_INPUT_V_PADDING;
+    }
+}
+
+.dx-diagram-toolbox-panel {
+    .dx-accordion {
+        margin: 0;
+    }
+
+    .dx-accordion-item {
+        border-bottom: 1px solid @accordion-item-border-color;
+        border-top: none;
+    }
+
+    .dx-accordion-item-opened {
+        margin: 0;
+    }
+
+    .dxdi-toolbox .dxdi-canvas .dxdi-shape-text { // stylelint-disable-line selector-class-pattern
+        opacity: @diagram-toolbox-shape-text-opacity;
+    }
+
+    .dx-item-content.dx-accordion-item-title {
+        height: 32px;
+
+        .dx-accordion-item-title-caption {
+            font-size: 0.8em;
+            left: @DIAGRAM_TOOLBOX_ACCORDION_H_PADDING;
+            top: @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING;
+            right: 32px;
+        }
+
+        &::before {
+            font-size: 1em;
+            line-height: 0.8em;
+            right: 0;
+            top: @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING;
+        }
+    }
+
+    .dx-item-content.dx-accordion-item-body {
+        padding: @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING @DIAGRAM_TOOLBOX_ACCORDION_H_PADDING;
     }
 }
 
@@ -191,4 +292,11 @@
     }
 }
 
-.diagram-icons-mixin(@base-text-color, @base-text-color, @MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE);
+.diagram-action-icons-mixin(@base-text-color, @base-text-color, @MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE);
+
+.dx-diagram-toolbox-popup .dx-button-has-icon .dx-icon.dx-icon-diagram-toolbox-drag {
+    .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/toolbox-drag.svg'), @popup-title-color, @DIAGRAM_TOOLBOX_TITLE_SIZE, @DIAGRAM_TOOLBOX_TITLE_SIZE);
+
+    line-height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
+    background-size: @DIAGRAM_TOOLBOX_TITLE_SIZE @DIAGRAM_TOOLBOX_TITLE_SIZE;
+}

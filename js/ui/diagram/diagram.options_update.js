@@ -1,5 +1,5 @@
-import DiagramBar from './diagram_bar';
-import { getDiagram } from './diagram_importer';
+import DiagramBar from './diagram.bar';
+import { getDiagram } from './diagram.importer';
 
 class DiagramOptionsUpdateBar extends DiagramBar {
     constructor(owner) {

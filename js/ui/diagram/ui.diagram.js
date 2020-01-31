@@ -7,24 +7,23 @@ import { extend } from '../../core/utils/extend';
 import typeUtils from '../../core/utils/type';
 import dataCoreUtils from '../../core/utils/data';
 import DiagramToolbar from './ui.diagram.toolbar';
-import DiagramLeftPanel from './ui.diagram.leftpanel';
 import DiagramRightPanel from './ui.diagram.rightpanel';
-import DiagramContextMenu from './ui.diagram.contextmenu';
-import DiagramContextToolbox from './ui.diagram.contexttoolbox';
+import DiagramContextMenu from './ui.diagram.context_menu';
+import DiagramContextToolbox from './ui.diagram.context_toolbox';
 import DiagramDialog from './ui.diagram.dialogs';
+import DiagramToolboxManager from './diagram.toolbox_manager';
 import DiagramToolbox from './ui.diagram.toolbox';
-import DiagramOptionsUpdateBar from './ui.diagram.optionsupdate';
-import NodesOption from './ui.diagram.nodes';
-import EdgesOptions from './ui.diagram.edges';
-import Tooltip from '../tooltip';
-import { getDiagram } from './diagram_importer';
+import DiagramOptionsUpdateBar from './diagram.options_update';
+import NodesOption from './diagram.nodes_option';
+import EdgesOption from './diagram.edges_option';
+import { getDiagram } from './diagram.importer';
 import { hasWindow, getWindow } from '../../core/utils/window';
 import domUtils from '../../core/utils/dom';
 import eventsEngine from '../../events/core/events_engine';
 import * as eventUtils from '../../events/utils';
 import messageLocalization from '../../localization/message';
 import numberLocalization from '../../localization/number';
-import DiagramDialogManager from './ui.diagram.dialogmanager';
+import DiagramDialogManager from './ui.diagram.dialog_manager';
 
 const DIAGRAM_CLASS = 'dx-diagram';
 const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
@@ -39,6 +38,11 @@ const DIAGRAM_DEFAULT_ZOOMLEVEL = 1;
 const DIAGRAM_DEFAULT_AUTOZOOM = 'disabled';
 const DIAGRAM_DEFAULT_PAGE_ORIENTATION = 'portrait';
 const DIAGRAM_DEFAULT_PAGE_COLOR = 'white';
+
+const DIAGRAM_TOOLBOX_ITEM_SIZE = 30;
+const DIAGRAM_TOOLBOX_ITEM_SPACING = 10;
+const DIAGRAM_CONTEXT_TOOLBOX_ICON_SIZE = 24;
+const DIAGRAM_CONTEXT_TOOLBOX_ICON_SPACING = 8;
 
 const DIAGRAM_NAMESPACE = 'dxDiagramEvent';
 const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('fullscreenchange', DIAGRAM_NAMESPACE);
@@ -69,9 +73,9 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_CONTENT_WRAPPER_CLASS)
             .appendTo(this.$element());
 
-        this._leftPanel = undefined;
+        this._toolbox = undefined;
         if(this.option('toolbox.visible')) {
-            this._renderLeftPanel($contentWrapper);
+            this._renderToolbox($contentWrapper);
         }
 
         const $drawerWrapper = $('<div>')
@@ -146,48 +150,29 @@ class Diagram extends Widget {
             widgetCommandNames: toolbarWidgetCommandNames
         });
     }
-    _renderLeftPanel($parent) {
+    _renderToolbox($parent) {
         const isServerSide = !hasWindow();
-
-        const $leftPanel = $('<div>')
+        const $toolBox = $('<div>')
             .appendTo($parent);
-
-        this._leftPanel = this._createComponent($leftPanel, DiagramLeftPanel, {
+        this._toolbox = this._createComponent($toolBox, DiagramToolbox, {
+            visible: !this.option('readOnly') && !this.option('disabled'),
             toolboxGroups: this._getToolboxGroups(),
-            disabled: this.option('readOnly'),
             onShapeCategoryRendered: (e) => {
                 if(isServerSide) return;
 
-                const $toolboxContainer = $(e.$element);
-                this._diagramInstance.createToolbox($toolboxContainer[0], 32, 8,
-                    { 'data-toggle': 'shape-toolbox-tooltip' },
-                    e.shapes || e.category, e.displayMode === 'texts');
-                this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
+                this._diagramInstance.createToolbox(e.$element[0],
+                    DIAGRAM_TOOLBOX_ITEM_SIZE, DIAGRAM_TOOLBOX_ITEM_SPACING,
+                    { 'data-toggle': e.dataToggle },
+                    e.shapes || e.category, e.displayMode === 'texts'
+                );
+            },
+            onFilterChanged: (e) => {
+                if(isServerSide) return;
+
+                this._diagramInstance.applyToolboxFilter(e.text, e.filteringToolboxes);
             },
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
-    }
-    _createTooltips($container, targets) {
-        targets.each((index, element) => {
-            const $target = $(element);
-            const title = $target.attr('title');
-            if(title) {
-                const $tooltip = $('<div>')
-                    .html(title)
-                    .appendTo($container);
-                this._createComponent($tooltip, Tooltip, {
-                    target: $target.get(0),
-                    showEvent: 'mouseenter',
-                    hideEvent: 'mouseleave',
-                    position: 'top',
-                    animation: {
-                        show: { type: 'fade', from: 0, to: 1, delay: 500 },
-                        hide: { type: 'fade', from: 1, to: 0, delay: 100 }
-                    }
-                });
-            }
-        });
-
     }
     _invalidateContextMenuCommands() {
         if(this._contextMenu) {
@@ -211,16 +196,16 @@ class Diagram extends Widget {
         }
     }
     _invalidateToolboxGroups() {
-        if(this._leftPanel) {
-            this._leftPanel.option({
+        if(this._toolbox) {
+            this._toolbox.option({
                 toolboxGroups: this._getToolboxGroups()
             });
         }
     }
-    _setLeftPanelEnabled(enabled) {
-        if(this._leftPanel) {
-            this._leftPanel.option({
-                disabled: !enabled
+    _setToolboxVisible(visible) {
+        if(this._toolbox) {
+            this._toolbox.option({
+                visible: visible
             });
         }
     }
@@ -287,7 +272,7 @@ class Diagram extends Widget {
                         isTextGroup = group.displayMode === 'texts';
                     }
                 }
-                this._diagramInstance.createContextToolbox($toolboxContainer[0], 24, 8, {},
+                this._diagramInstance.createContextToolbox($toolboxContainer[0], DIAGRAM_CONTEXT_TOOLBOX_ICON_SIZE, DIAGRAM_CONTEXT_TOOLBOX_ICON_SPACING, {},
                     shapes || category || e.category, isTextGroup,
                     function(shapeType) {
                         e.callback(shapeType);
@@ -433,7 +418,7 @@ class Diagram extends Widget {
             delete this._edgesOption;
         }
         if(this.option('edges.dataSource')) {
-            this._edgesOption = new EdgesOptions(this);
+            this._edgesOption = new EdgesOption(this);
             this._edgesOption.option('dataSource', this.option('edges.dataSource'));
             this._edgesOption._refreshDataSource();
         }
@@ -670,7 +655,7 @@ class Diagram extends Widget {
         return this.option('customShapes') || [];
     }
     _getToolboxGroups() {
-        return DiagramToolbox.getGroups(this.option('toolbox.groups'));
+        return DiagramToolboxManager.getGroups(this.option('toolbox.groups'));
     }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
@@ -840,7 +825,7 @@ class Diagram extends Widget {
         const { DiagramCommand } = getDiagram();
         const readOnly = this.option('readOnly') || this.option('disabled');
         this._executeDiagramCommand(DiagramCommand.ToggleReadOnly, readOnly);
-        this._setLeftPanelEnabled(!readOnly);
+        this._setToolboxVisible(!readOnly);
     }
     _updateZoomLevelState() {
         let zoomLevel = this.option('zoomLevel.value');
@@ -1643,13 +1628,13 @@ class Diagram extends Widget {
         }
     }
     _raiseToolboxDragStart() {
-        if(this._leftPanel) {
-            this._leftPanel.$element().addClass('dx-skip-gesture-event');
+        if(this._toolbox) {
+            this._toolbox._raiseToolboxDragStart();
         }
     }
     _raiseToolboxDragEnd() {
-        if(this._leftPanel) {
-            this._leftPanel.$element().removeClass('dx-skip-gesture-event');
+        if(this._toolbox) {
+            this._toolbox._raiseToolboxDragEnd();
         }
     }
 
