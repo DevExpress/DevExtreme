@@ -15,6 +15,7 @@ import { extend } from '../core/utils/extend';
 import { isFakeClickEvent } from '../events/utils';
 import { hasWindow } from '../core/utils/window';
 import Action from '../core/action';
+import { focusable } from '../ui/widget/selectors';
 
 const getStyles = ({ width, height, ...other }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
@@ -271,7 +272,7 @@ export default class Widget {
 
     @Effect()
     focusEffect() {
-        const namespace = 'UIFeedback';
+        const namespace = `${this.name}Focus`;
         const isFocusable = this.focusStateEnabled && !this.disabled;
 
         if (isFocusable) {
@@ -288,7 +289,7 @@ export default class Widget {
                 },
                 {
                     namespace,
-                    isFocusable,
+                    isFocusable: (el) => focusable(el),
                 }
             );
         }
