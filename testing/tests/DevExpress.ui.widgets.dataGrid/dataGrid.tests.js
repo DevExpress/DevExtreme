@@ -19215,8 +19215,7 @@ QUnit.test('The draggable row should have correct markup when defaultOptions is 
     }
 });
 
-// T827960
-QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady', function(assert) {
+QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady (T827960)', function(assert) {
     // arrange
     const onFocusedRowChangedSpy = sinon.spy();
     const dataGrid = createDataGrid({
