@@ -1304,7 +1304,7 @@ QUnit.module('events', {}, () => {
     QUnit.test('itemClick event - subscription using "on" method', function(assert) {
         const handler = sinon.spy();
         const dropDownButton = new DropDownButton('#dropDownButton2', {
-            items: [1, 2, 3],
+            items: [1, 2, 3]
         });
 
         dropDownButton.on('itemClick', handler);
