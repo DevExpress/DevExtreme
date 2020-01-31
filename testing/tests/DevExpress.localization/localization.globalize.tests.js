@@ -73,7 +73,7 @@ define(function(require, exports, module) {
         }
     }, function() {
 
-        QUnit.test('engine', assert => {
+        QUnit.test('engine', function(assert) {
             assert.equal(numberLocalization.engine(), 'globalize');
             assert.equal(dateLocalization.engine(), 'globalize');
             assert.equal(messageLocalization.engine(), 'globalize');
@@ -435,7 +435,7 @@ define(function(require, exports, module) {
         Globalize.locale('en');
     });
 
-    QUnit.test('getOpenXmlCurrencyFormat: check conversion for some cultures (T835933)', assert => {
+    QUnit.test('getOpenXmlCurrencyFormat: check conversion for some cultures (T835933)', function(assert) {
         try {
             Globalize.locale('en');
             assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '$#,##0{0}_);\\($#,##0{0}\\)');
@@ -469,7 +469,7 @@ define(function(require, exports, module) {
         Globalize.locale('en');
     });
 
-    QUnit.test('getCurrencySymbol and config.defaultCurrency', assert => {
+    QUnit.test('getCurrencySymbol and config.defaultCurrency', function(assert) {
         const originalConfig = config();
 
         try {

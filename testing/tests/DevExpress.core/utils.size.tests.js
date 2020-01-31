@@ -67,7 +67,8 @@ QUnit.test('invisible element in parent with fixed size', function(assert) {
 });
 
 QUnit.test('element with padding, marging, border without params', function(assert) {
-    let expected; let i;
+    let expected;
+    let i;
 
     expected = [
         { width: 80, height: 0 },
@@ -122,7 +123,8 @@ QUnit.test('element with padding, marging, border with params', function(assert)
 });
 
 QUnit.test('element with box-sizing = border-box', function(assert) {
-    let expected; let i;
+    let expected;
+    let i;
 
     expected = [
         { width: 100, height: 0 },
