@@ -5,7 +5,5 @@
     "plugins": [
         "jest"
     ],
-    "rules": {
-        "jest/no-truthy-falsy": "error"
-    }
+    "extends": ["plugin:jest/recommended"]
 }
