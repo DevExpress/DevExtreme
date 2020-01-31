@@ -189,29 +189,29 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
 
             /**
-             * @name dxTreeViewOptions.selectedItem
-             * @hidden
-             */
+            * @name dxTreeViewOptions.selectedItem
+            * @hidden
+            */
 
             /**
-             * @name dxTreeViewOptions.selectedItems
-             * @hidden
-             */
+            * @name dxTreeViewOptions.selectedItems
+            * @hidden
+            */
 
             /**
-             * @name dxTreeViewOptions.selectedItemKeys
-             * @hidden
-             */
+            * @name dxTreeViewOptions.selectedItemKeys
+            * @hidden
+            */
 
             /**
-             * @name dxTreeViewOptions.selectedIndex
-             * @hidden
-             */
+            * @name dxTreeViewOptions.selectedIndex
+            * @hidden
+            */
             /**
-             * @name dxTreeViewItem
-             * @inherits CollectionWidgetItem
-             * @type object
-             */
+            * @name dxTreeViewItem
+            * @inherits CollectionWidgetItem
+            * @type object
+            */
         });
     },
 
