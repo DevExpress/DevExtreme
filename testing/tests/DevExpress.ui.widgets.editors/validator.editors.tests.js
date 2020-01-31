@@ -154,8 +154,7 @@ QUnit.module('Editors Standard Adapter', {
 
 
     QUnit.test('Editor-specific validation should be kept', function(assert) {
-        const
-            handler = sinon.stub();
+        const handler = sinon.stub();
         const editor = this.fixture.createEditor({
             value: 'abc',
             isValid: false,

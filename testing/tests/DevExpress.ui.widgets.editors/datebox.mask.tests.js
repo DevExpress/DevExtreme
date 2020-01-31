@@ -490,7 +490,7 @@ module('Keyboard navigation', setupModule, () => {
         assert.strictEqual(this.instance.option('value').getMonth(), 9, 'month did not changed in the value');
 
         this.keyboard.press('enter');
-        assert.strictEqual(this.instance.option('value').getMonth(), 10, 'November 10 2012', 'month was changed in the value');
+        assert.strictEqual(this.instance.option('value').getMonth(), 10, 'month was changed in the value');
 
         this.keyboard.press('down');
         assert.strictEqual(this.$input.val(), 'November 9 2012', 'text was changed');
@@ -873,7 +873,7 @@ module('Search', setupModule, () => {
     test('Typing a letter in the year section should not lead to an infinite loop', function(assert) {
         this.instance.option('displayFormat', 'yyyy');
 
-        sinon.stub(this.instance, '_partIncrease').throws();
+        sinon.stub(this.instance, '_partIncrease').throws(new Error);
 
         try {
             this.keyboard.type('s');
@@ -1055,23 +1055,23 @@ module('Options changed', setupModule, () => {
     });
 
     test('Internal _maskValue and public value should be different objects', function(assert) {
-        assert.ok(this.instance._maskValue !== this.instance.option('value'), 'objects are different on init');
+        assert.notStrictEqual(this.instance._maskValue, this.instance.option('value'), 'objects are different on init');
 
         this.instance.option('value', new Date(2012, 1, 2));
-        assert.ok(this.instance._maskValue !== this.instance.option('value'), 'objects are different when setting by value');
+        assert.notStrictEqual(this.instance._maskValue, this.instance.option('value'), 'objects are different when setting by value');
 
         this.keyboard.press('up').press('esc');
-        assert.ok(this.instance._maskValue !== this.instance.option('value'), 'objects are different after revert changes');
+        assert.notStrictEqual(this.instance._maskValue, this.instance.option('value'), 'objects are different after revert changes');
 
         this.keyboard.press('5').press('enter');
-        assert.ok(this.instance._maskValue !== this.instance.option('value'), 'objects are different after enter');
+        assert.notStrictEqual(this.instance._maskValue, this.instance.option('value'), 'objects are different after enter');
 
         this.keyboard.press('4');
         this.$input.trigger('focusout');
-        assert.ok(this.instance._maskValue !== this.instance.option('value'), 'objects are different after focusout');
+        assert.notStrictEqual(this.instance._maskValue, this.instance.option('value'), 'objects are different after focusout');
 
         this.keyboard.press('7').change();
-        assert.ok(this.instance._maskValue !== this.instance.option('value'), 'objects are different after change event');
+        assert.notStrictEqual(this.instance._maskValue, this.instance.option('value'), 'objects are different after change event');
     });
 
     test('performance - value change should not lead to recreate regexp and format pattern', function(assert) {
