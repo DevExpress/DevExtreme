@@ -284,6 +284,7 @@ export default class Widget {
     keyboardEffect() {
         const hasKeyboardEventHandler = !!this.onKeyboardHandled;
         const shouldAttach = this.focusStateEnabled || hasKeyboardEventHandler;
+        let id = null;
 
         if (shouldAttach) {
             const keyboardHandler = (options: any) => {
@@ -302,13 +303,13 @@ export default class Widget {
                 return true;
             };
 
-            keyboard.on(
+            id = keyboard.on(
                 this.widgetRef,
                 this.widgetRef,
                 opts => keyboardHandler(opts),
             );
         }
 
-        return () => keyboard.off(this._keyboardListenerId);
+        return () => keyboard.off(id);
     }
 }
