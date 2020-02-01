@@ -3,6 +3,7 @@ import Class from 'core/class';
 import ValidationEngine from 'ui/validation_engine';
 import Validator from 'ui/validator';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import '../../helpers/ignoreQuillTimers.js';
 
 import 'common.css!';
 import 'generic_light.css!';
