@@ -40,7 +40,7 @@ const resourceData = [
     }
 ];
 
-var promiseData = {
+const promiseData = {
     resources: $.Deferred(),
     load: function() {
         promiseData.resources.resolve(testData.rooms);

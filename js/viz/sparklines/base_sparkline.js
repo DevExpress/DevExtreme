@@ -1,18 +1,39 @@
 const eventsEngine = require('../../events/core/events_engine');
 const domAdapter = require('../../core/dom_adapter');
-const ready = require('../../core/utils/ready_callbacks').add;
 const isFunction = require('../../core/utils/type').isFunction;
 const BaseWidget = require('../core/base_widget');
 const extend = require('../../core/utils/extend').extend;
+const addNamespace = require('../../events/utils').addNamespace;
+const pointerEvents = require('../../events/pointer');
+const pointInCanvas = require('../core/utils').pointInCanvas;
 
 const DEFAULT_LINE_SPACING = 2;
-const DEFAULT_EVENTS_DELAY = 100;
+const EVENT_NS = 'sparkline-tooltip';
+const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
 
-const eventUtils = require('../../events/utils');
 const translator2DModule = require('../translators/translator2d');
 
 const _extend = extend;
+const _floor = Math.floor;
 const _noop = require('../../core/utils/common').noop;
+
+function inCanvas({ left, top, bottom, right, width, height }, x, y) {
+    return pointInCanvas({
+        left,
+        top,
+        right: width - right,
+        bottom: height - bottom,
+        width,
+        height
+    }, x, y);
+}
+
+function pointerHandler({ data }) {
+    const that = data.widget;
+
+    that._enableOutHandler();
+    that._showTooltip();
+}
 
 function generateDefaultCustomizeTooltipCallback(fontOptions, rtlEnabled) {
     const lineSpacing = fontOptions.lineSpacing;
@@ -148,54 +169,64 @@ const BaseSparkline = BaseWidget.inherit({
         };
     },
 
-    _initTooltipEvents: function() {
-        let that = this;
-        const data = { widget: that };
+    _initTooltipEvents() {
+        const data = { widget: this };
 
-        that._showTooltipCallback = function() {
-            let tooltip;
+        this._renderer.root.off('.' + EVENT_NS)
+            .on(POINTER_ACTION, data, pointerHandler);
+    },
 
-            if(!that._tooltipShown) {
-                that._tooltipShown = true;
-                tooltip = that._getTooltip();
-                tooltip.isEnabled() && that._tooltip.show(that._getTooltipData(), that._getTooltipCoords(), {});
-            }
-            ///#DEBUG
-            that._DEBUG_showCallback && that._DEBUG_showCallback();
-            ///#ENDDEBUG
-        };
-        that._hideTooltipCallback = function() {
-            ///#DEBUG
-            const tooltipWasShown = that._tooltipShown;
-            ///#ENDDEBUG
-            that._hideTooltipTimeout = null;
-            if(that._tooltipShown) {
-                that._tooltipShown = false;
-                that._tooltip.hide();
-            }
-            ///#DEBUG
-            that._DEBUG_hideCallback && that._DEBUG_hideCallback(tooltipWasShown);
-            ///#ENDDEBUG
-        };
-        that._disposeCallbacks = function() {
-            that = that._showTooltipCallback = that._hideTooltipCallback = that._disposeCallbacks = null;
-        };
-        that._tooltipTracker.on(mouseEvents, data).on(touchEvents, data);
+    _showTooltip() {
+        const that = this;
+        let tooltip;
 
-        // for ie11
-        that._tooltipTracker.on(menuEvents);
+        if(!that._tooltipShown) {
+            that._tooltipShown = true;
+            tooltip = that._getTooltip();
+            tooltip.isEnabled() && that._tooltip.show(that._getTooltipData(), that._getTooltipCoords(), {});
+        }
+    },
+
+    _hideTooltip() {
+        if(this._tooltipShown) {
+            this._tooltipShown = false;
+            this._tooltip.hide();
+        }
     },
 
     _stopCurrentHandling() {
         this._hideTooltip();
     },
 
-    _disposeTooltipEvents: function() {
+    _enableOutHandler() {
         const that = this;
-        clearTimeout(that._hideTooltipTimeout);
+        if(that._outHandler) {
+            return;
+        }
 
-        that._tooltipTracker.off();
-        that._disposeCallbacks();
+        const handler = ({ pageX, pageY }) =>{
+            const { left, top } = that._renderer.getRootOffset();
+            const x = _floor(pageX - left);
+            const y = _floor(pageY - top);
+            if(!inCanvas(that._canvas, x, y)) {
+                that._hideTooltip();
+                that._disableOutHandler();
+            }
+        };
+
+        eventsEngine.on(domAdapter.getDocument(), POINTER_ACTION, handler);
+        this._outHandler = handler;
+    },
+
+    _disableOutHandler() {
+        this._outHandler && eventsEngine.off(domAdapter.getDocument(), POINTER_ACTION, this._outHandler);
+        this._outHandler = null;
+    },
+
+    _disposeTooltipEvents: function() {
+        this._tooltipTracker.off();
+        this._disableOutHandler();
+        this._renderer.root.off('.' + EVENT_NS);
     },
 
     _getTooltip: function() {
@@ -210,99 +241,7 @@ const BaseSparkline = BaseWidget.inherit({
     }
 });
 
-// for ie11
-var menuEvents = {
-    'contextmenu.sparkline-tooltip': function(event) {
-        if(eventUtils.isTouchEvent(event) || eventUtils.isPointerEvent(event)) {
-            event.preventDefault();
-        }
-    },
-    'MSHoldVisual.sparkline-tooltip': function(event) {
-        event.preventDefault();
-    }
-};
-
-var mouseEvents = {
-    'mouseover.sparkline-tooltip': function(event) {
-        isPointerDownCalled = false;
-        const widget = event.data.widget;
-        widget._x = event.pageX;
-        widget._y = event.pageY;
-        widget._tooltipTracker.off(mouseMoveEvents).on(mouseMoveEvents, event.data);
-        widget._showTooltip();
-    },
-    'mouseout.sparkline-tooltip': function(event) {
-        if(isPointerDownCalled) {
-            return;
-        }
-        const widget = event.data.widget;
-        widget._tooltipTracker.off(mouseMoveEvents);
-        widget._hideTooltip(DEFAULT_EVENTS_DELAY);
-    }
-};
-
-var mouseMoveEvents = {
-    'mousemove.sparkline-tooltip': function(event) {
-        const widget = event.data.widget;
-        widget._x = event.pageX;
-        widget._y = event.pageY;
-        widget._showTooltip();
-    }
-};
-
-let active_touch_tooltip_widget = null;
-const touchStartTooltipProcessing = function(event) {
-    let widget = active_touch_tooltip_widget;
-    if(widget && widget !== event.data.widget) {
-        widget._hideTooltip(DEFAULT_EVENTS_DELAY);
-    }
-    widget = active_touch_tooltip_widget = event.data.widget;
-    widget._showTooltip();
-    widget._touch = true;
-};
-const touchStartDocumentProcessing = function() {
-    const widget = active_touch_tooltip_widget;
-    if(widget) {
-        if(!widget._touch) {
-            widget._hideTooltip(DEFAULT_EVENTS_DELAY);
-            active_touch_tooltip_widget = null;
-        }
-        widget._touch = null;
-    }
-};
-const touchEndDocumentProcessing = function() {
-    const widget = active_touch_tooltip_widget;
-    if(widget) {
-        widget._hideTooltip(DEFAULT_EVENTS_DELAY);
-        active_touch_tooltip_widget = null;
-    }
-};
-var isPointerDownCalled = false;
-
-
-var touchEvents = {
-    'pointerdown.sparkline-tooltip': touchStartTooltipProcessing,
-    'touchstart.sparkline-tooltip': touchStartTooltipProcessing
-};
-ready(function() {
-    eventsEngine.subscribeGlobal(domAdapter.getDocument(), {
-        'pointerdown.sparkline-tooltip': function() {
-            isPointerDownCalled = true;
-            touchStartDocumentProcessing();
-        },
-        'touchstart.sparkline-tooltip': touchStartDocumentProcessing,
-        'pointerup.sparkline-tooltip': touchEndDocumentProcessing,
-        'touchend.sparkline-tooltip': touchEndDocumentProcessing
-    });
-});
-
 module.exports = BaseSparkline;
-
-///#DEBUG
-module.exports._DEBUG_reset = function() {
-    active_touch_tooltip_widget = null;
-};
-///#ENDDEBUG
 
 // PLUGINS_SECTION
 BaseSparkline.addPlugin(require('../core/tooltip').plugin);
@@ -331,34 +270,6 @@ BaseSparkline.prototype._setTooltipOptions = function() {
         customizeTooltip: generateCustomizeTooltipCallback(options.customizeTooltip, options.font, this.option('rtlEnabled')),
         enabled: options.enabled && this._isTooltipEnabled()
     }));
-};
-
-BaseSparkline.prototype._showTooltip = function() {
-    const that = this;
-
-    ///#DEBUG
-    ++that._DEBUG_clearHideTooltipTimeout;
-    ///#ENDDEBUG
-    clearTimeout(that._hideTooltipTimeout);
-    that._hideTooltipTimeout = null;
-    that._showTooltipCallback();
-};
-
-BaseSparkline.prototype._hideTooltip = function(delay) {
-    const that = this;
-
-    ///#DEBUG
-    ++that._DEBUG_clearShowTooltipTimeout;
-    ///#ENDDEBUG
-    clearTimeout(that._hideTooltipTimeout);
-    if(delay) {
-        ///#DEBUG
-        ++that._DEBUG_hideTooltipTimeoutSet;
-        ///#ENDDEBUG
-        that._hideTooltipTimeout = setTimeout(that._hideTooltipCallback, delay);
-    } else {
-        that._hideTooltipCallback();
-    }
 };
 
 // PLUGINS_SECTION

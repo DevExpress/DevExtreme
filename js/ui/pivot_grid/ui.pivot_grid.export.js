@@ -63,7 +63,6 @@ exports.ExportMixin = extend({}, exportMixin, {
         let cellIndex;
         let rowIndex;
         let correctedCellsInfo = cellsInfo;
-        let sourceItems;
         const rowsLength = this._getLength(rowsInfoItems);
         const headerRowsCount = columnsInfo.length;
 
@@ -73,7 +72,7 @@ exports.ExportMixin = extend({}, exportMixin, {
                 correctedCellsInfo = this._correctCellsInfoItemLengths(cellsInfo, cellInfoItemLength);
             }
         }
-        sourceItems = columnsInfo.concat(correctedCellsInfo);
+        const sourceItems = columnsInfo.concat(correctedCellsInfo);
 
         for(rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex++) {
             for(cellIndex = rowsInfoItems[rowIndex].length - 1; cellIndex >= 0; cellIndex--) {

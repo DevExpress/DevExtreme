@@ -1,26 +1,25 @@
-const $ = require('../../core/renderer');
-const AsyncTemplateMixin = require('../shared/async_template_mixin');
-const eventsEngine = require('../../events/core/events_engine');
-const Guid = require('../../core/guid');
-const registerComponent = require('../../core/component_registrator');
-const commonUtils = require('../../core/utils/common');
-const domUtils = require('../../core/utils/dom');
-const focused = require('../widget/selectors').focused;
-const each = require('../../core/utils/iterator').each;
-const isDefined = require('../../core/utils/type').isDefined;
-const extend = require('../../core/utils/extend').extend;
-const getPublicElement = require('../../core/utils/dom').getPublicElement;
-const errors = require('../widget/ui.errors');
-const positionUtils = require('../../animation/position');
-const getDefaultAlignment = require('../../core/utils/position').getDefaultAlignment;
-const DropDownButton = require('./ui.drop_down_button').default;
-const messageLocalization = require('../../localization/message');
-const eventUtils = require('../../events/utils');
-const TextBox = require('../text_box');
-const clickEvent = require('../../events/click');
-const devices = require('../../core/devices');
-const FunctionTemplate = require('../../core/templates/function_template').FunctionTemplate;
-const Popup = require('../popup');
+import $ from '../../core/renderer';
+import AsyncTemplateMixin from '../shared/async_template_mixin';
+import eventsEngine from '../../events/core/events_engine';
+import Guid from '../../core/guid';
+import registerComponent from '../../core/component_registrator';
+import { noop, splitPair } from '../../core/utils/common';
+import { focused } from '../widget/selectors';
+import { each } from '../../core/utils/iterator';
+import { isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { getPublicElement } from '../../core/utils/dom';
+import errors from '../widget/ui.errors';
+import { setup as setupPosition } from '../../animation/position';
+import { getDefaultAlignment } from '../../core/utils/position';
+import DropDownButton from './ui.drop_down_button';
+import { format as formatMessage } from '../../localization/message';
+import { addNamespace } from '../../events/utils';
+import TextBox from '../text_box';
+import clickEvent from '../../events/click';
+import devices from '../../core/devices';
+import { FunctionTemplate } from '../../core/templates/function_template';
+import Popup from '../popup';
 
 const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
@@ -136,8 +135,8 @@ const DropDownEditor = TextBox.inherit({
             dropDownOptions: {},
             popupPosition: this._getDefaultPopupPosition(),
             onPopupInitialized: null,
-            applyButtonText: messageLocalization.format('OK'),
-            cancelButtonText: messageLocalization.format('Cancel'),
+            applyButtonText: formatMessage('OK'),
+            cancelButtonText: formatMessage('Cancel'),
             buttonsLocation: 'default',
             showPopupTitle: false,
             useHiddenSubmitElement: false
@@ -179,8 +178,8 @@ const DropDownEditor = TextBox.inherit({
         });
     },
 
-    _getDefaultPopupPosition: function() {
-        const position = getDefaultAlignment();
+    _getDefaultPopupPosition: function(isRtlEnabled) {
+        const position = getDefaultAlignment(isRtlEnabled);
 
         return {
             offset: { h: 0, v: -1 },
@@ -212,7 +211,15 @@ const DropDownEditor = TextBox.inherit({
         this.callBase();
         this._initVisibilityActions();
         this._initPopupInitializedAction();
+        this._updatePopupPosition(this.option('rtlEnabled'));
         this._initInnerOptionCache('dropDownOptions');
+    },
+
+    _updatePopupPosition: function(isRtlEnabled) {
+        const { my, at } = this._getDefaultPopupPosition(isRtlEnabled);
+        const currentPosition = this.option('popupPosition');
+
+        this.option('popupPosition', extend({}, currentPosition, { my, at }));
     },
 
     _initVisibilityActions: function() {
@@ -339,7 +346,7 @@ const DropDownEditor = TextBox.inherit({
 
         fieldTemplate.render({
             model: data,
-            container: domUtils.getPublicElement($templateWrapper),
+            container: getPublicElement($templateWrapper),
             onRendered: () => {
                 const $input = this._input();
 
@@ -372,24 +379,23 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _renderOpenHandler: function() {
-        const that = this;
-        const $inputWrapper = that._inputWrapper();
-        const eventName = eventUtils.addNamespace(clickEvent.name, that.NAME);
-        const openOnFieldClick = that.option('openOnFieldClick');
+        const $inputWrapper = this._inputWrapper();
+        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const openOnFieldClick = this.option('openOnFieldClick');
 
         eventsEngine.off($inputWrapper, eventName);
-        eventsEngine.on($inputWrapper, eventName, that._getInputClickHandler(openOnFieldClick));
-        that.$element().toggleClass(DROP_DOWN_EDITOR_FIELD_CLICKABLE, openOnFieldClick);
+        eventsEngine.on($inputWrapper, eventName, this._getInputClickHandler(openOnFieldClick));
+        this.$element().toggleClass(DROP_DOWN_EDITOR_FIELD_CLICKABLE, openOnFieldClick);
 
         if(openOnFieldClick) {
-            that._openOnFieldClickAction = that._createAction(that._openHandler.bind(that));
+            this._openOnFieldClickAction = this._createAction(this._openHandler.bind(this));
         }
     },
 
     _attachFocusOutHandler: function() {
         if(isIOs) {
             this._detachFocusOutEvents();
-            eventsEngine.on(this._inputWrapper(), eventUtils.addNamespace('focusout', this.NAME), function(event) {
+            eventsEngine.on(this._inputWrapper(), addNamespace('focusout', this.NAME), (event) => {
                 const newTarget = event.relatedTarget;
                 const popupWrapper = this.content ? $(this.content()).closest('.' + DROP_DOWN_EDITOR_OVERLAY) : this._$popup;
                 if(newTarget && this.option('opened')) {
@@ -398,20 +404,18 @@ const DropDownEditor = TextBox.inherit({
                         this.close();
                     }
                 }
-            }.bind(this));
+            });
         }
     },
 
     _detachFocusOutEvents: function() {
-        isIOs && eventsEngine.off(this._inputWrapper(), eventUtils.addNamespace('focusout', this.NAME));
+        isIOs && eventsEngine.off(this._inputWrapper(), addNamespace('focusout', this.NAME));
     },
 
     _getInputClickHandler: function(openOnFieldClick) {
-        const that = this;
-
         return openOnFieldClick ?
-            function(e) { that._executeOpenAction(e); } :
-            function(e) { that._focusInput(); };
+            (e) => { this._executeOpenAction(e); } :
+            (e) => { this._focusInput(); };
     },
 
     _openHandler: function() {
@@ -501,7 +505,7 @@ const DropDownEditor = TextBox.inherit({
         this.setAria('id', this._popupContentId, $popupContent);
     },
 
-    _contentReadyHandler: commonUtils.noop,
+    _contentReadyHandler: noop,
 
     _popupConfig: function() {
 
@@ -534,16 +538,16 @@ const DropDownEditor = TextBox.inherit({
             return;
         }
 
-        return (function(e) {
+        return (e) => {
             this._popupInitializedAction({ popup: e.component });
-        }).bind(this);
+        };
     },
 
     _popupPositionedHandler: function(e) {
         e.position && this._popup.overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
     },
 
-    _popupShowingHandler: commonUtils.noop,
+    _popupShowingHandler: noop,
 
     _popupHidingHandler: function() {
         this.option('opened', false);
@@ -568,8 +572,8 @@ const DropDownEditor = TextBox.inherit({
         let positionRequest = 'below';
 
         if(this._popup && this._popup.option('visible')) {
-            const myTop = positionUtils.setup(this.$element()).top;
-            const popupTop = positionUtils.setup(this._popup.$content()).top;
+            const { top: myTop } = setupPosition(this.$element());
+            const { top: popupTop } = setupPosition(this._popup.$content());
 
             positionRequest = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'below' : 'above';
         }
@@ -593,7 +597,7 @@ const DropDownEditor = TextBox.inherit({
         $popupContent.empty();
 
         contentTemplate.render({
-            container: domUtils.getPublicElement($popupContent),
+            container: getPublicElement($popupContent),
             model: templateData
         });
     },
@@ -693,7 +697,7 @@ const DropDownEditor = TextBox.inherit({
         const resultConfig = buttonsConfig;
 
         if(buttonsLocation !== 'default') {
-            const position = commonUtils.splitPair(buttonsLocation);
+            const position = splitPair(buttonsLocation);
 
             each(resultConfig, function(_, element) {
                 extend(element, {
@@ -716,7 +720,7 @@ const DropDownEditor = TextBox.inherit({
         this.option('focusStateEnabled') && this.focus();
     },
 
-    _updatePopupWidth: commonUtils.noop,
+    _updatePopupWidth: noop,
 
     _popupOptionChanged: function(args) {
         const options = this._getOptionsFromContainer(args);
@@ -804,6 +808,10 @@ const DropDownEditor = TextBox.inherit({
                 }
 
                 this._renderSubmitElement();
+                break;
+            case 'rtlEnabled':
+                this._updatePopupPosition(args.value);
+                this.callBase(args);
                 break;
             default:
                 this.callBase(args);

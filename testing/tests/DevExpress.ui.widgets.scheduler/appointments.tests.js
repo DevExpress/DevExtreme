@@ -758,7 +758,7 @@ QUnit.test('onAppointmentDblClick should fires when item is dbl clicked', functi
         }
     });
 
-    var $item = $('.dx-scheduler-appointment').eq(0);
+    const $item = $('.dx-scheduler-appointment').eq(0);
     $($item).trigger(dblclickEvent.name);
 });
 
@@ -1041,13 +1041,11 @@ QUnit.test('Focus method should call focus on appointment', function(assert) {
     const focusSpy = sinon.spy(eventsEngine, 'trigger').withArgs(sinon.match(function($element) {
         return config().useJQuery ? $element.get(0) === focusedElement : $element === focusedElement;
     }), 'focus');
-    const appointmentFocusedStub = sinon.stub(this.instance, 'notifyObserver').withArgs('appointmentFocused');
 
     this.instance.focus();
 
     this.clock.tick();
     assert.ok(focusSpy.called, 'focus is called');
-    assert.ok(appointmentFocusedStub.called, 'appointmentFocused is fired');
     sinon.restore();
 
     eventsEngine.trigger = initialTrigger;

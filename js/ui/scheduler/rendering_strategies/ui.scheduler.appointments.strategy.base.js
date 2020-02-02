@@ -7,6 +7,8 @@ import { isNumeric } from '../../../core/utils/type';
 import typeUtils from '../../../core/utils/type';
 import themes from '../../themes';
 
+import utils from '../utils';
+
 const toMs = dateUtils.dateToMilliseconds;
 
 const APPOINTMENT_MIN_SIZE = 2;
@@ -535,7 +537,7 @@ class BaseRenderingStrategy {
     }
 
     _adjustDurationByDaylightDiff(duration, startDate, endDate) {
-        const daylightDiff = this.instance.fire('getDaylightOffset', startDate, endDate);
+        const daylightDiff = utils.getDaylightOffset(startDate, endDate);
         return this._needAdjustDuration(daylightDiff) ? this._calculateDurationByDaylightDiff(duration, daylightDiff) : duration;
     }
 

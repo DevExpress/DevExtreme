@@ -8,6 +8,7 @@ const isDate = require('../../core/utils/type').isDate;
 const extend = require('../../core/utils/extend').extend;
 const dateUtils = require('./ui.date_utils');
 const dateLocalization = require('../../localization/date');
+const dateSerialization = require('../../core/utils/date_serialization');
 
 const DATE_FORMAT = 'date';
 
@@ -234,7 +235,11 @@ const ListStrategy = DateBoxStrategy.inherit({
         const day = itemData.getDate();
 
         if(date) {
-            date = new Date(date);
+            if(this.dateBox.option('dateSerializationFormat')) {
+                date = dateSerialization.deserializeDate(date);
+            } else {
+                date = new Date(date);
+            }
 
             date.setHours(hours);
             date.setMinutes(minutes);
@@ -246,7 +251,7 @@ const ListStrategy = DateBoxStrategy.inherit({
             date = new Date(year, month, day, hours, minutes, 0, 0);
         }
 
-        this.dateBoxValue(date);
+        this.dateBoxValue(date, e.event);
     },
 
     attachKeyboardEvents: function(keyboardProcessor) {

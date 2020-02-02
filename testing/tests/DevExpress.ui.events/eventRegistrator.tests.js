@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const registerEvent = require('events/core/event_registrator');
-const eventsEngine = require('events/core/events_engine');
-const registerEventCallbacks = require('events/core/event_registrator_callbacks');
-const Class = require('core/class');
+import $ from 'jquery';
+import registerEvent from 'events/core/event_registrator';
+import eventsEngine from 'events/core/events_engine';
+import registerEventCallbacks from 'events/core/event_registrator_callbacks';
+import Class from 'core/class';
 
-const eventHelper = require('../../helpers/eventHelper.js');
+import eventHelper from '../../helpers/eventHelper.js';
 
 registerEventCallbacks.add(function(name, eventObject) {
     eventHelper.special[name] = eventObject;
@@ -78,11 +78,10 @@ QUnit.test('\'delegateType\' property', function(assert) {
 QUnit.test('\'setup\' method', function(assert) {
     const data = {};
     const handler = function() { };
-    let LOG;
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', data, handler);
 
-    LOG = this.testEventImplementer.LOG.setup;
+    const LOG = this.testEventImplementer.LOG.setup;
     assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
     assert.equal(LOG.arguments.length, 4, 'arguments count');
     assert.strictEqual(LOG.arguments[0], this.element[0], 'element');
@@ -94,13 +93,11 @@ QUnit.test('\'setup\' method', function(assert) {
 QUnit.test('\'teardown\' method', function(assert) {
     const data = {};
     const handler = function() { };
-    let LOG;
-
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', data, handler);
     eventsEngine.off(this.element, 'dxtestevent.test1.test2');
 
-    LOG = this.testEventImplementer.LOG.teardown;
+    const LOG = this.testEventImplementer.LOG.teardown;
 
     assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
     assert.equal(LOG.arguments.length, 3, 'arguments count');
@@ -112,11 +109,10 @@ QUnit.test('\'teardown\' method', function(assert) {
 QUnit.test('\'add\' method', function(assert) {
     const data = {};
     const handler = function() { };
-    let LOG;
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', '.some', data, handler);
 
-    LOG = this.testEventImplementer.LOG.add;
+    const LOG = this.testEventImplementer.LOG.add;
 
     assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
     assert.equal(LOG.arguments.length, 2, 'arguments count');
@@ -132,12 +128,11 @@ QUnit.test('\'add\' method', function(assert) {
 QUnit.test('\'remove\' method', function(assert) {
     const data = {};
     const handler = function() { };
-    let LOG;
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', '.some', data, handler);
     eventsEngine.off(this.element, 'dxtestevent.test1.test2', handler);
 
-    LOG = this.testEventImplementer.LOG.add;
+    const LOG = this.testEventImplementer.LOG.add;
 
     assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
     assert.equal(LOG.arguments.length, 2, 'arguments count');
@@ -154,12 +149,11 @@ QUnit.test('\'trigger\' method', function(assert) {
     const data = {};
     const handler = function() { };
     const event = eventsEngine.Event('dxtestevent');
-    let LOG;
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', handler);
     eventsEngine.trigger(this.element, event, data);
 
-    LOG = this.testEventImplementer.LOG.trigger;
+    const LOG = this.testEventImplementer.LOG.trigger;
     assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
     assert.equal(LOG.arguments.length, 3, 'arguments count');
     assert.strictEqual(LOG.arguments[0], this.element[0], 'element');
@@ -171,12 +165,11 @@ QUnit.test('\'_default\' method', function(assert) {
     const data = {};
     const handler = function() { };
     const event = eventsEngine.Event('dxtestevent');
-    let LOG;
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', data, handler);
     eventsEngine.trigger(this.element, event, data);
 
-    LOG = this.testEventImplementer.LOG._default;
+    const LOG = this.testEventImplementer.LOG._default;
     assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
     assert.equal(LOG.arguments.length, 3, 'arguments count');
     assert.strictEqual(LOG.arguments[1], event, 'event');
@@ -187,12 +180,11 @@ QUnit.test('\'handle\' method', function(assert) {
     const data = {};
     const handler = function() { };
     const event = eventsEngine.Event('dxtestevent');
-    let LOG;
 
     eventsEngine.on(this.element, 'dxtestevent.test1.test2', data, handler);
     eventsEngine.trigger(this.element, event, data);
 
-    LOG = this.testEventImplementer.LOG.handle;
+    const LOG = this.testEventImplementer.LOG.handle;
     assert.strictEqual(LOG.context, this.testEventImplementer, 'context');
     assert.equal(LOG.arguments.length, 3, 'arguments count');
     assert.strictEqual(LOG.arguments[0], this.element[0], 'element');

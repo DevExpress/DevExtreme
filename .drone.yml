@@ -16,9 +16,11 @@ pipeline:
 
   build:
     image: devexpress/devextreme-build:19_2
+    environment:
+      - TRAVIS=true    
     commands:
       - ./drone-cache.sh restore
-      - ./docker-ci.sh
+      - script -qefc ./docker-ci.sh /dev/null
       - ./drone-cache.sh rebuild
 
 matrix:
@@ -45,7 +47,7 @@ matrix:
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.scheduler }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: viz }
     - { TARGET: test_functional, COMPONENT: dataGrid }
-    - { TARGET: test_functional, COMPONENT: scheduler }
+    - { TARGET: test_functional, COMPONENT: scheduler, QUARANTINE_MODE: true }
     - { TARGET: test_functional, COMPONENT: editors }
     - { TARGET: test_functional, COMPONENT: navigation }
     - { TARGET: test_themebuilder }

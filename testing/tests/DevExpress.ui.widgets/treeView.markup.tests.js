@@ -389,14 +389,13 @@ QUnit.module('markup', {
     });
 
     QUnit.test('Render Search editor', function(assert) {
-        let $searchEditor;
         const $treeView = initTree({
             items: this.treeItems,
             searchEnabled: true,
             searchValue: '2'
         });
 
-        $searchEditor = $treeView.children().first();
+        const $searchEditor = $treeView.children().first();
         assert.ok($searchEditor.hasClass('dx-treeview-search'), 'has search editor');
         assert.strictEqual($searchEditor.dxTextBox('instance').option('value'), '2', 'editor value');
     });

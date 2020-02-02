@@ -31,10 +31,10 @@ const createMenu = (options) => {
 const toSelector = cssClass => '.' + cssClass;
 
 QUnit.module('Menu rendering', {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
     }
 }, () => {
@@ -75,11 +75,11 @@ QUnit.module('Menu rendering', {
 });
 
 QUnit.module('Menu - selection', {
-    beforeEach: () => {
+    beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         this.clock.restore();
         fx.off = false;
     }
@@ -95,10 +95,10 @@ QUnit.module('Menu - selection', {
 });
 
 QUnit.module('Menu with templates', {
-    beforeEach: () => {
+    beforeEach: function() {
         fx.off = true;
     },
-    afterEach: () => {
+    afterEach: function() {
         fx.off = false;
     }
 }, () => {
@@ -130,7 +130,7 @@ QUnit.module('Menu with templates', {
 let helper;
 
 QUnit.module('Aria accessibility', {
-    beforeEach: () => {
+    beforeEach: function() {
         helper = new ariaAccessibilityTestHelper({
             createWidget: ($element, options) => new Menu($element,
                 $.extend({
@@ -138,17 +138,17 @@ QUnit.module('Aria accessibility', {
                 }, options))
         });
     },
-    afterEach: () => {
+    afterEach: function() {
         helper.$widget.remove();
     }
 }, () => {
-    QUnit.test('Items: []', () => {
+    QUnit.test('Items: []', function() {
         helper.createWidget({ items: [] });
         helper.checkAttributes(helper.$widget, { role: 'menubar', tabindex: '0' }, 'widget');
         helper.checkItemsAttributes([], { role: 'menuitem', tabindex: '-1' });
     });
 
-    QUnit.test('Items: [{items[{}, {}], {}] -> set focusedElement: items[0]', () => {
+    QUnit.test('Items: [{items[{}, {}], {}] -> set focusedElement: items[0]', function() {
         helper.createWidget({
             items: [{ text: 'Item1_1', items: [{ text: 'Item2_1' }, { text: 'Item2_2' }] }, { text: 'item1_2' }]
         });

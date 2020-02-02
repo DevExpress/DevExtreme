@@ -74,6 +74,7 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 import themes from 'ui/themes';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
+import 'ui/scroll_view';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -5913,6 +5914,21 @@ QUnit.test('max-height from styles', function(assert) {
     assert.ok($dataGrid.find('.dx-datagrid').height() < 400, 'height is less then max-height');
 });
 
+// T849902
+QUnit.test('max-height as float number from styles', function(assert) {
+    // arrange, act
+    const dataGrid = $('#dataGrid').css('maxHeight', '100.2px').dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+        columns: ['field1']
+    }).dxDataGrid('instance');
+
+    // assert
+    const scrollable = dataGrid.getScrollable();
+    assert.ok(scrollable, 'scrollable is created');
+    assert.ok(scrollable.$content().height() > scrollable._container().height(), 'scroll is exists');
+});
+
 // T820186
 QUnit.test('width 100% should be applied if container width is zero on render', function(assert) {
     // arrange
@@ -7010,7 +7026,7 @@ QUnit.test('Total summary row should be rendered if row rendering mode is virtua
 
     const $footerView = $dataGrid.find('.dx-datagrid-total-footer');
     assert.ok($footerView.is(':visible'), 'footer view is visible');
-    assert.ok($footerView.find('.dx-row').length, 1, 'one footer row is rendered');
+    assert.strictEqual($footerView.find('.dx-row').length, 1, 'one footer row is rendered');
 });
 
 QUnit.test('Keep horizontal scroller position after refresh with native scrolling', function(assert) {
@@ -8229,7 +8245,7 @@ QUnit.test('updateDimensions during grouping when fixed to right column exists',
 
     // assert
     assert.ok(dataGrid.isReady(), 'dataGrid is ready');
-    assert.ok($(dataGrid.$element()).find('.dx-group-row').length, 1, 'one grouped row is rendered');
+    assert.strictEqual($(dataGrid.$element()).find('.dx-group-row').length, 2, 'grouped rows are rendered');
 });
 
 // T334530
@@ -9132,6 +9148,47 @@ QUnit.test('Editor should be rendered for hidden columns while editing in row mo
     });
 });
 
+QUnit.test('Scrollable should have the correct padding when the grid inside the ScrollView', function(assert) {
+    // arrange, act
+    $('#container').dxScrollView({
+        showScrollbar: 'always'
+    });
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 1 }],
+        columnAutoWidth: true,
+        scrolling: {
+            showScrollbar: 'always'
+        }
+    });
+    this.clock.tick(30);
+
+    // assert
+    const $scrollableContent = $(dataGrid.getScrollable().content());
+    assert.strictEqual($scrollableContent.css('paddingRight'), '0px', 'paddingRight');
+    assert.strictEqual($scrollableContent.css('paddingLeft'), '0px', 'paddingLeft');
+});
+
+QUnit.test('Scrollable should have the correct padding when the grid inside the ScrollView in RTL', function(assert) {
+    // arrange, act
+    $('#container').dxScrollView({
+        showScrollbar: 'always'
+    });
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 1 }],
+        columnAutoWidth: true,
+        rtlEnabled: true,
+        scrolling: {
+            showScrollbar: 'always'
+        }
+    });
+    this.clock.tick(30);
+
+    // assert
+    const $scrollableContent = $(dataGrid.getScrollable().content());
+    assert.strictEqual($scrollableContent.css('paddingRight'), '0px', 'paddingRight');
+    assert.strictEqual($scrollableContent.css('paddingLeft'), '0px', 'paddingLeft');
+});
+
 QUnit.module('Virtual row rendering', baseModuleConfig);
 
 QUnit.test('editing should starts correctly if scrolling mode is virtual', function(assert) {
@@ -9550,6 +9607,42 @@ QUnit.testInActiveWindow('Focus should not return to cell from filter row after 
     assert.ok($('.dx-datagrid-filter-row .dx-texteditor-input').is(':focus'), 'filter row\'s cell is focused');
 });
 
+function createRemoteDataSourceWithGroupPaging(arrayStore, key) {
+    return {
+        key,
+        load: function(options) {
+            const d = $.Deferred();
+            setTimeout(function() {
+                const result = {};
+                arrayStore.load(options).done(function(data) {
+                    result.data = data;
+
+                    if(options.group) {
+                        data.forEach(item => {
+                            item.count = item.items.length;
+                            item.items = null;
+                        });
+                    }
+                });
+                if(options.requireGroupCount) {
+                    arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
+                        result.groupCount = groupedData.length;
+                    });
+                }
+                if(options.requireTotalCount) {
+                    arrayStore.totalCount(options).done(function(totalCount) {
+                        result.totalCount = totalCount;
+                    });
+                }
+
+                d.resolve(result);
+            }, 10);
+
+            return d;
+        }
+    };
+}
+
 // T716207
 QUnit.test('Filtering should works correctly if groupPaging is enabled and group is expanded', function(assert) {
     // arrange
@@ -9561,39 +9654,7 @@ QUnit.test('Filtering should works correctly if groupPaging is enabled and group
         { id: 4, group: 'group', type: 2 }
     ]);
     const dataGrid = $('#dataGrid').dxDataGrid({
-        dataSource: {
-            key: 'id',
-            load: function(options) {
-                const d = $.Deferred();
-                setTimeout(function() {
-                    const result = {};
-                    arrayStore.load(options).done(function(data) {
-                        result.data = data;
-
-                        if(options.group) {
-                            data.forEach(item => {
-                                item.count = item.items.length;
-                                item.items = null;
-                            });
-                        }
-                    });
-                    if(options.requireGroupCount) {
-                        arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
-                            result.groupCount = groupedData.length;
-                        });
-                    }
-                    if(options.requireTotalCount) {
-                        arrayStore.totalCount(options).done(function(totalCount) {
-                            result.totalCount = totalCount;
-                        });
-                    }
-
-                    d.resolve(result);
-                }, 10);
-
-                return d;
-            }
-        },
+        dataSource: createRemoteDataSourceWithGroupPaging(arrayStore, 'id'),
         remoteOperations: { groupPaging: true },
         height: 400,
         filterSyncEnabled: true,
@@ -10103,6 +10164,51 @@ QUnit.test('cellTemplate should be rendered, asynchronously if column renderAsyn
     assert.equal(cellTemplateArgs.length, 1, 'cell template is called');
     assert.equal(cellTemplateArgs[0].rowType, 'data', 'cell template rowType');
     assert.equal(cellTemplateArgs[0].column.dataField, 'template', 'cell template column');
+});
+
+// T857205
+QUnit.test(' if renderAsync is true and state storing is used', function(assert) {
+    let selectedRowKeys = [1, 2];
+
+    const customLoad = sinon.spy(() => {
+        return {
+            selectedRowKeys: selectedRowKeys
+        };
+    });
+
+    // act
+    const grid = createDataGrid({
+        dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }],
+        keyExpr: 'id',
+        loadingTimeout: undefined,
+        renderAsync: true,
+        filterRow: {
+            visible: true
+        },
+        selection: {
+            mode: 'multiple'
+        },
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad
+        }
+    });
+
+    const $grid = grid.$element();
+    this.clock.tick();
+
+    const $selectCheckboxes = $grid.find('.dx-select-checkbox');
+    const $inputs = $selectCheckboxes.find('input');
+
+    // assert
+    assert.equal(customLoad.callCount, 1, 'customLoad was called once');
+
+    assert.deepEqual(grid.getSelectedRowKeys(), selectedRowKeys, 'selected row keys');
+
+    assert.equal($inputs.eq(1).prop('value'), 'true', 'first row checkbox');
+    assert.equal($inputs.eq(2).prop('value'), 'true', 'second row checkbox');
+    assert.equal($inputs.eq(3).prop('value'), 'false', 'third row checkbox');
 });
 
 QUnit.module('Assign options', baseModuleConfig);
@@ -16675,7 +16781,7 @@ QUnit.test('Using watch in masterDetail template if repaintChangesOnly', functio
 
     // assert
     assert.ok($(dataGrid.element()).find('.detail').is($detail), 'detail element isn\'t updated');
-    assert.ok($detail.text(), 'changed', 'detail text is changed');
+    assert.strictEqual($detail.text(), 'changed', 'detail text is changed');
 });
 
 // T800483
@@ -18443,6 +18549,38 @@ QUnit.testInActiveWindow('DataGrid - Master grid should not render it\'s overlay
     assert.ok(detailRowsViewWrapper.isFocusOverlayVisible(), 'Detail grid focus overlay is visible');
 });
 
+QUnit.testInActiveWindow('Not highlight cell if isHighlighted set false in the onFocusedCellChanging event by Tab key (T853599)', function(assert) {
+    // arrange
+    let focusedCellChangingCount = 0;
+    this.dataGrid.option({
+        dataSource: [{ name: 'Alex', phone: '111111', room: 6 }],
+        keyExpr: 'name',
+        onFocusedCellChanging: function(e) {
+            ++focusedCellChangingCount;
+            e.isHighlighted = false;
+        }
+    });
+    this.clock.tick();
+
+    $(this.dataGrid.getCellElement(0, 0))
+        .trigger(pointerEvents.up)
+        .click();
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.dataGrid.option('focusedRowIndex'), 0, 'focusedRowIndex');
+    assert.equal(this.dataGrid.option('focusedColumnIndex'), 0, 'focusedColumnIndex');
+
+    // act
+    const navigationController = this.dataGrid.getController('keyboardNavigation');
+    navigationController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(this.dataGrid.getCellElement(0, 0)) }) });
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedCellChangingCount, 2, 'onFocusedCellChanging fires count');
+    assert.notOk($(this.dataGrid.getCellElement(0, 1)).hasClass('dx-focused'), 'cell is not focused');
+});
+
 QUnit.test('Focus row element should support native DOM', function(assert) {
     // arrange
     let $focusedCell;
@@ -18813,19 +18951,47 @@ QUnit.test('The edited cell should be closed on click inside another dataGrid', 
 });
 
 QUnit.test('The cell should not be focused on pointerEvents.down event (T850219)', function(assert) {
+    ['row', 'cell'].forEach(editingMode => {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1' }],
+            editing: {
+                mode: editingMode,
+                allowUpdating: true
+            }
+        });
+        this.clock.tick();
+
+        // act
+        $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.down);
+        this.clock.tick();
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-focus-disabled'), `cell has dx-cell-focus-disabled class in '${editingMode}' editing mode`);
+        assert.equal($(dataGrid.$element()).find('.dx-datagrid-focus-overlay').length, 0, `focus overlay is not rendered in '${editingMode}' editing mode`);
+    });
+});
+
+QUnit.test('The cell should not have dx-cell-focus-disabled class on pointerEvents.down event with row editing mode if row in editing state (T850219)', function(assert) {
     // arrange
     const dataGrid = createDataGrid({
-        dataSource: [{ field1: 'test1' }],
+        dataSource: [{ field1: 'test1', field2: 'test2' }],
+        editing: {
+            mode: 'row',
+            allowUpdating: true
+        }
     });
     this.clock.tick();
 
+    dataGrid.editRow(0);
+    this.clock.tick();
+
     // act
-    $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.down);
+    $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.down);
     this.clock.tick();
 
     // assert
-    assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-cell-focus-disabled'), 'cell has dx-cell-focus-disabled class');
-    assert.equal($(dataGrid.$element()).find('.dx-datagrid-focus-overlay').length, 0, 'focus overlay is not rendered');
+    assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-focus-disabled'), 'cell has not dx-cell-focus-disabled class');
 });
 
 QUnit.test('onFocusedRowChanging, onFocusedRowChanged event if click selection checkBox (T812681)', function(assert) {

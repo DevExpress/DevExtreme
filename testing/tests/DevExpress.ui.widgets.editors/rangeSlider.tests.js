@@ -1160,7 +1160,7 @@ QUnit.module('option value', () => {
 
 QUnit.module('Validation', () => {
     [false, true].forEach((isValid) => {
-        QUnit.test(`initial state - isValid = ${isValid}, change the "value" option`, (assert) => {
+        QUnit.test(`initial state - isValid = ${isValid}, change the "value" option`, function(assert) {
             const instance = $('#slider').dxRangeSlider({
                 value: [10, 30],
                 isValid
@@ -1182,7 +1182,7 @@ QUnit.module('Validation', () => {
             assert.deepEqual(value, [15, 20], '\'value\' argument of the validation callback is correct');
         });
 
-        QUnit.test(`initial state - isValid = ${isValid}, change the "start" option`, (assert) => {
+        QUnit.test(`initial state - isValid = ${isValid}, change the "start" option`, function(assert) {
             const instance = $('#slider').dxRangeSlider({
                 value: [10, 30],
                 isValid
@@ -1203,7 +1203,7 @@ QUnit.module('Validation', () => {
             assert.deepEqual(value, [15, 30], '\'value\' argument of the validation callback is correct');
         });
 
-        QUnit.test(`initial state - isValid = ${isValid}, change the "end" option`, (assert) => {
+        QUnit.test(`initial state - isValid = ${isValid}, change the "end" option`, function(assert) {
             const instance = $('#slider').dxRangeSlider({
                 value: [10, 30],
                 isValid

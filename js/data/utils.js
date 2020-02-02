@@ -3,9 +3,9 @@ import domAdapter from '../core/dom_adapter';
 import { add as ready } from '../core/utils/ready_callbacks';
 import { getWindow } from '../core/utils/window';
 import { map } from '../core/utils/iterator';
-import { toComparable } from '../core/utils/data';
 import { Deferred } from '../core/utils/deferred';
 import typeUtils from '../core/utils/type';
+import { equalByValue } from '../core/utils/common';
 
 const XHR_ERROR_UNLOAD = 'DEVEXTREME_XHR_ERROR_UNLOAD';
 
@@ -153,21 +153,8 @@ function isConjunctiveOperator(condition) {
     return /^(and|&&|&)$/i.test(condition);
 }
 
-const keysEqual = function(keyExpr, key1, key2) {
-    if(Array.isArray(keyExpr)) {
-        const names = map(key1, function(v, k) { return k; });
-        let name;
-        for(let i = 0; i < names.length; i++) {
-            name = names[i];
-            // eslint-disable-next-line eqeqeq
-            if(toComparable(key1[name], true) != toComparable(key2[name], true)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    // eslint-disable-next-line eqeqeq
-    return toComparable(key1, true) == toComparable(key2, true);
+const keysEqual = function(key1, key2) {
+    return equalByValue(key1, key2, 0, false);
 };
 
 const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';

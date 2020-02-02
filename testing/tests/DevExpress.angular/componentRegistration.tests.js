@@ -16,9 +16,9 @@ import 'integration/angular';
 import 'ui/list';
 import 'ui/button';
 
-const FIXTURE_ELEMENT = () => $('#qunit-fixture');
+import '../../helpers/ignoreAngularTimers.js';
 
-const ignoreAngularBrowserDeferTimer = args => args.timerType === 'timeouts' && (args.callback.toString().indexOf('delete pendingDeferIds[timeoutId];') > -1 || args.callback.toString().indexOf('delete F[c];e(a)}') > -1);
+const FIXTURE_ELEMENT = () => $('#qunit-fixture');
 
 QUnit.module('simple component tests', {
     beforeEach() {
@@ -44,11 +44,6 @@ QUnit.module('simple component tests', {
             .appendTo(this.$container);
 
         registerComponent('dxTest', TestComponent);
-
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 
@@ -1392,11 +1387,6 @@ QUnit.module('nested Widget with templates enabled', {
 
         registerComponent('dxTestContainer', TestContainer);
         registerComponent('dxTestWidget', TestWidget);
-
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 
@@ -1506,7 +1496,7 @@ QUnit.test('widget inside two nested containers', function(assert) {
     assert.equal($.trim(inner.find('span').text()), 'new innerText');
 });
 
-QUnit.test('angular integration don\'t breaks defaultOptions', assert => {
+QUnit.test('angular integration don\'t breaks defaultOptions', function(assert) {
     const TestDOMComponent = DOMComponent.inherit();
 
     registerComponent('dxTestDOMComponent', TestDOMComponent);
@@ -1605,15 +1595,10 @@ QUnit.test('Multi-slot transclusion should work with dx temapltes', function(ass
 QUnit.module('Widget & CollectionWidget with templates enabled', {
     beforeEach() {
         this.testApp = angular.module('testApp', ['dx']);
-
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 
-QUnit.test('default NG template is not retrieved for widgets created with angular', assert => {
+QUnit.test('default NG template is not retrieved for widgets created with angular', function(assert) {
     const TestContainer = Widget.inherit({
         _renderContentImpl(template) {
             template = template || this.option('integrationOptions.templates').template;
@@ -1649,7 +1634,7 @@ QUnit.test('default NG template is not retrieved for widgets created with angula
     assert.ok(!(template instanceof NgTemplate), 'default NG template not retrieved');
 });
 
-QUnit.test('retrieving default NG template for collection widgets created with angular', assert => {
+QUnit.test('retrieving default NG template for collection widgets created with angular', function(assert) {
     const TestContainer = CollectionWidget.inherit({
         _renderContentImpl(template) {
             template = template || this.option('integrationOptions.templates').template;
@@ -1934,14 +1919,7 @@ QUnit.test('Widget options does not override scope properties', function(assert)
     assert.equal($.trim($markup.text()), 'Controller model');
 });
 
-QUnit.module('ui.collectionWidget', {
-    beforeEach() {
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
-    }
-});
+QUnit.module('ui.collectionWidget');
 
 const initMarkup = ($markup, controller) => {
     const TestCollectionContainer = CollectionWidget.inherit({
@@ -1987,7 +1965,7 @@ const initMarkup = ($markup, controller) => {
     return $markup;
 };
 
-QUnit.test('collection container item value escalates to scope', assert => {
+QUnit.test('collection container item value escalates to scope', function(assert) {
     const controller = $scope => {
         $scope.collection = [
             { widgetText: 'my text' }
@@ -2016,7 +1994,7 @@ QUnit.test('collection container item value escalates to scope', assert => {
     assert.equal(scope.collection[0].widgetText, 'own text');
 });
 
-QUnit.test('collection container primitive item value escalates to scope', assert => {
+QUnit.test('collection container primitive item value escalates to scope', function(assert) {
     const controller = $scope => {
         $scope.collection = ['my text'];
     };
@@ -2044,7 +2022,7 @@ QUnit.test('collection container primitive item value escalates to scope', asser
     assert.equal(scope.collection[0], 'own text');
 });
 
-QUnit.test('collection container item value escalates to scope: complex paths', assert => {
+QUnit.test('collection container item value escalates to scope: complex paths', function(assert) {
     const controller = $scope => {
         $scope.vm = {
             collection: [
@@ -2075,7 +2053,7 @@ QUnit.test('collection container item value escalates to scope: complex paths', 
     assert.equal(scope.vm.collection[0].data.widgetText, 'own text');
 });
 
-QUnit.test('Bootstrap should not fail if container component changes element markup on init (Problem after updating Angular to 1.2.16)', assert => {
+QUnit.test('Bootstrap should not fail if container component changes element markup on init (Problem after updating Angular to 1.2.16)', function(assert) {
     const controller = $scope => {
         $scope.vm = {
             items: [
@@ -2132,7 +2110,7 @@ QUnit.test('Global scope properties are accessible from item template', function
     this.clock.restore();
 });
 
-QUnit.test('binding to circular data (T144697)', assert => {
+QUnit.test('binding to circular data (T144697)', function(assert) {
     const controller = $scope => {
         $scope.collection = [];
         $scope.collection.push({
@@ -2156,7 +2134,7 @@ QUnit.test('binding to circular data (T144697)', assert => {
     assert.equal($.trim($markup.text()), 'New text');
 });
 
-QUnit.test('watcher type changed (T145604)', assert => {
+QUnit.test('watcher type changed (T145604)', function(assert) {
     const data = [];
 
     const controller = $scope => {
@@ -2196,7 +2174,7 @@ QUnit.test('watcher type changed (T145604)', assert => {
     assert.equal(watchLog.length, 0, '$watch shouldn\'t be used');
 });
 
-QUnit.test('Defining item data alias by \'itemAlias\' with custom template for all items', assert => {
+QUnit.test('Defining item data alias by \'itemAlias\' with custom template for all items', function(assert) {
     const controller = $scope => {
         $scope.collection = [1, 2, 3];
     };
@@ -2274,7 +2252,7 @@ QUnit.test('Defining item data alias by \'itemAlias\' with custom template for s
     this.clock.restore();
 });
 
-QUnit.test('$index is available in markup (T542335)', assert => {
+QUnit.test('$index is available in markup (T542335)', function(assert) {
     const controller = $scope => {
         $scope.items = [
             { text: 'text1' },
@@ -2296,7 +2274,7 @@ QUnit.test('$index is available in markup (T542335)', assert => {
     assert.equal($items.eq(1).dxTestWidget('option', 'text'), '1');
 });
 
-QUnit.test('$id in item model not caused exception', assert => {
+QUnit.test('$id in item model not caused exception', function(assert) {
     const controller = $scope => {
         $scope.collection = [
             { text: 'my text', $id: 1 }
@@ -2314,14 +2292,10 @@ QUnit.test('$id in item model not caused exception', assert => {
 QUnit.module('misc and regressions', {
     beforeEach() {
         this.testApp = angular.module('testApp', ['dx']);
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 
-QUnit.test('template.render() - data parameter is Scope', assert => {
+QUnit.test('template.render() - data parameter is Scope', function(assert) {
     const TestContainer = Widget.inherit({
 
         _getDefaultOptions() {
@@ -2462,7 +2436,7 @@ QUnit.test('all values should be correct displayed in collection widget (T425426
     assert.equal($markup.children().eq(6).text(), 'false');
 });
 
-QUnit.test('child collection widget should be rendered correctly when template provider is specified', assert => {
+QUnit.test('child collection widget should be rendered correctly when template provider is specified', function(assert) {
     const ChildWidget = Widget.inherit({
         _render() {
             this.callBase();
@@ -2621,7 +2595,7 @@ QUnit.test('component should notify view model if option changed on ctor after i
     assert.equal(scope.a, 2);
 });
 
-QUnit.test('Watchers executed after component initialization (T334273)', assert => {
+QUnit.test('Watchers executed after component initialization (T334273)', function(assert) {
     let exceptionFired = false;
 
     const app = angular.module('app', ['ng', 'dx']).factory('$exceptionHandler', () => (exception, cause) => {
@@ -2689,11 +2663,6 @@ QUnit.module('component action context', {
             .appendTo(this.$container);
 
         registerComponent('dxActionTest', TestComponent);
-
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 
@@ -2850,11 +2819,6 @@ QUnit.module('dxComponent as a template', {
         this.$container = $('<div/>').appendTo(FIXTURE_ELEMENT());
 
         registerComponent('dxTemplateComponent', TemplateComponent);
-
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 

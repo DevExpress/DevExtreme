@@ -3469,6 +3469,91 @@ QUnit.test('Error on change grouping when one expanded group and two group level
     assert.strictEqual(loadError.lastCall.args[0].message, 'Error', 'last error message');
 });
 
+// T850299
+QUnit.test('Remote group paging should work correctly after sorting if grouping by 2 columns', function(assert) {
+    // arrange
+    let items;
+    let subgroups;
+
+    const data = [];
+
+    for(let j = 1; j < 4; j++) {
+        for(let k = 1; k < 16; k++) {
+            data.push({
+                group1: 'group',
+                group2: `subgroup${j}`,
+                field: k * j
+            });
+        }
+    }
+
+    const pageSize = 7;
+
+    const dataSource = createDataSourceWithRemoteGrouping({
+        store: data,
+        paginate: true,
+        pageSize,
+        group: [{ selector: 'group1', isExpanded: false }, { selector: 'group2', isExpanded: false }],
+    }, true);
+
+    dataSource.load();
+
+    // assert
+    items = dataSource.items();
+
+    assert.equal(items.length, 1, 'one first level group');
+    assert.notOk(items[0].items, 'group is not expanded');
+
+    // act
+    dataSource.changeRowExpand(['group']);
+    dataSource.load();
+
+    // assert
+    items = dataSource.items();
+
+    assert.equal(items.length, 1, 'one first level group');
+    assert.equal(items[0].items.length, 3, 'group is expanded');
+
+    items[0].items.forEach((subgroup, index) => {
+        assert.notOk(subgroup.items, `subgroup #${index + 1} is not expanded`);
+    });
+
+    // act
+    dataSource.changeRowExpand(['group', 'subgroup2']);
+    dataSource.load();
+
+    // assert
+    items = dataSource.items();
+    subgroups = items[0].items;
+
+    assert.equal(items.length, 1, 'one first level group');
+    assert.equal(subgroups.length, 2, 'group is expanded');
+
+    assert.notOk(subgroups[0].items, 'subgroup #1 is not expanded');
+
+    assert.equal(subgroups[1].items.length, 4, 'subgroup #2 is expanded and paginated');
+
+    // act
+    dataSource.sort({ selector: 'field', desc: true });
+    dataSource.load();
+
+    // assert
+    items = dataSource.items();
+    subgroups = items[0].items;
+
+    assert.equal(items.length, 1, 'one first level group');
+    assert.equal(subgroups.length, 2, 'group is expanded');
+
+    assert.notOk(subgroups[0].items, 'subgroup #1 is not expanded');
+
+    assert.equal(subgroups[1].items.length, 4, 'subgroup #2 is expanded and paginated');
+    assert.deepEqual(subgroups[1].items[0], {
+        'field': 30,
+        'group1': 'group',
+        'group2': 'subgroup2'
+    }, 'data is sorted');
+});
+
 // T477410
 QUnit.test('Reload dataSource when one expanded group and one group level exist', function(assert) {
     const dataSource = this.createDataSource({
@@ -4500,6 +4585,40 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
                     key: 1
                 }
             ], 'items');
+        });
+
+        // T851306
+        QUnit.test('change sortOrder of group with many unique values', function(assert) {
+            const source = this.createDataSource({
+                store: [{
+                    field1: 1
+                }, {
+                    field1: 2
+                }, {
+                    field1: 3
+                }, {
+                    field1: 4
+                }, {
+                    field1: 5
+                }],
+                pageSize: 2,
+                group: [{ selector: 'field1', isExpanded: true }]
+            });
+            source.load();
+
+            sinon.spy(source._grouping, '_updateGroupInfoOffsets');
+
+            // act
+            source.group([{ selector: 'field1', isExpanded: true, desc: true }]);
+            source.reload();
+
+            // assert
+            assert.equal(source.pageCount(), 5, 'pageCount');
+            assert.deepEqual(source.items(), [{
+                key: 5,
+                items: [{ field1: 5 }]
+            }], 'items');
+            assert.equal(source._grouping._updateGroupInfoOffsets.callCount, 1, '_updateGroupInfoOffsets is called once');
         });
     }
 });

@@ -122,7 +122,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         let i;
         if(path1.length !== path2.length) return false;
         for(i = 0; i < path1.length; i++) {
-            if(!keysEqual(null, path1[i], path2[i])) {
+            if(!keysEqual(path1[i], path2[i])) {
                 return false;
             }
         }

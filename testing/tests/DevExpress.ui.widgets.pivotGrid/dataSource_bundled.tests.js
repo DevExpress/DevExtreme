@@ -3764,7 +3764,6 @@ QUnit.test('Fields Caption generation. Change field option', function(assert) {
         ],
         store: this.testStore
     });
-    let fields;
 
     // acts
     dataSource.field(1, { summaryType: 'max' });
@@ -3779,7 +3778,7 @@ QUnit.test('Fields Caption generation. Change field option', function(assert) {
     dataSource.field(10, { caption: 'new custom caption', summaryType: 'sum' });
 
     // assert
-    fields = dataSource.fields();
+    const fields = dataSource.fields();
     assert.strictEqual(fields[0].caption, 'userCaption');
     assert.strictEqual(fields[1].caption, '');
     assert.strictEqual(fields[2].caption, 'Field Name Caption (Max)');
@@ -6637,12 +6636,11 @@ QUnit.test('Set State without fields', function(assert) {
 QUnit.test('set state when store fields not loaded', function(assert) {
     const retrieveFieldsDef = $.Deferred();
     const fieldsPrepared = sinon.stub();
-    let dataSource;
 
     this.testStore.getFields.returns(retrieveFieldsDef);
     // act
 
-    dataSource = new DataSource({
+    const dataSource = new DataSource({
         fields: [],
         store: this.testStore,
         retrieveFields: true
@@ -6784,7 +6782,7 @@ QUnit.test('All stores implement correct interface', function(assert) {
         const store = new Store({});
 
         $.each(methods, function(_, methodName) {
-            assert.ok(typeof store[methodName] === 'function', i + ' Store should implement ' + methodName);
+            assert.equal(typeof store[methodName], 'function', i + ' Store should implement ' + methodName);
         });
     });
 });

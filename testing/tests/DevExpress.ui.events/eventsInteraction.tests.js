@@ -15,6 +15,8 @@ const dragEvents = require('events/drag');
 const dblclickEvent = require('events/dblclick');
 const pointerMock = require('../../helpers/pointerMock.js');
 
+const GESTURE_COVER_CLASS = 'dx-gesture-cover';
+
 QUnit.testStart(function() {
     const markup =
         '<div id="parent">\
@@ -35,7 +37,6 @@ const moduleConfig = {
 };
 
 GestureEmitter.touchBoundary(GestureEmitter.initialTouchBoundary);
-
 
 QUnit.module('events unsubscribing', {
 
@@ -279,134 +280,6 @@ QUnit.test('minimum distance for gesture should be 10 pixels', function(assert) 
 
     pointer.move(1).up();
     assert.ok(scrollStarted, 'scroll started');
-});
-
-const GESTURE_COVER_CLASS = 'dx-gesture-cover';
-const $gestureCover = $('.' + GESTURE_COVER_CLASS);
-
-const gestureCoverExists = function() {
-    return devices.real().deviceType === 'desktop' && $gestureCover.css('pointerEvents') !== undefined;
-};
-
-QUnit.test('wheel should be prevented on gesture cover (T319068)', function(assert) {
-    if(!gestureCoverExists()) {
-        assert.expect(0);
-        return;
-    }
-
-    const event = $.Event('dxmousewheel');
-    $('.' + GESTURE_COVER_CLASS).trigger(event);
-    assert.equal(event.isDefaultPrevented(), true, 'scroll prevented');
-});
-
-QUnit.test('selection shouldn\'t be prevented in native scroll', function(assert) {
-    if(!gestureCoverExists()) {
-        assert.expect(0);
-        return;
-    }
-
-    const $element = $('#element');
-    const pointer = pointerMock($element);
-
-    $element.on('dxscrollstart', { isNative: true }, $.noop);
-
-    pointer.start().down().move(20);
-    assert.equal($gestureCover.css('pointerEvents'), 'none', 'gestureCover is disabled');
-});
-
-$.each([
-    ['hover', 'pointer-events', 'all', true],
-    ['cursor', 'cursor', 'move', false]
-], function(_, config) {
-    const name = config[0];
-    const prop = config[1];
-    const propValue = config[2];
-    const needReset = config[3];
-
-    if(!gestureCoverExists()) {
-        return;
-    }
-
-    QUnit.test('gesture should set ' + name + ' if needed with pointer', function(assert) {
-        assert.expect(2);
-
-        const originalProp = $gestureCover.css(prop);
-        const $element = $('#element');
-        const pointer = pointerMock($element);
-
-        $element.on({
-            'dxscrollstart': function(e) {
-                assert.equal($gestureCover.css(prop), propValue, name + ' is disabled');
-            },
-            'dxscrollend': function() {
-                assert.equal($gestureCover.css(prop), needReset ? originalProp : propValue, name + ' is enabled');
-            }
-        });
-
-        pointer.start().down().move(20).up();
-    });
-
-    QUnit.test('gesture should set ' + name + ' if needed with mousewheel', function(assert) {
-        assert.expect(2);
-
-        const originalProp = $gestureCover.css(prop);
-        const $element = $('#element');
-        const pointer = pointerMock($element);
-
-        $element.on({
-            'dxscrollstart': function(e) {
-                assert.equal($gestureCover.css(prop), propValue, name + ' is disabled');
-            },
-            'dxscrollend': function() {
-                assert.equal($gestureCover.css(prop), needReset ? originalProp : propValue, name + ' is enabled');
-            }
-        });
-
-        pointer.start().wheel(20);
-    });
-
-    QUnit.test('cancel gesture should reset ' + name + ' on desktop', function(assert) {
-        const originalProp = $gestureCover.css(prop);
-        const $element = $('#element');
-        const pointer = pointerMock($element);
-
-        $element.on({
-            'dxscrollstart': function(e) {
-                e.cancel = true;
-            }
-        });
-
-        pointer.start().down().move(20).up();
-        assert.equal($gestureCover.css(prop), needReset ? originalProp : propValue, name + ' is enabled');
-    });
-
-    QUnit.test('dispose gesture should reset ' + name + ' if locked by current emitter', function(assert) {
-        const originalProp = $gestureCover.css(prop);
-        const $element = $('#element');
-        const pointer = pointerMock($element);
-
-        $element.on({
-            'dxscrollstart.TEST': noop
-        });
-
-        pointer.start().down().move(20);
-        $element.off('.TEST');
-        assert.equal($gestureCover.css(prop), needReset ? originalProp : propValue, name + ' is enabled');
-    });
-
-    QUnit.test('dispose gesture should not reset ' + name + ' if locked by another emitter', function(assert) {
-        const $child = $('#child');
-        const $parent = $('#parent');
-        const pointer = pointerMock($child);
-
-        $child.on('dxscrollstart', noop);
-        $parent.on('dxscrollstart.TEST', noop);
-
-        pointer.start().down().move(20);
-        const assignedProp = $gestureCover.css(prop);
-        $parent.off('.TEST');
-        assert.equal($gestureCover.css(prop), assignedProp, name + ' is enabled');
-    });
 });
 
 QUnit.test('gesture should be canceled if event should be skipped', function(assert) {
@@ -718,11 +591,11 @@ QUnit.test('gesture should not be started immediately without detected direction
 });
 
 QUnit.test('gesture should be started with wrong direction after timeout', function(assert) {
+    let swipeFired = 0;
     const $element = $('#element').on(swipeEvents.start, { immediate: true, direction: 'horizontal' }, function() {
         swipeFired++;
     });
     const pointer = pointerMock($element);
-    var swipeFired = 0;
 
     pointer.start().down().move(0, 1);
     assert.equal(swipeFired, 0, 'swipestart was fired');
@@ -732,11 +605,11 @@ QUnit.test('gesture should be started with wrong direction after timeout', funct
 });
 
 QUnit.test('not immediate gesture should not be started with wrong direction after timeout', function(assert) {
+    let swipeFired = 0;
     const $element = $('#element').on(swipeEvents.start, { immediate: false, direction: 'horizontal' }, function() {
         swipeFired++;
     });
     const pointer = pointerMock($element);
-    var swipeFired = 0;
 
     pointer.start().down().move(0, 1);
     assert.equal(swipeFired, 0, 'swipestart was fired');
@@ -746,11 +619,11 @@ QUnit.test('not immediate gesture should not be started with wrong direction aft
 });
 
 QUnit.test('gesture should not be started with wrong direction without timeout', function(assert) {
+    let swipeFired = 0;
     const $element = $('#element').on(swipeEvents.start, { immediate: true, direction: 'horizontal' }, function() {
         swipeFired++;
     });
     const pointer = pointerMock($element);
-    var swipeFired = 0;
 
     pointer.start().down().move(0, 1);
     assert.equal(swipeFired, 0, 'swipestart was not fired');
@@ -759,33 +632,33 @@ QUnit.test('gesture should not be started with wrong direction without timeout',
 });
 
 QUnit.test('gesture should not be started with wrong and specified direction without timeout (horizontal)', function(assert) {
+    let swipeFired = 0;
     const $element = $('#element').on(swipeEvents.start, { immediate: true, direction: 'horizontal' }, function() {
         swipeFired++;
     });
     const pointer = pointerMock($element);
-    var swipeFired = 0;
 
     pointer.start().down().move(5, 10);
     assert.equal(swipeFired, 0, 'swipestart was not fired');
 });
 
 QUnit.test('gesture should not be started with wrong and specified direction without timeout (vertical)', function(assert) {
+    let swipeFired = 0;
     const $element = $('#element').on(swipeEvents.start, { immediate: true, direction: 'vertical' }, function() {
         swipeFired++;
     });
     const pointer = pointerMock($element);
-    var swipeFired = 0;
 
     pointer.start().down().move(10, 5);
     assert.equal(swipeFired, 0, 'swipestart was not fired');
 });
 
 QUnit.test('second gesture should not be started with wrong direction without timeout', function(assert) {
+    let swipeFired = 0;
     const $element = $('#element').on(swipeEvents.start, { immediate: true, direction: 'horizontal' }, function() {
         swipeFired++;
     });
     const pointer = pointerMock($element);
-    var swipeFired = 0;
 
     pointer.start().down().move(0, 1);
     assert.equal(swipeFired, 0, 'swipestart was not fired');
@@ -1130,4 +1003,131 @@ QUnit.test('active emitter should not be reset if inactive emitter was unsubscri
         .off(scrollEvents.move);
 
     pointer.up();
+});
+
+QUnit.module('gesture cover', {
+    before: function() {
+        const $element = $('#element');
+        const pointer = pointerMock($element);
+
+        $element.on('dxscrollstart', noop);
+        pointer.start().down().move(20).up();
+        $element.off('dxscrollstart');
+    }
+}, function() {
+    const getGestureCover = () => $(`.${GESTURE_COVER_CLASS}`);
+
+    if(devices.real().deviceType === 'desktop') {
+        QUnit.test('wheel should be prevented on gesture cover (T319068)', function(assert) {
+            const event = $.Event('dxmousewheel');
+            getGestureCover().trigger(event);
+            assert.equal(event.isDefaultPrevented(), true, 'scroll prevented');
+        });
+
+        QUnit.test('selection shouldn\'t be prevented in native scroll', function(assert) {
+            const $element = $('#element');
+            const pointer = pointerMock($element);
+
+            $element.on('dxscrollstart', { isNative: true }, noop);
+
+            pointer.start().down().move(20);
+            assert.equal(getGestureCover().css('pointerEvents'), 'none', 'gestureCover is disabled');
+        });
+
+        $.each([
+            ['hover', 'pointer-events', 'all', true],
+            ['cursor', 'cursor', 'move', false]
+        ], function(_, config) {
+            const name = config[0];
+            const prop = config[1];
+            const propValue = config[2];
+            const needReset = config[3];
+
+            QUnit.test('gesture should set ' + name + ' if needed with pointer', function(assert) {
+                assert.expect(2);
+
+                const $gestureCover = getGestureCover();
+                const originalProp = $gestureCover.css(prop);
+                const $element = $('#element');
+                const pointer = pointerMock($element);
+
+                $element.on({
+                    'dxscrollstart': function(e) {
+                        assert.equal($gestureCover.css(prop), propValue, name + ' is disabled');
+                    },
+                    'dxscrollend': function() {
+                        assert.equal($gestureCover.css(prop), needReset ? originalProp : propValue, name + ' is enabled');
+                    }
+                });
+
+                pointer.start().down().move(20).up();
+            });
+
+            QUnit.test('gesture should set ' + name + ' if needed with mousewheel', function(assert) {
+                assert.expect(2);
+
+                const $gestureCover = getGestureCover();
+                const originalProp = $gestureCover.css(prop);
+                const $element = $('#element');
+                const pointer = pointerMock($element);
+
+                $element.on({
+                    'dxscrollstart': function(e) {
+                        assert.equal($gestureCover.css(prop), propValue, name + ' is disabled');
+                    },
+                    'dxscrollend': function() {
+                        assert.equal($gestureCover.css(prop), needReset ? originalProp : propValue, name + ' is enabled');
+                    }
+                });
+
+                pointer.start().wheel(20);
+            });
+
+            QUnit.test('cancel gesture should reset ' + name + ' on desktop', function(assert) {
+                const $gestureCover = getGestureCover();
+                const originalProp = $gestureCover.css(prop);
+                const $element = $('#element');
+                const pointer = pointerMock($element);
+
+                $element.on({
+                    'dxscrollstart': function(e) {
+                        e.cancel = true;
+                    }
+                });
+
+                pointer.start().down().move(20).up();
+                assert.equal($gestureCover.css(prop), needReset ? originalProp : propValue, name + ' is enabled');
+            });
+
+            QUnit.test('dispose gesture should reset ' + name + ' if locked by current emitter', function(assert) {
+                const $gestureCover = getGestureCover();
+                const originalProp = $gestureCover.css(prop);
+                const $element = $('#element');
+                const pointer = pointerMock($element);
+
+                $element.on({
+                    'dxscrollstart.TEST': noop
+                });
+
+                pointer.start().down().move(20);
+                $element.off('.TEST');
+                assert.equal($gestureCover.css(prop), needReset ? originalProp : propValue, name + ' is enabled');
+            });
+
+            QUnit.test('dispose gesture should not reset ' + name + ' if locked by another emitter', function(assert) {
+                const $gestureCover = getGestureCover();
+                const $child = $('#child');
+                const $parent = $('#parent');
+                const pointer = pointerMock($child);
+
+                $child.on('dxscrollstart', noop);
+                $parent.on('dxscrollstart.TEST', noop);
+
+                pointer.start().down().move(20);
+                const assignedProp = $gestureCover.css(prop);
+                $parent.off('.TEST');
+                assert.equal($gestureCover.css(prop), assignedProp, name + ' is enabled');
+            });
+        });
+    }
 });

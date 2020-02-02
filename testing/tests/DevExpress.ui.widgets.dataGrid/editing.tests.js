@@ -2353,7 +2353,7 @@ QUnit.test('The first cell should not be switched to the editing state when clic
     // assert
     $mainTable = $(rowsView.element().children('.dx-datagrid-content').children('table'));
     assert.strictEqual($mainTable.find('input').length, 0, 'hasn\'t input');
-    assert.notOk($mainTable.find('tbody > tr').first().children().first().hasClass('dx-editor-cell'), 0, 'first cell isn\'t editable');
+    assert.notOk($mainTable.find('tbody > tr').first().children().first().hasClass('dx-editor-cell'), 'first cell isn\'t editable');
 });
 
 // T531154
@@ -4485,7 +4485,7 @@ QUnit.test('Not highlight calculated column', function(assert) {
     that.clock.tick();
 
     assert.equal(testElement.find('.dx-row').first().find('.dx-cell-modified').length, 1, 'one modified value');
-    assert.ok(testElement.find('.dx-row').first().children().eq(0).hasClass('dx-cell-modified'), 1, 'first cell is modified');
+    assert.ok(testElement.find('.dx-row').first().children().eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
 });
 
 // T246535
@@ -12185,7 +12185,7 @@ QUnit.test('The validation message should not be overlapped by the fixed column 
 
     // assert
     overlayInstance = $(rowsView.getCellElement(0, 1)).find('.dx-overlay.dx-datagrid-invalid-message').dxOverlay('instance');
-    assert.ok(overlayInstance, 1, 'has invalid message');
+    assert.ok(overlayInstance, 'has invalid message');
     overlayPosition = overlayInstance.option('position');
     assert.strictEqual(overlayPosition.my, 'top left', 'position.my');
     assert.strictEqual(overlayPosition.at, 'bottom left', 'position.at');
@@ -12236,14 +12236,14 @@ QUnit.test('The validation message should not be overlapped by the fixed column 
 
     // assert
     overlayInstance = $(rowsView.getCellElement(0, 1)).find('.dx-overlay.dx-datagrid-invalid-message').dxOverlay('instance');
-    assert.ok(overlayInstance, 1, 'has invalid message');
+    assert.ok(overlayInstance, 'has invalid message');
     overlayPosition = overlayInstance.option('position');
     assert.strictEqual(overlayPosition.my, 'top right', 'position.my');
     assert.strictEqual(overlayPosition.at, 'bottom right', 'position.at');
     assert.strictEqual(overlayPosition.collision, 'none flip', 'position.collision');
 
     tooltipInstance = $(rowsView.getCellElement(0, 1)).find('.dx-overlay.dx-datagrid-revert-tooltip').dxTooltip('instance');
-    assert.ok(overlayInstance, 1, 'has invalid message');
+    assert.ok(overlayInstance, 'has invalid message');
     tooltipPosition = tooltipInstance.option('position');
     assert.strictEqual(tooltipPosition.my, 'top right', 'position.my');
     assert.strictEqual(tooltipPosition.at, 'top left', 'position.at');
@@ -12293,7 +12293,7 @@ QUnit.test('The validation message should be decreased when there is not enough 
 
     // assert
     overlayInstance = $(rowsView.getCellElement(0, 1)).find('.dx-overlay.dx-datagrid-invalid-message').dxOverlay('instance');
-    assert.ok(overlayInstance, 1, 'has invalid message');
+    assert.ok(overlayInstance, 'has invalid message');
     assert.strictEqual(overlayInstance.option('maxWidth'), 148, 'maxWidth of the validation message');
     overlayPosition = overlayInstance.option('position');
     assert.strictEqual(overlayPosition.my, 'top left', 'position.my');
@@ -14922,6 +14922,48 @@ QUnit.test('The edit form should not be rerendered when setCellValue is set for 
     assert.strictEqual(this.editingController._editForm, editFormInstance, 'edit form is not recreated');
     assert.strictEqual($editForm.find('.dx-datagrid-edit-form-item').get(0), $editFormItem.get(0), 'first edit form item is not re-rendered');
     assert.strictEqual($editForm.find('.dx-datagrid-edit-form-item').first().find('.dx-texteditor-input').val(), 'Test', 'first cell value is changed');
+});
+
+// T848729
+QUnit.test('The onRowClick event should not be fired when clicking on a save button in the edit form', function(assert) {
+    // arrange
+    this.options.loadingTimeout = 30;
+    this.options.repaintChangesOnly = true;
+    this.options.editing.texts = {
+        saveRowChanges: 'Save'
+    };
+    const onRowClick = this.options.onRowClick = sinon.spy((e) => {
+        this.editRow(e.rowIndex);
+    });
+    this.options.rowTemplate = function(container) {
+        $('<tbody class="dx-row dx-data-row"><tr><td></td></tr></tbody>').appendTo(container);
+    };
+    this.setupModules(this);
+    this.clock.tick(30);
+
+    const rowsView = this.rowsView;
+    const $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    this.editRow(0);
+    this.cellValue(0, 'name', 'Test');
+
+    let $rowElement = $(this.getRowElement(0));
+    const $saveButton = $rowElement.find('.dx-button').first();
+
+    // assert
+    assert.ok($rowElement.hasClass('dx-datagrid-edit-form'), 'has edit form');
+    assert.strictEqual($saveButton.text(), 'Save', 'has save button');
+
+    // act
+    $saveButton.trigger('dxclick');
+    this.clock.tick(30);
+
+    // assert
+    $rowElement = $(this.getRowElement(0));
+    assert.notOk($rowElement.hasClass('dx-datagrid-edit-form'), 'has not edit form');
+    assert.strictEqual(onRowClick.callCount, 0, 'onRowClick event is not fired');
 });
 
 

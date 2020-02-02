@@ -97,7 +97,7 @@ function update(keyInfo, array, key, data, isBatch) {
     const keyExpr = keyInfo.key();
 
     if(keyExpr) {
-        if(hasKey(data, keyExpr) && !keysEqual(keyExpr, key, keyInfo.keyOf(data))) {
+        if(hasKey(data, keyExpr) && !keysEqual(key, keyInfo.keyOf(data))) {
             return !isBatch && rejectedPromise(errors.Error('E4017'));
         }
 
@@ -169,14 +169,12 @@ function remove(keyInfo, array, key, isBatch) {
 }
 
 function indexByKey(keyInfo, array, key) {
-    const keyExpr = keyInfo.key();
-
     if(!getHasKeyCacheValue(array, key)) {
         return -1;
     }
 
     for(let i = 0, arrayLength = array.length; i < arrayLength; i++) {
-        if(keysEqual(keyExpr, keyInfo.keyOf(array[i]), key)) {
+        if(keysEqual(keyInfo.keyOf(array[i]), key)) {
             return i;
         }
     }

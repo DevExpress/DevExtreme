@@ -28,7 +28,7 @@ QUnit.test('PDF \'main page\' populated with correct size in pt', function(asser
     // act
     getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
         // assert
-        assert.ok(data.indexOf('/MediaBox[0 0 465.08 315.15]/') !== -1);
+        assert.notStrictEqual(data.indexOf('/MediaBox[0 0 465.08 315.15]/'), -1);
     }).done(done);
 });
 
@@ -39,7 +39,7 @@ QUnit.test('PDF \'content stream\' populated with correct size in pt', function(
     // act
     getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
         // assert
-        assert.ok(data.indexOf('q 465.08 0 0 315.15 0.00 0.00 cm /I0 Do Q') !== -1);
+        assert.notStrictEqual(data.indexOf('q 465.08 0 0 315.15 0.00 0.00 cm /I0 Do Q'), -1);
         done();
     });
 });
@@ -51,7 +51,7 @@ QUnit.test('PDF \'info\' has correct date and dx version', function(assert) {
     // act
     getData('image_markup', { width: 600.1, height: 400.2 }).then(function(data) {
         // assert
-        assert.ok(data.indexOf('/CreationDate _test_date_/Producer(DevExtreme ' + version + ')') !== -1);
+        assert.notStrictEqual(data.indexOf('/CreationDate _test_date_/Producer(DevExtreme ' + version + ')'), -1);
         done();
     });
 });
@@ -62,8 +62,8 @@ QUnit.test('PDF \'image\' populated with correct size in px, length and image st
     // act
     getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
         // assert
-        assert.ok(data.indexOf('/Image/Width 620.1/Height 420.2/') !== -1);
-        assert.ok(data.indexOf('/Length 26>>stream\r\n_test_image_markup_string_\r\n') !== -1);
+        assert.notStrictEqual(data.indexOf('/Image/Width 620.1/Height 420.2/'), -1);
+        assert.notStrictEqual(data.indexOf('/Length 26>>stream\r\n_test_image_markup_string_\r\n'), -1);
         done();
     });
 });
@@ -75,7 +75,7 @@ QUnit.test('PDF \'image\' does not contain artifacts. T443241', function(assert)
     // act
     getData('image_markup', { width: 600.1, height: 400.2 }).then(function(data) {
         // assert
-        assert.ok(data.indexOf('<</Type/XObject/Subtype/Image/Width') === data.lastIndexOf('<</Type/XObject/Subtype/Image/Width'));
+        assert.strictEqual(data.indexOf('<</Type/XObject/Subtype/Image/Width'), data.lastIndexOf('<</Type/XObject/Subtype/Image/Width'));
         done();
     });
 });

@@ -1,5 +1,6 @@
 /* global createTestContainer */
 
+const $ = require('jquery');
 const themeManagerModule = require('viz/core/base_theme_manager');
 const rangeViewModule = require('viz/range_selector/range_view');
 const slidersControllerModule = require('viz/range_selector/sliders_controller');
@@ -56,7 +57,7 @@ exports.returnValue = returnValue;
 
 exports.environment = {
     beforeEach: function() {
-        this.$container = createTestContainer('#test-container', { width: 300, height: 150 });
+        this.$container = $(createTestContainer('#qunit-fixture', { width: '300px', height: '150px' }));
         this.StubAxis = StubAxis;
 
         this.renderer = new vizMocks.Renderer();
@@ -86,7 +87,6 @@ exports.environment = {
     },
 
     afterEach: function() {
-        this.$container.remove();
         axisModule.Axis.restore();
     },
 

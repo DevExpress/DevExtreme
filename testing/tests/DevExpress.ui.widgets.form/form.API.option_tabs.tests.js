@@ -114,8 +114,8 @@ class FormTestWrapper {
     }
 }
 
-module('Public API: option method', () => {
-    test('Change the badge option', () => {
+module('Public API: option method', function() {
+    test('Change the badge option', function() {
         const testWrapper = new FormTestWrapper();
         testWrapper.setOption('items[0].tabs[0].badge', 'TestBadge1');
         testWrapper.checkFormsReRender();
@@ -126,7 +126,7 @@ module('Public API: option method', () => {
         testWrapper.checkTabBadge(1, 'TestBadge2');
     });
 
-    test('Change the disabled option', () => {
+    test('Change the disabled option', function() {
         const testWrapper = new FormTestWrapper();
         testWrapper.setOption('items[0].tabs[0].disabled', true);
         testWrapper.checkFormsReRender();
@@ -145,7 +145,7 @@ module('Public API: option method', () => {
         testWrapper.checkTabDisabled(1, false);
     });
 
-    test('Change the icon option', () => {
+    test('Change the icon option', function() {
         const testWrapper = new FormTestWrapper();
 
         testWrapper.setOption('items[0].tabs[0].icon', 'plus');
@@ -157,7 +157,7 @@ module('Public API: option method', () => {
         testWrapper.checkTabIcon(1, 'trash');
     });
 
-    test('Change the template option', () => {
+    test('Change the template option', function() {
         const testWrapper = new FormTestWrapper();
 
         const template1 = '<div class=\'custom-template-1\'></div>';
@@ -172,7 +172,7 @@ module('Public API: option method', () => {
         testWrapper.checkTabContentTemplate(1, $(template2));
     });
 
-    test('Change the tab template option', () => {
+    test('Change the tab template option', function() {
         const testWrapper = new FormTestWrapper();
 
         const template1 = '<div class=\'custom-tab-template-1\'></div>';
@@ -187,7 +187,7 @@ module('Public API: option method', () => {
         testWrapper.checkTabTemplate(1, $(template2));
     });
 
-    test('Change the title option', () => {
+    test('Change the title option', function() {
         const testWrapper = new FormTestWrapper();
         testWrapper.setOption('items[0].tabs[0].title', 'TestTitle1');
         testWrapper.checkFormsReRender();
@@ -198,7 +198,7 @@ module('Public API: option method', () => {
         testWrapper.checkTabTitle(1, 'TestTitle2');
     });
 
-    test('Title is set correctly when it is changed on the onInitialized event', () => {
+    test('Title is set correctly when it is changed on the onInitialized event', function() {
         const testWrapper = new FormTestWrapper({
             onInitialized: e => {
                 e.component.option('items[0].tabs[0].title', 'New Title');
@@ -217,7 +217,7 @@ module('Public API: option method', () => {
     });
 
     ['badge', 'icon', 'template', 'tabTemplate', 'title'].forEach(optionName => {
-        test(`Change the ${optionName} of a tab when tabbed item is hidden via api`, () => {
+        test(`Change the ${optionName} of a tab when tabbed item is hidden via api`, function() {
             const testWrapper = new FormTestWrapper();
 
             testWrapper.setOption('items[0].visible', false);
@@ -228,7 +228,7 @@ module('Public API: option method', () => {
 
     [false, true].forEach(deferRendering => {
         [false, true].forEach(repaintChangesOnly => {
-            test(`Add new tab to end, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Add new tab to end, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -266,7 +266,7 @@ module('Public API: option method', () => {
                 testWrapper.checkEditorRendered('lastName', true);
             });
 
-            test(`Add new tab to start, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Add new tab to start, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -306,7 +306,7 @@ module('Public API: option method', () => {
                 testWrapper.checkTabSelection(1);
             });
 
-            test(`Select last tab,remove last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select last tab,remove last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -341,7 +341,7 @@ module('Public API: option method', () => {
                 testWrapper.checkTabSelection(0);
             });
 
-            test(`Select first tab, remove last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, remove last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -374,7 +374,7 @@ module('Public API: option method', () => {
                 testWrapper.checkTabSelection(0);
             });
 
-            test(`Select first tab, remove first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, remove first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -408,7 +408,7 @@ module('Public API: option method', () => {
                 testWrapper.checkTabSelection(0);
             });
 
-            test(`Add new tabs with new items, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Add new tabs with new items, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -456,7 +456,7 @@ module('Public API: option method', () => {
                 testWrapper.checkTabSelection(1);
             });
 
-            test(`Select first tab, add new tab, remove first tab and change title for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, add new tab, remove first tab and change title for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -495,7 +495,7 @@ module('Public API: option method', () => {
                 testWrapper.checkTabSelection(0);
             });
 
-            test(`Select first tab, add new tab, remove first tab and change title for last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, add new tab, remove first tab and change title for last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -538,7 +538,7 @@ module('Public API: option method', () => {
                 testWrapper.checkTabSelection(repaintChangesOnly ? 1 : 0);
             });
 
-            test(`Select first tab, add new tab, remove last tab and change title for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, add new tab, remove last tab and change title for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -577,7 +577,7 @@ module('Public API: option method', () => {
                 testWrapper.checkTabSelection(0);
             });
 
-            test(`Select first tab, add new tab, remove last tab and change title for last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, add new tab, remove last tab and change title for last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -620,7 +620,7 @@ module('Public API: option method', () => {
                 testWrapper.checkTabSelection(repaintChangesOnly ? 1 : 0);
             });
 
-            test(`Select last tab, add new tab, remove last tab and change title for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select last tab, add new tab, remove last tab and change title for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -665,7 +665,7 @@ module('Public API: option method', () => {
                 testWrapper.checkTabSelection(1);
             });
 
-            test(`Select last tab, add new tab, remove last tab and change title for last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select last tab, add new tab, remove last tab and change title for last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -709,7 +709,7 @@ module('Public API: option method', () => {
                 testWrapper.checkTabSelection(1);
             });
 
-            test(`Select first tab, add new tab, select last tab, change title of last tab and change items for parent group, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, add new tab, select last tab, change title of last tab and change items for parent group, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -757,8 +757,8 @@ module('Public API: option method', () => {
     });
 });
 
-module('Public API: itemOption method', () => {
-    test('Change the badge option', () => {
+module('Public API: itemOption method', function() {
+    test('Change the badge option', function() {
         const testWrapper = new FormTestWrapper();
         testWrapper.setItemOption('tabbedItem.title0', 'badge', 'TestBadge1');
         testWrapper.checkFormsReRender();
@@ -769,7 +769,7 @@ module('Public API: itemOption method', () => {
         testWrapper.checkTabBadge(1, 'TestBadge2');
     });
 
-    test('Change the disabled option', () => {
+    test('Change the disabled option', function() {
         const testWrapper = new FormTestWrapper();
         testWrapper.setItemOption('tabbedItem.title0', 'disabled', true);
         testWrapper.checkFormsReRender();
@@ -788,7 +788,7 @@ module('Public API: itemOption method', () => {
         testWrapper.checkTabDisabled(1, false);
     });
 
-    test('Change the icon option', () => {
+    test('Change the icon option', function() {
         const testWrapper = new FormTestWrapper();
 
         testWrapper.setItemOption('tabbedItem.title0', 'icon', 'plus');
@@ -800,7 +800,7 @@ module('Public API: itemOption method', () => {
         testWrapper.checkTabIcon(1, 'trash');
     });
 
-    test('Change the template option', () => {
+    test('Change the template option', function() {
         const testWrapper = new FormTestWrapper();
 
         const template1 = '<div class=\'custom-template-1\'></div>';
@@ -815,7 +815,7 @@ module('Public API: itemOption method', () => {
         testWrapper.checkTabContentTemplate(1, $(template2));
     });
 
-    test('Change the tab template option', () => {
+    test('Change the tab template option', function() {
         const testWrapper = new FormTestWrapper();
 
         const template1 = '<div class=\'custom-tab-template-1\'></div>';
@@ -830,7 +830,7 @@ module('Public API: itemOption method', () => {
         testWrapper.checkTabTemplate(1, $(template2));
     });
 
-    test('Change the title option', () => {
+    test('Change the title option', function() {
         const testWrapper = new FormTestWrapper();
         testWrapper.setItemOption('tabbedItem.title0', 'title', 'TestTitle1');
         testWrapper.checkFormsReRender();
@@ -841,7 +841,7 @@ module('Public API: itemOption method', () => {
         testWrapper.checkTabTitle(1, 'TestTitle2');
     });
 
-    test('Title is set correctly when it is changed on the onInitialized event', () => {
+    test('Title is set correctly when it is changed on the onInitialized event', function() {
         const testWrapper = new FormTestWrapper({
             onInitialized: e => {
                 e.component.itemOption('title1', 'title', 'New Title');
@@ -860,7 +860,7 @@ module('Public API: itemOption method', () => {
     });
 
     ['badge', 'icon', 'template', 'tabTemplate', 'title'].forEach(optionName => {
-        test(`Change the ${optionName} of a tab when tabbed item is hidden via api`, () => {
+        test(`Change the ${optionName} of a tab when tabbed item is hidden via api`, function() {
             const testWrapper = new FormTestWrapper();
 
             testWrapper.setItemOption('tabbedItem', 'visible', false);
@@ -871,7 +871,7 @@ module('Public API: itemOption method', () => {
 
     [false, true].forEach(deferRendering => {
         [false, true].forEach(repaintChangesOnly => {
-            test(`Add new tab to end, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Add new tab to end, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -910,7 +910,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkEditorRendered('lastName', true);
             });
 
-            test(`Add new tab to start, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Add new tab to start, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -951,7 +951,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkTabSelection(1);
             });
 
-            test(`Select last tab, Remove last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select last tab, Remove last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -987,7 +987,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkTabSelection(0);
             });
 
-            test(`Select first tab, Remove last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, Remove last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -1021,7 +1021,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkTabSelection(0);
             });
 
-            test(`Select first tab, Remove first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, Remove first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -1056,7 +1056,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkTabSelection(0);
             });
 
-            test(`Add new tabs with new items, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Add new tabs with new items, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -1105,7 +1105,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkTabSelection(1);
             });
 
-            test(`Select first tab, add new tab, remove first tab and change title for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, add new tab, remove first tab and change title for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -1145,7 +1145,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkTabSelection(0);
             });
 
-            test(`Select first tab, add new tab, remove first tab and change title for last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, add new tab, remove first tab and change title for last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -1189,7 +1189,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkTabSelection(repaintChangesOnly ? 1 : 0);
             });
 
-            test(`Select first tab, add new tab, remove last tab and change title for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, add new tab, remove last tab and change title for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -1229,7 +1229,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkTabSelection(0);
             });
 
-            test(`Select first tab, add new tab, remove last tab and change title for last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, add new tab, remove last tab and change title for last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -1273,7 +1273,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkTabSelection(repaintChangesOnly ? 1 : 0);
             });
 
-            test(`Select last tab, add new tab, remove last tab and change title for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select last tab, add new tab, remove last tab and change title for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -1319,7 +1319,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkTabSelection(1);
             });
 
-            test(`Select last tab, add new tab, remove last tab and change title for last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select last tab, add new tab, remove last tab and change title for last tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -1364,7 +1364,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkTabSelection(1);
             });
 
-            test(`Select first tab, add new tab, remove first tab and change title and icon for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, add new tab, remove first tab and change title and icon for first tab, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']
@@ -1408,7 +1408,7 @@ module('Public API: itemOption method', () => {
                 testWrapper.checkTabSelection(0);
             });
 
-            test(`Select first tab, add new tab, select last tab, change title of last tab and change items for parent group, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, () => {
+            test(`Select first tab, add new tab, select last tab, change title of last tab and change items for parent group, repaintChangesOnly: ${repaintChangesOnly}, deferRendering: ${deferRendering}`, function() {
                 const tabs = [{
                     title: 'title1',
                     items: ['name']

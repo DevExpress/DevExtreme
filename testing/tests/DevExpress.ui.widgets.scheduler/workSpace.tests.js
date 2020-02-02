@@ -12,7 +12,6 @@ import dateUtils from 'core/utils/date';
 import dateLocalization from 'localization/date';
 import dragEvents from 'events/drag';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
-import devices from 'core/devices';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -161,16 +160,6 @@ QUnit.testStart(function() {
 
         assert.equal(stub.callCount, 0, 'Tables were not updated');
     });
-
-    if(devices.real().deviceType === 'desktop') {
-        QUnit.test('Workspace should restore scrollTop after restoreScrollTop call', function(assert) {
-            this.instance.$element().scrollTop(30);
-            assert.equal(this.instance.$element().scrollTop(), 30, 'scrollTop is right');
-
-            this.instance.restoreScrollTop();
-            assert.equal(this.instance.$element().scrollTop(), 0, 'scrollTop is restored');
-        });
-    }
 
     QUnit.test('dateUtils.getTimezonesDifference should be called when calculating interval between dates', function(assert) {
         const stub = sinon.stub(dateUtils, 'getTimezonesDifference');
@@ -2462,7 +2451,7 @@ QUnit.testStart(function() {
             }
         });
 
-        var $cell = $element.find('.' + CELL_CLASS).eq(0);
+        const $cell = $element.find('.' + CELL_CLASS).eq(0);
         $($cell).trigger('dxclick');
     });
 
@@ -2516,7 +2505,7 @@ QUnit.testStart(function() {
             }
         });
 
-        var $cell = $element.find('.' + CELL_CLASS).eq(1);
+        const $cell = $element.find('.' + CELL_CLASS).eq(1);
         $($cell).trigger('dxcontextmenu');
     });
 
@@ -3180,6 +3169,17 @@ QUnit.testStart(function() {
         assert.deepEqual(lastCellData.endDate, new Date(2017, 6, 10, 1), 'cell has right endtDate');
     });
 
+    QUnit.test('\'getCoordinatesByDateInGroup\' method should return only work week days (t853629)', function(assert) {
+        this.createInstance({
+            intervalCount: 2,
+            currentDate: new Date(2018, 4, 21),
+        });
+
+        assert.ok(!this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 26))[0]);
+        assert.ok(!this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 27))[0]);
+        assert.ok(this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 23))[0]);
+        assert.ok(this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 28))[0]);
+    });
 })('Work Space Work Week with intervalCount');
 
 (function() {

@@ -12,8 +12,10 @@ QUnit.module('keysEqual');
 
 QUnit.test('non-strict comparison is used', function(assert) {
     // NOTE there is no point in considering "1" and 1 as different keys
-    assert.ok(keysEqual('id', 1, '1'));
-    assert.ok(keysEqual(['a', 'b'], { a: 1, b: 2 }, { a: '1', b: '2' }));
+    assert.ok(keysEqual(1, '1'));
+    assert.ok(keysEqual({ a: 1, b: 2 }, { a: '1', b: '2' }));
+    assert.ok(keysEqual({ a: { b: 1, c: 2 } }, { a: { b: '1', c: '2' } }));
+    assert.ok(keysEqual({ b: 1, c: 2 }, { b: '1', c: '2' }));
 });
 
 QUnit.test('toComparable is used for compound keys', function(assert) {
@@ -23,7 +25,6 @@ QUnit.test('toComparable is used for compound keys', function(assert) {
     assert.ok(guid1 !== guid2);
 
     assert.ok(keysEqual(
-        ['a', 'b'],
         { a: 1, b: guid1 },
         { a: 1, b: guid2 }
     ));
@@ -38,7 +39,7 @@ QUnit.test('toComparable is used for EdmLiteral', function(assert) {
 
     assert.ok(edm1 !== edm2);
 
-    assert.ok(keysEqual(null, edm1, edm2));
+    assert.ok(keysEqual(edm1, edm2));
 });
 
 QUnit.module('processRequestResultLock');
@@ -143,7 +144,7 @@ QUnit.module('Throttling', {
 
 QUnit.module('isGroupCriterion', () => {
 
-    QUnit.test('check', (assert) => {
+    QUnit.test('check', function(assert) {
         const testFunc = () => {};
         const testBinary = ['id', '=', 1];
 

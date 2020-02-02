@@ -76,43 +76,43 @@ QUnit.test('instanceof', function(assert) {
 });
 
 QUnit.test('constructor property', function(assert) {
-    assert.ok(a.constructor === A);
-    assert.ok(b.constructor === B);
-    assert.ok(c.constructor === C);
+    assert.strictEqual(a.constructor, A);
+    assert.strictEqual(b.constructor, B);
+    assert.strictEqual(c.constructor, C);
 });
 
 QUnit.test('parent property', function(assert) {
-    assert.ok(A.parent === Class);
-    assert.ok(B.parent === A);
-    assert.ok(C.parent === B);
+    assert.strictEqual(A.parent, Class);
+    assert.strictEqual(B.parent, A);
+    assert.strictEqual(C.parent, B);
 });
 
 QUnit.test('method inheritance', function(assert) {
-    assert.ok('m1' === a.m1());
-    assert.ok('m1' === b.m1());
-    assert.ok('m1' === c.m1());
+    assert.strictEqual(a.m1(), 'm1');
+    assert.strictEqual(b.m1(), 'm1');
+    assert.strictEqual(c.m1(), 'm1');
 });
 
 QUnit.test('property inheritance', function(assert) {
-    assert.ok('p1' === a.p1);
-    assert.ok('p1' === b.p1);
-    assert.ok('p1' === c.p1);
+    assert.strictEqual(a.p1, 'p1');
+    assert.strictEqual(b.p1, 'p1');
+    assert.strictEqual(c.p1, 'p1');
 });
 
 QUnit.test('overridden method', function(assert) {
-    assert.ok('a' === a.m2());
-    assert.ok('ab' === b.m2());
-    assert.ok('abc' === c.m2());
+    assert.strictEqual(a.m2(), 'a');
+    assert.strictEqual(b.m2(), 'ab');
+    assert.strictEqual(c.m2(), 'abc');
 });
 
 QUnit.test('overridden ctor', function(assert) {
-    assert.ok('p2' === c.p2);
+    assert.strictEqual(c.p2, 'p2');
 });
 
 QUnit.test('redefine', function(assert) {
-    assert.ok('a' === a.m3());
-    assert.ok('ab' === b.m3());
-    assert.ok('abc' === c.m3());
+    assert.strictEqual(a.m3(), 'a');
+    assert.strictEqual(b.m3(), 'ab');
+    assert.strictEqual(c.m3(), 'abc');
 });
 
 QUnit.test('no redefine in root Class', function(assert) {
@@ -353,7 +353,7 @@ QUnit.test('static methods should be inherited', function(assert) {
 QUnit.module('API');
 
 
-QUnit.test('subclassOf method for es6 inheritors', assert => {
+QUnit.test('subclassOf method for es6 inheritors', function(assert) {
     const Base = Class.inherit({});
 
     class ES6Inheritor extends Base {}

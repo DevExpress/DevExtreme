@@ -968,10 +968,9 @@ module.exports = Class.inherit((function() {
 
         _changeLoadingCount: function(increment) {
             const oldLoading = this.isLoading();
-            let newLoading;
 
             this._loadingCount += increment;
-            newLoading = this.isLoading();
+            const newLoading = this.isLoading();
 
             if(oldLoading ^ newLoading) {
                 this.fireEvent('loadingChanged', [newLoading]);

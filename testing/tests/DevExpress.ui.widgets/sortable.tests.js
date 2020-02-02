@@ -361,6 +361,24 @@ QUnit.test('option changing', function(assert) {
     assert.strictEqual(this.$element.children().first().text(), 'item1', 'first item is not changed');
 });
 
+QUnit.test('Move to top if allowReordering is false', function(assert) {
+    // arrange
+    const onDragChangeSpy = sinon.spy();
+
+    this.createSortable({
+        allowReordering: false,
+        dropFeedbackMode: 'indicate',
+        onDragChange: onDragChangeSpy
+    });
+
+    // act
+    pointerMock(this.$element.children().eq(1)).start().down(15, 45).move(0, -45);
+
+    // assert
+    assert.strictEqual(onDragChangeSpy.callCount, 0, 'onDragChange event is not called');
+    assert.strictEqual($('.dx-sortable-placeholder').length, 0, 'placeholder does not exist');
+});
+
 
 QUnit.module('placeholder and source', moduleConfig);
 
@@ -1904,7 +1922,7 @@ QUnit.test('Dragging item to another the sortable widget with dropFeedbackMode i
     items2 = sortable2.$element().children();
     assert.strictEqual(items1.length, 3, 'first list - item count');
     assert.strictEqual(items2.length, 3, 'second list - item count');
-    assert.ok($('body').children('.dx-sortable-placeholder').length, 1, 'placeholder is in body');
+    assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 1, 'placeholder is in body');
 });
 
 QUnit.test('Dropping item to another the sortable widget with dropFeedbackMode indicate', function(assert) {

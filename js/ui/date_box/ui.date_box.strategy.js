@@ -92,12 +92,6 @@ const DateBoxStrategy = Class.inherit({
         this._widget && this._widget.option('value', this.dateBoxValue());
     },
 
-    _valueChangedHandler: function(args) {
-        if(this.dateBox.option('opened') && this.dateBox.option('applyValueMode') === 'instantly') {
-            this.dateBoxValue(args.value);
-        }
-    },
-
     useCurrentDateByDefault: noop,
 
     getDefaultDate: function() {

@@ -106,7 +106,7 @@ QUnit.test('Date time format as function converting', function(assert) {
         return text;
     }
 
-    var expected = {
+    const expected = {
         '[$-9]AM/PM H:mm:ss': function(value) { return expected['[$-9]AM/PM'](value) + ' ' + expected['[$-9]H:mm:ss'](value); },
         '[$-9]yyyy \\d\\e MM \\d\\e dd': function(value) { return expected['[$-9]yyyy'](value) + ' de ' + expected['[$-9]MM'](value) + ' de ' + expected['[$-9]dd'](value); },
         '[$-9]H:mm:ss': function(value) { return value.getHours().toString() + ':' + leftPad(value.getMinutes().toString(), 2, '0') + ':' + leftPad(value.getSeconds().toString(), 2, '0'); },
@@ -197,12 +197,12 @@ QUnit.test('Get excel date value', function(assert) {
     assert.strictEqual(getExcelDateValue('02/2/1900 12:52:03'), '33.536145833333336');
     assert.strictEqual(getExcelDateValue('06/27/2075 18:42:17'), '64097.77936342593');
     assert.strictEqual(getExcelDateValue('06/08/1928 17:17:48'), '10387.720694444444');
-    assert.ok(getExcelDateValue('08/11/1989 02:45:56').indexOf('32731.11523148148') === 0);
+    assert.strictEqual(getExcelDateValue('08/11/1989 02:45:56').indexOf('32731.11523148148'), 0);
     assert.strictEqual(getExcelDateValue('09/15/1979 16:31:31'), '29113.68855324074');
-    assert.strictEqual(getExcelDateValue('12/26/1980 22:24:35'), '29581.933738425927'); //
+    assert.strictEqual(getExcelDateValue('12/26/1980 22:24:35'), '29581.933738425927');
     assert.strictEqual(getExcelDateValue('12/16/1883 11:22:43'), '-5858.525891203703');
     assert.strictEqual(getExcelDateValue('06/14/1987 13:13:36'), '31942.551111111112');
-    assert.ok(getExcelDateValue('08/23/1983 14:57:31').indexOf('30551.62327546296') === 0);
+    assert.strictEqual(getExcelDateValue('08/23/1983 14:57:31').indexOf('30551.62327546296'), 0);
     assert.strictEqual(getExcelDateValue('03/29/1989 15:33:47'), '32596.64846064815');
     assert.strictEqual(getExcelDateValue('08/15/2015 2:00:00'), '42231.083333333336');
     // T267460 UTC -06:00 USA
@@ -274,13 +274,10 @@ QUnit.test('Cell formats generating by the \'getStyles\' function result', funct
 });
 
 QUnit.test('stringArray generating', function(assert) {
-    // arrange
-    let strings;
-
     // act
     this.excelCreator._prepareStyleData();
     this.excelCreator._prepareCellData();
-    strings = this.excelCreator._stringArray;
+    const strings = this.excelCreator._stringArray;
 
     // assert
     assert.equal(strings.length, 5, 'strings count');
@@ -289,8 +286,6 @@ QUnit.test('stringArray generating', function(assert) {
 
 QUnit.test('cellsArray generating', function(assert) {
     // arrange
-    let cells;
-
     this.dataProvider.getStyles.returns([
         { alignment: 'center', bold: true, dataType: 'string' },
         { alignment: 'left', bold: false, wrapText: false, format: 'currency', precision: 0 },
@@ -308,7 +303,7 @@ QUnit.test('cellsArray generating', function(assert) {
     this.excelCreator._prepareStyleData();
 
     this.excelCreator._prepareCellData();
-    cells = this.excelCreator._cellsArray;
+    const cells = this.excelCreator._cellsArray;
 
     // assert
     assert.equal(cells.length, 6, 'rows count');
@@ -603,7 +598,7 @@ QUnit.test('Disable ignore errors', function(assert) {
     worksheetFile.async('string').then(function(content) {
         try {
             // assert
-            assert.ok(content.indexOf('ignoredError') === -1);
+            assert.strictEqual(content.indexOf('ignoredError'), -1);
         } finally {
             done();
         }
@@ -630,10 +625,10 @@ QUnit.test('Generating worksheet without groups', function(assert) {
     this.excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).async('string').then(function(content) {
         try {
             // assert
-            assert.ok(content.indexOf('outlineLevel="1"') === -1, 'Excel worksheet outlineLevel correct');
-            assert.ok(content.indexOf(internals.GROUP_SHEET_PR_XML) === -1, 'Excel worksheet sheetPr correct');
-            assert.ok(content.indexOf(internals.SINGLE_SHEET_PR_XML) !== -1, 'Excel worksheet sheetPr single correct');
-            assert.ok(content.indexOf('s="1"') === -1, 'Worksheet has no bold style cells');
+            assert.strictEqual(content.indexOf('outlineLevel="1"'), -1, 'Excel worksheet outlineLevel correct');
+            assert.strictEqual(content.indexOf(internals.GROUP_SHEET_PR_XML), -1, 'Excel worksheet sheetPr correct');
+            assert.notStrictEqual(content.indexOf(internals.SINGLE_SHEET_PR_XML), -1, 'Excel worksheet sheetPr single correct');
+            assert.strictEqual(content.indexOf('s="1"'), -1, 'Worksheet has no bold style cells');
         } finally {
             done();
         }
@@ -664,10 +659,10 @@ QUnit.test('Generating worksheet with groups', function(assert) {
     this.excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).async('string').then(function(content) {
         try {
             // assert
-            assert.ok(content.indexOf('outlineLevel="1"') !== -1, 'Excel worksheet outlineLevel correct');
-            assert.ok(content.indexOf(internals.GROUP_SHEET_PR_XML) !== -1, 'Excel worksheet sheetPr correct');
-            assert.ok(content.indexOf(internals.SINGLE_SHEET_PR_XML) === -1, 'Excel worksheet sheetPr single correct');
-            assert.ok(content.indexOf('s="3"') !== -1, 'Worksheet group cells is bold');
+            assert.notStrictEqual(content.indexOf('outlineLevel="1"'), -1, 'Excel worksheet outlineLevel correct');
+            assert.notStrictEqual(content.indexOf(internals.GROUP_SHEET_PR_XML), -1, 'Excel worksheet sheetPr correct');
+            assert.strictEqual(content.indexOf(internals.SINGLE_SHEET_PR_XML), -1, 'Excel worksheet sheetPr single correct');
+            assert.notStrictEqual(content.indexOf('s="3"'), -1, 'Worksheet group cells is bold');
         } finally {
             done();
         }
@@ -696,7 +691,6 @@ QUnit.test('Add rtl property to sheet view', function(assert) {
 
 QUnit.test('Workwheet XML content is valid', function(assert) {
     // arrange
-    let excelCreator;
     const done = assert.async();
     const dataProvider = new exportMocks.MockDataProvider();
 
@@ -705,7 +699,7 @@ QUnit.test('Workwheet XML content is valid', function(assert) {
     };
 
     // act
-    excelCreator = new ExcelCreator(dataProvider, {
+    const excelCreator = new ExcelCreator(dataProvider, {
         wrapTextEnabled: true
     });
     excelCreator._generateContent();
@@ -713,10 +707,10 @@ QUnit.test('Workwheet XML content is valid', function(assert) {
     excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).async('string').then(function(content) {
         try {
             // assert
-            assert.ok(content.indexOf('<v />') === -1, 'No empty cell values <v /> in worksheet XML content');
-            assert.ok(content.indexOf('undefined') === -1, 'No undefined variables in worksheetXML content');
-            assert.ok(content.indexOf('NaN') === -1, 'No undefined NaN in worksheetXML content');
-            assert.ok(content.indexOf('NULL') === -1, 'No undefined NULL in worksheetXML content');
+            assert.strictEqual(content.indexOf('<v />'), -1, 'No empty cell values <v /> in worksheet XML content');
+            assert.strictEqual(content.indexOf('undefined'), -1, 'No undefined variables in worksheetXML content');
+            assert.strictEqual(content.indexOf('NaN'), -1, 'No undefined NaN in worksheetXML content');
+            assert.strictEqual(content.indexOf('NULL'), -1, 'No undefined NULL in worksheetXML content');
         } finally {
             done();
         }
@@ -741,9 +735,9 @@ QUnit.test('Generating worksheet with groups and three rows of the header', func
     this.excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).async('string').then(function(content) {
         try {
             // assert
-            assert.ok(content.indexOf('row r="5" spans="1:4" outlineLevel="1"') !== -1, 'Excel worksheet outlineLevel correct');
-            assert.ok(content.indexOf(internals.GROUP_SHEET_PR_XML) !== -1, 'Excel worksheet sheetPr correct');
-            assert.ok(content.indexOf(internals.SINGLE_SHEET_PR_XML) === -1, 'Excel worksheet sheetPr single correct');
+            assert.notStrictEqual(content.indexOf('row r="5" spans="1:4" outlineLevel="1"'), -1, 'Excel worksheet outlineLevel correct');
+            assert.notStrictEqual(content.indexOf(internals.GROUP_SHEET_PR_XML), -1, 'Excel worksheet sheetPr correct');
+            assert.strictEqual(content.indexOf(internals.SINGLE_SHEET_PR_XML), -1, 'Excel worksheet sheetPr single correct');
         } finally {
             done();
         }
@@ -753,12 +747,11 @@ QUnit.test('Generating worksheet with groups and three rows of the header', func
 
 QUnit.test('Style XML content is valid', function(assert) {
     // arrange
-    let excelCreator;
     const done = assert.async();
     const dataProvider = new exportMocks.MockDataProvider();
 
     // act
-    excelCreator = new ExcelCreator(dataProvider, {
+    const excelCreator = new ExcelCreator(dataProvider, {
         wrapTextEnabled: true
     });
     excelCreator._generateContent();
@@ -766,10 +759,10 @@ QUnit.test('Style XML content is valid', function(assert) {
     excelCreator._zip.folder(internals.XL_FOLDER_NAME).file(internals.STYLE_FILE_NAME).async('string').then(function(content) {
         try {
             // assert
-            assert.ok(content.indexOf('<v />') === -1, 'No empty cell values <v /> in worksheet XML content');
-            assert.ok(content.indexOf('undefined') === -1, 'No undefined variables in worksheetXML content');
-            assert.ok(content.indexOf('NaN') === -1, 'No undefined NaN in worksheetXML content');
-            assert.ok(content.indexOf('NULL') === -1, 'No undefined NULL in worksheetXML content');
+            assert.strictEqual(content.indexOf('<v />'), -1, 'No empty cell values <v /> in worksheet XML content');
+            assert.strictEqual(content.indexOf('undefined'), -1, 'No undefined variables in worksheetXML content');
+            assert.strictEqual(content.indexOf('NaN'), -1, 'No undefined NaN in worksheetXML content');
+            assert.strictEqual(content.indexOf('NULL'), -1, 'No undefined NULL in worksheetXML content');
         } finally {
             done();
         }
@@ -778,7 +771,6 @@ QUnit.test('Style XML content is valid', function(assert) {
 
 QUnit.test('SharedString XML content is valid', function(assert) {
     // arrange
-    let excelCreator;
     const done = assert.async();
     const dataProvider = new exportMocks.MockDataProvider();
 
@@ -787,7 +779,7 @@ QUnit.test('SharedString XML content is valid', function(assert) {
     };
 
     // act
-    excelCreator = new ExcelCreator(dataProvider, {
+    const excelCreator = new ExcelCreator(dataProvider, {
         wrapTextEnabled: true
     });
     excelCreator._generateContent();
@@ -795,10 +787,10 @@ QUnit.test('SharedString XML content is valid', function(assert) {
     excelCreator._zip.folder(internals.XL_FOLDER_NAME).file(internals.SHAREDSTRING_FILE_NAME).async('string').then(function(content) {
         try {
             // assert
-            assert.ok(content.indexOf('<v />') === -1, 'No empty cell values <v /> in worksheet XML content');
-            assert.ok(content.indexOf('undefined') === -1, 'No undefined variables in worksheetXML content');
-            assert.ok(content.indexOf('NaN') === -1, 'No undefined NaN in worksheetXML content');
-            assert.ok(content.indexOf('NULL') === -1, 'No undefined NULL in worksheetXML content');
+            assert.strictEqual(content.indexOf('<v />'), -1, 'No empty cell values <v /> in worksheet XML content');
+            assert.strictEqual(content.indexOf('undefined'), -1, 'No undefined variables in worksheetXML content');
+            assert.strictEqual(content.indexOf('NaN'), -1, 'No undefined NaN in worksheetXML content');
+            assert.strictEqual(content.indexOf('NULL'), -1, 'No undefined NULL in worksheetXML content');
         } finally {
             done();
         }

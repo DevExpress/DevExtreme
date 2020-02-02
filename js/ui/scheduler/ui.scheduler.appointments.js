@@ -109,15 +109,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _focusInHandler: function(e) {
-        clearTimeout(this._appointmentFocusedTimeout);
         this.callBase.apply(this, arguments);
         this._$currentAppointment = $(e.target);
         this.option('focusedElement', getPublicElement($(e.target)));
-        const that = this;
-
-        this._appointmentFocusedTimeout = setTimeout(function() {
-            that.notifyObserver('appointmentFocused');
-        });
     },
 
     _focusOutHandler: function() {
@@ -720,7 +714,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
             };
         }
 
-        appointmentSetting.targetedAppointmentData = this.invoke('getTargetedAppointmentData', appointmentData, $appointment, true);
+        appointmentSetting.targetedAppointmentData = this.invoke('getTargetedAppointmentData', appointmentData, $appointment);
 
         this._virtualAppointments[virtualGroupIndex].items.settings.push(appointmentSetting);
         this._virtualAppointments[virtualGroupIndex].items.data.push(appointmentData);
@@ -786,6 +780,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _processRecurrenceAppointment: function(appointment, index, skipLongAppointments) {
+        // NOTE: this method is actual only for agenda
         const recurrenceRule = this.invoke('getField', 'recurrenceRule', appointment);
         const result = {
             parts: [],
