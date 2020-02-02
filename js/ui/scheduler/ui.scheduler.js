@@ -1063,14 +1063,16 @@ const Scheduler = Widget.inherit({
         return this._calculateTimezoneByValue(this.option('timeZone'), date);
     },
 
-    _getDaylightOffsetByCustomTimezone: function(startDate, endDate) {
-        const cStartDate = this.fire('convertDateByTimezoneBack', new Date(startDate.getTime()));
-        const cEndDate = this.fire('convertDateByTimezoneBack', new Date(endDate.getTime()));
+    _getDaylightOffsetByCustomTimezone: function(startDate, endDate, appointmentTimezone) {
+        const cStartDate = this.fire('convertDateByTimezoneBack', new Date(startDate.getTime()), appointmentTimezone);
+        const cEndDate = this.fire('convertDateByTimezoneBack', new Date(endDate.getTime()), appointmentTimezone);
         return this._getTimezoneOffsetByOption(cStartDate) - this._getTimezoneOffsetByOption(cEndDate);
     },
 
     _getDaylightOffsetByAppointmentTimezone: function(startDate, endDate, appointmentTimezone) {
-        return this._calculateTimezoneByValue(appointmentTimezone, startDate) - this._calculateTimezoneByValue(appointmentTimezone, endDate);
+        const cStartDate = this.fire('convertDateByTimezoneBack', new Date(startDate.getTime()), appointmentTimezone);
+        const cEndDate = this.fire('convertDateByTimezoneBack', new Date(endDate.getTime()), appointmentTimezone);
+        return this._calculateTimezoneByValue(appointmentTimezone, cStartDate) - this._calculateTimezoneByValue(appointmentTimezone, cEndDate);
     },
 
     _getCorrectedDateByDaylightOffsets: function(originalStartDate, date, startDateTimezone) {
