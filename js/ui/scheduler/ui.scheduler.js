@@ -1064,7 +1064,9 @@ const Scheduler = Widget.inherit({
     },
 
     _getDaylightOffsetByCustomTimezone: function(startDate, endDate) {
-        return this._getTimezoneOffsetByOption(startDate) - this._getTimezoneOffsetByOption(endDate);
+        const cStartDate = this.fire('convertDateByTimezoneBack', new Date(startDate.getTime()));
+        const cEndDate = this.fire('convertDateByTimezoneBack', new Date(endDate.getTime()));
+        return this._getTimezoneOffsetByOption(cStartDate) - this._getTimezoneOffsetByOption(cEndDate);
     },
 
     _getDaylightOffsetByAppointmentTimezone: function(startDate, endDate, appointmentTimezone) {
@@ -1072,7 +1074,7 @@ const Scheduler = Widget.inherit({
     },
 
     _getCorrectedDateByDaylightOffsets: function(originalStartDate, date, startDateTimezone) {
-        const daylightOffsetByOption = this._getDaylightOffsetByCustomTimezone(originalStartDate, date);
+        const daylightOffsetByOption = this._getDaylightOffsetByCustomTimezone(originalStartDate, date, startDateTimezone);
         const daylightOffsetByAppointment = this._getDaylightOffsetByAppointmentTimezone(originalStartDate, date, startDateTimezone);
         const diff = daylightOffsetByOption - daylightOffsetByAppointment;
 

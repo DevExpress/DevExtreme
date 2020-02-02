@@ -704,8 +704,11 @@ const subscribes = {
         const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
         date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
+        const tzOffsets1 = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
 
-        return date;
+        const diff = tzOffsets.common - tzOffsets1.common;
+
+        return new Date(date.getTime() + diff * toMs('hour'));
     },
 
     translateDateToAppointmentTimeZone: function(date, offsets, back) {
