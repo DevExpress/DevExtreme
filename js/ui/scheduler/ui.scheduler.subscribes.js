@@ -706,8 +706,7 @@ const subscribes = {
         date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
         const tzOffsets1 = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
 
-        const diff = tzOffsets.common - tzOffsets1.common;
-
+        const diff = tzOffsets.common - tzOffsets1.common || 0;
         return new Date(date.getTime() + diff * toMs('hour'));
     },
 
