@@ -225,6 +225,11 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
         assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
 
+        scheduler.appointments.click(0);
+
+        assert.equal(scheduler.tooltip.getDateText(), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly before time changing in custom timezone');
+
+
         scheduler.instance.option('currentDate', new Date(2019, 2, 14)); // NOTE: DST Montreal, STD Paris
 
         targetCell = scheduler.workSpace.getCell(8);
@@ -233,6 +238,10 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
         assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
 
+        scheduler.appointments.click(0);
+
+        assert.equal(scheduler.tooltip.getDateText(), '4:00 AM - 7:00 AM', 'Dates and time were displayed correctly after time changing in custom timezone');
+
         scheduler.instance.option('currentDate', new Date(2019, 3, 2)); // NOTE: DST Paris
 
         targetCell = scheduler.workSpace.getCell(6);
@@ -240,6 +249,10 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
 
         assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
         assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
+
+        scheduler.appointments.click(0);
+
+        assert.equal(scheduler.tooltip.getDateText(), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly after time changing in appointment timezone');
     });
 
     QUnit.test('Recurrence appt part at the time of DST should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', function(assert) {
@@ -278,6 +291,10 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
         assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
 
+        scheduler.appointments.click(0);
+
+        assert.equal(scheduler.tooltip.getDateText(), '4:00 AM - 7:00 AM', 'Dates and time were displayed correctly after time changing in custom timezone');
+
         scheduler.instance.option('currentDate', new Date(2019, 2, 31)); // NOTE: DST Paris
 
         targetCell = scheduler.workSpace.getCell(6);
@@ -285,6 +302,10 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
 
         assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
         assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
+
+        scheduler.appointments.click(0);
+
+        assert.equal(scheduler.tooltip.getDateText(), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly after time changing in appointment timezone');
     });
 
     QUnit.test('Recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone', function(assert) {
