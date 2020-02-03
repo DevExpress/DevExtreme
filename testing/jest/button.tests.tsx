@@ -72,10 +72,18 @@ describe('Button', () => {
         });
 
         describe('text', () => {
-            it('should render text', () => {
+            it('should render "text"', () => {
                 const button = render({ text: 'My button' });
 
                 expect(button.find('.dx-button-text').text()).toBe('My button');
+            });
+
+            it('should not render "text" by default', () => {
+                const button = render();
+
+                expect(button.hasClass('dx-button')).toBe(true);
+                expect(button.hasClass('dx-button-has-text')).toBe(false);
+                expect(button.find('.dx-button-text').exists()).toBe(false);
             });
         });
 

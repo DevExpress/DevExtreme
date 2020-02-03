@@ -105,6 +105,6 @@ export default class Button extends Widget {
     @Prop() icon?: string;
     @Prop() pressed?: boolean;
     @Prop() stylingMode?: string;
-    @Prop() text?: string;
+    @Prop() text?: string = '';
     @Prop() type?: string;
 }
