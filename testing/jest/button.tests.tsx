@@ -129,6 +129,20 @@ describe('Button', () => {
                 expect(tree.find(Widget).prop('hoverStateEnabled')).toBe(false);
             });
         });
+
+        describe('tabIndex', () => {
+            it('should pass a default value into Widget component', () => {
+                const tree = render();
+
+                expect(tree.find(Widget).prop('tabIndex')).toBe(0);
+            });
+
+            it('should pass a custom value into Widget component', () => {
+                const tree = render({ tabIndex: 10 });
+
+                expect(tree.find(Widget).prop('tabIndex')).toBe(10);
+            });
+        });
     });
 
     it('should have dx-button class', () => {
