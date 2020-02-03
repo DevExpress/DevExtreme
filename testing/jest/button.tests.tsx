@@ -41,33 +41,33 @@ describe('Button', () => {
             it('should use "contained" as a default value', () => {
                 const button = render();
 
-                expect(button.hasClass('dx-button-mode-contained')).toBeTruthy();
-                expect(button.hasClass('dx-button-mode-text')).toBeFalsy();
-                expect(button.hasClass('dx-button-mode-outlined')).toBeFalsy();
+                expect(button.hasClass('dx-button-mode-contained')).toBe(true);
+                expect(button.hasClass('dx-button-mode-text')).toBe(false);
+                expect(button.hasClass('dx-button-mode-outlined')).toBe(false);
             });
 
             it('should add "dx-button-mode-text" class if the stylingMode is "text"', () => {
                 const button = render({ stylingMode: 'text' });
 
-                expect(button.hasClass('dx-button-mode-text')).toBeTruthy();
-                expect(button.hasClass('dx-button-mode-contained')).toBeFalsy();
-                expect(button.hasClass('dx-button-mode-outlined')).toBeFalsy();
+                expect(button.hasClass('dx-button-mode-text')).toBe(true);
+                expect(button.hasClass('dx-button-mode-contained')).toBe(false);
+                expect(button.hasClass('dx-button-mode-outlined')).toBe(false);
             });
 
             it('should add "dx-button-mode-contained" class if the stylingMode is "contained"', () => {
                 const button = render({ stylingMode: 'contained' });
 
-                expect(button.hasClass('dx-button-mode-contained')).toBeTruthy();
-                expect(button.hasClass('dx-button-mode-text')).toBeFalsy();
-                expect(button.hasClass('dx-button-mode-outlined')).toBeFalsy();
+                expect(button.hasClass('dx-button-mode-contained')).toBe(true);
+                expect(button.hasClass('dx-button-mode-text')).toBe(false);
+                expect(button.hasClass('dx-button-mode-outlined')).toBe(false);
             });
 
             it('should add "dx-button-mode-outlined" class if the stylingMode is "outlined"', () => {
                 const button = render({ stylingMode: 'outlined' });
 
-                expect(button.hasClass('dx-button-mode-outlined')).toBeTruthy();
-                expect(button.hasClass('dx-button-mode-text')).toBeFalsy();
-                expect(button.hasClass('dx-button-mode-contained')).toBeFalsy();
+                expect(button.hasClass('dx-button-mode-outlined')).toBe(true);
+                expect(button.hasClass('dx-button-mode-text')).toBe(false);
+                expect(button.hasClass('dx-button-mode-contained')).toBe(false);
             });
         });
 
@@ -83,14 +83,14 @@ describe('Button', () => {
             it('should use "normal" as a default value', () => {
                 const button = render();
 
-                expect(button.hasClass('dx-button-normal')).toBeTruthy();
+                expect(button.hasClass('dx-button-normal')).toBe(true);
             });
 
             it('should add "dx-button-*" if the type is defined', () => {
                 const button = render({ type: 'custom' });
 
-                expect(button.hasClass('dx-button-custom')).toBeTruthy();
-                expect(button.hasClass('dx-button-normal')).toBeFalsy();
+                expect(button.hasClass('dx-button-custom')).toBe(true);
+                expect(button.hasClass('dx-button-normal')).toBe(false);
             });
         });
 
@@ -98,8 +98,8 @@ describe('Button', () => {
             it('should be enabled by default', () => {
                 const button = render();
 
-                expect(button.prop('activeStateEnabled')).toBeTruthy();
-                expect(button.hasClass('dx-state-active')).toBeFalsy();
+                expect(button.prop('activeStateEnabled')).toBe(true);
+                expect(button.hasClass('dx-state-active')).toBe(false);
             });
         });
 
@@ -107,7 +107,7 @@ describe('Button', () => {
             it('should render template', () => {
                 const button = render({
                     text: 'My button',
-                    contentRender: ({ text }) => createElement('div', { className: 'custom-content', children: `${text}123`})
+                    contentRender: ({ text }) => createElement('div', { className: 'custom-content', children: `${text}123` }),
                 });
                 const buttonContentChildren = button.find('.dx-button-content').children();
 
@@ -143,6 +143,6 @@ describe('Button', () => {
     it('should have dx-button class', () => {
         const tree = render();
 
-        expect(tree.is('.dx-button')).toBeTruthy();
+        expect(tree.is('.dx-button')).toBe(true);
     });
 });
