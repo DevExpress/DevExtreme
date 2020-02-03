@@ -1108,7 +1108,7 @@ QUnit.test('Key is required', function(assert) {
         const selection = createDeferredSelection(this.data, {}, createDataSource(this.data, { }, { }));
         selection.selectedItemKeys();
     }, function(ex) {
-        assert.ok(ex.message.indexOf('E1042') === 0);
+        assert.strictEqual(ex.message.indexOf('E1042'), 0);
         return true;
     });
 });

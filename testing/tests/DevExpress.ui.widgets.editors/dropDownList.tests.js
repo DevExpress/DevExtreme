@@ -1128,7 +1128,7 @@ QUnit.module('popup', moduleConfig, () => {
         const scrollTop = listInstance.scrollTop();
 
         setTimeout(() => {
-            assert.ok(listInstance.scrollTop() === scrollTop, 'scrollTop is correctly after new page load');
+            assert.strictEqual(listInstance.scrollTop(), scrollTop, 'scrollTop is correctly after new page load');
             done();
         });
     });
