@@ -1148,16 +1148,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _updateItemSelection: function(value, itemElement, dxEvent) {
-        if(this._setItemSelection(value, itemElement, dxEvent)) {
-            this._fireSelectionChanged();
-        }
-    },
-
-    _setItemSelection: function(value, itemElement, dxEvent) {
         const node = this._getNode(itemElement);
-
-        if(!node || node.internalFields.selected === value) {
+        if(!node) {
             return false;
+        }
+
+        if(node.internalFields.selected === value) {
+            return true;
         }
 
         if(!value && this._isLastRequired(node)) {
@@ -1188,6 +1185,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             itemData: node.internalFields.item
         });
 
+        this._fireSelectionChanged();
         return true;
     },
 
@@ -1516,11 +1514,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     selectItem: function(itemElement) {
-        this._updateItemSelection(true, itemElement);
+        return this._updateItemSelection(true, itemElement);
     },
 
     unselectItem: function(itemElement) {
-        this._updateItemSelection(false, itemElement);
+        return this._updateItemSelection(false, itemElement);
     },
 
     expandItem: function(itemElement) {
