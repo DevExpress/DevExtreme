@@ -51,5 +51,33 @@ module.exports = [
     { content: 'dropDownEditor', task: 'widget', private: true },
     // dropDownBox
     { content: 'dropDownBox', task: 'widget' },
+    // list
+    { content: 'list', task: 'widget' },
+    // textArea
+    { content: 'textArea', task: 'widget' },
+    // numberBox
+    { content: 'numberBox', task: 'widget' },
+    // dateView
+    { content: 'dateView', task: 'widget', private: true },
+    // timeView
+    { content: 'timeView', task: 'widget', private: true },
+    // calendar
+    { content: 'calendar', task: 'widget' },
+    // dateBox
+    { content: 'dateBox', task: 'widget' },
+    // dropDownList
+    { content: 'dropDownList', task: 'widget', private: true },
+    // autocomplete
+    { content: 'autocomplete', task: 'widget' },
+    // loadIndicator
+    { content: 'loadIndicator', task: 'widget' },
+    // treeView
+    { content: 'treeView', task: 'widget' },
+    // overlay
+    { content: 'overlay', task: 'widget', private: true },
+    // menu
+    { content: 'menu', task: 'widget' },
+    // selectBox
+    { content: 'selectBox', task: 'widget' },
     { task: 'newline' }
 ];
