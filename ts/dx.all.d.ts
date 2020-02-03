@@ -1574,6 +1574,10 @@ declare module DevExpress.events {
     /** @name events.triggerHandler(element, event, extraParameters) */
     export function triggerHandler(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
 }
+declare module DevExpress.excelExporter {
+    /** @name excelExporter.exportDataGrid(options) */
+    export function exportDataGrid(options: { component?: DevExpress.ui.dxDataGrid, worksheet?: any, topLeftCell?: any, selectedRowsOnly?: boolean, autoFilterEnabled?: boolean, keepColumnWidths?: boolean, customizeCell?: any, loadPanel?: any }): void;
+}
 declare module DevExpress.exporter {
     /** @name ExcelDataGridCell */
     export interface ExcelDataGridCell {

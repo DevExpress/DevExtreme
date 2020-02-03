@@ -195,7 +195,7 @@
   {
     "name": "exporter/exceljs/excelExporter",
     "exports": {
-      "exportDataGrid": { "path": "excelExporter.exportDataGrid" }
+      "exportDataGrid": { "path": "exportDataGrid" }
     }
   },
   {
