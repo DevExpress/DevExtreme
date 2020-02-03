@@ -569,18 +569,47 @@ test("Row should not be focused by 'focusedRowIndex' after change 'pageIndex' by
         .click(pager.getNavPage(1).element)
         .expect(pager.getNavPage(1).isSelected).ok()
         .expect(dataGrid.getFocusedRow().exists).notOk();
-    }).before(() => createWidget("dxDataGrid", {
-        dataSource: [
-            { id: 0, c0: "c0_0" },
-            { id: 1, c0: "c0_1" },
-            { id: 2, c0: "c0_2" },
-            { id: 3, c0: "c0_3" }
-        ],
-        keyExpr: "id",
-        focusedRowEnabled: true,
-        autoNavigateToFocusedRow: false,
-        focusedRowIndex: 1,
-        paging: {
-            pageSize: 2
-        }
-    }));
+}).before(() => createWidget("dxDataGrid", {
+    dataSource: [
+        { id: 0, c0: "c0_0" },
+        { id: 1, c0: "c0_1" },
+        { id: 2, c0: "c0_2" },
+        { id: 3, c0: "c0_3" }
+    ],
+    keyExpr: "id",
+    focusedRowEnabled: true,
+    autoNavigateToFocusedRow: false,
+    focusedRowIndex: 1,
+    paging: {
+        pageSize: 2
+    }
+}));
+
+test("Cell should be highlighted after editing another cell when startEditAction is 'dblClick' and 'batch' edit mode if isHighlighted is set to true in onFocusedCellChanging (T836391)", async t => {
+    const dataGrid = new DataGrid("#container");
+
+    await t
+        .expect(dataGrid.getDataCell(0, 0).isFocused).notOk()
+        .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
+
+        .doubleClick(dataGrid.getDataCell(0, 0).element)
+        .expect(dataGrid.getDataCell(0, 0).isFocused).ok()
+        .expect(dataGrid.getDataCell(0, 0).isEditCell).ok()
+
+        .click(dataGrid.getDataCell(0, 1).element)
+        .expect(dataGrid.getDataCell(0, 1).isFocused).ok()
+        .expect(dataGrid.getDataCell(0, 0).isFocused).notOk()
+        .expect(dataGrid.getDataCell(0, 0).isEditCell).notOk();
+}).before(() => createWidget("dxDataGrid", {
+    dataSource: [
+        { name: "Alex", phone: "555555", room: 1 },
+        { name: "Dan", phone: "553355", room: 2 }
+    ],
+    columns:["name","phone","room"],
+    editing: {
+        mode: "batch",
+        allowUpdating: true,
+        startEditAction: "dblClick"
+    },
+    onFocusedCellChanging: (e) => e.isHighlighted = true
+}));
