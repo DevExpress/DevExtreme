@@ -3,7 +3,12 @@
         "jest": true
     },
     "plugins": [
-        "jest"
+        "jest",
+        "react"
     ],
-    "extends": ["plugin:jest/recommended"]
+    "extends": ["plugin:jest/recommended"],
+    "rules": {
+        "no-unused-vars": ["error", { "varsIgnorePattern": "h" }],
+        "react/jsx-uses-vars": 2
+    }
 }

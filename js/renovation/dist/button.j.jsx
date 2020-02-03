@@ -44,6 +44,7 @@ class Button extends Widget {
             hoverStateEnabled: true,
             icon: '',
             iconPosition: 'left',
+            text: '',
         });
     }
 }
