@@ -2269,10 +2269,18 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         showHighlighting: function($cell) {
-            const $highlight = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
-
+            // const $highlight = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
+            // test
+            let $highlight = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
+            // endTest
             if($cell.get(0).tagName === 'TD' && !$highlight.length) {
                 $cell.wrapInner($('<div>').addClass(CELL_HIGHLIGHT_OUTLINE + ' ' + POINTER_EVENTS_TARGET_CLASS));
+                // test
+                $highlight = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
+                if(!$highlight.find('.dx-widget').length) {
+                    $highlight.wrapInner($('<div>').addClass('dx-cell-value'));
+                }
+                // endTest
             }
         },
 

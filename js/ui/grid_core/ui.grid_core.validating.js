@@ -28,6 +28,8 @@ const INVALID_MESSAGE_ALWAYS_CLASS = 'dx-invalid-message-always';
 const REVERT_BUTTON_CLASS = 'dx-revert-button';
 const CELL_HIGHLIGHT_OUTLINE = 'dx-highlight-outline';
 const VALIDATOR_CLASS = 'validator';
+const PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
+const VALIDATION_PENDING_CLASS = 'dx-validation-pending';
 
 const INSERT_INDEX = '__DX_INSERT_INDEX__';
 const PADDING_BETWEEN_TOOLTIPS = 2;
@@ -228,28 +230,30 @@ const ValidatingController = modules.Controller.inherit((function() {
                 if(!$container) {
                     return;
                 }
-                let pendingIndicator = $container.data('pendingIndicator');
-                if(!pendingIndicator) {
-                    const $indicatorContainer = $container;// .find('.dx-highlight-outline.dx-pointer-events-target');
-                    if($indicatorContainer.length) {
-                        const $indicator = $('<div>').appendTo($indicatorContainer)
-                            .addClass('dx-pending-indicator');
-                        pendingIndicator = new LoadIndicator($indicator);
-                        $container.data('pendingIndicator', pendingIndicator);
-                        $container.addClass('dx-validation-pending');
+                let $indicator = $container.find('.' + PENDING_INDICATOR_CLASS);
+                if(!$indicator.length) {
+                    let $indicatorContainer = $container.find('.' + CELL_HIGHLIGHT_OUTLINE);
+                    if(!$indicatorContainer.length) {
+                        $indicatorContainer = $container;
                     }
+                    $indicator = $('<div>').appendTo($indicatorContainer)
+                        .addClass(PENDING_INDICATOR_CLASS);
+                    new LoadIndicator($indicator);
+                    $container.addClass(VALIDATION_PENDING_CLASS);
                 }
             };
             const disposeCellPendingIndicator = () => {
                 if(!$container) {
                     return;
                 }
-                const pendingIndicator = $container.data('pendingIndicator');
-                if(pendingIndicator) {
-                    pendingIndicator.dispose();
-                    pendingIndicator.element().remove();
-                    $container.removeData('pendingIndicator');
-                    $container.removeClass('dx-validation-pending');
+                const $indicator = $container.find('.' + PENDING_INDICATOR_CLASS);
+                if($indicator.length) {
+                    const indicator = LoadIndicator.getInstance($indicator);
+                    if(indicator) {
+                        indicator.dispose();
+                        indicator.element().remove();
+                    }
+                    $container.removeClass(VALIDATION_PENDING_CLASS);
                 }
             };
             const defaultValidationResult = (options) => {
@@ -399,7 +403,7 @@ const ValidatingController = modules.Controller.inherit((function() {
             const deferred = new Deferred();
             const adapter = validator.option('adapter');
             if(stateRestored && validationResult.status === VALIDATION_STATUS.pending) {
-                // this.updateCellValidationResult(extend({}, cellParams, { validationResult }));
+                this.updateCellValidationResult(cellParams);
                 adapter.applyValidationResults(validationResult);
             }
             when(validationResult.complete || validationResult).done((validationResult) => {
@@ -411,17 +415,24 @@ const ValidatingController = modules.Controller.inherit((function() {
 
         updateCellValidationResult: function({ rowKey, columnIndex, validationResult }) {
             const editData = this._editingController.getEditDataByKey(rowKey);
-            if(!editData || !validationResult) {
+            if(!editData) {
                 return;
             }
             if(!editData.validationResults) {
                 editData.validationResults = {};
             }
-            const result = extend({}, validationResult);
-            editData.validationResults[columnIndex] = result;
-            if(this._disableApplyValidationResults && validationResult.status === VALIDATION_STATUS.pending) {
-                result.disabledPendingId = validationResult.id;
-            } else if(result.disabledPendingId) {
+            let result;
+            if(validationResult) {
+                result = extend({}, validationResult);
+                editData.validationResults[columnIndex] = result;
+                if(this._disableApplyValidationResults && validationResult.status === VALIDATION_STATUS.pending) {
+                    result.disabledPendingId = validationResult.id;
+                    return;
+                }
+            } else {
+                result = editData.validationResults[columnIndex];
+            }
+            if(result && result.disabledPendingId) {
                 delete result.disabledPendingId;
             }
         },
