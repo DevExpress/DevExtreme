@@ -125,8 +125,8 @@ describe('Button', () => {
 
                 const elements = button.find('.dx-button-content').children();
 
-                expect(elements.at(0).is('.dx-icon.dx-icon-test')).toBeTruthy();
-                expect(elements.at(1).is('.dx-button-text')).toBeTruthy();
+                expect(elements.at(0).is('.dx-icon.dx-icon-test')).toBe(true);
+                expect(elements.at(1).is('.dx-button-text')).toBe(true);
             });
 
             it('should render icon after text if iconPosition is right', () => {
@@ -138,9 +138,9 @@ describe('Button', () => {
 
                 const elements = button.find('.dx-button-content').children();
 
-                expect(button.hasClass('dx-button-icon-right')).toBeTruthy();
-                expect(elements.at(0).is('.dx-button-text')).toBeTruthy();
-                expect(elements.at(1).is('.dx-icon.dx-icon-test.dx-icon-right')).toBeTruthy();
+                expect(button.hasClass('dx-button-icon-right')).toBe(true);
+                expect(elements.at(0).is('.dx-button-text')).toBe(true);
+                expect(elements.at(1).is('.dx-icon.dx-icon-test.dx-icon-right')).toBe(true);
             });
         });
 
