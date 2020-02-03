@@ -12,12 +12,17 @@ import { exportDataGrid } from './exportDataGrid';
 */
 
 /**
-* @name ExcelDataGridCell1
+* @name ExportDataGridOpts
 * @type object
 */
 
 /**
-* @name ExcelDataGridCell2
+* @name CellsRange
+* @type object
+*/
+
+/**
+* @name ExportLoadPanel
 * @type object
 */
 

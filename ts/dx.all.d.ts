@@ -1576,7 +1576,7 @@ declare module DevExpress.events {
 }
 declare module DevExpress.excelExporter {
     /** @name excelExporter.exportDataGrid(options) */
-    export function exportDataGrid(options: DevExpress.exporter.ExcelDataGridCell1): Promise<DevExpress.exporter.ExcelDataGridCell2> & JQueryPromise<DevExpress.exporter.ExcelDataGridCell2>;
+    export function exportDataGrid(options: DevExpress.exporter.ExportDataGridOpts): Promise<DevExpress.exporter.CellsRange> & JQueryPromise<DevExpress.exporter.CellsRange>;
 }
 declare module DevExpress.exporter {
     /** @name CellAddress */
@@ -1585,6 +1585,13 @@ declare module DevExpress.exporter {
         column?: number;
         /** @name CellAddress.row */
         row?: number;
+    }
+    /** @name CellsRange */
+    export interface CellsRange {
+        /** @name CellsRange.from */
+        from?: CellAddress;
+        /** @name CellsRange.to */
+        to?: CellAddress;
     }
     /** @name ExcelDataGridCell */
     export interface ExcelDataGridCell {
@@ -1603,20 +1610,6 @@ declare module DevExpress.exporter {
         /** @name ExcelDataGridCell.value */
         value?: any;
     }
-    /** @name ExcelDataGridCell1 */
-    export interface ExcelDataGridCell1 {
-        /** @name ExcelDataGridCell1.component */
-        component?: DevExpress.ui.dxDataGrid;
-        /** @name ExcelDataGridCell1.data */
-        data?: any;
-        /** @name ExcelDataGridCell1.topLeftCell */
-        topLeftCell?: CellAddress;
-    }
-    /** @name ExcelDataGridCell2 */
-    export interface ExcelDataGridCell2 {
-        /** @name ExcelDataGridCell2.data */
-        data?: any;
-    }
     /** @name ExcelFont */
     export interface ExcelFont {
         /** @name ExcelFont.bold */
@@ -1631,6 +1624,46 @@ declare module DevExpress.exporter {
         size?: number;
         /** @name ExcelFont.underline */
         underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
+    }
+    /** @name ExportDataGridOpts */
+    export interface ExportDataGridOpts {
+        /** @name ExportDataGridOpts.autoFilterEnabled */
+        autoFilterEnabled?: boolean;
+        /** @name ExportDataGridOpts.component */
+        component?: DevExpress.ui.dxDataGrid;
+        /** @name ExportDataGridOpts.customizeCell */
+        customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any }) => any);
+        /** @name ExportDataGridOpts.keepColumnWidths */
+        keepColumnWidths?: boolean;
+        /** @name ExportDataGridOpts.loadPanel */
+        loadPanel?: ExportLoadPanel;
+        /** @name ExportDataGridOpts.selectedRowsOnly */
+        selectedRowsOnly?: boolean;
+        /** @name ExportDataGridOpts.topLeftCell */
+        topLeftCell?: CellAddress;
+        /** @name ExportDataGridOpts.worksheet */
+        worksheet?: any;
+    }
+    /** @name ExportLoadPanel */
+    export interface ExportLoadPanel {
+        /** @name ExportLoadPanel.enabled */
+        enabled?: boolean;
+        /** @name ExportLoadPanel.height */
+        height?: number;
+        /** @name ExportLoadPanel.indicatorSrc */
+        indicatorSrc?: string;
+        /** @name ExportLoadPanel.shading */
+        shading?: boolean;
+        /** @name ExportLoadPanel.shadingColor */
+        shadingColor?: string;
+        /** @name ExportLoadPanel.showIndicator */
+        showIndicator?: boolean;
+        /** @name ExportLoadPanel.showPane */
+        showPane?: boolean;
+        /** @name ExportLoadPanel.text */
+        text?: string;
+        /** @name ExportLoadPanel.width */
+        width?: number;
     }
 }
 declare module DevExpress.fileProvider {
