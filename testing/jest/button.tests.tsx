@@ -1,11 +1,11 @@
 import Button from '../../js/renovation/button.p.js';
 import Widget from '../../js/renovation/widget.p.js';
-import { createElement } from 'preact';
+import { h } from 'preact';
 import { emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
 import { mount } from 'enzyme';
 
 describe('Button', () => {
-    const render = (props = {}) => mount(createElement(Button, props)).childAt(0);
+    const render = (props = {}) => mount(<Button {...props} />).childAt(0);
 
     describe('Props', () => {
         describe('onClick', () => {
@@ -115,7 +115,7 @@ describe('Button', () => {
             it('should render template', () => {
                 const button = render({
                     text: 'My button',
-                    contentRender: ({ text }) => createElement('div', { className: 'custom-content', children: `${text}123` }),
+                    contentRender: ({ text }) => <div className={'custom-content'}>{text + 123}</div>,
                 });
                 const buttonContentChildren = button.find('.dx-button-content').children();
 
