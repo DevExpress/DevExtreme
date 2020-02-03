@@ -30,13 +30,13 @@ describe('Widget', () => {
                 const widget = render({ accessKey: 'y', focusStateEnabled: true });
 
                 emit(EVENT.click, fakeClickEvent);
-                expect(widget.hasClass('dx-state-focused')).toBeTruthy();
+                expect(widget.hasClass('dx-state-focused')).toBe(true);
             });
 
             it('should not fire click event if the accessKey is pressed', () => {
                 const clickHandler = jest.fn();
                 const stopImmediatePropagation = jest.fn();
-                const fakeClickEventClone = Object.assign({}, fakeClickEvent);
+                const fakeClickEventClone = { ...fakeClickEvent };
 
                 fakeClickEventClone.stopImmediatePropagation = stopImmediatePropagation;
 
@@ -51,13 +51,13 @@ describe('Widget', () => {
             it('should not add rtl marker class by default', () => {
                 const widget = render();
 
-                expect(widget.hasClass('dx-rtl')).toBeFalsy();
+                expect(widget.hasClass('dx-rtl')).toBe(false);
             });
 
             it('should add rtl marker class if "rtlEnabled" is true', () => {
                 const widget = render({ rtlEnabled: true });
 
-                expect(widget.hasClass('dx-rtl')).toBeTruthy();
+                expect(widget.hasClass('dx-rtl')).toBe(true);
             });
         });
 
@@ -91,7 +91,7 @@ describe('Widget', () => {
             it('should add css marker class', () => {
                 const widget = render({ disabled: true });
 
-                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
+                expect(widget.hasClass('dx-state-disabled')).toBe(true);
             });
 
             it('should add aria attribute', () => {
@@ -105,7 +105,7 @@ describe('Widget', () => {
             it('should add css marker class', () => {
                 const widget = render({ visible: false });
 
-                expect(widget.hasClass('dx-state-invisible')).toBeTruthy();
+                expect(widget.hasClass('dx-state-invisible')).toBe(true);
             });
 
             it('should add aria attribute', () => {
@@ -137,13 +137,13 @@ describe('Widget', () => {
             it('should not add tabIndex attribute if the "disabled" is true', () => {
                 const widget = render({ focusStateEnabled: true, tabIndex: 10, disabled: true });
 
-                expect(widget.prop('tabIndex')).toBeFalsy();
+                expect(widget.prop('tabIndex')).toBe(false);
             });
 
             it('should not add tabIndex attribute if the "focusStateEnabled" is false', () => {
                 const widget = render({ focusStateEnabled: false, tabIndex: 10 });
 
-                expect(widget.prop('tabIndex')).toBeFalsy();
+                expect(widget.prop('tabIndex')).toBe(false);
             });
         });
 
@@ -151,11 +151,11 @@ describe('Widget', () => {
             it('should pass custom css class name via elementAttr', () => {
                 const widget = render({ elementAttr: { class: 'custom-class' } });
 
-                expect(widget.hasClass('custom-class')).toBeTruthy();
+                expect(widget.hasClass('custom-class')).toBe(true);
             });
 
             it('should pass custom attributes', () => {
-                const widget = render({ elementAttr: { 'data-custom': 'custom-attribute-value' }});
+                const widget = render({ elementAttr: { 'data-custom': 'custom-attribute-value' } });
 
                 expect(widget.prop('data-custom')).toBe('custom-attribute-value');
             });
@@ -163,9 +163,9 @@ describe('Widget', () => {
             it('should not provide `class` property', () => {
                 const widget = render({ elementAttr: { class: 'custom-class' } });
 
-                expect(widget.hasClass('custom-class')).toBeTruthy();
-                expect(widget.hasClass('dx-widget')).toBeTruthy();
-                expect(widget.prop('class')).toBeFalsy();
+                expect(widget.hasClass('custom-class')).toBe(true);
+                expect(widget.hasClass('dx-widget')).toBe(true);
+                expect(widget.prop('class')).toBe(void 0);
             });
         });
 
@@ -173,8 +173,8 @@ describe('Widget', () => {
             it('should be disabled by default', () => {
                 const widget = render();
 
-                expect(widget.prop('activeStateEnabled')).toBeFalsy();
-                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+                expect(widget.instance().props.activeStateEnabled).toBe(false);
+                expect(widget.hasClass('dx-state-active')).toBe(false);
             });
         });
 
@@ -182,8 +182,8 @@ describe('Widget', () => {
             it('should be disabled by default', () => {
                 const widget = render();
 
-                expect(widget.prop('hoverStateEnabled')).toBeFalsy();
-                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
+                expect(widget.instance().props.hoverStateEnabled).toBe(false);
+                expect(widget.hasClass('dx-state-hover')).toBe(false);
             });
         });
 
@@ -191,8 +191,8 @@ describe('Widget', () => {
             it('should be disabled by default', () => {
                 const widget = render();
 
-                expect(widget.prop('focusStateEnabled')).toBeFalsy();
-                expect(widget.hasClass('dx-state-focus')).toBeFalsy();
+                expect(widget.instance().props.focusStateEnabled).toBe(false);
+                expect(widget.hasClass('dx-state-focus')).toBe(false);
             });
         });
 
@@ -217,7 +217,7 @@ describe('Widget', () => {
                 label: 'custom-aria-label',
                 role: 'button',
                 id: 'custom-id',
-            }});
+            } });
 
             expect(widget.props()).toMatchObject({
                 'aria-label': 'custom-aria-label',
@@ -229,11 +229,11 @@ describe('Widget', () => {
 
     describe('Children', () => {
         it('should render child component', () => {
-            const widget = render({ children: createElement('div', { className: 'custom-content' })});
+            const widget = render({ children: createElement('div', { className: 'custom-content' }) });
             const children = widget.children();
 
             expect(children).toHaveLength(1);
-            expect(children.at(0).is('.custom-content')).toBeTruthy();
+            expect(children.at(0).is('.custom-content')).toBe(true);
         });
     });
 
@@ -242,28 +242,28 @@ describe('Widget', () => {
             it('should change state by mouse events', () => {
                 const widget = render({ activeStateEnabled: true });
 
-                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+                expect(widget.hasClass('dx-state-active')).toBe(false);
 
                 emit(EVENT.active);
-                expect(widget.hasClass('dx-state-active')).toBeTruthy();
+                expect(widget.hasClass('dx-state-active')).toBe(true);
 
                 emit(EVENT.inactive);
-                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+                expect(widget.hasClass('dx-state-active')).toBe(false);
             });
 
             it('should not change state if disabled', () => {
                 const widget = render({ activeStateEnabled: true, disabled: true });
 
-                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
-                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+                expect(widget.hasClass('dx-state-disabled')).toBe(true);
+                expect(widget.hasClass('dx-state-active')).toBe(false);
 
                 emit(EVENT.active);
-                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
-                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+                expect(widget.hasClass('dx-state-disabled')).toBe(true);
+                expect(widget.hasClass('dx-state-active')).toBe(false);
 
                 emit(EVENT.inactive);
-                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
-                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+                expect(widget.hasClass('dx-state-disabled')).toBe(true);
+                expect(widget.hasClass('dx-state-active')).toBe(false);
             });
         });
 
@@ -271,28 +271,28 @@ describe('Widget', () => {
             // it('should change state by mouse events', () => {
             //     const widget = render();
 
-            //     expect(widget.hasClass('dx-state-focus')).toBeFalsy();
+            //     expect(widget.hasClass('dx-state-focus')).toBe(false);
 
             //     emit(EVENT.focus);
-            //     expect(widget.hasClass('dx-state-focus')).toBeTruthy();
+            //     expect(widget.hasClass('dx-state-focus')).toBe(true);
 
             //     emit(EVENT.blur);
-            //     expect(widget.hasClass('dx-state-focus')).toBeFalsy();
+            //     expect(widget.hasClass('dx-state-focus')).toBe(false);
             // });
 
             // it('should not change state if disabled', () => {
             //     const widget = render({ disabled: true });
 
-            //     expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
-            //     expect(widget.hasClass('dx-state-focus')).toBeFalsy();
+            //     expect(widget.hasClass('dx-state-disabled')).toBe(true);
+            //     expect(widget.hasClass('dx-state-focus')).toBe(false);
 
             //     emit(EVENT.focus);
-            //     expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
-            //     expect(widget.hasClass('dx-state-focus')).toBeFalsy();
+            //     expect(widget.hasClass('dx-state-disabled')).toBe(true);
+            //     expect(widget.hasClass('dx-state-focus')).toBe(false);
 
             //     emit(EVENT.blur);
-            //     expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
-            //     expect(widget.hasClass('dx-state-focus')).toBeFalsy();
+            //     expect(widget.hasClass('dx-state-disabled')).toBe(true);
+            //     expect(widget.hasClass('dx-state-focus')).toBe(false);
             // });
         });
 
@@ -300,47 +300,47 @@ describe('Widget', () => {
             it('should change state by mouse events', () => {
                 const widget = render({ hoverStateEnabled: true });
 
-                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
+                expect(widget.hasClass('dx-state-hover')).toBe(false);
 
                 emit(EVENT.hoverStart);
-                expect(widget.hasClass('dx-state-hover')).toBeTruthy();
+                expect(widget.hasClass('dx-state-hover')).toBe(true);
 
                 emit(EVENT.hoverEnd);
-                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
+                expect(widget.hasClass('dx-state-hover')).toBe(false);
             });
 
             it('should not change state if disabled', () => {
                 const widget = render({ hoverStateEnabled: true, disabled: true });
 
-                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
-                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
+                expect(widget.hasClass('dx-state-disabled')).toBe(true);
+                expect(widget.hasClass('dx-state-hover')).toBe(false);
 
                 emit(EVENT.hoverStart);
-                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
-                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
+                expect(widget.hasClass('dx-state-disabled')).toBe(true);
+                expect(widget.hasClass('dx-state-hover')).toBe(false);
 
                 emit(EVENT.hoverEnd);
-                expect(widget.hasClass('dx-state-disabled')).toBeTruthy();
-                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
+                expect(widget.hasClass('dx-state-disabled')).toBe(true);
+                expect(widget.hasClass('dx-state-hover')).toBe(false);
             });
 
             it('should clear hover state if active', () => {
-                const widget = render({  hoverStateEnabled: true, activeStateEnabled: true });
+                const widget = render({ hoverStateEnabled: true, activeStateEnabled: true });
 
-                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
-                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+                expect(widget.hasClass('dx-state-hover')).toBe(false);
+                expect(widget.hasClass('dx-state-active')).toBe(false);
 
                 emit(EVENT.hoverStart);
-                expect(widget.hasClass('dx-state-hover')).toBeTruthy();
-                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+                expect(widget.hasClass('dx-state-hover')).toBe(true);
+                expect(widget.hasClass('dx-state-active')).toBe(false);
 
                 emit(EVENT.active);
-                expect(widget.hasClass('dx-state-hover')).toBeFalsy();
-                expect(widget.hasClass('dx-state-active')).toBeTruthy();
+                expect(widget.hasClass('dx-state-hover')).toBe(false);
+                expect(widget.hasClass('dx-state-active')).toBe(true);
 
                 emit(EVENT.inactive);
-                expect(widget.hasClass('dx-state-hover')).toBeTruthy();
-                expect(widget.hasClass('dx-state-active')).toBeFalsy();
+                expect(widget.hasClass('dx-state-hover')).toBe(true);
+                expect(widget.hasClass('dx-state-active')).toBe(false);
             });
         });
     });
@@ -348,6 +348,6 @@ describe('Widget', () => {
     it('should have dx-widget class', () => {
         const tree = render();
 
-        expect(tree.is('.dx-widget')).toBeTruthy();
+        expect(tree.is('.dx-widget')).toBe(true);
     });
 });
