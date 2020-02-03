@@ -278,7 +278,6 @@ const ROOT_ID = -1;
 configs.forEach(config => {
     QUnit.module(`SelectionMode: ${config.selectionMode}, dataSource: ${config.dataSourceOption}, virtualModeEnabled: ${config.virtualModeEnabled}, expanded: ${config.expanded}, selectNodesRecursive: ${config.selectNodesRecursive}`, () => {
         QUnit.test('all.selected: false', function(assert) {
-            // check via dataSource
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
@@ -988,5 +987,90 @@ QUnit.module('Delayed datasource', () => {
                 }
             });
         });
+    });
+});
+
+QUnit.module('Searching', () => {
+    QUnit.test('all.selected: false -> search(item2) -> select(item1) -> removeSearch', function(assert) {
+        const wrapper = createWrapper({ dataSourceOption: 'items' }, {}, [
+            { id: 0, text: 'item1', parentId: ROOT_ID, selected: false },
+            { id: 1, text: 'item2', parentId: ROOT_ID, selected: false }]);
+
+        wrapper.instance.option('searchValue', '2');
+        wrapper.checkSelectedKeys([], 'after search');
+        wrapper.checkSelectedNodes([], 'after search');
+        wrapper.checkEventLog([], 'after search');
+
+        wrapper.instance.selectItem(0);
+        wrapper.checkSelection([], [], 'after search');
+        wrapper.checkEventLog([], 'after search');
+
+        wrapper.instance.option('searchValue', '');
+        wrapper.checkSelection([], [], 'after removeSearch');
+        wrapper.checkEventLog([], 'after removeSearch');
+    });
+
+    QUnit.test('all.selected: false -> search(item2) -> selectAll() -> removeSearch', function(assert) {
+        const wrapper = createWrapper({ dataSourceOption: 'items' }, {}, [
+            { id: 0, text: 'item1', parentId: ROOT_ID, selected: false },
+            { id: 1, text: 'item2', parentId: ROOT_ID, selected: false }]);
+
+        wrapper.instance.option('searchValue', '2');
+        wrapper.checkSelectedKeys([], 'after search');
+        wrapper.checkSelectedNodes([], 'after search');
+        wrapper.checkEventLog([], 'after search');
+
+        wrapper.instance.selectAll();
+        wrapper.checkSelection([1], [0], 'after selectAll');
+        wrapper.checkEventLog(['selectionChanged'], 'after selectAll');
+        wrapper.clearEventLog();
+
+        wrapper.instance.option('searchValue', '');
+        wrapper.checkSelection([1], [1], 'after removeSearch');
+        wrapper.checkEventLog([]);
+    });
+
+    QUnit.test('all.selected: true -> search(item2) -> unselectItem(0) -> removeSearch', function(assert) {
+        const wrapper = createWrapper({ dataSourceOption: 'items' }, {}, [
+            { id: 0, text: 'item1', parentId: ROOT_ID, selected: true },
+            { id: 1, text: 'item2', parentId: ROOT_ID, selected: true }]);
+
+        wrapper.instance.option('searchValue', '2');
+        wrapper.checkSelectedKeys([1], 'after search');
+        wrapper.checkSelectedNodes([0], 'after search');
+        wrapper.checkEventLog([], 'after search');
+        wrapper.clearEventLog();
+
+        wrapper.instance.unselectItem(0);
+        wrapper.checkSelectedKeys([1], 'after unselect');
+        wrapper.checkSelectedNodes([0], 'after unselect');
+        wrapper.checkEventLog([], 'after unselect');
+        wrapper.clearEventLog();
+
+        wrapper.instance.option('searchValue', '');
+        wrapper.checkSelection([0, 1], [0, 1], 'after removeSearch');
+        wrapper.checkEventLog([], 'after removeSearch');
+    });
+
+    QUnit.test('all.selected: true -> search(item2) -> unselectAll -> removeSearch', function(assert) {
+        const wrapper = createWrapper({ dataSourceOption: 'items' }, {}, [
+            { id: 0, text: 'item1', parentId: ROOT_ID, selected: true },
+            { id: 1, text: 'item2', parentId: ROOT_ID, selected: true }]);
+
+        wrapper.instance.option('searchValue', '2');
+        wrapper.checkSelectedKeys([1], 'after search');
+        wrapper.checkSelectedNodes([0], 'after search');
+        wrapper.checkEventLog([], 'after search');
+        wrapper.clearEventLog();
+
+        wrapper.instance.unselectAll();
+        wrapper.checkSelectedKeys([], 'after unselectAll');
+        wrapper.checkSelectedNodes([], 'after search');
+        wrapper.checkEventLog(['selectionChanged'], 'after unselect');
+        wrapper.clearEventLog();
+
+        wrapper.instance.option('searchValue', '');
+        wrapper.checkSelection([0], [0], 'after removeSearch');
+        wrapper.checkEventLog([], 'after removeSearch');
     });
 });
