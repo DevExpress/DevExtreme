@@ -85,8 +85,10 @@ QUnit.module('popup integration', {
     });
 
     QUnit.test('popup and list should not be rendered if deferRendering is true', function(assert) {
-        assert.strictEqual(getPopup(this.instance), undefined, 'popup should be lazy rendered');
-        assert.strictEqual(getList(this.instance), undefined, 'list should be lazy rendered');
+        const dropDownButton = new DropDownButton('#dropDownButton2');
+
+        assert.strictEqual(getPopup(dropDownButton), undefined, 'popup should be lazy rendered');
+        assert.strictEqual(getList(dropDownButton), undefined, 'list should be lazy rendered');
     });
 
     QUnit.test('popup and list should be rendered on init when deferRendering is false', function(assert) {
