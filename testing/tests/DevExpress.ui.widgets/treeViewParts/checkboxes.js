@@ -916,6 +916,119 @@ configs.forEach(config => {
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
             wrapper.checkEventLog([], 'after expand');
         });
+
+        [true, false].forEach(selectionRequired => {
+            QUnit.test(`item1.selected: false, selectionRequired: ${selectionRequired} -> unselectItem(0)`, function(assert) {
+                const wrapper = createWrapper(config, { selectionRequired }, [
+                    { id: 0, text: 'item1', parentId: ROOT_ID, selected: false }]);
+
+                const unselectResult = wrapper.instance.unselectItem(0);
+
+                assert.strictEqual(unselectResult, true, 'after unselect');
+                wrapper.checkSelectedKeys([], 'after unselect');
+                wrapper.checkSelectedNodes([], 'after unselect');
+                wrapper.checkEventLog([], 'after unselect');
+                wrapper.clearEventLog();
+            });
+
+            QUnit.test(`item1.selected: true, selectionRequired: ${selectionRequired} -> unselectItem(0)`, function(assert) {
+                const wrapper = createWrapper(config, { selectionRequired }, [
+                    { id: 0, text: 'item1', parentId: ROOT_ID, selected: true }]);
+
+                const unselectResult = wrapper.instance.unselectItem(0);
+
+                let expectedKeys = [];
+                let expectedNodes = [];
+                let expectedUnselectResult = true;
+                let expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
+                if(selectionRequired) {
+                    expectedKeys = [0];
+                    expectedNodes = [0];
+                    expectedEventLog = [];
+                    expectedUnselectResult = false;
+                }
+
+                assert.strictEqual(unselectResult, expectedUnselectResult, 'after unselect');
+                wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
+                wrapper.checkSelectedNodes(expectedNodes, 'after unselect');
+                wrapper.checkEventLog(expectedEventLog, 'after unselect');
+                wrapper.clearEventLog();
+            });
+
+            QUnit.test(`item1.selected: true, item2.selected: true, selectionRequired: ${selectionRequired} -> unselectItem(0)`, function(assert) {
+                if(config.selectionMode === 'single') {
+                    assert.ok('skip for single');
+                    return;
+                }
+
+                const wrapper = createWrapper(config, { selectionRequired }, [
+                    { id: 0, text: 'item1', parentId: ROOT_ID, selected: true },
+                    { id: 1, text: 'item2', parentId: ROOT_ID, selected: true }
+                ]);
+
+                const unselectResult = wrapper.instance.unselectItem(0);
+
+                let expectedKeys = [1];
+                let expectedNodes = [1];
+                let expectedUnselectResult = true;
+                let expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
+
+                assert.strictEqual(unselectResult, expectedUnselectResult, 'after unselect');
+                wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
+                wrapper.checkSelectedNodes(expectedNodes, 'after unselect');
+                wrapper.checkEventLog(expectedEventLog, 'after unselect');
+                wrapper.clearEventLog();
+            });
+
+            QUnit.test(`all.selected: true -> unselectItem(0), selectionRequired: ${selectionRequired}`, function(assert) {
+                if(config.selectionMode === 'single') {
+                    assert.ok('skip for single');
+                    return;
+                }
+
+                const wrapper = createWrapper(config, { selectionRequired }, [
+                    { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
+                    { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
+
+                const unselectResult = wrapper.instance.unselectItem(0);
+
+                let expectedKeys = [1];
+                let expectedNodes = [1];
+                let expectedUnselectResult = true;
+                let expectedEvenLog = ['itemSelectionChanged', 'selectionChanged'];
+                if(config.selectNodesRecursive) {
+                    expectedKeys = [];
+                    expectedNodes = [];
+                }
+                // TODO: bug in internal field realization. TreeView does't use selectionModeRecursive if selectionRequired is turn on.
+                if(selectionRequired) {
+                    expectedKeys = [0, 1];
+                    expectedNodes = [0, 1];
+                    expectedUnselectResult = false;
+                    expectedEvenLog = [];
+                }
+                if(!config.expanded) {
+                    // unexpected result
+                    if(selectionRequired) {
+                        expectedNodes = [0];
+                    }
+                    if(isLazyDataSourceMode(wrapper)) {
+                        expectedKeys = [];
+                        expectedNodes = [];
+                        if(selectionRequired) {
+                            expectedKeys = [0];
+                            expectedNodes = [0];
+                        }
+                    }
+                }
+
+                assert.strictEqual(unselectResult, expectedUnselectResult, 'after unselect');
+                wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
+                wrapper.checkSelectedNodes(expectedNodes, 'after unselect');
+                wrapper.checkEventLog(expectedEvenLog, 'after unselect');
+                wrapper.clearEventLog();
+            });
+        });
     });
 });
 
@@ -982,3 +1095,4 @@ QUnit.test('all.selected: false -> selectItem(1) -> reload dataSource', function
         });
     }, 2);
 });
+
