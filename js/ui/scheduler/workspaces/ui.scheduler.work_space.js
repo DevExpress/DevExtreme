@@ -1467,7 +1467,7 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _getTimeText: function(i) {
         // T410490: incorrectly displaying time slots on Linux
-        const startViewDate = this._getTimeCellDate(i);
+        const startViewDate = this._getTimeCellDateAdjustedDST(i);
         const index = i % this._getRowCount();
 
         if(index % 2 === 0) {
@@ -1476,14 +1476,27 @@ const SchedulerWorkSpace = Widget.inherit({
         return '';
     },
 
+    _getTimeCellDateAdjustedDST: function(i) {
+        let startViewDate = new Date(this.getStartViewDate());
+        if(utils.hasDSTInDate(startViewDate)) {
+            startViewDate = new Date(startViewDate.setDate(startViewDate.getDate() + 1));
+        }
+
+        return this._getTimeCellDateCore(startViewDate, i);
+    },
+
     _getTimeCellDate: function(i) {
-        const startViewDate = new Date(this.getStartViewDate());
+        return this._getTimeCellDateCore(this.getStartViewDate(), i);
+    },
+
+    _getTimeCellDateCore: function(startViewDate, i) {
+        const result = new Date(startViewDate);
         const timeCellDuration = Math.round(this.getCellDuration());
         const lastCellInDay = this._calculateDayDuration() / this.option('hoursInterval');
 
-        startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * (i % lastCellInDay));
+        result.setMilliseconds(result.getMilliseconds() + timeCellDuration * (i % lastCellInDay));
 
-        return startViewDate;
+        return result;
     },
 
     _renderDateTable: function() {
