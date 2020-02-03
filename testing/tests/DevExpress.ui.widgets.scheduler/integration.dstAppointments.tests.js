@@ -306,3 +306,38 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         assert.equal(appointment.position().top, appointmentPosition, 'Recurrence appointment part positions are the same and independent of time changing');
     });
 });
+
+QUnit.module('Time panel should have correct value in case DST(T852308)', moduleConfig, () => {
+    const views = ['week', 'day'];
+    const dateWhichTimezoneShifted = new Date(2020, 2, 8); // TODO Daylight saving time will happen on this day in 2 A.M.
+
+    const expectedTimeResults = (() => {
+        const result = [];
+        let startDate = new Date(2020, 2, 9); // TODO Date when there is no daylight saving
+        while(startDate.getDate() < 10) {
+            result.push(dateLocalization.format(startDate, 'shorttime'));
+            startDate = new Date(startDate.setHours(startDate.getHours() + 1));
+        }
+        return result;
+    })();
+
+    views.forEach(view => {
+        QUnit.test(`Time value in time panel should be correct in ${view}`, function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: views,
+                currentView: view,
+                startDayHour: 0,
+                currentDate: dateWhichTimezoneShifted,
+                height: 600
+            });
+
+            const currentTimeResults = scheduler.timePanel.getTimeValues();
+
+            assert.equal(currentTimeResults.length, expectedTimeResults.length, 'Count of current values and expected should equal');
+            for(let i = 0; i < 24; i++) {
+                assert.equal(currentTimeResults[i], expectedTimeResults[i], 'Current value should be equal expected');
+            }
+        });
+    });
+});
