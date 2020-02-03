@@ -235,7 +235,7 @@ QUnit.test('Visible is changed from dataController', function(assert) {
     this.dataController.updatePagesCount(20);
 
     // assert
-    assert.ok(testElement.find('.dx-pager').css('display') !== 'none', 'pager visible');
+    assert.notStrictEqual(testElement.find('.dx-pager').css('display'), 'none', 'pager visible');
 });
 
 QUnit.test('Pager is not rendered on partial update', function(assert) {

@@ -948,7 +948,7 @@ QUnit.test('Hide visible series', function(assert) {
     const points = series.getPoints();
     // see T243839
     $.each(points, function(_, point) {
-        assert.ok(point._options.visible === false);
+        assert.strictEqual(point._options.visible, false);
     });
 });
 
@@ -966,7 +966,7 @@ QUnit.test('Show invisible series', function(assert) {
     const points = series.getPoints();
     // see T243839
     $.each(points, function(_, point) {
-        assert.ok(point._options.visible === true);
+        assert.strictEqual(point._options.visible, true);
     });
 });
 

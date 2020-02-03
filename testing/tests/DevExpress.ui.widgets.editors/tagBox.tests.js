@@ -331,7 +331,7 @@ QUnit.module('tags', moduleSetup, () => {
         });
 
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($element.find('.' + LIST_ITEM_CLASS).length === 3, 'found 3 items');
+        assert.strictEqual($element.find('.' + LIST_ITEM_CLASS).length, 3, 'found 3 items');
 
         $($element.find('.' + LIST_ITEM_CLASS).first()).trigger('dxclick');
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 1, 'tag is added');
@@ -4363,7 +4363,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         assert.ok(this.spy.args[this.spy.args.length - 1][0].value, 'all items are selected');
 
         $($selectAllCheckbox).trigger('dxclick');
-        assert.ok(this.spy.args[this.spy.args.length - 1][0].value === false, 'all items are unselected');
+        assert.strictEqual(this.spy.args[this.spy.args.length - 1][0].value, false, 'all items are unselected');
     });
 
     QUnit.test('the \'onSelectAllValueChanged\' action is fired only one time if all items are selected', function(assert) {

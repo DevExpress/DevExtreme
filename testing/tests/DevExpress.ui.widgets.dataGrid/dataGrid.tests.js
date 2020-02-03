@@ -3909,7 +3909,7 @@ QUnit.test('Horizontal scrollbar is not displayed when columns width has float v
     const dataGrid = $dataGrid.dxDataGrid('instance');
 
     // assert
-    assert.ok(dataGrid.getView('rowsView').getScrollbarWidth(true) === 0);
+    assert.strictEqual(dataGrid.getView('rowsView').getScrollbarWidth(true), 0);
 });
 
 // T386755
@@ -6042,7 +6042,7 @@ QUnit.test('native scrollBars layout should be correct after width change if fix
         assert.ok(dataGrid.getView('rowsView').getScrollbarWidth() > 0, 'vertical scrollBar exists');
     } else {
         assert.equal($('#dataGrid').find('.dx-datagrid-content-fixed').eq(1).css('margin-right'), '0px', 'margin-right is zero');
-        assert.ok(dataGrid.getView('rowsView').getScrollbarWidth() === 0, 'vertical scrollBar not exists');
+        assert.strictEqual(dataGrid.getView('rowsView').getScrollbarWidth(), 0, 'vertical scrollBar not exists');
     }
     assert.notEqual($('#dataGrid').find('.dx-datagrid-content-fixed').eq(1).css('margin-bottom'), '0px', 'margin-bottom is not zero');
 });
@@ -11833,7 +11833,7 @@ QUnit.test('Reset last non-command column width when width 100% in style', funct
     assert.equal($cols.length, 3);
     assert.equal($cols.get(0).style.width, '50px', 'first column width is not reset');
     assert.equal($cols.get(1).style.width, 'auto', 'second column width is reset - this is last non-command column');
-    assert.ok($cols.get(2).style.width !== 'auto', 'command column width is not reset');
+    assert.notStrictEqual($cols.get(2).style.width, 'auto', 'command column width is not reset');
     assert.equal($dataGrid.width(), $dataGrid.parent().width());
 });
 
@@ -18945,7 +18945,7 @@ QUnit.test('The edited cell should be closed on click inside another dataGrid', 
     this.clock.tick(100);
 
     // assert
-    assert.ok($(dataGrid1.getCellElement(0, 0)).find('input').length === 0, 'hasn\'t input');
+    assert.strictEqual($(dataGrid1.getCellElement(0, 0)).find('input').length, 0, 'hasn\'t input');
     assert.notOk($(dataGrid1.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell of the first grid isn\'t editable');
     assert.ok($(dataGrid2.getCellElement(0, 0)).find('input').length > 0, 'has input');
 });

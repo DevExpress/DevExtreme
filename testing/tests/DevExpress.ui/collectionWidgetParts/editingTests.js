@@ -622,7 +622,7 @@ module('selecting of items', {
                 if(args.name !== 'selectedItems') {
                     return;
                 }
-                assert.ok(args.previousValue !== args.value, 'values are not equal');
+                assert.notStrictEqual(args.previousValue, args.value, 'values are not equal');
             }
         });
 
