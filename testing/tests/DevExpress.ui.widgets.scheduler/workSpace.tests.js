@@ -12,7 +12,6 @@ import dateUtils from 'core/utils/date';
 import dateLocalization from 'localization/date';
 import dragEvents from 'events/drag';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
-import devices from 'core/devices';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -161,16 +160,6 @@ QUnit.testStart(function() {
 
         assert.equal(stub.callCount, 0, 'Tables were not updated');
     });
-
-    if(devices.real().deviceType === 'desktop') {
-        QUnit.test('Workspace should restore scrollTop after restoreScrollTop call', function(assert) {
-            this.instance.$element().scrollTop(30);
-            assert.equal(this.instance.$element().scrollTop(), 30, 'scrollTop is right');
-
-            this.instance.restoreScrollTop();
-            assert.equal(this.instance.$element().scrollTop(), 0, 'scrollTop is restored');
-        });
-    }
 
     QUnit.test('dateUtils.getTimezonesDifference should be called when calculating interval between dates', function(assert) {
         const stub = sinon.stub(dateUtils, 'getTimezonesDifference');
@@ -1618,7 +1607,7 @@ QUnit.testStart(function() {
         $($element).trigger('focusin');
         keyboard.keyDown('enter');
         const cellData = updateSpy.getCall(0).args[0].cellData;
-        assert.notOk(cellData === {}, 'cellData is not empty');
+        assert.notOk($.isEmptyObject(cellData), 'cellData is not empty');
         assert.deepEqual(cellData.startDate, new Date(2015, 2, 30), 'cellData startDate is passing right');
         assert.deepEqual(cellData.endDate, new Date(2015, 2, 31), 'cellData endDate is passing right');
     });

@@ -10,7 +10,8 @@ QUnit.testStart(() => {
 });
 
 const TOOLBAR_SELECTOR = '.dx-diagram-toolbar';
-const TOOBOX_ACCORDION_SELECTOR = '.dx-diagram-left-panel .dx-accordion';
+const TOOLBOX_SCROLLVIEW_SELECTOR = '.dx-diagram-toolbox-panel .dx-scrollview';
+const TOOLBOX_ACCORDION_SELECTOR = '.dx-diagram-toolbox-panel .dx-accordion';
 const CONTEXT_MENU_SELECTOR = 'div:not(.dx-diagram-toolbar-wrapper) > .dx-has-context-menu';
 const PROPERTIES_PANEL_ACCORDION_SELECTOR = '.dx-diagram-right-panel .dx-accordion';
 const PROPERTIES_PANEL_FORM_SELECTOR = '.dx-diagram-right-panel .dx-accordion .dx-form';
@@ -185,10 +186,11 @@ QUnit.module('Diagram Toolbar', {
     });
     test('call .update() after accordion item collapsing/expanding', function(assert) {
         const clock = sinon.useFakeTimers();
-        const $leftPanel = this.$element.find('.dx-diagram-left-panel');
-        const scrollView = $leftPanel.find('.dx-scrollview').dxScrollView('instance');
+        const $scrollView = $('body').find(TOOLBOX_SCROLLVIEW_SELECTOR);
+        const scrollView = $scrollView.dxScrollView('instance');
         const updateSpy = sinon.spy(scrollView, 'update');
-        $leftPanel.find('.dx-accordion-item-title').first().trigger('dxclick');
+        const $accordion = $('body').find(TOOLBOX_ACCORDION_SELECTOR);
+        $accordion.find('.dx-accordion-item-title').first().trigger('dxclick');
         clock.tick(2000);
         assert.equal(updateSpy.callCount, 1, 'scrollView.update() called once');
         clock.restore();
@@ -238,16 +240,16 @@ QUnit.module('Diagram Toolbar', {
 QUnit.module('Diagram Toolbox', moduleConfig, () => {
     test('should not render if toolbox.visible is false', function(assert) {
         this.instance.option('toolbox.visible', false);
-        const $accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR);
+        const $accordion = $('body').find(TOOLBOX_ACCORDION_SELECTOR);
         assert.equal($accordion.length, 0);
     });
     test('should fill toolbox with default items', function(assert) {
-        const accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR).dxAccordion('instance');
+        const accordion = $('body').find(TOOLBOX_ACCORDION_SELECTOR).dxAccordion('instance');
         assert.ok(accordion.option('dataSource').length > 1);
     });
     test('should fill toolbox with custom items', function(assert) {
         this.instance.option('toolbox.groups', ['general']);
-        const accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR).dxAccordion('instance');
+        const accordion = $('body').find(TOOLBOX_ACCORDION_SELECTOR).dxAccordion('instance');
         assert.equal(accordion.option('dataSource').length, 1);
     });
 });

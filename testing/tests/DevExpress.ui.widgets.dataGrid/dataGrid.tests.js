@@ -75,6 +75,7 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 import themes from 'ui/themes';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTED_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
+import 'ui/scroll_view';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -3819,7 +3820,7 @@ QUnit.test('Horizontal scrollbar is not displayed when columns width has float v
     const dataGrid = $dataGrid.dxDataGrid('instance');
 
     // assert
-    assert.ok(dataGrid.getView('rowsView').getScrollbarWidth(true) === 0);
+    assert.strictEqual(dataGrid.getView('rowsView').getScrollbarWidth(true), 0);
 });
 
 // T386755
@@ -5952,7 +5953,7 @@ QUnit.test('native scrollBars layout should be correct after width change if fix
         assert.ok(dataGrid.getView('rowsView').getScrollbarWidth() > 0, 'vertical scrollBar exists');
     } else {
         assert.equal($('#dataGrid').find('.dx-datagrid-content-fixed').eq(1).css('margin-right'), '0px', 'margin-right is zero');
-        assert.ok(dataGrid.getView('rowsView').getScrollbarWidth() === 0, 'vertical scrollBar not exists');
+        assert.strictEqual(dataGrid.getView('rowsView').getScrollbarWidth(), 0, 'vertical scrollBar not exists');
     }
     assert.notEqual($('#dataGrid').find('.dx-datagrid-content-fixed').eq(1).css('margin-bottom'), '0px', 'margin-bottom is not zero');
 });
@@ -9058,6 +9059,47 @@ QUnit.test('Editor should be rendered for hidden columns while editing in row mo
     });
 });
 
+QUnit.test('Scrollable should have the correct padding when the grid inside the ScrollView', function(assert) {
+    // arrange, act
+    $('#container').dxScrollView({
+        showScrollbar: 'always'
+    });
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 1 }],
+        columnAutoWidth: true,
+        scrolling: {
+            showScrollbar: 'always'
+        }
+    });
+    this.clock.tick(30);
+
+    // assert
+    const $scrollableContent = $(dataGrid.getScrollable().content());
+    assert.strictEqual($scrollableContent.css('paddingRight'), '0px', 'paddingRight');
+    assert.strictEqual($scrollableContent.css('paddingLeft'), '0px', 'paddingLeft');
+});
+
+QUnit.test('Scrollable should have the correct padding when the grid inside the ScrollView in RTL', function(assert) {
+    // arrange, act
+    $('#container').dxScrollView({
+        showScrollbar: 'always'
+    });
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 1 }],
+        columnAutoWidth: true,
+        rtlEnabled: true,
+        scrolling: {
+            showScrollbar: 'always'
+        }
+    });
+    this.clock.tick(30);
+
+    // assert
+    const $scrollableContent = $(dataGrid.getScrollable().content());
+    assert.strictEqual($scrollableContent.css('paddingRight'), '0px', 'paddingRight');
+    assert.strictEqual($scrollableContent.css('paddingLeft'), '0px', 'paddingLeft');
+});
+
 QUnit.module('Virtual row rendering', baseModuleConfig);
 
 QUnit.test('editing should starts correctly if scrolling mode is virtual', function(assert) {
@@ -10033,6 +10075,51 @@ QUnit.test('cellTemplate should be rendered, asynchronously if column renderAsyn
     assert.equal(cellTemplateArgs.length, 1, 'cell template is called');
     assert.equal(cellTemplateArgs[0].rowType, 'data', 'cell template rowType');
     assert.equal(cellTemplateArgs[0].column.dataField, 'template', 'cell template column');
+});
+
+// T857205
+QUnit.test(' if renderAsync is true and state storing is used', function(assert) {
+    let selectedRowKeys = [1, 2];
+
+    const customLoad = sinon.spy(() => {
+        return {
+            selectedRowKeys: selectedRowKeys
+        };
+    });
+
+    // act
+    const grid = createDataGrid({
+        dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }],
+        keyExpr: 'id',
+        loadingTimeout: undefined,
+        renderAsync: true,
+        filterRow: {
+            visible: true
+        },
+        selection: {
+            mode: 'multiple'
+        },
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad
+        }
+    });
+
+    const $grid = grid.$element();
+    this.clock.tick();
+
+    const $selectCheckboxes = $grid.find('.dx-select-checkbox');
+    const $inputs = $selectCheckboxes.find('input');
+
+    // assert
+    assert.equal(customLoad.callCount, 1, 'customLoad was called once');
+
+    assert.deepEqual(grid.getSelectedRowKeys(), selectedRowKeys, 'selected row keys');
+
+    assert.equal($inputs.eq(1).prop('value'), 'true', 'first row checkbox');
+    assert.equal($inputs.eq(2).prop('value'), 'true', 'second row checkbox');
+    assert.equal($inputs.eq(3).prop('value'), 'false', 'third row checkbox');
 });
 
 QUnit.module('Assign options', baseModuleConfig);
@@ -11657,7 +11744,7 @@ QUnit.test('Reset last non-command column width when width 100% in style', funct
     assert.equal($cols.length, 3);
     assert.equal($cols.get(0).style.width, '50px', 'first column width is not reset');
     assert.equal($cols.get(1).style.width, 'auto', 'second column width is reset - this is last non-command column');
-    assert.ok($cols.get(2).style.width !== 'auto', 'command column width is not reset');
+    assert.notStrictEqual($cols.get(2).style.width, 'auto', 'command column width is not reset');
     assert.equal($dataGrid.width(), $dataGrid.parent().width());
 });
 
@@ -18770,7 +18857,7 @@ QUnit.test('The edited cell should be closed on click inside another dataGrid', 
     this.clock.tick(100);
 
     // assert
-    assert.ok($(dataGrid1.getCellElement(0, 0)).find('input').length === 0, 'hasn\'t input');
+    assert.strictEqual($(dataGrid1.getCellElement(0, 0)).find('input').length, 0, 'hasn\'t input');
     assert.notOk($(dataGrid1.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell of the first grid isn\'t editable');
     assert.ok($(dataGrid2.getCellElement(0, 0)).find('input').length > 0, 'has input');
 });
@@ -19128,8 +19215,7 @@ QUnit.test('The draggable row should have correct markup when defaultOptions is 
     }
 });
 
-// T827960
-QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady', function(assert) {
+QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady (T827960)', function(assert) {
     // arrange
     const onFocusedRowChangedSpy = sinon.spy();
     const dataGrid = createDataGrid({

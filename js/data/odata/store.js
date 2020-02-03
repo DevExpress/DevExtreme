@@ -1,26 +1,28 @@
-const isDefined = require('../../core/utils/type').isDefined;
-const config = require('../../core/config');
-const odataUtils = require('./utils');
-const proxyUrlFormatter = require('../proxy_url_formatter');
-const errors = require('../errors').errors;
-const query = require('../query');
-const Store = require('../abstract_store');
-const RequestDispatcher = require('./request_dispatcher').default;
-const deferredUtils = require('../../core/utils/deferred');
-const when = deferredUtils.when;
-const Deferred = deferredUtils.Deferred;
 
-require('./query_adapter');
+import { isDefined } from '../../core/utils/type';
+import config from '../../core/config';
+import {
+    generateExpand,
+    generateSelect,
+    serializeKey,
+    convertPrimitiveValue,
+    formatFunctionInvocationUrl,
+    escapeServiceOperationParams
+} from './utils';
+import proxyUrlFormatter from '../proxy_url_formatter';
+import { errors } from '../errors';
+import query from '../query';
+import Store from '../abstract_store';
+import RequestDispatcher from './request_dispatcher';
+import { when, Deferred } from '../../core/utils/deferred';
+
+import './query_adapter';
 
 const ANONYMOUS_KEY_NAME = '5d46402c-7899-4ea9-bd81-8b73c47c7683';
 
-function expandKeyType(key, keyType) {
-    const result = {};
-    result[key] = keyType;
-    return result;
-}
+const expandKeyType = (key, keyType) => ({ [key]: keyType });
 
-function mergeFieldTypesWithKeyType(fieldTypes, keyType) {
+const mergeFieldTypesWithKeyType = (fieldTypes, keyType) => {
     const result = {};
 
     for(const field in fieldTypes) {
@@ -38,11 +40,11 @@ function mergeFieldTypesWithKeyType(fieldTypes, keyType) {
     }
 
     return result;
-}
+};
 
 const ODataStore = Store.inherit({
 
-    ctor: function(options) {
+    ctor(options) {
         this.callBase(options);
 
         this._requestDispatcher = new RequestDispatcher(options);
@@ -75,55 +77,48 @@ const ODataStore = Store.inherit({
         }
     },
 
-    _customLoadOptions: function() {
+    _customLoadOptions() {
         return ['expand', 'customQueryParams'];
     },
 
-    _byKeyImpl: function(key, extraOptions) {
+    _byKeyImpl(key, extraOptions) {
         const params = {};
 
         if(extraOptions) {
-            params['$expand'] = odataUtils.generateExpand(this.version(), extraOptions.expand, extraOptions.select) || undefined;
-            params['$select'] = odataUtils.generateSelect(this.version(), extraOptions.select) || undefined;
+            params['$expand'] = generateExpand(this.version(), extraOptions.expand, extraOptions.select) || undefined;
+            params['$select'] = generateSelect(this.version(), extraOptions.select) || undefined;
         }
 
         return this._requestDispatcher.sendRequest(this._byKeyUrl(key), 'GET', params);
     },
 
-    createQuery: function(loadOptions) {
+    createQuery(loadOptions) {
         let url;
-
-        loadOptions = loadOptions || {};
         const queryOptions = {
             adapter: 'odata',
-
             beforeSend: this._requestDispatcher.beforeSend,
             errorHandler: this._errorHandler,
             jsonp: this._requestDispatcher.jsonp,
             version: this._requestDispatcher.version,
             withCredentials: this._requestDispatcher._withCredentials,
-            expand: loadOptions.expand,
-            requireTotalCount: loadOptions.requireTotalCount,
+            expand: loadOptions?.expand,
+            requireTotalCount: loadOptions?.requireTotalCount,
             deserializeDates: this._requestDispatcher._deserializeDates,
             fieldTypes: this._fieldTypes
         };
 
         // NOTE: For AppBuilder, do not remove
-        if(isDefined(loadOptions.urlOverride)) {
-            url = loadOptions.urlOverride;
-        } else {
-            url = this._requestDispatcher.url;
-        }
+        url = loadOptions?.urlOverride ?? this._requestDispatcher.url;
 
         if(isDefined(this._requestDispatcher.filterToLower)) {
             queryOptions.filterToLower = this._requestDispatcher.filterToLower;
         }
 
-        if(loadOptions.customQueryParams) {
-            const params = odataUtils.escapeServiceOperationParams(loadOptions.customQueryParams, this.version());
+        if(loadOptions?.customQueryParams) {
+            const params = escapeServiceOperationParams(loadOptions?.customQueryParams, this.version());
 
             if(this.version() === 4) {
-                url = odataUtils.formatFunctionInvocationUrl(url, params);
+                url = formatFunctionInvocationUrl(url, params);
             } else {
                 queryOptions.params = params;
             }
@@ -132,54 +127,49 @@ const ODataStore = Store.inherit({
         return query(url, queryOptions);
     },
 
-    _insertImpl: function(values) {
+    _insertImpl(values) {
         this._requireKey();
 
-        const that = this;
         const d = new Deferred();
 
         when(this._requestDispatcher.sendRequest(this._requestDispatcher.url, 'POST', null, values))
-            .done(function(serverResponse) {
-                d.resolve(config().useLegacyStoreResult ? values : (serverResponse || values), that.keyOf(serverResponse));
-            })
+            .done(serverResponse =>
+                d.resolve(
+                    serverResponse && !config().useLegacyStoreResult ? serverResponse : values,
+                    this.keyOf(serverResponse)
+                )
+            )
             .fail(d.reject);
 
         return d.promise();
     },
 
-    _updateImpl: function(key, values) {
+    _updateImpl(key, values) {
         const d = new Deferred();
 
         when(
             this._requestDispatcher.sendRequest(this._byKeyUrl(key), this._updateMethod, null, values)
-        ).done(
-            function(serverResponse) {
-                if(config().useLegacyStoreResult) {
-                    d.resolve(key, values);
-                } else {
-                    d.resolve(serverResponse || values, key);
-                }
-            }
-        ).fail(d.reject);
+        ).done(serverResponse =>
+            config().useLegacyStoreResult
+                ? d.resolve(key, values)
+                : d.resolve(serverResponse || values, key)
+        )
+            .fail(d.reject);
 
         return d.promise();
     },
 
-    _removeImpl: function(key) {
+    _removeImpl(key) {
         const d = new Deferred();
 
-        when(
-            this._requestDispatcher.sendRequest(this._byKeyUrl(key), 'DELETE')
-        ).done(
-            function() {
-                d.resolve(key);
-            }
-        ).fail(d.reject);
+        when(this._requestDispatcher.sendRequest(this._byKeyUrl(key), 'DELETE'))
+            .done(() => d.resolve(key))
+            .fail(d.reject);
 
         return d.promise();
     },
 
-    _convertKey: function(value) {
+    _convertKey(value) {
         let result = value;
         const fieldTypes = this._fieldTypes;
         const key = this.key() || this._legacyAnonymousKey;
@@ -188,23 +178,23 @@ const ODataStore = Store.inherit({
             result = {};
             for(let i = 0; i < key.length; i++) {
                 const keyName = key[i];
-                result[keyName] = odataUtils.convertPrimitiveValue(fieldTypes[keyName], value[keyName]);
+                result[keyName] = convertPrimitiveValue(fieldTypes[keyName], value[keyName]);
             }
         } else if(fieldTypes[key]) {
-            result = odataUtils.convertPrimitiveValue(fieldTypes[key], value);
+            result = convertPrimitiveValue(fieldTypes[key], value);
         }
 
         return result;
     },
 
-    _byKeyUrl: function(value, useOriginalHost) {
+    _byKeyUrl(value, useOriginalHost) {
         const baseUrl = useOriginalHost
             ? proxyUrlFormatter.formatLocalUrl(this._requestDispatcher.url)
             : this._requestDispatcher.url;
 
         const convertedKey = this._convertKey(value);
 
-        return baseUrl + '(' + encodeURIComponent(odataUtils.serializeKey(convertedKey, this.version())) + ')';
+        return `${baseUrl}(${encodeURIComponent(serializeKey(convertedKey, this.version()))})`;
     },
 
     version() {
@@ -213,4 +203,5 @@ const ODataStore = Store.inherit({
 
 }, 'odata');
 
+// TODO: replace by "export default" after "odata/context" refactor
 module.exports = ODataStore;

@@ -241,7 +241,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     parentIdExpr?: string | Function;
     /**
      * @docid dxTreeViewOptions.rootValue
-     * @type Object
+     * @type any
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public

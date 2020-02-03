@@ -1,10 +1,10 @@
 import $ from '../../core/renderer';
 
-import DiagramPanel from './diagram.panel';
+import DiagramPanel from './ui.diagram.panel';
 import Toolbar from '../toolbar';
 import ContextMenu from '../context_menu';
-import DiagramCommands from './ui.diagram.commands';
-import DiagramBar from './diagram_bar';
+import DiagramCommands from './diagram.commands';
+import DiagramBar from './diagram.bar';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 

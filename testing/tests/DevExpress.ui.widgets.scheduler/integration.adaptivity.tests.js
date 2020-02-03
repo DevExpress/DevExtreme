@@ -113,7 +113,7 @@ module('Mobile tooltip', moduleConfig, () => {
             appointmentTooltipTemplate: (model, index, contentElement) => {
                 assert.equal(model.targetedAppointmentData.text, model.appointmentData.text, 'targetedAppointmentData should be not empty');
                 assert.equal(index, templateCallCount, 'Index should be correct pass in template callback');
-                assert.ok($(contentElement).length === 1, 'contentElement should be DOM element');
+                assert.strictEqual($(contentElement).length, 1, 'contentElement should be DOM element');
                 templateCallCount++;
 
                 return $('<div />').addClass(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME).text(`template item index - ${index}`);

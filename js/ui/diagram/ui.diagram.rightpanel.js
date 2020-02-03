@@ -1,11 +1,11 @@
 import $ from '../../core/renderer';
-import DiagramPanel from './diagram.panel';
+import DiagramPanel from './ui.diagram.panel';
 import Accordion from '../accordion';
 import Form from '../form';
-import DiagramCommands from './ui.diagram.commands';
+import DiagramCommands from './diagram.commands';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
-import DiagramBar from './diagram_bar';
+import DiagramBar from './diagram.bar';
 import ScrollView from '../scroll_view';
 import { Deferred } from '../../core/utils/deferred';
 

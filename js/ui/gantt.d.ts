@@ -161,14 +161,23 @@ export interface dxGanttTimeMarker {
      */
     cssClass?: string;
     /**
-     * @docid dxGanttTimeMarker.dateTime
+     * @docid dxGanttTimeMarker.end
      * @type Date|number|string|function
      * @type_function_return Date|number|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dateTime?: Date | number | string | (() => Date | number | string);
+    end?: Date | number | string | (() => Date | number | string);
+    /**
+     * @docid dxGanttTimeMarker.start
+     * @type Date|number|string|function
+     * @type_function_return Date|number|string
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    start?: Date | number | string | (() => Date | number | string);
     /**
      /**
      * @docid dxGanttTimeMarker.title

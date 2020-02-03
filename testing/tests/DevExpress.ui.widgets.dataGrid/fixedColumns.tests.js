@@ -1144,8 +1144,8 @@ QUnit.test('Synchronize rows for main table', function(assert) {
     that.rowsView.resize();
 
     // assert
-    assert.ok($table[0].offsetHeight === $fixTable[0].offsetHeight, 'height table and fixed table');
-    assert.ok($table.find('tbody > tr')[0].offsetHeight === $fixTable.find('tbody > tr')[0].offsetHeight, 'height row and fixed row');
+    assert.strictEqual($table[0].offsetHeight, $fixTable[0].offsetHeight, 'height table and fixed table');
+    assert.strictEqual($table.find('tbody > tr')[0].offsetHeight, $fixTable.find('tbody > tr')[0].offsetHeight, 'height row and fixed row');
 });
 
 QUnit.test('Synchronize rows for fixed table', function(assert) {
@@ -1173,8 +1173,8 @@ QUnit.test('Synchronize rows for fixed table', function(assert) {
     that.rowsView.resize();
 
     // assert
-    assert.ok($table[0].offsetHeight === $fixTable[0].offsetHeight, 'height table and fixed table');
-    assert.ok($table.find('tbody > tr')[0].offsetHeight === $fixTable.find('tbody > tr')[0].offsetHeight, 'height row and fixed row');
+    assert.strictEqual($table[0].offsetHeight, $fixTable[0].offsetHeight, 'height table and fixed table');
+    assert.strictEqual($table.find('tbody > tr')[0].offsetHeight, $fixTable.find('tbody > tr')[0].offsetHeight, 'height row and fixed row');
 });
 
 // T234513
@@ -1210,8 +1210,8 @@ QUnit.test('Synchronize rows for fixed table with master detail', function(asser
 
     assert.equal($table.find('tbody > tr').length, 4, 'count rows');
     assert.equal($fixTable.find('tbody > tr').length, 4, 'count fixed rows');
-    assert.ok($table.find('tbody > tr')[0].getBoundingClientRect().height === $fixTable.find('tbody > tr')[0].getBoundingClientRect().height, 'height first row');
-    assert.ok($table.find('tbody > tr')[1].getBoundingClientRect().height === $fixTable.find('tbody > tr')[1].getBoundingClientRect().height, 'height second row');
+    assert.strictEqual($table.find('tbody > tr')[0].getBoundingClientRect().height, $fixTable.find('tbody > tr')[0].getBoundingClientRect().height, 'height first row');
+    assert.strictEqual($table.find('tbody > tr')[1].getBoundingClientRect().height, $fixTable.find('tbody > tr')[1].getBoundingClientRect().height, 'height second row');
     assert.roughEqual($table.find('tbody > tr')[2].getBoundingClientRect().height, $fixTable.find('tbody > tr')[2].getBoundingClientRect().height, 0.1, 'height third row');
 });
 
@@ -1240,7 +1240,7 @@ QUnit.test('Synchronize rows with floating-point height', function(assert) {
     that.columnHeadersView.resize();
 
     // assert
-    assert.ok(that.columnHeadersView._getClientHeight($table.find('tbody > tr').get(0)) === that.columnHeadersView._getClientHeight($fixTable.find('tbody > tr').get(0)), 'height row and fixed row');
+    assert.strictEqual(that.columnHeadersView._getClientHeight($table.find('tbody > tr').get(0)), that.columnHeadersView._getClientHeight($fixTable.find('tbody > tr').get(0)), 'height row and fixed row');
 });
 
 // T246724
@@ -2062,7 +2062,7 @@ QUnit.test('Updating position of the fixed table (when scrollbar at the bottom) 
         that.rowsView.resize();
 
         // assert
-        assert.ok($fixedTable.position().top !== positionTop, 'scroll top of the fixed table is changed');
+        assert.notStrictEqual($fixedTable.position().top, positionTop, 'scroll top of the fixed table is changed');
         done();
     });
 });

@@ -89,7 +89,6 @@ const EditorFactoryMixin = (function() {
             },
             displayFormat: options.format,
             type: options.dataType,
-            formatWidthCalculator: null,
             dateSerializationFormat: null,
             width: options.parentType === 'filterBuilder' ? undefined : 'auto'
         }, options);

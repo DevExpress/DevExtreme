@@ -114,12 +114,24 @@
 @base-inverted-icon-color: @base-inverted-text-color;
 @base-disabled-opacity: 0.5;
 @base-dropdown-shadow-color: fade(@base-shadow-color, 17.5%);
-
+@base-invalid-color: @base-danger;
+@base-invalid-faded-border-color: fade(@base-invalid-color, 40%);
 
 @base-header-color: #627789;
 
+/**
+* @name 70. Border radius
+* @type text
+*/
+@base-border-radius-small: @base-border-radius - 1px;
+
+/**
+* @name 30. Border radius
+* @type text
+*/
+@base-border-radius-large: @base-border-radius + 2px;
+
 // Validation
-@base-invalid-color: @base-danger;
 
 @VALIDATION_MESSAGE_COLOR: @base-inverted-text-color;
 @VALIDATION_MESSAGE_BACKGROUND_COLOR: @base-invalid-color;
@@ -127,7 +139,6 @@
 @VALIDATION_SUMMARY_COLOR: @base-invalid-color;
 
 @validation-overlay-border-radius: @base-border-radius;
-@base-invalid-faded-border-color: fade(@base-invalid-color, 40%);
 
 // Badges
 
@@ -142,8 +153,6 @@
 * @type color
 */
 @badge-bg: #ff5f42;
-@badge-invalid-bg: @base-invalid-color;
-
 
 // TextEditor
 
@@ -195,12 +204,6 @@
 
 @texteditor-border-radius: @base-border-radius;
 @texteditor-input-border-radius: @base-border-radius;
-
-/**
-* @name 70. Border radius
-* @type text
-*/
-@base-border-radius-small: @base-border-radius - 1px;
 
 // TextBox
 
@@ -401,7 +404,7 @@
 
 // ButtonGroup
 
-// Normal Button
+// Normal Button (ButtonGroup)
 
 /**
 * @name 10. Selected item text color
@@ -422,7 +425,7 @@
 @button-group-normal-selected-bg-hover: fade(@button-group-normal-selected-bg, 11%);
 @button-group-normal-selected-bg-focused: fade(@button-group-normal-selected-bg, 14%);
 
-// Default Button
+// Default Button (ButtonGroup)
 
 /**
 * @name 10. Selected item text color
@@ -439,7 +442,7 @@
 @button-group-default-selected-bg-hover: fade(@button-group-default-selected-bg, 20%);
 @button-group-default-selected-bg-focused: fade(@button-group-default-selected-bg, 20%);
 
-// Danger Button
+// Danger Button (ButtonGroup)
 
 /**
 * @name 10. Selected item text color
@@ -456,7 +459,7 @@
 @button-group-danger-selected-bg-hover: fade(@button-group-danger-selected-bg, 20%);
 @button-group-danger-selected-bg-focused: fade(@button-group-danger-selected-bg, 20%);
 
-// Success Button
+// Success Button (ButtonGroup)
 
 /**
 * @name 10. Selected item text color
@@ -664,12 +667,6 @@
 * @type color
 */
 @overlay-shader-bg: fade(@base-bg, 80%);
-
-/**
-* @name 30. Border radius
-* @type text
-*/
-@base-border-radius-large: @base-border-radius + 2px;
 
 // Popup
 
