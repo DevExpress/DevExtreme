@@ -15,6 +15,7 @@ module.exports = {
         { regex: /@mixin validation-badge-animation\(\),/, replacement: '@include validation-badge-animation();' },
         { import: '../../base/mixins', type: 'index' },
         { import: '../../base/validation', type: 'index' },
+        { import: '../list/sizes', type: 'index' },
     ],
     'icons': [
         { regex: /@import \(once\) "..\/base\/icons.scss";/, replacement: '' },
@@ -98,5 +99,77 @@ module.exports = {
     ],
     'dropDownBox': [
         { import: '../dropDownEditor', type: 'index' },
-    ]
+    ],
+    'list': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../button/colors', type: 'colors' },
+        { import: '../button/colors', type: 'index' },
+        { import: '../button/sizes', type: 'index' },
+        { import: '../button', type: 'index' },
+        { import: '../checkBox/colors', type: 'index' },
+        { import: '../list/colors', type: 'sizes' },
+        { regex: /@mixin item-states\(\),/, replacement: '@include item-states();' },
+        { regex: /@mixin dx-icon\(chevronnext\),/, replacement: '@include dx-icon(chevronnext);' },
+        { regex: /.dx-icon-sizing\(\$GENERIC_BASE_ICON_SIZE\),/g, replacement: '@include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);' },
+        { regex: /margin-left: -5px,/, replacement: 'margin-left: -5px;' },
+        { regex: /color: \$list-item-chevron-icon-color,/, replacement: 'color: $list-item-chevron-icon-color;' },
+        { regex: /width: \$GENERIC_BASE_ICON_SIZE \+ \$GENERIC_LIST_ITEM_HORIZONTAL_PADDING,/, replacement: 'width: $GENERIC_BASE_ICON_SIZE + $GENERIC_LIST_ITEM_HORIZONTAL_PADDING;' },
+        { regex: /height: \$GENERIC_BASE_ICON_SIZE,/, replacement: 'height: $GENERIC_BASE_ICON_SIZE;' },
+        { regex: /vertical-align: top,/, replacement: 'vertical-align: top;' },
+        { regex: /margin-bottom: \$GENERIC_LIST_SEARCHBOX_MARGIN_BOTTOM,/, replacement: 'margin-bottom: $GENERIC_LIST_SEARCHBOX_MARGIN_BOTTOM;' }
+
+    ],
+    'numberBox': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../textEditor', type: 'index' },
+        { import: '../textEditor/sizes', type: 'index' },
+        { import: '../textEditor/colors', type: 'index' },
+        { import: '../button/colors', type: 'colors' },
+    ],
+    'dateView': [
+        { import: '../../base/mixins', type: 'index' },
+    ],
+    'timeView': [
+        { import: '../textEditor/sizes', type: 'index' },
+    ],
+    'calendar': [
+        { import: '../button/colors', type: 'colors' },
+        { import: '../button', type: 'index' },
+        { import: '../button/colors', type: 'index' },
+    ],
+    'dateBox': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../dropDownEditor', type: 'index' },
+        { import: '../textEditor', type: 'index' },
+        { import: '../textEditor/colors', type: 'index' },
+        { regex: /@mixin dx-icon\(spindown\),/, replacement: '@include dx-icon(spindown);' },
+        { regex: /.dx-dropdowneditor-button-icon\(\),/, replacement: '@include dx-dropdowneditor-button-icon();' },
+        { regex: /(hover-bg|opacity: 1|padding: 0|: none|_MARGIN|_MARGIN\/2|-1px),/g, replacement: '$1;' },
+        { regex: /@mixin dx-icon\(event\),/, replacement: '@include dx-icon(event);' },
+    ],
+    'dropDownList': [
+        { import: '../common', type: 'index' },
+    ],
+    'autocomplete': [
+        { import: '../common', type: 'index' },
+    ],
+    'treeView': [
+        { import: '../../base/treeView', type: 'index' },
+        { import: '../../base/icons', type: 'index' },
+        { import: '../checkBox/colors', type: 'index' },
+    ],
+    'overlay': [
+        { import: '../common', type: 'index' },
+    ],
+    'menuBase': [
+        { import: '../menu/colors', type: 'index' },
+        { import: '../common', type: 'index' },
+        { import: '../../base/icons', type: 'index' },
+        { import: '../../base/mixins', type: 'index' },
+    ],
+    'menu': [
+        { import: '../menuBase', type: 'index' },
+        { import: '../menuBase/sizes', type: 'index' },
+        { import: '../../base/icons', type: 'index' },
+    ],
 };
