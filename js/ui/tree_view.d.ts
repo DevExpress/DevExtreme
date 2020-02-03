@@ -402,14 +402,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     getSelectedNodeKeys(): Array<any>;
     /**
-     * @docid dxTreeViewMethods.getSelectedNodes
-     * @publicName getSelectedNodes()
-     * @return Array<dxTreeViewNode>
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    getSelectedNodes(): Array<dxTreeViewNode>;
-    /**
      * @docid dxTreeViewMethods.selectAll
      * @publicName selectAll()
      * @prevFileNamespace DevExpress.ui
