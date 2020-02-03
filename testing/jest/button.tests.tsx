@@ -129,6 +129,14 @@ describe('Button', () => {
                 expect(tree.find(Widget).prop('hoverStateEnabled')).toBe(false);
             });
         });
+
+        describe('visible', () => {
+            it('should pass the value into Widget component', () => {
+                const tree = render({ visible: false });
+
+                expect(tree.find(Widget).prop('visible')).toBe(false);
+            });
+        });
     });
 
     it('should have dx-button class', () => {
