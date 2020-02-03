@@ -11,7 +11,10 @@ testModule('Init and dispose', {
         document.getElementById('qunit-fixture').appendChild(this.element);
     },
     after: function() {
-        this.element.remove();
+        const { parentNode } = this.element;
+        if(parentNode) {
+            parentNode.removeChild(this.element);
+        }
     }
 }, function() {
     fx.off = true;
