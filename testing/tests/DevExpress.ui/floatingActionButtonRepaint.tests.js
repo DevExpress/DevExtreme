@@ -37,7 +37,7 @@ QUnit.module('apply current config options', (hooks) => {
         fx.off = false;
     }),
 
-    test('repaint with multiple actions', (assert) => {
+    test('repaint with multiple actions', function(assert) {
         $('#fab-one').dxSpeedDialAction();
         $('#fab-two').dxSpeedDialAction();
 
@@ -66,7 +66,7 @@ QUnit.module('apply current config options', (hooks) => {
         assert.equal($fabMainContent.offset().left, 0, 'default position left is changed');
     });
 
-    test('repaint with one action', (assert) => {
+    test('repaint with one action', function(assert) {
         const firstSDA = $('#fab-one').dxSpeedDialAction().dxSpeedDialAction('instance');
         $('#fab-two').dxSpeedDialAction({ icon: 'trash' });
 

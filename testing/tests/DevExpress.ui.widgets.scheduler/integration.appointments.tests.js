@@ -1724,7 +1724,7 @@ QUnit.test('Appointment should push correct data to the onAppointmentUpdating ev
         width: 800
     });
 
-    const stub = sinon.stub(this.instance._options, 'onAppointmentUpdating');
+    const stub = sinon.stub(this.instance.option(), 'onAppointmentUpdating');
     const $appointment = this.scheduler.appointments.getAppointment(0);
 
     $appointment.trigger(dragEvents.start);
