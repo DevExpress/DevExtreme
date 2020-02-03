@@ -3122,7 +3122,7 @@ let helper;
 if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
-            beforeEach: () => {
+            beforeEach: function() {
                 helper = new ariaAccessibilityTestHelper({
                     createWidget: ($element, options) => new Lookup($element,
                         $.extend({
@@ -3130,7 +3130,7 @@ if(devices.real().deviceType === 'desktop') {
                         }, options))
                 });
             },
-            afterEach: () => {
+            afterEach: function() {
                 helper.$widget.remove();
             }
         }, () => {

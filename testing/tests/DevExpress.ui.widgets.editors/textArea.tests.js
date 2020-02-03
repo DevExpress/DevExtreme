@@ -541,7 +541,7 @@ QUnit.module('TextArea in simulated scrollable', () => {
                 }
             }
 
-            QUnit.test(`mousewheel: textArea (scrollPosition - MIN) - wheel -> up -> down - scrollable direction: ${direction}`, (assert) => {
+            QUnit.test(`mousewheel: textArea (scrollPosition - MIN) - wheel -> up -> down - scrollable direction: ${direction}`, function(assert) {
                 const helper = new TextAreaInScrollableTestHelper(direction);
                 const $container = helper.getScrollableContainer();
 
@@ -556,7 +556,7 @@ QUnit.module('TextArea in simulated scrollable', () => {
                 helper.checkAsserts(assert, 80);
             });
 
-            QUnit.test(`mousewheel: textArea (scrollPosition - MAX) - wheel -> down -> up - scrollable direction: ${direction}`, (assert) => {
+            QUnit.test(`mousewheel: textArea (scrollPosition - MAX) - wheel -> down -> up - scrollable direction: ${direction}`, function(assert) {
                 const helper = new TextAreaInScrollableTestHelper(direction);
                 const $container = helper.getScrollableContainer();
 
@@ -572,7 +572,7 @@ QUnit.module('TextArea in simulated scrollable', () => {
                 helper.checkAsserts(assert, 70);
             });
 
-            QUnit.test(`mousewheel: textArea (scrollPosition - MIDDLE) - wheel -> down -> up - scrollable direction: ${direction}`, (assert) => {
+            QUnit.test(`mousewheel: textArea (scrollPosition - MIDDLE) - wheel -> down -> up - scrollable direction: ${direction}`, function(assert) {
                 const helper = new TextAreaInScrollableTestHelper(direction);
                 const $container = helper.getScrollableContainer();
 
