@@ -61,8 +61,13 @@ const Views = {
                 };
 
             this._iterateCells(this.option('colCount'), function(i) {
+                const dayCaption = that._getDayCaption(that._getFirstDayOfWeek() + i);
                 const $cell = $('<th>')
-                    .text(that._getDayCaption(that._getFirstDayOfWeek() + i));
+                    .attr({
+                        scope: 'col',
+                        abbr: dayCaption.full
+                    })
+                    .text(dayCaption.abbreviated);
 
                 appendCell($headerRow, $cell);
             });
@@ -95,8 +100,12 @@ const Views = {
 
         _getDayCaption: function(day) {
             const daysInWeek = this.option('colCount');
+            const dayIndex = day % daysInWeek;
 
-            return dateLocalization.getDayNames('abbreviated')[day % daysInWeek];
+            return {
+                full: dateLocalization.getDayNames()[dayIndex],
+                abbreviated: dateLocalization.getDayNames('abbreviated')[dayIndex]
+            };
         },
 
         _getFirstCellData: function() {

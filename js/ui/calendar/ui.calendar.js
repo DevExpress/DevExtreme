@@ -569,10 +569,6 @@ const Calendar = Editor.inherit({
         this._renderSwipeable();
         this._renderFooter();
 
-        this.setAria({
-            'role': 'listbox',
-            'label': messageLocalization.format('dxCalendar-ariaWidgetName')
-        });
         this._updateAriaSelected();
         this._updateAriaId();
 

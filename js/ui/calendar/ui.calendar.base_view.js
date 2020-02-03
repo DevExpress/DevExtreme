@@ -8,6 +8,7 @@ const dateUtils = require('../../core/utils/date');
 const extend = require('../../core/utils/extend').extend;
 const noop = require('../../core/utils/common').noop;
 const dateSerialization = require('../../core/utils/date_serialization');
+const messageLocalization = require('../../localization/message');
 const eventUtils = require('../../events/utils');
 const clickEvent = require('../../events/click');
 
@@ -63,14 +64,24 @@ const BaseView = Widget.inherit({
     },
 
     _renderImpl: function() {
-        this._$table = $('<table>');
-        this.$element().append(this._$table);
+        this.$element().append(this._createTable());
 
         this._createDisabledDatesHandler();
         this._renderBody();
         this._renderContouredDate();
         this._renderValue();
         this._renderEvents();
+    },
+
+    _createTable: function() {
+        this._$table = $('<table>');
+
+        this.setAria({
+            label: messageLocalization.format('dxCalendar-ariaWidgetName'),
+            role: 'grid'
+        }, this._$table);
+
+        return this._$table;
     },
 
     _renderBody: function() {
@@ -119,7 +130,7 @@ const BaseView = Widget.inherit({
             dataUtils.data(cell, CALENDAR_DATE_VALUE_KEY, cellDate);
 
             that.setAria({
-                'role': 'option',
+                'role': 'gridcell',
                 'label': that.getCellAriaLabel(cellDate)
             }, $cell);
 
@@ -147,6 +158,7 @@ const BaseView = Widget.inherit({
 
         for(let indexRow = 0, len = this.option('rowCount'); indexRow < len; indexRow++) {
             row = domAdapter.createElement('tr');
+            that.setAria('role', 'row', $(row));
             this.$body.get(0).appendChild(row);
             this._iterateCells(colCount, renderCell);
         }
