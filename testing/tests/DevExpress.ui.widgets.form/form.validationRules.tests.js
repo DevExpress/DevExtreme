@@ -89,7 +89,7 @@ function getID(form, dataField) {
     return 'dx_' + form.option('formID') + '_' + dataField;
 }
 
-QUnit.test('The validation result is invalid when item has validation rules', assert => {
+QUnit.test('The validation result is invalid when item has validation rules', function(assert) {
     const form = $('#form').dxForm({
         formData: {
             name: ''
@@ -109,7 +109,7 @@ QUnit.test('The validation result is invalid when item has validation rules', as
     assert.equal(form.$element().find(invalidSelector + ' [id=' + getID(form, 'name') + ']').length, 1, 'invalid name editor');
 });
 
-QUnit.test('The validation result is valid when item has validation rules', assert => {
+QUnit.test('The validation result is valid when item has validation rules', function(assert) {
     const form = $('#form').dxForm({
         formData: {
             name: 'Test'
@@ -128,7 +128,7 @@ QUnit.test('The validation result is valid when item has validation rules', asse
     assert.equal(form.$element().find(invalidSelector).length, 0, 'invalid editors count');
 });
 
-QUnit.test('Validate with template wrapper', assert => {
+QUnit.test('Validate with template wrapper', function(assert) {
     // arrange
     const validationSpy = sinon.spy();
     const form = $('#form').dxForm({
@@ -157,7 +157,7 @@ QUnit.test('Validate with template wrapper', assert => {
     assert.equal(validationSpy.callCount, 1, 'invalid editors count');
 });
 
-QUnit.test('Validate with a custom validation group', assert => {
+QUnit.test('Validate with a custom validation group', function(assert) {
     // arrange
     const form = $('#form').dxForm({
         validationGroup: 'Custom validation group',
@@ -183,7 +183,7 @@ QUnit.test('Validate with a custom validation group', assert => {
     assert.equal(form.$element().find(invalidSelector + ' [id=' + getID(form, 'firstName') + ']').length, 1, 'invalid firstName editor');
 });
 
-QUnit.test('Reset validation summary items when using a custom validation group', assert => {
+QUnit.test('Reset validation summary items when using a custom validation group', function(assert) {
     // arrange
     const form = $('#form').dxForm({
         validationGroup: 'Custom validation group',
@@ -213,7 +213,7 @@ QUnit.test('Reset validation summary items when using a custom validation group'
     assert.equal($validationSummaryItems.length, 0, 'There is no validation summary items');
 });
 
-QUnit.test('Validate form when several forms are rendered', assert => {
+QUnit.test('Validate form when several forms are rendered', function(assert) {
     // arrange
     const form1 = $('#form').dxForm({
         formData: {
@@ -255,7 +255,7 @@ QUnit.test('Validate form when several forms are rendered', assert => {
     assert.equal(form2.$element().find(invalidSelector + ' [id=' + getID(form2, 'firstName2') + ']').length, 0, 'invalid firstName editor');
 });
 
-QUnit.test('Validate via \'isRequired\' item option', assert => {
+QUnit.test('Validate via \'isRequired\' item option', function(assert) {
     // arrange
     const form = $('#form').dxForm({
         formData: {
@@ -285,7 +285,7 @@ QUnit.test('Validate via \'isRequired\' item option', assert => {
     assert.equal(form.$element().find('.dx-invalid-message').last().text(), 'First Name is required', 'Message contains the name of validated field by default if label isn\'t defined');
 });
 
-QUnit.test('Validate via validationRules when rules and \'isRequired\' item option are both defined', assert => {
+QUnit.test('Validate via validationRules when rules and \'isRequired\' item option are both defined', function(assert) {
     // arrange
     const form = $('#form').dxForm({
         formData: {
@@ -308,7 +308,7 @@ QUnit.test('Validate via validationRules when rules and \'isRequired\' item opti
     assert.equal(form.$element().find(invalidSelector + ' [id=' + getID(form, 'lastName') + ']').length, 1, 'invalid lastName editor');
 });
 
-QUnit.test('validate -> resetValues old test', assert => {
+QUnit.test('validate -> resetValues old test', function(assert) {
     // arrange
     const form = $('#form').dxForm({
         formData: {
@@ -387,7 +387,7 @@ QUnit.test('validate -> resetValues when there are invalid validation rules', fu
     form.dispose();
 });
 
-QUnit.test('Changing an validationRules options of an any item does not invalidate whole form (T673188)', assert => {
+QUnit.test('Changing an validationRules options of an any item does not invalidate whole form (T673188)', function(assert) {
     // arrange
     const form = $('#form').dxForm({
         formData: {
@@ -409,7 +409,7 @@ QUnit.test('Changing an validationRules options of an any item does not invalida
     assert.strictEqual(renderComponentSpy.callCount, 0, 'renderComponentSpy.callCount');
 });
 
-QUnit.test('Validate the form without validation rules for an any simple items', (assert) => {
+QUnit.test('Validate the form without validation rules for an any simple items', function(assert) {
     const errorStub = sinon.stub();
     logger.error = errorStub;
 
@@ -425,7 +425,7 @@ QUnit.test('Validate the form without validation rules for an any simple items',
     assert.equal(errorStub.getCalls().length, 0, 'errors are not written to the console');
 });
 
-QUnit.test('Change validation rules when simple item is hidden via api', (assert) => {
+QUnit.test('Change validation rules when simple item is hidden via api', function(assert) {
     const form = $('#form').dxForm({
         items: [{
             itemType: 'simple',
@@ -440,7 +440,7 @@ QUnit.test('Change validation rules when simple item is hidden via api', (assert
     assert.deepEqual(form.itemOption('item1').validationRules, [{ type: 'required' }], 'validation rules');
 });
 
-QUnit.testInActiveWindow('Change RangeRule.max', assert => {
+QUnit.testInActiveWindow('Change RangeRule.max', function(assert) {
     const runChangeRuleRageMaxTest = (options) => {
         [true, false].forEach(useItemOption => {
             runChangeValidationRuleTest({
@@ -467,7 +467,7 @@ QUnit.testInActiveWindow('Change RangeRule.max', assert => {
     runChangeRuleRageMaxTest({ fieldValue: 10, initialMax: 1, targetMax: 11, validationResult: true });
 });
 
-QUnit.testInActiveWindow('Add RangeRule to item.validationRules', assert => {
+QUnit.testInActiveWindow('Add RangeRule to item.validationRules', function(assert) {
     const runSetRangeRuleTest = (options) => {
         runChangeValidationRuleTest(extend(
             {
@@ -487,7 +487,7 @@ QUnit.testInActiveWindow('Add RangeRule to item.validationRules', assert => {
     });
 });
 
-QUnit.testInActiveWindow('Remove RangeRule from item.validationRules', assert => {
+QUnit.testInActiveWindow('Remove RangeRule from item.validationRules', function(assert) {
     const runRemoveRangedRuleTest = (options) => {
         runChangeValidationRuleTest(extend(
             {
@@ -508,7 +508,7 @@ QUnit.testInActiveWindow('Remove RangeRule from item.validationRules', assert =>
     });
 });
 
-QUnit.testInActiveWindow('Add RequiredRule to item.validationRules', assert => {
+QUnit.testInActiveWindow('Add RequiredRule to item.validationRules', function(assert) {
     [undefined, null, []].forEach(validationRules => {
         [true, false].forEach(useItemOption => {
             runChangeValidationRuleTest({
@@ -524,7 +524,7 @@ QUnit.testInActiveWindow('Add RequiredRule to item.validationRules', assert => {
     });
 });
 
-QUnit.testInActiveWindow('Remove RequiredRule from item.validationRules', assert => {
+QUnit.testInActiveWindow('Remove RequiredRule from item.validationRules', function(assert) {
     [undefined, null, []].forEach(newValidationRules => {
         [true, false].forEach(useItemOption => {
             runChangeValidationRuleTest({
@@ -540,7 +540,7 @@ QUnit.testInActiveWindow('Remove RequiredRule from item.validationRules', assert
     });
 });
 
-QUnit.testInActiveWindow('Change item.isRequired', assert => {
+QUnit.testInActiveWindow('Change item.isRequired', function(assert) {
     [true, false].forEach(isRequired => {
         [true, false].forEach(useItemOption => {
             runChangeValidationRuleTest({
@@ -576,7 +576,7 @@ QUnit.module('validation group', () => {
         assert.ok(ValidationEngine.getGroupConfig('Test'), 'the new validation group of the Form is contained in the validation engine');
     });
 
-    QUnit.test('Set { items: [name], showValidationSummary: true }, call option(validationGroup, Test)', (assert) => {
+    QUnit.test('Set { items: [name], showValidationSummary: true }, call option(validationGroup, Test)', function(assert) {
         const $formContainer = $('#form').dxForm({
             showValidationSummary: true,
             items: ['name']
@@ -604,7 +604,7 @@ QUnit.module('validation group', () => {
         assert.ok(ValidationEngine.getGroupConfig('Test2'), 'the new validation group of the Form is contained in the validation engine');
     });
 
-    QUnit.test('Set { items: [name], validationGroup: Test1, showValidationSummary: true }, call option(validationGroup, Test2)', (assert) => {
+    QUnit.test('Set { items: [name], validationGroup: Test1, showValidationSummary: true }, call option(validationGroup, Test2)', function(assert) {
         const $formContainer = $('#form').dxForm({
             showValidationSummary: true,
             validationGroup: 'Test1',
@@ -641,7 +641,7 @@ QUnit.module('validation group', () => {
         assert.ok(ValidationEngine.getGroupConfig('Test'), 'the new validation group of the Form is contained in the validation engine');
     });
 
-    QUnit.test('Set { items: [{dataField: name, isRequired: true}], showValidationSummary: true }, call option(validationGroup, Test)', (assert) => {
+    QUnit.test('Set { items: [{dataField: name, isRequired: true}], showValidationSummary: true }, call option(validationGroup, Test)', function(assert) {
         const $formContainer = $('#form').dxForm({
             showValidationSummary: true,
             items: [{ dataField: 'name', isRequired: true }]
@@ -678,7 +678,7 @@ QUnit.module('validation group', () => {
         assert.ok(ValidationEngine.getGroupConfig('Test2'), 'the new validation group of the Form is contained in the validation engine');
     });
 
-    QUnit.test('Set { items: [{dataField: name, isRequired: true}], validationGroup: Test1, showValidationSummary: true }, call option(validationGroup, Test2)', (assert) => {
+    QUnit.test('Set { items: [{dataField: name, isRequired: true}], validationGroup: Test1, showValidationSummary: true }, call option(validationGroup, Test2)', function(assert) {
         const $formContainer = $('#form').dxForm({
             showValidationSummary: true,
             validationGroup: 'Test1',

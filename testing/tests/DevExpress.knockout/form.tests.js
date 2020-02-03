@@ -388,11 +388,10 @@ QUnit.test('Reset editor\'s value when the formData option is empty object', fun
         this.items = ['name', 'lastName', 'sex', 'room', 'isDeveloper'];
     };
     const $form = $('#simpleTemplateForm');
-    let form;
     const vm = new viewModel();
 
     ko.applyBindings(vm, $form.get(0));
-    form = $form.dxForm('instance');
+    const form = $form.dxForm('instance');
 
     // act
     vm.formData({});
@@ -426,7 +425,7 @@ QUnit.test('Form is not crashed when numberbox is used (T369550)', function(asse
 
 QUnit.test('Form items should have correct model', function(assert) {
     assert.expect(1);
-    var viewModel = {
+    const viewModel = {
         formData: {},
         items: [{
             itemType: 'button',
@@ -590,7 +589,7 @@ QUnit.test('The formData is empty object when formData has \'undefined\' value',
     assert.deepEqual(viewModel.formData(), { });
 });
 
-QUnit.test('Check name argument of the simple item template when name is defined', assert => {
+QUnit.test('Check name argument of the simple item template when name is defined', function(assert) {
     // arrange
     const viewModel = {
         items: [{ name: 'TestName', template: 'simpleTemplate2' }]
@@ -603,7 +602,7 @@ QUnit.test('Check name argument of the simple item template when name is defined
     assert.strictEqual($('#name').text(), 'TestName', 'the name argument of template');
 });
 
-QUnit.test('Check name argument of the simple item template when name and dataField are defined', assert => {
+QUnit.test('Check name argument of the simple item template when name and dataField are defined', function(assert) {
     // arrange
     const viewModel = {
         items: [{ name: 'TestName', dataField: 'TestDataField', template: 'simpleTemplate2' }]
@@ -616,7 +615,7 @@ QUnit.test('Check name argument of the simple item template when name and dataFi
     assert.strictEqual($('#name').text(), 'TestName', 'the name argument of template');
 });
 
-QUnit.test('Check name argument of the simple item template when name is undefined', assert => {
+QUnit.test('Check name argument of the simple item template when name is undefined', function(assert) {
     // arrange
     const viewModel = {
         items: [{ template: 'simpleTemplate2' }]
@@ -629,7 +628,7 @@ QUnit.test('Check name argument of the simple item template when name is undefin
     assert.strictEqual($('#name').text(), '', 'the name argument of template');
 });
 
-QUnit.test('Check name argument of the simple item template when name is undefined and dataField is defined', assert => {
+QUnit.test('Check name argument of the simple item template when name is undefined and dataField is defined', function(assert) {
     // arrange
     const viewModel = {
         items: [{ dataField: 'TestDataField', template: 'simpleTemplate2' }]

@@ -143,9 +143,7 @@ QUnit.test('Change of the formData field change value of the editor', function(a
 QUnit.test('Change editor value after formOption is changed and items is defined', function(assert) {
     // arrange
     const $testContainer = $('#form');
-    let form;
-
-    form = $testContainer.dxForm({
+    const form = $testContainer.dxForm({
         formData: { pirateName: 'Blackbeard', type: 'captain', isSought: true },
         items: ['pirateName', 'type', 'isSought']
     }).dxForm('instance');
@@ -169,9 +167,7 @@ QUnit.test('Change editor value after formOption is changed and items is defined
 QUnit.test('Reset editor value after formData changing only if dataField is defined', function(assert) {
     // arrange
     const $testContainer = $('#form');
-    let form;
-
-    form = $testContainer.dxForm({
+    const form = $testContainer.dxForm({
         formData: { pirateName: 'Blackbeard', type: 'captain', isSought: 'Test', gender: 'Male' },
         items: [{ dataField: 'gender' }, { dataField: 'pirateName' }, { dataField: 'type' }, { name: 'isSought', editorType: 'dxTextBox' }]
     }).dxForm('instance');
@@ -343,9 +339,7 @@ QUnit.test('Refresh form when visibility changed to \'true\' in msie browser', f
     // arrange, act
     const $testContainer = $('#form');
     const expectedRefreshCount = browser.msie ? 1 : 0;
-    let form;
-
-    form = $testContainer.dxForm({
+    const form = $testContainer.dxForm({
         formData: { name: 'TestName' },
         items: [{ dataField: 'name' }]
     }).dxForm('instance');
@@ -1237,12 +1231,11 @@ QUnit.test('Change option after group rendered (check for cycling template rende
                 ]
             }]
     });
-    let $fieldItemWidgets;
 
     // act
     $formContainer.dxForm('instance').option('colCount', 4);
 
-    $fieldItemWidgets = $formContainer.find('.' + internals.FIELD_ITEM_CONTENT_CLASS);
+    const $fieldItemWidgets = $formContainer.find('.' + internals.FIELD_ITEM_CONTENT_CLASS);
 
     // assert
     assert.equal($fieldItemWidgets.length, 3, 'Correct number of a widgets');
@@ -1333,7 +1326,7 @@ QUnit.test('Align labels when layout is changed when small window size by defaul
     assert.equal($('.' + internals.HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
 });
 
-QUnit.test('required mark aligned', (assert) => {
+QUnit.test('required mark aligned', function(assert) {
     const $testContainer = $('#form').dxForm({
         requiredMark: '!',
         items: [{
@@ -1352,7 +1345,7 @@ QUnit.test('required mark aligned', (assert) => {
     assert.ok($requiredLabel.position().left < $requiredMark.position().left, 'required mark should be after of the text');
 });
 
-QUnit.test('optional mark aligned', (assert) => {
+QUnit.test('optional mark aligned', function(assert) {
     const $testContainer = $('#form').dxForm({
         optionalMark: 'optMark',
         showOptionalMark: true,
@@ -1595,10 +1588,7 @@ function triggerKeyUp($element, key) {
 QUnit.test('Check component instance onEditorEnterKey', function(assert) {
     // arrange
     let testArgs;
-    let editor;
-    let form;
-
-    form = $('#form').dxForm({
+    const form = $('#form').dxForm({
         formData: {
             name: 'Kyle',
             work: 'MexCo'
@@ -1609,7 +1599,7 @@ QUnit.test('Check component instance onEditorEnterKey', function(assert) {
     }).dxForm('instance');
 
     // act
-    editor = form.getEditor('work');
+    const editor = form.getEditor('work');
     triggerKeyUp(editor.$element(), 'Enter');
 
     // assert
@@ -2889,9 +2879,7 @@ QUnit.test('Column count for tabs may depend on screen factor', function(assert)
 QUnit.test('Cached colCount options doesn\'t leak', function(assert) {
     // arrange
     const $form = $('#form');
-    let instance;
-
-    instance = $form.dxForm({
+    const instance = $form.dxForm({
         formData: {
             name: 'User',
             lastName: 'Test Last Name'
@@ -2984,7 +2972,7 @@ QUnit.test('Form redraw layout when colCount is \'auto\' and an calculated colCo
 
 QUnit.module('Form when rtlEnabled is true');
 
-QUnit.test('required mark aligned when rtlEnabled option is set to true', (assert) => {
+QUnit.test('required mark aligned when rtlEnabled option is set to true', function(assert) {
     const $testContainer = $('#form').dxForm({
         requiredMark: '!',
         rtlEnabled: true,
@@ -3004,7 +2992,7 @@ QUnit.test('required mark aligned when rtlEnabled option is set to true', (asser
     assert.ok($requiredLabel.position().left > $requiredMark.position().left, 'required mark should be before of the text');
 });
 
-QUnit.test('optional mark aligned when rtlEnabled option is set to true', (assert) => {
+QUnit.test('optional mark aligned when rtlEnabled option is set to true', function(assert) {
     const $testContainer = $('#form').dxForm({
         optionalMark: 'optMark',
         showOptionalMark: true,
