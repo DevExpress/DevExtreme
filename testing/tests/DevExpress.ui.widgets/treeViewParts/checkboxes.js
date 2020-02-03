@@ -917,7 +917,7 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        [true, false].forEach(selectionRequired => {
+        [true, false].forEach(selectionRequired => { /* selectionRequired is the private option */
             QUnit.test(`item1.selected: false, selectionRequired: ${selectionRequired} -> unselectItem(0)`, function(assert) {
                 const wrapper = createWrapper(config, { selectionRequired }, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false }]);
