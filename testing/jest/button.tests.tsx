@@ -72,10 +72,18 @@ describe('Button', () => {
         });
 
         describe('text', () => {
-            it('should render text', () => {
+            it('should render "text"', () => {
                 const button = render({ text: 'My button' });
 
                 expect(button.find('.dx-button-text').text()).toBe('My button');
+            });
+
+            it('should not render "text" by default', () => {
+                const button = render();
+
+                expect(button.hasClass('dx-button')).toBe(true);
+                expect(button.hasClass('dx-button-has-text')).toBe(false);
+                expect(button.exists('.dx-button-text')).toBe(false);
             });
         });
 
@@ -141,6 +149,20 @@ describe('Button', () => {
                 const tree = render({ visible: false });
 
                 expect(tree.find(Widget).prop('visible')).toBe(false);
+            });
+        });
+
+        describe('tabIndex', () => {
+            it('should pass a default value into Widget component', () => {
+                const tree = render();
+
+                expect(tree.find(Widget).prop('tabIndex')).toBe(0);
+            });
+
+            it('should pass a custom value into Widget component', () => {
+                const tree = render({ tabIndex: 10 });
+
+                expect(tree.find(Widget).prop('tabIndex')).toBe(10);
             });
         });
     });
