@@ -966,7 +966,7 @@ QUnit.module('aria accessibility', {
 });
 
 QUnit.module('swipeable disabled state', () => {
-    QUnit.test('{items: [], swipeEnabled: false}', (assert) => {
+    QUnit.test('{items: [], swipeEnabled: false}', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [],
             swipeEnabled: false
@@ -978,7 +978,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), false, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [], swipeEnabled: false} -> items: [1, 2]', (assert) => {
+    QUnit.test('{items: [], swipeEnabled: false} -> items: [1, 2]', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [],
             swipeEnabled: false
@@ -992,7 +992,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), false, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [], swipeEnabled: false} -> items: [1, 2], swipeEnabled: true', (assert) => {
+    QUnit.test('{items: [], swipeEnabled: false} -> items: [1, 2], swipeEnabled: true', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [],
             swipeEnabled: false
@@ -1007,7 +1007,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), true, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [], swipeEnabled: false} -> swipeEnabled: true', (assert) => {
+    QUnit.test('{items: [], swipeEnabled: false} -> swipeEnabled: true', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [],
             swipeEnabled: false
@@ -1021,7 +1021,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), true, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [], swipeEnabled: true}', (assert) => {
+    QUnit.test('{items: [], swipeEnabled: true}', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [],
             swipeEnabled: true
@@ -1033,7 +1033,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), true, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [], swipeEnabled: true} -> items: [1, 2]', (assert) => {
+    QUnit.test('{items: [], swipeEnabled: true} -> items: [1, 2]', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [],
             swipeEnabled: true
@@ -1047,7 +1047,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), true, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [], swipeEnabled: true} -> items: [1, 2], swipeEnabled: false', (assert) => {
+    QUnit.test('{items: [], swipeEnabled: true} -> items: [1, 2], swipeEnabled: false', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [],
             swipeEnabled: true
@@ -1062,7 +1062,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), false, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [], swipeEnabled: true} -> swipeEnabled: false', (assert) => {
+    QUnit.test('{items: [], swipeEnabled: true} -> swipeEnabled: false', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [],
             swipeEnabled: true
@@ -1076,7 +1076,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), false, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [], swipeEnabled: true} -> swipeEnabled: false, items: [1, 2]', (assert) => {
+    QUnit.test('{items: [], swipeEnabled: true} -> swipeEnabled: false, items: [1, 2]', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [],
             swipeEnabled: true
@@ -1091,7 +1091,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), false, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [1], swipeEnabled: false}', (assert) => {
+    QUnit.test('{items: [1], swipeEnabled: false}', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1],
             swipeEnabled: false
@@ -1103,7 +1103,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), false, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [1], swipeEnabled: true}', (assert) => {
+    QUnit.test('{items: [1], swipeEnabled: true}', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1],
             swipeEnabled: true
@@ -1115,7 +1115,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), true, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [1, 2], swipeEnabled: false}', (assert) => {
+    QUnit.test('{items: [1, 2], swipeEnabled: false}', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2],
             swipeEnabled: false
@@ -1127,7 +1127,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), false, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [1, 2], swipeEnabled: false} -> items: [], swipeEnabled: true', (assert) => {
+    QUnit.test('{items: [1, 2], swipeEnabled: false} -> items: [], swipeEnabled: true', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2],
             swipeEnabled: false
@@ -1142,7 +1142,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), true, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [1, 2], swipeEnabled: false} -> swipeEnabled: true', (assert) => {
+    QUnit.test('{items: [1, 2], swipeEnabled: false} -> swipeEnabled: true', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2],
             swipeEnabled: false
@@ -1156,7 +1156,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), true, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [1, 2], swipeEnabled: true}', (assert) => {
+    QUnit.test('{items: [1, 2], swipeEnabled: true}', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2],
             swipeEnabled: true
@@ -1168,7 +1168,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), true, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [1, 2], swipeEnabled: true} -> items: []', (assert) => {
+    QUnit.test('{items: [1, 2], swipeEnabled: true} -> items: []', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2],
             swipeEnabled: true
@@ -1182,7 +1182,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), true, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [1, 2], swipeEnabled: true} -> items: [1]', (assert) => {
+    QUnit.test('{items: [1, 2], swipeEnabled: true} -> items: [1]', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2],
             swipeEnabled: true
@@ -1196,7 +1196,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), true, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [1, 2], swipeEnabled: true} -> items: [1,2,3]', (assert) => {
+    QUnit.test('{items: [1, 2], swipeEnabled: true} -> items: [1,2,3]', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2],
             swipeEnabled: true
@@ -1210,7 +1210,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), true, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [1, 2], swipeEnabled: true} -> swipeEnabled: false', (assert) => {
+    QUnit.test('{items: [1, 2], swipeEnabled: true} -> swipeEnabled: false', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2],
             swipeEnabled: true
@@ -1224,7 +1224,7 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), false, 'MultiView.swipeEnabled');
     });
 
-    QUnit.test('{items: [1, 2], swipeEnabled: true} -> swipeEnabled: false, items: [1,2,3]', (assert) => {
+    QUnit.test('{items: [1, 2], swipeEnabled: true} -> swipeEnabled: false, items: [1,2,3]', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2],
             swipeEnabled: true

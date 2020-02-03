@@ -41,7 +41,7 @@ QUnit.module('option changed', {
         assert.equal(buttons[1].option('hoverStateEnabled'), false, 'second button');
     });
 
-    QUnit.test('change hover state for all buttons', function(assert) {
+    QUnit.test('change focus state for all buttons', function(assert) {
         this.buttonGroup.option('focusStateEnabled', false);
         const buttons = $(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton('instance'));
 
@@ -112,7 +112,7 @@ QUnit.module('option changed', {
         assert.ok($items.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), 'second item when button group has width');
     });
 
-    QUnit.test('it should be possible to set full set of options for each button', assert => {
+    QUnit.test('it should be possible to set full set of options for each button', function(assert) {
         const $element = $('#widget').dxButtonGroup({
             items: [{ text: 'button 1', width: 24, elementAttr: { class: 'test' }, customOption: 'Test option' }]
         });
@@ -124,7 +124,7 @@ QUnit.module('option changed', {
         assert.strictEqual(button.option('customOption'), 'Test option', 'all options should be passed to the button');
     });
 
-    QUnit.test('default options should not be redefined', assert => {
+    QUnit.test('default options should not be redefined', function(assert) {
         const $element = $('#widget').dxButtonGroup({
             items: [{ text: 'Test', focusStateEnabled: true }]
         });
@@ -134,7 +134,7 @@ QUnit.module('option changed', {
         assert.strictEqual(button.option('focusStateEnabled'), false, 'focusStateEnabled has not been redefined');
     });
 
-    QUnit.test('onClick can be redefined', assert => {
+    QUnit.test('onClick can be redefined', function(assert) {
         const handler = sinon.spy();
         const $element = $('#widget').dxButtonGroup({
             items: [{ text: 'Test', onClick: handler }]
@@ -226,7 +226,7 @@ QUnit.module('Events', () => {
                 ['click', 'touch', 'space', 'enter'].forEach((eventName) => {
                     const config = ` ${eventName}, onItemClick is initial option=${isItemClickInInitialOption}, disabled: ${isDisabled} ${isItemDisabled ? `, item.disabled=${isItemDisabled}` : ''}`;
 
-                    QUnit.test('Check onItemClick for' + config, (assert) => {
+                    QUnit.test('Check onItemClick for' + config, function(assert) {
                         const helper = new ButtonGroupEventsTestHelper(eventName, isItemClickInInitialOption, isDisabled, isItemDisabled);
                         helper.createButtonGroup();
                         helper.performAction();
