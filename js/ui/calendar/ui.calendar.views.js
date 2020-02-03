@@ -1,11 +1,28 @@
-const $ = require('../../core/renderer');
-const noop = require('../../core/utils/common').noop;
-const BaseView = require('./ui.calendar.base_view');
-const dateUtils = require('../../core/utils/date');
-const extend = require('../../core/utils/extend').extend;
-const dateLocalization = require('../../localization/date');
-const dateSerialization = require('../../core/utils/date_serialization');
-const typeUtils = require('../../core/utils/type');
+import $ from '../../core/renderer';
+import BaseView from './ui.calendar.base_view';
+import { noop } from '../../core/utils/common';
+import {
+    sameDate,
+    dateInRange,
+    getFirstMonthDate,
+    getShortDateFormat,
+    sameMonthAndYear,
+    getLastMonthDate,
+    getFirstYearInDecade,
+    getFirstDecadeInCentury,
+    sameYear,
+    sameDecade,
+    sameCentury
+} from '../../core/utils/date';
+import { extend } from '../../core/utils/extend';
+import {
+    format as formatMessage,
+    getDayNames,
+    firstDayOfWeekIndex,
+    getMonthNames
+} from '../../localization/date';
+import { serializeDate } from '../../core/utils/date_serialization';
+import { isDefined } from '../../core/utils/type';
 
 const CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
@@ -40,12 +57,10 @@ const Views = {
         _renderFocusTarget: noop,
 
         getCellAriaLabel: function(date) {
-            return dateLocalization.format(date, 'longdate');
+            return formatMessage(date, 'longdate');
         },
 
         _renderHeader: function() {
-            const that = this;
-
             const $header = $('<thead>');
             this._$table.prepend($header);
 
@@ -60,34 +75,37 @@ const Views = {
                     row.append(cell);
                 };
 
-            this._iterateCells(this.option('colCount'), function(i) {
-                const dayCaption = that._getDayCaption(that._getFirstDayOfWeek() + i);
+            this._iterateCells(this.option('colCount'), (i) => {
+                const {
+                    full: fullCaption,
+                    abbreviated: abbrCaption
+                } = this._getDayCaption(this._getFirstDayOfWeek() + i);
                 const $cell = $('<th>')
                     .attr({
                         scope: 'col',
-                        abbr: dayCaption.full
+                        abbr: fullCaption
                     })
-                    .text(dayCaption.abbreviated);
+                    .text(abbrCaption);
 
                 appendCell($headerRow, $cell);
             });
         },
 
         getNavigatorCaption: function() {
-            return dateLocalization.format(this.option('date'), 'monthandyear');
+            return formatMessage(this.option('date'), 'monthandyear');
         },
 
         _isTodayCell: function(cellDate) {
             const today = new Date();
 
-            return dateUtils.sameDate(cellDate, today);
+            return sameDate(cellDate, today);
         },
 
         _isDateOutOfRange: function(cellDate) {
             const minDate = this.option('min');
             const maxDate = this.option('max');
 
-            return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
+            return !dateInRange(cellDate, minDate, maxDate, 'date');
         },
 
         _isOtherView: function(cellDate) {
@@ -95,7 +113,7 @@ const Views = {
         },
 
         _getCellText: function(cellDate) {
-            return dateLocalization.format(cellDate, 'd');
+            return formatMessage(cellDate, 'd');
         },
 
         _getDayCaption: function(day) {
@@ -103,13 +121,13 @@ const Views = {
             const dayIndex = day % daysInWeek;
 
             return {
-                full: dateLocalization.getDayNames()[dayIndex],
-                abbreviated: dateLocalization.getDayNames('abbreviated')[dayIndex]
+                full: getDayNames()[dayIndex],
+                abbreviated: getDayNames('abbreviated')[dayIndex]
             };
         },
 
         _getFirstCellData: function() {
-            const firstDay = dateUtils.getFirstMonthDate(this.option('date'));
+            const firstDay = getFirstMonthDate(this.option('date'));
             let firstMonthDayOffset = this._getFirstDayOfWeek() - firstDay.getDay();
             const daysInWeek = this.option('colCount');
 
@@ -128,21 +146,21 @@ const Views = {
         },
 
         _getFirstDayOfWeek: function() {
-            return typeUtils.isDefined(this.option('firstDayOfWeek')) ? this.option('firstDayOfWeek') : dateLocalization.firstDayOfWeekIndex();
+            return isDefined(this.option('firstDayOfWeek')) ? this.option('firstDayOfWeek') : firstDayOfWeekIndex();
         },
 
         _getCellByDate: function(date) {
-            return this._$table.find('td[data-value=\'' + dateSerialization.serializeDate(date, dateUtils.getShortDateFormat()) + '\']');
+            return this._$table.find(`td[data-value='${serializeDate(date, getShortDateFormat())}']`);
         },
 
         isBoundary: function(date) {
-            return dateUtils.sameMonthAndYear(date, this.option('min')) || dateUtils.sameMonthAndYear(date, this.option('max'));
+            return sameMonthAndYear(date, this.option('min')) || sameMonthAndYear(date, this.option('max'));
         },
 
         _getDefaultDisabledDatesHandler: function(disabledDates) {
             return function(args) {
                 const isDisabledDate = disabledDates.some(function(item) {
-                    return dateUtils.sameDate(item, args.date);
+                    return sameDate(item, args.date);
                 });
 
                 if(isDisabledDate) {
@@ -159,11 +177,11 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            return dateUtils.sameMonthAndYear(cellDate, new Date());
+            return sameMonthAndYear(cellDate, new Date());
         },
 
         _isDateOutOfRange: function(cellDate) {
-            return !dateUtils.dateInRange(cellDate, dateUtils.getFirstMonthDate(this.option('min')), dateUtils.getLastMonthDate(this.option('max')));
+            return !dateInRange(cellDate, getFirstMonthDate(this.option('min')), getLastMonthDate(this.option('max')));
         },
 
         _isOtherView: function() {
@@ -171,7 +189,7 @@ const Views = {
         },
 
         _getCellText: function(cellDate) {
-            return dateLocalization.getMonthNames('abbreviated')[cellDate.getMonth()];
+            return getMonthNames('abbreviated')[cellDate.getMonth()];
         },
 
         _getFirstCellData: function() {
@@ -193,19 +211,19 @@ const Views = {
             const foundDate = new Date(date);
             foundDate.setDate(1);
 
-            return this._$table.find('td[data-value=\'' + dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat()) + '\']');
+            return this._$table.find(`td[data-value='${serializeDate(foundDate, getShortDateFormat())}']`);
         },
 
         getCellAriaLabel: function(date) {
-            return dateLocalization.format(date, 'monthandyear');
+            return formatMessage(date, 'monthandyear');
         },
 
         getNavigatorCaption: function() {
-            return dateLocalization.format(this.option('date'), 'yyyy');
+            return formatMessage(this.option('date'), 'yyyy');
         },
 
         isBoundary: function(date) {
-            return dateUtils.sameYear(date, this.option('min')) || dateUtils.sameYear(date, this.option('max'));
+            return sameYear(date, this.option('min')) || sameYear(date, this.option('max'));
         }
     }),
 
@@ -216,29 +234,29 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            return dateUtils.sameYear(cellDate, new Date());
+            return sameYear(cellDate, new Date());
         },
 
         _isDateOutOfRange: function(cellDate) {
             const min = this.option('min');
             const max = this.option('max');
 
-            return !dateUtils.dateInRange(cellDate.getFullYear(), min && min.getFullYear(), max && max.getFullYear());
+            return !dateInRange(cellDate.getFullYear(), min && min.getFullYear(), max && max.getFullYear());
         },
 
         _isOtherView: function(cellDate) {
             const date = new Date(cellDate);
             date.setMonth(1);
 
-            return !dateUtils.sameDecade(date, this.option('date'));
+            return !sameDecade(date, this.option('date'));
         },
 
         _getCellText: function(cellDate) {
-            return dateLocalization.format(cellDate, 'yyyy');
+            return formatMessage(cellDate, 'yyyy');
         },
 
         _getFirstCellData: function() {
-            const year = dateUtils.getFirstYearInDecade(this.option('date')) - 1;
+            const year = getFirstYearInDecade(this.option('date')) - 1;
             return new Date(year, 0, 1);
         },
 
@@ -250,18 +268,18 @@ const Views = {
 
         getNavigatorCaption: function() {
             const currentDate = this.option('date');
-            const firstYearInDecade = dateUtils.getFirstYearInDecade(currentDate);
+            const firstYearInDecade = getFirstYearInDecade(currentDate);
             const startDate = new Date(currentDate);
             const endDate = new Date(currentDate);
 
             startDate.setFullYear(firstYearInDecade);
             endDate.setFullYear(firstYearInDecade + 9);
 
-            return dateLocalization.format(startDate, 'yyyy') + '-' + dateLocalization.format(endDate, 'yyyy');
+            return formatMessage(startDate, 'yyyy') + '-' + formatMessage(endDate, 'yyyy');
         },
 
         _isValueOnCurrentView: function(currentDate, value) {
-            return dateUtils.sameDecade(currentDate, value);
+            return sameDecade(currentDate, value);
         },
 
         _getCellByDate: function(date) {
@@ -269,11 +287,11 @@ const Views = {
             foundDate.setDate(1);
             foundDate.setMonth(0);
 
-            return this._$table.find('td[data-value=\'' + dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat()) + '\']');
+            return this._$table.find(`td[data-value='${serializeDate(foundDate, getShortDateFormat())}']`);
         },
 
         isBoundary: function(date) {
-            return dateUtils.sameDecade(date, this.option('min')) || dateUtils.sameDecade(date, this.option('max'));
+            return sameDecade(date, this.option('min')) || sameDecade(date, this.option('max'));
         }
     }),
 
@@ -284,35 +302,35 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            return dateUtils.sameDecade(cellDate, new Date());
+            return sameDecade(cellDate, new Date());
         },
 
         _isDateOutOfRange: function(cellDate) {
-            const decade = dateUtils.getFirstYearInDecade(cellDate);
-            const minDecade = dateUtils.getFirstYearInDecade(this.option('min'));
-            const maxDecade = dateUtils.getFirstYearInDecade(this.option('max'));
+            const decade = getFirstYearInDecade(cellDate);
+            const minDecade = getFirstYearInDecade(this.option('min'));
+            const maxDecade = getFirstYearInDecade(this.option('max'));
 
-            return !dateUtils.dateInRange(decade, minDecade, maxDecade);
+            return !dateInRange(decade, minDecade, maxDecade);
         },
 
         _isOtherView: function(cellDate) {
             const date = new Date(cellDate);
             date.setMonth(1);
 
-            return !dateUtils.sameCentury(date, this.option('date'));
+            return !sameCentury(date, this.option('date'));
         },
 
         _getCellText: function(cellDate) {
-            const startDate = dateLocalization.format(cellDate, 'yyyy');
+            const startDate = formatMessage(cellDate, 'yyyy');
             const endDate = new Date(cellDate);
 
             endDate.setFullYear(endDate.getFullYear() + 9);
 
-            return startDate + ' - ' + dateLocalization.format(endDate, 'yyyy');
+            return startDate + ' - ' + formatMessage(endDate, 'yyyy');
         },
 
         _getFirstCellData: function() {
-            const decade = dateUtils.getFirstDecadeInCentury(this.option('date')) - 10;
+            const decade = getFirstDecadeInCentury(this.option('date')) - 10;
             return new Date(decade, 0, 1);
         },
 
@@ -326,25 +344,25 @@ const Views = {
             const foundDate = new Date(date);
             foundDate.setDate(1);
             foundDate.setMonth(0);
-            foundDate.setFullYear(dateUtils.getFirstYearInDecade(foundDate));
+            foundDate.setFullYear(getFirstYearInDecade(foundDate));
 
-            return this._$table.find('td[data-value=\'' + dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat()) + '\']');
+            return this._$table.find(`td[data-value='${serializeDate(foundDate, getShortDateFormat())}']`);
         },
 
         getNavigatorCaption: function() {
             const currentDate = this.option('date');
-            const firstDecadeInCentury = dateUtils.getFirstDecadeInCentury(currentDate);
+            const firstDecadeInCentury = getFirstDecadeInCentury(currentDate);
             const startDate = new Date(currentDate);
             const endDate = new Date(currentDate);
 
             startDate.setFullYear(firstDecadeInCentury);
             endDate.setFullYear(firstDecadeInCentury + 99);
 
-            return dateLocalization.format(startDate, 'yyyy') + '-' + dateLocalization.format(endDate, 'yyyy');
+            return formatMessage(startDate, 'yyyy') + '-' + formatMessage(endDate, 'yyyy');
         },
 
         isBoundary: function(date) {
-            return dateUtils.sameCentury(date, this.option('min')) || dateUtils.sameCentury(date, this.option('max'));
+            return sameCentury(date, this.option('min')) || sameCentury(date, this.option('max'));
         }
     })
 };

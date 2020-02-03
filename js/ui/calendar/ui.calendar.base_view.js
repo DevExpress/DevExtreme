@@ -1,18 +1,18 @@
-const $ = require('../../core/renderer');
-const domAdapter = require('../../core/dom_adapter');
-const eventsEngine = require('../../events/core/events_engine');
-const dataUtils = require('../../core/element_data');
-const domUtils = require('../../core/utils/dom');
-const Widget = require('../widget/ui.widget');
-const dateUtils = require('../../core/utils/date');
-const extend = require('../../core/utils/extend').extend;
-const noop = require('../../core/utils/common').noop;
-const dateSerialization = require('../../core/utils/date_serialization');
-const messageLocalization = require('../../localization/message');
-const eventUtils = require('../../events/utils');
-const clickEvent = require('../../events/click');
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import eventsEngine from '../../events/core/events_engine';
+import dataUtils from '../../core/element_data';
+import domUtils from '../../core/utils/dom';
+import Widget from '../widget/ui.widget';
+import { fixTimezoneGap, getShortDateFormat, getFirstDateView } from '../../core/utils/date';
+import { extend } from '../../core/utils/extend';
+import { noop } from '../../core/utils/common';
+import { serializeDate } from '../../core/utils/date_serialization';
+import { format as formatMessage } from '../../localization/message';
+import { addNamespace } from '../../events/utils';
+import { name as clickEventName } from '../../events/click';
 
-const abstract = Widget.abstract;
+const { abstract } = Widget;
 
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
@@ -21,7 +21,7 @@ const CALENDAR_TODAY_CLASS = 'dx-calendar-today';
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 
-const CALENDAR_DXCLICK_EVENT_NAME = eventUtils.addNamespace(clickEvent.name, 'dxCalendar');
+const CALENDAR_DXCLICK_EVENT_NAME = addNamespace(clickEventName, 'dxCalendar');
 
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
@@ -77,7 +77,7 @@ const BaseView = Widget.inherit({
         this._$table = $('<table>');
 
         this.setAria({
-            label: messageLocalization.format('dxCalendar-ariaWidgetName'),
+            label: formatMessage('dxCalendar-ariaWidgetName'),
             role: 'grid'
         }, this._$table);
 
@@ -87,7 +87,6 @@ const BaseView = Widget.inherit({
     _renderBody: function() {
         this.$body = $('<tbody>').appendTo(this._$table);
 
-        const that = this;
         const cellTemplate = this.option('cellTemplate');
 
         const appendChild = this.option('rtl')
@@ -100,68 +99,83 @@ const BaseView = Widget.inherit({
         let cellDate = this._getFirstCellData();
         let row;
 
-        function renderCell(cellIndex) {
+        const renderCell = (cellIndex) => {
             // T425127
             if(prevCellDate) {
-                dateUtils.fixTimezoneGap(prevCellDate, cellDate);
+                fixTimezoneGap(prevCellDate, cellDate);
             }
 
             prevCellDate = cellDate;
 
-            const cell = domAdapter.createElement('td');
-            const $cell = $(cell);
-            let className = CALENDAR_CELL_CLASS;
-
-            if(that._isTodayCell(cellDate)) {
-                className = className + ' ' + CALENDAR_TODAY_CLASS;
-            }
-
-            if(that._isDateOutOfRange(cellDate) || that.isDateDisabled(cellDate)) {
-                className = className + ' ' + CALENDAR_EMPTY_CELL_CLASS;
-            }
-
-            if(that._isOtherView(cellDate)) {
-                className = className + ' ' + CALENDAR_OTHER_VIEW_CLASS;
-            }
-
-            cell.className = className;
-
-            cell.setAttribute('data-value', dateSerialization.serializeDate(cellDate, dateUtils.getShortDateFormat()));
-            dataUtils.data(cell, CALENDAR_DATE_VALUE_KEY, cellDate);
-
-            that.setAria({
-                'role': 'gridcell',
-                'label': that.getCellAriaLabel(cellDate)
-            }, $cell);
+            const { cell, $cell } = this._createCell(cellDate);
 
             appendChild(row, cell);
 
             if(cellTemplate) {
-                cellTemplate.render({
-                    model: {
-                        text: that._getCellText(cellDate),
-                        date: cellDate,
-                        view: that._getViewName()
-                    },
-                    container: domUtils.getPublicElement($cell),
-                    index: cellIndex
-                });
+                cellTemplate.render(this._prepareCellTemplateData(cellDate, cellIndex, $cell));
             } else {
-                cell.innerHTML = that._getCellText(cellDate);
+                cell.innerHTML = this._getCellText(cellDate);
             }
 
-            cellDate = that._getNextCellData(cellDate);
-        }
+            cellDate = this._getNextCellData(cellDate);
+        };
 
         const colCount = this.option('colCount');
         let prevCellDate;
 
         for(let indexRow = 0, len = this.option('rowCount'); indexRow < len; indexRow++) {
             row = domAdapter.createElement('tr');
-            that.setAria('role', 'row', $(row));
+            this.setAria('role', 'row', $(row));
             this.$body.get(0).appendChild(row);
             this._iterateCells(colCount, renderCell);
         }
+    },
+
+    _createCell: function(cellDate) {
+        const cell = domAdapter.createElement('td');
+        const $cell = $(cell);
+
+        cell.className = this._getClassNameByDate(cellDate);
+
+        cell.setAttribute('data-value', serializeDate(cellDate, getShortDateFormat()));
+        dataUtils.data(cell, CALENDAR_DATE_VALUE_KEY, cellDate);
+
+        this.setAria({
+            'role': 'gridcell',
+            'label': this.getCellAriaLabel(cellDate)
+        }, $cell);
+
+        return { cell, $cell };
+    },
+
+    _getClassNameByDate: function(cellDate) {
+        let className = CALENDAR_CELL_CLASS;
+
+        if(this._isTodayCell(cellDate)) {
+            className += ` ${CALENDAR_TODAY_CLASS}`;
+        }
+
+        if(this._isDateOutOfRange(cellDate) || this.isDateDisabled(cellDate)) {
+            className += ` ${CALENDAR_EMPTY_CELL_CLASS}`;
+        }
+
+        if(this._isOtherView(cellDate)) {
+            className += ` ${CALENDAR_OTHER_VIEW_CLASS}`;
+        }
+
+        return className;
+    },
+
+    _prepareCellTemplateData: function(cellDate, cellIndex, $cell) {
+        return {
+            model: {
+                text: this._getCellText(cellDate),
+                date: cellDate,
+                view: this._getViewName()
+            },
+            container: domUtils.getPublicElement($cell),
+            index: cellIndex
+        };
     },
 
     _iterateCells: function(colCount, delegate) {
@@ -177,14 +191,14 @@ const BaseView = Widget.inherit({
         this._createCellClickAction();
 
         eventsEngine.off(this._$table, CALENDAR_DXCLICK_EVENT_NAME);
-        eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, 'td', (function(e) {
+        eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, 'td', ((e) => {
             if(!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
                 this._cellClickAction({
                     event: e,
                     value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY)
                 });
             }
-        }).bind(this));
+        }));
     },
 
     _createCellClickAction: function() {
@@ -229,7 +243,7 @@ const BaseView = Widget.inherit({
 
         contouredDate = contouredDate || this.option('contouredDate');
 
-        const $oldContouredCell = this._$table.find('.' + CALENDAR_CONTOURED_DATE_CLASS);
+        const $oldContouredCell = this._$table.find(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
         const $newContouredCell = this._getCellByDate(contouredDate);
 
         $oldContouredCell.removeClass(CALENDAR_CONTOURED_DATE_CLASS);
@@ -276,7 +290,7 @@ const BaseView = Widget.inherit({
         let date = this.option('date');
         const min = this.option('min');
 
-        date = dateUtils.getFirstDateView(this._getViewName(), date);
+        date = getFirstDateView(this._getViewName(), date);
         return new Date(min && date < min ? min : date);
     },
 
@@ -285,13 +299,13 @@ const BaseView = Widget.inherit({
     isBoundary: abstract,
 
     _optionChanged: function(args) {
-        const name = args.name;
+        const { name, value } = args;
         switch(name) {
             case 'value':
                 this._renderValue();
                 break;
             case 'contouredDate':
-                this._renderContouredDate(args.value);
+                this._renderContouredDate(value);
                 break;
             case 'onCellClick':
                 this._createCellClickAction();
