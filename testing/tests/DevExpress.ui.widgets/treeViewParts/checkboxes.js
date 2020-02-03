@@ -539,6 +539,7 @@ configs.forEach(config => {
                 }
                 expectedNodes = [];
             }
+
             assert.strictEqual(unselectResult, true, 'after unselect');
             wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
             wrapper.checkSelectedNodes(expectedNodes, 'after unselect');
@@ -555,6 +556,7 @@ configs.forEach(config => {
                     expectedNodes = [0, 1];
                 }
             }
+
             wrapper.checkSelectedKeys(expectedKeys, 'after expand');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expand');
             wrapper.checkEventLog([], 'after expand');
@@ -972,7 +974,7 @@ QUnit.test('all.selected: false -> selectItem(1) -> reload dataSource', function
         wrapper.instance.getDataSource().reload().done(function() {
             const $item1 = wrapper.getElement().find('[aria-level="1"]');
 
-            assert.equal($item1.length, 5, 'item1 is rendered');
+            assert.equal($item1.length, 1, 'item1 is rendered');
             wrapper.checkSelectedKeys([], 'nothing is selected');
             wrapper.checkSelectedNodes([], 'there is no selected nodes');
             wrapper.checkEventLog([], 'there is no selection events');

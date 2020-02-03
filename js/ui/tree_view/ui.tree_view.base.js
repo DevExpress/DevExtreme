@@ -1539,6 +1539,18 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this._dataAdapter.getTreeNodes();
     },
 
+    getSelectedNodes: function() {
+        let items = [];
+
+        each(this.getSelectedNodeKeys(), (index, key) => {
+            let node = this._dataAdapter.getNodeByKey(key);
+            let publicNode = this._dataAdapter.getPublicNode(node);
+            items.push(publicNode);
+        });
+
+        return items;
+    },
+
     getSelectedNodesKeys: function() {
         return this.getSelectedNodeKeys();
     },
