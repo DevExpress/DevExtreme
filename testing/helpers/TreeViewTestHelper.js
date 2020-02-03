@@ -76,6 +76,14 @@ class TreeViewTestWrapper {
         });
     }
 
+    checkSelection(expectedKeys, expectedNodes, additionalErrorMessage) {
+        const items = this.instance.option('items');
+        this.checkSelectedItems(expectedKeys, items);
+
+        this.checkSelectedKeys(expectedKeys, additionalErrorMessage);
+        this.checkSelectedNodes(expectedNodes, additionalErrorMessage);
+    }
+
     checkSelected(expectedSelectedIndexes, items) {
         this.checkSelectedItems(expectedSelectedIndexes, items);
         this.checkSelectedNodes(expectedSelectedIndexes);

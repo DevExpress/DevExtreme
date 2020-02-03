@@ -282,8 +282,7 @@ configs.forEach(config => {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
-            wrapper.checkSelectedKeys([]);
-            wrapper.checkSelectedNodes([]);
+            wrapper.checkSelection([], []);
             wrapper.checkEventLog([]);
         });
 
@@ -310,8 +309,7 @@ configs.forEach(config => {
                 expectedNodes = [0];
             }
 
-            wrapper.checkSelectedKeys(expectedKeys, 'after select');
-            wrapper.checkSelectedNodes(expectedNodes, 'after select');
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after select');
             wrapper.checkEventLog(expectedEventLog, 'after select');
             wrapper.clearEventLog();
 
@@ -329,8 +327,7 @@ configs.forEach(config => {
                 }
             }
 
-            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-            wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after expand');
             wrapper.checkEventLog([], 'after expand');
         });
 
@@ -358,8 +355,7 @@ configs.forEach(config => {
             }
 
             assert.strictEqual(selectResult, true, 'item1 is selected');
-            wrapper.checkSelectedKeys(expectedKeys, 'after select');
-            wrapper.checkSelectedNodes(expectedNodes, 'after select');
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after select');
             wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'after select');
             wrapper.clearEventLog();
 
@@ -376,8 +372,7 @@ configs.forEach(config => {
                     expectedNodes = [0, 1];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-            wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after expand');
             wrapper.checkEventLog([], 'after expand');
         });
 
@@ -415,8 +410,7 @@ configs.forEach(config => {
 
 
             assert.strictEqual(selectResult, expectedSelectResult, 'selectResult after select');
-            wrapper.checkSelectedKeys(expectedKeys, 'after select');
-            wrapper.checkSelectedNodes(expectedNodes, 'after select');
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after select');
             wrapper.checkEventLog(expectedEventLog, 'after select');
             wrapper.clearEventLog();
 
@@ -431,8 +425,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedNodes = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-            wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after expand');
             wrapper.checkEventLog([], 'after expand');
         });
 
@@ -456,8 +449,7 @@ configs.forEach(config => {
                 expectedNodes = [0];
             }
 
-            wrapper.checkSelectedKeys(expectedKeys);
-            wrapper.checkSelectedNodes(expectedNodes);
+            wrapper.checkSelection(expectedKeys, expectedNodes);
             wrapper.checkEventLog([]);
         });
 
@@ -473,8 +465,7 @@ configs.forEach(config => {
 
             wrapper.instance.expandAll();
 
-            wrapper.checkSelectedKeys([0, 1], 'after expand');
-            wrapper.checkSelectedNodes([0, 1], 'after expand');
+            wrapper.checkSelection([0, 1], [0, 1], 'after expand');
             wrapper.checkEventLog([], 'after expand');
         });
 
@@ -494,8 +485,7 @@ configs.forEach(config => {
             let expectedNodes = [];
             let expectedEventLog = ['selectionChanged'];
 
-            wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
-            wrapper.checkSelectedNodes(expectedNodes, 'after unselect');
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after unselect');
             wrapper.checkEventLog(expectedEventLog, 'after unselect');
             wrapper.clearEventLog();
 
@@ -541,8 +531,7 @@ configs.forEach(config => {
             }
 
             assert.strictEqual(unselectResult, true, 'after unselect');
-            wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
-            wrapper.checkSelectedNodes(expectedNodes, 'after unselect');
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after unselect');
             wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'after unselect');
             wrapper.clearEventLog();
 
@@ -588,8 +577,7 @@ configs.forEach(config => {
             }
 
             assert.strictEqual(unselectResult, expectedUnselectResult, 'after unselect');
-            wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
-            wrapper.checkSelectedNodes(expectedKeys, 'after unselect');
+            wrapper.checkSelection(expectedKeys, expectedKeys, 'after unselect');
             wrapper.checkEventLog(expectedEventLog, 'after unselect');
             wrapper.clearEventLog();
 
@@ -598,8 +586,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [0, 1];
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-            wrapper.checkSelectedNodes(expectedKeys, 'after expand');
+            wrapper.checkSelection(expectedKeys, expectedKeys, 'after unselect');
             wrapper.checkEventLog([], 'after expand');
         });
 
@@ -625,8 +612,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedNodes = [0];
             }
-            wrapper.checkSelectedKeys(expectedKeys);
-            wrapper.checkSelectedNodes(expectedNodes);
+            wrapper.checkSelection(expectedKeys, expectedNodes);
             wrapper.checkEventLog([]);
         });
 
@@ -649,8 +635,7 @@ configs.forEach(config => {
                 }
             }
 
-            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-            wrapper.checkSelectedNodes(expectedKeys, 'after expand');
+            wrapper.checkSelection(expectedKeys, expectedKeys, 'after expand');
             wrapper.checkEventLog([], 'after expand');
         });
 
@@ -919,67 +904,97 @@ configs.forEach(config => {
     });
 });
 
-function executeDelayed(action, timeout) {
-    const deferred = new Deferred();
-    setTimeout(() => {
-        try {
-            const result = action();
-            deferred.resolve(result);
-        } catch(e) {
-            deferred.reject(e);
-        }
-    }, timeout);
-    return deferred.promise();
-}
 
-QUnit.test('all.selected: false -> selectItem(1) -> dataSource is loaded', function(assert) {
-    const done = assert.async();
-    const wrapper = new TreeViewTestWrapper({
-        dataSource: new CustomStore({
-            load: () => executeDelayed(() => { return [ { id: 1, text: 'item1' }]; }, 1)
-        }),
-        showCheckBoxesMode: 'normal',
-        dataStructure: 'plain'
-    });
+QUnit.module('Delayed datasource', () => {
+    function executeDelayed(action, timeout) {
+        const deferred = new Deferred();
+        setTimeout(() => {
+            try {
+                const result = action();
+                deferred.resolve(result);
+            } catch(e) {
+                deferred.reject(e);
+            }
+        }, timeout);
+        return deferred.promise();
+    }
 
-    const selectResult = wrapper.instance.selectItem(1);
+    QUnit.test('all.selected: false -> selectItem(1)', function(assert) {
+        const done = assert.async();
+        const wrapper = new TreeViewTestWrapper({
+            dataSource: new CustomStore({
+                load: () => executeDelayed(() => { return [ { id: 1, text: 'item1' }]; }, 1)
+            }),
+            showCheckBoxesMode: 'normal',
+            dataStructure: 'plain'
+        });
 
-    setTimeout(() => {
-        const $item1 = wrapper.getElement().find('[aria-level="1"]');
-
-        assert.equal($item1.length, 1, 'item1 is rendered');
-        assert.strictEqual(selectResult, false, 'selected item not found');
-        wrapper.checkSelectedKeys([], 'nothing is selected');
-        wrapper.checkSelectedNodes([], 'there is no selected nodes');
-        wrapper.checkEventLog([], 'there is no selection events');
-        done();
-    }, 2);
-});
-
-QUnit.test('all.selected: false -> selectItem(1) -> reload dataSource', function(assert) {
-    const done = assert.async();
-    const wrapper = new TreeViewTestWrapper({
-        dataSource: new CustomStore({
-            load: () => executeDelayed(() => { return [ { id: 1, text: 'item1' }]; }, 1)
-        }),
-        showCheckBoxesMode: 'normal',
-        dataStructure: 'plain'
-    });
-
-    setTimeout(() => {
         const selectResult = wrapper.instance.selectItem(1);
-        assert.strictEqual(selectResult, true, 'selected item found');
 
-        wrapper.clearEventLog();
-        wrapper.instance.getDataSource().reload().done(function() {
+        setTimeout(() => {
             const $item1 = wrapper.getElement().find('[aria-level="1"]');
 
             assert.equal($item1.length, 1, 'item1 is rendered');
+            assert.strictEqual(selectResult, false, 'selected item not found');
             wrapper.checkSelectedKeys([], 'nothing is selected');
             wrapper.checkSelectedNodes([], 'there is no selected nodes');
             wrapper.checkEventLog([], 'there is no selection events');
             done();
-        });
-    }, 2);
-});
+        }, 2);
+    });
 
+    QUnit.test('all.selected: false -> timeout(() => selectItem(1)) -> reload dataSource', function(assert) {
+        const done = assert.async();
+        const wrapper = new TreeViewTestWrapper({
+            dataSource: new CustomStore({
+                load: () => executeDelayed(() => { return [ { id: 0, text: 'item1' }]; }, 1)
+            }),
+            showCheckBoxesMode: 'normal',
+            dataStructure: 'plain'
+        });
+
+        setTimeout(() => {
+            const selectResult = wrapper.instance.selectItem(0);
+            assert.strictEqual(selectResult, true, 'selected item found');
+
+            const $item1 = wrapper.getElement().find('[aria-level="1"]');
+            assert.equal($item1.length, 1, 'item1 is rendered');
+            wrapper.checkSelectedKeys([0], 'item1 is selected');
+            wrapper.checkSelectedNodes([0], 'item1 has selected node');
+            wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'there is no selection events');
+
+            wrapper.clearEventLog();
+            wrapper.instance.getDataSource().reload().done(function() {
+                const $item1_ = wrapper.getElement().find('[aria-level="1"]');
+
+                assert.equal($item1_.length, 1, 'item1 is rendered');
+                wrapper.checkSelectedKeys([], 'nothing is selected');
+                wrapper.checkSelectedNodes([], 'there is no selected nodes');
+                wrapper.checkEventLog([], 'there is no selection events');
+                done();
+            });
+        }, 2);
+
+        QUnit.test('all.selected: false -> contentReady(() => selectItem(1)) ', function(assert) {
+            const done = assert.async();
+            const wrapper = new TreeViewTestWrapper({
+                dataSource: new CustomStore({
+                    load: () => executeDelayed(() => { return [ { id: 0, text: 'item1' }]; }, 1)
+                }),
+                showCheckBoxesMode: 'normal',
+                dataStructure: 'plain',
+                onContentReady: function() {
+                    const selectResult = wrapper.instance.selectItem(0);
+                    const $item1 = wrapper.getElement().find('[aria-level="1"]');
+
+                    assert.equal(selectResult, true, 'item1 is selected');
+                    assert.equal($item1.length, 1, 'item1 is rendered');
+                    wrapper.checkSelectedKeys([0], 'nothing is selected');
+                    wrapper.checkSelectedNodes([0], 'there is no selected nodes');
+                    wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'there is no selection events');
+                    done();
+                }
+            });
+        });
+    });
+});
