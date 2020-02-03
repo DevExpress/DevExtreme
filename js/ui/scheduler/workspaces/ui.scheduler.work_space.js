@@ -1478,7 +1478,7 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _getTimeCellDateAdjustedDST: function(i) {
         let startViewDate = new Date(this.getStartViewDate());
-        if(utils.isTimezoneChangeInDate(startViewDate)) {
+        if(utils.hasDSTInDate(startViewDate)) {
             startViewDate = new Date(startViewDate.setDate(startViewDate.getDate() + 1));
         }
 

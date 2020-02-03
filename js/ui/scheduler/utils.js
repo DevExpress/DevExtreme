@@ -18,8 +18,8 @@ const getDaylightOffsetInMs = (startDate, endDate) => {
     return getDaylightOffset(startDate, endDate) * toMs('minute');
 };
 
-const isTimezoneChangeInDate = (date) => {
-    const startDayDate = new Date((new Date(date)).setHours(0, 0, 0, 0));
+const hasDSTInDate = (date) => {
+    const startDayDate = new Date((new Date(date)).setHours(0, 0, 50, 0));
     const endDayDate = new Date((new Date(date)).setHours(23, 59, 59, 0));
     return (startDayDate.getTimezoneOffset() - endDayDate.getTimezoneOffset()) !== 0;
 };
@@ -30,7 +30,7 @@ const utils = {
     getTimezoneOffsetChangeInMinutes: getTimezoneOffsetChangeInMinutes,
     getTimezoneOffsetChangeInMs: getTimezoneOffsetChangeInMs,
 
-    isTimezoneChangeInDate: isTimezoneChangeInDate
+    hasDSTInDate: hasDSTInDate
 };
 
 module.exports = utils;
