@@ -29,21 +29,16 @@ describe('Widget', () => {
             it('should take a focus if the accessKey is pressed', () => {
                 const widget = render({ accessKey: 'y', focusStateEnabled: true });
 
-                emit(EVENT.click, fakeClickEvent);
+                emit(EVENT.dxClick, fakeClickEvent);
                 expect(widget.hasClass('dx-state-focused')).toBe(true);
             });
 
-            it('should not fire click event if the accessKey is pressed', () => {
-                const clickHandler = jest.fn();
-                const stopImmediatePropagation = jest.fn();
-                const fakeClickEventClone = { ...fakeClickEvent };
+            it.only('should not fire click event if the accessKey is pressed', () => {
+                const e = { ...fakeClickEvent, stopImmediatePropagation: jest.fn() };
 
-                fakeClickEventClone.stopImmediatePropagation = stopImmediatePropagation;
-
-                render({ accessKey: 'y', focusStateEnabled: true, onClick: clickHandler });
-                emit(EVENT.click, fakeClickEvent);
-                expect(stopImmediatePropagation).toHaveBeenCalledTimes(0);
-                expect(clickHandler).toHaveBeenCalledTimes(1);
+                render({ accessKey: 'y', focusStateEnabled: true });
+                emit(EVENT.dxClick, e);
+                expect(e.stopImmediatePropagation).toHaveBeenCalledTimes(1);
             });
         });
 
