@@ -1576,7 +1576,7 @@ declare module DevExpress.events {
 }
 declare module DevExpress.excelExporter {
     /** @name excelExporter.exportDataGrid(options) */
-    export function exportDataGrid(options: { component?: DevExpress.ui.dxDataGrid, worksheet?: any, topLeftCell?: any, selectedRowsOnly?: boolean, autoFilterEnabled?: boolean, keepColumnWidths?: boolean, customizeCell?: any, loadPanel?: any }): void;
+    export function exportDataGrid(options: { component?: DevExpress.ui.dxDataGrid, worksheet?: any, topLeftCell?: any, selectedRowsOnly?: boolean, autoFilterEnabled?: boolean, keepColumnWidths?: boolean, customizeCell?: any, loadPanel?: any }): Promise<any> & JQueryPromise<any>;
 }
 declare module DevExpress.exporter {
     /** @name ExcelDataGridCell */

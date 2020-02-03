@@ -132,6 +132,7 @@ import dxDataGrid from '../../ui/data_grid';
  * @type_function_param1_field6 keepColumnWidths:boolean
  * @type_function_param1_field7 customizeCell:Object
  * @type_function_param1_field8 loadPanel:Object
+ * @return Promise<Object>
  * @namespace DevExpress.excelExporter
  * @module exceljs/excelExporter/exportDataGrid
  * @static
