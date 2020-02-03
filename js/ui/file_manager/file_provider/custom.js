@@ -1,6 +1,5 @@
 import { ensureDefined, noop } from '../../../core/utils/common';
 import { isFunction } from '../../../core/utils/type';
-import { when } from '../../../core/utils/deferred';
 import { compileGetter } from '../../../core/utils/data';
 
 import { FileProvider } from './file_provider';
@@ -37,36 +36,36 @@ class CustomFileProvider extends FileProvider {
     }
 
     getItems(pathInfo) {
-        return when(this._getItemsFunction(pathInfo))
+        return this._executeActionAsDeferred(() => this._getItemsFunction(pathInfo), true)
             .then(dataItems => this._convertDataObjectsToFileItems(dataItems, pathInfo));
     }
 
     renameItem(item, name) {
-        return this._renameItemFunction(item, name);
+        return this._executeActionAsDeferred(() => this._renameItemFunction(item, name));
     }
 
     createFolder(parentDir, name) {
-        return this._createDirectoryFunction(parentDir, name);
+        return this._executeActionAsDeferred(() => this._createDirectoryFunction(parentDir, name));
     }
 
     deleteItems(items) {
-        return items.map(item => this._deleteItemFunction(item));
+        return items.map(item => this._executeActionAsDeferred(() => this._deleteItemFunction(item)));
     }
 
     moveItems(items, destinationDirectory) {
-        return items.map(item => this._moveItemFunction(item, destinationDirectory));
+        return items.map(item => this._executeActionAsDeferred(() => this._moveItemFunction(item, destinationDirectory)));
     }
 
     copyItems(items, destinationFolder) {
-        return items.map(item => this._copyItemFunction(item, destinationFolder));
+        return items.map(item => this._executeActionAsDeferred(() => this._copyItemFunction(item, destinationFolder)));
     }
 
     uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
-        return this._uploadFileChunkFunction(fileData, chunksInfo, destinationDirectory);
+        return this._executeActionAsDeferred(() => this._uploadFileChunkFunction(fileData, chunksInfo, destinationDirectory));
     }
 
     abortFileUpload(fileData, chunksInfo, destinationDirectory) {
-        return this._abortFileUploadFunction(fileData, chunksInfo, destinationDirectory);
+        return this._executeActionAsDeferred(() => this._abortFileUploadFunction(fileData, chunksInfo, destinationDirectory));
     }
 
     downloadItems(items) {
@@ -74,7 +73,7 @@ class CustomFileProvider extends FileProvider {
     }
 
     getItemContent(items) {
-        return this._getItemsContentFunction(items);
+        return this._executeActionAsDeferred(() => this._getItemsContentFunction(items));
     }
 
     getFileUploadChunkSize() {
@@ -94,7 +93,6 @@ class CustomFileProvider extends FileProvider {
         defaultFunction = defaultFunction || noop;
         return isFunction(functionObject) ? functionObject : defaultFunction;
     }
-
 }
 
 module.exports = CustomFileProvider;
