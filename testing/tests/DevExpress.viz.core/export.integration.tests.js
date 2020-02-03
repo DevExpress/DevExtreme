@@ -64,7 +64,7 @@ QUnit.test('Export method. Defined options', function(assert) {
     firstExportCall.args[1].fileSavingAction();
 
     // assert
-    assert.ok(exportFunc.callCount, 1, 'export was called one time');
+    assert.strictEqual(exportFunc.callCount, 1, 'export was called one time');
     assert.equal(firstExportCall.args[0], this.renderer.root.element, 'export data');
 
     assert.equal(firstExportCall.args[1].width, 200, 'width');
@@ -100,7 +100,7 @@ QUnit.test('Export method. PNG format', function(assert) {
 
     // assert
     const firstExportCall = exportFunc.getCall(0);
-    assert.ok(exportFunc.callCount, 1, 'export was called one time');
+    assert.strictEqual(exportFunc.callCount, 1, 'export was called one time');
     assert.equal(firstExportCall.args[1].format, 'PNG', 'format');
 });
 
@@ -124,7 +124,7 @@ QUnit.test('Export method. JPEG format', function(assert) {
 
     // assert
     const firstExportCall = exportFunc.getCall(0);
-    assert.ok(exportFunc.callCount, 1, 'export was called one time');
+    assert.strictEqual(exportFunc.callCount, 1, 'export was called one time');
     assert.equal(firstExportCall.args[1].format, 'JPEG', 'format');
 });
 
@@ -148,7 +148,7 @@ QUnit.test('Export method. GIF format', function(assert) {
 
     // assert
     const firstExportCall = exportFunc.getCall(0);
-    assert.ok(exportFunc.callCount, 1, 'export was called one time');
+    assert.strictEqual(exportFunc.callCount, 1, 'export was called one time');
     assert.equal(firstExportCall.args[1].format, 'GIF', 'format');
 });
 
@@ -172,7 +172,7 @@ QUnit.test('Export method. SVG format', function(assert) {
 
     // assert
     const firstExportCall = exportFunc.getCall(0);
-    assert.ok(exportFunc.callCount, 1, 'export was called one time');
+    assert.strictEqual(exportFunc.callCount, 1, 'export was called one time');
     assert.equal(firstExportCall.args[1].format, 'SVG', 'format');
 });
 
@@ -196,7 +196,7 @@ QUnit.test('Export method. PDF format', function(assert) {
 
     // assert
     const firstExportCall = exportFunc.getCall(0);
-    assert.ok(exportFunc.callCount, 1, 'export was called one time');
+    assert.strictEqual(exportFunc.callCount, 1, 'export was called one time');
     assert.equal(firstExportCall.args[1].format, 'PDF', 'format');
 });
 
@@ -222,7 +222,7 @@ QUnit.test('Export method. invalid format', function(assert) {
 
     // assert
     const firstExportCall = exportFunc.getCall(0);
-    assert.ok(exportFunc.callCount, 1, 'export was called one time');
+    assert.strictEqual(exportFunc.callCount, 1, 'export was called one time');
     assert.equal(firstExportCall.args[1].format, 'PNG', 'format');
     assert.equal(incidentOccurred.callCount, 0);
 });
@@ -251,7 +251,7 @@ QUnit.test('Export method. unsopported image format', function(assert) {
 
     // assert
     const firstExportCall = exportFunc.getCall(0);
-    assert.ok(exportFunc.callCount, 1, 'export was called one time');
+    assert.strictEqual(exportFunc.callCount, 1, 'export was called one time');
     assert.equal(firstExportCall.args[1].format, 'PNG', 'format');
     assert.equal(incidentOccurred.callCount, 1);
     assert.deepEqual(incidentOccurred.getCall(0).args[0].target.id, 'W2108');
@@ -446,7 +446,7 @@ QUnit.test('Print method - use export to prepare image, create hidden iFrame wit
     deferred.done(function(imageSrc) {
         assert.ok(fileSavingEventArgs.cancel, 'file should not be saved');
 
-        assert.ok(exportFunc.callCount, 1, 'export was called one time');
+        assert.strictEqual(exportFunc.callCount, 1, 'export was called one time');
         assert.equal(firstExportCall.args[0], that.renderer.root.element, 'export data');
 
         assert.equal(firstExportCall.args[1].width, 200, 'width');
