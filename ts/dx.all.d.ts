@@ -1576,9 +1576,16 @@ declare module DevExpress.events {
 }
 declare module DevExpress.excelExporter {
     /** @name excelExporter.exportDataGrid(options) */
-    export function exportDataGrid(options: { component?: DevExpress.ui.dxDataGrid, worksheet?: any, topLeftCell?: any, selectedRowsOnly?: boolean, autoFilterEnabled?: boolean, keepColumnWidths?: boolean, customizeCell?: any, loadPanel?: any }): Promise<any> & JQueryPromise<any>;
+    export function exportDataGrid(options: DevExpress.exporter.ExcelDataGridCell1): Promise<DevExpress.exporter.ExcelDataGridCell2> & JQueryPromise<DevExpress.exporter.ExcelDataGridCell2>;
 }
 declare module DevExpress.exporter {
+    /** @name CellAddress */
+    export interface CellAddress {
+        /** @name CellAddress.column */
+        column?: number;
+        /** @name CellAddress.row */
+        row?: number;
+    }
     /** @name ExcelDataGridCell */
     export interface ExcelDataGridCell {
         /** @name ExcelDataGridCell.column */
@@ -1595,6 +1602,20 @@ declare module DevExpress.exporter {
         totalSummaryItemName?: string;
         /** @name ExcelDataGridCell.value */
         value?: any;
+    }
+    /** @name ExcelDataGridCell1 */
+    export interface ExcelDataGridCell1 {
+        /** @name ExcelDataGridCell1.component */
+        component?: DevExpress.ui.dxDataGrid;
+        /** @name ExcelDataGridCell1.data */
+        data?: any;
+        /** @name ExcelDataGridCell1.topLeftCell */
+        topLeftCell?: CellAddress;
+    }
+    /** @name ExcelDataGridCell2 */
+    export interface ExcelDataGridCell2 {
+        /** @name ExcelDataGridCell2.data */
+        data?: any;
     }
     /** @name ExcelFont */
     export interface ExcelFont {

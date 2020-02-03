@@ -1,4 +1,5 @@
-import dxDataGrid from '../../ui/data_grid';
+// import { dxDataGrid } from '../../ui/data_grid';
+
 // export interface ExportDataGridOptions {
 //     // /**
 //     //  * @docid ExportDataGridOptions.component
@@ -119,20 +120,67 @@ import dxDataGrid from '../../ui/data_grid';
 // TODO: @field7 customizeCell:Object // TODO
 // TODO: @field8 loadPanel:Object // TODO
 
+
+import {
+    dxDataGridColumn
+} from '../../ui/data_grid';
+
+export interface CellAddress {
+    /**
+     * @docid CellAddress.row
+     * @type number
+     * @prevFileNamespace DevExpress.excelExporter
+     * @public
+     */
+    row?: number;
+
+    /**
+     * @docid CellAddress.column
+     * @type number
+     * @prevFileNamespace DevExpress.excelExporter
+     * @public
+     */
+    column?: number;
+}
+
+export interface ExcelDataGridCell1 {
+    /**
+     * @docid ExcelDataGridCell1.data
+     * @type object
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    data?: any;
+    /**
+     * @docid ExcelDataGridCell1.component
+     * @type dxDataGrid
+     * @prevFileNamespace DevExpress.excelExporter
+     * @public
+     */
+    component?: dxDataGrid;
+    /**
+     * @docid ExcelDataGridCell1.topLeftCell
+     * @type CellAddress
+     * @default { row: 1, column: 1 }
+     * @public
+     */
+    topLeftCell?: CellAddress;
+}
+
+export interface ExcelDataGridCell2 {
+    /**
+     * @docid ExcelDataGridCell2.data
+     * @type object
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    data?: any;
+}
 /**
  * @docid excelExporter.exportDataGrid
  * @publicName exportDataGrid(options)
- * @type function(options)
- * @type_function_param1 options:Object
- * @type_function_param1_field1 component:dxDataGrid
- * @type_function_param1_field2 worksheet:Object
- * @type_function_param1_field3 topLeftCell:Object
- * @type_function_param1_field4 selectedRowsOnly:boolean
- * @type_function_param1_field5 autoFilterEnabled:boolean
- * @type_function_param1_field6 keepColumnWidths:boolean
- * @type_function_param1_field7 customizeCell:Object
- * @type_function_param1_field8 loadPanel:Object
- * @return Promise<Object>
+ * @param1 options:ExcelDataGridCell1
+ * @return Promise<ExcelDataGridCell2>
  * @namespace DevExpress.excelExporter
  * @module exceljs/excelExporter/exportDataGrid
  * @static
