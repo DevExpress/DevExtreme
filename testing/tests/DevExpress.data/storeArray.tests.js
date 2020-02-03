@@ -899,20 +899,20 @@ QUnit.test('modification operations without key use instance as key', function(a
     store.insert(insertValues).done((data, key) => {
         insertedObj = store._array[0];
 
-        assert.ok(typeof insertedObj === 'object');
-        assert.ok(data === insertedObj);
-        assert.ok(data === key);
-        assert.ok(key === insertedObj);
-        assert.equal(insertedObj.a, 1);
+        assert.strictEqual(typeof insertedObj, 'object');
+        assert.strictEqual(data, insertedObj);
+        assert.strictEqual(data, key);
+        assert.strictEqual(key, insertedObj);
+        assert.strictEqual(insertedObj.a, 1);
 
         store.update(insertedObj, { a: 2 }).done((key, data) => {
-            assert.ok(key === insertedObj);
-            assert.ok(data === insertedObj);
-            assert.equal(insertedObj.a, 2);
+            assert.strictEqual(key, insertedObj);
+            assert.strictEqual(data, insertedObj);
+            assert.strictEqual(insertedObj.a, 2);
 
             store.remove(insertedObj).done(key => {
-                assert.ok(key === insertedObj);
-                assert.ok(!store._array.length);
+                assert.strictEqual(key, insertedObj);
+                assert.notOk(store._array.length);
 
                 done();
             });

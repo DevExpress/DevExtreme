@@ -1106,7 +1106,7 @@ QUnit.test('All rows are not isSelected by default', function(assert) {
     rowsSelected = testElement.find('.dx-selection');
 
     // assert
-    assert.ok(rowsSelected.length === 0, 'rows are not isSelected by default');
+    assert.strictEqual(rowsSelected.length, 0, 'rows are not isSelected by default');
 });
 
 QUnit.test('Click on row call changeItemSelection', function(assert) {
@@ -3251,7 +3251,7 @@ QUnit.test('Rows with option rowAlternationEnabled true', function(assert) {
     assert.ok(!rows.eq(0).hasClass('dx-row-alt'), 'not has class dx-row-alt');
 
     assert.ok(rows.eq(1).hasClass('dx-row-alt'), 'has class dx-row-alt');
-    assert.ok(rows.eq(1).find('td').css('backgroundColor') !== 'rgba(0, 0, 0, 0)', 'background color row');
+    assert.notStrictEqual(rows.eq(1).find('td').css('backgroundColor'), 'rgba(0, 0, 0, 0)', 'background color row');
 
     assert.ok(!rows.eq(2).hasClass('dx-row-alt'), 'not has class dx-row-alt');
 });
@@ -3284,7 +3284,7 @@ QUnit.test('Rows with option rowAlternationEnabled true when grouping', function
     assert.ok(!rows.eq(0).hasClass('dx-row-alt'), 'not has class dx-row-alt');
     assert.ok(!rows.eq(1).hasClass('dx-row-alt'), 'not has class dx-row-alt');
     assert.ok(rows.eq(2).hasClass('dx-row-alt'), 'has class dx-row-alt');
-    assert.ok(rows.eq(2).find('td').css('backgroundColor') !== 'rgba(0, 0, 0, 0)', 'background color row');
+    assert.notStrictEqual(rows.eq(2).find('td').css('backgroundColor'), 'rgba(0, 0, 0, 0)', 'background color row');
 });
 
 QUnit.test('Rows with option rowAlternationEnabled false', function(assert) {

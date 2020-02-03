@@ -219,8 +219,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         $folderNodes = this.wrapper.getFolderNodes();
         assert.equal($folderNodes.length, initialCount - 1, 'folders count decreased');
-        assert.ok($folderNodes.eq(1).find('span').text().indexOf('Folder 1') === -1, 'first folder is not target folder');
-        assert.ok($folderNodes.eq(2).find('span').text().indexOf('Folder 1') === -1, 'second folder is not target folder');
+        assert.strictEqual($folderNodes.eq(1).find('span').text().indexOf('Folder 1'), -1, 'first folder is not target folder');
+        assert.strictEqual($folderNodes.eq(2).find('span').text().indexOf('Folder 1'), -1, 'second folder is not target folder');
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
     });
@@ -242,8 +242,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         $rows = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS}`);
         assert.equal($rows.length, initialCount - 1, 'files count decreased');
-        assert.ok($rows.eq(0).text().indexOf('File 1.txt') === -1, 'first folder is not target folder');
-        assert.ok($rows.eq(1).text().indexOf('File 1.txt') === -1, 'second folder is not target folder');
+        assert.strictEqual($rows.eq(0).text().indexOf('File 1.txt'), -1, 'first folder is not target folder');
+        assert.strictEqual($rows.eq(1).text().indexOf('File 1.txt'), -1, 'second folder is not target folder');
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
     });
@@ -270,8 +270,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         $rows = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS}`);
         assert.equal($rows.length, initialCount - 1, 'files count decreased');
-        assert.ok($rows.eq(0).text().indexOf('File 1-1.txt') === -1, 'first folder is not target folder');
-        assert.ok($rows.eq(1).text().indexOf('File 1-1.txt') === -1, 'second folder is not target folder');
+        assert.strictEqual($rows.eq(0).text().indexOf('File 1-1.txt'), -1, 'first folder is not target folder');
+        assert.strictEqual($rows.eq(1).text().indexOf('File 1-1.txt'), -1, 'second folder is not target folder');
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Folder 1', 'sub folder selected');
     });

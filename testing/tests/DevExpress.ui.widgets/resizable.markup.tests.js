@@ -19,7 +19,7 @@ QUnit.module('markup', () => {
         const position = $resizable.get(0).style.position;
 
         assert.ok($resizable.hasClass(RESIZABLE_CLASS), 'dx-resizable class attached');
-        assert.ok(position !== 'static', 'position of element should not be static');
+        assert.notStrictEqual(position, 'static', 'position of element should not be static');
     });
 
     QUnit.test('resizable should have correct handle for handles', function(assert) {

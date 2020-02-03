@@ -163,15 +163,15 @@ QUnit.module('functionality', moduleSetup, () => {
         const instance = $element.dxSelectBox('instance');
         const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-        assert.ok(instance.option('value') === 'first', 'value set correct');
-        assert.ok($input.val() === 'first', 'value displayed correct');
+        assert.strictEqual(instance.option('value'), 'first', 'value set correct');
+        assert.strictEqual($input.val(), 'first', 'value displayed correct');
 
         instance.option('value', null);
-        assert.ok(instance.option('value') === null, 'value set to \'null\'');
+        assert.strictEqual(instance.option('value'), null, 'value set to \'null\'');
 
         instance.option('value', 'second');
-        assert.ok(instance.option('value') === 'second', 'new value set correct');
-        assert.ok($input.val() === 'second', 'new value displayed correct');
+        assert.strictEqual(instance.option('value'), 'second', 'new value set correct');
+        assert.strictEqual($input.val(), 'second', 'new value displayed correct');
     });
 
     QUnit.test('selectBox doesn\'t select item with value type is mismatch', function(assert) {
@@ -203,7 +203,7 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.ok(!instance.option('value'));
 
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($element.find(toSelector(LIST_ITEM_CLASS)).length === 3, 'found 3 items');
+        assert.strictEqual($element.find(toSelector(LIST_ITEM_CLASS)).length, 3, 'found 3 items');
 
         $($element.find(toSelector(LIST_ITEM_CLASS)).first()).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
@@ -926,7 +926,7 @@ QUnit.module('widget options', moduleSetup, () => {
         const instance = $element.dxSelectBox('instance');
 
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($element.find(toSelector(LIST_ITEM_CLASS)).length === 3, 'find 3 items');
+        assert.strictEqual($element.find(toSelector(LIST_ITEM_CLASS)).length, 3, 'find 3 items');
 
         $($element.find(toSelector(LIST_ITEM_CLASS)).first()).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
@@ -963,7 +963,7 @@ QUnit.module('widget options', moduleSetup, () => {
         const instance = $element.dxSelectBox('instance');
 
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($element.find(toSelector(LIST_ITEM_CLASS)).length === 2);
+        assert.strictEqual($element.find(toSelector(LIST_ITEM_CLASS)).length, 2);
 
         $($element.find(toSelector(LIST_ITEM_CLASS)).first()).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
@@ -998,7 +998,7 @@ QUnit.module('widget options', moduleSetup, () => {
         const instance = $element.dxSelectBox('instance');
 
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($element.find(toSelector(LIST_ITEM_CLASS)).length === 2);
+        assert.strictEqual($element.find(toSelector(LIST_ITEM_CLASS)).length, 2);
 
         $($element.find(toSelector(LIST_ITEM_CLASS)).first()).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
@@ -3589,7 +3589,7 @@ QUnit.module('regressions', moduleSetup, () => {
         $($input).trigger('keyup', { key: KEY_DOWN });
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).length === 3);
+        assert.strictEqual($list.find(toSelector(LIST_ITEM_CLASS)).length, 3);
     });
 
     QUnit.test('B251138 disabled', function(assert) {

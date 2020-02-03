@@ -28,7 +28,7 @@ QUnit.module('create one action', () => {
         const $fabContent = $fabElement.find('.dx-overlay-content');
         const clickHandler = sinon.spy();
 
-        assert.ok($fabElement.length === 1, 'one action button created');
+        assert.strictEqual($fabElement.length, 1, 'one action button created');
         assert.ok($fabElement.hasClass(FAB_MAIN_CLASS), 'it is main action button');
         assert.equal($fabContent.find('.dx-fa-button-icon').length, 1, 'icon container created');
         assert.equal($fabContent.find('.dx-icon-close').length, 1, 'default close icon created');
@@ -87,8 +87,8 @@ QUnit.module('create multiple actions', {
         let $fabElement = $('.' + FAB_CLASS);
         let $fabContent = $fabElement.find('.dx-overlay-content');
 
-        assert.ok($fabMainElement.length === 1, 'create one main fab');
-        assert.ok($fabElement.length === 3, 'create two actions');
+        assert.strictEqual($fabMainElement.length, 1, 'create one main fab');
+        assert.strictEqual($fabElement.length, 3, 'create two actions');
 
         assert.equal($fabMainElement.attr('title'), undefined, 'default hint empty');
         assert.equal($fabMainContent.find('.dx-icon-add').length, 1, 'default icon is applied');

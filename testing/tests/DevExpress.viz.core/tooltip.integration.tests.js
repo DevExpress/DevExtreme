@@ -27,7 +27,7 @@ QUnit.test('Creation', function(assert) {
     const params = tooltipModule.Tooltip.lastCall.args[0];
     assert.strictEqual(params.cssClass, 'dxtm-tooltip', 'param - css class');
     assert.strictEqual(params.pathModified, 'pathModified-option', 'param - path modified');
-    assert.ok(typeof params.eventTrigger === 'function', 'param - event trigger');
+    assert.strictEqual(typeof params.eventTrigger, 'function', 'param - event trigger');
     assert.equal(params.widgetRoot, this.widget.element());
 });
 

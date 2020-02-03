@@ -481,7 +481,7 @@ QUnit.test('Change name of one layer', function(assert) {
     const updatedLayers = map.getLayers();
 
     updatedLayers.forEach(function(l, i) {
-        assert.ok(l !== oldLayers[i]);
+        assert.notStrictEqual(l, oldLayers[i]);
     });
 });
 
@@ -493,7 +493,7 @@ QUnit.test('Layers shouldn\'t be created on updating when name not set', functio
     const oldLayer = map.getLayers()[0];
     map.option('layers', [{ color: 'some_color_1' }]);
 
-    assert.ok(map.getLayers()[0] === oldLayer);
+    assert.strictEqual(map.getLayers()[0], oldLayer);
 });
 
 QUnit.test('No crush on updating when on of layer in null', function(assert) {

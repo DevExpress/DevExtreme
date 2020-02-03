@@ -122,7 +122,7 @@ QUnit.module('Rendering', function() {
         assert.ok(!$fieldButton.hasClass(ACTIVE_CLASS));
         assert.equal(container.find('.' + FILTER_BUILDER_ITEM_OPERATION_CLASS).text(), 'Contains');
         assert.equal(container.find('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), '<enter a value>');
-        assert.ok($('.dx-filterbuilder-fields').length === 0);
+        assert.strictEqual($('.dx-filterbuilder-fields').length, 0);
     });
 
     QUnit.test('editorElement argument of onEditorPreparing option is correct', function(assert) {
@@ -204,7 +204,7 @@ QUnit.module('Rendering', function() {
 
         selectMenuItem(3);
 
-        assert.ok($('.dx-filterbuilder-group-operations').length === 0);
+        assert.strictEqual($('.dx-filterbuilder-group-operations').length, 0);
 
         $groupButton.trigger('dxclick');
         assert.equal(getSelectedMenuText(), 'Not Or');
@@ -228,7 +228,7 @@ QUnit.module('Rendering', function() {
 
         selectMenuItem(3);
 
-        assert.ok($('.dx-filterbuilder-operations').length === 0);
+        assert.strictEqual($('.dx-filterbuilder-operations').length, 0);
         assert.equal(container.find('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
 
         $operationButton.trigger('dxclick');

@@ -1495,7 +1495,7 @@ const checkGroups = function(assert, series) {
         const points = series.getPoints();
         // see T243839
         $.each(points, function(_, point) {
-            assert.ok(point._options.visible === false);
+            assert.strictEqual(point._options.visible, false);
         });
     });
 
@@ -1515,7 +1515,7 @@ const checkGroups = function(assert, series) {
         const points = series.getPoints();
         // see T243839
         $.each(points, function(_, point) {
-            assert.ok(point._options.visible === true);
+            assert.strictEqual(point._options.visible, true);
         });
     });
 })();

@@ -3953,7 +3953,7 @@ QUnit.test('Hide visible series', function(assert) {
 
     // see T243839
     $.each(series.getAllPoints(), function(_, point) {
-        assert.ok(point._options.visible !== false);
+        assert.notStrictEqual(point._options.visible, false);
     });
 });
 
@@ -4031,7 +4031,7 @@ QUnit.test('Show invisible series', function(assert) {
 
     // see T243839
     $.each(series.getAllPoints(), function(_, point) {
-        assert.ok(point._options.visible !== true);
+        assert.notStrictEqual(point._options.visible, true);
     });
 });
 

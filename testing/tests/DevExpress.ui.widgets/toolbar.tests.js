@@ -274,10 +274,10 @@ QUnit.module('toolbar with menu', {
             ],
         }).dxToolbar('instance');
 
-        assert.ok(this.element.find('.' + DROP_DOWN_MENU_CLASS).length === 1, 'dropdown was rendered');
+        assert.strictEqual(this.element.find('.' + DROP_DOWN_MENU_CLASS).length, 1, 'dropdown was rendered');
 
         instance.option('items', [{ location: 'menu', text: 'a', visible: false }]);
-        assert.ok(this.element.find('.' + DROP_DOWN_MENU_CLASS).length === 0, 'dropdown was not rendered');
+        assert.strictEqual(this.element.find('.' + DROP_DOWN_MENU_CLASS).length, 0, 'dropdown was not rendered');
     });
 
     QUnit.test('changing field of item in submenu', function(assert) {

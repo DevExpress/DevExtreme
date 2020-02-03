@@ -847,9 +847,9 @@ const environment = {
         // assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.equalBarWidth, true, 'series family should be updated');
 
-        assert.ok(series === chart.getAllSeries()[0], 'Series should not be recreated');
-        assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-        assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+        assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
+        assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+        assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
     });
 
     QUnit.test('T552944. Update series family and option that recreates series - series families are processed first', function(assert) {
@@ -871,7 +871,7 @@ const environment = {
             equalBarWidth: true
         });
         // assert
-        assert.ok(chart.getAllSeries() !== series, 'series recreated');
+        assert.notStrictEqual(chart.getAllSeries(), series, 'series recreated');
     });
 
     QUnit.test('MinBubbleSize updating', function(assert) {
@@ -900,9 +900,9 @@ const environment = {
         // assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.minBubbleSize, 5, 'series family should be updated');
 
-        assert.ok(series === chart.getAllSeries()[0], 'Series should not be recreated');
-        assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-        assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+        assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
+        assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+        assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
     });
 
     QUnit.test('MaxBubbleSize updating', function(assert) {
@@ -931,9 +931,9 @@ const environment = {
         // assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.maxBubbleSize, 10, 'series family should be updated');
 
-        assert.ok(series === chart.getAllSeries()[0], 'Series should not be recreated');
-        assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-        assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+        assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
+        assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+        assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
     });
 
     QUnit.test('BarWidth updating', function(assert) {
@@ -962,9 +962,9 @@ const environment = {
         // assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.barWidth, 11, 'series family should be updated');
 
-        assert.ok(series === chart.getAllSeries()[0], 'Series should not be recreated');
-        assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-        assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+        assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
+        assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+        assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
     });
 
     QUnit.test('barGroupPadding updating', function(assert) {
@@ -1040,9 +1040,9 @@ const environment = {
         // assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.negativesAsZeroes, true, 'series family should be updated');
 
-        assert.ok(series === chart.getAllSeries()[0], 'Series should not be recreated');
-        assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-        assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+        assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
+        assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+        assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
     });
 
     var testEverythingWasDrawn = function(assert, chart, options) {

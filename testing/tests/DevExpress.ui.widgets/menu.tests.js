@@ -316,7 +316,7 @@ QUnit.module('Menu rendering', {
         submenu = getSubMenuInstance(rootMenuItem);
         assert.ok(submenu.option('visible'));
         assert.ok($(submenu._$element[0]).offset().top > $(rootMenuItem[0]).offset().top);
-        assert.ok($(submenu._$element[0]).offset().left === $(rootMenuItem[0]).offset().left);
+        assert.strictEqual($(submenu._$element[0]).offset().left, $(rootMenuItem[0]).offset().left);
     });
 
     QUnit.test('Render vertical menu with default submenuDirection', function(assert) {
@@ -357,7 +357,7 @@ QUnit.module('Menu rendering', {
         submenu = getSubMenuInstance(rootMenuItem)._overlay;
         assert.ok(submenu.option('visible'));
         assert.ok($(submenu._$content[0]).offset().top < $(rootMenuItem[0]).offset().top);
-        assert.ok($(submenu._$content[0]).offset().left === $(rootMenuItem[0]).offset().left);
+        assert.strictEqual($(submenu._$content[0]).offset().left, $(rootMenuItem[0]).offset().left);
         fixtures.simple.drop();
     });
 

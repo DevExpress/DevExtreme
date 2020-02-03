@@ -68,9 +68,9 @@ QUnit.module('Pager', {
         const $pageNumberButton = $pager.find('.dx-page').eq(2);
 
         assert.ok($pager.hasClass('dx-pager'), 'pager class');
-        assert.ok($pager.css('display') !== 'none', 'element is visible');
+        assert.notStrictEqual($pager.css('display'), 'none', 'element is visible');
 
-        assert.ok($pager.find('.dx-pages').length === 1, 'pages chooser element');
+        assert.strictEqual($pager.find('.dx-pages').length, 1, 'pages chooser element');
         assert.equal($pager.find('.dx-page').length, 10, 'page elements count');
 
         assert.equal($pager.find('.dx-page-sizes').length, 1, 'page sizes element');
@@ -112,7 +112,7 @@ QUnit.module('Pager', {
         const $pager = $('#container').dxPager({ pageCount: 15 });
 
         assert.equal($pager.find('.dx-page').length, 6, 'page elements count');
-        assert.ok($pager.find('.dx-separator').length === 1, 'page separator element');
+        assert.strictEqual($pager.find('.dx-separator').length, 1, 'page separator element');
 
         assert.equal($pager.find('.dx-page-sizes').length, 1, 'page sizes element');
         assert.equal($pager.find('.dx-page-size').length, 2, 'page size elements');
@@ -124,14 +124,14 @@ QUnit.module('Pager', {
     QUnit.test('Pager is not rendered if pages count equal zero', function(assert) {
         const $pager = $('#container').dxPager({ maxPagesCount: 7, pageCount: 0 });
 
-        assert.ok($pager.find('.dx-pages').length === 0, 'pager is not rendered');
+        assert.strictEqual($pager.find('.dx-pages').length, 0, 'pager is not rendered');
     });
 
     QUnit.test('Pager is rendered if pages count equals one and more page exists', function(assert) {
         const $pager = $('#container').dxPager({ maxPagesCount: 7, pageCount: 1, hasKnownLastPage: false });
         const instance = $pager.dxPager('instance');
 
-        assert.ok($pager.find('.dx-pages').length === 1, 'pager is rendered');
+        assert.strictEqual($pager.find('.dx-pages').length, 1, 'pager is rendered');
         assert.ok(this.checkPages(instance._pages, [1, '>'], '1'), 'pages');
     });
 
@@ -307,7 +307,7 @@ QUnit.module('Pager', {
         $pages = testElement.find('.dx-page');
 
         assert.equal($pages.length, 1, '$pages count');
-        assert.ok($pages.css('visibility') !== 'hidden');
+        assert.notStrictEqual($pages.css('visibility'), 'hidden');
     });
 
     QUnit.test('PagesChooser is not visible  if pageNavigatorVisible is false', function(assert) {
@@ -383,7 +383,7 @@ QUnit.module('Pager', {
     QUnit.test('Pager is not displayed when visible is false', function(assert) {
         const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], visible: false });
 
-        assert.ok($('.' + 'dx-pager').length === 1, 'pager is rendered');
+        assert.strictEqual($('.' + 'dx-pager').length, 1, 'pager is rendered');
         assert.equal($pager.css('display'), 'none', 'pager is hidden');
     });
 
@@ -1394,7 +1394,7 @@ QUnit.module('Pager', {
         pager._dimensionChanged();
 
         assert.ok(!pager.option('lightModeEnabled'), 'lightModeEnabled');
-        assert.ok(pager._$info.css('display') !== 'none', 'info element is shown');
+        assert.notStrictEqual(pager._$info.css('display'), 'none', 'info element is shown');
     });
 
     QUnit.test('LightMode.Prev button is disabled when first page is chosen ', function(assert) {

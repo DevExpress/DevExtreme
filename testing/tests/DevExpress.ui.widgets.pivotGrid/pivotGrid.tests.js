@@ -4948,10 +4948,10 @@ QUnit.test('Headers area render', function(assert) {
     rows = table[0].rows;
 
     // assert
-    assert.ok(table.length === 1, 'tables count');
-    assert.ok(rows.length === 2, 'rows count');
-    assert.ok(rows[0].cells.length === 2, 'row1 cells count');
-    assert.ok(rows[1].cells.length === 2, 'row2 cells count');
+    assert.strictEqual(table.length, 1, 'tables count');
+    assert.strictEqual(rows.length, 2, 'rows count');
+    assert.strictEqual(rows[0].cells.length, 2, 'row1 cells count');
+    assert.strictEqual(rows[1].cells.length, 2, 'row2 cells count');
 
     assert.equal($(rows[0].cells[0]).text(), 'A', 'cell 1 - text');
     assert.equal($(rows[0].cells[0]).attr('colspan'), '2', 'cell 1 - colspan attribute');
@@ -5014,20 +5014,20 @@ QUnit.test('Headers area rerender', function(assert) {
     tableElement = testElement.find('table');
 
     // assert
-    assert.ok(tableElement.length === 1, '1 render - headers element count');
-    assert.ok(tableElement[0].rows.length === 2, '1 render - rows count');
-    assert.ok(tableElement[0].rows[0].cells.length === 2, '1 render - row1 cells count');
-    assert.ok(tableElement[0].rows[1].cells.length === 2, '1 render - row1 cells count');
+    assert.strictEqual(tableElement.length, 1, '1 render - headers element count');
+    assert.strictEqual(tableElement[0].rows.length, 2, '1 render - rows count');
+    assert.strictEqual(tableElement[0].rows[0].cells.length, 2, '1 render - row1 cells count');
+    assert.strictEqual(tableElement[0].rows[1].cells.length, 2, '1 render - row1 cells count');
 
     // act
     headersArea.render(testElement, this.headers);
     tableElement = testElement.find('table');
 
     // assert
-    assert.ok(tableElement.length === 1, '1 render - headers element count');
-    assert.ok(tableElement[0].rows.length === 2, '1 render - rows count');
-    assert.ok(tableElement[0].rows[0].cells.length === 2, '1 render - row1 cells count');
-    assert.ok(tableElement[0].rows[1].cells.length === 2, '1 render - row1 cells count');
+    assert.strictEqual(tableElement.length, 1, '1 render - headers element count');
+    assert.strictEqual(tableElement[0].rows.length, 2, '1 render - rows count');
+    assert.strictEqual(tableElement[0].rows[0].cells.length, 2, '1 render - row1 cells count');
+    assert.strictEqual(tableElement[0].rows[1].cells.length, 2, '1 render - row1 cells count');
 });
 
 QUnit.test('Apply css classes by horizontal orientation', function(assert) {

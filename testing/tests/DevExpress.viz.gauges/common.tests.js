@@ -592,7 +592,7 @@ QUnit.test('Value indicators are rendered in hard mode', function(assert) {
     }), 'value indicator 3 options');
     assert.strictEqual(gauge._valueIndicators[2].previousValue, -50, 'value is set - 3');
     assert.strictEqual(gauge._valueIndicators[2].value(), 30, 'value is set - 3');
-    assert.ok(typeof gauge.indicatorValue === 'function', 'indicatorValue method is available');
+    assert.strictEqual(typeof gauge.indicatorValue, 'function', 'indicatorValue method is available');
 });
 
 QUnit.test('Value indicators are rendered - not valid types', function(assert) {
@@ -1401,7 +1401,7 @@ QUnit.test('indicatorValue - set, not valid', function(assert) {
 QUnit.test('indicatorValue - not in hard mode', function(assert) {
     const gauge = this.createTestGauge();
 
-    assert.ok(gauge.valueIndicator === undefined, 'method is not available');
+    assert.strictEqual(gauge.valueIndicator, undefined, 'method is not available');
 });
 
 QUnit.module('Gauge - options changing support', environment);

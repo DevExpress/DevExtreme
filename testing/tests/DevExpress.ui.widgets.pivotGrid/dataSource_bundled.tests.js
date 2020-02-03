@@ -6784,7 +6784,7 @@ QUnit.test('All stores implement correct interface', function(assert) {
         const store = new Store({});
 
         $.each(methods, function(_, methodName) {
-            assert.ok(typeof store[methodName] === 'function', i + ' Store should implement ' + methodName);
+            assert.strictEqual(typeof store[methodName], 'function', i + ' Store should implement ' + methodName);
         });
     });
 });

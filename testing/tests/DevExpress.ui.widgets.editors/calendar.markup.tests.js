@@ -123,12 +123,12 @@ QUnit.module('Navigator', {
     }
 }, () => {
     QUnit.test('Caption button is render', function(assert) {
-        assert.ok(this.$element.find('.dx-calendar-caption-button').length === 1);
+        assert.strictEqual(this.$element.find('.dx-calendar-caption-button').length, 1);
     });
 
     QUnit.test('Calendar must display previous and next month links, and previous and next year links', function(assert) {
-        assert.ok(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS)).length === 1);
-        assert.ok(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS)).length === 1);
+        assert.strictEqual(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS)).length, 1);
+        assert.strictEqual(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS)).length, 1);
     });
 
     QUnit.test('Calendar must display the current month and year', function(assert) {
