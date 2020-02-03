@@ -233,9 +233,7 @@ export default class Widget {
         if (isHoverable) {
             hover.on(this.widgetRef,
                 new Action(() => {
-                    if (!this._active) {
-                        this._hovered = true;
-                    }
+                    this._hovered = true;
                 }, { excludeValidators: ['readOnly'] }),
                 () => { this._hovered = false; },
                 { selector, namespace },

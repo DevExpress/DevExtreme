@@ -1,11 +1,11 @@
 import Button from '../../js/renovation/button.p.js';
 import Widget from '../../js/renovation/widget.p.js';
 import { createElement } from 'preact';
-import { emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
+import { emit, emitKeyboard, EVENT, KEY, fakeClickEvent } from './utils/events-mock';
 import { mount } from 'enzyme';
 
 describe('Button', () => {
-    const render = (props = {}) => mount(createElement(Button, props)).childAt(0);
+  const render = (props = {}) => mount(createElement(Button, props)).childAt(0);
 
     describe('Props', () => {
         describe('onClick', () => {
@@ -120,8 +120,8 @@ describe('Button', () => {
             it('should render icon', () => {
                 const button = render({ icon: 'test' });
 
-                expect(button.is('.dx-button-has-icon')).toBeTruthy();
-                expect(button.exists('.dx-icon.dx-icon-test')).toBeTruthy();
+                expect(button.is('.dx-button-has-icon')).toBe(true);
+                expect(button.exists('.dx-icon.dx-icon-test')).toBe(true);
             });
         });
 
@@ -136,6 +136,20 @@ describe('Button', () => {
                 const tree = render({ hoverStateEnabled: false });
 
                 expect(tree.find(Widget).prop('hoverStateEnabled')).toBe(false);
+            });
+        });
+
+        describe('focusStateEnabled', () => {
+            it('should pass a default value into Widget component', () => {
+                const button = render();
+
+                expect(button.find(Widget).prop('focusStateEnabled')).toBe(true);
+            });
+
+            it('should pass a custom value into Widget component', () => {
+                const button = render({ focusStateEnabled: false });
+
+                expect(button.find(Widget).prop('focusStateEnabled')).toBe(false);
             });
         });
     });
