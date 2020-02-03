@@ -563,30 +563,30 @@ configs.forEach(config => {
 
             const unselectResult = wrapper.instance.unselectItem(1);
 
-            let expectedKeys = [0];
+            let expectedKeysAndNodes = [0];
             let expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
             let expectedUnselectResult = true;
             if(config.selectNodesRecursive) {
-                expectedKeys = [];
+                expectedKeysAndNodes = [];
             }
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
-                expectedKeys = [0];
+                expectedKeysAndNodes = [0];
                 expectedEventLog = [];
                 expectedUnselectResult = false;
             }
 
             assert.strictEqual(unselectResult, expectedUnselectResult, 'after unselect');
-            wrapper.checkSelection(expectedKeys, expectedKeys, 'after unselect');
+            wrapper.checkSelection(expectedKeysAndNodes, expectedKeysAndNodes, 'after unselect');
             wrapper.checkEventLog(expectedEventLog, 'after unselect');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
-                expectedKeys = [0, 1];
+                expectedKeysAndNodes = [0, 1];
             }
-            wrapper.checkSelection(expectedKeys, expectedKeys, 'after unselect');
+            wrapper.checkSelection(expectedKeysAndNodes, expectedKeysAndNodes, 'after unselect');
             wrapper.checkEventLog([], 'after expand');
         });
 
@@ -624,18 +624,18 @@ configs.forEach(config => {
 
             wrapper.instance.expandAll();
 
-            let expectedKeys = [0];
+            let expectedKeysAndNodes = [0];
             if(config.selectionMode === 'multiple') {
                 if(config.selectNodesRecursive) {
-                    expectedKeys = [0, 1, 2];
+                    expectedKeysAndNodes = [0, 1, 2];
                 }
                 if(!config.expanded && isLazyDataSourceMode(wrapper) && config.selectNodesRecursive) {
                     // unexpected result
-                    expectedKeys = [0, 1];
+                    expectedKeysAndNodes = [0, 1];
                 }
             }
 
-            wrapper.checkSelection(expectedKeys, expectedKeys, 'after expand');
+            wrapper.checkSelection(expectedKeysAndNodes, expectedKeysAndNodes, 'after expand');
             wrapper.checkEventLog([], 'after expand');
         });
 
@@ -662,8 +662,7 @@ configs.forEach(config => {
                 expectedNodes = [0];
             }
 
-            wrapper.checkSelectedKeys(expectedKeys, 'after select');
-            wrapper.checkSelectedNodes(expectedNodes, 'after select');
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after select');
             wrapper.checkEventLog(['selectionChanged'], 'after select');
             wrapper.clearEventLog();
 
@@ -681,8 +680,7 @@ configs.forEach(config => {
                     }
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-            wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+            wrapper.checkSelection(expectedKeys, expectedNodes, 'after expand');
             wrapper.checkEventLog([], 'after expand');
         });
 
@@ -695,14 +693,12 @@ configs.forEach(config => {
             wrapper.instance.unselectAll();
 
             let expectedEventLog = ['selectionChanged'];
-            wrapper.checkSelectedKeys([], 'after unselect');
-            wrapper.checkSelectedNodes([], 'after unselect');
+            wrapper.checkSelection([], [], 'after unselect');
             wrapper.checkEventLog(expectedEventLog, 'after unselect');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
-            wrapper.checkSelectedKeys([], 'after expand');
-            wrapper.checkSelectedNodes([], 'after expand');
+            wrapper.checkSelection([], [], 'after expand');
             wrapper.checkEventLog([], 'after expand');
         });
 
@@ -936,8 +932,7 @@ QUnit.module('Delayed datasource', () => {
 
             assert.equal($item1.length, 1, 'item1 is rendered');
             assert.strictEqual(selectResult, false, 'selected item not found');
-            wrapper.checkSelectedKeys([], 'nothing is selected');
-            wrapper.checkSelectedNodes([], 'there is no selected nodes');
+            wrapper.checkSelection([], [], 'nothing is selected');
             wrapper.checkEventLog([], 'there is no selection events');
             done();
         }, 2);
@@ -959,8 +954,7 @@ QUnit.module('Delayed datasource', () => {
 
             const $item1 = wrapper.getElement().find('[aria-level="1"]');
             assert.equal($item1.length, 1, 'item1 is rendered');
-            wrapper.checkSelectedKeys([0], 'item1 is selected');
-            wrapper.checkSelectedNodes([0], 'item1 has selected node');
+            wrapper.checkSelection([0], [0], 'item1 is selected');
             wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'there is no selection events');
 
             wrapper.clearEventLog();
@@ -968,8 +962,7 @@ QUnit.module('Delayed datasource', () => {
                 const $item1_ = wrapper.getElement().find('[aria-level="1"]');
 
                 assert.equal($item1_.length, 1, 'item1 is rendered');
-                wrapper.checkSelectedKeys([], 'nothing is selected');
-                wrapper.checkSelectedNodes([], 'there is no selected nodes');
+                wrapper.checkSelection([], [], 'nothing is selected');
                 wrapper.checkEventLog([], 'there is no selection events');
                 done();
             });
@@ -989,8 +982,7 @@ QUnit.module('Delayed datasource', () => {
 
                     assert.equal(selectResult, true, 'item1 is selected');
                     assert.equal($item1.length, 1, 'item1 is rendered');
-                    wrapper.checkSelectedKeys([0], 'nothing is selected');
-                    wrapper.checkSelectedNodes([0], 'there is no selected nodes');
+                    wrapper.checkSelection([0], [0], 'item1 is selected');
                     wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'there is no selection events');
                     done();
                 }
