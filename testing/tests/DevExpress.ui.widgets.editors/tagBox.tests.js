@@ -708,7 +708,7 @@ QUnit.module('multi tag support', {
         assert.equal($tagBox.find('.' + TAGBOX_TAG_CLASS).length, 4, '4 tags when option was disabled');
     });
 
-    QUnit.test('onMultitagPreparing option change', function(assert) {
+    QUnit.test('onMultiTagPreparing option change', function(assert) {
         assert.expect(4);
 
         const onMultiTagPreparing = e => {
@@ -727,6 +727,28 @@ QUnit.module('multi tag support', {
         const tagBox = $tagBox.dxTagBox('instance');
 
         tagBox.option('onMultiTagPreparing', onMultiTagPreparing);
+
+        const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+        assert.deepEqual($tag.text(), 'custom text', 'custom text is displayed');
+    });
+
+    QUnit.test('multitagPreparing event test', function(assert) {
+        assert.expect(4);
+
+        const onMultiTagPreparing = e => {
+            assert.equal(e.component.NAME, 'dxTagBox', 'component is correct');
+            assert.ok($(e.multiTagElement).hasClass(TAGBOX_MULTI_TAG_CLASS), 'element is correct');
+            assert.deepEqual(e.selectedItems, [1, 2, 4], 'selectedItems are correct');
+            e.text = 'custom text';
+        };
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [1, 2, 3, 4],
+            maxDisplayedTags: 2
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        tagBox.on('multiTagPreparing', onMultiTagPreparing);
+        tagBox.option('value', [1, 2, 4]);
 
         const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
         assert.deepEqual($tag.text(), 'custom text', 'custom text is displayed');
@@ -3582,6 +3604,21 @@ QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
         assert.deepEqual(tagBox.option('selectedItems'), [items[1]], 'the \'selectedItems\' option value is correct');
     });
 
+    QUnit.test('onSelectionChanged handler should be called if selected items was changed at runtime', function(assert) {
+        const items = [1, 2, 3];
+        const selectionChangedHandler = sinon.spy();
+
+        const tagBox = $('#tagBox').dxTagBox({
+            items,
+            opened: true,
+            onSelectionChanged: selectionChangedHandler
+        }).dxTagBox('instance');
+
+        const callCountOnInit = selectionChangedHandler.callCount;
+        tagBox.option('selectedItems', [items[0], items[1]]);
+        assert.strictEqual(selectionChangedHandler.callCount, callCountOnInit + 1, 'onSelectionChanged handler was called');
+    });
+
     QUnit.test('The \'selectedItems\' option changes after the \'value\' option', function(assert) {
         const items = [1, 2, 3];
 
@@ -3795,6 +3832,20 @@ QUnit.module('the \'onSelectionChanged\' option', moduleSetup, () => {
 
         assert.deepEqual(spy.args[1][0].removedItems, [data[2]], 'the \'removedItems\' argument');
         assert.equal(spy.args[1][0].addedItems.length, 0, 'the \'addedItems\' argument');
+    });
+
+    QUnit.test('selectionChanged event should be raised if selected items were changed', function(assert) {
+        const items = [1, 2, 3];
+        const selectionChangedHandler = sinon.spy();
+        const tagBox = $('#tagBox').dxTagBox({
+            items,
+            opened: true
+        }).dxTagBox('instance');
+
+        tagBox.on('selectionChanged', selectionChangedHandler);
+        tagBox.option('value', [1]);
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged event was raised');
     });
 });
 
@@ -4398,6 +4449,26 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         const $list = this.instance._list.$element();
         $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
         assert.equal(this.spy.callCount, 1, 'count is correct');
+    });
+
+    QUnit.test('the "selectAllValueChanged" event is fired one time after all items selection changing', function(assert) {
+        const spy = sinon.spy();
+
+        this.reinit({
+            items: this.items,
+            value: this.items.splice(),
+            onSelectAllValueChanged: null
+        });
+
+        const $list = this.instance._list.$element();
+        const $selectAllElement = $($list.find('.dx-list-select-all-checkbox'));
+        $selectAllElement.trigger('dxclick');
+        assert.equal(this.spy.callCount, 0, 'count is correct');
+
+        this.instance.on('selectAllValueChanged', spy);
+        $selectAllElement.trigger('dxclick');
+
+        assert.equal(spy.callCount, 1, 'count is correct');
     });
 });
 
@@ -5203,6 +5274,25 @@ QUnit.module('performance', () => {
         });
 
         assert.strictEqual(load.getCall(0).args[0].filter, undefined);
+    });
+
+    QUnit.test('load filter should be undefined when tagBox has some initial values and "maxFilterLength" was changed at runtime', function(assert) {
+        const load = sinon.stub();
+
+        const instance = $('#tagBox').dxTagBox({
+            dataSource: {
+                load
+            },
+            value: Array.apply(null, { length: 1 }).map(Number.call, Number),
+            valueExpr: 'id',
+            displayExpr: 'text'
+        }).dxTagBox('instance');
+
+        instance.option('maxFilterLength', 0);
+        instance.option('value', Array.apply(null, { length: 2 }).map(Number.call, Number));
+
+        assert.ok(load.getCall(0).args[0].filter);
+        assert.strictEqual(load.getCall(load.callCount - 1).args[0].filter, undefined);
     });
 
     QUnit.test('load filter should be array when tagBox has not a lot of initial values', function(assert) {
