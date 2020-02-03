@@ -83,7 +83,7 @@ describe('Button', () => {
 
                 expect(button.hasClass('dx-button')).toBe(true);
                 expect(button.hasClass('dx-button-has-text')).toBe(false);
-                expect(button.find('.dx-button-text').exists()).toBe(false);
+                expect(button.exists('.dx-button-text')).toBe(false);
             });
         });
 
