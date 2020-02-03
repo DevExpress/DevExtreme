@@ -8,7 +8,6 @@ import browser from 'core/utils/browser';
 import 'common.css!';
 import 'generic_light.css!';
 
-const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
 const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
 const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
@@ -46,14 +45,43 @@ const getToggleButton = (instance) => {
     return instance.$element().find(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`);
 };
 
-QUnit.module('markup', {
+QUnit.module('button group integration', {}, () => {
+    QUnit.test('height option should change buttonGroup wrapper height', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            height: '300px'
+        }).dxDropDownButton('instance');
+
+        const buttonGroup = getButtonGroup(dropDownButton);
+        const buttonGroupWrapper = buttonGroup.$element().find(`.${BUTTON_GROUP_WRAPPER}`);
+        assert.strictEqual(buttonGroupWrapper.eq(0).height(), 300, 'height is right');
+
+        $('#container').css('height', '900px');
+        dropDownButton.option('height', '50%');
+
+        const newButtonGroupWrapper = buttonGroup.$element().find(`.${BUTTON_GROUP_WRAPPER}`);
+        assert.strictEqual(newButtonGroupWrapper.eq(0).height(), 450, 'height after option change in runtime is right');
+    });
+});
+
+QUnit.module('popup integration', {
     beforeEach: function() {
-        this.instance = new DropDownButton('#dropDownButton', {});
+        this.instance = new DropDownButton('#dropDownButton', {
+            deferRendering: false,
+            splitButton: true,
+            items: [{ text: 'Item 1' }, { text: 'Item 2' }]
+        });
+        this.popup = getPopup(this.instance);
     }
 }, () => {
-    QUnit.test('element should have dropDownButton and widget class', function(assert) {
-        assert.ok(this.instance.$element().hasClass(DROP_DOWN_BUTTON_CLASS), 'dropdownbutton class is ok');
-        assert.ok(this.instance.$element().hasClass('dx-widget'), 'widget class is ok');
+    QUnit.test('toggle button should toggle the widget', function(assert) {
+        const instance = new DropDownButton('#dropDownButton', { splitButton: true });
+        const $toggleButton = getToggleButton(instance);
+
+        eventsEngine.trigger($toggleButton, 'dxclick');
+        assert.strictEqual(instance.option('dropDownOptions.visible'), true, 'the widget is opened');
+
+        eventsEngine.trigger($toggleButton, 'dxclick');
+        assert.strictEqual(instance.option('dropDownOptions.visible'), false, 'the widget is closed');
     });
 
     QUnit.test('popup and list should not be rendered if deferRendering is true', function(assert) {
@@ -70,217 +98,6 @@ QUnit.module('markup', {
         assert.ok(popup.option('closeOnOutsideClick'), 'popup should be closed on outside click');
     });
 
-    QUnit.test('it should be possible to render the widget without a text', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            deferRendering: false,
-            items: [{ icon: 'box' }, { icon: 'user' }],
-            keyExpr: 'icon',
-            displayExpr: '',
-            selectedItemKey: 'user'
-        });
-
-        const $actionButtonText = getActionButton(dropDownButton).text();
-        const $listItemText = getList(dropDownButton).itemElements().eq(0).text();
-
-        assert.strictEqual($actionButtonText, '', 'action button text is empty');
-        assert.strictEqual($listItemText, '', 'item text is empty');
-    });
-
-    QUnit.test('Widget should have no text after selectedItemKey is changed to null', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            items: [{ id: 1, text: 'Test' }],
-            keyExpr: 'id',
-            displayExpr: 'text',
-            selectedItemKey: 1,
-            useSelectMode: true
-        });
-
-        let $actionButtonText = getActionButton(dropDownButton).text();
-        assert.strictEqual($actionButtonText, 'Test', 'action button text is not empty');
-
-        dropDownButton.option('selectedItemKey', null);
-        $actionButtonText = getActionButton(dropDownButton).text();
-        assert.strictEqual($actionButtonText, '', 'action button text is empty');
-    });
-
-    QUnit.test('Widget should have no text after Items is changed to empty array', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            items: [{ id: 1, text: 'Test' }],
-            keyExpr: 'id',
-            displayExpr: 'text',
-            selectedItemKey: 1,
-            useSelectMode: true
-        });
-
-        let $actionButtonText = getActionButton(dropDownButton).text();
-        assert.strictEqual($actionButtonText, 'Test', 'action button text is not empty');
-
-        dropDownButton.option('items', []);
-        $actionButtonText = getActionButton(dropDownButton).text();
-        assert.strictEqual($actionButtonText, '', 'action button text is empty');
-    });
-
-    QUnit.test('width option should change dropDownButton width', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            text: 'Item 1',
-            icon: 'box',
-            width: 235
-        });
-
-        assert.strictEqual(dropDownButton.option('width'), 235, 'width is right');
-        dropDownButton.option('width', 135);
-        assert.strictEqual(dropDownButton.option('width'), 135, 'width was successfully changed');
-    });
-
-    QUnit.test('height option should change buttonGroup wrapper height', function(assert) {
-        const dropDownButton = $('#dropDownButton').dxDropDownButton({
-            height: '300px'
-        }).dxDropDownButton('instance');
-
-        const buttonGroup = getButtonGroup(dropDownButton);
-        const buttonGroupWrapper = buttonGroup.$element().find(`.${BUTTON_GROUP_WRAPPER}`);
-        assert.strictEqual(buttonGroupWrapper.eq(0).height(), 300, 'height is right');
-
-        $('#container').css('height', '900px');
-        dropDownButton.option('height', '50%');
-
-        const newButtonGroupWrapper = buttonGroup.$element().find(`.${BUTTON_GROUP_WRAPPER}`);
-        assert.strictEqual(newButtonGroupWrapper.eq(0).height(), 450, 'height after option change in runtime is right');
-    });
-
-    QUnit.test('dropDownButton height should be equal to main button height when height depends on content', function(assert) {
-        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
-            splitButton: true,
-            icon: 'icon.png'
-        });
-
-        const actionButton = $dropDownButton.find('.dx-dropdownbutton-action');
-        const toggleButton = $dropDownButton.find('.dx-dropdownbutton-toggle');
-
-        $dropDownButton.find('img.dx-icon').css('height', '50px');
-        let mainButtonHeight = actionButton.height();
-        let dropDownButtonHeight = toggleButton.height();
-        assert.strictEqual(dropDownButtonHeight, mainButtonHeight, 'heights are equal after main button content change');
-
-        $dropDownButton.find('i.dx-icon').css('height', '100px');
-        mainButtonHeight = actionButton.height();
-        dropDownButtonHeight = toggleButton.height();
-        assert.strictEqual(mainButtonHeight, dropDownButtonHeight, 'heights are equal after toggle button content change');
-    });
-
-    QUnit.test('stylingMode option should be transfered to buttonGroup', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            text: 'Item 1',
-            icon: 'box',
-            stylingMode: 'text'
-        });
-
-        assert.strictEqual(getButtonGroup(dropDownButton).option('stylingMode'), 'text', 'stylingMode was successfully transfered');
-
-        dropDownButton.option('stylingMode', 'outlined');
-        assert.strictEqual(getButtonGroup(dropDownButton).option('stylingMode'), 'outlined', 'stylingMode was successfully changed');
-    });
-});
-
-QUnit.module('button group integration', {}, () => {
-    QUnit.test('element should have buttonGroup inside', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', { selectionMode: true, splitButton: true });
-        const buttonGroup = getButtonGroup(instance);
-        assert.strictEqual(buttonGroup.NAME, 'dxButtonGroup', 'buttonGroup rendered');
-        assert.strictEqual(buttonGroup.option('selectionMode'), 'none', 'selection should be disabled');
-        assert.strictEqual(buttonGroup.option('stylingMode'), 'outlined', 'styling mode should be outlined');
-
-        const buttonGroupItems = buttonGroup.option('items');
-        assert.strictEqual(buttonGroupItems.length, 2, '2 buttons are rendered');
-        assert.strictEqual(buttonGroupItems[0].icon, undefined, 'empty icon is correct');
-        assert.strictEqual(buttonGroupItems[1].icon, 'spindown', 'dropdown icon is correct');
-    });
-
-    QUnit.test('hoverStateEnabled should be transfered to the buttonGroup', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', { hoverStateEnabled: false, deferRendering: false });
-        const buttonGroup = getButtonGroup(instance);
-        const list = getList(instance);
-
-        assert.strictEqual(buttonGroup.option('hoverStateEnabled'), false, 'buttonGroup has correct option');
-        assert.strictEqual(list.option('hoverStateEnabled'), false, 'List has correct option');
-
-        instance.option('hoverStateEnabled', true);
-        assert.strictEqual(buttonGroup.option('hoverStateEnabled'), true, 'buttonGroup has changed option');
-        assert.strictEqual(list.option('hoverStateEnabled'), true, 'List has changed option');
-    });
-
-    QUnit.test('toggle button should toggle the widget', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', { splitButton: true });
-        const $toggleButton = getToggleButton(instance);
-
-        eventsEngine.trigger($toggleButton, 'dxclick');
-        assert.strictEqual(instance.option('dropDownOptions.visible'), true, 'the widget is opened');
-
-        eventsEngine.trigger($toggleButton, 'dxclick');
-        assert.strictEqual(instance.option('dropDownOptions.visible'), false, 'the widget is closed');
-    });
-
-    QUnit.test('action and toggle button should have special class', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', { splitButton: true });
-
-        assert.ok(instance.$element().find('.dx-button').eq(0).hasClass(DROP_DOWN_BUTTON_ACTION_CLASS));
-        assert.ok(instance.$element().find('.dx-button').eq(1).hasClass(DROP_DOWN_BUTTON_TOGGLE_CLASS));
-    });
-
-    QUnit.test('a user can redefine buttonGroupOptions', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', {
-            useSelectMode: false,
-            buttonGroupOptions: {
-                items: [{ text: 'Test' }],
-                someOption: 'Test'
-            }
-        });
-
-        const buttonGroup = getButtonGroup(instance);
-        assert.strictEqual(buttonGroup.option('items[0].text'), 'Test', 'text of the first item is correct');
-        assert.strictEqual(buttonGroup.option('items[0].icon'), undefined, 'icon of the first item is correct');
-        assert.strictEqual(buttonGroup.option('items[1]'), undefined, 'second item is not exist');
-
-        instance.option('buttonGroupOptions.items[0]', { text: 'Test 2' });
-        assert.strictEqual(buttonGroup.option('items[0].text'), 'Test 2', 'text of the first item is correct');
-    });
-
-    QUnit.test('a user can read buttonGroupOptions', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', {});
-
-        assert.strictEqual(instance.option('buttonGroupOptions.stylingMode'), 'outlined', 'option is correct');
-    });
-
-    QUnit.test('text and icon options should depend on selection', function(assert) {
-        const instance = new DropDownButton('#dropDownButton', {
-            text: 'Item 1',
-            icon: 'box',
-            keyExpr: 'id',
-            displayExpr: 'text',
-            items: [{ id: 1, text: 'User', icon: 'user' }, { id: 2, text: 'Group', icon: 'group' }],
-            selectedItemKey: 1,
-            useSelectMode: true
-        });
-
-        assert.strictEqual(instance.option('text'), 'User', 'text option is correct');
-        assert.strictEqual(instance.option('icon'), 'user', 'icon option is correct');
-
-        instance.option('selectedItemKey', 2);
-        assert.strictEqual(instance.option('text'), 'Group', 'text option is correct');
-        assert.strictEqual(instance.option('icon'), 'group', 'icon option is correct');
-    });
-});
-
-QUnit.module('popup integration', {
-    beforeEach: function() {
-        this.instance = new DropDownButton('#dropDownButton', {
-            deferRendering: false,
-            splitButton: true,
-            items: [{ text: 'Item 1' }, { text: 'Item 2' }]
-        });
-        this.popup = getPopup(this.instance);
-    }
-}, () => {
     QUnit.test('popup should have special classes', function(assert) {
         assert.ok($(this.popup.content()).hasClass(DROP_DOWN_BUTTON_CONTENT), 'popup has a special class');
         assert.ok($(this.popup._wrapper()).hasClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS), 'popup wrapper has a special class');
@@ -458,6 +275,31 @@ QUnit.module('popup integration', {
 });
 
 QUnit.module('list integration', {}, () => {
+    QUnit.test('hoverStateEnabled should be transfered to the list', function(assert) {
+        const instance = new DropDownButton('#dropDownButton', { hoverStateEnabled: false, deferRendering: false });
+        const list = getList(instance);
+
+        assert.strictEqual(list.option('hoverStateEnabled'), false, 'List has correct option');
+
+        instance.option('hoverStateEnabled', true);
+
+        assert.strictEqual(list.option('hoverStateEnabled'), true, 'List has changed option');
+    });
+
+    QUnit.test('it should be possible to render the widget list item without a text', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            deferRendering: false,
+            items: [{ icon: 'box' }, { icon: 'user' }],
+            keyExpr: 'icon',
+            displayExpr: '',
+            selectedItemKey: 'user'
+        });
+
+        const $listItemText = getList(dropDownButton).itemElements().eq(0).text();
+
+        assert.strictEqual($listItemText, '', 'item text is empty');
+    });
+
     QUnit.test('list should be displayed correctly without data expressions', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', {
             items: ['Item 1'],
@@ -1012,86 +854,6 @@ QUnit.module('public methods', {
     });
 });
 
-QUnit.module('data expressions', {
-    beforeEach: function() {
-        this.dropDownButton = new DropDownButton('#dropDownButton', {
-            items: [
-                { id: 1, file: 'vs.exe', name: 'Trial for Visual Studio', icon: 'box' },
-                { id: 2, file: 'all.exe', name: 'Trial for all platforms', icon: 'user' }
-            ],
-            keyExpr: 'id',
-            useSelectMode: true,
-            deferRendering: false
-        });
-    }
-}, () => {
-    QUnit.test('displayExpr is required when items are objects', function(assert) {
-        this.dropDownButton.option('displayExpr', undefined);
-        this.dropDownButton.option('selectedItemKey', 1);
-
-        assert.strictEqual(getActionButton(this.dropDownButton).text(), '');
-    });
-
-    QUnit.test('displayExpr as function should work', function(assert) {
-        this.dropDownButton.option('displayExpr', (itemData) => {
-            return (itemData && itemData.name + '!') || '';
-        });
-
-        this.dropDownButton.option('selectedItemKey', 2);
-        assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Trial for all platforms!', 'displayExpr works');
-    });
-
-    QUnit.test('null value should be displayed as an empty string', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            items: ['Item 1', 'Item 2', 'Item 3'],
-            useSelectMode: true,
-            selectedItemKey: null
-        });
-
-        assert.strictEqual(getActionButton(dropDownButton).text(), '', 'value is correct');
-    });
-
-    QUnit.test('undefined value should be displayed as an empty string', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            items: ['Item 1', 'Item 2', 'Item 3'],
-            useSelectMode: true,
-            selectedItemKey: undefined
-        });
-
-        assert.strictEqual(getActionButton(dropDownButton).text(), '', 'value is correct');
-    });
-
-    QUnit.test('primitive items can be used without data expressions', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            items: ['Item 1', 'Item 2', 'Item 3'],
-            useSelectMode: true,
-            selectedItemKey: 'Item 1'
-        });
-
-        assert.strictEqual(getActionButton(dropDownButton).text(), 'Item 1', 'value is correct');
-    });
-
-    QUnit.test('numbers can be used without data expressions', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            items: [0, 1, 2],
-            useSelectMode: true,
-            selectedItemKey: 0
-        });
-
-        assert.strictEqual(getActionButton(dropDownButton).text(), '0', 'value is correct');
-    });
-
-    QUnit.test('booleans can be used without data expressions', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            items: [true, false],
-            useSelectMode: true,
-            selectedItemKey: false
-        });
-
-        assert.strictEqual(getActionButton(dropDownButton).text(), 'false', 'value is correct');
-    });
-});
-
 QUnit.module('items changing', {
     beforeEach: function() {
         this.dropDownButton = new DropDownButton('#dropDownButton', {
@@ -1116,28 +878,6 @@ QUnit.module('items changing', {
         const $firstItem = getList(this.dropDownButton).itemElements().eq(0);
 
         assert.strictEqual($firstItem.text(), 'changed', 'items has been changed');
-    });
-
-    QUnit.test('changing of items should load new selected item', function(assert) {
-        this.dropDownButton.option({
-            selectedItemKey: 2
-        });
-
-        assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Trial for all platforms', 'item was selected');
-
-        this.dropDownButton.option('items', [{ id: 2, name: 'Item 2' }]);
-        assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Item 2', 'changed item has been loaded by id');
-    });
-
-    QUnit.test('changing of dataSource should load new selected item', function(assert) {
-        this.dropDownButton.option({
-            selectedItemKey: 2
-        });
-
-        assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Trial for all platforms', 'item was selected');
-
-        this.dropDownButton.option('dataSource', [{ id: 2, name: 'Item 2' }]);
-        assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Item 2', 'changed item has been loaded by id');
     });
 
     QUnit.test('showing and hiding the toggle button should not lead to datasource loading when there is no list', function(assert) {
@@ -1273,7 +1013,6 @@ QUnit.module('deferred datasource', {
         });
         dropDownButton.option('selectedItemKey', 2);
         this.clock.tick();
-        assert.strictEqual(getActionButton(dropDownButton).text(), 'Item 2', 'action button has been changed');
         assert.strictEqual(getList(dropDownButton).option('selectedItemKeys')[0], 2, 'selectedItemKeys is correct');
     });
 });
@@ -1337,39 +1076,6 @@ QUnit.module('events', {}, () => {
         eventsEngine.trigger($item, 'dxclick');
 
         assert.strictEqual(handler.callCount, 1, 'handler was called');
-    });
-
-    QUnit.test('keyExpr option change', function(assert) {
-        const items = [{
-            name: 'A', id: 1
-        }, {
-            name: 'B', id: 2
-        }];
-
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            items,
-            keyExpr: 'name',
-            selectedItemKey: 'B',
-            useSelectMode: true,
-            displayExpr: 'name'
-        });
-
-        assert.strictEqual(dropDownButton.option('text'), 'B', 'value is correct');
-
-        dropDownButton.option('keyExpr', 'id');
-        dropDownButton.option('selectedItemKey', 'A');
-        assert.strictEqual(dropDownButton.option('text'), '', 'text is empty because keyExpt has been changed');
-
-        dropDownButton.option('selectedItemKey', 1);
-        assert.strictEqual(dropDownButton.option('text'), 'A', 'value is correct');
-    });
-
-    QUnit.test('focusStateEnabled option change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton2');
-
-        dropDownButton.option('focusStateEnabled', false);
-
-        assert.strictEqual(dropDownButton.$element().attr('tabindex'), undefined, 'element is not focusable');
     });
 
     QUnit.test('itemClick event change - subscription by "on" method', function(assert) {
@@ -1455,46 +1161,6 @@ QUnit.module('events', {}, () => {
         assert.strictEqual(handler.callCount, 1, 'handler was called');
     });
 
-    QUnit.test('selectedItemKey option change should raise selectionChanged event', function(assert) {
-        const handler = sinon.spy();
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            items: [1, 2, 3],
-            splitButton: true,
-            selectedItemKey: 2,
-            onSelectionChanged: handler
-        });
-
-        dropDownButton.option('selectedItemKey', 3);
-
-        assert.strictEqual(handler.callCount, 1, 'selectionChanged has been raised');
-    });
-
-    QUnit.test('selectedItemKey option change should raise selectionChanged event - subscription using "on" method', function(assert) {
-        const handler = sinon.spy();
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            items: [1, 2, 3],
-            splitButton: true,
-            selectedItemKey: 2
-        });
-
-        dropDownButton.on('selectionChanged', handler);
-        dropDownButton.option('selectedItemKey', 3);
-
-        assert.strictEqual(handler.callCount, 1, 'selectionChanged has been raised');
-    });
-
-    QUnit.test('selectedItemKey option change should change selectedItem option', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            items: [1, 2, 3],
-            splitButton: true,
-            selectedItemKey: 2
-        });
-
-        dropDownButton.option('selectedItemKey', 3);
-
-        assert.strictEqual(dropDownButton.option('selectedItem'), 3, 'selectedItem is correct');
-    });
-
     QUnit.test('onContentReady should be fired after widget rendering and take into account Popup rendering', function(assert) {
         const contentReadyHandler = sinon.spy();
 
@@ -1510,25 +1176,6 @@ QUnit.module('events', {}, () => {
         assert.strictEqual(contentReadyHandler.callCount, 1, 'Widget is ready');
         dropDownButton.open();
         assert.strictEqual(contentReadyHandler.callCount, 3, 'Popup is ready, then List is ready');
-    });
-
-    QUnit.test('onContentReady should be fired after widget rendering', function(assert) {
-        const contentReadyHandler = sinon.spy();
-
-        const dropDownButton = new DropDownButton('#dropDownButton2', {
-            dataSource: {
-                load: sinon.stub().returns([1, 2, 3]),
-                byKey: sinon.stub().returns(1)
-            },
-            opened: true,
-            deferRendering: false,
-            onContentReady: contentReadyHandler
-        });
-
-        assert.strictEqual(contentReadyHandler.callCount, 2, 'Popup is ready, then List is ready');
-
-        dropDownButton.option('dataSource', ['first', 'second', 'third']);
-        assert.strictEqual(contentReadyHandler.callCount, 3, 'List is ready after updating Popup content');
     });
 
     QUnit.test('onContentReady should be fired after widget rendering when subscription uses "on" method', function(assert) {
