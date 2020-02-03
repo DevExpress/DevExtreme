@@ -2652,7 +2652,7 @@ module.exports = {
                         $cell
                             .addClass(EDITOR_CELL_CLASS)
                             .toggleClass(this.addWidgetPrefix(READONLY_CLASS), !isEditableCell)
-                            .toggleClass(CELL_FOCUS_DISABLED_CLASS, !isEditableCell); // test???????this prevents validation messages from showing
+                            .toggleClass(CELL_FOCUS_DISABLED_CLASS, !isEditableCell);
 
 
                         if(alignment) {
