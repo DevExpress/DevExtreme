@@ -747,7 +747,7 @@ QUnit.module('options changing', moduleConfig, () => {
         instance.option('onValueChanged', handleValueUpdateEvent);
         pointerMock($element.find('.dx-clear-button-area')).click();
         clock.tick(10);
-        assert.ok($input.val() === '', 'Click on \'clear\' button causes input value reset');
+        assert.strictEqual($input.val(), '', 'Click on \'clear\' button causes input value reset');
         assert.ok($element.hasClass(EMPTY_INPUT_CLASS), 'Click on \'clear\' button causes marking with \'empty input\' CSS class');
         assert.equal(eventWasHandled, 1, 'Click on \'clear\' button rises value update event');
         clock.restore();

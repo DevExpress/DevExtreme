@@ -1930,7 +1930,7 @@ QUnit.test('Recurrent appointment with tail on next week has most top coordinate
 
     const coords = translator.locate(appointment);
 
-    assert.ok(coords.top === 0, 'Appointment tail has most top coordinate');
+    assert.strictEqual(coords.top, 0, 'Appointment tail has most top coordinate');
 });
 
 QUnit.test('Workspace view has correct viewEndDate with empty groups and groupByDate = true (T815379)', function(assert) {

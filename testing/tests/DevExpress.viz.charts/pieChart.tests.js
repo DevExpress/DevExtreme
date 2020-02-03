@@ -490,7 +490,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         });
 
         // assert
-        assert.ok(oldSeries === commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0]);
+        assert.strictEqual(oldSeries, commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0]);
     });
 
     QUnit.test('T400246. After series update tracker gets new series', function(assert) {
@@ -512,7 +512,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         });
 
         // assert
-        assert.ok(oldSeries !== commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0]);
+        assert.notStrictEqual(oldSeries, commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0]);
     });
 
     QUnit.test('create tracker, with series', function(assert) {

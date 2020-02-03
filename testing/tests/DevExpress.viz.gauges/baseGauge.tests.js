@@ -154,8 +154,8 @@ QUnit.test('Components creation', function(assert) {
     // assert.deepEqual(factory.createLayoutManager.lastCall.args, [], "layout manager");
 
     const arg = this.tracker.setCallbacks.lastCall.args[0];
-    assert.ok(typeof arg['tooltip-show'] === 'function', 'show callback');
-    assert.ok(typeof arg['tooltip-hide'] === 'function', 'hide callback');
+    assert.strictEqual(typeof arg['tooltip-show'], 'function', 'show callback');
+    assert.strictEqual(typeof arg['tooltip-hide'], 'function', 'hide callback');
 });
 
 QUnit.test('Components disposing', function(assert) {

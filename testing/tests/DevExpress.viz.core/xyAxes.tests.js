@@ -690,7 +690,7 @@ QUnit.test('IncidentOccured on measure labels', function(assert) {
     axis.setMarginOptions({ checkInterval: true });
     axis.measureLabels(this.canvas);
 
-    assert.ok(this.tickGenerator.lastCall.args[0].incidentOccurred !== this.incidentOccurred);
+    assert.notStrictEqual(this.tickGenerator.lastCall.args[0].incidentOccurred, this.incidentOccurred);
 });
 
 QUnit.test('call measure labels after axis draw - use ticks generated on draw', function(assert) {

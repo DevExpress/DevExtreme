@@ -67,7 +67,7 @@ QUnit.test('Draw searchPanel', function(assert) {
 
     searchPanel = testElement.find('.dx-datagrid-search-panel');
     assert.strictEqual(input.length, 1);
-    assert.ok(searchPanel.length === 1);
+    assert.strictEqual(searchPanel.length, 1);
     assert.equal(searchPanel.outerWidth(), 160, 'search panel width');
 });
 
@@ -356,7 +356,7 @@ QUnit.test('Enter text in searchPanel', function(assert) {
 
     // assert
     searchPanel = testElement.find('.dx-datagrid-search-panel');
-    assert.ok(searchPanel.length === 1);
+    assert.strictEqual(searchPanel.length, 1);
     searchPanel.dxTextBox('instance').option('value', '123');
     assert.equal(this.option('searchPanel.text'), '123');
 });
@@ -379,7 +379,7 @@ QUnit.test('Draw searchPanel custom width', function(assert) {
     const input = testElement.find('input');
     searchPanel = testElement.find('.dx-datagrid-search-panel');
     assert.strictEqual(input.length, 1);
-    assert.ok(searchPanel.length === 1);
+    assert.strictEqual(searchPanel.length, 1);
     assert.equal(searchPanel.outerWidth(), 213, 'default search panel width');
 });
 

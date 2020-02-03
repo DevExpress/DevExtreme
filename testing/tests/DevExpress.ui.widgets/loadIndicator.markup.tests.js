@@ -79,7 +79,7 @@ QUnit.module('Static load indicator', {
 
         assert.ok(isIdenticalNamesInUrl(getBackgroundImage(), url), 'custom indicator installed successfully as image');
         instance.option('indicatorSrc', '');
-        assert.ok(getBackgroundImage() !== '', 'custom indicator changed successfully as image');
+        assert.notStrictEqual(getBackgroundImage(), '', 'custom indicator changed successfully as image');
     });
 });
 

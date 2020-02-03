@@ -361,7 +361,7 @@ QUnit.testStart(function() {
 
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' });
         this.clock.tick();
-        assert.ok(this.instance.option('dataSource').items().length === 3, 'new item is added');
+        assert.strictEqual(this.instance.option('dataSource').items().length, 3, 'new item is added');
     });
 
     QUnit.test('Add new item with empty text', function(assert) {
@@ -378,7 +378,7 @@ QUnit.testStart(function() {
 
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17) });
         this.clock.tick();
-        assert.ok(this.instance.option('dataSource').items()[2].text === '', 'new item was added with correct text');
+        assert.strictEqual(this.instance.option('dataSource').items()[2].text, '', 'new item was added with correct text');
     });
 
     QUnit.test('Add new item when timezone doesn\'t equal to the default value', function(assert) {
@@ -2131,7 +2131,7 @@ QUnit.testStart(function() {
         this.instance.addAppointment({ startDate: new Date(), text: 'Appointment 1' });
         this.clock.tick();
 
-        assert.ok(dataSource.items().length === 0, 'Insert operation is canceled');
+        assert.strictEqual(dataSource.items().length, 0, 'Insert operation is canceled');
     });
 
     QUnit.test('Appointment should not be added to the data source if \'cancel\' flag is defined as true during async operation', function(assert) {
@@ -2151,7 +2151,7 @@ QUnit.testStart(function() {
         this.instance.addAppointment({ startDate: new Date(), text: 'Appointment 1' });
         this.clock.tick(200);
 
-        assert.ok(dataSource.items().length === 0, 'Insert operation is canceled');
+        assert.strictEqual(dataSource.items().length, 0, 'Insert operation is canceled');
     });
 
     QUnit.test('Appointment should not be added to the data source if \'cancel\' flag is defined as Promise', function(assert) {
@@ -2174,7 +2174,7 @@ QUnit.testStart(function() {
         this.clock.tick(200);
 
         promise.then(function() {
-            assert.ok(dataSource.items().length === 0, 'Insert operation is canceled');
+            assert.strictEqual(dataSource.items().length, 0, 'Insert operation is canceled');
         });
 
         return promise;

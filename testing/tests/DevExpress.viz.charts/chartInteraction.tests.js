@@ -202,7 +202,7 @@ QUnit.test('useSpiderWeb option changing', function(assert) {
     polar.option('useSpiderWeb', true);
 
     assert.ok(polar.getAllSeries()[0].getOptions().spiderWidget);
-    assert.ok(initialSeries === polar.getAllSeries()[0]);
+    assert.strictEqual(initialSeries, polar.getAllSeries()[0]);
 });
 
 // T738245

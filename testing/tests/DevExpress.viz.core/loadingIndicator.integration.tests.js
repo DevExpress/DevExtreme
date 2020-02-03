@@ -28,8 +28,8 @@ QUnit.test('Show', function(assert) {
 
     const params = loadingIndicatorModule.LoadingIndicator.lastCall.args[0];
     assert.ok(params.renderer, 'param - renderer');
-    assert.ok(typeof params.eventTrigger === 'function', 'param - event trigger');
-    assert.ok(typeof params.notify === 'function', 'param - notify');
+    assert.strictEqual(typeof params.eventTrigger, 'function', 'param - event trigger');
+    assert.strictEqual(typeof params.notify, 'function', 'param - notify');
     assert.deepEqual(this.loadingIndicator.setSize.lastCall.args, [{ width: 600, height: 400, left: 0, top: 0, right: 0, bottom: 0 }], 'canvas');
     assert.deepEqual(this.loadingIndicator.setOptions.lastCall.args[0].text, 'Some text', 'options');
     assert.deepEqual(this.loadingIndicator.show.lastCall.args, [], 'show');

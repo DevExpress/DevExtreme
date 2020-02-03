@@ -690,7 +690,7 @@ QUnit.test('Guid as key', function(assert) {
         new ODataStore({ version: 4, url: 'odata2.org' })
             .byKey(new Guid(guid))
             .done(function(r) {
-                assert.ok(r.url.indexOf('(guid\'' + guid + '\')') === -1);
+                assert.strictEqual(r.url.indexOf('(guid\'' + guid + '\')'), -1);
                 assert.ok(r.url.indexOf(guid) > 1);
             })
     ];
@@ -1489,7 +1489,7 @@ QUnit.test('works', function(assert) {
     });
 
     const handleBeforeSend = function(request) {
-        assert.ok(request.url.indexOf('DataSet(1)') === 11);
+        assert.strictEqual(request.url.indexOf('DataSet(1)'), 11);
         assert.equal(request.method.toLowerCase(), 'delete');
     };
 
@@ -1737,12 +1737,12 @@ QUnit.test('Dates, disableable, ODataStore', function(assert) {
     const promises = [
         store.load()
             .done(function(r) {
-                assert.ok(typeof r[0].dateProperty === 'string');
+                assert.strictEqual(typeof r[0].dateProperty, 'string');
             }),
 
         store.byKey(1)
             .done(function(r) {
-                assert.ok(typeof r.dateProperty === 'string');
+                assert.strictEqual(typeof r.dateProperty, 'string');
             })
     ];
 
@@ -1784,22 +1784,22 @@ QUnit.test('Dates, disableable, ODataContext', function(assert) {
     const promises = [
         ctx.get('function')
             .done(function(r) {
-                assert.ok(typeof r.dateProperty === 'string');
+                assert.strictEqual(typeof r.dateProperty, 'string');
             }),
 
         ctx.invoke('action')
             .done(function(r) {
-                assert.ok(typeof r.dateProperty === 'string');
+                assert.strictEqual(typeof r.dateProperty, 'string');
             }),
 
         ctx.X.load()
             .done(function(r) {
-                assert.ok(typeof r[0].dateProperty === 'string');
+                assert.strictEqual(typeof r[0].dateProperty, 'string');
             }),
 
         ctx.Y.load()
             .done(function(r) {
-                assert.ok($.type(r[0].dateProperty) === 'date');
+                assert.strictEqual($.type(r[0].dateProperty), 'date');
             })
     ];
 

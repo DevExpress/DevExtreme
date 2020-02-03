@@ -139,7 +139,7 @@ QUnit.test('change series options only - populateSeries', function(assert) {
     });
 
     // Assert
-    assert.ok(oldSeries !== chart.series, 'new series');
+    assert.notStrictEqual(oldSeries, chart.series, 'new series');
     assert.ok(chart.seriesDisposed, 'Series should be disposed');
     assert.ok(chart.seriesFamiliesDisposed, 'SeriesFamilies should be disposed');
 
@@ -476,9 +476,9 @@ QUnit.test('change containerBackgroundColor option only', function(assert) {
     assert.ok(!valAxis.disposed);
     assert.ok(!argAxis.disposed);
 
-    assert.ok(stubSeries1 === chart.getAllSeries()[0], 'Series should be updated');
-    assert.ok(valAxis === chart._valueAxes[0], 'Val axis should be updated');
-    assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should be updated');
+    assert.strictEqual(stubSeries1, chart.getAllSeries()[0], 'Series should be updated');
+    assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should be updated');
+    assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should be updated');
 });
 
 QUnit.test('change resolveLabelsOverlapping option only', function(assert) {
@@ -503,9 +503,9 @@ QUnit.test('change resolveLabelsOverlapping option only', function(assert) {
     // assert
     assert.ok(!series.disposed);
     assert.ok(!seriesFamily.dispose.called);
-    assert.ok(stubSeries1 === chart.getAllSeries()[0], 'Series should be updated');
-    assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-    assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+    assert.strictEqual(stubSeries1, chart.getAllSeries()[0], 'Series should be updated');
+    assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+    assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
 });
 
 QUnit.test('change title option only. change title settings', function(assert) {
@@ -1386,9 +1386,9 @@ QUnit.test('title option', function(assert) {
         title: 'changed title'
     });
     // assert
-    assert.ok(series === chart.getAllSeries()[0], 'Series should not be recreated');
-    assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-    assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+    assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
+    assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+    assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
     assert.ok(onDrawn.called);
 });
 
@@ -1412,9 +1412,9 @@ QUnit.test('adaptiveLayout option', function(assert) {
 
     assert.deepEqual(this.layoutManager.setOptions.lastCall.args, [{ width: 'someWidth', height: 'someHeight' }]);
 
-    assert.ok(series === chart.getAllSeries()[0], 'Series should not be recreated');
-    assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-    assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+    assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
+    assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+    assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
 });
 
 QUnit.test('crosshair option', function(assert) {
@@ -1434,9 +1434,9 @@ QUnit.test('crosshair option', function(assert) {
 
     assert.strictEqual(commons.getTrackerStub().update.lastCall.args[0].crosshair, chart._crosshair);
 
-    assert.ok(series === chart.getAllSeries()[0], 'Series should not be recreated');
-    assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-    assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+    assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
+    assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+    assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
 });
 
 QUnit.test('adjustOnZoom option', function(assert) {
@@ -1476,9 +1476,9 @@ QUnit.test('adjustOnZoom option', function(assert) {
     // assert
     assert.strictEqual(stubSeries1.getValueAxis().adjust.callCount, 1);
 
-    assert.ok(series === chart.getAllSeries()[0], 'Series should not be recreated');
-    assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-    assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+    assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
+    assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+    assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
 });
 
 QUnit.module('Change options - recreate series but not axes', commons.environment);
@@ -1508,9 +1508,9 @@ QUnit.test('pointSelectionMode option', function(assert) {
     assert.equal(commons.getTrackerStub().stub('update').lastCall.args[0].pointSelectionMode, 'new-point-selection-mode');
     assert.equal(chart.getAllSeries()[0].renderSettings.commonSeriesModes.pointSelectionMode, 'new-point-selection-mode');
 
-    assert.ok(series === chart.getAllSeries()[0], 'Series should be updated');
-    assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-    assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+    assert.strictEqual(series, chart.getAllSeries()[0], 'Series should be updated');
+    assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+    assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
 });
 
 QUnit.test('seriesSelectionMode option', function(assert) {
@@ -1538,9 +1538,9 @@ QUnit.test('seriesSelectionMode option', function(assert) {
     assert.equal(commons.getTrackerStub().stub('update').lastCall.args[0].seriesSelectionMode, 'new-series-selection-mode');
     assert.equal(chart.getAllSeries()[0].renderSettings.commonSeriesModes.seriesSelectionMode, 'new-series-selection-mode');
 
-    assert.ok(series === chart.getAllSeries()[0], 'Series should be updated');
-    assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-    assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+    assert.strictEqual(series, chart.getAllSeries()[0], 'Series should be updated');
+    assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+    assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
 });
 
 QUnit.test('useAggregation option', function(assert) {
@@ -1570,9 +1570,9 @@ QUnit.test('useAggregation option', function(assert) {
     });
 
     // assert
-    assert.ok(series === chart.getAllSeries()[0], 'Series should be updated');
-    assert.ok(valAxis === chart._valueAxes[0], 'Val axis should be updated');
-    assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should be updated');
+    assert.strictEqual(series, chart.getAllSeries()[0], 'Series should be updated');
+    assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should be updated');
+    assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should be updated');
 });
 
 QUnit.test('synchronizeMultiAxes option', function(assert) {
@@ -1602,9 +1602,9 @@ QUnit.test('synchronizeMultiAxes option', function(assert) {
     // assert
     assert.equal(multiAxesSynchronizer.synchronize.callCount, 1);
 
-    assert.ok(series === chart.getAllSeries()[0], 'Series should be updated');
-    assert.ok(valAxis === chart._valueAxes[0], 'Val axis should not be recreated');
-    assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
+    assert.strictEqual(series, chart.getAllSeries()[0], 'Series should be updated');
+    assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
+    assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
 });
 
 QUnit.module('Change Strips of axes. Q499381', $.extend({}, commons.environment, {

@@ -1407,7 +1407,7 @@ QUnit.test('Indicator state when there is filterValues in the grouped column', f
     $headerFilter = that.headerPanel.element().find('.dx-group-panel-item').first().find('.dx-header-filter');
     assert.equal($headerFilter.length, 1, 'have header filter');
     assert.ok(!$headerFilter.hasClass('dx-header-filter-empty'), 'has no class dx-header-filter-empty');
-    assert.ok($headerFilter.css('color') === $headerFilter.parent().css('color'), 'color of the header should be as parent color');
+    assert.strictEqual($headerFilter.css('color'), $headerFilter.parent().css('color'), 'color of the header should be as parent color');
 });
 
 QUnit.test('Header filter popup should be shown on header filter icon click in groupPanel', function(assert) {
@@ -1508,7 +1508,7 @@ QUnit.test('Indicator state when there is no filterValues in the grouped column'
     $headerFilter = that.headerPanel.element().find('.dx-group-panel-item').first().find('.dx-header-filter');
     assert.equal($headerFilter.length, 1, 'have header filter');
     assert.ok($headerFilter.hasClass('dx-header-filter-empty'), 'has no class dx-header-filter-empty');
-    assert.ok($headerFilter.css('color') !== $headerFilter.parent().css('color'), 'color of the header filter should hava alpha');
+    assert.notStrictEqual($headerFilter.css('color'), $headerFilter.parent().css('color'), 'color of the header filter should hava alpha');
 });
 
 // T260241

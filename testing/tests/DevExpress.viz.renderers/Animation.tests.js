@@ -529,7 +529,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
         // Assert
         assert.ok(new Date() - animation._startTime < 1000);
         assert.strictEqual(result, true);
-        assert.ok(firstTick !== secondTick);
+        assert.notStrictEqual(firstTick, secondTick);
     });
 
 
