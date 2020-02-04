@@ -143,49 +143,49 @@ export interface ExportLoadPanel {
      * @type string
      * @default "Exporting..."
      */
-    text?: string,
+    text?: string;
     /**
      * @docid ExportLoadPanel.width
      * @type number
      * @default 200
      */
-    width?: number,
+    width?: number;
     /**
      * @docid ExportLoadPanel.height
      * @type number
      * @default 90
      */
-    height?: number,
+    height?: number;
     /**
      * @docid ExportLoadPanel.showIndicator
      * @type boolean
      * @default true
      */
-    showIndicator?: boolean,
+    showIndicator?: boolean;
     /**
      * @docid ExportLoadPanel.indicatorSrc
      * @type string
      * @default ""
      */
-    indicatorSrc?: string,
+    indicatorSrc?: string;
     /**
      * @docid ExportLoadPanel.showPane
      * @type boolean
      * @default true
      */
-    showPane?: boolean,
+    showPane?: boolean;
     /**
      * @docid ExportLoadPanel.shading
      * @type boolean
      * @default false
      */
-    shading?: boolean,
+    shading?: boolean;
     /**
      * @docid ExportLoadPanel.shadingColor
      * @type string
      * @default ''
      */
-    shadingColor?: string
+    shadingColor?: string;
 }
 
 export interface ExportDataGridProps {
