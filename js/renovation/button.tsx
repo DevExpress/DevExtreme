@@ -3,7 +3,6 @@ import { click } from '../events/short';
 import { Component, ComponentInput, Effect, Prop, Ref, JSXComponent } from 'devextreme-generator/component_declaration/common';
 import Widget, { WidgetInput } from './widget';
 
-
 const getImageContainerJSX = (source: string) => {
     switch (getImageSourceType(source)) {
         case 'dxIcon': return (<i className={`dx-icon dx-icon-${source}`}/>);
@@ -56,7 +55,6 @@ declare type ButtonViewModel = {
 export const viewFunction = (viewModel: ButtonViewModel) => {
     const onClick = e => {
         viewModel.useSubmitBehavior && viewModel.submitInputRef?.current.click();
-
         return viewModel.onClick?.(e);
     };
 
