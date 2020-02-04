@@ -3,6 +3,8 @@ import { pathCombine, getFileExtension, PATH_SEPARATOR } from '../ui.file_manage
 import { ensureDefined } from '../../../core/utils/common';
 import { deserializeDate } from '../../../core/utils/date_serialization';
 import { each } from '../../../core/utils/iterator';
+import { isPromise } from '../../../core/utils/type';
+import { Deferred } from '../../../core/utils/deferred';
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
@@ -125,6 +127,26 @@ class FileProvider {
         return options.dateModifiedExpr || 'dateModified';
     }
 
+    _executeActionAsDeferred(action, keepResult) {
+        const deferred = new Deferred();
+
+        try {
+            const result = action();
+
+            if(isPromise(result)) {
+                result
+                    .done(userResult => deferred.resolve(keepResult && userResult || undefined))
+                    .fail(error => deferred.reject(error));
+            } else {
+                deferred.resolve(keepResult && result || undefined);
+            }
+
+        } catch(error) {
+            return deferred.reject(error);
+        }
+
+        return deferred.promise();
+    }
 }
 
 class FileManagerItem {

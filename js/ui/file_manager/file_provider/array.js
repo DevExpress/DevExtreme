@@ -54,10 +54,14 @@ class ArrayFileProvider extends FileProvider {
     }
 
     getItems(pathInfo) {
-        return this._getItems(pathInfo);
+        return this._executeActionAsDeferred(() => this._getItems(pathInfo), true);
     }
 
     renameItem(item, name) {
+        return this._executeActionAsDeferred(() => this._renameItemCore(item, name));
+    }
+
+    _renameItemCore(item, name) {
         if(!item) {
             return;
         }
@@ -67,33 +71,43 @@ class ArrayFileProvider extends FileProvider {
     }
 
     createFolder(parentDir, name) {
-        this._validateDirectoryExists(parentDir);
-        this._createDataObject(parentDir, name, true);
+        return this._executeActionAsDeferred(() => {
+            this._validateDirectoryExists(parentDir);
+            this._createDataObject(parentDir, name, true);
+        });
     }
 
     deleteItems(items) {
-        items.forEach(item => this._deleteItem(item));
+        return items.map(item => this._executeActionAsDeferred(() => this._deleteItem(item)));
     }
 
     moveItems(items, destinationDir) {
         const array = this._getDirectoryDataItems(destinationDir.dataItem);
-        items.forEach(item => {
+
+        const deferreds = items.map(item => this._executeActionAsDeferred(() => {
             this._checkAbilityToMoveOrCopyItem(item, destinationDir);
             this._deleteItem(item);
             array.push(item.dataItem);
-        });
+        }));
+
         this._updateHasSubDirs(destinationDir);
+
+        return deferreds;
     }
 
     copyItems(items, destinationDir) {
         const array = this._getDirectoryDataItems(destinationDir.dataItem);
-        items.forEach(item => {
+
+        const deferreds = items.map(item => this._executeActionAsDeferred(() => {
             this._checkAbilityToMoveOrCopyItem(item, destinationDir);
 
             const copiedItem = this._createCopy(item.dataItem);
             array.push(copiedItem);
-        });
+        }));
+
         this._updateHasSubDirs(destinationDir);
+
+        return deferreds;
     }
 
     uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
