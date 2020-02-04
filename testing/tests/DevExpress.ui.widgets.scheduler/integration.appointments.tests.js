@@ -3776,7 +3776,7 @@ QUnit.test('Appointment with equal startDate and endDate should render with 1 mi
     assert.equal(this.scheduler.appointments.getAppointmentHeight(0), this.scheduler.appointments.getAppointmentHeight(1), 'Appointment heights are equal');
 });
 
-$.each(['month', 'timelineMonth'], (_, value) => {
+$.each(['month', 'timelineMonth'], (index, value) => {
     QUnit.test(`Appointment with equal startDate and endDate should render in whole cell on ${value} view (T858496)`, function(assert) {
         this.createInstance({
             dataSource: [{
