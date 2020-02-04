@@ -41,6 +41,7 @@ const EDIT_MODE_ROW = 'row';
 const EDIT_MODE_FORM = 'form';
 const EDIT_MODE_POPUP = 'popup';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
+const GROUP_CELL_CLASS = 'dx-group-cell';
 
 function getColumnId(that, column) {
     return that._columnsController.getColumnId(column);
@@ -384,7 +385,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _isCellValid: function($cell) {
-        return $cell && $cell.length && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS);
+        return $cell && $cell.length && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS) && !$cell.hasClass(GROUP_CELL_CLASS);
     },
 
     _addCssClassToColumn: function(cssClassName, visibleIndex) {

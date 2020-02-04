@@ -1823,6 +1823,44 @@ QUnit.test('The adaptive cell should be empty in a grouped row with a summary', 
     assert.strictEqual($(this.rowsView.getRowElement(0)).children('.dx-command-adaptive').html(), '&nbsp;', 'adaptive cell');
 });
 
+// T857506
+QUnit.test('The group cell content should not be hidden when the hidingPriority property is specified for a first column', function(assert) {
+    // arrange, act
+    $('.dx-datagrid').width(400);
+    this.items = [
+        { firstName: 'Blablablablablablablablablabla', lastName: 'Psy', sex: true },
+        { firstName: 'Super', lastName: 'Star', sex: false }
+    ];
+    this.options = {
+        columns: [
+            { dataField: 'firstName', hidingPriority: 1 },
+            { dataField: 'lastName', groupIndex: 0 },
+            { dataField: 'sex' }
+        ],
+        grouping: {
+            autoExpandAll: true
+        }
+    };
+    setupDataGrid(this);
+    this.rowsView.render($('#container'));
+    this.resizingController.updateDimensions();
+
+    // assert
+    let $rowElement = $(this.getRowElement(0));
+    let $cellElements = $rowElement.children();
+
+    assert.ok($rowElement.hasClass('dx-group-row'), 'group row');
+    assert.ok($cellElements.eq(1).hasClass('dx-group-cell'), 'group cell');
+    assert.notOk($cellElements.eq(1).hasClass('dx-datagrid-hidden-column'), 'group cell content is visible');
+
+    $rowElement = $(this.getRowElement(1));
+    $cellElements = $rowElement.children();
+
+    assert.ok($rowElement.hasClass('dx-data-row'), 'data row');
+    assert.ok($cellElements.eq(1).hasClass('dx-datagrid-hidden-column'), 'firstName column is hidden');
+});
+
+
 QUnit.module('API', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
