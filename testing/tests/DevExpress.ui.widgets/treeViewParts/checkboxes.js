@@ -786,7 +786,7 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        QUnit.test('item1_1.selected: true -> unselectAll -> expandAll', function(assert) {
+        QUnit.test('item1_1.selected: true -> unselectAll -> expandAll', function() {
             const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
@@ -991,13 +991,11 @@ QUnit.module('Delayed datasource', () => {
 });
 
 QUnit.module('Searching', () => {
-    QUnit.test('all.selected: false -> search(item2) -> select(item1) -> removeSearch', function(assert) {
-        const wrapper = new TreeViewTestWrapper({ showCheckBoxesMode: 'normal', dataStructure: 'plain', rootValue: ROOT_ID,
+    QUnit.test('all.selected: false, searchValue: 2 -> select(item1) -> removeSearch', function(assert) {
+        const wrapper = new TreeViewTestWrapper({ searchValue: '2', showCheckBoxesMode: 'normal', dataStructure: 'plain', rootValue: ROOT_ID,
             items: [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false },
                 { id: 1, text: 'item2', parentId: ROOT_ID, selected: false }] });
-
-        wrapper.instance.option('searchValue', '2');
         wrapper.checkSelection([], [], 'after search');
         wrapper.checkEventLog([], 'after search');
 
@@ -1011,13 +1009,11 @@ QUnit.module('Searching', () => {
         wrapper.checkEventLog([], 'after removeSearch');
     });
 
-    QUnit.test('all.selected: false -> search(item2) -> selectAll() -> removeSearch', function(assert) {
-        const wrapper = new TreeViewTestWrapper({ showCheckBoxesMode: 'normal', dataStructure: 'plain', rootValue: ROOT_ID,
+    QUnit.test('all.selected: false, searchValue: 2 -> selectAll() -> removeSearch', function(assert) {
+        const wrapper = new TreeViewTestWrapper({ searchValue: '2', showCheckBoxesMode: 'normal', dataStructure: 'plain', rootValue: ROOT_ID,
             items: [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false },
                 { id: 1, text: 'item2', parentId: ROOT_ID, selected: false }] });
-
-        wrapper.instance.option('searchValue', '2');
         wrapper.checkSelection([], [], 'after search');
         wrapper.checkEventLog([], 'after search');
 
@@ -1031,16 +1027,13 @@ QUnit.module('Searching', () => {
         wrapper.checkEventLog([]);
     });
 
-    QUnit.test('all.selected: true -> search(item2) -> unselect(item1) -> removeSearch', function(assert) {
-        const wrapper = new TreeViewTestWrapper({ showCheckBoxesMode: 'normal', dataStructure: 'plain', rootValue: ROOT_ID,
+    QUnit.test('all.selected: true, searchValue: 2 -> unselect(item1) -> removeSearch', function(assert) {
+        const wrapper = new TreeViewTestWrapper({ searchValue: '2', showCheckBoxesMode: 'normal', dataStructure: 'plain', rootValue: ROOT_ID,
             items: [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true },
                 { id: 1, text: 'item2', parentId: ROOT_ID, selected: true }] });
-
-        wrapper.instance.option('searchValue', '2');
         wrapper.checkSelection([1], [0], 'after search');
         wrapper.checkEventLog([], 'after search');
-        wrapper.clearEventLog();
 
         const unselectResult = wrapper.instance.unselectItem(0);
         assert.equal(unselectResult, false, 'nothing is found');
@@ -1053,16 +1046,13 @@ QUnit.module('Searching', () => {
         wrapper.checkEventLog([], 'after removeSearch');
     });
 
-    QUnit.test('all.selected: true -> search(item2) -> unselectAll -> removeSearch', function(assert) {
-        const wrapper = new TreeViewTestWrapper({ showCheckBoxesMode: 'normal', dataStructure: 'plain', rootValue: ROOT_ID,
+    QUnit.test('all.selected: true, searchValue: 2 -> unselectAll -> removeSearch', function(assert) {
+        const wrapper = new TreeViewTestWrapper({ searchValue: '2', showCheckBoxesMode: 'normal', dataStructure: 'plain', rootValue: ROOT_ID,
             items: [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true },
                 { id: 1, text: 'item2', parentId: ROOT_ID, selected: true }] });
-
-        wrapper.instance.option('searchValue', '2');
         wrapper.checkSelection([1], [0], 'after search');
         wrapper.checkEventLog([], 'after search');
-        wrapper.clearEventLog();
 
         wrapper.instance.unselectAll();
         wrapper.checkSelection([], [], 'after unselectAll');
