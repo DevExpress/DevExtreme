@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
+import FormTestWrapper from '../../helpers/formTestWrapper.js';
 import typeUtils from 'core/utils/type';
 import browser from 'core/utils/browser';
 import domUtils from 'core/utils/dom';
@@ -734,6 +735,61 @@ QUnit.test('Check align labels when layout is changed_T306106', function(assert)
 
         assert.roughEqual(labelContentWidth, labelWidth, 1, 'tab 2, item ' + i);
     }
+});
+
+QUnit.module('Label aligment', () => {
+    function testOrSkip(name, callback) {
+        if(!browser.chrome) {
+            return;
+        }
+
+        QUnit.test(name, callback);
+    }
+
+    testOrSkip('1 column -> [item1]', function() {
+        const wrapper = new FormTestWrapper(1, ['item1']);
+        wrapper.checkFormSize({ width: 1000, height: 36 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 8.5, left: 0, width: 52, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 1, left: 53, width: 946, height: 34 });
+    });
+
+    function test_1Column_2ItemsLayout(items) {
+        const wrapper = new FormTestWrapper(1, items);
+        wrapper.checkFormSize({ width: 1000, height: 82 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 8.5, left: 0, width: 52, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 1, left: 53, width: 946, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 54.5, left: 0, width: 52, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), { top: 47, left: 53, width: 946, height: 34 });
+    }
+
+    testOrSkip('1 column -> [item1, item2]', function() {
+        test_1Column_2ItemsLayout(['item1', 'item2']);
+    });
+
+    testOrSkip('1 column -> [group[{item1}], group[{item2}]]', function() {
+        test_1Column_2ItemsLayout([ { itemType: 'group', items: ['item1'] }, { itemType: 'group', items: ['item2'] }]);
+    });
+
+    function test_2Column_2ItemsLayout(items) {
+        const wrapper = new FormTestWrapper(2, items);
+        wrapper.checkFormSize({ width: 1000, height: 36 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 8.5, left: 0, width: 52, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 1, left: 53, width: 431, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 8.5, left: 515, width: 52, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), { top: 1, left: 568, width: 431, height: 34 });
+    }
+
+    testOrSkip('2 column -> [item1, item2]', function() {
+        test_2Column_2ItemsLayout(['item1', 'item2']);
+    });
+
+    testOrSkip('2 column -> [group[{item1}], group[{item2}]]', function() {
+        test_2Column_2ItemsLayout([ { itemType: 'group', items: ['item1'] }, { itemType: 'group', items: ['item2'] }]);
+    });
+
+    testOrSkip('2 column -> [group[{item1.colSpan: 2}], group[{item2.colSpan: 2}]]', function() {
+        test_1Column_2ItemsLayout([ { itemType: 'group', colSpan: 2, items: ['item1'] }, { itemType: 'group', colSpan: 2, items: ['item2'] }]);
+    });
 });
 
 QUnit.test('Data is updated correctly_T353275', function(assert) {
