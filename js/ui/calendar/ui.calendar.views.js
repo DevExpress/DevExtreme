@@ -51,7 +51,7 @@ const Views = {
         _renderBody: function() {
             this.callBase();
 
-            this._$table.find('.' + CALENDAR_OTHER_VIEW_CLASS).addClass(CALENDAR_OTHER_MONTH_CLASS);
+            this._$table.find(`.${CALENDAR_OTHER_VIEW_CLASS}`).addClass(CALENDAR_OTHER_MONTH_CLASS);
         },
 
         _renderFocusTarget: noop,
@@ -67,7 +67,7 @@ const Views = {
             const $headerRow = $('<tr>');
             $header.append($headerRow);
 
-            const appendCell = this.option('rtl')
+            const appendCell = this.option('rtlEnabled')
                 ? function(row, cell) {
                     row.prepend(cell);
                 }

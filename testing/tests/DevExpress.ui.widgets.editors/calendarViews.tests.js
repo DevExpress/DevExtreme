@@ -128,7 +128,7 @@ QUnit.module('MonthView', {
     });
 
     QUnit.test('getNavigatorCaption must return a proper caption in RTL mode', function(assert) {
-        this.view.option('rtl', true);
+        this.view.option('rtlEnabled', true);
         assert.equal(this.view.getNavigatorCaption(), 'October 2013', 'caption is correct');
     });
 

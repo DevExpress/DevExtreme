@@ -86,49 +86,39 @@ const BaseView = Widget.inherit({
 
     _renderBody: function() {
         this.$body = $('<tbody>').appendTo(this._$table);
-
-        const cellTemplate = this.option('cellTemplate');
-
-        const appendChild = this.option('rtl')
-            ? function(row, cell) {
-                row.insertBefore(cell, row.firstChild);
-            } : function(row, cell) {
-                row.appendChild(cell);
-            };
-
-        let cellDate = this._getFirstCellData();
-        let row;
-
-        const renderCell = (cellIndex) => {
-            // T425127
-            if(prevCellDate) {
-                fixTimezoneGap(prevCellDate, cellDate);
-            }
-
-            prevCellDate = cellDate;
-
-            const { cell, $cell } = this._createCell(cellDate);
-
-            appendChild(row, cell);
-
-            if(cellTemplate) {
-                cellTemplate.render(this._prepareCellTemplateData(cellDate, cellIndex, $cell));
-            } else {
-                cell.innerHTML = this._getCellText(cellDate);
-            }
-
-            cellDate = this._getNextCellData(cellDate);
+        const colCount = this.option('colCount');
+        const rowData = {
+            cellDate: this._getFirstCellData(),
+            prevCellDate: null
         };
 
-        const colCount = this.option('colCount');
-        let prevCellDate;
-
         for(let indexRow = 0, len = this.option('rowCount'); indexRow < len; indexRow++) {
-            row = domAdapter.createElement('tr');
-            this.setAria('role', 'row', $(row));
-            this.$body.get(0).appendChild(row);
-            this._iterateCells(colCount, renderCell);
+            rowData.row = this._createRow();
+            this._iterateCells(colCount, this._renderCell.bind(this, rowData));
         }
+    },
+
+    _createRow: function() {
+        const row = domAdapter.createElement('tr');
+
+        this.setAria('role', 'row', $(row));
+        this.$body.get(0).appendChild(row);
+
+        return row;
+    },
+
+    _appendChild: function(row, cell) {
+        if(!this._appendMethod) {
+            this._prepareAppendMethod();
+        }
+
+        this._appendMethod(row, cell);
+    },
+
+    _prepareAppendMethod: function(rtlEnabled) {
+        this._appendMethod = rtlEnabled ?? this.option('rtlEnabled') ?
+            (row, cell) => row.insertBefore(cell, row.firstChild) :
+            (row, cell) => row.appendChild(cell);
     },
 
     _createCell: function(cellDate) {
@@ -146,6 +136,30 @@ const BaseView = Widget.inherit({
         }, $cell);
 
         return { cell, $cell };
+    },
+
+    _renderCell: function(params, cellIndex) {
+        const { cellDate, prevCellDate, row } = params;
+
+        // T425127
+        if(prevCellDate) {
+            fixTimezoneGap(prevCellDate, cellDate);
+        }
+
+        params.prevCellDate = cellDate;
+
+        const { cell, $cell } = this._createCell(cellDate);
+        const cellTemplate = this.option('cellTemplate');
+
+        this._appendChild(row, cell);
+
+        if(cellTemplate) {
+            cellTemplate.render(this._prepareCellTemplateData(cellDate, cellIndex, $cell));
+        } else {
+            cell.innerHTML = this._getCellText(cellDate);
+        }
+
+        params.cellDate = this._getNextCellData(cellDate);
     },
 
     _getClassNameByDate: function(cellDate) {
@@ -178,11 +192,11 @@ const BaseView = Widget.inherit({
         };
     },
 
-    _iterateCells: function(colCount, delegate) {
+    _iterateCells: function(colCount, callback) {
         let i = 0;
 
         while(i < colCount) {
-            delegate(i);
+            callback(i);
             ++i;
         }
     },
@@ -313,6 +327,10 @@ const BaseView = Widget.inherit({
             case 'disabledDates':
             case 'cellTemplate':
                 this._invalidate();
+                break;
+            case 'rtlEnabled':
+                this.callBase(args);
+                this._prepareAppendMethod(value);
                 break;
             default:
                 this.callBase(args);

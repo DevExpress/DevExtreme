@@ -544,7 +544,7 @@ QUnit.module('Views integration', {
         this.reinit({
             rtlEnabled: true
         });
-        assert.ok(getCurrentViewInstance(this.calendar).option('rtl'));
+        assert.ok(getCurrentViewInstance(this.calendar).option('rtlEnabled'));
     });
 
     QUnit.test('calendar must pass disabled to the created views', function(assert) {
