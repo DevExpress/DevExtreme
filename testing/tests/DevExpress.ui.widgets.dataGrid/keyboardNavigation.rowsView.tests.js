@@ -46,13 +46,15 @@ QUnit.module('Rows view', {
             }
             columnsController = new MockColumnsController(columns);
 
-            this.options = {
+            this.options = this.options || { };
+            Object.assign(this.options, this.options, {
                 disabled: false,
                 keyboardNavigation: {
                     enabled: true
                 },
                 tabIndex: 0
-            };
+            });
+
             this.selectionOptions = {};
 
             const mockDataGrid = {
@@ -247,9 +249,51 @@ QUnit.module('Rows view', {
         // act
         rowsView.render(testElement);
 
-        const $cell = $(rowsView.element().find('td').first());
+        const $cell = $(rowsView.getCellElement(0, 0));
         $cell.trigger(CLICK_EVENT);
         assert.equal(rowsView.element().attr('tabIndex'), undefined, 'tabIndex of rowsView');
         assert.equal($cell.attr('tabIndex'), 5, 'tabIndex of clicked cell');
+    });
+
+    QUnit.test('RowsView should clear focus attributes for the old focused items', function(assert) {
+        // arrange
+        const rowsView = this.createRowsView(this.items);
+        const testElement = $('#container');
+
+        this.options.tabIndex = 5;
+
+        rowsView.render(testElement);
+
+        const $rowsView = rowsView.element();
+
+        // act
+        let $cell = $(rowsView.getCellElement(0, 0));
+        $cell.trigger(pointerEvents.down);
+        this.clock.tick();
+
+        // act
+        $cell = $(rowsView.getCellElement(1, 0));
+        $cell.trigger(pointerEvents.down);
+        this.clock.tick();
+
+        // assert
+        assert.ok($cell.hasClass('dx-cell-focus-disabled'), 'Pointer down cell has disabled focus overlay class');
+        assert.notOk($cell.attr('tabIndex'), 'Pointer down cell has no [tabIndex]');
+        assert.equal($rowsView.find('[tabindex]').length, 0, 'Rows view cleared [tabindex] from elements');
+
+        let $elementsWithoutFocusOverlay = $rowsView.find('.dx-cell-focus-disabled');
+        assert.equal($elementsWithoutFocusOverlay.length, 1, 'Disabled focus overlay elements count');
+        assert.equal($elementsWithoutFocusOverlay[0], $cell[0], 'Pointer down cell has disabled focus overlay class');
+
+        // act
+        $cell.trigger(CLICK_EVENT);
+        this.clock.tick();
+
+        // assert
+        assert.equal($cell.attr('tabIndex'), 5, 'Clicked cell has tabIndex');
+
+        $elementsWithoutFocusOverlay = $rowsView.find('.dx-cell-focus-disabled');
+        assert.equal($elementsWithoutFocusOverlay.length, 1, 'Disabled focus overlay elements count');
+        assert.equal($elementsWithoutFocusOverlay[0], $cell[0], 'Pointer down cell has disabled focus overlay class');
     });
 });
