@@ -526,9 +526,9 @@ QUnit.module('misc', () => {
     test('themeNameFromDevice for iOS', function(assert) {
         const themeNameFromDevice = themes.themeNameFromDevice;
 
-        assert.equal('ios7', themeNameFromDevice({ platform: 'ios', version: [1] }));
-        assert.equal('ios7', themeNameFromDevice({ platform: 'ios', version: [99] }));
-        assert.equal('ios7', themeNameFromDevice({ platform: 'ios' }));
+        assert.equal(themeNameFromDevice({ platform: 'ios', version: [1] }), 'ios7');
+        assert.equal(themeNameFromDevice({ platform: 'ios', version: [99] }), 'ios7');
+        assert.equal(themeNameFromDevice({ platform: 'ios' }), 'ios7');
     });
 
     test('themeNameFromDevice for removed mobile themes (breaking change BC4928)', function(assert) {
