@@ -172,4 +172,75 @@ module.exports = {
         { import: '../menuBase/sizes', type: 'index' },
         { import: '../../base/icons', type: 'index' },
     ],
+    'toolbar': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../list/sizes', type: 'index' },
+        { import: '../button', type: 'index' },
+        { regex: /@mixin dx-toolbar-item-padding\(\$MATERIAL_TOOLBAR_ITEM_SPACING\),/, replacement: '@include dx-toolbar-item-padding($MATERIAL_TOOLBAR_ITEM_SPACING);' },
+        { regex: /.dx-toolbar-item-padding\(\$MATERIAL_MOBILE_TOOLBAR_ITEM_SPACING\),/, replacement: '@include dx-toolbar-item-padding($MATERIAL_MOBILE_TOOLBAR_ITEM_SPACING);' },
+        { regex: /(-bg|-color|: 0|MATERIAL_LIST_ITEM_HEIGHT|MATERIAL_LIST_ITEM_HORIZONTAL_PADDING|4px|2 0|50%),/g, replacement: '$1;' },
+        { regex: /@mixin dx-icon-sizing\(\$MATERIAL_BUTTON_ICON_SIZE\),/, replacement: '@include dx-icon-sizing($MATERIAL_BUTTON_ICON_SIZE);' },
+        { regex: /\.dx-button-onlyicon-sizing\(\),/g, replacement: '@include dx-button-onlyicon-sizing();' },
+        { regex: /\.dx-icon-margin\(6px\),/, replacement: '@include dx-icon-margin(6px);' },
+    ],
+    'popup': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../overlay/colors', type: 'index' },
+        { import: '../toolbar', type: 'index' },
+        { import: '../toolbar/sizes', type: 'index' },
+        { import: '../button', type: 'index' },
+    ],
+    'dropDownButton': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../button', type: 'index' },
+        { import: '../button/sizes', type: 'index' },
+        { import: '../common', type: 'index' },
+    ],
+    'popover': [
+        { import: '../overlay/colors', type: 'colors' },
+        { import: '../overlay/colors', type: 'index' },
+        { import: '../textEditor/colors', type: 'index' },
+    ],
+    'progressBar': [
+        { import: '../../base/mixins', type: 'index' },
+    ],
+    'tooltip': [
+        { import: '../overlay/colors', type: 'colors' },
+    ],
+    'gallery': [
+        { import: '../../base/icons', type: 'index' },
+    ],
+    'lookup': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../textEditor/sizes', type: 'index' },
+        { import: '../textEditor/colors', type: 'index' },
+        { import: '../dropDownEditor', type: 'index' },
+        { import: '../common', type: 'index' },
+        { regex: /@mixin dx-icon\(spinnext\),/, replacement: '@include dx-icon(spinnext);' },
+        { regex: /\.dx-icon-font-centered-sizing\(\$GENERIC_BASE_ICON_SIZE\),/, replacement: '@include dx-icon-font-centered-sizing($GENERIC_BASE_ICON_SIZE);' },
+        { regex: /(GENERIC_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE|lookup-icon-color|none|_CONTENT_PADDING|0|CONTENT_TOP|placeholder-color),/g, replacement: '$1;' },
+    ],
+    'loadPanel': [
+        { import: '../overlay/colors', type: 'colors' },
+    ],
+    'tagBox': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../textEditor', type: 'index' },
+        { import: '../common', type: 'index' },
+        { regex: /@mixin dx-icon\(clear\),/, replacement: '@include dx-icon(clear);' },
+        { regex: /(px|block|absolute|%|-remove-color|-active-color|-bg|none|0 0),/g, replacement: '$1;' },
+    ],
+    'accordion': [
+        { import: '../../base/icons', type: 'index' },
+    ],
+    'slideOut': [
+        { import: '../../base/icons', type: 'index' },
+    ],
+    'colorView': [
+        { import: '../overlay/colors', type: 'colors' },
+        { import: '../../base/colorView', type: 'index' },
+    ],
+    'colorBox': [
+        { import: '../colorView/colors', type: 'index' },
+    ],
 };
