@@ -1273,4 +1273,40 @@ QUnit.module('Real DataController and ColumnsController', {
         assert.strictEqual($testElement.find('.dx-datagrid-rowsview td').eq(2).text(), 'Bob John', 'text of the third column of the first row');
         assert.ok(that.editingController.isEditCell(1, 0), 'the first cell of the second row is editable');
     });
+
+    ['click', 'dblClick'].forEach(startEditAction => {
+        ['cell', 'batch'].forEach(editMode => {
+            QUnit.test(`Focus overlay should not be hidden after click the save editor cell if editing.startEditAction is ${startEditAction}`, function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
+                this.data = [{ name: 'Alex', lastName: 'John' }],
+                this.options = {
+                    editing: {
+                        allowUpdating: true,
+                        mode: editMode,
+                        startEditAction: startEditAction
+                    }
+                };
+
+                this.setupModule();
+                this.gridView.render($testElement);
+
+                const editingController = this.getController('editing');
+                const startEditClickEventName = startEditAction === 'click' ? 'dxclick' : 'dxdblclick';
+
+                // act
+                $(this.getCellElement(0, 1)).trigger(startEditClickEventName);
+                this.clock.tick();
+                // assert
+                assert.ok(editingController.isEditCell(0, 1), 'Cell[0, 1] is in edit mode');
+
+                // act
+                $(this.getCellElement(0, 1)).trigger(CLICK_EVENT);
+                // assert
+                assert.ok(editingController.isEditCell(0, 1), 'Cell[0, 1] is in edit mode');
+                assert.notOk($(this.getCellElement(0, 1)).hasClass('dx-cell-focus-disabled'), 'Cell[0, 1] focus overlay is not disabled');
+            });
+        });
+    });
 });

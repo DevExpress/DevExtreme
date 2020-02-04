@@ -810,7 +810,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
             } else {
                 const $target = event && $(event.target);
                 const isInteractiveTarget = $target && $target.not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR);
-                const isDisabled = !args.isHighlighted || isInteractiveTarget;
+                const isEditor = $cell.hasClass(EDITOR_CELL_CLASS);
+                const isDisabled = !isEditor && (!args.isHighlighted || isInteractiveTarget);
                 this._focus($cell, isDisabled, isInteractiveTarget);
             }
         } else {
@@ -953,7 +954,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const that = this;
         setTimeout(function() {
             let $cell = that._getFocusedCell();
-            const isEditing = that._editingController.isEditing();
+            const isEditing = that.getController('editing').isEditing();
 
             if($cell && !(that._isMasterDetailCell($cell) && !that._isRowEditMode())) {
                 if(that._hasSkipRow($cell.parent())) {
@@ -1946,8 +1947,14 @@ module.exports = {
                     this._keyboardNavigationController = this.getController('keyboardNavigation');
                 },
                 closeEditCell: function() {
-                    this.getController('keyboardNavigation')._fastEditingStarted = false;
-                    return this.callBase.apply(this, arguments);
+                    const keyboardNavigation = this.getController('keyboardNavigation');
+                    keyboardNavigation._fastEditingStarted = false;
+
+                    const result = this.callBase.apply(this, arguments);
+
+                    keyboardNavigation._updateFocus();
+
+                    return result;
                 },
                 _delayedInputFocus: function() {
                     this._keyboardNavigationController._isNeedScroll = true;
