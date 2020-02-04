@@ -1,27 +1,34 @@
 import eventsEngine from '../../../js/events/core/events_engine';
 import { keyboard } from '../../../js/events/short';
 
-const eventHandlers = {};
-const keyboardHandlers = {};
+let eventHandlers = {};
+let keyboardHandlers = {};
 
 export const KEY = {
     enter: 'enter',
     space: 'space'
 };
 
+export const clear = () => {
+    eventHandlers = {};
+    keyboardHandlers = {};
+};
+
 export const EVENT = {
     active: 'dxactive',
     blur: 'focusout',
-    click: 'dxclick',
+    click: 'click',
+    dxClick: 'dxclick',
     focus: 'focusin',
     hoverEnd: 'dxhoverend',
     hoverStart: 'dxhoverstart',
     inactive: 'dxinactive'
 };
 
-const defaultEvent = {
+export const defaultEvent = {
     stopImmediatePropagation: () => void 0,
-    preventDefault: () => void 0
+    preventDefault: () => void 0,
+    stopPropagation: () => void 0,
 };
 
 export const fakeClickEvent = Object.assign(defaultEvent, {
