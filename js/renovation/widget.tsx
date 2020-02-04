@@ -285,7 +285,7 @@ export default class Widget {
                 },
                 {
                     namespace,
-                    isFocusable: (el) => focusable(el),
+                    isFocusable: (el) => focusable(null, el),
                 }
             );
         }
