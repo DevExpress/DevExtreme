@@ -1,9 +1,9 @@
 import DiagramToolbar from './ui.diagram.toolbar';
-import DiagramCommands from './diagram.commands';
+import DiagramCommandsManager from './diagram.commands_manager';
 
 class DiagramViewSettingsToolbar extends DiagramToolbar {
     _getCommands() {
-        return DiagramCommands.getViewSettingsToolbarCommands(this.option('commands'));
+        return DiagramCommandsManager.getViewSettingsToolbarCommands(this.option('commands'));
     }
 }
 

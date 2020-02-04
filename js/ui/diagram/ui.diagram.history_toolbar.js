@@ -1,9 +1,9 @@
 import DiagramToolbar from './ui.diagram.toolbar';
-import DiagramCommands from './diagram.commands';
+import DiagramCommandsManager from './diagram.commands_manager';
 
 class DiagramHistoryToolbar extends DiagramToolbar {
     _getCommands() {
-        return DiagramCommands.getHistoryToolbarCommands(this.option('commands'));
+        return DiagramCommandsManager.getHistoryToolbarCommands(this.option('commands'));
     }
 }
 

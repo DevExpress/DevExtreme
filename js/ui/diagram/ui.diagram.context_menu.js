@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 
 import Widget from '../widget/ui.widget';
 import ContextMenu from '../context_menu';
-import DiagramCommands from './diagram.commands';
+import DiagramCommandsManager from './diagram.commands_manager';
 import DiagramBar from './diagram.bar';
 import { getDiagram } from './diagram.importer';
 
@@ -25,7 +25,7 @@ class DiagramContextMenu extends Widget {
     _initMarkup() {
         super._initMarkup();
 
-        this._commands = DiagramCommands.getContextMenuCommands(this.option('commands'));
+        this._commands = DiagramCommandsManager.getContextMenuCommands(this.option('commands'));
         this._commandToIndexMap = {};
         this._commands.forEach((item, index) => this._commandToIndexMap[item.command] = index);
 
@@ -69,7 +69,7 @@ class DiagramContextMenu extends Widget {
                 items.push({
                     command: command.command,
                     text: command.text,
-                    icon: command.icon,
+                    icon: command.menuIcon || command.icon,
                     getParameter: command.getParameter,
                     beginGroup: beginGroup
                 });
@@ -162,7 +162,7 @@ class DiagramContextMenu extends Widget {
 
 class ContextMenuBar extends DiagramBar {
     getCommandKeys() {
-        return DiagramCommands.getContextMenuCommands().map(c => c.command);
+        return DiagramCommandsManager.getContextMenuCommands().map(c => c.command);
     }
     setItemEnabled(key, enabled) {
         this._owner._setItemEnabled(key, enabled);
