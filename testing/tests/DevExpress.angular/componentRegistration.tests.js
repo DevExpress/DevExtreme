@@ -15,9 +15,9 @@ import 'integration/angular';
 import 'ui/list';
 import 'ui/button';
 
-const FIXTURE_ELEMENT = () => $('#qunit-fixture');
+import '../../helpers/ignoreAngularTimers.js';
 
-const ignoreAngularBrowserDeferTimer = args => args.timerType === 'timeouts' && (args.callback.toString().indexOf('delete pendingDeferIds[timeoutId];') > -1 || args.callback.toString().indexOf('delete F[c];e(a)}') > -1);
+const FIXTURE_ELEMENT = () => $('#qunit-fixture');
 
 QUnit.module('simple component tests', {
     beforeEach() {
@@ -43,11 +43,6 @@ QUnit.module('simple component tests', {
             .appendTo(this.$container);
 
         registerComponent('dxTest', TestComponent);
-
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 
@@ -1391,11 +1386,6 @@ QUnit.module('nested Widget with templates enabled', {
 
         registerComponent('dxTestContainer', TestContainer);
         registerComponent('dxTestWidget', TestWidget);
-
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 
@@ -1604,11 +1594,6 @@ QUnit.test('Multi-slot transclusion should work with dx temapltes', function(ass
 QUnit.module('Widget & CollectionWidget with templates enabled', {
     beforeEach() {
         this.testApp = angular.module('testApp', ['dx']);
-
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 
@@ -1933,14 +1918,7 @@ QUnit.test('Widget options does not override scope properties', function(assert)
     assert.equal($.trim($markup.text()), 'Controller model');
 });
 
-QUnit.module('ui.collectionWidget', {
-    beforeEach() {
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
-    }
-});
+QUnit.module('ui.collectionWidget');
 
 const initMarkup = ($markup, controller) => {
     const TestCollectionContainer = CollectionWidget.inherit({
@@ -2313,10 +2291,6 @@ QUnit.test('$id in item model not caused exception', function(assert) {
 QUnit.module('misc and regressions', {
     beforeEach() {
         this.testApp = angular.module('testApp', ['dx']);
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 
@@ -2688,11 +2662,6 @@ QUnit.module('component action context', {
             .appendTo(this.$container);
 
         registerComponent('dxActionTest', TestComponent);
-
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 
@@ -2849,11 +2818,6 @@ QUnit.module('dxComponent as a template', {
         this.$container = $('<div/>').appendTo(FIXTURE_ELEMENT());
 
         registerComponent('dxTemplateComponent', TemplateComponent);
-
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-    },
-    afterEach() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
 

@@ -2,18 +2,10 @@
 /* global jQuery */
 
 !function() {
-    var module = QUnit.module;
-
-    QUnit.module = function(_, testEnvironment) {
-        if(testEnvironment && (testEnvironment.setup || testEnvironment.teardown)) {
-            throw Error('Rename module hooks: The module hooks \'setup\' and \'teardown\' have been renamed to \'beforeEach\' and \'afterEach\'\nhttp://qunitjs.com/upgrade-guide-2.x/#rename-module-hooks');
-        }
-        return module.apply(this, arguments);
-    };
 
     // compares two float/double numbers with some acceptable epsilon
     QUnit.assert.roughEqual = function(actual, expected, epsilon, message) {
-        var delta = Math.abs(expected - actual);
+        const delta = Math.abs(expected - actual);
         this.pushResult({
             result: delta < epsilon,
             actual: actual,
@@ -22,31 +14,17 @@
         });
     };
 
-    QUnit.assert.assertPerformance = function(action, limit) {
-        var start = new Date();
-        action();
-        var ms = new Date() - start;
-        this.pushResult({
-            result: ms < limit,
-            actual: ms + ' ms',
-            expected: limit + ' ms or less',
-            message: 'Performance test (Limit ' + limit + ' ms, took ' + ms + ' ms)'
-        });
-    };
-
-    var confirmWindowActive = function() {
-        var $input;
+    const confirmWindowActive = function() {
+        let input;
         try {
-            $input = jQuery('<input>')
-                .appendTo('body')
-                .click()
-                .focus();
-
-            return $input.is(':focus');
+            input = document.createElement('input');
+            document.body.appendChild(input);
+            input.click();
+            input.focus();
+            return document.activeElement === input;
         } finally {
-            $input
-                .blur()
-                .remove();
+            input.blur();
+            document.body.removeChild(input);
         }
     };
 
@@ -54,7 +32,7 @@
         if(confirmWindowActive()) {
             QUnit.test.apply(this, arguments);
         } else {
-            var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             if(iOS) {
                 // do not test
                 // do not skip
@@ -72,70 +50,63 @@
 
     };
 
-    var waitFor = window.waitFor = function(predicate, timeout, interval) {
+    window.waitFor = function(predicate, timeout, interval) {
         timeout = timeout || 30000;
         interval = interval || 15;
 
-        var d = jQuery.Deferred(),
-            startTime = jQuery.now();
+        let doneCallback;
+        const startTime = Date.now();
 
-        var checkInterval = setInterval(function() {
+        const checkIntervalId = setInterval(function() {
             if(predicate()) {
-                d.resolve();
+                clearInterval(checkIntervalId);
+                doneCallback();
             }
 
-            if(jQuery.now() - startTime > timeout) {
+            if(Date.now() - startTime > timeout) {
+                clearInterval(checkIntervalId);
                 if(window.console) {
-                    if(jQuery.isFunction(window.console.error)) {
+                    if(typeof window.console.error === 'function') {
                         console.error('waitFor: Timeout is expired');
-                    } else if(jQuery.isFunction(window.console.log)) {
+                    } else if(typeof window.console.log === 'function') {
                         console.log('waitFor: Timeout is expired');
                     }
                 }
-                d.reject();
             }
         }, interval);
 
-        d.always(function() {
-            clearInterval(checkInterval);
-        });
-
-        return d.promise();
+        return {
+            done: function(callback) {
+                doneCallback = callback;
+            }
+        };
     };
 
-    window.waitTimeout = function(timeout, callback) {
-        var startTime = jQuery.now();
-        return waitFor(function() {
-            return (jQuery.now() - startTime) >= timeout;
-        }).done(callback);
-    };
-
-    if(window.console) {
-        if(!console.time) {
-            console._timers = {};
-            console.time = function(st) {
-                console.info('start ' + st);
-                console._timers[st] = new Date();
-            };
-            console.timeEnd = function(st) {
-                var time = new Date() - console._timers[st];
-                console.info('end ' + st + ': ' + time + ' ms');
-            };
-        }
-    }
-
-    window.createTestContainer = function(parent, css) {
+    window.createTestContainer = function(parentSelector, css) {
         function dashCase(str) {
             return str.replace(/[A-Z](?:(?=[^A-Z])|[A-Z]*(?=[A-Z][^A-Z]|$))/g, function(s, i) {
                 return (i > 0 ? '-' : '') + s.toLowerCase();
             });
         }
 
-        var uniqueName = dashCase(QUnit.config.current.testName),
-            $container = jQuery('<div />').attr('id', uniqueName);
-        css && $container.css(css);
-        parent && $container.appendTo(parent);
-        return $container;
+        const uniqueName = dashCase(QUnit.config.current.testName);
+        const container = document.createElement('div');
+        container.setAttribute('id', uniqueName);
+
+        if(css) {
+            Object.keys(css).forEach(function(prop) {
+                container.style[prop] = css[prop];
+            });
+        }
+
+        const parent = document.querySelector(parentSelector);
+        if(parent) {
+            parent.appendChild(container);
+        } else {
+            throw 'Parent element with "' + parentSelector + '" is not found';
+        }
+
+        return container;
     };
 
     window.currentTest = function() {
@@ -149,19 +120,45 @@
     };
 
     window.includeThemesLinks = function() {
-        jQuery('head')
-            .append('<link rel="dx-theme" data-theme="generic.light" href="' + SystemJS.normalizeSync('generic_light.css') + '" />')
-            .append('<link rel="dx-theme" data-theme="ios7.default" href="' + SystemJS.normalizeSync('ios7_default.css') + '" />')
-            .append('<link rel="dx-theme" data-theme="material.blue.light" href="' + SystemJS.normalizeSync('material_blue_light.css') + '" />');
+        const head = document.head;
+
+        [
+            'generic.light',
+            'ios7.default',
+            'material.blue.light'
+        ].forEach(function(theme) {
+            const link = document.createElement('link');
+            link.setAttribute('rel', 'dx-theme');
+            link.setAttribute('data-theme', theme);
+            link.setAttribute('href', SystemJS.normalizeSync(theme.replace(/./g, '_') + '.css'));
+            head.appendChild(link);
+        });
     };
+
+    const beforeTestDoneCallbacks = [];
+
+    QUnit.beforeTestDone = function(callback) {
+        beforeTestDoneCallbacks.push(callback);
+    };
+
+    QUnit.testStart(function() {
+        const after = QUnit.config.current.after;
+
+        QUnit.config.current.after = function() {
+            beforeTestDoneCallbacks.forEach(function(callback) {
+                callback();
+            });
+            return after.apply(this, arguments);
+        };
+    });
 
 }();
 
 
 (function clearQUnitFixtureByJQuery() {
-    var isMsEdge = 'CollectGarbage' in window && !('ActiveXObject' in window);
+    const isMsEdge = 'CollectGarbage' in window && !('ActiveXObject' in window);
 
-    QUnit.testDone(function(options) {
+    QUnit.beforeTestDone(function(options) {
         if(!jQuery) {
             return;
         }
@@ -182,85 +179,66 @@
         tooltip: 'Enabling this will test if any test introduces timers (setTimeout, setInterval, ....) and does not cleared them on test finalization. Stored as query-strings.'
     });
 
-    QUnit.timerIgnoringCheckers = (function() {
-        var noop = function() { };
+    const createMethodWrapper = function(method, callbacks) {
+        const beforeCall = callbacks.beforeCall;
+        const afterCall = callbacks.afterCall;
 
-        return {
-            register: noop,
-            unregister: noop,
-            applyUnregister: noop,
-            clear: noop,
-            needSkip: noop
-        };
-    })();
-
-    var createMethodWrapper = function(method, callbacks) {
-        var originalMethod = method,
-            beforeCall = callbacks['beforeCall'],
-            afterCall = callbacks['afterCall'],
-            info = {
-                originalMethod: originalMethod
+        return function() {
+            const info = {
+                method: method,
+                context: this,
+                args: Array.prototype.slice.call(arguments)
             };
-
-        var wrapper = function() {
-            info['context'] = this;
-            info['args'] = Array.prototype.slice.call(arguments);
 
             if(typeof beforeCall === 'function') {
                 beforeCall(info);
             }
 
-            info['result'] = originalMethod.apply(info.context, info.args);
+            info.returnValue = method.apply(info.context, info.args);
 
             if(typeof afterCall === 'function') {
                 afterCall(info);
             }
 
-            return info['result'];
+            return info.returnValue;
         };
-
-        info['wrapper'] = wrapper;
-        wrapper['info'] = info;
-
-        return wrapper;
     };
 
-    var getStack = function() {
-        var stack = '';
+    const getStack = function() {
+        let stack = '';
         try { throw Error(''); } catch(ex) { stack = ex.stack; }
         return stack;
     };
 
-    var saveTimerInfo = function(logObject, id, info) {
+    const saveTimerInfo = function(logObject, info) {
         info.stack = getStack();
         info.callback = info.callback.toString();
-        logObject[id] = info;
+        logObject[info.timerId] = info;
     };
 
-
-    var spyWindowMethods = function(windowObj) {
-        var log,
-            logEnabled,
-            timeouts,
-            intervals,
-            animationFrames;
+    const spyWindowMethods = function(windowObj) {
+        let log;
+        let logEnabled;
+        let timeouts;
+        let intervals;
+        let animationFrames;
 
         windowObj = windowObj || window;
 
-        var methodHooks = {
+        const methodHooks = {
             'setTimeout': {
                 'beforeCall': function(info) {
                     if(!logEnabled) {
                         return;
                     }
 
-                    info.originalCallback = info.args[0];
-                    var callbackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
+                    info.callback = info.args[0];
+                    info.args[0] = createMethodWrapper(info.callback, {
                         afterCall: function() {
                             if(!logEnabled) {
                                 return;
                             }
-                            delete timeouts[callbackWrapper.timerID];
+                            delete timeouts[info.returnValue];
                         }
                     });
                 },
@@ -270,9 +248,10 @@
                         return;
                     }
 
-                    info.args[0]['timerID'] = info.result;
-                    saveTimerInfo(timeouts, info.result, {
-                        callback: info.originalCallback,
+                    saveTimerInfo(timeouts, {
+                        timerType: 'timeouts',
+                        timerId: info.returnValue,
+                        callback: info.callback,
                         timeout: info.args[1]
                     });
                 }
@@ -292,7 +271,10 @@
                     if(!logEnabled) {
                         return;
                     }
-                    saveTimerInfo(intervals, info.result, {
+                    const timerId = info.returnValue;
+                    saveTimerInfo(intervals, {
+                        timerType: 'intervals',
+                        timerId: timerId,
                         callback: info.args[0],
                         timeout: info.args[1]
                     });
@@ -314,13 +296,13 @@
                         return;
                     }
 
-                    info.originalCallback = info.args[0];
-                    var callBackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
+                    info.callback = info.args[0];
+                    info.args[0] = createMethodWrapper(info.callback, {
                         afterCall: function() {
                             if(!logEnabled) {
                                 return;
                             }
-                            delete animationFrames[callBackWrapper.timerID];
+                            delete animationFrames[info.returnValue];
                         }
                     });
                 },
@@ -329,9 +311,10 @@
                         return;
                     }
 
-                    info.args[0]['timerID'] = info.result;
-                    saveTimerInfo(animationFrames, info.result, {
-                        callback: info.originalCallback
+                    saveTimerInfo(animationFrames, {
+                        timerType: 'animationFrames',
+                        timerId: info.returnValue,
+                        callback: info.callback
                     });
                 }
             },
@@ -347,14 +330,14 @@
             }
         };
 
-        for(var name in methodHooks) {
+        Object.keys(methodHooks).forEach(function(name) {
             windowObj[name] = createMethodWrapper(windowObj[name], methodHooks[name]);
-        }
+        });
 
-        var initLog = function() {
+        const initLog = function() {
             log = {};
-            timeouts = log['timeouts'] = {},
-            intervals = log['intervals'] = {},
+            timeouts = log['timeouts'] = {};
+            intervals = log['intervals'] = {};
             animationFrames = log['animationFrames'] = {};
         };
 
@@ -380,177 +363,121 @@
         };
     };
 
+    const ignoreRules = (function() {
+        let rules = [];
+
+        return {
+            register: function() {
+                Array.prototype.push.apply(rules, arguments);
+            },
+            unregister: function() {
+                Array.prototype.forEach.call(arguments, function(rule) {
+                    const index = rules.indexOf(rule);
+                    rules.splice(index, 1);
+                });
+            },
+            clear: function() {
+                rules = [];
+            },
+            shouldIgnore: function(timerInfo) {
+                let skip = false;
+
+                rules.forEach(function(rule) {
+                    if(rule(timerInfo)) {
+                        skip = true;
+                        return false;
+                    }
+                });
+
+                return skip;
+            }
+        };
+    })();
+
     QUnit.timersDetector = {
-        spyWindowMethods: spyWindowMethods
+        spyWindowMethods: spyWindowMethods,
+        ignoreRules: ignoreRules
     };
 
     if(!QUnit.urlParams['notimers']) {
         return;
     }
 
-    var suppressLogOnTest = function() {
-        return /Not cleared timers detected/.test(QUnit.config.current.testName);
+    const log = spyWindowMethods();
+
+    ignoreRules.register(function isThirdPartyLibraryTimer(timerInfo) {
+        const callback = String(timerInfo.callback).replace(/\s/g, '');
+        const timerType = timerInfo.timerType;
+
+        if(timerType === 'timeouts') {
+            if(
+                callback.indexOf('.Deferred.exceptionHook') > -1 || // NOTE: jQuery.Deferred are now asynchronous
+                callback.indexOf('e._drain()') > -1 // NOTE: SystemJS Promise polyfill
+            ) {
+                return true;
+            }
+
+            if(
+                window.navigator.userAgent.indexOf('Edge/') > -1 && // NOTE: Native Promise in Edge
+                callback.indexOf('function(){[nativecode]}') > -1
+            ) {
+                return true;
+            }
+        }
+    });
+
+    const logTestFailure = function(timerInfo) {
+        const timeoutString = timerInfo.timeout ? '\nTimeout: ' + timerInfo.timeout : '';
+
+        const message = [
+            'Not cleared timer detected.\n',
+            '\n',
+            'Timer type: ', timerInfo.timerType, '\n',
+            'Id: ', timerInfo.timerId, '\n',
+            'Callback:\n', timerInfo.callback, '\n',
+            timeoutString
+        ].join('');
+
+        QUnit.pushFailure(message, timerInfo.stack);
     };
 
-    var log = spyWindowMethods();
-
-    QUnit.timerIgnoringCheckers = (function() {
-        var checkers = [],
-            checkersToUnregister = [];
-
-        var register = function() {
-            Array.prototype.push.apply(checkers, arguments);
-        };
-
-        var unregister = function() {
-            Array.prototype.push.apply(checkersToUnregister, arguments);
-        };
-
-        var unregisterSingle = function(checker) {
-            var index = checkers.indexOf(checker);
-
-            checkers.splice(index, 1);
-        };
-
-        var applyUnregister = function() {
-            checkersToUnregister.forEach(unregisterSingle);
-            checkersToUnregister = [];
-        };
-
-        var clear = function() {
-            checkers = [];
-            checkersToUnregister = [];
-        };
-
-        var needSkip = function(timerInfo) {
-            var skip = false;
-
-            checkers.forEach(function(checker) {
-                if(checker(timerInfo)) {
-                    skip = true;
-                    return false;
-                }
-            });
-
-            return skip;
-        };
-
-        return {
-            register: register,
-            unregister: unregister,
-            applyUnregister: applyUnregister,
-            clear: clear,
-            needSkip: needSkip
-        };
-    })();
-
     QUnit.testStart(function() {
-        if(suppressLogOnTest()) {
-            return;
-        }
         log.start();
     });
 
-    QUnit.testDone(function(args) {
-        if(suppressLogOnTest()) {
-            return;
-        }
-
-        var logGlobalFailure = function(details) {
-            var timerInfo = details.timerInfo,
-                timeoutString = timerInfo.timeout ? ', timeout: ' + timerInfo.timeout : '',
-                message = ['Timer type: ', timerInfo.timerType, ', Id: ', timerInfo.timerId, timeoutString, '\nCallback:\n', timerInfo.callback].join('');
-
-            var testCallback = function() {
-                QUnit.pushFailure(message, timerInfo.stack || '1 timer');
-            };
-
-            testCallback.validTest = true;
-
-            QUnit.module('Not cleared timers detected! ' + details.moduleName);
-            QUnit.test(details.testName, testCallback);
-        };
-
-        var isThirdPartyLibraryTimer = function(timerInfo) {
-            if(!timerInfo || !timerInfo.callback) {
-                return false;
-            }
-            var callback = String(timerInfo.callback).replace(/\s|"use strict";/g, '');
-
-            if(timerInfo.timerType === 'animationFrames' &&
-                [
-                    'function(){for(vara=0;a<d.length;a++)d[a]();d=[]}',
-                    'function(){for(vari=0;i<waitQueue.length;i++){waitQueue[i]();}waitQueue=[];}'
-                ].indexOf(callback) > -1) {
-                // NOTE: Special thanks for Angular team
-                // 1. Implementation: https://github.com/angular/angular.js/blob/v1.5.x/src/ng/raf.js#L29
-                // 2. Usage: https://github.com/angular/angular.js/blob/v1.5.x/src/ng/animateRunner.js#L10
-
-                return true;
-            }
-
-            if(timerInfo.timerType === 'timeouts' &&
-                (callback.indexOf('.Deferred.exceptionHook') > -1 || // NOTE: jQuery.Deferred are now asynchronous
-                callback.indexOf('e._drain()') > -1)) { // NOTE: SystemJS Promise polyfill
-                return true;
-            }
-
-            if(timerInfo.timerType === 'timeouts' &&
-                window.navigator.userAgent.indexOf('Edge/') > -1 && // NOTE: Only in Edge
-                callback.indexOf('function(){[nativecode]}') > -1) { // NOTE: Native Promise
-                return true;
-            }
-        };
-
+    QUnit.beforeTestDone(function() {
         log.stop();
 
         ['timeouts', 'intervals', 'animationFrames'].forEach(function(type) {
-            var currentInfo = log.get()[type];
+            const currentInfo = log.get()[type];
 
             if(Object.keys(currentInfo).length) {
-                var timerId = Object.keys(currentInfo)[0];
+                const timerId = Object.keys(currentInfo)[0];
+                const timerInfo = currentInfo[timerId];
 
-                var normalizedTimerInfo = {
-                    timerType: type,
-                    timerId: timerId,
-                    callback: currentInfo[timerId].callback || currentInfo.callback,
-                    timeout: currentInfo[timerId].timeout || currentInfo.timeout,
-                    stack: currentInfo[timerId].stack || currentInfo.stack
-                };
-
-                if(isThirdPartyLibraryTimer(normalizedTimerInfo)) {
+                if(ignoreRules.shouldIgnore(timerInfo)) {
                     return;
                 }
 
-                if(QUnit.timerIgnoringCheckers.needSkip(normalizedTimerInfo)) {
-                    return;
-                }
-
-                logGlobalFailure({
-                    moduleName: args.module,
-                    testName: args.name,
-                    timerInfo: normalizedTimerInfo
-                });
+                logTestFailure(timerInfo);
             }
         });
 
-        QUnit.timerIgnoringCheckers.applyUnregister();
         log.clear();
     });
 })();
 
 (function checkSinonFakeTimers() {
 
+    let dateOnTestStart;
     QUnit.testStart(function() {
-        var dateOnTestStart = Date,
-            after = QUnit.config.current.after;
+        dateOnTestStart = Date;
+    });
 
-        QUnit.config.current.after = function() {
-            if(dateOnTestStart !== Date) {
-                QUnit.pushFailure('Not restored Sinon timers detected!', this.stack);
-            }
-            return after.apply(this, arguments);
-        };
+    QUnit.beforeTestDone(function() {
+        if(dateOnTestStart !== Date) {
+            QUnit.pushFailure('Not restored Sinon timers detected!', this.stack);
+        }
     });
 
 })();

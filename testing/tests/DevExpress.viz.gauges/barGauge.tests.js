@@ -93,7 +93,7 @@ QUnit.begin(function() {
 
 const environment = {
     beforeEach: function() {
-        this.$container = createTestContainer('#test-container', { width: 400, height: 300 });
+        this.$container = $(createTestContainer('#test-container', { width: '400px', height: '300px' }));
     },
     afterEach: function() {
         this.$container.remove();
