@@ -135,6 +135,21 @@ module('buttons group rendering', () => {
         instance.option('dataSource', [1, 2, 3]);
         assert.strictEqual(onContentReadyHandler.callCount, 2);
     });
+
+    test('onContentReady - subscription using "on" method', function(assert) {
+        const onContentReadyHandler = sinon.stub();
+
+        const instance = getInstance(
+            createRadioGroup({
+                dataSource: ['str1', 'str2', 'str3']
+            })
+        );
+
+        instance.on('contentReady', onContentReadyHandler);
+
+        instance.option('dataSource', [1, 2, 3]);
+        assert.strictEqual(onContentReadyHandler.callCount, 1, 'contentReady is fired');
+    });
 });
 
 module('layout', moduleConfig, () => {
@@ -339,6 +354,19 @@ module('value', moduleConfig, () => {
         $(radioGroup.itemElements()).first().trigger('dxclick');
 
         assert.equal(value, 1, 'value changed');
+    });
+
+    test('value is changed on item click - subscription using "on" method', function(assert) {
+        const handler = sinon.spy();
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3]
+        });
+        const radioGroup = getInstance($radioGroup);
+
+        radioGroup.on('valueChanged', handler);
+        $(radioGroup.itemElements()).first().trigger('dxclick');
+
+        assert.ok(handler.calledOnce, 'value changed');
     });
 
     test('onValueChanged option should get jQuery event as a parameter', function(assert) {
@@ -640,6 +668,46 @@ module('focus policy', moduleConfig, () => {
 });
 
 module('option changed', () => {
+    test('focusStateEnabled option change', function(assert) {
+        const $radioGroup = createRadioGroup({
+            focusStateEnabled: true
+        });
+        const instance = getInstance($radioGroup);
+
+        instance.option('focusStateEnabled', false);
+        assert.strictEqual(instance.$element().attr('tabindex'), undefined, 'element is not focusable');
+
+        instance.option('focusStateEnabled', true);
+        assert.strictEqual(instance.$element().attr('tabindex'), '0', 'element is focusable');
+    });
+
+    test('items option change', function(assert) {
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3]
+        });
+        const instance = getInstance($radioGroup);
+
+        assert.equal($(instance.itemElements()).eq(0).text(), '1', 'item is correct');
+        instance.option('items', [4, 5, 6]);
+        assert.equal($(instance.itemElements()).eq(0).text(), '4', 'item is correct');
+    });
+
+    test('displayExpr option change', function(assert) {
+        const radioGroup = getInstance(
+            createRadioGroup({
+                dataSource: [{ id: 1, name: 'Item 1' }],
+                valueExpr: 'id',
+                displayExpr: 'id',
+                value: 1
+            })
+        );
+
+        radioGroup.option('displayExpr', 'name');
+
+        const $item = $(radioGroup.itemElements()).eq(0);
+        assert.strictEqual($item.text(), 'Item 1', 'displayExpr works');
+    });
+
     test('items from the getDataSource method are wrong when the dataSource option is changed', function(assert) {
         const instance = getInstance(
             createRadioGroup({
