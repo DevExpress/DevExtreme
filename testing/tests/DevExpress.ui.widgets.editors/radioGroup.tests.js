@@ -135,6 +135,22 @@ module('buttons group rendering', () => {
         instance.option('dataSource', [1, 2, 3]);
         assert.strictEqual(onContentReadyHandler.callCount, 2);
     });
+
+    test('onContentReady - subscription using "on" method', function(assert) {
+        const onContentReadyHandler = () => {
+            assert.strictEqual(instance.itemElements().eq(0).text(), '1', 'buttons are rerendered');
+        };
+
+        const instance = getInstance(
+            createRadioGroup({
+                dataSource: ['str1', 'str2', 'str3']
+            })
+        );
+
+        instance.on('contentReady', onContentReadyHandler);
+
+        instance.option('dataSource', [1, 2, 3]);
+    });
 });
 
 module('layout', moduleConfig, () => {
@@ -339,6 +355,25 @@ module('value', moduleConfig, () => {
         $(radioGroup.itemElements()).first().trigger('dxclick');
 
         assert.equal(value, 1, 'value changed');
+    });
+
+    test('value is changed on item click - subscription using "on" method', function(assert) {
+        const handler = sinon.spy();
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3]
+        });
+        const radioGroup = getInstance($radioGroup);
+
+        radioGroup.on('valueChanged', handler);
+        $(radioGroup.itemElements()).first().trigger('dxclick');
+
+        const e = handler.lastCall.args[0];
+
+        assert.ok(handler.calledOnce, 'handler was called');
+        assert.strictEqual(e.component, radioGroup, 'component is correct');
+        assert.strictEqual(e.element, radioGroup.element(), 'element is correct');
+        assert.strictEqual(e.event.type, 'dxclick', 'event is correct');
+        assert.strictEqual(e.value, 1, 'itemData is correct');
     });
 
     test('onValueChanged option should get jQuery event as a parameter', function(assert) {
