@@ -5120,7 +5120,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.$widget.remove();
             }
         }, () => {
-            QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}`, () => {
+            QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}`, function() {
                 helper.createWidget({ opened: true });
 
                 helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox' }, 'list');
@@ -5162,7 +5162,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
             });
 
-            QUnit.test(`opened: false -> searchEnabled: ${!searchEnabled}`, () => {
+            QUnit.test(`opened: false -> searchEnabled: ${!searchEnabled}`, function() {
                 helper.createWidget({ opened: false });
 
                 const inputAttributes = {

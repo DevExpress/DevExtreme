@@ -38,7 +38,7 @@ QUnit.module('Menu rendering', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Render items with custom model', (assert) => {
+    QUnit.test('Render items with custom model', function(assert) {
         const menu = createMenu({
             items: [{
                 name: 'item 1',
@@ -59,13 +59,13 @@ QUnit.module('Menu rendering', {
         assert.ok($item1.find(toSelector(DX_MENU_ITEM_POPOUT_CLASS)).length, 'popout was rendered');
     });
 
-    QUnit.test('Check default css class', (assert) => {
+    QUnit.test('Check default css class', function(assert) {
         const menu = createMenu({});
 
         assert.ok($(menu.element).hasClass(DX_MENU_CLASS));
     });
 
-    QUnit.test('Do not render menu with empty items', (assert) => {
+    QUnit.test('Do not render menu with empty items', function(assert) {
         const menu = createMenu({ items: [] });
         const root = $(menu.element).find(toSelector(DX_MENU_HORIZONTAL));
 
@@ -84,7 +84,7 @@ QUnit.module('Menu - selection', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Create root childfree item selected', (assert) => {
+    QUnit.test('Create root childfree item selected', function(assert) {
         const menu = createMenu({
             items: [{ text: 'root', selected: true }],
             selectionMode: 'single'
@@ -102,7 +102,7 @@ QUnit.module('Menu with templates', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Create items with template', (assert) => {
+    QUnit.test('Create items with template', function(assert) {
         const $template = $('<div>').text('test');
         const options = {
             showFirstSubmenuMode: 'onClick',
@@ -142,13 +142,13 @@ QUnit.module('Aria accessibility', {
         helper.$widget.remove();
     }
 }, () => {
-    QUnit.test('Items: []', () => {
+    QUnit.test('Items: []', function() {
         helper.createWidget({ items: [] });
         helper.checkAttributes(helper.$widget, { role: 'menubar', tabindex: '0' }, 'widget');
         helper.checkItemsAttributes([], { role: 'menuitem', tabindex: '-1' });
     });
 
-    QUnit.test('Items: [{items[{}, {}], {}] -> set focusedElement: items[0]', () => {
+    QUnit.test('Items: [{items[{}, {}], {}] -> set focusedElement: items[0]', function() {
         helper.createWidget({
             items: [{ text: 'Item1_1', items: [{ text: 'Item2_1' }, { text: 'Item2_2' }] }, { text: 'item1_2' }]
         });

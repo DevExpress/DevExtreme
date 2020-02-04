@@ -334,11 +334,11 @@ QUnit.module('disabled state', () => {
                     [true, false].forEach((changeDisabledOrder) => {
                         ['never', 'always'].forEach((locateInMenu) => {
                             QUnit.test(`new dxToolbar({
-                                    toolbar.disabled: ${isToolbarDisabled}, 
-                                    button.disabled: ${isButtonDisabled}), 
-                                    toolbar.disabled new: ${isToolbarDisabledNew}, 
-                                    button.disabled new: ${isButtonDisabledNew}, 
-                                    changeDisableOrder: ${changeDisabledOrder}, 
+                                    toolbar.disabled: ${isToolbarDisabled},
+                                    button.disabled: ${isButtonDisabled}),
+                                    toolbar.disabled new: ${isToolbarDisabledNew},
+                                    button.disabled new: ${isButtonDisabledNew},
+                                    changeDisableOrder: ${changeDisabledOrder},
                                     locateInMenu: ${locateInMenu}`,
                             function(assert) {
                                 const itemClickHandler = sinon.spy();
@@ -1242,7 +1242,7 @@ QUnit.module('adaptivity', {
         assert.equal($('.' + TOOLBAR_MENU_SECTION_CLASS + ' .' + LIST_ITEM_CLASS + '.test').length, 1, 'item with the custom CSS');
     });
 
-    QUnit.test('dropDown should use default container', (assert) => {
+    QUnit.test('dropDown should use default container', function(assert) {
         const $element = $('#widget').dxToolbar({
             items: [
                 {
@@ -1258,7 +1258,7 @@ QUnit.module('adaptivity', {
         assert.strictEqual($element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 0, 'Toolbar\'s container isn\'t contains a dropDown list');
     });
 
-    QUnit.test('init Toolbar with new menuContainer', (assert) => {
+    QUnit.test('init Toolbar with new menuContainer', function(assert) {
         const $element = $('#widget');
 
         $element.dxToolbar({
@@ -1277,7 +1277,7 @@ QUnit.module('adaptivity', {
         assert.strictEqual($element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, 'Toolbar\'s container contains a dropDown list');
     });
 
-    QUnit.test('change Toolbar menuContainer', (assert) => {
+    QUnit.test('change Toolbar menuContainer', function(assert) {
         const $element = $('#widget');
 
         const instance = $element.dxToolbar({

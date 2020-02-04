@@ -351,7 +351,7 @@ testModule('option', moduleConfig, () => {
         assert.strictEqual(contentRenderSpy.callCount, 2, 'must invalidate content when RTL changed');
     });
 
-    test('disabled', (assert) => {
+    test('disabled', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             disabled: true
         });

@@ -929,7 +929,7 @@ QUnit.module('deferRendering', () => {
 });
 
 QUnit.module('Templates', () => {
-    QUnit.test('should not render placeholder if the fieldTemplate is used', (assert) => {
+    QUnit.test('should not render placeholder if the fieldTemplate is used', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             items: [0, 1, 2, 3, 4, 5],
             placeholder: 'placeholder',
@@ -1040,7 +1040,7 @@ QUnit.module('Templates', () => {
         });
     });
 
-    QUnit.test('should have no errors after value change if text editor buttons were directly removed (T743479)', (assert) => {
+    QUnit.test('should have no errors after value change if text editor buttons were directly removed (T743479)', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             items: [0, 1, 2, 3, 4, 5],
             value: 1,
@@ -1061,7 +1061,7 @@ QUnit.module('Templates', () => {
         }
     });
 
-    QUnit.testInActiveWindow('widget should detach focus events before fieldTemplate rerender', (assert) => {
+    QUnit.testInActiveWindow('widget should detach focus events before fieldTemplate rerender', function(assert) {
         const focusOutSpy = sinon.stub();
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             dataSource: [1, 2],
@@ -1087,7 +1087,7 @@ QUnit.module('Templates', () => {
         assert.strictEqual(focusOutSpy.callCount, 0, 'there\'s no focus outs from deleted field container');
     });
 
-    QUnit.test('fieldTemplate item element should have 100% width (T826516)', (assert) => {
+    QUnit.test('fieldTemplate item element should have 100% width (T826516)', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             dataSource: [1, 2],
             width: 500,
@@ -1103,7 +1103,7 @@ QUnit.module('Templates', () => {
         assert.roughEqual($fieldTemplateWrapper.outerWidth(), $input.outerWidth(), 1);
     });
 
-    QUnit.test('fieldTemplate item element should have 100% width with field template wrapper (T826516)', (assert) => {
+    QUnit.test('fieldTemplate item element should have 100% width with field template wrapper (T826516)', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             dataSource: [1, 2],
             width: 500,

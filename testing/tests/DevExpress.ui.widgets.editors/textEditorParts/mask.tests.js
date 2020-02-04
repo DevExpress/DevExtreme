@@ -1153,7 +1153,7 @@ QUnit.module('value', moduleConfig, () => {
         assert.equal(valueChangedFired, 1, 'change fired once on pressing enter key');
     });
 
-    QUnit.test('T278701 - the error should not be thrown if value is null and mask is set', (assert) => {
+    QUnit.test('T278701 - the error should not be thrown if value is null and mask is set', function(assert) {
         try {
             $('#texteditor').dxTextEditor({
                 value: null,
