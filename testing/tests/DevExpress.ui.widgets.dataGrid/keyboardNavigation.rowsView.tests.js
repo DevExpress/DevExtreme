@@ -47,7 +47,7 @@ QUnit.module('Rows view', {
             columnsController = new MockColumnsController(columns);
 
             this.options = this.options || { };
-            Object.assign(this.options, this.options, {
+            $.extend(this.options, {
                 disabled: false,
                 keyboardNavigation: {
                     enabled: true
