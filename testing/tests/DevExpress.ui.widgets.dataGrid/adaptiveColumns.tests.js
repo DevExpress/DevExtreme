@@ -1846,8 +1846,8 @@ QUnit.test('The group cell content should not be hidden when the hidingPriority 
     this.resizingController.updateDimensions();
 
     // assert
-    let $rowElement = $(this.getRowElement(0)),
-        $cellElements = $rowElement.children();
+    let $rowElement = $(this.getRowElement(0));
+    let $cellElements = $rowElement.children();
 
     assert.ok($rowElement.hasClass('dx-group-row'), 'group row');
     assert.ok($cellElements.eq(1).hasClass('dx-group-cell'), 'group cell');
