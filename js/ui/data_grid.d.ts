@@ -21,7 +21,7 @@ import {
 import {
     ExcelDataGridCell,
     ExcelFont
-} from '../exporter/excel/excel.doc_comments';
+} from '../exporter/exceljs/excelExporter';
 
 import dxDraggable from './draggable';
 

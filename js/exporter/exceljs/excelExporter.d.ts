@@ -1,26 +1,114 @@
-// import { dxDataGrid } from '../../ui/data_grid';
-// import {
-//     ExcelDataGridCell
-// } from '../excel/excel.doc_comments';
+import dxDataGrid, { dxDataGridColumn } from '../../ui/data_grid';
 
-// TODO: whe interfaces saved in DevExpress.exporter?
-// TODO: why not need imports?
-// TODO: How it will be look in documentation? clientExporter -> exportDataGrid -> options?
-// TODO: are the Options and Props reserved words?
-// TODO: What need add yet?
+export interface ExcelDataGridCell {
+    /**
+     * @docid ExcelDataGridCell.column
+     * @type dxDataGridColumn
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    column?: dxDataGridColumn;
+    /**
+     * @docid ExcelDataGridCell.data
+     * @type Object
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    data?: any;
+    /**
+     * @docid ExcelDataGridCell.groupIndex
+     * @type number
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    groupIndex?: number;
+    /**
+     * @docid ExcelDataGridCell.groupSummaryItems
+     * @type Array<Object>
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    groupSummaryItems?: Array<{ name?: string, value?: any }>;
+    /**
+     * @docid ExcelDataGridCell.rowType
+     * @type string
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    rowType?: string;
+    /**
+     * @docid ExcelDataGridCell.totalSummaryItemName
+     * @type string
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    totalSummaryItemName?: string;
+    /**
+     * @docid ExcelDataGridCell.value
+     * @type any
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    value?: any;
+}
+
+export interface ExcelFont {
+    /**
+     * @docid ExcelFont.bold
+     * @type boolean
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    bold?: boolean;
+    /**
+     * @docid ExcelFont.color
+     * @type string
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    color?: string;
+    /**
+     * @docid ExcelFont.italic
+     * @type boolean
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    italic?: boolean;
+    /**
+     * @docid ExcelFont.name
+     * @type string
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    name?: string;
+    /**
+     * @docid ExcelFont.size
+     * @type number
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    size?: number;
+    /**
+     * @docid ExcelFont.underline
+     * @type Enums.ExcelFontUnderlineType
+     * @prevFileNamespace DevExpress.exporter
+     * @public
+     */
+    underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
+}
 
 export interface CellAddress {
     /**
      * @docid CellAddress.row
      * @type number
-     * @prevFileNamespace DevExpress.excelExporter
+     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     row?: number;
     /**
      * @docid CellAddress.column
      * @type number
-     * @prevFileNamespace DevExpress.excelExporter
+     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     column?: number;
@@ -30,14 +118,14 @@ export interface CellsRange {
     /**
      * @docid CellsRange.from
      * @type CellAddress
-     * @prevFileNamespace DevExpress.excelExporter
+     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     from?: CellAddress;
     /**
      * @docid CellsRange.to
      * @type CellAddress
-     * @prevFileNamespace DevExpress.excelExporter
+     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     to?: CellAddress;
@@ -100,63 +188,69 @@ export interface ExportLoadPanel {
     shadingColor?: string
 }
 
-export interface ExportDataGridOpts {
+export interface ExportDataGridProps {
     /**
-     * @docid ExportDataGridOpts.component
+     * @docid ExportDataGridProps.component
      * @type dxDataGrid
      * @default undefined
-     * @prevFileNamespace DevExpress.excelExporter
+     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     component?: dxDataGrid;
     /**
-     * @docid ExportDataGridOpts.worksheet
+     * @docid ExportDataGridProps.worksheet
      * @type Object
      * @default undefined
-     * @prevFileNamespace DevExpress.excelExporter
+     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     worksheet?: object;
     /**
-     * @docid ExportDataGridOpts.topLeftCell
+     * @docid ExportDataGridProps.topLeftCell
      * @type CellAddress
      * @default { row: 1, column: 1 }
+     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     topLeftCell?: CellAddress;
     /**
-     * @docid ExportDataGridOpts.selectedRowsOnly
+     * @docid ExportDataGridProps.selectedRowsOnly
      * @type boolean
      * @default false
+     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     selectedRowsOnly?: boolean;
     /**
-     * @docid ExportDataGridOpts.autoFilterEnabled
+     * @docid ExportDataGridProps.autoFilterEnabled
      * @type boolean
      * @default false
+     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     autoFilterEnabled?: boolean;
     /**
-     * @docid ExportDataGridOpts.keepColumnWidths
+     * @docid ExportDataGridProps.keepColumnWidths
      * @type boolean
      * @default true
+     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     keepColumnWidths?: boolean;
     /**
-     * @docid ExportDataGridOpts.customizeCell
+     * @docid ExportDataGridProps.customizeCell
      * @type function(options)
      * @type_function_param1 options:Object
      * @type_function_param1_field1 gridCell:ExcelDataGridCell
      * @type_function_param1_field2 excelCell:Object
+     * @prevFileNamespace DevExpress.exporter
      * @public
      */
-    customizeCell?: ((options: Object) => any);
+    customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: object}) => any);
     /**
-     * @docid ExportDataGridOpts.loadPanel
+     * @docid ExportDataGridProps.loadPanel
      * @type ExportLoadPanel
+     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     loadPanel?: ExportLoadPanel;
@@ -165,13 +259,13 @@ export interface ExportDataGridOpts {
 /**
  * @docid excelExporter.exportDataGrid
  * @publicName exportDataGrid(options)
- * @param1 options:ExportDataGridOpts
+ * @param1 options:ExportDataGridProps
  * @return Promise<CellsRange>
  * @namespace DevExpress.excelExporter
  * @module exceljs/excelExporter/exportDataGrid
  * @static
- * @prevFileNamespace DevExpress.excelExporter
+ * @prevFileNamespace DevExpress.exporter
  * @public
  */
-export function exportDataGrid(options: object): Promise<void>;
+export function exportDataGrid(options: DevExpress.exporter.ExportDataGridProps): Promise<DevExpress.exporter.CellsRange>;
 

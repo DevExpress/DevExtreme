@@ -1576,7 +1576,7 @@ declare module DevExpress.events {
 }
 declare module DevExpress.excelExporter {
     /** @name excelExporter.exportDataGrid(options) */
-    export function exportDataGrid(options: DevExpress.exporter.ExportDataGridOpts): Promise<DevExpress.exporter.CellsRange> & JQueryPromise<DevExpress.exporter.CellsRange>;
+    export function exportDataGrid(options: DevExpress.exporter.ExportDataGridProps): Promise<DevExpress.exporter.CellsRange> & JQueryPromise<DevExpress.exporter.CellsRange>;
 }
 declare module DevExpress.exporter {
     /** @name CellAddress */
@@ -1625,23 +1625,23 @@ declare module DevExpress.exporter {
         /** @name ExcelFont.underline */
         underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
     }
-    /** @name ExportDataGridOpts */
-    export interface ExportDataGridOpts {
-        /** @name ExportDataGridOpts.autoFilterEnabled */
+    /** @name ExportDataGridProps */
+    export interface ExportDataGridProps {
+        /** @name ExportDataGridProps.autoFilterEnabled */
         autoFilterEnabled?: boolean;
-        /** @name ExportDataGridOpts.component */
+        /** @name ExportDataGridProps.component */
         component?: DevExpress.ui.dxDataGrid;
-        /** @name ExportDataGridOpts.customizeCell */
+        /** @name ExportDataGridProps.customizeCell */
         customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any }) => any);
-        /** @name ExportDataGridOpts.keepColumnWidths */
+        /** @name ExportDataGridProps.keepColumnWidths */
         keepColumnWidths?: boolean;
-        /** @name ExportDataGridOpts.loadPanel */
+        /** @name ExportDataGridProps.loadPanel */
         loadPanel?: ExportLoadPanel;
-        /** @name ExportDataGridOpts.selectedRowsOnly */
+        /** @name ExportDataGridProps.selectedRowsOnly */
         selectedRowsOnly?: boolean;
-        /** @name ExportDataGridOpts.topLeftCell */
+        /** @name ExportDataGridProps.topLeftCell */
         topLeftCell?: CellAddress;
-        /** @name ExportDataGridOpts.worksheet */
+        /** @name ExportDataGridProps.worksheet */
         worksheet?: any;
     }
     /** @name ExportLoadPanel */
