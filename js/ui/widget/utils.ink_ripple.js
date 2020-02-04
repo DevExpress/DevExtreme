@@ -58,7 +58,7 @@ const getWaves = function(element, wavesNumber) {
 };
 
 const getWaveStyleConfig = function(args, config) {
-    const element = config.element;
+    const element = $(config.element);
     const elementWidth = element.outerWidth();
     const elementHeight = element.outerHeight();
     const elementDiagonal = parseInt(Math.sqrt(elementWidth * elementWidth + elementHeight * elementHeight));
@@ -71,7 +71,7 @@ const getWaveStyleConfig = function(args, config) {
         top = (elementHeight - waveSize) / 2;
     } else {
         const event = config.event;
-        const position = config.element.offset();
+        const position = $(config.element).offset();
         const x = event.pageX - position.left;
         const y = event.pageY - position.top;
 

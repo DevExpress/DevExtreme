@@ -141,8 +141,7 @@ export const viewFunction = (viewModel: any) => {
 };
 
 @ComponentInput()
-export class WidgetInput { 
-    @Prop() _dimensionChanged?: () => any = (() => undefined);
+export class WidgetInput {
     @Prop() _feedbackHideTimeout?: number = 400;
     @Prop() _feedbackShowTimeout?: number = 30;
     @Prop() _visibilityChanged?: (args: any) => undefined;
@@ -157,11 +156,11 @@ export class WidgetInput {
     @Prop() focusStateEnabled?: boolean = false;
     @Prop() height?: string | number | null = null;
     @Prop() hint?: string;
-    @Prop() hoverEndHandler?: (args: any) => any = (() => undefined);
-    @Prop() hoverStartHandler?: (args: any) => any = (() => undefined);
     @Prop() hoverStateEnabled?: boolean = false;
     @Prop() name?: string = '';
+    @Prop() onActive: (e: any) => any = (() => undefined);
     @Prop() onDimensionChanged?: () => any = (() => undefined);
+    @Prop() onInactive: (e: any) => any = (() => undefined);
     @Prop() onKeyboardHandled?: (args: any) => any | undefined;
     @Prop() onKeyPress?: (e: any, options: any) => any = (() => undefined);
     @Prop() rtlEnabled?: boolean = config().rtlEnabled;
@@ -199,9 +198,11 @@ export default class Widget extends JSXComponent<WidgetInput> {
                 () => this.props.visible && this.props._visibilityChanged!(false),
                 { namespace },
             );
+
+            return () => visibility.off(this.widgetRef, { namespace });
         }
 
-        return () => visibility.off(this.widgetRef, { namespace });
+        return null;
     }
 
     @Effect()
@@ -220,14 +221,18 @@ export default class Widget extends JSXComponent<WidgetInput> {
         const isFocusable = this.props.focusStateEnabled && !this.props.disabled;
         const canBeFocusedByKey = isFocusable && this.props.accessKey;
 
-        canBeFocusedByKey && dxClick.on(this.widgetRef, (e) => {
-            if (isFakeClickEvent(e)) {
-                e.stopImmediatePropagation();
-                this._focused = true;
-            }
-        }, { namespace });
+        if (canBeFocusedByKey) {
+            dxClick.on(this.widgetRef, (e) => {
+                if (isFakeClickEvent(e)) {
+                    e.stopImmediatePropagation();
+                    this._focused = true;
+                }
+            }, { namespace });
 
-        return () => dxClick.off(this.widgetRef, { namespace });
+            return () => dxClick.off(this.widgetRef, { namespace });
+        }
+
+        return null;
     }
 
     @Effect()
@@ -246,9 +251,11 @@ export default class Widget extends JSXComponent<WidgetInput> {
                 () => { this._hovered = false; },
                 { selector, namespace },
             );
+
+            return () => hover.off(this.widgetRef, { selector, namespace });
         }
 
-        return () => hover.off(this.widgetRef, { selector, namespace });
+        return null;
     }
 
     @Effect()
@@ -258,9 +265,15 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
         if (this.props.activeStateEnabled && !this.props.disabled) {
             active.on(this.widgetRef,
-                new Action(() => { this._active = true; }),
+                new Action(({ event }) => {
+                    this._active = true;
+                    this.props.onActive?.(event);
+                }),
                 new Action(
-                    () => { this._active = false; },
+                    ({ event }) => {
+                        this._active = false;
+                        this.props.onInactive?.(event);
+                    },
                     { excludeValidators: ['disabled', 'readOnly'] },
                 ), {
                     showTimeout: this.props._feedbackShowTimeout,
@@ -269,9 +282,11 @@ export default class Widget extends JSXComponent<WidgetInput> {
                     namespace,
                 },
             );
+
+            return () => active.off(this.widgetRef, { selector, namespace });
         }
 
-        return () => active.off(this.widgetRef, { selector, namespace });
+        return null;
     }
 
     @Effect()

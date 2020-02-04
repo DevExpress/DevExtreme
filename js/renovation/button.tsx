@@ -1,14 +1,15 @@
-import { getImageSourceType } from '../core/utils/icon';
+import inkRipple from '../ui/widget/utils.ink_ripple';
 import { click } from '../events/short';
-import { Component, ComponentInput, Effect, Prop, Ref, JSXComponent } from 'devextreme-generator/component_declaration/common';
+import { getImageSourceType } from '../core/utils/icon';
+import { Component, ComponentInput, Effect, JSXComponent, Prop, Ref } from '../component_declaration/common';
 import Widget, { WidgetInput } from './widget';
 
 const getImageContainerJSX = (source: string) => {
     switch (getImageSourceType(source)) {
-        case 'dxIcon': return (<i className={`dx-icon dx-icon-${source}`}/>);
-        case 'fontIcon': return (<i className={`dx-icon ${source}`}/>);
-        case 'image': return (<img src={source} className="dx-icon"/>);
-        case 'svg': return (<i className="dx-icon dx-svg-icon">{source}></i>);
+        case 'dxIcon': return <i className={`dx-icon dx-icon-${source}`}/>;
+        case 'fontIcon': return <i className={`dx-icon ${source}`}/>;
+        case 'image': return <img src={source} className="dx-icon"/>;
+        case 'svg': return <i className="dx-icon dx-svg-icon">{source}></i>;
         default: return null;
     }
 };
@@ -65,6 +66,18 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
         }
     };
 
+    const isOnlyIconButton = !viewModel.text && viewModel.icon || viewModel.type === 'back';
+    const _inkRipple = inkRipple.render(isOnlyIconButton ? {
+        waveSizeCoefficient: 1,
+        useHoldAnimation: false,
+        isCentered: true,
+    } : {});
+
+    const onActive = event => viewModel.useInkRipple &&
+        _inkRipple.showWave({ element: viewModel.contentRef.current, event });
+    const onInactive = event => viewModel.useInkRipple &&
+        _inkRipple.hideWave({ element: viewModel.contentRef.current, event });
+
     return <Widget
         accessKey={viewModel.accessKey}
         activeStateEnabled={viewModel.activeStateEnabled}
@@ -76,17 +89,19 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
         height={viewModel.height}
         hint={viewModel.hint}
         hoverStateEnabled={viewModel.hoverStateEnabled}
+        onActive={onActive}
         onClick={onClick}
+        onInactive={onInactive}
         onKeyPress={onKeyPress}
         rtlEnabled={viewModel.rtlEnabled}
         tabIndex={viewModel.tabIndex}
         visible={viewModel.visible}
         width={viewModel.width}
     >
-        <div className="dx-button-content">
+        <div className="dx-button-content" ref={viewModel.contentRef}>
             {viewModel.contentRender &&
                 <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} />}
-            {!viewModel.contentRender && viewModel.icon}
+            {!viewModel.contentRender && [viewModel.icon}
             {!viewModel.contentRender && viewModel.text &&
                 <span className="dx-button-text">{viewModel.text}</span>
             }
@@ -98,7 +113,7 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
 };
 
 @ComponentInput()
-export class ButtonInput extends WidgetInput { 
+export class ButtonInput extends WidgetInput {
     @Prop() activeStateEnabled?: boolean = true;
     @Prop() classNames?: string[];
     @Prop() contentRender?: any;
@@ -110,6 +125,7 @@ export class ButtonInput extends WidgetInput {
     @Prop() stylingMode?: 'outlined' | 'text' | 'contained';
     @Prop() text?: string = '';
     @Prop() type?: string;
+    @Prop() useInkRipple: boolean = false;
     @Prop() useSubmitBehavior?: boolean = false;
 }
 
@@ -121,6 +137,7 @@ export class ButtonInput extends WidgetInput {
 })
 
 export default class Button extends JSXComponent<ButtonInput> {
+    @Ref() contentRef!: HTMLDivElement;
     @Ref() submitInputRef!: HTMLInputElement;
 
     @Effect()
