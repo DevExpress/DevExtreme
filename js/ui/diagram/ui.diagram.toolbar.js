@@ -3,7 +3,6 @@ import $ from '../../core/renderer';
 import DiagramPanel from './ui.diagram.panel';
 import Toolbar from '../toolbar';
 import ContextMenu from '../context_menu';
-import DiagramCommands from './diagram.commands';
 import DiagramBar from './diagram.bar';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
@@ -19,7 +18,7 @@ const TOOLBAR_MENU_SEPARATOR_CLASS = 'dx-diagram-toolbar-menu-separator';
 
 class DiagramToolbar extends DiagramPanel {
     _init() {
-        this.bar = new ToolbarDiagramBar(this);
+        this.bar = new ToolbarDiagramBar(this, this._getCommands());
         this._itemHelpers = {};
         this._contextMenus = [];
         this._createOnWidgetCommand();
@@ -28,12 +27,18 @@ class DiagramToolbar extends DiagramPanel {
 
     _initMarkup() {
         super._initMarkup();
-        const $toolbar = $('<div>')
-            .addClass(TOOLBAR_CLASS)
-            .appendTo(this._$element);
+        const $toolbar = this._createMainElement();
         this._renderToolbar($toolbar);
     }
 
+    _createMainElement() {
+        return $('<div>')
+            .addClass(TOOLBAR_CLASS)
+            .appendTo(this._$element);
+    }
+    _getCommands() {
+        return [];
+    }
     _getWidgetCommands() {
         return this._widgetCommands ||
             (this._widgetCommands = [
@@ -46,7 +51,7 @@ class DiagramToolbar extends DiagramPanel {
             ]);
     }
     _renderToolbar($toolbar) {
-        const commands = DiagramCommands.getToolbarCommands(this.option('commands'));
+        const commands = this._getCommands();
         const widgetCommandNames = this.option('widgetCommandNames') || [];
         const widgetCommands = this._getWidgetCommands().filter(function(c) { return widgetCommandNames.indexOf(c.command) > -1; });
         let dataSource = this._prepareToolbarItems(commands, 'before', this._execDiagramCommand);
@@ -237,7 +242,7 @@ class DiagramToolbar extends DiagramPanel {
         if(items) {
             items.forEach((item, index) => {
                 const itemIndexPath = indexPath.concat(index);
-                this._itemHelpers[item.command] = new ContextMenuItemHelper(widget, itemIndexPath, rootButton);
+                this._itemHelpers[item.command] = new ToolbarSubItemHelper(widget, itemIndexPath, rootButton);
                 this._addContextMenuHelper(item.items, widget, itemIndexPath, rootButton);
             });
         }
@@ -246,7 +251,7 @@ class DiagramToolbar extends DiagramPanel {
         this._contextMenus = this._contextMenus.filter(cm => cm !== widget);
     }
     _execDiagramCommand(command, value) {
-        if(!this._updateLocked) {
+        if(!this._updateLocked && command !== undefined) {
             this.bar.raiseBarCommandExecuted(command, value);
         }
     }
@@ -311,11 +316,15 @@ class DiagramToolbar extends DiagramPanel {
 }
 
 class ToolbarDiagramBar extends DiagramBar {
+    constructor(owner, commands) {
+        super(owner);
+        this._commands = commands;
+    }
     getCommandKeys() {
-        return this.getKeys(DiagramCommands.getToolbarCommands());
+        return this.getKeys(this._commands);
     }
     getKeys(items) {
-        return items.reduce((commands, item) => {
+        const keys = items.reduce((commands, item) => {
             if(item.command !== undefined) {
                 commands.push(item.command);
             }
@@ -324,6 +333,7 @@ class ToolbarDiagramBar extends DiagramBar {
             }
             return commands;
         }, []);
+        return keys;
     }
     setItemValue(key, value) {
         this._owner._setItemValue(key, value);
@@ -366,7 +376,7 @@ class ToolbarItemHelper {
     }
 }
 
-class ContextMenuItemHelper extends ToolbarItemHelper {
+class ToolbarSubItemHelper extends ToolbarItemHelper {
     constructor(widget, indexPath, rootButton) {
         super(widget);
         this._indexPath = indexPath;
@@ -388,7 +398,12 @@ class ContextMenuItemHelper extends ToolbarItemHelper {
         }
         return false;
     }
-    setValue(value) { }
+    setValue(value) {
+        const optionText = this._indexPath.reduce((r, i) => {
+            return r + `items[${i}].`;
+        }, '');
+        this._widget.option(optionText + 'selected', value);
+    }
 }
 
 module.exports = DiagramToolbar;

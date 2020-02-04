@@ -304,10 +304,82 @@ const DiagramCommands = {
                     text: messageLocalization.format('dxDiagram-commandFullscreen'),
                     icon: 'dx-diagram-i dx-diagram-i-button-fullscreen',
                     cssClass: CSS_CLASSES.BUTTON_COLOR
+                },
+
+                units: {
+                    command: DiagramCommand.ViewUnits,
+                    hint: messageLocalization.format('dxDiagram-commandUnits'),
+                    text: messageLocalization.format('dxDiagram-commandUnits'),
+                    widget: 'dxSelectBox'
+                },
+                pageSize: {
+                    command: DiagramCommand.PageSize,
+                    hint: messageLocalization.format('dxDiagram-commandPageSize'),
+                    text: messageLocalization.format('dxDiagram-commandPageSize'),
+                    widget: 'dxSelectBox',
+                    getValue: (v) => JSON.parse(v),
+                    setValue: (v) => JSON.stringify(v)
+                },
+                pageOrientation: {
+                    command: DiagramCommand.PageLandscape,
+                    hint: messageLocalization.format('dxDiagram-commandPageOrientation'),
+                    text: messageLocalization.format('dxDiagram-commandPageOrientation'),
+                    widget: 'dxSelectBox',
+                    items: [
+                        { value: true, title: messageLocalization.format('dxDiagram-commandPageOrientationLandscape') },
+                        { value: false, title: messageLocalization.format('dxDiagram-commandPageOrientationPortrait') }
+                    ]
+                },
+                pageColor: {
+                    command: DiagramCommand.PageColor,
+                    hint: messageLocalization.format('dxDiagram-commandPageColor'),
+                    text: messageLocalization.format('dxDiagram-commandPageColor'),
+                    widget: 'dxColorBox',
+                },
+                gridSize: {
+                    command: DiagramCommand.GridSize,
+                    hint: messageLocalization.format('dxDiagram-commandGridSize'),
+                    text: messageLocalization.format('dxDiagram-commandGridSize'),
+                    widget: 'dxSelectBox'
+                },
+                zoomLevel: {
+                    command: DiagramCommand.ZoomLevel,
+                    hint: messageLocalization.format('dxDiagram-commandZoomLevel'),
+                    text: messageLocalization.format('dxDiagram-commandZoomLevel'),
+                    widget: 'dxSelectBox'
+                },
+                autoZoom: {
+                    command: DiagramCommand.ToggleAutoZoom,
+                    hint: messageLocalization.format('dxDiagram-commandAutoZoom'),
+                    text: messageLocalization.format('dxDiagram-commandAutoZoom'),
+                    widget: 'dxCheckBox'
+                },
+                options: {
+                    icon: 'preferences',
+                    hint: messageLocalization.format('dxDiagram-commandProperties'),
+                    text: messageLocalization.format('dxDiagram-commandProperties'),
+                    items: [
+                        {
+                            command: DiagramCommand.ToggleSimpleView,
+                            hint: messageLocalization.format('dxDiagram-commandSimpleView'),
+                            text: messageLocalization.format('dxDiagram-commandSimpleView'),
+                            widget: 'dxCheckBox'
+                        },
+                        {
+                            command: DiagramCommand.ShowGrid,
+                            hint: messageLocalization.format('dxDiagram-commandShowGrid'),
+                            text: messageLocalization.format('dxDiagram-commandShowGrid'),
+                        },
+                        {
+                            command: DiagramCommand.SnapToGrid,
+                            hint: messageLocalization.format('dxDiagram-commandSnapToGrid'),
+                            text: messageLocalization.format('dxDiagram-commandSnapToGrid'),
+                        },
+                    ]
                 }
             });
     },
-    getToolbarCommands: function(commandNames) {
+    getMainToolbarCommands: function(commandNames) {
         const commands = this.getAllToolbarCommands();
         if(commandNames) {
             return commandNames.map(function(cn) { return commands[cn]; }).filter(function(c) { return c; });
@@ -340,6 +412,30 @@ const DiagramCommands = {
             commands['autoLayout'],
             commands['separator'],
             commands['fullScreen']
+        ];
+    },
+    getHistoryToolbarCommands: function(commandNames) {
+        const commands = this.getAllToolbarCommands();
+        if(commandNames) {
+            return commandNames.map(function(cn) { return commands[cn]; }).filter(function(c) { return c; });
+        }
+        return [
+            commands['undo'],
+            commands['separator'],
+            commands['redo']
+        ];
+    },
+    getViewSettingsToolbarCommands: function(commandNames) {
+        const commands = this.getAllToolbarCommands();
+        if(commandNames) {
+            return commandNames.map(function(cn) { return commands[cn]; }).filter(function(c) { return c; });
+        }
+        return [
+            commands['zoomLevel'],
+            commands['separator'],
+            commands['fullScreen'],
+            commands['separator'],
+            commands['export']
         ];
     },
 
