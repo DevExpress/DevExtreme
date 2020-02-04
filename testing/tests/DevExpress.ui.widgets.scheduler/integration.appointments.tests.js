@@ -3776,6 +3776,29 @@ QUnit.test('Appointment with equal startDate and endDate should render with 1 mi
     assert.equal(this.scheduler.appointments.getAppointmentHeight(0), this.scheduler.appointments.getAppointmentHeight(1), 'Appointment heights are equal');
 });
 
+$.each(['month', 'timelineMonth'], (index, value) => {
+    QUnit.test(`Appointment with equal startDate and endDate should render in whole cell on ${value} view (T858496)`, function(assert) {
+        this.createInstance({
+            dataSource: [{
+                text: 'Zero-minute appointment',
+                startDate: new Date(2017, 4, 22, 0),
+                endDate: new Date(2017, 4, 22, 0)
+            }, {
+                text: 'Default appointment',
+                startDate: new Date(2017, 4, 22, 0),
+                endDate: new Date(2017, 4, 22, 1)
+            }],
+            views: [value],
+            currentView: value,
+            currentDate: new Date(2017, 4, 25),
+            height: 600,
+        });
+
+        assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointments are rendered');
+        assert.equal(this.scheduler.appointments.getAppointmentWidth(0), this.scheduler.appointments.getAppointmentWidth(1), 'Appointment widths are equal');
+    });
+});
+
 QUnit.test('Multi-day appointment is hidden in compact collectors according to head and tail coordinates (T835541)', function(assert) {
     this.createInstance({
         dataSource: [{
