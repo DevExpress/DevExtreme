@@ -137,8 +137,11 @@ module('buttons group rendering', () => {
     });
 
     test('onContentReady - subscription using "on" method', function(assert) {
+        const done = assert.async(1);
+
         const onContentReadyHandler = () => {
-            assert.strictEqual(instance.itemElements().eq(0).text(), '1', 'buttons are rerendered');
+            assert.strictEqual(instance.itemElements().eq(0).text(), '1', 'contentReady is fired');
+            done();
         };
 
         const instance = getInstance(
