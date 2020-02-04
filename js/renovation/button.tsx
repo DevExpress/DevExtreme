@@ -1,5 +1,5 @@
 import { getImageSourceType } from '../core/utils/icon';
-import { Component, ComponentInput, Prop, React, JSXComponent } from 'devextreme-generator/component_declaration/common';
+import { Component, ComponentInput, Prop, JSXComponent } from 'devextreme-generator/component_declaration/common';
 import Widget, { WidgetInput } from './widget';
 
 
