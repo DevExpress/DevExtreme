@@ -427,7 +427,8 @@ QUnit.module('Checkboxes', () => {
         wrapper.checkSelectedNodes([], 'after search');
         wrapper.checkEventLog([], 'after search');
 
-        wrapper.checkSelection([], [], 'after selectItem');
+        const selectResult = wrapper.instance.selectItem(1);
+        assert.equal(selectResult, false, 'nothing is found');
         wrapper.checkSelectedKeys([], 'after selectItem');
         wrapper.checkSelectedNodes([], 'after selectItem');
         wrapper.checkEventLog([], 'after selectItem');
@@ -473,7 +474,8 @@ QUnit.module('Checkboxes', () => {
         wrapper.checkEventLog([], 'after search');
         wrapper.clearEventLog();
 
-        wrapper.instance.unselectItem(1);
+        const unselectResult = wrapper.instance.unselectItem(1);
+        assert.equal(unselectResult, false, 'nothing is found');
         wrapper.checkSelectedKeys([2], 'after unselect');
         wrapper.checkSelectedNodes([0], 'after unselect');
         wrapper.checkEventLog([], 'after unselect');
