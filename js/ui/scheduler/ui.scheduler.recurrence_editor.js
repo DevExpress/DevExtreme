@@ -42,15 +42,29 @@ const RECURRENCE_FREQ_FIELD = 'dx-recurrence-freq-field';
 const FIELD_LABEL_CLASS = 'dx-field-label';
 const FIELD_VALUE_CLASS = 'dx-field-value';
 
-const frequencies = [
-    { text() { return messageLocalization.format('dxScheduler-recurrenceNever'); }, value: 'never' },
-    { text() { return messageLocalization.format('dxScheduler-recurrenceMinutely'); }, value: 'minutely' },
-    { text() { return messageLocalization.format('dxScheduler-recurrenceHourly'); }, value: 'hourly' },
-    { text() { return messageLocalization.format('dxScheduler-recurrenceDaily'); }, value: 'daily' },
-    { text() { return messageLocalization.format('dxScheduler-recurrenceWeekly'); }, value: 'weekly' },
-    { text() { return messageLocalization.format('dxScheduler-recurrenceMonthly'); }, value: 'monthly' },
-    { text() { return messageLocalization.format('dxScheduler-recurrenceYearly'); }, value: 'yearly' }
-];
+const frequenciesMessages = [{
+    recurrence: 'dxScheduler-recurrenceMinutely',
+    value: 'minutely'
+}, {
+    recurrence: 'dxScheduler-recurrenceHourly',
+    value: 'hourly'
+}, {
+    recurrence: 'dxScheduler-recurrenceDaily',
+    value: 'daily'
+}, {
+    recurrence: 'dxScheduler-recurrenceWeekly',
+    value: 'weekly'
+}, {
+    recurrence: 'dxScheduler-recurrenceMonthly',
+    value: 'monthly'
+}, {
+    recurrence: 'dxScheduler-recurrenceYearly',
+    value: 'yearly'
+}];
+
+const frequencies = frequenciesMessages.map((item) => {
+    return { text() { return messageLocalization.format(item.recurrence); }, value: item.value };
+});
 
 const repeatEndTypes = [
     { text() { return messageLocalization.format('dxScheduler-recurrenceNever'); }, value: 'never' },
@@ -142,7 +156,8 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _getFirstDayOfWeek() {
-        return isDefined(this.option('firstDayOfWeek')) ? this.option('firstDayOfWeek') : dateLocalization.firstDayOfWeekIndex();
+        const firstDayOfWeek = this.option('firstDayOfWeek');
+        return isDefined(firstDayOfWeek) ? firstDayOfWeek : dateLocalization.firstDayOfWeekIndex();
     },
 
     _createComponent(element, name, config = {}) {
@@ -167,7 +182,6 @@ const RecurrenceEditor = Editor.inherit({
             .appendTo(this.$element());
 
         this._renderEditors();
-
         this._renderContainerVisibility(this.option('value'));
     },
 
@@ -205,18 +219,19 @@ const RecurrenceEditor = Editor.inherit({
     _renderEditors() {
         this._renderFreqEditor();
         this._renderIntervalEditor();
-
         this._renderRepeatOnEditor();
-
         this._renderRepeatEndEditor();
     },
 
     _renderFreqEditor() {
-        const freq = (this._recurrenceRule.rules().freq || 'never').toLowerCase();
-
+        const freq = (this._recurrenceRule.rules().freq || frequenciesMessages[0].value).toLowerCase();
         const $freqEditor = $('<div>')
             .addClass(FREQUENCY_EDITOR)
             .addClass(FIELD_VALUE_CLASS);
+
+        const $freqEditorLabel = $('<div>')
+            .text(messageLocalization.format('dxScheduler-editorLabelRecurrence'))
+            .addClass(FIELD_LABEL_CLASS);
 
         this._freqEditor = this._createComponent($freqEditor, SelectBox, {
             field: 'freq',
@@ -227,16 +242,15 @@ const RecurrenceEditor = Editor.inherit({
             layout: 'horizontal',
             onValueChanged: (args)=> {
                 this._valueChangedHandler(args);
-                this.invoke('resizePopup');
             }
         });
 
         const $field = $('<div>')
             .addClass(FIELD_CLASS)
             .addClass(RECURRENCE_FREQ_FIELD)
-            .append($freqEditor);
+            .append($freqEditorLabel, $freqEditor);
 
-        this.$element().prepend($field);
+        this._$container.append($field);
     },
 
     _renderIntervalEditor() {
@@ -521,28 +535,6 @@ const RecurrenceEditor = Editor.inherit({
         editor.setAria('id', labelId, $label);
     },
 
-    _repeatEndSwitchValueChangeHandler(args) {
-        const value = args.value;
-
-        this._renderRepeatEndVisibility(value);
-
-        if(!this._recurrenceRule.rules().count && !this._recurrenceRule.rules().until && value) {
-            this._handleRepeatEndDefaults();
-        } else if(!value) {
-            this._recurrenceRule.makeRule('count', '');
-            this._recurrenceRule.makeRule('until', '');
-            this._changeEditorValue();
-        }
-    },
-
-    _renderRepeatEndVisibility(value) {
-        if(!value) {
-            this._$repeatEndEditor.hide();
-        } else {
-            this._$repeatEndEditor.show();
-        }
-    },
-
     _handleRepeatEndDefaults() {
         this._recurrenceRule.makeRule('count', 1);
 
@@ -738,20 +730,14 @@ const RecurrenceEditor = Editor.inherit({
     _valueChangedHandler(args) {
         const value = args.component.option('value');
         const field = args.component.option('field');
-        const freqEditorValue = this._freqEditor && this._freqEditor.option('value');
-        let visible = true;
 
-        if(field === 'freq' && value === 'never' || field !== 'freq' && freqEditorValue === 'never') {
-            visible = false;
+        if(!this.option('visible')) {
             this.option('value', '');
         } else {
             this._recurrenceRule.makeRule(field, value);
-
             this._makeRepeatOnRule(field, value);
             this._changeEditorValue();
         }
-
-        this._renderContainerVisibility(visible);
     },
 
     _makeRepeatOnRule(field, value) {
@@ -827,9 +813,9 @@ const RecurrenceEditor = Editor.inherit({
     _changeEditorsValues(rules) {
         this._changeCheckBoxesValue(!!rules['byday']);
 
-        this._freqEditor.option('value', (rules.freq || 'never').toLowerCase());
+        this._freqEditor.option('value', (rules.freq || frequenciesMessages[0].value).toLowerCase());
         this._changeRepeatTypeLabel();
-        this._intervalEditor.option('value', rules.interval);
+        this._intervalEditor.option('value', rules.interval || 1);
 
         this._changeRepeatCountValue();
         this._changeRepeatUntilValue();

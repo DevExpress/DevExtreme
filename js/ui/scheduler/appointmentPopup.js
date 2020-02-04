@@ -138,6 +138,7 @@ export default class AppointmentPopup {
     _createForm(element) {
         const { expr } = this.scheduler._dataAccessors;
         const resources = this.scheduler.option('resources');
+        const appointmentData = this.state.appointment.data;
 
         AppointmentForm.prepareAppointmentFormEditors({
             textExpr: expr.textExpr,
@@ -148,7 +149,7 @@ export default class AppointmentPopup {
             recurrenceRuleExpr: expr.recurrenceRuleExpr,
             startDateTimeZoneExpr: expr.startDateTimeZoneExpr,
             endDateTimeZoneExpr: expr.endDateTimeZoneExpr
-        }, this.scheduler);
+        }, this.scheduler, this.triggerResize.bind(this), appointmentData);
 
         if(resources && resources.length) {
             this.scheduler._resourcesManager.setResources(this.scheduler.option('resources'));
@@ -158,8 +159,8 @@ export default class AppointmentPopup {
         return AppointmentForm.create(
             this.scheduler._createComponent.bind(this.scheduler),
             element,
-            this._isReadOnly(this.state.appointment.data),
-            this._createAppointmentFormData(this.state.appointment.data)
+            this._isReadOnly(appointmentData),
+            this._createAppointmentFormData(appointmentData)
         );
     }
 
@@ -177,7 +178,7 @@ export default class AppointmentPopup {
 
         const formData = this._createAppointmentFormData(appointmentData);
 
-        this.state.appointment.isEmptyText = appointmentData === undefined || appointmentData.text === undefined;
+        this.state.appointment.isEmptyText = appointmentData === undefined || appointmentData.text === undefined; // TODO fix
         this.state.appointment.isEmptyDescription = appointmentData === undefined || appointmentData.description === undefined;
 
         if(this.state.appointment.isEmptyText) {
@@ -201,21 +202,35 @@ export default class AppointmentPopup {
         const startDateExpr = this.scheduler._dataAccessors.expr.startDateExpr;
         const endDateExpr = this.scheduler._dataAccessors.expr.endDateExpr;
 
-        formData.recurrenceRule = formData.recurrenceRule || ''; // TODO: plug for recurrent editor
-
-        AppointmentForm.updateFormData(this._appointmentForm, formData);
-        this._appointmentForm.option('readOnly', this._isReadOnly(this.state.appointment.data));
-
-        AppointmentForm.checkEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
+        formData.recurrenceRule = formData.recurrenceRule || ''; // TODO: plug for recurrent editor fix?
 
         const recurrenceRuleExpr = this.scheduler._dataAccessors.expr.recurrenceRuleExpr;
-        const recurrentEditorItem = recurrenceRuleExpr ? this._appointmentForm.itemOption(recurrenceRuleExpr) : null;
-
-        if(recurrentEditorItem) {
-            const options = recurrentEditorItem.editorOptions || {};
-            options.startDate = startDate;
-            this._appointmentForm.itemOption(recurrenceRuleExpr, 'editorOptions', options);
+        const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr);
+        const switchOptions = this._getEditorOptions('visibilityChanged'); // TODO constant
+        if(this.state.appointment.data.recurrenceRule) {
+            recurrenceEditorOptions.startDate = startDate;
+            recurrenceEditorOptions.visible = true;
+            switchOptions.value = true;
+        } else {
+            recurrenceEditorOptions.visible = false;
+            switchOptions.value = false;
         }
+        this._setEditorOptions('visibilityChanged', switchOptions); // TODO constant
+        this._setEditorOptions(recurrenceRuleExpr, recurrenceEditorOptions);
+        this._appointmentForm.option('readOnly', this._isReadOnly(this.state.appointment.data));
+
+        AppointmentForm.updateFormData(this._appointmentForm, formData);
+        AppointmentForm.checkEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
+    }
+
+    _getEditorOptions(name) {
+        const editor = this._appointmentForm.itemOption(name);
+        return editor ? editor.editorOptions : {};
+    }
+
+    _setEditorOptions(name, options) {
+        const editor = this._appointmentForm.itemOption(name);
+        editor && this._appointmentForm.itemOption(name, 'editorOptions', options);
     }
 
     _isPopupFullScreenNeeded() {

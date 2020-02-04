@@ -53,7 +53,7 @@ QUnit.test('Recurrence editor should correctly process null value and reset inne
 
     const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
 
-    assert.equal(freqEditor.option('value'), 'never', 'freq editor default value was set');
+    assert.equal(freqEditor.option('value'), 'daily', 'freq editor default value was set');
 });
 
 QUnit.module('Recurrence editor - freq editor', {
@@ -76,7 +76,7 @@ QUnit.test('Recurrence editor should has right items', function(assert) {
     const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
 
     const items = freqEditor.option('items');
-    const itemValues = [{ text: 'Never', value: 'never' }, { text: 'Minutely', value: 'minutely' }, { text: 'Hourly', value: 'hourly' }, { text: 'Daily', value: 'daily' }, { text: 'Weekly', value: 'weekly' }, { text: 'Monthly', value: 'monthly' }, { text: 'Yearly', value: 'yearly' }];
+    const itemValues = [{ text: 'Minutely', value: 'minutely' }, { text: 'Hourly', value: 'hourly' }, { text: 'Daily', value: 'daily' }, { text: 'Weekly', value: 'weekly' }, { text: 'Monthly', value: 'monthly' }, { text: 'Yearly', value: 'yearly' }];
 
     for(let i = 0, len = items.length; i < len; i++) {
         assert.equal(itemValues[i].text, items[i].text(), 'item text is right');
@@ -128,20 +128,6 @@ QUnit.test('Recurrence editor onValueChanged should be fired after change value'
     freqEditor.option('value', 'weekly');
 
     assert.equal(fired, 1, 'Recurrence editor onValueChanged is fired');
-});
-
-QUnit.test('\'resizePopup\' observer should be fired after changing freq', function(assert) {
-    this.createInstance({
-        value: 'FREQ=MONTHLY'
-    });
-
-    const stub = sinon.stub(this.instance, 'invoke').withArgs('resizePopup');
-
-    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
-
-    freqEditor.option('value', 'weekly');
-
-    assert.ok(stub.calledOnce, 'Observer is notified');
 });
 
 QUnit.test('Recurrence editor should correctly process values to the freq radioGroup', function(assert) {

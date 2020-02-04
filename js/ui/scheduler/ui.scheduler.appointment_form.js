@@ -1,18 +1,13 @@
-import $ from '../../core/renderer';
 import Form from '../form';
 import dateSerialization from '../../core/utils/date_serialization';
 import messageLocalization from '../../localization/message';
-import clickEvent from '../../events/click';
 import typeUtils from '../../core/utils/type';
-import eventsEngine from '../../events/core/events_engine';
 
 import './ui.scheduler.recurrence_editor';
 import './timezones/ui.scheduler.timezone_editor';
 import '../text_area';
 import '../tag_box';
 import '../switch';
-
-const RECURRENCE_EDITOR_ITEM_CLASS = 'dx-scheduler-recurrence-rule-item';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 350;
 
@@ -72,7 +67,7 @@ const SchedulerAppointmentForm = {
         }
     },
 
-    prepareAppointmentFormEditors: function(dataExprs, schedulerInst) {
+    prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, appointmentData) {
         const that = this;
 
         this._editors = [
@@ -180,10 +175,18 @@ const SchedulerAppointmentForm = {
                 }
             }, {
                 editorType: 'dxSwitch',
+                name: 'visibilityChanged',
                 label: {
                     text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
                     location: 'right',
                 },
+                editorOptions: {
+                    value: !!appointmentData.recurrenceRule,
+                    onValueChanged: function(args) {
+                        that._appointmentForm.getEditor(dataExprs.recurrenceRuleExpr).option('visible', args.value);
+                        triggerResize();
+                    }
+                }
             },
             {
                 itemType: 'empty',
@@ -198,33 +201,16 @@ const SchedulerAppointmentForm = {
                 }
             },
             {
-                itemType: 'empty',
-                colSpan: 2
-            },
-            {
                 dataField: dataExprs.recurrenceRuleExpr,
                 editorType: 'dxRecurrenceEditor',
                 colSpan: 2,
                 editorOptions: {
-                    observer: schedulerInst,
                     firstDayOfWeek: schedulerInst.option('firstDayOfWeek'),
-                    onValueChanged: function(args) {
-                        const value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
-                        schedulerInst.fire('recurrenceEditorVisibilityChanged', value);
-                    },
-                    onContentReady: function(args) {
-                        const $editorField = $(args.element).closest('.dx-field-item');
-                        const $editorLabel = $editorField.find('.dx-field-item-label');
-
-                        eventsEngine.off($editorLabel, clickEvent.name);
-                        eventsEngine.on($editorLabel, clickEvent.name, function() {
-                            args.component.toggle();
-                        });
-                    }
+                    visible: !!appointmentData.recurrenceRule,
                 },
-                cssClass: RECURRENCE_EDITOR_ITEM_CLASS,
                 label: {
-                    text: messageLocalization.format('dxScheduler-editorLabelRecurrence')
+                    text: ' ',
+                    visible: false
                 }
             }
         ];
