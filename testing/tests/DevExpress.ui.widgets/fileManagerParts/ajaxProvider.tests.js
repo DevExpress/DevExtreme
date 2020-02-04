@@ -38,7 +38,7 @@ QUnit.module('Ajax File Provider', moduleConfig, () => {
             responseText: fileItems
         });
 
-        this.provider.getItems('')
+        this.provider.getItems()
             .done(dirs => {
                 assert.equal(dirs.length, 2);
                 assert.equal(dirs[0].name, 'F1');
