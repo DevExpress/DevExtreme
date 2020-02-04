@@ -509,7 +509,7 @@ module('keyboard navigation', moduleConfig, () => {
             disabled: true
         });
 
-        assert.ok($element.attr('tabindex') === undefined, 'collection of radio group has not tabindex');
+        assert.strictEqual($element.attr('tabindex'), undefined, 'collection of radio group has not tabindex');
     });
 
     test('radio group items should not have tabIndex(T674238)', function(assert) {
@@ -520,8 +520,8 @@ module('keyboard navigation', moduleConfig, () => {
         });
 
         const $items = $element.find('.' + RADIO_BUTTON_CLASS);
-        assert.ok($items.eq(0).attr('tabindex') === undefined, 'items of radio group hasn\'t tabindex');
-        assert.ok($items.eq(1).attr('tabindex') === undefined, 'items of radio group hasn\'t tabindex');
+        assert.strictEqual($items.eq(0).attr('tabindex'), undefined, 'items of radio group hasn\'t tabindex');
+        assert.strictEqual($items.eq(1).attr('tabindex'), undefined, 'items of radio group hasn\'t tabindex');
     });
 });
 

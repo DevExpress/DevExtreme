@@ -285,7 +285,7 @@ QUnit.test('T566739. Do not generate CrossJoin in select statement if skipValues
         skipValues: true
     });
 
-    assert.ok(this.getQuery().toLowerCase().indexOf('crossjoin') === -1);
+    assert.strictEqual(this.getQuery().toLowerCase().indexOf('crossjoin'), -1);
 });
 
 QUnit.test('Use full item key in descendants expression. T620434', function(assert) {

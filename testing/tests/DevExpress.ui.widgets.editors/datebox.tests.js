@@ -1229,7 +1229,7 @@ QUnit.module('dateView integration', {
         devices.real({ platform: 'win', win: true });
 
         const dateBox = $('#dateBox').dxDateBox().dxDateBox('instance');
-        assert.ok(dateBox.option('pickerType') !== 'native');
+        assert.notStrictEqual(dateBox.option('pickerType'), 'native');
 
         support.inputType = this.originalInputType;
         devices.real(originalDevice);

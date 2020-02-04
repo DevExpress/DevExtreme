@@ -745,7 +745,7 @@ testModule('visibility', moduleConfig, () => {
             const $content = $(overlay.$content());
             const $wrapper = $content.parent();
 
-            assert.ok($wrapper.closest('#overlay').length === 1, 'overlay wrapper is inside the overlay root element');
+            assert.strictEqual($wrapper.closest('#overlay').length, 1, 'overlay wrapper is inside the overlay root element');
             assert.ok($wrapper.is(':hidden'));
             assert.ok($content.is(':hidden'));
             assert.ok($overlay.is(':hidden'));

@@ -20,7 +20,7 @@ QUnit.test('toComparable is used for compound keys', function(assert) {
     const guid1 = new Guid();
     const guid2 = new Guid(guid1);
 
-    assert.ok(guid1 !== guid2);
+    assert.notStrictEqual(guid1, guid2);
 
     assert.ok(keysEqual(
         ['a', 'b'],
@@ -36,7 +36,7 @@ QUnit.test('toComparable is used for EdmLiteral', function(assert) {
     const edm1 = new EdmLiteral('50m');
     const edm2 = new EdmLiteral('50m');
 
-    assert.ok(edm1 !== edm2);
+    assert.notStrictEqual(edm1, edm2);
 
     assert.ok(keysEqual(null, edm1, edm2));
 });

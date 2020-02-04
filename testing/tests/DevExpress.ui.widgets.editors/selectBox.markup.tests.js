@@ -277,7 +277,7 @@ QUnit.module('regressions', moduleSetup, () => {
             }
         });
 
-        assert.ok(byKeyCalled.state() !== 'resolved');
+        assert.notStrictEqual(byKeyCalled.state(), 'resolved');
     });
 
     QUnit.test('T427723: dxSelectBox placed in a custom Angular directive throws the \'Cannot read property \'dxButton\' of undefined\' error', function(assert) {

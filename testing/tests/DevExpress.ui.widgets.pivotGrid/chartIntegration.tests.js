@@ -168,7 +168,7 @@ QUnit.test('Update bound chart when pivotGrid is changed', function(assert) {
 
     // assert
     const updatedChartOptions = this.getChartOptions();
-    assert.ok(chartDataSource !== updatedChartOptions.dataSource, 'chart dataSource is updated');
+    assert.notStrictEqual(chartDataSource, updatedChartOptions.dataSource, 'chart dataSource is updated');
 });
 
 QUnit.test('Unbind chart from pivotGrid', function(assert) {
@@ -184,7 +184,7 @@ QUnit.test('Unbind chart from pivotGrid', function(assert) {
     pivotGrid.getDataSource().load();
 
     newChartDS = this.getChartOptions().dataSource;
-    assert.ok(chartDataSource === newChartDS, 'chart dataSource is not updated');
+    assert.strictEqual(chartDataSource, newChartDS, 'chart dataSource is not updated');
     assert.ok(!chart.$element().data('dxPivotGridUnbinding'));
 });
 

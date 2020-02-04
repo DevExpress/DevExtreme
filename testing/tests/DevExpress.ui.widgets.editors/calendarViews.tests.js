@@ -206,7 +206,7 @@ QUnit.module('YearView', {
     }
 }, () => {
     QUnit.test('getNavigatorCaption must return a proper caption', function(assert) {
-        assert.ok(this.view.getNavigatorCaption().toString() === '2013');
+        assert.strictEqual(this.view.getNavigatorCaption().toString(), '2013');
     });
 
     QUnit.test('change value option must add a CSS class to a cell', function(assert) {
@@ -261,7 +261,7 @@ QUnit.module('DecadeView', {
     }
 }, () => {
     QUnit.test('getNavigatorCaption must return a proper caption', function(assert) {
-        assert.ok(this.view.getNavigatorCaption() === '2010-2019');
+        assert.strictEqual(this.view.getNavigatorCaption(), '2010-2019');
     });
 
     QUnit.test('change value option must add a CSS class to a cell', function(assert) {
@@ -327,7 +327,7 @@ QUnit.module('CenturyView', {
     }
 }, () => {
     QUnit.test('getNavigatorCaption must return a proper caption', function(assert) {
-        assert.ok(this.view.getNavigatorCaption() === '2000-2099');
+        assert.strictEqual(this.view.getNavigatorCaption(), '2000-2099');
     });
 
     QUnit.test('data-value after render for cells in century view', function(assert) {

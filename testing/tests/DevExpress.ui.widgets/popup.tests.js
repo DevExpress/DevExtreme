@@ -830,7 +830,7 @@ QUnit.module('options changed callbacks', {
         const $wrapper = this.instance.$content().parent().parent();
 
         assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI);
-        assert.ok(($wrapper.css('position') === 'fixed'), 'popup wrapper position type is correct');
+        assert.strictEqual($wrapper.css('position'), 'fixed', 'popup wrapper position type is correct');
 
         this.instance.hide();
         assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class removed from body after popup hiding');
@@ -844,7 +844,7 @@ QUnit.module('options changed callbacks', {
         this.instance.option('fullScreen', true);
 
         assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI, 'class added to the body if fullScreen is changed to \'true\' at runtime');
-        assert.ok(($wrapper.css('position') === 'fixed'), 'popup wrapper position type is correct if fullScreen is changed to \'true\' at runtime');
+        assert.strictEqual($wrapper.css('position'), 'fixed', 'popup wrapper position type is correct if fullScreen is changed to \'true\' at runtime');
         this.instance.hide();
     });
 

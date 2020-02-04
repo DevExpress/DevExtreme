@@ -55,14 +55,14 @@ QUnit.module('MonthView markup', {
 }, () => {
     QUnit.test('main table should be 6 by 7', function(assert) {
         const table = this.$element.find('tbody');
-        assert.ok(table.length === 1, 'table has been rendered');
+        assert.strictEqual(table.length, 1, 'table has been rendered');
 
         const rows = table.find('tr');
-        assert.ok(rows.length === 6, 'with 6 rows');
+        assert.strictEqual(rows.length, 6, 'with 6 rows');
 
         for(let i = 0; i < 6; ++i) {
             const columns = $(rows[i]).find('td');
-            assert.ok(columns.length === 7, 'of 7 columns');
+            assert.strictEqual(columns.length, 7, 'of 7 columns');
         }
     });
 
@@ -165,14 +165,14 @@ QUnit.module('YearView markup', {
     QUnit.test('main table for year view should be 4 by 3', function(assert) {
         const table = this.$element.find('tbody');
 
-        assert.ok(table.length === 1, 'table has been rendered');
+        assert.strictEqual(table.length, 1, 'table has been rendered');
 
         const rows = table.find('tr');
-        assert.ok(rows.length === 3, 'with 3 rows');
+        assert.strictEqual(rows.length, 3, 'with 3 rows');
 
         for(let i = 0; i < 3; ++i) {
             const columns = $(rows[i]).find('td');
-            assert.ok(columns.length === 4, 'of 4 columns');
+            assert.strictEqual(columns.length, 4, 'of 4 columns');
         }
     });
 
@@ -242,14 +242,14 @@ QUnit.module('DecadeView', {
     QUnit.test('main table for decade view should be 4 by 3', function(assert) {
         const table = this.$element.find('tbody');
 
-        assert.ok(table.length === 1, 'table has been rendered');
+        assert.strictEqual(table.length, 1, 'table has been rendered');
 
         const rows = table.find('tr');
-        assert.ok(rows.length === 3, 'with 3 rows');
+        assert.strictEqual(rows.length, 3, 'with 3 rows');
 
         for(let i = 0; i < 3; ++i) {
             const columns = $(rows[i]).find('td');
-            assert.ok(columns.length === 4, 'of 4 columns');
+            assert.strictEqual(columns.length, 4, 'of 4 columns');
         }
     });
 
@@ -312,14 +312,14 @@ QUnit.module('CenturyView', {
     QUnit.test('main table for century view should be 4 by 3', function(assert) {
         const table = this.$element.find('tbody');
 
-        assert.ok(table.length === 1, 'table has been rendered');
+        assert.strictEqual(table.length, 1, 'table has been rendered');
 
         const rows = table.find('tr');
-        assert.ok(rows.length === 3, 'with 3 rows');
+        assert.strictEqual(rows.length, 3, 'with 3 rows');
 
         for(let i = 0; i < 3; ++i) {
             const columns = $(rows[i]).find('td');
-            assert.ok(columns.length === 4, 'of 4 columns');
+            assert.strictEqual(columns.length, 4, 'of 4 columns');
         }
     });
 

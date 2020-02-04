@@ -2664,7 +2664,7 @@ QUnit.test('Context menu is removed when the allowExportSelectedData option is c
     $exportMenu = $('.dx-context-menu.dx-datagrid-export-menu').first();
 
     // assert
-    assert.ok($exportMenu.length === 0);
+    assert.strictEqual($exportMenu.length, 0);
 });
 
 QUnit.test('Hide export button via option', function(assert) {
@@ -2745,7 +2745,7 @@ QUnit.test('Show export button via option when the enabled option is disabled', 
     assert.ok(this.headerPanel.isVisible(), 'is visible');
     $exportButton = $container.find('.dx-datagrid-export-button');
     assert.equal($exportButton.length, 1, 'export button is contained in a DOM');
-    assert.ok($exportButton.css('display') !== 'none', 'export button is shown');
+    assert.notStrictEqual($exportButton.css('display'), 'none', 'export button is shown');
 });
 
 QUnit.test('The export context menu is shown', function(assert) {
@@ -3064,7 +3064,7 @@ QUnit.test('Customize a data and a columns before exporting', function(assert) {
     assert.equal(exportedItems[3].values[1], 'TEST 30', '4 exported item of data');
     assert.equal(exportedItems[4].values[1], 'TEST 30', '5 exported item of data');
 
-    assert.ok(columns[2].width !== 333, 'third column\'s width');
+    assert.notStrictEqual(columns[2].width, 333, 'third column\'s width');
     assert.equal(items[1].values[2], '3', '2 item of data');
     assert.equal(items[2].values[2], '3', '3 item of data');
     assert.equal(items[3].values[2], '3', '4 item of data');
