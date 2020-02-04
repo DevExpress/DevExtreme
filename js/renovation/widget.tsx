@@ -281,21 +281,13 @@ export default class Widget {
 
     @Effect()
     keyboardEffect() {
-        const shouldAttach = this.focusStateEnabled || this.onKeyPress;
-        let id: string | null = null;
+        if (this.focusStateEnabled || this.onKeyPress) {
+            const id = keyboard.on(this.widgetRef, this.widgetRef,
+                options => this.onKeyPress?.(options.originalEvent, options));
 
-        if (shouldAttach) {
-            const keyboardHandler = (options: any) => {
-                const { originalEvent } = options;
-
-                return this.onKeyPress && this.onKeyPress(originalEvent, options);
-            };
-
-            id = keyboard.on(this.widgetRef, this.widgetRef,
-                opts => keyboardHandler(opts),
-            );
+            return () => keyboard.off(id);
         }
 
-        return () => keyboard.off(id);
+        return null;
     }
 }

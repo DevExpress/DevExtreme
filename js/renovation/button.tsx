@@ -50,10 +50,10 @@ export const viewModelFunction = (model: Button) => {
 };
 
 export const viewFunction = (viewModel: Button) => {
-    const onClick = (e) => {
+    const onClick = e => {
         viewModel.useSubmitBehavior && viewModel.submitInputRef.current.click();
 
-        return viewModel.onClick && viewModel.onClick(e);
+        return viewModel.onClick?.(e);
     };
 
     const onKeyPress = (e, { keyName, which }) => {
@@ -89,7 +89,7 @@ export const viewFunction = (viewModel: Button) => {
                 <span className="dx-button-text">{viewModel.text}</span>
             }
             {viewModel.useSubmitBehavior &&
-                <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className={'dx-button-submit-input'}/>
+                <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
             }
         </div>
     </WidgetJSX>;
@@ -123,7 +123,7 @@ export default class Button extends Widget {
         const namespace = 'UIFeedback';
 
         click.on(this.submitInputRef, e => {
-            this.onSubmit && this.onSubmit(e);
+            this.onSubmit?.(e);
             e.stopPropagation();
         }, { namespace });
 

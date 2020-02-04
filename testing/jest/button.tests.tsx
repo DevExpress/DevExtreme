@@ -1,11 +1,13 @@
 import Button from '../../js/renovation/button.p.js';
 import Widget from '../../js/renovation/widget.p.js';
 import { h } from 'preact';
-import { defaultEvent, emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
+import { clear as clearEventHandlers, defaultEvent, emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
 import { mount } from 'enzyme';
 
 describe('Button', () => {
     const render = (props = {}) => mount(<Button {...props} />).childAt(0);
+
+    beforeEach(clearEventHandlers);
 
     describe('Props', () => {
         describe('useSubmitBehavior', () => {

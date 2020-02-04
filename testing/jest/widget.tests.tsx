@@ -1,10 +1,12 @@
 import Widget from '../../js/renovation/widget.p.js';
 import { h } from 'preact';
-import { emit, fakeClickEvent, EVENT } from './utils/events-mock';
+import { clear as clearEventHandlers, emit, fakeClickEvent, EVENT } from './utils/events-mock';
 import { shallow } from 'enzyme';
 
 describe('Widget', () => {
     const render = (props = {}) => shallow(<Widget {...props} />);
+
+    beforeEach(clearEventHandlers);
 
     describe('Props', () => {
         describe('accessKey', () => {
@@ -33,7 +35,7 @@ describe('Widget', () => {
                 expect(widget.hasClass('dx-state-focused')).toBe(true);
             });
 
-            it.only('should not fire click event if the accessKey is pressed', () => {
+            it('should not fire click event if the accessKey is pressed', () => {
                 const e = { ...fakeClickEvent, stopImmediatePropagation: jest.fn() };
 
                 render({ accessKey: 'y', focusStateEnabled: true });

@@ -1,12 +1,17 @@
 import eventsEngine from '../../../js/events/core/events_engine';
 import { keyboard } from '../../../js/events/short';
 
-const eventHandlers = {};
-const keyboardHandlers = {};
+let eventHandlers = {};
+let keyboardHandlers = {};
 
 export const KEY = {
     enter: 'enter',
     space: 'space'
+};
+
+export const clear = () => {
+    eventHandlers = {};
+    keyboardHandlers = {};
 };
 
 export const EVENT = {
