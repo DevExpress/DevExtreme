@@ -169,5 +169,10 @@
     "ie > 10",
     "> 1%"
   ],
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "node_modules"
+    ]
+  },
   "pre-commit": "lint-staged"
 }
