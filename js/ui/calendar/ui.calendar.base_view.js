@@ -322,8 +322,8 @@ const BaseView = Widget.inherit({
                 this._invalidate();
                 break;
             case 'rtlEnabled':
-                this.callBase(args);
                 this._cacheAppendMethodName(value);
+                this.callBase(args);
                 break;
             default:
                 this.callBase(args);
