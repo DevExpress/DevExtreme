@@ -1,12 +1,12 @@
 import Button from '../../js/renovation/button.p.js';
 import Widget from '../../js/renovation/widget.p.js';
-import { createElement } from 'preact';
+import { h } from 'preact';
 import { emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
 import { mount, shallow } from 'enzyme';
 
 describe('Button', () => {
-  const render = (props = {}) => mount(createElement(Button, props)).childAt(0);
-  const shallowRender = (props = {}) => shallow(createElement(Button, props));
+    const render = (props = {}) => mount(<Button {...props} />).childAt(0);
+    const shallowRender = (props = {}) => shallow(<Button {...props} />);
 
     describe('Props', () => {
         describe('onClick', () => {
@@ -73,10 +73,18 @@ describe('Button', () => {
         });
 
         describe('text', () => {
-            it('should render text', () => {
+            it('should render "text"', () => {
                 const button = render({ text: 'My button' });
 
                 expect(button.find('.dx-button-text').text()).toBe('My button');
+            });
+
+            it('should not render "text" by default', () => {
+                const button = render();
+
+                expect(button.hasClass('dx-button')).toBe(true);
+                expect(button.hasClass('dx-button-has-text')).toBe(false);
+                expect(button.exists('.dx-button-text')).toBe(false);
             });
         });
 
@@ -108,7 +116,7 @@ describe('Button', () => {
             it('should render template', () => {
                 const button = render({
                     text: 'My button',
-                    contentRender: ({ text }) => createElement('div', { className: 'custom-content', children: `${text}123` }),
+                    contentRender: ({ text }) => <div className={'custom-content'}>{text + 123}</div>,
                 });
                 const buttonContentChildren = button.find('.dx-button-content').children();
 
@@ -181,6 +189,20 @@ describe('Button', () => {
                 emit(EVENT.blur);
                 expect(button.hasClass('dx-state-disabled')).toBe(true);
                 expect(button.hasClass('dx-state-focus')).toBe(false);
+            })
+        })
+
+        describe('tabIndex', () => {
+            it('should pass a default value into Widget component', () => {
+                const tree = render();
+
+                expect(tree.find(Widget).prop('tabIndex')).toBe(0);
+            });
+
+            it('should pass a custom value into Widget component', () => {
+                const tree = render({ tabIndex: 10 });
+
+                expect(tree.find(Widget).prop('tabIndex')).toBe(10);
             });
         });
     });

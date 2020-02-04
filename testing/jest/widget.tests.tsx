@@ -1,10 +1,10 @@
 import Widget from '../../js/renovation/widget.p.js';
-import { createElement } from 'preact';
+import { h } from 'preact';
 import { emit, fakeClickEvent, EVENT } from './utils/events-mock';
 import { shallow } from 'enzyme';
 
 describe('Widget', () => {
-    const render = (props = {}) => shallow(createElement(Widget, props));
+    const render = (props = {}) => shallow(<Widget {...props} />);
 
     describe('Props', () => {
         describe('accessKey', () => {
@@ -229,7 +229,7 @@ describe('Widget', () => {
 
     describe('Children', () => {
         it('should render child component', () => {
-            const widget = render({ children: createElement('div', { className: 'custom-content' }) });
+            const widget = render({ children: <div className={'custom-content'} /> });
             const children = widget.children();
 
             expect(children).toHaveLength(1);

@@ -64,6 +64,7 @@
     "eslint": "^6.8.0",
     "eslint-plugin-jest": "^23.6.0",
     "eslint-plugin-qunit": "^4.0.0",
+    "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-spellcheck": "0.0.11",
     "exceljs": "3.3.1",
     "globalize": "^1.3.0",
@@ -168,5 +169,10 @@
     "ie > 10",
     "> 1%"
   ],
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "node_modules"
+    ]
+  },
   "pre-commit": "lint-staged"
 }
