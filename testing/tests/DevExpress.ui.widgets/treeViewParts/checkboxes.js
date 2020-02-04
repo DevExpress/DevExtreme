@@ -990,3 +990,87 @@ QUnit.module('Delayed datasource', () => {
     });
 });
 
+QUnit.module('Searching', () => {
+    QUnit.test('all.selected: false -> search(item2) -> select(item1) -> removeSearch', function(assert) {
+        const wrapper = new TreeViewTestWrapper({ showCheckBoxesMode: 'normal', dataStructure: 'plain', rootValue: ROOT_ID,
+            items: [
+                { id: 0, text: 'item1', parentId: ROOT_ID, selected: false },
+                { id: 1, text: 'item2', parentId: ROOT_ID, selected: false }] });
+
+        wrapper.instance.option('searchValue', '2');
+        wrapper.checkSelection([], [], 'after search');
+        wrapper.checkEventLog([], 'after search');
+
+        const selectResult = wrapper.instance.selectItem(0);
+        assert.equal(selectResult, false, 'nothing is found');
+        wrapper.checkSelection([], [], 'after selectItem');
+        wrapper.checkEventLog([], 'after selectItem');
+
+        wrapper.instance.option('searchValue', '');
+        wrapper.checkSelection([], [], 'after removeSearch');
+        wrapper.checkEventLog([], 'after removeSearch');
+    });
+
+    QUnit.test('all.selected: false -> search(item2) -> selectAll() -> removeSearch', function(assert) {
+        const wrapper = new TreeViewTestWrapper({ showCheckBoxesMode: 'normal', dataStructure: 'plain', rootValue: ROOT_ID,
+            items: [
+                { id: 0, text: 'item1', parentId: ROOT_ID, selected: false },
+                { id: 1, text: 'item2', parentId: ROOT_ID, selected: false }] });
+
+        wrapper.instance.option('searchValue', '2');
+        wrapper.checkSelection([], [], 'after search');
+        wrapper.checkEventLog([], 'after search');
+
+        wrapper.instance.selectAll();
+        wrapper.checkSelection([1], [0], 'after selectAll');
+        wrapper.checkEventLog(['selectionChanged'], 'after selectAll');
+        wrapper.clearEventLog();
+
+        wrapper.instance.option('searchValue', '');
+        wrapper.checkSelection([1], [1], 'after removeSearch');
+        wrapper.checkEventLog([]);
+    });
+
+    QUnit.test('all.selected: true -> search(item2) -> unselect(item1) -> removeSearch', function(assert) {
+        const wrapper = new TreeViewTestWrapper({ showCheckBoxesMode: 'normal', dataStructure: 'plain', rootValue: ROOT_ID,
+            items: [
+                { id: 0, text: 'item1', parentId: ROOT_ID, selected: true },
+                { id: 1, text: 'item2', parentId: ROOT_ID, selected: true }] });
+
+        wrapper.instance.option('searchValue', '2');
+        wrapper.checkSelection([1], [0], 'after search');
+        wrapper.checkEventLog([], 'after search');
+        wrapper.clearEventLog();
+
+        const unselectResult = wrapper.instance.unselectItem(0);
+        assert.equal(unselectResult, false, 'nothing is found');
+        wrapper.checkSelection([1], [0], 'after unselect');
+        wrapper.checkEventLog([], 'after unselect');
+        wrapper.clearEventLog();
+
+        wrapper.instance.option('searchValue', '');
+        wrapper.checkSelection([0, 1], [0, 1], 'after removeSearch');
+        wrapper.checkEventLog([], 'after removeSearch');
+    });
+
+    QUnit.test('all.selected: true -> search(item2) -> unselectAll -> removeSearch', function(assert) {
+        const wrapper = new TreeViewTestWrapper({ showCheckBoxesMode: 'normal', dataStructure: 'plain', rootValue: ROOT_ID,
+            items: [
+                { id: 0, text: 'item1', parentId: ROOT_ID, selected: true },
+                { id: 1, text: 'item2', parentId: ROOT_ID, selected: true }] });
+
+        wrapper.instance.option('searchValue', '2');
+        wrapper.checkSelection([1], [0], 'after search');
+        wrapper.checkEventLog([], 'after search');
+        wrapper.clearEventLog();
+
+        wrapper.instance.unselectAll();
+        wrapper.checkSelection([], [], 'after unselectAll');
+        wrapper.checkEventLog(['selectionChanged'], 'after unselectAll');
+        wrapper.clearEventLog();
+
+        wrapper.instance.option('searchValue', '');
+        wrapper.checkSelection([0], [0], 'after removeSearch');
+        wrapper.checkEventLog([], 'after removeSearch');
+    });
+});
