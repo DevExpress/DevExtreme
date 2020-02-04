@@ -19,14 +19,13 @@ import { isFakeClickEvent } from '../events/utils';
 import { hasWindow } from '../core/utils/window';
 import Action from '../core/action';
 
-const getStyles = ({ width, height, ...other }) => {
+const getStyles = ({ width, height }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
     const computedHeight = typeof height === 'function' ? height() : height;
 
     return {
         width: computedWidth ?? void 0,
-        height: computedHeight ?? void 0,
-        ...other
+        height: computedHeight ?? void 0
     };
 };
 
