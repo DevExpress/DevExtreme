@@ -4726,7 +4726,6 @@ QUnit.test('focusedRowKey should not overwrite dataSource field', function(asser
 
 QUnit.test('DataGrid should not scroll back to the focusedRow after paging if virtual scrolling (T718905, T719205)', function(assert) {
     // arrange
-    let isReady;
     const data = [
         { name: 'Alex', phone: '111111', room: 6 },
         { name: 'Dan', phone: '2222222', room: 5 },
@@ -4742,16 +4741,12 @@ QUnit.test('DataGrid should not scroll back to the focusedRow after paging if vi
         focusedRowEnabled: true,
         focusedRowIndex: 0,
         scrolling: { mode: 'virtual' },
-        paging: { pageSize: 2 },
-        onContentReady: function(e) {
-            if(!isReady) {
-                // act
-                e.component.pageIndex(1);
-                isReady = true;
-            }
-        }
+        paging: { pageSize: 2 }
     }).dxDataGrid('instance');
 
+    this.clock.tick();
+
+    dataGrid.pageIndex(1);
     this.clock.tick();
 
     // assert
@@ -19303,8 +19298,7 @@ QUnit.test('The draggable row should have correct markup when defaultOptions is 
     }
 });
 
-// T827960
-QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady', function(assert) {
+QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady (T827960)', function(assert) {
     // arrange
     const onFocusedRowChangedSpy = sinon.spy();
     const dataGrid = createDataGrid({
