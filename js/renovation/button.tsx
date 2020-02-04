@@ -101,7 +101,7 @@ export class ButtonInput extends WidgetInput {
     @Prop() icon?: string;
     @Prop() pressed?: boolean;
     @Prop() stylingMode?: 'outlined' | 'text' | 'contained';
-    @Prop() text?: string;
+    @Prop() text?: string = '';
     @Prop() type?: string;
 }
 
