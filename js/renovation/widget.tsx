@@ -163,8 +163,8 @@ export class WidgetInput {
     @Prop() name?: string = '';
     @Prop() onDimensionChanged?: () => any = (() => undefined);
     @Prop() onKeyboardHandled?: (args: any) => any | undefined;
+    @Prop() onKeyPress?: (e: any, options: any) => any = (() => undefined);
     @Prop() rtlEnabled?: boolean = config().rtlEnabled;
-    @Prop() supportedKeys?: (args: any) => any | undefined;
     @Prop() tabIndex?: number = 0;
     @Prop() visible?: boolean = true;
     @Prop() width?: string | number | null = null;
@@ -288,30 +288,13 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
     @Effect()
     keyboardEffect() {
-        const hasKeyboardEventHandler = !!this.props.onKeyboardHandled;
-        const shouldAttach = this.props.focusStateEnabled || hasKeyboardEventHandler;
-        let id: string | null = null;
+        if (this.props.focusStateEnabled || this.props.onKeyPress) {
+            const id = keyboard.on(this.widgetRef, this.widgetRef,
+                options => this.props.onKeyPress?.(options.originalEvent, options));
 
-        if (shouldAttach) {
-            const keyboardHandler = (options: any) => {
-                const { originalEvent, keyName, which } = options;
-                const keys = this.props.supportedKeys && this.props.supportedKeys(originalEvent) || {};
-                const handler = keys[keyName] || keys[which];
-
-                if (handler) {
-                    if (!handler(originalEvent, options)) {
-                        return false;
-                    }
-                }
-
-                return true;
-            };
-
-            id = keyboard.on(this.widgetRef, this.widgetRef,
-                opts => keyboardHandler(opts),
-            );
+            return () => keyboard.off(id);
         }
 
-        return () => keyboard.off(id);
+        return null;
     }
 }

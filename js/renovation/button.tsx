@@ -1,5 +1,6 @@
 import { getImageSourceType } from '../core/utils/icon';
-import { Component, ComponentInput, Prop, JSXComponent } from 'devextreme-generator/component_declaration/common';
+import { click } from '../events/short';
+import { Component, ComponentInput, Effect, Prop, Ref, JSXComponent } from 'devextreme-generator/component_declaration/common';
 import Widget, { WidgetInput } from './widget';
 
 
@@ -32,14 +33,6 @@ const getCssClasses = (model: ButtonInput) => {
 
 export const viewModelFunction = (model: Button):ButtonViewModel => {
     let icon: any = void 0;
-    const supportedKeys = () => {
-        const click = (e) => {
-            e.preventDefault();
-            model.props.onClick && model.props.onClick(e);
-        };
-
-        return { space: click, enter: click };
-    };
 
     if (model.props.icon || model.props.type === 'back') {
         icon = getImageContainerJSX(model.props.icon || 'back');
@@ -47,20 +40,34 @@ export const viewModelFunction = (model: Button):ButtonViewModel => {
 
     return {
         ...model.props,
+        submitInputRef: model.submitInputRef,
         elementAttr: { ...model.props.elementAttr, role: 'button' },
         aria: { label: model.props.text && model.props.text.trim() },
         cssClasses: getCssClasses(model.props),
         icon,
-        supportedKeys,
     };
 };
 
 declare type ButtonViewModel = {
     cssClasses: string;
+    submitInputRef: any
 } & ButtonInput
 
-export const viewFunction = (viewModel: ButtonViewModel) => (
-    <Widget
+export const viewFunction = (viewModel: ButtonViewModel) => {
+    const onClick = e => {
+        viewModel.useSubmitBehavior && viewModel.submitInputRef?.current.click();
+
+        return viewModel.onClick?.(e);
+    };
+
+    const onKeyPress = (e, { keyName, which }) => {
+        if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
+            e.preventDefault();
+            onClick(e);
+        }
+    };
+
+    return <Widget
         accessKey={viewModel.accessKey}
         activeStateEnabled={viewModel.activeStateEnabled}
         aria={viewModel.aria}
@@ -71,25 +78,26 @@ export const viewFunction = (viewModel: ButtonViewModel) => (
         height={viewModel.height}
         hint={viewModel.hint}
         hoverStateEnabled={viewModel.hoverStateEnabled}
-        onClick={viewModel.onClick}
+        onClick={onClick}
+        onKeyPress={onKeyPress}
         rtlEnabled={viewModel.rtlEnabled}
-        supportedKeys={viewModel.supportedKeys}
         tabIndex={viewModel.tabIndex}
         visible={viewModel.visible}
         width={viewModel.width}
     >
-        {viewModel.contentRender && (
-            <div className="dx-button-content">
-                <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} />
-            </div>
-        ) || (
-            <div className="dx-button-content">
-                {viewModel.icon}
-                {viewModel.text && <span className="dx-button-text">{viewModel.text}</span>}
-            </div>
-        )}
-    </Widget>
-);
+        <div className="dx-button-content">
+            {viewModel.contentRender &&
+                <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} />}
+            {!viewModel.contentRender && viewModel.icon}
+            {!viewModel.contentRender && viewModel.text &&
+                <span className="dx-button-text">{viewModel.text}</span>
+            }
+            {viewModel.useSubmitBehavior &&
+                <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
+            }
+        </div>
+    </Widget>;
+};
 
 @ComponentInput()
 export class ButtonInput extends WidgetInput { 
@@ -99,10 +107,12 @@ export class ButtonInput extends WidgetInput {
     @Prop() focusStateEnabled?: boolean = true;
     @Prop() hoverStateEnabled?: boolean = true;
     @Prop() icon?: string;
+    @Prop() onSubmit?: (e: any) => any = (() => undefined);
     @Prop() pressed?: boolean;
     @Prop() stylingMode?: 'outlined' | 'text' | 'contained';
     @Prop() text?: string = '';
     @Prop() type?: string;
+    @Prop() useSubmitBehavior?: boolean = false;
 }
 
 @Component({
@@ -112,4 +122,18 @@ export class ButtonInput extends WidgetInput {
     view: viewFunction,
 })
 
-export default class Button extends JSXComponent<ButtonInput> {}
+export default class Button extends JSXComponent<ButtonInput> {
+    @Ref() submitInputRef!: HTMLInputElement;
+
+    @Effect()
+    submitEffect() {
+        const namespace = 'UIFeedback';
+
+        click.on(this.submitInputRef, e => {
+            this.props.onSubmit?.(e);
+            e.stopPropagation();
+        }, { namespace });
+
+        return () => click.off(this.submitInputRef, { namespace });
+    }
+}
