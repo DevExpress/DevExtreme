@@ -84,10 +84,9 @@ export const viewFunction = (viewModel: Button) => {
         >
             <div className="dx-button-content">
                 {viewModel.contentRender && <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} />}
-                ||
-                {isIconLeft && viewModel.icon}
-                {viewModel.text && <span className="dx-button-text">{viewModel.text}</span>}
-                {!isIconLeft && viewModel.icon}
+                {!viewModel.contentRender && isIconLeft && viewModel.icon}
+                {!viewModel.contentRender && viewModel.text && <span className="dx-button-text">{viewModel.text}</span>}
+                {!viewModel.contentRender && !isIconLeft && viewModel.icon}
             </div>
         </WidgetJSX>
     );
