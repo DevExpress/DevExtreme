@@ -61,34 +61,29 @@ const Views = {
         },
 
         _renderHeader: function() {
-            const $header = $('<thead>');
+            const $headerRow = $('<tr>');
+            const $header = $('<thead>').append($headerRow);
+
             this._$table.prepend($header);
 
-            const $headerRow = $('<tr>');
-            $header.append($headerRow);
+            for(let colIndex = 0, colCount = this.option('colCount'); colIndex < colCount; colIndex++) {
+                this._renderHeaderCell(colIndex, $headerRow);
+            }
+        },
 
-            const appendCell = this.option('rtlEnabled')
-                ? function(row, cell) {
-                    row.prepend(cell);
-                }
-                : function(row, cell) {
-                    row.append(cell);
-                };
+        _renderHeaderCell: function(cellIndex, $headerRow) {
+            const {
+                full: fullCaption,
+                abbreviated: abbrCaption
+            } = this._getDayCaption(this._getFirstDayOfWeek() + cellIndex);
+            const $cell = $('<th>')
+                .attr({
+                    scope: 'col',
+                    abbr: fullCaption
+                })
+                .text(abbrCaption);
 
-            this._iterateCells(this.option('colCount'), (i) => {
-                const {
-                    full: fullCaption,
-                    abbreviated: abbrCaption
-                } = this._getDayCaption(this._getFirstDayOfWeek() + i);
-                const $cell = $('<th>')
-                    .attr({
-                        scope: 'col',
-                        abbr: fullCaption
-                    })
-                    .text(abbrCaption);
-
-                appendCell($headerRow, $cell);
-            });
+            this._appendCell($headerRow, $cell);
         },
 
         getNavigatorCaption: function() {

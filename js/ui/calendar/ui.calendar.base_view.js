@@ -86,15 +86,17 @@ const BaseView = Widget.inherit({
 
     _renderBody: function() {
         this.$body = $('<tbody>').appendTo(this._$table);
-        const colCount = this.option('colCount');
+
         const rowData = {
             cellDate: this._getFirstCellData(),
             prevCellDate: null
         };
 
-        for(let indexRow = 0, len = this.option('rowCount'); indexRow < len; indexRow++) {
+        for(let rowIndex = 0, rowCount = this.option('rowCount'); rowIndex < rowCount; rowIndex++) {
             rowData.row = this._createRow();
-            this._iterateCells(colCount, this._renderCell.bind(this, rowData));
+            for(let colIndex = 0, colCount = this.option('colCount'); colIndex < colCount; colIndex++) {
+                this._renderCell(rowData, colIndex);
+            }
         }
     },
 
@@ -107,18 +109,18 @@ const BaseView = Widget.inherit({
         return row;
     },
 
-    _appendChild: function(row, cell) {
-        if(!this._appendMethod) {
-            this._prepareAppendMethod();
+    _appendCell: function(row, cell) {
+        if(!this._appendMethodName) {
+            this._cacheAppendMethodName();
         }
 
-        this._appendMethod(row, cell);
+        $(row)[this._appendMethodName](cell);
     },
 
-    _prepareAppendMethod: function(rtlEnabled) {
-        this._appendMethod = rtlEnabled ?? this.option('rtlEnabled') ?
-            (row, cell) => row.insertBefore(cell, row.firstChild) :
-            (row, cell) => row.appendChild(cell);
+    _cacheAppendMethodName: function(rtlEnabled) {
+        this._appendMethodName = rtlEnabled ?? this.option('rtlEnabled') ?
+            'prepend' :
+            'append';
     },
 
     _createCell: function(cellDate) {
@@ -151,7 +153,7 @@ const BaseView = Widget.inherit({
         const { cell, $cell } = this._createCell(cellDate);
         const cellTemplate = this.option('cellTemplate');
 
-        this._appendChild(row, cell);
+        this._appendCell(row, cell);
 
         if(cellTemplate) {
             cellTemplate.render(this._prepareCellTemplateData(cellDate, cellIndex, $cell));
@@ -190,15 +192,6 @@ const BaseView = Widget.inherit({
             container: domUtils.getPublicElement($cell),
             index: cellIndex
         };
-    },
-
-    _iterateCells: function(colCount, callback) {
-        let i = 0;
-
-        while(i < colCount) {
-            callback(i);
-            ++i;
-        }
     },
 
     _renderEvents: function() {
@@ -330,7 +323,7 @@ const BaseView = Widget.inherit({
                 break;
             case 'rtlEnabled':
                 this.callBase(args);
-                this._prepareAppendMethod(value);
+                this._cacheAppendMethodName(value);
                 break;
             default:
                 this.callBase(args);
