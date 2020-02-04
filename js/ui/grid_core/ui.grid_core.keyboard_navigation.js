@@ -27,6 +27,7 @@ const FREESPACE_ROW_CLASS = 'dx-freespace-row';
 const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
 const MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell';
 const EDITOR_CELL_CLASS = 'dx-editor-cell';
+const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const EDIT_ROW_CLASS = 'dx-edit-row';
 const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const COMMAND_EXPAND_CLASS = 'dx-command-expand';
@@ -126,7 +127,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _initViewHandlers: function() {
         const that = this;
         const pointerDownAction = that.createAction(that._pointerDownHandler);
-        const pointerUpAction = that.createAction(that._clickHandler);
+        const pointerUpAction = that.createAction(that._pointerUpHandler);
         const rowsView = that.getView('rowsView');
 
         rowsView.renderCompleted.add(function(e) {
@@ -141,7 +142,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
             eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), pointerDownAction);
             eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), clickSelector, pointerDownAction);
-
             eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), pointerUpAction);
             eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickSelector, pointerUpAction);
 
@@ -730,7 +730,33 @@ const KeyboardNavigationController = core.ViewController.inherit({
     // #endregion Key_Handlers
 
     // #region Click_Handler
-    _clickHandler: function(e) {
+    _pointerDownHandler: function(e) {
+        const $target = $(e.event.target);
+        const $row = $target.closest(`.${ROW_CLASS}`);
+        const $cell = $target.closest('td');
+        const isEditor = $target.hasClass(EDITOR_INPUT_CLASS);
+        const isGroupRow = $row.hasClass(GROUP_ROW_CLASS);
+        const $rowsView = this.getView('rowsView').element();
+        const isFocused = $cell.hasClass('dx-focused');
+
+        $rowsView
+            .find(`.${ROW_CLASS}[tabindex], .${ROW_CLASS} > td[tabindex]`)
+            .not($cell)
+            .removeAttr('tabindex');
+
+        $rowsView
+            .find(`.${ROW_CLASS}.${CELL_FOCUS_DISABLED_CLASS}, .${ROW_CLASS} > td.${CELL_FOCUS_DISABLED_CLASS}`)
+            .not($cell)
+            .removeClass(CELL_FOCUS_DISABLED_CLASS);
+
+        if(isGroupRow) {
+            $row.addClass(CELL_FOCUS_DISABLED_CLASS);
+        } else if(!isEditor && !isFocused) {
+            $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
+        }
+    },
+
+    _pointerUpHandler: function(e) {
         const event = e.event;
         let $target = $(event.currentTarget);
         const rowsView = this.getView('rowsView');
@@ -766,16 +792,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     _isEventInCurrentGrid: function(event) {
         return isElementInCurrentGrid(this, $(event.target));
-    },
-
-    _pointerDownHandler: function(e) {
-        const $target = $(e.event.target);
-        const isEditRow = $target.closest('tr').hasClass(EDIT_ROW_CLASS);
-
-        if(!isEditRow) {
-            const $targetCell = $target.closest('td');
-            $targetCell.addClass(CELL_FOCUS_DISABLED_CLASS);
-        }
     },
 
     _clickTargetCellHandler: function(event, $cell) {
@@ -941,10 +957,10 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 eventsEngine.trigger($focusElement, 'focus');
             }
             if(disableFocus) {
-                $focusViewElement && $focusViewElement.find('.' + CELL_FOCUS_DISABLED_CLASS + '[tabIndex]').not($focusElement).removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr('tabIndex');
-                $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
+                $focusViewElement && $focusViewElement.find(`.${CELL_FOCUS_DISABLED_CLASS}[tabIndex]`).not($focusElement).removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr('tabIndex');
+                !isInteractiveElement && $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
             } else {
-                $focusViewElement && $focusViewElement.find('.' + CELL_FOCUS_DISABLED_CLASS + ':not(.' + MASTER_DETAIL_CELL_CLASS + ')').removeClass(CELL_FOCUS_DISABLED_CLASS);
+                $focusViewElement && $focusViewElement.find(`.${CELL_FOCUS_DISABLED_CLASS}:not(.${MASTER_DETAIL_CELL_CLASS})`).removeClass(CELL_FOCUS_DISABLED_CLASS);
                 this.getController('editorFactory').focus($focusElement);
             }
         }

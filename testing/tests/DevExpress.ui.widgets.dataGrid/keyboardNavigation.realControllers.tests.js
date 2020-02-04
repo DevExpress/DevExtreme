@@ -147,7 +147,10 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         $input = $(this.getCellElement(1, 1)).find('input');
-        $input.focus().trigger(CLICK_EVENT);
+        $input
+            .focus()
+            .trigger(pointerEvents.down)
+            .trigger(CLICK_EVENT);
         $cell = $input.parent();
 
         // assert
@@ -1308,5 +1311,47 @@ QUnit.module('Real DataController and ColumnsController', {
                 assert.notOk($(this.getCellElement(0, 1)).hasClass('dx-cell-focus-disabled'), 'Cell[0, 1] focus overlay is not disabled');
             });
         });
+    });
+
+    QUnit.testInActiveWindow('Focused overlay should not hide after click cell with focus overlay', function(assert) {
+        // arrange
+        const that = this;
+        const $testElement = $('#container');
+
+        that.$element = function() {
+            return $testElement;
+        };
+        that.data = [
+            { name: 'Alex', lastName: 'John' },
+            { name: 'Dan', lastName: 'Skip' }
+        ],
+        that.options = {
+            onFocusedCellChanging: e => { e.isHighlighted = true; },
+            tabIndex: 5
+        };
+
+        that.setupModule();
+        that.gridView.render($testElement);
+
+
+        // act
+        const $cell = $(this.getCellElement(1, 0));
+        $cell
+            .trigger(pointerEvents.down)
+            .trigger(CLICK_EVENT)
+            .trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.notOk($cell.hasClass('dx-cell-focus-disabled'), 'Pointer down cell has no disabled focus overlay class');
+        assert.equal($cell.attr('tabindex'), 5, 'Cell has [tabindex]');
+
+        // act
+        $cell.trigger(pointerEvents.down);
+        this.clock.tick();
+
+        // assert
+        assert.notOk($cell.hasClass('dx-cell-focus-disabled'), 'Pointer down cell has no disabled focus overlay class');
+        assert.equal($cell.attr('tabindex'), 5, 'Cell has [tabindex]');
     });
 });

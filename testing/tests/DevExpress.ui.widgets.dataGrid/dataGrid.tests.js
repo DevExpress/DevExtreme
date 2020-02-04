@@ -18972,8 +18972,9 @@ QUnit.test('The cell should not be focused on pointerEvents.down event (T850219)
     });
 });
 
-QUnit.test('The cell should not have dx-cell-focus-disabled class on pointerEvents.down event with row editing mode if row in editing state (T850219)', function(assert) {
+QUnit.test('Editor cell should not have dx-cell-focus-disabled class on pointerEvents.down event if row edit mode (T850219)', function(assert) {
     // arrange
+    const rowsViewWrapper = dataGridWrapper.rowsView;
     const dataGrid = createDataGrid({
         dataSource: [{ field1: 'test1', field2: 'test2' }],
         editing: {
@@ -18987,11 +18988,74 @@ QUnit.test('The cell should not have dx-cell-focus-disabled class on pointerEven
     this.clock.tick();
 
     // act
-    $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.down);
+    rowsViewWrapper.getEditorInput(0, 1).trigger(pointerEvents.down);
     this.clock.tick();
 
     // assert
-    assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-focus-disabled'), 'cell has not dx-cell-focus-disabled class');
+    assert.notOk(rowsViewWrapper.getCellElement(0, 1).hasClass('dx-cell-focus-disabled'), 'cell has not dx-cell-focus-disabled class');
+});
+
+['cell', 'batch'].forEach(editMode => {
+    QUnit.test(`Editor cell should not have dx-cell-focus-disabled class on pointerEvents.down event if ${editMode} edit mode (T850219)`, function(assert) {
+        // arrange
+        const rowsViewWrapper = dataGridWrapper.rowsView;
+
+        createDataGrid({
+            dataSource: [{ field1: 'test1', field2: 'test2' }],
+            editing: {
+                mode: editMode,
+                allowUpdating: true
+            }
+        });
+        this.clock.tick();
+
+        // act
+        rowsViewWrapper.getCellElement(0, 1)
+            .trigger(pointerEvents.down)
+            .trigger(pointerEvents.up)
+            .trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        let $cell = rowsViewWrapper.getCellElement(0, 1);
+        assert.ok($cell.hasClass('dx-editor-cell'), 'ediotr cell');
+        assert.notOk($cell.hasClass('dx-cell-focus-disabled'), 'cell has not dx-cell-focus-disabled class');
+        assert.equal($cell.attr('tabindex'), 0, 'cell has tabindex');
+
+        // act
+        rowsViewWrapper.getEditorInput(0, 1)
+            .trigger(pointerEvents.down);
+        this.clock.tick();
+
+        // assert
+        $cell = rowsViewWrapper.getCellElement(0, 1);
+        assert.ok($cell.hasClass('dx-editor-cell'), 'ediotr cell');
+        assert.notOk($cell.hasClass('dx-cell-focus-disabled'), 'cell has not dx-cell-focus-disabled class');
+        assert.equal($cell.attr('tabindex'), 0, 'cell has tabindex');
+    });
+});
+
+QUnit.test('The cell should not have dx-cell-focus-disabled class on pointerEvents.down event with row editing mode if row in editing state (T850219)', function(assert) {
+    // arrange
+    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 'test1', field2: 'test2' }],
+        editing: {
+            mode: 'row',
+            allowUpdating: true
+        }
+    });
+    this.clock.tick();
+
+    dataGrid.editRow(0);
+    this.clock.tick();
+
+    // act
+    rowsViewWrapper.getEditorInput(0, 1).trigger(pointerEvents.down);
+    this.clock.tick();
+
+    // assert
+    assert.notOk(rowsViewWrapper.getCellElement(0, 1).hasClass('dx-cell-focus-disabled'), 'cell has not dx-cell-focus-disabled class');
 });
 
 QUnit.test('onFocusedRowChanging, onFocusedRowChanged event if click selection checkBox (T812681)', function(assert) {
