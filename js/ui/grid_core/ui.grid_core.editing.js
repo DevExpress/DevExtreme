@@ -1781,6 +1781,16 @@ const EditingController = modules.ViewController.inherit((function() {
             return skipCurrentRow ? [] : [row.rowIndex];
         },
 
+        addDeferred: function(deferred) {
+            this._deferreds.push(deferred);
+            deferred.always(() => {
+                const index = this._deferreds.indexOf(deferred);
+                if(index >= 0) {
+                    this._deferreds.splice(index, 1);
+                }
+            });
+        },
+
         _prepareEditDataParams: function(options, value, text) {
             const that = this;
             const newData = {};
@@ -1814,13 +1824,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     options.values[options.columnIndex] = value;
                 }
 
-                that._deferreds.push(setCellValueResult);
-                setCellValueResult.always(function() {
-                    const index = that._deferreds.indexOf(setCellValueResult);
-                    if(index >= 0) {
-                        that._deferreds.splice(index, 1);
-                    }
-                });
+                that.addDeferred(setCellValueResult);
             }
 
             return deferred;
@@ -2327,10 +2331,11 @@ const EditingController = modules.ViewController.inherit((function() {
         allowDeleting: function(options) {
             return this._allowEditAction('allowDeleting', options);
         },
-
+        // test
         isInvalidCell: function() {
             return false;
         }
+        // endTest
     };
 })());
 

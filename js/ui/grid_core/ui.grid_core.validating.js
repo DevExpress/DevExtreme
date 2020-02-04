@@ -123,7 +123,10 @@ const ValidatingController = modules.Controller.inherit((function() {
             }
 
             this._isValidationInProgress = true;
+            let fullValidating;
             if(isFull) {
+                fullValidating = new Deferred();
+                editingController.addDeferred(fullValidating.promise());
                 each(editingController._editData, (index, editData) => {
                     let validationResult;
 
@@ -162,7 +165,8 @@ const ValidatingController = modules.Controller.inherit((function() {
 
             this._isValidationInProgress = false;
 
-            when(...completeList).done(function() {
+            when(...completeList).done(() => {
+                fullValidating && fullValidating.resolve();
                 deferred.resolve(isValid);
             });
 
@@ -261,7 +265,6 @@ const ValidatingController = modules.Controller.inherit((function() {
                     rule.columnIndex = column.index;
                     rule.column = column;
                 });
-
                 if($container) {
                     const validationResult = this.getCellValidationResult({
                         rowKey: parameters.key,
@@ -319,7 +322,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 });
                 if(result && result.status === VALIDATION_STATUS.pending) {
                     this.removeCellValidationResult({
-                        rowKey: parameters.key,
+                        editData: this._editingController.getEditDataByKey(parameters.key),
                         columnIndex: column.index
                     });
                 }
@@ -442,15 +445,13 @@ const ValidatingController = modules.Controller.inherit((function() {
             return editData && editData.validationResults && editData.validationResults[columnIndex];
         },
 
-        removeCellValidationResult: function({ rowKey, columnIndex }) {
-            const editData = this._editingController.getEditDataByKey(rowKey);
+        removeCellValidationResult: function({ editData, columnIndex }) {
             editData && editData.validationResults && delete editData.validationResults[columnIndex];
         },
 
-        resetRowValidationResults(rowKey) {
-            const editData = this._editingController.getEditDataByKey(rowKey);
+        resetRowValidationResults: function(editData) {
             if(editData) {
-                delete editData.validationResults;
+                editData.validationResults && delete editData.validationResults;
                 delete editData.validated;
             }
         }
@@ -734,7 +735,7 @@ module.exports = {
                 updateFieldValue: function(e) {
                     const editMode = this.getEditMode();
                     // test
-                    this.getController('validating').resetRowValidationResults(e.key);
+                    this.getController('validating').resetRowValidationResults(this.getEditDataByKey(e.key));
                     // endTest
                     this.callBase.apply(this, arguments);
 
@@ -778,7 +779,7 @@ module.exports = {
                 getEditData: function() {
                     return this._editData;
                 },
-
+                // test
                 isInvalidCell: function({ rowKey, columnIndex }) {
                     const validatingController = this.getController('validating');
                     const result = validatingController.getCellValidationResult({
@@ -788,6 +789,7 @@ module.exports = {
                     const editData = this.getEditDataByKey(rowKey);
                     return result && result.status === 'invalid' && editData && editData.validated;
                 }
+                // endTest
             },
             editorFactory: (function() {
                 const getWidthOfVisibleCells = function(that, element) {
