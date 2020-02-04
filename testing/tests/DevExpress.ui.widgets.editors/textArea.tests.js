@@ -35,7 +35,7 @@ const AUTO_RESIZE_CLASS = 'dx-texteditor-input-auto-resize';
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 
 QUnit.module('rendering', () => {
-    QUnit.test('onContentReady fired after the widget is fully ready', assert => {
+    QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
         assert.expect(1);
 
         $('#textarea').dxTextArea({
@@ -45,7 +45,7 @@ QUnit.module('rendering', () => {
         });
     });
 
-    QUnit.test('scrolling with dxpointer events', assert => {
+    QUnit.test('scrolling with dxpointer events', function(assert) {
         assert.expect(4);
 
         const longValue = 'qwertyQWERTYqwertyQWERTYqwertyQWERTYqwertyQWERTYqwertyQWERTYqwertyQWERTYqwertyQWERTYqwertyQWERTYqwertyQWERTYqwertyQWERTYqwertyQWERTYqwertyQWERTYqwertyQWERTYqwertyQWERTYqwertyQWERTY';
@@ -71,7 +71,7 @@ QUnit.module('rendering', () => {
         $(document).off('.dxtestns');
     });
 
-    QUnit.test('scrolling with dxpointer events, empty TextArea', assert => {
+    QUnit.test('scrolling with dxpointer events, empty TextArea', function(assert) {
         const $element = $('#textarea').dxTextArea({ height: 100, width: 100 });
         const $input = $element.dxTextArea('instance')._input();
 
@@ -84,7 +84,7 @@ QUnit.module('rendering', () => {
 });
 
 QUnit.module('options changing', () => {
-    QUnit.test('value', assert => {
+    QUnit.test('value', function(assert) {
         assert.expect(2);
 
         const $element = $('#textarea').dxTextArea({});
@@ -98,7 +98,7 @@ QUnit.module('options changing', () => {
         assert.equal($input.val(), '321');
     });
 
-    QUnit.test('disabled', assert => {
+    QUnit.test('disabled', function(assert) {
         assert.expect(2);
 
         const $element = $('#textarea').dxTextArea({});
@@ -112,7 +112,7 @@ QUnit.module('options changing', () => {
         assert.equal($input.prop('disabled'), false);
     });
 
-    QUnit.test('placeholder', assert => {
+    QUnit.test('placeholder', function(assert) {
         assert.expect(2);
 
         const $element = $('#textarea').dxTextArea({});
@@ -125,7 +125,7 @@ QUnit.module('options changing', () => {
         assert.equal($element.find(`.${INPUT_CLASS}`).prop('placeholder') || $element.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'John Jr. Doe');
     });
 
-    QUnit.test('inputAttr', assert => {
+    QUnit.test('inputAttr', function(assert) {
         const $textArea = $('#textarea').dxTextArea({
             inputAttr: { id: 'testId' }
         });
@@ -139,7 +139,7 @@ QUnit.module('options changing', () => {
         assert.equal($input.attr('id'), 'newTestId', 'Attr ID was changed');
     });
 
-    QUnit.test('the \'inputAttr\' option should preserve widget specific classes', assert => {
+    QUnit.test('the \'inputAttr\' option should preserve widget specific classes', function(assert) {
         const $textArea = $('#textarea').dxTextArea({
             inputAttr: { class: 'some-class' }
         });
@@ -147,7 +147,7 @@ QUnit.module('options changing', () => {
         assert.equal($textArea.find(`.${INPUT_CLASS}`).length, 1, 'widget specific class is preserved');
     });
 
-    QUnit.test('the \'inputAttr\' option should affect only custom classes on change', assert => {
+    QUnit.test('the \'inputAttr\' option should affect only custom classes on change', function(assert) {
         const firstClassName = 'first';
         const secondClassName = 'second';
         const $textArea = $('#textarea').dxTextArea();
@@ -165,7 +165,7 @@ QUnit.module('options changing', () => {
         assert.notOk($input.hasClass(firstClassName), 'first custom class is removed');
     });
 
-    QUnit.test('readOnly', assert => {
+    QUnit.test('readOnly', function(assert) {
         assert.expect(2);
 
         const $element = $('#textarea').dxTextArea({});
@@ -179,7 +179,7 @@ QUnit.module('options changing', () => {
         assert.equal($input.prop('readOnly'), false);
     });
 
-    QUnit.test('B234546 dxTextArea - It is impossible to change the height via code', assert => {
+    QUnit.test('B234546 dxTextArea - It is impossible to change the height via code', function(assert) {
         assert.expect(1);
 
         const $element = $('#textarea').dxTextArea({});
@@ -190,13 +190,13 @@ QUnit.module('options changing', () => {
         assert.equal($element.height(), height, 'Widget height should change too');
     });
 
-    QUnit.test('Changing the \'value\' option must invoke the \'onValueChanged\' action', assert => {
+    QUnit.test('Changing the \'value\' option must invoke the \'onValueChanged\' action', function(assert) {
         $('#textarea').dxTextArea({
             onValueChanged() { assert.ok(true); }
         }).dxTextArea('instance').option('value', true);
     });
 
-    QUnit.test('B254647 dxTextArea - widget overlaps another widgets', assert => {
+    QUnit.test('B254647 dxTextArea - widget overlaps another widgets', function(assert) {
         const $element = $('#textarea').dxTextArea({});
         const instance = $element.dxTextArea('instance');
         const height = 500;
@@ -207,13 +207,13 @@ QUnit.module('options changing', () => {
 });
 
 QUnit.module('widget sizing render', () => {
-    QUnit.test('default', assert => {
+    QUnit.test('default', function(assert) {
         const $element = $('#widget').dxTextArea();
 
         assert.ok($element.outerWidth() > 0, 'outer width of the element must be more than zero');
     });
 
-    QUnit.test('root with custom width', assert => {
+    QUnit.test('root with custom width', function(assert) {
         const $element = $('#widthRootStyle').dxTextArea();
         const instance = $element.dxTextArea('instance');
 
@@ -221,7 +221,7 @@ QUnit.module('widget sizing render', () => {
         assert.strictEqual($element.outerWidth(), 300, 'outer width of the element must be equal to custom width');
     });
 
-    QUnit.test('change width', assert => {
+    QUnit.test('change width', function(assert) {
         const $element = $('#widget').dxTextArea();
         const instance = $element.dxTextArea('instance');
         const customWidth = 400;
@@ -231,7 +231,7 @@ QUnit.module('widget sizing render', () => {
         assert.strictEqual($element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
     });
 
-    QUnit.test('widget renders correctly when minHeight and maxHeight is specified in pixels', assert => {
+    QUnit.test('widget renders correctly when minHeight and maxHeight is specified in pixels', function(assert) {
         const minHeight = 100;
         const $element = $('#widget').dxTextArea({
             minHeight: minHeight + 'px',
@@ -246,7 +246,7 @@ QUnit.module('widget sizing render', () => {
 });
 
 QUnit.module('the \'autoResizeEnabled\' option', () => {
-    QUnit.test('widget is resized on init', assert => {
+    QUnit.test('widget is resized on init', function(assert) {
         const $element = $('#textarea').dxTextArea({
             autoResizeEnabled: true
         });
@@ -259,7 +259,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         assert.equal(inputHeight, $input[0].scrollHeight, 'widget height is correct');
     });
 
-    QUnit.test('widget is resized on input', assert => {
+    QUnit.test('widget is resized on input', function(assert) {
         const $element = $('#textarea').dxTextArea({
             autoResizeEnabled: true
         });
@@ -276,7 +276,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         assert.equal(inputHeight, $input[0].scrollHeight, 'widget height is correct');
     });
 
-    QUnit.test('widget is resized on value change', assert => {
+    QUnit.test('widget is resized on value change', function(assert) {
         const $element = $('#textarea').dxTextArea({
             autoResizeEnabled: true
         });
@@ -292,7 +292,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         assert.equal(inputHeight, $input[0].scrollHeight, 'widget height is correct');
     });
 
-    QUnit.test('widget is resized on paste', assert => {
+    QUnit.test('widget is resized on paste', function(assert) {
         const $element = $('#textarea').dxTextArea({
             autoResizeEnabled: true
         });
@@ -310,7 +310,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
     });
 
     [true, false].forEach((autoResizeEnabled) => {
-        QUnit.test(`auto resize class depends on the "autoResizeEnabled" value, "autoResizeEnabled" is ${autoResizeEnabled}`, (assert) => {
+        QUnit.test(`auto resize class depends on the "autoResizeEnabled" value, "autoResizeEnabled" is ${autoResizeEnabled}`, function(assert) {
             const $element = $('#textarea').dxTextArea({
                 autoResizeEnabled,
                 value: '1'
@@ -322,7 +322,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         });
     });
 
-    QUnit.test('widget has correct height with auto resize mode and the \'maxHeight\' option', assert => {
+    QUnit.test('widget has correct height with auto resize mode and the \'maxHeight\' option', function(assert) {
         const boundaryHeight = 50;
 
         const $element = $('#textarea').dxTextArea({
@@ -343,7 +343,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         assert.equal(inputHeight, boundaryHeight - heightDifference, 'widget height is correct');
     });
 
-    QUnit.test('widget with auto resize should have a scrollbar if content is higher than the max height', assert => {
+    QUnit.test('widget with auto resize should have a scrollbar if content is higher than the max height', function(assert) {
         const boundaryHeight = 50;
 
         const $element = $('#textarea');
@@ -362,7 +362,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         assert.ok($input.hasClass(AUTO_RESIZE_CLASS), 'textarea with auto resize hasn\'t a scrollbar in case the content fit into container');
     });
 
-    QUnit.test('widget with auto resize should not have a scrollbar after max-height changed to the higher value', assert => {
+    QUnit.test('widget with auto resize should not have a scrollbar after max-height changed to the higher value', function(assert) {
         const $element = $('#textarea');
         const instance = $element.dxTextArea({
             autoResizeEnabled: true,
@@ -376,7 +376,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         assert.ok($input.hasClass(AUTO_RESIZE_CLASS), 'textarea with auto resize hasn\'t a scrollbar in case the content fit into container');
     });
 
-    QUnit.test('widget has correct height with auto resize mode and the \'minHeight\' option', assert => {
+    QUnit.test('widget has correct height with auto resize mode and the \'minHeight\' option', function(assert) {
         const boundaryHeight = 50;
 
         const $element = $('#textarea').dxTextArea({
@@ -397,7 +397,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         assert.equal(inputHeight, boundaryHeight - heightDifference, 'input height is correct');
     });
 
-    QUnit.test('widget should adopt its size on shown (T403238)', assert => {
+    QUnit.test('widget should adopt its size on shown (T403238)', function(assert) {
         const $element = $('#textarea')
             .hide()
             .dxTextArea({
@@ -415,7 +415,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         assert.ok($element.height() > initialHeight, 'widget is resized');
     });
 
-    QUnit.test('widget should adopt its size on \'visible\' option change (T403238)', assert => {
+    QUnit.test('widget should adopt its size on \'visible\' option change (T403238)', function(assert) {
         const $element = $('#textarea')
             .dxTextArea({
                 width: 70,
@@ -435,7 +435,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         assert.ok($element.height() > initialHeight, 'widget is resized');
     });
 
-    QUnit.test('vertical scroll bar is hidden in auto resize mode', assert => {
+    QUnit.test('vertical scroll bar is hidden in auto resize mode', function(assert) {
         const $element = $('#textarea').dxTextArea({
             autoResizeEnabled: true,
         });
@@ -455,7 +455,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
     });
 
 
-    QUnit.test('widget can not scroll container to the top on change content height (T755402)', assert => {
+    QUnit.test('widget can not scroll container to the top on change content height (T755402)', function(assert) {
         const container = $('#container').css({
             'overflow': 'scroll',
             'height': '60px'

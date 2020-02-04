@@ -19,7 +19,7 @@ const FAB_CLASS = 'dx-fa-button';
 const FAB_MAIN_CLASS = 'dx-fa-button-main';
 
 QUnit.module('create one action', () => {
-    QUnit.test('check rendering', (assert) => {
+    QUnit.test('check rendering', function(assert) {
         this.instance = $('#fab-one')
             .dxSpeedDialAction()
             .dxSpeedDialAction('instance');
@@ -49,7 +49,7 @@ QUnit.module('create one action', () => {
 });
 
 QUnit.module('maxSpeedDialActionCount option', () => {
-    QUnit.test('check action buttons count', (assert) => {
+    QUnit.test('check action buttons count', function(assert) {
         const $container = $('#fabs');
         const fabInstances = [];
 
@@ -138,7 +138,7 @@ QUnit.module('modify global action button config', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('check main fab rendering', (assert) => {
+    QUnit.test('check main fab rendering', function(assert) {
         config({
             floatingActionButtonConfig: {
                 icon: 'favorites',
@@ -159,7 +159,7 @@ QUnit.module('modify global action button config', {
         assert.equal($fabMainContent.offset().left, 0, 'default position left is changed');
     });
 
-    QUnit.test('main button has default icon if config has no icon', (assert) => {
+    QUnit.test('main button has default icon if config has no icon', function(assert) {
         config({
             floatingActionButtonConfig: { }
         });
@@ -174,7 +174,7 @@ QUnit.module('modify global action button config', {
         assert.equal($fabMainContentIcons.length, 2, 'only two icons rendered on the main button');
     });
 
-    QUnit.test('check main fab position after change', (assert) => {
+    QUnit.test('check main fab position after change', function(assert) {
         const firstSDA = $('#fab-one').dxSpeedDialAction().dxSpeedDialAction('instance');
         $('#fab-two').dxSpeedDialAction();
 
@@ -209,7 +209,7 @@ QUnit.module('add or remove action buttons', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('check main fab rendering', (assert) => {
+    QUnit.test('check main fab rendering', function(assert) {
         $('#fab-one').dxSpeedDialAction({
             icon: 'plus',
             hint: 'Add a Row'
@@ -256,7 +256,7 @@ QUnit.module('check action buttons position', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('if container is window', (assert) => {
+    QUnit.test('if container is window', function(assert) {
 
         $('#fab-one').dxSpeedDialAction({
             icon: 'plus'
@@ -281,7 +281,7 @@ QUnit.module('check action buttons position', {
         assert.equal($fabWrapper.eq(1).css('position'), expectedPosition, 'second action has the same position with main fab');
     });
 
-    QUnit.test('if random container', (assert) => {
+    QUnit.test('if random container', function(assert) {
         config({
             floatingActionButtonConfig: {
                 position: {
@@ -325,7 +325,7 @@ QUnit.module('check action buttons click args', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('component', (assert) => {
+    QUnit.test('component', function(assert) {
         const firstSDA = $('#fab-one').dxSpeedDialAction({
             onClick: function(e) {
                 assert.equal(e.component, firstSDA, 'component in args matches with first SDA instance');
@@ -360,7 +360,7 @@ QUnit.module('check action buttons events', {
         fx.off = false;
     },
 }, () => {
-    QUnit.test('trigger and args', (assert) => {
+    QUnit.test('trigger and args', function(assert) {
         const contentReadyStub = sinon.stub();
         const contentReadyHandlerStub = sinon.stub();
         const disposingHandlerStub = sinon.stub();

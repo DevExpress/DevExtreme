@@ -123,7 +123,7 @@ QUnit.module('render', () => {
         fixtures.simple.drop();
     });
 
-    QUnit.test('popup should not render arrow when the position side is center (T701940)', (assert) => {
+    QUnit.test('popup should not render arrow when the position side is center (T701940)', function(assert) {
         fixtures.simple.create();
 
         const popover = new Popover($('#what'), {

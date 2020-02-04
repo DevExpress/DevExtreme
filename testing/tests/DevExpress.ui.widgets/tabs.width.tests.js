@@ -165,7 +165,7 @@ QUnit.module('Width', () => {
         });
     });
 
-    QUnit.test('Does not render navbuttons: dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }', (assert) => {
+    QUnit.test('Does not render navbuttons: dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }', function(assert) {
         const styles = '<style>.dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }</style>';
 
         $('#qunit-fixture').html(styles);
@@ -193,7 +193,7 @@ QUnit.module('Width', () => {
         $('#qunit-fixture').html('');
     });
 
-    QUnit.test('Render navbuttons: dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }', (assert) => {
+    QUnit.test('Render navbuttons: dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }', function(assert) {
         const styles = '<style>.dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }</style>';
 
         $('#qunit-fixture').html(styles);
