@@ -21,7 +21,8 @@ export const EVENT = {
 
 const defaultEvent = {
     stopImmediatePropagation: () => void 0,
-    preventDefault: () => void 0
+    preventDefault: () => void 0,
+    isDefaultPrevented: () => void 0
 };
 
 export const fakeClickEvent = Object.assign(defaultEvent, {
@@ -38,7 +39,7 @@ export const emitKeyboard = (key, e = defaultEvent) => {
     }
 };
 
-export const emit = (event, e = {}, element) => {
+export const emit = (event, e = defaultEvent, element) => {
     eventHandlers[event]?.forEach(({ handler, el }) => {
         if(!element || el === element) {
             handler(e);

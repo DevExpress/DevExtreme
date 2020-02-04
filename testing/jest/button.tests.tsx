@@ -1,11 +1,12 @@
 import Button from '../../js/renovation/button.p.js';
 import Widget from '../../js/renovation/widget.p.js';
 import { createElement } from 'preact';
-import { emit, emitKeyboard, EVENT, KEY, fakeClickEvent } from './utils/events-mock';
-import { mount } from 'enzyme';
+import { emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
+import { mount, shallow } from 'enzyme';
 
 describe('Button', () => {
   const render = (props = {}) => mount(createElement(Button, props)).childAt(0);
+  const shallowRender = (props = {}) => shallow(createElement(Button, props));
 
     describe('Props', () => {
         describe('onClick', () => {
@@ -150,6 +151,36 @@ describe('Button', () => {
                 const button = render({ focusStateEnabled: false });
 
                 expect(button.find(Widget).prop('focusStateEnabled')).toBe(false);
+            });
+
+            it('should change state by "focusIn" and "focusOut"', () => {
+                const button =  shallowRender().dive();
+
+                expect(button.hasClass('dx-state-focused')).toBe(false);
+
+                emit(EVENT.focus);
+                expect(button.hasClass('dx-state-focused')).toBe(true);
+
+                emit(EVENT.blur);
+                expect(button.hasClass('dx-state-focused')).toBe(false);
+            });
+
+            it('should not change state if disabled', () => {
+                const button = shallowRender({ disabled: true }).dive();
+
+                expect(button.hasClass('dx-state-disabled')).toBe(true);
+                expect(button.hasClass('dx-state-focused')).toBe(false);
+
+                expect(button.hasClass('dx-state-disabled')).toBe(true);
+                expect(button.hasClass('dx-state-focus')).toBe(false);
+
+                emit(EVENT.focus);
+                expect(button.hasClass('dx-state-disabled')).toBe(true);
+                expect(button.hasClass('dx-state-focus')).toBe(false);
+
+                emit(EVENT.blur);
+                expect(button.hasClass('dx-state-disabled')).toBe(true);
+                expect(button.hasClass('dx-state-focus')).toBe(false);
             });
         });
     });

@@ -268,32 +268,32 @@ describe('Widget', () => {
         });
 
         describe('Focus', () => {
-            // it('should change state by mouse events', () => {
-            //     const widget = render();
+            it('should change state by mouse events', () => {
+                const widget = render({ focusStateEnabled: true });
 
-            //     expect(widget.hasClass('dx-state-focus')).toBe(false);
+                expect(widget.hasClass('dx-state-focused')).toBe(false);
 
-            //     emit(EVENT.focus);
-            //     expect(widget.hasClass('dx-state-focus')).toBe(true);
+                emit(EVENT.focus);
+                expect(widget.hasClass('dx-state-focused')).toBe(true);
 
-            //     emit(EVENT.blur);
-            //     expect(widget.hasClass('dx-state-focus')).toBe(false);
-            // });
+                emit(EVENT.blur);
+                expect(widget.hasClass('dx-state-focused')).toBe(false);
+            });
 
-            // it('should not change state if disabled', () => {
-            //     const widget = render({ disabled: true });
+            it('should not change state if disabled', () => {
+                const widget = render({ disabled: true });
 
-            //     expect(widget.hasClass('dx-state-disabled')).toBe(true);
-            //     expect(widget.hasClass('dx-state-focus')).toBe(false);
+                expect(widget.hasClass('dx-state-disabled')).toBe(true);
+                expect(widget.hasClass('dx-state-focused')).toBe(false);
 
-            //     emit(EVENT.focus);
-            //     expect(widget.hasClass('dx-state-disabled')).toBe(true);
-            //     expect(widget.hasClass('dx-state-focus')).toBe(false);
+                emit(EVENT.focus);
+                expect(widget.hasClass('dx-state-disabled')).toBe(true);
+                expect(widget.hasClass('dx-state-focused')).toBe(false);
 
-            //     emit(EVENT.blur);
-            //     expect(widget.hasClass('dx-state-disabled')).toBe(true);
-            //     expect(widget.hasClass('dx-state-focus')).toBe(false);
-            // });
+                emit(EVENT.blur);
+                expect(widget.hasClass('dx-state-disabled')).toBe(true);
+                expect(widget.hasClass('dx-state-focused')).toBe(false);
+            });
         });
 
         describe('Hover', () => {
