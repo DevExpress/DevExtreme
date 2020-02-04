@@ -1,9 +1,7 @@
 import { getImageSourceType } from '../core/utils/icon';
-import { Component, Prop, React } from '../component_declaration/common';
-import JSXConstructor from '../component_declaration/jsx';
-import Widget from './widget';
+import { Component, ComponentInput, Prop, React, JSXComponent } from 'devextreme-generator/component_declaration/common';
+import Widget, { WidgetInput } from './widget';
 
-const WidgetJSX = JSXConstructor<Widget>(Widget);
 
 const getImageContainerJSX = (source: string) => {
     switch (getImageSourceType(source)) {
@@ -18,10 +16,10 @@ const getImageContainerJSX = (source: string) => {
 const stylingModes = ['outlined', 'text', 'contained'];
 const defaultClassNames = ['dx-button'];
 
-const getCssClasses = (model: any) => {
+const getCssClasses = (model: ButtonInput) => {
     const { text, icon, stylingMode, type } = model;
-    const classNames = defaultClassNames.concat(model.classNames);
-    const isValidStylingMode = stylingModes.indexOf(stylingMode) !== -1;
+    const classNames = defaultClassNames.concat(model.classNames || []);
+    const isValidStylingMode = stylingMode && stylingModes.indexOf(stylingMode) !== -1;
 
     classNames.push(`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`);
     classNames.push(`dx-button-${type || 'normal'}`);
@@ -32,33 +30,37 @@ const getCssClasses = (model: any) => {
     return classNames.join(' ');
 };
 
-export const viewModelFunction = (model: Button) => {
+export const viewModelFunction = (model: Button):ButtonViewModel => {
     let icon: any = void 0;
     const supportedKeys = () => {
         const click = (e) => {
             e.preventDefault();
-            model.onClick && model.onClick(e);
+            model.props.onClick && model.props.onClick(e);
         };
 
         return { space: click, enter: click };
     };
 
-    if (model.icon || model.type === 'back') {
-        icon = getImageContainerJSX(model.icon || 'back');
+    if (model.props.icon || model.props.type === 'back') {
+        icon = getImageContainerJSX(model.props.icon || 'back');
     }
 
     return {
-        ...model,
-        elementAttr: { ...model.elementAttr, role: 'button' },
-        aria: { label: model.text && model.text.trim() },
-        cssClasses: getCssClasses(model),
+        ...model.props,
+        elementAttr: { ...model.props.elementAttr, role: 'button' },
+        aria: { label: model.props.text && model.props.text.trim() },
+        cssClasses: getCssClasses(model.props),
         icon,
         supportedKeys,
     };
 };
 
-export const viewFunction = (viewModel: Button) => (
-    <WidgetJSX
+declare type ButtonViewModel = {
+    cssClasses: string;
+} & ButtonInput
+
+export const viewFunction = (viewModel: ButtonViewModel) => (
+    <Widget
         accessKey={viewModel.accessKey}
         activeStateEnabled={viewModel.activeStateEnabled}
         aria={viewModel.aria}
@@ -86,8 +88,22 @@ export const viewFunction = (viewModel: Button) => (
                 {viewModel.text && <span className="dx-button-text">{viewModel.text}</span>}
             </div>
         )}
-    </WidgetJSX>
+    </Widget>
 );
+
+@ComponentInput()
+export class ButtonInput extends WidgetInput { 
+    @Prop() activeStateEnabled?: boolean = true;
+    @Prop() classNames?: string[];
+    @Prop() contentRender?: any;
+    @Prop() focusStateEnabled?: boolean = true;
+    @Prop() hoverStateEnabled?: boolean = true;
+    @Prop() icon?: string;
+    @Prop() pressed?: boolean;
+    @Prop() stylingMode?: 'outlined' | 'text' | 'contained';
+    @Prop() text?: string;
+    @Prop() type?: string;
+}
 
 @Component({
     name: 'Button',
@@ -96,15 +112,4 @@ export const viewFunction = (viewModel: Button) => (
     view: viewFunction,
 })
 
-export default class Button extends Widget {
-    @Prop() activeStateEnabled?: boolean = true;
-    @Prop() classNames?: string[];
-    @Prop() contentRender?: any;
-    @Prop() focusStateEnabled?: boolean = true;
-    @Prop() hoverStateEnabled?: boolean = true;
-    @Prop() icon?: string;
-    @Prop() pressed?: boolean;
-    @Prop() stylingMode?: string;
-    @Prop() text?: string;
-    @Prop() type?: string;
-}
+export default class Button extends JSXComponent<ButtonInput> {}
