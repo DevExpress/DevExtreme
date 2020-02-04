@@ -48,6 +48,7 @@ const FIELD_ITEM_LABEL_CLASS = 'dx-field-item-label';
 const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
 const FIELD_ITEM_TAB_CLASS = 'dx-field-item-tab';
 const FORM_FIELD_ITEM_COL_CLASS = 'dx-col-';
+const FORM_COL_COUNT_ATTR = 'col-count';
 const GROUP_COL_COUNT_CLASS = 'dx-group-colcount-';
 const FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
 const FORM_VALIDATION_SUMMARY = 'dx-form-validation-summary';
@@ -257,6 +258,11 @@ const Form = Widget.inherit({
         let isColsExist = true;
         let $cols;
 
+        const collCountByAttributes = this._getColCountByAttributes($element);
+        if(collCountByAttributes) {
+            return collCountByAttributes;
+        }
+
         while(isColsExist) {
             $cols = $element.find('.' + FORM_FIELD_ITEM_COL_CLASS + index);
             if(!$cols.length) {
@@ -266,6 +272,15 @@ const Form = Widget.inherit({
             }
         }
         return index;
+    },
+
+    _getColCountByAttributes: function($element) {
+        const colCountAttr = $element.attr(FORM_COL_COUNT_ATTR);
+        if(!colCountAttr) {
+            return null;
+        }
+
+        return parseInt(colCountAttr);
     },
 
     _createHiddenElement: function(rootLayoutManager) {
@@ -698,6 +713,7 @@ const Form = Widget.inherit({
                 this._groupsColCount.push(colCount);
             }
             $group.addClass(GROUP_COL_COUNT_CLASS + colCount);
+            $group.attr(FORM_COL_COUNT_ATTR, colCount);
         }
     },
 
