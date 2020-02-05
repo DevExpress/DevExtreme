@@ -5,10 +5,10 @@ class FormTestWrapper {
         const $form = $('#form').dxForm({
             width: 1000,
             screenByWidth: () => {
-                return 'xs';
+                return 'md';
             },
             colCountByScreen: {
-                xs: colCount
+                md: colCount
             },
             items
         });
