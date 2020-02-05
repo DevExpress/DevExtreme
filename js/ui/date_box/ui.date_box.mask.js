@@ -150,7 +150,28 @@ const DateBoxMask = DateBoxBase.inherit({
         return result;
     },
 
-    _maskInputHandler(e) {
+    _maskBeforeInputHandler(e) {
+        this._maskInputHandler = null;
+
+        const { inputType } = e.originalEvent;
+
+        if(inputType === 'insertCompositionText') {
+            this._maskInputHandler = () => {
+                this._renderDisplayText(this._getDisplayedText(this._maskValue));
+                this._selectNextPart();
+            };
+        }
+
+        const isBackwardDeletion = inputType === 'deleteContentBackward';
+        const isForwardDeletion = inputType === 'deleteContentForward';
+        if(isBackwardDeletion || isForwardDeletion) {
+            const direction = isBackwardDeletion ? BACKWARD : FORWARD;
+            this._maskInputHandler = () => {
+                this._revertPart();
+                this._selectNextPart(direction);
+            };
+        }
+
         if(!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
             return;
         }
@@ -158,8 +179,16 @@ const DateBoxMask = DateBoxBase.inherit({
         const key = e.originalEvent.data;
         this._processInputKey(key);
         e.preventDefault();
-        e.originalEvent.preventDefault();
         return true;
+    },
+
+    _keyPressHandler(e) {
+        this.callBase(e);
+
+        if(this._maskInputHandler) {
+            this._maskInputHandler();
+            this._maskInputHandler = null;
+        }
     },
 
     _processInputKey(key) {
@@ -332,7 +361,7 @@ const DateBoxMask = DateBoxBase.inherit({
         });
 
         if(this._useBeforeInputEvent()) {
-            eventsEngine.on(this._input(), addNamespace('beforeinput', MASK_EVENT_NAMESPACE), this._maskInputHandler.bind(this));
+            eventsEngine.on(this._input(), addNamespace('beforeinput', MASK_EVENT_NAMESPACE), this._maskBeforeInputHandler.bind(this));
         }
     },
 
