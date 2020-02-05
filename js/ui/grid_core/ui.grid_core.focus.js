@@ -186,9 +186,19 @@ exports.FocusController = core.ViewController.inherit((function() {
                         d.resolve(-1);
                         return;
                     }
-                    dataController.pageIndex(pageIndex).done(function() {
-                        that._navigateTo(key, d, needFocusRow);
-                    }).fail(d.reject);
+                    if(pageIndex === dataController.pageIndex()) {
+                        dataController.reload().done(function() {
+                            if(that.isRowFocused(key)) {
+                                d.resolve(that.getFocusedRowIndexByKey(key));
+                            } else {
+                                that._navigateTo(key, d, needFocusRow);
+                            }
+                        }).fail(d.reject);
+                    } else {
+                        dataController.pageIndex(pageIndex).done(function() {
+                            that._navigateTo(key, d, needFocusRow);
+                        }).fail(d.reject);
+                    }
                 }).fail(d.reject);
             }
 
