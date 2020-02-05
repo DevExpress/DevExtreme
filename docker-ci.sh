@@ -62,8 +62,6 @@ function run_test {
 
     dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
-    echo "URL: $url"
-
     for i in {15..0}; do
         if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
             echo "Runner exited unexpectedly"
@@ -80,6 +78,8 @@ function run_test {
         sleep 1
         echo "Waiting for runner..."
     done
+
+    echo "URL: $url"
 
     case "$BROWSER" in
 
