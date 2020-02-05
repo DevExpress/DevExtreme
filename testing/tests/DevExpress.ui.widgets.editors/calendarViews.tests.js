@@ -46,7 +46,7 @@ const FakeView = BaseView.inherit({
 
 QUnit.module('Basics', () => {
     QUnit.test('onCellClick action should be fired on cell click', function(assert) {
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
 
         try {
             const spy = sinon.spy();
@@ -62,7 +62,7 @@ QUnit.module('Basics', () => {
     });
 
     QUnit.test('no contouredDate is set by default', function(assert) {
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
 
         try {
             const view = new FakeView($element, {});
@@ -73,7 +73,7 @@ QUnit.module('Basics', () => {
     });
 
     QUnit.test('onCellClick should not be fired on out of range cells', function(assert) {
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
 
         try {
             const spy = sinon.spy();
@@ -90,7 +90,7 @@ QUnit.module('Basics', () => {
     });
 
     QUnit.test('Calendar should set first day by firstDayOfWeek option if it is setted and this is different in localization', function(assert) {
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
         const spy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
 
         this.view = new Views['month']($element, {
@@ -107,7 +107,7 @@ QUnit.module('MonthView', {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['month'](this.$element, {
             date: new Date(2013, 9, 16),
             firstDayOfWeek: 1,
@@ -116,7 +116,7 @@ QUnit.module('MonthView', {
     },
     reinit: function(options) {
         this.$element.remove();
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['month'](this.$element, options);
     },
     afterEach: function() {
@@ -129,7 +129,7 @@ QUnit.module('MonthView', {
     });
 
     QUnit.test('getNavigatorCaption must return a proper caption in RTL mode', function(assert) {
-        this.view.option('rtl', true);
+        this.view.option('rtlEnabled', true);
         assert.equal(this.view.getNavigatorCaption(), 'October 2013', 'caption is correct');
     });
 
@@ -188,7 +188,7 @@ QUnit.module('YearView', {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['year'](this.$element, {
             date: new Date(2013, 9, 16),
             firstDayOfWeek: 1,
@@ -197,7 +197,7 @@ QUnit.module('YearView', {
     },
     reinit: function(options) {
         this.$element.remove();
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['year'](this.$element, options);
     },
     afterEach: function() {
@@ -242,7 +242,7 @@ QUnit.module('DecadeView', {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['decade'](this.$element, {
             date: new Date(2013, 9, 16),
             value: new Date(2013, 9, 16),
@@ -252,7 +252,7 @@ QUnit.module('DecadeView', {
     },
     reinit: function(options) {
         this.$element.remove();
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['decade'](this.$element, options);
     },
     afterEach: function() {
@@ -308,7 +308,7 @@ QUnit.module('CenturyView', {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['century'](this.$element, {
             date: new Date(2013, 9, 16),
             value: new Date(2013, 9, 16),
@@ -318,7 +318,7 @@ QUnit.module('CenturyView', {
     },
     reinit: function(options) {
         this.$element.remove();
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['century'](this.$element, options);
     },
     afterEach: function() {
@@ -369,7 +369,7 @@ QUnit.module('MonthView min/max', {
         this.min = new Date(2010, 10, 5);
         this.max = new Date(2010, 10, 25);
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['month'](this.$element, {
             min: this.min,
             date: new Date(2010, 10, 10),
@@ -416,7 +416,7 @@ QUnit.module('MonthView disabledDates', {
             }
         };
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['month'](this.$element, {
             disabledDates: this.disabledDates,
             date: new Date(2010, 10, 10),
@@ -458,7 +458,7 @@ QUnit.module('MonthView disabledDates as array', {
             new Date(2010, 10, 4)
         ];
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['month'](this.$element, {
             disabledDates: this.disabledDates,
             date: new Date(2010, 10, 10),
@@ -495,7 +495,7 @@ QUnit.module('YearView min/max', {
         this.min = new Date(2015, 0, 18);
         this.max = new Date(2015, 6, 18);
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['year'](this.$element, {
             min: this.min,
             date: new Date(2015, 3, 15),
@@ -532,7 +532,7 @@ QUnit.module('YearView disabledDates', {
             }
         };
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['year'](this.$element, {
             disabledDates: this.disabledDates,
             date: new Date(2015, 3, 15)
@@ -561,7 +561,7 @@ QUnit.module('DecadeView min/max', {
         this.min = new Date(2013, 0, 18);
         this.max = new Date(2018, 6, 18);
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['decade'](this.$element, {
             min: this.min,
             value: new Date(2015, 3, 15),
@@ -598,7 +598,7 @@ QUnit.module('DecadeView disabledDates', {
             }
         };
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['decade'](this.$element, {
             disabledDates: this.disabledDates,
             value: new Date(2015, 3, 15),
@@ -626,7 +626,7 @@ QUnit.module('CenturyView min/max', {
         this.min = new Date(2005, 0, 18);
         this.max = new Date(2075, 6, 18);
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['century'](this.$element, {
             min: this.min,
             value: new Date(2015, 3, 15),
@@ -661,7 +661,7 @@ QUnit.module('CenturyView disabledDates', {
             }
         };
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['century'](this.$element, {
             disabledDates: this.disabledDates,
             value: new Date(2015, 3, 15)
@@ -699,7 +699,7 @@ QUnit.module('Aria accessibility', {
         };
 
         $.each(['month', 'year', 'decade', 'century'], function(_, type) {
-            const $element = $('<div>').appendTo('body');
+            const $element = $('<div>').appendTo('#qunit-fixture');
 
             new Views[type]($element, {
                 date: new Date(2015, 5, 1),
@@ -716,6 +716,57 @@ QUnit.module('Aria accessibility', {
                 $element.remove();
             }
         });
+    });
+
+    QUnit.test('check roles across the views', function(assert) {
+        ['month', 'year', 'decade', 'century'].forEach((viewName) => {
+            const $element = $('<div>').appendTo('#qunit-fixture');
+
+            new Views[viewName]($element, {
+                date: new Date(2015, 5, 1),
+                value: new Date(2015, 5, 1),
+                contouredDate: new Date(2015, 5, 1),
+                firstDayOfWeek: 1,
+                focusStateEnabled: true
+            });
+
+            try {
+                const $cell = $element.find(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
+                const $row = $cell.closest('tr');
+                const $table = $row.closest('table');
+
+                assert.equal($cell.attr('role'), 'gridcell', `${viewName} - cell role is correct`);
+                assert.equal($row.attr('role'), 'row', `${viewName} - row role is correct`);
+                assert.equal($table.attr('role'), 'grid', `${viewName} - table role is correct`);
+            } finally {
+                $element.remove();
+            }
+        });
+    });
+
+    QUnit.test('header row of the Month view should have correct attributes', function(assert) {
+        const $element = $('<div>').appendTo('#qunit-fixture');
+        const view = new Views.month($element, {
+            date: new Date(2015, 5, 1),
+            value: new Date(2015, 5, 1),
+            contouredDate: new Date(2015, 5, 1),
+            firstDayOfWeek: 1,
+            focusStateEnabled: true
+        });
+        const $headerCells = $element.find('thead > tr').first().find('th');
+
+        $headerCells.each((index, cell) => {
+            const scope = cell.getAttribute('scope');
+            const abbr = cell.getAttribute('abbr');
+            const cellText = cell.textContent;
+            const { full: fullDayCaption, abbreviated: shortDayCaption } = view._getDayCaption(view._getFirstDayOfWeek() + index);
+
+            assert.strictEqual(scope, 'col', `"${cellText}" cell: correct header cell role`);
+            assert.strictEqual(abbr, fullDayCaption, `"${cellText}" cell: correct cell "abbr" attribute`);
+            assert.strictEqual(cellText, shortDayCaption, `"${cellText}" cell: correct cell text`);
+        });
+
+        $element.remove();
     });
 });
 
