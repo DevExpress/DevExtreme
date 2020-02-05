@@ -62,7 +62,6 @@ function run_test {
 
     dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
-    url="http://localhost:$port/nobody-here"
     echo "URL: $url"
 
     for i in {15..0}; do
