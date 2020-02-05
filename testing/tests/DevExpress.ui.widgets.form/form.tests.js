@@ -737,6 +737,7 @@ QUnit.test('Check align labels when layout is changed_T306106', function(assert)
     }
 });
 
+
 QUnit.module('Label aligment', () => {
     function testOrSkip(name, callback) {
         if(!browser.chrome) {
@@ -804,8 +805,8 @@ QUnit.module('Label aligment', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[id$="veryVeryVeryLongText"]'), { top: 139, left: 165, width: 834, height: 34 });
     });
 
-    testOrSkip('2 column -> [text, longText, veryLongText, veryVeryVeryLongText]', function() {
-        const wrapper = new FormTestWrapper(2, ['text', 'longText', 'veryLongText', 'veryVeryVeryLongText']);
+    function test_2Column_4ItemsLayout(items) {
+        const wrapper = new FormTestWrapper(2, items);
         wrapper.checkFormSize({ width: 1000, height: 82 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8.5, left: 0, width: 103, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 1, left: 104, width: 380, height: 34 });
@@ -815,6 +816,24 @@ QUnit.module('Label aligment', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[id$="veryLongText"]'), { top: 47, left: 104, width: 380, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="veryVeryVeryLongText"]'), { top: 54.5, left: 515, width: 164, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="veryVeryVeryLongText"]'), { top: 47, left: 680, width: 319, height: 34 });
+    }
+
+    testOrSkip('2 column -> [text, longText, veryLongText, veryVeryVeryLongText]', function() {
+        test_2Column_4ItemsLayout(['text', 'longText', 'veryLongText', 'veryVeryVeryLongText']);
+    });
+
+    testOrSkip('2 column -> { group [text, veryLongText]}, {group[longText, veryVeryVeryLongText] }', function() {
+        test_2Column_4ItemsLayout([
+            { itemType: 'group', items: ['text', 'veryLongText'] },
+            { itemType: 'group', items: ['longText', 'veryVeryVeryLongText'] }]);
+    });
+
+    testOrSkip('2 column -> { group [text]}, { group [longText]}, { group [veryLongText]}, { group [veryVeryVeryLongText]} ', function() {
+        test_2Column_4ItemsLayout([
+            { itemType: 'group', items: ['text'] },
+            { itemType: 'group', items: ['longText'] },
+            { itemType: 'group', items: ['veryLongText'] },
+            { itemType: 'group', items: ['veryVeryVeryLongText'] }]);
     });
 });
 
