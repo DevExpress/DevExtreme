@@ -62,6 +62,7 @@ function run_test {
 
     dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
+    url="http://localhost:$port/nobody-here"
     echo "URL: $url"
 
     for i in {15..0}; do
@@ -70,7 +71,7 @@ function run_test {
             exit 1
         fi
 
-        httping -qc1 $url && break
+        httping -qsc1 $url && break
 
         if [ $i -eq 0 ]; then
             echo "Runner not reached"
