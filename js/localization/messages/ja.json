@@ -114,7 +114,7 @@
         "dxDataGrid-summaryMinOtherColumn": "{1} の最小は {0}",
         "dxDataGrid-summaryMax": "最大: {0}",
         "dxDataGrid-summaryMaxOtherColumn": "{1} の最小は {0}",
-        "dxDataGrid-summaryAvg": "Avg: {0}",
+        "dxDataGrid-summaryAvg": "平均: {0}",
         "dxDataGrid-summaryAvgOtherColumn": "{1} の平均は {0}",
         "dxDataGrid-summarySum": "合計: {0}",
         "dxDataGrid-summarySumOtherColumn": "{1} の合計は {0}",
