@@ -21,10 +21,6 @@ import { exportDataGrid } from './exportDataGrid';
 * @type object
 */
 /**
-* @name ExcelFont
-* @type object
-*/
-/**
 * @name ExcelDataGridCell
 * @type object
 */

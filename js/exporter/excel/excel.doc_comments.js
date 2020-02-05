@@ -1,0 +1,4 @@
+/**
+* @name ExcelFont
+* @type object
+*/

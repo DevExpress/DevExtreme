@@ -19,9 +19,12 @@ import {
 } from '../events/index';
 
 import {
-    ExcelDataGridCell,
-    ExcelFont
+    ExcelDataGridCell
 } from '../exporter/exceljs/excelExporter';
+
+import {
+    ExcelFont
+} from '../exporter/excel/excel.doc_comments';
 
 import dxDraggable from './draggable';
 
