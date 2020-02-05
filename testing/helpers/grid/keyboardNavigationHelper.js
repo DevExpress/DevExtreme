@@ -83,7 +83,7 @@ export function setupModules(that, modulesOptions, gridModules) {
     });
 }
 
-export const CLICK_EVENT = eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation');
+export const CLICK_EVENT = eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation');
 const device = devices.real();
 const KEYS = {
     'tab': 'Tab',
@@ -148,9 +148,8 @@ export function fireKeyDown($target, key, ctrlKey) {
 }
 
 export function focusCell(columnIndex, rowIndex) {
-    const $element0 = this.rowsView.element();
-    const $row = $($element0.find('.dx-row')[rowIndex]);
-    $($row.find('td')[columnIndex]).trigger(CLICK_EVENT);
+    const $cell = $(this.rowsView.getCellElement(rowIndex, columnIndex));
+    $cell.trigger(CLICK_EVENT);
 }
 
 export function getTextSelection(element) {

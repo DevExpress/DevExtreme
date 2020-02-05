@@ -126,7 +126,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _initViewHandlers: function() {
         const that = this;
         const pointerDownAction = that.createAction(that._pointerDownHandler);
-        const pointerUpAction = that.createAction(that._clickHandler);
         const rowsView = that.getView('rowsView');
 
         rowsView.renderCompleted.add(function(e) {
@@ -141,9 +140,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
             eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), pointerDownAction);
             eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), clickSelector, pointerDownAction);
-
-            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), pointerUpAction);
-            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickSelector, pointerUpAction);
 
             that._initKeyDownProcessor(that, $rowsView, that._keyDownHandler);
 
@@ -223,9 +219,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const isEditing = this._editingController.isEditing();
         let needStopPropagation = true;
         const originalEvent = e.originalEvent;
-        let isHandled;
-
-        isHandled = this._processOnKeyDown(e);
+        const isHandled = this._processOnKeyDown(e);
 
         if(originalEvent.isDefaultPrevented()) {
             return;
@@ -730,7 +724,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     // #endregion Key_Handlers
 
     // #region Click_Handler
-    _clickHandler: function(e) {
+    _pointerDownHandler: function(e) {
         const event = e.event;
         let $target = $(event.currentTarget);
         const rowsView = this.getView('rowsView');
@@ -762,19 +756,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
             }
         } else if($target.is('td')) {
             this._resetFocusedCell();
-        }
-    },
-    _isEventInCurrentGrid: function(event) {
-        return isElementInCurrentGrid(this, $(event.target));
-    },
-
-    _pointerDownHandler: function(e) {
-        const $target = $(e.event.target);
-        const isEditRow = $target.closest('tr').hasClass(EDIT_ROW_CLASS);
-
-        if(!isEditRow) {
-            const $targetCell = $target.closest('td');
-            $targetCell.addClass(CELL_FOCUS_DISABLED_CLASS);
         }
     },
 
@@ -1559,6 +1540,10 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     // #endregion Events
 
+    _isEventInCurrentGrid: function(event) {
+        return isElementInCurrentGrid(this, $(event.target));
+    },
+
     _isRowEditMode: function() {
         const editMode = this.getController('editing').getEditMode();
         return editMode === EDIT_MODE_ROW || editMode === EDIT_MODE_FORM;
@@ -1644,7 +1629,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const scrollable = this.getView('rowsView').getScrollable();
 
         if(that._focusedCellPosition) {
-            var scrollHandler = function() {
+            const scrollHandler = function() {
                 scrollable.off('scroll', scrollHandler);
                 setTimeout(that.restoreFocusableElement.bind(that, rowIndex, $event));
             };

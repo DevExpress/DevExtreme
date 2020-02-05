@@ -17,12 +17,12 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import fx from 'animation/fx';
-import pointerEvents from 'events/pointer';
 import { DataSource } from 'data/data_source/data_source';
 import { TreeListWrapper } from '../../helpers/wrappers/dataGridWrappers.js';
 import ArrayStore from 'data/array_store';
 import TreeList from 'ui/tree_list/ui.tree_list';
 import pointerMock from '../../helpers/pointerMock.js';
+import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 fx.off = true;
 
@@ -1380,7 +1380,7 @@ QUnit.test('TreeList should focus only one focused row (T827201)', function(asse
     this.clock.tick();
 
     // act
-    $(treeList.getCellElement(4, 1)).trigger(pointerEvents.up);
+    $(treeList.getCellElement(4, 1)).trigger(CLICK_EVENT);
     this.clock.tick();
 
     // assert

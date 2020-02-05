@@ -6,7 +6,7 @@ import { Selector } from 'testcafe';
 fixture `Keyboard Navigation`
     .page(url(__dirname, '../container.html'));
 
-test("Cell should not highlighted after editing another cell when startEditAction is 'dblClick' and 'batch' edit mode", async t => {
+test("Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch", async t => {
 const dataGrid = new DataGrid("#container");
 
     await t
