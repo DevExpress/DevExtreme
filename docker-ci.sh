@@ -68,7 +68,7 @@ function run_test {
             exit 1
         fi
 
-        httping -qsc1 $url && break
+        httping -qsc1 "$url" && break
 
         if [ $i -eq 0 ]; then
             echo "Runner not reached"
