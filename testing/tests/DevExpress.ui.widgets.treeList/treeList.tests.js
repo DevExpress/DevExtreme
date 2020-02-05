@@ -1403,8 +1403,29 @@ QUnit.test('TreeList navigateTo', function(assert) {
     this.clock.tick();
 
     // assert
+    assert.deepEqual(treeList.option('expandedRowKeys'), [11], 'parent node is expanded');
     assert.equal(treeList.pageIndex(), 1, 'page is changed');
     assert.ok(treeList.getRowIndexByKey(12) >= 0, 'key is visible');
+});
+
+QUnit.test('TreeList navigateTo to the same page with expand', function(assert) {
+    // arrange, act
+    const treeList = createTreeList({
+        dataSource: generateData(10),
+        paging: {
+            pageSize: 4
+        }
+    });
+
+    this.clock.tick();
+
+    treeList.navigateToRow(2);
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(treeList.option('expandedRowKeys'), [1], 'parent node is expanded');
+    assert.equal(treeList.pageIndex(), 0, 'page is not changed');
+    assert.ok(treeList.getRowIndexByKey(2) >= 0, 'key is visible');
 });
 
 // T697860
