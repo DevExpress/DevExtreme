@@ -1,9 +1,9 @@
 import { compileGetter } from '../../../core/utils/data';
-import { pathCombine, getFileExtension, PATH_SEPARATOR } from '../ui.file_manager.utils';
+import { pathCombine, getFileExtension, getPathParts, getName, PATH_SEPARATOR } from '../ui.file_manager.utils';
 import { ensureDefined } from '../../../core/utils/common';
 import { deserializeDate } from '../../../core/utils/date_serialization';
 import { each } from '../../../core/utils/iterator';
-import { isPromise } from '../../../core/utils/type';
+import { isPromise, isString } from '../../../core/utils/type';
 import { Deferred } from '../../../core/utils/deferred';
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
@@ -150,13 +150,52 @@ class FileProvider {
 }
 
 class FileManagerItem {
-    constructor(pathInfo, name, isDirectory) {
+    constructor() {
+        const ctor = isString(arguments[0]) ? this._publicCtor : this._internalCtor;
+        ctor.apply(this, arguments);
+    }
+
+    _internalCtor(pathInfo, name, isDirectory) {
         this.name = name;
 
         this.pathInfo = pathInfo && [...pathInfo] || [];
         this.parentPath = this._getPathByPathInfo(this.pathInfo);
         this.key = this.relativeName = pathCombine(this.parentPath, name);
 
+        this.path = pathCombine(this.parentPath, name);
+        this.pathKeys = this.pathInfo.map(({ key }) => key);
+        this.pathKeys.push(this.key);
+
+        this._initialize(isDirectory);
+    }
+
+    _publicCtor(path, isDirectory, pathKeys) {
+        this.path = path || '';
+        this.pathKeys = pathKeys || [];
+
+        const pathInfo = [];
+
+        const parts = getPathParts(path, true);
+        for(let i = 0; i < parts.length - 1; i++) {
+            const part = parts[i];
+            const pathInfoPart = {
+                key: this.pathKeys[i] || part,
+                name: getName(part)
+            };
+            pathInfo.push(pathInfoPart);
+        }
+
+        this.pathInfo = pathInfo;
+
+        this.relativeName = path;
+        this.name = getName(path);
+        this.key = this.pathKeys.length ? this.pathKeys[this.pathKeys.length - 1] : path;
+        this.parentPath = parts.length > 1 ? parts[parts.length - 2] : '';
+
+        this._initialize(isDirectory);
+    }
+
+    _initialize(isDirectory) {
         this.isDirectory = isDirectory || false;
         this.isRoot = false;
 
