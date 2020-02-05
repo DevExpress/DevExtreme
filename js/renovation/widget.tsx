@@ -67,6 +67,7 @@ const getCssClasses = (model: Partial<Widget>) => {
     model._active && className.push('dx-state-active');
     model._hovered && isHoverable && !model._active && className.push('dx-state-hover');
     model.rtlEnabled && className.push('dx-rtl');
+    model._visibilityChanged && hasWindow() && className.push('dx-visibility-change-handler');
     model.elementAttr?.class && className.push(model.elementAttr.class);
 
     return className.join(' ');
@@ -93,6 +94,7 @@ export const viewModelFunction = ({
     width,
 
     widgetRef,
+    _visibilityChanged,
 }: Widget) => {
     const styles = getStyles({ width, height });
     const attrsWithoutClass = getAttributes({
@@ -103,6 +105,7 @@ export const viewModelFunction = ({
     const cssClasses = getCssClasses({
         disabled, visible, _focused, _active, _hovered, rtlEnabled,
         elementAttr, hoverStateEnabled, focusStateEnabled, className,
+        _visibilityChanged,
     });
 
     return {
@@ -178,18 +181,71 @@ export default class Widget {
     @InternalState() _active: boolean = false;
     @InternalState() _focused: boolean = false;
     @InternalState() _hovered: boolean = false;
+    @InternalState() _isHidden: boolean = false;
 
     @Ref()
     widgetRef!: HTMLDivElement;
+
+    // @Effect()
+    // visibilityChangedEffect() {
+    //     const isVisible = () => {
+    //         return this.widgetRef?.offsetParent !== null;
+    //         // return Number(width) > 0 && Number(height) > 0;
+    //     };
+    //     const checkVisibilityChanged = (action) => {
+    //         if (isVisible()) {
+    //             if (action === 'hiding' && !this._isHidden) {
+    //                 this._visibilityChanged!(false);
+    //                 this._isHidden = true;
+    //             } else if (action === 'shown' && this._isHidden) {
+    //                 this._isHidden = false;
+    //                 this._visibilityChanged!(true);
+    //             }
+    //         }
+    //     };
+
+    //     checkVisibilityChanged(this.visible ? 'shown' : 'hiding');
+    // }
 
     @Effect()
     visibilityEffect() {
         const namespace = `${this.name}VisibilityChange`;
 
-        if (this._visibilityChanged !== undefined && hasWindow()) {
+        if (this._visibilityChanged || true /*&& hasWindow() */) {
+            // const isVisible = () => {
+            //     console.log(this.widgetRef?.offsetParent);
+            //     return this.widgetRef?.offsetParent !== null;
+            //     // const { width, height } = this.widgetRef?.style;
+            //     // return Number(width) > 0 && Number(height) > 0;
+            // };
+            // const checkVisibilityChanged = (action) => {
+
+            //     if (true) { // ?????
+            //         if (action === 'hiding' && !this._isHidden) {
+            //             this._visibilityChanged!(false);
+            //             this._isHidden = true;
+            //         } else if (action === 'shown' && this._isHidden) {
+            //             this._isHidden = false;
+            //             this._visibilityChanged!(true);
+            //         }
+            //     }
+            // };
+
             visibility.on(this.widgetRef,
-                () => this.visible && this._visibilityChanged!(true),
-                () => this.visible && this._visibilityChanged!(false),
+                () => {
+                    console.log(`isHidden - ${this._isHidden}, action - hidden`);
+                    if (this._isHidden) {
+                        this._visibilityChanged!(true);
+                        this._isHidden = false;
+                    }
+                },
+                () => {
+                    console.log(`isHidden - ${this._isHidden}, action - shown`);
+                    if (!this._isHidden) {
+                        this._isHidden = true;
+                        this._visibilityChanged!(false);
+                    }
+                },
                 { namespace },
             );
         }

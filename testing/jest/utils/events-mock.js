@@ -16,7 +16,9 @@ export const EVENT = {
     focus: 'focusin',
     hoverEnd: 'dxhoverend',
     hoverStart: 'dxhoverstart',
-    inactive: 'dxinactive'
+    inactive: 'dxinactive',
+    hiding: 'dxhiding',
+    shown: 'dxshown'
 };
 
 const defaultEvent = {

@@ -1,10 +1,11 @@
 import Widget from '../../js/renovation/widget.p.js';
 import { createElement } from 'preact';
 import { emit, fakeClickEvent, EVENT } from './utils/events-mock';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 
 describe('Widget', () => {
     const render = (props = {}) => shallow(createElement(Widget, props));
+    const mountRender = (props = {}) => mount(createElement(Widget, props));
 
     describe('Props', () => {
         describe('accessKey', () => {
@@ -342,6 +343,189 @@ describe('Widget', () => {
                 expect(widget.hasClass('dx-state-hover')).toBe(true);
                 expect(widget.hasClass('dx-state-active')).toBe(false);
             });
+        });
+    });
+
+    describe.only('Events', () => {
+        describe('visibilityChanged', () => {
+            it('is called on dxhiding and dxshown events and special css class is attached', () => {
+                let hidingFired = 0;
+                let shownFired = 0;
+                const _visibilityChanged = (visible) => {
+                    if (visible) {
+                        shownFired += 1;
+                    } else {
+                        hidingFired += 1;
+                    }
+                };
+
+                const widget = mountRender({ _visibilityChanged });
+
+                // expect(widget.hasClass('dx-visibility-change-handler')).toBe(true);
+
+                emit(EVENT.hiding); // hide!
+                // widget.setProps({ width: 0 });
+                expect(hidingFired).toBe(1);
+                expect(shownFired).toBe(0);
+                // $element.trigger('dxhiding').hide();
+                // assert.equal(hidingFired, 1, 'hiding was fired');
+                // assert.equal(shownFired, 0, 'shown was not fired');
+
+                emit(EVENT.shown); // show!
+                expect(hidingFired).toBe(1);
+                expect(shownFired).toBe(1);
+                // $element.show().trigger('dxshown');
+                // assert.equal(hidingFired, 1, 'hiding was fired only once');
+                // assert.equal(shownFired, 1, 'shown was fired');
+            });
+
+            /**
+             QUnit.test('_visibilityChanged is called on dxhiding and dxshown events and special css class is attached', function(assert) {
+            let hidingFired = 0;
+            let shownFired = 0;
+
+            const TestComponent = this.TestComponent.inherit({
+                NAME: 'TestComponent',
+
+                _visibilityChanged(visible) {
+                    if(visible) {
+                        shownFired++;
+                    } else {
+                        hidingFired++;
+                    }
+                }
+            });
+
+            const $element = $('#component');
+            new TestComponent($element);
+
+            assert.ok($element.hasClass('dx-visibility-change-handler'), 'special css class attached');
+
+            $element.trigger('dxhiding').hide();
+            assert.equal(hidingFired, 1, 'hiding was fired');
+            assert.equal(shownFired, 0, 'shown was not fired');
+
+            $element.show().trigger('dxshown');
+            assert.equal(hidingFired, 1, 'hiding was fired only once');
+            assert.equal(shownFired, 1, 'shown was fired');
+        });
+
+        QUnit.test('visibility change subscriptions should not clash', function(assert) {
+            let hidingFired = 0;
+            let shownFired = 0;
+
+            const visibilityChanged = visible => {
+                visible ? shownFired++ : hidingFired++;
+            };
+
+            const TestComponent1 = this.TestComponent.inherit({
+                NAME: 'TestComponent1',
+                _visibilityChanged: visibilityChanged
+            });
+
+            const TestComponent2 = this.TestComponent.inherit({
+                NAME: 'TestComponent2',
+                _visibilityChanged: visibilityChanged
+            });
+
+            const $element = $('#component');
+            new TestComponent1($element);
+            new TestComponent2($element);
+
+            $element.trigger('dxhiding').hide();
+            $element.show().trigger('dxshown');
+
+            assert.equal(hidingFired, 2, 'hidden fired for both components');
+            assert.equal(shownFired, 2, 'shown fired for both components');
+        });
+
+        QUnit.test('visibility change handling works optimally (initially visible)', function(assert) {
+            let hidingFired = 0;
+            let shownFired = 0;
+
+            const visibilityChanged = visible => {
+                visible ? shownFired++ : hidingFired++;
+            };
+
+            const TestComponent = this.TestComponent.inherit({
+                NAME: 'TestComponent1',
+                _visibilityChanged: visibilityChanged
+            });
+
+            const $element = $('#component');
+            new TestComponent($element);
+
+            assert.equal(hidingFired, 0, 'hidden is not fired initially');
+            assert.equal(shownFired, 0, 'shown is not fired initially');
+
+            $element.show().trigger('dxshown');
+            assert.equal(shownFired, 0, 'shown is not fired if element is visible');
+
+            $element.trigger('dxhiding').hide();
+            assert.equal(hidingFired, 1, 'hiding is fired for the first time');
+
+            $element.trigger('dxhiding').hide();
+            assert.equal(hidingFired, 1, 'hiding is not fired for the second time');
+        });
+
+        QUnit.test('visibility change handling works optimally (initially hidden)', function(assert) {
+            let hidingFired = 0;
+            let shownFired = 0;
+
+            const visibilityChanged = visible => {
+                visible ? shownFired++ : hidingFired++;
+            };
+
+            const TestComponent = this.TestComponent.inherit({
+                NAME: 'TestComponent1',
+                _visibilityChanged: visibilityChanged
+            });
+
+            const $element = $('#component').hide();
+            new TestComponent($element);
+
+            assert.equal(hidingFired, 0, 'hidden is not fired initially');
+            assert.equal(shownFired, 0, 'shown is not fired initially');
+
+            $element.trigger('dxhiding').hide();
+            assert.equal(shownFired, 0, 'hiding is not fired if element is hidden');
+
+            $element.show().trigger('dxshown');
+            assert.equal(shownFired, 1, 'shown is fired for the first time');
+
+            $element.show().trigger('dxshown');
+            assert.equal(shownFired, 1, 'shown is not fired for the second time');
+        });
+
+        QUnit.test('visibility change handling works with hidden parent', function(assert) {
+            let hidingFired = 0;
+            let shownFired = 0;
+
+            const visibilityChanged = visible => {
+                visible ? shownFired++ : hidingFired++;
+            };
+
+            const TestComponent = this.TestComponent.inherit({
+                NAME: 'TestComponent1',
+                _visibilityChanged: visibilityChanged
+            });
+
+            const $parent = $('#component').hide();
+            const $component = $('<div>').hide().appendTo($parent);
+
+            new TestComponent($component);
+
+            assert.equal(hidingFired, 0, 'hidden is not fired initially');
+            assert.equal(shownFired, 0, 'shown is not fired initially');
+
+            $component.show().triggerHandler('dxshown');
+            assert.equal(shownFired, 0, 'shown is not fired since parent is hidden');
+
+            $parent.show();
+            $component.triggerHandler('dxshown');
+            assert.equal(shownFired, 1, 'shown is fired since parent is shown');
+        });
+             */
         });
     });
 
