@@ -1574,25 +1574,7 @@ declare module DevExpress.events {
     /** @name events.triggerHandler(element, event, extraParameters) */
     export function triggerHandler(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
 }
-declare module DevExpress.excelExporter {
-    /** @name excelExporter.exportDataGrid(options) */
-    export function exportDataGrid(options: DevExpress.exporter.ExportDataGridProps): Promise<DevExpress.exporter.CellsRange> & JQueryPromise<DevExpress.exporter.CellsRange>;
-}
 declare module DevExpress.exporter {
-    /** @name CellAddress */
-    export interface CellAddress {
-        /** @name CellAddress.column */
-        column?: number;
-        /** @name CellAddress.row */
-        row?: number;
-    }
-    /** @name CellsRange */
-    export interface CellsRange {
-        /** @name CellsRange.from */
-        from?: CellAddress;
-        /** @name CellsRange.to */
-        to?: CellAddress;
-    }
     /** @name ExcelDataGridCell */
     export interface ExcelDataGridCell {
         /** @name ExcelDataGridCell.column */
@@ -1624,46 +1606,6 @@ declare module DevExpress.exporter {
         size?: number;
         /** @name ExcelFont.underline */
         underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
-    }
-    /** @name ExportDataGridProps */
-    export interface ExportDataGridProps {
-        /** @name ExportDataGridProps.autoFilterEnabled */
-        autoFilterEnabled?: boolean;
-        /** @name ExportDataGridProps.component */
-        component?: DevExpress.ui.dxDataGrid;
-        /** @name ExportDataGridProps.customizeCell */
-        customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any }) => any);
-        /** @name ExportDataGridProps.keepColumnWidths */
-        keepColumnWidths?: boolean;
-        /** @name ExportDataGridProps.loadPanel */
-        loadPanel?: ExportLoadPanel;
-        /** @name ExportDataGridProps.selectedRowsOnly */
-        selectedRowsOnly?: boolean;
-        /** @name ExportDataGridProps.topLeftCell */
-        topLeftCell?: CellAddress;
-        /** @name ExportDataGridProps.worksheet */
-        worksheet?: any;
-    }
-    /** @name ExportLoadPanel */
-    export interface ExportLoadPanel {
-        /** @name ExportLoadPanel.enabled */
-        enabled?: boolean;
-        /** @name ExportLoadPanel.height */
-        height?: number;
-        /** @name ExportLoadPanel.indicatorSrc */
-        indicatorSrc?: string;
-        /** @name ExportLoadPanel.shading */
-        shading?: boolean;
-        /** @name ExportLoadPanel.shadingColor */
-        shadingColor?: string;
-        /** @name ExportLoadPanel.showIndicator */
-        showIndicator?: boolean;
-        /** @name ExportLoadPanel.showPane */
-        showPane?: boolean;
-        /** @name ExportLoadPanel.text */
-        text?: string;
-        /** @name ExportLoadPanel.width */
-        width?: number;
     }
 }
 declare module DevExpress.fileProvider {
