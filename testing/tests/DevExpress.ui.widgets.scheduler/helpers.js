@@ -32,18 +32,6 @@ export class SchedulerTestWrapper {
             }
         },
 
-        this.timePanel = {
-            getElement: () => {
-                return $('.dx-scheduler-time-panel');
-            },
-            getTimeValues: () => {
-                const element = this.timePanel.getElement();
-                return element.find('.dx-scheduler-time-panel-cell > div').filter((i, el) => {
-                    return $(el).text() !== '';
-                }).map((i, el) => { return $(el).text(); });
-            }
-        },
-
         this.tooltip = {
             getOverlayContentElement: () => {
                 return this.isAdaptivity() ? this.tooltip.getContentElement().find('.dx-overlay-content') : $('.dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content');
