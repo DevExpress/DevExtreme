@@ -836,12 +836,21 @@ QUnit.module('Label aligment', () => {
             { itemType: 'group', items: ['veryVeryVeryLongText'] }]);
     });
 
-    testOrSkip('2 column -> { group [text]}, { group [longText]}, { group [veryLongText]}, { group [veryVeryVeryLongText]} ', function() {
-        test_2Column_4ItemsLayout([
-            { dataField: 'text' },
-            { dataField: 'longText' },
-            { dataField: 'veryLongText' },
-            { dataField: 'veryVeryVeryLongText' } ]);
+    testOrSkip('3 column -> [ text.colSpan: 2, longText.colSpan:1, veryLongText.colSpan:2, veryVeryVeryLongText.colSpan:1 ] ', function(assert) {
+        const wrapper = new FormTestWrapper(3, [
+            { colSpan: 2, dataField: 'text' },
+            { colSpan: 1, dataField: 'longText' },
+            { colSpan: 2, dataField: 'veryLongText' },
+            { colSpan: 1, dataField: 'veryVeryVeryLongText' } ]);
+        wrapper.checkFormSize({ width: 1000, height: 82 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8.5, left: 0, width: 103, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 1, left: 104, width: 546.6, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 8.5, left: 681.6, width: 164, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 1, left: 846.6, width: 152.3, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="veryLongText"]'), { top: 54.5, left: 0, width: 103, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="veryLongText"]'), { top: 47, left: 104, width: 546.6, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="veryVeryVeryLongText"]'), { top: 54.5, left: 681.6, width: 164, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="veryVeryVeryLongText"]'), { top: 47, left: 846.6, width: 152.3, height: 34 });
     });
 
     testOrSkip('1 column -> { group.colCount3 [ text.colSpan: 2, longText.colSpan:1, veryLongText.colSpan:2, veryVeryVeryLongText.colSpan:1 ]} ', function() {
