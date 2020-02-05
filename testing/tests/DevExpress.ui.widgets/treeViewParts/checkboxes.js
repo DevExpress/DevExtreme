@@ -284,7 +284,7 @@ configs.forEach(config => {
             wrapper.checkSelection([], []);
             wrapper.checkEventLog([]);
         });
-
+        /*
         QUnit.test('all.selected: false -> selectAll -> expandAll', function(assert) {
             if(config.selectionMode === 'single') {
                 assert.ok('skip for single');
@@ -467,7 +467,7 @@ configs.forEach(config => {
             wrapper.checkSelection([0, 1], [0, 1], 'after expand');
             wrapper.checkEventLog([], 'after expand');
         });
-
+        */
         QUnit.test('all.selected: true -> unselectAll -> expandAll', function(assert) {
             if(config.selectionMode === 'single') {
                 assert.ok('skip for single');
@@ -497,9 +497,11 @@ configs.forEach(config => {
                     expectedKeys = [0, 1];
                     expectedNodes = [0, 1];
                 }
+                wrapper.checkSelectedKeys(expectedKeys, 'after expand');
+                // NOTE: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+            } else {
+                wrapper.checkSelection(expectedKeys, expectedNodes, 'after expand');
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expand');
             wrapper.checkEventLog([], 'after expand');
         });
 
@@ -535,6 +537,9 @@ configs.forEach(config => {
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
+            if(!config.selectNodesRecursive) {
+                expectedNodes = [1];
+            }
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [1];
@@ -543,10 +548,12 @@ configs.forEach(config => {
                     expectedKeys = [0, 1];
                     expectedNodes = [0, 1];
                 }
-            }
 
-            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+                wrapper.checkSelectedKeys(expectedKeys, 'after expand');
+                // NOTE: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+            } else {
+                wrapper.checkSelection(expectedKeys, expectedNodes, 'after expand');
+            }
             wrapper.checkEventLog([], 'after expand');
         });
 
@@ -708,19 +715,32 @@ configs.forEach(config => {
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
 
             let expectedKeys = [1];
+            let expectedNodes = [1];
             if(config.selectionMode === 'multiple') {
                 if(config.selectNodesRecursive) {
                     expectedKeys = [0, 1, 2];
+                    expectedNodes = [0, 1, 2];
                 }
             }
             if(isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 if(!config.expanded) {
                     expectedKeys = [];
+                    expectedNodes = [];
                 }
+                wrapper.checkSelectedKeys(expectedKeys);
+                // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
+            } else {
+                if(!config.expanded) {
+                    if(!config.selectNodesRecursive || config.selectionMode === 'single') {
+                        expectedNodes = [];
+                    } else {
+                        expectedNodes = [0];
+                    }
+                }
+                wrapper.checkSelection(expectedKeys, expectedNodes);
             }
-            wrapper.checkSelectedKeys(expectedKeys);
-            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
+
             wrapper.checkEventLog([]);
         });
 
@@ -733,22 +753,25 @@ configs.forEach(config => {
 
             wrapper.instance.expandAll();
 
-            let expectedKeys = [1];
+            let expectedKeysAndNodes = [1];
             if(config.selectionMode === 'multiple') {
                 if(config.selectNodesRecursive) {
-                    expectedKeys = [0, 1, 2];
+                    expectedKeysAndNodes = [0, 1, 2];
                 }
                 if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                     // unexpected result
                     if(config.selectNodesRecursive) {
-                        expectedKeys = [0, 1];
+                        expectedKeysAndNodes = [0, 1];
                     } else {
-                        expectedKeys = [1];
+                        expectedKeysAndNodes = [1];
                     }
                 }
+                wrapper.checkSelectedKeys(expectedKeysAndNodes, 'after expand');
+                // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
+            } else {
+                wrapper.checkSelection(expectedKeysAndNodes, expectedKeysAndNodes, 'after expand');
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
+
             wrapper.checkEventLog([], 'after expand');
         });
 
