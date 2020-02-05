@@ -168,8 +168,8 @@ export default class Widget {
     @Prop() name?: string = '';
     @Prop() onDimensionChanged: () => any = (() => undefined);
     @Prop() onKeyboardHandled?: (args: any) => any | undefined;
+    @Prop() onKeyPress?: (e: any, options: any) => any = (() => undefined);
     @Prop() rtlEnabled?: boolean = config().rtlEnabled;
-    @Prop() supportedKeys?: (args: any) => any | undefined;
     @Prop() tabIndex?: number = 0;
     @Prop() visible?: boolean = true;
     @Prop() width?: string | number | null = null;
@@ -337,30 +337,13 @@ export default class Widget {
 
     @Effect()
     keyboardEffect() {
-        const hasKeyboardEventHandler = !!this.onKeyboardHandled;
-        const shouldAttach = this.focusStateEnabled || hasKeyboardEventHandler;
-        let id: string | null = null;
+        if (this.focusStateEnabled || this.onKeyPress) {
+            const id = keyboard.on(this.widgetRef, this.widgetRef,
+                options => this.onKeyPress?.(options.originalEvent, options));
 
-        if (shouldAttach) {
-            const keyboardHandler = (options: any) => {
-                const { originalEvent, keyName, which } = options;
-                const keys = this.supportedKeys && this.supportedKeys(originalEvent) || {};
-                const handler = keys[keyName] || keys[which];
-
-                if (handler) {
-                    if (!handler(originalEvent, options)) {
-                        return false;
-                    }
-                }
-
-                return true;
-            };
-
-            id = keyboard.on(this.widgetRef, this.widgetRef,
-                opts => keyboardHandler(opts),
-            );
+            return () => keyboard.off(id);
         }
 
-        return () => keyboard.off(id);
+        return null;
     }
 }
