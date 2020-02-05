@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { deserializeDate } from 'core/utils/date_serialization';
-import { FileManagerItem } from 'ui/file_manager/file_provider/file_provider';
+import FileSystemItem from 'file_management/file_system_item';
 
 import FileReaderMock from './fileManager/file_reader.mock.js';
 
@@ -648,19 +648,19 @@ export const createSampleFileItems = () => {
         { id: 'Root\\Files\\Article.txt', name: 'Article.txt', dateModified: '2017-02-09T09:38:46.3772529Z', isDirectory: false, size: 1, pathInfo: filesPathInfo }
     ];
 
-    const fileManagerItems = [
-        createFileManagerItem(filesPathInfo, itemData[0]),
-        createFileManagerItem(filesPathInfo, itemData[1]),
-        createFileManagerItem(filesPathInfo, itemData[2]),
-        createFileManagerItem(filesPathInfo, itemData[3]),
-        createFileManagerItem(filesPathInfo, itemData[4])
+    const fileSystemItems = [
+        createFileSystemItem(filesPathInfo, itemData[0]),
+        createFileSystemItem(filesPathInfo, itemData[1]),
+        createFileSystemItem(filesPathInfo, itemData[2]),
+        createFileSystemItem(filesPathInfo, itemData[3]),
+        createFileSystemItem(filesPathInfo, itemData[4])
     ];
 
-    return { filesPathInfo, itemData, fileManagerItems };
+    return { filesPathInfo, itemData, fileSystemItems };
 };
 
-const createFileManagerItem = (parentPath, dataObj) => {
-    const item = new FileManagerItem(parentPath, dataObj.name, dataObj.isDirectory);
+const createFileSystemItem = (parentPath, dataObj) => {
+    const item = new FileSystemItem(parentPath, dataObj.name, dataObj.isDirectory);
     item.dateModified = deserializeDate(dataObj.dateModified);
     item.size = dataObj.size;
     item.dataItem = dataObj;

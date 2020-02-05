@@ -19,7 +19,7 @@ const moduleConfig = {
         FileUploaderInternals.changeFileInputRenderer(() => $('<div>'));
 
         this.$element = $('#fileManager').dxFileManager({
-            fileProvider: fileSystem,
+            fileSystemProvider: fileSystem,
             selectionMode: 'single',
             itemView: {
                 showFolders: false,
@@ -29,7 +29,7 @@ const moduleConfig = {
                 create: true,
                 copy: true,
                 move: true,
-                remove: true,
+                delete: true,
                 rename: true,
                 upload: true,
                 download: true

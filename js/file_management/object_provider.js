@@ -1,21 +1,21 @@
-import { find } from '../../../core/utils/array';
-import { ensureDefined } from '../../../core/utils/common';
-import { compileGetter, compileSetter } from '../../../core/utils/data';
-import Guid from '../../../core/guid';
-import typeUtils from '../../../core/utils/type';
-import { errors } from '../../../data/errors';
-import { Deferred } from '../../../core/utils/deferred';
-import { getWindow } from '../../../core/utils/window';
-import { fileSaver } from '../../../exporter/file_saver';
-import Errors from '../../widget/ui.errors';
+import { find } from '../core/utils/array';
+import { ensureDefined } from '../core/utils/common';
+import { compileGetter, compileSetter } from '../core/utils/data';
+import Guid from '../core/guid';
+import typeUtils from '../core/utils/type';
+import { errors } from '../data/errors';
+import { Deferred } from '../core/utils/deferred';
+import { getWindow } from '../core/utils/window';
+import { fileSaver } from '../exporter/file_saver';
+import Errors from '../ui/widget/ui.errors';
 
-import { FileProvider } from './file_provider';
-import { ErrorCode } from '../ui.file_manager.common';
-import { pathCombine } from '../ui.file_manager.utils';
+import FileSystemProviderBase from './provider_base';
+import ErrorCode from './errors';
+import { pathCombine } from './utils';
 
 const window = getWindow();
 
-class ArrayFileProvider extends FileProvider {
+class ObjectFileSystemProvider extends FileSystemProviderBase {
 
     constructor(options) {
         options = ensureDefined(options, { });
@@ -70,7 +70,7 @@ class ArrayFileProvider extends FileProvider {
         item.key = this._ensureDataObjectKey(item.dataItem);
     }
 
-    createFolder(parentDir, name) {
+    createDirectory(parentDir, name) {
         return this._executeActionAsDeferred(() => {
             this._validateDirectoryExists(parentDir);
             this._createDataObject(parentDir, name, true);
@@ -397,4 +397,4 @@ function requestJSZip() {
     return jsZip;
 }
 
-module.exports = ArrayFileProvider;
+module.exports = ObjectFileSystemProvider;

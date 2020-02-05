@@ -14,7 +14,7 @@ const moduleConfig = {
         fx.off = true;
 
         this.$element = $('#fileManager').dxFileManager({
-            fileProvider: fileSystem,
+            fileSystemProvider: fileSystem,
             itemView: {
                 showFolders: false
             },
@@ -22,7 +22,7 @@ const moduleConfig = {
                 create: true,
                 copy: true,
                 move: true,
-                remove: true,
+                delete: true,
                 rename: true,
                 upload: true
             }

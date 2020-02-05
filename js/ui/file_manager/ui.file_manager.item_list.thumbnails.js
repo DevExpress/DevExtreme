@@ -4,7 +4,7 @@ import { when } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils';
 import { name as contextMenuEventName } from '../../events/contextmenu';
-import { getDisplayFileSize } from './ui.file_manager.utils.js';
+import { getDisplayFileSize } from './ui.file_manager.common';
 import messageLocalization from '../../localization/message';
 
 import FileManagerItemListBase from './ui.file_manager.item_list';

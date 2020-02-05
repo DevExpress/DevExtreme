@@ -1,10 +1,11 @@
-import { FileProvider, FileManagerItem, FileManagerRootItem } from './file_provider/file_provider';
-import ArrayFileProvider from './file_provider/array';
-import AjaxFileProvider from './file_provider/ajax';
-import RemoteFileProvider from './file_provider/remote';
-import CustomFileProvider from './file_provider/custom';
-import { pathCombine, getEscapedFileName, getPathParts, getFileExtension } from './ui.file_manager.utils';
-import whenSome, { ErrorCode } from './ui.file_manager.common';
+import FileSystemProviderBase from '../../file_management/provider_base';
+import FileSystemItem, { FileSystemRootItem } from '../../file_management/file_system_item';
+import ObjectFileSystemProvider from '../../file_management/object_provider';
+import RemoteFileSystemProvider from '../../file_management/remote_provider';
+import CustomFileSystemProvider from '../../file_management/custom_provider';
+import ErrorCode from '../../file_management/errors';
+import { pathCombine, getEscapedFileName, getPathParts, getFileExtension } from '../../file_management/utils';
+import whenSome from './ui.file_manager.common';
 
 import { Deferred, when } from '../../core/utils/deferred';
 import { find } from '../../core/utils/array';
@@ -47,25 +48,21 @@ export default class FileItemsController {
         }
 
         if(Array.isArray(fileProvider)) {
-            return new ArrayFileProvider({ data: fileProvider });
+            return new ObjectFileSystemProvider({ data: fileProvider });
         }
 
-        if(typeof fileProvider === 'string') {
-            return new AjaxFileProvider({ url: fileProvider });
-        }
-
-        if(fileProvider instanceof FileProvider) {
+        if(fileProvider instanceof FileSystemProviderBase) {
             return fileProvider;
         }
 
         switch(fileProvider.type) {
             case 'remote':
-                return new RemoteFileProvider(fileProvider);
+                return new RemoteFileSystemProvider(fileProvider);
             case 'custom':
-                return new CustomFileProvider(fileProvider);
+                return new CustomFileSystemProvider(fileProvider);
         }
 
-        return new ArrayFileProvider(fileProvider);
+        return new ObjectFileSystemProvider(fileProvider);
     }
 
     setCurrentPath(path) {
@@ -168,7 +165,7 @@ export default class FileItemsController {
     createDirectory(parentDirectoryInfo, name) {
         const actionInfo = this._createEditActionInfo('create', parentDirectoryInfo, parentDirectoryInfo);
         return this._processEditAction(actionInfo,
-            () => this._fileProvider.createFolder(parentDirectoryInfo.fileItem, name),
+            () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name),
             () => this._resetDirectoryState(parentDirectoryInfo));
     }
 
@@ -255,7 +252,7 @@ export default class FileItemsController {
 
     getItemContent(itemInfos) {
         const items = itemInfos.map(i => i.fileItem);
-        return when(this._fileProvider.getItemContent(items));
+        return when(this._fileProvider.getItemsContent(items));
     }
 
     _processEditAction(actionInfo, action, completeAction) {
@@ -301,7 +298,7 @@ export default class FileItemsController {
         const result = [];
         for(let i = 0; i < files.length; i++) {
             const file = files[i];
-            const item = new FileManagerItem(pathInfo, file.name, false);
+            const item = new FileSystemItem(pathInfo, file.name, false);
             const itemInfo = this._createFileInfo(item, parentDirectoryInfo);
             result.push(itemInfo);
         }
@@ -447,7 +444,7 @@ export default class FileItemsController {
     }
 
     _createRootDirectory(text) {
-        const root = new FileManagerRootItem();
+        const root = new FileSystemRootItem();
         root.name = text || '';
         return root;
     }

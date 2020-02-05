@@ -1608,111 +1608,121 @@ declare module DevExpress.exporter {
         underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
     }
 }
-declare module DevExpress.fileProvider {
-    /** @name AjaxFileProvider.Options */
-    export interface AjaxFileProviderOptions extends FileProviderOptions<AjaxFileProvider> {
-        /** @name AjaxFileProvider.Options.itemsExpr */
-        itemsExpr?: string | Function;
-        /** @name AjaxFileProvider.Options.url */
-        url?: string;
-    }
-    /** @name AjaxFileProvider */
-    export class AjaxFileProvider extends FileProvider {
-        constructor(options?: AjaxFileProviderOptions)
-    }
-    /** @name ArrayFileProvider.Options */
-    export interface ArrayFileProviderOptions extends FileProviderOptions<ArrayFileProvider> {
-        /** @name ArrayFileProvider.Options.contentExpr */
-        contentExpr?: string | Function;
-        /** @name ArrayFileProvider.Options.data */
-        data?: Array<any>;
-        /** @name ArrayFileProvider.Options.itemsExpr */
-        itemsExpr?: string | Function;
-    }
-    /** @name ArrayFileProvider */
-    export class ArrayFileProvider extends FileProvider {
-        constructor(options?: ArrayFileProviderOptions)
-    }
-    /** @name CustomFileProvider.Options */
-    export interface CustomFileProviderOptions extends FileProviderOptions<CustomFileProvider> {
-        /** @name CustomFileProvider.Options.abortFileUpload */
+declare module DevExpress.fileManagement {
+    /** @name CustomFileSystemProvider.Options */
+    export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
+        /** @name CustomFileSystemProvider.Options.abortFileUpload */
         abortFileUpload?: Function;
-        /** @name CustomFileProvider.Options.copyItem */
+        /** @name CustomFileSystemProvider.Options.copyItem */
         copyItem?: Function;
-        /** @name CustomFileProvider.Options.createDirectory */
+        /** @name CustomFileSystemProvider.Options.createDirectory */
         createDirectory?: Function;
-        /** @name CustomFileProvider.Options.deleteItem */
+        /** @name CustomFileSystemProvider.Options.deleteItem */
         deleteItem?: Function;
-        /** @name CustomFileProvider.Options.downloadItems */
+        /** @name CustomFileSystemProvider.Options.downloadItems */
         downloadItems?: Function;
-        /** @name CustomFileProvider.Options.getItems */
+        /** @name CustomFileSystemProvider.Options.getItems */
         getItems?: Function;
-        /** @name CustomFileProvider.Options.getItemsContent */
+        /** @name CustomFileSystemProvider.Options.getItemsContent */
         getItemsContent?: Function;
-        /** @name CustomFileProvider.Options.hasSubDirectoriesExpr */
+        /** @name CustomFileSystemProvider.Options.hasSubDirectoriesExpr */
         hasSubDirectoriesExpr?: string | Function;
-        /** @name CustomFileProvider.Options.moveItem */
+        /** @name CustomFileSystemProvider.Options.moveItem */
         moveItem?: Function;
-        /** @name CustomFileProvider.Options.renameItem */
+        /** @name CustomFileSystemProvider.Options.renameItem */
         renameItem?: Function;
-        /** @name CustomFileProvider.Options.uploadChunkSize */
+        /** @name CustomFileSystemProvider.Options.uploadChunkSize */
         uploadChunkSize?: number;
-        /** @name CustomFileProvider.Options.uploadFileChunk */
+        /** @name CustomFileSystemProvider.Options.uploadFileChunk */
         uploadFileChunk?: Function;
     }
-    /** @name CustomFileProvider */
-    export class CustomFileProvider extends FileProvider {
-        constructor(options?: CustomFileProviderOptions)
+    /** @name CustomFileSystemProvider */
+    export class CustomFileSystemProvider extends FileSystemProviderBase {
+        constructor(options?: CustomFileSystemProviderOptions)
     }
-    /** @name FileProvider.Options */
-    export interface FileProviderOptions<T = FileProvider> {
-        /** @name FileProvider.Options.dateModifiedExpr */
+    /** @name FileSystemItem */
+    export class FileSystemItem {
+        /** @name FileSystemItem.dataItem */
+        dataItem: any;
+        /** @name FileSystemItem.dateModified */
+        dateModified: Date;
+        /** @name FileSystemItem.isDirectory */
+        isDirectory: boolean;
+        /** @name FileSystemItem.key */
+        key: string;
+        /** @name FileSystemItem.name */
+        name: string;
+        /** @name FileSystemItem.path */
+        path: string;
+        /** @name FileSystemItem.pathKeys */
+        pathKeys: Array<string>;
+        /** @name FileSystemItem.size */
+        size: number;
+        /** @name FileSystemItem.thumbnail */
+        thumbnail: string;
+    }
+    /** @name FileSystemProviderBase.Options */
+    export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
+        /** @name FileSystemProviderBase.Options.dateModifiedExpr */
         dateModifiedExpr?: string | Function;
-        /** @name FileProvider.Options.isDirectoryExpr */
+        /** @name FileSystemProviderBase.Options.isDirectoryExpr */
         isDirectoryExpr?: string | Function;
-        /** @name FileProvider.Options.keyExpr */
+        /** @name FileSystemProviderBase.Options.keyExpr */
         keyExpr?: string | Function;
-        /** @name FileProvider.Options.nameExpr */
+        /** @name FileSystemProviderBase.Options.nameExpr */
         nameExpr?: string | Function;
-        /** @name FileProvider.Options.sizeExpr */
+        /** @name FileSystemProviderBase.Options.sizeExpr */
         sizeExpr?: string | Function;
-        /** @name FileProvider.Options.thumbnailExpr */
+        /** @name FileSystemProviderBase.Options.thumbnailExpr */
         thumbnailExpr?: string | Function;
     }
-    /** @name FileProvider */
-    export class FileProvider {
-        constructor(options?: FileProviderOptions)
-        /** @name FileProvider.abortFileUpload() */
-        abortFileUpload(fileData: File, uploadInfo: any, destinationDirectory: any): Promise<any> & JQueryPromise<any>;
-        /** @name FileProvider.copyItems() */
-        copyItems(items: Array<any>, destinationDirectory: any): Array<Promise<any> | JQueryPromise<any>>;
-        /** @name FileProvider.createFolder() */
-        createFolder(parentDirectory: any, name: string): Promise<any> & JQueryPromise<any>;
-        /** @name FileProvider.deleteItems() */
-        deleteItems(items: Array<any>): Array<Promise<any> | JQueryPromise<any>>;
-        /** @name FileProvider.downloadItems() */
-        downloadItems(items: Array<any>): any;
-        /** @name FileProvider.getItemContent() */
-        getItemContent(items: Array<any>): Promise<any> & JQueryPromise<any>;
-        /** @name FileProvider.getItems() */
+    /** @name FileSystemProviderBase */
+    export class FileSystemProviderBase {
+        constructor(options?: FileSystemProviderBaseOptions)
+        /** @name FileSystemProviderBase.abortFileUpload() */
+        abortFileUpload(fileData: File, uploadInfo: any, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+        /** @name FileSystemProviderBase.copyItems() */
+        copyItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<Promise<any> | JQueryPromise<any>>;
+        /** @name FileSystemProviderBase.createDirectory() */
+        createDirectory(parentDirectory: FileSystemItem, name: string): Promise<any> & JQueryPromise<any>;
+        /** @name FileSystemProviderBase.deleteItems() */
+        deleteItems(items: Array<FileSystemItem>): Array<Promise<any> | JQueryPromise<any>>;
+        /** @name FileSystemProviderBase.downloadItems() */
+        downloadItems(items: Array<FileSystemItem>): any;
+        /** @name FileSystemProviderBase.getItems() */
         getItems(pathInfo: any): Promise<Array<any>> & JQueryPromise<Array<any>>;
-        /** @name FileProvider.moveItems() */
-        moveItems(items: Array<any>, destinationDirectory: any): Array<Promise<any> | JQueryPromise<any>>;
-        /** @name FileProvider.renameItem() */
-        renameItem(item: any, newName: string): Promise<any> & JQueryPromise<any>;
-        /** @name FileProvider.uploadFileChunk() */
-        uploadFileChunk(fileData: File, uploadInfo: any, destinationDirectory: any): Promise<any> & JQueryPromise<any>;
+        /** @name FileSystemProviderBase.getItemsContent() */
+        getItemsContent(items: Array<FileSystemItem>): Promise<any> & JQueryPromise<any>;
+        /** @name FileSystemProviderBase.moveItems() */
+        moveItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<Promise<any> | JQueryPromise<any>>;
+        /** @name FileSystemProviderBase.renameItem() */
+        renameItem(item: FileSystemItem, newName: string): Promise<any> & JQueryPromise<any>;
+        /** @name FileSystemProviderBase.uploadFileChunk() */
+        uploadFileChunk(fileData: File, uploadInfo: any, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
     }
-    /** @name RemoteFileProvider.Options */
-    export interface RemoteFileProviderOptions extends FileProviderOptions<RemoteFileProvider> {
-        /** @name RemoteFileProvider.Options.endpointUrl */
+    /** @name ObjectFileSystemProvider.Options */
+    export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseOptions<ObjectFileSystemProvider> {
+        /** @name ObjectFileSystemProvider.Options.contentExpr */
+        contentExpr?: string | Function;
+        /** @name ObjectFileSystemProvider.Options.data */
+        data?: Array<any>;
+        /** @name ObjectFileSystemProvider.Options.itemsExpr */
+        itemsExpr?: string | Function;
+    }
+    /** @name ObjectFileSystemProvider */
+    export class ObjectFileSystemProvider extends FileSystemProviderBase {
+        constructor(options?: ObjectFileSystemProviderOptions)
+    }
+    /** @name RemoteFileSystemProvider.Options */
+    export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
+        /** @name RemoteFileSystemProvider.Options.endpointUrl */
         endpointUrl?: string;
-        /** @name RemoteFileProvider.Options.hasSubDirectoriesExpr */
+        /** @name RemoteFileSystemProvider.Options.hasSubDirectoriesExpr */
         hasSubDirectoriesExpr?: string | Function;
     }
-    /** @name RemoteFileProvider */
-    export class RemoteFileProvider extends FileProvider {
-        constructor(options?: RemoteFileProviderOptions)
+    /** @name RemoteFileSystemProvider */
+    export class RemoteFileSystemProvider extends FileSystemProviderBase {
+        constructor(options?: RemoteFileSystemProviderOptions)
     }
 }
 declare module DevExpress.fx {
@@ -3511,8 +3521,8 @@ declare module DevExpress.ui {
         customizeDetailColumns?: ((columns: Array<dxDataGridColumn>) => Array<dxDataGridColumn>);
         /** @name dxFileManager.Options.customizeThumbnail */
         customizeThumbnail?: ((fileItem: any) => string);
-        /** @name dxFileManager.Options.fileProvider */
-        fileProvider?: any;
+        /** @name dxFileManager.Options.fileSystemProvider */
+        fileSystemProvider?: any;
         /** @name dxFileManager.Options.itemView */
         itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
         /** @name dxFileManager.Options.onCurrentDirectoryChanged */
@@ -3520,7 +3530,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.onSelectedFileOpened */
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
         /** @name dxFileManager.Options.permissions */
-        permissions?: { copy?: boolean, create?: boolean, download?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
+        permissions?: { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean };
         /** @name dxFileManager.Options.rootFolderName */
         rootFolderName?: string;
         /** @name dxFileManager.Options.selectionMode */
@@ -3558,16 +3568,16 @@ declare module DevExpress.ui {
     /** @name dxFileManagerToolbar */
     export interface dxFileManagerToolbar {
         /** @name dxFileManagerToolbar.fileSelectionItems */
-        fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+        fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
         /** @name dxFileManagerToolbar.items */
-        items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+        items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
     }
     /** @name dxFileManagerToolbarItem */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {
         /** @name dxFileManagerToolbarItem.location */
         location?: 'after' | 'before' | 'center';
         /** @name dxFileManagerToolbarItem.name */
-        name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
+        name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
         /** @name dxFileManagerToolbarItem.visible */
         visible?: boolean;
     }
