@@ -13,7 +13,7 @@ class FormTestWrapper {
             items
         });
 
-        $form.find('*').css('font-family', 'Arial');
+        $form.find('*').css('font-family', 'DejaVu Sans');
 
         this.epsilon = 0.1;
         this.$form = $form;
