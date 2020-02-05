@@ -39,8 +39,8 @@ export const viewModelFunction = (model: Button):ButtonViewModel => {
 
     return {
         ...model.props,
-        onClick: model.clickHandler.bind(model),
-        onKeyPress: model.keyPressHandler.bind(model),
+        onWidgetClick: model.onWidgetClick,
+        onWidgetKeyPress: model.onWidgetKeyPress,
         submitInputRef: model.submitInputRef,
         elementAttr: { ...model.props.elementAttr, role: 'button' },
         aria: { label: model.props.text && model.props.text.trim() },
@@ -52,8 +52,8 @@ export const viewModelFunction = (model: Button):ButtonViewModel => {
 declare type ButtonViewModel = {
     cssClasses: string;
     submitInputRef: any;
-    onClick: (e: Event) => any;
-    onKeyPress: (e: Event, options:any) => void;
+    onWidgetClick: (e: Event) => any;
+    onWidgetKeyPress: (e: Event, options:any) => void;
 } & ButtonInput
 
 export const viewFunction = (viewModel: ButtonViewModel) => {
@@ -68,8 +68,8 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
         height={viewModel.height}
         hint={viewModel.hint}
         hoverStateEnabled={viewModel.hoverStateEnabled}
-        onClick={viewModel.onClick}
-        onKeyPress={viewModel.onKeyPress}
+        onClick={viewModel.onWidgetClick}
+        onKeyPress={viewModel.onWidgetKeyPress}
         rtlEnabled={viewModel.rtlEnabled}
         tabIndex={viewModel.tabIndex}
         visible={viewModel.visible}
@@ -127,15 +127,15 @@ export default class Button extends JSXComponent<ButtonInput> {
         return () => click.off(this.submitInputRef, { namespace });
     }
 
-    clickHandler(e:Event) { 
+    onWidgetClick(e:Event) { 
         this.props.useSubmitBehavior && this.submitInputRef.click();
         return this.props.onClick?.(e);
     }
 
-    keyPressHandler(e:Event, { keyName, which }){
+    onWidgetKeyPress(e:Event, { keyName, which }){
         if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
             e.preventDefault();
-            this.clickHandler(e);
+            this.onWidgetClick(e);
         }
     }
 }
