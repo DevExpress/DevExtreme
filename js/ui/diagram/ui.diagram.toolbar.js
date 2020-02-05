@@ -1,27 +1,32 @@
 import $ from '../../core/renderer';
 
-import DiagramPanel from './ui.diagram.panel';
 import Toolbar from '../toolbar';
 import ContextMenu from '../context_menu';
 import DiagramBar from './diagram.bar';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 
+import DiagramPanel from './ui.diagram.panel';
+
 import '../select_box';
 import '../color_box';
 import '../check_box';
 
 const ACTIVE_FORMAT_CLASS = 'dx-format-active';
-const TOOLBAR_CLASS = 'dx-diagram-toolbar';
-const TOOLBAR_SEPARATOR_CLASS = 'dx-diagram-toolbar-separator';
-const TOOLBAR_MENU_SEPARATOR_CLASS = 'dx-diagram-toolbar-menu-separator';
+const DIAGRAM_TOOLBAR_CLASS = 'dx-diagram-toolbar';
+const DIAGRAM_TOOLBAR_SEPARATOR_CLASS = 'dx-diagram-toolbar-separator';
+const DIAGRAM_TOOLBAR_MENU_SEPARATOR_CLASS = 'dx-diagram-toolbar-menu-separator';
+const DIAGRAM_CONTEXT_MENU_CLASS = 'dx-diagram-contextmenu';
 
 class DiagramToolbar extends DiagramPanel {
     _init() {
         this.bar = new ToolbarDiagramBar(this, this._getCommands());
         this._itemHelpers = {};
         this._contextMenus = [];
+
         this._createOnWidgetCommand();
+        this._createOnSubMenuVisibleChangedAction();
+
         super._init();
     }
 
@@ -33,7 +38,7 @@ class DiagramToolbar extends DiagramPanel {
 
     _createMainElement() {
         return $('<div>')
-            .addClass(TOOLBAR_CLASS)
+            .addClass(DIAGRAM_TOOLBAR_CLASS)
             .appendTo(this._$element);
     }
     _getCommands() {
@@ -74,10 +79,10 @@ class DiagramToolbar extends DiagramPanel {
         if(item.widget === 'separator') {
             return {
                 template: (data, index, element) => {
-                    $(element).addClass(TOOLBAR_SEPARATOR_CLASS);
+                    $(element).addClass(DIAGRAM_TOOLBAR_SEPARATOR_CLASS);
                 },
                 menuItemTemplate: (data, index, element) => {
-                    $(element).addClass(TOOLBAR_MENU_SEPARATOR_CLASS);
+                    $(element).addClass(DIAGRAM_TOOLBAR_MENU_SEPARATOR_CLASS);
                 }
             };
         }
@@ -217,17 +222,33 @@ class DiagramToolbar extends DiagramPanel {
             const $menuContainer = $('<div>')
                 .appendTo(this.$element());
             this._createComponent($menuContainer, ContextMenu, {
-                dataSource: item.items,
-                displayExpr: 'text',
-                valueExpr: 'command',
+                items: item.items,
                 target: widget.$element(),
+                cssClass: DIAGRAM_CONTEXT_MENU_CLASS,
                 showEvent: 'dxclick',
                 position: { at: 'left bottom' },
+                itemTemplate: (itemData, itemIndex, itemElement) => {
+                    if(itemData.widget && itemData.widget._hasCheckedItems) {
+                        const iconElement = $('<span></span>');
+                        iconElement.addClass('dx-icon-check');
+                        iconElement.css('visibility', !itemData.checked ? 'hidden' : '');
+                        itemElement.append(iconElement);
+                    }
+                    itemElement.append(itemData.text);
+                },
                 onItemClick: ({ itemData }) => {
                     if(itemData.command !== undefined) {
                         const parameter = this._getExecCommandParameter(itemData);
                         actionHandler.call(this, itemData.command, parameter);
                     }
+                },
+                onShowing: (e) => {
+                    if(this._showingSubMenu) return;
+
+                    this._showingSubMenu = e.component;
+                    this._onSubMenuVisibleChangedAction({ visible: true, component: this });
+                    e.component.option('items', item.items);
+                    delete this._showingSubMenu;
                 },
                 onInitialized: ({ component }) => this._onContextMenuInitialized(component, item, widget),
                 onDisposing: ({ component }) => this._onContextMenuDisposing(component, item)
@@ -267,7 +288,10 @@ class DiagramToolbar extends DiagramPanel {
 
     _setItemEnabled(command, enabled) {
         if(command in this._itemHelpers) {
-            this._itemHelpers[command].setEnabled(enabled);
+            const helper = this._itemHelpers[command];
+            if(helper.canUpdate(this._showingSubMenu)) {
+                helper.setEnabled(enabled);
+            }
         }
     }
     _setEnabled(enabled) {
@@ -278,7 +302,10 @@ class DiagramToolbar extends DiagramPanel {
         try {
             this._updateLocked = true;
             if(command in this._itemHelpers) {
-                this._itemHelpers[command].setValue(value);
+                const helper = this._itemHelpers[command];
+                if(helper.canUpdate(this._showingSubMenu)) {
+                    helper.setValue(value);
+                }
             }
         } finally {
             this._updateLocked = false;
@@ -287,12 +314,23 @@ class DiagramToolbar extends DiagramPanel {
     _setItemSubItems(command, items) {
         this._updateLocked = true;
         if(command in this._itemHelpers) {
-            this._itemHelpers[command].setItems(items);
+            const helper = this._itemHelpers[command];
+            if(helper.canUpdate(this._showingSubMenu)) {
+                helper.setItems(items);
+            }
         }
         this._updateLocked = false;
     }
+    _createOnSubMenuVisibleChangedAction() {
+        this._hasCheckedItems = false;
+        this._onSubMenuVisibleChangedAction = this._createActionByOption('onSubMenuVisibleChanged');
+    }
+
     _optionChanged(args) {
         switch(args.name) {
+            case 'onSubMenuVisibleChanged':
+                this._createOnSubMenuVisibleChangedAction();
+                break;
             case 'onWidgetCommand':
                 this._createOnWidgetCommand();
                 break;
@@ -353,6 +391,9 @@ class ToolbarItemHelper {
     constructor(widget) {
         this._widget = widget;
     }
+    canUpdate(showingSubMenu) {
+        return showingSubMenu === undefined;
+    }
     setEnabled(enabled) {
         this._widget.option('disabled', !enabled);
     }
@@ -382,6 +423,9 @@ class ToolbarSubItemHelper extends ToolbarItemHelper {
         this._indexPath = indexPath;
         this._rootButton = rootButton;
     }
+    canUpdate(showingSubMenu) {
+        return showingSubMenu === this._widget;
+    }
     setEnabled(enabled) {
         const optionText = this._indexPath.reduce((r, i) => {
             return r + `items[${i}].`;
@@ -402,7 +446,11 @@ class ToolbarSubItemHelper extends ToolbarItemHelper {
         const optionText = this._indexPath.reduce((r, i) => {
             return r + `items[${i}].`;
         }, '');
-        this._widget.option(optionText + 'selected', value);
+        if(value === true || value === false) {
+            this._widget._hasCheckedItems = true;
+            this._widget.option(optionText + 'checked', value);
+        }
+        this._widget.option(optionText + 'widget', this._widget);
     }
 }
 

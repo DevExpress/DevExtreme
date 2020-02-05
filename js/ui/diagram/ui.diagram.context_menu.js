@@ -6,6 +6,7 @@ import DiagramCommandsManager from './diagram.commands_manager';
 import DiagramBar from './diagram.bar';
 import { getDiagram } from './diagram.importer';
 
+const DIAGRAM_CONTEXT_MENU_CLASS = 'dx-diagram-contextmenu';
 const DIAGRAM_TOUCHBAR_CLASS = 'dx-diagram-touchbar';
 const DIAGRAM_TOUCHBAR_TARGET_CLASS = 'dx-diagram-touchbar-target';
 const DIAGRAM_TOUCHBAR_MIN_UNWRAPPED_WIDTH = 800;
@@ -40,7 +41,7 @@ class DiagramContextMenu extends Widget {
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
             closeOnOutsideClick: false,
             showEvent: '',
-            cssClass: Browser.TouchUI ? DIAGRAM_TOUCHBAR_CLASS : '',
+            cssClass: Browser.TouchUI ? DIAGRAM_TOUCHBAR_CLASS : DIAGRAM_CONTEXT_MENU_CLASS,
             items: this._getItems(this._commands),
             focusStateEnabled: false,
             position: (Browser.TouchUI ? {
@@ -54,29 +55,10 @@ class DiagramContextMenu extends Widget {
 
                 this._inOnShowing = true;
                 this._onVisibleChangedAction({ visible: true, component: this });
-                this._contextMenuInstance.option('items', this._getItems(this._commands, true));
+                e.component.option('items', this._getItems(this._commands, true));
                 delete this._inOnShowing;
             }
         });
-    }
-    _getItems(commands, onlyVisible) {
-        const items = [];
-        let beginGroup = false;
-        commands.forEach(function(command) {
-            if(command.widget === 'separator') {
-                beginGroup = true;
-            } else if(command.visible || !onlyVisible) {
-                items.push({
-                    command: command.command,
-                    text: command.text,
-                    icon: command.menuIcon || command.icon,
-                    getParameter: command.getParameter,
-                    beginGroup: beginGroup
-                });
-                beginGroup = false;
-            }
-        });
-        return items;
     }
     _show(x, y, selection) {
         this.clickPosition = { x, y };
@@ -116,6 +98,15 @@ class DiagramContextMenu extends Widget {
             this.bar.raiseBarCommandExecuted(itemData.command, parameter);
             this._contextMenuInstance.hide();
         }
+    }
+    _getItems(commands, onlyVisible) {
+        const result = [];
+        commands.forEach(command => {
+            if(command.visible || !onlyVisible) {
+                result.push(command);
+            }
+        });
+        return result;
     }
     _getExecCommandParameter(itemData) {
         if(itemData.getParameter) {

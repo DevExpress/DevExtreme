@@ -377,9 +377,11 @@ const DiagramCommandsManager = {
     },
     getMainToolbarCommands: function(commands) {
         const allCommands = this.getAllCommands();
-        if(commands) {
-            return this._getCustomCommands(allCommands, commands);
-        }
+        const mainToolbarCommands = commands ? this._getCustomCommands(allCommands, commands) :
+            this._getDefaultMainToolbarCommands(allCommands);
+        return this._prepareToolbarCommands(mainToolbarCommands);
+    },
+    _getDefaultMainToolbarCommands: function(allCommands) {
         return [
             {
                 widget: 'dxButton',
@@ -422,9 +424,11 @@ const DiagramCommandsManager = {
     },
     getHistoryToolbarCommands: function(commands) {
         const allCommands = this.getAllCommands();
-        if(commands) {
-            return this._getCustomCommands(allCommands, commands);
-        }
+        const historyToolbarCommands = commands ? this._getCustomCommands(allCommands, commands) :
+            this._getDefaultHistoryToolbarCommands(allCommands);
+        return this._prepareToolbarCommands(historyToolbarCommands);
+    },
+    _getDefaultHistoryToolbarCommands: function(allCommands) {
         return [
             allCommands['undo'],
             allCommands['separator'],
@@ -433,9 +437,11 @@ const DiagramCommandsManager = {
     },
     getViewSettingsToolbarCommands: function(commands) {
         const allCommands = this.getAllCommands();
-        if(commands) {
-            return this._getCustomCommands(allCommands, commands);
-        }
+        const viewSettingsToolbarCommands = commands ? this._getCustomCommands(allCommands, commands) :
+            this._getDefaultViewSettingsToolbarCommands(allCommands);
+        return this._prepareToolbarCommands(viewSettingsToolbarCommands);
+    },
+    _getDefaultViewSettingsToolbarCommands: function(allCommands) {
         return [
             allCommands['zoomLevel'],
             allCommands['separator'],
@@ -461,8 +467,8 @@ const DiagramCommandsManager = {
                     // allCommands['separator'],
                     allCommands['showGrid'],
                     allCommands['snapToGrid'],
+                    allCommands['separator'],
                     // allCommands['gridSize'],
-                    // allCommands['separator'],
                     allCommands['simpleView']
                 ]
             }
@@ -496,9 +502,11 @@ const DiagramCommandsManager = {
 
     getContextMenuCommands: function(commands) {
         const allCommands = this.getAllCommands();
-        if(commands) {
-            return this._getCustomCommands(allCommands, commands);
-        }
+        const contextMenuCommands = commands ? this._getCustomCommands(allCommands, commands) :
+            this._getDefaultContextMenuCommands(allCommands);
+        return this._prepareContextMenuCommands(contextMenuCommands);
+    },
+    _getDefaultContextMenuCommands: function(allCommands) {
         return [
             allCommands['cut'],
             allCommands['copy'],
@@ -524,12 +532,55 @@ const DiagramCommandsManager = {
             if(allCommands[c]) {
                 return allCommands[c];
             } else if(c.text || c.icon) {
+                const command = {
+                    text: c.text,
+                    icon: c.icon,
+                };
                 if(Array.isArray(c.items)) {
-                    c.items = this._getCustomCommands(allCommands, c.items);
+                    command.items = this._getCustomCommands(allCommands, c.items);
                 }
-                return c;
+                return command;
             }
         }).filter(c => c);
+    },
+
+    getContextMenuItems(commands, onlyVisible) {
+        const result = [];
+        commands.forEach(command => {
+            if(command.visible || !onlyVisible) {
+                result.push(command);
+            }
+        });
+        return result;
+    },
+    _prepareContextMenuCommands(commands) {
+        const result = [];
+        let beginGroup = false;
+        commands.forEach(command => {
+            if(command === SEPARATOR) {
+                beginGroup = true;
+            } else {
+                result.push({
+                    command: command.command,
+                    text: command.text,
+                    icon: command.menuIcon || command.icon,
+                    getParameter: command.getParameter,
+                    beginGroup: beginGroup
+                });
+                beginGroup = false;
+            }
+        });
+        return result;
+    },
+    _prepareToolbarCommands(commands) {
+        const result = [];
+        commands.forEach(command => {
+            if(Array.isArray(command.items)) {
+                command.items = this._prepareContextMenuCommands(command.items);
+            }
+            result.push(command);
+        });
+        return result;
     },
 
     _exportTo(widget, dataURI, format, mimeString) {

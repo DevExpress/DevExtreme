@@ -160,7 +160,8 @@ class Diagram extends Widget {
         }
         this._mainToolbar = this._createComponent($toolbarWrapper, DiagramMainToolbar, {
             commands: this.option('toolbar.commands'),
-            onContentReady: (e) => this._registerBar(e.component),
+            onContentReady: ({ component }) => this._registerBar(component),
+            onSubMenuVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
             widgetCommandNames: toolbarWidgetCommandNames
@@ -177,7 +178,8 @@ class Diagram extends Widget {
             .appendTo($parent);
         this._historyToolbar = this._createComponent($container, DiagramHistoryToolbar, {
             commands: this.option('historyToolbar.commands'),
-            onContentReady: (e) => this._registerBar(e.component),
+            onContentReady: ({ component }) => this._registerBar(component),
+            onSubMenuVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
         this._adjustFloatingToolbarContainer($container, this._historyToolbar, {
@@ -192,13 +194,13 @@ class Diagram extends Widget {
         const $toolBox = $('<div>')
             .appendTo($parent);
         let yOffset = DIAGRAM_FLOATING_PANEL_OFFSET;
-        let height = $parent.height();
+        let height = $parent.height() - 2 * DIAGRAM_FLOATING_PANEL_OFFSET;
         if(this._historyToolbar) {
             yOffset += this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
-            height -= this._historyToolbar.$element().height() + 2 * DIAGRAM_FLOATING_PANEL_OFFSET;
+            height -= this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
         }
         if(this._viewSettingsToolbar) {
-            height -= this._viewSettingsToolbar.$element().height() + 2 * DIAGRAM_FLOATING_PANEL_OFFSET;
+            height -= this._viewSettingsToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
         }
         this._toolbox = this._createComponent($toolBox, DiagramToolbox, {
             visible: !this.option('readOnly') && !this.option('disabled'),
@@ -233,7 +235,8 @@ class Diagram extends Widget {
             .appendTo($parent);
         this._viewSettingsToolbar = this._createComponent($container, DiagramViewSettingsToolbar, {
             commands: this.option('viewSettingsToolbar.commands'),
-            onContentReady: (e) => this._registerBar(e.component),
+            onContentReady: ({ component }) => this._registerBar(component),
+            onSubMenuVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
         this._adjustFloatingToolbarContainer($container, this._viewSettingsToolbar, {
