@@ -62,8 +62,12 @@ function run_test {
 
     dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
-    while ! httping -qc1 $url; do
-        sleep 1
+    while true; do
+        if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
+            echo "Runner exited unexpectedly"
+            exit 1
+        fi
+        httping -qc1 $url && break
     done
 
     echo "URL: $url"
