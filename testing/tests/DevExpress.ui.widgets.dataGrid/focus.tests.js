@@ -2284,7 +2284,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             onFocusedRowChanging: function(e) {
                 ++focusedRowChangingCount;
                 assert.equal(e.cancel, false);
-                assert.equal(e.event.type, CLICK_EVENT);
+                assert.ok(CLICK_EVENT.startsWith(e.event.type));
                 assert.equal(e.newRowIndex, 1);
                 assert.equal(e.prevRowIndex, 4);
                 assert.equal(e.rows.length, 6);
