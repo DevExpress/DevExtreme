@@ -491,10 +491,6 @@ const Calendar = Editor.inherit({
         this._renderSwipeable();
         this._renderFooter();
 
-        this.setAria({
-            'role': 'listbox',
-            'label': messageLocalization.format('dxCalendar-ariaWidgetName')
-        });
         this._updateAriaSelected();
         this._updateAriaId();
 
@@ -557,7 +553,7 @@ const Calendar = Editor.inherit({
             max: this._getMaxDate(),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             value: this._dateOption('value'),
-            rtl: this.option('rtlEnabled'),
+            rtlEnabled: this.option('rtlEnabled'),
             disabled: this.option('disabled'),
             tabIndex: undefined,
             focusStateEnabled: this.option('focusStateEnabled'),
