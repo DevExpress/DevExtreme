@@ -105,13 +105,14 @@ export const viewFunction = (viewModel: Button) => {
 export default class Button extends Widget {
     @Prop() activeStateEnabled?: boolean = true;
     @Prop() classNames?: string[];
-    @Prop() contentRender?: any;
+    @Prop() contentRender?: ButtonTemplateFn;
     @Prop() focusStateEnabled?: boolean = true;
     @Prop() hoverStateEnabled?: boolean = true;
     @Prop() icon?: string;
     @Prop() onSubmit?: (e: any) => any = (() => undefined);
     @Prop() pressed?: boolean;
     @Prop() stylingMode?: string;
+    @Prop() template?: ButtonTemplate = '';
     @Prop() text?: string = '';
     @Prop() type?: string;
     @Prop() useSubmitBehavior?: boolean = false;
@@ -130,3 +131,10 @@ export default class Button extends Widget {
         return () => click.off(this.widgetRef, { namespace });
     }
 }
+
+type ButtonContent = {
+    text: string,
+    icon: string,
+}
+type ButtonTemplateFn = (data: ButtonContent, container: any) => any
+type ButtonTemplate = ButtonTemplateFn | string

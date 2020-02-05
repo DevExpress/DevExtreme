@@ -2,6 +2,7 @@ import registerComponent from '../../core/component_registrator';
 import Widget from '../preact_wrapper';
 import { extend } from '../../core/utils/extend';
 import ButtonView from '../button.p';
+import * as Preact from 'preact';
 
 class Button extends Widget {
     getView() {
@@ -10,18 +11,17 @@ class Button extends Widget {
 
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
-        if(props.contentRender) {
+        if(props.template) {
             props.contentRender = (data) => {
-                const template = this._getTemplate(props.contentRender);
+                const template = this._getTemplate(props.template);
 
                 return (<div style={{ display: 'none' }} ref={(element) => {
-                    if(element && element.parentElement) {
+                    if(element?.parentElement) {
                         const parent = element.parentElement;
                         while(parent.firstChild) {
                             parent.removeChild(parent.firstChild);
                         }
                         template.render({ model: data, container: parent });
-                        parent.appendChild(element);
                     }
                 }}/>);
             };
@@ -42,6 +42,7 @@ class Button extends Widget {
             activeStateEnabled: true,
             focusStateEnabled: true,
             hoverStateEnabled: true,
+            template: '',
             text: '',
         });
     }
