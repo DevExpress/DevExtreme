@@ -18,6 +18,7 @@ namespace Runner
     {
         public static int Main(string[] argv)
         {
+            throw new Exception("I'm crashing and I know it");
             try
             {
                 var rootPath = Path.Combine(AppContext.BaseDirectory, "../../..");
