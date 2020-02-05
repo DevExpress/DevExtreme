@@ -1,4 +1,4 @@
-import { getDiagram } from './diagram_importer';
+import { getDiagram } from './diagram.importer';
 import { extend } from '../../core/utils/extend';
 import { fileSaver } from '../../exporter/file_saver';
 import { isFunction } from '../../core/utils/type';

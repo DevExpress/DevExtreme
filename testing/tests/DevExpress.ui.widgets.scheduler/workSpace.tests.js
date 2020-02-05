@@ -1607,7 +1607,7 @@ QUnit.testStart(function() {
         $($element).trigger('focusin');
         keyboard.keyDown('enter');
         const cellData = updateSpy.getCall(0).args[0].cellData;
-        assert.notOk(cellData === {}, 'cellData is not empty');
+        assert.notOk($.isEmptyObject(cellData), 'cellData is not empty');
         assert.deepEqual(cellData.startDate, new Date(2015, 2, 30), 'cellData startDate is passing right');
         assert.deepEqual(cellData.endDate, new Date(2015, 2, 31), 'cellData endDate is passing right');
     });

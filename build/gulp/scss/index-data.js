@@ -19,37 +19,57 @@ module.exports = [
 
 
     { content: 'public widgets', task: 'comment' },
-    // box
     { content: 'box', task: 'widget' },
-    // responsivebox
     { content: 'responsiveBox', task: 'widget' },
-    // button
     { content: 'button', task: 'widget' },
-    // buttonGroup
     { content: 'buttonGroup', task: 'widget' },
-    // scrollable
     { content: 'scrollable', task: 'widget', private: true },
-    // scrollview
     { content: 'scrollView', task: 'widget' },
-    // checkbox
     { content: 'checkBox', task: 'widget' },
-    // switch
     { content: 'switch', task: 'widget' },
-    // badge
     { content: 'badge', task: 'widget', private: true },
-    // tabs
     { content: 'tabs', task: 'widget' },
-    // navBar
     { content: 'navBar', task: 'widget' },
-    // validation
     { content: 'validation', task: 'widget', private: true },
-    // textEditor
     { content: 'textEditor', task: 'widget', private: true },
-    // textBox
     { content: 'textBox', task: 'widget', private: true },
-    // dropDownEditor
     { content: 'dropDownEditor', task: 'widget', private: true },
-    // dropDownBox
     { content: 'dropDownBox', task: 'widget' },
+    { content: 'list', task: 'widget' },
+    { content: 'textArea', task: 'widget' },
+    { content: 'numberBox', task: 'widget' },
+    { content: 'dateView', task: 'widget', private: true },
+    { content: 'timeView', task: 'widget', private: true },
+    { content: 'calendar', task: 'widget' },
+    { content: 'dateBox', task: 'widget' },
+    { content: 'dropDownList', task: 'widget', private: true },
+    { content: 'autocomplete', task: 'widget' },
+    { content: 'loadIndicator', task: 'widget' },
+    { content: 'treeView', task: 'widget' },
+    { content: 'overlay', task: 'widget', private: true },
+    { content: 'menu', task: 'widget' },
+    { content: 'selectBox', task: 'widget' },
+    { content: 'dropDownMenu', task: 'widget', private: true },
+    { content: 'toolbar', task: 'widget' },
+    { content: 'popup', task: 'widget' },
+    { content: 'dropDownButton', task: 'widget' },
+    { content: 'actionSheet', task: 'widget' },
+    { content: 'tileView', task: 'widget' },
+    { content: 'toast', task: 'widget' },
+    { content: 'popover', task: 'widget' },
+    { content: 'progressBar', task: 'widget' },
+    { content: 'tooltip', task: 'widget' },
+    { content: 'slider', task: 'widget' },
+    { content: 'rangeSlider', task: 'widget' },
+    { content: 'gallery', task: 'widget' },
+    { content: 'lookup', task: 'widget' },
+    { content: 'loadPanel', task: 'widget' },
+    { content: 'tagBox', task: 'widget' },
+    { content: 'radioGroup', task: 'widget' },
+    { content: 'accordion', task: 'widget' },
+    { content: 'slideOutView', task: 'widget' },
+    { content: 'slideOut', task: 'widget' },
+    { content: 'colorView', task: 'widget', private: true },
+    { content: 'colorBox', task: 'widget' },
     { task: 'newline' }
 ];

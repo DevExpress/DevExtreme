@@ -3820,7 +3820,7 @@ QUnit.test('Horizontal scrollbar is not displayed when columns width has float v
     const dataGrid = $dataGrid.dxDataGrid('instance');
 
     // assert
-    assert.ok(dataGrid.getView('rowsView').getScrollbarWidth(true) === 0);
+    assert.strictEqual(dataGrid.getView('rowsView').getScrollbarWidth(true), 0);
 });
 
 // T386755
@@ -4637,7 +4637,6 @@ QUnit.test('focusedRowKey should not overwrite dataSource field', function(asser
 
 QUnit.test('DataGrid should not scroll back to the focusedRow after paging if virtual scrolling (T718905, T719205)', function(assert) {
     // arrange
-    let isReady;
     const data = [
         { name: 'Alex', phone: '111111', room: 6 },
         { name: 'Dan', phone: '2222222', room: 5 },
@@ -4653,16 +4652,12 @@ QUnit.test('DataGrid should not scroll back to the focusedRow after paging if vi
         focusedRowEnabled: true,
         focusedRowIndex: 0,
         scrolling: { mode: 'virtual' },
-        paging: { pageSize: 2 },
-        onContentReady: function(e) {
-            if(!isReady) {
-                // act
-                e.component.pageIndex(1);
-                isReady = true;
-            }
-        }
+        paging: { pageSize: 2 }
     }).dxDataGrid('instance');
 
+    this.clock.tick();
+
+    dataGrid.pageIndex(1);
     this.clock.tick();
 
     // assert
@@ -5953,7 +5948,7 @@ QUnit.test('native scrollBars layout should be correct after width change if fix
         assert.ok(dataGrid.getView('rowsView').getScrollbarWidth() > 0, 'vertical scrollBar exists');
     } else {
         assert.equal($('#dataGrid').find('.dx-datagrid-content-fixed').eq(1).css('margin-right'), '0px', 'margin-right is zero');
-        assert.ok(dataGrid.getView('rowsView').getScrollbarWidth() === 0, 'vertical scrollBar not exists');
+        assert.strictEqual(dataGrid.getView('rowsView').getScrollbarWidth(), 0, 'vertical scrollBar not exists');
     }
     assert.notEqual($('#dataGrid').find('.dx-datagrid-content-fixed').eq(1).css('margin-bottom'), '0px', 'margin-bottom is not zero');
 });
@@ -11744,7 +11739,7 @@ QUnit.test('Reset last non-command column width when width 100% in style', funct
     assert.equal($cols.length, 3);
     assert.equal($cols.get(0).style.width, '50px', 'first column width is not reset');
     assert.equal($cols.get(1).style.width, 'auto', 'second column width is reset - this is last non-command column');
-    assert.ok($cols.get(2).style.width !== 'auto', 'command column width is not reset');
+    assert.notStrictEqual($cols.get(2).style.width, 'auto', 'command column width is not reset');
     assert.equal($dataGrid.width(), $dataGrid.parent().width());
 });
 
@@ -18857,7 +18852,7 @@ QUnit.test('The edited cell should be closed on click inside another dataGrid', 
     this.clock.tick(100);
 
     // assert
-    assert.ok($(dataGrid1.getCellElement(0, 0)).find('input').length === 0, 'hasn\'t input');
+    assert.strictEqual($(dataGrid1.getCellElement(0, 0)).find('input').length, 0, 'hasn\'t input');
     assert.notOk($(dataGrid1.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell of the first grid isn\'t editable');
     assert.ok($(dataGrid2.getCellElement(0, 0)).find('input').length > 0, 'has input');
 });
@@ -19215,8 +19210,7 @@ QUnit.test('The draggable row should have correct markup when defaultOptions is 
     }
 });
 
-// T827960
-QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady', function(assert) {
+QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to same page and loadPanel in onContentReady (T827960)', function(assert) {
     // arrange
     const onFocusedRowChangedSpy = sinon.spy();
     const dataGrid = createDataGrid({

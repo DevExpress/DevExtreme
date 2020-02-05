@@ -1740,8 +1740,26 @@ declare module DevExpress.fileProvider {
     /** @name FileProvider */
     export class FileProvider {
         constructor(options?: FileProviderOptions)
+        /** @name FileProvider.abortFileUpload() */
+        abortFileUpload(fileData: File, uploadInfo: any, destinationDirectory: any): Promise<any> & JQueryPromise<any>;
+        /** @name FileProvider.copyItems() */
+        copyItems(items: Array<any>, destinationDirectory: any): Array<Promise<any> | JQueryPromise<any>>;
+        /** @name FileProvider.createFolder() */
+        createFolder(parentDirectory: any, name: string): Promise<any> & JQueryPromise<any>;
+        /** @name FileProvider.deleteItems() */
+        deleteItems(items: Array<any>): Array<Promise<any> | JQueryPromise<any>>;
+        /** @name FileProvider.downloadItems() */
+        downloadItems(items: Array<any>): any;
         /** @name FileProvider.getItemContent() */
         getItemContent(items: Array<any>): Promise<any> & JQueryPromise<any>;
+        /** @name FileProvider.getItems() */
+        getItems(pathInfo: any): Promise<Array<any>> & JQueryPromise<Array<any>>;
+        /** @name FileProvider.moveItems() */
+        moveItems(items: Array<any>, destinationDirectory: any): Array<Promise<any> | JQueryPromise<any>>;
+        /** @name FileProvider.renameItem() */
+        renameItem(item: any, newName: string): Promise<any> & JQueryPromise<any>;
+        /** @name FileProvider.uploadFileChunk() */
+        uploadFileChunk(fileData: File, uploadInfo: any, destinationDirectory: any): Promise<any> & JQueryPromise<any>;
     }
     /** @name RemoteFileProvider.Options */
     export interface RemoteFileProviderOptions extends FileProviderOptions<RemoteFileProvider> {

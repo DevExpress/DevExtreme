@@ -602,38 +602,28 @@ describe('LessTemplateLoader', () => {
         };
 
         const lessTemplateLoader = new LessTemplateLoader(config);
-        lessTemplateLoader._makeInfoHeader = emptyHeader;
-
-        const promises = [];
-
-        promises.push(lessTemplateLoader.load(
-            themeName,
-            colorScheme,
-            metadata,
-            []
-        ).then(data => {
-            assert.equal(data.css, `div {
-  font: 20px/20px DXIcons;
-}`);
-        }));
 
         config.noClean = true;
         const lessTemplateLoaderNoClean = new LessTemplateLoader(config);
+
         lessTemplateLoaderNoClean._makeInfoHeader = emptyHeader;
-        promises.push(lessTemplateLoaderNoClean.load(
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+
+        const testCases = [{
+            loader: lessTemplateLoader,
+            expected: 'div {\n  font: 20px/20px DXIcons;\n}'
+        }, {
+            loader: lessTemplateLoaderNoClean,
+            expected: 'div {\n  font: 14px/1 DXIcons;\n  font-size: 20px;\n  line-height: 20px;\n}\n'
+        }];
+
+        const promises = testCases.map(testCase => testCase.loader.load(
             themeName,
             colorScheme,
             metadata,
             []
-        ).then(data => {
-            assert.equal(data.css, `div {
-  font: 14px/1 DXIcons;
-  font-size: 20px;
-  line-height: 20px;
-}
-`);
-        }));
+        ).then(data => assert.equal(data.css, testCase.expected)));
 
-        return promises;
+        return Promise.all(promises);
     });
 });

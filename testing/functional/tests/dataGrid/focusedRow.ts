@@ -99,3 +99,94 @@ test('Focused row should not being reseted after begin edit row by API if form e
         allowUpdating: true
     }
 }));
+
+test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged events on scrolling if scrolling.mode and rowRenderingMode are virtual', async t => {
+    const dataGrid = new DataGrid('#container');
+
+    await t.expect(dataGrid.getFocusedRow().exists).ok();
+
+    await ClientFunction(() => {
+        const widget = (window as any).widget;
+        const scrollable = widget.getScrollable();
+        scrollable.scrollTo({ top: 2000 });
+    })();
+    await t.wait(500);
+
+    await t.expect(ClientFunction(() => (window as any).focusedRowChanging_Counter)()).eql(undefined);
+    await t.expect(ClientFunction(() => (window as any).focusedRowChanged_Counter)()).eql(1);
+
+    await ClientFunction(() => {
+        const widget = (window as any).widget;
+        const scrollable = widget.getScrollable();
+        scrollable.scrollTo({ top: 0 });
+    })();
+    await t.wait(500);
+
+    await t.expect(ClientFunction(() => (window as any).focusedRowChanging_Counter)()).eql(undefined);
+    await t.expect(ClientFunction(() => (window as any).focusedRowChanged_Counter)()).eql(1);
+}).before(() => createWidget('dxDataGrid', () => {
+    const data = function() {
+        let data = [];
+
+        for(let i = 0; i < 200; i++) {
+            data.push({ id: i, c0: `c0`, c1: `c1_${i % 20}` });
+        }
+
+        return data;
+    }();
+
+    return {
+        height: 300,
+        keyExpr: "id",
+        dataSource: data,
+        focusedRowEnabled: true,
+        focusedRowKey: 1,
+        editing: {
+            allowAdding: true,
+            allowUpdating: true,
+            mode: 'form'
+        },
+        masterDetail: {
+            enabled: true,
+            template: container => {
+                container.append($("<div>")['dxDataGrid']({
+                    height: 500,
+                    keyExpr: "id",
+                    dataSource: data,
+                    editing: {
+                        allowAdding: true,
+                        allowUpdating: true,
+                        mode: 'batch'
+                    }
+                }));
+            }
+        },
+        columns: [
+            'id',
+            'c0',
+            {
+                dataField: 'c1',
+                groupIndex: 0
+            }
+        ],
+        paging: {
+            pageSize: 5
+        },
+        scrolling: {
+            mode: 'virtual',
+            rowRenderingMode: 'virtual'
+        },
+        onFocusedRowChanging: () => {
+            if(!(window as any).focusedRowChanging_Counter) {
+                (window as any).focusedRowChanging_Counter = 0;
+            }
+            (window as any).focusedRowChanging_Counter++;
+        },
+        onFocusedRowChanged: () => {
+            if(!(window as any).focusedRowChanged_Counter) {
+                (window as any).focusedRowChanged_Counter = 0;
+            }
+            (window as any).focusedRowChanged_Counter++;
+        }
+    };
+}));

@@ -412,10 +412,10 @@ QUnit.test('Export menu creation', function(assert) {
 
     // assert
     assert.equal(exportModule.ExportMenu.lastCall.args[0].renderer, this.renderer);
-    assert.ok(typeof exportModule.ExportMenu.lastCall.args[0].incidentOccurred === 'function');
+    assert.strictEqual(typeof exportModule.ExportMenu.lastCall.args[0].incidentOccurred, 'function');
     assert.strictEqual(this.exportMenu.setOptions.getCall(0).args[0].rtl, 'rtl option');
-    assert.ok(typeof exportModule.ExportMenu.lastCall.args[0].exportTo === 'function');
-    assert.ok(typeof exportModule.ExportMenu.lastCall.args[0].print === 'function');
+    assert.strictEqual(typeof exportModule.ExportMenu.lastCall.args[0].exportTo, 'function');
+    assert.strictEqual(typeof exportModule.ExportMenu.lastCall.args[0].print, 'function');
 
     exportModule.ExportMenu.lastCall.args[0].exportTo('FORMAT');
     assert.deepEqual(widget.exportTo.getCall(0).args, [undefined, 'FORMAT']);

@@ -1,21 +1,17 @@
 const gulp = require('gulp');
 const file = require('gulp-file');
 const footer = require('gulp-footer');
-const fs = require('fs');
 const concat = require('gulp-concat');
-const map = require('map-stream');
 const path = require('path');
 const replace = require('gulp-replace');
 const ts = require('gulp-typescript');
-
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const MODULES = require('./modules_metadata.json');
 
 const PACKAGE_DIR = context.RESULT_NPM_PATH + '/devextreme';
-const DIST_DIR = PACKAGE_DIR + '/dist';
 const OUTPUT_ARTIFACTS_DIR = 'artifacts/ts';
-const OUTPUT_PACKAGE_DIR = path.join(PACKAGE_DIR, 'bundles');
+const PACKAGE_BUNDLES_DIR = path.join(PACKAGE_DIR, 'bundles');
 const TS_BUNDLE_FILE = './ts/dx.all.d.ts';
 const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE, './ts/aliases.d.ts'];
 const TS_MODULES_GLOB = './js/**/*.d.ts';
@@ -25,18 +21,27 @@ gulp.task('ts-vendor', function() {
         .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR));
 });
 
-gulp.task('ts-bundle', function writeTsBundle() {
-    return gulp.src(TS_BUNDLE_SOURCES)
-        .pipe(concat('dx.all.d.ts'))
-        .pipe(headerPipes.bangLicense())
-        .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR)) // will be copied to the npm's /dist folder by another task
-        .pipe(replace('/*!', '/**'))
-        .pipe(replace(/\/\*\s*#StartGlobalDeclaration\s*\*\//g, 'declare global {'))
-        .pipe(replace(/\/\*\s*#EndGlobalDeclaration\s*\*\//g, '}'))
-        .pipe(replace(/\/\*\s*#StartJQueryAugmentation\s*\*\/[\s\S]*\/\*\s*#EndJQueryAugmentation\s*\*\//g, ''))
-        .pipe(footer('\nexport default DevExpress;'))
-        .pipe(gulp.dest(OUTPUT_PACKAGE_DIR));
-});
+gulp.task('ts-bundle', gulp.series(
+
+    function writeTsBundle() {
+        return gulp.src(TS_BUNDLE_SOURCES)
+            .pipe(concat('dx.all.d.ts'))
+            .pipe(headerPipes.bangLicense())
+            .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR)) // will be copied to the npm's /dist folder by another task
+            .pipe(replace('/*!', '/**'))
+            .pipe(replace(/\/\*\s*#StartGlobalDeclaration\s*\*\//g, 'declare global {'))
+            .pipe(replace(/\/\*\s*#EndGlobalDeclaration\s*\*\//g, '}'))
+            .pipe(replace(/\/\*\s*#StartJQueryAugmentation\s*\*\/[\s\S]*\/\*\s*#EndJQueryAugmentation\s*\*\//g, ''))
+            .pipe(footer('\nexport default DevExpress;'))
+            .pipe(gulp.dest(PACKAGE_BUNDLES_DIR));
+    },
+
+    function writeAngularHack() {
+        return file('dx.all.js', '// This file is required to compile devextreme-angular', { src: true })
+            .pipe(headerPipes.starLicense())
+            .pipe(gulp.dest(PACKAGE_BUNDLES_DIR));
+    }
+));
 
 gulp.task('ts-jquery-check', gulp.series('ts-bundle', function checkJQueryAugmentations() {
     let content = `/// <reference path='${TS_BUNDLE_FILE}' />\n`;
@@ -92,24 +97,7 @@ gulp.task('ts-modules', function generateModules() {
         .pipe(gulp.dest(PACKAGE_DIR));
 });
 
-gulp.task('ts-angular-hack', function() {
-    return gulp.src([PACKAGE_DIR + '/**/*.d.ts', '!' + DIST_DIR + '/**/*.*'])
-        .pipe(map(function(file, callback) {
-            const jsPath = file.path.replace('.d.ts', '.js');
-            if(fs.existsSync(jsPath)) {
-                callback();
-                return;
-            }
-
-            file.path = jsPath;
-            file.contents = Buffer.from('// This file is required to compile devextreme-angular');
-            callback(null, file);
-        }))
-        .pipe(headerPipes.starLicense())
-        .pipe(gulp.dest(PACKAGE_DIR));
-});
-
-gulp.task('ts-sources', gulp.series('ts-modules', 'ts-bundle', 'ts-angular-hack'));
+gulp.task('ts-sources', gulp.series('ts-modules', 'ts-bundle'));
 
 gulp.task('ts-modules-check', gulp.series('ts-modules', function checkModules() {
     let content = 'import $ from \'jquery\';\n';

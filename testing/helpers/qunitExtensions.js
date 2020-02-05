@@ -94,11 +94,9 @@
         container.setAttribute('id', uniqueName);
 
         if(css) {
-            for(const prop in css) {
-                if(Object.prototype.hasOwnProperty.call(css, prop)) {
-                    container.style[prop] = css[prop];
-                }
-            }
+            Object.keys(css).forEach(function(prop) {
+                container.style[prop] = css[prop];
+            });
         }
 
         const parent = document.querySelector(parentSelector);
@@ -332,10 +330,9 @@
             }
         };
 
-        let name;
-        for(name in methodHooks) {
+        Object.keys(methodHooks).forEach(function(name) {
             windowObj[name] = createMethodWrapper(windowObj[name], methodHooks[name]);
-        }
+        });
 
         const initLog = function() {
             log = {};
