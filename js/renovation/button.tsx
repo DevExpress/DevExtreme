@@ -39,6 +39,8 @@ export const viewModelFunction = (model: Button):ButtonViewModel => {
 
     return {
         ...model.props,
+        onClick: model.clickHandler.bind(model),
+        onKeyPress: model.keyPressHandler.bind(model),
         submitInputRef: model.submitInputRef,
         elementAttr: { ...model.props.elementAttr, role: 'button' },
         aria: { label: model.props.text && model.props.text.trim() },
@@ -49,22 +51,12 @@ export const viewModelFunction = (model: Button):ButtonViewModel => {
 
 declare type ButtonViewModel = {
     cssClasses: string;
-    submitInputRef: any
+    submitInputRef: any;
+    onClick: (e: Event) => any;
+    onKeyPress: (e: Event, options:any) => void;
 } & ButtonInput
 
 export const viewFunction = (viewModel: ButtonViewModel) => {
-    const onClick = e => {
-        viewModel.useSubmitBehavior && viewModel.submitInputRef?.current.click();
-        return viewModel.onClick?.(e);
-    };
-
-    const onKeyPress = (e, { keyName, which }) => {
-        if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
-            e.preventDefault();
-            onClick(e);
-        }
-    };
-
     return <Widget
         accessKey={viewModel.accessKey}
         activeStateEnabled={viewModel.activeStateEnabled}
@@ -76,8 +68,8 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
         height={viewModel.height}
         hint={viewModel.hint}
         hoverStateEnabled={viewModel.hoverStateEnabled}
-        onClick={onClick}
-        onKeyPress={onKeyPress}
+        onClick={viewModel.onClick}
+        onKeyPress={viewModel.onKeyPress}
         rtlEnabled={viewModel.rtlEnabled}
         tabIndex={viewModel.tabIndex}
         visible={viewModel.visible}
@@ -133,5 +125,17 @@ export default class Button extends JSXComponent<ButtonInput> {
         }, { namespace });
 
         return () => click.off(this.submitInputRef, { namespace });
+    }
+
+    clickHandler(e:Event) { 
+        this.props.useSubmitBehavior && this.submitInputRef.click();
+        return this.props.onClick?.(e);
+    }
+
+    keyPressHandler(e:Event, { keyName, which }){
+        if (keyName === 'space' || which === 'space' || keyName === 'enter' || which === 'enter') {
+            e.preventDefault();
+            this.clickHandler(e);
+        }
     }
 }
