@@ -262,8 +262,8 @@ function isLazyDataSourceMode(wrapper) {
 }
 
 const configs = [];
-['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
-    [false, true].forEach((virtualModeEnabled) => {
+['items', 'dataSource'].forEach((dataSourceOption) => { // 'createChildren' is partially supported
+    [false].forEach((virtualModeEnabled) => { // 'true' is partially supported
         [false, true].forEach((expanded) => {
             [false, true].forEach(selectNodesRecursive => {
                 ['multiple', 'single'].forEach(selectionMode => {
