@@ -13,6 +13,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/data_grid/ui.data_grid';
 import commonUtils from 'core/utils/common';
+import * as eventUtils from 'events/utils';
 import typeUtils from 'core/utils/type';
 import pointerEvents from 'events/pointer';
 import {
@@ -244,12 +245,51 @@ QUnit.module('Rows view', {
 
         this.options.tabIndex = 5;
 
-        // act
         rowsView.render(testElement);
 
+        // act
         const $cell = $(rowsView.element().find('td').first());
         $cell.trigger(CLICK_EVENT);
         assert.equal(rowsView.element().attr('tabIndex'), undefined, 'tabIndex of rowsView');
         assert.equal($cell.attr('tabIndex'), 5, 'tabIndex of clicked cell');
+    });
+
+    QUnit.testInActiveWindow('Focusing should be hidden if document.visibilityState changed to visible (T858241)', function(assert) {
+        // arrange
+        const rowsView = this.createRowsView(this.items);
+        const testElement = $('#container');
+
+        rowsView.render(testElement);
+
+        // act
+        const $cell = $(rowsView.getCellElement(0, 1));
+        $cell
+            .focus()
+            .trigger(pointerEvents.down)
+            .trigger(pointerEvents.up)
+            .trigger('dxclick');
+
+        // assert
+        assert.ok($cell.hasClass('dx-cell-focus-disabled'), 'Cell has no focus overlay');
+        assert.notOk($cell.hasClass('dx-focused'), 'Cell is has no .dx-focused');
+
+        // act
+        $cell.removeClass('dx-cell-focus-disabled');
+
+        $(document).trigger(eventUtils.createEvent('visibilitychange', { visibilityState: 'visible' }));
+
+        // assert
+        assert.ok($cell.hasClass('dx-cell-focus-disabled'), 'Cell has no focus overlay');
+        assert.notOk($cell.hasClass('dx-focused'), 'Cell is has no .dx-focused');
+
+        // act
+        $cell.removeClass('dx-cell-focus-disabled');
+        $cell.addClass('dx-focused');
+
+        $(document).trigger(eventUtils.createEvent('visibilitychange', { visibilityState: 'visible' }));
+
+        // assert
+        assert.notOk($cell.hasClass('dx-cell-focus-disabled'), 'Cell has focus overlay');
+        assert.ok($cell.hasClass('dx-focused'), 'Cell is has .dx-focused');
     });
 });

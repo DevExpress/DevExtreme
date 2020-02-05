@@ -14,7 +14,6 @@ import * as accessibility from '../shared/accessibility';
 import { isElementInCurrentGrid } from './ui.grid_core.utils';
 import browser from '../../core/utils/browser';
 
-
 const ROWS_VIEW_CLASS = 'rowsview';
 const EDIT_FORM_CLASS = 'edit-form';
 const GROUP_FOOTER_CLASS = 'group-footer';
@@ -33,6 +32,7 @@ const COMMAND_EXPAND_CLASS = 'dx-command-expand';
 const COMMAND_SELECT_CLASS = 'dx-command-select';
 const COMMAND_CELL_SELECTOR = '[class^=dx-command]';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const FOCUSED_CLASS = 'dx-focused';
 const DATEBOX_WIDGET_NAME = 'dxDateBox';
 const FOCUS_STATE_CLASS = 'dx-state-focused';
 const WIDGET_CLASS = 'dx-widget';
@@ -80,46 +80,32 @@ function isElementDefined($element) {
 const KeyboardNavigationController = core.ViewController.inherit({
     // #region Initialization
     init: function() {
-        const that = this;
+        if(this.isKeyboardEnabled()) {
 
-        if(that.isKeyboardEnabled()) {
             accessibility.subscribeVisibilityChange();
-            that._dataController = that.getController('data');
-            that._selectionController = that.getController('selection');
-            that._editingController = that.getController('editing');
-            that._headerPanel = that.getView('headerPanel');
-            that._columnsController = that.getController('columns');
-            that.getController('editorFactory').focused.add(function($element) {
-                that.setupFocusedView();
 
-                if(that._isNeedScroll) {
-                    if($element.is(':visible') && that._focusedView && that._focusedView.getScrollable) {
-                        that._focusedView._scrollToElement($element);
-                        that._isNeedScroll = false;
+            this._dataController = this.getController('data');
+            this._selectionController = this.getController('selection');
+            this._editingController = this.getController('editing');
+            this._headerPanel = this.getView('headerPanel');
+            this._columnsController = this.getController('columns');
+            this.getController('editorFactory').focused.add($element => {
+                this.setupFocusedView();
+
+                if(this._isNeedScroll) {
+                    if($element.is(':visible') && this._focusedView && this._focusedView.getScrollable) {
+                        this._focusedView._scrollToElement($element);
+                        this._isNeedScroll = false;
                     }
                 }
             });
 
-            that._fastEditingStarted = false;
+            this._fastEditingStarted = false;
+            this._focusedCellPosition = {};
+            this._canceledCellPosition = null;
 
-            that._focusedCellPosition = {};
-
-            that._canceledCellPosition = null;
-
-            that._initViewHandlers();
-
-            that._documentClickHandler = that.createAction(function(e) {
-                const $target = $(e.event.target);
-                const isCurrentRowsViewClick = that._isEventInCurrentGrid(e.event) && $target.closest('.' + that.addWidgetPrefix(ROWS_VIEW_CLASS)).length;
-                const isEditorOverlay = $target.closest('.' + DROPDOWN_EDITOR_OVERLAY_CLASS).length;
-                if(!isCurrentRowsViewClick && !isEditorOverlay) {
-                    that._resetFocusedCell();
-                }
-            });
-
-            that.createAction('onKeyDown');
-
-            eventsEngine.on(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), that._documentClickHandler);
+            this._initViewHandlers();
+            this._initDocumentHandlers();
         }
     },
 
@@ -156,6 +142,34 @@ const KeyboardNavigationController = core.ViewController.inherit({
         });
     },
 
+    _initDocumentHandlers: function() {
+        const that = this;
+        const document = domAdapter.getDocument();
+
+        that._documentClickHandler = that.createAction(function(e) {
+            const $target = $(e.event.target);
+            const isCurrentRowsViewClick = that._isEventInCurrentGrid(e.event) && $target.closest(`.${that.addWidgetPrefix(ROWS_VIEW_CLASS)}`).length;
+            const isEditorOverlay = $target.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`).length;
+            if(!isCurrentRowsViewClick && !isEditorOverlay) {
+                that._resetFocusedCell();
+            }
+        });
+
+        that._documentVisibilityChangeHandler = that.createAction(() => {
+            if(document.visibilityState === 'visible') {
+                const $focusedCell = that._getFocusedCell();
+                if(!$focusedCell.hasClass(FOCUSED_CLASS)) {
+                    $focusedCell.addClass(CELL_FOCUS_DISABLED_CLASS);
+                }
+            }
+        });
+
+        that.createAction('onKeyDown');
+
+        eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), that._documentClickHandler);
+        eventsEngine.on(document, eventUtils.addNamespace('visibilitychange', 'dxDataGridKeyboardNavigation'), that._documentVisibilityChangeHandler);
+    },
+
     _setRowsViewAttributes: function($rowsView) {
         const isGridEmpty = !this._dataController.getVisibleRows().length;
         if(isGridEmpty) {
@@ -181,6 +195,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._focusedView = null;
         this._keyDownProcessor && this._keyDownProcessor.dispose();
         eventsEngine.off(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), this._documentClickHandler);
+        eventsEngine.off(domAdapter.getDocument(), eventUtils.addNamespace('visibilitychange', 'dxDataGridKeyboardNavigation'), this._documentVisibilityChangeHandler);
         accessibility.unsubscribeVisibilityChange();
     },
     // #endregion Initialization
