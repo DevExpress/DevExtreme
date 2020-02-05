@@ -26,6 +26,10 @@ if((new Date()).getTimezoneOffset() === pacificTimezoneOffset) {
     QUnit.module('Time panel should have correct value in case DST(T852308)', moduleConfig, () => {
         const views = ['week', 'day'];
 
+        QUnit.test('temp', function(assert) {
+            assert.ok(false);
+        });
+
         QUnit.module('timeCellTemplate', () => {
             const expectedDateResults = (() => {
                 const result = [];
