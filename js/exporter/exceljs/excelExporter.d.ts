@@ -267,5 +267,5 @@ export interface ExportDataGridProps {
  * @prevFileNamespace DevExpress.exporter
  * @public
  */
-export function exportDataGrid(options: DevExpress.exporter.ExportDataGridProps): Promise<DevExpress.exporter.CellsRange>;
+export function exportDataGrid(options: ExportDataGridProps): Promise<CellsRange>;
 
