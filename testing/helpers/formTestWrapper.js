@@ -13,9 +13,9 @@ class FormTestWrapper {
             items
         });
 
-        $form.find('*').css('font-family', 'Verdana');
+        $form.find('*').css('font-family', 'Helvetica');
 
-        this.epsilon = 0.1;
+        this.epsilon = 3.5;
         this.$form = $form;
     }
 

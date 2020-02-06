@@ -254,33 +254,8 @@ const Form = Widget.inherit({
     },
 
     _getColCount: function($element) {
-        let index = 0;
-        let isColsExist = true;
-        let $cols;
-
-        const collCountByAttributes = this._getColCountByAttributes($element);
-        if(collCountByAttributes) {
-            return collCountByAttributes;
-        }
-
-        while(isColsExist) {
-            $cols = $element.find('.' + FORM_FIELD_ITEM_COL_CLASS + index);
-            if(!$cols.length) {
-                isColsExist = false;
-            } else {
-                index++;
-            }
-        }
-        return index;
-    },
-
-    _getColCountByAttributes: function($element) {
-        const colCountAttr = $element.attr(FORM_COL_COUNT_ATTR);
-        if(!colCountAttr) {
-            return null;
-        }
-
-        return parseInt(colCountAttr);
+        const colCount = $element.attr(FORM_COL_COUNT_ATTR);
+        return parseInt(colCount);
     },
 
     _createHiddenElement: function(rootLayoutManager) {
