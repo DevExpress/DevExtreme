@@ -217,12 +217,6 @@
     }
   },
   {
-    "name": "exporter/exceljs/excelExporter",
-    "exports": {
-      "exportDataGrid": { "path": "exportDataGrid" }
-    }
-  },
-  {
     "name": "mobile/hide_top_overlay",
     "exports": {
       "default": { "path": "hideTopOverlay" }
