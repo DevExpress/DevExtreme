@@ -74,7 +74,8 @@ QUnit.module('Label aligment', () => {
     });
 
     testOrSkip('1 column -> [group[group[text], group[longText]]], alignItemLabelsInAllGroups: true', function() {
-        test_1Column_2Items_Aligned([ { itemType: 'group', items: [{ itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
+        test_1Column_2Items_Aligned(
+            [ { itemType: 'group', items: [{ itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
     });
 
     testOrSkip('1 column -> [group[group[text], group[longText]]], alignItemLabelsInAllGroups: false', function() {
@@ -93,7 +94,8 @@ QUnit.module('Label aligment', () => {
     });
 
     testOrSkip('1 column -> [group[{text.colSpan: 2}], group[{longText.colSpan: 2}]], alignItemLabelsInAllGroups: true', function(assert) {
-        test_1Column_2Items_Aligned([ { itemType: 'group', colSpan: 2, items: ['text'] }, { itemType: 'group', colSpan: 2, items: ['longText'] }]);
+        test_1Column_2Items_Aligned(
+            [ { itemType: 'group', colSpan: 2, items: ['text'] }, { itemType: 'group', colSpan: 2, items: ['longText'] }]);
     });
 
     testOrSkip('1 column -> [group[{text.colSpan: 2}], group[{longText.colSpan: 2}]], alignItemLabelsInAllGroups: false', function(assert) {
