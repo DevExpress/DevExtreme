@@ -235,7 +235,9 @@ QUnit.module('Details View', moduleConfig, () => {
 
         assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection');
 
-        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxclick');
+        this.wrapper.getRowNameCellInDetailsView(2)
+            .trigger('dxpointerdown')
+            .trigger('dxclick');
         this.wrapper.getRowNameCellInDetailsView(2).trigger(pointerEvents.up);
         this.clock.tick(400);
 
@@ -243,7 +245,9 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.ok(this.wrapper.isDetailsRowFocused(2), 'first directory focused');
         assert.deepEqual(getSelectedItemNames(fileManager), [ 'Folder 1.1' ], 'first directory in selection');
 
-        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxclick');
+        this.wrapper.getRowNameCellInDetailsView(1)
+            .trigger('dxpointerdown')
+            .trigger('dxclick');
         this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.up);
         this.clock.tick(400);
 
@@ -264,7 +268,7 @@ QUnit.module('Details View', moduleConfig, () => {
         for(let i = 2; i <= 5; i++) {
             const e = $.Event('dxclick');
             e.ctrlKey = i !== 1;
-            this.wrapper.getRowNameCellInDetailsView(i).trigger(e).trigger(pointerEvents.up);
+            this.wrapper.getRowNameCellInDetailsView(i).trigger(pointerEvents.down).trigger(e);
             this.clock.tick(400);
         }
 
@@ -273,7 +277,7 @@ QUnit.module('Details View', moduleConfig, () => {
 
         const e = $.Event('dxclick');
         e.ctrlKey = true;
-        this.wrapper.getRowNameCellInDetailsView(1).trigger(e).trigger(pointerEvents.up);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down).trigger(e);
 
         assert.strictEqual(this.wrapper.getSelectAllCheckBoxState(), 'checked', 'select all is checked');
         assert.deepEqual(getSelectedItemNames(fileManager), allNames, 'all items in selection');
@@ -303,16 +307,16 @@ QUnit.module('Details View', moduleConfig, () => {
 
         assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection');
 
+        this.wrapper.getRowNameCellInDetailsView(2).trigger(pointerEvents.down);
         this.wrapper.getRowNameCellInDetailsView(2).trigger('dxclick');
-        this.wrapper.getRowNameCellInDetailsView(2).trigger(pointerEvents.up);
         this.clock.tick(400);
 
         assert.notOk(this.wrapper.isDetailsRowSelected(2), 'first directory selected');
         assert.ok(this.wrapper.isDetailsRowFocused(2), 'first directory focused');
         assert.deepEqual(getSelectedItemNames(fileManager), [ 'Folder 1.1' ], 'first directory in selection');
 
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down);
         this.wrapper.getRowNameCellInDetailsView(1).trigger('dxclick');
-        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.up);
         this.clock.tick(400);
 
         assert.notOk(this.wrapper.isDetailsRowSelected(2), 'first directory is not selected');
