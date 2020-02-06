@@ -144,49 +144,53 @@ const SchedulerAppointmentForm = {
                 visible: false
             },
             {
-                dataField: dataExprs.allDayExpr,
-                editorType: 'dxSwitch',
-                label: {
-                    text: messageLocalization.format('dxScheduler-allDay'),
-                    location: 'right',
-                },
-                editorOptions: {
-                    onValueChanged: function(args) {
-                        const value = args.value;
-                        const startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr);
-                        const endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr);
-                        const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
+                itemType: 'group',
+                colCount: 3,
+                items: [{
+                    dataField: dataExprs.allDayExpr,
+                    editorType: 'dxSwitch',
+                    label: {
+                        text: messageLocalization.format('dxScheduler-allDay'),
+                        location: 'right',
+                    },
+                    editorOptions: {
+                        onValueChanged: function(args) {
+                            const value = args.value;
+                            const startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr);
+                            const endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr);
+                            const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
 
-                        if(!that._appointmentForm._lockDateShiftFlag && startDate) {
-                            if(value) {
-                                const allDayStartDate = that._getAllDayStartDate(startDate);
-                                startDateEditor.option('value', allDayStartDate);
-                                endDateEditor.option('value', that._getAllDayEndDate(allDayStartDate));
-                            } else {
-                                const startDateWithStartHour = that._getStartDateWithStartHour(startDate, schedulerInst.option('startDayHour'));
-                                const endDate = schedulerInst._workSpace.calculateEndDate(startDateWithStartHour);
-                                startDateEditor.option('value', startDateWithStartHour);
-                                endDateEditor.option('value', endDate);
+                            if(!that._appointmentForm._lockDateShiftFlag && startDate) {
+                                if(value) {
+                                    const allDayStartDate = that._getAllDayStartDate(startDate);
+                                    startDateEditor.option('value', allDayStartDate);
+                                    endDateEditor.option('value', that._getAllDayEndDate(allDayStartDate));
+                                } else {
+                                    const startDateWithStartHour = that._getStartDateWithStartHour(startDate, schedulerInst.option('startDayHour'));
+                                    const endDate = schedulerInst._workSpace.calculateEndDate(startDateWithStartHour);
+                                    startDateEditor.option('value', startDateWithStartHour);
+                                    endDateEditor.option('value', endDate);
+                                }
                             }
+                            startDateEditor.option('type', value ? 'date' : 'datetime');
+                            endDateEditor.option('type', value ? 'date' : 'datetime');
                         }
-                        startDateEditor.option('type', value ? 'date' : 'datetime');
-                        endDateEditor.option('type', value ? 'date' : 'datetime');
                     }
-                }
-            }, {
-                editorType: 'dxSwitch',
-                name: 'visibilityChanged',
-                label: {
-                    text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
-                    location: 'right',
-                },
-                editorOptions: {
-                    value: !!appointmentData.recurrenceRule,
-                    onValueChanged: function(args) {
-                        that._appointmentForm.getEditor(dataExprs.recurrenceRuleExpr).option('visible', args.value);
-                        triggerResize();
+                }, {
+                    editorType: 'dxSwitch',
+                    name: 'visibilityChanged',
+                    label: {
+                        text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
+                        location: 'right',
+                    },
+                    editorOptions: {
+                        value: !!appointmentData.recurrenceRule,
+                        onValueChanged: function(args) {
+                            that._appointmentForm.getEditor(dataExprs.recurrenceRuleExpr).option('visible', args.value);
+                            triggerResize();
+                        }
                     }
-                }
+                }]
             },
             {
                 itemType: 'empty',
