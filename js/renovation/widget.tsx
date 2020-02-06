@@ -3,11 +3,11 @@ import {
     Component,
     Effect,
     Event,
-    Prop,
+    OneWay,
     React,
     Ref,
     Slot,
-    ComponentInput,
+    ComponentBindings,
     InternalState,
     JSXComponent
 } from 'devextreme-generator/component_declaration/common';
@@ -140,34 +140,34 @@ export const viewFunction = (viewModel: any) => {
     );
 };
 
-@ComponentInput()
+@ComponentBindings()
 export class WidgetInput { 
-    @Prop() _dimensionChanged?: () => any = (() => undefined);
-    @Prop() _feedbackHideTimeout?: number = 400;
-    @Prop() _feedbackShowTimeout?: number = 30;
-    @Prop() _visibilityChanged?: (args: any) => undefined;
-    @Prop() accessKey?: string | null = null;
-    @Prop() activeStateEnabled?: boolean = false;
-    @Prop() activeStateUnit?: string;
-    @Prop() aria?: any = {};
-    @Prop() className?: string | undefined = '';
-    @Prop() clickArgs?: any = {};
-    @Prop() disabled?: boolean = false;
-    @Prop() elementAttr?: { [name: string]: any } = {};
-    @Prop() focusStateEnabled?: boolean = false;
-    @Prop() height?: string | number | null = null;
-    @Prop() hint?: string;
-    @Prop() hoverEndHandler?: (args: any) => any = (() => undefined);
-    @Prop() hoverStartHandler?: (args: any) => any = (() => undefined);
-    @Prop() hoverStateEnabled?: boolean = false;
-    @Prop() name?: string = '';
-    @Prop() onDimensionChanged?: () => any = (() => undefined);
-    @Prop() onKeyboardHandled?: (args: any) => any | undefined;
-    @Prop() onKeyPress?: (e: any, options: any) => any = (() => undefined);
-    @Prop() rtlEnabled?: boolean = config().rtlEnabled;
-    @Prop() tabIndex?: number = 0;
-    @Prop() visible?: boolean = true;
-    @Prop() width?: string | number | null = null;
+    @OneWay() _dimensionChanged?: () => any = (() => undefined);
+    @OneWay() _feedbackHideTimeout?: number = 400;
+    @OneWay() _feedbackShowTimeout?: number = 30;
+    @OneWay() _visibilityChanged?: (args: any) => undefined;
+    @OneWay() accessKey?: string | null = null;
+    @OneWay() activeStateEnabled?: boolean = false;
+    @OneWay() activeStateUnit?: string;
+    @OneWay() aria?: any = {};
+    @OneWay() className?: string | undefined = '';
+    @OneWay() clickArgs?: any = {};
+    @OneWay() disabled?: boolean = false;
+    @OneWay() elementAttr?: { [name: string]: any } = {};
+    @OneWay() focusStateEnabled?: boolean = false;
+    @OneWay() height?: string | number | null = null;
+    @OneWay() hint?: string;
+    @OneWay() hoverEndHandler?: (args: any) => any = (() => undefined);
+    @OneWay() hoverStartHandler?: (args: any) => any = (() => undefined);
+    @OneWay() hoverStateEnabled?: boolean = false;
+    @OneWay() name?: string = '';
+    @OneWay() onDimensionChanged?: () => any = (() => undefined);
+    @OneWay() onKeyboardHandled?: (args: any) => any | undefined;
+    @OneWay() onKeyPress?: (e: any, options: any) => any = (() => undefined);
+    @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
+    @OneWay() tabIndex?: number = 0;
+    @OneWay() visible?: boolean = true;
+    @OneWay() width?: string | number | null = null;
 
     @Slot() children?: any;
 
