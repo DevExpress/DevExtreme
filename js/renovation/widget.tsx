@@ -3,12 +3,15 @@ import {
     Component,
     Effect,
     Event,
-    InternalState,
     Prop,
     React,
     Ref,
     Slot,
-} from '../component_declaration/common';
+    ComponentInput,
+    InternalState,
+    JSXComponent,
+} from 'devextreme-generator/component_declaration/common';
+
 import { active, dxClick, hover, keyboard, resize, visibility } from '../events/short';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
@@ -23,14 +26,13 @@ const isVisible = (element) => {
         || element.getClientRects().length);
 };
 
-const getStyles = ({ width, height, ...other }) => {
+const getStyles = ({ width, height }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
     const computedHeight = typeof height === 'function' ? height() : height;
 
     return {
         width: computedWidth ?? void 0,
-        height: computedHeight ?? void 0,
-        ...other,
+        height: computedHeight ?? void 0
     };
 };
 
@@ -62,7 +64,7 @@ const getAttributes = ({ elementAttr, accessKey }) => {
     return attrs;
 };
 
-const getCssClasses = (model: Partial<Widget>) => {
+const getCssClasses = (model: Partial<Widget> & Partial<WidgetInput>) => {
     const className = ['dx-widget'];
     const isFocusable = model.focusStateEnabled && !model.disabled;
     const isHoverable = model.hoverStateEnabled && !model.disabled;
@@ -85,20 +87,22 @@ export const viewModelFunction = ({
     _focused,
     _hovered,
 
-    accessKey,
-    aria,
-    children,
-    className,
-    disabled,
-    elementAttr,
-    focusStateEnabled,
-    height,
-    hint,
-    hoverStateEnabled,
-    rtlEnabled,
-    tabIndex,
-    visible,
-    width,
+    props: {
+        accessKey,
+        aria,
+        children,
+        className,
+        disabled,
+        elementAttr,
+        focusStateEnabled,
+        height,
+        hint,
+        hoverStateEnabled,
+        rtlEnabled,
+        tabIndex,
+        visible,
+        width,
+    },
 
     widgetRef,
     _visibilityChanged,
@@ -146,17 +150,11 @@ export const viewFunction = (viewModel: any) => {
     );
 };
 
-@Component({
-    name: 'Widget',
-    components: [],
-    viewModel: viewModelFunction,
-    view: viewFunction,
-})
-
-export default class Widget {
-    @Prop() _dimensionChanged: () => any = (() => undefined);
-    @Prop() _feedbackHideTimeout: number = 400;
-    @Prop() _feedbackShowTimeout: number = 30;
+@ComponentInput()
+export class WidgetInput {
+    @Prop() _dimensionChanged?: () => any = (() => undefined);
+    @Prop() _feedbackHideTimeout?: number = 400;
+    @Prop() _feedbackShowTimeout?: number = 30;
     @Prop() _visibilityChanged?: (args: any) => undefined;
     @Prop() accessKey?: string | null = null;
     @Prop() activeStateEnabled?: boolean = false;
@@ -169,11 +167,11 @@ export default class Widget {
     @Prop() focusStateEnabled?: boolean = false;
     @Prop() height?: string | number | null = null;
     @Prop() hint?: string;
-    @Prop() hoverEndHandler: (args: any) => any = (() => undefined);
-    @Prop() hoverStartHandler: (args: any) => any = (() => undefined);
+    @Prop() hoverEndHandler?: (args: any) => any = (() => undefined);
+    @Prop() hoverStartHandler?: (args: any) => any = (() => undefined);
     @Prop() hoverStateEnabled?: boolean = false;
     @Prop() name?: string = '';
-    @Prop() onDimensionChanged: () => any = (() => undefined);
+    @Prop() onDimensionChanged?: () => any = (() => undefined);
     @Prop() onKeyboardHandled?: (args: any) => any | undefined;
     @Prop() onKeyPress?: (e: any, options: any) => any = (() => undefined);
     @Prop() rtlEnabled?: boolean = config().rtlEnabled;
@@ -181,10 +179,19 @@ export default class Widget {
     @Prop() visible?: boolean = true;
     @Prop() width?: string | number | null = null;
 
-    @Slot() children: any;
+    @Slot() children?: any;
 
     @Event() onClick?: (e: any) => void = (() => { });
+}
+/* tslint:disable-next-line:max-classes-per-file */
+@Component({
+    name: 'Widget',
+    components: [],
+    viewModel: viewModelFunction,
+    view: viewFunction,
+})
 
+export default class Widget extends JSXComponent<WidgetInput> {
     @InternalState() _active: boolean = false;
     @InternalState() _focused: boolean = false;
     @InternalState() _hovered: boolean = false;
@@ -195,7 +202,7 @@ export default class Widget {
 
     @Effect()
     visibilityEffect() {
-        const namespace = `${this.name}VisibilityChange`;
+        const namespace = `${this.props.name}VisibilityChange`;
 
         if (this._visibilityChanged && hasWindow()) {
             console.log(`_isHidden - ${this._isHidden}`);
@@ -224,10 +231,10 @@ export default class Widget {
 
     @Effect()
     resizeEffect() {
-        const namespace = `${this.name}VisibilityChange`;
+        const namespace = `${this.props.name}VisibilityChange`;
 
-        this.onDimensionChanged &&
-            resize.on(this.widgetRef, this.onDimensionChanged, { namespace });
+        this.props.onDimensionChanged &&
+            resize.on(this.widgetRef, this.props.onDimensionChanged, { namespace });
 
         return () => resize.off(this.widgetRef, { namespace });
     }
@@ -235,8 +242,8 @@ export default class Widget {
     @Effect()
     accessKeyEffect() {
         const namespace = 'UIFeedback';
-        const isFocusable = this.focusStateEnabled && !this.disabled;
-        const canBeFocusedByKey = isFocusable && this.accessKey;
+        const isFocusable = this.props.focusStateEnabled && !this.props.disabled;
+        const canBeFocusedByKey = isFocusable && this.props.accessKey;
 
         canBeFocusedByKey && dxClick.on(this.widgetRef, (e) => {
             if (isFakeClickEvent(e)) {
@@ -251,8 +258,8 @@ export default class Widget {
     @Effect()
     hoverEffect() {
         const namespace = 'UIFeedback';
-        const selector = this.activeStateUnit;
-        const isHoverable = this.hoverStateEnabled && !this.disabled;
+        const selector = this.props.activeStateUnit;
+        const isHoverable = this.props.hoverStateEnabled && !this.props.disabled;
 
         if (isHoverable) {
             hover.on(this.widgetRef,
@@ -271,18 +278,18 @@ export default class Widget {
 
     @Effect()
     activeEffect() {
-        const selector = this.activeStateUnit;
+        const selector = this.props.activeStateUnit;
         const namespace = 'UIFeedback';
 
-        if (this.activeStateEnabled && !this.disabled) {
+        if (this.props.activeStateEnabled && !this.props.disabled) {
             active.on(this.widgetRef,
                 new Action(() => { this._active = true; }),
                 new Action(
                     () => { this._active = false; },
                     { excludeValidators: ['disabled', 'readOnly'] },
                 ), {
-                    showTimeout: this._feedbackShowTimeout,
-                    hideTimeout: this._feedbackHideTimeout,
+                    showTimeout: this.props._feedbackShowTimeout,
+                    hideTimeout: this.props._feedbackHideTimeout,
                     selector,
                     namespace,
                 },
@@ -294,10 +301,10 @@ export default class Widget {
 
     @Effect()
     clickEffect() {
-        const namespace = this.name;
+        const namespace = this.props.name;
 
         dxClick.on(this.widgetRef,
-            () => this.onClick!(this.clickArgs),
+            () => this.props.onClick!(this.props.clickArgs),
             { namespace },
         );
 
@@ -306,9 +313,9 @@ export default class Widget {
 
     @Effect()
     keyboardEffect() {
-        if (this.focusStateEnabled || this.onKeyPress) {
+        if (this.props.focusStateEnabled || this.props.onKeyPress) {
             const id = keyboard.on(this.widgetRef, this.widgetRef,
-                options => this.onKeyPress?.(options.originalEvent, options));
+                options => this.props.onKeyPress?.(options.originalEvent, options));
 
             return () => keyboard.off(id);
         }
