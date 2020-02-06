@@ -48,8 +48,8 @@ function run_test {
     [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
 
     if [ -n "$TZ" ]; then
-        echo "Time-Zone: $TZ"
-        date
+        ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
+        dpkg-reconfigure --frontend noninteractive tzdata
     fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
