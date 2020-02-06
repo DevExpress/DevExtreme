@@ -50,6 +50,8 @@ const VALIDATION_STATUS = {
     pending: 'pending'
 };
 
+const EDIT_DATA_INSERT_TYPE = 'insert';
+
 const ValidatingController = modules.Controller.inherit((function() {
     return {
         init: function() {
@@ -123,10 +125,13 @@ const ValidatingController = modules.Controller.inherit((function() {
             }
 
             this._isValidationInProgress = true;
-            let fullValidating;
             if(isFull) {
-                fullValidating = new Deferred();
-                editingController.addDeferred(fullValidating.promise());
+                if(this._fullValidating) {
+                    this._fullValidating.reject('cancel');
+                    editingController.removeDeferred(this._fullValidating);
+                }
+                this._fullValidating = new Deferred();
+                editingController.addDeferred(this._fullValidating);
                 each(editingController._editData, (index, editData) => {
                     let validationResult;
 
@@ -166,7 +171,7 @@ const ValidatingController = modules.Controller.inherit((function() {
             this._isValidationInProgress = false;
 
             when(...completeList).done(() => {
-                fullValidating && fullValidating.resolve();
+                this._fullValidating && this._fullValidating.resolve();
                 deferred.resolve(isValid);
             });
 
@@ -194,7 +199,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
             if(FORM_BASED_MODES.indexOf(editMode) === -1) {
                 // test
-                if(editData.type === 'insert' && (!isDefined(editData.data) || isEmptyObject(editData.data))) {
+                if(editData.type === EDIT_DATA_INSERT_TYPE && (!isDefined(editData.data) || isEmptyObject(editData.data))) {
                     editData.isValid = true;
                     return;
                 }
@@ -424,16 +429,23 @@ const ValidatingController = modules.Controller.inherit((function() {
             if(!editData.validationResults) {
                 editData.validationResults = {};
             }
-            let result;
+            let result = editData.validationResults[columnIndex];
             if(validationResult) {
                 result = extend({}, validationResult);
                 editData.validationResults[columnIndex] = result;
-                if(this._disableApplyValidationResults && validationResult.status === VALIDATION_STATUS.pending) {
-                    result.disabledPendingId = validationResult.id;
-                    return;
+                if(validationResult.status === VALIDATION_STATUS.pending) {
+                    if(this._editingController.getEditMode() === EDIT_MODE_CELL) {
+                        result.deferred = new Deferred();
+                        result.complete.always(() => {
+                            result.deferred.resolve();
+                        });
+                        this._editingController.addDeferred(result.deferred);
+                    }
+                    if(this._disableApplyValidationResults) {
+                        result.disabledPendingId = validationResult.id;
+                        return;
+                    }
                 }
-            } else {
-                result = editData.validationResults[columnIndex];
             }
             if(result && result.disabledPendingId) {
                 delete result.disabledPendingId;
@@ -446,7 +458,14 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         removeCellValidationResult: function({ editData, columnIndex }) {
-            editData && editData.validationResults && delete editData.validationResults[columnIndex];
+            if(editData && editData.validationResults) {
+                const result = editData.validationResults[columnIndex];
+                if(result.deferred) {
+                    result.deferred.reject('cancel');
+                    this._editingController.removeDeferred(result.deferred);
+                }
+                delete editData.validationResults[columnIndex];
+            }
         },
 
         resetRowValidationResults: function(editData) {
@@ -497,7 +516,7 @@ module.exports = {
                     each(that._editData, function(_, editData) {
                         if(!editData.isValid && editData.pageIndex !== that._pageIndex) {
                             editData.pageIndex = that._pageIndex;
-                            if(editData.type === 'insert') {
+                            if(editData.type === EDIT_DATA_INSERT_TYPE) {
                                 editData.rowIndex = startInsertIndex;
                             } else {
                                 editData.rowIndex = rowIndex;
@@ -524,7 +543,7 @@ module.exports = {
                     const dataController = that.getController('data');
                     const getIndexByEditData = function(editData, items) {
                         let index = -1;
-                        const isInsert = editData.type === 'insert';
+                        const isInsert = editData.type === EDIT_DATA_INSERT_TYPE;
                         const key = editData.key;
 
                         each(items, function(i, item) {
@@ -580,7 +599,7 @@ module.exports = {
                         if(editIndex >= 0) {
                             editData = that._editData[editIndex];
 
-                            if(editData.type !== 'insert') {
+                            if(editData.type !== EDIT_DATA_INSERT_TYPE) {
                                 item.data = extend(true, {}, editData.oldData, editData.data);
                                 item.key = key;
                             }
@@ -619,7 +638,7 @@ module.exports = {
                         each(invisibleColumns, function(_, column) {
                             editData.forEach(function(options) {
                                 let data;
-                                if(options.type === 'insert') {
+                                if(options.type === EDIT_DATA_INSERT_TYPE) {
                                     data = options.data;
                                 } else if(options.type === 'update') {
                                     data = createObjectWithChanges(options.oldData, options.data);
@@ -685,14 +704,10 @@ module.exports = {
                     //     return result;
                     // }
                     // test
-                    if(this.getEditMode() === EDIT_MODE_CELL) {
+                    if(this.getEditMode() === EDIT_MODE_CELL && !item.isNewRow) { // ??????????????????
                         const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
                         const validator = $cell && $cell.data('dxValidator');
                         if(validator) {
-                            const editData = this.getEditDataByKey(validator.option('validationGroup').key);
-                            if(editData.type === 'insert') {
-                                return;
-                            }
                             const validatingController = this.getController('validating');
                             const deferred = new Deferred();
                             when(validatingController.validateCell(validator), result).done((validationResult, result) => {
@@ -700,8 +715,9 @@ module.exports = {
                             });
                             return deferred.promise();
                         }
-                        return result;
+                        // return result;
                     }
+                    return result;
                     // endTest
                 },
 

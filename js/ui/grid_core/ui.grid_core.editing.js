@@ -1782,13 +1782,19 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         addDeferred: function(deferred) {
-            this._deferreds.push(deferred);
-            deferred.always(() => {
-                const index = this._deferreds.indexOf(deferred);
-                if(index >= 0) {
-                    this._deferreds.splice(index, 1);
-                }
-            });
+            if(this._deferreds.indexOf(deferred) < 0) {
+                this._deferreds.push(deferred);
+                deferred.always(() => {
+                    this.removeDeferred(deferred);
+                });
+            }
+        },
+
+        removeDeferred: function(deferred) {
+            const index = this._deferreds.indexOf(deferred);
+            if(index >= 0) {
+                this._deferreds.splice(index, 1);
+            }
         },
 
         _prepareEditDataParams: function(options, value, text) {
