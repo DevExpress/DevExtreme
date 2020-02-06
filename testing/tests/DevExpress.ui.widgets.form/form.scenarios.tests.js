@@ -22,28 +22,28 @@ QUnit.module('Label aligment', () => {
         QUnit.test(name, callback);
     }
 
-    testOrSkip('1 column -> [item1]', function() {
-        const wrapper = new FormTestWrapper(1, ['veryVeryVeryLongText']);
+    testOrSkip('1 column -> [longText]', function() {
+        const wrapper = new FormTestWrapper(1, ['longText']);
         wrapper.checkFormSize({ width: 1000, height: 36 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="veryVeryVeryLongText"]'), { top: 8, left: 0, width: 167, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="veryVeryVeryLongText"]'), { top: 1, left: 168, width: 831, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 8, left: 0, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 1, left: 75, width: 923, height: 34 });
     });
 
     function test_1Column_2ItemsLayout(items) {
         const wrapper = new FormTestWrapper(1, items);
         wrapper.checkFormSize({ width: 1000, height: 82 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="shortText"]'), { top: 8, left: 0, width: 167, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="shortText"]'), { top: 1, left: 168, width: 831, height: 34 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="veryVeryVeryLongText"]'), { top: 54, left: 0, width: 167, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="veryVeryVeryLongText"]'), { top: 47, left: 168, width: 831, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 0, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 1, left: 75, width: 923, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 0, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 75, width: 923, height: 34 });
     }
 
-    testOrSkip('1 column -> [shortText, item2]', function() {
-        test_1Column_2ItemsLayout(['shortText', 'veryVeryVeryLongText']);
+    testOrSkip('1 column -> [text, longText]', function() {
+        test_1Column_2ItemsLayout(['text', 'longText']);
     });
 
-    testOrSkip('1 column -> [group[{shortText}], group[{veryVeryVeryLongText}]]', function() {
-        test_1Column_2ItemsLayout([ { itemType: 'group', items: ['shortText'] }, { itemType: 'group', items: ['veryVeryVeryLongText'] }]);
+    testOrSkip('1 column -> [group[{text}], group[{longText}]]', function() {
+        test_1Column_2ItemsLayout([ { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }]);
     });
 
     function test_2Column_2ItemsLayout(items) {
@@ -63,8 +63,8 @@ QUnit.module('Label aligment', () => {
         test_2Column_2ItemsLayout([ { itemType: 'group', items: ['shortText'] }, { itemType: 'group', items: ['veryVeryVeryLongText'] }]);
     });
 
-    testOrSkip('2 column -> [group[{shortText.colSpan: 2}], group[{veryVeryVeryLongText.colSpan: 2}]]', function() {
-        test_1Column_2ItemsLayout([ { itemType: 'group', colSpan: 2, items: ['shortText'] }, { itemType: 'group', colSpan: 2, items: ['veryVeryVeryLongText'] }]);
+    testOrSkip('2 column -> [group[{text.colSpan: 2}], group[{longText.colSpan: 2}]]', function() {
+        test_1Column_2ItemsLayout([ { itemType: 'group', colSpan: 2, items: ['text'] }, { itemType: 'group', colSpan: 2, items: ['longText'] }]);
     });
 
     testOrSkip('1 column -> [text, longText, veryLongText, veryVeryVeryLongText]', function() {
