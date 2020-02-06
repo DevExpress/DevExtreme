@@ -61,6 +61,14 @@
     @GENERIC_COMMAND_EDIT_ICON_MARGIN: 1px;
 }
 
+@GENERIC_GRID_BASE_BORDER_HIDDEN: 1px solid transparent;
+@GENERIC_GRID_BASE_ROW_BORDER: 1px solid transparent;
+@GENERIC_GRID_BASE_BORDER_COLOR: @datagrid-border-color;
+@GENERIC_GRID_BASE_DRAG_HEADER_BORDER: 1px solid @datagrid-drag-header-border-color;
+@GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0 0 1px @datagrid-drag-header-shadow-color;
+@GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0 1px 3px @datagrid-drag-header-second-shadow-color;
+@GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
+
 .dx-set-checkbox-border-color-as-background() when (@GENERIC_COLOR_POSTFIX = ".contrast") {
     .dx-selection .dx-checkbox-icon {
         border-color: @datagrid-base-background-color;
@@ -68,14 +76,6 @@
 }
 
 .grid-base(@widgetName) {
-    @GENERIC_GRID_BASE_BORDER_HIDDEN: 1px solid transparent;
-    @GENERIC_GRID_BASE_ROW_BORDER: 1px solid transparent;
-    @GENERIC_GRID_BASE_BORDER_COLOR: @datagrid-border-color;
-    @GENERIC_GRID_BASE_DRAG_HEADER_BORDER: 1px solid @datagrid-drag-header-border-color;
-    @GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0 0 1px @datagrid-drag-header-shadow-color;
-    @GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0 1px 3px @datagrid-drag-header-second-shadow-color;
-    @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
-
     .dx-@{widgetName},
     .dx-@{widgetName}-container {
         .dx-menu-item-has-icon {
