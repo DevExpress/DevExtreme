@@ -29,7 +29,7 @@ QUnit.module('Label aligment', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 1, left: 75, width: 923, height: 34 });
     });
 
-    function test_1Column_2Items_AllAligned(items) {
+    function test_1Column_2Items_Aligned(items) {
         const wrapper = new FormTestWrapper(1, {}, items);
         wrapper.checkFormSize({ width: 1000, height: 82 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 0, width: 74, height: 19 });
@@ -38,8 +38,8 @@ QUnit.module('Label aligment', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 75, width: 923, height: 34 });
     }
 
-    function test_1Column_2Items_NotAligned(items) {
-        const wrapper = new FormTestWrapper(1, { alignItemLabelsInAllGroups: false }, items);
+    function test_1Column_2Items_NotAligned(options, items) {
+        const wrapper = new FormTestWrapper(1, options, items);
         wrapper.checkFormSize({ width: 1000, height: 82 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 0, width: 40, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 1, left: 41, width: 958, height: 34 });
@@ -48,40 +48,38 @@ QUnit.module('Label aligment', () => {
     }
 
     testOrSkip('1 column-> [text, longText], alignItemLabels: true', function() {
-        test_1Column_2Items_AllAligned(['text', 'longText']);
+        test_1Column_2Items_Aligned(['text', 'longText']);
     });
 
     testOrSkip('1 column-> [text, longText], alignItemLabels: false', function() {
-        const wrapper = new FormTestWrapper(1, { alignItemLabels: false }, ['text', 'longText']);
-        wrapper.checkFormSize({ width: 1000, height: 82 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 0, width: 42, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 1, left: 43, width: 957, height: 34 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 0, width: 74, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 75, width: 923, height: 34 });
+        test_1Column_2Items_NotAligned({ alignItemLabels: false },
+            ['text', 'longText']);
     });
 
     testOrSkip('1 column -> [group[text, longText]]', function() {
-        test_1Column_2Items_AllAligned([ { itemType: 'group', items: ['text', 'longText'] }]);
+        test_1Column_2Items_Aligned([ { itemType: 'group', items: ['text', 'longText'] }]);
     });
 
     testOrSkip('1 column -> [group[text, group[longText]]]', function() {
-        test_1Column_2Items_AllAligned([ { itemType: 'group', items: ['text', { itemType: 'group', items: ['longText'] }] }]);
+        test_1Column_2Items_Aligned([ { itemType: 'group', items: ['text', { itemType: 'group', items: ['longText'] }] }]);
     });
 
     testOrSkip('1 column -> [group[text], group[longText]], alignItemLabelsInAllGroups: true', function() {
-        test_1Column_2Items_AllAligned([ { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }]);
+        test_1Column_2Items_Aligned([ { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }]);
     });
 
     testOrSkip('1 column -> [group[text], group[longText]], alignItemLabelsInAllGroups: false', function() {
-        test_1Column_2Items_NotAligned([ { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }]);
+        test_1Column_2Items_NotAligned({ alignItemLabelsInAllGroups: false },
+            [ { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }]);
     });
 
     testOrSkip('1 column -> [group[group[text], group[longText]]], alignItemLabelsInAllGroups: true', function() {
-        test_1Column_2Items_AllAligned([ { itemType: 'group', items: [{ itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
+        test_1Column_2Items_Aligned([ { itemType: 'group', items: [{ itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
     });
 
     testOrSkip('1 column -> [group[group[text], group[longText]]], alignItemLabelsInAllGroups: false', function() {
-        test_1Column_2Items_NotAligned([ { itemType: 'group', items: [{ itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
+        test_1Column_2Items_NotAligned({ alignItemLabelsInAllGroups: false },
+            [ { itemType: 'group', items: [{ itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
     });
 
     testOrSkip('1 column -> [group[text.colSpan2], group[longText.colSpan2]]', function() {
@@ -94,7 +92,7 @@ QUnit.module('Label aligment', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 75, width: 923, height: 34 });
     });
 
-    function test_2Column_2Items(options, items) {
+    function test_2Column_2Items_NotAligned(options, items) {
         const wrapper = new FormTestWrapper(2, options, items);
         wrapper.checkFormSize({ width: 1000, height: 36 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 0, width: 40, height: 19 });
@@ -104,11 +102,11 @@ QUnit.module('Label aligment', () => {
     }
 
     testOrSkip('2 column -> [text, longText]', function() {
-        test_2Column_2Items({}, ['text', 'longText']);
+        test_2Column_2Items_NotAligned({}, ['text', 'longText']);
     });
 
     testOrSkip('2 column -> [group[text, longText]]', function() {
-        test_2Column_2Items({}, [ { itemType: 'group', colSpan: 2, colCount: 2, items: ['text', 'longText'] }]);
+        test_2Column_2Items_NotAligned({}, [ { itemType: 'group', colSpan: 2, colCount: 2, items: ['text', 'longText'] }]);
     });
 
     function test_2Column_2Items_AllAligned(items) {
@@ -127,7 +125,7 @@ QUnit.module('Label aligment', () => {
     });
 
     testOrSkip('2 column -> [group[text], group[longText]]', function() {
-        test_2Column_2Items({},
+        test_2Column_2Items_NotAligned({},
             [ { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }]);
     });
 
@@ -138,13 +136,13 @@ QUnit.module('Label aligment', () => {
     });
 
     testOrSkip('2 column -> [group[group[text], group[longText]]], alignItemLabelsInAllGroups: false', function() {
-        test_2Column_2Items({ alignItemLabelsInAllGroups: false },
+        test_2Column_2Items_NotAligned({ alignItemLabelsInAllGroups: false },
             [{ itemType: 'group', colCount: 2, colSpan: 2,
                 items: [{ itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
     });
 
     testOrSkip('2 column -> [group[{text.colSpan: 2}], group[{longText.colSpan: 2}]]', function() {
-        test_1Column_2Items_AllAligned([ { itemType: 'group', colSpan: 2, items: ['text'] }, { itemType: 'group', colSpan: 2, items: ['longText'] }]);
+        test_1Column_2Items_Aligned([ { itemType: 'group', colSpan: 2, items: ['text'] }, { itemType: 'group', colSpan: 2, items: ['longText'] }]);
     });
 
     function test_2Column_4ItemsLayout(options, items) {
