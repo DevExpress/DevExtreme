@@ -43,11 +43,14 @@ registerDecorator(
         },
 
         _dragTemplate: function(e) {
+            const direction = this.option('rtlEnabled') ? 'rtl' : 'ltr';
+
             return $(e.itemElement)
                 .clone()
                 .width($(e.itemElement).width())
                 .addClass(REORDERING_ITEM_GHOST_CLASS)
-                .addClass(STATE_HOVER_CLASS);
+                .addClass(STATE_HOVER_CLASS)
+                .css('direction', direction);
         },
 
         _dragStartHandler: function(e) {
