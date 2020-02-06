@@ -345,24 +345,24 @@ describe('Widget', () => {
     });
 
     describe.only('Events', () => {
-        Element.prototype.getBoundingClientRect = () => {};
-        jest.spyOn(Element.prototype, 'getClientRects').mockImplementation(() => ({
-            length: 1,
-        }));
-
-        let hidingFired = 0;
-        let shownFired = 0;
-
-        const _visibilityChanged = (visible) => {
-            visible ? shownFired += 1 : hidingFired += 1;
-        };
-
-        beforeEach(() => {
-            hidingFired = 0;
-            shownFired = 0;
-        });
-
         describe('visibilityChanged', () => {
+            Element.prototype.getBoundingClientRect = () => {};
+            jest.spyOn(Element.prototype, 'getClientRects').mockImplementation(() => ({
+                length: 1,
+            }));
+
+            let hidingFired = 0;
+            let shownFired = 0;
+
+            const _visibilityChanged = (visible) => {
+                visible ? shownFired += 1 : hidingFired += 1;
+            };
+
+            beforeEach(() => {
+                hidingFired = 0;
+                shownFired = 0;
+            });
+
             it('is called on dxhiding and dxshown events and special css class is attached', () => {
                 const widget = render({ _visibilityChanged });
 
@@ -449,7 +449,7 @@ describe('Widget', () => {
 
             it('should not calls with hidden parent', () => {
                 const widget = mount((
-                    <div>
+                    <div style={{ display: 'hidden' }}>
                         <Widget _visibilityChanged={_visibilityChanged} />
                     </div>
                 ));
