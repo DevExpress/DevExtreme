@@ -16,6 +16,13 @@ import { isFakeClickEvent } from '../events/utils';
 import { hasWindow } from '../core/utils/window';
 import Action from '../core/action';
 
+const isVisible = (element) => {
+    if (!element.nodeType) return true;
+    return !!(element.offsetWidth
+        || element.offsetHeight
+        || element.getClientRects().length);
+};
+
 const getStyles = ({ width, height, ...other }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
     const computedHeight = typeof height === 'function' ? height() : height;
@@ -186,62 +193,24 @@ export default class Widget {
     @Ref()
     widgetRef!: HTMLDivElement;
 
-    // @Effect()
-    // visibilityChangedEffect() {
-    //     const isVisible = () => {
-    //         return this.widgetRef?.offsetParent !== null;
-    //         // return Number(width) > 0 && Number(height) > 0;
-    //     };
-    //     const checkVisibilityChanged = (action) => {
-    //         if (isVisible()) {
-    //             if (action === 'hiding' && !this._isHidden) {
-    //                 this._visibilityChanged!(false);
-    //                 this._isHidden = true;
-    //             } else if (action === 'shown' && this._isHidden) {
-    //                 this._isHidden = false;
-    //                 this._visibilityChanged!(true);
-    //             }
-    //         }
-    //     };
-
-    //     checkVisibilityChanged(this.visible ? 'shown' : 'hiding');
-    // }
-
     @Effect()
     visibilityEffect() {
         const namespace = `${this.name}VisibilityChange`;
 
-        if (this._visibilityChanged || true /*&& hasWindow() */) {
-            // const isVisible = () => {
-            //     console.log(this.widgetRef?.offsetParent);
-            //     return this.widgetRef?.offsetParent !== null;
-            //     // const { width, height } = this.widgetRef?.style;
-            //     // return Number(width) > 0 && Number(height) > 0;
-            // };
-            // const checkVisibilityChanged = (action) => {
-
-            //     if (true) { // ?????
-            //         if (action === 'hiding' && !this._isHidden) {
-            //             this._visibilityChanged!(false);
-            //             this._isHidden = true;
-            //         } else if (action === 'shown' && this._isHidden) {
-            //             this._isHidden = false;
-            //             this._visibilityChanged!(true);
-            //         }
-            //     }
-            // };
-
+        if (this._visibilityChanged && hasWindow()) {
+            console.log(`_isHidden - ${this._isHidden}`);
+            const isHidden = this._isHidden;
             visibility.on(this.widgetRef,
                 () => {
-                    console.log(`isHidden - ${this._isHidden}, action - hidden`);
-                    if (this._isHidden) {
+                    console.log(`shown _isHidden - ${this._isHidden}`);
+                    if (isHidden && isVisible(this.widgetRef)) {
                         this._visibilityChanged!(true);
                         this._isHidden = false;
                     }
                 },
                 () => {
-                    console.log(`isHidden - ${this._isHidden}, action - shown`);
-                    if (!this._isHidden) {
+                    console.log(`HIDDEN _isHidden - ${this._isHidden}`);
+                    if (!isHidden && isVisible(this.widgetRef)) {
                         this._isHidden = true;
                         this._visibilityChanged!(false);
                     }
