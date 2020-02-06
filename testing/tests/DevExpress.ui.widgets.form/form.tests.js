@@ -777,7 +777,7 @@ QUnit.module('Label aligment', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[for$="shortText"]'), { top: 8, left: 0, width: 75, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="shortText"]'), { top: 1, left: 76, width: 408, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="veryVeryVeryLongText"]'), { top: 8, left: 515, width: 167, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="veryVeryVeryLongText"]'), { top: 1, left: 680, width: 319, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="veryVeryVeryLongText"]'), { top: 1, left: 683, width: 316, height: 34 });
     }
 
     testOrSkip('2 column -> [shortText, veryVeryVeryLongText]', function() {
@@ -811,11 +811,11 @@ QUnit.module('Label aligment', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 0, width: 103, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 1, left: 104, width: 380, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 8, left: 515, width: 167, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 1, left: 680, width: 319, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 1, left: 683, width: 316, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="veryLongText"]'), { top: 54, left: 0, width: 103, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="veryLongText"]'), { top: 47, left: 104, width: 380, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="veryVeryVeryLongText"]'), { top: 54, left: 515, width: 167, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="veryVeryVeryLongText"]'), { top: 47, left: 680, width: 319, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="veryVeryVeryLongText"]'), { top: 47, left: 683, width: 316, height: 34 });
     }
 
     testOrSkip('2 column -> [text, longText, veryLongText, veryVeryVeryLongText]', function() {
