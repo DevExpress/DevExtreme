@@ -59,8 +59,18 @@ QUnit.module('Label aligment', () => {
         test_1Column_2Items([ { itemType: 'group', items: ['text', { itemType: 'group', items: ['longText'] }] }]);
     });
 
-    testOrSkip('1 column -> [group[text], group[longText]]', function() {
+    testOrSkip('1 column -> [group[text], group[longText]], alignItemLabelsInAllGroups: true', function() {
         test_1Column_2Items([ { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }]);
+    });
+
+    testOrSkip('1 column -> [group[text], group[longText]], alignItemLabelsInAllGroups: false', function() {
+        const wrapper = new FormTestWrapper(1, { alignItemLabelsInAllGroups: false },
+            [ { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }]);
+        wrapper.checkFormSize({ width: 1000, height: 82 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 0, width: 40, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 1, left: 41, width: 958, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 0, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 75, width: 923, height: 34 });
     });
 
     testOrSkip('1 column -> [group[group[text], group[longText]]]', function() {
