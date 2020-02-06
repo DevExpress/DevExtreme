@@ -22,14 +22,14 @@ QUnit.module('Form scenarios', () => {
     }
 
     testOrSkip('1 column -> [item1]', function(assert) {
-        const wrapper = new FormTestWrapper(1, ['item1']);
+        const wrapper = new FormTestWrapper(1, {}, ['item1']);
         wrapper.checkFormSize({ width: 1000, height: 75 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
     });
 
     function test_1Column_2ItemsLayout(items) {
-        const wrapper = new FormTestWrapper(1, items);
+        const wrapper = new FormTestWrapper(1, {}, items);
         wrapper.checkFormSize({ width: 1000, height: 160 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
@@ -55,7 +55,7 @@ QUnit.module('Form scenarios', () => {
     });
 
     function test_1Column_3ItemsLayout(items) {
-        const wrapper = new FormTestWrapper(1, items);
+        const wrapper = new FormTestWrapper(1, {}, items);
         wrapper.checkFormSize({ width: 1000, height: 245 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
@@ -86,7 +86,7 @@ QUnit.module('Form scenarios', () => {
     });
 
     testOrSkip('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
-        const wrapper = new FormTestWrapper(1, [
+        const wrapper = new FormTestWrapper(1, {}, [
             'item1',
             { itemType: 'group', caption: 'Contact Information',
                 items: [ { itemType: 'tabbed',
@@ -102,7 +102,7 @@ QUnit.module('Form scenarios', () => {
     });
 
     testOrSkip('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
-        const wrapper = new FormTestWrapper(1, [
+        const wrapper = new FormTestWrapper(1, {}, [
             'item1',
             {
                 itemType: 'group',
@@ -130,7 +130,7 @@ QUnit.module('Form scenarios', () => {
     });
 
     function test_2Column_2ItemsLayout(items) {
-        const wrapper = new FormTestWrapper(2, items);
+        const wrapper = new FormTestWrapper(2, {}, items);
         wrapper.checkFormSize({ width: 1000, height: 75 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
@@ -171,7 +171,7 @@ QUnit.module('Form scenarios', () => {
     });
 
     function test_2Columns_3ItemsLayout(items) {
-        const wrapper = new FormTestWrapper(2, items);
+        const wrapper = new FormTestWrapper(2, {}, items);
         wrapper.checkFormSize({ width: 1000, height: 160 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
@@ -199,7 +199,7 @@ QUnit.module('Form scenarios', () => {
     });
 
     testOrSkip('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group colspan:3 [{ item3 }] ]', function(assert) {
-        const wrapper = new FormTestWrapper(2, [
+        const wrapper = new FormTestWrapper(2, {}, [
             { itemType: 'group', colSpan: 1, items: ['item1'] },
             { itemType: 'group', colSpan: 1, items: ['item2'] },
             { itemType: 'group', colSpan: 2, items: ['item3']
@@ -216,7 +216,7 @@ QUnit.module('Form scenarios', () => {
     });
 
     testOrSkip('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
-        const wrapper = new FormTestWrapper(2, [
+        const wrapper = new FormTestWrapper(2, {}, [
             'item1',
             { itemType: 'group', caption: 'Contact Information',
                 items: [{
@@ -235,7 +235,7 @@ QUnit.module('Form scenarios', () => {
     });
 
     testOrSkip('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
-        const wrapper = new FormTestWrapper(2, [
+        const wrapper = new FormTestWrapper(2, {}, [
             'item1',
             { itemType: 'group', caption: 'Contact Information',
                 items: [{
@@ -256,7 +256,7 @@ QUnit.module('Form scenarios', () => {
     });
 
     testOrSkip('4 columns -> [{ group colSpan:3 [{ item1 }], { group colSpan:1 [{ item2 }], { group colspan:4 [{ item3 }] ]', function(assert) {
-        const wrapper = new FormTestWrapper(4, [
+        const wrapper = new FormTestWrapper(4, {}, [
             { itemType: 'group', colSpan: 3, items: ['item1'] },
             { itemType: 'group', colSpan: 1, items: ['item2'] },
             { itemType: 'group', colSpan: 4, items: ['item3'] }

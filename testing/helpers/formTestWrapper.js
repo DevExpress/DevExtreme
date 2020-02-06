@@ -1,8 +1,8 @@
 import $ from 'jquery';
 
 class FormTestWrapper {
-    constructor(colCount, items) {
-        const $form = $('#form').dxForm({
+    constructor(colCount, options, items) {
+        const wrapperOptions = $.extend({}, options, {
             width: 1000,
             screenByWidth: () => {
                 return 'md';
@@ -13,6 +13,7 @@ class FormTestWrapper {
             items
         });
 
+        const $form = $('#form').dxForm(wrapperOptions);
         $form.find('*').css('font-family', 'Helvetica');
 
         this.epsilon = 3.5;
