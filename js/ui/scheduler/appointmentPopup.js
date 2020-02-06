@@ -207,8 +207,8 @@ export default class AppointmentPopup {
         const recurrenceRuleExpr = this.scheduler._dataAccessors.expr.recurrenceRuleExpr;
         const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr);
         const switchOptions = this._getEditorOptions('visibilityChanged'); // TODO constant
+        recurrenceEditorOptions.startDate = startDate; // move to another place
         if(this.state.appointment.data.recurrenceRule) {
-            recurrenceEditorOptions.startDate = startDate;
             recurrenceEditorOptions.visible = true;
             switchOptions.value = true;
         } else {

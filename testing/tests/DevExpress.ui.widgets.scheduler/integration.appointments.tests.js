@@ -2912,10 +2912,9 @@ QUnit.test('Scheduler appointment popup should be opened correctly for recurrenc
     $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
     const popup = this.instance.getAppointmentPopup();
-    const $checkboxes = $(popup.$content()).find('.dx-checkbox');
+    const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
-    assert.equal($checkboxes.eq(1).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked. Popup is correct');
-    assert.equal($checkboxes.eq(4).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked. Popup is correct');
+    assert.deepEqual($buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys');
 });
 
 QUnit.test('Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)', function(assert) {
@@ -2951,10 +2950,9 @@ QUnit.test('Scheduler appointment popup should be opened correctly for recurrenc
     $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
     const popup = this.instance.getAppointmentPopup();
-    const $checkboxes = $(popup.$content()).find('.dx-checkbox');
+    const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
-    assert.equal($checkboxes.eq(1).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked. Popup is correct');
-    assert.equal($checkboxes.eq(4).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked. Popup is correct');
+    $buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys';
 
     this.instance.hideAppointmentPopup();
     this.instance.showAppointmentPopup(tasks[0]);

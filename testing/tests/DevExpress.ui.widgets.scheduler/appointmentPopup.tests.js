@@ -995,10 +995,9 @@ QUnit.test('Multiple showing appointment popup for recurrence appointments shoul
     });
 
     const popup = this.instance.getAppointmentPopup();
-    const $checkboxes = $(popup.$content()).find('.dx-checkbox');
+    const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
-    assert.equal($checkboxes.eq(1).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked');
-    assert.equal($checkboxes.eq(4).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked');
+    assert.deepEqual($buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right buttons was checked');
 });
 
 QUnit.test('Appointment popup will render even if no appointmentData is provided (T734413)', function(assert) {
