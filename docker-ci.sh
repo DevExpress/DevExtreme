@@ -45,6 +45,12 @@ function run_test {
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
+    [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
+
+    if [ -n "$TZ" ]; then
+        ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
+        dpkg-reconfigure --frontend noninteractive tzdata
+    fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
@@ -108,6 +114,17 @@ function run_test {
                     --no-first-run
                     --no-default-browser-check
                     --disable-translate
+                )
+            fi
+
+            if [ "$PERF" == "true" ]; then
+                echo "Performance tests"
+                chrome_args+=(
+                    --disable-popup-blocking
+                    --remote-debugging-port=9223
+                    --enable-impl-side-painting
+                    --enable-skia-benchmarking
+                    --disable-web-security
                 )
             fi
 
