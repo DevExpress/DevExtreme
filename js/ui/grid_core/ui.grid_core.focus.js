@@ -541,7 +541,7 @@ module.exports = {
                                 focusController._focusRowByIndex();
                             }
                         } else {
-                            if(this.getRowIndexByKey(focusedRowKey) < 0) {
+                            if(!isVirtualScrolling && this.getRowIndexByKey(focusedRowKey) < 0) {
                                 this.option('focusedRowIndex', -1);
                             }
                         }
