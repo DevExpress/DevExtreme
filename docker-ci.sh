@@ -45,6 +45,12 @@ function run_test {
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
+    [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
+
+    if [ -n "$TZ" ]; then
+        ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
+        dpkg-reconfigure --frontend noninteractive tzdata
+    fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
@@ -111,6 +117,17 @@ function run_test {
                 )
             fi
 
+            if [ "$PERF" == "true" ]; then
+                echo "Performance tests"
+                chrome_args+=(
+                    --disable-popup-blocking
+                    --remote-debugging-port=9223
+                    --enable-impl-side-painting
+                    --enable-skia-benchmarking
+                    --disable-web-security
+                )
+            fi
+
             if [ -n "$MOBILE_UA" ]; then
                 local user_agent
 
@@ -169,6 +186,11 @@ function run_test_functional {
     npm run test-functional -- $args
 }
 
+function run_test_scss {
+    npm i
+    npx gulp generate-scss
+}
+
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
 case "$TARGET" in
@@ -177,6 +199,7 @@ case "$TARGET" in
     "test") run_test ;;
     "test_themebuilder") run_test_themebuilder ;;
     "test_functional") run_test_functional ;;
+    "test_scss") run_test_scss ;;
 
     *)
         echo "Unknown target"
