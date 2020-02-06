@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import { Deferred } from '../../core/utils/deferred';
+import { hasWindow } from '../../core/utils/window';
 import Widget from '../widget/ui.widget';
 import Popup from '../popup';
 import TextBox from '../text_box';
@@ -30,6 +31,7 @@ class DiagramToolbox extends Widget {
         const that = this;
         const $parent = this.$element();
 
+        const popupHeight = hasWindow() ? $parent.height() - 2 * DIAGRAM_TOOLBOX_SPACING : 200;
         const $popupElement = $('<div>')
             .addClass(DIAGRAM_TOOLBOX_POPUP_CLASS)
             .appendTo($parent);
@@ -37,7 +39,7 @@ class DiagramToolbox extends Widget {
         this._popupInstance = this._createComponent($popupElement, Popup, {
             animation: null,
             width: DIAGRAM_TOOLBOX_POPUP_WIDTH,
-            height: $parent.height() - 2 * DIAGRAM_TOOLBOX_SPACING,
+            height: popupHeight,
             position: {
                 my: 'left top',
                 at: 'left top',
