@@ -704,10 +704,12 @@ const subscribes = {
         const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
         date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
-        const tzOffsets1 = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
 
-        const diff = tzOffsets.common - tzOffsets1.common || 0;
-        return new Date(date.getTime() + diff * toMs('hour'));
+        const tzOffsetsAfterConvert = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
+        const daylightOffsetCommon = tzOffsets.common - tzOffsetsAfterConvert.common;
+        const daylightOffsetAppointment = tzOffsets.appointment - tzOffsetsAfterConvert.appointment;
+
+        return new Date(date.getTime() + (daylightOffsetCommon - daylightOffsetAppointment) * toMs('hour'));
     },
 
     translateDateToAppointmentTimeZone: function(date, offsets, back) {
