@@ -3735,6 +3735,66 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowKey'), 'Mark2', 'FocusedRowkey');
     });
 
+    QUnit.test('autoNavigateToFocusedRow == false and paging if scrolling mode is virtual', function(assert) {
+        this.options = {
+            focusedRowEnabled: true,
+            autoNavigateToFocusedRow: false,
+            onFocusedRowChanged: sinon.spy(),
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual'
+            },
+            pager: {
+                visible: true
+            },
+            paging: {
+                pageSize: 2
+            }
+        };
+
+        this.data = [
+            { id: 1 },
+            { id: 2 },
+            { id: 3 },
+            { id: 4 },
+            { id: 5 },
+            { id: 6 },
+            { id: 7 },
+            { id: 8 }
+        ];
+
+        this.setupModule();
+        addOptionChangedHandlers(this);
+
+        this.gridView.render($('#container'));
+        this.clock.tick();
+
+        this.option('focusedRowIndex', 0);
+
+        // assert
+        assert.equal(this.option('focusedRowIndex'), 0, 'focusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), 1, 'focusedRowkey');
+        assert.equal(this.options.onFocusedRowChanged.callCount, 1, 'onFocusedRowChanged called once');
+
+        // act
+        this.pageIndex(3);
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.option('focusedRowIndex'), 0, 'focusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), 1, 'focusedRowkey');
+        assert.equal(this.options.onFocusedRowChanged.callCount, 1, 'onFocusedRowChanged called once');
+
+        // act
+        this.pageIndex(0);
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.option('focusedRowIndex'), 0, 'focusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), 1, 'focusedRowkey');
+        assert.equal(this.options.onFocusedRowChanged.callCount, 1, 'onFocusedRowChanged called once');
+    });
+
     QUnit.test('Change \'pageIndex\' by API without focused row should focus it by \'focusedRowIndex\' if autoNavigateToFocusedRow == false and row or cell was focused', function(assert) {
         // arrange
         this.options = {
