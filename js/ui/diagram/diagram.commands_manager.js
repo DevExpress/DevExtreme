@@ -463,8 +463,8 @@ const DiagramCommandsManager = {
                 hint: messageLocalization.format('dxDiagram-commandProperties'),
                 text: messageLocalization.format('dxDiagram-commandProperties'),
                 items: [
-                    // allCommands['units'],
-                    // allCommands['separator'],
+                    allCommands['units'],
+                    allCommands['separator'],
                     allCommands['showGrid'],
                     allCommands['snapToGrid'],
                     allCommands['separator'],
@@ -544,26 +544,25 @@ const DiagramCommandsManager = {
         }).filter(c => c);
     },
 
-    getContextMenuItems(commands, onlyVisible) {
-        const result = [];
-        commands.forEach(command => {
-            if(command.visible || !onlyVisible) {
-                result.push(command);
-            }
-        });
-        return result;
-    },
-    _prepareContextMenuCommands(commands) {
+    _prepareContextMenuCommandsCore(commands, error) {
         const result = [];
         let beginGroup = false;
         commands.forEach(command => {
             if(command === SEPARATOR) {
                 beginGroup = true;
             } else {
+                if(Array.isArray(command.items)) {
+                    command.items.forEach(item => {
+                        if(item.command !== undefined) {
+                            throw new Error(error);
+                        }
+                    });
+                }
                 result.push({
                     command: command.command,
                     text: command.text,
                     icon: command.menuIcon || command.icon,
+                    items: command.items,
                     getParameter: command.getParameter,
                     beginGroup: beginGroup
                 });
@@ -572,11 +571,14 @@ const DiagramCommandsManager = {
         });
         return result;
     },
+    _prepareContextMenuCommands(commands) {
+        return this._prepareContextMenuCommandsCore(commands, 'Context menu cannot contain commands on the second level');
+    },
     _prepareToolbarCommands(commands) {
         const result = [];
         commands.forEach(command => {
             if(Array.isArray(command.items)) {
-                command.items = this._prepareContextMenuCommands(command.items);
+                command.items = this._prepareContextMenuCommandsCore(command.items, 'Toolbar cannot contain commands on the third level');
             }
             result.push(command);
         });

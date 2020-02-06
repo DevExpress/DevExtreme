@@ -7,6 +7,7 @@ import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 
 import DiagramPanel from './ui.diagram.panel';
+import DiagramContextMenuHelper from './ui.diagram.context_menu_helper';
 
 import '../select_box';
 import '../color_box';
@@ -16,7 +17,6 @@ const ACTIVE_FORMAT_CLASS = 'dx-format-active';
 const DIAGRAM_TOOLBAR_CLASS = 'dx-diagram-toolbar';
 const DIAGRAM_TOOLBAR_SEPARATOR_CLASS = 'dx-diagram-toolbar-separator';
 const DIAGRAM_TOOLBAR_MENU_SEPARATOR_CLASS = 'dx-diagram-toolbar-menu-separator';
-const DIAGRAM_CONTEXT_MENU_CLASS = 'dx-diagram-contextmenu';
 
 class DiagramToolbar extends DiagramPanel {
     _init() {
@@ -213,9 +213,7 @@ class DiagramToolbar extends DiagramPanel {
         return widgetValue;
     }
     _onItemInitialized(widget, item) {
-        if(item.command !== undefined) {
-            this._itemHelpers[item.command] = new ToolbarItemHelper(widget);
-        }
+        this._addItemHelper(item.command, new ToolbarItemHelper(widget));
     }
     _onItemContentReady(widget, item, actionHandler) {
         if(widget.NAME === 'dxButton' && item.items) {
@@ -224,24 +222,13 @@ class DiagramToolbar extends DiagramPanel {
             this._createComponent($menuContainer, ContextMenu, {
                 items: item.items,
                 target: widget.$element(),
-                cssClass: DIAGRAM_CONTEXT_MENU_CLASS,
+                cssClass: DiagramContextMenuHelper.getCssClass(),
                 showEvent: 'dxclick',
                 position: { at: 'left bottom' },
-                itemTemplate: (itemData, itemIndex, itemElement) => {
-                    if(itemData.widget && itemData.widget._hasCheckedItems) {
-                        const iconElement = $('<span></span>');
-                        iconElement.addClass('dx-icon-check');
-                        iconElement.css('visibility', !itemData.checked ? 'hidden' : '');
-                        itemElement.append(iconElement);
-                    }
-                    itemElement.append(itemData.text);
+                itemTemplate: function(itemData, itemIndex, itemElement) {
+                    DiagramContextMenuHelper.getItemTemplate(itemData, itemIndex, itemElement, this._menuHasCheckedItems);
                 },
-                onItemClick: ({ itemData }) => {
-                    if(itemData.command !== undefined) {
-                        const parameter = this._getExecCommandParameter(itemData);
-                        actionHandler.call(this, itemData.command, parameter);
-                    }
-                },
+                onItemClick: ({ itemData }) => this._onContextMenuItemClick(itemData, actionHandler),
                 onShowing: (e) => {
                     if(this._showingSubMenu) return;
 
@@ -255,16 +242,33 @@ class DiagramToolbar extends DiagramPanel {
             });
         }
     }
+    _onContextMenuItemClick(itemData, actionHandler) {
+        if(itemData.command !== undefined) {
+            const parameter = this._getExecCommandParameter(itemData);
+            actionHandler.call(this, itemData.command, parameter);
+        } else if(itemData.rootCommand !== undefined && itemData.value !== undefined) {
+            const parameter = this._getExecCommandParameter(itemData, itemData.value);
+            actionHandler.call(this, itemData.rootCommand, parameter);
+        }
+    }
     _onContextMenuInitialized(widget, item, rootButton) {
         this._contextMenus.push(widget);
-        this._addContextMenuHelper(item.items, widget, [], rootButton);
+        this._addContextMenuHelper(item, widget, [], rootButton);
     }
-    _addContextMenuHelper(items, widget, indexPath, rootButton) {
-        if(items) {
-            items.forEach((item, index) => {
+    _addItemHelper(command, helper) {
+        if(command) {
+            if(this._itemHelpers[command]) {
+                throw new Error('Toolbar cannot contain duplicated commands.');
+            }
+            this._itemHelpers[command] = helper;
+        }
+    }
+    _addContextMenuHelper(item, widget, indexPath, rootButton) {
+        if(item.items) {
+            item.items.forEach((subItem, index) => {
                 const itemIndexPath = indexPath.concat(index);
-                this._itemHelpers[item.command] = new ToolbarSubItemHelper(widget, itemIndexPath, rootButton);
-                this._addContextMenuHelper(item.items, widget, itemIndexPath, rootButton);
+                this._addItemHelper(subItem.command, new ToolbarSubItemHelper(widget, itemIndexPath, subItem.command, rootButton));
+                this._addContextMenuHelper(subItem, widget, itemIndexPath, rootButton);
             });
         }
     }
@@ -359,19 +363,7 @@ class ToolbarDiagramBar extends DiagramBar {
         this._commands = commands;
     }
     getCommandKeys() {
-        return this.getKeys(this._commands);
-    }
-    getKeys(items) {
-        const keys = items.reduce((commands, item) => {
-            if(item.command !== undefined) {
-                commands.push(item.command);
-            }
-            if(item.items) {
-                commands = commands.concat(this.getKeys(item.items));
-            }
-            return commands;
-        }, []);
-        return keys;
+        return this._getKeys(this._commands);
     }
     setItemValue(key, value) {
         this._owner._setItemValue(key, value);
@@ -407,30 +399,30 @@ class ToolbarItemHelper {
     setItems(items) {
         if('items' in this._widget.option()) {
             this._widget.option('items', items.map(item => {
-                const value = (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
                 return {
-                    'value': value,
+                    'value': this._getItemValue(item),
                     'title': item.text
                 };
             }));
         }
     }
+    _getItemValue(item) {
+        return (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
+    }
 }
 
 class ToolbarSubItemHelper extends ToolbarItemHelper {
-    constructor(widget, indexPath, rootButton) {
+    constructor(widget, indexPath, rootCommand, rootButton) {
         super(widget);
         this._indexPath = indexPath;
+        this._rootCommand = rootCommand;
         this._rootButton = rootButton;
     }
     canUpdate(showingSubMenu) {
         return showingSubMenu === this._widget;
     }
     setEnabled(enabled) {
-        const optionText = this._indexPath.reduce((r, i) => {
-            return r + `items[${i}].`;
-        }, '') + 'disabled';
-        this._widget.option(optionText, !enabled);
+        this._widget.option(this._getItemOptionText() + 'disabled', !enabled);
         const rootEnabled = this._hasEnabledCommandItems(this._widget.option('items'));
         this._rootButton.option('disabled', !rootEnabled);
     }
@@ -443,14 +435,43 @@ class ToolbarSubItemHelper extends ToolbarItemHelper {
         return false;
     }
     setValue(value) {
-        const optionText = this._indexPath.reduce((r, i) => {
+        const optionText = this._getItemOptionText();
+        if(value === true || value === false) {
+            this._setHasCheckedItems(-1);
+            this._widget.option(optionText + 'checked', value);
+        } else if(value !== undefined) {
+            this._subItems.forEach((item, index) => {
+                this._setHasCheckedItems(this._rootCommand);
+                item.checked = item.value === value;
+            });
+            this._updateItems();
+        }
+    }
+    setItems(items) {
+        this._subItems = items.slice();
+        this._updateItems();
+    }
+    _setHasCheckedItems(key) {
+        if(!this._widget._menuHasCheckedItems) {
+            this._widget._menuHasCheckedItems = {};
+        }
+        this._widget._menuHasCheckedItems[key] = true;
+    }
+    _updateItems(items) {
+        this._widget.option(this._getItemOptionText() + 'items', this._subItems.map(item => {
+            return {
+                'value': this._getItemValue(item),
+                'text': item.text,
+                'checked': item.checked,
+                'widget': this._widget,
+                'rootCommand': this._rootCommand
+            };
+        }));
+    }
+    _getItemOptionText() {
+        return this._indexPath.reduce((r, i) => {
             return r + `items[${i}].`;
         }, '');
-        if(value === true || value === false) {
-            this._widget._hasCheckedItems = true;
-            this._widget.option(optionText + 'checked', value);
-        }
-        this._widget.option(optionText + 'widget', this._widget);
     }
 }
 
