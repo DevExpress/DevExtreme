@@ -63,13 +63,13 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      */
     customizeThumbnail?: ((fileItem: any) => string);
     /**
-     * @docid dxFileManagerOptions.fileProvider
+     * @docid dxFileManagerOptions.fileSystemProvider
      * @type object
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fileProvider?: any;
+    fileSystemProvider?: any;
     /**
      * @docid dxFileManagerOptions.itemView
      * @type object
@@ -219,15 +219,15 @@ export interface dxFileManagerToolbar {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+    fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
     /**
      * @docid dxFileManagerToolbar.items
      * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
-     * @default [ "showNavPane", "create", "upload", "viewSwitcher", { name: "separator", location: "after" }, "refresh" ]
+     * @default [ "showNavPane", "create", "upload", "switchView", { name: "separator", location: "after" }, "refresh" ]
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+    items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
 }
 
 export interface dxFileManagerToolbarItem extends dxToolbarItem {
@@ -244,7 +244,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
+    name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
     /**
      * @docid dxFileManagerToolbarItem.visible
      * @default undefined

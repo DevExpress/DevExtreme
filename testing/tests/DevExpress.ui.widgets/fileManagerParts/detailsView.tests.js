@@ -16,7 +16,7 @@ const moduleConfig = {
                 mode: 'details',
                 showParentFolder: false
             },
-            fileProvider: [
+            fileSystemProvider: [
                 {
                     name: 'Folder 1',
                     isDirectory: true
@@ -81,7 +81,7 @@ const getSelectedItemNames = fileManager => fileManager.getSelectedItems().map(i
 const prepareParentDirectoryTesting = (context, singleSelection) => {
     const fileManager = context.$element.dxFileManager('instance');
     fileManager.option({
-        fileProvider: createTestFileSystem(),
+        fileSystemProvider: createTestFileSystem(),
         currentPath: 'Folder 1',
         selectionMode: singleSelection ? 'single' : 'multiple',
         itemView: {
@@ -105,7 +105,7 @@ QUnit.module('Details View', moduleConfig, () => {
     test('Using custom formats of JSON files', function(assert) {
         $('#fileManager')
             .dxFileManager('instance')
-            .option('fileProvider', {
+            .option('fileSystemProvider', {
                 data: [
                     {
                         title: 'Folder',
@@ -203,7 +203,7 @@ QUnit.module('Details View', moduleConfig, () => {
 
     test('\'Back\' directory must not be sortable', function(assert) {
         this.wrapper.getInstance().option({
-            fileProvider: createTestFileSystem(),
+            fileSystemProvider: createTestFileSystem(),
             currentPath: 'Folder 1',
             itemView: {
                 showParentFolder: true

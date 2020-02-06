@@ -43,7 +43,7 @@ export class FileManagerCommandManager {
                 name: 'delete',
                 text: messageLocalization.format('dxFileManager-commandDelete'),
                 icon: 'trash',
-                enabled: this._permissions.remove,
+                enabled: this._permissions.delete,
             },
             {
                 name: 'download',

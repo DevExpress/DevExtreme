@@ -1,6 +1,6 @@
 const { test } = QUnit;
-import { getPathParts, getEscapedFileName } from 'ui/file_manager/ui.file_manager.utils';
-import { FileManagerItem } from 'ui/file_manager/file_provider/file_provider';
+import { getPathParts, getEscapedFileName } from 'file_management/utils';
+import FileSystemItem from 'file_management/file_system_item';
 
 QUnit.module('Common tests', () => {
     test('getPathParts() function must correctly separate path string', function(assert) {
@@ -45,7 +45,7 @@ QUnit.module('Common tests', () => {
         }
     });
 
-    test('create FileManagerItem by public constructor', function(assert) {
+    test('create FileSystemItem by public constructor', function(assert) {
         const testData = {
             '1': {
                 path: 'folder1',
@@ -67,7 +67,7 @@ QUnit.module('Common tests', () => {
         for(const key in testData) {
             const testCase = testData[key];
 
-            const item = new FileManagerItem(testCase.path, testCase.isDir, testCase.pathKeys);
+            const item = new FileSystemItem(testCase.path, testCase.isDir, testCase.pathKeys);
 
             assert.strictEqual(item.name, testCase.name, `${key}: name correct`);
             assert.strictEqual(item.key, testCase.key, `${key}: key correct`);

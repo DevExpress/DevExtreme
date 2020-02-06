@@ -1,11 +1,11 @@
 import { when } from 'core/utils/deferred';
-import { FileManagerItem } from 'ui/file_manager/file_provider/file_provider';
-import CustomFileProvider from 'ui/file_manager/file_provider/custom';
+import FileSystemItem from 'file_management/file_system_item';
+import CustomFileSystemProvider from 'file_management/custom_provider';
 import { createSampleFileItems } from '../../../helpers/fileManagerHelpers.js';
 
 const { test } = QUnit;
 
-const { filesPathInfo, itemData, fileManagerItems } = createSampleFileItems();
+const { filesPathInfo, itemData, fileSystemItems } = createSampleFileItems();
 
 const moduleConfig = {
 
@@ -22,7 +22,7 @@ const moduleConfig = {
             uploadChunkSize: 1000
         };
 
-        this.provider = new CustomFileProvider(this.options);
+        this.provider = new CustomFileSystemProvider(this.options);
     }
 
 };
@@ -34,7 +34,7 @@ QUnit.module('Custom file provider', moduleConfig, () => {
 
         this.provider.getItems(filesPathInfo)
             .done(items => {
-                assert.deepEqual(items, fileManagerItems, 'items acquired');
+                assert.deepEqual(items, fileSystemItems, 'items acquired');
                 assert.strictEqual(this.options.getItems.callCount, 1, 'getItems called once');
                 assert.deepEqual(this.options.getItems.args[0][0], filesPathInfo, 'getItems arguments are valid');
                 done();
@@ -44,7 +44,7 @@ QUnit.module('Custom file provider', moduleConfig, () => {
     test('rename item', function(assert) {
         const done = assert.async();
 
-        const item = new FileManagerItem(filesPathInfo, 'Documents');
+        const item = new FileSystemItem(filesPathInfo, 'Documents');
 
         this.provider.renameItem(item, 'Test 1')
             .done(result => {
@@ -60,8 +60,8 @@ QUnit.module('Custom file provider', moduleConfig, () => {
     test('create directory', function(assert) {
         const done = assert.async();
 
-        const parentDir = new FileManagerItem(filesPathInfo, 'Documents');
-        this.provider.createFolder(parentDir, 'Test 1')
+        const parentDir = new FileSystemItem(filesPathInfo, 'Documents');
+        this.provider.createDirectory(parentDir, 'Test 1')
             .done(result => {
                 done();
 
@@ -76,8 +76,8 @@ QUnit.module('Custom file provider', moduleConfig, () => {
         const done = assert.async();
 
         const items = [
-            new FileManagerItem(filesPathInfo, 'Documents'),
-            new FileManagerItem(filesPathInfo, 'Article.txt')
+            new FileSystemItem(filesPathInfo, 'Documents'),
+            new FileSystemItem(filesPathInfo, 'Article.txt')
         ];
 
         const deferreds = this.provider.deleteItems(items);
@@ -99,10 +99,10 @@ QUnit.module('Custom file provider', moduleConfig, () => {
         const done = assert.async();
 
         const items = [
-            new FileManagerItem(filesPathInfo, 'Documents'),
-            new FileManagerItem(filesPathInfo, 'Article.txt')
+            new FileSystemItem(filesPathInfo, 'Documents'),
+            new FileSystemItem(filesPathInfo, 'Article.txt')
         ];
-        const destinationDir = new FileManagerItem(filesPathInfo, 'Music');
+        const destinationDir = new FileSystemItem(filesPathInfo, 'Music');
 
         const deferreds = this.provider.moveItems(items, destinationDir);
         assert.strictEqual(deferreds.length, 2, 'result contains deferrred for each item');
@@ -125,10 +125,10 @@ QUnit.module('Custom file provider', moduleConfig, () => {
         const done = assert.async();
 
         const items = [
-            new FileManagerItem(filesPathInfo, 'Documents'),
-            new FileManagerItem(filesPathInfo, 'Article.txt')
+            new FileSystemItem(filesPathInfo, 'Documents'),
+            new FileSystemItem(filesPathInfo, 'Article.txt')
         ];
-        const destinationDir = new FileManagerItem(filesPathInfo, 'Music');
+        const destinationDir = new FileSystemItem(filesPathInfo, 'Music');
 
         const deferreds = this.provider.copyItems(items, destinationDir);
         assert.strictEqual(deferreds.length, 2, 'result contains deferrred for each item');
@@ -152,7 +152,7 @@ QUnit.module('Custom file provider', moduleConfig, () => {
 
         const fileData = { name: 'Test1.txt' };
         const chunksInfo = { chunkIndex: 1 };
-        const destinationDir = new FileManagerItem(filesPathInfo, 'Documents');
+        const destinationDir = new FileSystemItem(filesPathInfo, 'Documents');
 
         this.provider.uploadFileChunk(fileData, chunksInfo, destinationDir)
             .done(result => {
@@ -171,7 +171,7 @@ QUnit.module('Custom file provider', moduleConfig, () => {
 
         const fileData = { name: 'Test1.txt' };
         const chunksInfo = { chunkIndex: 1 };
-        const destinationDir = new FileManagerItem(filesPathInfo, 'Documents');
+        const destinationDir = new FileSystemItem(filesPathInfo, 'Documents');
 
         this.provider.abortFileUpload(fileData, chunksInfo, destinationDir)
             .done(result => {
@@ -189,7 +189,7 @@ QUnit.module('Custom file provider', moduleConfig, () => {
         let size = this.provider.getFileUploadChunkSize();
         assert.strictEqual(size, this.options.uploadChunkSize, 'result acquired');
 
-        const provider = new CustomFileProvider();
+        const provider = new CustomFileSystemProvider();
         size = provider.getFileUploadChunkSize();
         assert.ok(size > 100000, 'default value used');
     });

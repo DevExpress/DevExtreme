@@ -1,9 +1,9 @@
 const { test } = QUnit;
 
 import 'ui/file_manager';
-import ArrayFileProvider from 'ui/file_manager/file_provider/array';
-import { FileManagerRootItem } from 'ui/file_manager/file_provider/file_provider';
-import { ErrorCode } from 'ui/file_manager/ui.file_manager.common';
+import ObjectFileSystemProvider from 'file_management/object_provider';
+import { FileSystemRootItem } from 'file_management/file_system_item';
+import ErrorCode from 'file_management/errors';
 import { fileSaver } from 'exporter/file_saver';
 
 import { createUploaderFiles, createUploadInfo } from '../../../helpers/fileManagerHelpers.js';
@@ -49,7 +49,7 @@ const moduleConfig = {
             ]
         };
 
-        this.provider = new ArrayFileProvider(this.options);
+        this.provider = new ObjectFileSystemProvider(this.options);
 
         sinon.stub(fileSaver, 'saveAs', (fileName, format, data) => {
             if(fileSaver._onTestSaveAs) {
@@ -238,7 +238,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
     });
 
     test('copy directory to root directory does not change root\'s hasSubDir property', function(assert) {
-        const root = new FileManagerRootItem();
+        const root = new FileSystemRootItem();
         const pathInfo = [ { key: 'F1', name: 'F1' } ];
 
         assert.strictEqual(root.hasSubDirs, undefined, 'root hasSubDirs property is undefined');
@@ -406,7 +406,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
     test('create new folder with existing name', function(assert) {
         const done = assert.async(2);
 
-        this.provider.createFolder(new FileManagerRootItem(), 'F1')
+        this.provider.createDirectory(new FileSystemRootItem(), 'F1')
             .then(result => {
                 done();
 
@@ -434,7 +434,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 done();
 
                 this.options.data.splice(0, this.options.data.length);
-                return this.provider.createFolder(f1Dir, 'NewDir');
+                return this.provider.createDirectory(f1Dir, 'NewDir');
             })
             .then(null, ({ errorId }) => {
                 done();
@@ -522,7 +522,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
     test('upload file', function(assert) {
         const done = assert.async(4);
 
-        const dir = new FileManagerRootItem();
+        const dir = new FileSystemRootItem();
         let initialCount = -1;
 
         const file = createUploaderFiles(1)[0];

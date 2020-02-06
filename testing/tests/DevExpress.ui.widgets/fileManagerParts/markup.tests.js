@@ -6,7 +6,7 @@ import { FileManagerWrapper, createTestFileSystem, Consts } from '../../../helpe
 
 const getDefaultConfig = () => {
     return {
-        fileProvider: createTestFileSystem(),
+        fileSystemProvider: createTestFileSystem(),
         itemView: {
             mode: 'thumbnails'
         },
@@ -14,7 +14,7 @@ const getDefaultConfig = () => {
             create: true,
             copy: true,
             move: true,
-            remove: true,
+            delete: true,
             rename: true,
             upload: true
         }
@@ -68,7 +68,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
         fileSystem[1].name = 'Folder 2 test 11111111 testtesttestest 22222 test test 1111111 test 1 222222';
 
         this.prepareFileManager({
-            fileProvider: fileSystem,
+            fileSystemProvider: fileSystem,
             itemView: {
                 mode: 'details'
             },
@@ -85,7 +85,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
 
     test('active area switches on itemView and dirsPanel click', function(assert) {
         this.prepareFileManager({
-            fileProvider: createTestFileSystem()
+            fileSystemProvider: createTestFileSystem()
         });
         const dirsPanel = this.wrapper.getDirsPanel();
         const itemsView = this.wrapper.getItemsView();

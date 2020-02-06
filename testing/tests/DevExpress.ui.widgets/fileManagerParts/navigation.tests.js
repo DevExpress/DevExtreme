@@ -16,7 +16,7 @@ const moduleConfig = {
         fx.off = true;
 
         this.$element = $('#fileManager').dxFileManager({
-            fileProvider: fileSystem,
+            fileSystemProvider: fileSystem,
             itemView: {
                 mode: 'thumbnails'
             },
@@ -24,7 +24,7 @@ const moduleConfig = {
                 create: true,
                 copy: true,
                 move: true,
-                remove: true,
+                delete: true,
                 rename: true,
                 upload: true
             }
@@ -446,7 +446,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         const incorrectOptionValue = 'Docu//me//nts';
         const incorrectName = 'Docu/me/nts';
         const fileProvider = createFileProviderWithIncorrectName(incorrectName);
-        inst.option('fileProvider', fileProvider);
+        inst.option('fileSystemProvider', fileProvider);
 
         let counter = 0;
         inst.option('onOptionChanged', (e) => { e.name === 'currentPath' && counter++; });
@@ -501,7 +501,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         const incorrectPartialName = 'Docu/';
         let fileProvider = createFileProviderWithIncorrectName(incorrectName);
         fileProvider = fileProvider.concat(createFileProviderWithIncorrectName(incorrectPartialName, true));
-        inst.option('fileProvider', fileProvider);
+        inst.option('fileSystemProvider', fileProvider);
 
         inst.option('currentPath', incorrectOptionValue);
         this.clock.tick(400);
@@ -524,7 +524,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     test('\'Back\' directory must have attributes of the represented directory', function(assert) {
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
-            fileProvider: [
+            fileSystemProvider: [
                 {
                     name: 'Folder 1',
                     isDirectory: true,
