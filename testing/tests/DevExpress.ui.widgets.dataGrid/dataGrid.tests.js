@@ -5053,11 +5053,11 @@ QUnit.test('Sort indicators should not be rendered if grouping is applied and sh
         }
     }).dxDataGrid('instance');
 
-    this.clock.tick(500);
+    this.clock.tick();
 
     // act
     dataGrid.columnOption(1, 'groupIndex', 0);
-    this.clock.tick(500);
+    this.clock.tick();
 
     // assert
     const $dataGrid = $(dataGrid.$element());
@@ -5093,11 +5093,11 @@ function groupingWithSortingTest(that, assert, sortIndexes) {
         }
     }).dxDataGrid('instance');
 
-    that.clock.tick(500);
+    that.clock.tick();
 
     // act
     dataGrid.columnOption(1, 'groupIndex', 0);
-    that.clock.tick(500);
+    that.clock.tick();
 
     // assert
     const $dataGrid = $(dataGrid.$element());
