@@ -61,30 +61,39 @@ QUnit.module('Items layout and labels alignment', () => {
     });
 
     testOrSkip('1 column -> [group[text, group[longText]]]', function() {
-        const wrapper = new FormTestWrapper(1, {}, [ { itemType: 'group', items: ['text', { itemType: 'group', items: ['longText'] }] }]);
+        const wrapper = new FormTestWrapper(1, {}, [ { itemType: 'group', items: [
+            'text',
+            { itemType: 'group', items: ['longText'] }] }]);
         test_1ColumnLayout_AlignedLabels(wrapper);
     });
 
     testOrSkip('1 column -> [group[text], group[longText]], alignItemLabelsInAllGroups: true', function() {
-        const wrapper = new FormTestWrapper(1, {}, [ { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }]);
+        const wrapper = new FormTestWrapper(1, {}, [
+            { itemType: 'group', items: ['text'] },
+            { itemType: 'group', items: ['longText'] }]);
         test_1ColumnLayout_AlignedLabels(wrapper);
     });
 
     testOrSkip('1 column -> [group[text], group[longText]], alignItemLabelsInAllGroups: false', function() {
-        const wrapper = new FormTestWrapper(1, { alignItemLabelsInAllGroups: false },
-            [ { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }]);
+        const wrapper = new FormTestWrapper(1, { alignItemLabelsInAllGroups: false }, [
+            { itemType: 'group', items: ['text'] },
+            { itemType: 'group', items: ['longText'] }]);
         test_1ColumnLayout_NotAlignedLabels(wrapper);
     });
 
     testOrSkip('1 column -> [group[group[text], group[longText]]], alignItemLabelsInAllGroups: true', function() {
         const wrapper = new FormTestWrapper(1, {},
-            [ { itemType: 'group', items: [{ itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
+            [ { itemType: 'group', items: [
+                { itemType: 'group', items: ['text'] },
+                { itemType: 'group', items: ['longText'] }] }]);
         test_1ColumnLayout_AlignedLabels(wrapper);
     });
 
     testOrSkip('1 column -> [group[group[text], group[longText]]], alignItemLabelsInAllGroups: false', function() {
         const wrapper = new FormTestWrapper(1, { alignItemLabelsInAllGroups: false },
-            [ { itemType: 'group', items: [{ itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
+            [ { itemType: 'group', items: [
+                { itemType: 'group', items: ['text'] },
+                { itemType: 'group', items: ['longText'] }] }]);
         test_1ColumnLayout_NotAlignedLabels(wrapper);
     });
 
@@ -141,19 +150,20 @@ QUnit.module('Items layout and labels alignment', () => {
     }
 
     testOrSkip('2 column -> [text, longText]', function() {
-        const wrapper = new FormTestWrapper(2, {}, ['text', 'longText']);
+        const wrapper = new FormTestWrapper(2, {},
+            ['text', 'longText']);
         test_2ColumnsLayout_NotAlignedLabels(wrapper);
     });
 
     testOrSkip('2 column -> [group[text, longText]]', function() {
-        const wrapper = new FormTestWrapper(2, {}, [ { itemType: 'group', colSpan: 2, colCount: 2, items: ['text', 'longText'] }]);
+        const wrapper = new FormTestWrapper(2, {}, [
+            { itemType: 'group', colSpan: 2, colCount: 2, items: ['text', 'longText'] }]);
         test_2ColumnsLayout_NotAlignedLabels(wrapper);
     });
 
     testOrSkip('2 column-> [text.colSpan2, longText.colSpan2], alignItemLabels: true', function(assert) {
         const wrapper = new FormTestWrapper(2, {}, [
-            { dataField: 'text', colSpan: 2 },
-            { dataField: 'longText', colSpan: 2 }]);
+            { dataField: 'text', colSpan: 2 }, { dataField: 'longText', colSpan: 2 }]);
         test_1ColumnLayout_AlignedLabels(wrapper);
     });
 
@@ -164,7 +174,8 @@ QUnit.module('Items layout and labels alignment', () => {
     testOrSkip('2 column -> [group.colCount:2,colSpan2[text, group[longText]]]', function(assert) {
         // unexpected bechaviour - https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxForm/Configuration/#alignItemLabelsInAllGroups
         const wrapper = new FormTestWrapper(2, {},
-            [ { itemType: 'group', colCount: 2, colSpan: 2, items: ['text', { itemType: 'group', items: ['longText'] }] }]);
+            [ { itemType: 'group', colCount: 2, colSpan: 2, items: [
+                'text', { itemType: 'group', items: ['longText'] }] }]);
         test_2ColumnsLayout_AlignedLabels(wrapper);
     });
 
@@ -175,7 +186,8 @@ QUnit.module('Items layout and labels alignment', () => {
     });
 
     testOrSkip('2 column -> [group[{text.colSpan: 2}], group[{longText.colSpan: 2}]], alignItemLabelsInAllGroups: true', function(assert) {
-        test_1ColumnLayout_AlignedLabels(new FormTestWrapper(2, {}, [ { itemType: 'group', colSpan: 2, items: ['text'] }, { itemType: 'group', colSpan: 2, items: ['longText'] }]));
+        test_1ColumnLayout_AlignedLabels(new FormTestWrapper(2, {}, [
+            { itemType: 'group', colSpan: 2, items: ['text'] }, { itemType: 'group', colSpan: 2, items: ['longText'] }]));
     });
 
     testOrSkip('2 column -> [group[{text.colSpan: 2}], group[{longText.colSpan: 2}]], alignItemLabelsInAllGroups: false', function(assert) {
@@ -193,8 +205,8 @@ QUnit.module('Items layout and labels alignment', () => {
 
     testOrSkip('2 column -> [group.colSpan:2.colCount:2[group[text], group[longText]]], alignItemLabelsInAllGroups: false', function() {
         const wrapper = new FormTestWrapper(2, { alignItemLabelsInAllGroups: false },
-            [{ itemType: 'group', colCount: 2, colSpan: 2,
-                items: [{ itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
+            [{ itemType: 'group', colCount: 2, colSpan: 2, items: [
+                { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
         test_2ColumnsLayout_NotAlignedLabels(wrapper);
     });
 
@@ -250,9 +262,7 @@ QUnit.module('Items layout and labels alignment', () => {
 
     testOrSkip('3 column -> [a, abc, text, longText] ', function(assert) {
         const wrapper = new FormTestWrapper(3, { alignItemLabels: true }, [
-            { dataField: 'a' },
-            { dataField: 'abc' },
-            { dataField: 'text' },
+            { dataField: 'a' }, { dataField: 'abc' }, { dataField: 'text' },
             { dataField: 'longText' } ]);
         wrapper.checkFormSize({ width: 1000, height: 82 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 74, height: 19 });
@@ -267,10 +277,8 @@ QUnit.module('Items layout and labels alignment', () => {
 
     testOrSkip('3 column -> [a.colSpan:2, abc.colSpan:1, text.colSpan:2, longText.colSpan:1] ', function(assert) {
         const wrapper = new FormTestWrapper(3, { alignItemLabels: true }, [
-            { colSpan: 2, dataField: 'a' },
-            { colSpan: 1, dataField: 'abc' },
-            { colSpan: 2, dataField: 'text' },
-            { colSpan: 1, dataField: 'longText' } ]);
+            { colSpan: 2, dataField: 'a' }, { colSpan: 1, dataField: 'abc' },
+            { colSpan: 2, dataField: 'text' }, { colSpan: 1, dataField: 'longText' } ]);
         wrapper.checkFormSize({ width: 1000, height: 82 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 40, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 42, width: 609, height: 34 });
@@ -301,10 +309,7 @@ QUnit.module('Items layout and labels alignment', () => {
 
     testOrSkip('4 column -> [a, abc, text, longText] ', function(assert) {
         const wrapper = new FormTestWrapper(4, { alignItemLabels: true }, [
-            { dataField: 'a' },
-            { dataField: 'abc' },
-            { dataField: 'text' },
-            { dataField: 'longText' } ]);
+            { dataField: 'a' }, { dataField: 'abc' }, { dataField: 'text' }, { dataField: 'longText' } ]);
         wrapper.checkFormSize({ width: 1000, height: 36 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 24, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 25, width: 209, height: 34 });
@@ -318,9 +323,7 @@ QUnit.module('Items layout and labels alignment', () => {
 
     testOrSkip('4 column -> [a.colSpan:2, abc.colSpan:1, text.colSpan:1, longText.colSpan:4] ', function(assert) {
         const wrapper = new FormTestWrapper(4, { alignItemLabels: true }, [
-            { colSpan: 2, dataField: 'a' },
-            { colSpan: 1, dataField: 'abc' },
-            { colSpan: 1, dataField: 'text' },
+            { colSpan: 2, dataField: 'a' }, { colSpan: 1, dataField: 'abc' }, { colSpan: 1, dataField: 'text' },
             { colSpan: 4, dataField: 'longText' } ]);
         wrapper.checkFormSize({ width: 1000, height: 82 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 74, height: 19 });
@@ -335,8 +338,7 @@ QUnit.module('Items layout and labels alignment', () => {
 
     testOrSkip('4 column -> [a.colSpan:2, abc.colSpan:2, text.colSpan:4, longText.colSpan:4] ', function(assert) {
         const wrapper = new FormTestWrapper(4, { alignItemLabels: true }, [
-            { colSpan: 2, dataField: 'a' },
-            { colSpan: 2, dataField: 'abc' },
+            { colSpan: 2, dataField: 'a' }, { colSpan: 2, dataField: 'abc' },
             { colSpan: 4, dataField: 'text' },
             { colSpan: 4, dataField: 'longText' } ]);
         wrapper.checkFormSize({ width: 1000, height: 128 });
