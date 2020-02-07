@@ -161,6 +161,7 @@ function run_test {
 
     esac
 
+    start_runner_watchdog
     wait $runner_pid || runner_result=1
     exit $runner_result
 }
@@ -191,6 +192,24 @@ function run_test_functional {
 function run_test_scss {
     npm i
     npx gulp generate-scss
+}
+
+function start_runner_watchdog {
+    local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
+    local last_suite_time=unknown
+
+    while true; do
+        [ -f "$PWD/testing/Results.xml" ] && break;
+
+        sleep 300
+
+        if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
+            echo "Runner stalled"
+            kill -TERM $$
+        fi
+
+        last_suite_time=$(cat $last_suite_time_file)
+    done &
 }
 
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
