@@ -126,10 +126,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
             this._isValidationInProgress = true;
             if(isFull) {
-                if(this._fullValidating) {
-                    this._fullValidating.reject('cancel');
-                    editingController.removeDeferred(this._fullValidating);
-                }
+                this._fullValidating && this._fullValidating.reject('cancel');
                 this._fullValidating = new Deferred();
                 editingController.addDeferred(this._fullValidating);
                 each(editingController._editData, (index, editData) => {
@@ -276,7 +273,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                         columnIndex: column.index
                     });
                     const requestIsDisabled = validationResult && validationResult.disabledPendingId === options.id;
-                    if(this._disableApplyValidationResults || requestIsDisabled) {
+                    if(this._disableApplyValidationResults && (this._currentCellValidator && this._currentCellValidator !== options.validator || requestIsDisabled)) {
                         return;
                     }
                     if(options.status === VALIDATION_STATUS.invalid) {
@@ -460,10 +457,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         removeCellValidationResult: function({ editData, columnIndex }) {
             if(editData && editData.validationResults) {
                 const result = editData.validationResults[columnIndex];
-                if(result.deferred) {
-                    result.deferred.reject('cancel');
-                    this._editingController.removeDeferred(result.deferred);
-                }
+                result.deferred && result.deferred.reject('cancel');
                 delete editData.validationResults[columnIndex];
             }
         },
@@ -704,20 +698,21 @@ module.exports = {
                     //     return result;
                     // }
                     // test
-                    if(this.getEditMode() === EDIT_MODE_CELL && !item.isNewRow) { // ??????????????????
+                    if(this.getEditMode() === EDIT_MODE_CELL) {
                         const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
                         const validator = $cell && $cell.data('dxValidator');
-                        if(validator) {
+                        const value = validator && validator.option('adapter').getValue();
+                        if(validator && value !== undefined) {
                             const validatingController = this.getController('validating');
                             const deferred = new Deferred();
                             when(validatingController.validateCell(validator), result).done((validationResult, result) => {
                                 deferred.resolve(validationResult.status === VALIDATION_STATUS.valid && result);
                             });
                             return deferred.promise();
+                        } else if(!validator) {
+                            return result;
                         }
-                        // return result;
                     }
-                    return result;
                     // endTest
                 },
 

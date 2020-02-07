@@ -212,6 +212,7 @@ const EditingController = modules.ViewController.inherit((function() {
             that._rowsView = that.getView('rowsView');
             that._editForm = null;
             that._updateEditFormDeferred = null;
+            that._lastOperation = null;
 
             if(that._deferreds) {
                 that._deferreds.forEach(d => d.reject('cancel'));
@@ -1114,11 +1115,28 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
+        executeOperation: function(deferred, func) {
+            if(this._lastOperation) {
+                this._lastOperation.reject();
+            }
+
+            this._lastOperation = deferred;
+
+            when(...this._deferreds).always(() => {
+                this._lastOperation = null;
+            }).done(() => {
+                if(deferred.state() === 'rejected') {
+                    return;
+                }
+                func();
+            }).fail(deferred.reject);
+        },
+
         editCell: function(rowIndex, columnIndex) {
             const d = new Deferred();
             let coreResult;
 
-            when(...this._deferreds).done(() => {
+            this.executeOperation(d, () => {
                 coreResult = this._editCellCore(rowIndex, columnIndex);
                 when(coreResult)
                     .done(d.resolve)
@@ -1729,10 +1747,10 @@ const EditingController = modules.ViewController.inherit((function() {
             if(!isRowEditMode(that)) {
                 result = deferredUtils.Deferred();
                 setTimeout(() => {
-                    when(...this._deferreds).done(() => {
+                    this.executeOperation(result, () => {
                         this._closeEditCellCore(isError, oldEditRowIndex);
                         result.resolve();
-                    }).fail(result.reject);
+                    });
                 });
             }
             return result.promise();
@@ -1785,15 +1803,11 @@ const EditingController = modules.ViewController.inherit((function() {
             if(this._deferreds.indexOf(deferred) < 0) {
                 this._deferreds.push(deferred);
                 deferred.always(() => {
-                    this.removeDeferred(deferred);
+                    const index = this._deferreds.indexOf(deferred);
+                    if(index >= 0) {
+                        this._deferreds.splice(index, 1);
+                    }
                 });
-            }
-        },
-
-        removeDeferred: function(deferred) {
-            const index = this._deferreds.indexOf(deferred);
-            if(index >= 0) {
-                this._deferreds.splice(index, 1);
             }
         },
 
