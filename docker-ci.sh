@@ -201,11 +201,12 @@ function start_runner_watchdog {
     while true; do
         [ -f "$PWD/testing/Results.xml" ] && break;
 
-        sleep 300
+        sleep 10
 
         if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
             echo "Runner stalled"
             kill -TERM $$
+            break
         fi
 
         last_suite_time=$(cat $last_suite_time_file)
