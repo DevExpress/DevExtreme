@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import DropDownButton from 'ui/drop_down_button';
+import windowUtils from 'core/utils/window';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -18,6 +19,14 @@ QUnit.testStart(() => {
 
 const getButtonGroup = (instance) => {
     return instance._buttonGroup;
+};
+
+const getPopup = (instance) => {
+    return instance._popup;
+};
+
+const getList = (instance) => {
+    return instance._list;
 };
 
 const getActionButton = (instance) => {
@@ -425,7 +434,7 @@ QUnit.module('deferred datasource', {
     });
 });
 
-QUnit.module('events', {}, () => {
+QUnit.module('option change', {}, () => {
     QUnit.test('keyExpr option change', function(assert) {
         const items = [{
             name: 'A', id: 1
@@ -445,7 +454,7 @@ QUnit.module('events', {}, () => {
 
         dropDownButton.option('keyExpr', 'id');
         dropDownButton.option('selectedItemKey', 'A');
-        assert.strictEqual(dropDownButton.option('text'), '', 'text is empty because keyExpt has been changed');
+        assert.strictEqual(dropDownButton.option('text'), '', 'text is empty because keyExpr has been changed');
 
         dropDownButton.option('selectedItemKey', 1);
         assert.strictEqual(dropDownButton.option('text'), 'A', 'value is correct');
@@ -457,6 +466,23 @@ QUnit.module('events', {}, () => {
         dropDownButton.option('focusStateEnabled', false);
 
         assert.strictEqual(dropDownButton.$element().attr('tabindex'), undefined, 'element is not focusable');
+    });
+
+    QUnit.test('opened option change', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton');
+
+        dropDownButton.option('opened', true);
+
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'no window');
+            return;
+        }
+
+        const popup = getPopup(dropDownButton);
+        assert.strictEqual(popup.option('visible'), true, 'popup is opened');
+
+        dropDownButton.option('opened', false);
+        assert.strictEqual(popup.option('visible'), false, 'popup is closed');
     });
 
     QUnit.test('selectedItemKey option change should raise selectionChanged event', function(assert) {
