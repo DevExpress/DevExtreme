@@ -195,16 +195,11 @@ function run_test_scss {
 
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
-case "$TARGET" in
-    "lint") run_lint ;;
-    "ts") run_ts ;;
-    "test") run_test ;;
-    "test_themebuilder") run_test_themebuilder ;;
-    "test_functional") run_test_functional ;;
-    "test_scss") run_test_scss ;;
+TARGET_FUNC="run_$TARGET"
 
-    *)
-        echo "Unknown target"
-        exit 1
-    ;;
-esac
+if [ $(type -t $TARGET_FUNC) != "function" ]; then
+    echo "Unknown target"
+    exit 1
+fi
+
+$TARGET_FUNC
