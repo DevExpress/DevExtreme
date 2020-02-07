@@ -473,7 +473,9 @@ const Draggable = DOMComponentWithTemplate.inherit({
             }).appendTo(result);
         }
 
-        return result.toggleClass(this._addWidgetPrefix(CLONE_CLASS), result.get(0) !== $element.get(0));
+        return result
+            .toggleClass(this._addWidgetPrefix(CLONE_CLASS), result.get(0) !== $element.get(0))
+            .toggleClass('dx-rtl', this.option('rtlEnabled'));
     },
 
     _resetDragElement: function() {
