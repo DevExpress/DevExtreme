@@ -551,15 +551,10 @@ const DiagramCommandsManager = {
             if(command === SEPARATOR) {
                 beginGroup = true;
             } else {
-                if(command.text || command.icon) {
-                    result.push({
-                        command: command.command,
-                        text: command.text,
-                        icon: command.menuIcon || command.icon,
-                        items: command.items,
-                        getParameter: command.getParameter,
+                if(typeof command === 'object') {
+                    result.push(extend(command, {
                         beginGroup: beginGroup
-                    });
+                    }));
                 } else {
                     result.push(command);
                 }
