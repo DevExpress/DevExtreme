@@ -1,52 +1,45 @@
-import dxDataGrid, { dxDataGridColumn } from '../../ui/data_grid';
+import dxDataGrid, { dxDataGridColumn } from './ui/data_grid';
 
 export interface ExcelDataGridCell {
     /**
      * @docid ExcelDataGridCell.column
      * @type dxDataGridColumn
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     column?: dxDataGridColumn;
     /**
      * @docid ExcelDataGridCell.data
      * @type Object
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     data?: any;
     /**
      * @docid ExcelDataGridCell.groupIndex
      * @type number
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     groupIndex?: number;
     /**
      * @docid ExcelDataGridCell.groupSummaryItems
      * @type Array<Object>
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     groupSummaryItems?: Array<{ name?: string, value?: any }>;
     /**
      * @docid ExcelDataGridCell.rowType
      * @type string
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     rowType?: string;
     /**
      * @docid ExcelDataGridCell.totalSummaryItemName
      * @type string
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     totalSummaryItemName?: string;
     /**
      * @docid ExcelDataGridCell.value
      * @type any
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     value?: any;
@@ -56,14 +49,12 @@ export interface CellAddress {
     /**
      * @docid CellAddress.row
      * @type number
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     row?: number;
     /**
      * @docid CellAddress.column
      * @type number
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     column?: number;
@@ -73,14 +64,12 @@ export interface CellsRange {
     /**
      * @docid CellsRange.from
      * @type CellAddress
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     from?: CellAddress;
     /**
      * @docid CellsRange.to
      * @type CellAddress
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     to?: CellAddress;
@@ -148,7 +137,6 @@ export interface ExportDataGridProps {
      * @docid ExportDataGridProps.component
      * @type dxDataGrid
      * @default undefined
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     component?: dxDataGrid;
@@ -156,7 +144,6 @@ export interface ExportDataGridProps {
      * @docid ExportDataGridProps.worksheet
      * @type Object
      * @default undefined
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     worksheet?: object;
@@ -164,7 +151,6 @@ export interface ExportDataGridProps {
      * @docid ExportDataGridProps.topLeftCell
      * @type CellAddress
      * @default { row: 1, column: 1 }
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     topLeftCell?: CellAddress;
@@ -172,7 +158,6 @@ export interface ExportDataGridProps {
      * @docid ExportDataGridProps.selectedRowsOnly
      * @type boolean
      * @default false
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     selectedRowsOnly?: boolean;
@@ -180,7 +165,6 @@ export interface ExportDataGridProps {
      * @docid ExportDataGridProps.autoFilterEnabled
      * @type boolean
      * @default false
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     autoFilterEnabled?: boolean;
@@ -188,7 +172,6 @@ export interface ExportDataGridProps {
      * @docid ExportDataGridProps.keepColumnWidths
      * @type boolean
      * @default true
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     keepColumnWidths?: boolean;
@@ -198,14 +181,12 @@ export interface ExportDataGridProps {
      * @type_function_param1 options:Object
      * @type_function_param1_field1 gridCell:ExcelDataGridCell
      * @type_function_param1_field2 excelCell:Object
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: object}) => any);
     /**
      * @docid ExportDataGridProps.loadPanel
      * @type ExportLoadPanel
-     * @prevFileNamespace DevExpress.exporter
      * @public
      */
     loadPanel?: ExportLoadPanel;
@@ -217,10 +198,10 @@ export interface ExportDataGridProps {
  * @param1 options:ExportDataGridProps
  * @return Promise<CellsRange>
  * @namespace DevExpress.excelExporter
- * @module exceljs/excelExporter/exportDataGrid
+ * @module excel_exporter
  * @static
- * @prevFileNamespace DevExpress.exporter
+ * @prevFileNamespace DevExpress
  * @public
  */
-export function exportDataGrid(options: ExportDataGridProps): Promise<CellsRange>;
+export function exportDataGrid(options: ExportDataGridProps): Promise<CellsRange> & JQueryPromise<CellsRange>;
 

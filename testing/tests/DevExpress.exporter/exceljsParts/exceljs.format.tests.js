@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import ExcelJS from 'exceljs';
 import ExcelJSTestHelper from './ExcelJSTestHelper.js';
-import { exportDataGrid } from 'exporter/exceljs/excelExporter';
+import { exportDataGrid } from 'excel_exporter';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 

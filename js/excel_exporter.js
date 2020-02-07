@@ -1,4 +1,4 @@
-import { exportDataGrid } from './exportDataGrid';
+import { exportDataGrid } from './exporter/exceljs/export_data_grid';
 
 /**
 * @name excelExporter
@@ -6,22 +6,27 @@ import { exportDataGrid } from './exportDataGrid';
 */
 /**
 * @name CellAddress
+* @namespace DevExpress.excelExporter
 * @type object
 */
 /**
 * @name ExportDataGridProps
+* @namespace DevExpress.excelExporter
 * @type object
 */
 /**
 * @name CellsRange
+* @namespace DevExpress.excelExporter
 * @type object
 */
 /**
 * @name ExportLoadPanel
+* @namespace DevExpress.excelExporter
 * @type object
 */
 /**
 * @name ExcelDataGridCell
+* @namespace DevExpress.excelExporter
 * @type object
 */
 /**
