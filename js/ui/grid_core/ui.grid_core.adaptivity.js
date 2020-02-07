@@ -1027,6 +1027,7 @@ module.exports = {
                             rowType: ADAPTIVE_ROW_TYPE,
                             key: item.key,
                             data: item.data,
+                            node: item.node,
                             modifiedValues: item.modifiedValues,
                             isNewRow: item.isNewRow,
                             values: item.values

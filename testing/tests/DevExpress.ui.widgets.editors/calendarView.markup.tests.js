@@ -37,7 +37,7 @@ QUnit.module('Basics', () => {
 
 QUnit.module('MonthView markup', {
     beforeEach: function() {
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['month'](this.$element, {
             date: new Date(2013, 9, 16),
             firstDayOfWeek: 1,
@@ -46,7 +46,7 @@ QUnit.module('MonthView markup', {
     },
     reinit: function(options) {
         this.$element.remove();
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['month'](this.$element, options);
     },
     afterEach: function() {
@@ -75,8 +75,15 @@ QUnit.module('MonthView markup', {
         this.reinit({
             date: new Date(2013, 9, 16),
             firstDayOfWeek: 1,
-            rtl: true
+            rtlEnabled: true
         });
+
+        const captions = this.$element.find('table').find('th');
+        assert.deepEqual(getTextsArray(captions), ['Sun', 'Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon'], 'day captions order is correct');
+    });
+
+    QUnit.test('day captions must be rendered in proper order in RTL mode after changing runtime', function(assert) {
+        this.view.option('rtlEnabled', true);
 
         const captions = this.$element.find('table').find('th');
         assert.deepEqual(getTextsArray(captions), ['Sun', 'Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon'], 'day captions order is correct');
@@ -94,8 +101,18 @@ QUnit.module('MonthView markup', {
         this.reinit({
             date: new Date(2013, 9, 16),
             firstDayOfWeek: 1,
-            rtl: true
+            rtlEnabled: true
         });
+
+        const dateCells = this.$element.find('table').find('td');
+        assert.deepEqual(getTextsArray(dateCells),
+            ['6', '5', '4', '3', '2', '1', '30', '13', '12', '11', '10', '9', '8', '7',
+                '20', '19', '18', '17', '16', '15', '14', '27', '26', '25', '24', '23', '22', '21',
+                '3', '2', '1', '31', '30', '29', '28', '10', '9', '8', '7', '6', '5', '4']);
+    });
+
+    QUnit.test('dates must be rendered in proper positions in RTL mode after changing runtime', function(assert) {
+        this.view.option('rtlEnabled', true);
 
         const dateCells = this.$element.find('table').find('td');
         assert.deepEqual(getTextsArray(dateCells),
@@ -146,7 +163,7 @@ QUnit.module('MonthView markup', {
 
 QUnit.module('YearView markup', {
     beforeEach: function() {
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['year'](this.$element, {
             date: new Date(2013, 9, 16),
             firstDayOfWeek: 1,
@@ -155,7 +172,7 @@ QUnit.module('YearView markup', {
     },
     reinit: function(options) {
         this.$element.remove();
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['year'](this.$element, options);
     },
     afterEach: function() {
@@ -187,7 +204,7 @@ QUnit.module('YearView markup', {
     QUnit.test('month must be rendered in proper positions in RTL mode', function(assert) {
         this.reinit({
             date: new Date(2015, 2, 1),
-            rtl: true
+            rtlEnabled: true
         });
 
         const dateCells = this.$element.find('table').find('td');
@@ -221,7 +238,7 @@ QUnit.module('DecadeView', {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['decade'](this.$element, {
             date: new Date(2013, 9, 16),
             value: new Date(2013, 9, 16),
@@ -231,7 +248,7 @@ QUnit.module('DecadeView', {
     },
     reinit: function(options) {
         this.$element.remove();
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['decade'](this.$element, options);
     },
     afterEach: function() {
@@ -264,7 +281,7 @@ QUnit.module('DecadeView', {
     QUnit.test('years must be rendered in proper positions in RTL mode', function(assert) {
         this.reinit({
             date: new Date(2015, 2, 1),
-            rtl: true
+            rtlEnabled: true
         });
 
         const dateCells = this.$element.find('table').find('td');
@@ -291,7 +308,7 @@ QUnit.module('CenturyView', {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['century'](this.$element, {
             date: new Date(2013, 9, 16),
             value: new Date(2013, 9, 16),
@@ -301,7 +318,7 @@ QUnit.module('CenturyView', {
     },
     reinit: function(options) {
         this.$element.remove();
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['century'](this.$element, options);
     },
     afterEach: function() {
@@ -334,7 +351,7 @@ QUnit.module('CenturyView', {
     QUnit.test('decades must be rendered in proper positions in RTL mode', function(assert) {
         this.reinit({
             date: new Date(2015, 2, 1),
-            rtl: true
+            rtlEnabled: true
         });
 
         const dateCells = this.$element.find('table').find('td');
@@ -372,7 +389,7 @@ QUnit.module('MonthView min/max', {
         this.min = new Date(2010, 10, 5);
         this.max = new Date(2010, 10, 25);
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['month'](this.$element, {
             min: this.min,
             date: new Date(2010, 10, 10),
@@ -403,7 +420,7 @@ QUnit.module('MonthView disabledDates', {
             }
         };
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['month'](this.$element, {
             disabledDates: this.disabledDates,
             date: new Date(2010, 10, 10),
@@ -434,7 +451,7 @@ QUnit.module('MonthView disabledDates as array', {
             new Date(2010, 10, 4)
         ];
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['month'](this.$element, {
             disabledDates: this.disabledDates,
             date: new Date(2010, 10, 10),
@@ -461,7 +478,7 @@ QUnit.module('YearView min/max', {
         this.min = new Date(2015, 0, 18);
         this.max = new Date(2015, 6, 18);
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['year'](this.$element, {
             min: this.min,
             date: new Date(2015, 3, 15),
@@ -495,7 +512,7 @@ QUnit.module('YearView disabledDates', {
             }
         };
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['year'](this.$element, {
             disabledDates: this.disabledDates,
             date: new Date(2015, 3, 15)
@@ -526,7 +543,7 @@ QUnit.module('DecadeView min/max', {
         const max = new Date(2018, 6, 18);
         const currentDate = new Date(2015, 3, 15);
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['decade'](this.$element, {
             min,
             max,
@@ -562,7 +579,7 @@ QUnit.module('DecadeView disabledDates', {
             }
         };
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['decade'](this.$element, {
             disabledDates: this.disabledDates,
             value: currentDate,
@@ -593,7 +610,7 @@ QUnit.module('CenturyView min/max', {
         this.min = new Date(2005, 0, 18);
         this.max = new Date(2075, 6, 18);
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['century'](this.$element, {
             min: this.min,
             value: new Date(2015, 3, 15),
@@ -627,7 +644,7 @@ QUnit.module('CenturyView disabledDates', {
             }
         };
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.view = new Views['century'](this.$element, {
             disabledDates: this.disabledDates,
             value: new Date(2015, 3, 15)

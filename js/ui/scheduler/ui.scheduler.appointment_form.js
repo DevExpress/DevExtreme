@@ -30,13 +30,15 @@ const SchedulerAppointmentForm = {
     },
 
     _getAllDayStartDate: function(startDate) {
-        return startDate.setHours(0, 0, 0, 0);
+        return new Date(new Date(startDate).setHours(0, 0, 0, 0));
     },
 
     _getAllDayEndDate: function(startDate) {
-        const endDate = new Date(startDate);
-        endDate.setDate(startDate.getDate() + 1);
-        return endDate;
+        return new Date(new Date(startDate).setDate(startDate.getDate() + 1));
+    },
+
+    _getStartDateWithStartHour: function(startDate, startDayHour) {
+        return new Date(new Date(startDate).setHours(startDayHour));
     },
 
     _updateLabelLocation: function(formWidth) {
@@ -62,6 +64,19 @@ const SchedulerAppointmentForm = {
         });
 
         return this._appointmentForm;
+    },
+
+    _dateBoxValueChanged: function(args, dateExpr, isNeedCorrect) {
+        this._validateAppointmentFormDate(args.component, args.value, args.previousValue);
+
+        const value = dateSerialization.deserializeDate(args.value);
+        const previousValue = dateSerialization.deserializeDate(args.previousValue);
+        const dateEditor = this._appointmentForm.getEditor(dateExpr);
+        const dateValue = dateSerialization.deserializeDate(dateEditor.option('value'));
+        if(!this._appointmentForm._lockDateShiftFlag && dateValue && value && isNeedCorrect(dateValue, value)) {
+            const duration = previousValue ? dateValue.getTime() - previousValue.getTime() : 0;
+            dateEditor.option('value', new Date(value.getTime() + duration));
+        }
     },
 
     prepareAppointmentFormEditors: function(dataExprs, schedulerInst) {
@@ -91,17 +106,7 @@ const SchedulerAppointmentForm = {
                         firstDayOfWeek: schedulerInst.option('firstDayOfWeek')
                     },
                     onValueChanged: function(args) {
-                        that._validateAppointmentFormDate(args.component, args.value, args.previousValue);
-
-                        const value = dateSerialization.deserializeDate(args.value);
-                        const previousValue = dateSerialization.deserializeDate(args.previousValue);
-                        const endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr);
-                        const endValue = dateSerialization.deserializeDate(endDateEditor.option('value'));
-                        if(!that._appointmentForm._lockDateShiftFlag && typeUtils.isDefined(value) && typeUtils.isDefined(endValue)
-                            && !!endValue && endValue < value) {
-                            const duration = endValue.getTime() - previousValue.getTime();
-                            endDateEditor.option('value', new Date(value.getTime() + duration));
-                        }
+                        that._dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => { return endValue < startValue; });
                     }
                 }
             },
@@ -133,16 +138,7 @@ const SchedulerAppointmentForm = {
                         firstDayOfWeek: schedulerInst.option('firstDayOfWeek')
                     },
                     onValueChanged: function(args) {
-                        that._validateAppointmentFormDate(args.component, args.value, args.previousValue);
-
-                        const value = dateSerialization.deserializeDate(args.value);
-                        const previousValue = dateSerialization.deserializeDate(args.previousValue);
-                        const startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr);
-                        const startValue = dateSerialization.deserializeDate(startDateEditor.option('value'));
-                        if(!that._appointmentForm._lockDateShiftFlag && !!value && startValue > value) {
-                            const duration = previousValue ? previousValue.getTime() - startValue.getTime() : 0;
-                            startDateEditor.option('value', new Date(value.getTime() - duration));
-                        }
+                        that._dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => { return endValue < startValue; });
                     }
                 }
             },
@@ -171,26 +167,22 @@ const SchedulerAppointmentForm = {
                         const value = args.value;
                         const startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr);
                         const endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr);
+                        const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
 
-                        if(startDateEditor && endDateEditor) {
-                            startDateEditor.option('type', value ? 'date' : 'datetime');
-                            endDateEditor.option('type', value ? 'date' : 'datetime');
-
-                            if(!startDateEditor.option('value')) {
-                                return;
-                            }
-
-                            const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
-
+                        if(!that._appointmentForm._lockDateShiftFlag && startDate) {
                             if(value) {
-                                startDateEditor.option('value', that._getAllDayStartDate(startDate));
-                                endDateEditor.option('value', that._getAllDayEndDate(startDate));
+                                const allDayStartDate = that._getAllDayStartDate(startDate);
+                                startDateEditor.option('value', allDayStartDate);
+                                endDateEditor.option('value', that._getAllDayEndDate(allDayStartDate));
                             } else {
-                                startDate.setHours(schedulerInst.option('startDayHour'));
-                                startDateEditor.option('value', startDate);
-                                endDateEditor.option('value', schedulerInst._workSpace.calculateEndDate(dateSerialization.deserializeDate(startDateEditor.option('value'))));
+                                const startDateWithStartHour = that._getStartDateWithStartHour(startDate, schedulerInst.option('startDayHour'));
+                                const endDate = schedulerInst._workSpace.calculateEndDate(startDateWithStartHour);
+                                startDateEditor.option('value', startDateWithStartHour);
+                                endDateEditor.option('value', endDate);
                             }
                         }
+                        startDateEditor.option('type', value ? 'date' : 'datetime');
+                        endDateEditor.option('type', value ? 'date' : 'datetime');
                     }
                 }
             },

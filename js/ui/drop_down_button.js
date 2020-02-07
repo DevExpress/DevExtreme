@@ -13,7 +13,7 @@ import { DataSource } from '../data/data_source/data_source';
 import ArrayStore from '../data/array_store';
 import { Deferred } from '../core/utils/deferred';
 import { extend } from '../core/utils/extend';
-import { isPlainObject } from '../core/utils/type';
+import { isPlainObject, isDefined } from '../core/utils/type';
 import { ensureDefined } from '../core/utils/common';
 import Guid from '../core/guid';
 import { format as formatMessage } from '../localization/message';
@@ -466,7 +466,7 @@ const DropDownButton = Widget.inherit({
     },
 
     _selectedItemKeyChanged(value) {
-        this._setListOption('selectedItemKeys', this.option('useSelectMode') && value ? [value] : []);
+        this._setListOption('selectedItemKeys', this.option('useSelectMode') && isDefined(value) ? [value] : []);
         const previousItem = this.option('selectedItem');
         this._loadSelectedItem().done((selectedItem) => {
             this._updateActionButton(selectedItem);

@@ -321,7 +321,7 @@ QUnit.module('actions', moduleConfig, () => {
         pointerMock($content)
             .start()
             .down()
-            .move(0, $container.height() - $content.height() - $bottomPocket.height() - 1)
+            .move(0, $container.height() - $content.height() + $bottomPocket.height() + 0.49)
             .up();
     });
 
@@ -1727,7 +1727,7 @@ QUnit.module('native pullDown strategy', {
         const $content = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
         const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
 
-        $container.scrollTop($content.height() - $container.height() + $bottomPocket.height() + 1);
+        $container.scrollTop($content.height() - $container.height() - $bottomPocket.height() + 0.51);
         $($container).trigger('scroll');
     });
 

@@ -45,6 +45,12 @@ function run_test {
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
+    [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
+
+    if [ -n "$TZ" ]; then
+        ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
+        dpkg-reconfigure --frontend noninteractive tzdata
+    fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
@@ -56,8 +62,21 @@ function run_test {
 
     dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
-    while ! httping -qc1 $url; do
+    for i in {15..0}; do
+        if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
+            echo "Runner exited unexpectedly"
+            exit 1
+        fi
+
+        httping -qsc1 "$url" && break
+
+        if [ $i -eq 0 ]; then
+            echo "Runner not reached"
+            exit 1
+        fi
+
         sleep 1
+        echo "Waiting for runner..."
     done
 
     echo "URL: $url"
@@ -95,6 +114,17 @@ function run_test {
                     --no-first-run
                     --no-default-browser-check
                     --disable-translate
+                )
+            fi
+
+            if [ "$PERF" == "true" ]; then
+                echo "Performance tests"
+                chrome_args+=(
+                    --disable-popup-blocking
+                    --remote-debugging-port=9223
+                    --enable-impl-side-painting
+                    --enable-skia-benchmarking
+                    --disable-web-security
                 )
             fi
 

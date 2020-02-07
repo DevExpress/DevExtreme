@@ -689,6 +689,18 @@ QUnit.module('common use cases', {
         assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Trial for Visual Studio', 'action button has been changed');
     });
 
+    QUnit.test('Widget should work correct if new selected item has key is 0', function(assert) {
+        this.dropDownButton.option({
+            items: [{ id: 0, name: 'Test 0' }, { id: 1, name: 'Test 1' }],
+            selectedItemKey: 1,
+            useSelectMode: true,
+            opened: true
+        });
+
+        eventsEngine.trigger(this.list.itemElements().eq(0), 'dxclick');
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Test 0', 'action button text is correct');
+    });
+
     QUnit.test('custom item should be redefined after selection if useSelectMode is changed to true at runtime', function(assert) {
         this.dropDownButton.option({
             useSelectMode: false,

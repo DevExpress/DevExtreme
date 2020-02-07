@@ -231,43 +231,39 @@ QUnit.module('Keyboard controller', {
     QUnit.testInActiveWindow('Element of view is subscribed to events', function(assert) {
         // arrange
         const navigationController = new KeyboardNavigationController(this.component);
-        let element;
 
         // act
         navigationController.init();
         navigationController._focusView();
-        element = navigationController.getFocusedView().element();
+
+        const element = navigationController.getFocusedView().element();
 
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation')].subscribeToEventCounter, 1, 'Subscribed');
         assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation')].subscribeToEventCounter, 1, 'Subscribed');
     });
 
     QUnit.testInActiveWindow('Element of view is unsubscribed from events', function(assert) {
         // arrange
         const navigationController = new KeyboardNavigationController(this.component);
-        let element;
 
         // act
         navigationController.init();
         navigationController._focusView();
-        element = navigationController.getFocusedView().element();
+
+        const element = navigationController.getFocusedView().element();
 
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation')].unsubscribeFromEventCounter, 1, 'Unsubscribed');
         assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation')].unsubscribeFromEventCounter, 1, 'Unsubscribed');
     });
 
     // T579521
     QUnit.testInActiveWindow('Master detail cell is not focused when clicked on self', function(assert) {
         // arrange
-        let navigationController;
         let isFocused = false;
-        let $masterDetailCell;
         const $rowsElement = $('<div />').append($('<tr class=\'dx-row\'><td class=\'dx-master-detail-cell\'><td/></tr>')).appendTo('#container');
 
         this.getView('rowsView').element = function() {
@@ -275,12 +271,12 @@ QUnit.module('Keyboard controller', {
         };
 
         // act
-        navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new KeyboardNavigationController(this.component);
         navigationController.init();
 
         callViewsRenderCompleted(this.component._views);
 
-        $masterDetailCell = $rowsElement.find('td')[0];
+        const $masterDetailCell = $rowsElement.find('td')[0];
 
         $masterDetailCell.focus = function() {
             isFocused = true;
@@ -295,18 +291,16 @@ QUnit.module('Keyboard controller', {
     // T281701
     QUnit.testInActiveWindow('Cell is not focused when clicked it in another grid', function(assert) {
         // arrange
-        let navigationController;
         let isFocused = false;
-        let $cell;
         const $rowsElement = $('<div />').addClass('.dx-datagrid').append($('<table><tr class=\'dx-row\'><td/></tr></table>')).appendTo('#container');
 
         // act
-        navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new KeyboardNavigationController(this.component);
         navigationController.init();
 
         callViewsRenderCompleted(this.component._views);
 
-        $cell = $rowsElement.find('td')[0];
+        const $cell = $rowsElement.find('td')[0];
 
         $cell.focus = function() {
             isFocused = true;
@@ -361,8 +355,6 @@ QUnit.module('Keyboard controller', {
 
     QUnit.testInActiveWindow('Interactive element is focused when edit mode is enabled (T403964)', function(assert) {
         // arrange
-        let navigationController;
-        let view;
         const $rowsElement = $('<div />').appendTo('#container').append($(`
                 <tr class='dx-row'>"
                     <td class='cell-0'><input></td>
@@ -372,7 +364,7 @@ QUnit.module('Keyboard controller', {
                     <td><select /></td>
                 </tr>`));
 
-        view = this.getView('rowsView');
+        const view = this.getView('rowsView');
         view.element = function() {
             return $rowsElement;
         };
@@ -380,7 +372,7 @@ QUnit.module('Keyboard controller', {
         // act
         $('.dx-row .cell-0').focus();
         this.component._controllers.editing._isEditing = true;
-        navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new KeyboardNavigationController(this.component);
         navigationController.init();
 
         navigationController._focusedView = view;
@@ -414,7 +406,6 @@ QUnit.module('Keyboard controller', {
 
     QUnit.testInActiveWindow('View is not focused when row is inline edited', function(assert) {
         // arrange
-        let navigationController;
         let isFocused = false;
         const $rowsElement = $('<div />');
 
@@ -426,7 +417,7 @@ QUnit.module('Keyboard controller', {
         };
 
         // act
-        navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new KeyboardNavigationController(this.component);
         navigationController._hasInput = function() {
             return true;
         };
@@ -473,7 +464,6 @@ QUnit.module('Keyboard controller', {
 
     QUnit.testInActiveWindow('Focus by click is not applied when editing is enabled (T311207)', function(assert) {
         // arrange
-        let navigationController;
         let isViewFocused = false;
         const $rowsViewElement = $('<div />').append($('<table><tbody><tr class=\'dx-row\'><td><input class=\'dx-texteditor-input\'></td><td><input class=\'dx-texteditor-input\'></td></tr></tbody></table>')).appendTo('#container');
         const rowsView = this.getView('rowsView');
@@ -483,7 +473,7 @@ QUnit.module('Keyboard controller', {
         };
 
         // act
-        navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new KeyboardNavigationController(this.component);
         navigationController.init();
         navigationController._focusedView = rowsView;
 
@@ -693,9 +683,7 @@ QUnit.module('Keyboard controller', {
 
     QUnit.testInActiveWindow('Cell is not focused when view is renderCompleted without keydown event', function(assert) {
         // arrange
-        let navigationController;
         let isFocused = false;
-        let $cell;
         const rowsView = this.getView('rowsView');
         const $rowsElement = $('<div />').append($('<table><tr class=\'dx-row\'><td></td></tr></table>'));
 
@@ -704,14 +692,14 @@ QUnit.module('Keyboard controller', {
         };
 
         // act
-        navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new KeyboardNavigationController(this.component);
         navigationController.init();
         navigationController._focusedView = rowsView;
         navigationController._focus = function() {
             isFocused = true;
         };
 
-        $cell = $rowsElement.find('td').eq(0);
+        const $cell = $rowsElement.find('td').eq(0);
 
         $($cell).trigger(CLICK_EVENT);
 
@@ -725,7 +713,6 @@ QUnit.module('Keyboard controller', {
 
     QUnit.test('Element is not focused when it is html tag is not cell', function(assert) {
         // arrange
-        let navigationController;
         let _$focusElement;
         const rowsView = this.getView('rowsView');
         const $rowsElement = $('<div />').append($('<table><tr class=\'dx-row\'><td></td></tr></table>'));
@@ -738,7 +725,7 @@ QUnit.module('Keyboard controller', {
         };
 
         // act
-        navigationController = new KeyboardNavigationController(this.component);
+        const navigationController = new KeyboardNavigationController(this.component);
         navigationController.init();
         navigationController._focusedView = rowsView;
         navigationController._focus($('<div>'));

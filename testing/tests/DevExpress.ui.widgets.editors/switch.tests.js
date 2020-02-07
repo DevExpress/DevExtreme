@@ -271,18 +271,22 @@ QUnit.module('interaction', {
     });
 
     QUnit.test('swipe gesture is to fire onValueChanged', function(assert) {
-        let counter = 0;
+        const valueChangeStub = sinon.stub();
         const $element = $('#switch').dxSwitch({
             value: true,
-            'onValueChanged': function() { counter++; }
+            onValueChanged: valueChangeStub
         });
         const mouse = pointerMock($element);
 
         mouse.start().swipeStart().swipeEnd(-1);
-        assert.equal(counter, 1);
+        assert.ok(valueChangeStub.calledOnce);
 
         mouse.start().swipeStart().swipeEnd(1);
-        assert.equal(counter, 2);
+        assert.ok(valueChangeStub.calledTwice);
+
+        const { event } = valueChangeStub.lastCall.args[0];
+        assert.ok(event);
+        assert.strictEqual(event.type, 'dxswipeend');
     });
 
     QUnit.test('swipe doesn\'t turn off feedback during gesture', function(assert) {
