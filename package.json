@@ -111,7 +111,7 @@
     "string-replace-loader": "^2.1.1",
     "stylelint": "9.9.0",
     "stylelint-config-standard": "^18.3.0",
-    "systemjs": "6.2.2",
+    "systemjs": "<=0.19.41",
     "systemjs-plugin-babel": "0.0.25",
     "systemjs-plugin-css": "0.1.33",
     "systemjs-plugin-json": "0.2.2",
