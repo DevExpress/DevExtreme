@@ -88,6 +88,42 @@ QUnit.module('Items layout and labels alignment', () => {
         test_1ColumnLayout_NotAligned(wrapper);
     });
 
+
+    testOrSkip('1 column -> [group.colCount3 [ a.colSpan: 2, abc.colSpan:1, text.colSpan:2, longText.colSpan:1 ]]', function() {
+        const wrapper = new FormTestWrapper(1, { alignItemLabels: true }, [
+            { itemType: 'group', colCount: 3, items: [
+                { colSpan: 2, dataField: 'a' }, { colSpan: 1, dataField: 'abc' },
+                { colSpan: 2, dataField: 'text' }, { colSpan: 1, dataField: 'longText' } ] } ]);
+        wrapper.checkFormSize({ width: 1000, height: 82 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 40, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 42, width: 609, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), { top: 8, left: 680, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 754, width: 242, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 54, left: 0, width: 40, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 47, left: 42, width: 609, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 680, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 754, width: 242, height: 34 });
+    });
+
+    testOrSkip('1 column -> [group.colCount3 [ a.colSpan: 2, abc.colSpan:1, text.colSpan:2, longText.colSpan:1, ab.colSpan:3 ]]', function() {
+        const wrapper = new FormTestWrapper(1, { alignItemLabels: true }, [
+            { itemType: 'group', colCount: 3, colSpan: 3, items: [
+                { colSpan: 2, dataField: 'a' }, { colSpan: 1, dataField: 'abc' },
+                { colSpan: 2, dataField: 'text' }, { colSpan: 1, dataField: 'longText' },
+                { colSpan: 3, dataField: 'ab' }] } ]);
+        wrapper.checkFormSize({ width: 1000, height: 128 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 40, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 42, width: 609, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), { top: 8, left: 680, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 754, width: 242, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 54, left: 0, width: 40, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 47, left: 42, width: 609, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 680, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 754, width: 242, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="ab"]'), { top: 100, left: 0, width: 40, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="ab"]'), { top: 93, left: 42, width: 958, height: 34 });
+    });
+
     function test_2ColumnsLayout_NotAligned(wrapper) {
         wrapper.checkFormSize({ width: 1000, height: 36 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 0, width: 40, height: 19 });
@@ -225,7 +261,7 @@ QUnit.module('Items layout and labels alignment', () => {
             { dataField: 'longText' } ]);
         wrapper.checkFormSize({ width: 1000, height: 82 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 74, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 73, width: 246, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 73, width: 242, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), { top: 8, left: 350, width: 39, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 388, width: 262, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 683, width: 40, height: 19 });
@@ -268,38 +304,54 @@ QUnit.module('Items layout and labels alignment', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 139, left: 73, width: 924, height: 34 });
     });
 
-    testOrSkip('1 column -> [group.colCount3 [ a.colSpan: 2, abc.colSpan:1, text.colSpan:2, longText.colSpan:1 ]]', function() {
-        const wrapper = new FormTestWrapper(1, { alignItemLabels: true }, [
-            { itemType: 'group', colCount: 3, items: [
-                { colSpan: 2, dataField: 'a' }, { colSpan: 1, dataField: 'abc' },
-                { colSpan: 2, dataField: 'text' }, { colSpan: 1, dataField: 'longText' } ] } ]);
-        wrapper.checkFormSize({ width: 1000, height: 82 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 40, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 42, width: 609, height: 34 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), { top: 8, left: 680, width: 74, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 754, width: 242, height: 34 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 54, left: 0, width: 40, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 47, left: 42, width: 609, height: 34 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 680, width: 74, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 754, width: 242, height: 34 });
+    testOrSkip('4 column -> [a, abc, text, longText] ', function(assert) {
+        const wrapper = new FormTestWrapper(4, { alignItemLabels: true }, [
+            { dataField: 'a' },
+            { dataField: 'abc' },
+            { dataField: 'text' },
+            { dataField: 'longText' } ]);
+        wrapper.checkFormSize({ width: 1000, height: 36 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 24, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 25, width: 209, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), { top: 8, left: 267, width: 39, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 303, width: 181, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 515, width: 38, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 1, left: 556, width: 178, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 8, left: 766, width: 72, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 1, left: 840, width: 161, height: 34 });
     });
 
-    testOrSkip('1 column -> [group.colCount3 [ a.colSpan: 2, abc.colSpan:1, text.colSpan:2, longText.colSpan:1, ab.colSpan:3 ]]', function() {
-        const wrapper = new FormTestWrapper(1, { alignItemLabels: true }, [
-            { itemType: 'group', colCount: 3, colSpan: 3, items: [
-                { colSpan: 2, dataField: 'a' }, { colSpan: 1, dataField: 'abc' },
-                { colSpan: 2, dataField: 'text' }, { colSpan: 1, dataField: 'longText' },
-                { colSpan: 3, dataField: 'ab' }] } ]);
+    testOrSkip('4 column -> [a.colSpan:2, abc.colSpan:1, text.colSpan:1, longText.colSpan:4] ', function(assert) {
+        const wrapper = new FormTestWrapper(4, { alignItemLabels: true }, [
+            { colSpan: 2, dataField: 'a' },
+            { colSpan: 1, dataField: 'abc' },
+            { colSpan: 1, dataField: 'text' },
+            { colSpan: 4, dataField: 'longText' } ]);
+        wrapper.checkFormSize({ width: 1000, height: 82 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 75, width: 409, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), { top: 8, left: 513, width: 39, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 555, width: 181, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 765, width: 38, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 1, left: 804, width: 195, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 0, width: 72, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 73, width: 926, height: 34 });
+    });
+
+    testOrSkip('4 column -> [a.colSpan:2, abc.colSpan:2, text.colSpan:4, longText.colSpan:4] ', function(assert) {
+        const wrapper = new FormTestWrapper(4, { alignItemLabels: true }, [
+            { colSpan: 2, dataField: 'a' },
+            { colSpan: 2, dataField: 'abc' },
+            { colSpan: 4, dataField: 'text' },
+            { colSpan: 4, dataField: 'longText' } ]);
         wrapper.checkFormSize({ width: 1000, height: 128 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 40, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 42, width: 609, height: 34 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), { top: 8, left: 680, width: 74, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 754, width: 242, height: 34 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 54, left: 0, width: 40, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 47, left: 42, width: 609, height: 34 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 680, width: 74, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 754, width: 242, height: 34 });
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="ab"]'), { top: 100, left: 0, width: 40, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="ab"]'), { top: 93, left: 42, width: 958, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 75, width: 409, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), { top: 8, left: 513, width: 39, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 555, width: 446, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 54, left: 0, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 47, left: 75, width: 926, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 100, left: 0, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 93, left: 75, width: 926, height: 34 });
     });
 });
