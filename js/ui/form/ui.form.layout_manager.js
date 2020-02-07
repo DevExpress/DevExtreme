@@ -1205,7 +1205,8 @@ const LayoutManager = Widget.inherit({
             }
         });
         editorInstance.on('valueChanged', args => {
-            if(!this._disableEditorValueChangedHandler && !(isObject(args.value) && args.value === args.previousValue)) {
+            if(!this._disableEditorValueChangedHandler && !(isObject(args.value) && args.value === args.previousValue) &&
+                !(Array.isArray(args.value) && args.value === args.previousValue)) {
                 this._updateFieldValue(dataField, args.value);
             }
         });

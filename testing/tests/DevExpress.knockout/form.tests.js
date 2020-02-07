@@ -5,6 +5,7 @@ import fx from 'animation/fx';
 
 import 'ui/text_area';
 import 'ui/select_box';
+import 'ui/tag_box';
 import 'integration/knockout';
 
 QUnit.testStart(() => {
@@ -45,7 +46,6 @@ const moduleSetup = {
         this.clock.restore();
     }
 };
-
 
 QUnit.module('Knockout integration', moduleSetup);
 
@@ -97,6 +97,32 @@ QUnit.test('Change formData -> observable value changed', function(assert) {
     assert.equal(viewModel.formData.famousPirate(), 'Cpt. Jack Sparrow', 'Values is synchronized');
 });
 
+QUnit.test('Change formData -> observable array changed', function(assert) {
+    const itemsData = ko.observableArray([]);
+    const viewModel = {
+        formData: {
+            items: itemsData
+        },
+        items: [{
+            dataField: 'items',
+            editorType: 'dxTagBox',
+            editorOptions: {
+                dataSource: ['item1', 'items2']
+            }
+        }]
+    };
+
+    const $form = $('#formWithItems');
+    ko.applyBindings(viewModel, $form.get(0));
+
+    const form = $form.dxForm('instance');
+    const tagBox = form.getEditor('items');
+
+    tagBox.option('value', ['item2']);
+
+    assert.deepEqual(itemsData(), ['item2'], 'value of the observable array');
+});
+
 QUnit.test('Change observable -> formData changed', function(assert) {
     const viewModel = {
         formData:
@@ -121,6 +147,32 @@ QUnit.test('Change observable -> formData changed', function(assert) {
 
     assert.equal(textBox.option('value'), 'Cpt. Jack Sparrow', 'Values is synchronized');
     assert.equal(viewModel.formData.famousPirate(), 'Cpt. Jack Sparrow', 'famousPirate is changed');
+});
+
+QUnit.test('Change observable array -> formData changed', function(assert) {
+    const itemsData = ko.observableArray([]);
+    const viewModel = {
+        formData: {
+            items: itemsData
+        },
+        items: [{
+            dataField: 'items',
+            editorType: 'dxTagBox',
+            editorOptions: {
+                dataSource: ['item1', 'items2']
+            }
+        }]
+    };
+
+    const $form = $('#formWithItems');
+    ko.applyBindings(viewModel, $form.get(0));
+
+    itemsData(['item2']);
+
+    const form = $form.dxForm('instance');
+    const tagBox = form.getEditor('items');
+
+    assert.deepEqual(tagBox.option('value'), ['item2'], 'value of the TagBox');
 });
 
 QUnit.test('Must unwrap visible option when render', function(assert) {
@@ -149,7 +201,6 @@ QUnit.test('Must unwrap visible option when render', function(assert) {
     viewModel.formOptions.items[1].visible(true);
     assert.equal($form.find(visibleEditorSelector).length, 2, 'Both editors are visible');
 });
-
 
 QUnit.test('Change formData field and other observable', function(assert) {
     const viewModel = {
@@ -421,7 +472,6 @@ QUnit.test('Form is not crashed when numberbox is used (T369550)', function(asse
 
     assert.ok(true, 'error is not threw');
 });
-
 
 QUnit.test('Form items should have correct model', function(assert) {
     assert.expect(1);
