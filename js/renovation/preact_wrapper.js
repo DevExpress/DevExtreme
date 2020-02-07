@@ -23,15 +23,18 @@ export default class PreactWrapper extends Widget {
 
     getProps(isFirstRender) {
         const options = extend({}, this.option());
+        const attributes = this.$element()[0].attributes;
 
         if(isFirstRender) {
-            const attributes = this.$element()[0].attributes;
             options.elementAttr = extend(Object.keys(attributes).reduce((a, key) => {
                 if(attributes[key].specified) {
                     a[attributes[key].name] = attributes[key].value;
                 }
                 return a;
             }, {}), options.elementAttr);
+        } else {
+            // NOTE: workaround to save container id
+            options.elementAttr = extend({ [attributes.id.name]: attributes.id.value }, options.elementAttr);
         }
 
         return options;
@@ -39,7 +42,7 @@ export default class PreactWrapper extends Widget {
 
     _renderContent() {
         const isFirstRender = this.$element().children().length === 0;
-        const container = isFirstRender ? this.$element().get(0) : undefined;
+        const container = isFirstRender ? this.$element().get(0) : this.$element().get(0);
 
         Preact.render(this.renderView(this.getProps(isFirstRender)), this.$element().get(0), container);
     }

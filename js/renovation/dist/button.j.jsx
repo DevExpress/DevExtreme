@@ -1,8 +1,13 @@
 import registerComponent from '../../core/component_registrator';
 import Widget from '../preact_wrapper';
 import { extend } from '../../core/utils/extend';
+import { equalByValue } from '../../core/utils/common';
 import ButtonView from '../button.p';
 import * as Preact from 'preact';
+
+// NOTE: workaround to memoize template
+let prevData;
+let prevTemplate;
 
 class Button extends Widget {
     getView() {
@@ -13,15 +18,24 @@ class Button extends Widget {
         const props = super.getProps(isFirstRender);
         if(props.template) {
             props.contentRender = (data) => {
-                const template = this._getTemplate(props.template);
+                const templateProp = this.option('template');
+
+                if(equalByValue(data, prevData) && prevTemplate === templateProp) return;
+
+                const template = this._getTemplate(templateProp);
 
                 return (<div style={{ display: 'none' }} ref={(element) => {
+                    prevTemplate = templateProp;
+                    prevData = data;
                     if(element?.parentElement) {
                         const parent = element.parentElement;
                         while(parent.firstChild) {
                             parent.removeChild(parent.firstChild);
                         }
-                        template.render({ model: data, container: parent });
+                        template.render({
+                            model: data,
+                            container: parent
+                        });
                     }
                 }}/>);
             };
