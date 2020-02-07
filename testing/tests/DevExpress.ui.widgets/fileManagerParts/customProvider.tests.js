@@ -32,11 +32,13 @@ QUnit.module('Custom file provider', moduleConfig, () => {
     test('get directory file items', function(assert) {
         const done = assert.async();
 
-        this.provider.getItems(filesPathInfo)
+        const filesDir = new FileSystemItem('Root/Files', true);
+
+        this.provider.getItems(filesDir)
             .done(items => {
                 assert.deepEqual(items, fileSystemItems, 'items acquired');
                 assert.strictEqual(this.options.getItems.callCount, 1, 'getItems called once');
-                assert.deepEqual(this.options.getItems.args[0][0], filesPathInfo, 'getItems arguments are valid');
+                assert.deepEqual(this.options.getItems.args[0][0], filesDir, 'getItems arguments are valid');
                 done();
             });
     });

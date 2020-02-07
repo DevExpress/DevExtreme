@@ -240,7 +240,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         let dir = inst.getCurrentDirectory();
         assert.strictEqual(dir.relativeName, '', 'directory has empty relative name');
         assert.ok(dir.isDirectory, 'directory has directory flag');
-        assert.ok(dir.isRoot, 'directory has root flag');
+        assert.ok(dir.isRoot(), 'directory has root flag');
 
         inst.option('currentPath', 'Folder 1/Folder 1.1');
         this.clock.tick(800);
@@ -248,7 +248,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         dir = inst.getCurrentDirectory();
         assert.strictEqual(dir.relativeName, 'Folder 1/Folder 1.1', 'directory has correct relative name');
         assert.ok(dir.isDirectory, 'directory has directory flag');
-        assert.notOk(dir.isRoot, 'directory has not root flag');
+        assert.notOk(dir.isRoot(), 'directory has not root flag');
     });
 
     test('change current directory by public API', function(assert) {

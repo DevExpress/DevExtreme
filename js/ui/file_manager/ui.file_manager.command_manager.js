@@ -131,7 +131,7 @@ export class FileManagerCommandManager {
         }
 
         const itemsLength = itemInfos && itemInfos.length || 0;
-        if(itemsLength === 0 || itemInfos.some(item => item.fileItem.isRoot || item.fileItem.isParentFolder)) {
+        if(itemsLength === 0 || itemInfos.some(item => item.fileItem.isRoot() || item.fileItem.isParentFolder)) {
             return false;
         }
 
