@@ -6,13 +6,20 @@ import 'ui/scheduler/ui.scheduler';
 import 'common.css!';
 import 'generic_light.css!';
 
-const pacificTimezoneOffset = 480; // TODO: Value in ms. Offset (UTC-08:00) Pacific Time (US & Canada)
-const dateWhichTimezoneShifted = new Date(2020, 2, 8);
-// TODO Daylight saving time will happen on this day in 2 A.M.(UTC -8 Pacific time)
-
 // This tests run only in (UTC-08:00) Pacific Time (US & Canada)
 // For run test locally, change timezone on desktop on (UTC-08:00) Pacific Time (US & Canada)
-if((new Date()).getTimezoneOffset() === pacificTimezoneOffset) {
+
+// TODO: Value in ms. Offset (UTC-08:00) Pacific Time (US & Canada)
+const pacificTimezoneOffset = 480;
+const pacificTimezoneOffsetAfterDST = 420;
+
+const dateWhichTimezoneShifted = new Date(2020, 2, 8); // TODO Daylight saving time will happen on this day in 2 A.M.(UTC -8 Pacific time)
+
+const currentDate = new Date();
+const dateSummer = new Date(currentDate.getFullYear(), 6, 1);
+const dateWinter = new Date(currentDate.getFullYear(), 0, 1);
+
+if(dateWinter.getTimezoneOffset() === pacificTimezoneOffset && dateSummer.getTimezoneOffset() === pacificTimezoneOffsetAfterDST) {
     QUnit.testStart(() => initTestMarkup());
     const moduleConfig = {
         beforeEach() {
@@ -26,10 +33,6 @@ if((new Date()).getTimezoneOffset() === pacificTimezoneOffset) {
 
     QUnit.module('Time panel should have correct value in case DST(T852308)', moduleConfig, () => {
         const views = ['week', 'day'];
-
-        QUnit.test('temp', function(assert) {
-            assert.ok(false);
-        });
 
         QUnit.module('timeCellTemplate', () => {
             const expectedDateResults = (() => {
