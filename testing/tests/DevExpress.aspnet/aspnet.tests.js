@@ -525,10 +525,9 @@
 
     QUnit.test('Warn https://github.com/dotnet/aspnetcore/issues/17028', function(assert) {
         aspnet.setTemplateEngine();
+        const spy = sinon.spy(console.logger, 'warn');
         try {
             aspnet.warnBug17028();
-
-            const spy = sinon.spy(console.logger, 'warn');
 
             $('#qunit-fixture').html(`
                 <div id=widget1></div>
@@ -542,6 +541,7 @@
             assert.ok(spy.args[0][0].indexOf('alternate template syntax') > -1);
         } finally {
             setTemplateEngine('default');
+            spy.restore();
         }
     });
 
