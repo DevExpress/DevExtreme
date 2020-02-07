@@ -112,15 +112,44 @@ QUnit.module('Form scenarios', () => {
                     wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 1, left: 41, width: 443, height: 34 });
                 });
 
-                testOrSkip('2 column-> form.colSpan:2 [text.colSpan: 2]', function() {
-                    const wrapper = new FormTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups }, [{ dataField: 'text', colSpan: 2 }]);
-                    test_1Column_1Item_Layout(wrapper);
-                });
-
                 testOrSkip('2 column-> form.colSpan:2 [text.colSpan: 1, longText.colSpan: 1]', function() {
                     const wrapper = new FormTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups }, [
                         { dataField: 'text', colSpan: 1 }, { dataField: 'longText', colSpan: 1 }]);
                     test_2ColumnsLayout_NotAlignedLabels(wrapper);
+                });
+
+                testOrSkip('2 column-> form.colSpan:2 [text.colSpan: 1, longText.colSpan: 2]', function(assert) {
+                    const wrapper = new FormTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups }, [
+                        { dataField: 'text', colSpan: 1 }, { dataField: 'longText', colSpan: 2 }]);
+                    test_2ColumnsLayout_NotAlignedLabels(wrapper);
+                });
+
+                testOrSkip('2 column-> form.colSpan:2 [text.colSpan: 1, group.colSpan: 2[longText]]', function(assert) {
+                    const wrapper = new FormTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups }, [
+                        { dataField: 'text', colSpan: 1 }, { itemType: 'group', colSpan: 1, items: ['longText'] }]);
+                    test_2ColumnsLayout_NotAlignedLabels(wrapper);
+                });
+
+                testOrSkip('2 column -> form.colSpan:2 [text.colSpan: 2]', function() {
+                    const wrapper = new FormTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups },
+                        [{ dataField: 'text', colSpan: 2 }]);
+                    test_1Column_1Item_Layout(wrapper);
+                });
+
+                testOrSkip('2 column -> form.colSpan:2 [text.colSpan: 2, longText.colSpan: 1]', function() {
+                    const wrapper = new FormTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups },
+                        [{ dataField: 'text', colSpan: 2 }, { dataField: 'longText', colSpan: 1 }]);
+                    wrapper.checkFormSize({ width: 1000, height: 82 });
+                    wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 0, width: 74, height: 19 });
+                    wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 1, left: 75, width: 923, height: 34 });
+                    wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 0, width: 74, height: 19 });
+                    wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 75, width: 409, height: 34 });
+                });
+
+                testOrSkip('2 column -> form.colSpan:2 [text.colSpan: 2, longText.colSpan: 2]', function() {
+                    const wrapper = new FormTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups },
+                        [{ dataField: 'text', colSpan: 2 }, { dataField: 'longText', colSpan: 2 }]);
+                    test_1ColumnLayout_2Items_AlignedLabels(wrapper);
                 });
             });
         });
