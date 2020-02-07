@@ -7,7 +7,8 @@ import 'common.css!';
 import 'generic_light.css!';
 
 const pacificTimezoneOffset = 480; // TODO: Value in ms. Offset (UTC-08:00) Pacific Time (US & Canada)
-const dateWhichTimezoneShifted = new Date(2020, 2, 8); // TODO Daylight saving time will happen on this day in 2 A.M.(UTC -8 Pacific time)
+const dateWhichTimezoneShifted = new Date(2020, 2, 8);
+// TODO Daylight saving time will happen on this day in 2 A.M.(UTC -8 Pacific time)
 
 // This tests run only in (UTC-08:00) Pacific Time (US & Canada)
 // For run test locally, change timezone on desktop on (UTC-08:00) Pacific Time (US & Canada)
