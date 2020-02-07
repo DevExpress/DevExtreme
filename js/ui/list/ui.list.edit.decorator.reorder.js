@@ -47,8 +47,7 @@ registerDecorator(
                 .clone()
                 .width($(e.itemElement).width())
                 .addClass(REORDERING_ITEM_GHOST_CLASS)
-                .addClass(STATE_HOVER_CLASS)
-                .toggleClass('dx-rtl', this.option('rtlEnabled'));
+                .addClass(STATE_HOVER_CLASS);
         },
 
         _dragStartHandler: function(e) {
