@@ -21,23 +21,23 @@ class FileSystemProviderBase {
         this._thumbnailGetter = compileGetter(options.thumbnailExpr || 'thumbnail');
     }
 
-    getItems(pathInfo) {
+    getItems(parentDirectory) {
         return [];
     }
 
     renameItem(item, name) {
     }
 
-    createDirectory(parentFolder, name) {
+    createDirectory(parentDirectory, name) {
     }
 
     deleteItems(items) {
     }
 
-    moveItems(items, destinationFolder) {
+    moveItems(items, destinationDirectory) {
     }
 
-    copyItems(items, destinationFolder) {
+    copyItems(items, destinationDirectory) {
     }
 
     uploadFileChunk(fileData, chunksInfo, destinationDirectory) {

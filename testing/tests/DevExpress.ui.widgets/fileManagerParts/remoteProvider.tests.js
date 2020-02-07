@@ -40,12 +40,9 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             callback: request => assert.equal(request.method, 'GET')
         });
 
-        const pathInfo = [
-            { key: 'Root', name: 'Root' },
-            { key: 'Root/Files', name: 'Files' }
-        ];
+        const filesDir = new FileSystemItem('Root/Files', true);
 
-        this.provider.getItems(pathInfo)
+        this.provider.getItems(filesDir)
             .done(folders => {
                 assert.deepEqual(folders, fileSystemItems, 'folders received');
                 done();

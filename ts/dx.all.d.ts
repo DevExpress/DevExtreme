@@ -1748,7 +1748,7 @@ declare module DevExpress.fileManagement {
         /** @name FileSystemProviderBase.downloadItems() */
         downloadItems(items: Array<FileSystemItem>): any;
         /** @name FileSystemProviderBase.getItems() */
-        getItems(pathInfo: any): Promise<Array<any>> & JQueryPromise<Array<any>>;
+        getItems(parentDirectory: FileSystemItem): Promise<Array<any>> & JQueryPromise<Array<any>>;
         /** @name FileSystemProviderBase.getItemsContent() */
         getItemsContent(items: Array<FileSystemItem>): Promise<any> & JQueryPromise<any>;
         /** @name FileSystemProviderBase.moveItems() */

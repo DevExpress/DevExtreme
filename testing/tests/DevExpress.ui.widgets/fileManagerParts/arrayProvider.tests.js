@@ -2,7 +2,7 @@ const { test } = QUnit;
 
 import 'ui/file_manager';
 import ObjectFileSystemProvider from 'file_management/object_provider';
-import { FileSystemRootItem } from 'file_management/file_system_item';
+import FileSystemItem from 'file_management/file_system_item';
 import ErrorCode from 'file_management/errors';
 import { fileSaver } from 'exporter/file_saver';
 
@@ -51,6 +51,8 @@ const moduleConfig = {
 
         this.provider = new ObjectFileSystemProvider(this.options);
 
+        this.rootItem = new FileSystemItem('', true);
+
         sinon.stub(fileSaver, 'saveAs', (fileName, format, data) => {
             if(fileSaver._onTestSaveAs) {
                 fileSaver._onTestSaveAs(fileName, format, data);
@@ -72,13 +74,10 @@ QUnit.module('Array File Provider', moduleConfig, () => {
         const done2 = assert.async();
         const done3 = assert.async();
 
-        const pathInfo1 = [ { key: 'F1', name: 'F1' } ];
-        const pathInfo2 = [
-            { key: 'F1', name: 'F1' },
-            { key: 'F1/F1.2', name: 'F1.2' }
-        ];
+        const dir1 = new FileSystemItem('F1', true);
+        const dir2 = new FileSystemItem('F1/F1.2', true);
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .done(items => {
                 done1();
 
@@ -88,7 +87,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 assert.equal(items[1].name, 'F2');
                 assert.notOk(items[1].hasSubDirs);
             })
-            .then(() => this.provider.getItems(pathInfo1))
+            .then(() => this.provider.getItems(dir1))
             .done(items => {
                 done2();
 
@@ -100,7 +99,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 assert.equal(items[2].name, 'F1.3');
                 assert.ok(items[2].hasSubDirs);
             })
-            .then(() => this.provider.getItems(pathInfo2))
+            .then(() => this.provider.getItems(dir2))
             .done(items => {
                 done3();
 
@@ -122,7 +121,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
 
         const done = assert.async();
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .done(items => {
                 done();
                 assert.strictEqual(items.length, testResult.length, 'item count is correct');
@@ -147,18 +146,18 @@ QUnit.module('Array File Provider', moduleConfig, () => {
     });
 
     test('move directory', function(assert) {
-        const pathInfo = [ { key: 'F2', name: 'F2' } ];
+        const dir = new FileSystemItem('F2', true);
 
         let items = null;
         let subItemsCount = -1;
         const done = assert.async(5);
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .then(result => {
                 done();
 
                 items = result;
-                return this.provider.getItems(pathInfo);
+                return this.provider.getItems(dir);
             })
             .then(subItems => {
                 done();
@@ -174,13 +173,13 @@ QUnit.module('Array File Provider', moduleConfig, () => {
 
                 assert.strictEqual(result, undefined, 'resolved with no result');
 
-                return this.provider.getItems();
+                return this.provider.getItems(this.rootItem);
             })
             .then(result => {
                 done();
 
                 items = result;
-                return this.provider.getItems(pathInfo);
+                return this.provider.getItems(dir);
             })
             .done(subItems => {
                 done();
@@ -192,18 +191,18 @@ QUnit.module('Array File Provider', moduleConfig, () => {
     });
 
     test('copy directory', function(assert) {
-        const pathInfo = [ { key: 'F2', name: 'F2' } ];
+        const dir = new FileSystemItem('F2', true);
 
         let items = null;
         let subItemsCount = -1;
         const done = assert.async(5);
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .then(result => {
                 done();
 
                 items = result;
-                return this.provider.getItems(pathInfo);
+                return this.provider.getItems(dir);
             })
             .then(subItems => {
                 done();
@@ -219,7 +218,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
 
                 assert.strictEqual(result, undefined, 'resolved with no result');
 
-                return this.provider.getItems();
+                return this.provider.getItems(this.rootItem);
             })
             .then(result => {
                 done();
@@ -228,7 +227,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 assert.equal(items.length, 2, 'source dir preserved');
                 assert.ok(items[0].hasSubDirs, 'source dir items preserved');
 
-                return this.provider.getItems(pathInfo);
+                return this.provider.getItems(dir);
             })
             .done(subItems => {
                 done();
@@ -238,8 +237,8 @@ QUnit.module('Array File Provider', moduleConfig, () => {
     });
 
     test('copy directory to root directory does not change root\'s hasSubDir property', function(assert) {
-        const root = new FileSystemRootItem();
-        const pathInfo = [ { key: 'F1', name: 'F1' } ];
+        const root = new FileSystemItem();
+        const dir = new FileSystemItem('F1', true);
 
         assert.strictEqual(root.hasSubDirs, undefined, 'root hasSubDirs property is undefined');
 
@@ -247,12 +246,12 @@ QUnit.module('Array File Provider', moduleConfig, () => {
         let itemCount = -1;
         const done = assert.async(4);
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .then(result => {
                 done();
 
                 itemCount = result.length;
-                return this.provider.getItems(pathInfo);
+                return this.provider.getItems(dir);
             })
             .then(result => {
                 done();
@@ -265,7 +264,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
             .then(() => {
                 done();
 
-                return this.provider.getItems();
+                return this.provider.getItems(this.rootItem);
             })
             .then(result => {
                 done();
@@ -281,7 +280,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
 
         const done = assert.async(4);
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .then(result => {
                 done();
 
@@ -296,8 +295,8 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 assert.equal(items[0].name, 'F1');
                 assert.equal(error.errorId, ErrorCode.Other);
 
-                const pathInfo = [ { key: 'F1', name: 'F1' } ];
-                return this.provider.getItems(pathInfo);
+                const dir = new FileSystemItem('F1', true);
+                return this.provider.getItems(dir);
             })
             .then(result => {
                 done();
@@ -329,14 +328,14 @@ QUnit.module('Array File Provider', moduleConfig, () => {
 
         const done = assert.async(4);
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .then(result => {
                 done();
 
                 items = result;
 
-                const pathInfo = [ { key: 1, name: 'F1' } ];
-                return this.provider.getItems(pathInfo);
+                const dir = new FileSystemItem('F1', true, [ 1 ]);
+                return this.provider.getItems(dir);
             })
             .then(result => {
                 done();
@@ -369,7 +368,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
 
         const done = assert.async(4);
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .then(result => {
                 done();
 
@@ -384,8 +383,8 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 assert.equal(items[0].name, 'F1');
                 assert.equal(error.errorId, ErrorCode.Other);
 
-                const pathInfo = [ { key: 'F1', name: 'F1' } ];
-                return this.provider.getItems(pathInfo);
+                const dir = new FileSystemItem('F1', true);
+                return this.provider.getItems(dir);
             })
             .then(result => {
                 done();
@@ -406,12 +405,13 @@ QUnit.module('Array File Provider', moduleConfig, () => {
     test('create new folder with existing name', function(assert) {
         const done = assert.async(2);
 
-        this.provider.createDirectory(new FileSystemRootItem(), 'F1')
+        const root = new FileSystemItem('', true);
+        this.provider.createDirectory(root, 'F1')
             .then(result => {
                 done();
 
                 assert.strictEqual(result, undefined, 'resolved with no result');
-                return this.provider.getItems();
+                return this.provider.getItems(this.rootItem);
             })
             .then(dirs => {
                 done();
@@ -429,7 +429,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
     test('throw error on creating new directory in unexisting directory', function(assert) {
         const done = assert.async(2);
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .then(([ f1Dir ]) => {
                 done();
 
@@ -448,7 +448,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
 
         const done = assert.async(2);
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .then(result => {
                 done();
 
@@ -473,7 +473,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
 
         const done = assert.async(3);
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .then(result => {
                 done();
 
@@ -490,7 +490,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 done();
 
                 assert.strictEqual(result, undefined, 'resolved with no result');
-                return this.provider.getItems();
+                return this.provider.getItems(this.rootItem);
             })
             .then(result => {
                 done();
@@ -504,7 +504,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
     test('throw exception if remove unexisting directory', function(assert) {
         const done = assert.async(2);
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .then(([ f1Dir ]) => {
                 done();
 
@@ -522,13 +522,13 @@ QUnit.module('Array File Provider', moduleConfig, () => {
     test('upload file', function(assert) {
         const done = assert.async(4);
 
-        const dir = new FileSystemRootItem();
+        const dir = new FileSystemItem('', true);
         let initialCount = -1;
 
         const file = createUploaderFiles(1)[0];
         let uploadInfo = createUploadInfo(file);
 
-        this.provider.getItems()
+        this.provider.getItems(this.rootItem)
             .then(items => {
                 done();
 
@@ -545,7 +545,7 @@ QUnit.module('Array File Provider', moduleConfig, () => {
                 done();
 
                 assert.strictEqual(result, undefined, 'resolved with no result');
-                return this.provider.getItems();
+                return this.provider.getItems(this.rootItem);
             })
             .then(items => {
                 done();
@@ -570,12 +570,9 @@ QUnit.module('Array File Provider', moduleConfig, () => {
             assert.strictEqual(data.size, content.length, 'file size is correct');
         };
 
-        const pathInfo = [
-            { key: 'F1', name: 'F1' },
-            { key: 'F1/F1.2', name: 'F1.2' }
-        ];
+        const dir = new FileSystemItem('F1/F1.2', true);
 
-        this.provider.getItems(pathInfo)
+        this.provider.getItems(dir)
             .then(([ file1 ]) => {
                 done();
 
@@ -600,12 +597,9 @@ QUnit.module('Array File Provider', moduleConfig, () => {
             content: window.btoa('Test content 2')
         });
 
-        const pathInfo = [
-            { key: 'F1', name: 'F1' },
-            { key: 'F1/F1.2', name: 'F1.2' }
-        ];
+        const dir = new FileSystemItem('F1/F1.2', true);
 
-        this.provider.getItems(pathInfo)
+        this.provider.getItems(dir)
             .then(files => {
                 done();
 

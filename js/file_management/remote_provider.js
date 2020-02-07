@@ -22,7 +22,8 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || 'hasSubDirectories');
     }
 
-    getItems(pathInfo) {
+    getItems(parentDir) {
+        const pathInfo = parentDir.getFullPathInfo();
         return this._getEntriesByPath(pathInfo)
             .then(result => this._convertDataObjectsToFileItems(result.result, pathInfo));
     }
@@ -39,7 +40,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
             pathInfo: parentDir.getFullPathInfo(),
             name
         }).done(() => {
-            if(parentDir && !parentDir.isRoot) {
+            if(parentDir && !parentDir.isRoot()) {
                 parentDir.hasSubDirs = true;
             }
         });

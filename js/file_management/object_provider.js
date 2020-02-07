@@ -53,8 +53,8 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
         this._data = initialArray || [ ];
     }
 
-    getItems(pathInfo) {
-        return this._executeActionAsDeferred(() => this._getItems(pathInfo), true);
+    getItems(parentDir) {
+        return this._executeActionAsDeferred(() => this._getItems(parentDir), true);
     }
 
     renameItem(item, name) {
@@ -274,7 +274,8 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
         return dataItems;
     }
 
-    _getItems(pathInfo) {
+    _getItems(parentDir) {
+        const pathInfo = parentDir.getFullPathInfo();
         const parentDirKey = pathInfo && pathInfo.length > 0 ? pathInfo[pathInfo.length - 1].key : null;
         let dirFileObjects = this._data;
         if(parentDirKey) {
@@ -342,7 +343,7 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
     }
 
     _updateHasSubDirs(dir) {
-        if(dir && !dir.isRoot) {
+        if(dir && !dir.isRoot()) {
             dir.hasSubDirs = this._hasSubDirs(dir.dataItem);
         }
     }
@@ -367,7 +368,7 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
     }
 
     _isFileItemExists(fileItem) {
-        return fileItem.isDirectory && fileItem.isRoot || !!this._findFileItemObj(fileItem.getFullPathInfo());
+        return fileItem.isDirectory && fileItem.isRoot() || !!this._findFileItemObj(fileItem.getFullPathInfo());
     }
 
     _createFileReader() {

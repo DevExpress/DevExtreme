@@ -35,8 +35,9 @@ class CustomFileSystemProvider extends FileSystemProviderBase {
         this._uploadChunkSize = options.uploadChunkSize;
     }
 
-    getItems(pathInfo) {
-        return this._executeActionAsDeferred(() => this._getItemsFunction(pathInfo), true)
+    getItems(parentDir) {
+        const pathInfo = parentDir.getFullPathInfo();
+        return this._executeActionAsDeferred(() => this._getItemsFunction(parentDir), true)
             .then(dataItems => this._convertDataObjectsToFileItems(dataItems, pathInfo));
     }
 
