@@ -204,9 +204,9 @@ function start_runner_watchdog {
         if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
             echo "Runner stalled"
             kill -9 $1
+        else
+            last_suite_time=$(cat $last_suite_time_file)
         fi
-
-        last_suite_time=$(cat $last_suite_time_file)
     done &
 }
 
