@@ -161,7 +161,7 @@ function run_test {
 
     esac
 
-    start_runner_watchdog
+    start_runner_watchdog $runner_pid
     wait $runner_pid || runner_result=1
     exit $runner_result
 }
@@ -205,7 +205,7 @@ function start_runner_watchdog {
 
         if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
             echo "Runner stalled"
-            kill -TERM $$
+            kill -9 $1
             break
         fi
 
