@@ -1055,7 +1055,7 @@ QUnit.test('Clone an element when dragging', function(assert) {
     this.checkPosition(10, 10, assert, $cloneElement);
     this.checkPosition(0, 0, assert);
 
-    assert.ok($cloneElement.hasClass('dx-rtl'), 'clone has not dx-rtl class');
+    assert.notOk($cloneElement.hasClass('dx-rtl'), 'clone has not dx-rtl class');
     assert.equal($cloneElement.css('direction'), 'ltr', 'clone\'s direction is ltr');
 });
 
