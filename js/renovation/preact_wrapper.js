@@ -42,7 +42,7 @@ export default class PreactWrapper extends Widget {
 
     _renderContent() {
         const isFirstRender = this.$element().children().length === 0;
-        const container = isFirstRender ? this.$element().get(0) : this.$element().get(0);
+        const container = isFirstRender ? this.$element().get(0) : undefined;
 
         Preact.render(this.renderView(this.getProps(isFirstRender)), this.$element().get(0), container);
     }
