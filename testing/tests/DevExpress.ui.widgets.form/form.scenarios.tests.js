@@ -13,7 +13,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-QUnit.module('Label aligment', () => {
+QUnit.module('Items layout and labels alignment', () => {
     function testOrSkip(name, callback) {
         if(!browser.chrome) {
             return;
@@ -129,7 +129,23 @@ QUnit.module('Label aligment', () => {
         test_2Column_2Items_NotAligned({}, [ { itemType: 'group', colSpan: 2, colCount: 2, items: ['text', 'longText'] }]);
     });
 
-    testOrSkip('2 column -> [group[text, group[longText]]]', function(assert) {
+    testOrSkip('2 column-> [text.colSpan2, longText.colSpan2], alignItemLabels: true', function(assert) {
+        const wrapper = new FormTestWrapper(2, {}, [
+            { dataField: 'text', colSpan: 2 },
+            { dataField: 'longText', colSpan: 2 }]);
+
+        wrapper.checkFormSize({ width: 1000, height: 82 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 8, left: 0, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 1, left: 75, width: 923, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 0, width: 74, height: 19 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 75, width: 923, height: 34 });
+    });
+
+    testOrSkip('2 column-> [text.colSpan2, longText.colSpan2], alignItemLabels: false', function(assert) {
+        assert.ok('bug, if exists colspan labels are aligned'); // test_1Column_2Items_NotAligned({ colCount: 2, alignItemLabelsInAllGroups: false }, [{ dataField: 'text', colSpan: 2 }, { dataField: 'longText', colSpan: 2 }]);
+    });
+
+    testOrSkip('2 column -> [group.colCount:2,colSpan2[text, group[longText]]]', function(assert) {
         // unexpected bechaviour - https://js.devexpress.com/Documentation/ApiReference/UI_Widgets/dxForm/Configuration/#alignItemLabelsInAllGroups
         test_2Column_2Items_Aligned(
             [ { itemType: 'group', colCount: 2, colSpan: 2, items: ['text', { itemType: 'group', items: ['longText'] }] }]);
@@ -140,26 +156,26 @@ QUnit.module('Label aligment', () => {
             [ { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }]);
     });
 
-    testOrSkip('2 column -> [group[group[text], group[longText]]], alignItemLabelsInAllGroups: true', function() {
+    testOrSkip('2 column -> [group.colSpan:2.colCount:2[group[text], group[longText]]], alignItemLabelsInAllGroups: true', function() {
         test_2Column_2Items_Aligned(
             [ { itemType: 'group', colCount: 2, colSpan: 2, items: [
                 { itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
     });
 
-    testOrSkip('2 column -> [group[group[text], group[longText]]], alignItemLabelsInAllGroups: false', function() {
+    testOrSkip('2 column -> [group.colSpan:2.colCount:2[group[text], group[longText]]], alignItemLabelsInAllGroups: false', function() {
         test_2Column_2Items_NotAligned({ alignItemLabelsInAllGroups: false },
             [{ itemType: 'group', colCount: 2, colSpan: 2,
                 items: [{ itemType: 'group', items: ['text'] }, { itemType: 'group', items: ['longText'] }] }]);
     });
 
-    testOrSkip('2 column -> [group[text.colSpan: 1], group[longText.colSpan: 1}], alignItemLabelsInAllGroups: true', function(assert) {
+    testOrSkip('2 column -> [group.colSpan:2.colCount:2[group[text.colSpan: 1], group[longText.colSpan: 1]]], alignItemLabelsInAllGroups: true', function(assert) {
         test_2Column_2Items_Aligned(
             [ { itemType: 'group', colCount: 2, colSpan: 2, items: [
                 { itemType: 'group', colSpan: 1, items: ['text'] },
                 { itemType: 'group', colSpan: 1, items: ['longText'] }] } ]);
     });
 
-    testOrSkip('2 column -> [group[text.colSpan: 1], group[longText.colSpan: 1]], alignItemLabelsInAllGroups: false', function(assert) {
+    testOrSkip('2 column -> [group.colSpan:2.colCount:2[group[text.colSpan: 1], group[longText.colSpan: 1]]], alignItemLabelsInAllGroups: false', function(assert) {
         test_2Column_2Items_NotAligned({ alignItemLabelsInAllGroups: false },
             [ { itemType: 'group', colCount: 2, colSpan: 2, items: [
                 { itemType: 'group', colSpan: 1, items: ['text'] },
@@ -170,11 +186,11 @@ QUnit.module('Label aligment', () => {
         const wrapper = new FormTestWrapper(2, options, items);
         wrapper.checkFormSize({ width: 1000, height: 82 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 40, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 41, width: 447, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 41, width: 445, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), { top: 8, left: 515, width: 72, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 586, width: 411, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 54, left: 0, width: 40, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 47, left: 41, width: 447, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 47, left: 41, width: 445, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 515, width: 72, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 586, width: 411, height: 34 });
     }
@@ -208,11 +224,11 @@ QUnit.module('Label aligment', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 40, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 42, width: 609, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), { top: 8, left: 680, width: 72, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 752, width: 242, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 754, width: 242, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 54, left: 0, width: 40, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 47, left: 42, width: 609, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 680, width: 72, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 752, width: 242, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 754, width: 242, height: 34 });
     });
 
     testOrSkip('1 column -> [group.colCount3 [ a.colSpan: 2, abc.colSpan:1, text.colSpan:2, longText.colSpan:1 ]]', function() {
@@ -224,11 +240,11 @@ QUnit.module('Label aligment', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 40, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 42, width: 609, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), { top: 8, left: 680, width: 72, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 752, width: 242, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 754, width: 242, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 54, left: 0, width: 40, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 47, left: 42, width: 609, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 680, width: 72, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 752, width: 242, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 754, width: 242, height: 34 });
     });
 
     testOrSkip('1 column -> [group.colCount3 [ a.colSpan: 2, abc.colSpan:1, text.colSpan:2, longText.colSpan:1, ab.colSpan:3 ]]', function() {
@@ -241,11 +257,11 @@ QUnit.module('Label aligment', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), { top: 8, left: 0, width: 40, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), { top: 1, left: 42, width: 609, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), { top: 8, left: 680, width: 72, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 752, width: 242, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), { top: 1, left: 754, width: 242, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), { top: 54, left: 0, width: 40, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), { top: 47, left: 42, width: 609, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), { top: 54, left: 680, width: 72, height: 19 });
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 752, width: 242, height: 34 });
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), { top: 47, left: 754, width: 242, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="ab"]'), { top: 100, left: 0, width: 40, height: 19 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="ab"]'), { top: 93, left: 42, width: 958, height: 34 });
     });
