@@ -1,15 +1,18 @@
 import $ from '../../core/renderer';
+import { getImageContainer } from '../../core/utils/icon';
 
 const DIAGRAM_CONTEXT_MENU_CLASS = 'dx-diagram-contextmenu';
 
 const DiagramContextMenuHelper = {
     getItemTemplate(itemData, itemIndex, itemElement, menuHasCheckedItems) {
         const itemKey = itemData.rootCommand !== undefined ? itemData.rootCommand : -1;
-        if(menuHasCheckedItems && menuHasCheckedItems[itemKey] === true) {
-            const $iconElement = $('<span></span>');
-            $iconElement.addClass('dx-icon-check');
-            $iconElement.css('visibility', !itemData.checked ? 'hidden' : '');
+        if(itemData.icon && !itemData.checked) {
+            const $iconElement = getImageContainer(itemData.icon);
             itemElement.append($iconElement);
+        } else if(menuHasCheckedItems && menuHasCheckedItems[itemKey] === true) {
+            const $checkElement = getImageContainer('check');
+            $checkElement.css('visibility', !itemData.checked ? 'hidden' : '');
+            itemElement.append($checkElement);
         }
         itemElement.append('<span class="dx-menu-item-text">' + itemData.text + '</span>');
         if(Array.isArray(itemData.items) && itemData.items.length > 0) {

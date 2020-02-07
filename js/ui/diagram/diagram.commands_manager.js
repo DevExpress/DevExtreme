@@ -467,8 +467,8 @@ const DiagramCommandsManager = {
                     allCommands['separator'],
                     allCommands['showGrid'],
                     allCommands['snapToGrid'],
+                    allCommands['gridSize'],
                     allCommands['separator'],
-                    // allCommands['gridSize'],
                     allCommands['simpleView']
                 ]
             }
@@ -544,41 +544,35 @@ const DiagramCommandsManager = {
         }).filter(c => c);
     },
 
-    _prepareContextMenuCommandsCore(commands, error) {
+    _prepareContextMenuCommands(commands) {
         const result = [];
         let beginGroup = false;
         commands.forEach(command => {
             if(command === SEPARATOR) {
                 beginGroup = true;
             } else {
-                if(Array.isArray(command.items)) {
-                    command.items.forEach(item => {
-                        if(item.command !== undefined) {
-                            throw new Error(error);
-                        }
+                if(command.text || command.icon) {
+                    result.push({
+                        command: command.command,
+                        text: command.text,
+                        icon: command.menuIcon || command.icon,
+                        items: command.items,
+                        getParameter: command.getParameter,
+                        beginGroup: beginGroup
                     });
+                } else {
+                    result.push(command);
                 }
-                result.push({
-                    command: command.command,
-                    text: command.text,
-                    icon: command.menuIcon || command.icon,
-                    items: command.items,
-                    getParameter: command.getParameter,
-                    beginGroup: beginGroup
-                });
                 beginGroup = false;
             }
         });
         return result;
     },
-    _prepareContextMenuCommands(commands) {
-        return this._prepareContextMenuCommandsCore(commands, 'Context menu cannot contain commands on the second level');
-    },
     _prepareToolbarCommands(commands) {
         const result = [];
         commands.forEach(command => {
             if(Array.isArray(command.items)) {
-                command.items = this._prepareContextMenuCommandsCore(command.items, 'Toolbar cannot contain commands on the third level');
+                command.items = this._prepareContextMenuCommands(command.items);
             }
             result.push(command);
         });

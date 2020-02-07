@@ -99,8 +99,13 @@ class DiagramContextMenu extends Widget {
         }
 
         if(!processed) {
-            const parameter = this._getExecCommandParameter(itemData);
-            this.bar.raiseBarCommandExecuted(itemData.command, parameter);
+            if(itemData.command !== undefined && (!Array.isArray(itemData.items) || !itemData.items.length)) {
+                const parameter = this._getExecCommandParameter(itemData);
+                this.bar.raiseBarCommandExecuted(itemData.command, parameter);
+            } else if(itemData.rootCommand !== undefined && itemData.value !== undefined) {
+                const parameter = this._getExecCommandParameter(itemData, itemData.value);
+                this.bar.raiseBarCommandExecuted(itemData.rootCommand, parameter);
+            }
             this._contextMenuInstance.hide();
         }
     }
@@ -116,10 +121,14 @@ class DiagramContextMenu extends Widget {
         });
         return result;
     }
-    _getExecCommandParameter(itemData) {
-        if(itemData.getParameter) {
-            return itemData.getParameter(this);
+    _getItemValue(item) {
+        return (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
+    }
+    _getExecCommandParameter(item, widgetValue) {
+        if(item.getParameter) {
+            return item.getParameter(this);
         }
+        return widgetValue;
     }
     _setItemEnabled(key, enabled) {
         this._setItemVisible(key, enabled);
@@ -132,22 +141,38 @@ class DiagramContextMenu extends Widget {
     }
     _setItemValue(key, value) {
         if(key in this._commandToIndexMap) {
-            // const index = this._commandToIndexMap[key];
-            // if(value === true || value === false) {
-            //     this._setHasCheckedItems(-1);
-            //     this._widget.option('items[] + 'checked', value);
-            // } else if(value !== undefined) {
-            //     this._subItems.forEach((item, index) => {
-            //         this._setHasCheckedItems(this._rootCommand);
-            //         item.checked = item.value === value;
-            //     });
-            // }
+            const command = this._commands[this._commandToIndexMap[key]];
+            if(command) {
+                if(value === true || value === false) {
+                    this._setHasCheckedItems(-1);
+                    command.checked = value;
+                } else if(value !== undefined) {
+                    this._setHasCheckedItems(key);
+                    command.items = command.items.map(item => {
+                        return {
+                            'value': item.value,
+                            'text': item.text,
+                            'checked': item.value === value,
+                            'rootCommand': key
+                        };
+                    });
+                }
+            }
         }
     }
     _setItemSubItems(key, items) {
         if(key in this._commandToIndexMap) {
             const command = this._commands[this._commandToIndexMap[key]];
-            if(command) command.items = items;
+            if(command) {
+                command.items = items.map(item => {
+                    return {
+                        'value': this._getItemValue(item),
+                        'text': item.text,
+                        'checked': item.checked,
+                        'rootCommand': key
+                    };
+                });
+            }
         }
     }
     _setEnabled(enabled) {
@@ -157,10 +182,10 @@ class DiagramContextMenu extends Widget {
         return this._inOnShowing;
     }
     _setHasCheckedItems(key) {
-        if(!this._menuHasCheckedItems) {
-            this._menuHasCheckedItems = {};
+        if(!this._contextMenuInstance._menuHasCheckedItems) {
+            this._contextMenuInstance._menuHasCheckedItems = {};
         }
-        this._menuHasCheckedItems[key] = true;
+        this._contextMenuInstance._menuHasCheckedItems[key] = true;
     }
     _createOnVisibleChangedAction() {
         this._onVisibleChangedAction = this._createActionByOption('onVisibleChanged');

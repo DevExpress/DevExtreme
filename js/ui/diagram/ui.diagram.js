@@ -194,12 +194,12 @@ class Diagram extends Widget {
         const $toolBox = $('<div>')
             .appendTo($parent);
         let yOffset = DIAGRAM_FLOATING_PANEL_OFFSET;
-        let height = $parent.height() - 2 * DIAGRAM_FLOATING_PANEL_OFFSET;
-        if(this._historyToolbar) {
+        let height = !isServerSide ? $parent.height() - 2 * DIAGRAM_FLOATING_PANEL_OFFSET : 200;
+        if(this._historyToolbar && !isServerSide) {
             yOffset += this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
             height -= this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
         }
-        if(this._viewSettingsToolbar) {
+        if(this._viewSettingsToolbar && !isServerSide) {
             height -= this._viewSettingsToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
         }
         this._toolbox = this._createComponent($toolBox, DiagramToolbox, {

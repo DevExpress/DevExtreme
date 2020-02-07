@@ -243,7 +243,7 @@ class DiagramToolbar extends DiagramPanel {
         }
     }
     _onContextMenuItemClick(itemData, actionHandler) {
-        if(itemData.command !== undefined) {
+        if(itemData.command !== undefined && (!Array.isArray(itemData.items) || !itemData.items.length)) {
             const parameter = this._getExecCommandParameter(itemData);
             actionHandler.call(this, itemData.command, parameter);
         } else if(itemData.rootCommand !== undefined && itemData.value !== undefined) {
@@ -412,10 +412,10 @@ class ToolbarItemHelper {
 }
 
 class ToolbarSubItemHelper extends ToolbarItemHelper {
-    constructor(widget, indexPath, rootCommand, rootButton) {
+    constructor(widget, indexPath, rootCommandKey, rootButton) {
         super(widget);
         this._indexPath = indexPath;
-        this._rootCommand = rootCommand;
+        this._rootCommandKey = rootCommandKey;
         this._rootButton = rootButton;
     }
     canUpdate(showingSubMenu) {
@@ -440,8 +440,8 @@ class ToolbarSubItemHelper extends ToolbarItemHelper {
             this._setHasCheckedItems(-1);
             this._widget.option(optionText + 'checked', value);
         } else if(value !== undefined) {
+            this._setHasCheckedItems(this._rootCommandKey);
             this._subItems.forEach((item, index) => {
-                this._setHasCheckedItems(this._rootCommand);
                 item.checked = item.value === value;
             });
             this._updateItems();
@@ -464,7 +464,7 @@ class ToolbarSubItemHelper extends ToolbarItemHelper {
                 'text': item.text,
                 'checked': item.checked,
                 'widget': this._widget,
-                'rootCommand': this._rootCommand
+                'rootCommand': this._rootCommandKey
             };
         }));
     }

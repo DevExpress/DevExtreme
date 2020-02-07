@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
-import { hasWindow } from '../../core/utils/window';
 import TextBox from '../text_box';
 import Accordion from '../accordion';
 import ScrollView from '../scroll_view';
