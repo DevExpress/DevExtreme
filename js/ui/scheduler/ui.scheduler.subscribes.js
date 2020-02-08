@@ -777,7 +777,7 @@ const subscribes = {
         extend(true, result, appointmentData, recurringData);
 
         if(this._isAppointmentRecurrence(appointmentData)) {
-            this._convertDatesByTimezoneBack(false, result); // TODO: temporary solution fox fix T848058, more information in the ticket
+            this._convertDatesByTimezoneBack(true, result); // TODO: temporary solution fox fix T848058, more information in the ticket
         }
 
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
