@@ -48,9 +48,19 @@ gulp.task('copy-fonts-and-icons', () => {
         .pipe(gulp.dest(cssArtifactsPath));
 });
 
-gulp.task('style-compiler-styles', () => compileBundles('styles/bundles/*.less'));
+gulp.task('style-compiler-themes', gulp.parallel(
+    () => compileBundles('styles/bundles/*.less'),
+    'copy-fonts-and-icons'
+));
 
-gulp.task('style-compiler-themes', gulp.parallel('style-compiler-styles', 'copy-fonts-and-icons'));
+gulp.task('style-compiler-themes-ci', gulp.parallel(
+    () => compileBundles([
+        'styles/bundles/dx.common.less',
+        'styles/bundles/dx.light.less',
+        'styles/bundles/dx.material.blue.light.less',
+    ]),
+    'copy-fonts-and-icons'
+));
 
 gulp.task('style-compiler-themes-dev', () => {
     const args = parseArguments(process.argv);
