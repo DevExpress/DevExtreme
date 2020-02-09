@@ -234,13 +234,13 @@ const subscribes = {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },
 
-    getTextAndFormatDate(data, currentData, format, skipTimezone) {
+    getTextAndFormatDate(data, currentData, format) {
         const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
         const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
         let startDate = appointmentFields.startDate;
         let endDate = appointmentFields.endDate;
 
-        if(this._isAppointmentRecurrence(data) && !skipTimezone) {
+        if(!this._isAppointmentRecurrence(data)) {
             startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
             endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
         }
@@ -777,7 +777,7 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipTimezone) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, applyTimezone) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
 
@@ -790,9 +790,9 @@ const subscribes = {
 
         extend(true, result, appointmentData, recurringData);
 
-        if(this._isAppointmentRecurrence(appointmentData) && !skipTimezone) {
-            this._convertDatesByTimezoneBack(false, result, result, true); // TODO: temporary solution fox fix T848058, more information in the ticket
-        }
+        // if(this._isAppointmentRecurrence(appointmentData)) {
+        //     this._convertDatesByTimezoneBack(false, result, result, true); // TODO: temporary solution fox fix T848058, more information in the ticket
+        // }
 
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 

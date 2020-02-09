@@ -331,8 +331,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
             'getTextAndFormatDate',
             model.appointmentData,
             model.appointmentData.settings || (data.recurrenceRule && model.targetedAppointmentData) || {},
-            'TIME',
-            true
+            'TIME'
         );
 
         $('<div>')
@@ -457,7 +456,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         return itemTemplate.render({
             model: {
                 appointmentData: itemData,
-                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent(), true)
+                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent())
             },
             container: container,
             index: index
