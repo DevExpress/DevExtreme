@@ -234,11 +234,17 @@ const subscribes = {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },
 
-    getTextAndFormatDate(data, currentData, format) {
+    getTextAndFormatDate(data, currentData, format, skipTimezone) {
         const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
         const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
-        const startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
-        const endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
+        let startDate = appointmentFields.startDate;
+        let endDate = appointmentFields.endDate;
+
+        if(this._isAppointmentRecurrence(data) && !skipTimezone) {
+            startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
+            endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
+        }
+
         return {
             text: this.fire('createAppointmentTitle', appointmentFields),
             formatDate: this.fire('_formatDates', startDate, endDate, appointmentFields.allDay, format)
@@ -695,10 +701,17 @@ const subscribes = {
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets);
         date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets);
 
+        // const tzOffsetsAfterConvert = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
+
+        // const daylightOffsetCommon = tzOffsets.common - tzOffsetsAfterConvert.common || 0;
+        // const daylightOffsetAppointment = appointmentTimezone ? tzOffsets.appointment - tzOffsetsAfterConvert.appointment : 0;
+
+        // return new Date(date.getTime() + (daylightOffsetCommon - daylightOffsetAppointment) * toMs('hour'));
+        // const daylightOffsetClient = makeSomething ? tzOffsets.client - tzOffsetsAfterConvert.client : 0;
         return date;
     },
 
-    convertDateByTimezoneBack: function(date, appointmentTimezone) {
+    convertDateByTimezoneBack: function(date, appointmentTimezone, makeSomething) {
         date = new Date(date);
 
         const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
@@ -707,7 +720,8 @@ const subscribes = {
 
         const tzOffsetsAfterConvert = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
         const daylightOffsetCommon = tzOffsets.common - tzOffsetsAfterConvert.common || 0;
-        const daylightOffsetAppointment = tzOffsets.appointment - tzOffsetsAfterConvert.appointment;
+        const daylightOffsetAppointment = appointmentTimezone ? tzOffsets.appointment - tzOffsetsAfterConvert.appointment : 0;
+        // const daylightOffsetClient = makeSomething ? tzOffsets.client - tzOffsetsAfterConvert.client : 0;
 
         return new Date(date.getTime() + (daylightOffsetCommon - daylightOffsetAppointment) * toMs('hour'));
     },
@@ -763,7 +777,7 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipTimezone) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
 
@@ -776,8 +790,8 @@ const subscribes = {
 
         extend(true, result, appointmentData, recurringData);
 
-        if(this._isAppointmentRecurrence(appointmentData)) {
-            this._convertDatesByTimezoneBack(false, result); // TODO: temporary solution fox fix T848058, more information in the ticket
+        if(this._isAppointmentRecurrence(appointmentData) && !skipTimezone) {
+            this._convertDatesByTimezoneBack(false, result, result, true); // TODO: temporary solution fox fix T848058, more information in the ticket
         }
 
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
