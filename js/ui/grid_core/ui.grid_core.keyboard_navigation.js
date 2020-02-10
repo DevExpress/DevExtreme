@@ -14,7 +14,6 @@ import * as accessibility from '../shared/accessibility';
 import { isElementInCurrentGrid } from './ui.grid_core.utils';
 import browser from '../../core/utils/browser';
 
-
 const ROWS_VIEW_CLASS = 'rowsview';
 const EDIT_FORM_CLASS = 'edit-form';
 const GROUP_FOOTER_CLASS = 'group-footer';
@@ -763,10 +762,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const columnIndex = this.getView('rowsView').getCellIndex($cell);
         const column = this._columnsController.getVisibleColumns()[columnIndex];
         const isCellEditMode = this._isCellEditMode();
-        let args;
 
         this.setCellFocusType();
-        args = this._fireFocusChangingEvents(event, $cell, true);
+        const args = this._fireFocusChangingEvents(event, $cell, true);
         $cell = args.$newCellElement;
 
         if(!args.cancel) {
@@ -791,7 +789,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             } else {
                 const $target = event && $(event.target);
                 const isInteractiveTarget = $target && $target.not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR);
-                const isEditor = $cell.hasClass(EDITOR_CELL_CLASS);
+                const isEditor = !column.command && $cell.hasClass(EDITOR_CELL_CLASS);
                 const isDisabled = !isEditor && (!args.isHighlighted || isInteractiveTarget);
                 this._focus($cell, isDisabled, isInteractiveTarget);
             }
@@ -947,7 +945,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
                         return;
                     }
                     if($cell.is('td') || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
-                        if(that.getController('editorFactory').focus()) {
+                        const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
+                        if(!isCommandCell && that.getController('editorFactory').focus()) {
                             that._focus($cell);
                         } else if(that._isCellEditMode()) {
                             that._focus($cell, that._isHiddenFocus);
