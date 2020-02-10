@@ -703,13 +703,6 @@ const subscribes = {
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets);
         date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets);
 
-        // const tzOffsetsAfterConvert = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
-
-        // const daylightOffsetCommon = tzOffsets.common - tzOffsetsAfterConvert.common || 0;
-        // const daylightOffsetAppointment = appointmentTimezone ? tzOffsets.appointment - tzOffsetsAfterConvert.appointment : 0;
-
-        // return new Date(date.getTime() + (daylightOffsetCommon - daylightOffsetAppointment) * toMs('hour'));
-        // const daylightOffsetClient = makeSomething ? tzOffsets.client - tzOffsetsAfterConvert.client : 0;
         return date;
     },
 
@@ -720,12 +713,7 @@ const subscribes = {
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
         date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
 
-        const tzOffsetsAfterConvert = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
-        const daylightOffsetCommon = tzOffsets.common - tzOffsetsAfterConvert.common || 0;
-        const daylightOffsetAppointment = appointmentTimezone ? tzOffsets.appointment - tzOffsetsAfterConvert.appointment : 0;
-        // const daylightOffsetClient = makeSomething ? tzOffsets.client - tzOffsetsAfterConvert.client : 0;
-
-        return new Date(date.getTime() + (daylightOffsetCommon - daylightOffsetAppointment) * toMs('hour'));
+        return date;
     },
 
     translateDateToAppointmentTimeZone: function(date, offsets, back) {
