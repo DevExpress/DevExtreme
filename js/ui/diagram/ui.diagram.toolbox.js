@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
+import { hasWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
 import TextBox from '../text_box';
 import Accordion from '../accordion';
@@ -77,10 +78,11 @@ class DiagramToolbox extends DiagramFloatingPanel {
                 }
             }]
         });
+        const searchInputHeight = !hasWindow() ? '100%' : 'calc(100% - ' + this._searchInput.$element().height() + 'px)';
         const $panel = $('<div>')
             .addClass(DIAGRAM_TOOLBOX_PANEL_CLASS)
             .appendTo($parent)
-            .height('calc(100% - ' + this._searchInput.$element().height() + 'px)');
+            .height(searchInputHeight);
         this._renderScrollView($panel);
     }
     _renderScrollView($parent) {
@@ -111,7 +113,10 @@ class DiagramToolbox extends DiagramFloatingPanel {
                 shapes: toolboxGroups[i].shapes,
                 onTemplate: (widget, $element, data) => {
                     const $toolboxElement = $($element);
-                    const toolboxWidth = DIAGRAM_TOOLBOX_POPUP_WIDTH - ($toolboxElement.parent().width() - $toolboxElement.width() + 2);
+                    let toolboxWidth = DIAGRAM_TOOLBOX_POPUP_WIDTH;
+                    if(hasWindow()) {
+                        toolboxWidth -= ($toolboxElement.parent().width() - $toolboxElement.width() + 2);
+                    }
                     this._onShapeCategoryRenderedAction({
                         category: data.category,
                         displayMode: data.displayMode,

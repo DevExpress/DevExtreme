@@ -168,6 +168,8 @@ class Diagram extends Widget {
         });
     }
     _adjustFloatingToolbarContainer($container, toolbar, position) {
+        if(!hasWindow()) return;
+
         const $toolbarContent = toolbar.$element().find('.dx-toolbar-before');
         $container.width($toolbarContent.width());
         positionUtils.setup($container, position);
