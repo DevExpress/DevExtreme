@@ -48,8 +48,8 @@ const FIELD_ITEM_LABEL_CLASS = 'dx-field-item-label';
 const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
 const FIELD_ITEM_TAB_CLASS = 'dx-field-item-tab';
 const FORM_FIELD_ITEM_COL_CLASS = 'dx-col-';
-const FORM_COL_COUNT_ATTR = 'col-count';
 const GROUP_COL_COUNT_CLASS = 'dx-group-colcount-';
+const GROUP_COL_COUNT_ATTR = 'group-col-count';
 const FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
 const FORM_VALIDATION_SUMMARY = 'dx-form-validation-summary';
 
@@ -253,9 +253,8 @@ const Form = Widget.inherit({
         });
     },
 
-    _getColCount: function($element) {
-        const colCount = $element.attr(FORM_COL_COUNT_ATTR);
-        return parseInt(colCount);
+    _getGroupColCount: function($element) {
+        return parseInt($element.attr(GROUP_COL_COUNT_ATTR));
     },
 
     _createHiddenElement: function(rootLayoutManager) {
@@ -326,7 +325,7 @@ const Form = Widget.inherit({
     },
 
     _applyLabelsWidth: function($container, excludeTabbed, inOneColumn, colCount) {
-        colCount = inOneColumn ? 1 : colCount || this._getColCount($container);
+        colCount = inOneColumn ? 1 : colCount || this._getGroupColCount($container);
         const applyLabelsOptions = {
             excludeTabbed: excludeTabbed,
             inOneColumn: inOneColumn
@@ -372,7 +371,7 @@ const Form = Widget.inherit({
 
             for(groupsColIndex = 0; groupsColIndex < this._groupsColCount.length; groupsColIndex++) {
                 $groupsByCol = this._getGroupElementsInColumn($container, colIndex, this._groupsColCount[groupsColIndex]);
-                const groupColCount = this._getColCount($groupsByCol);
+                const groupColCount = this._getGroupColCount($groupsByCol);
 
                 for(groupColIndex = 1; groupColIndex < groupColCount; groupColIndex++) {
                     this._applyLabelsWidthByCol($groupsByCol, groupColIndex, applyLabelsOptions);
@@ -688,7 +687,7 @@ const Form = Widget.inherit({
                 this._groupsColCount.push(colCount);
             }
             $group.addClass(GROUP_COL_COUNT_CLASS + colCount);
-            $group.attr(FORM_COL_COUNT_ATTR, colCount);
+            $group.attr(GROUP_COL_COUNT_ATTR, colCount);
         }
     },
 
