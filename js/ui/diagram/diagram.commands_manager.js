@@ -383,18 +383,6 @@ const DiagramCommandsManager = {
     },
     _getDefaultMainToolbarCommands: function(allCommands) {
         return [
-            {
-                widget: 'dxButton',
-                icon: 'export',
-                text: messageLocalization.format('dxDiagram-commandExport'),
-                hint: messageLocalization.format('dxDiagram-commandExport'),
-                items: [
-                    allCommands['exportSvg'],
-                    allCommands['exportPng'],
-                    allCommands['exportJpg']
-                ]
-            },
-            allCommands['separator'],
             allCommands['undo'],
             allCommands['redo'],
             allCommands['separator'],
@@ -418,8 +406,6 @@ const DiagramCommandsManager = {
             allCommands['connectorLineEnd'],
             allCommands['separator'],
             allCommands['autoLayout'],
-            allCommands['separator'],
-            allCommands['fullScreen']
         ];
     },
     getHistoryToolbarCommands: function(commands) {
@@ -477,13 +463,10 @@ const DiagramCommandsManager = {
 
     getDefaultPropertyPanelCommandGroups: function() {
         return [
-            { commands: ['units'] },
-            { commands: ['pageSize', 'pageOrientation', 'pageColor'] },
-            { commands: ['showGrid', 'snapToGrid', 'gridSize'] },
-            { commands: ['zoomLevel', 'autoZoom', 'simpleView'] },
+            { commands: ['pageSize', 'pageOrientation', 'pageColor'] }
         ];
     },
-    getPropertyPanelCommandsByGroups: function(groups) {
+    _getPropertyPanelCommandsByGroups: function(groups) {
         const allCommands = this.getAllCommands();
         const result = [];
         groups.forEach(function(g, gi) {
@@ -497,7 +480,7 @@ const DiagramCommandsManager = {
     },
     getPropertyPanelCommands: function(commandGroups) {
         commandGroups = commandGroups || this.getDefaultPropertyPanelCommandGroups();
-        return this.getPropertyPanelCommandsByGroups(commandGroups);
+        return this._getPropertyPanelCommandsByGroups(commandGroups);
     },
 
     getContextMenuCommands: function(commands) {

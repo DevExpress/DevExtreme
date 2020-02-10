@@ -9,7 +9,6 @@ const MAIN_TOOLBAR_SELECTOR = '.dx-diagram-toolbar-wrapper > .dx-diagram-toolbar
 const CONTEXT_MENU_SELECTOR = 'div:not(.dx-diagram-toolbar-wrapper):not(.dx-diagram-floating-toolbar-container) > .dx-has-context-menu';
 const TOOLBAR_ITEM_ACTIVE_CLASS = 'dx-format-active';
 const DX_MENU_ITEM_SELECTOR = '.dx-menu-item';
-const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -106,14 +105,6 @@ QUnit.module('Main Toolbar', {
         getToolbarIcon(colorButton).trigger('dxclick');
         assert.ok(colorBox.option('opened'), true);
     });
-    test('should toggle fullscreen class name on button click', function(assert) {
-        assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-        const fullScreenButton = findToolbarItem(this.$element, 'full screen');
-        fullScreenButton.trigger('dxclick');
-        assert.ok(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-        fullScreenButton.trigger('dxclick');
-        assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-    });
     test('diagram should be focused after change font family', function(assert) {
         const fontSelectBox = this.$element.find(MAIN_TOOLBAR_SELECTOR).find('.dx-selectbox').eq(0).dxSelectBox('instance');
         fontSelectBox.focus();
@@ -151,8 +142,8 @@ QUnit.module('Main Toolbar', {
 function getToolbarIcon(button) {
     return button.find('.dx-dropdowneditor-field-template-wrapper').find('.dx-diagram-i, .dx-icon');
 }
-function findToolbarItem($diagram, label) {
-    return $diagram.find(MAIN_TOOLBAR_SELECTOR)
+function findToolbarItem($diagramElement, label) {
+    return $diagramElement.find(MAIN_TOOLBAR_SELECTOR)
         .find('.dx-widget')
         .filter(function() {
             return $(this).text().toLowerCase().indexOf(label) >= 0;

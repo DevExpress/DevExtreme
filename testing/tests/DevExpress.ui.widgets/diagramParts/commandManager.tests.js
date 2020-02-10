@@ -22,10 +22,11 @@ QUnit.module('CommandManager', {
     }
 }, () => {
     test('default commands', function(assert) {
-        assert.equal(DiagramCommandsManager.getMainToolbarCommands().length, 27);
+        assert.equal(DiagramCommandsManager.getMainToolbarCommands().length, 23);
         assert.equal(DiagramCommandsManager.getHistoryToolbarCommands().length, 3);
         assert.equal(DiagramCommandsManager.getViewToolbarCommands().length, 6);
         assert.equal(DiagramCommandsManager.getContextMenuCommands().length, 12);
+        assert.equal(DiagramCommandsManager.getPropertyPanelCommands().length, 3);
     });
     test('custom toolbar commands', function(assert) {
         const commands = DiagramCommandsManager.getMainToolbarCommands([
@@ -67,7 +68,15 @@ QUnit.module('CommandManager', {
         ]);
         assert.equal(commands.length, 5);
         assert.equal(commands[2].beginGroup, true);
-        assert.equal(commands[5].items.length, 2);
-        assert.equal(commands[5].items[1].beginGroup, true);
+        assert.equal(commands[4].items.length, 2);
+        assert.equal(commands[4].items[1].beginGroup, true);
+    });
+    test('custom properties panel commands', function(assert) {
+        const commands = DiagramCommandsManager.getPropertyPanelCommands([
+            { commands: [ 'gridSize', 'showGrid' ] },
+            { commands: [ 'pageSize', 'pageColor' ] }
+        ]);
+        assert.equal(commands.length, 4);
+        assert.equal(commands[2].beginGroup, true);
     });
 });
