@@ -473,10 +473,16 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) {
+        const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement);
+
+        if(this._isAppointmentRecurrence(config.itemData)) {
+            this._convertDatesByTimezoneBack(false, targetedData);
+        }
+
         return {
             appointmentData: config.itemData,
             appointmentElement: config.itemElement,
-            targetedAppointmentData: this.fire('getTargetedAppointmentData', config.itemData, config.itemElement),
+            targetedAppointmentData: targetedData,
         };
     },
 
@@ -765,7 +771,7 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, convertDates) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
 
