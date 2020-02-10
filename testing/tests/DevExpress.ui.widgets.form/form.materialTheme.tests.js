@@ -131,7 +131,7 @@ QUnit.module('Form scenarios', () => {
 
     function test_2Column_2ItemsLayout(items) {
         const wrapper = new FormLayoutTestWrapper(2, {}, items);
-        wrapper.checkFormSize(100, 75);
+        wrapper.checkFormSize(1000, 75);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
