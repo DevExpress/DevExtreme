@@ -253,29 +253,29 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
     test('change current directory by public API', function(assert) {
         const inst = this.wrapper.getInstance();
+        const spy = sinon.spy();
+
         assert.equal(inst.option('currentPath'), '');
 
-        const that = this;
-        let onCurrentDirectoryChangedCounter = 0;
-        inst.option('onCurrentDirectoryChanged', function() {
-            onCurrentDirectoryChangedCounter++;
-        });
-
+        inst.option('onCurrentDirectoryChanged', spy);
         inst.option('currentPath', 'Folder 1/Folder 1.1');
         this.clock.tick(800);
 
-        assert.equal(onCurrentDirectoryChangedCounter, 1);
+        assert.equal(spy.callCount, 1);
+        assert.equal(spy.args[0][0].directory.path, 'Folder 1/Folder 1.1', 'directory passed as argument');
         assert.equal(inst.option('currentPath'), 'Folder 1/Folder 1.1', 'The option \'currentPath\' was changed');
 
-        const $folder1Node = that.wrapper.getFolderNode(1);
+        const $folder1Node = this.wrapper.getFolderNode(1);
         assert.equal($folder1Node.find('span').text(), 'Folder 1');
 
-        const $folder11Node = that.wrapper.getFolderNode(2);
+        const $folder11Node = this.wrapper.getFolderNode(2);
         assert.equal($folder11Node.find('span').text(), 'Folder 1.1');
 
         inst.option('currentPath', '');
         this.clock.tick(800);
 
+        assert.equal(spy.callCount, 2);
+        assert.equal(spy.args[1][0].directory.path, '', 'directory argument updated');
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
         assert.equal(this.wrapper.getBreadcrumbsPath(), 'Files', 'breadcrumbs refrers to the root folder');
     });
