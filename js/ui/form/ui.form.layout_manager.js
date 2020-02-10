@@ -1205,8 +1205,9 @@ const LayoutManager = Widget.inherit({
             }
         });
         editorInstance.on('valueChanged', args => {
-            if(!this._disableEditorValueChangedHandler && !(isObject(args.value) && args.value === args.previousValue) &&
-                !(Array.isArray(args.value) && args.value === args.previousValue)) {
+            // TODO: This need only for the KO integration
+            const isValueReferenceType = isObject(args.value) || Array.isArray(args.value);
+            if(!this._disableEditorValueChangedHandler && !(isValueReferenceType && args.value === args.previousValue)) {
                 this._updateFieldValue(dataField, args.value);
             }
         });
