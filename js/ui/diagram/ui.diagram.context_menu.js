@@ -3,7 +3,7 @@ import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import ContextMenu from '../context_menu';
 import DiagramCommandsManager from './diagram.commands_manager';
-import DiagramContextMenuHelper from './ui.diagram.context_menu_helper';
+import DiagramMenuHelper from './ui.diagram.menu_helper';
 
 import DiagramBar from './diagram.bar';
 import { getDiagram } from './diagram.importer';
@@ -22,15 +22,14 @@ class DiagramContextMenu extends Widget {
 
         this._commands = [];
         this._commandToIndexMap = {};
-
-        this.bar = new ContextMenuBar(this, this._getCommands());
+        this.bar = new ContextMenuBar(this);
     }
     _initMarkup() {
         super._initMarkup();
 
         this._commands = this._getCommands();
         this._commandToIndexMap = {};
-        this._commands.forEach((item, index) => this._commandToIndexMap[item.command] = index);
+        this._fillCommandToIndexMap(this._commands, []);
 
         this._$contextMenuTargetElement = $('<div>')
             .addClass(DIAGRAM_TOUCHBAR_TARGET_CLASS)
@@ -43,7 +42,7 @@ class DiagramContextMenu extends Widget {
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
             closeOnOutsideClick: false,
             showEvent: '',
-            cssClass: Browser.TouchUI ? DIAGRAM_TOUCHBAR_CLASS : DiagramContextMenuHelper.getCssClass(),
+            cssClass: Browser.TouchUI ? DIAGRAM_TOUCHBAR_CLASS : DiagramMenuHelper.getContextMenuCssClass(),
             items: this._getItems(this._commands),
             focusStateEnabled: false,
             position: (Browser.TouchUI ? {
@@ -52,7 +51,7 @@ class DiagramContextMenu extends Widget {
                 of: this._$contextMenuTargetElement
             } : {}),
             itemTemplate: function(itemData, itemIndex, itemElement) {
-                DiagramContextMenuHelper.getItemTemplate(itemData, itemIndex, itemElement, this._menuHasCheckedItems);
+                DiagramMenuHelper.getContextMenuItemTemplate(itemData, itemIndex, itemElement, this._menuHasCheckedItems);
             },
             onItemClick: ({ itemData }) => this._onItemClick(itemData),
             onShowing: (e) => {
@@ -99,80 +98,92 @@ class DiagramContextMenu extends Widget {
         }
 
         if(!processed) {
-            if(itemData.command !== undefined && (!Array.isArray(itemData.items) || !itemData.items.length)) {
-                const parameter = this._getExecCommandParameter(itemData);
-                this.bar.raiseBarCommandExecuted(itemData.command, parameter);
-            } else if(itemData.rootCommand !== undefined && itemData.value !== undefined) {
-                const parameter = this._getExecCommandParameter(itemData, itemData.value);
-                this.bar.raiseBarCommandExecuted(itemData.rootCommand, parameter);
-            }
+            DiagramMenuHelper.onContextMenuItemClick(itemData, this._execDiagramCommand.bind(this));
             this._contextMenuInstance.hide();
         }
     }
+    _execDiagramCommand(command, value, onExecuted) {
+        if(command !== undefined) {
+            this.bar.raiseBarCommandExecuted(command, value);
+        }
+
+        if(typeof onExecuted === 'function') {
+            onExecuted.call(this);
+        }
+    }
+
     _getCommands() {
         return DiagramCommandsManager.getContextMenuCommands(this.option('commands'));
+    }
+    _fillCommandToIndexMap(commands, indexPath) {
+        commands.forEach((command, index) => {
+            const commandIndexPath = indexPath.concat([index]);
+            if(command.command !== undefined) {
+                this._commandToIndexMap[command.command] = commandIndexPath;
+            }
+            if(Array.isArray(command.items)) {
+                this._fillCommandToIndexMap(command.items, commandIndexPath);
+            }
+        });
+    }
+    _getCommandByKey(key) {
+        const indexPath = this._commandToIndexMap[key];
+        if(indexPath) {
+            let command;
+            let commands = this._commands;
+            indexPath.forEach(index => {
+                command = commands[index];
+                commands = command.items;
+            });
+            return command;
+        }
     }
     _getItems(commands, onlyVisible) {
         const result = [];
         commands.forEach(command => {
-            if(command.visible || !onlyVisible) {
+            if(command.visible !== false || !onlyVisible) {
                 result.push(command);
             }
         });
         return result;
     }
-    _getItemValue(item) {
-        return (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
-    }
-    _getExecCommandParameter(item, widgetValue) {
-        if(item.getParameter) {
-            return item.getParameter(this);
-        }
-        return widgetValue;
-    }
     _setItemEnabled(key, enabled) {
         this._setItemVisible(key, enabled);
     }
     _setItemVisible(key, visible) {
-        if(key in this._commandToIndexMap) {
-            const command = this._commands[this._commandToIndexMap[key]];
-            if(command) command.visible = visible;
-        }
+        const command = this._getCommandByKey(key);
+        if(command) command.visible = visible;
     }
     _setItemValue(key, value) {
-        if(key in this._commandToIndexMap) {
-            const command = this._commands[this._commandToIndexMap[key]];
-            if(command) {
-                if(value === true || value === false) {
-                    this._setHasCheckedItems(-1);
-                    command.checked = value;
-                } else if(value !== undefined) {
-                    this._setHasCheckedItems(key);
-                    command.items = command.items.map(item => {
-                        return {
-                            'value': item.value,
-                            'text': item.text,
-                            'checked': item.value === value,
-                            'rootCommand': key
-                        };
-                    });
-                }
-            }
-        }
-    }
-    _setItemSubItems(key, items) {
-        if(key in this._commandToIndexMap) {
-            const command = this._commands[this._commandToIndexMap[key]];
-            if(command) {
-                command.items = items.map(item => {
+        const command = this._getCommandByKey(key);
+        if(command) {
+            if(value === true || value === false) {
+                this._setHasCheckedItems(-1);
+                command.checked = value;
+            } else if(value !== undefined) {
+                this._setHasCheckedItems(key);
+                command.items = command.items.map(item => {
                     return {
-                        'value': this._getItemValue(item),
+                        'value': item.value,
                         'text': item.text,
-                        'checked': item.checked,
+                        'checked': item.value === value,
                         'rootCommand': key
                     };
                 });
             }
+        }
+    }
+    _setItemSubItems(key, items) {
+        const command = this._getCommandByKey(key);
+        if(command) {
+            command.items = items.map(item => {
+                return {
+                    'value': DiagramMenuHelper.getItemValue(item),
+                    'text': item.text,
+                    'checked': item.checked,
+                    'rootCommand': key
+                };
+            });
         }
     }
     _setEnabled(enabled) {
@@ -211,12 +222,12 @@ class DiagramContextMenu extends Widget {
 }
 
 class ContextMenuBar extends DiagramBar {
-    constructor(owner, commands) {
+    constructor(owner) {
         super(owner);
-        this._commands = commands;
     }
+
     getCommandKeys() {
-        return this._getKeys(this._commands);
+        return this._getKeys(this._owner._commands);
     }
     setItemValue(key, value) {
         this._owner._setItemValue(key, value);

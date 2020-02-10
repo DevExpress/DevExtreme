@@ -17,7 +17,7 @@ import numberLocalization from '../../localization/number';
 
 import DiagramMainToolbar from './ui.diagram.main_toolbar';
 import DiagramHistoryToolbar from './ui.diagram.history_toolbar';
-import DiagramViewSettingsToolbar from './ui.diagram.view_settings_toolbar';
+import DiagramViewToolbar from './ui.diagram.view_toolbar';
 import DiagramRightPanel from './ui.diagram.rightpanel';
 import DiagramContextMenu from './ui.diagram.context_menu';
 import DiagramContextToolbox from './ui.diagram.context_toolbox';
@@ -84,9 +84,9 @@ class Diagram extends Widget {
             this._renderHistoryToolbar($contentWrapper);
         }
 
-        this._viewSettingsToolbar = undefined;
-        if(this.option('viewSettingsToolbar.visible')) {
-            this._renderViewSettingsToolbar($contentWrapper);
+        this._viewToolbar = undefined;
+        if(this.option('viewToolbar.visible')) {
+            this._renderViewToolbar($contentWrapper);
         }
 
         this._toolbox = undefined;
@@ -199,8 +199,8 @@ class Diagram extends Widget {
             yOffset += this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
             height -= this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
         }
-        if(this._viewSettingsToolbar && !isServerSide) {
-            height -= this._viewSettingsToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
+        if(this._viewToolbar && !isServerSide) {
+            height -= this._viewToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
         }
         this._toolbox = this._createComponent($toolBox, DiagramToolbox, {
             visible: !this.option('readOnly') && !this.option('disabled'),
@@ -229,17 +229,17 @@ class Diagram extends Widget {
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
     }
-    _renderViewSettingsToolbar($parent) {
+    _renderViewToolbar($parent) {
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
-        this._viewSettingsToolbar = this._createComponent($container, DiagramViewSettingsToolbar, {
-            commands: this.option('viewSettingsToolbar.commands'),
+        this._viewToolbar = this._createComponent($container, DiagramViewToolbar, {
+            commands: this.option('viewToolbar.commands'),
             onContentReady: ({ component }) => this._registerBar(component),
             onSubMenuVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
-        this._adjustFloatingToolbarContainer($container, this._viewSettingsToolbar, {
+        this._adjustFloatingToolbarContainer($container, this._viewToolbar, {
             my: 'left bottom',
             at: 'left bottom',
             of: $parent,
@@ -1563,15 +1563,15 @@ class Diagram extends Widget {
                 * @default undefined
                 */
             },
-            viewSettingsToolbar: {
+            viewToolbar: {
                 /**
-                * @name dxDiagramOptions.viewSettingsToolbar.visible
+                * @name dxDiagramOptions.viewToolbar.visible
                 * @type boolean
                 * @default true
                 */
                 visible: true,
                 /**
-                * @name dxDiagramOptions.viewSettingsToolbar.commands
+                * @name dxDiagramOptions.viewToolbar.commands
                 * @type Array<Enums.DiagramToolbarCommand>
                 * @default undefined
                 */
@@ -1783,10 +1783,10 @@ class Diagram extends Widget {
             });
         }
     }
-    _invalidateViewSettingsToolbarCommands() {
-        if(this._viewSettingsToolbar) {
-            this._viewSettingsToolbar.option({
-                commands: this.option('viewSettingsToolbar.commands')
+    _invalidateViewToolbarCommands() {
+        if(this._viewToolbar) {
+            this._viewToolbar.option({
+                commands: this.option('viewToolbar.commands')
             });
         }
     }
@@ -1926,9 +1926,9 @@ class Diagram extends Widget {
                     this._invalidate();
                 }
                 break;
-            case 'viewSettingstoolbar':
-                if(args.fullName === 'viewSettingstoolbar.commands') {
-                    this._invalidateViewSettingsToolbarCommands();
+            case 'viewToolbar':
+                if(args.fullName === 'viewToolbar.commands') {
+                    this._invalidateViewToolbarCommands();
                 } else {
                     this._invalidate();
                 }

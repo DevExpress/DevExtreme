@@ -435,13 +435,13 @@ const DiagramCommandsManager = {
             allCommands['redo']
         ];
     },
-    getViewSettingsToolbarCommands: function(commands) {
+    getViewToolbarCommands: function(commands) {
         const allCommands = this.getAllCommands();
-        const viewSettingsToolbarCommands = commands ? this._getCustomCommands(allCommands, commands) :
-            this._getDefaultViewSettingsToolbarCommands(allCommands);
-        return this._prepareToolbarCommands(viewSettingsToolbarCommands);
+        const viewToolbarCommands = commands ? this._getCustomCommands(allCommands, commands) :
+            this._getDefaultViewToolbarCommands(allCommands);
+        return this._prepareToolbarCommands(viewToolbarCommands);
     },
-    _getDefaultViewSettingsToolbarCommands: function(allCommands) {
+    _getDefaultViewToolbarCommands: function(allCommands) {
         return [
             allCommands['zoomLevel'],
             allCommands['separator'],
@@ -488,9 +488,9 @@ const DiagramCommandsManager = {
         const result = [];
         groups.forEach(function(g, gi) {
             g.commands.forEach(function(cn, ci) {
-                result.push(extend(allCommands[cn], {
+                result.push(extend({
                     beginGroup: gi > 0 && ci === 0
-                }));
+                }, allCommands[cn]));
             });
         });
         return result;
@@ -535,6 +535,7 @@ const DiagramCommandsManager = {
                 const command = {
                     text: c.text,
                     icon: c.icon,
+                    onExecuted: c.onClick
                 };
                 if(Array.isArray(c.items)) {
                     command.items = this._getCustomCommands(allCommands, c.items);
@@ -552,6 +553,9 @@ const DiagramCommandsManager = {
                 beginGroup = true;
             } else {
                 if(typeof command === 'object') {
+                    if(Array.isArray(command.items)) {
+                        command.items = this._prepareContextMenuCommands(command.items);
+                    }
                     result.push(extend(command, {
                         beginGroup: beginGroup
                     }));
