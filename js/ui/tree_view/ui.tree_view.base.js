@@ -1551,6 +1551,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return items;
     },
 
+    // Deprecated. Will bew removed in near future - use getSelectedNodeKeys method instead
     getSelectedNodesKeys: function() {
         return this.getSelectedNodeKeys();
     },
