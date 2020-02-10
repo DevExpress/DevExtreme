@@ -8,6 +8,13 @@ import * as Preact from 'preact';
 // NOTE: workaround to memoize template
 let prevData;
 let prevTemplate;
+let parent;
+
+const removeChildren = (element) => {
+    while(element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+};
 
 class Button extends Widget {
     getView() {
@@ -16,6 +23,12 @@ class Button extends Widget {
 
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
+
+        // NOTE: workaround to switch from custom template to default
+        if(!props.template) {
+            parent && removeChildren(parent);
+        }
+
         if(props.template) {
             props.contentRender = (data) => {
                 const templateProp = this.option('template');
@@ -27,11 +40,10 @@ class Button extends Widget {
                 return (<div style={{ display: 'none' }} ref={(element) => {
                     prevTemplate = templateProp;
                     prevData = data;
+
                     if(element?.parentElement) {
-                        const parent = element.parentElement;
-                        while(parent.firstChild) {
-                            parent.removeChild(parent.firstChild);
-                        }
+                        parent = element.parentElement;
+                        removeChildren(parent);
                         template.render({
                             model: data,
                             container: parent

@@ -100,6 +100,7 @@ export class ButtonInput extends WidgetInput {
     @OneWay() onSubmit?: (e: any) => any = (() => undefined);
     @OneWay() pressed?: boolean;
     @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
+    @OneWay() template?: ButtonTemplate = '';
     @OneWay() text?: string = '';
     @OneWay() type?: string;
     @OneWay() useSubmitBehavior?: boolean = false;
