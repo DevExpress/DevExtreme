@@ -101,8 +101,8 @@ const subscribes = {
 
     showAppointmentTooltip: function(options) {
         const appointmentData = options.data;
-        const targetData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target), true);
-        this.showAppointmentTooltip(appointmentData, options.target, targetData);
+        const targetedData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target), true);
+        this.showAppointmentTooltip(appointmentData, options.target, targetedData);
     },
 
     hideAppointmentTooltip: function() {

@@ -3890,11 +3890,13 @@ QUnit.module('Appointments', () => {
             const endDateExpr = scheduler.option('endDateExpr');
             const textExpr = scheduler.option('textExpr');
 
-            const expectedStartDateHours = appointmentData[startDateExpr].getHours() + eventCallCount;
-            const expectedStartDateMinutes = appointmentData[startDateExpr].getMinutes();
+            const expectedStartDate = scheduler.instance.fire('convertDateByTimezone', appointmentData[startDateExpr]);
+            const expectedStartDateHours = expectedStartDate.getHours() + eventCallCount;
+            const expectedStartDateMinutes = expectedStartDate.getMinutes();
 
-            const expectedEndDateHours = appointmentData[endDateExpr].getHours() + eventCallCount;
-            const expectedEndDateMinutes = appointmentData[endDateExpr].getMinutes();
+            const expectedEndDate = scheduler.instance.fire('convertDateByTimezone', appointmentData[endDateExpr]);
+            const expectedEndDateHours = expectedEndDate.getHours() + eventCallCount;
+            const expectedEndDateMinutes = expectedEndDate.getMinutes();
 
             assert.equal(targetedAppointmentData[startDateExpr].getHours(), expectedStartDateHours, `start date of targetedAppointmentData should be equal ${expectedStartDateHours}`);
             assert.equal(targetedAppointmentData[startDateExpr].getMinutes(), expectedStartDateMinutes, `start date of targetedAppointmentData should be equal ${expectedStartDateMinutes}`);
@@ -4041,7 +4043,7 @@ QUnit.module('Appointments', () => {
                     startDateExpr: 'startDateCustom',
                     endDateExpr: 'endDateCustom',
                     currentView: 'week',
-                    timeZone: 'Europe/Belgrade',
+                    timeZone: -1,
                     startDayHour: 0,
                     endDayHour: 24
                 },
