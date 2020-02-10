@@ -4,7 +4,6 @@ import Toolbar from '../toolbar';
 import ContextMenu from '../context_menu';
 import DiagramBar from './diagram.bar';
 import { extend } from '../../core/utils/extend';
-import messageLocalization from '../../localization/message';
 
 import DiagramPanel from './ui.diagram.panel';
 import DiagramMenuHelper from './ui.diagram.menu_helper';
@@ -36,6 +35,7 @@ class DiagramToolbar extends DiagramPanel {
         this._commands = this._getCommands();
         this._itemHelpers = {};
         this._contextMenus = [];
+        this._rightAlignedCommands = this._getRightAlignedCommands();
 
         const $toolbar = this._createMainElement();
         this._renderToolbar($toolbar);
@@ -49,27 +49,18 @@ class DiagramToolbar extends DiagramPanel {
     _getCommands() {
         return [];
     }
+    _getRightAlignedCommands() {
+        return [];
+    }
     _getWidgetCommands() {
-        return this._widgetCommands ||
-            (this._widgetCommands = [
-                {
-                    command: 'options',
-                    icon: 'preferences',
-                    hint: messageLocalization.format('dxDiagram-commandProperties'),
-                    text: messageLocalization.format('dxDiagram-commandProperties'),
-                }
-            ]);
+        return this.option('widgetCommandNames') || [];
     }
     _renderToolbar($toolbar) {
-        const widgetCommandNames = this.option('widgetCommandNames') || [];
-        const widgetCommands = this._getWidgetCommands().filter(function(c) { return widgetCommandNames.indexOf(c.command) > -1; });
-        let dataSource = this._prepareToolbarItems(this._commands, 'before', this._execDiagramCommand);
-        dataSource = dataSource.concat(this._prepareToolbarItems(widgetCommands, 'after', this._execWidgetCommand));
-        this._toolbarInstance = this._createComponent($toolbar, Toolbar, {
-            dataSource
-        });
+        let dataSource = [];
+        dataSource = dataSource.concat(this._prepareToolbarItems(this._commands, 'before', this._execDiagramCommand));
+        dataSource = dataSource.concat(this._prepareToolbarItems(this._rightAlignedCommands, 'after', this._execDiagramCommand));
+        this._toolbarInstance = this._createComponent($toolbar, Toolbar, { dataSource });
     }
-
     _prepareToolbarItems(items, location, actionHandler) {
         return items.map(item => extend(true,
             { location: location, locateInMenu: 'auto' },
@@ -266,18 +257,17 @@ class DiagramToolbar extends DiagramPanel {
     }
     _execDiagramCommand(command, value, onExecuted) {
         if(!this._updateLocked && command !== undefined) {
-            this.bar.raiseBarCommandExecuted(command, value);
+            const widgetCommands = this._getWidgetCommands();
+            if(widgetCommands.indexOf(command) > -1) {
+                this._onWidgetCommandAction({ name: command });
+            } else {
+                this.bar.raiseBarCommandExecuted(command, value);
+            }
         }
         if(typeof onExecuted === 'function') {
             onExecuted.call(this);
         }
     }
-    _execWidgetCommand(command) {
-        if(!this._updateLocked) {
-            this._onWidgetCommandAction({ name: command });
-        }
-    }
-
     _createOnWidgetCommand() {
         this._onWidgetCommandAction = this._createActionByOption('onWidgetCommand');
     }

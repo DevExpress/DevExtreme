@@ -822,6 +822,10 @@ declare module DevExpress {
         /** @name positionConfig.offset */
         offset?: string | { x?: number, y?: number };
     }
+    /** @name registerComponent(name, componentClass) */
+    export function registerComponent(name: string, componentClass: any): void;
+    /** @name registerComponent(name, namespace, componentClass) */
+    export function registerComponent(name: string, namespace: any, componentClass: any): void;
     /** @name setTemplateEngine(name) */
     export function setTemplateEngine(templateEngineName: string): void;
     /** @name setTemplateEngine(options) */
@@ -10169,4 +10173,10 @@ declare module DevExpress.viz {
 declare module DevExpress.viz.map {
     /** @name viz.map.projection(data) */
     export function projection(data: VectorMapProjectionConfig): any;
+}
+declare module DevExpress.viz.map.projection {
+    /** @name viz.map.projection.add(name, projection) */
+    export function add(name: string, projection: VectorMapProjectionConfig | any): void;
+    /** @name viz.map.projection.get(name) */
+    export function get(name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string): any;
 }
