@@ -32,9 +32,9 @@ class FileManagerFilesTreeView extends Widget {
             rootValue: '',
             createChildren: this._onFilesTreeViewCreateSubDirectories.bind(this),
             itemTemplate: this._createFilesTreeViewItemTemplate.bind(this),
-            keyExpr: 'fileItem.key',
-            parentIdExpr: 'parentDirectory.fileItem.key',
-            displayExpr: 'fileItem.name',
+            keyExpr: 'getInternalKey',
+            parentIdExpr: 'parentDirectory.getInternalKey',
+            displayExpr: itemInfo => itemInfo.getDisplayName(),
             hasItemsExpr: 'fileItem.hasSubDirs',
             onItemClick: this._createActionByOption('onDirectoryClick'),
             onItemExpanded: e => this._onFilesTreeViewItemExpanded(e),
@@ -100,7 +100,7 @@ class FileManagerFilesTreeView extends Widget {
         const $image = getImageContainer(itemData.icon);
 
         const $text = $('<span>')
-            .text(itemData.fileItem.name)
+            .text(itemData.getDisplayName())
             .addClass(FILE_MANAGER_DIRS_TREE_ITEM_TEXT_CLASS);
 
         const $button = $('<div>');
@@ -134,7 +134,7 @@ class FileManagerFilesTreeView extends Widget {
 
     _updateFocusedElement() {
         const directoryInfo = this._getCurrentDirectory();
-        const $element = this._getItemElementByKey(directoryInfo.fileItem.key);
+        const $element = this._getItemElementByKey(directoryInfo.getInternalKey());
         if(this._$focusedElement) {
             this._$focusedElement.toggleClass(FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS, false);
         }
@@ -201,7 +201,7 @@ class FileManagerFilesTreeView extends Widget {
         if(!directoryInfo || directoryInfo.items.length === 0) {
             return deferred.reject().promise();
         }
-        const treeViewNode = this._filesTreeView._dataAdapter.getNodeByKey(directoryInfo.fileItem.key);
+        const treeViewNode = this._filesTreeView._dataAdapter.getNodeByKey(directoryInfo.getInternalKey());
         if(!treeViewNode) {
             return deferred.reject().promise();
         }
@@ -210,7 +210,7 @@ class FileManagerFilesTreeView extends Widget {
         }
 
         treeViewNode.expandedDeferred = deferred;
-        this._filesTreeView.expandItem(directoryInfo.fileItem.key);
+        this._filesTreeView.expandItem(directoryInfo.getInternalKey());
         return deferred.promise();
     }
 

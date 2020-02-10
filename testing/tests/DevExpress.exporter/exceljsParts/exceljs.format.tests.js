@@ -61,10 +61,10 @@ const ExcelJSLocalizationFormatTests = {
                     exportDataGrid({
                         component: dataGrid,
                         worksheet: this.worksheet
-                    }).then((cellsRange) => {
+                    }).then((cellRange) => {
                         helper.checkValues(expectedCells);
                         helper.checkCellFormat(expectedCells);
-                        helper.checkCellsRange(cellsRange, { row: 1, column: 6 }, topLeft);
+                        helper.checkCellRange(cellRange, { row: 1, column: 6 }, topLeft);
                         done();
                     });
                 });

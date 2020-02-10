@@ -59,12 +59,12 @@ export default class FileSystemProviderBase {
     /**
      * @docid FileSystemProviderBaseMethods.getItems
      * @publicName getItems()
-     * @param1 pathInfo:object
+     * @param1 parentDirectory:FileSystemItem
      * @return Promise<Array<object>>
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItems(pathInfo: any): Promise<Array<any>> & JQueryPromise<Array<any>>;
+    getItems(parentDirectory: FileSystemItem): Promise<Array<any>> & JQueryPromise<Array<any>>;
 
     /**
      * @docid FileSystemProviderBaseMethods.renameItem

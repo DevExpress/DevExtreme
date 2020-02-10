@@ -438,7 +438,7 @@ class FileManagerActionContext {
         this._onlyFiles = !this._actionMetadata.affectsAllItems && this._itemInfos.every(info => !info.fileItem.isDirectory);
         this._items = this._itemInfos.map(itemInfo => itemInfo.fileItem);
         this._multipleItems = this._items.length > 1;
-        this._location = directoryInfo.fileItem.name;
+        this._location = directoryInfo.getDisplayName();
 
         this._singleRequest = true;
 

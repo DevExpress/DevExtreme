@@ -302,7 +302,7 @@ class FileManager extends Widget {
             ? this._controller.getDirectoryContents(selectedDir)
             : this._controller.getFiles(selectedDir);
 
-        if(this.option('itemView.showParentFolder') && !selectedDir.fileItem.isRoot) {
+        if(this.option('itemView.showParentFolder') && !selectedDir.fileItem.isRoot()) {
             const parentDirItem = selectedDir.fileItem.createClone();
             parentDirItem.isParentFolder = true;
             parentDirItem.name = '..';
