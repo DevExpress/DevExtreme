@@ -1938,13 +1938,14 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _updateEditRow: function(row, forceUpdateRow, isCustomSetCellValue) {
             const that = this;
-
             if(forceUpdateRow || !isRowEditMode(that)) {
                 that._updateEditRowCore(row, !forceUpdateRow, isCustomSetCellValue);
                 if(!forceUpdateRow) {
                     that._focusEditingCell();
                 }
             } else {
+                const deferred = new Deferred();
+                that.addDeferred(deferred);
                 setTimeout(function() {
                     const $focusedElement = $(domAdapter.getActiveElement());
                     const columnIndex = that._rowsView.getCellIndex($focusedElement, row.rowIndex);
@@ -1964,6 +1965,7 @@ const EditingController = modules.ViewController.inherit((function() {
                             });
                         });
                     }
+                    deferred.resolve();
                 });
             }
         },
@@ -2293,18 +2295,9 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         showHighlighting: function($cell) {
-            // const $highlight = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
-            // test
-            let $highlight = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
-            // endTest
+            const $highlight = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
             if($cell.get(0).tagName === 'TD' && !$highlight.length) {
                 $cell.wrapInner($('<div>').addClass(CELL_HIGHLIGHT_OUTLINE + ' ' + POINTER_EVENTS_TARGET_CLASS));
-                // test
-                $highlight = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
-                if(!$highlight.find('.dx-widget').length) {
-                    $highlight.wrapInner($('<div>').addClass('dx-cell-value'));
-                }
-                // endTest
             }
         },
 

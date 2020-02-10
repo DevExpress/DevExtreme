@@ -125,10 +125,11 @@ const ValidatingController = modules.Controller.inherit((function() {
             }
 
             this._isValidationInProgress = true;
+            let fullValidating;
             if(isFull) {
-                this._fullValidating && this._fullValidating.reject('cancel');
-                this._fullValidating = new Deferred();
-                editingController.addDeferred(this._fullValidating);
+                // this._fullValidating && this._fullValidating.reject('cancel');
+                fullValidating = new Deferred();
+                editingController.addDeferred(fullValidating);
                 each(editingController._editData, (index, editData) => {
                     let validationResult;
 
@@ -165,10 +166,11 @@ const ValidatingController = modules.Controller.inherit((function() {
                 });
             }
 
-            this._isValidationInProgress = false;
+            // this._isValidationInProgress = false;
 
             when(...completeList).done(() => {
-                this._fullValidating && this._fullValidating.resolve();
+                this._isValidationInProgress = false;
+                fullValidating && fullValidating.resolve();
                 deferred.resolve(isValid);
             });
 
