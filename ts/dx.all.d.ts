@@ -1670,29 +1670,27 @@ declare module DevExpress.fileManagement {
     /** @name CustomFileSystemProvider.Options */
     export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
         /** @name CustomFileSystemProvider.Options.abortFileUpload */
-        abortFileUpload?: Function;
+        abortFileUpload?: ((file: File, uploadInfo?: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.copyItem */
-        copyItem?: Function;
+        copyItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.createDirectory */
-        createDirectory?: Function;
+        createDirectory?: ((parentDirectory: FileSystemItem, name: string) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.deleteItem */
-        deleteItem?: Function;
+        deleteItem?: ((item: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.downloadItems */
-        downloadItems?: Function;
+        downloadItems?: ((items: Array<FileSystemItem>) => any);
         /** @name CustomFileSystemProvider.Options.getItems */
-        getItems?: Function;
+        getItems?: ((parentDirectory: FileSystemItem) => Promise<Array<any>> | JQueryPromise<Array<any>> | Array<any>);
         /** @name CustomFileSystemProvider.Options.getItemsContent */
-        getItemsContent?: Function;
+        getItemsContent?: ((items: Array<FileSystemItem>) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.hasSubDirectoriesExpr */
         hasSubDirectoriesExpr?: string | Function;
         /** @name CustomFileSystemProvider.Options.moveItem */
-        moveItem?: Function;
+        moveItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.renameItem */
-        renameItem?: Function;
-        /** @name CustomFileSystemProvider.Options.uploadChunkSize */
-        uploadChunkSize?: number;
+        renameItem?: ((item: FileSystemItem, newName: string) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.uploadFileChunk */
-        uploadFileChunk?: Function;
+        uploadFileChunk?: ((file: File, uploadInfo: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
     }
     /** @name CustomFileSystemProvider */
     export class CustomFileSystemProvider extends FileSystemProviderBase {
@@ -1781,6 +1779,19 @@ declare module DevExpress.fileManagement {
     /** @name RemoteFileSystemProvider */
     export class RemoteFileSystemProvider extends FileSystemProviderBase {
         constructor(options?: RemoteFileSystemProviderOptions)
+    }
+    /** @name UploadInfo */
+    export interface UploadInfo {
+        /** @name UploadInfo.bytesUploaded */
+        bytesUploaded?: number;
+        /** @name UploadInfo.chunkBlob */
+        chunkBlob?: Blob;
+        /** @name UploadInfo.chunkCount */
+        chunkCount?: number;
+        /** @name UploadInfo.chunkIndex */
+        chunkIndex?: number;
+        /** @name UploadInfo.customData */
+        customData?: any;
     }
 }
 declare module DevExpress.fx {
@@ -3642,7 +3653,7 @@ declare module DevExpress.ui {
     /** @name dxFileUploader.Options */
     export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
         /** @name dxFileUploader.Options.abortUpload */
-        abortUpload?: ((file: File, uploadInfo: { bytesUploaded?: number, chunkCount?: number, customData?: any, chunkBlob?: Blob, chunkIndex?: number }) => Promise<any> | JQueryPromise<any> | any);
+        abortUpload?: ((file: File, uploadInfo?: DevExpress.fileManagement.UploadInfo) => Promise<any> | JQueryPromise<any> | any);
         /** @name dxFileUploader.Options.accept */
         accept?: string;
         /** @name dxFileUploader.Options.allowCanceling */
@@ -3692,7 +3703,7 @@ declare module DevExpress.ui {
         /** @name dxFileUploader.Options.uploadButtonText */
         uploadButtonText?: string;
         /** @name dxFileUploader.Options.uploadChunk */
-        uploadChunk?: ((file: File, uploadInfo: { bytesUploaded?: number, chunkCount?: number, customData?: any, chunkBlob?: Blob, chunkIndex?: number }) => Promise<any> | JQueryPromise<any> | any);
+        uploadChunk?: ((file: File, uploadInfo: DevExpress.fileManagement.UploadInfo) => Promise<any> | JQueryPromise<any> | any);
         /** @name dxFileUploader.Options.uploadFailedMessage */
         uploadFailedMessage?: string;
         /** @name dxFileUploader.Options.uploadFile */

@@ -4,8 +4,8 @@
  * @module file_management/file_system_item
  * @namespace DevExpress.fileManagement
  * @export default
- * @hidden
  * @prevFileNamespace DevExpress.fileManagement
+ * @public
  */
 export default class FileSystemItem {
     constructor(path: string, isDirectory: boolean, pathKeys?: Array<string>);
