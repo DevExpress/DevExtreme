@@ -101,7 +101,7 @@ const subscribes = {
 
     showAppointmentTooltip: function(options) {
         const appointmentData = options.data;
-        const targetedData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target), true);
+        const targetedData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target));
         this.showAppointmentTooltip(appointmentData, options.target, targetedData);
     },
 
@@ -765,7 +765,7 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipConvert) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
 
@@ -777,10 +777,6 @@ const subscribes = {
         const result = {};
 
         extend(true, result, appointmentData, recurringData);
-
-        if(this._isAppointmentRecurrence(appointmentData) && !skipConvert) {
-            this._convertDatesByTimezoneBack(false, result); // TODO: temporary solution fox fix T848058, more information in the ticket
-        }
 
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 

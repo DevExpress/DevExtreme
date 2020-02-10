@@ -456,7 +456,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         return itemTemplate.render({
             model: {
                 appointmentData: itemData,
-                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent(), true)
+                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent())
             },
             container: container,
             index: index
@@ -713,7 +713,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
             };
         }
 
-        appointmentSetting.targetedAppointmentData = this.invoke('getTargetedAppointmentData', appointmentData, $appointment, true);
+        appointmentSetting.targetedAppointmentData = this.invoke('getTargetedAppointmentData', appointmentData, $appointment);
 
         this._virtualAppointments[virtualGroupIndex].items.settings.push(appointmentSetting);
         this._virtualAppointments[virtualGroupIndex].items.data.push(appointmentData);
