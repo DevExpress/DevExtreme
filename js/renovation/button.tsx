@@ -1,6 +1,6 @@
 import { getImageSourceType } from '../core/utils/icon';
 import { click } from '../events/short';
-import { Component, ComponentInput, Effect, Prop, Ref, JSXComponent } from 'devextreme-generator/component_declaration/common';
+import { Component, ComponentBindings, Effect, OneWay, Ref, JSXComponent } from 'devextreme-generator/component_declaration/common';
 import Widget, { WidgetInput } from './widget';
 
 const getImageContainerJSX = (source: string) => {
@@ -89,21 +89,20 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
     </Widget>;
 };
 
-@ComponentInput()
+@ComponentBindings()
 export class ButtonInput extends WidgetInput { 
-    @Prop() activeStateEnabled?: boolean = true;
-    @Prop() classNames?: string[];
-    @Prop() contentRender?: ButtonTemplateFn;
-    @Prop() focusStateEnabled?: boolean = true;
-    @Prop() hoverStateEnabled?: boolean = true;
-    @Prop() icon?: string;
-    @Prop() onSubmit?: (e: any) => any = (() => undefined);
-    @Prop() pressed?: boolean;
-    @Prop() stylingMode?: 'outlined' | 'text' | 'contained';
-    @Prop() template?: ButtonTemplate = '';
-    @Prop() text?: string = '';
-    @Prop() type?: string;
-    @Prop() useSubmitBehavior?: boolean = false;
+    @OneWay() activeStateEnabled?: boolean = true;
+    @OneWay() classNames?: string[];
+    @OneWay() contentRender?: ButtonTemplateFn;
+    @OneWay() focusStateEnabled?: boolean = true;
+    @OneWay() hoverStateEnabled?: boolean = true;
+    @OneWay() icon?: string;
+    @OneWay() onSubmit?: (e: any) => any = (() => undefined);
+    @OneWay() pressed?: boolean;
+    @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
+    @OneWay() text?: string = '';
+    @OneWay() type?: string;
+    @OneWay() useSubmitBehavior?: boolean = false;
 }
 
 @Component({
