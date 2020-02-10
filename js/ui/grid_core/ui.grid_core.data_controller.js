@@ -602,11 +602,6 @@ module.exports = {
                     };
 
                     each(rowIndices, function(index, rowIndex) {
-                        let oldItem;
-                        let newItem;
-                        let oldNextItem;
-                        let newNextItem;
-                        let strict;
                         let columnIndices;
 
                         rowIndex += rowIndexCorrection + rowIndexDelta;
@@ -614,12 +609,12 @@ module.exports = {
                         if(prevIndex === rowIndex) return;
 
                         prevIndex = rowIndex;
-                        oldItem = that._items[rowIndex];
-                        oldNextItem = that._items[rowIndex + 1];
-                        newItem = items[rowIndex];
-                        newNextItem = items[rowIndex + 1];
+                        const oldItem = that._items[rowIndex];
+                        const oldNextItem = that._items[rowIndex + 1];
+                        const newItem = items[rowIndex];
+                        const newNextItem = items[rowIndex + 1];
 
-                        strict = equalItems(oldItem, oldNextItem) || equalItems(newItem, newNextItem);
+                        const strict = equalItems(oldItem, oldNextItem) || equalItems(newItem, newNextItem);
 
                         if(newItem) {
                             newItem.rowIndex = rowIndex;
