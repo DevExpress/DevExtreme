@@ -90,7 +90,7 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
 };
 
 @ComponentInput()
-export class ButtonInput extends WidgetInput { 
+export class ButtonInput extends WidgetInput {
     @Prop() activeStateEnabled?: boolean = true;
     @Prop() classNames?: string[];
     @Prop() contentRender?: any;
@@ -105,6 +105,7 @@ export class ButtonInput extends WidgetInput {
     @Prop() useSubmitBehavior?: boolean = false;
 }
 
+/* tslint:disable-next-line:max-classes-per-file */
 @Component({
     name: 'Button',
     components: [],
@@ -127,7 +128,7 @@ export default class Button extends JSXComponent<ButtonInput> {
         return () => click.off(this.submitInputRef, { namespace });
     }
 
-    onWidgetClick(e:Event) { 
+    onWidgetClick(e:Event) {
         this.props.useSubmitBehavior && this.submitInputRef.click();
         return this.props.onClick?.(e);
     }

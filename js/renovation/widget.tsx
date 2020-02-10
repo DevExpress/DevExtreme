@@ -102,10 +102,10 @@ export const viewModelFunction = ({
         tabIndex,
         visible,
         width,
+        _visibilityChanged,
     },
 
     widgetRef,
-    _visibilityChanged,
 }: Widget) => {
     const styles = getStyles({ width, height });
     const attrsWithoutClass = getAttributes({
@@ -178,6 +178,7 @@ export class WidgetInput {
     @Prop() tabIndex?: number = 0;
     @Prop() visible?: boolean = true;
     @Prop() width?: string | number | null = null;
+    @Prop() _isHidden: boolean = false;
 
     @Slot() children?: any;
 
@@ -195,31 +196,31 @@ export default class Widget extends JSXComponent<WidgetInput> {
     @InternalState() _active: boolean = false;
     @InternalState() _focused: boolean = false;
     @InternalState() _hovered: boolean = false;
-    @InternalState() _isHidden: boolean = false;
+    @InternalState() _isHidden: boolean = this.props._isHidden;
 
     @Ref()
     widgetRef!: HTMLDivElement;
 
     @Effect()
+    hiddenStateEffect() {
+        this._isHidden = isVisible(this.widgetRef);
+    }
+
+    @Effect()
     visibilityEffect() {
         const namespace = `${this.props.name}VisibilityChange`;
-
-        if (this._visibilityChanged && hasWindow()) {
-            console.log(`_isHidden - ${this._isHidden}`);
-            const isHidden = this._isHidden;
+        if (this.props._visibilityChanged && hasWindow()) {
             visibility.on(this.widgetRef,
                 () => {
-                    console.log(`shown _isHidden - ${this._isHidden}`);
-                    if (isHidden && isVisible(this.widgetRef)) {
-                        this._visibilityChanged!(true);
+                    if (this._isHidden && isVisible(this.widgetRef)) {
+                        this.props._visibilityChanged!(true);
                         this._isHidden = false;
                     }
                 },
                 () => {
-                    console.log(`HIDDEN _isHidden - ${this._isHidden}`);
-                    if (!isHidden && isVisible(this.widgetRef)) {
+                    if (!this._isHidden && isVisible(this.widgetRef)) {
                         this._isHidden = true;
-                        this._visibilityChanged!(false);
+                        this.props._visibilityChanged!(false);
                     }
                 },
                 { namespace },

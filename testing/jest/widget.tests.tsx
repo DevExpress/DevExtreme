@@ -346,10 +346,8 @@ describe('Widget', () => {
 
     describe.only('Events', () => {
         describe('visibilityChanged', () => {
-            Element.prototype.getBoundingClientRect = () => {};
-            jest.spyOn(Element.prototype, 'getClientRects').mockImplementation(() => ({
-                length: 1,
-            }));
+            const getClientRects = jest.spyOn(Element.prototype, 'getClientRects');
+            getClientRects.mockImplementation(() => ({ length: 1 }));
 
             let hidingFired = 0;
             let shownFired = 0;
@@ -379,55 +377,50 @@ describe('Widget', () => {
                 expect(shownFired).toBe(1);
             });
 
-            it('should have many subscriptions without crashing', () => {
-                const widget1 = render({ _visibilityChanged, name: 'TestComponent1' });
-                const widget2 = render({ _visibilityChanged, name: 'TestComponent2' });
+            // it should testing at eventEngine side
+            // it('should have many subscriptions without crashing', () => {
+            //     const widget1 = render({ _visibilityChanged, name: 'TestComponent1' });
+            //     const widget2 = render({ _visibilityChanged, name: 'TestComponent2' });
 
-                emit(EVENT.hiding);
-                widget1.setProps({});
-                widget2.setProps({});
+            //     emit(EVENT.hiding);
+            //     widget1.setProps({});
+            //     widget2.setProps({});
 
-                emit(EVENT.shown);
-                widget1.setProps({});
-                widget2.setProps({});
+            //     emit(EVENT.shown);
+            //     widget1.setProps({});
+            //     widget2.setProps({});
 
-                expect(hidingFired).toBe(2);
-                expect(shownFired).toBe(2);
-            });
+            //     expect(hidingFired).toBe(2);
+            //     expect(shownFired).toBe(2);
+            // });
 
-            fit('works optimally if component is visible on initializing', () => {
-                const widget = render({ _visibilityChanged });
+            it('works optimally if component is visible on initializing', () => {
+                let widget = null;
+                widget = render({ _visibilityChanged });
 
                 // hidden/shown is not fired initially
                 expect(hidingFired).toBe(0);
                 expect(shownFired).toBe(0);
 
                 // shown is not fired if element is visible
-                act(() => {
-                    emit(EVENT.shown);
-                });
+                emit(EVENT.shown);
+                widget.setProps({});
                 widget.update();
-                // widget.setProps({});
                 expect(shownFired).toBe(0);
 
-                act(() => {
-                    emit(EVENT.hiding);
-                });
+                emit(EVENT.hiding);
+                widget.setProps({});
                 widget.update();
-                // widget.setProps({});
                 expect(hidingFired).toBe(1);
 
-                act(() => {
-                    emit(EVENT.hiding);
-                });
+                emit(EVENT.hiding);
+                widget.setProps({});
                 widget.update();
-                // widget.setProps({});
                 expect(hidingFired).toBe(1);
             });
 
             it('works optimally if component is hidden on initializing', () => {
-                const widget = mountRender({ _visibilityChanged });
-                widget.setState({ _isHidden: true });
+                const widget = mountRender({ _visibilityChanged, _isHidden: true });
 
                 // hidden/shown is not fired initially
                 expect(hidingFired).toBe(0);
@@ -447,12 +440,9 @@ describe('Widget', () => {
                 expect(shownFired).toBe(1);
             });
 
-            it('should not calls with hidden parent', () => {
-                const widget = mount((
-                    <div style={{ display: 'hidden' }}>
-                        <Widget _visibilityChanged={_visibilityChanged} />
-                    </div>
-                ));
+            fit('should not calls with hidden parent', () => {
+                getClientRects.mockImplementation(() => ({ length: 0 }));
+                const widget = mountRender({ _visibilityChanged });
 
                 // hidden/shown is not fired initially
                 expect(hidingFired).toBe(0);
@@ -460,9 +450,9 @@ describe('Widget', () => {
 
                 emit(EVENT.shown);
                 widget.setProps({});
-                expect(shownFired).toBe(1);
+                expect(shownFired).toBe(0);
 
-                // $parent.show();
+                getClientRects.mockImplementation(() => ({ length: 1 }));
                 emit(EVENT.shown);
                 widget.setProps({});
                 expect(shownFired).toBe(1);
