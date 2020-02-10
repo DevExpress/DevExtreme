@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-class FormTestWrapper {
+class FormLayoutTestWrapper {
     constructor(colCount, options, items) {
         const wrapperOptions = $.extend({}, options, {
             width: 1000,
@@ -38,4 +38,4 @@ class FormTestWrapper {
     }
 }
 
-export default FormTestWrapper;
+export default FormLayoutTestWrapper;
