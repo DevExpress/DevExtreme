@@ -1,8 +1,8 @@
-/* global document */
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import eventUtils from '../../events/utils';
 import { extend } from '../../core/utils/extend';
+import domAdapter from '../../core/dom_adapter';
 
 const FOCUS_STATE_CLASS = 'dx-state-focused';
 const FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -105,16 +105,16 @@ function fireKeyDownEvent(instance, event, executeAction) {
 }
 
 function onDocumentVisibilityChange() {
-    isHiddenFocusing = document.visibilityState === 'visible';
+    isHiddenFocusing = domAdapter.getDocument().visibilityState === 'visible';
 }
 
 module.exports = {
     subscribeVisibilityChange: function() {
-        eventsEngine.on(document, 'visibilitychange', onDocumentVisibilityChange);
+        eventsEngine.on(domAdapter.getDocument(), 'visibilitychange', onDocumentVisibilityChange);
     },
 
     unsubscribeVisibilityChange: function() {
-        eventsEngine.off(document, 'visibilitychange', onDocumentVisibilityChange);
+        eventsEngine.off(domAdapter.getDocument(), 'visibilitychange', onDocumentVisibilityChange);
     },
 
     hiddenFocus: function(element) {
