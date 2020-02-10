@@ -20,10 +20,10 @@ class FormTestWrapper {
         this.$form = $form;
     }
 
-    checkFormSize(expected) {
+    checkFormSize(expectedWidth, expectedHeight) {
         const elementRect = this.$form.get(0).getBoundingClientRect();
-        QUnit.assert.roughEqual(elementRect.width, expected.width, this.epsilon, 'form width');
-        QUnit.assert.roughEqual(elementRect.height, expected.height, this.epsilon, 'form height');
+        QUnit.assert.roughEqual(elementRect.width, expectedWidth, this.epsilon, 'form width');
+        QUnit.assert.roughEqual(elementRect.height, expectedHeight, this.epsilon, 'form height');
     }
 
     checkElementPosition($element, expected) {

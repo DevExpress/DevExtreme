@@ -23,14 +23,14 @@ QUnit.module('Form scenarios', () => {
 
     testOrSkip('1 column -> [item1]', function(assert) {
         const wrapper = new FormTestWrapper(1, {}, ['item1']);
-        wrapper.checkFormSize({ width: 1000, height: 75 });
+        wrapper.checkFormSize(1000, 75);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
     });
 
     function test_1Column_2ItemsLayout(items) {
         const wrapper = new FormTestWrapper(1, {}, items);
-        wrapper.checkFormSize({ width: 1000, height: 160 });
+        wrapper.checkFormSize(1000, 160);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
@@ -56,7 +56,7 @@ QUnit.module('Form scenarios', () => {
 
     function test_1Column_3ItemsLayout(items) {
         const wrapper = new FormTestWrapper(1, {}, items);
-        wrapper.checkFormSize({ width: 1000, height: 245 });
+        wrapper.checkFormSize(1000, 245);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
@@ -94,7 +94,7 @@ QUnit.module('Form scenarios', () => {
                     tabs: [ { title: 'item2', items: ['item2'] }]
                 }]
             }]);
-        wrapper.checkFormSize({ width: 1000, height: 320 });
+        wrapper.checkFormSize(1000, 320);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 205, left: 20, width: 960, height: 34 });
@@ -120,7 +120,7 @@ QUnit.module('Form scenarios', () => {
             },
             'item3']);
 
-        wrapper.checkFormSize({ width: 1000, height: 405 });
+        wrapper.checkFormSize(1000, 405);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 205, left: 20, width: 960, height: 34 });
@@ -131,7 +131,7 @@ QUnit.module('Form scenarios', () => {
 
     function test_2Column_2ItemsLayout(items) {
         const wrapper = new FormTestWrapper(2, {}, items);
-        wrapper.checkFormSize({ width: 1000, height: 75 });
+        wrapper.checkFormSize(100, 75);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
@@ -172,7 +172,7 @@ QUnit.module('Form scenarios', () => {
 
     function test_2Columns_3ItemsLayout(items) {
         const wrapper = new FormTestWrapper(2, {}, items);
-        wrapper.checkFormSize({ width: 1000, height: 160 });
+        wrapper.checkFormSize(1000, 160);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
@@ -206,7 +206,7 @@ QUnit.module('Form scenarios', () => {
             }
         ]);
 
-        wrapper.checkFormSize({ width: 1000, height: 160 });
+        wrapper.checkFormSize(1000, 160);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
@@ -227,7 +227,7 @@ QUnit.module('Form scenarios', () => {
             }
         ]);
 
-        wrapper.checkFormSize({ width: 1000, height: 235 });
+        wrapper.checkFormSize(1000, 235);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 120, left: 540, width: 440, height: 34 });
@@ -246,7 +246,7 @@ QUnit.module('Form scenarios', () => {
             },
             'item3']);
 
-        wrapper.checkFormSize({ width: 1000, height: 320 });
+        wrapper.checkFormSize(1000, 320);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 120, left: 540, width: 440, height: 34 });
@@ -262,7 +262,7 @@ QUnit.module('Form scenarios', () => {
             { itemType: 'group', colSpan: 4, items: ['item3'] }
         ]);
 
-        wrapper.checkFormSize({ width: 1000, height: 160 });
+        wrapper.checkFormSize(1000, 160);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), { top: 0, left: 0, width: 730, height: 34 });
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), { top: 34, left: 0, width: 730, height: 31 });
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), { top: 0, left: 770, width: 230, height: 34 });
