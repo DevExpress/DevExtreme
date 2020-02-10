@@ -237,8 +237,6 @@ const subscribes = {
     getTextAndFormatDate(data, currentData, format) {
         const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
         const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
-        // const startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
-        // const endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
         let startDate = appointmentFields.startDate;
         let endDate = appointmentFields.endDate;
 
@@ -706,7 +704,7 @@ const subscribes = {
         return date;
     },
 
-    convertDateByTimezoneBack: function(date, appointmentTimezone, makeSomething) {
+    convertDateByTimezoneBack: function(date, appointmentTimezone) {
         date = new Date(date);
 
         const tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
@@ -781,7 +779,7 @@ const subscribes = {
         extend(true, result, appointmentData, recurringData);
 
         if(this._isAppointmentRecurrence(appointmentData) && !skipConvert) {
-            this._convertDatesByTimezoneBack(false, result, result, true); // TODO: temporary solution fox fix T848058, more information in the ticket
+            this._convertDatesByTimezoneBack(false, result); // TODO: temporary solution fox fix T848058, more information in the ticket
         }
 
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
