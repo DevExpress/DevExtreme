@@ -1,6 +1,6 @@
 import { getImageSourceType } from '../core/utils/icon';
 import { click } from '../events/short';
-import { Component, ComponentInput, Effect, Prop, Ref, JSXComponent } from 'devextreme-generator/component_declaration/common';
+import { Component, ComponentBindings, Effect, OneWay, Ref, JSXComponent } from 'devextreme-generator/component_declaration/common';
 import Widget, { WidgetInput } from './widget';
 
 const getImageContainerJSX = (source: string) => {
@@ -54,7 +54,7 @@ declare type ButtonViewModel = {
     submitInputRef: any;
     onWidgetClick: (e: Event) => any;
     onWidgetKeyPress: (e: Event, options:any) => void;
-} & ButtonInput
+} & ButtonInput;
 
 export const viewFunction = (viewModel: ButtonViewModel) => {
     return <Widget
@@ -89,20 +89,20 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
     </Widget>;
 };
 
-@ComponentInput()
+@ComponentBindings()
 export class ButtonInput extends WidgetInput {
-    @Prop() activeStateEnabled?: boolean = true;
-    @Prop() classNames?: string[];
-    @Prop() contentRender?: any;
-    @Prop() focusStateEnabled?: boolean = true;
-    @Prop() hoverStateEnabled?: boolean = true;
-    @Prop() icon?: string;
-    @Prop() onSubmit?: (e: any) => any = (() => undefined);
-    @Prop() pressed?: boolean;
-    @Prop() stylingMode?: 'outlined' | 'text' | 'contained';
-    @Prop() text?: string = '';
-    @Prop() type?: string;
-    @Prop() useSubmitBehavior?: boolean = false;
+    @OneWay() activeStateEnabled?: boolean = true;
+    @OneWay() classNames?: string[];
+    @OneWay() contentRender?: any;
+    @OneWay() focusStateEnabled?: boolean = true;
+    @OneWay() hoverStateEnabled?: boolean = true;
+    @OneWay() icon?: string;
+    @OneWay() onSubmit?: (e: any) => any = (() => undefined);
+    @OneWay() pressed?: boolean;
+    @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
+    @OneWay() text?: string = '';
+    @OneWay() type?: string;
+    @OneWay() useSubmitBehavior?: boolean = false;
 }
 
 /* tslint:disable-next-line:max-classes-per-file */
@@ -120,7 +120,7 @@ export default class Button extends JSXComponent<ButtonInput> {
     submitEffect() {
         const namespace = 'UIFeedback';
 
-        click.on(this.submitInputRef, e => {
+        click.on(this.submitInputRef, (e) => {
             this.props.onSubmit?.(e);
             e.stopPropagation();
         }, { namespace });
