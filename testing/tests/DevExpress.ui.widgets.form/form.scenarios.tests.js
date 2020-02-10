@@ -406,6 +406,18 @@ QUnit.module('Form scenarios', () => {
                     }
                 });
 
+                testChromeOnly('2 column-> group.colCount:2 [group.colSpan: 2.colCount: 2 [group.text], longText.colSpan: 2]', function() {
+                    const wrapper = new FormLayoutTestWrapper(1, { alignItemLabels, alignItemLabelsInAllGroups }, [{ itemType: 'group', colCount: 2, items: [
+                        { itemType: 'group', colSpan: 2, colCount: 2, items: [
+                            { itemType: 'group', colSpan: 2, colCount: 2, items: [ { dataField: 'text', colSpan: 2 }] },
+                            { itemType: 'group', colSpan: 2, colCount: 2, items: [ { dataField: 'longText', colSpan: 2 }] }] }] }]);
+                    if(alignItemLabelsInAllGroups) {
+                        test_1Column_2Items_AlignedLabels(wrapper);
+                    } else {
+                        test_1Column_2Items_NotAlignedLabels(wrapper);
+                    }
+                });
+
                 testChromeOnly('2 column -> form.colCount:2 [a, abc, text, longText ]', function(assert) {
                     const wrapper = new FormLayoutTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups }, [
                         { dataField: 'a' }, { dataField: 'abc' }, { dataField: 'text' }, { dataField: 'longText' }]);
