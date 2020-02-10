@@ -237,13 +237,15 @@ const subscribes = {
     getTextAndFormatDate(data, currentData, format) {
         const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
         const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
-        let startDate = appointmentFields.startDate;
-        let endDate = appointmentFields.endDate;
+        const startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
+        const endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
+        // let startDate = appointmentFields.startDate;
+        // let endDate = appointmentFields.endDate;
 
-        if(!this._isAppointmentRecurrence(data)) {
-            startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
-            endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
-        }
+        // if(!this._isAppointmentRecurrence(data)) {
+        //     startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
+        //     endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
+        // }
 
         return {
             text: this.fire('createAppointmentTitle', appointmentFields),
@@ -790,9 +792,9 @@ const subscribes = {
 
         extend(true, result, appointmentData, recurringData);
 
-        // if(this._isAppointmentRecurrence(appointmentData)) {
-        //     this._convertDatesByTimezoneBack(false, result, result, true); // TODO: temporary solution fox fix T848058, more information in the ticket
-        // }
+        if(this._isAppointmentRecurrence(appointmentData)) {
+            this._convertDatesByTimezoneBack(false, result, result, true); // TODO: temporary solution fox fix T848058, more information in the ticket
+        }
 
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 
