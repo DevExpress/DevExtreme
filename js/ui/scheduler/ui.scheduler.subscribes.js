@@ -101,7 +101,7 @@ const subscribes = {
 
     showAppointmentTooltip: function(options) {
         const appointmentData = options.data;
-        const targetData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target));
+        const targetData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target), true);
         this.showAppointmentTooltip(appointmentData, options.target, targetData);
     },
 
@@ -237,15 +237,15 @@ const subscribes = {
     getTextAndFormatDate(data, currentData, format) {
         const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
         const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
-        const startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
-        const endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
-        // let startDate = appointmentFields.startDate;
-        // let endDate = appointmentFields.endDate;
+        // const startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
+        // const endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
+        let startDate = appointmentFields.startDate;
+        let endDate = appointmentFields.endDate;
 
-        // if(!this._isAppointmentRecurrence(data)) {
-        //     startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
-        //     endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
-        // }
+        if(!this._isAppointmentRecurrence(data)) {
+            startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
+            endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
+        }
 
         return {
             text: this.fire('createAppointmentTitle', appointmentFields),
@@ -779,7 +779,7 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, applyTimezone) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipConvert) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
 
@@ -792,7 +792,7 @@ const subscribes = {
 
         extend(true, result, appointmentData, recurringData);
 
-        if(this._isAppointmentRecurrence(appointmentData)) {
+        if(this._isAppointmentRecurrence(appointmentData) && !skipConvert) {
             this._convertDatesByTimezoneBack(false, result, result, true); // TODO: temporary solution fox fix T848058, more information in the ticket
         }
 
