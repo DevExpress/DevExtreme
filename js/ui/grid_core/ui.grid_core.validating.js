@@ -428,7 +428,7 @@ const ValidatingController = modules.Controller.inherit((function() {
             if(!editData.validationResults) {
                 editData.validationResults = {};
             }
-            let result = editData.validationResults[columnIndex];
+            let result;
             if(validationResult) {
                 result = extend({}, validationResult);
                 editData.validationResults[columnIndex] = result;
@@ -445,6 +445,8 @@ const ValidatingController = modules.Controller.inherit((function() {
                         return;
                     }
                 }
+            } else {
+                result = editData.validationResults[columnIndex];
             }
             if(result && result.disabledPendingId) {
                 delete result.disabledPendingId;
