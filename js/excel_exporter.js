@@ -15,7 +15,7 @@ import { exportDataGrid } from './exporter/exceljs/export_data_grid';
 * @type object
 */
 /**
-* @name CellsRange
+* @name CellRange
 * @namespace DevExpress.excelExporter
 * @type object
 */

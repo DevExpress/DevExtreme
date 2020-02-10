@@ -1582,11 +1582,11 @@ declare module DevExpress.excelExporter {
         /** @name CellAddress.row */
         row?: number;
     }
-    /** @name CellsRange */
-    export interface CellsRange {
-        /** @name CellsRange.from */
+    /** @name CellRange */
+    export interface CellRange {
+        /** @name CellRange.from */
         from?: CellAddress;
-        /** @name CellsRange.to */
+        /** @name CellRange.to */
         to?: CellAddress;
     }
     /** @name ExcelDataGridCell */
@@ -1647,7 +1647,7 @@ declare module DevExpress.excelExporter {
         width?: number;
     }
     /** @name excelExporter.exportDataGrid(options) */
-    export function exportDataGrid(options: ExportDataGridProps): Promise<CellsRange> & JQueryPromise<CellsRange>;
+    export function exportDataGrid(options: ExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
 }
 declare module DevExpress.exporter {
     /** @name ExcelFont */

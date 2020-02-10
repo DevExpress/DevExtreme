@@ -60,15 +60,15 @@ export interface CellAddress {
     column?: number;
 }
 
-export interface CellsRange {
+export interface CellRange {
     /**
-     * @docid CellsRange.from
+     * @docid CellRange.from
      * @type CellAddress
      * @public
      */
     from?: CellAddress;
     /**
-     * @docid CellsRange.to
+     * @docid CellRange.to
      * @type CellAddress
      * @public
      */
@@ -196,12 +196,12 @@ export interface ExportDataGridProps {
  * @docid excelExporter.exportDataGrid
  * @publicName exportDataGrid(options)
  * @param1 options:ExportDataGridProps
- * @return Promise<CellsRange>
+ * @return Promise<CellRange>
  * @namespace DevExpress.excelExporter
  * @module excel_exporter
  * @static
  * @prevFileNamespace DevExpress
  * @public
  */
-export function exportDataGrid(options: ExportDataGridProps): Promise<CellsRange> & JQueryPromise<CellsRange>;
+export function exportDataGrid(options: ExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
 
