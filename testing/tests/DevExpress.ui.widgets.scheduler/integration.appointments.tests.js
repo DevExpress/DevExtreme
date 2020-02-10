@@ -4041,7 +4041,7 @@ QUnit.module('Appointments', () => {
                     startDateExpr: 'startDateCustom',
                     endDateExpr: 'endDateCustom',
                     currentView: 'week',
-                    timeZone: 'Asia/Yekaterinburg',
+                    timeZone: 'Europe/Belgrade',
                     startDayHour: 0,
                     endDayHour: 24
                 },
