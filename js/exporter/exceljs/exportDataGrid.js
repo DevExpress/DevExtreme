@@ -37,7 +37,7 @@ function exportDataGrid(options) {
         summaryRight: false
     };
 
-    const cellsRange = {
+    const cellRange = {
         from: { row: topLeftCell.row, column: topLeftCell.column },
         to: { row: topLeftCell.row, column: topLeftCell.column }
     };
@@ -51,28 +51,28 @@ function exportDataGrid(options) {
             const dataRowsCount = dataProvider.getRowsCount();
 
             if(keepColumnWidths) {
-                _setColumnsWidth(worksheet, columns, cellsRange.from.column);
+                _setColumnsWidth(worksheet, columns, cellRange.from.column);
             }
 
             const mergedCells = [];
             const mergeRanges = [];
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
-                const row = worksheet.getRow(cellsRange.from.row + rowIndex);
+                const row = worksheet.getRow(cellRange.from.row + rowIndex);
 
-                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText);
+                _exportRow(rowIndex, columns.length, row, cellRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText);
 
                 if(rowIndex >= headerRowCount) {
                     row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
                 }
                 if(rowIndex >= 1) {
-                    cellsRange.to.row++;
+                    cellRange.to.row++;
                 }
             }
 
             _mergeCells(worksheet, topLeftCell, mergeRanges);
 
-            cellsRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
+            cellRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
             const worksheetViewSettings = worksheet.views[0] || {};
 
@@ -82,16 +82,16 @@ function exportDataGrid(options) {
 
             if(headerRowCount > 0) {
                 if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
-                    extend(worksheetViewSettings, { state: 'frozen', ySplit: cellsRange.from.row + dataProvider.getFrozenArea().y - 1 });
+                    extend(worksheetViewSettings, { state: 'frozen', ySplit: cellRange.from.row + dataProvider.getFrozenArea().y - 1 });
                 }
-                _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilterEnabled);
+                _setAutoFilter(dataProvider, worksheet, component, cellRange, autoFilterEnabled);
             }
 
             if(Object.keys(worksheetViewSettings).length > 0) {
                 worksheet.views = [worksheetViewSettings];
             }
 
-            resolve(cellsRange);
+            resolve(cellRange);
         }).always(() => {
             component.option('loadPanel', initialLoadPanelOptions);
         });
@@ -167,10 +167,10 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     }
 }
 
-function _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilterEnabled) {
+function _setAutoFilter(dataProvider, worksheet, component, cellRange, autoFilterEnabled) {
     if(autoFilterEnabled) {
         if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
-            worksheet.autoFilter = cellsRange;
+            worksheet.autoFilter = cellRange;
         }
     }
 }
