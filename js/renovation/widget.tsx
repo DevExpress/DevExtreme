@@ -15,7 +15,6 @@ import { active, dxClick, hover, keyboard, resize, visibility } from '../events/
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { isFakeClickEvent } from '../events/utils';
-import { hasWindow } from '../core/utils/window';
 import Action from '../core/action';
 
 const getStyles = ({ width, height }) => {
@@ -68,7 +67,7 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetInput>) => {
     model._active && className.push('dx-state-active');
     model._hovered && isHoverable && !model._active && className.push('dx-state-hover');
     model.rtlEnabled && className.push('dx-rtl');
-    model.onVisibilityChange && hasWindow() && className.push('dx-visibility-change-handler');
+    model.onVisibilityChange && className.push('dx-visibility-change-handler');
     model.elementAttr?.class && className.push(model.elementAttr.class);
 
     return className.join(' ');
@@ -194,7 +193,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
     @Effect()
     visibilityEffect() {
         const namespace = `${this.props.name}VisibilityChange`;
-        if (this.props.onVisibilityChange && hasWindow()) {
+        if (this.props.onVisibilityChange) {
             visibility.on(this.widgetRef,
                 () => this.props.onVisibilityChange!(true),
                 () => this.props.onVisibilityChange!(false),
