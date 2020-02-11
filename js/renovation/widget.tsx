@@ -1,17 +1,16 @@
 import config from '../core/config';
 import {
     Component,
+    ComponentBindings,
     Effect,
     Event,
+    InternalState,
+    JSXComponent,
     OneWay,
     React,
     Ref,
     Slot,
-    ComponentBindings,
-    InternalState,
-    JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
-
 import { active, dxClick, hover, keyboard, resize, visibility } from '../events/short';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
@@ -32,7 +31,7 @@ const getStyles = ({ width, height }) => {
 
     return {
         width: computedWidth ?? void 0,
-        height: computedHeight ?? void 0
+        height: computedHeight ?? void 0,
     };
 };
 
@@ -120,7 +119,6 @@ export const viewModelFunction = ({
     });
 
     return {
-        widgetRef,
         attributes: { ...attrsWithoutClass, ...arias },
         children,
         cssClasses,
@@ -128,9 +126,10 @@ export const viewModelFunction = ({
         focusStateEnabled,
         hoverStateEnabled,
         styles,
-        visible,
         tabIndex: focusStateEnabled && !disabled && tabIndex,
         title: hint,
+        visible,
+        widgetRef,
     };
 };
 
@@ -152,7 +151,6 @@ export const viewFunction = (viewModel: any) => {
 
 @ComponentBindings()
 export class WidgetInput {
-    @OneWay() _dimensionChanged?: () => any = (() => undefined);
     @OneWay() _feedbackHideTimeout?: number = 400;
     @OneWay() _feedbackShowTimeout?: number = 30;
     @OneWay() _visibilityChanged?: (args: any) => undefined;
@@ -168,13 +166,13 @@ export class WidgetInput {
     @OneWay() focusStateEnabled?: boolean = false;
     @OneWay() height?: string | number | null = null;
     @OneWay() hint?: string;
-    @OneWay() hoverEndHandler?: (args: any) => any = (() => undefined);
-    @OneWay() hoverStartHandler?: (args: any) => any = (() => undefined);
     @OneWay() hoverStateEnabled?: boolean = false;
     @OneWay() name?: string = '';
+    @OneWay() onActive?: (e: any) => any = (() => undefined);
     @OneWay() onDimensionChanged?: () => any = (() => undefined);
-    @OneWay() onKeyboardHandled?: (args: any) => any | undefined;
+    @OneWay() onInactive?: (e: any) => any = (() => undefined);
     @OneWay() onKeyPress?: (e: any, options: any) => any = (() => undefined);
+    @OneWay() onKeyboardHandled?: (args: any) => any | undefined;
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
     @OneWay() tabIndex?: number = 0;
     @OneWay() visible?: boolean = true;
@@ -184,7 +182,8 @@ export class WidgetInput {
 
     @Event() onClick?: (e: any) => void = (() => { });
 }
-/* tslint:disable-next-line:max-classes-per-file */
+
+// tslint:disable-next-line: max-classes-per-file
 @Component({
     name: 'Widget',
     components: [],
@@ -225,42 +224,54 @@ export default class Widget extends JSXComponent<WidgetInput> {
                 },
                 { namespace },
             );
+
+            return () => visibility.off(this.widgetRef, { namespace });
         }
 
-        return () => visibility.off(this.widgetRef, { namespace });
+        return null;
     }
 
     @Effect()
     resizeEffect() {
         const namespace = `${this.props.name}VisibilityChange`;
+        const { onDimensionChanged } = this.props;
 
-        this.props.onDimensionChanged &&
-            resize.on(this.widgetRef, this.props.onDimensionChanged, { namespace });
+        if (onDimensionChanged) {
+            resize.on(this.widgetRef, onDimensionChanged, { namespace });
 
-        return () => resize.off(this.widgetRef, { namespace });
+            return () => resize.off(this.widgetRef, { namespace });
+        }
+
+        return null;
     }
 
     @Effect()
     accessKeyEffect() {
         const namespace = 'UIFeedback';
-        const isFocusable = this.props.focusStateEnabled && !this.props.disabled;
-        const canBeFocusedByKey = isFocusable && this.props.accessKey;
+        const { accessKey, focusStateEnabled, disabled } = this.props;
+        const isFocusable = focusStateEnabled && !disabled;
+        const canBeFocusedByKey = isFocusable && accessKey;
 
-        canBeFocusedByKey && dxClick.on(this.widgetRef, (e) => {
-            if (isFakeClickEvent(e)) {
-                e.stopImmediatePropagation();
-                this._focused = true;
-            }
-        }, { namespace });
+        if (canBeFocusedByKey) {
+            dxClick.on(this.widgetRef, (e) => {
+                if (isFakeClickEvent(e)) {
+                    e.stopImmediatePropagation();
+                    this._focused = true;
+                }
+            }, { namespace });
 
-        return () => dxClick.off(this.widgetRef, { namespace });
+            return () => dxClick.off(this.widgetRef, { namespace });
+        }
+
+        return null;
     }
 
     @Effect()
     hoverEffect() {
         const namespace = 'UIFeedback';
-        const selector = this.props.activeStateUnit;
-        const isHoverable = this.props.hoverStateEnabled && !this.props.disabled;
+        const { activeStateUnit, hoverStateEnabled, disabled } = this.props;
+        const selector = activeStateUnit;
+        const isHoverable = hoverStateEnabled && !disabled;
 
         if (isHoverable) {
             hover.on(this.widgetRef,
@@ -272,51 +283,64 @@ export default class Widget extends JSXComponent<WidgetInput> {
                 () => { this._hovered = false; },
                 { selector, namespace },
             );
+
+            return () => hover.off(this.widgetRef, { selector, namespace });
         }
 
-        return () => hover.off(this.widgetRef, { selector, namespace });
+        return null;
     }
 
     @Effect()
     activeEffect() {
-        const selector = this.props.activeStateUnit;
+        const {
+            activeStateEnabled, activeStateUnit, disabled, onInactive,
+            _feedbackShowTimeout, _feedbackHideTimeout, onActive,
+        } = this.props;
+        const selector = activeStateUnit;
         const namespace = 'UIFeedback';
 
-        if (this.props.activeStateEnabled && !this.props.disabled) {
+        if (activeStateEnabled && !disabled) {
             active.on(this.widgetRef,
-                new Action(() => { this._active = true; }),
-                new Action(
-                    () => { this._active = false; },
-                    { excludeValidators: ['disabled', 'readOnly'] },
+                new Action(({ event }) => {
+                    this._active = true;
+                    onActive?.(event);
+                }),
+                new Action(({ event }) => {
+                    this._active = false;
+                    onInactive?.(event);
+                },
+                { excludeValidators: ['disabled', 'readOnly'] },
                 ), {
-                    showTimeout: this.props._feedbackShowTimeout,
-                    hideTimeout: this.props._feedbackHideTimeout,
+                    showTimeout: _feedbackShowTimeout,
+                    hideTimeout: _feedbackHideTimeout,
                     selector,
                     namespace,
                 },
             );
+
+            return () => active.off(this.widgetRef, { selector, namespace });
         }
 
-        return () => active.off(this.widgetRef, { selector, namespace });
+        return null;
     }
 
     @Effect()
     clickEffect() {
-        const namespace = this.props.name;
+        const { name, clickArgs } = this.props;
+        const namespace = name;
 
-        dxClick.on(this.widgetRef,
-            () => this.props.onClick!(this.props.clickArgs),
-            { namespace },
-        );
+        dxClick.on(this.widgetRef, () => this.props.onClick!(clickArgs), { namespace });
 
         return () => dxClick.off(this.widgetRef, { namespace });
     }
 
     @Effect()
     keyboardEffect() {
-        if (this.props.focusStateEnabled || this.props.onKeyPress) {
+        const { focusStateEnabled, onKeyPress } = this.props;
+
+        if (focusStateEnabled || onKeyPress) {
             const id = keyboard.on(this.widgetRef, this.widgetRef,
-                options => this.props.onKeyPress?.(options.originalEvent, options));
+                options => onKeyPress?.(options.originalEvent, options));
 
             return () => keyboard.off(id);
         }

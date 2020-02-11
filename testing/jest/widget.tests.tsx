@@ -238,12 +238,32 @@ describe('Widget', () => {
     describe('States', () => {
         describe('Active', () => {
             it('should change state by mouse events', () => {
-                const widget = render({ activeStateEnabled: true });
+                const onActive = jest.fn();
+                const onInactive = jest.fn();
+                const widget = render({ activeStateEnabled: true, onActive, onInactive });
+
+                expect(widget.hasClass('dx-state-active')).toBe(false);
+                expect(onActive).toHaveBeenCalledTimes(0);
+                expect(onInactive).toHaveBeenCalledTimes(0);
+
+                emit(EVENT.active);
+                expect(onActive).toHaveBeenCalledTimes(1);
+                expect(onInactive).toHaveBeenCalledTimes(0);
+                expect(widget.hasClass('dx-state-active')).toBe(true);
+
+                emit(EVENT.inactive);
+                expect(onActive).toHaveBeenCalledTimes(1);
+                expect(onInactive).toHaveBeenCalledTimes(1);
+                expect(widget.hasClass('dx-state-active')).toBe(false);
+            });
+
+            it('should not change state if activeStateEnabled is false', () => {
+                const widget = render({ activeStateEnabled: false });
 
                 expect(widget.hasClass('dx-state-active')).toBe(false);
 
                 emit(EVENT.active);
-                expect(widget.hasClass('dx-state-active')).toBe(true);
+                expect(widget.hasClass('dx-state-active')).toBe(false);
 
                 emit(EVENT.inactive);
                 expect(widget.hasClass('dx-state-active')).toBe(false);
