@@ -286,8 +286,8 @@ module('Appointment popup', moduleConfig, () => {
         resetWindowWidth();
     });
 
-    test('The fullscreen mode is disabled of popup when window\'s width > 768px', function(assert) {
-        setWindowWidth(769);
+    test('The fullscreen mode is disabled of popup when window\'s width > 800px', function(assert) {
+        setWindowWidth(800);
 
         const scheduler = createInstance();
         scheduler.appointments.compact.click();
@@ -317,15 +317,15 @@ module('Appointment popup', moduleConfig, () => {
         resetWindowWidth();
     });
 
-    test('The fullscreen mode is disabled of popup when the window\'s width > 768px by resizing the window', function(assert) {
-        setWindowWidth(767);
+    test('The fullscreen mode is disabled of popup when the window\'s width > 800px by resizing the window', function(assert) {
+        setWindowWidth(799);
 
         const scheduler = createInstance();
         scheduler.appointments.compact.click();
         scheduler.tooltip.clickOnItem();
         const popup = scheduler.appointmentPopup.getPopupInstance();
 
-        setWindowWidth(769);
+        setWindowWidth(801);
         resizeCallbacks.fire();
 
         assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');

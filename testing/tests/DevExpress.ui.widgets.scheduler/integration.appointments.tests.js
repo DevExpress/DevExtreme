@@ -589,42 +589,6 @@ QUnit.test('DblClick on appointment should not affect the related cell start dat
     }
 });
 
-QUnit.test('Recurrence repeat-type editor should have default \'never\' value after reopening appointment popup', function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 1, 9),
-        dataSource: new DataSource({
-            store: []
-        }),
-        currentView: 'week'
-    });
-
-    const firstAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 1' };
-    const secondAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 2' };
-
-    this.instance.showAppointmentPopup(firstAppointment);
-
-    let form = this.instance.getAppointmentDetailsForm();
-    let recurrenceEditor = form.getEditor('recurrenceRule');
-    let freqEditor = recurrenceEditor._freqEditor;
-    let repeatTypeEditor = form.getEditor('recurrenceRule')._repeatTypeEditor;
-
-    freqEditor.option('value', 'daily');
-
-    repeatTypeEditor.option('value', 'count');
-    $('.dx-scheduler-appointment-popup').find('.dx-popup-done').trigger('dxclick');
-
-    this.instance.showAppointmentPopup(secondAppointment);
-
-    form = this.instance.getAppointmentDetailsForm();
-    recurrenceEditor = form.getEditor('recurrenceRule');
-    freqEditor = recurrenceEditor._freqEditor;
-    repeatTypeEditor = form.getEditor('recurrenceRule')._repeatTypeEditor;
-
-    freqEditor.option('value', 'daily');
-
-    assert.strictEqual(repeatTypeEditor.option('value'), 'never', 'Repeat-type editor value is ok');
-});
-
 QUnit.test('Appointment dates should not be normalized before sending to the details view', function(assert) {
     const startDate = 1429776000000;
     const endDate = 1429794000000;

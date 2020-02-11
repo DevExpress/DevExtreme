@@ -9,6 +9,7 @@ import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { Deferred, when } from '../../core/utils/deferred';
+import { isDefined } from '../../core/utils/type';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -16,7 +17,8 @@ const WIDGET_CLASS = 'dx-scheduler';
 const APPOINTMENT_POPUP_CLASS = `${WIDGET_CLASS}-appointment-popup`;
 
 const APPOINTMENT_POPUP_WIDTH = 440;
-const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH = 768;
+const APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE = 790;
+const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH = 800;
 
 const TOOLBAR_ITEM_AFTER_LOCATION = 'after';
 const TOOLBAR_ITEM_BEFORE_LOCATION = 'before';
@@ -39,9 +41,9 @@ export default class AppointmentPopup {
         };
     }
 
-    show(data, showButtons, processTimeZone) {
+    show(data = {}, showButtons, processTimeZone) {
         this.state.appointment = {
-            data: data || {},
+            data: data,
             processTimeZone: processTimeZone
         };
 
@@ -69,7 +71,7 @@ export default class AppointmentPopup {
                 if(canceled) {
                     e.cancel = true;
                 } else {
-                    this.updatePopupFullScreenMode();
+                    this.updatePopupFullScreenMode(data.recurrenceRule);
                 }
             });
         });
@@ -129,7 +131,7 @@ export default class AppointmentPopup {
     }
 
     _createAppointmentFormData(appointmentData) {
-        const result = extend(true, {}, appointmentData);
+        const result = extend(true, { repeat: !!appointmentData.recurrenceRule }, appointmentData);
         each(this.scheduler._resourcesManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
 
         return result;
@@ -139,6 +141,7 @@ export default class AppointmentPopup {
         const { expr } = this.scheduler._dataAccessors;
         const resources = this.scheduler.option('resources');
         const appointmentData = this.state.appointment.data;
+        const formData = this._createAppointmentFormData(appointmentData);
 
         AppointmentForm.prepareAppointmentFormEditors({
             textExpr: expr.textExpr,
@@ -149,7 +152,7 @@ export default class AppointmentPopup {
             recurrenceRuleExpr: expr.recurrenceRuleExpr,
             startDateTimeZoneExpr: expr.startDateTimeZoneExpr,
             endDateTimeZoneExpr: expr.endDateTimeZoneExpr
-        }, this.scheduler, this.triggerResize.bind(this), appointmentData);
+        }, this.scheduler, this.triggerResize.bind(this), this.changeSize.bind(this), formData);
 
         if(resources && resources.length) {
             this.scheduler._resourcesManager.setResources(this.scheduler.option('resources'));
@@ -160,7 +163,7 @@ export default class AppointmentPopup {
             this.scheduler._createComponent.bind(this.scheduler),
             element,
             this._isReadOnly(appointmentData),
-            this._createAppointmentFormData(appointmentData)
+            formData
         );
     }
 
@@ -206,16 +209,12 @@ export default class AppointmentPopup {
 
         const recurrenceRuleExpr = this.scheduler._dataAccessors.expr.recurrenceRuleExpr;
         const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr);
-        const switchOptions = this._getEditorOptions('visibilityChanged'); // TODO constant
         recurrenceEditorOptions.startDate = startDate; // move to another place
         if(this.state.appointment.data.recurrenceRule) {
             recurrenceEditorOptions.visible = true;
-            switchOptions.value = true;
         } else {
             recurrenceEditorOptions.visible = false;
-            switchOptions.value = false;
         }
-        this._setEditorOptions('visibilityChanged', switchOptions); // TODO constant
         this._setEditorOptions(recurrenceRuleExpr, recurrenceEditorOptions);
         this._appointmentForm.option('readOnly', this._isReadOnly(this.state.appointment.data));
 
@@ -245,11 +244,21 @@ export default class AppointmentPopup {
         this._popup && domUtils.triggerResizeEvent(this._popup.$element());
     }
 
-    updatePopupFullScreenMode() {
+    _getMaxWidth(isRecurrence) {
+        return isRecurrence ? APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE : APPOINTMENT_POPUP_WIDTH;
+    }
+
+    changeSize(isRecurrence) {
+        this._popup && this._popup.option({
+            maxWidth: this._getMaxWidth(isRecurrence)
+        });
+    }
+
+    updatePopupFullScreenMode(isRecurrence) {
         if(this.isVisible()) {
             const isFullScreen = this._isPopupFullScreenNeeded();
             this._popup.option({
-                maxWidth: isFullScreen ? '100%' : APPOINTMENT_POPUP_WIDTH,
+                maxWidth: isFullScreen ? '100%' : this._getMaxWidth(isRecurrence),
                 fullScreen: isFullScreen
             });
         }
@@ -304,6 +313,9 @@ export default class AppointmentPopup {
             }
             if(state.data.recurrenceRule === undefined && formData.recurrenceRule === '') { // TODO: plug for recurrent editor
                 delete formData.recurrenceRule;
+            }
+            if(isDefined(formData.repeat)) {
+                delete formData.repeat;
             }
 
             if(oldData) {

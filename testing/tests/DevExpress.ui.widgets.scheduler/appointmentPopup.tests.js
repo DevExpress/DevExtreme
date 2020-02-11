@@ -208,6 +208,30 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         // assert.notOk(scheduler.appointmentPopup.form.isRecurrenceEditorVisible(), 'Recurrence editor shouldn\'t visible on click on common appointment');
         // assert.equal(scheduler.appointmentPopup.form.getSubject(), NEW_EXPECTED_SUBJECT, 'Subject in form should equal selected common appointment');
     });
+
+
+    QUnit.test('Recurrence repeat-type editor should have default \'never\' value after reopening appointment popup', function(assert) {
+        const firstAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 1' };
+        const secondAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 2' };
+        const scheduler = createScheduler();
+
+        scheduler.instance.showAppointmentPopup(firstAppointment);
+
+        let form = scheduler.instance.getAppointmentDetailsForm();
+        let visibilityChanged = form.getEditor('visibilityChanged');
+        visibilityChanged.option('value', true);
+
+        const repeatTypeEditor = form.getEditor('recurrenceRule')._repeatTypeEditor;
+        repeatTypeEditor.option('value', 'count');
+        scheduler.appointmentPopup.clickDoneButton();
+
+        scheduler.instance.showAppointmentPopup(secondAppointment);
+        form = scheduler.instance.getAppointmentDetailsForm();
+        visibilityChanged = form.getEditor('visibilityChanged');
+        visibilityChanged.option('value', true);
+
+        assert.strictEqual(repeatTypeEditor.option('value'), 'never', 'Repeat-type editor value is ok');
+    });
 });
 
 const createInstance = function(options) {
@@ -558,18 +582,13 @@ QUnit.test('Recurrence editor container should be visible after changing its vis
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: 'a' });
 
     const form = this.instance.getAppointmentDetailsForm();
-    const recurrenceEditor = form.getEditor('recurrenceRule');
-    const visibilityChangedEditor = form.getEditor('visibilityChanged');
+    assert.equal(form.getEditor('recurrenceRule')._$container.css('display'), 'none', 'Container is not visible');
 
-    assert.equal(recurrenceEditor._$container.css('display'), 'none', 'Container is not visible');
+    form.getEditor('visibilityChanged').option('value', true);
+    assert.equal(form.getEditor('recurrenceRule')._$container.css('display'), 'block', 'Container is visible');
 
-    visibilityChangedEditor.option('value', true);
-
-    assert.equal(recurrenceEditor._$container.css('display'), 'block', 'Container is visible');
-
-    visibilityChangedEditor.option('value', false);
-
-    assert.equal(recurrenceEditor._$container.css('display'), 'none', 'Container is not visible');
+    form.getEditor('visibilityChanged').option('value', false);
+    assert.equal(form.getEditor('recurrenceRule')._$container.css('display'), 'none', 'Container is not visible');
 });
 
 QUnit.test('Popup should contain recurrence editor with right config', function(assert) {
@@ -1127,7 +1146,7 @@ QUnit.test('Popup should not be closed until the valid value is typed', function
     const scheduler = createInstance();
     scheduler.instance.option('onAppointmentFormOpening', function(data) {
         const items = data.form.option('items');
-        items[0].validationRules = [
+        items[0].items[0].validationRules = [
             {
                 type: 'async',
                 validationCallback: function(params) {
