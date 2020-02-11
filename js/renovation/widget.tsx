@@ -305,16 +305,8 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
         if (isFocusable) {
             focus.on(this.widgetRef,
-                (e) => {
-                    if(!e.isDefaultPrevented()) {
-                        this._focused = true;
-                    }
-                },
-                (e) => {
-                    if(!e.isDefaultPrevented()) {
-                        this._focused = false;
-                    }
-                },
+                e => !e.isDefaultPrevented() && (this._focused = true),
+                e => !e.isDefaultPrevented() && (this._focused = false),
                 {
                     namespace,
                     isFocusable: (el) => focusable(null, el),
