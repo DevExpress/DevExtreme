@@ -1868,7 +1868,10 @@ QUnit.module('Draw label', {
             })
         };
         this.sinonFactory = sinon.stub(labelModule, 'Label', function() {
-            return sinon.createStubInstance(originalLabel);
+            const label = sinon.createStubInstance(originalLabel);
+            label.getLayoutOptions.returns(that.options.label);
+            label.getBoundingRect.returns({ height: 10, width: 20 });
+            return label;
         });
         this.renderer = new vizMocks.Renderer();
         this.renderer.bBoxTemplate = { x: 55, y: 40, height: 10, width: 20 };
@@ -1904,7 +1907,8 @@ QUnit.module('Draw label', {
             areLabelsVisible: function() { return true; },
             getLabelVisibility: function() { return true; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
-            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; }
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+            getVisibleArea: function() { return { minX: 0, maxX: 200, minY: 0, maxY: 210 }; },
         };
     },
     afterEach: function() {
@@ -2111,6 +2115,37 @@ QUnit.test('Draw label. Candlestick', function(assert) {
     point._drawLabel(this.renderer, this.group);
 
     assert.deepEqual(point._label.draw.lastCall.args, [true]);
+});
+
+QUnit.test('Draw label, not rotated (area of label < minY area of series)', function(assert) {
+    const point = createPoint(this.series, this.data, this.options);
+    point.x = 50;
+    point.highY = 15;
+    point.lowY = 60;
+    point.width = 20;
+    const label = point._label;
+
+    point._drawLabel(this.renderer, this.group);
+    point.correctLabelPosition(label);
+
+    assert.equal(label.shift.firstCall.args[0], 40);
+    assert.equal(label.shift.firstCall.args[1], 25);
+});
+
+QUnit.test('Draw label, rotated (area of label > maxX area of series)', function(assert) {
+    this.options.rotated = true;
+    const point = createPoint(this.series, this.data, this.options);
+    point.x = 50;
+    point.highY = 200;
+    point.lowY = 60;
+    point.width = 20;
+    const label = point._label;
+
+    point._drawLabel(this.renderer, this.group);
+    point.correctLabelPosition(label);
+
+    assert.equal(label.shift.firstCall.args[0], 170);
+    assert.equal(label.shift.firstCall.args[1], 45);
 });
 
 QUnit.module('get point radius', {

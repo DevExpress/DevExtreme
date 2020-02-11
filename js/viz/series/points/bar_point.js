@@ -16,6 +16,17 @@ const LEFT = 'left';
 const TOP = 'top';
 const BOTTOM = 'bottom';
 
+function getLabelOrientation(point) {
+    const initialValue = point.initialValue;
+    const invert = point._getValTranslator().getBusinessRange().invert;
+    const isDiscreteValue = point.series.valueAxisType === 'discrete';
+    const isFullStacked = point.series.isFullStackedSeries();
+    const notAxisInverted = (!isDiscreteValue && ((initialValue >= 0 && !invert) ||
+                (initialValue < 0 && invert))) ||
+                (isDiscreteValue && !invert) ||
+                (isFullStacked);
+    return notAxisInverted ? TOP : BOTTOM;
+}
 module.exports = _extend({}, symbolPoint, {
 
     correctCoordinates(correctOptions) {
@@ -33,13 +44,25 @@ module.exports = _extend({}, symbolPoint, {
         }
     },
 
-    _getGraphicBBox: function() {
-        return {
+    _getGraphicBBox: function(location) {
+        const bBox = {
             x: this.x,
             y: this.y,
             width: this.width,
             height: this.height
         };
+        if(location) {
+            const isTop = location === 'top';
+            if(!this._options.rotated) {
+                bBox.y = isTop ? bBox.y : bBox.y + bBox.height;
+                bBox.height = 0;
+            } else {
+                bBox.x = isTop ? bBox.x + bBox.width : bBox.x;
+                bBox.width = 0;
+            }
+        }
+
+        return bBox;
     },
 
     _getLabelConnector: function(location) {
@@ -47,23 +70,10 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _getLabelPosition: function() {
-        const that = this;
-        let position;
-        const initialValue = that.initialValue;
-        const invert = that._getValTranslator().getBusinessRange().invert;
-        const isDiscreteValue = that.series.valueAxisType === 'discrete';
-        const isFullStacked = that.series.isFullStackedSeries();
-        const notAxisInverted = (!isDiscreteValue && ((initialValue >= 0 && !invert) ||
-                (initialValue < 0 && invert))) ||
-                (isDiscreteValue && !invert) ||
-                (isFullStacked);
-
-        if(!that._options.rotated) {
-            position = notAxisInverted ? TOP : BOTTOM;
-        } else {
-            position = notAxisInverted ? RIGHT : LEFT;
+        let position = getLabelOrientation(this);
+        if(this._options.rotated) {
+            position = position === TOP ? RIGHT : LEFT;
         }
-
         return position;
     },
 
@@ -85,15 +95,9 @@ module.exports = _extend({}, symbolPoint, {
         return coords;
     },
 
-    _checkLabelPosition: function(label, coord) {
-        const that = this;
-        const visibleArea = that._getVisibleArea();
-
-        if(that._isPointInVisibleArea(visibleArea, that._getGraphicBBox())) {
-            return that._moveLabelOnCanvas(coord, visibleArea, label.getBoundingRect());
-        }
-
-        return coord;
+    _drawLabel: function() {
+        this._label.pointPosition = this._label.getLayoutOptions().position !== 'inside' && getLabelOrientation(this);
+        symbolPoint._drawLabel.call(this);
     },
 
     hideInsideLabel: function(label, coord) {
@@ -111,25 +115,6 @@ module.exports = _extend({}, symbolPoint, {
         }
 
         return false;
-    },
-
-    _moveLabelOnCanvas: function(coord, visibleArea, labelBBox) {
-        let x = coord.x;
-        let y = coord.y;
-        if(visibleArea.minX > x) {
-            x = visibleArea.minX;
-        }
-        if(visibleArea.maxX < (x + labelBBox.width)) {
-            x = visibleArea.maxX - labelBBox.width;
-        }
-        if(visibleArea.minY > y) {
-            y = visibleArea.minY;
-        }
-        if(visibleArea.maxY < (y + labelBBox.height)) {
-            y = visibleArea.maxY - labelBBox.height;
-        }
-
-        return { x: x, y: y };
     },
 
     _showForZeroValues: function() {
