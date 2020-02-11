@@ -41,7 +41,6 @@ import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
 import SchedulerAppointments from './ui.scheduler.appointments';
 import SchedulerLayoutManager from './ui.scheduler.appointments.layout_manager';
 import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
-import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 import AsyncTemplateMixin from '../shared/async_template_mixin';
 import DataHelperMixin from '../../data_helper';
 import loading from './ui.loading';
@@ -1077,23 +1076,6 @@ const Scheduler = Widget.inherit({
         }
 
         return dates;
-    },
-
-    _calculateTimezoneByValue: function(timezone, date) {
-        let result = timezone;
-
-        if(typeof timezone === 'string') {
-            date = date || new Date();
-            const dateUtc = Date.UTC(
-                date.getUTCFullYear(),
-                date.getUTCMonth(),
-                date.getUTCDate(),
-                date.getUTCHours(),
-                date.getUTCMinutes()
-            );
-            result = SchedulerTimezones.getTimezoneOffsetById(timezone, dateUtc);
-        }
-        return result;
     },
 
     _filterAppointmentsByDate: function() {
