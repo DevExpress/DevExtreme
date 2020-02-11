@@ -18,13 +18,6 @@ import { isFakeClickEvent } from '../events/utils';
 import { hasWindow } from '../core/utils/window';
 import Action from '../core/action';
 
-const isVisible = (element) => {
-    if (!element.nodeType) return true;
-    return !!(element.offsetWidth
-        || element.offsetHeight
-        || element.getClientRects().length);
-};
-
 const getStyles = ({ width, height }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
     const computedHeight = typeof height === 'function' ? height() : height;
@@ -75,7 +68,7 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetInput>) => {
     model._active && className.push('dx-state-active');
     model._hovered && isHoverable && !model._active && className.push('dx-state-hover');
     model.rtlEnabled && className.push('dx-rtl');
-    model._visibilityChanged && hasWindow() && className.push('dx-visibility-change-handler');
+    model.onVisibilityChange && hasWindow() && className.push('dx-visibility-change-handler');
     model.elementAttr?.class && className.push(model.elementAttr.class);
 
     return className.join(' ');
@@ -101,7 +94,7 @@ export const viewModelFunction = ({
         tabIndex,
         visible,
         width,
-        _visibilityChanged,
+        onVisibilityChange,
     },
 
     widgetRef,
@@ -115,7 +108,7 @@ export const viewModelFunction = ({
     const cssClasses = getCssClasses({
         disabled, visible, _focused, _active, _hovered, rtlEnabled,
         elementAttr, hoverStateEnabled, focusStateEnabled, className,
-        _visibilityChanged,
+        onVisibilityChange,
     });
 
     return {
@@ -153,8 +146,7 @@ export const viewFunction = (viewModel: any) => {
 export class WidgetInput {
     @OneWay() _feedbackHideTimeout?: number = 400;
     @OneWay() _feedbackShowTimeout?: number = 30;
-    @OneWay() _visibilityChanged?: (args: any) => undefined;
-    @OneWay() _isHidden: boolean = false;
+    @OneWay() onVisibilityChange?: (args: any) => undefined;
     @OneWay() accessKey?: string | null = null;
     @OneWay() activeStateEnabled?: boolean = false;
     @OneWay() activeStateUnit?: string;
@@ -195,33 +187,17 @@ export default class Widget extends JSXComponent<WidgetInput> {
     @InternalState() _active: boolean = false;
     @InternalState() _focused: boolean = false;
     @InternalState() _hovered: boolean = false;
-    @InternalState() _isHidden: boolean = this.props._isHidden;
 
     @Ref()
     widgetRef!: HTMLDivElement;
 
     @Effect()
-    hiddenStateEffect() {
-        this._isHidden = !isVisible(this.widgetRef);
-    }
-
-    @Effect()
     visibilityEffect() {
         const namespace = `${this.props.name}VisibilityChange`;
-        if (this.props._visibilityChanged && hasWindow()) {
+        if (this.props.onVisibilityChange && hasWindow()) {
             visibility.on(this.widgetRef,
-                () => {
-                    if (this._isHidden && isVisible(this.widgetRef)) {
-                        this.props._visibilityChanged!(true);
-                        this._isHidden = false;
-                    }
-                },
-                () => {
-                    if (!this._isHidden && isVisible(this.widgetRef)) {
-                        this._isHidden = true;
-                        this.props._visibilityChanged!(false);
-                    }
-                },
+                () => this.props.onVisibilityChange!(true),
+                () => this.props.onVisibilityChange!(false),
                 { namespace },
             );
 

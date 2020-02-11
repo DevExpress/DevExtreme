@@ -1,11 +1,10 @@
 import Widget from '../../js/renovation/widget.p.js';
 import { h } from 'preact';
 import { clear as clearEventHandlers, emit, fakeClickEvent, EVENT } from './utils/events-mock';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 describe('Widget', () => {
     const render = (props = {}) => shallow(<Widget {...props} />);
-    const mountRender = (props = {}) => mount(<Widget {...props} />);
 
     beforeEach(clearEventHandlers);
 
@@ -363,96 +362,23 @@ describe('Widget', () => {
         });
     });
 
-    describe('Events', () => {
-        describe('visibilityChanged', () => {
-            const getClientRects = jest.spyOn(Element.prototype, 'getClientRects');
-            getClientRects.mockImplementation(() => ({ length: 1 }));
-
-            let hidingFired = 0;
-            let shownFired = 0;
-
-            const _visibilityChanged = (visible) => {
-                visible ? shownFired += 1 : hidingFired += 1;
-            };
-
-            beforeEach(() => {
-                hidingFired = 0;
-                shownFired = 0;
-            });
-
-            it('is called on dxhiding and dxshown events and special css class is attached', () => {
-                const widget = render({ _visibilityChanged });
+    describe('Callbacks', () => {
+        describe('onVisibilityChanged', () => {
+            it('is called on `dxhiding` and `dxshown` events and special css class is attached', () => {
+                const onVisibilityChange = jest.fn();
+                const widget = render({ onVisibilityChange });
 
                 expect(widget.find('.dx-visibility-change-handler').exists()).toBe(true);
 
                 emit(EVENT.hiding);
                 widget.setProps({});
-                expect(hidingFired).toBe(1);
-                expect(shownFired).toBe(0);
+                expect(onVisibilityChange).toHaveBeenCalledTimes(1);
+                expect(onVisibilityChange).toHaveBeenLastCalledWith(false);
 
                 emit(EVENT.shown);
                 widget.setProps({});
-                expect(hidingFired).toBe(1);
-                expect(shownFired).toBe(1);
-            });
-
-            it('works optimally if component is visible on initializing', () => {
-                let widget = null;
-                widget = render({ _visibilityChanged });
-
-                expect(hidingFired).toBe(0);
-                expect(shownFired).toBe(0);
-
-                emit(EVENT.shown);
-                widget.setProps({});
-                widget.update();
-                expect(shownFired).toBe(0);
-
-                emit(EVENT.hiding);
-                widget.setProps({});
-                widget.update();
-                expect(hidingFired).toBe(1);
-
-                emit(EVENT.hiding);
-                widget.setProps({});
-                widget.update();
-                expect(hidingFired).toBe(1);
-            });
-
-            it('works optimally if component is hidden on initializing', () => {
-                const widget = mountRender({ _visibilityChanged, _isHidden: true });
-
-                expect(hidingFired).toBe(0);
-                expect(shownFired).toBe(0);
-
-                emit(EVENT.hiding);
-                widget.setProps({});
-                expect(shownFired).toBe(0);
-
-                emit(EVENT.shown);
-                widget.setProps({});
-                expect(shownFired).toBe(1);
-
-                emit(EVENT.shown);
-                widget.setProps({});
-                expect(shownFired).toBe(1);
-            });
-
-            it('should not calls with hidden parent', () => {
-                getClientRects.mockImplementation(() => ({ length: 0 }));
-                const widget = mountRender({ _visibilityChanged });
-
-                expect(hidingFired).toBe(0);
-                expect(shownFired).toBe(0);
-
-                emit(EVENT.shown);
-                widget.setProps({});
-                expect(shownFired).toBe(0);
-
-                getClientRects.mockImplementation(() => ({ length: 1 }));
-                emit(EVENT.shown);
-                widget.setProps({});
-                expect(shownFired).toBe(1);
+                expect(onVisibilityChange).toHaveBeenCalledTimes(2);
+                expect(onVisibilityChange).toHaveBeenLastCalledWith(true);
             });
         });
     });
