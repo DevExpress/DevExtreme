@@ -26,15 +26,15 @@ class FormLayoutTestWrapper {
         QUnit.assert.roughEqual(elementRect.height, expectedHeight, this.epsilon, 'form height');
     }
 
-    checkElementPosition($element, expected) {
+    checkElementPosition($element, expectedTop, expectedLeft, expectedWidth, expectedHeight) {
         const elementRect = $element.get(0).getBoundingClientRect();
         const containerRect = this.$form.get(0).getBoundingClientRect();
 
-        QUnit.assert.roughEqual(elementRect.top - containerRect.top, expected.top, this.epsilon, 'top element offset');
-        QUnit.assert.roughEqual(elementRect.left - containerRect.left, expected.left, this.epsilon, 'left element offset');
+        QUnit.assert.roughEqual(elementRect.top - containerRect.top, expectedTop, this.epsilon, 'top element offset');
+        QUnit.assert.roughEqual(elementRect.left - containerRect.left, expectedLeft, this.epsilon, 'left element offset');
 
-        QUnit.assert.roughEqual(elementRect.width, expected.width, this.epsilon, 'element width');
-        QUnit.assert.roughEqual(elementRect.height, expected.height, this.epsilon, 'element height');
+        QUnit.assert.roughEqual(elementRect.width, expectedWidth, this.epsilon, 'element width');
+        QUnit.assert.roughEqual(elementRect.height, expectedHeight, this.epsilon, 'element height');
     }
 }
 
