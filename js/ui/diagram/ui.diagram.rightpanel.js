@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import DiagramPanel from './ui.diagram.panel';
 import Accordion from '../accordion';
 import Form from '../form';
-import DiagramCommands from './diagram.commands';
+import DiagramCommandsManager from './diagram.commands_manager';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 import DiagramBar from './diagram.bar';
@@ -55,7 +55,7 @@ class DiagramRightPanel extends DiagramPanel {
         });
     }
     _renderOptions($container) {
-        const commands = DiagramCommands.getPropertyPanelCommands(this.option('propertyGroups'));
+        const commands = DiagramCommandsManager.getPropertyPanelCommands(this.option('propertyGroups'));
         this._formInstance = this._createComponent($container, Form, {
             items: commands.map(item => {
                 return extend(true, {
@@ -147,7 +147,7 @@ class DiagramRightPanel extends DiagramPanel {
 
 class OptionsDiagramBar extends DiagramBar {
     getCommandKeys() {
-        return DiagramCommands.getPropertyPanelCommands().map(c => c.command);
+        return DiagramCommandsManager.getPropertyPanelCommands().map(c => c.command);
     }
     setItemValue(key, value) {
         this._owner._setItemValue(key, value);

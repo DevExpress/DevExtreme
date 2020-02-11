@@ -7,6 +7,7 @@
 @import (once) "./form.generic.less";
 @import (once) "./toolbar.generic.less";
 @import (once) "./contextMenu.generic.less";
+@import (once) "./overlay.generic.less";
 @import (once) "./fileUploader.generic.less";
 @import (once) "./popup.generic.less";
 
@@ -110,6 +111,18 @@
     }
 }
 
+.dx-diagram-floating-toolbar-container {
+    border: 1px solid @overlay-border-color;
+    background: @overlay-content-bg;
+    box-shadow: 0 6px 12px @overlay-content-shadow-color;
+    border-radius: @popup-border-radius;
+    padding: 2px;
+
+    .dx-toolbar-item {
+        padding: 0 2px 0 0;
+    }
+}
+
 .dx-diagram-toolbox-popup {
     .dx-popup-title.dx-toolbar {
         font-size: 0.5em;
@@ -181,8 +194,6 @@
 }
 
 .dx-diagram-toolbar {
-    background-color: transparent;
-
     .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
         background-color: @diagram-normal-format-active-bg;
 
