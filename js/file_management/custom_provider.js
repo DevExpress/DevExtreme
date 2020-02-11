@@ -31,8 +31,6 @@ class CustomFileSystemProvider extends FileSystemProviderBase {
         this._downloadItemsFunction = this._ensureFunction(options.downloadItems);
 
         this._getItemsContentFunction = this._ensureFunction(options.getItemsContent);
-
-        this._uploadChunkSize = options.uploadChunkSize;
     }
 
     getItems(parentDir) {
@@ -75,10 +73,6 @@ class CustomFileSystemProvider extends FileSystemProviderBase {
 
     getItemsContent(items) {
         return this._executeActionAsDeferred(() => this._getItemsContentFunction(items));
-    }
-
-    getFileUploadChunkSize() {
-        return ensureDefined(this._uploadChunkSize, super.getFileUploadChunkSize());
     }
 
     _hasSubDirs(dataObj) {

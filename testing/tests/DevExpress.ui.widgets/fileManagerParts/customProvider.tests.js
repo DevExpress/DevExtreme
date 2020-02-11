@@ -18,8 +18,7 @@ const moduleConfig = {
             moveItem: sinon.spy((item, destinationDir) => `moved ${item.name}`),
             copyItem: sinon.spy((item, destinationDir) => `copied ${item.name}`),
             uploadFileChunk: sinon.spy((fileData, chunksInfo, destinationDir) => 'uploaded'),
-            abortFileUpload: sinon.spy((fileData, chunksInfo, destinationDir) => 'aborted'),
-            uploadChunkSize: 1000
+            abortFileUpload: sinon.spy((fileData, chunksInfo, destinationDir) => 'aborted')
         };
 
         this.provider = new CustomFileSystemProvider(this.options);
@@ -185,15 +184,6 @@ QUnit.module('Custom file provider', moduleConfig, () => {
                 assert.deepEqual(this.options.abortFileUpload.args[0][1], chunksInfo, 'abortFileUpload arguments are valid');
                 assert.deepEqual(this.options.abortFileUpload.args[0][2], destinationDir, 'abortFileUpload arguments are valid');
             });
-    });
-
-    test('upload chunk size', function(assert) {
-        let size = this.provider.getFileUploadChunkSize();
-        assert.strictEqual(size, this.options.uploadChunkSize, 'result acquired');
-
-        const provider = new CustomFileSystemProvider();
-        size = provider.getFileUploadChunkSize();
-        assert.ok(size > 100000, 'default value used');
     });
 
 });
