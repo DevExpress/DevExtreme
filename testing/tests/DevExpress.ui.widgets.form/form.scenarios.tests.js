@@ -109,21 +109,6 @@ QUnit.module('Form scenarios', () => {
 
     [true, false].forEach(alignItemLabels => {
         [true, false].forEach(alignItemLabelsInAllGroups => {
-            testChromeOnly('3 column -> group.colCount:3 [a.colSpan:1, abc.colSpan:2, text.colSpan:1, longText.colSpan:1 ]', function(assert) {
-                const wrapper = new FormLayoutTestWrapper(1, { alignItemLabels, alignItemLabelsInAllGroups }, [{ itemType: 'group', colCount: 3, items: [
-                    { dataField: 'a', colSpan: 1 }, { dataField: 'abc', colSpan: 2 },
-                    { dataField: 'text', colSpan: 1 }, { dataField: 'longText', colSpan: 1 }] }]);
-                wrapper.checkFormSize(1000, 82);
-                wrapper.checkElementPosition(wrapper.$form.find('[for$="a"]'), 8, 0, 40, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="a"]'), 1, 41, 278, 34);
-                wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 348, 72, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 421, 577, 34);
-                wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 278, 34);
-                wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 348, 74, 19);
-                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 421, 229, 34);
-            });
-
             QUnit.module(`Items layout and labels alignment. alignItemLabels: ${alignItemLabels}, alignItemLabelsInAllGroups: ${alignItemLabelsInAllGroups}`, () => {
                 testChromeOnly('1 column -> [text]', function() {
                     const wrapper = new FormLayoutTestWrapper(1, { alignItemLabels, alignItemLabelsInAllGroups }, ['text']);
