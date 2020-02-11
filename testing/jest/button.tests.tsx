@@ -11,6 +11,31 @@ describe('Button', () => {
     beforeEach(clearEventHandlers);
 
     describe('Props', () => {
+        describe('useInkRipple', () => {
+            it('should be "false" by default', () => {
+                const button = render();
+                const content = button.find('.dx-button-content').getDOMNode();
+                const { onActive } = button.find(Widget).props();
+
+                onActive(defaultEvent);
+                expect(content.querySelectorAll('.dx-inkripple')).toHaveLength(0);
+            });
+
+            it('should render on active event and clear on inactive event', () => {
+                const button = render({ useInkRipple: true });
+                const content = button.find('.dx-button-content').getDOMNode();
+                const { onActive, onInactive } = button.find(Widget).props();
+
+                expect(content.querySelectorAll('.dx-inkripple-wave')).toHaveLength(0);
+                expect(content.querySelectorAll('.dx-inkripple-hiding')).toHaveLength(0);
+                onActive(defaultEvent);
+                expect(content.querySelectorAll('.dx-inkripple-wave')).toHaveLength(1);
+                expect(content.querySelectorAll('.dx-inkripple-hiding')).toHaveLength(0);
+                onInactive(defaultEvent);
+                expect(content.querySelectorAll('.dx-inkripple-hiding')).toHaveLength(1);
+            });
+        });
+
         describe('useSubmitBehavior', () => {
             it('should be "false" by default', () => {
                 const button = render();
