@@ -40,7 +40,7 @@ const getDaylightOffsetByAppointmentTimezone = (startDate, endDate, startDateTim
     return calculateTimezoneByValue(startDateTimezone, startDate) - calculateTimezoneByValue(startDateTimezone, endDate);
 };
 
-const getDaylightOffsetByCommonTimezone = (startDate, endDate, timeZone, startDateTimezone) => {
+const getDaylightOffsetByCommonTimezone = (startDate, endDate, timeZone) => {
     return calculateTimezoneByValue(timeZone, startDate) - calculateTimezoneByValue(timeZone, endDate);
 };
 
