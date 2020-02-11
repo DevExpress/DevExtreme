@@ -538,7 +538,7 @@
             [1, 2].forEach(i => $('#widget' + i).dxButton({ template: $('#template1') }));
 
             assert.equal(spy.callCount, 1);
-            assert.ok(spy.args[0][0].indexOf('alternate template syntax') > -1);
+            assert.ok(spy.args[0][0].indexOf('alternative template syntax') > -1);
         } finally {
             setTemplateEngine('default');
             spy.restore();
