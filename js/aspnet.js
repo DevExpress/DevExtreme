@@ -71,7 +71,7 @@
 
             if(warnBug17028 && chunks.length > 1) {
                 if(text.indexOf(OPEN_TAG) > -1) {
-                    console.logger.warn('Please use the alternate template syntax: https://community.devexpress.com/blogs/aspnet/archive/2020/01/29/asp-net-core-new-syntax-to-fix-razor-issue.aspx');
+                    console.logger.warn('Please use an alternative template syntax: https://community.devexpress.com/blogs/aspnet/archive/2020/01/29/asp-net-core-new-syntax-to-fix-razor-issue.aspx');
                     warnBug17028 = false;
                 }
             }
