@@ -84,7 +84,7 @@ describe('Button', () => {
                 expect(submitInputClick).toHaveBeenCalledTimes(1);
             });
 
-            it('should submit form by sapce press', () => {
+            it('should submit form by space press', () => {
                 const button = render({ useSubmitBehavior: true });
                 const submitInput = button.find('input.dx-button-submit-input');
                 const submitInputClick = jest.fn();
@@ -223,6 +223,13 @@ describe('Button', () => {
         });
 
         describe('icon', () => {
+            it('should not render icon by default', () => {
+                const button = render();
+
+                expect(button.is('.dx-button-has-icon')).toBe(false);
+                expect(button.exists('.dx-icon')).toBe(false);
+            });
+
             it('should render icon', () => {
                 const button = render({ icon: 'test' });
 
