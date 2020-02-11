@@ -17,14 +17,15 @@ const getImageContainerJSX = (source: string) => {
 const stylingModes = ['outlined', 'text', 'contained'];
 const defaultClassNames = ['dx-button'];
 
-const getInkRippleConfig = ({ text, icon, type }) => {
+const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
     const isOnlyIconButton = !text && icon || type === 'back';
-
-    return initConfig(isOnlyIconButton ? {
+    const config: any = isOnlyIconButton ? {
         isCentered: true,
         useHoldAnimation: false,
         waveSizeCoefficient: 1,
-    } : {});
+    } : {};
+
+    return initConfig(config);
 };
 
 const getCssClasses = (model: ButtonInput) => {
@@ -42,19 +43,12 @@ const getCssClasses = (model: ButtonInput) => {
 };
 
 export const viewModelFunction = (model: Button):ButtonViewModel => {
-    let icon: any = void 0;
-
-    if (model.props.icon || model.props.type === 'back') {
-        icon = getImageContainerJSX(model.props.icon || 'back');
-    }
-
     return {
         ...model.props,
         aria: { label: model.props.text && model.props.text.trim() },
         contentRef: model.contentRef,
         cssClasses: getCssClasses(model.props),
         elementAttr: { ...model.props.elementAttr, role: 'button' },
-        icon,
         onActive: model.onActive,
         onInactive: model.onInactive,
         onWidgetClick: model.onWidgetClick,
@@ -71,9 +65,15 @@ declare type ButtonViewModel = {
     onWidgetClick: (e: Event) => any;
     onWidgetKeyPress: (e: Event, options:any) => void;
     submitInputRef: any;
-} & ButtonInput
+} & ButtonInput;
 
 export const viewFunction = (viewModel: ButtonViewModel) => {
+    let icon: any = viewModel.icon;
+
+    if (icon || viewModel.type === 'back') {
+        icon = getImageContainerJSX(icon || 'back');
+    }
+
     return <Widget
         accessKey={viewModel.accessKey}
         activeStateEnabled={viewModel.activeStateEnabled}
@@ -96,8 +96,8 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
     >
         <div className="dx-button-content" ref={viewModel.contentRef}>
             {viewModel.contentRender &&
-                <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} />}
-            {!viewModel.contentRender && viewModel.icon}
+                <viewModel.contentRender icon={icon} text={viewModel.text} />}
+            {!viewModel.contentRender && icon}
             {!viewModel.contentRender && viewModel.text &&
                 <span className="dx-button-text">{viewModel.text}</span>
             }
@@ -125,6 +125,7 @@ export class ButtonInput extends WidgetInput {
     @OneWay() useSubmitBehavior?: boolean = false;
 }
 
+// tslint:disable-next-line: max-classes-per-file
 @Component({
     name: 'Button',
     components: [],
