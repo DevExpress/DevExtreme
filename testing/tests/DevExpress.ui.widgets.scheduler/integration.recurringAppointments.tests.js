@@ -1539,3 +1539,91 @@ QUnit.test('Recurrence appointment occurences should have correct text (T818393)
 
     assert.equal($thirdAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 AM - 5:00 AM', 'Appointment third occurrences has correct date text');
 });
+
+$.each(['minutely', 'hourly'], (_, value) => {
+    QUnit.test(`Recurrence appointment renders correctly, freq=${value}`, function(assert) {
+        this.createInstance({
+            views: ['day'],
+            currentView: 'day',
+            height: 600,
+            dataSource: [{
+                text: 'Recurrence',
+                startDate: new Date(2019, 2, 30, 2, 0),
+                endDate: new Date(2019, 2, 30, 3, 0),
+                recurrenceRule: `FREQ=${value.toUpperCase()};COUNT=1`
+            }],
+            currentDate: new Date(2019, 2, 30)
+        });
+
+        const appointments = this.scheduler.appointments.getAppointments();
+
+        assert.equal(appointments.length, 1, 'Appointment is rendered');
+    });
+    QUnit.test(`Recurrence appointment renders correctly with INTERVAL rule, freq=${value}`, function(assert) {
+        this.createInstance({
+            views: ['day'],
+            currentView: 'day',
+            height: 600,
+            dataSource: [{
+                text: 'Recurrence',
+                startDate: new Date(2019, 2, 30, 2, 0),
+                endDate: new Date(2019, 2, 30, 2, 55),
+                recurrenceRule: `FREQ=${value.toUpperCase()};INTERVAL=110`
+            }],
+            currentDate: new Date(2019, 2, 30)
+        });
+
+        const appointments = this.scheduler.appointments.getAppointments();
+        const appointmentHeight = this.scheduler.appointments.getAppointmentHeight();
+
+        if(value === 'hourly') {
+            assert.equal(appointments.length, 1, 'Appointment is rendered');
+        } else if(value === 'minutely') {
+            assert.equal(appointments.length, 12, 'Appointment are rendered');
+            assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(0).top + appointmentHeight * 2, this.scheduler.appointments.getAppointmentPosition(1).top, 1, 'Appointment interval rendered correctly');
+        }
+    });
+    QUnit.test(`Recurrence appointment renders correctly with COUNT rule, freq=${value}`, function(assert) {
+        this.createInstance({
+            views: ['week'],
+            currentView: 'week',
+            height: 600,
+            dataSource: [{
+                text: 'Recurrence',
+                startDate: new Date(2019, 2, 30, 2, 0),
+                endDate: new Date(2019, 2, 30, 3, 0),
+                recurrenceRule: `FREQ=${value.toUpperCase()};COUNT=3`
+            }],
+            currentDate: new Date(2019, 2, 30),
+            maxAppointmentsPerCell: 3,
+        });
+
+        assert.equal(this.scheduler.appointments.getAppointmentCount(), 3, 'Appointments are rendered with correct count');
+    });
+    QUnit.test(`Recurrence appointment renders correctly with UNTIL rule, freq=${value}`, function(assert) {
+        this.createInstance({
+            views: ['week'],
+            currentView: 'week',
+            height: 600,
+            dataSource: [{
+                text: 'Recurrence',
+                startDate: new Date(2019, 2, 30, 2, 0),
+                endDate: new Date(2019, 2, 30, 3, 0),
+                recurrenceRule: `FREQ=${value.toUpperCase()};INTERVAL=25;UNTIL=2019230T200000`
+            }, {
+                text: 'Appointment after UNTIL',
+                startDate: new Date(2019, 2, 30, 20, 0),
+                endDate: new Date(2019, 2, 30, 22, 15),
+            }],
+            currentDate: new Date(2019, 2, 30)
+        });
+
+        const appointments = this.scheduler.appointments.getAppointments();
+        const appointmentCount = this.scheduler.appointments.getAppointmentCount();
+
+        const lastAppointment = appointments[appointmentCount - 1];
+        const lastRecurrentAppointment = appointments[appointmentCount - 2];
+
+        assert.ok(translator.locate($(lastAppointment)).top > translator.locate($(lastRecurrentAppointment)).top, 'Last recurrent appointment renders last');
+    });
+});

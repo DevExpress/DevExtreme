@@ -44,6 +44,8 @@ const FIELD_VALUE_CLASS = 'dx-field-value';
 
 const frequencies = [
     { text() { return messageLocalization.format('dxScheduler-recurrenceNever'); }, value: 'never' },
+    { text() { return messageLocalization.format('dxScheduler-recurrenceMinutely'); }, value: 'minutely' },
+    { text() { return messageLocalization.format('dxScheduler-recurrenceHourly'); }, value: 'hourly' },
     { text() { return messageLocalization.format('dxScheduler-recurrenceDaily'); }, value: 'daily' },
     { text() { return messageLocalization.format('dxScheduler-recurrenceWeekly'); }, value: 'weekly' },
     { text() { return messageLocalization.format('dxScheduler-recurrenceMonthly'); }, value: 'monthly' },
@@ -284,7 +286,7 @@ const RecurrenceEditor = Editor.inherit({
                 .appendTo(this._$container);
         }
 
-        if(!freq || freq === 'daily') {
+        if(!freq || freq === 'daily' || freq === 'minutely' || freq === 'hourly') {
             this._clearRepeatOnEditor();
             this._clearRepeatOnLabel();
             return;
