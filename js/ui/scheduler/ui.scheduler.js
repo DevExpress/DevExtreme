@@ -1060,35 +1060,19 @@ const Scheduler = Widget.inherit({
     },
 
     _getTimezoneOffsetByOption: function(date) {
-        return this._calculateTimezoneByValue(this.option('timeZone'), date);
-    },
-
-    _getDaylightOffsetByCommonTimezone: function(startDate, endDate, startDateTimezone) {
-        return this._getTimezoneOffsetByOption(startDate) - this._getTimezoneOffsetByOption(endDate);
-    },
-
-    _getDaylightOffsetByAppointmentTimezone: function(startDate, endDate, startDateTimezone) {
-        return this._calculateTimezoneByValue(startDateTimezone, startDate) - this._calculateTimezoneByValue(startDateTimezone, endDate);
-    },
-
-    _getCorrectedDateByDaylightOffsets: function(originalStartDate, date, startDateTimezone) {
-        const convertedOriginalStartDate = this.fire('convertDateByTimezoneBack', new Date(originalStartDate.getTime()), startDateTimezone);
-        const convertedDate = this.fire('convertDateByTimezoneBack', new Date(date.getTime()), startDateTimezone);
-
-        const daylightOffsetByCommonTimezone = this._getDaylightOffsetByCommonTimezone(convertedOriginalStartDate, convertedDate, startDateTimezone);
-        const daylightOffsetByAppointmentTimezone = this._getDaylightOffsetByAppointmentTimezone(convertedOriginalStartDate, convertedDate, startDateTimezone);
-        const diff = daylightOffsetByCommonTimezone - daylightOffsetByAppointmentTimezone;
-
-        return new Date(date.getTime() - diff * toMs('hour'));
+        return utils.calculateTimezoneByValue(this.option('timeZone'), date);
     },
 
     getCorrectedDatesByDaylightOffsets: function(originalStartDate, dates, appointmentData) {
         const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
         const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
+        const convertedOriginalStartDate = this.fire('convertDateByTimezoneBack', new Date(originalStartDate.getTime()), startDateTimeZone);
 
         if(needCheckTimezoneOffset) {
             dates = dates.map((date) => {
-                return this._getCorrectedDateByDaylightOffsets(originalStartDate, date, startDateTimeZone);
+                const convertedDate = this.fire('convertDateByTimezoneBack', new Date(date.getTime()), startDateTimeZone);
+
+                return utils.getCorrectedDateByDaylightOffsets(convertedOriginalStartDate, convertedDate, date, this.option('timeZone'), startDateTimeZone);
             });
         }
 
