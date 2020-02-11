@@ -11,14 +11,13 @@ import {
     Ref,
     Slot,
 } from 'devextreme-generator/component_declaration/common';
-
-import { active, dxClick, hover, keyboard, resize, visibility, focus } from '../events/short';
+import { active, dxClick, focus, hover, keyboard, resize, visibility } from '../events/short';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
+import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
 import { hasWindow } from '../core/utils/window';
 import Action from '../core/action';
-import { focusable } from '../ui/widget/selectors';
 
 const getStyles = ({ width, height }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
@@ -253,7 +252,9 @@ export default class Widget extends JSXComponent<WidgetInput> {
         if (isHoverable) {
             hover.on(this.widgetRef,
                 new Action(() => {
-                    this._hovered = true;
+                    if(!this._active){
+                        this._hovered = true;
+                    }
                 }, { excludeValidators: ['readOnly'] }),
                 () => { this._hovered = false; },
                 { selector, namespace },
@@ -312,9 +313,11 @@ export default class Widget extends JSXComponent<WidgetInput> {
                     isFocusable: (el) => focusable(null, el),
                 }
             );
+
+            return () => focus.off(this.widgetRef, { namespace });
         }
 
-        return () => focus.off(this.widgetRef, { namespace });
+        return null;
     }
 
     @Effect()

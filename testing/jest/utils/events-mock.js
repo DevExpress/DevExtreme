@@ -26,9 +26,9 @@ export const EVENT = {
 };
 
 export const defaultEvent = {
-    stopImmediatePropagation: () => void 0,
-    preventDefault: () => void 0,
     isDefaultPrevented: () => void 0,
+    preventDefault: () => void 0,
+    stopImmediatePropagation: () => void 0,
     stopPropagation: () => void 0,
 };
 
