@@ -423,10 +423,10 @@
             ) {
                 return true;
             }
-
-            if(callback.indexOf('function(){clearTimeout(u),cancelAnimationFrame(t),setTimeout(n)}') > -1) return true; // NOTE: Preact
-            if(callback.indexOf('.__H.u.forEach(') > -1) return true; // NOTE: Preact hooks
         }
+
+        if(callback.indexOf('function(){clearTimeout(u),cancelAnimationFrame(t),setTimeout(n)}') > -1) return true; // NOTE: Preact
+        if(callback.indexOf('.__H.u.forEach(') > -1) return true; // NOTE: Preact hooks
     });
 
     const logTestFailure = function(timerInfo) {
