@@ -1686,7 +1686,7 @@ const moduleConfig = {
 
         QUnit.test('Data - columns.dataType: boolean', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: true }];
+            const ds = [{ f1: true }, { f1: false }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [{
                     dataField: 'f1',
@@ -1700,21 +1700,24 @@ const moduleConfig = {
             const expectedCells = [[
                 { excelCell: { value: 'F1', alignment: alignCenterTopNoWrap, font: { bold: true } }, gridCell: { rowType: 'header', column: dataGrid.columnOption(0) } }
             ], [
-                { excelCell: { value: 'true', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], value: true, column: dataGrid.columnOption(0) } }
+                { excelCell: { value: true, alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } }
+            ], [
+                { excelCell: { value: false, alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(0) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
-                helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
+                helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
+                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, 'string', `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
-                helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellRange(cellRange, { row: 2, column: 1 }, topLeft);
+                assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, 'boolean', `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
+                assert.equal(typeof this.worksheet.getCell(topLeft.row + 2, topLeft.column).value, 'boolean', `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
+                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkCellRange(cellRange, { row: 3, column: 1 }, topLeft);
                 done();
             });
         });

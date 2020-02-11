@@ -2547,7 +2547,8 @@ module.exports = {
                     }
 
                     return column.index;
-                }
+                },
+                getCustomizeTextByDataType: getCustomizeTextByDataType
             };
         })())
     }
