@@ -454,7 +454,7 @@ QUnit.test('Returning correct links[].connection data in getAllLinks', function(
         const output = find(links, function(i) {
             return i.connection.source === linkData.source && i.connection.target === linkData.target && i.connection.weight === linkData.weight;
         });
-        assert.ok(typeof output !== 'undefined');
+        assert.notStrictEqual(typeof output, 'undefined');
     });
 });
 

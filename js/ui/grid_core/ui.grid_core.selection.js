@@ -76,7 +76,16 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
     };
 
     const selectionCellTemplate = (container, options) => {
-        const rowsView = options.component.getView('rowsView');
+        const component = options.component;
+        const rowsView = component.getView('rowsView');
+
+        if(component.option('renderAsync')) {
+            const selectedRowKeys = component.getSelectedRowKeys();
+
+            if(selectedRowKeys.indexOf(options.row.key) !== -1) {
+                options.value = true;
+            }
+        }
 
         rowsView.renderSelectCheckBoxContainer($(container), options);
     };

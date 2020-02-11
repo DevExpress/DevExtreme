@@ -254,9 +254,10 @@ const Sortable = Draggable.inherit({
     },
 
     _isValidPoint: function(visibleIndex, draggableVisibleIndex, dropInsideItem) {
+        const allowDropInsideItem = this.option('allowDropInsideItem');
         const allowReordering = dropInsideItem || this._allowReordering();
 
-        if(!allowReordering && visibleIndex !== 0) {
+        if(!allowReordering && (visibleIndex !== 0 || !allowDropInsideItem)) {
             return false;
         }
 

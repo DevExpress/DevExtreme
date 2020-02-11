@@ -595,9 +595,9 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 if(options.collapseVisibleNodes || expandedRowKeys.length) {
                     this.option('expandedRowKeys', expandedRowKeys);
                 }
+                this._isReload = false;
                 this.executeAction('onNodesInitialized', { root: this._rootNode });
                 this._isNodesInitializing = false;
-                this._isReload = false;
             }
 
             data = this._createVisibleItemsByNodes(this._rootNode.children, options);

@@ -1,14 +1,14 @@
 import 'ui/file_manager';
-import { FileManagerItem } from 'ui/file_manager/file_provider/file_provider';
+import FileSystemItem from 'file_management/file_system_item';
 
-import RemoteFileProvider from 'ui/file_manager/file_provider/remote';
+import RemoteFileSystemProvider from 'file_management/remote_provider';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 import { createSampleFileItems } from '../../../helpers/fileManagerHelpers.js';
 import { when } from 'core/utils/deferred';
 
 const { test } = QUnit;
 
-const { filesPathInfo, itemData, fileManagerItems } = createSampleFileItems();
+const { filesPathInfo, itemData, fileSystemItems } = createSampleFileItems();
 
 const moduleConfig = {
 
@@ -17,7 +17,7 @@ const moduleConfig = {
             endpointUrl: '/api/endpoint'
         };
 
-        this.provider = new RemoteFileProvider(this.options);
+        this.provider = new RemoteFileSystemProvider(this.options);
     },
 
     afterEach: function() {
@@ -40,14 +40,11 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             callback: request => assert.equal(request.method, 'GET')
         });
 
-        const pathInfo = [
-            { key: 'Root', name: 'Root' },
-            { key: 'Root/Files', name: 'Files' }
-        ];
+        const filesDir = new FileSystemItem('Root/Files', true);
 
-        this.provider.getItems(pathInfo)
+        this.provider.getItems(filesDir)
             .done(folders => {
-                assert.deepEqual(folders, fileManagerItems, 'folders received');
+                assert.deepEqual(folders, fileSystemItems, 'folders received');
                 done();
             });
     });
@@ -63,8 +60,8 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             callback: request => assert.equal(request.method, 'POST')
         });
 
-        const parentFolder = new FileManagerItem(filesPathInfo, 'Documents');
-        this.provider.createFolder(parentFolder, 'Test 1')
+        const parentFolder = new FileSystemItem(filesPathInfo, 'Documents');
+        this.provider.createDirectory(parentFolder, 'Test 1')
             .done(result => {
                 assert.ok(result.success, 'folder created');
                 done();
@@ -82,7 +79,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             callback: request => assert.equal(request.method, 'POST')
         });
 
-        const item = new FileManagerItem(filesPathInfo, 'Documents');
+        const item = new FileSystemItem(filesPathInfo, 'Documents');
         this.provider.renameItem(item, 'Test 1')
             .done(result => {
                 assert.ok(result.success, 'item renamed');
@@ -101,7 +98,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             callback: request => assert.equal(request.method, 'POST')
         });
 
-        const item = new FileManagerItem(filesPathInfo, 'Documents');
+        const item = new FileSystemItem(filesPathInfo, 'Documents');
         const deferreds = this.provider.deleteItems([ item ]);
         when.apply(null, deferreds)
             .done(result => {
@@ -121,8 +118,8 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             callback: request => assert.equal(request.method, 'POST')
         });
 
-        const item = new FileManagerItem(filesPathInfo, 'Documents');
-        const destinationFolder = new FileManagerItem(filesPathInfo, 'Images');
+        const item = new FileSystemItem(filesPathInfo, 'Documents');
+        const destinationFolder = new FileSystemItem(filesPathInfo, 'Images');
         const deferreds = this.provider.moveItems([ item ], destinationFolder);
         when.apply(null, deferreds)
             .done(result => {
@@ -142,8 +139,8 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             callback: request => assert.equal(request.method, 'POST')
         });
 
-        const item = new FileManagerItem(filesPathInfo, 'Documents');
-        const destinationFolder = new FileManagerItem(filesPathInfo, 'Images');
+        const item = new FileSystemItem(filesPathInfo, 'Documents');
+        const destinationFolder = new FileSystemItem(filesPathInfo, 'Images');
         const deferreds = this.provider.copyItems([ item ], destinationFolder);
         when.apply(null, deferreds)
             .done(result => {
@@ -164,8 +161,8 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             }
         });
 
-        const item = new FileManagerItem(filesPathInfo, 'Article.txt');
-        this.provider.getItemContent([ item ])
+        const item = new FileSystemItem(filesPathInfo, 'Article.txt');
+        this.provider.getItemsContent([ item ])
             .done(result => {
                 assert.strictEqual(result.byteLength, 5, 'item content acquired');
                 done();
@@ -173,15 +170,15 @@ QUnit.module('Remote Provider', moduleConfig, () => {
     });
 
     test('generation end point', function(assert) {
-        let provider = new RemoteFileProvider({
+        let provider = new RemoteFileSystemProvider({
             endpointUrl: 'myEndpoint'
         });
-        assert.ok(provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?command=myCommand') !== -1);
+        assert.notStrictEqual(provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?command=myCommand'), -1);
 
-        provider = new RemoteFileProvider({
+        provider = new RemoteFileSystemProvider({
             endpointUrl: 'myEndpoint?param1=value'
         });
-        assert.ok(provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?param1=value&command=myCommand') !== -1);
+        assert.notStrictEqual(provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?param1=value&command=myCommand'), -1);
     });
 
 });

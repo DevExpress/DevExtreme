@@ -977,7 +977,7 @@ extend(legendPrototype, {
         let titleY = titleBox.y + titleOptions.margin.top;
         let titleX = 0;
 
-        if(titleOptions.verticalAlignment === BOTTOM) {
+        if(titleOptions.verticalAlignment === BOTTOM && that._markersGroup) {
             titleY += that._markersGroup.getBBox().height;
         }
 

@@ -929,7 +929,7 @@ module('collection updating', () => {
 
             textBox.option('stylingMode', 'filled');
             customButton = textBox.getButton('custom');
-            assert.notOk(customButton.option('stylingMode') === 'text');
+            assert.notStrictEqual(customButton.option('stylingMode'), 'text');
         });
     });
 

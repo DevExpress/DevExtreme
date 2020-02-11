@@ -40,7 +40,7 @@ const setupModule = function() {
     };
 
     that.setupTreeList = function() {
-        setupTreeListModules(that, ['data', 'columns', 'rows', 'selection', 'editorFactory', 'columnHeaders', 'filterRow', 'sorting', 'search'], {
+        setupTreeListModules(that, ['data', 'columns', 'rows', 'selection', 'editorFactory', 'columnHeaders', 'filterRow', 'sorting', 'search', 'focus'], {
             initViews: true
         });
     };
@@ -496,6 +496,38 @@ QUnit.test('selection for nested node should works', function(assert) {
     assert.deepEqual(this.getSelectedRowKeys(), [3], 'selected row keys');
     assert.strictEqual(this.getVisibleRows()[1].isSelected, true, 'row 1 is selected');
 });
+
+// T858312
+QUnit.test('The getSelectedRowsData method should work correctly when calling navigateToRow in the onNodesInitialized event', function(assert) {
+    // arrange
+    const $testElement = $('#treeList');
+    const clock = sinon.useFakeTimers();
+
+    this.options.loadingTimeout = 30;
+    this.options.autoNavigateToFocusedRow = true;
+    this.options.onNodesInitialized = (e) => {
+        this.navigateToRow(2);
+    };
+
+    this.setupTreeList();
+    clock.tick(60);
+    this.rowsView.render($testElement);
+
+    // assert
+    assert.ok(this.getNodeByKey(1), 'node with key "1" exists');
+    assert.ok(this.getNodeByKey(2), 'node with key "2" exists');
+
+    // act
+    this.selectRows(2);
+
+    // assert
+    assert.deepEqual(this.getSelectedRowKeys(), [2], 'getSelectedRowKeys');
+    assert.deepEqual(this.option('selectedRowKeys'), [2], 'selectedRowKeys');
+    assert.deepEqual(this.getSelectedRowsData(), [{ id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) }], 'getSelectedRowsData');
+
+    clock.restore();
+});
+
 
 QUnit.module('Recursive selection', {
     beforeEach: function() {

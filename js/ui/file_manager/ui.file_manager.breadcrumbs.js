@@ -70,7 +70,7 @@ class FileManagerBreadcrumbs extends Widget {
 
         dirLine.forEach((dir, index) => {
             result.push({
-                text: dir.fileItem.name,
+                text: dir.getDisplayName(),
                 directory: dir,
                 isPathItem: true
             });
