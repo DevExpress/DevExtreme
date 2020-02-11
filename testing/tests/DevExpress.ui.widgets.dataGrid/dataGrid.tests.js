@@ -4972,16 +4972,12 @@ QUnit.test('Group collapsing if focusedRowEnabled is true and key is complex', f
 QUnit.test('DataGrid should not scroll back to the focused row after pageIndex changed in virtual scrolling', function(assert) {
     // arrange
     const data = [];
-    let dataGrid;
-    const generateData = function() {
-        for(let i = 0; i < 100; ++i) {
-            data.push({ id: i, c0: 'c0_' + i, c1: 'c1_' + i });
-        }
-    };
 
-    generateData();
+    for(let i = 0; i < 100; ++i) {
+        data.push({ id: i, c0: 'c0_' + i, c1: 'c1_' + i });
+    }
 
-    dataGrid = $('#dataGrid').dxDataGrid({
+    const dataGrid = $('#dataGrid').dxDataGrid({
         height: 300,
         keyExpr: 'id',
         dataSource: data,

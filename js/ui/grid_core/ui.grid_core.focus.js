@@ -514,26 +514,32 @@ module.exports = {
 
                         if(e.changeType === 'refresh' && e.items.length || isPartialUpdateWithDeleting) {
                             this.processUpdateFocusedRow();
+                        } else if(e.changeType === 'append' || e.changeType === 'prepend') {
+                            this._updatePageIndexes();
                         }
                     }
                 },
+
+                _updatePageIndexes: function() {
+                    this._lastPageIndex = this.pageIndex();
+                    this._lastRenderingPageIndex = this._rowsScrollController ? this._rowsScrollController.pageIndex() : 0;
+                },
+
                 processUpdateFocusedRow: function() {
-                    const prevPageIndex = this._prevPageIndex;
-                    const pageIndex = this.pageIndex();
-                    const prevRenderingPageIndex = this._prevRenderingPageIndex || 0;
-                    const renderingPageIndex = this._rowsScrollController ? this._rowsScrollController.pageIndex() : 0;
+                    const prevPageIndex = this._lastPageIndex;
+                    const prevRenderingPageIndex = this._lastRenderingPageIndex || 0;
+                    this._updatePageIndexes();
+                    const pageIndex = this._lastPageIndex;
+                    const renderingPageIndex = this._lastRenderingPageIndex;
+                    const paging = prevPageIndex !== undefined && prevPageIndex !== pageIndex;
+                    const pagingByRendering = renderingPageIndex !== prevRenderingPageIndex;
                     const operationTypes = this._dataSource.operationTypes() || {};
                     const focusController = this.getController('focus');
                     const reload = operationTypes.reload;
                     const keyboardController = this.getController('keyboardNavigation');
                     const isVirtualScrolling = keyboardController._isVirtualScrolling();
                     const focusedRowKey = this.option('focusedRowKey');
-                    const paging = prevPageIndex !== undefined && prevPageIndex !== pageIndex;
-                    const pagingByRendering = renderingPageIndex !== prevRenderingPageIndex;
                     const isAutoNavigate = this.option('autoNavigateToFocusedRow');
-
-                    this._prevPageIndex = pageIndex;
-                    this._prevRenderingPageIndex = renderingPageIndex;
 
                     if(reload && focusedRowKey !== undefined) {
                         focusController._navigateToRow(focusedRowKey, true).done(function(focusedRowIndex) {
