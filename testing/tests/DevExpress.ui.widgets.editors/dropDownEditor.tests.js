@@ -15,10 +15,8 @@ import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="qunit-fixture" class="qunit-fixture-visible">\
-            <div id="dropDownEditorLazy"></div>\
-            <div id="dropDownEditorSecond"></div>\
-        </div>';
+        `<div id="dropDownEditorLazy"></div>
+         <div id="dropDownEditorSecond"></div>`;
 
     $('#qunit-fixture').html(markup);
 });
@@ -1128,6 +1126,26 @@ QUnit.module('Templates', () => {
 
         keyboard.type('z5');
         assert.strictEqual($input.val(), '5-_', 'Masked TextBox works fine');
+    });
+
+    QUnit.test('contentTemplate should not redefine popup content (T860163)', function(assert) {
+        assert.expect(1);
+
+        const $editor = $(`<div id='editor'>
+                <div data-options="dxTemplate: { name: 'content' }">
+                    Content template markup
+                </div>
+            </div>`).appendTo('#qunit-fixture');
+
+        $editor.dxDropDownEditor({
+            onPopupInitialized({ popup }) {
+                popup.on('contentReady', () => {
+                    const popupContentText = $(popup.content()).text();
+                    assert.ok(popupContentText.indexOf('Content template markup') < 0);
+                });
+            },
+            opened: true
+        });
     });
 });
 
