@@ -47,7 +47,8 @@ class FileManager extends Widget {
             rootText: this.option('rootFolderName'),
             fileProvider: this.option('fileSystemProvider'),
             allowedFileExtensions: this.option('allowedFileExtensions'),
-            maxUploadFileSize: this.option('upload').maxFileSize,
+            uploadMaxFileSize: this.option('upload').maxFileSize,
+            uploadChunkSize: this.option('upload').chunkSize,
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
         this._commandManager = new FileManagerCommandManager(this.option('permissions'));
@@ -434,7 +435,14 @@ class FileManager extends Widget {
                 * @type number
                 * @default 0
                 */
-                maxFileSize: 0
+                maxFileSize: 0,
+
+                /**
+                * @name dxFileManagerOptions.upload.chunkSize
+                * @type number
+                * @default 200000
+                */
+                chunkSize: 200000
             },
 
             permissions: {

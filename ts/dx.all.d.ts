@@ -3611,7 +3611,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.toolbar */
         toolbar?: dxFileManagerToolbar;
         /** @name dxFileManager.Options.upload */
-        upload?: { maxFileSize?: number };
+        upload?: { chunkSize?: number, maxFileSize?: number };
     }
     /** @name dxFileManager */
     export class dxFileManager extends Widget {

@@ -397,7 +397,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
     test('upload fails when max file size exceeded', function(assert) {
         this.controller = new FileItemsController({
             fileProvider: this.data,
-            maxUploadFileSize: 400000
+            uploadMaxFileSize: 400000
         });
 
         stubFileReaderInProvider(this.controller);

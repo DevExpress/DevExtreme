@@ -140,7 +140,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    upload?: { maxFileSize?: number };
+    upload?: { maxFileSize?: number, chunkSize?: number };
 }
 /**
  * @docid dxFileManager

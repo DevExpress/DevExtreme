@@ -26,7 +26,7 @@ export default class FileItemsController {
 
         this._securityController = new FileSecurityController({
             allowedFileExtensions: this._options.allowedFileExtensions,
-            maxFileSize: this._options.maxUploadFileSize
+            maxFileSize: this._options.uploadMaxFileSize
         });
 
         this.setProvider(options.fileProvider);
@@ -241,6 +241,10 @@ export default class FileItemsController {
     }
 
     getFileUploadChunkSize() {
+        const chunkSize = this._options.uploadChunkSize;
+        if(chunkSize && chunkSize > 0) {
+            return chunkSize;
+        }
         return this._fileProvider.getFileUploadChunkSize();
     }
 
