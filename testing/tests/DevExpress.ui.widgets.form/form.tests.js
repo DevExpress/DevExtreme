@@ -1947,7 +1947,7 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
         assert.equal(button.option('height'), 20, 'Correct button height');
     });
 
-    QUnit.test(`Changing the editorOptions of a sub item without re-render Form when use the ${optionWay} method (T316822)`, function(assert) {
+    QUnit.test(`Changing the editorOptions of a sub item without re-render Form when use the ${optionWay} method (T316522)`, function(assert) {
         const form = $('#form').dxForm({
             formData: {
                 lastName: 'Kyle',
