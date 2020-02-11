@@ -399,7 +399,7 @@
         aspnet.setTemplateEngine();
 
         const errors = errorsAccessor();
-        sinon.spy(errors, 'log');
+        const spy = sinon.spy(errors, 'log');
 
         try {
             const formID = 'bd859c15-674f-49bf-a6d0-9368508e8d11';
@@ -460,6 +460,7 @@
 
         } finally {
             setTemplateEngine('default');
+            spy.restore();
             delete window.__createForm;
             delete window.__createTextBox;
         }
