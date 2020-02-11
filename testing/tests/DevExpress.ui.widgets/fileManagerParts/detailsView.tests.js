@@ -151,19 +151,18 @@ QUnit.module('Details View', moduleConfig, () => {
     });
 
     test('Raise the  SelectedFileOpened event', function(assert) {
-        let eventCounter = 0;
+        const spy = sinon.spy();
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
-        fileManagerInstance.option('onSelectedFileOpened', e => {
-            eventCounter++;
-        });
+        fileManagerInstance.option('onSelectedFileOpened', spy);
 
         getCellInDetailsView(this.$element, 2, 2).trigger('dxdblclick');
         this.clock.tick(800);
-        assert.equal(eventCounter, 1);
+        assert.equal(spy.callCount, 1);
+        assert.equal(spy.args[0][0].file.name, '1.txt', 'file passed as argument');
 
         getCellInDetailsView(this.$element, 1, 2).trigger('dxdblclick');
         this.clock.tick(800);
-        assert.equal(eventCounter, 1);
+        assert.equal(spy.callCount, 1);
     });
 
     test('Apply sorting by click on file type column header', function(assert) {

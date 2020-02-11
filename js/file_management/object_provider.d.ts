@@ -5,7 +5,7 @@ import FileSystemProviderBase, {
 export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseOptions<ObjectFileSystemProvider> {
     /**
      * @docid ObjectFileSystemProviderOptions.contentExpr
-     * @type string|function(fileItem)
+     * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -19,7 +19,7 @@ export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseO
     data?: Array<any>;
     /**
      * @docid ObjectFileSystemProviderOptions.itemsExpr
-     * @type string|function(fileItem)
+     * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */

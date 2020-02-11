@@ -543,14 +543,15 @@ class FileManager extends Widget {
     }
 
     _onSelectedDirectoryChanged() {
+        const currentDirectory = this._getCurrentDirectory();
         const currentPath = this._controller.getCurrentPath();
 
         this._filesTreeView.updateCurrentDirectory();
         this._itemView.refresh();
-        this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
+        this._breadcrumbs.setCurrentDirectory(currentDirectory);
 
         this.option('currentPath', currentPath);
-        this._onCurrentDirectoryChangedAction();
+        this._onCurrentDirectoryChangedAction({ directory: currentDirectory.fileItem });
     }
 
     getDirectories(parentDirectoryInfo) {
@@ -577,7 +578,7 @@ class FileManager extends Widget {
     _onSelectedItemOpened({ fileItemInfo }) {
         const fileItem = fileItemInfo.fileItem;
         if(!fileItem.isDirectory) {
-            this._onSelectedFileOpenedAction({ fileItem });
+            this._onSelectedFileOpenedAction({ file: fileItem });
             return;
         }
 

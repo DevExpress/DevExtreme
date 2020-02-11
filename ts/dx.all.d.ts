@@ -3593,15 +3593,15 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.customizeDetailColumns */
         customizeDetailColumns?: ((columns: Array<dxDataGridColumn>) => Array<dxDataGridColumn>);
         /** @name dxFileManager.Options.customizeThumbnail */
-        customizeThumbnail?: ((fileItem: any) => string);
+        customizeThumbnail?: ((fileSystemItem: DevExpress.fileManagement.FileSystemItem) => string);
         /** @name dxFileManager.Options.fileSystemProvider */
         fileSystemProvider?: any;
         /** @name dxFileManager.Options.itemView */
         itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
         /** @name dxFileManager.Options.onCurrentDirectoryChanged */
-        onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any }) => any);
+        onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, directory?: DevExpress.fileManagement.FileSystemItem }) => any);
         /** @name dxFileManager.Options.onSelectedFileOpened */
-        onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
+        onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, file?: DevExpress.fileManagement.FileSystemItem }) => any);
         /** @name dxFileManager.Options.permissions */
         permissions?: { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean };
         /** @name dxFileManager.Options.rootFolderName */

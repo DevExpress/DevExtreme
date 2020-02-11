@@ -4,42 +4,42 @@ import FileSystemItem from './file_system_item';
 export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**
      * @docid FileSystemProviderBaseOptions.dateModifiedExpr
-     * @type string|function(fileItem)
+     * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     dateModifiedExpr?: string | Function;
     /**
      * @docid FileSystemProviderBaseOptions.isDirectoryExpr
-     * @type string|function(fileItem)
+     * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     isDirectoryExpr?: string | Function;
     /**
      * @docid FileSystemProviderBaseOptions.keyExpr
-     * @type string|function(fileItem)
+     * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     keyExpr?: string | Function;
     /**
      * @docid FileSystemProviderBaseOptions.nameExpr
-     * @type string|function(fileItem)
+     * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     nameExpr?: string | Function;
     /**
      * @docid FileSystemProviderBaseOptions.sizeExpr
-     * @type string|function(fileItem)
+     * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     sizeExpr?: string | Function;
     /**
      * @docid FileSystemProviderBaseOptions.thumbnailExpr
-     * @type string|function(fileItem)
+     * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
