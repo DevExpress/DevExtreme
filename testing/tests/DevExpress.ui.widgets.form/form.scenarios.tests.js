@@ -6,14 +6,6 @@ import 'ui/form/ui.form';
 import 'common.css!';
 import 'generic_light.css!';
 
-function chromeModuleOnly(name, environment) {
-    if(!browser.chrome) {
-        return;
-    }
-
-    QUnit.module(name, environment);
-}
-
 QUnit.testStart(function() {
     const markup = '<div id="form"></div>';
 
@@ -108,7 +100,11 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
 
 [true, false].forEach(alignItemLabels => {
     [true, false].forEach(alignItemLabelsInAllGroups => {
-        chromeModuleOnly(`Items layout and labels alignment. alignItemLabels: ${alignItemLabels}, alignItemLabelsInAllGroups: ${alignItemLabelsInAllGroups}`, () => {
+        QUnit.module(`Items layout and labels alignment. alignItemLabels: ${alignItemLabels}, alignItemLabelsInAllGroups: ${alignItemLabelsInAllGroups}`, () => {
+            if(!browser.chrome) {
+                return;
+            }
+
             QUnit.test('1 column -> [text]', function() {
                 const wrapper = new FormLayoutTestWrapper(1, { alignItemLabels, alignItemLabelsInAllGroups }, ['text']);
                 test_1Column_1Item(wrapper);
