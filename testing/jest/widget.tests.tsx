@@ -1,6 +1,5 @@
 import Widget from '../../js/renovation/widget.p.js';
 import { h } from 'preact';
-import { act } from 'preact/test-utils';
 import { clear as clearEventHandlers, emit, fakeClickEvent, EVENT } from './utils/events-mock';
 import { shallow, mount } from 'enzyme';
 
@@ -344,7 +343,7 @@ describe('Widget', () => {
         });
     });
 
-    describe.only('Events', () => {
+    describe('Events', () => {
         describe('visibilityChanged', () => {
             const getClientRects = jest.spyOn(Element.prototype, 'getClientRects');
             getClientRects.mockImplementation(() => ({ length: 1 }));
@@ -377,32 +376,13 @@ describe('Widget', () => {
                 expect(shownFired).toBe(1);
             });
 
-            // it should testing at eventEngine side
-            // it('should have many subscriptions without crashing', () => {
-            //     const widget1 = render({ _visibilityChanged, name: 'TestComponent1' });
-            //     const widget2 = render({ _visibilityChanged, name: 'TestComponent2' });
-
-            //     emit(EVENT.hiding);
-            //     widget1.setProps({});
-            //     widget2.setProps({});
-
-            //     emit(EVENT.shown);
-            //     widget1.setProps({});
-            //     widget2.setProps({});
-
-            //     expect(hidingFired).toBe(2);
-            //     expect(shownFired).toBe(2);
-            // });
-
             it('works optimally if component is visible on initializing', () => {
                 let widget = null;
                 widget = render({ _visibilityChanged });
 
-                // hidden/shown is not fired initially
                 expect(hidingFired).toBe(0);
                 expect(shownFired).toBe(0);
 
-                // shown is not fired if element is visible
                 emit(EVENT.shown);
                 widget.setProps({});
                 widget.update();
@@ -422,11 +402,9 @@ describe('Widget', () => {
             it('works optimally if component is hidden on initializing', () => {
                 const widget = mountRender({ _visibilityChanged, _isHidden: true });
 
-                // hidden/shown is not fired initially
                 expect(hidingFired).toBe(0);
                 expect(shownFired).toBe(0);
 
-                // hiding is not fired if element is hidden
                 emit(EVENT.hiding);
                 widget.setProps({});
                 expect(shownFired).toBe(0);
@@ -440,11 +418,10 @@ describe('Widget', () => {
                 expect(shownFired).toBe(1);
             });
 
-            fit('should not calls with hidden parent', () => {
+            it('should not calls with hidden parent', () => {
                 getClientRects.mockImplementation(() => ({ length: 0 }));
                 const widget = mountRender({ _visibilityChanged });
 
-                // hidden/shown is not fired initially
                 expect(hidingFired).toBe(0);
                 expect(shownFired).toBe(0);
 

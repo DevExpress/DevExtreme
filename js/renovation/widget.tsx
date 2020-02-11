@@ -203,7 +203,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
     @Effect()
     hiddenStateEffect() {
-        this._isHidden = isVisible(this.widgetRef);
+        this._isHidden = !isVisible(this.widgetRef);
     }
 
     @Effect()
