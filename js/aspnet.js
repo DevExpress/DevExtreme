@@ -12,7 +12,8 @@
                 require('./core/utils/iterator'),
                 require('./core/utils/dom').extractTemplateMarkup,
                 require('./core/utils/string').encodeHtml,
-                require('./core/utils/ajax')
+                require('./core/utils/ajax'),
+                require('./core/utils/console')
             );
         });
     } else {
@@ -25,13 +26,15 @@
             DevExpress.utils.iterator,
             DevExpress.utils.dom.extractTemplateMarkup,
             DevExpress.utils.string.encodeHtml,
-            DevExpress.utils.ajax
+            DevExpress.utils.ajax,
+            DevExpress.utils.console
         );
     }
-})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml, ajax) {
+})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml, ajax, console) {
     var templateCompiler = createTemplateCompiler();
     var pendingCreateComponentRoutines = [ ];
     var enableAlternateTemplateTags = true;
+    var warnBug17028 = false;
 
     function createTemplateCompiler() {
         var OPEN_TAG = '<%',
@@ -65,6 +68,13 @@
         return function(text) {
             var bag = ['var _ = [];', 'with(obj||{}) {'],
                 chunks = text.split(enableAlternateTemplateTags ? EXTENDED_OPEN_TAG : OPEN_TAG);
+
+            if(warnBug17028 && chunks.length > 1) {
+                if(text.indexOf(OPEN_TAG) > -1) {
+                    console.logger.warn('Please use an alternative template syntax: https://community.devexpress.com/blogs/aspnet/archive/2020/01/29/asp-net-core-new-syntax-to-fix-razor-issue.aspx');
+                    warnBug17028 = false;
+                }
+            }
 
             acceptText(bag, chunks.shift());
 
@@ -175,6 +185,10 @@
 
         enableAlternateTemplateTags: function(value) {
             enableAlternateTemplateTags = value;
+        },
+
+        warnBug17028: function() {
+            warnBug17028 = true;
         },
 
         createValidationSummaryItems: function(validationGroup, editorNames) {

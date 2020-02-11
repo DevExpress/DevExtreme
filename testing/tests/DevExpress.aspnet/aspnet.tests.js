@@ -18,7 +18,8 @@
                 require('core/templates/template_engine_registry').setTemplateEngine,
                 aspnet,
                 function() { return require('ui/widget/ui.errors'); },
-                function() { return require('../../helpers/ajaxMock.js'); }
+                function() { return require('../../helpers/ajaxMock.js'); },
+                require('core/utils/console')
             );
         });
     } else {
@@ -27,10 +28,11 @@
             DevExpress.setTemplateEngine,
             DevExpress.aspnet,
             function() { return window.DevExpress_ui_widget_errors; },
-            function() { return window.ajaxMock; }
+            function() { return window.ajaxMock; },
+            DevExpress.utils.console
         );
     }
-}(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor) {
+}(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor, console) {
 
     if(QUnit.urlParams['nojquery']) {
         return;
@@ -519,6 +521,28 @@
             assert.ok($('#' + NUMERIC_ID).dxTextBox('instance'));
         } finally {
             setTemplateEngine('default');
+        }
+    });
+
+    QUnit.test('Warn https://github.com/dotnet/aspnetcore/issues/17028', function(assert) {
+        aspnet.setTemplateEngine();
+        const spy = sinon.spy(console.logger, 'warn');
+        try {
+            aspnet.warnBug17028();
+
+            $('#qunit-fixture').html(`
+                <div id=widget1></div>
+                <div id=widget2></div>
+                <script id=template1 type=text/html><%= %></script>
+            `);
+
+            [1, 2].forEach(i => $('#widget' + i).dxButton({ template: $('#template1') }));
+
+            assert.equal(spy.callCount, 1);
+            assert.ok(spy.args[0][0].indexOf('alternative template syntax') > -1);
+        } finally {
+            setTemplateEngine('default');
+            spy.restore();
         }
     });
 
