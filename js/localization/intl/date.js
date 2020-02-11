@@ -9,7 +9,13 @@ const getIntlFormatter = format => {
         // NOTE: Intl in some browsers formates dates with timezone offset which was at the moment for this date.
         // But the method "new Date" creates date using current offset. So, we decided to format dates in the UTC timezone.
         if(!format.timeZoneName) {
-            const utcDate = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
+            const year = date.getFullYear();
+            // NOTE: new Date(99,0,1) will return 1999 year, but 99 expected
+            const recognizableAsTwentyCentury = String(year).length < 3;
+            const safeYearShift = 400;
+            const temporaryYearValue = recognizableAsTwentyCentury ? year + safeYearShift : year;
+            const utcDate = new Date(Date.UTC(temporaryYearValue, date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+            utcDate.setFullYear(year);
             const utcFormat = extend({ timeZone: 'UTC' }, format);
 
             return formatDateTime(utcDate, utcFormat);
