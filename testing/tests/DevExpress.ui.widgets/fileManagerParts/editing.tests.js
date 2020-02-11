@@ -3,6 +3,7 @@ import 'ui/file_manager';
 import pointerEvents from 'events/pointer';
 import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
+import CustomFileSystemProvider from 'file_management/custom_provider';
 import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
 
 const { test } = QUnit;
@@ -36,6 +37,7 @@ const moduleConfig = {
             }
         });
 
+        this.fileManager = this.$element.dxFileManager('instance');
         this.wrapper = new FileManagerWrapper(this.$element);
         this.progressPanelWrapper = new FileManagerProgressPanelWrapper(this.$element);
 
@@ -483,6 +485,35 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
         assert.ok(uploadedFileIndex > -1, 'file is uploaded');
         assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
+    });
+
+    test('upload chunkSize option', function(assert) {
+        const uploadChunkSpy = sinon.spy();
+        const chunkSize = 50000;
+
+        this.fileManager.option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                uploadFileChunk: uploadChunkSpy
+            }),
+            upload: { chunkSize }
+        });
+
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Upload').filter(':visible').trigger('dxclick');
+
+        const file = createUploaderFiles(1)[0];
+        this.wrapper.setUploadInputFile([ file ]);
+        this.clock.tick(400);
+
+        assert.strictEqual(uploadChunkSpy.callCount, 6, 'uploadFileChunk called for each chunk');
+
+        for(let i = 0; i < 6; i++) {
+            const uploadInfo = uploadChunkSpy.args[i][1];
+            assert.strictEqual(uploadInfo.chunkCount, 6, `chunkCount correct for ${i} chunk`);
+            assert.strictEqual(uploadInfo.chunkIndex, i, `chunkIndex correct for ${i} chunk`);
+            assert.strictEqual(uploadInfo.bytesUploaded, i * chunkSize, `bytesUploaded correct for ${i} chunk`);
+        }
     });
 
     test('copying file must be completed in progress panel and current directory must be changed to the destination', function(assert) {
