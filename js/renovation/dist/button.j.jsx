@@ -1,17 +1,20 @@
+
+import $ from '../../core/renderer';
+import * as Preact from 'preact';
 import registerComponent from '../../core/component_registrator';
 import Widget from '../preact_wrapper';
 import { extend } from '../../core/utils/extend';
 import { equalByValue } from '../../core/utils/common';
 import ButtonView from '../button.p';
-import * as Preact from 'preact';
 
 // NOTE: workaround to memoize template
 let prevData;
 let prevTemplate;
-let parent;
+let component;
+let wrapper = false;
 
 const removeChildren = (element) => {
-    while(element.firstChild) {
+    while(element?.firstChild) {
         element.removeChild(element.firstChild);
     }
 };
@@ -26,32 +29,43 @@ class Button extends Widget {
 
         // NOTE: workaround to switch from custom template to default
         if(!props.template) {
-            parent && removeChildren(parent);
+            component && removeChildren($(component).parent().get(0));
         }
 
         if(props.template) {
             props.contentRender = (data) => {
                 const templateProp = this.option('template');
+                const shouldRender = !equalByValue(data, prevData) || prevTemplate !== templateProp;
 
-                if(equalByValue(data, prevData) && prevTemplate === templateProp) return;
+                if(shouldRender) {
+                    const template = this._getTemplate(templateProp);
 
-                const template = this._getTemplate(templateProp);
+                    component && removeChildren($(component).parent().get(0));
 
-                return (<div style={{ display: 'none' }} ref={(element) => {
                     prevTemplate = templateProp;
                     prevData = data;
+                    wrapper = false;
 
-                    if(element?.parentElement) {
-                        parent = element.parentElement;
-                        removeChildren(parent);
-                        template.render({
-                            model: data,
-                            container: parent
-                        });
-                    }
-                }}/>);
+                    component = <div className="dx-button-content" ref={(element) => {
+                        if(element) {
+                            const $template = $(template.render({
+                                model: data,
+                                container: element
+                            }));
+                            if($template.hasClass('dx-template-wrapper')) {
+                                $template.addClass('dx-button-content');
+                                $(element).replaceWith($template);
+                                component = $template;
+                                wrapper = true;
+                            }
+                        }
+                    }}/>;
+                }
+
+                return !wrapper && component;
             };
         }
+
         props.onClick = this._createActionByOption('onClick', {
             excludeValidators: ['readOnly'],
             afterExecute: () => {
@@ -70,6 +84,21 @@ class Button extends Widget {
             hoverStateEnabled: true,
             template: '',
             text: '',
+        });
+    }
+
+    _initTemplates() {
+        super._initTemplates();
+        this._templateManager.addDefaultTemplates({
+            test: {
+                render: function(args) {
+                    const $element = $('<span>')
+                        .addClass('dx-template-wrapper')
+                        .text('button');
+
+                    return $element.get(0);
+                }
+            }
         });
     }
 }

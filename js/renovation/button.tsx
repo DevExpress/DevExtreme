@@ -75,17 +75,19 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
         visible={viewModel.visible}
         width={viewModel.width}
     >
-        <div className="dx-button-content">
-            {viewModel.contentRender &&
-                <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} />}
-            {!viewModel.contentRender && viewModel.icon}
-            {!viewModel.contentRender && viewModel.text &&
-                <span className="dx-button-text">{viewModel.text}</span>
-            }
-            {viewModel.useSubmitBehavior &&
-                <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
-            }
-        </div>
+        {(viewModel.contentRender && 
+            <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} />
+        ) || (
+            <div className="dx-button-content">
+                {viewModel.icon}
+                {viewModel.text && 
+                    <span className="dx-button-text">{viewModel.text}</span>
+                }
+                {viewModel.useSubmitBehavior &&
+                    <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
+                }
+            </div>
+        )}
     </Widget>;
 };
 
