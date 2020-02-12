@@ -9,6 +9,11 @@ var OUTPUT_DIR = 'artifacts/ts';
 var MODULES = require('./modules_metadata.json');
 var TS_PATH = './ts/dx.all.d.ts';
 
+const COMMON_TS_COMPILER_OPTIONS = {
+    noEmitOnError: true,
+    skipLibCheck: true
+};
+
 var widgetNameByPath = exports.widgetNameByPath = function(widgetPath) {
     if(widgetPath.startsWith('ui.dx') || widgetPath.startsWith('viz.dx')) {
         var parts = widgetPath.split('.');
@@ -67,16 +72,12 @@ gulp.task('ts-jquery-check', ['ts-sources'], function() {
         }).join('\n');
 
     return file('artifacts/globals.ts', content, { src: true })
-        .pipe(ts({
-            noEmitOnError: true
-        }, ts.reporter.fullReporter()));
+        .pipe(ts(COMMON_TS_COMPILER_OPTIONS, ts.reporter.fullReporter()));
 });
 
 gulp.task('ts-compilation-check', function() {
     return gulp.src(TS_PATH)
-        .pipe(ts({
-            noEmitOnError: true
-        }, ts.reporter.fullReporter()));
+        .pipe(ts(COMMON_TS_COMPILER_OPTIONS, ts.reporter.fullReporter()));
 });
 
 gulp.task('ts', [ 'ts-vendor', 'ts-sources', 'ts-jquery-check', 'ts-compilation-check' ]);

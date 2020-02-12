@@ -203,7 +203,8 @@ gulp.task('npm-ts-modules-check', ['npm-ts-modules-generator'], function() {
     return file('artifacts/modules.ts', content, { src: true })
         .pipe(ts({
             allowSyntheticDefaultImports: true,
-            noEmitOnError: true
+            noEmitOnError: true,
+            skipLibCheck: true
         }, ts.reporter.fullReporter()));
 });
 
