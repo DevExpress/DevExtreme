@@ -1158,7 +1158,10 @@ QUnit.module('dateView integration', {
     });
 
     QUnit.test('dateBox should apply first rollers value if start rollers value is not equal for the actual date (T860282)', function(assert) {
-        this.instance.option('max', new Date(2000, 1, 1));
+        this.instance.option({
+            'max': new Date(2000, 1, 1),
+            'opened': false
+        });
         this.instance.open();
         $(this.popup().overlayContent()).find(CALENDAR_APPLY_BUTTON_SELECTOR).trigger('dxclick');
 
