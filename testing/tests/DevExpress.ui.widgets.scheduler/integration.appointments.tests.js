@@ -4043,7 +4043,7 @@ QUnit.module('Appointments', () => {
                     startDateExpr: 'startDateCustom',
                     endDateExpr: 'endDateCustom',
                     currentView: 'week',
-                    timeZone: 1,
+                    timeZone: 'Africa/Bangui', // NOTE: +1
                     startDayHour: 0,
                     endDayHour: 24
                 },
