@@ -38,6 +38,7 @@ const FIELD_CLASS = 'dx-field';
 const RECURRENCE_FREQ_FIELD = 'dx-recurrence-freq-field';
 const FIELD_LABEL_CLASS = 'dx-field-label';
 const FIELD_VALUE_CLASS = 'dx-field-value';
+const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
 
 const frequenciesMessages = [{
     recurrence: 'dxScheduler-recurrenceMinutely',
@@ -69,7 +70,7 @@ const repeatEndTypes = [
     { text() { return messageLocalization.format('dxScheduler-recurrenceRepeatCount'); }, value: 'count' }
 ];
 
-const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 const DAYS_IN_WEEK = 7;
 
 class RecurrenceRule {
@@ -378,7 +379,7 @@ const RecurrenceEditor = Editor.inherit({
         const that = this;
         const itemsButtonGroup = days.slice(firstDayOfWeek).concat(days.slice(0, firstDayOfWeek)).map(item => { return { text: item }; });
 
-        this._$repeatOnWeek = $('<div>').appendTo(this._$repeatOnEditor);
+        this._$repeatOnWeek = $('<div>').addClass(RECURRENCE_BUTTON_GROUP).appendTo(this._$repeatOnEditor);
 
         this._weekEditor = this._createComponent(this._$repeatOnWeek, ButtonGroup, {
             items: itemsButtonGroup,
