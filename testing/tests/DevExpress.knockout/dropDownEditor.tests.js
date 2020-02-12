@@ -12,12 +12,6 @@ QUnit.testStart(function() {
                 <div data-bind="dxTextBox: {}"></div>\
             </div>\
         </div>\
-        \
-        <div id="dropDownEditorWithContentTemplate" data-bind="dxDropDownEditor: { contentTemplate: \'content\', value: value, opened: true }">\
-            <div data-options="dxTemplate: { name: \'content\' }">\
-                <span data-bind="text: $data.value"></span>\
-            </div>\
-        </div>\
         <div id="dropDownEditorWithButtonTemplate" data-bind="dxDropDownEditor: { dropDownButtonTemplate: \'buttonTpl\' }">\
             <div data-options="dxTemplate: { name: \'buttonTpl\' }">\
                 <span data-bind="text: $parent.text"></span>\
@@ -35,17 +29,6 @@ QUnit.test('fieldTemplate', function(assert) {
     ko.applyBindings(vm, $dropDownEditor.get(0));
 
     assert.equal($.trim($dropDownEditor.text()), 'test', 'template rendered');
-});
-
-QUnit.test('contentTemplate', function(assert) {
-    const vm = {
-        value: 'test'
-    };
-
-    const $dropDownEditor = $('#dropDownEditorWithContentTemplate');
-    ko.applyBindings(vm, $dropDownEditor.get(0));
-
-    assert.equal($.trim($('.dx-popup-wrapper').text()), 'test', 'content rendered');
 });
 
 QUnit.test('drop button template', function(assert) {

@@ -15,10 +15,8 @@ import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="qunit-fixture" class="qunit-fixture-visible">\
-            <div id="dropDownEditorLazy"></div>\
-            <div id="dropDownEditorSecond"></div>\
-        </div>';
+        `<div id="dropDownEditorLazy"></div>
+         <div id="dropDownEditorSecond"></div>`;
 
     $('#qunit-fixture').html(markup);
 });
@@ -577,9 +575,6 @@ QUnit.module('focus policy', () => {
     QUnit.test('focusout to another editor should close current ddb (T832410)', function(assert) {
         const $dropDownEditor1 = $('#dropDownEditorLazy').dxDropDownEditor({
             items: [0, 1, 2],
-            contentTemplate() {
-                return $('<div>').attr('id', 'test-content');
-            },
             acceptCustomValue: true,
             focusStateEnabled: true,
             opened: true
@@ -937,24 +932,6 @@ QUnit.module('Templates', () => {
         assert.strictEqual($placeholder.closest('.dx-textbox').length, 1, 'is textbox\'s placeholder');
     });
 
-
-    QUnit.test('contentTemplate as render', function(assert) {
-        $('#dropDownEditorLazy').dxDropDownEditor({
-            contentTemplate(data, content) {
-                assert.equal(isRenderer(content), !!config().useJQuery, 'contentElement is correct');
-                $(content).addClass('drop-down-editor-content');
-                return $('<div>').text(data.component.option('value'));
-            },
-            value: 'test',
-            opened: true
-        });
-
-        const $dropDownContent = $('.drop-down-editor-content');
-
-        assert.equal($dropDownContent.length, 1, 'There is one dropDownEditor content element with custom class');
-        assert.equal($.trim($dropDownContent.text()), 'test', 'Correct content rendered');
-    });
-
     QUnit.test('onValueChanged should be fired for each change by keyboard when fieldTemplate is used', function(assert) {
         const valueChangedSpy = sinon.spy();
 
@@ -1145,6 +1122,26 @@ QUnit.module('Templates', () => {
 
         keyboard.type('z5');
         assert.strictEqual($input.val(), '5-_', 'Masked TextBox works fine');
+    });
+
+    QUnit.test('contentTemplate should not redefine popup content (T860163)', function(assert) {
+        assert.expect(1);
+
+        const $editor = $(`<div id='editor'>
+                <div data-options="dxTemplate: { name: 'content' }">
+                    Content template markup
+                </div>
+            </div>`).appendTo('#qunit-fixture');
+
+        $editor.dxDropDownEditor({
+            onPopupInitialized({ popup }) {
+                popup.on('contentReady', () => {
+                    const popupContentText = $(popup.content()).text();
+                    assert.ok(popupContentText.indexOf('Content template markup') < 0);
+                });
+            },
+            opened: true
+        });
     });
 });
 
