@@ -36,14 +36,15 @@ class Button extends Widget {
         if(props.template) {
             props.contentRender = ({ text, icon, contentRef }) => {
                 const data = { text, icon };
-                let $content = $('<div className=dx-button-content>');
+                let $content = $('<div>');
                 const templateProp = this.option('template');
                 const $template = $(this._getTemplate(templateProp).render({ model: data, container: $content }));
 
                 if($template.hasClass('dx-template-wrapper')) {
-                    $template.addClass('dx-button-content');
                     $content = $template;
                 }
+
+                $content.addClass('dx-button-content');
 
                 const result = HTMLToPreact($content.get(0));
                 result.ref = contentRef;
