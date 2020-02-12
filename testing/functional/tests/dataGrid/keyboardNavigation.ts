@@ -13,19 +13,19 @@ const dataGrid = new DataGrid("#container");
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
         .expect(dataGrid.getDataCell(1, 1).isFocused).notOk()
 
-        .doubleClick(dataGrid.getDataCell(1, 1).element)
+        .doubleClick(dataGrid.getDataCell(1, 1).element, { speed: 0.5 })
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
         .expect(dataGrid.getDataCell(1, 1).isFocused).ok()
 
-        .click(dataGrid.getDataCell(0, 1).element)
+        .click(dataGrid.getDataCell(0, 1).element, { speed: 0.5 })
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
         .expect(dataGrid.getDataCell(1, 1).isFocused).notOk()
         .expect(dataGrid.getDataCell(1, 1).isEditCell).notOk()
 
-        .doubleClick(dataGrid.getDataCell(1, 1).element)
+        .doubleClick(dataGrid.getDataCell(1, 1).element, { speed: 0.5 })
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
 
-        .click(dataGrid.getDataCell(0, 1).element)
+        .click(dataGrid.getDataCell(0, 1).element, { speed: 0.5 })
         .expect(dataGrid.getDataCell(0, 1).element.focused).ok()
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
         .expect(dataGrid.getDataCell(1, 1).isFocused).notOk();
