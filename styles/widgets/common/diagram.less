@@ -33,25 +33,8 @@
         overflow: hidden;
     }
 
-    .dx-diagram-drawer-wrapper {
-        flex: 1 0;
-        overflow: hidden;
-        flex-basis: 0;
-    }
-
     .dx-diagram-content {
         height: 100%;
-    }
-
-    .dx-diagram-right-panel {
-        border-left: @TRANSPARENT_BORDER;
-    }
-
-    .dx-diagram-right-panel .dx-scrollview {
-        width: 280px;
-    }
-
-    .dx-diagram-right-panel .dx-accordion {
         width: 100%;
     }
 
@@ -127,6 +110,17 @@
                 width: 100%;
             }
         }
+    }
+}
+
+.dx-diagram-properties-popup {
+    .dx-popup-content {
+        padding: 0;
+    }
+
+    .dx-scrollview,
+    .dx-accordion {
+        width: 100%;
     }
 }
 

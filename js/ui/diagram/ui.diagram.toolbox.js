@@ -22,19 +22,8 @@ class DiagramToolbox extends DiagramFloatingPanel {
 
         this._toolboxes = [];
         this.filterText = '';
-        this._onShapeCategoryRenderedAction = this._createActionByOption('onShapeCategoryRendered');
-        this._onFilterChangedAction = this._createActionByOption('onFilterChanged');
-        this._onVisibilityChangedAction = this._createActionByOption('onVisibilityChanged');
-        this._isVisible = this.option('isVisible');
-    }
-    toggle() {
-        this._isVisible = !this._isVisible;
-        this._updatePopupVisible();
-    }
-    _initMarkup() {
-        super._initMarkup();
-
-        this._updatePopupVisible();
+        this._createOnShapeCategoryRenderedAction();
+        this._createOnFilterChangedAction();
     }
     _getPopupClass() {
         return DIAGRAM_TOOLBOX_POPUP_CLASS;
@@ -53,19 +42,8 @@ class DiagramToolbox extends DiagramFloatingPanel {
                     stylingMode: 'outlined',
                     type: 'normal',
                 }
-            }],
-            onShown: () => {
-                this._isVisible = true;
-                this._onVisibilityChangedAction({ visible: this._isVisible });
-            },
-            onHidden: () => {
-                this._isVisible = false;
-                this._onVisibilityChangedAction({ visible: this._isVisible });
-            }
+            }]
         });
-    }
-    _updatePopupVisible() {
-        this._popup.option('visible', this._isVisible);
     }
     _renderPopupContent($parent) {
         const that = this;
@@ -226,11 +204,19 @@ class DiagramToolbox extends DiagramFloatingPanel {
         });
     }
 
+    _createOnShapeCategoryRenderedAction() {
+        this._onShapeCategoryRenderedAction = this._createActionByOption('onShapeCategoryRendered');
+    }
+    _createOnFilterChangedAction() {
+        this._onFilterChangedAction = this._createActionByOption('onFilterChanged');
+    }
     _optionChanged(args) {
         switch(args.name) {
-            case 'isVisible':
-                this._isVisible = args.value;
-                this._updatePopupVisible();
+            case 'onShapeCategoryRendered':
+                this._createOnShapeCategoryRenderedAction();
+                break;
+            case 'onFilterChanged':
+                this._createOnFilterChangedAction();
                 break;
             case 'toolboxGroups':
                 this._accordion.option('dataSource', this._getAccordionDataSource());

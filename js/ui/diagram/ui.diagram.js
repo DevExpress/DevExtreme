@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
-import Drawer from '../drawer';
+import SpeedDialAction from '../speed_dial_action';
 import LoadIndicator from '../load_indicator';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
@@ -18,12 +18,12 @@ import numberLocalization from '../../localization/number';
 import DiagramMainToolbar from './ui.diagram.main_toolbar';
 import DiagramHistoryToolbar from './ui.diagram.history_toolbar';
 import DiagramViewToolbar from './ui.diagram.view_toolbar';
-import DiagramRightPanel from './ui.diagram.rightpanel';
 import DiagramContextMenu from './ui.diagram.context_menu';
 import DiagramContextToolbox from './ui.diagram.context_toolbox';
 import DiagramDialog from './ui.diagram.dialogs';
 import DiagramToolboxManager from './diagram.toolbox_manager';
 import DiagramToolbox from './ui.diagram.toolbox';
+import DiagramPropertiesPanel from './ui.diagram.properties_panel';
 import DiagramOptionsUpdateBar from './diagram.options_update';
 import DiagramDialogManager from './ui.diagram.dialog_manager';
 import DiagramCommandsManager from './diagram.commands_manager';
@@ -34,11 +34,12 @@ const DIAGRAM_CLASS = 'dx-diagram';
 const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
 const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + '-toolbar-wrapper';
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + '-content-wrapper';
-const DIAGRAM_DRAWER_WRAPPER_CLASS = DIAGRAM_CLASS + '-drawer-wrapper';
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + '-content';
 const DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS = DIAGRAM_CLASS + '-floating-toolbar-container';
 const DIAGRAM_LOADING_INDICATOR_CLASS = DIAGRAM_CLASS + '-loading-indicator';
+const DIAGRAM_PROPERTIES_PANEL_BUTTON_CLASS = DIAGRAM_CLASS + '-properties-panel-btn';
 const DIAGRAM_FLOATING_PANEL_OFFSET = 22;
+const DIAGRAM_PROPERTIES_PANEL_BUTTON_SIZE = 48;
 
 const DIAGRAM_DEFAULT_UNIT = 'in';
 const DIAGRAM_DEFAULT_ZOOMLEVEL = 1;
@@ -81,7 +82,7 @@ class Diagram extends Widget {
             .appendTo(this.$element());
 
         this._historyToolbar = undefined;
-        if(this.option('historyToolbar.visible')) {
+        if(this._isHistoryToolbarVisible()) {
             this._renderHistoryToolbar($contentWrapper);
         }
 
@@ -95,23 +96,16 @@ class Diagram extends Widget {
             this._renderToolbox($contentWrapper);
         }
 
-        const $drawerWrapper = $('<div>')
-            .addClass(DIAGRAM_DRAWER_WRAPPER_CLASS)
-            .appendTo($contentWrapper);
-
-        this._drawer = undefined;
-        if(this.option('propertiesPanel.enabled')) {
-            const $drawer = $('<div>')
-                .appendTo($drawerWrapper);
-            this._content = $('<div>')
-                .addClass(DIAGRAM_CONTENT_CLASS)
-                .appendTo($drawer);
-            this._renderRightPanel($drawer);
-        } else {
-            this._content = $('<div>')
-                .addClass(DIAGRAM_CONTENT_CLASS)
-                .appendTo($drawerWrapper);
+        this._propertiesPanel = undefined;
+        this._propertiesPanelActionButton = undefined;
+        if(this._isPropertiesPanelVisible()) {
+            this._renderPropertiesPanelActionButton($contentWrapper);
+            this._renderPropertiesPanel($contentWrapper);
         }
+
+        this._content = $('<div>')
+            .addClass(DIAGRAM_CONTENT_CLASS)
+            .appendTo($contentWrapper);
 
         this._contextMenu = undefined;
         if(this.option('contextMenu.enabled')) {
@@ -154,7 +148,7 @@ class Diagram extends Widget {
     }
     _getExcludeCommands() {
         const excludeCommands = [];
-        if(!this.option('propertiesPanel.enabled')) {
+        if(!this._isPropertiesPanelVisible()) {
             excludeCommands.push(DiagramCommandsManager.SHOW_OPTIONS_COMMAND_NAME);
         }
         if(!this._isToolboxVisible()) {
@@ -169,13 +163,13 @@ class Diagram extends Widget {
         this._mainToolbar = this._createComponent($toolbarWrapper, DiagramMainToolbar, {
             commands: this.option('toolbar.commands'),
             onContentReady: ({ component }) => this._registerBar(component),
-            onSubMenuVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
             onCommandExecuted: (e) => {
-                if(e.command === DiagramCommandsManager.SHOW_OPTIONS_COMMAND_NAME && this._drawer) {
-                    this._drawer.toggle();
+                if(e.command === DiagramCommandsManager.SHOW_OPTIONS_COMMAND_NAME && this._propertiesPanel) {
+                    this._propertiesPanel.toggle();
                 }
             }
         });
@@ -187,6 +181,9 @@ class Diagram extends Widget {
         $container.width($toolbarContent.width());
         positionUtils.setup($container, position);
     }
+    _isHistoryToolbarVisible() {
+        return this.option('historyToolbar.visible') && !this.option('readOnly') && !this.option('disabled');
+    }
     _renderHistoryToolbar($parent) {
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
@@ -194,7 +191,7 @@ class Diagram extends Widget {
         this._historyToolbar = this._createComponent($container, DiagramHistoryToolbar, {
             commands: this.option('historyToolbar.commands'),
             onContentReady: ({ component }) => this._registerBar(component),
-            onSubMenuVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
         this._adjustFloatingToolbarContainer($container, this._historyToolbar, {
@@ -261,7 +258,7 @@ class Diagram extends Widget {
         this._viewToolbar = this._createComponent($container, DiagramViewToolbar, {
             commands: this.option('viewToolbar.commands'),
             onContentReady: ({ component }) => this._registerBar(component),
-            onSubMenuVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
@@ -278,28 +275,51 @@ class Diagram extends Widget {
             offset: DIAGRAM_FLOATING_PANEL_OFFSET + ' -' + DIAGRAM_FLOATING_PANEL_OFFSET
         });
     }
-
-    _renderRightPanel($parent) {
-        const isCollapsible = this.option('propertiesPanel.collapsible');
-        this._drawer = this._createComponent($parent, Drawer, {
-            closeOnOutsideClick: isCollapsible,
-            opened: !isCollapsible,
-            openedStateMode: isCollapsible ? 'overlap' : 'shrink',
-            position: 'right',
-            template: ($options) => {
-                this._rightPanel = this._createComponent($options, DiagramRightPanel, {
-                    propertyGroups: this.option('propertiesPanel.groups'),
-                    onContentReady: (e) => this._registerBar(e.component),
-                    onPointerUp: this._onPanelPointerUp.bind(this)
-                });
+    _isPropertiesPanelVisible() {
+        return this.option('propertiesPanel.visibility') !== 'disabled' && !this.option('readOnly') && !this.option('disabled');
+    }
+    _renderPropertiesPanelActionButton($parent) {
+        const $propertiesPanelActionButton = $('<div>')
+            .appendTo($parent);
+        this._propertiesPanelActionButton = this._createComponent($propertiesPanelActionButton, SpeedDialAction, {
+            icon: 'edit',
+            elementAttr: { class: DIAGRAM_PROPERTIES_PANEL_BUTTON_CLASS },
+            onClick: (e) => {
+                this._propertiesPanel.toggle();
             }
         });
     }
+    _renderPropertiesPanel($parent) {
+        const isServerSide = !hasWindow();
+        const $propertiesPanel = $('<div>')
+            .appendTo($parent);
+        this._propertiesPanel = this._createComponent($propertiesPanel, DiagramPropertiesPanel, {
+            isVisible: this.option('propertiesPanel.visibility') === 'visible',
+            position: {
+                my: 'right bottom',
+                at: 'right bottom',
+                of: $parent,
+                offset: '-' + DIAGRAM_FLOATING_PANEL_OFFSET + ' -' + (2 * DIAGRAM_FLOATING_PANEL_OFFSET + DIAGRAM_PROPERTIES_PANEL_BUTTON_SIZE)
+            },
+            propertyGroups: this.option('propertiesPanel.groups'),
+            onContentReady: (e) => this._registerBar(e.component),
+            onVisibilityChanged: (e) => {
+                if(isServerSide) return;
 
+                if(this._propertiesPanelActionButton) {
+                    this._propertiesPanelActionButton.option('icon', e.visible ? 'close' : 'edit');
+                }
+                if(this._mainToolbar) {
+                    this._mainToolbar.setCommandChecked(DiagramCommandsManager.SHOW_OPTIONS_COMMAND_NAME, e.visible);
+                }
+            },
+            onVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onPointerUp: this._onPanelPointerUp.bind(this)
+        });
+    }
     _onPanelPointerUp() {
         this._diagramInstance.captureFocus();
     }
-
     _renderContextMenu($mainElement) {
         const $contextMenu = $('<div>')
             .appendTo(this.$element());
@@ -307,7 +327,7 @@ class Diagram extends Widget {
             commands: this.option('contextMenu.commands'),
             container: $mainElement,
             onContentReady: ({ component }) => this._registerBar(component),
-            onVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); }
         });
     }
@@ -1532,7 +1552,7 @@ class Diagram extends Widget {
             toolbox: {
                 /**
                 * @name dxDiagramOptions.toolbox.visibility
-                * @type Enums.DiagramToolboxVisibility
+                * @type Enums.DiagramPanelVisibility
                 * @default true
                 */
                 visibility: 'visible',
@@ -1636,17 +1656,11 @@ class Diagram extends Widget {
             },
             propertiesPanel: {
                 /**
-                * @name dxDiagramOptions.propertiesPanel.enabled
-                * @type Boolean
+                * @name dxDiagramOptions.propertiesPanel.visibility
+                * @type Enums.DiagramPanelVisibility
                 * @default true
                 */
-                enabled: true,
-                /**
-                * @name dxDiagramOptions.propertiesPanel.collapsible
-                * @type Boolean
-                * @default true
-                */
-                collapsible: true,
+                visibility: 'collapsed',
                 /**
                 * @name dxDiagramOptions.propertiesPanel.groups
                 * @type Array<Object>
@@ -1788,8 +1802,8 @@ class Diagram extends Widget {
         }
     }
     _invalidatePropertiesPanelGroups() {
-        if(this._rightPanel) {
-            this._rightPanel.option({
+        if(this._propertiesPanel) {
+            this._propertiesPanel.option({
                 propertyGroups: this.option('propertiesPanel.groups')
             });
         }

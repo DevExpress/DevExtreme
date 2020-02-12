@@ -25,7 +25,7 @@ class DiagramToolbar extends DiagramPanel {
         this.bar = new ToolbarDiagramBar(this);
 
         this._createOnCommandExecuted();
-        this._createOnSubMenuVisibleChangedAction();
+        this._createOnSubMenuVisibilityChangingAction();
 
         super._init();
     }
@@ -212,12 +212,15 @@ class DiagramToolbar extends DiagramPanel {
                 itemTemplate: function(itemData, itemIndex, itemElement) {
                     DiagramMenuHelper.getContextMenuItemTemplate(itemData, itemIndex, itemElement, this._menuHasCheckedItems);
                 },
-                onItemClick: ({ itemData }) => DiagramMenuHelper.onContextMenuItemClick(this, itemData, actionHandler.bind(this)),
+                onItemClick: ({ component, itemData }) => {
+                    DiagramMenuHelper.onContextMenuItemClick(this, itemData, actionHandler.bind(this));
+                    component.hide();
+                },
                 onShowing: (e) => {
                     if(this._showingSubMenu) return;
 
                     this._showingSubMenu = e.component;
-                    this._onSubMenuVisibleChangedAction({ visible: true, component: this });
+                    this._onSubMenuVisibilityChangingAction({ visible: true, component: this });
                     e.component.option('items', item.items);
                     delete this._showingSubMenu;
                 },
@@ -300,15 +303,14 @@ class DiagramToolbar extends DiagramPanel {
         }
         this._updateLocked = false;
     }
-    _createOnSubMenuVisibleChangedAction() {
-        this._hasCheckedItems = false;
-        this._onSubMenuVisibleChangedAction = this._createActionByOption('onSubMenuVisibleChanged');
+    _createOnSubMenuVisibilityChangingAction() {
+        this._onSubMenuVisibilityChangingAction = this._createActionByOption('onSubMenuVisibilityChanging');
     }
 
     _optionChanged(args) {
         switch(args.name) {
-            case 'onSubMenuVisibleChanged':
-                this._createOnSubMenuVisibleChangedAction();
+            case 'onSubMenuVisibilityChanging':
+                this._createOnSubMenuVisibilityChangingAction();
                 break;
             case 'onCommandExecuted':
                 this._createOnCommandExecuted();

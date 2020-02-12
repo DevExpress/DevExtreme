@@ -41,11 +41,10 @@ QUnit.module('Main Toolbar', {
         let toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
         const count = toolbar.option('dataSource').length;
 
-        this.instance.option('propertiesPanel.enabled', false);
+        this.instance.option('propertiesPanel.visibility', 'disabled');
         toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
         assert.equal(toolbar.option('dataSource').length, count - 1);
-        this.instance.option('propertiesPanel.enabled', true);
-        this.instance.option('propertiesPanel.collapsible', false);
+        this.instance.option('propertiesPanel.visibility', 'visible');
         toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
         assert.equal(toolbar.option('dataSource').length, count);
     });
