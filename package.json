@@ -39,6 +39,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.7.5",
     "@babel/preset-env": "^7.7.7",
     "@types/jquery": "^2.0.34",
+    "@types/node": "10.17.14",
     "angular": "^1.6.10",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
