@@ -2237,19 +2237,18 @@ QUnit.test('Height free space row for virtual scroller', function(assert) {
     const dataController = new MockDataController({ items: this.items, virtualItemsCount: { begin: 0, end: 0 } });
     const rowsView = this.createRowsView(this.items, dataController);
     const $testElement = $('#container');
-    let freeSpaceRowHeight;
-    let borderTopWidth;
-    let tableBorderTopWidth;
 
     // act
     rowsView.render($testElement);
     rowsView.height(400);
     rowsView.resize();
-    borderTopWidth = Math.ceil(parseFloat($(rowsView.element()).css('borderTopWidth')));
-    tableBorderTopWidth = Math.ceil(parseFloat(rowsView.getTableElements().css('borderTopWidth')));
+
+    const borderTopWidth = Math.ceil(parseFloat($(rowsView.element()).css('borderTopWidth')));
+    const tableBorderTopWidth = Math.ceil(parseFloat(rowsView.getTableElements().css('borderTopWidth')));
+    const heightCorrection = browser.mozilla ? 1 : 0;
+    const freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight - borderTopWidth - tableBorderTopWidth - heightCorrection;
 
     // assert
-    freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight - borderTopWidth - tableBorderTopWidth;
     assert.equal(rowsView._getFreeSpaceRowElements().css('display'), 'table-row', 'display style is none');
     assert.equal(rowsView._getFreeSpaceRowElements()[0].offsetHeight, Math.round(freeSpaceRowHeight), 'height free space row');
 });
