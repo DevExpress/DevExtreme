@@ -267,8 +267,10 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
     @Effect()
     activeEffect() {
-        const { activeStateEnabled, activeStateUnit, disabled, onInactive,
-            _feedbackShowTimeout, _feedbackHideTimeout, onActive } = this.props;
+        const {
+            activeStateEnabled, activeStateUnit, disabled, onInactive,
+            _feedbackShowTimeout, _feedbackHideTimeout, onActive,
+        } = this.props;
         const selector = activeStateUnit;
         const namespace = 'UIFeedback';
 
@@ -279,10 +281,10 @@ export default class Widget extends JSXComponent<WidgetInput> {
                     onActive?.(event);
                 }),
                 new Action(({ event }) => {
-                        this._active = false;
-                        onInactive?.(event);
-                    },
-                    { excludeValidators: ['disabled', 'readOnly'] },
+                    this._active = false;
+                    onInactive?.(event);
+                },
+                { excludeValidators: ['disabled', 'readOnly'] },
                 ), {
                     showTimeout: _feedbackShowTimeout,
                     hideTimeout: _feedbackHideTimeout,
