@@ -831,7 +831,7 @@ module.exports = {
                                     const $tableElement = $table || that.getTableElements();
                                     const borderTopWidth = Math.ceil(parseFloat($tableElement.css('borderTopWidth')));
                                     const isZoomedWebkit = browser.webkit && that._getDevicePixelRatio() >= 2; // T606935
-                                    const hasExtraBorderTop = browser.mozilla && !that.option('showRowLines');
+                                    const hasExtraBorderTop = browser.mozilla && browser.version >= 70 && !that.option('showRowLines');
                                     const heightCorrection = isZoomedWebkit || hasExtraBorderTop ? 1 : 0;
                                     const resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth - heightCorrection;
 
