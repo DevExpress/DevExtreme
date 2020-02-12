@@ -19565,7 +19565,8 @@ QUnit.module('Validation with virtual scrolling and rendering', {
             showBorders: true,
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual'
+                rowRenderingMode: 'virtual',
+                useNative: false
             },
             paging: { pageSize: 50 },
             editing: {

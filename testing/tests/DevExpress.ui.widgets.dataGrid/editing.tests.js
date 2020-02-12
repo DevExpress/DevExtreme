@@ -33,6 +33,7 @@ import 'generic_light.css!';
 import 'ui/data_grid/ui.data_grid';
 import 'ui/autocomplete';
 import 'ui/color_box';
+import 'ui/validator';
 
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -2798,6 +2799,61 @@ QUnit.test('Batch mode - The allowUpdating callback should not be called on clic
     // assert
     assert.strictEqual(allowUpdating.callCount, 0, 'allowUpdating isn\'t called');
 });
+
+QUnit.test('editingController.addDeferred should add the same deferred object only once', function(assert) {
+    // arrange
+    const deferred1 = new Deferred();
+    const deferred2 = new Deferred();
+
+    // act
+    this.editingController.addDeferred(deferred1);
+    this.editingController.addDeferred(deferred1);
+
+    // assert
+    assert.strictEqual(this.editingController._deferreds.length, 1, 'a single deferred object is added');
+
+    // act
+    deferred1.resolve();
+
+    // assert
+    assert.strictEqual(this.editingController._deferreds.length, 0, 'deferreds array should be empty');
+
+    // act
+    this.editingController.addDeferred(deferred2);
+
+    // assert
+    assert.strictEqual(this.editingController._deferreds.length, 1, 'a deferred object is added');
+
+    // act
+    deferred2.reject();
+
+    // assert
+    assert.strictEqual(this.editingController._deferreds.length, 0, 'deferreds array should be empty');
+});
+
+QUnit.test('editingController.executeOperation - only the last operation should be executed', function(assert) {
+    // arrange
+    let value = 0;
+    const deferred1 = new Deferred();
+    const func = function() {
+        value++;
+    };
+
+    // act
+    this.editingController.addDeferred(deferred1);
+    this.editingController.executeOperation(deferred1, func);
+
+    const deferred2 = new Deferred();
+    this.editingController.addDeferred(deferred2);
+    this.editingController.executeOperation(deferred2, func);
+
+    deferred2.resolve();
+
+    // assert
+    assert.strictEqual(value, 1, 'value === 1');
+    assert.notOk(this.editingController._deferreds.length, 'deferreds should be empty');
+});
+
 
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
@@ -12483,6 +12539,245 @@ QUnit.test('No exceptions on editing a column with given setCellValue when repai
         // assert
         assert.ok(false, 'exception');
     }
+});
+
+QUnit.test('editingController.isInvalidCell - cell should be invalid', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'row'
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{ type: 'required' }]
+        }]
+    });
+
+    this.editRow(0);
+
+    // act
+    this.cellValue(0, 'name', '');
+    const key = this.getKeyByRowIndex(0);
+
+    // assert
+    assert.notOk(this.editingController.isInvalidCell({ rowKey: key, columnIndex: 0 }), 'cell should be invalid');
+});
+
+QUnit.test('validatingController.validateCell should not call the validate method of the current validator', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+    const done = assert.async();
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'batch'
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{ type: 'required' }]
+        }]
+    });
+
+    this.editCell(0, 0);
+    this.cellValue(0, 0, '');
+
+    const validator = $(this.getCellElement(0, 0)).dxValidator('instance');
+
+    // assert
+    assert.ok(validator, 'validator should be created');
+    validator.validate = sinon.spy();
+
+    this.validatingController.validateCell(validator).done(result => {
+        // assert
+        assert.strictEqual(result.status, 'invalid', 'status === "invalid"');
+        assert.equal(result.brokenRules.length, 1, 'one rule should be broken');
+        assert.equal(validator.validate.callCount, 0, 'validator.validate should not be called');
+
+        done();
+    });
+});
+
+QUnit.test('validatingController - validation result should be cached', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'row'
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{ type: 'required' }]
+        }]
+    });
+
+    this.editRow(0);
+    this.clock.tick();
+    const rowKey = this.getKeyByRowIndex(0);
+
+    let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+    // assert
+    assert.strictEqual(result.status, 'valid', 'result.status === "valid"');
+
+    const validationResult = {
+        status: 'invalid',
+        brokenRules: [{
+            type: 'required',
+            message: 'invalid value'
+        }]
+    };
+    this.validatingController.updateCellValidationResult({ rowKey, columnIndex: 0, validationResult });
+    result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+    // assert
+    assert.strictEqual(result.status, validationResult.status, 'result.status === validationResult.status');
+    assert.strictEqual(result.brokenRules, validationResult.brokenRules, 'result.brokenRules === validationReulst.brokenRules');
+});
+
+QUnit.test('validatingController - validation result should be cached with hidden validation', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'cell'
+        },
+        columns: [{
+            dataField: 'name'
+        }]
+    });
+
+    this.editCell(0, 0);
+    this.clock.tick();
+    const rowKey = this.getKeyByRowIndex(0);
+    this.validatingController.setDisableApplyValidationResults(true);
+    const deferred = new Deferred();
+    const validationResult = {
+        status: 'pending',
+        id: '123',
+        complete: deferred.promise()
+    };
+    this.validatingController.updateCellValidationResult({ rowKey, columnIndex: 0, validationResult });
+
+    let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+    // assert
+    assert.strictEqual(result.status, validationResult.status, 'result.status === validationResult.status');
+    assert.strictEqual(result.id, validationResult.id, 'result.id === validationResult.id');
+    assert.strictEqual(result.complete, validationResult.complete, 'result.complete === validationResult.complete');
+    assert.strictEqual(result.disabledPendingId, validationResult.id, 'result.disabledPendingId === validationResult.id');
+    assert.equal(this.editingController._deferreds.length, 1, 'deferreds should contain a single object');
+    assert.equal(this.editingController._deferreds[0], result.deferred, 'deferreds should contain result.deferred');
+
+    validationResult.status = 'valid';
+    validationResult.complete = null;
+    deferred.resolve();
+    this.validatingController.updateCellValidationResult({ rowKey, columnIndex: 0, validationResult });
+    result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+    // assert
+    assert.strictEqual(result.status, validationResult.status, 'result.status === validationResult.status');
+    assert.strictEqual(result.id, validationResult.id, 'result.id === validationResult.id');
+    assert.notOk(result.disabledPendingId, 'result.disabledPendingId is not defined');
+    assert.equal(this.editingController._deferreds.length, 0, 'deferreds should be empty');
+});
+
+QUnit.test('validatingController - validation result should be removed from cache', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'cell'
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{ type: 'required' }]
+        }]
+    });
+
+    this.editCell(0, 0);
+    this.clock.tick();
+    const rowKey = this.getKeyByRowIndex(0);
+
+    let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+    // assert
+    assert.ok(result, 'result should be restored from cache');
+
+    const editData = this.editingController.getEditDataByKey(rowKey);
+    this.validatingController.removeCellValidationResult({ editData, columnIndex: 0 });
+    result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+    // assert
+    assert.notOk(result, 'result should not be defined');
+});
+
+QUnit.test('validatingController - all validation results of a certain row should be removed', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'row'
+        },
+        columns: [
+            {
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            },
+            {
+                dataField: 'age',
+                validationRules: [{ type: 'required' }]
+            }
+        ]
+    });
+
+    this.editRow(0);
+    this.clock.tick();
+    const rowKey = this.getKeyByRowIndex(0);
+    this.cellValue(0, 0, '');
+    this.saveEditData();
+    this.clock.tick();
+
+    let result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+    let result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
+    const editData = this.editingController.getEditDataByKey(rowKey);
+
+    // assert
+    assert.ok(result1, 'result1 should be restored from cache');
+    assert.ok(result2, 'result2 should be restored from cache');
+    assert.ok(editData.validated, 'editData should be validated');
+
+    this.validatingController.resetRowValidationResults(editData);
+    result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+    result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
+
+    // assert
+    assert.notOk(result1, 'result1 should not be defined');
+    assert.notOk(result2, 'result2 should not be defined');
+    assert.notOk(editData.validated, 'editData should not be validated');
 });
 
 
