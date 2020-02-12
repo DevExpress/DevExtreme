@@ -1654,6 +1654,13 @@ const SchedulerWorkSpace = Widget.inherit({
                     width: cellWidth,
                     height: cellHeight
                 };
+            },
+            checkDropTarget: (target, event) => {
+                if(this._appointmentIsOutsideScrollable(target, event)) {
+                    return false;
+                }
+
+                return true;
             }
         }, function(e) {
             if(that._$currentTableTarget) {
@@ -1990,6 +1997,18 @@ const SchedulerWorkSpace = Widget.inherit({
         return this.getCoordinatesByDate(currentDate);
     },
 
+    _appointmentIsOutsideScrollable: function(target, event) {
+        const scrollable = this._dateTableScrollable;
+        const $scrollableElement = scrollable.$element();
+
+        if(!$(target).closest($scrollableElement).length) {
+            return false;
+        }
+
+        const scrollableSize = $scrollableElement.get(0).getBoundingClientRect();
+
+        return event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height);
+    },
 
     setCellDataCache: function(cellCoordinates, groupIndex, $cell) {
         const cache = this.getCellDataCache();
