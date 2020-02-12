@@ -3,7 +3,7 @@ import DiagramCommandsManager from './diagram.commands_manager';
 
 class DiagramHistoryToolbar extends DiagramToolbar {
     _getCommands() {
-        return DiagramCommandsManager.getHistoryToolbarCommands(this.option('commands'));
+        return DiagramCommandsManager.getHistoryToolbarCommands(this.option('commands'), this.option('excludeCommands'));
     }
 }
 

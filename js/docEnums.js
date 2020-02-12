@@ -1126,6 +1126,11 @@
  */
 
 /**
+ * @typedef {string} Enums.DiagramToolboxVisibility
+ * @enum {'visible'|'collapsed'|'disabled'}
+ */
+
+/**
  * @typedef {string} Enums.DiagramAutoZoom
  * @enum {'fitContent'|'fitWidth'|'disabled'}
  */

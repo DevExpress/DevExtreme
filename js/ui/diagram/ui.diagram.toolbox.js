@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { hasWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
+import messageLocalization from '../../localization/message';
 import TextBox from '../text_box';
 import Accordion from '../accordion';
 import ScrollView from '../scroll_view';
@@ -23,13 +24,17 @@ class DiagramToolbox extends DiagramFloatingPanel {
         this.filterText = '';
         this._onShapeCategoryRenderedAction = this._createActionByOption('onShapeCategoryRendered');
         this._onFilterChangedAction = this._createActionByOption('onFilterChanged');
+        this._onVisibilityChangedAction = this._createActionByOption('onVisibilityChanged');
+        this._isVisible = this.option('isVisible');
+    }
+    toggle() {
+        this._isVisible = !this._isVisible;
+        this._updatePopupVisible();
     }
     _initMarkup() {
         super._initMarkup();
 
-        if(this.option('visible')) {
-            this._popup.show();
-        }
+        this._updatePopupVisible();
     }
     _getPopupClass() {
         return DIAGRAM_TOOLBOX_POPUP_CLASS;
@@ -49,7 +54,18 @@ class DiagramToolbox extends DiagramFloatingPanel {
                     type: 'normal',
                 }
             }],
+            onShown: () => {
+                this._isVisible = true;
+                this._onVisibilityChangedAction({ visible: this._isVisible });
+            },
+            onHidden: () => {
+                this._isVisible = false;
+                this._onVisibilityChangedAction({ visible: this._isVisible });
+            }
         });
+    }
+    _updatePopupVisible() {
+        this._popup.option('visible', this._isVisible);
     }
     _renderPopupContent($parent) {
         const that = this;
@@ -57,7 +73,7 @@ class DiagramToolbox extends DiagramFloatingPanel {
             .addClass(DIAGRAM_TOOLBOX_INPUT_CLASS)
             .appendTo($parent);
         this._searchInput = this._createComponent($input, TextBox, {
-            placeholder: 'Search',
+            placeholder: messageLocalization.format('dxDiagram-uiSearch'),
             onValueChanged: function(data) {
                 that._onInputChanged(data.value);
             },
@@ -86,8 +102,6 @@ class DiagramToolbox extends DiagramFloatingPanel {
         this._renderScrollView($panel);
     }
     _renderScrollView($parent) {
-        super._initMarkup();
-
         const $scrollViewWrapper = $('<div>')
             .appendTo($parent);
 
@@ -214,8 +228,9 @@ class DiagramToolbox extends DiagramFloatingPanel {
 
     _optionChanged(args) {
         switch(args.name) {
-            case 'visible':
-                this._popup.option('visible', args.value);
+            case 'isVisible':
+                this._isVisible = args.value;
+                this._updatePopupVisible();
                 break;
             case 'toolboxGroups':
                 this._accordion.option('dataSource', this._getAccordionDataSource());

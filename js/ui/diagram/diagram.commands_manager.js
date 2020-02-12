@@ -13,6 +13,9 @@ const CSS_CLASSES = {
 };
 
 const DiagramCommandsManager = {
+    SHOW_TOOLBOX_COMMAND_NAME: 'toolbox',
+    SHOW_OPTIONS_COMMAND_NAME: 'options',
+
     getAllCommands: function() {
         const { DiagramCommand } = getDiagram();
         return this.allCommands ||
@@ -372,14 +375,27 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandAutoZoom'),
                     text: messageLocalization.format('dxDiagram-commandAutoZoom'),
                     widget: 'dxCheckBox'
+                },
+                // Custom commands
+                showOptions: {
+                    command: this.SHOW_OPTIONS_COMMAND_NAME,
+                    icon: 'preferences',
+                    hint: messageLocalization.format('dxDiagram-uiProperties'),
+                    text: messageLocalization.format('dxDiagram-uiProperties'),
+                    position: 'after'
+                },
+                showToolbox: {
+                    command: this.SHOW_TOOLBOX_COMMAND_NAME,
+                    hint: messageLocalization.format('dxDiagram-uiShowToolbox'),
+                    text: messageLocalization.format('dxDiagram-uiShowToolbox')
                 }
             });
     },
-    getMainToolbarCommands: function(commands) {
+    getMainToolbarCommands: function(commands, excludeCommands) {
         const allCommands = this.getAllCommands();
         const mainToolbarCommands = commands ? this._getCustomCommands(allCommands, commands) :
             this._getDefaultMainToolbarCommands(allCommands);
-        return this._prepareToolbarCommands(mainToolbarCommands);
+        return this._prepareToolbarCommands(mainToolbarCommands, excludeCommands);
     },
     _getDefaultMainToolbarCommands: function(allCommands) {
         return [
@@ -406,13 +422,14 @@ const DiagramCommandsManager = {
             allCommands['connectorLineEnd'],
             allCommands['separator'],
             allCommands['autoLayout'],
+            allCommands['showOptions']
         ];
     },
-    getHistoryToolbarCommands: function(commands) {
+    getHistoryToolbarCommands: function(commands, excludeCommands) {
         const allCommands = this.getAllCommands();
         const historyToolbarCommands = commands ? this._getCustomCommands(allCommands, commands) :
             this._getDefaultHistoryToolbarCommands(allCommands);
-        return this._prepareToolbarCommands(historyToolbarCommands);
+        return this._prepareToolbarCommands(historyToolbarCommands, excludeCommands);
     },
     _getDefaultHistoryToolbarCommands: function(allCommands) {
         return [
@@ -421,11 +438,11 @@ const DiagramCommandsManager = {
             allCommands['redo']
         ];
     },
-    getViewToolbarCommands: function(commands) {
+    getViewToolbarCommands: function(commands, excludeCommands) {
         const allCommands = this.getAllCommands();
         const viewToolbarCommands = commands ? this._getCustomCommands(allCommands, commands) :
             this._getDefaultViewToolbarCommands(allCommands);
-        return this._prepareToolbarCommands(viewToolbarCommands);
+        return this._prepareToolbarCommands(viewToolbarCommands, excludeCommands);
     },
     _getDefaultViewToolbarCommands: function(allCommands) {
         return [
@@ -446,8 +463,8 @@ const DiagramCommandsManager = {
             },
             {
                 icon: 'preferences',
-                hint: messageLocalization.format('dxDiagram-commandProperties'),
-                text: messageLocalization.format('dxDiagram-commandProperties'),
+                hint: messageLocalization.format('dxDiagram-uiProperties'),
+                text: messageLocalization.format('dxDiagram-uiProperties'),
                 items: [
                     allCommands['units'],
                     allCommands['separator'],
@@ -455,7 +472,8 @@ const DiagramCommandsManager = {
                     allCommands['snapToGrid'],
                     allCommands['gridSize'],
                     allCommands['separator'],
-                    allCommands['simpleView']
+                    allCommands['simpleView'],
+                    allCommands['showToolbox']
                 ]
             }
         ];
@@ -528,10 +546,12 @@ const DiagramCommandsManager = {
         }).filter(c => c);
     },
 
-    _prepareContextMenuCommands(commands) {
+    _prepareContextMenuCommands(commands, excludeCommands) {
         const result = [];
         let beginGroup = false;
         commands.forEach(command => {
+            if(!this._isValidCommand(command, excludeCommands)) return;
+
             if(command === SEPARATOR) {
                 beginGroup = true;
             } else {
@@ -550,15 +570,21 @@ const DiagramCommandsManager = {
         });
         return result;
     },
-    _prepareToolbarCommands(commands) {
+    _prepareToolbarCommands(commands, excludeCommands) {
         const result = [];
         commands.forEach(command => {
+            if(!this._isValidCommand(command, excludeCommands)) return;
+
             if(Array.isArray(command.items)) {
-                command.items = this._prepareContextMenuCommands(command.items);
+                command.items = this._prepareContextMenuCommands(command.items, excludeCommands);
             }
             result.push(command);
         });
         return result;
+    },
+    _isValidCommand(c, excludeCommands) {
+        excludeCommands = excludeCommands || [];
+        return excludeCommands.indexOf(c.command) === -1;
     },
 
     _exportTo(widget, dataURI, format, mimeString) {

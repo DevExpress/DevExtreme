@@ -307,7 +307,6 @@
     "dxDiagram-categoryOrgChart": "Szervezeti ábra",
     "dxDiagram-categoryContainers": "Tárolók",
     "dxDiagram-categoryCustom": "Egyedi",
-    "dxDiagram-commandProperties": "Tulajdonságok",
     "dxDiagram-commandExport": "Exportálás",
     "dxDiagram-commandExportToSvg": "Exportálás SVG-be",
     "dxDiagram-commandExportToPng": "Exportálás PNG-be",
@@ -365,12 +364,17 @@
     "dxDiagram-unitIn": "in",
     "dxDiagram-unitCm": "cm",
     "dxDiagram-unitPx": "px",
+
     "dxDiagram-dialogButtonOK": "OK",
     "dxDiagram-dialogButtonCancel": "Mégse",
     "dxDiagram-dialogInsertShapeImageTitle": "Kép beszúrása",
     "dxDiagram-dialogEditShapeImageTitle": "Kép cseréje",
     "dxDiagram-dialogEditShapeImageSelectButton": "Kép kiválasztása",
     "dxDiagram-dialogEditShapeImageLabelText": "vagy húzza a fájlt ide",
+
+    "dxDiagram-uiProperties": "Tulajdonságok",
+    "dxDiagram-uiShowToolbox": "TODO",
+    "dxDiagram-uiSearch": "TODO",
 
     "dxDiagram-shapeText": "TODO",
     "dxDiagram-shapeRectangle": "TODO",
