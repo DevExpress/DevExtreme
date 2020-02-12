@@ -830,7 +830,9 @@ module.exports = {
                                     const rowsHeight = that._getRowsHeight(contentElement.children().first());
                                     const $tableElement = $table || that.getTableElements();
                                     const borderTopWidth = Math.ceil(parseFloat($tableElement.css('borderTopWidth')));
-                                    const heightCorrection = browser.webkit && that._getDevicePixelRatio() >= 2 ? 1 : 0; // T606935
+                                    const isZoomedWebkit = browser.webkit && that._getDevicePixelRatio() >= 2; // T606935
+                                    const hasExtraBorderTop = browser.mozilla && browser.version >= 70 && !that.option('showRowLines');
+                                    const heightCorrection = isZoomedWebkit || hasExtraBorderTop ? 1 : 0;
                                     const resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth - heightCorrection;
 
                                     if(showFreeSpaceRow) {
