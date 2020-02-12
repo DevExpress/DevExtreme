@@ -79,32 +79,33 @@ function isElementDefined($element) {
 const KeyboardNavigationController = core.ViewController.inherit({
     // #region Initialization
     init: function() {
-        if(this.isKeyboardEnabled()) {
+        const that = this;
+        if(that.isKeyboardEnabled()) {
 
             accessibility.subscribeVisibilityChange();
 
-            this._dataController = this.getController('data');
-            this._selectionController = this.getController('selection');
-            this._editingController = this.getController('editing');
-            this._headerPanel = this.getView('headerPanel');
-            this._columnsController = this.getController('columns');
-            this.getController('editorFactory').focused.add($element => {
-                this.setupFocusedView();
+            that._dataController = that.getController('data');
+            that._selectionController = that.getController('selection');
+            that._editingController = that.getController('editing');
+            that._headerPanel = that.getView('headerPanel');
+            that._columnsController = that.getController('columns');
+            that.getController('editorFactory').focused.add(function($element) {
+                that.setupFocusedView();
 
-                if(this._isNeedScroll) {
-                    if($element.is(':visible') && this._focusedView && this._focusedView.getScrollable) {
-                        this._focusedView._scrollToElement($element);
-                        this._isNeedScroll = false;
+                if(that._isNeedScroll) {
+                    if($element.is(':visible') && that._focusedView && that._focusedView.getScrollable) {
+                        that._focusedView._scrollToElement($element);
+                        that._isNeedScroll = false;
                     }
                 }
             });
 
-            this._fastEditingStarted = false;
-            this._focusedCellPosition = {};
-            this._canceledCellPosition = null;
+            that._fastEditingStarted = false;
+            that._focusedCellPosition = {};
+            that._canceledCellPosition = null;
 
-            this._initViewHandlers();
-            this._initDocumentHandlers();
+            that._initViewHandlers();
+            that._initDocumentHandlers();
         }
     },
 
