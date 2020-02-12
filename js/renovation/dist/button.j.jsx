@@ -12,15 +12,17 @@ const HTMLToPreact = (node) => {
     }
 
     const tag = node.tagName;
-    const attributes = [...node.attributes].reduce((acc, attr) => {
-        acc[attr.name] = attr.value;
-        return acc;
-    }, {});
     const childNodes = node.childNodes;
+
     const children = [];
     for(let i = 0; i < childNodes.length; i++) {
         children.push(HTMLToPreact(childNodes[i]));
     }
+
+    const attributes = [...node.attributes].reduce((acc, attr) => {
+        acc[attr.name] = attr.value;
+        return acc;
+    }, {});
 
     return Preact.h(tag, attributes, children);
 };
@@ -71,21 +73,6 @@ class Button extends Widget {
             hoverStateEnabled: true,
             template: '',
             text: '',
-        });
-    }
-
-    _initTemplates() {
-        super._initTemplates();
-        this._templateManager.addDefaultTemplates({
-            test: {
-                render: function(args) {
-                    const $element = $('<span>')
-                        .addClass('dx-template-wrapper')
-                        .text('button');
-
-                    return $element.get(0);
-                }
-            }
         });
     }
 }
