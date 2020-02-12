@@ -175,9 +175,14 @@ module.exports = _extend({}, barPoint, {
         const rotated = that._options.rotated;
         const x = that.x;
         const width = that.width;
-        const lowY = that.lowY;
-        const highY = that.highY;
+        let lowY = that.lowY;
+        let highY = that.highY;
 
+        if(location) {
+            const valVisibleArea = that.series.getValueAxis().getVisibleArea();
+            highY = that._truncateCoord(highY, valVisibleArea);
+            lowY = that._truncateCoord(lowY, valVisibleArea);
+        }
         const bBox = {
             x: !rotated ? x - _round(width / 2) : lowY,
             y: !rotated ? highY : x - _round(width / 2),
@@ -261,7 +266,6 @@ module.exports = _extend({}, barPoint, {
         const that = this;
         const rotated = that._options.rotated;
         const valTranslator = that._getValTranslator();
-        let centerValue;
         const x = that._getArgTranslator().translate(that.argument);
 
         that.vx = that.vy = that.x = x === null ? x : x + (that.xCorrection || 0);
@@ -270,7 +274,7 @@ module.exports = _extend({}, barPoint, {
         that.lowY = valTranslator.translate(that.lowValue);
         that.closeY = that.closeValue !== null ? valTranslator.translate(that.closeValue) : null;
 
-        centerValue = _min(that.lowY, that.highY) + _abs(that.lowY - that.highY) / 2;
+        const centerValue = _min(that.lowY, that.highY) + _abs(that.lowY - that.highY) / 2;
         that._calculateVisibility(!rotated ? that.x : centerValue, !rotated ? centerValue : that.x);
     },
 
