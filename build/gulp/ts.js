@@ -20,6 +20,11 @@ const TS_BUNDLE_FILE = './ts/dx.all.d.ts';
 const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE, './ts/aliases.d.ts'];
 const TS_MODULES_GLOB = './js/**/*.d.ts';
 
+const COMMON_TS_COMPILER_OPTIONS = {
+    noEmitOnError: true,
+    skipLibCheck: true
+};
+
 gulp.task('ts-vendor', function() {
     return gulp.src('./ts/vendor/*')
         .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR));
@@ -60,16 +65,12 @@ gulp.task('ts-jquery-check', gulp.series('ts-bundle', function checkJQueryAugmen
         }).join('\n');
 
     return file('artifacts/globals.ts', content, { src: true })
-        .pipe(ts({
-            noEmitOnError: true
-        }, ts.reporter.fullReporter()));
+        .pipe(ts(COMMON_TS_COMPILER_OPTIONS, ts.reporter.fullReporter()));
 }));
 
 gulp.task('ts-compilation-check', function() {
     return gulp.src(TS_BUNDLE_FILE)
-        .pipe(ts({
-            noEmitOnError: true
-        }, ts.reporter.fullReporter()));
+        .pipe(ts(COMMON_TS_COMPILER_OPTIONS, ts.reporter.fullReporter()));
 });
 
 gulp.task('ts-modules', function generateModules() {
@@ -142,10 +143,11 @@ gulp.task('ts-modules-check', gulp.series('ts-modules', function checkModules() 
     }).join('\n');
 
     return file('artifacts/modules.ts', content, { src: true })
-        .pipe(ts({
-            allowSyntheticDefaultImports: true,
-            noEmitOnError: true
-        }, ts.reporter.fullReporter()));
+        .pipe(ts(
+            Object.assign({}, COMMON_TS_COMPILER_OPTIONS, {
+                allowSyntheticDefaultImports: true
+            })
+        ), ts.reporter.fullReporter());
 }));
 
 gulp.task('ts', gulp.series(
