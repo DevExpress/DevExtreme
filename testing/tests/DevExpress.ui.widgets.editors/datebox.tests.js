@@ -1157,7 +1157,7 @@ QUnit.module('dateView integration', {
         assert.deepEqual(this.instance.option('value'), new Date(2000, 1, 1));
     });
 
-    QUnit.test('dateBox should apply first rollers value if start rollers value is not equal for the actual date (T860282)', function(assert) {
+    QUnit.test('dateBox should use actual rollers value as a new date if click to the DateBox Apply button without any rollers navigation (T860282)', function(assert) {
         this.instance.option({
             'max': new Date(2000, 1, 1),
             'opened': false
