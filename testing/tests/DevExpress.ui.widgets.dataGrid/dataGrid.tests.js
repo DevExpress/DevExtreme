@@ -827,6 +827,27 @@ QUnit.test('Cells in fixed columns should have \'dx-col-fixed\' class if FF (T82
     assert.notOk(filterRowWrapper.getEditorCell(1).hasClass('dx-col-fixed'), 'not dx-col-fixed');
 });
 
+QUnit.test('Cells in group row should not have \'dx-col-fixed\' class (T852898)', function(assert) {
+    // arrange
+    const dataGrid = $('#dataGrid').dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [
+                { id: 1, value: 'value 1' }
+            ]
+        },
+        columns: ['id', {
+            dataField: 'value',
+            fixed: true,
+            groupIndex: 0
+        }]
+    }).dxDataGrid('instance');
+
+    // assert
+    assert.notOk($(dataGrid.getCellElement(0, 0)).hasClass('dx-col-fixed'), 'dx-col-fixed');
+    assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-col-fixed'), 'dx-col-fixed');
+});
+
 QUnit.test('noDataText option', function(assert) {
     // act
     const noDataText = 'Custom no data';
