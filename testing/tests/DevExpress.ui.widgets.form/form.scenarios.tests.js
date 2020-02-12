@@ -1601,7 +1601,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 40, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 720, 279, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 609, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 610, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 242, 34);
                     }
@@ -1629,7 +1629,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 40, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 720, 279, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 609, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 610, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 242, 34);
                     }
@@ -1657,7 +1657,7 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="abc"]'), 8, 681, 40, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="abc"]'), 1, 720, 279, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 54, 0, 40, 19);
-                        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 609, 34);
+                        wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 47, 41, 610, 34);
                         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 54, 681, 74, 19);
                         wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 754, 242, 34);
                     }
