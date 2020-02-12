@@ -215,10 +215,6 @@ const DropDownList = DropDownEditor.inherit({
             * @hidden
             */
             /**
-            * @name dxDropDownListOptions.contentTemplate
-            * @hidden
-            */
-            /**
             * @name dxDropDownListOptions.contentRender
             * @hidden
             */
@@ -553,6 +549,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _renderPopupContent: function() {
+        this.callBase();
         this._renderList();
     },
 
