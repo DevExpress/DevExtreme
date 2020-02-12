@@ -350,7 +350,6 @@
         "dxDiagram-categoryOrgChart": "組織のフロー・チャート",
         "dxDiagram-categoryContainers": "コンテナー",
         "dxDiagram-categoryCustom": "カスタム",
-        "dxDiagram-commandProperties": "プロパティ",
         "dxDiagram-commandExport": "エクスポート",
         "dxDiagram-commandExportToSvg": "SVG にエクスポート",
         "dxDiagram-commandExportToPng": "PNG にエクスポート",
@@ -408,12 +407,17 @@
         "dxDiagram-unitIn": "in",
         "dxDiagram-unitCm": "cm",
         "dxDiagram-unitPx": "px",
+
         "dxDiagram-dialogButtonOK": "OK",
         "dxDiagram-dialogButtonCancel": "キャンセル",
         "dxDiagram-dialogInsertShapeImageTitle": "画像の挿入",
         "dxDiagram-dialogEditShapeImageTitle": "画像の変更",
         "dxDiagram-dialogEditShapeImageSelectButton": "画像の選択",
         "dxDiagram-dialogEditShapeImageLabelText": "またはファイルをここにドロップしてください",
+
+        "dxDiagram-uiProperties": "プロパティ",
+        "dxDiagram-uiShowToolbox": "TODO",
+        "dxDiagram-uiSearch": "TODO",
 
         "dxDiagram-shapeText": "テキスト",
         "dxDiagram-shapeRectangle": "長方形",

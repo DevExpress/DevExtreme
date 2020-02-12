@@ -24,7 +24,7 @@ class DiagramToolbar extends DiagramPanel {
         this._contextMenus = [];
         this.bar = new ToolbarDiagramBar(this);
 
-        this._createOnWidgetCommand();
+        this._createOnCommandExecuted();
         this._createOnSubMenuVisibleChangedAction();
 
         super._init();
@@ -35,7 +35,6 @@ class DiagramToolbar extends DiagramPanel {
         this._commands = this._getCommands();
         this._itemHelpers = {};
         this._contextMenus = [];
-        this._rightAlignedCommands = this._getRightAlignedCommands();
 
         const $toolbar = this._createMainElement();
         this._renderToolbar($toolbar);
@@ -49,16 +48,12 @@ class DiagramToolbar extends DiagramPanel {
     _getCommands() {
         return [];
     }
-    _getRightAlignedCommands() {
-        return [];
-    }
-    _getWidgetCommands() {
-        return this.option('widgetCommandNames') || [];
-    }
     _renderToolbar($toolbar) {
         let dataSource = [];
-        dataSource = dataSource.concat(this._prepareToolbarItems(this._commands, 'before', this._execDiagramCommand));
-        dataSource = dataSource.concat(this._prepareToolbarItems(this._rightAlignedCommands, 'after', this._execDiagramCommand));
+        const beforeCommands = this._commands.filter(command => command.position !== 'after');
+        dataSource = dataSource.concat(this._prepareToolbarItems(beforeCommands, 'before', this._execDiagramCommand));
+        const afterCommands = this._commands.filter(command => command.position === 'after');
+        dataSource = dataSource.concat(this._prepareToolbarItems(afterCommands, 'after', this._execDiagramCommand));
         this._toolbarInstance = this._createComponent($toolbar, Toolbar, { dataSource });
     }
     _prepareToolbarItems(items, location, actionHandler) {
@@ -183,7 +178,7 @@ class DiagramToolbar extends DiagramPanel {
                 return {
                     options: {
                         onValueChanged: (e) => {
-                            const parameter = DiagramMenuHelper.getItemCommandParameter(item, e.component.option('value'));
+                            const parameter = DiagramMenuHelper.getItemCommandParameter(this, item, e.component.option('value'));
                             handler.call(this, item.command, parameter, item.onExecuted);
                         }
                     }
@@ -193,7 +188,7 @@ class DiagramToolbar extends DiagramPanel {
                     return {
                         options: {
                             onClick: (e) => {
-                                const parameter = DiagramMenuHelper.getItemCommandParameter(item);
+                                const parameter = DiagramMenuHelper.getItemCommandParameter(this, item);
                                 handler.call(this, item.command, parameter, item.onExecuted);
                             }
                         }
@@ -217,7 +212,7 @@ class DiagramToolbar extends DiagramPanel {
                 itemTemplate: function(itemData, itemIndex, itemElement) {
                     DiagramMenuHelper.getContextMenuItemTemplate(itemData, itemIndex, itemElement, this._menuHasCheckedItems);
                 },
-                onItemClick: ({ itemData }) => DiagramMenuHelper.onContextMenuItemClick(itemData, actionHandler.bind(this)),
+                onItemClick: ({ itemData }) => DiagramMenuHelper.onContextMenuItemClick(this, itemData, actionHandler.bind(this)),
                 onShowing: (e) => {
                     if(this._showingSubMenu) return;
 
@@ -257,19 +252,17 @@ class DiagramToolbar extends DiagramPanel {
     }
     _execDiagramCommand(command, value, onExecuted) {
         if(!this._updateLocked && command !== undefined) {
-            const widgetCommands = this._getWidgetCommands();
-            if(widgetCommands.indexOf(command) > -1) {
-                this._onWidgetCommandAction({ name: command });
-            } else {
+            if(typeof command === 'number') {
                 this.bar.raiseBarCommandExecuted(command, value);
             }
+            this._onCommandExecutedAction({ command });
         }
         if(typeof onExecuted === 'function') {
             onExecuted.call(this);
         }
     }
-    _createOnWidgetCommand() {
-        this._onWidgetCommandAction = this._createActionByOption('onWidgetCommand');
+    _createOnCommandExecuted() {
+        this._onCommandExecutedAction = this._createActionByOption('onCommandExecuted');
     }
 
     _setItemEnabled(command, enabled) {
@@ -317,8 +310,8 @@ class DiagramToolbar extends DiagramPanel {
             case 'onSubMenuVisibleChanged':
                 this._createOnSubMenuVisibleChangedAction();
                 break;
-            case 'onWidgetCommand':
-                this._createOnWidgetCommand();
+            case 'onCommandExecuted':
+                this._createOnCommandExecuted();
                 break;
             case 'commands':
                 this._invalidate();
@@ -336,6 +329,13 @@ class DiagramToolbar extends DiagramPanel {
                 proxyUrl: undefined
             }
         });
+    }
+
+    setCommandChecked(command, checked) {
+        this._setItemValue(command, checked);
+    }
+    setCommandEnabled(command, enabled) {
+        this._setItemEnabled(command, enabled);
     }
 }
 

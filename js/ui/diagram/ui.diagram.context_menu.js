@@ -98,13 +98,15 @@ class DiagramContextMenu extends Widget {
         }
 
         if(!processed) {
-            DiagramMenuHelper.onContextMenuItemClick(itemData, this._execDiagramCommand.bind(this));
+            DiagramMenuHelper.onContextMenuItemClick(this, itemData, this._execDiagramCommand.bind(this));
             this._contextMenuInstance.hide();
         }
     }
     _execDiagramCommand(command, value, onExecuted) {
         if(command !== undefined) {
-            this.bar.raiseBarCommandExecuted(command, value);
+            if(typeof command === 'number') {
+                this.bar.raiseBarCommandExecuted(command, value);
+            }
         }
 
         if(typeof onExecuted === 'function') {

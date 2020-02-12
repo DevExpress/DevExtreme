@@ -380,7 +380,6 @@
         "dxDiagram-categoryOrgChart": "Structure organisationnelle",
         "dxDiagram-categoryContainers": "Conteneurs",
         "dxDiagram-categoryCustom": "Personnalisé",
-        "dxDiagram-commandProperties": "Propriétés",
         "dxDiagram-commandExport": "Exporter",
         "dxDiagram-commandExportToSvg": "Exporter en SVG",
         "dxDiagram-commandExportToPng": "Exporter en PNG",
@@ -438,12 +437,17 @@
         "dxDiagram-unitIn": "po",
         "dxDiagram-unitCm": "cm",
         "dxDiagram-unitPx": "px",
+
         "dxDiagram-dialogButtonOK": "OK",
         "dxDiagram-dialogButtonCancel": "Annuler",
         "dxDiagram-dialogInsertShapeImageTitle": "Insérer une image",
         "dxDiagram-dialogEditShapeImageTitle": "Changer image",
         "dxDiagram-dialogEditShapeImageSelectButton": "Sélectionner une image",
         "dxDiagram-dialogEditShapeImageLabelText": "ou déposer le fichier ici",
+
+        "dxDiagram-uiProperties": "Propriétés",
+        "dxDiagram-uiShowToolbox": "TODO",
+        "dxDiagram-uiSearch": "TODO",
 
         "dxDiagram-shapeText": "Texte",
         "dxDiagram-shapeRectangle": "Rectangle",

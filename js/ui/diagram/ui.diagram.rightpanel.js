@@ -31,7 +31,7 @@ class DiagramRightPanel extends DiagramPanel {
     }
     _getAccordionDataSource() {
         return [{
-            title: messageLocalization.format('dxDiagram-commandProperties'),
+            title: messageLocalization.format('dxDiagram-uiProperties'),
             onTemplate: (widget, $element) => widget._renderOptions($element)
         }];
     }

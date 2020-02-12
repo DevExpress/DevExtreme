@@ -26,6 +26,7 @@ import DiagramToolboxManager from './diagram.toolbox_manager';
 import DiagramToolbox from './ui.diagram.toolbox';
 import DiagramOptionsUpdateBar from './diagram.options_update';
 import DiagramDialogManager from './ui.diagram.dialog_manager';
+import DiagramCommandsManager from './diagram.commands_manager';
 import NodesOption from './diagram.nodes_option';
 import EdgesOption from './diagram.edges_option';
 
@@ -90,7 +91,7 @@ class Diagram extends Widget {
         }
 
         this._toolbox = undefined;
-        if(this.option('toolbox.visible')) {
+        if(this._isToolboxVisible()) {
             this._renderToolbox($contentWrapper);
         }
 
@@ -98,6 +99,7 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_DRAWER_WRAPPER_CLASS)
             .appendTo($contentWrapper);
 
+        this._drawer = undefined;
         if(this.option('propertiesPanel.enabled')) {
             const $drawer = $('<div>')
                 .appendTo($drawerWrapper);
@@ -150,21 +152,32 @@ class Diagram extends Widget {
         component.bar.onChanged.add(this);
         this._diagramInstance.barManager.registerBar(component.bar);
     }
+    _getExcludeCommands() {
+        const excludeCommands = [];
+        if(!this.option('propertiesPanel.enabled')) {
+            excludeCommands.push(DiagramCommandsManager.SHOW_OPTIONS_COMMAND_NAME);
+        }
+        if(!this._isToolboxVisible()) {
+            excludeCommands.push(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME);
+        }
+        return excludeCommands;
+    }
     _renderMainToolbar() {
         const $toolbarWrapper = $('<div>')
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
-        const toolbarWidgetCommandNames = [];
-        if(this.option('propertiesPanel.enabled') && this.option('propertiesPanel.collapsible')) {
-            toolbarWidgetCommandNames.push('options');
-        }
         this._mainToolbar = this._createComponent($toolbarWrapper, DiagramMainToolbar, {
             commands: this.option('toolbar.commands'),
             onContentReady: ({ component }) => this._registerBar(component),
             onSubMenuVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
-            widgetCommandNames: toolbarWidgetCommandNames
+            excludeCommands: this._getExcludeCommands(),
+            onCommandExecuted: (e) => {
+                if(e.command === DiagramCommandsManager.SHOW_OPTIONS_COMMAND_NAME && this._drawer) {
+                    this._drawer.toggle();
+                }
+            }
         });
     }
     _adjustFloatingToolbarContainer($container, toolbar, position) {
@@ -191,6 +204,9 @@ class Diagram extends Widget {
             offset: DIAGRAM_FLOATING_PANEL_OFFSET + ' ' + DIAGRAM_FLOATING_PANEL_OFFSET
         });
     }
+    _isToolboxVisible() {
+        return this.option('toolbox.visibility') !== 'disabled' && !this.option('readOnly') && !this.option('disabled');
+    }
     _renderToolbox($parent) {
         const isServerSide = !hasWindow();
         const $toolBox = $('<div>')
@@ -205,7 +221,7 @@ class Diagram extends Widget {
             height -= this._viewToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
         }
         this._toolbox = this._createComponent($toolBox, DiagramToolbox, {
-            visible: !this.option('readOnly') && !this.option('disabled'),
+            isVisible: this.option('toolbox.visibility') === 'visible',
             height: height,
             position: {
                 my: 'left top',
@@ -228,6 +244,13 @@ class Diagram extends Widget {
 
                 this._diagramInstance.applyToolboxFilter(e.text, e.filteringToolboxes);
             },
+            onVisibilityChanged: (e) => {
+                if(isServerSide) return;
+
+                if(this._viewToolbar) {
+                    this._viewToolbar.setCommandChecked(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME, e.visible);
+                }
+            },
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
     }
@@ -239,7 +262,14 @@ class Diagram extends Widget {
             commands: this.option('viewToolbar.commands'),
             onContentReady: ({ component }) => this._registerBar(component),
             onSubMenuVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
-            onPointerUp: this._onPanelPointerUp.bind(this)
+            onPointerUp: this._onPanelPointerUp.bind(this),
+            export: this.option('export'),
+            excludeCommands: this._getExcludeCommands(),
+            onCommandExecuted: (e) => {
+                if(e.command === DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME && this._toolbox) {
+                    this._toolbox.toggle();
+                }
+            }
         });
         this._adjustFloatingToolbarContainer($container, this._viewToolbar, {
             my: 'left bottom',
@@ -251,7 +281,7 @@ class Diagram extends Widget {
 
     _renderRightPanel($parent) {
         const isCollapsible = this.option('propertiesPanel.collapsible');
-        const drawer = this._createComponent($parent, Drawer, {
+        this._drawer = this._createComponent($parent, Drawer, {
             closeOnOutsideClick: isCollapsible,
             opened: !isCollapsible,
             openedStateMode: isCollapsible ? 'overlap' : 'shrink',
@@ -264,13 +294,6 @@ class Diagram extends Widget {
                 });
             }
         });
-        if(this._mainToolbar) {
-            this._mainToolbar.option('onWidgetCommand', (e) => {
-                if(e.name === 'options') {
-                    drawer.toggle();
-                }
-            });
-        }
     }
 
     _onPanelPointerUp() {
@@ -1508,11 +1531,11 @@ class Diagram extends Widget {
             ],
             toolbox: {
                 /**
-                * @name dxDiagramOptions.toolbox.visible
-                * @type boolean
+                * @name dxDiagramOptions.toolbox.visibility
+                * @type Enums.DiagramToolboxVisibility
                 * @default true
                 */
-                visible: true,
+                visibility: 'visible',
                 /**
                 * @name dxDiagramOptions.toolbox.groups
                 * @type Array<Object>|Array<Enums.DiagramShapeCategory>
