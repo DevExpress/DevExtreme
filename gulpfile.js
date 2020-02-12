@@ -22,6 +22,7 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
 require('./build/gulp/generator');
+require('./build/gulp/scss/tasks');
 
 const TEST_CI = Boolean(process.env['DEVEXTREME_TEST_CI']);
 const DOCKER_CI = Boolean(process.env['DEVEXTREME_DOCKER_CI']);
@@ -31,11 +32,10 @@ if(TEST_CI) {
 }
 
 function createStyleCompilerBatch() {
-    const tasks = ['style-compiler-themes'];
-    if(!TEST_CI) {
-        tasks.push('style-compiler-tb-assets');
-    }
-    return gulp.series(tasks);
+    return gulp.series(TEST_CI
+        ? ['style-compiler-themes-ci']
+        : ['style-compiler-themes', 'style-compiler-tb-assets']
+    );
 }
 
 function createMiscBatch() {

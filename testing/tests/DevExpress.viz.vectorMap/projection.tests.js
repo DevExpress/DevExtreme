@@ -1273,7 +1273,7 @@ QUnit.test('bounds', function(assert) {
     const newProj = proj.bounds([10, 20, 30, 40]);
 
     assert.ok(newProj instanceof projectionModule._TESTS_Engine, 'instance type');
-    assert.ok(newProj !== proj, 'not same instance');
+    assert.notStrictEqual(newProj, proj, 'not same instance');
     assert.strictEqual(newProj.original(), proj, 'original');
     assert.strictEqual(newProj.ar(), 3, 'ar');
 });
@@ -1292,7 +1292,7 @@ QUnit.test('aspectRatio', function(assert) {
     const newProj = proj.aspectRatio(4);
 
     assert.ok(newProj instanceof projectionModule._TESTS_Engine, 'instance type');
-    assert.ok(newProj !== proj, 'not same instance');
+    assert.notStrictEqual(newProj, proj, 'not same instance');
     assert.strictEqual(newProj.original(), proj, 'original');
     assert.strictEqual(newProj.ar(), 4, 'ar');
     assert.deepEqual(newProj.project([10, 20]), proj.project([10, 20]), 'project');

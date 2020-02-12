@@ -7,7 +7,7 @@ import CustomStore from '../../data/custom_store';
 
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
-import { getDisplayFileSize } from './ui.file_manager.utils.js';
+import { getDisplayFileSize } from './ui.file_manager.common';
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = 'dx-filemanager-details';
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-details-item-thumbnail';

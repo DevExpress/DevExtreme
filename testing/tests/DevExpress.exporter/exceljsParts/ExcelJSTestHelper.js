@@ -95,12 +95,12 @@ class ExcelJSTestHelper {
         assert.equal(this.worksheet.columnCount, total.column === 0 ? total.column : topLeft.column + total.column - 1, 'worksheet.columnCount');
     }
 
-    checkCellsRange(cellsRange, actual, topLeft) {
-        assert.deepEqual(cellsRange.from, topLeft, 'cellsRange.from');
+    checkCellRange(cellRange, actual, topLeft) {
+        assert.deepEqual(cellRange.from, topLeft, 'cellRange.from');
         if(actual.row > 0 && actual.column > 0) {
-            assert.deepEqual(cellsRange.to, { row: topLeft.row + actual.row - 1, column: topLeft.column + actual.column - 1 }, 'cellsRange.to');
+            assert.deepEqual(cellRange.to, { row: topLeft.row + actual.row - 1, column: topLeft.column + actual.column - 1 }, 'cellRange.to');
         } else {
-            assert.deepEqual(cellsRange.to, { row: topLeft.row + actual.row, column: topLeft.column + actual.column }, 'cellsRange.to');
+            assert.deepEqual(cellRange.to, { row: topLeft.row + actual.row, column: topLeft.column + actual.column }, 'cellRange.to');
         }
     }
 

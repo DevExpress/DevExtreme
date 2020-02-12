@@ -7,7 +7,7 @@ const controlBarModule = require('viz/vector_map/control_bar');
 const legendModule = require('viz/vector_map/legend');
 const tooltipModule = require('viz/core/tooltip');
 const tooltipViewerModule = require('viz/vector_map/tooltip_viewer');
-const dataSourceModule = require('data/data_source/data_source');
+const DataSource = require('data/data_source/data_source').DataSource;
 const exportMenuModule = require('viz/core/export'); // TODO maybe if you test layer - you should create exact layer?
 const rendererModule = require('viz/core/renderers/renderer');
 
@@ -481,7 +481,7 @@ QUnit.test('Change name of one layer', function(assert) {
     const updatedLayers = map.getLayers();
 
     updatedLayers.forEach(function(l, i) {
-        assert.ok(l !== oldLayers[i]);
+        assert.notStrictEqual(l, oldLayers[i]);
     });
 });
 
@@ -493,7 +493,7 @@ QUnit.test('Layers shouldn\'t be created on updating when name not set', functio
     const oldLayer = map.getLayers()[0];
     map.option('layers', [{ color: 'some_color_1' }]);
 
-    assert.ok(map.getLayers()[0] === oldLayer);
+    assert.strictEqual(map.getLayers()[0], oldLayer);
 });
 
 QUnit.test('No crush on updating when on of layer in null', function(assert) {
@@ -567,7 +567,7 @@ QUnit.test('getDataSource method', function(assert) {
         ])
     });
 
-    assert.ok(map.getLayers()[0].getDataSource() instanceof dataSourceModule.DataSource);
+    assert.ok(map.getLayers()[0].getDataSource() instanceof DataSource);
 });
 
 QUnit.test('Bounds calculation', function(assert) {

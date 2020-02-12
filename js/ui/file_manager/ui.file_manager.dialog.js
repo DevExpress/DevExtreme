@@ -94,6 +94,14 @@ class FileManagerDialogBase extends Widget {
         this._onClosedAction = this._createActionByOption('onClosed');
     }
 
+    _setTitle(newTitle) {
+        this._popup.option('title', newTitle);
+    }
+
+    _setButtonText(newText) {
+        this._popup.option('toolbarItems[0].options.text', newText);
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             onClosed: null

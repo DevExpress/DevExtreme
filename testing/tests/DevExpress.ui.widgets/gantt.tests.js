@@ -27,6 +27,7 @@ const SPLITTER_SELECTOR = '.dx-splitter';
 const POPUP_SELECTOR = '.dx-popup-normal';
 const GANTT_VIEW_HORIZONTAL_BORDER_SELECTOR = '.dx-gantt-hb';
 const TIME_MARKER_SELECTOR = '.dx-gantt-tm';
+const TIME_INTERVAL_SELECTOR = '.dx-gantt-ti';
 const OVERLAY_WRAPPER_SELECTOR = '.dx-overlay-wrapper';
 const CONTEXT_MENU_SELECTOR = '.dx-context-menu';
 const INPUT_TEXT_EDITOR_SELECTOR = '.dx-texteditor-input';
@@ -97,7 +98,7 @@ QUnit.module('Markup', moduleConfig, () => {
     test('should render treeList', function(assert) {
         this.createInstance(tasksOnlyOptions);
         const treeListElements = this.$element.find(TREELIST_SELECTOR);
-        assert.ok(treeListElements.length === 1);
+        assert.strictEqual(treeListElements.length, 1);
     });
     test('should render task wrapper for each task', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -625,9 +626,9 @@ QUnit.module('Context Menu', moduleConfig, () => {
 QUnit.module('Time Markers', moduleConfig, () => {
     test('render', function(assert) {
         const timeMarkers = [
-            { dateTime: tasks[0].start, title: 'Start' },
-            { dateTime: new Date(2019, 2, 1) },
-            { dateTime: () => tasks[tasks.length - 1].end, title: 'End', cssClass: 'end' }
+            { start: tasks[0].start, title: 'First' },
+            { start: new Date(2019, 2, 1) },
+            { start: new Date(2019, 5, 5), end: () => tasks[tasks.length - 1].end, title: 'Interval', cssClass: 'end' }
         ];
         const options = {
             tasks: { dataSource: tasks },
@@ -638,6 +639,8 @@ QUnit.module('Time Markers', moduleConfig, () => {
 
         const $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
         assert.equal($timeMarkers.length, timeMarkers.length, 'all time markers are rendered');
+        const $timeIntervals = this.$element.find(TIME_INTERVAL_SELECTOR);
+        assert.equal($timeIntervals.length, 1, 'all time intervals are rendered');
         assert.ok($timeMarkers.eq(2).hasClass(timeMarkers[2].cssClass), 'custom cssClass rendered');
         assert.equal($timeMarkers.eq(0).attr('title'), timeMarkers[0].title, 'title rendered');
     });
@@ -646,10 +649,21 @@ QUnit.module('Time Markers', moduleConfig, () => {
         this.clock.tick();
 
         let $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
-        assert.equal($timeMarkers.length, 0, 'gantt has not time markers');
+        assert.equal($timeMarkers.length, 0, 'gantt has no time markers');
+        let $timeIntervals = this.$element.find(TIME_INTERVAL_SELECTOR);
+        assert.equal($timeIntervals.length, 0, 'gantt has no time intervals');
 
-        this.instance.option('timeMarkers', [{ dateTime: tasks[0].start, title: 'Start' }]);
+        this.instance.option('timeMarkers', [
+            { start: tasks[0].start },
+            { start: tasks[tasks.length - 1].start, end: tasks[tasks.length - 1].end }
+        ]);
         $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
-        assert.equal($timeMarkers.length, 1, 'gantt has a time marker');
+        assert.equal($timeMarkers.length, 2, 'gantt has time markers');
+        $timeIntervals = this.$element.find(TIME_INTERVAL_SELECTOR);
+        assert.equal($timeIntervals.length, 1, 'gantt has time interval');
+
+        this.instance.option('timeMarkers', []);
+        $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($timeMarkers.length, 0, 'gantt has no time markers');
     });
 });

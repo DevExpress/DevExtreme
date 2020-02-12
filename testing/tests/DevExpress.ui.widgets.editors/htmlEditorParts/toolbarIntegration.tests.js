@@ -358,9 +358,9 @@ QUnit.module('Toolbar integration', {
                 const blackIndex = value.indexOf(BLACK_PIXEL);
                 const orangeIndex = value.indexOf(ORANGE_PIXEL);
 
-                assert.ok(value.indexOf(WHITE_PIXEL) === -1, 'There is no white pixel');
-                assert.ok(blackIndex !== -1, 'There is a black pixel');
-                assert.ok(orangeIndex !== -1, 'There is an orange pixel');
+                assert.strictEqual(value.indexOf(WHITE_PIXEL), -1, 'There is no white pixel');
+                assert.notStrictEqual(blackIndex, -1, 'There is a black pixel');
+                assert.notStrictEqual(orangeIndex, -1, 'There is an orange pixel');
                 assert.ok(orangeIndex < blackIndex, 'orange pixel placed before black pixel');
                 done();
             }

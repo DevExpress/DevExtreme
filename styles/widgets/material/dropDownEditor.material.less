@@ -41,7 +41,7 @@
 
 .dx-dropdowneditor-icon {
     color: @dropdowneditor-icon-color;
-    .dx-icon-spindown;
+    .dx-icon(spindown);
     .dx-dropdowneditor-button-icon();
 }
 
@@ -102,7 +102,7 @@
     .dx-dropdowneditor-icon {
         color: @dropdowneditor-icon-active-color;
         opacity: 1;
-        .dx-icon-spinup;
+        .dx-icon(spinup);
         .dx-dropdowneditor-button-icon();
     }
 }
@@ -113,8 +113,8 @@
         &:after {
             right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
 
-            .dx-rtl &,
-            .dx-rtl& {
+            .dx-rtl&,
+            .dx-rtl & {
                 right: auto;
                 left: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
             }
@@ -126,8 +126,8 @@
             &:after {
                 right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_WITH_CLEAR_OFFSET;
 
-                .dx-rtl &,
-                .dx-rtl& {
+                .dx-rtl&,
+                .dx-rtl & {
                     right: auto;
                     left: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_WITH_CLEAR_OFFSET;
                 }

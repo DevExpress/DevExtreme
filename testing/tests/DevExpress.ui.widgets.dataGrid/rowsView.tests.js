@@ -85,7 +85,7 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
             return true;
         },
         $element: function() {
-            return $('.dx-datagrid');
+            return $('.dx-datagrid').parent();
         }
     };
 
@@ -1106,7 +1106,7 @@ QUnit.test('All rows are not isSelected by default', function(assert) {
     rowsSelected = testElement.find('.dx-selection');
 
     // assert
-    assert.ok(rowsSelected.length === 0, 'rows are not isSelected by default');
+    assert.strictEqual(rowsSelected.length, 0, 'rows are not isSelected by default');
 });
 
 QUnit.test('Click on row call changeItemSelection', function(assert) {
@@ -3250,7 +3250,7 @@ QUnit.test('Rows with option rowAlternationEnabled true', function(assert) {
     assert.ok(!rows.eq(0).hasClass('dx-row-alt'), 'not has class dx-row-alt');
 
     assert.ok(rows.eq(1).hasClass('dx-row-alt'), 'has class dx-row-alt');
-    assert.ok(rows.eq(1).find('td').css('backgroundColor') !== 'rgba(0, 0, 0, 0)', 'background color row');
+    assert.notStrictEqual(rows.eq(1).find('td').css('backgroundColor'), 'rgba(0, 0, 0, 0)', 'background color row');
 
     assert.ok(!rows.eq(2).hasClass('dx-row-alt'), 'not has class dx-row-alt');
 });
@@ -3283,7 +3283,7 @@ QUnit.test('Rows with option rowAlternationEnabled true when grouping', function
     assert.ok(!rows.eq(0).hasClass('dx-row-alt'), 'not has class dx-row-alt');
     assert.ok(!rows.eq(1).hasClass('dx-row-alt'), 'not has class dx-row-alt');
     assert.ok(rows.eq(2).hasClass('dx-row-alt'), 'has class dx-row-alt');
-    assert.ok(rows.eq(2).find('td').css('backgroundColor') !== 'rgba(0, 0, 0, 0)', 'background color row');
+    assert.notStrictEqual(rows.eq(2).find('td').css('backgroundColor'), 'rgba(0, 0, 0, 0)', 'background color row');
 });
 
 QUnit.test('Rows with option rowAlternationEnabled false', function(assert) {
@@ -3808,7 +3808,7 @@ QUnit.test('Summary items are not displayed in a group row', function(assert) {
 
 QUnit.test('Scroll to element by focus', function(assert) {
     // arrange
-    const testElement = $('#container');
+    const $testElement = $('#container');
     const rowsView = this.createRowsView(this.items, null, null, null, {
         keyboardNavigation: {
             enabled: true
@@ -3818,16 +3818,18 @@ QUnit.test('Scroll to element by focus', function(assert) {
     let isScrollTo;
     const keyboardNavigationController = this.dataGrid.keyboardNavigationController;
 
-    rowsView.render(testElement);
     keyboardNavigationController._isNeedFocus = true;
     keyboardNavigationController._isNeedScroll = true;
     keyboardNavigationController._focusedView = rowsView;
+
+    rowsView.render($testElement);
+
     rowsView._scrollable.scrollToElement = function() {
         isScrollTo = true;
     };
 
     // act
-    this.dataGrid.editorFactoryController.focus(testElement.find('.dx-data-row td').eq(0));
+    this.dataGrid.editorFactoryController.focus($testElement.find('.dx-data-row td').eq(0));
     this.clock.tick(1);
 
     // assert

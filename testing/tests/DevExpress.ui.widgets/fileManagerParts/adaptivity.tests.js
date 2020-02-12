@@ -38,12 +38,12 @@ const moduleConfig = {
         this.$element = $('#fileManager')
             .css('width', 350)
             .dxFileManager({
-                fileProvider: createTestFileSystem(),
+                fileSystemProvider: createTestFileSystem(),
                 permissions: {
                     create: true,
                     copy: true,
                     move: true,
-                    remove: true,
+                    delete: true,
                     rename: true,
                     upload: true
                 }

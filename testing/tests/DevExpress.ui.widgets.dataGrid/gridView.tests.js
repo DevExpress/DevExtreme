@@ -377,7 +377,7 @@ function createGridView(options, userOptions) {
         headers = testElement.find('.dx-datagrid-headers');
 
         // assert
-        assert.ok(headers.length === 0, 'headers are hidden');
+        assert.strictEqual(headers.length, 0, 'headers are hidden');
     });
 
     QUnit.test('Hide borders by default', function(assert) {
@@ -450,7 +450,7 @@ function createGridView(options, userOptions) {
         headers = testElement.find('.dx-datagrid-headers');
 
         // assert
-        assert.ok(headers.length === 0, 'headers are hidden');
+        assert.strictEqual(headers.length, 0, 'headers are hidden');
     });
 
     // B239207

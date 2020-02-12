@@ -98,7 +98,7 @@ const ScrollViewScroller = simulatedStrategy.Scroller.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && this._location <= this._bottomBound;
+        return this._reachBottomEnabled && (this._location - this._bottomBound <= 0.5); // T858013
     },
 
     _scrollComplete: function() {

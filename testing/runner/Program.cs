@@ -32,7 +32,10 @@ namespace Runner
                     .ConfigureServices(services =>
                     {
                         services
-                            .AddMvc()
+                            .AddMvcCore()
+                            .AddViews()
+                            .AddRazorViewEngine()
+                            .AddJsonFormatters()
                             .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
                         services.AddWebEncoders();
