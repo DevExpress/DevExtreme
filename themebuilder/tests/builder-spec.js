@@ -116,8 +116,9 @@ describe('Builder - testing exported function', () => {
             assert.ok(themeBuilderCss === distributionCss);
         });
     }).timeout(buildTimeout);
+});
 
-
+describe('Check if all widgets can be compiled separately', () => {
     ['generic.light', 'material.blue.light'].forEach(theme => {
         const ModulesHandler = require('../modules/modules-handler');
         const themesFileContent = fs.readFileSync(path.join(__dirname, '../../styles/theme.less'), 'utf8');
@@ -131,7 +132,8 @@ describe('Builder - testing exported function', () => {
                 lessCompiler: lessCompiler,
                 items: [],
                 baseTheme: theme,
-                widgets: [widgetName]
+                widgets: [widgetName],
+                noClean: true
             };
 
             it(`We can build bundle for every widget (${theme}, ${widgetName})`, () => {
@@ -139,10 +141,9 @@ describe('Builder - testing exported function', () => {
                     assert.isString(result.css, `${widgetName} bundle builded`);
                     assert.deepEqual(result.widgets, [ widgetName ]);
                 });
-            });
+            }).timeout(buildTimeout);
         });
     });
-
 });
 
 

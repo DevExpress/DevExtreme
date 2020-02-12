@@ -8,8 +8,7 @@ import messageLocalization from '../../localization/message';
 
 import Widget from '../widget/ui.widget';
 
-import FileManagerNameEditorDialog from './ui.file_manager.dialog.name_editor';
-import FileManagerFolderChooserDialog from './ui.file_manager.dialog.folder_chooser';
+import FileManagerDialogManager from './ui.file_manager.dialog_manager';
 import FileManagerFileUploader from './ui.file_manager.file_uploader';
 import { FileManagerMessages } from './ui.file_manager.messages';
 
@@ -31,22 +30,14 @@ class FileManagerEditingControl extends Widget {
         this._model = this.option('model');
         this._uploadOperationInfoMap = {};
 
-        this._renameItemDialog = this._createEnterNameDialog(
-            messageLocalization.format('dxFileManager-dialogRenameItemTitle'),
-            messageLocalization.format('dxFileManager-dialogRenameItemButtonText'));
-        this._createFolderDialog = this._createEnterNameDialog(
-            messageLocalization.format('dxFileManager-dialogCreateDirectoryTitle'),
-            messageLocalization.format('dxFileManager-dialogCreateDirectoryButtonText'));
-
-        const $chooseFolderDialog = $('<div>').appendTo(this.$element());
-        this._chooseFolderDialog = this._createComponent($chooseFolderDialog, FileManagerFolderChooserDialog, {
-            provider: this._controller._fileProvider,
-            getDirectories: this._controller.getDirectories.bind(this._controller),
-            getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
-            onClosed: this._onDialogClosed.bind(this)
+        this._dialogManager = new FileManagerDialogManager(this.$element(), {
+            chooseDirectoryDialog: {
+                provider: this._controller._fileProvider,
+                getDirectories: this._controller.getDirectories.bind(this._controller),
+                getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
+            },
+            onDialogClosed: this._onDialogClosed.bind(this)
         });
-
-        this._confirmationDialog = this._createConfirmationDialog();
 
         this._fileUploader = this._createFileUploader();
 
@@ -80,25 +71,6 @@ class FileManagerEditingControl extends Widget {
             chunkSize: this._controller.getFileUploadChunkSize(),
             uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, uploadDirectory),
             abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, uploadDirectory)
-        };
-    }
-
-    _createEnterNameDialog(title, buttonText) {
-        const $dialog = $('<div>').appendTo(this.$element());
-        return this._createComponent($dialog, FileManagerNameEditorDialog, {
-            title: title,
-            buttonText: buttonText,
-            onClosed: this._onDialogClosed.bind(this)
-        });
-    }
-
-    _createConfirmationDialog() {
-        return { // TODO implement this dialog
-            show: () => {
-                setTimeout(() => {
-                    this._onDialogClosed({ dialogResult: {} });
-                });
-            }
         };
     }
 
@@ -269,31 +241,31 @@ class FileManagerEditingControl extends Widget {
     _tryCreate(parentDirectories) {
         const parentDirectoryInfo = parentDirectories && parentDirectories[0] || this._getCurrentDirectory();
         const newDirName = messageLocalization.format('dxFileManager-newDirectoryName');
-        return this._showDialog(this._createFolderDialog, newDirName)
+        return this._showDialog(this._dialogManager.getCreateItemDialog(), newDirName)
             .then(({ name }) => this._controller.createDirectory(parentDirectoryInfo, name));
     }
 
     _tryRename(itemInfos) {
         const itemInfo = itemInfos && itemInfos[0] || this._model.getMultipleSelectedItems()[0];
-        return this._showDialog(this._renameItemDialog, itemInfo.fileItem.name)
+        return this._showDialog(this._dialogManager.getRenameItemDialog(), itemInfo.fileItem.name)
             .then(({ name }) => this._controller.renameItem(itemInfo, name));
     }
 
     _tryDelete(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        return this._showDialog(this._confirmationDialog)
+        return this._showDialog(this._dialogManager.getConfirmationDialog())
             .then(() => this._controller.deleteItems(itemInfos));
     }
 
     _tryMove(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        return this._showDialog(this._chooseFolderDialog)
+        return this._showDialog(this._dialogManager.getMoveDialog())
             .then(({ folder }) => this._controller.moveItems(itemInfos, folder));
     }
 
     _tryCopy(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        return this._showDialog(this._chooseFolderDialog)
+        return this._showDialog(this._dialogManager.getCopyDialog())
             .then(({ folder }) => this._controller.copyItems(itemInfos, folder));
     }
 
@@ -466,7 +438,7 @@ class FileManagerActionContext {
         this._onlyFiles = !this._actionMetadata.affectsAllItems && this._itemInfos.every(info => !info.fileItem.isDirectory);
         this._items = this._itemInfos.map(itemInfo => itemInfo.fileItem);
         this._multipleItems = this._items.length > 1;
-        this._location = directoryInfo.fileItem.name;
+        this._location = directoryInfo.getDisplayName();
 
         this._singleRequest = true;
 

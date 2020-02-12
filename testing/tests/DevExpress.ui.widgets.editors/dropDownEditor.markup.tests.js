@@ -127,3 +127,33 @@ module('aria accessibility', () => {
     });
 });
 
+
+module('option change', function() {
+    const getStartDirection = (isRtlEnabled) => isRtlEnabled ? 'right' : 'left';
+
+    [false, true].forEach((rtlEnabled) => {
+        test(`after updating of the "rtlEnabled" option to "${rtlEnabled}" Popup should update its position`, function(assert) {
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ rtlEnabled }).dxDropDownEditor('instance');
+            const { my: initialMyPosition, at: initialAtPosition } = dropDownEditor.option('popupPosition');
+            const initialStartDirection = getStartDirection(rtlEnabled);
+
+            assert.strictEqual(initialAtPosition, `${initialStartDirection} bottom`, 'correct initial "at" position');
+            assert.strictEqual(initialMyPosition, `${initialStartDirection} top`, 'correct initial "my" position');
+
+            dropDownEditor.option('rtlEnabled', !rtlEnabled);
+
+            const { my: newMyPosition, at: newAtPosition } = dropDownEditor.option('popupPosition');
+            const newStartDirection = getStartDirection(!rtlEnabled);
+
+            assert.strictEqual(newAtPosition, `${newStartDirection} bottom`, 'correct new "at" position');
+            assert.strictEqual(newMyPosition, `${newStartDirection} top`, 'correct new "my" position');
+
+            dropDownEditor.option('rtlEnabled', rtlEnabled);
+
+            const { my: revertedMyPosition, at: revertedAtPosition } = dropDownEditor.option('popupPosition');
+
+            assert.strictEqual(revertedAtPosition, `${initialStartDirection} bottom`, 'correct initial "at" position');
+            assert.strictEqual(revertedMyPosition, `${initialStartDirection} top`, 'correct initial "my" position');
+        });
+    });
+});

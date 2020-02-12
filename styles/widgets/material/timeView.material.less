@@ -58,29 +58,35 @@
         margin-right: @MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN;
     }
 
-    &.dx-dropdowneditor-button-visible .dx-texteditor-container {
-        .dx-texteditor-input {
-            padding-right: 0;
+    &.dx-dropdowneditor-button-visible {
+        .dx-texteditor-container {
+            .dx-texteditor-input {
+                padding-right: 0;
 
-            .dx-rtl & {
-                padding-left: 0;
+                .dx-rtl & {
+                    padding-left: 0;
+                }
             }
 
-            .dx-editor-filled&,
-            .dx-editor-outlined& {
-                .dx-rtl&,
+            .dx-texteditor-buttons-container .dx-dropdowneditor-button {
+                margin-right: 0;
+
+                &.dx-rtl,
                 .dx-rtl & {
-                    padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                    margin-left: 0;
                 }
             }
         }
 
-        .dx-texteditor-buttons-container .dx-dropdowneditor-button {
-            margin-right: 0;
-
-            &.dx-rtl,
-            .dx-rtl & {
-                margin-left: 0;
+        &.dx-editor-filled,
+        &.dx-editor-outlined {
+            .dx-texteditor-container {
+                .dx-texteditor-input {
+                    .dx-rtl&,
+                    .dx-rtl & {
+                        padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                    }
+                }
             }
         }
     }

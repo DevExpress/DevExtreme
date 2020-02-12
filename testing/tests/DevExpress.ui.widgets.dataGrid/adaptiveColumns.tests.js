@@ -486,7 +486,7 @@ QUnit.test('Show the form when an adaptive row is expanded', function(assert) {
 
     // assert
     const form = $('.dx-master-detail-row .dx-form').dxForm('instance');
-    assert.ok(form !== undefined, 'form is initialized');
+    assert.notStrictEqual(form, undefined, 'form is initialized');
     assert.equal(form.option('items')[0].column.dataField, 'lastName', 'dataField of column');
     assert.equal(form.option('items')[0].dataField, 'lastName', 'dataField of item');
     assert.equal($('.dx-field-item-content').text(), 'Psy', 'text of item');
@@ -771,7 +771,7 @@ QUnit.test('Show the form with cellTemplate when an adaptive row is expanded', f
 
     // assert
     const form = $('.dx-master-detail-row .dx-form').dxForm('instance');
-    assert.ok(form !== undefined, 'form is initialized');
+    assert.notStrictEqual(form, undefined, 'form is initialized');
     assert.equal(form.option('items')[0].column.dataField, 'lastName', 'dataField of column');
     assert.equal(form.option('items')[0].dataField, 'lastName', 'dataField of item');
     assert.equal($('.dx-field-item-content').text(), 'Psy template', 'template text of item');
@@ -1823,6 +1823,44 @@ QUnit.test('The adaptive cell should be empty in a grouped row with a summary', 
     assert.strictEqual($(this.rowsView.getRowElement(0)).children('.dx-command-adaptive').html(), '&nbsp;', 'adaptive cell');
 });
 
+// T857506
+QUnit.test('The group cell content should not be hidden when the hidingPriority property is specified for a first column', function(assert) {
+    // arrange, act
+    $('.dx-datagrid').width(400);
+    this.items = [
+        { firstName: 'Blablablablablablablablablabla', lastName: 'Psy', sex: true },
+        { firstName: 'Super', lastName: 'Star', sex: false }
+    ];
+    this.options = {
+        columns: [
+            { dataField: 'firstName', hidingPriority: 1 },
+            { dataField: 'lastName', groupIndex: 0 },
+            { dataField: 'sex' }
+        ],
+        grouping: {
+            autoExpandAll: true
+        }
+    };
+    setupDataGrid(this);
+    this.rowsView.render($('#container'));
+    this.resizingController.updateDimensions();
+
+    // assert
+    let $rowElement = $(this.getRowElement(0));
+    let $cellElements = $rowElement.children();
+
+    assert.ok($rowElement.hasClass('dx-group-row'), 'group row');
+    assert.ok($cellElements.eq(1).hasClass('dx-group-cell'), 'group cell');
+    assert.notOk($cellElements.eq(1).hasClass('dx-datagrid-hidden-column'), 'group cell content is visible');
+
+    $rowElement = $(this.getRowElement(1));
+    $cellElements = $rowElement.children();
+
+    assert.ok($rowElement.hasClass('dx-data-row'), 'data row');
+    assert.ok($cellElements.eq(1).hasClass('dx-datagrid-hidden-column'), 'firstName column is hidden');
+});
+
+
 QUnit.module('API', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -2033,7 +2071,7 @@ QUnit.test('Hide the adaptive and master detail row', function(assert) {
 
     // assert
     assert.equal($rows.length, 1, 'master detail rows count');
-    assert.ok($rows.eq(0).css('display') === 'none', 'master detail row');
+    assert.strictEqual($rows.eq(0).css('display'), 'none', 'master detail row');
 });
 
 QUnit.test('Expand adaptive row when row as tbody', function(assert) {
@@ -2099,13 +2137,13 @@ QUnit.test('Edit form. Check that adaptive form is hidden', function(assert) {
     this.clock.tick();
 
     let adaptiveDetailForm = $('.dx-adaptive-detail-row .dx-form').dxForm('instance');
-    assert.ok(adaptiveDetailForm !== undefined, 'adaptive detail form is initialized');
+    assert.notStrictEqual(adaptiveDetailForm, undefined, 'adaptive detail form is initialized');
 
     this.editingController.editRow(0);
     this.clock.tick();
 
     adaptiveDetailForm = $('.dx-adaptive-detail-row .dx-form').dxForm('instance');
-    assert.ok(adaptiveDetailForm === undefined, 'adaptive detail form is not initialized');
+    assert.strictEqual(adaptiveDetailForm, undefined, 'adaptive detail form is not initialized');
 });
 
 // T458653
@@ -2213,9 +2251,9 @@ QUnit.test('Edit row', function(assert) {
     const editor1 = $editors.eq(0).dxTextBox('instance');
     const editor2 = $editors.eq(2).dxTextBox('instance');
 
-    assert.ok(form !== undefined, 'form is initialized');
-    assert.equal($editors.length, 3, 'editors count');
-    assert.equal(editor2.option('value'), 'Psy', 'editor\'s value');
+    assert.notStrictEqual(form, undefined, 'form is initialized');
+    assert.strictEqual($editors.length, 3, 'editors count');
+    assert.strictEqual(editor2.option('value'), 'Psy', 'editor\'s value');
 
     // act
     editor1.option('value', 'Man');
@@ -2226,7 +2264,7 @@ QUnit.test('Edit row', function(assert) {
     form = $('.dx-master-detail-row .dx-form').dxForm('instance');
     $editors = $('.dx-texteditor');
 
-    assert.ok(form === undefined, 'form is not initialized');
+    assert.strictEqual(form, undefined, 'form is not initialized');
     assert.equal($editors.length, 0, 'editors count');
     assert.equal($('.dx-editor-cell').length, 0, 'the editor cell class is not applied');
 });
@@ -2338,7 +2376,7 @@ QUnit.test('Edit row. Check repeat edit', function(assert) {
     form = $('.dx-master-detail-row .dx-form').dxForm('instance');
     $editors = $('.dx-texteditor');
 
-    assert.ok(form !== undefined, 'form is initialized');
+    assert.notStrictEqual(form, undefined, 'form is initialized');
     assert.equal($editors.length, 3, 'editors count');
 });
 
@@ -2403,7 +2441,7 @@ QUnit.test('Edit row. Editor is not rendered inside the form widget when clicked
     $($itemContent).trigger('dxclick');
 
     // assert
-    assert.ok(form !== undefined, 'form is initialized');
+    assert.notStrictEqual(form, undefined, 'form is initialized');
     assert.equal($('.dx-texteditor').length, 0, 'editors count');
 });
 
@@ -2513,7 +2551,7 @@ QUnit.test('Edit row. Editors are rendered inside the form widget when the adapt
     const form = $('.dx-master-detail-row .dx-form').dxForm('instance');
 
     // assert
-    assert.ok(form !== undefined, 'form is initialized');
+    assert.notStrictEqual(form, undefined, 'form is initialized');
     assert.equal($('.dx-texteditor').length, 3, 'editors count');
 });
 

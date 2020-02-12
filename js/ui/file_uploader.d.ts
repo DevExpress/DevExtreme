@@ -12,22 +12,19 @@ import Editor, {
     EditorOptions
 } from './editor/editor';
 
+import UploadInfo from '../file_management/upload_info';
+
 export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid dxFileUploaderOptions.abortUpload
      * @type function
      * @type_function_param1 file:File
-     * @type_function_param2 uploadInfo:object
-     * @type_function_param2_field1 bytesUploaded:Number
-     * @type_function_param2_field2 chunkCount:Number
-     * @type_function_param2_field3 customData:object
-     * @type_function_param2_field4 chunkBlob:Blob
-     * @type_function_param2_field5 chunkIndex:Number
+     * @type_function_param2 uploadInfo?:UploadInfo
      * @type_function_return Promise<any>|any
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    abortUpload?: ((file: File, uploadInfo: { bytesUploaded?: number, chunkCount?: number, customData?: any, chunkBlob?: Blob, chunkIndex?: number }) => Promise<any> | JQueryPromise<any> | any);
+    abortUpload?: ((file: File, uploadInfo?: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
     /**
      * @docid dxFileUploaderOptions.accept
      * @type string
@@ -264,17 +261,12 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @docid dxFileUploaderOptions.uploadChunk
      * @type function
      * @type_function_param1 file:File
-     * @type_function_param2 uploadInfo:object
-     * @type_function_param2_field1 bytesUploaded:Number
-     * @type_function_param2_field2 chunkCount:Number
-     * @type_function_param2_field3 customData:object
-     * @type_function_param2_field4 chunkBlob:Blob
-     * @type_function_param2_field5 chunkIndex:Number
+     * @type_function_param2 uploadInfo:UploadInfo
      * @type_function_return Promise<any>|any
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    uploadChunk?: ((file: File, uploadInfo: { bytesUploaded?: number, chunkCount?: number, customData?: any, chunkBlob?: Blob, chunkIndex?: number }) => Promise<any> | JQueryPromise<any> | any);
+    uploadChunk?: ((file: File, uploadInfo: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
     /**
      * @docid dxFileUploaderOptions.uploadFailedMessage
      * @type string

@@ -23,7 +23,7 @@ const toSelector = function(className) {
 
 QUnit.module('Calendar markup', {
     beforeEach: function() {
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar({
             value: new Date(2013, 9, 15),
             firstDayOfWeek: 1,
@@ -51,7 +51,7 @@ QUnit.module('Calendar markup', {
     });
 
     QUnit.test('Calendar must render with dx-rtl class', function(assert) {
-        const $element = $('<div>').appendTo('body');
+        const $element = $('<div>').appendTo('#qunit-fixture');
         $element.dxCalendar({
             value: new Date(2013, 9, 15),
             rtlEnabled: true
@@ -64,7 +64,7 @@ QUnit.module('Calendar markup', {
 
 QUnit.module('Hidden input', {
     beforeEach: function() {
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar({
             value: new Date(2013, 9, 15)
         }).dxCalendar('instance');
@@ -94,7 +94,7 @@ QUnit.module('Hidden input', {
 
 QUnit.module('The \'name\' option', {
     beforeEach: function() {
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
     },
     afterEach: function() {
         this.$element.remove();
@@ -113,7 +113,7 @@ QUnit.module('The \'name\' option', {
 
 QUnit.module('Navigator', {
     beforeEach: function() {
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar({
             value: new Date(2015, 5, 13)
         }).dxCalendar('instance');
@@ -139,7 +139,7 @@ QUnit.module('Navigator', {
 
 QUnit.module('Calendar footer', {
     beforeEach: function() {
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
     },
     afterEach: function() {
         this.$element.remove();
@@ -166,12 +166,12 @@ QUnit.module('Calendar footer', {
 
 QUnit.module('CellTemplate option', {
     beforeEach: function() {
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar().dxCalendar('instance');
     },
     reinit: function(options) {
         this.$element.remove();
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
     },
     afterEach: function() {
@@ -232,19 +232,24 @@ QUnit.module('CellTemplate option', {
 
 QUnit.module('Aria accessibility', {
     beforeEach: function() {
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
     },
     afterEach: function() {
         this.$element.remove();
     }
 }, () => {
     QUnit.test('role for calendar widget', function(assert) {
-        const $element = this.$element;
+        this.$element.dxCalendar();
 
-        $element.dxCalendar();
+        const $tables = this.$element.find('table');
 
-        assert.equal($element.attr('role'), 'listbox', 'role is correct');
-        assert.equal($element.attr('aria-label'), 'Calendar', 'label is correct');
+        $tables.each((index, tableElement) => {
+            const role = tableElement.getAttribute('role');
+            const label = tableElement.getAttribute('aria-label');
+
+            assert.strictEqual(role, 'grid', 'role is correct');
+            assert.equal(label, 'Calendar', 'label is correct');
+        });
     });
 });
 

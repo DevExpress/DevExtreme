@@ -788,6 +788,18 @@ QUnit.test('\'getCoordinatesByDate\' should return right coordinates with view o
     assert.equal(coords.left, targetCellPosition.left, 'Cell coordinates are right');
 });
 
+QUnit.test('\'getCoordinatesByDateInGroup\' method should return only work week days (t853629)', function(assert) {
+    this.instance.option({
+        intervalCount: 2,
+        currentDate: new Date(2018, 4, 21),
+    });
+
+    assert.ok(!this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 26))[0]);
+    assert.ok(!this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 27))[0]);
+    assert.ok(this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 23))[0]);
+    assert.ok(this.instance.getCoordinatesByDateInGroup(new Date(2018, 4, 28))[0]);
+});
+
 QUnit.module('TimelineWeek with grouping by date', {
     beforeEach: function() {
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({

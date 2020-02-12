@@ -387,17 +387,6 @@ QUnit.test('\'showAddAppointmentPopup\' should update appointment data if there 
     }, 'Appointment data is OK');
 });
 
-QUnit.test('\'appointmentFocused\' should fire restoreScrollTop', function(assert) {
-    this.createInstance();
-
-    const workspace = this.instance.$element().find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance');
-    const restoreScrollTopStub = sinon.stub(workspace, 'restoreScrollTop');
-
-    this.instance.fire('appointmentFocused');
-
-    assert.ok(restoreScrollTopStub.calledOnce, 'There is some result');
-});
-
 QUnit.test('check the \'getField\' method with date field', function(assert) {
     const defaultForceIsoDateParsing = config().forceIsoDateParsing;
     config().forceIsoDateParsing = true;

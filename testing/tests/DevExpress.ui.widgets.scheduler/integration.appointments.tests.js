@@ -3712,9 +3712,9 @@ QUnit.test('Long term appoinment inflict index shift in other appointments (T737
     });
 
     const appointments = this.instance._getAppointmentsToRepaint();
-    assert.ok(appointments[0].settings[1].index === 0, 'Long term appointment tail has right index');
-    assert.ok(appointments[1].settings[0].index === 1, 'Appointment next to long term appointment head has right index');
-    assert.ok(appointments[2].settings[0].index === 1, 'Appointment next to long term appointment tail has right index');
+    assert.strictEqual(appointments[0].settings[1].index, 0, 'Long term appointment tail has right index');
+    assert.strictEqual(appointments[1].settings[0].index, 1, 'Appointment next to long term appointment head has right index');
+    assert.strictEqual(appointments[2].settings[0].index, 1, 'Appointment next to long term appointment tail has right index');
 });
 
 QUnit.test('Multi-day appointment should be rendered when started after endDayHour (T819852)', function(assert) {
@@ -3776,6 +3776,29 @@ QUnit.test('Appointment with equal startDate and endDate should render with 1 mi
     assert.equal(this.scheduler.appointments.getAppointmentHeight(0), this.scheduler.appointments.getAppointmentHeight(1), 'Appointment heights are equal');
 });
 
+$.each(['month', 'timelineMonth'], (index, value) => {
+    QUnit.test(`Appointment with equal startDate and endDate should render in whole cell on ${value} view (T858496)`, function(assert) {
+        this.createInstance({
+            dataSource: [{
+                text: 'Zero-minute appointment',
+                startDate: new Date(2017, 4, 22, 0),
+                endDate: new Date(2017, 4, 22, 0)
+            }, {
+                text: 'Default appointment',
+                startDate: new Date(2017, 4, 22, 0),
+                endDate: new Date(2017, 4, 22, 1)
+            }],
+            views: [value],
+            currentView: value,
+            currentDate: new Date(2017, 4, 25),
+            height: 600,
+        });
+
+        assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointments are rendered');
+        assert.equal(this.scheduler.appointments.getAppointmentWidth(0), this.scheduler.appointments.getAppointmentWidth(1), 'Appointment widths are equal');
+    });
+});
+
 QUnit.test('Multi-day appointment is hidden in compact collectors according to head and tail coordinates (T835541)', function(assert) {
     this.createInstance({
         dataSource: [{
@@ -3821,7 +3844,7 @@ QUnit.module('Appointments', () => {
         return createWrapper($.extend(config, options));
     };
 
-    const createTestForCommonData = (assert, skipCallCount = false) => {
+    const createTestForCommonData = (assert, scheduler, skipCallCount = false) => {
         eventCallCount = 0;
 
         return (model, index, container) => {
@@ -3841,7 +3864,6 @@ QUnit.module('Appointments', () => {
 
         return (model, index, container) => {
             const { appointmentData, targetedAppointmentData } = model;
-
             const startDateExpr = scheduler.option('startDateExpr');
             const endDateExpr = scheduler.option('endDateExpr');
             const textExpr = scheduler.option('textExpr');
@@ -3960,14 +3982,14 @@ QUnit.module('Appointments', () => {
             const scheduler = createScheduler(commonData);
             scheduler.option({ appointmentTemplate: createTestForCommonData(assert) });
 
-            assert.ok(eventCallCount === 5, 'appointmentTemplate should be raised');
+            assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
         });
 
         QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence', function(assert) {
             const scheduler = createScheduler(recurrenceData);
             scheduler.option({ appointmentTemplate: createTestForRecurrenceData(assert, scheduler) });
 
-            assert.ok(eventCallCount === 5, 'appointmentTemplate should be raised');
+            assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
         });
 
         QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence and custom data properties', function(assert) {
@@ -3978,59 +4000,65 @@ QUnit.module('Appointments', () => {
             });
             scheduler.option({ appointmentTemplate: createTestForRecurrenceData(assert, scheduler) });
 
-            assert.ok(eventCallCount === 5, 'appointmentTemplate should be raised');
+            assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
         });
     });
 
     QUnit.module('appointmentTooltipTemplate', () => {
-        QUnit.test('model.targetedAppointmentData argument should have current appointment data', function(assert) {
-            const scheduler = createScheduler(commonData);
-            scheduler.option({ appointmentTooltipTemplate: createTestForCommonData(assert, true) });
-
-            for(let i = 0; i < 5; i++) {
-                scheduler.appointments.click(i);
+        const cases = [
+            {
+                data: commonData,
+                appointmentTooltip: createTestForCommonData,
+                name: 'common'
+            },
+            {
+                data: recurrenceData,
+                appointmentTooltip: createTestForRecurrenceData,
+                name: 'recurrence'
+            },
+            {
+                data: recurrenceAndCompactData,
+                appointmentTooltip: createTestForRecurrenceData,
+                name: 'recurrence in collector'
+            },
+            {
+                data: hourlyRecurrenceData,
+                options: {
+                    textExpr: 'textCustom',
+                    startDateExpr: 'startDateCustom',
+                    endDateExpr: 'endDateCustom',
+                    currentView: 'week'
+                },
+                appointmentTooltip: createTestForHourlyRecurrenceData,
+                name: 'hourly recurrence in collector'
+            },
+            {
+                data: hourlyRecurrenceData,
+                options: {
+                    textExpr: 'textCustom',
+                    startDateExpr: 'startDateCustom',
+                    endDateExpr: 'endDateCustom',
+                    currentView: 'week',
+                    timeZone: 'Asia/Yekaterinburg',
+                    startDayHour: 0,
+                    endDayHour: 24
+                },
+                appointmentTooltip: createTestForHourlyRecurrenceData,
+                name: 'hourly recurrence in collector, custom timezone is set'
             }
+        ];
 
-            assert.ok(eventCallCount === 5, 'appointmentTemplate should be raised');
-        });
+        cases.forEach(testCase => {
+            QUnit.test(`model.targetedAppointmentData argument should have current appointment data, ${testCase.name} case`, function(assert) {
+                const scheduler = createScheduler(testCase.data, testCase.options);
+                scheduler.option('appointmentTooltipTemplate', testCase.appointmentTooltip(assert, scheduler, true));
 
-        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence', function(assert) {
-            const scheduler = createScheduler(recurrenceData);
-            scheduler.option({ appointmentTooltipTemplate: createTestForRecurrenceData(assert, scheduler) });
+                for(let i = 0; i < 5; i++) {
+                    scheduler.appointments.click(i);
+                }
 
-            for(let i = 0; i < 5; i++) {
-                scheduler.appointments.click(i);
-            }
-
-            assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
-        });
-
-        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence in collector', function(assert) {
-            const scheduler = createScheduler(recurrenceAndCompactData);
-            scheduler.option({ appointmentTooltipTemplate: createTestForRecurrenceData(assert, scheduler) });
-
-            for(let i = 0; i < 5; i++) {
-                scheduler.appointments.compact.click(i);
-            }
-
-            assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
-        });
-
-        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case hourly recurrence in collector', function(assert) {
-            const scheduler = createScheduler(hourlyRecurrenceData, {
-                textExpr: 'textCustom',
-                startDateExpr: 'startDateCustom',
-                endDateExpr: 'endDateCustom',
-                currentView: 'week'
+                assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
             });
-
-            scheduler.option({ appointmentTooltipTemplate: createTestForHourlyRecurrenceData(assert, scheduler) });
-
-            for(let i = 0; i < 5; i++) {
-                scheduler.appointments.compact.click(i);
-            }
-
-            assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
         });
     });
 

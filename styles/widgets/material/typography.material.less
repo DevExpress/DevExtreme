@@ -48,6 +48,10 @@
         url(~"fonts/Roboto-700.ttf") format('truetype');
 }
 
+.dx-s-font-mixin() {
+    font-size: @MATERIAL_S_FONT_SIZE;
+}
+
 .dx-theme-material-typography {
     background-color: @typography-bg;
     .dx-base-typography();
@@ -99,7 +103,7 @@
     }
 
     .dx-font-s {
-        font-size: @MATERIAL_S_FONT_SIZE;
+        .dx-s-font-mixin();
     }
 
     small,

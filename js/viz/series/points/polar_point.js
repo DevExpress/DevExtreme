@@ -21,7 +21,24 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
 
     _getLabelCoords: piePoint._getLabelCoords,
 
-    _moveLabelOnCanvas: barPoint._moveLabelOnCanvas,
+    _moveLabelOnCanvas: function(coord, visibleArea, labelBBox) {
+        let x = coord.x;
+        let y = coord.y;
+        if(visibleArea.minX > x) {
+            x = visibleArea.minX;
+        }
+        if(visibleArea.maxX < (x + labelBBox.width)) {
+            x = visibleArea.maxX - labelBBox.width;
+        }
+        if(visibleArea.minY > y) {
+            y = visibleArea.minY;
+        }
+        if(visibleArea.maxY < (y + labelBBox.height)) {
+            y = visibleArea.maxY - labelBBox.height;
+        }
+
+        return { x: x, y: y };
+    },
 
     _getLabelPosition: function() {
         return 'outside';
@@ -135,7 +152,7 @@ exports.polarBarPoint = _extend({}, barPoint, {
 
     _getErrorBarSettings: exports.polarSymbolPoint._getErrorBarSettings,
 
-    _moveLabelOnCanvas: barPoint._moveLabelOnCanvas,
+    _moveLabelOnCanvas: exports.polarSymbolPoint._moveLabelOnCanvas,
 
     _getLabelCoords: piePoint._getLabelCoords,
 

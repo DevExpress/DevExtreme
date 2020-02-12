@@ -4,14 +4,15 @@ import { isDefined, isPlainObject } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import errorsModule from '../errors';
 import ODataStore from './store';
-import { SharedMethods, formatFunctionInvocationUrl, escapeServiceOperationParams } from './mixins';
+import RequestDispatcher from './request_dispatcher';
+import { escapeServiceOperationParams, formatFunctionInvocationUrl } from './utils';
 import { when, Deferred } from '../../core/utils/deferred';
 import './query_adapter';
 
 const ODataContext = Class.inherit({
 
     ctor(options) {
-        this._extractServiceOptions(options);
+        this._requestDispatcher = new RequestDispatcher(options);
 
         this._errorHandler = options.errorHandler;
 
@@ -20,7 +21,7 @@ const ODataContext = Class.inherit({
                 {},
                 options,
                 {
-                    url: `${this._url}/${encodeURIComponent(entityOptions.name || entityAlias)}`
+                    url: `${this._requestDispatcher.url}/${encodeURIComponent(entityOptions.name || entityAlias)}`
                 },
                 entityOptions
             ));
@@ -35,7 +36,7 @@ const ODataContext = Class.inherit({
         httpMethod = httpMethod.toLowerCase();
 
         const d = new Deferred();
-        let url = `${this._url}/${encodeURIComponent(operationName)}`;
+        let url = `${this._requestDispatcher.url}/${encodeURIComponent(operationName)}`;
         let payload;
 
         if(this.version() === 4) {
@@ -48,7 +49,7 @@ const ODataContext = Class.inherit({
             }
         }
 
-        when(this._sendRequest(url, httpMethod, escapeServiceOperationParams(params, this.version()), payload))
+        when(this._requestDispatcher.sendRequest(url, httpMethod, escapeServiceOperationParams(params, this.version()), payload))
             .done((r) => {
                 if(isPlainObject(r) && operationName in r) {
                     r = r[operationName];
@@ -77,9 +78,11 @@ const ODataContext = Class.inherit({
                 uri: store._byKeyUrl(key, true)
             }
         };
-    }
+    },
 
-})
-    .include(SharedMethods);
+    version() {
+        return this._requestDispatcher.version;
+    },
+});
 
 export default ODataContext;

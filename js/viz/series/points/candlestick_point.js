@@ -170,7 +170,7 @@ module.exports = _extend({}, barPoint, {
         };
     },
 
-    _getGraphicBBox: function() {
+    _getGraphicBBox: function(location) {
         const that = this;
         const rotated = that._options.rotated;
         const x = that.x;
@@ -178,12 +178,25 @@ module.exports = _extend({}, barPoint, {
         const lowY = that.lowY;
         const highY = that.highY;
 
-        return {
+        const bBox = {
             x: !rotated ? x - _round(width / 2) : lowY,
             y: !rotated ? highY : x - _round(width / 2),
             width: !rotated ? width : highY - lowY,
             height: !rotated ? lowY - highY : width
         };
+
+        if(location) {
+            const isTop = location === 'top';
+            if(!this._options.rotated) {
+                bBox.y = isTop ? bBox.y : bBox.y + bBox.height;
+                bBox.height = 0;
+            } else {
+                bBox.x = isTop ? bBox.x + bBox.width : bBox.x;
+                bBox.width = 0;
+            }
+        }
+
+        return bBox;
     },
 
     getTooltipParams: function(location) {

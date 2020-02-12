@@ -19,7 +19,10 @@ import {
 } from '../events/index';
 
 import {
-    ExcelDataGridCell,
+    ExcelDataGridCell
+} from '../excel_exporter';
+
+import {
     ExcelFont
 } from '../exporter/excel/excel.doc_comments';
 

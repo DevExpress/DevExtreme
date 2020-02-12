@@ -2561,7 +2561,7 @@ QUnit.test('Update group offset for expanded grouped row of the first level when
     // act
     source.group([{ selector: 'field1', desc: true, isExpanded: true }, { selector: 'field2', isExpanded: true }]);
     source.reload();
-    window.test = source;
+
     // assert
     assert.equal(source.totalItemsCount(), 5);
     assert.deepEqual(source.items(), [{

@@ -112,6 +112,9 @@ namespace Runner.Controllers
                 }
                 Console.ResetColor();
                 Console.WriteLine("] " + name);
+
+                if (_runFlags.IsContinuousIntegration)
+                    IOFile.WriteAllText(Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt"), DateTime.Now.ToString("s"));
             }
         }
 
