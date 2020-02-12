@@ -368,15 +368,13 @@ describe('Widget', () => {
                 const onVisibilityChange = jest.fn();
                 const widget = render({ onVisibilityChange });
 
-                expect(widget.find('.dx-visibility-change-handler').exists()).toBe(true);
+                expect(widget.exists('.dx-visibility-change-handler')).toBe(true);
 
                 emit(EVENT.hiding);
-                widget.setProps({});
                 expect(onVisibilityChange).toHaveBeenCalledTimes(1);
                 expect(onVisibilityChange).toHaveBeenLastCalledWith(false);
 
                 emit(EVENT.shown);
-                widget.setProps({});
                 expect(onVisibilityChange).toHaveBeenCalledTimes(2);
                 expect(onVisibilityChange).toHaveBeenLastCalledWith(true);
             });

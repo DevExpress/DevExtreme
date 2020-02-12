@@ -145,7 +145,7 @@ export const viewFunction = (viewModel: any) => {
 export class WidgetInput {
     @OneWay() _feedbackHideTimeout?: number = 400;
     @OneWay() _feedbackShowTimeout?: number = 30;
-    @OneWay() onVisibilityChange?: (args: any) => undefined;
+    @OneWay() onVisibilityChange?: (args: boolean) => undefined;
     @OneWay() accessKey?: string | null = null;
     @OneWay() activeStateEnabled?: boolean = false;
     @OneWay() activeStateUnit?: string;
@@ -192,11 +192,13 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
     @Effect()
     visibilityEffect() {
-        const namespace = `${this.props.name}VisibilityChange`;
-        if (this.props.onVisibilityChange) {
+        const { name, onVisibilityChange } = this.props;
+
+        const namespace = `${name}VisibilityChange`;
+        if (onVisibilityChange) {
             visibility.on(this.widgetRef,
-                () => this.props.onVisibilityChange!(true),
-                () => this.props.onVisibilityChange!(false),
+                () => onVisibilityChange!(true),
+                () => onVisibilityChange!(false),
                 { namespace },
             );
 
