@@ -2344,11 +2344,10 @@ const EditingController = modules.ViewController.inherit((function() {
         allowDeleting: function(options) {
             return this._allowEditAction('allowDeleting', options);
         },
-        // test
+
         isInvalidCell: function() {
             return false;
         }
-        // endTest
     };
 })());
 
@@ -2691,14 +2690,11 @@ module.exports = {
                     }
 
                     const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
-                    // test
                     const isCellInvalidInNewRow = parameters.row && parameters.row.isNewRow && editingController.isInvalidCell({
                         rowKey: parameters.key,
                         columnIndex: parameters.column.index
                     });
                     if(((modifiedValues && modifiedValues[columnIndex] !== undefined) || isCellInvalidInNewRow) && parameters.column && !isCommandCell && parameters.column.setCellValue) {
-                    // endTest
-                    // if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
                         editingController.showHighlighting($cell);
                         $cell.addClass(CELL_MODIFIED);
                     } else if(isEditableCell) {
