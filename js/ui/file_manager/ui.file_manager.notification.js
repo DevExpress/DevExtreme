@@ -1,6 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
+import { getWindow } from '../../core/utils/window';
 
 import Widget from '../widget/ui.widget';
 import Popup from '../popup';
@@ -158,6 +159,7 @@ export default class FileManagerNotificationControl extends Widget {
         if(this._isProgressDrawerOpened()) {
             return;
         }
+        this._windowInnerWidth = getWindow().innerWidth;
         this._getNotificationPopup()._wrapper().toggleClass(FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS, !!errorMode);
         this._getNotificationPopup().option('contentTemplate', content);
         if(!this._getNotificationPopup().option('visible')) {
@@ -199,6 +201,10 @@ export default class FileManagerNotificationControl extends Widget {
                 container: this.$element(),
                 width: 'auto',
                 height: 'auto',
+                minWidth: '240px',
+                maxWidth: function() {
+                    return `${400 < this._windowInnerWidth - 30 ? 400 : this._windowInnerWidth - 30}px`;
+                }.bind(this),
                 showTitle: false,
                 dragEnabled: false,
                 shading: false,
