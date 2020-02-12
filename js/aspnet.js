@@ -33,7 +33,7 @@
 })(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml, ajax, console) {
     var templateCompiler = createTemplateCompiler();
     var pendingCreateComponentRoutines = [ ];
-    var enableAlternateTemplateTags = true;
+    var enableAlternativeTemplateTags = true;
     var warnBug17028 = false;
 
     function createTemplateCompiler() {
@@ -67,7 +67,7 @@
 
         return function(text) {
             var bag = ['var _ = [];', 'with(obj||{}) {'],
-                chunks = text.split(enableAlternateTemplateTags ? EXTENDED_OPEN_TAG : OPEN_TAG);
+                chunks = text.split(enableAlternativeTemplateTags ? EXTENDED_OPEN_TAG : OPEN_TAG);
 
             if(warnBug17028 && chunks.length > 1) {
                 if(text.indexOf(OPEN_TAG) > -1) {
@@ -79,7 +79,7 @@
             acceptText(bag, chunks.shift());
 
             for(var i = 0; i < chunks.length; i++) {
-                var tmp = chunks[i].split(enableAlternateTemplateTags ? EXTENDED_CLOSE_TAG : CLOSE_TAG);
+                var tmp = chunks[i].split(enableAlternativeTemplateTags ? EXTENDED_CLOSE_TAG : CLOSE_TAG);
                 if(tmp.length !== 2) {
                     throw 'Template syntax error';
                 }
@@ -183,8 +183,8 @@
             }
         },
 
-        enableAlternateTemplateTags: function(value) {
-            enableAlternateTemplateTags = value;
+        enableAlternativeTemplateTags: function(value) {
+            enableAlternativeTemplateTags = value;
         },
 
         warnBug17028: function() {
