@@ -275,7 +275,7 @@ QUnit.module('Rows view', {
         assert.notOk($cell.hasClass('dx-focused'), 'Cell has no .dx-focused');
 
         // act
-        eventsEngine.trigger($cell, eventUtils.createEvent('focusout', { relatedTarget: 'someElement' }));
+        eventsEngine.trigger($cell, eventUtils.createEvent('blur', { relatedTarget: 'someElement' }));
 
         // assert
         assert.notOk($cell.hasClass('dx-cell-focus-disabled'), 'Cell has no disabled focus class');
@@ -292,7 +292,7 @@ QUnit.module('Rows view', {
         assert.notOk($cell.hasClass('dx-focused'), 'Cell has no .dx-focused');
 
         // act
-        eventsEngine.trigger($cell, eventUtils.createEvent('focusout'));
+        eventsEngine.trigger($cell, eventUtils.createEvent('blur'));
 
         // assert
         assert.ok($cell.hasClass('dx-cell-focus-disabled'), 'Cell has no disabled focus class');
