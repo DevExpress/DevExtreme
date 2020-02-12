@@ -105,8 +105,12 @@ const DateViewStrategy = DateBoxStrategy.inherit({
         return DateView;
     },
 
-    getValue: function() {
-        return this._widget._getCurrentDate();
+    renderOpenedState: function() {
+        this.callBase();
+
+        if(this._widget) {
+            this._widget.option('value', this._widget._getCurrentDate());
+        }
     },
 
     _getWidgetOptions: function() {
