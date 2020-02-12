@@ -5033,6 +5033,98 @@ QUnit.testInActiveWindow('Data cell in group column with showWhenGrouped=true sh
     assert.deepEqual(keyboardController._focusedCellPosition, { rowIndex: 1, columnIndex: 3 }, 'focused cell position');
 });
 
+// T859208
+QUnit.test('Sort indicators should not be rendered if grouping is applied and showWhenGrouped = true (single sorting)', function(assert) {
+    // arrange
+    const dataGrid = $('#dataGrid').dxDataGrid({
+        dataSource: [{ }],
+        sorting: {
+            mode: 'single'
+        },
+        columns: [{
+            dataField: 'field1'
+        }, {
+            dataField: 'field3',
+            sortOrder: 'desc',
+            showWhenGrouped: true
+        }],
+        groupPanel: {
+            visible: true
+        }
+    }).dxDataGrid('instance');
+
+    this.clock.tick();
+
+    // act
+    dataGrid.columnOption(1, 'groupIndex', 0);
+    this.clock.tick();
+
+    // assert
+    const $dataGrid = $(dataGrid.$element());
+    const $headers = $dataGrid.find('.dx-header-row > td');
+    const $groupPanelItem = $dataGrid.find('.dx-group-panel-item');
+
+    assert.notOk($headers.eq(2).find('.dx-sort').length, 'no element with dx-sort class');
+    assert.notOk($headers.eq(2).find('.dx-sort-indicator').length, 'no element with dx-sort-indicator class');
+
+    assert.ok($groupPanelItem.find('.dx-sort').length, 'group item sort indicator');
+    assert.notOk($groupPanelItem.find('.dx-sort-indicator').length, 'no element with dx-sort-indicator class');
+});
+
+function groupingWithSortingTest(that, assert, sortIndexes) {
+    // arrange
+    const dataGrid = $('#dataGrid').dxDataGrid({
+        dataSource: [{ }],
+        sorting: {
+            mode: 'multiple'
+        },
+        columns: [{
+            dataField: 'field1',
+            sortOrder: 'desc',
+            sortIndex: sortIndexes[0]
+        }, {
+            dataField: 'field3',
+            sortOrder: 'desc',
+            sortIndex: sortIndexes[1],
+            showWhenGrouped: true
+        }],
+        groupPanel: {
+            visible: true
+        }
+    }).dxDataGrid('instance');
+
+    that.clock.tick();
+
+    // act
+    dataGrid.columnOption(1, 'groupIndex', 0);
+    that.clock.tick();
+
+    // assert
+    const $dataGrid = $(dataGrid.$element());
+    const $headers = $dataGrid.find('.dx-header-row > td');
+    const $groupPanelItem = $dataGrid.find('.dx-group-panel-item');
+
+    assert.notOk($headers.eq(2).find('.dx-sort').length, 'no element with dx-sort class');
+    assert.notOk($headers.eq(2).find('.dx-sort-indicator').length, 'no element with dx-sort-indicator class');
+    assert.notOk($headers.eq(2).find('.dx-sort-index-indicator').length, 'no element with dx-sort-index-indicator class');
+
+    assert.ok($groupPanelItem.find('.dx-sort').length, 'group item sort indicator');
+    assert.notOk($groupPanelItem.find('.dx-sort-indicator').length, 'no element with dx-sort-indicator class');
+    assert.notOk($groupPanelItem.find('.dx-sort-index-indicator').length, 'no element with dx-sort-index-indicator class');
+
+    assert.equal($headers.eq(1).find('.dx-sort-index-icon').text(), `${sortIndexes[0] + 1}`, 'has sort index icon');
+    assert.notOk($headers.eq(2).find('.dx-sort-index-icon').length, 'no sort index icon');
+    assert.notOk($groupPanelItem.find('.dx-sort-index-icon').length, 'no sort index icon');
+
+    dataGrid.dispose();
+}
+
+// T859208
+QUnit.test('Sort indicators should not be rendered if grouping is applied and showWhenGrouped = true (multiple sorting)', function(assert) {
+    groupingWithSortingTest(this, assert, [0, 1]);
+    groupingWithSortingTest(this, assert, [1, 0]);
+});
+
 QUnit.test('Enable rows hover via option method', function(assert) {
     if(devices.real().deviceType !== 'desktop') {
         assert.ok(true, 'hover is disabled for not desktop devices');

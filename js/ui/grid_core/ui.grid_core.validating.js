@@ -359,7 +359,6 @@ module.exports = {
                 processItems: function(items, changeType) {
                     const that = this;
                     let i;
-                    let itemsCount;
                     const editData = that._editData;
                     const dataController = that.getController('data');
                     const getIndexByEditData = function(editData, items) {
@@ -376,24 +375,24 @@ module.exports = {
 
                         return index;
                     };
+
+                    items = that.callBase(items, changeType);
+                    const itemsCount = items.length;
+
                     const addInValidItem = function(editData) {
                         const data = { key: editData.key };
                         const index = getIndexByEditData(editData, items);
-                        let rowIndex;
 
                         if(index >= 0) {
                             return;
                         }
 
                         editData.rowIndex = editData.rowIndex > itemsCount ? editData.rowIndex % itemsCount : editData.rowIndex;
-                        rowIndex = editData.rowIndex;
+                        const rowIndex = editData.rowIndex;
 
                         data[INSERT_INDEX] = 1;
                         items.splice(rowIndex, 0, data);
                     };
-
-                    items = that.callBase(items, changeType);
-                    itemsCount = items.length;
 
                     if(that.getEditMode() === EDIT_MODE_BATCH && changeType !== 'prepend' && changeType !== 'append') {
                         for(i = 0; i < editData.length; i++) {
@@ -449,6 +448,7 @@ module.exports = {
                 _createInvisibleColumnValidators: function(editData) {
                     const validatingController = this.getController('validating');
                     const columnsController = this.getController('columns');
+
                     const invisibleColumns = this._getInvisibleColumns(editData).filter((column) => !column.isBand);
                     const groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1);
                     const invisibleColumnValidators = [];

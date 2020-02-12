@@ -2717,7 +2717,7 @@ QUnit.test('list item duplicate should inherit direction (rtl)', function(assert
     assert.ok(!$ghostItem.hasClass(REORDERING_ITEM_CLASS), 'reordering class is not present');
 
     assert.equal($ghostItem.css('direction'), 'rtl', 'direction is rtl');
-    assert.ok($ghostItem.hasClass('dx-rtl'), 'ghost has dx-rtl class');
+    assert.ok($ghostItem.parent().hasClass('dx-rtl'), 'ghost\'s parent has dx-rtl class');
 
     pointer.dragEnd();
     $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
