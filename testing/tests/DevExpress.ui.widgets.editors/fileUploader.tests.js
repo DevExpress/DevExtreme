@@ -1671,6 +1671,25 @@ QUnit.module('file uploading', moduleConfig, () => {
 
         assert.equal($input.val(), 'fakeFile', 'value was cleared in input');
     });
+
+    QUnit.test('T857021 - widget can be destoyed in \'Uploaded\' event', function(assert) {
+        const $fileUploader = $('#fileuploader');
+
+        const onUploadedSpy = sinon.spy(() => {
+            $fileUploader.dxFileUploader('dispose');
+            $fileUploader.remove();
+        });
+
+        $fileUploader.dxFileUploader({
+            onUploaded: onUploadedSpy
+        });
+
+        simulateFileChoose($fileUploader, fakeFile);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT + 1000);
+
+        assert.strictEqual(onUploadedSpy.callCount, 1, 'onUploaded event raised');
+        assert.ok($fileUploader.empty(), 'widget container empty');
+    });
 });
 
 QUnit.module('uploading progress', moduleConfig, () => {
