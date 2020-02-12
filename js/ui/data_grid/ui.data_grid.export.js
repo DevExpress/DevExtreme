@@ -273,8 +273,12 @@ exports.DataProvider = Class.inherit({
                             const value = itemValues[correctedCellIndex];
                             const displayValue = dataGridCore.getDisplayValue(column, value, item.data, item.rowType); // from 'ui.grid_core.rows.js: _getCellOptions'
 
-                            if(!isFinite(displayValue) || (isDefined(column.customizeText) && !isExcelJS && column.customizeText !== this._exportController._columnsController.getCustomizeTextByDataType)) { // similar to 'ui.grid_core.rows.js: _getCellOptions'
-                                result.value = dataGridCore.formatValue(displayValue, column);
+                            if(!isFinite(displayValue) || isDefined(column.customizeText)) { // similar to 'ui.grid_core.rows.js: _getCellOptions'
+                                if(isExcelJS && isDefined(column.customizeText) && (column.customizeText.toString() === this._exportController._columnsController.getCustomizeTextByDataType('boolean').toString())) {
+                                    result.value = displayValue;
+                                } else {
+                                    result.value = dataGridCore.formatValue(displayValue, column);
+                                }
                             } else {
                                 result.value = displayValue;
                             }
