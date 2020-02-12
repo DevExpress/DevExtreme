@@ -95,9 +95,9 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
         width={viewModel.width}
     >
         {(viewModel.contentRender && 
-            <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} />
+            <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} contentRef={viewModel.contentRef}/>
         ) || (
-            <div className="dx-button-content">
+            <div className="dx-button-content" ref={viewModel.contentRef}>
                 {viewModel.icon}
                 {viewModel.text && 
                     <span className="dx-button-text">{viewModel.text}</span>
@@ -136,7 +136,7 @@ export class ButtonInput extends WidgetInput {
 })
 
 export default class Button extends JSXComponent<ButtonInput> {
-    @Ref() contentRef!: HTMLDivElement;
+    @Ref() contentRef!: HTMLElement;
     @Ref() submitInputRef!: HTMLInputElement;
 
     @Effect()

@@ -4,19 +4,25 @@ import * as Preact from 'preact';
 import registerComponent from '../../core/component_registrator';
 import Widget from '../preact_wrapper';
 import { extend } from '../../core/utils/extend';
-import { equalByValue } from '../../core/utils/common';
 import ButtonView from '../button.p';
 
-// NOTE: workaround to memoize template
-let prevData;
-let prevTemplate;
-let component;
-let wrapper = false;
-
-const removeChildren = (element) => {
-    while(element?.firstChild) {
-        element.removeChild(element.firstChild);
+const HTMLToPreact = (node) => {
+    if(node.nodeType === 3) {
+        return node.wholeText;
     }
+
+    const tag = node.tagName;
+    const attributes = [...node.attributes].reduce((acc, attr) => {
+        acc[attr.name] = attr.value;
+        return acc;
+    }, {});
+    const childNodes = node.childNodes;
+    const children = [];
+    for(let i = 0; i < childNodes.length; i++) {
+        children.push(HTMLToPreact(childNodes[i]));
+    }
+
+    return Preact.h(tag, attributes, children);
 };
 
 class Button extends Widget {
@@ -27,42 +33,22 @@ class Button extends Widget {
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
 
-        // NOTE: workaround to switch from custom template to default
-        if(!props.template) {
-            component && removeChildren($(component).parent().get(0));
-        }
-
         if(props.template) {
-            props.contentRender = (data) => {
+            props.contentRender = ({ text, icon, contentRef }) => {
+                const data = { text, icon };
+                let $content = $('<div className=dx-button-content>');
                 const templateProp = this.option('template');
-                const shouldRender = !equalByValue(data, prevData) || prevTemplate !== templateProp;
+                const $template = $(this._getTemplate(templateProp).render({ model: data, container: $content }));
 
-                if(shouldRender) {
-                    const template = this._getTemplate(templateProp);
-
-                    component && removeChildren($(component).parent().get(0));
-
-                    prevTemplate = templateProp;
-                    prevData = data;
-                    wrapper = false;
-
-                    component = <div className="dx-button-content" ref={(element) => {
-                        if(element) {
-                            const $template = $(template.render({
-                                model: data,
-                                container: element
-                            }));
-                            if($template.hasClass('dx-template-wrapper')) {
-                                $template.addClass('dx-button-content');
-                                $(element).replaceWith($template);
-                                component = $template;
-                                wrapper = true;
-                            }
-                        }
-                    }}/>;
+                if($template.hasClass('dx-template-wrapper')) {
+                    $template.addClass('dx-button-content');
+                    $content = $template;
                 }
 
-                return !wrapper && component;
+                const result = HTMLToPreact($content.get(0));
+                result.ref = contentRef;
+
+                return result;
             };
         }
 
