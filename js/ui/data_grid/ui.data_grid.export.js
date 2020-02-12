@@ -274,7 +274,7 @@ exports.DataProvider = Class.inherit({
                             const displayValue = dataGridCore.getDisplayValue(column, value, item.data, item.rowType); // from 'ui.grid_core.rows.js: _getCellOptions'
 
                             if(!isFinite(displayValue) || isDefined(column.customizeText)) { // similar to 'ui.grid_core.rows.js: _getCellOptions'
-                                if(isExcelJS && isDefined(column.customizeText) && (column.customizeText.toString() === this._exportController._columnsController.getCustomizeTextByDataType('boolean').toString())) {
+                                if(isExcelJS && isDefined(column.customizeText) && column.customizeText === this._exportController._columnsController.getCustomizeTextByDataType('boolean')) {
                                     result.value = displayValue;
                                 } else {
                                     result.value = dataGridCore.formatValue(displayValue, column);
