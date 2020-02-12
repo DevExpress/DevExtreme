@@ -51,13 +51,19 @@ module.exports = {
                 const indicatorCount = $indicatorElements && $indicatorElements.length;
                 const columnAlignment = that._getColumnAlignment(column.alignment);
 
+                const sortIndicatorClassName = `.${that._getIndicatorClassName('sort')}`;
+                const sortIndexIndicatorClassName = `.${that._getIndicatorClassName('sortIndex')}`;
+
+                const $sortIndicator = $visibleIndicatorElements.filter(sortIndicatorClassName);
+                const $sortIndexIndicator = $visibleIndicatorElements.children().filter(sortIndexIndicatorClassName);
+
                 $cellContent = $cellContent || $cell.children('.' + that.addWidgetPrefix(CELL_CONTENT_CLASS));
 
                 $cellContent
                     .toggleClass(TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX + columnAlignment, indicatorCount > 0)
                     .toggleClass(TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX + (columnAlignment === 'left' ? 'right' : 'left'), indicatorCount > 0 && column.alignment === 'center')
-                    .toggleClass(SORT_INDICATOR_CLASS, !!$visibleIndicatorElements.filter('.' + that._getIndicatorClassName('sort')).length)
-                    .toggleClass(SORT_INDEX_INDICATOR_CLASS, !!$visibleIndicatorElements.children().filter('.' + that._getIndicatorClassName('sortIndex')).length)
+                    .toggleClass(SORT_INDICATOR_CLASS, !!$sortIndicator.length)
+                    .toggleClass(SORT_INDEX_INDICATOR_CLASS, !!$sortIndexIndicator.length)
                     .toggleClass(HEADER_FILTER_INDICATOR_CLASS, !!$visibleIndicatorElements.filter('.' + that._getIndicatorClassName('headerFilter')).length);
             };
 

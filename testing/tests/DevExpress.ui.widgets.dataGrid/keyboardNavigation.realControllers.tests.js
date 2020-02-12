@@ -1251,7 +1251,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
     ['click', 'dblClick'].forEach(startEditAction => {
         ['cell', 'batch'].forEach(editMode => {
-            QUnit.test(`Focus overlay should not be hidden after click the save editor cell if editing.startEditAction is ${startEditAction}`, function(assert) {
+            QUnit.test(`Focus overlay should not be hidden after click the save editor cell if editing.mode: ${editMode}, editing.startEditAction is ${startEditAction}`, function(assert) {
                 // arrange
                 const $testElement = $('#container');
 
@@ -1281,6 +1281,64 @@ QUnit.module('Real DataController and ColumnsController', {
                 // assert
                 assert.ok(editingController.isEditCell(0, 1), 'Cell[0, 1] is in edit mode');
                 assert.notOk($(this.getCellElement(0, 1)).hasClass('dx-cell-focus-disabled'), 'Cell[0, 1] focus overlay is not disabled');
+            });
+
+            QUnit.test(`Click by command select cell should not highlight focus if editing.mode: ${editMode}, editing.startEditAction is ${startEditAction}`, function(assert) {
+                // arrange
+                const rowsViewWrapper = dataGridWrapper.rowsView;
+                const $testElement = $('#container');
+
+                this.data = [{ name: 'Alex', lastName: 'John' }],
+                this.options = {
+                    loadingTimeout: undefined,
+                    selection: {
+                        mode: 'multiple',
+                        showCheckBoxesMode: 'always'
+                    },
+                    editing: {
+                        allowUpdating: true,
+                        mode: editMode,
+                        startEditAction: startEditAction
+                    }
+                };
+
+                this.setupModule();
+                this.gridView.render($testElement);
+
+                // act
+                const $selectCell = rowsViewWrapper.getCellElement(0, 0);
+                $selectCell
+                    .focus()
+                    .removeClass('dx-cell-focus-disabled');
+                this.getController('editorFactory')._updateFocusCore();
+                this.clock.tick();
+
+                $selectCell
+                    .trigger(pointerEvents.down)
+                    .trigger(pointerEvents.up)
+                    .trigger('dxclick');
+                this.clock.tick();
+
+                // assert
+                assert.notOk($selectCell.hasClass('dx-focused'), 'Cell has no .dx-focused');
+                assert.ok($selectCell.hasClass('dx-cell-focus-disabled'), 'Cell has disable focus class');
+
+                const $selectCheckBox = rowsViewWrapper.getSelectCheckBox(0, 0);
+                $selectCheckBox
+                    .focus()
+                    .removeClass('dx-cell-focus-disabled');
+                this.getController('editorFactory')._updateFocusCore();
+                this.clock.tick();
+
+                $selectCheckBox
+                    .trigger(pointerEvents.down)
+                    .trigger(pointerEvents.up)
+                    .trigger('dxclick');
+                this.clock.tick();
+
+                // assert
+                assert.notOk($selectCell.hasClass('dx-focused'), 'Cell has no .dx-focused');
+                assert.ok($selectCell.hasClass('dx-cell-focus-disabled'), 'Cell has disable focus class');
             });
         });
     });

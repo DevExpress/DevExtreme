@@ -1035,8 +1035,6 @@ QUnit.module('clone', moduleConfig);
 
 QUnit.test('Clone an element when dragging', function(assert) {
     // arrange
-    let $cloneElement;
-
     this.createDraggable({
         clone: true
     });
@@ -1045,7 +1043,8 @@ QUnit.test('Clone an element when dragging', function(assert) {
     this.pointer.down().move(10, 10);
 
     // assert
-    $cloneElement = $('body').children('.dx-draggable-dragging').children('#draggable');
+    const $cloneElement = $('body').children('.dx-draggable-dragging').children('#draggable');
+
     assert.strictEqual($cloneElement.length, 1, 'cloned element');
     assert.ok($cloneElement.parent().hasClass('dx-draggable-dragging'), 'parent of cloned element has dragging class');
     assert.ok(this.$element.hasClass('dx-draggable-source'), 'element has source class');
@@ -1055,6 +1054,28 @@ QUnit.test('Clone an element when dragging', function(assert) {
     assert.equal($cloneElement.parent().css('z-index'), MAX_INTEGER, 'z-index of the cloned element');
     this.checkPosition(10, 10, assert, $cloneElement);
     this.checkPosition(0, 0, assert);
+
+    assert.notOk($cloneElement.hasClass('dx-rtl'), 'clone has not dx-rtl class');
+    assert.equal($cloneElement.css('direction'), 'ltr', 'clone\'s direction is ltr');
+});
+
+// T859557
+QUnit.test('Clone\'s direction should be rtl if rtlEnabled: true', function(assert) {
+    // arrange
+    this.createDraggable({
+        clone: true,
+        rtlEnabled: true
+    });
+
+    // act
+    this.pointer.down().move(10, 10);
+
+    // assert
+    const $cloneElement = $('body').children('.dx-draggable-dragging');
+
+    assert.strictEqual($cloneElement.length, 1, 'cloned element');
+    assert.ok($cloneElement.hasClass('dx-rtl'), 'clone has dx-rtl class');
+    assert.equal($cloneElement.css('direction'), 'rtl', 'clone\'s direction is rtl');
 });
 
 QUnit.test('Remove cloned element after the drop end', function(assert) {

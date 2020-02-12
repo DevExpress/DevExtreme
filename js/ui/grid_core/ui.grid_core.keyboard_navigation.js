@@ -794,7 +794,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             } else {
                 const $target = event && $(event.target);
                 const isInteractiveTarget = $target && $target.not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR);
-                const isEditor = $cell.hasClass(EDITOR_CELL_CLASS);
+                const isEditor = !column.command && $cell.hasClass(EDITOR_CELL_CLASS);
                 const isDisabled = !isEditor && (!args.isHighlighted || isInteractiveTarget);
                 this._focus($cell, isDisabled, isInteractiveTarget);
             }
@@ -954,7 +954,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
                         return;
                     }
                     if($cell.is('td') || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
-                        if(that.getController('editorFactory').focus()) {
+                        const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
+                        if(!isCommandCell && that.getController('editorFactory').focus()) {
                             that._focus($cell);
                         } else if(that._isCellEditMode()) {
                             that._focus($cell, that._isHiddenFocus);

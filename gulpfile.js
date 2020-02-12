@@ -30,11 +30,10 @@ if(TEST_CI) {
 }
 
 function createStyleCompilerBatch() {
-    const tasks = ['style-compiler-themes'];
-    if(!TEST_CI) {
-        tasks.push('style-compiler-tb-assets');
-    }
-    return gulp.series(tasks);
+    return gulp.series(TEST_CI
+        ? ['style-compiler-themes-ci']
+        : ['style-compiler-themes', 'style-compiler-tb-assets']
+    );
 }
 
 function createMiscBatch() {

@@ -770,7 +770,8 @@ const DropDownList = DropDownEditor.inherit({
         const $element = this.$element();
         const $customBoundaryContainer = this._$customBoundaryContainer;
         const offsetTop = $element.offset().top - ($customBoundaryContainer ? $customBoundaryContainer.offset().top : 0);
-        const containerHeight = ($customBoundaryContainer || $(window)).outerHeight();
+        const windowHeight = $(window).outerHeight();
+        const containerHeight = $customBoundaryContainer ? Math.min($customBoundaryContainer.outerHeight(), windowHeight) : windowHeight;
         const maxHeight = Math.max(offsetTop, containerHeight - offsetTop - $element.outerHeight());
 
         return Math.min(containerHeight * 0.5, maxHeight);
