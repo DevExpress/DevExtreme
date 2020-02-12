@@ -30,7 +30,6 @@ const REPEAT_TYPE_EDITOR = 'dx-recurrence-radiogroup-repeat-type';
 const REPEAT_COUNT_EDITOR = 'dx-recurrence-numberbox-repeat-count';
 const REPEAT_UNTIL_DATE_EDITOR = 'dx-recurrence-datebox-until-date';
 const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
-const REPEAT_ON_WEEK_EDITOR = 'dx-recurrence-repeat-on-week';
 const REPEAT_ON_MONTH_EDITOR = 'dx-recurrence-repeat-on-month';
 const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 const REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year';
@@ -379,10 +378,7 @@ const RecurrenceEditor = Editor.inherit({
         const that = this;
         const itemsButtonGroup = days.slice(firstDayOfWeek).concat(days.slice(0, firstDayOfWeek)).map(item => { return { text: item }; });
 
-        this._$repeatOnWeek = $('<div>')
-            .addClass(REPEAT_ON_WEEK_EDITOR)
-            .addClass(FIELD_VALUE_CLASS)
-            .appendTo(this._$repeatOnEditor);
+        this._$repeatOnWeek = $('<div>').appendTo(this._$repeatOnEditor);
 
         this._weekEditor = this._createComponent(this._$repeatOnWeek, ButtonGroup, {
             items: itemsButtonGroup,

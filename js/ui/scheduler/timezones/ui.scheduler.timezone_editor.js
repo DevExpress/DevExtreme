@@ -43,10 +43,8 @@ const SchedulerTimezoneEditor = Editor.inherit({
         this._displayNameEditor = this._renderSelectBox(TIMEZONE_DISPLAY_NAME_SELECTBOX_CLASS, {
             items: [noTzTitle].concat(this.invoke('getTimezonesDisplayName')),
             value: value,
-            onOptionChanged: function(e) {
-                if(e.name === 'value') {
-                    this._processDisplayNameChanging(e.value);
-                }
+            onValueChanged: function(e) {
+                this._processDisplayNameChanging(e.value);
             }.bind(this)
         });
     },
@@ -55,10 +53,8 @@ const SchedulerTimezoneEditor = Editor.inherit({
         this._ianaIdEditor = this._renderSelectBox(TIMEZONE_IANA_ID_SELECTBOX_CLASS, {
             items: this._idsDataSource(),
             value: this.option('value'),
-            onOptionChanged: function(e) {
-                if(e.name === 'value') {
-                    this.option('value', e.value);
-                }
+            onValueChanged: function(e) {
+                this.option('value', e.value);
             }.bind(this),
             valueExpr: 'id',
             displayExpr: 'displayName',

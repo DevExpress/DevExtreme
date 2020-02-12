@@ -71,7 +71,7 @@ export default class AppointmentPopup {
                 if(canceled) {
                     e.cancel = true;
                 } else {
-                    this.updatePopupFullScreenMode(data.recurrenceRule);
+                    this.updatePopupFullScreenMode();
                 }
             });
         });
@@ -254,7 +254,8 @@ export default class AppointmentPopup {
         });
     }
 
-    updatePopupFullScreenMode(isRecurrence) {
+    updatePopupFullScreenMode() {
+        const isRecurrence = this._appointmentForm.option('formData').recurrenceRule;
         if(this.isVisible()) {
             const isFullScreen = this._isPopupFullScreenNeeded();
             this._popup.option({
