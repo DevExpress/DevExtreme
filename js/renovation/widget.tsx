@@ -11,7 +11,7 @@ import {
     Ref,
     Slot,
 } from 'devextreme-generator/component_declaration/common';
-import { active, dxClick, hover, keyboard, resize, visibility } from '../events/short';
+import { active, dxClick, hover, keyboard, resize, visibility, focus } from '../events/short';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { isFakeClickEvent } from '../events/utils';
@@ -162,6 +162,8 @@ export class WidgetInput {
     @OneWay() onInactive?: (e: any) => any = (() => undefined);
     @OneWay() onKeyPress?: (e: any, options: any) => any = (() => undefined);
     @OneWay() onKeyboardHandled?: (args: any) => any | undefined;
+    @OneWay() onFocusIn?: (args: Event) => any = (() => undefined);
+    @OneWay() onFocusOut?: (args: Event) => any = (() => undefined);
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
     @OneWay() tabIndex?: number = 0;
     @OneWay() visible?: boolean = true;
@@ -215,6 +217,32 @@ export default class Widget extends JSXComponent<WidgetInput> {
             resize.on(this.widgetRef, onDimensionChanged, { namespace });
 
             return () => resize.off(this.widgetRef, { namespace });
+        }
+
+        return null;
+    }
+
+    @Effect()
+    focusEffect() {
+        const { name, onFocusIn, onFocusOut, focusStateEnabled, disabled } = this.props;
+        const isFocusable = focusStateEnabled && !disabled;
+
+        if (isFocusable) {
+            focus.on(this.widgetRef,
+                (event) => {
+                    this._focused = true;
+                    onFocusIn!(event);
+                },
+                (event) => {
+                    this._focused = false;
+                    onFocusOut!(event);
+                }, {
+                    namespace: `${name}Focus`,
+                    isFocusable: el => el.tabIndex > -1, // ???
+                },
+            );
+
+            return focus.off(this.widgetRef, { namespace: `${name}Focus` });
         }
 
         return null;
