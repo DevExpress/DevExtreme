@@ -1906,7 +1906,12 @@ QUnit.module('Draw label', {
             isFullStackedSeries: function() { return false; },
             areLabelsVisible: function() { return true; },
             getLabelVisibility: function() { return true; },
-            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getValueAxis: function() {
+                return {
+                    getTranslator: function() { return that.translators.val; },
+                    getVisibleArea: function() { return [0, 210]; }
+                };
+            },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
             getVisibleArea: function() { return { minX: 0, maxX: 200, minY: 0, maxY: 210 }; },
         };
@@ -2145,6 +2150,37 @@ QUnit.test('Draw label, rotated (area of label > maxX area of series)', function
     point.correctLabelPosition(label);
 
     assert.equal(label.shift.firstCall.args[0], 170);
+    assert.equal(label.shift.firstCall.args[1], 45);
+});
+
+QUnit.test('Draw label, not rotated (point.high < minY area of series)', function(assert) {
+    const point = createPoint(this.series, this.data, this.options);
+    point.x = 50;
+    point.highY = -15;
+    point.lowY = 60;
+    point.width = 20;
+    const label = point._label;
+
+    point._drawLabel(this.renderer, this.group);
+    point.correctLabelPosition(label);
+
+    assert.equal(label.shift.firstCall.args[0], 40);
+    assert.equal(label.shift.firstCall.args[1], 10);
+});
+
+QUnit.test('Draw label, rotated (point.high > maxX area of series)', function(assert) {
+    this.options.rotated = true;
+    const point = createPoint(this.series, this.data, this.options);
+    point.x = 50;
+    point.highY = 240;
+    point.lowY = 60;
+    point.width = 20;
+    const label = point._label;
+
+    point._drawLabel(this.renderer, this.group);
+    point.correctLabelPosition(label);
+
+    assert.equal(label.shift.firstCall.args[0], 180);
     assert.equal(label.shift.firstCall.args[1], 45);
 });
 
