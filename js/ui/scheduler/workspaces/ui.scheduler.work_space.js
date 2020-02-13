@@ -1655,13 +1655,7 @@ const SchedulerWorkSpace = Widget.inherit({
                     height: cellHeight
                 };
             },
-            checkDropTarget: (target, event) => {
-                if(this._appointmentIsOutsideScrollable(target, event)) {
-                    return false;
-                }
-
-                return true;
-            }
+            checkDropTarget: (target, event) => !this._appointmentIsOutsideScrollable(target, event)
         }, function(e) {
             if(that._$currentTableTarget) {
                 that._$currentTableTarget.removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
