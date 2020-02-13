@@ -830,7 +830,8 @@ module.exports = {
                                     const rowsHeight = that._getRowsHeight(contentElement.children().first());
                                     const $tableElement = $table || that.getTableElements();
                                     const borderTopWidth = Math.ceil(parseFloat($tableElement.css('borderTopWidth')));
-                                    const resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth - that._getHeightCorrection.call(that);
+                                    const heightCorrection = that._getHeightCorrection();
+                                    const resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth - heightCorrection;
 
                                     if(showFreeSpaceRow) {
                                         deferRender(function() {
