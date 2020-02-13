@@ -14,6 +14,7 @@ import registerComponent from '../core/component_registrator';
 import { normalizeKeyName } from '../events/utils';
 import devices from '../core/devices';
 import { getActiveElement } from '../core/dom_adapter';
+import { getPublicElement } from '../core/utils/dom';
 
 const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
@@ -58,7 +59,7 @@ const DropDownBox = DropDownEditor.inherit({
 
             acceptCustomValue: false,
 
-            contentTemplate: 'content',
+            contentTemplate: ANONYMOUS_TEMPLATE_NAME,
 
 
             /**
@@ -214,7 +215,24 @@ const DropDownBox = DropDownEditor.inherit({
             return;
         }
 
-        return this.callBase();
+        const contentTemplate = this._getTemplateByOption('contentTemplate');
+
+        if(!(contentTemplate && this.option('contentTemplate'))) {
+            return;
+        }
+
+        const $popupContent = this._popup.$content();
+        const templateData = {
+            value: this._fieldRenderData(),
+            component: this
+        };
+
+        $popupContent.empty();
+
+        contentTemplate.render({
+            container: getPublicElement($popupContent),
+            model: templateData
+        });
     },
 
     _canShowVirtualKeyboard: function() {
@@ -241,6 +259,7 @@ const DropDownBox = DropDownEditor.inherit({
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled: this.option('focusStateEnabled'),
+            contentTemplate: ANONYMOUS_TEMPLATE_NAME,
             closeOnTargetScroll: this._shouldCloseOnTargetScroll.bind(this),
             position: {
                 of: this.$element(),
@@ -281,6 +300,9 @@ const DropDownBox = DropDownEditor.inherit({
                 break;
             case 'displayExpr':
                 this._renderValue();
+                break;
+            case 'contentTemplate':
+                this._invalidate();
                 break;
             default:
                 this.callBase(args);

@@ -14,10 +14,8 @@ import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="qunit-fixture" class="qunit-fixture-visible">\
-            <div id="dropDownEditorLazy"></div>\
-            <div id="dropDownEditorSecond"></div>\
-        </div>';
+        `<div id="dropDownEditorLazy"></div>
+         <div id="dropDownEditorSecond"></div>`;
 
     $('#qunit-fixture').html(markup);
 });
@@ -28,6 +26,7 @@ const DROP_DOWN_EDITOR_OVERLAY = 'dx-dropdowneditor-overlay';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
+const POPUP_CONTENT = 'dx-popup-content';
 const TAB_KEY_CODE = 'Tab';
 const ESC_KEY_CODE = 'Escape';
 
@@ -576,9 +575,6 @@ QUnit.module('focus policy', () => {
     QUnit.test('focusout to another editor should close current ddb (T832410)', function(assert) {
         const $dropDownEditor1 = $('#dropDownEditorLazy').dxDropDownEditor({
             items: [0, 1, 2],
-            contentTemplate() {
-                return $('<div>').attr('id', 'test-content');
-            },
             acceptCustomValue: true,
             focusStateEnabled: true,
             opened: true
@@ -603,7 +599,7 @@ QUnit.module('focus policy', () => {
 
         dropDownEditor1.open();
         dropDownEditor1.focus();
-        $input1.trigger($.Event('focusout', { relatedTarget: $('#test-content') }));
+        $input1.trigger($.Event('focusout', { relatedTarget: $(`.${POPUP_CONTENT}`) }));
 
         assert.ok(dropDownEditor1.option('opened'), 'should be still opened after the widget\'s popup focus');
     });
@@ -940,24 +936,6 @@ QUnit.module('Templates', () => {
         assert.strictEqual($placeholder.closest('.dx-textbox').length, 1, 'is textbox\'s placeholder');
     });
 
-
-    QUnit.test('contentTemplate as render', function(assert) {
-        $('#dropDownEditorLazy').dxDropDownEditor({
-            contentTemplate(data, content) {
-                assert.equal(isRenderer(content), !!config().useJQuery, 'contentElement is correct');
-                $(content).addClass('drop-down-editor-content');
-                return $('<div>').text(data.component.option('value'));
-            },
-            value: 'test',
-            opened: true
-        });
-
-        const $dropDownContent = $('.drop-down-editor-content');
-
-        assert.equal($dropDownContent.length, 1, 'There is one dropDownEditor content element with custom class');
-        assert.equal($.trim($dropDownContent.text()), 'test', 'Correct content rendered');
-    });
-
     QUnit.test('onValueChanged should be fired for each change by keyboard when fieldTemplate is used', function(assert) {
         const valueChangedSpy = sinon.spy();
 
@@ -1124,6 +1102,26 @@ QUnit.module('Templates', () => {
         const $fieldTemplateWrapper = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
         const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
         assert.roughEqual($fieldTemplateWrapper.outerWidth(), $input.outerWidth(), 1);
+    });
+
+    QUnit.test('contentTemplate should not redefine popup content (T860163)', function(assert) {
+        assert.expect(1);
+
+        const $editor = $(`<div id='editor'>
+                <div data-options="dxTemplate: { name: 'content' }">
+                    Content template markup
+                </div>
+            </div>`).appendTo('#qunit-fixture');
+
+        $editor.dxDropDownEditor({
+            onPopupInitialized({ popup }) {
+                popup.on('contentReady', () => {
+                    const popupContentText = $(popup.content()).text();
+                    assert.ok(popupContentText.indexOf('Content template markup') < 0);
+                });
+            },
+            opened: true
+        });
     });
 });
 
@@ -1517,7 +1515,7 @@ QUnit.module('aria accessibility', () => {
         const instance = $dropDownEditor.dxDropDownEditor('instance');
 
         assert.notEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns exists');
-        assert.equal($dropDownEditor.attr('aria-owns'), $('.dx-popup-content').attr('id'), 'aria-owns points to popup\'s content id');
+        assert.equal($dropDownEditor.attr('aria-owns'), $(`.${POPUP_CONTENT}`).attr('id'), 'aria-owns points to popup\'s content id');
 
         instance.close();
 
