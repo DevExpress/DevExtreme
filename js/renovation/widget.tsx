@@ -11,9 +11,10 @@ import {
     Ref,
     Slot,
 } from 'devextreme-generator/component_declaration/common';
-import { active, dxClick, hover, keyboard, resize, visibility } from '../events/short';
+import { active, dxClick, focus, hover, keyboard, resize, visibility } from '../events/short';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
+import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
 import Action from '../core/action';
 
@@ -294,6 +295,28 @@ export default class Widget extends JSXComponent<WidgetInput> {
             );
 
             return () => active.off(this.widgetRef, { selector, namespace });
+        }
+
+        return null;
+    }
+
+    @Effect()
+    focusEffect() {
+        const { disabled, focusStateEnabled, name } = this.props;
+        const namespace = `${name}Focus`;
+        const isFocusable = focusStateEnabled && !disabled;
+
+        if (isFocusable) {
+            focus.on(this.widgetRef,
+                e => !e.isDefaultPrevented() && (this._focused = true),
+                e => !e.isDefaultPrevented() && (this._focused = false),
+                {
+                    isFocusable: el => focusable(null, el),
+                    namespace,
+                },
+            );
+
+            return () => focus.off(this.widgetRef, { namespace });
         }
 
         return null;
