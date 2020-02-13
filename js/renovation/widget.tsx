@@ -16,15 +16,14 @@ import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
-import { hasWindow } from '../core/utils/window';
 
 const getStyles = ({ width, height }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
     const computedHeight = typeof height === 'function' ? height() : height;
 
     return {
-        width: computedWidth ?? void 0,
         height: computedHeight ?? void 0,
+        width: computedWidth ?? void 0,
     };
 };
 
@@ -68,6 +67,7 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetInput>) => {
     model._active && className.push('dx-state-active');
     model._hovered && isHoverable && !model._active && className.push('dx-state-hover');
     model.rtlEnabled && className.push('dx-rtl');
+    model.onVisibilityChange && className.push('dx-visibility-change-handler');
     model.elementAttr?.class && className.push(model.elementAttr.class);
 
     return className.join(' ');
@@ -93,19 +93,21 @@ export const viewModelFunction = ({
         tabIndex,
         visible,
         width,
+        onVisibilityChange,
     },
 
     widgetRef,
 }: Widget) => {
     const styles = getStyles({ width, height });
     const attrsWithoutClass = getAttributes({
-        elementAttr,
         accessKey: focusStateEnabled && !disabled && accessKey,
+        elementAttr,
     });
     const arias = getAria({ ...aria, disabled, hidden: !visible });
     const cssClasses = getCssClasses({
-        disabled, visible, _focused, _active, _hovered, rtlEnabled,
-        elementAttr, hoverStateEnabled, focusStateEnabled, className,
+        _active, _focused, _hovered, className,
+        disabled, elementAttr, focusStateEnabled, hoverStateEnabled,
+        onVisibilityChange, rtlEnabled, visible,
     });
 
     return {
@@ -143,11 +145,11 @@ export const viewFunction = (viewModel: any) => {
 export class WidgetInput {
     @OneWay() _feedbackHideTimeout?: number = 400;
     @OneWay() _feedbackShowTimeout?: number = 30;
-    @OneWay() _visibilityChanged?: (args: any) => undefined;
     @OneWay() accessKey?: string | null = null;
     @OneWay() activeStateEnabled?: boolean = false;
     @OneWay() activeStateUnit?: string;
     @OneWay() aria?: any = {};
+    @Slot() children?: any;
     @OneWay() className?: string | undefined = '';
     @OneWay() clickArgs?: any = {};
     @OneWay() disabled?: boolean = false;
@@ -158,26 +160,24 @@ export class WidgetInput {
     @OneWay() hoverStateEnabled?: boolean = false;
     @OneWay() name?: string = '';
     @OneWay() onActive?: (e: any) => any = (() => undefined);
+    @Event() onClick?: (e: any) => void = (() => { });
     @OneWay() onDimensionChanged?: () => any = (() => undefined);
     @OneWay() onInactive?: (e: any) => any = (() => undefined);
-    @OneWay() onKeyPress?: (e: any, options: any) => any = (() => undefined);
     @OneWay() onKeyboardHandled?: (args: any) => any | undefined;
+    @OneWay() onKeyPress?: (e: any, options: any) => any = (() => undefined);
+    @OneWay() onVisibilityChange?: (args: boolean) => undefined;
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
     @OneWay() tabIndex?: number = 0;
     @OneWay() visible?: boolean = true;
     @OneWay() width?: string | number | null = null;
-
-    @Slot() children?: any;
-
-    @Event() onClick?: (e: any) => void = (() => { });
 }
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({
-    name: 'Widget',
     components: [],
-    viewModel: viewModelFunction,
+    name: 'Widget',
     view: viewFunction,
+    viewModel: viewModelFunction,
 })
 
 export default class Widget extends JSXComponent<WidgetInput> {
@@ -187,38 +187,6 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
     @Ref()
     widgetRef!: HTMLDivElement;
-
-    @Effect()
-    visibilityEffect() {
-        const { name, _visibilityChanged, visible } = this.props;
-        const namespace = `${name}VisibilityChange`;
-
-        if (_visibilityChanged !== undefined && hasWindow()) {
-            visibility.on(this.widgetRef,
-                () => visible && _visibilityChanged!(true),
-                () => visible && _visibilityChanged!(false),
-                { namespace },
-            );
-
-            return () => visibility.off(this.widgetRef, { namespace });
-        }
-
-        return null;
-    }
-
-    @Effect()
-    resizeEffect() {
-        const namespace = `${this.props.name}VisibilityChange`;
-        const { onDimensionChanged } = this.props;
-
-        if (onDimensionChanged) {
-            resize.on(this.widgetRef, onDimensionChanged, { namespace });
-
-            return () => resize.off(this.widgetRef, { namespace });
-        }
-
-        return null;
-    }
 
     @Effect()
     accessKeyEffect() {
@@ -236,6 +204,70 @@ export default class Widget extends JSXComponent<WidgetInput> {
             }, { namespace });
 
             return () => dxClick.off(this.widgetRef, { namespace });
+        }
+
+        return null;
+    }
+
+    @Effect()
+    activeEffect() {
+        const {
+            activeStateEnabled, activeStateUnit, disabled, onInactive,
+            _feedbackShowTimeout, _feedbackHideTimeout, onActive,
+        } = this.props;
+        const selector = activeStateUnit;
+        const namespace = 'UIFeedback';
+
+        if (activeStateEnabled && !disabled) {
+            active.on(this.widgetRef,
+                ({ event }) => {
+                    this._active = true;
+                    onActive?.(event);
+                },
+                ({ event }) => {
+                    this._active = false;
+                    onInactive?.(event);
+                }, {
+                    hideTimeout: _feedbackHideTimeout,
+                    namespace,
+                    selector,
+                    showTimeout: _feedbackShowTimeout,
+                },
+            );
+
+            return () => active.off(this.widgetRef, { selector, namespace });
+        }
+
+        return null;
+    }
+
+    @Effect()
+    clickEffect() {
+        const { name, clickArgs } = this.props;
+        const namespace = name;
+
+        dxClick.on(this.widgetRef, () => this.props.onClick!(clickArgs), { namespace });
+
+        return () => dxClick.off(this.widgetRef, { namespace });
+    }
+
+    @Effect()
+    focusEffect() {
+        const { disabled, focusStateEnabled, name } = this.props;
+        const namespace = `${name}Focus`;
+        const isFocusable = focusStateEnabled && !disabled;
+
+        if (isFocusable) {
+            focus.on(this.widgetRef,
+                e => !e.isDefaultPrevented() && (this._focused = true),
+                e => !e.isDefaultPrevented() && (this._focused = false),
+                {
+                    isFocusable: el => focusable(null, el),
+                    namespace,
+                },
+            );
+
+            return () => focus.off(this.widgetRef, { namespace });
         }
 
         return null;
@@ -262,70 +294,6 @@ export default class Widget extends JSXComponent<WidgetInput> {
     }
 
     @Effect()
-    activeEffect() {
-        const {
-            activeStateEnabled, activeStateUnit, disabled, onInactive,
-            _feedbackShowTimeout, _feedbackHideTimeout, onActive,
-        } = this.props;
-        const selector = activeStateUnit;
-        const namespace = 'UIFeedback';
-
-        if (activeStateEnabled && !disabled) {
-            active.on(this.widgetRef,
-                ({ event }) => {
-                    this._active = true;
-                    onActive?.(event);
-                },
-                ({ event }) => {
-                    this._active = false;
-                    onInactive?.(event);
-                }, {
-                    showTimeout: _feedbackShowTimeout,
-                    hideTimeout: _feedbackHideTimeout,
-                    selector,
-                    namespace,
-                },
-            );
-
-            return () => active.off(this.widgetRef, { selector, namespace });
-        }
-
-        return null;
-    }
-
-    @Effect()
-    focusEffect() {
-        const { disabled, focusStateEnabled, name } = this.props;
-        const namespace = `${name}Focus`;
-        const isFocusable = focusStateEnabled && !disabled;
-
-        if (isFocusable) {
-            focus.on(this.widgetRef,
-                e => !e.isDefaultPrevented() && (this._focused = true),
-                e => !e.isDefaultPrevented() && (this._focused = false),
-                {
-                    namespace,
-                    isFocusable: el => focusable(null, el),
-                },
-            );
-
-            return () => focus.off(this.widgetRef, { namespace });
-        }
-
-        return null;
-    }
-
-    @Effect()
-    clickEffect() {
-        const { name, clickArgs } = this.props;
-        const namespace = name;
-
-        dxClick.on(this.widgetRef, () => this.props.onClick!(clickArgs), { namespace });
-
-        return () => dxClick.off(this.widgetRef, { namespace });
-    }
-
-    @Effect()
     keyboardEffect() {
         const { focusStateEnabled, onKeyPress } = this.props;
 
@@ -334,6 +302,38 @@ export default class Widget extends JSXComponent<WidgetInput> {
                 options => onKeyPress?.(options.originalEvent, options));
 
             return () => keyboard.off(id);
+        }
+
+        return null;
+    }
+
+    @Effect()
+    resizeEffect() {
+        const namespace = `${this.props.name}VisibilityChange`;
+        const { onDimensionChanged } = this.props;
+
+        if (onDimensionChanged) {
+            resize.on(this.widgetRef, onDimensionChanged, { namespace });
+
+            return () => resize.off(this.widgetRef, { namespace });
+        }
+
+        return null;
+    }
+
+    @Effect()
+    visibilityEffect() {
+        const { name, onVisibilityChange } = this.props;
+
+        const namespace = `${name}VisibilityChange`;
+        if (onVisibilityChange) {
+            visibility.on(this.widgetRef,
+                () => onVisibilityChange!(true),
+                () => onVisibilityChange!(false),
+                { namespace },
+            );
+
+            return () => visibility.off(this.widgetRef, { namespace });
         }
 
         return null;

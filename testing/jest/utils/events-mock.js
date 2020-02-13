@@ -20,9 +20,11 @@ export const EVENT = {
     click: 'click',
     dxClick: 'dxclick',
     focus: 'focusin',
+    hiding: 'dxhiding',
     hoverEnd: 'dxhoverend',
     hoverStart: 'dxhoverstart',
-    inactive: 'dxinactive'
+    inactive: 'dxinactive',
+    shown: 'dxshown',
 };
 
 export const defaultEvent = {
@@ -77,5 +79,8 @@ eventsEngine.on = (...args) => {
     });
 };
 
-eventsEngine.off = (el, event) => eventHandlers[event] = [];
+eventsEngine.off = (...args) => {
+    const event = args[1].split('.')[0];
+    eventHandlers[event] = [];
+};
 keyboard.off = id => delete keyboardHandlers[id];
