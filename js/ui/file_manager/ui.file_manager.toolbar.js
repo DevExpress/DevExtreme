@@ -101,6 +101,8 @@ const REFRESH_ICON_MAP = {
     error: 'dx-filemanager-i dx-filemanager-i-danger'
 };
 
+const REFRESH_ITEM_PROGRESS_MESSAGE_DELAY = 500;
+
 class FileManagerToolbar extends Widget {
 
     _initMarkup() {
@@ -472,7 +474,7 @@ class FileManagerToolbar extends Widget {
             return setTimeout(() => {
                 this._applyRefreshItemOptions(options);
                 this._refreshItemTextTimeout = undefined;
-            }, this.option('refreshItemDelay'));
+            }, REFRESH_ITEM_PROGRESS_MESSAGE_DELAY);
         } else {
             if(this._refreshItemTextTimeout) {
                 clearTimeout(this._refreshItemTextTimeout);
