@@ -27,6 +27,15 @@
     }
 
     .dx-filemanager-notification-popup {
+        & > .dx-overlay-content {
+            min-width: 240px;
+            max-width: 93vw;
+
+            @media (min-width: 431px) {
+                max-width: 400px;
+            }
+        }
+
         .dx-popup-content {
             padding: 15px;
 

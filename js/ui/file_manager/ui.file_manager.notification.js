@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
-import { getWindow } from '../../core/utils/window';
 
 import Widget from '../widget/ui.widget';
 import Popup from '../popup';
@@ -200,10 +199,6 @@ export default class FileManagerNotificationControl extends Widget {
                 container: this.$element(),
                 width: 'auto',
                 height: 'auto',
-                minWidth: '240px',
-                maxWidth: function() {
-                    return `${400 < $(getWindow()).width() - 30 ? 400 : $(getWindow()).width() - 30}px`;
-                },
                 showTitle: false,
                 dragEnabled: false,
                 shading: false,
