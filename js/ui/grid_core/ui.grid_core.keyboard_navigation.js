@@ -80,9 +80,10 @@ const KeyboardNavigationController = core.ViewController.inherit({
     // #region Initialization
     init: function() {
         const that = this;
-
         if(that.isKeyboardEnabled()) {
+
             accessibility.subscribeVisibilityChange();
+
             that._dataController = that.getController('data');
             that._selectionController = that.getController('selection');
             that._editingController = that.getController('editing');
@@ -100,25 +101,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
             });
 
             that._fastEditingStarted = false;
-
             that._focusedCellPosition = {};
-
             that._canceledCellPosition = null;
 
             that._initViewHandlers();
-
-            that._documentClickHandler = that.createAction(function(e) {
-                const $target = $(e.event.target);
-                const isCurrentRowsViewClick = that._isEventInCurrentGrid(e.event) && $target.closest('.' + that.addWidgetPrefix(ROWS_VIEW_CLASS)).length;
-                const isEditorOverlay = $target.closest('.' + DROPDOWN_EDITOR_OVERLAY_CLASS).length;
-                if(!isCurrentRowsViewClick && !isEditorOverlay) {
-                    that._resetFocusedCell();
-                }
-            });
-
-            that.createAction('onKeyDown');
-
-            eventsEngine.on(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), that._documentClickHandler);
+            that._initDocumentHandlers();
         }
     },
 
@@ -149,6 +136,24 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 needUpdateFocus && that._updateFocus(true);
             }
         });
+    },
+
+    _initDocumentHandlers: function() {
+        const that = this;
+        const document = domAdapter.getDocument();
+
+        that._documentClickHandler = that.createAction(function(e) {
+            const $target = $(e.event.target);
+            const isCurrentRowsViewClick = that._isEventInCurrentGrid(e.event) && $target.closest(`.${that.addWidgetPrefix(ROWS_VIEW_CLASS)}`).length;
+            const isEditorOverlay = $target.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`).length;
+            if(!isCurrentRowsViewClick && !isEditorOverlay) {
+                that._resetFocusedCell();
+            }
+        });
+
+        that.createAction('onKeyDown');
+
+        eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), that._documentClickHandler);
     },
 
     _setRowsViewAttributes: function($rowsView) {
@@ -764,9 +769,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const isCellEditMode = this._isCellEditMode();
 
         this.setCellFocusType();
+
         const args = this._fireFocusChangingEvents(event, $cell, true);
         $cell = args.$newCellElement;
-
         if(!args.cancel) {
             if(args.resetFocusedRow) {
                 this.getController('focus')._resetFocusedRow();
@@ -914,7 +919,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
         $prevFocusedCell && $prevFocusedCell.is('td') && $prevFocusedCell.not($focusElement).removeAttr('tabIndex');
 
         if($focusElement) {
-            eventsEngine.one($focusElement, 'blur', () => $focusElement.removeClass(CELL_FOCUS_DISABLED_CLASS));
+            eventsEngine.one($focusElement, 'blur', e => {
+                if(e.relatedTarget) {
+                    $focusElement.removeClass(CELL_FOCUS_DISABLED_CLASS);
+                }
+            });
             if(!isInteractiveElement) {
                 this._applyTabIndexToElement($focusElement);
                 eventsEngine.trigger($focusElement, 'focus');
@@ -1359,10 +1368,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const that = this;
         const rowIndex = this.getVisibleRowIndex();
         const colIndex = this._focusedCellPosition.columnIndex;
-        let deferred;
 
         this._fastEditingStarted = isDefined(fastEditingKey);
-        deferred = this._editingController.editCell(rowIndex, colIndex);
+        const deferred = this._editingController.editCell(rowIndex, colIndex);
 
         if(this._isFastEditingStarted()) {
             if(deferred === true) {
