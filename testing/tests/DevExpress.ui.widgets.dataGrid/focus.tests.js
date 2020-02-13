@@ -4748,7 +4748,38 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal($rowsView.find('.dx-row-focused > td:nth-child(1)').text(), 'Dan', 'Focused row key column text');
     });
 
-    QUnit.testInActiveWindow('DataGrid - Should paginate to the defined focusedRowKey', function(assert) {
+    QUnit.testInActiveWindow('DataGrid should paginate to the defined focusedRowKey', function(assert) {
+        // arrange
+        this.data = [
+            { name: 'Alex', phone: '111111', room: 6 },
+            { name: 'Dan', phone: '2222222', room: 5 },
+            { name: 'Ben', phone: '333333', room: 4 },
+            { name: 'Sean', phone: '4545454', room: 3 },
+            { name: 'Smith', phone: '555555', room: 2 },
+            { name: 'Zeb', phone: '6666666', room: 1 }
+        ];
+
+        this.options = {
+            keyExpr: 'name',
+            focusedRowEnabled: true,
+            focusedRowKey: 'Smith',
+            paging: {
+                pageSize: 2
+            }
+        };
+
+        this.setupModule();
+
+        this.gridView.render($('#container'));
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.pageIndex(), 2, 'PageIndex is 2');
+        assert.strictEqual(this.dataController.getVisibleRows()[0].data, this.data[4], 'Row 0, Data 4');
+        assert.ok(this.gridView.getView('rowsView').getRow(0).hasClass('dx-row-focused'), 'Row 0 is the focused row');
+    });
+
+    QUnit.testInActiveWindow('DataGrid should not paginate to the defined focusedRowKey if scrolling mode is infinite (T856933)', function(assert) {
         // arrange
         this.data = [
             { name: 'Alex', phone: '111111', room: 6 },
@@ -4766,8 +4797,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             paging: {
                 pageSize: 2
             },
-            editing: {
-                allowEditing: false
+            scrolling: {
+                mode: 'infinite'
             }
         };
 
@@ -4777,9 +4808,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // assert
-        assert.equal(this.pageIndex(), 2, 'PageIndex is 0');
-        assert.strictEqual(this.dataController.getVisibleRows()[0].data, this.data[4], 'Row 0, Data 4');
-        assert.ok(this.gridView.getView('rowsView').getRow(0).hasClass('dx-row-focused'), 'Row 0 is the focused row');
+        assert.equal(this.pageIndex(), 0, 'PageIndex is 0');
+        assert.strictEqual(this.dataController.getVisibleRows()[0].data, this.data[0], 'Row 0, Data 0');
     });
 
     QUnit.testInActiveWindow('Highlight cell on focus() if focusedRowEnabled is true and focusedColumnIndex, focusedRowIndex are set', function(assert) {
