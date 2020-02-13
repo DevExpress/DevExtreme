@@ -29,7 +29,11 @@
     .dx-filemanager-notification-popup {
         & > .dx-overlay-content {
             min-width: 240px;
-            max-width: 400px;
+            max-width: 93vw;
+
+            @media (min-width: 431px) {
+                max-width: 400px;
+            }
         }
 
         .dx-popup-content {
@@ -106,11 +110,11 @@
 
         .dx-filemanager-progress-box-wrapper {
             flex: 1 auto;
+            overflow: hidden;
         }
 
         .dx-filemanager-progress-box-common {
             padding: 5px 0;
-            max-width: 330px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
