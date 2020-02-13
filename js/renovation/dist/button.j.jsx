@@ -5,6 +5,7 @@ import Widget from '../preact-wrapper/component';
 import { extend } from '../../core/utils/extend';
 import ButtonView from '../button.p';
 import { HTMLToPreact } from '../preact-wrapper/utils';
+import { getPublicElement } from '../../core/utils/dom';
 
 class Button extends Widget {
     getView() {
@@ -21,7 +22,7 @@ class Button extends Widget {
                 $content.addClass('dx-button-content');
                 const $template = $(
                     this._getTemplate(this.option('template')).render({
-                        model: data, container: $content
+                        model: data, container: getPublicElement($content)
                     })
                 );
 

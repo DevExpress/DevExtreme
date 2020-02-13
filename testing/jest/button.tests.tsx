@@ -210,10 +210,7 @@ describe('Button', () => {
         });
 
         describe('contentRender', () => {
-            const contentRender = ({ text }) => 
-                <div className={'dx-button-content'}>
-                    <div className={'custom-content'}>{text + 123}</div>
-                </div>;
+            const contentRender = ({ text }) => <div className={'custom-content'}>{text + 123}</div>;
 
             it('should render contentRender', () => {
                 const button = render({
@@ -223,7 +220,6 @@ describe('Button', () => {
                 const customRender = button.find(contentRender);
 
                 expect(customRender.exists()).toBe(true);
-                expect(customRender.exists('.dx-button-content')).toBe(true);
                 expect(customRender.exists('.custom-content')).toBe(true);
 
                 expect(customRender.props().text).toBe('My button');
