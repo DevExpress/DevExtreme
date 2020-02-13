@@ -49,7 +49,10 @@ test("Custom form shouldn't throw exception, after second show appointment form(
 
     const scheduler = new Scheduler("#container");
 
-    await t.doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
+    await t
+        .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element, {
+            speed: 0.1
+        })
         .click(CHECKBOX_CLASS)
 
         .expect(Selector(TEXT_EDITOR_CLASS).value)

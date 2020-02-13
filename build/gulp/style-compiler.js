@@ -20,6 +20,15 @@ const autoPrefix = new LessAutoPrefix({ browsers: browsersList });
 const cssArtifactsPath = path.join(process.cwd(), 'artifacts', 'css');
 const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 
+const DEFAULT_DEV_BUNDLE_NAMES = [
+    'common',
+    'light',
+    'material.blue.light',
+    'ios7.default'
+];
+
+const getBundleSourcePath = name => `styles/bundles/dx.${name}.less`;
+
 const compileBundles = (bundles) => {
     const paths = path.join(process.cwd(), 'styles');
 
@@ -48,9 +57,15 @@ gulp.task('copy-fonts-and-icons', () => {
         .pipe(gulp.dest(cssArtifactsPath));
 });
 
-gulp.task('style-compiler-styles', () => compileBundles('styles/bundles/*.less'));
+gulp.task('style-compiler-themes', gulp.parallel(
+    () => compileBundles(getBundleSourcePath('*')),
+    'copy-fonts-and-icons'
+));
 
-gulp.task('style-compiler-themes', gulp.parallel('style-compiler-styles', 'copy-fonts-and-icons'));
+gulp.task('style-compiler-themes-ci', gulp.parallel(
+    () => compileBundles(DEFAULT_DEV_BUNDLE_NAMES.map(getBundleSourcePath)),
+    'copy-fonts-and-icons'
+));
 
 gulp.task('style-compiler-themes-dev', () => {
     const args = parseArguments(process.argv);
@@ -59,13 +74,13 @@ gulp.task('style-compiler-themes-dev', () => {
     const bundles = (
         bundlesArg
             ? bundlesArg.split(',')
-            : ['common', 'light', 'material.blue.light'])
+            : DEFAULT_DEV_BUNDLE_NAMES)
         .map((bundle) => {
-            const bundleName = `styles/bundles/dx.${bundle}.less`;
-            if(fs.existsSync(bundleName)) {
-                return bundleName;
+            const sourcePath = getBundleSourcePath(bundle);
+            if(fs.existsSync(sourcePath)) {
+                return sourcePath;
             }
-            console.log(`${bundleName} file does not exists`);
+            console.log(`${sourcePath} file does not exists`);
             return null;
         });
 

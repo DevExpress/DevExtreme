@@ -29,7 +29,7 @@ const createFileManager = useThumbnailViewMode => {
     const viewMode = useThumbnailViewMode ? 'thumbnails' : 'details';
 
     $('#fileManager').dxFileManager({
-        fileProvider: fileSystem,
+        fileSystemProvider: fileSystem,
         itemView: {
             mode: viewMode,
             showFolders: false,
@@ -39,7 +39,7 @@ const createFileManager = useThumbnailViewMode => {
             create: true,
             copy: true,
             move: true,
-            remove: true,
+            delete: true,
             rename: true,
             upload: true
         }
@@ -165,7 +165,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
             create: false,
             copy: false,
             move: false,
-            remove: false,
+            delete: false,
             rename: false,
             upload: false
         });
@@ -225,7 +225,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
                     location: 'after'
                 },
                 {
-                    name: 'viewSwitcher',
+                    name: 'switchView',
                     location: 'before'
                 }]
         });
@@ -270,7 +270,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
                     name: 'separator',
                     location: 'after'
                 },
-                'viewSwitcher',
+                'switchView',
                 {
                     ID: 42,
                     name: 'commandName',
@@ -305,7 +305,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
                     name: 'separator',
                     location: 'after'
                 },
-                'viewSwitcher',
+                'switchView',
                 {
                     name: 'commandName',
                     locateInMenu: 'always',
@@ -374,7 +374,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
                     name: 'separator',
                     location: 'after'
                 },
-                'viewSwitcher'
+                'switchView'
             ]
         });
         this.clock.tick(400);

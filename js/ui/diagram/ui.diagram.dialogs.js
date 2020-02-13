@@ -20,7 +20,7 @@ class DiagramDialog extends Widget {
 
         this._$popupElement = $('<div>')
             .appendTo(this.$element());
-        this._popupInstance = this._createComponent(this._$popupElement, Popup, {
+        this._popup = this._createComponent(this._$popupElement, Popup, {
             title: this.option('title'),
             maxWidth: this.option('maxWidth'),
             height: this.option('height'),
@@ -29,7 +29,7 @@ class DiagramDialog extends Widget {
         });
     }
     _clean() {
-        delete this._popupInstance;
+        delete this._popup;
         this._$popupElement && this._$popupElement.remove();
     }
     _getDefaultOptions() {
@@ -74,7 +74,7 @@ class DiagramDialog extends Widget {
             case 'maxWidth':
             case 'height':
             case 'toolbarItems':
-                this._popupInstance.option(args.name, args.value);
+                this._popup.option(args.name, args.value);
                 break;
             case 'command':
                 this._command = args.value;
@@ -96,15 +96,15 @@ class DiagramDialog extends Widget {
         this._onHiddenAction = this._createActionByOption('onHidden');
     }
     _hide() {
-        this._popupInstance.hide();
+        this._popup.hide();
         this._isShown = false;
     }
     _show() {
-        this._popupInstance
+        this._popup
             .content()
             .empty()
             .append(this._onGetContentAction());
-        this._popupInstance.show();
+        this._popup.show();
         this._isShown = true;
     }
     isVisible() {

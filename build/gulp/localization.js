@@ -87,8 +87,8 @@ const getMessages = function(directory, locale) {
     return serializeObject(json, true);
 };
 
-gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FOLDER).map(locale => {
-    return function() {
+gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FOLDER).map(locale => Object.assign(
+    function() {
         return gulp
             .src('build/gulp/localization-template.jst')
             .pipe(template({
@@ -99,8 +99,9 @@ gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FO
             .pipe(headerPipes.useStrict())
             .pipe(headerPipes.bangLicense())
             .pipe(gulp.dest(RESULT_PATH));
-    };
-})));
+    },
+    { displayName: 'dx.messages.' + locale }
+))));
 
 gulp.task('localization-generated-sources', gulp.parallel([
     {
@@ -124,8 +125,8 @@ gulp.task('localization-generated-sources', gulp.parallel([
         destination: 'js/localization/cldr-data'
 
     }
-].map((source) => {
-    return function() {
+].map((source) => Object.assign(
+    function() {
         return gulp
             .src('build/gulp/generated_js.jst')
             .pipe(template({
@@ -135,7 +136,8 @@ gulp.task('localization-generated-sources', gulp.parallel([
             .pipe(lint.format())
             .pipe(rename(source.filename))
             .pipe(gulp.dest(source.destination));
-    };
-})));
+    },
+    { displayName: source.filename }
+))));
 
 gulp.task('localization', gulp.series('localization-messages', 'localization-generated-sources'));

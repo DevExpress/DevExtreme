@@ -7,6 +7,12 @@
 @base-font-family: "Roboto", "RobotoFallback", "Helvetica", "Arial", sans-serif;
 
 /**
+* @name 20. Text color
+* @type color
+*/
+@base-text-color: #fff;
+
+/**
 * @name 20. Label color
 * @type color
 */
@@ -29,12 +35,6 @@
 * @type color
 */
 @base-spin-icon-color: fade(@base-text-color, 54%);
-
-/**
-* @name 20. Text color
-* @type color
-*/
-@base-text-color: #fff;
 
 /**
 * @name 30. Background color
@@ -104,14 +104,15 @@
 @base-inverted-icon-color: @base-inverted-text-color;
 @base-disabled-opacity: 0.38;
 @base-dropdown-shadow-color: fade(@base-shadow-color, 40%);
+@base-invalid-color: @base-danger;
+@base-invalid-faded-border-color: fade(@base-invalid-color, 40%);
 
 // Validation
-@base-invalid-color: @base-danger;
+
 @VALIDATION_MESSAGE_COLOR: @base-inverted-text-color;
 @VALIDATION_MESSAGE_BACKGROUND_COLOR: @base-invalid-color;
 @VALIDATION_SUMMARY_COLOR: @base-invalid-color;
 
-@base-invalid-faded-border-color: fade(@base-invalid-color, 40%);
 
 // Badges
 
@@ -126,7 +127,6 @@
 * @type color
 */
 @badge-bg: @base-accent;
-@badge-invalid-bg: @base-invalid-color;
 
 
 // TextEditor
@@ -417,7 +417,7 @@
 
 // ButtonGroup
 
-// Normal Button
+// Normal Button (ButtonGroup)
 
 /**
 * @name 10. Selected item text color
@@ -438,7 +438,7 @@
 @button-group-normal-selected-bg-hover: fade(@button-group-normal-selected-bg, 12%);
 @button-group-normal-selected-bg-focused: fade(@button-group-normal-selected-bg, 12%);
 
-// Default Button
+// Default Button (ButtonGroup)
 
 /**
 * @name 10. Selected item text color
@@ -458,7 +458,7 @@
 @button-group-default-contained-hover-bg: mix(@button-normal-bg, @button-default-bg, 92%);
 @button-group-default-contained-focused-bg: mix(@button-normal-bg, @button-default-bg, 92%);
 
-// Danger Button
+// Danger Button (ButtonGroup)
 
 /**
 * @name 10. Selected item text color
@@ -478,7 +478,7 @@
 @button-group-danger-contained-hover-bg: mix(@button-normal-bg, @button-danger-bg, 92%);
 @button-group-danger-contained-focused-bg: mix(@button-normal-bg, @button-danger-bg, 92%);
 
-// Success Button
+// Success Button (ButtonGroup)
 
 /**
 * @name 10. Selected item text color

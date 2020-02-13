@@ -717,7 +717,7 @@ QUnit.test('Script request (cross domain)', function(assert) {
 
         const addedScript = appendChild.firstCall.args[0];
 
-        assert.ok(addedScript.src.indexOf('http://somefakedomain1221.com/json-url?_=') === 0, 'url: ' + addedScript.src);
+        assert.strictEqual(addedScript.src.indexOf('http://somefakedomain1221.com/json-url?_='), 0, 'url: ' + addedScript.src);
 
         appendChild.restore();
         createElement.restore();

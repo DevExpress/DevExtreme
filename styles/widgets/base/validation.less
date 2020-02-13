@@ -1,14 +1,18 @@
-.dx-validationsummary-item {
-    color: @VALIDATION_SUMMARY_COLOR;
+.dx-base-validation(@summary-color, @message-color, @message-bg-color) {
+    .dx-validationsummary-item {
+        color: @summary-color;
+    }
+
+    .dx-invalid-message > .dx-overlay-content {
+        color: @message-color;
+        background-color: @message-bg-color;
+    }
 }
 
 .dx-validationsummary-item-content {
-    .pseudo-link();
-}
-
-.dx-invalid-message > .dx-overlay-content {
-    color: @VALIDATION_MESSAGE_COLOR;
-    background-color: @VALIDATION_MESSAGE_BACKGROUND_COLOR;
+    border-bottom: 1px dashed;
+    display: inline-block;
+    line-height: normal;
 }
 
 @keyframes valid-badge-frames {

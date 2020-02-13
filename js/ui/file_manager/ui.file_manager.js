@@ -45,9 +45,10 @@ class FileManager extends Widget {
         this._controller = new FileItemsController({
             currentPath: this.option('currentPath'),
             rootText: this.option('rootFolderName'),
-            fileProvider: this.option('fileProvider'),
+            fileProvider: this.option('fileSystemProvider'),
             allowedFileExtensions: this.option('allowedFileExtensions'),
-            maxUploadFileSize: this.option('upload').maxFileSize,
+            uploadMaxFileSize: this.option('upload').maxFileSize,
+            uploadChunkSize: this.option('upload').chunkSize,
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
         this._commandManager = new FileManagerCommandManager(this.option('permissions'));
@@ -68,7 +69,8 @@ class FileManager extends Widget {
         this._notificationControl = this._createComponent($notificationControl, FileManagerNotificationControl, {
             progressPanelContainer: this.$element(),
             contentTemplate: container => this._createWrapper(container),
-            onActionProgress: e => this._onActionProgress(e)
+            onActionProgress: e => this._onActionProgress(e),
+            positionTarget: `.${FILE_MANAGER_CONTAINER_CLASS}`
         });
         this._editing.option('notificationControl', this._notificationControl);
     }
@@ -301,7 +303,7 @@ class FileManager extends Widget {
             ? this._controller.getDirectoryContents(selectedDir)
             : this._controller.getFiles(selectedDir);
 
-        if(this.option('itemView.showParentFolder') && !selectedDir.fileItem.isRoot) {
+        if(this.option('itemView.showParentFolder') && !selectedDir.fileItem.isRoot()) {
             const parentDirItem = selectedDir.fileItem.createClone();
             parentDirItem.isParentFolder = true;
             parentDirItem.name = '..';
@@ -311,7 +313,7 @@ class FileManager extends Widget {
                     const itemInfosCopy = [...items];
                     itemInfosCopy.unshift({
                         fileItem: parentDirItem,
-                        icon: 'folder'
+                        icon: 'parentfolder'
                     });
                     return itemInfosCopy;
                 });
@@ -340,7 +342,7 @@ class FileManager extends Widget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            fileProvider: null,
+            fileSystemProvider: null,
 
             currentPath: '',
 
@@ -361,7 +363,7 @@ class FileManager extends Widget {
 
             toolbar: {
                 items: [
-                    'showNavPane', 'create', 'upload', 'viewSwitcher',
+                    'showNavPane', 'create', 'upload', 'switchView',
                     {
                         name: 'separator',
                         location: 'after'
@@ -433,7 +435,14 @@ class FileManager extends Widget {
                 * @type number
                 * @default 0
                 */
-                maxFileSize: 0
+                maxFileSize: 0,
+
+                /**
+                * @name dxFileManagerOptions.upload.chunkSize
+                * @type number
+                * @default 200000
+                */
+                chunkSize: 200000
             },
 
             permissions: {
@@ -456,11 +465,11 @@ class FileManager extends Widget {
                  */
                 move: false,
                 /**
-                 * @name dxFileManagerOptions.permissions.remove
+                 * @name dxFileManagerOptions.permissions.delete
                  * @type boolean
                  * @default false
                  */
-                remove: false,
+                delete: false,
                 /**
                  * @name dxFileManagerOptions.permissions.rename
                  * @type boolean
@@ -490,7 +499,7 @@ class FileManager extends Widget {
             case 'currentPath':
                 this._setCurrentPath(args.value);
                 break;
-            case 'fileProvider':
+            case 'fileSystemProvider':
             case 'selectionMode':
             case 'customizeThumbnail':
             case 'customizeDetailColumns':
@@ -542,14 +551,15 @@ class FileManager extends Widget {
     }
 
     _onSelectedDirectoryChanged() {
+        const currentDirectory = this._getCurrentDirectory();
         const currentPath = this._controller.getCurrentPath();
 
         this._filesTreeView.updateCurrentDirectory();
         this._itemView.refresh();
-        this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
+        this._breadcrumbs.setCurrentDirectory(currentDirectory);
 
         this.option('currentPath', currentPath);
-        this._onCurrentDirectoryChangedAction();
+        this._onCurrentDirectoryChangedAction({ directory: currentDirectory.fileItem });
     }
 
     getDirectories(parentDirectoryInfo) {
@@ -576,7 +586,7 @@ class FileManager extends Widget {
     _onSelectedItemOpened({ fileItemInfo }) {
         const fileItem = fileItemInfo.fileItem;
         if(!fileItem.isDirectory) {
-            this._onSelectedFileOpenedAction({ fileItem });
+            this._onSelectedFileOpenedAction({ file: fileItem });
             return;
         }
 

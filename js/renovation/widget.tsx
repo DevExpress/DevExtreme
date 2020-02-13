@@ -252,7 +252,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
         if (isHoverable) {
             hover.on(this.widgetRef,
                 new Action(() => {
-                    if(!this._active){
+                    if (!this._active) {
                         this._hovered = true;
                     }
                 }, { excludeValidators: ['readOnly'] }),
@@ -268,8 +268,10 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
     @Effect()
     activeEffect() {
-        const { activeStateEnabled, activeStateUnit, disabled, onInactive,
-            _feedbackShowTimeout, _feedbackHideTimeout, onActive } = this.props;
+        const {
+            activeStateEnabled, activeStateUnit, disabled, onInactive,
+            _feedbackShowTimeout, _feedbackHideTimeout, onActive,
+        } = this.props;
         const selector = activeStateUnit;
         const namespace = 'UIFeedback';
 
@@ -280,10 +282,10 @@ export default class Widget extends JSXComponent<WidgetInput> {
                     onActive?.(event);
                 }),
                 new Action(({ event }) => {
-                        this._active = false;
-                        onInactive?.(event);
-                    },
-                    { excludeValidators: ['disabled', 'readOnly'] },
+                    this._active = false;
+                    onInactive?.(event);
+                },
+                { excludeValidators: ['disabled', 'readOnly'] },
                 ), {
                     showTimeout: _feedbackShowTimeout,
                     hideTimeout: _feedbackHideTimeout,
@@ -310,8 +312,8 @@ export default class Widget extends JSXComponent<WidgetInput> {
                 e => !e.isDefaultPrevented() && (this._focused = false),
                 {
                     namespace,
-                    isFocusable: (el) => focusable(null, el),
-                }
+                    isFocusable: el => focusable(null, el),
+                },
             );
 
             return () => focus.off(this.widgetRef, { namespace });
