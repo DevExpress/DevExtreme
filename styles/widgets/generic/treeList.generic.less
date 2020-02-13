@@ -15,7 +15,7 @@
         position: relative;
         display: inline-block;
         width: @TREELIST_EMPTY_SPACE_WIDTH;
-        .dx-icon-spinright;
+        .dx-icon(spinright);
 
         &:before {
             visibility: hidden;
@@ -27,7 +27,7 @@
     }
 
     .dx-treelist-expanded span {
-        .dx-icon-spindown;
+        .dx-icon(spindown);
         .dx-icon-font-centered-sizing(@GENERIC_BASE_ICON_SIZE);
 
         cursor: pointer;
@@ -40,7 +40,7 @@
     }
 
     .dx-treelist-collapsed span {
-        .dx-icon-spinright;
+        .dx-icon(spinright);
         .dx-icon-font-centered-sizing(@GENERIC_BASE_ICON_SIZE);
 
         cursor: pointer;

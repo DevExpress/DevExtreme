@@ -6,25 +6,28 @@ import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import typeUtils from '../../core/utils/type';
 import dataCoreUtils from '../../core/utils/data';
-import DiagramToolbar from './ui.diagram.toolbar';
-import DiagramLeftPanel from './ui.diagram.leftpanel';
-import DiagramRightPanel from './ui.diagram.rightpanel';
-import DiagramContextMenu from './ui.diagram.contextmenu';
-import DiagramContextToolbox from './ui.diagram.contexttoolbox';
-import DiagramDialog from './ui.diagram.dialogs';
-import DiagramToolbox from './ui.diagram.toolbox';
-import DiagramOptionsUpdateBar from './ui.diagram.optionsupdate';
-import NodesOption from './ui.diagram.nodes';
-import EdgesOptions from './ui.diagram.edges';
-import Tooltip from '../tooltip';
-import { getDiagram } from './diagram_importer';
+import positionUtils from '../../animation/position';
+import { getDiagram } from './diagram.importer';
 import { hasWindow, getWindow } from '../../core/utils/window';
 import domUtils from '../../core/utils/dom';
 import eventsEngine from '../../events/core/events_engine';
 import * as eventUtils from '../../events/utils';
 import messageLocalization from '../../localization/message';
 import numberLocalization from '../../localization/number';
-import DiagramDialogManager from './ui.diagram.dialogmanager';
+
+import DiagramMainToolbar from './ui.diagram.main_toolbar';
+import DiagramHistoryToolbar from './ui.diagram.history_toolbar';
+import DiagramViewToolbar from './ui.diagram.view_toolbar';
+import DiagramRightPanel from './ui.diagram.rightpanel';
+import DiagramContextMenu from './ui.diagram.context_menu';
+import DiagramContextToolbox from './ui.diagram.context_toolbox';
+import DiagramDialog from './ui.diagram.dialogs';
+import DiagramToolboxManager from './diagram.toolbox_manager';
+import DiagramToolbox from './ui.diagram.toolbox';
+import DiagramOptionsUpdateBar from './diagram.options_update';
+import DiagramDialogManager from './ui.diagram.dialog_manager';
+import NodesOption from './diagram.nodes_option';
+import EdgesOption from './diagram.edges_option';
 
 const DIAGRAM_CLASS = 'dx-diagram';
 const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
@@ -32,13 +35,20 @@ const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + '-toolbar-wrapper';
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + '-content-wrapper';
 const DIAGRAM_DRAWER_WRAPPER_CLASS = DIAGRAM_CLASS + '-drawer-wrapper';
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + '-content';
+const DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS = DIAGRAM_CLASS + '-floating-toolbar-container';
 const DIAGRAM_LOADING_INDICATOR_CLASS = DIAGRAM_CLASS + '-loading-indicator';
+const DIAGRAM_FLOATING_PANEL_OFFSET = 22;
 
 const DIAGRAM_DEFAULT_UNIT = 'in';
 const DIAGRAM_DEFAULT_ZOOMLEVEL = 1;
 const DIAGRAM_DEFAULT_AUTOZOOM = 'disabled';
 const DIAGRAM_DEFAULT_PAGE_ORIENTATION = 'portrait';
 const DIAGRAM_DEFAULT_PAGE_COLOR = 'white';
+
+const DIAGRAM_TOOLBOX_ITEM_SIZE = 30;
+const DIAGRAM_TOOLBOX_ITEM_SPACING = 10;
+const DIAGRAM_CONTEXT_TOOLBOX_ICON_SIZE = 24;
+const DIAGRAM_CONTEXT_TOOLBOX_ICON_SPACING = 8;
 
 const DIAGRAM_NAMESPACE = 'dxDiagramEvent';
 const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('fullscreenchange', DIAGRAM_NAMESPACE);
@@ -60,18 +70,28 @@ class Diagram extends Widget {
         const isServerSide = !hasWindow();
         this.$element().addClass(DIAGRAM_CLASS);
 
-        this._toolbarInstance = undefined;
+        this._mainToolbar = undefined;
         if(this.option('toolbar.visible')) {
-            this._renderToolbar();
+            this._renderMainToolbar();
         }
 
         const $contentWrapper = $('<div>')
             .addClass(DIAGRAM_CONTENT_WRAPPER_CLASS)
             .appendTo(this.$element());
 
-        this._leftPanel = undefined;
+        this._historyToolbar = undefined;
+        if(this.option('historyToolbar.visible')) {
+            this._renderHistoryToolbar($contentWrapper);
+        }
+
+        this._viewToolbar = undefined;
+        if(this.option('viewToolbar.visible')) {
+            this._renderViewToolbar($contentWrapper);
+        }
+
+        this._toolbox = undefined;
         if(this.option('toolbox.visible')) {
-            this._renderLeftPanel($contentWrapper);
+            this._renderToolbox($contentWrapper);
         }
 
         const $drawerWrapper = $('<div>')
@@ -130,7 +150,7 @@ class Diagram extends Widget {
         component.bar.onChanged.add(this);
         this._diagramInstance.barManager.registerBar(component.bar);
     }
-    _renderToolbar() {
+    _renderMainToolbar() {
         const $toolbarWrapper = $('<div>')
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
@@ -138,91 +158,95 @@ class Diagram extends Widget {
         if(this.option('propertiesPanel.enabled') && this.option('propertiesPanel.collapsible')) {
             toolbarWidgetCommandNames.push('options');
         }
-        this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
+        this._mainToolbar = this._createComponent($toolbarWrapper, DiagramMainToolbar, {
             commands: this.option('toolbar.commands'),
-            onContentReady: (e) => this._registerBar(e.component),
+            onContentReady: ({ component }) => this._registerBar(component),
+            onSubMenuVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
             widgetCommandNames: toolbarWidgetCommandNames
         });
     }
-    _renderLeftPanel($parent) {
-        const isServerSide = !hasWindow();
+    _adjustFloatingToolbarContainer($container, toolbar, position) {
+        if(!hasWindow()) return;
 
-        const $leftPanel = $('<div>')
+        const $toolbarContent = toolbar.$element().find('.dx-toolbar-before');
+        $container.width($toolbarContent.width());
+        positionUtils.setup($container, position);
+    }
+    _renderHistoryToolbar($parent) {
+        const $container = $('<div>')
+            .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
-
-        this._leftPanel = this._createComponent($leftPanel, DiagramLeftPanel, {
+        this._historyToolbar = this._createComponent($container, DiagramHistoryToolbar, {
+            commands: this.option('historyToolbar.commands'),
+            onContentReady: ({ component }) => this._registerBar(component),
+            onSubMenuVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onPointerUp: this._onPanelPointerUp.bind(this)
+        });
+        this._adjustFloatingToolbarContainer($container, this._historyToolbar, {
+            my: 'left top',
+            at: 'left top',
+            of: $parent,
+            offset: DIAGRAM_FLOATING_PANEL_OFFSET + ' ' + DIAGRAM_FLOATING_PANEL_OFFSET
+        });
+    }
+    _renderToolbox($parent) {
+        const isServerSide = !hasWindow();
+        const $toolBox = $('<div>')
+            .appendTo($parent);
+        let yOffset = DIAGRAM_FLOATING_PANEL_OFFSET;
+        let height = !isServerSide ? $parent.height() - 2 * DIAGRAM_FLOATING_PANEL_OFFSET : 200;
+        if(this._historyToolbar && !isServerSide) {
+            yOffset += this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
+            height -= this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
+        }
+        if(this._viewToolbar && !isServerSide) {
+            height -= this._viewToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
+        }
+        this._toolbox = this._createComponent($toolBox, DiagramToolbox, {
+            visible: !this.option('readOnly') && !this.option('disabled'),
+            height: height,
+            position: {
+                my: 'left top',
+                at: 'left top',
+                of: $parent,
+                offset: DIAGRAM_FLOATING_PANEL_OFFSET + ' ' + yOffset
+            },
             toolboxGroups: this._getToolboxGroups(),
-            disabled: this.option('readOnly'),
             onShapeCategoryRendered: (e) => {
                 if(isServerSide) return;
 
-                const $toolboxContainer = $(e.$element);
-                this._diagramInstance.createToolbox($toolboxContainer[0], 32, 8,
-                    { 'data-toggle': 'shape-toolbox-tooltip' },
-                    e.shapes || e.category, e.displayMode === 'texts');
-                this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
+                this._diagramInstance.createToolbox(e.$element[0],
+                    DIAGRAM_TOOLBOX_ITEM_SIZE, DIAGRAM_TOOLBOX_ITEM_SPACING,
+                    { 'data-toggle': e.dataToggle },
+                    e.shapes || e.category, e.displayMode === 'texts', e.width
+                );
+            },
+            onFilterChanged: (e) => {
+                if(isServerSide) return;
+
+                this._diagramInstance.applyToolboxFilter(e.text, e.filteringToolboxes);
             },
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
     }
-    _createTooltips($container, targets) {
-        targets.each((index, element) => {
-            const $target = $(element);
-            const title = $target.attr('title');
-            if(title) {
-                const $tooltip = $('<div>')
-                    .html(title)
-                    .appendTo($container);
-                this._createComponent($tooltip, Tooltip, {
-                    target: $target.get(0),
-                    showEvent: 'mouseenter',
-                    hideEvent: 'mouseleave',
-                    position: 'top',
-                    animation: {
-                        show: { type: 'fade', from: 0, to: 1, delay: 500 },
-                        hide: { type: 'fade', from: 1, to: 0, delay: 100 }
-                    }
-                });
-            }
+    _renderViewToolbar($parent) {
+        const $container = $('<div>')
+            .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
+            .appendTo($parent);
+        this._viewToolbar = this._createComponent($container, DiagramViewToolbar, {
+            commands: this.option('viewToolbar.commands'),
+            onContentReady: ({ component }) => this._registerBar(component),
+            onSubMenuVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onPointerUp: this._onPanelPointerUp.bind(this)
         });
-
-    }
-    _invalidateContextMenuCommands() {
-        if(this._contextMenu) {
-            this._contextMenu.option({
-                commands: this.option('contextMenu.commands')
-            });
-        }
-    }
-    _invalidatePropertiesPanelGroups() {
-        if(this._rightPanel) {
-            this._rightPanel.option({
-                propertyGroups: this.option('propertiesPanel.groups')
-            });
-        }
-    }
-    _invalidateToolbarCommands() {
-        if(this._toolbarInstance) {
-            this._toolbarInstance.option({
-                commands: this.option('toolbar.commands')
-            });
-        }
-    }
-    _invalidateToolboxGroups() {
-        if(this._leftPanel) {
-            this._leftPanel.option({
-                toolboxGroups: this._getToolboxGroups()
-            });
-        }
-    }
-    _setLeftPanelEnabled(enabled) {
-        if(this._leftPanel) {
-            this._leftPanel.option({
-                disabled: !enabled
-            });
-        }
+        this._adjustFloatingToolbarContainer($container, this._viewToolbar, {
+            my: 'left bottom',
+            at: 'left bottom',
+            of: $parent,
+            offset: DIAGRAM_FLOATING_PANEL_OFFSET + ' -' + DIAGRAM_FLOATING_PANEL_OFFSET
+        });
     }
 
     _renderRightPanel($parent) {
@@ -240,8 +264,8 @@ class Diagram extends Widget {
                 });
             }
         });
-        if(this._toolbarInstance) {
-            this._toolbarInstance.option('onWidgetCommand', (e) => {
+        if(this._mainToolbar) {
+            this._mainToolbar.option('onWidgetCommand', (e) => {
                 if(e.name === 'options') {
                     drawer.toggle();
                 }
@@ -287,7 +311,7 @@ class Diagram extends Widget {
                         isTextGroup = group.displayMode === 'texts';
                     }
                 }
-                this._diagramInstance.createContextToolbox($toolboxContainer[0], 24, 8, {},
+                this._diagramInstance.createContextToolbox($toolboxContainer[0], DIAGRAM_CONTEXT_TOOLBOX_ICON_SIZE, DIAGRAM_CONTEXT_TOOLBOX_ICON_SPACING, {},
                     shapes || category || e.category, isTextGroup,
                     function(shapeType) {
                         e.callback(shapeType);
@@ -433,7 +457,7 @@ class Diagram extends Widget {
             delete this._edgesOption;
         }
         if(this.option('edges.dataSource')) {
-            this._edgesOption = new EdgesOptions(this);
+            this._edgesOption = new EdgesOption(this);
             this._edgesOption.option('dataSource', this.option('edges.dataSource'));
             this._edgesOption._refreshDataSource();
         }
@@ -670,7 +694,7 @@ class Diagram extends Widget {
         return this.option('customShapes') || [];
     }
     _getToolboxGroups() {
-        return DiagramToolbox.getGroups(this.option('toolbox.groups'));
+        return DiagramToolboxManager.getGroups(this.option('toolbox.groups'));
     }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
@@ -840,7 +864,7 @@ class Diagram extends Widget {
         const { DiagramCommand } = getDiagram();
         const readOnly = this.option('readOnly') || this.option('disabled');
         this._executeDiagramCommand(DiagramCommand.ToggleReadOnly, readOnly);
-        this._setLeftPanelEnabled(!readOnly);
+        this._setToolboxVisible(!readOnly);
     }
     _updateZoomLevelState() {
         let zoomLevel = this.option('zoomLevel.value');
@@ -1528,6 +1552,32 @@ class Diagram extends Widget {
                 * @default undefined
                 */
             },
+            historyToolbar: {
+                /**
+                * @name dxDiagramOptions.historyToolbar.visible
+                * @type boolean
+                * @default true
+                */
+                visible: true,
+                /**
+                * @name dxDiagramOptions.historyToolbar.commands
+                * @type Array<Enums.DiagramToolbarCommand>
+                * @default undefined
+                */
+            },
+            viewToolbar: {
+                /**
+                * @name dxDiagramOptions.viewToolbar.visible
+                * @type boolean
+                * @default true
+                */
+                visible: true,
+                /**
+                * @name dxDiagramOptions.viewToolbar.commands
+                * @type Array<Enums.DiagramToolbarCommand>
+                * @default undefined
+                */
+            },
             contextMenu: {
                 /**
                 * @name dxDiagramOptions.contextMenu.enabled
@@ -1643,13 +1693,13 @@ class Diagram extends Widget {
         }
     }
     _raiseToolboxDragStart() {
-        if(this._leftPanel) {
-            this._leftPanel.$element().addClass('dx-skip-gesture-event');
+        if(this._toolbox) {
+            this._toolbox._raiseToolboxDragStart();
         }
     }
     _raiseToolboxDragEnd() {
-        if(this._leftPanel) {
-            this._leftPanel.$element().removeClass('dx-skip-gesture-event');
+        if(this._toolbox) {
+            this._toolbox._raiseToolboxDragEnd();
         }
     }
 
@@ -1706,6 +1756,57 @@ class Diagram extends Widget {
             toKey: nativeConnector.toKey
         };
     }
+
+    _invalidateContextMenuCommands() {
+        if(this._contextMenu) {
+            this._contextMenu.option({
+                commands: this.option('contextMenu.commands')
+            });
+        }
+    }
+    _invalidatePropertiesPanelGroups() {
+        if(this._rightPanel) {
+            this._rightPanel.option({
+                propertyGroups: this.option('propertiesPanel.groups')
+            });
+        }
+    }
+    _invalidateMainToolbarCommands() {
+        if(this._mainToolbar) {
+            this._mainToolbar.option({
+                commands: this.option('toolbar.commands')
+            });
+        }
+    }
+    _invalidateHistoryToolbarCommands() {
+        if(this._historyToolbar) {
+            this._historyToolbar.option({
+                commands: this.option('historyToolbar.commands')
+            });
+        }
+    }
+    _invalidateViewToolbarCommands() {
+        if(this._viewToolbar) {
+            this._viewToolbar.option({
+                commands: this.option('viewToolbar.commands')
+            });
+        }
+    }
+    _invalidateToolboxGroups() {
+        if(this._toolbox) {
+            this._toolbox.option({
+                toolboxGroups: this._getToolboxGroups()
+            });
+        }
+    }
+    _setToolboxVisible(visible) {
+        if(this._toolbox) {
+            this._toolbox.option({
+                visible: visible
+            });
+        }
+    }
+
     _optionChanged(args) {
         if(this.optionsUpdateBar.isUpdateLocked()) return;
 
@@ -1815,7 +1916,21 @@ class Diagram extends Widget {
                 break;
             case 'toolbar':
                 if(args.fullName === 'toolbar.commands') {
-                    this._invalidateToolbarCommands();
+                    this._invalidateMainToolbarCommands();
+                } else {
+                    this._invalidate();
+                }
+                break;
+            case 'historyToolbar':
+                if(args.fullName === 'historyToolbar.commands') {
+                    this._invalidateHistoryToolbarCommands();
+                } else {
+                    this._invalidate();
+                }
+                break;
+            case 'viewToolbar':
+                if(args.fullName === 'viewToolbar.commands') {
+                    this._invalidateViewToolbarCommands();
                 } else {
                     this._invalidate();
                 }
@@ -1830,8 +1945,8 @@ class Diagram extends Widget {
                 this._createSelectionChangedAction();
                 break;
             case 'export':
-                if(this._toolbarInstance) {
-                    this._toolbarInstance.option('export', args.value);
+                if(this._mainToolbar) {
+                    this._mainToolbar.option('export', args.value);
                 }
                 break;
             case 'hasChanges':

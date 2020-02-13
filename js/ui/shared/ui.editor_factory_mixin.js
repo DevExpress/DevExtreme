@@ -8,7 +8,7 @@ const browser = require('../../core/utils/browser');
 const extend = require('../../core/utils/extend').extend;
 const devices = require('../../core/devices');
 const getPublicElement = require('../../core/utils/dom').getPublicElement;
-const normalizeDataSourceOptions = require('../../data/data_source/data_source').normalizeDataSourceOptions;
+const normalizeDataSourceOptions = require('../../data/data_source/utils').normalizeDataSourceOptions;
 const normalizeKeyName = require('../../events/utils').normalizeKeyName;
 
 require('../text_box');
@@ -89,7 +89,6 @@ const EditorFactoryMixin = (function() {
             },
             displayFormat: options.format,
             type: options.dataType,
-            formatWidthCalculator: null,
             dateSerializationFormat: null,
             width: options.parentType === 'filterBuilder' ? undefined : 'auto'
         }, options);

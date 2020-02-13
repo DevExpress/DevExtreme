@@ -1,11 +1,11 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import { Deferred } from 'core/utils/deferred';
-import ArrayFileProvider from 'ui/file_manager/file_provider/array';
-import { ErrorCode } from 'ui/file_manager/ui.file_manager.common';
+import ObjectFileSystemProvider from 'file_management/object_provider';
+import ErrorCode from 'file_management/errors';
 import FileItemsController from 'ui/file_manager/file_items_controller';
 import { createTestFileSystem, createUploaderFiles, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
-import TestFileProvider from '../../../helpers/fileManager/file_provider.test.js';
+import TestFileSystemProvider from '../../../helpers/fileManager/file_provider.test.js';
 import FileManagerProgressPanelMock from '../../../helpers/fileManager/notification.progress_panel.mock.js';
 import FileManagerNotificationControlMock from '../../../helpers/fileManager/notification.mock.js';
 import FileManagerFileUploaderMock from '../../../helpers/fileManager/file_uploader.mock.js';
@@ -34,7 +34,7 @@ const moduleConfig = {
 
 const createController = (context, providerOptions) => {
     const data = createTestFileSystem();
-    const arrayProvider = new ArrayFileProvider({ data });
+    const arrayProvider = new ObjectFileSystemProvider({ data });
 
     stubFileReader(arrayProvider);
 
@@ -42,7 +42,7 @@ const createController = (context, providerOptions) => {
         provider: arrayProvider
     };
     const config = $.extend(true, defaultConfig, providerOptions || {});
-    const provider = new TestFileProvider(config);
+    const provider = new TestFileSystemProvider(config);
 
     context.controller = new FileItemsController({
         fileProvider: provider,

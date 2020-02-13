@@ -23,6 +23,8 @@ const HEADER_COLUMN_INDICATORS_CLASS = 'dx-column-indicators';
 const GRID_TABLE_CLASS = 'dx-datagrid-table';
 const FREE_SPACE_ROW = 'dx-freespace-row';
 const ROW_CLASS = 'dx-row';
+const COMMAND_EDIT_CLASS = 'dx-command-edit';
+const COMMAND_BUTTON_CLASS = 'dx-link';
 
 class GridWrapper extends WrapperBase {
     constructor(containerSelector, widgetPrefix) {
@@ -121,6 +123,17 @@ export class RowsViewWrapper extends GridTableElement {
 
     getDataCellElement(rowIndex, columnIndex) {
         return this.getDataRowElement(rowIndex).find('td').eq(columnIndex);
+    }
+
+    getCommandButton(rowIndex, commandColumnIndex, buttonIndex) {
+        const $dataRow = this.getDataRowElement(rowIndex);
+        const $commandCell = $dataRow
+            .find(`.${COMMAND_EDIT_CLASS}`)
+            .eq(commandColumnIndex);
+
+        return $commandCell
+            .find(`.${COMMAND_BUTTON_CLASS}`)
+            .eq(buttonIndex);
     }
 
     getFixedDataCellElement(rowIndex, columnIndex) {

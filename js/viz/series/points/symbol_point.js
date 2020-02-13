@@ -329,9 +329,10 @@ module.exports = {
         const visibleArea = that._getVisibleArea();
         const labelBBox = label.getBoundingRect();
         const graphicBBox = that._getGraphicBBox(label.pointPosition);
+        const fullGraphicBBox = that._getGraphicBBox();
         const offset = LABEL_OFFSET;
 
-        if(that._isPointInVisibleArea(visibleArea, graphicBBox)) {
+        if(that._isPointInVisibleArea(visibleArea, fullGraphicBBox)) {
             if(!that._options.rotated) {
                 if(visibleArea.minX > coord.x) {
                     coord.x = visibleArea.minX;

@@ -1111,7 +1111,7 @@ module('items via markup', {
         const $element = $('#cmp');
         const dxItemString = 'dxItem: {}';
 
-        const $innerItem = window.test = $('<div>').attr('data-options', dxItemString).text('test');
+        const $innerItem = $('<div>').attr('data-options', dxItemString).text('test');
         $innerItem.appendTo($element);
         const component = new TestComponent('#cmp', {});
 
@@ -1125,7 +1125,7 @@ module('items via markup', {
         const $element = $('#cmp');
         const dxItemString = '{ "dxItem": {} }';
 
-        const $innerItem = window.test = $('<div>').attr('data-options', dxItemString).text('test');
+        const $innerItem = $('<div>').attr('data-options', dxItemString).text('test');
         $innerItem.appendTo($element);
         let component;
         try {

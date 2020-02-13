@@ -53,6 +53,8 @@ class Button extends Widget {
             activeStateEnabled: true,
             focusStateEnabled: true,
             hoverStateEnabled: true,
+            icon: '',
+            iconPosition: 'left',
             template: '',
             text: '',
         });

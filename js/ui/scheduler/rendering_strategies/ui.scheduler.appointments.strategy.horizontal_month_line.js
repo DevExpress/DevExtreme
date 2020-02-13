@@ -5,6 +5,7 @@ import query from '../../../data/query';
 const HOURS_IN_DAY = 24;
 const MINUTES_IN_HOUR = 60;
 const MILLISECONDS_IN_MINUTE = 60000;
+const ZERO_APPOINTMENT_DURATION_IN_DAYS = 1;
 
 class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrategy {
     calculateAppointmentWidth(appointment, position, isRecurring) {
@@ -12,15 +13,15 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
         const endDate = new Date(this.endDate(appointment, position, isRecurring, true));
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
-        const duration = this._getDurationInHour(startDate, endDate) / HOURS_IN_DAY;
+        const duration = this._getDurationInDays(startDate, endDate);
         const width = this.cropAppointmentWidth(Math.ceil(duration) * cellWidth, cellWidth);
 
         return width;
     }
 
-    _getDurationInHour(startDate, endDate) {
+    _getDurationInDays(startDate, endDate) {
         const adjustedDuration = this._adjustDurationByDaylightDiff(endDate.getTime() - startDate.getTime(), startDate, endDate);
-        return adjustedDuration / dateUtils.dateToMilliseconds('hour');
+        return (adjustedDuration / dateUtils.dateToMilliseconds('day')) || ZERO_APPOINTMENT_DURATION_IN_DAYS;
     }
 
     getDeltaTime(args, initialSize) {

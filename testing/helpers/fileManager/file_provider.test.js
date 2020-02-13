@@ -1,11 +1,11 @@
 import { Deferred } from 'core/utils/deferred';
 
-import { FileProvider } from 'ui/file_manager/file_provider/file_provider';
-import { ErrorCode } from 'ui/file_manager/ui.file_manager.common';
+import FileSystemProviderBase from 'file_management/provider_base';
+import ErrorCode from 'file_management/errors';
 
 const DEFAULT_DELAY = 2000;
 
-export default class TestFileProvider extends FileProvider {
+export default class TestFileSystemProvider extends FileSystemProviderBase {
 
     constructor(options) {
         super(options);
@@ -30,13 +30,13 @@ export default class TestFileProvider extends FileProvider {
         this._provider.renameItem(item, name);
     }
 
-    createFolder(parentDir, name) {
-        return this._doDelay(() => this._createFolderCore(parentDir, name));
+    createDirectory(parentDir, name) {
+        return this._doDelay(() => this._createDirectoryCore(parentDir, name));
     }
 
-    _createFolderCore(parentDir, name) {
+    _createDirectoryCore(parentDir, name) {
         this._raiseError();
-        this._provider.createFolder(parentDir, name);
+        this._provider.createDirectory(parentDir, name);
     }
 
     deleteItems(items) {

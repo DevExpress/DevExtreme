@@ -24,7 +24,9 @@ module.exports = {
             rootElement.find('.' + SORT_CLASS).remove();
             !$indicatorsContainer.children().length && $indicatorsContainer.remove();
 
-            if((sortingMode === 'single' || sortingMode === 'multiple') && column.allowSorting || isDefined(column.sortOrder)) {
+            const isSortingAllowed = (sortingMode === 'single' || sortingMode === 'multiple') && column.allowSorting;
+
+            if(!isDefined(column.groupIndex) && (isSortingAllowed || isDefined(column.sortOrder))) {
                 ariaSortState = column.sortOrder === 'asc' ? 'ascending' : 'descending';
                 $sortIndicator = that.callBase(options)
                     .toggleClass(SORTUP_CLASS, column.sortOrder === 'asc')

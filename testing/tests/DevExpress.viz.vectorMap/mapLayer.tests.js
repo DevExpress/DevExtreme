@@ -11,7 +11,7 @@ let stubSelectStrategy;
 let StubMapLayerElement;
 let StubProxy;
 const projectionModule = require('viz/vector_map/projection.main');
-const dataSourceModule = require('data/data_source/data_source');
+const DataSource = require('data/data_source/data_source').DataSource;
 const baseThemeManagerModule = require('viz/core/base_theme_manager');
 const vizMocks = require('../../helpers/vizMocks.js');
 
@@ -140,7 +140,7 @@ QUnit.test('dataSource creation', function(assert) {
     this.layer.setOptions({ dataSource: [{}] });
 
     assert.ok(this.layer.getDataSource(), 'getDataSource method is work');
-    assert.ok(this.layer.getDataSource() instanceof dataSourceModule.DataSource);
+    assert.ok(this.layer.getDataSource() instanceof DataSource);
     assert.deepEqual(this.layer.getDataSource().items(), [{}], 'data source items');
 });
 
@@ -225,8 +225,8 @@ QUnit.test('Set options with data, load error', function(assert) {
     const labelRoot = this.context.labelRoot = new vizMocks.Element();
     this.context.grouping = { g1: 1, g2: 2 };
 
-    const DataSource = vizMocks.stubClass(dataSourceModule.DataSource);
-    const ds = new DataSource();
+    const DataSourceMock = vizMocks.stubClass(DataSource);
+    const ds = new DataSourceMock();
 
     this.layer.setOptions({
         dataSource: ds

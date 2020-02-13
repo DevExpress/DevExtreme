@@ -28,6 +28,7 @@ const FILE_MANAGER_PROGRESS_BOX_WRAPPER_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLA
 const FILE_MANAGER_PROGRESS_BOX_COMMON_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-common`;
 const FILE_MANAGER_PROGRESS_BOX_PROGRESS_BAR_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-progress-bar`;
 const FILE_MANAGER_PROGRESS_BOX_CLOSE_BUTTON_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-close-button`;
+const DX_CARD_CLASS = 'dx-card';
 
 class FileManagerProgressPanel extends Widget {
 
@@ -161,6 +162,9 @@ class FileManagerProgressPanel extends Widget {
 
     _createDetailsItem($container, item, itemIndex, skipProgressBox, showCloseButton) {
         const $detailsItem = $('<div>').appendTo($container);
+        if(itemIndex !== -1) {
+            $detailsItem.addClass(DX_CARD_CLASS);
+        }
         return this._createProgressBox($detailsItem, {
             commonText: item.commonText,
             imageUrl: item.imageUrl,

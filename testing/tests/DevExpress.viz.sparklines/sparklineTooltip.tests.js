@@ -74,7 +74,7 @@ QUnit.test('Enabled tooltip', function(assert) {
             enabled: true
         }
     });
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
 
     const arg = sparkline._tooltip.ctorArgs;
     assert.strictEqual(arg.length, 1);
@@ -102,7 +102,7 @@ QUnit.test('Enabled tooltip. Empty data', function(assert) {
             enabled: true
         }
     });
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
 
     const arg = sparkline._tooltip.ctorArgs;
     assert.strictEqual(arg.length, 1);
@@ -129,7 +129,7 @@ QUnit.test('Disabled tooltip', function(assert) {
         }
     });
 
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
 
     assert.equal(sparkline._tooltip.update.callCount, 1, 'update is called');
     assert.equal(sparkline._tooltip.update.lastCall.args[0].enabled, false);
@@ -143,7 +143,7 @@ QUnit.test('Tooltip when datasource is empty', function(assert) {
         }
     });
 
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
 
     assert.equal(sparkline._tooltip.update.callCount, 1, 'update is called');
     assert.equal(sparkline._tooltip.update.lastCall.args[0].enabled, false);
@@ -164,7 +164,7 @@ QUnit.test('customizeTooltip does not return html or text', function(assert) {
         }
     });
 
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
 
     const ct = sparkline._tooltip.update.lastCall.args[0].customizeTooltip;
 
@@ -189,7 +189,7 @@ QUnit.test('customizeTooltip return html', function(assert) {
         }
     });
 
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
 
     const ct = sparkline._tooltip.update.lastCall.args[0].customizeTooltip;
 
@@ -214,7 +214,7 @@ QUnit.test('customizeTooltip return text', function(assert) {
         }
     });
 
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
 
     const ct = sparkline._tooltip.update.lastCall.args[0].customizeTooltip;
 
@@ -239,7 +239,7 @@ QUnit.test('customizeTooltip is not function', function(assert) {
         }
     });
 
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
 
     const ct = sparkline._tooltip.update.lastCall.args[0].customizeTooltip;
 
@@ -258,7 +258,7 @@ QUnit.test('Default customizeTooltip callback. Custom linespacing', function(ass
         }
     });
 
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
 
     const ct = sparkline._tooltip.update.lastCall.args[0].customizeTooltip;
 
@@ -276,7 +276,7 @@ QUnit.test('dxSparkline get TooltipFormatObject', function(assert) {
             enabled: true
         }
     });
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
 
     assert.deepEqual(sparkline._tooltip.show.lastCall.args, [{
         firstValue: '4:undefined',
@@ -303,7 +303,7 @@ QUnit.test('sparkline tooltip format object. min/max values when all values are 
         }
     });
 
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
 
     assert.strictEqual(sparkline._tooltip.show.lastCall.args[0].originalMinValue, 0);
     assert.strictEqual(sparkline._tooltip.show.lastCall.args[0].originalMaxValue, 0);
@@ -319,7 +319,7 @@ QUnit.test('Default Tooltip text', function(assert) {
             enabled: true
         }
     });
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
     sparkline._tooltip.formatValue = function(value, format) { return value; };
 
     const ctResult = sparkline._tooltip.update.lastCall.args[0].customizeTooltip(sparkline._getTooltipData());
@@ -344,7 +344,7 @@ QUnit.test('Default Tooltip text. Rtl', function(assert) {
         },
         rtlEnabled: true
     });
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
     sparkline._tooltip.formatValue = function(value, format) { return value; };
 
     const ctResult = sparkline._tooltip.update.lastCall.args[0].customizeTooltip(sparkline._getTooltipData());
@@ -368,7 +368,7 @@ QUnit.test('Winloss sparkline get TooltipFormatObject', function(assert) {
             enabled: true
         }
     });
-    sparkline._showTooltipCallback();
+    sparkline._showTooltip();
 
 
     assert.deepEqual(sparkline._tooltip.show.lastCall.args, [{

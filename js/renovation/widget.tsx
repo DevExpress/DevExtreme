@@ -11,9 +11,10 @@ import {
     Ref,
     Slot,
 } from 'devextreme-generator/component_declaration/common';
-import { active, dxClick, hover, keyboard, resize, visibility } from '../events/short';
+import { active, dxClick, focus, hover, keyboard, resize, visibility } from '../events/short';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
+import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
 import { hasWindow } from '../core/utils/window';
 import Action from '../core/action';
@@ -267,8 +268,10 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
     @Effect()
     activeEffect() {
-        const { activeStateEnabled, activeStateUnit, disabled, onInactive,
-            _feedbackShowTimeout, _feedbackHideTimeout, onActive } = this.props;
+        const {
+            activeStateEnabled, activeStateUnit, disabled, onInactive,
+            _feedbackShowTimeout, _feedbackHideTimeout, onActive,
+        } = this.props;
         const selector = activeStateUnit;
         const namespace = 'UIFeedback';
 
@@ -279,10 +282,10 @@ export default class Widget extends JSXComponent<WidgetInput> {
                     onActive?.(event);
                 }),
                 new Action(({ event }) => {
-                        this._active = false;
-                        onInactive?.(event);
-                    },
-                    { excludeValidators: ['disabled', 'readOnly'] },
+                    this._active = false;
+                    onInactive?.(event);
+                },
+                { excludeValidators: ['disabled', 'readOnly'] },
                 ), {
                     showTimeout: _feedbackShowTimeout,
                     hideTimeout: _feedbackHideTimeout,
@@ -292,6 +295,28 @@ export default class Widget extends JSXComponent<WidgetInput> {
             );
 
             return () => active.off(this.widgetRef, { selector, namespace });
+        }
+
+        return null;
+    }
+
+    @Effect()
+    focusEffect() {
+        const { disabled, focusStateEnabled, name } = this.props;
+        const namespace = `${name}Focus`;
+        const isFocusable = focusStateEnabled && !disabled;
+
+        if (isFocusable) {
+            focus.on(this.widgetRef,
+                e => !e.isDefaultPrevented() && (this._focused = true),
+                e => !e.isDefaultPrevented() && (this._focused = false),
+                {
+                    namespace,
+                    isFocusable: el => focusable(null, el),
+                },
+            );
+
+            return () => focus.off(this.widgetRef, { namespace });
         }
 
         return null;

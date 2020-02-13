@@ -26,8 +26,9 @@ export const EVENT = {
 };
 
 export const defaultEvent = {
-    stopImmediatePropagation: () => void 0,
+    isDefaultPrevented: () => void 0,
     preventDefault: () => void 0,
+    stopImmediatePropagation: () => void 0,
     stopPropagation: () => void 0,
 };
 
@@ -45,7 +46,7 @@ export const emitKeyboard = (key, e = defaultEvent) => {
     }
 };
 
-export const emit = (event, e = {}, element) => {
+export const emit = (event, e = defaultEvent, element) => {
     eventHandlers[event]?.forEach(({ handler, el }) => {
         if(!element || el === element) {
             handler(e);

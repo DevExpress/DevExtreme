@@ -12,6 +12,8 @@ if [ "$1" == "rebuild" ]; then
         exit 0
     fi
 
+    source drone-cache-clean.sh
+
     for i in $CACHE_DIRS; do
         if [ -e $i ]; then
             if tar cf - $i | lz4 | curl -Lsf -X PUT -H "x-amz-acl: bucket-owner-full-control" --data-binary @- "$CACHE_URL/$i.tar.lz4"; then

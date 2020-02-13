@@ -84,7 +84,7 @@ describe('Button', () => {
                 expect(submitInputClick).toHaveBeenCalledTimes(1);
             });
 
-            it('should submit form by sapce press', () => {
+            it('should submit form by space press', () => {
                 const button = render({ useSubmitBehavior: true });
                 const submitInput = button.find('input.dx-button-submit-input');
                 const submitInputClick = jest.fn();
@@ -222,6 +222,50 @@ describe('Button', () => {
             });
         });
 
+        describe('icon', () => {
+            it('should not render icon by default', () => {
+                const button = render();
+
+                expect(button.is('.dx-button-has-icon')).toBe(false);
+                expect(button.exists('.dx-icon')).toBe(false);
+            });
+
+            it('should render icon', () => {
+                const button = render({ icon: 'test' });
+
+                expect(button.is('.dx-button-has-icon')).toBe(true);
+                expect(button.exists('.dx-icon.dx-icon-test')).toBe(true);
+            });
+        });
+
+        describe('iconPosition', () => {
+            it('should render icon before text if iconPosition is left (by default)', () => {
+                const button = render({
+                    text: 'myButton',
+                    icon: 'test',
+                });
+
+                const elements = button.find('.dx-button-content').children();
+
+                expect(elements.at(0).is('.dx-icon.dx-icon-test')).toBe(true);
+                expect(elements.at(1).is('.dx-button-text')).toBe(true);
+            });
+
+            it('should render icon after text if iconPosition is right', () => {
+                const button = render({
+                    text: 'myButton',
+                    icon: 'test',
+                    iconPosition: 'right',
+                });
+
+                const elements = button.find('.dx-button-content').children();
+
+                expect(button.hasClass('dx-button-icon-right')).toBe(true);
+                expect(elements.at(0).is('.dx-button-text')).toBe(true);
+                expect(elements.at(1).is('.dx-icon.dx-icon-test.dx-icon-right')).toBe(true);
+            });
+        });
+
         describe('hoverStateEnabled', () => {
             it('should pass a default value into Widget component', () => {
                 const tree = render();
@@ -233,6 +277,20 @@ describe('Button', () => {
                 const tree = render({ hoverStateEnabled: false });
 
                 expect(tree.find(Widget).prop('hoverStateEnabled')).toBe(false);
+            });
+        });
+
+        describe('focusStateEnabled', () => {
+            it('should pass a default value into Widget component', () => {
+                const button = render();
+
+                expect(button.find(Widget).prop('focusStateEnabled')).toBe(true);
+            });
+
+            it('should pass a custom value into Widget component', () => {
+                const button = render({ focusStateEnabled: false });
+
+                expect(button.find(Widget).prop('focusStateEnabled')).toBe(false);
             });
         });
 
