@@ -22,7 +22,7 @@ const TS_MODULES_GLOB = './js/**/*.d.ts';
 
 const COMMON_TS_COMPILER_OPTIONS = {
     noEmitOnError: true,
-    skipLibCheck: true
+    types: ['jquery']
 };
 
 gulp.task('ts-vendor', function() {
