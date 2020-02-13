@@ -1,6 +1,6 @@
 import { h } from 'preact';
 
-export const HTMLToPreact = (node) => {
+export const HTMLToPreact = (node, ...restChildren) => {
     // NOTE: nodeType === 3 => text node
     if(node.nodeType === 3) {
         return node.wholeText;
@@ -19,5 +19,5 @@ export const HTMLToPreact = (node) => {
         return result;
     }, {});
 
-    return h(tag, attributes, children);
+    return h(tag, attributes, [...children, ...restChildren]);
 };

@@ -103,7 +103,11 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
                 icon={viewModel.icon}
                 text={viewModel.text}
                 contentRef={viewModel.contentRef}
-            />
+            >
+                {viewModel.useSubmitBehavior &&
+                    <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
+                }
+            </viewModel.contentRender>
         ) || (
             <div className="dx-button-content" ref={viewModel.contentRef}>
                 {isIconLeft && icon}

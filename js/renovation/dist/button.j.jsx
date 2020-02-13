@@ -15,7 +15,7 @@ class Button extends Widget {
         const props = super.getProps(isFirstRender);
 
         if(props.template) {
-            props.contentRender = ({ text, icon, contentRef }) => {
+            props.contentRender = ({ text, icon, contentRef, children }) => {
                 const data = { text, icon };
                 let $content = $('<div>');
                 $content.addClass('dx-button-content');
@@ -30,7 +30,7 @@ class Button extends Widget {
                     $content = $template;
                 }
 
-                const result = HTMLToPreact($content.get(0));
+                const result = HTMLToPreact($content.get(0), children);
                 result.ref = contentRef;
 
                 return result;
