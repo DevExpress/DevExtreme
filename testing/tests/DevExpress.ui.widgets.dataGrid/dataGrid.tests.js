@@ -2048,10 +2048,6 @@ QUnit.test('Columns should not shake during resizing', function(assert) {
     const widths = [];
     const offset = $('#dataGrid').offset();
 
-    for(let i = 0; i < 5; i++) {
-        widths.push($('#dataGrid').find('td').eq(i).width());
-    }
-
     // act
     const resizeController = instance.getController('columnsResizer');
     resizeController._isResizing = true;
@@ -2088,8 +2084,8 @@ QUnit.test('Columns should not shake during resizing', function(assert) {
     assert.equal($cells.eq(0).width(), 34, 'first column width');
     assert.equal($cells.eq(1).width(), 333, 'second column width');
 
-    for(let i = 2; i < 5; i++) {
-        assert.equal($cells.eq(i).width(), widths[i], 'width was not affected');
+    for(let i = 0; i < 5; i++) {
+        widths.push($('#dataGrid').find('td').eq(i).width());
     }
 
     // act
