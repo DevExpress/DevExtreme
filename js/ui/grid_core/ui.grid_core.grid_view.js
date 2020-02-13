@@ -193,6 +193,8 @@ const ResizingController = modules.ViewController.inherit({
             const $rowsTable = that._rowsView._getTableElement();
             const $rowsFixedTable = that._rowsView.getTableElements().eq(1);
 
+            if(!$rowsTable) return;
+
             $rowsTable.css('tableLayout', isBestFit ? 'auto' : 'fixed');
             $rowsTable.children('colgroup').css('display', isBestFit ? 'none' : '');
             $rowsFixedTable.toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
