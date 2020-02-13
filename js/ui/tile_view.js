@@ -217,8 +217,17 @@ const TileView = CollectionWidget.inherit({
         this._cells.push(new Array(this._cellsPerDimension));
 
         this._arrangeItems(items);
+        this._renderContentSize(config, itemMargin);
+    },
+
+    _renderContentSize: function(config, itemMargin) {
         if(windowUtils.hasWindow()) {
-            this._$container[config.mainDimension](this._cells.length * this.option(config.baseItemMainDimension) + (this._cells.length + 1) * itemMargin);
+            const actualContentSize = this._cells.length * this.option(config.baseItemMainDimension) + (this._cells.length + 1) * itemMargin;
+            const containerSize = this._$container[config.mainDimension]();
+
+            if(actualContentSize > containerSize) {
+                this._$container[config.mainDimension](actualContentSize);
+            }
         }
     },
 
