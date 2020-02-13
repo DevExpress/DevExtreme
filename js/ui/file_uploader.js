@@ -580,9 +580,11 @@ const FileUploader = Editor.inherit({
     _setStatusMessage: function(file, key) {
         setTimeout(function() {
             if(this.option('showFileList')) {
-                file.$statusMessage.text(this.option(key));
-                file.$statusMessage.css('display', '');
-                file.progressBar.$element().remove();
+                if(file.$statusMessage) {
+                    file.$statusMessage.text(this.option(key));
+                    file.$statusMessage.css('display', '');
+                    file.progressBar.$element().remove();
+                }
             }
         }.bind(this), FILEUPLOADER_AFTER_LOAD_DELAY);
     },
