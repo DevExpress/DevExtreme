@@ -1952,8 +1952,6 @@ const Scheduler = Widget.inherit({
         if(isPopupEditing) {
             this._updatedRecAppointment = updatedAppointment;
 
-            // processAppointmentDates.call(this, singleAppointment);
-
             this._showAppointmentPopup(singleAppointment, true, false);
             this._editAppointmentData = targetAppointment;
 

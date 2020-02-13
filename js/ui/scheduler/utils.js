@@ -20,8 +20,6 @@ const getDaylightOffsetInMs = (startDate, endDate) => {
 };
 
 const calculateTimezoneByValue = (timezone, date) => {
-    let result = timezone;
-
     if(typeof timezone === 'string') {
         date = date || new Date();
         const dateUtc = Date.UTC(
@@ -31,9 +29,9 @@ const calculateTimezoneByValue = (timezone, date) => {
             date.getUTCHours(),
             date.getUTCMinutes()
         );
-        result = SchedulerTimezones.getTimezoneOffsetById(timezone, dateUtc);
+        timezone = SchedulerTimezones.getTimezoneOffsetById(timezone, dateUtc);
     }
-    return result;
+    return timezone;
 };
 
 const getDaylightOffsetByAppointmentTimezone = (startDate, endDate, startDateTimezone) => {
