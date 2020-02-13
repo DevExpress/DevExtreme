@@ -108,3 +108,14 @@ QUnit.test('should rerender template in runtime', function(assert) {
     assert.strictEqual($element.find('#custom-template').length, 0, 'not render old template');
     assert.strictEqual($element.find('#new-template').length, 1, 'render new template');
 });
+
+QUnit.test('should render submit input with custom template', function(assert) {
+    const $element = $('#component');
+
+    $element.Button({
+        useSubmitBehavior: true,
+        template: (data, container) => $('<span>'),
+    });
+
+    assert.strictEqual($element.find('.dx-button-submit-input').length, 1, 'render submit input');
+});

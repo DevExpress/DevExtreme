@@ -236,7 +236,7 @@ describe('Button', () => {
                 
                 button.setProps({ contentRender: undefined });
                 expect(button.exists(contentRender)).toBe(false);
-            })
+            });
 
             it('should change properties in runtime', () => {
                 const button = mount(<Button text='My button' contentRender={contentRender} />);
@@ -250,7 +250,7 @@ describe('Button', () => {
 
                 expect(buttonContent.props().text).toBe('New value');
                 expect(buttonContent.render().text()).toBe('New value123');
-            })
+            });
         });
 
         describe('icon', () => {
