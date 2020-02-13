@@ -364,11 +364,14 @@ describe('Widget', () => {
 
     describe('Callbacks', () => {
         describe('onVisibilityChanged', () => {
-            it('is called on `dxhiding` and `dxshown` events and special css class is attached', () => {
-                const onVisibilityChange = jest.fn();
+            const onVisibilityChange = jest.fn();
+            it('should add special css class when `onVisibilityChange` handler is defined', () => {
                 const widget = render({ onVisibilityChange });
 
                 expect(widget.exists('.dx-visibility-change-handler')).toBe(true);
+            });
+            it('should be called on `dxhiding` and `dxshown` events and special css class is attached', () => {
+                render({ onVisibilityChange });
 
                 emit(EVENT.hiding);
                 expect(onVisibilityChange).toHaveBeenCalledTimes(1);
