@@ -81,11 +81,11 @@ class MentionModule extends PopupModule {
     _attachKeyboardHandlers() {
         this.quill.keyboard.addBinding({
             key: KEY_CODES.ARROW_UP
-        }, this._arrowUpKeyHandler.bind(this));
+        }, this._moveToItem.bind(this, 'prev'));
 
         this.quill.keyboard.addBinding({
             key: KEY_CODES.ARROW_DOWN
-        }, this._arrowDownKeyHandler.bind(this));
+        }, this._moveToItem.bind(this, 'next'));
 
         this.quill.keyboard.addBinding({
             key: KEY_CODES.ENTER
@@ -119,27 +119,19 @@ class MentionModule extends PopupModule {
         });
     }
 
-    _arrowUpKeyHandler() {
-        if(this._isMentionActive) {
+    _moveToItem(direction) {
+        const dataSource = this._list.getDataSource();
+
+        if(this._isMentionActive && !dataSource.isLoading()) {
             const $focusedItem = $(this._list.option('focusedElement'));
-            let $prevItem = $focusedItem.prev();
+            const defaultItemPosition = direction === 'next' ? 'first' : 'last';
+            let $nextItem = $focusedItem[direction]();
 
-            $prevItem = $prevItem.length ? $prevItem : this._activeListItems.last();
-            this._list.option('focusedElement', getPublicElement($prevItem));
-            this._list.scrollToItem($prevItem);
-        }
-        return !this._isMentionActive;
-    }
-
-    _arrowDownKeyHandler() {
-        if(this._isMentionActive) {
-            const $focusedItem = $(this._list.option('focusedElement'));
-            let $nextItem = $focusedItem.next();
-
-            $nextItem = $nextItem.length ? $nextItem : this._activeListItems.first();
+            $nextItem = $nextItem.length ? $nextItem : this._activeListItems[defaultItemPosition]();
             this._list.option('focusedElement', getPublicElement($nextItem));
             this._list.scrollToItem($nextItem);
         }
+
         return !this._isMentionActive;
     }
 
