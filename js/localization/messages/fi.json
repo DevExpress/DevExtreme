@@ -194,6 +194,8 @@
         "dxScheduler-openAppointment": "Avaa tapaaminen",
 
         "dxScheduler-recurrenceNever": "Ei koskaan",
+        "dxScheduler-recurrenceMinutely": "Minutely",
+        "dxScheduler-recurrenceHourly": "Hourly",
         "dxScheduler-recurrenceDaily": "Päivittäin",
         "dxScheduler-recurrenceWeekly": "Viikoittain",
         "dxScheduler-recurrenceMonthly": "Kuukausittain",
@@ -205,6 +207,8 @@
         "dxScheduler-recurrenceAfter": "Jälkeen",
         "dxScheduler-recurrenceOn": "Aika",
 
+        "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
+        "dxScheduler-recurrenceRepeatHourly": "hour(s)",
         "dxScheduler-recurrenceRepeatDaily": "päivittäin",
         "dxScheduler-recurrenceRepeatWeekly": "viikon välein",
         "dxScheduler-recurrenceRepeatMonthly": "kuukauden välein",

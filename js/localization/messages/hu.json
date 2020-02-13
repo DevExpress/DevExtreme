@@ -194,6 +194,8 @@
     "dxScheduler-openAppointment": "Találkozó megnyitása",
 
     "dxScheduler-recurrenceNever": "Soha",
+    "dxScheduler-recurrenceMinutely": "Minutely",
+    "dxScheduler-recurrenceHourly": "Hourly",
     "dxScheduler-recurrenceDaily": "Naponta",
     "dxScheduler-recurrenceWeekly": "Hetente",
     "dxScheduler-recurrenceMonthly": "Havonta",
@@ -205,6 +207,8 @@
     "dxScheduler-recurrenceAfter": "Után",
     "dxScheduler-recurrenceOn": "Ekkor",
 
+    "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
+    "dxScheduler-recurrenceRepeatHourly": "hour(s)",
     "dxScheduler-recurrenceRepeatDaily": "nap(ok)",
     "dxScheduler-recurrenceRepeatWeekly": "hét(ek)",
     "dxScheduler-recurrenceRepeatMonthly": "hónap(ok)",

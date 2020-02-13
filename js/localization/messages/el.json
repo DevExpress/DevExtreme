@@ -194,6 +194,8 @@
         "dxScheduler-openAppointment": "Άνοιγμα ραντεβού",
 
         "dxScheduler-recurrenceNever": "Ποτέ",
+        "dxScheduler-recurrenceMinutely": "Minutely",
+        "dxScheduler-recurrenceHourly": "Hourly",
         "dxScheduler-recurrenceDaily": "Καθημερινά",
         "dxScheduler-recurrenceWeekly": "Εβδομαδιαία",
         "dxScheduler-recurrenceMonthly": "Μηνιαία",
@@ -205,6 +207,8 @@
         "dxScheduler-recurrenceAfter": "Μετά",
         "dxScheduler-recurrenceOn": "On",
 
+        "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
+        "dxScheduler-recurrenceRepeatHourly": "hour(s)",
         "dxScheduler-recurrenceRepeatDaily": "μέρα(ες)",
         "dxScheduler-recurrenceRepeatWeekly": "εβδομάδα(ες)",
         "dxScheduler-recurrenceRepeatMonthly": "μήνα(ες)",

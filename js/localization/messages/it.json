@@ -194,6 +194,8 @@
         "dxScheduler-openAppointment": "Apri appuntamento",
 
         "dxScheduler-recurrenceNever": "Mai",
+        "dxScheduler-recurrenceMinutely": "Minutely",
+        "dxScheduler-recurrenceHourly": "Hourly",
         "dxScheduler-recurrenceDaily": "Giornaliero",
         "dxScheduler-recurrenceWeekly": "Settimanale",
         "dxScheduler-recurrenceMonthly": "Mensile",
@@ -205,6 +207,8 @@
         "dxScheduler-recurrenceAfter": "Dopo",
         "dxScheduler-recurrenceOn": "Di",
 
+        "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
+        "dxScheduler-recurrenceRepeatHourly": "hour(s)",
         "dxScheduler-recurrenceRepeatDaily": "giorno(i)",
         "dxScheduler-recurrenceRepeatWeekly": "settimana(e)",
         "dxScheduler-recurrenceRepeatMonthly": "mese(i)",

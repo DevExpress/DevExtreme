@@ -194,6 +194,8 @@
     "dxScheduler-openAppointment": "打开日程",
 
     "dxScheduler-recurrenceNever": "永不",
+    "dxScheduler-recurrenceMinutely": "Minutely",
+    "dxScheduler-recurrenceHourly": "Hourly",
     "dxScheduler-recurrenceDaily": "日常",
     "dxScheduler-recurrenceWeekly": "每周",
     "dxScheduler-recurrenceMonthly": "每月",
@@ -205,6 +207,8 @@
     "dxScheduler-recurrenceAfter": "之后",
     "dxScheduler-recurrenceOn": "在",
 
+    "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
+    "dxScheduler-recurrenceRepeatHourly": "hour(s)",
     "dxScheduler-recurrenceRepeatDaily": "日",
     "dxScheduler-recurrenceRepeatWeekly": "周",
     "dxScheduler-recurrenceRepeatMonthly": "月",
