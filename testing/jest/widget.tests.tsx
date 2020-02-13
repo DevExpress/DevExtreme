@@ -362,6 +362,29 @@ describe('Widget', () => {
         });
     });
 
+    describe('Callbacks', () => {
+        describe('onVisibilityChanged', () => {
+            const onVisibilityChange = jest.fn();
+            it('should add special css class when `onVisibilityChange` handler is defined', () => {
+                const widget = render({ onVisibilityChange });
+
+                expect(widget.exists('.dx-visibility-change-handler')).toBe(true);
+            });
+
+            it('should be called on `dxhiding` and `dxshown` events and special css class is attached', () => {
+                render({ onVisibilityChange });
+
+                emit(EVENT.hiding);
+                expect(onVisibilityChange).toHaveBeenCalledTimes(1);
+                expect(onVisibilityChange).toHaveBeenLastCalledWith(false);
+
+                emit(EVENT.shown);
+                expect(onVisibilityChange).toHaveBeenCalledTimes(2);
+                expect(onVisibilityChange).toHaveBeenLastCalledWith(true);
+            });
+        });
+    });
+
     it('should have dx-widget class', () => {
         const tree = render();
 

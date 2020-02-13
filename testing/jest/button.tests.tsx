@@ -311,6 +311,20 @@ describe('Button', () => {
             });
         });
 
+        describe('visible', () => {
+            it('should pass the default value into Widget component', () => {
+                const tree = render();
+
+                expect(tree.find(Widget).prop('visible')).toBe(true);
+            });
+
+            it('should pass the custom value into Widget component', () => {
+                const tree = render({ visible: false });
+
+                expect(tree.find(Widget).prop('visible')).toBe(false);
+            });
+        });
+
         describe('focusStateEnabled', () => {
             it('should pass a default value into Widget component', () => {
                 const button = render();
