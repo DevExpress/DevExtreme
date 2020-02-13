@@ -127,28 +127,15 @@ export class ButtonInput extends WidgetInput {
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({
-    name: 'Button',
     components: [],
-    viewModel: viewModelFunction,
+    name: 'Button',
     view: viewFunction,
+    viewModel: viewModelFunction,
 })
 
 export default class Button extends JSXComponent<ButtonInput> {
     @Ref() contentRef!: HTMLDivElement;
     @Ref() submitInputRef!: HTMLInputElement;
-
-    @Effect()
-    submitEffect() {
-        const namespace = 'UIFeedback';
-        const { onSubmit } = this.props;
-
-        click.on(this.submitInputRef, (e) => {
-            onSubmit?.(e);
-            e.stopPropagation();
-        }, { namespace });
-
-        return () => click.off(this.submitInputRef, { namespace });
-    }
 
     onActive(event: Event) {
         const { useInkRipple } = this.props;
@@ -177,5 +164,18 @@ export default class Button extends JSXComponent<ButtonInput> {
             e.preventDefault();
             this.onWidgetClick(e);
         }
+    }
+
+    @Effect()
+    submitEffect() {
+        const namespace = 'UIFeedback';
+        const { onSubmit } = this.props;
+
+        click.on(this.submitInputRef, (e) => {
+            onSubmit?.(e);
+            e.stopPropagation();
+        }, { namespace });
+
+        return () => click.off(this.submitInputRef, { namespace });
     }
 }

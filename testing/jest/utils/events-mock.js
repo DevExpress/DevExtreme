@@ -20,11 +20,11 @@ export const EVENT = {
     click: 'click',
     dxClick: 'dxclick',
     focus: 'focusin',
+    hiding: 'dxhiding',
     hoverEnd: 'dxhoverend',
     hoverStart: 'dxhoverstart',
     inactive: 'dxinactive',
-    hiding: 'dxhiding',
-    shown: 'dxshown'
+    shown: 'dxshown',
 };
 
 export const defaultEvent = {

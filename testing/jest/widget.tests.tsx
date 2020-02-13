@@ -370,6 +370,7 @@ describe('Widget', () => {
 
                 expect(widget.exists('.dx-visibility-change-handler')).toBe(true);
             });
+
             it('should be called on `dxhiding` and `dxshown` events and special css class is attached', () => {
                 render({ onVisibilityChange });
 

@@ -22,8 +22,8 @@ const getStyles = ({ width, height }) => {
     const computedHeight = typeof height === 'function' ? height() : height;
 
     return {
-        width: computedWidth ?? void 0,
         height: computedHeight ?? void 0,
+        width: computedWidth ?? void 0,
     };
 };
 
@@ -100,14 +100,14 @@ export const viewModelFunction = ({
 }: Widget) => {
     const styles = getStyles({ width, height });
     const attrsWithoutClass = getAttributes({
-        elementAttr,
         accessKey: focusStateEnabled && !disabled && accessKey,
+        elementAttr,
     });
     const arias = getAria({ ...aria, disabled, hidden: !visible });
     const cssClasses = getCssClasses({
-        disabled, visible, _focused, _active, _hovered, rtlEnabled,
-        elementAttr, hoverStateEnabled, focusStateEnabled, className,
-        onVisibilityChange,
+        _active, _focused, _hovered, className,
+        disabled, elementAttr, focusStateEnabled, hoverStateEnabled,
+        onVisibilityChange, rtlEnabled, visible,
     });
 
     return {
@@ -145,11 +145,11 @@ export const viewFunction = (viewModel: any) => {
 export class WidgetInput {
     @OneWay() _feedbackHideTimeout?: number = 400;
     @OneWay() _feedbackShowTimeout?: number = 30;
-    @OneWay() onVisibilityChange?: (args: boolean) => undefined;
     @OneWay() accessKey?: string | null = null;
     @OneWay() activeStateEnabled?: boolean = false;
     @OneWay() activeStateUnit?: string;
     @OneWay() aria?: any = {};
+    @Slot() children?: any;
     @OneWay() className?: string | undefined = '';
     @OneWay() clickArgs?: any = {};
     @OneWay() disabled?: boolean = false;
@@ -160,26 +160,24 @@ export class WidgetInput {
     @OneWay() hoverStateEnabled?: boolean = false;
     @OneWay() name?: string = '';
     @OneWay() onActive?: (e: any) => any = (() => undefined);
+    @Event() onClick?: (e: any) => void = (() => { });
     @OneWay() onDimensionChanged?: () => any = (() => undefined);
     @OneWay() onInactive?: (e: any) => any = (() => undefined);
-    @OneWay() onKeyPress?: (e: any, options: any) => any = (() => undefined);
     @OneWay() onKeyboardHandled?: (args: any) => any | undefined;
+    @OneWay() onKeyPress?: (e: any, options: any) => any = (() => undefined);
+    @OneWay() onVisibilityChange?: (args: boolean) => undefined;
     @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
     @OneWay() tabIndex?: number = 0;
     @OneWay() visible?: boolean = true;
     @OneWay() width?: string | number | null = null;
-
-    @Slot() children?: any;
-
-    @Event() onClick?: (e: any) => void = (() => { });
 }
 
 // tslint:disable-next-line: max-classes-per-file
 @Component({
-    name: 'Widget',
     components: [],
-    viewModel: viewModelFunction,
+    name: 'Widget',
     view: viewFunction,
+    viewModel: viewModelFunction,
 })
 
 export default class Widget extends JSXComponent<WidgetInput> {
@@ -288,10 +286,10 @@ export default class Widget extends JSXComponent<WidgetInput> {
                 },
                 { excludeValidators: ['disabled', 'readOnly'] },
                 ), {
-                    showTimeout: _feedbackShowTimeout,
                     hideTimeout: _feedbackHideTimeout,
-                    selector,
                     namespace,
+                    selector,
+                    showTimeout: _feedbackShowTimeout,
                 },
             );
 
