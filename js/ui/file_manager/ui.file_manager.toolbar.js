@@ -434,29 +434,59 @@ class FileManagerToolbar extends Widget {
 
     updateRefreshItem(message, status) {
         let generalToolbarOptions = null;
+        let text = '';
+
         this._isRefreshVisibleInFileToolbar = false;
 
         if(status === 'default') {
             generalToolbarOptions = {
                 showText: 'inMenu',
                 options: {
-                    text: messageLocalization.format('dxFileManager-commandRefresh'),
                     icon: REFRESH_ICON_MAP.default
                 }
             };
+            text = messageLocalization.format('dxFileManager-commandRefresh');
         } else {
             generalToolbarOptions = {
                 showText: 'always',
                 options: {
-                    text: message,
                     icon: REFRESH_ICON_MAP[status]
                 }
             };
             this._isRefreshVisibleInFileToolbar = true;
+            text = message;
         }
 
         const fileToolbarOptions = extend({ }, generalToolbarOptions, { visible: this._isRefreshVisibleInFileToolbar });
+        this.applyRefreshItemOptions(generalToolbarOptions, fileToolbarOptions);
+        this._refreshItemTextTimeout = this.updateRefreshItemText(status === 'progress', text);
+    }
 
+    updateRefreshItemText(isDeferredUpdate, text) {
+        const options = {
+            options: {
+                text: text
+            }
+        };
+        if(isDeferredUpdate) {
+            this.updateRefreshItemText(false, '');
+            return setTimeout(() => {
+                this.applyRefreshItemOptions(options);
+                this._refreshItemTextTimeout = undefined;
+            }, this.option('refreshItemDelay'));
+        } else {
+            if(this._refreshItemTextTimeout) {
+                clearTimeout(this._refreshItemTextTimeout);
+            }
+            this.applyRefreshItemOptions(options);
+            return undefined;
+        }
+    }
+
+    applyRefreshItemOptions(generalToolbarOptions, fileToolbarOptions) {
+        if(!fileToolbarOptions) {
+            fileToolbarOptions = generalToolbarOptions;
+        }
         this._updateItemInToolbar(this._generalToolbar, 'refresh', generalToolbarOptions);
         this._updateItemInToolbar(this._fileToolbar, 'refresh', fileToolbarOptions);
     }
