@@ -159,7 +159,6 @@ export default class FileManagerNotificationControl extends Widget {
         if(this._isProgressDrawerOpened()) {
             return;
         }
-        this._windowInnerWidth = getWindow().innerWidth;
         this._getNotificationPopup()._wrapper().toggleClass(FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS, !!errorMode);
         this._getNotificationPopup().option('contentTemplate', content);
         if(!this._getNotificationPopup().option('visible')) {
@@ -204,7 +203,7 @@ export default class FileManagerNotificationControl extends Widget {
                 minWidth: '240px',
                 maxWidth: function() {
                     return `${400 < $(getWindow()).width() - 30 ? 400 : $(getWindow()).width() - 30}px`;
-                }.bind(this),
+                },
                 showTitle: false,
                 dragEnabled: false,
                 shading: false,
