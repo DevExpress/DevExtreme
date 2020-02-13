@@ -510,7 +510,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
         $prevFocusedCell && $prevFocusedCell.is('td') && $prevFocusedCell.not($focusElement).removeAttr('tabIndex');
 
         if($focusElement) {
-            eventsEngine.one($focusElement, 'blur', () => $focusElement.removeClass(CELL_FOCUS_DISABLED_CLASS));
+            eventsEngine.one($focusElement, 'blur', e => {
+                if(e.relatedTarget) {
+                    $focusElement.removeClass(CELL_FOCUS_DISABLED_CLASS);
+                }
+            });
             if(!isInteractiveElement) {
                 this._applyTabIndexToElement($focusElement);
                 eventsEngine.trigger($focusElement, 'focus');

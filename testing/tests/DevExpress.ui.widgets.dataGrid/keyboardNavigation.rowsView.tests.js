@@ -1,8 +1,7 @@
 QUnit.testStart(function() {
     const markup = `
         <div>
-            <div id="container"></div>
-            <div class="dx-datagrid"></div>
+            <div id="container" class="dx-datagrid"></div>
         </div>
     `;
 
@@ -17,7 +16,9 @@ import 'ui/data_grid/ui.data_grid';
 import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
+import pointerEvents from 'events/pointer';
 import eventUtils from 'events/utils';
+import eventsEngine from 'events/core/events_engine';
 import { setupDataGridModules, MockDataController, MockColumnsController, MockSelectionController } from '../../helpers/dataGridMocks.js';
 
 const CLICK_EVENT = eventUtils.addNamespace('dxpointerdown', 'dxDataGridKeyboardNavigation');
@@ -315,5 +316,54 @@ QUnit.module('Rows view', {
         $cell.trigger(CLICK_EVENT);
         assert.equal(rowsView.element().attr('tabIndex'), undefined, 'tabIndex of rowsView');
         assert.equal($cell.attr('tabIndex'), 5, 'tabIndex of clicked cell');
+    });
+
+    QUnit.testInActiveWindow('Cell focus should not be disabled after "blur" in the current document (T858241)', function(assert) {
+        // arrange
+        const rowsView = this.createRowsView(this.items);
+        const testElement = $('#container');
+
+        rowsView.render(testElement);
+
+        const $cell0 = $(rowsView.getCellElement(0, 1));
+        const $cell1 = $(rowsView.getCellElement(1, 1));
+
+        // act
+        $cell0
+            .focus()
+            .trigger(pointerEvents.down)
+            .trigger(pointerEvents.up)
+            .trigger('dxclick');
+
+        // assert
+        assert.ok($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has disabled focus class');
+        assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
+
+        $cell1
+            .focus()
+            .trigger(pointerEvents.down)
+            .trigger(pointerEvents.up)
+            .trigger('dxclick');
+
+        // assert
+        assert.notOk($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has no disabled focus class');
+        assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
+
+        $cell0
+            .focus()
+            .trigger(pointerEvents.down)
+            .trigger(pointerEvents.up)
+            .trigger('dxclick');
+
+        // assert
+        assert.ok($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has disabled focus class');
+        assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
+
+        // act
+        eventsEngine.trigger($cell0, eventUtils.createEvent('blur'));
+
+        // assert
+        assert.ok($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has no disabled focus class');
+        assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
     });
 });
