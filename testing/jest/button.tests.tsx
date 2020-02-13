@@ -222,6 +222,34 @@ describe('Button', () => {
             });
         });
 
+        describe('iconPosition', () => {
+            it('should render icon before text if iconPosition is left (by default)', () => {
+                const button = render({
+                    text: 'myButton',
+                    icon: 'test',
+                });
+
+                const elements = button.find('.dx-button-content').children();
+
+                expect(elements.at(0).is('.dx-icon.dx-icon-test')).toBe(true);
+                expect(elements.at(1).is('.dx-button-text')).toBe(true);
+            });
+
+            it('should render icon after text if iconPosition is right', () => {
+                const button = render({
+                    text: 'myButton',
+                    icon: 'test',
+                    iconPosition: 'right',
+                });
+
+                const elements = button.find('.dx-button-content').children();
+
+                expect(button.hasClass('dx-button-icon-right')).toBe(true);
+                expect(elements.at(0).is('.dx-button-text')).toBe(true);
+                expect(elements.at(1).is('.dx-icon.dx-icon-test.dx-icon-right')).toBe(true);
+            });
+        });
+
         describe('hoverStateEnabled', () => {
             it('should pass a default value into Widget component', () => {
                 const tree = render();

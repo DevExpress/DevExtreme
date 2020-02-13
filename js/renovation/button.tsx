@@ -4,12 +4,14 @@ import { initConfig, showWave, hideWave } from '../ui/widget/utils.ink_ripple';
 import { Component, ComponentBindings, Effect, JSXComponent, OneWay, Ref } from 'devextreme-generator/component_declaration/common';
 import Widget, { WidgetInput } from './widget';
 
-const getImageContainerJSX = (source: string) => {
+const getImageContainerJSX = (source: string, position: string) => {
+    const iconRightClass = position !== 'left' ? 'dx-icon-right' : '';
+
     switch (getImageSourceType(source)) {
-        case 'dxIcon': return <i className={`dx-icon dx-icon-${source}`}/>;
-        case 'fontIcon': return <i className={`dx-icon ${source}`}/>;
-        case 'image': return <img src={source} className="dx-icon"/>;
-        case 'svg': return <i className="dx-icon dx-svg-icon">{source}></i>;
+        case 'dxIcon': return <i className={`dx-icon dx-icon-${source} ${iconRightClass}`}/>;
+        case 'fontIcon': return <i className={`dx-icon ${source} ${iconRightClass}`}/>;
+        case 'image': return <img src={source} className={`dx-icon ${iconRightClass}`}/>;
+        case 'svg': return <i className={`dx-icon dx-svg-icon ${iconRightClass}`}>{source}></i>;
         default: return null;
     }
 };
@@ -29,7 +31,7 @@ const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
 };
 
 const getCssClasses = (model: ButtonInput) => {
-    const { text, icon, stylingMode, type } = model;
+    const { text, icon, stylingMode, type, iconPosition } = model;
     const classNames = defaultClassNames.concat(model.classNames || []);
     const isValidStylingMode = stylingMode && stylingModes.indexOf(stylingMode) !== -1;
 
@@ -38,6 +40,7 @@ const getCssClasses = (model: ButtonInput) => {
 
     text && classNames.push('dx-button-has-text');
     icon && classNames.push('dx-button-has-icon');
+    iconPosition !== 'left' && classNames.push('dx-button-icon-right');
 
     return classNames.join(' ');
 };
@@ -68,10 +71,11 @@ declare type ButtonViewModel = {
 } & ButtonInput;
 
 export const viewFunction = (viewModel: ButtonViewModel) => {
+    const isIconLeft = viewModel.iconPosition === 'left';
     let icon: any = viewModel.icon;
 
     if (icon || viewModel.type === 'back') {
-        icon = getImageContainerJSX(icon || 'back');
+        icon = getImageContainerJSX(icon || 'back', viewModel.iconPosition!);
     }
 
     return <Widget
@@ -97,10 +101,11 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
         <div className="dx-button-content" ref={viewModel.contentRef}>
             {viewModel.contentRender &&
                 <viewModel.contentRender icon={icon} text={viewModel.text} />}
-            {!viewModel.contentRender && icon}
+            {!viewModel.contentRender && isIconLeft && icon}
             {!viewModel.contentRender && viewModel.text &&
                 <span className="dx-button-text">{viewModel.text}</span>
             }
+            {!viewModel.contentRender && !isIconLeft && icon}
             {viewModel.useSubmitBehavior &&
                 <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
             }
@@ -115,7 +120,8 @@ export class ButtonInput extends WidgetInput {
     @OneWay() contentRender?: any;
     @OneWay() focusStateEnabled?: boolean = true;
     @OneWay() hoverStateEnabled?: boolean = true;
-    @OneWay() icon?: string;
+    @OneWay() icon?: string = '';
+    @OneWay() iconPosition?: string = 'left';
     @OneWay() onSubmit?: (e: any) => any = (() => undefined);
     @OneWay() pressed?: boolean;
     @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
