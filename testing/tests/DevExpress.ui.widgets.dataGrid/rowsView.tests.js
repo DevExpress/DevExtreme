@@ -6949,25 +6949,23 @@ if(browser.webkit) {
     });
 }
 
-if(browser.mozilla) {
-    QUnit.test('The vertical scrollbar should not be shown if mozilla and showRowLines set false', function(assert) {
-        // arrange
-        const rows = [{ values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data' }];
-        const columns = ['field1', 'field2', 'field3', 'field4'];
-        const rowsView = this.createRowsView(rows, null, columns, null, { scrolling: { useNative: true } });
-        const $testElement = $('#container');
+QUnit.test('The vertical scrollbar should not be shown if free space row rendered and showRowLines set false', function(assert) {
+    // arrange
+    const rows = [{ values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data' }];
+    const columns = ['field1', 'field2', 'field3', 'field4'];
+    const rowsView = this.createRowsView(rows, null, columns, null, { scrolling: { useNative: true } });
+    const $testElement = $('#container');
 
-        $testElement.parent().wrap($('<div/>').addClass('dx-widget'));
+    $testElement.parent().wrap($('<div/>').addClass('dx-widget'));
 
-        // act
-        rowsView.render($testElement);
-        rowsView.height(700);
-        rowsView.resize();
+    // act
+    rowsView.render($testElement);
+    rowsView.height(700);
+    rowsView.resize();
 
-        // assert
-        assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'There is no vertical scrollbar');
-    });
-}
+    // assert
+    assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'There is no vertical scrollbar');
+});
 
 // T697699
 QUnit.test('The vertical scrollbar should not be shown if showScrollbar is always', function(assert) {
