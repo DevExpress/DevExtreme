@@ -1126,7 +1126,7 @@
  */
 
 /**
- * @typedef {string} Enums.DiagramToolboxVisibility
+ * @typedef {string} Enums.DiagramPanelVisibility
  * @enum {'visible'|'collapsed'|'disabled'}
  */
 

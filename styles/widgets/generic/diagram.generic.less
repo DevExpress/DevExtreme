@@ -68,17 +68,13 @@
         border-bottom: 1px solid @diagram-toolbar-border-color;
     }
 
-    .dx-diagram-right-panel {
-        border-left-color: @diagram-toolbar-border-color;
-    }
-
     &.dx-diagram-fullscreen {
         background-color: @base-bg;
     }
 }
 
 .dx-diagram-toolbox-panel,
-.dx-diagram-right-panel {
+.dx-diagram-properties-panel {
     background: @overlay-content-bg;
 
     .dx-accordion {
@@ -86,7 +82,7 @@
             border-left: none;
             border-right: none;
 
-            .dx-diagram-right-panel-begin-group {
+            .dx-diagram-properties-panel-begin-group {
                 padding-top: 24px;
             }
         }
@@ -99,14 +95,6 @@
             &.dx-accordion-item-closed:not(:last-of-type) {
                 border-bottom-color: transparent;
             }
-        }
-    }
-}
-
-.dx-diagram-right-panel {
-    .dx-accordion {
-        .dx-accordion-item:first-of-type {
-            border-top: none;
         }
     }
 }

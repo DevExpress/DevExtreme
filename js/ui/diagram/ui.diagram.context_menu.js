@@ -16,7 +16,7 @@ const DIAGRAM_TOUCHBAR_Y_OFFSET = 32;
 class DiagramContextMenu extends Widget {
     _init() {
         super._init();
-        this._createOnVisibleChangedAction();
+        this._createOnVisibilityChangingAction();
         this._createOnItemClickAction();
         this._tempState = undefined;
 
@@ -58,7 +58,7 @@ class DiagramContextMenu extends Widget {
                 if(this._inOnShowing === true) return;
 
                 this._inOnShowing = true;
-                this._onVisibleChangedAction({ visible: true, component: this });
+                this._onVisibilityChangingAction({ visible: true, component: this });
                 e.component.option('items', this._getItems(this._commands, true));
                 delete this._inOnShowing;
             }
@@ -200,16 +200,16 @@ class DiagramContextMenu extends Widget {
         }
         this._contextMenuInstance._menuHasCheckedItems[key] = true;
     }
-    _createOnVisibleChangedAction() {
-        this._onVisibleChangedAction = this._createActionByOption('onVisibleChanged');
+    _createOnVisibilityChangingAction() {
+        this._onVisibilityChangingAction = this._createActionByOption('onVisibilityChanging');
     }
     _createOnItemClickAction() {
         this._onItemClickAction = this._createActionByOption('onItemClick');
     }
     _optionChanged(args) {
         switch(args.name) {
-            case 'onVisibleChanged':
-                this._createOnVisibleChangedAction();
+            case 'onVisibilityChanging':
+                this._createOnVisibilityChangingAction();
                 break;
             case 'onItemClick':
                 this._createOnItemClickAction();

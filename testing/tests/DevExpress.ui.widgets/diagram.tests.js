@@ -2,7 +2,6 @@ import $ from 'jquery';
 import 'common.css!';
 import 'ui/diagram';
 
-import './diagramParts/dom.tests.js';
 import './diagramParts/mainToolbar.tests.js';
 import './diagramParts/historyToolbar.tests.js';
 import './diagramParts/viewToolbar.tests.js';
