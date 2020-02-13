@@ -3213,11 +3213,15 @@ QUnit.test('AddRow method should return Deferred', function(assert) {
     assert.equal(this.getVisibleRows().length, 7, '7 visible rows');
 
     // act
+    let doneExecuteCount = 0;
     this.addRow().done(() => {
-        // assert
-        assert.ok(true, 'addRow returns Deferred');
-        assert.equal(this.getVisibleRows().length, 8, 'one more row is added');
+        doneExecuteCount++;
     });
+    this.clock.tick();
+
+    // assert
+    assert.equal(doneExecuteCount, 1, 'done was executed');
+    assert.equal(this.getVisibleRows().length, 8, 'one more row was added');
 });
 
 QUnit.test('Edit row when set onEditingStart', function(assert) {
