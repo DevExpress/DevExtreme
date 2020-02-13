@@ -203,7 +203,7 @@ export default class FileManagerNotificationControl extends Widget {
                 height: 'auto',
                 minWidth: '240px',
                 maxWidth: function() {
-                    return `${400 < this._windowInnerWidth - 30 ? 400 : this._windowInnerWidth - 30}px`;
+                    return `${400 < $(getWindow()).width() - 30 ? 400 : $(getWindow()).width() - 30}px`;
                 }.bind(this),
                 showTitle: false,
                 dragEnabled: false,

@@ -87,8 +87,7 @@ class FileManager extends Widget {
             commandManager: this._commandManager,
             generalItems: this.option('toolbar.items'),
             fileItems: this.option('toolbar.fileSelectionItems'),
-            itemViewMode: this.option('itemView').mode,
-            refreshItemDelay: 500
+            itemViewMode: this.option('itemView').mode
         });
 
         this._createAdaptivityControl();
