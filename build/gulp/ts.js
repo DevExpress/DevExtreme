@@ -11,7 +11,7 @@ var TS_PATH = './ts/dx.all.d.ts';
 
 const COMMON_TS_COMPILER_OPTIONS = {
     noEmitOnError: true,
-    skipLibCheck: true
+    types: ['jquery']
 };
 
 var widgetNameByPath = exports.widgetNameByPath = function(widgetPath) {

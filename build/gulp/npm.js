@@ -204,7 +204,7 @@ gulp.task('npm-ts-modules-check', ['npm-ts-modules-generator'], function() {
         .pipe(ts({
             allowSyntheticDefaultImports: true,
             noEmitOnError: true,
-            skipLibCheck: true
+            types: ['jquery']
         }, ts.reporter.fullReporter()));
 });
 
