@@ -298,13 +298,14 @@ QUnit.test('AddRow method should return Deferred with collapsed parent', functio
     assert.equal(this.getVisibleRows().length, 1, 'one visible row');
 
     // act
+    let doneExecuteCount = 0;
     this.addRow(1).done(() => {
-        // assert
-        assert.ok(true, 'addRow returns Deferred');
-        assert.equal(this.getVisibleRows().length, 3, 'parent is expanded and one more row is added');
+        doneExecuteCount++;
     });
-
     this.clock.tick();
+
+    assert.equal(doneExecuteCount, 1, 'done was executed');
+    assert.equal(this.getVisibleRows().length, 3, 'parent was expanded and one more row was added');
 });
 
 QUnit.test('Sequential adding of a row after adding the previous using Deferred (T844118)', function(assert) {
@@ -324,15 +325,15 @@ QUnit.test('Sequential adding of a row after adding the previous using Deferred 
     assert.equal(this.getVisibleRows().length, 1, '1 visible row');
 
     // act
-    const addRowAfterDeferredResolve = (sequence, index) => {
-        const parentId = sequence[index];
+    const addRowAfterDeferredResolve = (parentIds, index) => {
+        const parentId = parentIds[index];
 
         if(parentId !== undefined) {
-            return this.addRow(parentId).done(addRowAfterDeferredResolve.bind(null, sequence, index + 1));
+            return this.addRow(parentId).done(addRowAfterDeferredResolve.bind(null, parentIds, index + 1));
         }
 
         // assert
-        assert.deepEqual(sequence, initNewRowCalls, 'for every added row sequential calls onInitNewRow');
+        assert.deepEqual(parentIds, initNewRowCalls, 'for every added row sequentially calls onInitNewRow');
 
         return $.Deferred().resolve();
     };

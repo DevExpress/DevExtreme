@@ -882,10 +882,10 @@ const EditingController = modules.ViewController.inherit((function() {
             when(that._initNewRow(param, parentKey)).done(() => {
                 if(that._allowRowAdding()) {
                     that._addRowCore(param.data, parentKey, oldEditRowIndex);
+                    deferred.resolve();
                 } else {
                     deferred.reject('cancel');
                 }
-                deferred.resolve();
             }).fail(deferred.reject);
 
             return deferred.promise();
