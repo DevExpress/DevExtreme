@@ -255,47 +255,52 @@ QUnit.module('Rows view', {
         assert.equal($cell.attr('tabIndex'), 5, 'tabIndex of clicked cell');
     });
 
-    QUnit.testInActiveWindow('Cell focus should not be disabled after "focusout" in the current document (T858241)', function(assert) {
+    QUnit.testInActiveWindow('Cell focus should not be disabled after "blur" in the current document (T858241)', function(assert) {
         // arrange
         const rowsView = this.createRowsView(this.items);
         const testElement = $('#container');
 
         rowsView.render(testElement);
 
+        const $cell0 = $(rowsView.getCellElement(0, 1));
+        const $cell1 = $(rowsView.getCellElement(1, 1));
+
         // act
-        const $cell = $(rowsView.getCellElement(0, 1));
-        $cell
+        $cell0
             .focus()
             .trigger(pointerEvents.down)
             .trigger(pointerEvents.up)
             .trigger('dxclick');
 
         // assert
-        assert.ok($cell.hasClass('dx-cell-focus-disabled'), 'Cell has disabled focus class');
-        assert.notOk($cell.hasClass('dx-focused'), 'Cell has no .dx-focused');
+        assert.ok($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has disabled focus class');
+        assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
 
-        // act
-        eventsEngine.trigger($cell, eventUtils.createEvent('blur', { relatedTarget: 'someElement' }));
-
-        // assert
-        assert.notOk($cell.hasClass('dx-cell-focus-disabled'), 'Cell has no disabled focus class');
-        assert.notOk($cell.hasClass('dx-focused'), 'Cell has no .dx-focused');
-
-        $cell
+        $cell1
             .focus()
             .trigger(pointerEvents.down)
             .trigger(pointerEvents.up)
             .trigger('dxclick');
 
         // assert
-        assert.ok($cell.hasClass('dx-cell-focus-disabled'), 'Cell has disabled focus class');
-        assert.notOk($cell.hasClass('dx-focused'), 'Cell has no .dx-focused');
+        assert.notOk($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has no disabled focus class');
+        assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
 
-        // act
-        eventsEngine.trigger($cell, eventUtils.createEvent('blur'));
+        $cell0
+            .focus()
+            .trigger(pointerEvents.down)
+            .trigger(pointerEvents.up)
+            .trigger('dxclick');
 
         // assert
-        assert.ok($cell.hasClass('dx-cell-focus-disabled'), 'Cell has no disabled focus class');
-        assert.notOk($cell.hasClass('dx-focused'), 'Cell has no .dx-focused');
+        assert.ok($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has disabled focus class');
+        assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
+
+        // act
+        eventsEngine.trigger($cell0, eventUtils.createEvent('blur'));
+
+        // assert
+        assert.ok($cell0.hasClass('dx-cell-focus-disabled'), 'Cell has no disabled focus class');
+        assert.notOk($cell0.hasClass('dx-focused'), 'Cell has no .dx-focused');
     });
 });
