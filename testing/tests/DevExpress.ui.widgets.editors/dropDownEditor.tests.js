@@ -27,6 +27,7 @@ const DROP_DOWN_EDITOR_OVERLAY = 'dx-dropdowneditor-overlay';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
+const POPUP_CONTENT = 'dx-popup-content';
 const TAB_KEY_CODE = 'Tab';
 const ESC_KEY_CODE = 'Escape';
 
@@ -599,7 +600,7 @@ QUnit.module('focus policy', () => {
 
         dropDownEditor1.open();
         dropDownEditor1.focus();
-        $input1.trigger($.Event('focusout', { relatedTarget: $('#test-content') }));
+        $input1.trigger($.Event('focusout', { relatedTarget: $(`.${POPUP_CONTENT}`) }));
 
         assert.ok(dropDownEditor1.option('opened'), 'should be still opened after the widget\'s popup focus');
     });
@@ -1539,7 +1540,7 @@ QUnit.module('aria accessibility', () => {
         const instance = $dropDownEditor.dxDropDownEditor('instance');
 
         assert.notEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns exists');
-        assert.equal($dropDownEditor.attr('aria-owns'), $('.dx-popup-content').attr('id'), 'aria-owns points to popup\'s content id');
+        assert.equal($dropDownEditor.attr('aria-owns'), $(`.${POPUP_CONTENT}`).attr('id'), 'aria-owns points to popup\'s content id');
 
         instance.close();
 
