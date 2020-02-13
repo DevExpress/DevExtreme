@@ -11690,154 +11690,6 @@ QUnit.test('It\'s impossible to save new data when editing form is invalid', fun
     assert.equal($invalid.find('.dx-overlay-content').css('whiteSpace'), 'normal', 'white-space is normal');
 });
 
-QUnit.test('It\'s impossible to save new data when editing form is invalid (async)', function(assert) {
-    // arrange
-    this.clock.restore();
-    const rowsView = this.rowsView;
-    const testElement = $('#container');
-    let $formRow;
-    let inputElement;
-    const done = assert.async();
-
-    rowsView.render(testElement);
-
-    this.applyOptions({
-        editing: {
-            mode: 'form',
-            allowUpdating: true,
-        },
-        columns: [{
-            dataField: 'age',
-            validationRules: [{
-                type: 'async',
-                validationCallback: function(params) {
-                    const d = new Deferred();
-                    setTimeout(function() {
-                        d.reject();
-                    }, 10);
-                    return d.promise();
-                }
-            }]
-        }]
-    });
-
-    // act
-    this.editRow(0);
-    $formRow = rowsView.getRow(0);
-
-    inputElement = getInputElements(testElement).first();
-    inputElement.val('');
-    inputElement.trigger('change');
-    this.saveEditData().done(() => {
-        assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
-        assert.equal($formRow.find('.dx-invalid').length, 1, 'There is one invalid editor in first row');
-        done();
-    });
-
-    // assert
-    assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
-    assert.equal($formRow.find('.dx-validation-pending').length, 1, 'There is one pending editor in first row');
-});
-
-QUnit.test('Only valid data is saved (async)', function(assert) {
-    // arrange
-    this.clock.restore();
-    const rowsView = this.rowsView;
-    const testElement = $('#container');
-    let $formRow;
-    let inputElement;
-    const done = assert.async();
-
-    rowsView.render(testElement);
-
-    this.applyOptions({
-        loadingTimeout: undefined,
-        editing: {
-            mode: 'form',
-            allowUpdating: true,
-        },
-        columns: [{
-            dataField: 'age',
-            validationRules: [{
-                type: 'async',
-                validationCallback: function(params) {
-                    const d = new Deferred();
-                    setTimeout(function() {
-                        params.value === 1 ? d.resolve(true) : d.reject();
-                    }, 10);
-                    return d.promise();
-                }
-            }]
-        }]
-    });
-
-    // act
-    this.editRow(0);
-    $formRow = rowsView.getRow(0);
-
-    inputElement = getInputElements(testElement).first();
-    inputElement.val('');
-    inputElement.trigger('change');
-
-    this.saveEditData().done(() => {
-        assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
-        assert.equal($formRow.find('.dx-invalid').length, 1, 'There is one invalid editor in first row');
-
-        inputElement.val('1');
-        inputElement.trigger('change');
-        this.saveEditData().done(() => {
-            assert.equal(this.editingController._editRowIndex, -1, 'there is no editing row');
-            const $row = rowsView.getRow(0);
-            assert.ok($row.hasClass('dx-data-row'), 'The form was closed');
-            done();
-        });
-    });
-
-    // assert
-    assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
-    assert.equal($formRow.find('.dx-validation-pending').length, 1, 'There is one pending editor in first row');
-});
-
-QUnit.test('AsyncRule.validationCallback accepts extra parameters', function(assert) {
-    // arrange
-    const rowsView = this.rowsView;
-    const testElement = $('#container');
-    let inputElement;
-    const validationCallback = sinon.spy(function() { return new Deferred().resolve().promise(); });
-
-    rowsView.render(testElement);
-
-    this.applyOptions({
-        loadingTimeout: undefined,
-        editing: {
-            mode: 'form',
-            allowUpdating: true,
-        },
-        columns: [{
-            dataField: 'age',
-            validationRules: [{
-                type: 'async',
-                validationCallback: validationCallback
-            }]
-        }]
-    });
-
-    // act
-    this.editRow(0);
-
-    inputElement = getInputElements(testElement).first();
-    inputElement.val('');
-    inputElement.trigger('change');
-
-    assert.equal(validationCallback.callCount, 1, 'valdiationCallback should be called once');
-
-    const params = validationCallback.getCall(0).args[0];
-
-    assert.ok(params.data, 'data should be passed');
-    assert.strictEqual(params.column.dataField, 'age', 'column.dataField === \'age\'');
-    assert.ok(params.column.validationRules, 'column.validationRules !== null');
-});
-
 QUnit.test('CustomRule.validationCallback accepts extra parameters', function(assert) {
     // arrange
     const rowsView = this.rowsView;
@@ -17070,4 +16922,453 @@ QUnit.test('Adding row and editing another row when the onInitNewRow event is as
     // assert
     assert.ok($(this.rowsView.getRowElement(0)).hasClass('dx-edit-row dx-row-inserted'), 'new row');
     assert.notOk($(this.rowsView.getRowElement(3)).hasClass('dx-edit-row'), 'row isn\'t edited');
+});
+
+
+QUnit.module('Async validation', {
+    beforeEach: function() {
+        this.$element = () => $('#container');
+        this.gridContainer = $('#container > .dx-datagrid');
+
+        this.array = [
+            { name: 'Alex', age: 15, lastName: 'John', },
+            { name: 'Dan', age: 16, lastName: 'Skip' },
+            { name: 'Vadim', age: 17, lastName: 'Dog' }
+        ];
+        this.options = {
+            errorRowEnabled: true,
+            editing: {
+                mode: 'row',
+                allowUpdating: true,
+                allowAdding: true
+            },
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            columns: ['name', 'age', 'lastName'],
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: this.array,
+                paginate: true
+            }
+        };
+
+        this.$element = function() {
+            return renderer('.dx-datagrid');
+        };
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary'], {
+            initViews: true
+        });
+
+        this.applyOptions = function(options) {
+            $.extend(true, this.options, options);
+            this.dataController.init();
+            this.columnsController.init();
+            this.editingController.init();
+            this.validatingController.init();
+        };
+
+        this.columnHeadersView.getColumnCount = function() {
+            return 3;
+        };
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('AsyncRule.validationCallback accepts extra parameters', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const validationCallback = sinon.spy(function() { return new Deferred().resolve().promise(); });
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            loadingTimeout: undefined,
+            editing: {
+                mode: 'form',
+                allowUpdating: true,
+            },
+            columns: [{
+                dataField: 'age',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: validationCallback
+                }]
+            }]
+        });
+
+        // act
+        this.editRow(0);
+
+        const inputElement = getInputElements(testElement).first();
+        inputElement.val('');
+        inputElement.trigger('change');
+
+        assert.equal(validationCallback.callCount, 1, 'valdiationCallback should be called once');
+
+        const params = validationCallback.getCall(0).args[0];
+
+        assert.ok(params.data, 'data should be passed');
+        assert.strictEqual(params.column.dataField, 'age', 'column.dataField === \'age\'');
+        assert.ok(params.column.validationRules, 'column.validationRules !== null');
+    });
+
+    QUnit.test('Form - It\'s impossible to save modified invalid data', function(assert) {
+        // arrange
+        this.clock.restore();
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            editing: {
+                mode: 'form',
+                allowUpdating: true,
+            },
+            columns: [{
+                dataField: 'age',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = new Deferred();
+                        setTimeout(function() {
+                            d.reject();
+                        }, 10);
+                        return d.promise();
+                    }
+                }]
+            }]
+        });
+
+        // act
+        this.editRow(0);
+        const $formRow = rowsView.getRow(0);
+
+        const inputElement = getInputElements(testElement).first();
+        inputElement.val('');
+        inputElement.trigger('change');
+        this.saveEditData().done(() => {
+            assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+            assert.equal($formRow.find('.dx-invalid').length, 1, 'There is one invalid editor in first row');
+            done();
+        });
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+        assert.equal($formRow.find('.dx-validation-pending').length, 1, 'There is one pending editor in first row');
+    });
+
+    QUnit.test('Form - Only valid data is saved', function(assert) {
+        // arrange
+        this.clock.restore();
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            loadingTimeout: undefined,
+            editing: {
+                mode: 'form',
+                allowUpdating: true,
+            },
+            columns: [{
+                dataField: 'age',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = new Deferred();
+                        setTimeout(function() {
+                            params.value === 1 ? d.resolve(true) : d.reject();
+                        }, 10);
+                        return d.promise();
+                    }
+                }]
+            }]
+        });
+
+        // act
+        this.editRow(0);
+        const $formRow = rowsView.getRow(0);
+
+        const inputElement = getInputElements(testElement).first();
+        inputElement.val('');
+        inputElement.trigger('change');
+
+        this.saveEditData().done(() => {
+            assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+            assert.equal($formRow.find('.dx-invalid').length, 1, 'There is one invalid editor in first row');
+
+            inputElement.val('1');
+            inputElement.trigger('change');
+            this.saveEditData().done(() => {
+                const $row = rowsView.getRow(0);
+                // asset
+                assert.equal(this.editingController._editRowIndex, -1, 'there is no editing row');
+                assert.ok($row.hasClass('dx-data-row'), 'The form was closed');
+
+                done();
+            });
+        });
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+        assert.equal($formRow.find('.dx-validation-pending').length, 1, 'There is one pending editor in first row');
+    });
+
+    QUnit.test('Row - Only valid data is saved in a new row', function(assert) {
+        // arrange
+        this.clock.restore();
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            editing: {
+                mode: 'row',
+                allowAdding: true
+            },
+            columns: [{
+                dataField: 'age',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = new Deferred();
+                        setTimeout(function() {
+                            params.value === 1 ? d.resolve(true) : d.reject();
+                        }, 10);
+                        return d.promise();
+                    }
+                }]
+            }]
+        });
+
+        // act
+        this.addRow();
+        let $row = rowsView.getRow(0);
+
+        // assert
+        assert.equal($row.find('.dx-validation-pending').length, 0, 'there are no pending editors in a new row');
+        assert.equal($row.find('.dx-datagrid-invalid').length, 0, 'there are no invalid editors in a new row');
+
+        this.saveEditData().done(() => {
+            // assert
+            assert.equal(this.editingController._editRowIndex, 0, 'new row is still editing');
+            assert.equal($row.find('.dx-datagrid-invalid').length, 1, 'there is one invalid editor in first row');
+
+            this.cellValue(0, 0, 1);
+            this.saveEditData().done(() => {
+                $row = rowsView.getRow(0);
+
+                // asset
+                assert.equal(this.editingController._editRowIndex, -1, 'there is no editing row');
+                assert.notOk($row.hasClass('dx-row-inserted'), 'the row is not in editing mode');
+
+                done();
+            });
+        });
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, 'new row is still editing');
+        assert.equal($row.find('.dx-validation-pending').length, 1, 'there is one pending editor in a new row');
+    });
+
+    QUnit.test('Row - Only valid data is saved in a modified row', function(assert) {
+        // arrange
+        this.clock.restore();
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            loadingTimeout: undefined,
+            editing: {
+                mode: 'row',
+                allowUpdating: true,
+            },
+            columns: [{
+                dataField: 'age',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = new Deferred();
+                        setTimeout(function() {
+                            params.value === 1 ? d.resolve(true) : d.reject();
+                        }, 10);
+                        return d.promise();
+                    }
+                }]
+            }]
+        });
+
+        // act
+        this.editRow(0);
+        let $row = rowsView.getRow(0);
+
+        this.cellValue(0, 0, null);
+        this.saveEditData().done(() => {
+            // assert
+            assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+            assert.equal($row.find('.dx-datagrid-invalid').length, 1, 'there is one invalid editor in first row');
+
+            this.cellValue(0, 0, 1);
+            this.saveEditData().done(() => {
+                $row = rowsView.getRow(0);
+
+                // asset
+                assert.equal(this.editingController._editRowIndex, -1, 'there is no editing row');
+                assert.notOk($row.hasClass('dx-edit-row'), 'the row is not in editing mode');
+
+                done();
+            });
+        });
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+        assert.equal($row.find('.dx-validation-pending').length, 1, 'there is one pending editor in first row');
+    });
+
+    QUnit.test('Row - Data is not saved when a dependant cell value becomes invalid', function(assert) {
+        // arrange
+        this.clock.restore();
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            loadingTimeout: undefined,
+            editing: {
+                mode: 'row',
+                allowUpdating: true,
+            },
+            columns: [{
+                dataField: 'age',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = new Deferred();
+                        setTimeout(function() {
+                            params.value === 1 ? d.resolve(true) : d.reject();
+                        }, 10);
+                        return d.promise();
+                    }
+                }],
+                setCellValue: function(rowData, value) {
+                    rowData.age = value;
+                    if(value === 1) {
+                        rowData.name = '';
+                    }
+                }
+            }, {
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        // act
+        this.editRow(0);
+        const $editRow = rowsView.getRow(0);
+
+        this.cellValue(0, 0, null);
+        this.saveEditData().done(() => {
+            let $cell1 = $(this.getCellElement(0, 0));
+            let $cell2 = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+            assert.ok($cell1.hasClass('dx-datagrid-invalid'), 'first cell is invalid');
+            assert.notOk($cell2.hasClass('dx-datagrid-invalid'), 'second cell is valid');
+
+            this.cellValue(0, 0, 1);
+            this.saveEditData().done(() => {
+                $cell1 = $(this.getCellElement(0, 0));
+                $cell2 = $(this.getCellElement(0, 1));
+
+                // asset
+                assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+                assert.notOk($cell1.hasClass('dx-datagrid-invalid'), 'first cell is valid');
+                assert.ok($cell2.hasClass('dx-datagrid-invalid'), 'second cell is invalid');
+
+                done();
+            });
+        });
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+        assert.equal($editRow.find('.dx-validation-pending').length, 1, 'there is one pending editor in first row');
+    });
+
+    // QUnit.test('Batch - Only valid data is saved in a new row', function(assert) {
+    //     // arrange
+    //     this.clock.restore();
+    //     const rowsView = this.rowsView;
+    //     const testElement = $('#container');
+    //     const done = assert.async();
+
+    //     rowsView.render(testElement);
+
+    //     this.applyOptions({
+    //         editing: {
+    //             mode: 'batch',
+    //             allowAdding: true
+    //         },
+    //         columns: [{
+    //             dataField: 'age',
+    //             validationRules: [{
+    //                 type: 'async',
+    //                 validationCallback: function(params) {
+    //                     const d = new Deferred();
+    //                     setTimeout(function() {
+    //                         params.value === 1 ? d.resolve(true) : d.reject();
+    //                     }, 10);
+    //                     return d.promise();
+    //                 }
+    //             }]
+    //         }]
+    //     });
+
+    //     // act
+    //     this.addRow();
+    //     let $row = rowsView.getRow(0);
+
+    //     // assert
+    //     assert.equal($row.find('.dx-validation-pending').length, 0, 'there are no pending editors in a new row');
+    //     assert.equal($row.find('.dx-datagrid-invalid').length, 0, 'there are no invalid editors in a new row');
+
+    //     this.saveEditData().done(() => {
+    //         $row = rowsView.getRow(0);
+
+    //         // assert
+    //         assert.ok($row.hasClass('dx-row-inserted'), 'the row is in editing mode');
+    //         assert.equal($row.find('.dx-datagrid-invalid').length, 1, 'there is one invalid editor in first row');
+
+    //         this.cellValue(0, 0, 1);
+    //         this.saveEditData().done(() => {
+    //             $row = rowsView.getRow(0);
+
+    //             // asset
+    //             assert.notOk($row.hasClass('dx-row-inserted'), 'the row is not in editing mode');
+
+    //             done();
+    //         });
+    //     });
+    //     $row = rowsView.getRow(0);
+
+    //     // assert
+    //     assert.equal($row.find('.dx-validation-pending').length, 1, 'there is one pending editor in a new row');
+    // });
 });
