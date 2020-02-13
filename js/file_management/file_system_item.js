@@ -1,5 +1,5 @@
 import { isString } from '../core/utils/type';
-import { pathCombine, getFileExtension, getPathParts, getName, PATH_SEPARATOR } from './utils';
+import { pathCombine, getFileExtension, getPathParts, getName, getEscapedFileName, PATH_SEPARATOR } from './utils';
 
 class FileSystemItem {
     constructor() {
@@ -8,15 +8,19 @@ class FileSystemItem {
     }
 
     _internalCtor(pathInfo, name, isDirectory) {
-        this.name = name;
+        this.name = name || '';
 
         this.pathInfo = pathInfo && [...pathInfo] || [];
         this.parentPath = this._getPathByPathInfo(this.pathInfo);
-        this.key = this.relativeName = pathCombine(this.parentPath, name);
+        this.relativeName = pathCombine(this.parentPath, name);
+        this.key = this._getPathByPathInfo(this.getFullPathInfo(), true);
 
         this.path = pathCombine(this.parentPath, name);
+
         this.pathKeys = this.pathInfo.map(({ key }) => key);
-        this.pathKeys.push(this.key);
+        if(!this.isRoot()) {
+            this.pathKeys.push(this.key);
+        }
 
         this._initialize(isDirectory);
     }
@@ -94,9 +98,9 @@ class FileSystemItem {
         return result;
     }
 
-    _getPathByPathInfo(pathInfo) {
+    _getPathByPathInfo(pathInfo, escape) {
         return pathInfo
-            .map(info => info.name)
+            .map(info => escape ? getEscapedFileName(info.name) : info.name)
             .join(PATH_SEPARATOR);
     }
 }

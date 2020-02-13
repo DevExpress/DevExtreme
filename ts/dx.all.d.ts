@@ -3590,6 +3590,8 @@ declare module DevExpress.ui {
         contextMenu?: dxFileManagerContextMenu;
         /** @name dxFileManager.Options.currentPath */
         currentPath?: string;
+        /** @name dxFileManager.Options.currentPathKeys */
+        currentPathKeys?: Array<string>;
         /** @name dxFileManager.Options.customizeDetailColumns */
         customizeDetailColumns?: ((columns: Array<dxDataGridColumn>) => Array<dxDataGridColumn>);
         /** @name dxFileManager.Options.customizeThumbnail */

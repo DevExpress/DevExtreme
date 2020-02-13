@@ -10,6 +10,7 @@ import whenSome from './ui.file_manager.common';
 import { Deferred, when } from '../../core/utils/deferred';
 import { find } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
+import { equalByValue } from '../../core/utils/common';
 
 const DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME = 'Files';
 
@@ -34,7 +35,11 @@ export default class FileItemsController {
 
         this._loadedItems = {};
 
-        this.setCurrentPath(options.currentPath);
+        if(options.currentPathKeys && options.currentPathKeys.length) {
+            this.setCurrentPathByKeys(options.currentPathKeys);
+        } else {
+            this.setCurrentPath(options.currentPath);
+        }
     }
 
     setProvider(fileProvider) {
@@ -72,13 +77,15 @@ export default class FileItemsController {
             return;
         }
 
-        return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts)
-            .then(directoryInfo => {
-                for(let info = directoryInfo.parentDirectory; info; info = info.parentDirectory) {
-                    info.expanded = true;
-                }
-                this.setCurrentDirectory(directoryInfo);
-            });
+        return this._setCurrentDirectoryByPathParts(pathParts);
+    }
+
+    setCurrentPathByKeys(pathKeys) {
+        if(equalByValue(this.getCurrentDirectory().fileItem.pathKeys, pathKeys, 0, true)) {
+            return;
+        }
+
+        return this._setCurrentDirectoryByPathParts(pathKeys, true);
     }
 
     getCurrentPath() {
@@ -350,27 +357,39 @@ export default class FileItemsController {
             () => null);
     }
 
-    _getDirectoryByPathParts(parentDirectoryInfo, pathParts) {
+    _setCurrentDirectoryByPathParts(pathParts, useKeys) {
+        return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts, useKeys)
+            .then(directoryInfo => {
+                for(let info = directoryInfo.parentDirectory; info; info = info.parentDirectory) {
+                    info.expanded = true;
+                }
+                this.setCurrentDirectory(directoryInfo);
+            });
+    }
+
+    _getDirectoryByPathParts(parentDirectoryInfo, pathParts, useKeys) {
         if(pathParts.length < 1) {
             return new Deferred()
                 .resolve(parentDirectoryInfo)
                 .promise();
         }
 
+        const fieldName = useKeys ? 'key' : 'name';
         return this.getDirectories(parentDirectoryInfo)
             .then(dirInfos => {
-                const subDirInfo = find(dirInfos, d => d.fileItem.name === pathParts[0]);
+                const subDirInfo = find(dirInfos, d => d.fileItem[fieldName] === pathParts[0]);
                 if(!subDirInfo) {
                     return new Deferred().reject().promise();
                 }
-                return this._getDirectoryByPathParts(subDirInfo, pathParts.splice(1));
+                const restPathParts = [...pathParts].splice(1);
+                return this._getDirectoryByPathParts(subDirInfo, restPathParts, useKeys);
             });
     }
 
     _getDirectoryPathKeyParts(directoryInfo) {
-        const pathParts = [ directoryInfo.fileItem.key ];
+        const pathParts = [];
         while(directoryInfo && directoryInfo.parentDirectory) {
-            pathParts.unshift(directoryInfo.parentDirectory.fileItem.key);
+            pathParts.unshift(directoryInfo.fileItem.key);
             directoryInfo = directoryInfo.parentDirectory;
         }
         return pathParts;
@@ -378,11 +397,11 @@ export default class FileItemsController {
 
     _findSelectedDirectoryByPathKeyParts(keyParts) {
         let selectedDirInfo = this._rootDirectoryInfo;
-        if(keyParts.length < 2 || keyParts[0] !== this._rootDirectoryInfo.fileItem.key) {
+        if(keyParts.length === 0) {
             return selectedDirInfo;
         }
 
-        let i = 1;
+        let i = 0;
         let newSelectedDir = selectedDirInfo;
         while(newSelectedDir && i < keyParts.length) {
             newSelectedDir = find(selectedDirInfo.items, info => info.fileItem.key === keyParts[i]);

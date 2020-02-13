@@ -47,6 +47,14 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      */
     currentPath?: string;
     /**
+     * @docid dxFileManagerOptions.currentPathKeys
+     * @type Array<string>
+     * @default []
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    currentPathKeys?: Array<string>;
+    /**
      * @docid dxFileManagerOptions.customizeDetailColumns
      * @type function
      * @type_function_param1 columns:Array<dxDataGridColumn>
