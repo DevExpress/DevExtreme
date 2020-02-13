@@ -434,58 +434,57 @@ class FileManagerToolbar extends Widget {
 
     updateRefreshItem(message, status) {
         let generalToolbarOptions = null;
-        let text = '';
+        let text = messageLocalization.format('dxFileManager-commandRefresh');
+        let showText = 'inMenu';
 
         this._isRefreshVisibleInFileToolbar = false;
 
         if(status === 'default') {
             generalToolbarOptions = {
-                showText: 'inMenu',
                 options: {
                     icon: REFRESH_ICON_MAP.default
                 }
             };
-            text = messageLocalization.format('dxFileManager-commandRefresh');
         } else {
             generalToolbarOptions = {
-                showText: 'always',
                 options: {
                     icon: REFRESH_ICON_MAP[status]
                 }
             };
             this._isRefreshVisibleInFileToolbar = true;
             text = message;
+            showText = 'always';
         }
 
         const fileToolbarOptions = extend({ }, generalToolbarOptions, { visible: this._isRefreshVisibleInFileToolbar });
-        this.applyRefreshItemOptions(generalToolbarOptions, fileToolbarOptions);
-        this._refreshItemTextTimeout = this.updateRefreshItemText(status === 'progress', text);
+        this._applyRefreshItemOptions(generalToolbarOptions, fileToolbarOptions);
+        this._refreshItemTextTimeout = this._updateRefreshItemText(status === 'progress', text, showText);
     }
 
-    updateRefreshItemText(isDeferredUpdate, text) {
+    _updateRefreshItemText(isDeferredUpdate, text, showText) {
         const options = {
+            showText,
             options: {
-                text: text
+                text
             }
         };
         if(isDeferredUpdate) {
-            this.updateRefreshItemText(false, '');
             return setTimeout(() => {
-                this.applyRefreshItemOptions(options);
+                this._applyRefreshItemOptions(options);
                 this._refreshItemTextTimeout = undefined;
             }, this.option('refreshItemDelay'));
         } else {
             if(this._refreshItemTextTimeout) {
                 clearTimeout(this._refreshItemTextTimeout);
             }
-            this.applyRefreshItemOptions(options);
+            this._applyRefreshItemOptions(options);
             return undefined;
         }
     }
 
-    applyRefreshItemOptions(generalToolbarOptions, fileToolbarOptions) {
+    _applyRefreshItemOptions(generalToolbarOptions, fileToolbarOptions) {
         if(!fileToolbarOptions) {
-            fileToolbarOptions = generalToolbarOptions;
+            fileToolbarOptions = extend({}, generalToolbarOptions);
         }
         this._updateItemInToolbar(this._generalToolbar, 'refresh', generalToolbarOptions);
         this._updateItemInToolbar(this._fileToolbar, 'refresh', fileToolbarOptions);
