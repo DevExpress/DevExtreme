@@ -190,38 +190,6 @@ export default class Widget extends JSXComponent<WidgetInput> {
     widgetRef!: HTMLDivElement;
 
     @Effect()
-    visibilityEffect() {
-        const { name, onVisibilityChange } = this.props;
-
-        const namespace = `${name}VisibilityChange`;
-        if (onVisibilityChange) {
-            visibility.on(this.widgetRef,
-                () => onVisibilityChange!(true),
-                () => onVisibilityChange!(false),
-                { namespace },
-            );
-
-            return () => visibility.off(this.widgetRef, { namespace });
-        }
-
-        return null;
-    }
-
-    @Effect()
-    resizeEffect() {
-        const namespace = `${this.props.name}VisibilityChange`;
-        const { onDimensionChanged } = this.props;
-
-        if (onDimensionChanged) {
-            resize.on(this.widgetRef, onDimensionChanged, { namespace });
-
-            return () => resize.off(this.widgetRef, { namespace });
-        }
-
-        return null;
-    }
-
-    @Effect()
     accessKeyEffect() {
         const namespace = 'UIFeedback';
         const { accessKey, focusStateEnabled, disabled } = this.props;
@@ -237,30 +205,6 @@ export default class Widget extends JSXComponent<WidgetInput> {
             }, { namespace });
 
             return () => dxClick.off(this.widgetRef, { namespace });
-        }
-
-        return null;
-    }
-
-    @Effect()
-    hoverEffect() {
-        const namespace = 'UIFeedback';
-        const { activeStateUnit, hoverStateEnabled, disabled } = this.props;
-        const selector = activeStateUnit;
-        const isHoverable = hoverStateEnabled && !disabled;
-
-        if (isHoverable) {
-            hover.on(this.widgetRef,
-                new Action(() => {
-                    if (!this._active) {
-                        this._hovered = true;
-                    }
-                }, { excludeValidators: ['readOnly'] }),
-                () => { this._hovered = false; },
-                { selector, namespace },
-            );
-
-            return () => hover.off(this.widgetRef, { selector, namespace });
         }
 
         return null;
@@ -301,6 +245,16 @@ export default class Widget extends JSXComponent<WidgetInput> {
     }
 
     @Effect()
+    clickEffect() {
+        const { name, clickArgs } = this.props;
+        const namespace = name;
+
+        dxClick.on(this.widgetRef, () => this.props.onClick!(clickArgs), { namespace });
+
+        return () => dxClick.off(this.widgetRef, { namespace });
+    }
+
+    @Effect()
     focusEffect() {
         const { disabled, focusStateEnabled, name } = this.props;
         const namespace = `${name}Focus`;
@@ -323,13 +277,27 @@ export default class Widget extends JSXComponent<WidgetInput> {
     }
 
     @Effect()
-    clickEffect() {
-        const { name, clickArgs } = this.props;
-        const namespace = name;
+    hoverEffect() {
+        const namespace = 'UIFeedback';
+        const { activeStateUnit, hoverStateEnabled, disabled } = this.props;
+        const selector = activeStateUnit;
+        const isHoverable = hoverStateEnabled && !disabled;
 
-        dxClick.on(this.widgetRef, () => this.props.onClick!(clickArgs), { namespace });
+        if (isHoverable) {
+            hover.on(this.widgetRef,
+                new Action(() => {
+                    if (!this._active) {
+                        this._hovered = true;
+                    }
+                }, { excludeValidators: ['readOnly'] }),
+                () => { this._hovered = false; },
+                { selector, namespace },
+            );
 
-        return () => dxClick.off(this.widgetRef, { namespace });
+            return () => hover.off(this.widgetRef, { selector, namespace });
+        }
+
+        return null;
     }
 
     @Effect()
@@ -341,6 +309,38 @@ export default class Widget extends JSXComponent<WidgetInput> {
                 options => onKeyPress?.(options.originalEvent, options));
 
             return () => keyboard.off(id);
+        }
+
+        return null;
+    }
+
+    @Effect()
+    resizeEffect() {
+        const namespace = `${this.props.name}VisibilityChange`;
+        const { onDimensionChanged } = this.props;
+
+        if (onDimensionChanged) {
+            resize.on(this.widgetRef, onDimensionChanged, { namespace });
+
+            return () => resize.off(this.widgetRef, { namespace });
+        }
+
+        return null;
+    }
+
+    @Effect()
+    visibilityEffect() {
+        const { name, onVisibilityChange } = this.props;
+
+        const namespace = `${name}VisibilityChange`;
+        if (onVisibilityChange) {
+            visibility.on(this.widgetRef,
+                () => onVisibilityChange!(true),
+                () => onVisibilityChange!(false),
+                { namespace },
+            );
+
+            return () => visibility.off(this.widgetRef, { namespace });
         }
 
         return null;
