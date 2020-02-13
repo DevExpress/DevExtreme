@@ -15,7 +15,9 @@ const getIntlFormatter = format => {
             const safeYearShift = 400;
             const temporaryYearValue = recognizableAsTwentyCentury ? year + safeYearShift : year;
             const utcDate = new Date(Date.UTC(temporaryYearValue, date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
-            utcDate.setFullYear(year);
+            if(recognizableAsTwentyCentury) {
+                utcDate.setFullYear(year);
+            }
             const utcFormat = extend({ timeZone: 'UTC' }, format);
 
             return formatDateTime(utcDate, utcFormat);
