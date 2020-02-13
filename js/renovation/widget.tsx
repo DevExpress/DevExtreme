@@ -16,7 +16,6 @@ import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
-import Action from '../core/action';
 
 const getStyles = ({ width, height }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
@@ -221,16 +220,14 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
         if (activeStateEnabled && !disabled) {
             active.on(this.widgetRef,
-                new Action(({ event }) => {
+                ({ event }) => {
                     this._active = true;
                     onActive?.(event);
-                }),
-                new Action(({ event }) => {
+                },
+                ({ event }) => {
                     this._active = false;
                     onInactive?.(event);
-                },
-                { excludeValidators: ['disabled', 'readOnly'] },
-                ), {
+                }, {
                     hideTimeout: _feedbackHideTimeout,
                     namespace,
                     selector,
@@ -285,12 +282,8 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
         if (isHoverable) {
             hover.on(this.widgetRef,
-                new Action(() => {
-                    if (!this._active) {
-                        this._hovered = true;
-                    }
-                }, { excludeValidators: ['readOnly'] }),
-                () => { this._hovered = false; },
+                () => !this._active && (this._hovered = true),
+                () => this._hovered = false,
                 { selector, namespace },
             );
 
