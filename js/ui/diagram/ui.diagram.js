@@ -148,9 +148,6 @@ class Diagram extends Widget {
     }
     _getExcludeCommands() {
         const excludeCommands = [];
-        if(!this._isPropertiesPanelVisible()) {
-            excludeCommands.push(DiagramCommandsManager.SHOW_OPTIONS_COMMAND_NAME);
-        }
         if(!this._isToolboxVisible()) {
             excludeCommands.push(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME);
         }
@@ -166,12 +163,7 @@ class Diagram extends Widget {
             onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
-            excludeCommands: this._getExcludeCommands(),
-            onCommandExecuted: (e) => {
-                if(e.command === DiagramCommandsManager.SHOW_OPTIONS_COMMAND_NAME && this._propertiesPanel) {
-                    this._propertiesPanel.toggle();
-                }
-            }
+            excludeCommands: this._getExcludeCommands()
         });
     }
     _adjustFloatingToolbarContainer($container, toolbar, position) {
@@ -308,9 +300,6 @@ class Diagram extends Widget {
 
                 if(this._propertiesPanelActionButton) {
                     this._propertiesPanelActionButton.option('icon', e.visible ? 'close' : 'edit');
-                }
-                if(this._mainToolbar) {
-                    this._mainToolbar.setCommandChecked(DiagramCommandsManager.SHOW_OPTIONS_COMMAND_NAME, e.visible);
                 }
             },
             onVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),

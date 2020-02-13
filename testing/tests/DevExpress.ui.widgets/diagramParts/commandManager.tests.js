@@ -41,7 +41,7 @@ QUnit.module('CommandManager', {
     }
 }, () => {
     test('default commands', function(assert) {
-        assert.equal(DiagramCommandsManager.getMainToolbarCommands().length, 24);
+        assert.equal(DiagramCommandsManager.getMainToolbarCommands().length, 23);
         assert.equal(DiagramCommandsManager.getHistoryToolbarCommands().length, 3);
         assert.equal(DiagramCommandsManager.getViewToolbarCommands().length, 6);
         assert.equal(DiagramCommandsManager.getViewToolbarCommands()[5].items.length, 6);
@@ -49,7 +49,7 @@ QUnit.module('CommandManager', {
         assert.equal(DiagramCommandsManager.getPropertyPanelCommands().length, 3);
     });
     test('default commands with excludes', function(assert) {
-        assert.equal(DiagramCommandsManager.getMainToolbarCommands(undefined, ['options']).length, 23);
+        assert.equal(DiagramCommandsManager.getMainToolbarCommands(undefined, [1]).length, 22);
         assert.equal(DiagramCommandsManager.getViewToolbarCommands(undefined, ['toolbox']).length, 6);
         assert.equal(DiagramCommandsManager.getViewToolbarCommands(undefined, ['toolbox'])[5].items.length, 5);
     });

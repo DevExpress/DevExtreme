@@ -14,7 +14,6 @@ const CSS_CLASSES = {
 
 const DiagramCommandsManager = {
     SHOW_TOOLBOX_COMMAND_NAME: 'toolbox',
-    SHOW_OPTIONS_COMMAND_NAME: 'options',
 
     getAllCommands: function() {
         const { DiagramCommand } = getDiagram();
@@ -377,13 +376,6 @@ const DiagramCommandsManager = {
                     widget: 'dxCheckBox'
                 },
                 // Custom commands
-                showOptions: {
-                    command: this.SHOW_OPTIONS_COMMAND_NAME,
-                    icon: 'preferences',
-                    hint: messageLocalization.format('dxDiagram-uiProperties'),
-                    text: messageLocalization.format('dxDiagram-uiProperties'),
-                    position: 'after'
-                },
                 showToolbox: {
                     command: this.SHOW_TOOLBOX_COMMAND_NAME,
                     hint: messageLocalization.format('dxDiagram-uiShowToolbox'),
@@ -421,8 +413,7 @@ const DiagramCommandsManager = {
             allCommands['connectorLineStart'],
             allCommands['connectorLineEnd'],
             allCommands['separator'],
-            allCommands['autoLayout'],
-            allCommands['showOptions']
+            allCommands['autoLayout']
         ];
     },
     getHistoryToolbarCommands: function(commands, excludeCommands) {

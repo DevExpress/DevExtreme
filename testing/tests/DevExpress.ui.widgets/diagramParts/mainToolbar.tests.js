@@ -37,17 +37,6 @@ QUnit.module('Main Toolbar', {
         const toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
         assert.equal(toolbar.option('dataSource').length, 1);
     });
-    test('should hide toolbar custom button', function(assert) {
-        let toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
-        const count = toolbar.option('dataSource').length;
-
-        this.instance.option('propertiesPanel.visibility', 'disabled');
-        toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
-        assert.equal(toolbar.option('dataSource').length, count - 1);
-        this.instance.option('propertiesPanel.visibility', 'visible');
-        toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
-        assert.equal(toolbar.option('dataSource').length, count);
-    });
     test('should enable items on diagram request', function(assert) {
         const undoButton = findToolbarItem(this.$element, 'undo').dxButton('instance');
         assert.ok(undoButton.option('disabled'));
