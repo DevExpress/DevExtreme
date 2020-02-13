@@ -1,31 +1,10 @@
 
 import $ from '../../core/renderer';
-import * as Preact from 'preact';
 import registerComponent from '../../core/component_registrator';
-import Widget from '../preact_wrapper';
+import Widget from '../preact-wrapper/component';
 import { extend } from '../../core/utils/extend';
 import ButtonView from '../button.p';
-
-const HTMLToPreact = (node) => {
-    if(node.nodeType === 3) {
-        return node.wholeText;
-    }
-
-    const tag = node.tagName;
-    const childNodes = node.childNodes;
-
-    const children = [];
-    for(let i = 0; i < childNodes.length; i++) {
-        children.push(HTMLToPreact(childNodes[i]));
-    }
-
-    const attributes = [...node.attributes].reduce((acc, attr) => {
-        acc[attr.name] = attr.value;
-        return acc;
-    }, {});
-
-    return Preact.h(tag, attributes, children);
-};
+import { HTMLToPreact } from '../preact-wrapper/utils';
 
 class Button extends Widget {
     getView() {
@@ -39,14 +18,17 @@ class Button extends Widget {
             props.contentRender = ({ text, icon, contentRef }) => {
                 const data = { text, icon };
                 let $content = $('<div>');
-                const templateProp = this.option('template');
-                const $template = $(this._getTemplate(templateProp).render({ model: data, container: $content }));
+                $content.addClass('dx-button-content');
+                const $template = $(
+                    this._getTemplate(this.option('template')).render({
+                        model: data, container: $content
+                    })
+                );
 
                 if($template.hasClass('dx-template-wrapper')) {
+                    $template.addClass('dx-button-content');
                     $content = $template;
                 }
-
-                $content.addClass('dx-button-content');
 
                 const result = HTMLToPreact($content.get(0));
                 result.ref = contentRef;
