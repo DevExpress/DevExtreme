@@ -1432,6 +1432,16 @@ const SchedulerWorkSpace = Widget.inherit({
 
     _renderTimePanel: function() {
         const repeatCount = this._groupedStrategy.calculateTimeCellRepeatCount();
+        const startViewDate = this._getDateWithSkippedDST();
+
+        const _getTimeText = (i) => {
+            // T410490: incorrectly displaying time slots on Linux
+            const index = i % this._getRowCount();
+            if(index % 2 === 0) {
+                return dateLocalization.format(this._getTimeCellDateCore(startViewDate, i), 'shorttime');
+            }
+            return '';
+        };
 
         this._renderTableBody({
             container: getPublicElement(this._$timePanel),
@@ -1440,19 +1450,28 @@ const SchedulerWorkSpace = Widget.inherit({
             cellClass: this._getTimeCellClass.bind(this),
             rowClass: TIME_PANEL_ROW_CLASS,
             cellTemplate: this.option('timeCellTemplate'),
-            getCellText: this._getTimeText.bind(this),
+            getCellText: _getTimeText.bind(this),
             getCellDate: this._getTimeCellDate.bind(this),
             groupCount: this._getGroupCount(),
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined
         });
     },
 
+    _getDateWithSkippedDST: function() {
+        let result = new Date(this.getStartViewDate());
+        if(utils.isTimezoneChangeInDate(result)) {
+            result = new Date(result.setDate(result.getDate() + 1));
+        }
+        return result;
+    },
+
     _getTimePanelRowCount: function() {
         return this._getCellCountInDay();
     },
 
-    _getCellCountInDay: function() {
-        return Math.ceil(this._calculateDayDuration() / this.option('hoursInterval'));
+    _getCellCountInDay: function(skipRound) {
+        const result = this._calculateDayDuration() / this.option('hoursInterval');
+        return skipRound ? result : Math.ceil(result);
     },
 
     _calculateDayDuration: function() {
@@ -1465,25 +1484,27 @@ const SchedulerWorkSpace = Widget.inherit({
         return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i, i);
     },
 
-    _getTimeText: function(i) {
-        // T410490: incorrectly displaying time slots on Linux
-        const startViewDate = this._getTimeCellDate(i);
-        const index = i % this._getRowCount();
-
-        if(index % 2 === 0) {
-            return dateLocalization.format(startViewDate, 'shorttime');
+    _getTimeCellDateAdjustedDST: function(i) {
+        let startViewDate = new Date(this.getStartViewDate());
+        if(utils.isTimezoneChangeInDate(startViewDate)) {
+            startViewDate = new Date(startViewDate.setDate(startViewDate.getDate() + 1));
         }
-        return '';
+
+        return this._getTimeCellDateCore(startViewDate, i);
     },
 
     _getTimeCellDate: function(i) {
-        const startViewDate = new Date(this.getStartViewDate());
+        return this._getTimeCellDateCore(this.getStartViewDate(), i);
+    },
+
+    _getTimeCellDateCore: function(startViewDate, i) {
+        const result = new Date(startViewDate);
         const timeCellDuration = Math.round(this.getCellDuration());
-        const lastCellInDay = this._calculateDayDuration() / this.option('hoursInterval');
+        const cellCountInDay = this._getCellCountInDay(true);
 
-        startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * (i % lastCellInDay));
+        result.setMilliseconds(result.getMilliseconds() + timeCellDuration * (i % cellCountInDay));
 
-        return startViewDate;
+        return result;
     },
 
     _renderDateTable: function() {

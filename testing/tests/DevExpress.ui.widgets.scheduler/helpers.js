@@ -20,7 +20,17 @@ export class SchedulerTestWrapper {
     constructor(instance) {
         this.instance = instance;
 
-        this.getTimePanel = () => $('.dx-scheduler-time-panel'),
+        this.timePanel = {
+            getElement: () => {
+                return $('.dx-scheduler-time-panel');
+            },
+            getTimeValues: () => {
+                const cellClassName = this.instance.option('currentView').indexOf('timeline') > -1 ? '.dx-scheduler-header-panel-cell' : '.dx-scheduler-time-panel-cell > div';
+                return $(cellClassName).filter((i, el) => {
+                    return $(el).text() !== '';
+                }).map((i, el) => { return $(el).text(); });
+            }
+        },
 
         this.tooltip = {
             getOverlayContentElement: () => {
