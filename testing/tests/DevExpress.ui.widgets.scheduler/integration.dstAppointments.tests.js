@@ -51,9 +51,6 @@ QUnit.module('DST/STD for recurrence appointments, T804886 and T856624', moduleC
         assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
         assert.equal(scheduler.appointments.getDateText(0), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in appointment before time changing in custom timezone');
 
-        scheduler.appointments.click(0);
-        assert.equal(scheduler.tooltip.getDateText(), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in tooltip before time changing in custom timezone');
-
         scheduler.instance.option('currentDate', new Date(2019, 2, 14)); // NOTE: DST Montreal, STD Paris
 
         targetCell = scheduler.workSpace.getCell(8);
@@ -63,10 +60,6 @@ QUnit.module('DST/STD for recurrence appointments, T804886 and T856624', moduleC
         assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
         assert.equal(scheduler.appointments.getDateText(0), '4:00 AM - 7:00 AM', 'Dates and time were displayed correctly in appointment after time changing in custom timezone');
 
-        scheduler.appointments.click(0);
-
-        assert.equal(scheduler.tooltip.getDateText(), '4:00 AM - 7:00 AM', 'Dates and time were displayed correctly in tooltip after time changing in custom timezone');
-
         scheduler.instance.option('currentDate', new Date(2019, 3, 2)); // NOTE: DST Paris
 
         targetCell = scheduler.workSpace.getCell(6);
@@ -75,11 +68,70 @@ QUnit.module('DST/STD for recurrence appointments, T804886 and T856624', moduleC
         assert.equal(appointment.position().top, targetCell.position().top, 'Recurrence appointment part is rendered in right cell');
         assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
         assert.equal(scheduler.appointments.getDateText(0), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in appointment after time changing in appointment timezone');
+    });
+
+    QUnit.test('Any recurrence appt part should have correct tooltip and popup if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', function(assert) {
+        // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
+        const scheduler = createWrapper({
+            dataSource: [
+                {
+                    text: 'Daily meeting',
+                    startDate: '2019-03-01T09:00:00+01:00',
+                    endDate: '2019-03-01T12:00:00+01:00',
+                    recurrenceRule: 'FREQ=DAILY',
+                    startDateTimeZone: 'Europe/Paris',
+                    endDateTimeZone: 'Europe/Paris'
+                }
+            ],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2019, 2, 1), // NOTE: STD Montreal
+            startDayHour: 0,
+            height: 600,
+            timeZone: 'America/Montreal',
+            dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx'
+        });
+
+        let startDateEditor;
+        let endDateEditor;
 
         scheduler.appointments.click(0);
+        assert.equal(scheduler.tooltip.getDateText(), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in tooltip before time changing in custom timezone');
 
+        scheduler.tooltip.clickOnItem();
+        scheduler.appointmentPopup.dialog.clickEditAppointment();
+        startDateEditor = scheduler.appointmentForm.getEditor('startDate');
+        endDateEditor = scheduler.appointmentForm.getEditor('endDate');
+        assert.equal(startDateEditor.option('text'), '3/1/2019, 3:00 AM', 'Start Date is displayed correctly in appointment popup form before time changing in custom timezone');
+        assert.equal(endDateEditor.option('text'), '3/1/2019, 6:00 AM', 'End Date is displayed correctly in appointment popup form before time changing in custom timezone');
+        scheduler.appointmentPopup.hide();
+
+        scheduler.instance.option('currentDate', new Date(2019, 2, 14)); // NOTE: DST Montreal, STD Paris
+
+        scheduler.appointments.click(0);
+        assert.equal(scheduler.tooltip.getDateText(), '4:00 AM - 7:00 AM', 'Dates and time were displayed correctly in tooltip after time changing in custom timezone');
+
+        scheduler.tooltip.clickOnItem();
+        scheduler.appointmentPopup.dialog.clickEditAppointment();
+        startDateEditor = scheduler.appointmentForm.getEditor('startDate');
+        endDateEditor = scheduler.appointmentForm.getEditor('endDate');
+        assert.equal(startDateEditor.option('text'), '3/14/2019, 4:00 AM', 'Start Date is displayed correctly in appointment popup form before time changing in custom timezone');
+        assert.equal(endDateEditor.option('text'), '3/14/2019, 7:00 AM', 'End Date is displayed correctly in appointment popup form before time changing in custom timezone');
+        scheduler.appointmentPopup.hide();
+
+        scheduler.instance.option('currentDate', new Date(2019, 3, 2)); // NOTE: DST Paris
+
+        scheduler.appointments.click(0);
         assert.equal(scheduler.tooltip.getDateText(), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in tooltip after time changing in appointment timezone');
+
+        scheduler.tooltip.clickOnItem();
+        scheduler.appointmentPopup.dialog.clickEditAppointment();
+        startDateEditor = scheduler.appointmentForm.getEditor('startDate');
+        endDateEditor = scheduler.appointmentForm.getEditor('endDate');
+        assert.equal(startDateEditor.option('text'), '4/2/2019, 3:00 AM', 'Start Date is displayed correctly in appointment popup form before time changing in custom timezone');
+        assert.equal(endDateEditor.option('text'), '4/2/2019, 6:00 AM', 'End Date is displayed correctly in appointment popup form before time changing in custom timezone');
     });
+
 
     QUnit.test('Recurrence appt part at the time of DST should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', function(assert) {
         // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
