@@ -2,7 +2,7 @@
     "extends": "stylelint-config-standard",
     "ignoreFiles": "!**/*.{css,less}",
     "rules": {
-        "indentation": [4, { ignore: ["inside-parens"] }],
+        "indentation": [4, { "ignore": ["inside-parens"] }],
         "max-empty-lines": 2,
         "selector-pseudo-element-colon-notation": null,
         "no-descending-specificity": null,
