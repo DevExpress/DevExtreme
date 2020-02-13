@@ -46,12 +46,6 @@ const getCssClasses = (model: ButtonInput) => {
 };
 
 export const viewModelFunction = (model: Button):ButtonViewModel => {
-    let icon: any = void 0;
-
-    if (model.props.icon || model.props.type === 'back') {
-        icon = getImageContainerJSX(model.props.icon || 'back', model.props.iconPosition);
-    }
-
     return {
         ...model.props,
         aria: { label: model.props.text && model.props.text.trim() },
@@ -81,7 +75,7 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
     let icon: any = viewModel.icon;
 
     if (icon || viewModel.type === 'back') {
-        icon = getImageContainerJSX(icon || 'back');
+        icon = getImageContainerJSX(icon || 'back', viewModel.iconPosition!);
     }
 
     return <Widget
@@ -107,11 +101,11 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
         <div className="dx-button-content" ref={viewModel.contentRef}>
             {viewModel.contentRender &&
                 <viewModel.contentRender icon={icon} text={viewModel.text} />}
-            {!viewModel.contentRender && isIconLeft && viewModel.icon}
+            {!viewModel.contentRender && isIconLeft && icon}
             {!viewModel.contentRender && viewModel.text &&
                 <span className="dx-button-text">{viewModel.text}</span>
             }
-            {!viewModel.contentRender && !isIconLeft && viewModel.icon}
+            {!viewModel.contentRender && !isIconLeft && icon}
             {viewModel.useSubmitBehavior &&
                 <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
             }
