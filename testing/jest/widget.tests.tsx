@@ -298,7 +298,7 @@ describe('Widget', () => {
             });
 
             it('should not change state if disabled', () => {
-                const widget = render({ disabled: true });
+                const widget = render({ focusStateEnabled: true, disabled: true });
 
                 expect(widget.hasClass('dx-state-disabled')).toBe(true);
                 expect(widget.hasClass('dx-state-focused')).toBe(false);
