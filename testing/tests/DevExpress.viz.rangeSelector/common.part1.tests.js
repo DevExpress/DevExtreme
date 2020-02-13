@@ -1,6 +1,6 @@
 const $ = require('jquery');
 const trackerModule = require('viz/range_selector/tracker');
-const dataSourceModule = require('data/data_source/data_source');
+const DataSource = require('data/data_source/data_source').DataSource;
 const seriesDataSourceModule = require('viz/range_selector/series_data_source');
 const commons = require('./rangeSelectorParts/commons.js');
 
@@ -223,7 +223,7 @@ QUnit.test('Creation', function(assert) {
     const widget = this.createWidget({ dataSource: [1, 2, 3] });
     const ds = widget.getDataSource();
 
-    assert.ok(ds instanceof dataSourceModule.DataSource);
+    assert.ok(ds instanceof DataSource);
     assert.deepEqual(ds.items(), [1, 2, 3]);
 });
 
@@ -239,7 +239,7 @@ QUnit.module('isReady', $.extend({}, commons.environment, {
 }));
 
 QUnit.test('dataSource is not loaded', function(assert) {
-    const ds = new dataSourceModule.DataSource();
+    const ds = new DataSource();
     ds.isLoaded = sinon.stub().returns(false);
     const rangeSelector = this.createWidget({ dataSource: ds });
 
@@ -248,7 +248,7 @@ QUnit.test('dataSource is not loaded', function(assert) {
 });
 
 QUnit.test('dataSource is loaded', function(assert) {
-    const ds = new dataSourceModule.DataSource();
+    const ds = new DataSource();
     ds.isLoaded = sinon.stub().returns(true);
     const rangeSelector = this.createWidget({ dataSource: ds });
 

@@ -23,7 +23,7 @@ QUnit.test('Creation', function(assert) {
 
     const params = titleModule.Title.lastCall.args[0];
     assert.ok(params.renderer, 'param - renderer');
-    assert.ok(typeof params.incidentOccurred === 'function', 'param - incident occurred');
+    assert.strictEqual(typeof params.incidentOccurred, 'function', 'param - incident occurred');
     assert.strictEqual(params.cssClass, 'dxtm-title', 'param - css class');
 });
 

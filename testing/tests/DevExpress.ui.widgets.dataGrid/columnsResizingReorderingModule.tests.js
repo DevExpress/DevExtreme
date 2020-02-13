@@ -1474,7 +1474,7 @@ function getEvent(options) {
         }));
 
         // assert
-        assert.ok(resizeController._columnsController.updateOptions.length === 0, 'cancel moving');
+        assert.strictEqual(resizeController._columnsController.updateOptions.length, 0, 'cancel moving');
     });
 
     QUnit.test('Headers element is null in startResizing_B239012', function(assert) {
@@ -1560,7 +1560,7 @@ function getEvent(options) {
         this.renderViews($container);
 
         // assert
-        assert.ok($container.find('.dx-datagrid-columns-separator').length === 0, 'columnsSeparator is null');
+        assert.strictEqual($container.find('.dx-datagrid-columns-separator').length, 0, 'columnsSeparator is null');
     });
 
     QUnit.test('Update height of separator when caption of header is wrapped', function(assert) {
@@ -2323,7 +2323,7 @@ function getEvent(options) {
         // assert
         assert.ok(isPointsUpdated, 'points by columns is updated');
         assert.ok(!resizeController._columnsSeparatorView._isShown, 'columnsSeparator is hidden');
-        assert.ok(resizeController._columnsSeparatorView._testCursorName === '', 'cursor is down');
+        assert.strictEqual(resizeController._columnsSeparatorView._testCursorName, '', 'cursor is down');
         assert.ok(!resizeController._isResizing, 'columnsResizer is not resized');
         assert.ok(!resizeController._isReadyResizing, 'columnsResizer is not ready resized');
     });
@@ -3360,7 +3360,7 @@ function getEvent(options) {
         $draggingHeader = testElement.find('.dx-datagrid-drag-header');
 
         // assert
-        assert.ok($draggingHeader.length === 1, 'draggingHeader element');
+        assert.strictEqual($draggingHeader.length, 1, 'draggingHeader element');
         assert.strictEqual($draggingHeader.css('display'), 'none', 'display is none');
         assert.ok($draggingHeader.hasClass('dx-widget'), 'Widget class');
     });
@@ -3384,7 +3384,7 @@ function getEvent(options) {
         $draggingHeader = testElement.find('.dx-datagrid-drag-header');
 
         // assert
-        assert.ok($draggingHeader.length === 1, 'draggingHeader element');
+        assert.strictEqual($draggingHeader.length, 1, 'draggingHeader element');
         assert.strictEqual($draggingHeader.css('display'), 'none', 'display is none');
     });
 
@@ -3407,7 +3407,7 @@ function getEvent(options) {
         $draggingHeader = testElement.find('.dx-datagrid-drag-header');
 
         // assert
-        assert.ok($draggingHeader.length === 1, 'draggingHeader element');
+        assert.strictEqual($draggingHeader.length, 1, 'draggingHeader element');
         assert.strictEqual($draggingHeader.css('display'), 'none', 'display is none');
     });
 
@@ -4523,15 +4523,15 @@ function getEvent(options) {
 
         // assert
         assert.equal(moveHeaderDataSelfArgs.length, 1);
-        assert.ok(moveHeaderDataSelfArgs[0] === controller1._draggingHeaderView);
+        assert.strictEqual(moveHeaderDataSelfArgs[0], controller1._draggingHeaderView);
 
         // act
         $(controller2._columnHeadersView.element().find('td').first()).trigger(dragEvents.move + '.dxDataGridResizingReordering');
 
         // assert
         assert.equal(moveHeaderDataSelfArgs.length, 2);
-        assert.ok(moveHeaderDataSelfArgs[0] === controller1._draggingHeaderView);
-        assert.ok(moveHeaderDataSelfArgs[1] === controller2._draggingHeaderView);
+        assert.strictEqual(moveHeaderDataSelfArgs[0], controller1._draggingHeaderView);
+        assert.strictEqual(moveHeaderDataSelfArgs[1], controller2._draggingHeaderView);
     });
 
     QUnit.test('setRowsOpacity method of views should called only once for begin dragging', function(assert) {

@@ -8,6 +8,7 @@ import { grep } from '../../core/utils/common';
 import { Deferred } from '../../core/utils/deferred';
 import { errors } from '../errors';
 import { XHR_ERROR_UNLOAD, errorMessageFromXhr } from '../utils';
+import { format as stringFormat } from '../../core/utils/string';
 
 const GUID_REGEX = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
 
@@ -598,6 +599,28 @@ export const generateExpand = (oDataVersion, expand, select) =>
     oDataVersion < 4
         ? generatorV2(expand, select)
         : generatorV4(expand, select);
+
+export const formatFunctionInvocationUrl = (baseUrl, args) =>
+    stringFormat(
+        '{0}({1})',
+        baseUrl,
+        map(args || {}, (value, key) => stringFormat('{0}={1}', key, value)).join(',')
+    );
+
+export const escapeServiceOperationParams = (params, version) => {
+    if(!params) {
+        return params;
+    }
+
+    // From WCF Data Services docs:
+    // The type of each parameter must be a primitive type.
+    // Any data of a non-primitive type must be serialized and passed into a string parameter
+    const result = {};
+    each(params, (k, v) => {
+        result[k] = serializeValue(v, version);
+    });
+    return result;
+};
 
 ///#DEBUG
 export const OData__internals = {

@@ -88,7 +88,7 @@ QUnit.module('Hidden input', {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar({
             value: new Date(2013, 9, 15)
         }).dxCalendar('instance');
@@ -115,7 +115,7 @@ QUnit.module('Hidden input', {
 QUnit.module('Navigator', {
     beforeEach: function() {
         fx.off = true;
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar({
             value: new Date(2015, 5, 13)
         }).dxCalendar('instance');
@@ -136,7 +136,7 @@ QUnit.module('Navigator', {
         };
         let actualScrollTop;
         try {
-            brick.appendTo('body');
+            brick.appendTo('#qunit-fixture');
             brick.insertBefore(this.$element);
             $window.scrollTop(50000);
             actualScrollTop = $window.scrollTop();
@@ -161,7 +161,7 @@ QUnit.module('Navigator', {
 QUnit.module('Navigator integration', {
     beforeEach: function() {
         fx.off = true;
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar({
             value: new Date(2015, 5, 13)
         }).dxCalendar('instance');
@@ -172,7 +172,7 @@ QUnit.module('Navigator integration', {
 
         this.reinit = (options) => {
             this.$element.remove();
-            this.$element = $('<div>').appendTo('body');
+            this.$element = $('<div>').appendTo('#qunit-fixture');
             this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
 
             this.$navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
@@ -457,12 +457,12 @@ QUnit.module('Navigator integration', {
 
 QUnit.module('Views initial positions', {
     beforeEach: function() {
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.instance = this.$element.dxCalendar().dxCalendar('instance');
 
         this.reinit = (options) => {
             this.$element.remove();
-            this.$element = $('<div>').appendTo('body');
+            this.$element = $('<div>').appendTo('#qunit-fixture');
             this.instance = this.$element.dxCalendar(options).dxCalendar('instance');
         };
     },
@@ -523,7 +523,7 @@ QUnit.module('Views initial positions', {
 QUnit.module('Views integration', {
     beforeEach: function() {
         fx.off = true;
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar({
             value: new Date(2015, 5, 13),
             focusStateEnabled: true
@@ -531,7 +531,7 @@ QUnit.module('Views integration', {
 
         this.reinit = (options) => {
             this.$element.remove();
-            this.$element = $('<div>').appendTo('body');
+            this.$element = $('<div>').appendTo('#qunit-fixture');
             this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
         };
     },
@@ -544,7 +544,7 @@ QUnit.module('Views integration', {
         this.reinit({
             rtlEnabled: true
         });
-        assert.ok(getCurrentViewInstance(this.calendar).option('rtl'));
+        assert.ok(getCurrentViewInstance(this.calendar).option('rtlEnabled'));
     });
 
     QUnit.test('calendar must pass disabled to the created views', function(assert) {
@@ -711,7 +711,7 @@ QUnit.module('Keyboard navigation', {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.value = new Date(2013, 9, 13);
 
         this.calendar = this.$element.dxCalendar({
@@ -723,7 +723,7 @@ QUnit.module('Keyboard navigation', {
 
         this.reinit = (options) => {
             this.$element.remove();
-            this.$element = $('<div>').appendTo('body');
+            this.$element = $('<div>').appendTo('#qunit-fixture');
             this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
         };
     },
@@ -1073,7 +1073,7 @@ QUnit.module('Keyboard navigation', {
         assert.expect(4);
 
         this.$element.remove();
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.$element.dxCalendar({
             value: new Date(2013, 11, 15),
             focusStateEnabled: true
@@ -1125,7 +1125,7 @@ QUnit.module('Preserve time component on value change', {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar({
             focusStateEnabled: true
         }).dxCalendar('instance');
@@ -1165,7 +1165,7 @@ QUnit.module('Calendar footer', {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar({
             value: new Date(2010, 10, 10),
             focusStateEnabled: true,
@@ -1174,7 +1174,7 @@ QUnit.module('Calendar footer', {
 
         this.reinit = (options = {}) => {
             this.$element.remove();
-            this.$element = $('<div>').appendTo('body');
+            this.$element = $('<div>').appendTo('#qunit-fixture');
             this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
         };
     },
@@ -1368,12 +1368,12 @@ QUnit.module('Options', {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar().dxCalendar('instance');
 
         this.reinit = (options) => {
             this.$element.remove();
-            this.$element = $('<div>').appendTo('body');
+            this.$element = $('<div>').appendTo('#qunit-fixture');
             this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
         };
     },
@@ -1490,7 +1490,7 @@ QUnit.module('Options', {
 QUnit.module('ZoomLevel option', {
     beforeEach: function() {
         fx.off = true;
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
     },
     afterEach: function() {
         this.$element.remove();
@@ -1720,7 +1720,7 @@ QUnit.module('Min & Max options', {
         this.minDate = new Date(2010, 9, 10);
         this.maxDate = new Date(2010, 11, 10);
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar({
             min: this.minDate,
             value: this.value,
@@ -1732,7 +1732,7 @@ QUnit.module('Min & Max options', {
 
         this.reinit = (options) => {
             this.$element.remove();
-            this.$element = $('<div>').appendTo('body');
+            this.$element = $('<div>').appendTo('#qunit-fixture');
             this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
         };
     },
@@ -2005,7 +2005,7 @@ QUnit.module('disabledDates option', {
             }
         };
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar({
             disabledDates: this.disabledDates,
             value: this.value,
@@ -2016,7 +2016,7 @@ QUnit.module('disabledDates option', {
 
         this.reinit = (options) => {
             this.$element.remove();
-            this.$element = $('<div>').appendTo('body');
+            this.$element = $('<div>').appendTo('#qunit-fixture');
             this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
         };
     },
@@ -2641,11 +2641,11 @@ QUnit.module('disabledDates option', {
 QUnit.module('Current date', {
     beforeEach: function() {
         fx.off = true;
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
 
         this.reinit = () => {
             this.$element.remove();
-            this.$element = $('<div>').appendTo('body');
+            this.$element = $('<div>').appendTo('#qunit-fixture');
         };
     },
     afterEach: function() {
@@ -2824,7 +2824,7 @@ QUnit.module('Current date', {
 QUnit.module('Navigation - click on other view cell', {
     beforeEach: function() {
         fx.off = true;
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
     },
     afterEach: function() {
         this.$element.remove();
@@ -2913,7 +2913,7 @@ QUnit.module('Navigation - swiping', {
     beforeEach: function() {
         fx.off = true;
 
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         this.calendar = this.$element.dxCalendar({
             currentDate: new Date(2013, 9, 15),
             firstDayOfWeek: 1
@@ -2923,7 +2923,7 @@ QUnit.module('Navigation - swiping', {
 
         this.reinit = (options) => {
             this.$element.remove();
-            this.$element = $('<div>').appendTo('body');
+            this.$element = $('<div>').appendTo('#qunit-fixture');
             this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
             this.pointer = pointerMock(this.$element).start();
         };
@@ -3209,22 +3209,13 @@ QUnit.module('Navigation - swiping', {
 QUnit.module('Aria accessibility', {
     beforeEach: function() {
         fx.off = true;
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
     },
     afterEach: function() {
         this.$element.remove();
         fx.off = false;
     }
 }, () => {
-    QUnit.test('role for calendar widget', function(assert) {
-        const $element = this.$element;
-
-        $element.dxCalendar();
-
-        assert.equal($element.attr('role'), 'listbox', 'role is correct');
-        assert.equal($element.attr('aria-label'), 'Calendar', 'label is correct');
-    });
-
     QUnit.test('aria-activedescendant on widget should point to the focused cell', function(assert) {
         const $element = this.$element;
 
@@ -3294,11 +3285,14 @@ QUnit.module('Aria accessibility', {
         assert.equal($element.attr('aria-activedescendant'), $cell.attr('id'), 'selected cell id and activedescendant are equal');
     });
 
-    QUnit.test('role for calendar cells', function(assert) {
-        const calendar = this.$element.dxCalendar().dxCalendar('instance');
-        const $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_CELL_CLASS)).first());
+    QUnit.test('role for calendar cells and rows', function(assert) {
+        this.$element.dxCalendar();
 
-        assert.equal($cell.attr('role'), 'option', 'aria role is correct');
+        const $row = this.$element.find('tr').last();
+        const $cell = this.$element.find(toSelector(CALENDAR_CELL_CLASS)).first();
+
+        assert.equal($row.attr('role'), 'row', 'Row: aria role is correct');
+        assert.equal($cell.attr('role'), 'gridcell', 'Cell: aria role is correct');
     });
 
     QUnit.test('aria id on contoured date cell', function(assert) {
@@ -3415,17 +3409,37 @@ QUnit.module('Aria accessibility', {
             clock.restore();
         }
     });
+
+    QUnit.test('table should have correct role after navigation to another view or zoom level', function(assert) {
+        const calendar = this.$element.dxCalendar().dxCalendar('instance');
+        const $navigatorNext = this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS));
+
+        ['month', 'year', 'decade', 'century'].forEach((zoomLevel) => {
+            calendar.option({ zoomLevel });
+            $navigatorNext.trigger('dxclick');
+
+            const $tables = this.$element.find('table');
+
+            $tables.each((index, tableElement) => {
+                const role = tableElement.getAttribute('role');
+                const label = tableElement.getAttribute('aria-label');
+
+                assert.strictEqual(role, 'grid', `zoomLevel: ${zoomLevel}, role is correct`);
+                assert.equal(label, 'Calendar', `zoomLevel: ${zoomLevel}, label is correct`);
+            });
+        });
+    });
 });
 
 
 QUnit.module('Regression', {
     beforeEach: function() {
         fx.off = true;
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
 
         this.reinit = (options) => {
             this.$element.remove();
-            this.$element = $('<div>').appendTo('body');
+            this.$element = $('<div>').appendTo('#qunit-fixture');
         };
     },
     afterEach: function() {
@@ -3480,7 +3494,7 @@ QUnit.module('Regression', {
 
 QUnit.module('dxCalendar number and string value support', {
     beforeEach: function() {
-        this.$element = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo('#qunit-fixture');
         fx.off = true;
     },
     afterEach: function() {

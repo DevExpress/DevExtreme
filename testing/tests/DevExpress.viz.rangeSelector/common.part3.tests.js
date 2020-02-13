@@ -3,7 +3,7 @@ import baseWidgetModule from 'viz/core/base_widget';
 import commons from './rangeSelectorParts/commons.js';
 import slidersControllerModule from 'viz/range_selector/sliders_controller';
 import seriesDataSourceModule from 'viz/range_selector/series_data_source';
-import dataSourceModule from 'data/data_source/data_source';
+import { DataSource } from 'data/data_source/data_source';
 import dateLocalization from 'localization/date';
 import axisModule from 'viz/axes/base_axis';
 
@@ -1660,7 +1660,7 @@ QUnit.test('dataSource creation', function(assert) {
     });
     const ds = widget.getDataSource();
 
-    assert.ok(ds instanceof dataSourceModule.DataSource);
+    assert.ok(ds instanceof DataSource);
     assert.ok(ds.isLoaded());
     assert.deepEqual(ds.items(), [{}]);
 });

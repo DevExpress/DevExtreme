@@ -2598,9 +2598,11 @@ module.exports = {
                     });
                 },
                 _rowClick: function(e) {
+                    const isEditForm = $(e.rowElement).hasClass(this.addWidgetPrefix(EDIT_FORM_CLASS));
+
                     e.event[TARGET_COMPONENT_NAME] = this.component;
 
-                    if(!this._editCellByClick(e, 'click')) {
+                    if(!this._editCellByClick(e, 'click') && !isEditForm) {
                         this.callBase.apply(this, arguments);
                     }
                 },

@@ -48,13 +48,19 @@
 @typography-link-color: @base-link-color;
 @base-disabled-opacity: 0.5;
 
-// Validation
-
 /**
 * @name 1. Invalid widget state - active color
 * @type color
 */
 @base-invalid-color: #EA4444;
+
+/**
+* @name 2. Invalid widget state - border color
+* @type color
+*/
+@base-invalid-faded-border-color: @base-invalid-color;
+
+// Validation
 
 @VALIDATION_MESSAGE_COLOR: @base-text-color;
 @VALIDATION_MESSAGE_BACKGROUND_COLOR: @base-invalid-color;
@@ -64,12 +70,6 @@
 @validation-overlay-border-radius: @base-border-radius;
 
 @datagrid-row-hovered-color: @base-text-color;
-
-/**
-* @name 2. Invalid widget state - border color
-* @type color
-*/
-@base-invalid-faded-border-color: @base-invalid-color;
 
 /**
 * @name 20. Label color
@@ -86,7 +86,6 @@
 * @type color
 */
 @badge-color: @base-inverted-text-color;
-@badge-invalid-bg: @base-invalid-color;
 
 /**
 * @name 20. Badge background color
@@ -1005,7 +1004,7 @@
 */
 @datagrid-cell-modified-border-color: @base-text-color;
 
-@datagrid-row-removed-bg: @base-text-color;
+@datagrid-row-removed-bg: fade(@base-success, 50%);
 
 /**
 * @name 73. Invalidate data faded color
@@ -1198,7 +1197,7 @@
 */
 @treelist-cell-modified-border-color: @base-text-color;
 
-@treelist-row-removed-bg: @base-text-color;
+@treelist-row-removed-bg: fade(@base-success, 50%);
 
 /**
 * @name 73. Invalidate data faded color

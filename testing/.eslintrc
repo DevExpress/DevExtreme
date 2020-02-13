@@ -20,7 +20,7 @@
         "qunit/no-async-in-loops": "error",
         "qunit/no-commented-tests": "warn",
         "qunit/no-identical-names": "warn",
-        "qunit/no-ok-equality": "warn",
+        "qunit/no-ok-equality": "error",
         "qunit/no-only": "error",
         "qunit/no-setup-teardown": "error"
     }

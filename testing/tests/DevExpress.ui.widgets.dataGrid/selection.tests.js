@@ -1335,7 +1335,7 @@ QUnit.test('redundant load after refresh when the grid restores its selection', 
     this.dataController.refresh();
 
     const selectedRowsData = this.selectionController.getSelectedRowsData();
-    assert.ok(oldSelectedRowsData !== selectedRowsData, 'selectedRowsData instance is changed');
+    assert.notStrictEqual(oldSelectedRowsData, selectedRowsData, 'selectedRowsData instance is changed');
     assert.deepEqual(selectedRowsData, [{ name: 'Dan1', pay: 999 }, { name: 'Dan3', pay: 153 }]);
     assert.equal(loadingCount, 1, 'one loading after refresh with selection');
 });
