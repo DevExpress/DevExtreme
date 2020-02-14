@@ -498,7 +498,7 @@ configs.forEach(config => {
                     expectedNodes = [0, 1];
                 }
                 wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-                // NOTE: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+                // TODO: DOM checkbox element value is 'false' when data source object property value is 'true' -T862228
             } else {
                 wrapper.checkSelection(expectedKeys, expectedNodes, 'after expand');
             }
@@ -550,7 +550,7 @@ configs.forEach(config => {
                 }
 
                 wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-                // NOTE: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+                // TODO: DOM checkbox element value is 'false' when data source object property value is 'true' -T862228
             } else {
                 wrapper.checkSelection(expectedKeys, expectedNodes, 'after expand');
             }
@@ -729,7 +729,7 @@ configs.forEach(config => {
                     expectedNodes = [];
                 }
                 wrapper.checkSelectedKeys(expectedKeys);
-                // NOTE: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
+                // TODO: DOM checkbox element value is 'false' when data source object property value is 'true' (T862228)- wrapper.checkSelectedNodes(expectedNodes);
             } else {
                 if(!config.expanded) {
                     if(!config.selectNodesRecursive || config.selectionMode === 'single') {
@@ -767,7 +767,7 @@ configs.forEach(config => {
                     }
                 }
                 wrapper.checkSelectedKeys(expectedKeysAndNodes, 'after expand');
-                // NOTE: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
+                // TODO: DOM checkbox element value is 'false' when data source object property value is 'true' (T862228)- wrapper.checkSelectedNodes(expectedNodes);
             } else {
                 wrapper.checkSelection(expectedKeysAndNodes, expectedKeysAndNodes, 'after expand');
             }
@@ -840,7 +840,7 @@ configs.forEach(config => {
                     expectedNodes = [0, 1];
                 }
                 wrapper.checkSelectedKeys(expectedKeys, 'after expand');
-                // NOTE: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
+                // TODO: DOM checkbox element value is 'false' when data source object property value is 'true' (T862228)- wrapper.checkSelectedNodes(expectedNodes);
             } else {
                 wrapper.checkSelection(expectedKeys, expectedNodes, 'after expand');
             }
@@ -877,7 +877,7 @@ configs.forEach(config => {
                     expectedNodes = [];
                 }
                 wrapper.checkSelectedKeys(expectedKeys);
-                // NOTE: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
+                // TODO: DOM checkbox element value is 'false' when data source object property value is 'true' (T862228)- wrapper.checkSelectedNodes(expectedNodes);
             } else {
                 wrapper.checkSelection(expectedKeys, expectedNodes);
             }
@@ -905,7 +905,7 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeysAndNodes = [];
                 wrapper.checkSelectedKeys(expectedKeysAndNodes, 'after expand');
-                // NOTE: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
+                // TODO: DOM checkbox element value is 'false' when data source object property value is 'true' (T862228)- wrapper.checkSelectedNodes(expectedNodes);
             } else {
                 wrapper.checkSelection(expectedKeysAndNodes, expectedKeysAndNodes, 'after expand');
             }
