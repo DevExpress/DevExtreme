@@ -11,6 +11,7 @@ import { inArray } from '../../core/utils/array';
 import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
+import utils from './utils';
 
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
@@ -101,8 +102,8 @@ const subscribes = {
 
     showAppointmentTooltip: function(options) {
         const appointmentData = options.data;
-        const targetData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target));
-        this.showAppointmentTooltip(appointmentData, options.target, targetData);
+        const targetedData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target));
+        this.showAppointmentTooltip(appointmentData, options.target, targetedData);
     },
 
     hideAppointmentTooltip: function() {
@@ -237,8 +238,14 @@ const subscribes = {
     getTextAndFormatDate(data, currentData, format) {
         const fields = ['startDate', 'endDate', 'startDateTimeZone', 'endDateTimeZone', 'allDay', 'text'];
         const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
-        const startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
-        const endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
+        let startDate = appointmentFields.startDate;
+        let endDate = appointmentFields.endDate;
+
+        if(!this._isAppointmentRecurrence(data)) {
+            startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
+            endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
+        }
+
         return {
             text: this.fire('createAppointmentTitle', appointmentFields),
             formatDate: this.fire('_formatDates', startDate, endDate, appointmentFields.allDay, format)
@@ -467,10 +474,16 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) {
+        const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement);
+
+        if(this._isAppointmentRecurrence(config.itemData)) {
+            this._convertDatesByTimezoneBack(false, targetedData);
+        }
+
         return {
             appointmentData: config.itemData,
             appointmentElement: config.itemElement,
-            targetedAppointmentData: this.fire('getTargetedAppointmentData', config.itemData, config.itemElement),
+            targetedAppointmentData: targetedData,
         };
     },
 
@@ -730,7 +743,7 @@ const subscribes = {
     getComplexOffsets: function(scheduler, date, appointmentTimezone) {
         const clientTimezoneOffset = -this.getClientTimezoneOffset(date) / toMs('hour');
         const commonTimezoneOffset = scheduler._getTimezoneOffsetByOption(date);
-        let appointmentTimezoneOffset = scheduler._calculateTimezoneByValue(appointmentTimezone, date);
+        let appointmentTimezoneOffset = utils.calculateTimezoneByValue(appointmentTimezone, date);
 
         if(typeof appointmentTimezoneOffset !== 'number') {
             appointmentTimezoneOffset = clientTimezoneOffset;
@@ -771,10 +784,6 @@ const subscribes = {
         const result = {};
 
         extend(true, result, appointmentData, recurringData);
-
-        if(this._isAppointmentRecurrence(appointmentData)) {
-            this._convertDatesByTimezoneBack(false, result); // TODO: temporary solution fox fix T848058, more information in the ticket
-        }
 
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 
