@@ -161,6 +161,7 @@ function run_test {
 
     esac
 
+    start_runner_watchdog $runner_pid
     wait $runner_pid || runner_result=1
     exit $runner_result
 }
@@ -193,18 +194,29 @@ function run_test_scss {
     npx gulp generate-scss
 }
 
+function start_runner_watchdog {
+    local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
+    local last_suite_time=unknown
+
+    while true; do
+        sleep 300
+
+        if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
+            echo "Runner stalled"
+            kill -9 $1
+        else
+            last_suite_time=$(cat $last_suite_time_file)
+        fi
+    done &
+}
+
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
-case "$TARGET" in
-    "lint") run_lint ;;
-    "ts") run_ts ;;
-    "test") run_test ;;
-    "test_themebuilder") run_test_themebuilder ;;
-    "test_functional") run_test_functional ;;
-    "test_scss") run_test_scss ;;
+TARGET_FUNC="run_$TARGET"
 
-    *)
-        echo "Unknown target"
-        exit 1
-    ;;
-esac
+if [ $(type -t $TARGET_FUNC) != "function" ]; then
+    echo "Unknown target"
+    exit 1
+fi
+
+$TARGET_FUNC

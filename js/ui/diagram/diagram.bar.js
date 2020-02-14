@@ -26,6 +26,19 @@ class DiagramBar {
     isVisible() { // IBar.isVisible(): boolean
         return true;
     }
+
+    _getKeys(items) {
+        const keys = items.reduce((commands, item) => {
+            if(item.command !== undefined) {
+                commands.push(item.command);
+            }
+            if(item.items) {
+                commands = commands.concat(this._getKeys(item.items));
+            }
+            return commands;
+        }, []);
+        return keys;
+    }
 }
 
 module.exports = DiagramBar;

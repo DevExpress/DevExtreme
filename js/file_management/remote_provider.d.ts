@@ -12,7 +12,7 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
     endpointUrl?: string;
     /**
      * @docid RemoteFileSystemProviderOptions.hasSubDirectoriesExpr
-     * @type string|function(fileItem)
+     * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */

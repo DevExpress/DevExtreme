@@ -240,7 +240,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         let dir = inst.getCurrentDirectory();
         assert.strictEqual(dir.relativeName, '', 'directory has empty relative name');
         assert.ok(dir.isDirectory, 'directory has directory flag');
-        assert.ok(dir.isRoot, 'directory has root flag');
+        assert.ok(dir.isRoot(), 'directory has root flag');
 
         inst.option('currentPath', 'Folder 1/Folder 1.1');
         this.clock.tick(800);
@@ -248,34 +248,34 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         dir = inst.getCurrentDirectory();
         assert.strictEqual(dir.relativeName, 'Folder 1/Folder 1.1', 'directory has correct relative name');
         assert.ok(dir.isDirectory, 'directory has directory flag');
-        assert.notOk(dir.isRoot, 'directory has not root flag');
+        assert.notOk(dir.isRoot(), 'directory has not root flag');
     });
 
     test('change current directory by public API', function(assert) {
         const inst = this.wrapper.getInstance();
+        const spy = sinon.spy();
+
         assert.equal(inst.option('currentPath'), '');
 
-        const that = this;
-        let onCurrentDirectoryChangedCounter = 0;
-        inst.option('onCurrentDirectoryChanged', function() {
-            onCurrentDirectoryChangedCounter++;
-        });
-
+        inst.option('onCurrentDirectoryChanged', spy);
         inst.option('currentPath', 'Folder 1/Folder 1.1');
         this.clock.tick(800);
 
-        assert.equal(onCurrentDirectoryChangedCounter, 1);
+        assert.equal(spy.callCount, 1);
+        assert.equal(spy.args[0][0].directory.path, 'Folder 1/Folder 1.1', 'directory passed as argument');
         assert.equal(inst.option('currentPath'), 'Folder 1/Folder 1.1', 'The option \'currentPath\' was changed');
 
-        const $folder1Node = that.wrapper.getFolderNode(1);
+        const $folder1Node = this.wrapper.getFolderNode(1);
         assert.equal($folder1Node.find('span').text(), 'Folder 1');
 
-        const $folder11Node = that.wrapper.getFolderNode(2);
+        const $folder11Node = this.wrapper.getFolderNode(2);
         assert.equal($folder11Node.find('span').text(), 'Folder 1.1');
 
         inst.option('currentPath', '');
         this.clock.tick(800);
 
+        assert.equal(spy.callCount, 2);
+        assert.equal(spy.args[1][0].directory.path, '', 'directory argument updated');
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
         assert.equal(this.wrapper.getBreadcrumbsPath(), 'Files', 'breadcrumbs refrers to the root folder');
     });

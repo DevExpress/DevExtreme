@@ -7,8 +7,8 @@ import messageLocalization from 'localization/message';
 import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
 import ExcelJSTestHelper from './ExcelJSTestHelper.js';
-import { exportDataGrid } from 'exporter/exceljs/excelExporter';
-import { MAX_EXCEL_COLUMN_WIDTH, _getFullOptions } from 'exporter/exceljs/exportDataGrid';
+import { exportDataGrid } from 'excel_exporter';
+import { MAX_EXCEL_COLUMN_WIDTH, _getFullOptions } from 'exporter/exceljs/export_data_grid';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
@@ -99,12 +99,12 @@ const moduleConfig = {
 
             const expectedCells = [];
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                 helper.checkColumnWidths([undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkValues(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 0, column: 0 }, topLeft);
                 done();
             });
         });
@@ -123,7 +123,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
                 helper.checkFont(expectedCells);
@@ -132,7 +132,7 @@ const moduleConfig = {
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row });
-                helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
                 done();
             });
         });
@@ -145,22 +145,22 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row });
-                helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
 
                 this.customizeCellCallCount = 0;
                 const newTopLeft = { row: topLeft.row + 3, column: topLeft.column + 3 };
                 helper._extendExpectedCells(expectedCells, newTopLeft);
-                exportDataGrid(getOptions(this, dataGrid, expectedCells, { topLeftCell: newTopLeft })).then((cellsRange) => {
+                exportDataGrid(getOptions(this, dataGrid, expectedCells, { topLeftCell: newTopLeft })).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 1, column: 1 }, newTopLeft);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, newTopLeft);
                     helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row });
-                    helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, newTopLeft);
+                    helper.checkCellRange(cellRange, { row: 1, column: 1 }, newTopLeft);
                     done();
                 });
             });
@@ -182,13 +182,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row });
-                helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
                 done();
             });
         });
@@ -204,7 +204,7 @@ const moduleConfig = {
             const expectedCells = [[ { excelCell: {}, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } } ]];
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkColumnWidths([242.85, undefined], topLeft.column);
                 done();
             });
@@ -221,7 +221,7 @@ const moduleConfig = {
             const expectedCells = [[ { excelCell: {}, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } } ]];
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkColumnWidths([MAX_EXCEL_COLUMN_WIDTH, undefined], topLeft.column);
                 done();
             });
@@ -238,12 +238,12 @@ const moduleConfig = {
 
             const expectedCells = [];
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                assert.deepEqual(cellsRange.from, topLeft, 'cellsRange.from');
-                assert.deepEqual(cellsRange.to, topLeft, 'cellsRange.to');
+                assert.deepEqual(cellRange.from, topLeft, 'cellRange.from');
+                assert.deepEqual(cellRange.to, topLeft, 'cellRange.to');
                 done();
             });
         });
@@ -259,13 +259,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                 helper.checkColumnWidths([undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 0, column: 0 }, topLeft);
                 done();
             });
         });
@@ -286,12 +286,12 @@ const moduleConfig = {
             dataGrid.beginUpdate();
             dataGrid.columnOption('f1', 'visible', true);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn300Pixels], topLeft.column);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
             }).then(() => {
                 dataGrid.columnOption('f1', 'visible', false);
                 dataGrid.endUpdate();
@@ -313,11 +313,11 @@ const moduleConfig = {
             dataGrid.beginUpdate();
             dataGrid.columnOption('f1', 'visible', false);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 0, column: 0 }, topLeft);
             }).then(() => {
                 dataGrid.columnOption('f1', 'visible', true);
                 dataGrid.endUpdate();
@@ -336,13 +336,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                 helper.checkColumnWidths([undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 0, column: 0 }, topLeft);
                 done();
             });
         });
@@ -401,14 +401,14 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 2 }, topLeft);
                 done();
             });
         });
@@ -487,11 +487,11 @@ const moduleConfig = {
 
             const expectedCells = [];
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                 helper.checkColumnWidths([undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 0, column: 0 }, topLeft);
                 done();
             });
         });
@@ -510,14 +510,14 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
                 done();
             });
         });
@@ -536,14 +536,14 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
                 done();
             });
         });
@@ -568,12 +568,12 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 3 }, topLeft);
                 done();
             });
         });
@@ -597,12 +597,12 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 2 }, topLeft);
                 done();
             });
         });
@@ -626,12 +626,12 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 2 }, topLeft);
                 done();
             });
         });
@@ -654,12 +654,12 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn300Pixels], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
                 done();
             });
         });
@@ -683,12 +683,12 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 2 }, topLeft);
                 done();
             });
         });
@@ -712,12 +712,12 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 2 }, topLeft);
                 done();
             });
         });
@@ -741,12 +741,12 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 2 }, topLeft);
                 done();
             });
         });
@@ -769,7 +769,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -777,7 +777,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
                 done();
             });
         });
@@ -801,7 +801,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -809,7 +809,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
                 done();
             });
         });
@@ -832,7 +832,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 4 }, { row: 1, column: 4 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -840,7 +840,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 4 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 4 }, topLeft);
                 done();
             });
         });
@@ -869,7 +869,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -877,7 +877,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 1 }, topLeft);
                 done();
             });
         });
@@ -900,7 +900,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkFont(expectedCells);
@@ -908,7 +908,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -932,7 +932,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row, rightToLeft: true });
                 helper.checkFont(expectedCells);
@@ -940,7 +940,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -963,24 +963,24 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
 
                 this.customizeCellCallCount = 0;
                 const newTopLeft = { row: topLeft.row + 3, column: topLeft.column + 3 };
                 helper._extendExpectedCells(expectedCells, newTopLeft);
-                exportDataGrid(getOptions(this, dataGrid, expectedCells, { topLeftCell: newTopLeft })).then((cellsRange) => {
+                exportDataGrid(getOptions(this, dataGrid, expectedCells, { topLeftCell: newTopLeft })).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 2, column: 2 }, newTopLeft);
                     helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, newTopLeft);
                     helper.checkOutlineLevel([0, 0], newTopLeft.row);
-                    helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, newTopLeft);
+                    helper.checkCellRange(cellRange, { row: 2, column: 2 }, newTopLeft);
                     done();
                 });
             });
@@ -1005,7 +1005,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkFont(expectedCells);
@@ -1013,7 +1013,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -1044,7 +1044,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels], topLeft.column);
@@ -1053,7 +1053,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -1086,7 +1086,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels /* excelColumnWidthFromColumn150Pixels */ ], topLeft.column);
@@ -1095,7 +1095,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -1122,7 +1122,7 @@ const moduleConfig = {
             dataGrid.beginUpdate();
             dataGrid.columnOption('f1', 'visible', true);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 // helper.checkColumnWidths([excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
@@ -1131,7 +1131,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
             }).then(() => {
                 dataGrid.columnOption('f1', 'visible', false);
                 dataGrid.endUpdate();
@@ -1160,7 +1160,7 @@ const moduleConfig = {
 
             dataGrid.columnOption('f1', 'visible', true);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
@@ -1169,7 +1169,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
             }).then(() => {
                 dataGrid.columnOption('f1', 'visible', false);
                 done();
@@ -1196,7 +1196,7 @@ const moduleConfig = {
             dataGrid.beginUpdate();
             dataGrid.columnOption('f1', 'visible', false);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
                 // helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels], topLeft.column);
@@ -1205,7 +1205,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 1 }, topLeft);
             }).then(() => {
                 dataGrid.columnOption('f1', 'visible', true);
                 dataGrid.endUpdate();
@@ -1232,7 +1232,7 @@ const moduleConfig = {
                     if(gridCell.rowType === 'header') { excelCell.font = undefined; }
                     if(gridCell.rowType === 'data') { excelCell.font = { bold: true }; }
                 }
-            }).then((cellsRange) => {
+            }).then((cellRange) => {
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column).font, undefined, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).font`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column + 1).font, undefined, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).font`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).font, { bold: true }, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).font`);
@@ -1257,7 +1257,7 @@ const moduleConfig = {
                 component: dataGrid,
                 worksheet: this.worksheet,
                 topLeftCell: topLeft
-            }).then((cellsRange) => {
+            }).then((cellRange) => {
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column).alignment, alignCenterTopWrap, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).alignment`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column + 1).alignment, alignCenterTopWrap, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).alignment`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).alignment, alignLeftTopWrap, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).alignment`);
@@ -1289,7 +1289,7 @@ const moduleConfig = {
                     if(gridCell.rowType === 'header') { excelCell.alignment = undefined; }
                     if(gridCell.rowType === 'data') { excelCell.alignment = alignment; }
                 }
-            }).then((cellsRange) => {
+            }).then((cellRange) => {
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column).alignment, undefined, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).alignment`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column + 1).alignment, undefined, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).alignment`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).alignment, alignment, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).alignment`);
@@ -1322,7 +1322,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkFont(expectedCells);
@@ -1331,7 +1331,7 @@ const moduleConfig = {
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -1387,7 +1387,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -1413,7 +1413,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false, selectedRowsOnly: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false, selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -1421,7 +1421,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
                 done();
             });
         });
@@ -1453,7 +1453,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 4 }, { row: 1, column: 5 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -1461,7 +1461,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 5 }, topLeft);
                 done();
             });
         });
@@ -1488,7 +1488,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -1496,7 +1496,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 2 }, topLeft);
                 done();
             });
         });
@@ -1525,7 +1525,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -1533,7 +1533,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 3 }, topLeft);
                 done();
             });
         });
@@ -1559,7 +1559,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkFont(expectedCells);
@@ -1568,7 +1568,7 @@ const moduleConfig = {
                 helper.checkMergeCells(expectedCells, topLeft);
                 assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, 'number', `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 1 }, topLeft);
                 done();
             });
         });
@@ -1632,7 +1632,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 6 }, { row: 1, column: 7 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -1640,7 +1640,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 7 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 7 }, topLeft);
 
                 const expectedCellTypes = ['string', 'object', 'number', 'number', 'number', 'string', 'string', 'object'];
 
@@ -1671,7 +1671,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -1679,14 +1679,14 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
                 done();
             });
         });
 
         QUnit.test('Data - columns.dataType: boolean', function(assert) {
             const done = assert.async();
-            const ds = [{ f1: true }];
+            const ds = [{ f1: true }, { f1: false }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 columns: [{
                     dataField: 'f1',
@@ -1698,23 +1698,25 @@ const moduleConfig = {
 
 
             const expectedCells = [[
-                { excelCell: { value: 'F1', alignment: alignCenterTopNoWrap, font: { bold: true } }, gridCell: { rowType: 'header', column: dataGrid.columnOption(0) } }
+                { excelCell: { value: 'F1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopNoWrap, font: { bold: true } }, gridCell: { rowType: 'header', column: dataGrid.columnOption(0) } }
             ], [
-                { excelCell: { value: 'true', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], value: true, column: dataGrid.columnOption(0) } }
+                { excelCell: { value: true, type: ExcelJS.ValueType.Boolean, dataType: 'boolean', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } }
+            ], [
+                { excelCell: { value: false, type: ExcelJS.ValueType.Boolean, dataType: 'boolean', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(0) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
-                helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
+                helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
+                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
-                assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, 'string', `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
-                helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
+                helper.checkCellFormat(expectedCells);
+                helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                helper.checkCellRange(cellRange, { row: 3, column: 1 }, topLeft);
                 done();
             });
         });
@@ -1773,7 +1775,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 4 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -1782,7 +1784,7 @@ const moduleConfig = {
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 4 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 4 }, topLeft);
                 done();
             });
         });
@@ -1815,7 +1817,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -1824,7 +1826,7 @@ const moduleConfig = {
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 2 }, topLeft);
                 done();
             });
         });
@@ -1875,7 +1877,7 @@ const moduleConfig = {
 
                     helper._extendExpectedCells(expectedCells, topLeft);
 
-                    exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+                    exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                         helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                         helper.checkAutoFilter(autoFilterEnabled, null);
                         helper.checkFont(expectedCells);
@@ -1884,7 +1886,7 @@ const moduleConfig = {
                         helper.checkMergeCells(expectedCells, topLeft);
                         helper.checkOutlineLevel([0], topLeft.row);
                         helper.checkCellFormat(expectedCells);
-                        helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                        helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
                         done();
                     });
                 });
@@ -1916,7 +1918,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 4 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -1925,7 +1927,7 @@ const moduleConfig = {
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 4 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 4 }, topLeft);
                 done();
             });
         });
@@ -1986,7 +1988,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkFont(expectedCells);
@@ -1994,7 +1996,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 1 }, topLeft);
                 done();
             });
         });
@@ -2026,13 +2028,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 5 }, topLeft);
                 done();
             });
         });
@@ -2064,13 +2066,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 5 }, topLeft);
                 done();
             });
         });
@@ -2102,13 +2104,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 5 }, topLeft);
                 done();
             });
         });
@@ -2140,13 +2142,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 5 }, topLeft);
                 done();
             });
         });
@@ -2178,13 +2180,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 5 }, topLeft);
                 done();
             });
         });
@@ -2216,13 +2218,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 5 }, topLeft);
                 done();
             });
         });
@@ -2254,13 +2256,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 5 }, topLeft);
                 done();
             });
         });
@@ -2292,13 +2294,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 5 }, topLeft);
                 done();
             });
         });
@@ -2330,13 +2332,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 5 }, topLeft);
                 done();
             });
         });
@@ -2370,13 +2372,13 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 6 }, { row: 1, column: 6 }, topLeft);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 6 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 6 }, topLeft);
                 done();
             });
         });
@@ -2415,14 +2417,14 @@ const moduleConfig = {
                 { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
                 { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
                 { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: String(ds[0].f4), type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignCenterTopNoWrap }, gridCell: { value: ds[0].f4, rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Boolean, dataType: 'boolean', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
                 { excelCell: { value: 'name1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f5, rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } },
                 { excelCell: { value: ds[0].f6, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 6 }, { row: 1, column: 6 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -2431,8 +2433,7 @@ const moduleConfig = {
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
                 helper.checkCellFormat(expectedCells);
-                helper.checkCellFormat(expectedCells);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 6 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 6 }, topLeft);
                 done();
             });
         });
@@ -2473,7 +2474,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -2481,7 +2482,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -2516,7 +2517,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -2524,7 +2525,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 3 }, topLeft);
                 done();
             });
         });
@@ -2549,17 +2550,17 @@ const moduleConfig = {
 
             const expectedCells = [[
                 { excelCell: { value: 'f1_1', alignment: alignCenterTopWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: 'true', alignment: alignRightTopWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1), value: true } },
+                { excelCell: { value: true, alignment: alignRightTopWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
                 { excelCell: { value: 1, alignment: alignLeftTopWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
                 { excelCell: { value: 'f1_2', alignment: alignCenterTopWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: 'false', alignment: alignRightTopWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(1), value: false } },
+                { excelCell: { value: false, alignment: alignRightTopWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(1) } },
                 { excelCell: { value: 2, alignment: alignLeftTopWrap }, gridCell: { rowType: 'data', data: ds[1], column: dataGrid.columnOption(2) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -2567,7 +2568,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 3 }, topLeft);
                 done();
             });
         });
@@ -2601,7 +2602,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
@@ -2610,7 +2611,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -2644,7 +2645,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
@@ -2653,7 +2654,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -2687,7 +2688,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
@@ -2696,7 +2697,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -2732,7 +2733,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
@@ -2741,7 +2742,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 3 }, topLeft);
                 done();
             });
         });
@@ -2777,7 +2778,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
@@ -2786,7 +2787,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 3 }, topLeft);
                 done();
             });
         });
@@ -2822,7 +2823,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
@@ -2831,7 +2832,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 3 }, topLeft);
                 done();
             });
         });
@@ -2865,7 +2866,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkFont(expectedCells);
@@ -2873,7 +2874,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 5, column: 1 }, topLeft);
                 done();
             });
         });
@@ -2903,7 +2904,7 @@ const moduleConfig = {
 
                     helper._extendExpectedCells(expectedCells, topLeft);
 
-                    exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+                    exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                         helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
                         helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
                         helper.checkFont(expectedCells);
@@ -2911,7 +2912,7 @@ const moduleConfig = {
                         helper.checkValues(expectedCells);
                         helper.checkMergeCells(expectedCells, topLeft);
                         helper.checkOutlineLevel([0, 0, 1], topLeft.row);
-                        helper.checkCellsRange(cellsRange, { row: 3, column: 1 }, topLeft);
+                        helper.checkCellRange(cellRange, { row: 3, column: 1 }, topLeft);
                         done();
                     });
                 });
@@ -2946,7 +2947,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 done();
@@ -2979,7 +2980,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 done();
@@ -3017,7 +3018,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
@@ -3026,7 +3027,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
         });
@@ -3057,7 +3058,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 done();
@@ -3094,7 +3095,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkFont(expectedCells);
@@ -3102,7 +3103,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 5, column: 1 }, topLeft);
                 done();
             });
         });
@@ -3138,7 +3139,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false, wrapText: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false, wrapText: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row, rightToLeft: true });
                 helper.checkFont(expectedCells);
@@ -3146,7 +3147,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 5, column: 1 }, topLeft);
                 done();
             });
         });
@@ -3174,7 +3175,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3182,7 +3183,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 1 }, topLeft);
                 done();
             });
         });
@@ -3210,7 +3211,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3218,7 +3219,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 1 }, topLeft);
                 done();
             });
         });
@@ -3248,7 +3249,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3256,7 +3257,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 1 }, topLeft);
                 done();
             });
         });
@@ -3288,7 +3289,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3296,7 +3297,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -3327,14 +3328,14 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false, selectedRowsOnly: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false, selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -3362,7 +3363,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3370,7 +3371,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 1 }, topLeft);
                 done();
             });
         });
@@ -3406,7 +3407,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3414,7 +3415,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 0, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 1 }, topLeft);
                 done();
             });
         });
@@ -3494,7 +3495,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3502,7 +3503,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1, 0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 6, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 6, column: 1 }, topLeft);
                 done();
             });
         });
@@ -3545,7 +3546,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null, { 'rightToLeft': true });
                 helper.checkFont(expectedCells);
@@ -3553,7 +3554,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1, 0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 6, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 6, column: 1 }, topLeft);
                 done();
             });
         });
@@ -3598,7 +3599,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3606,7 +3607,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 0, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
         });
@@ -3649,7 +3650,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3657,7 +3658,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -3696,7 +3697,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3704,7 +3705,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 2, 0, 1, 2], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 6, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 6, column: 1 }, topLeft);
                 done();
             });
         });
@@ -3743,7 +3744,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3751,7 +3752,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 5, column: 1 }, topLeft);
                 done();
             });
         });
@@ -3803,7 +3804,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 11, column: 1 }, { row: 11, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3811,7 +3812,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 11, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 11, column: 1 }, topLeft);
                 done();
             });
         });
@@ -3877,7 +3878,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 11, column: 2 }, { row: 11, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3885,7 +3886,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 11, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 11, column: 2 }, topLeft);
                 done();
             });
         });
@@ -3939,7 +3940,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 3 }, { row: 5, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -3947,7 +3948,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 5, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 5, column: 3 }, topLeft);
                 done();
             });
         });
@@ -4001,7 +4002,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 3 }, { row: 5, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -4009,7 +4010,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 5, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 5, column: 3 }, topLeft);
                 done();
             });
         });
@@ -4050,7 +4051,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, undefined], topLeft.column);
@@ -4059,7 +4060,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
                 done();
             });
         });
@@ -4100,7 +4101,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, undefined], topLeft.column);
@@ -4109,7 +4110,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
                 done();
             });
         });
@@ -4147,7 +4148,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
@@ -4156,7 +4157,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -4194,7 +4195,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
@@ -4203,7 +4204,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -4241,7 +4242,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
@@ -4250,7 +4251,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -4291,7 +4292,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkColumnWidths([excelColumnWidthFromColumn300Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
@@ -4300,7 +4301,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
                 done();
             });
         });
@@ -4349,7 +4350,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -4357,7 +4358,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
                 done();
             });
         });
@@ -4402,7 +4403,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -4410,7 +4411,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
                 done();
             });
         });
@@ -4455,7 +4456,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -4463,7 +4464,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
         });
@@ -4508,7 +4509,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -4516,7 +4517,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
         });
@@ -4558,7 +4559,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -4566,7 +4567,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -4611,7 +4612,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -4619,7 +4620,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
         });
@@ -4661,7 +4662,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -4669,7 +4670,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -4714,14 +4715,14 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
         });
@@ -4753,7 +4754,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 done();
@@ -4802,7 +4803,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -4853,7 +4854,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -4900,7 +4901,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -4908,7 +4909,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -4949,7 +4950,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -4957,7 +4958,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -4998,7 +4999,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -5006,7 +5007,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -5046,7 +5047,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -5054,7 +5055,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -5095,7 +5096,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -5103,7 +5104,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -5144,7 +5145,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
@@ -5152,7 +5153,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -5193,14 +5194,14 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -5230,7 +5231,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -5238,7 +5239,7 @@ const moduleConfig = {
                 helper.checkAlignment(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -5270,7 +5271,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
@@ -5279,7 +5280,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 1 }, topLeft);
                 done();
             });
         });
@@ -5319,7 +5320,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkFont(expectedCells);
@@ -5327,7 +5328,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
                 done();
             });
         });
@@ -5366,7 +5367,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 4 }, { row: 2, column: 4 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 3 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -5375,7 +5376,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 4 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 4 }, topLeft);
                 done();
             });
         });
@@ -5428,7 +5429,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 4 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -5437,7 +5438,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 5 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 5 }, topLeft);
                 done();
             });
         });
@@ -5492,7 +5493,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 4 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -5501,7 +5502,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 5 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 5 }, topLeft);
                 done();
             });
         });
@@ -5536,7 +5537,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 4 }, { row: 1, column: 4 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -5545,7 +5546,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 4 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 4 }, topLeft);
                 done();
             });
         });
@@ -5579,7 +5580,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -5588,7 +5589,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 3 }, topLeft);
                 done();
             });
         });
@@ -5622,7 +5623,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
@@ -5631,7 +5632,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 1, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 1, column: 3 }, topLeft);
                 done();
             });
         });
@@ -5667,7 +5668,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -5676,7 +5677,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -5715,7 +5716,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -5724,7 +5725,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
@@ -5760,7 +5761,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn250Pixels], topLeft.column);
@@ -5769,7 +5770,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -5804,7 +5805,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -5813,7 +5814,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
                 done();
             });
         });
@@ -5854,7 +5855,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn250Pixels], topLeft.column);
@@ -5863,7 +5864,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
                 done();
             });
         });
@@ -5904,7 +5905,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
@@ -5913,7 +5914,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 3, column: 3 }, topLeft);
                 done();
             });
         });
@@ -5962,7 +5963,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -5971,7 +5972,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
                 done();
             });
         });
@@ -6016,7 +6017,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -6025,7 +6026,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
         });
@@ -6066,7 +6067,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
@@ -6075,7 +6076,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 1 }, topLeft);
                 done();
             });
         });
@@ -6124,7 +6125,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -6133,7 +6134,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
                 done();
             });
         });
@@ -6178,7 +6179,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -6187,7 +6188,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
         });
@@ -6228,7 +6229,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
@@ -6237,7 +6238,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 1 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 1 }, topLeft);
                 done();
             });
         });
@@ -6286,7 +6287,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
@@ -6295,7 +6296,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 3 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 3 }, topLeft);
                 done();
             });
         });
@@ -6340,7 +6341,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -6349,7 +6350,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
         });
@@ -6394,7 +6395,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
@@ -6403,7 +6404,7 @@ const moduleConfig = {
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
-                helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
         });

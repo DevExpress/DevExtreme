@@ -1575,10 +1575,6 @@ declare module DevExpress.events {
     export function triggerHandler(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
 }
 declare module DevExpress.excelExporter {
-    /** @name excelExporter.exportDataGrid(options) */
-    export function exportDataGrid(options: DevExpress.exporter.ExportDataGridProps): Promise<DevExpress.exporter.CellsRange> & JQueryPromise<DevExpress.exporter.CellsRange>;
-}
-declare module DevExpress.exporter {
     /** @name CellAddress */
     export interface CellAddress {
         /** @name CellAddress.column */
@@ -1586,11 +1582,11 @@ declare module DevExpress.exporter {
         /** @name CellAddress.row */
         row?: number;
     }
-    /** @name CellsRange */
-    export interface CellsRange {
-        /** @name CellsRange.from */
+    /** @name CellRange */
+    export interface CellRange {
+        /** @name CellRange.from */
         from?: CellAddress;
-        /** @name CellsRange.to */
+        /** @name CellRange.to */
         to?: CellAddress;
     }
     /** @name ExcelDataGridCell */
@@ -1609,21 +1605,6 @@ declare module DevExpress.exporter {
         totalSummaryItemName?: string;
         /** @name ExcelDataGridCell.value */
         value?: any;
-    }
-    /** @name ExcelFont */
-    export interface ExcelFont {
-        /** @name ExcelFont.bold */
-        bold?: boolean;
-        /** @name ExcelFont.color */
-        color?: string;
-        /** @name ExcelFont.italic */
-        italic?: boolean;
-        /** @name ExcelFont.name */
-        name?: string;
-        /** @name ExcelFont.size */
-        size?: number;
-        /** @name ExcelFont.underline */
-        underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
     }
     /** @name ExportDataGridProps */
     export interface ExportDataGridProps {
@@ -1665,34 +1646,51 @@ declare module DevExpress.exporter {
         /** @name ExportLoadPanel.width */
         width?: number;
     }
+    /** @name excelExporter.exportDataGrid(options) */
+    export function exportDataGrid(options: ExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
+}
+declare module DevExpress.exporter {
+    /** @name ExcelFont */
+    export interface ExcelFont {
+        /** @name ExcelFont.bold */
+        bold?: boolean;
+        /** @name ExcelFont.color */
+        color?: string;
+        /** @name ExcelFont.italic */
+        italic?: boolean;
+        /** @name ExcelFont.name */
+        name?: string;
+        /** @name ExcelFont.size */
+        size?: number;
+        /** @name ExcelFont.underline */
+        underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
+    }
 }
 declare module DevExpress.fileManagement {
     /** @name CustomFileSystemProvider.Options */
     export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
         /** @name CustomFileSystemProvider.Options.abortFileUpload */
-        abortFileUpload?: Function;
+        abortFileUpload?: ((file: File, uploadInfo?: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.copyItem */
-        copyItem?: Function;
+        copyItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.createDirectory */
-        createDirectory?: Function;
+        createDirectory?: ((parentDirectory: FileSystemItem, name: string) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.deleteItem */
-        deleteItem?: Function;
+        deleteItem?: ((item: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.downloadItems */
-        downloadItems?: Function;
+        downloadItems?: ((items: Array<FileSystemItem>) => any);
         /** @name CustomFileSystemProvider.Options.getItems */
-        getItems?: Function;
+        getItems?: ((parentDirectory: FileSystemItem) => Promise<Array<any>> | JQueryPromise<Array<any>> | Array<any>);
         /** @name CustomFileSystemProvider.Options.getItemsContent */
-        getItemsContent?: Function;
+        getItemsContent?: ((items: Array<FileSystemItem>) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.hasSubDirectoriesExpr */
         hasSubDirectoriesExpr?: string | Function;
         /** @name CustomFileSystemProvider.Options.moveItem */
-        moveItem?: Function;
+        moveItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.renameItem */
-        renameItem?: Function;
-        /** @name CustomFileSystemProvider.Options.uploadChunkSize */
-        uploadChunkSize?: number;
+        renameItem?: ((item: FileSystemItem, newName: string) => Promise<any> | JQueryPromise<any> | any);
         /** @name CustomFileSystemProvider.Options.uploadFileChunk */
-        uploadFileChunk?: Function;
+        uploadFileChunk?: ((file: File, uploadInfo: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
     }
     /** @name CustomFileSystemProvider */
     export class CustomFileSystemProvider extends FileSystemProviderBase {
@@ -1748,7 +1746,7 @@ declare module DevExpress.fileManagement {
         /** @name FileSystemProviderBase.downloadItems() */
         downloadItems(items: Array<FileSystemItem>): any;
         /** @name FileSystemProviderBase.getItems() */
-        getItems(pathInfo: any): Promise<Array<any>> & JQueryPromise<Array<any>>;
+        getItems(parentDirectory: FileSystemItem): Promise<Array<any>> & JQueryPromise<Array<any>>;
         /** @name FileSystemProviderBase.getItemsContent() */
         getItemsContent(items: Array<FileSystemItem>): Promise<any> & JQueryPromise<any>;
         /** @name FileSystemProviderBase.moveItems() */
@@ -1781,6 +1779,19 @@ declare module DevExpress.fileManagement {
     /** @name RemoteFileSystemProvider */
     export class RemoteFileSystemProvider extends FileSystemProviderBase {
         constructor(options?: RemoteFileSystemProviderOptions)
+    }
+    /** @name UploadInfo */
+    export interface UploadInfo {
+        /** @name UploadInfo.bytesUploaded */
+        bytesUploaded?: number;
+        /** @name UploadInfo.chunkBlob */
+        chunkBlob?: Blob;
+        /** @name UploadInfo.chunkCount */
+        chunkCount?: number;
+        /** @name UploadInfo.chunkIndex */
+        chunkIndex?: number;
+        /** @name UploadInfo.customData */
+        customData?: any;
     }
 }
 declare module DevExpress.fx {
@@ -2932,7 +2943,7 @@ declare module DevExpress.ui {
         /** @name dxDataGrid.Options.editing */
         editing?: dxDataGridEditing;
         /** @name dxDataGrid.Options.export */
-        export?: { allowExportSelectedData?: boolean, customizeExcelCell?: ((options: { component?: dxDataGrid, horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right', verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top', wrapTextEnabled?: boolean, backgroundColor?: string, fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid', fillPatternColor?: string, font?: DevExpress.exporter.ExcelFont, value?: string | number | Date, numberFormat?: string, gridCell?: DevExpress.exporter.ExcelDataGridCell }) => any), enabled?: boolean, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, fileName?: string, ignoreExcelErrors?: boolean, proxyUrl?: string, texts?: { exportAll?: string, exportSelectedRows?: string, exportTo?: string } };
+        export?: { allowExportSelectedData?: boolean, customizeExcelCell?: ((options: { component?: dxDataGrid, horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right', verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top', wrapTextEnabled?: boolean, backgroundColor?: string, fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid', fillPatternColor?: string, font?: DevExpress.exporter.ExcelFont, value?: string | number | Date, numberFormat?: string, gridCell?: DevExpress.excelExporter.ExcelDataGridCell }) => any), enabled?: boolean, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, fileName?: string, ignoreExcelErrors?: boolean, proxyUrl?: string, texts?: { exportAll?: string, exportSelectedRows?: string, exportTo?: string } };
         /** @name dxDataGrid.Options.groupPanel */
         groupPanel?: { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | 'auto' };
         /** @name dxDataGrid.Options.grouping */
@@ -3223,6 +3234,8 @@ declare module DevExpress.ui {
         gridSize?: number | { items?: Array<number>, value?: number };
         /** @name dxDiagram.Options.hasChanges */
         hasChanges?: boolean;
+        /** @name dxDiagram.Options.historyToolbar */
+        historyToolbar?: { commands?: Array<'separator' | 'export' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'autoLayout' | 'fullScreen' | 'zoomLevel' | 'autoZoom' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units'>, visible?: boolean };
         /** @name dxDiagram.Options.nodes */
         nodes?: { autoLayout?: 'auto' | 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'auto' | 'off' | 'tree' | 'layered' }, childrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onItemClick */
@@ -3238,7 +3251,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.pageSize */
         pageSize?: { height?: number, items?: Array<{ height?: number, text?: string, width?: number }>, width?: number };
         /** @name dxDiagram.Options.propertiesPanel */
-        propertiesPanel?: { collapsible?: boolean, enabled?: boolean, groups?: Array<{ commands?: Array<'zoomLevel' | 'autoZoom' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'> }> };
+        propertiesPanel?: { groups?: Array<{ commands?: Array<'zoomLevel' | 'autoZoom' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'> }>, visibility?: 'visible' | 'collapsed' | 'disabled' };
         /** @name dxDiagram.Options.readOnly */
         readOnly?: boolean;
         /** @name dxDiagram.Options.showGrid */
@@ -3248,11 +3261,13 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.snapToGrid */
         snapToGrid?: boolean;
         /** @name dxDiagram.Options.toolbar */
-        toolbar?: { commands?: Array<'separator' | 'export' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'autoLayout' | 'fullScreen'>, visible?: boolean };
+        toolbar?: { commands?: Array<'separator' | 'export' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'autoLayout' | 'fullScreen' | 'zoomLevel' | 'autoZoom' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units'>, visible?: boolean };
         /** @name dxDiagram.Options.toolbox */
-        toolbox?: { groups?: Array<{ category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string, displayMode?: 'icons' | 'texts', expanded?: boolean, shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>, title?: string }> | Array<'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom'>, visible?: boolean };
+        toolbox?: { groups?: Array<{ category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string, displayMode?: 'icons' | 'texts', expanded?: boolean, shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>, title?: string }> | Array<'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom'>, visibility?: 'visible' | 'collapsed' | 'disabled' };
         /** @name dxDiagram.Options.units */
         units?: 'in' | 'cm' | 'px';
+        /** @name dxDiagram.Options.viewToolbar */
+        viewToolbar?: { commands?: Array<'separator' | 'export' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'autoLayout' | 'fullScreen' | 'zoomLevel' | 'autoZoom' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units'>, visible?: boolean };
         /** @name dxDiagram.Options.viewUnits */
         viewUnits?: 'in' | 'cm' | 'px';
         /** @name dxDiagram.Options.zoomLevel */
@@ -3578,15 +3593,15 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.customizeDetailColumns */
         customizeDetailColumns?: ((columns: Array<dxDataGridColumn>) => Array<dxDataGridColumn>);
         /** @name dxFileManager.Options.customizeThumbnail */
-        customizeThumbnail?: ((fileItem: any) => string);
+        customizeThumbnail?: ((fileSystemItem: DevExpress.fileManagement.FileSystemItem) => string);
         /** @name dxFileManager.Options.fileSystemProvider */
         fileSystemProvider?: any;
         /** @name dxFileManager.Options.itemView */
         itemView?: { mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
         /** @name dxFileManager.Options.onCurrentDirectoryChanged */
-        onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any }) => any);
+        onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, directory?: DevExpress.fileManagement.FileSystemItem }) => any);
         /** @name dxFileManager.Options.onSelectedFileOpened */
-        onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
+        onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, file?: DevExpress.fileManagement.FileSystemItem }) => any);
         /** @name dxFileManager.Options.permissions */
         permissions?: { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean };
         /** @name dxFileManager.Options.rootFolderName */
@@ -3596,7 +3611,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.toolbar */
         toolbar?: dxFileManagerToolbar;
         /** @name dxFileManager.Options.upload */
-        upload?: { maxFileSize?: number };
+        upload?: { chunkSize?: number, maxFileSize?: number };
     }
     /** @name dxFileManager */
     export class dxFileManager extends Widget {
@@ -3642,7 +3657,7 @@ declare module DevExpress.ui {
     /** @name dxFileUploader.Options */
     export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
         /** @name dxFileUploader.Options.abortUpload */
-        abortUpload?: ((file: File, uploadInfo: { bytesUploaded?: number, chunkCount?: number, customData?: any, chunkBlob?: Blob, chunkIndex?: number }) => Promise<any> | JQueryPromise<any> | any);
+        abortUpload?: ((file: File, uploadInfo?: DevExpress.fileManagement.UploadInfo) => Promise<any> | JQueryPromise<any> | any);
         /** @name dxFileUploader.Options.accept */
         accept?: string;
         /** @name dxFileUploader.Options.allowCanceling */
@@ -3692,7 +3707,7 @@ declare module DevExpress.ui {
         /** @name dxFileUploader.Options.uploadButtonText */
         uploadButtonText?: string;
         /** @name dxFileUploader.Options.uploadChunk */
-        uploadChunk?: ((file: File, uploadInfo: { bytesUploaded?: number, chunkCount?: number, customData?: any, chunkBlob?: Blob, chunkIndex?: number }) => Promise<any> | JQueryPromise<any> | any);
+        uploadChunk?: ((file: File, uploadInfo: DevExpress.fileManagement.UploadInfo) => Promise<any> | JQueryPromise<any> | any);
         /** @name dxFileUploader.Options.uploadFailedMessage */
         uploadFailedMessage?: string;
         /** @name dxFileUploader.Options.uploadFile */

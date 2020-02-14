@@ -1,5 +1,5 @@
 import FileSystemProviderBase from '../../file_management/provider_base';
-import FileSystemItem, { FileSystemRootItem } from '../../file_management/file_system_item';
+import FileSystemItem from '../../file_management/file_system_item';
 import ObjectFileSystemProvider from '../../file_management/object_provider';
 import RemoteFileSystemProvider from '../../file_management/remote_provider';
 import CustomFileSystemProvider from '../../file_management/custom_provider';
@@ -11,22 +11,22 @@ import { Deferred, when } from '../../core/utils/deferred';
 import { find } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 
+const DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME = 'Files';
+
 export default class FileItemsController {
 
     constructor(options) {
         options = options || {};
         this._options = extend({ }, options);
 
-        const rootDirectory = this._createRootDirectory(options.rootText);
-        this._rootDirectoryInfo = this._createDirectoryInfo(rootDirectory, null);
-
+        this._rootDirectoryInfo = this._createRootDirectoryInfo(options.rootText);
         this._currentDirectoryInfo = this._rootDirectoryInfo;
 
         this._defaultIconMap = this._createDefaultIconMap();
 
         this._securityController = new FileSecurityController({
             allowedFileExtensions: this._options.allowedFileExtensions,
-            maxFileSize: this._options.maxUploadFileSize
+            maxFileSize: this._options.uploadMaxFileSize
         });
 
         this.setProvider(options.fileProvider);
@@ -84,7 +84,7 @@ export default class FileItemsController {
     getCurrentPath() {
         let currentPath = '';
         let directory = this.getCurrentDirectory();
-        while(directory && !directory.fileItem.isRoot) {
+        while(directory && !directory.fileItem.isRoot()) {
             const escapedName = getEscapedFileName(directory.fileItem.name);
             currentPath = pathCombine(escapedName, currentPath);
             directory = directory.parentDirectory;
@@ -133,14 +133,13 @@ export default class FileItemsController {
                 .promise();
         }
 
-        const dirKey = parentDirectoryInfo.fileItem.key;
+        const dirKey = parentDirectoryInfo.getInternalKey();
         let loadItemsDeferred = this._loadedItems[dirKey];
         if(loadItemsDeferred) {
             return loadItemsDeferred;
         }
 
-        const pathInfo = this._getPathInfo(parentDirectoryInfo);
-        loadItemsDeferred = this._getFileItems(pathInfo)
+        loadItemsDeferred = this._getFileItems(parentDirectoryInfo)
             .then(fileItems => {
                 parentDirectoryInfo.items = fileItems.map(fileItem =>
                     fileItem.isDirectory && this._createDirectoryInfo(fileItem, parentDirectoryInfo) || this._createFileInfo(fileItem, parentDirectoryInfo)
@@ -157,8 +156,8 @@ export default class FileItemsController {
         return loadItemsDeferred;
     }
 
-    _getFileItems(pathInfo) {
-        return when(this._fileProvider.getItems(pathInfo))
+    _getFileItems(parentDirectoryInfo) {
+        return when(this._fileProvider.getItems(parentDirectoryInfo.fileItem))
             .then(fileItems => this._securityController.getAllowedItems(fileItems));
     }
 
@@ -242,6 +241,10 @@ export default class FileItemsController {
     }
 
     getFileUploadChunkSize() {
+        const chunkSize = this._options.uploadChunkSize;
+        if(chunkSize && chunkSize > 0) {
+            return chunkSize;
+        }
         return this._fileProvider.getFileUploadChunkSize();
     }
 
@@ -395,7 +398,7 @@ export default class FileItemsController {
     _createDirectoryInfo(fileItem, parentDirectoryInfo) {
         return extend(this._createFileInfo(fileItem, parentDirectoryInfo), {
             icon: 'folder',
-            expanded: fileItem.isRoot,
+            expanded: fileItem.isRoot(),
             items: [ ]
         });
     }
@@ -404,7 +407,13 @@ export default class FileItemsController {
         return {
             fileItem,
             parentDirectory: parentDirectoryInfo,
-            icon: this._getFileItemDefaultIcon(fileItem)
+            icon: this._getFileItemDefaultIcon(fileItem),
+            getInternalKey() {
+                return `FIK_${this.fileItem.key}`;
+            },
+            getDisplayName() {
+                return this.displayName || this.fileItem.name;
+            }
         };
     }
 
@@ -443,10 +452,12 @@ export default class FileItemsController {
         return result;
     }
 
-    _createRootDirectory(text) {
-        const root = new FileSystemRootItem();
-        root.name = text || '';
-        return root;
+    _createRootDirectoryInfo(text) {
+        const rootDirectory = new FileSystemItem(null, '', true);
+
+        const result = this._createDirectoryInfo(rootDirectory, null);
+        result.displayName = text || DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME;
+        return result;
     }
 
     _raiseSelectedDirectoryChanged(directoryInfo) {
@@ -498,7 +509,7 @@ export default class FileItemsController {
 
     _getPathInfo(directoryInfo) {
         const pathInfo = [ ];
-        for(let dirInfo = directoryInfo; dirInfo && !dirInfo.fileItem.isRoot; dirInfo = dirInfo.parentDirectory) {
+        for(let dirInfo = directoryInfo; dirInfo && !dirInfo.fileItem.isRoot(); dirInfo = dirInfo.parentDirectory) {
             pathInfo.unshift({
                 key: dirInfo.fileItem.key,
                 name: dirInfo.fileItem.name

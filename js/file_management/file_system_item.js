@@ -48,8 +48,7 @@ class FileSystemItem {
     }
 
     _initialize(isDirectory) {
-        this.isDirectory = isDirectory || false;
-        this.isRoot = false;
+        this.isDirectory = !!isDirectory;
 
         this.size = 0;
         this.dateModified = new Date();
@@ -60,11 +59,19 @@ class FileSystemItem {
 
     getFullPathInfo() {
         const pathInfo = [...this.pathInfo];
-        !this.isRoot && pathInfo.push({
-            key: this.key,
-            name: this.name
-        });
+
+        if(!this.isRoot()) {
+            pathInfo.push({
+                key: this.key,
+                name: this.name
+            });
+        }
+
         return pathInfo;
+    }
+
+    isRoot() {
+        return this.path === '';
     }
 
     getExtension() {
@@ -94,14 +101,4 @@ class FileSystemItem {
     }
 }
 
-class FileSystemRootItem extends FileSystemItem {
-    constructor() {
-        super(null, 'Files', true);
-        this.key = '__dxfmroot_394CED1B-58CF-4925-A5F8-042BC0822B31_51558CB8-C170-4655-A9E0-C454ED8EA2C1';
-        this.relativeName = '';
-        this.isRoot = true;
-    }
-}
-
 module.exports = FileSystemItem;
-module.exports.FileSystemRootItem = FileSystemRootItem;

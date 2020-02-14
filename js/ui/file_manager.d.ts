@@ -4,6 +4,8 @@ import {
     dxElement
 } from '../core/element';
 
+import FileSystemItem from '../file_management/file_system_item';
+
 import {
     dxContextMenuItem
 } from './context_menu';
@@ -56,12 +58,12 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.customizeThumbnail
      * @type function
-     * @type_function_param1 fileItem:object
+     * @type_function_param1 fileSystemItem:FileSystemItem
      * @type_function_return string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeThumbnail?: ((fileItem: any) => string);
+    customizeThumbnail?: ((fileSystemItem: FileSystemItem) => string);
     /**
      * @docid dxFileManagerOptions.fileSystemProvider
      * @type object
@@ -83,24 +85,25 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
+     * @type_function_param1_field4 directory:FileSystemItem
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: dxElement, model?: any }) => any);
+    onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, directory?: FileSystemItem }) => any);
     /**
      * @docid dxFileManagerOptions.onSelectedFileOpened
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 fileItem:object
+     * @type_function_param1_field4 file:FileSystemItem
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, fileItem?: any }) => any);
+    onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, file?: FileSystemItem }) => any);
     /**
      * @docid dxFileManagerOptions.permissions
      * @type object
@@ -137,7 +140,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    upload?: { maxFileSize?: number };
+    upload?: { maxFileSize?: number, chunkSize?: number };
 }
 /**
  * @docid dxFileManager

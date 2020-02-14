@@ -397,7 +397,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
     test('upload fails when max file size exceeded', function(assert) {
         this.controller = new FileItemsController({
             fileProvider: this.data,
-            maxUploadFileSize: 400000
+            uploadMaxFileSize: 400000
         });
 
         stubFileReaderInProvider(this.controller);
@@ -490,14 +490,19 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
         this.clock.tick(100);
     });
 
-    test('root direcotry key is unique', function(assert) {
+    test('root directory object has valid properties', function(assert) {
         const rootDir = this.controller.getCurrentDirectory();
-        const rootKey = rootDir.fileItem.key;
+        const rootItem = rootDir.fileItem;
 
-        assert.ok(isString(rootKey), 'root key has type of string');
-        assert.ok(rootKey.length > 10, 'root key contains many characters');
-        assert.strictEqual(rootKey.indexOf('Files'), -1, 'root key doesn\'t contain root directory name');
-        assert.strictEqual(rootKey.indexOf('__dxfmroot_'), 0, 'root key starts with internal prefix');
+        assert.strictEqual(rootItem.key, '', 'root key is empty string');
+        assert.strictEqual(rootItem.path, '', 'root path is empty string');
+        assert.strictEqual(rootItem.name, '', 'root name is empty string');
+        assert.strictEqual(rootDir.getDisplayName(), 'Files', 'root info name has default value');
+
+        assert.ok(isString(rootDir.getInternalKey()), 'root info key has type of string');
+        assert.ok(rootDir.getInternalKey(), 'root info key is not empty');
+
+        assert.ok(rootItem.isRoot(), 'root has root flag');
     });
 
 });

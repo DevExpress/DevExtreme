@@ -5,6 +5,7 @@ import 'ui/form/ui.form';
 
 import 'common.css!';
 import 'material_blue_light.css!';
+import FormLayoutTestWrapper from '../../helpers/FormLayoutTestWrapper.js';
 
 QUnit.testStart(function() {
     const markup = '<div id="form"></div>';
@@ -12,38 +13,7 @@ QUnit.testStart(function() {
 });
 
 QUnit.module('Form scenarios', () => {
-    function createForm(colCount, items) {
-        const $form = $('#form').dxForm({
-            width: 1000,
-            screenByWidth: () => {
-                return 'xs';
-            },
-            colCountByScreen: {
-                xs: colCount
-            },
-            items
-        });
-
-        $form.find('*').css('font-family', 'Helvetica');
-
-        return $form;
-    }
-
-    function checkPosition($container, $element, expected) {
-        const elementRect = $element.get(0).getBoundingClientRect();
-
-        const epsilon = 0.1;
-        if($container != null) {
-            const containerRect = $container.get(0).getBoundingClientRect();
-            QUnit.assert.roughEqual(elementRect.top - containerRect.top, expected.top, epsilon, 'top element offset');
-            QUnit.assert.roughEqual(elementRect.left - containerRect.left, expected.left, epsilon, 'left element offset');
-        }
-
-        QUnit.assert.roughEqual(elementRect.width, expected.width, epsilon, 'element width');
-        QUnit.assert.roughEqual(elementRect.height, expected.height, epsilon, 'element height');
-    }
-
-    function testOrSkip(name, callback) {
+    function testChromeOnly(name, callback) {
         if(!browser.chrome) {
             return;
         }
@@ -51,32 +21,33 @@ QUnit.module('Form scenarios', () => {
         QUnit.test(name, callback);
     }
 
-    testOrSkip('1 column -> [item1]', function(assert) {
-        const $form = createForm(1, ['item1']);
-        checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
-        checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-        checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
+    testChromeOnly('1 column -> [item1]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(1, {}, ['item1']);
+        wrapper.checkFormSize(1000, 75);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 0, 0, 1000, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 34, 0, 1000, 31);
     });
 
     function test_1Column_2ItemsLayout(items) {
-        const $form = createForm(1, items);
-        checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-        checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
-        checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
-        checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
+        const wrapper = new FormLayoutTestWrapper(1, {}, items);
+        wrapper.checkFormSize(1000, 160);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 0, 0, 1000, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 34, 0, 1000, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 85, 0, 1000, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 119, 0, 1000, 31);
     }
 
-    testOrSkip('1 column -> [item1, item2]', function(assert) {
+    testChromeOnly('1 column -> [item1, item2]', function(assert) {
         test_1Column_2ItemsLayout(['item1', 'item2']);
     });
 
-    testOrSkip('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
+    testChromeOnly('1 column -> [item1, { group [{ item2 }] ]', function(assert) {
         test_1Column_2ItemsLayout([
             'item1',
             { itemType: 'group', items: ['item2'] }]);
     });
 
-    testOrSkip('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(assert) {
+    testChromeOnly('1 column -> [item1, { group [{ group [{ item2 }] }] ]', function(assert) {
         test_1Column_2ItemsLayout([
             'item1',
             { itemType: 'group', items: [{ itemType: 'group', items: ['item2'] }] }
@@ -84,21 +55,21 @@ QUnit.module('Form scenarios', () => {
     });
 
     function test_1Column_3ItemsLayout(items) {
-        const $form = createForm(1, items);
-        checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 245 });
-        checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-        checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
-        checkPosition($form, $form.find('[for$="item2"]'), { top: 85, left: 0, width: 1000, height: 34 });
-        checkPosition($form, $form.find('[id$="item2"]'), { top: 119, left: 0, width: 1000, height: 31 });
-        checkPosition($form, $form.find('[for$="item3"]'), { top: 170, left: 0, width: 1000, height: 34 });
-        checkPosition($form, $form.find('[id$="item3"]'), { top: 204, left: 0, width: 1000, height: 31 });
+        const wrapper = new FormLayoutTestWrapper(1, {}, items);
+        wrapper.checkFormSize(1000, 245);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 0, 0, 1000, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 34, 0, 1000, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 85, 0, 1000, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 119, 0, 1000, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 170, 0, 1000, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 204, 0, 1000, 31);
     }
 
-    testOrSkip('1 column -> [item1, item2, item3]', function(assert) {
+    testChromeOnly('1 column -> [item1, item2, item3]', function(assert) {
         test_1Column_3ItemsLayout(['item1', 'item2', 'item3']);
     });
 
-    testOrSkip('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
+    testChromeOnly('1 column -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
         test_1Column_3ItemsLayout([
             'item1',
             { itemType: 'group', items: [{ itemType: 'group', items: ['item2'] }] },
@@ -106,7 +77,7 @@ QUnit.module('Form scenarios', () => {
         ]);
     });
 
-    testOrSkip('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item3]', function(assert) {
+    testChromeOnly('1 column -> [item1, { group [{ group [{ group [{item2 }] }] }], item3]', function(assert) {
         test_1Column_3ItemsLayout([
             'item1',
             { itemType: 'group', items: [{ itemType: 'group', items: [{ itemType: 'group', items: ['item2'] }] }] },
@@ -114,8 +85,8 @@ QUnit.module('Form scenarios', () => {
         ]);
     });
 
-    testOrSkip('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
-        const $form = createForm(1, [
+    testChromeOnly('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(1, {}, [
             'item1',
             { itemType: 'group', caption: 'Contact Information',
                 items: [ { itemType: 'tabbed',
@@ -123,15 +94,15 @@ QUnit.module('Form scenarios', () => {
                     tabs: [ { title: 'item2', items: ['item2'] }]
                 }]
             }]);
-        checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 320 });
-        checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-        checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
-        checkPosition($form, $form.find('[for$="item2"]'), { top: 205, left: 20, width: 960, height: 34 });
-        checkPosition($form, $form.find('[id$="item2"]'), { top: 239, left: 20, width: 960, height: 31 });
+        wrapper.checkFormSize(1000, 320);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 0, 0, 1000, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 34, 0, 1000, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 205, 20, 960, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 239, 20, 960, 31);
     });
 
-    testOrSkip('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
-        const $form = createForm(1, [
+    testChromeOnly('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(1, {}, [
             'item1',
             {
                 itemType: 'group',
@@ -149,50 +120,50 @@ QUnit.module('Form scenarios', () => {
             },
             'item3']);
 
-        checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 405 });
-        checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 1000, height: 34 });
-        checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 1000, height: 31 });
-        checkPosition($form, $form.find('[for$="item2"]'), { top: 205, left: 20, width: 960, height: 34 });
-        checkPosition($form, $form.find('[id$="item2"]'), { top: 239, left: 20, width: 960, height: 31 });
-        checkPosition($form, $form.find('[for$="item3"]'), { top: 330, left: 0, width: 1000, height: 34 });
-        checkPosition($form, $form.find('[id$="item3"]'), { top: 364, left: 0, width: 1000, height: 31 });
+        wrapper.checkFormSize(1000, 405);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 0, 0, 1000, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 34, 0, 1000, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 205, 20, 960, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 239, 20, 960, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 330, 0, 1000, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 364, 0, 1000, 31);
     });
 
     function test_2Column_2ItemsLayout(items) {
-        const $form = createForm(2, items);
-        checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 75 });
-        checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-        checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
-        checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-        checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
+        const wrapper = new FormLayoutTestWrapper(2, {}, items);
+        wrapper.checkFormSize(1000, 75);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 0, 0, 480, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 34, 0, 480, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 0, 520, 480, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 34, 520, 480, 31);
     }
 
-    testOrSkip('2 columns -> [item1, item2]', function(assert) {
+    testChromeOnly('2 columns -> [item1, item2]', function(assert) {
         test_2Column_2ItemsLayout(['item1', 'item2']);
     });
 
-    testOrSkip('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
+    testChromeOnly('2 columns -> [item1, { group [{ item2 }] }]', function(assert) {
         test_2Column_2ItemsLayout([
             'item1',
             { itemType: 'group', items: ['item2'] }
         ]);
     });
 
-    testOrSkip('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(assert) {
+    testChromeOnly('2 columns -> [item1, { group [{ group [{ item2 }] }] }]', function(assert) {
         test_2Column_2ItemsLayout([
             'item1',
             { itemType: 'group', items: [{ itemType: 'group', items: ['item2'] }] }
         ]);
     });
 
-    testOrSkip('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(assert) {
+    testChromeOnly('2 columns -> [{ group [{ item1 }], { group [{ item2 }]]', function(assert) {
         test_2Column_2ItemsLayout([
             { itemType: 'group', items: ['item1'] },
             { itemType: 'group', items: ['item2'] }
         ]);
     });
 
-    testOrSkip('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }]]', function(assert) {
+    testChromeOnly('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }]]', function(assert) {
         test_2Column_2ItemsLayout([
             { itemType: 'group', items: [{ itemType: 'group', items: ['item1'] }] },
             { itemType: 'group', items: [{ itemType: 'group', items: ['item2'] }] }
@@ -200,17 +171,17 @@ QUnit.module('Form scenarios', () => {
     });
 
     function test_2Columns_3ItemsLayout(items) {
-        const $form = createForm(2, items);
-        checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
-        checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-        checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
-        checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-        checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
-        checkPosition($form, $form.find('[for$="item3"]'), { top: 85, left: 0, width: 480, height: 34 });
-        checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 480, height: 31 });
+        const wrapper = new FormLayoutTestWrapper(2, {}, items);
+        wrapper.checkFormSize(1000, 160);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 0, 0, 480, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 34, 0, 480, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 0, 520, 480, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 34, 520, 480, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 85, 0, 480, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 119, 0, 480, 31);
     }
 
-    testOrSkip('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
+    testChromeOnly('2 columns -> [item1, { group [{ group [{ item2 }] }], item3]', function(assert) {
         test_2Columns_3ItemsLayout([
             'item1',
             { itemType: 'group', items: [{ itemType: 'group', items: ['item2'] }] },
@@ -218,7 +189,7 @@ QUnit.module('Form scenarios', () => {
         ]);
     });
 
-    testOrSkip('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }], { group [{ item3 }] }]', function(assert) {
+    testChromeOnly('2 columns -> [{ group [{ { group [{ item1 }] }], { group [{ { group [{ item2 }] }], { group [{ item3 }] }]', function(assert) {
         test_2Columns_3ItemsLayout([
             { itemType: 'group', items: [{ itemType: 'group', items: ['item1'] }] },
             { itemType: 'group', items: [{ itemType: 'group', items: ['item2'] }] },
@@ -227,25 +198,25 @@ QUnit.module('Form scenarios', () => {
         ]);
     });
 
-    testOrSkip('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group colspan:3 [{ item3 }] ]', function(assert) {
-        const $form = createForm(2, [
+    testChromeOnly('2 columns -> [{ group [{ item1 }], { group [{ item2 }], { group colspan:3 [{ item3 }] ]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(2, {}, [
             { itemType: 'group', colSpan: 1, items: ['item1'] },
             { itemType: 'group', colSpan: 1, items: ['item2'] },
             { itemType: 'group', colSpan: 2, items: ['item3']
             }
         ]);
 
-        checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
-        checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-        checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
-        checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 520, width: 480, height: 34 });
-        checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 520, width: 480, height: 31 });
-        checkPosition($form, $form.find('[for$="item3"]'), { top: 85, left: 0, width: 1000, height: 34 });
-        checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 1000, height: 31 });
+        wrapper.checkFormSize(1000, 160);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 0, 0, 480, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 34, 0, 480, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 0, 520, 480, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 34, 520, 480, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 85, 0, 1000, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 119, 0, 1000, 31);
     });
 
-    testOrSkip('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
-        const $form = createForm(2, [
+    testChromeOnly('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(2, {}, [
             'item1',
             { itemType: 'group', caption: 'Contact Information',
                 items: [{
@@ -256,15 +227,15 @@ QUnit.module('Form scenarios', () => {
             }
         ]);
 
-        checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 235 });
-        checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-        checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
-        checkPosition($form, $form.find('[for$="item2"]'), { top: 120, left: 540, width: 440, height: 34 });
-        checkPosition($form, $form.find('[id$="item2"]'), { top: 154, left: 540, width: 440, height: 31 });
+        wrapper.checkFormSize(1000, 235);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 0, 0, 480, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 34, 0, 480, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 120, 540, 440, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 154, 540, 440, 31);
     });
 
-    testOrSkip('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
-        const $form = createForm(2, [
+    testChromeOnly('2 column -> [item1, { group [{ tabbed [{ item2 }] }] }, item3]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(2, {}, [
             'item1',
             { itemType: 'group', caption: 'Contact Information',
                 items: [{
@@ -275,28 +246,28 @@ QUnit.module('Form scenarios', () => {
             },
             'item3']);
 
-        checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 320 });
-        checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 480, height: 34 });
-        checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 480, height: 31 });
-        checkPosition($form, $form.find('[for$="item2"]'), { top: 120, left: 540, width: 440, height: 34 });
-        checkPosition($form, $form.find('[id$="item2"]'), { top: 154, left: 540, width: 440, height: 31 });
-        checkPosition($form, $form.find('[for$="item3"]'), { top: 245, left: 0, width: 480, height: 34 });
-        checkPosition($form, $form.find('[id$="item3"]'), { top: 279, left: 0, width: 480, height: 31 });
+        wrapper.checkFormSize(1000, 320);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 0, 0, 480, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 34, 0, 480, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 120, 540, 440, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 154, 540, 440, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 245, 0, 480, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 279, 0, 480, 31);
     });
 
-    testOrSkip('4 columns -> [{ group colSpan:3 [{ item1 }], { group colSpan:1 [{ item2 }], { group colspan:4 [{ item3 }] ]', function(assert) {
-        const $form = createForm(4, [
+    testChromeOnly('4 columns -> [{ group colSpan:3 [{ item1 }], { group colSpan:1 [{ item2 }], { group colspan:4 [{ item3 }] ]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(4, {}, [
             { itemType: 'group', colSpan: 3, items: ['item1'] },
             { itemType: 'group', colSpan: 1, items: ['item2'] },
             { itemType: 'group', colSpan: 4, items: ['item3'] }
         ]);
 
-        checkPosition(null, $form, { top: 0, left: 0, width: 1000, height: 160 });
-        checkPosition($form, $form.find('[for$="item1"]'), { top: 0, left: 0, width: 730, height: 34 });
-        checkPosition($form, $form.find('[id$="item1"]'), { top: 34, left: 0, width: 730, height: 31 });
-        checkPosition($form, $form.find('[for$="item2"]'), { top: 0, left: 770, width: 230, height: 34 });
-        checkPosition($form, $form.find('[id$="item2"]'), { top: 34, left: 770, width: 230, height: 31 });
-        checkPosition($form, $form.find('[for$="item3"]'), { top: 85, left: 0, width: 1000, height: 34 });
-        checkPosition($form, $form.find('[id$="item3"]'), { top: 119, left: 0, width: 1000, height: 31 });
+        wrapper.checkFormSize(1000, 160);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 0, 0, 730, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 34, 0, 730, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 0, 770, 230, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 34, 770, 230, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 85, 0, 1000, 34);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 119, 0, 1000, 31);
     });
 });

@@ -46,13 +46,20 @@ const getCorrectedDateByDaylightOffsets = (convertedOriginalStartDate, converted
     return new Date(date.getTime() - diff * toMs('hour'));
 };
 
+const isTimezoneChangeInDate = (date) => {
+    const startDayDate = new Date((new Date(date)).setHours(0, 0, 0, 0));
+    const endDayDate = new Date((new Date(date)).setHours(23, 59, 59, 0));
+    return (startDayDate.getTimezoneOffset() - endDayDate.getTimezoneOffset()) !== 0;
+};
+
 const utils = {
     getDaylightOffset: getDaylightOffset,
     getDaylightOffsetInMs: getDaylightOffsetInMs,
     getTimezoneOffsetChangeInMinutes: getTimezoneOffsetChangeInMinutes,
     getTimezoneOffsetChangeInMs: getTimezoneOffsetChangeInMs,
     calculateTimezoneByValue: calculateTimezoneByValue,
-    getCorrectedDateByDaylightOffsets: getCorrectedDateByDaylightOffsets
+    getCorrectedDateByDaylightOffsets: getCorrectedDateByDaylightOffsets,
+    isTimezoneChangeInDate: isTimezoneChangeInDate
 };
 
 module.exports = utils;

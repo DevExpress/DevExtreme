@@ -47,7 +47,8 @@ class FileManager extends Widget {
             rootText: this.option('rootFolderName'),
             fileProvider: this.option('fileSystemProvider'),
             allowedFileExtensions: this.option('allowedFileExtensions'),
-            maxUploadFileSize: this.option('upload').maxFileSize,
+            uploadMaxFileSize: this.option('upload').maxFileSize,
+            uploadChunkSize: this.option('upload').chunkSize,
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
         this._commandManager = new FileManagerCommandManager(this.option('permissions'));
@@ -302,7 +303,7 @@ class FileManager extends Widget {
             ? this._controller.getDirectoryContents(selectedDir)
             : this._controller.getFiles(selectedDir);
 
-        if(this.option('itemView.showParentFolder') && !selectedDir.fileItem.isRoot) {
+        if(this.option('itemView.showParentFolder') && !selectedDir.fileItem.isRoot()) {
             const parentDirItem = selectedDir.fileItem.createClone();
             parentDirItem.isParentFolder = true;
             parentDirItem.name = '..';
@@ -434,7 +435,14 @@ class FileManager extends Widget {
                 * @type number
                 * @default 0
                 */
-                maxFileSize: 0
+                maxFileSize: 0,
+
+                /**
+                * @name dxFileManagerOptions.upload.chunkSize
+                * @type number
+                * @default 200000
+                */
+                chunkSize: 200000
             },
 
             permissions: {
@@ -543,14 +551,15 @@ class FileManager extends Widget {
     }
 
     _onSelectedDirectoryChanged() {
+        const currentDirectory = this._getCurrentDirectory();
         const currentPath = this._controller.getCurrentPath();
 
         this._filesTreeView.updateCurrentDirectory();
         this._itemView.refresh();
-        this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
+        this._breadcrumbs.setCurrentDirectory(currentDirectory);
 
         this.option('currentPath', currentPath);
-        this._onCurrentDirectoryChangedAction();
+        this._onCurrentDirectoryChangedAction({ directory: currentDirectory.fileItem });
     }
 
     getDirectories(parentDirectoryInfo) {
@@ -577,7 +586,7 @@ class FileManager extends Widget {
     _onSelectedItemOpened({ fileItemInfo }) {
         const fileItem = fileItemInfo.fileItem;
         if(!fileItem.isDirectory) {
-            this._onSelectedFileOpenedAction({ fileItem });
+            this._onSelectedFileOpenedAction({ file: fileItem });
             return;
         }
 

@@ -101,6 +101,8 @@ const REFRESH_ICON_MAP = {
     error: 'dx-filemanager-i dx-filemanager-i-danger'
 };
 
+const REFRESH_ITEM_PROGRESS_MESSAGE_DELAY = 500;
+
 class FileManagerToolbar extends Widget {
 
     _initMarkup() {
@@ -434,29 +436,58 @@ class FileManagerToolbar extends Widget {
 
     updateRefreshItem(message, status) {
         let generalToolbarOptions = null;
+        let text = messageLocalization.format('dxFileManager-commandRefresh');
+        let showText = 'inMenu';
+
         this._isRefreshVisibleInFileToolbar = false;
 
         if(status === 'default') {
             generalToolbarOptions = {
-                showText: 'inMenu',
                 options: {
-                    text: messageLocalization.format('dxFileManager-commandRefresh'),
                     icon: REFRESH_ICON_MAP.default
                 }
             };
         } else {
             generalToolbarOptions = {
-                showText: 'always',
                 options: {
-                    text: message,
                     icon: REFRESH_ICON_MAP[status]
                 }
             };
             this._isRefreshVisibleInFileToolbar = true;
+            text = message;
+            showText = 'always';
         }
 
         const fileToolbarOptions = extend({ }, generalToolbarOptions, { visible: this._isRefreshVisibleInFileToolbar });
+        this._applyRefreshItemOptions(generalToolbarOptions, fileToolbarOptions);
+        this._refreshItemTextTimeout = this._updateRefreshItemText(status === 'progress', text, showText);
+    }
 
+    _updateRefreshItemText(isDeferredUpdate, text, showText) {
+        const options = {
+            showText,
+            options: {
+                text
+            }
+        };
+        if(isDeferredUpdate) {
+            return setTimeout(() => {
+                this._applyRefreshItemOptions(options);
+                this._refreshItemTextTimeout = undefined;
+            }, REFRESH_ITEM_PROGRESS_MESSAGE_DELAY);
+        } else {
+            if(this._refreshItemTextTimeout) {
+                clearTimeout(this._refreshItemTextTimeout);
+            }
+            this._applyRefreshItemOptions(options);
+            return undefined;
+        }
+    }
+
+    _applyRefreshItemOptions(generalToolbarOptions, fileToolbarOptions) {
+        if(!fileToolbarOptions) {
+            fileToolbarOptions = extend({}, generalToolbarOptions);
+        }
         this._updateItemInToolbar(this._generalToolbar, 'refresh', generalToolbarOptions);
         this._updateItemInToolbar(this._fileToolbar, 'refresh', fileToolbarOptions);
     }

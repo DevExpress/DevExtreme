@@ -20,7 +20,7 @@ import {
 
 import {
     ExcelDataGridCell
-} from '../exporter/exceljs/excelExporter';
+} from '../excel_exporter';
 
 import {
     ExcelFont
