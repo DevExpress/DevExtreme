@@ -112,21 +112,6 @@
                 margin-right: 4px;
             }
         }
-
-        .dx-area-field-container {
-            border-spacing: @PIVOTGRID_FILTER_AREA_BORDER_SPACING;
-            border-collapse: separate;
-        }
-
-        .dx-pivotgrid-fields-area-head {
-            td {
-                padding: @PIVOTGRID_COMMON_FIELD_PADDING;
-            }
-
-            tr > td:first-child {
-                padding-left: @PIVOTGRID_COMMON_FIELD_PADDING;
-            }
-        }
     }
 
     .dx-data-header,
@@ -150,6 +135,23 @@
         .dx-pivotgrid-fields-area-head {
             tr > td:first-child {
                 padding-left: 0;
+            }
+        }
+    }
+
+    .dx-filter-header {
+        .dx-area-field-container {
+            border-spacing: @PIVOTGRID_FILTER_AREA_BORDER_SPACING;
+            border-collapse: separate;
+        }
+
+        .dx-pivotgrid-fields-area-head {
+            td {
+                padding: @PIVOTGRID_COMMON_FIELD_PADDING;
+            }
+
+            tr > td:first-child {
+                padding-left: @PIVOTGRID_COMMON_FIELD_PADDING;
             }
         }
     }
