@@ -711,7 +711,7 @@ QUnit.test('Scroll to when native scroll', function(assert) {
     scrollController.scrollTo(24000);
 
     function assertFunction() {
-        assert.roughEqual(scrollController.getViewportPosition(), 24000, 1);
+        assert.roughEqual(scrollController.getViewportPosition(), 24000, 1.01);
 
         $($fixtureElement).off('scroll', assertFunction);
         done();
