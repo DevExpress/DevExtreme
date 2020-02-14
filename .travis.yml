@@ -10,6 +10,9 @@ env:
     - TARGET=ts
     - TARGET=test CONSTEL=export
     - TARGET=test CONSTEL=misc
+    - TARGET=test CONSTEL=misc TZ='PST8PDT'
+    - TARGET=test CONSTEL=misc TZ='Japan'
+    - TARGET=test CONSTEL=misc TZ='Australia/ACT'
     - TARGET=test CONSTEL=ui
     - TARGET=test CONSTEL=ui.editors
     - TARGET=test CONSTEL=ui.editors TZ='PST8PDT'
