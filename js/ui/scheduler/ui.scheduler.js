@@ -41,7 +41,6 @@ import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
 import SchedulerAppointments from './ui.scheduler.appointments';
 import SchedulerLayoutManager from './ui.scheduler.appointments.layout_manager';
 import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
-import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 import AsyncTemplateMixin from '../shared/async_template_mixin';
 import DataHelperMixin from '../../data_helper';
 import loading from './ui.loading';
@@ -1059,53 +1058,23 @@ const Scheduler = Widget.inherit({
     },
 
     _getTimezoneOffsetByOption: function(date) {
-        return this._calculateTimezoneByValue(this.option('timeZone'), date);
-    },
-
-    _getDaylightOffsetByCustomTimezone: function(startDate, endDate) {
-        return this._getTimezoneOffsetByOption(startDate) - this._getTimezoneOffsetByOption(endDate);
-    },
-
-    _getDaylightOffsetByAppointmentTimezone: function(startDate, endDate, appointmentTimezone) {
-        return this._calculateTimezoneByValue(appointmentTimezone, startDate) - this._calculateTimezoneByValue(appointmentTimezone, endDate);
-    },
-
-    _getCorrectedDateByDaylightOffsets: function(originalStartDate, date, startDateTimezone) {
-        const daylightOffsetByOption = this._getDaylightOffsetByCustomTimezone(originalStartDate, date);
-        const daylightOffsetByAppointment = this._getDaylightOffsetByAppointmentTimezone(originalStartDate, date, startDateTimezone);
-        const diff = daylightOffsetByOption - daylightOffsetByAppointment;
-
-        return new Date(date.getTime() - diff * toMs('hour'));
+        return utils.calculateTimezoneByValue(this.option('timeZone'), date);
     },
 
     getCorrectedDatesByDaylightOffsets: function(originalStartDate, dates, appointmentData) {
         const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
         const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
+        const convertedOriginalStartDate = this.fire('convertDateByTimezoneBack', new Date(originalStartDate.getTime()), startDateTimeZone);
 
         if(needCheckTimezoneOffset) {
             dates = dates.map((date) => {
-                return this._getCorrectedDateByDaylightOffsets(originalStartDate, date, startDateTimeZone);
+                const convertedDate = this.fire('convertDateByTimezoneBack', new Date(date.getTime()), startDateTimeZone);
+
+                return utils.getCorrectedDateByDaylightOffsets(convertedOriginalStartDate, convertedDate, date, this.option('timeZone'), startDateTimeZone);
             });
         }
 
         return dates;
-    },
-
-    _calculateTimezoneByValue: function(timezone, date) {
-        let result = timezone;
-
-        if(typeof timezone === 'string') {
-            date = date || new Date();
-            const dateUtc = Date.UTC(
-                date.getUTCFullYear(),
-                date.getUTCMonth(),
-                date.getUTCDate(),
-                date.getUTCHours(),
-                date.getUTCMinutes()
-            );
-            result = SchedulerTimezones.getTimezoneOffsetById(timezone, dateUtc);
-        }
-        return result;
     },
 
     _filterAppointmentsByDate: function() {
@@ -1984,9 +1953,7 @@ const Scheduler = Widget.inherit({
         if(isPopupEditing) {
             this._updatedRecAppointment = updatedAppointment;
 
-            processAppointmentDates.call(this, singleAppointment);
-
-            this._showAppointmentPopup(singleAppointment, true, true);
+            this._showAppointmentPopup(singleAppointment, true, false);
             this._editAppointmentData = targetAppointment;
 
         } else {
