@@ -79,6 +79,9 @@ const DropDownMenu = Widget.inherit({
 
             opened: false,
 
+            selectionMode: 'none',
+            selectedItemKeys: [],
+
             deferRendering: false,
             popupPosition: { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 1 } },
             popupAnimation: undefined,
@@ -327,6 +330,8 @@ const DropDownMenu = Widget.inherit({
             pageLoadMode: 'scrollBottom',
             indicateLoading: false,
             noDataText: '',
+            selectionMode: this.option('selectionMode'),
+            selectedItemKeys: this.option('selectedItemKeys'),
             itemTemplate: this.option('itemTemplate'),
             onItemClick: (function(e) {
                 if(this.option('closeOnClick')) {
