@@ -45,6 +45,14 @@ QUnit.module('Common tests', () => {
         }
     });
 
+    test('FileSystemItem default key contains encoded path', function(assert) {
+        const pathInfo = [
+            { key: 'F1', name: 'F1' }
+        ];
+        const item = new FileSystemItem(pathInfo, 'Docu/ments', true);
+        assert.strictEqual(item.key, 'F1/Docu//ments', 'key is in encoded format');
+    });
+
     test('create FileSystemItem by public constructor', function(assert) {
         const testData = {
             '1': {

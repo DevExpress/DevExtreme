@@ -30,6 +30,8 @@ const moduleConfig = {
             }
         });
 
+        this.fileManager = this.$element.dxFileManager('instance');
+
         this.wrapper = new FileManagerWrapper(this.$element);
 
         this.clock.tick(400);
@@ -554,4 +556,61 @@ QUnit.module('Navigation operations', moduleConfig, () => {
             });
     });
 
+    test('navigate via \'currentPathKeys\' option updating', function(assert) {
+        const optionChangedSpy = sinon.spy();
+        const dirChangedSpy = sinon.spy();
+        const pathKeys = [ 'Folder 1', 'Folder 1/Folder 1.1' ];
+
+        assert.deepEqual(this.fileManager.option('currentPathKeys'), [], 'initial value correct');
+
+        this.fileManager.option({
+            onCurrentDirectoryChanged: dirChangedSpy,
+            onOptionChanged: optionChangedSpy,
+            currentPathKeys: pathKeys
+        });
+        this.clock.tick(800);
+
+        assert.strictEqual(dirChangedSpy.callCount, 1, 'directory changed event raised');
+        assert.strictEqual(dirChangedSpy.args[0][0].directory.path, 'Folder 1/Folder 1.1', 'directory passed as argument');
+        assert.deepEqual(this.fileManager.option('currentPathKeys'), pathKeys, 'The option \'currentPathKeys\' was changed');
+        assert.strictEqual(optionChangedSpy.callCount, 2, 'option changed event raised');
+        assert.strictEqual(optionChangedSpy.args[1][0].name, 'currentPath', 'current path option changed');
+        assert.strictEqual(optionChangedSpy.args[1][0].value, 'Folder 1/Folder 1.1', 'current path option value updated');
+
+        const $folder1Node = this.wrapper.getFolderNode(1);
+        assert.strictEqual($folder1Node.find('span').text(), 'Folder 1');
+
+        const $folder11Node = this.wrapper.getFolderNode(2);
+        assert.strictEqual($folder11Node.find('span').text(), 'Folder 1.1');
+
+        this.fileManager.option('currentPathKeys', []);
+        this.clock.tick(800);
+
+        assert.strictEqual(dirChangedSpy.callCount, 2, 'directory changed event raised');
+        assert.strictEqual(dirChangedSpy.args[1][0].directory.path, '', 'directory argument updated');
+        assert.strictEqual(this.fileManager.option('currentPath'), '', 'The option \'currentPath\' was changed');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files', 'breadcrumbs refrers to the root folder');
+        assert.strictEqual(optionChangedSpy.callCount, 4, 'option changed event raised');
+        assert.strictEqual(optionChangedSpy.args[3][0].name, 'currentPath', 'current path option changed');
+        assert.strictEqual(optionChangedSpy.args[3][0].value, '', 'current path option value updated');
+    });
+
+    test('navigate via \'currentPathKeys\' option on init', function(assert) {
+        const optionChangedSpy = sinon.spy();
+
+        this.$element.dxFileManager({
+            onOptionChanged: optionChangedSpy,
+            currentPathKeys: [ 'Folder 1', 'Folder 1/Folder 1.1' ],
+        });
+        this.clock.tick(800);
+
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'Target folder is selected');
+        assert.strictEqual(this.wrapper.getBreadcrumbsPath(), 'Files/Folder 1/Folder 1.1', 'breadcrumbs refrers to the target folder');
+        assert.strictEqual(optionChangedSpy.callCount, 3, 'option changed event raised');
+        assert.strictEqual(optionChangedSpy.args[0][0].name, 'onOptionChanged', 'onOptionChanged option changed');
+        assert.strictEqual(optionChangedSpy.args[1][0].name, 'currentPathKeys', 'currentPathKeys option changed');
+        assert.strictEqual(optionChangedSpy.args[2][0].name, 'currentPath', 'currentPath option changed');
+        assert.strictEqual(optionChangedSpy.args[2][0].value, 'Folder 1/Folder 1.1', 'currentPath option updated');
+    });
 });

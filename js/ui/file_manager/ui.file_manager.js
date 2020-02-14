@@ -3,6 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import typeUtils from '../../core/utils/type';
 import { when, Deferred } from '../../core/utils/deferred';
+import { equalByValue } from '../../core/utils/common';
 
 import messageLocalization from '../../localization/message';
 
@@ -44,6 +45,7 @@ class FileManager extends Widget {
 
         this._controller = new FileItemsController({
             currentPath: this.option('currentPath'),
+            currentPathKeys: this.option('currentPathKeys'),
             rootText: this.option('rootFolderName'),
             fileProvider: this.option('fileSystemProvider'),
             allowedFileExtensions: this.option('allowedFileExtensions'),
@@ -346,6 +348,8 @@ class FileManager extends Widget {
 
             currentPath: '',
 
+            currentPathKeys: [],
+
             rootFolderName: messageLocalization.format('dxFileManager-rootDirectoryName'),
 
             selectionMode: 'multiple', // "single"
@@ -497,7 +501,10 @@ class FileManager extends Widget {
 
         switch(name) {
             case 'currentPath':
-                this._setCurrentPath(args.value);
+                this._controller.setCurrentPath(args.value);
+                break;
+            case 'currentPathKeys':
+                this._controller.setCurrentPathByKeys(args.value);
                 break;
             case 'fileSystemProvider':
             case 'selectionMode':
@@ -553,12 +560,20 @@ class FileManager extends Widget {
     _onSelectedDirectoryChanged() {
         const currentDirectory = this._getCurrentDirectory();
         const currentPath = this._controller.getCurrentPath();
+        const currentPathKeys = currentDirectory.fileItem.pathKeys;
 
         this._filesTreeView.updateCurrentDirectory();
         this._itemView.refresh();
         this._breadcrumbs.setCurrentDirectory(currentDirectory);
 
-        this.option('currentPath', currentPath);
+        const options = { currentPath };
+
+        if(!equalByValue(this.option('currentPathKeys'), currentPathKeys)) {
+            options.currentPathKeys = currentPathKeys;
+        }
+
+        this.option(options);
+
         this._onCurrentDirectoryChangedAction({ directory: currentDirectory.fileItem });
     }
 
@@ -596,10 +611,6 @@ class FileManager extends Widget {
         if(newCurrentDirectory) {
             this._filesTreeView.expandDirectory(newCurrentDirectory.parentDirectory);
         }
-    }
-
-    _setCurrentPath(path) {
-        this._controller.setCurrentPath(path);
     }
 
 }
