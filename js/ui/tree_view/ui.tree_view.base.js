@@ -1541,15 +1541,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     getSelectedNodes: function() {
-        let items = [];
-
-        each(this.getSelectedNodeKeys(), (index, key) => {
-            let node = this._dataAdapter.getNodeByKey(key);
-            let publicNode = this._dataAdapter.getPublicNode(node);
-            items.push(publicNode);
+        return this.getSelectedNodeKeys().map(key => {
+            const node = this._dataAdapter.getNodeByKey(key);
+            return this._dataAdapter.getPublicNode(node);
         });
-
-        return items;
     },
 
     // Deprecated. Will bew removed in near future - use getSelectedNodeKeys method instead
