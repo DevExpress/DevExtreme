@@ -2879,6 +2879,10 @@ declare module DevExpress.ui {
         fieldTemplate?: DevExpress.core.template | ((value: string, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxColorBox.Options.keyStep */
         keyStep?: number;
+        /** @name dxColorBox.Options.openOnFieldClick */
+        openOnFieldClick?: boolean;
+        /** @name dxColorBox.Options.showDropDownButton */
+        showDropDownButton?: boolean;
         /** @name dxColorBox.Options.value */
         value?: string;
     }
