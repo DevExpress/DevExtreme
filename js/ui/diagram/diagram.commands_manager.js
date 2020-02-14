@@ -91,12 +91,14 @@ const DiagramCommandsManager = {
                 fontName: {
                     command: DiagramCommand.FontName,
                     hint: messageLocalization.format('dxDiagram-commandFontName'),
+                    text: messageLocalization.format('dxDiagram-commandFontName'),
                     widget: 'dxSelectBox',
                     items: ['Arial', 'Arial Black', 'Helvetica', 'Times New Roman', 'Courier New', 'Courier', 'Verdana', 'Georgia', 'Comic Sans MS', 'Trebuchet MS']
                 },
                 fontSize: {
                     command: DiagramCommand.FontSize,
                     hint: messageLocalization.format('dxDiagram-commandFontSize'),
+                    text: messageLocalization.format('dxDiagram-commandFontSize'),
                     widget: 'dxSelectBox',
                     items: ['8pt', '9pt', '10pt', '11pt', '12pt', '14pt', '16pt', '18pt', '20pt', '22pt', '24pt', '26pt', '28pt', '36pt', '48pt', '72pt'],
                     cssClass: CSS_CLASSES.SMALL_SELECT
@@ -134,6 +136,72 @@ const DiagramCommandsManager = {
                     widget: 'dxColorBox',
                     icon: 'dx-icon dx-icon-background',
                     cssClass: CSS_CLASSES.BUTTON_COLOR
+                },
+                lineWidth: {
+                    command: DiagramCommand.StrokeWidth,
+                    text: messageLocalization.format('dxDiagram-commandLineWidth'),
+                    hint: messageLocalization.format('dxDiagram-commandLineWidth'),
+                    widget: 'dxSelectBox',
+                    items: [
+                        {
+                            text: '1px',
+                            value: '1'
+                        },
+                        {
+                            text: '2px',
+                            value: '2'
+                        },
+                        {
+                            text: '3px',
+                            value: '3'
+                        },
+                        {
+                            text: '4px',
+                            value: '4'
+                        },
+                        {
+                            text: '5px',
+                            value: '5'
+                        },
+                        {
+                            text: '6px',
+                            value: '6'
+                        },
+                        {
+                            text: '7px',
+                            value: '7'
+                        },
+                        {
+                            text: '8px',
+                            value: '8'
+                        },
+                    ],
+                    displayExpr: 'text',
+                    valueExpr: 'value',
+                    cssClass: CSS_CLASSES.SMALL_SELECT
+                },
+                lineStyle: {
+                    command: DiagramCommand.StrokeStyle,
+                    text: messageLocalization.format('dxDiagram-commandLineStyle'),
+                    hint: messageLocalization.format('dxDiagram-commandLineStyle'),
+                    widget: 'dxSelectBox',
+                    items: [
+                        {
+                            text: 'Solid',
+                            value: ''
+                        },
+                        {
+                            text: 'Dotted',
+                            value: '2,2'
+                        },
+                        {
+                            text: 'Dashed',
+                            value: '6,2'
+                        }
+                    ],
+                    displayExpr: 'text',
+                    valueExpr: 'value',
+                    cssClass: CSS_CLASSES.SMALL_SELECT
                 },
                 fillColor: {
                     command: DiagramCommand.FillColor,
@@ -396,10 +464,12 @@ const DiagramCommandsManager = {
             allCommands['separator'],
             allCommands['fontName'],
             allCommands['fontSize'],
-            allCommands['separator'],
             allCommands['bold'],
             allCommands['italic'],
             allCommands['underline'],
+            allCommands['separator'],
+            allCommands['lineWidth'],
+            allCommands['lineStyle'],
             allCommands['separator'],
             allCommands['fontColor'],
             allCommands['lineColor'],
@@ -444,8 +514,8 @@ const DiagramCommandsManager = {
             {
                 widget: 'dxButton',
                 icon: 'export',
-                text: messageLocalization.format('dxDiagram-commandExport'),
-                hint: messageLocalization.format('dxDiagram-commandExport'),
+                text: messageLocalization.format('dxDiagram-uiExport'),
+                hint: messageLocalization.format('dxDiagram-uiExport'),
                 items: [
                     allCommands['exportSvg'],
                     allCommands['exportPng'],
