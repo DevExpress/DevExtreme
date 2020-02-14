@@ -198,8 +198,8 @@ export default class Button extends JSXComponent<ButtonInput> {
 }
 
 declare type ButtonContent = {
-    text: string,
     icon: string,
+    text: string,
 };
 declare type ButtonTemplateFn = (data: ButtonContent, container: any) => any;
 declare type ButtonTemplate = ButtonTemplateFn | string;

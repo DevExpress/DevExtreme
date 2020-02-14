@@ -223,7 +223,7 @@ describe('Button', () => {
                 expect(customRender.exists('.custom-content')).toBe(true);
 
                 expect(customRender.props().text).toBe('My button');
-                expect(customRender.render().text()).toBe('My button123');
+                expect(customRender.text()).toBe('My button123');
             });
 
             it('should rerender contentRender in runtime', () => {
@@ -243,13 +243,13 @@ describe('Button', () => {
                 let buttonContent = button.find(contentRender);
                 
                 expect(buttonContent.props().text).toBe('My button');
-                expect(buttonContent.render().text()).toBe('My button123');
+                expect(buttonContent.text()).toBe('My button123');
 
                 button.setProps({ text: 'New value' });
                 buttonContent = button.find(contentRender);
 
                 expect(buttonContent.props().text).toBe('New value');
-                expect(buttonContent.render().text()).toBe('New value123');
+                expect(buttonContent.text()).toBe('New value123');
             });
         });
 
