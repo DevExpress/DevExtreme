@@ -164,6 +164,7 @@ const ValidatingController = modules.Controller.inherit((function() {
             let validationResult;
 
             if(validateGroup && validateGroup.validators.length) {
+                this.resetRowValidationResults(editData);
                 validationResult = ValidationEngine.validateGroup(editData);
             }
 
