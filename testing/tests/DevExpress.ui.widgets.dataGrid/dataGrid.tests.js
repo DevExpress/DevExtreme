@@ -11512,6 +11512,21 @@ QUnit.test('using dataSource instance after disposing DataGrid', function(assert
     assert.ok(!dataSource._disposed, 'dataSource is not disposed');
 });
 
+QUnit.test('updateDimensions after disposing DataGrid (T847853)', function(assert) {
+    const dataGrid = createDataGrid({
+        columnAutoWidth: true,
+        dataSource: [{ id: 1 }]
+    });
+    this.clock.tick();
+
+    dataGrid.resetOption('scrolling');
+    dataGrid.dispose();
+    dataGrid.updateDimensions();
+
+    // assert
+    assert.ok(dataGrid._disposed, 'DataGrid is disposed');
+});
+
 // T243908
 QUnit.test('onContentReady after hide column', function(assert) {
 
