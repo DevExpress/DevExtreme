@@ -54,6 +54,30 @@
             border-bottom-color: @GENERIC_GRID_BASE_BORDER_COLOR;
         }
     }
+
+    td {
+        &.dx-validation-pending {
+            position: relative;
+            padding: 0;
+
+            .dx-highlight-outline {
+                padding-right: @GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+
+                .dx-rtl&,
+                .dx-rtl & {
+                    padding-left: @GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+                    padding-right: 0;
+                }
+            }
+
+            .dx-pending-indicator {
+                .dx-pending-indicator-generic();
+                .texteditor-validation-icon-offset();
+
+                background-color: @datagrid-base-background-color;
+            }
+        }
+    }
 }
 
 .dx-datagrid-group-opened {
