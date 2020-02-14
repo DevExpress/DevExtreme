@@ -418,8 +418,6 @@ const DropDownMenu = Widget.inherit({
             case 'useInkRipple':
                 this._invalidate();
                 break;
-            case 'selectionMode':
-            case 'selectedItemKeys':
             case 'focusStateEnabled':
             case 'activeStateEnabled':
                 if(this._list) {
@@ -427,6 +425,8 @@ const DropDownMenu = Widget.inherit({
                 }
                 this.callBase(args);
                 break;
+            case 'selectionMode':
+            case 'selectedItemKeys':
             case 'onItemRendered':
                 if(this._list) {
                     this._list.option(name, value);
