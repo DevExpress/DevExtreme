@@ -63,18 +63,6 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      */
     keyStep?: number;
     /**
-     * @docid dxColorBoxOptions.openOnFieldClick
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    openOnFieldClick?: boolean;
-    /**
-     * @docid dxColorBoxOptions.showDropDownButton
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    showDropDownButton?: boolean;
-    /**
      * @docid dxColorBoxOptions.value
      * @type string
      * @prevFileNamespace DevExpress.ui
