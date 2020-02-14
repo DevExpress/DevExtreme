@@ -3890,11 +3890,13 @@ QUnit.module('Appointments', () => {
             const endDateExpr = scheduler.option('endDateExpr');
             const textExpr = scheduler.option('textExpr');
 
-            const expectedStartDateHours = appointmentData[startDateExpr].getHours() + eventCallCount;
-            const expectedStartDateMinutes = appointmentData[startDateExpr].getMinutes();
+            const expectedStartDate = scheduler.instance.fire('convertDateByTimezone', appointmentData[startDateExpr]);
+            const expectedStartDateHours = expectedStartDate.getHours() + eventCallCount;
+            const expectedStartDateMinutes = expectedStartDate.getMinutes();
 
-            const expectedEndDateHours = appointmentData[endDateExpr].getHours() + eventCallCount;
-            const expectedEndDateMinutes = appointmentData[endDateExpr].getMinutes();
+            const expectedEndDate = scheduler.instance.fire('convertDateByTimezone', appointmentData[endDateExpr]);
+            const expectedEndDateHours = expectedEndDate.getHours() + eventCallCount;
+            const expectedEndDateMinutes = expectedEndDate.getMinutes();
 
             assert.equal(targetedAppointmentData[startDateExpr].getHours(), expectedStartDateHours, `start date of targetedAppointmentData should be equal ${expectedStartDateHours}`);
             assert.equal(targetedAppointmentData[startDateExpr].getMinutes(), expectedStartDateMinutes, `start date of targetedAppointmentData should be equal ${expectedStartDateMinutes}`);
@@ -4019,7 +4021,8 @@ QUnit.module('Appointments', () => {
             {
                 data: recurrenceAndCompactData,
                 appointmentTooltip: createTestForRecurrenceData,
-                name: 'recurrence in collector'
+                name: 'recurrence in collector',
+                testCollector: true
             },
             {
                 data: hourlyRecurrenceData,
@@ -4030,7 +4033,8 @@ QUnit.module('Appointments', () => {
                     currentView: 'week'
                 },
                 appointmentTooltip: createTestForHourlyRecurrenceData,
-                name: 'hourly recurrence in collector'
+                name: 'hourly recurrence in collector',
+                testCollector: true
             },
             {
                 data: hourlyRecurrenceData,
@@ -4039,12 +4043,13 @@ QUnit.module('Appointments', () => {
                     startDateExpr: 'startDateCustom',
                     endDateExpr: 'endDateCustom',
                     currentView: 'week',
-                    timeZone: 'Asia/Yekaterinburg',
+                    timeZone: 'Africa/Bangui', // NOTE: +1
                     startDayHour: 0,
                     endDayHour: 24
                 },
                 appointmentTooltip: createTestForHourlyRecurrenceData,
-                name: 'hourly recurrence in collector, custom timezone is set'
+                name: 'hourly recurrence in collector, custom timezone is set',
+                testCollector: true
             }
         ];
 
@@ -4054,7 +4059,11 @@ QUnit.module('Appointments', () => {
                 scheduler.option('appointmentTooltipTemplate', testCase.appointmentTooltip(assert, scheduler, true));
 
                 for(let i = 0; i < 5; i++) {
-                    scheduler.appointments.click(i);
+                    if(testCase.testCollector) {
+                        scheduler.appointments.compact.click(i);
+                    } else {
+                        scheduler.appointments.click(i);
+                    }
                 }
 
                 assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
