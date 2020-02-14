@@ -70,7 +70,7 @@ const repeatEndTypes = [
     { text() { return messageLocalization.format('dxScheduler-recurrenceRepeatCount'); }, value: 'count' }
 ];
 
-const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 const DAYS_IN_WEEK = 7;
 
 class RecurrenceRule {

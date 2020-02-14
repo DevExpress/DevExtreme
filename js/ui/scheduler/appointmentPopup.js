@@ -255,6 +255,9 @@ export default class AppointmentPopup {
     }
 
     updatePopupFullScreenMode() {
+        if(!this._appointmentForm) {
+            return;
+        }
         const isRecurrence = this._appointmentForm.option('formData').recurrenceRule;
         if(this.isVisible()) {
             const isFullScreen = this._isPopupFullScreenNeeded();
