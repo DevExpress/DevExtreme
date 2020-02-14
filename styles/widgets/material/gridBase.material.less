@@ -891,14 +891,18 @@
 
         .dx-data-row,
         .dx-adaptive-detail-row {
-            &:not(.dx-edit-row) .dx-cell-modified {
-                background-color: ~"@{@{widgetName}-cell-modified-border-color}";
-            }
+            &,
+            &.dx-selection,
+            &.dx-selection:hover {
+                &:not(.dx-edit-row) .dx-cell-modified {
+                    background-color: ~"@{@{widgetName}-cell-modified-border-color}";
+                }
 
-            .dx-validator {
-                &.dx-@{widgetName}-invalid,
-                &.dx-invalid {
-                    background-color: ~"@{@{widgetName}-row-invalid-faded-border-color}";
+                .dx-validator {
+                    &.dx-@{widgetName}-invalid,
+                    &.dx-invalid {
+                        background-color: ~"@{@{widgetName}-row-invalid-faded-border-color}";
+                    }
                 }
             }
 
