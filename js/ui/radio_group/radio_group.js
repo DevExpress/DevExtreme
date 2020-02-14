@@ -7,6 +7,7 @@ import registerComponent from '../../core/component_registrator';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import DataExpressionMixin from '../editor/ui.data_expression';
 import Editor from '../editor/editor';
+import { Deferred } from '../../core/utils/deferred';
 
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
@@ -260,6 +261,7 @@ class RadioGroup extends Editor {
     }
 
     _renderRadios() {
+        this.isRadiosRendered = new Deferred();
         const $radios = $('<div>').appendTo(this.$element());
 
         this._radios = this._createComponent($radios, RadioCollection, {
@@ -278,6 +280,8 @@ class RadioGroup extends Editor {
             selectedItemKeys: [this.option('value')],
             tabIndex: this.option('tabIndex')
         });
+
+        this.isRadiosRendered.resolve();
     }
 
     _renderSubmitElement() {
@@ -302,7 +306,7 @@ class RadioGroup extends Editor {
     }
 
     _setCollectionWidgetOption() {
-        this._setWidgetOption('_radios', arguments);
+        this.isRadiosRendered.done(this._setWidgetOption.bind(this, '_radios', arguments));
     }
 
     _toggleActiveState($element, value, e) {

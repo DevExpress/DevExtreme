@@ -136,6 +136,25 @@ module('buttons group rendering', () => {
         assert.strictEqual(onContentReadyHandler.callCount, 2);
     });
 
+    test('should render new items if them were setted in onContentReady handler (T861468)', function(assert) {
+        const onContentReadyHandler = sinon.spy((e) => {
+            if(!isReady) {
+                isReady = true;
+                e.component.option('items', [1, 2, 3]);
+            }
+        });
+        let isReady;
+        const instance = getInstance(
+            createRadioGroup({
+                dataSource: ['str1', 'str2'],
+                onContentReady: onContentReadyHandler
+            })
+        );
+
+        assert.strictEqual(onContentReadyHandler.callCount, 2);
+        assert.strictEqual($(instance.element()).find(`.${RADIO_BUTTON_CLASS}`).length, 3);
+    });
+
     test('onContentReady - subscription using "on" method', function(assert) {
         const done = assert.async();
 
