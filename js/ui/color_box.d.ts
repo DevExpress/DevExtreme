@@ -64,7 +64,6 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     keyStep?: number;
     /**
      * @docid dxColorBoxOptions.openOnFieldClick
-     * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
