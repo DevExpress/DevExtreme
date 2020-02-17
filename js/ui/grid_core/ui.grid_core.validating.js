@@ -256,7 +256,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                         columnIndex: column.index
                     });
                     const requestIsDisabled = validationResult && validationResult.disabledPendingId === options.id;
-                    if(this._disableApplyValidationResults || requestIsDisabled /* && (this._currentCellValidator && this._currentCellValidator !== options.validator || requestIsDisabled) */) {
+                    if(this._disableApplyValidationResults || requestIsDisabled) {
                         return;
                     }
                     if(options.status === VALIDATION_STATUS.invalid) {
