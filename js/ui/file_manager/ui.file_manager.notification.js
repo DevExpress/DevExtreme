@@ -62,7 +62,6 @@ export default class FileManagerNotificationControl extends Widget {
     addOperation(processingMessage, allowCancel, allowProgressAutoUpdate) {
         this._operationInProgressCount++;
         const operationInfo = this._progressPanel.addOperation(processingMessage, allowCancel, allowProgressAutoUpdate);
-        this._showPopup(processingMessage);
         this._updateActionProgress(processingMessage, 'progress');
         return operationInfo;
     }

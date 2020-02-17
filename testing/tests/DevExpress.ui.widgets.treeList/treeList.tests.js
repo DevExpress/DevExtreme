@@ -17,12 +17,12 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import fx from 'animation/fx';
-import pointerEvents from 'events/pointer';
 import { DataSource } from 'data/data_source/data_source';
 import { TreeListWrapper } from '../../helpers/wrappers/dataGridWrappers.js';
 import ArrayStore from 'data/array_store';
 import TreeList from 'ui/tree_list/ui.tree_list';
 import pointerMock from '../../helpers/pointerMock.js';
+import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 fx.off = true;
 
@@ -488,6 +488,50 @@ QUnit.test('Click on selectCheckBox shouldn\'t render editor, editing & selectio
 
     // assert
     assert.notOk($('#treeList').find('.dx-texteditor').length, 'Editing textEditor wasn\'t rendered');
+});
+
+// T857405
+QUnit.test('Assign new values using the promise parameter in the onInitNewRow', function(assert) {
+    // arrange
+    let visibleRows;
+
+    const rowData = { room: 42 };
+
+    const treeList = createTreeList({
+        editing: {
+            allowAdding: true,
+            mode: 'row'
+        },
+        dataSource: [],
+        columns: ['room'],
+        onInitNewRow: function(e) {
+            e.promise = $.Deferred();
+            setTimeout(() => {
+                e.data = rowData;
+                e.promise.resolve();
+            }, 500);
+        }
+    });
+
+    // act
+    treeList.addRow();
+
+    visibleRows = treeList.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 0);
+
+    // act
+    this.clock.tick(500);
+
+    treeList.saveEditData();
+    this.clock.tick();
+
+    visibleRows = treeList.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 1, 'row was added');
+    assert.deepEqual(visibleRows[0].data, rowData, 'row data');
 });
 
 // T742147
@@ -1336,7 +1380,7 @@ QUnit.test('TreeList should focus only one focused row (T827201)', function(asse
     this.clock.tick();
 
     // act
-    $(treeList.getCellElement(4, 1)).trigger(pointerEvents.up);
+    $(treeList.getCellElement(4, 1)).trigger(CLICK_EVENT);
     this.clock.tick();
 
     // assert
@@ -1359,8 +1403,29 @@ QUnit.test('TreeList navigateTo', function(assert) {
     this.clock.tick();
 
     // assert
+    assert.deepEqual(treeList.option('expandedRowKeys'), [11], 'parent node is expanded');
     assert.equal(treeList.pageIndex(), 1, 'page is changed');
     assert.ok(treeList.getRowIndexByKey(12) >= 0, 'key is visible');
+});
+
+QUnit.test('TreeList navigateTo to the same page with expand', function(assert) {
+    // arrange, act
+    const treeList = createTreeList({
+        dataSource: generateData(10),
+        paging: {
+            pageSize: 4
+        }
+    });
+
+    this.clock.tick();
+
+    treeList.navigateToRow(2);
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(treeList.option('expandedRowKeys'), [1], 'parent node is expanded');
+    assert.equal(treeList.pageIndex(), 0, 'page is not changed');
+    assert.ok(treeList.getRowIndexByKey(2) >= 0, 'key is visible');
 });
 
 // T697860

@@ -1,4 +1,4 @@
-import { each } from '../../core/utils/iterator';
+import { each } from '../core/utils/iterator';
 
 const PATH_SEPARATOR = '/';
 
@@ -46,7 +46,7 @@ const getPathParts = (path, includeFullPath) => {
 
     if(includeFullPath) {
         for(let i = 0; i < result.length; i++) {
-            result[i] = pathCombine(i === 0 ? '' : result[i - 1], result[i]);
+            result[i] = pathCombine(i === 0 ? '' : result[i - 1], getEscapedFileName(result[i]));
         }
     }
 
@@ -73,23 +73,10 @@ const pathCombine = function() {
     return result;
 };
 
-const getDisplayFileSize = function(byteSize) {
-    const sizesTitles = [ 'B', 'KB', 'MB', 'GB', 'TB' ];
-    let index = 0;
-    let displaySize = byteSize;
-    while(displaySize >= 1024 && index <= sizesTitles.length - 1) {
-        displaySize /= 1024;
-        index++;
-    }
-    displaySize = Math.round(displaySize * 10) / 10;
-    return `${displaySize} ${sizesTitles[index]}`;
-};
-
 module.exports.getFileExtension = getFileExtension;
 module.exports.getName = getName;
 module.exports.getParentPath = getParentPath;
 module.exports.getPathParts = getPathParts;
 module.exports.getEscapedFileName = getEscapedFileName;
 module.exports.pathCombine = pathCombine;
-module.exports.getDisplayFileSize = getDisplayFileSize;
 module.exports.PATH_SEPARATOR = PATH_SEPARATOR;

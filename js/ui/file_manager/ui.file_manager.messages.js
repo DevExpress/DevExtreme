@@ -1,5 +1,5 @@
 import messageLocalization from '../../localization/message';
-import { ErrorCode } from './ui.file_manager.common';
+import ErrorCode from '../../file_management/errors';
 
 export const FileManagerMessages = {
     get: (errorId, args) => {

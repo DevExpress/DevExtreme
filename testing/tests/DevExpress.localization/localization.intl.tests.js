@@ -430,29 +430,32 @@ QUnit.module('Intl localization', {
                 date: new Date(2015, 2, 2, 3, 4, 5, 6),
                 expected: 'Q1 2015'
             };
-            const testDate = new Date(2015, 2, 2, 13, 4, 5, 6);
+            const smallYearDate = new Date(44, 0, 1, 13, 4, 5, 6);
+            smallYearDate.setFullYear(44);
+            const testDates = [ new Date(2015, 2, 2, 13, 4, 5, 6), smallYearDate];
+            testDates.forEach((testDate, i) => {
+                const testFormat = (format, date, expected) => {
+                    assert.equal(dateLocalization.format(date, format), expected, `${date} in ${format} format${i ? ' (small year)' : ''}`);
+                    assert.equal(dateLocalization.format(date, { type: format }), expected, `${date} in ${format} format (object syntax)${i ? ' (small year)' : ''}`);
+                };
 
-            const testFormat = (format, date, expected) => {
-                assert.equal(dateLocalization.format(date, format), expected, date + ' in ' + format + ' format');
-                assert.equal(dateLocalization.format(date, { type: format }), expected, date + ' in ' + format + ' format (object syntax)');
-            };
+                formats.forEach(data => {
+                    const expected = data.expected || getIntlDateFormatter(data.intlFormat)(testDate);
 
-            formats.forEach(data => {
-                const expected = data.expected || getIntlDateFormatter(data.intlFormat)(testDate);
+                    testFormat(data.format, testDate, expected);
+                    testFormat(data.format.toUpperCase(), testDate, expected);
 
-                testFormat(data.format, testDate, expected);
-                testFormat(data.format.toUpperCase(), testDate, expected);
+                    if(data.intlFormat) {
+                        assert.equal(dateLocalization.format(testDate, data.intlFormat), expected, `${testDate} in Intl representation of ${data.format} format${i ? ' (small year)' : ''}`);
+                    }
+                });
 
-                if(data.intlFormat) {
-                    assert.equal(dateLocalization.format(testDate, data.intlFormat), expected, testDate + ' in Intl representation of ' + data.format + ' format');
-                }
+                quarterData.forEach(data => {
+                    testFormat('quarter', data.date, localizeDigits(data.expected));
+                });
+
+                testFormat('quarterandyear', quarterAndYearData.date, localizeDigits(quarterAndYearData.expected));
             });
-
-            quarterData.forEach(data => {
-                testFormat('quarter', data.date, localizeDigits(data.expected));
-            });
-
-            testFormat('quarterandyear', quarterAndYearData.date, localizeDigits(quarterAndYearData.expected));
 
             assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6)), String(new Date(2015, 2, 2, 3, 4, 5)), 'without format');
             assert.notOk(dateLocalization.format(), 'without date');

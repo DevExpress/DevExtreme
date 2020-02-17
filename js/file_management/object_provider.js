@@ -1,21 +1,21 @@
-import { find } from '../../../core/utils/array';
-import { ensureDefined } from '../../../core/utils/common';
-import { compileGetter, compileSetter } from '../../../core/utils/data';
-import Guid from '../../../core/guid';
-import typeUtils from '../../../core/utils/type';
-import { errors } from '../../../data/errors';
-import { Deferred } from '../../../core/utils/deferred';
-import { getWindow } from '../../../core/utils/window';
-import { fileSaver } from '../../../exporter/file_saver';
-import Errors from '../../widget/ui.errors';
+import { find } from '../core/utils/array';
+import { ensureDefined } from '../core/utils/common';
+import { compileGetter, compileSetter } from '../core/utils/data';
+import Guid from '../core/guid';
+import typeUtils from '../core/utils/type';
+import { errors } from '../data/errors';
+import { Deferred } from '../core/utils/deferred';
+import { getWindow } from '../core/utils/window';
+import { fileSaver } from '../exporter/file_saver';
+import Errors from '../ui/widget/ui.errors';
 
-import { FileProvider } from './file_provider';
-import { ErrorCode } from '../ui.file_manager.common';
-import { pathCombine } from '../ui.file_manager.utils';
+import FileSystemProviderBase from './provider_base';
+import ErrorCode from './errors';
+import { pathCombine } from './utils';
 
 const window = getWindow();
 
-class ArrayFileProvider extends FileProvider {
+class ObjectFileSystemProvider extends FileSystemProviderBase {
 
     constructor(options) {
         options = ensureDefined(options, { });
@@ -53,11 +53,15 @@ class ArrayFileProvider extends FileProvider {
         this._data = initialArray || [ ];
     }
 
-    getItems(pathInfo) {
-        return this._getItems(pathInfo);
+    getItems(parentDir) {
+        return this._executeActionAsDeferred(() => this._getItems(parentDir), true);
     }
 
     renameItem(item, name) {
+        return this._executeActionAsDeferred(() => this._renameItemCore(item, name));
+    }
+
+    _renameItemCore(item, name) {
         if(!item) {
             return;
         }
@@ -66,34 +70,44 @@ class ArrayFileProvider extends FileProvider {
         item.key = this._ensureDataObjectKey(item.dataItem);
     }
 
-    createFolder(parentDir, name) {
-        this._validateDirectoryExists(parentDir);
-        this._createDataObject(parentDir, name, true);
+    createDirectory(parentDir, name) {
+        return this._executeActionAsDeferred(() => {
+            this._validateDirectoryExists(parentDir);
+            this._createDataObject(parentDir, name, true);
+        });
     }
 
     deleteItems(items) {
-        items.forEach(item => this._deleteItem(item));
+        return items.map(item => this._executeActionAsDeferred(() => this._deleteItem(item)));
     }
 
     moveItems(items, destinationDir) {
         const array = this._getDirectoryDataItems(destinationDir.dataItem);
-        items.forEach(item => {
+
+        const deferreds = items.map(item => this._executeActionAsDeferred(() => {
             this._checkAbilityToMoveOrCopyItem(item, destinationDir);
             this._deleteItem(item);
             array.push(item.dataItem);
-        });
+        }));
+
         this._updateHasSubDirs(destinationDir);
+
+        return deferreds;
     }
 
     copyItems(items, destinationDir) {
         const array = this._getDirectoryDataItems(destinationDir.dataItem);
-        items.forEach(item => {
+
+        const deferreds = items.map(item => this._executeActionAsDeferred(() => {
             this._checkAbilityToMoveOrCopyItem(item, destinationDir);
 
             const copiedItem = this._createCopy(item.dataItem);
             array.push(copiedItem);
-        });
+        }));
+
         this._updateHasSubDirs(destinationDir);
+
+        return deferreds;
     }
 
     uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
@@ -260,7 +274,8 @@ class ArrayFileProvider extends FileProvider {
         return dataItems;
     }
 
-    _getItems(pathInfo) {
+    _getItems(parentDir) {
+        const pathInfo = parentDir.getFullPathInfo();
         const parentDirKey = pathInfo && pathInfo.length > 0 ? pathInfo[pathInfo.length - 1].key : null;
         let dirFileObjects = this._data;
         if(parentDirKey) {
@@ -328,7 +343,7 @@ class ArrayFileProvider extends FileProvider {
     }
 
     _updateHasSubDirs(dir) {
-        if(dir && !dir.isRoot) {
+        if(dir && !dir.isRoot()) {
             dir.hasSubDirs = this._hasSubDirs(dir.dataItem);
         }
     }
@@ -353,7 +368,7 @@ class ArrayFileProvider extends FileProvider {
     }
 
     _isFileItemExists(fileItem) {
-        return fileItem.isDirectory && fileItem.isRoot || !!this._findFileItemObj(fileItem.getFullPathInfo());
+        return fileItem.isDirectory && fileItem.isRoot() || !!this._findFileItemObj(fileItem.getFullPathInfo());
     }
 
     _createFileReader() {
@@ -383,4 +398,4 @@ function requestJSZip() {
     return jsZip;
 }
 
-module.exports = ArrayFileProvider;
+module.exports = ObjectFileSystemProvider;

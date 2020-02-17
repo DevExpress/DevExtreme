@@ -75,10 +75,6 @@ QUnit.module('Real DataController and ColumnsController', {
 }, function() {
     QUnit.testInActiveWindow('Must navigate after click by expand column of master detail', function(assert) {
         // arrange
-        let keyboardController;
-        let rowsView;
-        let $expandCell;
-
         this.options = {
             masterDetail: {
                 enabled: true,
@@ -94,9 +90,9 @@ QUnit.module('Real DataController and ColumnsController', {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        keyboardController = this.getController('keyboardNavigation');
-        rowsView = this.gridView.getView('rowsView');
-        $expandCell = $(rowsView.element().find('td').first());
+        const keyboardController = this.getController('keyboardNavigation');
+        const rowsView = this.gridView.getView('rowsView');
+        const $expandCell = $(rowsView.element().find('td').first());
 
         // act
         $expandCell.trigger(CLICK_EVENT);
@@ -118,11 +114,9 @@ QUnit.module('Real DataController and ColumnsController', {
 
     QUnit.testInActiveWindow('Cell is focused when clicked on self', function(assert) {
         // arrange
-        let $cell;
-
         this.setupAndRender();
 
-        $cell = $(this.getCellElement(1, 1));
+        const $cell = $(this.getCellElement(1, 1));
         $cell.trigger(CLICK_EVENT);
 
         // assert
@@ -131,9 +125,6 @@ QUnit.module('Real DataController and ColumnsController', {
 
     QUnit.testInActiveWindow('Cell is focused when clicked on input in cell (T667278)', function(assert) {
         // arrange
-        let $cell;
-        let $input;
-
         this.options = {
             columns: [
                 'name', {
@@ -147,9 +138,9 @@ QUnit.module('Real DataController and ColumnsController', {
         this.setupAndRender();
 
         // act
-        $input = $(this.getCellElement(1, 1)).find('input');
+        const $input = $(this.getCellElement(1, 1)).find('input');
         $input.focus().trigger(CLICK_EVENT);
-        $cell = $input.parent();
+        const $cell = $input.parent();
 
         // assert
         assert.ok($input.is(':focus'), 'input is focused');
@@ -159,19 +150,16 @@ QUnit.module('Real DataController and ColumnsController', {
 
     QUnit.testInActiveWindow('Cell is not focused when clicked on invalid self', function(assert) {
         // arrange
-        let navigationController;
-        let $cell;
-
         this.setupAndRender();
 
         // act
-        navigationController = this.getController('keyboardNavigation');
+        const navigationController = this.getController('keyboardNavigation');
         navigationController._isCellValid = () => false;
         navigationController._focusedCellPosition = { columnIndex: 0, rowIndex: 0 };
         navigationController._isNeedFocus = true;
 
         // arrange
-        $cell = $(this.getCellElement(1, 1));
+        const $cell = $(this.getCellElement(1, 1));
         $cell.trigger(CLICK_EVENT);
 
         // assert
@@ -182,9 +170,6 @@ QUnit.module('Real DataController and ColumnsController', {
 
     QUnit.testInActiveWindow('Focus valid cell in a rows with data', function(assert) {
         // arrange
-        let navigationController;
-        let rowsView;
-
         this.options = {
             editing: {
                 mode: 'cell',
@@ -197,8 +182,8 @@ QUnit.module('Real DataController and ColumnsController', {
         $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
         this.clock.tick();
 
-        navigationController = this.getController('keyboardNavigation');
-        rowsView = this.getView('rowsView');
+        const navigationController = this.getController('keyboardNavigation');
+        const rowsView = this.getView('rowsView');
         navigationController.getFocusedView = () => rowsView;
         navigationController._editingController.isEditing = () => true;
         navigationController._isNeedFocus = true;
@@ -211,8 +196,6 @@ QUnit.module('Real DataController and ColumnsController', {
 
     QUnit.testInActiveWindow('Only visible input element is focused when edit mode is enabled (T403964)', function(assert) {
         // arrange
-        let navigationController;
-
         this.options = {
             editing: {
                 mode: 'row',
@@ -235,7 +218,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.setupAndRender();
 
         // arrange
-        navigationController = this.getController('keyboardNavigation');
+        const navigationController = this.getController('keyboardNavigation');
 
         // act
         this.editRow(1);
@@ -330,8 +313,6 @@ QUnit.module('Real DataController and ColumnsController', {
 
     QUnit.testInActiveWindow('Master-detail cell should not has tabindex', function(assert) {
         // arrange
-        let masterDetailCell;
-
         this.$element = function() {
             return $('#container');
         };
@@ -354,7 +335,8 @@ QUnit.module('Real DataController and ColumnsController', {
 
         this.option('focusedRowIndex', 1);
         this.getView('rowsView').renderFocusState();
-        masterDetailCell = $(this.gridView.getView('rowsView').element().find('.dx-master-detail-cell').eq(0));
+
+        const masterDetailCell = $(this.gridView.getView('rowsView').element().find('.dx-master-detail-cell').eq(0));
 
         // assert
         assert.notOk(masterDetailCell.attr('tabindex'), 'master-detail cell has no tabindex');
@@ -382,8 +364,8 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         const $cell = $(this.getCellElement(0, 1));
-        $cell.trigger(pointerEvents.up);
-        $cell.trigger(pointerEvents.up);
+        $cell.trigger(CLICK_EVENT);
+        $cell.trigger(CLICK_EVENT);
 
         // assert
         assert.equal($(this.getCellElement(0, 1)).attr('tabIndex'), 0, 'cell has tab index');
@@ -421,7 +403,6 @@ QUnit.module('Real DataController and ColumnsController', {
 
     QUnit.testInActiveWindow('DataGrid should not moved back to the edited cell if the next clicked cell canceled editing process (T718459, T812546)', function(assert) {
         // arrange
-        let keyboardNavigationController;
         let editingStartFiresCount = 0;
         let focusedCellChangingFiresCount = 0;
         let focusedCellChangedFiresCount = 0;
@@ -450,7 +431,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         this.gridView.render($('#container'));
-        keyboardNavigationController = this.gridView.component.keyboardNavigationController;
+        const keyboardNavigationController = this.gridView.component.keyboardNavigationController;
         $cell = $(this.getCellElement(1, 1));
         $cell.trigger(CLICK_EVENT);
         this.editCell(1, 1);
@@ -486,8 +467,6 @@ QUnit.module('Real DataController and ColumnsController', {
     QUnit.testInActiveWindow('DataGrid should preserve fosused overlay after cancel editing (T812546)', function(assert) {
         // arrange
         let editingStartFiresCount = 0;
-        let keyboardNavigation;
-
         this.$element = () => $('#container');
 
         this.options = {
@@ -505,11 +484,12 @@ QUnit.module('Real DataController and ColumnsController', {
         };
 
         this.setupModule();
-        keyboardNavigation = this.getController('keyboardNavigation');
+
+        const keyboardNavigation = this.getController('keyboardNavigation');
 
         // act
         this.gridView.render($('#container'));
-        $(this.getCellElement(1, 1)).trigger(pointerEvents.up);
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
         this.clock.tick();
         this.triggerKeyDown('upArrow', false, false, $(':focus'));
         this.clock.tick();
@@ -527,7 +507,6 @@ QUnit.module('Real DataController and ColumnsController', {
 
     QUnit.testInActiveWindow('DataGrid should cancel editing cell if cell focusing canceled (T718459)', function(assert) {
         // arrange
-        let keyboardNavigationController;
         let editingStartCount = 0;
         let focusedCellChangingFiresCount = 0;
         let focusedCellChangedFiresCount = 0;
@@ -558,7 +537,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         this.gridView.render($('#container'));
-        keyboardNavigationController = this.gridView.component.keyboardNavigationController;
+        const keyboardNavigationController = this.gridView.component.keyboardNavigationController;
         $cell = $(this.rowsView.element().find('.dx-row').eq(1).find('td').eq(1));
         $cell.trigger(CLICK_EVENT);
         this.editCell(1, 1);
@@ -655,7 +634,8 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         $(this.getCellElement(0, 0))
-            .trigger('dxpointerup')
+            .trigger(CLICK_EVENT)
+            .trigger(pointerEvents.up)
             .trigger('dxclick');
 
         // assert
@@ -693,9 +673,6 @@ QUnit.module('Real DataController and ColumnsController', {
     });
 
     QUnit.testInActiveWindow('Focus must be after enter key pressed if \'cell\' edit mode (T653709)', function(assert) {
-        let rowsView;
-        let $cell;
-
         // arrange
         this.$element = function() {
             return $('#container');
@@ -714,7 +691,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // arrange
         this.gridView.render($('#container'));
-        rowsView = this.gridView.getView('rowsView');
+        const rowsView = this.gridView.getView('rowsView');
 
         // act
         this.editCell(0, 1);
@@ -723,7 +700,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.gridView.component.editorFactoryController._$focusedElement = undefined;
         this.clock.tick();
 
-        $cell = $(this.rowsView.element().find('.dx-data-row:nth-child(1) td:nth-child(2)'));
+        const $cell = $(this.rowsView.element().find('.dx-data-row:nth-child(1) td:nth-child(2)'));
 
         // assert
         assert.ok($cell.hasClass('dx-focused'), 'cell is focused');
@@ -815,7 +792,7 @@ QUnit.module('Real DataController and ColumnsController', {
         const rowsView = this.gridView.getView('rowsView');
 
         const $expandCell = $(rowsView.element().find('td').first());
-        $expandCell.trigger(pointerEvents.up);
+        $expandCell.trigger(CLICK_EVENT);
 
         this.clock.tick();
 
@@ -1092,7 +1069,6 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // arrange
         const that = this;
-        let $testElement;
 
         that.$element = function() {
             return $('#container');
@@ -1119,7 +1095,7 @@ QUnit.module('Real DataController and ColumnsController', {
         that.gridView.render($('#container'));
 
         // arrange, act
-        $testElement = that.$element().find('.template td').eq(0);
+        const $testElement = that.$element().find('.template td').eq(0);
         $testElement.find('input').focus();
         $testElement.trigger(CLICK_EVENT);
 
@@ -1133,7 +1109,6 @@ QUnit.module('Real DataController and ColumnsController', {
     QUnit.test('After apply the edit value with the ENTER key do not display the revert button when the save process, if editing mode is cell (T657148)', function(assert) {
         // arrange
         const that = this;
-        let $input;
 
         that.$element = function() {
             return $('#container');
@@ -1165,7 +1140,7 @@ QUnit.module('Real DataController and ColumnsController', {
         that.editCell(0, 0);
         that.clock.tick();
 
-        $input = $(that.getCellElement(0, 0)).find('input');
+        const $input = $(that.getCellElement(0, 0)).find('input');
         $input.val('test').trigger('change');
 
         that.clock.tick();
@@ -1277,7 +1252,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
     ['click', 'dblClick'].forEach(startEditAction => {
         ['cell', 'batch'].forEach(editMode => {
-            QUnit.test(`Focus overlay should not be hidden after click the save editor cell if editing.startEditAction is ${startEditAction}`, function(assert) {
+            QUnit.test(`Focus overlay should not be hidden after click the save editor cell if editing.mode: ${editMode}, editing.startEditAction is ${startEditAction}`, function(assert) {
                 // arrange
                 const $testElement = $('#container');
 
@@ -1307,6 +1282,64 @@ QUnit.module('Real DataController and ColumnsController', {
                 // assert
                 assert.ok(editingController.isEditCell(0, 1), 'Cell[0, 1] is in edit mode');
                 assert.notOk($(this.getCellElement(0, 1)).hasClass('dx-cell-focus-disabled'), 'Cell[0, 1] focus overlay is not disabled');
+            });
+
+            QUnit.test(`Click by command select cell should not highlight focus if editing.mode: ${editMode}, editing.startEditAction is ${startEditAction}`, function(assert) {
+                // arrange
+                const rowsViewWrapper = dataGridWrapper.rowsView;
+                const $testElement = $('#container');
+
+                this.data = [{ name: 'Alex', lastName: 'John' }],
+                this.options = {
+                    loadingTimeout: undefined,
+                    selection: {
+                        mode: 'multiple',
+                        showCheckBoxesMode: 'always'
+                    },
+                    editing: {
+                        allowUpdating: true,
+                        mode: editMode,
+                        startEditAction: startEditAction
+                    }
+                };
+
+                this.setupModule();
+                this.gridView.render($testElement);
+
+                // act
+                const $selectCell = rowsViewWrapper.getCellElement(0, 0);
+                $selectCell
+                    .focus()
+                    .removeClass('dx-cell-focus-disabled');
+                this.getController('editorFactory')._updateFocusCore();
+                this.clock.tick();
+
+                $selectCell
+                    .trigger(pointerEvents.down)
+                    .trigger(pointerEvents.up)
+                    .trigger('dxclick');
+                this.clock.tick();
+
+                // assert
+                assert.notOk($selectCell.hasClass('dx-focused'), 'Cell has no .dx-focused');
+                assert.ok($selectCell.hasClass('dx-cell-focus-disabled'), 'Cell has disable focus class');
+
+                const $selectCheckBox = rowsViewWrapper.getSelectCheckBox(0, 0);
+                $selectCheckBox
+                    .focus()
+                    .removeClass('dx-cell-focus-disabled');
+                this.getController('editorFactory')._updateFocusCore();
+                this.clock.tick();
+
+                $selectCheckBox
+                    .trigger(pointerEvents.down)
+                    .trigger(pointerEvents.up)
+                    .trigger('dxclick');
+                this.clock.tick();
+
+                // assert
+                assert.notOk($selectCell.hasClass('dx-focused'), 'Cell has no .dx-focused');
+                assert.ok($selectCell.hasClass('dx-cell-focus-disabled'), 'Cell has disable focus class');
             });
         });
     });

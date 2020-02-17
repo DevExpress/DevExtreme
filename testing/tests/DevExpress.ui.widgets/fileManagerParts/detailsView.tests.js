@@ -16,7 +16,7 @@ const moduleConfig = {
                 mode: 'details',
                 showParentFolder: false
             },
-            fileProvider: [
+            fileSystemProvider: [
                 {
                     name: 'Folder 1',
                     isDirectory: true
@@ -81,7 +81,7 @@ const getSelectedItemNames = fileManager => fileManager.getSelectedItems().map(i
 const prepareParentDirectoryTesting = (context, singleSelection) => {
     const fileManager = context.$element.dxFileManager('instance');
     fileManager.option({
-        fileProvider: createTestFileSystem(),
+        fileSystemProvider: createTestFileSystem(),
         currentPath: 'Folder 1',
         selectionMode: singleSelection ? 'single' : 'multiple',
         itemView: {
@@ -105,7 +105,7 @@ QUnit.module('Details View', moduleConfig, () => {
     test('Using custom formats of JSON files', function(assert) {
         $('#fileManager')
             .dxFileManager('instance')
-            .option('fileProvider', {
+            .option('fileSystemProvider', {
                 data: [
                     {
                         title: 'Folder',
@@ -151,19 +151,18 @@ QUnit.module('Details View', moduleConfig, () => {
     });
 
     test('Raise the  SelectedFileOpened event', function(assert) {
-        let eventCounter = 0;
+        const spy = sinon.spy();
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
-        fileManagerInstance.option('onSelectedFileOpened', e => {
-            eventCounter++;
-        });
+        fileManagerInstance.option('onSelectedFileOpened', spy);
 
         getCellInDetailsView(this.$element, 2, 2).trigger('dxdblclick');
         this.clock.tick(800);
-        assert.equal(eventCounter, 1);
+        assert.equal(spy.callCount, 1);
+        assert.equal(spy.args[0][0].file.name, '1.txt', 'file passed as argument');
 
         getCellInDetailsView(this.$element, 1, 2).trigger('dxdblclick');
         this.clock.tick(800);
-        assert.equal(eventCounter, 1);
+        assert.equal(spy.callCount, 1);
     });
 
     test('Apply sorting by click on file type column header', function(assert) {
@@ -203,7 +202,7 @@ QUnit.module('Details View', moduleConfig, () => {
 
     test('\'Back\' directory must not be sortable', function(assert) {
         this.wrapper.getInstance().option({
-            fileProvider: createTestFileSystem(),
+            fileSystemProvider: createTestFileSystem(),
             currentPath: 'Folder 1',
             itemView: {
                 showParentFolder: true
@@ -235,7 +234,9 @@ QUnit.module('Details View', moduleConfig, () => {
 
         assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection');
 
-        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxclick');
+        this.wrapper.getRowNameCellInDetailsView(2)
+            .trigger('dxpointerdown')
+            .trigger('dxclick');
         this.wrapper.getRowNameCellInDetailsView(2).trigger(pointerEvents.up);
         this.clock.tick(400);
 
@@ -243,7 +244,9 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.ok(this.wrapper.isDetailsRowFocused(2), 'first directory focused');
         assert.deepEqual(getSelectedItemNames(fileManager), [ 'Folder 1.1' ], 'first directory in selection');
 
-        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxclick');
+        this.wrapper.getRowNameCellInDetailsView(1)
+            .trigger('dxpointerdown')
+            .trigger('dxclick');
         this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.up);
         this.clock.tick(400);
 
@@ -264,7 +267,7 @@ QUnit.module('Details View', moduleConfig, () => {
         for(let i = 2; i <= 5; i++) {
             const e = $.Event('dxclick');
             e.ctrlKey = i !== 1;
-            this.wrapper.getRowNameCellInDetailsView(i).trigger(e).trigger(pointerEvents.up);
+            this.wrapper.getRowNameCellInDetailsView(i).trigger(pointerEvents.down).trigger(e);
             this.clock.tick(400);
         }
 
@@ -273,7 +276,7 @@ QUnit.module('Details View', moduleConfig, () => {
 
         const e = $.Event('dxclick');
         e.ctrlKey = true;
-        this.wrapper.getRowNameCellInDetailsView(1).trigger(e).trigger(pointerEvents.up);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down).trigger(e);
 
         assert.strictEqual(this.wrapper.getSelectAllCheckBoxState(), 'checked', 'select all is checked');
         assert.deepEqual(getSelectedItemNames(fileManager), allNames, 'all items in selection');
@@ -303,16 +306,16 @@ QUnit.module('Details View', moduleConfig, () => {
 
         assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection');
 
+        this.wrapper.getRowNameCellInDetailsView(2).trigger(pointerEvents.down);
         this.wrapper.getRowNameCellInDetailsView(2).trigger('dxclick');
-        this.wrapper.getRowNameCellInDetailsView(2).trigger(pointerEvents.up);
         this.clock.tick(400);
 
         assert.notOk(this.wrapper.isDetailsRowSelected(2), 'first directory selected');
         assert.ok(this.wrapper.isDetailsRowFocused(2), 'first directory focused');
         assert.deepEqual(getSelectedItemNames(fileManager), [ 'Folder 1.1' ], 'first directory in selection');
 
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down);
         this.wrapper.getRowNameCellInDetailsView(1).trigger('dxclick');
-        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.up);
         this.clock.tick(400);
 
         assert.notOk(this.wrapper.isDetailsRowSelected(2), 'first directory is not selected');

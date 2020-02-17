@@ -1,28 +1,56 @@
 import $ from '../../core/renderer';
-import DiagramPanel from './ui.diagram.panel';
+import { extend } from '../../core/utils/extend';
+import { Deferred } from '../../core/utils/deferred';
+import messageLocalization from '../../localization/message';
 import Accordion from '../accordion';
 import Form from '../form';
-import DiagramCommands from './diagram.commands';
-import { extend } from '../../core/utils/extend';
-import messageLocalization from '../../localization/message';
-import DiagramBar from './diagram.bar';
 import ScrollView from '../scroll_view';
-import { Deferred } from '../../core/utils/deferred';
 
-const DIAGRAM_RIGHT_PANEL_CLASS = 'dx-diagram-right-panel';
-const DIAGRAM_RIGHT_PANEL_BEGIN_GROUP_CLASS = 'dx-diagram-right-panel-begin-group';
+import DiagramBar from './diagram.bar';
+import DiagramFloatingPanel from './ui.diagram.floating_panel';
+import DiagramCommandsManager from './diagram.commands_manager';
 
-class DiagramRightPanel extends DiagramPanel {
+const DIAGRAM_PROPERTIES_POPUP_WIDTH = 330;
+const DIAGRAM_PROPERTIES_POPUP_HEIGHT = 350;
+const DIAGRAM_PROPERTIES_POPUP_CLASS = 'dx-diagram-properties-popup';
+const DIAGRAM_PROPERTIES_PANEL_CLASS = 'dx-diagram-properties-panel';
+const DIAGRAM_PROPERTIES_PANEL_BEGIN_GROUP_CLASS = 'dx-diagram-properties-panel-begin-group';
+
+
+class DiagramPropertiesPanel extends DiagramFloatingPanel {
     _init() {
         super._init();
+
         this.bar = new OptionsDiagramBar(this);
         this._valueConverters = {};
+        this._createOnVisibilityChangingAction();
     }
-    _initMarkup() {
-        super._initMarkup();
-        this.$element().addClass(DIAGRAM_RIGHT_PANEL_CLASS);
+    _getPopupClass() {
+        return DIAGRAM_PROPERTIES_POPUP_CLASS;
+    }
+    _getPopupOptions() {
+        return extend(super._getPopupOptions(), {
+            width: DIAGRAM_PROPERTIES_POPUP_WIDTH,
+            height: DIAGRAM_PROPERTIES_POPUP_HEIGHT,
+            showTitle: false,
+            onShowing: (e) => {
+                if(this._inOnShowing === true) return;
+
+                this._inOnShowing = true;
+                this._onVisibilityChangingAction({ visible: true, component: this });
+                delete this._inOnShowing;
+            }
+        });
+    }
+    _renderPopupContent($parent) {
+        const $panel = $('<div>')
+            .addClass(DIAGRAM_PROPERTIES_PANEL_CLASS)
+            .appendTo($parent);
+        this._renderScrollView($panel);
+    }
+    _renderScrollView($parent) {
         const $scrollViewWrapper = $('<div>')
-            .appendTo(this.$element());
+            .appendTo($parent);
         this._scrollView = this._createComponent($scrollViewWrapper, ScrollView);
         const $accordion = $('<div>')
             .appendTo(this._scrollView.content());
@@ -31,7 +59,7 @@ class DiagramRightPanel extends DiagramPanel {
     }
     _getAccordionDataSource() {
         return [{
-            title: messageLocalization.format('dxDiagram-commandProperties'),
+            title: messageLocalization.format('dxDiagram-uiProperties'),
             onTemplate: (widget, $element) => widget._renderOptions($element)
         }];
     }
@@ -55,13 +83,13 @@ class DiagramRightPanel extends DiagramPanel {
         });
     }
     _renderOptions($container) {
-        const commands = DiagramCommands.getPropertyPanelCommands(this.option('propertyGroups'));
+        const commands = DiagramCommandsManager.getPropertyPanelCommands(this.option('propertyGroups'));
         this._formInstance = this._createComponent($container, Form, {
             items: commands.map(item => {
                 return extend(true, {
                     editorType: item.widget,
                     dataField: item.command.toString(),
-                    cssClass: item.beginGroup && DIAGRAM_RIGHT_PANEL_BEGIN_GROUP_CLASS,
+                    cssClass: item.beginGroup && DIAGRAM_PROPERTIES_PANEL_BEGIN_GROUP_CLASS,
                     label: {
                         text: item.text
                     },
@@ -129,8 +157,17 @@ class DiagramRightPanel extends DiagramPanel {
         const editorInstance = this._formInstance.getEditor(key.toString());
         if(editorInstance) editorInstance.option('disabled', !enabled);
     }
+    isVisible() {
+        return this._inOnShowing;
+    }
+    _createOnVisibilityChangingAction() {
+        this._onVisibilityChangingAction = this._createActionByOption('onVisibilityChanging');
+    }
     _optionChanged(args) {
         switch(args.name) {
+            case 'onVisibilityChanging':
+                this._createOnVisibilityChangingAction();
+                break;
             case 'propertyGroups':
                 this._invalidate();
                 break;
@@ -138,16 +175,11 @@ class DiagramRightPanel extends DiagramPanel {
                 super._optionChanged(args);
         }
     }
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            container: null
-        });
-    }
 }
 
 class OptionsDiagramBar extends DiagramBar {
     getCommandKeys() {
-        return DiagramCommands.getPropertyPanelCommands().map(c => c.command);
+        return DiagramCommandsManager.getPropertyPanelCommands().map(c => c.command);
     }
     setItemValue(key, value) {
         this._owner._setItemValue(key, value);
@@ -161,6 +193,9 @@ class OptionsDiagramBar extends DiagramBar {
     setItemSubItems(key, items) {
         this._owner._setItemSubItems(key, items);
     }
+    isVisible() {
+        return this._owner.isVisible();
+    }
 }
 
-module.exports = DiagramRightPanel;
+module.exports = DiagramPropertiesPanel;

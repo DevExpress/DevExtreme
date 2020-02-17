@@ -373,6 +373,7 @@ const Switch = Editor.inherit({
             complete: function() {
                 that._swiping = false;
                 const pos = that.option('value') + offsetDirection * e.event.targetOffset;
+                that._saveValueChangeEvent(e.event);
                 that.option('value', Boolean(pos));
                 that._feedbackDeferred.resolve();
                 that._toggleActiveState(that.$element(), false);

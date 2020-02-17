@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import ExcelJS from 'exceljs';
 import ExcelJSTestHelper from './ExcelJSTestHelper.js';
-import { exportDataGrid } from 'exporter/exceljs/excelExporter';
+import { exportDataGrid } from 'excel_exporter';
 import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 
@@ -61,10 +61,10 @@ const ExcelJSLocalizationFormatTests = {
                     exportDataGrid({
                         component: dataGrid,
                         worksheet: this.worksheet
-                    }).then((cellsRange) => {
+                    }).then((cellRange) => {
                         helper.checkValues(expectedCells);
                         helper.checkCellFormat(expectedCells);
-                        helper.checkCellsRange(cellsRange, { row: 1, column: 6 }, topLeft);
+                        helper.checkCellRange(cellRange, { row: 1, column: 6 }, topLeft);
                         done();
                     });
                 });

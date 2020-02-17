@@ -82,21 +82,6 @@ module.exports = _extend({}, barPoint, {
 
     _getLabelCoords: rangeSymbolPointMethods._getLabelCoords,
 
-    _getGraphicBBox: function(location) {
-        const isTop = location === 'top';
-        const bBox = barPoint._getGraphicBBox.call(this);
-
-        if(!this._options.rotated) {
-            bBox.y = isTop ? bBox.y : bBox.y + bBox.height;
-            bBox.height = 0;
-        } else {
-            bBox.x = isTop ? bBox.x + bBox.width : bBox.x;
-            bBox.width = 0;
-        }
-
-        return bBox;
-    },
-
     getLabel: rangeSymbolPointMethods.getLabel,
 
     getLabels: rangeSymbolPointMethods.getLabels,

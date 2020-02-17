@@ -23,19 +23,19 @@
 
     .dx-filemanager-progress-panel {
         background-color: @base-bg;
+    }
 
-        .dx-filemanager-progress-panel-details {
-            border-color: @filemanager-border-color;
-
-            & > .dx-filemanager-progress-box {
-                box-shadow: 0 4px 8px 0 @filemanager-progressbox-shadow-color;
-            }
-        }
+    .dx-filemanager-progress-box-image {
+        font-size: @MATERIAL_BASE_ICON_SIZE;
     }
 
     .dx-filemanager-progress-box-error {
         color: @base-inverted-text-color;
         background: @base-danger;
+    }
+
+    .dx-filemanager-progress-box .dx-filemanager-progress-box-close-button {
+        margin-top: @FILEMANAGER_PROGRESS_BOX_BUTTON_CLOSE_MARGIN_TOP;
     }
 
     .dx-filemanager-toolbar {

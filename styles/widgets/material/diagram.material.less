@@ -7,6 +7,7 @@
 @import (once) "./form.material.less";
 @import (once) "./toolbar.material.less";
 @import (once) "./contextMenu.material.less";
+@import (once) "./overlay.material.less";
 @import (once) "./fileUploader.material.less";
 @import (once) "./popup.material.less";
 
@@ -75,17 +76,13 @@
     }
 
 
-    .dx-diagram-right-panel {
-        border-left-color: @diagram-toolbar-border-color;
-    }
-
     &.dx-diagram-fullscreen {
         background-color: @base-bg;
     }
 }
 
 .dx-diagram-toolbox-panel,
-.dx-diagram-right-panel {
+.dx-diagram-properties-panel {
     background: @overlay-content-bg;
 
     .dx-accordion {
@@ -94,7 +91,7 @@
             border-right: none;
             box-shadow: none;
 
-            .dx-diagram-right-panel-begin-group {
+            .dx-diagram-properties-panel-begin-group {
                 padding-top: 24px;
             }
         }
@@ -111,11 +108,14 @@
     }
 }
 
-.dx-diagram-right-panel {
-    .dx-accordion {
-        .dx-accordion-item:first-of-type {
-            border-top: none;
-        }
+.dx-diagram-floating-toolbar-container {
+    background: @overlay-content-bg;
+    box-shadow: 0 11px 15px -7px fade(@base-shadow-color, 20%), 0 24px 38px 3px fade(@base-shadow-color, 14%), 0 9px 46px 8px fade(@base-shadow-color, 12%);
+    border-radius: @popup-border-radius;
+    padding: 4px;
+
+    .dx-toolbar-item {
+        padding: 0 4px 0 0;
     }
 }
 
@@ -207,8 +207,6 @@
 }
 
 .dx-diagram-toolbar {
-    background-color: transparent;
-
     .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
         background-color: @diagram-normal-format-active-bg;
 

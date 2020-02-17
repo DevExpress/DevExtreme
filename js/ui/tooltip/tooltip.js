@@ -5,6 +5,7 @@ const extend = require('../../core/utils/extend').extend;
 const Popover = require('../popover');
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
+const isWindow = require('../../core/utils/type').isWindow;
 
 const Tooltip = Popover.inherit({
     _getDefaultOptions: function() {
@@ -73,7 +74,9 @@ const Tooltip = Popover.inherit({
         const $target = $(this.option('target'));
         const label = showing ? this._contentId : undefined;
 
-        this.setAria('describedby', label, $target);
+        if(!isWindow($target.get(0))) {
+            this.setAria('describedby', label, $target);
+        }
     }
 });
 

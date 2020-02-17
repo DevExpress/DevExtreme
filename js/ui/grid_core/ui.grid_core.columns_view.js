@@ -188,8 +188,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             }
         }
 
-        // T823783
-        if(browser.mozilla && options.column.fixed) {
+        // T823783, T852898
+        if(browser.mozilla && options.column.fixed && options.rowType !== 'group') {
             $cell.addClass(FIXED_COL_CLASS);
         }
 
