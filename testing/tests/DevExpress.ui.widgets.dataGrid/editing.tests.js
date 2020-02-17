@@ -17175,8 +17175,12 @@ QUnit.module('Async validation', {
         assert.equal($row.find('.dx-datagrid-invalid').length, 0, 'there are no invalid editors in a new row');
 
         this.saveEditData().done(() => {
+            let rowKey = this.getKeyByRowIndex(0);
+            let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
             // assert
             assert.equal(this.editingController._editRowIndex, 0, 'new row is still editing');
+            assert.strictEqual(result.status, 'invalid', 'the first cell has invalid validation status');
             assert.equal($row.find('.dx-datagrid-invalid').length, 1, 'there is one invalid editor in first row');
 
             this.changeInputValue({
@@ -17185,9 +17189,12 @@ QUnit.module('Async validation', {
             });
             this.saveEditData().done(() => {
                 $row = rowsView.getRow(0);
+                rowKey = this.getKeyByRowIndex(0);
+                result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
 
                 // asset
                 assert.equal(this.editingController._editRowIndex, -1, 'there is no editing row');
+                assert.notOk(result, 'the first cell does not have cached validation result');
                 assert.notOk($row.hasClass('dx-row-inserted'), 'the row is not in editing mode');
 
                 done();
@@ -17238,8 +17245,12 @@ QUnit.module('Async validation', {
             value: ''
         });
         this.saveEditData().done(() => {
+            const rowKey = this.getKeyByRowIndex(0);
+            let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
             // assert
             assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+            assert.strictEqual(result.status, 'invalid', 'the first cell has invalid validation status');
             assert.equal($row.find('.dx-datagrid-invalid').length, 1, 'there is one invalid editor in first row');
 
             this.changeInputValue({
@@ -17248,9 +17259,11 @@ QUnit.module('Async validation', {
             });
             this.saveEditData().done(() => {
                 $row = rowsView.getRow(0);
+                result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
 
                 // asset
                 assert.equal(this.editingController._editRowIndex, -1, 'there is no editing row');
+                assert.notOk(result, 'the first cell does not have cached validation result');
                 assert.notOk($row.hasClass('dx-edit-row'), 'the row is not in editing mode');
 
                 done();
@@ -17312,9 +17325,14 @@ QUnit.module('Async validation', {
         this.saveEditData().done(() => {
             let $cell1 = $(this.getCellElement(0, 0));
             let $cell2 = $(this.getCellElement(0, 1));
+            const rowKey = this.getKeyByRowIndex(0);
+            let result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+            let result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
 
             // assert
             assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+            assert.strictEqual(result1.status, 'invalid', 'the first cell has invalid validation status');
+            assert.strictEqual(result2.status, 'valid', 'the second cell has valid validation status');
             assert.ok($cell1.hasClass('dx-datagrid-invalid'), 'first cell is invalid');
             assert.notOk($cell2.hasClass('dx-datagrid-invalid'), 'second cell is valid');
 
@@ -17325,9 +17343,13 @@ QUnit.module('Async validation', {
             this.saveEditData().done(() => {
                 $cell1 = $(this.getCellElement(0, 0));
                 $cell2 = $(this.getCellElement(0, 1));
+                result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+                result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
 
                 // asset
                 assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+                assert.strictEqual(result1.status, 'valid', 'the first cell has valid validation status');
+                assert.strictEqual(result2.status, 'invalid', 'the second cell has invalid validation status');
                 assert.notOk($cell1.hasClass('dx-datagrid-invalid'), 'first cell is valid');
                 assert.ok($cell2.hasClass('dx-datagrid-invalid'), 'second cell is invalid');
 
@@ -17382,9 +17404,12 @@ QUnit.module('Async validation', {
             this.editCell(0, 0);
             this.saveEditData().done(() => {
                 $row = rowsView.getRow(0);
+                let rowKey = this.getKeyByRowIndex(0);
+                let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
 
                 // assert
                 assert.ok($row.hasClass('dx-row-inserted'), 'the row is in editing mode');
+                assert.strictEqual(result.status, 'invalid', 'the first cell has invalid validation status');
                 assert.equal($row.find('.dx-datagrid-invalid').length, 1, 'there is one invalid editor in first row');
 
                 this.editCell(0, 0);
@@ -17394,8 +17419,11 @@ QUnit.module('Async validation', {
                 });
                 this.saveEditData().done(() => {
                     $row = rowsView.getRow(0);
+                    rowKey = this.getKeyByRowIndex(0);
+                    result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
 
                     // asset
+                    assert.notOk(result, 'the first cell does not have cached validation result');
                     assert.notOk($row.hasClass('dx-row-inserted'), 'the row is not in editing mode');
 
                     done();
@@ -17443,16 +17471,19 @@ QUnit.module('Async validation', {
             let $row = rowsView.getRow(0);
             let rowKey = this.getKeyByRowIndex(0);
             let editData;
+
             this.changeInputValue({
                 inputContainer: $(this.getCellElement(0, 0)),
                 value: ''
             });
             this.saveEditData().done(() => {
                 $row = rowsView.getRow(0);
+                let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
                 editData = this.editingController.getEditDataByKey(rowKey);
 
                 // assert
                 assert.strictEqual(editData.type, 'update', 'cell value is not saved');
+                assert.strictEqual(result.status, 'invalid', 'the first cell has invalid validation status');
                 assert.equal($row.find('.dx-datagrid-invalid').length, 1, 'there is one invalid editor in first row');
 
                 this.editCell(0, 0);
@@ -17463,10 +17494,12 @@ QUnit.module('Async validation', {
                 this.saveEditData().done(() => {
                     rowKey = this.getKeyByRowIndex(0);
                     editData = this.editingController.getEditDataByKey(rowKey);
+                    result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
                     $row = rowsView.getRow(0);
 
                     // asset
                     assert.notOk(editData, 'there is no editing row');
+                    assert.notOk(result, 'there is no cached validation result for the first cell');
                     assert.equal($row.find('.dx-datagrid-invalid').length, 0, 'the row does not have invalid cells');
 
                     done();
@@ -17523,6 +17556,7 @@ QUnit.module('Async validation', {
             let rowKey = this.getKeyByRowIndex(0);
             let editData;
 
+
             this.changeInputValue({
                 inputContainer: $(this.getCellElement(0, 0)),
                 value: ''
@@ -17531,9 +17565,13 @@ QUnit.module('Async validation', {
                 let $cell1 = $(this.getCellElement(0, 0));
                 let $cell2 = $(this.getCellElement(0, 1));
                 editData = this.editingController.getEditDataByKey(rowKey);
+                let result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+                let result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
 
                 // assert
                 assert.strictEqual(editData.type, 'update', 'cell value is not saved');
+                assert.strictEqual(result1.status, 'invalid', 'the first cell has invalid validation status');
+                assert.strictEqual(result2.status, 'valid', 'the second cell has valid validation status');
                 assert.ok($cell1.hasClass('dx-datagrid-invalid'), 'first cell is invalid');
                 assert.notOk($cell2.hasClass('dx-datagrid-invalid'), 'second cell is valid');
 
@@ -17548,9 +17586,13 @@ QUnit.module('Async validation', {
                     $cell2 = $(this.getCellElement(0, 1));
                     rowKey = this.getKeyByRowIndex(0);
                     editData = this.editingController.getEditDataByKey(rowKey);
+                    result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+                    result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
 
                     // asset
                     assert.strictEqual(editData.type, 'update', 'cell value is not saved');
+                    assert.strictEqual(result1.status, 'valid', 'the first cell has valid validation status');
+                    assert.strictEqual(result2.status, 'invalid', 'the second cell has invalid validation status');
                     assert.notOk($cell1.hasClass('dx-datagrid-invalid'), 'first cell is valid');
                     assert.ok($cell2.hasClass('dx-datagrid-invalid'), 'second cell is invalid');
 
