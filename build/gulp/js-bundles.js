@@ -7,7 +7,6 @@ const named = require('vinyl-named');
 const webpack = require('webpack');
 const lazyPipe = require('lazypipe');
 const webpackStream = require('webpack-stream');
-const args = require('yargs').argv;
 
 const webpackConfig = require('../../webpack.config.js');
 const webpackConfigDev = require('../../webpack.config.dev.js');
@@ -70,7 +69,7 @@ const createDebugBundlesStream = function(watch) {
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
     if(!context.uglify) {
-        debugConfig.devtool = args.sourceMap ? 'eval-source-map' : 'eval';
+        debugConfig.devtool = 'eval-source-map';
     }
 
     return gulp.src(bundles)
