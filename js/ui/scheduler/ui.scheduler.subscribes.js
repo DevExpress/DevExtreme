@@ -272,12 +272,14 @@ const subscribes = {
 
         const formatTypes = {
             'DATETIME': function() {
-                const dateTimeFormat = 'mediumdatemediumtime';
-                const startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
+                const dateFormat = 'monthandday';
+                const timeFormat = 'shorttime';
+
+                const startDateString = dateLocalization.format(startDate, dateFormat) + ', ' + dateLocalization.format(startDate, timeFormat) + ' - ';
 
                 const endDateString = (startDate.getDate() === endDate.getDate()) ?
-                    dateLocalization.format(endDate, 'shorttime') :
-                    dateLocalization.format(endDate, dateTimeFormat);
+                    dateLocalization.format(endDate, timeFormat) :
+                    dateLocalization.format(endDate, dateFormat) + ', ' + dateLocalization.format(endDate, timeFormat);
 
                 return startDateString + endDateString;
             },
