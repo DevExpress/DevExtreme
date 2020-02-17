@@ -9,7 +9,7 @@ import { camelize } from '../../core/utils/inflector';
 
 class OverlapStrategy extends DrawerStrategy {
 
-    renderPanel(template, whenPanelRendered) {
+    renderPanelContent(_, whenPanelContentRendered) {
         delete this._initialPosition;
 
         const position = this.getOverlayPosition();
@@ -34,7 +34,7 @@ class OverlapStrategy extends DrawerStrategy {
             }).bind(this),
             contentTemplate: drawer.option('template'),
             onContentReady: (args) => {
-                whenPanelRendered.resolve();
+                whenPanelContentRendered.resolve();
                 this._processOverlayZIndex(args.component.content());
             },
             visible: true,

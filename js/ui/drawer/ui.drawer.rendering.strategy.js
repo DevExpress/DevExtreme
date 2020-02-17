@@ -97,11 +97,11 @@ class DrawerStrategy {
         return this._drawer;
     }
 
-    renderPanel(template, whenPanelRendered) {
+    renderPanelContent(template, whenPanelContentRendered) {
         template && template.render({
             container: this.getDrawerInstance().content(),
             onRendered: () => {
-                whenPanelRendered.resolve();
+                whenPanelContentRendered.resolve();
             }
         });
     }
