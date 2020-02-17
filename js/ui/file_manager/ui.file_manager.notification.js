@@ -1,6 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
+import { getWindow } from '../core/utils/window';
 
 import Widget from '../widget/ui.widget';
 import Popup from '../popup';
@@ -41,7 +42,7 @@ export default class FileManagerNotificationControl extends Widget {
         this._progressDrawer = this._createComponent($progressDrawer, Drawer, {
             opened: false,
             position: 'right',
-            openedStateMode: 'overlap',
+            openedStateMode: $(getWindow()).width() <= 573 ? 'overlap' : 'shrink',
             closeOnOutsideClick: true,
             shading: true,
             template: container => this._progressDrawerTemplate(container)
