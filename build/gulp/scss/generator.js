@@ -474,5 +474,3 @@ gulp.task('create-theme-index', (callback) => {
 
     callback();
 });
-
-
