@@ -146,13 +146,48 @@ module('buttons group rendering', () => {
         let isReady;
         const instance = getInstance(
             createRadioGroup({
-                dataSource: ['str1', 'str2'],
+                items: ['str1', 'str2'],
                 onContentReady: onContentReadyHandler
             })
         );
 
         assert.strictEqual(onContentReadyHandler.callCount, 2);
         assert.strictEqual($(instance.element()).find(`.${RADIO_BUTTON_CLASS}`).length, 3);
+    });
+
+    test('should render new items if async dataSource was setted in onContentReady handler (T861468)', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const asyncDataSource = new DataSource({
+            load: () => {
+                const d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve([1, 2, 3]);
+                }, 200);
+
+                return d.promise();
+            }
+        });
+
+        const onContentReadyHandler = sinon.spy((e) => {
+            if(!isReady) {
+                isReady = true;
+                e.component.option('dataSource', asyncDataSource);
+            }
+        });
+        let isReady;
+        const instance = getInstance(
+            createRadioGroup({
+                dataSource: ['str1', 'str2'],
+                onContentReady: onContentReadyHandler
+            })
+        );
+
+        clock.tick(300);
+
+        assert.strictEqual(onContentReadyHandler.callCount, 2);
+        assert.strictEqual($(instance.element()).find(`.${RADIO_BUTTON_CLASS}`).length, 3);
+        clock.restore();
     });
 
     test('onContentReady - subscription using "on" method', function(assert) {
