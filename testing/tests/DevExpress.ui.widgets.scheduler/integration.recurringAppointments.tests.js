@@ -1544,6 +1544,8 @@ QUnit.test('Recurrence appointment occurences should have correct text (T818393)
 });
 
 $.each(['minutely', 'hourly'], (_, value) => {
+    const apptStartDate = new Date(2019, 2, 30, 2, 0);
+    const apptEndDate = new Date(2019, 2, 30, 3, 0);
     QUnit.test(`Recurrence appointment renders correctly, freq=${value}`, function(assert) {
         this.createInstance({
             views: ['day'],
@@ -1551,8 +1553,8 @@ $.each(['minutely', 'hourly'], (_, value) => {
             height: 600,
             dataSource: [{
                 text: 'Recurrence',
-                startDate: new Date(2019, 2, 30, 2, 0),
-                endDate: new Date(2019, 2, 30, 3, 0),
+                startDate: apptStartDate,
+                endDate: apptEndDate,
                 recurrenceRule: `FREQ=${value.toUpperCase()};COUNT=3`
             }],
             currentDate: new Date(2019, 2, 30),
@@ -1594,36 +1596,38 @@ $.each(['minutely', 'hourly'], (_, value) => {
             height: 600,
             dataSource: [{
                 text: 'Recurrence',
-                startDate: new Date(2019, 2, 30, 2, 0),
-                endDate: new Date(2019, 2, 30, 3, 0),
+                startDate: apptStartDate,
+                endDate: apptEndDate,
                 recurrenceRule: `FREQ=${value.toUpperCase()};COUNT=3`
             }],
             currentDate: new Date(2019, 2, 30),
             appointmentTemplate: function(model) {
+                const { targetedAppointmentData, appointmentData } = model;
                 if(appTemplateIndex === 2) {
-                    assert.deepEqual(model.appointmentData.startDate, new Date(2019, 2, 30, 2, 0), 'AppointmentTemplate Model appointmentData startDate is correct');
-                    assert.deepEqual(model.appointmentData.endDate, new Date(2019, 2, 30, 3, 0), 'AppointmentTemplate Model appointmentData startDate is correct');
+                    assert.deepEqual(appointmentData.startDate, apptStartDate, 'AppointmentTemplate Model appointmentData startDate is correct');
+                    assert.deepEqual(appointmentData.endDate, apptEndDate, 'AppointmentTemplate Model appointmentData endDate is correct');
                 }
                 if(value === 'minutely') {
-                    assert.deepEqual(model.targetedAppointmentData.startDate, new Date(new Date(2019, 2, 30, 2, 0).getTime() + (toMs('minute') * appTemplateIndex)), `AppointmentTemplate Model targetedAppointmentData startDate is correct, index=${appTemplateIndex}`);
-                    assert.deepEqual(model.targetedAppointmentData.endDate, new Date(new Date(2019, 2, 30, 3, 0).getTime() + (toMs('minute') * appTemplateIndex)), `AppointmentTemplate Model targetedAppointmentData endDate is correct, index=${appTemplateIndex}`);
+                    assert.deepEqual(targetedAppointmentData.startDate, new Date(apptStartDate.getTime() + (toMs('minute') * appTemplateIndex)), `AppointmentTemplate Model targetedAppointmentData startDate is correct, index=${appTemplateIndex}`);
+                    assert.deepEqual(targetedAppointmentData.endDate, new Date(apptEndDate.getTime() + (toMs('minute') * appTemplateIndex)), `AppointmentTemplate Model targetedAppointmentData endDate is correct, index=${appTemplateIndex}`);
                 } else if(value === 'hourly') {
-                    assert.deepEqual(model.targetedAppointmentData.startDate, new Date(new Date(2019, 2, 30, 2, 0).getTime() + (toMs('hour') * appTemplateIndex)), `AppointmentTemplate Model targetedAppointmentData startDate is correct, index=${appTemplateIndex}`);
-                    assert.deepEqual(model.targetedAppointmentData.endDate, new Date(new Date(2019, 2, 30, 3, 0).getTime() + (toMs('hour') * appTemplateIndex)), `AppointmentTemplate Model targetedAppointmentData endDate is correct, index=${appTemplateIndex}`);
+                    assert.deepEqual(targetedAppointmentData.startDate, new Date(apptStartDate.getTime() + (toMs('hour') * appTemplateIndex)), `AppointmentTemplate Model targetedAppointmentData startDate is correct, index=${appTemplateIndex}`);
+                    assert.deepEqual(targetedAppointmentData.endDate, new Date(apptEndDate.getTime() + (toMs('hour') * appTemplateIndex)), `AppointmentTemplate Model targetedAppointmentData endDate is correct, index=${appTemplateIndex}`);
                 }
                 appTemplateIndex++;
             },
             appointmentTooltipTemplate: function(model) {
+                const { targetedAppointmentData, appointmentData } = model;
                 if(appTooltipTemplateIndex === 2) {
-                    assert.deepEqual(model.appointmentData.startDate, new Date(2019, 2, 30, 2, 0), 'AppointmentTooltipTemplate Model appointmentData startDate is correct');
-                    assert.deepEqual(model.appointmentData.endDate, new Date(2019, 2, 30, 3, 0), 'AppointmentTooltipTemplate Model appointmentData startDate is correct');
+                    assert.deepEqual(appointmentData.startDate, apptStartDate, 'AppointmentTooltipTemplate Model appointmentData startDate is correct');
+                    assert.deepEqual(appointmentData.endDate, apptEndDate, 'AppointmentTooltipTemplate Model appointmentData endDate is correct');
                 }
                 if(value === 'minutely') {
-                    assert.deepEqual(model.targetedAppointmentData.startDate, new Date(new Date(2019, 2, 30, 2, 0).getTime() + (toMs('minute') * appTooltipTemplateIndex)), `AppointmentTooltipTemplate Model targetedAppointmentData startDate is correct, index=${appTooltipTemplateIndex}`);
-                    assert.deepEqual(model.targetedAppointmentData.endDate, new Date(new Date(2019, 2, 30, 3, 0).getTime() + (toMs('minute') * appTooltipTemplateIndex)), `AppointmentTooltipTemplate Model targetedAppointmentData endDate is correct, index=${appTooltipTemplateIndex}`);
+                    assert.deepEqual(targetedAppointmentData.startDate, new Date(apptStartDate.getTime() + (toMs('minute') * appTooltipTemplateIndex)), `AppointmentTooltipTemplate Model targetedAppointmentData startDate is correct, index=${appTooltipTemplateIndex}`);
+                    assert.deepEqual(targetedAppointmentData.endDate, new Date(apptEndDate.getTime() + (toMs('minute') * appTooltipTemplateIndex)), `AppointmentTooltipTemplate Model targetedAppointmentData endDate is correct, index=${appTooltipTemplateIndex}`);
                 } else if(value === 'hourly') {
-                    assert.deepEqual(model.targetedAppointmentData.startDate, new Date(new Date(2019, 2, 30, 2, 0).getTime() + (toMs('hour') * appTooltipTemplateIndex)), `AppointmentTooltipTemplate Model targetedAppointmentData startDate is correct, index=${appTooltipTemplateIndex}`);
-                    assert.deepEqual(model.targetedAppointmentData.endDate, new Date(new Date(2019, 2, 30, 3, 0).getTime() + (toMs('hour') * appTooltipTemplateIndex)), `AppointmentTooltipTemplate Model targetedAppointmentData endDate is correct, index=${appTooltipTemplateIndex}`);
+                    assert.deepEqual(targetedAppointmentData.startDate, new Date(apptStartDate.getTime() + (toMs('hour') * appTooltipTemplateIndex)), `AppointmentTooltipTemplate Model targetedAppointmentData startDate is correct, index=${appTooltipTemplateIndex}`);
+                    assert.deepEqual(targetedAppointmentData.endDate, new Date(apptEndDate.getTime() + (toMs('hour') * appTooltipTemplateIndex)), `AppointmentTooltipTemplate Model targetedAppointmentData endDate is correct, index=${appTooltipTemplateIndex}`);
                 }
                 appTooltipTemplateIndex++;
             },
@@ -1637,7 +1641,7 @@ $.each(['minutely', 'hourly'], (_, value) => {
             height: 600,
             dataSource: [{
                 text: 'Recurrence',
-                startDate: new Date(2019, 2, 30, 2, 0),
+                startDate: apptStartDate,
                 endDate: new Date(2019, 2, 30, 2, 55),
                 recurrenceRule: `FREQ=${value.toUpperCase()};INTERVAL=110`
             }],
@@ -1661,8 +1665,8 @@ $.each(['minutely', 'hourly'], (_, value) => {
             height: 600,
             dataSource: [{
                 text: 'Recurrence',
-                startDate: new Date(2019, 2, 30, 2, 0),
-                endDate: new Date(2019, 2, 30, 3, 0),
+                startDate: apptStartDate,
+                endDate: apptEndDate,
                 recurrenceRule: `FREQ=${value.toUpperCase()};COUNT=3`
             }],
             currentDate: new Date(2019, 2, 30),
@@ -1678,8 +1682,8 @@ $.each(['minutely', 'hourly'], (_, value) => {
             height: 600,
             dataSource: [{
                 text: 'Recurrence',
-                startDate: new Date(2019, 2, 30, 2, 0),
-                endDate: new Date(2019, 2, 30, 3, 0),
+                startDate: apptStartDate,
+                endDate: apptEndDate,
                 recurrenceRule: `FREQ=${value.toUpperCase()};INTERVAL=25;UNTIL=2019230T200000`
             }, {
                 text: 'Appointment after UNTIL',
