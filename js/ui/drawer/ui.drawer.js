@@ -100,12 +100,15 @@ const Drawer = Widget.inherit({
 
         this._animations = [];
         this._animationPromise = undefined;
-        this._whenPanelRendered = undefined;
-        this._whenPanelRefreshed = undefined;
+        this._whenPanelContentRendered = undefined;
+        this._whenPanelContentRefreshed = undefined;
 
-        this._initHideTopOverlayHandler();
+        this._hideMenuHandler = this.hide.bind(this); // TODO: remove?
 
-        this._initContentMarkup();
+        this._$wrapper = $('<div>').addClass(DRAWER_WRAPPER_CLASS);
+        this._$contentWrapper = $('<div>').addClass(DRAWER_CONTENT_CLASS);
+        this._$wrapper.append(this._$contentWrapper);
+        this.$element().append(this._$wrapper);
     },
 
     _initStrategy() {
@@ -124,28 +127,11 @@ const Drawer = Widget.inherit({
         }
     },
 
-    _initContentMarkup() {
-        this._$wrapper = $('<div>').addClass(DRAWER_WRAPPER_CLASS);
-
-        this._$contentWrapper = $('<div>').addClass(DRAWER_CONTENT_CLASS);
-        this._$wrapper.append(this._$contentWrapper);
-        this.$element().append(this._$wrapper);
-    },
-
-    _initHideTopOverlayHandler() {
-        this._hideMenuHandler = this.hide.bind(this);
-    },
-
     _initTemplates() {
         this.callBase();
 
         this._defaultTemplates[PANEL_TEMPLATE_NAME] = new EmptyTemplate();
         this._defaultTemplates[ANONYMOUS_TEMPLATE_NAME] = new EmptyTemplate();
-    },
-
-    _initCloseOnOutsideClickHandler() {
-        eventsEngine.off(this._$contentWrapper, clickEvent.name);
-        eventsEngine.on(this._$contentWrapper, clickEvent.name, this._outsideClickHandler.bind(this));
     },
 
     _outsideClickHandler(e) {
@@ -177,8 +163,8 @@ const Drawer = Widget.inherit({
         this._refreshRevealModeClass();
         this._renderShader();
 
-        this._whenPanelRendered = new Deferred();
-        this._strategy.renderPanelContent(this._getTemplate(this.option('template')), this._whenPanelRendered);
+        this._whenPanelContentRendered = new Deferred();
+        this._strategy.renderPanelContent(this._getTemplate(this.option('template')), this._whenPanelContentRendered);
 
         const contentTemplateOption = this.option('contentTemplate');
         const contentTemplate = this._getTemplate(contentTemplateOption);
@@ -190,7 +176,9 @@ const Drawer = Widget.inherit({
             transclude
         });
 
-        this._initCloseOnOutsideClickHandler();
+        eventsEngine.off(this._$contentWrapper, clickEvent.name);
+        eventsEngine.on(this._$contentWrapper, clickEvent.name, this._outsideClickHandler.bind(this));
+
         this._refreshPositionClass();
     },
 
@@ -199,7 +187,7 @@ const Drawer = Widget.inherit({
 
         this.callBase();
 
-        this._whenPanelRendered.always(() => {
+        this._whenPanelContentRendered.always(() => {
             this._initSize();
             this._strategy.setPanelSize(this.option('revealMode') === 'slide' || !this.isHorizontalDirection());
 
@@ -423,10 +411,10 @@ const Drawer = Widget.inherit({
         this._renderPanelElement();
         this._orderContent(this.getDrawerPosition());
 
-        this._whenPanelRefreshed = new Deferred();
-        this._strategy.renderPanelContent(this._getTemplate(this.option('template')), this._whenPanelRefreshed);
+        this._whenPanelContentRefreshed = new Deferred();
+        this._strategy.renderPanelContent(this._getTemplate(this.option('template')), this._whenPanelContentRefreshed);
 
-        hasWindow() && this._whenPanelRefreshed.always(() => {
+        hasWindow() && this._whenPanelContentRefreshed.always(() => {
             this._strategy.setPanelSize(this.option('revealMode') === 'slide');
             this._renderPosition(this.option('opened'), false, true);
         });
