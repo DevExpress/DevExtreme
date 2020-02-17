@@ -519,9 +519,12 @@ const DropDownButton = Widget.inherit({
                 break;
             case 'displayExpr':
                 this._compileDisplayGetter();
+                this._setListOption(name, value);
+                this._updateActionButton(this.option('selectedItem'));
                 break;
             case 'keyExpr':
                 this._compileKeyGetter();
+                this._setListOption(name, value);
                 break;
             case 'buttonGroupOptions':
                 this._innerWidgetOptionChanged(this._buttonGroup, args);

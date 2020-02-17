@@ -231,6 +231,26 @@ QUnit.module('common use cases', {
         });
     }
 }, () => {
+    QUnit.test('toggleButton should have static width (T847072)', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            items: [{
+                'id': 1,
+                'name': 'I',
+                'icon': 'alignright'
+            }],
+            displayExpr: 'name',
+            keyExpr: 'id',
+            useSelectMode: true,
+            width: 100,
+            splitButton: true,
+            selectedItemKey: 1
+        }).dxDropDownButton('instance');
+
+        const toggleButtonElement = getToggleButton(dropDownButton);
+
+        assert.strictEqual(toggleButtonElement.outerWidth(), 20, 'toggleButton has correct width in generic theme');
+    });
+
     QUnit.test('custom button is rendered', function(assert) {
         assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Download DevExtreme Trial', 'text is correct on init');
         assert.ok(getActionButton(this.dropDownButton).find('.dx-icon').hasClass('dx-icon-group'), 'icon is correct on init');
@@ -449,6 +469,7 @@ QUnit.module('option change', {}, () => {
 
         const dropDownButton = new DropDownButton('#dropDownButton', {
             items,
+            opened: true,
             keyExpr: 'name',
             selectedItemKey: 'B',
             useSelectMode: true,
@@ -456,11 +477,16 @@ QUnit.module('option change', {}, () => {
         });
 
         dropDownButton.option('keyExpr', 'id');
-        dropDownButton.option('selectedItemKey', 'A');
-        assert.strictEqual(dropDownButton.option('text'), '', 'text is empty because keyExpr has been changed');
 
-        dropDownButton.option('selectedItemKey', 1);
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'no window');
+            return;
+        }
+
+        const listItems = getList(dropDownButton).itemElements();
+        eventsEngine.trigger(listItems.eq(0), 'dxclick');
         assert.strictEqual(dropDownButton.option('text'), 'A', 'value is correct');
+        assert.deepEqual(getList(dropDownButton).option('selectedItemKeys'), [1], 'value is correct');
     });
 
     QUnit.test('displayExpr option change', function(assert) {
@@ -472,6 +498,7 @@ QUnit.module('option change', {}, () => {
 
         const dropDownButton = new DropDownButton('#dropDownButton', {
             items,
+            opened: true,
             keyExpr: 'name',
             selectedItemKey: 'B',
             useSelectMode: true,
@@ -479,13 +506,15 @@ QUnit.module('option change', {}, () => {
         });
 
         dropDownButton.option('displayExpr', 'id');
+        assert.strictEqual(dropDownButton.option('text'), '2', 'value is correct');
 
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'no window');
             return;
         }
 
-        assert.strictEqual(dropDownButton.option('text'), '2', 'value is correct');
+        const $items = getList(dropDownButton).itemElements();
+        assert.strictEqual($items.eq(0).text(), '1', 'value is correct');
     });
 
     QUnit.test('focusStateEnabled option change', function(assert) {
@@ -869,26 +898,6 @@ QUnit.module('option change', {}, () => {
         const $itemContainer = list._itemContainer();
 
         assert.notOk($itemContainer.hasClass('dx-wrap-item-text'), 'class was removed');
-    });
-
-    QUnit.test('onButtonClick option change', function(assert) {
-        const handler = sinon.spy();
-        const dropDownButton = new DropDownButton('#dropDownButton', {
-            items: [1, 2, 3],
-            selectedItemKey: 2
-        });
-
-        dropDownButton.option('onButtonClick', handler);
-        const $actionButton = getActionButton(dropDownButton);
-
-        eventsEngine.trigger($actionButton, 'dxclick');
-
-        const e = handler.lastCall.args[0];
-
-        assert.strictEqual(handler.callCount, 1, 'handler was called');
-        assert.strictEqual(e.component, dropDownButton, 'component is correct');
-        assert.strictEqual(e.element, dropDownButton.element(), 'element is correct');
-        assert.strictEqual(e.event.type, 'dxclick', 'event is correct');
     });
 
     QUnit.test('onContentReady option change', function(assert) {

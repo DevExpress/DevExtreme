@@ -473,26 +473,6 @@ QUnit.module('list integration', {}, () => {
         assert.roughEqual(buttonTextVerticalCenter, dropDownButtonVerticalCenter, 2, 'content is vertically centered');
     });
 
-    QUnit.test('toggleButton should have static width (T847072)', function(assert) {
-        const dropDownButton = $('#dropDownButton').dxDropDownButton({
-            items: [{
-                'id': 1,
-                'name': 'I',
-                'icon': 'alignright'
-            }],
-            displayExpr: 'name',
-            keyExpr: 'id',
-            useSelectMode: true,
-            width: 100,
-            splitButton: true,
-            selectedItemKey: 1
-        }).dxDropDownButton('instance');
-
-        const toggleButtonElement = getToggleButton(dropDownButton);
-
-        assert.strictEqual(toggleButtonElement.outerWidth(), 20, 'toggleButton has correct width in generic theme');
-    });
-
     QUnit.test('toggle/action buttons should have correct height when height option is not defined (T847072)', function(assert) {
         const dropDownButton = $('#dropDownButton').dxDropDownButton({
             items: [{
@@ -573,19 +553,6 @@ QUnit.module('common use cases', {
         this.listItems = this.list.itemElements();
     }
 }, () => {
-    QUnit.test('custom button is rendered', function(assert) {
-        assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Download DevExtreme Trial', 'text is correct on init');
-        assert.ok(getActionButton(this.dropDownButton).find('.dx-icon').hasClass('dx-icon-group'), 'icon is correct on init');
-
-        this.dropDownButton.option({
-            text: 'New text',
-            icon: 'box'
-        });
-
-        assert.strictEqual(getActionButton(this.dropDownButton).text(), 'New text', 'text is correct on change');
-        assert.ok(getActionButton(this.dropDownButton).find('.dx-icon').hasClass('dx-icon-box'), 'icon is correct on change');
-    });
-
     QUnit.test('it should be possible to set non-datasource action button', function(assert) {
         assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Download DevExtreme Trial', 'initial text is correct');
 
@@ -655,15 +622,6 @@ QUnit.module('common use cases', {
         assert.notOk(this.dropDownButton.option('dropDownOptions.visible'), 'action button doesn\'t open the dropdown');
     });
 
-    QUnit.test('spindown secondary icon should be rendered when splitButton is false', function(assert) {
-        this.dropDownButton.option('splitButton', false);
-
-        const $icons = getActionButton(this.dropDownButton).find('.dx-icon');
-        assert.strictEqual($icons.length, 2, '2 icons are rendered');
-        assert.ok($icons.eq(0).hasClass('dx-icon-group'), 'first icon is correct');
-        assert.ok($icons.eq(1).hasClass('dx-icon-spindown'), 'second icon is correct');
-    });
-
     QUnit.test('click on item should raise onSelectionChanged (T848284)', function(assert) {
         const selectionChangeHandler = sinon.spy();
 
@@ -724,17 +682,6 @@ QUnit.module('common use cases', {
         eventsEngine.trigger(firstListItems[0], 'dxclick');
 
         assert.strictEqual(this.dropDownButton.option('selectedItem'), items[0], 'selectedItem is correct');
-    });
-
-    QUnit.test('spindown secondary icon should not be rendered when showArrowIcon is false', function(assert) {
-        this.dropDownButton.option({
-            splitButton: false,
-            showArrowIcon: false
-        });
-
-        const $icons = getActionButton(this.dropDownButton).find('.dx-icon');
-        assert.strictEqual($icons.length, 1, '1 icon is rendered');
-        assert.ok($icons.eq(0).hasClass('dx-icon-group'), 'first icon is correct');
     });
 });
 
@@ -1050,6 +997,26 @@ QUnit.module('events', {}, () => {
         assert.strictEqual(e.element, dropDownButton.element(), 'element is correct');
         assert.strictEqual(e.event.type, 'dxclick', 'event is correct');
         assert.strictEqual(e.selectedItem, 2, 'itemData is correct');
+    });
+
+    QUnit.test('onButtonClick option change', function(assert) {
+        const handler = sinon.spy();
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            items: [1, 2, 3],
+            selectedItemKey: 2
+        });
+
+        dropDownButton.option('onButtonClick', handler);
+        const $actionButton = getActionButton(dropDownButton);
+
+        eventsEngine.trigger($actionButton, 'dxclick');
+
+        const e = handler.lastCall.args[0];
+
+        assert.strictEqual(handler.callCount, 1, 'handler was called');
+        assert.strictEqual(e.component, dropDownButton, 'component is correct');
+        assert.strictEqual(e.element, dropDownButton.element(), 'element is correct');
+        assert.strictEqual(e.event.type, 'dxclick', 'event is correct');
     });
 
     QUnit.test('onButtonClick should be called even if splitButton is false', function(assert) {
