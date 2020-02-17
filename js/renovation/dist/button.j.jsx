@@ -9,9 +9,9 @@ import { getPublicElement } from '../../core/utils/dom';
 
 const templateDeclarations = {
     template: {
-        getContainer: (className) => $(`<div class=${className}>`),
+        getContainer: () => $('<div>'),
         containerClass: 'dx-button-content',
-        wrapperClass: 'dx-react-wrapper',
+        wrapperClass: 'dx-template-wrapper',
     }
 };
 
@@ -27,7 +27,8 @@ class Button extends Widget {
             if(props[key]) {
                 props[`${key}Render`] = (params) => {
                     const declaration = templateDeclarations[key];
-                    const $container = declaration.getContainer(declaration.containerClass);
+                    const $container = declaration.getContainer();
+                    $container.addClass(declaration.containerClass);
                     const data = { container: getPublicElement($container), ...params };
                     const $template = $(this._getTemplate(props[key]).render(data));
 
@@ -45,7 +46,8 @@ class Button extends Widget {
         if(props.template) {
             props.contentRender = (params) => {
                 const declaration = templateDeclarations.template;
-                const $container = declaration.getContainer(declaration.containerClass);
+                const $container = declaration.getContainer();
+                $container.addClass(declaration.containerClass);
                 const data = { container: getPublicElement($container), ...params };
                 const $template = $(this._getTemplate(props.template).render(data));
 
