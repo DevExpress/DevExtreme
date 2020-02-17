@@ -16979,11 +16979,9 @@ QUnit.module('Async validation', {
             inputElement.trigger('change');
         };
 
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         this.dispose();
-        this.clock.restore();
     }
 }, () => {
     QUnit.test('AsyncRule.validationCallback accepts extra parameters', function(assert) {
@@ -17028,7 +17026,6 @@ QUnit.module('Async validation', {
 
     QUnit.test('Form - It\'s impossible to save modified invalid data', function(assert) {
         // arrange
-        this.clock.restore();
         const rowsView = this.rowsView;
         const testElement = $('#container');
         const done = assert.async();
@@ -17077,7 +17074,6 @@ QUnit.module('Async validation', {
 
     QUnit.test('Form - Only valid data is saved', function(assert) {
         // arrange
-        this.clock.restore();
         const rowsView = this.rowsView;
         const testElement = $('#container');
         const done = assert.async();
@@ -17139,7 +17135,6 @@ QUnit.module('Async validation', {
 
     QUnit.test('Row - Only valid data is saved in a new row', function(assert) {
         // arrange
-        this.clock.restore();
         const rowsView = this.rowsView;
         const testElement = $('#container');
         const done = assert.async();
@@ -17208,7 +17203,6 @@ QUnit.module('Async validation', {
 
     QUnit.test('Row - Only valid data is saved in a modified row', function(assert) {
         // arrange
-        this.clock.restore();
         const rowsView = this.rowsView;
         const testElement = $('#container');
         const done = assert.async();
@@ -17277,7 +17271,6 @@ QUnit.module('Async validation', {
 
     QUnit.test('Row - Data is not saved when a dependant cell value becomes invalid', function(assert) {
         // arrange
-        this.clock.restore();
         const rowsView = this.rowsView;
         const testElement = $('#container');
         const done = assert.async();
@@ -17365,7 +17358,6 @@ QUnit.module('Async validation', {
     ['Cell', 'Batch'].forEach(mode => {
         QUnit.test(`${mode} - Only valid data is saved in a new row`, function(assert) {
             // arrange
-            this.clock.restore();
             const rowsView = this.rowsView;
             const testElement = $('#container');
             const done = assert.async();
@@ -17438,7 +17430,6 @@ QUnit.module('Async validation', {
 
         QUnit.test(`${mode} - Only valid data is saved in a modified cell`, function(assert) {
             // arrange
-            this.clock.restore();
             const rowsView = this.rowsView;
             const testElement = $('#container');
             const done = assert.async();
@@ -17514,7 +17505,6 @@ QUnit.module('Async validation', {
 
         QUnit.test(`${mode} - Data is not saved when a dependant cell value becomes invalid`, function(assert) {
             // arrange
-            this.clock.restore();
             const rowsView = this.rowsView;
             const testElement = $('#container');
             const done = assert.async();
