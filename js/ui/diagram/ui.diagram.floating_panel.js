@@ -1,8 +1,8 @@
 import $ from '../../core/renderer';
-import Widget from '../widget/ui.widget';
+import DiagramPanel from './ui.diagram.panel';
 import Popup from '../popup';
 
-class DiagramFloatingPanel extends Widget {
+class DiagramFloatingPanel extends DiagramPanel {
     _init() {
         super._init();
 
@@ -26,6 +26,20 @@ class DiagramFloatingPanel extends Widget {
         this._updatePopupVisible();
     }
 
+    _getPopupContent() {
+        return this._popup.content();
+    }
+    _getPointerUpElement() {
+        return this._getPopupContent();
+    }
+    _getVerticalPaddingsAndBorders() {
+        const $content = $(this._getPopupContent());
+        return $content.outerHeight() - $content.height();
+    }
+    _getHorizontalPaddingsAndBorders() {
+        const $content = $(this._getPopupContent());
+        return $content.outerWidth() - $content.width();
+    }
     _getPopupClass() {
         return '';
     }

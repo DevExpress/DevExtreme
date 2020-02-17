@@ -23,6 +23,31 @@ const customCommands = [
     'showToolbox'
 ];
 
+const customGroups = [
+    {
+        title: 'AAA',
+        groups: [
+            {
+                title: 'AAA1',
+                commands: ['fontName', 'fontSize']
+            },
+            {
+                title: 'AAA2',
+                commands: ['fillColor']
+            },
+        ]
+    },
+    {
+        title: 'BBB',
+        groups: [
+            {
+                title: 'BBB1',
+                commands: ['gridSize']
+            },
+        ]
+    }
+];
+
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#diagram').dxDiagram();
@@ -40,28 +65,48 @@ QUnit.module('CommandManager', {
         this.clock.reset();
     }
 }, () => {
-    test('default commands', function(assert) {
-        assert.equal(DiagramCommandsManager.getMainToolbarCommands().length, 23);
+    test('default main toolbar commands', function(assert) {
+        assert.equal(DiagramCommandsManager.getMainToolbarCommands().length, 25);
+    });
+    test('default history toolbar commands', function(assert) {
         assert.equal(DiagramCommandsManager.getHistoryToolbarCommands().length, 3);
-        assert.equal(DiagramCommandsManager.getViewToolbarCommands().length, 6);
-        assert.equal(DiagramCommandsManager.getViewToolbarCommands()[5].items.length, 6);
-        assert.equal(DiagramCommandsManager.getContextMenuCommands().length, 12);
-        assert.equal(DiagramCommandsManager.getPropertyPanelCommands().length, 3);
     });
-    test('default commands with excludes', function(assert) {
-        assert.equal(DiagramCommandsManager.getMainToolbarCommands(undefined, [1]).length, 22);
-        assert.equal(DiagramCommandsManager.getViewToolbarCommands(undefined, ['toolbox']).length, 6);
-        assert.equal(DiagramCommandsManager.getViewToolbarCommands(undefined, ['toolbox'])[5].items.length, 5);
+    test('default view toolbar commands', function(assert) {
+        const commands = DiagramCommandsManager.getViewToolbarCommands();
+        assert.equal(commands.length, 6);
+        assert.equal(commands[5].items.length, 6);
     });
-    test('custom toolbar commands', function(assert) {
+    test('default view toolbar commands with excludes', function(assert) {
+        const commands = DiagramCommandsManager.getViewToolbarCommands(undefined, ['toolbox']);
+        assert.equal(commands.length, 6);
+        assert.equal(commands[5].items.length, 5);
+    });
+    test('custom main toolbar commands', function(assert) {
         const commands = DiagramCommandsManager.getMainToolbarCommands(customCommands);
         assert.equal(commands.length, 7);
         assert.equal(commands[5].items.length, 2);
         assert.equal(commands[5].items[1].beginGroup, true);
     });
-    test('custom toolbar commands with excludes', function(assert) {
-        const commands = DiagramCommandsManager.getMainToolbarCommands(customCommands, ['toolbox']);
+    test('custom history toolbar commands', function(assert) {
+        const commands = DiagramCommandsManager.getHistoryToolbarCommands(customCommands);
+        assert.equal(commands.length, 7);
+        assert.equal(commands[5].items.length, 2);
+        assert.equal(commands[5].items[1].beginGroup, true);
+    });
+    test('custom view toolbar commands', function(assert) {
+        const commands = DiagramCommandsManager.getViewToolbarCommands(customCommands);
+        assert.equal(commands.length, 7);
+        assert.equal(commands[5].items.length, 2);
+        assert.equal(commands[5].items[1].beginGroup, true);
+    });
+    test('custom view toolbar commands with excludes', function(assert) {
+        const commands = DiagramCommandsManager.getViewToolbarCommands(customCommands, ['toolbox']);
         assert.equal(commands.length, 6);
+        assert.equal(commands[5].items.length, 2);
+        assert.equal(commands[5].items[1].beginGroup, true);
+    });
+    test('default context menu commands', function(assert) {
+        assert.equal(DiagramCommandsManager.getContextMenuCommands().length, 12);
     });
     test('custom context menu commands', function(assert) {
         const commands = DiagramCommandsManager.getContextMenuCommands(customCommands);
@@ -70,12 +115,16 @@ QUnit.module('CommandManager', {
         assert.equal(commands[4].items.length, 2);
         assert.equal(commands[4].items[1].beginGroup, true);
     });
-    test('custom properties panel commands', function(assert) {
-        const commands = DiagramCommandsManager.getPropertyPanelCommands([
-            { commands: [ 'gridSize', 'showGrid' ] },
-            { commands: [ 'pageSize', 'pageColor' ] }
-        ]);
-        assert.equal(commands.length, 4);
-        assert.equal(commands[2].beginGroup, true);
+    test('default properties panel command groups', function(assert) {
+        const groups = DiagramCommandsManager.getPropertyPanelCommandGroups();
+        assert.equal(groups.length, 3);
+        assert.equal(groups[0].groups.length, 3);
+        assert.equal(groups[0].groups[2].commands.length, 3);
+    });
+    test('custom properties panel command groups', function(assert) {
+        const groups = DiagramCommandsManager.getPropertyPanelCommandGroups(customGroups);
+        assert.equal(groups.length, 2);
+        assert.equal(groups[0].groups.length, 2);
+        assert.equal(groups[0].groups[0].commands.length, 2);
     });
 });
