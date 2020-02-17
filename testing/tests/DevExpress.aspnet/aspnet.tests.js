@@ -261,20 +261,20 @@
             setTemplateEngine('default');
         }
     }, function() {
-        const testTemplate = function(name, templateSource, expected, enableAlternateTemplateTags) {
+        const testTemplate = function(name, templateSource, expected, enableAlternativeTemplateTags) {
             QUnit.test(name, function(assert) {
                 const $template = $('#simpleTemplate');
 
                 $template.text(templateSource);
 
-                aspnet.enableAlternateTemplateTags(enableAlternateTemplateTags !== false);
+                aspnet.enableAlternativeTemplateTags(enableAlternativeTemplateTags !== false);
                 try {
                     $('#button').dxButton({
                         text: 'Test button',
                         template: $template
                     });
                 } finally {
-                    aspnet.enableAlternateTemplateTags(true);
+                    aspnet.enableAlternativeTemplateTags(true);
                 }
 
                 assert.equal($('.dx-button-content').text(), expected);
@@ -328,7 +328,7 @@
 
         testTemplate('obj', '<%- obj.text %>', 'Test button');
 
-        QUnit.module('Alternate syntax (T831170)', function() {
+        QUnit.module('Alternative syntax (T831170)', function() {
             testTemplate('enabled', 'a [%= \'b\' %] c', 'a b c');
             testTemplate('disabled', '[%= 123 %]', '[%= 123 %]', false);
         });

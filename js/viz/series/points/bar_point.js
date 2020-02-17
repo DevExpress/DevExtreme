@@ -223,15 +223,15 @@ module.exports = _extend({}, symbolPoint, {
         return { x: x + width / 2, y: y + height / 2 };
     },
 
-    _truncateCoord: function(coord, minBounce, maxBounce) {
+    _truncateCoord: function(coord, bounds) {
         if(coord === null) {
             return coord;
         }
-        if(coord < minBounce) {
-            return minBounce;
+        if(coord < bounds[0]) {
+            return bounds[0];
         }
-        if(coord > maxBounce) {
-            return maxBounce;
+        if(coord > bounds[1]) {
+            return bounds[1];
         }
         return coord;
     },
@@ -273,8 +273,8 @@ module.exports = _extend({}, symbolPoint, {
         that['v' + valAxis] = val;
         that['v' + argAxis] = arg + that[argIntervalName] / 2;
 
-        val = that._truncateCoord(val, valVisibleArea[0], valVisibleArea[1]);
-        minVal = that._truncateCoord(minVal, valVisibleArea[0], valVisibleArea[1]);
+        val = that._truncateCoord(val, valVisibleArea);
+        minVal = that._truncateCoord(minVal, valVisibleArea);
 
         that[valIntervalName] = _abs(val - minVal);
 

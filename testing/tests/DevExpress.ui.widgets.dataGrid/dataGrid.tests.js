@@ -827,6 +827,27 @@ QUnit.test('Cells in fixed columns should have \'dx-col-fixed\' class if FF (T82
     assert.notOk(filterRowWrapper.getEditorCell(1).hasClass('dx-col-fixed'), 'not dx-col-fixed');
 });
 
+QUnit.test('Cells in group row should not have \'dx-col-fixed\' class (T852898)', function(assert) {
+    // arrange
+    const dataGrid = $('#dataGrid').dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [
+                { id: 1, value: 'value 1' }
+            ]
+        },
+        columns: ['id', {
+            dataField: 'value',
+            fixed: true,
+            groupIndex: 0
+        }]
+    }).dxDataGrid('instance');
+
+    // assert
+    assert.notOk($(dataGrid.getCellElement(0, 0)).hasClass('dx-col-fixed'), 'dx-col-fixed');
+    assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-col-fixed'), 'dx-col-fixed');
+});
+
 QUnit.test('noDataText option', function(assert) {
     // act
     const noDataText = 'Custom no data';
@@ -11485,6 +11506,21 @@ QUnit.test('using dataSource instance after disposing DataGrid', function(assert
     // assert
     assert.ok(!dataGrid.getController('data').dataSource(), 'no dataSource');
     assert.ok(!dataSource._disposed, 'dataSource is not disposed');
+});
+
+QUnit.test('updateDimensions after disposing DataGrid (T847853)', function(assert) {
+    const dataGrid = createDataGrid({
+        columnAutoWidth: true,
+        dataSource: [{ id: 1 }]
+    });
+    this.clock.tick();
+
+    dataGrid.resetOption('scrolling');
+    dataGrid.dispose();
+    dataGrid.updateDimensions();
+
+    // assert
+    assert.ok(dataGrid._disposed, 'DataGrid is disposed');
 });
 
 // T243908
