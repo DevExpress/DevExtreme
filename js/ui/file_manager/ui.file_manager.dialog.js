@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
+import messageLocalization from '../../localization/message';
 
 import Widget from '../widget/ui.widget';
 import Popup from '../popup';
@@ -38,6 +39,15 @@ class FileManagerDialogBase extends Widget {
                     options: {
                         text: options.buttonText,
                         onClick: this._applyDialogChanges.bind(this)
+                    }
+                },
+                {
+                    widget: 'dxButton',
+                    toolbar: 'bottom',
+                    location: 'after',
+                    options: {
+                        text: messageLocalization.format('dxFileManager-dialogButtonCancel'),
+                        onClick: function() { this._popup.hide(); }.bind(this)
                     }
                 }
             ],
