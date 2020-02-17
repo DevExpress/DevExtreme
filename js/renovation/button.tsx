@@ -20,7 +20,7 @@ const CustomRender = ({ text, icon, renderFn, contentRef, children }) => {
     const result = renderFn({
         model: { text, icon },
     });
-    result.props.children.push(children);
+    result.props.children?.push?.(children);
     result.ref = contentRef;
 
     return result;

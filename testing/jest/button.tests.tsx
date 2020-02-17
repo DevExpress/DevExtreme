@@ -210,14 +210,14 @@ describe('Button', () => {
         });
 
         describe('contentRender', () => {
-            const contentRender = ({ text }) => <div className={'custom-content'}>{text + 123}</div>;
+            const contentRender = ({ model: { text } }) => <div className={'custom-content'}>{`${text}123`}</div>;
 
             it('should render contentRender', () => {
                 const button = render({
                     text: 'My button',
                     contentRender,
                 });
-                const customRender = button.find(contentRender);
+                const customRender = button.find('CustomRender');
 
                 expect(customRender.exists()).toBe(true);
                 expect(customRender.exists('.custom-content')).toBe(true);
@@ -229,24 +229,24 @@ describe('Button', () => {
             it('should rerender contentRender in runtime', () => {
                 const button = mount(<Button text='My button' />);
                 
-                expect(button.exists(contentRender)).toBe(false);
+                expect(button.exists('CustomRender')).toBe(false);
 
                 button.setProps({ contentRender });
-                expect(button.exists(contentRender)).toBe(true);
+                expect(button.exists('CustomRender')).toBe(true);
                 
                 button.setProps({ contentRender: undefined });
-                expect(button.exists(contentRender)).toBe(false);
+                expect(button.exists('CustomRender')).toBe(false);
             });
 
             it('should change properties in runtime', () => {
                 const button = mount(<Button text='My button' contentRender={contentRender} />);
-                let buttonContent = button.find(contentRender);
+                let buttonContent = button.find('CustomRender');
                 
                 expect(buttonContent.props().text).toBe('My button');
                 expect(buttonContent.text()).toBe('My button123');
 
                 button.setProps({ text: 'New value' });
-                buttonContent = button.find(contentRender);
+                buttonContent = button.find('CustomRender');
 
                 expect(buttonContent.props().text).toBe('New value');
                 expect(buttonContent.text()).toBe('New value123');
