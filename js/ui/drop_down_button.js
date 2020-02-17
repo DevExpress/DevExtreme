@@ -6,6 +6,7 @@ import ButtonGroup from './button_group';
 import Popup from './popup';
 import List from './list';
 import { compileGetter } from '../core/utils/data';
+import windowUtils from '../core/utils/window';
 import domUtils from '../core/utils/dom';
 import { getImageContainer } from '../core/utils/icon';
 import DataHelperMixin from '../data_helper';
@@ -423,6 +424,10 @@ const DropDownButton = Widget.inherit({
     },
 
     toggle(visible) {
+        if(!windowUtils.hasWindow()) {
+            return new Deferred().resolve();
+        }
+
         if(!this._popup) {
             this._renderPopup();
             this._renderContent();
@@ -591,7 +596,7 @@ const DropDownButton = Widget.inherit({
                 this._createSelectionChangedAction();
                 break;
             case 'deferRendering':
-                if(!value && !this._popup) {
+                if(windowUtils.hasWindow() && !value && !this._popup) {
                     this._renderPopup();
                     this._renderContent();
                 }
