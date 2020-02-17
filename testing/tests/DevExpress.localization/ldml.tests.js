@@ -230,6 +230,12 @@ QUnit.module('number formatter', () => {
         assert.strictEqual(formatter(123456789), '12,34,56,789', 'format integer with 3 groups');
     });
 
+    QUnit.test('format with invalid group (T862287)', function(assert) {
+        const formatter = getNumberFormatter('#,,,B');
+
+        assert.strictEqual(formatter(123), 'B', 'format integer with invalid format');
+    });
+
     QUnit.test('different positive and negative formatting with groups', function(assert) {
         const formatter = getNumberFormatter('#,##0;(#,##0)');
 

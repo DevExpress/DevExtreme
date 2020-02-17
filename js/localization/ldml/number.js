@@ -67,6 +67,9 @@ function applyGroups(valueString, groupSizes, thousandsSeparator) {
 
     while(valueString) {
         const groupSize = groupSizes[index];
+        if(!groupSize) {
+            break;
+        }
         groups.push(valueString.slice(0, groupSize));
         valueString = valueString.slice(groupSize);
         if(index < groupSizes.length - 1) {
