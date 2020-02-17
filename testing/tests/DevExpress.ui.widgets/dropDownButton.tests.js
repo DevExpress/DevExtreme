@@ -233,26 +233,21 @@ QUnit.module('popup integration', {
         assert.strictEqual(repaintMock.callCount, 3, 'popup has been repainted 3 times');
     });
 
-    QUnit.test('a user can redefine dropdown options', function(assert) {
+    QUnit.test('dropDownOptions can be restored after repaint', function(assert) {
         const instance = new DropDownButton('#dropDownButton', {
             deferRendering: false,
             dropDownOptions: {
-                visible: true,
-                someOption: 'Test'
+                firstOption: 'Test'
             }
         });
 
-        const popup = getPopup(instance);
-        assert.strictEqual(popup.option('visible'), true, 'set an option');
-
         instance.option('dropDownOptions', {
-            customOption: 'Test 2'
+            secondOption: 'Test 2'
         });
-        assert.strictEqual(popup.option('customOption'), 'Test 2', 'custom option is correct');
-        assert.strictEqual(popup.option('visible'), true, 'visible was not rewrited');
 
         instance.repaint();
-        assert.strictEqual(getPopup(instance).option('visible'), true, 'options have been stored after the repaint');
+        assert.strictEqual(getPopup(instance).option('firstOption'), 'Test', 'option has been stored after repaint');
+        assert.strictEqual(getPopup(instance).option('secondOption'), 'Test 2', 'option has been stored after repaint');
     });
 
     QUnit.test('click on toggle button should not be outside', function(assert) {
