@@ -24,7 +24,7 @@ const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const OPENED_STATE_CLASS = 'dx-drawer-opened';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
-
+const PANEL_TEMPLATE_NAME = 'panel';
 
 const Drawer = Widget.inherit({
 
@@ -41,7 +41,7 @@ const Drawer = Widget.inherit({
 
             shading: false,
 
-            template: 'panel',
+            template: PANEL_TEMPLATE_NAME,
 
             openedStateMode: 'shrink',
 
@@ -60,7 +60,7 @@ const Drawer = Widget.inherit({
             * @hidden
             * @default "content"
             */
-            contentTemplate: 'content',
+            contentTemplate: ANONYMOUS_TEMPLATE_NAME,
 
             target: undefined,
 
@@ -109,20 +109,19 @@ const Drawer = Widget.inherit({
     },
 
     _initStrategy() {
-        const mode = this.option('openedStateMode');
-        let Strategy = this._getDefaultStrategy();
-
-        if(mode === 'push') {
-            Strategy = PushStrategy;
+        switch(this.option('openedStateMode')) {
+            case 'push':
+                this._strategy = new PushStrategy(this);
+                break;
+            case 'shrink':
+                this._strategy = new ShrinkStrategy(this);
+                break;
+            case 'overlap':
+                this._strategy = new OverlapStrategy(this);
+                break;
+            default:
+                this._strategy = new PushStrategy(this);
         }
-        if(mode === 'shrink') {
-            Strategy = ShrinkStrategy;
-        }
-        if(mode === 'overlap') {
-            Strategy = OverlapStrategy;
-        }
-
-        this._strategy = new Strategy(this);
     },
 
     _initContentMarkup() {
@@ -133,10 +132,6 @@ const Drawer = Widget.inherit({
         this.$element().append(this._$wrapper);
     },
 
-    _getDefaultStrategy() {
-        return PushStrategy;
-    },
-
     _initHideTopOverlayHandler() {
         this._hideMenuHandler = this.hide.bind(this);
     },
@@ -144,8 +139,8 @@ const Drawer = Widget.inherit({
     _initTemplates() {
         this.callBase();
 
-        this._defaultTemplates['panel'] = new EmptyTemplate();
-        this._defaultTemplates['content'] = new EmptyTemplate();
+        this._defaultTemplates[PANEL_TEMPLATE_NAME] = new EmptyTemplate();
+        this._defaultTemplates[ANONYMOUS_TEMPLATE_NAME] = new EmptyTemplate();
     },
 
     _initCloseOnOutsideClickHandler() {
