@@ -156,7 +156,7 @@ const Drawer = Widget.inherit({
     _initMarkup() {
         this.callBase();
 
-        this._toggleVisibleClass(this.option('opened'));
+        this._toggleOpenedStateClass(this.option('opened'));
         this._renderPanelContentWrapper();
 
         this._refreshModeClass();
@@ -400,7 +400,7 @@ const Drawer = Widget.inherit({
         }
     },
 
-    _toggleVisibleClass(opened) {
+    _toggleOpenedStateClass(opened) {
         this.$element().toggleClass(OPENED_STATE_CLASS, opened);
     },
 
@@ -437,7 +437,7 @@ const Drawer = Widget.inherit({
         if(this._overlay) {
             this._overlay.dispose();
             delete this._overlay;
-            delete this._$panelContentWrapper;
+            delete this._$panelContentWrapper; // TODO: why here?
         }
     },
 
@@ -449,7 +449,7 @@ const Drawer = Widget.inherit({
                 break;
             case 'opened':
                 this._renderPosition(args.value);
-                this._toggleVisibleClass(args.value);
+                this._toggleOpenedStateClass(args.value);
                 break;
             case 'position':
                 this._refreshPositionClass(args.previousValue);
