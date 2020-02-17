@@ -275,11 +275,11 @@ const subscribes = {
                 const dateFormat = 'monthandday';
                 const timeFormat = 'shorttime';
 
-                const startDateString = dateLocalization.format(startDate, dateFormat) + ', ' + dateLocalization.format(startDate, timeFormat) + ' - ';
+                const startDateString = dateLocalization.format(startDate, dateFormat) + ' ' + dateLocalization.format(startDate, timeFormat) + ' - ';
 
                 const endDateString = (startDate.getDate() === endDate.getDate()) ?
                     dateLocalization.format(endDate, timeFormat) :
-                    dateLocalization.format(endDate, dateFormat) + ', ' + dateLocalization.format(endDate, timeFormat);
+                    dateLocalization.format(endDate, dateFormat) + ' ' + dateLocalization.format(endDate, timeFormat);
 
                 return startDateString + endDateString;
             },
