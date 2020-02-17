@@ -231,26 +231,6 @@ QUnit.module('common use cases', {
         });
     }
 }, () => {
-    QUnit.test('toggleButton should have static width (T847072)', function(assert) {
-        const dropDownButton = $('#dropDownButton').dxDropDownButton({
-            items: [{
-                'id': 1,
-                'name': 'I',
-                'icon': 'alignright'
-            }],
-            displayExpr: 'name',
-            keyExpr: 'id',
-            useSelectMode: true,
-            width: 100,
-            splitButton: true,
-            selectedItemKey: 1
-        }).dxDropDownButton('instance');
-
-        const toggleButtonElement = getToggleButton(dropDownButton);
-
-        assert.strictEqual(toggleButtonElement.outerWidth(), 20, 'toggleButton has correct width in generic theme');
-    });
-
     QUnit.test('custom button is rendered', function(assert) {
         assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Download DevExtreme Trial', 'text is correct on init');
         assert.ok(getActionButton(this.dropDownButton).find('.dx-icon').hasClass('dx-icon-group'), 'icon is correct on init');
@@ -600,9 +580,9 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('dropDownOptions runtime change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton');
+        const dropDownButton = new DropDownButton('#dropDownButton', { deferRendering: false });
 
-        dropDownButton.option('dropDownOptions', { visible: true });
+        dropDownButton.option('dropDownOptions', { width: 100 });
 
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'no window');
@@ -610,7 +590,7 @@ QUnit.module('option change', {}, () => {
         }
 
         const popup = getPopup(dropDownButton);
-        assert.strictEqual(popup.option('visible'), true, 'option has been changed');
+        assert.strictEqual(popup.option('width'), 100, 'option has been changed');
     });
 
     QUnit.test('elementAttr runtime change', function(assert) {

@@ -553,6 +553,26 @@ QUnit.module('common use cases', {
         this.listItems = this.list.itemElements();
     }
 }, () => {
+    QUnit.test('toggleButton should have static width (T847072)', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            items: [{
+                'id': 1,
+                'name': 'I',
+                'icon': 'alignright'
+            }],
+            displayExpr: 'name',
+            keyExpr: 'id',
+            useSelectMode: true,
+            width: 100,
+            splitButton: true,
+            selectedItemKey: 1
+        }).dxDropDownButton('instance');
+
+        const toggleButtonElement = getToggleButton(dropDownButton);
+
+        assert.strictEqual(toggleButtonElement.outerWidth(), 20, 'toggleButton has correct width in generic theme');
+    });
+
     QUnit.test('it should be possible to set non-datasource action button', function(assert) {
         assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Download DevExtreme Trial', 'initial text is correct');
 
