@@ -47,7 +47,7 @@ class FileManagerDialogBase extends Widget {
                     location: 'after',
                     options: {
                         text: messageLocalization.format('dxFileManager-dialogButtonCancel'),
-                        onClick: function() { this._popup.hide(); }.bind(this)
+                        onClick: this._closeDialog.bind(this)
                     }
                 }
             ],
@@ -91,6 +91,10 @@ class FileManagerDialogBase extends Widget {
             this._dialogResult = result;
             this._popup.hide();
         }
+    }
+
+    _closeDialog() {
+        this._popup.hide();
     }
 
     _onPopupHidden() {
