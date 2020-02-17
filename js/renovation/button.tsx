@@ -16,6 +16,16 @@ const getImageContainerJSX = (source: string, position: string) => {
     }
 };
 
+const CustomRender = ({ text, icon, renderFn, contentRef, children }) => {
+    const result = renderFn({
+        model: { text, icon },
+    });
+    result.props.children.push(children);
+    result.ref = contentRef;
+
+    return result;
+};
+
 const stylingModes = ['outlined', 'text', 'contained'];
 const defaultClassNames = ['dx-button'];
 
@@ -99,15 +109,16 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
         width={viewModel.width}
     >
         {(viewModel.contentRender &&
-            <viewModel.contentRender
-                icon={viewModel.icon}
+            <CustomRender
                 text={viewModel.text}
+                icon={viewModel.icon}
+                renderFn={viewModel.contentRender}
                 contentRef={viewModel.contentRef}
             >
                 {viewModel.useSubmitBehavior &&
                     <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
                 }
-            </viewModel.contentRender>
+            </CustomRender>
         ) || (
             <div className="dx-button-content" ref={viewModel.contentRef}>
                 {isIconLeft && icon}

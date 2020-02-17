@@ -7,6 +7,14 @@ import ButtonView from '../button.p';
 import { HTMLToPreact } from '../preact-wrapper/utils';
 import { getPublicElement } from '../../core/utils/dom';
 
+const templateDeclarations = {
+    template: {
+        getContainer: (className) => $(`<div class=${className}>`),
+        containerClass: 'dx-button-content',
+        wrapperClass: 'dx-react-wrapper',
+    }
+};
+
 class Button extends Widget {
     getView() {
         return ButtonView;
@@ -15,26 +23,38 @@ class Button extends Widget {
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
 
-        if(props.template) {
-            props.contentRender = ({ text, icon, contentRef, children }) => {
-                const data = { text, icon };
-                let $content = $('<div>');
-                $content.addClass('dx-button-content');
-                const $template = $(
-                    this._getTemplate(this.option('template')).render({
-                        model: data, container: getPublicElement($content)
-                    })
-                );
+        Object.keys(templateDeclarations).map((key) => {
+            if(props[key]) {
+                props[`${key}Render`] = (params) => {
+                    const declaration = templateDeclarations[key];
+                    const $container = declaration.getContainer(declaration.containerClass);
+                    const data = { container: getPublicElement($container), ...params };
+                    const $template = $(this._getTemplate(props[key]).render(data));
 
-                if($template.hasClass('dx-template-wrapper')) {
-                    $template.addClass('dx-button-content');
-                    $content = $template;
+                    if(declaration.wrapperClass && $template.hasClass(declaration.wrapperClass)) {
+                        $template.addClass(declaration.containerClass);
+                        return HTMLToPreact($template.get(0));
+                    }
+
+                    return HTMLToPreact($container.get(0));
+                };
+            }
+        });
+
+        // TODO: remove after generator fix ('template'->'render' translation)
+        if(props.template) {
+            props.contentRender = (params) => {
+                const declaration = templateDeclarations.template;
+                const $container = declaration.getContainer(declaration.containerClass);
+                const data = { container: getPublicElement($container), ...params };
+                const $template = $(this._getTemplate(props.template).render(data));
+
+                if(declaration.wrapperClass && $template.hasClass(declaration.wrapperClass)) {
+                    $template.addClass(declaration.containerClass);
+                    return HTMLToPreact($template.get(0));
                 }
 
-                const result = HTMLToPreact($content.get(0), children);
-                result.ref = contentRef;
-
-                return result;
+                return HTMLToPreact($container.get(0));
             };
         }
 

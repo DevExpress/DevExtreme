@@ -1,6 +1,7 @@
 import { h } from 'preact';
 
 export const HTMLToPreact = (node, ...restChildren) => {
+    if(!node) return;
     // NOTE: nodeType === 3 => text node
     if(node.nodeType === 3) {
         return node.wholeText;
