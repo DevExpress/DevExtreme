@@ -291,6 +291,7 @@
         "dxFileManager-dialogRenameItemButtonText": "Speichern",
         "dxFileManager-dialogCreateDirectoryTitle": "Neues Verzeichnis",
         "dxFileManager-dialogCreateDirectoryButtonText": "Erstellen",
+        "dxFileManager-dialogButtonCancel": "Abbrechen",
 
         "dxFileManager-editingCreateSingleItemProcessingMessage": "Ein Verzeichnis wird in {0} erstellt",
         "dxFileManager-editingCreateSingleItemSuccessMessage": "Ein Verzeichnis wurde in {0} erstellt",

@@ -323,6 +323,7 @@
         "dxFileManager-dialogRenameItemButtonText": "Save",
         "dxFileManager-dialogCreateDirectoryTitle": "New directory",
         "dxFileManager-dialogCreateDirectoryButtonText": "Create",
+        "dxFileManager-dialogButtonCancel": "Cancel",
 
         "dxFileManager-editingCreateSingleItemProcessingMessage": "Creating a directory inside {0}",
         "dxFileManager-editingCreateSingleItemSuccessMessage": "Created a directory inside {0}",
