@@ -19,7 +19,7 @@ import { triggerResizeEvent } from '../../core/utils/dom';
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
-const DRAWER_CONTENT_CLASS = 'dx-drawer-content';
+const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
 const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const OPENED_STATE_CLASS = 'dx-drawer-opened';
@@ -106,8 +106,8 @@ const Drawer = Widget.inherit({
         this._hideMenuHandler = this.hide.bind(this); // TODO: remove?
 
         this._$wrapper = $('<div>').addClass(DRAWER_WRAPPER_CLASS);
-        this._$contentWrapper = $('<div>').addClass(DRAWER_CONTENT_CLASS);
-        this._$wrapper.append(this._$contentWrapper);
+        this._$viewContentWrapper = $('<div>').addClass(DRAWER_VIEW_CONTENT_CLASS);
+        this._$wrapper.append(this._$viewContentWrapper);
         this.$element().append(this._$wrapper);
     },
 
@@ -134,7 +134,7 @@ const Drawer = Widget.inherit({
         this._defaultTemplates[ANONYMOUS_TEMPLATE_NAME] = new EmptyTemplate();
     },
 
-    _outsideClickHandler(e) {
+    _viewContentWrapperClickHandler(e) {
         let closeOnOutsideClick = this.option('closeOnOutsideClick');
 
         if(typeUtils.isFunction(closeOnOutsideClick)) {
@@ -176,8 +176,8 @@ const Drawer = Widget.inherit({
             transclude
         });
 
-        eventsEngine.off(this._$contentWrapper, clickEvent.name);
-        eventsEngine.on(this._$contentWrapper, clickEvent.name, this._outsideClickHandler.bind(this));
+        eventsEngine.off(this._$viewContentWrapper, clickEvent.name);
+        eventsEngine.on(this._$viewContentWrapper, clickEvent.name, this._viewContentWrapperClickHandler.bind(this));
 
         this._refreshPositionClass();
     },
@@ -220,7 +220,7 @@ const Drawer = Widget.inherit({
 
     _orderContent(position) {
         if(this._strategy.needOrderContent(position, this.option('rtlEnabled'))) {
-            this._$wrapper.prepend(this._$contentWrapper);
+            this._$wrapper.prepend(this._$viewContentWrapper);
         } else {
             this._$wrapper.prepend(this._$panelContentWrapper);
         }
@@ -500,7 +500,7 @@ const Drawer = Widget.inherit({
     * @hidden
     */
     viewContent() {
-        return getPublicElement(this._$contentWrapper);
+        return getPublicElement(this._$viewContentWrapper);
     },
 
     show() {
