@@ -157,7 +157,7 @@ const Drawer = Widget.inherit({
         this.callBase();
 
         this._toggleVisibleClass(this.option('opened'));
-        this._renderPanelElement();
+        this._renderPanelContentWrapper();
 
         this._refreshModeClass();
         this._refreshRevealModeClass();
@@ -195,9 +195,9 @@ const Drawer = Widget.inherit({
         });
     },
 
-    _renderPanelElement() {
-        this._$panel = $('<div>').addClass(DRAWER_PANEL_CONTENT_CLASS);
-        this._$wrapper.append(this._$panel);
+    _renderPanelContentWrapper() {
+        this._$panelContentWrapper = $('<div>').addClass(DRAWER_PANEL_CONTENT_CLASS);
+        this._$wrapper.append(this._$panelContentWrapper);
     },
 
     _refreshModeClass(prevClass) {
@@ -222,7 +222,7 @@ const Drawer = Widget.inherit({
         if(this._strategy.needOrderContent(position, this.option('rtlEnabled'))) {
             this._$wrapper.prepend(this._$contentWrapper);
         } else {
-            this._$wrapper.prepend(this._$panel);
+            this._$wrapper.prepend(this._$panelContentWrapper);
         }
     },
 
@@ -331,7 +331,7 @@ const Drawer = Widget.inherit({
 
     setZIndex(zIndex) {
         this._$shader.css('zIndex', zIndex - 1);
-        this._$panel.css('zIndex', zIndex);
+        this._$panelContentWrapper.css('zIndex', zIndex);
     },
 
     resizeContent() {
@@ -405,10 +405,13 @@ const Drawer = Widget.inherit({
     },
 
     _refreshPanel() {
-        this._setInitialViewContentPosition();
-        this._cleanPanel();
+        $(this.viewContent()).css('paddingLeft', 0);
+        $(this.viewContent()).css('left', 0);
+        $(this.viewContent()).css('transform', 'translate(0px, 0px)');
 
-        this._renderPanelElement();
+        this._removePanelContentWrapper();
+
+        this._renderPanelContentWrapper();
         this._orderContent(this.getDrawerPosition());
 
         this._whenPanelContentRefreshed = new Deferred();
@@ -420,27 +423,21 @@ const Drawer = Widget.inherit({
         });
     },
 
-    _setInitialViewContentPosition() {
-        $(this.viewContent()).css('paddingLeft', 0);
-        $(this.viewContent()).css('left', 0);
-        $(this.viewContent()).css('transform', 'translate(0px, 0px)');
-    },
-
     _clean() {
         this._cleanFocusState();
 
-        this._cleanPanel();
+        this._removePanelContentWrapper();
     },
 
-    _cleanPanel() {
-        if(this._$panel) {
-            this._$panel.remove();
+    _removePanelContentWrapper() {
+        if(this._$panelContentWrapper) {
+            this._$panelContentWrapper.remove();
         }
 
         if(this._overlay) {
             this._overlay.dispose();
             delete this._overlay;
-            delete this._$panel;
+            delete this._$panelContentWrapper;
         }
     },
 
@@ -493,7 +490,7 @@ const Drawer = Widget.inherit({
 
 
     content() {
-        return getPublicElement(this._$panel);
+        return getPublicElement(this._$panelContentWrapper);
     },
 
     /**
