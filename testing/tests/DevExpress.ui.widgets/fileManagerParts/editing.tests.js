@@ -598,4 +598,16 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal(this.progressPanelWrapper.getInfos()[0].common.commonText, 'Created a directory inside Files', 'common text is correct');
     });
 
+    test('Action dialogues must have "Cancel" button', function(assert) {
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+        const cancelButton = this.wrapper.getDialogButton('Cancel');
+        assert.strictEqual(cancelButton.length, 1, ' Dialog Cancel button exists');
+        cancelButton.trigger('dxclick');
+        const fileNames = this.wrapper.getDetailsItemNamesTexts();
+        assert.strictEqual(fileNames.filter(name => name === 'File 1.txt').length, 1, 'File wasn\'t copied');
+    });
+
 });
