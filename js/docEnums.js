@@ -1053,7 +1053,7 @@
 
 /**
  * @typedef {string} Enums.FileManagerToolbarItem
- * @enum {'showNavPane'|'create'|'upload'|'refresh'|'viewSwitcher'|'download'|'move'|'copy'|'rename'|'delete'|'clear'|'separator'}
+ * @enum {'showNavPane'|'create'|'upload'|'refresh'|'switchView'|'download'|'move'|'copy'|'rename'|'delete'|'clear'|'separator'}
  */
 
 /**
@@ -1112,7 +1112,7 @@
 
 /**
  * @typedef {string} Enums.DiagramToolbarCommand
- * @enum {'separator'|'export'|'undo'|'redo'|'cut'|'copy'|'paste'|'selectAll'|'delete'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'lock'|'unlock'|'sendToBack'|'bringToFront'|'insertShapeImage'|'editShapeImage'|'deleteShapeImage'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'autoLayout'|'fullScreen'}
+ * @enum {'separator'|'export'|'undo'|'redo'|'cut'|'copy'|'paste'|'selectAll'|'delete'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'lock'|'unlock'|'sendToBack'|'bringToFront'|'insertShapeImage'|'editShapeImage'|'deleteShapeImage'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'autoLayout'|'fullScreen'|'zoomLevel'|'autoZoom'|'showGrid'|'snapToGrid'|'gridSize'|'units'}
  */
 
 /**
@@ -1123,6 +1123,11 @@
 /**
  * @typedef {string} Enums.DiagramPropertiesPanelCommand
  * @enum {'zoomLevel'|'autoZoom'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageOrientation'|'pageColor'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramPanelVisibility
+ * @enum {'visible'|'collapsed'|'disabled'}
  */
 
 /**

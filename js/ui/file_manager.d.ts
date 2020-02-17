@@ -4,6 +4,8 @@ import {
     dxElement
 } from '../core/element';
 
+import FileSystemItem from '../file_management/file_system_item';
+
 import {
     dxContextMenuItem
 } from './context_menu';
@@ -45,6 +47,14 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      */
     currentPath?: string;
     /**
+     * @docid dxFileManagerOptions.currentPathKeys
+     * @type Array<string>
+     * @default []
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    currentPathKeys?: Array<string>;
+    /**
      * @docid dxFileManagerOptions.customizeDetailColumns
      * @type function
      * @type_function_param1 columns:Array<dxDataGridColumn>
@@ -56,20 +66,20 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.customizeThumbnail
      * @type function
-     * @type_function_param1 fileItem:object
+     * @type_function_param1 fileSystemItem:FileSystemItem
      * @type_function_return string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeThumbnail?: ((fileItem: any) => string);
+    customizeThumbnail?: ((fileSystemItem: FileSystemItem) => string);
     /**
-     * @docid dxFileManagerOptions.fileProvider
+     * @docid dxFileManagerOptions.fileSystemProvider
      * @type object
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fileProvider?: any;
+    fileSystemProvider?: any;
     /**
      * @docid dxFileManagerOptions.itemView
      * @type object
@@ -83,24 +93,25 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
+     * @type_function_param1_field4 directory:FileSystemItem
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: dxElement, model?: any }) => any);
+    onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, directory?: FileSystemItem }) => any);
     /**
      * @docid dxFileManagerOptions.onSelectedFileOpened
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 fileItem:object
+     * @type_function_param1_field4 file:FileSystemItem
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, fileItem?: any }) => any);
+    onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, file?: FileSystemItem }) => any);
     /**
      * @docid dxFileManagerOptions.permissions
      * @type object
@@ -137,7 +148,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    upload?: { maxFileSize?: number };
+    upload?: { maxFileSize?: number, chunkSize?: number };
 }
 /**
  * @docid dxFileManager
@@ -219,15 +230,15 @@ export interface dxFileManagerToolbar {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+    fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
     /**
      * @docid dxFileManagerToolbar.items
      * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
-     * @default [ "showNavPane", "create", "upload", "viewSwitcher", { name: "separator", location: "after" }, "refresh" ]
+     * @default [ "showNavPane", "create", "upload", "switchView", { name: "separator", location: "after" }, "refresh" ]
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+    items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
 }
 
 export interface dxFileManagerToolbarItem extends dxToolbarItem {
@@ -244,7 +255,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
+    name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
     /**
      * @docid dxFileManagerToolbarItem.visible
      * @default undefined

@@ -1,10 +1,10 @@
-import { ensureDefined, noop } from '../../../core/utils/common';
-import { isFunction } from '../../../core/utils/type';
-import { compileGetter } from '../../../core/utils/data';
+import { ensureDefined, noop } from '../core/utils/common';
+import { isFunction } from '../core/utils/type';
+import { compileGetter } from '../core/utils/data';
 
-import { FileProvider } from './file_provider';
+import FileSystemProviderBase from './provider_base';
 
-class CustomFileProvider extends FileProvider {
+class CustomFileSystemProvider extends FileSystemProviderBase {
 
     constructor(options) {
         options = ensureDefined(options, { });
@@ -31,12 +31,11 @@ class CustomFileProvider extends FileProvider {
         this._downloadItemsFunction = this._ensureFunction(options.downloadItems);
 
         this._getItemsContentFunction = this._ensureFunction(options.getItemsContent);
-
-        this._uploadChunkSize = options.uploadChunkSize;
     }
 
-    getItems(pathInfo) {
-        return this._executeActionAsDeferred(() => this._getItemsFunction(pathInfo), true)
+    getItems(parentDir) {
+        const pathInfo = parentDir.getFullPathInfo();
+        return this._executeActionAsDeferred(() => this._getItemsFunction(parentDir), true)
             .then(dataItems => this._convertDataObjectsToFileItems(dataItems, pathInfo));
     }
 
@@ -44,7 +43,7 @@ class CustomFileProvider extends FileProvider {
         return this._executeActionAsDeferred(() => this._renameItemFunction(item, name));
     }
 
-    createFolder(parentDir, name) {
+    createDirectory(parentDir, name) {
         return this._executeActionAsDeferred(() => this._createDirectoryFunction(parentDir, name));
     }
 
@@ -72,12 +71,8 @@ class CustomFileProvider extends FileProvider {
         return this._downloadItemsFunction(items);
     }
 
-    getItemContent(items) {
+    getItemsContent(items) {
         return this._executeActionAsDeferred(() => this._getItemsContentFunction(items));
-    }
-
-    getFileUploadChunkSize() {
-        return ensureDefined(this._uploadChunkSize, super.getFileUploadChunkSize());
     }
 
     _hasSubDirs(dataObj) {
@@ -95,4 +90,4 @@ class CustomFileProvider extends FileProvider {
     }
 }
 
-module.exports = CustomFileProvider;
+module.exports = CustomFileSystemProvider;

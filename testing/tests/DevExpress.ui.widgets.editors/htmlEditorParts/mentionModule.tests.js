@@ -463,6 +463,32 @@ QUnit.module('Mentions module', moduleConfig, () => {
         assert.ok(isLastListItemFocused);
     });
 
+    test('trigger "arrow down" or "arrow up" does not change focused item in case data source is loading', function(assert) {
+        const mention = new Mentions(this.quillMock, this.options);
+
+        mention.savePosition(0);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
+
+        this.clock.tick();
+
+        this.$element.trigger($.Event('keydown', { key: 'ArrowUp', which: KEY_CODES.ARROW_UP }));
+
+        const $list = $(`.${SUGGESTION_LIST_CLASS}`);
+        const getLastItem = () => $list.find(`.${LIST_ITEM_CLASS}`).last();
+        const getFocusedItem = () => $list.find(`.${LIST_ITEM_CLASS}.${FOCUSED_STATE_CLASS}`);
+        const $lastItem = getLastItem();
+
+        assert.ok($lastItem.hasClass(FOCUSED_STATE_CLASS), 'last item is focused');
+
+        mention._list.getDataSource().beginLoading();
+
+        this.$element.trigger($.Event('keydown', { key: 'ArrowDown', which: KEY_CODES.ARROW_DOWN }));
+        assert.ok(getFocusedItem().is($lastItem), 'the same item is still focused');
+
+        this.$element.trigger($.Event('keydown', { key: 'ArrowUp', which: KEY_CODES.ARROW_UP }));
+        assert.ok(getFocusedItem().is($lastItem), 'the same item is still focused');
+    });
+
     APPLY_VALUE_KEYS.forEach(({ key, code }) => {
         test(`trigger '${key}' key should select focused list item`, function(assert) {
             const mention = new Mentions(this.quillMock, this.options);

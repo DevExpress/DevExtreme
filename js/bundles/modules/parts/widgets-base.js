@@ -1,6 +1,6 @@
 const DevExpress = require('./core');
 require('./data');
-require('./file_providers');
+require('./file_management');
 
 /// BUNDLER_PARTS
 /* UI core (dx.module-core.js) */

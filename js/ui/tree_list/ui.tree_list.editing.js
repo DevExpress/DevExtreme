@@ -124,7 +124,7 @@ const EditingController = editingModule.controllers.editing.inherit((function() 
 
             parentIdSetter(options.data, parentKey);
 
-            this.callBase.apply(this, arguments);
+            return this.callBase.apply(this, arguments);
         },
 
         allowAdding: function(options) {

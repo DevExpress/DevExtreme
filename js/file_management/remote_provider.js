@@ -1,19 +1,19 @@
-import $ from '../../../core/renderer';
-import ajax from '../../../core/utils/ajax';
-import { ensureDefined, noop } from '../../../core/utils/common';
-import Guid from '../../../core/guid';
-import { getWindow } from '../../../core/utils/window';
-import { each } from '../../../core/utils/iterator';
-import { Deferred } from '../../../core/utils/deferred';
-import eventsEngine from '../../../events/core/events_engine';
+import $ from '../core/renderer';
+import ajax from '../core/utils/ajax';
+import { ensureDefined, noop } from '../core/utils/common';
+import Guid from '../core/guid';
+import { getWindow } from '../core/utils/window';
+import { each } from '../core/utils/iterator';
+import { Deferred } from '../core/utils/deferred';
+import eventsEngine from '../events/core/events_engine';
 
-import { FileProvider } from './file_provider';
-import { compileGetter } from '../../../core/utils/data';
+import FileSystemProviderBase from './provider_base';
+import { compileGetter } from '../core/utils/data';
 
 const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = 'chunk';
 
-class RemoteFileProvider extends FileProvider {
+class RemoteFileSystemProvider extends FileSystemProviderBase {
 
     constructor(options) {
         options = ensureDefined(options, { });
@@ -22,7 +22,8 @@ class RemoteFileProvider extends FileProvider {
         this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || 'hasSubDirectories');
     }
 
-    getItems(pathInfo) {
+    getItems(parentDir) {
+        const pathInfo = parentDir.getFullPathInfo();
         return this._getEntriesByPath(pathInfo)
             .then(result => this._convertDataObjectsToFileItems(result.result, pathInfo));
     }
@@ -34,12 +35,12 @@ class RemoteFileProvider extends FileProvider {
         });
     }
 
-    createFolder(parentDir, name) {
+    createDirectory(parentDir, name) {
         return this._executeRequest('CreateDir', {
             pathInfo: parentDir.getFullPathInfo(),
             name
         }).done(() => {
-            if(parentDir && !parentDir.isRoot) {
+            if(parentDir && !parentDir.isRoot()) {
                 parentDir.hasSubDirs = true;
             }
         });
@@ -134,7 +135,7 @@ class RemoteFileProvider extends FileProvider {
         setTimeout(() => $form.remove());
     }
 
-    getItemContent(items) {
+    getItemsContent(items) {
         const args = this._getDownloadArgs(items);
 
         const formData = new window.FormData();
@@ -248,4 +249,4 @@ class RemoteFileProvider extends FileProvider {
 
 }
 
-module.exports = RemoteFileProvider;
+module.exports = RemoteFileSystemProvider;

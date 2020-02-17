@@ -347,7 +347,6 @@
         "dxDiagram-categoryOrgChart": "TODO",
         "dxDiagram-categoryContainers": "TODO",
         "dxDiagram-categoryCustom": "TODO",
-        "dxDiagram-commandProperties": "TODO",
         "dxDiagram-commandExport": "TODO",
         "dxDiagram-commandExportToSvg": "TODO",
         "dxDiagram-commandExportToPng": "TODO",
@@ -405,12 +404,17 @@
         "dxDiagram-unitIn": "TODO",
         "dxDiagram-unitCm": "TODO",
         "dxDiagram-unitPx": "TODO",
+
         "dxDiagram-dialogButtonOK": "TODO",
         "dxDiagram-dialogButtonCancel": "TODO",
         "dxDiagram-dialogInsertShapeImageTitle": "TODO",
         "dxDiagram-dialogEditShapeImageTitle": "TODO",
         "dxDiagram-dialogEditShapeImageSelectButton": "TODO",
         "dxDiagram-dialogEditShapeImageLabelText": "TODO",
+
+        "dxDiagram-uiProperties": "TODO",
+        "dxDiagram-uiShowToolbox": "TODO",
+        "dxDiagram-uiSearch": "TODO",
 
         "dxDiagram-shapeText": "TODO",
         "dxDiagram-shapeRectangle": "TODO",

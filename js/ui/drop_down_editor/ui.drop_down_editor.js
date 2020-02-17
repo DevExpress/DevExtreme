@@ -125,7 +125,6 @@ const DropDownEditor = TextBox.inherit({
             dropDownButtonTemplate: 'dropDownButton',
 
             fieldTemplate: null,
-            contentTemplate: null,
 
             openOnFieldClick: false,
 
@@ -484,6 +483,8 @@ const DropDownEditor = TextBox.inherit({
         this._renderPopupContent();
     },
 
+    _renderPopupContent: noop,
+
     _renderPopup: function() {
         this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this._options.cache('dropDownOptions')));
 
@@ -531,7 +532,8 @@ const DropDownEditor = TextBox.inherit({
             showCloseButton: false,
             toolbarItems: this._getPopupToolbarItems(),
             onPositioned: this._popupPositionedHandler.bind(this),
-            fullScreen: false
+            fullScreen: false,
+            contentTemplate: null
         };
     },
 
@@ -581,27 +583,6 @@ const DropDownEditor = TextBox.inherit({
         }
 
         return this.callBase(positionRequest);
-    },
-
-    _renderPopupContent: function() {
-        const contentTemplate = this._getTemplateByOption('contentTemplate');
-
-        if(!(contentTemplate && this.option('contentTemplate'))) {
-            return;
-        }
-
-        const $popupContent = this._popup.$content();
-        const templateData = {
-            value: this._fieldRenderData(),
-            component: this
-        };
-
-        $popupContent.empty();
-
-        contentTemplate.render({
-            container: getPublicElement($popupContent),
-            model: templateData
-        });
     },
 
     _closeOutsideDropDownHandler: function({ target }) {
@@ -778,7 +759,6 @@ const DropDownEditor = TextBox.inherit({
                     this._invalidate();
                 }
                 break;
-            case 'contentTemplate':
             case 'acceptCustomValue':
             case 'openOnFieldClick':
                 this._invalidate();

@@ -1,14 +1,14 @@
-import { compileGetter } from '../../../core/utils/data';
-import { pathCombine, getFileExtension, PATH_SEPARATOR } from '../ui.file_manager.utils';
-import { ensureDefined } from '../../../core/utils/common';
-import { deserializeDate } from '../../../core/utils/date_serialization';
-import { each } from '../../../core/utils/iterator';
-import { isPromise } from '../../../core/utils/type';
-import { Deferred } from '../../../core/utils/deferred';
+import { compileGetter } from '../core/utils/data';
+import { ensureDefined } from '../core/utils/common';
+import { deserializeDate } from '../core/utils/date_serialization';
+import { each } from '../core/utils/iterator';
+import { isPromise } from '../core/utils/type';
+import { Deferred } from '../core/utils/deferred';
+import FileSystemItem from './file_system_item';
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
-class FileProvider {
+class FileSystemProviderBase {
 
     constructor(options) {
         options = ensureDefined(options, {});
@@ -21,23 +21,23 @@ class FileProvider {
         this._thumbnailGetter = compileGetter(options.thumbnailExpr || 'thumbnail');
     }
 
-    getItems(pathInfo) {
+    getItems(parentDirectory) {
         return [];
     }
 
     renameItem(item, name) {
     }
 
-    createFolder(parentFolder, name) {
+    createDirectory(parentDirectory, name) {
     }
 
     deleteItems(items) {
     }
 
-    moveItems(items, destinationFolder) {
+    moveItems(items, destinationDirectory) {
     }
 
-    copyItems(items, destinationFolder) {
+    copyItems(items, destinationDirectory) {
     }
 
     uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
@@ -49,7 +49,7 @@ class FileProvider {
     downloadItems(items) {
     }
 
-    getItemContent(items) {
+    getItemsContent(items) {
     }
 
     getFileUploadChunkSize() {
@@ -69,7 +69,7 @@ class FileProvider {
         return result;
     }
     _createFileItem(dataObj, pathInfo) {
-        const fileItem = new FileManagerItem(pathInfo, this._nameGetter(dataObj), !!this._isDirGetter(dataObj));
+        const fileItem = new FileSystemItem(pathInfo, this._nameGetter(dataObj), !!this._isDirGetter(dataObj));
 
         fileItem.size = this._sizeGetter(dataObj);
         if(fileItem.size === undefined) {
@@ -149,69 +149,4 @@ class FileProvider {
     }
 }
 
-class FileManagerItem {
-    constructor(pathInfo, name, isDirectory) {
-        this.name = name;
-
-        this.pathInfo = pathInfo && [...pathInfo] || [];
-        this.parentPath = this._getPathByPathInfo(this.pathInfo);
-        this.key = this.relativeName = pathCombine(this.parentPath, name);
-
-        this.isDirectory = isDirectory || false;
-        this.isRoot = false;
-
-        this.size = 0;
-        this.dateModified = new Date();
-
-        this.thumbnail = '';
-        this.tooltipText = '';
-    }
-
-    getFullPathInfo() {
-        const pathInfo = [...this.pathInfo];
-        !this.isRoot && pathInfo.push({
-            key: this.key,
-            name: this.name
-        });
-        return pathInfo;
-    }
-
-    getExtension() {
-        return this.isDirectory ? '' : getFileExtension(this.name);
-    }
-
-    equals(item) {
-        return item && this.key === item.key;
-    }
-
-    createClone() {
-        const result = new FileManagerItem(this.pathInfo, this.name, this.isDirectory);
-        result.key = this.key;
-        result.size = this.size;
-        result.dateModified = this.dateModified;
-        result.thumbnail = this.thumbnail;
-        result.tooltipText = this.tooltipText;
-        result.hasSubDirs = this.hasSubDirs;
-        result.dataItem = this.dataItem;
-        return result;
-    }
-
-    _getPathByPathInfo(pathInfo) {
-        return pathInfo
-            .map(info => info.name)
-            .join(PATH_SEPARATOR);
-    }
-}
-
-class FileManagerRootItem extends FileManagerItem {
-    constructor() {
-        super(null, 'Files', true);
-        this.key = '__dxfmroot_394CED1B-58CF-4925-A5F8-042BC0822B31_51558CB8-C170-4655-A9E0-C454ED8EA2C1';
-        this.relativeName = '';
-        this.isRoot = true;
-    }
-}
-
-module.exports.FileProvider = FileProvider;
-module.exports.FileManagerItem = FileManagerItem;
-module.exports.FileManagerRootItem = FileManagerRootItem;
+module.exports = FileSystemProviderBase;

@@ -349,7 +349,6 @@
         "dxDiagram-categoryOrgChart": "Организационная схема",
         "dxDiagram-categoryContainers": "Контейнеры",
         "dxDiagram-categoryCustom": "Пользовательские",
-        "dxDiagram-commandProperties": "Настройки",
         "dxDiagram-commandExport": "Экспорт",
         "dxDiagram-commandExportToSvg": "Экспорт в SVG",
         "dxDiagram-commandExportToPng": "Экспорт в PNG",
@@ -407,12 +406,17 @@
         "dxDiagram-unitIn": "дюйм(а)",
         "dxDiagram-unitCm": "см",
         "dxDiagram-unitPx": "пиксель(я)",
+
         "dxDiagram-dialogButtonOK": "ОК",
         "dxDiagram-dialogButtonCancel": "Отмена",
         "dxDiagram-dialogInsertShapeImageTitle": "Добавить изображение",
         "dxDiagram-dialogEditShapeImageTitle": "Изменить изображение",
         "dxDiagram-dialogEditShapeImageSelectButton": "Выберите изображение",
         "dxDiagram-dialogEditShapeImageLabelText": "или перетащите файл сюда",
+
+        "dxDiagram-uiProperties": "Настройки",
+        "dxDiagram-uiShowToolbox": "Панель инструментов",
+        "dxDiagram-uiSearch": "Поиск",
 
         "dxDiagram-shapeText": "Текст",
         "dxDiagram-shapeRectangle": "Прямоугольник",

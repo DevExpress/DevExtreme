@@ -440,17 +440,19 @@ module.exports = {
                 }
             };
 
+            const customizeTextForBooleanDataType = function(e) {
+                if(e.value === true) {
+                    return this.trueText || 'true';
+                } else if(e.value === false) {
+                    return this.falseText || 'false';
+                } else {
+                    return e.valueText || '';
+                }
+            };
+
             const getCustomizeTextByDataType = function(dataType) {
                 if(dataType === 'boolean') {
-                    return function(e) {
-                        if(e.value === true) {
-                            return this.trueText || 'true';
-                        } else if(e.value === false) {
-                            return this.falseText || 'false';
-                        } else {
-                            return e.valueText || '';
-                        }
-                    };
+                    return customizeTextForBooleanDataType;
                 }
             };
 
@@ -2547,7 +2549,8 @@ module.exports = {
                     }
 
                     return column.index;
-                }
+                },
+                getCustomizeTextByDataType: getCustomizeTextByDataType
             };
         })())
     }

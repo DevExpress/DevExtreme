@@ -1,13 +1,14 @@
 import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import { hasWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
-import Widget from '../widget/ui.widget';
-import Popup from '../popup';
+import messageLocalization from '../../localization/message';
 import TextBox from '../text_box';
 import Accordion from '../accordion';
 import ScrollView from '../scroll_view';
 import Tooltip from '../tooltip';
+import DiagramFloatingPanel from './ui.diagram.floating_panel';
 
-const DIAGRAM_TOOLBOX_SPACING = 22;
 const DIAGRAM_TOOLBOX_POPUP_WIDTH = 136;
 const DIAGRAM_TOOLBOX_POPUP_CLASS = 'dx-diagram-toolbox-popup';
 const DIAGRAM_TOOLBOX_PANEL_CLASS = 'dx-diagram-toolbox-panel';
@@ -15,36 +16,21 @@ const DIAGRAM_TOOLBOX_INPUT_CLASS = 'dx-diagram-toolbox-input';
 const DIAGRAM_TOOLTIP_DATATOGGLE = 'shape-toolbox-tooltip';
 const DIAGRAM_SKIP_GESTURE_CLASS = 'dx-skip-gesture-event';
 
-class DiagramToolbox extends Widget {
+class DiagramToolbox extends DiagramFloatingPanel {
     _init() {
         super._init();
 
         this._toolboxes = [];
         this.filterText = '';
-        this._onShapeCategoryRenderedAction = this._createActionByOption('onShapeCategoryRendered');
-        this._onFilterChangedAction = this._createActionByOption('onFilterChanged');
+        this._createOnShapeCategoryRenderedAction();
+        this._createOnFilterChangedAction();
     }
-    _initMarkup() {
-        super._initMarkup();
-
-        const that = this;
-        const $parent = this.$element();
-
-        const $popupElement = $('<div>')
-            .addClass(DIAGRAM_TOOLBOX_POPUP_CLASS)
-            .appendTo($parent);
-
-        this._popupInstance = this._createComponent($popupElement, Popup, {
-            animation: null,
+    _getPopupClass() {
+        return DIAGRAM_TOOLBOX_POPUP_CLASS;
+    }
+    _getPopupOptions() {
+        return extend(super._getPopupOptions(), {
             width: DIAGRAM_TOOLBOX_POPUP_WIDTH,
-            height: $parent.height() - 2 * DIAGRAM_TOOLBOX_SPACING,
-            position: {
-                my: 'left top',
-                at: 'left top',
-                of: $parent,
-                offset: DIAGRAM_TOOLBOX_SPACING + ' ' + DIAGRAM_TOOLBOX_SPACING
-            },
-            shading: false,
             toolbarItems: [{
                 widget: 'dxButton',
                 location: 'center',
@@ -56,23 +42,16 @@ class DiagramToolbox extends Widget {
                     stylingMode: 'outlined',
                     type: 'normal',
                 }
-            }],
-            onContentReady: function() {
-                that._renderPopupContent(that._popupInstance.content());
-            }
+            }]
         });
-
-        if(this.option('visible')) {
-            this._popupInstance.show();
-        }
     }
     _renderPopupContent($parent) {
         const that = this;
         const $input = $('<div>')
             .addClass(DIAGRAM_TOOLBOX_INPUT_CLASS)
             .appendTo($parent);
-        this._searchInputInstance = this._createComponent($input, TextBox, {
-            placeholder: 'Search',
+        this._searchInput = this._createComponent($input, TextBox, {
+            placeholder: messageLocalization.format('dxDiagram-uiSearch'),
             onValueChanged: function(data) {
                 that._onInputChanged(data.value);
             },
@@ -88,27 +67,26 @@ class DiagramToolbox extends Widget {
                     stylingMode: 'outlined',
                     type: 'normal',
                     onClick: function() {
-                        that._searchInputInstance.focus();
+                        that._searchInput.focus();
                     }
                 }
             }]
         });
-
+        const searchInputHeight = !hasWindow() ? '100%' : 'calc(100% - ' + this._searchInput.$element().height() + 'px)';
         const $panel = $('<div>')
             .addClass(DIAGRAM_TOOLBOX_PANEL_CLASS)
-            .appendTo($parent);
+            .appendTo($parent)
+            .height(searchInputHeight);
         this._renderScrollView($panel);
     }
     _renderScrollView($parent) {
-        super._initMarkup();
-
         const $scrollViewWrapper = $('<div>')
             .appendTo($parent);
 
-        this._scrollViewInstance = this._createComponent($scrollViewWrapper, ScrollView);
+        this._scrollView = this._createComponent($scrollViewWrapper, ScrollView);
 
         const $accordion = $('<div>')
-            .appendTo(this._scrollViewInstance.content());
+            .appendTo(this._scrollView.content());
 
         this._renderAccordion($accordion);
     }
@@ -127,12 +105,17 @@ class DiagramToolbox extends Widget {
                 shapes: toolboxGroups[i].shapes,
                 onTemplate: (widget, $element, data) => {
                     const $toolboxElement = $($element);
+                    let toolboxWidth = DIAGRAM_TOOLBOX_POPUP_WIDTH;
+                    if(hasWindow()) {
+                        toolboxWidth -= ($toolboxElement.parent().width() - $toolboxElement.width() + 2);
+                    }
                     this._onShapeCategoryRenderedAction({
                         category: data.category,
                         displayMode: data.displayMode,
                         dataToggle: DIAGRAM_TOOLTIP_DATATOGGLE,
                         shapes: data.shapes,
-                        $element: $toolboxElement
+                        $element: $toolboxElement,
+                        width: toolboxWidth
                     });
                     this._toolboxes.push($toolboxElement);
 
@@ -173,7 +156,7 @@ class DiagramToolbox extends Widget {
     }
     _renderAccordion($container) {
         const data = this._getAccordionDataSource();
-        this._accordionInstance = this._createComponent($container, Accordion, {
+        this._accordion = this._createComponent($container, Accordion, {
             multiple: true,
             activeStateEnabled: false,
             focusStateEnabled: false,
@@ -190,24 +173,24 @@ class DiagramToolbox extends Widget {
 
         for(let i = 0; i < data.length; i++) {
             if(data[i].expanded === false) {
-                this._accordionInstance.collapseItem(i);
+                this._accordion.collapseItem(i);
             } else if(data[i].expanded === true) {
-                this._accordionInstance.expandItem(i);
+                this._accordion.expandItem(i);
             }
         }
     }
     _updateScrollAnimateSubscription(component) {
         component._deferredAnimate = new Deferred();
         component._deferredAnimate.done(() => {
-            this._scrollViewInstance.update();
+            this._scrollView.update();
             this._updateScrollAnimateSubscription(component);
         });
     }
     _raiseToolboxDragStart() {
-        this._scrollViewInstance.$element().addClass(DIAGRAM_SKIP_GESTURE_CLASS);
+        this._scrollView.$element().addClass(DIAGRAM_SKIP_GESTURE_CLASS);
     }
     _raiseToolboxDragEnd() {
-        this._scrollViewInstance.$element().removeClass(DIAGRAM_SKIP_GESTURE_CLASS);
+        this._scrollView.$element().removeClass(DIAGRAM_SKIP_GESTURE_CLASS);
     }
     _onInputChanged(text) {
         this.filterText = text;
@@ -221,13 +204,22 @@ class DiagramToolbox extends Widget {
         });
     }
 
+    _createOnShapeCategoryRenderedAction() {
+        this._onShapeCategoryRenderedAction = this._createActionByOption('onShapeCategoryRendered');
+    }
+    _createOnFilterChangedAction() {
+        this._onFilterChangedAction = this._createActionByOption('onFilterChanged');
+    }
     _optionChanged(args) {
         switch(args.name) {
-            case 'visible':
-                this._popupInstance.option('visible', args.value);
+            case 'onShapeCategoryRendered':
+                this._createOnShapeCategoryRenderedAction();
+                break;
+            case 'onFilterChanged':
+                this._createOnFilterChangedAction();
                 break;
             case 'toolboxGroups':
-                this._accordionInstance.option('dataSource', this._getAccordionDataSource());
+                this._accordion.option('dataSource', this._getAccordionDataSource());
                 break;
             default:
                 super._optionChanged(args);
