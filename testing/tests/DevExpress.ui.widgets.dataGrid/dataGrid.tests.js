@@ -2081,8 +2081,8 @@ QUnit.test('Columns should not shake during resizing', function(assert) {
     // assert
     let $cells = $('#dataGrid').find('td');
 
-    assert.equal($cells.eq(0).width(), 34, 'first column width');
-    assert.equal($cells.eq(1).width(), 333, 'second column width');
+    assert.roughEqual($cells.eq(0).width(), 34, 1.01, 'first column width');
+    assert.roughEqual($cells.eq(1).width(), 333, 1.01, 'second column width');
 
     for(let i = 0; i < 5; i++) {
         widths.push($('#dataGrid').find('td').eq(i).width());
@@ -2118,8 +2118,8 @@ QUnit.test('Columns should not shake during resizing', function(assert) {
     // assert
     $cells = $('#dataGrid').find('td');
 
-    assert.equal($cells.eq(0).width(), 35, 'first column width');
-    assert.equal($cells.eq(1).width(), 332, 'second column width');
+    assert.equal($cells.eq(0).width(), widths[0] + 1, 'first column width');
+    assert.equal($cells.eq(1).width(), widths[1] - 1, 'second column width');
 
     for(let i = 2; i < 5; i++) {
         assert.equal($cells.eq(i).width(), widths[i], 'width was not affected');
