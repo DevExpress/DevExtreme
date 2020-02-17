@@ -47,7 +47,7 @@ const compareLocales = function(first, second, assert) {
         'dxHtmlEditor-dialogLinkTextField',
         'dxDiagram-uiExport',
         'dxDiagram-commandUndo',
-        'dxDiagram-commandAutoLayoutHorizontal',
+        'dxDiagram-uiLayoutHorizontal',
         'dxDiagram-unitIn',
         'dxDiagram-unitCm',
         'dxDiagram-unitPx',
