@@ -580,9 +580,12 @@ QUnit.module('option change', {}, () => {
     });
 
     QUnit.test('dropDownOptions runtime change', function(assert) {
-        const dropDownButton = new DropDownButton('#dropDownButton', { deferRendering: false });
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            width: 100,
+            deferRendering: false
+        });
 
-        dropDownButton.option('dropDownOptions', { width: 100 });
+        dropDownButton.option('dropDownOptions', { width: 50 });
 
         if(!windowUtils.hasWindow()) {
             assert.ok(true, 'no window');
@@ -590,7 +593,21 @@ QUnit.module('option change', {}, () => {
         }
 
         const popup = getPopup(dropDownButton);
-        assert.strictEqual(popup.option('width'), 100, 'option has been changed');
+        assert.strictEqual(popup.option('width'), 50, 'option has been changed');
+    });
+
+    QUnit.test('dropDownOptions.visible option change should not do anything', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton');
+
+        dropDownButton.option('dropDownOptions', { visible: true });
+
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'no window');
+            return;
+        }
+
+        const popup = getPopup(dropDownButton);
+        assert.strictEqual(popup, undefined, 'popup has not been rendered');
     });
 
     QUnit.test('elementAttr runtime change', function(assert) {

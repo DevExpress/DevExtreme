@@ -100,6 +100,17 @@ QUnit.module('popup integration', {
         assert.ok(popup.option('closeOnOutsideClick'), 'popup should be closed on outside click');
     });
 
+    QUnit.test('popup should not be rendered if dropDownOptions.visible is true', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            dropDownOptions: {
+                visible: true
+            }
+        });
+        const popup = getPopup(dropDownButton);
+
+        assert.strictEqual(popup, undefined, 'popup has not been rendered');
+    });
+
     QUnit.test('popup should have special classes', function(assert) {
         assert.ok($(this.popup.content()).hasClass(DROP_DOWN_BUTTON_CONTENT), 'popup has a special class');
         assert.ok($(this.popup._wrapper()).hasClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS), 'popup wrapper has a special class');

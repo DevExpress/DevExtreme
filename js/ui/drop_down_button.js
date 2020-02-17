@@ -321,7 +321,6 @@ const DropDownButton = Widget.inherit({
             width: 'auto',
             height: 'auto',
             shading: false,
-            visible: this.option('opened'),
             position: {
                 of: this.$element(),
                 collision: 'flipfit',
@@ -331,7 +330,7 @@ const DropDownButton = Widget.inherit({
                     y: -1
                 }
             }
-        }, this._options.cache('dropDownOptions'));
+        }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
     },
 
     _listOptions() {
@@ -530,6 +529,7 @@ const DropDownButton = Widget.inherit({
                 this._innerWidgetOptionChanged(this._buttonGroup, args);
                 break;
             case 'dropDownOptions':
+                args.value.visible && delete args.value.visible;
                 this._innerWidgetOptionChanged(this._popup, args);
                 break;
             case 'opened':
