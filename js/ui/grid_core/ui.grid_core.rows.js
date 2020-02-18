@@ -632,9 +632,19 @@ module.exports = {
                     const that = this;
                     const row = options.row;
                     const rowTemplate = that.option('rowTemplate');
+                    const isDataRow = row.rowType === 'data';
+                    const isGroupRow = row.rowType === 'group';
 
-                    if((row.rowType === 'data' || row.rowType === 'group') && !isDefined(row.groupIndex) && rowTemplate) {
-                        that.renderTemplate($table, rowTemplate, extend({ columns: options.columns }, row), true);
+                    if((isDataRow || isGroupRow) && !isDefined(row.groupIndex) && rowTemplate) {
+                        const rowOptions = extend({ columns: options.columns }, row);
+                        that.renderTemplate($table, rowTemplate, rowOptions, true);
+                        if(that.option('repaintChangesOnly') && isDataRow) {
+                            that._addWatchMethod(rowOptions, row);
+                            const stopWatch = rowOptions.watch((data) => extend(true, {}, data), () => {
+                                stopWatch();
+                                that._dataController.repaintRows([row.rowIndex]);
+                            });
+                        }
                     } else {
                         that.callBase($table, options);
                     }
