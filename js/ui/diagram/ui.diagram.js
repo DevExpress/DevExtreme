@@ -75,7 +75,7 @@ class Diagram extends Widget {
         this.$element().addClass(DIAGRAM_CLASS);
 
         this._mainToolbar = undefined;
-        if(this.option('toolbar.visible')) {
+        if(this.option('mainToolbar.visible')) {
             this._renderMainToolbar();
         }
 
@@ -160,7 +160,7 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
         this._mainToolbar = this._createComponent($toolbarWrapper, DiagramMainToolbar, {
-            commands: this.option('toolbar.commands'),
+            commands: this.option('mainToolbar.commands'),
             onContentReady: ({ component }) => this._registerBar(component),
             onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
@@ -1616,15 +1616,15 @@ class Diagram extends Widget {
                 * @type Array<Enums.DiagramShapeType>|Array<String>
                 */
             },
-            toolbar: {
+            mainToolbar: {
                 /**
-                * @name dxDiagramOptions.toolbar.visible
+                * @name dxDiagramOptions.mainToolbar.visible
                 * @type boolean
                 * @default true
                 */
                 visible: false,
                 /**
-                * @name dxDiagramOptions.toolbar.commands
+                * @name dxDiagramOptions.mainToolbar.commands
                 * @type Array<Enums.DiagramToolbarCommand>
                 * @default undefined
                 */
@@ -1861,7 +1861,7 @@ class Diagram extends Widget {
     _invalidateMainToolbarCommands() {
         if(this._mainToolbar) {
             this._mainToolbar.option({
-                commands: this.option('toolbar.commands')
+                commands: this.option('mainToolbar.commands')
             });
         }
     }
@@ -2001,8 +2001,8 @@ class Diagram extends Widget {
                     this._invalidate();
                 }
                 break;
-            case 'toolbar':
-                if(args.fullName === 'toolbar.commands') {
+            case 'mainToolbar':
+                if(args.fullName === 'mainToolbar.commands') {
                     this._invalidateMainToolbarCommands();
                 } else {
                     this._invalidate();
