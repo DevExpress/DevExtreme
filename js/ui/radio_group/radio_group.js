@@ -261,7 +261,7 @@ class RadioGroup extends Editor {
     }
 
     _renderRadios() {
-        this._isRadiosRendered = new Deferred();
+        this._isRadiosInited = new Deferred();
         const $radios = $('<div>').appendTo(this.$element());
 
         this._radios = this._createComponent($radios, RadioCollection, {
@@ -280,7 +280,7 @@ class RadioGroup extends Editor {
             selectedItemKeys: [this.option('value')],
             tabIndex: this.option('tabIndex')
         });
-        this._isRadiosRendered.resolve();
+        this._isRadiosInited.resolve();
     }
 
     _renderSubmitElement() {
@@ -305,7 +305,7 @@ class RadioGroup extends Editor {
     }
 
     _setCollectionWidgetOption() {
-        this._isRadiosRendered.done(this._setWidgetOption.bind(this, '_radios', arguments));
+        this._isRadiosInited.done(this._setWidgetOption.bind(this, '_radios', arguments));
     }
 
     _toggleActiveState($element, value, e) {
