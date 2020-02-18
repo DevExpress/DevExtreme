@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
-import { getWindow } from '../core/utils/window';
+import { isSmallScreen } from './ui.file_manager.adaptivity';
 
 import Widget from '../widget/ui.widget';
 import Popup from '../popup';
@@ -42,10 +42,10 @@ export default class FileManagerNotificationControl extends Widget {
         this._progressDrawer = this._createComponent($progressDrawer, Drawer, {
             opened: false,
             position: 'right',
-            openedStateMode: $(getWindow()).width() <= 573 ? 'overlap' : 'shrink',
+            openedStateMode: isSmallScreen() ? 'overlap' : 'shrink',
             closeOnOutsideClick: true,
-            shading: true,
-            template: container => this._progressDrawerTemplate(container)
+            shading: isSmallScreen() ? true : false,
+            template: (container) => this.getProgressPanel(container)
         });
     }
 
@@ -105,6 +105,10 @@ export default class FileManagerNotificationControl extends Widget {
         this._notifyError(errorInfo);
     }
 
+    getProgressPanelDrawer() {
+        return this._progressDrawer;
+    }
+
     _hideProgressPanel() {
         setTimeout(() => this._progressDrawer.hide());
     }
@@ -122,20 +126,20 @@ export default class FileManagerNotificationControl extends Widget {
         this._raiseActionProgress(message, status);
     }
 
-    _progressDrawerTemplate(container) {
-        const $panel = $('<div>')
-            .appendTo(container);
+    getProgressPanel(container) {
+        if(!this._progressPanel) {
+            this._progressPanel = this._createComponent($('<div>'), FileManagerProgressPanel, {
+                onOperationClosed: ({ info }) => this._onProgressPanelOperationClosed(info),
+                onOperationCanceled: ({ info }) => this._raiseOperationCanceled(info),
+                onOperationItemCanceled: ({ item, itemIndex }) => this._raiseOperationItemCanceled(item, itemIndex),
+                onPanelClosed: () => this._hideProgressPanel()
+            });
+        }
+        if(container) {
+            this._progressPanel.$element().appendTo(container);
+        }
 
-        this._progressPanel = this._createComponent($panel, this._getProgressPanelComponent(), {
-            onOperationClosed: ({ info }) => this._onProgressPanelOperationClosed(info),
-            onOperationCanceled: ({ info }) => this._raiseOperationCanceled(info),
-            onOperationItemCanceled: ({ item, itemIndex }) => this._raiseOperationItemCanceled(item, itemIndex),
-            onPanelClosed: () => this._hideProgressPanel()
-        });
-    }
-
-    _getProgressPanelComponent() {
-        return FileManagerProgressPanel;
+        return this._progressPanel;
     }
 
     _notifyError(errorInfo) {

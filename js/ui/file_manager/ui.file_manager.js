@@ -21,7 +21,7 @@ import FileManagerToolbar from './ui.file_manager.toolbar';
 import FileManagerNotificationControl from './ui.file_manager.notification';
 import FileManagerEditingControl from './ui.file_manager.editing';
 import FileManagerBreadcrumbs from './ui.file_manager.breadcrumbs';
-import FileManagerAdaptivityControl from './ui.file_manager.adaptivity';
+import { FileManagerAdaptivityControl } from './ui.file_manager.adaptivity';
 
 const FILE_MANAGER_CLASS = 'dx-filemanager';
 const FILE_MANAGER_WRAPPER_CLASS = FILE_MANAGER_CLASS + '-wrapper';
@@ -210,6 +210,14 @@ class FileManager extends Widget {
     }
 
     _onAdaptiveStateChanged({ enabled }) {
+        const progressPanelDrawer = this._notificationControl && this._notificationControl.getProgressPanelDrawer();
+        if(progressPanelDrawer) {
+            this._notificationControl.getProgressPanel().$element().appendTo(this.$element());
+            progressPanelDrawer.option({
+                openedStateMode: enabled ? 'overlap' : 'shrink',
+                shading: enabled ? true : false
+            });
+        }
         this._commandManager.setCommandEnabled('showNavPane', enabled);
         this._updateToolbar();
     }
