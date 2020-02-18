@@ -5624,7 +5624,8 @@ QUnit.test('Freespace row have the correct height when using master-detail with 
         dataRowsHeight += $(this).outerHeight();
     });
 
-    const expectedFreeSpaceRowHeight = $contentTable.height() - dataRowsHeight;
+    const heightCorrection = gridInstance.getView('rowsView')._getHeightCorrection();
+    const expectedFreeSpaceRowHeight = $contentTable.height() - dataRowsHeight - heightCorrection;
 
     // assert
     assert.roughEqual($dataGrid.find('.dx-freespace-row').eq(2).height(), expectedFreeSpaceRowHeight, 1, 'Height of the freeSpace row');
