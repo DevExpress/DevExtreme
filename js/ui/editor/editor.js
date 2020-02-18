@@ -62,7 +62,7 @@ const Editor = Widget.inherit({
     },
 
     _attachKeyboardEvents() {
-        const readOnly = this.option();
+        const { readOnly } = this.option();
 
         !readOnly && this.callBase();
     },
@@ -189,15 +189,16 @@ const Editor = Widget.inherit({
 
             this._$validationMessage = $('<div>');
             this._validationMessage = this._createValidationOverlay($element, this._$validationMessage);
+            this._validationMessage
+                .$content()
+                .addClass('dx-invalid-message-content')
+                .attr('id', messageId);
             this._$validationMessage
                 .addClass('dx-invalid-message')
                 .html(errorMessage)
                 .toggleClass('dx-invalid-message-auto', validationMessageMode === 'auto')
                 .toggleClass('dx-invalid-message-always', validationMessageMode === 'always')
-                .appendTo($element)
-                .$content()
-                .addClass('dx-invalid-message-content')
-                .attr('id', messageId);
+                .appendTo($element);
 
             this.setAria('describedby', messageId);
             this._setValidationMessageMaxWidth();
