@@ -307,6 +307,9 @@ const DropDownButton = Widget.inherit({
             focusStateEnabled: false,
             deferRendering: this.option('deferRendering'),
             minWidth: () => {
+                if(!windowUtils.hasWindow()) {
+                    return;
+                }
                 return this.$element().outerWidth();
             },
             closeOnOutsideClick: (e) => {
@@ -424,10 +427,6 @@ const DropDownButton = Widget.inherit({
     },
 
     toggle(visible) {
-        if(!windowUtils.hasWindow()) {
-            return new Deferred().resolve();
-        }
-
         if(!this._popup) {
             this._renderPopup();
             this._renderContent();
@@ -598,10 +597,8 @@ const DropDownButton = Widget.inherit({
                 this._createSelectionChangedAction();
                 break;
             case 'deferRendering':
-                if(windowUtils.hasWindow() && !value && !this._popup) {
-                    this._renderPopup();
-                    this._renderContent();
-                }
+                this._renderPopup();
+                this._renderContent();
                 break;
             default:
                 this.callBase(args);

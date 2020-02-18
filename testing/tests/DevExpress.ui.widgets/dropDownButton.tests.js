@@ -91,6 +91,39 @@ QUnit.module('popup integration', {
         assert.strictEqual(getList(dropDownButton), undefined, 'list should be lazy rendered');
     });
 
+    QUnit.test('dropDownOptions.deferRendering=false should not override deferRendering', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            deferRendering: true,
+            dropDownOptions: {
+                deferRendering: false
+            }
+        });
+
+        const popup = getPopup(dropDownButton);
+        assert.strictEqual(popup, undefined, 'popup has not been rendered');
+    });
+
+    QUnit.test('dropDownOptions.deferRendering=true should not override deferRendering', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            deferRendering: false,
+            dropDownOptions: {
+                deferRendering: true
+            }
+        });
+
+        const popup = getPopup(dropDownButton);
+        assert.strictEqual(popup.NAME, 'dxPopup', 'popup has been rendered');
+    });
+
+    QUnit.test('dropDownOptions.deferRendering optionChange should be ignored', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton');
+
+        dropDownButton.option('dropDownOptions', { deferRendering: false });
+
+        const popup = getPopup(dropDownButton);
+        assert.strictEqual(popup, undefined, 'dropDownOptions.deferRendering is ignored');
+    });
+
     QUnit.test('popup and list should be rendered on init when deferRendering is false', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', { deferRendering: false });
         const popup = getPopup(dropDownButton);
