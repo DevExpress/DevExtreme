@@ -10,6 +10,7 @@ import Tooltip from '../tooltip';
 import DiagramFloatingPanel from './ui.diagram.floating_panel';
 
 const DIAGRAM_TOOLBOX_WIDTH = 136;
+const DIAGRAM_TOOLBOX_MIN_HEIGHT = 130;
 const DIAGRAM_TOOLBOX_POPUP_CLASS = 'dx-diagram-toolbox-popup';
 const DIAGRAM_TOOLBOX_PANEL_CLASS = 'dx-diagram-toolbox-panel';
 const DIAGRAM_TOOLBOX_INPUT_CLASS = 'dx-diagram-toolbox-input';
@@ -28,9 +29,11 @@ class DiagramToolbox extends DiagramFloatingPanel {
     _getPopupClass() {
         return DIAGRAM_TOOLBOX_POPUP_CLASS;
     }
+    _getPopupMinHeight() {
+        return DIAGRAM_TOOLBOX_MIN_HEIGHT;
+    }
     _getPopupOptions() {
         return extend(super._getPopupOptions(), {
-            width: 'auto',
             toolbarItems: [{
                 widget: 'dxButton',
                 location: 'center',
