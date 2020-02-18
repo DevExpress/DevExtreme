@@ -1064,7 +1064,7 @@ const Scheduler = Widget.inherit({
 
     getCorrectedDatesByDaylightOffsets: function(originalStartDate, dates, appointmentData) {
         const startDateTimeZone = this.fire('getField', 'startDateTimeZone', appointmentData);
-        const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone) && typeUtils.isDefined(this._getTimezoneOffsetByOption(originalStartDate));
+        const needCheckTimezoneOffset = typeUtils.isDefined(startDateTimeZone);
         const convertedOriginalStartDate = this.fire('convertDateByTimezoneBack', new Date(originalStartDate.getTime()), startDateTimeZone);
 
         if(needCheckTimezoneOffset) {
