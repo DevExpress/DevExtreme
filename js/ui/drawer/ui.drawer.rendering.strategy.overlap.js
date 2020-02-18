@@ -106,7 +106,7 @@ class OverlapStrategy extends DrawerStrategy {
         $content.css('transform', 'inherit');
     }
 
-    slidePositionRendering(config, offset, animate) {
+    slidePositionRendering(config, _, animate) {
         const drawer = this.getDrawerInstance();
 
         this._initialPosition = drawer.isHorizontalDirection() ? { left: config.panelOffset } : { top: config.panelOffset };
@@ -132,7 +132,7 @@ class OverlapStrategy extends DrawerStrategy {
         }
     }
 
-    expandPositionRendering(config, offset, animate) {
+    expandPositionRendering(config, _, animate) {
         const drawer = this.getDrawerInstance();
 
         this._initialPosition = { left: 0 };
@@ -165,12 +165,12 @@ class OverlapStrategy extends DrawerStrategy {
         }
     }
 
-    getPositionRenderingConfig(offset) {
+    getPositionRenderingConfig(isDrawerOpened) {
         const drawer = this.getDrawerInstance();
-        const config = super.getPositionRenderingConfig(offset);
+        const config = super.getPositionRenderingConfig(isDrawerOpened);
 
         return extend(config, {
-            panelOffset: this._getPanelOffset(offset) * this.getDrawerInstance()._getPositionCorrection(),
+            panelOffset: this._getPanelOffset(isDrawerOpened) * this.getDrawerInstance()._getPositionCorrection(),
             $panelOverlayContent: drawer.getOverlay().$content(),
             marginTop: drawer.getRealPanelHeight() - config.size
         });

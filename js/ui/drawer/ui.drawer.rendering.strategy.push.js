@@ -9,7 +9,7 @@ class PushStrategy extends DrawerStrategy {
         return true;
     }
 
-    defaultPositionRendering(config, offset, animate) {
+    defaultPositionRendering(config, _, animate) {
         const drawer = this.getDrawerInstance();
 
         $(drawer.content()).css(drawer.isHorizontalDirection() ? 'width' : 'height', config.maxSize);
@@ -35,9 +35,9 @@ class PushStrategy extends DrawerStrategy {
         }
     }
 
-    getPositionRenderingConfig(offset) {
-        return extend(super.getPositionRenderingConfig(offset), {
-            contentPosition: this._getPanelSize(offset) * this.getDrawerInstance()._getPositionCorrection(),
+    getPositionRenderingConfig(isDrawerOpened) {
+        return extend(super.getPositionRenderingConfig(isDrawerOpened), {
+            contentPosition: this._getPanelSize(isDrawerOpened) * this.getDrawerInstance()._getPositionCorrection(),
             maxSize: this._getPanelSize(true)
         });
     }

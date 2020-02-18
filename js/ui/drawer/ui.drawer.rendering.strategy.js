@@ -106,22 +106,22 @@ class DrawerStrategy {
         });
     }
 
-    renderPosition(offset, animate) {
+    renderPosition(isDrawerOpened, animate) {
         const drawer = this.getDrawerInstance();
         const revealMode = drawer.option('revealMode');
 
         this.prepareAnimationDeferreds(animate);
 
-        const config = this.getPositionRenderingConfig(offset);
+        const config = this.getPositionRenderingConfig(isDrawerOpened);
 
         if(this.useDefaultAnimation()) {
-            this.defaultPositionRendering(config, offset, animate);
+            this.defaultPositionRendering(config, isDrawerOpened, animate);
         } else {
             if(revealMode === 'slide') {
-                this.slidePositionRendering(config, offset, animate);
+                this.slidePositionRendering(config, isDrawerOpened, animate);
             }
             if(revealMode === 'expand') {
-                this.expandPositionRendering(config, offset, animate);
+                this.expandPositionRendering(config, isDrawerOpened, animate);
             }
         }
     }
@@ -144,7 +144,7 @@ class DrawerStrategy {
         }
     }
 
-    getPositionRenderingConfig(offset) {
+    getPositionRenderingConfig(isDrawerOpened) {
         const drawer = this.getDrawerInstance();
 
         return {
@@ -152,7 +152,7 @@ class DrawerStrategy {
             $panel: $(drawer.content()),
             $content: $(drawer.viewContent()),
             defaultAnimationConfig: this._defaultAnimationConfig(),
-            size: this._getPanelSize(offset)
+            size: this._getPanelSize(isDrawerOpened)
         };
     }
 
@@ -173,38 +173,38 @@ class DrawerStrategy {
         };
     }
 
-    _getPanelOffset(offset) {
+    _getPanelOffset(isDrawerOpened) {
         const drawer = this.getDrawerInstance();
         const size = drawer.isHorizontalDirection() ? drawer.getRealPanelWidth() : drawer.getRealPanelHeight();
 
-        if(offset) {
+        if(isDrawerOpened) {
             return -(size - drawer.getMaxSize());
         } else {
             return -(size - drawer.getMinSize());
         }
     }
 
-    _getPanelSize(offset) {
-        return offset ? this.getDrawerInstance().getMaxSize() : this.getDrawerInstance().getMinSize();
+    _getPanelSize(isDrawerOpened) {
+        return isDrawerOpened ? this.getDrawerInstance().getMaxSize() : this.getDrawerInstance().getMinSize();
     }
 
-    renderShaderVisibility(offset, animate, duration) {
-        const fadeConfig = this._getFadeConfig(offset);
+    renderShaderVisibility(isDrawerOpened, animate, duration) {
+        const fadeConfig = this._getFadeConfig(isDrawerOpened);
         const drawer = this.getDrawerInstance();
 
         if(animate) {
             animation.fade($(drawer._$shader), fadeConfig, duration, () => {
-                this._drawer._toggleShaderVisibility(offset);
+                this._drawer._toggleShaderVisibility(isDrawerOpened);
                 this._shaderAnimation.resolve();
             });
         } else {
-            drawer._toggleShaderVisibility(offset);
+            drawer._toggleShaderVisibility(isDrawerOpened);
             drawer._$shader.css('opacity', fadeConfig.to);
         }
     }
 
-    _getFadeConfig(offset) {
-        if(offset) {
+    _getFadeConfig(isDrawerOpened) {
+        if(isDrawerOpened) {
             return {
                 to: 1,
                 from: 0

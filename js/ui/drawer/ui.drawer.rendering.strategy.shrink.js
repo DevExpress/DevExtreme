@@ -6,7 +6,7 @@ import { camelize } from '../../core/utils/inflector';
 
 class ShrinkStrategy extends DrawerStrategy {
 
-    slidePositionRendering(config, offset, animate) {
+    slidePositionRendering(config, _, animate) {
         if(animate) {
             const animationConfig = extend(config.defaultAnimationConfig, {
                 $element: config.$panel,
@@ -20,7 +20,7 @@ class ShrinkStrategy extends DrawerStrategy {
         }
     }
 
-    expandPositionRendering(config, offset, animate) {
+    expandPositionRendering(config, _, animate) {
         const drawer = this.getDrawerInstance();
 
         if(animate) {
@@ -40,9 +40,9 @@ class ShrinkStrategy extends DrawerStrategy {
         }
     }
 
-    getPositionRenderingConfig(offset) {
-        return extend(super.getPositionRenderingConfig(offset), {
-            panelOffset: this._getPanelOffset(offset)
+    getPositionRenderingConfig(isDrawerOpened) {
+        return extend(super.getPositionRenderingConfig(isDrawerOpened), {
+            panelOffset: this._getPanelOffset(isDrawerOpened)
         });
     }
 

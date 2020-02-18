@@ -348,7 +348,7 @@ const Drawer = Widget.inherit({
         return position === 'right' || position === 'bottom';
     },
 
-    _renderPosition(offset, animate, jumpToEnd) {
+    _renderPosition(isDrawerOpened, animate, jumpToEnd) {
         this.stopAnimations(jumpToEnd);
 
         this._animations = [];
@@ -359,11 +359,11 @@ const Drawer = Widget.inherit({
 
         const duration = this.option('animationDuration');
 
-        offset && this._toggleShaderVisibility(offset);
+        isDrawerOpened && this._toggleShaderVisibility(isDrawerOpened);
 
-        this._strategy.renderPosition(offset, animate);
+        this._strategy.renderPosition(isDrawerOpened, animate);
 
-        this._strategy.renderShaderVisibility(offset, animate, duration);
+        this._strategy.renderShaderVisibility(isDrawerOpened, animate, duration);
     },
 
     _animationCompleteHandler() {
