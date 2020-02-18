@@ -2244,7 +2244,7 @@ QUnit.test('Height free space row for virtual scroller', function(assert) {
 
     const borderTopWidth = Math.ceil(parseFloat($(rowsView.element()).css('borderTopWidth')));
     const tableBorderTopWidth = Math.ceil(parseFloat(rowsView.getTableElements().css('borderTopWidth')));
-    const heightCorrection = browser.mozilla && browser.version >= 70 ? 1 : 0;
+    const heightCorrection = rowsView._getHeightCorrection();
     const freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight - borderTopWidth - tableBorderTopWidth - heightCorrection;
 
     // assert

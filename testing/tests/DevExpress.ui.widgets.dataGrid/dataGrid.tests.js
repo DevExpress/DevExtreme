@@ -5624,7 +5624,7 @@ QUnit.test('Freespace row have the correct height when using master-detail with 
         dataRowsHeight += $(this).outerHeight();
     });
 
-    const heightCorrection = browser.mozilla && browser.version >= 70 ? 1 : 0;
+    const heightCorrection = gridInstance.getView('rowsView')._getHeightCorrection();
     const expectedFreeSpaceRowHeight = $contentTable.height() - dataRowsHeight - heightCorrection;
 
     // assert
