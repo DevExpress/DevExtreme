@@ -159,7 +159,7 @@ const Drawer = Widget.inherit({
         this._toggleOpenedStateClass(this.option('opened'));
         this._renderPanelContentWrapper();
 
-        this._refreshModeClass();
+        this._refreshOpenedStateModeClass();
         this._refreshRevealModeClass();
         this._renderShader();
 
@@ -200,7 +200,7 @@ const Drawer = Widget.inherit({
         this._$wrapper.append(this._$panelContentWrapper);
     },
 
-    _refreshModeClass(prevClass) {
+    _refreshOpenedStateModeClass(prevClass) {
         prevClass && this.$element()
             .removeClass(DRAWER_CLASS + '-' + prevClass);
 
@@ -466,7 +466,7 @@ const Drawer = Widget.inherit({
             case 'openedStateMode':
             case 'target':
                 this._initStrategy();
-                this._refreshModeClass(args.previousValue);
+                this._refreshOpenedStateModeClass(args.previousValue);
 
                 this._refreshPanel();
                 break;
