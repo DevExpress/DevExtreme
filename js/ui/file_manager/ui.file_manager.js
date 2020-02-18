@@ -40,8 +40,7 @@ class FileManager extends Widget {
     _initMarkup() {
         super._initMarkup();
 
-        this._onCurrentDirectoryChangedAction = this._createActionByOption('onCurrentDirectoryChanged');
-        this._onSelectedFileOpenedAction = this._createActionByOption('onSelectedFileOpened');
+        this._initActions();
 
         this._controller = new FileItemsController({
             currentPath: this.option('currentPath'),
@@ -205,8 +204,9 @@ class FileManager extends Widget {
         this._setItemsViewAreaActive(false);
     }
 
-    _onItemViewSelectionChanged() {
+    _onItemViewSelectionChanged(e) {
         this._updateToolbar();
+        this._actions.onSelectionChanged(e);
     }
 
     _onAdaptiveStateChanged({ enabled }) {
@@ -431,6 +431,8 @@ class FileManager extends Widget {
 
             onSelectedFileOpened: null,
 
+            onSelectionChanged: null,
+
             allowedFileExtensions: ['.txt', '.rtf', '.doc', '.docx', '.odt', '.xls', '.xlsx', '.ods', '.ppt', '.pptx', '.odp', '.pdf', '.xml', '.png', '.svg', '.gif', '.jpg', '.jpeg', '.ico', '.bmp', '.avi', '.mpeg', '.mkv', ''],
 
             upload: {
@@ -535,14 +537,21 @@ class FileManager extends Widget {
                 this._filesTreeView.option('contextMenu', this._createContextMenu());
                 break;
             case 'onCurrentDirectoryChanged':
-                this._onCurrentDirectoryChangedAction = this._createActionByOption('onCurrentDirectoryChanged');
-                break;
             case 'onSelectedFileOpened':
-                this._onSelectedFileOpenedAction = this._createActionByOption('onSelectedFileOpened');
+            case 'onSelectionChanged':
+                this._actions[name] = this._createActionByOption(name);
                 break;
             default:
                 super._optionChanged(args);
         }
+    }
+
+    _initActions() {
+        this._actions = {
+            onCurrentDirectoryChanged: this._createActionByOption('onCurrentDirectoryChanged'),
+            onSelectedFileOpened: this._createActionByOption('onSelectedFileOpened'),
+            onSelectionChanged: this._createActionByOption('onSelectionChanged')
+        };
     }
 
     executeCommand(commandName) {
@@ -574,7 +583,7 @@ class FileManager extends Widget {
 
         this.option(options);
 
-        this._onCurrentDirectoryChangedAction({ directory: currentDirectory.fileItem });
+        this._actions.onCurrentDirectoryChanged({ directory: currentDirectory.fileItem });
     }
 
     getDirectories(parentDirectoryInfo) {
@@ -601,7 +610,7 @@ class FileManager extends Widget {
     _onSelectedItemOpened({ fileItemInfo }) {
         const fileItem = fileItemInfo.fileItem;
         if(!fileItem.isDirectory) {
-            this._onSelectedFileOpenedAction({ file: fileItem });
+            this._actions.onSelectedFileOpened({ file: fileItem });
             return;
         }
 
