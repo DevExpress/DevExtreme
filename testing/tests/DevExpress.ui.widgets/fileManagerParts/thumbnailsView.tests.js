@@ -116,6 +116,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
             currentPath: 'Folder 1',
             onSelectionChanged: selectionSpy
         });
+        this.clock.tick(400);
 
         this.wrapper.findThumbnailsItem('Folder 1.1').trigger('click');
         this.clock.tick(400);
