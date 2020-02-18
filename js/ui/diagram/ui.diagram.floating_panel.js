@@ -43,13 +43,26 @@ class DiagramFloatingPanel extends DiagramPanel {
     _getPopupClass() {
         return '';
     }
+    _getPopupWidth() {
+        return Math.max(this.option('width'), this._getPopupMinWidth()) || 'auto';
+    }
+    _getPopupMinWidth() {
+        return 0;
+    }
+    _getPopupHeight() {
+        return Math.max(this.option('height'), this._getPopupMinHeight()) || 'auto';
+    }
+    _getPopupMinHeight() {
+        return 0;
+    }
     _getPopupOptions() {
         const that = this;
         return {
             animation: null,
             shading: false,
             focusStateEnabled: false,
-            height: this.option('height') || 'auto',
+            width: this._getPopupWidth(),
+            height: this._getPopupHeight(),
             position: this.option('position'),
             onContentReady: function() {
                 that._renderPopupContent(that._popup.content());
@@ -76,6 +89,12 @@ class DiagramFloatingPanel extends DiagramPanel {
         switch(args.name) {
             case 'onVisibilityChanged':
                 this._createOnVisibilityChangedAction();
+                break;
+            case 'width':
+                this._popup.option('width', this._getPopupWidth());
+                break;
+            case 'height':
+                this._popup.option('height', this._getPopupHeight());
                 break;
             case 'isVisible':
                 this._isVisible = args.value;

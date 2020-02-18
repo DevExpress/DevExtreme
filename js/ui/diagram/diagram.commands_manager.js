@@ -2,6 +2,7 @@ import { getDiagram } from './diagram.importer';
 import { fileSaver } from '../../exporter/file_saver';
 import { isFunction } from '../../core/utils/type';
 import { getWindow } from '../../core/utils/window';
+import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 
 const SEPARATOR = { widget: 'separator' };
@@ -695,6 +696,7 @@ const DiagramCommandsManager = {
             } else {
                 const command = this._cloneCommand(c, excludeCommands);
                 command.beginGroup = beginGroup;
+                beginGroup = false;
                 return command;
             }
         }).filter(c => c);
@@ -707,21 +709,7 @@ const DiagramCommandsManager = {
         }).filter(c => c);
     },
     _cloneCommand(c, excludeCommands) {
-        const command = {
-            command: c.command,
-            text: c.text,
-            showText: c.showText,
-            hint: c.hint,
-            value: c.value,
-            icon: c.icon,
-            menuIcon: c.menuIcon,
-            widget: c.widget,
-            cssClass: c.cssClass,
-
-            getParameter: c.getParameter,
-            getValue: c.getValue,
-            setValue: c.setValue
-        };
+        const command = extend({}, c);
         if(Array.isArray(c.items)) {
             command.items = this._prepareContextMenuCommands(c.items, excludeCommands);
         }

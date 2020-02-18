@@ -98,11 +98,11 @@ class DiagramContextMenu extends Widget {
         }
 
         if(!processed) {
-            DiagramMenuHelper.onContextMenuItemClick(this, itemData, this._execDiagramCommand.bind(this));
+            DiagramMenuHelper.onContextMenuItemClick(this, itemData, this._executeCommand.bind(this));
             this._contextMenuInstance.hide();
         }
     }
-    _execDiagramCommand(command, value, onExecuted) {
+    _executeCommand(command, value, onExecuted) {
         if(command !== undefined) {
             if(typeof command === 'number') {
                 this.bar.raiseBarCommandExecuted(command, value);

@@ -7,6 +7,7 @@ import { extend } from '../../core/utils/extend';
 import typeUtils from '../../core/utils/type';
 import dataCoreUtils from '../../core/utils/data';
 import positionUtils from '../../animation/position';
+import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { getDiagram } from './diagram.importer';
 import { hasWindow, getWindow } from '../../core/utils/window';
 import domUtils from '../../core/utils/dom';
@@ -74,7 +75,7 @@ class Diagram extends Widget {
         this.$element().addClass(DIAGRAM_CLASS);
 
         this._mainToolbar = undefined;
-        if(this.option('toolbar.visible')) {
+        if(this.option('mainToolbar.visible')) {
             this._renderMainToolbar();
         }
 
@@ -159,7 +160,7 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
         this._mainToolbar = this._createComponent($toolbarWrapper, DiagramMainToolbar, {
-            commands: this.option('toolbar.commands'),
+            commands: this.option('mainToolbar.commands'),
             onContentReady: ({ component }) => this._registerBar(component),
             onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
@@ -172,12 +173,12 @@ class Diagram extends Widget {
 
         const $toolbarContent = toolbar.$element().find('.dx-toolbar-before');
         $container.width($toolbarContent.width());
-        positionUtils.setup($container, position);
     }
     _isHistoryToolbarVisible() {
         return this.option('historyToolbar.visible') && !this.option('readOnly') && !this.option('disabled');
     }
     _renderHistoryToolbar($parent) {
+        const isServerSide = !hasWindow();
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
@@ -187,7 +188,13 @@ class Diagram extends Widget {
             onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
-        this._adjustFloatingToolbarContainer($container, this._historyToolbar, {
+        this._adjustFloatingToolbarContainer($container, this._historyToolbar);
+        this._updateHistoryToolbarPosition($container, $parent, isServerSide);
+    }
+    _updateHistoryToolbarPosition($container, $parent, isServerSide) {
+        if(isServerSide) return;
+
+        positionUtils.setup($container, {
             my: 'left top',
             at: 'left top',
             of: $parent,
@@ -201,23 +208,15 @@ class Diagram extends Widget {
         const isServerSide = !hasWindow();
         const $toolBox = $('<div>')
             .appendTo($parent);
-        let yOffset = DIAGRAM_FLOATING_PANEL_OFFSET;
-        let height = !isServerSide ? $parent.height() - 2 * DIAGRAM_FLOATING_PANEL_OFFSET : 200;
-        if(this._historyToolbar && !isServerSide) {
-            yOffset += this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
-            height -= this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
-        }
-        if(this._viewToolbar && !isServerSide) {
-            height -= this._viewToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
-        }
+        const bounds = this._getToolboxBounds($parent, isServerSide);
         this._toolbox = this._createComponent($toolBox, DiagramToolbox, {
             isVisible: this.option('toolbox.visibility') === 'visible',
-            height: height,
+            height: bounds.height,
             position: {
                 my: 'left top',
                 at: 'left top',
                 of: $parent,
-                offset: DIAGRAM_FLOATING_PANEL_OFFSET + ' ' + yOffset
+                offset: bounds.offsetX + ' ' + bounds.offsetY
             },
             toolboxGroups: this._getToolboxGroups(),
             onShapeCategoryRendered: (e) => {
@@ -243,8 +242,28 @@ class Diagram extends Widget {
             },
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
+        resizeCallbacks.add(() => {
+            const bounds = this._getToolboxBounds($parent, isServerSide);
+            this._toolbox.option('height', bounds.height);
+        });
+    }
+    _getToolboxBounds($parent, isServerSide) {
+        const result = {
+            offsetX: DIAGRAM_FLOATING_PANEL_OFFSET,
+            offsetY: DIAGRAM_FLOATING_PANEL_OFFSET,
+            height: !isServerSide ? $parent.height() - 2 * DIAGRAM_FLOATING_PANEL_OFFSET : 0
+        };
+        if(this._historyToolbar && !isServerSide) {
+            result.offsetY += this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
+            result.height -= this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
+        }
+        if(this._viewToolbar && !isServerSide) {
+            result.height -= this._viewToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
+        }
+        return result;
     }
     _renderViewToolbar($parent) {
+        const isServerSide = !hasWindow();
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
@@ -261,7 +280,16 @@ class Diagram extends Widget {
                 }
             }
         });
-        this._adjustFloatingToolbarContainer($container, this._viewToolbar, {
+        this._adjustFloatingToolbarContainer($container, this._viewToolbar);
+        this._updateViewToolbarPosition($container, $parent, isServerSide);
+        resizeCallbacks.add(() => {
+            this._updateViewToolbarPosition($container, $parent, isServerSide);
+        });
+    }
+    _updateViewToolbarPosition($container, $parent, isServerSide) {
+        if(isServerSide) return;
+
+        positionUtils.setup($container, {
             my: 'left bottom',
             at: 'left bottom',
             of: $parent,
@@ -310,7 +338,7 @@ class Diagram extends Widget {
                 if(isServerSide) return;
 
                 if(this._propertiesPanelActionButton) {
-                    this._propertiesPanelActionButton.option('icon', e.visible ? 'close' : 'edit');
+                    this._propertiesPanelActionButton.option('icon', e.visible ? 'close' : 'dx-diagram-i dx-diagram-i-button-properties-panel');
                 }
             },
             onVisibilityChanging: ({ component }) => this._updatePropertiesPanelGroupBars(component),
@@ -1588,15 +1616,15 @@ class Diagram extends Widget {
                 * @type Array<Enums.DiagramShapeType>|Array<String>
                 */
             },
-            toolbar: {
+            mainToolbar: {
                 /**
-                * @name dxDiagramOptions.toolbar.visible
+                * @name dxDiagramOptions.mainToolbar.visible
                 * @type boolean
                 * @default true
                 */
                 visible: false,
                 /**
-                * @name dxDiagramOptions.toolbar.commands
+                * @name dxDiagramOptions.mainToolbar.commands
                 * @type Array<Enums.DiagramToolbarCommand>
                 * @default undefined
                 */
@@ -1833,7 +1861,7 @@ class Diagram extends Widget {
     _invalidateMainToolbarCommands() {
         if(this._mainToolbar) {
             this._mainToolbar.option({
-                commands: this.option('toolbar.commands')
+                commands: this.option('mainToolbar.commands')
             });
         }
     }
@@ -1973,8 +2001,8 @@ class Diagram extends Widget {
                     this._invalidate();
                 }
                 break;
-            case 'toolbar':
-                if(args.fullName === 'toolbar.commands') {
+            case 'mainToolbar':
+                if(args.fullName === 'mainToolbar.commands') {
                     this._invalidateMainToolbarCommands();
                 } else {
                     this._invalidate();
