@@ -100,15 +100,16 @@ QUnit.module('popup integration', {
         assert.ok(popup.option('closeOnOutsideClick'), 'popup should be closed on outside click');
     });
 
-    QUnit.test('popup should not be rendered if dropDownOptions.visible is true', function(assert) {
+    QUnit.test('dropDownOptions.visible=true should not open popup on init', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', {
+            deferRendering: false,
             dropDownOptions: {
                 visible: true
             }
         });
-        const popup = getPopup(dropDownButton);
 
-        assert.strictEqual(popup, undefined, 'popup has not been rendered');
+        const popup = getPopup(dropDownButton);
+        assert.strictEqual(popup.option('visible'), false, 'popup is closed');
     });
 
     QUnit.test('popup should have special classes', function(assert) {
