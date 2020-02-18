@@ -47,7 +47,7 @@ export function getContextMenuInstance($diagramElement) {
     return $diagramElement.find(Consts.CONTEXT_MENU_SELECTOR).dxContextMenu('instance');
 }
 export function findContextMenuItem($diagramElement, label) {
-    return $('body').find('.dx-diagram-contextmenu')
+    return $('body').find('.dx-diagram-contextmenu, .dx-diagram-touchbar')
         .find(Consts.DX_MENU_ITEM_SELECTOR)
         .filter(function() {
             return $(this).text().toLowerCase().indexOf(label) >= 0;
