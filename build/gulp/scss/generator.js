@@ -80,6 +80,9 @@ gulp.task('fix-base', () => {
         // treeList
         .pipe(replace(/\$treelist-border/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$treelist-border'))
 
+        // pivotGrid
+        .pipe(replace(/^\$PIVOTGRID_DRAG_HEADER_BORDER/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$PIVOTGRID_DRAG_HEADER_BORDER'))
+
         .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;

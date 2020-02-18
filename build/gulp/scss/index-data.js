@@ -73,5 +73,6 @@ module.exports = [
     { content: 'colorBox', task: 'widget' },
     { content: 'dataGrid', task: 'widget' },
     { content: 'treeList', task: 'widget' },
+    { content: 'pivotGrid', task: 'widget' },
     { task: 'newline' }
 ];
