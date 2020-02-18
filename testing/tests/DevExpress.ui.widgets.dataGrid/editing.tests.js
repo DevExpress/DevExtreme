@@ -3200,6 +3200,39 @@ QUnit.test('Remove the inserted row with edit mode batch and hidden column', fun
     assert.ok(!testElement.find('tbody > tr').first().hasClass('dx-row-inserted'), 'not has row inserted');
 });
 
+// T861092
+QUnit.test('cell should not be edited after row adding and page change (cell edit mode)', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'cell',
+        allowAdding: true
+    };
+
+    that.dataController.pageSize(3);
+
+    rowsView.render(testElement);
+
+    // act
+    that.addRow();
+
+    that.editCell(0, 0);
+
+    // assert
+    assert.ok(testElement.find('tbody > tr').first().hasClass('dx-row-inserted'), 'has inserted row');
+
+    // act
+    that.pageIndex(1);
+
+    // assert
+    assert.notOk(testElement.find('tbody > tr').first().hasClass('dx-row-inserted'), 'has not inserted row');
+    assert.notOk(that.editingController.isEditing(), 'is not editing');
+    assert.notOk(testElement.find('.dx-editor-cell').length, 'has not editor');
+});
+
 QUnit.test('Edit row when set onEditingStart', function(assert) {
     const that = this;
     const rowsView = this.rowsView;

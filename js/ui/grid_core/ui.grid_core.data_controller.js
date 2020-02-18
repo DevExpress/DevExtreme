@@ -91,6 +91,13 @@ module.exports = {
                             that.option('paging.' + optionName, value);
                             that._skipProcessingPagingChange = false;
 
+                            const editingController = that.getController('editing');
+
+                            if(editingController) {
+                                editingController._editRowIndex = -1;
+                                editingController._editColumnIndex = -1;
+                            }
+
                             return dataSource[optionName === 'pageIndex' ? 'load' : 'reload']()
                                 .done(that.pageChanged.fire.bind(that.pageChanged));
                         }
