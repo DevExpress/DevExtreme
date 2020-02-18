@@ -806,7 +806,7 @@ QUnit.module('public methods', {
     });
 
     QUnit.test('close method', function(assert) {
-        this.dropDownButton.option('dropDownOptions.visible', true);
+        this.dropDownButton.option('opened', true);
         const popup = getPopup(this.dropDownButton);
         assert.strictEqual(popup.option('visible'), true, 'popup is opened');
 
