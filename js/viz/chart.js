@@ -370,8 +370,8 @@ function checkUsedSpace(sizeShortage, side, axes, getMarginFunc) {
     }
 }
 
-function axisAnimationEnabled(drawOptions, pointsToAnimation, seriesCount) {
-    const pointsCount = pointsToAnimation.reduce((sum, count) => sum + count, 0) / seriesCount;
+function axisAnimationEnabled(drawOptions, pointsToAnimation) {
+    const pointsCount = pointsToAnimation.reduce((sum, count) => sum + count, 0) / pointsToAnimation.length;
 
     return drawOptions.animate && pointsCount <= drawOptions.animationPointsLimit;
 }
@@ -942,7 +942,7 @@ const dxChart = AdvancedChart.inherit({
         const visibleSeries = that._getVisibleSeries();
         const pointsToAnimation = that._getPointsToAnimation(visibleSeries);
 
-        performActionOnAxes(allAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation, visibleSeries.length));
+        performActionOnAxes(allAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
 
         horizontalAxes.forEach(shiftAxis('top', 'bottom'));
         verticalAxes.forEach(shiftAxis('left', 'right'));
