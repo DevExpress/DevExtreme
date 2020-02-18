@@ -6,9 +6,12 @@ trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
 export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
+export DOTNET_USE_POLLING_FILE_WATCHER=true
 
 function run_lint {
-    npm i eslint eslint-plugin-spellcheck eslint-plugin-qunit stylelint stylelint-config-standard npm-run-all babel-eslint
+    npm i npm-run-all \
+        eslint eslint-plugin-qunit eslint-plugin-spellcheck babel-eslint \
+        stylelint stylelint-config-standard
     npm run lint
 }
 
@@ -47,8 +50,8 @@ function run_test {
     [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
 
     if [ -n "$TZ" ]; then
-        echo "Time-Zone: $TZ"
-        date
+        ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
+        dpkg-reconfigure --frontend noninteractive tzdata
     fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
@@ -61,8 +64,21 @@ function run_test {
 
     dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
-    while ! httping -qc1 $url; do
+    for i in {15..0}; do
+        if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
+            echo "Runner exited unexpectedly"
+            exit 1
+        fi
+
+        httping -qsc1 "$url" && break
+
+        if [ $i -eq 0 ]; then
+            echo "Runner not reached"
+            exit 1
+        fi
+
         sleep 1
+        echo "Waiting for runner..."
     done
 
     echo "URL: $url"
@@ -145,6 +161,7 @@ function run_test {
 
     esac
 
+    start_runner_watchdog $runner_pid
     wait $runner_pid || runner_result=1
     exit $runner_result
 }
@@ -177,18 +194,29 @@ function run_test_scss {
     npx gulp generate-scss
 }
 
+function start_runner_watchdog {
+    local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
+    local last_suite_time=unknown
+
+    while true; do
+        sleep 300
+
+        if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
+            echo "Runner stalled"
+            kill -9 $1
+        else
+            last_suite_time=$(cat $last_suite_time_file)
+        fi
+    done &
+}
+
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
-case "$TARGET" in
-    "lint") run_lint ;;
-    "ts") run_ts ;;
-    "test") run_test ;;
-    "test_themebuilder") run_test_themebuilder ;;
-    "test_functional") run_test_functional ;;
-    "test_scss") run_test_scss ;;
+TARGET_FUNC="run_$TARGET"
 
-    *)
-        echo "Unknown target"
-        exit 1
-    ;;
-esac
+if [ $(type -t $TARGET_FUNC) != "function" ]; then
+    echo "Unknown target"
+    exit 1
+fi
+
+$TARGET_FUNC

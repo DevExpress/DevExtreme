@@ -69,8 +69,6 @@
 
 @validation-overlay-border-radius: @base-border-radius;
 
-@datagrid-row-hovered-color: @base-text-color;
-
 /**
 * @name 20. Label color
 * @type color
@@ -985,6 +983,7 @@
 * @type color
 */
 @datagrid-row-focused-bg: @base-accent;
+@datagrid-row-hovered-color: @base-text-color;
 
 /**
 * @name 90. Hovered row background color
@@ -1113,183 +1112,9 @@
 
 
 // TreeList
-
-/**
-* @name 10. Text color
-* @type color
-*/
-@treelist-base-color: @base-text-color;
-
-/**
-* @name 60. Background color
-* @type color
-*/
-@treelist-base-background-color: @base-bg;
-
-/**
-* @name 70. Border color
-* @type color
-*/
-@treelist-border-color: @base-border-color;
-@treelist-border: 1px solid @treelist-border-color;
-
-/**
-* @name 20. Header text color
-* @type color
-*/
-@treelist-columnchooser-item-color: @base-text-color;
-@treelist-columnchooser-font-weight: normal;
-
-/**
-* @name 71. Draggable header border color
-* @type color
-*/
-@treelist-drag-header-border-color: @base-border-color;
-@treelist-drag-header-shadow-color: @base-shadow-color;
-@treelist-drag-header-second-shadow-color: @base-shadow-color;
-@treelist-header-drag-bg: @base-bg;
-
-/**
-* @name 80. Selected row background color
-* @type color
-*/
-@treelist-selection-bg: @base-inverted-bg;
-
-/**
-* @name 81. Selected row border color
-* @type color
-*/
-@treelist-row-selected-border-color: @treelist-base-background-color;
-
-/**
-* @name 82. Selected row text color
-* @type color
-*/
-@treelist-row-selected-color: @base-inverted-text-color;
-
-/**
-* @name 83. Focused row text color
-* @type color
-*/
-@treelist-row-focused-color: @base-text-color;
-
-/**
-* @name 84. Focused row background color
-* @type color
-*/
-@treelist-row-focused-bg: @base-accent;
-
-/**
-* @name 90. Hovered row background color
-* @type color
-*/
-@treelist-hover-bg: @base-hover-color;
-
-/**
-* @name 70. Context menu icons color
-* @type color
-*/
-@treelist-menu-icon-color: @base-icon-color;
-
-/**
-* @name 71. Modified data color
-* @type color
-*/
-@treelist-cell-modified-border-color: @base-text-color;
-
-@treelist-row-removed-bg: fade(@base-success, 50%);
-
-/**
-* @name 73. Invalidate data faded color
-* @type color
-*/
-@treelist-row-invalid-faded-border-color: @base-invalid-faded-border-color;
-@treelist-row-invalid-border-color: @base-invalid-color;
-
-/**
-* @name 30. NoData message text color
-* @type color
-*/
-@treelist-nodata-color: @base-text-color;
-
-@treelist-master-detail-cell-bg: @base-bg;
-
-/**
-* @name 150. Highlighted text color
-* @type color
-*/
-@treelist-search-color: @base-inverted-text-color;
-
 @treelist-spin-icon-color: @base-icon-color;
 @treelist-selection-spin-icon-color: @base-inverted-text-color;
-
-/**
-* @name 160. Highlighted text background color
-* @type color
-*/
-@treelist-search-bg: @base-inverted-bg;
-
-/**
-* @name 170. Error row text color
-* @type color
-*/
-@treelist-row-error-color: @base-inverted-text-color;
-
-/**
-* @name 180. Error row background color
-* @type color
-*/
-@treelist-row-error-bg: @base-invalid-color;
-
-/**
-* @name 40. Link color
-* @type color
-*/
-@treelist-link-color: @base-link-color;
-
-/**
-* @name 130. Focused cell border color
-* @type color
-*/
-@treelist-focused-border-color: @base-accent;
-
-/**
-* @name 131. Editor background
-* @type color
-*/
-@treelist-editor-bg: @treelist-base-background-color;
-@treelist-drop-highlight-bg: @base-inverted-bg;
-@treelist-drop-highlight-color: @base-inverted-text-color;
-
-/**
-* @name 140. Column chooser background color
-* @type color
-*/
-@treelist-columnchooser-bg: @base-bg;
-
-/**
-* @name 100. Row alternation background color
-* @type color
-*/
-@treelist-row-alternation-bg: @base-bg;
-@treelist-columnchooser-item-bg: @base-bg;
-
-/**
-* @name 170. Summary item color
-* @type color
-*/
-@treelist-summary-color: @base-text-color;
-@treelist-columnchooser-message-color: @base-text-color;
-
-@treelist-overlay-content-shadow-color: fade(@base-shadow-color, 15%);
-@treelist-columnchooser-shadow-color: fade(@base-shadow-color, 20%);
-
-@treelist-columnchooser-overlay-border-radius: @base-border-radius + 2px;
-
-@treelist-column-separator-bg: darken(@treelist-base-background-color, 13.5%);
-
-@treelist-row-hovered-color: @base-text-color;
-@treelist-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/contrast/grid/text-stub.png');
+@treelist-row-alternation-bg: @datagrid-row-alternation-bg;
 
 
 // dxPivotGrid
@@ -1718,7 +1543,7 @@
 
 // Gantt
 @gantt-collapsable-row-bg: lighten(@base-bg, 5%);
-@gantt-selection-bg: fade(@treelist-selection-bg, 30%);
+@gantt-selection-bg: fade(@datagrid-selection-bg, 30%);
 
 // Splitter
 @splitter-inactive-color: @base-border-color;

@@ -3,6 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import typeUtils from '../../core/utils/type';
 import { when, Deferred } from '../../core/utils/deferred';
+import { equalByValue } from '../../core/utils/common';
 
 import messageLocalization from '../../localization/message';
 
@@ -39,15 +40,16 @@ class FileManager extends Widget {
     _initMarkup() {
         super._initMarkup();
 
-        this._onCurrentDirectoryChangedAction = this._createActionByOption('onCurrentDirectoryChanged');
-        this._onSelectedFileOpenedAction = this._createActionByOption('onSelectedFileOpened');
+        this._initActions();
 
         this._controller = new FileItemsController({
             currentPath: this.option('currentPath'),
+            currentPathKeys: this.option('currentPathKeys'),
             rootText: this.option('rootFolderName'),
-            fileProvider: this.option('fileProvider'),
+            fileProvider: this.option('fileSystemProvider'),
             allowedFileExtensions: this.option('allowedFileExtensions'),
-            maxUploadFileSize: this.option('upload').maxFileSize,
+            uploadMaxFileSize: this.option('upload').maxFileSize,
+            uploadChunkSize: this.option('upload').chunkSize,
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
         this._commandManager = new FileManagerCommandManager(this.option('permissions'));
@@ -202,8 +204,9 @@ class FileManager extends Widget {
         this._setItemsViewAreaActive(false);
     }
 
-    _onItemViewSelectionChanged() {
+    _onItemViewSelectionChanged(e) {
         this._updateToolbar();
+        this._actions.onSelectionChanged(e);
     }
 
     _onAdaptiveStateChanged({ enabled }) {
@@ -302,7 +305,7 @@ class FileManager extends Widget {
             ? this._controller.getDirectoryContents(selectedDir)
             : this._controller.getFiles(selectedDir);
 
-        if(this.option('itemView.showParentFolder') && !selectedDir.fileItem.isRoot) {
+        if(this.option('itemView.showParentFolder') && !selectedDir.fileItem.isRoot()) {
             const parentDirItem = selectedDir.fileItem.createClone();
             parentDirItem.isParentFolder = true;
             parentDirItem.name = '..';
@@ -341,9 +344,11 @@ class FileManager extends Widget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            fileProvider: null,
+            fileSystemProvider: null,
 
             currentPath: '',
+
+            currentPathKeys: [],
 
             rootFolderName: messageLocalization.format('dxFileManager-rootDirectoryName'),
 
@@ -362,7 +367,7 @@ class FileManager extends Widget {
 
             toolbar: {
                 items: [
-                    'showNavPane', 'create', 'upload', 'viewSwitcher',
+                    'showNavPane', 'create', 'upload', 'switchView',
                     {
                         name: 'separator',
                         location: 'after'
@@ -426,6 +431,8 @@ class FileManager extends Widget {
 
             onSelectedFileOpened: null,
 
+            onSelectionChanged: null,
+
             allowedFileExtensions: ['.txt', '.rtf', '.doc', '.docx', '.odt', '.xls', '.xlsx', '.ods', '.ppt', '.pptx', '.odp', '.pdf', '.xml', '.png', '.svg', '.gif', '.jpg', '.jpeg', '.ico', '.bmp', '.avi', '.mpeg', '.mkv', ''],
 
             upload: {
@@ -434,7 +441,14 @@ class FileManager extends Widget {
                 * @type number
                 * @default 0
                 */
-                maxFileSize: 0
+                maxFileSize: 0,
+
+                /**
+                * @name dxFileManagerOptions.upload.chunkSize
+                * @type number
+                * @default 200000
+                */
+                chunkSize: 200000
             },
 
             permissions: {
@@ -457,11 +471,11 @@ class FileManager extends Widget {
                  */
                 move: false,
                 /**
-                 * @name dxFileManagerOptions.permissions.remove
+                 * @name dxFileManagerOptions.permissions.delete
                  * @type boolean
                  * @default false
                  */
-                remove: false,
+                delete: false,
                 /**
                  * @name dxFileManagerOptions.permissions.rename
                  * @type boolean
@@ -489,9 +503,12 @@ class FileManager extends Widget {
 
         switch(name) {
             case 'currentPath':
-                this._setCurrentPath(args.value);
+                this._controller.setCurrentPath(args.value);
                 break;
-            case 'fileProvider':
+            case 'currentPathKeys':
+                this._controller.setCurrentPathByKeys(args.value);
+                break;
+            case 'fileSystemProvider':
             case 'selectionMode':
             case 'customizeThumbnail':
             case 'customizeDetailColumns':
@@ -520,14 +537,21 @@ class FileManager extends Widget {
                 this._filesTreeView.option('contextMenu', this._createContextMenu());
                 break;
             case 'onCurrentDirectoryChanged':
-                this._onCurrentDirectoryChangedAction = this._createActionByOption('onCurrentDirectoryChanged');
-                break;
             case 'onSelectedFileOpened':
-                this._onSelectedFileOpenedAction = this._createActionByOption('onSelectedFileOpened');
+            case 'onSelectionChanged':
+                this._actions[name] = this._createActionByOption(name);
                 break;
             default:
                 super._optionChanged(args);
         }
+    }
+
+    _initActions() {
+        this._actions = {
+            onCurrentDirectoryChanged: this._createActionByOption('onCurrentDirectoryChanged'),
+            onSelectedFileOpened: this._createActionByOption('onSelectedFileOpened'),
+            onSelectionChanged: this._createActionByOption('onSelectionChanged')
+        };
     }
 
     executeCommand(commandName) {
@@ -543,14 +567,23 @@ class FileManager extends Widget {
     }
 
     _onSelectedDirectoryChanged() {
+        const currentDirectory = this._getCurrentDirectory();
         const currentPath = this._controller.getCurrentPath();
+        const currentPathKeys = currentDirectory.fileItem.pathKeys;
 
         this._filesTreeView.updateCurrentDirectory();
         this._itemView.refresh();
-        this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
+        this._breadcrumbs.setCurrentDirectory(currentDirectory);
 
-        this.option('currentPath', currentPath);
-        this._onCurrentDirectoryChangedAction();
+        const options = { currentPath };
+
+        if(!equalByValue(this.option('currentPathKeys'), currentPathKeys)) {
+            options.currentPathKeys = currentPathKeys;
+        }
+
+        this.option(options);
+
+        this._actions.onCurrentDirectoryChanged({ directory: currentDirectory.fileItem });
     }
 
     getDirectories(parentDirectoryInfo) {
@@ -577,7 +610,7 @@ class FileManager extends Widget {
     _onSelectedItemOpened({ fileItemInfo }) {
         const fileItem = fileItemInfo.fileItem;
         if(!fileItem.isDirectory) {
-            this._onSelectedFileOpenedAction({ fileItem });
+            this._actions.onSelectedFileOpened({ file: fileItem });
             return;
         }
 
@@ -587,10 +620,6 @@ class FileManager extends Widget {
         if(newCurrentDirectory) {
             this._filesTreeView.expandDirectory(newCurrentDirectory.parentDirectory);
         }
-    }
-
-    _setCurrentPath(path) {
-        this._controller.setCurrentPath(path);
     }
 
 }

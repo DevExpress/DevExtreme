@@ -5,6 +5,7 @@ const replace = require('gulp-replace');
 const plumber = require('gulp-plumber');
 const path = require('path');
 const notify = require('gulp-notify');
+const sourceMaps = require('gulp-sourcemaps');
 
 const context = require('./context.js');
 
@@ -18,7 +19,9 @@ const VERSION_FILE_PATH = 'core/version.js';
 
 gulp.task('transpile', gulp.series('bundler-config', function() {
     return gulp.src(SRC)
+        .pipe(sourceMaps.init())
         .pipe(babel())
+        .pipe(sourceMaps.write())
         .pipe(gulp.dest(context.TRANSPILED_PATH));
 }));
 
@@ -30,11 +33,13 @@ gulp.task('version-replace', gulp.series('transpile', function() {
 
 gulp.task('transpile-watch', gulp.series('version-replace', function() {
     return watch(SRC)
+        .pipe(sourceMaps.init())
         .pipe(plumber({
             errorHandler: notify.onError('Error: <%= error.message %>')
                 .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
         }))
         .pipe(babel())
+        .pipe(sourceMaps.write())
         .pipe(gulp.dest(context.TRANSPILED_PATH));
 }));
 

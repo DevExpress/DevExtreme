@@ -43,7 +43,7 @@ const DEFAULT_ITEM_CONFIGS = {
             locateInMenu: 'auto'
         }
     },
-    viewSwitcher: {
+    switchView: {
         location: 'after'
     },
     download: {
@@ -92,7 +92,7 @@ const DEFAULT_ITEM_CONFIGS = {
     }
 };
 
-const ALWAYS_VISIBLE_TOOLBAR_ITEMS = [ 'separator', 'viewSwitcher' ];
+const ALWAYS_VISIBLE_TOOLBAR_ITEMS = [ 'separator', 'switchView' ];
 
 const REFRESH_ICON_MAP = {
     default: 'dx-filemanager-i dx-filemanager-i-refresh',
@@ -100,6 +100,8 @@ const REFRESH_ICON_MAP = {
     success: 'dx-filemanager-i dx-filemanager-i-done',
     error: 'dx-filemanager-i dx-filemanager-i-danger'
 };
+
+const REFRESH_ITEM_PROGRESS_MESSAGE_DELAY = 500;
 
 class FileManagerToolbar extends Widget {
 
@@ -199,7 +201,7 @@ class FileManagerToolbar extends Widget {
             case 'separator':
                 result = this._createSeparatorItem();
                 break;
-            case 'viewSwitcher':
+            case 'switchView':
                 result = this._createViewModeItem();
                 break;
         }
@@ -434,29 +436,58 @@ class FileManagerToolbar extends Widget {
 
     updateRefreshItem(message, status) {
         let generalToolbarOptions = null;
+        let text = messageLocalization.format('dxFileManager-commandRefresh');
+        let showText = 'inMenu';
+
         this._isRefreshVisibleInFileToolbar = false;
 
         if(status === 'default') {
             generalToolbarOptions = {
-                showText: 'inMenu',
                 options: {
-                    text: messageLocalization.format('dxFileManager-commandRefresh'),
                     icon: REFRESH_ICON_MAP.default
                 }
             };
         } else {
             generalToolbarOptions = {
-                showText: 'always',
                 options: {
-                    text: message,
                     icon: REFRESH_ICON_MAP[status]
                 }
             };
             this._isRefreshVisibleInFileToolbar = true;
+            text = message;
+            showText = 'always';
         }
 
         const fileToolbarOptions = extend({ }, generalToolbarOptions, { visible: this._isRefreshVisibleInFileToolbar });
+        this._applyRefreshItemOptions(generalToolbarOptions, fileToolbarOptions);
+        this._refreshItemTextTimeout = this._updateRefreshItemText(status === 'progress', text, showText);
+    }
 
+    _updateRefreshItemText(isDeferredUpdate, text, showText) {
+        const options = {
+            showText,
+            options: {
+                text
+            }
+        };
+        if(isDeferredUpdate) {
+            return setTimeout(() => {
+                this._applyRefreshItemOptions(options);
+                this._refreshItemTextTimeout = undefined;
+            }, REFRESH_ITEM_PROGRESS_MESSAGE_DELAY);
+        } else {
+            if(this._refreshItemTextTimeout) {
+                clearTimeout(this._refreshItemTextTimeout);
+            }
+            this._applyRefreshItemOptions(options);
+            return undefined;
+        }
+    }
+
+    _applyRefreshItemOptions(generalToolbarOptions, fileToolbarOptions) {
+        if(!fileToolbarOptions) {
+            fileToolbarOptions = extend({}, generalToolbarOptions);
+        }
         this._updateItemInToolbar(this._generalToolbar, 'refresh', generalToolbarOptions);
         this._updateItemInToolbar(this._fileToolbar, 'refresh', fileToolbarOptions);
     }

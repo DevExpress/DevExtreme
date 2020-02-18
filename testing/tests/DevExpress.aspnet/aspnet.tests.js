@@ -18,7 +18,8 @@
                 require('core/templates/template_engine_registry').setTemplateEngine,
                 aspnet,
                 function() { return require('ui/widget/ui.errors'); },
-                function() { return require('../../helpers/ajaxMock.js'); }
+                function() { return require('../../helpers/ajaxMock.js'); },
+                require('core/utils/console')
             );
         });
     } else {
@@ -27,10 +28,11 @@
             DevExpress.setTemplateEngine,
             DevExpress.aspnet,
             function() { return window.DevExpress_ui_widget_errors; },
-            function() { return window.ajaxMock; }
+            function() { return window.ajaxMock; },
+            DevExpress.utils.console
         );
     }
-}(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor) {
+}(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor, console) {
 
     if(QUnit.urlParams['nojquery']) {
         return;
@@ -261,20 +263,20 @@
             setTemplateEngine('default');
         }
     }, function() {
-        const testTemplate = function(name, templateSource, expected, enableAlternateTemplateTags) {
+        const testTemplate = function(name, templateSource, expected, enableAlternativeTemplateTags) {
             QUnit.test(name, function(assert) {
                 const $template = $('#simpleTemplate');
 
                 $template.text(templateSource);
 
-                aspnet.enableAlternateTemplateTags(enableAlternateTemplateTags !== false);
+                aspnet.enableAlternativeTemplateTags(enableAlternativeTemplateTags !== false);
                 try {
                     $('#button').dxButton({
                         text: 'Test button',
                         template: $template
                     });
                 } finally {
-                    aspnet.enableAlternateTemplateTags(true);
+                    aspnet.enableAlternativeTemplateTags(true);
                 }
 
                 assert.equal($('.dx-button-content').text(), expected);
@@ -328,7 +330,7 @@
 
         testTemplate('obj', '<%- obj.text %>', 'Test button');
 
-        QUnit.module('Alternate syntax (T831170)', function() {
+        QUnit.module('Alternative syntax (T831170)', function() {
             testTemplate('enabled', 'a [%= \'b\' %] c', 'a b c');
             testTemplate('disabled', '[%= 123 %]', '[%= 123 %]', false);
         });
@@ -399,7 +401,7 @@
         aspnet.setTemplateEngine();
 
         const errors = errorsAccessor();
-        sinon.spy(errors, 'log');
+        const spy = sinon.spy(errors, 'log');
 
         try {
             const formID = 'bd859c15-674f-49bf-a6d0-9368508e8d11';
@@ -460,6 +462,7 @@
 
         } finally {
             setTemplateEngine('default');
+            spy.restore();
             delete window.__createForm;
             delete window.__createTextBox;
         }
@@ -518,6 +521,28 @@
             assert.ok($('#' + NUMERIC_ID).dxTextBox('instance'));
         } finally {
             setTemplateEngine('default');
+        }
+    });
+
+    QUnit.test('Warn https://github.com/dotnet/aspnetcore/issues/17028', function(assert) {
+        aspnet.setTemplateEngine();
+        const spy = sinon.spy(console.logger, 'warn');
+        try {
+            aspnet.warnBug17028();
+
+            $('#qunit-fixture').html(`
+                <div id=widget1></div>
+                <div id=widget2></div>
+                <script id=template1 type=text/html><%= %></script>
+            `);
+
+            [1, 2].forEach(i => $('#widget' + i).dxButton({ template: $('#template1') }));
+
+            assert.equal(spy.callCount, 1);
+            assert.ok(spy.args[0][0].indexOf('alternative template syntax') > -1);
+        } finally {
+            setTemplateEngine('default');
+            spy.restore();
         }
     });
 

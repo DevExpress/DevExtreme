@@ -1216,68 +1216,9 @@
 @datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/softblue/grid/text-stub.png');
 
 // TreeList
-
-@treelist-base-color: @base-text-color;
-@treelist-base-background-color: @base-bg;
-@treelist-border-color: @base-border-color;
-@treelist-border: 1px solid @treelist-border-color;
-@treelist-columnchooser-item-color: @datagrid-columnchooser-item-color;
-@treelist-columnchooser-font-weight: @datagrid-columnchooser-font-weight;
-
-@treelist-drag-header-border-color: @datagrid-drag-header-border-color;
-@treelist-drag-header-shadow-color: fade(@base-shadow-color, 10%);
-@treelist-drag-header-second-shadow-color: fade(@base-shadow-color, 20%);
-@treelist-header-drag-bg: @treelist-base-background-color;
-@treelist-selection-bg: @datagrid-selection-bg;
-@treelist-row-selected-border-color: @datagrid-row-selected-border-color;
-
-@treelist-row-selected-color: @datagrid-row-selected-color;
-@treelist-row-focused-color: @datagrid-row-focused-color;
-@treelist-row-focused-bg: @datagrid-row-focused-bg;
-@treelist-hover-bg: @base-webwidget-hover-background;
-@treelist-row-hovered-color: @treelist-base-color;
-@treelist-menu-icon-color: @datagrid-menu-icon-color;
-@treelist-cell-modified-border-color: @datagrid-cell-modified-border-color;
-@treelist-row-removed-bg: fade(@base-success, 50%);
-@treelist-row-invalid-faded-border-color: @datagrid-row-invalid-faded-border-color;
-@treelist-row-invalid-border-color: @base-invalid-color;
-@treelist-nodata-color: lighten(@treelist-base-color, 40%);
-@treelist-master-detail-cell-bg: darken(@treelist-base-background-color, 2%);
-
-@treelist-search-color: @datagrid-search-color;
+@treelist-row-alternation-bg: @datagrid-row-alternation-bg;
 @treelist-spin-icon-color: @base-icon-color;
 @treelist-selection-spin-icon-color: @base-icon-color;
-@treelist-search-bg: @datagrid-search-bg;
-
-@treelist-row-error-color: @datagrid-row-error-color;
-@treelist-row-error-bg: @datagrid-row-error-bg;
-
-
-@treelist-link-color: @base-link-color;
-@treelist-focused-border-color: @datagrid-focused-border-color;
-
-@treelist-editor-bg: @datagrid-editor-bg;
-
-@treelist-drop-highlight-bg: @base-accent;
-@treelist-drop-highlight-color: @base-inverted-text-color;
-
-
-@treelist-columnchooser-bg: @base-element-bg;
-
-@treelist-row-alternation-bg: @datagrid-row-alternation-bg; // #fff => #fafafa
-@treelist-columnchooser-item-bg: @treelist-columnchooser-bg;
-
-@treelist-summary-color: @datagrid-summary-color;
-@treelist-columnchooser-message-color: lighten(@treelist-base-color, 40%);
-
-@treelist-overlay-content-shadow-color: fade(@base-shadow-color, 15%);
-@treelist-columnchooser-shadow-color: fade(@base-shadow-color, 20%);
-
-@treelist-columnchooser-overlay-border-radius: @base-border-radius-large; // TODO: may be not need
-
-@treelist-column-separator-bg: fade(@base-accent, 50%);
-@treelist-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/softblue/grid/text-stub.png');
-
 
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
@@ -1741,7 +1682,7 @@
 
 // Gantt
 @gantt-collapsable-row-bg: darken(@base-bg, 4%);
-@gantt-selection-bg: @treelist-selection-bg;
+@gantt-selection-bg: @datagrid-selection-bg;
 
 // Splitter
 @splitter-inactive-color: @base-border-color;

@@ -170,20 +170,38 @@ module.exports = _extend({}, barPoint, {
         };
     },
 
-    _getGraphicBBox: function() {
+    _getGraphicBBox: function(location) {
         const that = this;
         const rotated = that._options.rotated;
         const x = that.x;
         const width = that.width;
-        const lowY = that.lowY;
-        const highY = that.highY;
+        let lowY = that.lowY;
+        let highY = that.highY;
 
-        return {
+        if(location) {
+            const valVisibleArea = that.series.getValueAxis().getVisibleArea();
+            highY = that._truncateCoord(highY, valVisibleArea);
+            lowY = that._truncateCoord(lowY, valVisibleArea);
+        }
+        const bBox = {
             x: !rotated ? x - _round(width / 2) : lowY,
             y: !rotated ? highY : x - _round(width / 2),
             width: !rotated ? width : highY - lowY,
             height: !rotated ? lowY - highY : width
         };
+
+        if(location) {
+            const isTop = location === 'top';
+            if(!this._options.rotated) {
+                bBox.y = isTop ? bBox.y : bBox.y + bBox.height;
+                bBox.height = 0;
+            } else {
+                bBox.x = isTop ? bBox.x + bBox.width : bBox.x;
+                bBox.width = 0;
+            }
+        }
+
+        return bBox;
     },
 
     getTooltipParams: function(location) {
@@ -248,7 +266,6 @@ module.exports = _extend({}, barPoint, {
         const that = this;
         const rotated = that._options.rotated;
         const valTranslator = that._getValTranslator();
-        let centerValue;
         const x = that._getArgTranslator().translate(that.argument);
 
         that.vx = that.vy = that.x = x === null ? x : x + (that.xCorrection || 0);
@@ -257,7 +274,7 @@ module.exports = _extend({}, barPoint, {
         that.lowY = valTranslator.translate(that.lowValue);
         that.closeY = that.closeValue !== null ? valTranslator.translate(that.closeValue) : null;
 
-        centerValue = _min(that.lowY, that.highY) + _abs(that.lowY - that.highY) / 2;
+        const centerValue = _min(that.lowY, that.highY) + _abs(that.lowY - that.highY) / 2;
         that._calculateVisibility(!rotated ? that.x : centerValue, !rotated ? centerValue : that.x);
     },
 
