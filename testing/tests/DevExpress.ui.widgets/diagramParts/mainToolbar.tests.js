@@ -4,7 +4,7 @@ import 'common.css!';
 import 'ui/diagram';
 
 import { DiagramCommand } from 'devexpress-diagram';
-import { Consts, getMainToolbarInstance, getContextMenuInstance, findToolbarItem, getToolbarIcon, findContextMenuItem } from '../../../helpers/diagramHelpers.js';
+import { Consts, getMainToolbarInstance, findToolbarItem, getToolbarIcon, findContextMenuItem } from '../../../helpers/diagramHelpers.js';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -146,11 +146,8 @@ QUnit.module('Main Toolbar', {
         assert.ok(button.option('disabled'));
     });
     test('Auto Layout button should be disabled in Read Only mode', function(assert) {
-        this.instance.option('contextMenu.commands', ['selectAll']);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
-        const contextMenu = getContextMenuInstance(this.$element);
-        contextMenu.show();
-        findContextMenuItem(this.$element, 'select all').trigger('dxclick');
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.SelectAll).execute(true);
         const button = findToolbarItem(this.$element, 'layout').dxButton('instance');
         assert.notOk(button.option('disabled'));
         this.instance.option('readOnly', true);
