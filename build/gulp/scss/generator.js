@@ -62,7 +62,6 @@ gulp.task('fix-bundles', () => {
 });
 
 gulp.task('fix-base', () => {
-    // the same code for different themes
     return gulp
         .src(`${unfixedScssPath}/widgets/base/*.scss`)
         // .pipe(replace(/\.dx-font-icon\("/g, '@include dx-font-icon("'))
@@ -74,6 +73,12 @@ gulp.task('fix-base', () => {
         }))
         .pipe(replace('f11d",', 'f11d"'))
         .pipe(replace(/each\(\$icons,\s{([\w\W]*)}\);/, '@each $key, $val in $icons {$1}'))
+
+        // dataGrid
+        .pipe(replace('.dx-datagrid-borders', '@use "./mixins" as *;\n@use "./icons" as *;\n\n.dx-datagrid-borders'))
+
+        // treeList
+        .pipe(replace(/\$treelist-border/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$treelist-border'))
 
         .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
         .pipe(rename((path) => {
@@ -104,6 +109,41 @@ gulp.task('fix-mixins', () => {
         .pipe(gulp.dest(`${outputPath}/widgets/base`));
 });
 
+const getRealFileName = (sassModuleName) => {
+    if(fs.existsSync(sassModuleName)) return sassModuleName;
+
+    const indexFileName = path.join(sassModuleName, '_index.scss');
+    if(fs.existsSync(indexFileName)) return indexFileName;
+
+    const moduleFileName = '_' + path.basename(sassModuleName) + '.scss';
+    const moduleDirName = path.dirname(sassModuleName);
+    const moduleRealFileName = path.join(moduleDirName, moduleFileName);
+    if(fs.existsSync(moduleRealFileName)) return moduleRealFileName;
+
+    throw new Error(`Module ${sassModuleName} not found`);
+};
+
+const addImportedVariables = (r, folder) => {
+    if(!r.withVars || r.withVars.length === 0) return '';
+
+    let variables = '';
+    let withPart = '';
+    let definitions = '';
+    r.withVars.forEach((variable) => {
+        variables += `    $${variable}: $${variable},\n`;
+        definitions += `$${variable}: null !default;\n`;
+    });
+    withPart = ` with (\n${variables})`;
+
+    const targetFileName = getRealFileName(path.join(folder, r.import));
+    let content = fs.readFileSync(targetFileName).toString();
+    if(content.indexOf(definitions) !== 0) {
+        content = definitions + content;
+    }
+    fs.writeFileSync(targetFileName, content);
+    return withPart;
+};
+
 const specificReplacement = (content, folder, file) => {
     const widget = path.basename(folder);
     const replacementTable = require('./replacements');
@@ -113,7 +153,9 @@ const specificReplacement = (content, folder, file) => {
             if(r.regex && file === 'index') {
                 content = content.replace(r.regex, r.replacement);
             } else if(r.import && r.type === file) {
-                content = content.replace(/\/\/\sadduse/, `// adduse\n@use "${r.import}" as *;`);
+                const withPart = addImportedVariables(r, folder);
+                const alias = r.alias || '*';
+                content = content.replace(/\/\/\sadduse/, `@use "${r.import}" as ${alias}${withPart};\n// adduse`); // TODO // adduse at the end
             }
 
         });
@@ -257,7 +299,8 @@ const collectWidgetColorVariables = (content, schemeName) => {
         'success button (buttongroup)': 'buttonGroup',
         'checkbox': 'checkBox',
         'fileuploader': 'fileUploader',
-        'selectbox': 'selectBox'
+        'selectbox': 'selectBox',
+        'datagrid': 'gridBase'
     };
 
     let regResult;

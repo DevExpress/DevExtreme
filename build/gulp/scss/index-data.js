@@ -71,5 +71,7 @@ module.exports = [
     { content: 'slideOut', task: 'widget' },
     { content: 'colorView', task: 'widget', private: true },
     { content: 'colorBox', task: 'widget' },
+    { content: 'dataGrid', task: 'widget' },
+    { content: 'treeList', task: 'widget' },
     { task: 'newline' }
 ];
