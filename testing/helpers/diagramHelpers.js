@@ -16,8 +16,14 @@ export const Consts = {
     FULLSCREEN_CLASS: 'dx-diagram-fullscreen'
 };
 
-export function getToolbarIcon(button) {
-    return button.find('.dx-dropdowneditor-field-template-wrapper').find('.dx-diagram-i, .dx-icon');
+export function getMainToolbarInstance($diagramElement) {
+    return $diagramElement.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
+}
+export function getHistoryToolbarInstance($diagramElement) {
+    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(0)).dxToolbar('instance');
+}
+export function getViewToolbarInstance($diagramElement) {
+    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(1)).dxToolbar('instance');
 }
 export function findToolbarItem($diagramElement, label) {
     return $diagramElement.find(Consts.MAIN_TOOLBAR_SELECTOR)
@@ -32,6 +38,13 @@ export function findViewToolbarItem($diagramElement, label) {
         .filter(function() {
             return $(this).text().toLowerCase().indexOf(label) >= 0;
         });
+}
+export function getToolbarIcon($button) {
+    return $button.find('.dx-dropdowneditor-field-template-wrapper').find('.dx-diagram-i, .dx-icon');
+}
+
+export function getContextMenuInstance($diagramElement) {
+    return $diagramElement.find(Consts.CONTEXT_MENU_SELECTOR).dxContextMenu('instance');
 }
 export function findContextMenuItem($diagramElement, label) {
     return $('body').find('.dx-diagram-contextmenu')

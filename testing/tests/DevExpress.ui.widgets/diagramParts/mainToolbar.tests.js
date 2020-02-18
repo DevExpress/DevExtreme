@@ -4,7 +4,7 @@ import 'common.css!';
 import 'ui/diagram';
 
 import { DiagramCommand } from 'devexpress-diagram';
-import { Consts, findToolbarItem, getToolbarIcon } from '../../../helpers/diagramHelpers.js';
+import { Consts, getMainToolbarInstance, getContextMenuInstance, findToolbarItem, getToolbarIcon, findContextMenuItem } from '../../../helpers/diagramHelpers.js';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -33,12 +33,12 @@ QUnit.module('Main Toolbar', {
         assert.equal($toolbar.length, 0);
     });
     test('should fill toolbar with default items', function(assert) {
-        const toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
+        const toolbar = getMainToolbarInstance(this.$element);
         assert.ok(toolbar.option('dataSource').length > 10);
     });
     test('should fill toolbar with custom items', function(assert) {
         this.instance.option('toolbar.commands', ['exportSvg']);
-        const toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
+        const toolbar = getMainToolbarInstance(this.$element);
         assert.equal(toolbar.option('dataSource').length, 1);
     });
     test('should enable items on diagram request', function(assert) {
@@ -58,6 +58,28 @@ QUnit.module('Main Toolbar', {
         assert.notOk(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.TextLeftAlign).getState().value);
         findToolbarItem(this.$element, 'left').trigger('dxclick');
         assert.ok(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.TextLeftAlign).getState().value);
+    });
+    test('button should raise custom commands', function(assert) {
+        this.onCustomClick = sinon.spy();
+        this.onCustomClick2 = sinon.spy();
+        this.instance.option('toolbar.commands', [
+            {
+                text: 'custom',
+                onClick: this.onCustomClick
+            },
+            {
+                text: 'sub menu',
+                items: [{
+                    text: 'custom2',
+                    onClick: this.onCustomClick2,
+                }]
+            }
+        ]);
+        findToolbarItem(this.$element, 'custom').trigger('dxclick');
+        assert.ok(this.onCustomClick.called);
+        findToolbarItem(this.$element, 'sub menu').trigger('dxclick');
+        findContextMenuItem(this.$element, 'custom2').trigger('dxclick');
+        assert.ok(this.onCustomClick2.called);
     });
     test('selectBox should have items', function(assert) {
         assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontName).getState().value, 'Arial');
@@ -126,9 +148,9 @@ QUnit.module('Main Toolbar', {
     test('Auto Layout button should be disabled in Read Only mode', function(assert) {
         this.instance.option('contextMenu.commands', ['selectAll']);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
-        const contextMenu = this.$element.find(Consts.CONTEXT_MENU_SELECTOR).dxContextMenu('instance');
+        const contextMenu = getContextMenuInstance(this.$element);
         contextMenu.show();
-        $(contextMenu.itemsContainer().find(Consts.DX_MENU_ITEM_SELECTOR).eq(0)).trigger('dxclick'); // Select All
+        findContextMenuItem(this.$element, 'select all').trigger('dxclick');
         const button = findToolbarItem(this.$element, 'layout').dxButton('instance');
         assert.notOk(button.option('disabled'));
         this.instance.option('readOnly', true);

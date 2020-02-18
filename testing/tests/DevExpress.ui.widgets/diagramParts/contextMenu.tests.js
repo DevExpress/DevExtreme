@@ -4,7 +4,7 @@ import 'common.css!';
 import 'ui/diagram';
 
 import { DiagramCommand } from 'devexpress-diagram';
-import { Consts } from '../../../helpers/diagramHelpers.js';
+import { Consts, getContextMenuInstance, findContextMenuItem } from '../../../helpers/diagramHelpers.js';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -31,17 +31,17 @@ QUnit.module('Context Menu', {
         assert.equal($contextMenu.length, 0);
     });
     test('should load default items', function(assert) {
-        const contextMenu = this.$element.find(Consts.CONTEXT_MENU_SELECTOR).dxContextMenu('instance');
+        const contextMenu = getContextMenuInstance(this.$element);
         assert.ok(contextMenu.option('items').length > 1);
     });
     test('should load custom items', function(assert) {
         this.instance.option('contextMenu.commands', ['copy']);
-        const contextMenu = this.$element.find(Consts.CONTEXT_MENU_SELECTOR).dxContextMenu('instance');
+        const contextMenu = getContextMenuInstance(this.$element);
         assert.equal(contextMenu.option('items').length, 1);
     });
     test('should update items on showing', function(assert) {
         this.instance.option('contextMenu.commands', ['copy', 'selectAll']);
-        const contextMenu = this.$element.find(Consts.CONTEXT_MENU_SELECTOR).dxContextMenu('instance');
+        const contextMenu = getContextMenuInstance(this.$element);
         assert.notOk(contextMenu.option('visible'));
         assert.ok(contextMenu.option('items')[0].text.indexOf('Copy') > -1);
         contextMenu.show();
@@ -51,10 +51,34 @@ QUnit.module('Context Menu', {
     test('should execute commands on click', function(assert) {
         this.instance.option('contextMenu.commands', ['selectAll']);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
-        const contextMenu = this.$element.find(Consts.CONTEXT_MENU_SELECTOR).dxContextMenu('instance');
+        const contextMenu = getContextMenuInstance(this.$element);
         contextMenu.show();
         assert.ok(this.instance._diagramInstance.selection.isEmpty());
-        $(contextMenu.itemsContainer().find(Consts.DX_MENU_ITEM_SELECTOR).eq(0)).trigger('dxclick');
+        findContextMenuItem(this.$element, 'select all').trigger('dxclick');
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
+    });
+    test('should execute custom commands on click', function(assert) {
+        this.onCustomClick = sinon.spy();
+        this.onCustomClick2 = sinon.spy();
+        this.instance.option('contextMenu.commands', [
+            {
+                text: 'custom',
+                onClick: this.onCustomClick
+            },
+            {
+                text: 'sub menu',
+                items: [{
+                    text: 'custom2',
+                    onClick: this.onCustomClick2,
+                }]
+            }
+        ]);
+        const contextMenu = getContextMenuInstance(this.$element);
+        contextMenu.show();
+        findContextMenuItem(this.$element, 'custom').trigger('dxclick');
+        assert.ok(this.onCustomClick.called);
+        findContextMenuItem(this.$element, 'sub menu').trigger('dxclick');
+        findContextMenuItem(this.$element, 'custom2').trigger('dxclick');
+        assert.ok(this.onCustomClick2.called);
     });
 });

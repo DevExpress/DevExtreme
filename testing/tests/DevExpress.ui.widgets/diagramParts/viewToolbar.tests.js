@@ -3,7 +3,7 @@ const { test } = QUnit;
 import 'common.css!';
 import 'ui/diagram';
 
-import { Consts, findViewToolbarItem } from '../../../helpers/diagramHelpers.js';
+import { Consts, getViewToolbarInstance, findViewToolbarItem } from '../../../helpers/diagramHelpers.js';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -30,12 +30,12 @@ QUnit.module('View Toolbar', {
         assert.equal($toolbar.length, 1);
     });
     test('should fill toolbar with default items', function(assert) {
-        const toolbar = $(this.$element.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(1)).dxToolbar('instance');
+        const toolbar = getViewToolbarInstance(this.$element);
         assert.equal(toolbar.option('dataSource').length, 6);
     });
     test('should fill toolbar with custom items', function(assert) {
         this.instance.option('viewToolbar.commands', ['copy']);
-        const toolbar = $(this.$element.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(1)).dxToolbar('instance');
+        const toolbar = getViewToolbarInstance(this.$element);
         assert.equal(toolbar.option('dataSource').length, 1); // + show properties panel
     });
     test('should toggle fullscreen class name on button click', function(assert) {

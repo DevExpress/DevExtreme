@@ -54,9 +54,9 @@ class DiagramToolbar extends DiagramPanel {
         const centerCommands = this._commands.filter(command => command.position === 'center');
         const afterCommands = this._commands.filter(command => command.position === 'after');
         const dataSource = []
-            .concat(this._prepareToolbarItems(beforeCommands, 'before', this._execDiagramCommand))
-            .concat(this._prepareToolbarItems(centerCommands, 'center', this._execDiagramCommand))
-            .concat(this._prepareToolbarItems(afterCommands, 'after', this._execDiagramCommand));
+            .concat(this._prepareToolbarItems(beforeCommands, 'before', this._executeCommand))
+            .concat(this._prepareToolbarItems(centerCommands, 'center', this._executeCommand))
+            .concat(this._prepareToolbarItems(afterCommands, 'after', this._executeCommand));
         this._toolbarInstance = this._createComponent($toolbar, Toolbar, { dataSource });
     }
     _prepareToolbarItems(items, location, actionHandler) {
@@ -250,7 +250,7 @@ class DiagramToolbar extends DiagramPanel {
     _onContextMenuDisposing(widget, item) {
         this._contextMenus = this._contextMenus.filter(cm => cm !== widget);
     }
-    _execDiagramCommand(command, value, onExecuted) {
+    _executeCommand(command, value, onExecuted) {
         if(!this._updateLocked && command !== undefined) {
             if(typeof command === 'number') {
                 const valueConverter = this._valueConverters[command];
