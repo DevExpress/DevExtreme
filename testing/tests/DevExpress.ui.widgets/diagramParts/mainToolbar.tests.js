@@ -9,7 +9,7 @@ import { Consts, getMainToolbarInstance, getContextMenuInstance, findToolbarItem
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#diagram').dxDiagram({
-            toolbar: {
+            mainToolbar: {
                 visible: true
             }
         });
@@ -28,7 +28,7 @@ QUnit.module('Main Toolbar', {
     }
 }, () => {
     test('should not render if toolbar.visible is false', function(assert) {
-        this.instance.option('toolbar.visible', false);
+        this.instance.option('mainToolbar.visible', false);
         const $toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR);
         assert.equal($toolbar.length, 0);
     });
@@ -37,7 +37,7 @@ QUnit.module('Main Toolbar', {
         assert.ok(toolbar.option('dataSource').length > 10);
     });
     test('should fill toolbar with custom items', function(assert) {
-        this.instance.option('toolbar.commands', ['exportSvg']);
+        this.instance.option('mainToolbar.commands', ['exportSvg']);
         const toolbar = getMainToolbarInstance(this.$element);
         assert.equal(toolbar.option('dataSource').length, 1);
     });
@@ -62,7 +62,7 @@ QUnit.module('Main Toolbar', {
     test('button should raise custom commands', function(assert) {
         this.onCustomClick = sinon.spy();
         this.onCustomClick2 = sinon.spy();
-        this.instance.option('toolbar.commands', [
+        this.instance.option('mainToolbar.commands', [
             {
                 text: 'custom',
                 onClick: this.onCustomClick
