@@ -8,6 +8,7 @@ import messageLocalization from '../../localization/message';
 const SEPARATOR = { widget: 'separator' };
 const CSS_CLASSES = {
     SMALL_SELECT: 'dx-diagram-select-sm',
+    LARGE_SELECT: 'dx-diagram-select-lg',
     BUTTON_SELECT: 'dx-diagram-select-b',
     LARGE_ICON: 'dx-diagram-btn-l-icon',
     BUTTON_COLOR: 'dx-diagram-color-b',
@@ -405,6 +406,7 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandPageSize'),
                     text: messageLocalization.format('dxDiagram-commandPageSize'),
                     widget: 'dxSelectBox',
+                    cssClass: CSS_CLASSES.LARGE_SELECT,
                     getValue: (v) => JSON.parse(v),
                     setValue: (v) => JSON.stringify(v)
                 },
@@ -423,6 +425,8 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandPageColor'),
                     text: messageLocalization.format('dxDiagram-commandPageColor'),
                     widget: 'dxColorBox',
+                    icon: 'dx-diagram-i dx-diagram-i-button-fill',
+                    cssClass: CSS_CLASSES.BUTTON_COLOR
                 },
                 zoomLevel: {
                     command: DiagramCommand.ZoomLevel,
