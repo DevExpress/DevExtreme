@@ -597,8 +597,7 @@ const DropDownButton = Widget.inherit({
                 this._createSelectionChangedAction();
                 break;
             case 'deferRendering':
-                this._renderPopup();
-                this._renderContent();
+                this.toggle(this.option('opened'));
                 break;
             default:
                 this.callBase(args);

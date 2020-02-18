@@ -633,6 +633,16 @@ QUnit.module('common use cases', {
         assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Trial for Visual Studio', 'action button has been changed');
     });
 
+    QUnit.test('deferRendering should not do anything if popup has already been rendered', function(assert) {
+        const handler = sinon.spy(this.dropDownButton, '_renderPopup');
+
+        this.dropDownButton.option('deferRendering', true);
+        assert.ok(handler.notCalled, 'popup does not render repeatedly');
+
+        this.dropDownButton.option('deferRendering', false);
+        assert.ok(handler.notCalled, 'popup does not render repeatedly');
+    });
+
     QUnit.test('custom item should be redefined after selection if useSelectMode is changed to true at runtime', function(assert) {
         this.dropDownButton.option({
             useSelectMode: false,
