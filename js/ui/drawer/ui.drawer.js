@@ -183,12 +183,12 @@ const Drawer = Widget.inherit({
     },
 
     _render() {
-        this._initSize();
+        this._initMinMaxSize();
 
         this.callBase();
 
         this._whenPanelContentRendered.always(() => {
-            this._initSize();
+            this._initMinMaxSize();
             this._strategy.setPanelSize(this.option('revealMode') === 'slide' || !this.isHorizontalDirection());
 
             this._renderPosition(this.option('opened'), false);
@@ -240,7 +240,11 @@ const Drawer = Widget.inherit({
         this._toggleShaderVisibility(this.option('opened'));
     },
 
-    _initSize() {
+    _initSize() { // TODO: keep for ui.file_manager.adaptivity.js
+        this._initMinMaxSize();
+    },
+
+    _initMinMaxSize() {
         const realPanelSize = this.isHorizontalDirection() ? this.getRealPanelWidth() : this.getRealPanelHeight();
 
         this._maxSize = this.option('maxSize') || realPanelSize;
@@ -387,7 +391,7 @@ const Drawer = Widget.inherit({
     },
 
     _dimensionChanged() {
-        this._initSize();
+        this._initMinMaxSize();
         this._strategy.setPanelSize(this.option('revealMode') === 'slide');
     },
 
@@ -468,7 +472,7 @@ const Drawer = Widget.inherit({
                 break;
             case 'minSize':
             case 'maxSize':
-                this._initSize();
+                this._initMinMaxSize();
                 this._renderPosition(this.option('opened'), false);
                 break;
             case 'revealMode':
