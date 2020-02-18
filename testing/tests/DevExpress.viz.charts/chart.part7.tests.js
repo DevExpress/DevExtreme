@@ -1320,6 +1320,10 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
                         series: series,
                         getLabels: sinon.stub().returns([label]),
                         argument: seriesOptions && seriesOptions.argument || label.getBoundingRect().x,
+                        getMinValue() {},
+                        getOptions() {
+                            return {};
+                        }
                     };
                 });
             };
@@ -1886,6 +1890,8 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
                     getLabels: sinon.stub().returns([labels[0], labels[1]]),
                     argument: labels[0].getBoundingRect().x,
                     originalMinValue: labels[0].getBoundingRect().value,
+                    getMinValue() {},
+                    getOptions() { return {}; }
                 };
             });
             seriesMockData.series.push(series);

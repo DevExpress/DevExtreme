@@ -370,8 +370,8 @@ function checkUsedSpace(sizeShortage, side, axes, getMarginFunc) {
     }
 }
 
-function axisAnimationEnabled(drawOptions, series) {
-    const pointsCount = series.reduce((sum, s) => sum += s.getPoints().length, 0) / series.length;
+function axisAnimationEnabled(drawOptions, pointsToAnimation, seriesCount) {
+    const pointsCount = pointsToAnimation.reduce((sum, count) => sum + count, 0) / seriesCount;
 
     return drawOptions.animate && pointsCount <= drawOptions.animationPointsLimit;
 }
@@ -750,6 +750,21 @@ const dxChart = AdvancedChart.inherit({
         });
     },
 
+    _getPointsToAnimation(series) {
+        const argViewPortFilter = rangeCalculator.getViewPortFilter(this.getArgumentAxis().visualRange() || {});
+
+        return series.map((s) => {
+            const valAxis = s.getValueAxis();
+            const valVisualRange = valAxis.visualRange();
+            const valViewPortFilter = rangeCalculator.getViewPortFilter(valVisualRange || {});
+
+            return s.getPoints().filter(p => {
+                return p.getOptions().visible && argViewPortFilter(p.argument) &&
+                    (valViewPortFilter(p.getMinValue(true)) || valViewPortFilter(p.getMaxValue(true)));
+            }).length;
+        });
+    },
+
     _applyPointMarkersAutoHiding() {
         const that = this;
         if(!that._themeManager.getOptions('autoHidePointMarkers')) {
@@ -924,7 +939,10 @@ const dxChart = AdvancedChart.inherit({
 
         let oldTitlesWidth = calculateTitlesWidth(verticalAxes);
 
-        performActionOnAxes(allAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, that._getVisibleSeries()));
+        const visibleSeries = that._getVisibleSeries();
+        const pointsToAnimation = that._getPointsToAnimation(visibleSeries);
+
+        performActionOnAxes(allAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation, visibleSeries.length));
 
         horizontalAxes.forEach(shiftAxis('top', 'bottom'));
         verticalAxes.forEach(shiftAxis('left', 'right'));

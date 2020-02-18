@@ -742,6 +742,10 @@ const BaseChart = BaseWidget.inherit({
         this._updateSeriesDimensions(drawOptions);
     },
 
+    _getPointsToAnimation(series) {
+        return series.map(s => s.getPoints().length);
+    },
+
     _renderSeriesElements: function(drawOptions, isRotated, isLegendInside) {
         const that = this;
         let i;
@@ -750,11 +754,12 @@ const BaseChart = BaseWidget.inherit({
         const seriesLength = series.length;
         const resolveLabelOverlapping = that._themeManager.getOptions('resolveLabelOverlapping');
 
+        const pointsToAnimation = that._getPointsToAnimation(series);
         for(i = 0; i < seriesLength; i++) {
             singleSeries = series[i];
             that._applyExtraSettings(singleSeries, drawOptions);
 
-            singleSeries.draw(drawOptions.animate && singleSeries.getPoints().length <= drawOptions.animationPointsLimit && that._renderer.animationEnabled(),
+            singleSeries.draw(drawOptions.animate && pointsToAnimation[i] <= drawOptions.animationPointsLimit && that._renderer.animationEnabled(),
                 drawOptions.hideLayoutLabels,
                 that._getLegendCallBack(singleSeries)
             );
