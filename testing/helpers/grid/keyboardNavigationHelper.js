@@ -84,8 +84,11 @@ export function setupModules(that, modulesOptions, gridModules) {
     });
 }
 
-export const CLICK_EVENT = eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation');
 const device = devices.real();
+const isMobile = device.deviceType !== 'desktop';
+const pointerEventName = !isMobile ? pointerEvents.down : pointerEvents.up;
+export const CLICK_EVENT = eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation');
+
 const KEYS = {
     'tab': 'Tab',
     'enter': 'Enter',
@@ -106,7 +109,7 @@ const KEYS = {
 };
 
 export function testInDesktop(name, testFunc) {
-    if(device.deviceType === 'desktop') {
+    if(!isMobile) {
         QUnit.testInActiveWindow(name, testFunc);
     }
 }

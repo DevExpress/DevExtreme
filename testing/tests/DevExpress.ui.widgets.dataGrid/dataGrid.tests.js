@@ -10187,7 +10187,7 @@ QUnit.test('cellTemplate should be rendered, asynchronously if column renderAsyn
 
 // T857205
 QUnit.test(' if renderAsync is true and state storing is used', function(assert) {
-    let selectedRowKeys = [1, 2];
+    const selectedRowKeys = [1, 2];
 
     const customLoad = sinon.spy(() => {
         return {
@@ -18998,7 +18998,7 @@ QUnit.test('The cell should not be focused on pointerEvents.down event (T850219)
         this.clock.tick();
 
         // act
-        $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.down);
+        $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         // assert
@@ -19419,6 +19419,53 @@ QUnit.test('DataGrid should scroll horizontally without scroll back if focused r
 
     // assert
     assert.equal(scrollable.scrollOffset().left, 300, 'Content was scrolled');
+});
+
+QUnit.test('Row should not focus on scrolling with the pointer (T861577)', function(assert) {
+    if(devices.real().deviceType === 'desktop') {
+        assert.ok(true, 'Not actual for the desktop');
+        return;
+    }
+
+    // arrange
+    const dataGrid = createDataGrid({
+        height: 100,
+        width: 400,
+        dataSource: [
+            { name: 'Alex', phone: '555555', room: 1 },
+            { name: 'Dan', phone: '553355', room: 2 },
+            { name: 'Ben', phone: '6666666', room: 3 },
+            { name: 'Mark1', phone: '777777', room: 4 },
+            { name: 'Mark2', phone: '888888', room: 5 },
+            { name: 'Mark3', phone: '99999999', room: 6 }
+        ],
+        keyExpr: 'name',
+        focusedRowEnabled: true,
+        scrolling: {
+            mode: 'virtual',
+            useNative: true
+        }
+    });
+
+    this.clock.tick();
+
+    const scrollable = dataGrid.getScrollable();
+    const $cell = $(dataGrid.getCellElement(1, 0));
+    const $scrollableContainer = $(scrollable.element()).find('.dx-scrollable-container');
+
+    // act
+    $cell.trigger(pointerEvents.down);
+    this.clock.tick();
+
+    $scrollableContainer.trigger('scroll');
+    this.clock.tick();
+
+    $cell.trigger(CLICK_EVENT);
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.option('focusedRowIndex'), -1, 'No focused row index');
+    assert.equal(dataGrid.option('focusedRowKey'), undefined, 'No focused row key');
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {

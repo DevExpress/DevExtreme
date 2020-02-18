@@ -23,6 +23,7 @@ import eventsEngine from 'events/core/events_engine';
 import pointerEvents from 'events/pointer';
 import { MockDataController, MockColumnsController, MockEditingController } from '../../helpers/dataGridMocks.js';
 import { CLICK_EVENT, callViewsRenderCompleted } from '../../helpers/grid/keyboardNavigationHelper.js';
+import devices from 'core/devices';
 
 const KeyboardNavigationController = keyboardNavigationModule.controllers.keyboardNavigation;
 
@@ -166,6 +167,7 @@ QUnit.module('Keyboard controller', {
             getController: function(name) {
                 return this._controllers[name];
             },
+            getScrollable: commonUtils.noop,
             _createComponent: function(element, name, config) {
                 name = typeof name === 'string' ? name : publicComponentUtils.name(name);
                 const $element = $(element)[name](config || {});
@@ -232,6 +234,7 @@ QUnit.module('Keyboard controller', {
     QUnit.testInActiveWindow('Element of view is subscribed to events', function(assert) {
         // arrange
         const navigationController = new KeyboardNavigationController(this.component);
+        const isMobile = devices.current().deviceType !== 'desktop';
 
         // act
         navigationController.init();
@@ -242,12 +245,18 @@ QUnit.module('Keyboard controller', {
         callViewsRenderCompleted(this.component._views);
 
         // assert
-        assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation')].subscribeToEventCounter, 1, 'Subscribed');
+        assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation')].subscribeToEventCounter, 1, 'PointerDown subscribed');
+
+        if(isMobile) {
+            // assert
+            assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation')].subscribeToEventCounter, 1, 'PointerUp subscribed');
+        }
     });
 
     QUnit.testInActiveWindow('Element of view is unsubscribed from events', function(assert) {
         // arrange
         const navigationController = new KeyboardNavigationController(this.component);
+        const isMobile = devices.current().deviceType !== 'desktop';
 
         // act
         navigationController.init();
@@ -259,6 +268,11 @@ QUnit.module('Keyboard controller', {
 
         // assert
         assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation')].unsubscribeFromEventCounter, 1, 'Unsubscribed');
+
+        if(isMobile) {
+            // assert
+            assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation')].unsubscribeFromEventCounter, 1, 'Unsubscribed');
+        }
     });
 
     // T579521
