@@ -553,6 +553,16 @@ const GroupConfig = Class.inherit({
 const ValidationEngine = {
     groups: [],
 
+    buildErrorMessage: (errors) => {
+        let result = '';
+
+        errors?.forEach(({ message }) => {
+            result += message ? (result ? '<br />' : '') + message : '';
+        });
+
+        return result;
+    },
+
     getGroupConfig(group) {
         const result = grep(this.groups, function(config) {
             return config.group === group;

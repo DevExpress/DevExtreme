@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import dataUtils from '../../core/element_data';
+import { buildErrorMessage, initValidationOptions, synchronizeValidationOptions } from '../validation_engine';
 import { hasWindow } from '../../core/utils/window';
 import { addNamespace, normalizeKeyName } from '../../events/utils';
 import { getDefaultAlignment } from '../../core/utils/position';
@@ -8,18 +9,7 @@ import Callbacks from '../../core/utils/callbacks';
 import EventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import Overlay from '../overlay';
-import ValidationEngine from '../validation_engine';
 import Widget from '../widget/ui.widget';
-
-const getValidationErrorMessage = (errors) => {
-    let result = '';
-
-    errors?.forEach(({ message }) => {
-        result += message ? (result ? '<br />' : '') + message : '';
-    });
-
-    return result;
-};
 
 const Editor = Widget.inherit({
     ctor() {
@@ -34,7 +24,7 @@ const Editor = Widget.inherit({
 
     _initOptions(options) {
         this.callBase.apply(this, arguments);
-        this.option(ValidationEngine.initValidationOptions(options));
+        this.option(initValidationOptions(options));
     },
 
     _init() {
@@ -186,7 +176,7 @@ const Editor = Widget.inherit({
             return;
         }
 
-        const errorMessage = getValidationErrorMessage(validationErrors);
+        const errorMessage = buildErrorMessage(validationErrors);
 
         if(this._$validationMessage) {
             this._$validationMessage.remove();
@@ -293,11 +283,11 @@ const Editor = Widget.inherit({
                 break;
             case 'isValid':
             case 'validationError':
-                this.option(ValidationEngine.synchronizeValidationOptions(args, this.option()));
+                this.option(synchronizeValidationOptions(args, this.option()));
                 break;
             case 'validationErrors':
             case 'validationStatus':
-                this.option(ValidationEngine.synchronizeValidationOptions(args, this.option()));
+                this.option(synchronizeValidationOptions(args, this.option()));
                 this._renderValidationState();
                 break;
             case 'validationBoundary':
