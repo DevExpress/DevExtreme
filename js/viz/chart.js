@@ -1169,9 +1169,7 @@ const dxChart = AdvancedChart.inherit({
         that._panesBorderGroup.linkRemove().clear();
 
         _each(that.panes, function(i, pane) {
-            let bc;
             const borderOptions = panesBorderOptions[pane.name];
-            let segmentRectParams;
             const attr = {
                 fill: 'none',
                 stroke: borderOptions.color,
@@ -1186,9 +1184,9 @@ const dxChart = AdvancedChart.inherit({
             if(!borderOptions.visible) {
                 return;
             }
-            bc = pane.borderCoords;
+            const bc = pane.borderCoords;
 
-            segmentRectParams = prepareSegmentRectPoints(bc.left, bc.top, bc.width, bc.height, borderOptions);
+            const segmentRectParams = prepareSegmentRectPoints(bc.left, bc.top, bc.width, bc.height, borderOptions);
             that._renderer.path(segmentRectParams.points, segmentRectParams.pathType).attr(attr).append(that._panesBorderGroup);
         });
 

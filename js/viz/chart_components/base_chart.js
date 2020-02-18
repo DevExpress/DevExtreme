@@ -77,10 +77,7 @@ function checkHeightRollingStock(rollingStocks, stubCanvas) {
 }
 
 function findAndKillSmallValue(rollingStocks) {
-    let smallestObject;
-    let width;
-
-    smallestObject = rollingStocks.reduce(function(prev, rollingStock, index) {
+    const smallestObject = rollingStocks.reduce(function(prev, rollingStock, index) {
         if(!rollingStock) return prev;
         const value = rollingStock.value();
         return value < prev.value ? {
@@ -95,7 +92,7 @@ function findAndKillSmallValue(rollingStocks) {
     });
 
     smallestObject.rollingStock.getLabels()[0].draw(false);
-    width = smallestObject.rollingStock.getBoundingRect().width;
+    const width = smallestObject.rollingStock.getBoundingRect().width;
     rollingStocks[smallestObject.index] = null;
 
     return width;
@@ -615,14 +612,12 @@ const BaseChart = BaseWidget.inherit({
 
     _doRender: function(_options) {
         const that = this;
-        let drawOptions;
-        let recreateCanvas;
 
         if(that._canvas.width === 0 && that._canvas.height === 0) return;
 
         that._resetIsReady(); // T207606
-        drawOptions = that._prepareDrawOptions(_options);
-        recreateCanvas = drawOptions.recreateCanvas;
+        const drawOptions = that._prepareDrawOptions(_options);
+        const recreateCanvas = drawOptions.recreateCanvas;
 
         // T207665
         that._preserveOriginalCanvas();
@@ -1139,11 +1134,9 @@ const BaseChart = BaseWidget.inherit({
 
     _updateCanvasClipRect: function(canvas) {
         const that = this;
-        let width;
-        let height;
 
-        width = Math.max(canvas.width - canvas.left - canvas.right, 0);
-        height = Math.max(canvas.height - canvas.top - canvas.bottom, 0);
+        const width = Math.max(canvas.width - canvas.left - canvas.right, 0);
+        const height = Math.max(canvas.height - canvas.top - canvas.bottom, 0);
 
         that._canvasClipRect.attr({ x: canvas.left, y: canvas.top, width: width, height: height });
         that._backgroundRect.attr({ x: canvas.left, y: canvas.top, width: width, height: height });
@@ -1199,7 +1192,6 @@ const BaseChart = BaseWidget.inherit({
 
     _repopulateSeries: function() {
         const that = this;
-        let parsedData;
         const themeManager = that._themeManager;
         const data = that._dataSourceItems();
         const dataValidatorOptions = themeManager.getOptions('dataPrepareSettings');
@@ -1210,7 +1202,7 @@ const BaseChart = BaseWidget.inherit({
         }
 
         that._groupSeries();
-        parsedData = dataValidatorModule.validateData(data, that._groupsData, that._incidentOccurred, dataValidatorOptions);
+        const parsedData = dataValidatorModule.validateData(data, that._groupsData, that._incidentOccurred, dataValidatorOptions);
         themeManager.resetPalette();
 
         that.series.forEach(function(singleSeries) {
