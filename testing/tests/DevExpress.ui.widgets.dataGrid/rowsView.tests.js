@@ -85,7 +85,7 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
             return true;
         },
         $element: function() {
-            return $('.dx-datagrid');
+            return $('.dx-datagrid').parent();
         }
     };
 
@@ -2236,19 +2236,18 @@ QUnit.test('Height free space row for virtual scroller', function(assert) {
     const dataController = new MockDataController({ items: this.items, virtualItemsCount: { begin: 0, end: 0 } });
     const rowsView = this.createRowsView(this.items, dataController);
     const $testElement = $('#container');
-    let freeSpaceRowHeight;
-    let borderTopWidth;
-    let tableBorderTopWidth;
 
     // act
     rowsView.render($testElement);
     rowsView.height(400);
     rowsView.resize();
-    borderTopWidth = Math.ceil(parseFloat($(rowsView.element()).css('borderTopWidth')));
-    tableBorderTopWidth = Math.ceil(parseFloat(rowsView.getTableElements().css('borderTopWidth')));
+
+    const borderTopWidth = Math.ceil(parseFloat($(rowsView.element()).css('borderTopWidth')));
+    const tableBorderTopWidth = Math.ceil(parseFloat(rowsView.getTableElements().css('borderTopWidth')));
+    const heightCorrection = rowsView._getHeightCorrection();
+    const freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight - borderTopWidth - tableBorderTopWidth - heightCorrection;
 
     // assert
-    freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight - borderTopWidth - tableBorderTopWidth;
     assert.equal(rowsView._getFreeSpaceRowElements().css('display'), 'table-row', 'display style is none');
     assert.equal(rowsView._getFreeSpaceRowElements()[0].offsetHeight, Math.round(freeSpaceRowHeight), 'height free space row');
 });
@@ -3808,7 +3807,7 @@ QUnit.test('Summary items are not displayed in a group row', function(assert) {
 
 QUnit.test('Scroll to element by focus', function(assert) {
     // arrange
-    const testElement = $('#container');
+    const $testElement = $('#container');
     const rowsView = this.createRowsView(this.items, null, null, null, {
         keyboardNavigation: {
             enabled: true
@@ -3818,16 +3817,18 @@ QUnit.test('Scroll to element by focus', function(assert) {
     let isScrollTo;
     const keyboardNavigationController = this.dataGrid.keyboardNavigationController;
 
-    rowsView.render(testElement);
     keyboardNavigationController._isNeedFocus = true;
     keyboardNavigationController._isNeedScroll = true;
     keyboardNavigationController._focusedView = rowsView;
+
+    rowsView.render($testElement);
+
     rowsView._scrollable.scrollToElement = function() {
         isScrollTo = true;
     };
 
     // act
-    this.dataGrid.editorFactoryController.focus(testElement.find('.dx-data-row td').eq(0));
+    this.dataGrid.editorFactoryController.focus($testElement.find('.dx-data-row td').eq(0));
     this.clock.tick(1);
 
     // assert
@@ -6947,6 +6948,24 @@ if(browser.webkit) {
         assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'There is no vertical scrollbar');
     });
 }
+
+QUnit.test('The vertical scrollbar should not be shown if free space row rendered and showRowLines set false', function(assert) {
+    // arrange
+    const rows = [{ values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data' }];
+    const columns = ['field1', 'field2', 'field3', 'field4'];
+    const rowsView = this.createRowsView(rows, null, columns, null, { scrolling: { useNative: true } });
+    const $testElement = $('#container');
+
+    $testElement.parent().wrap($('<div/>').addClass('dx-widget'));
+
+    // act
+    rowsView.render($testElement);
+    rowsView.height(700);
+    rowsView.resize();
+
+    // assert
+    assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'There is no vertical scrollbar');
+});
 
 // T697699
 QUnit.test('The vertical scrollbar should not be shown if showScrollbar is always', function(assert) {

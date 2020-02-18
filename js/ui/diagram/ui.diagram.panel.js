@@ -16,9 +16,12 @@ class DiagramPanel extends Widget {
         super._render();
         this._attachPointerUpEvent();
     }
+    _getPointerUpElement() {
+        return this.$element();
+    }
     _attachPointerUpEvent() {
-        eventsEngine.off(this.$element(), POINTERUP_EVENT_NAME);
-        eventsEngine.on(this.$element(), POINTERUP_EVENT_NAME, (e) => {
+        eventsEngine.off(this._getPointerUpElement(), POINTERUP_EVENT_NAME);
+        eventsEngine.on(this._getPointerUpElement(), POINTERUP_EVENT_NAME, (e) => {
             if(!$(e.target).closest(PREVENT_REFOCUS_SELECTOR).length) {
                 this._onPointerUpAction();
             }

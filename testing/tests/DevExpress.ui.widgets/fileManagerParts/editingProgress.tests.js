@@ -1,11 +1,11 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import { Deferred } from 'core/utils/deferred';
-import ArrayFileProvider from 'ui/file_manager/file_provider/array';
-import { ErrorCode } from 'ui/file_manager/ui.file_manager.common';
+import ObjectFileSystemProvider from 'file_management/object_provider';
+import ErrorCode from 'file_management/errors';
 import FileItemsController from 'ui/file_manager/file_items_controller';
 import { createTestFileSystem, createUploaderFiles, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
-import TestFileProvider from '../../../helpers/fileManager/file_provider.test.js';
+import TestFileSystemProvider from '../../../helpers/fileManager/file_provider.test.js';
 import FileManagerProgressPanelMock from '../../../helpers/fileManager/notification.progress_panel.mock.js';
 import FileManagerNotificationControlMock from '../../../helpers/fileManager/notification.mock.js';
 import FileManagerFileUploaderMock from '../../../helpers/fileManager/file_uploader.mock.js';
@@ -34,7 +34,7 @@ const moduleConfig = {
 
 const createController = (context, providerOptions) => {
     const data = createTestFileSystem();
-    const arrayProvider = new ArrayFileProvider({ data });
+    const arrayProvider = new ObjectFileSystemProvider({ data });
 
     stubFileReader(arrayProvider);
 
@@ -42,7 +42,7 @@ const createController = (context, providerOptions) => {
         provider: arrayProvider
     };
     const config = $.extend(true, defaultConfig, providerOptions || {});
-    const provider = new TestFileProvider(config);
+    const provider = new TestFileSystemProvider(config);
 
     context.controller = new FileItemsController({
         fileProvider: provider,
@@ -150,7 +150,6 @@ const createTestData = () => {
 
         'multiple request - delete multiple items': [
             { operationId: 1, commonText: 'Deleting 3 items from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
-            { commonText: 'Deleting 3 items from Files', type: 'notification-_showPopup' },
             { message: 'Deleting 3 items from Files', status: 'progress', type: 'notification-onActionProgress' },
             {
                 operationId: 1,
@@ -175,7 +174,6 @@ const createTestData = () => {
 
         'multiple request - delete multiple items with error': [
             { operationId: 1, commonText: 'Deleting 3 items from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
-            { commonText: 'Deleting 3 items from Files', type: 'notification-_showPopup' },
             { message: 'Deleting 3 items from Files', status: 'progress', type: 'notification-onActionProgress' },
             {
                 operationId: 1,
@@ -210,7 +208,6 @@ const createTestData = () => {
 
         'multiple request - delete multiple items with error for each item': [
             { operationId: 1, commonText: 'Deleting 2 items from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
-            { commonText: 'Deleting 2 items from Files', type: 'notification-_showPopup' },
             { message: 'Deleting 2 items from Files', status: 'progress', type: 'notification-onActionProgress' },
             {
                 operationId: 1,
@@ -246,7 +243,6 @@ const createTestData = () => {
 
         'multiple request - delete single item': [
             { operationId: 1, commonText: 'Deleting an item from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
-            { commonText: 'Deleting an item from Files', type: 'notification-_showPopup' },
             { message: 'Deleting an item from Files', status: 'progress', type: 'notification-onActionProgress' },
             { commonText: 'Deleted an item from Files', type: 'notification-_showPopup' },
             { operationId: 1, commonText: 'Deleted an item from Files', isError: false, type: 'progress-completeOperation' },
@@ -256,7 +252,6 @@ const createTestData = () => {
 
         'multiple request - delete single item with error': [
             { operationId: 1, commonText: 'Deleting an item from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
-            { commonText: 'Deleting an item from Files', type: 'notification-_showPopup' },
             { message: 'Deleting an item from Files', status: 'progress', type: 'notification-onActionProgress' },
             { operationId: 1, errorText: 'Unspecified error.', type: 'progress-completeSingleOperationWithError' },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
@@ -274,7 +269,6 @@ const createTestData = () => {
 
         'single request - delete multiple items': [
             { operationId: 1, commonText: 'Deleting 3 items from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
-            { commonText: 'Deleting 3 items from Files', type: 'notification-_showPopup' },
             { message: 'Deleting 3 items from Files', status: 'progress', type: 'notification-onActionProgress' },
             { commonText: 'Deleted 3 items from Files', type: 'notification-_showPopup' },
             { operationId: 1, commonText: 'Deleted 3 items from Files', isError: false, type: 'progress-completeOperation' },
@@ -284,7 +278,6 @@ const createTestData = () => {
 
         'single request - delete multiple items with error': [
             { operationId: 1, commonText: 'Deleting 3 items from Files', allowProgressAutoUpdate: true, type: 'progress-addOperation' },
-            { commonText: 'Deleting 3 items from Files', type: 'notification-_showPopup' },
             { message: 'Deleting 3 items from Files', status: 'progress', type: 'notification-onActionProgress' },
             { operationId: 1, errorText: 'Unspecified error.', type: 'progress-completeSingleOperationWithError' },
             { errorText: 'Unspecified error.', type: 'progress-renderError' },
@@ -299,7 +292,6 @@ const createTestData = () => {
 
         'upload multiple files': [
             { operationId: 1, commonText: 'Uploading 2 items to Files', allowCancel: true, allowProgressAutoUpdate: false, type: 'progress-addOperation' },
-            { commonText: 'Uploading 2 items to Files', type: 'notification-_showPopup' },
             { message: 'Uploading 2 items to Files', status: 'progress', type: 'notification-onActionProgress' },
             {
                 operationId: 1,
@@ -325,7 +317,6 @@ const createTestData = () => {
 
         'upload multiple files with error': [
             { operationId: 1, commonText: 'Uploading 2 items to Files', allowCancel: true, allowProgressAutoUpdate: false, type: 'progress-addOperation' },
-            { commonText: 'Uploading 2 items to Files', type: 'notification-_showPopup' },
             { message: 'Uploading 2 items to Files', status: 'progress', type: 'notification-onActionProgress' },
             {
                 operationId: 1,
@@ -356,7 +347,6 @@ const createTestData = () => {
 
         'upload multiple files with error for each item': [
             { operationId: 1, commonText: 'Uploading 2 items to Files', allowCancel: true, allowProgressAutoUpdate: false, type: 'progress-addOperation' },
-            { commonText: 'Uploading 2 items to Files', type: 'notification-_showPopup' },
             { message: 'Uploading 2 items to Files', status: 'progress', type: 'notification-onActionProgress' },
             {
                 operationId: 1,
@@ -386,7 +376,6 @@ const createTestData = () => {
 
         'upload multiple files and cancel one of them': [
             { operationId: 1, commonText: 'Uploading 2 items to Files', allowCancel: true, allowProgressAutoUpdate: false, type: 'progress-addOperation' },
-            { commonText: 'Uploading 2 items to Files', type: 'notification-_showPopup' },
             { message: 'Uploading 2 items to Files', status: 'progress', type: 'notification-onActionProgress' },
             {
                 operationId: 1,
@@ -408,7 +397,6 @@ const createTestData = () => {
 
         'upload multiple files and cancel each of them': [
             { operationId: 1, commonText: 'Uploading 2 items to Files', allowCancel: true, allowProgressAutoUpdate: false, type: 'progress-addOperation' },
-            { commonText: 'Uploading 2 items to Files', type: 'notification-_showPopup' },
             { message: 'Uploading 2 items to Files', status: 'progress', type: 'notification-onActionProgress' },
             {
                 operationId: 1,
@@ -428,7 +416,6 @@ const createTestData = () => {
 
         'upload multiple files and cancel the whole upload': [
             { operationId: 1, commonText: 'Uploading 2 items to Files', allowCancel: true, allowProgressAutoUpdate: false, type: 'progress-addOperation' },
-            { commonText: 'Uploading 2 items to Files', type: 'notification-_showPopup' },
             { message: 'Uploading 2 items to Files', status: 'progress', type: 'notification-onActionProgress' },
             {
                 operationId: 1,
@@ -448,7 +435,6 @@ const createTestData = () => {
 
         'upload multiple files with error and cancel one of them': [
             { operationId: 1, commonText: 'Uploading 2 items to Files', allowCancel: true, allowProgressAutoUpdate: false, type: 'progress-addOperation' },
-            { commonText: 'Uploading 2 items to Files', type: 'notification-_showPopup' },
             { message: 'Uploading 2 items to Files', status: 'progress', type: 'notification-onActionProgress' },
             {
                 operationId: 1,

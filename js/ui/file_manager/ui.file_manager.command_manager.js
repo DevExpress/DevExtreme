@@ -43,7 +43,7 @@ export class FileManagerCommandManager {
                 name: 'delete',
                 text: messageLocalization.format('dxFileManager-commandDelete'),
                 icon: 'trash',
-                enabled: this._permissions.remove,
+                enabled: this._permissions.delete,
             },
             {
                 name: 'download',
@@ -131,7 +131,7 @@ export class FileManagerCommandManager {
         }
 
         const itemsLength = itemInfos && itemInfos.length || 0;
-        if(itemsLength === 0 || itemInfos.some(item => item.fileItem.isRoot || item.fileItem.isParentFolder)) {
+        if(itemsLength === 0 || itemInfos.some(item => item.fileItem.isRoot() || item.fileItem.isParentFolder)) {
             return false;
         }
 

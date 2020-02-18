@@ -3,6 +3,7 @@ import 'ui/file_manager';
 import pointerEvents from 'events/pointer';
 import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
+import CustomFileSystemProvider from 'file_management/custom_provider';
 import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
 
 const { test } = QUnit;
@@ -19,7 +20,7 @@ const moduleConfig = {
         FileUploaderInternals.changeFileInputRenderer(() => $('<div>'));
 
         this.$element = $('#fileManager').dxFileManager({
-            fileProvider: fileSystem,
+            fileSystemProvider: fileSystem,
             selectionMode: 'single',
             itemView: {
                 showFolders: false,
@@ -29,13 +30,14 @@ const moduleConfig = {
                 create: true,
                 copy: true,
                 move: true,
-                remove: true,
+                delete: true,
                 rename: true,
                 upload: true,
                 download: true
             }
         });
 
+        this.fileManager = this.$element.dxFileManager('instance');
         this.wrapper = new FileManagerWrapper(this.$element);
         this.progressPanelWrapper = new FileManagerProgressPanelWrapper(this.$element);
 
@@ -107,7 +109,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         let $cell = this.wrapper.getRowNameCellInDetailsView(1);
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
-        $cell.trigger(pointerEvents.up).click();
+        $cell.trigger(pointerEvents.down).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Rename').trigger('dxclick');
@@ -128,7 +130,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
     test('create folder in folders area from items area without folders', function(assert) {
         const $cell = this.wrapper.getRowNameCellInDetailsView(1);
-        $cell.trigger(pointerEvents.up).click();
+        $cell.trigger(pointerEvents.down).click();
 
         const $row = $cell.parent();
         assert.ok($row.hasClass(Consts.FOCUSED_ROW_CLASS), 'file selected');
@@ -152,7 +154,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
     test('create folder in folders area from items area without folders by Enter in dialog input', function(assert) {
         const $cell = this.wrapper.getRowNameCellInDetailsView(1);
-        $cell.trigger(pointerEvents.up).click();
+        $cell.trigger(pointerEvents.down).click();
 
         const $row = $cell.parent();
         assert.ok($row.hasClass(Consts.FOCUSED_ROW_CLASS), 'file selected');
@@ -251,7 +253,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
         const $cell = this.wrapper.getRowNameCellInDetailsView(1);
-        $cell.trigger(pointerEvents.up).click();
+        $cell.trigger(pointerEvents.down).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Delete').trigger('dxclick');
@@ -277,7 +279,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1-1.txt', 'has target file');
 
         const $cell = this.wrapper.getRowNameCellInDetailsView(1);
-        $cell.trigger(pointerEvents.up).click();
+        $cell.trigger(pointerEvents.down).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Delete').trigger('dxclick');
@@ -368,7 +370,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $cell = $cells.eq(0);
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
-        $cell.trigger(pointerEvents.up).click();
+        $cell.trigger(pointerEvents.down).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Move to').trigger('dxclick');
@@ -400,7 +402,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $cell = $cells.eq(0);
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
-        $cell.trigger(pointerEvents.up).click();
+        $cell.trigger(pointerEvents.down).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
@@ -429,7 +431,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
     test('rename file failed for not allowed extension', function(assert) {
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
-        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.up).click();
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Rename').trigger('dxclick');
@@ -451,7 +453,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
-        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.up).click();
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Download').filter(':visible').trigger('dxclick');
@@ -485,6 +487,35 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
     });
 
+    test('upload chunkSize option', function(assert) {
+        const uploadChunkSpy = sinon.spy();
+        const chunkSize = 50000;
+
+        this.fileManager.option({
+            fileSystemProvider: new CustomFileSystemProvider({
+                uploadFileChunk: uploadChunkSpy
+            }),
+            upload: { chunkSize }
+        });
+
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Upload').filter(':visible').trigger('dxclick');
+
+        const file = createUploaderFiles(1)[0];
+        this.wrapper.setUploadInputFile([ file ]);
+        this.clock.tick(400);
+
+        assert.strictEqual(uploadChunkSpy.callCount, 6, 'uploadFileChunk called for each chunk');
+
+        for(let i = 0; i < 6; i++) {
+            const uploadInfo = uploadChunkSpy.args[i][1];
+            assert.strictEqual(uploadInfo.chunkCount, 6, `chunkCount correct for ${i} chunk`);
+            assert.strictEqual(uploadInfo.chunkIndex, i, `chunkIndex correct for ${i} chunk`);
+            assert.strictEqual(uploadInfo.bytesUploaded, i * chunkSize, `bytesUploaded correct for ${i} chunk`);
+        }
+    });
+
     test('copying file must be completed in progress panel and current directory must be changed to the destination', function(assert) {
         const longPath = 'Files/Folder 1/Folder 1.1/Folder 1.1.1/Folder 1.1.1.1/Folder 1.1.1.1.1';
         assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is no operations');
@@ -494,7 +525,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $cell = $cells.eq(0);
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
-        $cell.trigger(pointerEvents.up).click();
+        $cell.trigger(pointerEvents.down).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
@@ -565,6 +596,18 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(items.length, initialItemsLength + 1, 'One item added');
         assert.ok(items.eq(items.length - 1).text().indexOf('Untitled directory') > -1, 'Directory created');
         assert.equal(this.progressPanelWrapper.getInfos()[0].common.commonText, 'Created a directory inside Files', 'common text is correct');
+    });
+
+    test('Action dialogues must have "Cancel" button', function(assert) {
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+        const cancelButton = this.wrapper.getDialogButton('Cancel');
+        assert.strictEqual(cancelButton.length, 1, ' Dialog Cancel button exists');
+        cancelButton.trigger('dxclick');
+        const fileNames = this.wrapper.getDetailsItemNamesTexts();
+        assert.strictEqual(fileNames.filter(name => name === 'File 1.txt').length, 1, 'File wasn\'t copied');
     });
 
 });
