@@ -22,6 +22,7 @@ class DiagramToolbar extends DiagramPanel {
         this._commands = [];
         this._itemHelpers = {};
         this._contextMenus = [];
+        this._valueConverters = {};
         this.bar = new ToolbarDiagramBar(this);
 
         this._createOnCommandExecuted();
@@ -46,26 +47,32 @@ class DiagramToolbar extends DiagramPanel {
             .appendTo(this._$element);
     }
     _getCommands() {
-        return [];
+        return this.option('commands') || [];
     }
     _renderToolbar($toolbar) {
-        let dataSource = [];
-        const beforeCommands = this._commands.filter(command => command.position !== 'after');
-        dataSource = dataSource.concat(this._prepareToolbarItems(beforeCommands, 'before', this._execDiagramCommand));
+        const beforeCommands = this._commands.filter(command => ['after', 'center'].indexOf(command.position) === -1);
+        const centerCommands = this._commands.filter(command => command.position === 'center');
         const afterCommands = this._commands.filter(command => command.position === 'after');
-        dataSource = dataSource.concat(this._prepareToolbarItems(afterCommands, 'after', this._execDiagramCommand));
+        const dataSource = []
+            .concat(this._prepareToolbarItems(beforeCommands, 'before', this._execDiagramCommand))
+            .concat(this._prepareToolbarItems(centerCommands, 'center', this._execDiagramCommand))
+            .concat(this._prepareToolbarItems(afterCommands, 'after', this._execDiagramCommand));
         this._toolbarInstance = this._createComponent($toolbar, Toolbar, { dataSource });
     }
     _prepareToolbarItems(items, location, actionHandler) {
         return items.map(item => extend(true,
-            { location: location, locateInMenu: 'auto' },
+            { location: location, locateInMenu: this.option('locateInMenu') },
             this._createItem(item, location, actionHandler),
             this._createItemOptions(item),
             this._createItemActionOptions(item, actionHandler)
         ));
     }
 
+
     _createItem(item, location, actionHandler) {
+        if(item.getValue && item.setValue) {
+            this._valueConverters[item.command] = { getValue: item.getValue, setValue: item.setValue };
+        }
         if(item.widget === 'separator') {
             return {
                 template: (data, index, element) => {
@@ -102,23 +109,13 @@ class DiagramToolbar extends DiagramPanel {
     }
     _createSelectBoxItemOptions(hint, items, valueExpr, displayExpr) {
         let options = this._createSelectBoxBaseItemOptions(hint);
-        if(items) {
-            options = extend(true, options, {
-                options: {
-                    items,
-                    displayExpr,
-                    valueExpr
-                }
-            });
-        } else {
-            options = extend(true, options, {
-                options: {
-                    dataSource: items,
-                    displayExpr: 'title',
-                    valueExpr: 'value'
-                }
-            });
-        }
+        options = extend(true, options, {
+            options: {
+                dataSource: items,
+                displayExpr: displayExpr || 'text',
+                valueExpr: valueExpr || 'value'
+            }
+        });
 
         const isSelectButton = items && items.every(i => i.icon !== undefined);
         if(isSelectButton) {
@@ -165,7 +162,7 @@ class DiagramToolbar extends DiagramPanel {
     _createSelectBoxBaseItemOptions(hint) {
         return {
             options: {
-                stylingMode: 'filled',
+                stylingMode: this.option('editorStylingMode'),
                 hint: hint,
             }
         };
@@ -256,6 +253,10 @@ class DiagramToolbar extends DiagramPanel {
     _execDiagramCommand(command, value, onExecuted) {
         if(!this._updateLocked && command !== undefined) {
             if(typeof command === 'number') {
+                const valueConverter = this._valueConverters[command];
+                if(valueConverter) {
+                    value = valueConverter.getValue(value);
+                }
                 this.bar.raiseBarCommandExecuted(command, value);
             }
             this._onCommandExecutedAction({ command });
@@ -286,6 +287,10 @@ class DiagramToolbar extends DiagramPanel {
             if(command in this._itemHelpers) {
                 const helper = this._itemHelpers[command];
                 if(helper.canUpdate(this._showingSubMenu)) {
+                    const valueConverter = this._valueConverters[command];
+                    if(valueConverter) {
+                        value = valueConverter.setValue(value);
+                    }
                     helper.setValue(value);
                 }
             }
@@ -329,7 +334,9 @@ class DiagramToolbar extends DiagramPanel {
             'export': {
                 fileName: 'Diagram',
                 proxyUrl: undefined
-            }
+            },
+            'locateInMenu': 'auto',
+            'editorStylingMode': 'filled'
         });
     }
 
@@ -381,7 +388,7 @@ class ToolbarItemHelper {
             this._widget.option('items', items.map(item => {
                 return {
                     'value': DiagramMenuHelper.getItemValue(item),
-                    'title': item.text
+                    'text': item.text
                 };
             }));
         }

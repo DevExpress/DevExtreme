@@ -15,6 +15,7 @@ import * as eventUtils from '../../events/utils';
 import messageLocalization from '../../localization/message';
 import numberLocalization from '../../localization/number';
 
+import DiagramToolbar from './ui.diagram.toolbar';
 import DiagramMainToolbar from './ui.diagram.main_toolbar';
 import DiagramHistoryToolbar from './ui.diagram.history_toolbar';
 import DiagramViewToolbar from './ui.diagram.view_toolbar';
@@ -148,9 +149,6 @@ class Diagram extends Widget {
     }
     _getExcludeCommands() {
         const excludeCommands = [];
-        if(!this._isPropertiesPanelVisible()) {
-            excludeCommands.push(DiagramCommandsManager.SHOW_OPTIONS_COMMAND_NAME);
-        }
         if(!this._isToolboxVisible()) {
             excludeCommands.push(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME);
         }
@@ -166,12 +164,7 @@ class Diagram extends Widget {
             onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
-            excludeCommands: this._getExcludeCommands(),
-            onCommandExecuted: (e) => {
-                if(e.command === DiagramCommandsManager.SHOW_OPTIONS_COMMAND_NAME && this._propertiesPanel) {
-                    this._propertiesPanel.toggle();
-                }
-            }
+            excludeCommands: this._getExcludeCommands()
         });
     }
     _adjustFloatingToolbarContainer($container, toolbar, position) {
@@ -302,19 +295,32 @@ class Diagram extends Widget {
                 offset: '-' + DIAGRAM_FLOATING_PANEL_OFFSET + ' -' + (2 * DIAGRAM_FLOATING_PANEL_OFFSET + DIAGRAM_PROPERTIES_PANEL_BUTTON_SIZE)
             },
             propertyGroups: this.option('propertiesPanel.groups'),
-            onContentReady: (e) => this._registerBar(e.component),
+            onCreateToolbar: (e) => {
+                e.toolbar = this._createComponent(e.$parent, DiagramToolbar, {
+                    commands: e.commands,
+                    locateInMenu: 'never',
+                    editorStylingMode: 'outlined',
+                    onContentReady: ({ component }) => this._registerBar(component),
+                    onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+                    export: this.option('export'),
+                    excludeCommands: this._getExcludeCommands()
+                });
+            },
             onVisibilityChanged: (e) => {
                 if(isServerSide) return;
 
                 if(this._propertiesPanelActionButton) {
                     this._propertiesPanelActionButton.option('icon', e.visible ? 'close' : 'edit');
                 }
-                if(this._mainToolbar) {
-                    this._mainToolbar.setCommandChecked(DiagramCommandsManager.SHOW_OPTIONS_COMMAND_NAME, e.visible);
-                }
             },
-            onVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onVisibilityChanging: ({ component }) => this._updatePropertiesPanelGroupBars(component),
+            onSelectedGroupChanged: ({ component }) => this._updatePropertiesPanelGroupBars(component),
             onPointerUp: this._onPanelPointerUp.bind(this)
+        });
+    }
+    _updatePropertiesPanelGroupBars(component) {
+        component.getActiveToolbars().forEach(toolbar => {
+            this._diagramInstance.barManager.updateBarItemsState(toolbar.bar);
         });
     }
     _onPanelPointerUp() {
@@ -1588,7 +1594,7 @@ class Diagram extends Widget {
                 * @type boolean
                 * @default true
                 */
-                visible: true,
+                visible: false,
                 /**
                 * @name dxDiagramOptions.toolbar.commands
                 * @type Array<Enums.DiagramToolbarCommand>
@@ -1667,8 +1673,24 @@ class Diagram extends Widget {
                 * @default undefined
                 */
                 /**
+                * @name dxDiagramOptions.propertiesPanel.groups.title
+                * @type string
+                */
+                /**
                 * @name dxDiagramOptions.propertiesPanel.groups.commands
-                * @type Array<Enums.DiagramPropertiesPanelCommand>
+                * @type Array<Enums.DiagramToolbarCommand>
+                */
+                /**
+                * @name dxDiagramOptions.propertiesPanel.groups.groups
+                * @type Array<object>
+                */
+                /**
+                * @name dxDiagramOptions.propertiesPanel.groups.groups.title
+                * @type string
+                */
+                /**
+                * @name dxDiagramOptions.propertiesPanel.groups.groups.commands
+                * @type Array<Enums.DiagramToolbarCommand>
                 */
             },
 

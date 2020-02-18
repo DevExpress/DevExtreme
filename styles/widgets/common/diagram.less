@@ -114,13 +114,30 @@
 }
 
 .dx-diagram-properties-popup {
-    .dx-popup-content {
-        padding: 0;
-    }
-
     .dx-scrollview,
     .dx-accordion {
         width: 100%;
+    }
+
+    .dx-tabpanel .dx-multiview-wrapper {
+        border-left: 0;
+        border-bottom: 0;
+        border-right: 0;
+    }
+
+    .dx-diagram-properties-panel-group-toolbar {
+        .dx-toolbar-items-container {
+            display: block;
+            height: auto;
+        }
+
+        .dx-toolbar-items-container > div {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            height: auto;
+            position: inherit;
+        }
     }
 }
 

@@ -8,8 +8,9 @@ export const Consts = {
     CONTEXT_MENU_SELECTOR: 'div:not(.dx-diagram-toolbar-wrapper):not(.dx-diagram-floating-toolbar-container) > .dx-has-context-menu',
     TOOLBAR_ITEM_ACTIVE_CLASS: 'dx-format-active',
     DX_MENU_ITEM_SELECTOR: '.dx-menu-item',
-    PROPERTIES_PANEL_ACCORDION_SELECTOR: '.dx-diagram-properties-panel .dx-accordion',
-    PROPERTIES_PANEL_FORM_SELECTOR: '.dx-diagram-properties-panel .dx-accordion .dx-form',
+    PROPERTIES_PANEL_BTN_SELECTOR: '.dx-diagram-properties-panel-btn',
+    PROPERTIES_PANEL_SELECTOR: '.dx-diagram-properties-panel',
+    PROPERTIES_PANEL_TOOLBAR_SELECTOR: '.dx-diagram-properties-panel .dx-diagram-toolbar',
     TOOLBOX_SCROLLVIEW_SELECTOR: '.dx-diagram-toolbox-panel .dx-scrollview',
     TOOLBOX_ACCORDION_SELECTOR: '.dx-diagram-toolbox-panel .dx-accordion',
     FULLSCREEN_CLASS: 'dx-diagram-fullscreen'
