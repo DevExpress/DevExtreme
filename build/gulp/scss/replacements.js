@@ -351,5 +351,8 @@ module.exports = {
     'tabPanel': [
         { import: '../tabs', type: 'index' },
         { import: '../tabs/colors', type: 'index' },
+    ],
+    'fileUploader': [
+        { import: '../../base/mixins', type: 'index' },
     ]
 };

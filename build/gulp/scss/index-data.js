@@ -77,5 +77,6 @@ module.exports = [
     { content: 'contextMenu', task: 'widget' },
     { content: 'multiView', task: 'widget' },
     { content: 'tabPanel', task: 'widget' },
+    { content: 'fileUploader', task: 'widget' },
     { task: 'newline' }
 ];
