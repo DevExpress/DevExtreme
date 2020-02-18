@@ -596,6 +596,20 @@ QUnit.module('option change', {}, () => {
         assert.strictEqual(popup.option('width'), 50, 'option has been changed');
     });
 
+    QUnit.test('dropDownOptions.visible option change should be ignored', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', { deferRendering: false });
+
+        dropDownButton.option('dropDownOptions.visible', true);
+
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'no window');
+            return;
+        }
+
+        const popup = getPopup(dropDownButton);
+        assert.strictEqual(popup.option('visible'), false, 'popup is still closed');
+    });
+
     QUnit.test('dropDownOptions.visible option change should not open/close popup', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', { deferRendering: false });
 

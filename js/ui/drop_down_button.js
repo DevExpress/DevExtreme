@@ -533,6 +533,9 @@ const DropDownButton = Widget.inherit({
                 this._innerWidgetOptionChanged(this._buttonGroup, args);
                 break;
             case 'dropDownOptions':
+                if(args.fullName === 'dropDownOptions.visible') {
+                    break;
+                }
                 if(args.value.visible !== undefined) {
                     delete args.value.visible;
                 }
