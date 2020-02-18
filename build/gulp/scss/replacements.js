@@ -342,4 +342,14 @@ module.exports = {
             'PIVOTGRID_HIERARCHY_IMAGE',
         ] },
     ],
+    'contextMenu': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../menuBase', type: 'index' },
+        { import: '../menuBase/sizes', type: 'index' },
+        { import: '../menu/colors', type: 'index' },
+    ],
+    'tabPanel': [
+        { import: '../tabs', type: 'index' },
+        { import: '../tabs/colors', type: 'index' },
+    ]
 };
