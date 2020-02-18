@@ -178,6 +178,7 @@ class Diagram extends Widget {
         return this.option('historyToolbar.visible') && !this.option('readOnly') && !this.option('disabled');
     }
     _renderHistoryToolbar($parent) {
+        const isServerSide = !hasWindow();
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
@@ -188,9 +189,11 @@ class Diagram extends Widget {
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
         this._adjustFloatingToolbarContainer($container, this._historyToolbar);
-        this._updateHistoryToolbarPosition($container, $parent);
+        this._updateHistoryToolbarPosition($container, $parent, isServerSide);
     }
-    _updateHistoryToolbarPosition($container, $parent) {
+    _updateHistoryToolbarPosition($container, $parent, isServerSide) {
+        if(isServerSide) return;
+
         positionUtils.setup($container, {
             my: 'left top',
             at: 'left top',
@@ -260,6 +263,7 @@ class Diagram extends Widget {
         return result;
     }
     _renderViewToolbar($parent) {
+        const isServerSide = !hasWindow();
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
@@ -277,12 +281,14 @@ class Diagram extends Widget {
             }
         });
         this._adjustFloatingToolbarContainer($container, this._viewToolbar);
-        this._updateViewToolbarPosition($container, $parent);
+        this._updateViewToolbarPosition($container, $parent, isServerSide);
         resizeCallbacks.add(() => {
-            this._updateViewToolbarPosition($container, $parent);
+            this._updateViewToolbarPosition($container, $parent, isServerSide);
         });
     }
-    _updateViewToolbarPosition($container, $parent) {
+    _updateViewToolbarPosition($container, $parent, isServerSide) {
+        if(isServerSide) return;
+
         positionUtils.setup($container, {
             my: 'left bottom',
             at: 'left bottom',
