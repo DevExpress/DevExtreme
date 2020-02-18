@@ -130,14 +130,19 @@
         .dx-toolbar-items-container {
             display: block;
             height: auto;
-        }
 
-        .dx-toolbar-items-container > div {
-            display: flex;
-            flex-wrap: wrap;
-            width: 100%;
-            height: auto;
-            position: inherit;
+            & > div {
+                display: flex;
+                flex-wrap: wrap;
+                width: 100%;
+                height: auto;
+                position: inherit;
+            }
+
+            .dx-toolbar-item {
+                display: flex;
+                align-items: center;
+            }
         }
     }
 }

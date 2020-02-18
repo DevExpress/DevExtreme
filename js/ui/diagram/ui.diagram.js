@@ -332,7 +332,7 @@ class Diagram extends Widget {
                 if(isServerSide) return;
 
                 if(this._propertiesPanelActionButton) {
-                    this._propertiesPanelActionButton.option('icon', e.visible ? 'close' : 'edit');
+                    this._propertiesPanelActionButton.option('icon', e.visible ? 'close' : 'dx-diagram-i dx-diagram-i-button-properties-panel');
                 }
             },
             onVisibilityChanging: ({ component }) => this._updatePropertiesPanelGroupBars(component),
