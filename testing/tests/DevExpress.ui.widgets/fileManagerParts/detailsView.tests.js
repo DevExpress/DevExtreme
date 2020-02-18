@@ -3,6 +3,7 @@ import 'ui/file_manager';
 import fx from 'animation/fx';
 import pointerEvents from 'events/pointer';
 import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import { triggerCellClick } from '../../../helpers/fileManager/events.js';
 
 const { test } = QUnit;
 
@@ -324,5 +325,52 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.ok(this.wrapper.isDetailsRowFocused(1), 'parent directory item is focused');
         assert.notOk(this.wrapper.getRowSelectCheckBox(1).length, 'parent directory item check box hidden');
         assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection');
+    });
+
+    test('selectionChanged event ignore parent direcotry item', function(assert) {
+        const selectionSpy = sinon.spy();
+        const itemPath = 'Folder 1/Folder 1.1';
+
+        const fileManager = prepareParentDirectoryTesting(this);
+        fileManager.option('onSelectionChanged', selectionSpy);
+
+        triggerCellClick(this.wrapper.getRowNameCellInDetailsView(2));
+        this.clock.tick(400);
+
+        assert.strictEqual(selectionSpy.callCount, 1, 'event raised');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems.length, 1, 'one item in selection');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems[0].path, itemPath, 'correct item in selection');
+        assert.deepEqual(selectionSpy.args[0][0].selectedItemKeys, [ itemPath ], 'selected key provided');
+        assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [ itemPath ], 'one item became selected');
+        assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [], 'no deselected items');
+
+        triggerCellClick(this.wrapper.getRowNameCellInDetailsView(1));
+        this.clock.tick(400);
+
+        assert.strictEqual(selectionSpy.callCount, 2, 'event raised');
+        assert.deepEqual(selectionSpy.args[1][0].selectedItems, [], 'no items in selection');
+        assert.deepEqual(selectionSpy.args[1][0].selectedItemKeys, [], 'no item keys in selection');
+        assert.deepEqual(selectionSpy.args[1][0].currentSelectedItemKeys, [], 'no selected items');
+        assert.deepEqual(selectionSpy.args[1][0].currentDeselectedItemKeys, [ itemPath ], 'no deselected items');
+
+        triggerCellClick(this.wrapper.getRowNameCellInDetailsView(1));
+        this.clock.tick(400);
+
+        assert.strictEqual(selectionSpy.callCount, 2, 'event not raised');
+
+        this.wrapper.getSelectCheckBoxInDetailsView(2).trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(selectionSpy.callCount, 3, 'event raised');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems.length, 1, 'one item in selection');
+        assert.strictEqual(selectionSpy.args[0][0].selectedItems[0].path, itemPath, 'correct item in selection');
+        assert.deepEqual(selectionSpy.args[0][0].selectedItemKeys, [ itemPath ], 'selected key provided');
+        assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [ itemPath ], 'one item became selected');
+        assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [], 'no deselected items');
+
+        triggerCellClick(this.wrapper.getRowNameCellInDetailsView(1));
+        this.clock.tick(400);
+
+        assert.strictEqual(selectionSpy.callCount, 3, 'event not raised');
     });
 });
