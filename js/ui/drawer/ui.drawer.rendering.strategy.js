@@ -189,8 +189,8 @@ class DrawerStrategy {
     }
 
     renderShaderVisibility(isDrawerOpened, animate, duration) {
-        const fadeConfig = this._getFadeConfig(isDrawerOpened);
         const drawer = this.getDrawerInstance();
+        const fadeConfig = isDrawerOpened ? { from: 0, to: 1 } : { from: 1, to: 0 };
 
         if(animate) {
             animation.fade($(drawer._$shader), fadeConfig, duration, () => {
@@ -200,20 +200,6 @@ class DrawerStrategy {
         } else {
             drawer._toggleShaderVisibility(isDrawerOpened);
             drawer._$shader.css('opacity', fadeConfig.to);
-        }
-    }
-
-    _getFadeConfig(isDrawerOpened) {
-        if(isDrawerOpened) {
-            return {
-                to: 1,
-                from: 0
-            };
-        } else {
-            return {
-                to: 0,
-                from: 1
-            };
         }
     }
 
