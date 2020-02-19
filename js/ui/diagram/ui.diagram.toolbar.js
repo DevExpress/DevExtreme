@@ -25,7 +25,7 @@ class DiagramToolbar extends DiagramPanel {
         this._valueConverters = {};
         this.bar = new ToolbarDiagramBar(this);
 
-        this._createOnCommandExecuted();
+        this._createOnCustomCommandExecuted();
         this._createOnSubMenuVisibilityChangingAction();
 
         super._init();
@@ -176,7 +176,7 @@ class DiagramToolbar extends DiagramPanel {
                     options: {
                         onValueChanged: (e) => {
                             const parameter = DiagramMenuHelper.getItemCommandParameter(this, item, e.component.option('value'));
-                            handler.call(this, item.command, parameter, item.onExecuted);
+                            handler.call(this, item.command, parameter);
                         }
                     }
                 };
@@ -186,7 +186,7 @@ class DiagramToolbar extends DiagramPanel {
                         options: {
                             onClick: (e) => {
                                 const parameter = DiagramMenuHelper.getItemCommandParameter(this, item);
-                                handler.call(this, item.command, parameter, item.onExecuted);
+                                handler.call(this, item.command, parameter);
                             }
                         }
                     };
@@ -250,23 +250,21 @@ class DiagramToolbar extends DiagramPanel {
     _onContextMenuDisposing(widget, item) {
         this._contextMenus = this._contextMenus.filter(cm => cm !== widget);
     }
-    _executeCommand(command, value, onExecuted) {
-        if(!this._updateLocked && command !== undefined) {
-            if(typeof command === 'number') {
-                const valueConverter = this._valueConverters[command];
-                if(valueConverter) {
-                    value = valueConverter.getValue(value);
-                }
-                this.bar.raiseBarCommandExecuted(command, value);
+    _executeCommand(command, value) {
+        if(this._updateLocked || command === undefined) return;
+        if(typeof command === 'number') {
+            const valueConverter = this._valueConverters[command];
+            if(valueConverter) {
+                value = valueConverter.getValue(value);
             }
-            this._onCommandExecutedAction({ command });
+            this.bar.raiseBarCommandExecuted(command, value);
         }
-        if(typeof onExecuted === 'function') {
-            onExecuted.call(this);
+        if(typeof command === 'string') {
+            this._onCustomCommandExecutedAction({ command });
         }
     }
-    _createOnCommandExecuted() {
-        this._onCommandExecutedAction = this._createActionByOption('onCommandExecuted');
+    _createOnCustomCommandExecuted() {
+        this._onCustomCommandExecutedAction = this._createActionByOption('onCustomCommandExecuted');
     }
 
     _setItemEnabled(command, enabled) {
@@ -317,8 +315,8 @@ class DiagramToolbar extends DiagramPanel {
             case 'onSubMenuVisibilityChanging':
                 this._createOnSubMenuVisibilityChangingAction();
                 break;
-            case 'onCommandExecuted':
-                this._createOnCommandExecuted();
+            case 'onCustomCommandExecuted':
+                this._createOnCustomCommandExecuted();
                 break;
             case 'commands':
                 this._invalidate();

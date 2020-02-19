@@ -8,6 +8,7 @@ import messageLocalization from '../../localization/message';
 const SEPARATOR = { widget: 'separator' };
 const CSS_CLASSES = {
     SMALL_SELECT: 'dx-diagram-select-sm',
+    LARGE_SELECT: 'dx-diagram-select-lg',
     BUTTON_SELECT: 'dx-diagram-select-b',
     LARGE_ICON: 'dx-diagram-btn-l-icon',
     BUTTON_COLOR: 'dx-diagram-color-b',
@@ -405,6 +406,7 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandPageSize'),
                     text: messageLocalization.format('dxDiagram-commandPageSize'),
                     widget: 'dxSelectBox',
+                    cssClass: CSS_CLASSES.LARGE_SELECT,
                     getValue: (v) => JSON.parse(v),
                     setValue: (v) => JSON.stringify(v)
                 },
@@ -423,6 +425,8 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandPageColor'),
                     text: messageLocalization.format('dxDiagram-commandPageColor'),
                     widget: 'dxColorBox',
+                    icon: 'dx-diagram-i dx-diagram-i-button-fill',
+                    cssClass: CSS_CLASSES.BUTTON_COLOR
                 },
                 zoomLevel: {
                     command: DiagramCommand.ZoomLevel,
@@ -675,9 +679,9 @@ const DiagramCommandsManager = {
                 return allCommands[c];
             } else if(c.text || c.icon) {
                 const command = {
+                    command: c.name,
                     text: c.text,
-                    icon: c.icon,
-                    onExecuted: c.onClick
+                    icon: c.icon
                 };
                 if(Array.isArray(c.items)) {
                     command.items = this._getPreparedCommands(allCommands, c.items);
@@ -695,6 +699,7 @@ const DiagramCommandsManager = {
                 beginGroup = true;
             } else {
                 const command = this._cloneCommand(c, excludeCommands);
+                command.icon = command.menuIcon || command.icon;
                 command.beginGroup = beginGroup;
                 beginGroup = false;
                 return command;

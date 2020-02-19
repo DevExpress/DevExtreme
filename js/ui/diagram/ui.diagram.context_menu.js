@@ -16,7 +16,9 @@ const DIAGRAM_TOUCHBAR_Y_OFFSET = 32;
 class DiagramContextMenu extends Widget {
     _init() {
         super._init();
+
         this._createOnVisibilityChangingAction();
+        this._createOnCustomCommandExecuted();
         this._createOnItemClickAction();
         this._tempState = undefined;
 
@@ -102,16 +104,18 @@ class DiagramContextMenu extends Widget {
             this._contextMenuInstance.hide();
         }
     }
-    _executeCommand(command, value, onExecuted) {
-        if(command !== undefined) {
-            if(typeof command === 'number') {
-                this.bar.raiseBarCommandExecuted(command, value);
-            }
-        }
+    _executeCommand(command, value) {
+        if(command === undefined) return;
 
-        if(typeof onExecuted === 'function') {
-            onExecuted.call(this);
+        if(typeof command === 'number') {
+            this.bar.raiseBarCommandExecuted(command, value);
         }
+        if(typeof command === 'string') {
+            this._onCustomCommandExecutedAction({ command });
+        }
+    }
+    _createOnCustomCommandExecuted() {
+        this._onCustomCommandExecutedAction = this._createActionByOption('onCustomCommandExecuted');
     }
 
     _getCommands() {
@@ -210,6 +214,9 @@ class DiagramContextMenu extends Widget {
         switch(args.name) {
             case 'onVisibilityChanging':
                 this._createOnVisibilityChangingAction();
+                break;
+            case 'onCustomCommandExecuted':
+                this._createOnCustomCommandExecuted();
                 break;
             case 'onItemClick':
                 this._createOnItemClickAction();

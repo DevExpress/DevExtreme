@@ -10,6 +10,7 @@ const DIAGRAM_PROPERTIES_POPUP_WIDTH = 420;
 const DIAGRAM_PROPERTIES_POPUP_HEIGHT = 340;
 const DIAGRAM_PROPERTIES_POPUP_CLASS = 'dx-diagram-properties-popup';
 const DIAGRAM_PROPERTIES_PANEL_CLASS = 'dx-diagram-properties-panel';
+const DIAGRAM_PROPERTIES_PANEL_NO_TABS_CLASS = 'dx-diagram-properties-panel-no-tabs';
 const DIAGRAM_PROPERTIES_PANEL_GROUP_TITLE_CLASS = 'dx-diagram-properties-panel-group-title';
 const DIAGRAM_PROPERTIES_PANEL_GROUP_TOOLBAR_CLASS = 'dx-diagram-properties-panel-group-toolbar';
 
@@ -50,6 +51,9 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
         const $panel = $('<div>')
             .addClass(DIAGRAM_PROPERTIES_PANEL_CLASS)
             .appendTo($parent);
+        if(this._commandGroups.length < 2) {
+            $panel.addClass(DIAGRAM_PROPERTIES_PANEL_NO_TABS_CLASS);
+        }
         this._renderTabPanel($panel);
     }
     _renderTabPanel($parent) {

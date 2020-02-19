@@ -8,7 +8,9 @@ import { Consts, getMainToolbarInstance, findToolbarItem, getToolbarIcon, findCo
 
 const moduleConfig = {
     beforeEach: function() {
+        this.onCustomCommandExecuted = sinon.spy();
         this.$element = $('#diagram').dxDiagram({
+            onCustomCommandExecuted: this.onCustomCommandExecuted,
             mainToolbar: {
                 visible: true
             }
@@ -60,26 +62,26 @@ QUnit.module('Main Toolbar', {
         assert.ok(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.TextLeftAlign).getState().value);
     });
     test('button should raise custom commands', function(assert) {
-        this.onCustomClick = sinon.spy();
-        this.onCustomClick2 = sinon.spy();
         this.instance.option('mainToolbar.commands', [
             {
+                name: 'custom',
                 text: 'custom',
-                onClick: this.onCustomClick
             },
             {
                 text: 'sub menu',
                 items: [{
-                    text: 'custom2',
-                    onClick: this.onCustomClick2,
+                    name: 'custom2',
+                    text: 'custom2'
                 }]
             }
         ]);
         findToolbarItem(this.$element, 'custom').trigger('dxclick');
-        assert.ok(this.onCustomClick.called);
         findToolbarItem(this.$element, 'sub menu').trigger('dxclick');
         findContextMenuItem(this.$element, 'custom2').trigger('dxclick');
-        assert.ok(this.onCustomClick2.called);
+        assert.ok(this.onCustomCommandExecuted.called);
+        assert.equal(this.onCustomCommandExecuted.getCalls().length, 2);
+        assert.equal(this.onCustomCommandExecuted.getCall(0).args[0]['name'], 'custom');
+        assert.equal(this.onCustomCommandExecuted.getCall(1).args[0]['name'], 'custom2');
     });
     test('selectBox should have items', function(assert) {
         assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontName).getState().value, 'Arial');

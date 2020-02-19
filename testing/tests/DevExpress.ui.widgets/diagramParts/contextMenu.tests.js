@@ -8,7 +8,10 @@ import { Consts, getContextMenuInstance, findContextMenuItem } from '../../../he
 
 const moduleConfig = {
     beforeEach: function() {
-        this.$element = $('#diagram').dxDiagram();
+        this.onCustomCommandExecuted = sinon.spy();
+        this.$element = $('#diagram').dxDiagram({
+            onCustomCommandExecuted: this.onCustomCommandExecuted
+        });
         this.instance = this.$element.dxDiagram('instance');
     }
 };
@@ -58,27 +61,27 @@ QUnit.module('Context Menu', {
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
     });
     test('should execute custom commands on click', function(assert) {
-        this.onCustomClick = sinon.spy();
-        this.onCustomClick2 = sinon.spy();
         this.instance.option('contextMenu.commands', [
             {
-                text: 'custom',
-                onClick: this.onCustomClick
+                name: 'custom',
+                text: 'custom'
             },
             {
                 text: 'sub menu',
                 items: [{
-                    text: 'custom2',
-                    onClick: this.onCustomClick2,
+                    name: 'custom2',
+                    text: 'custom2'
                 }]
             }
         ]);
         const contextMenu = getContextMenuInstance(this.$element);
         contextMenu.show();
         findContextMenuItem(this.$element, 'custom').trigger('dxclick');
-        assert.ok(this.onCustomClick.called);
         findContextMenuItem(this.$element, 'sub menu').trigger('dxclick');
         findContextMenuItem(this.$element, 'custom2').trigger('dxclick');
-        assert.ok(this.onCustomClick2.called);
+        assert.ok(this.onCustomCommandExecuted.called);
+        assert.equal(this.onCustomCommandExecuted.getCalls().length, 2);
+        assert.equal(this.onCustomCommandExecuted.getCall(0).args[0]['name'], 'custom');
+        assert.equal(this.onCustomCommandExecuted.getCall(1).args[0]['name'], 'custom2');
     });
 });
