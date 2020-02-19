@@ -1315,7 +1315,7 @@ class Diagram extends Widget {
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout
                  * @type Enums.DiagramDataLayoutType|Object
-                 * @default "layered"
+                 * @default "auto"
                  */
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout.type
