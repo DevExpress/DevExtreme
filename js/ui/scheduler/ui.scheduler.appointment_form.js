@@ -1,7 +1,6 @@
 import Form from '../form';
 import dateSerialization from '../../core/utils/date_serialization';
 import messageLocalization from '../../localization/message';
-import typeUtils from '../../core/utils/type';
 
 import './ui.scheduler.recurrence_editor';
 import './timezones/ui.scheduler.timezone_editor';
@@ -67,9 +66,10 @@ const SchedulerAppointmentForm = {
         }
     },
 
-    prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData) {
+    prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, { showStartTimezone, showEndTimezone }) {
         const that = this;
         const recurrenceEditorVisibility = !!appointmentData.recurrenceRule;
+        const isTimezonesVisible = showStartTimezone || showEndTimezone;
 
         this._editors = [
             {
@@ -86,68 +86,75 @@ const SchedulerAppointmentForm = {
                         }
                     },
                     {
-                        dataField: dataExprs.startDateExpr,
-                        editorType: 'dxDateBox',
-                        label: {
-                            text: messageLocalization.format('dxScheduler-editorLabelStartDate')
-                        },
-                        validationRules: [{
-                            type: 'required'
-                        }],
-                        editorOptions: {
-                            width: '100%',
-                            calendarOptions: {
-                                firstDayOfWeek: schedulerInst.option('firstDayOfWeek')
-                            },
-                            onValueChanged: function(args) {
-                                that._dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => { return endValue < startValue; });
-                            }
-                        }
-                    },
-                    {
-                        dataField: dataExprs.startDateTimeZoneExpr,
-                        editorType: 'dxSchedulerTimezoneEditor',
+                        itemType: 'group',
                         colSpan: 2,
-                        label: {
-                            text: ' ',
-                            showColon: false
-                        },
-                        editorOptions: {
-                            observer: schedulerInst
-                        },
-                        visible: false
-                    },
-                    {
-                        dataField: dataExprs.endDateExpr,
-                        editorType: 'dxDateBox',
-                        label: {
-                            text: messageLocalization.format('dxScheduler-editorLabelEndDate')
-                        },
-                        validationRules: [{
-                            type: 'required'
-                        }],
-                        editorOptions: {
-                            width: '100%',
-                            calendarOptions: {
-                                firstDayOfWeek: schedulerInst.option('firstDayOfWeek')
+                        colCount: 2,
+                        items: [{
+                            dataField: dataExprs.startDateExpr,
+                            editorType: 'dxDateBox',
+                            colSpan: isTimezonesVisible ? 2 : 1,
+                            label: {
+                                text: messageLocalization.format('dxScheduler-editorLabelStartDate')
                             },
-                            onValueChanged: function(args) {
-                                that._dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => { return endValue < startValue; });
+                            validationRules: [{
+                                type: 'required'
+                            }],
+                            editorOptions: {
+                                width: '100%',
+                                calendarOptions: {
+                                    firstDayOfWeek: schedulerInst.option('firstDayOfWeek')
+                                },
+                                onValueChanged: function(args) {
+                                    that._dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => { return endValue < startValue; });
+                                }
                             }
-                        }
-                    },
-                    {
-                        dataField: dataExprs.endDateTimeZoneExpr,
-                        editorType: 'dxSchedulerTimezoneEditor',
-                        colSpan: 2,
-                        label: {
-                            text: ' ',
-                            showColon: false
                         },
-                        editorOptions: {
-                            observer: schedulerInst
+                        {
+                            dataField: dataExprs.startDateTimeZoneExpr,
+                            editorType: 'dxSchedulerTimezoneEditor',
+                            visibleIndex: 1,
+                            colSpan: isTimezonesVisible ? 2 : 1,
+                            label: {
+                                text: ' ',
+                            },
+                            editorOptions: {
+                                observer: schedulerInst
+                            },
+                            visible: showStartTimezone
                         },
-                        visible: false
+                        {
+                            dataField: dataExprs.endDateExpr,
+                            editorType: 'dxDateBox',
+                            colSpan: isTimezonesVisible ? 2 : 1,
+                            label: {
+                                text: messageLocalization.format('dxScheduler-editorLabelEndDate')
+                            },
+                            validationRules: [{
+                                type: 'required'
+                            }],
+                            editorOptions: {
+                                width: '100%',
+                                calendarOptions: {
+                                    firstDayOfWeek: schedulerInst.option('firstDayOfWeek')
+                                },
+                                onValueChanged: function(args) {
+                                    that._dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => { return endValue < startValue; });
+                                }
+                            }
+                        },
+                        {
+                            dataField: dataExprs.endDateTimeZoneExpr,
+                            editorType: 'dxSchedulerTimezoneEditor',
+                            visibleIndex: 3,
+                            colSpan: isTimezonesVisible ? 2 : 1,
+                            label: {
+                                text: ' ',
+                            },
+                            editorOptions: {
+                                observer: schedulerInst
+                            },
+                            visible: showEndTimezone
+                        }],
                     },
                     {
                         itemType: 'group',
@@ -236,10 +243,6 @@ const SchedulerAppointmentForm = {
         ];
 
         return this._editors;
-    },
-
-    _getRecurrenceRule: function(schedulerInstance, appointmentForm) {
-        return !typeUtils.isEmptyObject(appointmentForm) ? !!schedulerInstance.fire('getField', 'recurrenceRule', appointmentForm.option('formData')) : false;
     },
 
     concatResources: function(resources) {

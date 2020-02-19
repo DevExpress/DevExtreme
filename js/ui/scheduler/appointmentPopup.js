@@ -52,7 +52,7 @@ export default class AppointmentPopup {
         }
 
         this._popup.option({
-            toolbarItems: showButtons ? this._getPopupToolbarItems() : [],
+            toolbarItems: showButtons ? this._getPopupToolbarItems() : [], // TODO: move to _createPopup
             showCloseButton: false,
             showTitle: false
         });
@@ -140,6 +140,7 @@ export default class AppointmentPopup {
     _createForm(element) {
         const { expr } = this.scheduler._dataAccessors;
         const resources = this.scheduler.option('resources');
+        const appointmentFormOptions = this.scheduler.option('appointmentForm') || {};
         const appointmentData = this.state.appointment.data;
         const formData = this._createAppointmentFormData(appointmentData);
 
@@ -152,7 +153,7 @@ export default class AppointmentPopup {
             recurrenceRuleExpr: expr.recurrenceRuleExpr,
             startDateTimeZoneExpr: expr.startDateTimeZoneExpr,
             endDateTimeZoneExpr: expr.endDateTimeZoneExpr
-        }, this.scheduler, this.triggerResize.bind(this), this.changeSize.bind(this), formData);
+        }, this.scheduler, this.triggerResize.bind(this), this.changeSize.bind(this), formData, appointmentFormOptions);
 
         if(resources && resources.length) {
             this.scheduler._resourcesManager.setResources(this.scheduler.option('resources'));
