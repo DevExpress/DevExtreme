@@ -738,8 +738,25 @@ const BaseChart = BaseWidget.inherit({
         this._updateSeriesDimensions(drawOptions);
     },
 
+    _getArgFilter() {
+        return () => true;
+    },
+
+    _getValFilter(series) {
+        return () => true;
+    },
+
     _getPointsToAnimation(series) {
-        return series.map(s => s.getPoints().length);
+        const argViewPortFilter = this._getArgFilter();
+
+        return series.map((s) => {
+            const valViewPortFilter = this._getValFilter(s);
+
+            return s.getPoints().filter(p => {
+                return p.getOptions().visible && argViewPortFilter(p.argument) &&
+                    (valViewPortFilter(p.getMinValue(true)) || valViewPortFilter(p.getMaxValue(true)));
+            }).length;
+        });
     },
 
     _renderSeriesElements: function(drawOptions, isRotated, isLegendInside) {

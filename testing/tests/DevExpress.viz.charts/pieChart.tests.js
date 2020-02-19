@@ -69,6 +69,7 @@ function createPoint(options) {
     point.fullState = 0;
 
     point.getLegendStyles = sinon.stub().returns({ normal: {}, selection: {}, hover: {} });
+    point.getOptions = sinon.stub().returns(options);
 
     return point;
 }

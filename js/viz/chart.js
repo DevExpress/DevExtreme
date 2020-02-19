@@ -18,7 +18,7 @@ import multiAxesSynchronizer from './chart_components/multi_axes_synchronizer';
 import { AdvancedChart } from './chart_components/advanced_chart';
 import scrollBarModule from './chart_components/scroll_bar';
 import crosshairModule from './chart_components/crosshair';
-import rangeCalculator from './series/helpers/range_data_calculator';
+import { getViewPortFilter } from './series/helpers/range_data_calculator';
 import rangeModule from './translators/range';
 const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
@@ -750,19 +750,8 @@ const dxChart = AdvancedChart.inherit({
         });
     },
 
-    _getPointsToAnimation(series) {
-        const argViewPortFilter = rangeCalculator.getViewPortFilter(this.getArgumentAxis().visualRange() || {});
-
-        return series.map((s) => {
-            const valAxis = s.getValueAxis();
-            const valVisualRange = valAxis.visualRange();
-            const valViewPortFilter = rangeCalculator.getViewPortFilter(valVisualRange || {});
-
-            return s.getPoints().filter(p => {
-                return p.getOptions().visible && argViewPortFilter(p.argument) &&
-                    (valViewPortFilter(p.getMinValue(true)) || valViewPortFilter(p.getMaxValue(true)));
-            }).length;
-        });
+    _getArgFilter() {
+        return getViewPortFilter(this.getArgumentAxis().visualRange() || {});
     },
 
     _applyPointMarkersAutoHiding() {
@@ -778,7 +767,7 @@ const dxChart = AdvancedChart.inherit({
             const argVisualRange = argAxis.visualRange();
             const argTranslator = argAxis.getTranslator();
             const argAxisType = argAxis.getOptions().type;
-            const argViewPortFilter = rangeCalculator.getViewPortFilter(argVisualRange || {});
+            const argViewPortFilter = getViewPortFilter(argVisualRange || {});
             let points = [];
             const overloadedSeries = {};
 
@@ -787,7 +776,7 @@ const dxChart = AdvancedChart.inherit({
                 const valVisualRange = valAxis.visualRange();
                 const valTranslator = valAxis.getTranslator();
                 const seriesIndex = that.series.indexOf(s);
-                const valViewPortFilter = rangeCalculator.getViewPortFilter(valVisualRange || {});
+                const valViewPortFilter = getViewPortFilter(valVisualRange || {});
 
                 overloadedSeries[seriesIndex] = {};
                 series.forEach(sr => overloadedSeries[seriesIndex][that.series.indexOf(sr)] = 0);
