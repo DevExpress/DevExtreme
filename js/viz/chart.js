@@ -18,7 +18,7 @@ import multiAxesSynchronizer from './chart_components/multi_axes_synchronizer';
 import { AdvancedChart } from './chart_components/advanced_chart';
 import scrollBarModule from './chart_components/scroll_bar';
 import crosshairModule from './chart_components/crosshair';
-import rangeCalculator from './series/helpers/range_data_calculator';
+import { getViewPortFilter } from './series/helpers/range_data_calculator';
 import rangeModule from './translators/range';
 const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
@@ -370,8 +370,8 @@ function checkUsedSpace(sizeShortage, side, axes, getMarginFunc) {
     }
 }
 
-function axisAnimationEnabled(drawOptions, series) {
-    const pointsCount = series.reduce((sum, s) => sum += s.getPoints().length, 0) / series.length;
+function axisAnimationEnabled(drawOptions, pointsToAnimation) {
+    const pointsCount = pointsToAnimation.reduce((sum, count) => sum + count, 0) / pointsToAnimation.length;
 
     return drawOptions.animate && pointsCount <= drawOptions.animationPointsLimit;
 }
@@ -750,6 +750,10 @@ const dxChart = AdvancedChart.inherit({
         });
     },
 
+    _getArgFilter() {
+        return getViewPortFilter(this.getArgumentAxis().visualRange() || {});
+    },
+
     _applyPointMarkersAutoHiding() {
         const that = this;
         if(!that._themeManager.getOptions('autoHidePointMarkers')) {
@@ -763,7 +767,7 @@ const dxChart = AdvancedChart.inherit({
             const argVisualRange = argAxis.visualRange();
             const argTranslator = argAxis.getTranslator();
             const argAxisType = argAxis.getOptions().type;
-            const argViewPortFilter = rangeCalculator.getViewPortFilter(argVisualRange || {});
+            const argViewPortFilter = getViewPortFilter(argVisualRange || {});
             let points = [];
             const overloadedSeries = {};
 
@@ -772,7 +776,7 @@ const dxChart = AdvancedChart.inherit({
                 const valVisualRange = valAxis.visualRange();
                 const valTranslator = valAxis.getTranslator();
                 const seriesIndex = that.series.indexOf(s);
-                const valViewPortFilter = rangeCalculator.getViewPortFilter(valVisualRange || {});
+                const valViewPortFilter = getViewPortFilter(valVisualRange || {});
 
                 overloadedSeries[seriesIndex] = {};
                 series.forEach(sr => overloadedSeries[seriesIndex][that.series.indexOf(sr)] = 0);
@@ -924,7 +928,10 @@ const dxChart = AdvancedChart.inherit({
 
         let oldTitlesWidth = calculateTitlesWidth(verticalAxes);
 
-        performActionOnAxes(allAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, that._getVisibleSeries()));
+        const visibleSeries = that._getVisibleSeries();
+        const pointsToAnimation = that._getPointsToAnimation(visibleSeries);
+
+        performActionOnAxes(allAxes, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
 
         horizontalAxes.forEach(shiftAxis('top', 'bottom'));
         verticalAxes.forEach(shiftAxis('left', 'right'));
