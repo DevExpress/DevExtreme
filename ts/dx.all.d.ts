@@ -6331,22 +6331,26 @@ declare module DevExpress.ui {
         expandItem(key: any): void;
         /** @name dxTreeView.getNodes() */
         getNodes(): Array<dxTreeViewNode>;
+        /** @name dxTreeView.getSelectedNodeKeys() */
+        getSelectedNodeKeys(): Array<any>;
+        /** @name dxTreeView.getSelectedNodes() */
+        getSelectedNodes(): Array<dxTreeViewNode>;
         /** @name dxTreeView.selectAll() */
         selectAll(): void;
         /** @name dxTreeView.selectItem(itemData) */
-        selectItem(itemData: any): void;
+        selectItem(itemData: any): boolean;
         /** @name dxTreeView.selectItem(itemElement) */
-        selectItem(itemElement: Element): void;
+        selectItem(itemElement: Element): boolean;
         /** @name dxTreeView.selectItem(key) */
-        selectItem(key: any): void;
+        selectItem(key: any): boolean;
         /** @name dxTreeView.unselectAll() */
         unselectAll(): void;
         /** @name dxTreeView.unselectItem(itemData) */
-        unselectItem(itemData: any): void;
+        unselectItem(itemData: any): boolean;
         /** @name dxTreeView.unselectItem(itemElement) */
-        unselectItem(itemElement: Element): void;
+        unselectItem(itemElement: Element): boolean;
         /** @name dxTreeView.unselectItem(key) */
-        unselectItem(key: any): void;
+        unselectItem(key: any): boolean;
         /** @name dxTreeView.updateDimensions() */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
     }

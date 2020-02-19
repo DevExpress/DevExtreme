@@ -386,6 +386,22 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      */
     getNodes(): Array<dxTreeViewNode>;
     /**
+     * @docid dxTreeViewMethods.getSelectedNodes
+     * @publicName getSelectedNodes()
+     * @return Array<dxTreeViewNode>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getSelectedNodes(): Array<dxTreeViewNode>;
+    /**
+     * @docid dxTreeViewMethods.getSelectedNodeKeys
+     * @publicName getSelectedNodeKeys()
+     * @return Array<any>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getSelectedNodeKeys(): Array<any>;
+    /**
      * @docid dxTreeViewMethods.selectAll
      * @publicName selectAll()
      * @prevFileNamespace DevExpress.ui
@@ -396,26 +412,29 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @docid dxTreeViewMethods.selectItem
      * @publicName selectItem(itemData)
      * @param1 itemData:Object
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectItem(itemData: any): void;
+    selectItem(itemData: any): boolean;
     /**
      * @docid dxTreeViewMethods.selectItem
      * @publicName selectItem(itemElement)
      * @param1 itemElement:Node
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectItem(itemElement: Element): void;
+    selectItem(itemElement: Element): boolean;
     /**
      * @docid dxTreeViewMethods.selectItem
      * @publicName selectItem(key)
      * @param1 key:any
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectItem(key: any): void;
+    selectItem(key: any): boolean;
     /**
      * @docid dxTreeViewMethods.unselectAll
      * @publicName unselectAll()
@@ -427,26 +446,29 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @docid dxTreeViewMethods.unselectItem
      * @publicName unselectItem(itemData)
      * @param1 itemData:Object
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    unselectItem(itemData: any): void;
+    unselectItem(itemData: any): boolean;
     /**
      * @docid dxTreeViewMethods.unselectItem
      * @publicName unselectItem(itemElement)
      * @param1 itemElement:Node
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    unselectItem(itemElement: Element): void;
+    unselectItem(itemElement: Element): boolean;
     /**
      * @docid dxTreeViewMethods.unselectItem
      * @publicName unselectItem(key)
      * @param1 key:any
+     * @return boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    unselectItem(key: any): void;
+    unselectItem(key: any): boolean;
     /**
      * @docid dxTreeViewMethods.updateDimensions
      * @publicName updateDimensions()
