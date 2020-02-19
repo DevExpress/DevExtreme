@@ -18,7 +18,8 @@ function run_ts {
     cp $target $target.current
 
     npm i
-    npm update --no-save devextreme-internal-tools
+    unlink package-lock.json
+    npm update devextreme-internal-tools
     npm ls devextreme-internal-tools
 
     npm run update-ts
