@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import AsyncTemplateMixin from '../shared/async_template_mixin';
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
@@ -815,7 +814,7 @@ const DropDownEditor = TextBox.inherit({
     content: function() {
         return this._popup ? this._popup.content() : null;
     }
-}).include(AsyncTemplateMixin);
+});
 
 registerComponent('dxDropDownEditor', DropDownEditor);
 

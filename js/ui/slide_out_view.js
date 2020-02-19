@@ -8,7 +8,6 @@ const getPublicElement = require('../core/utils/dom').getPublicElement;
 const hideTopOverlayCallback = require('../mobile/hide_top_overlay').hideCallback;
 const registerComponent = require('../core/component_registrator');
 const extend = require('../core/utils/extend').extend;
-const AsyncTemplateMixin = require('./shared/async_template_mixin');
 const Widget = require('./widget/ui.widget');
 const Swipeable = require('../events/gesture/swipeable');
 const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
@@ -394,7 +393,7 @@ const SlideOutView = Widget.inherit({
     * @publicName focus()
     * @hidden
     */
-}).include(AsyncTemplateMixin);
+});
 
 registerComponent('dxSlideOutView', SlideOutView);
 
