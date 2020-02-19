@@ -219,7 +219,6 @@ class DrawerStrategy {
         const drawer = this.getDrawerInstance();
         const panelSize = this._getPanelSize(drawer.option('opened'));
 
-
         if(drawer.isHorizontalDirection()) {
             $(drawer.content()).width(calcFromRealPanelSize ? drawer.getRealPanelWidth() : panelSize);
         } else {

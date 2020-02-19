@@ -12,7 +12,7 @@ class OverlapStrategy extends DrawerStrategy {
     renderPanelContent(_, whenPanelContentRendered) {
         delete this._initialPosition;
 
-        const position = this.getOverlayPosition();
+        const position = this._getOverlayPosition();
         const drawer = this.getDrawerInstance();
 
         const { opened, minSize } = drawer.option();
@@ -53,32 +53,37 @@ class OverlapStrategy extends DrawerStrategy {
         }
     }
 
-    getOverlayPosition() {
+    _getOverlayPosition() {
         const drawer = this.getDrawerInstance();
         const panelPosition = drawer.getDrawerPosition();
 
         let result = {};
 
-        if(panelPosition === 'left') {
-            result = {
-                my: 'top left',
-                at: 'top left',
-            };
-        }
-        if(panelPosition === 'right') {
-            const my = drawer.option('rtlEnabled') ? 'top left' : 'top right';
+        switch(panelPosition) {
+            case 'left': {
+                result = {
+                    my: 'top left',
+                    at: 'top left',
+                };
+                break;
+            }
+            case 'right': {
+                const my = drawer.option('rtlEnabled') ? 'top left' : 'top right';
 
-            result = {
-                my: my,
-                at: 'top right',
-            };
-        }
-
-        if(panelPosition === 'top' || panelPosition === 'bottom') {
-            result = {
-                my: panelPosition,
-                at: panelPosition,
-            };
+                result = {
+                    my: my,
+                    at: 'top right',
+                };
+                break;
+            }
+            case 'top':
+            case 'bottom': {
+                result = {
+                    my: panelPosition,
+                    at: panelPosition,
+                };
+                break;
+            }
         }
 
         result.of = drawer.getOverlayTarget();
