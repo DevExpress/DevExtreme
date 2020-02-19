@@ -744,28 +744,6 @@ QUnit.test('Command drag cell should have cursor \'move\' for data rows and \'de
     assert.equal($($rowsView.getRowElement(1)).find('td').eq(2).css('cursor'), 'default', 'data cell in data row has default cursor');
 });
 
-QUnit.test('Data cells should have \'user-select: auto\' style if showDragIcons set true (T862255)', function(assert) {
-    // arrange
-    $.extend(this.options, {
-        columns: [{ dataField: 'field1', groupIndex: 0 }, 'field2', 'field3'],
-        grouping: {
-            autoExpandAll: true
-        },
-        rowDragging: {
-            showDragIcons: true
-        }
-    });
-
-    const $rowsView = this.createRowsView();
-    $rowsView.render($('#container'));
-
-    // assert
-    const userSelect = browser.msie ? 'text' : 'auto';
-    assert.equal($($rowsView.getRowElement(0)).find('.dx-group-cell').eq(0).css('user-select'), userSelect, `data cell in group row has 'user-select: ${userSelect}'`);
-    assert.equal($($rowsView.getRowElement(1)).find('.dx-command-drag').eq(0).css('user-select'), 'none', 'command-drag in data row has \'user-select: none\'');
-    assert.equal($($rowsView.getRowElement(1)).find('td').eq(2).css('user-select'), userSelect, `data cell in data row has 'user-select: ${userSelect}'`);
-});
-
 QUnit.test('Command drag cell should have cursor \'grabbing/pointer\' for dragging row', function(assert) {
     // arrange
     const rowsView = this.createRowsView();
