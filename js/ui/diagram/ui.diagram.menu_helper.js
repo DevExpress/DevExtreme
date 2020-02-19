@@ -28,12 +28,10 @@ const DiagramMenuHelper = {
     onContextMenuItemClick(widget, itemData, actionHandler) {
         if(itemData.command !== undefined && (!Array.isArray(itemData.items) || !itemData.items.length)) {
             const parameter = DiagramMenuHelper.getItemCommandParameter(widget, itemData);
-            actionHandler.call(this, itemData.command, parameter, itemData.onExecuted);
+            actionHandler.call(this, itemData.command, parameter);
         } else if(itemData.rootCommand !== undefined && itemData.value !== undefined) {
             const parameter = DiagramMenuHelper.getItemCommandParameter(widget, itemData, itemData.value);
-            actionHandler.call(this, itemData.rootCommand, parameter, itemData.onExecuted);
-        } else if(itemData.onExecuted) {
-            actionHandler.call(this, itemData.command, undefined, itemData.onExecuted);
+            actionHandler.call(this, itemData.rootCommand, parameter);
         }
     },
     getItemValue(item) {

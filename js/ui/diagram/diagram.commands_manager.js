@@ -679,9 +679,9 @@ const DiagramCommandsManager = {
                 return allCommands[c];
             } else if(c.text || c.icon) {
                 const command = {
+                    command: c.name,
                     text: c.text,
-                    icon: c.icon,
-                    onExecuted: c.onClick
+                    icon: c.icon
                 };
                 if(Array.isArray(c.items)) {
                     command.items = this._getPreparedCommands(allCommands, c.items);

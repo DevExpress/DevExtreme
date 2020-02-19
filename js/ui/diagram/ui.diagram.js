@@ -67,6 +67,8 @@ class Diagram extends Widget {
         super._init();
         this._initDiagram();
 
+        this._createCustomCommandExecuted();
+
         this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
     }
     _initMarkup() {
@@ -155,18 +157,36 @@ class Diagram extends Widget {
         }
         return excludeCommands;
     }
-    _renderMainToolbar() {
-        const $toolbarWrapper = $('<div>')
-            .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
-            .appendTo(this.$element());
-        this._mainToolbar = this._createComponent($toolbarWrapper, DiagramMainToolbar, {
-            commands: this.option('mainToolbar.commands'),
+    _getToolbarBaseOptions() {
+        return {
             onContentReady: ({ component }) => this._registerBar(component),
             onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
-            excludeCommands: this._getExcludeCommands()
-        });
+            excludeCommands: this._getExcludeCommands(),
+            onCustomCommandExecuted: this._onCustomCommandExecuted.bind(this)
+        };
+    }
+    _onCustomCommandExecuted(e) {
+        switch(e.command) {
+            case DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME:
+                if(this._toolbox) {
+                    this._toolbox.toggle();
+                }
+                break;
+            default:
+                this._customCommandExecutedAction({ name: e.command });
+        }
+    }
+    _renderMainToolbar() {
+        const $toolbarWrapper = $('<div>')
+            .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
+            .appendTo(this.$element());
+        this._mainToolbar = this._createComponent($toolbarWrapper, DiagramMainToolbar,
+            extend(this._getToolbarBaseOptions(), {
+                commands: this.option('mainToolbar.commands')
+            })
+        );
     }
     _adjustFloatingToolbarContainer($container, toolbar, position) {
         if(!hasWindow()) return;
@@ -182,12 +202,11 @@ class Diagram extends Widget {
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
-        this._historyToolbar = this._createComponent($container, DiagramHistoryToolbar, {
-            commands: this.option('historyToolbar.commands'),
-            onContentReady: ({ component }) => this._registerBar(component),
-            onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
-            onPointerUp: this._onPanelPointerUp.bind(this)
-        });
+        this._historyToolbar = this._createComponent($container, DiagramHistoryToolbar,
+            extend(this._getToolbarBaseOptions(), {
+                commands: this.option('historyToolbar.commands'),
+            })
+        );
         this._adjustFloatingToolbarContainer($container, this._historyToolbar);
         this._updateHistoryToolbarPosition($container, $parent, isServerSide);
     }
@@ -267,19 +286,11 @@ class Diagram extends Widget {
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
-        this._viewToolbar = this._createComponent($container, DiagramViewToolbar, {
-            commands: this.option('viewToolbar.commands'),
-            onContentReady: ({ component }) => this._registerBar(component),
-            onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
-            onPointerUp: this._onPanelPointerUp.bind(this),
-            export: this.option('export'),
-            excludeCommands: this._getExcludeCommands(),
-            onCommandExecuted: (e) => {
-                if(e.command === DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME && this._toolbox) {
-                    this._toolbox.toggle();
-                }
-            }
-        });
+        this._viewToolbar = this._createComponent($container, DiagramViewToolbar,
+            extend(this._getToolbarBaseOptions(), {
+                commands: this.option('viewToolbar.commands')
+            })
+        );
         this._adjustFloatingToolbarContainer($container, this._viewToolbar);
         this._updateViewToolbarPosition($container, $parent, isServerSide);
         resizeCallbacks.add(() => {
@@ -324,15 +335,13 @@ class Diagram extends Widget {
             },
             propertyGroups: this.option('propertiesPanel.groups'),
             onCreateToolbar: (e) => {
-                e.toolbar = this._createComponent(e.$parent, DiagramToolbar, {
-                    commands: e.commands,
-                    locateInMenu: 'never',
-                    editorStylingMode: 'outlined',
-                    onContentReady: ({ component }) => this._registerBar(component),
-                    onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
-                    export: this.option('export'),
-                    excludeCommands: this._getExcludeCommands()
-                });
+                e.toolbar = this._createComponent(e.$parent, DiagramToolbar,
+                    extend(this._getToolbarBaseOptions(), {
+                        commands: e.commands,
+                        locateInMenu: 'never',
+                        editorStylingMode: 'outlined'
+                    })
+                );
             },
             onVisibilityChanged: (e) => {
                 if(isServerSide) return;
@@ -362,7 +371,10 @@ class Diagram extends Widget {
             container: $mainElement,
             onContentReady: ({ component }) => this._registerBar(component),
             onVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
-            onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); }
+            onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); },
+            export: this.option('export'),
+            excludeCommands: this._getExcludeCommands(),
+            onCustomCommandExecuted: this._onCustomCommandExecuted.bind(this)
         });
     }
 
@@ -1625,7 +1637,7 @@ class Diagram extends Widget {
                 visible: false,
                 /**
                 * @name dxDiagramOptions.mainToolbar.commands
-                * @type Array<Enums.DiagramToolbarCommand>
+                * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
                 * @default undefined
                 */
             },
@@ -1638,7 +1650,7 @@ class Diagram extends Widget {
                 visible: true,
                 /**
                 * @name dxDiagramOptions.historyToolbar.commands
-                * @type Array<Enums.DiagramToolbarCommand>
+                * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
                 * @default undefined
                 */
             },
@@ -1651,7 +1663,7 @@ class Diagram extends Widget {
                 visible: true,
                 /**
                 * @name dxDiagramOptions.viewToolbar.commands
-                * @type Array<Enums.DiagramToolbarCommand>
+                * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
                 * @default undefined
                 */
             },
@@ -1664,7 +1676,7 @@ class Diagram extends Widget {
                 enabled: true,
                 /**
                 * @name dxDiagramOptions.contextMenu.commands
-                * @type Array<Enums.DiagramContextMenuCommand>
+                * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
                 * @default undefined
                 */
             },
@@ -1706,7 +1718,7 @@ class Diagram extends Widget {
                 */
                 /**
                 * @name dxDiagramOptions.propertiesPanel.groups.commands
-                * @type Array<Enums.DiagramToolbarCommand>
+                * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
                 */
                 /**
                 * @name dxDiagramOptions.propertiesPanel.groups.groups
@@ -1718,7 +1730,7 @@ class Diagram extends Widget {
                 */
                 /**
                 * @name dxDiagramOptions.propertiesPanel.groups.groups.commands
-                * @type Array<Enums.DiagramToolbarCommand>
+                * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
                 */
             },
 
@@ -1798,6 +1810,9 @@ class Diagram extends Widget {
     }
     _createSelectionChangedAction() {
         this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
+    }
+    _createCustomCommandExecuted() {
+        this._customCommandExecutedAction = this._createActionByOption('onCustomCommandExecuted');
     }
     _raiseItemClickAction(nativeItem) {
         if(!this._itemClickAction) {
@@ -2030,6 +2045,9 @@ class Diagram extends Widget {
                 break;
             case 'onSelectionChanged':
                 this._createSelectionChangedAction();
+                break;
+            case 'onCustomCommandExecuted':
+                this._createCustomCommandExecuted();
                 break;
             case 'export':
                 if(this._mainToolbar) {
