@@ -634,13 +634,13 @@ QUnit.module('common use cases', {
     });
 
     QUnit.test('deferRendering should not do anything if popup has already been rendered', function(assert) {
-        const $dropDownButton = this.dropDownButton._popup.$element();
+        const $dropDownButton = getPopup(this.dropDownButton).$element();
 
         this.dropDownButton.option('deferRendering', true);
-        assert.strictEqual($dropDownButton, this.dropDownButton._popup.$element(), 'popup does not render repeatedly');
+        assert.strictEqual($dropDownButton, getPopup(this.dropDownButton).$element(), 'popup does not render repeatedly');
 
         this.dropDownButton.option('deferRendering', false);
-        assert.strictEqual($dropDownButton, this.dropDownButton._popup.$element(), 'popup does not render repeatedly');
+        assert.strictEqual($dropDownButton, getPopup(this.dropDownButton).$element(), 'popup does not render repeatedly');
     });
 
     QUnit.test('Widget should work correct if new selected item has key is 0', function(assert) {
