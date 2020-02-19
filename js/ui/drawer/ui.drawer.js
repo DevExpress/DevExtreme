@@ -200,16 +200,16 @@ const Drawer = Widget.inherit({
         this._$wrapper.append(this._$panelContentWrapper);
     },
 
-    _refreshOpenedStateModeClass(prevClass) {
-        prevClass && this.$element()
-            .removeClass(DRAWER_CLASS + '-' + prevClass);
+    _refreshOpenedStateModeClass(prevOpenedStateMode) {
+        prevOpenedStateMode && this.$element()
+            .removeClass(DRAWER_CLASS + '-' + prevOpenedStateMode);
 
         this.$element().addClass(DRAWER_CLASS + '-' + this.option('openedStateMode'));
     },
 
-    _refreshPositionClass(prevClass) {
-        prevClass && this.$element()
-            .removeClass(DRAWER_CLASS + '-' + prevClass);
+    _refreshPositionClass(prevPosition) {
+        prevPosition && this.$element()
+            .removeClass(DRAWER_CLASS + '-' + prevPosition);
 
         const position = this.getDrawerPosition();
 
@@ -226,9 +226,9 @@ const Drawer = Widget.inherit({
         }
     },
 
-    _refreshRevealModeClass(prevClass) {
-        prevClass && this.$element()
-            .removeClass(DRAWER_CLASS + '-' + prevClass);
+    _refreshRevealModeClass(prevRevealMode) {
+        prevRevealMode && this.$element()
+            .removeClass(DRAWER_CLASS + '-' + prevRevealMode);
 
         this.$element().addClass(DRAWER_CLASS + '-' + this.option('revealMode'));
     },
