@@ -2054,6 +2054,99 @@ QUnit.test('Cursor should switch style when it was moved to columns separator if
     assert.equal(columnsSeparator.css('cursor'), 'col-resize', 'cursor style');
 });
 
+// T846832
+QUnit.test('Columns should not shake during resizing', function(assert) {
+    // arrange
+    const dataGrid = $('#dataGrid').dxDataGrid({
+        width: 1000,
+        dataSource: [{}],
+        loadingTimeout: undefined,
+        columns: ['CompanyName', 'City', 'State', 'Phone', 'Fax'],
+        showBorders: true,
+        allowColumnResizing: true
+    });
+    const instance = dataGrid.dxDataGrid('instance');
+    const widths = [];
+    const offset = $('#dataGrid').offset();
+
+    // act
+    const resizeController = instance.getController('columnsResizer');
+    resizeController._isResizing = true;
+    resizeController._targetPoint = { columnIndex: 1 };
+
+    resizeController._startResizing({
+        event: {
+            data: resizeController,
+            type: 'touchstart',
+            pageX: offset.left + 200,
+            pageY: offset.top + 15,
+            preventDefault: function() {},
+            stopPropagation: function() {}
+        }
+    });
+
+    resizeController._moveSeparator({
+        event: {
+            data: resizeController,
+            pageX: offset.left + 50,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    resizeController._endResizing({
+        event: {
+            data: resizeController
+        }
+    });
+
+    // assert
+    let $cells = $('#dataGrid').find('td');
+
+    assert.roughEqual($cells.eq(0).width(), 34, 1.01, 'first column width');
+    assert.roughEqual($cells.eq(1).width(), 333, 1.01, 'second column width');
+
+    for(let i = 0; i < 5; i++) {
+        widths.push($('#dataGrid').find('td').eq(i).width());
+    }
+
+    // act
+    resizeController._startResizing({
+        event: {
+            data: resizeController,
+            type: 'touchstart',
+            pageX: offset.left + 50,
+            pageY: offset.top + 15,
+            preventDefault: function() {},
+            stopPropagation: function() {}
+        }
+    });
+
+    resizeController._moveSeparator({
+        event: {
+            type: 'dxpointermove',
+            data: resizeController,
+            pageX: offset.left + 51,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    resizeController._endResizing({
+        event: {
+            data: resizeController
+        }
+    });
+
+    // assert
+    $cells = $('#dataGrid').find('td');
+
+    assert.equal($cells.eq(0).width(), widths[0] + 1, 'first column width');
+    assert.equal($cells.eq(1).width(), widths[1] - 1, 'second column width');
+
+    for(let i = 2; i < 5; i++) {
+        assert.equal($cells.eq(i).width(), widths[i], 'width was not affected');
+    }
+});
+
 QUnit.test('export.enabled: true, allowExportSelectedData: true -> check export menu icons (T757579)', function(assert) {
     $('#dataGrid').dxDataGrid({
         export: {
@@ -10184,7 +10277,7 @@ QUnit.test('cellTemplate should be rendered, asynchronously if column renderAsyn
 
 // T857205
 QUnit.test(' if renderAsync is true and state storing is used', function(assert) {
-    let selectedRowKeys = [1, 2];
+    const selectedRowKeys = [1, 2];
 
     const customLoad = sinon.spy(() => {
         return {
