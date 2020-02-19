@@ -116,6 +116,14 @@ describe('Button', () => {
                 expect(clickHandler).toHaveBeenCalledTimes(1);
             });
 
+            it('should be called with passed event', () => {
+              const clickHandler = jest.fn();
+              const button = render({ onClick: clickHandler });
+
+              emit(EVENT.dxClick, defaultEvent, button.getDOMNode());
+              expect(clickHandler).toHaveBeenCalledWith({ event: defaultEvent });
+            });
+
             it('should be called by Enter', () => {
                 const clickHandler = jest.fn();
 
