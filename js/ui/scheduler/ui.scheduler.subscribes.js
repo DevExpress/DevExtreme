@@ -286,11 +286,7 @@ const subscribes = {
                 ].join('');
             },
             'TIME': function() {
-                return [
-                    dateLocalization.format(startDate, timeFormat),
-                    ' - ',
-                    dateLocalization.format(endDate, timeFormat),
-                ].join('');
+                return `${dateLocalization.format(startDate, timeFormat)} - ${dateLocalization.format(endDate, timeFormat)}`;
             },
             'DATE': function() {
                 const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
