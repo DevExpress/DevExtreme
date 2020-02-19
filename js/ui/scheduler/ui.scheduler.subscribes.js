@@ -298,10 +298,7 @@ const subscribes = {
             case 'TIME':
                 return `${dateLocalization.format(startDate, timeFormat)} - ${dateLocalization.format(endDate, timeFormat)}`;
             case 'DATE':
-                return [
-                    dateLocalization.format(startDate, dateFormat),
-                    isDurationMoreThanDay || !isSameDate ? ' - ' + dateLocalization.format(endDate, dateFormat) : '',
-                ].join('');
+                return `${dateLocalization.format(startDate, dateFormat)}${isDurationMoreThanDay || !isSameDate ? ' - ' + dateLocalization.format(endDate, dateFormat) : ''}`;
         }
     },
 
