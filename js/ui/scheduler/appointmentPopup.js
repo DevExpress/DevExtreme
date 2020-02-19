@@ -48,14 +48,8 @@ export default class AppointmentPopup {
         };
 
         if(!this._popup) {
-            this._popup = this._createPopup();
+            this._popup = this._createPopup(showButtons);
         }
-
-        this._popup.option({
-            toolbarItems: showButtons ? this._getPopupToolbarItems() : [], // TODO: move to _createPopup
-            showCloseButton: false,
-            showTitle: false
-        });
 
         this._popup.option('onShowing', e => {
             this._updateForm(data, processTimeZone);
@@ -98,18 +92,21 @@ export default class AppointmentPopup {
         }
     }
 
-    _createPopup() {
+    _createPopup(showButtons) {
         const popupElement = $('<div>')
             .addClass(APPOINTMENT_POPUP_CLASS)
             .appendTo(this.scheduler.$element());
 
-        return this.scheduler._createComponent(popupElement, Popup, this._createPopupConfig());
+        return this.scheduler._createComponent(popupElement, Popup, this._createPopupConfig(showButtons));
     }
 
-    _createPopupConfig() {
+    _createPopupConfig(showButtons) {
         return {
             height: 'auto',
             maxHeight: '100%',
+            toolbarItems: showButtons ? this._getPopupToolbarItems() : [],
+            showCloseButton: false,
+            showTitle: false,
             onHiding: () => { this.scheduler.focus(); },
             contentTemplate: () => this._createPopupContent(),
             defaultOptionsRules: [

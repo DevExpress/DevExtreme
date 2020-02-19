@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { extend } from 'core/utils/extend';
 import translator from 'animation/translator';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
@@ -158,14 +157,7 @@ export class SchedulerTestWrapper {
             getPopupInstance: () => $('.dx-scheduler-appointment-popup.dx-widget').dxPopup('instance'),
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
             hide: () => this.appointmentPopup.getPopup().find('.dx-closebutton.dx-button').trigger('dxclick'),
-            setInitialPopupSize: size => {
-                const _createPopupConfig = this.instance._appointmentPopup._createPopupConfig;
-                this.instance._appointmentPopup._createPopupConfig = () => {
-                    const config = _createPopupConfig.call(this.instance._appointmentPopup);
-                    return extend(config, size);
-                };
-            },
-            setPopupWidth: width => this.appointmentPopup.getPopupInstance().option('width', width),
+            setPopupSize: size => this.appointmentPopup.getPopupInstance().option({ width: size.width, height: size.height }),
             getToolbarElementByLocation: location => {
                 const toolbarName = location === TOOLBAR_TOP_LOCATION ? 'title' : TOOLBAR_BOTTOM_LOCATION;
                 return this.appointmentPopup.getPopup().find(`.dx-toolbar.dx-widget.dx-popup-${toolbarName}`);

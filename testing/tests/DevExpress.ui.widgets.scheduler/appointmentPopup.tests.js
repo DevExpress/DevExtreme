@@ -1105,14 +1105,14 @@ QUnit.test('The vertical scroll bar is shown when an appointment popup fill to a
         dataSource: []
     });
 
-    const popup = scheduler.appointmentPopup;
-    popup.setInitialPopupSize({ height: 300 });
-
     scheduler.instance.fire('showAddAppointmentPopup', {
         startDate: new Date(2015, 1, 1),
         endDate: new Date(2015, 1, 1, 1),
         allDay: true
     });
+
+    const popup = scheduler.appointmentPopup;
+    popup.setPopupSize({ height: 300 });
 
     assert.ok(popup.hasVerticalScroll(), 'The popup has the vertical scrolling');
 });

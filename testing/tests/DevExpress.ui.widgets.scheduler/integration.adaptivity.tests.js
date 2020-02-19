@@ -152,60 +152,12 @@ module('Appointment form', {
         resetWindowWidth();
     }
 }, () => {
-    test('Items has layout has one column when the form\'s width < 350px on first show', function(assert) {
+    test('Items has layout has one column', function(assert) {
         const scheduler = createInstance();
-        scheduler.appointmentPopup.setInitialPopupSize({ width: 300 });
         scheduler.appointments.compact.click();
         scheduler.tooltip.clickOnItem();
 
-        assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
-    });
-
-    test('Items has layout has non-one column when the form\'s width > 460px on first show', function(assert) {
-        const scheduler = createInstance();
-        scheduler.appointmentPopup.setInitialPopupSize({ width: 463 });
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-
-        assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
-    });
-
-    test('Label location is top when the form\'s width < 440px on window resizing', function(assert) {
-        const scheduler = createInstance();
-        scheduler.appointmentPopup.setInitialPopupSize({ width: 400 });
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-
-        scheduler.appointmentPopup.setPopupWidth(600);
-        resizeCallbacks.fire();
-
-        const form = scheduler.appointmentForm.getFormInstance();
-
-        assert.equal(form.option('labelLocation'), 'top', 'label location of Form');
-    });
-
-    test('Items has layout has one column when the form\'s width < 350 on window resizing', function(assert) {
-        const scheduler = createInstance();
-        scheduler.appointmentPopup.setInitialPopupSize({ width: 300 });
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-
-        scheduler.appointmentPopup.setPopupWidth(200);
-        resizeCallbacks.fire();
-
-        assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
-    });
-
-    test('Items has layout has non-one column when the form\'s width > 350px on window resizing', function(assert) {
-        const scheduler = createInstance();
-        scheduler.appointmentPopup.setInitialPopupSize({ width: 460 });
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-
-        scheduler.appointmentPopup.setPopupWidth(463);
-        resizeCallbacks.fire();
-
-        assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
+        assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
     });
 });
 
