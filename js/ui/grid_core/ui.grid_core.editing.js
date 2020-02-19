@@ -572,10 +572,19 @@ const EditingController = modules.ViewController.inherit((function() {
             return ['insertRow', 'addRow', 'removeRow', 'deleteRow', 'undeleteRow', 'editRow', 'editCell', 'closeEditCell', 'saveEditData', 'cancelEditData', 'hasEditData'];
         },
 
-        refresh: function() {
-            if(getEditMode(this) === EDIT_MODE_CELL) return;
+        refresh: function(isPageChanged) {
+            const editMode = getEditMode(this);
 
-            if(getEditMode(this) !== EDIT_MODE_BATCH) {
+            if(editMode === EDIT_MODE_CELL) {
+                if(isPageChanged && this.option('scrolling.mode') !== 'virtual') {
+                    this._editRowIndex = -1;
+                    this._editColumnIndex = -1;
+                }
+
+                return;
+            }
+
+            if(editMode !== EDIT_MODE_BATCH) {
                 this.init();
             } else {
                 this._editRowIndex = -1;
@@ -1746,7 +1755,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(dataController && that._pageIndex !== dataController.pageIndex()) {
                 if(changeType === 'refresh') {
-                    that.refresh();
+                    that.refresh(true);
                 }
                 that._pageIndex = dataController.pageIndex();
             }
