@@ -246,18 +246,12 @@ const subscribes = {
             endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
         }
 
+        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, appointmentFields.allDay);
+
         return {
-            text: this.fire('createAppointmentTitle', appointmentFields),
-            formatDate: this.fire('_formatDates', startDate, endDate, appointmentFields.allDay, format)
+            text: this.fire('_createAppointmentTitle', appointmentFields),
+            formatDate: this.fire('_formatDates', startDate, endDate, formatType)
         };
-    },
-
-    createAppointmentTitle: function(data) {
-        if(typeUtils.isPlainObject(data)) {
-            return data.text;
-        }
-
-        return String(data);
     },
 
     _getAppointmentFields(data, arrayOfFields) {
@@ -267,8 +261,25 @@ const subscribes = {
         }, {});
     },
 
-    _formatDates(startDate, endDate, isAllDay, format) {
-        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, isAllDay);
+    _getTypeFormat(startDate, endDate, isAllDay) {
+        if(isAllDay) {
+            return 'DATE';
+        }
+        if(this.option('currentView') !== 'month' && dateUtils.sameDate(startDate, endDate)) {
+            return 'TIME';
+        }
+        return 'DATETIME';
+    },
+
+    _createAppointmentTitle(data) {
+        if(typeUtils.isPlainObject(data)) {
+            return data.text;
+        }
+
+        return String(data);
+    },
+
+    _formatDates(startDate, endDate, formatType) {
         const dateFormat = 'monthandday';
         const timeFormat = 'shorttime';
 
@@ -300,16 +311,6 @@ const subscribes = {
         };
 
         return formatTypes[formatType]();
-    },
-
-    _getTypeFormat(startDate, endDate, isAllDay) {
-        if(isAllDay) {
-            return 'DATE';
-        }
-        if(this.option('currentView') !== 'month' && dateUtils.sameDate(startDate, endDate)) {
-            return 'TIME';
-        }
-        return 'DATETIME';
     },
 
     getResizableAppointmentArea: function(options) {
