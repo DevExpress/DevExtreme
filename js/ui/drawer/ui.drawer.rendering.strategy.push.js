@@ -5,11 +5,11 @@ import translator from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
 
 class PushStrategy extends DrawerStrategy {
-    useDefaultAnimation() {
+    _useDefaultAnimation() {
         return true;
     }
 
-    defaultPositionRendering(config, _, animate) {
+    _defaultPositionRendering(config, _, animate) {
         const drawer = this.getDrawerInstance();
 
         $(drawer.content()).css(drawer.isHorizontalDirection() ? 'width' : 'height', config.maxSize);
@@ -35,8 +35,8 @@ class PushStrategy extends DrawerStrategy {
         }
     }
 
-    getPositionRenderingConfig(isDrawerOpened) {
-        return extend(super.getPositionRenderingConfig(isDrawerOpened), {
+    _getPositionRenderingConfig(isDrawerOpened) {
+        return extend(super._getPositionRenderingConfig(isDrawerOpened), {
             contentPosition: this._getPanelSize(isDrawerOpened) * this.getDrawerInstance()._getPositionCorrection(),
             maxSize: this._getPanelSize(true)
         });

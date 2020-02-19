@@ -104,20 +104,20 @@ class OverlapStrategy extends DrawerStrategy {
         }
     }
 
-    setupContent($content, position) {
+    _setupContent($content, position) {
         const drawer = this.getDrawerInstance();
 
         $content.css('padding' + camelize(position, true), drawer.option('minSize'));
         $content.css('transform', 'inherit');
     }
 
-    slidePositionRendering(config, _, animate) {
+    _slidePositionRendering(config, _, animate) {
         const drawer = this.getDrawerInstance();
 
         this._initialPosition = drawer.isHorizontalDirection() ? { left: config.panelOffset } : { top: config.panelOffset };
         const position = drawer.getDrawerPosition();
 
-        this.setupContent(config.$content, position, config.drawer);
+        this._setupContent(config.$content, position, config.drawer);
 
         if(animate) {
             const animationConfig = extend(config.defaultAnimationConfig, {
@@ -137,13 +137,13 @@ class OverlapStrategy extends DrawerStrategy {
         }
     }
 
-    expandPositionRendering(config, _, animate) {
+    _expandPositionRendering(config, _, animate) {
         const drawer = this.getDrawerInstance();
 
         this._initialPosition = { left: 0 };
         const position = drawer.getDrawerPosition();
 
-        this.setupContent(config.$content, position);
+        this._setupContent(config.$content, position);
 
         translator.move(config.$panelOverlayContent, { left: 0 });
 
@@ -170,9 +170,9 @@ class OverlapStrategy extends DrawerStrategy {
         }
     }
 
-    getPositionRenderingConfig(isDrawerOpened) {
+    _getPositionRenderingConfig(isDrawerOpened) {
         const drawer = this.getDrawerInstance();
-        const config = super.getPositionRenderingConfig(isDrawerOpened);
+        const config = super._getPositionRenderingConfig(isDrawerOpened);
 
         return extend(config, {
             panelOffset: this._getPanelOffset(isDrawerOpened) * this.getDrawerInstance()._getPositionCorrection(),

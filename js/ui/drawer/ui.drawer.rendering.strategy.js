@@ -112,16 +112,16 @@ class DrawerStrategy {
 
         this.prepareAnimationDeferreds(animate);
 
-        const config = this.getPositionRenderingConfig(isDrawerOpened);
+        const config = this._getPositionRenderingConfig(isDrawerOpened);
 
-        if(this.useDefaultAnimation()) {
-            this.defaultPositionRendering(config, isDrawerOpened, animate);
+        if(this._useDefaultAnimation()) {
+            this._defaultPositionRendering(config, isDrawerOpened, animate);
         } else {
             if(revealMode === 'slide') {
-                this.slidePositionRendering(config, isDrawerOpened, animate);
+                this._slidePositionRendering(config, isDrawerOpened, animate);
             }
             if(revealMode === 'expand') {
-                this.expandPositionRendering(config, isDrawerOpened, animate);
+                this._expandPositionRendering(config, isDrawerOpened, animate);
             }
         }
     }
@@ -144,7 +144,7 @@ class DrawerStrategy {
         }
     }
 
-    getPositionRenderingConfig(isDrawerOpened) {
+    _getPositionRenderingConfig(isDrawerOpened) {
         const drawer = this.getDrawerInstance();
 
         return {
@@ -156,7 +156,7 @@ class DrawerStrategy {
         };
     }
 
-    useDefaultAnimation() {
+    _useDefaultAnimation() {
         return false;
     }
 
