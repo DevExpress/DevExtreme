@@ -187,19 +187,18 @@ const Editor = Widget.inherit({
         if(!isValid && errorMessage) {
             const messageId = `dx-${new Guid()}`;
 
-            this._$validationMessage = $('<div>');
+            this._$validationMessage = $('<div>')
+                .addClass('dx-invalid-message')
+                .html(errorMessage)
+                .appendTo($element);
             this._validationMessage = this._createValidationOverlay($element, this._$validationMessage);
+            this._$validationMessage
+                .toggleClass('dx-invalid-message-auto', validationMessageMode === 'auto')
+                .toggleClass('dx-invalid-message-always', validationMessageMode === 'always');
             this._validationMessage
                 .$content()
                 .addClass('dx-invalid-message-content')
                 .attr('id', messageId);
-            this._$validationMessage
-                .addClass('dx-invalid-message')
-                .html(errorMessage)
-                .toggleClass('dx-invalid-message-auto', validationMessageMode === 'auto')
-                .toggleClass('dx-invalid-message-always', validationMessageMode === 'always')
-                .appendTo($element);
-
             this.setAria('describedby', messageId);
             this._setValidationMessageMaxWidth();
             this._bindInnerWidgetOptions(this._validationMessage, 'validationTooltipOptions');
