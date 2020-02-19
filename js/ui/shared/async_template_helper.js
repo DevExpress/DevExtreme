@@ -1,5 +1,5 @@
 export default class AsyncTemplateHelper {
-    waitAsyncTemplates(callback) {
+    wait(callback) {
         this._asyncTemplatesTimers = this._asyncTemplatesTimers || [];
         const timer = setTimeout(() => {
             callback();
@@ -8,7 +8,7 @@ export default class AsyncTemplateHelper {
         this._asyncTemplatesTimers.push(timer);
     }
 
-    cleanAsyncTemplatesTimer() {
+    dispose() {
         const timers = this._asyncTemplatesTimers || [];
 
         timers.forEach(timer => clearTimeout(timer));
