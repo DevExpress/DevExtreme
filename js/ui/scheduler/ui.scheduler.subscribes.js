@@ -269,33 +269,37 @@ const subscribes = {
 
     _formatDates(startDate, endDate, isAllDay, format) {
         const formatType = format || this.fire('_getTypeFormat', startDate, endDate, isAllDay);
+        const dateFormat = 'monthandday';
+        const timeFormat = 'shorttime';
 
         const formatTypes = {
             'DATETIME': function() {
-                const dateFormat = 'monthandday';
-                const timeFormat = 'shorttime';
+                const isSameDate = startDate.getDate() === endDate.getDate();
 
-                const startDateString = dateLocalization.format(startDate, dateFormat) + ' ' + dateLocalization.format(startDate, timeFormat) + ' - ';
-
-                const endDateString = (startDate.getDate() === endDate.getDate()) ?
-                    dateLocalization.format(endDate, timeFormat) :
-                    dateLocalization.format(endDate, dateFormat) + ' ' + dateLocalization.format(endDate, timeFormat);
-
-                return startDateString + endDateString;
+                return [
+                    dateLocalization.format(startDate, dateFormat),
+                    ' ',
+                    dateLocalization.format(startDate, timeFormat),
+                    ' - ',
+                    isSameDate ? '' : dateLocalization.format(endDate, dateFormat) + ' ',
+                    dateLocalization.format(endDate, timeFormat)
+                ].join('');
             },
             'TIME': function() {
-                return dateLocalization.format(startDate, 'shorttime') + ' - ' + dateLocalization.format(endDate, 'shorttime');
+                return [
+                    dateLocalization.format(startDate, timeFormat),
+                    ' - ',
+                    dateLocalization.format(endDate, timeFormat),
+                ].join('');
             },
             'DATE': function() {
-                const dateTimeFormat = 'monthAndDay';
-                const startDateString = dateLocalization.format(startDate, dateTimeFormat);
                 const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
+                const isDifferentDays = endDate.getDate() !== startDate.getDate();
 
-                const endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
-                    ' - ' + dateLocalization.format(endDate, dateTimeFormat) :
-                    '';
-
-                return startDateString + endDateString;
+                return [
+                    dateLocalization.format(startDate, dateFormat),
+                    isDurationMoreThanDay || isDifferentDays ? ' - ' + dateLocalization.format(endDate, dateFormat) : '',
+                ].join('');
             }
         };
 
