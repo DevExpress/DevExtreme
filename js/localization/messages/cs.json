@@ -194,6 +194,8 @@
         "dxScheduler-openAppointment": "Otevřít schůzku",
 
         "dxScheduler-recurrenceNever": "Nikdy",
+        "dxScheduler-recurrenceMinutely": "Minutely",
+        "dxScheduler-recurrenceHourly": "Hourly",
         "dxScheduler-recurrenceDaily": "Denně",
         "dxScheduler-recurrenceWeekly": "Týdně",
         "dxScheduler-recurrenceMonthly": "Měsíčně",
@@ -205,6 +207,8 @@
         "dxScheduler-recurrenceAfter": "Po",
         "dxScheduler-recurrenceOn": "Zap",
 
+        "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
+        "dxScheduler-recurrenceRepeatHourly": "hour(s)",
         "dxScheduler-recurrenceRepeatDaily": "dní",
         "dxScheduler-recurrenceRepeatWeekly": "týdnů",
         "dxScheduler-recurrenceRepeatMonthly": "měsíců",

@@ -194,6 +194,8 @@
         "dxScheduler-openAppointment": "Öppna avtalad tid",
 
         "dxScheduler-recurrenceNever": "Aldrig",
+        "dxScheduler-recurrenceMinutely": "Minutely",
+        "dxScheduler-recurrenceHourly": "Hourly",
         "dxScheduler-recurrenceDaily": "Varje dag",
         "dxScheduler-recurrenceWeekly": "Varje vecka",
         "dxScheduler-recurrenceMonthly": "Varje månad",
@@ -205,6 +207,8 @@
         "dxScheduler-recurrenceAfter": "Efter",
         "dxScheduler-recurrenceOn": "På",
 
+        "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
+        "dxScheduler-recurrenceRepeatHourly": "hour(s)",
         "dxScheduler-recurrenceRepeatDaily": "dagar",
         "dxScheduler-recurrenceRepeatWeekly": "veckor",
         "dxScheduler-recurrenceRepeatMonthly": "månader",
