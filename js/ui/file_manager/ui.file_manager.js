@@ -212,7 +212,7 @@ class FileManager extends Widget {
     _onAdaptiveStateChanged({ enabled }) {
         const progressPanelDrawer = this._notificationControl && this._notificationControl.getProgressPanelDrawer();
         if(progressPanelDrawer) {
-            this._notificationControl.getProgressPanel().$element().appendTo(this.$element());
+            this._notificationControl.getProgressPanel(this.$element());
             progressPanelDrawer.option({
                 openedStateMode: enabled ? 'overlap' : 'shrink',
                 shading: enabled ? true : false
