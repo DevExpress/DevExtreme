@@ -194,6 +194,8 @@
         "dxScheduler-openAppointment": "Mở lịch hẹn",
 
         "dxScheduler-recurrenceNever": "Không bao giờ",
+        "dxScheduler-recurrenceMinutely": "Minutely",
+        "dxScheduler-recurrenceHourly": "Hourly",
         "dxScheduler-recurrenceDaily": "Hàng ngày",
         "dxScheduler-recurrenceWeekly": "Hàng tuần",
         "dxScheduler-recurrenceMonthly": "Hàng tháng",
@@ -205,6 +207,8 @@
         "dxScheduler-recurrenceAfter": "Sau",
         "dxScheduler-recurrenceOn": "Vào",
 
+        "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
+        "dxScheduler-recurrenceRepeatHourly": "hour(s)",
         "dxScheduler-recurrenceRepeatDaily": "ngày",
         "dxScheduler-recurrenceRepeatWeekly": "tuần",
         "dxScheduler-recurrenceRepeatMonthly": "tháng",

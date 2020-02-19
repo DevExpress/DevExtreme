@@ -194,6 +194,8 @@
         "dxScheduler-openAppointment": "Définir un évenement",
 
         "dxScheduler-recurrenceNever": "Jamais",
+        "dxScheduler-recurrenceMinutely": "Minutely",
+        "dxScheduler-recurrenceHourly": "Hourly",
         "dxScheduler-recurrenceDaily": "Quotidien",
         "dxScheduler-recurrenceWeekly": "Hebdomadaire",
         "dxScheduler-recurrenceMonthly": "Mensuel",
@@ -205,6 +207,8 @@
         "dxScheduler-recurrenceAfter": "Après",
         "dxScheduler-recurrenceOn": "Le",
 
+        "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
+        "dxScheduler-recurrenceRepeatHourly": "hour(s)",
         "dxScheduler-recurrenceRepeatDaily": "Jour(s)",
         "dxScheduler-recurrenceRepeatWeekly": "Semaine(s)",
         "dxScheduler-recurrenceRepeatMonthly": "Mois(s)",

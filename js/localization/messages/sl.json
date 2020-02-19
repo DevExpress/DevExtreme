@@ -192,6 +192,8 @@
         "dxScheduler-openAppointment": "Odpri dogodek",
 
         "dxScheduler-recurrenceNever": "Nikoli",
+        "dxScheduler-recurrenceMinutely": "Minutely",
+        "dxScheduler-recurrenceHourly": "Hourly",
         "dxScheduler-recurrenceDaily": "Dnevno",
         "dxScheduler-recurrenceWeekly": "Tedensko",
         "dxScheduler-recurrenceMonthly": "Mesečno",
@@ -203,6 +205,8 @@
         "dxScheduler-recurrenceAfter": "Po",
         "dxScheduler-recurrenceOn": "Vklopljeno",
 
+        "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
+        "dxScheduler-recurrenceRepeatHourly": "hour(s)",
         "dxScheduler-recurrenceRepeatDaily": "dan/dni",
         "dxScheduler-recurrenceRepeatWeekly": "teden/tednov",
         "dxScheduler-recurrenceRepeatMonthly": "mesec/mesecev",
