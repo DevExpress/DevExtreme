@@ -76,7 +76,9 @@ function createSeries() {
     const series = sinon.createStubInstance(Series);
     series.isUpdated = true;
     series.isVisible.returns(true);
-    series.getPoints.returns([{ argument: 0, value: 1 }, { argument: 1, value: 2 }, { argument: 2, value: 3 }]);
+    series.getPoints.returns([{ argument: 0, value: 1, getOptions: function() { return { visible: true }; }, getMinValue: function() {} },
+        { argument: 1, value: 2, getOptions: function() { return { visible: true }; }, getMinValue: function() {} },
+        { argument: 2, value: 3, getOptions: function() { return { visible: true }; }, getMinValue: function() {} }]);
     series.getOptions.returns({ showInLegend: true, opacity: 0.5 });
     series.getLegendStyles.returns({ normal: { opacity: 0.5 } });
     series.getRangeData.returns({});
