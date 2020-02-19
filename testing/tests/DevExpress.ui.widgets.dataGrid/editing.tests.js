@@ -3202,8 +3202,9 @@ QUnit.test('Remove the inserted row with edit mode batch and hidden column', fun
 
 [true, false].forEach((needAddRow) => {
     [true, false].forEach((changePageViaDataSource) => {
-        let testName = 'cell should not be edited after ' + needAddRow ? 'row adding' : 'editing';
-        testName += ' and page change ' + changePageViaDataSource ? 'via dataSource' : '';
+        let testName = 'cell should not be edited after ' + (needAddRow ? 'row adding' : 'editing');
+        testName += ' and page change ' + (changePageViaDataSource ? 'via dataSource' : '');
+
         // T861092
         QUnit.test(testName + ' (cell edit mode)', function(assert) {
             // arrange
