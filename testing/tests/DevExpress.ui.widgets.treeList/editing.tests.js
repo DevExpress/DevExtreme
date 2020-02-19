@@ -329,7 +329,7 @@ QUnit.test('Sequential adding of a row after adding the previous using Deferred 
         const parentId = parentIds[index];
 
         if(parentId !== undefined) {
-            return this.addRow(parentId).done(addRowAfterDeferredResolve.bind(null, parentIds, index + 1));
+            return this.addRow(parentId).done(() => addRowAfterDeferredResolve(parentIds, index + 1));
         }
 
         // assert
@@ -341,6 +341,29 @@ QUnit.test('Sequential adding of a row after adding the previous using Deferred 
     addRowAfterDeferredResolve([1, 2], 0);
 
     this.clock.tick();
+});
+
+QUnit.test('AddRow method returns Deferred with using promise in onInitNewRow (T844118)', function(assert) {
+    // arrange
+    const deferred = $.Deferred();
+    this.options.editing.allowAdding = true;
+    this.options.onInitNewRow = (e) => {
+        e.promise = deferred;
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($('#treeList'));
+    this.clock.tick();
+
+    // act
+    let isAddRowDone = false;
+    this.addRow(1).done(() => isAddRowDone = true);
+    this.clock.tick();
+
+    // assert
+    assert.notOk(isAddRowDone, 'done method has not executed yet');
+    deferred.resolve();
+    assert.ok(isAddRowDone, 'done method has executed');
 });
 
 // T553905
