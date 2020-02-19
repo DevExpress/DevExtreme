@@ -46,7 +46,7 @@ QUnit.test('Columns - number', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
         '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /><col width="13.57" min="6" max="6" customWidth="1" />' +
-        '<col width="13.57" min="7" max="7" customWidth="1" /><col width="13.57" min="8" max="8" customWidth="1" /><col width="13.57" min="9" max="9" /></cols>' +
+        '<col width="13.57" min="7" max="7" customWidth="1" /><col width="13.57" min="8" max="8" customWidth="1" /><col width="13.57" min="9" max="9" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:9" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s" />' +
         '<c r="B1" s="3" t="n" />' +
@@ -95,7 +95,7 @@ QUnit.test('Columns - number, unbound', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
         '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /><col width="13.57" min="6" max="6" customWidth="1" />' +
-        '<col width="13.57" min="7" max="7" customWidth="1" /><col width="13.57" min="8" max="8" customWidth="1" /><col width="13.57" min="9" max="9" /></cols>' +
+        '<col width="13.57" min="7" max="7" customWidth="1" /><col width="13.57" min="8" max="8" customWidth="1" /><col width="13.57" min="9" max="9" customWidth="1" /></cols>' +
         '<sheetData><row r="1" spans="1:9" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s" />' +
         '<c r="B1" s="3" t="n" />' +
