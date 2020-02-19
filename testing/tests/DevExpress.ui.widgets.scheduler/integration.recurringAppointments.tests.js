@@ -1521,7 +1521,7 @@ QUnit.test('Recurrence appointment occurrences should have correct start date wi
     assert.equal(this.scheduler.appointments.getAppointmentPosition(0).top, this.scheduler.appointments.getAppointmentPosition(2).top, 'Appointment first and third occurrences have same top coordinate');
 });
 
-QUnit.test('Recurrence appointment occurences should have correct text (T818393)', function(assert) {
+QUnit.test('Recurrence appointment occurrences should have correct text (T818393)', function(assert) {
     this.createInstance({
         views: ['week'],
         currentView: 'week',
@@ -1547,7 +1547,7 @@ QUnit.test('Recurrence appointment occurences should have correct text (T818393)
 const apptStartDate = new Date(2019, 2, 30, 2, 0);
 const apptEndDate = new Date(2019, 2, 30, 3, 0);
 
-QUnit.test('Recurrence appointment renders correctly, freq=MINUTELY', function(assert) {
+QUnit.test('Recurrence appointment is rendered correctly, freq=MINUTELY', function(assert) {
     this.createInstance({
         views: ['day'],
         currentView: 'day',
@@ -1570,11 +1570,11 @@ QUnit.test('Recurrence appointment renders correctly, freq=MINUTELY', function(a
     const formStartDate = this.scheduler.appointmentForm.getEditor('startDate');
     const formEndDate = this.scheduler.appointmentForm.getEditor('endDate');
 
-    assert.deepEqual(formStartDate.option('value'), new Date(2019, 2, 30, 2, 2), 'Appointment third recurrence sets right startDate in appointmentForm');
-    assert.deepEqual(formEndDate.option('value'), new Date(2019, 2, 30, 3, 2), 'Appointment third recurrence sets right endDate in appointmentForm');
+    assert.deepEqual(formStartDate.option('value'), new Date(2019, 2, 30, 2, 2), 'Appointment third occurrence sets right startDate in appointmentForm');
+    assert.deepEqual(formEndDate.option('value'), new Date(2019, 2, 30, 3, 2), 'Appointment third occurrence sets right endDate in appointmentForm');
 });
 
-QUnit.test('Recurrence appointment renders correctly, freq=HOURLY', function(assert) {
+QUnit.test('Recurrence appointment is rendered correctly, freq=HOURLY', function(assert) {
     this.createInstance({
         views: ['day'],
         currentView: 'day',
@@ -1589,7 +1589,7 @@ QUnit.test('Recurrence appointment renders correctly, freq=HOURLY', function(ass
     });
 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 3, 'Appointment is rendered');
-    assert.equal(this.scheduler.appointments.getDateText(2), '4:00 AM - 5:00 AM', 'Appointment third occurrences has correct date text');
+    assert.equal(this.scheduler.appointments.getDateText(2), '4:00 AM - 5:00 AM', 'Appointment third occurrence has correct date text');
 
     this.scheduler.appointments.dblclick(2);
     this.scheduler.appointmentForm.clickFormDialogButton(1);
@@ -1597,8 +1597,8 @@ QUnit.test('Recurrence appointment renders correctly, freq=HOURLY', function(ass
     const formStartDate = this.scheduler.appointmentForm.getEditor('startDate');
     const formEndDate = this.scheduler.appointmentForm.getEditor('endDate');
 
-    assert.deepEqual(formStartDate.option('value'), new Date(2019, 2, 30, 4, 0), 'Appointment third recurrence sets right startDate in appointmentForm');
-    assert.deepEqual(formEndDate.option('value'), new Date(2019, 2, 30, 5, 0), 'Appointment third recurrence sets right endDate in appointmentForm');
+    assert.deepEqual(formStartDate.option('value'), new Date(2019, 2, 30, 4, 0), 'Appointment third occurrence sets right startDate in appointmentForm');
+    assert.deepEqual(formEndDate.option('value'), new Date(2019, 2, 30, 5, 0), 'Appointment third occurrence sets right endDate in appointmentForm');
 });
 
 QUnit.test('Recurrence appointment sends correct data to appointmentTemplate, freq=MINUTELY', function(assert) {
@@ -1728,6 +1728,6 @@ $.each(['minutely', 'hourly'], (_, value) => {
         const lastAppointment = appointments[appointmentCount - 1];
         const lastRecurrentAppointment = appointments[appointmentCount - 2];
 
-        assert.ok(translator.locate($(lastAppointment)).top > translator.locate($(lastRecurrentAppointment)).top, 'Last recurrent appointment renders last');
+        assert.ok(translator.locate($(lastAppointment)).top > translator.locate($(lastRecurrentAppointment)).top, 'Last occurrence renders correctly');
     });
 });
