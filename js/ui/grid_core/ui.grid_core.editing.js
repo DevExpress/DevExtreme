@@ -573,18 +573,11 @@ const EditingController = modules.ViewController.inherit((function() {
         refresh: function(isPageChanged) {
             const editMode = getEditMode(this);
 
-            if(editMode === EDIT_MODE_CELL) {
-                if(isPageChanged && this.option('scrolling.mode') !== 'virtual') {
-                    this._editRowIndex = -1;
-                    this._editColumnIndex = -1;
-                }
+            const needResetIndexes = editMode === EDIT_MODE_BATCH || isPageChanged && this.option('scrolling.mode') !== 'virtual';
 
-                return;
-            }
-
-            if(editMode !== EDIT_MODE_BATCH) {
+            if(editMode !== EDIT_MODE_BATCH && editMode !== EDIT_MODE_CELL) {
                 this.init();
-            } else {
+            } else if(needResetIndexes) {
                 this._editRowIndex = -1;
                 this._editColumnIndex = -1;
             }
