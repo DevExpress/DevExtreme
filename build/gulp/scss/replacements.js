@@ -306,4 +306,53 @@ module.exports = {
             'base-focus-color',
         ] },
     ],
+    'pivotGrid': [
+        { import: '../common', type: 'index' },
+        { import: '../../base/icons', type: 'index' },
+        { import: '../gridBase/colors', type: 'index' },
+        { import: '../treeView/sizes', type: 'index' },
+        { import: '../button', type: 'index' },
+        { import: '../button/colors', type: 'index' },
+        { import: '../../base/pivotGrid', alias: 'basePivotGrid', type: 'index', withVars: [
+            'PIVOTGRID_DRAG_HEADER_BORDER_COLOR',
+            'PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR',
+            'PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR',
+            'PIVOTGRID_BORDER_COLOR',
+            'PIVOTGRID_COMMON_LEFT_RIGHT_PADDING',
+            'PIVOTGRID_AREA_COLOR',
+            'HEADER_FILTER_COLOR',
+            'HEADER_FILTER_COLOR_EMPTY',
+            'PIVOTGRID_AREA_BACKGROUND',
+            'PIVOTGRID_COMMON_TOP_BOTTOM_PADDING',
+            'PIVOTGRID_FIELD_INDICATORS_OFFSET',
+            'PIVOTGRID_INDICATORS_LINE_HEIGHT',
+            'PIVOTGRID_TOTALCOLOR',
+            'PIVOTGRID_EXPAND_ICON_OFFSET', // TODO this variable is the same for generic, material (refactor with ios removing)
+            'PIVOTGRID_EXPAND_ICON_TEXT_OFFSET', // TODO this variable is the same for generic, material (refactor with ios removing)
+            'PIVOTGRID_FIELD_AREA_TEXT_COLOR',
+            'PIVOTGRID_DATA_AREA_COLOR',
+            'PIVOTGRID_GRANDTOTALCOLOR',
+            'PIVOTGRID_ACCENT_COLOR',
+            'PIVOTGRID_AREA_ALL_IMAGE',
+            'PIVOTGRID_AREA_FILTER_IMAGE',
+            'PIVOTGRID_AREA_ROW_IMAGE',
+            'PIVOTGRID_AREA_COLUMN_IMAGE',
+            'PIVOTGRID_AREA_DATA_IMAGE',
+            'PIVOTGRID_DIMENSION_IMAGE',
+            'PIVOTGRID_HIERARCHY_IMAGE',
+        ] },
+    ],
+    'contextMenu': [
+        { import: '../../base/icons', type: 'index' },
+        { import: '../menuBase', type: 'index' },
+        { import: '../menuBase/sizes', type: 'index' },
+        { import: '../menu/colors', type: 'index' },
+    ],
+    'tabPanel': [
+        { import: '../tabs', type: 'index' },
+        { import: '../tabs/colors', type: 'index' },
+    ],
+    'fileUploader': [
+        { import: '../../base/mixins', type: 'index' },
+    ]
 };

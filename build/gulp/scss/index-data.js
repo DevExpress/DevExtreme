@@ -73,5 +73,10 @@ module.exports = [
     { content: 'colorBox', task: 'widget' },
     { content: 'dataGrid', task: 'widget' },
     { content: 'treeList', task: 'widget' },
+    { content: 'pivotGrid', task: 'widget' },
+    { content: 'contextMenu', task: 'widget' },
+    { content: 'multiView', task: 'widget' },
+    { content: 'tabPanel', task: 'widget' },
+    { content: 'fileUploader', task: 'widget' },
     { task: 'newline' }
 ];
