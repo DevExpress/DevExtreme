@@ -282,11 +282,11 @@ const subscribes = {
     _formatDates(startDate, endDate, formatType) {
         const dateFormat = 'monthandday';
         const timeFormat = 'shorttime';
+        const isSameDate = startDate.getDate() === endDate.getDate();
+        const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
 
-        const formatTypes = {
-            'DATETIME': function() {
-                const isSameDate = startDate.getDate() === endDate.getDate();
-
+        switch(formatType) {
+            case 'DATETIME':
                 return [
                     dateLocalization.format(startDate, dateFormat),
                     ' ',
@@ -295,22 +295,14 @@ const subscribes = {
                     isSameDate ? '' : dateLocalization.format(endDate, dateFormat) + ' ',
                     dateLocalization.format(endDate, timeFormat)
                 ].join('');
-            },
-            'TIME': function() {
+            case 'TIME':
                 return `${dateLocalization.format(startDate, timeFormat)} - ${dateLocalization.format(endDate, timeFormat)}`;
-            },
-            'DATE': function() {
-                const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
-                const isDifferentDays = endDate.getDate() !== startDate.getDate();
-
+            case 'DATE':
                 return [
                     dateLocalization.format(startDate, dateFormat),
-                    isDurationMoreThanDay || isDifferentDays ? ' - ' + dateLocalization.format(endDate, dateFormat) : '',
+                    isDurationMoreThanDay || !isSameDate ? ' - ' + dateLocalization.format(endDate, dateFormat) : '',
                 ].join('');
-            }
-        };
-
-        return formatTypes[formatType]();
+        }
     },
 
     getResizableAppointmentArea: function(options) {
