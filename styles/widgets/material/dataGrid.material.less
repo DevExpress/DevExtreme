@@ -59,30 +59,6 @@
             border-bottom-color: @MATERIAL_GRID_BASE_BORDER_COLOR;
         }
     }
-
-    td {
-        &.dx-validation-pending {
-            position: relative;
-            padding: 0;
-
-            .dx-highlight-outline {
-                padding-right: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE;
-
-                .dx-rtl&,
-                .dx-rtl & {
-                    padding-left: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE;
-                    padding-right: 0;
-                }
-            }
-
-            .dx-pending-indicator {
-                .dx-pending-indicator-material();
-                .texteditor-validation-icon-offset();
-
-                background-color: @datagrid-base-background-color;
-            }
-        }
-    }
 }
 
 .dx-datagrid-group-opened {
