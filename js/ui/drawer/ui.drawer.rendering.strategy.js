@@ -211,15 +211,19 @@ class DrawerStrategy {
         return this.getDrawerInstance().$element().get(0).getBoundingClientRect().width;
     }
 
-    setPanelSize(keepMaxSize) {
+    setPanelSize(calcFromRealPanelSize) { // TODO: keep for ui.file_manager.adaptivity.js
+        this.refreshPanelElementSize(calcFromRealPanelSize);
+    }
+
+    refreshPanelElementSize(calcFromRealPanelSize) {
         const drawer = this.getDrawerInstance();
         const panelSize = this._getPanelSize(drawer.option('opened'));
 
 
         if(drawer.isHorizontalDirection()) {
-            $(drawer.content()).width(keepMaxSize ? drawer.getRealPanelWidth() : panelSize);
+            $(drawer.content()).width(calcFromRealPanelSize ? drawer.getRealPanelWidth() : panelSize);
         } else {
-            $(drawer.content()).height(keepMaxSize ? drawer.getRealPanelHeight() : panelSize);
+            $(drawer.content()).height(calcFromRealPanelSize ? drawer.getRealPanelHeight() : panelSize);
         }
     }
 
