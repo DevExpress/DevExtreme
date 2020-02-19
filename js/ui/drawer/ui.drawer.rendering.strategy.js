@@ -140,7 +140,7 @@ class DrawerStrategy {
                 drawer._animationCompleteHandler();
             });
         } else {
-            drawer.resizeContent();
+            drawer.resizeViewContent();
         }
     }
 

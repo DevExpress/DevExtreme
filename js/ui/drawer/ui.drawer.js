@@ -338,7 +338,11 @@ const Drawer = Widget.inherit({
         this._$panelContentWrapper.css('zIndex', zIndex);
     },
 
-    resizeContent() {
+    resizeContent() { // TODO: keep for ui.file_manager.adaptivity.js
+        this.resizeViewContent;
+    },
+
+    resizeViewContent() {
         triggerResizeEvent(this.viewContent());
     },
 
@@ -367,7 +371,7 @@ const Drawer = Widget.inherit({
     },
 
     _animationCompleteHandler() {
-        this.resizeContent();
+        this.resizeViewContent();
 
         if(this._animationPromise) {
             this._animationPromise.resolve();
