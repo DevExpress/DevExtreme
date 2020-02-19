@@ -256,6 +256,27 @@ QUnit.test('Correct start scroll position when RTL', function(assert) {
     assert.equal(scrollLeft, 100);
 });
 
+QUnit.test('Correct background color of focused grouped row when RTL', function(assert) {
+    const dataGrid = createDataGrid({
+        dataSource: [{ id: 1 }],
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        focusedRowIndex: 0,
+        rtlEnabled: true,
+        columns: [{
+            dataField: 'id',
+            groupIndex: 0,
+        }]
+    });
+    this.clock.tick();
+
+    const cellBackgroundColor = browser.msie ? 'transparent' : 'rgba(0, 0, 0, 0)';
+    const $groupedRow = $(dataGrid.getRowElement(0)[0]);
+    assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgb(51, 122, 183)', 'focused grouped row has correct background color in rtl mode');
+    assert.equal(window.getComputedStyle($groupedRow.find('td')[0]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
+    assert.equal(window.getComputedStyle($groupedRow.find('td')[1]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
+});
+
 QUnit.test('Grid accessibility structure (T640539, T831996)', function(assert) {
     const headersWrapper = dataGridWrapper.headers;
     const rowsViewWrapper = dataGridWrapper.rowsView;
@@ -10273,7 +10294,7 @@ QUnit.test('cellTemplate should be rendered, asynchronously if column renderAsyn
 
 // T857205
 QUnit.test(' if renderAsync is true and state storing is used', function(assert) {
-    let selectedRowKeys = [1, 2];
+    const selectedRowKeys = [1, 2];
 
     const customLoad = sinon.spy(() => {
         return {
