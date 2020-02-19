@@ -1048,7 +1048,9 @@ const TablePositionViewController = modules.ViewController.inherit({
 
         that._rowsView.resizeCompleted.add(function() {
             if(that.option('allowColumnResizing')) {
-                that.update(null);
+                const targetPoint = that.getController('columnsResizer')._targetPoint;
+
+                that.update(targetPoint ? targetPoint.y : null);
             }
         });
     },
