@@ -1329,7 +1329,7 @@ QUnit.test('DropDown appointment should be rendered correctly when timezone is s
         });
 
         scheduler.appointments.compact.click();
-        assert.equal(scheduler.tooltip.getDateText(), 'September 16 10:00 PM - 11:00 PM', 'Dates is correct');
+        assert.equal(scheduler.tooltip.getDateText(), 'September 16 10:00 PM - 11:00 PM', 'Dates are correct');
     } finally {
         tzOffsetStub.restore();
     }
