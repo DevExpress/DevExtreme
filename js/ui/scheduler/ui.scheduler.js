@@ -1526,15 +1526,7 @@ const Scheduler = Widget.inherit({
             fixedContainer: this._workSpace.getFixedContainer(),
             allDayContainer: this._workSpace.getAllDayContainer()
         });
-        if(this._options.silent('templatesRenderAsynchronously')) {
-            const timer = setTimeout(() => {
-                this._workSpaceRecalculation?.resolve();
-                clearTimeout(timer);
-            });
-            this._asyncTemplatesTimers.push(timer);
-        } else {
-            this._workSpaceRecalculation?.resolve();
-        }
+        this._waitAsyncTemplate(() => this._workSpaceRecalculation?.resolve());
         this._filterAppointmentsByDate();
     },
 
@@ -1692,17 +1684,10 @@ const Scheduler = Widget.inherit({
 
     _recalculateWorkspace: function() {
         this._workSpaceRecalculation = new Deferred();
-        if(this._options.silent('templatesRenderAsynchronously')) {
-            const timer = setTimeout(() => {
-                domUtils.triggerResizeEvent(this._workSpace.$element());
-                this._workSpace._refreshDateTimeIndication();
-                clearTimeout(timer);
-            });
-            this._asyncTemplatesTimers.push(timer);
-        } else {
+        this._waitAsyncTemplate(() => {
             domUtils.triggerResizeEvent(this._workSpace.$element());
             this._workSpace._refreshDateTimeIndication();
-        }
+        });
     },
 
     _workSpaceConfig: function(groups, countConfig) {
@@ -1755,6 +1740,18 @@ const Scheduler = Widget.inherit({
         return result;
     },
 
+    _waitAsyncTemplate: function(callback) {
+        if(this._options.silent('templatesRenderAsynchronously')) {
+            const timer = setTimeout(() => {
+                callback();
+                clearTimeout(timer);
+            });
+            this._asyncTemplatesTimers.push(timer);
+        } else {
+            callback();
+        }
+    },
+
     _getCurrentViewOptions: function() {
         return this._currentView;
     },
@@ -1799,15 +1796,7 @@ const Scheduler = Widget.inherit({
                 fixedContainer: this._workSpace.getFixedContainer(),
                 allDayContainer: this._workSpace.getAllDayContainer()
             });
-            if(this._options.silent('templatesRenderAsynchronously')) {
-                const timer = setTimeout(() => {
-                    this._workSpaceRecalculation.resolve();
-                    clearTimeout(timer);
-                });
-                this._asyncTemplatesTimers.push(timer);
-            } else {
-                this._workSpaceRecalculation.resolve();
-            }
+            this._waitAsyncTemplate(this._workSpaceRecalculation.resolve);
         }
     },
 
