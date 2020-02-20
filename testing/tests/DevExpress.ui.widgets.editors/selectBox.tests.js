@@ -4434,7 +4434,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
 
         this.clock.tick(300);
 
-        keyboard.keyDown('down')
+        keyboard
             .keyDown('down')
             .keyDown('down')
             .keyDown('down')
@@ -4443,7 +4443,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
 
         this.clock.tick(300);
         assert.strictEqual(loadHandler.callCount, 2, 'only one next page can be loaded after quick keydowns');
-        assert.deepEqual(instance.option('selectedItem'), items[5], 'some key downs can be accumulated during the next page loading');
+        assert.deepEqual(instance.option('selectedItem'), items[3], 'correct item is selected');
     });
 
     QUnit.test('T323427 - item should be chosen after focus on it if input is empty', function(assert) {
