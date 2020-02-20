@@ -1,21 +1,18 @@
 
-SystemJS.config({
-    map: {
-        'devexpress-diagram': '/testing/helpers/noDiagram.js'
-    }
-});
+import { getLibrary } from 'core/registry';
+import 'integration/diagram';
 
-define(function(require) {
-    const getDiagram = require('ui/diagram/diagram.importer').getDiagram;
+QUnit.module('Import devexpress-diagram', function() {
+    QUnit.test('there is no error when the devexpress-diagram script referenced', function(assert) {
+        let isOK = true;
 
-    QUnit.module('Import devexpress-diagram', function() {
-        QUnit.test('throw an error if the devexpress-diagram script isn\'t referenced', function(assert) {
-            assert.throws(
-                function() { getDiagram(); },
-                function(e) {
-                    return /(E1041)[\s\S]*(devexpress-diagram)/.test(e.message);
-                }
-            );
-        });
+        try {
+            getLibrary('diagram');
+        } catch(e) {
+            isOK = false;
+        }
+
+        assert.ok(isOK, 'devexpress-diagram has been added');
     });
 });
+

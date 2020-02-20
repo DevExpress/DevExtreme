@@ -3,7 +3,11 @@ const excelCreator = require('exporter').excel;
 const coreLocalization = require('localization/core');
 const ExcelCreator = excelCreator.creator;
 const internals = excelCreator.__internals;
+const addLibrary = require('core/registry').addLibrary;
+
 const exportMocks = require('../../helpers/exportMocks.js');
+
+require('integration/jszip');
 
 QUnit.module('Excel creator', {
     beforeEach: function() {
@@ -785,8 +789,8 @@ QUnit.test('xl\\worksheets\\sheet1.xml file content with AutoFilter', function(a
 
 
 QUnit.test('Exception should be thrown if JSzip not included has no start date', function(assert) {
-    const zip_backup = this.excelCreator._zip;
-
+    const jsZip = this.excelCreator._zip;
+    addLibrary('JSZip', null, true);
     this.excelCreator._zip = null;
 
     assert.throws(
@@ -797,5 +801,5 @@ QUnit.test('Exception should be thrown if JSzip not included has no start date',
         'The JSZip script is referenced after DevExtreme scripts'
     );
 
-    this.excelCreator._zip = zip_backup;
+    addLibrary('JSZip', jsZip, true);
 });

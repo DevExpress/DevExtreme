@@ -1,8 +1,9 @@
-import { getQuill } from '../quill_importer';
+import { getLibrary } from '../../../core/registry';
+
 import { ensureDefined } from '../../../core/utils/common';
 import { extend } from '../../../core/utils/extend';
 
-const quill = getQuill();
+const quill = getLibrary('quill');
 const Embed = quill.import('blots/embed');
 
 const VARIABLE_CLASS = 'dx-variable';

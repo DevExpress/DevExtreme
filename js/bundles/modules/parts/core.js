@@ -9,6 +9,10 @@ const DevExpress = require('../../../bundles/modules/core');
 require('../../../integration/jquery');
 require('../../../integration/angular');
 require('../../../integration/knockout');
+require('../../../integration/quill');
+require('../../../integration/gantt');
+require('../../../integration/diagram');
+require('../../../integration/jszip');
 
 require('../../../localization/globalize/core');
 require('../../../localization/globalize/message');

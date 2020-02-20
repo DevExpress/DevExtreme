@@ -1,5 +1,5 @@
 import ConverterController from '../converterController';
-import { getQuill } from '../quill_importer';
+import { getLibrary } from '../../../core/registry';
 import { isFunction } from '../../../core/utils/type';
 
 const ESCAPING_MAP = {
@@ -16,8 +16,9 @@ const LIST_ITEM_BLOT_NAME = 'list-item';
 class DeltaConverter {
 
     constructor() {
-        this.TextBlot = getQuill().import('blots/text');
-        this.BreakBlot = getQuill().import('blots/break');
+        const Quill = getLibrary('quill');
+        this.TextBlot = Quill.import('blots/text');
+        this.BreakBlot = Quill.import('blots/break');
     }
 
     setQuillInstance(quillInstance) {

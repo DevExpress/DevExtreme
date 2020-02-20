@@ -1,21 +1,16 @@
+import { getLibrary } from 'core/registry';
+import 'integration/gantt';
 
-SystemJS.config({
-    map: {
-        'devexpress-gantt': '/testing/helpers/noGantt.js'
-    }
-});
+QUnit.module('Import devexpress-gantt', function() {
+    QUnit.test('there is no error when the devexpress-gantt script referenced', function(assert) {
+        let isOK = true;
 
-define(function(require) {
-    const getGantt = require('ui/gantt/gantt_importer').getGanttViewCore;
+        try {
+            getLibrary('gantt');
+        } catch(e) {
+            isOK = false;
+        }
 
-    QUnit.module('Import devexpress-gantt', function() {
-        QUnit.test('throw an error if the devexpress-gantt script isn\'t referenced', function(assert) {
-            assert.throws(
-                function() { getGantt(); },
-                function(e) {
-                    return /(E1041)[\s\S]*(devexpress-gantt)/.test(e.message);
-                }
-            );
-        });
+        assert.ok(isOK);
     });
 });

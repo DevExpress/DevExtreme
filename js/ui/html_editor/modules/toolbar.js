@@ -1,4 +1,4 @@
-import { getQuill } from '../quill_importer';
+import { getLibrary } from '../../../core/registry';
 
 import $ from '../../../core/renderer';
 
@@ -16,7 +16,7 @@ import { titleize } from '../../../core/utils/inflector';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils';
 
-const BaseModule = getQuill().import('core/module');
+const BaseModule = getLibrary('quill').import('core/module');
 
 const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
 const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';

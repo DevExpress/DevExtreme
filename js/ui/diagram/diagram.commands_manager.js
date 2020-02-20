@@ -1,4 +1,5 @@
-import { getDiagram } from './diagram.importer';
+import { getLibrary } from '../../core/registry';
+
 import { extend } from '../../core/utils/extend';
 import { fileSaver } from '../../exporter/file_saver';
 import { isFunction } from '../../core/utils/type';
@@ -17,7 +18,7 @@ const DiagramCommandsManager = {
     SHOW_OPTIONS_COMMAND_NAME: 'options',
 
     getAllCommands: function() {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         return this.allCommands ||
             (this.allCommands = {
                 separator: SEPARATOR,

@@ -7,7 +7,7 @@ import { errors } from '../data/errors';
 import { Deferred } from '../core/utils/deferred';
 import { getWindow } from '../core/utils/window';
 import { fileSaver } from '../exporter/file_saver';
-import Errors from '../ui/widget/ui.errors';
+import { getLibrary } from '../core/registry';
 
 import FileSystemProviderBase from './provider_base';
 import ErrorCode from './errors';
@@ -161,7 +161,7 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
     }
 
     _downloadMultipleFiles(files) {
-        const jsZip = getJSZip();
+        const jsZip = getLibrary('JSZip');
         const zip = new jsZip();
 
         files.forEach(file => zip.file(file.name, this._getFileContent(file), { base64: true }));
@@ -375,27 +375,6 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
         return new window.FileReader();
     }
 
-}
-
-let JSZip;
-
-function getJSZip() {
-    if(!JSZip) {
-        JSZip = requestJSZip();
-    }
-
-    return JSZip;
-}
-
-function requestJSZip() {
-    const window = getWindow();
-    const jsZip = window && window.JSZip || require('jszip');
-
-    if(!jsZip) {
-        throw Errors.Error('E1041', 'JSZip');
-    }
-
-    return jsZip;
 }
 
 module.exports = ObjectFileSystemProvider;

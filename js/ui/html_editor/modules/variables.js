@@ -1,4 +1,5 @@
-import { getQuill } from '../quill_importer';
+import { getLibrary } from '../../../core/registry';
+
 
 import $ from '../../../core/renderer';
 import PopupModule from './popup';
@@ -9,7 +10,8 @@ import { extend } from '../../../core/utils/extend';
 const VARIABLE_FORMAT_CLASS = 'dx-variable-format';
 const ACTIVE_FORMAT_CLASS = 'dx-format-active';
 
-getQuill()
+Registry
+    .get('quill')
     .register({ 'formats/variable': Variable }, true);
 
 class VariableModule extends PopupModule {

@@ -1,4 +1,5 @@
-import { getQuill } from './quill_importer';
+import { getLibrary } from '../../core/registry';
+
 
 class QuillRegistrator {
     constructor() {
@@ -75,7 +76,7 @@ class QuillRegistrator {
     }
 
     getQuill() {
-        return getQuill();
+        return getLibrary('quill');
     }
 }
 

@@ -1,7 +1,8 @@
-import { getQuill } from '../quill_importer';
+import { getLibrary } from '../../../core/registry';
+
 import { isObject } from '../../../core/utils/type';
 
-const quill = getQuill();
+const quill = getLibrary('quill');
 const Image = quill.import('formats/image');
 
 class ExtImage extends Image {

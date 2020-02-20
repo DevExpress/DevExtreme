@@ -1,6 +1,6 @@
-import { getQuill } from '../quill_importer';
+import { getLibrary } from '../../../core/registry';
 
-const Theme = getQuill().import('core/theme');
+const Theme = getLibrary('quill').import('core/theme');
 
 class BaseTheme extends Theme {
     constructor(quill, options) {

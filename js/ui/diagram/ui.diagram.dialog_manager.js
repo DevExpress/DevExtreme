@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
-import { getDiagram } from './diagram.importer';
+import { getLibrary } from '../../core/registry';
+
 import messageLocalization from '../../localization/message';
 
 const FileUploader = require('../file_uploader');
@@ -7,7 +8,7 @@ import { getWindow } from '../../core/utils/window';
 
 const DiagramDialogManager = {
     getConfigurations: function() {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         return this.dialogList ||
             (this.dialogList = [
                 {

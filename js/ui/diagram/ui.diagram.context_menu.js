@@ -6,7 +6,7 @@ import DiagramCommandsManager from './diagram.commands_manager';
 import DiagramMenuHelper from './ui.diagram.menu_helper';
 
 import DiagramBar from './diagram.bar';
-import { getDiagram } from './diagram.importer';
+import { getLibrary } from '../../core/registry';
 
 const DIAGRAM_TOUCHBAR_CLASS = 'dx-diagram-touchbar';
 const DIAGRAM_TOUCHBAR_TARGET_CLASS = 'dx-diagram-touchbar-target';
@@ -38,7 +38,7 @@ class DiagramContextMenu extends Widget {
         const $contextMenu = $('<div>')
             .appendTo(this.$element());
 
-        const { Browser } = getDiagram();
+        const { Browser } = getLibrary('diagram');
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
             closeOnOutsideClick: false,
             showEvent: '',
@@ -66,7 +66,7 @@ class DiagramContextMenu extends Widget {
     }
     _show(x, y, selection) {
         this.clickPosition = { x, y };
-        const { Browser } = getDiagram();
+        const { Browser } = getLibrary('diagram');
 
         this._contextMenuInstance.hide();
         if(Browser.TouchUI) {

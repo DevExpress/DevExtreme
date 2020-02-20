@@ -1,5 +1,5 @@
 import Widget from '../widget/ui.widget';
-import { getGanttViewCore } from './gantt_importer';
+import { getLibrary } from '../../core/registry';
 import { TaskAreaContainer } from './ui.gantt.task.area.container';
 
 export class GanttView extends Widget {
@@ -12,7 +12,7 @@ export class GanttView extends Widget {
         this._onPopupMenuShowing = this._createActionByOption('onPopupMenuShowing');
     }
     _initMarkup() {
-        const { GanttView } = getGanttViewCore();
+        const { GanttView } = getLibrary('gantt');
         this._ganttViewCore = new GanttView(this.$element().get(0), this, {
             showResources: this.option('showResources'),
             taskTitlePosition: this._getTaskTitlePosition(this.option('taskTitlePosition')),

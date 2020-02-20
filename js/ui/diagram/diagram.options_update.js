@@ -1,11 +1,11 @@
 import DiagramBar from './diagram.bar';
-import { getDiagram } from './diagram.importer';
+import { getLibrary } from '../../core/registry';
 
 class DiagramOptionsUpdateBar extends DiagramBar {
     constructor(owner) {
         super(owner);
 
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this.commandOptions = {};
         this.commandOptions[DiagramCommand.Fullscreen] = 'fullScreen';
         this.commandOptions[DiagramCommand.ZoomLevel] = function(value) {
@@ -16,7 +16,7 @@ class DiagramOptionsUpdateBar extends DiagramBar {
             }
         };
         this.commandOptions[DiagramCommand.SwitchAutoZoom] = function(value) {
-            const { AutoZoomMode } = getDiagram();
+            const { AutoZoomMode } = getLibrary('diagram');
             switch(value) {
                 case AutoZoomMode.FitContent:
                     this._setOption('autoZoom', 'fitContent');
@@ -45,7 +45,7 @@ class DiagramOptionsUpdateBar extends DiagramBar {
             this._setOption('pageOrientation', value ? 'landscape' : 'portrait');
         };
         this.commandOptions[DiagramCommand.ViewUnits] = function(value) {
-            const { DiagramUnit } = getDiagram();
+            const { DiagramUnit } = getLibrary('diagram');
             switch(value) {
                 case DiagramUnit.In:
                     this._setOption('viewUnits', 'in');

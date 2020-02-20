@@ -1,22 +1,18 @@
 
-SystemJS.config({
-    map: {
-        'quill': '/testing/helpers/quillDependencies/noQuill.js'
-    }
-});
+import { getLibrary } from 'core/registry';
+import 'integration/quill';
 
-define(function(require) {
-    const getQuill = require('ui/html_editor/quill_importer').getQuill;
+QUnit.module('Import 3rd party', function() {
+    QUnit.test('there is no error when the quill script referenced', function(assert) {
+        let isOK = true;
 
-    QUnit.module('Import 3rd party', function() {
-        QUnit.test('it throw an error if the quill script isn\'t referenced', function(assert) {
-            assert.throws(
-                function() { getQuill(); },
-                function(e) {
-                    return /(E1041)[\s\S]*(Quill)/.test(e.message);
-                },
-                'The Quill script isn\'t referenced'
-            );
-        });
+        try {
+            getLibrary('quill');
+        } catch(e) {
+            isOK = false;
+        }
+
+        assert.ok(isOK);
     });
 });
+

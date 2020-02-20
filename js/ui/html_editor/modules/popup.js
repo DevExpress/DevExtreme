@@ -1,4 +1,5 @@
-import { getQuill } from '../quill_importer';
+import { getLibrary } from '../../../core/registry';
+
 import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';
 import { getWindow } from '../../../core/utils/window';
@@ -8,7 +9,7 @@ import List from '../../list';
 
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const SUGGESTION_LIST_WRAPPER_CLASS = 'dx-suggestion-list-wrapper';
-const BaseModule = getQuill().import('core/module');
+const BaseModule = getLibrary('quill').import('core/module');
 
 const MIN_HEIGHT = 100;
 

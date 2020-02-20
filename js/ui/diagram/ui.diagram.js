@@ -7,7 +7,7 @@ import { extend } from '../../core/utils/extend';
 import typeUtils from '../../core/utils/type';
 import dataCoreUtils from '../../core/utils/data';
 import positionUtils from '../../animation/position';
-import { getDiagram } from './diagram.importer';
+import { getLibrary } from '../../core/registry';
 import { hasWindow, getWindow } from '../../core/utils/window';
 import domUtils from '../../core/utils/dom';
 import eventsEngine from '../../events/core/events_engine';
@@ -402,7 +402,7 @@ class Diagram extends Widget {
     }
 
     _initDiagram() {
-        const { DiagramControl } = getDiagram();
+        const { DiagramControl } = getLibrary('diagram');
         this._diagramInstance = new DiagramControl();
         this._diagramInstance.onChanged = this._raiseDataChangeAction.bind(this);
         this._diagramInstance.onEdgeInserted = this._raiseEdgeInsertedAction.bind(this);
@@ -507,12 +507,12 @@ class Diagram extends Widget {
     }
     _getDiagramData() {
         let value;
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.Export, function(data) { value = data; });
         return value;
     }
     _setDiagramData(data, keepExistingItems) {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.Import, { data, keepExistingItems });
     }
 
@@ -533,7 +533,7 @@ class Diagram extends Widget {
     _bindDiagramData() {
         if(this._updateDiagramLockCount || !this._isBindingMode()) return;
 
-        const { DiagramCommand, ConnectorLineOption, ConnectorLineEnding } = getDiagram();
+        const { DiagramCommand, ConnectorLineOption, ConnectorLineEnding } = getLibrary('diagram');
         let lineOptionGetter;
         let lineOptionSetter;
         let startLineEndingGetter;
@@ -676,7 +676,7 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.BindDocument, data);
     }
     _getDataBindingLayoutParameters() {
-        const { DataLayoutType, DataLayoutOrientation } = getDiagram();
+        const { DataLayoutType, DataLayoutOrientation } = getLibrary('diagram');
         const layoutParametersOption = this.option('nodes.autoLayout') || 'off';
         const layoutType = layoutParametersOption.type || layoutParametersOption;
         if(layoutType === 'off' || (layoutType === 'auto' && this._hasNodePositionExprs())) {
@@ -709,7 +709,7 @@ class Diagram extends Widget {
         return this.option('nodes.topExpr') && this.option('nodes.leftExpr');
     }
     _getAutoZoomValue(option) {
-        const { AutoZoomMode } = getDiagram();
+        const { AutoZoomMode } = getLibrary('diagram');
         switch(option) {
             case 'fitContent':
                 return AutoZoomMode.FitContent;
@@ -891,7 +891,7 @@ class Diagram extends Widget {
     }
 
     _getDiagramUnitValue(value) {
-        const { DiagramUnit } = getDiagram();
+        const { DiagramUnit } = getLibrary('diagram');
         switch(value) {
             case 'in':
                 return DiagramUnit.In;
@@ -904,7 +904,7 @@ class Diagram extends Widget {
         }
     }
     _updateReadOnlyState() {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         const readOnly = this.option('readOnly') || this.option('disabled');
         this._executeDiagramCommand(DiagramCommand.ToggleReadOnly, readOnly);
         this._setToolboxVisible(!readOnly);
@@ -915,36 +915,36 @@ class Diagram extends Widget {
             zoomLevel = this.option('zoomLevel');
         }
 
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.ZoomLevel, zoomLevel);
     }
     _updateZoomLevelItemsState() {
         const zoomLevelItems = this.option('zoomLevel.items');
         if(!Array.isArray(zoomLevelItems)) return;
 
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.ZoomLevelItems, zoomLevelItems);
     }
     _updateAutoZoomState() {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.SwitchAutoZoom, this._getAutoZoomValue(this.option('autoZoom')));
     }
     _updateSimpleViewState() {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.ToggleSimpleView, this.option('simpleView'));
     }
     _updateFullscreenState() {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         const fullScreen = this.option('fullScreen');
         this._executeDiagramCommand(DiagramCommand.Fullscreen, fullScreen);
         this._onToggleFullScreen(fullScreen);
     }
     _updateShowGridState() {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.ShowGrid, this.option('showGrid'));
     }
     _updateSnapToGridState() {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.SnapToGrid, this.option('snapToGrid'));
     }
     _updateGridSizeState() {
@@ -953,18 +953,18 @@ class Diagram extends Widget {
             gridSize = this.option('gridSize');
         }
 
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.GridSize, gridSize);
     }
     _updateGridSizeItemsState() {
         const gridSizeItems = this.option('gridSize.items');
         if(!Array.isArray(gridSizeItems)) return;
 
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.GridSizeItems, gridSizeItems);
     }
     _updateUnitItems() {
-        const { DiagramLocalizationService } = getDiagram();
+        const { DiagramLocalizationService } = getLibrary('diagram');
         const items = this._getUnitItems();
         if(this._unitItems !== items) {
             this._unitItems = items;
@@ -972,7 +972,7 @@ class Diagram extends Widget {
         }
     }
     _getUnitItems() {
-        const { DiagramUnit } = getDiagram();
+        const { DiagramUnit } = getLibrary('diagram');
         const items = {};
         items[DiagramUnit.In] = messageLocalization.format('dxDiagram-unitIn');
         items[DiagramUnit.Cm] = messageLocalization.format('dxDiagram-unitCm');
@@ -980,43 +980,43 @@ class Diagram extends Widget {
         return items;
     }
     _updateFormatUnitsMethod() {
-        const { DiagramLocalizationService } = getDiagram();
+        const { DiagramLocalizationService } = getLibrary('diagram');
         DiagramLocalizationService.formatUnit = function(value) {
             return numberLocalization.format(value);
         };
     }
     _updateViewUnitsState() {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.ViewUnits, this._getDiagramUnitValue(this.option('viewUnits')));
     }
     _updateUnitsState() {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.Units, this._getDiagramUnitValue(this.option('units')));
     }
     _updatePageSizeState() {
         const pageSize = this.option('pageSize');
         if(!pageSize || !pageSize.width || !pageSize.height) return;
 
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.PageSize, pageSize);
     }
     _updatePageSizeItemsState() {
         const pageSizeItems = this.option('pageSize.items');
         if(!Array.isArray(pageSizeItems)) return;
 
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.PageSizeItems, pageSizeItems);
     }
     _updatePageOrientationState() {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.PageLandscape, this.option('pageOrientation') === 'landscape');
     }
     _updatePageColorState() {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         this._executeDiagramCommand(DiagramCommand.PageColor, this.option('pageColor'));
     }
     _updateShapeTexts() {
-        const { DiagramLocalizationService } = getDiagram();
+        const { DiagramLocalizationService } = getLibrary('diagram');
         const texts = this._getShapeTexts();
         if(this._shapeTexts !== texts) {
             this._shapeTexts = texts;
@@ -1024,7 +1024,7 @@ class Diagram extends Widget {
         }
     }
     _getShapeTexts() {
-        const { ShapeTypes } = getDiagram();
+        const { ShapeTypes } = getLibrary('diagram');
         const texts = {};
         // Standard
         texts[ShapeTypes.Text] = messageLocalization.format('dxDiagram-shapeText');
@@ -1086,7 +1086,7 @@ class Diagram extends Widget {
         this._executeDiagramCommand(command, callback);
     }
     _getDiagramExportToCommand(format) {
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand } = getLibrary('diagram');
         switch(format) {
             case 'png':
                 return DiagramCommand.ExportPng;
@@ -1768,7 +1768,7 @@ class Diagram extends Widget {
         this._selectionChangedAction({ items: nativeItems.map(this._nativeItemToDiagramItem.bind(this)) });
     }
     _nativeItemToDiagramItem(nativeItem) {
-        const { NativeShape } = getDiagram();
+        const { NativeShape } = getLibrary('diagram');
         const createMethod = nativeItem instanceof NativeShape ?
             this._nativeShapeToDiagramShape.bind(this) :
             this._nativeConnectorToDiagramConnector.bind(this);

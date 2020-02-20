@@ -1,6 +1,6 @@
-import { getQuill } from '../quill_importer';
+import { getLibrary } from '../../../core/registry';
 
-const quill = getQuill();
+const quill = getLibrary('quill');
 const FontStyle = quill.import('attributors/style/font');
 
 FontStyle.whitelist = null;

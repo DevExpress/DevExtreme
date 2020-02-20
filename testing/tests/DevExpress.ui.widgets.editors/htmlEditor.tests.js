@@ -1,7 +1,8 @@
 import 'common.css!';
+import 'integration/quill';
 import '../../helpers/ignoreQuillTimers.js';
-import './htmlEditorParts/initFixture.js';
 
+import './htmlEditorParts/initFixture.js';
 import './htmlEditorParts/converters.tests.js';
 import './htmlEditorParts/quillRegistrator.tests.js';
 import './htmlEditorParts/markup.tests.js';

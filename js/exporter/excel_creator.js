@@ -2,9 +2,8 @@ import Class from '../core/class';
 import { getWindow } from '../core/utils/window';
 import { isDefined, isString, isDate, isBoolean, isObject, isFunction } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
-import errors from '../ui/widget/ui.errors';
 import stringUtils from '../core/utils/string';
-import JSZip from 'jszip';
+import { getLibrary } from '../core/registry';
 import fileSaver from './file_saver';
 import excelFormatConverter from './excel_format_converter';
 import ExcelFile from './excel/excel.file';
@@ -664,17 +663,8 @@ const ExcelCreator = Class.inherit({
         this._dataProvider = dataProvider;
         this._excelFile = new ExcelFile();
 
-        if(isDefined(ExcelCreator.JSZip)) {
-            this._zip = new ExcelCreator.JSZip();
-        } else {
-            this._zip = null;
-        }
-    },
-
-    _checkZipState: function() {
-        if(!this._zip) {
-            throw errors.Error('E1041', 'JSZip');
-        }
+        const JSZip = getLibrary('JSZip');
+        this._zip = new JSZip();
     },
 
     ready: function() {
@@ -689,7 +679,7 @@ const ExcelCreator = Class.inherit({
         };
         const deferred = new Deferred();
 
-        this._checkZipState();
+        this._requestJsZip();
         this._generateContent();
 
         if(this._zip.generateAsync) {
@@ -698,10 +688,14 @@ const ExcelCreator = Class.inherit({
             deferred.resolve(this._zip.generate(options));
         }
         return deferred;
+    },
+
+    _requestJsZip: function() {
+        if(!this._zip) {
+            this._zip = getLibrary('JSZip');
+        }
     }
 });
-
-ExcelCreator.JSZip = JSZip;
 
 exports.ExcelCreator = ExcelCreator;
 
@@ -709,7 +703,7 @@ exports.getData = function(data, options) {
     // TODO: Looks like there is no need to export ExcelCreator any more?
     const excelCreator = new exports.ExcelCreator(data, options);
 
-    excelCreator._checkZipState();
+    excelCreator._requestJsZip();
 
     return excelCreator.ready().then(() => excelCreator.getData(isFunction(getWindow().Blob)));
 };

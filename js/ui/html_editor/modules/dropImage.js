@@ -1,4 +1,4 @@
-import { getQuill } from '../quill_importer';
+import { getLibrary } from '../../../core/registry';
 
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils';
@@ -6,7 +6,7 @@ import { each } from '../../../core/utils/iterator';
 import browser from '../../../core/utils/browser';
 import { getWindow } from '../../../core/utils/window';
 
-const BaseModule = getQuill().import('core/module');
+const BaseModule = getLibrary('quill').import('core/module');
 
 class DropImageModule extends BaseModule {
     constructor(quill, options) {

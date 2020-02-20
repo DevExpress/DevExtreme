@@ -1,8 +1,8 @@
-import { getDiagram } from './diagram.importer';
+import { getLibrary } from '../../core/registry';
 
 class DiagramBar {
     constructor(owner) {
-        const { EventDispatcher } = getDiagram();
+        const { EventDispatcher } = getLibrary('diagram');
         this.onChanged = new EventDispatcher(); // IBar.onChanged: EventDispatcher<IBarListener>
         this._owner = owner;
     }

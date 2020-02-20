@@ -1,12 +1,12 @@
 import DeltaConverter from 'ui/html_editor/converters/delta';
 import MarkdownConverter from 'ui/html_editor/converters/markdown';
-import { getQuill } from 'ui/html_editor/quill_importer';
+import { getLibrary } from 'core/registry';
 
 const { test } = QUnit;
 
 QUnit.module('Delta converter', {
     beforeEach: function() {
-        const Quill = getQuill();
+        const Quill = getLibrary('quill');
         this.deltaConverter = new DeltaConverter();
         this.quillInstance = new Quill(document.getElementById('htmlEditor'), {});
         this.deltaConverter.setQuillInstance(this.quillInstance);

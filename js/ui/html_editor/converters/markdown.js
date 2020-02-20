@@ -2,23 +2,16 @@
 import TurnDown from 'turndown';
 import ShowDown from 'showdown';
 
-import { getWindow } from '../../../core/utils/window';
-import Errors from '../../widget/ui.errors';
+import { getLibrary, addLibrary } from '../../../core/registry';
 import converterController from '../converterController';
+
+TurnDown && addLibrary('turndown', TurnDown);
+ShowDown && addLibrary('showdown', ShowDown);
 
 class MarkdownConverter {
     constructor() {
-        const window = getWindow();
-        const turndown = window && window.TurndownService || TurnDown;
-        const showdown = window && window.showdown || ShowDown;
-
-        if(!turndown) {
-            throw Errors.Error('E1041', 'Turndown');
-        }
-
-        if(!showdown) {
-            throw Errors.Error('E1041', 'Showdown');
-        }
+        const turndown = getLibrary('turndown');
+        const showdown = getLibrary('showdown');
 
         this._html2Markdown = new turndown();
         this._markdown2Html = new showdown.Converter({
