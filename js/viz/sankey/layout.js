@@ -185,7 +185,9 @@ const layout = {
     },
 
     _computeLinks: function(links, rects, cascades) {
-        const yOffsets = {}; const paths = []; const result = [];
+        const yOffsets = {};
+        const paths = [];
+        const result = [];
 
         cascades.forEach(cascade => {
             Object.keys(cascade).forEach(nodeTitle => {

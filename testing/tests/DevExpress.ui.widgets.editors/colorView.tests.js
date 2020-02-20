@@ -689,7 +689,9 @@ QUnit.module('ColorView', {
 
         colorView.option('value', 'rgba(48, 84, 46, 0.19)');
 
-        const paletteHandlePosition = colorView._$paletteHandle.position(); const alphaChannelHandlePosition = colorView._$alphaChannelHandle.position(); const hueScaleHandlePosition = colorView._$hueScaleHandle.position();
+        const paletteHandlePosition = colorView._$paletteHandle.position();
+        const alphaChannelHandlePosition = colorView._$alphaChannelHandle.position();
+        const hueScaleHandlePosition = colorView._$hueScaleHandle.position();
 
         assert.equal(Math.floor(paletteHandlePosition.left), 116);
         assert.equal(Math.floor(paletteHandlePosition.top), 186);

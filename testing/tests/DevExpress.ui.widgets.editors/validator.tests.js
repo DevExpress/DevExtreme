@@ -352,7 +352,9 @@ QUnit.module('Validator specific tests', {
     });
 
     QUnit.test('Validation rules are not modified after validate', function(assert) {
-        const value = ''; const name = 'Login'; const handler = sinon.stub();
+        const value = '';
+        const name = 'Login';
+        const handler = sinon.stub();
 
 
         const validator = this.fixture.createValidator({

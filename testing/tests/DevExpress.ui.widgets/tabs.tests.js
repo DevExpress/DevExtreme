@@ -58,7 +58,8 @@ QUnit.module('general', () => {
             tabs.eq(clickedTabIndex).trigger('dxclick');
 
             tabs.each(function(tabIndex) {
-                const tab = $(this); const isClickedTab = tabIndex === clickedTabIndex;
+                const tab = $(this);
+                const isClickedTab = tabIndex === clickedTabIndex;
 
                 assert.ok(isClickedTab ? tab.hasClass(TAB_SELECTED_CLASS) : !tab.hasClass(TAB_SELECTED_CLASS), 'tab selected state');
             });
@@ -77,7 +78,8 @@ QUnit.module('general', () => {
         });
         const tabsInstance = tabsElement.dxTabs('instance');
 
-        const tabElements = $(tabsInstance._itemElements()); const tabElement = tabElements.eq(1);
+        const tabElements = $(tabsInstance._itemElements());
+        const tabElement = tabElements.eq(1);
 
         tabElement.trigger('dxclick');
 
@@ -610,7 +612,8 @@ QUnit.module('RTL', () => {
             width: 100
         });
 
-        const leftButtonIcon = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS).dxButton('option', 'icon'); const rightButtonIcon = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS).dxButton('option', 'icon');
+        const leftButtonIcon = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS).dxButton('option', 'icon');
+        const rightButtonIcon = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS).dxButton('option', 'icon');
 
         assert.equal(leftButtonIcon, BUTTON_NEXT_ICON, 'Left button icon is OK');
         assert.equal(rightButtonIcon, BUTTON_PREV_ICON, 'Right button icon is OK');
@@ -628,7 +631,8 @@ QUnit.module('RTL', () => {
 
         $element.dxTabs('option', 'rtlEnabled', false);
 
-        const leftButtonIcon = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS).dxButton('option', 'icon'); const rightButtonIcon = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS).dxButton('option', 'icon');
+        const leftButtonIcon = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS).dxButton('option', 'icon');
+        const rightButtonIcon = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS).dxButton('option', 'icon');
 
         assert.equal(leftButtonIcon, BUTTON_PREV_ICON, 'Left button icon is OK');
         assert.equal(rightButtonIcon, BUTTON_NEXT_ICON, 'Right button icon is OK');

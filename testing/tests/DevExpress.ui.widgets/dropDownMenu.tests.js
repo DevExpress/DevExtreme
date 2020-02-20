@@ -89,7 +89,8 @@ const testRendering = function(usePopover) {
         });
 
         QUnit.test('list should be rendered before onContentReady of the popup', function(assert) {
-            const ddMenu = this.element.dxDropDownMenu('instance'); const initialPopupOptions = ddMenu._popupOptions;
+            const ddMenu = this.element.dxDropDownMenu('instance');
+            const initialPopupOptions = ddMenu._popupOptions;
             try {
                 ddMenu._popupOptions = function() {
                     return $.extend(initialPopupOptions.call(ddMenu), { onContentReady: function() {
@@ -150,7 +151,8 @@ const testRendering = function(usePopover) {
         });
 
         QUnit.test('RTL support', function(assert) {
-            const RTL_SELECTOR = '.dx-rtl'; const DROPDOWNMENU_POPUP_WRAPPER_SELECTOR = '.dx-dropdownmenu-popup-wrapper';
+            const RTL_SELECTOR = '.dx-rtl';
+            const DROPDOWNMENU_POPUP_WRAPPER_SELECTOR = '.dx-dropdownmenu-popup-wrapper';
             this.element.dxDropDownMenu({
                 dataSource: new ArrayStore([
                     'Item 0',
@@ -393,7 +395,9 @@ QUnit.module('position', {
             assert.ok(true, 'unnecessary test on mobile devices');
             return;
         }
-        const element = $('#dropDownMenu').dxDropDownMenu(); const instance = element.dxDropDownMenu('instance'); const defaultPosition = { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 4 } };
+        const element = $('#dropDownMenu').dxDropDownMenu();
+        const instance = element.dxDropDownMenu('instance');
+        const defaultPosition = { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 4 } };
 
         assert.deepEqual(defaultPosition, instance.option('popupPosition'));
         assert.notOk(instance.option('usePopover'));
@@ -449,7 +453,8 @@ QUnit.module('behavior', moduleConfig(), () => {
         });
         this.toggleMenu();
 
-        const popup = this.popup; const $list = this.$list;
+        const popup = this.popup;
+        const $list = this.$list;
 
         assert.equal(popup.option('visible'), true, 'popup is visible');
 
@@ -602,7 +607,9 @@ QUnit.module('integration', () => {
             onItemRendered: noop,
             opened: true
         };
-        const itemRenderedCallback = sinon.stub(options, 'onItemRendered'); const dropDownMenu = $('#dropDownMenu').dxDropDownMenu(options).dxDropDownMenu('instance'); const itemRenderedCallbackArgs = itemRenderedCallback.getCall(0).args[0];
+        const itemRenderedCallback = sinon.stub(options, 'onItemRendered');
+        const dropDownMenu = $('#dropDownMenu').dxDropDownMenu(options).dxDropDownMenu('instance');
+        const itemRenderedCallbackArgs = itemRenderedCallback.getCall(0).args[0];
 
         assert.equal(itemRenderedCallback.callCount, 2, 'onItemRendered was fired');
         assert.equal(dropDownMenu._list.element(), itemRenderedCallbackArgs.element, 'onItemRendered was fired in the right context');
@@ -626,7 +633,12 @@ QUnit.module('integration', () => {
 
 QUnit.module('regression', moduleConfig(), () => {
     QUnit.test('B233109: dropDownMenu menu interference', function(assert) {
-        const ddMenu1 = $('#dropDownMenu').dxDropDownMenu({ items: [{ text: 'test1' }], opened: true }).dxDropDownMenu('instance'); const ddMenu2 = $('#dropDownMenuSecond').dxDropDownMenu({ items: [{ text: 'test2' }], opened: true }).dxDropDownMenu('instance'); const $button1 = $(ddMenu1._button.$element()); const $button2 = $(ddMenu2._button.$element()); const popup1 = ddMenu1._popup; const popup2 = ddMenu2._popup;
+        const ddMenu1 = $('#dropDownMenu').dxDropDownMenu({ items: [{ text: 'test1' }], opened: true }).dxDropDownMenu('instance');
+        const ddMenu2 = $('#dropDownMenuSecond').dxDropDownMenu({ items: [{ text: 'test2' }], opened: true }).dxDropDownMenu('instance');
+        const $button1 = $(ddMenu1._button.$element());
+        const $button2 = $(ddMenu2._button.$element());
+        const popup1 = ddMenu1._popup;
+        const popup2 = ddMenu2._popup;
 
         ddMenu1.close();
         ddMenu2.close();
@@ -838,7 +850,9 @@ QUnit.module('keyboard navigation', {
 
     QUnit.test('No exceptions on \'tab\' key pressing when popup is not opened', function(assert) {
         assert.expect(0);
-        const instance = $('#dropDownMenuKeyboard').dxDropDownMenu({ focusStateEnabled: true }).dxDropDownMenu('instance'); const $element = $(instance.$element()); const keyboard = keyboardMock($element);
+        const instance = $('#dropDownMenuKeyboard').dxDropDownMenu({ focusStateEnabled: true }).dxDropDownMenu('instance');
+        const $element = $(instance.$element());
+        const keyboard = keyboardMock($element);
 
         keyboard.keyDown('tab');
     });

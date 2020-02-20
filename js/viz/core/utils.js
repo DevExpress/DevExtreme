@@ -85,7 +85,8 @@ const getDistance = function(x1, y1, x2, y2) {
 };
 
 const getDecimalOrder = function(number) {
-    let n = abs(number); let cn;
+    let n = abs(number);
+    let cn;
     if(!_isNaN(n)) {
         if(n > 0) {
             n = log(n) / LN10;
@@ -242,7 +243,9 @@ extend(exports, {
     },
 
     enumParser: function(values) {
-        const stored = {}; let i; let ii;
+        const stored = {};
+        let i;
+        let ii;
         for(i = 0, ii = values.length; i < ii; ++i) {
             stored[normalizeEnum(values[i])] = 1;
         }

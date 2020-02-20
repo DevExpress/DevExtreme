@@ -3332,7 +3332,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             { name: 'Zeb', phone: '6666666', isRoom: false }
         ];
 
-        const store = new ArrayStore(this.data); const loadSpy = sinon.spy((loadOptions) => store.load(loadOptions));
+        const store = new ArrayStore(this.data);
+        const loadSpy = sinon.spy((loadOptions) => store.load(loadOptions));
 
         this.options = {
             focusedRowEnabled: true,

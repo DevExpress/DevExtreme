@@ -17283,7 +17283,8 @@ QUnit.test('Change page index when virtual scrolling is enabled', function(asser
 QUnit.test('Filtering on load when virtual scrolling', function(assert) {
     // arrange
     const generateDataSource = function(count) {
-        const result = []; let i;
+        const result = [];
+        let i;
         for(i = 0; i < count; ++i) {
             result.push({ firstName: 'name_' + i, lastName: 'lastName_' + i });
         }
@@ -17316,7 +17317,8 @@ QUnit.test('Filtering on load when virtual scrolling', function(assert) {
 QUnit.test('DataGrid should not paginate to the already loaded page if it is not in the viewport and it\'s row was focused (T726994)', function(assert) {
     // arrange
     const generateDataSource = function(count) {
-        const result = []; let i;
+        const result = [];
+        let i;
         for(i = 0; i < count; ++i) {
             result.push({ firstName: 'name_' + i, lastName: 'lastName_' + i });
         }
