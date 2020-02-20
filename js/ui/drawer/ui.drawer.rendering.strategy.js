@@ -210,10 +210,6 @@ class DrawerStrategy {
         return $(this.getDrawerInstance().content());
     }
 
-    getWidth() {
-        return this.getDrawerInstance().$element().get(0).getBoundingClientRect().width;
-    }
-
     setPanelSize(calcFromRealPanelSize) { // TODO: keep for ui.file_manager.adaptivity.js
         this.refreshPanelElementSize(calcFromRealPanelSize);
     }
