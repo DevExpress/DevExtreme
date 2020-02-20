@@ -82,6 +82,12 @@ DevExpress.localization = require('../../localization');
 DevExpress.templateRendered = require('../../core/templates/template_base').renderedCallbacks;
 DevExpress.setTemplateEngine = require('../../core/templates/template_engine_registry').setTemplateEngine;
 
-DevExpress.registry = require('../../core/registry').default;
+const Registry = require('../../core/registry');
+
+DevExpress.registry = {
+    add: Registry.addLibrary,
+    get: Registry.getLibrary,
+    reset: Registry.resetRegistry
+};
 
 module.exports = DevExpress;

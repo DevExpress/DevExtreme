@@ -52,9 +52,3 @@ export function resetRegistry() {
         delete registry[lib];
     }
 }
-
-export default {
-    add: addLibrary,
-    get: getLibrary,
-    reset: resetRegistry
-};
