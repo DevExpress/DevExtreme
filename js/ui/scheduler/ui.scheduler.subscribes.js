@@ -241,10 +241,10 @@ const subscribes = {
         let startDate = appointmentFields.startDate;
         let endDate = appointmentFields.endDate;
 
-        if(!this._isAppointmentRecurrence(data)) {
-            startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
-            endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
-        }
+        // if(!this._isAppointmentRecurrence(data)) {
+        //     startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
+        //     endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
+        // }
 
         const formatType = format || this.fire('_getTypeFormat', startDate, endDate, appointmentFields.allDay);
 
@@ -468,9 +468,9 @@ const subscribes = {
     mapAppointmentFields: function(config) {
         const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement);
 
-        if(this._isAppointmentRecurrence(config.itemData)) {
-            this._convertDatesByTimezoneBack(false, targetedData);
-        }
+        // if(this._isAppointmentRecurrence(config.itemData)) {
+        //     this._convertDatesByTimezoneBack(false, targetedData);
+        // }
 
         return {
             appointmentData: config.itemData,
@@ -768,14 +768,14 @@ const subscribes = {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
 
-        const recurringData = this._getSingleAppointmentData(appointmentData, {
+        const visibleData = this._getSingleAppointmentData(appointmentData, {
             skipDateCalculation: true,
             $appointment: $appointmentElement,
             skipHoursProcessing: true
         });
         const result = {};
 
-        extend(true, result, appointmentData, recurringData);
+        extend(true, result, appointmentData, visibleData);
 
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 
