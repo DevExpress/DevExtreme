@@ -99,7 +99,7 @@ const Drawer = Widget.inherit({
         this.$element().addClass(DRAWER_CLASS);
 
         this._animations = [];
-        this._animationPromise = undefined;
+        this._whenAnimationCompleted = undefined;
         this._whenPanelContentRendered = undefined;
         this._whenPanelContentRefreshed = undefined;
 
@@ -373,8 +373,8 @@ const Drawer = Widget.inherit({
     _animationCompleteHandler() {
         this.resizeViewContent();
 
-        if(this._animationPromise) {
-            this._animationPromise.resolve();
+        if(this._whenAnimationCompleted) {
+            this._whenAnimationCompleted.resolve();
             this._animations = [];
         }
     },
@@ -524,13 +524,13 @@ const Drawer = Widget.inherit({
         return this.toggle(false);
     },
 
-    toggle(showing) {
-        showing = showing === undefined ? !this.option('opened') : showing;
+    toggle(opened) {
+        const targetOpened = opened === undefined ? !this.option('opened') : opened;
 
-        this._animationPromise = new Deferred();
-        this.option('opened', showing);
+        this._whenAnimationCompleted = new Deferred();
+        this.option('opened', targetOpened);
 
-        return this._animationPromise.promise();
+        return this._whenAnimationCompleted.promise();
     }
 
     /**
