@@ -43,7 +43,7 @@ export default class FileManagerNotificationControl extends Widget {
             opened: false,
             position: 'right',
             openedStateMode: isSmallScreen() ? 'overlap' : 'shrink',
-            closeOnOutsideClick: true,
+            closeOnOutsideClick: false,
             shading: isSmallScreen() ? true : false,
             template: (container) => this.getProgressPanel(container)
         });
@@ -128,7 +128,7 @@ export default class FileManagerNotificationControl extends Widget {
 
     getProgressPanel(container) {
         if(!this._progressPanel) {
-            this._progressPanel = this._createComponent($('<div>'), FileManagerProgressPanel, {
+            this._progressPanel = this._createComponent($('<div>'), this._getProgressPanelComponent(), {
                 onOperationClosed: ({ info }) => this._onProgressPanelOperationClosed(info),
                 onOperationCanceled: ({ info }) => this._raiseOperationCanceled(info),
                 onOperationItemCanceled: ({ item, itemIndex }) => this._raiseOperationItemCanceled(item, itemIndex),
@@ -140,6 +140,10 @@ export default class FileManagerNotificationControl extends Widget {
         }
 
         return this._progressPanel;
+    }
+
+    _getProgressPanelComponent() {
+        return FileManagerProgressPanel;
     }
 
     _notifyError(errorInfo) {
