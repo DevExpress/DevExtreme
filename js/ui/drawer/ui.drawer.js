@@ -11,7 +11,7 @@ import PushStrategy from './ui.drawer.rendering.strategy.push';
 import ShrinkStrategy from './ui.drawer.rendering.strategy.shrink';
 import OverlapStrategy from './ui.drawer.rendering.strategy.overlap';
 import { animation } from './ui.drawer.rendering.strategy';
-import clickEvent from '../../events/click';
+import { name as CLICK_EVENT_NAME } from '../../events/click';
 import fx from '../../animation/fx';
 import { Deferred } from '../../core/utils/deferred';
 import { triggerResizeEvent } from '../../core/utils/dom';
@@ -176,8 +176,8 @@ const Drawer = Widget.inherit({
             transclude
         });
 
-        eventsEngine.off(this._$viewContentWrapper, clickEvent.name);
-        eventsEngine.on(this._$viewContentWrapper, clickEvent.name, this._viewContentWrapperClickHandler.bind(this));
+        eventsEngine.off(this._$viewContentWrapper, CLICK_EVENT_NAME);
+        eventsEngine.on(this._$viewContentWrapper, CLICK_EVENT_NAME, this._viewContentWrapperClickHandler.bind(this));
 
         this._refreshPositionClass();
         this._refreshWrapperChildrenOrder();
