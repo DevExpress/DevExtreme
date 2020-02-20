@@ -16,9 +16,9 @@ const toMs = dateUtils.dateToMilliseconds;
 const WIDGET_CLASS = 'dx-scheduler';
 const APPOINTMENT_POPUP_CLASS = `${WIDGET_CLASS}-appointment-popup`;
 
-const APPOINTMENT_POPUP_WIDTH = 440;
-const APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE = 790;
-const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH = 800;
+const APPOINTMENT_POPUP_WIDTH = 485;
+const APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE = 970;
+const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH = 1000;
 
 const TOOLBAR_ITEM_AFTER_LOCATION = 'after';
 const TOOLBAR_ITEM_BEFORE_LOCATION = 'before';
@@ -197,7 +197,7 @@ export default class AppointmentPopup {
 
         const { startDateExpr, endDateExpr, recurrenceRuleExpr } = this.scheduler._dataAccessors.expr;
         const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr);
-        this._setEditorOptions(recurrenceRuleExpr, extend({}, { startDate: startDate, visible: data.recurrenceRule ? true : false }, recurrenceEditorOptions));
+        this._setEditorOptions(recurrenceRuleExpr, extend({}, { startDate: startDate }, recurrenceEditorOptions));
         this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
