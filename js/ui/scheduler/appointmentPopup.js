@@ -48,8 +48,6 @@ export default class AppointmentPopup {
         if(!this._popup) {
             const popupConfig = this._createPopupConfig(showButtons);
             this._popup = this._createPopup(popupConfig);
-        } else {
-            this._updateForm();
         }
 
         this._popup.show();
@@ -96,6 +94,7 @@ export default class AppointmentPopup {
                 return formElement;
             },
             onShowing: (e) => {
+                this._updateForm();
                 const arg = {
                     form: this._appointmentForm,
                     appointmentData: this.state.appointment.data,
@@ -139,7 +138,7 @@ export default class AppointmentPopup {
     _createForm(element) {
         const { expr } = this.scheduler._dataAccessors;
         const resources = this.scheduler.option('resources');
-        const appointmentFormOptions = this.scheduler.option('appointmentForm') || {};
+        const appointmentFormOptions = this.scheduler.option('appointmentForm') || { showStartTimezone: false, showEndTimezone: false };
         const appointmentData = this.state.appointment.data;
         const formData = this._createAppointmentFormData(appointmentData);
 

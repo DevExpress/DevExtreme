@@ -247,7 +247,7 @@ const moduleOptions = {
     beforeEach: function() {
         this.instance = $('#scheduler').dxScheduler({
             dataSource: [],
-            maxAppointmentsPerCell: null
+            maxAppointmentsPerCell: null,
         }).dxScheduler('instance');
         fx.off = true;
         this.tasks = [
