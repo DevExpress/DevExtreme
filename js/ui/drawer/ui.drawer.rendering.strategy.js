@@ -113,7 +113,7 @@ class DrawerStrategy {
         const drawer = this.getDrawerInstance();
         const revealMode = drawer.option('revealMode');
 
-        this.prepareAnimationDeferreds(animate);
+        this._prepareAnimationDeferreds(animate);
 
         const config = this._getPositionRenderingConfig(isDrawerOpened);
 
@@ -129,7 +129,7 @@ class DrawerStrategy {
         }
     }
 
-    prepareAnimationDeferreds(animate) {
+    _prepareAnimationDeferreds(animate) {
         const drawer = this.getDrawerInstance();
 
         this._contentAnimation = new Deferred();
