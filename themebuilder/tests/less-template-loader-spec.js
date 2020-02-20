@@ -368,14 +368,13 @@ describe('LessTemplateLoader', () => {
     });
 
     it('compile less with options', () => {
-        const compilerWithOptions = require('less/lib/less-node');
-        compilerWithOptions.options = {
+        lessCompiler.options = {
             'rootpath': 'modified_path/'
         };
 
         const config = {
             isBootstrap: false,
-            lessCompiler: compilerWithOptions
+            lessCompiler: lessCompiler
         };
 
         const less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
@@ -397,6 +396,7 @@ describe('LessTemplateLoader', () => {
         const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.compileLess(less, {}, metadataVariables).then(data => {
+            lessCompiler.options = {};
             assert.equal(data.css, `@font-face {
   font-family: DXIcons;
   src: url(modified_path/icons/generic.woff2) format('woff2'),url(modified_path/icons/generic.woff) format('woff'),url(modified_path/icons/generic.ttf) format('truetype');
@@ -625,5 +625,55 @@ describe('LessTemplateLoader', () => {
         ).then(data => assert.equal(data.css, testCase.expected)));
 
         return Promise.all(promises);
+    });
+
+    it('clean-css does not rebase path for the fonts', () => {
+        // With the default { rebase: true } the path will be changed to the '../../../artifacts/css' with clean-css
+        lessCompiler.options = {
+            'rootpath': '../../../../artifacts/css'
+        };
+        const config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            reader: path => {
+                assert.equal(path, 'devextreme-themebuilder/data/less/bundles/dx.light.less');
+                return new Promise(resolve => {
+                    resolve(`
+@base-bg: #fff;
+@base-font-family:'default';
+@base-text-color:#0f0;
+@font-face {
+    font-family: RobotoFallback;
+    font-style: normal;
+    font-weight: 300;
+    src: local('Roboto Light'),url(fonts/Roboto-300.woff2) format('woff2');
+}`);
+                });
+            }
+        };
+
+        // eslint-disable-next-line
+        process.chdir('..');
+
+        const lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata,
+            []
+        ).then(data => {
+            lessCompiler.options = {};
+
+            // eslint-disable-next-line
+            process.chdir('themebuilder');
+            assert.equal(data.css, `@font-face {
+  font-family: RobotoFallback;
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Light'),url(../../../../artifacts/css/fonts/Roboto-300.woff2) format('woff2');
+}`);
+        });
     });
 });

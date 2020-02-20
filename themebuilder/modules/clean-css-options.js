@@ -1,4 +1,6 @@
 module.exports = {
+    // eslint-disable-next-line
+    rebase: false,
     format: {
         breaks: {
             afterAtRule: true,
