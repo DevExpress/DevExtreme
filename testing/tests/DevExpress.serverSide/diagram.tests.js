@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import 'integration/diagram';
 import 'ui/diagram';
 import 'common.css!';
 

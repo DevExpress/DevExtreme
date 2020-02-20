@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import 'integration/gantt';
 import 'ui/gantt';
 import 'common.css!';
 

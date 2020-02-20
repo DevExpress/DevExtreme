@@ -1,6 +1,7 @@
 import $ from 'jquery';
 const { test } = QUnit;
 import 'common.css!';
+import 'integration/gantt';
 import 'ui/gantt';
 
 QUnit.testStart(() => {

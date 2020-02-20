@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'common.css!';
+import 'integration/diagram';
 import 'ui/diagram';
 
 import './diagramParts/mainToolbar.tests.js';
