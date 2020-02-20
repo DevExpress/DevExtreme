@@ -783,19 +783,19 @@ QUnit.module('Drawer behavior', () => {
         });
         const instance = $element.dxDrawer('instance');
 
-        assert.equal(instance.getDrawerPosition(), 'right');
+        assert.equal(instance.calcCurrentPosition(), 'right');
 
         instance.option('position', 'before');
 
-        assert.equal(instance.getDrawerPosition(), 'left');
+        assert.equal(instance.calcCurrentPosition(), 'left');
 
         instance.option('rtlEnabled', true);
 
-        assert.equal(instance.getDrawerPosition(), 'right');
+        assert.equal(instance.calcCurrentPosition(), 'right');
 
         instance.option('position', 'after');
 
-        assert.equal(instance.getDrawerPosition(), 'left');
+        assert.equal(instance.calcCurrentPosition(), 'left');
     });
 });
 
