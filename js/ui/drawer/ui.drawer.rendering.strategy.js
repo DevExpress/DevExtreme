@@ -97,13 +97,16 @@ class DrawerStrategy {
         return this._drawer;
     }
 
-    renderPanelContent(template, whenPanelContentRendered) {
-        template && template.render({
-            container: this.getDrawerInstance().content(),
-            onRendered: () => {
-                whenPanelContentRendered.resolve();
-            }
-        });
+    renderPanelContent(whenPanelContentRendered) {
+        const template = this.getDrawerInstance()._getTemplate(this.getDrawerInstance().option('template'));
+        if(template) {
+            template.render({
+                container: this.getDrawerInstance().content(),
+                onRendered: () => {
+                    whenPanelContentRendered.resolve();
+                }
+            });
+        }
     }
 
     renderPosition(isDrawerOpened, animate) {
