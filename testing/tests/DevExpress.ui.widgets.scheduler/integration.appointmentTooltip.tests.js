@@ -17,6 +17,9 @@ import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
+const dateFormat = 'monthandday';
+const timeFormat = 'shorttime';
+
 const { testStart, module, test } = QUnit;
 
 testStart(() => initTestMarkup());
@@ -402,7 +405,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         scheduler.appointments.click();
 
-        assert.equal(scheduler.tooltip.getDateText(), 'October 5, 11:30 PM - October 6, 1:00 AM', 'dates and time were displayed correctly');
+        assert.equal(scheduler.tooltip.getDateText(), 'October 5 11:30 PM - October 6 1:00 AM', 'dates and time were displayed correctly');
     });
 
     test('Scheduler appointment tooltip dates should be correct, when custom timeZone is set', function(assert) {
@@ -506,7 +509,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         scheduler.appointments.click(1);
 
-        assert.equal(scheduler.tooltip.getDateText(), 'February 9, 11:00 AM - 12:00 PM', 'dates and time were displayed correctly');
+        assert.equal(scheduler.tooltip.getDateText(), 'February 9 11:00 AM - 12:00 PM', 'dates and time were displayed correctly');
     });
 
     test('Click on tooltip-remove button should call scheduler.deleteAppointment and hide tooltip', function(assert) {
@@ -673,7 +676,10 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         scheduler.appointments.click(0);
 
-        assert.equal(scheduler.tooltip.getDateText(), dateLocalization.format(startDate, 'mediumdatemediumtime') + ' - ' + dateLocalization.format(endDate, 'mediumdatemediumtime'), 'dates were displayed correctly');
+        const startDateString = dateLocalization.format(startDate, dateFormat) + ' ' + dateLocalization.format(startDate, timeFormat);
+        const endDateString = dateLocalization.format(endDate, dateFormat) + ' ' + dateLocalization.format(endDate, timeFormat);
+
+        assert.equal(scheduler.tooltip.getDateText(), startDateString + ' - ' + endDateString, 'dates were displayed correctly');
     });
 
     test('Tooltip of multiday appointment should display date & time for month view', function(assert) {
@@ -692,7 +698,10 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         scheduler.appointments.click(0);
 
-        assert.equal(scheduler.tooltip.getDateText(), dateLocalization.format(startDate, 'mediumdatemediumtime') + ' - ' + dateLocalization.format(endDate, 'mediumdatemediumtime'), 'dates were displayed correctly');
+        const startDateString = dateLocalization.format(startDate, dateFormat) + ' ' + dateLocalization.format(startDate, timeFormat);
+        const endDateString = dateLocalization.format(endDate, dateFormat) + ' ' + dateLocalization.format(endDate, timeFormat);
+
+        assert.equal(scheduler.tooltip.getDateText(), startDateString + ' - ' + endDateString, 'dates were displayed correctly');
     });
 
     test('Tooltip of appointment part after midnight should display right date & time', function(assert) {
@@ -711,7 +720,10 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         scheduler.appointments.click(1);
 
-        assert.equal(scheduler.tooltip.getDateText(), dateLocalization.format(startDate, 'mediumdatemediumtime') + ' - ' + dateLocalization.format(endDate, 'mediumdatemediumtime'), 'dates were displayed correctly');
+        const startDateString = dateLocalization.format(startDate, dateFormat) + ' ' + dateLocalization.format(startDate, timeFormat);
+        const endDateString = dateLocalization.format(endDate, dateFormat) + ' ' + dateLocalization.format(endDate, timeFormat);
+
+        assert.equal(scheduler.tooltip.getDateText(), startDateString + ' - ' + endDateString, 'dates were displayed correctly');
     });
 
     test('Tooltip of recurrence appointment part after midnight should display right date & time', function(assert) {
@@ -731,7 +743,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         scheduler.appointments.click(2);
 
-        assert.equal(scheduler.tooltip.getDateText(), 'May 30, 11:00 PM - May 31, 1:15 AM', 'dates were displayed correctly');
+        assert.equal(scheduler.tooltip.getDateText(), 'May 30 11:00 PM - May 31 1:15 AM', 'dates were displayed correctly');
     });
 
     test('Tooltip for recurrence appointment should display right dates(T384181)', function(assert) {
@@ -752,7 +764,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         scheduler.appointments.click(1);
 
-        assert.equal(scheduler.tooltip.getDateText(), 'February 6, 11:00 AM - 12:00 PM', 'dates and time were displayed correctly');
+        assert.equal(scheduler.tooltip.getDateText(), 'February 6 11:00 AM - 12:00 PM', 'dates and time were displayed correctly');
     });
 
     test('Tooltip should hide when window was resized', function(assert) {
