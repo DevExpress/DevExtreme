@@ -380,6 +380,25 @@ QUnit.module('render', moduleConfig(), () => {
 
         assert.strictEqual($content.closest($container).length, 1, 'Popover content located into desired container');
     });
+
+    QUnit.test('item should be selected if set selected item', function(assert) {
+        const selectItemClassName = 'dx-list-item-selected';
+
+        const $container = $('#dropDownMenu');
+        $container.dxDropDownMenu({
+            opened: true,
+            items: [1, 2],
+            container: $container,
+            selectionMode: 'single',
+            selectedItemKeys: [1],
+        });
+
+        this.toggleMenu();
+        const $items = this.list.itemElements();
+
+        assert.ok($items.eq(0).hasClass(selectItemClassName), 'first item should be selected');
+        assert.notOk($items.eq(1).hasClass(selectItemClassName), 'second item shouldn\'t be selected');
+    });
 });
 
 QUnit.module('position', {

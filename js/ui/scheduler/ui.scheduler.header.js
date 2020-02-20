@@ -137,12 +137,7 @@ const SchedulerHeader = Widget.inherit({
         this._validateViews();
 
         const $viewSwitcher = $('<div>').addClass(VIEW_SWITCHER_CLASS).appendTo(this.$element());
-
-        if(!this.option('useDropDownViewSwitcher')) {
-            this._renderViewSwitcherTabs($viewSwitcher);
-        } else {
-            this._renderViewSwitcherDropDownMenu($viewSwitcher);
-        }
+        this.option('useDropDownViewSwitcher') ? this._renderViewSwitcherDropDownMenu($viewSwitcher) : this._renderViewSwitcherTabs($viewSwitcher);
     },
 
     _validateViews: function() {
