@@ -192,7 +192,7 @@ class OverlapStrategy extends DrawerStrategy {
         this.getDrawerInstance().setZIndex(zIndex);
     }
 
-    needOrderContent(position) {
+    isViewContentFirst(position) {
         return position === 'right' || position === 'bottom';
     }
 }

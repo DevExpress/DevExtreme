@@ -180,6 +180,7 @@ const Drawer = Widget.inherit({
         eventsEngine.on(this._$viewContentWrapper, clickEvent.name, this._viewContentWrapperClickHandler.bind(this));
 
         this._refreshPositionClass();
+        this._refreshWrapperChildrenOrder();
     },
 
     _render() {
@@ -214,12 +215,11 @@ const Drawer = Widget.inherit({
         const position = this.getDrawerPosition();
 
         this.$element().addClass(DRAWER_CLASS + '-' + position);
-
-        this._orderContent(position);
     },
 
-    _orderContent(position) {
-        if(this._strategy.needOrderContent(position, this.option('rtlEnabled'))) {
+    _refreshWrapperChildrenOrder() {
+        const position = this.getDrawerPosition();
+        if(this._strategy.isViewContentFirst(position, this.option('rtlEnabled'))) {
             this._$wrapper.prepend(this._$viewContentWrapper);
         } else {
             this._$wrapper.prepend(this._$panelContentWrapper);
@@ -420,7 +420,7 @@ const Drawer = Widget.inherit({
         this._removePanelContentWrapper();
 
         this._renderPanelContentWrapper();
-        this._orderContent(this.getDrawerPosition());
+        this._refreshWrapperChildrenOrder();
 
         this._whenPanelContentRefreshed = new Deferred();
         this._strategy.renderPanelContent(this._getTemplate(this.option('template')), this._whenPanelContentRefreshed);
@@ -461,6 +461,7 @@ const Drawer = Widget.inherit({
                 break;
             case 'position':
                 this._refreshPositionClass(args.previousValue);
+                this._refreshWrapperChildrenOrder();
                 this._invalidate();
                 break;
             case 'contentTemplate':

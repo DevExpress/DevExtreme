@@ -226,7 +226,7 @@ class DrawerStrategy {
         }
     }
 
-    needOrderContent() {
+    isViewContentFirst() {
         return false;
     }
 }
