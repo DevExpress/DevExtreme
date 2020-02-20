@@ -94,7 +94,7 @@ const Drawer = Widget.inherit({
     _init() {
         this.callBase();
 
-        this._strategy = this._createStrategy();
+        this._initStrategy();
 
         this.$element().addClass(DRAWER_CLASS);
 
@@ -111,16 +111,19 @@ const Drawer = Widget.inherit({
         this.$element().append(this._$wrapper);
     },
 
-    _createStrategy() {
+    _initStrategy() {
         switch(this.option('openedStateMode')) {
             case 'push':
-                return new PushStrategy(this);
+                this._strategy = new PushStrategy(this);
+                break;
             case 'shrink':
-                return new ShrinkStrategy(this);
+                this._strategy = new ShrinkStrategy(this);
+                break;
             case 'overlap':
-                return new OverlapStrategy(this);
+                this._strategy = new OverlapStrategy(this);
+                break;
             default:
-                return new PushStrategy(this);
+                this._strategy = new PushStrategy(this);
         }
     },
 
