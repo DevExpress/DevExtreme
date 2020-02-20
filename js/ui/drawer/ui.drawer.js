@@ -449,7 +449,7 @@ const Drawer = Widget.inherit({
         if(this._overlay) {
             this._overlay.dispose();
             delete this._overlay;
-            delete this._$panelContentWrapper; // TODO: why here?
+            delete this._$panelContentWrapper; // TODO: move to _removePanelContentWrapper?
         }
     },
 
