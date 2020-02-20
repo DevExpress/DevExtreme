@@ -368,6 +368,8 @@ module('Appointment popup', moduleConfig, () => {
     });
 });
 
+// $('head').append('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">')
+
 module('View switcher', moduleConfig, () => {
     test('View switcher should render selection current view', function(assert) {
         this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'ios' });
@@ -388,7 +390,7 @@ module('View switcher', moduleConfig, () => {
         }
     });
 
-    if(isDesktopEnvironment) {
+    if(isDesktopEnvironment()) {
         test('View switcher shouldn\'t render selection current view in desktop', function(assert) {
             const scheduler = createInstance({
                 adaptivityEnabled: false,
@@ -408,10 +410,23 @@ module('View switcher', moduleConfig, () => {
         });
     }
 
-    if(!isDesktopEnvironment) {
-        test('label of view name shouldn\'t be visible on mobile in case width < 450px', function(assert) {
-            const scheduler = createInstance();
-            assert.notOk(scheduler.viewSwitcher.getLabel().is(':visible'), 'label of view name shouldn\'t be visible');
+    if(!isDesktopEnvironment()) {
+        const config = {
+            beforeEach() {
+                fx.off = true;
+                $('head').append('<meta  id="viewport" name="viewport" content="width=device-width, initial-scale=1">');
+            },
+
+            afterEach() {
+                fx.off = false;
+                $('#viewport').remove();
+            }
+        };
+        module('mobile environment', config, () => {
+            test('label of view name shouldn\'t be visible on mobile in case width < 450px', function(assert) {
+                const scheduler = createInstance();
+                assert.notOk(scheduler.viewSwitcher.getLabel().is(':visible'), 'label of view name shouldn\'t be visible');
+            });
         });
     }
 });
