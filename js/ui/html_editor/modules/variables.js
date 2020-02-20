@@ -10,9 +10,7 @@ import { extend } from '../../../core/utils/extend';
 const VARIABLE_FORMAT_CLASS = 'dx-variable-format';
 const ACTIVE_FORMAT_CLASS = 'dx-format-active';
 
-Registry
-    .get('quill')
-    .register({ 'formats/variable': Variable }, true);
+getLibrary('quill').register({ 'formats/variable': Variable }, true);
 
 class VariableModule extends PopupModule {
     _getDefaultOptions() {
