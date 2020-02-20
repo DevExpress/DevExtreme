@@ -80,12 +80,16 @@ class FileManagerAdaptivityControl extends Widget {
 
     _checkAdaptiveState() {
         const oldState = this._isInAdaptiveState;
-        this._isInAdaptiveState = isSmallScreen();
+        this._isInAdaptiveState = this._isSmallScreen();
         if(oldState !== this._isInAdaptiveState) {
             this.toggleDrawer(!this._isInAdaptiveState, true);
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
             this._splitter.toggleState(!this._isInAdaptiveState);
         }
+    }
+
+    _isSmallScreen() {
+        return $(window).width() <= ADAPTIVE_STATE_SCREEN_WIDTH;
     }
 
     _initActions() {
@@ -132,9 +136,4 @@ class FileManagerAdaptivityControl extends Widget {
     }
 }
 
-const isSmallScreen = function() {
-    return $(window).width() <= ADAPTIVE_STATE_SCREEN_WIDTH;
-};
-
-module.exports.FileManagerAdaptivityControl = FileManagerAdaptivityControl;
-module.exports.isSmallScreen = isSmallScreen;
+module.exports = FileManagerAdaptivityControl;
