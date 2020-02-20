@@ -15300,6 +15300,66 @@ QUnit.test('editing.popup options should apply to editing popup', function(asser
     assert.ok(that.editPopupInstance.option('fullScreen'), 'Editing popup shown in fullScreen mode');
 });
 
+QUnit.test('editing popup toolbarItems option changing should be applied (T862799)', function(assert) {
+    const that = this;
+
+    let button;
+
+    that.options.editing.popup = {
+        toolbarItems: [{
+            toolbar: 'bottom',
+            location: 'after',
+            widget: 'dxButton',
+            options: {
+                onInitialized(e) {
+                    button = e.component;
+                },
+                text: 'My Button',
+                visible: false
+            }
+        }]
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    // act
+    that.editRow(0);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(button.option('visible'), false, 'Toolbar button is not visible');
+
+    // act
+    that.editingController.optionChanged({ name: 'editing', fullName: 'editing.popup.toolbarItems[0].options.visible', value: true });
+
+    // assert
+    assert.strictEqual(button.option('visible'), true, 'Toolbar button is visible');
+});
+
+QUnit.test('editing popup option changing should be applied (T862799)', function(assert) {
+    const that = this;
+
+    const popupOptions = {
+        toolbarItems: [{
+            widget: 'dxButton'
+        }]
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    that.editRow(0);
+    that.clock.tick();
+    that.preparePopupHelpers();
+
+    // act
+    that.editingController.optionChanged({ name: 'editing', fullName: 'editing.popup', value: popupOptions });
+
+    // assert
+    assert.strictEqual(that.editPopupInstance.option('toolbarItems'), popupOptions.toolbarItems, 'popup options are applied');
+});
+
 QUnit.test('Cancel edit data when popup hide not after click on \'save\' or \'cancel\' button', function(assert) {
     const that = this;
 

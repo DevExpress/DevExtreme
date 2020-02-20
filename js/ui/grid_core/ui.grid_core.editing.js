@@ -113,6 +113,8 @@ const ACTION_OPTION_NAMES = {
 };
 const BUTTON_NAMES = ['edit', 'save', 'cancel', 'delete', 'undelete'];
 
+const EDITING_POPUP_OPTION_NAME = 'editing.popup';
+
 const createFailureHandler = function(deferred) {
     return function(arg) {
         const error = arg instanceof Error ? arg : new Error(arg && String(arg) || 'Unknown error');
@@ -555,7 +557,19 @@ const EditingController = modules.ViewController.inherit((function() {
 
         optionChanged: function(args) {
             if(args.name === 'editing') {
-                if(this._editPopup && this._editPopup.option('visible') && args.fullName.indexOf('editing.form') === 0) {
+                const fullName = args.fullName;
+                const editPopup = this._editPopup;
+
+                if(fullName && fullName.indexOf(EDITING_POPUP_OPTION_NAME) === 0) {
+                    if(editPopup) {
+                        const popupOptionName = fullName.slice(EDITING_POPUP_OPTION_NAME.length + 1);
+                        if(popupOptionName) {
+                            editPopup.option(popupOptionName, args.value);
+                        } else {
+                            editPopup.option(args.value);
+                        }
+                    }
+                } else if(editPopup && editPopup.option('visible') && fullName.indexOf('editing.form') === 0) {
                     this._repaintEditPopup();
                 } else {
                     this.init();
@@ -1008,7 +1022,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     ],
                     contentTemplate: that._getPopupEditFormTemplate(rowIndex)
                 },
-                that.option('editing.popup')
+                that.option(EDITING_POPUP_OPTION_NAME)
             );
 
             if(!that._editPopup) {
@@ -2708,13 +2722,16 @@ module.exports = {
                 },
 
                 optionChanged: function(args) {
+                    const fullName = args.fullName;
                     switch(args.name) {
-                        case 'editing':
-                            if(!(args.fullName && args.fullName.indexOf('editing.popup') === 0)) {
+                        case 'editing': {
+                            const isEditingPopupOption = fullName && fullName.indexOf(EDITING_POPUP_OPTION_NAME) === 0;
+                            if(!isEditingPopupOption) {
                                 this._invalidate();
                             }
                             this.callBase(args);
                             break;
+                        }
                         default:
                             this.callBase(args);
                     }
