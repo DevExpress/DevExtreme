@@ -335,11 +335,25 @@ const SelectBox = DropDownList.inherit({
         return new Deferred().resolve();
     },
 
+    _extraLoadsCount: 0,
+
     _setNextItem: function(step) {
         const item = this._calcNextItem(step);
         const value = this._valueGetter(item);
 
         this._setValue(value);
+    },
+
+    _loadNextItems: function(step) {
+        let selectedIndex;
+        const lastItemsIndex = this._items().length - 1;
+        for(let i = 0; i < 1 + this._extraLoadsCount; i++) {
+            selectedIndex = this._getSelectedIndex();
+            if(!this._extraLoadsCount || !(selectedIndex === lastItemsIndex)) {
+                this._setNextItem(step);
+            }
+        }
+        this._extraLoadsCount = 0;
     },
 
     _setNextValue: function(e) {
@@ -360,7 +374,12 @@ const SelectBox = DropDownList.inherit({
                 if(!this._popup) {
                     this._createPopup();
                 }
-                this._list._loadNextPage().done(this._setNextItem.bind(this, step));
+
+                if(this._dataSource.isLoading()) {
+                    this._extraLoadsCount++;
+                } else {
+                    this._list._loadNextPage().done(this._loadNextItems.bind(this, step));
+                }
             } else {
                 this._setNextItem(step);
             }
@@ -807,6 +826,7 @@ const SelectBox = DropDownList.inherit({
     _dispose: function() {
         this._renderInputValueAsync = commonUtils.noop;
         delete this._loadItemDeferred;
+        this._extraLoadsCount = 0;
         this.callBase();
     },
 
