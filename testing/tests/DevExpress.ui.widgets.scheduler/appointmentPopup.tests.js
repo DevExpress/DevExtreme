@@ -987,7 +987,8 @@ QUnit.test('Popup should be readOnly if appointment is disabled', function(asser
     this.instance._createComponent = sinon.stub().returns({
         option: sinon.stub(),
         initialOption: sinon.stub(),
-        show: sinon.stub()
+        show: sinon.stub(),
+        itemOption: sinon.stub()
     });
 
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), disabled: true });

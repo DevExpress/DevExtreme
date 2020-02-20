@@ -42,33 +42,15 @@ export default class AppointmentPopup {
     }
 
     show(data = {}, showButtons, processTimeZone) {
-        this.state.appointment = {
-            data: data,
-            processTimeZone: processTimeZone
-        };
+        this.state.appointment.data = data;
+        this.state.appointment.processTimeZone = processTimeZone;
 
         if(!this._popup) {
-            this._popup = this._createPopup(showButtons);
+            const popupConfig = this._createPopupConfig(showButtons);
+            this._popup = this._createPopup(popupConfig);
+        } else {
+            this._updateForm();
         }
-
-        this._popup.option('onShowing', e => {
-            this._updateForm(data, processTimeZone);
-
-            const arg = {
-                form: this._appointmentForm,
-                appointmentData: data,
-                cancel: false
-            };
-
-            this.scheduler._actions['onAppointmentFormOpening'](arg);
-            this.scheduler._processActionResult(arg, canceled => {
-                if(canceled) {
-                    e.cancel = true;
-                } else {
-                    this.updatePopupFullScreenMode();
-                }
-            });
-        });
 
         this._popup.show();
     }
@@ -92,12 +74,12 @@ export default class AppointmentPopup {
         }
     }
 
-    _createPopup(showButtons) {
+    _createPopup(options) {
         const popupElement = $('<div>')
             .addClass(APPOINTMENT_POPUP_CLASS)
             .appendTo(this.scheduler.$element());
 
-        return this.scheduler._createComponent(popupElement, Popup, this._createPopupConfig(showButtons));
+        return this.scheduler._createComponent(popupElement, Popup, options);
     }
 
     _createPopupConfig(showButtons) {
@@ -108,7 +90,27 @@ export default class AppointmentPopup {
             showCloseButton: false,
             showTitle: false,
             onHiding: () => { this.scheduler.focus(); },
-            contentTemplate: () => this._createPopupContent(),
+            contentTemplate: () => {
+                const formElement = this._createPopupContent();
+                this._updateForm();
+                return formElement;
+            },
+            onShowing: (e) => {
+                const arg = {
+                    form: this._appointmentForm,
+                    appointmentData: this.state.appointment.data,
+                    cancel: false
+                };
+
+                this.scheduler._actions['onAppointmentFormOpening'](arg);
+                this.scheduler._processActionResult(arg, canceled => {
+                    if(canceled) {
+                        e.cancel = true;
+                    } else {
+                        this.updatePopupFullScreenMode();
+                    }
+                });
+            },
             defaultOptionsRules: [
                 {
                     device: () => devices.current().android,
@@ -172,24 +174,17 @@ export default class AppointmentPopup {
         return this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false;
     }
 
-    _updateForm(appointmentData, isProcessTimeZone) {
-        const allDay = this.scheduler.fire('getField', 'allDay', appointmentData);
-        let startDate = this.scheduler.fire('getField', 'startDate', appointmentData);
-        let endDate = this.scheduler.fire('getField', 'endDate', appointmentData);
+    _updateForm() {
+        const { data, processTimeZone } = this.state.appointment;
+        const allDay = this.scheduler.fire('getField', 'allDay', data);
+        let startDate = this.scheduler.fire('getField', 'startDate', data);
+        let endDate = this.scheduler.fire('getField', 'endDate', data);
+        this.state.appointment.isEmptyText = data === undefined || data.text === undefined;
+        this.state.appointment.isEmptyDescription = data === undefined || data.description === undefined;
 
-        const formData = this._createAppointmentFormData(appointmentData);
+        const formData = extend({}, { text: '', description: '', recurrenceRule: '' }, this._createAppointmentFormData(data));
 
-        this.state.appointment.isEmptyText = appointmentData === undefined || appointmentData.text === undefined; // TODO fix
-        this.state.appointment.isEmptyDescription = appointmentData === undefined || appointmentData.description === undefined;
-
-        if(this.state.appointment.isEmptyText) {
-            formData.text = '';
-        }
-        if(this.state.appointment.isEmptyDescription) {
-            formData.description = '';
-        }
-
-        if(isProcessTimeZone) {
+        if(processTimeZone) {
             if(startDate) {
                 startDate = this.scheduler.fire('convertDateByTimezone', startDate);
                 this.scheduler.fire('setField', 'startDate', formData, startDate);
@@ -200,21 +195,10 @@ export default class AppointmentPopup {
             }
         }
 
-        const startDateExpr = this.scheduler._dataAccessors.expr.startDateExpr;
-        const endDateExpr = this.scheduler._dataAccessors.expr.endDateExpr;
-
-        formData.recurrenceRule = formData.recurrenceRule || ''; // TODO: plug for recurrent editor fix?
-
-        const recurrenceRuleExpr = this.scheduler._dataAccessors.expr.recurrenceRuleExpr;
+        const { startDateExpr, endDateExpr, recurrenceRuleExpr } = this.scheduler._dataAccessors.expr;
         const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr);
-        recurrenceEditorOptions.startDate = startDate; // move to another place
-        if(this.state.appointment.data.recurrenceRule) {
-            recurrenceEditorOptions.visible = true;
-        } else {
-            recurrenceEditorOptions.visible = false;
-        }
-        this._setEditorOptions(recurrenceRuleExpr, recurrenceEditorOptions);
-        this._appointmentForm.option('readOnly', this._isReadOnly(this.state.appointment.data));
+        this._setEditorOptions(recurrenceRuleExpr, extend({}, { startDate: startDate, visible: data.recurrenceRule ? true : false }, recurrenceEditorOptions));
+        this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
         AppointmentForm.checkEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
