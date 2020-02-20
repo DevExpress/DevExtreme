@@ -12393,7 +12393,7 @@ QUnit.test('No exceptions on editing a column with given setCellValue when repai
     }
 });
 
-QUnit.test('editingController.isInvalidCell - cell should be invalid', function(assert) {
+QUnit.test('validatingController.isInvalidCell - cell should be invalid', function(assert) {
     // arrange
     const rowsView = this.rowsView;
     const testElement = $('#container');
@@ -12417,7 +12417,7 @@ QUnit.test('editingController.isInvalidCell - cell should be invalid', function(
     const key = this.getKeyByRowIndex(0);
 
     // assert
-    assert.notOk(this.editingController.isInvalidCell({ rowKey: key, columnIndex: 0 }), 'cell should be invalid');
+    assert.notOk(this.validatingController.isInvalidCell({ rowKey: key, columnIndex: 0 }), 'cell should be invalid');
 });
 
 QUnit.test('validatingController.validateCell should not call the validate method of the current validator', function(assert) {

@@ -2345,8 +2345,10 @@ const EditingController = modules.ViewController.inherit((function() {
             return this._allowEditAction('allowDeleting', options);
         },
 
-        isInvalidCell: function() {
-            return false;
+        isCellModified: function(parameters) {
+            const columnIndex = parameters.columnIndex;
+            const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
+            return modifiedValues && modifiedValues[columnIndex] !== undefined;
         }
     };
 })());
@@ -2665,7 +2667,6 @@ module.exports = {
                     }
                 },
                 _cellPrepared: function($cell, parameters) {
-                    const columnIndex = parameters.columnIndex;
                     const editingController = this._editingController;
                     const isCommandCell = !!parameters.column.command;
                     const isEditableCell = parameters.setValue;
@@ -2689,12 +2690,8 @@ module.exports = {
                         this._editCellPrepared($cell);
                     }
 
-                    const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
-                    const isCellInvalidInNewRow = parameters.row && parameters.row.isNewRow && editingController.isInvalidCell({
-                        rowKey: parameters.key,
-                        columnIndex: parameters.column.index
-                    });
-                    if(((modifiedValues && modifiedValues[columnIndex] !== undefined) || isCellInvalidInNewRow) && parameters.column && !isCommandCell && parameters.column.setCellValue) {
+                    const cellModified = editingController.isCellModified(parameters);
+                    if(cellModified && parameters.column && !isCommandCell && parameters.column.setCellValue) {
                         editingController.showHighlighting($cell);
                         $cell.addClass(CELL_MODIFIED);
                     } else if(isEditableCell) {
