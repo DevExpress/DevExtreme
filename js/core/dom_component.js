@@ -48,6 +48,10 @@ const DOMComponent = Component.inherit({
         this.callBase(options);
     },
 
+    _createElement(element) {
+        this._$element = $(element);
+    },
+
     _getSynchronizableOptionsForCreateComponent() {
         return ['rtlEnabled', 'disabled', 'templatesRenderAsynchronously'];
     },

@@ -44,12 +44,15 @@ const Editor = Widget.inherit({
         this.callBase.apply(this, arguments);
     },
 
-    _initOptions: function(options) {
-        const element = this.$element()[0];
-        if(element) {
-            dataUtils.data(element, VALIDATION_TARGET, this);
+    _createElement: function(element) {
+        this.callBase(element);
+        const $element = this.$element();
+        if($element) {
+            dataUtils.data($element[0], VALIDATION_TARGET, this);
         }
+    },
 
+    _initOptions: function(options) {
         this.callBase.apply(this, arguments);
         this.option(ValidationEngine.initValidationOptions(options));
     },
