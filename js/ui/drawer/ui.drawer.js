@@ -103,8 +103,6 @@ const Drawer = Widget.inherit({
         this._whenPanelContentRendered = undefined;
         this._whenPanelContentRefreshed = undefined;
 
-        this._hideMenuHandler = this.hide.bind(this); // TODO: remove?
-
         this._$wrapper = $('<div>').addClass(DRAWER_WRAPPER_CLASS);
         this._$viewContentWrapper = $('<div>').addClass(DRAWER_VIEW_CONTENT_CLASS);
         this._$wrapper.append(this._$viewContentWrapper);
