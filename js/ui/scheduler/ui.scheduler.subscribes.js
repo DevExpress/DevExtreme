@@ -283,7 +283,7 @@ const subscribes = {
         const dateFormat = 'monthandday';
         const timeFormat = 'shorttime';
         const isSameDate = startDate.getDate() === endDate.getDate();
-        const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
+        const isDurationLessThanDay = (endDate.getTime() - startDate.getTime()) <= toMs('day');
 
         switch(formatType) {
             case 'DATETIME':
@@ -298,7 +298,7 @@ const subscribes = {
             case 'TIME':
                 return `${dateLocalization.format(startDate, timeFormat)} - ${dateLocalization.format(endDate, timeFormat)}`;
             case 'DATE':
-                return `${dateLocalization.format(startDate, dateFormat)}${isDurationMoreThanDay || !isSameDate ? ' - ' + dateLocalization.format(endDate, dateFormat) : ''}`;
+                return `${dateLocalization.format(startDate, dateFormat)}${isDurationLessThanDay || isSameDate ? '' : ' - ' + dateLocalization.format(endDate, dateFormat)}`;
         }
     },
 
