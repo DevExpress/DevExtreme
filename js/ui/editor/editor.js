@@ -41,12 +41,12 @@ const Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
         this.validationRequest = Callbacks();
-        this.callBase.apply(this, arguments);
-        const $element = this.$element();
-        if($element) {
-            dataUtils.data($element[0], VALIDATION_TARGET, this);
+        const element = arguments[0];
+        if(element) {
+            dataUtils.data(element.get ? element.get(0) : element, VALIDATION_TARGET, this);
         }
 
+        this.callBase.apply(this, arguments);
     },
 
     _initOptions: function(options) {
