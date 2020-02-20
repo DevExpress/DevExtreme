@@ -1,13 +1,16 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
-import { isSmallScreen } from './ui.file_manager.adaptivity';
+import { getWindow } from '../../core/utils/window';
 
 import Widget from '../widget/ui.widget';
 import Popup from '../popup';
 import Drawer from '../drawer/ui.drawer';
 
 import FileManagerProgressPanel from './ui.file_manager.notification.progress_panel';
+
+const window = getWindow();
+const ADAPTIVE_STATE_SCREEN_WIDTH = 1000;
 
 const FILE_MANAGER_NOTIFICATION_CLASS = 'dx-filemanager-notification';
 const FILE_MANAGER_NOTIFICATION_DRAWER_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-drawer`;
@@ -39,13 +42,14 @@ export default class FileManagerNotificationControl extends Widget {
             contentRenderer($progressDrawer);
         }
 
+        this._isInAdaptiveState = this._isSmallScreen();
         this._progressDrawer = this._createComponent($progressDrawer, Drawer, {
             opened: false,
             position: 'right',
-            openedStateMode: isSmallScreen() ? 'overlap' : 'shrink',
+            openedStateMode: this._isInAdaptiveState ? 'overlap' : 'shrink',
             closeOnOutsideClick: false,
-            shading: isSmallScreen() ? true : false,
-            template: (container) => this.getProgressPanel(container)
+            shading: this._isInAdaptiveState ? true : false,
+            template: (container) => this._getProgressPanel(container)
         });
     }
 
@@ -53,6 +57,7 @@ export default class FileManagerNotificationControl extends Widget {
         if(this._actionProgressStatus === 'default') {
             return;
         }
+        this._checkAdaptiveState();
 
         setTimeout(() => {
             this._progressDrawer.show();
@@ -105,10 +110,6 @@ export default class FileManagerNotificationControl extends Widget {
         this._notifyError(errorInfo);
     }
 
-    getProgressPanelDrawer() {
-        return this._progressDrawer;
-    }
-
     _hideProgressPanel() {
         setTimeout(() => this._progressDrawer.hide());
     }
@@ -126,7 +127,29 @@ export default class FileManagerNotificationControl extends Widget {
         this._raiseActionProgress(message, status);
     }
 
-    getProgressPanel(container) {
+    _isSmallScreen() {
+        return $(window).width() <= ADAPTIVE_STATE_SCREEN_WIDTH;
+    }
+
+    _dimensionChanged(dimension) {
+        if(!dimension || dimension !== 'height') {
+            this._checkAdaptiveState();
+        }
+    }
+
+    _checkAdaptiveState() {
+        const oldState = this._isInAdaptiveState;
+        this._isInAdaptiveState = this._isSmallScreen();
+        if(this._progressDrawer && oldState !== this._isInAdaptiveState) {
+            this._getProgressPanel(this.$element());
+            this._progressDrawer.option({
+                openedStateMode: this._isInAdaptiveState ? 'overlap' : 'shrink',
+                shading: this._isInAdaptiveState ? true : false
+            });
+        }
+    }
+
+    _getProgressPanel(container) {
         if(!this._progressPanel) {
             this._progressPanel = this._createComponent($('<div>'), this._getProgressPanelComponent(), {
                 onOperationClosed: ({ info }) => this._onProgressPanelOperationClosed(info),
