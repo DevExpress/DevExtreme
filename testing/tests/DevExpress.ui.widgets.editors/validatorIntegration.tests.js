@@ -15,6 +15,7 @@ import 'ui/calendar';
 import 'ui/check_box';
 import 'ui/drop_down_box';
 import 'ui/html_editor';
+import 'integration/quill';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/select_box';
