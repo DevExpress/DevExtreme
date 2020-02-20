@@ -418,6 +418,7 @@ const Drawer = Widget.inherit({
         $(this.viewContent()).css('transform', 'translate(0px, 0px)');
 
         this._removePanelContentWrapper();
+        this._removeOverlay();
 
         this._renderPanelContentWrapper();
         this._refreshWrapperChildrenOrder();
@@ -435,13 +436,16 @@ const Drawer = Widget.inherit({
         this._cleanFocusState();
 
         this._removePanelContentWrapper();
+        this._removeOverlay();
     },
 
     _removePanelContentWrapper() {
         if(this._$panelContentWrapper) {
             this._$panelContentWrapper.remove();
         }
+    },
 
+    _removeOverlay() {
         if(this._overlay) {
             this._overlay.dispose();
             delete this._overlay;
