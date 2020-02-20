@@ -38,18 +38,19 @@ class FileManagerAdaptivityControl extends Widget {
 
     _createDrawerTemplate(container) {
         this.option('drawerTemplate')(container);
-        this._splitter = this._createComponent('<div>', SplitterControl, {
-            container: this.$element(),
-            leftElement: $(this._drawer.content()),
-            rightElement: $(this._drawer.viewContent()),
-            onApplyPanelSize: this._onApplyPanelSize.bind(this)
-        });
-        this._splitter.$element().appendTo(container);
     }
 
     _render() {
         super._render();
         this._checkAdaptiveState();
+        const $splitter = $('<div>').insertAfter($(this._drawer.content()));
+        this._splitter = this._createComponent($splitter, SplitterControl, {
+            container: this.$element(),
+            leftElement: $(this._drawer.content()),
+            rightElement: $(this._drawer.viewContent()),
+            onApplyPanelSize: this._onApplyPanelSize.bind(this)
+        });
+        this._splitter.toggleState(!this._isInAdaptiveState);
     }
 
     _onApplyPanelSize(e) {
@@ -84,7 +85,7 @@ class FileManagerAdaptivityControl extends Widget {
         if(oldState !== this._isInAdaptiveState) {
             this.toggleDrawer(!this._isInAdaptiveState, true);
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
-            this._splitter.toggleState(!this._isInAdaptiveState);
+            this._splitter && this._splitter.toggleState(!this._isInAdaptiveState);
         }
     }
 

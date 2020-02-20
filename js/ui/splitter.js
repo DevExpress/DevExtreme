@@ -43,6 +43,11 @@ export default class SplitterControl extends Widget {
 
         this._detachEventHandlers();
         this._attachEventHandlers();
+        let initialPosition = null;
+        if(this.option('initialLeftPanelWidth') || this.option('initialLeftPanelWidth') === 0) {
+            initialPosition = this.option('initialLeftPanelWidth');
+        }
+        this.setSplitterPositionLeft(initialPosition);
     }
 
     _clean() {
@@ -67,7 +72,7 @@ export default class SplitterControl extends Widget {
     _dimensionChanged() {
         if(this._leftPanelPercentageWidth === undefined) {
             const leftElementWidth = this._$leftElement.get(0).clientWidth + this.getSplitterOffset();
-            this._leftPanelPercentageWidth = this._convertLeftPanelWidthToPercentage(leftElementWidth);
+            this._leftPanelPercentageWidth = this._convertPanelWidthToPercentage(leftElementWidth);
         }
 
         const rightPanelWidth = 100 - this._leftPanelPercentageWidth;
@@ -75,7 +80,7 @@ export default class SplitterControl extends Widget {
             leftPanelWidth: this._leftPanelPercentageWidth + '%',
             rightPanelWidth: rightPanelWidth + '%'
         });
-        this.setSplitterPositionLeft(this._$leftElement.get(0).clientWidth - this.getSplitterOffset());
+        this.setSplitterPositionLeft(this._$leftElement.get(0).clientWidth);
     }
 
     _onMouseDownHandler(e) {
@@ -107,14 +112,10 @@ export default class SplitterControl extends Widget {
     }
 
     _getNewSplitterPositionLeft(e) {
-        let newSplitterPositionLeft = e.pageX - this._$container.offset().left - this._offsetX;
-        newSplitterPositionLeft = Math.max(0 - this.getSplitterOffset(), newSplitterPositionLeft);
-        newSplitterPositionLeft = Math.min(this._containerWidth - this.getSplitterOffset() - this._getSplitterWidth(), newSplitterPositionLeft);
+        let newSplitterPositionLeft = e.pageX - this._$container.offset().left - this._offsetX + this.getSplitterOffset();
+        newSplitterPositionLeft = Math.max(0, newSplitterPositionLeft);
+        newSplitterPositionLeft = Math.min(this._containerWidth - this._getSplitterWidth(), newSplitterPositionLeft);
         return newSplitterPositionLeft;
-    }
-
-    _isDomElement(element) {
-        return element && element.nodeType && element.nodeType === 1;
     }
 
     _isPercentValue(value) {
@@ -144,7 +145,12 @@ export default class SplitterControl extends Widget {
     }
 
     setSplitterPositionLeft(splitterPositionLeft, needUpdatePanels) {
-        splitterPositionLeft = splitterPositionLeft || this._$leftElement.get(0).clientWidth - this.getSplitterOffset();
+        if(!splitterPositionLeft) {
+            if(splitterPositionLeft !== 0) {
+                splitterPositionLeft = this._$leftElement.get(0).clientWidth;
+            }
+        }
+        splitterPositionLeft -= this.getSplitterOffset();
         this.$element().css('left', splitterPositionLeft);
         if(!needUpdatePanels) {
             return;
@@ -155,16 +161,16 @@ export default class SplitterControl extends Widget {
             leftPanelWidth: leftPanelWidth,
             rightPanelWidth: rightPanelWidth
         });
-        this._leftPanelPercentageWidth = this._convertLeftPanelWidthToPercentage(leftPanelWidth);
+        this._leftPanelPercentageWidth = this._convertPanelWidthToPercentage(leftPanelWidth);
     }
 
     _optionChanged(args) {
         switch(args.name) {
             case 'initialLeftPanelWidth':
-                this._leftPanelPercentageWidth = this._convertLeftPanelWidthToPercentage(args.value);
-                this._dimensionChanged();
+                this.setSplitterPositionLeft(args.value);
                 break;
             case 'leftElement':
+            case 'rightElement':
                 this.repaint();
                 break;
             default:
@@ -172,7 +178,7 @@ export default class SplitterControl extends Widget {
         }
     }
 
-    _convertLeftPanelWidthToPercentage(leftPanelWidth) {
-        return leftPanelWidth / this._$container.get(0).clientWidth * 100;
+    _convertPanelWidthToPercentage(panelWidth) {
+        return panelWidth / this._$container.get(0).clientWidth * 100;
     }
 }
