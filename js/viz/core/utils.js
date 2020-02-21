@@ -609,11 +609,15 @@ function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
 function rangesAreEqual(range, rangeFromOptions) {
     if(Array.isArray(rangeFromOptions)) {
         return range.length === rangeFromOptions.length
-            && range.every((item, i) => item === rangeFromOptions[i]);
+            && range.every((item, i) => valueOf(item) === valueOf(rangeFromOptions[i]));
     } else {
-        return range.startValue === rangeFromOptions.startValue
-            && range.endValue === rangeFromOptions.endValue;
+        return valueOf(range.startValue) === valueOf(rangeFromOptions.startValue)
+            && valueOf(range.endValue) === valueOf(rangeFromOptions.endValue);
     }
+}
+
+function valueOf(value) {
+    return value && value.valueOf();
 }
 
 function pointInCanvas(canvas, x, y) {

@@ -422,7 +422,7 @@ QUnit.test('Inverted scale', function(assert) {
 QUnit.test('values are not defined', function(assert) {
     this.update();
 
-    this.setRange(undefined, undefined);
+    this.controller.setSelectedRange(undefined);
 
     this.check(assert, [1000, 3000], [10, 30]);
 });
@@ -442,22 +442,38 @@ QUnit.test('values are not defined. Logarithmic', function(assert) {
 
     this.update();
 
-    this.setRange(undefined, undefined);
+    this.controller.setSelectedRange(undefined);
 
     this.check(assert, [1000, 3000], [0.01, 10000]);
 });
 
-QUnit.test('values are not defined. Categories', function(assert) {
+QUnit.test('value is not defined. Categories', function(assert) {
     this.setCategories(['a', 'b', 'c', 'd', 'e']);
 
     this.update();
 
-    this.setRange(undefined, undefined);
+    this.controller.setSelectedRange(undefined);
 
     this.check(assert, [1000, 3000], ['a', 'e']);
 });
 
-QUnit.test('values are not valid', function(assert) {
+// T856868
+QUnit.test('Set equal values', function(assert) {
+    this.translator.update({
+        min: new Date('01/01/2020'),
+        max: new Date('01/02/2020'),
+        dataType: 'datetime'
+    },
+    { left: 1000, width: 3000 }, { isHorizontal: true });
+    this.update();
+
+    this.setRange(new Date(2020, 0), new Date(2020, 0, 1));
+    this.setRange(new Date(2020, 0), new Date(2020, 0, 1));
+
+    assert.equal(this.sliderRoot(1).animate.callCount, 1);
+});
+
+QUnit.test('value is not valid', function(assert) {
     this.update();
 
     this.setRange('A', 'B');
@@ -465,7 +481,7 @@ QUnit.test('values are not valid', function(assert) {
     this.check(assert, [1000, 3000], [10, 30]);
 });
 
-QUnit.test('values are out of range', function(assert) {
+QUnit.test('value is out of range', function(assert) {
     this.update();
 
     this.setRange(5, 15);

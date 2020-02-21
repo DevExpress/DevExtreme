@@ -986,15 +986,10 @@ const dxRangeSelector = baseWidgetModule.inherit({
     },
 
     setValue: function(value, e) {
-        let current;
         const visualRange = parseValue(value);
         if(!this._isUpdating && value) {
             this._validateRange(visualRange.startValue, visualRange.endValue);
-            // TODO: Move the check inside the SlidersController
-            current = this._slidersController.getSelectedRange();
-            if(!current || current.startValue !== visualRange.startValue || current.endValue !== visualRange.endValue) {
-                this._slidersController.setSelectedRange(parseValue(value), e);
-            }
+            this._slidersController.setSelectedRange(visualRange, e);
         }
     },
 

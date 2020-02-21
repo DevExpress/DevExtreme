@@ -7,14 +7,11 @@ const _normalizeEnum = require('../core/utils').normalizeEnum;
 const typeUtils = require('../../core/utils/type');
 const isNumeric = typeUtils.isNumeric;
 const vizUtils = require('../core/utils');
+const rangesAreEqual = require('../core/utils').rangesAreEqual;
 const adjust = require('../../core/utils/math').adjust;
 
 function buildRectPoints(left, top, right, bottom) {
     return [left, top, right, top, right, bottom, left, bottom];
-}
-
-function valueOf(value) {
-    return value && value.valueOf();
 }
 
 function isLess(a, b) {
@@ -97,7 +94,7 @@ SlidersController.prototype = {
     _processSelectionChanged: function(e) {
         const that = this;
         const selectedRange = that.getSelectedRange();
-        if(valueOf(selectedRange.startValue) !== valueOf(that._lastSelectedRange.startValue) || valueOf(selectedRange.endValue) !== valueOf(that._lastSelectedRange.endValue)) {
+        if(!rangesAreEqual(selectedRange, that._lastSelectedRange)) {
             that._params.updateSelectedRange(selectedRange, that._lastSelectedRange, e);
             that._lastSelectedRange = selectedRange;
         }
@@ -215,8 +212,11 @@ SlidersController.prototype = {
     },
 
     setSelectedRange: function(visualRange, e) {
-        visualRange = visualRange || {};
         const that = this;
+        if(visualRange && rangesAreEqual(visualRange, that.getSelectedRange())) {
+            return;
+        }
+        visualRange = visualRange || {};
         const translator = that._params.translator;
         const businessRange = translator.getBusinessRange();
         const compare = businessRange.axisType === 'discrete' ? function(a, b) {
