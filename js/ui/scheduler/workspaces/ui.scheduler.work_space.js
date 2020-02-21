@@ -1160,9 +1160,14 @@ const SchedulerWorkSpace = Widget.inherit({
         const lastCellData = this.getCellData($cell.last());
 
         const args = {
-            startDate: this.invoke('convertDateByTimezoneBack', firstCellData.startDate),
-            endDate: this.invoke('convertDateByTimezoneBack', lastCellData.endDate)
+            startDate: this.invoke('convertDateByTimezoneBack', firstCellData.startDate) || firstCellData.startDate,
+            endDate: this.invoke('convertDateByTimezoneBack', lastCellData.endDate) || lastCellData.endDate
         };
+
+        // const args = {
+        //     startDate: firstCellData.startDate,
+        //     endDate: lastCellData.endDate
+        // };
 
         if(isDefined(lastCellData.allDay)) {
             args.allDay = lastCellData.allDay;

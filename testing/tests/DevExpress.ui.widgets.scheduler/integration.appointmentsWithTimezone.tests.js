@@ -8,6 +8,7 @@ import dragEvents from 'events/drag';
 import { DataSource } from 'data/data_source/data_source';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dataUtils from 'core/element_data';
+import dateUtils from 'core/utils/date';
 import { SchedulerTestWrapper } from './helpers.js';
 
 import 'common.css!';
@@ -1347,6 +1348,7 @@ QUnit.test('New added appointment should be rendered correctly in specified time
         });
 
         const task = { text: 'a', startDate: new Date(2018, 4, 23, 8, 0), endDate: new Date(2018, 4, 23, 8, 30) };
+        const timezoneOffset = task.startDate.getTimezoneOffset() * dateUtils.dateToMilliseconds('minute');
 
         this.instance.showAppointmentPopup(task, true);
         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
@@ -1354,7 +1356,7 @@ QUnit.test('New added appointment should be rendered correctly in specified time
         const $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS);
         const startDate = $appointment.dxSchedulerAppointment('instance').option('startDate');
 
-        assert.deepEqual(startDate, task.startDate, 'appointment starts in 8AM');
+        assert.equal(startDate.getTime(), task.startDate.getTime() + timezoneOffset, 'appointment starts in 8AM');
     } finally {
         tzOffsetStub.restore();
     }
