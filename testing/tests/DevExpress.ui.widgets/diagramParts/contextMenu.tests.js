@@ -46,10 +46,12 @@ QUnit.module('Context Menu', {
         this.instance.option('contextMenu.commands', ['copy', 'selectAll']);
         const contextMenu = getContextMenuInstance(this.$element);
         assert.notOk(contextMenu.option('visible'));
-        assert.ok(contextMenu.option('items')[0].text.indexOf('Copy') > -1);
+        assert.equal(contextMenu.option('items')[0].visible, undefined);
+        assert.equal(contextMenu.option('items')[1].visible, undefined);
         contextMenu.show();
         assert.ok(contextMenu.option('visible'));
-        assert.ok(contextMenu.option('items')[0].text.indexOf('Select All') > -1);
+        assert.equal(contextMenu.option('items')[0].visible, false);
+        assert.equal(contextMenu.option('items')[1].visible, true);
     });
     test('should execute commands on click', function(assert) {
         this.instance.option('contextMenu.commands', ['selectAll']);

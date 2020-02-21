@@ -45,7 +45,7 @@ const DIAGRAM_PROPERTIES_PANEL_BUTTON_SIZE = 48;
 
 const DIAGRAM_DEFAULT_UNIT = 'in';
 const DIAGRAM_DEFAULT_ZOOMLEVEL = 1;
-const DIAGRAM_DEFAULT_AUTOZOOM = 'disabled';
+const DIAGRAM_DEFAULT_AUTOZOOM_MODE = 'disabled';
 const DIAGRAM_DEFAULT_PAGE_ORIENTATION = 'portrait';
 const DIAGRAM_DEFAULT_PAGE_COLOR = 'white';
 
@@ -128,7 +128,7 @@ class Diagram extends Widget {
         if(this.option('zoomLevel') !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
             this._updateZoomLevelState();
         }
-        if(this.option('autoZoom') !== DIAGRAM_DEFAULT_AUTOZOOM) {
+        if(this.option('autoZoomMode') !== DIAGRAM_DEFAULT_AUTOZOOM_MODE) {
             this._updateAutoZoomState();
         }
         if(this.option('simpleView')) {
@@ -973,7 +973,7 @@ class Diagram extends Widget {
     }
     _updateAutoZoomState() {
         const { DiagramCommand } = getDiagram();
-        this._executeDiagramCommand(DiagramCommand.SwitchAutoZoom, this._getAutoZoomValue(this.option('autoZoom')));
+        this._executeDiagramCommand(DiagramCommand.SwitchAutoZoom, this._getAutoZoomValue(this.option('autoZoomMode')));
     }
     _updateSimpleViewState() {
         const { DiagramCommand } = getDiagram();
@@ -1162,7 +1162,7 @@ class Diagram extends Widget {
             */
             zoomLevel: DIAGRAM_DEFAULT_ZOOMLEVEL,
             simpleView: false,
-            autoZoom: DIAGRAM_DEFAULT_AUTOZOOM,
+            autoZoom: DIAGRAM_DEFAULT_AUTOZOOM_MODE,
             fullScreen: false,
             showGrid: true,
             snapToGrid: true,
@@ -1933,7 +1933,7 @@ class Diagram extends Widget {
                     this._updateZoomLevelState();
                 }
                 break;
-            case 'autoZoom':
+            case 'autoZoomMode':
                 this._updateAutoZoomState();
                 break;
             case 'simpleView':

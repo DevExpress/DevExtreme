@@ -407,8 +407,8 @@ const DiagramCommandsManager = {
                     text: messageLocalization.format('dxDiagram-commandPageSize'),
                     widget: 'dxSelectBox',
                     cssClass: CSS_CLASSES.LARGE_SELECT,
-                    getValue: (v) => JSON.parse(v),
-                    setValue: (v) => JSON.stringify(v)
+                    getCommandValue: (v) => JSON.parse(v),
+                    getEditorValue: (v) => JSON.stringify(v)
                 },
                 pageOrientation: {
                     command: DiagramCommand.PageLandscape,
@@ -432,7 +432,34 @@ const DiagramCommandsManager = {
                     command: DiagramCommand.ZoomLevel,
                     hint: messageLocalization.format('dxDiagram-commandZoomLevel'),
                     text: messageLocalization.format('dxDiagram-commandZoomLevel'),
-                    widget: 'dxSelectBox'
+                    widget: 'dxTextBox',
+                    items: [
+                        SEPARATOR,
+                        {
+                            command: DiagramCommand.FitToScreen,
+                            hint: messageLocalization.format('dxDiagram-commandFitToContent'),
+                            text: messageLocalization.format('dxDiagram-commandFitToContent'),
+                        },
+                        {
+                            command: DiagramCommand.FitToWidth,
+                            hint: messageLocalization.format('dxDiagram-commandFitToWidth'),
+                            text: messageLocalization.format('dxDiagram-commandFitToWidth'),
+                        },
+                        SEPARATOR,
+                        {
+                            command: DiagramCommand.AutoZoomToContent,
+                            hint: messageLocalization.format('dxDiagram-commandAutoZoomByContent'),
+                            text: messageLocalization.format('dxDiagram-commandAutoZoomByContent'),
+                        },
+                        {
+                            command: DiagramCommand.AutoZoomToWidth,
+                            hint: messageLocalization.format('dxDiagram-commandAutoZoomByWidth'),
+                            text: messageLocalization.format('dxDiagram-commandAutoZoomByWidth'),
+                        }
+                    ],
+                    getEditorDisplayValue: (v) => {
+                        return Math.round(v * 100) + '%';
+                    }
                 },
                 autoZoom: {
                     command: DiagramCommand.ToggleAutoZoom,

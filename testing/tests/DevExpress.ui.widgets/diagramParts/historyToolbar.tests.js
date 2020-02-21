@@ -36,6 +36,6 @@ QUnit.module('History Toolbar', {
     test('should fill toolbar with custom items', function(assert) {
         this.instance.option('historyToolbar.commands', ['copy']);
         const toolbar = getHistoryToolbarInstance(this.$element);
-        assert.equal(toolbar.option('dataSource').length, 1); // + show properties panel
+        assert.equal(toolbar.option('dataSource').length, 1);
     });
 });

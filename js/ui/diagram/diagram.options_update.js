@@ -19,13 +19,13 @@ class DiagramOptionsUpdateBar extends DiagramBar {
             const { AutoZoomMode } = getDiagram();
             switch(value) {
                 case AutoZoomMode.FitContent:
-                    this._setOption('autoZoom', 'fitContent');
+                    this._setOption('autoZoomMode', 'fitContent');
                     break;
                 case AutoZoomMode.FitToWidth:
-                    this._setOption('autoZoom', 'fitWidth');
+                    this._setOption('autoZoomMode', 'fitWidth');
                     break;
                 case AutoZoomMode.Disabled:
-                    this._setOption('autoZoom', 'disabled');
+                    this._setOption('autoZoomMode', 'disabled');
                     break;
             }
         };
