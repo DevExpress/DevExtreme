@@ -57,10 +57,10 @@ export default class FileManagerNotificationControl extends Widget {
         if(this._actionProgressStatus === 'default') {
             return;
         }
-        this._checkAdaptiveState();
 
         setTimeout(() => {
             this._progressDrawer.show();
+            this._getNotificationPopup().hide();
             this._tryHideActionProgress();
         });
     }
