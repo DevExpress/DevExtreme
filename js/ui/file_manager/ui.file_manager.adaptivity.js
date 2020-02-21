@@ -11,6 +11,7 @@ const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
 
 const DRAWER_PANEL_CONTENT_INITIAL = 'dx-drawer-panel-content-initial';
+const DRAWER_PANEL_CONTENT_ADAPTIVE_STATE = 'dx-drawer-panel-content-adaptive-state';
 
 class FileManagerAdaptivityControl extends Widget {
 
@@ -50,7 +51,8 @@ class FileManagerAdaptivityControl extends Widget {
             rightElement: $(this._drawer.viewContent()),
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
-        this._splitter.toggleState(!this._isInAdaptiveState);
+        this._splitter.toggleActiveState(!this._isInAdaptiveState);
+        this._splitter.toggleVisibleState(!this._isInAdaptiveState);
     }
 
     _onApplyPanelSize(e) {
@@ -83,9 +85,13 @@ class FileManagerAdaptivityControl extends Widget {
         const oldState = this._isInAdaptiveState;
         this._isInAdaptiveState = this._isSmallScreen();
         if(oldState !== this._isInAdaptiveState) {
+            $(this._drawer.content()).toggleClass(DRAWER_PANEL_CONTENT_ADAPTIVE_STATE, this._isInAdaptiveState);
             this.toggleDrawer(!this._isInAdaptiveState, true);
+            if(this._splitter) {
+                this._splitter.toggleActiveState(!this._isInAdaptiveState);
+                this._splitter.toggleVisibleState(!this._isInAdaptiveState);
+            }
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
-            this._splitter && this._splitter.toggleState(!this._isInAdaptiveState);
         }
     }
 

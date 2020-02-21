@@ -13,6 +13,7 @@ const SPLITTER_BORDER_CLASS = `${SPLITTER_CLASS}-border`;
 const SPLITTER_INITIAL_STATE_CLASS = `${SPLITTER_CLASS}-initial`;
 
 const STATE_DISABLED_CLASS = 'dx-state-disabled';
+const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 const SPLITTER_MODULE_NAMESPACE = 'dxSplitterResizing';
 const SPLITTER_POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, SPLITTER_MODULE_NAMESPACE);
@@ -134,10 +135,13 @@ export default class SplitterControl extends Widget {
         return this._$splitterBorder.get(0).clientWidth;
     }
 
-    toggleState(isActive) {
-        const classAction = isActive ? 'removeClass' : 'addClass';
-        this.$element()[classAction](STATE_DISABLED_CLASS);
-        this._$splitter[classAction](STATE_DISABLED_CLASS);
+    toggleActiveState(isActive) {
+        this.$element().toggleClass(STATE_DISABLED_CLASS, !isActive);
+        this._$splitter.toggleClass(STATE_DISABLED_CLASS, !isActive);
+    }
+
+    toggleVisibleState(isVisible) {
+        this.$element().toggleClass(STATE_INVISIBLE_CLASS, !isVisible);
     }
 
     isSplitterMoved() {
