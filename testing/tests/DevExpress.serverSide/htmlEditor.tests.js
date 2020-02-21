@@ -1,4 +1,5 @@
 import 'common.css!';
+import 'integration/quill';
 
 QUnit.testStart(() => {
     const element = document.createElement('div');

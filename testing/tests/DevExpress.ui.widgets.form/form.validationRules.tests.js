@@ -10,6 +10,7 @@ import 'ui/autocomplete';
 import 'ui/calendar';
 import 'ui/date_box';
 import 'ui/drop_down_box';
+import 'integration/quill';
 import 'ui/html_editor';
 import 'ui/lookup';
 import 'ui/radio_group';

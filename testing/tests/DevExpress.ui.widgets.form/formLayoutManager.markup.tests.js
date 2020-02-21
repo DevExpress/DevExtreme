@@ -19,6 +19,7 @@ import 'ui/text_area';
 import 'ui/radio_group';
 import 'ui/range_slider';
 import 'ui/slider';
+import 'integration/quill';
 import 'ui/html_editor';
 
 import 'common.css!';
