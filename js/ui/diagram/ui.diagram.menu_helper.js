@@ -90,7 +90,7 @@ const DiagramMenuHelper = {
         contextMenu.option(itemOptionText + 'visible', visible);
     },
     updateContextMenuItemValue(contextMenu, itemOptionText, rootCommandKey, value) {
-        if(value === true || value === false) {
+        if(typeof value === 'boolean') {
             this._setContextMenuHasCheckedItems(contextMenu, -1);
             contextMenu.option(itemOptionText + 'checked', value);
         } else if(value !== undefined) {

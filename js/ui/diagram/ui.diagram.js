@@ -1,6 +1,5 @@
 import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
-import SpeedDialAction from '../speed_dial_action';
 import LoadIndicator from '../load_indicator';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
@@ -20,6 +19,7 @@ import DiagramToolbar from './ui.diagram.toolbar';
 import DiagramMainToolbar from './ui.diagram.main_toolbar';
 import DiagramHistoryToolbar from './ui.diagram.history_toolbar';
 import DiagramViewToolbar from './ui.diagram.view_toolbar';
+import DiagramPropertiesPanelToolbar from './ui.diagram.properties_panel_toolbar';
 import DiagramContextMenu from './ui.diagram.context_menu';
 import DiagramContextToolbox from './ui.diagram.context_toolbox';
 import DiagramDialog from './ui.diagram.dialogs';
@@ -38,8 +38,8 @@ const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + '-toolbar-wrapper';
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + '-content-wrapper';
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + '-content';
 const DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS = DIAGRAM_CLASS + '-floating-toolbar-container';
+const DIAGRAM_PROPERTIES_PANEL_TOOLBAR_CONTAINER_CLASS = DIAGRAM_CLASS + '-properties-panel-toolbar-container';
 const DIAGRAM_LOADING_INDICATOR_CLASS = DIAGRAM_CLASS + '-loading-indicator';
-const DIAGRAM_PROPERTIES_PANEL_BUTTON_CLASS = DIAGRAM_CLASS + '-properties-panel-btn';
 const DIAGRAM_FLOATING_PANEL_OFFSET = 22;
 const DIAGRAM_PROPERTIES_PANEL_BUTTON_SIZE = 48;
 
@@ -101,9 +101,9 @@ class Diagram extends Widget {
         }
 
         this._propertiesPanel = undefined;
-        this._propertiesPanelActionButton = undefined;
+        this._propertiesPanelToolbar = undefined;
         if(this._isPropertiesPanelVisible()) {
-            this._renderPropertiesPanelActionButton($contentWrapper);
+            this._renderPropertiesPanelToolbar($contentWrapper);
             this._renderPropertiesPanel($contentWrapper);
         }
 
@@ -155,6 +155,9 @@ class Diagram extends Widget {
         if(!this._isToolboxVisible()) {
             excludeCommands.push(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME);
         }
+        if(!this._isPropertiesPanelVisible()) {
+            excludeCommands.push(DiagramCommandsManager.SHOW_PROPERTIES_PANEL_COMMAND_NAME);
+        }
         return excludeCommands;
     }
     _getToolbarBaseOptions() {
@@ -172,6 +175,11 @@ class Diagram extends Widget {
             case DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME:
                 if(this._toolbox) {
                     this._toolbox.toggle();
+                }
+                break;
+            case DiagramCommandsManager.SHOW_PROPERTIES_PANEL_COMMAND_NAME:
+                if(this._propertiesPanel) {
+                    this._propertiesPanel.toggle();
                 }
                 break;
             default:
@@ -310,15 +318,41 @@ class Diagram extends Widget {
     _isPropertiesPanelVisible() {
         return this.option('propertiesPanel.visibility') !== 'disabled' && !this.option('readOnly') && !this.option('disabled');
     }
-    _renderPropertiesPanelActionButton($parent) {
-        const $propertiesPanelActionButton = $('<div>')
+    _renderPropertiesPanelToolbar($parent) {
+        const isServerSide = !hasWindow();
+        const $container = $('<div>')
+            .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
+            .addClass(DIAGRAM_PROPERTIES_PANEL_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
-        this._propertiesPanelActionButton = this._createComponent($propertiesPanelActionButton, SpeedDialAction, {
-            icon: 'edit',
-            elementAttr: { class: DIAGRAM_PROPERTIES_PANEL_BUTTON_CLASS },
-            onClick: (e) => {
-                this._propertiesPanel.toggle();
-            }
+        this._propertiesPanelToolbar = this._createComponent($container, DiagramPropertiesPanelToolbar,
+            extend(this._getToolbarBaseOptions(), {
+                buttonStylingMode: 'contained',
+                buttonType: 'default'
+            })
+        );
+        this._adjustFloatingToolbarContainer($container, this._propertiesPanelToolbar);
+        this._updatePropertiesPanelToolbarPosition($container, $parent, isServerSide);
+        resizeCallbacks.add(() => {
+            this._updatePropertiesPanelToolbarPosition($container, $parent, isServerSide);
+        });
+        // const $propertiesPanelActionButton = $('<div>')
+        //     .appendTo($parent);
+        // this._propertiesPanelActionButton = this._createComponent($propertiesPanelActionButton, SpeedDialAction, {
+        //     icon: 'edit',
+        //     elementAttr: { class: DIAGRAM_PROPERTIES_PANEL_BUTTON_CLASS },
+        //     onClick: (e) => {
+        //         this._propertiesPanel.toggle();
+        //     }
+        // });
+    }
+    _updatePropertiesPanelToolbarPosition($container, $parent, isServerSide) {
+        if(isServerSide) return;
+
+        positionUtils.setup($container, {
+            my: 'right bottom',
+            at: 'right bottom',
+            of: $parent,
+            offset: '-' + DIAGRAM_FLOATING_PANEL_OFFSET + ' -' + DIAGRAM_FLOATING_PANEL_OFFSET
         });
     }
     _renderPropertiesPanel($parent) {
@@ -346,8 +380,8 @@ class Diagram extends Widget {
             onVisibilityChanged: (e) => {
                 if(isServerSide) return;
 
-                if(this._propertiesPanelActionButton) {
-                    this._propertiesPanelActionButton.option('icon', e.visible ? 'close' : 'dx-diagram-i dx-diagram-i-button-properties-panel');
+                if(this._propertiesPanelToolbar) {
+                    this._propertiesPanelToolbar.option('active', e.visible);
                 }
             },
             onVisibilityChanging: ({ component }) => this._updatePropertiesPanelGroupBars(component),

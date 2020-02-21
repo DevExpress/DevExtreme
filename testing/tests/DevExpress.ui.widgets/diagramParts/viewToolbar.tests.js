@@ -24,10 +24,10 @@ QUnit.module('View Toolbar', {
 }, () => {
     test('should not render if toolbar.visible is false', function(assert) {
         let $toolbar = this.$element.find(Consts.FLOATING_TOOLBAR_SELECTOR);
-        assert.equal($toolbar.length, 2);
+        assert.equal($toolbar.length, 3);
         this.instance.option('viewToolbar.visible', false);
         $toolbar = this.$element.find(Consts.FLOATING_TOOLBAR_SELECTOR);
-        assert.equal($toolbar.length, 1);
+        assert.equal($toolbar.length, 2);
     });
     test('should fill toolbar with default items', function(assert) {
         const toolbar = getViewToolbarInstance(this.$element);

@@ -91,7 +91,8 @@ class DiagramToolbar extends DiagramPanel {
             widget: item.widget || 'dxButton',
             cssClass: item.cssClass,
             options: {
-                stylingMode: 'text',
+                stylingMode: this.option('buttonStylingMode'),
+                type: this.option('buttonType'),
                 text: item.text,
                 hint: item.hint,
                 icon: item.icon,
@@ -374,6 +375,8 @@ class DiagramToolbar extends DiagramPanel {
                 proxyUrl: undefined
             },
             'locateInMenu': 'auto',
+            'buttonStylingMode': 'text',
+            'buttonType': 'normal',
             'editorStylingMode': 'filled'
         });
     }
