@@ -46,6 +46,10 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
                 return false;
             }
 
+            if(item1.level !== item2.level) {
+                return false;
+            }
+
             return true;
         },
 

@@ -223,6 +223,13 @@ QUnit.test('The selector is specific enough to override the style applied to han
     assert.equal($('.dx-sortable-dragging').find('.default').eq(0).css('cursor'), cursor, `cursor is ${cursor}`);
 });
 
+QUnit.test('Elements should have \'user-select: auto\' style (T862255)', function(assert) {
+    this.createSortable();
+
+    const userSelect = browser.msie ? 'text' : 'auto';
+    assert.equal(this.$element.find('.draggable').eq(0).css('user-select'), userSelect, `user-select is ${userSelect}`);
+});
+
 QUnit.module('allowReordering', moduleConfig);
 
 QUnit.test('allowReordering = false when dropFeedbackMode is \'push\'', function(assert) {

@@ -632,9 +632,19 @@ module.exports = {
                     const that = this;
                     const row = options.row;
                     const rowTemplate = that.option('rowTemplate');
+                    const isDataRow = row.rowType === 'data';
+                    const isGroupRow = row.rowType === 'group';
 
-                    if((row.rowType === 'data' || row.rowType === 'group') && !isDefined(row.groupIndex) && rowTemplate) {
-                        that.renderTemplate($table, rowTemplate, extend({ columns: options.columns }, row), true);
+                    if((isDataRow || isGroupRow) && !isDefined(row.groupIndex) && rowTemplate) {
+                        const rowOptions = extend({ columns: options.columns }, row);
+                        that.renderTemplate($table, rowTemplate, rowOptions, true);
+                        if(that.option('repaintChangesOnly') && isDataRow) {
+                            that._addWatchMethod(rowOptions, row);
+                            const stopWatch = rowOptions.watch((data) => extend(true, {}, data), () => {
+                                stopWatch();
+                                that._dataController.repaintRows([row.rowIndex]);
+                            });
+                        }
                     } else {
                         that.callBase($table, options);
                     }
@@ -830,7 +840,7 @@ module.exports = {
                                     const rowsHeight = that._getRowsHeight(contentElement.children().first());
                                     const $tableElement = $table || that.getTableElements();
                                     const borderTopWidth = Math.ceil(parseFloat($tableElement.css('borderTopWidth')));
-                                    const heightCorrection = browser.webkit && that._getDevicePixelRatio() >= 2 ? 1 : 0; // T606935
+                                    const heightCorrection = that._getHeightCorrection();
                                     const resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth - heightCorrection;
 
                                     if(showFreeSpaceRow) {
@@ -851,6 +861,12 @@ module.exports = {
                             that._updateLastRowBorder(true);
                         }
                     }
+                },
+
+                _getHeightCorrection: function() {
+                    const isZoomedWebkit = browser.webkit && this._getDevicePixelRatio() >= 2; // T606935
+                    const hasExtraBorderTop = browser.mozilla && browser.version >= 70 && !this.option('showRowLines');
+                    return isZoomedWebkit || hasExtraBorderTop ? 1 : 0;
                 },
 
                 _columnOptionChanged: function(e) {

@@ -290,14 +290,16 @@ let ComponentBuilder = Class.inherit({
         func(scope);
         if(!scope.$root.$$phase) {
             if(!this._renderingTimer) {
+                const clearRenderingTimer = () => {
+                    clearTimeout(this._renderingTimer);
+                };
                 this._renderingTimer = setTimeout(() => {
                     scope.$apply();
                     this._renderingTimer = null;
+                    this._componentDisposing.remove(clearRenderingTimer);
                 });
+                this._componentDisposing.add(clearRenderingTimer);
             }
-            this._componentDisposing.add(() => {
-                clearTimeout(this._renderingTimer);
-            });
         }
     },
 

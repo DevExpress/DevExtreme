@@ -2,9 +2,9 @@ import { ClientFunction, Selector } from "testcafe";
 import Widget from "./internal/widget";
 
 const CLASS = {
-    headers: 'dx-datagrid-headers',
+    headers: 'headers',
     headerRow: 'dx-header-row',
-    filterRow: 'dx-datagrid-filter-row',
+    filterRow: 'filter-row',
     filterMenu: 'dx-filter-menu',
     dataRow: 'dx-data-row',
     groupRow: 'dx-group-row',
@@ -17,10 +17,10 @@ const CLASS = {
     focusedRow: 'dx-row-focused',
     rowRemoved: 'dx-row-removed',
     editorInput: 'dx-texteditor-input',
-    filterPanel: 'dx-datagrid-filter-panel',
+    filterPanel: 'filter-panel',
     filterPanelIcon: 'dx-icon-filter',
-    filterPanelText: 'dx-datagrid-filter-panel-text',
-    pager: 'dx-datagrid-pager',
+    filterPanelText: 'filter-panel-text',
+    pager: 'pager',
     pagerPageSize: 'dx-page-size',
     pagerPrevNavButton: 'dx-prev-button',
     pagerNextNavButton: 'dx-next-button',
@@ -30,9 +30,14 @@ const CLASS = {
     textEditor: 'dx-texteditor',
     textEditorInput: 'dx-texteditor-input',
     invalid: 'dx-invalid',
-    editFormRow: 'dx-datagrid-edit-form',
+    editFormRow: 'edit-form',
     button: 'dx-button',
-    formButtonsContainer: 'dx-datagrid-form-buttons-container'
+    formButtonsContainer: 'form-buttons-container',
+    selectCheckBox: 'dx-select-checkbox'
+};
+
+const addWidgetPrefix = function(widgetName: string, className: string) {
+    return `dx-${widgetName.slice(2).toLowerCase() + (className ? '-' + className : '')}`;
 };
 
 class DxElement {
@@ -48,8 +53,11 @@ class DxElement {
 }
 
 class Headers extends DxElement {
-    constructor(element: Selector) {
+    widgetName: string;
+
+    constructor(element: Selector, widgetName) {
         super(element);
+        this.widgetName = widgetName;
     }
 
     getHeaderRow(index: number): HeaderRow {
@@ -57,7 +65,7 @@ class Headers extends DxElement {
     }
 
     getFilterRow(): FilterRow {
-        return new FilterRow(this.element.find(`.${CLASS.filterRow}`));
+        return new FilterRow(this.element.find(`.${addWidgetPrefix(this.widgetName, CLASS.filterRow)}`));
     }
 }
 
@@ -130,11 +138,13 @@ class CommandCell extends DxElement {
 class DataRow extends DxElement {
     isRemoved: Promise<boolean>;
     isFocusedRow: Promise<boolean>;
+    isSelected: Promise<boolean>;
 
     constructor(element: Selector) {
         super(element);
         this.isRemoved = this.element.hasClass(CLASS.rowRemoved);
         this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
+        this.isSelected = this.element.hasClass(CLASS.selection);
     }
 
     getDataCell(index: number): DataCell {
@@ -143,6 +153,10 @@ class DataRow extends DxElement {
 
     getCommandCell(index: number): CommandCell {
         return new CommandCell(this.element, index);
+    }
+
+    getSelectCheckBox(): Selector {
+        return this.element.find(`.${CLASS.selectCheckBox}`);
     }
 }
 
@@ -160,8 +174,11 @@ class GroupRow extends DxElement {
 }
 
 class FilterPanel extends DxElement {
-    constructor(element: Selector) {
+    widgetName: string;
+
+    constructor(element: Selector, widgetName) {
         super(element);
+        this.widgetName = widgetName;
     }
 
     getIconFilter(): DxElement {
@@ -169,7 +186,7 @@ class FilterPanel extends DxElement {
     }
 
     getFilterText(): DxElement {
-        return new DxElement(this.element.find(`.${CLASS.filterPanelText}`));
+        return new DxElement(this.element.find(`.${addWidgetPrefix(this.widgetName, CLASS.filterPanelText)}`));
     }
 }
 
@@ -204,17 +221,13 @@ class Pager extends DxElement {
 }
 
 export class EditForm extends DxElement {
-    selector: string;
     form: Selector;
     saveButton: Selector;
     cancelButton: Selector;
 
-    constructor(parentSelector: Selector) {
-        const selector = parentSelector ? parentSelector.find(`.${CLASS.editFormRow}`) :  Selector(`.${CLASS.editFormRow}`);
-        super(selector);
+    constructor(element: Selector, buttons: Selector) {
+        super(element);
         this.form = this.element.find(`.${CLASS.form}`);
-
-        const buttons = this.element.find(`.${CLASS.formButtonsContainer} .${CLASS.button}`);
         this.saveButton = buttons.nth(0);
         this.cancelButton = buttons.nth(1);
     }
@@ -232,23 +245,28 @@ export default class DataGrid extends Widget {
     dataRows: Selector;
     getGridInstance: ClientFunction<any>;
 
-    name: string = 'dxDataGrid';
+    name: string;
 
-    constructor(id: string) {
+    constructor(id: string, name='dxDataGrid') {
         super(id);
 
+        this.name = name;
         this.dataRows = this.element.find(`.${CLASS.dataRow}`);
 
-        const dataGrid =  this.element;
+        const grid = this.element;
 
         this.getGridInstance = ClientFunction(
-            () => $(dataGrid())['dxDataGrid']('instance'),
-            { dependencies: { dataGrid }}
+            () => $(grid())[`${name}`]('instance'),
+            { dependencies: { grid, name }}
         );
     }
 
+    addWidgetPrefix(className: string) {
+        return addWidgetPrefix(this.name, className);
+    }
+
     getHeaders(): Headers {
-        return new Headers(this.element.find(`.${CLASS.headers}`));
+        return new Headers(this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`), this.name);
     }
 
     getDataRow(index: number): DataRow {
@@ -268,11 +286,11 @@ export default class DataGrid extends Widget {
     }
 
     getFilterPanel(): FilterPanel {
-        return new FilterPanel(this.element.find(`.${CLASS.filterPanel}`));
+        return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel)}`), this.name);
     }
 
     getPager(): Pager {
-        return new Pager(this.element.find(`.${CLASS.pager}`));
+        return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
     }
 
     scrollTo(options): Promise<void> {
@@ -303,7 +321,11 @@ export default class DataGrid extends Widget {
     }
 
     getEditForm() {
-        return new EditForm(this.element);
+        const editFormRowClass = this.addWidgetPrefix(CLASS.editFormRow);
+        const element = this.element ? this.element.find(`.${editFormRowClass}`) :  Selector(`.${editFormRowClass}`);
+        const buttons = element.find(`.${this.addWidgetPrefix(CLASS.formButtonsContainer)} .${CLASS.button}`);
+
+        return new EditForm(element, buttons);
     }
 
     api_option(name: any, value = 'undefined') : Promise<any> {
