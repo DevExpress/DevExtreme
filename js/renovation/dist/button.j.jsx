@@ -19,9 +19,11 @@ class Button extends Widget {
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
 
-        if(props.contentRender) {
-            const template = this._getTemplate(props.contentRender);
+        if(props.template) {
+            const template = this._getTemplate(props.template);
 
+            // TODO: rename 'contentRender' => 'template' after fix generator bug
+            //       (renames 'template' => 'render' in declaration)
             props.contentRender = ({ parentRef, ...restProps }) => {
                 useLayoutEffect(() => {
                     const $parent = $(parentRef.current);
