@@ -344,12 +344,10 @@ extend(exports, {
         const categoriesValue = map(categories, function(category) {
             return isDefined(category) ? category.valueOf() : null;
         });
-        let visibleCategories;
         let indexStartValue = categoriesValue.indexOf(startValue.valueOf());
         let indexEndValue = categoriesValue.indexOf(endValue.valueOf());
         let swapBuf;
         let inverted = false;
-        let lastIdx;
 
         indexStartValue < 0 && (indexStartValue = 0);
         indexEndValue < 0 && (indexEndValue = categories.length - 1);
@@ -360,8 +358,8 @@ extend(exports, {
             inverted = true;
         }
 
-        visibleCategories = categories.slice(indexStartValue, indexEndValue + 1);
-        lastIdx = visibleCategories.length - 1;
+        const visibleCategories = categories.slice(indexStartValue, indexEndValue + 1);
+        const lastIdx = visibleCategories.length - 1;
         return {
             categories: visibleCategories,
             start: visibleCategories[inverted ? lastIdx : 0],
