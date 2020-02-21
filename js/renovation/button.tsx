@@ -131,6 +131,7 @@ export class ButtonInput extends WidgetInput {
     @OneWay() onSubmit?: (e: any) => any = (() => undefined);
     @OneWay() pressed?: boolean;
     @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
+    @OneWay() template?: any = '';
     @OneWay() text?: string = '';
     @OneWay() type?: string;
     @OneWay() useInkRipple: boolean = false;
