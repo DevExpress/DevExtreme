@@ -32,7 +32,7 @@ export default class PreactWrapper extends Widget {
                 }
                 return a;
             }, {}), options.elementAttr);
-        } else {
+        } else if(attributes.id) {
             // NOTE: workaround to save container id
             options.elementAttr = extend({ [attributes.id.name]: attributes.id.value }, options.elementAttr);
         }
