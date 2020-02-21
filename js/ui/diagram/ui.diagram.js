@@ -335,15 +335,6 @@ class Diagram extends Widget {
         resizeCallbacks.add(() => {
             this._updatePropertiesPanelToolbarPosition($container, $parent, isServerSide);
         });
-        // const $propertiesPanelActionButton = $('<div>')
-        //     .appendTo($parent);
-        // this._propertiesPanelActionButton = this._createComponent($propertiesPanelActionButton, SpeedDialAction, {
-        //     icon: 'edit',
-        //     elementAttr: { class: DIAGRAM_PROPERTIES_PANEL_BUTTON_CLASS },
-        //     onClick: (e) => {
-        //         this._propertiesPanel.toggle();
-        //     }
-        // });
     }
     _updatePropertiesPanelToolbarPosition($container, $parent, isServerSide) {
         if(isServerSide) return;
