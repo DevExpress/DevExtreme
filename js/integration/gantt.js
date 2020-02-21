@@ -1,4 +1,4 @@
-import { GanttView } from 'devexpress-gantt';
-import { addLibrary } from '../core/registry';
+const Gantt = require('devexpress-gantt');
+const addLibrary = require('../core/registry').addLibrary;
 
-GanttView && addLibrary('gantt', { GanttView });
+Gantt && addLibrary('gantt', Gantt);
