@@ -31,6 +31,7 @@ export default class FileManagerNotificationControl extends Widget {
         this._actionProgressStatus = 'default';
         this._operationInProgressCount = 0;
         this._failedOperationCount = 0;
+        this._isInAdaptiveState = this._isSmallScreen();
 
         const $progressPanelContainer = this.option('progressPanelContainer');
         const $progressDrawer = $('<div>')
@@ -42,15 +43,14 @@ export default class FileManagerNotificationControl extends Widget {
             contentRenderer($progressDrawer);
         }
 
-        this._isInAdaptiveState = this._isSmallScreen();
-        this._progressDrawer = this._createComponent($progressDrawer, Drawer, {
+        const drawerOptions = extend({
             opened: false,
             position: 'right',
-            openedStateMode: this._isInAdaptiveState ? 'overlap' : 'shrink',
-            closeOnOutsideClick: false,
-            shading: this._isInAdaptiveState ? true : false,
             template: (container) => this._getProgressPanel(container)
-        });
+        },
+        this._getProgressPanelDrawerAdaptiveOptions());
+
+        this._progressDrawer = this._createComponent($progressDrawer, Drawer, drawerOptions);
     }
 
     tryShowProgressPanel() {
@@ -142,11 +142,17 @@ export default class FileManagerNotificationControl extends Widget {
         this._isInAdaptiveState = this._isSmallScreen();
         if(this._progressDrawer && oldState !== this._isInAdaptiveState) {
             this._getProgressPanel(this.$element());
-            this._progressDrawer.option({
-                openedStateMode: this._isInAdaptiveState ? 'overlap' : 'shrink',
-                shading: this._isInAdaptiveState ? true : false
-            });
+            const options = this._getProgressPanelDrawerAdaptiveOptions();
+            this._progressDrawer.option(options);
         }
+    }
+
+    _getProgressPanelDrawerAdaptiveOptions() {
+        return {
+            openedStateMode: this._isInAdaptiveState ? 'overlap' : 'shrink',
+            shading: this._isInAdaptiveState ? true : false,
+            closeOnOutsideClick: this._isInAdaptiveState ? true : false
+        };
     }
 
     _getProgressPanel(container) {
