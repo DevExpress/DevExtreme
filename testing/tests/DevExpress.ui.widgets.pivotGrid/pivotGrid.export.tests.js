@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import helper from '../../helpers/pivotGridExportTestsHelper.js';
 import JSZipMock from '../../helpers/jszipMock.js';
-import excel_creator from 'exporter/excel_creator';
 import { addLibrary } from 'core/registry';
 
 QUnit.testStart(function() {
