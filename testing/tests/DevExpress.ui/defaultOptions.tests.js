@@ -400,11 +400,7 @@ testComponentDefaults(Lookup,
         closeOnOutsideClick: true,
         searchEnabled: false,
         showCancelButton: false,
-        showPopupTitle: false,
-        position: {
-            my: 'left top',
-            at: 'left top'
-        }
+        showPopupTitle: false
     },
     function() {
         this.origIsMaterial = themes.isMaterial;

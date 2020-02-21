@@ -3332,8 +3332,8 @@ QUnit.module('default options', {
 
             const $popover = $('.dx-popover-wrapper');
 
-            assert.equal(lookup.option('popupWidth')(), $(window).width() * 0.8, 'popup width match with lookup field width');
-            assert.equal(lookup.option('popupHeight')(), $('.dx-list-item').height() * 4 + 16, 'popup position of lookup field');
+            assert.equal($popover.find('.dx-overlay-content').outerWidth(), $(lookup.field()).outerWidth() + 2, 'popup width match with lookup field width');
+            assert.equal($popover.find('.dx-overlay-content').outerHeight(), $('.dx-list-item').height() * 5 + 2, 'popup height auto if usePopover true');
 
             assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup.field()).outerHeight() + 8, 2, 'popover position of lookup field with body padding 8px');
 
