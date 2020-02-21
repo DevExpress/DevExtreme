@@ -6,6 +6,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import '../../helpers/ignoreQuillTimers.js';
 
 import 'common.css!';
+import 'integration/quill';
 import 'generic_light.css!';
 import 'ui/text_box';
 import 'ui/date_box';
@@ -15,7 +16,6 @@ import 'ui/calendar';
 import 'ui/check_box';
 import 'ui/drop_down_box';
 import 'ui/html_editor';
-import 'integration/quill';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/select_box';

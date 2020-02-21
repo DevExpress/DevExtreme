@@ -74,6 +74,7 @@ const widgets = {
 };
 
 const DataSource = require('data/data_source');
+require('integration/quill');
 
 QUnit.module('Widget creation', {
     beforeEach: function() {

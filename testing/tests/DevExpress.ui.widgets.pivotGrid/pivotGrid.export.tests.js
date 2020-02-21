@@ -2,6 +2,7 @@ import $ from 'jquery';
 import helper from '../../helpers/pivotGridExportTestsHelper.js';
 import JSZipMock from '../../helpers/jszipMock.js';
 import excel_creator from 'exporter/excel_creator';
+import { addLibrary } from 'core/registry';
 
 QUnit.testStart(function() {
     const markup = '<div id="pivotGrid" style="width: 700px"></div>';
@@ -48,7 +49,7 @@ QUnit.test('Export with async jsZip', function(assert) {
         }
     }
 
-    excel_creator.ExcelCreator.JSZip = AsyncJSZipMock;
+    addLibrary('jszip', AsyncJSZipMock, true);
     helper.runGeneralTest(assert, {}, { data: { isZipData: true } });
 });
 
