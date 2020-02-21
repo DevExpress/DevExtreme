@@ -3236,6 +3236,7 @@ QUnit.test('Remove the inserted row with edit mode batch and hidden column', fun
             assert.notOk(that.editingController.isEditing(), 'is not editing');
         });
     });
+});
 
 QUnit.test('AddRow method should return Deferred', function(assert) {
     // arrange
