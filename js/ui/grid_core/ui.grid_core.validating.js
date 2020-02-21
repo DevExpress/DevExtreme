@@ -900,7 +900,7 @@ module.exports = {
                         }
                     },
 
-                    _showValidationMessage: function($cell, message, alignment, revertTooltip) {
+                    _showValidationMessage: function($cell, messages, alignment, revertTooltip) {
                         const $highlightContainer = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
                         const isMaterial = themes.isMaterial();
                         const overlayTarget = $highlightContainer.length && !isMaterial ? $highlightContainer : $cell;
@@ -909,11 +909,16 @@ module.exports = {
                         const myPosition = isOverlayVisible ? 'top right' : 'top ' + alignment;
                         const atPosition = isOverlayVisible ? 'top left' : 'bottom ' + alignment;
 
+                        let errorMessageText = '';
+                        messages && messages.forEach(function(message) {
+                            errorMessageText += (errorMessageText.length ? '<br/>' : '') + encodeHtml(message);
+                        });
+
                         const $overlayElement = $('<div>')
                             .addClass(INVALID_MESSAGE_CLASS)
                             .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
                             .addClass(this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
-                            .html(message)
+                            .html(errorMessageText)
                             .appendTo($cell);
 
                         const overlayOptions = {
@@ -1031,11 +1036,11 @@ module.exports = {
                         const showValidationMessage = validationResult && validationResult.status === VALIDATION_STATUS.invalid;
 
                         if(showValidationMessage && $cell && column && validationResult && validationResult.brokenRules) {
-                            let errorMessage = '';
+                            const errorMessages = [];
                             validationResult.brokenRules.forEach(function(rule) {
-                                errorMessage += (errorMessage.length ? '<br/>' : '') + encodeHtml(rule.message);
+                                errorMessages.push(rule.message);
                             });
-                            this._showValidationMessage($focus, errorMessage, column.alignment || 'left', revertTooltip);
+                            this._showValidationMessage($focus, errorMessages, column.alignment || 'left', revertTooltip);
                         }
 
                         !hideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
