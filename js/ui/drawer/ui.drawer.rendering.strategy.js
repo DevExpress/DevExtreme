@@ -191,17 +191,17 @@ class DrawerStrategy {
         return isDrawerOpened ? this.getDrawerInstance().getMaxSize() : this.getDrawerInstance().getMinSize();
     }
 
-    renderShaderVisibility(isDrawerOpened, animate, duration) {
+    renderShaderVisibility(isShaderVisible, animate, duration) {
         const drawer = this.getDrawerInstance();
-        const fadeConfig = isDrawerOpened ? { from: 0, to: 1 } : { from: 1, to: 0 };
+        const fadeConfig = isShaderVisible ? { from: 0, to: 1 } : { from: 1, to: 0 };
 
         if(animate) {
             animation.fade($(drawer._$shader), fadeConfig, duration, () => {
-                this._drawer._toggleShaderVisibility(isDrawerOpened);
+                this._drawer._toggleShaderVisibility(isShaderVisible);
                 this._shaderAnimation.resolve();
             });
         } else {
-            drawer._toggleShaderVisibility(isDrawerOpened);
+            drawer._toggleShaderVisibility(isShaderVisible);
             drawer._$shader.css('opacity', fadeConfig.to);
         }
     }
