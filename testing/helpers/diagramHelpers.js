@@ -16,14 +16,23 @@ export const Consts = {
     FULLSCREEN_CLASS: 'dx-diagram-fullscreen'
 };
 
+export function getMainToolbarElement($diagramElement) {
+    return $diagramElement.find(Consts.MAIN_TOOLBAR_SELECTOR);
+}
 export function getMainToolbarInstance($diagramElement) {
-    return $diagramElement.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
+    return getMainToolbarElement($diagramElement).dxToolbar('instance');
+}
+export function getHistoryToolbarElement($diagramElement) {
+    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(0));
 }
 export function getHistoryToolbarInstance($diagramElement) {
-    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(0)).dxToolbar('instance');
+    return getHistoryToolbarElement($diagramElement).dxToolbar('instance');
+}
+export function getViewToolbarElement($diagramElement) {
+    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(1));
 }
 export function getViewToolbarInstance($diagramElement) {
-    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(1)).dxToolbar('instance');
+    return getViewToolbarElement($diagramElement).dxToolbar('instance');
 }
 export function findToolbarItem($diagramElement, label) {
     return $diagramElement.find(Consts.MAIN_TOOLBAR_SELECTOR)
@@ -41,6 +50,9 @@ export function findViewToolbarItem($diagramElement, label) {
 }
 export function getToolbarIcon($button) {
     return $button.find('.dx-dropdowneditor-field-template-wrapper').find('.dx-diagram-i, .dx-icon');
+}
+export function getContextMenuItemCheck($button) {
+    return $button.find('.dx-icon-check');
 }
 
 export function getContextMenuInstance($diagramElement) {
