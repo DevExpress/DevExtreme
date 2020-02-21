@@ -1,14 +1,11 @@
-const noop = require('../../core/utils/common').noop;
-const commonModule = require('./common');
+import { noop } from '../../core/utils/common';
+import commonModule from './common';
+import Slider from './slider';
+import { normalizeEnum as _normalizeEnum, rangesAreEqual, adjustVisualRange } from '../core/utils';
+import { isNumeric } from '../../core/utils/type';
+import { adjust } from '../../core/utils/math';
 const animationSettings = commonModule.utils.animationSettings;
 const emptySliderMarkerText = commonModule.consts.emptySliderMarkerText;
-const Slider = require('./slider');
-const _normalizeEnum = require('../core/utils').normalizeEnum;
-const typeUtils = require('../../core/utils/type');
-const isNumeric = typeUtils.isNumeric;
-const vizUtils = require('../core/utils');
-const rangesAreEqual = require('../core/utils').rangesAreEqual;
-const adjust = require('../../core/utils/math').adjust;
 
 function buildRectPoints(left, top, right, bottom) {
     return [left, top, right, top, right, bottom, left, bottom];
@@ -224,7 +221,7 @@ SlidersController.prototype = {
             return a <= b;
         };
 
-        let { startValue, endValue } = vizUtils.adjustVisualRange({
+        let { startValue, endValue } = adjustVisualRange({
             dataType: businessRange.dataType,
             axisType: businessRange.axisType,
             base: businessRange.base
