@@ -96,7 +96,7 @@
 @SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING: 7px;
 @SCHEDULER_RECURRENCE_BORDER_COLOR: @base-border-color;
 
-.scheduler-mixin(100px);
+.scheduler-mixin();
 
 .dx-scheduler-time-panel-cell {
     height: @GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
@@ -119,7 +119,7 @@
     }
 }
 
-&:not(.dx-scheduler-work-space-vertical-grouped) {
+:not(.dx-scheduler-work-space-vertical-grouped) {
     .dx-scheduler-all-day-title-mixin(@GENERIC_SCHEDULER_HEADER_HEIGHT + @GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
 }
 

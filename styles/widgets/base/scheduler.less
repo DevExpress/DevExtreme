@@ -331,7 +331,7 @@
     }
 }
 
-.set-size-vertical-group-table-mixin(@size) {
+.set-size-vertical-group-table-mixin(@size, @offset) {
     .dx-scheduler-work-space-vertical-group-table {
         width: @size;
     }
@@ -420,21 +420,26 @@
 
 .dx-scheduler-vertical-group-table-mixin(@offset: 0px) {
     &[dx-group-column-count='1'] {
-        .set-size-vertical-group-table-mixin(@SCHEDULER_LEFT_COLUMN_WIDTH);
+        .set-size-vertical-group-table-mixin(@SCHEDULER_LEFT_COLUMN_WIDTH, @offset);
     }
 
     &[dx-group-column-count='2'] {
-        .set-size-vertical-group-table-mixin(1.5 * @SCHEDULER_LEFT_COLUMN_WIDTH);
+        .set-size-vertical-group-table-mixin(1.5 * @SCHEDULER_LEFT_COLUMN_WIDTH, @offset);
     }
 
     &[dx-group-column-count='3'] {
-        .set-size-vertical-group-table-mixin(2 * @SCHEDULER_LEFT_COLUMN_WIDTH);
+        .set-size-vertical-group-table-mixin(2 * @SCHEDULER_LEFT_COLUMN_WIDTH, @offset);
     }
 }
 
 .dx-scheduler-appointment-focused-mixin() {
     &.dx-state-focused {
         box-shadow: none;
+
+        // T314382
+        & when (@SCHEDULER_FILL_FOCUSED_APPOINTMENT) {
+            background-color: @SCHEDULER_APPOINTMENT_START_COLOR;
+        }
 
         &:before {
             pointer-events: none;
@@ -444,38 +449,32 @@
             left: 0;
             right: 0;
             bottom: 0;
-        }
-    }
-}
-// T314382
-.dx-scheduler-appointment-focused-mixin() when (@SCHEDULER_FILL_FOCUSED_APPOINTMENT = true) {
-    &.dx-state-focused {
-        background-color: @SCHEDULER_APPOINTMENT_START_COLOR;
-    }
-}
-// T314382
-.dx-scheduler-appointment-focused-mixin() when not (@SCHEDULER_FILL_FOCUSED_APPOINTMENT = true) {
-    &.dx-state-focused {
-        &:before {
-            background-color: @SCHEDULER_APPOINTMENT_START_COLOR;
-            opacity: 0.98;
-        }
-    }
-}
 
-.scheduler-mixin(@left-column-width) {
-    @SCHEDULER_LEFT_COLUMN_WIDTH: @left-column-width;
-
-    .dx-scheduler-pseudo-cell {
-        &:before {
-            content: "";
-            width: @SCHEDULER_LEFT_COLUMN_WIDTH;
-            display: table-cell;
-
-            .dx-scheduler-small & {
-                width: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+            // T314382
+            & when not (@SCHEDULER_FILL_FOCUSED_APPOINTMENT) {
+                background-color: @SCHEDULER_APPOINTMENT_START_COLOR;
+                opacity: 0.98;
             }
         }
+    }
+}
+
+.dx-scheduler-pseudo-cell-mixin() {
+    &:before {
+        content: "";
+        width: @SCHEDULER_LEFT_COLUMN_WIDTH;
+        display: table-cell;
+
+        .dx-scheduler-small & {
+            width: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+        }
+    }
+}
+
+
+.scheduler-mixin() {
+    .dx-scheduler-pseudo-cell {
+        .dx-scheduler-pseudo-cell-mixin();
     }
 
     .dx-scheduler-fixed-appointments {
@@ -1581,7 +1580,7 @@
     .dx-scheduler-group-row,
     .dx-scheduler-header-row,
     .dx-scheduler-all-day-table-row {
-        .dx-scheduler-pseudo-cell();
+        .dx-scheduler-pseudo-cell-mixin();
     }
 
     .dx-scheduler-all-day-panel {
@@ -1716,7 +1715,7 @@
         }
 
         .dx-scheduler-date-table-row {
-            .dx-scheduler-pseudo-cell();
+            .dx-scheduler-pseudo-cell-mixin();
         }
     }
 
@@ -2388,7 +2387,7 @@
         .dx-scheduler-all-day-panel {
             display: table-cell;
             position: relative;
-            .dx-scheduler-pseudo-cell();
+            .dx-scheduler-pseudo-cell-mixin();
         }
 
         .dx-scheduler-all-day-table-row {

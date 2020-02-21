@@ -83,6 +83,16 @@ gulp.task('fix-base', () => {
         // pivotGrid
         .pipe(replace(/^\$PIVOTGRID_DRAG_HEADER_BORDER/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$PIVOTGRID_DRAG_HEADER_BORDER'))
 
+        // scheduler
+        .pipe(replace(/(@mixin |\.)dx-scheduler-group-mixin\((.*?)\),/g, '@include dx-scheduler-group-mixin($2);'))
+        .pipe(replace(/(@mixin |\.)set-size-timeline-horizontal-grouping-mixin\((.*?)\),/g, '@include set-size-timeline-horizontal-grouping-mixin($2);'))
+        .pipe(replace(/(@mixin |\.)set-size-timeline-group-table-mixin\((.*?)\),/g, '@include set-size-timeline-group-table-mixin($2);'))
+        .pipe(replace(/(@mixin |\.)set-size-vertical-group-table-mixin\((.*?)\),/g, '@include set-size-vertical-group-table-mixin($2);'))
+        .pipe(replace(/(@mixin |\.)dx-icon\((.*?)\),/g, '@include dx-icon($2);'))
+        .pipe(replace(/& when (not )?\((.*?)\)/g, '@if $1$2'))
+        .pipe(replace(/(_TOP|_LEFT|100%|absolute|inherit|""|0|_COLOR|none|_BORDER|relative|inline-block|hidden|left),$/gm, '$1;'))
+        .pipe(replace(/^\$SCHEDULER_NAVIGATOR_OFFSET/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$SCHEDULER_NAVIGATOR_OFFSET'))
+
         .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;

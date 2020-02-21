@@ -78,5 +78,6 @@ module.exports = [
     { content: 'multiView', task: 'widget' },
     { content: 'tabPanel', task: 'widget' },
     { content: 'fileUploader', task: 'widget' },
+    { content: 'scheduler', task: 'widget' },
     { task: 'newline' }
 ];
