@@ -14,6 +14,7 @@ class ShrinkStrategy extends DrawerStrategy {
                 duration: this.getDrawerInstance().option('animationDuration'),
                 direction: config.direction
             });
+
             animation.margin(animationConfig);
         } else {
             config.$panel.css('margin' + camelize(config.direction, true), config.panelOffset);

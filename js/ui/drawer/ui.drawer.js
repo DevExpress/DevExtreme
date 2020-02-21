@@ -166,12 +166,11 @@ const Drawer = Widget.inherit({
 
         const contentTemplateOption = this.option('contentTemplate');
         const contentTemplate = this._getTemplate(contentTemplateOption);
-        const transclude = this._getAnonymousTemplateName() === contentTemplateOption;
 
         contentTemplate && contentTemplate.render({
             container: this.viewContent(),
             noModel: true,
-            transclude
+            transclude: (this._getAnonymousTemplateName() === contentTemplateOption)
         });
 
         eventsEngine.off(this._$viewContentWrapper, CLICK_EVENT_NAME);
@@ -210,9 +209,7 @@ const Drawer = Widget.inherit({
         prevPosition && this.$element()
             .removeClass(DRAWER_CLASS + '-' + prevPosition);
 
-        const position = this.calcCurrentPosition();
-
-        this.$element().addClass(DRAWER_CLASS + '-' + position);
+        this.$element().addClass(DRAWER_CLASS + '-' + this.calcCurrentPosition());
     },
 
     _refreshWrapperChildrenOrder() {
@@ -359,13 +356,11 @@ const Drawer = Widget.inherit({
 
         if(!hasWindow()) return;
 
-        const duration = this.option('animationDuration');
-
         isDrawerOpened && this._toggleShaderVisibility(isDrawerOpened);
 
         this._strategy.renderPosition(isDrawerOpened, animate);
 
-        this._strategy.renderShaderVisibility(isDrawerOpened, animate, duration);
+        this._strategy.renderShaderVisibility(isDrawerOpened, animate, this.option('animationDuration'));
     },
 
     _animationCompleteHandler() {

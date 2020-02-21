@@ -110,8 +110,7 @@ class DrawerStrategy {
     }
 
     renderPosition(isDrawerOpened, animate) {
-        const drawer = this.getDrawerInstance();
-        const revealMode = drawer.option('revealMode');
+        const revealMode = this.getDrawerInstance().option('revealMode');
 
         this._prepareAnimationDeferreds(animate);
 
