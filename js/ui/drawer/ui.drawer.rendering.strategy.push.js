@@ -18,7 +18,7 @@ class PushStrategy extends DrawerStrategy {
             const animationConfig = {
                 $element: config.$content,
                 position: config.contentPosition,
-                direction: drawer.calcCurrentPosition(),
+                direction: drawer.calcTargetPosition(),
                 duration: drawer.option('animationDuration'),
                 complete: () => {
                     this._elementsAnimationCompleteHandler();

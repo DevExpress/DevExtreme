@@ -149,7 +149,7 @@ class DrawerStrategy {
         const drawer = this.getDrawerInstance();
 
         return {
-            direction: drawer.calcCurrentPosition(),
+            direction: drawer.calcTargetPosition(),
             $panel: $(drawer.content()),
             $content: $(drawer.viewContent()),
             defaultAnimationConfig: this._defaultAnimationConfig(),
