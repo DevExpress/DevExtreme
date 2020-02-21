@@ -2945,7 +2945,7 @@ declare module DevExpress.ui {
         /** @name dxDataGrid.addColumn(columnOptions) */
         addColumn(columnOptions: any | string): void;
         /** @name dxDataGrid.addRow() */
-        addRow(): void;
+        addRow(): Promise<void> & JQueryPromise<void>;
         /** @name dxDataGrid.clearGrouping() */
         clearGrouping(): void;
         /** @name dxDataGrid.collapseAll(groupIndex) */
@@ -6027,9 +6027,9 @@ declare module DevExpress.ui {
         /** @name dxTreeList.addColumn(columnOptions) */
         addColumn(columnOptions: any | string): void;
         /** @name dxTreeList.addRow() */
-        addRow(): void;
+        addRow(): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeList.addRow(parentId) */
-        addRow(parentId: any): void;
+        addRow(parentId: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeList.collapseRow(key) */
         collapseRow(key: any): Promise<void> & JQueryPromise<void>;
         /** @name dxTreeList.expandRow(key) */
