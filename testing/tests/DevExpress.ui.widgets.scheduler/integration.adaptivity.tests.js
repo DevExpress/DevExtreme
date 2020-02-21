@@ -95,7 +95,7 @@ module('Mobile tooltip', moduleConfig, () => {
         assert.ok(scheduler.appointmentPopup.isVisible(), 'Appointment popup should be visible after click on item in tooltip');
         assert.notOk(scheduler.tooltip.isVisible(), 'Tooltip should be hide after showing Appointment popup');
 
-        scheduler.appointmentPopup.hide();
+        scheduler.appointmentPopup.clickCancelButton();
         scheduler.appointments.compact.click();
         assert.ok(scheduler.tooltip.isVisible(), 'Tooltip should be visible after click on appointment');
 

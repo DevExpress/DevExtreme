@@ -205,7 +205,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _handleDefaults() {
-        this._recurrenceRule.makeRule('freq', 'daily');
+        this._recurrenceRule.makeRule('freq', frequenciesMessages[2].value);
         this._changeEditorValue();
     },
 
@@ -221,7 +221,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _renderFreqEditor() {
-        const freq = (this._recurrenceRule.rules().freq || frequenciesMessages[0].value).toLowerCase();
+        const freq = (this._recurrenceRule.rules().freq || frequenciesMessages[2].value).toLowerCase();
         const $freqEditor = $('<div>')
             .addClass(FREQUENCY_EDITOR)
             .addClass(FIELD_VALUE_CLASS);
@@ -771,7 +771,7 @@ const RecurrenceEditor = Editor.inherit({
     },
 
     _changeEditorsValues(rules) {
-        this._freqEditor.option('value', (rules.freq || frequenciesMessages[0].value).toLowerCase());
+        this._freqEditor.option('value', (rules.freq || frequenciesMessages[2].value).toLowerCase());
         this._changeRepeatTypeLabel();
         this._intervalEditor.option('value', rules.interval || 1);
 

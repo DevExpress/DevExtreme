@@ -1055,7 +1055,7 @@ QUnit.module('New common tooltip for compact and cell appointments', moduleConfi
         scheduler.tooltip.clickOnItem();
         assert.notOk(scheduler.tooltip.isVisible(), 'Tooltip shouldn\'t visible');
 
-        scheduler.appointmentPopup.hide();
+        scheduler.appointmentPopup.clickCancelButton();
 
         scheduler.appointments.compact.click(scheduler.appointments.compact.getButtonCount() - 1);
         assert.ok(scheduler.tooltip.isVisible(), 'Tooltip should visible');
@@ -1063,7 +1063,7 @@ QUnit.module('New common tooltip for compact and cell appointments', moduleConfi
         scheduler.tooltip.clickOnItem(1);
         assert.notOk(scheduler.tooltip.isVisible(), 'Tooltip shouldn\'t visible');
 
-        scheduler.appointmentPopup.hide();
+        scheduler.appointmentPopup.clickCancelButton();
 
         scheduler.appointments.compact.click(scheduler.appointments.compact.getButtonCount() - 1);
         assert.equal(scheduler.tooltip.getItemCount(), 2, 'Count of items in tooltip should be equal 2');
