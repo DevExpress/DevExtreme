@@ -1162,7 +1162,7 @@ class Diagram extends Widget {
             */
             zoomLevel: DIAGRAM_DEFAULT_ZOOMLEVEL,
             simpleView: false,
-            autoZoom: DIAGRAM_DEFAULT_AUTOZOOM_MODE,
+            autoZoomMode: DIAGRAM_DEFAULT_AUTOZOOM_MODE,
             fullScreen: false,
             showGrid: true,
             snapToGrid: true,
