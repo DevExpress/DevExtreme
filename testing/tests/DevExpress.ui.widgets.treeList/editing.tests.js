@@ -286,6 +286,86 @@ QUnit.test('AddRow method should expand row and add item after parent', function
     assert.strictEqual(rows[2].node.parent.key, 1, 'row 2 node parent');
 });
 
+QUnit.test('AddRow method should return Deferred with collapsed parent', function(assert) {
+    // arrange
+    this.options.editing.allowAdding = true;
+
+    this.setupTreeList();
+    this.rowsView.render($('#treeList'));
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.getVisibleRows().length, 1, 'one visible row');
+
+    // act
+    let doneExecuteCount = 0;
+    this.addRow(1).done(() => {
+        doneExecuteCount++;
+    });
+    this.clock.tick();
+
+    assert.equal(doneExecuteCount, 1, 'done was executed');
+    assert.equal(this.getVisibleRows().length, 3, 'parent was expanded and one more row was added');
+});
+
+QUnit.test('Sequential adding of a row after adding the previous using Deferred (T844118)', function(assert) {
+    // arrange
+    const initNewRowCalls = [];
+
+    this.options.editing.allowAdding = true;
+    this.options.onInitNewRow = (e) => {
+        initNewRowCalls.push(e.data.parentId);
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($('#treeList'));
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.getVisibleRows().length, 1, '1 visible row');
+
+    // act
+    const addRowAfterDeferredResolve = (parentIds, index) => {
+        const parentId = parentIds[index];
+
+        if(parentId !== undefined) {
+            return this.addRow(parentId).done(() => addRowAfterDeferredResolve(parentIds, index + 1));
+        }
+
+        // assert
+        assert.deepEqual(parentIds, initNewRowCalls, 'for every added row sequentially calls onInitNewRow');
+
+        return $.Deferred().resolve();
+    };
+
+    addRowAfterDeferredResolve([1, 2], 0);
+
+    this.clock.tick();
+});
+
+QUnit.test('AddRow method returns Deferred with using promise in onInitNewRow (T844118)', function(assert) {
+    // arrange
+    const deferred = $.Deferred();
+    this.options.editing.allowAdding = true;
+    this.options.onInitNewRow = (e) => {
+        e.promise = deferred;
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($('#treeList'));
+    this.clock.tick();
+
+    // act
+    let isAddRowDone = false;
+    this.addRow(1).done(() => isAddRowDone = true);
+    this.clock.tick();
+
+    // assert
+    assert.notOk(isAddRowDone, 'done method has not executed yet');
+    deferred.resolve();
+    assert.ok(isAddRowDone, 'done method has executed');
+});
+
 // T553905
 QUnit.test('Add item in node without children (Angular)', function(assert) {
     // arrange
@@ -717,11 +797,12 @@ QUnit.test('TreeList should show error message on adding row if dataSource is no
     };
 
     // act
-    this.addRow();
+    const deferred = this.addRow();
 
     // assert
     assert.equal(errorCode, 'E1052', 'error code');
     assert.equal(widgetName, 'dxTreeList', 'widget name');
+    assert.equal(deferred.state(), 'rejected', 'deferred is rejected');
 });
 
 QUnit.test('Set add button for a specific row', function(assert) {
