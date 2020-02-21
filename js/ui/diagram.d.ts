@@ -40,7 +40,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      */
     contextToolbox?: { category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string, displayMode?: 'icons' | 'texts', enabled?: boolean, shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string> };
     /**
-     * @docid dxDiagramOptions.onToolbarCustomCommandExecuted
+     * @docid dxDiagramOptions.onCustomCommandExecuted
      * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
@@ -50,7 +50,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onToolbarCustomCommandExecuted?: ((e: { component?: dxDiagram, element?: dxElement, name?: string }) => any);
+    onCustomCommandExecuted?: ((e: { component?: dxDiagram, element?: dxElement, name?: string }) => any);
     /**
      * @docid dxDiagramOptions.customShapeTemplate
      * @type template|function

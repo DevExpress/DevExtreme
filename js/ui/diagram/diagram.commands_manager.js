@@ -16,6 +16,7 @@ const CSS_CLASSES = {
 
 const DiagramCommandsManager = {
     SHOW_TOOLBOX_COMMAND_NAME: 'toolbox',
+    SHOW_PROPERTIES_PANEL_COMMAND_NAME: 'propertiesPanel',
 
     getAllCommands: function() {
         const { DiagramCommand } = getDiagram();
@@ -472,6 +473,12 @@ const DiagramCommandsManager = {
                     command: this.SHOW_TOOLBOX_COMMAND_NAME,
                     hint: messageLocalization.format('dxDiagram-uiShowToolbox'),
                     text: messageLocalization.format('dxDiagram-uiShowToolbox')
+                },
+                showPropertiesPanel: {
+                    command: this.SHOW_PROPERTIES_PANEL_COMMAND_NAME,
+                    icon: 'dx-diagram-i dx-diagram-i-button-properties-panel',
+                    hint: messageLocalization.format('dxDiagram-uiProperties'),
+                    text: messageLocalization.format('dxDiagram-uiProperties')
                 }
             });
     },
@@ -587,6 +594,18 @@ const DiagramCommandsManager = {
                         allCommands['showToolbox']
                     ]
                 }
+            ]);
+    },
+    getPropertiesPanelToolbarCommands: function(commands, excludeCommands) {
+        const allCommands = this.getAllCommands();
+        const viewToolbarCommands = commands ? this._getPreparedCommands(allCommands, commands) :
+            this._getDefaultPropertiesPanelToolbarCommands(allCommands);
+        return this._prepareToolbarCommands(viewToolbarCommands, excludeCommands);
+    },
+    _getDefaultPropertiesPanelToolbarCommands: function(allCommands) {
+        return this._defaultPropertiesPanelToolbarCommands ||
+            (this._defaultPropertiesPanelToolbarCommands = [
+                allCommands['showPropertiesPanel']
             ]);
     },
 

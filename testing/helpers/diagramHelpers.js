@@ -8,7 +8,6 @@ export const Consts = {
     CONTEXT_MENU_SELECTOR: 'div:not(.dx-diagram-toolbar-wrapper):not(.dx-diagram-floating-toolbar-container) > .dx-has-context-menu',
     TOOLBAR_ITEM_ACTIVE_CLASS: 'dx-format-active',
     DX_MENU_ITEM_SELECTOR: '.dx-menu-item',
-    PROPERTIES_PANEL_BTN_SELECTOR: '.dx-diagram-properties-panel-btn',
     PROPERTIES_PANEL_SELECTOR: '.dx-diagram-properties-panel',
     PROPERTIES_PANEL_TOOLBAR_SELECTOR: '.dx-diagram-properties-panel .dx-diagram-toolbar',
     TOOLBOX_SCROLLVIEW_SELECTOR: '.dx-diagram-toolbox-panel .dx-scrollview',
@@ -34,15 +33,35 @@ export function getViewToolbarElement($diagramElement) {
 export function getViewToolbarInstance($diagramElement) {
     return getViewToolbarElement($diagramElement).dxToolbar('instance');
 }
-export function findToolbarItem($diagramElement, label) {
+export function getPropertiesPanelToolbarElement($diagramElement) {
+    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(2));
+}
+export function getPropertiesPanelToolbarInstance($diagramElement) {
+    return getPropertiesPanelToolbarElement($diagramElement).dxToolbar('instance');
+}
+export function findMainToolbarItem($diagramElement, label) {
     return $diagramElement.find(Consts.MAIN_TOOLBAR_SELECTOR)
         .find('.dx-widget')
         .filter(function() {
             return $(this).text().toLowerCase().indexOf(label) >= 0;
         });
 }
+export function findHistoryToolbarItem($diagramElement, label) {
+    return getHistoryToolbarElement($diagramElement)
+        .find('.dx-widget')
+        .filter(function() {
+            return $(this).text().toLowerCase().indexOf(label) >= 0;
+        });
+}
 export function findViewToolbarItem($diagramElement, label) {
-    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(1))
+    return getViewToolbarElement($diagramElement)
+        .find('.dx-widget')
+        .filter(function() {
+            return $(this).text().toLowerCase().indexOf(label) >= 0;
+        });
+}
+export function findPropertiesPanelToolbarItem($diagramElement, label) {
+    return getPropertiesPanelToolbarElement($diagramElement)
         .find('.dx-widget')
         .filter(function() {
             return $(this).text().toLowerCase().indexOf(label) >= 0;
