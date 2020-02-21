@@ -1,7 +1,8 @@
 import 'common.css!';
+import 'integration/jszip';
 
 import { excel as excelCreator } from 'exporter';
-import excel_creator from 'exporter/excel_creator';
+import { addLibrary, getLibrary } from 'core/registry';
 import JSZipMock from './jszipMock.js';
 
 const INTERNAL_BASE_STYLE_XML1 = '<fonts count="2"><font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" />' +
@@ -31,12 +32,12 @@ const exportTestsHelper = {
     STYLESHEET_FOOTER_XML: '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>',
 
     beforeEachTest: function() {
-        this.oldJSZip = excel_creator.ExcelCreator.JSZip;
-        excel_creator.ExcelCreator.JSZip = JSZipMock;
+        this.oldJSZip = getLibrary('jszip');
+        addLibrary('jszip', JSZipMock, true);
     },
 
     afterEachTest: function() {
-        excel_creator.ExcelCreator.JSZip = this.oldJSZip;
+        addLibrary('jszip', this.oldJSZip, true);
     },
 
     getLastCreatedJSZipInstance: function() {
