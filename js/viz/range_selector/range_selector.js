@@ -143,13 +143,11 @@ function updateTranslatorRangeInterval(translatorRange, scaleOptions) {
 }
 
 function checkLogarithmicOptions(options, defaultLogarithmBase, incidentOccurred) {
-    let logarithmBase;
-
     if(!options) {
         return;
     }
 
-    logarithmBase = options.logarithmBase;
+    const logarithmBase = options.logarithmBase;
     if(options.type === LOGARITHMIC && logarithmBase <= 0 || (logarithmBase && !_isNumber(logarithmBase))) {
         options.logarithmBase = defaultLogarithmBase;
         incidentOccurred('E2104');
@@ -442,7 +440,6 @@ function updateScaleOptions(scaleOptions, seriesDataSource, translatorRange, tic
 function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred, containerColor) {
     let parsedValue = 0;
     let valueType = parseUtils.correctValueType(_normalizeEnum(scaleOption.valueType));
-    let parser;
     const validateStartEndValues = function(field, parser) {
         const messageToIncidentOccurred = field === START_VALUE ? 'start' : 'end';
 
@@ -472,7 +469,7 @@ function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred,
 
     scaleOption.valueType = valueType;
     scaleOption.dataType = valueType;
-    parser = parseUtils.getParser(valueType);
+    const parser = parseUtils.getParser(valueType);
 
     validateStartEndValues(START_VALUE, parser);
     validateStartEndValues(END_VALUE, parser);
@@ -581,11 +578,6 @@ const dxRangeSelector = baseWidgetModule.inherit({
         const that = this;
         const renderer = that._renderer;
         const root = renderer.root;
-        let rangeViewGroup;
-        let slidersGroup;
-        let scaleGroup;
-        let scaleBreaksGroup;
-        let trackersGroup;
 
         // TODO: Move it to the SlidersEventManager
         root.css({
@@ -595,11 +587,11 @@ const dxRangeSelector = baseWidgetModule.inherit({
         // RangeContainer
         that._clipRect = renderer.clipRect(); // TODO: Try to remove it
         // TODO: Groups could be created by the corresponding components
-        rangeViewGroup = renderer.g().attr({ 'class': 'dxrs-view' }).append(root);
-        slidersGroup = renderer.g().attr({ 'class': 'dxrs-slidersContainer', 'clip-path': that._clipRect.id }).append(root);
-        scaleGroup = renderer.g().attr({ 'class': 'dxrs-scale', 'clip-path': that._clipRect.id }).append(root);
-        scaleBreaksGroup = renderer.g().attr({ 'class': 'dxrs-scale-breaks' }).append(root);
-        trackersGroup = renderer.g().attr({ 'class': 'dxrs-trackers' }).append(root);
+        const rangeViewGroup = renderer.g().attr({ 'class': 'dxrs-view' }).append(root);
+        const slidersGroup = renderer.g().attr({ 'class': 'dxrs-slidersContainer', 'clip-path': that._clipRect.id }).append(root);
+        const scaleGroup = renderer.g().attr({ 'class': 'dxrs-scale', 'clip-path': that._clipRect.id }).append(root);
+        const scaleBreaksGroup = renderer.g().attr({ 'class': 'dxrs-scale-breaks' }).append(root);
+        const trackersGroup = renderer.g().attr({ 'class': 'dxrs-trackers' }).append(root);
 
         that._axis = new AxisWrapper({
             renderer: renderer,
@@ -838,9 +830,6 @@ const dxRangeSelector = baseWidgetModule.inherit({
         seriesDataSource && that._completeSeriesDataSourceCreation(scaleOptions, seriesDataSource);
         const argTranslatorRange = calculateTranslatorRange(seriesDataSource, scaleOptions);
         const tickIntervalsInfo = updateTickIntervals(scaleOptions, canvas.width, that._incidentOccurred, argTranslatorRange);
-        let sliderMarkerOptions;
-        let indents;
-        let rangeContainerCanvas;
         const chartThemeManager = seriesDataSource && seriesDataSource.isShowChart() && seriesDataSource.getThemeManager();
 
         if(chartThemeManager) {
@@ -850,9 +839,9 @@ const dxRangeSelector = baseWidgetModule.inherit({
 
         updateScaleOptions(scaleOptions, seriesDataSource, argTranslatorRange, tickIntervalsInfo, getDateMarkerVisibilityChecker(canvas.width));
         updateTranslatorRangeInterval(argTranslatorRange, scaleOptions);
-        sliderMarkerOptions = that._prepareSliderMarkersOptions(scaleOptions, canvas.width, tickIntervalsInfo, argTranslatorRange);
-        indents = calculateIndents(that._renderer, scaleOptions, sliderMarkerOptions, that.option('indent'), tickIntervalsInfo);
-        rangeContainerCanvas = {
+        const sliderMarkerOptions = that._prepareSliderMarkersOptions(scaleOptions, canvas.width, tickIntervalsInfo, argTranslatorRange);
+        const indents = calculateIndents(that._renderer, scaleOptions, sliderMarkerOptions, that.option('indent'), tickIntervalsInfo);
+        const rangeContainerCanvas = {
             left: canvas.left + indents.left,
             top: canvas.top + indents.top,
             width: canvas.left + indents.left + _max(canvas.width - indents.left - indents.right, 1),
