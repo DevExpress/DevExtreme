@@ -11,19 +11,19 @@ const animation = {
         const toConfig = {};
         let animationType;
 
-        if(direction === 'right') {
-            toConfig['transform'] = 'translate(' + position + 'px, 0px)';
-            animationType = 'custom';
-        }
-
-        if(direction === 'left') {
-            toConfig['left'] = position;
-            animationType = 'slide';
-        }
-
-        if(direction === 'top' || direction === 'bottom') {
-            toConfig['top'] = position;
-            animationType = 'slide';
+        switch(direction) {
+            case 'right':
+                toConfig['transform'] = 'translate(' + position + 'px, 0px)';
+                animationType = 'custom';
+                break;
+            case 'left':
+                toConfig['left'] = position;
+                animationType = 'slide';
+                break;
+            case 'top':
+            case 'bottom':
+                toConfig['top'] = position;
+                animationType = 'slide';
         }
 
         fx.animate($element, {
@@ -75,6 +75,7 @@ const animation = {
         if(direction === 'bottom') {
             toConfig['marginTop'] = marginTop;
         }
+
         fx.animate($element, {
             to: toConfig,
             duration,
@@ -110,8 +111,6 @@ class DrawerStrategy {
     }
 
     renderPosition(isDrawerOpened, animate) {
-        const revealMode = this.getDrawerInstance().option('revealMode');
-
         this._prepareAnimationDeferreds(animate);
 
         const config = this._getPositionRenderingConfig(isDrawerOpened);
@@ -119,10 +118,10 @@ class DrawerStrategy {
         if(this._useDefaultAnimation()) {
             this._defaultPositionRendering(config, isDrawerOpened, animate);
         } else {
+            const revealMode = this.getDrawerInstance().option('revealMode');
             if(revealMode === 'slide') {
                 this._slidePositionRendering(config, isDrawerOpened, animate);
-            }
-            if(revealMode === 'expand') {
+            } else if(revealMode === 'expand') {
                 this._expandPositionRendering(config, isDrawerOpened, animate);
             }
         }

@@ -167,11 +167,13 @@ const Drawer = Widget.inherit({
         const contentTemplateOption = this.option('contentTemplate');
         const contentTemplate = this._getTemplate(contentTemplateOption);
 
-        contentTemplate && contentTemplate.render({
-            container: this.viewContent(),
-            noModel: true,
-            transclude: (this._getAnonymousTemplateName() === contentTemplateOption)
-        });
+        if(contentTemplate) {
+            contentTemplate.render({
+                container: this.viewContent(),
+                noModel: true,
+                transclude: (this._getAnonymousTemplateName() === contentTemplateOption)
+            });
+        }
 
         eventsEngine.off(this._$viewContentWrapper, CLICK_EVENT_NAME);
         eventsEngine.on(this._$viewContentWrapper, CLICK_EVENT_NAME, this._viewContentWrapperClickHandler.bind(this));
@@ -199,15 +201,17 @@ const Drawer = Widget.inherit({
     },
 
     _refreshOpenedStateModeClass(prevOpenedStateMode) {
-        prevOpenedStateMode && this.$element()
-            .removeClass(DRAWER_CLASS + '-' + prevOpenedStateMode);
+        if(prevOpenedStateMode) {
+            this.$element().removeClass(DRAWER_CLASS + '-' + prevOpenedStateMode);
+        }
 
         this.$element().addClass(DRAWER_CLASS + '-' + this.option('openedStateMode'));
     },
 
     _refreshPositionClass(prevPosition) {
-        prevPosition && this.$element()
-            .removeClass(DRAWER_CLASS + '-' + prevPosition);
+        if(prevPosition) {
+            this.$element().removeClass(DRAWER_CLASS + '-' + prevPosition);
+        }
 
         this.$element().addClass(DRAWER_CLASS + '-' + this.calcCurrentPosition());
     },
@@ -222,8 +226,9 @@ const Drawer = Widget.inherit({
     },
 
     _refreshRevealModeClass(prevRevealMode) {
-        prevRevealMode && this.$element()
-            .removeClass(DRAWER_CLASS + '-' + prevRevealMode);
+        if(prevRevealMode) {
+            this.$element().removeClass(DRAWER_CLASS + '-' + prevRevealMode);
+        }
 
         this.$element().addClass(DRAWER_CLASS + '-' + this.option('revealMode'));
     },
@@ -249,16 +254,14 @@ const Drawer = Widget.inherit({
     calcCurrentPosition() {
         const position = this.option('position');
         const rtl = this.option('rtlEnabled');
+        let result = position;
 
         if(position === 'before') {
-            return rtl ? 'right' : 'left';
+            result = rtl ? 'right' : 'left';
+        } else if(position === 'after') {
+            result = rtl ? 'left' : 'right';
         }
-
-        if(position === 'after') {
-            return rtl ? 'left' : 'right';
-        }
-
-        return position;
+        return result;
     },
 
     getOverlayTarget() {
@@ -325,7 +328,9 @@ const Drawer = Widget.inherit({
         fx.stop($(this.viewContent()), jumpToEnd);
 
         const overlay = this.getOverlay();
-        overlay && fx.stop($(overlay.$content()), jumpToEnd);
+        if(overlay) {
+            fx.stop($(overlay.$content()), jumpToEnd);
+        }
     },
 
     setZIndex(zIndex) {
@@ -352,11 +357,15 @@ const Drawer = Widget.inherit({
 
         this._animations = [];
 
+        if(!hasWindow()) {
+            return;
+        }
+
         animate = typeUtils.isDefined(animate) ? animate && this.option('animationEnabled') : this.option('animationEnabled');
 
-        if(!hasWindow()) return;
-
-        isDrawerOpened && this._toggleShaderVisibility(isDrawerOpened);
+        if(isDrawerOpened) {
+            this._toggleShaderVisibility(isDrawerOpened);
+        }
 
         this._strategy.renderPosition(isDrawerOpened, animate);
 
@@ -419,10 +428,12 @@ const Drawer = Widget.inherit({
         this._whenPanelContentRefreshed = new Deferred();
         this._strategy.renderPanelContent(this._whenPanelContentRefreshed);
 
-        hasWindow() && this._whenPanelContentRefreshed.always(() => {
-            this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
-            this._renderPosition(this.option('opened'), false, true);
-        });
+        if(hasWindow()) {
+            this._whenPanelContentRefreshed.always(() => {
+                this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
+                this._renderPosition(this.option('opened'), false, true);
+            });
+        }
     },
 
     _clean() {
