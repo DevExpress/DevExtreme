@@ -1,24 +1,16 @@
-import { h } from 'preact';
+// NOTE: function for jQuery templates
+export const wrapElement = ($element, $wrapper) => {
+    const attributes = [...$wrapper.get(0).attributes];
+    attributes.forEach(({ name, value }) => {
+        if(name === 'class') {
+            $element.addClass(value);
+        } else {
+            $element.attr(name, value);
+        }
+    });
 
-export const HTMLToPreact = (node, ...restChildren) => {
-    if(!node) return;
-    // NOTE: nodeType === 3 => text node
-    if(node.nodeType === 3) {
-        return node.wholeText;
-    }
+    const children = $wrapper.contents();
+    $wrapper.replaceWith(children);
 
-    const tag = node.tagName;
-    const childNodes = node.childNodes;
-
-    const children = [];
-    for(let i = 0; i < childNodes.length; i++) {
-        children.push(HTMLToPreact(childNodes[i]));
-    }
-
-    const attributes = [...node.attributes].reduce((result, attr) => {
-        result[attr.name] = attr.value;
-        return result;
-    }, {});
-
-    return h(tag, attributes, [...children, ...restChildren]);
+    return children;
 };

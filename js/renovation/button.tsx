@@ -16,16 +16,6 @@ const getImageContainerJSX = (source: string, position: string) => {
     }
 };
 
-const CustomRender = ({ text, icon, renderFn, contentRef, children }) => {
-    const result = renderFn({
-        model: { text, icon },
-    });
-    result.props.children?.push?.(children);
-    result.ref = contentRef;
-
-    return result;
-};
-
 const stylingModes = ['outlined', 'text', 'contained'];
 const defaultClassNames = ['dx-button'];
 
@@ -108,29 +98,24 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
         visible={viewModel.visible}
         width={viewModel.width}
     >
-        {(viewModel.contentRender &&
-            <CustomRender
-                text={viewModel.text}
-                icon={viewModel.icon}
-                renderFn={viewModel.contentRender}
-                contentRef={viewModel.contentRef}
-            >
-                {viewModel.useSubmitBehavior &&
-                    <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
-                }
-            </CustomRender>
-        ) || (
-            <div className="dx-button-content" ref={viewModel.contentRef}>
-                {isIconLeft && icon}
-                {viewModel.text &&
-                    <span className="dx-button-text">{viewModel.text}</span>
-                }
-                {!isIconLeft && icon}
-                {viewModel.useSubmitBehavior &&
-                    <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
-                }
-            </div>
-        )}
+        <div className="dx-button-content" ref={viewModel.contentRef}>
+            {viewModel.contentRender &&
+                <viewModel.contentRender
+                    model={{
+                        icon: viewModel.icon,
+                        text: viewModel.text,
+                    }}
+                    parentRef={viewModel.contentRef}
+                />}
+            {!viewModel.contentRender && isIconLeft && icon}
+            {!viewModel.contentRender && viewModel.text &&
+                <span className="dx-button-text">{viewModel.text}</span>
+            }
+            {!viewModel.contentRender && !isIconLeft && icon}
+            {viewModel.useSubmitBehavior &&
+                <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
+            }
+        </div>
     </Widget>;
 };
 
@@ -138,7 +123,7 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
 export class ButtonInput extends WidgetInput {
     @OneWay() activeStateEnabled?: boolean = true;
     @OneWay() classNames?: string[];
-    @OneWay() contentRender?: ButtonTemplateFn;
+    @OneWay() contentRender?: any;
     @OneWay() focusStateEnabled?: boolean = true;
     @OneWay() hoverStateEnabled?: boolean = true;
     @OneWay() icon?: string = '';
@@ -146,7 +131,6 @@ export class ButtonInput extends WidgetInput {
     @OneWay() onSubmit?: (e: any) => any = (() => undefined);
     @OneWay() pressed?: boolean;
     @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
-    @OneWay() template?: ButtonTemplate = '';
     @OneWay() text?: string = '';
     @OneWay() type?: string;
     @OneWay() useInkRipple: boolean = false;
@@ -162,7 +146,7 @@ export class ButtonInput extends WidgetInput {
 })
 
 export default class Button extends JSXComponent<ButtonInput> {
-    @Ref() contentRef!: HTMLElement;
+    @Ref() contentRef!: HTMLDivElement;
     @Ref() submitInputRef!: HTMLInputElement;
 
     onActive(event: Event) {
@@ -207,10 +191,3 @@ export default class Button extends JSXComponent<ButtonInput> {
         return () => click.off(this.submitInputRef, { namespace });
     }
 }
-
-declare type ButtonContent = {
-    icon: string,
-    text: string,
-};
-declare type ButtonTemplateFn = (data: ButtonContent, container: any) => any;
-declare type ButtonTemplate = ButtonTemplateFn | string;
