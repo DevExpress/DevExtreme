@@ -233,6 +233,8 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     */
     E1056: 'The {0} widget does not support buttons of the "{1}" type',
 
+    // (obsolete) E1057: 'The {0} widget does not support asynchronous validation rules in the "{1}" edit mode',
+
     /**
     * @name ErrorsUIWidgets.W1001
     */

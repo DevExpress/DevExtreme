@@ -18,6 +18,7 @@ import themes from '../themes';
 import errors from '../widget/ui.errors';
 import { Deferred, when } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
+import { encodeHtml } from '../../core/utils/string';
 
 const INVALIDATE_CLASS = 'invalid';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
@@ -1032,7 +1033,7 @@ module.exports = {
                         if(showValidationMessage && $cell && column && validationResult && validationResult.brokenRules) {
                             let errorMessage = '';
                             validationResult.brokenRules.forEach(function(rule) {
-                                errorMessage += (errorMessage.length ? '<br/>' : '') + rule.message;
+                                errorMessage += (errorMessage.length ? '<br/>' : '') + encodeHtml(rule.message);
                             });
                             this._showValidationMessage($focus, errorMessage, column.alignment || 'left', revertTooltip);
                         }
