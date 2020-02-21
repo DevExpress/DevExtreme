@@ -165,7 +165,8 @@ QUnit.module('Color Box', {
     });
 
     QUnit.test('Click on apply button', function(assert) {
-        const onValueChangedHandler = sinon.spy(noop); const onApplyButtonClickHandler = sinon.spy(noop);
+        const onValueChangedHandler = sinon.spy(noop);
+        const onApplyButtonClickHandler = sinon.spy(noop);
 
         showColorBox.call(this, {
             onValueChanged: onValueChangedHandler,
@@ -422,7 +423,9 @@ QUnit.module('Color Box', {
 
 
     QUnit.test('Option changes', function(assert) {
-        const colorBox = showColorBox.call(this).dxColorBox('instance'); const onCancelButtonClick = noop; const onApplyButtonClick = noop;
+        const colorBox = showColorBox.call(this).dxColorBox('instance');
+        const onCancelButtonClick = noop;
+        const onApplyButtonClick = noop;
 
         $.each([
             { name: 'value', value: '#ff0000' },
@@ -438,7 +441,9 @@ QUnit.module('Color Box', {
     });
 
     QUnit.test('\'applyButtonText\' and \'cancelButtonText\' options change should update UI', function(assert) {
-        const colorBox = showColorBox.call(this).dxColorBox('instance'); const applyText = 'Test Done'; const cancelText = 'Test Cancel';
+        const colorBox = showColorBox.call(this).dxColorBox('instance');
+        const applyText = 'Test Done';
+        const cancelText = 'Test Cancel';
 
         colorBox.option('applyButtonText', applyText);
         colorBox.close();
@@ -570,7 +575,8 @@ QUnit.module('keyboard navigation', {
     QUnit.test('enter key test on inputs', function(assert) {
         assert.expect(10);
 
-        const instance = this.instance; const $input = this.$element.find('.dx-texteditor-input');
+        const instance = this.instance;
+        const $input = this.$element.find('.dx-texteditor-input');
         instance.option({
             opened: true,
             value: 'rgba(153, 72, 70, 1)',

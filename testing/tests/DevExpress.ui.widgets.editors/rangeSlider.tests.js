@@ -69,7 +69,9 @@ QUnit.module('render', moduleOptions, () => {
 
         const slider = el.dxRangeSlider('instance');
 
-        const handleStart = el.find('.' + SLIDER_HANDLE_CLASS).eq(0); const handleEnd = el.find('.' + SLIDER_HANDLE_CLASS).eq(1); const range = el.find('.' + SLIDER_RANGE_CLASS);
+        const handleStart = el.find('.' + SLIDER_HANDLE_CLASS).eq(0);
+        const handleEnd = el.find('.' + SLIDER_HANDLE_CLASS).eq(1);
+        const range = el.find('.' + SLIDER_RANGE_CLASS);
 
         assert.equal(handleStart.position().left, 0);
         assert.equal(handleEnd.position().left, 960);
@@ -706,7 +708,8 @@ QUnit.module('regressions', {
     QUnit.test('only one handler must be highlighted on pressing (B230410)', function(assert) {
         const module = this;
 
-        const leftHandle = module.leftHandle; const rightHandle = module.rightHandle;
+        const leftHandle = module.leftHandle;
+        const rightHandle = module.rightHandle;
 
         let mouse = pointerMock(leftHandle).start().move(leftHandle.offset().left).down();
         module.clock.tick(FEEDBACK_SHOW_TIMEOUT);
@@ -750,7 +753,9 @@ QUnit.module('regressions', {
             'end': 50
         });
 
-        const mouse = pointerMock(module.element.find('.' + SLIDER_WRAPPER_CLASS)); const hX = module.rightHandle.offset().left + module.rightHandle.outerWidth() / 2; const hY = module.rightHandle.offset().top + module.rightHandle.outerHeight() / 2;
+        const mouse = pointerMock(module.element.find('.' + SLIDER_WRAPPER_CLASS));
+        const hX = module.rightHandle.offset().left + module.rightHandle.outerWidth() / 2;
+        const hY = module.rightHandle.offset().top + module.rightHandle.outerHeight() / 2;
 
         mouse
             .start()
@@ -828,9 +833,12 @@ QUnit.module('regressions', {
             'end': 50
         });
 
-        const mouse = pointerMock(module.element.find('.' + SLIDER_WRAPPER_CLASS)); const hX = module.rightHandle.offset().left + module.rightHandle.outerWidth() / 2; const hY = module.rightHandle.offset().top + module.rightHandle.outerHeight() / 2;
+        const mouse = pointerMock(module.element.find('.' + SLIDER_WRAPPER_CLASS));
+        const hX = module.rightHandle.offset().left + module.rightHandle.outerWidth() / 2;
+        const hY = module.rightHandle.offset().top + module.rightHandle.outerHeight() / 2;
 
-        const leftHandle = module.leftHandle; const rightHandle = module.rightHandle;
+        const leftHandle = module.leftHandle;
+        const rightHandle = module.rightHandle;
 
         assert.equal(leftHandle.hasClass('dx-state-active'), false);
         assert.equal(rightHandle.hasClass('dx-state-active'), false);

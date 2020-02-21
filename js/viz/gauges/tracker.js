@@ -91,7 +91,8 @@ const Tracker = Class.inherit({
     },
 
     setTooltipState: function(state) {
-        const that = this; let data;
+        const that = this;
+        let data;
         that._element.off(tooltipMouseEvents).off(tooltipTouchEvents).off(tooltipMouseWheelEvents);
         if(state) {
             data = { tracker: that };

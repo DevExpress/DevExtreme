@@ -113,7 +113,8 @@ QUnit.module('Editors Standard Adapter', {
 
 
     QUnit.test('Editor\'s validators request should not be mixed with another editors', function(assert) {
-        const value = '123'; const emptyValue = '';
+        const value = '123';
+        const emptyValue = '';
 
         const editor1 = this.fixture.createEditor({
             value: value

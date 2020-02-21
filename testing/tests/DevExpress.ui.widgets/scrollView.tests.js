@@ -100,7 +100,8 @@ QUnit.module('render', moduleConfig, () => {
     QUnit.test('dxLoadIndicator was created', function(assert) {
         const $scrollView = $('#scrollView').dxScrollView({ useNative: false }); const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS); const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS); const $loadIndicatorTop = $topPocket.find('.dx-loadindicator'); const $loadIndicatorBottom = $bottomPocket.find('.dx-loadindicator');
 
-        const top = $loadIndicatorTop.dxLoadIndicator('instance'); const bottom = $loadIndicatorBottom.dxLoadIndicator('instance');
+        const top = $loadIndicatorTop.dxLoadIndicator('instance');
+        const bottom = $loadIndicatorBottom.dxLoadIndicator('instance');
 
         assert.notEqual(top, null, 'dxLoadIndicator was created');
         assert.notEqual(bottom, null, 'dxLoadIndicator was created');
@@ -190,7 +191,8 @@ QUnit.module('dimension', moduleConfig, () => {
             useNative: false,
             inertiaEnabled: false,
             onEnd: function() {
-                const location = getScrollOffset($scrollView); const height = $container.height() - $content.height() + $bottomPocket.height();
+                const location = getScrollOffset($scrollView);
+                const height = $container.height() - $content.height() + $bottomPocket.height();
                 assert.equal(location.top, height, 'bottom position calculated considering top pocket height');
             }
         });
@@ -281,7 +283,9 @@ QUnit.module('actions', moduleConfig, () => {
             .down()
             .move(0, offset);
 
-        const location = translator.locate($content); const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS); const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+        const location = translator.locate($content);
+        const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
+        const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
         assert.equal(location.top, 0, 'translate top position is right');
         assert.equal($container.scrollTop(), $topPocket.height() - offset, 'scroll top position is right');
@@ -904,7 +908,9 @@ QUnit.module('scrollbars', moduleConfig, () => {
     });
 
     QUnit.test('scrollbar height calculated correctly', function(assert) {
-        const containerHeight = 50; const contentHeight = 100; const scrollHeight = (containerHeight / contentHeight) * containerHeight;
+        const containerHeight = 50;
+        const contentHeight = 100;
+        const scrollHeight = (containerHeight / contentHeight) * containerHeight;
 
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: false
@@ -968,7 +974,8 @@ QUnit.module('scrollbars', moduleConfig, () => {
     });
 
     QUnit.test('scrolling by thumb should trigger bottom loading even without moving', function(assert) {
-        const containerSize = 50; const contentHeight = 100;
+        const containerSize = 50;
+        const contentHeight = 100;
 
         const $scrollView = $('#scrollView').dxScrollView({
             scrollByThumb: true,
@@ -1489,7 +1496,9 @@ QUnit.module('native pullDown strategy', {
 
         const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollView); const $topPocket = $('.' + SCROLLVIEW_TOP_POCKET_CLASS, $scrollView);
 
-        const containerOffset = $container.offset().top; const topPocketOffset = $topPocket.offset().top; const topPocketSize = $topPocket.height();
+        const containerOffset = $container.offset().top;
+        const topPocketOffset = $topPocket.offset().top;
+        const topPocketSize = $topPocket.height();
 
         assert.equal(containerOffset, topPocketOffset + topPocketSize, 'pull down element located above content');
     });
@@ -1503,7 +1512,9 @@ QUnit.module('native pullDown strategy', {
 
         const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollView); const $topPocket = $('.' + SCROLLVIEW_TOP_POCKET_CLASS, $scrollView);
 
-        const containerOffset = $container.offset().top; const topPocketOffset = $topPocket.offset().top; const topPocketSize = $topPocket.height();
+        const containerOffset = $container.offset().top;
+        const topPocketOffset = $topPocket.offset().top;
+        const topPocketSize = $topPocket.height();
 
         assert.equal(containerOffset, topPocketOffset + topPocketSize, 'pull down element located above content');
     });
@@ -1551,7 +1562,8 @@ QUnit.module('native pullDown strategy', {
             refreshStrategy: 'pullDown'
         });
 
-        const scrollView = $('#scrollView').dxScrollView('instance'); const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollView);
+        const scrollView = $('#scrollView').dxScrollView('instance');
+        const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollView);
 
         scrollView.scrollTo({ y: 10 });
         $($container).trigger('scroll');
@@ -1569,7 +1581,11 @@ QUnit.module('native pullDown strategy', {
             onPullDown: noop
         });
 
-        const scrollView = $('#scrollView').dxScrollView('instance'); const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS); const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS); const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS); const topPocketHeight = $topPocket.height();
+        const scrollView = $('#scrollView').dxScrollView('instance');
+        const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
+        const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
+        const $pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+        const topPocketHeight = $topPocket.height();
 
         scrollView.scrollTo({ y: -topPocketHeight });
         $($container).trigger('scroll');
@@ -1695,7 +1711,10 @@ QUnit.module('native pullDown strategy', {
             return;
         }
 
-        let top = true; let left = true; let right = false; let bottom = false;
+        let top = true;
+        let left = true;
+        let right = false;
+        let bottom = false;
         let lastScrollEventArgs;
         const $scrollView = $('#scrollView').width(50).height(50);
         $scrollView.children().width(100).height(100);
@@ -2014,7 +2033,10 @@ QUnit.module('native swipeDown strategy', {
 
         assert.expect(12);
 
-        let top = true; let left = true; let right = false; let bottom = false;
+        let top = true;
+        let left = true;
+        let right = false;
+        let bottom = false;
 
         const $scrollView = $('#scrollView').width(50).height(50);
         $scrollView.children().width(100).height(100);

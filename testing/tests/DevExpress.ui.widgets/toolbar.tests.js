@@ -57,7 +57,8 @@ QUnit.module('render', {
             ]
         });
 
-        const labelElement = this.element.find('.' + TOOLBAR_ITEM_CLASS)[0]; const labelMaxWidth = parseInt(labelElement.style.maxWidth);
+        const labelElement = this.element.find('.' + TOOLBAR_ITEM_CLASS)[0];
+        const labelMaxWidth = parseInt(labelElement.style.maxWidth);
 
         labelElement.style.maxWidth = '';
 
@@ -666,7 +667,8 @@ QUnit.module('adaptivity', {
 
         $element.dxToolbar('option', 'width', 1000);
 
-        const elementCenter = $element.offset().left + $element.outerWidth() * 0.5; const itemCenter = $item.offset().left + $item.outerWidth() * 0.5;
+        const elementCenter = $element.offset().left + $element.outerWidth() * 0.5;
+        const itemCenter = $item.offset().left + $item.outerWidth() * 0.5;
 
         assert.equal(itemCenter, elementCenter, 'item has correct position');
     });

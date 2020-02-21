@@ -407,8 +407,12 @@ QUnit.test('Repeat colors', function(assert) {
 QUnit.module('DiscretePalette', $.extend({}, environment, {
     createColors: function(count) {
         let i = 0;
-        const step = Math.round(255 / count); let r = 0;
-        let g = 32; let b = 64; const list = []; let color;
+        const step = Math.round(255 / count);
+        let r = 0;
+        let g = 32;
+        let b = 64;
+        const list = [];
+        let color;
         for(; i < count; ++i) {
             color = new Color();
             color.r = r;
@@ -448,14 +452,16 @@ QUnit.test('palette is custom object', function(assert) {
 });
 
 QUnit.test('palette size is 1', function(assert) {
-    const start = new Color('#0f2e89'); const end = new Color('#123fd7');
+    const start = new Color('#0f2e89');
+    const end = new Color('#123fd7');
     const palette = this.getDiscretePalette([start.toHex(), end.toHex()], 1);
     assert.strictEqual(palette.getColor(0), start.blend(end, 0.5).toHex(), 'color 0');
     assert.strictEqual(palette.getColor(1), null, 'color 1');
 });
 
 QUnit.test('palette size is 2', function(assert) {
-    const start = new Color('#ad8902'); const end = new Color('#37e90a');
+    const start = new Color('#ad8902');
+    const end = new Color('#37e90a');
     const palette = this.getDiscretePalette([start.toHex(), end.toHex()], 2);
     assert.strictEqual(palette.getColor(0), start.toHex(), 'color 0');
     assert.strictEqual(palette.getColor(1), end.toHex(), 'color 1');
@@ -463,7 +469,8 @@ QUnit.test('palette size is 2', function(assert) {
 });
 
 QUnit.test('palette size is 3', function(assert) {
-    const start = new Color('red'); const end = new Color('blue');
+    const start = new Color('red');
+    const end = new Color('blue');
     const palette = this.getDiscretePalette([start.toHex(), end.toHex()], 3);
     assert.strictEqual(palette.getColor(0), start.toHex(), 'color 0');
     assert.strictEqual(palette.getColor(1), start.blend(end, 0.5).toHex(), 'color 1');
@@ -472,7 +479,8 @@ QUnit.test('palette size is 3', function(assert) {
 });
 
 QUnit.test('palette size is 51', function(assert) {
-    const start = new Color('#000102'); const end = new Color('#fff901');
+    const start = new Color('#000102');
+    const end = new Color('#fff901');
     const palette = this.getDiscretePalette([start.toHex(), end.toHex()], 51);
     let i = 0;
     for(; i < 51; ++i) {

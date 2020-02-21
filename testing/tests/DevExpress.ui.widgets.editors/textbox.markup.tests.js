@@ -63,7 +63,8 @@ QUnit.module('markup', () => {
         browser.msie = false;
 
         try {
-            const element = $('#textbox').dxTextBox({ maxLength: '5' }); const input = element.find('.' + INPUT_CLASS);
+            const element = $('#textbox').dxTextBox({ maxLength: '5' });
+            const input = element.find('.' + INPUT_CLASS);
             assert.equal(input.attr('maxLength'), '5');
         } finally {
             devices.real(originalDevices);

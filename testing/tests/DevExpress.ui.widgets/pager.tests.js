@@ -377,7 +377,8 @@ QUnit.module('Pager', {
     QUnit.test('Page sizes render when pageSizes is false', function(assert) {
         $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, pageSizes: false });
 
-        const pageSizesElements = $('.dx-page-size'); const pageSizesContainer = $('.dx-page-sizes');
+        const pageSizesElements = $('.dx-page-size');
+        const pageSizesContainer = $('.dx-page-sizes');
 
         assert.equal(pageSizesContainer.length, 0, 'page sizes container elements count');
         assert.equal(pageSizesElements.length, 0, 'page size elements count');
@@ -386,7 +387,8 @@ QUnit.module('Pager', {
     QUnit.test('Page sizes render when showPageSizes is false', function(assert) {
         $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, showPageSizes: false, pageSizes: [5, 10, 20] });
 
-        const pageSizesElements = $('.dx-page-size'); const pageSizesContainer = $('.dx-page-sizes');
+        const pageSizesElements = $('.dx-page-size');
+        const pageSizesContainer = $('.dx-page-sizes');
 
         assert.equal(pageSizesContainer.length, 0, 'page sizes container elements count');
         assert.equal(pageSizesElements.length, 0, 'page size elements count');
@@ -866,7 +868,8 @@ QUnit.module('Pager', {
             pagesCountText: 'of'
         });
 
-        const editor = $('.dx-page-index').dxNumberBox('instance'); const $pagesCount = $('.dx-pages-count');
+        const editor = $('.dx-page-index').dxNumberBox('instance');
+        const $pagesCount = $('.dx-pages-count');
 
         $($pagesCount).trigger('dxclick');
 

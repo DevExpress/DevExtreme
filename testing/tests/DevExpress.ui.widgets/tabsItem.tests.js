@@ -2,7 +2,8 @@ import $ from 'jquery';
 import Tabs from 'ui/tabs';
 
 QUnit.module('badge builtin', () => {
-    const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge'; const BADGE_CLASS = 'dx-badge';
+    const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge';
+    const BADGE_CLASS = 'dx-badge';
 
     QUnit.test('badge should be rendered correctly by default', function(assert) {
         const widget = new Tabs($('<div>'), {

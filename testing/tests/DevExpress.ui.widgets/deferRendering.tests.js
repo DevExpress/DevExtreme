@@ -60,7 +60,8 @@ QUnit.module('dxDeferRendering', () => {
     });
 
     QUnit.test('renderContent', function(assert) {
-        const done = assert.async(); const $test = $('#renderContent');
+        const done = assert.async();
+        const $test = $('#renderContent');
 
         const deferRendering = $test
             .find('.defer-rendering')
@@ -79,7 +80,8 @@ QUnit.module('dxDeferRendering', () => {
     });
 
     QUnit.test('render delegate', function(assert) {
-        const done = assert.async(); const $test = $('#renderDelegate');
+        const done = assert.async();
+        const $test = $('#renderDelegate');
 
         $test
             .find('.defer-rendering')
@@ -99,7 +101,8 @@ QUnit.module('dxDeferRendering', () => {
     });
 
     QUnit.test('rendering state is set properly', function(assert) {
-        const done = assert.async(); const $test = $('#renderDelegate');
+        const done = assert.async();
+        const $test = $('#renderDelegate');
 
         $test.find('.defer-rendering').dxDeferRendering();
 
