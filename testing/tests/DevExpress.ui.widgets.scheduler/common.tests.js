@@ -1872,7 +1872,14 @@ QUnit.testStart(function() {
     });
 
     QUnit.test('Editing default option value', function(assert) {
-        const defaultEditing = { allowAdding: true, allowUpdating: true, allowDeleting: true, allowResizing: true, allowDragging: true };
+        const defaultEditing = {
+            allowAdding: true,
+            allowUpdating: true,
+            allowDeleting: true,
+            allowResizing: true,
+            allowDragging: true,
+            allowEditingTimeZones: false,
+        };
 
         if(devices.real().platform !== 'generic') {
             defaultEditing.allowDragging = false;

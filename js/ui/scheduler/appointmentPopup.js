@@ -138,7 +138,7 @@ export default class AppointmentPopup {
     _createForm(element) {
         const { expr } = this.scheduler._dataAccessors;
         const resources = this.scheduler.option('resources');
-        const appointmentFormOptions = this.scheduler.option('appointmentForm') || { showStartTimezone: false, showEndTimezone: false };
+        const allowEditingTimeZones = this.scheduler.option('editing').allowEditingTimeZones;
         const appointmentData = this.state.appointment.data;
         const formData = this._createAppointmentFormData(appointmentData);
 
@@ -151,7 +151,7 @@ export default class AppointmentPopup {
             recurrenceRuleExpr: expr.recurrenceRuleExpr,
             startDateTimeZoneExpr: expr.startDateTimeZoneExpr,
             endDateTimeZoneExpr: expr.endDateTimeZoneExpr
-        }, this.scheduler, this.triggerResize.bind(this), this.changeSize.bind(this), formData, appointmentFormOptions);
+        }, this.scheduler, this.triggerResize.bind(this), this.changeSize.bind(this), formData, allowEditingTimeZones);
 
         if(resources && resources.length) {
             this.scheduler._resourcesManager.setResources(this.scheduler.option('resources'));

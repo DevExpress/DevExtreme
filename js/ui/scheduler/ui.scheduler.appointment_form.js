@@ -66,7 +66,8 @@ const SchedulerAppointmentForm = {
         }
     },
 
-    _getTimezoneEditor: function(timeZoneExpr, visibleIndex, colSpan, schedulerInst, isShow) {
+    _getTimezoneEditor: function(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, schedulerInst, isShow = false) {
+        const that = this;
         return {
             dataField: timeZoneExpr,
             editorType: 'dxSchedulerTimezoneEditor',
@@ -76,7 +77,14 @@ const SchedulerAppointmentForm = {
                 text: ' ',
             },
             editorOptions: {
-                observer: schedulerInst
+                observer: schedulerInst,
+                onValueChanged: function(args) {
+                    const form = that._appointmentForm;
+                    const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);
+                    if(!secondTimezoneEditor.option('value')) {
+                        secondTimezoneEditor.option('value', args.value);
+                    }
+                }
             },
             visible: isShow
         };
@@ -103,9 +111,9 @@ const SchedulerAppointmentForm = {
         };
     },
 
-    _getDateBoxItems: function(dataExprs, schedulerInst, { showStartTimezone, showEndTimezone }) {
+    _getDateBoxItems: function(dataExprs, schedulerInst, allowEditingTimeZones) {
         const that = this;
-        const colSpan = showStartTimezone || showEndTimezone ? 2 : 1;
+        const colSpan = allowEditingTimeZones ? 2 : 1;
         const firstDayOfWeek = schedulerInst.option('firstDayOfWeek');
         return [
             this._getDateBoxEditor(dataExprs.startDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelStartDate',
@@ -113,18 +121,18 @@ const SchedulerAppointmentForm = {
                     that._dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => { return endValue < startValue; });
                 }),
 
-            this._getTimezoneEditor(dataExprs.startDateTimeZoneExpr, 1, colSpan, schedulerInst, showStartTimezone),
+            this._getTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, schedulerInst, allowEditingTimeZones),
 
             this._getDateBoxEditor(dataExprs.endDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelEndDate',
                 function(args) {
                     that._dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => { return endValue < startValue; });
                 }),
 
-            this._getTimezoneEditor(dataExprs.endDateTimeZoneExpr, 3, colSpan, schedulerInst, showEndTimezone)
+            this._getTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, schedulerInst, allowEditingTimeZones)
         ];
     },
 
-    _getMainItems: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentFormOptions) {
+    _getMainItems: function(dataExprs, schedulerInst, triggerResize, changeSize, allowEditingTimeZones) {
         const that = this;
         return [
             {
@@ -139,7 +147,7 @@ const SchedulerAppointmentForm = {
                 itemType: 'group',
                 colSpan: 2,
                 colCount: 2,
-                items: this._getDateBoxItems(dataExprs, schedulerInst, appointmentFormOptions),
+                items: this._getDateBoxItems(dataExprs, schedulerInst, allowEditingTimeZones),
             },
             {
                 itemType: 'group',
@@ -208,7 +216,7 @@ const SchedulerAppointmentForm = {
         ];
     },
 
-    prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, appointmentFormOptions) {
+    prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowEditingTimeZones) {
         const that = this;
         const recurrenceEditorVisibility = !!appointmentData.recurrenceRule;
 
@@ -217,7 +225,7 @@ const SchedulerAppointmentForm = {
                 itemType: 'group',
                 colCount: 2,
                 colSpan: recurrenceEditorVisibility ? 1 : 2,
-                items: this._getMainItems(dataExprs, schedulerInst, triggerResize, changeSize, appointmentFormOptions),
+                items: this._getMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowEditingTimeZones),
             },
             {
                 dataField: dataExprs.recurrenceRuleExpr,

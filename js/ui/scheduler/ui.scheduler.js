@@ -342,10 +342,6 @@ const Scheduler = Widget.inherit({
             max: undefined,
             dateSerializationFormat: undefined,
             firstDayOfWeek: undefined,
-            appointmentForm: {
-                showStartTimezone: false,
-                showEndTimezone: false
-            },
 
             groups: [],
 
@@ -428,7 +424,8 @@ const Scheduler = Widget.inherit({
                 allowDeleting: true,
                 allowDragging: true,
                 allowResizing: true,
-                allowUpdating: true
+                allowUpdating: true,
+                allowEditingTimeZones: false,
             },
 
             /**
