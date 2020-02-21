@@ -4317,6 +4317,57 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
         assert.deepEqual(instance.option('selectedItem'), items[1], 'downArrow');
     });
 
+    QUnit.test('selectBox should load only one next page after some quick navigations by arrow keys (T862714)', function(assert) {
+        const items = [];
+        for(let i = 0; i < 10; i++) {
+            items.push({ id: i, text: 'item ' + i });
+        }
+
+        const loadHandler = sinon.spy((e) => {
+            const d = $.Deferred();
+            setTimeout(() => {
+                d.resolve(items.slice(e.skip, e.skip + e.take));
+            }, 200);
+            return d.promise();
+        });
+
+        const $element = $('#selectBox').dxSelectBox({
+            dataSource: new DataSource({
+                byKey: (key) => {
+                    return $.extend({}, $.grep(items, (i) => {
+                        return i.id === key;
+                    })[0]);
+                },
+                load: loadHandler,
+                key: 'id',
+                pageSize: 3,
+                paginate: true
+            }),
+            focusStateEnabled: true,
+            deferRendering: true,
+            displayExpr: 'text',
+            valueExpr: 'id'
+        });
+        const instance = $element.dxSelectBox('instance');
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown('down');
+
+        this.clock.tick(300);
+
+        keyboard
+            .keyDown('down')
+            .keyDown('down')
+            .keyDown('down')
+            .keyDown('down')
+            .keyDown('down');
+
+        this.clock.tick(300);
+        assert.strictEqual(loadHandler.callCount, 2, 'only one next page can be loaded after quick keydowns');
+        assert.deepEqual(instance.option('selectedItem'), items[3], 'correct item is selected');
+    });
+
     QUnit.test('T323427 - item should be chosen after focus on it if input is empty', function(assert) {
         const items = [1, 2];
         const $selectBox = $('#selectBox').dxSelectBox({

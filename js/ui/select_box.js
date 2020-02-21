@@ -409,7 +409,10 @@ const SelectBox = DropDownList.inherit({
                 if(!this._popup) {
                     this._createPopup();
                 }
-                this._list._loadNextPage().done(this._setNextItem.bind(this, step));
+
+                if(!this._dataSource.isLoading()) {
+                    this._list._loadNextPage().done(this._setNextItem.bind(this, step));
+                }
             } else {
                 this._setNextItem(step);
             }
