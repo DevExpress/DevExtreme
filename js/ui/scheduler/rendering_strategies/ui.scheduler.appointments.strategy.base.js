@@ -168,6 +168,7 @@ class BaseRenderingStrategy {
                 allDay: allDay,
                 rowIndex: initialRowIndex,
                 cellIndex: initialCellIndex,
+                endDate: this.endDate(item, position[j], isRecurring),
                 appointmentReduced: appointmentReduced
             });
             result = this._getAppointmentPartsPosition(multiWeekAppointmentParts, position[j], result);
