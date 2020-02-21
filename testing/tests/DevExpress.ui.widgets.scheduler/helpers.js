@@ -221,12 +221,14 @@ export class SchedulerTestWrapper {
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
             getCurrentTimeIndicator: () => $('.dx-scheduler-date-time-indicator'),
+            getAllDayPanel: () => $('.dx-scheduler-all-day-panel'),
 
             getDataTableScrollableContainer: () => this.workSpace.getDateTableScrollable().find('.dx-scrollable-container'),
             getScrollPosition: () => {
                 const element = this.workSpace.getDataTableScrollableContainer();
                 return { left: element.scrollLeft(), top: element.scrollTop() };
             },
+            getScrollable: () => $('.dx-scheduler-date-table-scrollable').dxScrollable('instance'),
             groups: {
                 getGroupsContainer: () => $('.dx-scheduler-group-flex-container'),
                 getGroup: (index = 0) => $('.dx-scheduler-group-row').eq(index),

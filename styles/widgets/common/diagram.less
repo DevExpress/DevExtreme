@@ -15,7 +15,8 @@
     border: @TRANSPARENT_BORDER;
     display: flex;
     flex-flow: column;
-    height: 400px;
+    height: 600px;
+    min-height: 350px;
 
     .dx-diagram-toolbar-wrapper {
         padding: 5px;
@@ -114,13 +115,45 @@
 }
 
 .dx-diagram-properties-popup {
-    .dx-popup-content {
-        padding: 0;
-    }
-
     .dx-scrollview,
     .dx-accordion {
         width: 100%;
+    }
+
+    .dx-tabpanel .dx-multiview-wrapper {
+        border-left: 0;
+        border-bottom: 0;
+        border-right: 0;
+    }
+
+    .dx-diagram-properties-panel-no-tabs {
+        .dx-tabpanel-tabs {
+            display: none;
+        }
+
+        .dx-multiview-wrapper {
+            border: 0;
+        }
+    }
+
+    .dx-diagram-properties-panel-group-toolbar {
+        .dx-toolbar-items-container {
+            display: block;
+            height: auto;
+
+            & > div {
+                display: flex;
+                flex-wrap: wrap;
+                width: 100%;
+                height: auto;
+                position: inherit;
+            }
+
+            .dx-toolbar-item {
+                display: flex;
+                align-items: center;
+            }
+        }
     }
 }
 

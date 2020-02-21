@@ -92,7 +92,8 @@ QUnit.module('hidden input', moduleConfig, () => {
             value: 2
         });
 
-        const instance = this.$element.dxDropDownBox('instance'); const $input = this.$element.find('input[type=\'hidden\']');
+        const instance = this.$element.dxDropDownBox('instance');
+        const $input = this.$element.find('input[type=\'hidden\']');
 
         instance.option('value', 1);
         assert.equal($input.val(), '1', 'input value is correct');

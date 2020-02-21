@@ -88,7 +88,8 @@ QUnit.module('clock rendering', () => {
 
 
     const getRotation = function($element) {
-        const matrix = $element.css('transform'); const values = matrix.split('(')[1].split(')')[0].split(',');
+        const matrix = $element.css('transform');
+        const values = matrix.split('(')[1].split(')')[0].split(',');
 
         return Math.round(Math.atan2(values[1], values[0]) * (180 / Math.PI));
     };

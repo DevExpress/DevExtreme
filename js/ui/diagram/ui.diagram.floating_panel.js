@@ -1,8 +1,8 @@
 import $ from '../../core/renderer';
-import Widget from '../widget/ui.widget';
+import DiagramPanel from './ui.diagram.panel';
 import Popup from '../popup';
 
-class DiagramFloatingPanel extends Widget {
+class DiagramFloatingPanel extends DiagramPanel {
     _init() {
         super._init();
 
@@ -26,8 +26,34 @@ class DiagramFloatingPanel extends Widget {
         this._updatePopupVisible();
     }
 
+    _getPopupContent() {
+        return this._popup.content();
+    }
+    _getPointerUpElement() {
+        return this._getPopupContent();
+    }
+    _getVerticalPaddingsAndBorders() {
+        const $content = $(this._getPopupContent());
+        return $content.outerHeight() - $content.height();
+    }
+    _getHorizontalPaddingsAndBorders() {
+        const $content = $(this._getPopupContent());
+        return $content.outerWidth() - $content.width();
+    }
     _getPopupClass() {
         return '';
+    }
+    _getPopupWidth() {
+        return Math.max(this.option('width'), this._getPopupMinWidth()) || 'auto';
+    }
+    _getPopupMinWidth() {
+        return 0;
+    }
+    _getPopupHeight() {
+        return Math.max(this.option('height'), this._getPopupMinHeight()) || 'auto';
+    }
+    _getPopupMinHeight() {
+        return 0;
     }
     _getPopupOptions() {
         const that = this;
@@ -35,7 +61,8 @@ class DiagramFloatingPanel extends Widget {
             animation: null,
             shading: false,
             focusStateEnabled: false,
-            height: this.option('height') || 'auto',
+            width: this._getPopupWidth(),
+            height: this._getPopupHeight(),
             position: this.option('position'),
             onContentReady: function() {
                 that._renderPopupContent(that._popup.content());
@@ -62,6 +89,12 @@ class DiagramFloatingPanel extends Widget {
         switch(args.name) {
             case 'onVisibilityChanged':
                 this._createOnVisibilityChangedAction();
+                break;
+            case 'width':
+                this._popup.option('width', this._getPopupWidth());
+                break;
+            case 'height':
+                this._popup.option('height', this._getPopupHeight());
                 break;
             case 'isVisible':
                 this._isVisible = args.value;

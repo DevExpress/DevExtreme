@@ -457,7 +457,8 @@ QUnit.test('Rival duplicated appointments should have correct positions', functi
 });
 
 QUnit.test('More than 3 small appointments should be grouped', function(assert) {
-    const items = []; let i = 8;
+    const items = [];
+    let i = 8;
     while(i > 0) {
         items.push({ text: i, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 10) });
         i--;
@@ -693,7 +694,8 @@ QUnit.test('Start date of the long-time reduced appointment should be changed co
 });
 
 QUnit.test('More than 3 cloned appointments should be grouped', function(assert) {
-    const items = []; let i = 10;
+    const items = [];
+    let i = 10;
 
     while(i > 0) {
         items.push({ text: i, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1) });
@@ -719,7 +721,8 @@ QUnit.test('More than 3 cloned appointments should be grouped', function(assert)
 });
 
 QUnit.test('Grouped appointments schould have correct colors', function(assert) {
-    const items = []; let i = 2;
+    const items = [];
+    let i = 2;
 
     while(i > 0) {
         items.push({ text: i, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), roomId: 1 });
@@ -759,7 +762,8 @@ QUnit.test('Grouped appointments schould have correct colors', function(assert) 
 });
 
 QUnit.test('Grouped appointments schould have correct colors when resourses store is asynchronous', function(assert) {
-    const items = []; let i = 2;
+    const items = [];
+    let i = 2;
 
     while(i > 0) {
         items.push({ text: i, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), roomId: 1 });
@@ -809,7 +813,8 @@ QUnit.test('Grouped appointments schould have correct colors when resourses stor
 });
 
 QUnit.test('Grouped appointments should be reinitialized if datasource is changed', function(assert) {
-    const items = []; let i = 7;
+    const items = [];
+    let i = 7;
     while(i > 0) {
         items.push({ text: i, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1) });
         i--;
@@ -1578,7 +1583,8 @@ QUnit.test('Rival duplicated appointments should have correct positions', functi
 });
 
 QUnit.test('More than 3 all-day appointments should be grouped', function(assert) {
-    const items = []; let i = 12;
+    const items = [];
+    let i = 12;
     while(i > 0) {
         items.push({ text: i, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 10), allDay: true });
         i--;

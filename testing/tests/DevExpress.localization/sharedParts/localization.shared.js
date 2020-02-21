@@ -403,26 +403,7 @@ module.exports = function() {
             'yyyy MMMM d': {
                 text: '2015 March 2',
                 expected: new Date(2015, 2, 2)
-            },
-
-            'mediumdatemediumtime': [
-                {
-                    text: 'March 2, 3:12 AM',
-                    expectedConfig: { month: 2, day: 2, hours: 3, minutes: 12, seconds: 0 }
-                },
-                {
-                    text: 'March 2, 3:12 PM',
-                    expectedConfig: { month: 2, day: 2, hours: 15, minutes: 12, seconds: 0 }
-                },
-                {
-                    text: 'March 2, 12:12 AM',
-                    expectedConfig: { month: 2, day: 2, hours: 0, minutes: 12, seconds: 0 }
-                },
-                {
-                    text: 'March 2, 12:12 PM',
-                    expectedConfig: { month: 2, day: 2, hours: 12, minutes: 12, seconds: 0 }
-                }
-            ]
+            }
         };
 
         try {

@@ -1073,6 +1073,46 @@ QUnit.test('The select checkbox should be displayed after changing expand state 
     assert.ok($expandIcon.next().hasClass('dx-select-checkbox'), 'third node has a select checkbox');
 });
 
+// T861052
+QUnit.test('The child node position should be updated after changing dataSource when rowRenderingMode is "virtual" and repaintChangesOnly is true', function(assert) {
+    // arrange
+    const array = [
+        { id: 1, parentId: 0, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) }
+    ];
+    const treeList = createTreeList({
+        dataSource: array,
+        autoExpandAll: true,
+        loadingTimeout: undefined,
+        keyExpr: 'id',
+        parentIdExpr: 'parentId',
+        rootValue: 0,
+        columns: ['field1', 'field2', 'field3'],
+        repaintChangesOnly: true,
+        scrolling: {
+            mode: 'virtual',
+            rowRenderingMode: 'virtual'
+        }
+    });
+
+    // assert
+    let rows = treeList.getVisibleRows();
+    assert.strictEqual(rows[0].level, 0, 'level of the first node');
+    assert.strictEqual(rows[1].level, 1, 'level of the second node');
+    assert.strictEqual(rows[2].level, 2, 'level of the third node');
+
+    // act
+    array[2].parentId = 1;
+    treeList.option('dataSource', array);
+
+    // assert
+    rows = treeList.getVisibleRows();
+    assert.strictEqual(rows[0].level, 0, 'level of the first node');
+    assert.strictEqual(rows[1].level, 1, 'level of the second node');
+    assert.strictEqual(rows[2].level, 1, 'level of the third node');
+});
+
 
 QUnit.module('Expand/Collapse rows');
 

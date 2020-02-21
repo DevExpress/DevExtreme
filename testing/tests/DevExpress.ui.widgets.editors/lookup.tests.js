@@ -152,7 +152,8 @@ QUnit.module('Lookup', {
 
         this.togglePopup();
 
-        const popup = this.popup; const $field = this.$field;
+        const popup = this.popup;
+        const $field = this.$field;
 
         assert.ok(popup.option('visible'), 'popup shows on click');
 
@@ -181,7 +182,8 @@ QUnit.module('Lookup', {
 
         this.togglePopup();
 
-        const popup = this.popup; const $field = this.$field;
+        const popup = this.popup;
+        const $field = this.$field;
 
         $field.trigger('dxclick');
         assert.ok(!popup.option('visible'), 'popup hides on click');
@@ -802,7 +804,8 @@ QUnit.module('Lookup', {
 
         this.togglePopup();
 
-        const loadTriggeredAtStart = loadTriggered; const search = this.search;
+        const loadTriggeredAtStart = loadTriggered;
+        const search = this.search;
 
         search.option('value', 't');
         this.clock.tick(300);
@@ -1369,7 +1372,8 @@ QUnit.module('Lookup', {
     });
 
     QUnit.test('Check popup position for Material theme when fullScreen option is true ', function(assert) {
-        const isMaterialStub = sinon.stub(themes, 'isMaterial'); const $lookup = $('#lookup');
+        const isMaterialStub = sinon.stub(themes, 'isMaterial');
+        const $lookup = $('#lookup');
 
         isMaterialStub.returns(true);
 
@@ -1735,7 +1739,9 @@ QUnit.module('options', {
     });
 
     QUnit.test('value', function(assert) {
-        const items = [1, 2, 3]; const instance = $('#lookup').dxLookup({ dataSource: items }).dxLookup('instance'); const $field = $(instance._$field);
+        const items = [1, 2, 3];
+        const instance = $('#lookup').dxLookup({ dataSource: items }).dxLookup('instance');
+        const $field = $(instance._$field);
 
         assert.equal($field.text(), instance.option('placeholder'), 'no field text if no selected value');
 
@@ -1855,7 +1861,8 @@ QUnit.module('options', {
     });
 
     QUnit.test('items after null data source', function(assert) {
-        const items2 = [4, 5]; const instance = $('#lookup').dxLookup({}).dxLookup('instance');
+        const items2 = [4, 5];
+        const instance = $('#lookup').dxLookup({}).dxLookup('instance');
 
         instance.option('items', items2);
 
@@ -1921,7 +1928,9 @@ QUnit.module('options', {
 
         $(instance._$field).trigger('dxclick');
 
-        const search = instance._searchBox; const $field = $(instance._$field); const $list = $(instance._list.$element());
+        const search = instance._searchBox;
+        const $field = $(instance._$field);
+        const $list = $(instance._list.$element());
 
         assert.equal($list.find('.dx-list-item').filter(':visible').length, 0, 'No items are expected to be shown');
         assert.equal($field.text(), placeholder);
@@ -2373,7 +2382,8 @@ QUnit.module('list options', {
 
 QUnit.module('Native scrolling', () => {
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {
-        const data = []; const done = assert.async();
+        const data = [];
+        const done = assert.async();
 
         for(let i = 100; i >= 0; i--) {
             data.push(i);

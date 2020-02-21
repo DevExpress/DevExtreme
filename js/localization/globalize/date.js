@@ -613,10 +613,6 @@ if(Globalize && Globalize.formatDate) {
             path: 'dateTimeFormats/short',
             parts: ['shorttime', 'shortdate']
         },
-        'mediumdatemediumtime': {
-            path: 'dateTimeFormats/medium',
-            parts: ['shorttime', 'monthandday']
-        },
         'longdatelongtime': {
             path: 'dateTimeFormats/medium',
             parts: ['longtime', 'longdate']

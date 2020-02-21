@@ -76,7 +76,7 @@ QUnit.test('Recurrence editor should has right items', function(assert) {
     const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
 
     const items = freqEditor.option('items');
-    const itemValues = [{ text: 'Never', value: 'never' }, { text: 'Daily', value: 'daily' }, { text: 'Weekly', value: 'weekly' }, { text: 'Monthly', value: 'monthly' }, { text: 'Yearly', value: 'yearly' }];
+    const itemValues = [{ text: 'Never', value: 'never' }, { text: 'Minutely', value: 'minutely' }, { text: 'Hourly', value: 'hourly' }, { text: 'Daily', value: 'daily' }, { text: 'Weekly', value: 'weekly' }, { text: 'Monthly', value: 'monthly' }, { text: 'Yearly', value: 'yearly' }];
 
     for(let i = 0, len = items.length; i < len; i++) {
         assert.equal(itemValues[i].text, items[i].text(), 'item text is right');
@@ -153,6 +153,29 @@ QUnit.test('Recurrence editor should correctly process values to the freq radioG
 
     this.instance.option('value', 'FREQ=MONTHLY');
     assert.equal(freqEditor.option('value'), 'monthly', 'Freq editor has right value');
+});
+
+$.each(['minutely', 'hourly'], (_, value) => {
+    QUnit.test(`Recurrence editor should correctly set frequency on ${value} freq`, function(assert) {
+        this.createInstance();
+
+        const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
+
+        assert.equal(this.instance.option('value'), null, 'Freq editor has right value');
+        freqEditor.option('value', value);
+        assert.equal(this.instance.option('value'), `FREQ=${value.toUpperCase()}`, 'Freq editor has right value');
+    });
+
+    QUnit.test(`Recurrence editor should correctly set interval on ${value} freq`, function(assert) {
+        this.createInstance();
+
+        const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
+        freqEditor.option('value', value);
+        const intervalEditor = this.instance.$element().find('.' + EVERY_INTERVAL).dxNumberBox('instance');
+        intervalEditor.option('value', 10);
+
+        assert.equal(this.instance.option('value'), `FREQ=${value.toUpperCase()};INTERVAL=10`, 'Freq editor has right value');
+    });
 });
 
 

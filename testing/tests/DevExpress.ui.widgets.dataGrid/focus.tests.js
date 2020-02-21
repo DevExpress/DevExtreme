@@ -3332,7 +3332,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             { name: 'Zeb', phone: '6666666', isRoom: false }
         ];
 
-        const store = new ArrayStore(this.data); const loadSpy = sinon.spy((loadOptions) => store.load(loadOptions));
+        const store = new ArrayStore(this.data);
+        const loadSpy = sinon.spy((loadOptions) => store.load(loadOptions));
 
         this.options = {
             focusedRowEnabled: true,
@@ -4163,6 +4164,95 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowKey'), 'Mark1', 'focusedRowKey');
         assert.ok(rowsView.getRow(0).hasClass('dx-row-focused'), 'Focused row');
         assert.equal($(rowsView.getRow(0)).find('td').eq(0).text(), 'Mark1', 'Focused row cell text');
+    });
+
+    QUnit.testInActiveWindow('Focused row should be updated by index after scrolling and deleting (T856932)', function(assert) {
+        // arrange
+        this.options = {
+            height: 40,
+            focusedRowEnabled: true,
+            keyExpr: 'name',
+            showColumnHeaders: false,
+            scrolling: {
+                mode: 'virtual',
+                removeInvisiblePages: true
+            },
+            paging: {
+                pageSize: 1
+            }
+        };
+
+        this.data = [
+            { name: 'Alex', phone: '555555', room: 1 },
+            { name: 'Ben', phone: '553355', room: 2 },
+            { name: 'Dan', phone: '6666666', room: 3 },
+            { name: 'Mark1', phone: '777777', room: 4 },
+            { name: 'Mark2', phone: '888888', room: 5 }
+        ];
+
+        this.setupModule();
+
+        addOptionChangedHandlers(this);
+
+        this.gridView.render($('#container'));
+
+        // act
+        this.pageIndex(1);
+        this.option('focusedRowKey', 'Dan');
+        this.deleteRow(this.getRowIndexByKey('Dan'));
+
+        // assert
+        assert.equal(this.getVisibleRows()[0].key, 'Ben', 'top visible row key');
+        assert.equal(this.option('focusedRowIndex'), 2, 'focusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), 'Mark1', 'focusedRowKey');
+        assert.ok($(this.getRowElement(1)).hasClass('dx-row-focused'), 'Focused row style');
+        assert.equal($(this.getCellElement(1, 0)).text(), 'Mark1', 'Focused row cell text');
+    });
+
+    QUnit.testInActiveWindow('Focused row should be updated by index after scrolling back and deleting (T856932)', function(assert) {
+        // arrange
+        this.options = {
+            height: 40,
+            focusedRowEnabled: true,
+            keyExpr: 'name',
+            showColumnHeaders: false,
+            scrolling: {
+                mode: 'virtual',
+                removeInvisiblePages: true
+            },
+            paging: {
+                pageSize: 1
+            }
+        };
+
+        this.data = [
+            { name: 'Alex', phone: '555555', room: 1 },
+            { name: 'Ben', phone: '553355', room: 2 },
+            { name: 'Dan', phone: '6666666', room: 3 },
+            { name: 'Mark1', phone: '777777', room: 4 },
+            { name: 'Mark2', phone: '888888', room: 5 }
+        ];
+
+        this.setupModule();
+
+        addOptionChangedHandlers(this);
+
+        this.gridView.render($('#container'));
+
+        this.pageIndex(2);
+        assert.equal(this.getVisibleRows()[0].key, 'Ben', 'top visible row key');
+
+        // act
+        this.pageIndex(0);
+        this.option('focusedRowKey', 'Alex');
+        this.deleteRow(this.getRowIndexByKey('Alex'));
+
+        // assert
+        assert.equal(this.getVisibleRows()[0].key, 'Ben', 'top visible row key');
+        assert.equal(this.option('focusedRowIndex'), 0, 'focusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), 'Ben', 'focusedRowKey');
+        assert.ok($(this.getRowElement(0)).hasClass('dx-row-focused'), 'Focused row style');
+        assert.equal($(this.getCellElement(0, 0)).text(), 'Ben', 'Focused row cell text');
     });
 
     QUnit.testInActiveWindow('DataGrid should show error E1042 if keyExpr is absent and focusedRowEnabled when focusedRowKey is set', function(assert) {

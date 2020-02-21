@@ -1,29 +1,33 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import { Deferred } from '../../core/utils/deferred';
-import messageLocalization from '../../localization/message';
-import Accordion from '../accordion';
-import Form from '../form';
 import ScrollView from '../scroll_view';
+import TabPanel from '../tab_panel';
 
-import DiagramBar from './diagram.bar';
 import DiagramFloatingPanel from './ui.diagram.floating_panel';
 import DiagramCommandsManager from './diagram.commands_manager';
 
-const DIAGRAM_PROPERTIES_POPUP_WIDTH = 330;
-const DIAGRAM_PROPERTIES_POPUP_HEIGHT = 350;
+const DIAGRAM_PROPERTIES_POPUP_WIDTH = 420;
+const DIAGRAM_PROPERTIES_POPUP_HEIGHT = 340;
 const DIAGRAM_PROPERTIES_POPUP_CLASS = 'dx-diagram-properties-popup';
 const DIAGRAM_PROPERTIES_PANEL_CLASS = 'dx-diagram-properties-panel';
-const DIAGRAM_PROPERTIES_PANEL_BEGIN_GROUP_CLASS = 'dx-diagram-properties-panel-begin-group';
-
+const DIAGRAM_PROPERTIES_PANEL_NO_TABS_CLASS = 'dx-diagram-properties-panel-no-tabs';
+const DIAGRAM_PROPERTIES_PANEL_GROUP_TITLE_CLASS = 'dx-diagram-properties-panel-group-title';
+const DIAGRAM_PROPERTIES_PANEL_GROUP_TOOLBAR_CLASS = 'dx-diagram-properties-panel-group-toolbar';
 
 class DiagramPropertiesPanel extends DiagramFloatingPanel {
     _init() {
         super._init();
 
-        this.bar = new OptionsDiagramBar(this);
-        this._valueConverters = {};
+        this._commandGroups = DiagramCommandsManager.getPropertyPanelCommandGroups(this.option('propertyGroups'));
+        this._createOnCreateToolbar();
+        this._createOnSelectedGroupChanged();
         this._createOnVisibilityChangingAction();
+    }
+    _initMarkup() {
+        this._toolbars = [];
+        this._selectedToolbar = undefined;
+
+        super._initMarkup();
     }
     _getPopupClass() {
         return DIAGRAM_PROPERTIES_POPUP_CLASS;
@@ -33,6 +37,7 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
             width: DIAGRAM_PROPERTIES_POPUP_WIDTH,
             height: DIAGRAM_PROPERTIES_POPUP_HEIGHT,
             showTitle: false,
+            resizeEnabled: true,
             onShowing: (e) => {
                 if(this._inOnShowing === true) return;
 
@@ -46,125 +51,88 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
         const $panel = $('<div>')
             .addClass(DIAGRAM_PROPERTIES_PANEL_CLASS)
             .appendTo($parent);
-        this._renderScrollView($panel);
+        if(this._commandGroups.length < 2) {
+            $panel.addClass(DIAGRAM_PROPERTIES_PANEL_NO_TABS_CLASS);
+        }
+        this._renderTabPanel($panel);
     }
-    _renderScrollView($parent) {
-        const $scrollViewWrapper = $('<div>')
+    _renderTabPanel($parent) {
+        const $tabPanel = $('<div>')
             .appendTo($parent);
-        this._scrollView = this._createComponent($scrollViewWrapper, ScrollView);
-        const $accordion = $('<div>')
-            .appendTo(this._scrollView.content());
-
-        this._renderAccordion($accordion);
-    }
-    _getAccordionDataSource() {
-        return [{
-            title: messageLocalization.format('dxDiagram-uiProperties'),
-            onTemplate: (widget, $element) => widget._renderOptions($element)
-        }];
-    }
-    _renderAccordion($container) {
-        this._accordionInstance = this._createComponent($container, Accordion, {
-            multiple: true,
-            collapsible: true,
-            displayExpr: 'title',
-            dataSource: this._getAccordionDataSource(),
-            itemTemplate: (data, index, $element) => data.onTemplate(this, $element),
+        this._tabPanel = this._createComponent($tabPanel, TabPanel, {
+            focusStateEnabled: false,
+            dataSource: this._commandGroups,
+            itemTemplate: (data, index, $element) => {
+                const $scrollViewWrapper = $('<div>')
+                    .appendTo($element);
+                this._scrollView = this._createComponent($scrollViewWrapper, ScrollView, {
+                    height: this._scrollViewHeight
+                });
+                this._renderTabPanelItemContent(this._scrollView.content(), data, index);
+            },
+            onSelectionChanged: (e) => {
+                this._onSelectedGroupChangedAction();
+            },
             onContentReady: (e) => {
-                this._updateScrollAnimateSubscription(e.component);
-            }
-        });
-    }
-    _updateScrollAnimateSubscription(component) {
-        component._deferredAnimate = new Deferred();
-        component._deferredAnimate.done(() => {
-            this._scrollView.update();
-            this._updateScrollAnimateSubscription(component);
-        });
-    }
-    _renderOptions($container) {
-        const commands = DiagramCommandsManager.getPropertyPanelCommands(this.option('propertyGroups'));
-        this._formInstance = this._createComponent($container, Form, {
-            items: commands.map(item => {
-                return extend(true, {
-                    editorType: item.widget,
-                    dataField: item.command.toString(),
-                    cssClass: item.beginGroup && DIAGRAM_PROPERTIES_PANEL_BEGIN_GROUP_CLASS,
-                    label: {
-                        text: item.text
-                    },
-                    options: {
-                        text: item.text,
-                        hint: item.hint,
-                        icon: item.icon,
-                        onInitialized: (e) => this._onToolbarItemInitialized(e.component, item.command)
-                    }
-                }, this._createWidgetOptions(item));
-            }),
-            onFieldDataChanged: (e) => this._onDiagramOptionChanged(e.dataField, e.value)
-        });
-    }
-    _createWidgetOptions(item) {
-        if(item.getValue && item.setValue) {
-            this._valueConverters[item.command] = { getValue: item.getValue, setValue: item.setValue };
-        }
-        if(item.widget === 'dxSelectBox') {
-            return {
-                editorOptions: {
-                    dataSource: item.items,
-                    displayExpr: 'title',
-                    valueExpr: 'value'
+                this._popup.option('height', e.component.$element().height() + this._getVerticalPaddingsAndBorders());
+                if(this._scrollView) {
+                    this._scrollViewHeight = this._scrollView.$element().outerHeight();
+                    this._scrollView.option('height',);
                 }
-            };
-        }
-    }
-    _onDiagramOptionChanged(key, value) {
-        if(!this._updateLocked && value !== undefined) {
-            const valueConverter = this._valueConverters[key];
-            if(valueConverter) {
-                value = valueConverter.getValue(value);
             }
-            this.bar.raiseBarCommandExecuted(parseInt(key), value);
+        });
+    }
+    _renderTabPanelItemContent($parent, group, index) {
+        if(group.groups) {
+            group.groups.forEach((sg, si) => {
+                this._renderTabPanelItemContentGroup($parent, index, sg.title, sg.commands);
+            });
+        } else if(group.commands) {
+            this._renderTabPanelItemContentGroup($parent, index, undefined, group.commands);
         }
     }
-    _setItemValue(key, value) {
-        const valueConverter = this._valueConverters[key];
-        if(valueConverter) {
-            value = valueConverter.setValue(value);
+    _renderTabPanelItemContentGroup($parent, index, title, commands) {
+        if(title) {
+            $('<div>')
+                .addClass(DIAGRAM_PROPERTIES_PANEL_GROUP_TITLE_CLASS)
+                .appendTo($parent)
+                .text(title);
         }
-        this._updateLocked = true;
-        this._formInstance.updateData(key.toString(), value);
-        this._updateLocked = false;
-    }
-    _setItemSubItems(key, items) {
-        this._updateLocked = true;
-        const editorInstance = this._formInstance.getEditor(key.toString());
-        if(editorInstance) {
-            editorInstance.option('items', items.map(item => {
-                const value = (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
-                return {
-                    'value': value,
-                    'title': item.text
-                };
-            }));
+        const $toolbar = $('<div>')
+            .addClass(DIAGRAM_PROPERTIES_PANEL_GROUP_TOOLBAR_CLASS)
+            .appendTo($parent);
+        const args = {
+            $parent: $toolbar,
+            commands: commands
+        };
+        this._onCreateToolbarAction(args);
+        if(!this._toolbars[index]) {
+            this._toolbars[index] = [];
         }
-        this._updateLocked = false;
+        this._toolbars[index].push(args.toolbar);
+        this._selectedToolbar = args.toolbar;
     }
-    _setEnabled(enabled) {
-        this._formInstance.option('disabled', !enabled);
+    getActiveToolbars() {
+        return this._toolbars[this._tabPanel.option('selectedIndex')];
     }
-    _setItemEnabled(key, enabled) {
-        const editorInstance = this._formInstance.getEditor(key.toString());
-        if(editorInstance) editorInstance.option('disabled', !enabled);
+
+    _createOnCreateToolbar() {
+        this._onCreateToolbarAction = this._createActionByOption('onCreateToolbar');
     }
-    isVisible() {
-        return this._inOnShowing;
+    _createOnSelectedGroupChanged() {
+        this._onSelectedGroupChangedAction = this._createActionByOption('onSelectedGroupChanged');
     }
     _createOnVisibilityChangingAction() {
         this._onVisibilityChangingAction = this._createActionByOption('onVisibilityChanging');
     }
     _optionChanged(args) {
         switch(args.name) {
+            case 'onCreateToolbar':
+                this._createOnCreateToolbar();
+                break;
+            case 'onSelectedGroupChanged':
+                this._createOnSelectedGroupChanged();
+                break;
             case 'onVisibilityChanging':
                 this._createOnVisibilityChangingAction();
                 break;
@@ -174,27 +142,6 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
             default:
                 super._optionChanged(args);
         }
-    }
-}
-
-class OptionsDiagramBar extends DiagramBar {
-    getCommandKeys() {
-        return DiagramCommandsManager.getPropertyPanelCommands().map(c => c.command);
-    }
-    setItemValue(key, value) {
-        this._owner._setItemValue(key, value);
-    }
-    setEnabled(enabled) {
-        this._owner._setEnabled(enabled);
-    }
-    setItemEnabled(key, enabled) {
-        this._owner._setItemEnabled(key, enabled);
-    }
-    setItemSubItems(key, items) {
-        this._owner._setItemSubItems(key, items);
-    }
-    isVisible() {
-        return this._owner.isVisible();
     }
 }
 

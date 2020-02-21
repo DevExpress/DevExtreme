@@ -190,7 +190,8 @@ QUnit.module('rendering', {
     });
 
     QUnit.test('rendering horizontal in RTL mode', function(assert) {
-        const config = configs.horizontal; const getPosition = getPositionCreator(config);
+        const config = configs.horizontal;
+        const getPosition = getPositionCreator(config);
 
         const element = this.element.dxTileView({
             height: 200,
@@ -224,7 +225,8 @@ QUnit.module('rendering', {
     });
 
     QUnit.test('rendering vertical in RTL mode', function(assert) {
-        const config = configs.vertical; const getPosition = getPositionCreator(config);
+        const config = configs.vertical;
+        const getPosition = getPositionCreator(config);
 
         const element = this.element.dxTileView({
             width: 200,
@@ -471,7 +473,8 @@ QUnit.module('keyboard navigation', {
     }
 }, () => {
     QUnit.test('useKeyboard is must be false by default', function(assert) {
-        const instance = this.$element.dxTileView().dxTileView('instance'); const scrollView = this.$element.dxScrollView('instance');
+        const instance = this.$element.dxTileView().dxTileView('instance');
+        const scrollView = this.$element.dxScrollView('instance');
 
         instance.option('useKeyboard', false);
         assert.ok(!scrollView.option('useKeyboard'), 'useKeyboard is false in scrollview');

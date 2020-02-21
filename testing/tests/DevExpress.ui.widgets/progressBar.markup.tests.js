@@ -104,7 +104,8 @@ QUnit.module('ProgressBar markup', {
         });
         const progressBar = $progressBar.dxProgressBar('instance');
 
-        const renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length; const defaultSegmentCount = progressBar.option('_animatingSegmentCount');
+        const renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length;
+        const defaultSegmentCount = progressBar.option('_animatingSegmentCount');
 
         assert.equal($progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER)).length, 1, 'Segment wrapper has been created');
         assert.equal(renderedIndeterminateSegmentsCount, defaultSegmentCount, 'Segments have been created');
@@ -117,7 +118,8 @@ QUnit.module('ProgressBar markup', {
         });
         const progressBar = $progressBar.dxProgressBar('instance');
 
-        const renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length; const defaultSegmentCount = progressBar.option('_animatingSegmentCount');
+        const renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length;
+        const defaultSegmentCount = progressBar.option('_animatingSegmentCount');
 
         assert.equal(renderedIndeterminateSegmentsCount, defaultSegmentCount, 'dxProgressBar have been created with correct segment count');
     });

@@ -24,6 +24,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         this._itemCount = 0;
         this._focusedItem = null;
         this._hasParentDirectoryItem = false;
+        this._parentDirectoryItemKey = null;
         this._selectAllCheckBox = null;
         this._selectAllCheckBoxUpdating = false;
 
@@ -224,7 +225,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         e.items = this._contextMenu.createContextMenuItems(fileItems);
     }
 
-    _onFilesViewSelectionChanged({ selectedRowsData }) {
+    _onFilesViewSelectionChanged({ selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {
         const parentDirectoryItem = this._findParentDirectoryItem(selectedRowsData);
         if(parentDirectoryItem) {
             this._filesView.deselectRows([ parentDirectoryItem.fileItem.key ]);
@@ -234,11 +235,25 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         this._selectAllCheckBox.option('value', this._isAllItemsSelected());
         this._selectAllCheckBoxUpdating = false;
 
-        this._raiseSelectionChanged();
+        let raiseEvent = !this._hasParentDirectoryItem;
+        raiseEvent = raiseEvent || this._hasValidKeys(currentSelectedRowKeys) || this._hasValidKeys(currentDeselectedRowKeys);
+
+        if(raiseEvent) {
+            let selectedItems = selectedRowsData.map(itemInfo => itemInfo.fileItem);
+            selectedItems = this._filterOutParentDirectory(selectedItems);
+
+            const selectedItemKeys = this._filterOutParentDirectoryKey(selectedRowKeys, true);
+            const currentSelectedItemKeys = this._filterOutParentDirectoryKey(currentSelectedRowKeys, true);
+            const currentDeselectedItemKeys = this._filterOutParentDirectoryKey(currentDeselectedRowKeys, true);
+
+            this._raiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
+        }
     }
 
     _onFocusedRowChanged({ row }) {
-        this._selectItemSingleSelection(row.data);
+        if(!this._isMultipleSelectionMode()) {
+            this._selectItemSingleSelection(row.data);
+        }
     }
 
     _onFilesViewOptionChanged({ fullName }) {
@@ -283,8 +298,20 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _selectItemSingleSelection(fileItemInfo) {
         if(!this._focusedItem || this._focusedItem.fileItem.key !== fileItemInfo.fileItem.key) {
+            const oldFocusedItem = this._focusedItem;
             this._focusedItem = fileItemInfo;
-            this._raiseSelectionChanged();
+
+            const deselectedKeys = [];
+            if(oldFocusedItem) {
+                deselectedKeys.push(oldFocusedItem.fileItem.key);
+            }
+
+            this._raiseSelectionChanged({
+                selectedItems: [ fileItemInfo.fileItem ],
+                selectedItemKeys: [ fileItemInfo.fileItem.key ],
+                currentSelectedItemKeys: [ fileItemInfo.fileItem.key ],
+                currentDeselectedItemKeys: deselectedKeys
+            });
         }
     }
 
@@ -299,7 +326,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     _getItemsInternal() {
         return this._getItems().done(itemInfos => {
             this._itemCount = itemInfos.length;
-            this._hasParentDirectoryItem = !!this._findParentDirectoryItem(itemInfos);
+
+            const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
+            this._hasParentDirectoryItem = !!parentDirectoryItem;
+            this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
         });
     }
 
@@ -325,6 +355,39 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _isParentDirectoryItem(itemInfo) {
         return itemInfo.fileItem.isParentFolder;
+    }
+
+    _hasValidKeys(keys) {
+        return keys.length > 1 || keys.length === 1 && keys[0] !== this._parentDirectoryItemKey;
+    }
+
+    _filterOutParentDirectory(array, createNewArray) {
+        return this._filterOutItemByPredicate(array, item => item.key === this._parentDirectoryItemKey, createNewArray);
+    }
+
+    _filterOutParentDirectoryKey(array, createNewArray) {
+        return this._filterOutItemByPredicate(array, key => key === this._parentDirectoryItemKey, createNewArray);
+    }
+
+    _filterOutItemByPredicate(array, predicate, createNewArray) {
+        let result = array;
+        let index = -1;
+
+        for(let i = 0; i < array.length; i++) {
+            if(predicate(array[i])) {
+                index = i;
+                break;
+            }
+        }
+
+        if(index !== -1) {
+            if(createNewArray) {
+                result = [...array];
+            }
+            result.splice(index, 1);
+        }
+
+        return result;
     }
 
     _isMultipleSelectionMode() {

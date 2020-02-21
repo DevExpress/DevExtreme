@@ -1675,7 +1675,8 @@ const SchedulerWorkSpace = Widget.inherit({
                     width: cellWidth,
                     height: cellHeight
                 };
-            }
+            },
+            checkDropTarget: (target, event) => !this._isOutsideScrollable(target, event)
         }, function(e) {
             if(that._$currentTableTarget) {
                 that._$currentTableTarget.removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
@@ -2011,6 +2012,17 @@ const SchedulerWorkSpace = Widget.inherit({
         return this.getCoordinatesByDate(currentDate);
     },
 
+    _isOutsideScrollable: function(target, event) {
+        const $scrollableElement = this._dateTableScrollable.$element();
+
+        if(!$(target).closest($scrollableElement).length) {
+            return false;
+        }
+
+        const scrollableSize = $scrollableElement.get(0).getBoundingClientRect();
+
+        return event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height);
+    },
 
     setCellDataCache: function(cellCoordinates, groupIndex, $cell) {
         const cache = this.getCellDataCache();

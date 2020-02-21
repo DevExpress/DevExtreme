@@ -257,7 +257,8 @@ QUnit.module('BaseIndicator - animation', {
 
             group.animate = function(properties, options) {
                 const that = this;
-                const _originalStep = options.step; const _originalComplete = options.complete;
+                const _originalStep = options.step;
+                const _originalComplete = options.complete;
 
                 options.step = function(pos) {
                     _originalStep && _originalStep.apply(this, arguments);

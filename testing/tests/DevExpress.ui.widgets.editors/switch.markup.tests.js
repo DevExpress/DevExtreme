@@ -110,7 +110,8 @@ QUnit.module('Switch markup', () => {
     QUnit.test('default ui state', function(assert) {
         const element = $('#switch').dxSwitch();
 
-        const inner = element.find(INNER_SELECTOR); const handle = element.find(HANDLE_SELECTOR);
+        const inner = element.find(INNER_SELECTOR);
+        const handle = element.find(HANDLE_SELECTOR);
 
         assert.strictEqual(UIState(inner, handle), false, 'Default UI state is right');
     });
@@ -122,7 +123,8 @@ QUnit.module('Switch markup', () => {
             value: true
         });
 
-        const inner = element.find(INNER_SELECTOR); const handle = element.find(HANDLE_SELECTOR);
+        const inner = element.find(INNER_SELECTOR);
+        const handle = element.find(HANDLE_SELECTOR);
 
         assert.strictEqual(UIState(inner, handle), true, 'UI state with options is right');
     });

@@ -69,7 +69,7 @@ const createDebugBundlesStream = function(watch) {
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
     if(!context.uglify) {
-        debugConfig.devtool = 'eval';
+        debugConfig.devtool = 'eval-source-map';
     }
 
     return gulp.src(bundles)

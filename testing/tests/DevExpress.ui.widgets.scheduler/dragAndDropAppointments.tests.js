@@ -721,6 +721,42 @@ module('Common', commonModuleConfig, () => {
         appointmentContent = scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
         assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates when dragging from timezone change are correct');
     });
+
+    QUnit.test('The appointment should be dragged into the all-day panel when there is a scroll offset(T851985)', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'Task 1',
+                startDate: new Date(2017, 4, 25, 11, 0),
+                endDate: new Date(2017, 4, 25, 13, 30)
+            }, {
+                text: 'Task 2',
+                startDate: new Date(2017, 4, 25, 14, 0),
+                endDate: new Date(2017, 4, 25, 15, 30)
+            }],
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            height: 600
+        });
+
+        const scrollable = scheduler.workSpace.getScrollable();
+        scrollable.scrollTo({ y: 270 });
+
+        const $appointment = scheduler.appointments.find('Task 2').first();
+        const positionBeforeDrag = getAbsolutePosition($appointment);
+        const $allDayPanel = scheduler.workSpace.getAllDayPanel();
+        const allDayPanelPosition = getAbsolutePosition($allDayPanel);
+
+        pointerMock($appointment)
+            .start()
+            .down(positionBeforeDrag.left, positionBeforeDrag.top)
+            .move(0, -(positionBeforeDrag.top - allDayPanelPosition.top - $allDayPanel.outerHeight() / 2))
+            .up();
+
+        const data = scheduler.instance.option('dataSource')[1];
+        assert.ok(data.allDay, 'second appointment - allDay is true');
+    });
 });
 
 module('appointmentDragging customization', $.extend({}, {
