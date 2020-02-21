@@ -99,10 +99,11 @@ class DrawerStrategy {
     }
 
     renderPanelContent(whenPanelContentRendered) {
-        const template = this.getDrawerInstance()._getTemplate(this.getDrawerInstance().option('template'));
+        const drawer = this.getDrawerInstance();
+        const template = drawer._getTemplate(drawer.option('template'));
         if(template) {
             template.render({
-                container: this.getDrawerInstance().content(),
+                container: drawer.content(),
                 onRendered: () => {
                     whenPanelContentRendered.resolve();
                 }
