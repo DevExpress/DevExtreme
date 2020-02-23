@@ -122,6 +122,11 @@ class BaseRenderingStrategy {
         const isRecurring = !!this.instance.fire('getField', 'recurrenceRule', item);
 
         for(let j = 0; j < position.length; j++) {
+            extend(position[j], {
+                originalAppointmentStartDate: position[j].startDate,
+                endDate: this.endDate(item, position[j], isRecurring)
+            });
+
             const height = this.calculateAppointmentHeight(item, position[j], isRecurring);
             const width = this.calculateAppointmentWidth(item, position[j], isRecurring);
             let resultWidth = width;
@@ -168,7 +173,6 @@ class BaseRenderingStrategy {
                 allDay: allDay,
                 rowIndex: initialRowIndex,
                 cellIndex: initialCellIndex,
-                endDate: this.endDate(item, position[j], isRecurring),
                 appointmentReduced: appointmentReduced
             });
             result = this._getAppointmentPartsPosition(multiWeekAppointmentParts, position[j], result);
