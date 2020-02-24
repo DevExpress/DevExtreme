@@ -1,44 +1,49 @@
 QUnit.testStart(function() {
-    const markup =
-'<style>\
-    .fixed-height {\
-        height: 400px;\
-    }\
-    .qunit-fixture-auto-height {\
-        position: static !important;\
-        height: auto !important;\
-    }\
-    .dx-scrollable-native-ios .dx-scrollable-content {\
-        padding: 0 !important;\
-    }\
-</style>\
-\
-<!--qunit-fixture-->\
-    <div id="container">\
-        <div id="dataGrid">\
-            <div data-options="dxTemplate: { name: \'test\' }">Template Content</div>\
-            <div data-options="dxTemplate: { name: \'test2\' }">Template Content2</div>\
-            <table data-options="dxTemplate: { name: \'testRow\' }"><tr class="dx-row dx-data-row test"><td colspan="2">Row Content</td></tr></table>\
-            <table data-options="dxTemplate: { name: \'testRowWithExpand\' }"><tr class="dx-row"><td colspan="2">Row Content <em class="dx-command-expand dx-datagrid-expand">More info</em></td></tr></table>\
-            <div data-options="dxTemplate: { name: \'testDetail\' }"><p>Test Details</p></div>\
-        </div>\
-\
-        <div id="dataGrid2"></div>\
-        <div id="dataGridWithStyle" style="width: 500px;"></div>\
-        <div id="form"></div>\
-    </div>\
-\
-<script id="jsrenderRow" type="text/x-jsrender">\
-    <tr class="jsrender-row"><td>Row {{:data.value}}</td></tr>\
-</script>\
-<script id="scriptTestTemplate1" type="text/html">\
-<span id="template1">Template1</span>\
-</script>\
-<script id="scriptTestTemplate2" type="text/html">\
-<span>Template2</span>\
-</script>';
+    const gridMarkup = `
+        <div id='container'>
+            <div id="dataGrid">
+                <div data-options="dxTemplate: { name: 'test' }">Template Content</div>
+                <div data-options="dxTemplate: { name: 'test2' }">Template Content2</div>
+                <table data-options="dxTemplate: { name: 'testRow' }"><tr class="dx-row dx-data-row test"><td colspan="2">Row Content</td></tr></table>
+                <table data-options="dxTemplate: { name: 'testRowWithExpand' }"><tr class="dx-row"><td colspan="2">Row Content <em class="dx-command-expand dx-datagrid-expand">More info</em></td></tr></table>
+                <div data-options="dxTemplate: { name: 'testDetail' }"><p>Test Details</p></div>
+            </div>
+            <div id="dataGrid2"></div>
+            <div id="dataGridWithStyle" style="width: 500px;"></div>
+            <div id="form"></div>
+        </div>
+    `;
+    const markup = `
+        <style>
+            .fixed-height {
+                height: 400px;
+            }
+            .qunit-fixture-auto-height {
+                position: static !important;
+                height: auto !important;
+            }
+            .dx-scrollable-native-ios .dx-scrollable-content {
+                padding: 0 !important;
+            }
+        </style>
+
+        <!--qunit-fixture-->
+
+        ${gridMarkup}
+
+        <script id="jsrenderRow" type="text/x-jsrender">
+            <tr class="jsrender-row"><td>Row {{:data.value}}</td></tr>
+        </script>
+        <script id="scriptTestTemplate1" type="text/html">
+        <span id="template1">Template1</span>
+        </script>
+        <script id="scriptTestTemplate2" type="text/html">
+        <span>Template2</span>
+        </script>
+    `;
 
     $('#qunit-fixture').html(markup);
+    // $(gridMarkup).appendTo('body');
 });
 
 import 'common.css!';
@@ -340,6 +345,7 @@ QUnit.test('Grid accessibility structure (T640539, T831996)', function(assert) {
     assert.notOk(headersWrapper.getHeaderItem(0, 0).attr('id'), 'Group header indent has no ID attribute');
     assert.notOk(headersWrapper.getHeaderItem(0, 1).attr('id'), 'MasterDetail header indent has no ID attribute');
     assert.notOk(headersWrapper.getHeaderItem(0, 2).attr('id'), 'SelectAll header cell has no ID attribute');
+
     assert.notOk(rowsViewWrapper.getCellElement(0, 0).attr('aria-describedby'), 'Group cell[0, 0] has no aria-describedby');
     assert.notOk(rowsViewWrapper.getCellElement(0, 1).attr('aria-describedby'), 'Group cell[0, 1] has no aria-describedby');
     assert.notOk(rowsViewWrapper.getCellElement(1, 0).attr('aria-describedby'), 'Group indent cell[1, 0] has no aria-describedby');
@@ -364,7 +370,8 @@ QUnit.test('Grid accessibility structure (T640539, T831996)', function(assert) {
     assert.equal(headersWrapper.getTable().attr('role'), 'presentation', 'Headers table role');
     assert.equal(rowsViewWrapper.getTable().attr('role'), 'presentation', 'RowsView table role');
 
-    assert.equal(rowsViewWrapper.getFreeSpaceRow().attr('role'), 'presentation');
+    const $freeSpaceRow = rowsViewWrapper.getFreeSpaceRow().getElement();
+    assert.equal($freeSpaceRow.attr('role'), 'presentation');
 
     // assert
     assert.equal(filterPanelWrapper.getIconFilter().attr('tabindex'), 0, 'Filter panel icon tabindex');
@@ -460,7 +467,8 @@ QUnit.testInActiveWindow('Global column index should be unique for the different
 
 QUnit.testInActiveWindow('DataGrid - focused row changing should not affect on focused row in master detail (T818808)', function(assert) {
     // arrange
-    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const detailGridWrapper = new DataGridWrapper('.detail-grid');
+    const detailRowsViewWrapper = detailGridWrapper.rowsView;
     const masterDetailDataGrids = [];
     const dataGrid = createDataGrid({
         dataSource: [{ id: 0, text: '0' }, { id: 1, text: '1' }],
@@ -469,7 +477,7 @@ QUnit.testInActiveWindow('DataGrid - focused row changing should not affect on f
         masterDetail: {
             enabled: true,
             template: function(container, e) {
-                masterDetailDataGrids.push($('<div class=\'detail-grid\'>').dxDataGrid({
+                masterDetailDataGrids.push($('<div class="detail-grid">').dxDataGrid({
                     loadingTimeout: undefined,
                     keyExpr: 'id',
                     focusedRowEnabled: true,
@@ -493,7 +501,8 @@ QUnit.testInActiveWindow('DataGrid - focused row changing should not affect on f
     $(dataGrid.getCellElement(2, 1)).trigger(pointerEvents.down);
     this.clock.tick();
 
-    assert.ok(rowsViewWrapper.hasFocusedRow(), 'master detail has focused row');
+    const row = detailRowsViewWrapper.getDataRow(0);
+    assert.ok(row.isFocusedRow(), 'master detail has focused row');
 });
 
 QUnit.test('Command column accessibility structure', function(assert) {
@@ -809,7 +818,7 @@ QUnit.test('Fixed and main table should have same scroll top if showScrollbar is
     assert.strictEqual(scrollable.scrollTop(), $(scrollable.element()).children('.dx-datagrid-content-fixed').scrollTop(), 'scroll top are same for main and fixed table');
 });
 
-QUnit.test('Cells in fixed columns should have \'dx-col-fixed\' class if FF (T823783)', function(assert) {
+QUnit.test('Cells in fixed columns should have "dx-col-fixed" class if FF (T823783)', function(assert) {
     // arrange
     const rowsViewWrapper = dataGridWrapper.rowsView;
     const filterRowWrapper = dataGridWrapper.filterRow;
@@ -833,19 +842,25 @@ QUnit.test('Cells in fixed columns should have \'dx-col-fixed\' class if FF (T82
         }]
     });
 
+    let fixedDataCell = rowsViewWrapper.getFixedDataRow(0).getCell(0);
+    let dataCell = rowsViewWrapper.getDataRow().getCell(0);
+
     // assert
     if(browser.mozilla) {
-        assert.ok(rowsViewWrapper.getDataCellElement(0, 0).hasClass('dx-col-fixed'), 'dx-col-fixed');
-        assert.ok(rowsViewWrapper.getFixedDataCellElement(0, 0).hasClass('dx-col-fixed'), 'dx-col-fixed');
+        assert.ok(dataCell.getElement().hasClass('dx-col-fixed'), 'dx-col-fixed');
+        assert.ok(fixedDataCell.getElement().hasClass('dx-col-fixed'), 'dx-col-fixed');
         assert.ok(filterRowWrapper.getEditorCell(0).hasClass('dx-col-fixed'), 'dx-col-fixed');
     } else {
-        assert.notOk(rowsViewWrapper.getDataCellElement(0, 0).hasClass('dx-col-fixed'), 'not dx-col-fixed');
-        assert.notOk(rowsViewWrapper.getFixedDataCellElement(0, 0).hasClass('dx-col-fixed'), 'not dx-col-fixed');
+        assert.notOk(dataCell.getElement().hasClass('dx-col-fixed'), 'not dx-col-fixed');
+        assert.notOk(fixedDataCell.getElement().hasClass('dx-col-fixed'), 'not dx-col-fixed');
         assert.notOk(filterRowWrapper.getEditorCell(0).hasClass('dx-col-fixed'), 'not dx-col-fixed');
     }
 
-    assert.notOk(rowsViewWrapper.getDataCellElement(0, 1).hasClass('dx-col-fixed'), 'not dx-col-fixed');
-    assert.notOk(rowsViewWrapper.getFixedDataCellElement(0, 1).hasClass('dx-col-fixed'), 'not dx-col-fixed');
+    dataCell = rowsViewWrapper.getDataRow().getCell(1);
+    assert.notOk(dataCell.getElement().hasClass('dx-col-fixed'), 'not dx-col-fixed');
+
+    fixedDataCell = rowsViewWrapper.getFixedDataRow(0).getCell(1);
+    assert.notOk(fixedDataCell.getElement().hasClass('dx-col-fixed'), 'not dx-col-fixed');
     assert.notOk(filterRowWrapper.getEditorCell(1).hasClass('dx-col-fixed'), 'not dx-col-fixed');
 });
 
@@ -4230,6 +4245,7 @@ QUnit.testInActiveWindow('Focused row should be visible if page size has height 
 
 QUnit.test('Focused row should be visible in virtual scrolling mode', function(assert) {
     // arrange
+    const rowsViewWrapper = dataGridWrapper.rowsView;
     const data = [
         { name: 'Alex', phone: '111111', room: 6 },
         { name: 'Dan', phone: '2222222', room: 5 },
@@ -4245,15 +4261,14 @@ QUnit.test('Focused row should be visible in virtual scrolling mode', function(a
         focusedRowEnabled: true,
         scrolling: { mode: 'virtual' }
     }).dxDataGrid('instance');
-    const rowsView = dataGrid.getView('rowsView');
 
     // act
     dataGrid.option('focusedRowKey', 'Smith');
     this.clock.tick();
 
     // assert
-    assert.ok(rowsView.getRow(4).hasClass('dx-row-focused'), 'Focused row');
-    assert.ok(dataGridWrapper.rowsView.isRowVisible(4, 1), 'Navigation row is visible');
+    assert.ok(rowsViewWrapper.getDataRow(4).isFocusedRow(), 'Focused row');
+    assert.ok(rowsViewWrapper.isRowVisible(4, 1), 'Navigation row is visible');
 });
 
 QUnit.test('Test \'autoNavigateToFocusedRow\' option if focused row key is not visible', function(assert) {
@@ -5616,7 +5631,7 @@ QUnit.test('DataGrid should expand the row in the onContentReady method in virtu
     this.clock.tick();
 
     // assert
-    assert.equal(rowsView.getDataRowElementCount(), 2, 'row is expanded');
+    assert.equal(rowsView.getDataRows().getElement().length, 2, 'row is expanded');
 });
 
 QUnit.test('virtual columns', function(assert) {
@@ -13084,7 +13099,8 @@ QUnit.testInActiveWindow('Datebox editor\'s enter key handler should be replaced
     $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
 
     // assert
-    const dateBox = rowsViewWrapper.getEditor(0, 0).dxDateBox('instance');
+    const editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+    const dateBox = editor.getElement().dxDateBox('instance');
     const enterKeyHandler = dateBox._supportedKeys().enter;
     assert.strictEqual(enterKeyHandler(), true, 'dateBox enter key handler is replaced');
 });
@@ -13118,8 +13134,9 @@ QUnit.testInActiveWindow('Datebox editor\'s value should be selected from calend
         dataGrid.editCell(0, 0);
         this.clock.tick();
 
-        const instance = rowsViewWrapper.getEditor(0, 0).dxDateBox('instance');
-        const keyboard = keyboardMock(rowsViewWrapper.getEditorInput(0, 0));
+        let editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+        const instance = editor.getElement().dxDateBox('instance');
+        const keyboard = keyboardMock(editor.getInputElement());
 
         instance.open();
         keyboard
@@ -13127,7 +13144,8 @@ QUnit.testInActiveWindow('Datebox editor\'s value should be selected from calend
             .press('enter');
 
         // assert
-        assert.equal(rowsViewWrapper.getEditorInput(0, 0).val(), '12/31/1999', `dateBox value is changed if useMaskBehavior is ${useMaskBehavior}`);
+        editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+        assert.equal(editor.getInputElement().val(), '12/31/1999', `dateBox value is changed if useMaskBehavior is ${useMaskBehavior}`);
     });
 });
 
@@ -14997,53 +15015,38 @@ QUnit.test('Editing should be started without errors if update form items in con
     assert.ok(dataGrid.getVisibleRows()[0].isEditing, 'row 0 isEditing');
 });
 
-QUnit.test('KeyboardNavigation \'isValidCell\' works well with handling of fixed \'edit\' command column (legacy)', function(assert) {
-    // arrange, act
-    const dataGrid = createDataGrid({
-        loadingTimeout: undefined,
-        width: 300,
-        columns: [{ dataField: 'field1', width: 200 }, { dataField: 'field2', width: 200 }, { dataField: 'field3', width: 50, fixed: true, fixedPosition: 'right' }],
-        editing: {
-            allowUpdating: true,
-            mode: 'row'
-        },
-        dataSource: {
-            store: [
-                { field1: 1, field2: 2, field3: 3 },
-                { field1: 7, field2: 8, field3: 9 }
-            ]
-        },
-        useLegacyKeyboardNavigation: true
+[true, false].forEach(useLegacyKeyboardNavigation => {
+    QUnit.test(`keyboardNavigation "isValidCell" works well with handling of fixed "edit" command column if useLegacyKeyboardNavigation: ${useLegacyKeyboardNavigation}`, function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            width: 300,
+            columns: [
+                { dataField: 'field1', width: 200 },
+                { dataField: 'field2', width: 200 },
+                { dataField: 'field3', width: 50, fixed: true, fixedPosition: 'right' }
+            ],
+            editing: {
+                allowUpdating: true,
+                mode: 'row'
+            },
+            dataSource: {
+                store: [
+                    { field1: 1, field2: 2, field3: 3 },
+                    { field1: 7, field2: 8, field3: 9 }
+                ]
+            },
+            useLegacyKeyboardNavigation
+        });
+
+        const navigationController = dataGrid.getController('keyboardNavigation');
+        const fixedDataRow = dataGridWrapper.rowsView.getFixedDataRow(0);
+        const commandCell = fixedDataRow.getCommandCell(2);
+
+        // assert
+        const isValidEditCommandCell = !useLegacyKeyboardNavigation;
+        assert.equal(navigationController._isCellValid(commandCell.getElement()), isValidEditCommandCell, 'editCommand cell validation');
     });
-    const navigationController = dataGrid.getController('keyboardNavigation');
-    const $editCommandCell = $('.dx-command-edit').eq(5);
-
-    // assert
-    assert.ok(!navigationController._isCellValid($editCommandCell), 'editCommand cell must be not valid');
-});
-
-QUnit.test('KeyboardNavigation \'isValidCell\' works well with handling of fixed \'edit\' command column', function(assert) {
-    // arrange, act
-    const dataGrid = createDataGrid({
-        loadingTimeout: undefined,
-        width: 300,
-        columns: [{ dataField: 'field1', width: 200 }, { dataField: 'field2', width: 200 }, { dataField: 'field3', width: 50, fixed: true, fixedPosition: 'right' }],
-        editing: {
-            allowUpdating: true,
-            mode: 'row'
-        },
-        dataSource: {
-            store: [
-                { field1: 1, field2: 2, field3: 3 },
-                { field1: 7, field2: 8, field3: 9 }
-            ]
-        }
-    });
-    const navigationController = dataGrid.getController('keyboardNavigation');
-    const $editCommandCell = $('.dx-command-edit').eq(5);
-
-    // assert
-    assert.ok(navigationController._isCellValid($editCommandCell), 'editCommand cell must be valid');
 });
 
 // T172125
@@ -16611,12 +16614,14 @@ QUnit.test('DataGrid should repaint editors on cancelEditData method if repaintC
     // act
     dataGrid.editCell(0, 0);
     // assert
-    assert.ok(rowsViewWrapper.hasEditorInputElement(0, 0), 'cell has editor');
+    let editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+    assert.ok(editor.getInputElement().length > 0, 'cell has editor');
 
     // act
     dataGrid.cancelEditData();
     // assert
-    assert.notOk(rowsViewWrapper.hasEditorInputElement(0, 0), 'cell has no editor');
+    editor = rowsViewWrapper.getDataRow(0).getCell(0).getEditor();
+    assert.equal(editor.getInputElement().length, 0, 'cell has no editor');
 });
 
 QUnit.test('Using watch in cellPrepared event for editor if repaintChangesOnly', function(assert) {
@@ -17559,7 +17564,7 @@ QUnit.test('test template in script outside container', function(assert) {
     dataGrid._getTemplate($('#scriptTestTemplate1')).render({ container: container });
 
     // assert
-    assert.equal(container.html().toLowerCase(), '<span id="template1">Template1</span>'.toLowerCase());
+    assert.equal(container.html().trim().toLowerCase(), '<span id="template1">Template1</span>'.toLowerCase());
     setTemplateEngine('default');
 });
 
@@ -17605,7 +17610,7 @@ QUnit.test('test template in script outside container (get by selector)', functi
     dataGrid._getTemplate('#scriptTestTemplate2').render({ container: container });
 
     // assert
-    assert.equal(container.html().toLowerCase(), '<span>Template2</span>'.toLowerCase());
+    assert.equal(container.html().trim().toLowerCase(), '<span>Template2</span>'.toLowerCase());
     setTemplateEngine('default');
 });
 
@@ -18693,8 +18698,9 @@ QUnit.testInActiveWindow('DataGrid - Master grid should not render it\'s overlay
     this.clock.tick();
 
     // assert
-    assert.equal(detailRowsViewWrapper.findFocusOverlay().length, 1, 'Detail grid has one focus overlay');
-    assert.ok(detailRowsViewWrapper.isFocusOverlayVisible(), 'Detail grid focus overlay is visible');
+    const focusOverlay = detailRowsViewWrapper.getFocusOverlay();
+    assert.equal(focusOverlay.getElement().length, 1, 'Detail grid has one focus overlay');
+    assert.ok(focusOverlay.isVisible(), 'Detail grid focus overlay is visible');
 });
 
 QUnit.testInActiveWindow('Not highlight cell if isHighlighted set false in the onFocusedCellChanging event by Tab key (T853599)', function(assert) {
@@ -19161,7 +19167,8 @@ QUnit.test('onFocusedRowChanging, onFocusedRowChanged event if click selection c
     });
 
     // act
-    rowsViewWrapper.getSelectionCheckBoxElement(1).trigger(CLICK_EVENT);
+    const selectCheckBox = rowsViewWrapper.getDataRow(1).getSelectCheckBox();
+    selectCheckBox.getElement().trigger(CLICK_EVENT);
     this.clock.tick();
 
     // assert
@@ -19197,7 +19204,8 @@ QUnit.test('Cancel focused row if click selection checkBox (T812681)', function(
     assert.equal(dataGrid.option('focusedRowIndex'), -1, 'focusedRowIndex');
 
     // act
-    rowsViewWrapper.getSelectionCheckBoxElement(1).trigger(CLICK_EVENT);
+    const selectCheckBox = rowsViewWrapper.getDataRow(1).getSelectCheckBox();
+    selectCheckBox.getElement().trigger(CLICK_EVENT);
     this.clock.tick();
 
     // assert
@@ -19244,8 +19252,10 @@ QUnit.test('Cancel focused row if click selection checkBox (T812681)', function(
             .trigger('dxclick');
 
         // assert
-        assert.ok(rowsViewWrapper.getEditorInput(5, 1).length, 'Cell[5, 1] is in editing mode');
-        assert.ok(rowsViewWrapper.isFocusedRow(5), 'Row 5 is focused');
+        const dataRow = rowsViewWrapper.getDataRow(5);
+        const editor = dataRow.getCell(1).getEditor();
+        assert.ok(editor.getInputElement().length > 0, 'Cell[5, 1] is in editing mode');
+        assert.ok(dataRow.isFocusedRow(), 'Row 5 is focused');
         assert.equal(counter, 2, 'scrollToElementVertically called twice');
     });
 });
