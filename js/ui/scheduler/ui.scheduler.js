@@ -2106,10 +2106,11 @@ const Scheduler = Widget.inherit({
                     const coordinates = translator.locate($appointment);
                     updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
                 } else {
-                    appointmentStartDate = $appointment.data('dxAppointmentSettings') && $appointment.data('dxAppointmentSettings').startDate;
+                    const settings = $appointment.data('dxAppointmentSettings');
+                    appointmentStartDate = settings && settings.startDate;
 
-                    if($appointment.hasClass(REDUCED_APPOINTMENT_CLASS)) {
-                        appointmentStartDate = $appointment.data('dxAppointmentStartDate');
+                    if($appointment.hasClass(REDUCED_APPOINTMENT_CLASS) || (settings && settings.appointmentReduced)) {
+                        appointmentStartDate = settings.originalAppointmentStartDate;
                     }
 
                     if(appointmentStartDate) {
