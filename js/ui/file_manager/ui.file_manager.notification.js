@@ -8,6 +8,7 @@ import Popup from '../popup';
 import Drawer from '../drawer/ui.drawer';
 
 import FileManagerProgressPanel from './ui.file_manager.notification.progress_panel';
+import { Deferred } from '../../core/utils/deferred';
 
 const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 1000;
@@ -54,15 +55,17 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     tryShowProgressPanel() {
+        const promise = new Deferred();
         if(this._actionProgressStatus === 'default') {
-            return;
+            return promise.resolve();
         }
 
         setTimeout(() => {
-            this._progressDrawer.show();
+            this._progressDrawer.show().then(() => promise.resolve());
             this._getNotificationPopup().hide();
             this._tryHideActionProgress();
         });
+        return promise;
     }
 
     addOperation(processingMessage, allowCancel, allowProgressAutoUpdate) {
