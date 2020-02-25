@@ -1337,27 +1337,22 @@ QUnit.test('DropDown appointment should be rendered correctly when timezone is s
 });
 
 QUnit.test('New added appointment should be rendered correctly in specified timeZone', function(assert) {
-    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
-    try {
-        this.createInstance({
-            dataSource: [],
-            currentDate: new Date(2018, 4, 25),
-            views: ['week'],
-            currentView: 'week',
-            timeZone: 'Etc/UTC'
-        });
+    this.createInstance({
+        dataSource: [],
+        currentDate: new Date(2018, 4, 25),
+        views: ['week'],
+        currentView: 'week',
+        timeZone: 'Etc/UTC'
+    });
 
-        const task = { text: 'a', startDate: new Date(2018, 4, 23, 8, 0), endDate: new Date(2018, 4, 23, 8, 30) };
-        const timezoneOffset = new Date(2018, 4, 23).getTimezoneOffset() * dateUtils.dateToMilliseconds('minute');
+    const task = { text: 'a', startDate: new Date(2018, 4, 23, 8, 0), endDate: new Date(2018, 4, 23, 8, 30) };
+    const timezoneOffset = new Date(2018, 4, 23).getTimezoneOffset() * dateUtils.dateToMilliseconds('minute');
 
-        this.instance.showAppointmentPopup(task, true);
-        $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+    this.instance.showAppointmentPopup(task, true);
+    $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-        const $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS);
-        const startDate = $appointment.dxSchedulerAppointment('instance').option('startDate');
+    const $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+    const startDate = $appointment.dxSchedulerAppointment('instance').option('startDate');
 
-        assert.equal(startDate.getTime(), task.startDate.getTime() + timezoneOffset, 'appointment starts in 8AM');
-    } finally {
-        tzOffsetStub.restore();
-    }
+    assert.equal(startDate.getTime(), task.startDate.getTime() + timezoneOffset, 'appointment starts in 8AM');
 });
