@@ -230,7 +230,6 @@ const SchedulerAppointmentForm = {
             {
                 dataField: dataExprs.recurrenceRuleExpr,
                 editorType: 'dxRecurrenceEditor',
-                colSpan: 1,
                 editorOptions: {
                     firstDayOfWeek: schedulerInst.option('firstDayOfWeek'),
                     onInitialized: (e) => {

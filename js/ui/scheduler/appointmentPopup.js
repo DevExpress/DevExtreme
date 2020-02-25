@@ -89,9 +89,7 @@ export default class AppointmentPopup {
             showTitle: false,
             onHiding: () => { this.scheduler.focus(); },
             contentTemplate: () => {
-                const formElement = this._createPopupContent();
-                this._updateForm();
-                return formElement;
+                return this._createPopupContent();
             },
             onShowing: (e) => {
                 this._updateForm();
