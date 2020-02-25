@@ -686,7 +686,7 @@ const DiagramCommandsManager = {
         });
         return result;
     },
-    getPropertyPanelCommandGroups: function(commandGroups) {
+    getPropertyPanelCommandTabs: function(commandGroups) {
         commandGroups = commandGroups || this._getDefaultPropertyPanelCommandGroups();
         return this._preparePropertyPanelGroups(commandGroups);
     },

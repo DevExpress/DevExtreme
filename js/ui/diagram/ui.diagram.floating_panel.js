@@ -1,6 +1,10 @@
 import $ from '../../core/renderer';
-import DiagramPanel from './ui.diagram.panel';
+import { extend } from '../../core/utils/extend';
 import Popup from '../popup';
+
+import DiagramPanel from './ui.diagram.panel';
+
+const DIAGRAM_MOBILE_POPUP_CLASS = 'dx-diagram-mobile-popup';
 
 class DiagramFloatingPanel extends DiagramPanel {
     _init() {
@@ -8,6 +12,7 @@ class DiagramFloatingPanel extends DiagramPanel {
 
         this._createOnVisibilityChangedAction();
         this._isVisible = this.option('isVisible');
+        this._isMobileView = this.option('isMobileView');
     }
     _initMarkup() {
         super._initMarkup();
@@ -16,6 +21,7 @@ class DiagramFloatingPanel extends DiagramPanel {
 
         const $popupElement = $('<div>')
             .addClass(this._getPopupClass())
+            .addClass(this._isMobileView && DIAGRAM_MOBILE_POPUP_CLASS)
             .appendTo($parent);
 
         this._popup = this._createComponent($popupElement, Popup, this._getPopupOptions());
@@ -96,6 +102,12 @@ class DiagramFloatingPanel extends DiagramPanel {
             case 'height':
                 this._popup.option('height', this._getPopupHeight());
                 break;
+            case 'isMobileView':
+                if(this._isMobileView !== args.value) {
+                    this._isMobileView = args.value;
+                    this._invalidate();
+                }
+                break;
             case 'isVisible':
                 this._isVisible = args.value;
                 this._updatePopupVisible();
@@ -103,6 +115,12 @@ class DiagramFloatingPanel extends DiagramPanel {
             default:
                 super._optionChanged(args);
         }
+    }
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
+            offsetX: 0,
+            offsetY: 0
+        });
     }
 }
 module.exports = DiagramFloatingPanel;

@@ -10,7 +10,6 @@ const DIAGRAM_PROPERTIES_POPUP_WIDTH = 420;
 const DIAGRAM_PROPERTIES_POPUP_HEIGHT = 340;
 const DIAGRAM_PROPERTIES_POPUP_CLASS = 'dx-diagram-properties-popup';
 const DIAGRAM_PROPERTIES_PANEL_CLASS = 'dx-diagram-properties-panel';
-const DIAGRAM_PROPERTIES_PANEL_NO_TABS_CLASS = 'dx-diagram-properties-panel-no-tabs';
 const DIAGRAM_PROPERTIES_PANEL_GROUP_TITLE_CLASS = 'dx-diagram-properties-panel-group-title';
 const DIAGRAM_PROPERTIES_PANEL_GROUP_TOOLBAR_CLASS = 'dx-diagram-properties-panel-group-toolbar';
 
@@ -18,7 +17,7 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
     _init() {
         super._init();
 
-        this._commandGroups = DiagramCommandsManager.getPropertyPanelCommandGroups(this.option('propertyGroups'));
+        this._commandTabs = DiagramCommandsManager.getPropertyPanelCommandTabs(this.option('propertyTabs'));
         this._createOnCreateToolbar();
         this._createOnSelectedGroupChanged();
         this._createOnVisibilityChangingAction();
@@ -34,10 +33,16 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
     }
     _getPopupOptions() {
         return extend(super._getPopupOptions(), {
-            width: DIAGRAM_PROPERTIES_POPUP_WIDTH,
+            width: this._isMobileView ? '100%' : DIAGRAM_PROPERTIES_POPUP_WIDTH,
             height: DIAGRAM_PROPERTIES_POPUP_HEIGHT,
-            showTitle: false,
-            resizeEnabled: true,
+            showTitle: false, // this._isMobileView,
+            position: {
+                my: 'right bottom',
+                at: 'right bottom',
+                of: this.option('offsetParent'),
+                offset: '-' + (this._isMobileView ? 0 : this.option('offsetX')) +
+                    ' -' + (this._isMobileView ? 0 : this.option('offsetY'))
+            },
             onShowing: (e) => {
                 if(this._inOnShowing === true) return;
 
@@ -48,50 +53,61 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
         });
     }
     _renderPopupContent($parent) {
+        if(!this._commandTabs.length) return;
+
         const $panel = $('<div>')
             .addClass(DIAGRAM_PROPERTIES_PANEL_CLASS)
             .appendTo($parent);
-        if(this._commandGroups.length < 2) {
-            $panel.addClass(DIAGRAM_PROPERTIES_PANEL_NO_TABS_CLASS);
+        if(this._commandTabs.length === 1) {
+            this._renderTabContent($panel, this._commandTabs[0], 0, true);
+        } else {
+            this._renderTabPanel($panel);
         }
-        this._renderTabPanel($panel);
     }
     _renderTabPanel($parent) {
         const $tabPanel = $('<div>')
             .appendTo($parent);
         this._tabPanel = this._createComponent($tabPanel, TabPanel, {
             focusStateEnabled: false,
-            dataSource: this._commandGroups,
+            dataSource: this._commandTabs,
             itemTemplate: (data, index, $element) => {
-                const $scrollViewWrapper = $('<div>')
-                    .appendTo($element);
-                this._scrollView = this._createComponent($scrollViewWrapper, ScrollView, {
-                    height: this._scrollViewHeight
-                });
-                this._renderTabPanelItemContent(this._scrollView.content(), data, index);
+                this._renderTabContent($element, data, index);
             },
             onSelectionChanged: (e) => {
                 this._onSelectedGroupChangedAction();
             },
             onContentReady: (e) => {
                 this._popup.option('height', e.component.$element().height() + this._getVerticalPaddingsAndBorders());
-                if(this._scrollView) {
-                    this._scrollViewHeight = this._scrollView.$element().outerHeight();
-                    this._scrollView.option('height',);
+                if(this._firstScrollView) {
+                    this._scrollViewHeight = this._firstScrollView.$element().outerHeight();
+                    this._firstScrollView.option('height', this._scrollViewHeight);
                 }
             }
         });
     }
-    _renderTabPanelItemContent($parent, group, index) {
-        if(group.groups) {
-            group.groups.forEach((sg, si) => {
-                this._renderTabPanelItemContentGroup($parent, index, sg.title, sg.commands);
-            });
-        } else if(group.commands) {
-            this._renderTabPanelItemContentGroup($parent, index, undefined, group.commands);
+    _renderTabContent($parent, tab, index, isSingleTab) {
+        const $scrollViewWrapper = $('<div>')
+            .appendTo($parent);
+        const scrollView = this._createComponent($scrollViewWrapper, ScrollView, {
+            height: this._scrollViewHeight
+        });
+        this._renderTabInnerContent(scrollView.content(), tab, index);
+        if(isSingleTab) {
+            this._popup.option('height', scrollView.$element().height() + this._getVerticalPaddingsAndBorders());
+        } else {
+            this._firstScrollView = this._firstScrollView || scrollView;
         }
     }
-    _renderTabPanelItemContentGroup($parent, index, title, commands) {
+    _renderTabInnerContent($parent, group, index) {
+        if(group.groups) {
+            group.groups.forEach((sg, si) => {
+                this._renderTabGroupContent($parent, index, sg.title, sg.commands);
+            });
+        } else if(group.commands) {
+            this._renderTabGroupContent($parent, index, undefined, group.commands);
+        }
+    }
+    _renderTabGroupContent($parent, index, title, commands) {
         if(title) {
             $('<div>')
                 .addClass(DIAGRAM_PROPERTIES_PANEL_GROUP_TITLE_CLASS)
@@ -113,7 +129,8 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
         this._selectedToolbar = args.toolbar;
     }
     getActiveToolbars() {
-        return this._toolbars[this._tabPanel.option('selectedIndex')];
+        const index = this._tabPanel ? this._tabPanel.option('selectedIndex') : 0;
+        return this._toolbars[index];
     }
 
     _createOnCreateToolbar() {
@@ -136,7 +153,7 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
             case 'onVisibilityChanging':
                 this._createOnVisibilityChangingAction();
                 break;
-            case 'propertyGroups':
+            case 'propertyTabs':
                 this._invalidate();
                 break;
             default:

@@ -50,6 +50,8 @@ const DIAGRAM_DEFAULT_PAGE_ORIENTATION = 'portrait';
 const DIAGRAM_DEFAULT_PAGE_COLOR = 'white';
 
 const DIAGRAM_TOOLBOX_ITEM_SIZE = 30;
+
+const DIAGRAM_MAX_MOBILE_WINDOW_WIDTH = 576;
 const DIAGRAM_TOOLBOX_ITEM_SPACING = 10;
 const DIAGRAM_CONTEXT_TOOLBOX_ICON_SIZE = 24;
 const DIAGRAM_CONTEXT_TOOLBOX_ICON_SPACING = 8;
@@ -142,6 +144,9 @@ class Diagram extends Widget {
         }
 
         this._diagramInstance.barManager.registerBar(this.optionsUpdateBar);
+    }
+    _isMobileScreenSize() {
+        return hasWindow() && getWindow().innerWidth < DIAGRAM_MAX_MOBILE_WINDOW_WIDTH;
     }
     notifyBarCommandExecuted() {
         this._diagramInstance.captureFocus();
@@ -335,15 +340,6 @@ class Diagram extends Widget {
         resizeCallbacks.add(() => {
             this._updatePropertiesPanelToolbarPosition($container, $parent, isServerSide);
         });
-        // const $propertiesPanelActionButton = $('<div>')
-        //     .appendTo($parent);
-        // this._propertiesPanelActionButton = this._createComponent($propertiesPanelActionButton, SpeedDialAction, {
-        //     icon: 'edit',
-        //     elementAttr: { class: DIAGRAM_PROPERTIES_PANEL_BUTTON_CLASS },
-        //     onClick: (e) => {
-        //         this._propertiesPanel.toggle();
-        //     }
-        // });
     }
     _updatePropertiesPanelToolbarPosition($container, $parent, isServerSide) {
         if(isServerSide) return;
@@ -360,14 +356,12 @@ class Diagram extends Widget {
         const $propertiesPanel = $('<div>')
             .appendTo($parent);
         this._propertiesPanel = this._createComponent($propertiesPanel, DiagramPropertiesPanel, {
+            isMobileView: this._isMobileScreenSize(),
             isVisible: this.option('propertiesPanel.visibility') === 'visible',
-            position: {
-                my: 'right bottom',
-                at: 'right bottom',
-                of: $parent,
-                offset: '-' + DIAGRAM_FLOATING_PANEL_OFFSET + ' -' + (2 * DIAGRAM_FLOATING_PANEL_OFFSET + DIAGRAM_PROPERTIES_PANEL_BUTTON_SIZE)
-            },
-            propertyGroups: this.option('propertiesPanel.groups'),
+            offsetParent: $parent,
+            offsetX: DIAGRAM_FLOATING_PANEL_OFFSET,
+            offsetY: 2 * DIAGRAM_FLOATING_PANEL_OFFSET + DIAGRAM_PROPERTIES_PANEL_BUTTON_SIZE,
+            propertyTabs: this.option('propertiesPanel.tabs'),
             onCreateToolbar: (e) => {
                 e.toolbar = this._createComponent(e.$parent, DiagramToolbar,
                     extend(this._getToolbarBaseOptions(), {
@@ -387,6 +381,9 @@ class Diagram extends Widget {
             onVisibilityChanging: ({ component }) => this._updatePropertiesPanelGroupBars(component),
             onSelectedGroupChanged: ({ component }) => this._updatePropertiesPanelGroupBars(component),
             onPointerUp: this._onPanelPointerUp.bind(this)
+        });
+        resizeCallbacks.add(() => {
+            this._propertiesPanel.option('isMobileView', this._isMobileScreenSize());
         });
     }
     _updatePropertiesPanelGroupBars(component) {
@@ -1742,28 +1739,28 @@ class Diagram extends Widget {
                 */
                 visibility: 'collapsed',
                 /**
-                * @name dxDiagramOptions.propertiesPanel.groups
+                * @name dxDiagramOptions.propertiesPanel.tabs
                 * @type Array<Object>
                 * @default undefined
                 */
                 /**
-                * @name dxDiagramOptions.propertiesPanel.groups.title
+                * @name dxDiagramOptions.propertiesPanel.tabs.title
                 * @type string
                 */
                 /**
-                * @name dxDiagramOptions.propertiesPanel.groups.commands
+                * @name dxDiagramOptions.propertiesPanel.tabs.commands
                 * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
                 */
                 /**
-                * @name dxDiagramOptions.propertiesPanel.groups.groups
+                * @name dxDiagramOptions.propertiesPanel.tabs.groups
                 * @type Array<object>
                 */
                 /**
-                * @name dxDiagramOptions.propertiesPanel.groups.groups.title
+                * @name dxDiagramOptions.propertiesPanel.tabs.groups.title
                 * @type string
                 */
                 /**
-                * @name dxDiagramOptions.propertiesPanel.groups.groups.commands
+                * @name dxDiagramOptions.propertiesPanel.tabs.groups.commands
                 * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
                 */
             },
@@ -1900,10 +1897,10 @@ class Diagram extends Widget {
             });
         }
     }
-    _invalidatePropertiesPanelGroups() {
+    _invalidatePropertiesPanelTabs() {
         if(this._propertiesPanel) {
             this._propertiesPanel.option({
-                propertyGroups: this.option('propertiesPanel.groups')
+                propertyTabs: this.option('propertiesPanel.tabs')
             });
         }
     }
@@ -2037,8 +2034,8 @@ class Diagram extends Widget {
                 }
                 break;
             case 'propertiesPanel':
-                if(args.name === 'propertiesPanel.groups') {
-                    this._invalidatePropertiesPanelGroups();
+                if(args.name === 'propertiesPanel.tabs') {
+                    this._invalidatePropertiesPanelTabs();
                 } else {
                     this._invalidate();
                 }

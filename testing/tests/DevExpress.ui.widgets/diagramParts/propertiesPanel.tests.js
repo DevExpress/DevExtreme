@@ -50,7 +50,7 @@ QUnit.module('Properties Panel', moduleConfig, () => {
         assert.ok(toolbar.option('items').length > 1);
     });
     test('should fill properties panel with custom items', function(assert) {
-        this.instance.option('propertiesPanel.groups', [{ commands: ['units'] }]);
+        this.instance.option('propertiesPanel.tabs', [{ commands: ['units'] }]);
         this.instance.option('propertiesPanel.visibility', 'visible');
         const toolbar = $('body').find(Consts.PROPERTIES_PANEL_TOOLBAR_SELECTOR).dxToolbar('instance');
         assert.equal(toolbar.option('items').length, 1);
