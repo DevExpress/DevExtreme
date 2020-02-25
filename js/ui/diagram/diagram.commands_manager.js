@@ -307,59 +307,59 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandConnectorLineEnd'),
                     cssClass: CSS_CLASSES.BUTTON_SELECT
                 },
-                autoLayoutTreeVertical: {
+                layoutTreeTopToBottom: {
                     command: DiagramCommand.AutoLayoutTreeVertical,
-                    text: messageLocalization.format('dxDiagram-uiLayoutVertical'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutVertical'),
+                    text: messageLocalization.format('dxDiagram-uiLayoutTopToBottom'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutTopToBottom'),
                     icon: 'dx-diagram-i-button-layout-tree-tb dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON
                 },
-                autoLayoutTreeVerticalBottomToTop: {
+                layoutTreeBottomToTop: {
                     command: DiagramCommand.AutoLayoutTreeVerticalBottomToTop,
-                    text: messageLocalization.format('dxDiagram-uiLayoutVerticalBottomToTop'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutVerticalBottomToTop'),
+                    text: messageLocalization.format('dxDiagram-uiLayoutBottomToTop'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutBottomToTop'),
                     icon: 'dx-diagram-i-button-layout-tree-bt dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON
                 },
-                autoLayoutTreeHorizontal: {
+                layoutTreeLeftToRight: {
                     command: DiagramCommand.AutoLayoutTreeHorizontal,
-                    text: messageLocalization.format('dxDiagram-uiLayoutHorizontal'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutHorizontal'),
+                    text: messageLocalization.format('dxDiagram-uiLayoutLeftToRight'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutLeftToRight'),
                     icon: 'dx-diagram-i-button-layout-tree-lr dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON
                 },
-                autoLayoutTreeHorizontalRightToLeft: {
+                layoutTreeRightToLeft: {
                     command: DiagramCommand.AutoLayoutTreeHorizontalRightToLeft,
-                    text: messageLocalization.format('dxDiagram-uiLayoutHorizontalRightToLeft'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutHorizontalRightToLeft'),
+                    text: messageLocalization.format('dxDiagram-uiLayoutRightToLeft'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutRightToLeft'),
                     icon: 'dx-diagram-i-button-layout-tree-rl dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON
                 },
-                autoLayoutLayeredVertical: {
+                layoutLayeredTopToBottom: {
                     command: DiagramCommand.AutoLayoutLayeredVertical,
-                    text: messageLocalization.format('dxDiagram-uiLayoutVertical'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutVertical'),
+                    text: messageLocalization.format('dxDiagram-uiLayoutTopToBottom'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutTopToBottom'),
                     icon: 'dx-diagram-i-button-layout-layered-tb dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON
                 },
-                autoLayoutLayeredVerticalBottomToTop: {
+                layoutLayeredBottomToTop: {
                     command: DiagramCommand.AutoLayoutLayeredVerticalBottomToTop,
-                    text: messageLocalization.format('dxDiagram-uiLayoutVerticalBottomToTop'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutVerticalBottomToTop'),
+                    text: messageLocalization.format('dxDiagram-uiLayoutBottomToTop'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutBottomToTop'),
                     icon: 'dx-diagram-i-button-layout-layered-bt dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON
                 },
-                autoLayoutLayeredHorizontal: {
+                layoutLayeredLeftToRight: {
                     command: DiagramCommand.AutoLayoutLayeredHorizontal,
-                    text: messageLocalization.format('dxDiagram-uiLayoutHorizontal'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutHorizontal'),
+                    text: messageLocalization.format('dxDiagram-uiLayoutLeftToRight'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutLeftToRight'),
                     icon: 'dx-diagram-i-button-layout-layered-lr dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON
                 },
-                autoLayoutLayeredHorizontalRightToLeft: {
+                layoutLayeredRightToLeft: {
                     command: DiagramCommand.AutoLayoutLayeredHorizontalRightToLeft,
-                    text: messageLocalization.format('dxDiagram-uiLayoutHorizontalRightToLeft'),
-                    hint: messageLocalization.format('dxDiagram-uiLayoutHorizontalRightToLeft'),
+                    text: messageLocalization.format('dxDiagram-uiLayoutRightToLeft'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutRightToLeft'),
                     icon: 'dx-diagram-i-button-layout-layered-rl dx-diagram-i',
                     cssClass: CSS_CLASSES.LARGE_ICON
                 },
@@ -522,19 +522,19 @@ const DiagramCommandsManager = {
                         {
                             text: messageLocalization.format('dxDiagram-uiLayoutTree'),
                             items: [
-                                allCommands['autoLayoutTreeVertical'],
-                                allCommands['autoLayoutTreeVerticalBottomToTop'],
-                                allCommands['autoLayoutTreeHorizontal'],
-                                allCommands['autoLayoutTreeHorizontalRightToLeft']
+                                allCommands['layoutTreeTopToBottom'],
+                                allCommands['layoutTreeBottomToTop'],
+                                allCommands['layoutTreeLeftToRight'],
+                                allCommands['layoutTreeRightToLeft']
                             ]
                         },
                         {
                             text: messageLocalization.format('dxDiagram-uiLayoutLayered'),
                             items: [
-                                allCommands['autoLayoutLayeredVertical'],
-                                allCommands['autoLayoutLayeredVerticalBottomToTop'],
-                                allCommands['autoLayoutLayeredHorizontal'],
-                                allCommands['autoLayoutLayeredHorizontalRightToLeft']
+                                allCommands['layoutLayeredTopToBottom'],
+                                allCommands['layoutLayeredBottomToTop'],
+                                allCommands['layoutLayeredLeftToRight'],
+                                allCommands['layoutLayeredRightToLeft']
                             ]
                         }
                     ]
@@ -634,11 +634,11 @@ const DiagramCommandsManager = {
                     groups: [
                         {
                             title: messageLocalization.format('dxDiagram-uiLayoutLayered'),
-                            commands: [ 'autoLayoutLayeredVertical', 'autoLayoutLayeredVerticalBottomToTop', 'autoLayoutLayeredHorizontal', 'autoLayoutLayeredHorizontalRightToLeft']
+                            commands: [ 'layoutLayeredTopToBottom', 'layoutLayeredBottomToTop', 'layoutLayeredLeftToRight', 'layoutLayeredRightToLeft']
                         },
                         {
                             title: messageLocalization.format('dxDiagram-uiLayoutTree'),
-                            commands: [ 'autoLayoutTreeVertical', 'autoLayoutTreeVerticalBottomToTop', 'autoLayoutTreeHorizontal', 'autoLayoutTreeHorizontalRightToLeft']
+                            commands: [ 'layoutTreeTopToBottom', 'layoutTreeBottomToTop', 'layoutTreeLeftToRight', 'layoutTreeRightToLeft']
                         }
                     ]
                 },
