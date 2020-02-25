@@ -11,6 +11,7 @@ const ValidationMixin = require('../validation/validation_mixin');
 const Overlay = require('../overlay');
 const EventsEngine = require('../../events/core/events_engine');
 const eventUtils = require('../../events/utils');
+import { encodeHtml } from '../../core/utils/string';
 
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 const INVALID_CLASS = 'dx-invalid';
@@ -226,7 +227,7 @@ const Editor = Widget.inherit({
 
         if(!isValid && validationError && validationError.message) {
             this._$validationMessage = $('<div>').addClass(INVALID_MESSAGE)
-                .html(validationError.message)
+                .html(encodeHtml(validationError.message))
                 .appendTo($element);
 
             const validationTarget = this._getValidationMessageTarget();
