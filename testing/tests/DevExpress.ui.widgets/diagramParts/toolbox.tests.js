@@ -35,6 +35,9 @@ QUnit.module('Toolbox', moduleConfig, () => {
         $accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR);
         assert.equal($accordion.length, 1);
         assert.equal($accordion.is(':visible'), true);
+        showToolboxButton.trigger('dxclick');
+        assert.equal($accordion.length, 1);
+        assert.equal($accordion.is(':visible'), false);
     });
     test('should fill toolbox with default items', function(assert) {
         const accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR).dxAccordion('instance');

@@ -544,7 +544,8 @@ function getMultitouchEventCoords(event, pointerId) {
 function adjustWheelDelta(delta, lock) {
     if(delta === 0) { return 0; }
 
-    let _delta = _abs(delta); const sign = _round(delta / _delta);
+    let _delta = _abs(delta);
+    const sign = _round(delta / _delta);
 
     if(lock.dir && sign !== lock.dir) { return 0; }
 

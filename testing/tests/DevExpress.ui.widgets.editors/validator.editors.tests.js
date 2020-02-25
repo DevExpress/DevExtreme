@@ -111,9 +111,32 @@ QUnit.module('Editors Standard Adapter', {
         assert.strictEqual(editor.option('isValid'), true, 'Editor options should be set');
     });
 
+    QUnit.test('Adapter should be set on contentReady', function(assert) {
+        const fixture = this.fixture;
+        let error = '';
+        this.fixture.createEditor({
+            onContentReady: function() {
+                try {
+                    fixture.createValidator({
+                        adapter: null,
+                        validationRules: [{
+                            type: 'required'
+                        }]
+                    });
+
+                } catch(e) {
+                    error = e;
+                }
+            }
+        });
+
+        assert.equal(error, '');
+    });
+
 
     QUnit.test('Editor\'s validators request should not be mixed with another editors', function(assert) {
-        const value = '123'; const emptyValue = '';
+        const value = '123';
+        const emptyValue = '';
 
         const editor1 = this.fixture.createEditor({
             value: value

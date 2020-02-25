@@ -94,7 +94,9 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
         height: 500
     });
 
-    const appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption' }; const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineDay('instance'); const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+    const appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption' };
+    const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineDay('instance');
+    const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
 
     try {
         scheduler.instance.showAppointmentPopup(appointment);
@@ -122,7 +124,9 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
     const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
     scrollable.scrollTo({ left: 10000 });
 
-    const appointment = { startDate: new Date(2015, 2, 6, 6), endDate: new Date(2015, 2, 6, 8), text: 'caption' }; const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek('instance'); const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+    const appointment = { startDate: new Date(2015, 2, 6, 6), endDate: new Date(2015, 2, 6, 8), text: 'caption' };
+    const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek('instance');
+    const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
 
     try {
         scheduler.instance.showAppointmentPopup(appointment);
@@ -150,7 +154,9 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
     const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
     scrollable.scrollTo({ left: 2000 });
 
-    const appointment = { startDate: new Date(2015, 2, 6, 6), endDate: new Date(2015, 2, 6, 8), text: 'caption' }; const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek('instance'); const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+    const appointment = { startDate: new Date(2015, 2, 6, 6), endDate: new Date(2015, 2, 6, 8), text: 'caption' };
+    const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek('instance');
+    const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
 
     try {
         scheduler.instance.showAppointmentPopup(appointment);
@@ -191,7 +197,9 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
     const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
     scrollable.scrollTo({ left: 12000 });
 
-    const appointment = { startDate: new Date(2015, 2, 29, 6), endDate: new Date(2015, 2, 29, 8), text: 'caption' }; const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineMonth('instance'); const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+    const appointment = { startDate: new Date(2015, 2, 29, 6), endDate: new Date(2015, 2, 29, 8), text: 'caption' };
+    const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineMonth('instance');
+    const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
 
     try {
         scheduler.instance.showAppointmentPopup(appointment);
@@ -219,7 +227,9 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
     const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
     scrollable.scrollTo({ left: 1000 });
 
-    const appointment = { startDate: new Date(2015, 2, 29, 6), endDate: new Date(2015, 2, 29, 8), text: 'caption' }; const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineMonth('instance'); const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+    const appointment = { startDate: new Date(2015, 2, 29, 6), endDate: new Date(2015, 2, 29, 8), text: 'caption' };
+    const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineMonth('instance');
+    const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
 
     try {
         scheduler.instance.showAppointmentPopup(appointment);
@@ -382,7 +392,8 @@ QUnit.test('Scheduler timeline groupTable should have right height if widget has
         }]
     });
 
-    const groupHeight = scheduler.grouping.getGroupTableHeight(); const dateTableHeight = scheduler.workSpace.getDateTableHeight();
+    const groupHeight = scheduler.grouping.getGroupTableHeight();
+    const dateTableHeight = scheduler.workSpace.getDateTableHeight();
 
     assert.roughEqual(groupHeight, dateTableHeight, 1.5, 'Group table has correct height');
 });

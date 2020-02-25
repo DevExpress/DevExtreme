@@ -1142,7 +1142,7 @@ QUnit.test('getTextAndFormatDate, simple appointment, month view, without format
     });
 
     assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
-        formatDate: 'March 1, 10:00 AM - 11:00 AM',
+        formatDate: 'March 1 10:00 AM - 11:00 AM',
         text: 'Appointment test text'
     });
 });
@@ -1163,7 +1163,7 @@ QUnit.test('getTextAndFormatData, recurrance appointment with different data', f
         currentView: 'month'
     });
     assert.deepEqual(this.instance.fire('getTextAndFormatDate', initialData, dataRecur), {
-        formatDate: 'March 2, 10:00 AM - 11:00 AM',
+        formatDate: 'March 2 10:00 AM - 11:00 AM',
         text: 'Appointment test text'
     });
 });

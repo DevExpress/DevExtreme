@@ -4,11 +4,17 @@ import 'common.css!';
 import 'ui/diagram';
 
 import { DiagramCommand } from 'devexpress-diagram';
-import { Consts, findToolbarItem, getToolbarIcon } from '../../../helpers/diagramHelpers.js';
+import { Consts, getMainToolbarInstance, findMainToolbarItem, getToolbarIcon, findContextMenuItem } from '../../../helpers/diagramHelpers.js';
 
 const moduleConfig = {
     beforeEach: function() {
-        this.$element = $('#diagram').dxDiagram();
+        this.onCustomCommandExecuted = sinon.spy();
+        this.$element = $('#diagram').dxDiagram({
+            onCustomCommandExecuted: this.onCustomCommandExecuted,
+            mainToolbar: {
+                visible: true
+            }
+        });
         this.instance = this.$element.dxDiagram('instance');
     }
 };
@@ -24,47 +30,63 @@ QUnit.module('Main Toolbar', {
     }
 }, () => {
     test('should not render if toolbar.visible is false', function(assert) {
-        this.instance.option('toolbar.visible', false);
+        this.instance.option('mainToolbar.visible', false);
         const $toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR);
         assert.equal($toolbar.length, 0);
     });
     test('should fill toolbar with default items', function(assert) {
-        const toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
+        const toolbar = getMainToolbarInstance(this.$element);
         assert.ok(toolbar.option('dataSource').length > 10);
     });
     test('should fill toolbar with custom items', function(assert) {
-        this.instance.option('toolbar.commands', ['exportSvg']);
-        const toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
+        this.instance.option('mainToolbar.commands', ['exportSvg']);
+        const toolbar = getMainToolbarInstance(this.$element);
         assert.equal(toolbar.option('dataSource').length, 1);
     });
-    test('should hide toolbar custom button', function(assert) {
-        let toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
-        const count = toolbar.option('dataSource').length;
-
-        this.instance.option('propertiesPanel.visibility', 'disabled');
-        toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
-        assert.equal(toolbar.option('dataSource').length, count - 1);
-        this.instance.option('propertiesPanel.visibility', 'visible');
-        toolbar = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).dxToolbar('instance');
-        assert.equal(toolbar.option('dataSource').length, count);
-    });
     test('should enable items on diagram request', function(assert) {
-        const undoButton = findToolbarItem(this.$element, 'undo').dxButton('instance');
+        const undoButton = findMainToolbarItem(this.$element, 'undo').dxButton('instance');
         assert.ok(undoButton.option('disabled'));
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageLandscape).execute(true);
         assert.notOk(undoButton.option('disabled'));
     });
     test('should activate items on diagram request', function(assert) {
-        assert.ok(findToolbarItem(this.$element, 'center').hasClass(Consts.TOOLBAR_ITEM_ACTIVE_CLASS));
-        assert.notOk(findToolbarItem(this.$element, 'left').hasClass(Consts.TOOLBAR_ITEM_ACTIVE_CLASS));
+        assert.ok(findMainToolbarItem(this.$element, 'center').hasClass(Consts.TOOLBAR_ITEM_ACTIVE_CLASS));
+        assert.notOk(findMainToolbarItem(this.$element, 'left').hasClass(Consts.TOOLBAR_ITEM_ACTIVE_CLASS));
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.TextLeftAlign).execute(true);
-        assert.notOk(findToolbarItem(this.$element, 'center').hasClass(Consts.TOOLBAR_ITEM_ACTIVE_CLASS));
-        assert.ok(findToolbarItem(this.$element, 'left').hasClass(Consts.TOOLBAR_ITEM_ACTIVE_CLASS));
+        assert.notOk(findMainToolbarItem(this.$element, 'center').hasClass(Consts.TOOLBAR_ITEM_ACTIVE_CLASS));
+        assert.ok(findMainToolbarItem(this.$element, 'left').hasClass(Consts.TOOLBAR_ITEM_ACTIVE_CLASS));
     });
     test('button should raise diagram commands', function(assert) {
         assert.notOk(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.TextLeftAlign).getState().value);
-        findToolbarItem(this.$element, 'left').trigger('dxclick');
+        findMainToolbarItem(this.$element, 'left').trigger('dxclick');
         assert.ok(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.TextLeftAlign).getState().value);
+    });
+    test('button should raise custom commands', function(assert) {
+        this.instance.option('mainToolbar.commands', [
+            {
+                name: 'custom',
+                text: 'custom',
+            },
+            {
+                text: 'sub menu',
+                items: [{
+                    name: 'custom2',
+                    text: 'custom2'
+                }]
+            }
+        ]);
+        findMainToolbarItem(this.$element, 'custom').trigger('dxclick');
+        findMainToolbarItem(this.$element, 'sub menu').trigger('dxclick');
+        findContextMenuItem(this.$element, 'custom2').trigger('dxclick');
+        assert.ok(this.onCustomCommandExecuted.called);
+        assert.equal(this.onCustomCommandExecuted.getCalls().length, 2);
+        assert.equal(this.onCustomCommandExecuted.getCall(0).args[0]['name'], 'custom');
+        assert.equal(this.onCustomCommandExecuted.getCall(1).args[0]['name'], 'custom2');
+    });
+    test('selectBox should have items', function(assert) {
+        assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontName).getState().value, 'Arial');
+        const fontSelectBox = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-selectbox').eq(0).dxSelectBox('instance');
+        assert.ok(fontSelectBox.option('dataSource').length > 0);
     });
     test('selectBox should raise diagram commands', function(assert) {
         assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontName).getState().value, 'Arial');
@@ -116,22 +138,19 @@ QUnit.module('Main Toolbar', {
         assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
     test('diagram should be focused after set font bold', function(assert) {
-        const boldButton = findToolbarItem(this.$element, 'bold');
+        const boldButton = findMainToolbarItem(this.$element, 'bold');
         assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         boldButton.trigger('dxclick');
         assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
     test('Auto Layout button should be disabled when there is no selection', function(assert) {
-        const button = findToolbarItem(this.$element, 'auto layout').dxButton('instance');
+        const button = findMainToolbarItem(this.$element, 'layout').dxButton('instance');
         assert.ok(button.option('disabled'));
     });
     test('Auto Layout button should be disabled in Read Only mode', function(assert) {
-        this.instance.option('contextMenu.commands', ['selectAll']);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
-        const contextMenu = this.$element.find(Consts.CONTEXT_MENU_SELECTOR).dxContextMenu('instance');
-        contextMenu.show();
-        $(contextMenu.itemsContainer().find(Consts.DX_MENU_ITEM_SELECTOR).eq(0)).trigger('dxclick'); // Select All
-        const button = findToolbarItem(this.$element, 'auto layout').dxButton('instance');
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.SelectAll).execute(true);
+        const button = findMainToolbarItem(this.$element, 'layout').dxButton('instance');
         assert.notOk(button.option('disabled'));
         this.instance.option('readOnly', true);
         assert.ok(button.option('disabled'));

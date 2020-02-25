@@ -271,7 +271,9 @@ QUnit.module('Intl localization', {
                 });
             };
 
-            const monthsWide = getIntlMonthNames('long'); const monthsAbbr = getIntlMonthNames('short'); const monthsNarrow = getIntlMonthNames('narrow');
+            const monthsWide = getIntlMonthNames('long');
+            const monthsAbbr = getIntlMonthNames('short');
+            const monthsNarrow = getIntlMonthNames('narrow');
 
             assert.deepEqual(dateLocalization.getMonthNames(), monthsWide, 'Array of month names without format');
             assert.deepEqual(dateLocalization.getMonthNames('wide'), monthsWide, 'Array of month names (wide format)');

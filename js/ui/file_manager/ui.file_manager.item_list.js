@@ -71,8 +71,8 @@ class FileManagerItemListBase extends Widget {
         this._actions.onError({ error });
     }
 
-    _raiseSelectionChanged() {
-        this._actions.onSelectionChanged();
+    _raiseSelectionChanged(args) {
+        this._actions.onSelectionChanged(args);
     }
 
     _raiseSelectedItemOpened(fileItemInfo) {

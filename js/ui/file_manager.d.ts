@@ -113,6 +113,21 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      */
     onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, file?: FileSystemItem }) => any);
     /**
+     * @docid dxFileManagerOptions.onSelectionChanged
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 currentSelectedItemKeys:Array<string>
+     * @type_function_param1_field5 currentDeselectedItemKeys:Array<string>
+     * @type_function_param1_field6 selectedItems:Array<FileSystemItem>
+     * @type_function_param1_field7 selectedItemKeys:Array<string>
+     * @default null
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onSelectionChanged?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, currentSelectedItemKeys?: Array<string>, currentDeselectedItemKeys?: Array<string>, selectedItems?: Array<FileSystemItem>, selectedItemKeys?: Array<string>}) => any);
+    /**
      * @docid dxFileManagerOptions.permissions
      * @type object
      * @prevFileNamespace DevExpress.ui

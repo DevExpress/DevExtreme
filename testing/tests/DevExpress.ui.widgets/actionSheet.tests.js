@@ -36,7 +36,9 @@ QUnit.module('action sheet', {
     }
 }, () => {
     QUnit.test('render popup', function(assert) {
-        const popupElement = $('.dx-popup', this.element); const popup = popupElement.dxPopup('instance'); const popupPosition = popup.option('position');
+        const popupElement = $('.dx-popup', this.element);
+        const popup = popupElement.dxPopup('instance');
+        const popupPosition = popup.option('position');
 
         assert.ok(popupElement.length, 'Popup rendered');
         assert.ok(popupElement.dxPopup('instance'));
@@ -157,7 +159,8 @@ QUnit.module('action sheet', {
     QUnit.test('show and hide methods are provided to popup', function(assert) {
         assert.expect(5);
 
-        const popup = $('.dx-popup', this.element).dxPopup('instance'); const instance = this.instance;
+        const popup = $('.dx-popup', this.element).dxPopup('instance');
+        const instance = this.instance;
 
         assert.equal(popup.option('visible'), false, 'hidden on init');
 
@@ -495,7 +498,9 @@ QUnit.module('Forward templates to popup', () => {
 
         $actionSheet.dxActionSheet();
 
-        const actionSheet = $actionSheet.dxActionSheet('instance'); const templates = actionSheet.option('integrationOptions.templates'); const popupTemplates = actionSheet._popup.option('integrationOptions.templates');
+        const actionSheet = $actionSheet.dxActionSheet('instance');
+        const templates = actionSheet.option('integrationOptions.templates');
+        const popupTemplates = actionSheet._popup.option('integrationOptions.templates');
 
         let noOneTemplateIsMissing = true;
 

@@ -7,6 +7,7 @@ const axisModule = require('../axes/base_axis');
 const seriesFamilyModule = require('../core/series_family');
 const BaseChart = require('./base_chart').BaseChart;
 const crosshairModule = require('./crosshair');
+const getViewPortFilter = require('../series/helpers/range_data_calculator').getViewPortFilter;
 
 const _isArray = Array.isArray;
 const _isDefined = require('../../core/utils/type').isDefined;
@@ -559,6 +560,10 @@ const AdvancedChart = BaseChart.inherit({
         }
 
         return options;
+    },
+
+    _getValFilter(series) {
+        return getViewPortFilter(series.getValueAxis().visualRange() || {});
     },
 
     _createAxis(isArgumentAxes, options, virtual, index) {

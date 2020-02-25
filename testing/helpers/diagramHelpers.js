@@ -8,32 +8,77 @@ export const Consts = {
     CONTEXT_MENU_SELECTOR: 'div:not(.dx-diagram-toolbar-wrapper):not(.dx-diagram-floating-toolbar-container) > .dx-has-context-menu',
     TOOLBAR_ITEM_ACTIVE_CLASS: 'dx-format-active',
     DX_MENU_ITEM_SELECTOR: '.dx-menu-item',
-    PROPERTIES_PANEL_ACCORDION_SELECTOR: '.dx-diagram-properties-panel .dx-accordion',
-    PROPERTIES_PANEL_FORM_SELECTOR: '.dx-diagram-properties-panel .dx-accordion .dx-form',
+    PROPERTIES_PANEL_SELECTOR: '.dx-diagram-properties-panel',
+    PROPERTIES_PANEL_TOOLBAR_SELECTOR: '.dx-diagram-properties-panel .dx-diagram-toolbar',
     TOOLBOX_SCROLLVIEW_SELECTOR: '.dx-diagram-toolbox-panel .dx-scrollview',
     TOOLBOX_ACCORDION_SELECTOR: '.dx-diagram-toolbox-panel .dx-accordion',
     FULLSCREEN_CLASS: 'dx-diagram-fullscreen'
 };
 
-export function getToolbarIcon(button) {
-    return button.find('.dx-dropdowneditor-field-template-wrapper').find('.dx-diagram-i, .dx-icon');
+export function getMainToolbarElement($diagramElement) {
+    return $diagramElement.find(Consts.MAIN_TOOLBAR_SELECTOR);
 }
-export function findToolbarItem($diagramElement, label) {
+export function getMainToolbarInstance($diagramElement) {
+    return getMainToolbarElement($diagramElement).dxToolbar('instance');
+}
+export function getHistoryToolbarElement($diagramElement) {
+    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(0));
+}
+export function getHistoryToolbarInstance($diagramElement) {
+    return getHistoryToolbarElement($diagramElement).dxToolbar('instance');
+}
+export function getViewToolbarElement($diagramElement) {
+    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(1));
+}
+export function getViewToolbarInstance($diagramElement) {
+    return getViewToolbarElement($diagramElement).dxToolbar('instance');
+}
+export function getPropertiesPanelToolbarElement($diagramElement) {
+    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(2));
+}
+export function getPropertiesPanelToolbarInstance($diagramElement) {
+    return getPropertiesPanelToolbarElement($diagramElement).dxToolbar('instance');
+}
+export function findMainToolbarItem($diagramElement, label) {
     return $diagramElement.find(Consts.MAIN_TOOLBAR_SELECTOR)
         .find('.dx-widget')
         .filter(function() {
             return $(this).text().toLowerCase().indexOf(label) >= 0;
         });
 }
-export function findViewToolbarItem($diagramElement, label) {
-    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(1))
+export function findHistoryToolbarItem($diagramElement, label) {
+    return getHistoryToolbarElement($diagramElement)
         .find('.dx-widget')
         .filter(function() {
             return $(this).text().toLowerCase().indexOf(label) >= 0;
         });
 }
+export function findViewToolbarItem($diagramElement, label) {
+    return getViewToolbarElement($diagramElement)
+        .find('.dx-widget')
+        .filter(function() {
+            return $(this).text().toLowerCase().indexOf(label) >= 0;
+        });
+}
+export function findPropertiesPanelToolbarItem($diagramElement, label) {
+    return getPropertiesPanelToolbarElement($diagramElement)
+        .find('.dx-widget')
+        .filter(function() {
+            return $(this).text().toLowerCase().indexOf(label) >= 0;
+        });
+}
+export function getToolbarIcon($button) {
+    return $button.find('.dx-dropdowneditor-field-template-wrapper').find('.dx-diagram-i, .dx-icon');
+}
+export function getContextMenuItemCheck($button) {
+    return $button.find('.dx-icon-check');
+}
+
+export function getContextMenuInstance($diagramElement) {
+    return $diagramElement.find(Consts.CONTEXT_MENU_SELECTOR).dxContextMenu('instance');
+}
 export function findContextMenuItem($diagramElement, label) {
-    return $('body').find('.dx-diagram-contextmenu')
+    return $('body').find('.dx-diagram-contextmenu, .dx-diagram-touchbar')
         .find(Consts.DX_MENU_ITEM_SELECTOR)
         .filter(function() {
             return $(this).text().toLowerCase().indexOf(label) >= 0;

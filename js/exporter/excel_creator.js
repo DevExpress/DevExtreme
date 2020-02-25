@@ -524,7 +524,8 @@ const ExcelCreator = Class.inherit({
             this._colsArray[colIndex] = this._getXMLTag('col', [
                 { name: 'width', value: this._colsArray[colIndex] },
                 { name: 'min', value: Number(colIndex) + 1 },
-                { name: 'max', value: Number(colIndex) + 1 }
+                { name: 'max', value: Number(colIndex) + 1 },
+                { name: 'customWidth', value: 1 }
             ]);
         }
 

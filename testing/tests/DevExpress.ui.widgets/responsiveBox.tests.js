@@ -271,7 +271,9 @@ QUnit.module('layouting', moduleConfig, () => {
         const minSize = 80;
         const maxSize = 5;
 
-        const device = devices.real(); const version = device.version; const isAndroid = device.android;
+        const device = devices.real();
+        const version = device.version;
+        const isAndroid = device.android;
 
         if(isAndroid && (version[0] < 4 || (version[0] === 4 && version[1] === 0))) {
             assert.ok(true, 'old android min/max height problem');

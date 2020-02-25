@@ -113,6 +113,8 @@ const ACTION_OPTION_NAMES = {
 };
 const BUTTON_NAMES = ['edit', 'save', 'cancel', 'delete', 'undelete'];
 
+const EDITING_POPUP_OPTION_NAME = 'editing.popup';
+
 const createFailureHandler = function(deferred) {
     return function(arg) {
         const error = arg instanceof Error ? arg : new Error(arg && String(arg) || 'Unknown error');
@@ -557,7 +559,19 @@ const EditingController = modules.ViewController.inherit((function() {
 
         optionChanged: function(args) {
             if(args.name === 'editing') {
-                if(this._editPopup && this._editPopup.option('visible') && args.fullName.indexOf('editing.form') === 0) {
+                const fullName = args.fullName;
+                const editPopup = this._editPopup;
+
+                if(fullName && fullName.indexOf(EDITING_POPUP_OPTION_NAME) === 0) {
+                    if(editPopup) {
+                        const popupOptionName = fullName.slice(EDITING_POPUP_OPTION_NAME.length + 1);
+                        if(popupOptionName) {
+                            editPopup.option(popupOptionName, args.value);
+                        } else {
+                            editPopup.option(args.value);
+                        }
+                    }
+                } else if(editPopup && editPopup.option('visible') && fullName.indexOf('editing.form') === 0) {
                     this._repaintEditPopup();
                 } else {
                     this.init();
@@ -572,12 +586,14 @@ const EditingController = modules.ViewController.inherit((function() {
             return ['insertRow', 'addRow', 'removeRow', 'deleteRow', 'undeleteRow', 'editRow', 'editCell', 'closeEditCell', 'saveEditData', 'cancelEditData', 'hasEditData'];
         },
 
-        refresh: function() {
-            if(getEditMode(this) === EDIT_MODE_CELL) return;
+        refresh: function(isPageChanged) {
+            const editMode = getEditMode(this);
 
-            if(getEditMode(this) !== EDIT_MODE_BATCH) {
+            const needResetIndexes = editMode === EDIT_MODE_BATCH || isPageChanged && this.option('scrolling.mode') !== 'virtual';
+
+            if(editMode !== EDIT_MODE_BATCH && editMode !== EDIT_MODE_CELL) {
                 this.init();
-            } else {
+            } else if(needResetIndexes) {
                 this._editRowIndex = -1;
                 this._editColumnIndex = -1;
             }
@@ -829,26 +845,29 @@ const EditingController = modules.ViewController.inherit((function() {
             const param = { data: {} };
             const editMode = getEditMode(that);
             const oldEditRowIndex = that._getVisibleEditRowIndex();
+            const deferred = new Deferred();
 
             if(!store) {
                 dataController.fireError('E1052', this.component.NAME);
-                return;
+                return deferred.reject();
             }
 
             if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
                 that.saveEditData().done(function() {
                     // T804894
                     if(!that.hasChanges()) {
-                        that.addRow(parentKey);
+                        that.addRow(parentKey).done(deferred.resolve).fail(deferred.reject);
+                    } else {
+                        deferred.reject('cancel');
                     }
                 });
-                return;
+                return deferred.promise();
             }
 
             that.refresh();
 
             if(!that._allowRowAdding()) {
-                return;
+                return deferred.reject('cancel');
             }
 
             if(!key) {
@@ -858,8 +877,13 @@ const EditingController = modules.ViewController.inherit((function() {
             when(that._initNewRow(param, parentKey)).done(() => {
                 if(that._allowRowAdding()) {
                     that._addRowCore(param.data, parentKey, oldEditRowIndex);
+                    deferred.resolve();
+                } else {
+                    deferred.reject('cancel');
                 }
-            });
+            }).fail(deferred.reject);
+
+            return deferred.promise();
         },
 
         _allowRowAdding: function() {
@@ -1006,7 +1030,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     ],
                     contentTemplate: that._getPopupEditFormTemplate(rowIndex)
                 },
-                that.option('editing.popup')
+                that.option(EDITING_POPUP_OPTION_NAME)
             );
 
             if(!that._editPopup) {
@@ -1746,7 +1770,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(dataController && that._pageIndex !== dataController.pageIndex()) {
                 if(changeType === 'refresh') {
-                    that.refresh();
+                    that.refresh(true);
                 }
                 that._pageIndex = dataController.pageIndex();
             }
@@ -2708,13 +2732,16 @@ module.exports = {
                 },
 
                 optionChanged: function(args) {
+                    const fullName = args.fullName;
                     switch(args.name) {
-                        case 'editing':
-                            if(!(args.fullName && args.fullName.indexOf('editing.popup') === 0)) {
+                        case 'editing': {
+                            const isEditingPopupOption = fullName && fullName.indexOf(EDITING_POPUP_OPTION_NAME) === 0;
+                            if(!isEditingPopupOption) {
                                 this._invalidate();
                             }
                             this.callBase(args);
                             break;
+                        }
                         default:
                             this.callBase(args);
                     }

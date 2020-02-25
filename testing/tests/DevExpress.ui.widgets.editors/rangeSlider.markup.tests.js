@@ -56,14 +56,20 @@ QUnit.module('hidden inputs', () => {
     });
 
     QUnit.test('first input gets correct value after widget the \'start\' option change', function(assert) {
-        const expectedStart = 33; const $element = $('#slider').dxRangeSlider(); const instance = $element.dxRangeSlider('instance'); const $input = $element.find('input').eq(0);
+        const expectedStart = 33;
+        const $element = $('#slider').dxRangeSlider();
+        const instance = $element.dxRangeSlider('instance');
+        const $input = $element.find('input').eq(0);
 
         instance.option('start', expectedStart);
         assert.equal($input.val(), expectedStart, 'the first input value is correct');
     });
 
     QUnit.test('second input gets correct value after widget the \'end\' option change', function(assert) {
-        const expectedEnd = 88; const $element = $('#slider').dxRangeSlider(); const instance = $element.dxRangeSlider('instance'); const $input = $element.find('input').eq(1);
+        const expectedEnd = 88;
+        const $element = $('#slider').dxRangeSlider();
+        const instance = $element.dxRangeSlider('instance');
+        const $input = $element.find('input').eq(1);
 
         instance.option('end', expectedEnd);
         assert.equal($input.val(), expectedEnd, 'the second input value is correct');

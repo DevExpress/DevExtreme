@@ -1,7 +1,10 @@
 import $ from 'jquery';
 import List from 'ui/list';
 
-const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container'; const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon'; const LIST_ITEM_CHEVRON_CONTAINER_CLASS = 'dx-list-item-chevron-container'; const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
+const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
+const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon';
+const LIST_ITEM_CHEVRON_CONTAINER_CLASS = 'dx-list-item-chevron-container';
+const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 
 QUnit.module('showChevron builtin', () => {
     QUnit.test('showChevron should be rendered correctly by default', function(assert) {
@@ -66,7 +69,9 @@ QUnit.module('icon builtin', () => {
 });
 
 QUnit.module('badge builtin', () => {
-    const LIST_ITEM_BADGE_CONTAINER_CLASS = 'dx-list-item-badge-container'; const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge'; const BADGE_CLASS = 'dx-badge';
+    const LIST_ITEM_BADGE_CONTAINER_CLASS = 'dx-list-item-badge-container';
+    const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';
+    const BADGE_CLASS = 'dx-badge';
 
     QUnit.test('badge should be rendered correctly by default', function(assert) {
         const widget = new List($('<div>'), {

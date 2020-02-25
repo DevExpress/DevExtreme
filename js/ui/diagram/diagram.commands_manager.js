@@ -1,26 +1,27 @@
 import { getLibrary } from '../../core/registry';
-
-import { extend } from '../../core/utils/extend';
 import { fileSaver } from '../../exporter/file_saver';
 import { isFunction } from '../../core/utils/type';
 import { getWindow } from '../../core/utils/window';
+import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 
 const SEPARATOR = { widget: 'separator' };
 const CSS_CLASSES = {
     SMALL_SELECT: 'dx-diagram-select-sm',
+    LARGE_SELECT: 'dx-diagram-select-lg',
     BUTTON_SELECT: 'dx-diagram-select-b',
+    LARGE_ICON: 'dx-diagram-btn-l-icon',
     BUTTON_COLOR: 'dx-diagram-color-b',
 };
 
 const DiagramCommandsManager = {
     SHOW_TOOLBOX_COMMAND_NAME: 'toolbox',
-    SHOW_OPTIONS_COMMAND_NAME: 'options',
+    SHOW_PROPERTIES_PANEL_COMMAND_NAME: 'propertiesPanel',
 
     getAllCommands: function() {
         const { DiagramCommand } = getLibrary('diagram');
-        return this.allCommands ||
-            (this.allCommands = {
+        return this._allCommands ||
+            (this._allCommands = {
                 separator: SEPARATOR,
 
                 exportSvg: {
@@ -93,14 +94,33 @@ const DiagramCommandsManager = {
                 fontName: {
                     command: DiagramCommand.FontName,
                     hint: messageLocalization.format('dxDiagram-commandFontName'),
+                    text: messageLocalization.format('dxDiagram-commandFontName'),
                     widget: 'dxSelectBox',
-                    items: ['Arial', 'Arial Black', 'Helvetica', 'Times New Roman', 'Courier New', 'Courier', 'Verdana', 'Georgia', 'Comic Sans MS', 'Trebuchet MS']
+                    items: [
+                        'Arial',
+                        'Arial Black',
+                        'Helvetica',
+                        'Times New Roman',
+                        'Courier New',
+                        'Courier',
+                        'Verdana',
+                        'Georgia',
+                        'Comic Sans MS',
+                        'Trebuchet MS'
+                    ].map(item => {
+                        return { text: item, value: item };
+                    })
                 },
                 fontSize: {
                     command: DiagramCommand.FontSize,
                     hint: messageLocalization.format('dxDiagram-commandFontSize'),
+                    text: messageLocalization.format('dxDiagram-commandFontSize'),
                     widget: 'dxSelectBox',
-                    items: ['8pt', '9pt', '10pt', '11pt', '12pt', '14pt', '16pt', '18pt', '20pt', '22pt', '24pt', '26pt', '28pt', '36pt', '48pt', '72pt'],
+                    items: [
+                        8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72
+                    ].map(item => {
+                        return { text: item + 'pt', value: item + 'pt' };
+                    }),
                     cssClass: CSS_CLASSES.SMALL_SELECT
                 },
                 bold: {
@@ -136,6 +156,30 @@ const DiagramCommandsManager = {
                     widget: 'dxColorBox',
                     icon: 'dx-icon dx-icon-background',
                     cssClass: CSS_CLASSES.BUTTON_COLOR
+                },
+                lineWidth: {
+                    command: DiagramCommand.StrokeWidth,
+                    text: messageLocalization.format('dxDiagram-commandLineWidth'),
+                    hint: messageLocalization.format('dxDiagram-commandLineWidth'),
+                    widget: 'dxSelectBox',
+                    items: [
+                        1, 2, 3, 4, 5, 6, 7, 8
+                    ].map(item => {
+                        return { text: item + 'px', value: item.toString() };
+                    }),
+                    cssClass: CSS_CLASSES.SMALL_SELECT
+                },
+                lineStyle: {
+                    command: DiagramCommand.StrokeStyle,
+                    text: messageLocalization.format('dxDiagram-commandLineStyle'),
+                    hint: messageLocalization.format('dxDiagram-commandLineStyle'),
+                    widget: 'dxSelectBox',
+                    items: [
+                        { text: 'Solid', value: '' },
+                        { text: 'Dotted', value: '2,2' },
+                        { text: 'Dashed', value: '6,2' }
+                    ],
+                    cssClass: CSS_CLASSES.SMALL_SELECT
                 },
                 fillColor: {
                     command: DiagramCommand.FillColor,
@@ -225,8 +269,6 @@ const DiagramCommandsManager = {
                             hint: messageLocalization.format('dxDiagram-commandConnectorLineOrthogonal')
                         }
                     ],
-                    displayExpr: 'name',
-                    valueExpr: 'value',
                     cssClass: CSS_CLASSES.BUTTON_SELECT
                 },
                 connectorLineStart: {
@@ -244,8 +286,6 @@ const DiagramCommandsManager = {
                             hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
                         }
                     ],
-                    displayExpr: 'name',
-                    valueExpr: 'value',
                     hint: messageLocalization.format('dxDiagram-commandConnectorLineStart'),
                     cssClass: CSS_CLASSES.BUTTON_SELECT
                 },
@@ -264,43 +304,64 @@ const DiagramCommandsManager = {
                             hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
                         }
                     ],
-                    displayExpr: 'name',
-                    valueExpr: 'value',
                     hint: messageLocalization.format('dxDiagram-commandConnectorLineEnd'),
                     cssClass: CSS_CLASSES.BUTTON_SELECT
                 },
-                autoLayout: {
-                    widget: 'dxButton',
-                    text: messageLocalization.format('dxDiagram-commandAutoLayout'),
-                    showText: 'always',
-                    items: [
-                        {
-                            text: messageLocalization.format('dxDiagram-commandAutoLayoutTree'),
-                            items: [
-                                {
-                                    command: DiagramCommand.AutoLayoutTreeVertical,
-                                    text: messageLocalization.format('dxDiagram-commandAutoLayoutVertical')
-                                },
-                                {
-                                    command: DiagramCommand.AutoLayoutTreeHorizontal,
-                                    text: messageLocalization.format('dxDiagram-commandAutoLayoutHorizontal')
-                                }
-                            ]
-                        },
-                        {
-                            text: messageLocalization.format('dxDiagram-commandAutoLayoutLayered'),
-                            items: [
-                                {
-                                    command: DiagramCommand.AutoLayoutLayeredVertical,
-                                    text: messageLocalization.format('dxDiagram-commandAutoLayoutVertical')
-                                },
-                                {
-                                    command: DiagramCommand.AutoLayoutLayeredHorizontal,
-                                    text: messageLocalization.format('dxDiagram-commandAutoLayoutHorizontal')
-                                }
-                            ]
-                        }
-                    ]
+                autoLayoutTreeVertical: {
+                    command: DiagramCommand.AutoLayoutTreeVertical,
+                    text: messageLocalization.format('dxDiagram-uiLayoutVertical'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutVertical'),
+                    icon: 'dx-diagram-i-button-layout-tree-tb dx-diagram-i',
+                    cssClass: CSS_CLASSES.LARGE_ICON
+                },
+                autoLayoutTreeVerticalBottomToTop: {
+                    command: DiagramCommand.AutoLayoutTreeVerticalBottomToTop,
+                    text: messageLocalization.format('dxDiagram-uiLayoutVerticalBottomToTop'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutVerticalBottomToTop'),
+                    icon: 'dx-diagram-i-button-layout-tree-bt dx-diagram-i',
+                    cssClass: CSS_CLASSES.LARGE_ICON
+                },
+                autoLayoutTreeHorizontal: {
+                    command: DiagramCommand.AutoLayoutTreeHorizontal,
+                    text: messageLocalization.format('dxDiagram-uiLayoutHorizontal'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutHorizontal'),
+                    icon: 'dx-diagram-i-button-layout-tree-lr dx-diagram-i',
+                    cssClass: CSS_CLASSES.LARGE_ICON
+                },
+                autoLayoutTreeHorizontalRightToLeft: {
+                    command: DiagramCommand.AutoLayoutTreeHorizontalRightToLeft,
+                    text: messageLocalization.format('dxDiagram-uiLayoutHorizontalRightToLeft'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutHorizontalRightToLeft'),
+                    icon: 'dx-diagram-i-button-layout-tree-rl dx-diagram-i',
+                    cssClass: CSS_CLASSES.LARGE_ICON
+                },
+                autoLayoutLayeredVertical: {
+                    command: DiagramCommand.AutoLayoutLayeredVertical,
+                    text: messageLocalization.format('dxDiagram-uiLayoutVertical'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutVertical'),
+                    icon: 'dx-diagram-i-button-layout-layered-tb dx-diagram-i',
+                    cssClass: CSS_CLASSES.LARGE_ICON
+                },
+                autoLayoutLayeredVerticalBottomToTop: {
+                    command: DiagramCommand.AutoLayoutLayeredVerticalBottomToTop,
+                    text: messageLocalization.format('dxDiagram-uiLayoutVerticalBottomToTop'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutVerticalBottomToTop'),
+                    icon: 'dx-diagram-i-button-layout-layered-bt dx-diagram-i',
+                    cssClass: CSS_CLASSES.LARGE_ICON
+                },
+                autoLayoutLayeredHorizontal: {
+                    command: DiagramCommand.AutoLayoutLayeredHorizontal,
+                    text: messageLocalization.format('dxDiagram-uiLayoutHorizontal'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutHorizontal'),
+                    icon: 'dx-diagram-i-button-layout-layered-lr dx-diagram-i',
+                    cssClass: CSS_CLASSES.LARGE_ICON
+                },
+                autoLayoutLayeredHorizontalRightToLeft: {
+                    command: DiagramCommand.AutoLayoutLayeredHorizontalRightToLeft,
+                    text: messageLocalization.format('dxDiagram-uiLayoutHorizontalRightToLeft'),
+                    hint: messageLocalization.format('dxDiagram-uiLayoutHorizontalRightToLeft'),
+                    icon: 'dx-diagram-i-button-layout-layered-rl dx-diagram-i',
+                    cssClass: CSS_CLASSES.LARGE_ICON
                 },
                 fullScreen: {
                     command: DiagramCommand.Fullscreen,
@@ -346,8 +407,9 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandPageSize'),
                     text: messageLocalization.format('dxDiagram-commandPageSize'),
                     widget: 'dxSelectBox',
-                    getValue: (v) => JSON.parse(v),
-                    setValue: (v) => JSON.stringify(v)
+                    cssClass: CSS_CLASSES.LARGE_SELECT,
+                    getCommandValue: (v) => JSON.parse(v),
+                    getEditorValue: (v) => JSON.stringify(v)
                 },
                 pageOrientation: {
                     command: DiagramCommand.PageLandscape,
@@ -355,8 +417,8 @@ const DiagramCommandsManager = {
                     text: messageLocalization.format('dxDiagram-commandPageOrientation'),
                     widget: 'dxSelectBox',
                     items: [
-                        { value: true, title: messageLocalization.format('dxDiagram-commandPageOrientationLandscape') },
-                        { value: false, title: messageLocalization.format('dxDiagram-commandPageOrientationPortrait') }
+                        { value: true, text: messageLocalization.format('dxDiagram-commandPageOrientationLandscape') },
+                        { value: false, text: messageLocalization.format('dxDiagram-commandPageOrientationPortrait') }
                     ]
                 },
                 pageColor: {
@@ -364,12 +426,41 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandPageColor'),
                     text: messageLocalization.format('dxDiagram-commandPageColor'),
                     widget: 'dxColorBox',
+                    icon: 'dx-diagram-i dx-diagram-i-button-fill',
+                    cssClass: CSS_CLASSES.BUTTON_COLOR
                 },
                 zoomLevel: {
                     command: DiagramCommand.ZoomLevel,
                     hint: messageLocalization.format('dxDiagram-commandZoomLevel'),
                     text: messageLocalization.format('dxDiagram-commandZoomLevel'),
-                    widget: 'dxSelectBox'
+                    widget: 'dxTextBox',
+                    items: [
+                        SEPARATOR,
+                        {
+                            command: DiagramCommand.FitToScreen,
+                            hint: messageLocalization.format('dxDiagram-commandFitToContent'),
+                            text: messageLocalization.format('dxDiagram-commandFitToContent'),
+                        },
+                        {
+                            command: DiagramCommand.FitToWidth,
+                            hint: messageLocalization.format('dxDiagram-commandFitToWidth'),
+                            text: messageLocalization.format('dxDiagram-commandFitToWidth'),
+                        },
+                        SEPARATOR,
+                        {
+                            command: DiagramCommand.AutoZoomToContent,
+                            hint: messageLocalization.format('dxDiagram-commandAutoZoomByContent'),
+                            text: messageLocalization.format('dxDiagram-commandAutoZoomByContent'),
+                        },
+                        {
+                            command: DiagramCommand.AutoZoomToWidth,
+                            hint: messageLocalization.format('dxDiagram-commandAutoZoomByWidth'),
+                            text: messageLocalization.format('dxDiagram-commandAutoZoomByWidth'),
+                        }
+                    ],
+                    getEditorDisplayValue: (v) => {
+                        return Math.round(v * 100) + '%';
+                    }
                 },
                 autoZoom: {
                     command: DiagramCommand.ToggleAutoZoom,
@@ -378,210 +469,302 @@ const DiagramCommandsManager = {
                     widget: 'dxCheckBox'
                 },
                 // Custom commands
-                showOptions: {
-                    command: this.SHOW_OPTIONS_COMMAND_NAME,
-                    icon: 'preferences',
-                    hint: messageLocalization.format('dxDiagram-uiProperties'),
-                    text: messageLocalization.format('dxDiagram-uiProperties'),
-                    position: 'after'
-                },
                 showToolbox: {
                     command: this.SHOW_TOOLBOX_COMMAND_NAME,
                     hint: messageLocalization.format('dxDiagram-uiShowToolbox'),
                     text: messageLocalization.format('dxDiagram-uiShowToolbox')
+                },
+                showPropertiesPanel: {
+                    command: this.SHOW_PROPERTIES_PANEL_COMMAND_NAME,
+                    icon: 'dx-diagram-i dx-diagram-i-button-properties-panel',
+                    hint: messageLocalization.format('dxDiagram-uiProperties'),
+                    text: messageLocalization.format('dxDiagram-uiProperties')
                 }
             });
     },
     getMainToolbarCommands: function(commands, excludeCommands) {
         const allCommands = this.getAllCommands();
-        const mainToolbarCommands = commands ? this._getCustomCommands(allCommands, commands) :
+        const mainToolbarCommands = commands ? this._getPreparedCommands(allCommands, commands) :
             this._getDefaultMainToolbarCommands(allCommands);
         return this._prepareToolbarCommands(mainToolbarCommands, excludeCommands);
     },
     _getDefaultMainToolbarCommands: function(allCommands) {
-        return [
-            allCommands['undo'],
-            allCommands['redo'],
-            allCommands['separator'],
-            allCommands['fontName'],
-            allCommands['fontSize'],
-            allCommands['separator'],
-            allCommands['bold'],
-            allCommands['italic'],
-            allCommands['underline'],
-            allCommands['separator'],
-            allCommands['fontColor'],
-            allCommands['lineColor'],
-            allCommands['fillColor'],
-            allCommands['separator'],
-            allCommands['textAlignLeft'],
-            allCommands['textAlignCenter'],
-            allCommands['textAlignRight'],
-            allCommands['separator'],
-            allCommands['connectorLineType'],
-            allCommands['connectorLineStart'],
-            allCommands['connectorLineEnd'],
-            allCommands['separator'],
-            allCommands['autoLayout'],
-            allCommands['showOptions']
-        ];
+        return this._defaultMainToolbarCommands ||
+            (this._defaultMainToolbarCommands = [
+                allCommands['undo'],
+                allCommands['redo'],
+                allCommands['separator'],
+                allCommands['fontName'],
+                allCommands['fontSize'],
+                allCommands['bold'],
+                allCommands['italic'],
+                allCommands['underline'],
+                allCommands['separator'],
+                allCommands['lineWidth'],
+                allCommands['lineStyle'],
+                allCommands['separator'],
+                allCommands['fontColor'],
+                allCommands['lineColor'],
+                allCommands['fillColor'],
+                allCommands['separator'],
+                allCommands['textAlignLeft'],
+                allCommands['textAlignCenter'],
+                allCommands['textAlignRight'],
+                allCommands['separator'],
+                allCommands['connectorLineType'],
+                allCommands['connectorLineStart'],
+                allCommands['connectorLineEnd'],
+                allCommands['separator'],
+                {
+                    text: messageLocalization.format('dxDiagram-uiLayout'),
+                    showText: 'always',
+                    items: [
+                        {
+                            text: messageLocalization.format('dxDiagram-uiLayoutTree'),
+                            items: [
+                                allCommands['autoLayoutTreeVertical'],
+                                allCommands['autoLayoutTreeVerticalBottomToTop'],
+                                allCommands['autoLayoutTreeHorizontal'],
+                                allCommands['autoLayoutTreeHorizontalRightToLeft']
+                            ]
+                        },
+                        {
+                            text: messageLocalization.format('dxDiagram-uiLayoutLayered'),
+                            items: [
+                                allCommands['autoLayoutLayeredVertical'],
+                                allCommands['autoLayoutLayeredVerticalBottomToTop'],
+                                allCommands['autoLayoutLayeredHorizontal'],
+                                allCommands['autoLayoutLayeredHorizontalRightToLeft']
+                            ]
+                        }
+                    ]
+                }
+            ]);
     },
     getHistoryToolbarCommands: function(commands, excludeCommands) {
         const allCommands = this.getAllCommands();
-        const historyToolbarCommands = commands ? this._getCustomCommands(allCommands, commands) :
+        const historyToolbarCommands = commands ? this._getPreparedCommands(allCommands, commands) :
             this._getDefaultHistoryToolbarCommands(allCommands);
         return this._prepareToolbarCommands(historyToolbarCommands, excludeCommands);
     },
     _getDefaultHistoryToolbarCommands: function(allCommands) {
-        return [
-            allCommands['undo'],
-            allCommands['separator'],
-            allCommands['redo']
-        ];
+        return this._defaultHistoryToolbarCommands ||
+            (this._defaultHistoryToolbarCommands = [
+                allCommands['undo'],
+                allCommands['separator'],
+                allCommands['redo']
+            ]);
     },
     getViewToolbarCommands: function(commands, excludeCommands) {
         const allCommands = this.getAllCommands();
-        const viewToolbarCommands = commands ? this._getCustomCommands(allCommands, commands) :
+        const viewToolbarCommands = commands ? this._getPreparedCommands(allCommands, commands) :
             this._getDefaultViewToolbarCommands(allCommands);
         return this._prepareToolbarCommands(viewToolbarCommands, excludeCommands);
     },
     _getDefaultViewToolbarCommands: function(allCommands) {
-        return [
-            allCommands['zoomLevel'],
-            allCommands['separator'],
-            allCommands['fullScreen'],
-            allCommands['separator'],
-            {
-                widget: 'dxButton',
-                icon: 'export',
-                text: messageLocalization.format('dxDiagram-commandExport'),
-                hint: messageLocalization.format('dxDiagram-commandExport'),
-                items: [
-                    allCommands['exportSvg'],
-                    allCommands['exportPng'],
-                    allCommands['exportJpg']
-                ]
-            },
-            {
-                icon: 'preferences',
-                hint: messageLocalization.format('dxDiagram-uiProperties'),
-                text: messageLocalization.format('dxDiagram-uiProperties'),
-                items: [
-                    allCommands['units'],
-                    allCommands['separator'],
-                    allCommands['showGrid'],
-                    allCommands['snapToGrid'],
-                    allCommands['gridSize'],
-                    allCommands['separator'],
-                    allCommands['simpleView'],
-                    allCommands['showToolbox']
-                ]
-            }
-        ];
+        return this._defaultViewToolbarCommands ||
+            (this._defaultViewToolbarCommands = [
+                allCommands['zoomLevel'],
+                allCommands['separator'],
+                allCommands['fullScreen'],
+                allCommands['separator'],
+                {
+                    widget: 'dxButton',
+                    icon: 'export',
+                    text: messageLocalization.format('dxDiagram-uiExport'),
+                    hint: messageLocalization.format('dxDiagram-uiExport'),
+                    items: [
+                        allCommands['exportSvg'],
+                        allCommands['exportPng'],
+                        allCommands['exportJpg']
+                    ]
+                },
+                {
+                    icon: 'preferences',
+                    hint: messageLocalization.format('dxDiagram-uiProperties'),
+                    text: messageLocalization.format('dxDiagram-uiProperties'),
+                    items: [
+                        allCommands['units'],
+                        allCommands['separator'],
+                        allCommands['showGrid'],
+                        allCommands['snapToGrid'],
+                        allCommands['gridSize'],
+                        allCommands['separator'],
+                        allCommands['simpleView'],
+                        allCommands['showToolbox']
+                    ]
+                }
+            ]);
+    },
+    getPropertiesPanelToolbarCommands: function(commands, excludeCommands) {
+        const allCommands = this.getAllCommands();
+        const viewToolbarCommands = commands ? this._getPreparedCommands(allCommands, commands) :
+            this._getDefaultPropertiesPanelToolbarCommands(allCommands);
+        return this._prepareToolbarCommands(viewToolbarCommands, excludeCommands);
+    },
+    _getDefaultPropertiesPanelToolbarCommands: function(allCommands) {
+        return this._defaultPropertiesPanelToolbarCommands ||
+            (this._defaultPropertiesPanelToolbarCommands = [
+                allCommands['showPropertiesPanel']
+            ]);
     },
 
-    getDefaultPropertyPanelCommandGroups: function() {
-        return [
-            { commands: ['pageSize', 'pageOrientation', 'pageColor'] }
-        ];
+    _getDefaultPropertyPanelCommandGroups: function() {
+        return this._defaultPropertyPanelCommandGroups ||
+            (this._defaultPropertyPanelCommandGroups = [
+                {
+                    title: messageLocalization.format('dxDiagram-uiStyle'),
+                    groups: [
+                        {
+                            title: messageLocalization.format('dxDiagram-uiText'),
+                            commands: ['fontName', 'fontSize', 'bold', 'italic', 'underline', 'textAlignLeft', 'textAlignCenter', 'textAlignRight', 'fontColor']
+                        },
+                        {
+                            title: messageLocalization.format('dxDiagram-uiObject'),
+                            commands: ['lineWidth', 'lineStyle', 'lineColor', 'fillColor']
+                        },
+                        {
+                            title: messageLocalization.format('dxDiagram-uiConnector'),
+                            commands: ['connectorLineType', 'connectorLineStart', 'connectorLineEnd']
+                        }
+                    ]
+                },
+                {
+                    title: messageLocalization.format('dxDiagram-uiLayout'),
+                    groups: [
+                        {
+                            title: messageLocalization.format('dxDiagram-uiLayoutLayered'),
+                            commands: [ 'autoLayoutLayeredVertical', 'autoLayoutLayeredVerticalBottomToTop', 'autoLayoutLayeredHorizontal', 'autoLayoutLayeredHorizontalRightToLeft']
+                        },
+                        {
+                            title: messageLocalization.format('dxDiagram-uiLayoutTree'),
+                            commands: [ 'autoLayoutTreeVertical', 'autoLayoutTreeVerticalBottomToTop', 'autoLayoutTreeHorizontal', 'autoLayoutTreeHorizontalRightToLeft']
+                        }
+                    ]
+                },
+                {
+                    title: messageLocalization.format('dxDiagram-uiDiagram'),
+                    groups: [
+                        {
+                            title: messageLocalization.format('dxDiagram-uiPage'),
+                            commands: ['pageSize', 'pageOrientation', 'pageColor']
+                        }
+                    ]
+                }
+            ]);
     },
-    _getPropertyPanelCommandsByGroups: function(groups) {
+    _preparePropertyPanelGroups: function(groups) {
         const allCommands = this.getAllCommands();
         const result = [];
-        groups.forEach(function(g, gi) {
-            g.commands.forEach(function(cn, ci) {
-                result.push(extend({
-                    beginGroup: gi > 0 && ci === 0
-                }, allCommands[cn]));
+        groups.forEach(g => {
+            let commands = g.commands;
+            if(commands) {
+                commands = this._getPreparedCommands(allCommands, commands);
+                commands = this._prepareToolbarCommands(commands);
+            }
+
+            let subGroups;
+            if(g.groups) {
+                subGroups = [];
+                g.groups.forEach(sg => {
+                    let subCommands = sg.commands;
+                    if(subCommands) {
+                        subCommands = this._getPreparedCommands(allCommands, subCommands);
+                        subCommands = this._prepareToolbarCommands(subCommands);
+                    }
+                    subGroups.push({
+                        title: sg.title,
+                        commands: subCommands
+                    });
+                });
+            }
+            result.push({
+                title: g.title,
+                commands: commands,
+                groups: subGroups
             });
         });
         return result;
     },
-    getPropertyPanelCommands: function(commandGroups) {
-        commandGroups = commandGroups || this.getDefaultPropertyPanelCommandGroups();
-        return this._getPropertyPanelCommandsByGroups(commandGroups);
+    getPropertyPanelCommandGroups: function(commandGroups) {
+        commandGroups = commandGroups || this._getDefaultPropertyPanelCommandGroups();
+        return this._preparePropertyPanelGroups(commandGroups);
     },
 
     getContextMenuCommands: function(commands) {
         const allCommands = this.getAllCommands();
-        const contextMenuCommands = commands ? this._getCustomCommands(allCommands, commands) :
+        const contextMenuCommands = commands ? this._getPreparedCommands(allCommands, commands) :
             this._getDefaultContextMenuCommands(allCommands);
         return this._prepareContextMenuCommands(contextMenuCommands);
     },
     _getDefaultContextMenuCommands: function(allCommands) {
-        return [
-            allCommands['cut'],
-            allCommands['copy'],
-            allCommands['paste'],
-            allCommands['delete'],
-            allCommands['separator'],
-            allCommands['selectAll'],
-            allCommands['separator'],
-            allCommands['bringToFront'],
-            allCommands['sendToBack'],
-            allCommands['separator'],
-            allCommands['lock'],
-            allCommands['unlock'],
-            allCommands['separator'],
-            allCommands['insertShapeImage'],
-            allCommands['editShapeImage'],
-            allCommands['deleteShapeImage']
-        ];
+        return this._defaultContextMenuCommands ||
+            (this._defaultContextMenuCommands = [
+                allCommands['cut'],
+                allCommands['copy'],
+                allCommands['paste'],
+                allCommands['delete'],
+                allCommands['separator'],
+                allCommands['selectAll'],
+                allCommands['separator'],
+                allCommands['bringToFront'],
+                allCommands['sendToBack'],
+                allCommands['separator'],
+                allCommands['lock'],
+                allCommands['unlock'],
+                allCommands['separator'],
+                allCommands['insertShapeImage'],
+                allCommands['editShapeImage'],
+                allCommands['deleteShapeImage']
+            ]);
     },
 
-    _getCustomCommands(allCommands, customCommands) {
-        return customCommands.map(c => {
+    _getPreparedCommands(allCommands, commands) {
+        return commands.map(c => {
             if(allCommands[c]) {
                 return allCommands[c];
             } else if(c.text || c.icon) {
                 const command = {
+                    command: c.name,
                     text: c.text,
-                    icon: c.icon,
-                    onExecuted: c.onClick
+                    icon: c.icon
                 };
                 if(Array.isArray(c.items)) {
-                    command.items = this._getCustomCommands(allCommands, c.items);
+                    command.items = this._getPreparedCommands(allCommands, c.items);
                 }
                 return command;
             }
         }).filter(c => c);
     },
-
     _prepareContextMenuCommands(commands, excludeCommands) {
-        const result = [];
         let beginGroup = false;
-        commands.forEach(command => {
-            if(!this._isValidCommand(command, excludeCommands)) return;
+        return commands.map(c => {
+            if(!this._isValidCommand(c, excludeCommands)) return;
 
-            if(command === SEPARATOR) {
+            if(c === SEPARATOR) {
                 beginGroup = true;
             } else {
-                if(typeof command === 'object') {
-                    if(Array.isArray(command.items)) {
-                        command.items = this._prepareContextMenuCommands(command.items);
-                    }
-                    result.push(extend(command, {
-                        beginGroup: beginGroup
-                    }));
-                } else {
-                    result.push(command);
-                }
+                const command = this._cloneCommand(c, excludeCommands);
+                command.icon = command.menuIcon || command.icon;
+                command.beginGroup = beginGroup;
                 beginGroup = false;
+                return command;
             }
-        });
-        return result;
+        }).filter(c => c);
     },
     _prepareToolbarCommands(commands, excludeCommands) {
-        const result = [];
-        commands.forEach(command => {
-            if(!this._isValidCommand(command, excludeCommands)) return;
-
-            if(Array.isArray(command.items)) {
-                command.items = this._prepareContextMenuCommands(command.items, excludeCommands);
+        return commands.map(c => {
+            if(this._isValidCommand(c, excludeCommands)) {
+                return this._cloneCommand(c, excludeCommands);
             }
-            result.push(command);
-        });
-        return result;
+        }).filter(c => c);
+    },
+    _cloneCommand(c, excludeCommands) {
+        const command = extend({}, c);
+        if(Array.isArray(c.items)) {
+            command.items = this._prepareContextMenuCommands(c.items, excludeCommands);
+        }
+        return command;
     },
     _isValidCommand(c, excludeCommands) {
         excludeCommands = excludeCommands || [];

@@ -18,6 +18,7 @@ import fx from '../../animation/fx';
 import Scrollable from '../scroll_view/ui.scrollable';
 import LoadIndicator from '../load_indicator';
 import { fromPromise, Deferred, when } from '../../core/utils/deferred';
+import errors from '../widget/ui.errors';
 
 const WIDGET_CLASS = 'dx-treeview';
 
@@ -1133,7 +1134,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _isLastRequired: function(node) {
         const selectionRequired = this.option('selectionRequired');
         const isSingleMode = this._isSingleSelection();
-        const selectedNodesKeys = this.getSelectedNodesKeys();
+        const selectedNodesKeys = this.getSelectedNodeKeys();
 
         if(!selectionRequired) {
             return;
@@ -1149,9 +1150,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _updateItemSelection: function(value, itemElement, dxEvent) {
         const node = this._getNode(itemElement);
+        if(!node) {
+            return false;
+        }
 
-        if(!node || node.internalFields.selected === value) {
-            return;
+        if(node.internalFields.selected === value) {
+            return true;
         }
 
         if(!value && this._isLastRequired(node)) {
@@ -1161,10 +1165,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
                 checkbox && checkbox.option('value', true);
             }
-            return;
+            return false;
         }
 
-        const selectedNodesKeys = this.getSelectedNodesKeys();
+        const selectedNodesKeys = this.getSelectedNodeKeys();
         if(this._isSingleSelection() && value) {
             each(selectedNodesKeys, (index, nodeKey) => {
                 this.unselectItem(nodeKey);
@@ -1183,6 +1187,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
 
         this._fireSelectionChanged();
+        return true;
     },
 
     _getCheckBoxInstance: function($node) {
@@ -1510,11 +1515,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     selectItem: function(itemElement) {
-        this._updateItemSelection(true, itemElement);
+        return this._updateItemSelection(true, itemElement);
     },
 
     unselectItem: function(itemElement) {
-        this._updateItemSelection(false, itemElement);
+        return this._updateItemSelection(false, itemElement);
     },
 
     expandItem: function(itemElement) {
@@ -1535,7 +1540,20 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this._dataAdapter.getTreeNodes();
     },
 
+    getSelectedNodes: function() {
+        return this.getSelectedNodeKeys().map(key => {
+            const node = this._dataAdapter.getNodeByKey(key);
+            return this._dataAdapter.getPublicNode(node);
+        });
+    },
+
+    // Deprecated. Will bew removed in near future - use getSelectedNodeKeys method instead
     getSelectedNodesKeys: function() {
+        errors.log('W0002', 'dxTreeView', 'getSelectedNodesKeys', '20.1', 'Use the \'getSelectedNodeKeys\' method instead');
+        return this.getSelectedNodeKeys();
+    },
+
+    getSelectedNodeKeys: function() {
         return this._dataAdapter.getSelectedNodesKeys();
     },
 

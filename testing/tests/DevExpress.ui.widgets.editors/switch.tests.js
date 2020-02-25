@@ -362,7 +362,8 @@ QUnit.module('interaction', {
         const originalAnimation = fx.animate;
         const clock = sinon.useFakeTimers();
         try {
-            const element = this.element; const instance = element.dxSwitch('instance');
+            const element = this.element;
+            const instance = element.dxSwitch('instance');
 
             instance.option('value', false);
 
@@ -404,7 +405,8 @@ QUnit.module('interaction', {
 
         pointer.start().down().move(offset, 0);
 
-        const innerTransform = $innerWrapper.get(0).style.transform; const handleTransform = $handle.get(0).style.transform;
+        const innerTransform = $innerWrapper.get(0).style.transform;
+        const handleTransform = $handle.get(0).style.transform;
 
         assert.equal(innerTransform, 'translateX(-25%)', 'Inner position is right');
         assert.equal(handleTransform, 'translateX(-50%)', 'Handle position is right');
@@ -423,14 +425,16 @@ QUnit.module('interaction', {
 
         pointer.start().down().move(offset, 0).up();
 
-        const innerTransform = $innerWrapper.get(0).style.transform; const handleTransform = $handle.get(0).style.transform;
+        const innerTransform = $innerWrapper.get(0).style.transform;
+        const handleTransform = $handle.get(0).style.transform;
 
         assert.equal(innerTransform, 'translateX(0%)', 'Inner position is right');
         assert.equal(handleTransform, 'translateX(-100%)', 'Handle position is right');
     });
 
     QUnit.test('click on disabled switch has no effect', function(assert) {
-        const element = this.element; const instance = element.dxSwitch('instance');
+        const element = this.element;
+        const instance = element.dxSwitch('instance');
 
         instance.option('value', false);
         instance.option('disabled', true);

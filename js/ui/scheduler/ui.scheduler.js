@@ -41,7 +41,6 @@ import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
 import SchedulerAppointments from './ui.scheduler.appointments';
 import SchedulerLayoutManager from './ui.scheduler.appointments.layout_manager';
 import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
-import AsyncTemplateMixin from '../shared/async_template_mixin';
 import DataHelperMixin from '../../data_helper';
 import loading from './ui.loading';
 import deferredUtils from '../../core/utils/deferred';
@@ -1210,6 +1209,8 @@ const Scheduler = Widget.inherit({
 
         this._compactAppointmentsHelper = new CompactAppointmentsHelper(this);
 
+        this._asyncTemplatesTimers = [];
+
         this._subscribes = subscribes;
     },
 
@@ -1404,7 +1405,8 @@ const Scheduler = Widget.inherit({
         this.hideAppointmentPopup();
         this.hideAppointmentTooltip();
 
-        this._cleanAsyncTemplatesTimer();
+        this._asyncTemplatesTimers.forEach(clearTimeout);
+        this._asyncTemplatesTimers = [];
 
         this._dataSource && this._dataSource.off('customizeStoreLoadOptions', this._proxiedCustomizeStoreLoadOptionsHandler);
         this.callBase();
@@ -1524,9 +1526,7 @@ const Scheduler = Widget.inherit({
             fixedContainer: this._workSpace.getFixedContainer(),
             allDayContainer: this._workSpace.getAllDayContainer()
         });
-        this._waitAsyncTemplates(() => {
-            this._workSpaceRecalculation && this._workSpaceRecalculation.resolve();
-        });
+        this._waitAsyncTemplate(() => this._workSpaceRecalculation?.resolve());
         this._filterAppointmentsByDate();
     },
 
@@ -1684,7 +1684,7 @@ const Scheduler = Widget.inherit({
 
     _recalculateWorkspace: function() {
         this._workSpaceRecalculation = new Deferred();
-        this._waitAsyncTemplates(() => {
+        this._waitAsyncTemplate(() => {
             domUtils.triggerResizeEvent(this._workSpace.$element());
             this._workSpace._refreshDateTimeIndication();
         });
@@ -1740,6 +1740,18 @@ const Scheduler = Widget.inherit({
         return result;
     },
 
+    _waitAsyncTemplate: function(callback) {
+        if(this._options.silent('templatesRenderAsynchronously')) {
+            const timer = setTimeout(() => {
+                callback();
+                clearTimeout(timer);
+            });
+            this._asyncTemplatesTimers.push(timer);
+        } else {
+            callback();
+        }
+    },
+
     _getCurrentViewOptions: function() {
         return this._currentView;
     },
@@ -1784,9 +1796,7 @@ const Scheduler = Widget.inherit({
                 fixedContainer: this._workSpace.getFixedContainer(),
                 allDayContainer: this._workSpace.getAllDayContainer()
             });
-            this._waitAsyncTemplates(() => {
-                this._workSpaceRecalculation.resolve();
-            });
+            this._waitAsyncTemplate(this._workSpaceRecalculation.resolve);
         }
     },
 
@@ -2525,7 +2535,7 @@ const Scheduler = Widget.inherit({
         * @hidden
         */
 
-}).include(AsyncTemplateMixin, DataHelperMixin);
+}).include(DataHelperMixin);
 
 registerComponent('dxScheduler', Scheduler);
 

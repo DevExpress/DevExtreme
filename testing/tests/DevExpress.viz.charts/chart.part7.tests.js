@@ -978,12 +978,11 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             panes: [{ name: 'topPane' },
                 { name: 'bottomPane' }]
         });
-        let idError;
 
         assert.ok(chart._incidentOccurred.calledOnce);
         assert.deepEqual(chart._incidentOccurred.firstCall.args, ['W2101', ['nonExistingPane']]);
 
-        idError = chart._incidentOccurred.firstCall.args[0];
+        const idError = chart._incidentOccurred.firstCall.args[0];
         assert.equal(dxErrors[idError], 'The "{0}" pane does not exist; the last pane is used by default');
     });
 
@@ -998,12 +997,12 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             series: {
                 type: 100,
             }
-        }); let idError;
+        });
 
         // assert
         assert.ok(chart._incidentOccurred.calledOnce);
 
-        idError = chart._incidentOccurred.firstCall.args[0];
+        const idError = chart._incidentOccurred.firstCall.args[0];
 
         assert.equal(chart._incidentOccurred.firstCall.args[1][0], '100');
 
@@ -1022,12 +1021,12 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             series: {
                 type: new Date(2011, 1, 1)
             }
-        }); let idError;
+        });
 
         // assert
         assert.ok(chart._incidentOccurred.calledOnce);
 
-        idError = chart._incidentOccurred.firstCall.args[0];
+        const idError = chart._incidentOccurred.firstCall.args[0];
 
         assert.deepEqual(chart._incidentOccurred.firstCall.args[1][0].valueOf(), new Date(2011, 1, 1).valueOf());
 
@@ -1047,11 +1046,11 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             series: {
                 type: 'unknown',
             }
-        }, this.$container); let idError;
+        }, this.$container);
         // assert
         assert.ok(chart._incidentOccurred.calledOnce);
 
-        idError = chart._incidentOccurred.firstCall.args[0];
+        const idError = chart._incidentOccurred.firstCall.args[0];
 
         assert.equal(chart._incidentOccurred.firstCall.args[1][0], 'unknown');
 
@@ -1065,10 +1064,9 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
                 { name: 'axisName' }
             ]
         }, this.$container);
-        let idError;
 
         assert.ok(chart._incidentOccurred.calledOnce);
-        idError = chart._incidentOccurred.firstCall.args[0];
+        const idError = chart._incidentOccurred.firstCall.args[0];
         assert.equal(idError, 'E2102');
         assert.equal(dxErrors[idError], 'Ambiguity occurred between two value axes with the same name');
     });
@@ -1099,10 +1097,9 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
                 { name: 'default' }
             ]
         });
-        let idError;
 
         assert.ok(chart._incidentOccurred.calledOnce);
-        idError = chart._incidentOccurred.firstCall.args[0];
+        const idError = chart._incidentOccurred.firstCall.args[0];
         assert.equal(idError, 'E2102');
     });
 
@@ -1116,11 +1113,10 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
                 type: 'line'
             }]
         }, this.$container);
-        let idError;
         // assert
         assert.ok(chart._incidentOccurred.calledOnce);
 
-        idError = chart._incidentOccurred.firstCall.args[0];
+        const idError = chart._incidentOccurred.firstCall.args[0];
 
         assert.equal(chart._incidentOccurred.firstCall.args[1][0], 'axis');
 
@@ -1320,6 +1316,10 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
                         series: series,
                         getLabels: sinon.stub().returns([label]),
                         argument: seriesOptions && seriesOptions.argument || label.getBoundingRect().x,
+                        getMinValue() {},
+                        getOptions() {
+                            return {};
+                        }
                     };
                 });
             };
@@ -1886,6 +1886,8 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
                     getLabels: sinon.stub().returns([labels[0], labels[1]]),
                     argument: labels[0].getBoundingRect().x,
                     originalMinValue: labels[0].getBoundingRect().value,
+                    getMinValue() {},
+                    getOptions() { return {}; }
                 };
             });
             seriesMockData.series.push(series);

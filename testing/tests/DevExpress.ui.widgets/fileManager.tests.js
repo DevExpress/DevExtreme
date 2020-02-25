@@ -10,6 +10,7 @@ QUnit.testStart(() => {
 import './fileManagerParts/markup.tests.js';
 import './fileManagerParts/contextMenu.tests.js';
 import './fileManagerParts/detailsView.tests.js';
+import './fileManagerParts/thumbnailsView.tests.js';
 import './fileManagerParts/toolbar.tests.js';
 import './fileManagerParts/navigation.tests.js';
 import './fileManagerParts/editing.tests.js';

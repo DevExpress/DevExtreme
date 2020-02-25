@@ -155,7 +155,8 @@ QUnit.module('Rendering input', moduleConfig, () => {
             type: 'time'
         });
 
-        const inputValue = this.instance._input().val(); const normalizedInputValue = support.inputType(this.instance.option('mode')) ? uiDateUtils.fromStandardDateFormat(inputValue) : dateLocalization.parse(inputValue, uiDateUtils.FORMATS_MAP.time);
+        const inputValue = this.instance._input().val();
+        const normalizedInputValue = support.inputType(this.instance.option('mode')) ? uiDateUtils.fromStandardDateFormat(inputValue) : dateLocalization.parse(inputValue, uiDateUtils.FORMATS_MAP.time);
 
         assert.equal(normalizedInputValue.getHours(), date.getHours());
         assert.equal(normalizedInputValue.getMinutes(), date.getMinutes());

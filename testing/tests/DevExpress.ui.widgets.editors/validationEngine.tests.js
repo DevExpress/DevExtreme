@@ -1687,7 +1687,8 @@ QUnit.module('Groups', {
     }
 }, () => {
     QUnit.test('Simple group - can register validator in group', function(assert) {
-        const group = 'newGroup'; const validator = sinon.createStubInstance(Validator);
+        const group = 'newGroup';
+        const validator = sinon.createStubInstance(Validator);
 
         // act
         ValidationEngine.registerValidatorInGroup(group, validator);
@@ -1700,7 +1701,8 @@ QUnit.module('Groups', {
     });
 
     QUnit.test('Simple group - validator should not be duplicated in group', function(assert) {
-        const group = 'newGroup'; const validator = sinon.createStubInstance(Validator);
+        const group = 'newGroup';
+        const validator = sinon.createStubInstance(Validator);
 
         // act
         ValidationEngine.registerValidatorInGroup(group, validator);
@@ -1741,7 +1743,8 @@ QUnit.module('Groups', {
 
 
     QUnit.test('Simple group - call validateGroup method', function(assert) {
-        const group = 'newGroup'; const validator = sinon.createStubInstance(Validator);
+        const group = 'newGroup';
+        const validator = sinon.createStubInstance(Validator);
 
         validator.on = sinon.stub();
         validator.off = sinon.stub();
@@ -1790,7 +1793,10 @@ QUnit.module('Groups', {
     });
 
     QUnit.test('Event Validated should be triggered', function(assert) {
-        const group = {}; const validator = sinon.createStubInstance(Validator); const rule = { type: 'required', isValid: false }; const handler = sinon.spy();
+        const group = {};
+        const validator = sinon.createStubInstance(Validator);
+        const rule = { type: 'required', isValid: false };
+        const handler = sinon.spy();
         validator.on = sinon.stub();
         validator.off = sinon.stub();
         validator.validate.returns({ isValid: false, brokenRule: rule, brokenRules: [rule] });
@@ -1836,7 +1842,8 @@ QUnit.module('Groups', {
     });
 
     QUnit.test('Remove registered group', function(assert) {
-        const group = 'group1'; const validator = sinon.createStubInstance(Validator);
+        const group = 'group1';
+        const validator = sinon.createStubInstance(Validator);
         ValidationEngine.registerValidatorInGroup(group, validator);
 
         // act

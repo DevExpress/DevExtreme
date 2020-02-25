@@ -2,7 +2,8 @@ import $ from 'jquery';
 import NavBar from 'ui/nav_bar';
 
 QUnit.module('badge builtin', () => {
-    const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge'; const NAVBAR_ITEM_BADGE_CLASS = 'dx-navbar-item-badge';
+    const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge';
+    const NAVBAR_ITEM_BADGE_CLASS = 'dx-navbar-item-badge';
 
     QUnit.test('badge should be rendered correctly with value = 22', function(assert) {
         const widget = new NavBar($('<div>'), {

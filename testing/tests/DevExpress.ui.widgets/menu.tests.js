@@ -230,7 +230,9 @@ QUnit.module('Menu rendering', {
     });
 
     QUnit.test('Do not render menu with empty items', function(assert) {
-        const menu = createMenu({ items: [] }); const submenus = $(menu.element).find('.' + DX_SUBMENU_CLASS); const root = $(menu.element).find('.' + DX_MENU_HORIZONTAL);
+        const menu = createMenu({ items: [] });
+        const submenus = $(menu.element).find('.' + DX_SUBMENU_CLASS);
+        const root = $(menu.element).find('.' + DX_MENU_HORIZONTAL);
 
         assert.ok(menu);
         assert.equal(submenus.length, 0, 'no levels');
@@ -238,7 +240,9 @@ QUnit.module('Menu rendering', {
     });
 
     QUnit.test('Do not render submenu with empty items', function(assert) {
-        const menu = createMenu({ items: [{ text: 'item1' }, { text: 'item2', items: [] }] }); const submenus = $(menu.element).find('.' + DX_SUBMENU_CLASS); const root = $(menu.element).find('.' + DX_MENU_HORIZONTAL);
+        const menu = createMenu({ items: [{ text: 'item1' }, { text: 'item2', items: [] }] });
+        const submenus = $(menu.element).find('.' + DX_SUBMENU_CLASS);
+        const root = $(menu.element).find('.' + DX_MENU_HORIZONTAL);
 
         assert.ok(menu);
         assert.equal(submenus.length, 0, 'no levels');
@@ -246,7 +250,8 @@ QUnit.module('Menu rendering', {
     });
 
     QUnit.test('Don\'t create submenu on rendering', function(assert) {
-        const menu = createMenu({ items: [{ text: 'item1', items: [{}] }] }); const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const menu = createMenu({ items: [{ text: 'item1', items: [{}] }] });
+        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         assert.equal($rootMenuItem.children('.' + DX_CONTEXT_MENU_CLASS).length, 0);
     });
@@ -437,7 +442,8 @@ QUnit.module('Menu - selection', {
         $($rootItem).trigger('dxpointermove');
         this.clock.tick(0);
 
-        const submenu = getSubMenuInstance($rootItem); const $submenuItem = $($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0));
+        const submenu = getSubMenuInstance($rootItem);
+        const $submenuItem = $($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0));
 
         $($submenuItem).trigger('dxclick');
         assert.ok(true, 'menu does not crash');
@@ -526,7 +532,8 @@ QUnit.module('Menu - selection', {
         const $item1 = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $($item1).trigger('dxclick');
-        const submenu = getSubMenuInstance($item1); const $nestedItem = $($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_SELECTED_CLASS));
+        const submenu = getSubMenuInstance($item1);
+        const $nestedItem = $($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_SELECTED_CLASS));
 
         submenu.unselectItem($nestedItem.get(0));
 
@@ -806,7 +813,8 @@ QUnit.module('Menu tests', {
         assert.equal(handlerHiding.callCount, 0);
         assert.equal(handlerHidden.callCount, 0);
 
-        const submenu = getSubMenuInstance($rootItem); const $submenuItems = submenu.itemElements();
+        const submenu = getSubMenuInstance($rootItem);
+        const $submenuItems = submenu.itemElements();
 
         // show second level first time
         $($submenuItems.eq(0)).trigger('dxclick');
@@ -1165,7 +1173,9 @@ QUnit.module('Menu tests', {
 
         $($rootMenuItem).trigger('dxclick');
 
-        const submenu = getSubMenuInstance($rootMenuItem); const $itemsContainer = submenu.itemsContainer(); const $rootItem = submenu.itemElements().eq(0);
+        const submenu = getSubMenuInstance($rootMenuItem);
+        const $itemsContainer = submenu.itemsContainer();
+        const $rootItem = submenu.itemElements().eq(0);
 
         $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
 
@@ -1356,7 +1366,8 @@ QUnit.module('Menu tests', {
         hoverMenuItem($rootMenuItems.eq(0));
         this.clock.tick(50);
 
-        const submenu = getSubMenuInstance($rootMenuItems.eq(0)); const $submenuItem = submenu.itemElements().eq(0);
+        const submenu = getSubMenuInstance($rootMenuItems.eq(0));
+        const $submenuItem = submenu.itemElements().eq(0);
 
         hoverMenuItem($rootMenuItems.eq(1));
         this.clock.tick(25);
@@ -1950,10 +1961,13 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100); const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(700); const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
+        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100);
+        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(700);
+        const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
 
         try {
-            const overlay = this.$element.find('.dx-overlay').dxOverlay('instance'); const maxHeight = overlay.option('maxHeight');
+            const overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
+            const maxHeight = overlay.option('maxHeight');
 
             assert.ok(Math.floor(maxHeight()) < windowHeight(), 'maxHeight is correct');
             assert.ok(overlay._wrapper().hasClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS), 'special class for overlay wrapper');

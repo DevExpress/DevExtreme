@@ -22,7 +22,7 @@ const ChartTrackerSub = vizMocks.stubClass(trackerModule.ChartTracker);
 const dxChart = require('viz/chart');
 const chartMocks = require('../../helpers/chartMocks.js');
 const MockSeries = chartMocks.MockSeries;
-const MockPoint = chartMocks.MockSeries;
+const MockPoint = chartMocks.MockPoint;
 const insertMockFactory = chartMocks.insertMockFactory;
 const resetMockFactory = chartMocks.resetMockFactory;
 const restoreMockFactory = chartMocks.restoreMockFactory;
@@ -641,12 +641,11 @@ const environment = {
                 enabled: true
             }
         });
-        let paneClipRect;
         const stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
         chartMocks.seriesMockData.series.push(stubSeries);
-        paneClipRect = chart._panesClipRects.base[0];
+        const paneClipRect = chart._panesClipRects.base[0];
         resetMocksInChart(chart);
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
         $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
@@ -796,12 +795,11 @@ const environment = {
                 subtitle: {}
             }
         });
-        let paneClipRect;
         const stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
         chartMocks.seriesMockData.series.push(stubSeries);
-        paneClipRect = chart._panesClipRects.base[0];
+        const paneClipRect = chart._panesClipRects.base[0];
         resetMocksInChart(chart);
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
         $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
@@ -1190,7 +1188,7 @@ const environment = {
         assert.ok(chart._crosshairCursorGroup.clear.called, 'crosshair should be cleared');
     });
 
-    QUnit.test('dxChart with single series request default type', function(assert) {
+    QUnit.test('dxChart with single series request default type. Remote dataSource', function(assert) {
         // arrange
         const loadingDeferred = $.Deferred();
         const store = new CustomStore({
@@ -1358,7 +1356,7 @@ const environment = {
     QUnit.test('Series animation with default - more than Limit', function(assert) {
         // arrange
         const stubSeries = new MockSeries({
-            points: getPoints(DEFAULT_ANIMATION_LIMIT + 500)
+            points: getPoints(DEFAULT_ANIMATION_LIMIT + 500, { visible: true })
         });
         chartMocks.seriesMockData.series.push(stubSeries);
         // act
@@ -1368,6 +1366,24 @@ const environment = {
         });
         // assert
         assert.ok(!chart.series[0].wasAnimated, 'Series should not be animated as point animation limit is exceeded');
+    });
+
+    QUnit.test('Series animation with default - more than Limit. Visual range is set', function(assert) {
+        // arrange
+        const stubSeries = new MockSeries({
+            points: getPoints(DEFAULT_ANIMATION_LIMIT + 10, { visible: true })
+        });
+        chartMocks.seriesMockData.series.push(stubSeries);
+        // act
+        const chart = this.createChart({
+            dataSource: [{ arg: 1, val: 1 }],
+            series: { type: 'line' },
+            argumentAxis: {
+                visualRange: { startValue: 10, endValue: 15 }
+            }
+        });
+        // assert
+        assert.ok(chart.series[0].wasAnimated, 'Series should be animated because count of visible points less animation limit');
     });
 
     QUnit.test('Series animation - less than overridden limit', function(assert) {
@@ -1392,10 +1408,10 @@ const environment = {
     QUnit.test('One series is animated while second one is not', function(assert) {
         // arrange
         const stubSeries1 = new MockSeries({
-            points: getPoints(DEFAULT_ANIMATION_LIMIT - 500)
+            points: getPoints(DEFAULT_ANIMATION_LIMIT - 500, { visible: true })
         });
         const stubSeries2 = new MockSeries({
-            points: getPoints(DEFAULT_ANIMATION_LIMIT + 500)
+            points: getPoints(DEFAULT_ANIMATION_LIMIT + 500, { visible: true })
         });
         chartMocks.seriesMockData.series.push(stubSeries1);
         chartMocks.seriesMockData.series.push(stubSeries2);
@@ -1433,9 +1449,8 @@ const environment = {
                 subtitle: {}
             }
         });
-        let loadIndicator;
         chart.showLoadingIndicator();
-        loadIndicator = chart._loadingIndicator;
+        const loadIndicator = chart._loadingIndicator;
 
         const countDisposedObjects = function(propName, fields) {
             chart[propName + 'Disposed'] = chart[propName + 'Disposed'] || 0;
@@ -1595,11 +1610,11 @@ const environment = {
     });
 }());
 
-const getPoints = function(count) {
+const getPoints = function(count, options) {
     let i;
     const points = [];
     for(i = 0; i < count; i++) {
-        points.push(new MockPoint({}));
+        points.push(new MockPoint(options || {}));
     }
 
     return points;

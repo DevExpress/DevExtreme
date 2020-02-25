@@ -64,9 +64,12 @@ class TreeViewTestWrapper {
         });
     }
 
-    checkSelectedItems(selectedIndexes, items) {
+    checkSelectedItemsWithTreeStructure(selectedIndexes, items) {
         const itemsArray = this.convertTreeToFlatList(items);
+        this.checkSelectedItemsWithPlainStructure(selectedIndexes, itemsArray);
+    }
 
+    checkSelectedItemsWithPlainStructure(selectedIndexes, itemsArray) {
         itemsArray.forEach((_, index) => {
             if(selectedIndexes.indexOf(index) === -1) {
                 assert.equal(!!itemsArray[index].selected, false, `item ${index} is not selected`);
@@ -76,14 +79,30 @@ class TreeViewTestWrapper {
         });
     }
 
+    checkSelection(expectedKeys, expectedNodes, additionalErrorMessage) {
+        const items = this.instance._dataAdapter.getData().map(node => node.internalFields.publicNode);
+        const keysArray = items.map(item => item.key);
+        const selectedIndexes = expectedKeys.map(key => keysArray.indexOf(key));
+        this.checkSelectedItemsWithPlainStructure(selectedIndexes, items);
+
+        this.checkSelectedKeys(expectedKeys, additionalErrorMessage);
+        this.checkSelectedNodes(expectedNodes, additionalErrorMessage);
+    }
+
     checkSelected(expectedSelectedIndexes, items) {
-        this.checkSelectedItems(expectedSelectedIndexes, items);
+        this.checkSelectedItemsWithTreeStructure(expectedSelectedIndexes, items);
         this.checkSelectedNodes(expectedSelectedIndexes);
     }
 
     checkSelectedKeys(expectedSelectedKeys, additionalErrorMessage) {
-        const actualSelectedKeys = this.instance.getSelectedNodesKeys();
-        assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method ' + additionalErrorMessage);
+        const actualKeys = this.instance.getSelectedNodeKeys();
+        assert.deepEqual(actualKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodeKeys method ' + additionalErrorMessage);
+
+        const keysByAdapter = this.instance._dataAdapter.getSelectedNodesKeys();
+        assert.deepEqual(keysByAdapter.sort(), expectedSelectedKeys.sort(), 'selectedKeys from dataAdapter' + additionalErrorMessage);
+
+        const selectedKeysByNodes = this.instance.getSelectedNodes().map(node => { return node.key; });
+        assert.deepEqual(selectedKeysByNodes.sort(), expectedSelectedKeys.sort(), 'getSelectedNodes method ' + additionalErrorMessage);
     }
 
     checkEventLog(expectedEventLog, additionalErrorMessage) {
