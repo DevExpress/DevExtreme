@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
-import { getWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 
 import Widget from '../widget/ui.widget';
 import Popup from '../popup';
@@ -131,6 +131,9 @@ export default class FileManagerNotificationControl extends Widget {
     }
 
     _isSmallScreen() {
+        if(!hasWindow()) {
+            return false;
+        }
         return $(window).width() <= ADAPTIVE_STATE_SCREEN_WIDTH;
     }
 
