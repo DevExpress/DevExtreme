@@ -89,9 +89,9 @@ class Gantt extends Widget {
             container: this.$element(),
             leftElement: this._$treeListWrapper,
             rightElement: this._$ganttView,
-            onApplyPanelSize: this._onApplyPanelSize.bind(this),
-            initialLeftPanelWidth: this.option('taskListWidth')
+            onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
+        this._splitter.option('initialLeftPanelWidth', this.option('taskListWidth'));
     }
     _renderBars() {
         this._contextMenuBar = new GanttContextMenuBar(this._$contextMenu, this);
