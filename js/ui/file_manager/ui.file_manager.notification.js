@@ -1,6 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
+import { Deferred } from '../../core/utils/deferred';
 import { getWindow, hasWindow } from '../../core/utils/window';
 
 import Widget from '../widget/ui.widget';
@@ -8,7 +9,6 @@ import Popup from '../popup';
 import Drawer from '../drawer/ui.drawer';
 
 import FileManagerProgressPanel from './ui.file_manager.notification.progress_panel';
-import { Deferred } from '../../core/utils/deferred';
 
 const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 1000;
@@ -47,9 +47,9 @@ export default class FileManagerNotificationControl extends Widget {
         const drawerOptions = extend({
             opened: false,
             position: 'right',
-            template: (container) => this._getProgressPanel(container)
+            template: (container) => this._ensureProgressPanelCreated(container)
         },
-        this._getProgressPanelDrawerAdaptiveOptions());
+        this._getProgressDrawerAdaptiveOptions());
 
         this._progressDrawer = this._createComponent($progressDrawer, Drawer, drawerOptions);
     }
@@ -61,11 +61,11 @@ export default class FileManagerNotificationControl extends Widget {
         }
 
         setTimeout(() => {
-            this._progressDrawer.show().then(() => promise.resolve());
+            this._progressDrawer.show().done(promise.resolve);
             this._getNotificationPopup().hide();
             this._tryHideActionProgress();
         });
-        return promise;
+        return promise.promise();
     }
 
     addOperation(processingMessage, allowCancel, allowProgressAutoUpdate) {
@@ -147,34 +147,40 @@ export default class FileManagerNotificationControl extends Widget {
         const oldState = this._isInAdaptiveState;
         this._isInAdaptiveState = this._isSmallScreen();
         if(this._progressDrawer && oldState !== this._isInAdaptiveState) {
-            this._getProgressPanel(this.$element());
-            const options = this._getProgressPanelDrawerAdaptiveOptions();
+            this._progressPanel && this._progressPanel.$element().detach();
+            const options = this._getProgressDrawerAdaptiveOptions();
             this._progressDrawer.option(options);
         }
     }
 
-    _getProgressPanelDrawerAdaptiveOptions() {
-        return {
-            openedStateMode: this._isInAdaptiveState ? 'overlap' : 'shrink',
-            shading: this._isInAdaptiveState ? true : false,
-            closeOnOutsideClick: this._isInAdaptiveState ? true : false
-        };
+    _getProgressDrawerAdaptiveOptions() {
+        if(this._isInAdaptiveState) {
+            return {
+                openedStateMode: 'overlap',
+                shading: true,
+                closeOnOutsideClick: true
+            };
+        } else {
+            return {
+                openedStateMode: 'shrink',
+                shading: false,
+                closeOnOutsideClick: false
+            };
+        }
     }
 
-    _getProgressPanel(container) {
+    _ensureProgressPanelCreated(container) {
         if(!this._progressPanel) {
-            this._progressPanel = this._createComponent($('<div>'), this._getProgressPanelComponent(), {
+            const $progressPanelElement = $('<div>').appendTo(container);
+            this._progressPanel = this._createComponent($progressPanelElement, this._getProgressPanelComponent(), {
                 onOperationClosed: ({ info }) => this._onProgressPanelOperationClosed(info),
                 onOperationCanceled: ({ info }) => this._raiseOperationCanceled(info),
                 onOperationItemCanceled: ({ item, itemIndex }) => this._raiseOperationItemCanceled(item, itemIndex),
                 onPanelClosed: () => this._hideProgressPanel()
             });
-        }
-        if(container) {
+        } else {
             this._progressPanel.$element().appendTo(container);
         }
-
-        return this._progressPanel;
     }
 
     _getProgressPanelComponent() {

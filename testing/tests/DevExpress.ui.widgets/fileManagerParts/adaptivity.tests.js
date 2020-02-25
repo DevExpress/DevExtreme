@@ -3,7 +3,7 @@ import renderer from 'core/renderer';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'ui/file_manager';
 import fx from 'animation/fx';
-import { FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, createTestFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
 
 const { test } = QUnit;
 
@@ -50,7 +50,6 @@ const moduleConfig = {
             });
 
         this.wrapper = new FileManagerWrapper(this.$element);
-        this.progressPanelWrapper = new FileManagerProgressPanelWrapper(this.$element);
 
         this.clock.tick(400);
     },
@@ -132,12 +131,12 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         $('#fileManager').css('width', '100%');
         this.wrapper.getInstance().repaint();
 
-        assert.ok(this.progressPanelWrapper.getDrawer().hasClass(Consts.DRAWER_MODE_SHRINK));
+        assert.ok(this.wrapper.getDrawer().hasClass(Consts.DRAWER_MODE_SHRINK));
 
         renderer.fn.width = () => 999;
         this.wrapper.getInstance().repaint();
 
-        assert.ok(this.progressPanelWrapper.getDrawer().hasClass(Consts.DRAWER_MODE_OVERLAP));
+        assert.ok(this.wrapper.getDrawer().hasClass(Consts.DRAWER_MODE_OVERLAP));
 
         renderer.fn.width = originalWidth;
     });

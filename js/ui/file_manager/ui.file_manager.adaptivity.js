@@ -51,8 +51,7 @@ class FileManagerAdaptivityControl extends Widget {
             rightElement: $(this._drawer.viewContent()),
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
-        this._splitter.toggleActiveState(!this._isInAdaptiveState);
-        this._splitter.toggleVisibleState(!this._isInAdaptiveState);
+        this._splitter.toggleVisibleAndActiveState(!this._isInAdaptiveState);
     }
 
     _onApplyPanelSize(e) {
@@ -88,8 +87,7 @@ class FileManagerAdaptivityControl extends Widget {
             $(this._drawer.content()).toggleClass(DRAWER_PANEL_CONTENT_ADAPTIVE_STATE, this._isInAdaptiveState);
             this.toggleDrawer(!this._isInAdaptiveState, true);
             if(this._splitter) {
-                this._splitter.toggleActiveState(!this._isInAdaptiveState);
-                this._splitter.toggleVisibleState(!this._isInAdaptiveState);
+                this._splitter.toggleVisibleAndActiveState(!this._isInAdaptiveState);
             }
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
         }

@@ -135,6 +135,11 @@ export default class SplitterControl extends Widget {
         return this._$splitterBorder.get(0).clientWidth;
     }
 
+    toggleVisibleAndActiveState(isEnabled) {
+        this.toggleActiveState(isEnabled);
+        this.toggleVisibleState(isEnabled);
+    }
+
     toggleActiveState(isActive) {
         this.$element().toggleClass(STATE_DISABLED_CLASS, !isActive);
         this._$splitter.toggleClass(STATE_DISABLED_CLASS, !isActive);
