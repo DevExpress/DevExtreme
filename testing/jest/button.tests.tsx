@@ -1,5 +1,6 @@
 import Button from '../../js/renovation/button.p.js';
 import Widget from '../../js/renovation/widget.p.js';
+import Icon from '../../js/renovation/icon.p.js';
 import { h } from 'preact';
 import { clear as clearEventHandlers, defaultEvent, emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
 import { mount } from 'enzyme';
@@ -259,6 +260,17 @@ describe('Button', () => {
                 expect(buttonContent.props().model.text).toBe('New value');
                 expect(buttonContent.text()).toBe('New value123');
             });
+
+            it('should get original icon prop', () => {
+                const button = render({
+                    text: 'My button',
+                    icon: 'testicon',
+                    contentRender: ({ icon }) => <div>{icon}</div>,
+                });
+                const buttonContentChildren = button.find('.dx-button-content').children();
+
+                expect(buttonContentChildren.props().icon).toBe('testicon');
+            });
         });
 
         describe('icon', () => {
@@ -266,14 +278,15 @@ describe('Button', () => {
                 const button = render();
 
                 expect(button.is('.dx-button-has-icon')).toBe(false);
-                expect(button.exists('.dx-icon')).toBe(false);
+                expect(button.exists(Icon)).toBe(false);
             });
 
             it('should render icon', () => {
                 const button = render({ icon: 'test' });
 
                 expect(button.is('.dx-button-has-icon')).toBe(true);
-                expect(button.exists('.dx-icon.dx-icon-test')).toBe(true);
+                const { source } = button.find(Icon).props();
+                expect(source).toEqual('test');
             });
         });
 
@@ -281,27 +294,28 @@ describe('Button', () => {
             it('should render icon before text if iconPosition is left (by default)', () => {
                 const button = render({
                     text: 'myButton',
-                    icon: 'test',
+                    icon: 'test'
                 });
 
                 const elements = button.find('.dx-button-content').children();
 
-                expect(elements.at(0).is('.dx-icon.dx-icon-test')).toBe(true);
+                expect(elements.at(0).is(Icon)).toBe(true);
                 expect(elements.at(1).is('.dx-button-text')).toBe(true);
+                expect(elements.at(0).props().position).toEqual('left');
             });
 
             it('should render icon after text if iconPosition is right', () => {
                 const button = render({
                     text: 'myButton',
                     icon: 'test',
-                    iconPosition: 'right',
+                    iconPosition: 'right'
                 });
 
                 const elements = button.find('.dx-button-content').children();
 
-                expect(button.hasClass('dx-button-icon-right')).toBe(true);
                 expect(elements.at(0).is('.dx-button-text')).toBe(true);
-                expect(elements.at(1).is('.dx-icon.dx-icon-test.dx-icon-right')).toBe(true);
+                expect(elements.at(1).is('Icon')).toBe(true);
+                expect(elements.at(1).props().position).toEqual('right');
             });
         });
 
