@@ -3195,6 +3195,49 @@ QUnit.test('Remove the inserted row with edit mode batch and hidden column', fun
     assert.ok(!testElement.find('tbody > tr').first().hasClass('dx-row-inserted'), 'not has row inserted');
 });
 
+[true, false].forEach((needAddRow) => {
+    [true, false].forEach((changePageViaDataSource) => {
+        let testName = 'cell should not be edited after ' + (needAddRow ? 'row adding' : 'editing');
+        testName += ' and page change ' + (changePageViaDataSource ? 'via dataSource' : '');
+
+        // T861092
+        QUnit.test(testName + ' (cell edit mode)', function(assert) {
+            // arrange
+            const that = this;
+
+            that.options.editing = {
+                mode: 'cell',
+                allowAdding: true
+            };
+
+            that.dataController.pageSize(3);
+
+            // act
+            if(needAddRow) {
+                that.addRow();
+            }
+
+            that.editCell(0, 0);
+
+            // assert
+            assert.ok(that.editingController.isEditing(), 'editing started');
+
+            // act
+            if(changePageViaDataSource) {
+                const dataSource = that.getDataSource();
+
+                dataSource.pageIndex(1);
+                dataSource.load();
+            } else {
+                that.pageIndex(1);
+            }
+
+            // assert
+            assert.notOk(that.editingController.isEditing(), 'is not editing');
+        });
+    });
+});
+
 QUnit.test('AddRow method should return Deferred', function(assert) {
     // arrange
     this.options.editing = {
