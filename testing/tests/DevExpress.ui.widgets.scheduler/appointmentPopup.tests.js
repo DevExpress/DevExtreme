@@ -793,7 +793,7 @@ QUnit.test('allDay changing should switch only type in editors, if startDate is 
     this.instance.showAppointmentPopup({
         text: 'test appointment',
         allDay: true
-    }, true, true);
+    }, true, null);
 
     const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
     const $allDayEditor = $popupContent.find('.dx-switch').eq(0);
