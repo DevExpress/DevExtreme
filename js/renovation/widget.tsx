@@ -247,7 +247,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
         const namespace = name;
 
         dxClick.on(this.widgetRef,
-            e => this.props.onClick!({ ...clickArgs, event: e }),
+            e => this.props.onClick!({ ...clickArgs, ...e }),
             { namespace },
         );
 

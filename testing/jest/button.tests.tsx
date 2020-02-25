@@ -141,6 +141,14 @@ describe('Button', () => {
                 emitKeyboard(KEY.space);
                 expect(clickHandler).toHaveBeenCalledTimes(1);
             });
+            
+            it('should be called by key press with passed event', () => {
+                const clickHandler = jest.fn();
+
+                render({ onClick: clickHandler });
+                emitKeyboard(KEY.enter);
+                expect(clickHandler).toHaveBeenCalledWith({ event: defaultEvent });
+            });
         });
 
         describe('stylingMode', () => {

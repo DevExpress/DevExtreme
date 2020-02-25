@@ -169,7 +169,7 @@ export default class Button extends JSXComponent<ButtonInput> {
 
         useSubmitBehavior && this.submitInputRef.click();
 
-        return onClick?.(e);
+        return onClick?.({ event: e });
     }
 
     onWidgetKeyPress(e: Event, { keyName, which }) {
