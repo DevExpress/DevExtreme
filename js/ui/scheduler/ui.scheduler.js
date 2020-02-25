@@ -1561,6 +1561,7 @@ const Scheduler = Widget.inherit({
         const countConfig = this._getViewCountConfig();
 
         result = extend({
+            isAdaptive: this.option('adaptivityEnabled'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             currentView: this._currentView,
             tabIndex: this.option('tabIndex'),

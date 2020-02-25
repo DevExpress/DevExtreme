@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
-import { createWrapper, initTestMarkup, TOOLBAR_TOP_LOCATION, TOOLBAR_BOTTOM_LOCATION } from './helpers.js';
+import { createWrapper, initTestMarkup, isDesktopEnvironment, TOOLBAR_TOP_LOCATION, TOOLBAR_BOTTOM_LOCATION } from './helpers.js';
 import { getSimpleDataArray } from './data.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from 'core/devices';
@@ -366,4 +366,65 @@ module('Appointment popup', moduleConfig, () => {
 
         resetWindowWidth();
     });
+});
+
+module('View switcher', moduleConfig, () => {
+    test('View switcher should render selection current view', function(assert) {
+        this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'ios' });
+        try {
+            const scheduler = createInstance();
+            scheduler.viewSwitcher.show();
+
+            assert.equal(scheduler.option('currentView'), scheduler.viewSwitcher.getSelectedViewName().toLocaleLowerCase(),
+                `current view should equal selected value of view switcher(${scheduler.option('currentView')})`);
+
+            scheduler.viewSwitcher.click('Day');
+            scheduler.viewSwitcher.show();
+
+            assert.equal(scheduler.option('currentView'), 'day', 'current view should be equal Day value');
+            assert.equal(scheduler.viewSwitcher.getSelectedViewName(), 'Day', 'view switcher should select Day value');
+        } finally {
+            this.realDeviceMock.restore();
+        }
+    });
+
+    if(isDesktopEnvironment()) {
+        test('View switcher shouldn\'t render selection current view in desktop', function(assert) {
+            const scheduler = createInstance({
+                adaptivityEnabled: false,
+                useDropDownViewSwitcher: true
+            });
+
+            assert.ok(scheduler.viewSwitcher.getLabel().is(':visible'), 'label of view name should be visible');
+
+            scheduler.viewSwitcher.show();
+            assert.equal(scheduler.viewSwitcher.getSelectedViewName().toLocaleLowerCase(), '', 'view switcher shouldn\'t select current view');
+
+            scheduler.viewSwitcher.click('Day');
+            scheduler.viewSwitcher.show();
+
+            assert.equal(scheduler.option('currentView'), 'day', 'view should change on \'Day\'');
+            assert.equal(scheduler.viewSwitcher.getSelectedViewName(), '', 'view switcher shouldn\'t select current view after change view');
+        });
+    }
+
+    if(!isDesktopEnvironment()) {
+        const config = {
+            beforeEach() {
+                fx.off = true;
+                $('head').append('<meta  id="viewport" name="viewport" content="width=device-width, initial-scale=1">');
+            },
+
+            afterEach() {
+                fx.off = false;
+                $('#viewport').remove();
+            }
+        };
+        module('mobile environment', config, () => {
+            test('label of view name shouldn\'t be visible on mobile in case width < 450px', function(assert) {
+                const scheduler = createInstance();
+                assert.notOk(scheduler.viewSwitcher.getLabel().is(':visible'), 'label of view name shouldn\'t be visible');
+            });
+        });
+    }
 });
