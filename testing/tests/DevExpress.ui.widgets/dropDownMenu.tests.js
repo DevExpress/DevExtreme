@@ -413,7 +413,7 @@ QUnit.module('render', moduleConfig(), () => {
 
         [[1], [2], [1, 2]].forEach(value => {
             this.ddMenu.option('selectedItemKeys', value);
-            assert.deepEqual(this.list.option('selectedItemKeys'), value, `${value} value of selectedItemKeys should set in list`);
+            assert.deepEqual(this.list.option('selectedItemKeys'), value, `${value} value of selectedItemKeys should be set in list`);
         });
     });
 
@@ -440,7 +440,7 @@ QUnit.module('render', moduleConfig(), () => {
 
                 defaultItems.forEach((item, index) => {
                     const isItemSelectionRendered = $items.eq(index).hasClass(selectItemClassName);
-                    selectedItems[index] ? assert.ok(isItemSelectionRendered, 'item should be render selection') :
+                    selectedItems[index] ? assert.ok(isItemSelectionRendered, 'item should be rendered selection') :
                         assert.notOk(isItemSelectionRendered, 'item shouldn\'t be render selection');
                 });
             });

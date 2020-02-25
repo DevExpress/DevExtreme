@@ -381,7 +381,7 @@ module('View switcher', moduleConfig, () => {
             scheduler.viewSwitcher.click('Day');
             scheduler.viewSwitcher.show();
 
-            assert.equal(scheduler.option('currentView'), 'day', 'current view should equal Day value');
+            assert.equal(scheduler.option('currentView'), 'day', 'current view should be equal Day value');
             assert.equal(scheduler.viewSwitcher.getSelectedViewName(), 'Day', 'view switcher should select Day value');
         } finally {
             this.realDeviceMock.restore();
