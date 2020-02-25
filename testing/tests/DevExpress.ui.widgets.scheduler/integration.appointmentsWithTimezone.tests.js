@@ -1348,7 +1348,7 @@ QUnit.test('New added appointment should be rendered correctly in specified time
         });
 
         const task = { text: 'a', startDate: new Date(2018, 4, 23, 8, 0), endDate: new Date(2018, 4, 23, 8, 30) };
-        const timezoneOffset = task.startDate.getTimezoneOffset() * dateUtils.dateToMilliseconds('minute');
+        const timezoneOffset = new Date(2018, 4, 23).getTimezoneOffset() * dateUtils.dateToMilliseconds('minute');
 
         this.instance.showAppointmentPopup(task, true);
         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
