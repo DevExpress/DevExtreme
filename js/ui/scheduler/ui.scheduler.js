@@ -1486,7 +1486,8 @@ const Scheduler = Widget.inherit({
                 return this._getSingleAppointmentData(appointmentData, {
                     data: appointmentData,
                     target: $appointment.get(0),
-                    $appointment: $appointment
+                    $appointment: $appointment,
+                    skipHoursProcessing: true
                 });
             }
         };
