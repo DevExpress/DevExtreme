@@ -1164,11 +1164,6 @@ const SchedulerWorkSpace = Widget.inherit({
             endDate: this.invoke('convertDateByTimezoneBack', lastCellData.endDate) || lastCellData.endDate
         };
 
-        // const args = {
-        //     startDate: firstCellData.startDate,
-        //     endDate: lastCellData.endDate
-        // };
-
         if(isDefined(lastCellData.allDay)) {
             args.allDay = lastCellData.allDay;
         }
