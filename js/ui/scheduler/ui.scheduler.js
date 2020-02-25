@@ -2134,23 +2134,24 @@ const Scheduler = Widget.inherit({
                     }
                 }
 
-                if(!options.skipHoursProcessing) {
-                    this.fire(
-                        'convertDateByTimezoneBack',
-                        updatedStartDate,
-                        this.fire('getField', 'startDateTimeZone', appointmentData)
-                    );
+                this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
+                this.fire('setField', 'endDate', resultAppointmentData, updatedEndDate);
 
-                    this.fire(
-                        'convertDateByTimezoneBack',
-                        updatedEndDate,
-                        this.fire('getField', 'startDateTimeZone', appointmentData) // NOTE: endDateTimeZone ?
-                    );
+                if(!options.skipHoursProcessing && !options.isAppointmentResized) {
+                    this._convertDatesByTimezoneBack(false, resultAppointmentData);
+                    // this.fire(
+                    //     'convertDateByTimezoneBack',
+                    //     updatedStartDate,
+                    //     this.fire('getField', 'startDateTimeZone', appointmentData)
+                    // );
+
+                    // this.fire(
+                    //     'convertDateByTimezoneBack',
+                    //     updatedEndDate,
+                    //     this.fire('getField', 'startDateTimeZone', appointmentData) // NOTE: endDateTimeZone ?
+                    // );
                 }
             }
-
-            this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
-            this.fire('setField', 'endDate', resultAppointmentData, updatedEndDate);
         }
 
         return resultAppointmentData;

@@ -466,7 +466,7 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) {
-        const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement);
+        const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement, true);
 
         // if(this._isAppointmentRecurrence(config.itemData)) {
         //     this._convertDatesByTimezoneBack(false, targetedData);
@@ -764,14 +764,14 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, convertByTimezones) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
 
         const visibleData = this._getSingleAppointmentData(appointmentData, {
             skipDateCalculation: true,
             $appointment: $appointmentElement,
-            skipHoursProcessing: true
+            skipHoursProcessing: convertByTimezones ? false : true
         });
         const result = {};
 
