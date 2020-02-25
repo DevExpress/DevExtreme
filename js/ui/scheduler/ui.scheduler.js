@@ -2101,8 +2101,9 @@ const Scheduler = Widget.inherit({
         // if(typeUtils.isDefined($appointment) && (this._isAppointmentRecurrence(appointmentData) || this._needUpdateAppointmentData($appointment))) {
             const apptDataCalculator = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
 
-            if(typeUtils.isFunction(apptDataCalculator)) {
+            if(typeUtils.isFunction(apptDataCalculator) && this._isAppointmentRecurrence(appointmentData)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
+                updatedEndDate = new Date(updatedStartDate.getTime() + appointmentDuration);
             } else {
                 if(options.isAppointmentResized) {
                     const coordinates = translator.locate($appointment);
@@ -2133,25 +2134,25 @@ const Scheduler = Widget.inherit({
                         updatedEndDate = new Date(updatedStartDate.getTime() + appointmentDuration);
                     }
                 }
-
-                this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
-                this.fire('setField', 'endDate', resultAppointmentData, updatedEndDate);
-
-                if(!options.skipHoursProcessing && !options.isAppointmentResized) {
-                    this._convertDatesByTimezoneBack(false, resultAppointmentData);
-                    // this.fire(
-                    //     'convertDateByTimezoneBack',
-                    //     updatedStartDate,
-                    //     this.fire('getField', 'startDateTimeZone', appointmentData)
-                    // );
-
-                    // this.fire(
-                    //     'convertDateByTimezoneBack',
-                    //     updatedEndDate,
-                    //     this.fire('getField', 'startDateTimeZone', appointmentData) // NOTE: endDateTimeZone ?
-                    // );
-                }
             }
+        }
+
+        this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
+        this.fire('setField', 'endDate', resultAppointmentData, updatedEndDate);
+
+        if(!options.skipHoursProcessing && !options.isAppointmentResized) {
+            this._convertDatesByTimezoneBack(false, resultAppointmentData);
+            // this.fire(
+            //     'convertDateByTimezoneBack',
+            //     updatedStartDate,
+            //     this.fire('getField', 'startDateTimeZone', appointmentData)
+            // );
+
+            // this.fire(
+            //     'convertDateByTimezoneBack',
+            //     updatedEndDate,
+            //     this.fire('getField', 'startDateTimeZone', appointmentData) // NOTE: endDateTimeZone ?
+            // );
         }
 
         return resultAppointmentData;
