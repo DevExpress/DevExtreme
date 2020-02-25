@@ -492,10 +492,10 @@ class AppointmentModel {
     appointmentTakesSeveralDays(appointment) {
         const dataAccessors = this._dataAccessors;
         const startDate = dataAccessors.getter.startDate(appointment);
-        const endDate = dataAccessors.getter.endDate(appointment);
+        const endDate = new Date(dataAccessors.getter.endDate(appointment));
 
         const startDateCopy = dateUtils.trimTime(new Date(startDate));
-        const endDateCopy = dateUtils.trimTime(new Date(endDate));
+        const endDateCopy = dateUtils.trimTime(new Date(endDate.getTime() - 1));
 
         return startDateCopy.getTime() !== endDateCopy.getTime();
     }
