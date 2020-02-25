@@ -100,7 +100,13 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
     >
         <div className="dx-button-content" ref={viewModel.contentRef}>
             {viewModel.contentRender &&
-                <viewModel.contentRender icon={icon} text={viewModel.text} />}
+                <viewModel.contentRender
+                    model={{
+                        icon: viewModel.icon,
+                        text: viewModel.text,
+                    }}
+                    parentRef={viewModel.contentRef}
+                />}
             {!viewModel.contentRender && isIconLeft && icon}
             {!viewModel.contentRender && viewModel.text &&
                 <span className="dx-button-text">{viewModel.text}</span>
@@ -125,6 +131,7 @@ export class ButtonInput extends WidgetInput {
     @OneWay() onSubmit?: (e: any) => any = (() => undefined);
     @OneWay() pressed?: boolean;
     @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
+    @OneWay() template?: any = '';
     @OneWay() text?: string = '';
     @OneWay() type?: string;
     @OneWay() useInkRipple: boolean = false;

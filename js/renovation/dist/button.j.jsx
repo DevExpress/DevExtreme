@@ -1,7 +1,15 @@
+
+import $ from '../../core/renderer';
+import * as Preact from 'preact';
 import registerComponent from '../../core/component_registrator';
-import Widget from '../preact_wrapper';
+import Widget from '../preact-wrapper/component';
 import { extend } from '../../core/utils/extend';
 import ButtonView from '../button.p';
+import { wrapElement } from '../preact-wrapper/utils';
+import { useLayoutEffect } from 'preact/hooks';
+import { getPublicElement } from '../../core/utils/dom';
+
+const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 class Button extends Widget {
     getView() {
@@ -10,22 +18,33 @@ class Button extends Widget {
 
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
-        if(props.contentRender) {
-            props.contentRender = (data) => {
-                const template = this._getTemplate(props.contentRender);
 
-                return (<div style={{ display: 'none' }} ref={(element) => {
-                    if(element && element.parentElement) {
-                        const parent = element.parentElement;
-                        while(parent.firstChild) {
-                            parent.removeChild(parent.firstChild);
-                        }
-                        template.render({ model: data, container: parent });
-                        parent.appendChild(element);
+        if(props.template) {
+            const template = this._getTemplate(props.template);
+
+            // TODO: rename 'contentRender' => 'template' after fix generator bug
+            //       (renames 'template' => 'render' in declaration)
+            props.contentRender = ({ parentRef, ...restProps }) => {
+                useLayoutEffect(() => {
+                    const $parent = $(parentRef.current);
+                    let $template = template.render({
+                        container: getPublicElement($parent),
+                        ...restProps,
+                    });
+
+                    if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
+                        $template = wrapElement($parent, $template);
                     }
-                }}/>);
+
+                    return () => {
+                        $template.remove();
+                    };
+                }, Object.keys(props).map(key => props[key]));
+
+                return (<Preact.Fragment/>);
             };
         }
+
         props.onClick = this._createActionByOption('onClick', {
             excludeValidators: ['readOnly'],
             afterExecute: () => {
@@ -34,6 +53,7 @@ class Button extends Widget {
                 useSubmitBehavior && setTimeout(() => this._submitInput().click());
             }
         });
+
         return props;
     }
 
@@ -44,6 +64,7 @@ class Button extends Widget {
             hoverStateEnabled: true,
             icon: '',
             iconPosition: 'left',
+            template: '',
             text: '',
         });
     }
