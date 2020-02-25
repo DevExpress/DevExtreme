@@ -206,6 +206,10 @@ const SchedulerAppointmentForm = {
                 colSpan: 2,
             },
             {
+                itemType: 'empty',
+                colSpan: 2,
+            },
+            {
                 dataField: dataExprs.descriptionExpr,
                 editorType: 'dxTextArea',
                 colSpan: 2,
