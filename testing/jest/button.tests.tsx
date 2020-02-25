@@ -237,12 +237,12 @@ describe('Button', () => {
 
             it('should rerender contentRender in runtime', () => {
                 const button = mount(<Button text='My button' />);
-                
+
                 expect(button.exists(contentRender)).toBe(false);
 
                 button.setProps({ contentRender });
                 expect(button.exists(contentRender)).toBe(true);
-                
+
                 button.setProps({ contentRender: undefined });
                 expect(button.exists(contentRender)).toBe(false);
             });
@@ -250,7 +250,7 @@ describe('Button', () => {
             it('should change properties in runtime', () => {
                 const button = mount(<Button text='My button' contentRender={contentRender} />);
                 let buttonContent = button.find(contentRender);
-                
+
                 expect(buttonContent.props().model.text).toBe('My button');
                 expect(buttonContent.text()).toBe('My button123');
 
@@ -269,7 +269,7 @@ describe('Button', () => {
                 });
                 const buttonContentChildren = button.find('.dx-button-content').children();
 
-                expect(buttonContentChildren.props().icon).toBe('testicon');
+                expect(buttonContentChildren.props().model.icon).toBe('testicon');
             });
         });
 
