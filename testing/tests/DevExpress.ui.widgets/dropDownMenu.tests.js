@@ -376,6 +376,72 @@ QUnit.module('render', moduleConfig(), () => {
 
         assert.strictEqual($content.closest($container).length, 1, 'Popover content located into desired container');
     });
+
+    QUnit.test('selectionMode property should pass to list', function(assert) {
+        const $container = $('#dropDownMenu');
+        $container.dxDropDownMenu({
+            opened: true,
+            items: [1, 2],
+            container: $container
+        });
+
+        this.toggleMenu();
+
+        assert.equal(this.ddMenu.option('selectionMode'), 'none', 'in default case, selectionMode should be "none" value');
+        assert.equal(this.list.option('selectionMode'), 'none', 'in default case, selectionMode should be "none" value in list');
+
+        ['all', 'multiple', 'none', 'single'].forEach(selectionMode => {
+            this.ddMenu.option('selectionMode', selectionMode);
+            assert.equal(this.list.option('selectionMode'), selectionMode, `${selectionMode} value of selectionMode should set in list`);
+        });
+    });
+
+    QUnit.test('selectedItemKeys property should pass to list', function(assert) {
+        const $container = $('#dropDownMenu');
+        $container.dxDropDownMenu({
+            opened: true,
+            items: [1, 2],
+            selectionMode: 'multiple',
+            container: $container
+        });
+
+        this.toggleMenu();
+
+        [[1], [2], [1, 2]].forEach(value => {
+            this.ddMenu.option('selectedItemKeys', value);
+            assert.deepEqual(this.list.option('selectedItemKeys'), value, `${value} value of selectedItemKeys should be set in list`);
+        });
+    });
+
+    QUnit.module('selection', () => {
+        const selectItemClassName = 'dx-list-item-selected';
+
+        [[1], [1, 2]].forEach(selectedItems => {
+            const selectionMode = selectedItems.length > 1 ? 'multiple' : 'single';
+
+            QUnit.test(`item should be render like selected in "${selectionMode}" mode`, function(assert) {
+                const defaultItems = [1, 2];
+                const $container = $('#dropDownMenu');
+
+                $container.dxDropDownMenu({
+                    opened: true,
+                    items: defaultItems,
+                    container: $container,
+                    selectionMode: selectionMode,
+                    selectedItemKeys: selectedItems,
+                });
+
+                this.toggleMenu();
+                const $items = this.list.itemElements();
+
+                defaultItems.forEach((item, index) => {
+                    const isItemSelectionRendered = $items.eq(index).hasClass(selectItemClassName);
+                    selectedItems[index] ? assert.ok(isItemSelectionRendered, 'item should be rendered selection') :
+                        assert.notOk(isItemSelectionRendered, 'item shouldn\'t be render selection');
+                });
+            });
+        });
+    });
 });
 
 QUnit.module('position', {
