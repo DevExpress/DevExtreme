@@ -75,10 +75,10 @@ gulp.task('fix-base', () => {
         .pipe(replace(/each\(\$icons,\s{([\w\W]*)}\);/, '@each $key, $val in $icons {$1}'))
 
         // dataGrid
-        .pipe(replace('.dx-datagrid-borders', '@use "./mixins" as *;\n@use "./icons" as *;\n\n.dx-datagrid-borders'))
+        .pipe(replace('.dx-datagrid-borders', '@use "sass:color";\n@use "./mixins" as *;\n@use "./icons" as *;\n\n.dx-datagrid-borders'))
 
         // treeList
-        .pipe(replace(/\$treelist-border/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$treelist-border'))
+        .pipe(replace(/\$treelist-border/, '@use "sass:color";\n@use "./mixins" as *;\n@use "./icons" as *;\n\n$treelist-border'))
 
         // pivotGrid
         .pipe(replace(/^\$PIVOTGRID_DRAG_HEADER_BORDER/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$PIVOTGRID_DRAG_HEADER_BORDER'))
@@ -93,7 +93,17 @@ gulp.task('fix-base', () => {
         .pipe(replace(/(_TOP|_LEFT|100%|absolute|inherit|""|0|_COLOR|none|_BORDER|relative|inline-block|hidden|left),$/gm, '$1;'))
         .pipe(replace(/^\$SCHEDULER_NAVIGATOR_OFFSET/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$SCHEDULER_NAVIGATOR_OFFSET'))
 
+        // fileManager, diagram
+        .pipe(replace(/\.(filemanager|diagram)-icon-colored\(d/g, '@include $1-icon-colored(d'))
+
+        // sortable
+        .pipe(replace('.dx-sortable-placeholder', '@use "sass:color";\n\n.dx-sortable-placeholder'))
+
         .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
+        .pipe(through.obj((file, enc, callback) => {
+            file.contents = new Buffer(replaceColorFunctions(file.contents.toString()));
+            callback(null, file);
+        }))
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;
         }))
