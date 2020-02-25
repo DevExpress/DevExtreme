@@ -601,6 +601,22 @@ QUnit.module('Validation - UI', {
 
         assert.equal(editor._$validationMessage.outerWidth(), 305, 'overlay width was set correctly');
     });
+
+    QUnit.test('Validation message should be encoded', function(assert) {
+        const $element = this.fixture.createOnlyElement();
+
+        const validationMessage = 'Error <script>alert(\'hello\')</script> message';
+        const editor = new Editor($element, {
+            validationMessageMode: 'always',
+            validationError: {
+                message: validationMessage
+            },
+            isValid: false,
+            width: 305
+        });
+
+        assert.strictEqual(editor._$validationMessage.text(), validationMessage, 'error message is encoded');
+    });
 });
 
 QUnit.module('Validation overlay options', {
