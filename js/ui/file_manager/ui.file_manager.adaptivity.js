@@ -44,7 +44,7 @@ class FileManagerAdaptivityControl extends Widget {
     _render() {
         super._render();
         this._checkAdaptiveState();
-        const $splitter = $('<div>').insertAfter($(this._drawer.content()));
+        const $splitter = $('<div>').appendTo(this.$element());
         this._splitter = this._createComponent($splitter, SplitterControl, {
             container: this.$element(),
             leftElement: $(this._drawer.content()),
