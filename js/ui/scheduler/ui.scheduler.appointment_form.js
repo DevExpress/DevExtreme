@@ -8,7 +8,7 @@ import '../text_area';
 import '../tag_box';
 import '../switch';
 
-const SCREEN_SIZE_OF_SINGLE_COLUMN = 350;
+const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
 
 const SchedulerAppointmentForm = {
     _appointmentForm: {},
@@ -34,19 +34,22 @@ const SchedulerAppointmentForm = {
         return new Date(new Date(startDate).setHours(startDayHour));
     },
 
-    create: function(componentCreator, $container, isReadOnly, formData) {
+    create: function(componentCreator, $container, isReadOnly, formData, getWindowWidth) {
         this._appointmentForm = componentCreator($container, Form, {
             items: this._editors,
             readOnly: isReadOnly,
             showValidationSummary: true,
             scrollingEnabled: true,
-            colCount: 2,
+            colCount: 'auto',
+            colCountByScreen: {
+                lg: 2,
+                xs: 1
+            },
             formData: formData,
             showColonAfterLabel: false,
             labelLocation: 'top',
             screenByWidth: () => {
-                const formWidth = $container.parent().outerWidth();
-                return formWidth < SCREEN_SIZE_OF_SINGLE_COLUMN ? 'xs' : 'lg';
+                return getWindowWidth() < SCREEN_SIZE_OF_SINGLE_COLUMN ? 'xs' : 'lg';
             }
         });
 
@@ -146,12 +149,19 @@ const SchedulerAppointmentForm = {
             {
                 itemType: 'group',
                 colSpan: 2,
-                colCount: 2,
+                colCountByScreen: {
+                    lg: 2,
+                    xs: 1
+                },
                 items: this._getDateBoxItems(dataExprs, schedulerInst, allowEditingTimeZones),
             },
             {
                 itemType: 'group',
-                colCount: 3,
+                colCountByScreen: {
+                    lg: 3,
+                    xs: 3
+                },
+                colSpan: 2,
                 items: [{
                     dataField: dataExprs.allDayExpr,
                     editorType: 'dxSwitch',
@@ -227,7 +237,10 @@ const SchedulerAppointmentForm = {
         this._editors = [
             {
                 itemType: 'group',
-                colCount: 2,
+                colCountByScreen: {
+                    lg: 2,
+                    xs: 1
+                },
                 colSpan: recurrenceEditorVisibility ? 1 : 2,
                 items: this._getMainItems(dataExprs, schedulerInst, triggerResize, changeSize, allowEditingTimeZones),
             },

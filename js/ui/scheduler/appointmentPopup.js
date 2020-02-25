@@ -160,7 +160,8 @@ export default class AppointmentPopup {
             this.scheduler._createComponent.bind(this.scheduler),
             element,
             this._isReadOnly(appointmentData),
-            formData
+            formData,
+            this._getWindowWidth
         );
     }
 
@@ -212,11 +213,16 @@ export default class AppointmentPopup {
     }
 
     _isPopupFullScreenNeeded() {
+        const width = this._getWindowWidth();
+        return width ? width < APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH : false;
+
+    }
+
+    _getWindowWidth() {
         if(windowUtils.hasWindow()) {
             const window = windowUtils.getWindow();
-            return $(window).width() < APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH;
+            return $(window).width();
         }
-        return false;
     }
 
     triggerResize() {
