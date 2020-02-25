@@ -123,7 +123,7 @@ class BaseRenderingStrategy {
 
         for(let j = 0; j < position.length; j++) {
             extend(position[j], {
-                originalAppointmentStartDate: position[j].startDate,
+                originalAppointmentStartDate: this.startDate(item, true),
                 endDate: this.endDate(item, position[j], isRecurring)
             });
 

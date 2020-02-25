@@ -51,7 +51,7 @@ import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
 import utils from './utils';
 
-import { REDUCED_APPOINTMENT_CLASS, COMPACT_APPOINTMENT_CLASS, RECURRENCE_APPOINTMENT_CLASS } from './constants';
+import { COMPACT_APPOINTMENT_CLASS, RECURRENCE_APPOINTMENT_CLASS } from './constants';
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -2110,12 +2110,18 @@ const Scheduler = Widget.inherit({
                     updatedEndDate = new Date(updatedStartDate.getTime() + appointmentDuration);
                 } else {
                     const settings = $appointment.data('dxAppointmentSettings');
-                    appointmentStartDate = settings && settings.startDate;
-                    appointmentEndDate = settings && settings.endDate;
 
-                    if($appointment.hasClass(REDUCED_APPOINTMENT_CLASS) || (settings && settings.appointmentReduced)) {
-                        appointmentStartDate = settings.originalAppointmentStartDate;
+                    appointmentStartDate = settings && settings.originalAppointmentStartDate;
+                    appointmentEndDate = settings && settings.endDate; // NOTE: fix it
+
+                    if(this._isAppointmentRecurrence(appointmentData)) {
+                        appointmentStartDate = settings && settings.startDate;
+                        appointmentEndDate = settings && settings.endDate;
                     }
+
+                    // if($appointment.hasClass(REDUCED_APPOINTMENT_CLASS) || (settings && settings.appointmentReduced)) {
+                    //     appointmentStartDate = settings.originalAppointmentStartDate;
+                    // }
 
                     if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;

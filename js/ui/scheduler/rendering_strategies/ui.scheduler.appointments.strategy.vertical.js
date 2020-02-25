@@ -85,15 +85,21 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                         bottom: currentMaxAllowedPosition
                     });
 
-                    multiDaysAppointmentParts = this._getAppointmentParts({
-                        sourceAppointmentHeight: height,
-                        reducedHeight: resultHeight,
-                        width: width
-                    }, position[j]);
+                    // multiDaysAppointmentParts = this._getAppointmentParts({
+                    //     sourceAppointmentHeight: height,
+                    //     reducedHeight: resultHeight,
+                    //     width: width
+                    // }, position[j]);
                 } else {
                     appointmentReduced = 'tail';
                 }
             }
+
+            multiDaysAppointmentParts = this._getAppointmentParts({
+                sourceAppointmentHeight: height,
+                reducedHeight: resultHeight,
+                width: width
+            }, position[j]);
 
             extend(position[j], {
                 height: resultHeight,
