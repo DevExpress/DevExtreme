@@ -2107,6 +2107,7 @@ const Scheduler = Widget.inherit({
                 if(options.isAppointmentResized) {
                     const coordinates = translator.locate($appointment);
                     updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
+                    updatedEndDate = new Date(updatedStartDate.getTime() + appointmentDuration);
                 } else {
                     const settings = $appointment.data('dxAppointmentSettings');
                     appointmentStartDate = settings && settings.startDate;
