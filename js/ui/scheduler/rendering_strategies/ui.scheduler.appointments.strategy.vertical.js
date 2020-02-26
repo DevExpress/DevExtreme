@@ -117,7 +117,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 width: width,
                 allDay: allDay,
                 originalAppointmentStartDate: this.startDate(item, true),
-                originalAppointmentEndDate: this.endDate(item, position[j], isRecurring),
+                originalAppointmentEndDate: this.endDate(item),
                 endDate: this.endDate(item, position[j], isRecurring),
                 appointmentReduced: appointmentReduced
             });

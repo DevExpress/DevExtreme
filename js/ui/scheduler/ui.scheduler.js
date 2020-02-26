@@ -51,8 +51,6 @@ import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
 import utils from './utils';
 
-import { COMPACT_APPOINTMENT_CLASS, RECURRENCE_APPOINTMENT_CLASS } from './constants';
-
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
 
@@ -2094,73 +2092,44 @@ const Scheduler = Widget.inherit({
         const endDate = new Date(this.fire('getField', 'endDate', resultAppointmentData));
         const appointmentDuration = endDate.getTime() - startDate.getTime();
         let updatedStartDate = startDate;
-        let updatedEndDate = endDate;
         let appointmentStartDate;
         let appointmentEndDate;
 
         if(typeUtils.isDefined($appointment)) {
-        // if(typeUtils.isDefined($appointment) && (this._isAppointmentRecurrence(appointmentData) || this._needUpdateAppointmentData($appointment))) {
             const apptDataCalculator = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
 
             if(typeUtils.isFunction(apptDataCalculator) && this._isAppointmentRecurrence(appointmentData)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
-                updatedEndDate = new Date(updatedStartDate.getTime() + appointmentDuration);
             } else {
                 if(options.isAppointmentResized) {
                     const coordinates = translator.locate($appointment);
                     updatedStartDate = new Date(this._workSpace.getCellDataByCoordinates(coordinates, isAllDay).startDate);
-                    updatedEndDate = new Date(updatedStartDate.getTime() + appointmentDuration);
                 } else {
                     const settings = $appointment.data('dxAppointmentSettings');
 
                     appointmentStartDate = settings && settings.originalAppointmentStartDate;
-                    appointmentEndDate = settings && settings.endDate; // NOTE: fix it
+                    appointmentEndDate = settings && settings.originalAppointmentEndDate;
 
                     if(this._isAppointmentRecurrence(appointmentData)) {
                         appointmentStartDate = settings && settings.startDate;
                         appointmentEndDate = settings && settings.endDate;
                     }
 
-                    // if($appointment.hasClass(REDUCED_APPOINTMENT_CLASS) || (settings && settings.appointmentReduced)) {
-                    //     appointmentStartDate = settings.originalAppointmentStartDate;
-                    // }
-
                     if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
-                    }
-
-                    if(appointmentEndDate) {
-                        updatedEndDate = appointmentEndDate;
-                    } else {
-                        updatedEndDate = new Date(updatedStartDate.getTime() + appointmentDuration);
                     }
                 }
             }
         }
 
         this.fire('setField', 'startDate', resultAppointmentData, updatedStartDate);
-        this.fire('setField', 'endDate', resultAppointmentData, updatedEndDate);
+        this.fire('setField', 'endDate', resultAppointmentData, appointmentEndDate || new Date(updatedStartDate.getTime() + appointmentDuration));
 
         if(!options.skipHoursProcessing && !options.isAppointmentResized) {
             this._convertDatesByTimezoneBack(false, resultAppointmentData);
-            // this.fire(
-            //     'convertDateByTimezoneBack',
-            //     updatedStartDate,
-            //     this.fire('getField', 'startDateTimeZone', appointmentData)
-            // );
-
-            // this.fire(
-            //     'convertDateByTimezoneBack',
-            //     updatedEndDate,
-            //     this.fire('getField', 'startDateTimeZone', appointmentData) // NOTE: endDateTimeZone ?
-            // );
         }
 
         return resultAppointmentData;
-    },
-
-    _needUpdateAppointmentData: function($appointment) {
-        return $appointment.hasClass(COMPACT_APPOINTMENT_CLASS) || $appointment.hasClass(RECURRENCE_APPOINTMENT_CLASS);
     },
 
     subscribe: function(subject, action) {
