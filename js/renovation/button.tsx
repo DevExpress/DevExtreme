@@ -1,6 +1,6 @@
 import { click } from '../events/short';
 import { initConfig, showWave, hideWave } from '../ui/widget/utils.ink_ripple';
-import { Component, ComponentBindings, Effect, JSXComponent, OneWay, Ref } from 'devextreme-generator/component_declaration/common';
+import { Component, ComponentBindings, Effect, JSXComponent, OneWay, Ref, Template } from 'devextreme-generator/component_declaration/common';
 import { getImageSourceType } from '../core/utils/icon';
 import Widget, { WidgetInput } from './widget';
 import Icon from './icon';
@@ -47,12 +47,12 @@ const getAriaLabel = (text, icon) => {
 };
 
 export const viewFunction = (viewModel: Button) => {
-    const { contentRender, text, iconPosition, icon } = viewModel.props;
-    const renderText = !contentRender && text;
+    const { icon, iconPosition, template, text } = viewModel.props;
+    const renderText = !template && text;
     const isIconLeft = iconPosition === 'left';
-    const leftIcon = !contentRender && isIconLeft;
-    const rightIcon = !contentRender && !isIconLeft;
-    const iconComponent = !contentRender && viewModel.iconSource
+    const leftIcon = !template && isIconLeft;
+    const rightIcon = !template && !isIconLeft;
+    const iconComponent = !template && viewModel.iconSource
         && <Icon source={viewModel.iconSource} position={iconPosition}/>;
 
     return <Widget
@@ -77,12 +77,10 @@ export const viewFunction = (viewModel: Button) => {
         width={viewModel.props.width}
     >
         <div className="dx-button-content" ref={viewModel.contentRef as any}>
-            {contentRender &&
-                <viewModel.props.contentRender
-                    model={{
-                        icon,
-                        text,
-                    }}
+            {template &&
+                <viewModel.props.template
+                    icon={icon}
+                    text={text}
                     parentRef={viewModel.contentRef}
                 />
             }
@@ -102,14 +100,13 @@ export const viewFunction = (viewModel: Button) => {
 export class ButtonInput extends WidgetInput {
     @OneWay() activeStateEnabled?: boolean = true;
     @OneWay() classNames?: string[];
-    @OneWay() contentRender?: any;
     @OneWay() hoverStateEnabled?: boolean = true;
     @OneWay() icon?: string = '';
     @OneWay() iconPosition?: string = 'left';
     @OneWay() onSubmit?: (e: any) => any = (() => undefined);
     @OneWay() pressed?: boolean;
     @OneWay() stylingMode?: 'outlined' | 'text' | 'contained';
-    @OneWay() template?: any = '';
+    @Template() template?: any = '';
     @OneWay() text?: string = '';
     @OneWay() type?: string;
     @OneWay() useInkRipple?: boolean = false;

@@ -21,14 +21,12 @@ class Button extends Widget {
         if(props.template) {
             const template = this._getTemplate(props.template);
 
-            // TODO: rename 'contentRender' => 'template' after fix generator bug
-            //       (renames 'template' => 'render' in declaration)
-            props.contentRender = ({ parentRef, ...restProps }) => {
+            props.render = ({ parentRef, ...restProps }) => {
                 useLayoutEffect(() => {
                     const $parent = $(parentRef.current);
                     let $template = $(template.render({
                         container: getPublicElement($parent),
-                        ...restProps,
+                        model: restProps,
                     }));
 
                     if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
@@ -36,7 +34,7 @@ class Button extends Widget {
                     }
 
                     return () => {
-                        $template.remove();
+                        $parent.empty();
                     };
                 }, Object.keys(props).map(key => props[key]));
 
