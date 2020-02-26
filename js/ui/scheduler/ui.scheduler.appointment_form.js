@@ -159,9 +159,8 @@ const SchedulerAppointmentForm = {
                 itemType: 'group',
                 colCountByScreen: {
                     lg: 3,
-                    xs: 3
+                    xs: 4
                 },
-                colSpan: 2,
                 items: [{
                     dataField: dataExprs.allDayExpr,
                     editorType: 'dxSwitch',
