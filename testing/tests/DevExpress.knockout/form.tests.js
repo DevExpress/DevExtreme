@@ -63,22 +63,19 @@ QUnit.test('Generate items from layoutData with unacceptable data', function(ass
     const layoutManager = $('#simpleDataForm').find('.dx-layout-manager').dxLayoutManager('instance');
 
     // assert
-    assert.deepEqual(layoutManager._items, [
-        {
-            dataField: 'firstName',
-            editorType: 'dxTextBox',
-            itemType: 'simple',
-            visibleIndex: 0,
-            col: 0
-        },
-        {
-            col: 0,
-            dataField: 'mark',
-            editorType: 'dxNumberBox',
-            itemType: 'simple',
-            visibleIndex: 1
-        }
-    ]);
+    const items = layoutManager._items;
+    assert.equal(items.length, 2, 'count of items');
+    assert.equal(items[0].dataField, 'firstName', 'data field of first item');
+    assert.equal(items[0].editorType, 'dxTextBox', 'editorType of first item');
+    assert.equal(items[0].itemType, 'simple', 'itemType of first item');
+    assert.equal(items[0].visibleIndex, 0, 'visibleIndex of first item');
+    assert.equal(items[0].col, 0, 'col of first item');
+
+    assert.equal(items[1].dataField, 'mark', 'data field of second item');
+    assert.equal(items[1].editorType, 'dxNumberBox', 'editorType of second item');
+    assert.equal(items[1].itemType, 'simple', 'itemType of second item');
+    assert.equal(items[1].visibleIndex, 1, 'visibleIndex of second item');
+    assert.equal(items[1].col, 0, 'col of second item');
 });
 
 QUnit.test('Change formData -> observable value changed', function(assert) {

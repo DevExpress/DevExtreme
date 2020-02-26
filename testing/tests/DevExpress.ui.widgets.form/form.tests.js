@@ -2156,7 +2156,7 @@ QUnit.test('The \'itemOption\' cannot update an item when it has the string type
         const items = form.option('items');
 
         assert.deepEqual(items, ['item1'], 'items');
-        assert.deepEqual(errors.log.lastCall.args, ['W0017', 'item1']);
+        assert.deepEqual(errors.log.lastCall.args, ['W0017']);
     } finally {
         errors.log.restore();
     }
@@ -2183,7 +2183,7 @@ QUnit.test('The \'itemOption\' cannot update an item inside group when it has th
             name: 'group1',
             items: ['item1']
         }], 'items');
-        assert.deepEqual(errors.log.lastCall.args, ['W0017', 'group1.item1']);
+        assert.deepEqual(errors.log.lastCall.args, ['W0017']);
     } finally {
         errors.log.restore();
     }
@@ -2216,7 +2216,7 @@ QUnit.test('The \'itemOption\' cannot update an item inside tab when it has the 
                 items: ['item1']
             }]
         }], 'items');
-        assert.deepEqual(errors.log.lastCall.args, ['W0017', 'tabbed1.title1.item1']);
+        assert.deepEqual(errors.log.lastCall.args, ['W0017']);
     } finally {
         errors.log.restore();
     }

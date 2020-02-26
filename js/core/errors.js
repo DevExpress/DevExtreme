@@ -246,5 +246,5 @@ module.exports = errorUtils({
     /**
     * @name ErrorsCore.W0017
     */
-    W0017: 'The "{0}" item cannot update because it has the string type. Please wrap this item into an object by defining a dataField inside.'
+    W0017: 'itemOption() cannot update the target item because it is declared as a string.'
 });

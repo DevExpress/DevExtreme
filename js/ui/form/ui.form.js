@@ -1199,7 +1199,7 @@ const Form = Widget.inherit({
                 if(!isString(userItem)) {
                     this.option(fullName, value);
                 } else {
-                    errors.log('W0017', id);
+                    errors.log('W0017');
                 }
                 break;
             }
