@@ -433,6 +433,7 @@ module.exports = {
         { import: '../fieldset', type: 'index' },
         { import: '../fieldset/sizes', type: 'index' },
         { import: '../menu/colors', type: 'index' },
+        { import: '../tabs', type: 'index' },
         { regex: /\.diagram-icon-colored\(d/g, replacement: '@include diagram-icon-colored(d' }
     ],
     'gantt': [
