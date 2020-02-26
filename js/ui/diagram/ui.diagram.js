@@ -147,10 +147,12 @@ class Diagram extends Widget {
 
         this._diagramInstance.barManager.registerBar(this.optionsUpdateBar);
 
-        resizeCallbacks.add(() => {
-            this._killBrowserResizeTimer();
-            this._browserResizeTimer = setTimeout(() => this._processBrowserResize(), 100);
-        });
+        if(hasWindow()) {
+            resizeCallbacks.add(() => {
+                this._killBrowserResizeTimer();
+                this._browserResizeTimer = setTimeout(() => this._processBrowserResize(), 100);
+            });
+        }
     }
     _processBrowserResize() {
         this._isMobileScreenSize = undefined;
