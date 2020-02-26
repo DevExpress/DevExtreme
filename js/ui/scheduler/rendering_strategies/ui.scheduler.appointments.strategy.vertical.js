@@ -59,7 +59,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const allDay = this.isAllDay(item);
         const isRecurring = !!this.instance.fire('getField', 'recurrenceRule', item);
         const isAppointmentLong = this.instance.fire('appointmentTakesSeveralDays', item);
-        const appointmentStartDate = new Date(this.instance.fire('getField', 'startDate', item)); // NOTE: Timezones and timestamp
+        const appointmentStartDate = this.startDate(item, true); // NOTE: Timezones and timestamp
 
         if(allDay) {
             return super._getItemPosition(item);
@@ -76,27 +76,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             let multiDaysAppointmentParts = [];
             const currentMaxAllowedPosition = position[j].vMax;
 
-            if(!isRecurring) {
-                if(this._isMultiDayAppointment(position[j], height) || isAppointmentLong) {
-                    if(dateUtils.sameDate(appointmentStartDate, position[j].startDate)) {
-                        appointmentReduced = 'head';
-
-                        resultHeight = this._reduceMultiDayAppointment(height, {
-                            top: position[j].top,
-                            bottom: currentMaxAllowedPosition
-                        });
-
-                        multiDaysAppointmentParts = this._getAppointmentParts({
-                            sourceAppointmentHeight: height,
-                            reducedHeight: resultHeight,
-                            width: width
-                        }, position[j]);
-                    } else {
-                        appointmentReduced = 'tail';
-                    }
-                }
-            } else {
-                if(this._isMultiDayAppointment(position[j], height)) {
+            if(this._isMultiDayAppointment(position[j], height) || (isAppointmentLong && !isRecurring)) {
+                if(dateUtils.sameDate(appointmentStartDate, position[j].startDate) || isRecurring) {
                     appointmentReduced = 'head';
 
                     resultHeight = this._reduceMultiDayAppointment(height, {
@@ -109,6 +90,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                         reducedHeight: resultHeight,
                         width: width
                     }, position[j]);
+                } else {
+                    appointmentReduced = 'tail';
                 }
             }
 
@@ -116,7 +99,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 height: resultHeight,
                 width: width,
                 allDay: allDay,
-                originalAppointmentStartDate: this.startDate(item, true),
+                originalAppointmentStartDate: appointmentStartDate,
                 originalAppointmentEndDate: this.endDate(item),
                 endDate: this.endDate(item, position[j], isRecurring),
                 appointmentReduced: appointmentReduced
