@@ -1481,7 +1481,7 @@ const Scheduler = Widget.inherit({
             getSingleAppointmentData: (appointmentData, targetElement) => { // TODO: temporary solution fox fix T848058, more information in the ticket
                 const $appointment = $(targetElement);
 
-                return this._getSingleAppointmentData(appointmentData, {
+                return this._getAppointmentData(appointmentData, {
                     data: appointmentData,
                     target: $appointment.get(0),
                     $appointment: $appointment,
@@ -2080,7 +2080,7 @@ const Scheduler = Widget.inherit({
         this._appointmentPopup.triggerResize();
     },
 
-    _getSingleAppointmentData: function(appointmentData, options) {
+    _getAppointmentData: function(appointmentData, options) {
         options = options || {};
 
         const $appointment = options.$appointment;
@@ -2414,7 +2414,7 @@ const Scheduler = Widget.inherit({
     },
 
     showAppointmentPopup: function(appointmentData, createNewAppointment, currentAppointmentData) {
-        const singleAppointment = currentAppointmentData || this._getSingleAppointmentData(appointmentData, { skipDateCalculation: true });
+        const singleAppointment = currentAppointmentData || this._getAppointmentData(appointmentData, { skipDateCalculation: true });
         const startDate = this.fire('getField', 'startDate', currentAppointmentData || appointmentData);
 
         this._checkRecurringAppointment(appointmentData, singleAppointment, startDate, function() {
