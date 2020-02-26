@@ -15,34 +15,35 @@ const moduleConfig = {
 QUnit.module('Properties Panel', moduleConfig, () => {
     test('should render if propertiesPanel.visibility is "visible"', function(assert) {
         this.instance.option('propertiesPanel.visibility', 'visible');
-        const $accordion = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
-        assert.equal($accordion.length, 1);
+        const $panel = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
+        assert.equal($panel.length, 1);
         const $toolbar = getPropertiesPanelToolbarElement(this.$element);
         assert.equal($toolbar.length, 1);
     });
     test('should not render if propertiesPanel.visibility is "disabled"', function(assert) {
         this.instance.option('propertiesPanel.visibility', 'disabled');
-        const $accordion = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
-        assert.equal($accordion.length, 0);
+        const $panel = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
+        assert.equal($panel.length, 0);
         const $toolbar = getPropertiesPanelToolbarElement(this.$element);
         assert.equal($toolbar.length, 0);
     });
     test('should render if propertiesPanel.visibility is "collapsed"', function(assert) {
         this.instance.option('propertiesPanel.visibility', 'collapsed');
-        let $accordion = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
-        assert.equal($accordion.length, 0);
+        let $panel = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
+        assert.equal($panel.length, 0);
         const $toolbar = getPropertiesPanelToolbarElement(this.$element);
         assert.equal($toolbar.length, 1);
 
-        const $button = findPropertiesPanelToolbarItem(this.$element, 'properties');
+        let $button = findPropertiesPanelToolbarItem(this.$element, 'properties');
         $button.trigger('dxclick');
-        $accordion = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
-        assert.equal($accordion.length, 1);
-        assert.equal($accordion.is(':visible'), true);
+        $panel = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
+        assert.equal($panel.length, 1);
+        assert.equal($panel.is(':visible'), true);
 
+        $button = findPropertiesPanelToolbarItem(this.$element, 'properties');
         $button.trigger('dxclick');
-        assert.equal($accordion.length, 1);
-        assert.equal($accordion.is(':visible'), false);
+        assert.equal($panel.length, 1);
+        assert.equal($panel.is(':visible'), false);
     });
     test('should fill properties panel with default items', function(assert) {
         this.instance.option('propertiesPanel.visibility', 'visible');

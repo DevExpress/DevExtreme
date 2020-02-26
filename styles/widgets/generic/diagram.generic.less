@@ -1,6 +1,7 @@
 @import (once) "../base/diagram.less";
 @import (once) "./drawer.generic.less";
 @import (once) "./loadIndicator.generic.less";
+@import (once) "./tabs.generic.less";
 @import (once) "./tooltip.generic.less";
 @import (once) "./accordion.generic.less";
 @import (once) "./scrollView.generic.less";
@@ -225,6 +226,23 @@
 
     .dx-diagram-properties-panel-group-toolbar:first-child {
         padding-top: @DIAGRAM_PROPERTIES_PANEL_SPACING;
+    }
+
+    &.dx-diagram-mobile-popup {
+        .dx-popup-title {
+            padding: 2px 8px 0 0;
+        }
+
+        .dx-tabpanel {
+            .dx-tabs {
+                border-top: none;
+                border-bottom: @GENERIC_TABS_BORDER;
+            }
+
+            .dx-tab-selected:before {
+                top: -1px;
+            }
+        }
     }
 }
 

@@ -31,17 +31,21 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
     _getPopupClass() {
         return DIAGRAM_PROPERTIES_POPUP_CLASS;
     }
+    _getPopupWidth() {
+        return this.isMobileView() ? '100%' : DIAGRAM_PROPERTIES_POPUP_WIDTH;
+    }
+    _getPopupHeight() {
+        return DIAGRAM_PROPERTIES_POPUP_HEIGHT;
+    }
     _getPopupOptions() {
         return extend(super._getPopupOptions(), {
-            width: this._isMobileView ? '100%' : DIAGRAM_PROPERTIES_POPUP_WIDTH,
-            height: DIAGRAM_PROPERTIES_POPUP_HEIGHT,
-            showTitle: false, // this._isMobileView,
+            showTitle: this.isMobileView(),
             position: {
                 my: 'right bottom',
                 at: 'right bottom',
                 of: this.option('offsetParent'),
-                offset: '-' + (this._isMobileView ? 0 : this.option('offsetX')) +
-                    ' -' + (this._isMobileView ? 0 : this.option('offsetY'))
+                offset: '-' + (this.isMobileView() ? 0 : this.option('offsetX')) +
+                    ' -' + (this.isMobileView() ? 0 : this.option('offsetY'))
             },
             onShowing: (e) => {
                 if(this._inOnShowing === true) return;
