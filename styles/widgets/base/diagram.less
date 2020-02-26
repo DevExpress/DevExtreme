@@ -1,4 +1,12 @@
-.diagram-action-icons-mixin(@toolbar-color, @menu-color, @icon-size) {
+.diagram-icon-colored(@data-uri, @current-color, @width, @height) {
+    @uri: replace("@{data-uri}", "currentColor", escape("@{current-color}"), "gi");
+
+    background-image: e(@uri);
+    width: @width;
+    height: @height;
+}
+
+.diagram-action-icons-mixin(@toolbar-color, @menu-color, @icon-size, @toolbar-colorbutton-border-width) {
     .dx-diagram-i-connector-begin-none {
         .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-begin-none.svg'), @toolbar-color, 1.46 * @icon-size, @icon-size);
     }
@@ -24,7 +32,7 @@
     }
 
     .dx-diagram-i-button-fill {
-        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/button-fill.svg'), @toolbar-color, @icon-size, @icon-size + @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH);
+        .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/button-fill.svg'), @toolbar-color, @icon-size, @icon-size + @toolbar-colorbutton-border-width);
     }
 
     .dx-diagram-i-button-fullscreen {
@@ -126,12 +134,4 @@
     .dx-diagram-i-menu-image-insert {
         .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/image-insert.svg'), @menu-color, @icon-size, @icon-size);
     }
-}
-
-.diagram-icon-colored(@data-uri, @current-color, @width, @height) {
-    @uri: replace("@{data-uri}", "currentColor", escape("@{current-color}"), "gi");
-
-    background-image: e(@uri);
-    width: @width;
-    height: @height;
 }

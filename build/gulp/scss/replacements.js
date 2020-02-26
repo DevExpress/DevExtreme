@@ -402,5 +402,45 @@ module.exports = {
         { regex: /@include dx-scheduler-agenda-group-mixin/g, replacement: '@include baseScheduler.dx-scheduler-agenda-group-mixin' },
         { regex: /\$SCHEDULER_BASE_BORDER([\s;])/g, replacement: 'baseScheduler.$SCHEDULER_BASE_BORDER$1' },
         { regex: /\$SCHEDULER_SMALL_SIZE_FACTOR([\s;])/g, replacement: 'baseScheduler.$SCHEDULER_SMALL_SIZE_FACTOR$1' },
+    ],
+    'filterBuilder': [
+        { import: '../textEditor/colors', type: 'index' },
+    ],
+    'htmlEditor': [
+        { import: '../button/colors', type: 'colors' },
+        { import: '../button/sizes', type: 'index' },
+        { import: '../textEditor/colors', type: 'index' },
+        { import: '../common', type: 'index' },
+    ],
+    'speedDialAction': [
+        { import: '../../base/speedDialAction', type: 'index' },
+        { import: '../overlay/colors', type: 'colors' },
+        { import: '../button/colors', type: 'index' },
+    ],
+    'fileManager': [
+        { import: '../../base/fileManager', type: 'index' },
+        { import: '../splitter', type: 'index' },
+    ],
+    'diagram': [
+        { import: '../../base/diagram', type: 'index' },
+        { import: '../button/colors', type: 'colors' },
+        { import: '../button/colors', type: 'index' },
+        { import: '../loadIndicator/colors', type: 'colors' },
+        { import: '../overlay/colors', type: 'index' },
+        { import: '../accordion/colors', type: 'index' },
+        { import: '../popup/colors', type: 'index' },
+        { import: '../speedDialAction', type: 'index' },
+        { import: '../fieldset', type: 'index' },
+        { import: '../fieldset/sizes', type: 'index' },
+        { import: '../menu/colors', type: 'index' },
+        { regex: /\.diagram-icon-colored\(d/g, replacement: '@include diagram-icon-colored(d' }
+    ],
+    'gantt': [
+        { import: '../splitter', type: 'index' },
+        { import: '../gridBase/colors', type: 'colors' },
+        { import: '../gridBase/colors', type: 'index' },
+    ],
+    'sortable': [
+        { import: '../../base/sortable', type: 'index', withVars: [ 'base-accent' ] },
     ]
 };
