@@ -72,8 +72,8 @@ module.exports = {
         { import: '../button/sizes', type: 'index' },
         { import: '../common', type: 'index' },
         { import: '../button', type: 'index' },
-        { regex: /@mixin texteditor-input-padding-filled\(\),/g, replacement: '@inclide texteditor-input-padding-filled();' },
-        { regex: /@mixin texteditor-input-padding\(\),/g, replacement: '@inclide texteditor-input-padding();' },
+        { regex: /@mixin texteditor-input-padding-filled\(\),/g, replacement: '@include texteditor-input-padding-filled();' },
+        { regex: /@mixin texteditor-input-padding\(\),/g, replacement: '@include texteditor-input-padding();' },
         { regex: /.texteditor-validation-icon-offset-filled\(\),/g, replacement: '@include texteditor-validation-icon-offset-filled();' },
         { regex: /.texteditor-validation-icon-offset\(\),/g, replacement: '@include texteditor-validation-icon-offset();' },
         { regex: /@mixin dx-icon-sizing\(\$MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE\),/, replacement: '@include dx-icon-sizing($MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);' },
@@ -404,6 +404,7 @@ module.exports = {
         { regex: /\$SCHEDULER_SMALL_SIZE_FACTOR([\s;])/g, replacement: 'baseScheduler.$SCHEDULER_SMALL_SIZE_FACTOR$1' },
     ],
     'filterBuilder': [
+        // { import: '../../base/filterBuilder', type: 'index' }, // TODO
         { import: '../textEditor/colors', type: 'index' },
     ],
     'htmlEditor': [
