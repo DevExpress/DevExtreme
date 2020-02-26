@@ -76,8 +76,27 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             let multiDaysAppointmentParts = [];
             const currentMaxAllowedPosition = position[j].vMax;
 
-            if(this._isMultiDayAppointment(position[j], height) || isAppointmentLong) {
-                if(dateUtils.sameDate(appointmentStartDate, position[j].startDate)) {
+            if(!isRecurring) {
+                if(this._isMultiDayAppointment(position[j], height) || isAppointmentLong) {
+                    if(dateUtils.sameDate(appointmentStartDate, position[j].startDate)) {
+                        appointmentReduced = 'head';
+
+                        resultHeight = this._reduceMultiDayAppointment(height, {
+                            top: position[j].top,
+                            bottom: currentMaxAllowedPosition
+                        });
+                    } else {
+                        appointmentReduced = 'tail';
+                    }
+                }
+
+                multiDaysAppointmentParts = this._getAppointmentParts({
+                    sourceAppointmentHeight: height,
+                    reducedHeight: resultHeight,
+                    width: width
+                }, position[j]);
+            } else {
+                if(this._isMultiDayAppointment(position[j], height)) {
                     appointmentReduced = 'head';
 
                     resultHeight = this._reduceMultiDayAppointment(height, {
@@ -85,21 +104,13 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                         bottom: currentMaxAllowedPosition
                     });
 
-                    // multiDaysAppointmentParts = this._getAppointmentParts({
-                    //     sourceAppointmentHeight: height,
-                    //     reducedHeight: resultHeight,
-                    //     width: width
-                    // }, position[j]);
-                } else {
-                    appointmentReduced = 'tail';
+                    multiDaysAppointmentParts = this._getAppointmentParts({
+                        sourceAppointmentHeight: height,
+                        reducedHeight: resultHeight,
+                        width: width
+                    }, position[j]);
                 }
             }
-
-            multiDaysAppointmentParts = this._getAppointmentParts({
-                sourceAppointmentHeight: height,
-                reducedHeight: resultHeight,
-                width: width
-            }, position[j]);
 
             extend(position[j], {
                 height: resultHeight,
