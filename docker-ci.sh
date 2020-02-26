@@ -7,6 +7,7 @@ trap "echo 'Interrupted!' && kill -9 0" TERM INT
 export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
 export DOTNET_USE_POLLING_FILE_WATCHER=true
+export DISABLE_V8_COMPILE_CACHE=1
 
 function run_lint {
     npm i
