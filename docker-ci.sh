@@ -9,9 +9,7 @@ export NUGET_PACKAGES=$PWD/dotnet_packages
 export DOTNET_USE_POLLING_FILE_WATCHER=true
 
 function run_lint {
-    npm i npm-run-all \
-        eslint eslint-plugin-qunit eslint-plugin-spellcheck babel-eslint \
-        stylelint stylelint-config-standard
+    npm i
     npm run lint
 }
 

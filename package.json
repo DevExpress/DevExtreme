@@ -95,7 +95,6 @@
     "jsrender": "0.9.90",
     "knockout": "^3.4.2",
     "lazypipe": "^1.0.1",
-    "less-plugin-autoprefix": "^2.0.0",
     "less": "3.9.0",
     "less2sass": "^1.0.3",
     "lint-staged": "^10.0.7",
