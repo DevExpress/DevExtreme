@@ -11,7 +11,6 @@ const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
 
 const DRAWER_PANEL_CONTENT_INITIAL = 'dx-drawer-panel-content-initial';
-const DRAWER_PANEL_CONTENT_ADAPTIVE_STATE = 'dx-drawer-panel-content-adaptive-state';
 
 class FileManagerAdaptivityControl extends Widget {
 
@@ -39,19 +38,18 @@ class FileManagerAdaptivityControl extends Widget {
 
     _createDrawerTemplate(container) {
         this.option('drawerTemplate')(container);
-    }
-
-    _render() {
-        super._render();
-        this._checkAdaptiveState();
-        const $splitter = $('<div>').appendTo(this.$element());
-        this._splitter = this._createComponent($splitter, SplitterControl, {
+        this._splitter = this._createComponent('<div>', SplitterControl, {
             container: this.$element(),
             leftElement: $(this._drawer.content()),
             rightElement: $(this._drawer.viewContent()),
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
-        this._splitter.toggleVisibleAndActiveState(!this._isInAdaptiveState);
+        this._splitter.$element().appendTo(container);
+    }
+
+    _render() {
+        super._render();
+        this._checkAdaptiveState();
     }
 
     _onApplyPanelSize(e) {
@@ -65,6 +63,7 @@ class FileManagerAdaptivityControl extends Widget {
         }
         $(this._drawer.content()).removeClass(DRAWER_PANEL_CONTENT_INITIAL);
         $(this._drawer.content()).css('width', e.leftPanelWidth);
+        this._drawer._initSize();
         this._drawer.resizeContent();
     }
 
@@ -84,11 +83,7 @@ class FileManagerAdaptivityControl extends Widget {
         const oldState = this._isInAdaptiveState;
         this._isInAdaptiveState = this._isSmallScreen();
         if(oldState !== this._isInAdaptiveState) {
-            $(this._drawer.content()).toggleClass(DRAWER_PANEL_CONTENT_ADAPTIVE_STATE, this._isInAdaptiveState);
             this.toggleDrawer(!this._isInAdaptiveState, true);
-            if(this._splitter) {
-                this._splitter.toggleVisibleAndActiveState(!this._isInAdaptiveState);
-            }
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
         }
     }
@@ -138,6 +133,8 @@ class FileManagerAdaptivityControl extends Widget {
     toggleDrawer(showing, skipAnimation) {
         this._drawer.option('animationEnabled', !skipAnimation);
         this._drawer.toggle(showing);
+        const isSplitterActive = this._drawer.option('opened') && !this.isInAdaptiveState();
+        this._splitter.toggleState(isSplitterActive);
     }
 }
 

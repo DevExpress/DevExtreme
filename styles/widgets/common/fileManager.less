@@ -55,11 +55,6 @@
         }
     }
 
-    .dx-drawer-shrink .dx-filemanager-progress-panel {
-        border-left-width: 1px;
-        border-left-style: solid;
-    }
-
     .dx-filemanager-progress-panel {
         width: 340px;
         height: 100%;
@@ -160,13 +155,16 @@
         }
     }
 
+    .dx-splitter-wrapper.dx-splitter-initial {
+        right: 3.5px;  // Half of dx-splitter-border width
+    }
+
     .dx-filemanager-container {
         display: flex;
         height: 100%;
         border-top: 1px solid;
         box-sizing: border-box;
         overflow: hidden;
-        position: relative;
 
         .dx-filemanager-dirs-panel {
             padding: 5px 10px;
@@ -181,6 +179,10 @@
             }
         }
 
+        .dx-drawer-shrink .dx-drawer-panel-content {
+            overflow: visible;
+        }
+
         .dx-drawer-panel-content {
             display: block;
             width: 30%;
@@ -188,13 +190,6 @@
             &.dx-drawer-panel-content-initial {
                 min-width: 250px;
                 max-width: 300px;
-            }
-
-            &.dx-drawer-panel-content-adaptive-state {
-                .dx-filemanager-dirs-panel {
-                    border-right-width: 1px;
-                    border-right-style: solid;
-                }
             }
         }
     }
