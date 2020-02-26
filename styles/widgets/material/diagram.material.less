@@ -258,6 +258,19 @@
     .dx-diagram-properties-panel-group-toolbar:first-child {
         padding-top: @DIAGRAM_PROPERTIES_PANEL_SPACING;
     }
+
+    &.dx-diagram-mobile-popup {
+        .dx-popup-title {
+            padding: 8px 8px 0 0;
+        }
+
+        .dx-tabpanel {
+            .dx-tab-selected:before {
+                top: 0;
+                bottom: initial;
+            }
+        }
+    }
 }
 
 .dx-diagram-toolbar {

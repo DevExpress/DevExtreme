@@ -24,7 +24,7 @@ class DiagramPropertiesPanelToolbar extends DiagramToolbar {
     }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            active: true,
+            active: false,
         });
     }
 }

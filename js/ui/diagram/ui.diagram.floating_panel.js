@@ -11,8 +11,12 @@ class DiagramFloatingPanel extends DiagramPanel {
         super._init();
 
         this._createOnVisibilityChangedAction();
-        this._isVisible = this.option('isVisible');
-        this._isMobileView = this.option('isMobileView');
+    }
+    isVisible() {
+        return this.option('isVisible');
+    }
+    isMobileView() {
+        return this.option('isMobileView');
     }
     _initMarkup() {
         super._initMarkup();
@@ -21,14 +25,14 @@ class DiagramFloatingPanel extends DiagramPanel {
 
         const $popupElement = $('<div>')
             .addClass(this._getPopupClass())
-            .addClass(this._isMobileView && DIAGRAM_MOBILE_POPUP_CLASS)
+            .addClass(this.isMobileView() && DIAGRAM_MOBILE_POPUP_CLASS)
             .appendTo($parent);
 
         this._popup = this._createComponent($popupElement, Popup, this._getPopupOptions());
         this._updatePopupVisible();
     }
     toggle() {
-        this._isVisible = !this._isVisible;
+        this.option('isVisible', !this.isVisible());
         this._updatePopupVisible();
     }
 
@@ -52,8 +56,14 @@ class DiagramFloatingPanel extends DiagramPanel {
     _getPopupWidth() {
         return Math.max(this.option('width'), this._getPopupMinWidth()) || 'auto';
     }
+    _getPopupWidthOption() {
+        return this._getPopupWidth() || 'auto';
+    }
     _getPopupMinWidth() {
         return 0;
+    }
+    _getPopupHeightOption() {
+        return this._getPopupHeight() || 'auto';
     }
     _getPopupHeight() {
         return Math.max(this.option('height'), this._getPopupMinHeight()) || 'auto';
@@ -67,26 +77,26 @@ class DiagramFloatingPanel extends DiagramPanel {
             animation: null,
             shading: false,
             focusStateEnabled: false,
-            width: this._getPopupWidth(),
-            height: this._getPopupHeight(),
+            width: this._getPopupWidthOption(),
+            height: this._getPopupHeightOption(),
             position: this.option('position'),
             onContentReady: function() {
                 that._renderPopupContent(that._popup.content());
             },
             onShown: () => {
-                this._isVisible = true;
-                this._onVisibilityChangedAction({ visible: this._isVisible });
+                this.option('isVisible', true);
+                this._onVisibilityChangedAction({ visible: true });
             },
             onHidden: () => {
-                this._isVisible = false;
-                this._onVisibilityChangedAction({ visible: this._isVisible });
+                this.option('isVisible', false);
+                this._onVisibilityChangedAction({ visible: false });
             }
         };
     }
     _renderPopupContent($parent) {
     }
     _updatePopupVisible() {
-        this._popup.option('visible', this._isVisible);
+        this._popup.option('visible', this.isVisible());
     }
     _createOnVisibilityChangedAction() {
         this._onVisibilityChangedAction = this._createActionByOption('onVisibilityChanged');
@@ -97,19 +107,15 @@ class DiagramFloatingPanel extends DiagramPanel {
                 this._createOnVisibilityChangedAction();
                 break;
             case 'width':
-                this._popup.option('width', this._getPopupWidth());
+                this._popup.option('width', this._getPopupWidthOption());
                 break;
             case 'height':
-                this._popup.option('height', this._getPopupHeight());
+                this._popup.option('height', this._getPopupHeightOption());
                 break;
             case 'isMobileView':
-                if(this._isMobileView !== args.value) {
-                    this._isMobileView = args.value;
-                    this._invalidate();
-                }
+                this._invalidate();
                 break;
             case 'isVisible':
-                this._isVisible = args.value;
                 this._updatePopupVisible();
                 break;
             default:
