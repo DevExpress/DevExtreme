@@ -15,6 +15,7 @@ const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 const REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
 const EVERY_INTERVAL = 'dx-recurrence-numberbox-interval';
+const RECURRENCE_BUTTON_GROUP = 'dx-recurrence-button-group';
 
 require('common.css!');
 
@@ -413,6 +414,15 @@ QUnit.test('Recurrence repeat-on editor should be rendered, when freq != daily',
     const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
 
     assert.equal($repeatOn.length, 1, 'repeat-on editor was rendered');
+});
+
+QUnit.test('Recurrence repeat-on editor should contain repeat-on-week editor, when freq = weekly', function(assert) {
+    this.createInstance({ value: 'FREQ=WEEKLY' });
+
+    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+    const $repeatOnWeek = $repeatOn.find('.' + RECURRENCE_BUTTON_GROUP);
+
+    assert.equal($repeatOnWeek.length, 1, 'repeat-on-week editor was rendered');
 });
 
 QUnit.test('Recurrence repeat-on editor should process values correctly, freq = weekly', function(assert) {

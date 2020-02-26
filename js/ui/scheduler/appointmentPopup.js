@@ -61,9 +61,11 @@ export default class AppointmentPopup {
         return this._popup ? this._popup.option('visible') : false;
     }
 
+    ///#DEBUG
     getPopup() {
         return this._popup;
     }
+    ///#ENDDEBUG
 
     dispose() {
         if(this._$popup) {
@@ -140,16 +142,14 @@ export default class AppointmentPopup {
         const appointmentData = this.state.appointment.data;
         const formData = this._createAppointmentFormData(appointmentData);
 
-        AppointmentForm.prepareAppointmentFormEditors({
-            textExpr: expr.textExpr,
-            allDayExpr: expr.allDayExpr,
-            startDateExpr: expr.startDateExpr,
-            endDateExpr: expr.endDateExpr,
-            descriptionExpr: expr.descriptionExpr,
-            recurrenceRuleExpr: expr.recurrenceRuleExpr,
-            startDateTimeZoneExpr: expr.startDateTimeZoneExpr,
-            endDateTimeZoneExpr: expr.endDateTimeZoneExpr
-        }, this.scheduler, this.triggerResize.bind(this), this.changeSize.bind(this), formData, allowEditingTimeZones);
+        AppointmentForm.prepareAppointmentFormEditors(
+            expr,
+            this.scheduler,
+            this.triggerResize.bind(this),
+            this.changeSize.bind(this),
+            formData,
+            allowEditingTimeZones
+        );
 
         if(resources && resources.length) {
             this.scheduler._resourcesManager.setResources(this.scheduler.option('resources'));
@@ -203,11 +203,17 @@ export default class AppointmentPopup {
     }
 
     _getEditorOptions(name) {
+        if(!name) {
+            return;
+        }
         const editor = this._appointmentForm.itemOption(name);
         return editor ? editor.editorOptions : {};
     }
 
     _setEditorOptions(name, options) {
+        if(!name) {
+            return;
+        }
         const editor = this._appointmentForm.itemOption(name);
         editor && this._appointmentForm.itemOption(name, 'editorOptions', options);
     }
@@ -243,7 +249,7 @@ export default class AppointmentPopup {
         if(!this._appointmentForm) {
             return;
         }
-        const isRecurrence = this._appointmentForm.option('formData').recurrenceRule;
+        const isRecurrence = AppointmentForm._getRecurrenceRule(this._appointmentForm.option('formData'), this.scheduler._dataAccessors.expr);
         if(this.isVisible()) {
             const isFullScreen = this._isPopupFullScreenNeeded();
             this._popup.option({
