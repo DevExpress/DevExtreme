@@ -17942,8 +17942,7 @@ QUnit.test('columnAutoWidth when table with one row in safari', function(assert)
     assert.ok(visibleWidth2 > 2 * visibleWidth1, 'second column width more then first');
 });
 
-// T654427
-QUnit.test('column with width auto should have minimum size by content', function(assert) {
+QUnit.test('column with width auto should have minimum size by content (T654427)', function(assert) {
     const CONTENT_WIDTH = 50;
     const dataGrid = $('#dataGrid').dxDataGrid({
         loadingTimeout: undefined,
@@ -17962,8 +17961,7 @@ QUnit.test('column with width auto should have minimum size by content', functio
         }]
     }).dxDataGrid('instance');
 
-
-    assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, 'last column width by content');
+    assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 1.01, 'last column width by content');
 });
 
 // T709106
@@ -17986,8 +17984,7 @@ QUnit.test('column widths if all columns have width auto and columnAutoWidth is 
     assert.roughEqual($(dataGrid.getCellElement(0, 0)).outerWidth(), $(dataGrid.getCellElement(0, 1)).outerWidth(), 1.01, 'first and second column widths are equals');
 });
 
-// T672282
-QUnit.test('column with width auto should have minimum size by content if columnAutoWidth is disabled', function(assert) {
+QUnit.test('column with width auto should have minimum size by content if columnAutoWidth is disabled (T672282)', function(assert) {
     const CONTENT_WIDTH = 50;
     const dataGrid = $('#dataGrid').dxDataGrid({
         width: 1000,
@@ -18007,7 +18004,7 @@ QUnit.test('column with width auto should have minimum size by content if column
     }).dxDataGrid('instance');
 
 
-    assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, 'last column width by content');
+    assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 1.01, 'last column width by content');
 });
 
 QUnit.test('column with width 0 should be applied', function(assert) {
