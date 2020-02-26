@@ -311,7 +311,7 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
     }
 
-    getDrawer() {
+    getProgressDrawer() {
         return this._$element.find(`.${Consts.NOTIFICATION_DRAWER_CLASS}`);
     }
 

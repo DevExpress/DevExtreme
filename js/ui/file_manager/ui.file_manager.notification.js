@@ -57,7 +57,7 @@ export default class FileManagerNotificationControl extends Widget {
     tryShowProgressPanel() {
         const promise = new Deferred();
         if(this._actionProgressStatus === 'default') {
-            return promise.resolve();
+            return promise.resolve().promise();
         }
 
         setTimeout(() => {
@@ -147,7 +147,9 @@ export default class FileManagerNotificationControl extends Widget {
         const oldState = this._isInAdaptiveState;
         this._isInAdaptiveState = this._isSmallScreen();
         if(this._progressDrawer && oldState !== this._isInAdaptiveState) {
-            this._progressPanel && this._progressPanel.$element().detach();
+            if(this._progressPanel) {
+                this._progressPanel.$element().detach();
+            }
             const options = this._getProgressDrawerAdaptiveOptions();
             this._progressDrawer.option(options);
         }

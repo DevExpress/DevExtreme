@@ -131,12 +131,12 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         $('#fileManager').css('width', '100%');
         this.wrapper.getInstance().repaint();
 
-        assert.ok(this.wrapper.getDrawer().hasClass(Consts.DRAWER_MODE_SHRINK));
+        assert.ok(this.wrapper.getProgressDrawer().hasClass(Consts.DRAWER_MODE_SHRINK));
 
         renderer.fn.width = () => 999;
         this.wrapper.getInstance().repaint();
 
-        assert.ok(this.wrapper.getDrawer().hasClass(Consts.DRAWER_MODE_OVERLAP));
+        assert.ok(this.wrapper.getProgressDrawer().hasClass(Consts.DRAWER_MODE_OVERLAP));
 
         renderer.fn.width = originalWidth;
     });
