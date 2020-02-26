@@ -159,10 +159,12 @@ const SchedulerAppointmentForm = {
                 itemType: 'group',
                 colCountByScreen: {
                     lg: 3,
-                    xs: 4
+                    xs: 3
                 },
+                colSpan: 2,
                 items: [{
                     dataField: dataExprs.allDayExpr,
+                    cssClass: 'dx-uppointment-form-switch',
                     editorType: 'dxSwitch',
                     label: {
                         text: messageLocalization.format('dxScheduler-allDay'),
@@ -194,6 +196,7 @@ const SchedulerAppointmentForm = {
                 }, {
                     editorType: 'dxSwitch',
                     dataField: 'repeat',
+                    cssClass: 'dx-uppointment-form-switch',
                     name: 'visibilityChanged',
                     label: {
                         text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
@@ -212,11 +215,7 @@ const SchedulerAppointmentForm = {
             },
             {
                 itemType: 'empty',
-                colSpan: 2,
-            },
-            {
-                itemType: 'empty',
-                colSpan: 2,
+                colSpan: 2
             },
             {
                 dataField: dataExprs.descriptionExpr,
@@ -225,6 +224,10 @@ const SchedulerAppointmentForm = {
                 label: {
                     text: messageLocalization.format('dxScheduler-editorLabelDescription')
                 }
+            },
+            {
+                itemType: 'empty',
+                colSpan: 2
             }
         ];
     },
