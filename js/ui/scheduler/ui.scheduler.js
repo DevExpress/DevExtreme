@@ -1797,7 +1797,7 @@ const Scheduler = Widget.inherit({
                 fixedContainer: this._workSpace.getFixedContainer(),
                 allDayContainer: this._workSpace.getAllDayContainer()
             });
-            this._waitAsyncTemplate(this._workSpaceRecalculation.resolve);
+            this._waitAsyncTemplate(() => this._workSpaceRecalculation.resolve());
         }
     },
 
