@@ -9,6 +9,7 @@ import themes from 'ui/themes';
 import device from 'core/devices';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import domAdapter from 'core/dom_adapter';
+import errors from 'core/errors';
 
 import 'ui/text_area';
 import 'ui/autocomplete';
@@ -27,6 +28,8 @@ const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
+
+const createForm = options => $('#form').dxForm(options).dxForm('instance');
 
 QUnit.testStart(function() {
     const markup =
@@ -453,6 +456,98 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
 });
 
+QUnit.test('The optionChanged event should called with correct full name of option when an option is changed via the \'itemOption\' method', function(assert) {
+    const optionChangedStub = sinon.stub();
+    const form = createForm({
+        formData: {
+            name: 'TestName',
+            lastName: 'TestLastName'
+        },
+        items: [{
+            itemType: 'group',
+            name: 'group',
+            cssClass: 'test-group',
+            items: ['name', 'lastName']
+        }],
+        onOptionChanged: optionChangedStub
+    });
+
+    form.itemOption('group', 'colCount', 2);
+
+    assert.equal(optionChangedStub.callCount, 1, 'optionChanged event is called once');
+    const { fullName, value } = optionChangedStub.getCall(0).args[0];
+    assert.equal(fullName, 'items[0].colCount', 'full name for colCount option');
+    assert.equal(value, 2, 'value of colCount parameter');
+    assert.equal(form.$element().find('.test-group .dx-group-colcount-2').length, 1, 'group has colcount-2 CSS class');
+});
+
+QUnit.test('The optionChanged event should called with correct full name of options when options are changed via the \'itemOption\' method', function(assert) {
+    const optionChangedStub = sinon.stub();
+    const form = createForm({
+        formData: {
+            name: 'TestName',
+            lastName: 'TestLastName'
+        },
+        items: [{
+            itemType: 'group',
+            name: 'group',
+            cssClass: 'test-group',
+            items: ['name', 'lastName']
+        }],
+        onOptionChanged: optionChangedStub
+    });
+
+    form.itemOption('group', {
+        caption: 'Test Caption',
+        colCount: 2
+    });
+
+    assert.equal(optionChangedStub.callCount, 2, 'optionChanged event is called once');
+
+    const $element = form.$element();
+    const args1 = optionChangedStub.getCall(0).args[0];
+    assert.equal(args1.fullName, 'items[0].caption', 'full name for caption option');
+    assert.equal(args1.value, 'Test Caption', 'value ot caption parameter');
+    assert.equal($element.find('.dx-form-group-caption').text(), 'Test Caption', 'text of Caption element');
+
+    const args2 = optionChangedStub.getCall(1).args[0];
+    assert.equal(args2.fullName, 'items[0].colCount', 'full name for colCount option');
+    assert.equal(args2.value, 2, 'value of colCount parameter');
+    assert.equal($element.find('.test-group .dx-group-colcount-2').length, 1, 'group has colcount-2 CSS class');
+});
+
+QUnit.test('Check the complex full name parameter of optionChanged event when this option is changed via the itemOption method', function(assert) {
+    const optionChangedStub = sinon.stub();
+    const form = createForm({
+        formData: {
+            name: 'TestName',
+            lastName: 'TestLastName'
+        },
+        items: [{
+            itemType: 'group',
+            name: 'group1',
+            items: [{
+                itemType: 'tabbed',
+                tabs: [{
+                    title: 'title1',
+                    items: ['address']
+                }, {
+                    title: 'title2',
+                    items: [{ dataField: 'name' }]
+                }]
+            }]
+        }],
+        onOptionChanged: optionChangedStub
+    });
+
+    form.itemOption('group1.title2.name', 'label', { text: 'New Label' });
+
+    assert.equal(optionChangedStub.callCount, 1, 'optionChanged event is called once');
+
+    const { fullName, value } = optionChangedStub.getCall(0).args[0];
+    assert.equal(fullName, 'items[0].items[0].tabs[1].items[0].label', 'full name of name item');
+    assert.deepEqual(value, { text: 'New Label' }, 'label option of name item');
+});
 
 QUnit.module('Tabs', {
     beforeEach: function() {
@@ -1653,28 +1748,42 @@ QUnit.test('Check component instance onEditorEnterKey', function(assert) {
     assert.equal(testArgs.component.NAME, 'dxForm', 'correct component');
 });
 
-QUnit.test('Use \'itemOption\' with no items', function(assert) {
-    // arrange
-    const $testContainer = $('#form').dxForm({
+QUnit.test('The \'itemOption\' method does not update items correctly when items are undefined', function(assert) {
+    const form = createForm({
         height: 200,
-        formData: { test1: 'abc', test2: 'xyz', test3: '123' }
+        formData: { dataField1: 'test value1', dataField2: 'test value 2' }
     });
-    const form = $testContainer.dxForm('instance');
 
-    // act
-    const testItem = form.itemOption('test2');
+    const $form = form.$element();
+    const item = form.itemOption('dataField2');
 
-    form.itemOption('test3', 'label', { text: 'NEWLABEL' });
+    form.itemOption('dataField2', 'label', { text: 'New Label' });
 
-    // assert
-    assert.deepEqual(testItem, { dataField: 'test2' }, 'corrected item received');
-    assert.equal($testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS).last().text(), 'NEWLABEL:', 'new label rendered');
+    assert.equal(form.option('items').length, undefined, 'user items are undefined');
+    assert.deepEqual(item, { dataField: 'dataField2' }, 'second item');
+    assert.equal($form.find(`.${FORM_LAYOUT_MANAGER_CLASS}`).children().length, 0, 'layout manager is rendered empty');
+});
+
+QUnit.test('The \'option\' method does not update items correctly when items are undefined', function(assert) {
+    const form = createForm({
+        height: 200,
+        formData: { dataField1: 'test value1', dataField2: 'test value 2' }
+    });
+
+    const $form = form.$element();
+    const item = form.option('items[1]');
+
+    form.option('items[1].label', { text: 'New Label' });
+
+    assert.equal(form.option('items').length, undefined, 'user items are undefined');
+    assert.equal(item, undefined, 'second item');
+    assert.equal($form.find(`.${FORM_LAYOUT_MANAGER_CLASS}`).children().length, 0, 'layout manager is rendered empty');
 });
 
 QUnit.test('Use \'itemOption\' do not change the order of an items', function(assert) {
     // arrange
     const contentReadyStub = sinon.stub();
-    const $testContainer = $('#form').dxForm({
+    const form = createForm({
         height: 200,
         formData: { ID: 1, FistName: 'Alex', LastName: 'Johnson', Address: 'Alabama' },
         items: [
@@ -1684,7 +1793,6 @@ QUnit.test('Use \'itemOption\' do not change the order of an items', function(as
             'Address'
         ]
     });
-    const form = $testContainer.dxForm('instance');
 
     form.on('contentReady', contentReadyStub);
 
@@ -1706,7 +1814,7 @@ QUnit.test('Use \'itemOption\' do not change the order of an items', function(as
     assert.deepEqual(
         form.option('items'),
         [
-            { dataField: 'ID' },
+            'ID',
             {
                 dataField: 'FirstName',
                 visible: true,
@@ -1721,7 +1829,7 @@ QUnit.test('Use \'itemOption\' do not change the order of an items', function(as
                 }
             },
             { dataField: 'LastName' },
-            { dataField: 'Address' }
+            'Address'
         ],
         'correct items order');
 
@@ -1729,8 +1837,7 @@ QUnit.test('Use \'itemOption\' do not change the order of an items', function(as
 });
 
 QUnit.test('Use \'itemOption\' with groups', function(assert) {
-    // arrange
-    const $testContainer = $('#form').dxForm({
+    const form = createForm({
         height: 200,
         formData: { EmployeeID: 1, LastName: 'John', FirstName: 'Dow', BirthData: '01/01/1970', HireDate: '12/11/1995' },
         items: [
@@ -1748,31 +1855,26 @@ QUnit.test('Use \'itemOption\' with groups', function(assert) {
                         }, {
                             itemType: 'group',
                             caption: 'Dates',
-                            items: ['BirthDate', 'HireDate']
+                            items: ['BirthDate', { dataField: 'HireDate' }]
                         }]
                     }
                 ]
             }
         ]
-    }
-    );
-    const form = $testContainer.dxForm('instance');
-
-    // act
-    const unknownField = form.itemOption('FirstName');
+    });
+    const $form = form.$element();
+    const firstNameField = form.itemOption('FirstName');
     const firstGroup = form.itemOption('Personal');
     const secondGroup = form.itemOption('Personal.FullName');
     const innerOption = form.itemOption('Personal.FullName.FirstName');
 
     form.itemOption('Personal.Dates.HireDate', 'label', { text: 'NEWLABEL' });
 
-    // assert
-    assert.equal(unknownField, undefined, 'corrected item received');
+    assert.equal(firstNameField, 'FirstName', 'first name field');
     assert.deepEqual({ itemType: firstGroup.itemType, caption: firstGroup.caption }, { itemType: 'group', caption: 'Personal' }, 'corrected item received');
     assert.deepEqual({ itemType: secondGroup.itemType, caption: secondGroup.caption }, { itemType: 'group', caption: 'Full Name' }, 'corrected item received');
-    assert.equal(innerOption.dataField, 'FirstName', 'corrected item received');
-
-    assert.equal($testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS).last().text(), 'NEWLABEL:', 'new label rendered');
+    assert.equal(innerOption, 'FirstName', 'corrected item received');
+    assert.equal($form.find(`.${internals.FIELD_ITEM_LABEL_CLASS}`).last().text(), 'NEWLABEL:', 'new label rendered');
 });
 
 QUnit.test('Use \'itemOption\' with groups and one group has empty caption (T359214)', function(assert) {
@@ -1842,9 +1944,18 @@ QUnit.test('Use \'itemOption\' with groups and one group has empty caption (T359
 });
 
 QUnit.test('Use \'itemOption\' with tabs', function(assert) {
-    // arrange
-    const $testContainer = $('#form').dxForm({
-        formData: { EmployeeID: 1, LastName: 'John', FirstName: 'Dow', BirthData: '01/01/1970', HireDate: '12/11/1995', Country: 'USA', City: 'Phoenix', Region: 'Arizona', Title: 'Ms' },
+    const form = createForm({
+        formData: {
+            EmployeeID: 1,
+            LastName: 'John',
+            FirstName: 'Dow',
+            BirthData: '01/01/1970',
+            HireDate: '12/11/1995',
+            Country: 'USA',
+            City: 'Phoenix',
+            Region: 'Arizona',
+            Title: 'Ms'
+        },
         items: [
             'EmployeeID', 'FirstName', 'LastName',
             {
@@ -1852,7 +1963,7 @@ QUnit.test('Use \'itemOption\' with tabs', function(assert) {
                 tabs: [
                     {
                         title: 'Dates',
-                        items: ['BirthDate', 'HireDate']
+                        items: ['BirthDate', { dataField: 'HireDate' }]
                     },
                     {
                         title: 'Address',
@@ -1867,63 +1978,66 @@ QUnit.test('Use \'itemOption\' with tabs', function(assert) {
             }
         ] }
     );
-    const form = $testContainer.dxForm('instance');
-
-    // act
+    const $form = form.$element();
     const tabItem = form.itemOption('Address');
     const innerTabItem = form.itemOption('Address.Country');
 
     form.itemOption('Dates.HireDate', 'label', { text: 'NEWLABEL' });
 
-    // assert
+    const hireDateItem = form.itemOption('Dates.HireDate');
+
     assert.deepEqual(tabItem, {
         title: 'Address',
         colCount: 2,
-        items: [{ dataField: 'Country' }, { dataField: 'City' }, { dataField: 'Region' }]
+        items: ['Country', 'City', 'Region']
     }, 'Correct tab\'s item');
-
-    assert.equal(innerTabItem.dataField, 'Country', 'corrected item received');
-
-    assert.equal($testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS).eq(4).text(), 'NEWLABEL:', 'new label rendered');
+    assert.deepEqual(hireDateItem, {
+        dataField: 'HireDate',
+        label: {
+            text: 'NEWLABEL'
+        }
+    }, 'the HireDate item');
+    assert.equal(innerTabItem, 'Country', 'corrected item received');
+    assert.equal($form.find(`.${internals.FIELD_ITEM_LABEL_CLASS}`).eq(4).text(), 'NEWLABEL:', 'new label rendered');
 });
 
 QUnit.test('\'itemOption\' should get an item with several spaces in the caption', function(assert) {
-    // arrange
-    const $testContainer = $('#form').dxForm({
+    const form = createForm({
         formData: { EmployeeID: 1, LastName: 'John', FirstName: 'Dow' },
         items: [
             'EmployeeID',
             {
                 itemType: 'group',
                 caption: 'Test group item',
-                items: [
-                    'FirstName', 'LastName'
-                ]
+                items: ['FirstName', { dataField: 'LastName' }]
             }
         ] }
     );
-    const form = $testContainer.dxForm('instance');
-
-    // act
+    const $form = form.$element();
     const groupItem = form.itemOption('Testgroupitem');
     const innerGroupItem = form.itemOption('Testgroupitem.FirstName');
 
     assert.deepEqual(groupItem, {
         itemType: 'group',
         caption: 'Test group item',
-        items: [ { dataField: 'FirstName' }, { dataField: 'LastName' }]
+        items: ['FirstName', { dataField: 'LastName' }]
     }, 'Correct group item');
 
     form.itemOption('Testgroupitem.LastName', 'label', { text: 'NEWLABEL' });
 
-    // assert
-    assert.equal(innerGroupItem.dataField, 'FirstName', 'corrected item received');
-    assert.equal($testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS).last().text(), 'NEWLABEL:', 'new label rendered');
+    const lastNameItem = form.itemOption('Testgroupitem.LastName');
+    assert.deepEqual(lastNameItem, {
+        dataField: 'LastName',
+        label: {
+            text: 'NEWLABEL'
+        }
+    }, 'LastName item');
+    assert.equal(innerGroupItem, 'FirstName', 'corrected item received');
+    assert.equal($form.find(`.${internals.FIELD_ITEM_LABEL_CLASS}`).last().text(), 'NEWLABEL:', 'new label rendered');
 });
 
 QUnit.test('\'itemOption\' should get an item with several spaces in the caption and long path', function(assert) {
-    // arrange
-    const $testContainer = $('#form').dxForm({
+    const form = createForm({
         formData: { EmployeeID: 1, LastName: 'John', FirstName: 'Dow' },
         items: [
             'EmployeeID',
@@ -1938,18 +2052,14 @@ QUnit.test('\'itemOption\' should get an item with several spaces in the caption
             }
         ] }
     );
-    const form = $testContainer.dxForm('instance');
 
-    // act
     const innerGroupItem = form.itemOption('Testgroup1.Testgroup2.FirstName');
 
-    // assert
-    assert.deepEqual(innerGroupItem, { dataField: 'FirstName' }, 'corrected item received');
+    assert.deepEqual(innerGroupItem, 'FirstName', 'corrected item received');
 });
 
 QUnit.test('\'itemOption\' should get an group inner item located into tabbed item', function(assert) {
-    // arrange
-    const $testContainer = $('#form').dxForm({
+    const form = createForm({
         formData: { EmployeeID: 1, LastName: 'John', FirstName: 'Dow' },
         items: [
             {
@@ -1967,13 +2077,10 @@ QUnit.test('\'itemOption\' should get an group inner item located into tabbed it
                 }]
             }]
     });
-    const form = $testContainer.dxForm('instance');
 
-    // act
     const innerGroupItem = form.itemOption('TestTab2.TestGroup1.FirstName');
 
-    // assert
-    assert.deepEqual(innerGroupItem, { dataField: 'FirstName' }, 'corrected item received');
+    assert.deepEqual(innerGroupItem, 'FirstName', 'corrected item received');
 });
 
 QUnit.test('\'itemOption\' should get item by composite path use the name option', function(assert) {
@@ -2034,6 +2141,85 @@ QUnit.test('\'itemOption\' should get a group item by the name option', function
         name: 'simpleItem',
         dataField: 'LastName'
     }], 'has correct items');
+});
+
+QUnit.test('The \'itemOption\' cannot update an item when it has the string type and throws the warning', function(assert) {
+    sinon.spy(errors, 'log');
+
+    try {
+        const form = createForm({
+            items: ['item1']
+        });
+
+        form.itemOption('item1', 'label', { text: 'test' });
+
+        const items = form.option('items');
+
+        assert.deepEqual(items, ['item1'], 'items');
+        assert.deepEqual(errors.log.lastCall.args, ['W0017', 'item1']);
+    } finally {
+        errors.log.restore();
+    }
+});
+
+QUnit.test('The \'itemOption\' cannot update an item inside group when it has the string type and throws the warning', function(assert) {
+    sinon.spy(errors, 'log');
+
+    try {
+        const form = createForm({
+            items: [{
+                itemType: 'group',
+                name: 'group1',
+                items: ['item1']
+            }]
+        });
+
+        form.itemOption('group1.item1', 'label', { text: 'test' });
+
+        const items = form.option('items');
+
+        assert.deepEqual(items, [{
+            itemType: 'group',
+            name: 'group1',
+            items: ['item1']
+        }], 'items');
+        assert.deepEqual(errors.log.lastCall.args, ['W0017', 'group1.item1']);
+    } finally {
+        errors.log.restore();
+    }
+});
+
+QUnit.test('The \'itemOption\' cannot update an item inside tab when it has the string type and throws the warning', function(assert) {
+    sinon.spy(errors, 'log');
+
+    try {
+        const form = createForm({
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed1',
+                tabs: [{
+                    title: 'title1',
+                    items: ['item1']
+                }]
+            }]
+        });
+
+        form.itemOption('tabbed1.title1.item1', 'label', { text: 'test' });
+
+        const items = form.option('items');
+
+        assert.deepEqual(items, [{
+            itemType: 'tabbed',
+            name: 'tabbed1',
+            tabs: [{
+                title: 'title1',
+                items: ['item1']
+            }]
+        }], 'items');
+        assert.deepEqual(errors.log.lastCall.args, ['W0017', 'tabbed1.title1.item1']);
+    } finally {
+        errors.log.restore();
+    }
 });
 
 QUnit.test('The exception is not thrown when option of an unknown item is changed', function(assert) {

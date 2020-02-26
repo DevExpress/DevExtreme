@@ -85,8 +85,8 @@ class FormTestWrapper {
         QUnit.assert.equal(result.validators.length, validatorsCount, 'validators count of validation result');
     }
 
-    checkFormsReRender(message = '') {
-        QUnit.assert.equal(this._formContentReadyStub.callCount, 0, `${message}, form is not re-render`);
+    checkFormsReRender(message = '', expectedRendersCount = 0) {
+        QUnit.assert.equal(this._formContentReadyStub.callCount, expectedRendersCount, `${message}, form is not re-render`);
         this._formContentReadyStub.reset();
     }
 
@@ -151,6 +151,10 @@ class FormTestWrapper {
     checkLabelsBySelector({ itemSelector, columnIndex = 0, etalonLabelText }) {
         const $texts = this._form.$element().find(`${itemSelector}.dx-col-${columnIndex} .${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
         this._checkLabelTextsWidthByEtalon($texts, etalonLabelText);
+    }
+
+    checkItemOption(itemID, optionName, expectedOptionValue) {
+        QUnit.assert.equal(this._form.itemOption(itemID)[optionName], expectedOptionValue, `value of the ${optionName} for ${itemID} item`);
     }
 }
 
@@ -574,6 +578,36 @@ module('Group item. Use the option method', function() {
         testWrapper.checkLabelText('.test-item3', 'Test Label 3');
         testWrapper.checkHelpText('.test-item3', 'Test help text 3');
     });
+
+    test('Set { colCount: 2, items: [{itemType: \'group\', items: [{dataField: \'dataField1\', visible: false}, \'dataField2\']}, {itemType: \'group\', items:[\'dataField3\'}]}, change item visible and colSpan of group', function() {
+        const testWrapper = new FormTestWrapper({
+            colCount: 2,
+            items: [{
+                itemType: 'group',
+                name: 'group1',
+                items: [{
+                    dataField: 'dataField1',
+                    cssClass: 'test-item1',
+                    visible: false
+                }, {
+                    dataField: 'dataField2',
+                    cssClass: 'test-item2'
+                }]
+            }, {
+                itemType: 'group',
+                items: ['dataField3']
+            }]
+        });
+
+        testWrapper.beginUpdate();
+        testWrapper.setOption('items[0].items[0]', 'visible', true);
+        testWrapper.setOption('items[0]', 'colSpan', 2);
+        testWrapper.endUpdate();
+
+        testWrapper.checkFormsReRender('Form is re-render', 1);
+        testWrapper.checkItemElement('.test-item1', true);
+        testWrapper.checkItemElement('.test-item2', true);
+    });
 });
 
 module('Tabbed item. Use the option method', function() {
@@ -816,6 +850,38 @@ module('Tabbed item. Use the option method', function() {
         testWrapper.checkSimpleItem('dataField2', 'DataField2', 'Data Field 2');
         testWrapper.checkItemElement('.test-tab', true, 'tabbed item element');
         testWrapper.checkTabTitle('.test-tab', 'Test Title');
+    });
+
+    test('Set { colCount: 2, items: [{itemType: \'tabbed\', tabs: [{title: \'title1\', items: [{dataField: \'dataField1\', visible: false}, \'dataField2\']}}], {itemType: \'group\', items:[\'dataField3\'}]}, change item visible and colSpan of group', function() {
+        const testWrapper = new FormTestWrapper({
+            colCount: 2,
+            items: [{
+                itemType: 'tabbed',
+                tabs: [{
+                    title: 'title1',
+                    items: [{
+                        dataField: 'dataField1',
+                        cssClass: 'test-item1',
+                        visible: false
+                    }, {
+                        dataField: 'dataField2',
+                        cssClass: 'test-item2'
+                    }]
+                }]
+            }, {
+                itemType: 'group',
+                items: ['dataField3']
+            }]
+        });
+
+        testWrapper.beginUpdate();
+        testWrapper.setOption('items[0].tabs[0].items[0]', 'visible', true);
+        testWrapper.setOption('items[0]', 'colSpan', 2);
+        testWrapper.endUpdate();
+
+        testWrapper.checkFormsReRender('Form is re-render', 1);
+        testWrapper.checkItemElement('.test-item1', true);
+        testWrapper.checkItemElement('.test-item2', true);
     });
 });
 
@@ -1337,6 +1403,38 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkLabelText('.test-item3', 'Test Label 3');
         testWrapper.checkHelpText('.test-item3', 'Test help text 3');
     });
+
+    test('Set { colCount: 2, items: [{itemType: \'group\', items: [{dataField: \'dataField1\', visible: false}, \'dataField2\']}, {itemType: \'group\', items:[\'dataField3\'}]}, change item visible and colSpan of group', function() {
+        const testWrapper = new FormTestWrapper({
+            colCount: 2,
+            items: [{
+                itemType: 'group',
+                name: 'group1',
+                items: [{
+                    dataField: 'dataField1',
+                    cssClass: 'test-item1',
+                    visible: false
+                }, {
+                    dataField: 'dataField2',
+                    cssClass: 'test-item2'
+                }]
+            }, {
+                itemType: 'group',
+                items: ['dataField3']
+            }]
+        });
+
+        testWrapper.beginUpdate();
+        // TODO: the issue reproduces when the option set as object
+        testWrapper.setItemOption('group1.dataField1', { visible: true });
+        testWrapper.setItemOption('group1', 'colSpan', 2);
+        testWrapper.endUpdate();
+
+        testWrapper.checkFormsReRender('Form is re-render', 1);
+        testWrapper.checkItemElement('.test-item1', true);
+        testWrapper.checkItemElement('.test-item2', true);
+        testWrapper.checkItemOption('group1.dataField1', 'visible', true);
+    });
 });
 
 module('Tabbed item. Use the itemOption method', function() {
@@ -1587,6 +1685,41 @@ module('Tabbed item. Use the itemOption method', function() {
         testWrapper.checkItemElement('.test-tab', true, 'tabbed item element');
         testWrapper.checkTabTitle('.test-tab', 'Test Title');
     });
+
+    test('Set { colCount: 2, items: [{itemType: \'tabbed\', tabs: [{title: \'title1\', items: [{dataField: \'dataField1\', visible: false}, \'dataField2\']}}], {itemType: \'group\', items:[\'dataField3\'}]}, change item visible and colSpan of group', function() {
+        const testWrapper = new FormTestWrapper({
+            colCount: 2,
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed1',
+                tabs: [{
+                    title: 'title1',
+                    items: [{
+                        dataField: 'dataField1',
+                        cssClass: 'test-item1',
+                        visible: false
+                    }, {
+                        dataField: 'dataField2',
+                        cssClass: 'test-item2'
+                    }]
+                }]
+            }, {
+                itemType: 'group',
+                items: ['dataField3']
+            }]
+        });
+
+        testWrapper.beginUpdate();
+        // TODO: the issue reproduces when the option set as object
+        testWrapper.setItemOption('tabbed1.title1.dataField1', { visible: true });
+        testWrapper.setItemOption('tabbed1', 'colSpan', 2);
+        testWrapper.endUpdate();
+
+        testWrapper.checkFormsReRender('Form is re-render', 1);
+        testWrapper.checkItemElement('.test-item1', true);
+        testWrapper.checkItemElement('.test-item2', true);
+        testWrapper.checkItemOption('tabbed1.title1.dataField1', 'visible', true);
+    });
 });
 
 module('Align labels', () => {
@@ -1598,7 +1731,7 @@ module('Align labels', () => {
             }, {
                 itemType: 'group',
                 name: 'group1',
-                items: ['address', 'city']
+                items: [{ dataField: 'address' }, 'city']
             }]
         });
 
@@ -1717,7 +1850,7 @@ module('Align labels', () => {
                 itemType: 'group',
                 name: 'group1',
                 colCount: 2,
-                items: ['name', 'description', 'lastName', 'city']
+                items: [{ dataField: 'name' }, { dataField: 'description' }, 'lastName', 'city']
             }]
         });
 
@@ -1814,19 +1947,19 @@ module('Align labels', () => {
             }]
         });
 
-        testWrapper.setItemOption('title1.group1.description', 'visible', false);
+        testWrapper.setItemOption('title1.group2.description', 'visible', false);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Home Address' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Last Name' });
 
-        testWrapper.setItemOption('title1.group1.homeAddress', 'visible', false);
+        testWrapper.setItemOption('title1.group2.homeAddress', 'visible', false);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Name' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Last Name' });
 
-        testWrapper.setItemOption('title1.group1.description', 'visible', true);
+        testWrapper.setItemOption('title1.group2.description', 'visible', true);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Description' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Last Name' });
 
-        testWrapper.setItemOption('title1.group1.homeAddress', 'visible', true);
+        testWrapper.setItemOption('title1.group2.homeAddress', 'visible', true);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Description' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Home Address' });
     });

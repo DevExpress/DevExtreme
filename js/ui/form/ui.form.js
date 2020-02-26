@@ -20,6 +20,7 @@ import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import TabPanel from '../tab_panel';
 import Scrollable from '../scroll_view/ui.scrollable';
 import { Deferred } from '../../core/utils/deferred';
+import errors from '../../core/errors';
 import themes from '../themes';
 import tryCreateItemOptionAction from './ui.form.item_options_actions';
 import {
@@ -28,8 +29,6 @@ import {
     getFullOptionName,
     getOptionNameFromFullName,
     tryGetTabPath,
-    getTextWithoutSpaces,
-    isExpectedItem,
     isFullPathContainsTabs
 } from './ui.form.utils';
 
@@ -564,6 +563,7 @@ const Form = Widget.inherit({
         let items = that.option('items');
         const $content = that._getContent();
 
+        items = this._generateItemsFromData(items);
         items = that._prepareItems(items);
 
         //#DEBUG
@@ -803,8 +803,7 @@ const Form = Widget.inherit({
     _optionChanged: function(args) {
         const rootNameOfComplexOption = this._getRootLevelOfExpectedComplexOption(args.fullName, ['formData', 'items']);
 
-        if(rootNameOfComplexOption) {
-            this._customHandlerOfComplexOption(args, rootNameOfComplexOption);
+        if(this._tryToProcessComplexOption(args, rootNameOfComplexOption)) {
             return;
         }
 
@@ -873,10 +872,8 @@ const Form = Widget.inherit({
         let result;
 
         if(splitFullName.length > 1) {
-            let i;
             const rootOptionName = splitFullName[0];
-
-            for(i = 0; i < expectedRootNames.length; i++) {
+            for(let i = 0; i < expectedRootNames.length; i++) {
                 if(rootOptionName.search(expectedRootNames[i]) !== -1) {
                     result = expectedRootNames[i];
                 }
@@ -936,10 +933,10 @@ const Form = Widget.inherit({
             } else {
                 this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
             }
+            this._updateValidationGroupAndSummaryIfNeeded(optionName);
         };
         layoutManager.on('contentReady', contentReadyHandler);
         layoutManager.option(optionName, value);
-        this._updateValidationGroupAndSummaryIfNeeded(optionName);
     },
 
     _tryChangeLayoutManagerItemOption(fullName, value) {
@@ -970,20 +967,7 @@ const Form = Widget.inherit({
         return false;
     },
 
-    _tryChangeLayoutManagerItemOptions(itemPath, options) {
-        let result;
-        this.beginUpdate();
-        each(options, (optionName, optionValue) => {
-            result = this._tryChangeLayoutManagerItemOption(getFullOptionName(itemPath, optionName), optionValue);
-            if(!result) {
-                return false;
-            }
-        });
-        this.endUpdate();
-        return result;
-    },
-
-    _customHandlerOfComplexOption: function(args, rootOptionName) {
+    _tryToProcessComplexOption: function(args, rootOptionName) {
         const nameParts = args.fullName.split('.');
         const value = args.value;
 
@@ -993,14 +977,7 @@ const Form = Widget.inherit({
             const optionNameWithoutPath = args.fullName.replace(itemPath + '.', '');
             const simpleOptionName = optionNameWithoutPath.split('.')[0].replace(/\[\d+]/, '');
             const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue, itemPath);
-
-            if(!this._tryExecuteItemOptionAction(itemAction) && !this._tryChangeLayoutManagerItemOption(args.fullName, value)) {
-                if(item) {
-                    this._changeItemOption(item, optionNameWithoutPath, value);
-                    const items = this._generateItemsFromData(this.option('items'));
-                    this.option('items', items);
-                }
-            }
+            return this._tryExecuteItemOptionAction(itemAction) || this._tryChangeLayoutManagerItemOption(args.fullName, value);
         }
 
         if(rootOptionName === 'formData') {
@@ -1011,7 +988,9 @@ const Form = Widget.inherit({
             } else {
                 this._triggerOnFieldDataChanged({ dataField, value });
             }
+            return true;
         }
+        return false;
     },
 
     _getItemPath: function(nameParts) {
@@ -1063,138 +1042,20 @@ const Form = Widget.inherit({
         const result = [];
 
         if(!items && isDefined(formData)) {
-            each(formData, function(dataField) {
-                result.push({
-                    dataField: dataField
-                });
+            each(formData, dataField => {
+                result.push({ dataField });
             });
         }
 
-        if(items) {
-            each(items, function(index, item) {
+        if(Array.isArray(items)) {
+            items.forEach(item => {
                 if(isObject(item)) {
                     result.push(item);
-                } else {
-                    result.push({
-                        dataField: item
-                    });
+                }
+                if(isString(item)) {
+                    result.push({ dataField: item });
                 }
             });
-        }
-
-        return result;
-    },
-
-    _getItemByField: function(field, items) {
-        const that = this;
-        const fieldParts = isObject(field) ? field : that._getFieldParts(field);
-        const fieldName = fieldParts.fieldName;
-        const fieldPath = fieldParts.fieldPath;
-        let resultItem;
-
-        if(items.length) {
-            each(items, function(index, item) {
-                const itemType = item.itemType;
-
-                if(fieldPath.length) {
-                    const path = fieldPath.slice();
-
-                    item = that._getItemByFieldPath(path, fieldName, item);
-                } else if(itemType === 'group' && !(item.caption || item.name) || itemType === 'tabbed' && !item.name) {
-                    const subItemsField = that._getSubItemField(itemType);
-
-                    item.items = that._generateItemsFromData(item.items);
-
-                    item = that._getItemByField({ fieldName: fieldName, fieldPath: fieldPath }, item[subItemsField]);
-                }
-
-                if(isExpectedItem(item, fieldName)) {
-                    resultItem = item;
-                    return false;
-                }
-            });
-        }
-
-        return resultItem;
-    },
-
-    _getFieldParts: function(field) {
-        const fieldSeparator = '.';
-        let fieldName = field;
-        let separatorIndex = fieldName.indexOf(fieldSeparator);
-        const resultPath = [];
-
-
-        while(separatorIndex !== -1) {
-            resultPath.push(fieldName.substr(0, separatorIndex));
-            fieldName = fieldName.substr(separatorIndex + 1);
-            separatorIndex = fieldName.indexOf(fieldSeparator);
-        }
-
-        return {
-            fieldName: fieldName,
-            fieldPath: resultPath.reverse()
-        };
-    },
-
-    _getItemByFieldPath: function(path, fieldName, item) {
-        const that = this;
-        const itemType = item.itemType;
-        const subItemsField = that._getSubItemField(itemType);
-        const isItemWithSubItems = itemType === 'group' || itemType === 'tabbed' || item.title;
-        let result;
-
-        do {
-            if(isItemWithSubItems) {
-                const name = item.name || item.caption || item.title;
-                const isGroupWithName = isDefined(name);
-                const nameWithoutSpaces = getTextWithoutSpaces(name);
-                var pathNode;
-
-                item[subItemsField] = that._generateItemsFromData(item[subItemsField]);
-
-                if(isGroupWithName) {
-                    pathNode = path.pop();
-                }
-
-                if(!path.length) {
-                    result = that._getItemByField(fieldName, item[subItemsField]);
-
-                    if(result) {
-                        break;
-                    }
-                }
-
-                if(!isGroupWithName || isGroupWithName && nameWithoutSpaces === pathNode) {
-                    if(path.length) {
-                        result = that._searchItemInEverySubItem(path, fieldName, item[subItemsField]);
-                    }
-                }
-            } else {
-                break;
-            }
-        } while(path.length && !isDefined(result));
-
-        return result;
-    },
-
-    _getSubItemField: function(itemType) {
-        return itemType === 'tabbed' ? 'tabs' : 'items';
-    },
-
-    _searchItemInEverySubItem: function(path, fieldName, items) {
-        const that = this;
-        let result;
-
-        each(items, function(index, groupItem) {
-            result = that._getItemByFieldPath(path.slice(), fieldName, groupItem);
-            if(result) {
-                return false;
-            }
-        });
-
-        if(!result) {
-            result = false;
         }
 
         return result;
@@ -1321,9 +1182,8 @@ const Form = Widget.inherit({
     },
 
     itemOption(id, option, value) {
-        const items = this._generateItemsFromData(this.option('items'));
-        const item = this._getItemByField(id, items);
-        const path = this._itemsRunTimeInfo.getPathFromItem(item);
+        const runTimeItemInfo = this._itemsRunTimeInfo.findRunTimeItemInfoByID(id);
+        const { item, path } = runTimeItemInfo || {};
 
         if(!item) {
             return;
@@ -1333,32 +1193,30 @@ const Form = Widget.inherit({
             case 1:
                 return item;
             case 3: {
-                const itemAction = this._tryCreateItemOptionAction(option, item, value, item[option], path);
-                this._changeItemOption(item, option, value);
                 const fullName = getFullOptionName(path, option);
-                if(!this._tryExecuteItemOptionAction(itemAction) && !this._tryChangeLayoutManagerItemOption(fullName, value)) {
-                    this.option('items', items);
+                const userItem = this.option(path);
+
+                if(!isString(userItem)) {
+                    this.option(fullName, value);
+                } else {
+                    errors.log('W0017', id);
                 }
                 break;
             }
             default: {
                 if(isObject(option)) {
-                    if(!this._tryChangeLayoutManagerItemOptions(path, option)) {
-                        let allowUpdateItems;
-                        each(option, (optionName, optionValue) => {
-                            const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName], path);
-                            this._changeItemOption(item, optionName, optionValue);
-                            if(!allowUpdateItems && !this._tryExecuteItemOptionAction(itemAction)) {
-                                allowUpdateItems = true;
-                            }
-                        });
-                        allowUpdateItems && this.option('items', items);
-                    }
+                    this.beginUpdate();
+                    each(option, (optionName, optionValue) => {
+                        const fullOptionName = getFullOptionName(path, optionName);
+                        this.option(fullOptionName, optionValue);
+                    });
+                    this.endUpdate();
                 }
                 break;
             }
         }
     },
+
     validate: function() {
         return ValidationEngine.validateGroup(this._getValidationGroup());
     },

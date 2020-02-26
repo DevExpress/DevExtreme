@@ -841,7 +841,7 @@ module('Public API: itemOption method', function() {
         testWrapper.checkTabTitle(1, 'TestTitle2');
     });
 
-    test('Title is set correctly when it is changed on the onInitialized event', function() {
+    test('Does not possibly set a title of a tabbed item when it is changed on the onInitialized event', function() {
         const testWrapper = new FormTestWrapper({
             onInitialized: e => {
                 e.component.itemOption('title1', 'title', 'New Title');
@@ -856,7 +856,7 @@ module('Public API: itemOption method', function() {
         });
 
         testWrapper.checkFormsReRender();
-        testWrapper.checkTabTitle(0, 'New Title');
+        testWrapper.checkTabTitle(0, 'title1');
     });
 
     ['badge', 'icon', 'template', 'tabTemplate', 'title'].forEach(optionName => {

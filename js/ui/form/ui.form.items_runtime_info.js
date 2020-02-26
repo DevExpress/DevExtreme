@@ -2,6 +2,7 @@ import Guid from '../../core/guid';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { isString } from '../../core/utils/type';
+import { isExpectedItem } from './ui.form.utils';
 
 export default class FormItemsRunTimeInfo {
     constructor() {
@@ -110,6 +111,25 @@ export default class FormItemsRunTimeInfo {
 
     findItemIndexByItem(targetItem) {
         return this._findFieldByCondition(({ item }) => item === targetItem, 'itemIndex');
+    }
+
+    findRunTimeItemInfoByID(id, itemPath = '') {
+        const idParts = id.split('.');
+        const keys = Object.keys(this._map).filter(key => {
+            const { item, path } = this._map[key];
+            return (isString(item) ? item === idParts[0] : isExpectedItem(item, idParts[0])) && path.startsWith(itemPath);
+        });
+
+        if(!keys.length) {
+            return;
+        }
+
+        if(idParts.length === 1) {
+            return this._map[keys[0]];
+        } else {
+            const newId = idParts.slice(1, idParts.length).join('.');
+            return this.findRunTimeItemInfoByID(newId, this._map[keys[0]].path);
+        }
     }
 
     getItems() {
