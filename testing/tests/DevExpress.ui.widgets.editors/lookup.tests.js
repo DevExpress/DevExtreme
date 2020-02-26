@@ -3313,7 +3313,7 @@ QUnit.module('default options', {
 
             let $popup = $('.dx-popup-wrapper');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').outerWidth(), $(window).width() * 0.8, 1, 'default popup width like generic');
+            assert.roughEqual($popup.find('.dx-overlay-content').outerWidth(), $(window).width() * 0.8, 3, 'default popup width like generic');
             assert.roughEqual($popup.find('.dx-overlay-content').outerHeight(), $('.dx-list-item').height() * 5 + 2, 1, 'default popup height like generic');
 
             assert.roughEqual($popup.find('.dx-overlay-content').position().top, ($(window).height() - $popup.find('.dx-overlay-content').outerHeight()) / 2, 1, 'default popup position of window');
@@ -3333,7 +3333,7 @@ QUnit.module('default options', {
             const $popover = $('.dx-popover-wrapper');
 
             assert.equal($popover.find('.dx-overlay-content').outerWidth(), $(lookup.field()).outerWidth() + 2, 'popup width match with lookup field width');
-            assert.equal($popover.find('.dx-overlay-content').outerHeight(), $('.dx-list-item').height() * 5 + 2, 'popup height auto if usePopover true');
+            assert.roughEqual($popover.find('.dx-overlay-content').outerHeight(), $('.dx-list-item').height() * 5 + 2, 3, 'popup height auto if usePopover true');
 
             assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup.field()).outerHeight() + 8, 2, 'popover position of lookup field with body padding 8px');
 
