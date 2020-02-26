@@ -3,7 +3,7 @@ import renderer from 'core/renderer';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import 'ui/file_manager';
 import fx from 'animation/fx';
-import { FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, createTestFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
 
 const { test } = QUnit;
 
@@ -123,6 +123,22 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         const oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
         this.wrapper.moveSplitter(100);
         assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth + 100, 'Left panel has correct size');
+    });
+
+    test('progressPanel should change its mode on small screens', function(assert) {
+        const originalWidth = renderer.fn.width;
+        renderer.fn.width = () => 1200;
+        $('#fileManager').css('width', '100%');
+        this.wrapper.getInstance().repaint();
+
+        assert.ok(this.wrapper.getProgressDrawer().hasClass(Consts.DRAWER_MODE_SHRINK));
+
+        renderer.fn.width = () => 999;
+        this.wrapper.getInstance().repaint();
+
+        assert.ok(this.wrapper.getProgressDrawer().hasClass(Consts.DRAWER_MODE_OVERLAP));
+
+        renderer.fn.width = originalWidth;
     });
 
 });

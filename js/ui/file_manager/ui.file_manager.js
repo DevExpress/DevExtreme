@@ -220,9 +220,7 @@ class FileManager extends Widget {
     }
 
     _refreshAndShowProgress() {
-        this._notificationControl.tryShowProgressPanel();
-
-        return this._controller.refresh()
+        return when(this._notificationControl.tryShowProgressPanel(), this._controller.refresh())
             .then(() => this._redrawComponent());
     }
 
