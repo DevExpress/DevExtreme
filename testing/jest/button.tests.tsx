@@ -314,7 +314,7 @@ describe('Button', () => {
                 const elements = button.find('.dx-button-content').children();
 
                 expect(elements.at(0).is('.dx-button-text')).toBe(true);
-                expect(elements.at(1).is('Icon')).toBe(true);
+                expect(elements.at(1).is(Icon)).toBe(true);
                 expect(elements.at(1).props().position).toEqual('right');
             });
         });

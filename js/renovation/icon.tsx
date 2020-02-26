@@ -15,20 +15,12 @@ export const viewModelFunction = (model: Icon): IconViewModel => {
     };
 };
 
-export const viewFunction = (viewModel: IconViewModel) => {
+export const viewFunction = ({ sourceType, cssClass, props: { source } }: IconViewModel) => {
     return (<Fragment>
-        {viewModel.sourceType === 'dxIcon' &&
-            <i className={`dx-icon dx-icon-${viewModel.props.source} ${viewModel.cssClass}`}/>
-        }
-        {viewModel.sourceType === 'fontIcon' &&
-            <i className={`dx-icon ${viewModel.props.source} ${viewModel.cssClass}`}/>
-        }
-        {viewModel.sourceType === 'image' &&
-            <img src={viewModel.props.source} className={`dx-icon ${viewModel.cssClass}`}/>
-        }
-        {viewModel.sourceType === 'svg' &&
-            <i className={`dx-icon dx-svg-icon ${viewModel.cssClass}`}>{viewModel.props.source}</i>
-        }
+        {sourceType === 'dxIcon' && <i className={`dx-icon dx-icon-${source} ${cssClass}`}/>}
+        {sourceType === 'fontIcon' && <i className={`dx-icon ${source} ${cssClass}`}/>}
+        {sourceType === 'image' && <img src={source} className={`dx-icon ${cssClass}`}/>}
+        {sourceType === 'svg' && <i className={`dx-icon dx-svg-icon ${cssClass}`}>{source}</i>}
     </Fragment>);
 };
 
