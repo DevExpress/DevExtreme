@@ -9,7 +9,6 @@ export NUGET_PACKAGES=$PWD/dotnet_packages
 export DOTNET_USE_POLLING_FILE_WATCHER=true
 
 function run_lint {
-    rm -rf node_modules
     npm i
     npm run lint
 }
