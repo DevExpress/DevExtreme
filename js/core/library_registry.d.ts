@@ -7,9 +7,10 @@
  * @module core/library_registry
  * @export addLibrary
  * @prevFileNamespace DevExpress.core
+ * @static
  * @public
  */
-declare function addLibrary(libraryName: string, library: any): void;
+export function addLibrary(libraryName: string, library: any): void;
 
 /**
  * @docid getLibrary
@@ -20,9 +21,10 @@ declare function addLibrary(libraryName: string, library: any): void;
  * @module core/library_registry
  * @export getLibrary
  * @prevFileNamespace DevExpress.core
+ * @static
  * @public
  */
-declare function getLibrary(libraryName: string): any;
+export function getLibrary(libraryName: string): any;
 
 /**
  * @docid resetLibraryRegistry
@@ -31,13 +33,7 @@ declare function getLibrary(libraryName: string): any;
  * @module core/library_registry
  * @export resetLibraryRegistry
  * @prevFileNamespace DevExpress.core
+ * @static
  * @public
  */
-declare function resetLibraryRegistry(libraryName: string): any;
-
-
-export { 
-    addLibrary,
-    getLibrary,
-    resetLibraryRegistry
-};
+export function resetLibraryRegistry(libraryName: string): any;
