@@ -128,7 +128,7 @@ function getFormatter(format, config) {
         const minFloatPrecision = getRequiredDigitCount(floatFormatParts[1]);
         const maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]);
         const minIntegerPrecision = getRequiredDigitCount(floatFormatParts[0]);
-        const maxIntegerPrecision = getNonRequiredDigitCount(floatFormatParts[0]) ? undefined : minIntegerPrecision;
+        const maxIntegerPrecision = getNonRequiredDigitCount(floatFormatParts[0]) || config.unlimitedIntegerDigits ? undefined : minIntegerPrecision;
         const integerLength = Math.floor(value).toString().length;
         const floatPrecision = fitIntoRange(maxFloatPrecision, 0, MAXIMUM_NUMBER_LENGTH - integerLength);
         const groupSizes = getGroupSizes(floatFormatParts[0]).reverse();
