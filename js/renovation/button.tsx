@@ -1,23 +1,12 @@
 import { click } from '../events/short';
-import { getImageSourceType } from '../core/utils/icon';
 import { initConfig, showWave, hideWave } from '../ui/widget/utils.ink_ripple';
 import { Component, ComponentBindings, Effect, JSXComponent, OneWay, Ref } from 'devextreme-generator/component_declaration/common';
+import { getImageSourceType } from '../core/utils/icon';
 import Widget, { WidgetInput } from './widget';
+import Icon from './icon';
 import devices from '../core/devices';
 import themes from '../ui/themes';
 import createDefaultOptionRules from '../core/options/utils';
-
-const getImageContainerJSX = (source: string, position: string) => {
-    const iconRightClass = position !== 'left' ? 'dx-icon-right' : '';
-
-    switch (getImageSourceType(source)) {
-        case 'dxIcon': return <i className={`dx-icon dx-icon-${source} ${iconRightClass}`}/>;
-        case 'fontIcon': return <i className={`dx-icon ${source} ${iconRightClass}`}/>;
-        case 'image': return <img src={source} className={`dx-icon ${iconRightClass}`}/>;
-        case 'svg': return <i className={`dx-icon dx-svg-icon ${iconRightClass}`}>{source}></i>;
-        default: return null;
-    }
-};
 
 const stylingModes = ['outlined', 'text', 'contained'];
 const defaultClassNames = ['dx-button'];
@@ -48,13 +37,24 @@ const getCssClasses = (model: ButtonInput) => {
     return classNames.join(' ');
 };
 
+const getAriaLabel = (text, icon) => {
+    let label = text && text.trim() || icon;
+    if (!text && getImageSourceType(icon) === 'image') {
+        label = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
+    }
+
+    return label ? { label } : {};
+};
+
 export const viewModelFunction = (model: Button):ButtonViewModel => {
+    const props = model.props;
     return {
-        ...model.props,
-        aria: { label: model.props.text && model.props.text.trim() },
+        ...props,
+        aria: getAriaLabel(model.props.text, model.props.icon),
         contentRef: model.contentRef,
-        cssClasses: getCssClasses(model.props),
-        elementAttr: { ...model.props.elementAttr, role: 'button' },
+        cssClasses: getCssClasses(props),
+        elementAttr: { ...props.elementAttr, role: 'button' },
+        iconSource: (props.icon || props.type === 'back') ? (props.icon || 'back') : '',
         onActive: model.onActive,
         onInactive: model.onInactive,
         onWidgetClick: model.onWidgetClick,
@@ -66,6 +66,7 @@ export const viewModelFunction = (model: Button):ButtonViewModel => {
 declare type ButtonViewModel = {
     contentRef: any;
     cssClasses: string;
+    iconSource: string;
     onActive: (e: Event) => any;
     onInactive: (e: Event) => any;
     onWidgetClick: (e: Event) => any;
@@ -74,12 +75,12 @@ declare type ButtonViewModel = {
 } & ButtonInput;
 
 export const viewFunction = (viewModel: ButtonViewModel) => {
+    const renderText = !viewModel.contentRender && viewModel.text;
     const isIconLeft = viewModel.iconPosition === 'left';
-    let icon: any = viewModel.icon;
-
-    if (icon || viewModel.type === 'back') {
-        icon = getImageContainerJSX(icon || 'back', viewModel.iconPosition!);
-    }
+    const leftIcon = !viewModel.contentRender && isIconLeft;
+    const rightIcon = !viewModel.contentRender && !isIconLeft;
+    const icon = !viewModel.contentRender && viewModel.iconSource
+        && <Icon source={viewModel.iconSource} position={viewModel.iconPosition}/>;
 
     return <Widget
         accessKey={viewModel.accessKey}
@@ -109,12 +110,13 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
                         text: viewModel.text,
                     }}
                     parentRef={viewModel.contentRef}
-                />}
-            {!viewModel.contentRender && isIconLeft && icon}
-            {!viewModel.contentRender && viewModel.text &&
+                />
+            }
+            {leftIcon && icon}
+            {renderText &&
                 <span className="dx-button-text">{viewModel.text}</span>
             }
-            {!viewModel.contentRender && !isIconLeft && icon}
+            {rightIcon && icon}
             {viewModel.useSubmitBehavior &&
                 <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
             }
