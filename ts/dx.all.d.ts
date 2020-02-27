@@ -711,6 +711,8 @@ declare module DevExpress {
         /** @name TransitionExecutor.stop() */
         stop(): void;
     }
+    /** @name addLibrary(libraryName, library) */
+    export function addLibrary(libraryName: string, library: any): void;
     /** @name animationConfig */
     export interface animationConfig {
         /** @name animationConfig.complete */
@@ -757,6 +759,8 @@ declare module DevExpress {
     export function config(config: globalConfig): void;
     /** @name devices */
     export var devices: DevicesObject;
+    /** @name getLibrary(libraryName) */
+    export function getLibrary(libraryName: string): any;
     /** @name globalConfig */
     export interface globalConfig {
         /** @deprecated */
@@ -826,16 +830,12 @@ declare module DevExpress {
     export function registerComponent(name: string, componentClass: any): void;
     /** @name registerComponent(name, namespace, componentClass) */
     export function registerComponent(name: string, namespace: any, componentClass: any): void;
+    /** @name resetLibraryRegistry() */
+    export function resetLibraryRegistry(): void;
     /** @name setTemplateEngine(name) */
     export function setTemplateEngine(templateEngineName: string): void;
     /** @name setTemplateEngine(options) */
     export function setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
-    /** @name addLibrary(libraryName, library) */
-    export function addLibrary(libraryName: string, library: any): void;
-    /** @name getLibrary(libraryName) */
-    export function getLibrary(libraryName: string): any;
-    /** @name resetLibraryRegistry() */
-    export function resetLibraryRegistry(): void;
     /** @name ui */
     export class ui {
         /** @name ui.notify(message,type,displayTime) */
