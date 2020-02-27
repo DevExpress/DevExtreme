@@ -273,7 +273,7 @@ const SchedulerAppointmentForm = {
     },
 
     concatResources: function(resources) {
-        this._editors = this._editors[0].items.concat(resources);
+        this._editors[0].items = this._editors[0].items.concat(resources);
     },
 
     checkEditorsType: function(form, startDateExpr, endDateExpr, allDay) {

@@ -242,7 +242,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         let taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
 
-        const ownerEditor = taskDetailsView.option('items')[6];
+        const ownerEditor = taskDetailsView.option('items')[0].items[6];
         ownerEditor.editorOptions.dataSource.load();
 
         assert.ok(taskDetailsView.getEditor('ownerId'), 'Editor is exist');
@@ -254,7 +254,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         scheduler.instance.showAppointmentPopup(task2);
         taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
 
-        const roomEditor = taskDetailsView.option('items')[7];
+        const roomEditor = taskDetailsView.option('items')[0].items[7];
 
         roomEditor.editorOptions.dataSource.load();
 
@@ -303,7 +303,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         scheduler.instance.showAppointmentPopup(task);
 
         const taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
-        const ownerEditor = taskDetailsView.option('items')[6];
+        const ownerEditor = taskDetailsView.option('items')[0].items[6];
 
 
         assert.equal(ownerEditor.editorType, 'dxTagBox', 'Editor is dxTagBox');
@@ -354,7 +354,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         scheduler.instance.showAppointmentPopup(appointment);
 
         const taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
-        const movieEditor = taskDetailsView.option('items')[6];
+        const movieEditor = taskDetailsView.option('items')[0].items[6];
 
         movieEditor.editorOptions.dataSource.load();
 

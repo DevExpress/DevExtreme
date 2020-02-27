@@ -152,7 +152,6 @@ export default class AppointmentPopup {
         );
 
         if(resources && resources.length) {
-            this.scheduler._resourcesManager.setResources(this.scheduler.option('resources'));
             AppointmentForm.concatResources(this.scheduler._resourcesManager.getEditors());
         }
 

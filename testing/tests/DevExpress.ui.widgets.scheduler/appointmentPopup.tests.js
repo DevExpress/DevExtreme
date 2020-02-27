@@ -1093,6 +1093,26 @@ QUnit.test('Changes shouldn\'t be saved if form is invalid', function(assert) {
     assert.notOk(addingAppointment.calledOnce);
 });
 
+QUnit.test('Appointment popup should contain resources and recurrence editor', function(assert) {
+    const rooms = [
+        {
+            text: 'Room Test',
+            id: 4,
+        }];
+    this.instance.option({
+        resources: [{ label: 'Room', fieldExpr: 'roomId', dataSource: rooms }],
+    });
+
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), roomId: 4, recurrenceRule: 'FREQ=WEEKLY' });
+    $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
+    const form = this.instance.getAppointmentDetailsForm();
+    const items = form.option('items');
+
+    assert.equal(items.length, 2, 'Main group and recurrence editor added');
+    assert.equal(items[0].items.length, 7, 'Count of editors with resources is correct');
+    assert.equal(items[0].items[6].label.text, 'Room', 'Recources is the last element in the main group of editors');
+});
+
 QUnit.module('Appointment Popup', moduleOptions);
 
 QUnit.test('focus is called on popup hiding', function(assert) {
