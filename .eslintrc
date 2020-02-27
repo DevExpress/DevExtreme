@@ -150,6 +150,7 @@
                     "msie",
                     "odata",      // OData
                     "readonly",
+                    "rebase",     // clean-css option
                     "rtl",        // Right-to-Left
                     "scss",
                     "semver",     // The semantic versioner for npm

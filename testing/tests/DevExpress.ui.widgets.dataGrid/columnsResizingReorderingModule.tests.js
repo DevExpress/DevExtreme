@@ -513,10 +513,7 @@ const TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit(
 
             NAME: 'dxDataGrid'
         };
-        let tablePosition;
-        let $separator;
         const $container = $('#container');
-        let separator;
 
         // act
         $('<div/>')
@@ -527,18 +524,18 @@ const TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit(
             .addClass('dx-datagrid-headers')
             .appendTo($container);
 
-        tablePosition = new columnResizingReordering.TablePositionViewController(component);
+        const tablePosition = new columnResizingReordering.TablePositionViewController(component);
         component._controllers.tablePosition = tablePosition;
         tablePosition.init();
 
-        separator = new columnResizingReordering.ColumnsSeparatorView(component);
+        const separator = new columnResizingReordering.ColumnsSeparatorView(component);
         separator.init();
         separator.render($container);
 
         tablePosition.update();
 
         // arrange
-        $separator = separator.element();
+        const $separator = separator.element();
         assert.equal($separator.height(), 145, 'height of columns separator');
         assert.equal($separator.css('top'), '100px', 'height of columns separator');
     });
@@ -602,20 +599,18 @@ const TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit(
 
             NAME: 'dxDataGrid'
         };
-        let tablePosition;
         const $container = $('#container');
-        let separator;
 
         // act
         $('<div/>')
             .addClass('dx-datagrid-headers')
             .appendTo($container);
 
-        tablePosition = new columnResizingReordering.TablePositionViewController(component);
+        const tablePosition = new columnResizingReordering.TablePositionViewController(component);
         component._controllers.tablePosition = tablePosition;
         tablePosition.init();
 
-        separator = new columnResizingReordering.ColumnsSeparatorView(component);
+        const separator = new columnResizingReordering.ColumnsSeparatorView(component);
         separator.init();
         separator.render($container);
 
@@ -668,20 +663,18 @@ const TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit(
 
             NAME: 'dxDataGrid'
         };
-        let tablePosition;
         const $container = $('#container');
-        let separator;
 
         // act
         $('<div/>')
             .addClass('dx-datagrid-headers')
             .appendTo($container);
 
-        tablePosition = new columnResizingReordering.TablePositionViewController(component);
+        const tablePosition = new columnResizingReordering.TablePositionViewController(component);
         component._controllers.tablePosition = tablePosition;
         tablePosition.init();
 
-        separator = new columnResizingReordering.ColumnsSeparatorView(component);
+        const separator = new columnResizingReordering.ColumnsSeparatorView(component);
         separator.init();
         separator.render($container);
 
@@ -1692,8 +1685,6 @@ function getEvent(options) {
 
     QUnit.test('Update height of separator when there is band columns', function(assert) {
         // arrange
-        let columnsSeparatorHeight;
-
         this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
         const resizeController = this.createColumnsResizerViewController([
             [
@@ -1719,7 +1710,7 @@ function getEvent(options) {
         this.component._controllers.tablePosition.update();
 
         // assert
-        columnsSeparatorHeight = resizeController._columnsSeparatorView.height();
+        const columnsSeparatorHeight = resizeController._columnsSeparatorView.height();
         assert.ok(columnsSeparatorHeight > 0, 'columnsSeparator height');
         assert.equal(parseInt(resizeController._columnsSeparatorView.element().css('top')), 0, 'columnsSeparator top');
 
@@ -2166,10 +2157,8 @@ function getEvent(options) {
     QUnit.test('Move separator when width of column is changed', function(assert) {
         // arrange
         const resizeController = this.createColumnsResizerViewController();
-        let posX;
         let testPosX;
         const $container = $('#container').width('300px');
-        let columnWidths;
 
         // act
         this.renderViews($container);
@@ -2180,7 +2169,7 @@ function getEvent(options) {
         resizeController._isResizing = true;
         resizeController._targetPoint = { x: -9850, columnIndex: 1, index: 2 };
         resizeController._resizingInfo = { startPosX: -9847, currentColumnIndex: 0 };
-        columnWidths = [this.options.columns[0].width + 7, this.options.columns[1].width - 7];
+        const columnWidths = [this.options.columns[0].width + 7, this.options.columns[1].width - 7];
         resizeController._columnHeadersView.setColumnWidths({ widths: columnWidths });
         resizeController._moveSeparator(getEvent({
             data: resizeController,
@@ -2189,7 +2178,7 @@ function getEvent(options) {
         }));
 
         // assert
-        posX = resizeController._targetPoint.x + (-9840 - resizeController._resizingInfo.startPosX);
+        const posX = resizeController._targetPoint.x + (-9840 - resizeController._resizingInfo.startPosX);
         assert.equal(resizeController._columnsSeparatorView._testPosX, posX, 'posX of columnsSeparator');
         assert.equal(testPosX, -9840, 'posX');
     });
@@ -2388,13 +2377,12 @@ function getEvent(options) {
     QUnit.test('Grid view is resized when vertical scrollbar is not shown', function(assert) {
         // arrange
         let isGridViewResized = false;
-        let resizeController;
 
         this.component.updateDimensions = function() {
             isGridViewResized = true;
         };
 
-        resizeController = this.createColumnsResizerViewController();
+        const resizeController = this.createColumnsResizerViewController();
 
         resizeController._pointsByColumns = [
             { x: -9875, columnIndex: 0, index: 1 },
@@ -2431,7 +2419,6 @@ function getEvent(options) {
     QUnit.test('Grid view is resized when vertical scrollbar is shown', function(assert) {
         // arrange
         let isGridViewResized = false;
-        let resizeController;
 
         this.component.updateDimensions = function() {
             isGridViewResized = true;
@@ -2441,7 +2428,7 @@ function getEvent(options) {
             return 16;
         };
 
-        resizeController = this.createColumnsResizerViewController();
+        const resizeController = this.createColumnsResizerViewController();
 
         resizeController._pointsByColumns = [
             { x: -9875, columnIndex: 0, index: 1 },
@@ -2478,7 +2465,6 @@ function getEvent(options) {
     QUnit.test('Grid view is not resized by move separator', function(assert) {
         // arrange
         let isGridViewResized = false;
-        let resizeController;
 
         this.component._views.gridView = {
             init: noop,
@@ -2488,7 +2474,7 @@ function getEvent(options) {
             render: noop
         };
 
-        resizeController = this.createColumnsResizerViewController();
+        const resizeController = this.createColumnsResizerViewController();
 
         resizeController._pointsByColumns = [
             { x: -9875, columnIndex: 0, index: 1 },
@@ -2522,12 +2508,11 @@ function getEvent(options) {
         // arrange
         let isFreeSpaceRowHeightUpdated;
         const tablePositionController = new columnResizingReordering.TablePositionViewController(this.component);
-        let resizeController;
 
         this.component._controllers.tablePosition = tablePositionController;
         tablePositionController.init();
 
-        resizeController = this.createColumnsResizerViewController();
+        const resizeController = this.createColumnsResizerViewController();
 
         resizeController._pointsByColumns = [
             { x: -9875, columnIndex: 0, index: 1 },
@@ -2576,12 +2561,11 @@ function getEvent(options) {
             { caption: 'Column 4', visible: true, width: '150px' }], this.commonColumnSettings);
 
         const tablePositionController = new columnResizingReordering.TablePositionViewController(this.component);
-        let resizeController;
 
         this.component._controllers.tablePosition = tablePositionController;
         tablePositionController.init();
 
-        resizeController = this.createColumnsResizerViewController();
+        const resizeController = this.createColumnsResizerViewController();
 
         resizeController._pointsByColumns = [
             { x: -9875, columnIndex: 0, index: 1 },
@@ -2614,14 +2598,13 @@ function getEvent(options) {
 
     QUnit.test('\'Process size changed\' method is not called', function(assert) {
         // arrange
-        let resizeController;
         let isProcessSizeChanged = false;
         const tablePositionController = new columnResizingReordering.TablePositionViewController(this.component);
 
         this.component._controllers.tablePosition = tablePositionController;
         tablePositionController.init();
 
-        resizeController = this.createColumnsResizerViewController();
+        const resizeController = this.createColumnsResizerViewController();
 
         resizeController._pointsByColumns = [
             { x: -9875, columnIndex: 0, index: 1 },

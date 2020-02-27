@@ -1561,6 +1561,7 @@ const Scheduler = Widget.inherit({
         const countConfig = this._getViewCountConfig();
 
         result = extend({
+            isAdaptive: this.option('adaptivityEnabled'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             currentView: this._currentView,
             tabIndex: this.option('tabIndex'),
@@ -2415,7 +2416,7 @@ const Scheduler = Widget.inherit({
         this._checkRecurringAppointment(appointmentData, singleAppointment, startDate, function() {
             if(createNewAppointment || typeUtils.isEmptyObject(appointmentData)) {
                 delete this._editAppointmentData;
-                this._editing.allowAdding && this._showAppointmentPopup(appointmentData, true, false);
+                this._editing.allowAdding && this._showAppointmentPopup(appointmentData, true, true);
             } else {
                 this._editAppointmentData = appointmentData;
                 this._showAppointmentPopup(appointmentData, this._editing.allowUpdating, true);

@@ -221,12 +221,14 @@ export class SchedulerTestWrapper {
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
             getCurrentTimeIndicator: () => $('.dx-scheduler-date-time-indicator'),
+            getAllDayPanel: () => $('.dx-scheduler-all-day-panel'),
 
             getDataTableScrollableContainer: () => this.workSpace.getDateTableScrollable().find('.dx-scrollable-container'),
             getScrollPosition: () => {
                 const element = this.workSpace.getDataTableScrollableContainer();
                 return { left: element.scrollLeft(), top: element.scrollTop() };
             },
+            getScrollable: () => $('.dx-scheduler-date-table-scrollable').dxScrollable('instance'),
             groups: {
                 getGroupsContainer: () => $('.dx-scheduler-group-flex-container'),
                 getGroup: (index = 0) => $('.dx-scheduler-group-row').eq(index),
@@ -244,6 +246,22 @@ export class SchedulerTestWrapper {
             clickOnNextButton: () => {
                 this.navigator.getNavigator().find('.dx-scheduler-navigator-next').trigger('dxclick');
             }
+        },
+
+        this.viewSwitcher = {
+            getElement: () => $('.dx-dropdownmenu-popup-wrapper.dx-position-bottom'),
+            show: () => {
+                $('.dx-scheduler-view-switcher').trigger('dxclick');
+            },
+            click: (name) => {
+                this.viewSwitcher.getElement().find('.dx-list-item').filter((index, element) => {
+                    return $(element).find('.dx-dropdownmenu-item-text').text() === name;
+                }).trigger('dxclick');
+            },
+            getSelectedViewName: () => {
+                return this.viewSwitcher.getElement().find('.dx-list-item-selected .dx-dropdownmenu-item-text').text();
+            },
+            getLabel: () => $('.dx-scheduler-view-switcher-label')
         },
 
         this.header = {

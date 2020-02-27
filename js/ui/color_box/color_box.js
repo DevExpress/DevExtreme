@@ -87,17 +87,6 @@ const ColorBox = DropDownEditor.inherit({
             * @action
             */
 
-            /**
-             * @name dxColorBoxOptions.showDropDownButton
-             * @hidden
-             */
-
-            /**
-             * @name dxColorBoxOptions.openOnFieldClick
-             * @hidden
-             */
-
-
             applyValueMode: 'useButtons',
 
             keyStep: 1,

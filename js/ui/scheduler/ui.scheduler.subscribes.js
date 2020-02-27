@@ -246,18 +246,12 @@ const subscribes = {
             endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
         }
 
+        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, appointmentFields.allDay);
+
         return {
-            text: this.fire('createAppointmentTitle', appointmentFields),
-            formatDate: this.fire('_formatDates', startDate, endDate, appointmentFields.allDay, format)
+            text: this.fire('_createAppointmentTitle', appointmentFields),
+            formatDate: this.fire('_formatDates', startDate, endDate, formatType)
         };
-    },
-
-    createAppointmentTitle: function(data) {
-        if(typeUtils.isPlainObject(data)) {
-            return data.text;
-        }
-
-        return String(data);
     },
 
     _getAppointmentFields(data, arrayOfFields) {
@@ -265,39 +259,6 @@ const subscribes = {
             accumulator[field] = this.fire('getField', field, data);
             return accumulator;
         }, {});
-    },
-
-    _formatDates(startDate, endDate, isAllDay, format) {
-        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, isAllDay);
-
-        const formatTypes = {
-            'DATETIME': function() {
-                const dateTimeFormat = 'mediumdatemediumtime';
-                const startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
-
-                const endDateString = (startDate.getDate() === endDate.getDate()) ?
-                    dateLocalization.format(endDate, 'shorttime') :
-                    dateLocalization.format(endDate, dateTimeFormat);
-
-                return startDateString + endDateString;
-            },
-            'TIME': function() {
-                return dateLocalization.format(startDate, 'shorttime') + ' - ' + dateLocalization.format(endDate, 'shorttime');
-            },
-            'DATE': function() {
-                const dateTimeFormat = 'monthAndDay';
-                const startDateString = dateLocalization.format(startDate, dateTimeFormat);
-                const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
-
-                const endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
-                    ' - ' + dateLocalization.format(endDate, dateTimeFormat) :
-                    '';
-
-                return startDateString + endDateString;
-            }
-        };
-
-        return formatTypes[formatType]();
     },
 
     _getTypeFormat(startDate, endDate, isAllDay) {
@@ -308,6 +269,37 @@ const subscribes = {
             return 'TIME';
         }
         return 'DATETIME';
+    },
+
+    _createAppointmentTitle(data) {
+        if(typeUtils.isPlainObject(data)) {
+            return data.text;
+        }
+
+        return String(data);
+    },
+
+    _formatDates(startDate, endDate, formatType) {
+        const dateFormat = 'monthandday';
+        const timeFormat = 'shorttime';
+        const isSameDate = startDate.getDate() === endDate.getDate();
+        const isDurationLessThanDay = (endDate.getTime() - startDate.getTime()) <= toMs('day');
+
+        switch(formatType) {
+            case 'DATETIME':
+                return [
+                    dateLocalization.format(startDate, dateFormat),
+                    ' ',
+                    dateLocalization.format(startDate, timeFormat),
+                    ' - ',
+                    isSameDate ? '' : dateLocalization.format(endDate, dateFormat) + ' ',
+                    dateLocalization.format(endDate, timeFormat)
+                ].join('');
+            case 'TIME':
+                return `${dateLocalization.format(startDate, timeFormat)} - ${dateLocalization.format(endDate, timeFormat)}`;
+            case 'DATE':
+                return `${dateLocalization.format(startDate, dateFormat)}${isDurationLessThanDay || isSameDate ? '' : ' - ' + dateLocalization.format(endDate, dateFormat)}`;
+        }
     },
 
     getResizableAppointmentArea: function(options) {

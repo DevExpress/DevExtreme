@@ -541,8 +541,8 @@ QUnit.test('Update series data when points are empty', function(assert) {
 
     assert.ok(series.getAllPoints(), 'Series points should be created');
     assert.equal(series.getAllPoints().length, 1, 'Series should have 1 point');
-    assert.equal(series.getAllPoints()[0].mockOptions.argument, 1, 'Arg');
-    assert.equal(series.getAllPoints()[0].mockOptions.value, 10, 'Val');
+    assert.equal(series.getAllPoints()[0].getOptions().argument, 1, 'Arg');
+    assert.equal(series.getAllPoints()[0].getOptions().value, 10, 'Val');
     assert.ok(series.canRenderCompleteHandle());
 });
 
@@ -559,8 +559,8 @@ QUnit.test('Update series data when points are not empty. Old points length = ne
 
     assert.ok(series.getAllPoints(), 'Series points should be created');
     assert.equal(series.getAllPoints().length, 1, 'Series should have 1 point');
-    assert.equal(series.getAllPoints()[0].mockOptions.argument, 3, 'Arg');
-    assert.equal(series.getAllPoints()[0].mockOptions.value, 4, 'Val');
+    assert.equal(series.getAllPoints()[0].getOptions().argument, 3, 'Arg');
+    assert.equal(series.getAllPoints()[0].getOptions().value, 4, 'Val');
     assert.ok(series.canRenderCompleteHandle());
 });
 
@@ -580,8 +580,8 @@ QUnit.test('Update series data when points are not empty. Old points length > ne
 
     assert.ok(series, 'Series should be created');
 
-    assert.equal(series.getAllPoints()[0].mockOptions.argument, 3, 'Arg');
-    assert.equal(series.getAllPoints()[0].mockOptions.value, 4, 'Val');
+    assert.equal(series.getAllPoints()[0].getOptions().argument, 3, 'Arg');
+    assert.equal(series.getAllPoints()[0].getOptions().value, 4, 'Val');
     assert.equal(series.getAllPoints().length, 1);
 });
 
@@ -595,8 +595,8 @@ QUnit.test('Create points for dataItems with coresponding series (series templat
 
     assert.ok(series.getAllPoints(), 'Series points should be created');
     assert.equal(series.getAllPoints().length, 1, 'Series should have 1 point');
-    assert.equal(series.getAllPoints()[0].mockOptions.argument, 1, 'Arg');
-    assert.equal(series.getAllPoints()[0].mockOptions.value, 10, 'Val');
+    assert.equal(series.getAllPoints()[0].getOptions().argument, 1, 'Arg');
+    assert.equal(series.getAllPoints()[0].getOptions().value, 10, 'Val');
     assert.ok(series.canRenderCompleteHandle());
 });
 
@@ -630,10 +630,10 @@ QUnit.test('Update series data when points are not empty. Old points length < ne
 
     assert.ok(series.getAllPoints(), 'Series points should be created');
     assert.equal(series.getAllPoints().length, 2, 'Series should have 2 points');
-    assert.equal(series.getAllPoints()[0].mockOptions.argument, 3, 'Arg');
-    assert.equal(series.getAllPoints()[0].mockOptions.value, 4, 'Val');
-    assert.equal(series.getAllPoints()[1].mockOptions.argument, 4, 'Arg');
-    assert.equal(series.getAllPoints()[1].mockOptions.value, 11, 'Val');
+    assert.equal(series.getAllPoints()[0].getOptions().argument, 3, 'Arg');
+    assert.equal(series.getAllPoints()[0].getOptions().value, 4, 'Val');
+    assert.equal(series.getAllPoints()[1].getOptions().argument, 4, 'Arg');
+    assert.equal(series.getAllPoints()[1].getOptions().value, 11, 'Val');
     assert.equal(this.pointsCreatingCount, 3);
 });
 
@@ -653,10 +653,10 @@ QUnit.test('Update series data when points are not empty. Points with same argum
     series.createPoints();
 
     assert.equal(series.getAllPoints().length, 2, 'Series should have 1 point');
-    assert.equal(series.getAllPoints()[0].mockOptions.argument, 1, 'Arg');
-    assert.equal(series.getAllPoints()[0].mockOptions.value, 4, 'Val');
-    assert.equal(series.getAllPoints()[1].mockOptions.argument, 4, 'Arg');
-    assert.equal(series.getAllPoints()[1].mockOptions.value, 11, 'Val');
+    assert.equal(series.getAllPoints()[0].getOptions().argument, 1, 'Arg');
+    assert.equal(series.getAllPoints()[0].getOptions().value, 4, 'Val');
+    assert.equal(series.getAllPoints()[1].getOptions().argument, 4, 'Arg');
+    assert.equal(series.getAllPoints()[1].getOptions().value, 11, 'Val');
     assert.equal(this.pointsCreatingCount, 2);
 });
 
@@ -676,13 +676,13 @@ QUnit.test('Update points when series has several points at the same argument', 
     series.createPoints();
 
     assert.equal(series.getAllPoints().length, 3);
-    assert.equal(series.getAllPoints()[0].mockOptions.argument, 1, 'Arg');
-    assert.equal(series.getAllPoints()[0].mockOptions.value, 4, 'Val');
-    assert.equal(series.getAllPoints()[1].mockOptions.argument, 1, 'Arg');
-    assert.equal(series.getAllPoints()[1].mockOptions.value, 5, 'Val');
+    assert.equal(series.getAllPoints()[0].getOptions().argument, 1, 'Arg');
+    assert.equal(series.getAllPoints()[0].getOptions().value, 4, 'Val');
+    assert.equal(series.getAllPoints()[1].getOptions().argument, 1, 'Arg');
+    assert.equal(series.getAllPoints()[1].getOptions().value, 5, 'Val');
 
-    assert.equal(series.getAllPoints()[2].mockOptions.argument, 4, 'Arg');
-    assert.equal(series.getAllPoints()[2].mockOptions.value, 11, 'Val');
+    assert.equal(series.getAllPoints()[2].getOptions().argument, 4, 'Arg');
+    assert.equal(series.getAllPoints()[2].getOptions().value, 11, 'Val');
     assert.equal(this.pointsCreatingCount, 3);
 });
 

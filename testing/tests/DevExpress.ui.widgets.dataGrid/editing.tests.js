@@ -3195,6 +3195,73 @@ QUnit.test('Remove the inserted row with edit mode batch and hidden column', fun
     assert.ok(!testElement.find('tbody > tr').first().hasClass('dx-row-inserted'), 'not has row inserted');
 });
 
+[true, false].forEach((needAddRow) => {
+    [true, false].forEach((changePageViaDataSource) => {
+        let testName = 'cell should not be edited after ' + (needAddRow ? 'row adding' : 'editing');
+        testName += ' and page change ' + (changePageViaDataSource ? 'via dataSource' : '');
+
+        // T861092
+        QUnit.test(testName + ' (cell edit mode)', function(assert) {
+            // arrange
+            const that = this;
+
+            that.options.editing = {
+                mode: 'cell',
+                allowAdding: true
+            };
+
+            that.dataController.pageSize(3);
+
+            // act
+            if(needAddRow) {
+                that.addRow();
+            }
+
+            that.editCell(0, 0);
+
+            // assert
+            assert.ok(that.editingController.isEditing(), 'editing started');
+
+            // act
+            if(changePageViaDataSource) {
+                const dataSource = that.getDataSource();
+
+                dataSource.pageIndex(1);
+                dataSource.load();
+            } else {
+                that.pageIndex(1);
+            }
+
+            // assert
+            assert.notOk(that.editingController.isEditing(), 'is not editing');
+        });
+    });
+});
+
+QUnit.test('AddRow method should return Deferred', function(assert) {
+    // arrange
+    this.options.editing = {
+        mode: 'batch',
+        allowAdding: true
+    };
+
+    this.rowsView.render($('#container'));
+
+    // assert
+    assert.equal(this.getVisibleRows().length, 7, '7 visible rows');
+
+    // act
+    let doneExecuteCount = 0;
+    this.addRow().done(() => {
+        doneExecuteCount++;
+    });
+    this.clock.tick();
+
+    // assert
+    assert.equal(doneExecuteCount, 1, 'done was executed');
+    assert.equal(this.getVisibleRows().length, 8, 'one more row was added');
+});
+
 QUnit.test('Edit row when set onEditingStart', function(assert) {
     const that = this;
     const rowsView = this.rowsView;
@@ -4963,6 +5030,34 @@ QUnit.test('deleteRow should works if cell value is changed', function(assert) {
     assert.strictEqual(testElement.find('input').length, 0, 'no editors');
 });
 
+QUnit.test('deleteRow should works in row editing mode if boolean column and validation are exist (T865833, T864931)', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'row',
+        allowDeleting: true
+    };
+
+    that.options.columns.push({ dataField: 'booleanField', dataType: 'boolean', validationRules: [{ type: 'required' }] });
+    that.columnsController.reset();
+    that.editingController.init();
+
+    rowsView.render(testElement);
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 7, 'row count');
+
+    // act
+    that.deleteRow(1);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
+});
+
 // T804894
 QUnit.test('addRow should not work if updating is started with validation error', function(assert) {
     // arrange
@@ -4988,17 +5083,19 @@ QUnit.test('addRow should not work if updating is started with validation error'
     // act
     that.editCell(0, 0);
     that.cellValue(0, 0, 'Test');
-    that.addRow();
+    const rejectDeferred = that.addRow();
 
     // assert
     assert.equal(testElement.find('.dx-data-row').length, 7, 'row is not added');
+    assert.equal(rejectDeferred.state(), 'rejected', 'deferred is rejected');
 
     // act
     that.cancelEditData();
-    that.addRow();
+    const resolveDeferred = that.addRow();
 
     // assert
     assert.equal(testElement.find('.dx-data-row').length, 8, 'row is added');
+    assert.equal(resolveDeferred.state(), 'resolved', 'deferred is resolved');
 });
 
 // T100624
@@ -7533,6 +7630,27 @@ QUnit.test('Add a custom cssClass for image icons in the \'buttons\' command col
     assert.ok($testElement.find('.dx-command-edit').first().hasClass('dx-command-edit-with-icons'), 'Command edit cell has icons');
     assert.ok($buttonElement.hasClass('myIcon'), 'Custom cssClass is applied');
     assert.ok($buttonElement.hasClass('dx-icon'), 'Custom icon is created');
+});
+
+QUnit.test('dx-svg-icon should not have \'pointerEvents: none\' if a column button set using svg icon (T863635)', function(assert) {
+    // arrange
+    const $testElement = $('#container');
+    this.options.columns.push({
+        type: 'buttons',
+        buttons: [{
+            icon: '<svg><circle r="10" /></svg>'
+        }]
+    });
+    this.columnsController.reset();
+
+    // act
+    this.rowsView.render($testElement);
+    const svgIcon = $testElement.find('.dx-command-edit').first().find('.dx-svg-icon').first();
+
+    // assert
+    const pointerEvents = browser.msie && parseInt(browser.version) <= 11 ? 'visiblePainted' : 'auto';
+    assert.strictEqual(window.getComputedStyle(svgIcon[0]).pointerEvents, pointerEvents, 'dx-svg-icon allows pointer events');
+    assert.strictEqual(window.getComputedStyle(svgIcon.find('svg')[0]).pointerEvents, 'none', 'dx-svg-icon svg does not allow pointer events');
 });
 
 QUnit.test('Add a custom command column', function(assert) {
@@ -15300,6 +15418,66 @@ QUnit.test('editing.popup options should apply to editing popup', function(asser
     assert.ok(that.editPopupInstance.option('fullScreen'), 'Editing popup shown in fullScreen mode');
 });
 
+QUnit.test('editing popup toolbarItems option changing should be applied (T862799)', function(assert) {
+    const that = this;
+
+    let button;
+
+    that.options.editing.popup = {
+        toolbarItems: [{
+            toolbar: 'bottom',
+            location: 'after',
+            widget: 'dxButton',
+            options: {
+                onInitialized(e) {
+                    button = e.component;
+                },
+                text: 'My Button',
+                visible: false
+            }
+        }]
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    // act
+    that.editRow(0);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(button.option('visible'), false, 'Toolbar button is not visible');
+
+    // act
+    that.editingController.optionChanged({ name: 'editing', fullName: 'editing.popup.toolbarItems[0].options.visible', value: true });
+
+    // assert
+    assert.strictEqual(button.option('visible'), true, 'Toolbar button is visible');
+});
+
+QUnit.test('editing popup option changing should be applied (T862799)', function(assert) {
+    const that = this;
+
+    const popupOptions = {
+        toolbarItems: [{
+            widget: 'dxButton'
+        }]
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    that.editRow(0);
+    that.clock.tick();
+    that.preparePopupHelpers();
+
+    // act
+    that.editingController.optionChanged({ name: 'editing', fullName: 'editing.popup', value: popupOptions });
+
+    // assert
+    assert.strictEqual(that.editPopupInstance.option('toolbarItems'), popupOptions.toolbarItems, 'popup options are applied');
+});
+
 QUnit.test('Cancel edit data when popup hide not after click on \'save\' or \'cancel\' button', function(assert) {
     const that = this;
 
@@ -16233,9 +16411,9 @@ QUnit.test('Adding multiple rows with async onInitNewRow and batch mode', functi
     that.columnsController.init();
 
     // act
-    that.addRow();
-    that.addRow();
-    that.addRow();
+    const firstDeferred = that.addRow();
+    const secondDeferred = that.addRow();
+    const thirdDeferred = that.addRow();
 
     visibleRows = that.getVisibleRows();
 
@@ -16255,6 +16433,10 @@ QUnit.test('Adding multiple rows with async onInitNewRow and batch mode', functi
     assert.deepEqual(visibleRows[7].data, { room: 8 }, 'row #7 data');
     assert.deepEqual(visibleRows[8].data, { room: 9 }, ' row #8 data');
     assert.deepEqual(visibleRows[9].data, { room: 10 }, 'last row\'s data');
+
+    assert.equal(firstDeferred.state(), 'resolved', 'first deferred is resolved');
+    assert.equal(secondDeferred.state(), 'resolved', 'second deferred is resolved');
+    assert.equal(thirdDeferred.state(), 'resolved', 'third deferred is resolved');
 });
 
 QUnit.test('Adding multiple rows with async onInitNewRow and cell mode', function(assert) {
@@ -16284,9 +16466,9 @@ QUnit.test('Adding multiple rows with async onInitNewRow and cell mode', functio
     that.columnsController.init();
 
     // act
-    that.addRow();
-    that.addRow();
-    that.addRow();
+    const firstDeferred = that.addRow();
+    const secondDeferred = that.addRow();
+    const thirdDeferred = that.addRow();
 
     visibleRows = that.getVisibleRows();
 
@@ -16304,6 +16486,10 @@ QUnit.test('Adding multiple rows with async onInitNewRow and cell mode', functio
     // assert
     assert.equal(visibleRows.length, 8, 'one row was added');
     assert.deepEqual(visibleRows[7].data, { room: 8 }, 'row #7 data');
+
+    assert.equal(firstDeferred.state(), 'resolved', 'first deferred is resolved');
+    assert.equal(secondDeferred.state(), 'rejected', 'second deferred is rejected');
+    assert.equal(thirdDeferred.state(), 'rejected', 'third deferred is rejected');
 });
 
 QUnit.test('Adding multiple rows with async onInitNewRow and row mode', function(assert) {
@@ -16333,9 +16519,9 @@ QUnit.test('Adding multiple rows with async onInitNewRow and row mode', function
     that.columnsController.init();
 
     // act
-    that.addRow();
-    that.addRow();
-    that.addRow();
+    const firstDeferred = that.addRow();
+    const secondDeferred = that.addRow();
+    const thirdDeferred = that.addRow();
 
     visibleRows = that.getVisibleRows();
 
@@ -16353,6 +16539,10 @@ QUnit.test('Adding multiple rows with async onInitNewRow and row mode', function
     // assert
     assert.equal(visibleRows.length, 8, 'one row was added');
     assert.deepEqual(visibleRows[7].data, { room: 8 }, 'row #7 data');
+
+    assert.equal(firstDeferred.state(), 'resolved', 'first deferred is resolved');
+    assert.equal(secondDeferred.state(), 'rejected', 'second deferred is rejected');
+    assert.equal(thirdDeferred.state(), 'rejected', 'third deferred is rejected');
 });
 
 QUnit.test('Adding multiple rows with async onInitNewRow (mixed failures and success) and batch mode', function(assert) {

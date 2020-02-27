@@ -256,6 +256,27 @@ QUnit.test('Correct start scroll position when RTL', function(assert) {
     assert.equal(scrollLeft, 100);
 });
 
+QUnit.test('Correct background color of focused grouped row when RTL', function(assert) {
+    const dataGrid = createDataGrid({
+        dataSource: [{ id: 1 }],
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        focusedRowIndex: 0,
+        rtlEnabled: true,
+        columns: [{
+            dataField: 'id',
+            groupIndex: 0,
+        }]
+    });
+    this.clock.tick();
+
+    const cellBackgroundColor = browser.msie ? 'transparent' : 'rgba(0, 0, 0, 0)';
+    const $groupedRow = $(dataGrid.getRowElement(0)[0]);
+    assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgb(51, 122, 183)', 'focused grouped row has correct background color in rtl mode');
+    assert.equal(window.getComputedStyle($groupedRow.find('td')[0]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
+    assert.equal(window.getComputedStyle($groupedRow.find('td')[1]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
+});
+
 QUnit.test('Grid accessibility structure (T640539, T831996)', function(assert) {
     const headersWrapper = dataGridWrapper.headers;
     const rowsViewWrapper = dataGridWrapper.rowsView;
@@ -2051,6 +2072,99 @@ QUnit.test('Cursor should switch style when it was moved to columns separator if
     }));
 
     assert.equal(columnsSeparator.css('cursor'), 'col-resize', 'cursor style');
+});
+
+// T846832
+QUnit.test('Columns should not shake during resizing', function(assert) {
+    // arrange
+    const dataGrid = $('#dataGrid').dxDataGrid({
+        width: 1000,
+        dataSource: [{}],
+        loadingTimeout: undefined,
+        columns: ['CompanyName', 'City', 'State', 'Phone', 'Fax'],
+        showBorders: true,
+        allowColumnResizing: true
+    });
+    const instance = dataGrid.dxDataGrid('instance');
+    const widths = [];
+    const offset = $('#dataGrid').offset();
+
+    // act
+    const resizeController = instance.getController('columnsResizer');
+    resizeController._isResizing = true;
+    resizeController._targetPoint = { columnIndex: 1 };
+
+    resizeController._startResizing({
+        event: {
+            data: resizeController,
+            type: 'touchstart',
+            pageX: offset.left + 200,
+            pageY: offset.top + 15,
+            preventDefault: function() {},
+            stopPropagation: function() {}
+        }
+    });
+
+    resizeController._moveSeparator({
+        event: {
+            data: resizeController,
+            pageX: offset.left + 50,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    resizeController._endResizing({
+        event: {
+            data: resizeController
+        }
+    });
+
+    // assert
+    let $cells = $('#dataGrid').find('td');
+
+    assert.roughEqual($cells.eq(0).width(), 34, 1.01, 'first column width');
+    assert.roughEqual($cells.eq(1).width(), 333, 1.01, 'second column width');
+
+    for(let i = 0; i < 5; i++) {
+        widths.push($('#dataGrid').find('td').eq(i).width());
+    }
+
+    // act
+    resizeController._startResizing({
+        event: {
+            data: resizeController,
+            type: 'touchstart',
+            pageX: offset.left + 50,
+            pageY: offset.top + 15,
+            preventDefault: function() {},
+            stopPropagation: function() {}
+        }
+    });
+
+    resizeController._moveSeparator({
+        event: {
+            type: 'dxpointermove',
+            data: resizeController,
+            pageX: offset.left + 51,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    resizeController._endResizing({
+        event: {
+            data: resizeController
+        }
+    });
+
+    // assert
+    $cells = $('#dataGrid').find('td');
+
+    assert.equal($cells.eq(0).width(), widths[0] + 1, 'first column width');
+    assert.equal($cells.eq(1).width(), widths[1] - 1, 'second column width');
+
+    for(let i = 2; i < 5; i++) {
+        assert.equal($cells.eq(i).width(), widths[i], 'width was not affected');
+    }
 });
 
 QUnit.test('export.enabled: true, allowExportSelectedData: true -> check export menu icons (T757579)', function(assert) {
@@ -4993,16 +5107,12 @@ QUnit.test('Group collapsing if focusedRowEnabled is true and key is complex', f
 QUnit.test('DataGrid should not scroll back to the focused row after pageIndex changed in virtual scrolling', function(assert) {
     // arrange
     const data = [];
-    let dataGrid;
-    const generateData = function() {
-        for(let i = 0; i < 100; ++i) {
-            data.push({ id: i, c0: 'c0_' + i, c1: 'c1_' + i });
-        }
-    };
 
-    generateData();
+    for(let i = 0; i < 100; ++i) {
+        data.push({ id: i, c0: 'c0_' + i, c1: 'c1_' + i });
+    }
 
-    dataGrid = $('#dataGrid').dxDataGrid({
+    const dataGrid = $('#dataGrid').dxDataGrid({
         height: 300,
         keyExpr: 'id',
         dataSource: data,
@@ -5734,7 +5844,8 @@ QUnit.test('Freespace row have the correct height when using master-detail with 
         dataRowsHeight += $(this).outerHeight();
     });
 
-    const expectedFreeSpaceRowHeight = $contentTable.height() - dataRowsHeight;
+    const heightCorrection = gridInstance.getView('rowsView')._getHeightCorrection();
+    const expectedFreeSpaceRowHeight = $contentTable.height() - dataRowsHeight - heightCorrection;
 
     // assert
     assert.roughEqual($dataGrid.find('.dx-freespace-row').eq(2).height(), expectedFreeSpaceRowHeight, 1, 'Height of the freeSpace row');
@@ -10276,7 +10387,7 @@ QUnit.test('cellTemplate should be rendered, asynchronously if column renderAsyn
 
 // T857205
 QUnit.test(' if renderAsync is true and state storing is used', function(assert) {
-    let selectedRowKeys = [1, 2];
+    const selectedRowKeys = [1, 2];
 
     const customLoad = sinon.spy(() => {
         return {
@@ -13921,7 +14032,7 @@ QUnit.test('scroll position after refresh with native scrolling', function(asser
     assert.equal($scrollableContainer.scrollLeft(), 100);
 });
 
-QUnit.test('round scroll position for columnHeadersView', function(assert) {
+QUnit.test('scrollLeft for columnHeadersView should be equal scrollLeft for rowsView (T307737, T861910)', function(assert) {
     const $dataGrid = $('#dataGrid').dxDataGrid({
         width: 100,
         scrolling: {
@@ -13939,10 +14050,11 @@ QUnit.test('round scroll position for columnHeadersView', function(assert) {
     scrollable.scrollTo(100.7);
 
     // assert
-    assert.equal(Math.round(scrollable.scrollLeft()), 101);
+    assert.equal(scrollable.scrollLeft(), 100.7);
+    assert.equal(scrollable._container().scrollLeft(), 100);
 
     const $headersScrollable = $dataGrid.find('.dx-datagrid-headers' + ' .dx-datagrid-scroll-container').first();
-    assert.equal($headersScrollable.scrollLeft(), 101);
+    assert.equal($headersScrollable.scrollLeft(), 100);
 });
 
 // T372552
