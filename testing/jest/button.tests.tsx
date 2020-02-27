@@ -396,10 +396,16 @@ describe('Button', () => {
             expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'file' });
         });
 
-        it('should not defined aria-label if properties are not defined', () => {
+        it('should not define aria-label if properties are not defined', () => {
             const tree = render({ text: '', icon: '' });
 
             expect(tree.find(Widget).prop('aria')).toStrictEqual({});
+        });
+
+        it('should not parse icon if icon-type is base64 for aria-label', () => {
+            const tree = render({ text: '', icon: 'data:image/png;base64,' });
+
+            expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'Base64' });
         });
     });
 

@@ -239,8 +239,7 @@ QUnit.module('aria accessibility', () => {
         assert.equal($element.attr('aria-label'), undefined, 'aria label without text and icon is correct');
     });
 
-    // TODO
-    QUnit.skip('icon-type base64 should not be parsed for aria-label creation (T281454)', function(assert) {
+    QUnit.test('icon-type base64 should not be parsed for aria-label creation (T281454)', function(assert) {
         const $element = $('#button').Button({
             icon: 'data:image/png;base64,'
         });
