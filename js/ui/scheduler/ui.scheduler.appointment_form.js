@@ -234,7 +234,7 @@ const SchedulerAppointmentForm = {
 
     prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowEditingTimeZones) {
         const that = this;
-        const recurrenceEditorVisibility = !!this._getRecurrenceRule(appointmentData, dataExprs);
+        const recurrenceEditorVisibility = !!this.getRecurrenceRule(appointmentData, dataExprs);
 
         this._editors = [
             {
@@ -254,7 +254,7 @@ const SchedulerAppointmentForm = {
                     onInitialized: (e) => {
                         const form = that._appointmentForm;
                         if(form.option) {
-                            e.component.option('visible', !!this._getRecurrenceRule(form.option('formData'), dataExprs));
+                            e.component.option('visible', !!this.getRecurrenceRule(form.option('formData'), dataExprs));
                         }
                     }
                 },
@@ -268,7 +268,7 @@ const SchedulerAppointmentForm = {
         return this._editors;
     },
 
-    _getRecurrenceRule(data, dataExprs) {
+    getRecurrenceRule(data, dataExprs) {
         return data[dataExprs.recurrenceRuleExpr];
     },
 

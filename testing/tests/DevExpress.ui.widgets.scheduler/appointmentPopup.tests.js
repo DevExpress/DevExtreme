@@ -15,14 +15,17 @@ import 'ui/switch';
 
 const APPOINTMENT_POPUP_WIDTH = 485;
 const APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE = 970;
-const checkFormWithRecurrenceEditor = (assert, instance, css) => {
-    const width = css === 'block' ? APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE : APPOINTMENT_POPUP_WIDTH;
-    const colSpan = css === 'block' ? 1 : 2;
+const checkFormWithRecurrenceEditor = (assert, instance, visibility) => {
+    const width = visibility === true ? APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE : APPOINTMENT_POPUP_WIDTH;
+    const colSpan = visibility === true ? 1 : 2;
+    const css = visibility === true ? 'block' : 'none';
     const form = instance.getAppointmentDetailsForm();
-    assert.equal(form.getEditor('recurrenceRule')._$container.css('display'),
-        css, `Container is ${css === 'block' ? 'visible' : 'not visible'}`);
+    const recurrenceEditor = form.getEditor('recurrenceRule');
+    assert.equal(recurrenceEditor.option('visible'),
+        visibility, `Container is ${visibility === true ? 'visible' : 'not visible'}`);
     assert.equal(form.option('items')[0].colSpan, colSpan, 'colSpan of main group');
     assert.equal(instance.getAppointmentPopup().option('maxWidth'), width, 'maxWidth of popup');
+    assert.equal(recurrenceEditor._$container.css('display'), css, 'correct css style');
 };
 
 QUnit.testStart(() => initTestMarkup());
@@ -584,20 +587,20 @@ QUnit.test('Recurrence editor container should be visible if recurrence rule was
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: 'a', recurrenceRule: 'FREQ=WEEKLY' });
     $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
-    checkFormWithRecurrenceEditor(assert, this.instance, 'block');
+    checkFormWithRecurrenceEditor(assert, this.instance, true);
 });
 
 QUnit.test('Recurrence editor container should be visible after changing its visibility value', function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: 'a' });
 
     const form = this.instance.getAppointmentDetailsForm();
-    checkFormWithRecurrenceEditor(assert, this.instance, 'none');
+    checkFormWithRecurrenceEditor(assert, this.instance, false);
 
     form.getEditor('visibilityChanged').option('value', true);
-    checkFormWithRecurrenceEditor(assert, this.instance, 'block');
+    checkFormWithRecurrenceEditor(assert, this.instance, true);
 
     form.getEditor('visibilityChanged').option('value', false);
-    checkFormWithRecurrenceEditor(assert, this.instance, 'none');
+    checkFormWithRecurrenceEditor(assert, this.instance, false);
 });
 
 QUnit.test('Popup should contain recurrence editor with right config', function(assert) {
@@ -636,16 +639,16 @@ QUnit.test('Recurrence editor should change value if freq editor value changed',
 
 QUnit.test('Popup should show or not show reccurence editor after many opening with different data', function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: 'a' });
-    checkFormWithRecurrenceEditor(assert, this.instance, 'none');
+    checkFormWithRecurrenceEditor(assert, this.instance, false);
     this.instance.getAppointmentPopup().hide();
 
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: 'b', recurrenceRule: 'FREQ=WEEKLY' });
     $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
-    checkFormWithRecurrenceEditor(assert, this.instance, 'block');
+    checkFormWithRecurrenceEditor(assert, this.instance, true);
     this.instance.getAppointmentPopup().hide();
 
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: 'c' });
-    checkFormWithRecurrenceEditor(assert, this.instance, 'none');
+    checkFormWithRecurrenceEditor(assert, this.instance, false);
 });
 
 QUnit.test('Popup should not contain recurrence editor, if recurrenceRuleExpr is null', function(assert) {
@@ -670,7 +673,7 @@ QUnit.test('Popup should not contain recurrence editor, if recurrenceRuleExpr is
     this.instance.showAppointmentPopup(appointment);
     $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
-    checkFormWithRecurrenceEditor(assert, this.instance, 'block', APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE, 1);
+    checkFormWithRecurrenceEditor(assert, this.instance, true, APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE, 1);
 });
 
 QUnit.test('Popup should not contain recurrence editor, if recurrenceRuleExpr is \'\'', function(assert) {
@@ -1160,6 +1163,26 @@ QUnit.test('Multiple showing appointment popup for recurrence appointments shoul
     const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
     assert.deepEqual($buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right buttons was checked');
+});
+
+QUnit.test('Multiple showing appointment popup for recurrence appointments and after update options should work correct', function(assert) {
+    this.instance.showAppointmentPopup({
+        text: 'Appointment 1',
+        startDate: new Date(2017, 4, 1, 9, 30),
+        endDate: new Date(2017, 4, 1, 11)
+    });
+
+    this.instance.hideAppointmentPopup(true);
+    this.instance.option('recurrenceEditMode', 'series');
+
+    this.instance.showAppointmentPopup({
+        text: 'Appointment 2',
+        startDate: new Date(2017, 4, 1, 9, 30),
+        endDate: new Date(2017, 4, 1, 11),
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH'
+    });
+
+    checkFormWithRecurrenceEditor(assert, this.instance, true);
 });
 
 QUnit.test('Appointment popup will render even if no appointmentData is provided (T734413)', function(assert) {

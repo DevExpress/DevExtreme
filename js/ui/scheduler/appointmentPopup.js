@@ -48,8 +48,9 @@ export default class AppointmentPopup {
         if(!this._popup) {
             const popupConfig = this._createPopupConfig(showButtons);
             this._popup = this._createPopup(popupConfig);
+        } else {
+            this._updateForm();
         }
-
         this._popup.show();
     }
 
@@ -94,7 +95,6 @@ export default class AppointmentPopup {
                 return this._createPopupContent();
             },
             onShowing: (e) => {
-                this._updateForm();
                 const arg = {
                     form: this._appointmentForm,
                     appointmentData: this.state.appointment.data,
@@ -124,7 +124,7 @@ export default class AppointmentPopup {
     _createPopupContent() {
         const formElement = $('<div>');
         this._appointmentForm = this._createForm(formElement);
-
+        this._updateForm();
         return formElement;
     }
 
@@ -194,7 +194,8 @@ export default class AppointmentPopup {
 
         const { startDateExpr, endDateExpr, recurrenceRuleExpr } = this.scheduler._dataAccessors.expr;
         const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr);
-        this._setEditorOptions(recurrenceRuleExpr, extend({}, { startDate: startDate }, recurrenceEditorOptions));
+        const isRecurrence = AppointmentForm.getRecurrenceRule(formData, this.scheduler._dataAccessors.expr);
+        this._setEditorOptions(recurrenceRuleExpr, extend({}, { startDate: startDate, visible: !!isRecurrence }, recurrenceEditorOptions));
         this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
@@ -248,7 +249,7 @@ export default class AppointmentPopup {
         if(!this._appointmentForm) {
             return;
         }
-        const isRecurrence = AppointmentForm._getRecurrenceRule(this._appointmentForm.option('formData'), this.scheduler._dataAccessors.expr);
+        const isRecurrence = AppointmentForm.getRecurrenceRule(this._appointmentForm.option('formData'), this.scheduler._dataAccessors.expr);
         if(this.isVisible()) {
             const isFullScreen = this._isPopupFullScreenNeeded();
             this._popup.option({
