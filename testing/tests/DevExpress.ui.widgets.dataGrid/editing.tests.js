@@ -7610,6 +7610,27 @@ QUnit.test('Add a custom cssClass for image icons in the \'buttons\' command col
     assert.ok($buttonElement.hasClass('dx-icon'), 'Custom icon is created');
 });
 
+QUnit.test('dx-svg-icon should not have \'pointerEvents: none\' if a column button set using svg icon (T863635)', function(assert) {
+    // arrange
+    const $testElement = $('#container');
+    this.options.columns.push({
+        type: 'buttons',
+        buttons: [{
+            icon: '<svg><circle r="10" /></svg>'
+        }]
+    });
+    this.columnsController.reset();
+
+    // act
+    this.rowsView.render($testElement);
+    const svgIcon = $testElement.find('.dx-command-edit').first().find('.dx-svg-icon').first();
+
+    // assert
+    const pointerEvents = browser.msie && parseInt(browser.version) <= 11 ? 'visiblePainted' : 'auto';
+    assert.strictEqual(window.getComputedStyle(svgIcon[0]).pointerEvents, pointerEvents, 'dx-svg-icon allows pointer events');
+    assert.strictEqual(window.getComputedStyle(svgIcon.find('svg')[0]).pointerEvents, 'none', 'dx-svg-icon svg does not allow pointer events');
+});
+
 QUnit.test('Add a custom command column', function(assert) {
     // arrange
     const that = this;
