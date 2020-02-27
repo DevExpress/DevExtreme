@@ -20,7 +20,7 @@ testModule('Library registry', function() {
 
         const warnArgs = logger.warn.lastCall.args[0];
         assert.ok(logger.warn.calledOnce);
-        assert.strictEqual(warnArgs, 'Incorrect "name" argument type');
+        assert.ok(/(W0017)[\s\S]*(Incorrect argument type)/.test(warnArgs));
 
         getLibrary(123);
         assert.ok(logger.warn.calledTwice);
@@ -54,7 +54,7 @@ testModule('Library registry', function() {
 
         const warnArgs = logger.warn.lastCall.args[0];
         assert.ok(logger.warn.calledOnce);
-        assert.strictEqual(warnArgs, `${libKey} is already defined`);
+        assert.ok(/(W0018)[\s\S]*(myLib)/.test(warnArgs));
         assert.deepEqual(getLibrary(libKey), oldLib);
 
         addLibrary(libKey, newLib, true);

@@ -241,5 +241,15 @@ module.exports = errorUtils({
     /**
     * @name ErrorsCore.W0016
     */
-    W0016: 'The "{0}" option does not accept the "{1}" value since v.{2}. {3}.'
+    W0016: 'The "{0}" option does not accept the "{1}" value since v.{2}. {3}.',
+
+    /**
+    * @name ErrorsCore.W0017
+    */
+    W0017: 'Incorrect argument type',
+
+    /**
+    * @name ErrorsCore.W0018
+    */
+    W0018: 'The \'{0}\' library is already defined'
 });

@@ -1,12 +1,11 @@
 import Errors from '../ui/widget/ui.errors';
-import { logger } from './utils/console';
 import { isString } from './utils/type';
 
 const registry = {};
 
 function handleName(name) {
     if(!isString(name)) {
-        logger.warn('Incorrect "name" argument type');
+        Errors.log('W0017');
         return {};
     }
 
@@ -24,7 +23,7 @@ export function addLibrary(name, library, overwrite = false) {
     }
 
     if(registry[libKey] && !overwrite) {
-        logger.warn(`${libName} is already defined`);
+        Errors.log('W0018', libName);
         return;
     }
 
