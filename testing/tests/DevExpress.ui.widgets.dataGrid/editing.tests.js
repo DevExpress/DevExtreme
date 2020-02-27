@@ -4954,6 +4954,34 @@ QUnit.test('deleteRow should works if cell value is changed', function(assert) {
     assert.strictEqual(testElement.find('input').length, 0, 'no editors');
 });
 
+QUnit.test('deleteRow should works in row editing mode if boolean column and validation are exist (T865833, T864931)', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'row',
+        allowDeleting: true
+    };
+
+    that.options.columns.push({ dataField: 'booleanField', dataType: 'boolean', validationRules: [{ type: 'required' }] });
+    that.columnsController.reset();
+    that.editingController.init();
+
+    rowsView.render(testElement);
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 7, 'row count');
+
+    // act
+    that.deleteRow(1);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
+});
+
 // T804894
 QUnit.test('addRow should not work if updating is started with validation error', function(assert) {
     // arrange
