@@ -689,35 +689,51 @@ QUnit.module('templates', () => {
     });
 
     checkStyleHelper.testInChromeOnDesktopActiveWindow('parent styles when button is focused, text is not empty', function(assert) {
+        const done = assert.async();
+
         const $template = $('<div>').text('test1');
         const $button = $('#button').Button({
             text: 'not empty',
             template: function() { return $template; }
         });
-        $button.Button('instance').focus();
 
-        assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(51, 51, 51)', 'color');
-        // TODO
-        // assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(235, 235, 235)', 'backgroundColor');
-        assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), 'hidden', 'overflowX');
-        assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'ellipsis', 'textOverflow');
-        assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'nowrap', 'whiteSpace');
+        setTimeout(() => {
+            $button.Button('instance').focus();
+
+            setTimeout(() => {
+                assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(51, 51, 51)', 'color');
+                assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(235, 235, 235)', 'backgroundColor');
+                assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), 'hidden', 'overflowX');
+                assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'ellipsis', 'textOverflow');
+                assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'nowrap', 'whiteSpace');
+
+                done();
+            }, 10);
+        }, 10);
     });
 
     checkStyleHelper.testInChromeOnDesktopActiveWindow('parent styles when button is focused, text is empty', function(assert) {
+        const done = assert.async();
+
         const $template = $('<div>').text('test1');
         const $button = $('#button').Button({
             text: null,
             template: function() { return $template; }
         });
-        $button.Button('instance').focus();
 
-        assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(51, 51, 51)', 'color');
-        // TODO
-        // assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(235, 235, 235)', 'backgroundColor');
-        assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), 'visible', 'overflowX');
-        assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
-        assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'normal', 'whiteSpace');
+        setTimeout(() => {
+            $button.Button('instance').focus();
+
+            setTimeout(() => {
+                assert.strictEqual(checkStyleHelper.getColor($template[0]), 'rgb(51, 51, 51)', 'color');
+                assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), 'rgb(235, 235, 235)', 'backgroundColor');
+                assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), 'visible', 'overflowX');
+                assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
+                assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'normal', 'whiteSpace');
+
+                done();
+            }, 10);
+        }, 10);
     });
 });
 
