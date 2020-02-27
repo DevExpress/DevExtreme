@@ -62,6 +62,14 @@
     }
   },
   {
+    "name": "core/library_registry",
+    "exports": {
+      "addLibrary": { "path": "addLibrary" },
+      "getLibrary": { "path": "getLibrary" },
+      "resetLibraryRegistry": { "path": "resetLibraryRegistry" }
+    }
+  },
+  {
     "name": "core/set_template_engine",
     "exports": {
       "default": { "path": "setTemplateEngine" }
