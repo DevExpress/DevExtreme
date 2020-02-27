@@ -7,7 +7,7 @@ import { errors } from '../data/errors';
 import { Deferred } from '../core/utils/deferred';
 import { getWindow } from '../core/utils/window';
 import { fileSaver } from '../exporter/file_saver';
-import { getLibrary } from '../core/registry';
+import { getLibrary } from '../core/library_registry';
 
 import FileSystemProviderBase from './provider_base';
 import ErrorCode from './errors';

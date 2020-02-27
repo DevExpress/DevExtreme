@@ -1,6 +1,6 @@
 import DeltaConverter from 'ui/html_editor/converters/delta';
 import MarkdownConverter from 'ui/html_editor/converters/markdown';
-import { getLibrary } from 'core/registry';
+import { getLibrary } from 'core/library_registry';
 
 const { test } = QUnit;
 

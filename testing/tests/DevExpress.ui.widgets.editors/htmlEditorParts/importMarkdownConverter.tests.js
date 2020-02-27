@@ -1,5 +1,5 @@
 import 'ui/html_editor/converters/markdown';
-import { getLibrary } from 'core/registry';
+import { getLibrary } from 'core/library_registry';
 
 QUnit.module('Import 3rd party', function() {
     QUnit.test('Markdown-related libraries should be registered', function(assert) {

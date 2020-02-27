@@ -1,5 +1,5 @@
 import Widget from '../widget/ui.widget';
-import { getLibrary } from '../../core/registry';
+import { getLibrary } from '../../core/library_registry';
 import { TaskAreaContainer } from './ui.gantt.task.area.container';
 
 export class GanttView extends Widget {

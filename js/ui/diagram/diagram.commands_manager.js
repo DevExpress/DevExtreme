@@ -1,4 +1,4 @@
-import { getLibrary } from '../../core/registry';
+import { getLibrary } from '../../core/library_registry';
 import { fileSaver } from '../../exporter/file_saver';
 import { isFunction } from '../../core/utils/type';
 import { getWindow } from '../../core/utils/window';

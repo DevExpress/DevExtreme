@@ -7,7 +7,7 @@ import typeUtils from '../../core/utils/type';
 import dataCoreUtils from '../../core/utils/data';
 import positionUtils from '../../animation/position';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
-import { getLibrary } from '../../core/registry';
+import { getLibrary } from '../../core/library_registry';
 import { hasWindow, getWindow } from '../../core/utils/window';
 import domUtils from '../../core/utils/dom';
 import eventsEngine from '../../events/core/events_engine';

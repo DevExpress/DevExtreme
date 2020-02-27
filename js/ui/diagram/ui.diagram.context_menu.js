@@ -6,7 +6,7 @@ import DiagramCommandsManager from './diagram.commands_manager';
 import DiagramMenuHelper from './ui.diagram.menu_helper';
 
 import DiagramBar from './diagram.bar';
-import { getLibrary } from '../../core/registry';
+import { getLibrary } from '../../core/library_registry';
 
 const DIAGRAM_TOUCHBAR_CLASS = 'dx-diagram-touchbar';
 const DIAGRAM_TOUCHBAR_TARGET_CLASS = 'dx-diagram-touchbar-target';

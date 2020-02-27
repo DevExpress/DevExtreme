@@ -1,4 +1,4 @@
-import { getLibrary } from '../../../core/registry';
+import { getLibrary } from '../../../core/library_registry';
 
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils';

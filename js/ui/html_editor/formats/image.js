@@ -1,4 +1,4 @@
-import { getLibrary } from '../../../core/registry';
+import { getLibrary } from '../../../core/library_registry';
 
 import { isObject } from '../../../core/utils/type';
 

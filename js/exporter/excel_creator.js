@@ -3,7 +3,7 @@ import { getWindow } from '../core/utils/window';
 import { isDefined, isString, isDate, isBoolean, isObject, isFunction } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import stringUtils from '../core/utils/string';
-import { getLibrary } from '../core/registry';
+import { getLibrary } from '../core/library_registry';
 import fileSaver from './file_saver';
 import excelFormatConverter from './excel_format_converter';
 import ExcelFile from './excel/excel.file';

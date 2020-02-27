@@ -2,7 +2,7 @@
 import TurnDown from 'turndown';
 import ShowDown from 'showdown';
 
-import { getLibrary, addLibrary } from '../../../core/registry';
+import { getLibrary, addLibrary } from '../../../core/library_registry';
 import converterController from '../converterController';
 
 TurnDown && addLibrary('turndown', TurnDown);

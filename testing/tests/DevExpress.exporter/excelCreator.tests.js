@@ -3,7 +3,7 @@ const excelCreator = require('exporter').excel;
 const coreLocalization = require('localization/core');
 const ExcelCreator = excelCreator.creator;
 const internals = excelCreator.__internals;
-const addLibrary = require('core/registry').addLibrary;
+const addLibrary = require('core/library_registry').addLibrary;
 
 const exportMocks = require('../../helpers/exportMocks.js');
 

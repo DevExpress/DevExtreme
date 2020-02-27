@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { getLibrary } from '../../core/registry';
+import { getLibrary } from '../../core/library_registry';
 
 import messageLocalization from '../../localization/message';
 

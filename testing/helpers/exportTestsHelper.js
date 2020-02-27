@@ -2,7 +2,7 @@ import 'common.css!';
 import 'integration/jszip';
 
 import { excel as excelCreator } from 'exporter';
-import { addLibrary, getLibrary } from 'core/registry';
+import { addLibrary, getLibrary } from 'core/library_registry';
 import JSZipMock from './jszipMock.js';
 
 const INTERNAL_BASE_STYLE_XML1 = '<fonts count="2"><font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" />' +

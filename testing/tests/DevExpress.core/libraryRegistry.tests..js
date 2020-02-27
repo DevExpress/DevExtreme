@@ -1,9 +1,9 @@
-import { addLibrary, getLibrary, resetRegistry } from 'core/registry';
+import { addLibrary, getLibrary, resetLibraryRegistry } from 'core/library_registry';
 import { logger } from 'core/utils/console';
 
 const { module: testModule, test } = QUnit;
 
-testModule('Registry', function() {
+testModule('Library registry', function() {
     test('library request throw an error when unknown library has been requested and keep name formatting', function(assert) {
         assert.throws(
             function() { getLibrary('AwEsOmeLib'); },
@@ -39,7 +39,7 @@ testModule('Registry', function() {
         assert.deepEqual(getLibrary('myLib'), myLib, 'we can get library from the registry');
         assert.deepEqual(getLibrary('MyLiB'), myLib, 'key is case insensitive');
 
-        resetRegistry();
+        resetLibraryRegistry();
     });
 
     test('libraries is not overrides by default', function(assert) {
@@ -62,12 +62,12 @@ testModule('Registry', function() {
         assert.deepEqual(getLibrary(libKey), newLib, 'library has been replaced');
 
         logger.warn.restore();
-        resetRegistry();
+        resetLibraryRegistry();
     });
 
-    test('resetRegistry method clear the registry', function(assert) {
+    test('resetLibraryRegistry method clear the registry', function(assert) {
         addLibrary('myLib', { name: 'test' });
-        resetRegistry();
+        resetLibraryRegistry();
 
         assert.throws(
             function() { getLibrary('myLib'); },

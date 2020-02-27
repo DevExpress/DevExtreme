@@ -1,5 +1,5 @@
 import ConverterController from '../converterController';
-import { getLibrary } from '../../../core/registry';
+import { getLibrary } from '../../../core/library_registry';
 import { isFunction } from '../../../core/utils/type';
 
 const ESCAPING_MAP = {

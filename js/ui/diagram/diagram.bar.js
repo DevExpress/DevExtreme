@@ -1,4 +1,4 @@
-import { getLibrary } from '../../core/registry';
+import { getLibrary } from '../../core/library_registry';
 
 class DiagramBar {
     constructor(owner) {

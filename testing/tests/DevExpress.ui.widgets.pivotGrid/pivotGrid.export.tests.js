@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import helper from '../../helpers/pivotGridExportTestsHelper.js';
 import JSZipMock from '../../helpers/jszipMock.js';
-import { addLibrary } from 'core/registry';
+import { addLibrary } from 'core/library_registry';
 
 QUnit.testStart(function() {
     const markup = '<div id="pivotGrid" style="width: 700px"></div>';

@@ -1,5 +1,5 @@
 import DiagramBar from './diagram.bar';
-import { getLibrary } from '../../core/registry';
+import { getLibrary } from '../../core/library_registry';
 
 class DiagramOptionsUpdateBar extends DiagramBar {
     constructor(owner) {

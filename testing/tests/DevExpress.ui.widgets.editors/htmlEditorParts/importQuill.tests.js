@@ -1,5 +1,5 @@
 
-import { getLibrary } from 'core/registry';
+import { getLibrary } from 'core/library_registry';
 import 'integration/quill';
 
 QUnit.module('Import 3rd party', function() {

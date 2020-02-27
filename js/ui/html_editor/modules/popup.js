@@ -1,4 +1,4 @@
-import { getLibrary } from '../../../core/registry';
+import { getLibrary } from '../../../core/library_registry';
 
 import $ from '../../../core/renderer';
 import { extend } from '../../../core/utils/extend';

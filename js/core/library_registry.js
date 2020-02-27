@@ -47,7 +47,7 @@ export function getLibrary(name) {
     return library;
 }
 
-export function resetRegistry() {
+export function resetLibraryRegistry() {
     for(const lib in registry) {
         delete registry[lib];
     }
