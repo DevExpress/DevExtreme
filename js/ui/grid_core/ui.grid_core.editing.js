@@ -1309,12 +1309,12 @@ const EditingController = modules.ViewController.inherit((function() {
             const dataController = this._dataController;
             const item = dataController.items()[rowIndex];
             const key = item && item.key;
-            const editIndex = getIndexByKey(key, this._editData);
             const oldEditRowIndex = this._getVisibleEditRowIndex();
             const isBatchMode = this.option('editing.mode') === EDIT_MODE_BATCH;
 
             this.refresh();
 
+            const editIndex = getIndexByKey(key, this._editData);
             if(editIndex >= 0) {
                 if(this._editData[editIndex].type === DATA_EDIT_DATA_INSERT_TYPE) {
                     this._removeEditDataItem(editIndex);
