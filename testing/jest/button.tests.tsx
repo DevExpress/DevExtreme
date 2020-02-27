@@ -5,24 +5,33 @@ import { clear as clearEventHandlers, defaultEvent, emit, emitKeyboard, EVENT, K
 import { mount } from 'enzyme';
 import devices from '../../js/core/devices';
 import themes from '../../js/ui/themes';
-import sinon from 'sinon';
+
+jest.mock('../../js/core/devices', () => {
+    const actualDevices = require.requireActual('../../js/core/devices');
+    return {
+        ...actualDevices,
+        ...actualDevices.__proto__,
+        isSimulator: jest.fn(() => false),
+        real: jest.fn(() => ({ deviceType: 'desktop' })),
+    };
+});
+
+jest.mock('../../js/ui/themes', () => ({
+    ...require.requireActual('../../js/ui/themes'),
+    current: jest.fn(() => 'generic'),
+}));
 
 describe('Button', () => {
     const render = (props = {}) => mount(<Button {...props} />).childAt(0);
 
     beforeEach(() => {
-        sinon.stub(devices, 'real').returns({
-            deviceType: 'desktop',
-        });
-        sinon.stub((devices as any), 'isSimulator');
-        const currentStub = sinon.stub(themes, 'current');
-        (currentStub as any).returns('generic');
+        (devices.real as any).mockImplementation(() => ({ deviceType: 'desktop' }));
+        (devices as any).isSimulator.mockImplementation(() => false);
+        (themes.current as any).mockImplementation(() => 'generic');
     });
 
     afterEach(() => {
-        (devices.real as any).restore();
-        (devices as any).isSimulator.restore();
-        (themes.current as any).restore();
+        jest.resetAllMocks();
         clearEventHandlers();
     });
 
@@ -396,28 +405,16 @@ describe('Button', () => {
 
         describe('focusStateEnabled', () => {
             it('should be false if device is not desktop', () => {
-                (devices.real as any).returns({
-                    deviceType: 'android',
-                });
-                (devices as any).isSimulator.returns(false);
-
+                (devices.real as any).mockImplementation(() => ({ deviceType: 'android' }));
                 expect(getDefaultProps().focusStateEnabled).toBe(false);
             });
 
             it('should be true on desktop and not simulator', () => {
-                (devices.real as any).returns({
-                    deviceType: 'desktop',
-                });
-                (devices as any).isSimulator.returns(false);
-
                 expect(getDefaultProps().focusStateEnabled).toBe(true);
             });
 
             it('should be false on simulator', () => {
-                (devices.real as any).returns({
-                    deviceType: 'desktop',
-                });
-                (devices as any).isSimulator.returns(true);
+                (devices as any).isSimulator.mockImplementation(() => true);
 
                 expect(getDefaultProps().focusStateEnabled).toBe(false);
             });
@@ -425,14 +422,12 @@ describe('Button', () => {
 
         describe('useInkRiple', () => {
             it('should be true if material theme', () => {
-                (themes as any).current.returns('material');
-
+                (themes.current as any).mockImplementation(() => 'material');
                 expect(getDefaultProps().useInkRipple).toBe(true);
             });
 
             it('should be false if theme is not material', () => {
-                (themes as any).current.returns('generic');
-
+                (themes.current as any).mockImplementation(() => 'generic');
                 expect(getDefaultProps().useInkRipple).toBe(false);
             });
         });
