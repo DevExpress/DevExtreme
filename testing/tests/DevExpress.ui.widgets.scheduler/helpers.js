@@ -156,7 +156,7 @@ export class SchedulerTestWrapper {
             },
             getPopupInstance: () => $('.dx-scheduler-appointment-popup.dx-widget').dxPopup('instance'),
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
-            setPopupSize: size => this.appointmentPopup.getPopupInstance().option({ width: size.width, height: size.height }),
+            setPopupHeight: height => this.appointmentPopup.getPopupInstance().option('height', height),
             getToolbarElementByLocation: location => {
                 const toolbarName = location === TOOLBAR_TOP_LOCATION ? 'title' : TOOLBAR_BOTTOM_LOCATION;
                 return this.appointmentPopup.getPopup().find(`.dx-toolbar.dx-widget.dx-popup-${toolbarName}`);
