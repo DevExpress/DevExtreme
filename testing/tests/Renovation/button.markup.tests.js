@@ -230,12 +230,10 @@ QUnit.module('aria accessibility', () => {
         assert.equal($element.attr('aria-label'), 'test', 'aria label for all params is correct');
 
         instance.option('text', '');
-        // TODO
-        // assert.equal($element.attr('aria-label'), 'find', 'aria label without text is correct');
+        assert.equal($element.attr('aria-label'), 'find', 'aria label without text is correct');
 
         instance.option('icon', '/path/file.png');
-        // TODO
-        // assert.equal($element.attr('aria-label'), 'file', 'aria label without text and icon is correct');
+        assert.equal($element.attr('aria-label'), 'file', 'aria label without text and icon is correct');
 
         instance.option('icon', '');
         assert.equal($element.attr('aria-label'), undefined, 'aria label without text and icon is correct');

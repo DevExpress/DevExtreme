@@ -1,6 +1,7 @@
 import { click } from '../events/short';
 import { initConfig, showWave, hideWave } from '../ui/widget/utils.ink_ripple';
 import { Component, ComponentBindings, Effect, JSXComponent, OneWay, Ref } from 'devextreme-generator/component_declaration/common';
+import { getImageSourceType } from '../core/utils/icon';
 import Widget, { WidgetInput } from './widget';
 import Icon from './icon';
 
@@ -33,11 +34,21 @@ const getCssClasses = (model: ButtonInput) => {
     return classNames.join(' ');
 };
 
+const fileNameExp = new RegExp('.+\/([^.]+)\..+$');
+const getAriaLabel = (text, icon) => {
+    let label = text && text.trim() || icon;
+    if (!text && getImageSourceType(icon) === 'image') {
+        label = icon.indexOf('base64') === -1 ? icon.replace(fileNameExp, '$1') : 'Base64';
+    }
+
+    return label ? { label } : {};
+};
+
 export const viewModelFunction = (model: Button):ButtonViewModel => {
     const props = model.props;
     return {
         ...props,
-        aria: { label: props.text && props.text.trim() },
+        aria: getAriaLabel(model.props.text, model.props.icon),
         contentRef: model.contentRef,
         cssClasses: getCssClasses(props),
         elementAttr: { ...props.elementAttr, role: 'button' },
