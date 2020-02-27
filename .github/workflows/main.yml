@@ -7,7 +7,7 @@ jobs:
 
     strategy:
       matrix:
-        CONSTEL: [ export, misc, ui, ui.editors, ui.grid, ui.scheduler, viz ]
+        CONSTEL: [ export, misc, ui, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
 
     runs-on: windows-latest
 
