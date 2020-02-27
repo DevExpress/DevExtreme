@@ -27,3 +27,7 @@ export const deviceMatch = (device, filter) => isEmptyObject(filter) || findBest
 export const getFieldName = fullName => fullName.substr(fullName.lastIndexOf('.') + 1);
 
 export const getParentName = fullName => fullName.substr(0, fullName.lastIndexOf('.'));
+
+export default function createDefaultRules(options = []) {
+    return options;
+}

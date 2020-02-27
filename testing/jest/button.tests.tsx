@@ -1,13 +1,30 @@
-import Button from '../../js/renovation/button.p.js';
+import Button, { defaultOptions } from '../../js/renovation/button.p.js';
 import Widget from '../../js/renovation/widget.p.js';
 import { h } from 'preact';
 import { clear as clearEventHandlers, defaultEvent, emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
 import { mount } from 'enzyme';
+import devices from '../../js/core/devices';
+import themes from '../../js/ui/themes';
+import sinon from 'sinon';
 
 describe('Button', () => {
     const render = (props = {}) => mount(<Button {...props} />).childAt(0);
 
-    beforeEach(clearEventHandlers);
+    beforeEach(() => {
+        sinon.stub(devices, 'real').returns({
+            deviceType: 'desktop',
+        });
+        sinon.stub((devices as any), 'isSimulator');
+        const currentStub = sinon.stub(themes, 'current');
+        (currentStub as any).returns('generic');
+    });
+
+    afterEach(() => {
+        (devices.real as any).restore();
+        (devices as any).isSimulator.restore();
+        (themes.current as any).restore();
+        clearEventHandlers();
+    });
 
     describe('Props', () => {
         describe('useInkRipple', () => {
@@ -366,5 +383,58 @@ describe('Button', () => {
         const tree = render();
 
         expect(tree.is('.dx-button')).toBe(true);
+    });
+
+    describe('DefaultOptionRules', () => {
+        function getDefaultProps() {
+            defaultOptions({
+                device: () => false,
+                options: {},
+            });
+            return Button.defaultProps;
+        }
+
+        describe('focusStateEnabled', () => {
+            it('should be false if device is not desktop', () => {
+                (devices.real as any).returns({
+                    deviceType: 'android',
+                });
+                (devices as any).isSimulator.returns(false);
+
+                expect(getDefaultProps().focusStateEnabled).toBe(false);
+            });
+
+            it('should be true on desktop and not simulator', () => {
+                (devices.real as any).returns({
+                    deviceType: 'desktop',
+                });
+                (devices as any).isSimulator.returns(false);
+
+                expect(getDefaultProps().focusStateEnabled).toBe(true);
+            });
+
+            it('should be false on simulator', () => {
+                (devices.real as any).returns({
+                    deviceType: 'desktop',
+                });
+                (devices as any).isSimulator.returns(true);
+
+                expect(getDefaultProps().focusStateEnabled).toBe(false);
+            });
+        });
+
+        describe('useInkRiple', () => {
+            it('should be true if material theme', () => {
+                (themes as any).current.returns('material');
+
+                expect(getDefaultProps().useInkRipple).toBe(true);
+            });
+
+            it('should be false if theme is not material', () => {
+                (themes as any).current.returns('generic');
+
+                expect(getDefaultProps().useInkRipple).toBe(false);
+            });
+        });
     });
 });
