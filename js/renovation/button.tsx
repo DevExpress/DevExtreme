@@ -34,11 +34,10 @@ const getCssClasses = (model: ButtonInput) => {
     return classNames.join(' ');
 };
 
-const fileNameExp = new RegExp('.+\/([^.]+)\..+$');
 const getAriaLabel = (text, icon) => {
     let label = text && text.trim() || icon;
     if (!text && getImageSourceType(icon) === 'image') {
-        label = icon.indexOf('base64') === -1 ? icon.replace(fileNameExp, '$1') : 'Base64';
+        label = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
     }
 
     return label ? { label } : {};
