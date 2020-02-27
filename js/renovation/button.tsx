@@ -19,7 +19,7 @@ const getInkRippleConfig = ({ text, icon, type }: ButtonInput) => {
 };
 
 const getCssClasses = (model: ButtonInput) => {
-    const { text, icon, stylingMode, type } = model;
+    const { text, icon, stylingMode, type, iconPosition } = model;
     const classNames = defaultClassNames.concat(model.classNames || []);
     const isValidStylingMode = stylingMode && stylingModes.indexOf(stylingMode) !== -1;
 
@@ -28,6 +28,7 @@ const getCssClasses = (model: ButtonInput) => {
 
     text && classNames.push('dx-button-has-text');
     icon && classNames.push('dx-button-has-icon');
+    iconPosition !== 'left' && classNames.push('dx-button-icon-right');
 
     return classNames.join(' ');
 };
