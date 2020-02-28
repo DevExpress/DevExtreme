@@ -183,10 +183,6 @@ QUnit.test('Accessibility columns id should not set for columns editors (T710132
 QUnit.test('DataGrid - Should hide filter row menu after losing it\'s focus', function(assert) {
     // arrange
     const filterRowWrapper = dataGridWrapper.filterRow;
-    let $menu;
-    let $root;
-    let menuInstance;
-    let subMenu;
 
     createDataGrid({
         filterRow: { visible: true },
@@ -195,13 +191,13 @@ QUnit.test('DataGrid - Should hide filter row menu after losing it\'s focus', fu
     this.clock.tick();
 
     // act
-    $menu = filterRowWrapper.getMenuElement(0);
+    const $menu = filterRowWrapper.getMenuElement(0);
     $menu.focus();
 
-    menuInstance = $menu.dxMenu('instance');
-    $root = $(menuInstance.itemElements().get(0));
+    const menuInstance = $menu.dxMenu('instance');
+    const $root = $(menuInstance.itemElements().get(0));
     menuInstance._showSubmenu($root);
-    subMenu = menuInstance._visibleSubmenu;
+    const subMenu = menuInstance._visibleSubmenu;
 
     // assert
     assert.ok(subMenu._isVisible(), 'submenu exists');
@@ -217,6 +213,40 @@ QUnit.test('DataGrid - Should hide filter row menu after losing it\'s focus', fu
 
     // assert
     assert.notOk(subMenu._isVisible(), 'submenu is hidden');
+});
+
+// T860356
+QUnit.test('Filter row\'s menu icons and text should have different colors', function(assert) {
+    // arrange
+    const filterRowWrapper = dataGridWrapper.filterRow;
+
+    createDataGrid({
+        filterRow: { visible: true },
+        dataSource: [{ field1: '1' }]
+    });
+    this.clock.tick();
+
+    // act
+    const $menu = filterRowWrapper.getMenuElement(0);
+    $menu.focus();
+
+    const menuInstance = $menu.dxMenu('instance');
+    const $root = $(menuInstance.itemElements().get(0));
+    menuInstance._showSubmenu($root);
+    const subMenu = menuInstance._visibleSubmenu;
+
+    // assert
+    const $items = $('.dx-datagrid.dx-filter-menu.dx-overlay-content').find('.dx-menu-item-has-icon');
+
+    assert.ok(subMenu._isVisible(), 'submenu exists');
+    assert.ok($items.length, 'menu items');
+
+    let $currentItem;
+    for(let i = 0; i < $items.length; i++) {
+        $currentItem = $items.eq(i);
+
+        assert.notEqual($currentItem.find('.dx-menu-item-text').css('color'), $currentItem.find('.dx-icon').css('color'), 'colors are different');
+    }
 });
 
 QUnit.test('commonColumnOptions', function(assert) {
@@ -1924,6 +1954,34 @@ QUnit.test('Context menu does not have grouping items when \'contextMenuEnabled\
     assert.ok(!$menuItems.find(':contains(Group this)').length, 'Menu items doesn\'t contain \'group\' command');
     assert.ok(!$menuItems.find(':contains(Ungroup this)').length, 'Menu items doesn\'t contain \'ungroup\' command');
     assert.ok(!$menuItems.find(':contains(Clear grouping)').length, 'Menu items doesn\'t contain \'clear grouping\' command');
+});
+
+// T860356
+QUnit.test('Context menu item\'s color and text should have the same color', function(assert) {
+    const dataGrid = $('#dataGrid').dxDataGrid({
+        columns: ['field1', 'field2', 'field3'],
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [{ field1: '1' }]
+        }
+    }).dxDataGrid('instance');
+
+    $(dataGrid.$element())
+        .find('.dx-header-row td')
+        .eq(0)
+        .trigger('dxcontextmenu');
+
+    const $menuItems = $('.dx-datagrid .dx-menu-item');
+
+    // assert
+    assert.ok($menuItems.length, 'menu items');
+
+    let $currentItem;
+    for(let i = 0; i < $menuItems.length; i++) {
+        $currentItem = $menuItems.eq(i);
+
+        assert.equal($currentItem.find('.dx-icon').css('color'), $currentItem.find('.dx-menu-item-text').css('color'), 'colors are equal');
+    }
 });
 
 QUnit.test('dataGrid first data rendering', function(assert) {
