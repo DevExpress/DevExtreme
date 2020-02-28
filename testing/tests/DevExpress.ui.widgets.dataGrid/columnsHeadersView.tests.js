@@ -1852,6 +1852,38 @@ QUnit.test('Header with sorting and headerFilter - alignment cell content', func
     assert.ok($headerCellContent.eq(2).hasClass('dx-text-content-alignment-right'), 'third cell content has margin left');
 });
 
+// T862537
+QUnit.test('Header with sorting and headerFilter (rtl enabled)', function(assert) {
+    // arrange
+    const $testElement = $('#container');
+
+    $testElement.css('direction', 'rtl');
+    this.options.rtlEnabled = true;
+    this.options.sorting = { mode: 'multiple' };
+    this.options.showColumnLines = false;
+    this.options.headerFilter = { visible: true };
+
+    $.extend(this.columns, [
+        { caption: 'Column 1', allowFiltering: true, allowSorting: true, sortOrder: 'asc', alignment: 'left' },
+        { caption: 'Column 2', allowFiltering: true, allowSorting: true, alignment: 'center' },
+        { caption: 'Column 3', allowFiltering: true, allowSorting: true, sortOrder: 'desc', alignment: 'right' }
+    ]);
+
+    // act
+    this.columnHeadersView.render($testElement);
+
+    // assert
+    const $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
+    const $headerCellIndicators = $testElement.find('.dx-header-row .dx-column-indicators');
+
+    assert.ok($headerCellContent.eq(0).offset().left > $headerCellIndicators.eq(0).offset().left, 'indicators are on the left');
+
+    assert.ok($headerCellContent.eq(1).offset().left > $headerCellIndicators.eq(2).offset().left, 'indicators are on the left');
+    assert.equal($headerCellIndicators.eq(2).children().length, 2, 'indicator count');
+
+    assert.ok($headerCellContent.eq(2).offset().left > $headerCellIndicators.eq(3).offset().left, 'indicators are on the right');
+});
+
 QUnit.test('Header without sorting and headerFilter - alignment cell content', function(assert) {
     // arrange
     let $headerCellContent;
