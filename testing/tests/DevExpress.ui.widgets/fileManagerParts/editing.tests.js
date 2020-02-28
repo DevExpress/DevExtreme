@@ -1,10 +1,11 @@
 import $ from 'jquery';
 import 'ui/file_manager';
-import pointerEvents from 'events/pointer';
 import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
+import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
+
 
 const { test } = QUnit;
 
@@ -109,7 +110,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         let $cell = this.wrapper.getRowNameCellInDetailsView(1);
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
-        $cell.trigger(pointerEvents.down).click();
+        $cell.trigger(CLICK_EVENT).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Rename').trigger('dxclick');
@@ -130,7 +131,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
     test('create folder in folders area from items area without folders', function(assert) {
         const $cell = this.wrapper.getRowNameCellInDetailsView(1);
-        $cell.trigger(pointerEvents.down).click();
+        $cell.trigger(CLICK_EVENT).click();
 
         const $row = $cell.parent();
         assert.ok($row.hasClass(Consts.FOCUSED_ROW_CLASS), 'file selected');
@@ -154,7 +155,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
     test('create folder in folders area from items area without folders by Enter in dialog input', function(assert) {
         const $cell = this.wrapper.getRowNameCellInDetailsView(1);
-        $cell.trigger(pointerEvents.down).click();
+        $cell.trigger(CLICK_EVENT).click();
 
         const $row = $cell.parent();
         assert.ok($row.hasClass(Consts.FOCUSED_ROW_CLASS), 'file selected');
@@ -253,7 +254,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
         const $cell = this.wrapper.getRowNameCellInDetailsView(1);
-        $cell.trigger(pointerEvents.down).click();
+        $cell.trigger(CLICK_EVENT).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Delete').trigger('dxclick');
@@ -279,7 +280,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1-1.txt', 'has target file');
 
         const $cell = this.wrapper.getRowNameCellInDetailsView(1);
-        $cell.trigger(pointerEvents.down).click();
+        $cell.trigger(CLICK_EVENT).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Delete').trigger('dxclick');
@@ -370,7 +371,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $cell = $cells.eq(0);
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
-        $cell.trigger(pointerEvents.down).click();
+        $cell.trigger(CLICK_EVENT).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Move to').trigger('dxclick');
@@ -402,7 +403,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $cell = $cells.eq(0);
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
-        $cell.trigger(pointerEvents.down).click();
+        $cell.trigger(CLICK_EVENT).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
@@ -431,7 +432,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
     test('rename file failed for not allowed extension', function(assert) {
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
-        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down).click();
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Rename').trigger('dxclick');
@@ -453,7 +454,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
-        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down).click();
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Download').filter(':visible').trigger('dxclick');
@@ -525,7 +526,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $cell = $cells.eq(0);
         assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
 
-        $cell.trigger(pointerEvents.down).click();
+        $cell.trigger(CLICK_EVENT).click();
         this.clock.tick(400);
 
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
