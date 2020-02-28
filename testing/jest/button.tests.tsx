@@ -1,14 +1,40 @@
-import Button from '../../js/renovation/button.p.js';
+import Button, { defaultOptions } from '../../js/renovation/button.p.js';
 import Widget from '../../js/renovation/widget.p.js';
 import Icon from '../../js/renovation/icon.p.js';
 import { h } from 'preact';
 import { clear as clearEventHandlers, defaultEvent, emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
 import { mount } from 'enzyme';
+import devices from '../../js/core/devices';
+import themes from '../../js/ui/themes';
+
+jest.mock('../../js/core/devices', () => {
+    const actualDevices = require.requireActual('../../js/core/devices');
+    return {
+        ...actualDevices,
+        ...actualDevices.__proto__,
+        isSimulator: jest.fn(() => false),
+        real: jest.fn(() => ({ deviceType: 'desktop' })),
+    };
+});
+
+jest.mock('../../js/ui/themes', () => ({
+    ...require.requireActual('../../js/ui/themes'),
+    current: jest.fn(() => 'generic'),
+}));
 
 describe('Button', () => {
     const render = (props = {}) => mount(<Button {...props} />).childAt(0);
 
-    beforeEach(clearEventHandlers);
+    beforeEach(() => {
+        (devices.real as any).mockImplementation(() => ({ deviceType: 'desktop' }));
+        (devices as any).isSimulator.mockImplementation(() => false);
+        (themes.current as any).mockImplementation(() => 'generic');
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
+        clearEventHandlers();
+    });
 
     describe('Props', () => {
         describe('useInkRipple', () => {
@@ -413,5 +439,44 @@ describe('Button', () => {
         const tree = render();
 
         expect(tree.is('.dx-button')).toBe(true);
+    });
+
+    describe('DefaultOptionRules', () => {
+        const getDefaultProps = () => {
+            defaultOptions({
+                device: () => false,
+                options: {},
+            });
+            return Button.defaultProps;
+        };
+
+        describe('focusStateEnabled', () => {
+            it('should be false if device is not desktop', () => {
+                (devices.real as any).mockImplementation(() => ({ deviceType: 'android' }));
+                expect(getDefaultProps().focusStateEnabled).toBe(false);
+            });
+
+            it('should be true on desktop and not simulator', () => {
+                expect(getDefaultProps().focusStateEnabled).toBe(true);
+            });
+
+            it('should be false on simulator', () => {
+                (devices as any).isSimulator.mockImplementation(() => true);
+
+                expect(getDefaultProps().focusStateEnabled).toBe(false);
+            });
+        });
+
+        describe('useInkRiple', () => {
+            it('should be true if material theme', () => {
+                (themes.current as any).mockImplementation(() => 'material');
+                expect(getDefaultProps().useInkRipple).toBe(true);
+            });
+
+            it('should be false if theme is not material', () => {
+                (themes.current as any).mockImplementation(() => 'generic');
+                expect(getDefaultProps().useInkRipple).toBe(false);
+            });
+        });
     });
 });
