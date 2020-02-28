@@ -1637,7 +1637,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
     });
 
-    QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
+    QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if enterKeyDirection: "row", enterKeyAction: "startEdit"', function(assert) {
         let focusedCellChangingCounter = 0;
         let columnIndex;
 
@@ -1707,7 +1707,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.notOk(this.editingController.isEditing(), 'Is editing');
     });
 
-    QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
+    QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if enterKeyDirection: "row", enterKeyAction: "moveFocus", editing.allowEditing: true', function(assert) {
         let focusedCellChangingCounter = 0;
         let columnIndex;
 
@@ -1749,7 +1749,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1811,7 +1811,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
