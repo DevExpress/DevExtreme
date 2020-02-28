@@ -115,7 +115,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     _initViewHandlers: function() {
         const that = this;
-        const clickAction = that.createAction(that._clickHandler);
+        const pointerEventAction = that.createAction(that._pointerEventHandler);
         const rowsView = that.getView('rowsView');
 
         rowsView.renderCompleted.add(function(e) {
@@ -130,8 +130,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const isMobile = devices.current().deviceType !== 'desktop';
             const pointerEventName = !isMobile ? pointerEvents.down : clickEvent.name;
 
-            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickAction);
-            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickSelector, clickAction);
+            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), pointerEventAction);
+            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickSelector, pointerEventAction);
 
             that._initKeyDownHandler($rowsView, e => that._keyDownHandler(e));
 
@@ -724,8 +724,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     // #endregion Key_Handlers
 
-    // #region Click_Handler
-    _clickHandler: function(e) {
+    // #region Pointer_Event_Handler
+    _pointerEventHandler: function(e) {
         const event = e.event;
         let $target = $(event.currentTarget);
         const rowsView = this.getView('rowsView');
@@ -811,7 +811,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
         return this._editingController.allowUpdating({ row: row }, 'click');
     },
-    // #endregion Click_Handler
+    // #endregion Pointer_Event_Handler
 
     // #region Focusing
     focus: function(element) {
