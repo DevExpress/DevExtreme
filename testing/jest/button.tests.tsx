@@ -442,13 +442,13 @@ describe('Button', () => {
     });
 
     describe('DefaultOptionRules', () => {
-        function getDefaultProps() {
+        const getDefaultProps = () => {
             defaultOptions({
                 device: () => false,
                 options: {},
             });
             return Button.defaultProps;
-        }
+        };
 
         describe('focusStateEnabled', () => {
             it('should be false if device is not desktop', () => {

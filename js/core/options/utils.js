@@ -28,6 +28,6 @@ export const getFieldName = fullName => fullName.substr(fullName.lastIndexOf('.'
 
 export const getParentName = fullName => fullName.substr(0, fullName.lastIndexOf('.'));
 
-export default function createDefaultRules(options = []) {
+export default function createDefaultOptionRules(options = []) {
     return options;
 }
