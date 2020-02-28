@@ -8,6 +8,7 @@ import { inArray } from '../../core/utils/array';
 import { focused } from '../widget/selectors';
 import * as eventUtils from '../../events/utils';
 import pointerEvents from '../../events/pointer';
+import clickEvent from '../../events/click';
 import { noop } from '../../core/utils/common';
 import * as accessibility from '../shared/accessibility';
 import { isElementInCurrentGrid } from './ui.grid_core.utils';
@@ -127,7 +128,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const $focusedElement = $(':focus');
             const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length || (browser.msie && $focusedElement.is('body'));
             const isMobile = devices.current().deviceType !== 'desktop';
-            const pointerEventName = !isMobile ? pointerEvents.down : 'dxclick';
+            const pointerEventName = !isMobile ? pointerEvents.down : clickEvent.name;
 
             eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickAction);
             eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickSelector, clickAction);

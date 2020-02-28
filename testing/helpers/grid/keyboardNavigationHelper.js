@@ -84,7 +84,7 @@ export function setupModules(that, modulesOptions, gridModules) {
     });
 }
 
-const device = devices.real();
+export const device = devices.real();
 const isMobile = device.deviceType !== 'desktop';
 const pointerEventName = !isMobile ? pointerEvents.down : 'dxclick';
 export const CLICK_EVENT = eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation');

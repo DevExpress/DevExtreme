@@ -17,7 +17,7 @@ import ArrayStore from 'data/array_store';
 import pointerEvents from 'events/pointer';
 import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
-import { CLICK_EVENT, fireKeyDown, triggerKeyDown } from '../../helpers/grid/keyboardNavigationHelper.js';
+import { CLICK_EVENT, device, fireKeyDown, triggerKeyDown } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 const dataGridWrapper = new DataGridWrapper('#container');
 const rowsViewWrapper = dataGridWrapper.rowsView;
@@ -71,7 +71,9 @@ const getModuleConfig = function(keyboardNavigationEnabled) {
         },
         afterEach: function() {
             this.clock.restore();
-            this.dispose();
+            if(this.dispose) {
+                this.dispose();
+            }
         }
     };
 };
@@ -3925,6 +3927,48 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), 0, 'FocusedRowIndex');
         assert.equal(this.option('focusedRowKey'), 'Mark2', 'FocusedRowkey');
         assert.equal(this.pageIndex(), 2, 'PageIndex with the \'Mark2\' row');
+    });
+
+    QUnit.testInActiveWindow('Row should not focus on scrolling with the pointer (T861577)', function(assert) {
+        if(device.deviceType === 'desktop') {
+            assert.ok(true, 'This test is not actual for the desktop');
+            return;
+        }
+
+        // arrange
+        this.options = {
+            focusedRowEnabled: true,
+            keyExpr: 'name',
+            keyboardNavigation: {
+                enabled: true
+            }
+        };
+
+        this.data = [
+            { name: 'Alex', phone: '555555', room: 1 },
+            { name: 'Ben', phone: '6666666', room: 2 },
+            { name: 'Dan', phone: '553355', room: 3 }
+        ];
+
+        this.setupModule();
+        addOptionChangedHandlers(this);
+
+        this.gridView.render($('#container'));
+        const rowsView = this.gridView.getView('rowsView');
+
+        // act
+        $(rowsView.getCellElement(1, 1)).trigger(pointerEvents.down);
+        this.clock.tick();
+        // assert
+        assert.equal(this.option('focusedRowIndex'), undefined, 'No focusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), undefined, 'No focusedRowKey');
+
+        // act
+        $(rowsView.getCellElement(1, 1)).trigger('dxclick');
+        this.clock.tick();
+        // assert
+        assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
+        assert.equal(this.option('focusedRowKey'), 'Ben', 'focusedRowKey');
     });
 });
 
