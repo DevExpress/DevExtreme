@@ -708,8 +708,8 @@ QUnit.module('templates', () => {
                 assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'nowrap', 'whiteSpace');
 
                 done();
-            }, 10);
-        }, 10);
+            }, 100);
+        }, 100);
     });
 
     checkStyleHelper.testInChromeOnDesktopActiveWindow('parent styles when button is focused, text is empty', function(assert) {
@@ -732,8 +732,8 @@ QUnit.module('templates', () => {
                 assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'normal', 'whiteSpace');
 
                 done();
-            }, 10);
-        }, 10);
+            }, 100);
+        }, 100);
     });
 });
 
