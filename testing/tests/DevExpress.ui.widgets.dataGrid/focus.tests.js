@@ -265,7 +265,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex is 1');
         assert.ok(rowsView.getRow(1).hasClass('dx-row-focused'), 'FocusedRow');
         // act
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         keyboardController._upDownKeysHandler({ key: 'ArrowUp', keyName: 'upArrow' });
         this.clock.tick();
         // assert
@@ -358,7 +358,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.notOk(rowsView.getRow(0).hasClass('dx-cell-focus-disabled'), 'Row 0 has no .dx-cell-focus-disabled');
 
         // act
-        $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT);
         // assert
         assert.ok(keyboardController.isRowFocusType(), 'Row focus type');
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex = 1');
@@ -369,7 +369,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal($(rowsView.getCellElement(1, 0)).attr('tabindex'), undefined);
 
         // act
-        $(rowsView.getCellElement(0, 0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getCellElement(0, 0)).trigger(CLICK_EVENT);
         rowsView = this.gridView.getView('rowsView');
         // assert
         assert.ok(keyboardController.isRowFocusType(), 'Row focus type');
@@ -408,7 +408,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
         this.clock.tick();
         // act
-        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT);
         this.triggerKeyDown('tab', false, false, rowsView.element().find(':focus').get(0));
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
@@ -546,7 +546,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
         this.clock.tick();
         // act
-        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT);
         this.triggerKeyDown('leftArrow', false, false, rowsView.element().find(':focus').get(0));
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex = 1');
@@ -583,7 +583,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
         this.clock.tick();
         // act
-        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT);
         this.triggerKeyDown('rightArrow', false, false, rowsView.element().find(':focus').get(0));
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex = 1');
@@ -617,7 +617,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex');
 
         // act
-        $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT);
         // assert
         assert.ok(this.keyboardNavigationController.isRowFocusType(), 'Row focus type');
 
@@ -672,7 +672,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // assert
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
         // act
-        $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT);
         // assert
         assert.equal(this.option('focusedRowIndex'), 3, 'FocusedRowIndex = 3');
         assert.ok(this.keyboardNavigationController.isRowFocusType(), 'Row focus type');
@@ -845,10 +845,10 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         const rowsView = this.gridView.getView('rowsView');
 
         // act
-        $(rowsView.getRow(0).find('td').eq(0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getRow(0).find('td').eq(0)).trigger(CLICK_EVENT);
         this.clock.tick();
         this.triggerKeyDown('rightArrow', false, false, rowsView.element().find(':focus').get(0));
-        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT);
         // assert
         assert.equal($(rowsView.getRow(0)).find('[tabindex="0"]').length, 1, 'Row 0 has tabindex');
         // act
@@ -933,7 +933,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowIndex'), undefined, 'FocusedRowIndex is undefined');
         this.clock.tick();
         // act
-        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT).click();
+        $(rowsView.getRow(1).find('td').eq(0)).trigger(CLICK_EVENT);
         this.triggerKeyDown('rightArrow', false, false, rowsView.element().find(':focus').get(0));
         // assert
         assert.ok(this.getController('keyboardNavigation').isCellFocusType(), 'Cell focus type');
@@ -1492,7 +1492,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1541,7 +1541,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1937,7 +1937,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -1993,7 +1993,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -2054,7 +2054,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -2115,7 +2115,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -2300,7 +2300,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // act
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
         // assert
         assert.equal(this.getController('keyboardNavigation').getVisibleRowIndex(), 1, 'Focused row index is 1');
@@ -2531,7 +2531,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -2595,7 +2595,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 2)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
@@ -2660,7 +2660,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // act
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         assert.equal(focusedRowChangingCount, 1, 'focusedRowChanging count');
@@ -2726,7 +2726,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         keyboardController._focusedView = this.gridView.getView('rowsView');
 
         // act
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         keyboardController._upDownKeysHandler({ key: 'ArrowDown', keyName: 'downArrow' });
         keyboardController._upDownKeysHandler({ key: 'ArrowDown', keyName: 'downArrow' });
         keyboardController._upDownKeysHandler({ key: 'ArrowDown', keyName: 'downArrow' });
@@ -2762,7 +2762,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // act
-        $(this.getCellElement(0, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(0, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         assert.equal(onFocusedRowChangedSpy.callCount, 1, 'focusedRowChanged count');
@@ -3070,7 +3070,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         keyboardController._focusedView = rowsView;
 
         // act
-        $(this.getCellElement(4, 1)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(4, 1)).trigger(CLICK_EVENT);
         this.clock.tick();
         // assert
         assert.equal(this.getController('keyboardNavigation').getVisibleColumnIndex(), 1, 'Focused column index');
@@ -3108,7 +3108,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         keyboardController._focusedView = rowsView;
 
         // act
-        $(this.getCellElement(4, 1)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(4, 1)).trigger(CLICK_EVENT);
         this.clock.tick();
         // assert
         assert.equal(this.getController('keyboardNavigation').getVisibleColumnIndex(), 1, 'Focused column index');
@@ -3142,7 +3142,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         keyboardController._focusedView = rowsView;
 
         // act
-        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
         this.clock.tick();
         // assert
         assert.equal(focusedColumnChangingCount, 1, 'onFocusedCellChanging fires count');
@@ -3182,7 +3182,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // act
         this.option('focusedRowEnabled', true);
 
-        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
 
         // assert
         assert.equal(focusedRowChangedCount, 1, 'onFocusedRowChanged fires count');
@@ -3226,7 +3226,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // act
         const rowsView = this.gridView.getView('rowsView');
-        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
         assert.equal(focusedCellChangedCount, 1, 'onFocusedCellChanged fires count');
     });
 
@@ -3643,7 +3643,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // act
-        $(this.getCellElement(0, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(0, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         // assert
@@ -3677,7 +3677,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         keyboardController._focusedView = rowsView;
 
         // act
-        $(this.getCellElement(0, 1)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(0, 1)).trigger(CLICK_EVENT);
         this.clock.tick();
         // assert
         assert.equal(focusedCellChangingCount, 1, 'onFocusedCellChanging fires count');
