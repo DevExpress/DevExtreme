@@ -1881,7 +1881,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+        $(this.getCellElement(1, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         const rowsView = this.gridView.getView('rowsView');
