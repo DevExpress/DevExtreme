@@ -13,6 +13,7 @@ import * as accessibility from '../shared/accessibility';
 import { isElementInCurrentGrid } from './ui.grid_core.utils';
 import browser from '../../core/utils/browser';
 import { keyboard } from '../../events/short';
+import devices from '../../core/devices';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const EDIT_FORM_CLASS = 'edit-form';
@@ -113,7 +114,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     _initViewHandlers: function() {
         const that = this;
-        const pointerDownAction = that.createAction(that._pointerDownHandler);
+        const clickAction = that.createAction(that._clickHandler);
         const rowsView = that.getView('rowsView');
 
         rowsView.renderCompleted.add(function(e) {
@@ -125,9 +126,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const clickSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
             const $focusedElement = $(':focus');
             const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length || (browser.msie && $focusedElement.is('body'));
+            const isMobile = devices.current().deviceType !== 'desktop';
+            const pointerEventName = !isMobile ? pointerEvents.down : 'dxclick';
 
-            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), pointerDownAction);
-            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), clickSelector, pointerDownAction);
+            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickAction);
+            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickSelector, clickAction);
 
             that._initKeyDownHandler($rowsView, e => that._keyDownHandler(e));
 
@@ -721,7 +724,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     // #endregion Key_Handlers
 
     // #region Click_Handler
-    _pointerDownHandler: function(e) {
+    _clickHandler: function(e) {
         const event = e.event;
         let $target = $(event.currentTarget);
         const rowsView = this.getView('rowsView');

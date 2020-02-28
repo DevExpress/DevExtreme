@@ -18773,8 +18773,7 @@ QUnit.testInActiveWindow('Not highlight cell if isHighlighted set false in the o
     this.clock.tick();
 
     $(this.dataGrid.getCellElement(0, 0))
-        .trigger(CLICK_EVENT)
-        .click();
+        .trigger(CLICK_EVENT);
     this.clock.tick();
 
     // assert
@@ -19173,7 +19172,7 @@ QUnit.test('The cell should not be focused on pointerEvents.down event (T850219)
         this.clock.tick();
 
         // act
-        $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.down);
+        $(dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
         this.clock.tick();
 
         // assert
