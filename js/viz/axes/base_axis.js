@@ -343,19 +343,29 @@ Axis.prototype = {
         return svgElement.sharp(this._getSharpParam(), sharpDirection);
     },
 
-    getRootPositionOption(optionPath) {},
-
-    getResolvedPositionOption() {
-        return this.getRootPositionOption(this.getOptions().optionPath) || this.getOptions().position;
+    customPositionIsAvailable() {
+        return false;
     },
 
-    isSpecialPosition(position) {
-        return [BOTTOM, LEFT, RIGHT, TOP].indexOf(position) > -1;
+    getCustomPosition: _noop,
+
+    getCustomBoundaryPosition: _noop,
+
+    hasCustomPosition() {
+        return false;
+    },
+
+    customPositionIsBoundaryOppositeAxis() {
+        return false;
+    },
+
+    getResolvedBoundaryPosition() {
+        return this.getOptions().position;
     },
 
     getAxisSharpDirection() {
-        const position = this.getResolvedPositionOption();
-        return position !== BOTTOM && position !== RIGHT ? 1 : -1;
+        const position = this.getResolvedBoundaryPosition();
+        return this.hasCustomPosition() || position !== BOTTOM && position !== RIGHT ? 1 : -1;
     },
 
     getSharpDirectionByCoords(coords) {
@@ -771,6 +781,15 @@ Axis.prototype = {
 
     getMargins: function() {
         const that = this;
+        if(that.hasCustomPosition()) {
+            return {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            };
+        }
+
         const options = that._options;
         const position = options.position;
         const placeholderSize = options.placeholderSize;
@@ -961,16 +980,19 @@ Axis.prototype = {
         return canvas;
     },
 
-    updateCanvas: function(canvas) {
-        const positions = this._orthogonalPositions = {
-            start: !this._isHorizontal ? canvas.left : canvas.top,
-            end: !this._isHorizontal ? canvas.width - canvas.right : canvas.height - canvas.bottom
-        };
+    updateCanvas: function(canvas, canvasRedesign) {
+        if(!canvasRedesign) {
+            const positions = this._orthogonalPositions = {
+                start: !this._isHorizontal ? canvas.left : canvas.top,
+                end: !this._isHorizontal ? canvas.width - canvas.right : canvas.height - canvas.bottom
+            };
+
+            positions.center = positions.start + (positions.end - positions.start) / 2;
+        } else {
+            this._orthogonalPositions = null;
+        }
 
         this._canvas = canvas;
-
-        positions.center = positions.start + (positions.end - positions.start) / 2;
-
         this._translator.updateCanvas(this._processCanvas(canvas));
 
         this._initAxisPositions();
@@ -1637,7 +1659,7 @@ Axis.prototype = {
         const viewPort = this.getViewport();
         const screenDelta = that._getScreenDelta();
         const isDiscrete = (options.type || '').indexOf(constants.discrete) !== -1;
-        const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete;
+        const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete && !that.customPositionIsBoundaryOppositeAxis();
 
         const translator = that._translator;
 
@@ -2402,7 +2424,7 @@ Axis.prototype = {
         if(that._majorTicks) {
             ticks = convertTicksToValues(that._majorTicks);
         } else {
-            this.updateCanvas(canvas);
+            that.updateCanvas(canvas);
             ticks = that._createTicksAndLabelFormat(viewportRange, _noop);
             tickInterval = ticks.tickInterval;
             ticks = ticks.ticks;

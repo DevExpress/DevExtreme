@@ -251,28 +251,6 @@ const AdvancedChart = BaseChart.inherit({
 
         that._redesignAxes(argumentAxesPopulatedOptions, true, paneWithNonVirtualAxis);
         that._redesignAxes(valueAxesPopulatedOptions, false);
-
-        const argumentAxis = that.getArgumentAxis();
-        const getRootPositionOption = (optionPath) => {
-            return that.option(`${optionPath}.position`);
-        };
-
-        that._valueAxes.forEach(v => {
-            v.getCustomPosition = (position) => {
-                return argumentAxis.getTranslator().to(position);
-            };
-            v.getRootPositionOption = getRootPositionOption;
-            v.initOppositeAxisPositions = _noop;
-        });
-
-        argumentAxis.getCustomPosition = (position) => {
-            const valueAxis = that._valueAxes.filter(v => v.pane = that.defaultPane)[0];
-            return valueAxis.getTranslator().to(position);
-        };
-        argumentAxis.getRootPositionOption = getRootPositionOption;
-        argumentAxis.initOppositeAxisPositions = () => {
-            that._valueAxes.forEach(v => v._initAxisPositions());
-        };
     },
 
     _redesignAxes(options, isArgumentAxes, paneWithNonVirtualAxis) {
@@ -824,12 +802,12 @@ const AdvancedChart = BaseChart.inherit({
 
         that._recreateSizeDependentObjects(false);
         if(!that._changes.has('FULL_RENDER')) {
-            const resizePanesOnZoom = this.option('resizePanesOnZoom');
+            const resizePanesOnZoom = that.option('resizePanesOnZoom');
             that._doRender({
                 force: true,
                 drawTitle: false,
                 drawLegend: false,
-                adjustAxes: _isDefined(resizePanesOnZoom) ? resizePanesOnZoom : (this.option('adjustAxesOnZoom') || false),
+                adjustAxes: resizePanesOnZoom ?? (that.option('adjustAxesOnZoom') || false),
                 animate: false
             });
             that._raiseZoomEndHandlers();
