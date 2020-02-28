@@ -495,9 +495,10 @@ class AppointmentModel {
         const endDate = new Date(dataAccessors.getter.endDate(appointment));
 
         const startDateCopy = dateUtils.trimTime(new Date(startDate));
+        let endDateCopy = new Date(endDate);
 
         // NOTE: subtract 1 millisecond to avoid 00.00 time
-        const endDateCopy = dateUtils.trimTime(new Date(endDate.getTime() - 1));
+        endDateCopy = dateUtils.trimTime(new Date(endDateCopy.getTime() - 1));
 
         return startDateCopy.getTime() !== endDateCopy.getTime();
     }
