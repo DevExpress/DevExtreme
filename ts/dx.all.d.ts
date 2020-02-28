@@ -7497,6 +7497,8 @@ declare module DevExpress.viz {
         constantLineStyle?: dxChartArgumentAxisConstantLineStyle;
         /** @name dxChart.Options.argumentAxis.constantLines */
         constantLines?: Array<dxChartArgumentAxisConstantLines>;
+        /** @name dxChart.Options.argumentAxis.customPosition */
+        customPosition?: number | Date | string;
         /** @name dxChart.Options.argumentAxis.endOnTick */
         endOnTick?: boolean;
         /** @name dxChart.Options.argumentAxis.holidays */
@@ -7521,6 +7523,8 @@ declare module DevExpress.viz {
         minorTickCount?: number;
         /** @name dxChart.Options.argumentAxis.minorTickInterval */
         minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        /** @name dxChart.Options.argumentAxis.offset */
+        offset?: number;
         /** @name dxChart.Options.argumentAxis.position */
         position?: 'bottom' | 'left' | 'right' | 'top';
         /** @name dxChart.Options.argumentAxis.singleWorkdays */
@@ -7824,6 +7828,8 @@ declare module DevExpress.viz {
         constantLineStyle?: dxChartValueAxisConstantLineStyle;
         /** @name dxChart.Options.valueAxis.constantLines */
         constantLines?: Array<dxChartValueAxisConstantLines>;
+        /** @name dxChart.Options.valueAxis.customPosition */
+        customPosition?: number | Date | string;
         /** @name dxChart.Options.valueAxis.endOnTick */
         endOnTick?: boolean;
         /** @name dxChart.Options.valueAxis.label */
@@ -7850,6 +7856,8 @@ declare module DevExpress.viz {
         multipleAxesSpacing?: number;
         /** @name dxChart.Options.valueAxis.name */
         name?: string;
+        /** @name dxChart.Options.valueAxis.offset */
+        offset?: number;
         /** @name dxChart.Options.valueAxis.pane */
         pane?: string;
         /** @name dxChart.Options.valueAxis.position */
