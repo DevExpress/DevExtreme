@@ -3521,3 +3521,184 @@ QUnit.test('Alignment right. Chart rotated', function(assert) {
     assert.roughEqual(texts0[0].tspan.getEndPositionOfChar(8).x, texts0[1].tspan.getEndPositionOfChar(20).x, 0.15);
     assert.roughEqual(texts1[0].tspan.getEndPositionOfChar(22).x, texts1[1].tspan.getEndPositionOfChar(3).x, 0.15);
 });
+
+QUnit.module('Custom axis positioning', $.extend({}, moduleSetup, {
+    beforeEach() {
+        moduleSetup.beforeEach.call(this);
+        this.options = {
+            dataSource: [{
+                arg: 0,
+                val: 250,
+                val1: 500
+            }, {
+                arg: 100,
+                val: 300,
+                val1: 420
+            }, {
+                arg: 250,
+                val: 370,
+                val1: 350
+            }, {
+                arg: 500,
+                val: 450,
+                val1: 320
+            }, {
+                arg: 700,
+                val: 530,
+                val1: 270
+            }, {
+                arg: 900,
+                val: 620,
+                val1: 120
+            }, {
+                arg: 1000,
+                val: 800,
+                val1: 0
+            }],
+            size: {
+                width: 1000,
+                height: 1000
+            },
+            panes: [{
+                name: 'pane1'
+            }, {
+                name: 'pane2'
+            }],
+            series: [{
+                pane: 'pane1',
+                axis: 'axis0'
+            }, {
+                pane: 'pane2',
+                axis: 'axis2',
+                valueField: 'val1'
+            }],
+            valueAxis: [{
+                name: 'axis0',
+                pane: 'pane1'
+            }, {
+                name: 'axis1',
+                pane: 'pane1',
+                position: 'right'
+            }, {
+                name: 'axis2',
+                pane: 'pane2'
+            }],
+            legend: {
+                verticalAlignment: 'top',
+                horizontalAlignment: 'left'
+            },
+            zoomAndPan: {
+                argumentAxis: 'both',
+                valueAxis: 'both'
+            },
+            scrollBar: {
+                visible: true
+            },
+            title: {
+                text: 'Title title tile title',
+                verticalAlignment: 'bottom'
+            }
+        };
+    },
+    afterEach() {
+        moduleSetup.afterEach.call(this);
+    },
+    createChart: function(options) {
+        return moduleSetup.createChart.call(this, $.extend(true, {}, this.options, options));
+    }
+}));
+
+QUnit.test('Argument axis. Set customPosition and offset options', function(assert) {
+    const chart = this.createChart({
+        argumentAxis: {
+            customPosition: 100
+        }
+    });
+    const axis = chart.getArgumentAxis();
+
+    assert.roughEqual(axis._axisPosition, 862, 8);
+
+    chart.option('argumentAxis.offset', -50);
+    assert.roughEqual(axis._axisPosition, 812, 8);
+
+    chart.option({
+        argumentAxis: {
+            customPosition: -100,
+            offset: 0
+        }
+    });
+    assert.roughEqual(axis._axisPosition, 927, 8);
+
+    chart.option({
+        argumentAxis: {
+            customPosition: 500,
+            offset: -50
+        }
+    });
+    assert.roughEqual(axis._axisPosition, 492, 8);
+
+    chart.option('argumentAxis.customPosition', 'abcd');
+    assert.roughEqual(axis._axisPosition, 895, 8);
+});
+
+QUnit.test('Value axis. Set customPosition and offset options', function(assert) {
+    const chart = this.createChart({});
+
+    chart.option('valueAxis[0].customPosition', 380);
+    assert.roughEqual(chart.getValueAxis('axis0')._axisPosition, 450, 5);
+
+    chart.option('valueAxis[2].customPosition', 1100);
+    assert.roughEqual(chart.getValueAxis('axis2')._axisPosition, 990, 5);
+
+    chart.option('valueAxis[1].offset', -18);
+    assert.roughEqual(chart.getValueAxis('axis1')._axisPosition, 970, 5);
+
+    chart.option('valueAxis[1].offset', 18);
+    assert.roughEqual(chart.getValueAxis('axis1')._axisPosition, 990, 5);
+
+});
+
+QUnit.testStart(function() {
+    $('#qunit-fixture').addClass('qunit-fixture-visible');
+});
+
+QUnit.test('Zoom and pan', function(assert) {
+    const chart = this.createChart({
+        argumentAxis: {
+            visualRange: [300, 700]
+        }
+    });
+    const valAxis1 = chart.getValueAxis('axis1');
+    const valAxis2 = chart.getValueAxis('axis2');
+
+    chart.option('valueAxis[2].customPosition', 320);
+    assert.roughEqual(valAxis2._axisPosition, 165, 5);
+
+    const $root = $(chart._renderer.root.element);
+
+    $root.trigger(new $.Event('dxdragstart', { pageX: 200, pageY: 250 }));
+    $root.trigger(new $.Event('dxdrag', { offset: { x: 100, y: 0 } }));
+    $root.trigger(new $.Event('dxdragend', {}));
+
+    assert.roughEqual(valAxis2._axisPosition, 265, 5);
+
+    $root.trigger(new $.Event('dxdragstart', { pageX: 500, pageY: 250 }));
+    $root.trigger(new $.Event('dxdrag', { offset: { x: -250, y: 0 } }));
+    $root.trigger(new $.Event('dxdragend', {}));
+
+    assert.roughEqual(valAxis2._axisPosition, 113, 5);
+
+    chart.option('valueAxis[1]', {
+        position: 'left',
+        customPosition: 400
+    });
+
+    assert.roughEqual(valAxis1._axisPosition, 340, 5);
+
+    $root.trigger(new $.Event('dxdragstart', { pageX: 500, pageY: 250 }));
+    $root.trigger(new $.Event('dxdrag', { offset: { x: -400, y: 0 } }));
+    $root.trigger(new $.Event('dxdragend', {}));
+
+    assert.roughEqual(valAxis1._axisPosition, 125, 5);
+    assert.roughEqual(valAxis1._axisShift, 37, 5);
+});
