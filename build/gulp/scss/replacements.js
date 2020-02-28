@@ -230,6 +230,9 @@ module.exports = {
         { regex: /@mixin dx-icon\(clear\),/, replacement: '@include dx-icon(clear);' },
         { regex: /(px|block|absolute|%|-remove-color|-active-color|-bg|none|0 0),/g, replacement: '$1;' },
     ],
+    'radioButton': [
+        { import: '../radioGroup/colors', type: 'index' },
+    ],
     'accordion': [
         { import: '../../base/icons', type: 'index' },
     ],
