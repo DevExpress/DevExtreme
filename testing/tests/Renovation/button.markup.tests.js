@@ -190,19 +190,20 @@ QUnit.module('Button markup', () => {
         });
     });
 
-    // TODO
-    QUnit.skip('Button should render custom template with render function that returns dom node', function(assert) {
+    QUnit.test('Button should render custom template with render function that returns dom node', function(assert) {
         const $element = $('#button').Button({
-            integrationOptions: {
-                templates: {
-                    'content': {
-                        render: function(args) {
-                            const $element = $('<span>')
-                                .addClass('dx-template-wrapper')
-                                .text('button text');
+            template: 'test',
+        });
 
-                            return $element.get(0);
-                        }
+        $element.Button('instance').option('integrationOptions', {
+            templates: {
+                'test': {
+                    render: function(args) {
+                        const $element = $('<span>')
+                            .addClass('dx-template-wrapper')
+                            .text('button text');
+
+                        return $element.get(0);
                     }
                 }
             }
