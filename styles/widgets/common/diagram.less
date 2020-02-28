@@ -83,6 +83,7 @@
         .dx-diagram-toolbox-input {
             width: 100%;
             border: 0;
+            border-radius: 0;
         }
 
         .dx-diagram-toolbox-input input,
@@ -163,7 +164,8 @@
             height: auto;
 
             .dx-toolbar-item {
-                padding: 0;
+                padding-top: 0;
+                padding-bottom: 0;
             }
         }
 
@@ -184,9 +186,14 @@
     width: 100%;
 
     &.dx-diagram-properties-panel-toolbar-container {
+        background: transparent;
         border-radius: 50%;
         border: 0;
         padding: 0;
+
+        .dx-toolbar {
+            background: transparent;
+        }
 
         div {
             border-radius: 50%;

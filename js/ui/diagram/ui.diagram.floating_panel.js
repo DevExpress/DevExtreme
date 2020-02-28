@@ -76,6 +76,7 @@ class DiagramFloatingPanel extends DiagramPanel {
         return {
             animation: null,
             shading: false,
+            showTitle: false,
             focusStateEnabled: false,
             width: this._getPopupWidthOption(),
             height: this._getPopupHeightOption(),
@@ -124,6 +125,8 @@ class DiagramFloatingPanel extends DiagramPanel {
     }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
+            isVisible: true,
+            isMobileView: false,
             offsetX: 0,
             offsetY: 0
         });

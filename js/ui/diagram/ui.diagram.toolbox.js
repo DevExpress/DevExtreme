@@ -9,7 +9,7 @@ import ScrollView from '../scroll_view';
 import Tooltip from '../tooltip';
 import DiagramFloatingPanel from './ui.diagram.floating_panel';
 
-const DIAGRAM_TOOLBOX_WIDTH = 136;
+const DIAGRAM_TOOLBOX_WIDTH = 146;
 const DIAGRAM_TOOLBOX_MIN_HEIGHT = 130;
 const DIAGRAM_TOOLBOX_POPUP_CLASS = 'dx-diagram-toolbox-popup';
 const DIAGRAM_TOOLBOX_PANEL_CLASS = 'dx-diagram-toolbox-panel';
@@ -36,27 +36,33 @@ class DiagramToolbox extends DiagramFloatingPanel {
         return DIAGRAM_TOOLBOX_MIN_HEIGHT;
     }
     _getPopupOptions() {
-        return extend(super._getPopupOptions(), {
+        let options = extend(super._getPopupOptions(), {
             position: {
                 my: 'left top',
                 at: 'left top',
                 of: this.option('offsetParent'),
                 offset: (this.isMobileView() ? 0 : this.option('offsetX')) +
                     ' ' + (this.isMobileView() ? 0 : this.option('offsetY'))
-            },
-            toolbarItems: [{
-                widget: 'dxButton',
-                location: 'center',
-                options: {
-                    activeStateEnabled: false,
-                    focusStateEnabled: false,
-                    hoverStateEnabled: false,
-                    icon: 'diagram-toolbox-drag',
-                    stylingMode: 'outlined',
-                    type: 'normal',
-                }
-            }]
+            }
         });
+        if(!this.isMobileView()) {
+            options = extend(options, {
+                showTitle: true,
+                toolbarItems: [{
+                    widget: 'dxButton',
+                    location: 'center',
+                    options: {
+                        activeStateEnabled: false,
+                        focusStateEnabled: false,
+                        hoverStateEnabled: false,
+                        icon: 'diagram-toolbox-drag',
+                        stylingMode: 'outlined',
+                        type: 'normal',
+                    }
+                }]
+            });
+        }
+        return options;
     }
     _renderPopupContent($parent) {
         const that = this;
