@@ -3619,7 +3619,7 @@ QUnit.test('Argument axis. Set customPosition and offset options', function(asse
     assert.roughEqual(axis._axisPosition, 862, 8);
 
     chart.option('argumentAxis.offset', -50);
-    assert.roughEqual(axis._axisPosition, 812, 8);
+    assert.roughEqual(axis._axisPosition, 808, 10);
 
     chart.option({
         argumentAxis: {
@@ -3636,9 +3636,6 @@ QUnit.test('Argument axis. Set customPosition and offset options', function(asse
         }
     });
     assert.roughEqual(axis._axisPosition, 492, 8);
-
-    chart.option('argumentAxis.customPosition', 'abcd');
-    assert.roughEqual(axis._axisPosition, 895, 8);
 });
 
 QUnit.test('Value axis. Set customPosition and offset options', function(assert) {
@@ -3656,6 +3653,9 @@ QUnit.test('Value axis. Set customPosition and offset options', function(assert)
     chart.option('valueAxis[1].offset', 18);
     assert.roughEqual(chart.getValueAxis('axis1')._axisPosition, 990, 5);
 
+    chart.option('valueAxis[0].offset', 50);
+    chart.option('valueAxis[0].customPosition', 'abcd');
+    assert.roughEqual(chart.getValueAxis('axis0')._axisPosition, 132, 8);
 });
 
 QUnit.testStart(function() {
