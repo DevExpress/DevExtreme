@@ -1,4 +1,3 @@
-
 import $ from '../../core/renderer';
 import * as Preact from 'preact';
 import registerComponent from '../../core/component_registrator';
@@ -27,10 +26,10 @@ class Button extends Widget {
             props.contentRender = ({ parentRef, ...restProps }) => {
                 useLayoutEffect(() => {
                     const $parent = $(parentRef.current);
-                    let $template = template.render({
+                    let $template = $(template.render({
                         container: getPublicElement($parent),
                         ...restProps,
-                    });
+                    }));
 
                     if($template.hasClass(TEMPLATE_WRAPPER_CLASS)) {
                         $template = wrapElement($parent, $template);
