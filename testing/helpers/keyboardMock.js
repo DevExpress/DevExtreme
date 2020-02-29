@@ -1,30 +1,30 @@
-var focused;
+let focused;
 
 (function(root, factory) {
-    if(typeof define === "function" && define.amd) {
+    if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            focused = require("ui/widget/selectors").focused;
-            root.keyboardMock = module.exports = factory(require("jquery"));
+            focused = require('ui/widget/selectors').focused;
+            root.keyboardMock = module.exports = factory(require('jquery'));
         });
     } else {
-        focused = DevExpress.require("ui/widget/selectors").focused;
+        focused = DevExpress.require('ui/widget/selectors').focused;
         root.keyboardMock = factory(root.jQuery);
     }
 }(window, function($) {
-    var $element;
+    let $element;
 
-    var caret;
+    let caret;
 
-    var caretMock = {
+    const caretMock = {
         getPosition: function() {
-            return $element.data("dxCaretPosition") || { start: 0, end: 0 };
+            return $element.data('dxCaretPosition') || { start: 0, end: 0 };
         },
 
         setPosition: function(position) {
             position = $.isPlainObject(position) ? position : { start: position || 0, end: position || 0 };
-            var start = position.start;
-            var end = position.end;
-            var textLength = $element.val().length;
+            let start = position.start;
+            let end = position.end;
+            const textLength = $element.val().length;
 
             if(start < 0) {
                 start = 0;
@@ -36,21 +36,21 @@ var focused;
                 start = end;
             }
 
-            $element.data("dxCaretPosition", { start: start, end: end });
+            $element.data('dxCaretPosition', { start: start, end: end });
         }
     };
 
-    var nativeCaretMock = {
+    const nativeCaretMock = {
         getPosition: function() {
-            var start = 0;
-            var end = 0;
-            var input = $element.get(0);
+            let start = 0;
+            let end = 0;
+            const input = $element.get(0);
 
             if(!input.setSelectionRange) {
-                var range = document.selection.createRange();
-                var rangeCopy = range.duplicate();
-                range.move("character", -input.value.length);
-                range.setEndPoint("EndToStart", rangeCopy);
+                const range = document.selection.createRange();
+                const rangeCopy = range.duplicate();
+                range.move('character', -input.value.length);
+                range.setEndPoint('EndToStart', rangeCopy);
                 start = range.text.length;
                 end = start + rangeCopy.text.length;
             } else {
@@ -65,10 +65,10 @@ var focused;
 
         setPosition: function(position) {
             position = $.isPlainObject(position) ? position : { start: position || 0, end: position || 0 };
-            var input = $element.get(0);
-            var start = position.start;
-            var end = position.end;
-            var textLength = input.value.length;
+            const input = $element.get(0);
+            let start = position.start;
+            let end = position.end;
+            const textLength = input.value.length;
 
             if(start < 0) {
                 start = 0;
@@ -85,10 +85,10 @@ var focused;
 
             try {
                 if(!input.setSelectionRange) {
-                    var range = input.createTextRange();
+                    const range = input.createTextRange();
                     range.collapse(true);
-                    range.moveStart("character", start);
-                    range.moveEnd("character", end - start);
+                    range.moveStart('character', start);
+                    range.moveEnd('character', end - start);
                     range.select();
                 } else {
                     input.setSelectionRange(start, end);
@@ -97,88 +97,88 @@ var focused;
         }
     };
 
-    var KEYS_MAPS = {
+    const KEYS_MAPS = {
         SPECIAL_KEYS: {
-            "backspace": "Backspace",
-            "tab": "Tab",
-            "enter": "Enter",
-            "esc": "Escape",
-            "space": " ",
-            "pageup": "PageUp",
-            "pagedown": "PageDown",
-            "end": "End",
-            "home": "Home",
-            "left": "ArrowLeft",
-            "up": "ArrowUp",
-            "right": "ArrowRight",
-            "down": "ArrowDown",
-            "ins": "Insert",
-            "del": "Delete"
+            'backspace': 'Backspace',
+            'tab': 'Tab',
+            'enter': 'Enter',
+            'esc': 'Escape',
+            'space': ' ',
+            'pageup': 'PageUp',
+            'pagedown': 'PageDown',
+            'end': 'End',
+            'home': 'Home',
+            'left': 'ArrowLeft',
+            'up': 'ArrowUp',
+            'right': 'ArrowRight',
+            'down': 'ArrowDown',
+            'ins': 'Insert',
+            'del': 'Delete'
         },
 
         SHIFT_MAP: {
-            "~": "`",
-            "!": "1",
-            "@": "2",
-            "#": "3",
-            "$": "4",
-            "%": "5",
-            "^": "6",
-            "&": "7",
-            "*": "8",
-            "(": "9",
-            ")": "0",
-            "_": "-",
-            "+": "=",
-            "{": "[",
-            "}": "]",
-            ":": ";",
-            '"': "\"",
-            "|": "\\",
-            "<": ",",
-            ">": ".",
-            "?": "/"
+            '~': '`',
+            '!': '1',
+            '@': '2',
+            '#': '3',
+            '$': '4',
+            '%': '5',
+            '^': '6',
+            '&': '7',
+            '*': '8',
+            '(': '9',
+            ')': '0',
+            '_': '-',
+            '+': '=',
+            '{': '[',
+            '}': ']',
+            ':': ';',
+            '"': '"',
+            '|': '\\',
+            '<': ',',
+            '>': '.',
+            '?': '/'
         }
     };
 
-    var DEFAULT_OPTIONS = {
+    const DEFAULT_OPTIONS = {
         timeStamp: 0,
         which: undefined,
         keyCode: undefined,
         keyChar: undefined
     };
 
-    var isEditableElement = function() {
-        var editableInputTypesRE = /^(date|datetime|datetime-local|email|month|number|password|search|tel|text|time|url|week)$/;
-        return $element.is("input") && editableInputTypesRE.test($element.prop("type")) || $element.is("textarea") || ($element.prop("tabindex") >= 0);
+    const isEditableElement = function() {
+        const editableInputTypesRE = /^(date|datetime|datetime-local|email|month|number|password|search|tel|text|time|url|week)$/;
+        return $element.is('input') && editableInputTypesRE.test($element.prop('type')) || $element.is('textarea') || ($element.prop('tabindex') >= 0);
     };
 
-    var deleteSelection = function() {
-        var caretPosition = caret.getPosition(),
-            value = $element.val();
+    const deleteSelection = function() {
+        const caretPosition = caret.getPosition();
+        const value = $element.val();
 
         $element.val(value.slice(0, caretPosition.start) + value.slice(caretPosition.end, value.length));
         caret.setPosition(caretPosition.start);
     };
 
-    var typeChar = function(character) {
-        if($element.prop("readonly") || $element.prop("disabled")) {
+    const typeChar = function(character) {
+        if($element.prop('readonly') || $element.prop('disabled')) {
             return;
         }
 
         deleteSelection();
 
-        var value = $element.val(),
-            caretPosition = caret.getPosition().start;
+        const value = $element.val();
+        const caretPosition = caret.getPosition().start;
 
         $element.val(value.substring(0, caretPosition) + character + value.substring(caretPosition, value.length));
         caret.setPosition(caretPosition + 1);
     };
 
-    var backspace = function() {
-        var caretPosition = caret.getPosition(),
-            caretStartPosition = caretPosition.start,
-            value = $element.val();
+    const backspace = function() {
+        const caretPosition = caret.getPosition();
+        const caretStartPosition = caretPosition.start;
+        const value = $element.val();
 
         if(caretPosition.start !== caretPosition.end) {
             deleteSelection();
@@ -187,13 +187,13 @@ var focused;
             caret.setPosition(caretStartPosition - 1);
         }
 
-        return "deleteContentBackward";
+        return 'deleteContentBackward';
     };
 
-    var del = function() {
-        var caretPosition = caret.getPosition(),
-            caretStartPosition = caretPosition.start,
-            value = $element.val();
+    const del = function() {
+        const caretPosition = caret.getPosition();
+        const caretStartPosition = caretPosition.start;
+        const value = $element.val();
 
         if(caretPosition.start !== caretPosition.end) {
             deleteSelection();
@@ -203,34 +203,34 @@ var focused;
         }
     };
 
-    var left = function() {
-        var rtlCorrection = $element.css("direction") === "rtl" ? -1 : 1;
+    const left = function() {
+        const rtlCorrection = $element.css('direction') === 'rtl' ? -1 : 1;
         caret.setPosition(caret.getPosition().start - 1 * rtlCorrection);
     };
 
-    var right = function() {
-        var rtlCorrection = $element.css("direction") === "rtl" ? -1 : 1;
+    const right = function() {
+        const rtlCorrection = $element.css('direction') === 'rtl' ? -1 : 1;
         caret.setPosition(caret.getPosition().start + 1 * rtlCorrection);
     };
 
-    var home = function() {
+    const home = function() {
         caret.setPosition(0);
     };
 
-    var end = function() {
+    const end = function() {
         caret.setPosition($element.val().length);
     };
 
-    var shortcuts = {
-        "backspace": backspace,
-        "del": del,
-        "left": left,
-        "right": right,
-        "home": home,
-        "end": end
+    const shortcuts = {
+        'backspace': backspace,
+        'del': del,
+        'left': left,
+        'right': right,
+        'home': home,
+        'end': end
     };
 
-    var eventMock = function(type, options) {
+    const eventMock = function(type, options) {
         return $.extend(true, $.Event(type), DEFAULT_OPTIONS, options);
     };
 
@@ -240,10 +240,10 @@ var focused;
         caret = useNativeSelection ? nativeCaretMock : caretMock;
 
         if(!isEditableElement()) {
-            throw Error("Unable to type text in non-editable element: " + $element.get(0));
+            throw Error('Unable to type text in non-editable element: ' + $element.get(0));
         }
 
-        var clock = $.now();
+        let clock = $.now();
 
         return {
             triggerEvent: function(eventName, options) {
@@ -254,68 +254,68 @@ var focused;
             },
 
             keyDown: function(rawKey, options) {
-                var isKeyCodeString = typeof rawKey === "string",
-                    isCommandKey = rawKey && rawKey.length > 1 || !isKeyCodeString,
-                    key = isCommandKey && KEYS_MAPS.SPECIAL_KEYS[rawKey] ? KEYS_MAPS.SPECIAL_KEYS[rawKey] : rawKey;
+                const isKeyCodeString = typeof rawKey === 'string';
+                const isCommandKey = rawKey && rawKey.length > 1 || !isKeyCodeString;
+                const key = isCommandKey && KEYS_MAPS.SPECIAL_KEYS[rawKey] ? KEYS_MAPS.SPECIAL_KEYS[rawKey] : rawKey;
 
 
-                this.triggerEvent("keydown", $.extend({ key: key }, options));
+                this.triggerEvent('keydown', $.extend({ key: key }, options));
                 return this;
             },
 
             keyPress: function(rawKey) {
-                var isKeyCodeString = typeof rawKey === "string",
-                    isCommandKey = rawKey && rawKey.length > 1 || !isKeyCodeString,
-                    key = isCommandKey && KEYS_MAPS.SPECIAL_KEYS[rawKey] ? KEYS_MAPS.SPECIAL_KEYS[rawKey] : rawKey;
+                const isKeyCodeString = typeof rawKey === 'string';
+                const isCommandKey = rawKey && rawKey.length > 1 || !isKeyCodeString;
+                const key = isCommandKey && KEYS_MAPS.SPECIAL_KEYS[rawKey] ? KEYS_MAPS.SPECIAL_KEYS[rawKey] : rawKey;
 
                 // key = rawKey;
-                this.triggerEvent("keypress", { key: key });
+                this.triggerEvent('keypress', { key: key });
                 return this;
             },
 
             beforeInput: function(data, inputType) {
-                var params = { data: data };
+                const params = { data: data };
 
                 if(inputType !== null) {
-                    params.originalEvent = $.Event("beforeinput", { data: data, inputType: inputType || "insertText" });
+                    params.originalEvent = $.Event('beforeinput', { data: data, inputType: inputType || 'insertText' });
                 }
 
-                this.triggerEvent("beforeinput", params);
+                this.triggerEvent('beforeinput', params);
                 return this;
             },
 
             input: function(data, inputType) {
-                var params = { data: data };
+                const params = { data: data };
 
                 if(inputType !== null) {
-                    params.originalEvent = $.Event("input", { data: data, inputType: inputType || "insertText" });
+                    params.originalEvent = $.Event('input', { data: data, inputType: inputType || 'insertText' });
                 }
 
-                this.triggerEvent("input", params);
+                this.triggerEvent('input', params);
                 return this;
             },
 
             keyUp: function(rawKey) {
-                var isKeyCodeString = typeof rawKey === "string",
-                    isCommandKey = rawKey && rawKey.length > 1 || !isKeyCodeString,
-                    key = isCommandKey && KEYS_MAPS.SPECIAL_KEYS[rawKey] ? KEYS_MAPS.SPECIAL_KEYS[rawKey] : rawKey;
+                const isKeyCodeString = typeof rawKey === 'string';
+                const isCommandKey = rawKey && rawKey.length > 1 || !isKeyCodeString;
+                const key = isCommandKey && KEYS_MAPS.SPECIAL_KEYS[rawKey] ? KEYS_MAPS.SPECIAL_KEYS[rawKey] : rawKey;
 
-                this.triggerEvent("keyup", { key: key });
+                this.triggerEvent('keyup', { key: key });
                 return this;
             },
 
             change: function() {
-                this.triggerEvent("change");
+                this.triggerEvent('change');
                 return this;
             },
 
             focus: function() {
-                !focused($element) && this.triggerEvent("focus");
+                !focused($element) && this.triggerEvent('focus');
                 return this;
             },
 
             blur: function() {
-                this.triggerEvent("blur");
+                this.triggerEvent('blur');
                 return this;
             },
 
@@ -328,18 +328,18 @@ var focused;
                 this.focus();
 
                 // NOTE: we should separate symbol "+" that concats other keys and key "+" to support commands like the "ctrl++"
-                var keys = keysString.replace(/^\+/g, "plus").replace(/\+\+/g, "+plus").split("+");
+                const keys = keysString.replace(/^\+/g, 'plus').replace(/\+\+/g, '+plus').split('+');
 
                 $.map(keys, function(key, index) {
-                    keys[index] = key.replace("plus", "+");
+                    keys[index] = key.replace('plus', '+');
                 });
 
                 // NOTE: check "shift" modifier in keys
-                for(var i = 0; i < keys.length; i++) {
-                    var key = keys[i];
+                for(let i = 0; i < keys.length; i++) {
+                    const key = keys[i];
 
-                    if(key.toLowerCase() === "shift") {
-                        var nextKey = keys[i + 1];
+                    if(key.toLowerCase() === 'shift') {
+                        const nextKey = keys[i + 1];
                         if(!nextKey) {
                             continue;
                         }
@@ -348,30 +348,30 @@ var focused;
                         }
                     }
 
-                    if(KEYS_MAPS.SHIFT_MAP[key] && (!keys[i - 1] || keys[i - 1].toLowerCase() !== "shift")) {
+                    if(KEYS_MAPS.SHIFT_MAP[key] && (!keys[i - 1] || keys[i - 1].toLowerCase() !== 'shift')) {
                         keys[i] = KEYS_MAPS.SHIFT_MAP[key];
-                        keys.splice(i, 0, "shift");
+                        keys.splice(i, 0, 'shift');
                         i++;
                     }
                 }
 
 
-                var that = this;
+                const that = this;
 
                 $.each(keys, function(index, key) {
-                    var keyValue = key in KEYS_MAPS.SPECIAL_KEYS ? KEYS_MAPS.SPECIAL_KEYS[key] : key;
+                    const keyValue = key in KEYS_MAPS.SPECIAL_KEYS ? KEYS_MAPS.SPECIAL_KEYS[key] : key;
 
                     that.keyDown(keyValue);
 
                     if(!that.event.isDefaultPrevented()) {
                         that.keyPress(keyValue);
                         if(shortcuts[key]) {
-                            var oldValue = $element.val();
-                            that.beforeInput(data);
-                            var inputType = shortcuts[key](element) || "insertText";
-                            var newValue = $element.val();
+                            const oldValue = $element.val();
+                            that.beforeInput();
+                            const inputType = shortcuts[key](element) || 'insertText';
+                            const newValue = $element.val();
                             if(newValue !== oldValue) {
-                                var data = inputType === "deleteContentBackward" ? null : newValue;
+                                const data = inputType === 'deleteContentBackward' ? null : newValue;
                                 that.input(data, inputType);
                             }
                         }
@@ -397,8 +397,8 @@ var focused;
             type: function(string) {
                 this.focus();
 
-                for(var i = 0; i < string.length; i++) {
-                    var char = string.charAt(i);
+                for(let i = 0; i < string.length; i++) {
+                    const char = string.charAt(i);
                     this.keyDown(char);
 
                     if(!this.event.isDefaultPrevented()) {
@@ -418,7 +418,7 @@ var focused;
             },
 
             paste: function(string) {
-                this.triggerEvent("paste", { originalEvent: $.Event("paste", { clipboardData: { getData: function() { return string; } } }) });
+                this.triggerEvent('paste', { originalEvent: $.Event('paste', { clipboardData: { getData: function() { return string; } } }) });
                 return this;
             }
         };

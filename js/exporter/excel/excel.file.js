@@ -1,9 +1,9 @@
-import { isDefined } from "../../core/utils/type";
+import { isDefined } from '../../core/utils/type';
 import tagHelper from './excel.tag_helper';
 import cellFormatHelper from './excel.cell_format_helper';
-import fillHelper from "./excel.fill_helper";
-import fontHelper from "./excel.font_helper";
-import numberFormatHelper from "./excel.number_format_helper";
+import fillHelper from './excel.fill_helper';
+import fontHelper from './excel.font_helper';
+import numberFormatHelper from './excel.number_format_helper';
 
 export default class ExcelFile {
 
@@ -49,7 +49,7 @@ export default class ExcelFile {
     generateCellFormatsXml() {
         // §18.8.10 cellXfs (Cell Formats), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
         const cellFormatTagsAsXmlStringsArray = this._cellFormatTags.map(tag => cellFormatHelper.toXml(tag));
-        return tagHelper.toXml("cellXfs", { count: cellFormatTagsAsXmlStringsArray.length }, cellFormatTagsAsXmlStringsArray.join(""));
+        return tagHelper.toXml('cellXfs', { count: cellFormatTagsAsXmlStringsArray.length }, cellFormatTagsAsXmlStringsArray.join(''));
     }
 
     registerFill(fill) {
@@ -67,7 +67,7 @@ export default class ExcelFile {
                     // the [0, 1] indexes are reserved:
                     // - https://stackoverflow.com/questions/11116176/cell-styles-in-openxml-spreadsheet-spreadsheetml
                     // - https://social.msdn.microsoft.com/Forums/office/en-US/a973335c-9f9b-4e70-883a-02a0bcff43d2/coloring-cells-in-excel-sheet-using-openxml-in-c
-                    this._fillTags.push(fillHelper.tryCreateTag({ patternFill: { patternType: "Gray125" } })); // Index 1 - reserved
+                    this._fillTags.push(fillHelper.tryCreateTag({ patternFill: { patternType: 'Gray125' } })); // Index 1 - reserved
                 }
                 result = this._fillTags.push(fillTag) - 1;
             }
@@ -78,7 +78,7 @@ export default class ExcelFile {
     generateFillsXml() {
         // §18.8.21, 'fills (Fills)', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
         const tagsAsXmlStringsArray = this._fillTags.map(tag => fillHelper.toXml(tag));
-        return tagHelper.toXml("fills", { count: tagsAsXmlStringsArray.length }, tagsAsXmlStringsArray.join(""));
+        return tagHelper.toXml('fills', { count: tagsAsXmlStringsArray.length }, tagsAsXmlStringsArray.join(''));
     }
 
     registerFont(font) {
@@ -101,7 +101,7 @@ export default class ExcelFile {
     generateFontsXml() {
         // §18.8.23, 'fonts (Fonts)', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
         const xmlStringsArray = this._fontTags.map(tag => fontHelper.toXml(tag));
-        return tagHelper.toXml("fonts", { count: xmlStringsArray.length }, xmlStringsArray.join(""));
+        return tagHelper.toXml('fonts', { count: xmlStringsArray.length }, xmlStringsArray.join(''));
     }
 
     _convertNumberFormatIndexToId(index) {
@@ -135,7 +135,7 @@ export default class ExcelFile {
         if(this._numberFormatTags.length > 0) {
             // §18.8.31 numFmts (Number Formats)
             const xmlStringsArray = this._numberFormatTags.map((tag) => numberFormatHelper.toXml(tag));
-            return tagHelper.toXml("numFmts", { count: xmlStringsArray.length }, xmlStringsArray.join(""));
+            return tagHelper.toXml('numFmts', { count: xmlStringsArray.length }, xmlStringsArray.join(''));
         } else {
             return '';
         }

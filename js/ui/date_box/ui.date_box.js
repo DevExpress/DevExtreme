@@ -1,6 +1,6 @@
-var registerComponent = require("../../core/component_registrator"),
-    DateBoxMask = require("./ui.date_box.mask");
+const registerComponent = require('../../core/component_registrator');
+const DateBoxMask = require('./ui.date_box.mask');
 
-registerComponent("dxDateBox", DateBoxMask);
+registerComponent('dxDateBox', DateBoxMask);
 
 module.exports = DateBoxMask;

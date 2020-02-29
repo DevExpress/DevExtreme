@@ -1,23 +1,23 @@
-var $ = require("../../core/renderer"),
-    Button = require("../button"),
-    registerDecorator = require("./ui.list.edit.decorator_registry").register,
-    EditDecorator = require("./ui.list.edit.decorator");
+const $ = require('../../core/renderer');
+const Button = require('../button');
+const registerDecorator = require('./ui.list.edit.decorator_registry').register;
+const EditDecorator = require('./ui.list.edit.decorator');
 
-var STATIC_DELETE_BUTTON_CONTAINER_CLASS = "dx-list-static-delete-button-container",
-    STATIC_DELETE_BUTTON_CLASS = "dx-list-static-delete-button";
+const STATIC_DELETE_BUTTON_CONTAINER_CLASS = 'dx-list-static-delete-button-container';
+const STATIC_DELETE_BUTTON_CLASS = 'dx-list-static-delete-button';
 
 registerDecorator(
-    "delete",
-    "static",
+    'delete',
+    'static',
     EditDecorator.inherit({
         afterBag: function(config) {
-            var $itemElement = config.$itemElement,
-                $container = config.$container;
+            const $itemElement = config.$itemElement;
+            const $container = config.$container;
 
-            var $button = $("<div>").addClass(STATIC_DELETE_BUTTON_CLASS);
+            const $button = $('<div>').addClass(STATIC_DELETE_BUTTON_CLASS);
 
             this._list._createComponent($button, Button, {
-                icon: "remove",
+                icon: 'remove',
                 onClick: (function(args) {
                     args.event.stopPropagation();
                     this._deleteItem($itemElement);
@@ -31,7 +31,7 @@ registerDecorator(
         },
 
         _deleteItem: function($itemElement) {
-            if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
+            if($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
                 return;
             }
 

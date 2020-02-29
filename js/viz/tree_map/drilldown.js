@@ -1,25 +1,25 @@
-var proto = require("./tree_map.base").prototype,
-    _expand = require("../core/helpers").expand;
+const proto = require('./tree_map.base').prototype;
+const _expand = require('../core/helpers').expand;
 
-require("./api");
+require('./api');
 
-proto._eventsMap.onDrill = { name: "drill" };
+proto._eventsMap.onDrill = { name: 'drill' };
 
-_expand(proto, "_extendProxyType", function(proto) {
-    var that = this;
+_expand(proto, '_extendProxyType', function(proto) {
+    const that = this;
 
     proto.drillDown = function() {
         that._drillToNode(this._id);
     };
 });
 
-_expand(proto, "_onNodesCreated", function() {
+_expand(proto, '_onNodesCreated', function() {
     this._drilldownIndex = -1;
 });
 
 proto._drillToNode = function(index) {
-    var that = this,
-        node;
+    const that = this;
+    let node;
 
     if(that._drilldownIndex !== index) {
         node = that._nodes[index] || that._root;
@@ -27,9 +27,9 @@ proto._drillToNode = function(index) {
             that._drilldownIndex = index;
             that._topNode = node;
             that._context.suspend();
-            that._context.change(["MAX_DEPTH", "NODES_RESET"]);
+            that._context.change(['MAX_DEPTH', 'NODES_RESET']);
             that._context.resume();
-            that._eventTrigger("drill", { node: node.proxy });
+            that._eventTrigger('drill', { node: node.proxy });
         }
     }
 };

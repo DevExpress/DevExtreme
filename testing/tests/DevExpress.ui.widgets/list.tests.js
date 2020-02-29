@@ -1,6 +1,6 @@
-import $ from "jquery";
+import $ from 'jquery';
 
-import "common.css!";
+import 'common.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -29,11 +29,11 @@ QUnit.testStart(() => {
             <div data-options="dxTemplate: { name: \'item\' }">Item Template</div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-import "./listParts/commonTests.js";
-import "./listParts/editingTests.js";
-import "./listParts/editingUITests.js";
-import "./listParts/dataSourceFromUrlTests.js";
-import "./listParts/liveUpdateTests.js";
+import './listParts/commonTests.js';
+import './listParts/editingTests.js';
+import './listParts/editingUITests.js';
+import './listParts/dataSourceFromUrlTests.js';
+import './listParts/liveUpdateTests.js';

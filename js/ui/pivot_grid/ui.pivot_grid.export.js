@@ -1,33 +1,29 @@
-import Class from "../../core/class";
-import { isDefined } from "../../core/utils/type";
-import { extend } from "../../core/utils/extend";
-import { each } from "../../core/utils/iterator";
-import { format } from "../../format_helper";
-import { parse } from "../../localization/number";
-import clientExporter, { excel as excelExporter } from "../../exporter";
-import exportMixin from "../grid_core/ui.grid_core.export_mixin";
-import { when, Deferred } from "../../core/utils/deferred";
+import Class from '../../core/class';
+import { isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { format } from '../../format_helper';
+import { parse } from '../../localization/number';
+import clientExporter, { excel as excelExporter } from '../../exporter';
+import exportMixin from '../grid_core/ui.grid_core.export_mixin';
+import { when, Deferred } from '../../core/utils/deferred';
 
-var DEFAULT_DATA_TYPE = 'string',
-    COLUMN_HEADER_STYLE_ID = 0,
-    ROW_HEADER_STYLE_ID = 1,
-    DATA_STYLE_OFFSET = 2,
-    DEFAUL_COLUMN_WIDTH = 100;
+const DEFAULT_DATA_TYPE = 'string';
+const COLUMN_HEADER_STYLE_ID = 0;
+const ROW_HEADER_STYLE_ID = 1;
+const DATA_STYLE_OFFSET = 2;
+const DEFAUL_COLUMN_WIDTH = 100;
 
 exports.ExportMixin = extend({}, exportMixin, {
-    /**
-    * @name dxPivotGridMethods.exportToExcel
-    * @publicName exportToExcel()
-    */
     exportToExcel: function() {
-        var that = this;
+        const that = this;
 
         clientExporter.export(that.getDataProvider(), {
-            fileName: that.option("export.fileName"),
-            proxyUrl: that.option("export.proxyUrl"),
-            format: "EXCEL",
-            rtlEnabled: that.option("rtlEnabled"),
-            ignoreErrors: that.option("export.ignoreExcelErrors"),
+            fileName: that.option('export.fileName'),
+            proxyUrl: that.option('export.proxyUrl'),
+            format: 'EXCEL',
+            rtlEnabled: that.option('rtlEnabled'),
+            ignoreErrors: that.option('export.ignoreExcelErrors'),
             exportingAction: that._actions.onExporting,
             exportedAction: that._actions.onExported,
             fileSavingAction: that._actions.onFileSaving
@@ -35,9 +31,9 @@ exports.ExportMixin = extend({}, exportMixin, {
     },
 
     _getLength: function(items) {
-        var i,
-            itemCount = items[0].length,
-            cellCount = 0;
+        let i;
+        const itemCount = items[0].length;
+        let cellCount = 0;
 
         for(i = 0; i < itemCount; i++) {
             cellCount += items[0][i].colspan || 1;
@@ -64,12 +60,11 @@ exports.ExportMixin = extend({}, exportMixin, {
     },
 
     _getAllItems: function(columnsInfo, rowsInfoItems, cellsInfo) {
-        var cellIndex,
-            rowIndex,
-            correctedCellsInfo = cellsInfo,
-            sourceItems,
-            rowsLength = this._getLength(rowsInfoItems),
-            headerRowsCount = columnsInfo.length;
+        let cellIndex;
+        let rowIndex;
+        let correctedCellsInfo = cellsInfo;
+        const rowsLength = this._getLength(rowsInfoItems);
+        const headerRowsCount = columnsInfo.length;
 
         if(columnsInfo.length > 0 && columnsInfo[0].length > 0 && cellsInfo.length > 0 && cellsInfo[0].length === 0) {
             const cellInfoItemLength = this._calculateCellInfoItemLength(columnsInfo[0]);
@@ -77,7 +72,7 @@ exports.ExportMixin = extend({}, exportMixin, {
                 correctedCellsInfo = this._correctCellsInfoItemLengths(cellsInfo, cellInfoItemLength);
             }
         }
-        sourceItems = columnsInfo.concat(correctedCellsInfo);
+        const sourceItems = columnsInfo.concat(correctedCellsInfo);
 
         for(rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex++) {
             for(cellIndex = rowsInfoItems[rowIndex].length - 1; cellIndex >= 0; cellIndex--) {
@@ -92,7 +87,7 @@ exports.ExportMixin = extend({}, exportMixin, {
 
         sourceItems[0].splice(0, 0, extend({}, this._getEmptyCell(),
             {
-                alignment: this._options.rtlEnabled ? "right" : "left",
+                alignment: this._options.rtlEnabled ? 'right' : 'left',
                 colspan: rowsLength,
                 rowspan: headerRowsCount
             }));
@@ -101,15 +96,15 @@ exports.ExportMixin = extend({}, exportMixin, {
     },
 
     getDataProvider: function() {
-        var that = this,
-            dataController = this._dataController,
-            items = new Deferred();
+        const that = this;
+        const dataController = this._dataController;
+        const items = new Deferred();
 
         dataController.beginLoading();
         setTimeout(function() {
-            var columnsInfo = extend(true, [], dataController.getColumnsInfo(true)),
-                rowsInfoItems = extend(true, [], dataController.getRowsInfo(true)),
-                cellsInfo = dataController.getCellsInfo(true);
+            const columnsInfo = extend(true, [], dataController.getColumnsInfo(true));
+            const rowsInfoItems = extend(true, [], dataController.getRowsInfo(true));
+            const cellsInfo = dataController.getCellsInfo(true);
 
             items.resolve(that._getAllItems(columnsInfo, rowsInfoItems, cellsInfo));
             dataController.endLoading();
@@ -117,16 +112,16 @@ exports.ExportMixin = extend({}, exportMixin, {
 
         return new exports.DataProvider({
             items: items,
-            rtlEnabled: this.option("rtlEnabled"),
-            dataFields: this.getDataSource().getAreaFields("data"),
-            customizeExcelCell: this.option("export.customizeExcelCell"),
+            rtlEnabled: this.option('rtlEnabled'),
+            dataFields: this.getDataSource().getAreaFields('data'),
+            customizeExcelCell: this.option('export.customizeExcelCell'),
         });
     }
 });
 
 function getCellDataType(field) {
     if(field && field.customizeText) {
-        return "string";
+        return 'string';
     }
 
     if(field.dataType) {
@@ -135,10 +130,10 @@ function getCellDataType(field) {
 
     if(field.format) {
         if(parse(format(1, field.format)) === 1) {
-            return "number";
+            return 'number';
         }
         if(format(new Date(), field.format)) {
-            return "date";
+            return 'date';
         }
     }
 
@@ -152,18 +147,18 @@ exports.DataProvider = Class.inherit({
     },
 
     ready: function() {
-        var that = this,
-            options = that._options,
-            dataFields = options.dataFields;
+        const that = this;
+        const options = that._options;
+        const dataFields = options.dataFields;
 
         return when(options.items).done(function(items) {
-            var headerSize = items[0][0].rowspan,
-                columns = items[headerSize - 1],
-                dataItemStyle = { alignment: options.rtlEnabled ? "left" : "right" };
+            const headerSize = items[0][0].rowspan;
+            const columns = items[headerSize - 1];
+            const dataItemStyle = { alignment: options.rtlEnabled ? 'left' : 'right' };
 
             that._styles = [
-                { alignment: "center", dataType: "string" },
-                { alignment: options.rtlEnabled ? "right" : "left", dataType: "string" }
+                { alignment: 'center', dataType: 'string' },
+                { alignment: options.rtlEnabled ? 'right' : 'left', dataType: 'string' }
             ];
 
             if(dataFields.length) {
@@ -199,8 +194,8 @@ exports.DataProvider = Class.inherit({
     },
 
     getCellMerging: function(rowIndex, cellIndex) {
-        var items = this._options.items,
-            item = items[rowIndex] && items[rowIndex][cellIndex];
+        const items = this._options.items;
+        const item = items[rowIndex] && items[rowIndex][cellIndex];
 
         return item ? {
             colspan: item.colspan - 1,
@@ -209,22 +204,22 @@ exports.DataProvider = Class.inherit({
     },
 
     getFrozenArea: function() {
-        var items = this._options.items;
+        const items = this._options.items;
 
         return { x: items[0][0].colspan, y: items[0][0].rowspan };
     },
 
     getCellType: function(rowIndex, cellIndex) {
-        var style = this._styles[this.getStyleId(rowIndex, cellIndex)];
-        return style && style.dataType || "string";
+        const style = this._styles[this.getStyleId(rowIndex, cellIndex)];
+        return style && style.dataType || 'string';
     },
 
     getCellData: function(rowIndex, cellIndex) {
         const result = {};
-        var items = this._options.items,
-            item = items[rowIndex] && items[rowIndex][cellIndex] || {};
+        const items = this._options.items;
+        const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
-        if(this.getCellType(rowIndex, cellIndex) === "string") {
+        if(this.getCellType(rowIndex, cellIndex) === 'string') {
             result.value = item.text;
         } else {
             result.value = item.value;
@@ -237,10 +232,10 @@ exports.DataProvider = Class.inherit({
     },
 
     getStyleId: function(rowIndex, cellIndex) {
-        var items = this._options.items,
-            columnHeaderSize = items[0][0].rowspan,
-            rowHeaderSize = items[0][0].colspan,
-            item = items[rowIndex] && items[rowIndex][cellIndex] || {};
+        const items = this._options.items;
+        const columnHeaderSize = items[0][0].rowspan;
+        const rowHeaderSize = items[0][0].colspan;
+        const item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
         if(cellIndex === 0 && rowIndex === 0) {
             return COLUMN_HEADER_STYLE_ID;

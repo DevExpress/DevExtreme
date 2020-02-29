@@ -3,10 +3,13 @@ import { equalByValue, noop } from '../utils/common';
 import { OptionManager } from './option_manager';
 import { clone } from '../utils/object';
 import { getFieldName, getParentName, convertRulesToOptions } from './utils';
+import { extend } from '../utils/extend';
 
 export class Options {
     constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {
         this._deprecatedCallback;
+        this._startChangeCallback;
+        this._endChangeCallback;
 
         this._default = defaultOptions;
         this._deprecated = deprecatedOptions;
@@ -19,6 +22,7 @@ export class Options {
             optionsByReference
         );
         this._optionManager.onRelevantNamesPrepared((options, name, value, silent) => this._setRelevantNames(options, name, value, silent));
+        this._cachedOptions = {};
 
         this._rules = [];
     }
@@ -97,7 +101,7 @@ export class Options {
     }
 
     _normalizeName(name, silent) {
-        if(name && !silent) {
+        if(this._deprecatedNames.length && name && !silent) {
             for(let i = 0; i < this._deprecatedNames.length; i++) {
                 if(this._deprecatedNames[i] === name) {
                     const deprecate = this._deprecated[name];
@@ -126,6 +130,8 @@ export class Options {
 
     dispose() {
         this._deprecatedCallback = noop;
+        this._startChangeCallback = noop;
+        this._endChangeCallback = noop;
         this._optionManager.dispose();
     }
 
@@ -141,8 +147,16 @@ export class Options {
         this._deprecatedCallback = callBack;
     }
 
+    onStartChange(callBack) {
+        this._startChangeCallback = callBack;
+    }
+
+    onEndChange(callBack) {
+        this._endChangeCallback = callBack;
+    }
+
     isInitial(name) {
-        const value = this.option(name);
+        const value = this.silent(name);
         const initialValue = this.initial(name);
         const areFunctions = isFunction(value) && isFunction(initialValue);
 
@@ -161,7 +175,12 @@ export class Options {
         if(isGetter) {
             return this._optionManager.get(undefined, this._normalizeName(options));
         } else {
-            this._optionManager.set(options, value);
+            this._startChangeCallback();
+            try {
+                this._optionManager.set(options, value);
+            } finally {
+                this._endChangeCallback();
+            }
         }
     }
 
@@ -196,5 +215,15 @@ export class Options {
 
     isDeprecated(name) {
         return Object.prototype.hasOwnProperty.call(this._deprecated, name);
+    }
+
+    cache(name, options) {
+        const isGetter = arguments.length < 2;
+
+        if(isGetter) {
+            return this._cachedOptions[name];
+        } else {
+            this._cachedOptions[name] = extend(this._cachedOptions[name], options);
+        }
     }
 }

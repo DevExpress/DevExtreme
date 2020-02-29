@@ -1,46 +1,46 @@
-import $ from "jquery";
+import $ from 'jquery';
 import { QUnitTestIfSupported, checkScrollableSizes } from '../../../helpers/scrollableTestsHelper.js';
 
-import "ui/tree_view";
-import "ui/box";
-import "ui/responsive_box";
+import 'ui/tree_view';
+import 'ui/box';
+import 'ui/responsive_box';
 
-import "common.css!";
+import 'common.css!';
 
-const TREEVIEW_ID = "treeView_id";
-const PLACEMENT_STANDALONE = "standalone";
-const PLACEMENT_INSIDE_BOX = "insideBox";
-const PLACEMENT_INSIDE_RESPONSIVE_BOX = "insideResponsiveBox";
+const TREEVIEW_ID = 'treeView_id';
+const PLACEMENT_STANDALONE = 'standalone';
+const PLACEMENT_INSIDE_BOX = 'insideBox';
+const PLACEMENT_INSIDE_RESPONSIVE_BOX = 'insideResponsiveBox';
 
-const fewItems = [{ text: "item 1" }, { text: "item 2" }];
+const fewItems = [{ text: 'item 1' }, { text: 'item 2' }];
 const itemsOverflowX = [{
-    text: "1111", expanded: true,
+    text: '1111', expanded: true,
     items: [{
-        text: "1111_1111"
+        text: '1111_1111'
     }]
 }];
 
 const itemsOverflowY = [{
-    text: "a", expanded: true,
+    text: 'a', expanded: true,
     items: [{
-        text: "b", expanded: true,
+        text: 'b', expanded: true,
         items: [{
-            text: "c", expanded: true,
+            text: 'c', expanded: true,
             items: [{
-                text: "d"
+                text: 'd'
             }]
         }]
     }]
 }];
 
 const itemsOverflowXY = [{
-    text: "1111", expanded: true,
+    text: '1111', expanded: true,
     items: [{
-        text: "1111_1111", expanded: true,
+        text: '1111_1111', expanded: true,
         items: [{
-            text: "1111_1111_1111", expanded: true,
+            text: '1111_1111_1111', expanded: true,
             items: [
-                { text: "1111_1111_1111_" }
+                { text: '1111_1111_1111_' }
             ]
         }]
     }]
@@ -59,10 +59,10 @@ function appendTreeViewTo(appendToElement, id, items, width, height) {
     $treeView.dxTreeView(options);
 }
 
-QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", {
+QUnit.module('Size of one TreeView standalone/inside Box/inside ResponsiveBox', {
     beforeEach: function() {
-        this.$container = $(`<div style="background-color: blue"></div>`);
-        $("#qunit-fixture").append(this.$container);
+        this.$container = $('<div style="background-color: blue"></div>');
+        $('#qunit-fixture').append(this.$container);
     },
     afterEach: function() {
         this.$container.remove();
@@ -76,7 +76,7 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
         function appendOneTreeViewTo($appendTo, { id, width, height, items }) {
             if(placement === PLACEMENT_INSIDE_RESPONSIVE_BOX) {
                 $appendTo.dxResponsiveBox({
-                    _layoutStrategy: "flex",
+                    _layoutStrategy: 'flex',
                     width,
                     height,
                     dataSource: [{
@@ -88,10 +88,10 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
                 });
             } else if(placement === PLACEMENT_INSIDE_BOX) {
                 $appendTo.dxBox({
-                    _layoutStrategy: "flex",
+                    _layoutStrategy: 'flex',
                     width,
                     height,
-                    direction: "row",
+                    direction: 'row',
                     items: [{ ratio: 1, baseSize: 0 }],
                     itemTemplate: function(data, index, element) {
                         appendTreeViewTo(element, id, items);
@@ -102,14 +102,14 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
             }
         }
 
-        QUnit.test("no content overflow, " + testContext, function(assert) {
+        QUnit.test('no content overflow, ' + testContext, function(assert) {
             appendOneTreeViewTo(this.$container, {
                 id: TREEVIEW_ID,
                 width: 150,
                 height: 100,
                 items: [
-                    { text: "item 1" },
-                    { text: "item 2" }
+                    { text: 'item 1' },
+                    { text: 'item 2' }
                 ]
             });
 
@@ -127,7 +127,7 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
             });
         });
 
-        QUnit.test("content overflow_x, " + testContext, function(assert) {
+        QUnit.test('content overflow_x, ' + testContext, function(assert) {
             appendOneTreeViewTo(this.$container, {
                 id: TREEVIEW_ID,
                 width: 75,
@@ -149,7 +149,7 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
             });
         });
 
-        QUnit.test("content overflow_x_y, " + testContext, function(assert) {
+        QUnit.test('content overflow_x_y, ' + testContext, function(assert) {
             appendOneTreeViewTo(this.$container, {
                 id: TREEVIEW_ID,
                 width: 75,
@@ -170,7 +170,7 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
             });
         });
 
-        QUnit.test("content overflow_y, " + testContext, function(assert) {
+        QUnit.test('content overflow_y, ' + testContext, function(assert) {
             appendOneTreeViewTo(this.$container, {
                 id: TREEVIEW_ID,
                 width: 200,
@@ -193,10 +193,10 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
     });
 });
 
-QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
+QUnit.module('Size of two TreeViews inside Box/ResponsiveBox', {
     beforeEach: function() {
-        this.$container = $(`<div></div>`);
-        $("#qunit-fixture").append(this.$container);
+        this.$container = $('<div></div>');
+        $('#qunit-fixture').append(this.$container);
     },
     afterEach: function() {
         this.$container.remove();
@@ -208,7 +208,7 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
         const testContext = `[placement: ${placement}]`;
 
         function appendTreeViewsToResponsiveBox($responsiveBox, treeViewItems, responsiveBoxConfig) {
-            responsiveBoxConfig._layoutStrategy = "flex";
+            responsiveBoxConfig._layoutStrategy = 'flex';
             responsiveBoxConfig.itemTemplate = function(data, index, element) {
                 appendTreeViewTo(element, TREEVIEW_ID + index, treeViewItems);
             };
@@ -217,7 +217,7 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
         }
 
         function appendTreeViewsToBox($box, treeViewItems, boxConfig) {
-            boxConfig._layoutStrategy = "flex";
+            boxConfig._layoutStrategy = 'flex';
             boxConfig.items = [{ ratio: 1 }, { ratio: 1 }];
             boxConfig.itemTemplate = function(data, index, element) {
                 appendTreeViewTo(element, TREEVIEW_ID + index, treeViewItems);
@@ -226,11 +226,11 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
             $box.dxBox(boxConfig);
         }
 
-        QUnit.test("no content overflow - 2 treeView in row, " + testContext, function(assert) {
+        QUnit.test('no content overflow - 2 treeView in row, ' + testContext, function(assert) {
             if(placement === PLACEMENT_INSIDE_BOX) {
                 appendTreeViewsToBox(this.$container, fewItems, {
                     width: 300, height: 100,
-                    direction: "row"
+                    direction: 'row'
                 });
             } else {
                 appendTreeViewsToResponsiveBox(this.$container, fewItems, {
@@ -258,11 +258,11 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
             }));
         });
 
-        QUnit.test("no content overflow - 2 treeView in col, " + testContext, function(assert) {
+        QUnit.test('no content overflow - 2 treeView in col, ' + testContext, function(assert) {
             if(placement === PLACEMENT_INSIDE_BOX) {
                 appendTreeViewsToBox(this.$container, fewItems, {
                     width: 75, height: 200,
-                    direction: "col"
+                    direction: 'col'
                 });
             } else {
                 appendTreeViewsToResponsiveBox(this.$container, fewItems, {
@@ -290,11 +290,11 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
             }));
         });
 
-        QUnitTestIfSupported("content overflow_x - 2 treeView in row, " + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE, function(assert) {
+        QUnitTestIfSupported('content overflow_x - 2 treeView in row, ' + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE, function(assert) {
             if(placement === PLACEMENT_INSIDE_BOX) {
                 appendTreeViewsToBox(this.$container, itemsOverflowX, {
                     width: 150, height: 100,
-                    direction: "row"
+                    direction: 'row'
                 });
             } else {
                 appendTreeViewsToResponsiveBox(this.$container, itemsOverflowX, {
@@ -322,11 +322,11 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
             }));
         });
 
-        QUnit.test("content overflow_x - 2 treeView in col, " + testContext, function(assert) {
+        QUnit.test('content overflow_x - 2 treeView in col, ' + testContext, function(assert) {
             if(placement === PLACEMENT_INSIDE_BOX) {
                 appendTreeViewsToBox(this.$container, itemsOverflowX, {
                     width: 75, height: 200,
-                    direction: "col"
+                    direction: 'col'
                 });
             } else {
                 appendTreeViewsToResponsiveBox(this.$container, itemsOverflowX, {
@@ -354,11 +354,11 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
             }));
         });
 
-        QUnitTestIfSupported("content overflow_y - 2 treeView in row, " + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE, function(assert) {
+        QUnitTestIfSupported('content overflow_y - 2 treeView in row, ' + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE, function(assert) {
             if(placement === PLACEMENT_INSIDE_BOX) {
                 appendTreeViewsToBox(this.$container, itemsOverflowY, {
                     width: 400, height: 75,
-                    direction: "row"
+                    direction: 'row'
                 });
             } else {
                 appendTreeViewsToResponsiveBox(this.$container, itemsOverflowY, {
@@ -385,11 +385,11 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
             }));
         });
 
-        QUnitTestIfSupported("content overflow_y - 2 treeView in col, " + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE, function(assert) {
+        QUnitTestIfSupported('content overflow_y - 2 treeView in col, ' + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE, function(assert) {
             if(placement === PLACEMENT_INSIDE_BOX) {
                 appendTreeViewsToBox(this.$container, itemsOverflowY, {
                     width: 200, height: 150,
-                    direction: "col"
+                    direction: 'col'
                 });
             } else {
                 appendTreeViewsToResponsiveBox(this.$container, itemsOverflowY, {

@@ -1,11 +1,12 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import messageLocalization from '../../localization/message';
 
-import Widget from "../widget/ui.widget";
-import Popup from "../popup";
+import Widget from '../widget/ui.widget';
+import Popup from '../popup';
 
-const FILE_MANAGER_DIALOG_CONTENT = "dx-filemanager-dialog";
-const FILE_MANAGER_DIALOG_POPUP = "dx-filemanager-dialog-popup";
+const FILE_MANAGER_DIALOG_CONTENT = 'dx-filemanager-dialog';
+const FILE_MANAGER_DIALOG_POPUP = 'dx-filemanager-dialog-popup';
 
 class FileManagerDialogBase extends Widget {
 
@@ -16,7 +17,7 @@ class FileManagerDialogBase extends Widget {
 
         const options = this._getDialogOptions();
 
-        const $popup = $("<div>")
+        const $popup = $('<div>')
             .addClass(FILE_MANAGER_DIALOG_POPUP)
             .appendTo(this.$element());
 
@@ -32,12 +33,21 @@ class FileManagerDialogBase extends Widget {
             contentTemplate: this._createContentTemplate.bind(this),
             toolbarItems: [
                 {
-                    widget: "dxButton",
-                    toolbar: "bottom",
-                    location: "after",
+                    widget: 'dxButton',
+                    toolbar: 'bottom',
+                    location: 'after',
                     options: {
                         text: options.buttonText,
                         onClick: this._applyDialogChanges.bind(this)
+                    }
+                },
+                {
+                    widget: 'dxButton',
+                    toolbar: 'bottom',
+                    location: 'after',
+                    options: {
+                        text: messageLocalization.format('dxFileManager-dialogButtonCancel'),
+                        onClick: this._closeDialog.bind(this)
                     }
                 }
             ],
@@ -53,15 +63,15 @@ class FileManagerDialogBase extends Widget {
 
     _getDialogOptions() {
         return {
-            title: "Title",
-            buttonText: "ButtonText",
-            contentCssClass: "",
-            popupCssClass: ""
+            title: 'Title',
+            buttonText: 'ButtonText',
+            contentCssClass: '',
+            popupCssClass: ''
         };
     }
 
     _createContentTemplate(element) {
-        this._$contentElement = $("<div>")
+        this._$contentElement = $('<div>')
             .appendTo(element)
             .addClass(FILE_MANAGER_DIALOG_CONTENT);
 
@@ -83,6 +93,10 @@ class FileManagerDialogBase extends Widget {
         }
     }
 
+    _closeDialog() {
+        this._popup.hide();
+    }
+
     _onPopupHidden() {
         this._onClosedAction({ dialogResult: this._dialogResult });
     }
@@ -91,7 +105,15 @@ class FileManagerDialogBase extends Widget {
     }
 
     _createOnClosedAction() {
-        this._onClosedAction = this._createActionByOption("onClosed");
+        this._onClosedAction = this._createActionByOption('onClosed');
+    }
+
+    _setTitle(newTitle) {
+        this._popup.option('title', newTitle);
+    }
+
+    _setButtonText(newText) {
+        this._popup.option('toolbarItems[0].options.text', newText);
     }
 
     _getDefaultOptions() {
@@ -104,7 +126,7 @@ class FileManagerDialogBase extends Widget {
         const name = args.name;
 
         switch(name) {
-            case "onClosed":
+            case 'onClosed':
                 this._createOnPathChangedAction();
                 break;
             default:

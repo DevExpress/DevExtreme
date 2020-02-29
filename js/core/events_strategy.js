@@ -1,6 +1,6 @@
-import Callbacks from "./utils/callbacks";
-import { each } from "./utils/iterator";
-import { isFunction, isPlainObject } from "./utils/type";
+import Callbacks from './utils/callbacks';
+import { each } from './utils/iterator';
+import { isFunction, isPlainObject } from './utils/type';
 
 export class EventsStrategy {
     constructor(owner) {

@@ -1,10 +1,10 @@
-import $ from "../../core/renderer";
+import $ from '../../core/renderer';
 
 const allowScroll = function(container, delta, shiftKey) {
     const $container = $(container);
     const scrollTopPos = shiftKey ? $container.scrollLeft() : $container.scrollTop();
 
-    const prop = shiftKey ? "Width" : "Height";
+    const prop = shiftKey ? 'Width' : 'Height';
     const scrollBottomPos = $container.prop(`scroll${prop}`) - $container.prop(`client${prop}`) - scrollTopPos;
 
     if(scrollTopPos === 0 && scrollBottomPos === 0) {

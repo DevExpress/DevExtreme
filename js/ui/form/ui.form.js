@@ -1,27 +1,27 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import registerComponent from "../../core/component_registrator";
-import Guid from "../../core/guid";
-import { ensureDefined } from "../../core/utils/common";
-import { isDefined, isEmptyObject, isObject, isString } from "../../core/utils/type";
-import { each } from "../../core/utils/iterator";
-import { inArray } from "../../core/utils/array";
-import { extend } from "../../core/utils/extend";
-import { isEmpty } from "../../core/utils/string";
-import browser from "../../core/utils/browser";
-import { getPublicElement, triggerShownEvent } from "../../core/utils/dom";
-import messageLocalization from "../../localization/message";
-import Widget from "../widget/ui.widget";
-import Editor from "../editor/editor";
-import { defaultScreenFactorFunc, getCurrentScreenFactor, hasWindow } from "../../core/utils/window";
-import ValidationEngine from "../validation_engine";
-import LayoutManager from "./ui.form.layout_manager";
-import { default as FormItemsRunTimeInfo } from "./ui.form.items_runtime_info";
-import TabPanel from "../tab_panel";
-import Scrollable from "../scroll_view/ui.scrollable";
-import { Deferred } from "../../core/utils/deferred";
-import themes from "../themes";
-import tryCreateItemOptionAction from "./ui.form.item_options_actions";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import registerComponent from '../../core/component_registrator';
+import Guid from '../../core/guid';
+import { ensureDefined } from '../../core/utils/common';
+import { isDefined, isEmptyObject, isObject, isString } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import { inArray } from '../../core/utils/array';
+import { extend } from '../../core/utils/extend';
+import { isEmpty } from '../../core/utils/string';
+import browser from '../../core/utils/browser';
+import { getPublicElement, triggerShownEvent } from '../../core/utils/dom';
+import messageLocalization from '../../localization/message';
+import Widget from '../widget/ui.widget';
+import Editor from '../editor/editor';
+import { defaultScreenFactorFunc, getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
+import ValidationEngine from '../validation_engine';
+import LayoutManager from './ui.form.layout_manager';
+import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
+import TabPanel from '../tab_panel';
+import Scrollable from '../scroll_view/ui.scrollable';
+import { Deferred } from '../../core/utils/deferred';
+import themes from '../themes';
+import tryCreateItemOptionAction from './ui.form.item_options_actions';
 import {
     concatPaths,
     createItemPathByIndex,
@@ -31,31 +31,32 @@ import {
     getTextWithoutSpaces,
     isExpectedItem,
     isFullPathContainsTabs
-} from "./ui.form.utils";
+} from './ui.form.utils';
 
-import "../validation_summary";
-import "../validation_group";
+import '../validation_summary';
+import '../validation_group';
 
-const FORM_CLASS = "dx-form";
-const FIELD_ITEM_CLASS = "dx-field-item";
-const FIELD_ITEM_LABEL_TEXT_CLASS = "dx-field-item-label-text";
-const FORM_GROUP_CLASS = "dx-form-group";
-const FORM_GROUP_CONTENT_CLASS = "dx-form-group-content";
-const FORM_GROUP_WITH_CAPTION_CLASS = "dx-form-group-with-caption";
-const FORM_GROUP_CAPTION_CLASS = "dx-form-group-caption";
-const HIDDEN_LABEL_CLASS = "dx-layout-manager-hidden-label";
-const FIELD_ITEM_LABEL_CLASS = "dx-field-item-label";
-const FIELD_ITEM_LABEL_CONTENT_CLASS = "dx-field-item-label-content";
-const FIELD_ITEM_TAB_CLASS = "dx-field-item-tab";
-const FORM_FIELD_ITEM_COL_CLASS = "dx-col-";
-const GROUP_COL_COUNT_CLASS = "dx-group-colcount-";
-const FIELD_ITEM_CONTENT_CLASS = "dx-field-item-content";
-const FORM_VALIDATION_SUMMARY = "dx-form-validation-summary";
+const FORM_CLASS = 'dx-form';
+const FIELD_ITEM_CLASS = 'dx-field-item';
+const FIELD_ITEM_LABEL_TEXT_CLASS = 'dx-field-item-label-text';
+const FORM_GROUP_CLASS = 'dx-form-group';
+const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
+const FORM_GROUP_WITH_CAPTION_CLASS = 'dx-form-group-with-caption';
+const FORM_GROUP_CAPTION_CLASS = 'dx-form-group-caption';
+const HIDDEN_LABEL_CLASS = 'dx-layout-manager-hidden-label';
+const FIELD_ITEM_LABEL_CLASS = 'dx-field-item-label';
+const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
+const FIELD_ITEM_TAB_CLASS = 'dx-field-item-tab';
+const FORM_FIELD_ITEM_COL_CLASS = 'dx-col-';
+const GROUP_COL_COUNT_CLASS = 'dx-group-colcount-';
+const GROUP_COL_COUNT_ATTR = 'group-col-count';
+const FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
+const FORM_VALIDATION_SUMMARY = 'dx-form-validation-summary';
 
-const WIDGET_CLASS = "dx-widget";
-const FOCUSED_STATE_CLASS = "dx-state-focused";
+const WIDGET_CLASS = 'dx-widget';
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
-const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ["items", "isRequired", "validationRules", "visible"];
+const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ['items', 'isRequired', 'validationRules', 'visible'];
 
 const Form = Widget.inherit({
     _init: function() {
@@ -69,7 +70,7 @@ const Form = Widget.inherit({
     },
 
     _initOptions: function(options) {
-        if(!("screenByWidth" in options)) {
+        if(!('screenByWidth' in options)) {
             options.screenByWidth = defaultScreenFactorFunc;
         }
 
@@ -78,26 +79,10 @@ const Form = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            formID: "dx-" + new Guid(),
-            /**
-             * @name dxFormOptions.formData
-             * @type object
-             * @default {}
-             * @fires dxFormOptions.onFieldDataChanged
-             */
+            formID: 'dx-' + new Guid(),
             formData: {},
-            /**
-             * @name dxFormOptions.colCount
-             * @type number|Enums.Mode
-             * @default 1
-             */
             colCount: 1,
 
-            /**
-            * @name dxFormOptions.screenByWidth
-            * @type function
-            * @default null
-            */
             screenByWidth: null,
 
             /**
@@ -108,149 +93,26 @@ const Form = Widget.inherit({
             * @name ColCountResponsible
             * @hidden
             */
-            /**
-            * @name ColCountResponsible.xs
-            * @type number
-            * @default undefined
-            */
-            /**
-            * @name ColCountResponsible.sm
-            * @type number
-            * @default undefined
-            */
-            /**
-            * @name ColCountResponsible.md
-            * @type number
-            * @default undefined
-            */
-            /**
-            * @name ColCountResponsible.lg
-            * @type number
-            * @default undefined
-            */
 
-            /**
-            * @name dxFormOptions.colCountByScreen
-            * @extends ColCountResponsibleType
-            * @inherits ColCountResponsible
-            * @default undefined
-            */
             colCountByScreen: undefined,
 
-            /**
-             * @name dxFormOptions.labelLocation
-             * @type Enums.FormLabelLocation
-             * @default "left"
-             */
-            labelLocation: "left",
-            /**
-             * @name dxFormOptions.readOnly
-             * @type boolean
-             * @default false
-             */
+            labelLocation: 'left',
             readOnly: false,
-            /**
-             * @name dxFormOptions.onFieldDataChanged
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 dataField:string
-             * @type_function_param1_field5 value:object
-             * @action
-             */
             onFieldDataChanged: null,
-            /**
-             * @name dxFormOptions.customizeItem
-             * @type function
-             * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem|dxFormButtonItem
-             */
             customizeItem: null,
-            /**
-             * @name dxFormOptions.onEditorEnterKey
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 dataField:string
-             * @action
-             */
             onEditorEnterKey: null,
-            /**
-             * @name dxFormOptions.minColWidth
-             * @type number
-             * @default 200
-             */
             minColWidth: 200,
-            /**
-             * @name dxFormOptions.alignItemLabels
-             * @type boolean
-             * @default true
-             */
             alignItemLabels: true,
-            /**
-             * @name dxFormOptions.alignItemLabelsInAllGroups
-             * @type boolean
-             * @default true
-             */
             alignItemLabelsInAllGroups: true,
-            /**
-             * @name dxFormOptions.showColonAfterLabel
-             * @type boolean
-             * @default true
-             */
             showColonAfterLabel: true,
-            /**
-             * @name dxFormOptions.showRequiredMark
-             * @type boolean
-             * @default true
-             */
             showRequiredMark: true,
-            /**
-             * @name dxFormOptions.showOptionalMark
-             * @type boolean
-             * @default false
-             */
             showOptionalMark: false,
-            /**
-             * @name dxFormOptions.requiredMark
-             * @type string
-             * @default "*"
-             */
-            requiredMark: "*",
-            /**
-             * @name dxFormOptions.optionalMark
-             * @type string
-             * @default "optional"
-             */
-            optionalMark: messageLocalization.format("dxForm-optionalMark"),
-            /**
-            * @name dxFormOptions.requiredMessage
-            * @type string
-            * @default "{0} is required"
-            */
-            requiredMessage: messageLocalization.getFormatter("dxForm-requiredMessage"),
-            /**
-             * @name dxFormOptions.showValidationSummary
-             * @type boolean
-             * @default false
-             */
+            requiredMark: '*',
+            optionalMark: messageLocalization.format('dxForm-optionalMark'),
+            requiredMessage: messageLocalization.getFormatter('dxForm-requiredMessage'),
             showValidationSummary: false,
-            /**
-             * @name dxFormOptions.items
-             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
-             * @default undefined
-             */
             items: undefined,
-            /**
-             * @name dxFormOptions.scrollingEnabled
-             * @type boolean
-             * @default false
-             */
             scrollingEnabled: false,
-            /**
-             * @name dxFormOptions.validationGroup
-             * @type string
-             * @default undefined
-             */
             validationGroup: undefined,
             stylingMode: undefined
             /**
@@ -259,67 +121,6 @@ const Form = Widget.inherit({
             * @section FormItems
             * @type object
             */
-            /**
-             * @name dxFormSimpleItem.dataField
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.name
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.editorType
-             * @type Enums.FormItemEditorType
-             */
-            /**
-             * @name dxFormSimpleItem.editorOptions
-             * @type object
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.colSpan
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.itemType
-             * @type Enums.FormItemType
-             * @default "simple"
-             */
-            /**
-             * @name dxFormSimpleItem.visible
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormSimpleItem.cssClass
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.visibleIndex
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.template
-             * @type template|function
-             * @type_function_param1 data:object
-             * @type_function_param1_field1 component:dxForm
-             * @type_function_param1_field2 dataField:string
-             * @type_function_param1_field3 editorOptions:object
-             * @type_function_param1_field4 editorType:string
-             * @type_function_param1_field5 name:string
-             * @type_function_param2 itemElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
-            /**
-             * @name dxFormSimpleItem.label
-             * @type object
-             * @default undefined
-             */
             /**
              * @name dxFormSimpleItem.label.text
              * @type string
@@ -346,137 +147,17 @@ const Form = Widget.inherit({
              * @default "left"
              */
             /**
-             * @name dxFormSimpleItem.helpText
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.isRequired
-             * @type boolean
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.validationRules
-             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-             * @default undefined
-             */
-            /**
             * @name dxFormGroupItem
 			* @publicName GroupItem
             * @section FormItems
             * @type object
             */
             /**
-             * @name dxFormGroupItem.caption
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormGroupItem.name
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormGroupItem.colCount
-             * @type number
-             * @default 1
-             */
-            /**
-             * @name dxFormGroupItem.colCountByScreen
-             * @extends ColCountResponsibleType
-             * @inherits ColCountResponsible
-             * @default undefined
-             */
-            /**
-             * @name dxFormGroupItem.itemType
-             * @type Enums.FormItemType
-             * @default "simple"
-             */
-            /**
-             * @name dxFormGroupItem.colSpan
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormGroupItem.visible
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormGroupItem.cssClass
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormGroupItem.visibleIndex
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormGroupItem.alignItemLabels
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormGroupItem.template
-             * @type template|function
-             * @type_function_param1 data:object
-             * @type_function_param1_field1 component:dxForm
-             * @type_function_param1_field2 formData:object
-             * @type_function_param2 itemElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
-            /**
-             * @name dxFormGroupItem.items
-             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
-             * @default undefined
-             */
-            /**
             * @name dxFormTabbedItem
 			* @publicName TabbedItem
             * @section FormItems
             * @type object
             */
-            /**
-             * @name dxFormTabbedItem.name
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.visible
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormTabbedItem.itemType
-             * @type Enums.FormItemType
-             * @default "simple"
-             */
-            /**
-             * @name dxFormTabbedItem.cssClass
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.visibleIndex
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabPanelOptions
-             * @type dxTabPanelOptions
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.colSpan
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabs
-             * @type Array<Object>
-             * @default undefined
-             */
             /**
              * @name dxFormTabbedItem.tabs.alignItemLabels
              * @type boolean
@@ -541,92 +222,11 @@ const Form = Widget.inherit({
             * @type object
             */
             /**
-             * @name dxFormEmptyItem.name
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormEmptyItem.colSpan
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormEmptyItem.itemType
-             * @type Enums.FormItemType
-             * @default "simple"
-             */
-            /**
-             * @name dxFormEmptyItem.visible
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormEmptyItem.cssClass
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormEmptyItem.visibleIndex
-             * @type number
-             * @default undefined
-             */
-            /**
             * @name dxFormButtonItem
 			* @publicName ButtonItem
             * @section FormItems
             * @type object
             */
-            /**
-             * @name dxFormButtonItem.name
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormButtonItem.colSpan
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormButtonItem.itemType
-             * @type Enums.FormItemType
-             * @default "simple"
-             */
-            /**
-             * @name dxFormButtonItem.visible
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormButtonItem.cssClass
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormButtonItem.visibleIndex
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormButtonItem.buttonOptions
-             * @type dxButtonOptions
-             * @default undefined
-             */
-            /**
-             * @name dxFormButtonItem.alignment
-             * @type Enums.HorizontalAlignment
-             * @default "right"
-             * @deprecated dxFormButtonItem.horizontalAlignment
-             */
-            /**
-             * @name dxFormButtonItem.horizontalAlignment
-             * @type Enums.HorizontalAlignment
-             * @default "right"
-             */
-            /**
-             * @name dxFormButtonItem.verticalAlignment
-             * @type Enums.VerticalAlignment
-             * @default "top"
-             */
         });
     },
 
@@ -637,18 +237,8 @@ const Form = Widget.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    /**
-                     * @name dxFormOptions.showColonAfterLabel
-                     * @type boolean
-                     * @default false @for Material
-                     */
                     showColonAfterLabel: false,
-                    /**
-                     * @name dxFormOptions.labelLocation
-                     * @type Enums.FormLabelLocation
-                     * @default "top" @for Material
-                     */
-                    labelLocation: "top"
+                    labelLocation: 'top'
                 }
             }
         ]);
@@ -663,34 +253,22 @@ const Form = Widget.inherit({
         });
     },
 
-    _getColCount: function($element) {
-        var index = 0,
-            isColsExist = true,
-            $cols;
-
-        while(isColsExist) {
-            $cols = $element.find("." + FORM_FIELD_ITEM_COL_CLASS + index);
-            if(!$cols.length) {
-                isColsExist = false;
-            } else {
-                index++;
-            }
-        }
-        return index;
+    _getGroupColCount: function($element) {
+        return parseInt($element.attr(GROUP_COL_COUNT_ATTR));
     },
 
     _createHiddenElement: function(rootLayoutManager) {
-        this._$hiddenElement = $("<div>")
+        this._$hiddenElement = $('<div>')
             .addClass(WIDGET_CLASS)
             .addClass(HIDDEN_LABEL_CLASS)
-            .appendTo("body");
+            .appendTo('body');
 
-        var $hiddenLabel = rootLayoutManager._renderLabel({
-            text: " ",
+        const $hiddenLabel = rootLayoutManager._renderLabel({
+            text: ' ',
             location: this._labelLocation()
         }).appendTo(this._$hiddenElement);
 
-        this._hiddenLabelText = $hiddenLabel.find("." + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
+        this._hiddenLabelText = $hiddenLabel.find('.' + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
     },
 
     _removeHiddenElement: function() {
@@ -707,18 +285,18 @@ const Form = Widget.inherit({
     _getLabelsSelectorByCol: function(index, options) {
         options = options || {};
 
-        var fieldItemClass = options.inOneColumn ? FIELD_ITEM_CLASS : FORM_FIELD_ITEM_COL_CLASS + index,
-            cssExcludeTabbedSelector = options.excludeTabbed ? ":not(." + FIELD_ITEM_TAB_CLASS + ")" : "",
-            childLabelContentSelector = "> ." + FIELD_ITEM_LABEL_CLASS + " > ." + FIELD_ITEM_LABEL_CONTENT_CLASS;
+        const fieldItemClass = options.inOneColumn ? FIELD_ITEM_CLASS : FORM_FIELD_ITEM_COL_CLASS + index;
+        const cssExcludeTabbedSelector = options.excludeTabbed ? ':not(.' + FIELD_ITEM_TAB_CLASS + ')' : '';
+        const childLabelContentSelector = '> .' + FIELD_ITEM_LABEL_CLASS + ' > .' + FIELD_ITEM_LABEL_CONTENT_CLASS;
 
-        return "." + fieldItemClass + cssExcludeTabbedSelector + childLabelContentSelector;
+        return '.' + fieldItemClass + cssExcludeTabbedSelector + childLabelContentSelector;
     },
 
     _getLabelText: function(labelText) {
-        var length = labelText.children.length,
-            child,
-            result = "",
-            i;
+        const length = labelText.children.length;
+        let child;
+        let result = '';
+        let i;
 
         for(i = 0; i < length; i++) {
             child = labelText.children[i];
@@ -729,11 +307,11 @@ const Form = Widget.inherit({
     },
 
     _applyLabelsWidthByCol: function($container, index, options) {
-        var $labelTexts = $container.find(this._getLabelsSelectorByCol(index, options)),
-            $labelTextsLength = $labelTexts.length,
-            labelWidth,
-            i,
-            maxWidth = 0;
+        const $labelTexts = $container.find(this._getLabelsSelectorByCol(index, options));
+        const $labelTextsLength = $labelTexts.length;
+        let labelWidth;
+        let i;
+        let maxWidth = 0;
 
         for(i = 0; i < $labelTextsLength; i++) {
             labelWidth = this._getLabelWidthByText(this._getLabelText($labelTexts[i]));
@@ -742,17 +320,17 @@ const Form = Widget.inherit({
             }
         }
         for(i = 0; i < $labelTextsLength; i++) {
-            $labelTexts[i].style.width = maxWidth + "px";
+            $labelTexts[i].style.width = maxWidth + 'px';
         }
     },
 
     _applyLabelsWidth: function($container, excludeTabbed, inOneColumn, colCount) {
-        colCount = inOneColumn ? 1 : colCount || this._getColCount($container);
-        var applyLabelsOptions = {
-                excludeTabbed: excludeTabbed,
-                inOneColumn: inOneColumn
-            },
-            i;
+        colCount = inOneColumn ? 1 : colCount || this._getGroupColCount($container);
+        const applyLabelsOptions = {
+            excludeTabbed: excludeTabbed,
+            inOneColumn: inOneColumn
+        };
+        let i;
 
         for(i = 0; i < colCount; i++) {
             this._applyLabelsWidthByCol($container, i, applyLabelsOptions);
@@ -760,20 +338,20 @@ const Form = Widget.inherit({
     },
 
     _getGroupElementsInColumn: function($container, columnIndex, colCount) {
-        var cssColCountSelector = isDefined(colCount) ? "." + GROUP_COL_COUNT_CLASS + colCount : "",
-            groupSelector = "." + FORM_FIELD_ITEM_COL_CLASS + columnIndex + " > ." + FIELD_ITEM_CONTENT_CLASS + " > ." + FORM_GROUP_CLASS + cssColCountSelector;
+        const cssColCountSelector = isDefined(colCount) ? '.' + GROUP_COL_COUNT_CLASS + colCount : '';
+        const groupSelector = '.' + FORM_FIELD_ITEM_COL_CLASS + columnIndex + ' > .' + FIELD_ITEM_CONTENT_CLASS + ' > .' + FORM_GROUP_CLASS + cssColCountSelector;
 
         return $container.find(groupSelector);
     },
 
     _applyLabelsWidthWithGroups: function($container, colCount, excludeTabbed) {
-        var alignItemLabelsInAllGroups = this.option("alignItemLabelsInAllGroups");
+        const alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
 
         if(alignItemLabelsInAllGroups) {
             this._applyLabelsWidthWithNestedGroups($container, colCount, excludeTabbed);
         } else {
-            var $groups = this.$element().find("." + FORM_GROUP_CLASS),
-                i;
+            const $groups = this.$element().find('.' + FORM_GROUP_CLASS);
+            let i;
             for(i = 0; i < $groups.length; i++) {
                 this._applyLabelsWidth($groups.eq(i), excludeTabbed);
             }
@@ -781,11 +359,11 @@ const Form = Widget.inherit({
     },
 
     _applyLabelsWidthWithNestedGroups: function($container, colCount, excludeTabbed) {
-        var applyLabelsOptions = { excludeTabbed: excludeTabbed },
-            colIndex,
-            groupsColIndex,
-            groupColIndex,
-            $groupsByCol;
+        const applyLabelsOptions = { excludeTabbed: excludeTabbed };
+        let colIndex;
+        let groupsColIndex;
+        let groupColIndex;
+        let $groupsByCol;
 
         for(colIndex = 0; colIndex < colCount; colIndex++) {
             $groupsByCol = this._getGroupElementsInColumn($container, colIndex);
@@ -793,7 +371,7 @@ const Form = Widget.inherit({
 
             for(groupsColIndex = 0; groupsColIndex < this._groupsColCount.length; groupsColIndex++) {
                 $groupsByCol = this._getGroupElementsInColumn($container, colIndex, this._groupsColCount[groupsColIndex]);
-                var groupColCount = this._getColCount($groupsByCol);
+                const groupColCount = this._getGroupColCount($groupsByCol);
 
                 for(groupColIndex = 1; groupColIndex < groupColCount; groupColIndex++) {
                     this._applyLabelsWidthByCol($groupsByCol, groupColIndex, applyLabelsOptions);
@@ -803,11 +381,11 @@ const Form = Widget.inherit({
     },
 
     _labelLocation: function() {
-        return this.option("labelLocation");
+        return this.option('labelLocation');
     },
 
     _alignLabelsInColumn: function({ layoutManager, inOneColumn, $container, excludeTabbed, items }) {
-        if(!hasWindow() || this._labelLocation() === "top") {
+        if(!hasWindow() || this._labelLocation() === 'top') {
             return;
         }
 
@@ -825,8 +403,8 @@ const Form = Widget.inherit({
     },
 
     _prepareFormData: function() {
-        if(!isDefined(this.option("formData"))) {
-            this.option("formData", {});
+        if(!isDefined(this.option('formData'))) {
+            this.option('formData', {});
         }
     },
 
@@ -838,9 +416,9 @@ const Form = Widget.inherit({
 
         this.callBase();
 
-        this.setAria("role", "form", this.$element());
+        this.setAria('role', 'form', this.$element());
 
-        if(this.option("scrollingEnabled")) {
+        if(this.option('scrollingEnabled')) {
             this._renderScrollable();
         }
 
@@ -851,7 +429,7 @@ const Form = Widget.inherit({
     },
 
     _getCurrentScreenFactor: function() {
-        return hasWindow() ? getCurrentScreenFactor(this.option("screenByWidth")) : "lg";
+        return hasWindow() ? getCurrentScreenFactor(this.option('screenByWidth')) : 'lg';
     },
 
     _clearCachedInstances: function() {
@@ -864,7 +442,7 @@ const Form = Widget.inherit({
             $container: this.$element(),
             layoutManager,
             excludeTabbed: true,
-            items: this.option("items"),
+            items: this.option('items'),
             inOneColumn
         });
     },
@@ -877,45 +455,49 @@ const Form = Widget.inherit({
     },
 
     _renderScrollable: function() {
-        var useNativeScrolling = this.option("useNativeScrolling");
+        const useNativeScrolling = this.option('useNativeScrolling');
         this._scrollable = new Scrollable(this.$element(), {
             useNative: !!useNativeScrolling,
             useSimulatedScrollbar: !useNativeScrolling,
             useKeyboard: false,
-            direction: "both",
+            direction: 'both',
             bounceEnabled: false
         });
     },
 
     _getContent: function() {
-        return this.option("scrollingEnabled") ? this._scrollable.$content() : this.$element();
+        return this.option('scrollingEnabled') ? this._scrollable.$content() : this.$element();
     },
 
     _renderValidationSummary: function() {
-        var $validationSummary = this.$element().find("." + FORM_VALIDATION_SUMMARY);
+        const $validationSummary = this.$element().find('.' + FORM_VALIDATION_SUMMARY);
 
         if($validationSummary.length > 0) {
             $validationSummary.remove();
         }
 
-        if(this.option("showValidationSummary")) {
-            const $validationSummary = $("<div>")
+        if(this.option('showValidationSummary')) {
+            const $validationSummary = $('<div>')
                 .addClass(FORM_VALIDATION_SUMMARY)
                 .appendTo(this._getContent());
 
             this._validationSummary = $validationSummary.dxValidationSummary({
                 validationGroup: this._getValidationGroup()
-            }).dxValidationSummary("instance");
+            }).dxValidationSummary('instance');
         }
     },
 
     _prepareItems(items, parentIsTabbedItem, currentPath, isTabs) {
         if(items) {
-            let result = [];
+            const result = [];
             for(let i = 0; i < items.length; i++) {
-                const item = items[i];
+                let item = items[i];
                 const path = concatPaths(currentPath, createItemPathByIndex(i, isTabs));
                 const guid = this._itemsRunTimeInfo.add({ item, itemIndex: i, path });
+
+                if(isString(item)) {
+                    item = { dataField: item };
+                }
 
                 if(isObject(item)) {
                     const itemCopy = extend({}, item);
@@ -942,7 +524,7 @@ const Form = Widget.inherit({
     },
 
     _tryPrepareGroupItem: function(item) {
-        if(item.itemType === "group") {
+        if(item.itemType === 'group') {
             item.alignItemLabels = ensureDefined(item.alignItemLabels, true);
 
             if(item.template) {
@@ -954,7 +536,7 @@ const Form = Widget.inherit({
     },
 
     _tryPrepareTabbedItem: function(item, path) {
-        if(item.itemType === "tabbed") {
+        if(item.itemType === 'tabbed') {
             item.template = this._itemTabbedTemplate.bind(this, item);
             item.tabs = this._prepareItems(item.tabs, true, path, true);
         }
@@ -968,9 +550,9 @@ const Form = Widget.inherit({
 
     _checkGrouping: function(items) {
         if(items) {
-            for(var i = 0; i < items.length; i++) {
-                var item = items[i];
-                if(item.itemType === "group") {
+            for(let i = 0; i < items.length; i++) {
+                const item = items[i];
+                if(item.itemType === 'group') {
                     return true;
                 }
             }
@@ -978,9 +560,9 @@ const Form = Widget.inherit({
     },
 
     _renderLayout: function() {
-        var that = this,
-            items = that.option("items"),
-            $content = that._getContent();
+        const that = this;
+        let items = that.option('items');
+        const $content = that._getContent();
 
         items = that._prepareItems(items);
 
@@ -989,10 +571,10 @@ const Form = Widget.inherit({
         //#ENDDEBUG
 
         that._rootLayoutManager = that._renderLayoutManager(items, $content, {
-            colCount: that.option("colCount"),
-            alignItemLabels: that.option("alignItemLabels"),
-            screenByWidth: this.option("screenByWidth"),
-            colCountByScreen: this.option("colCountByScreen"),
+            colCount: that.option('colCount'),
+            alignItemLabels: that.option('alignItemLabels'),
+            screenByWidth: this.option('screenByWidth'),
+            colCountByScreen: this.option('colCountByScreen'),
             onLayoutChanged: function(inOneColumn) {
                 that._alignLabels.bind(that)(that._rootLayoutManager, inOneColumn);
             },
@@ -1006,19 +588,18 @@ const Form = Widget.inherit({
         return item.items || [];
     },
 
-    _itemTabbedTemplate(item, e, $container) {
-        const $tabPanel = $("<div>").appendTo($container);
+    _itemTabbedTemplate: function(item, e, $container) {
+        const $tabPanel = $('<div>').appendTo($container);
         const tabPanelOptions = extend({}, item.tabPanelOptions, {
             dataSource: item.tabs,
             onItemRendered: args => triggerShownEvent(args.itemElement),
             itemTemplate: (itemData, e, container) => {
                 const $container = $(container);
                 const alignItemLabels = ensureDefined(itemData.alignItemLabels, true);
-
                 const layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(itemData), $container, {
                     colCount: itemData.colCount,
                     alignItemLabels: alignItemLabels,
-                    screenByWidth: this.option("screenByWidth"),
+                    screenByWidth: this.option('screenByWidth'),
                     colCountByScreen: itemData.colCountByScreen,
                     cssItemClass: itemData.cssItemClass,
                     onLayoutChanged: inOneColumn => {
@@ -1045,36 +626,46 @@ const Form = Widget.inherit({
                 }
             }
         });
-
+        const tryUpdateTabPanelInstance = (items, instance) => {
+            if(Array.isArray(items)) {
+                items.forEach(item => this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(item.guid, {
+                    widgetInstance: instance
+                }));
+            }
+        };
         const tabPanel = this._createComponent($tabPanel, TabPanel, tabPanelOptions);
-        if(item.tabs) {
-            item.tabs.forEach(tab => this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(tab.guid, { widgetInstance: tabPanel }));
-        }
+
+        tabPanel.on('optionChanged', e => {
+            if(e.fullName === 'dataSource') {
+                tryUpdateTabPanelInstance(e.value, e.component);
+            }
+        });
+
+        tryUpdateTabPanelInstance([{ guid: item.guid }, ...item.tabs], tabPanel);
     },
 
     _itemGroupTemplate: function(item, e, $container) {
-        var $group = $("<div>")
-                .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, isDefined(item.caption) && item.caption.length)
-                .addClass(FORM_GROUP_CLASS)
-                .appendTo($container),
-            $groupContent,
-            colCount,
-            layoutManager;
+        const $group = $('<div>')
+            .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, isDefined(item.caption) && item.caption.length)
+            .addClass(FORM_GROUP_CLASS)
+            .appendTo($container);
+        let colCount;
+        let layoutManager;
 
         if(item.caption) {
-            $("<span>")
+            $('<span>')
                 .addClass(FORM_GROUP_CAPTION_CLASS)
                 .text(item.caption)
                 .appendTo($group);
         }
 
-        $groupContent = $("<div>")
+        const $groupContent = $('<div>')
             .addClass(FORM_GROUP_CONTENT_CLASS)
             .appendTo($group);
 
         if(item.groupContentTemplate) {
-            var data = {
-                formData: this.option("formData"),
+            const data = {
+                formData: this.option('formData'),
                 component: this
             };
             item.groupContentTemplate.render({
@@ -1096,63 +687,67 @@ const Form = Widget.inherit({
                 this._groupsColCount.push(colCount);
             }
             $group.addClass(GROUP_COL_COUNT_CLASS + colCount);
+            $group.attr(GROUP_COL_COUNT_ATTR, colCount);
         }
     },
 
     _renderLayoutManager: function(items, $rootElement, options) {
-        var $element = $("<div>"),
-            that = this,
-            instance,
-            config = that._getLayoutManagerConfig(items, options),
-            baseColCountByScreen = {
-                lg: options.colCount,
-                md: options.colCount,
-                sm: options.colCount,
-                xs: 1
-            };
+        const $element = $('<div>');
+        const that = this;
+        const config = that._getLayoutManagerConfig(items, options);
+        const baseColCountByScreen = {
+            lg: options.colCount,
+            md: options.colCount,
+            sm: options.colCount,
+            xs: 1
+        };
 
         that._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, options.colCountByScreen) });
         $element.appendTo($rootElement);
-        instance = that._createComponent($element, "dxLayoutManager", config);
-        instance.on("autoColCountChanged", function() { that._refresh(); });
+
+        const instance = that._createComponent($element, 'dxLayoutManager', config);
+        instance.on('autoColCountChanged', function() { that._refresh(); });
         that._cachedLayoutManagers.push(instance);
         return instance;
     },
 
     _getValidationGroup: function() {
-        return this.option("validationGroup") || this;
+        return this.option('validationGroup') || this;
     },
 
     _getLayoutManagerConfig: function(items, options) {
-        var that = this,
-            baseConfig = {
-                form: that,
-                validationGroup: that._getValidationGroup(),
-                showRequiredMark: that.option("showRequiredMark"),
-                showOptionalMark: that.option("showOptionalMark"),
-                requiredMark: that.option("requiredMark"),
-                optionalMark: that.option("optionalMark"),
-                requiredMessage: that.option("requiredMessage"),
-                screenByWidth: that.option("screenByWidth"),
-                layoutData: that.option("formData"),
-                labelLocation: that.option("labelLocation"),
-                customizeItem: that.option("customizeItem"),
-                minColWidth: that.option("minColWidth"),
-                showColonAfterLabel: that.option("showColonAfterLabel"),
-                onEditorEnterKey: that.option("onEditorEnterKey"),
-                onFieldDataChanged: function(args) {
-                    if(!that._isDataUpdating) {
-                        that._triggerOnFieldDataChanged(args);
-                    }
-                },
-                validationBoundary: that.option("scrollingEnabled") ? that.$element() : undefined
-            };
+        const baseConfig = {
+            form: this,
+            validationGroup: this._getValidationGroup(),
+            showRequiredMark: this.option('showRequiredMark'),
+            showOptionalMark: this.option('showOptionalMark'),
+            requiredMark: this.option('requiredMark'),
+            optionalMark: this.option('optionalMark'),
+            requiredMessage: this.option('requiredMessage'),
+            screenByWidth: this.option('screenByWidth'),
+            layoutData: this.option('formData'),
+            labelLocation: this.option('labelLocation'),
+            customizeItem: this.option('customizeItem'),
+            minColWidth: this.option('minColWidth'),
+            showColonAfterLabel: this.option('showColonAfterLabel'),
+            onEditorEnterKey: this.option('onEditorEnterKey'),
+            onFieldDataChanged: args => {
+                if(!this._isDataUpdating) {
+                    this._triggerOnFieldDataChanged(args);
+                }
+            },
+            validationBoundary: this.option('scrollingEnabled') ? this.$element() : undefined
+        };
 
         return extend(baseConfig, {
             items: items,
-            onContentReady: function(args) {
-                that._itemsRunTimeInfo.addItemsOrExtendFrom(args.component._itemsRunTimeInfo);
+            onContentReady: args => {
+                this._itemsRunTimeInfo.addItemsOrExtendFrom(args.component._itemsRunTimeInfo);
                 options.onContentReady && options.onContentReady(args);
+            },
+            onDisposing: ({ component }) => {
+                const nestedItemsRunTimeInfo = component.getItemsRunTimeInfo();
+                this._itemsRunTimeInfo.removeItemsByItems(nestedItemsRunTimeInfo);
             },
             colCount: options.colCount,
             alignItemLabels: options.alignItemLabels,
@@ -1164,25 +759,25 @@ const Form = Widget.inherit({
     },
 
     _createComponent: function($element, type, config) {
-        var that = this;
+        const that = this;
         config = config || {};
 
         that._extendConfig(config, {
-            readOnly: that.option("readOnly")
+            readOnly: that.option('readOnly')
         });
 
         return that.callBase($element, type, config);
     },
 
     _attachSyncSubscriptions: function() {
-        var that = this;
+        const that = this;
 
-        that.on("optionChanged", function(args) {
-            var optionFullName = args.fullName;
+        that.on('optionChanged', function(args) {
+            const optionFullName = args.fullName;
 
-            if(optionFullName === "formData") {
+            if(optionFullName === 'formData') {
                 if(!isDefined(args.value)) {
-                    that._options.silent("formData", args.value = {});
+                    that._options.silent('formData', args.value = {});
                 }
 
                 that._triggerOnFieldDataChangedByDataSet(args.value);
@@ -1190,13 +785,13 @@ const Form = Widget.inherit({
 
             if(that._cachedLayoutManagers.length) {
                 each(that._cachedLayoutManagers, function(index, layoutManager) {
-                    if(optionFullName === "formData") {
+                    if(optionFullName === 'formData') {
                         that._isDataUpdating = true;
-                        layoutManager.option("layoutData", args.value);
+                        layoutManager.option('layoutData', args.value);
                         that._isDataUpdating = false;
                     }
 
-                    if(args.name === "readOnly" || args.name === "disabled") {
+                    if(args.name === 'readOnly' || args.name === 'disabled') {
                         layoutManager.option(optionFullName, args.value);
                     }
                 });
@@ -1205,7 +800,7 @@ const Form = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        var rootNameOfComplexOption = this._getRootLevelOfExpectedComplexOption(args.fullName, ["formData", "items"]);
+        const rootNameOfComplexOption = this._getRootLevelOfExpectedComplexOption(args.fullName, ['formData', 'items']);
 
         if(rootNameOfComplexOption) {
             this._customHandlerOfComplexOption(args, rootNameOfComplexOption);
@@ -1213,57 +808,57 @@ const Form = Widget.inherit({
         }
 
         switch(args.name) {
-            case "formData":
-                if(!this.option("items")) {
+            case 'formData':
+                if(!this.option('items')) {
                     this._invalidate();
                 } else if(isEmptyObject(args.value)) {
                     this._resetValues();
                 }
                 break;
-            case "items":
-            case "colCount":
-            case "onFieldDataChanged":
-            case "onEditorEnterKey":
-            case "labelLocation":
-            case "alignItemLabels":
-            case "showColonAfterLabel":
-            case "customizeItem":
-            case "alignItemLabelsInAllGroups":
-            case "showRequiredMark":
-            case "showOptionalMark":
-            case "requiredMark":
-            case "optionalMark":
-            case "requiredMessage":
-            case "scrollingEnabled":
-            case "formID":
-            case "colCountByScreen":
-            case "screenByWidth":
-            case "stylingMode":
+            case 'items':
+            case 'colCount':
+            case 'onFieldDataChanged':
+            case 'onEditorEnterKey':
+            case 'labelLocation':
+            case 'alignItemLabels':
+            case 'showColonAfterLabel':
+            case 'customizeItem':
+            case 'alignItemLabelsInAllGroups':
+            case 'showRequiredMark':
+            case 'showOptionalMark':
+            case 'requiredMark':
+            case 'optionalMark':
+            case 'requiredMessage':
+            case 'scrollingEnabled':
+            case 'formID':
+            case 'colCountByScreen':
+            case 'screenByWidth':
+            case 'stylingMode':
                 this._invalidate();
                 break;
-            case "showValidationSummary":
+            case 'showValidationSummary':
                 this._renderValidationSummary();
                 break;
-            case "minColWidth":
-                if(this.option("colCount") === "auto") {
+            case 'minColWidth':
+                if(this.option('colCount') === 'auto') {
                     this._invalidate();
                 }
                 break;
-            case "readOnly":
+            case 'readOnly':
                 break;
-            case "width":
+            case 'width':
                 this.callBase(args);
                 this._rootLayoutManager.option(args.name, args.value);
                 this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
                 break;
-            case "visible":
+            case 'visible':
                 this.callBase(args);
 
                 if(args.value) {
                     triggerShownEvent(this.$element());
                 }
                 break;
-            case "validationGroup":
+            case 'validationGroup':
                 ValidationEngine.removeGroup(args.previousValue || this);
                 this._invalidate();
                 break;
@@ -1273,12 +868,12 @@ const Form = Widget.inherit({
     },
 
     _getRootLevelOfExpectedComplexOption: function(fullOptionName, expectedRootNames) {
-        var splitFullName = fullOptionName.split("."),
-            result;
+        const splitFullName = fullOptionName.split('.');
+        let result;
 
         if(splitFullName.length > 1) {
-            var i,
-                rootOptionName = splitFullName[0];
+            let i;
+            const rootOptionName = splitFullName[0];
 
             for(i = 0; i < expectedRootNames.length; i++) {
                 if(rootOptionName.search(expectedRootNames[i]) !== -1) {
@@ -1290,7 +885,11 @@ const Form = Widget.inherit({
         return result;
     },
 
-    _tryCreateItemOptionAction: function(optionName, item, value, previousValue) {
+    _tryCreateItemOptionAction: function(optionName, item, value, previousValue, itemPath) {
+        if(optionName === 'tabs') {
+            this._itemsRunTimeInfo.removeItemsByPathStartWith(`${itemPath}.tabs`);
+            value = this._prepareItems(value, true, itemPath, true);
+        }
         return tryCreateItemOptionAction(optionName, {
             item,
             value,
@@ -1307,7 +906,7 @@ const Form = Widget.inherit({
         const optionName = getOptionNameFromFullName(fullName);
         if(ITEM_OPTIONS_FOR_VALIDATION_UPDATING.indexOf(optionName) > -1) {
             ValidationEngine.addGroup(this._getValidationGroup());
-            if(this.option("showValidationSummary")) {
+            if(this.option('showValidationSummary')) {
                 this._validationSummary && this._validationSummary._initGroupRegistration();
             }
         }
@@ -1323,12 +922,12 @@ const Form = Widget.inherit({
             });
         }
         const contentReadyHandler = e => {
-            e.component.off("contentReady", contentReadyHandler);
+            e.component.off('contentReady', contentReadyHandler);
             if(isFullPathContainsTabs(path)) {
                 const tabPath = tryGetTabPath(path);
                 const tabLayoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(tabPath);
                 this._alignLabelsInColumn({
-                    items: tabLayoutManager.option("items"),
+                    items: tabLayoutManager.option('items'),
                     layoutManager: tabLayoutManager,
                     $container: tabLayoutManager.$element(),
                     inOneColumn: tabLayoutManager.isSingleColumnMode()
@@ -1337,16 +936,16 @@ const Form = Widget.inherit({
                 this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
             }
         };
-        layoutManager.on("contentReady", contentReadyHandler);
+        layoutManager.on('contentReady', contentReadyHandler);
         layoutManager.option(optionName, value);
         this._updateValidationGroupAndSummaryIfNeeded(optionName);
     },
 
     _tryChangeLayoutManagerItemOption(fullName, value) {
-        const nameParts = fullName.split(".");
+        const nameParts = fullName.split('.');
         const optionName = getOptionNameFromFullName(fullName);
 
-        if(optionName === "items" && nameParts.length > 1) {
+        if(optionName === 'items' && nameParts.length > 1) {
             const itemPath = this._getItemPath(nameParts);
             const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
 
@@ -1384,30 +983,30 @@ const Form = Widget.inherit({
     },
 
     _customHandlerOfComplexOption: function(args, rootOptionName) {
-        const nameParts = args.fullName.split(".");
+        const nameParts = args.fullName.split('.');
         const value = args.value;
 
-        if(rootOptionName === "items") {
+        if(rootOptionName === 'items') {
             const itemPath = this._getItemPath(nameParts);
             const item = this.option(itemPath);
-            const optionNameWithoutPath = args.fullName.replace(itemPath + ".", "");
-            const simpleOptionName = optionNameWithoutPath.split(".")[0].replace(/\[\d+]/, "");
-            const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue);
+            const optionNameWithoutPath = args.fullName.replace(itemPath + '.', '');
+            const simpleOptionName = optionNameWithoutPath.split('.')[0].replace(/\[\d+]/, '');
+            const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue, itemPath);
 
             if(!this._tryExecuteItemOptionAction(itemAction) && !this._tryChangeLayoutManagerItemOption(args.fullName, value)) {
                 if(item) {
                     this._changeItemOption(item, optionNameWithoutPath, value);
-                    const items = this._generateItemsFromData(this.option("items"));
-                    this.option("items", items);
+                    const items = this._generateItemsFromData(this.option('items'));
+                    this.option('items', items);
                 }
             }
         }
 
-        if(rootOptionName === "formData") {
-            const dataField = nameParts.slice(1).join(".");
+        if(rootOptionName === 'formData') {
+            const dataField = nameParts.slice(1).join('.');
             const editor = this.getEditor(dataField);
             if(editor) {
-                editor.option("value", value);
+                editor.option('value', value);
             } else {
                 this._triggerOnFieldDataChanged({ dataField, value });
             }
@@ -1415,12 +1014,12 @@ const Form = Widget.inherit({
     },
 
     _getItemPath: function(nameParts) {
-        var itemPath = nameParts[0],
-            i;
+        let itemPath = nameParts[0];
+        let i;
 
         for(i = 1; i < nameParts.length; i++) {
             if(nameParts[i].search(/items\[\d+]|tabs\[\d+]/) !== -1) {
-                itemPath += "." + nameParts[i];
+                itemPath += '.' + nameParts[i];
             } else {
                 break;
             }
@@ -1430,11 +1029,11 @@ const Form = Widget.inherit({
     },
 
     _triggerOnFieldDataChanged: function(args) {
-        this._createActionByOption("onFieldDataChanged")(args);
+        this._createActionByOption('onFieldDataChanged')(args);
     },
 
     _triggerOnFieldDataChangedByDataSet: function(data) {
-        var that = this;
+        const that = this;
         if(data && isObject(data)) {
             each(data, function(dataField, value) {
                 that._triggerOnFieldDataChanged({ dataField: dataField, value: value });
@@ -1443,24 +1042,24 @@ const Form = Widget.inherit({
     },
 
     _updateFieldValue: function(dataField, value) {
-        if(isDefined(this.option("formData"))) {
-            var editor = this.getEditor(dataField);
+        if(isDefined(this.option('formData'))) {
+            const editor = this.getEditor(dataField);
 
-            this.option("formData." + dataField, value);
+            this.option('formData.' + dataField, value);
 
             if(editor) {
-                var editorValue = editor.option("value");
+                const editorValue = editor.option('value');
 
                 if(editorValue !== value) {
-                    editor.option("value", value);
+                    editor.option('value', value);
                 }
             }
         }
     },
 
     _generateItemsFromData: function(items) {
-        var formData = this.option("formData"),
-            result = [];
+        const formData = this.option('formData');
+        const result = [];
 
         if(!items && isDefined(formData)) {
             each(formData, function(dataField) {
@@ -1486,22 +1085,22 @@ const Form = Widget.inherit({
     },
 
     _getItemByField: function(field, items) {
-        var that = this,
-            fieldParts = isObject(field) ? field : that._getFieldParts(field),
-            fieldName = fieldParts.fieldName,
-            fieldPath = fieldParts.fieldPath,
-            resultItem;
+        const that = this;
+        const fieldParts = isObject(field) ? field : that._getFieldParts(field);
+        const fieldName = fieldParts.fieldName;
+        const fieldPath = fieldParts.fieldPath;
+        let resultItem;
 
         if(items.length) {
             each(items, function(index, item) {
-                var itemType = item.itemType;
+                const itemType = item.itemType;
 
                 if(fieldPath.length) {
-                    var path = fieldPath.slice();
+                    const path = fieldPath.slice();
 
                     item = that._getItemByFieldPath(path, fieldName, item);
-                } else if(itemType === "group" && !(item.caption || item.name) || itemType === "tabbed" && !item.name) {
-                    var subItemsField = that._getSubItemField(itemType);
+                } else if(itemType === 'group' && !(item.caption || item.name) || itemType === 'tabbed' && !item.name) {
+                    const subItemsField = that._getSubItemField(itemType);
 
                     item.items = that._generateItemsFromData(item.items);
 
@@ -1519,10 +1118,10 @@ const Form = Widget.inherit({
     },
 
     _getFieldParts: function(field) {
-        var fieldSeparator = ".",
-            fieldName = field,
-            separatorIndex = fieldName.indexOf(fieldSeparator),
-            resultPath = [];
+        const fieldSeparator = '.';
+        let fieldName = field;
+        let separatorIndex = fieldName.indexOf(fieldSeparator);
+        const resultPath = [];
 
 
         while(separatorIndex !== -1) {
@@ -1538,18 +1137,18 @@ const Form = Widget.inherit({
     },
 
     _getItemByFieldPath: function(path, fieldName, item) {
-        var that = this,
-            itemType = item.itemType,
-            subItemsField = that._getSubItemField(itemType),
-            isItemWithSubItems = itemType === "group" || itemType === "tabbed" || item.title,
-            result;
+        const that = this;
+        const itemType = item.itemType;
+        const subItemsField = that._getSubItemField(itemType);
+        const isItemWithSubItems = itemType === 'group' || itemType === 'tabbed' || item.title;
+        let result;
 
         do {
             if(isItemWithSubItems) {
-                var name = item.name || item.caption || item.title,
-                    isGroupWithName = isDefined(name),
-                    nameWithoutSpaces = getTextWithoutSpaces(name),
-                    pathNode;
+                const name = item.name || item.caption || item.title;
+                const isGroupWithName = isDefined(name);
+                const nameWithoutSpaces = getTextWithoutSpaces(name);
+                let pathNode;
 
                 item[subItemsField] = that._generateItemsFromData(item[subItemsField]);
 
@@ -1579,12 +1178,12 @@ const Form = Widget.inherit({
     },
 
     _getSubItemField: function(itemType) {
-        return itemType === "tabbed" ? "tabs" : "items";
+        return itemType === 'tabbed' ? 'tabs' : 'items';
     },
 
     _searchItemInEverySubItem: function(path, fieldName, items) {
-        var that = this,
-            result;
+        const that = this;
+        let result;
 
         each(items, function(index, groupItem) {
             result = that._getItemByFieldPath(path.slice(), fieldName, groupItem);
@@ -1607,7 +1206,7 @@ const Form = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        var currentScreenFactor = this._getCurrentScreenFactor();
+        const currentScreenFactor = this._getCurrentScreenFactor();
 
         if(this._lastMarkupScreenFactor !== currentScreenFactor) {
             if(this._isColCountChanged(this._lastMarkupScreenFactor, currentScreenFactor)) {
@@ -1621,7 +1220,7 @@ const Form = Widget.inherit({
     },
 
     _isColCountChanged: function(oldScreenSize, newScreenSize) {
-        var isChanged = false;
+        let isChanged = false;
 
         each(this._cachedColCountOptions, function(index, item) {
             if(item.colCountByScreen[oldScreenSize] !== item.colCountByScreen[newScreenSize]) {
@@ -1634,9 +1233,9 @@ const Form = Widget.inherit({
     },
 
     _refresh: function() {
-        var editorSelector = "." + FOCUSED_STATE_CLASS + " input, ." + FOCUSED_STATE_CLASS + " textarea";
+        const editorSelector = '.' + FOCUSED_STATE_CLASS + ' input, .' + FOCUSED_STATE_CLASS + ' textarea';
 
-        eventsEngine.trigger(this.$element().find(editorSelector), "change");
+        eventsEngine.trigger(this.$element().find(editorSelector), 'change');
 
         this.callBase();
     },
@@ -1645,7 +1244,7 @@ const Form = Widget.inherit({
         this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
             if(isDefined(itemRunTimeInfo.widgetInstance) && itemRunTimeInfo.widgetInstance instanceof Editor) {
                 itemRunTimeInfo.widgetInstance.reset();
-                itemRunTimeInfo.widgetInstance.option("isValid", true);
+                itemRunTimeInfo.widgetInstance.option('isValid', true);
             }
         });
 
@@ -1653,12 +1252,12 @@ const Form = Widget.inherit({
     },
 
     _updateData: function(data, value, isComplexData) {
-        var that = this,
-            _data = isComplexData ? value : data;
+        const that = this;
+        const _data = isComplexData ? value : data;
 
         if(isObject(_data)) {
             each(_data, function(dataField, fieldValue) {
-                that._updateData(isComplexData ? data + "." + dataField : dataField, fieldValue, isObject(fieldValue));
+                that._updateData(isComplexData ? data + '.' + dataField : dataField, fieldValue, isObject(fieldValue));
             });
         } else if(isString(data)) {
             that._updateFieldValue(data, value);
@@ -1675,7 +1274,7 @@ const Form = Widget.inherit({
     },
 
     _focusTarget: function() {
-        return this.$element().find("." + FIELD_ITEM_CONTENT_CLASS + " [tabindex]").first();
+        return this.$element().find('.' + FIELD_ITEM_CONTENT_CLASS + ' [tabindex]').first();
     },
 
     _visibilityChanged: function(visible) {
@@ -1689,57 +1288,25 @@ const Form = Widget.inherit({
         this.callBase();
     },
 
-    /**
-     * @name dxFormMethods.resetValues
-     * @publicName resetValues()
-     */
     resetValues: function() {
         this._resetValues();
     },
 
-    /**
-     * @name dxFormMethods.updateData
-     * @publicName updateData(dataField, value)
-     * @param1 dataField:string
-     * @param2 value:object
-     */
-    /**
-     * @name dxFormMethods.updateData
-     * @publicName updateData(data)
-     * @param1 data:object
-     */
     updateData: function(data, value) {
         this._updateData(data, value);
     },
 
-    /**
-     * @name dxFormMethods.getEditor
-     * @publicName getEditor(dataField)
-     * @param1 dataField:string
-     * @return Editor | undefined
-     */
     getEditor: function(dataField) {
         return this._itemsRunTimeInfo.findWidgetInstanceByDataField(dataField) || this._itemsRunTimeInfo.findWidgetInstanceByName(dataField);
     },
 
-    /**
-     * @name dxFormMethods.getButton
-     * @publicName getButton(name)
-     * @param1 name:string
-     * @return dxButton | undefined
-     */
     getButton: function(name) {
         return this._itemsRunTimeInfo.findWidgetInstanceByName(name);
     },
 
-    /**
-     * @name dxFormMethods.updateDimensions
-     * @publicName updateDimensions()
-     * @return Promise<void>
-     */
     updateDimensions: function() {
-        var that = this,
-            deferred = new Deferred();
+        const that = this;
+        const deferred = new Deferred();
 
         if(that._scrollable) {
             that._scrollable.update().done(function() {
@@ -1752,27 +1319,8 @@ const Form = Widget.inherit({
         return deferred.promise();
     },
 
-    /**
-     * @name dxFormMethods.itemOption
-     * @publicName itemOption(id, option, value)
-     * @param1 id:string
-     * @param2 option:string
-     * @param3 value:any
-     */
-    /**
-     * @name dxFormMethods.itemOption
-     * @publicName itemOption(id, options)
-     * @param1 id:string
-     * @param2 options:object
-     */
-    /**
-     * @name dxFormMethods.itemOption
-     * @publicName itemOption(id)
-     * @param1 id:string
-     * @return any
-     */
     itemOption(id, option, value) {
-        const items = this._generateItemsFromData(this.option("items"));
+        const items = this._generateItemsFromData(this.option('items'));
         const item = this._getItemByField(id, items);
         const path = this._itemsRunTimeInfo.getPathFromItem(item);
 
@@ -1784,11 +1332,11 @@ const Form = Widget.inherit({
             case 1:
                 return item;
             case 3: {
-                const itemAction = this._tryCreateItemOptionAction(option, item, value, item[option]);
+                const itemAction = this._tryCreateItemOptionAction(option, item, value, item[option], path);
                 this._changeItemOption(item, option, value);
                 const fullName = getFullOptionName(path, option);
                 if(!this._tryExecuteItemOptionAction(itemAction) && !this._tryChangeLayoutManagerItemOption(fullName, value)) {
-                    this.option("items", items);
+                    this.option('items', items);
                 }
                 break;
             }
@@ -1797,30 +1345,25 @@ const Form = Widget.inherit({
                     if(!this._tryChangeLayoutManagerItemOptions(path, option)) {
                         let allowUpdateItems;
                         each(option, (optionName, optionValue) => {
-                            const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName]);
+                            const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName], path);
                             this._changeItemOption(item, optionName, optionValue);
                             if(!allowUpdateItems && !this._tryExecuteItemOptionAction(itemAction)) {
                                 allowUpdateItems = true;
                             }
                         });
-                        allowUpdateItems && this.option("items", items);
+                        allowUpdateItems && this.option('items', items);
                     }
                 }
                 break;
             }
         }
     },
-    /**
-     * @name dxFormMethods.validate
-     * @publicName validate()
-     * @return dxValidationGroupResult
-     */
     validate: function() {
         return ValidationEngine.validateGroup(this._getValidationGroup());
     },
 
     getItemID: function(name) {
-        return "dx_" + this.option("formID") + "_" + (name || new Guid());
+        return 'dx_' + this.option('formID') + '_' + (name || new Guid());
     },
 
     getTargetScreenFactor: function() {
@@ -1828,7 +1371,7 @@ const Form = Widget.inherit({
     }
 });
 
-registerComponent("dxForm", Form);
+registerComponent('dxForm', Form);
 
 module.exports = Form;
 

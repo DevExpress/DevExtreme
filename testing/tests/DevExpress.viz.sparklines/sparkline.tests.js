@@ -1,29 +1,29 @@
 /* global currentTest, createTestContainer */
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    tooltipModule = require("viz/core/tooltip"),
-    BaseWidget = require("viz/core/base_widget"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    dataValidatorModule = require("viz/components/data_validator"),
-    translator2DModule = require("viz/translators/translator2d"),
-    seriesModule = require("viz/series/base_series"),
-    dataSourceModule = require("data/data_source/data_source");
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const tooltipModule = require('viz/core/tooltip');
+const BaseWidget = require('viz/core/base_widget');
+const rendererModule = require('viz/core/renderers/renderer');
+const dataValidatorModule = require('viz/components/data_validator');
+const translator2DModule = require('viz/translators/translator2d');
+const seriesModule = require('viz/series/base_series');
+const DataSource = require('data/data_source/data_source').DataSource;
 
-require("viz/sparkline");
+require('viz/sparkline');
 
-$("<div>")
-    .attr("id", "container")
+$('<div>')
+    .attr('id', 'container')
     .css({ width: 250, height: 30 })
-    .appendTo("#qunit-fixture");
+    .appendTo('#qunit-fixture');
 
 QUnit.begin(function() {
-    var FakeTranslator = vizMocks.stubClass({
-            getCanvasVisibleArea: function() { return {}; },
-            update: sinon.spy()
-        }),
-        StubSeries = vizMocks.Series,
-        StubTooltip = vizMocks.Tooltip;
+    const FakeTranslator = vizMocks.stubClass({
+        getCanvasVisibleArea: function() { return {}; },
+        update: sinon.spy()
+    });
+    const StubSeries = vizMocks.Series;
+    const StubTooltip = vizMocks.Tooltip;
 
     rendererModule.Renderer = sinon.spy(function() {
         return currentTest().renderer;
@@ -47,17 +47,17 @@ QUnit.begin(function() {
         seriesModule.Series.reset();
     });
 
-    var environment = {
+    const environment = {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
 
-            this.$container = createTestContainer('#container');
+            this.$container = $(createTestContainer('#container'));
             this.renderer = new vizMocks.Renderer();
             this.translator = new FakeTranslator();
             this.series = new StubSeries();
             this.tooltip = new StubTooltip();
 
-            this.series.stub("getPoints").returns([{
+            this.series.stub('getPoints').returns([{
                 argument: 1,
                 value: 2,
                 correctCoordinates: sinon.stub()
@@ -71,12 +71,12 @@ QUnit.begin(function() {
             container = container || this.$container;
 
             this.series.type = options.type;
-            this.series.stub("getRangeData").returns(rangeData || { arg: {}, val: {} });
-            this.series.stub("getArgumentField").returns(options.argumentField || "arg");
-            this.series.stub("getValueFields").returns([options.valueField || "val"]);
-            this.series.stub("getOptions").returns({});
+            this.series.stub('getRangeData').returns(rangeData || { arg: {}, val: {} });
+            this.series.stub('getArgumentField').returns(options.argumentField || 'arg');
+            this.series.stub('getValueFields').returns([options.valueField || 'val']);
+            this.series.stub('getOptions').returns({});
 
-            return container.dxSparkline(options).dxSparkline("instance");
+            return container.dxSparkline(options).dxSparkline('instance');
         },
         forceTimeout: function() {
             this.clock.tick(0);
@@ -90,7 +90,7 @@ QUnit.begin(function() {
         return $.extend({}, environment, {
             beforeEach: function() {
                 environment.beforeEach.apply(this, arguments);
-                this.validateData = sinon.stub(dataValidatorModule, "validateData", function() {
+                this.validateData = sinon.stub(dataValidatorModule, 'validateData', function() {
                     return {
                         arg: [{
                             argument: 1,
@@ -121,8 +121,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
@@ -145,8 +145,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 5, bottom: 6, left: 7, right: 8 }, 'Canvas object is correct');
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 5, bottom: 6, left: 7, right: 8 }, 'Canvas object is correct');
@@ -160,8 +160,8 @@ QUnit.begin(function() {
             pointSize: 0
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
@@ -170,7 +170,7 @@ QUnit.begin(function() {
     });
 
     // T607927 start
-    QUnit.test("Create canvas with big point size - canvas should have margins for point size", function(assert) {
+    QUnit.test('Create canvas with big point size - canvas should have margins for point size', function(assert) {
         this.createSparkline({
             dataSource: [1],
             pointSize: 21,
@@ -178,42 +178,42 @@ QUnit.begin(function() {
             showMinMax: true
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
     });
 
-    QUnit.test("Create canvas with big point size and type is bar - canvas should not change default margins", function(assert) {
+    QUnit.test('Create canvas with big point size and type is bar - canvas should not change default margins', function(assert) {
         this.createSparkline({
             dataSource: [1],
             pointSize: 22,
-            type: "bar"
+            type: 'bar'
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
     });
 
-    QUnit.test("Create canvas with big point size and type is winloss - canvas should not change default margins", function(assert) {
+    QUnit.test('Create canvas with big point size and type is winloss - canvas should not change default margins', function(assert) {
         this.createSparkline({
             dataSource: [1],
             pointSize: 22,
-            type: "winloss"
+            type: 'winloss'
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
     });
 
-    QUnit.test("Create canvas with big point size, showFirstLast and showMinMax are false - canvas shouldn't have margins for point size", function(assert) {
+    QUnit.test('Create canvas with big point size, showFirstLast and showMinMax are false - canvas shouldn\'t have margins for point size', function(assert) {
         this.createSparkline({
             dataSource: [1],
             pointSize: 21,
@@ -221,14 +221,14 @@ QUnit.begin(function() {
             showMinMax: false
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
     });
 
-    QUnit.test("Create canvas with big point size, showFirstLast is false, showMinMax is true - canvas should have margins for point size", function(assert) {
+    QUnit.test('Create canvas with big point size, showFirstLast is false, showMinMax is true - canvas should have margins for point size', function(assert) {
         this.createSparkline({
             dataSource: [1],
             pointSize: 21,
@@ -236,14 +236,14 @@ QUnit.begin(function() {
             showMinMax: true
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
     });
 
-    QUnit.test("Create canvas with big point size, showMinMax is false, showFirstLast is true  - canvas should have margins for point size", function(assert) {
+    QUnit.test('Create canvas with big point size, showMinMax is false, showFirstLast is true  - canvas should have margins for point size', function(assert) {
         this.createSparkline({
             dataSource: [1],
             pointSize: 21,
@@ -251,16 +251,16 @@ QUnit.begin(function() {
             showMinMax: false
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
     });
     // T607927 end
 
-    QUnit.test("Create canvas with big point size and update theme - canvas shouldn't decrease", function(assert) {
-        var sparkline = this.createSparkline({
+    QUnit.test('Create canvas with big point size and update theme - canvas shouldn\'t decrease', function(assert) {
+        const sparkline = this.createSparkline({
             dataSource: [1],
             pointSize: 21,
             showFirstLast: true,
@@ -269,8 +269,8 @@ QUnit.begin(function() {
 
         sparkline.option({ theme: 'myTheme' });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 13, bottom: 13, left: 13, right: 13 }, 'Canvas object is correct');
@@ -278,12 +278,12 @@ QUnit.begin(function() {
 
     // T124801
     QUnit.test('Create canvas when container size is not defined', function(assert) {
-        var container = $('<div style="width: 100px">').appendTo(this.$container);
+        const container = $('<div style="width: 100px">').appendTo(this.$container);
 
         this.createSparkline({ dataSource: [1], pointSize: 0 }, container);
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 100, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
         assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 100, height: 30, top: 0, bottom: 0, left: 0, right: 0 }, 'Canvas object is correct');
@@ -294,10 +294,10 @@ QUnit.begin(function() {
     QUnit.module('Range', environment);
 
     QUnit.test('Create range when datasource has one point. Line', function(assert) {
-        this.createSparkline({ dataSource: ["1"] }, null, { arg: {}, val: { min: 4, max: 4 } });
+        this.createSparkline({ dataSource: ['1'] }, null, { arg: {}, val: { min: 4, max: 4 } });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 1, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, 4, 'MinY is correct');
@@ -305,10 +305,10 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when datasource has one point. Area/bar', function(assert) {
-        this.createSparkline({ type: "area", dataSource: ["1"] }, null, { arg: {}, val: { min: 0, max: 4 } });
+        this.createSparkline({ type: 'area', dataSource: ['1'] }, null, { arg: {}, val: { min: 0, max: 4 } });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 1, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'MinY is correct');
@@ -316,10 +316,10 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when datasource has one point. Winloss', function(assert) {
-        this.createSparkline({ type: 'winloss', dataSource: ["1"] }, null, { arg: {}, val: { min: 0, max: 1 } });
+        this.createSparkline({ type: 'winloss', dataSource: ['1'] }, null, { arg: {}, val: { min: 0, max: 1 } });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 1, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'MinY is correct');
@@ -327,7 +327,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when all points are positive. Line', function(assert) {
-        this.createSparkline({ dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"] }, null, {
+        this.createSparkline({ dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'] }, null, {
             arg: {},
             val: {
                 min: 1,
@@ -335,8 +335,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 23, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min.toPrecision(2), -0.20, 'MinY is correct');
@@ -344,7 +344,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when all points are positive. Bar/area', function(assert) {
-        this.createSparkline({ type: 'bar', dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"] }, null, {
+        this.createSparkline({ type: 'bar', dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'] }, null, {
             arg: {},
             val: {
                 min: 0,
@@ -352,8 +352,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 23, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'MinY is correct');
@@ -361,7 +361,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when all points are positive. Winloss', function(assert) {
-        this.createSparkline({ type: 'winloss', dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"] }, null, {
+        this.createSparkline({ type: 'winloss', dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'] }, null, {
             arg: {},
             val: {
                 min: 0,
@@ -369,8 +369,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 23, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'MinY is correct');
@@ -378,7 +378,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when all points are negative. Line', function(assert) {
-        this.createSparkline({ dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", ] }, null, {
+        this.createSparkline({ dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', ] }, null, {
             arg: {},
             val: {
                 min: -9,
@@ -386,8 +386,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 18, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -10.05, 'MinY is correct');
@@ -395,7 +395,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when all points are negative. Bar/area', function(assert) {
-        this.createSparkline({ type: 'bar', dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"] }, null, {
+        this.createSparkline({ type: 'bar', dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'] }, null, {
             arg: {},
             val: {
                 min: -9,
@@ -403,8 +403,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 18, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -10.35, 'MinY is correct');
@@ -412,7 +412,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when all points are negative. Winloss', function(assert) {
-        this.createSparkline({ type: 'winloss', dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"] }, null, {
+        this.createSparkline({ type: 'winloss', dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18'] }, null, {
             arg: {},
             val: {
                 min: -1,
@@ -420,8 +420,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 18, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -1.15, 'MinY is correct');
@@ -429,7 +429,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when datasource is continuous. Bar', function(assert) {
-        this.createSparkline({ type: 'bar', dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"] }, null, {
+        this.createSparkline({ type: 'bar', dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] }, null, {
             arg: {
                 categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
             },
@@ -439,8 +439,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -7.3, 'MinY is correct');
@@ -448,7 +448,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when datasource is continuous. Winloss', function(assert) {
-        this.createSparkline({ type: 'winloss', dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"] }, null, {
+        this.createSparkline({ type: 'winloss', dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] }, null, {
             arg: {},
             val: {
                 min: -1,
@@ -456,8 +456,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -1.3, 'MinY is correct');
@@ -465,7 +465,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when there are minY and maxY options. part 1', function(assert) {
-        this.createSparkline({ minValue: -5, maxValue: 5, dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"] }, null, {
+        this.createSparkline({ minValue: -5, maxValue: 5, dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] }, null, {
             arg: {},
             val: {
                 min: -10,
@@ -473,8 +473,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
@@ -484,7 +484,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when there are minY and maxY options. part 2', function(assert) {
-        this.createSparkline({ minValue: -15, maxValue: 15, dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"] }, null, {
+        this.createSparkline({ minValue: -15, maxValue: 15, dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] }, null, {
             arg: {},
             val: {
                 min: -10,
@@ -492,8 +492,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
@@ -503,7 +503,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when there are minY and maxY null options', function(assert) {
-        this.createSparkline({ minValue: null, maxValue: null, dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"] }, null, {
+        this.createSparkline({ minValue: null, maxValue: null, dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] }, null, {
             arg: {},
             val: {
                 min: -10,
@@ -511,8 +511,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
@@ -522,7 +522,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when there are minY and maxY incorrect options. part 1', function(assert) {
-        this.createSparkline({ minValue: "a", maxValue: "b", dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"] }, null, {
+        this.createSparkline({ minValue: 'a', maxValue: 'b', dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] }, null, {
             arg: {},
             val: {
                 min: -10,
@@ -530,8 +530,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
@@ -541,7 +541,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when there are minY and maxY incorrect options. part 2', function(assert) {
-        this.createSparkline({ minValue: 5, maxValue: "b", dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"] }, null, {
+        this.createSparkline({ minValue: 5, maxValue: 'b', dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] }, null, {
             arg: {},
             val: {
                 min: -10,
@@ -549,8 +549,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
@@ -560,7 +560,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when there are minY and maxY. min > max', function(assert) {
-        this.createSparkline({ minValue: 2, maxValue: -1, dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"] }, null, {
+        this.createSparkline({ minValue: 2, maxValue: -1, dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] }, null, {
             arg: {},
             val: {
                 min: -10,
@@ -568,8 +568,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
@@ -579,7 +579,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when there are minY and maxY. min = max', function(assert) {
-        this.createSparkline({ minValue: 5, maxValue: 5, dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"] }, null, {
+        this.createSparkline({ minValue: 5, maxValue: 5, dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] }, null, {
             arg: {},
             val: {
                 min: -10,
@@ -587,8 +587,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
@@ -598,7 +598,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when there are minY and maxY options for winloss. part 1', function(assert) {
-        this.createSparkline({ type: "winloss", minValue: -0.6, maxValue: 0.2, dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"] }, null, {
+        this.createSparkline({ type: 'winloss', minValue: -0.6, maxValue: 0.2, dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] }, null, {
             arg: {},
             val: {
                 min: -1,
@@ -606,8 +606,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -1.3, 'MinY is correct');
@@ -617,7 +617,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when there are minY and maxY options for winloss. part 2', function(assert) {
-        this.createSparkline({ minValue: -5, maxValue: 20, type: "winloss", dataSource: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"] }, null, {
+        this.createSparkline({ minValue: -5, maxValue: 20, type: 'winloss', dataSource: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'] }, null, {
             arg: {},
             val: {
                 min: -1,
@@ -625,8 +625,8 @@ QUnit.begin(function() {
             }
         });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
         assert.equal(valTranslator.update.lastCall.args[0].min, -1.3, 'MinY is correct');
@@ -640,42 +640,42 @@ QUnit.begin(function() {
     QUnit.test('Prepare series options when type is incorrect', function(assert) {
         this.createSparkline({ type: 'abc' });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
     QUnit.test('Prepare series options when type is incorrect', function(assert) {
         this.createSparkline({ dataSource: [3], type: 'pie' });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
     QUnit.test('Prepare series options when type is incorrect', function(assert) {
         this.createSparkline({ dataSource: [3], type: 'stepLine' });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.equal(options.type, 'stepline', 'Series type should be correct');
     });
 
     QUnit.test('Prepare series options when type is incorrect', function(assert) {
         this.createSparkline({ dataSource: [3], type: 111 });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
     QUnit.test('Prepare series options when type is incorrect', function(assert) {
         this.createSparkline({ dataSource: [3], type: null });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
     QUnit.test('Prepare series options when type is incorrect', function(assert) {
         this.createSparkline({ dataSource: [3], type: NaN });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
@@ -684,7 +684,7 @@ QUnit.begin(function() {
             dataSource: [1]
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.ok(options, 'Series options should be created');
 
         assert.ok(!options.extremumPoints, 'Extremum points options should be deleted from series options');
@@ -699,7 +699,7 @@ QUnit.begin(function() {
     QUnit.test('Prepare series options. Winloss', function(assert) {
         this.createSparkline({ type: 'winloss' });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
 
         assert.ok(options, 'Series options should be created');
         assert.equal(options.type, 'bar', 'Series type should be bar');
@@ -709,7 +709,7 @@ QUnit.begin(function() {
     QUnit.test('Prepare series options. Bar', function(assert) {
         this.createSparkline({ type: 'bar' });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
 
         assert.ok(options, 'Series options should be created');
         assert.equal(options.type, 'bar', 'Series type should be bar');
@@ -719,7 +719,7 @@ QUnit.begin(function() {
     QUnit.test('Prepare series options. Not winloss', function(assert) {
         this.createSparkline({ type: 'area' });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.ok(options, 'Series options should be created');
         assert.equal(options.type, 'area', 'Series type should be line');
     });
@@ -727,7 +727,7 @@ QUnit.begin(function() {
     QUnit.test('Prepare series options. Check options', function(assert) {
         this.createSparkline({});
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
 
         assert.ok(options, 'Series options should be created');
 
@@ -754,23 +754,23 @@ QUnit.begin(function() {
 
         this.createSparkline({
             dataSource: [{ arg: 1, val: 1 }],
-            type: "bar"
+            type: 'bar'
         });
 
-        var point = this.series.getPoints()[0];
+        const point = this.series.getPoints()[0];
 
-        assert.equal(point.correctCoordinates.firstCall.args[0].width, 50, "Bar width should not be more than 50");
+        assert.equal(point.correctCoordinates.firstCall.args[0].width, 50, 'Bar width should not be more than 50');
     });
 
     QUnit.test('Get bar width when there are ten points', function(assert) {
-        var points = [];
-        for(var i = 0; i < 10; i++) {
+        const points = [];
+        for(let i = 0; i < 10; i++) {
             points.push({ correctCoordinates: sinon.spy() });
         }
         this.series.getPoints.returns(points);
         this.createSparkline({
             dataSource: [{ arg: 1, val: 1 }],
-            type: "bar",
+            type: 'bar',
             size: {
                 width: 200
             },
@@ -780,19 +780,19 @@ QUnit.begin(function() {
             }
         });
 
-        var point = this.series.getPoints()[0];
-        assert.equal(point.correctCoordinates.firstCall.args[0].width, 11, "Bar width should be correct");
+        const point = this.series.getPoints()[0];
+        assert.equal(point.correctCoordinates.firstCall.args[0].width, 11, 'Bar width should be correct');
     });
 
     QUnit.test('Get bar width when there are 150 points', function(assert) {
-        var points = [];
-        for(var i = 0; i < 150; i++) {
+        const points = [];
+        for(let i = 0; i < 150; i++) {
             points.push({ correctCoordinates: sinon.spy() });
         }
         this.series.getPoints.returns(points);
         this.createSparkline({
             dataSource: [{ arg: 1, val: 1 }],
-            type: "bar",
+            type: 'bar',
             size: {
                 width: 200
             },
@@ -802,8 +802,8 @@ QUnit.begin(function() {
             }
         });
 
-        var point = this.series.getPoints()[0];
-        assert.equal(point.correctCoordinates.firstCall.args[0].width, 1, "Bar width should not be less than 1");
+        const point = this.series.getPoints()[0];
+        assert.equal(point.correctCoordinates.firstCall.args[0].width, 1, 'Bar width should not be less than 1');
     });
 
     QUnit.module('Prepare datasource', getEnvironmentWithStubValidateData());
@@ -813,7 +813,7 @@ QUnit.begin(function() {
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }]
         });
 
-        var data = this.getData();
+        const data = this.getData();
 
         assert.equal(data.length, 2, 'Data source should have two items');
         assert.equal(data[0].arg, 1, 'First data source item should be correct');
@@ -828,7 +828,7 @@ QUnit.begin(function() {
             dataSource: [{ arg: 1, count: 10 }, { arg: undefined, count: 3 }]
         });
 
-        var data = this.getData();
+        const data = this.getData();
 
         assert.equal(data.length, 1, 'Data source should have one item');
         assert.equal(data[0].arg, 1, 'First data source item should be correct');
@@ -841,7 +841,7 @@ QUnit.begin(function() {
             dataSource: [{ arg: 1, count: 10 }, { arg: undefined, count: undefined }]
         });
 
-        var data = this.getData();
+        const data = this.getData();
         assert.equal(data.length, 1, 'Data source should have one item');
         assert.equal(data[0].arg, 1, 'First data source item should be correct');
         assert.equal(data[0].count, 10, 'First data source item should be correct');
@@ -853,7 +853,7 @@ QUnit.begin(function() {
             dataSource: [{ arg: 1, count: 10 }, { arg: undefined, count: undefined }]
         });
 
-        var data = this.getData();
+        const data = this.getData();
         assert.equal(data.length, 1, 'Data source should have one item');
         assert.equal(data[0].arg, 1, 'First data source item should be correct');
         assert.equal(data[0].count, 10, 'First data source item should be correct');
@@ -864,7 +864,7 @@ QUnit.begin(function() {
             dataSource: [5, 4, undefined, 6]
         });
 
-        var data = this.getData();
+        const data = this.getData();
         assert.equal(data.length, 3, 'Data source should have one item');
         assert.equal(data[0].arg, '0', 'First data source item should be correct');
         assert.equal(data[0].val, 5, 'First data source item should be correct');
@@ -880,7 +880,7 @@ QUnit.begin(function() {
             dataSource: [{ arg: 1, count: 10 }, { arg: 2, count: 5 }, { arg1: 3, val: 4 }]
         });
 
-        var data = this.getData();
+        const data = this.getData();
         assert.equal(data.length, 2, 'Data source should have two items');
         assert.equal(data[0].arg, 1, 'First data source item should be correct');
         assert.equal(data[0].count, 10, 'First data source item should be correct');
@@ -893,7 +893,7 @@ QUnit.begin(function() {
             dataSource: [{ arg: '1', val: 1 }, { arg: '2', val: 2 }]
         });
 
-        var data = this.getData();
+        const data = this.getData();
         assert.equal(data.length, 2, 'Data source should have two items');
         assert.equal(data[0].arg, '1', 'First data source item should be correct');
         assert.equal(data[0].val, 1, 'First data source item should be correct');
@@ -906,7 +906,7 @@ QUnit.begin(function() {
             dataSource: [1, 2]
         });
 
-        var data = this.getData();
+        const data = this.getData();
 
         assert.equal(data.length, 2, 'Data source should have two items');
         assert.equal(data[0].arg, '0', 'First data source item should be correct');
@@ -922,7 +922,7 @@ QUnit.begin(function() {
             dataSource: [1, 2]
         });
 
-        var data = this.getData();
+        const data = this.getData();
 
         assert.equal(data.length, 2, 'Data source should have two items');
         assert.equal(data[0].arg, '0', 'First data source item should be correct');
@@ -937,7 +937,7 @@ QUnit.begin(function() {
             type: 'winloss'
         });
 
-        var data = this.getData();
+        const data = this.getData();
         assert.equal(data.length, 4, 'Data source should have two items');
         assert.equal(data[0].arg, '0', 'First data source item should be correct');
         assert.equal(data[0].val, 1, 'First data source item should be correct');
@@ -954,7 +954,7 @@ QUnit.begin(function() {
             dataSource: [1, 2, null, 4]
         });
 
-        var data = this.getData();
+        const data = this.getData();
         assert.strictEqual(data.length, 4, 'size simpleDataSource');
         assert.strictEqual(data[0].val, 1);
         assert.strictEqual(data[1].val, 2);
@@ -968,32 +968,32 @@ QUnit.begin(function() {
             dataSource: [1, 2, null, 4]
         });
 
-        var data = this.getData();
+        const data = this.getData();
         assert.strictEqual(data.length, 3, 'size simpleDataSource');
         assert.strictEqual(data[0].val, 1);
         assert.strictEqual(data[1].val, 2);
         assert.strictEqual(data[2].val, 4);
     });
 
-    QUnit.test("pass validateData correct argumentAxisType, winloss", function(assert) {
+    QUnit.test('pass validateData correct argumentAxisType, winloss', function(assert) {
         this.createSparkline({
             dataSource: [1],
             type: 'winloss'
         });
 
-        assert.equal(dataValidatorModule.validateData.firstCall.args[1].argumentOptions.type, "discrete");
+        assert.equal(dataValidatorModule.validateData.firstCall.args[1].argumentOptions.type, 'discrete');
     });
 
-    QUnit.test("pass validateData correct argumentAxisType, bar", function(assert) {
+    QUnit.test('pass validateData correct argumentAxisType, bar', function(assert) {
         this.createSparkline({
             dataSource: [1],
             type: 'bar'
         });
 
-        assert.equal(dataValidatorModule.validateData.firstCall.args[1].argumentOptions.type, "discrete");
+        assert.equal(dataValidatorModule.validateData.firstCall.args[1].argumentOptions.type, 'discrete');
     });
 
-    QUnit.test("pass validateData correct argumentAxisType, area", function(assert) {
+    QUnit.test('pass validateData correct argumentAxisType, area', function(assert) {
         this.createSparkline({
             dataSource: [1],
             type: 'area'
@@ -1004,7 +1004,7 @@ QUnit.begin(function() {
     QUnit.module('Customize points',
         $.extend({
             checkCustomizePoint: function(assert, expectedData) {
-                var customizeFunction = this.getSeriesOptions().customizePoint;
+                const customizeFunction = this.getSeriesOptions().customizePoint;
 
                 this.series.updateData.lastCall.args[0].forEach(function(dataItem, i) {
                     assert.deepEqual(customizeFunction.call({ index: i, value: dataItem.val }), expectedData[i]);
@@ -1017,39 +1017,39 @@ QUnit.begin(function() {
         this.createSparkline({
             dataSource: ['10', '3', '7'],
             showMinMax: true,
-            minColor: "green",
-            maxColor: "red"
+            minColor: 'green',
+            maxColor: 'red'
         });
 
-        this.checkCustomizePoint(assert, [{ border: { color: "red" }, visible: true },
-            { border: { color: "green" }, visible: true },
-            { border: { color: "#666666" }, visible: true }]);
+        this.checkCustomizePoint(assert, [{ border: { color: 'red' }, visible: true },
+            { border: { color: 'green' }, visible: true },
+            { border: { color: '#666666' }, visible: true }]);
     });
 
     QUnit.test('B239983. Datasource is array with object and string', function(assert) {
         this.createSparkline({
             dataSource: [{ arg: '0', val: '10' }, { arg: '1', val: '3' }, { arg: '2', val: '13' }],
             showMinMax: true,
-            minColor: "green",
-            maxColor: "red"
+            minColor: 'green',
+            maxColor: 'red'
         });
 
-        this.checkCustomizePoint(assert, [{ border: { color: "#666666" }, visible: true },
-            { border: { color: "green" }, visible: true },
-            { border: { color: "red" }, visible: true }]);
+        this.checkCustomizePoint(assert, [{ border: { color: '#666666' }, visible: true },
+            { border: { color: 'green' }, visible: true },
+            { border: { color: 'red' }, visible: true }]);
     });
 
     QUnit.test('Get extremum points indexes when datasource is not ordered - B239987', function(assert) {
         this.createSparkline({
             dataSource: [{ arg: 9, val: 10 }, { arg: 5, val: 1 }, { arg: 4, val: 1 }],
             showMinMax: true,
-            minColor: "green",
-            maxColor: "red"
+            minColor: 'green',
+            maxColor: 'red'
         });
 
-        this.checkCustomizePoint(assert, [{ border: { color: "green" }, visible: true },
-            { border: { color: "green" }, visible: true },
-            { border: { color: "red" }, visible: true }]);
+        this.checkCustomizePoint(assert, [{ border: { color: 'green' }, visible: true },
+            { border: { color: 'green' }, visible: true },
+            { border: { color: 'red' }, visible: true }]);
     });
 
     QUnit.test('Get extremum points indexes when mode is first last', function(assert) {
@@ -1058,11 +1058,11 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { border: { color: "#666666" }, visible: true },
+            { border: { color: '#666666' }, visible: true },
             {},
             {},
             {},
-            { border: { color: "#666666" }, visible: true }
+            { border: { color: '#666666' }, visible: true }
         ]);
     });
 
@@ -1074,10 +1074,10 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { border: { color: "#e8c267" }, visible: true },
+            { border: { color: '#e8c267' }, visible: true },
             {},
             {},
-            { border: { color: "#e55253" }, visible: true },
+            { border: { color: '#e55253' }, visible: true },
             {}
         ]);
     });
@@ -1090,11 +1090,11 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { border: { color: "#e8c267" }, visible: true },
+            { border: { color: '#e8c267' }, visible: true },
             {},
             {},
-            { border: { color: "#e55253" }, visible: true },
-            { border: { color: "#666666" }, visible: true }
+            { border: { color: '#e55253' }, visible: true },
+            { border: { color: '#666666' }, visible: true }
         ]);
     });
 
@@ -1114,10 +1114,10 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { border: { color: "#666666" }, visible: true },
+            { border: { color: '#666666' }, visible: true },
             {},
             {},
-            { border: { color: "#666666" }, visible: true }
+            { border: { color: '#666666' }, visible: true }
         ]);
     });
 
@@ -1128,10 +1128,10 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { border: { color: "blue" }, visible: true },
+            { border: { color: 'blue' }, visible: true },
             {},
             {},
-            { border: { color: "blue" }, visible: true }
+            { border: { color: 'blue' }, visible: true }
         ]);
     });
 
@@ -1142,10 +1142,10 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { color: "#666666" },
-            { color: "#a9a9a9" },
-            { color: "#d7d7d7" },
-            { color: "#666666" }
+            { color: '#666666' },
+            { color: '#a9a9a9' },
+            { color: '#d7d7d7' },
+            { color: '#666666' }
         ]);
     });
 
@@ -1157,10 +1157,10 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { color: "yellow" },
-            { color: "#a9a9a9" },
-            { color: "#d7d7d7" },
-            { color: "yellow" }
+            { color: 'yellow' },
+            { color: '#a9a9a9' },
+            { color: '#d7d7d7' },
+            { color: 'yellow' }
         ]);
     });
 
@@ -1172,8 +1172,8 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { border: { color: "#e8c267" }, visible: true },
-            { border: { color: "#e55253" }, visible: true },
+            { border: { color: '#e8c267' }, visible: true },
+            { border: { color: '#e55253' }, visible: true },
             {},
             {}
         ]);
@@ -1189,10 +1189,10 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { color: "#e8c267" },
-            { color: "#e55253" },
-            { color: "#a9a9a9" },
-            { color: "#a9a9a9" }
+            { color: '#e8c267' },
+            { color: '#e55253' },
+            { color: '#a9a9a9' },
+            { color: '#a9a9a9' }
         ]);
     });
 
@@ -1204,12 +1204,12 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { border: { color: "#666666" }, visible: true },
+            { border: { color: '#666666' }, visible: true },
             {},
-            { border: { color: "#e8c267" }, visible: true },
+            { border: { color: '#e8c267' }, visible: true },
             {},
-            { border: { color: "#e55253" }, visible: true },
-            { border: { color: "#666666" }, visible: true }
+            { border: { color: '#e55253' }, visible: true },
+            { border: { color: '#666666' }, visible: true }
         ]);
     });
 
@@ -1221,12 +1221,12 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { border: { color: "#666666" }, visible: true },
+            { border: { color: '#666666' }, visible: true },
             {},
-            { border: { color: "#e8c267" }, visible: true },
+            { border: { color: '#e8c267' }, visible: true },
             {},
             {},
-            { border: { color: "#e55253" }, visible: true }
+            { border: { color: '#e55253' }, visible: true }
         ]);
     });
 
@@ -1238,12 +1238,12 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { border: { color: "#e8c267" }, visible: true },
+            { border: { color: '#e8c267' }, visible: true },
             {},
             {},
             {},
             {},
-            { border: { color: "#e55253" }, visible: true }
+            { border: { color: '#e55253' }, visible: true }
         ]);
     });
 
@@ -1252,18 +1252,18 @@ QUnit.begin(function() {
             dataSource: [1, 5, -8, -8, 16, 16, 14],
             showFirstLast: true,
             showMinMax: true,
-            minColor: "red",
-            maxColor: "green"
+            minColor: 'red',
+            maxColor: 'green'
         });
 
         this.checkCustomizePoint(assert, [
-            { border: { color: "#666666" }, visible: true },
+            { border: { color: '#666666' }, visible: true },
             {},
-            { border: { color: "red" }, visible: true },
-            { border: { color: "red" }, visible: true },
-            { border: { color: "green" }, visible: true },
-            { border: { color: "green" }, visible: true },
-            { border: { color: "#666666" }, visible: true }
+            { border: { color: 'red' }, visible: true },
+            { border: { color: 'red' }, visible: true },
+            { border: { color: 'green' }, visible: true },
+            { border: { color: 'green' }, visible: true },
+            { border: { color: '#666666' }, visible: true }
         ]);
     });
 
@@ -1277,12 +1277,12 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { color: "yellow" },
-            { color: "#a9a9a9" },
-            { color: "#e8c267" },
-            { color: "#a9a9a9" },
-            { color: "#e55253" },
-            { color: "yellow" }
+            { color: 'yellow' },
+            { color: '#a9a9a9' },
+            { color: '#e8c267' },
+            { color: '#a9a9a9' },
+            { color: '#e55253' },
+            { color: 'yellow' }
         ]);
     });
 
@@ -1296,12 +1296,12 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { color: "yellow" },
-            { color: "#a9a9a9" },
-            { color: "#e8c267" },
-            { color: "#a9a9a9" },
-            { color: "#a9a9a9" },
-            { color: "#e55253" }
+            { color: 'yellow' },
+            { color: '#a9a9a9' },
+            { color: '#e8c267' },
+            { color: '#a9a9a9' },
+            { color: '#a9a9a9' },
+            { color: '#e55253' }
         ]);
     });
 
@@ -1315,12 +1315,12 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { color: "#e8c267" },
-            { color: "#a9a9a9" },
-            { color: "#a9a9a9" },
-            { color: "#a9a9a9" },
-            { color: "#a9a9a9" },
-            { color: "#e55253" }
+            { color: '#e8c267' },
+            { color: '#a9a9a9' },
+            { color: '#a9a9a9' },
+            { color: '#a9a9a9' },
+            { color: '#a9a9a9' },
+            { color: '#e55253' }
         ]);
     });
 
@@ -1334,13 +1334,13 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { color: "yellow" },
-            { color: "#a9a9a9" },
-            { color: "#e8c267" },
-            { color: "#e8c267" },
-            { color: "#e55253" },
-            { color: "#e55253" },
-            { color: "yellow" }
+            { color: 'yellow' },
+            { color: '#a9a9a9' },
+            { color: '#e8c267' },
+            { color: '#e8c267' },
+            { color: '#e55253' },
+            { color: '#e55253' },
+            { color: 'yellow' }
         ]);
     });
 
@@ -1363,10 +1363,10 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { color: "#a9a9a9" },
-            { color: "#a9a9a9" },
-            { color: "#d7d7d7" },
-            { color: "#a9a9a9" }
+            { color: '#a9a9a9' },
+            { color: '#a9a9a9' },
+            { color: '#d7d7d7' },
+            { color: '#a9a9a9' }
         ]);
     });
 
@@ -1377,10 +1377,10 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { color: "#666666" },
-            { color: "#a9a9a9" },
-            { color: "#a9a9a9" },
-            { color: "#666666" }
+            { color: '#666666' },
+            { color: '#a9a9a9' },
+            { color: '#a9a9a9' },
+            { color: '#666666' }
         ]);
     });
 
@@ -1394,10 +1394,10 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { color: "pink" },
-            { color: "yellow" },
-            { color: "yellow" },
-            { color: "pink" }
+            { color: 'pink' },
+            { color: 'yellow' },
+            { color: 'yellow' },
+            { color: 'pink' }
         ]);
     });
 
@@ -1408,10 +1408,10 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { color: "#666666" },
-            { color: "#a9a9a9" },
-            { color: "#a9a9a9" },
-            { color: "#666666" }
+            { color: '#666666' },
+            { color: '#a9a9a9' },
+            { color: '#a9a9a9' },
+            { color: '#666666' }
         ]);
     });
 
@@ -1426,55 +1426,55 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [
-            { color: "pink" },
-            { color: "blue" },
-            { color: "yellow" },
-            { color: "pink" }
+            { color: 'pink' },
+            { color: 'blue' },
+            { color: 'yellow' },
+            { color: 'pink' }
         ]);
     });
 
-    QUnit.test("Several min/max in dataSource", function(assert) {
+    QUnit.test('Several min/max in dataSource', function(assert) {
         this.createSparkline({
             dataSource: [1, 5, 5, -1, -1],
             maxColor: 'red',
-            minColor: "green",
+            minColor: 'green',
             showMinMax: true
         });
 
         this.checkCustomizePoint(assert, [
-            { visible: true, border: { color: "#666666" } },
-            { visible: true, border: { color: "red" } },
-            { visible: true, border: { color: "red" } },
-            { visible: true, border: { color: "green" } },
-            { visible: true, border: { color: "green" } },
+            { visible: true, border: { color: '#666666' } },
+            { visible: true, border: { color: 'red' } },
+            { visible: true, border: { color: 'red' } },
+            { visible: true, border: { color: 'green' } },
+            { visible: true, border: { color: 'green' } },
         ]);
     });
 
-    QUnit.test("DataSource contains only equal values", function(assert) {
+    QUnit.test('DataSource contains only equal values', function(assert) {
         this.createSparkline({
             dataSource: [1, 1, 1],
             maxColor: 'red',
-            minColor: "green",
+            minColor: 'green',
             showMinMax: true
         });
 
         this.checkCustomizePoint(assert, [
-            { visible: true, border: { color: "#666666" } },
+            { visible: true, border: { color: '#666666' } },
             {},
-            { visible: true, border: { color: "#666666" } }
+            { visible: true, border: { color: '#666666' } }
         ]);
     });
 
     QUnit.module('Creating', environment);
 
     QUnit.test('Tooltip is not created on widget creation', function(assert) {
-        var sparkline = this.createSparkline({});
+        const sparkline = this.createSparkline({});
 
         assert.equal(tooltipModule.Tooltip.callCount, 0);
-        assert.ok(!("_tooltip" in sparkline));
+        assert.ok(!('_tooltip' in sparkline));
         assert.strictEqual(this.renderer.root.attr.callCount, 2);
-        assert.deepEqual(this.renderer.root.attr.getCall(0).args, [{ "pointer-events": "visible" }]);
-        assert.deepEqual(this.renderer.root.attr.getCall(1).args, ["pointer-events"]);
+        assert.deepEqual(this.renderer.root.attr.getCall(0).args, [{ 'pointer-events': 'visible' }]);
+        assert.deepEqual(this.renderer.root.attr.getCall(1).args, ['pointer-events']);
     });
 
     QUnit.test('Create html groups', function(assert) {
@@ -1482,17 +1482,17 @@ QUnit.begin(function() {
             dataSource: [{ arg: 1, val: 1 }]
         });
 
-        assert.deepEqual(this.renderer.g.firstCall.returnValue.attr.firstCall.args[0], { "class": "dxsl-series" }, 'Series group should be created');
+        assert.deepEqual(this.renderer.g.firstCall.returnValue.attr.firstCall.args[0], { 'class': 'dxsl-series' }, 'Series group should be created');
         assert.ok(this.renderer.g.firstCall.returnValue.append.called, 'Series group should be appended');
 
-        assert.deepEqual(this.renderer.g.secondCall.returnValue.attr.firstCall.args[0], { "class": "dxsl-series-labels" }, 'Series labels group should be created');
+        assert.deepEqual(this.renderer.g.secondCall.returnValue.attr.firstCall.args[0], { 'class': 'dxsl-series-labels' }, 'Series labels group should be created');
         assert.ok(!this.renderer.g.secondCall.returnValue.append.called, 'Series labels group should not be appended');
     });
 
     QUnit.test('Creating helpers', function(assert) {
         this.createSparkline({ dataSource: [1] });
 
-        assert.equal(rendererModule.Renderer.firstCall.args[0].cssClass, "dxsl dxsl-sparkline");
+        assert.equal(rendererModule.Renderer.firstCall.args[0].cssClass, 'dxsl dxsl-sparkline');
 
         assert.equal(translator2DModule.Translator2D.callCount, 2);
         assert.ok(translator2DModule.Translator2D.firstCall.args[0]);
@@ -1504,17 +1504,17 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Pas stick = false to translator for bar', function(assert) {
-        this.createSparkline({ type: "bar", dataSource: [1] });
+        this.createSparkline({ type: 'bar', dataSource: [1] });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
 
         assert.strictEqual(argTranslator.update.lastCall.args[2].stick, false);
     });
 
     QUnit.test('Pas stick = true to translator for non-bar', function(assert) {
-        this.createSparkline({ type: "line", dataSource: [1] });
+        this.createSparkline({ type: 'line', dataSource: [1] });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
 
         assert.strictEqual(argTranslator.update.lastCall.args[2].stick, true);
     });
@@ -1524,17 +1524,17 @@ QUnit.begin(function() {
             dataSource: [4, 4, 8, 7, 9, 5, 4, 6, 1, 2, 3, 0, 5, 6, 4, 8, 9, 5, 6, 1, 2, 3, 4, 5, 6, 8, 4, 6]
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
 
         assert.ok(seriesModule.Series.called);
         assert.deepEqual(options, {
-            argumentField: "arg",
+            argumentField: 'arg',
             border: {
-                color: "#666666",
+                color: '#666666',
                 visible: true,
                 width: 2
             },
-            color: "#666666",
+            color: '#666666',
             customizePoint: options.customizePoint,
             opacity: undefined,
             point: {
@@ -1542,7 +1542,7 @@ QUnit.begin(function() {
                     visible: true,
                     width: 2
                 },
-                color: "#ffffff",
+                color: '#ffffff',
                 hoverStyle: {
                     border: {}
                 },
@@ -1550,13 +1550,13 @@ QUnit.begin(function() {
                     border: {}
                 },
                 size: 4,
-                symbol: "circle",
+                symbol: 'circle',
                 visible: false
             },
-            type: "line",
-            valueField: "val",
+            type: 'line',
+            valueField: 'val',
             visible: true,
-            widgetType: "chart",
+            widgetType: 'chart',
             width: 2
         });
     });
@@ -1569,17 +1569,17 @@ QUnit.begin(function() {
             pointSize: 7
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
 
         assert.ok(seriesModule.Series.called);
         assert.deepEqual(options, {
-            argumentField: "arg",
+            argumentField: 'arg',
             border: {
-                color: "blue",
+                color: 'blue',
                 visible: true,
                 width: 3
             },
-            color: "blue",
+            color: 'blue',
             customizePoint: options.customizePoint,
             opacity: undefined,
             point: {
@@ -1587,7 +1587,7 @@ QUnit.begin(function() {
                     visible: true,
                     width: 2
                 },
-                color: "#ffffff",
+                color: '#ffffff',
                 hoverStyle: {
                     border: {}
                 },
@@ -1595,13 +1595,13 @@ QUnit.begin(function() {
                     border: {}
                 },
                 size: 7,
-                symbol: "circle",
+                symbol: 'circle',
                 visible: false
             },
-            type: "line",
-            valueField: "val",
+            type: 'line',
+            valueField: 'val',
             visible: true,
-            widgetType: "chart",
+            widgetType: 'chart',
             width: 3
         });
     });
@@ -1611,9 +1611,9 @@ QUnit.begin(function() {
             dataSource: [4, 4, 8, 7, 9, 5, 4, 6, 1, 2, 3, 0, 5, 6, 4, 8, 9, 5, 6, 1, 2, 3, 4, 5, 6, 8, 4, 6]
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.ok(seriesModule.Series.called);
-        assert.equal(options.point.symbol, "circle");
+        assert.equal(options.point.symbol, 'circle');
     });
 
     QUnit.test('Create line series with square point', function(assert) {
@@ -1622,9 +1622,9 @@ QUnit.begin(function() {
             pointSymbol: 'square'
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.ok(seriesModule.Series.called);
-        assert.equal(options.point.symbol, "square");
+        assert.equal(options.point.symbol, 'square');
     });
 
     QUnit.test('Create line series with cross point', function(assert) {
@@ -1633,9 +1633,9 @@ QUnit.begin(function() {
             pointSymbol: 'cross'
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.ok(seriesModule.Series.called);
-        assert.equal(options.point.symbol, "cross");
+        assert.equal(options.point.symbol, 'cross');
     });
 
     QUnit.test('Create line series with polygon point', function(assert) {
@@ -1644,9 +1644,9 @@ QUnit.begin(function() {
             pointSymbol: 'polygon'
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.ok(seriesModule.Series.called);
-        assert.equal(options.point.symbol, "polygon");
+        assert.equal(options.point.symbol, 'polygon');
     });
 
     QUnit.test('Create spline series', function(assert) {
@@ -1655,9 +1655,9 @@ QUnit.begin(function() {
             dataSource: [4, 4, 8, 7, 9, 5, 4, 6, 1, 2, 3, 0, 5, 6, 4, 8, 9, 5, 6, 1, 2, 3, 4, 5, 6, 8, 4, 6]
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.ok(seriesModule.Series.called);
-        assert.equal(options.type, "spline");
+        assert.equal(options.type, 'spline');
     });
 
     QUnit.test('Create stepline series', function(assert) {
@@ -1666,9 +1666,9 @@ QUnit.begin(function() {
             dataSource: [4, 4, 8, 7, 9, 5, 4, 6, 1, 2, 3, 0, 5, 6, 4, 8, 9, 5, 6, 1, 2, 3, 4, 5, 6, 8, 4, 6]
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.ok(seriesModule.Series.called);
-        assert.equal(options.type, "stepline");
+        assert.equal(options.type, 'stepline');
     });
 
     QUnit.test('Create area series with default options', function(assert) {
@@ -1677,17 +1677,17 @@ QUnit.begin(function() {
             dataSource: [4, 4, 8, 7, 9, 5, 4, 6, 1, 2, 3, 0, 5, 6, 4, 8, 9, 5, 6, 1, 2, 3, 4, 5, 6, 8, 4, 6]
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
 
         assert.ok(seriesModule.Series.called);
         assert.deepEqual(options, {
-            argumentField: "arg",
+            argumentField: 'arg',
             border: {
-                color: "#666666",
+                color: '#666666',
                 visible: true,
                 width: 2
             },
-            color: "#666666",
+            color: '#666666',
             customizePoint: options.customizePoint,
             opacity: 0.2,
             point: {
@@ -1695,7 +1695,7 @@ QUnit.begin(function() {
                     visible: true,
                     width: 2
                 },
-                color: "#ffffff",
+                color: '#ffffff',
                 hoverStyle: {
                     border: {}
                 },
@@ -1703,13 +1703,13 @@ QUnit.begin(function() {
                     border: {}
                 },
                 size: 4,
-                symbol: "circle",
+                symbol: 'circle',
                 visible: false
             },
-            type: "area",
-            valueField: "val",
+            type: 'area',
+            valueField: 'val',
             visible: true,
-            widgetType: "chart",
+            widgetType: 'chart',
             width: 2
         });
     });
@@ -1722,17 +1722,17 @@ QUnit.begin(function() {
             dataSource: [4, 4, 8, 7, 9, 5, 4, 6, 1, 2, 3, 0, 5, 6, 4, 8, 9, 5, 6, 1, 2, 3, 4, 5, 6, 8, 4, 6]
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
 
         assert.ok(seriesModule.Series.called);
         assert.deepEqual(options, {
-            argumentField: "arg",
+            argumentField: 'arg',
             border: {
-                color: "yellow",
+                color: 'yellow',
                 visible: true,
                 width: 5
             },
-            color: "yellow",
+            color: 'yellow',
             customizePoint: options.customizePoint,
             opacity: 0.2,
             point: {
@@ -1740,7 +1740,7 @@ QUnit.begin(function() {
                     visible: true,
                     width: 2
                 },
-                color: "#ffffff",
+                color: '#ffffff',
                 hoverStyle: {
                     border: {}
                 },
@@ -1748,13 +1748,13 @@ QUnit.begin(function() {
                     border: {}
                 },
                 size: 4,
-                symbol: "circle",
+                symbol: 'circle',
                 visible: false
             },
-            type: "area",
-            valueField: "val",
+            type: 'area',
+            valueField: 'val',
             visible: true,
-            widgetType: "chart",
+            widgetType: 'chart',
             width: 5
         });
     });
@@ -1765,9 +1765,9 @@ QUnit.begin(function() {
             dataSource: [4, 4, 8, 7, 9, 5, 4, 6, 1, 2, 3, 0, 5, 6, 4, 8, 9, 5, 6, 1, 2, 3, 4, 5, 6, 8, 4, 6]
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.ok(seriesModule.Series.called);
-        assert.equal(options.type, "splinearea");
+        assert.equal(options.type, 'splinearea');
     });
 
     QUnit.test('Create steparea series', function(assert) {
@@ -1776,9 +1776,9 @@ QUnit.begin(function() {
             dataSource: [4, 4, 8, 7, 9, 5, 4, 6, 1, 2, 3, 0, 5, 6, 4, 8, 9, 5, 6, 1, 2, 3, 4, 5, 6, 8, 4, 6]
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
         assert.ok(seriesModule.Series.called);
-        assert.equal(options.type, "steparea");
+        assert.equal(options.type, 'steparea');
     });
 
     QUnit.test('Create bar series with default options', function(assert) {
@@ -1787,17 +1787,17 @@ QUnit.begin(function() {
             dataSource: [4, 4, 8, 7, 9, 5, 4, 6, 1, 2, 3, 0, 5, 6, 4, 8, 9, 5, 6, 1, 2, 3, 4, 5, 6, 8, 4, 6]
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
 
         assert.ok(seriesModule.Series.called);
         assert.deepEqual(options, {
-            argumentField: "arg",
+            argumentField: 'arg',
             border: {
-                color: "#666666",
+                color: '#666666',
                 visible: false,
                 width: 2
             },
-            color: "#666666",
+            color: '#666666',
             customizePoint: options.customizePoint,
             opacity: undefined,
             point: {
@@ -1805,7 +1805,7 @@ QUnit.begin(function() {
                     visible: true,
                     width: 2
                 },
-                color: "#ffffff",
+                color: '#ffffff',
                 hoverStyle: {
                     border: {}
                 },
@@ -1813,13 +1813,13 @@ QUnit.begin(function() {
                     border: {}
                 },
                 size: 4,
-                symbol: "circle",
+                symbol: 'circle',
                 visible: false
             },
-            type: "bar",
-            valueField: "val",
+            type: 'bar',
+            valueField: 'val',
             visible: true,
-            widgetType: "chart",
+            widgetType: 'chart',
             width: 2
         });
     });
@@ -1830,17 +1830,17 @@ QUnit.begin(function() {
             dataSource: [4, 4, 8, 7, 9, 5, 4, 6, 1, 2, 3, 0, 5, 6, 4, 8, 9, 5, 6, 1, 2, 3, 4, 5, 6, 8, 4, 6]
         });
 
-        var options = this.getSeriesOptions();
+        const options = this.getSeriesOptions();
 
         assert.ok(seriesModule.Series.called);
         assert.deepEqual(options, {
-            argumentField: "arg",
+            argumentField: 'arg',
             border: {
-                color: "#666666",
+                color: '#666666',
                 visible: false,
                 width: 2
             },
-            color: "#666666",
+            color: '#666666',
             customizePoint: options.customizePoint,
             opacity: undefined,
             point: {
@@ -1848,7 +1848,7 @@ QUnit.begin(function() {
                     visible: true,
                     width: 2
                 },
-                color: "#ffffff",
+                color: '#ffffff',
                 hoverStyle: {
                     border: {}
                 },
@@ -1856,13 +1856,13 @@ QUnit.begin(function() {
                     border: {}
                 },
                 size: 4,
-                symbol: "circle",
+                symbol: 'circle',
                 visible: false
             },
-            type: "bar",
-            valueField: "val",
+            type: 'bar',
+            valueField: 'val',
             visible: true,
-            widgetType: "chart",
+            widgetType: 'chart',
             width: 2
         });
     });
@@ -1877,14 +1877,14 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Refresh', function(assert) {
-        var options = {
-                dataSource: [4, 8, 6, 9, 4],
-                type: 'area',
-                color: '#448ff4',
-                width: 2,
-                mode: 'minMax'
-            },
-            sparkline = this.createSparkline(options);
+        const options = {
+            dataSource: [4, 8, 6, 9, 4],
+            type: 'area',
+            color: '#448ff4',
+            width: 2,
+            mode: 'minMax'
+        };
+        const sparkline = this.createSparkline(options);
 
         this.renderer.resize.reset();
 
@@ -1892,8 +1892,8 @@ QUnit.begin(function() {
         this.$container.height(40);
         sparkline.render();
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1].width, 300, 'Canvas width should have new value');
         assert.deepEqual(valTranslator.update.lastCall.args[1].height, 40, 'Canvas height should have new value');
@@ -1905,7 +1905,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Change size of container', function(assert) {
-        var sparkline = this.createSparkline({
+        const sparkline = this.createSparkline({
             dataSource: [4, 8, 6, 9, 1, 3, 5, 6, 1, 2, 5, 4]
         });
 
@@ -1913,8 +1913,8 @@ QUnit.begin(function() {
 
         sparkline.option('size', { width: 300, height: 100 });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
         assert.deepEqual(argTranslator.update.lastCall.args[1].width, 300, 'Canvas should have new width');
         assert.deepEqual(valTranslator.update.lastCall.args[1].height, 100, 'Canvas should have new height');
@@ -1924,22 +1924,22 @@ QUnit.begin(function() {
     });
 
     QUnit.test('B239673 - Tooltip does not update location after resize', function(assert) {
-        var sparkline = this.createSparkline({
+        const sparkline = this.createSparkline({
             dataSource: [4]
         });
-        sparkline._showTooltipCallback();
+        sparkline._showTooltip();
 
         sparkline.option('size', { width: 300, height: 100 });
         assert.ok(sparkline._tooltip.hide.calledOnce, 'Tooltip should be hidden');
     });
 
     QUnit.test('Change datasource', function(assert) {
-        var sparkline = this.createSparkline({
+        const sparkline = this.createSparkline({
             dataSource: [4, 8, 6, 9, 1, 3, 5, 6, 1, 2, 5, 4]
         });
         sparkline.option({ dataSource: [1, 1, 1, 1] });
 
-        var data = seriesModule.Series.lastCall.returnValue.updateData.lastCall.args[0];
+        const data = seriesModule.Series.lastCall.returnValue.updateData.lastCall.args[0];
 
         assert.equal(data[0].arg, '0', 'Data source should be correct');
         assert.equal(data[0].val, 1, 'Data source should be correct');
@@ -1954,7 +1954,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Change type', function(assert) {
-        var sparkline = this.createSparkline({
+        const sparkline = this.createSparkline({
             dataSource: [4, 8, 6, 9, 1, 3, 5, 6, 1, 2, 5, 4]
         });
 
@@ -1965,7 +1965,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Change size - B239871', function(assert) {
-        var sparkline = this.createSparkline({
+        const sparkline = this.createSparkline({
             dataSource: [4, 8, 6, 9, 1, 3, 5, 6, 1, 2, 5, 4]
         });
 
@@ -1975,7 +1975,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Change size if size = 0,0 - B239871', function(assert) {
-        var sparkline = this.createSparkline({
+        const sparkline = this.createSparkline({
             dataSource: [4, 8, 6, 9, 1, 3, 5, 6, 1, 2, 5, 4],
             size: {
                 width: 0,
@@ -1989,7 +1989,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Change size if size = 10,0 - B239871', function(assert) {
-        var sparkline = this.createSparkline({
+        const sparkline = this.createSparkline({
             dataSource: [4, 8, 6, 9, 1, 3, 5, 6, 1, 2, 5, 4],
             size: {
                 width: 10,
@@ -2003,7 +2003,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Change size if size = 0,10 - B239871', function(assert) {
-        var sparkline = this.createSparkline({
+        const sparkline = this.createSparkline({
             dataSource: [4, 8, 6, 9, 1, 3, 5, 6, 1, 2, 5, 4],
             size: {
                 width: 0,
@@ -2017,16 +2017,16 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Resize empty sparkline', function(assert) {
-        var sparkline = this.createSparkline({});
+        const sparkline = this.createSparkline({});
 
         sparkline.option('size', { width: 200 });
 
-        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
         assert.deepEqual(argTranslator.update.lastCall.args[1].width, 200, 'Width was corrected');
     });
 
     QUnit.test('Change datasource with small container. B254479', function(assert) {
-        var sparkline = this.createSparkline({
+        const sparkline = this.createSparkline({
             size: {
                 width: 3
             }
@@ -2038,8 +2038,8 @@ QUnit.begin(function() {
     });
 
     // T422022
-    QUnit.test("sparkline contains export methods", function(assert) {
-        var sparkline = this.createSparkline({});
+    QUnit.test('sparkline contains export methods', function(assert) {
+        const sparkline = this.createSparkline({});
 
         assert.ok($.isFunction(sparkline.exportTo));
     });
@@ -2063,17 +2063,17 @@ QUnit.begin(function() {
     });
 
     QUnit.test('drawn is called after dataSource changing', function(assert) {
-        var sparkline = this.createSparkline(0);
+        const sparkline = this.createSparkline(0);
 
-        sparkline.option("dataSource", [4]);
+        sparkline.option('dataSource', [4]);
 
         assert.strictEqual(BaseWidget.prototype._drawn.calledTwice, true);
     });
 
     QUnit.test('drawn is called after resize', function(assert) {
-        var sparkline = this.createSparkline({ dataSource: [3] });
+        const sparkline = this.createSparkline({ dataSource: [3] });
 
-        sparkline.option("size", { width: 300 });
+        sparkline.option('size', { width: 300 });
 
         assert.strictEqual(BaseWidget.prototype._drawn.calledTwice, true);
     });
@@ -2082,8 +2082,8 @@ QUnit.begin(function() {
         beforeEach: function() {
             environment.beforeEach.call(this);
             sinon.stub(BaseWidget.prototype, '_drawn', sinon.spy());
-            this.data = new dataSourceModule.DataSource();
-            this.isLoadedStub = sinon.stub(this.data, "isLoaded");
+            this.data = new DataSource();
+            this.isLoadedStub = sinon.stub(this.data, 'isLoaded');
         },
         afterEach: function() {
             environment.afterEach.call(this);
@@ -2111,7 +2111,7 @@ QUnit.begin(function() {
     QUnit.module('isReady', environment);
 
     QUnit.test('isReady without data', function(assert) {
-        var sparkline = this.createSparkline({});
+        const sparkline = this.createSparkline({});
 
         this.renderer.onEndAnimation.lastCall.args[0]();
 
@@ -2119,7 +2119,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('isReady with data', function(assert) {
-        var sparkline = this.createSparkline({ value: 10, dataSource: null });
+        const sparkline = this.createSparkline({ value: 10, dataSource: null });
 
         this.renderer.onEndAnimation.lastCall.args[0]();
 
@@ -2127,53 +2127,53 @@ QUnit.begin(function() {
     });
 
     QUnit.test('isReady with not loaded dataSource', function(assert) {
-        var data = new dataSourceModule.DataSource();
-        sinon.stub(data, "isLoaded", function() { return false; });
+        const data = new DataSource();
+        sinon.stub(data, 'isLoaded', function() { return false; });
 
-        var sparkline = this.createSparkline({ dataSource: data });
+        const sparkline = this.createSparkline({ dataSource: data });
 
-        this.renderer.stub("onEndAnimation", function(callback) { callback(); });
+        this.renderer.stub('onEndAnimation', function(callback) { callback(); });
         sparkline.render();
 
         assert.strictEqual(sparkline.isReady(), false);
     });
 
-    QUnit.module("incidentOccurred", getEnvironmentWithStubValidateData());
+    QUnit.module('incidentOccurred', getEnvironmentWithStubValidateData());
 
-    QUnit.test("check incidentOccurred passed to validateData", function(assert) {
-        var incSpy = sinon.spy();
+    QUnit.test('check incidentOccurred passed to validateData', function(assert) {
+        const incSpy = sinon.spy();
 
         this.createSparkline({
             onIncidentOccurred: incSpy
         });
-        dataValidatorModule.validateData.lastCall.args[2]("E202");
+        dataValidatorModule.validateData.lastCall.args[2]('E202');
         this.forceTimeout();
 
         assert.ok(incSpy.called);
     });
 
-    QUnit.module("dataSource integration", environment);
+    QUnit.module('dataSource integration', environment);
 
-    QUnit.test("dataSource creation", function(assert) {
-        var widget = this.createSparkline({ dataSource: [1, 2, 3] }),
-            ds = widget.getDataSource();
+    QUnit.test('dataSource creation', function(assert) {
+        const widget = this.createSparkline({ dataSource: [1, 2, 3] });
+        const ds = widget.getDataSource();
 
-        assert.ok(ds instanceof dataSourceModule.DataSource);
+        assert.ok(ds instanceof DataSource);
         assert.ok(ds.isLoaded());
         assert.deepEqual(ds.items(), [1, 2, 3]);
     });
 
-    QUnit.test("data initialization after load dataSource", function(assert) {
+    QUnit.test('data initialization after load dataSource', function(assert) {
         this.createSparkline({ dataSource: [] });
 
         assert.equal(seriesModule.Series.callCount, 1);
         assert.equal(seriesModule.Series.lastCall.returnValue.updateData.callCount, 1);
     });
 
-    QUnit.test("update dataSource after option changing", function(assert) {
-        var widget = this.createSparkline({});
+    QUnit.test('update dataSource after option changing', function(assert) {
+        const widget = this.createSparkline({});
 
-        widget.option("dataSource", [1, 2, 3]);
+        widget.option('dataSource', [1, 2, 3]);
 
         assert.deepEqual(widget.getDataSource().items(), [1, 2, 3]);
     });

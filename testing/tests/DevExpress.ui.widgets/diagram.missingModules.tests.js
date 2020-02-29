@@ -1,1 +1,1 @@
-require("./diagramParts/importDiagram.tests.js");
+require('./diagramParts/importDiagram.tests.js');

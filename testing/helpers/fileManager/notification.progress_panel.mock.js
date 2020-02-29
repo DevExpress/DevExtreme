@@ -1,5 +1,5 @@
-import { extend } from "core/utils/extend";
-import FileManagerProgressPanel from "ui/file_manager/ui.file_manager.notification.progress_panel";
+import { extend } from 'core/utils/extend';
+import FileManagerProgressPanel from 'ui/file_manager/ui.file_manager.notification.progress_panel';
 
 export default class FileManagerProgressPanelMock extends FileManagerProgressPanel {
 
@@ -11,9 +11,9 @@ export default class FileManagerProgressPanelMock extends FileManagerProgressPan
     }
 
     _logEvent(type, args) {
-        const logger = this.option("logger");
+        const logger = this.option('logger');
         if(logger) {
-            type = "progress-" + type;
+            type = 'progress-' + type;
             logger.addEntry(type, args);
         }
     }
@@ -21,7 +21,7 @@ export default class FileManagerProgressPanelMock extends FileManagerProgressPan
     addOperation(commonText, showCloseButtonAlways, allowProgressAutoUpdate) {
         const operationId = ++this._lastId;
 
-        this._logEvent("addOperation", {
+        this._logEvent('addOperation', {
             operationId,
             commonText,
             allowCancel: showCloseButtonAlways,
@@ -42,7 +42,7 @@ export default class FileManagerProgressPanelMock extends FileManagerProgressPan
             };
         });
 
-        this._logEvent("addOperationDetails", {
+        this._logEvent('addOperationDetails', {
             operationId: info.testOperationId,
             details: detailsItems,
             allowCancel: showCloseButton
@@ -51,7 +51,7 @@ export default class FileManagerProgressPanelMock extends FileManagerProgressPan
     }
 
     completeOperationItem(info, itemIndex, commonProgress) {
-        this._logEvent("completeOperationItem", {
+        this._logEvent('completeOperationItem', {
             operationId: info.testOperationId,
             itemIndex,
             commonProgress
@@ -60,7 +60,7 @@ export default class FileManagerProgressPanelMock extends FileManagerProgressPan
     }
 
     updateOperationItemProgress(info, itemIndex, itemProgress, commonProgress) {
-        this._logEvent("updateOperationItemProgress", {
+        this._logEvent('updateOperationItemProgress', {
             operationId: info.testOperationId,
             itemIndex,
             itemProgress,
@@ -70,7 +70,7 @@ export default class FileManagerProgressPanelMock extends FileManagerProgressPan
     }
 
     completeOperation(info, commonText, isError, statusText) {
-        this._logEvent("completeOperation", {
+        this._logEvent('completeOperation', {
             operationId: info.testOperationId,
             commonText,
             isError,
@@ -80,7 +80,7 @@ export default class FileManagerProgressPanelMock extends FileManagerProgressPan
     }
 
     completeSingleOperationWithError(info, errorText) {
-        this._logEvent("completeSingleOperationWithError", {
+        this._logEvent('completeSingleOperationWithError', {
             operationId: info.testOperationId,
             errorText
         });
@@ -88,7 +88,7 @@ export default class FileManagerProgressPanelMock extends FileManagerProgressPan
     }
 
     addOperationDetailsError(info, index, errorText) {
-        this._logEvent("addOperationDetailsError", {
+        this._logEvent('addOperationDetailsError', {
             operationId: info.testOperationId,
             index,
             errorText
@@ -97,7 +97,7 @@ export default class FileManagerProgressPanelMock extends FileManagerProgressPan
     }
 
     renderError($container, $target, errorText) {
-        this._logEvent("renderError", {
+        this._logEvent('renderError', {
             errorText
         });
         super.renderError($container, $target, errorText);
@@ -108,7 +108,7 @@ export default class FileManagerProgressPanelMock extends FileManagerProgressPan
             commonText: item.commonText,
             imageUrl: item.imageUrl
         };
-        this._logEvent("createErrorDetailsProgressBox", {
+        this._logEvent('createErrorDetailsProgressBox', {
             item: itemInfo,
             errorText
         });
@@ -129,7 +129,7 @@ export default class FileManagerProgressPanelMock extends FileManagerProgressPan
         const name = args.name;
 
         switch(name) {
-            case "logger":
+            case 'logger':
                 break;
             default:
                 super._optionChanged(args);

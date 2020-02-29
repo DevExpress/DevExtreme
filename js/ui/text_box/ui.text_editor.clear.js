@@ -1,21 +1,21 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import TextEditorButton from "./texteditor_button_collection/button";
-import { addNamespace } from "../../events/utils";
-import { down as pointerDown } from "../../events/pointer";
-import { name as click } from "../../events/click";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import TextEditorButton from './texteditor_button_collection/button';
+import { addNamespace } from '../../events/utils';
+import { down as pointerDown } from '../../events/pointer';
+import { name as click } from '../../events/click';
 
-const STATE_INVISIBLE_CLASS = "dx-state-invisible";
-const TEXTEDITOR_CLEAR_BUTTON_CLASS = "dx-clear-button-area";
-const TEXTEDITOR_CLEAR_ICON_CLASS = "dx-icon-clear";
-const TEXTEDITOR_ICON_CLASS = "dx-icon";
-const TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS = "dx-show-clear-button";
+const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
+const TEXTEDITOR_CLEAR_BUTTON_CLASS = 'dx-clear-button-area';
+const TEXTEDITOR_CLEAR_ICON_CLASS = 'dx-icon-clear';
+const TEXTEDITOR_ICON_CLASS = 'dx-icon';
+const TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS = 'dx-show-clear-button';
 
 export default class ClearButton extends TextEditorButton {
     _create() {
-        const $element = $("<span>")
+        const $element = $('<span>')
             .addClass(TEXTEDITOR_CLEAR_BUTTON_CLASS)
-            .append($("<span>").addClass(TEXTEDITOR_ICON_CLASS).addClass(TEXTEDITOR_CLEAR_ICON_CLASS));
+            .append($('<span>').addClass(TEXTEDITOR_ICON_CLASS).addClass(TEXTEDITOR_CLEAR_ICON_CLASS));
 
         this._addToContainer($element);
         this.update(true);
@@ -38,7 +38,7 @@ export default class ClearButton extends TextEditorButton {
 
         eventsEngine.on($button, addNamespace(pointerDown, editorName),
             (e) => {
-                e.pointerType === "mouse"
+                e.pointerType === 'mouse'
                     ? e.preventDefault()
                     : editor._clearValueHandler(e);
             }

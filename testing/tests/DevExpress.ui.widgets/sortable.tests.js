@@ -1,20 +1,23 @@
-import $ from "jquery";
-import pointerMock from "../../helpers/pointerMock.js";
-import "ui/sortable";
-import fx from "animation/fx";
-import animationFrame from "animation/frame";
-import browser from "core/utils/browser";
+import $ from 'jquery';
+import pointerMock from '../../helpers/pointerMock.js';
+import 'ui/sortable';
+import fx from 'animation/fx';
+import animationFrame from 'animation/frame';
+import browser from 'core/utils/browser';
 
-import "common.css!";
+import 'common.css!';
 
 fx.off = true;
 
 
 QUnit.testStart(function() {
-    let markup =
+    const markup =
         `<style>
             .draggable {
                 height: 30px;
+            }
+            .default {
+                cursor: default;
             }
         </style>
         <div id="items" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
@@ -70,66 +73,66 @@ QUnit.testStart(function() {
     </div>
         `;
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-var SORTABLE_CLASS = "dx-sortable",
-    PLACEHOLDER_CLASS = "dx-sortable-placeholder",
-    PLACEHOLDER_SELECTOR = `.${PLACEHOLDER_CLASS}`,
-    MAX_INTEGER = 2147483647;
+const SORTABLE_CLASS = 'dx-sortable';
+const PLACEHOLDER_CLASS = 'dx-sortable-placeholder';
+const PLACEHOLDER_SELECTOR = `.${PLACEHOLDER_CLASS}`;
+const MAX_INTEGER = 2147483647;
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
-        $("#qunit-fixture").addClass("qunit-fixture-visible");
-        this.$element = $("#items");
+        $('#qunit-fixture').addClass('qunit-fixture-visible');
+        this.$element = $('#items');
 
         this.createSortable = (options) => {
-            return this.sortableInstance = this.$element.dxSortable(options).dxSortable("instance");
+            return this.sortableInstance = this.$element.dxSortable(options).dxSortable('instance');
         };
     },
     afterEach: function() {
-        $("#qunit-fixture").removeClass("qunit-fixture-visible");
+        $('#qunit-fixture').removeClass('qunit-fixture-visible');
         this.sortableInstance && this.sortableInstance.dispose();
     }
 };
 
-var crossComponentModuleConfig = {
+const crossComponentModuleConfig = {
     createComponent: function(componentName, options, $element) {
-        let instance = ($element || this.$element)[componentName](options)[componentName]("instance");
+        const instance = ($element || this.$element)[componentName](options)[componentName]('instance');
         this.instances.push(instance);
         return instance;
     },
     beforeEach: function() {
-        $("#qunit-fixture").addClass("qunit-fixture-visible");
+        $('#qunit-fixture').addClass('qunit-fixture-visible');
 
         this.instances = [];
-        this.$element = $("#items");
-        this.createSortable = this.createComponent.bind(this, "dxSortable");
-        this.createDraggable = this.createComponent.bind(this, "dxDraggable");
+        this.$element = $('#items');
+        this.createSortable = this.createComponent.bind(this, 'dxSortable');
+        this.createDraggable = this.createComponent.bind(this, 'dxDraggable');
     },
     afterEach: function() {
-        $("#qunit-fixture").removeClass("qunit-fixture-visible");
+        $('#qunit-fixture').removeClass('qunit-fixture-visible');
         this.instances.forEach((instance) => {
             instance.dispose();
         });
     }
 };
 
-QUnit.module("rendering", moduleConfig);
+QUnit.module('rendering', moduleConfig);
 
-QUnit.test("Element has class", function(assert) {
+QUnit.test('Element has class', function(assert) {
     assert.ok(this.createSortable().$element().hasClass(SORTABLE_CLASS));
 });
 
-QUnit.test("Drag template - check args", function(assert) {
+QUnit.test('Drag template - check args', function(assert) {
     // arrange
-    let items,
-        dragTemplate = sinon.spy(() => {
-            return $("<div>");
-        });
+    let items;
+    const dragTemplate = sinon.spy(() => {
+        return $('<div>');
+    });
 
     this.createSortable({
-        filter: ".draggable",
+        filter: '.draggable',
         dragTemplate: dragTemplate
     });
 
@@ -139,14 +142,14 @@ QUnit.test("Drag template - check args", function(assert) {
     pointerMock(items.eq(0)).start().down().move(10, 0);
 
     // assert
-    assert.strictEqual(dragTemplate.callCount, 1, "drag template is called");
-    assert.strictEqual($(dragTemplate.getCall(0).args[0].itemElement).get(0), items.get(0), "itemElement arg");
-    assert.strictEqual(dragTemplate.getCall(0).args[0].fromIndex, 0, "fromIndex arg");
-    assert.strictEqual($(dragTemplate.getCall(0).args[1]).get(0), $("body").children(".dx-sortable-dragging").get(0), "second arg");
+    assert.strictEqual(dragTemplate.callCount, 1, 'drag template is called');
+    assert.strictEqual($(dragTemplate.getCall(0).args[0].itemElement).get(0), items.get(0), 'itemElement arg');
+    assert.strictEqual(dragTemplate.getCall(0).args[0].fromIndex, 0, 'fromIndex arg');
+    assert.strictEqual($(dragTemplate.getCall(0).args[1]).get(0), $('body').children('.dx-sortable-dragging').get(0), 'second arg');
 });
 
 // T826089
-QUnit.test("Asynchronous drag template (React)", function(assert) {
+QUnit.test('Asynchronous drag template (React)', function(assert) {
     // arrange
     let $dragContainer;
 
@@ -156,43 +159,43 @@ QUnit.test("Asynchronous drag template (React)", function(assert) {
         }
     });
 
-    let $items = this.$element.children();
+    const $items = this.$element.children();
 
     // act
     pointerMock($items.eq(0)).start().down().move(10, 0);
-    $("<div>").addClass("my-drag-item").appendTo($dragContainer);
+    $('<div>').addClass('my-drag-item').appendTo($dragContainer);
 
     // assert
-    let $sortableDragging = $("body").children(".dx-sortable-dragging");
-    assert.strictEqual($sortableDragging.length, 1, "body contains dx-sortable-dragging");
-    assert.strictEqual($sortableDragging.hasClass("dx-sortable-clone"), true, "dx-sortable-dragging has dx-sortable-clone class");
-    assert.strictEqual($sortableDragging.children(".my-drag-item").length, 1, "dx-sortable-dragging contains my-drag-item");
+    const $sortableDragging = $('body').children('.dx-sortable-dragging');
+    assert.strictEqual($sortableDragging.length, 1, 'body contains dx-sortable-dragging');
+    assert.strictEqual($sortableDragging.hasClass('dx-sortable-clone'), true, 'dx-sortable-dragging has dx-sortable-clone class');
+    assert.strictEqual($sortableDragging.children('.my-drag-item').length, 1, 'dx-sortable-dragging contains my-drag-item');
 });
 
-QUnit.test("Default drag template", function(assert) {
+QUnit.test('Default drag template', function(assert) {
     // arrange
     this.createSortable({
     });
 
-    var $items = this.$element.children();
+    const $items = this.$element.children();
 
     // act
     pointerMock($items.eq(0)).start().down().move(10, 0);
 
     // assert
-    var $draggingElement = $(".dx-sortable-dragging");
-    assert.ok($draggingElement.hasClass("dx-sortable-clone"), "clone class");
-    assert.equal($draggingElement.css("z-index"), MAX_INTEGER, "z-index");
-    assert.strictEqual($draggingElement.text(), "item1", "text is correct");
-    assert.strictEqual($draggingElement.outerWidth(), $items.eq(0).outerWidth(), "width is correct");
-    assert.strictEqual($draggingElement.outerHeight(), $items.eq(0).outerHeight(), "height is correct");
-    assert.strictEqual($items.get(0).style.width, "", "width style does not exist in item");
-    assert.strictEqual($draggingElement.children().get(0).style.width, "300px", "width style exists in dragging item");
-    assert.strictEqual($items.get(0).style.height, "", "height style does not exist in item");
-    assert.strictEqual($draggingElement.children().get(0).style.height, "30px", "height style exists in dragging item");
+    const $draggingElement = $('.dx-sortable-dragging');
+    assert.ok($draggingElement.hasClass('dx-sortable-clone'), 'clone class');
+    assert.equal($draggingElement.css('z-index'), MAX_INTEGER, 'z-index');
+    assert.strictEqual($draggingElement.text(), 'item1', 'text is correct');
+    assert.strictEqual($draggingElement.outerWidth(), $items.eq(0).outerWidth(), 'width is correct');
+    assert.strictEqual($draggingElement.outerHeight(), $items.eq(0).outerHeight(), 'height is correct');
+    assert.strictEqual($items.get(0).style.width, '', 'width style does not exist in item');
+    assert.strictEqual($draggingElement.children().get(0).style.width, '300px', 'width style exists in dragging item');
+    assert.strictEqual($items.get(0).style.height, '', 'height style does not exist in item');
+    assert.strictEqual($draggingElement.children().get(0).style.height, '30px', 'height style exists in dragging item');
 });
 
-QUnit.test("While dragging cursor should be 'grabbing/pointer'", function(assert) {
+QUnit.test('While dragging cursor should be \'grabbing/pointer\'', function(assert) {
     // arrange
     this.createSortable({});
 
@@ -200,73 +203,96 @@ QUnit.test("While dragging cursor should be 'grabbing/pointer'", function(assert
     pointerMock(this.$element.children().eq(0)).start().down().move(10, 0);
 
     // assert
-    let cursor = browser.msie && parseInt(browser.version) <= 11 ? "pointer" : "grabbing";
-    assert.equal($(".dx-sortable-dragging").css("cursor"), cursor, `cursor is ${cursor}`);
+    const cursor = browser.msie && parseInt(browser.version) <= 11 ? 'pointer' : 'grabbing';
+    assert.equal($('.dx-sortable-dragging').children().first().css('cursor'), cursor, `cursor is ${cursor}`);
 });
 
-QUnit.module("allowReordering", moduleConfig);
-
-QUnit.test("allowReordering = false when dropFeedbackMode is 'push'", function(assert) {
+QUnit.test('The selector is specific enough to override the style applied to handle element', function(assert) {
     // arrange
-    let onDragChangeSpy = sinon.spy(),
-        onReorderSpy = sinon.spy();
+    $('<div>Drag</div>').addClass('default').appendTo(this.$element);
 
     this.createSortable({
-        filter: ".draggable",
+        handle: '.default'
+    });
+
+    // act
+    pointerMock(this.$element.find('.default').eq(0)).start().down().move(10, 0);
+
+    // assert
+    const cursor = browser.msie && parseInt(browser.version) <= 11 ? 'pointer' : 'grabbing';
+    assert.equal($('.dx-sortable-dragging').find('.default').eq(0).css('cursor'), cursor, `cursor is ${cursor}`);
+});
+
+QUnit.test('Elements should have \'user-select: auto\' style (T862255)', function(assert) {
+    this.createSortable();
+
+    const userSelect = browser.msie ? 'text' : 'auto';
+    assert.equal(this.$element.find('.draggable').eq(0).css('user-select'), userSelect, `user-select is ${userSelect}`);
+});
+
+QUnit.module('allowReordering', moduleConfig);
+
+QUnit.test('allowReordering = false when dropFeedbackMode is \'push\'', function(assert) {
+    // arrange
+    const onDragChangeSpy = sinon.spy();
+    const onReorderSpy = sinon.spy();
+
+    this.createSortable({
+        filter: '.draggable',
         allowReordering: false,
-        dropFeedbackMode: "push",
+        dropFeedbackMode: 'push',
         moveItemOnDrop: true,
         onDragChange: onDragChangeSpy,
         onReorder: onReorderSpy
     });
 
     // act
-    let pointer = pointerMock(this.$element.children().first()).start().down().move(0, 65);
+    const pointer = pointerMock(this.$element.children().first()).start().down().move(0, 65);
 
     // assert
-    assert.strictEqual(onDragChangeSpy.callCount, 0, "onDragChange event is not called");
-    assert.strictEqual(this.$element.children().get(1).style.transform, "", "item position is not changed");
+    assert.strictEqual(onDragChangeSpy.callCount, 0, 'onDragChange event is not called');
+    assert.strictEqual(this.$element.children().get(1).style.transform, '', 'item position is not changed');
 
     // act
     pointer.up();
 
     // assert
-    assert.strictEqual(onReorderSpy.callCount, 0, "onReorder event is not called");
-    assert.strictEqual(this.$element.children().first().text(), "item1", "first item is not changed");
+    assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+    assert.strictEqual(this.$element.children().first().text(), 'item1', 'first item is not changed');
 });
 
-QUnit.test("allowReordering = false when dropFeedbackMode is 'indicate'", function(assert) {
+QUnit.test('allowReordering = false when dropFeedbackMode is \'indicate\'', function(assert) {
     // arrange
-    let onDragChangeSpy = sinon.spy(),
-        onReorderSpy = sinon.spy();
+    const onDragChangeSpy = sinon.spy();
+    const onReorderSpy = sinon.spy();
 
     this.createSortable({
-        filter: ".draggable",
+        filter: '.draggable',
         allowReordering: false,
-        dropFeedbackMode: "indicate",
+        dropFeedbackMode: 'indicate',
         moveItemOnDrop: true,
         onDragChange: onDragChangeSpy,
         onReorder: onReorderSpy
     });
 
     // act
-    let pointer = pointerMock(this.$element.children().first()).start().down().move(0, 65);
+    const pointer = pointerMock(this.$element.children().first()).start().down().move(0, 65);
 
     // assert
-    assert.strictEqual(onDragChangeSpy.callCount, 0, "onDragChange event is not called");
-    assert.strictEqual($(".dx-sortable-placeholder").length, 0, "placeholder does not exist");
+    assert.strictEqual(onDragChangeSpy.callCount, 0, 'onDragChange event is not called');
+    assert.strictEqual($('.dx-sortable-placeholder').length, 0, 'placeholder does not exist');
 
     // act
     pointer.up();
 
     // assert
-    assert.strictEqual(onReorderSpy.callCount, 0, "onReorder event is not called");
-    assert.strictEqual(this.$element.children().first().text(), "item1", "first item is not changed");
+    assert.strictEqual(onReorderSpy.callCount, 0, 'onReorder event is not called');
+    assert.strictEqual(this.$element.children().first().text(), 'item1', 'first item is not changed');
 });
 
-QUnit.test("allowReordering = false when allowDropInsideItem is true", function(assert) {
+QUnit.test('allowReordering = false when allowDropInsideItem is true', function(assert) {
     // arrange
-    let onDragChangeSpy = sinon.spy();
+    const onDragChangeSpy = sinon.spy();
 
     this.createSortable({
         allowReordering: false,
@@ -275,24 +301,24 @@ QUnit.test("allowReordering = false when allowDropInsideItem is true", function(
     });
 
     // act
-    let pointer = pointerMock(this.$element.children().first()).start().down(15, 15).move(0, 50);
+    const pointer = pointerMock(this.$element.children().first()).start().down(15, 15).move(0, 50);
 
     // assert
     // assert
-    assert.strictEqual(onDragChangeSpy.callCount, 0, "onDragChange event is not called");
-    assert.strictEqual($(".dx-sortable-placeholder").length, 0, "placeholder does not exist");
+    assert.strictEqual(onDragChangeSpy.callCount, 0, 'onDragChange event is not called');
+    assert.strictEqual($('.dx-sortable-placeholder').length, 0, 'placeholder does not exist');
 
     // act
     pointer.move(0, 10);
 
     // assert
-    assert.strictEqual(onDragChangeSpy.callCount, 1, "onDragChange event is called");
-    assert.strictEqual($(".dx-sortable-placeholder.dx-sortable-placeholder-inside").length, 1, "placeholder exists");
+    assert.strictEqual(onDragChangeSpy.callCount, 1, 'onDragChange event is called');
+    assert.strictEqual($('.dx-sortable-placeholder.dx-sortable-placeholder-inside').length, 1, 'placeholder exists');
 });
 
-QUnit.test("Move to root if allowReordering is false and allowDropInsideItem is true", function(assert) {
+QUnit.test('Move to root if allowReordering is false and allowDropInsideItem is true', function(assert) {
     // arrange
-    let onDragChangeSpy = sinon.spy();
+    const onDragChangeSpy = sinon.spy();
 
     this.createSortable({
         allowReordering: false,
@@ -301,127 +327,145 @@ QUnit.test("Move to root if allowReordering is false and allowDropInsideItem is 
     });
 
     // act
-    let pointer = pointerMock(this.$element.children().eq(1)).start().down(15, 45).move(0, -30);
+    const pointer = pointerMock(this.$element.children().eq(1)).start().down(15, 45).move(0, -30);
 
     // assert
-    assert.strictEqual(onDragChangeSpy.callCount, 1, "onDragChange event is not called");
-    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].dropInsideItem, true, "onDragChange dropInsideItem arg is true");
-    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].fromIndex, 1, "onDragChange from arg");
-    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 0, "onDragChange toIndex arg");
-    assert.strictEqual($(".dx-sortable-placeholder").length, 1, "inside placeholder exists");
+    assert.strictEqual(onDragChangeSpy.callCount, 1, 'onDragChange event is not called');
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].dropInsideItem, true, 'onDragChange dropInsideItem arg is true');
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].fromIndex, 1, 'onDragChange from arg');
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 0, 'onDragChange toIndex arg');
+    assert.strictEqual($('.dx-sortable-placeholder').length, 1, 'inside placeholder exists');
 
     // act
     pointer.move(0, -10);
 
     // assert
-    assert.strictEqual(onDragChangeSpy.callCount, 2, "onDragChange event is called");
-    assert.strictEqual(onDragChangeSpy.getCall(1).args[0].dropInsideItem, false, "onDragChange dropInsideItem arg is false");
-    assert.strictEqual(onDragChangeSpy.getCall(1).args[0].fromIndex, 1, "onDragChange from arg");
-    assert.strictEqual(onDragChangeSpy.getCall(1).args[0].toIndex, 0, "onDragChange toIndex arg");
-    assert.strictEqual($(".dx-sortable-placeholder:not(.dx-sortable-placeholder-inside)").length, 1, "placeholder exists");
+    assert.strictEqual(onDragChangeSpy.callCount, 2, 'onDragChange event is called');
+    assert.strictEqual(onDragChangeSpy.getCall(1).args[0].dropInsideItem, false, 'onDragChange dropInsideItem arg is false');
+    assert.strictEqual(onDragChangeSpy.getCall(1).args[0].fromIndex, 1, 'onDragChange from arg');
+    assert.strictEqual(onDragChangeSpy.getCall(1).args[0].toIndex, 0, 'onDragChange toIndex arg');
+    assert.strictEqual($('.dx-sortable-placeholder:not(.dx-sortable-placeholder-inside)').length, 1, 'placeholder exists');
 });
 
-QUnit.test("option changing", function(assert) {
+QUnit.test('option changing', function(assert) {
     // arrange
-    var sortable = this.createSortable({
-        filter: ".draggable",
+    const sortable = this.createSortable({
+        filter: '.draggable',
         moveItemOnDrop: true
     });
 
     // act
-    sortable.option("allowReordering", false);
-    let pointer = pointerMock(this.$element.children().first()).start().down().move(0, 65);
+    sortable.option('allowReordering', false);
+    const pointer = pointerMock(this.$element.children().first()).start().down().move(0, 65);
 
     // assert
-    assert.strictEqual(this.$element.children().get(1).style.transform, "", "item position is not changed");
+    assert.strictEqual(this.$element.children().get(1).style.transform, '', 'item position is not changed');
 
     // act
     pointer.up();
 
     // assert
-    assert.strictEqual(this.$element.children().first().text(), "item1", "first item is not changed");
+    assert.strictEqual(this.$element.children().first().text(), 'item1', 'first item is not changed');
+});
+
+QUnit.test('Move to top if allowReordering is false', function(assert) {
+    // arrange
+    const onDragChangeSpy = sinon.spy();
+
+    this.createSortable({
+        allowReordering: false,
+        dropFeedbackMode: 'indicate',
+        onDragChange: onDragChangeSpy
+    });
+
+    // act
+    pointerMock(this.$element.children().eq(1)).start().down(15, 45).move(0, -45);
+
+    // assert
+    assert.strictEqual(onDragChangeSpy.callCount, 0, 'onDragChange event is not called');
+    assert.strictEqual($('.dx-sortable-placeholder').length, 0, 'placeholder does not exist');
 });
 
 
-QUnit.module("placeholder and source", moduleConfig);
+QUnit.module('placeholder and source', moduleConfig);
 
-QUnit.test("Source item if filter is not defined", function(assert) {
+QUnit.test('Source item if filter is not defined', function(assert) {
     // arrange
     this.createSortable({
-        dropFeedbackMode: "push"
+        dropFeedbackMode: 'push'
     });
 
     let $items = this.$element.children();
-    let $dragItemElement = $items.eq(0);
+    const $dragItemElement = $items.eq(0);
 
     // assert
-    assert.strictEqual($items.length, 3, "item count");
+    assert.strictEqual($items.length, 3, 'item count');
 
     // act
     pointerMock($dragItemElement).start().down().move(10, 0);
 
     // assert
     $items = this.$element.children();
-    let $source = $items.eq(0);
-    assert.strictEqual($items.length, 3, "item count");
-    assert.ok($source.hasClass("dx-sortable-source-hidden"), "source item is hidden");
+    const $source = $items.eq(0);
+    assert.strictEqual($items.length, 3, 'item count');
+    assert.ok($source.hasClass('dx-sortable-source-hidden'), 'source item is hidden');
 });
 
-QUnit.test("Source item if content template is defined", function(assert) {
+QUnit.test('Source item if content template is defined', function(assert) {
     // arrange
-    this.$element = $("#itemsWithContentTemplate");
+    this.$element = $('#itemsWithContentTemplate');
 
     this.createSortable({
-        dropFeedbackMode: "push"
+        dropFeedbackMode: 'push'
     });
 
     let $items = this.$element.children().children();
-    let $dragItemElement = $items.eq(0);
+    const $dragItemElement = $items.eq(0);
 
     // assert
-    assert.strictEqual($items.length, 3, "item count");
+    assert.strictEqual($items.length, 3, 'item count');
 
     // act
     pointerMock($dragItemElement).start().down().move(10, 0);
 
     // assert
     $items = this.$element.children().children();
-    let $source = $items.eq(0);
-    assert.strictEqual($items.length, 3, "item count");
-    assert.ok($source.hasClass("dx-sortable-source-hidden"), "source item is hidden");
+    const $source = $items.eq(0);
+    assert.strictEqual($items.length, 3, 'item count');
+    assert.ok($source.hasClass('dx-sortable-source-hidden'), 'source item is hidden');
 });
 
-QUnit.test("Source item", function(assert) {
+QUnit.test('Source item', function(assert) {
     // arrange
     this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable"
+        dropFeedbackMode: 'push',
+        filter: '.draggable'
     });
 
     let $items = this.$element.children();
-    let $dragItemElement = $items.eq(0);
+    const $dragItemElement = $items.eq(0);
 
     // assert
-    assert.strictEqual($items.length, 3, "item count");
+    assert.strictEqual($items.length, 3, 'item count');
 
     // act
     pointerMock($dragItemElement).start().down().move(10, 0);
 
     // assert
     $items = this.$element.children();
-    let $source = $items.eq(0);
-    assert.strictEqual($items.length, 3, "item count");
-    assert.ok($source.hasClass("dx-sortable-source-hidden"), "source item is hidden");
+    const $source = $items.eq(0);
+    assert.strictEqual($items.length, 3, 'item count');
+    assert.ok($source.hasClass('dx-sortable-source-hidden'), 'source item is hidden');
 });
 
-QUnit.test("Initial placeholder if dropFeedbackMode is indicate", function(assert) {
+QUnit.test('Initial placeholder if dropFeedbackMode is indicate', function(assert) {
     // arrange
-    let items,
-        $placeholder,
-        $dragItemElement;
+    let items;
+    let $placeholder;
+    let $dragItemElement;
 
     this.createSortable({
-        dropFeedbackMode: "indicate"
+        dropFeedbackMode: 'indicate'
     });
 
     items = this.$element.children();
@@ -432,8 +476,8 @@ QUnit.test("Initial placeholder if dropFeedbackMode is indicate", function(asser
 
     // assert
     items = this.$element.children();
-    assert.strictEqual(items.length, 3, "item count");
-    assert.strictEqual($(".dx-sortable-placeholder").length, 0, "there isn't a placeholder");
+    assert.strictEqual(items.length, 3, 'item count');
+    assert.strictEqual($('.dx-sortable-placeholder').length, 0, 'there isn\'t a placeholder');
 
     pointerMock($dragItemElement).up();
 
@@ -442,21 +486,21 @@ QUnit.test("Initial placeholder if dropFeedbackMode is indicate", function(asser
 
     // assert
     items = this.$element.children();
-    $placeholder = $(".dx-sortable-placeholder");
-    assert.strictEqual(items.length, 3, "item count is not changed");
-    assert.equal($placeholder.length, 1, "placeholder exists");
-    assert.equal($placeholder.css("z-index"), MAX_INTEGER, "z-index");
-    assert.ok($placeholder.next().hasClass("dx-sortable-dragging"), "palceholder is before dragging");
-    assert.equal($placeholder.get(0).style.height, "", "placeholder height");
-    assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");
-    assert.equal($placeholder.get(0).style.transform, "translate(0px, 60px)", "placeholder position");
+    $placeholder = $('.dx-sortable-placeholder');
+    assert.strictEqual(items.length, 3, 'item count is not changed');
+    assert.equal($placeholder.length, 1, 'placeholder exists');
+    assert.equal($placeholder.css('z-index'), MAX_INTEGER, 'z-index');
+    assert.ok($placeholder.next().hasClass('dx-sortable-dragging'), 'palceholder is before dragging');
+    assert.equal($placeholder.get(0).style.height, '', 'placeholder height');
+    assert.equal($placeholder.get(0).style.width, '300px', 'placeholder width');
+    assert.equal($placeholder.get(0).style.transform, 'translate(0px, 60px)', 'placeholder position');
 });
 
-QUnit.test("Initial placeholder if allowDropInsideItem is true", function(assert) {
+QUnit.test('Initial placeholder if allowDropInsideItem is true', function(assert) {
     // arrange
-    let items,
-        $placeholder,
-        $dragItemElement;
+    let items;
+    let $placeholder;
+    let $dragItemElement;
 
     this.createSortable({
         allowDropInsideItem: true
@@ -466,43 +510,43 @@ QUnit.test("Initial placeholder if allowDropInsideItem is true", function(assert
     $dragItemElement = items.eq(0);
 
     // act
-    var pointer = pointerMock($dragItemElement).start().down(15, 15).move(0, 30);
+    const pointer = pointerMock($dragItemElement).start().down(15, 15).move(0, 30);
 
     // assert
     items = this.$element.children();
-    $placeholder = $(".dx-sortable-placeholder");
-    assert.strictEqual(items.length, 3, "item count");
-    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "element has placeholder class");
-    assert.ok($placeholder.hasClass("dx-sortable-placeholder-inside"), "element has placeholder-inside class");
-    assert.equal($placeholder.get(0).style.height, "30px", "placeholder height");
-    assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");
-    assert.equal($placeholder.get(0).style.transform, "translate(0px, 30px)", "placeholder position");
+    $placeholder = $('.dx-sortable-placeholder');
+    assert.strictEqual(items.length, 3, 'item count');
+    assert.ok($placeholder.hasClass('dx-sortable-placeholder'), 'element has placeholder class');
+    assert.ok($placeholder.hasClass('dx-sortable-placeholder-inside'), 'element has placeholder-inside class');
+    assert.equal($placeholder.get(0).style.height, '30px', 'placeholder height');
+    assert.equal($placeholder.get(0).style.width, '300px', 'placeholder width');
+    assert.equal($placeholder.get(0).style.transform, 'translate(0px, 30px)', 'placeholder position');
 
     // act
     pointer.move(0, 15);
 
     // assert
     items = this.$element.children();
-    $placeholder = $(".dx-sortable-placeholder");
-    assert.strictEqual(items.length, 3, "item count");
-    assert.equal($placeholder.length, 1, "placeholder exists");
-    assert.notOk($placeholder.hasClass("dx-sortable-placeholder-inside"), "element has not placeholder-inside class");
-    assert.equal($placeholder.get(0).style.height, "", "placeholder height");
-    assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");
-    assert.equal($placeholder.get(0).style.transform, "translate(0px, 60px)", "placeholder position");
+    $placeholder = $('.dx-sortable-placeholder');
+    assert.strictEqual(items.length, 3, 'item count');
+    assert.equal($placeholder.length, 1, 'placeholder exists');
+    assert.notOk($placeholder.hasClass('dx-sortable-placeholder-inside'), 'element has not placeholder-inside class');
+    assert.equal($placeholder.get(0).style.height, '', 'placeholder height');
+    assert.equal($placeholder.get(0).style.width, '300px', 'placeholder width');
+    assert.equal($placeholder.get(0).style.transform, 'translate(0px, 60px)', 'placeholder position');
 });
 
-QUnit.test("Initial placeholder if dropFeedbackMode is indicate and itemOrientation is horiontal", function(assert) {
+QUnit.test('Initial placeholder if dropFeedbackMode is indicate and itemOrientation is horiontal', function(assert) {
     // arrange
-    let items,
-        $placeholder,
-        $dragItemElement;
+    let items;
+    let $placeholder;
+    let $dragItemElement;
 
-    this.$element = $("#itemsHorizontal");
+    this.$element = $('#itemsHorizontal');
 
     this.createSortable({
-        dropFeedbackMode: "indicate",
-        itemOrientation: "horizontal"
+        dropFeedbackMode: 'indicate',
+        itemOrientation: 'horizontal'
     });
 
     items = this.$element.children();
@@ -513,56 +557,56 @@ QUnit.test("Initial placeholder if dropFeedbackMode is indicate and itemOrientat
 
     // assert
     items = this.$element.children();
-    $placeholder = $(".dx-sortable-placeholder");
-    assert.strictEqual(items.length, 3, "item count");
-    assert.equal($placeholder.length, 1, "element has placeholder class");
-    assert.equal($placeholder.get(0).style.height, "300px", "placeholder height style");
-    assert.equal($placeholder.get(0).style.width, "", "placeholder width style");
-    assert.equal($placeholder.get(0).style.transform, "translate(60px, 500px)", "placeholder position");
+    $placeholder = $('.dx-sortable-placeholder');
+    assert.strictEqual(items.length, 3, 'item count');
+    assert.equal($placeholder.length, 1, 'element has placeholder class');
+    assert.equal($placeholder.get(0).style.height, '300px', 'placeholder height style');
+    assert.equal($placeholder.get(0).style.width, '', 'placeholder width style');
+    assert.equal($placeholder.get(0).style.transform, 'translate(60px, 500px)', 'placeholder position');
 });
 
-QUnit.test("Source classes toggling", function(assert) {
+QUnit.test('Source classes toggling', function(assert) {
     // arrange
     this.createSortable({
-        dropFeedbackMode: "push"
+        dropFeedbackMode: 'push'
     });
 
-    let items = this.$element.children(),
-        $dragItemElement = items.eq(0);
+    let items = this.$element.children();
+    const $dragItemElement = items.eq(0);
 
     // act
     pointerMock($dragItemElement).start().down().move(10, 0);
 
     // assert
     items = this.$element.children();
-    assert.ok(items.eq(0).hasClass("dx-sortable-source"), "element has source class");
-    assert.ok(items.eq(0).hasClass("dx-sortable-source-hidden"), "element has source-hidden class");
+    assert.ok(items.eq(0).hasClass('dx-sortable-source'), 'element has source class');
+    assert.ok(items.eq(0).hasClass('dx-sortable-source-hidden'), 'element has source-hidden class');
 
     // act
     pointerMock($dragItemElement).up();
 
     // assert
     items = this.$element.children();
-    assert.notOk(items.eq(0).hasClass("dx-sortable-source"), "element has not source class");
-    assert.notOk(items.eq(0).hasClass("dx-sortable-source-hidden"), "element has not source-hidden class");
+    assert.notOk(items.eq(0).hasClass('dx-sortable-source'), 'element has not source class');
+    assert.notOk(items.eq(0).hasClass('dx-sortable-source-hidden'), 'element has not source-hidden class');
 });
 
-QUnit.test("Move items during dragging", function(assert) {
+QUnit.test('Move items during dragging', function(assert) {
     // arrange
-    let items,
-        $item,
-        $dragItemElement;
+    let items;
+    let $item;
+    let $dragItemElement;
 
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "push"
+        filter: '.draggable',
+        dropFeedbackMode: 'push'
     });
 
     items = this.$element.children();
     $dragItemElement = items.eq(0);
 
     // assert
-    assert.strictEqual(items.length, 3, "item count");
+    assert.strictEqual(items.length, 3, 'item count');
 
     // act
     pointerMock($dragItemElement).start().down(15, 15).move(0, 30);
@@ -570,32 +614,32 @@ QUnit.test("Move items during dragging", function(assert) {
     // assert
     items = this.$element.children();
     $item = items.eq(0);
-    assert.strictEqual(items.length, 3, "item count");
-    assert.strictEqual($item.attr("id"), "item1", "first item is a source");
-    assert.ok($item.hasClass("dx-sortable-source-hidden"), "has source-hidden class");
+    assert.strictEqual(items.length, 3, 'item count');
+    assert.strictEqual($item.attr('id'), 'item1', 'first item is a source');
+    assert.ok($item.hasClass('dx-sortable-source-hidden'), 'has source-hidden class');
 
-    assert.strictEqual(items[0].style.transform, "", "items 1 is not moved");
-    assert.strictEqual(items[1].style.transform, "translate(0px, -30px)", "items 2 is moved up");
-    assert.strictEqual(items[2].style.transform, "", "items 3 is not moved");
+    assert.strictEqual(items[0].style.transform, '', 'items 1 is not moved');
+    assert.strictEqual(items[1].style.transform, 'translate(0px, -30px)', 'items 2 is moved up');
+    assert.strictEqual(items[2].style.transform, '', 'items 3 is not moved');
 });
 
-QUnit.test("Move items during dragging if content tempalte is defined", function(assert) {
+QUnit.test('Move items during dragging if content tempalte is defined', function(assert) {
     // arrange
-    let items,
-        $item,
-        $dragItemElement;
+    let items;
+    let $item;
+    let $dragItemElement;
 
-    this.$element = $("#itemsWithContentTemplate");
+    this.$element = $('#itemsWithContentTemplate');
 
     this.createSortable({
-        dropFeedbackMode: "push"
+        dropFeedbackMode: 'push'
     });
 
     items = this.$element.children().children();
     $dragItemElement = items.eq(0);
 
     // assert
-    assert.strictEqual(items.length, 3, "item count");
+    assert.strictEqual(items.length, 3, 'item count');
 
     // act
     pointerMock($dragItemElement).start().down(15, 15).move(15, 1000);
@@ -603,24 +647,24 @@ QUnit.test("Move items during dragging if content tempalte is defined", function
     // assert
     items = this.$element.children().children();
     $item = items.eq(0);
-    assert.strictEqual(items.length, 3, "item count");
-    assert.strictEqual($item.attr("id"), "item11", "first item is a source");
-    assert.ok($item.hasClass("dx-sortable-source-hidden"), "has source-hidden class");
+    assert.strictEqual(items.length, 3, 'item count');
+    assert.strictEqual($item.attr('id'), 'item11', 'first item is a source');
+    assert.ok($item.hasClass('dx-sortable-source-hidden'), 'has source-hidden class');
 
-    assert.strictEqual(items[0].style.transform, "", "items 1 is not moved");
-    assert.strictEqual(items[1].style.transform, "translate(0px, -30px)", "items 2 is moved up");
-    assert.strictEqual(items[2].style.transform, "translate(0px, -30px)", "items 3 is moved up");
+    assert.strictEqual(items[0].style.transform, '', 'items 1 is not moved');
+    assert.strictEqual(items[1].style.transform, 'translate(0px, -30px)', 'items 2 is moved up');
+    assert.strictEqual(items[2].style.transform, 'translate(0px, -30px)', 'items 3 is moved up');
 });
 
-QUnit.test("Drop when dropFeedbackMode is push", function(assert) {
+QUnit.test('Drop when dropFeedbackMode is push', function(assert) {
     // arrange
-    let items,
-        $dragItemElement;
+    let items;
+    let $dragItemElement;
 
     this.createSortable({
-        filter: ".draggable",
+        filter: '.draggable',
         moveItemOnDrop: true,
-        dropFeedbackMode: "push"
+        dropFeedbackMode: 'push'
     });
 
     items = this.$element.children();
@@ -631,20 +675,20 @@ QUnit.test("Drop when dropFeedbackMode is push", function(assert) {
 
     // assert
     items = this.$element.children();
-    assert.strictEqual(items.eq(0).attr("id"), "item2", "second item");
-    assert.strictEqual(items.eq(1).attr("id"), "item1", "first item");
-    assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
+    assert.strictEqual(items.eq(0).attr('id'), 'item2', 'second item');
+    assert.strictEqual(items.eq(1).attr('id'), 'item1', 'first item');
+    assert.strictEqual(items.eq(2).attr('id'), 'item3', 'third item');
 });
 
-QUnit.test("Drop when dropFeedbackMode is indicate", function(assert) {
+QUnit.test('Drop when dropFeedbackMode is indicate', function(assert) {
     // arrange
-    let items,
-        $dragItemElement;
+    let items;
+    let $dragItemElement;
 
     this.createSortable({
-        filter: ".draggable",
+        filter: '.draggable',
         moveItemOnDrop: true,
-        dropFeedbackMode: "indicate"
+        dropFeedbackMode: 'indicate'
     });
 
     items = this.$element.children();
@@ -655,41 +699,41 @@ QUnit.test("Drop when dropFeedbackMode is indicate", function(assert) {
 
     // assert
     items = this.$element.children();
-    assert.strictEqual(items.eq(0).attr("id"), "item2", "second item");
-    assert.strictEqual(items.eq(1).attr("id"), "item1", "first item");
-    assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
+    assert.strictEqual(items.eq(0).attr('id'), 'item2', 'second item');
+    assert.strictEqual(items.eq(1).attr('id'), 'item1', 'first item');
+    assert.strictEqual(items.eq(2).attr('id'), 'item3', 'third item');
 });
 
-QUnit.test("Remove placeholder after the drop end", function(assert) {
+QUnit.test('Remove placeholder after the drop end', function(assert) {
     // arrange
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate"
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate'
     });
 
-    let items = this.$element.children(),
-        $dragItemElement = items.eq(0);
+    const items = this.$element.children();
+    const $dragItemElement = items.eq(0);
 
     // act
     pointerMock($dragItemElement).start().down(15, 15).move(0, 30);
 
     // assert
-    assert.strictEqual($(".dx-sortable-placeholder").length, 1, "there is a placeholder element");
+    assert.strictEqual($('.dx-sortable-placeholder').length, 1, 'there is a placeholder element');
 
     // act
     pointerMock($dragItemElement).up();
 
     // assert
-    assert.strictEqual($(".dx-sortable-placeholder").length, 0, "there isn't a placeholder element");
+    assert.strictEqual($('.dx-sortable-placeholder').length, 0, 'there isn\'t a placeholder element');
 });
 
-QUnit.test("The source item should be correct after drag and drop items", function(assert) {
+QUnit.test('The source item should be correct after drag and drop items', function(assert) {
     // arrange
-    let items,
-        $item;
+    let items;
+    let $item;
 
     this.createSortable({
-        filter: ".draggable"
+        filter: '.draggable'
     });
 
     items = this.$element.children();
@@ -699,8 +743,8 @@ QUnit.test("The source item should be correct after drag and drop items", functi
 
     // assert
     $item = items.eq(0);
-    assert.ok($item.hasClass("dx-sortable-source"), "there is a source");
-    assert.strictEqual($item.attr("id"), "item1", "source id");
+    assert.ok($item.hasClass('dx-sortable-source'), 'there is a source');
+    assert.strictEqual($item.attr('id'), 'item1', 'source id');
 
     // arrange
     pointerMock(items.eq(0)).up();
@@ -709,90 +753,195 @@ QUnit.test("The source item should be correct after drag and drop items", functi
     pointerMock(items.eq(1)).start().down().move(10, 0);
 
     $item = items.eq(1);
-    assert.ok($item.hasClass("dx-sortable-source"), "there is a source");
-    assert.strictEqual($item.attr("id"), "item2", "placeholder id");
+    assert.ok($item.hasClass('dx-sortable-source'), 'there is a source');
+    assert.strictEqual($item.attr('id'), 'item2', 'placeholder id');
 });
 
-QUnit.test("Dragging an item to the last position when there is ignored (not draggable) item", function(assert) {
+QUnit.test('Dragging an item to the last position when there is ignored (not draggable) item', function(assert) {
     // arrange
-    let pointer,
-        items;
+    let pointer;
+    let items;
 
-    this.$element.append("<div id='item4'></div>");
+    this.$element.append('<div id=\'item4\'></div>');
     this.createSortable({
-        filter: ".draggable",
+        filter: '.draggable',
         moveItemOnDrop: true
     });
 
     items = this.$element.children();
 
     // assert
-    assert.strictEqual(items.length, 4, "item count");
+    assert.strictEqual(items.length, 4, 'item count');
 
     // act
     pointer = pointerMock(items.eq(0)).start().down().move(0, 90);
 
     // assert
     items = this.$element.children();
-    assert.ok(items.eq(0).hasClass("dx-sortable-source"), "source item");
-    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
+    assert.ok(items.eq(0).hasClass('dx-sortable-source'), 'source item');
+    assert.strictEqual(items.eq(3).attr('id'), 'item4', 'ignored item');
 
     // act
     pointer.up();
 
     // assert
     items = this.$element.children();
-    assert.strictEqual(items.eq(2).attr("id"), "item1", "source item");
-    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
+    assert.strictEqual(items.eq(2).attr('id'), 'item1', 'source item');
+    assert.strictEqual(items.eq(3).attr('id'), 'item4', 'ignored item');
 });
 
-QUnit.test("Dragging an item to the last position when there is ignored (not draggable) item and dropFeedbackMode option is 'indicate'", function(assert) {
+QUnit.test('Dragging an item to the last position when there is ignored (not draggable) item and dropFeedbackMode option is \'indicate\'', function(assert) {
     // arrange
-    let pointer,
-        items;
+    let pointer;
+    let items;
 
-    this.$element.append("<div id='item4'></div>");
+    this.$element.append('<div id=\'item4\'></div>');
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate",
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
         moveItemOnDrop: true
     });
 
     items = this.$element.children();
 
     // assert
-    assert.strictEqual(items.length, 4, "item count");
+    assert.strictEqual(items.length, 4, 'item count');
 
     // act
     pointer = pointerMock(items.eq(0)).start().down().move(0, 90);
 
     // assert
     items = this.$element.children();
-    assert.equal($(".dx-sortable-placeholder").length, 1, "placeholder exists");
-    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
+    assert.equal($('.dx-sortable-placeholder').length, 1, 'placeholder exists');
+    assert.strictEqual(items.eq(3).attr('id'), 'item4', 'ignored item');
 
     // act
     pointer.up();
 
     // assert
     items = this.$element.children();
-    assert.strictEqual(items.eq(2).attr("id"), "item1", "source item");
-    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
-    assert.equal($(".dx-sortable-placeholder").length, 0, "placeholder removed");
+    assert.strictEqual(items.eq(2).attr('id'), 'item1', 'source item');
+    assert.strictEqual(items.eq(3).attr('id'), 'item4', 'ignored item');
+    assert.equal($('.dx-sortable-placeholder').length, 0, 'placeholder removed');
+});
+
+QUnit.test('Dragging an item when the next item is hidden (dropFeedbackMode is "indicate")', function(assert) {
+    // arrange
+    const $items = $('#items').children();
+    const onDragChangeSpy = sinon.spy();
+
+    $items.eq(1).hide();
+    this.createSortable({
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
+        onDragChange: onDragChangeSpy
+    });
+
+    // act
+    const pointer = pointerMock($items.eq(0)).start().down().move(0, 15);
+
+    // assert
+    let $placeholderElement = $('.dx-sortable-placeholder');
+    assert.notOk($placeholderElement.is(':visible'), 'placeholder is hidden');
+
+    // act
+    pointer.move(0, 45);
+
+    // assert
+    $placeholderElement = $('.dx-sortable-placeholder');
+    assert.ok($placeholderElement.is(':visible'), 'placeholder is visible');
+    assert.strictEqual($placeholderElement.offset().top, 60, 'placeholder position top');
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
+});
+
+QUnit.test('Dragging an item when the prev item is hidden (dropFeedbackMode is "indicate")', function(assert) {
+    // arrange
+    const $items = $('#items').children();
+    const onDragChangeSpy = sinon.spy();
+
+    $items.eq(1).hide();
+    this.createSortable({
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
+        onDragChange: onDragChangeSpy
+    });
+
+    // act
+    const pointer = pointerMock($items.eq(2)).start().down(0, 55).move(0, -10);
+
+    // assert
+    let $placeholderElement = $('.dx-sortable-placeholder');
+    assert.notOk($placeholderElement.is(':visible'), 'placeholder is hidden');
+
+    // act
+    pointer.move(0, -50);
+
+    // assert
+    $placeholderElement = $('.dx-sortable-placeholder');
+    assert.ok($placeholderElement.is(':visible'), 'placeholder is visible');
+    assert.strictEqual($placeholderElement.offset().top, 0, 'placeholder position top');
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 0, 'toIndex');
+});
+
+QUnit.test('Dragging an item to the last position when the last item is hidden (dropFeedbackMode is "indicate")', function(assert) {
+    // arrange
+    const $items = $('#items').children();
+    const onDragChangeSpy = sinon.spy();
+
+    $items.last().hide();
+    this.createSortable({
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
+        onDragChange: onDragChangeSpy
+    });
+
+    // act
+    pointerMock($items.eq(0)).start().down().move(0, 60);
+
+    // assert
+    const $placeholderElement = $('.dx-sortable-placeholder');
+    assert.ok($placeholderElement.is(':visible'), 'placeholder is visible');
+    assert.strictEqual($placeholderElement.offset().top, 60, 'placeholder position top');
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
+});
+
+QUnit.test('The placeholder should not be displayed for the last visible item when it is dragged (dropFeedbackMode is "indicate")', function(assert) {
+    // arrange
+    let $items = $('#items').children();
+
+    $items.eq(1).hide();
+    $items.eq(2).hide();
+    $('#items').append(`
+        <div id="item4" class="draggable">item4</div>
+        <div id="item5" class="draggable" style="display: none;">item5</div>
+    `);
+
+    this.createSortable({
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate'
+    });
+    $items = $('#items').children();
+
+    // act
+    pointerMock($items.eq(3)).start().down(0, 45).move(0, 15);
+
+    // assert
+    const $placeholderElement = $('.dx-sortable-placeholder');
+    assert.notOk($placeholderElement.is(':visible'), 'placeholder is hidden');
 });
 
 
-QUnit.module("Events", crossComponentModuleConfig);
+QUnit.module('Events', crossComponentModuleConfig);
 
-QUnit.test("onDragChange - check args when dragging an item down", function(assert) {
+QUnit.test('onDragChange - check args when dragging an item down', function(assert) {
     // arrange
-    let items,
-        args,
-        onDragChange = sinon.spy();
+    let items;
+    let args;
+    const onDragChange = sinon.spy();
 
-    var data = {};
+    const data = {};
     this.createSortable({
-        filter: ".draggable",
+        filter: '.draggable',
         data: data,
         onDragChange: onDragChange
     });
@@ -804,21 +953,21 @@ QUnit.test("onDragChange - check args when dragging an item down", function(asse
 
     // assert
     args = onDragChange.getCall(0).args;
-    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
-    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
-    assert.strictEqual(args[0].toIndex, 1, "toIndex");
-    assert.strictEqual(args[0].fromData, data, "fromData");
-    assert.strictEqual(args[0].toData, data, "toData");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), 'source element');
+    assert.strictEqual(args[0].fromIndex, 0, 'fromIndex');
+    assert.strictEqual(args[0].toIndex, 1, 'toIndex');
+    assert.strictEqual(args[0].fromData, data, 'fromData');
+    assert.strictEqual(args[0].toData, data, 'toData');
 });
 
-QUnit.test("onDragChange - check args when dragging an item up", function(assert) {
+QUnit.test('onDragChange - check args when dragging an item up', function(assert) {
     // arrange
-    let items,
-        args,
-        onDragChange = sinon.spy();
+    let items;
+    let args;
+    const onDragChange = sinon.spy();
 
     this.createSortable({
-        filter: ".draggable",
+        filter: '.draggable',
         onDragChange: onDragChange
     });
 
@@ -829,19 +978,19 @@ QUnit.test("onDragChange - check args when dragging an item up", function(assert
 
     // assert
     args = onDragChange.getCall(0).args;
-    assert.deepEqual($(args[0].itemElement).get(0), items.get(2), "source element");
-    assert.strictEqual(args[0].fromIndex, 2, "fromIndex");
-    assert.strictEqual(args[0].toIndex, 1, "toIndex");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(2), 'source element');
+    assert.strictEqual(args[0].fromIndex, 2, 'fromIndex');
+    assert.strictEqual(args[0].toIndex, 1, 'toIndex');
 });
 
-QUnit.test("onDragChange - check args when dragging to last position", function(assert) {
+QUnit.test('onDragChange - check args when dragging to last position', function(assert) {
     // arrange
-    let items,
-        args,
-        onDragChange = sinon.spy();
+    let items;
+    let args;
+    const onDragChange = sinon.spy();
 
     this.createSortable({
-        filter: ".draggable",
+        filter: '.draggable',
         onDragChange: onDragChange
     });
 
@@ -852,25 +1001,25 @@ QUnit.test("onDragChange - check args when dragging to last position", function(
 
     // assert
     args = onDragChange.getCall(0).args;
-    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
-    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
-    assert.strictEqual(args[0].toIndex, 2, "toIndex");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), 'source element');
+    assert.strictEqual(args[0].fromIndex, 0, 'fromIndex');
+    assert.strictEqual(args[0].toIndex, 2, 'toIndex');
 });
 
-QUnit.test("'onDragChange' option changing", function(assert) {
+QUnit.test('\'onDragChange\' option changing', function(assert) {
     // arrange
-    let args,
-        items,
-        onDragChange = sinon.spy();
+    let args;
+    let items;
+    const onDragChange = sinon.spy();
 
-    let sortableInstance = this.createSortable({
-        filter: ".draggable"
+    const sortableInstance = this.createSortable({
+        filter: '.draggable'
     });
 
     items = this.$element.children();
 
     // act
-    sortableInstance.option("onDragChange", onDragChange);
+    sortableInstance.option('onDragChange', onDragChange);
 
     // arrange
     items = this.$element.children();
@@ -880,18 +1029,18 @@ QUnit.test("'onDragChange' option changing", function(assert) {
 
     // assert
     args = onDragChange.getCall(0).args;
-    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
-    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
-    assert.strictEqual(args[0].toIndex, 1, "toIndex");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), 'source element');
+    assert.strictEqual(args[0].fromIndex, 0, 'fromIndex');
+    assert.strictEqual(args[0].toIndex, 1, 'toIndex');
 });
 
-QUnit.test("'onDragChange' event - not drag item when eventArgs.cancel is true", function(assert) {
+QUnit.test('\'onDragChange\' event - not drag item when eventArgs.cancel is true', function(assert) {
     // arrange
-    let items,
-        $dragItemElement;
+    let items;
+    let $dragItemElement;
 
     this.createSortable({
-        filter: ".draggable",
+        filter: '.draggable',
         onDragChange: function(e) {
             e.cancel = true;
         }
@@ -905,21 +1054,21 @@ QUnit.test("'onDragChange' event - not drag item when eventArgs.cancel is true",
 
     // assert
     items = this.$element.children();
-    assert.strictEqual(items.eq(0).attr("id"), "item1", "first item");
-    assert.strictEqual(items.eq(1).attr("id"), "item2", "second item");
-    assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
+    assert.strictEqual(items.eq(0).attr('id'), 'item1', 'first item');
+    assert.strictEqual(items.eq(1).attr('id'), 'item2', 'second item');
+    assert.strictEqual(items.eq(2).attr('id'), 'item3', 'third item');
 });
 
-QUnit.test("onDragEnd - check args when dragging an item down", function(assert) {
+QUnit.test('onDragEnd - check args when dragging an item down', function(assert) {
     // arrange
-    let items,
-        args,
-        onDragEnd = sinon.spy();
+    let items;
+    let args;
+    const onDragEnd = sinon.spy();
 
 
     this.createSortable({
-        filter: ".draggable",
-        data: "x",
+        filter: '.draggable',
+        data: 'x',
         onDragEnd: onDragEnd
     });
 
@@ -930,23 +1079,23 @@ QUnit.test("onDragEnd - check args when dragging an item down", function(assert)
 
     // assert
     args = onDragEnd.getCall(0).args;
-    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
-    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
-    assert.strictEqual(args[0].toIndex, 1, "toIndex");
-    assert.strictEqual(args[0].fromData, "x", "fromData");
-    assert.strictEqual(args[0].toData, "x", "toData");
-    assert.strictEqual(args[0].dropInsideItem, false, "dropInsideItem is false");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), 'source element');
+    assert.strictEqual(args[0].fromIndex, 0, 'fromIndex');
+    assert.strictEqual(args[0].toIndex, 1, 'toIndex');
+    assert.strictEqual(args[0].fromData, 'x', 'fromData');
+    assert.strictEqual(args[0].toData, 'x', 'toData');
+    assert.strictEqual(args[0].dropInsideItem, false, 'dropInsideItem is false');
 });
 
-QUnit.test("onDragEnd - check args when dragging an item up", function(assert) {
+QUnit.test('onDragEnd - check args when dragging an item up', function(assert) {
     // arrange
-    let items,
-        args,
-        onDragEnd = sinon.spy();
+    let items;
+    let args;
+    const onDragEnd = sinon.spy();
 
 
     this.createSortable({
-        filter: ".draggable",
+        filter: '.draggable',
         onDragEnd: onDragEnd
     });
 
@@ -957,19 +1106,19 @@ QUnit.test("onDragEnd - check args when dragging an item up", function(assert) {
 
     // assert
     args = onDragEnd.getCall(0).args;
-    assert.deepEqual($(args[0].itemElement).get(0), items.get(2), "source element");
-    assert.strictEqual(args[0].fromIndex, 2, "fromIndex");
-    assert.strictEqual(args[0].toIndex, 1, "toIndex");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(2), 'source element');
+    assert.strictEqual(args[0].fromIndex, 2, 'fromIndex');
+    assert.strictEqual(args[0].toIndex, 1, 'toIndex');
 });
 
-QUnit.test("onDragEnd - check args when dragging to last position", function(assert) {
+QUnit.test('onDragEnd - check args when dragging to last position', function(assert) {
     // arrange
-    let items,
-        args,
-        onDragEnd = sinon.spy();
+    let items;
+    let args;
+    const onDragEnd = sinon.spy();
 
     this.createSortable({
-        filter: ".draggable",
+        filter: '.draggable',
         onDragEnd: onDragEnd
     });
 
@@ -980,18 +1129,18 @@ QUnit.test("onDragEnd - check args when dragging to last position", function(ass
 
     // assert
     args = onDragEnd.getCall(0).args;
-    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
-    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
-    assert.strictEqual(args[0].toIndex, 2, "toIndex");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), 'source element');
+    assert.strictEqual(args[0].fromIndex, 0, 'fromIndex');
+    assert.strictEqual(args[0].toIndex, 2, 'toIndex');
 });
 
-QUnit.test("onDragEnd with eventArgs.cancel is true - the draggable element should not change position", function(assert) {
+QUnit.test('onDragEnd with eventArgs.cancel is true - the draggable element should not change position', function(assert) {
     // arrange
     let items;
 
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate",
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
         moveItemOnDrop: true,
         onDragEnd: function(e) {
             e.cancel = true;
@@ -1005,22 +1154,22 @@ QUnit.test("onDragEnd with eventArgs.cancel is true - the draggable element shou
 
     // assert
     items = this.$element.children();
-    assert.strictEqual(items.eq(0).attr("id"), "item1", "first item");
-    assert.strictEqual(items.eq(1).attr("id"), "item2", "second item");
-    assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
+    assert.strictEqual(items.eq(0).attr('id'), 'item1', 'first item');
+    assert.strictEqual(items.eq(1).attr('id'), 'item2', 'second item');
+    assert.strictEqual(items.eq(2).attr('id'), 'item3', 'third item');
 });
 
-QUnit.test("onDragEnd - check args when dropping onto itself (dropFeedbackMode is 'indicate')", function(assert) {
+QUnit.test('onDragEnd - check args when dropping onto itself (dropFeedbackMode is \'indicate\')', function(assert) {
     // arrange
-    let items,
-        args,
-        onDragEnd = sinon.spy();
+    let items;
+    let args;
+    const onDragEnd = sinon.spy();
 
 
     this.createSortable({
-        dropFeedbackMode: "indicate",
-        filter: ".draggable",
-        data: "x",
+        dropFeedbackMode: 'indicate',
+        filter: '.draggable',
+        data: 'x',
         onDragEnd: onDragEnd
     });
 
@@ -1031,21 +1180,21 @@ QUnit.test("onDragEnd - check args when dropping onto itself (dropFeedbackMode i
 
     // assert
     args = onDragEnd.getCall(0).args;
-    assert.deepEqual($(args[0].itemElement).get(0), items.get(1), "source element");
-    assert.strictEqual(args[0].fromIndex, 1, "fromIndex");
-    assert.strictEqual(args[0].toIndex, 1, "toIndex");
-    assert.strictEqual(args[0].fromData, "x", "fromData");
-    assert.strictEqual(args[0].toData, "x", "toData");
-    assert.strictEqual(args[0].dropInsideItem, false, "dropInsideItem is false");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(1), 'source element');
+    assert.strictEqual(args[0].fromIndex, 1, 'fromIndex');
+    assert.strictEqual(args[0].toIndex, 1, 'toIndex');
+    assert.strictEqual(args[0].fromData, 'x', 'fromData');
+    assert.strictEqual(args[0].toData, 'x', 'toData');
+    assert.strictEqual(args[0].dropInsideItem, false, 'dropInsideItem is false');
 });
 
-QUnit.test("The draggable element should not change position without moveItemOnDrop", function(assert) {
+QUnit.test('The draggable element should not change position without moveItemOnDrop', function(assert) {
     // arrange
     let items;
 
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate"
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate'
     });
 
     items = this.$element.children();
@@ -1055,16 +1204,16 @@ QUnit.test("The draggable element should not change position without moveItemOnD
 
     // assert
     items = this.$element.children();
-    assert.strictEqual(items.eq(0).attr("id"), "item1", "first item");
-    assert.strictEqual(items.eq(1).attr("id"), "item2", "second item");
-    assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
+    assert.strictEqual(items.eq(0).attr('id'), 'item1', 'first item');
+    assert.strictEqual(items.eq(1).attr('id'), 'item2', 'second item');
+    assert.strictEqual(items.eq(2).attr('id'), 'item3', 'third item');
 });
 
-QUnit.test("onDragEnd - check args when dragging inside item", function(assert) {
+QUnit.test('onDragEnd - check args when dragging inside item', function(assert) {
     // arrange
-    let items,
-        args,
-        onDragEnd = sinon.spy();
+    let items;
+    let args;
+    const onDragEnd = sinon.spy();
 
 
     this.createSortable({
@@ -1079,23 +1228,23 @@ QUnit.test("onDragEnd - check args when dragging inside item", function(assert) 
 
     // assert
     args = onDragEnd.getCall(0).args;
-    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
-    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
-    assert.strictEqual(args[0].toIndex, 1, "toIndex");
-    assert.strictEqual(args[0].dropInsideItem, true, "dropInsideItem");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), 'source element');
+    assert.strictEqual(args[0].fromIndex, 0, 'fromIndex');
+    assert.strictEqual(args[0].toIndex, 1, 'toIndex');
+    assert.strictEqual(args[0].dropInsideItem, true, 'dropInsideItem');
 });
 
-QUnit.test("onPlaceholderPrepared - check args when dragging", function(assert) {
+QUnit.test('onPlaceholderPrepared - check args when dragging', function(assert) {
     // arrange
-    let items,
-        args,
-        onPlaceholderPrepared = sinon.spy();
+    let items;
+    let args;
+    const onPlaceholderPrepared = sinon.spy();
 
 
     this.createSortable({
-        filter: ".draggable",
+        filter: '.draggable',
         onPlaceholderPrepared: onPlaceholderPrepared,
-        dropFeedbackMode: "indicate"
+        dropFeedbackMode: 'indicate'
     });
 
     items = this.$element.children();
@@ -1106,30 +1255,30 @@ QUnit.test("onPlaceholderPrepared - check args when dragging", function(assert) 
     // assert
     items = this.$element.children();
     args = onPlaceholderPrepared.getCall(0).args;
-    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
-    assert.ok(args[0].placeholderElement, "placeholder element exists");
-    assert.ok(args[0].dragElement, "dragging element exists");
-    assert.deepEqual($(args[0].placeholderElement).get(0), $("body").children(".dx-sortable-placeholder").get(0), "placeholder element");
-    assert.deepEqual($(args[0].dragElement).get(0), $("body").children(".dx-sortable-dragging").get(0), "dragging element");
-    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
-    assert.strictEqual(args[0].toIndex, 1, "toIndex");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), 'source element');
+    assert.ok(args[0].placeholderElement, 'placeholder element exists');
+    assert.ok(args[0].dragElement, 'dragging element exists');
+    assert.deepEqual($(args[0].placeholderElement).get(0), $('body').children('.dx-sortable-placeholder').get(0), 'placeholder element');
+    assert.deepEqual($(args[0].dragElement).get(0), $('body').children('.dx-sortable-dragging').get(0), 'dragging element');
+    assert.strictEqual(args[0].fromIndex, 0, 'fromIndex');
+    assert.strictEqual(args[0].toIndex, 1, 'toIndex');
 });
 
-QUnit.test("'onPlaceholderPrepared' option changing", function(assert) {
+QUnit.test('\'onPlaceholderPrepared\' option changing', function(assert) {
     // arrange
-    let args,
-        items,
-        onPlaceholderPrepared = sinon.spy();
+    let args;
+    let items;
+    const onPlaceholderPrepared = sinon.spy();
 
-    let sortableInstance = this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate"
+    const sortableInstance = this.createSortable({
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate'
     });
 
     items = this.$element.children();
 
     // act
-    sortableInstance.option("onPlaceholderPrepared", onPlaceholderPrepared);
+    sortableInstance.option('onPlaceholderPrepared', onPlaceholderPrepared);
 
     // arrange
     items = this.$element.children();
@@ -1140,336 +1289,337 @@ QUnit.test("'onPlaceholderPrepared' option changing", function(assert) {
     // assert
     items = this.$element.children();
     args = onPlaceholderPrepared.getCall(0).args;
-    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
-    assert.deepEqual($(args[0].placeholderElement).get(0), $("body").children(".dx-sortable-placeholder").get(0), "placeholder element");
-    assert.deepEqual($(args[0].dragElement).get(0), $("body").children(".dx-sortable-dragging").get(0), "dragging element");
-    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
-    assert.strictEqual(args[0].toIndex, 1, "toIndex");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), 'source element');
+    assert.deepEqual($(args[0].placeholderElement).get(0), $('body').children('.dx-sortable-placeholder').get(0), 'placeholder element');
+    assert.deepEqual($(args[0].dragElement).get(0), $('body').children('.dx-sortable-dragging').get(0), 'dragging element');
+    assert.strictEqual(args[0].fromIndex, 0, 'fromIndex');
+    assert.strictEqual(args[0].toIndex, 1, 'toIndex');
 });
 
-QUnit.test("onAdd - check args", function(assert) {
+QUnit.test('onAdd - check args', function(assert) {
     // arrange
-    let onAddSpy = sinon.spy();
+    const onAddSpy = sinon.spy();
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        data: "x",
-        group: "shared"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        data: 'x',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
-        data: "y",
+    const sortable2 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
+        data: 'y',
         moveItemOnDrop: true,
         onAdd: onAddSpy
-    }, $("#items2"));
+    }, $('#items2'));
 
     // act
-    let $sourceElement = sortable1.$element().children().eq(1);
+    const $sourceElement = sortable1.$element().children().eq(1);
     pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 30).move(50, 0).up();
 
     // assert
-    assert.strictEqual(onAddSpy.callCount, 1, "onAdd is called");
-    assert.deepEqual(onAddSpy.getCall(0).args[0].fromComponent, sortable1, "sourceComponent");
-    assert.deepEqual(onAddSpy.getCall(0).args[0].toComponent, sortable2, "component");
-    assert.strictEqual(onAddSpy.getCall(0).args[0].fromIndex, 1, "fromIndex");
-    assert.strictEqual(onAddSpy.getCall(0).args[0].toIndex, 2, "toIndex");
-    assert.strictEqual(onAddSpy.getCall(0).args[0].fromData, "x", "fromData");
-    assert.strictEqual(onAddSpy.getCall(0).args[0].toData, "y", "toData");
-    assert.strictEqual($(onAddSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), "itemElement");
-    assert.strictEqual($(sortable2.element()).children("#item2").length, 1, "item is added");
+    assert.strictEqual(onAddSpy.callCount, 1, 'onAdd is called');
+    assert.deepEqual(onAddSpy.getCall(0).args[0].fromComponent, sortable1, 'sourceComponent');
+    assert.deepEqual(onAddSpy.getCall(0).args[0].toComponent, sortable2, 'component');
+    assert.strictEqual(onAddSpy.getCall(0).args[0].fromIndex, 1, 'fromIndex');
+    assert.strictEqual(onAddSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
+    assert.strictEqual(onAddSpy.getCall(0).args[0].fromData, 'x', 'fromData');
+    assert.strictEqual(onAddSpy.getCall(0).args[0].toData, 'y', 'toData');
+    assert.strictEqual($(onAddSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
+    assert.strictEqual($(sortable2.element()).children('#item2').length, 1, 'item is added');
 });
 
-QUnit.test("onAdd - not add item when eventArgs.cancel is true", function(assert) {
+QUnit.test('onAdd - not add item when eventArgs.cancel is true', function(assert) {
     // arrange
-    let onAddSpy = sinon.spy((e) => { e.cancel = true; });
+    const onAddSpy = sinon.spy((e) => { e.cancel = true; });
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
+    const sortable2 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
         moveItemOnDrop: true,
         onAdd: onAddSpy
-    }, $("#items2"));
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0).up();
 
     // assert
-    assert.strictEqual(onAddSpy.callCount, 1, "onAdd is called");
-    assert.strictEqual($(sortable2.element()).children("#item1").length, 0, "item isn't added");
+    assert.strictEqual(onAddSpy.callCount, 1, 'onAdd is called');
+    assert.strictEqual($(sortable2.element()).children('#item1').length, 0, 'item isn\'t added');
 });
 
-QUnit.test("onAdd - not add item without moveItemOnDrop", function(assert) {
+QUnit.test('onAdd - not add item without moveItemOnDrop', function(assert) {
     // arrange
-    let onAddSpy = sinon.spy();
+    const onAddSpy = sinon.spy();
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
+    const sortable2 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
         onAdd: onAddSpy
-    }, $("#items2"));
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0).up();
 
     // assert
-    assert.strictEqual(onAddSpy.callCount, 1, "onAdd is called");
-    assert.strictEqual($(sortable2.element()).children("#item1").length, 0, "item isn't added");
+    assert.strictEqual(onAddSpy.callCount, 1, 'onAdd is called');
+    assert.strictEqual($(sortable2.element()).children('#item1').length, 0, 'item isn\'t added');
 });
 
-QUnit.test("onRemove - check args", function(assert) {
+QUnit.test('onRemove - check args', function(assert) {
     // arrange
-    let onRemoveSpy = sinon.spy();
+    const onRemoveSpy = sinon.spy();
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
-        data: "x",
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
+        data: 'x',
         onRemove: onRemoveSpy
-    }, $("#items"));
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        filter: ".draggable",
+    const sortable2 = this.createSortable({
+        filter: '.draggable',
         moveItemOnDrop: true,
-        data: "y",
-        group: "shared"
-    }, $("#items2"));
+        data: 'y',
+        group: 'shared'
+    }, $('#items2'));
 
     // act
-    let $sourceElement = sortable1.$element().children().eq(1);
+    const $sourceElement = sortable1.$element().children().eq(1);
     pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 30).move(50, 0).up();
 
     // assert
-    assert.strictEqual(onRemoveSpy.callCount, 1, "onRemove is called");
-    assert.deepEqual(onRemoveSpy.getCall(0).args[0].toComponent, sortable2, "targetComponent");
-    assert.deepEqual(onRemoveSpy.getCall(0).args[0].fromComponent, sortable1, "component");
-    assert.strictEqual(onRemoveSpy.getCall(0).args[0].fromIndex, 1, "fromIndex");
-    assert.strictEqual(onRemoveSpy.getCall(0).args[0].toIndex, 2, "toIndex");
-    assert.strictEqual(onRemoveSpy.getCall(0).args[0].fromData, "x", "fromData");
-    assert.strictEqual(onRemoveSpy.getCall(0).args[0].toData, "y", "toData");
-    assert.strictEqual($(onRemoveSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), "itemElement");
-    assert.strictEqual($(sortable1.element()).children("#item2").length, 0, "item is removed");
+    assert.strictEqual(onRemoveSpy.callCount, 1, 'onRemove is called');
+    assert.deepEqual(onRemoveSpy.getCall(0).args[0].toComponent, sortable2, 'targetComponent');
+    assert.deepEqual(onRemoveSpy.getCall(0).args[0].fromComponent, sortable1, 'component');
+    assert.strictEqual(onRemoveSpy.getCall(0).args[0].fromIndex, 1, 'fromIndex');
+    assert.strictEqual(onRemoveSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
+    assert.strictEqual(onRemoveSpy.getCall(0).args[0].fromData, 'x', 'fromData');
+    assert.strictEqual(onRemoveSpy.getCall(0).args[0].toData, 'y', 'toData');
+    assert.strictEqual($(onRemoveSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
+    assert.strictEqual($(sortable1.element()).children('#item2').length, 0, 'item is removed');
 });
 
-QUnit.test("onRemove - not add item when eventArgs.cancel is true", function(assert) {
+QUnit.test('onRemove - not add item when eventArgs.cancel is true', function(assert) {
     // arrange
-    let onRemoveSpy = sinon.spy((e) => { e.cancel = true; });
+    const onRemoveSpy = sinon.spy((e) => { e.cancel = true; });
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
         onRemove: onRemoveSpy
-    }, $("#items"));
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
+    const sortable2 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
         moveItemOnDrop: true
-    }, $("#items2"));
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0).up();
 
     // assert
-    assert.strictEqual(onRemoveSpy.callCount, 1, "onRemove is called");
-    assert.strictEqual($(sortable1.element()).children("#item1").length, 1, "item isn't removed");
-    assert.strictEqual($(sortable1.element()).children("#item1").attr("class"), "draggable", "source item hasn't dx-sortable-source class");
-    assert.strictEqual($(sortable2.element()).children("#item1").attr("class"), "draggable", "cloned source item hasn't dx-sortable-source class");
+    assert.strictEqual(onRemoveSpy.callCount, 1, 'onRemove is called');
+    assert.strictEqual($(sortable1.element()).children('#item1').length, 1, 'item isn\'t removed');
+    assert.strictEqual($(sortable1.element()).children('#item1').attr('class'), 'draggable', 'source item hasn\'t dx-sortable-source class');
+    assert.strictEqual($(sortable2.element()).children('#item1').attr('class'), 'draggable', 'cloned source item hasn\'t dx-sortable-source class');
 });
 
-QUnit.test("onRemove - not add item without moveItemOnDrop", function(assert) {
+QUnit.test('onRemove - not add item without moveItemOnDrop', function(assert) {
     // arrange
-    let onRemoveSpy = sinon.spy();
+    const onRemoveSpy = sinon.spy();
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
         onRemove: onRemoveSpy
-    }, $("#items"));
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items2"));
+    const sortable2 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0).up();
 
     // assert
-    assert.strictEqual(onRemoveSpy.callCount, 1, "onRemove is called");
-    assert.strictEqual($(sortable1.element()).children("#item1").length, 1, "item isn't removed");
-    assert.strictEqual($(sortable1.element()).children("#item1").attr("class"), "draggable", "source item hasn't dx-sortable-source class");
-    assert.strictEqual($(sortable2.element()).children("#item1").length, 0, "source item is not added to second sortable");
+    assert.strictEqual(onRemoveSpy.callCount, 1, 'onRemove is called');
+    assert.strictEqual($(sortable1.element()).children('#item1').length, 1, 'item isn\'t removed');
+    assert.strictEqual($(sortable1.element()).children('#item1').attr('class'), 'draggable', 'source item hasn\'t dx-sortable-source class');
+    assert.strictEqual($(sortable2.element()).children('#item1').length, 0, 'source item is not added to second sortable');
 });
 
-QUnit.test("onReorder - check args", function(assert) {
+QUnit.test('onReorder - check args', function(assert) {
     // arrange
-    let onReorderSpy = sinon.spy();
+    const onReorderSpy = sinon.spy();
 
-    let sortable = this.createSortable({
-        filter: ".draggable",
-        data: "x",
+    const sortable = this.createSortable({
+        filter: '.draggable',
+        data: 'x',
         onReorder: onReorderSpy,
         moveItemOnDrop: true
-    }, $("#items"));
+    }, $('#items'));
 
     // act
-    let $sourceElement = sortable.$element().children().eq(0);
+    const $sourceElement = sortable.$element().children().eq(0);
 
     pointerMock($sourceElement).start().down().move(0, 40).move(0, 10).up();
 
     // assert
-    assert.strictEqual(onReorderSpy.callCount, 1, "onRemove is called");
-    assert.strictEqual(onReorderSpy.getCall(0).args[0].fromIndex, 0, "fromIndex");
-    assert.strictEqual(onReorderSpy.getCall(0).args[0].toIndex, 1, "toIndex");
-    assert.strictEqual(onReorderSpy.getCall(0).args[0].fromData, "x", "fromData");
-    assert.strictEqual(onReorderSpy.getCall(0).args[0].toData, "x", "toData");
-    assert.strictEqual($(onReorderSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), "itemElement");
+    assert.strictEqual(onReorderSpy.callCount, 1, 'onRemove is called');
+    assert.strictEqual(onReorderSpy.getCall(0).args[0].fromIndex, 0, 'fromIndex');
+    assert.strictEqual(onReorderSpy.getCall(0).args[0].toIndex, 1, 'toIndex');
+    assert.strictEqual(onReorderSpy.getCall(0).args[0].fromData, 'x', 'fromData');
+    assert.strictEqual(onReorderSpy.getCall(0).args[0].toData, 'x', 'toData');
+    assert.strictEqual($(onReorderSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
 });
 
-QUnit.test("onDragMove, onDragEnd, onDragChange, onReorder - check itemData arg", function(assert) {
+QUnit.test('onDragMove, onDragEnd, onDragChange, onReorder - check itemData arg', function(assert) {
     // arrange
-    let itemData = { test: true },
-        options = {
-            filter: ".draggable",
-            onDragStart: function(e) {
-                e.itemData = itemData;
-            },
-            onDragMove: sinon.spy(),
-            onDragEnd: sinon.spy(),
-            onDragChange: sinon.spy(),
-            onReorder: sinon.spy()
-        };
+    const itemData = { test: true };
+    const options = {
+        filter: '.draggable',
+        onDragStart: function(e) {
+            e.itemData = itemData;
+        },
+        onDragMove: sinon.spy(),
+        onDragEnd: sinon.spy(),
+        onDragChange: sinon.spy(),
+        onReorder: sinon.spy()
+    };
 
-    let sortable = this.createSortable(options, $("#items"));
+    const sortable = this.createSortable(options, $('#items'));
 
     // act
-    let $sourceElement = sortable.$element().children().eq(0);
+    const $sourceElement = sortable.$element().children().eq(0);
     pointerMock($sourceElement).start().down().move(0, 25).move(0, 5).up();
 
     // assert
-    assert.strictEqual(options.onDragMove.getCall(0).args[0].itemData, itemData, "itemData in onDragMove event arguments");
-    assert.strictEqual(options.onDragEnd.getCall(0).args[0].itemData, itemData, "itemData in onDragEnd event arguments");
-    assert.strictEqual(options.onDragChange.getCall(0).args[0].itemData, itemData, "itemData in onDragChange event arguments");
-    assert.strictEqual(options.onReorder.getCall(0).args[0].itemData, itemData, "itemData in onReorder event arguments");
+    assert.strictEqual(options.onDragMove.getCall(0).args[0].itemData, itemData, 'itemData in onDragMove event arguments');
+    assert.strictEqual(options.onDragEnd.getCall(0).args[0].itemData, itemData, 'itemData in onDragEnd event arguments');
+    assert.strictEqual(options.onDragChange.getCall(0).args[0].itemData, itemData, 'itemData in onDragChange event arguments');
+    assert.strictEqual(options.onReorder.getCall(0).args[0].itemData, itemData, 'itemData in onReorder event arguments');
 });
 
-QUnit.test("onAdd, onRemove - check itemData arg", function(assert) {
+QUnit.test('onAdd, onRemove - check itemData arg', function(assert) {
     // arrange
-    let itemData = { test: true },
-        onAddSpy = sinon.spy(),
-        onRemoveSpy = sinon.spy();
+    const itemData = { test: true };
+    const onAddSpy = sinon.spy();
+    const onRemoveSpy = sinon.spy();
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
         onDragStart: function(e) {
             e.itemData = itemData;
         },
         onRemove: onRemoveSpy
-    }, $("#items"));
+    }, $('#items'));
 
     this.createSortable({
-        filter: ".draggable",
-        group: "shared",
+        filter: '.draggable',
+        group: 'shared',
         onAdd: onAddSpy
-    }, $("#items2"));
+    }, $('#items2'));
 
     // act
-    let $sourceElement = sortable1.$element().children().eq(1);
+    const $sourceElement = sortable1.$element().children().eq(1);
     pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 30).move(50, 0).up();
 
     // assert
-    assert.deepEqual(onAddSpy.getCall(0).args[0].itemData, itemData, "itemData in onDragMove event arguments");
-    assert.deepEqual(onRemoveSpy.getCall(0).args[0].itemData, itemData, "itemData in onDragEnd event arguments");
+    assert.deepEqual(onAddSpy.getCall(0).args[0].itemData, itemData, 'itemData in onDragMove event arguments');
+    assert.deepEqual(onRemoveSpy.getCall(0).args[0].itemData, itemData, 'itemData in onDragEnd event arguments');
 });
 
 // T835349
-QUnit.test("The onAdd event should be fired when there is horizontal scrolling", function(assert) {
+QUnit.test('The onAdd event should be fired when there is horizontal scrolling', function(assert) {
     // arrange
-    let onAddSpy = sinon.spy();
+    const onAddSpy = sinon.spy();
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        data: "x",
-        group: "shared"
-    }, $("#itemsWithBothScrolls"));
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        data: 'x',
+        group: 'shared'
+    }, $('#itemsWithBothScrolls'));
 
     this.createSortable({
-        filter: ".draggable",
-        group: "shared",
-        data: "y",
+        filter: '.draggable',
+        group: 'shared',
+        data: 'y',
         moveItemOnDrop: true,
         onAdd: onAddSpy
-    }, $("#items2"));
+    }, $('#items2'));
 
     // act
-    let $sourceElement = $(sortable1.element()).children().eq(1);
+    const $sourceElement = $(sortable1.element()).children().eq(1);
     pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 0).move(10, 0).up();
 
     // assert
-    assert.strictEqual(onAddSpy.callCount, 1, "onAdd event is called once");
+    assert.strictEqual(onAddSpy.callCount, 1, 'onAdd event is called once');
 });
 
 // T835349
-QUnit.test("The onAdd event should be fired when there is vertical scrolling", function(assert) {
+QUnit.test('The onAdd event should be fired when there is vertical scrolling', function(assert) {
     // arrange
-    let onAddSpy = sinon.spy();
+    const onAddSpy = sinon.spy();
 
-    $("#scroll").css("top", "300px");
-    $("#bothScrolls").css("height", "300px");
+    $('#scroll').css('top', '300px');
+    $('#bothScrolls').css('height', '300px');
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        data: "x",
-        group: "shared"
-    }, $("#itemsWithBothScrolls"));
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        data: 'x',
+        group: 'shared'
+    }, $('#itemsWithBothScrolls'));
 
     this.createSortable({
-        filter: ".draggable",
-        group: "shared",
-        data: "y",
+        filter: '.draggable',
+        group: 'shared',
+        data: 'y',
         moveItemOnDrop: true,
         onAdd: onAddSpy
-    }, $("#scroll"));
+    }, $('#scroll'));
 
     // act
-    let $sourceElement = $(sortable1.element()).children().eq(1);
+    const $sourceElement = $(sortable1.element()).children().eq(1);
     pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(0, 350).move(0, 10).up();
 
     // assert
-    assert.strictEqual(onAddSpy.callCount, 1, "onAdd event is called once");
+    assert.strictEqual(onAddSpy.callCount, 1, 'onAdd event is called once');
 });
 
 
-QUnit.module("Cross-Component Drag and Drop", crossComponentModuleConfig);
+QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig);
 
-QUnit.test("Dragging item to another the sortable widget", function(assert) {
+QUnit.test('Dragging item to another the sortable widget', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let sortable1 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items2"));
+    const sortable2 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
@@ -1477,37 +1627,38 @@ QUnit.test("Dragging item to another the sortable widget", function(assert) {
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 3, "first list - item count");
-    assert.strictEqual(items2.length, 3, "second list - item count");
-    assert.strictEqual(items1.filter("#item1").length, 1, "first list - first item is not removed");
-    assert.strictEqual(items2.filter("#item1").length, 0, "second list - first item of the first list was not added");
+    assert.strictEqual(items1.length, 3, 'first list - item count');
+    assert.strictEqual(items2.length, 3, 'second list - item count');
+    assert.strictEqual(items1.filter('#item1').length, 1, 'first list - first item is not removed');
+    assert.strictEqual(items2.filter('#item1').length, 0, 'second list - first item of the first list was not added');
 
-    assert.strictEqual(items1[0].style.transform, "", "items1 1 is not moved");
-    assert.strictEqual(items1[1].style.transform, "translate(0px, -30px)", "items1 2 is moved up");
-    assert.strictEqual(items1[2].style.transform, "translate(0px, -30px)", "items1 3 is moved up");
+    assert.strictEqual(items1[0].style.transform, '', 'items1 1 is not moved');
+    assert.strictEqual(items1[1].style.transform, 'translate(0px, -30px)', 'items1 2 is moved up');
+    assert.strictEqual(items1[2].style.transform, 'translate(0px, -30px)', 'items1 3 is moved up');
 
-    assert.strictEqual(items2[0].style.transform, "translate(0px, 30px)", "items2 1 is moved down");
-    assert.strictEqual(items2[1].style.transform, "translate(0px, 30px)", "items2 2 is moved down");
-    assert.strictEqual(items2[2].style.transform, "translate(0px, 30px)", "items2 3 is moved down");
+    assert.strictEqual(items2[0].style.transform, 'translate(0px, 30px)', 'items2 1 is moved down');
+    assert.strictEqual(items2[1].style.transform, 'translate(0px, 30px)', 'items2 2 is moved down');
+    assert.strictEqual(items2[2].style.transform, 'translate(0px, 30px)', 'items2 3 is moved down');
 });
 
-QUnit.test("Dragging item to another the sortable widget when allowReordering is false", function(assert) {
+QUnit.test('Dragging item to another the sortable widget when allowReordering is false', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let sortable1 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
-        group: "shared",
+    const sortable1 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared',
         allowReordering: false
-    }, $("#items"));
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
-        group: "shared",
+    const sortable2 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared',
         allowReordering: false
-    }, $("#items2"));
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
@@ -1515,41 +1666,42 @@ QUnit.test("Dragging item to another the sortable widget when allowReordering is
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 3, "first list - item count");
-    assert.strictEqual(items2.length, 3, "second list - item count");
-    assert.strictEqual(items1.filter("#item1").length, 1, "first list - first item is not removed");
-    assert.strictEqual(items2.filter("#item1").length, 0, "second list - first item of the first list was not added");
+    assert.strictEqual(items1.length, 3, 'first list - item count');
+    assert.strictEqual(items2.length, 3, 'second list - item count');
+    assert.strictEqual(items1.filter('#item1').length, 1, 'first list - first item is not removed');
+    assert.strictEqual(items2.filter('#item1').length, 0, 'second list - first item of the first list was not added');
 
-    assert.strictEqual(items1[0].style.transform, "", "items1 1 is not moved");
-    assert.strictEqual(items1[1].style.transform, "translate(0px, -30px)", "items1 2 is moved up");
-    assert.strictEqual(items1[2].style.transform, "translate(0px, -30px)", "items1 3 is moved up");
+    assert.strictEqual(items1[0].style.transform, '', 'items1 1 is not moved');
+    assert.strictEqual(items1[1].style.transform, 'translate(0px, -30px)', 'items1 2 is moved up');
+    assert.strictEqual(items1[2].style.transform, 'translate(0px, -30px)', 'items1 3 is moved up');
 
-    assert.strictEqual(items2[0].style.transform, "translate(0px, 30px)", "items2 1 is moved down");
-    assert.strictEqual(items2[1].style.transform, "translate(0px, 30px)", "items2 2 is moved down");
-    assert.strictEqual(items2[2].style.transform, "translate(0px, 30px)", "items2 3 is moved down");
+    assert.strictEqual(items2[0].style.transform, 'translate(0px, 30px)', 'items2 1 is moved down');
+    assert.strictEqual(items2[1].style.transform, 'translate(0px, 30px)', 'items2 2 is moved down');
+    assert.strictEqual(items2[2].style.transform, 'translate(0px, 30px)', 'items2 3 is moved down');
 });
 
-QUnit.test("Dragging item to another the sortable widget if dragTemplate contains scrollable", function(assert) {
+QUnit.test('Dragging item to another the sortable widget if dragTemplate contains scrollable', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let sortable1 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
+    const sortable1 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
         dragTemplate: function() {
-            return $("<div>").css({
+            return $('<div>').css({
                 width: 100,
                 height: 100
             }).dxSortable();
         },
-        group: "shared"
-    }, $("#items"));
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items2"));
+    const sortable2 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
@@ -1557,69 +1709,104 @@ QUnit.test("Dragging item to another the sortable widget if dragTemplate contain
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 3, "first list - item count");
-    assert.strictEqual(items2.length, 3, "second list - item count");
-    assert.strictEqual(items1.filter("#item1").length, 1, "first list - first item is not removed");
-    assert.strictEqual(items2.filter("#item1").length, 0, "second list - first item of the first list was not added");
+    assert.strictEqual(items1.length, 3, 'first list - item count');
+    assert.strictEqual(items2.length, 3, 'second list - item count');
+    assert.strictEqual(items1.filter('#item1').length, 1, 'first list - first item is not removed');
+    assert.strictEqual(items2.filter('#item1').length, 0, 'second list - first item of the first list was not added');
 
-    assert.strictEqual(items1[0].style.transform, "", "items1 1 is not moved");
-    assert.strictEqual(items1[1].style.transform, "translate(0px, -30px)", "items1 2 is moved up");
-    assert.strictEqual(items1[2].style.transform, "translate(0px, -30px)", "items1 3 is moved up");
+    assert.strictEqual(items1[0].style.transform, '', 'items1 1 is not moved');
+    assert.strictEqual(items1[1].style.transform, 'translate(0px, -30px)', 'items1 2 is moved up');
+    assert.strictEqual(items1[2].style.transform, 'translate(0px, -30px)', 'items1 3 is moved up');
 
-    assert.strictEqual(items2[0].style.transform, "translate(0px, 30px)", "items2 1 is moved down");
-    assert.strictEqual(items2[1].style.transform, "translate(0px, 30px)", "items2 2 is moved down");
-    assert.strictEqual(items2[2].style.transform, "translate(0px, 30px)", "items2 3 is moved down");
+    assert.strictEqual(items2[0].style.transform, 'translate(0px, 30px)', 'items2 1 is moved down');
+    assert.strictEqual(items2[1].style.transform, 'translate(0px, 30px)', 'items2 2 is moved down');
+    assert.strictEqual(items2[2].style.transform, 'translate(0px, 30px)', 'items2 3 is moved down');
 });
 
-QUnit.test("Dragging item to another the sortable widget without free space", function(assert) {
+QUnit.test('Dragging item to another the sortable widget without free space', function(assert) {
     // arrange
-    $("#items2").css("height", "");
-    $("#items2").children().last().css("margin", 1);
+    $('#items2').css('height', '');
+    $('#items2').children().last().css('margin', 1);
 
 
-    let sortable1 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items2"));
+    const sortable2 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items2'));
 
 
     // act
-    let pointer = pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
+    const pointer = pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
 
     // assert
-    assert.strictEqual(sortable2.$element().children().last()[0].style.marginBottom, "29px", "items2 last item has margin bottom");
-    assert.strictEqual(sortable2.$element().css("overflow"), "hidden", "overflow is hidden to correct applying margin to sortable element");
+    assert.strictEqual(sortable2.$element().children().last()[0].style.marginBottom, '29px', 'items2 last item has margin bottom');
+    assert.strictEqual(sortable2.$element().css('overflow'), 'hidden', 'overflow is hidden to correct applying margin to sortable element');
 
     // act
     pointer.up();
 
     // assert
-    assert.strictEqual(sortable2.$element().children().last()[0].style.marginBottom, "1px", "items2 last item margin bottom is restored");
+    assert.strictEqual(sortable2.$element().children().last()[0].style.marginBottom, '1px', 'items2 last item margin bottom is restored');
+});
+
+QUnit.test('Dragging an item to another the sortable widget without free space when its last element is hidden', function(assert) {
+    // arrange
+    $('#items2').css('height', '');
+    $('#items2').children().last().hide();
+    $('#items2').children().eq(-2).css('margin', 1);
+
+
+    const sortable1 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
+
+    const sortable2 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items2'));
+
+
+    // act
+    const pointer = pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
+
+    // assert
+    assert.strictEqual(sortable2.$element().children().eq(-2)[0].style.marginBottom, '29px', 'items2 last item has margin bottom');
+    assert.strictEqual(sortable2.$element().css('overflow'), 'hidden', 'overflow is hidden to correct applying margin to sortable element');
+
+    // act
+    pointer.up();
+
+    // assert
+    assert.strictEqual(sortable2.$element().children().eq(-2)[0].style.marginBottom, '1px', 'items2 last item margin bottom is restored');
 });
 
 
-QUnit.test("Dragging item with dropFeedbackMode push to another the sortable widget with dropFeedbackMode indicate", function(assert) {
+QUnit.test('Dragging item with dropFeedbackMode push to another the sortable widget with dropFeedbackMode indicate', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let sortable1 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        dropFeedbackMode: "indicate",
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items2"));
+    const sortable2 = this.createSortable({
+        dropFeedbackMode: 'indicate',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
@@ -1627,31 +1814,31 @@ QUnit.test("Dragging item with dropFeedbackMode push to another the sortable wid
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 3, "first list - item count");
-    assert.strictEqual(items2.length, 3, "second list - item count");
-    assert.strictEqual(items1.filter("#item1").length, 1, "first list - first item is exists");
-    assert.strictEqual(items1.filter("#item1").hasClass("dx-sortable-source-hidden"), true, "first list - first item is hidden");
-    assert.strictEqual(items2.filter("#item1").length, 0, "second list - first item of the first list is not added");
-    assert.strictEqual($("body").children(".dx-sortable-placeholder").length, 1, "placeholder is in body");
+    assert.strictEqual(items1.length, 3, 'first list - item count');
+    assert.strictEqual(items2.length, 3, 'second list - item count');
+    assert.strictEqual(items1.filter('#item1').length, 1, 'first list - first item is exists');
+    assert.strictEqual(items1.filter('#item1').hasClass('dx-sortable-source-hidden'), true, 'first list - first item is hidden');
+    assert.strictEqual(items2.filter('#item1').length, 0, 'second list - first item of the first list is not added');
+    assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 1, 'placeholder is in body');
 });
 
-QUnit.test("Dragging item to another the sortable widget when group as object", function(assert) {
+QUnit.test('Dragging item to another the sortable widget when group as object', function(assert) {
     // arrange
-    let items1,
-        items2,
-        group = {};
+    let items1;
+    let items2;
+    const group = {};
 
-    let sortable1 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
+    const sortable1 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
         group: group
-    }, $("#items"));
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
+    const sortable2 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
         group: group
-    }, $("#items2"));
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
@@ -1659,31 +1846,32 @@ QUnit.test("Dragging item to another the sortable widget when group as object", 
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 3, "first list - item count");
-    assert.strictEqual(items2.length, 3, "second list - item count");
+    assert.strictEqual(items1.length, 3, 'first list - item count');
+    assert.strictEqual(items2.length, 3, 'second list - item count');
 
-    assert.strictEqual(items1[0].style.transform, "", "items1 1 is not moved");
-    assert.strictEqual(items1[1].style.transform, "translate(0px, -30px)", "items1 2 is moved up");
-    assert.strictEqual(items1[2].style.transform, "translate(0px, -30px)", "items1 3 is moved up");
+    assert.strictEqual(items1[0].style.transform, '', 'items1 1 is not moved');
+    assert.strictEqual(items1[1].style.transform, 'translate(0px, -30px)', 'items1 2 is moved up');
+    assert.strictEqual(items1[2].style.transform, 'translate(0px, -30px)', 'items1 3 is moved up');
 
-    assert.strictEqual(items2[0].style.transform, "translate(0px, 30px)", "items2 1 is moved down");
-    assert.strictEqual(items2[1].style.transform, "translate(0px, 30px)", "items2 2 is moved down");
-    assert.strictEqual(items2[2].style.transform, "translate(0px, 30px)", "items2 3 is moved down");
+    assert.strictEqual(items2[0].style.transform, 'translate(0px, 30px)', 'items2 1 is moved down');
+    assert.strictEqual(items2[1].style.transform, 'translate(0px, 30px)', 'items2 2 is moved down');
+    assert.strictEqual(items2[2].style.transform, 'translate(0px, 30px)', 'items2 3 is moved down');
 
 });
 
-QUnit.test("Dragging item should not work when another the sortable widget does not have a group", function(assert) {
+QUnit.test('Dragging item should not work when another the sortable widget does not have a group', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        filter: ".draggable"
-    }, $("#items2"));
+    const sortable2 = this.createSortable({
+        filter: '.draggable'
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
@@ -1691,24 +1879,25 @@ QUnit.test("Dragging item should not work when another the sortable widget does 
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 3, "first list - item count");
-    assert.strictEqual(items2.length, 3, "second list - item count");
+    assert.strictEqual(items1.length, 3, 'first list - item count');
+    assert.strictEqual(items2.length, 3, 'second list - item count');
 });
 
-QUnit.test("Dropping item to another the sortable widget", function(assert) {
+QUnit.test('Dropping item to another the sortable widget', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
+    const sortable2 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
         moveItemOnDrop: true
-    }, $("#items2"));
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0).up();
@@ -1716,27 +1905,28 @@ QUnit.test("Dropping item to another the sortable widget", function(assert) {
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 2, "first list - item count");
-    assert.strictEqual(items2.length, 4, "second list - item count");
-    assert.strictEqual(items1.filter("#item1").length, 0, "first list - first item is removed");
-    assert.strictEqual(items2.filter("#item1").length, 1, "second list - first item of the first list was added");
+    assert.strictEqual(items1.length, 2, 'first list - item count');
+    assert.strictEqual(items2.length, 4, 'second list - item count');
+    assert.strictEqual(items1.filter('#item1').length, 0, 'first list - first item is removed');
+    assert.strictEqual(items2.filter('#item1').length, 1, 'second list - first item of the first list was added');
 });
 
-QUnit.test("Dragging item to another the sortable widget with dropFeedbackMode indicate", function(assert) {
+QUnit.test('Dragging item to another the sortable widget with dropFeedbackMode indicate', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
-        dropFeedbackMode: "push",
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
+        dropFeedbackMode: 'push',
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
-        dropFeedbackMode: "indicate",
-    }, $("#items2"));
+    const sortable2 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
+        dropFeedbackMode: 'indicate',
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
@@ -1744,27 +1934,28 @@ QUnit.test("Dragging item to another the sortable widget with dropFeedbackMode i
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 3, "first list - item count");
-    assert.strictEqual(items2.length, 3, "second list - item count");
-    assert.strictEqual($("body").children(".dx-sortable-placeholder").length, 1, "placeholder is in body");
+    assert.strictEqual(items1.length, 3, 'first list - item count');
+    assert.strictEqual(items2.length, 3, 'second list - item count');
+    assert.strictEqual($('body').children('.dx-sortable-placeholder').length, 1, 'placeholder is in body');
 });
 
-QUnit.test("Dropping item to another the sortable widget with dropFeedbackMode indicate", function(assert) {
+QUnit.test('Dropping item to another the sortable widget with dropFeedbackMode indicate', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
-        dropFeedbackMode: "indicate"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
+        dropFeedbackMode: 'indicate'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
-        dropFeedbackMode: "indicate",
+    const sortable2 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
+        dropFeedbackMode: 'indicate',
         moveItemOnDrop: true
-    }, $("#items2"));
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0).up();
@@ -1772,27 +1963,28 @@ QUnit.test("Dropping item to another the sortable widget with dropFeedbackMode i
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 2, "first list - item count");
-    assert.strictEqual(items2.length, 4, "second list - item count");
-    assert.strictEqual(items1.filter("#item1").length, 0, "first list - first item is removed");
-    assert.strictEqual(items2.filter("#item1").length, 1, "second list - first item of the first list was added");
+    assert.strictEqual(items1.length, 2, 'first list - item count');
+    assert.strictEqual(items2.length, 4, 'second list - item count');
+    assert.strictEqual(items1.filter('#item1').length, 0, 'first list - first item is removed');
+    assert.strictEqual(items2.filter('#item1').length, 1, 'second list - first item of the first list was added');
 });
 
-QUnit.test("Dragging items between sortable widgets", function(assert) {
+QUnit.test('Dragging items between sortable widgets', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
         moveItemOnDrop: true
-    }, $("#items"));
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
+    const sortable2 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
         moveItemOnDrop: true
-    }, $("#items2"));
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0).up();
@@ -1800,8 +1992,8 @@ QUnit.test("Dragging items between sortable widgets", function(assert) {
     // assert
     items1 = $(sortable1.$element()).children();
     items2 = $(sortable2.$element()).children();
-    assert.strictEqual(items1.length, 2, "first list - item count");
-    assert.strictEqual(items2.length, 4, "second list - item count");
+    assert.strictEqual(items1.length, 2, 'first list - item count');
+    assert.strictEqual(items2.length, 4, 'second list - item count');
 
     // act
     pointerMock(sortable2.$element().children().eq(1)).start({ x: 304, y: 0 }).down().move(-250, 30).move(-50, 0).up();
@@ -1809,154 +2001,155 @@ QUnit.test("Dragging items between sortable widgets", function(assert) {
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 3, "first list - item count");
-    assert.strictEqual(items2.length, 3, "second list - item count");
-    assert.strictEqual(items1.eq(0).attr("id"), "item2", "first list - first item");
-    assert.strictEqual(items1.eq(1).attr("id"), "item4", "first list - second item");
-    assert.strictEqual(items2.eq(0).attr("id"), "item1", "second list - first item");
-    assert.strictEqual(items2.eq(1).attr("id"), "item5", "second list - second item");
+    assert.strictEqual(items1.length, 3, 'first list - item count');
+    assert.strictEqual(items2.length, 3, 'second list - item count');
+    assert.strictEqual(items1.eq(0).attr('id'), 'item2', 'first list - first item');
+    assert.strictEqual(items1.eq(1).attr('id'), 'item4', 'first list - second item');
+    assert.strictEqual(items2.eq(0).attr('id'), 'item1', 'second list - first item');
+    assert.strictEqual(items2.eq(1).attr('id'), 'item5', 'second list - second item');
 });
 
-QUnit.test("Animation should be stopped for target sortable items after leave", function(assert) {
+QUnit.test('Animation should be stopped for target sortable items after leave', function(assert) {
     // arrange
     let items2;
 
-    let sortable1 = this.createSortable({
-        group: "shared",
-        dropFeedbackMode: "push"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        group: 'shared',
+        dropFeedbackMode: 'push'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        group: "shared",
-        dropFeedbackMode: "push"
-    }, $("#items2"));
+    const sortable2 = this.createSortable({
+        group: 'shared',
+        dropFeedbackMode: 'push'
+    }, $('#items2'));
 
     // act
-    let pointer = pointerMock(sortable1.$element().children().eq(0));
+    const pointer = pointerMock(sortable1.$element().children().eq(0));
     pointer.start().down().move(350, 0).move(50, 0);
 
     // assert
     items2 = $(sortable2.$element()).children();
-    assert.strictEqual(items2[0].style.transform, "translate(0px, 30px)", "items2 1 is moved down");
-    assert.strictEqual(items2[1].style.transform, "translate(0px, 30px)", "items2 2 is moved down");
-    assert.strictEqual(items2[2].style.transform, "translate(0px, 30px)", "items2 3 is moved down");
+    assert.strictEqual(items2[0].style.transform, 'translate(0px, 30px)', 'items2 1 is moved down');
+    assert.strictEqual(items2[1].style.transform, 'translate(0px, 30px)', 'items2 2 is moved down');
+    assert.strictEqual(items2[2].style.transform, 'translate(0px, 30px)', 'items2 3 is moved down');
 
     // act
-    sinon.spy(fx, "stop");
+    sinon.spy(fx, 'stop');
     pointer.move(300, 0);
 
     // assert
-    assert.strictEqual(items2[0].style.transform, "none", "items2 1 is moved down");
-    assert.strictEqual(items2[1].style.transform, "none", "items2 2 is moved down");
-    assert.strictEqual(items2[2].style.transform, "none", "items2 3 is moved down");
-    assert.strictEqual(fx.stop.callCount, 3, "fx.stop call count");
-    assert.strictEqual(fx.stop.getCall(0).args[0].get(0), items2[0], "fx.stop called for items2 1");
-    assert.strictEqual(fx.stop.getCall(1).args[0].get(0), items2[1], "fx.stop called for items2 1");
-    assert.strictEqual(fx.stop.getCall(2).args[0].get(0), items2[2], "fx.stop called for items2 1");
+    assert.strictEqual(items2[0].style.transform, 'none', 'items2 1 is moved down');
+    assert.strictEqual(items2[1].style.transform, 'none', 'items2 2 is moved down');
+    assert.strictEqual(items2[2].style.transform, 'none', 'items2 3 is moved down');
+    assert.strictEqual(fx.stop.callCount, 3, 'fx.stop call count');
+    assert.strictEqual(fx.stop.getCall(0).args[0].get(0), items2[0], 'fx.stop called for items2 1');
+    assert.strictEqual(fx.stop.getCall(1).args[0].get(0), items2[1], 'fx.stop called for items2 1');
+    assert.strictEqual(fx.stop.getCall(2).args[0].get(0), items2[2], 'fx.stop called for items2 1');
 });
 
-QUnit.test("items should not be moved after leave and enter", function(assert) {
+QUnit.test('items should not be moved after leave and enter', function(assert) {
     // arrange
-    let sortable1 = this.createSortable({
-        group: "shared",
-        dropFeedbackMode: "push"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        group: 'shared',
+        dropFeedbackMode: 'push'
+    }, $('#items'));
 
     this.createSortable({
-        group: "shared",
-        dropFeedbackMode: "push"
-    }, $("#items2"));
+        group: 'shared',
+        dropFeedbackMode: 'push'
+    }, $('#items2'));
 
     // act
-    let pointer = pointerMock(sortable1.$element().children().eq(0));
+    const pointer = pointerMock(sortable1.$element().children().eq(0));
     pointer.start().down().move(350, 0).move(50, 0).move(-50).move(-350);
 
     // assert
-    let items1 = $(sortable1.$element()).children();
-    assert.strictEqual(items1[0].style.transform, "", "items1 1 is not moved");
-    assert.strictEqual(items1[1].style.transform, browser.mozilla ? "translate(0px)" : "translate(0px, 0px)", "items1 2 is not moved");
-    assert.strictEqual(items1[2].style.transform, browser.mozilla ? "translate(0px)" : "translate(0px, 0px)", "items1 3 is not moved");
+    const items1 = $(sortable1.$element()).children();
+    assert.strictEqual(items1[0].style.transform, '', 'items1 1 is not moved');
+    assert.strictEqual(items1[1].style.transform, browser.mozilla ? 'translate(0px)' : 'translate(0px, 0px)', 'items1 2 is not moved');
+    assert.strictEqual(items1[2].style.transform, browser.mozilla ? 'translate(0px)' : 'translate(0px, 0px)', 'items1 3 is not moved');
 });
 
-QUnit.test("Items should be moved after leave sortable if group is defined", function(assert) {
+QUnit.test('Items should be moved after leave sortable if group is defined', function(assert) {
     // arrange
-    let sortable = this.createSortable({
-        group: "shared",
-        dropFeedbackMode: "push"
-    }, $("#items"));
+    const sortable = this.createSortable({
+        group: 'shared',
+        dropFeedbackMode: 'push'
+    }, $('#items'));
 
     // act
-    let pointer = pointerMock(sortable.$element().children().eq(0));
+    const pointer = pointerMock(sortable.$element().children().eq(0));
     pointer.start().down(0, 0).move(0, 1).move(0, -10);
 
     // assert
-    let items = $(sortable.$element()).children();
-    assert.strictEqual(items[0].style.transform, "", "items 1 is not moved");
-    assert.strictEqual(items[1].style.transform, "translate(0px, -30px)", "items 2 is moved up");
-    assert.strictEqual(items[2].style.transform, "translate(0px, -30px)", "items 3 is moved up");
+    const items = $(sortable.$element()).children();
+    assert.strictEqual(items[0].style.transform, '', 'items 1 is not moved');
+    assert.strictEqual(items[1].style.transform, 'translate(0px, -30px)', 'items 2 is moved up');
+    assert.strictEqual(items[2].style.transform, 'translate(0px, -30px)', 'items 3 is moved up');
 });
 
-QUnit.test("Items should not be moved after leave sortable if group is not defined", function(assert) {
+QUnit.test('Items should not be moved after leave sortable if group is not defined', function(assert) {
     // arrange
-    let sortable = this.createSortable({
-        dropFeedbackMode: "push"
-    }, $("#items"));
+    const sortable = this.createSortable({
+        dropFeedbackMode: 'push'
+    }, $('#items'));
 
     // act
-    let pointer = pointerMock(sortable.$element().children().eq(0));
+    const pointer = pointerMock(sortable.$element().children().eq(0));
     pointer.start().down(0, 0).move(0, 1).move(0, -10);
 
     // assert
-    let items = $(sortable.$element()).children();
-    assert.strictEqual(items[0].style.transform, "", "items 1 is not moved");
-    assert.strictEqual(items[1].style.transform, "", "items 2 is moved up");
-    assert.strictEqual(items[2].style.transform, "", "items 3 is moved up");
+    const items = $(sortable.$element()).children();
+    assert.strictEqual(items[0].style.transform, '', 'items 1 is not moved');
+    assert.strictEqual(items[1].style.transform, '', 'items 2 is moved up');
+    assert.strictEqual(items[2].style.transform, '', 'items 3 is moved up');
 });
 
-QUnit.test("Update item points when dragging an item to another the sortable widget if dropFeedbackMode is push", function(assert) {
+QUnit.test('Update item points when dragging an item to another the sortable widget if dropFeedbackMode is push', function(assert) {
     // arrange
-    let sortable1 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items2"));
+    const sortable2 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items2'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
 
     // assert
-    var itemPoints = sortable2.option("itemPoints");
-    assert.equal(itemPoints.length, 4, "point count");
-    assert.deepEqual(itemPoints[0].top, 30, "top of the first point");
-    assert.deepEqual(itemPoints[0].index, 0, "index of the first point");
-    assert.deepEqual(itemPoints[1].top, 60, "top of the first point");
-    assert.deepEqual(itemPoints[1].index, 1, "index of the first point");
-    assert.deepEqual(itemPoints[2].top, 90, "top of the second point");
-    assert.deepEqual(itemPoints[2].index, 2, "index of the second point");
-    assert.deepEqual(itemPoints[3].top, 120, "top of the third point");
-    assert.deepEqual(itemPoints[3].index, 3, "index of the third point");
+    const itemPoints = sortable2.option('itemPoints');
+    assert.equal(itemPoints.length, 4, 'point count');
+    assert.deepEqual(itemPoints[0].top, 30, 'top of the first point');
+    assert.deepEqual(itemPoints[0].index, 0, 'index of the first point');
+    assert.deepEqual(itemPoints[1].top, 60, 'top of the first point');
+    assert.deepEqual(itemPoints[1].index, 1, 'index of the first point');
+    assert.deepEqual(itemPoints[2].top, 90, 'top of the second point');
+    assert.deepEqual(itemPoints[2].index, 2, 'index of the second point');
+    assert.deepEqual(itemPoints[3].top, 120, 'top of the third point');
+    assert.deepEqual(itemPoints[3].index, 3, 'index of the third point');
 });
 
-QUnit.test("Drag and drop item from draggable to sortable", function(assert) {
+QUnit.test('Drag and drop item from draggable to sortable', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let draggable = this.createDraggable({
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items"));
+    const draggable = this.createDraggable({
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
+    const sortable = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
         moveItemOnDrop: true
-    }, $("#items2"));
+    }, $('#items2'));
 
     // act
     pointerMock(draggable.$element().children().eq(0)).start().down().move(350, 0).move(50, 0).up();
@@ -1964,26 +2157,27 @@ QUnit.test("Drag and drop item from draggable to sortable", function(assert) {
     // assert
     items1 = draggable.$element().children();
     items2 = sortable.$element().children();
-    assert.strictEqual(items1.length, 2, "first list - item count");
-    assert.strictEqual(items2.length, 4, "second list - item count");
-    assert.strictEqual(items1.filter("#item1").length, 0, "first list - draggable item is removed");
-    assert.strictEqual(items2.filter("#item1").length, 1, "second list - item from second list");
-    assert.strictEqual(items2.first().attr("id"), "item1", "second list - new item in first position");
+    assert.strictEqual(items1.length, 2, 'first list - item count');
+    assert.strictEqual(items2.length, 4, 'second list - item count');
+    assert.strictEqual(items1.filter('#item1').length, 0, 'first list - draggable item is removed');
+    assert.strictEqual(items2.filter('#item1').length, 1, 'second list - item from second list');
+    assert.strictEqual(items2.first().attr('id'), 'item1', 'second list - new item in first position');
 });
 
-QUnit.test("Drag and drop item from sortable to draggable should not move item", function(assert) {
+QUnit.test('Drag and drop item from sortable to draggable should not move item', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let draggable = this.createDraggable({
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items"));
+    const draggable = this.createDraggable({
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable = this.createSortable({
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items2"));
+    const sortable = this.createSortable({
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items2'));
 
     // act
     pointerMock(sortable.$element().children().eq(0)).start({ x: 304, y: 0 }).down().move(-250, 0).move(-50, 0).up();
@@ -1991,28 +2185,29 @@ QUnit.test("Drag and drop item from sortable to draggable should not move item",
     // assert
     items1 = draggable.$element().children();
     items2 = sortable.$element().children();
-    assert.strictEqual(items1.length, 3, "first list items are not changed");
-    assert.strictEqual(items2.length, 3, "second list items are not changed");
+    assert.strictEqual(items1.length, 3, 'first list items are not changed');
+    assert.strictEqual(items2.length, 3, 'second list items are not changed');
 });
 
-QUnit.test("Drag and drop item from sortable to draggable with drop handler", function(assert) {
+QUnit.test('Drag and drop item from sortable to draggable with drop handler', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let draggable = this.createDraggable({
-        filter: ".draggable",
-        group: "shared",
+    const draggable = this.createDraggable({
+        filter: '.draggable',
+        group: 'shared',
         onDrop: function(e) {
             if(e.fromComponent !== e.toComponent) {
                 $(e.element).append(e.itemElement);
             }
         }
-    }, $("#items"));
+    }, $('#items'));
 
-    let sortable = this.createSortable({
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items2"));
+    const sortable = this.createSortable({
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items2'));
 
     // act
     pointerMock(sortable.$element().children().eq(0)).start({ x: 304, y: 0 }).down().move(-250, 0).move(-50, 0).up();
@@ -2020,27 +2215,28 @@ QUnit.test("Drag and drop item from sortable to draggable with drop handler", fu
     // assert
     items1 = draggable.$element().children();
     items2 = sortable.$element().children();
-    assert.strictEqual(items1.length, 4, "first list - item count");
-    assert.strictEqual(items2.length, 2, "second list - item count");
-    assert.strictEqual(items1.filter("#item4").length, 1, "first list - item from second list");
-    assert.strictEqual(items1.last().attr("id"), "item4", "first list - new item in last position");
-    assert.strictEqual(items2.filter("#item4").length, 0, "second list - draggable item is removed");
+    assert.strictEqual(items1.length, 4, 'first list - item count');
+    assert.strictEqual(items2.length, 2, 'second list - item count');
+    assert.strictEqual(items1.filter('#item4').length, 1, 'first list - item from second list');
+    assert.strictEqual(items1.last().attr('id'), 'item4', 'first list - new item in last position');
+    assert.strictEqual(items2.filter('#item4').length, 0, 'second list - draggable item is removed');
 });
 
-QUnit.test("Drag and drop item to empty sortable", function(assert) {
+QUnit.test('Drag and drop item to empty sortable', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        filter: ".draggable",
-        group: "shared",
+    const sortable2 = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
         moveItemOnDrop: true
-    }, $("#items3"));
+    }, $('#items3'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(0, 300).move(0, 10).up();
@@ -2048,69 +2244,70 @@ QUnit.test("Drag and drop item to empty sortable", function(assert) {
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 2, "first list - item count");
-    assert.strictEqual(items2.length, 1, "second list - item count");
-    assert.strictEqual(items1.filter("#item1").length, 0, "first list - draggable item is removed");
-    assert.strictEqual(items2.filter("#item1").length, 1, "second list - item from first list");
+    assert.strictEqual(items1.length, 2, 'first list - item count');
+    assert.strictEqual(items2.length, 1, 'second list - item count');
+    assert.strictEqual(items1.filter('#item1').length, 0, 'first list - draggable item is removed');
+    assert.strictEqual(items2.filter('#item1').length, 1, 'second list - item from first list');
 });
 
-QUnit.test("Placeholder should not visible on drag item to empty sortable", function(assert) {
+QUnit.test('Placeholder should not visible on drag item to empty sortable', function(assert) {
     // arrange
-    let sortable1 = this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate",
-        group: "shared"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
+        group: 'shared'
+    }, $('#items'));
 
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate",
-        group: "shared"
-    }, $("#items3"));
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
+        group: 'shared'
+    }, $('#items3'));
 
     // act
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(0, 300).move(0, 10);
 
     // assert
-    assert.strictEqual($(".dx-sortable-placeholder").length, 2, "placeholders exist");
-    assert.strictEqual($(".dx-sortable-placeholder").eq(0).is(":visible"), false, "placeholder 1 is not visible");
-    assert.strictEqual($(".dx-sortable-placeholder").eq(1).is(":visible"), false, "placeholder 2 is not visible");
+    assert.strictEqual($('.dx-sortable-placeholder').length, 2, 'placeholders exist');
+    assert.strictEqual($('.dx-sortable-placeholder').eq(0).is(':visible'), false, 'placeholder 1 is not visible');
+    assert.strictEqual($('.dx-sortable-placeholder').eq(1).is(':visible'), false, 'placeholder 2 is not visible');
 });
 
-QUnit.test("Dragging an item to another sortable and back when it is alone in the collection", function(assert) {
+QUnit.test('Dragging an item to another sortable and back when it is alone in the collection', function(assert) {
     // arrange
-    let items1, items2;
+    let items1;
+    let items2;
 
-    $("#items3").append("<div id='item7' class='draggable' style='width: 300px; height: 30px; background: blue;'>item7</div>");
+    $('#items3').append('<div id=\'item7\' class=\'draggable\' style=\'width: 300px; height: 30px; background: blue;\'>item7</div>');
 
-    let sortable1 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items"));
+    const sortable1 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
 
-    let sortable2 = this.createSortable({
-        dropFeedbackMode: "push",
-        filter: ".draggable",
-        group: "shared"
-    }, $("#items3"));
+    const sortable2 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items3'));
 
     // act
-    let pointer = pointerMock(sortable2.$element().children().eq(0)).start({ x: 0, y: 310 }).down().move(0, -300).move(0, -10);
+    const pointer = pointerMock(sortable2.$element().children().eq(0)).start({ x: 0, y: 310 }).down().move(0, -300).move(0, -10);
 
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 3, "first list - item count");
-    assert.strictEqual(items2.length, 1, "second list - item count");
+    assert.strictEqual(items1.length, 3, 'first list - item count');
+    assert.strictEqual(items2.length, 1, 'second list - item count');
 
-    assert.strictEqual(items1[0].style.transform, "translate(0px, 30px)", "items1 1 is moved down");
-    assert.strictEqual(items1[1].style.transform, "translate(0px, 30px)", "items1 2 is moved down");
-    assert.strictEqual(items1[2].style.transform, "translate(0px, 30px)", "items1 3 is moved down");
+    assert.strictEqual(items1[0].style.transform, 'translate(0px, 30px)', 'items1 1 is moved down');
+    assert.strictEqual(items1[1].style.transform, 'translate(0px, 30px)', 'items1 2 is moved down');
+    assert.strictEqual(items1[2].style.transform, 'translate(0px, 30px)', 'items1 3 is moved down');
 
-    assert.strictEqual(items2[0].style.transform, "", "items2 1 is not moved");
-    assert.strictEqual(items2.first().attr("id"), "item7", "source item position is not changed");
-    assert.strictEqual(items2.hasClass("dx-sortable-source-hidden"), true, "source item is hidden");
+    assert.strictEqual(items2[0].style.transform, '', 'items2 1 is not moved');
+    assert.strictEqual(items2.first().attr('id'), 'item7', 'source item position is not changed');
+    assert.strictEqual(items2.hasClass('dx-sortable-source-hidden'), true, 'source item is hidden');
 
     // act
     pointer.move(0, 300).move(0, 10);
@@ -2118,10 +2315,46 @@ QUnit.test("Dragging an item to another sortable and back when it is alone in th
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 3, "first list - item count");
-    assert.strictEqual(items2.length, 1, "second list - item count");
-    assert.strictEqual(items2.first().attr("id"), "item7", "second list - first item");
+    assert.strictEqual(items1.length, 3, 'first list - item count');
+    assert.strictEqual(items2.length, 1, 'second list - item count');
+    assert.strictEqual(items2.first().attr('id'), 'item7', 'second list - first item');
 });
+
+// T846161
+QUnit.test('The onRemove event should be fired when dragging the item from sortable to draggable', function(assert) {
+    // arrange
+    const onRemoveSpy = sinon.spy();
+    const onDragEndSpy = sinon.spy();
+
+    const draggable = this.createDraggable({
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
+
+    const sortable = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
+        onRemove: onRemoveSpy,
+        onDragEnd: onDragEndSpy
+    }, $('#items2'));
+
+    // act
+    const $sortableElement = sortable.$element();
+    pointerMock($sortableElement.children().eq(0)).start().down($sortableElement.offset().left, 0).move(-50, 0).up();
+
+    // assert
+    assert.strictEqual(onRemoveSpy.callCount, 1, 'onRemove event is called');
+    assert.deepEqual(onRemoveSpy.getCall(0).args[0].fromComponent, sortable, 'onRemove arg - fromComponent');
+    assert.deepEqual(onRemoveSpy.getCall(0).args[0].toComponent, draggable, 'onRemove arg - toComponent');
+    assert.strictEqual(onRemoveSpy.getCall(0).args[0].fromIndex, 0, 'onRemove arg - fromIndex');
+    assert.ok(isNaN(onRemoveSpy.getCall(0).args[0].toIndex), 'onRemove arg - toIndex');
+    assert.strictEqual(onDragEndSpy.callCount, 1, 'onDragEnd event is called');
+    assert.deepEqual(onDragEndSpy.getCall(0).args[0].fromComponent, sortable, 'onDragEnd arg - fromComponent');
+    assert.deepEqual(onDragEndSpy.getCall(0).args[0].toComponent, draggable, 'onDragEnd arg - toComponent');
+    assert.strictEqual(onDragEndSpy.getCall(0).args[0].fromIndex, 0, 'onDragEndSpy arg - fromIndex');
+    assert.ok(isNaN(onDragEndSpy.getCall(0).args[0].toIndex), 'onDragEndSpy arg - toIndex');
+});
+
 
 function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
     return {
@@ -2133,12 +2366,12 @@ function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
                 return window.setTimeout(callback, 10);
             };
 
-            $("#qunit-fixture").addClass("qunit-fixture-visible");
+            $('#qunit-fixture').addClass('qunit-fixture-visible');
             this.$element = $(elementSelector);
             this.$scroll = $(scrollSelector);
 
             this.createSortable = (options) => {
-                return this.sortableInstance = this.$element.dxSortable(options).dxSortable("instance");
+                return this.sortableInstance = this.$element.dxSortable(options).dxSortable('instance');
             };
         },
         afterEach: function() {
@@ -2147,24 +2380,24 @@ function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
 
             animationFrame.requestAnimationFrame = this.originalRAF;
 
-            $("#qunit-fixture").removeClass("qunit-fixture-visible");
+            $('#qunit-fixture').removeClass('qunit-fixture-visible');
             this.sortableInstance && this.sortableInstance.dispose();
         }
     };
 }
 
-QUnit.module("With scroll", getModuleConfigForTestsWithScroll("#itemsWithScroll", "#scroll"));
+QUnit.module('With scroll', getModuleConfigForTestsWithScroll('#itemsWithScroll', '#scroll'));
 
-QUnit.test("Placeholder position should be updated during autoscroll", function(assert) {
+QUnit.test('Placeholder position should be updated during autoscroll', function(assert) {
     // arrange
-    let pointer,
-        items,
-        previousPlaceholderOffsetTop,
-        currentPlaceholderOffsetTop;
+    let pointer;
+    let items;
+    let previousPlaceholderOffsetTop;
+    let currentPlaceholderOffsetTop;
 
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate",
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
         scrollSpeed: 10
     });
 
@@ -2183,20 +2416,20 @@ QUnit.test("Placeholder position should be updated during autoscroll", function(
         this.clock.tick(10);
         currentPlaceholderOffsetTop = $(PLACEHOLDER_SELECTOR).offset().top;
 
-        assert.ok(currentPlaceholderOffsetTop !== previousPlaceholderOffsetTop, "placeholder was updated");
+        assert.notStrictEqual(currentPlaceholderOffsetTop, previousPlaceholderOffsetTop, 'placeholder was updated');
 
         previousPlaceholderOffsetTop = currentPlaceholderOffsetTop;
     }
 });
 
-QUnit.test("Placeholder should not be visible outside bottom of scroll container", function(assert) {
+QUnit.test('Placeholder should not be visible outside bottom of scroll container', function(assert) {
     // arrange
-    let pointer,
-        items;
+    let pointer;
+    let items;
 
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate"
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate'
     });
 
     items = this.$element.children();
@@ -2205,29 +2438,29 @@ QUnit.test("Placeholder should not be visible outside bottom of scroll container
     pointer = pointerMock(items.eq(0)).start().down().move(0, 250);
 
     // assert
-    assert.ok($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is visisble");
+    assert.ok($(PLACEHOLDER_SELECTOR).is(':visible'), 'placeholder is visisble');
 
     // act
     pointer.move(0, 50);
 
     // assert
-    assert.notOk($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is not visible");
+    assert.notOk($(PLACEHOLDER_SELECTOR).is(':visible'), 'placeholder is not visible');
 });
 
-QUnit.test("Placeholder should not be visible outside bottom of scroll container if overflow on sortable", function(assert) {
+QUnit.test('Placeholder should not be visible outside bottom of scroll container if overflow on sortable', function(assert) {
     // arrange
-    let pointer,
-        items;
+    let pointer;
+    let items;
 
-    this.$scroll.css("overflow", "");
+    this.$scroll.css('overflow', '');
     this.$element.css({
-        overflow: "auto",
+        overflow: 'auto',
         height: 250
     });
 
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate"
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate'
     });
 
     items = this.$element.children();
@@ -2236,23 +2469,23 @@ QUnit.test("Placeholder should not be visible outside bottom of scroll container
     pointer = pointerMock(items.eq(0)).start().down().move(0, 250);
 
     // assert
-    assert.ok($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is visisble");
+    assert.ok($(PLACEHOLDER_SELECTOR).is(':visible'), 'placeholder is visisble');
 
     // act
     pointer.move(0, 50);
 
     // assert
-    assert.notOk($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is not visible");
+    assert.notOk($(PLACEHOLDER_SELECTOR).is(':visible'), 'placeholder is not visible');
 });
 
-QUnit.test("Placeholder should not be visible outside top of scroll container", function(assert) {
+QUnit.test('Placeholder should not be visible outside top of scroll container', function(assert) {
     // arrange
-    let pointer,
-        items;
+    let pointer;
+    let items;
 
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate",
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
         autoScroll: false
     });
 
@@ -2264,28 +2497,28 @@ QUnit.test("Placeholder should not be visible outside top of scroll container", 
     pointer = pointerMock(items.eq(2)).start().down(0, 100).move(0, -100);
 
     // assert
-    assert.ok($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is visisble");
+    assert.ok($(PLACEHOLDER_SELECTOR).is(':visible'), 'placeholder is visisble');
 
     // act
     pointer.move(0, -50);
 
     // assert
-    assert.notOk($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is not visible");
+    assert.notOk($(PLACEHOLDER_SELECTOR).is(':visible'), 'placeholder is not visible');
 });
 
-QUnit.module("With both scrolls", getModuleConfigForTestsWithScroll("#itemsWithBothScrolls", "#bothScrolls"));
+QUnit.module('With both scrolls', getModuleConfigForTestsWithScroll('#itemsWithBothScrolls', '#bothScrolls'));
 
 // T830034
-QUnit.test("Placeholder width and offset should be correct if horizontal scroll exists and items have left margin", function(assert) {
+QUnit.test('Placeholder width and offset should be correct if horizontal scroll exists and items have left margin', function(assert) {
     // arrange
-    let items,
-        maxScroll = this.$scroll.prop("scrollWidth") - this.$scroll.width();
+    let items;
+    const maxScroll = this.$scroll.prop('scrollWidth') - this.$scroll.width();
 
-    $(".draggable").css("margin-left", "40px");
+    $('.draggable').css('margin-left', '40px');
 
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate",
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
         scrollSpeed: 10
     });
 
@@ -2293,14 +2526,14 @@ QUnit.test("Placeholder width and offset should be correct if horizontal scroll 
 
     function scrollTestIteration(targetY, expectedWidth, expectedOffset) {
         // act
-        let pointer = pointerMock(items.eq(0)).start().down().move(0, targetY),
-            $placeholder;
+        const pointer = pointerMock(items.eq(0)).start().down().move(0, targetY);
+        let $placeholder;
 
         $placeholder = $(PLACEHOLDER_SELECTOR);
 
         // assert
-        assert.roughEqual($placeholder.width(), expectedWidth, 3, "placeholder width");
-        assert.deepEqual($placeholder.offset(), expectedOffset, "placeholder offset");
+        assert.roughEqual($placeholder.width(), expectedWidth, 3, 'placeholder width');
+        assert.deepEqual($placeholder.offset(), expectedOffset, 'placeholder offset');
 
         // act
         pointer.up();
@@ -2336,21 +2569,21 @@ QUnit.test("Placeholder width and offset should be correct if horizontal scroll 
 
     scrollTestIteration(180, 300, { left: 0, top: 200 });
 
-    $(".draggable").css("margin-left", "0px");
+    $('.draggable').css('margin-left', '0px');
 });
 
 // T830034
-QUnit.test("Placeholder width and offset should be correct if horizontal scroll exists and items have right margin", function(assert) {
+QUnit.test('Placeholder width and offset should be correct if horizontal scroll exists and items have right margin', function(assert) {
     // arrange
-    let items,
-        maxScroll = this.$scroll.prop("scrollWidth") - this.$scroll.width();
+    let items;
+    const maxScroll = this.$scroll.prop('scrollWidth') - this.$scroll.width();
 
-    $(".draggable").css("width", "560");
-    $(".draggable").css("margin-right", "40px");
+    $('.draggable').css('width', '560');
+    $('.draggable').css('margin-right', '40px');
 
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate",
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
         scrollSpeed: 10
     });
 
@@ -2358,14 +2591,14 @@ QUnit.test("Placeholder width and offset should be correct if horizontal scroll 
 
     function scrollTestIteration(targetY, expectedWidth, expectedOffset) {
         // act
-        let pointer = pointerMock(items.eq(0)).start().down().move(0, targetY),
-            $placeholder;
+        const pointer = pointerMock(items.eq(0)).start().down().move(0, targetY);
+        let $placeholder;
 
         $placeholder = $(PLACEHOLDER_SELECTOR);
 
         // assert
-        assert.roughEqual($placeholder.width(), expectedWidth, 3, "placeholder width");
-        assert.deepEqual($placeholder.offset(), expectedOffset, "placeholder offset");
+        assert.roughEqual($placeholder.width(), expectedWidth, 3, 'placeholder width');
+        assert.deepEqual($placeholder.offset(), expectedOffset, 'placeholder offset');
 
         // act
         pointer.up();
@@ -2401,23 +2634,23 @@ QUnit.test("Placeholder width and offset should be correct if horizontal scroll 
 
     scrollTestIteration(180, 260, { left: 0, top: 200 });
 
-    $(".draggable").css("width", "600px");
-    $(".draggable").css("margin-right", "0px");
+    $('.draggable').css('width', '600px');
+    $('.draggable').css('margin-right', '0px');
 });
 
 // T830034
-QUnit.test("Placeholder width and offset should be correct if horizontal scroll exists and items have right and left margins", function(assert) {
+QUnit.test('Placeholder width and offset should be correct if horizontal scroll exists and items have right and left margins', function(assert) {
     // arrange
-    let items,
-        maxScroll = this.$scroll.prop("scrollWidth") - this.$scroll.width();
+    let items;
+    const maxScroll = this.$scroll.prop('scrollWidth') - this.$scroll.width();
 
-    $(".draggable").css("width", "520px");
-    $(".draggable").css("margin-right", "40px");
-    $(".draggable").css("margin-left", "40px");
+    $('.draggable').css('width', '520px');
+    $('.draggable').css('margin-right', '40px');
+    $('.draggable').css('margin-left', '40px');
 
     this.createSortable({
-        filter: ".draggable",
-        dropFeedbackMode: "indicate",
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
         scrollSpeed: 10
     });
 
@@ -2425,14 +2658,14 @@ QUnit.test("Placeholder width and offset should be correct if horizontal scroll 
 
     function scrollTestIteration(targetY, expectedWidth, expectedOffset) {
         // act
-        let pointer = pointerMock(items.eq(0)).start().down().move(0, targetY),
-            $placeholder;
+        const pointer = pointerMock(items.eq(0)).start().down().move(0, targetY);
+        let $placeholder;
 
         $placeholder = $(PLACEHOLDER_SELECTOR);
 
         // assert
-        assert.roughEqual($placeholder.width(), expectedWidth, 3, "placeholder width");
-        assert.deepEqual($placeholder.offset(), expectedOffset, "placeholder offset");
+        assert.roughEqual($placeholder.width(), expectedWidth, 3, 'placeholder width');
+        assert.deepEqual($placeholder.offset(), expectedOffset, 'placeholder offset');
 
         // act
         pointer.up();
@@ -2468,7 +2701,7 @@ QUnit.test("Placeholder width and offset should be correct if horizontal scroll 
 
     scrollTestIteration(180, 260, { left: 0, top: 200 });
 
-    $(".draggable").css("width", "600px");
-    $(".draggable").css("margin-right", "0px");
-    $(".draggable").css("margin-left", "0px");
+    $('.draggable').css('width', '600px');
+    $('.draggable').css('margin-right', '0px');
+    $('.draggable').css('margin-left', '0px');
 });

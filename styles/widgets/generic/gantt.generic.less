@@ -49,7 +49,7 @@
     }
 
     .dx-gantt-header {
-        color: @treelist-columnchooser-item-color;
+        color: @datagrid-columnchooser-item-color;
 
         .dx-gantt-tsac,
         .dx-gantt-tsa,
@@ -184,8 +184,8 @@
 
     .dx-gantt-sel {
         background-color: @gantt-selection-bg;
-        border-top: 1px solid @treelist-selection-bg;
-        border-bottom: 1px solid @treelist-selection-bg;
+        border-top: 1px solid @datagrid-selection-bg;
+        border-bottom: 1px solid @datagrid-selection-bg;
     }
 
     .dx-gantt-tac-hb .dx-gantt-sel {
@@ -202,6 +202,15 @@
 
     .dx-gantt-arrow {
         border: 5px solid @base-text-color;
+    }
+
+    .dx-gantt-tm {
+        border-left: 1px dashed @base-accent;
+
+        &.dx-gantt-ti {
+            border-right: 1px dashed @base-accent;
+            background-color: fade(@base-accent, 15%);
+        }
     }
 
     .dx-gantt-altRow,

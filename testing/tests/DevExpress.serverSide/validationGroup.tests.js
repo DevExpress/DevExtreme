@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets.editors/validationGroup.markup.tests.js");
+require('../DevExpress.ui.widgets.editors/validationGroup.markup.tests.js');

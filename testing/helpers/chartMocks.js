@@ -1,21 +1,21 @@
 /* global currentAssert */
-import $ from "jquery";
-import Class from "core/class";
-import commonUtils from "core/utils/common";
-import typeUtils from "core/utils/type";
-import loadingIndicatorModule from "viz/core/loading_indicator";
-import axisModule from "viz/axes/base_axis";
-import pointModule from "viz/series/points/base_point";
-import translator2DModule from "viz/translators/translator2d";
-import seriesFamilyModule from "viz/core/series_family";
-import seriesModule from "viz/series/base_series";
-import vizMocks from "./vizMocks.js";
-import { isDefined } from "../../js/core/utils/type.js";
+import $ from 'jquery';
+import Class from 'core/class';
+import commonUtils from 'core/utils/common';
+import typeUtils from 'core/utils/type';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
+import axisModule from 'viz/axes/base_axis';
+import pointModule from 'viz/series/points/base_point';
+import translator2DModule from 'viz/translators/translator2d';
+import seriesFamilyModule from 'viz/core/series_family';
+import seriesModule from 'viz/series/base_series';
+import vizMocks from './vizMocks.js';
+import { isDefined } from '../../js/core/utils/type.js';
 
-const firstCategory = "First";
-const secondCategory = "Second";
-const thirdCategory = "Third";
-const fourthCategory = "Fourth";
+const firstCategory = 'First';
+const secondCategory = 'Second';
+const thirdCategory = 'Third';
+const fourthCategory = 'Fourth';
 const sourceItemsToMocking = {};
 
 export const categories = [firstCategory, secondCategory, thirdCategory, fourthCategory];
@@ -39,20 +39,20 @@ export const verticalStart = 0;
 export const verticalDelta = 85;
 export const verticalEnd = verticalStart + verticalDelta * 5;
 export const horizontalContinuousXData = {
-    "0": horizontalStart,
-    "20": horizontalStart + horizontalDelta,
-    "40": horizontalStart + horizontalDelta * 2,
-    "60": horizontalStart + horizontalDelta * 3,
-    "80": horizontalStart + horizontalDelta * 4,
+    '0': horizontalStart,
+    '20': horizontalStart + horizontalDelta,
+    '40': horizontalStart + horizontalDelta * 2,
+    '60': horizontalStart + horizontalDelta * 3,
+    '80': horizontalStart + horizontalDelta * 4,
     '100': horizontalStart + horizontalDelta * 5
 };
 export const horizontalContinuousXDataFrom = {
-    "70": 0,
-    "170": 20,
-    "270": 40,
-    "370": 60,
-    "470": 80,
-    "570": 100,
+    '70': 0,
+    '170': 20,
+    '270': 40,
+    '370': 60,
+    '470': 80,
+    '570': 100,
 };
 export const horizontalContinuousXDataSpecialCases = {
     'canvas_position_start': horizontalStart,
@@ -150,18 +150,18 @@ export const categoriesVerticalTranslatorDataY = {
     interval: verticalCategoryDelta
 };
 
-var defaultAxisXOptions = $.extend(true, {}, {
+const defaultAxisXOptions = $.extend(true, {}, {
     isHorizontal: true,
     valueMarginsEnabled: true,
     position: 'bottom',
     axisDivisionFactor: 50,
     visible: true,
     label: {
-        alignment: "center",
+        alignment: 'center',
         indentFromAxis: 10,
         // TODO: make sure we really need it
         precision: 0,
-        format: "",
+        format: '',
         customizeText: undefined
 
     },
@@ -173,8 +173,8 @@ var defaultAxisXOptions = $.extend(true, {}, {
     },
     title: {
         font: {
-            color: "#000000",
-            family: "Helvetica",
+            color: '#000000',
+            family: 'Helvetica',
             size: 20
         },
         margin: 10
@@ -183,21 +183,21 @@ var defaultAxisXOptions = $.extend(true, {}, {
     },
     constantLineStyle: {
     },
-    drawingType: "normal"
+    drawingType: 'normal'
 });
 
-var defaultAxisYOptions = $.extend(true, {}, {
+const defaultAxisYOptions = $.extend(true, {}, {
     isHorizontal: false,
     valueMarginsEnabled: true,
-    position: "left",
+    position: 'left',
     axisDivisionFactor: 30,
     visible: true,
     label: {
-        alignment: "right",
+        alignment: 'right',
         indentFromAxis: 10,
         // TODO: make sure we really need it
         precision: 0,
-        format: "",
+        format: '',
         customizeText: undefined
     },
     tick: {
@@ -208,8 +208,8 @@ var defaultAxisYOptions = $.extend(true, {}, {
     },
     title: {
         font: {
-            color: "#000000",
-            family: "Helvetica",
+            color: '#000000',
+            family: 'Helvetica',
             size: 20
         },
         margin: 10
@@ -218,7 +218,7 @@ var defaultAxisYOptions = $.extend(true, {}, {
     },
     constantLineStyle: {
     },
-    drawingType: "normal"
+    drawingType: 'normal'
 });
 
 export const createHorizontalAxis = function createHorizontalAxis(translatorData, orthogonalTranslatorData, allOptions) {
@@ -230,7 +230,7 @@ export const createVerticalAxis = function createVerticalAxis(translatorData, or
 
 function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHorizontal) {
     function createTranslator(data, options) {
-        var useOriginalTranslator = options.useOriginalTranslator;
+        const useOriginalTranslator = options.useOriginalTranslator;
         data.categories = data.categories || options.categories;
         data.maxVisible = data.maxVisible || options.max;
         data.minVisible = data.minVisible || options.min;
@@ -246,20 +246,19 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
     translatorData = $.extend({}, translatorData);
     orthogonalTranslatorData = $.extend({}, orthogonalTranslatorData);
 
-    var translator = createTranslator(translatorData, allOptions),
-        orthogonalTranslator = createTranslator(orthogonalTranslatorData, allOptions),
-        mergedOptions = $.extend(true, {}, allOptions),
-        axis;
+    const translator = createTranslator(translatorData, allOptions);
+    const orthogonalTranslator = createTranslator(orthogonalTranslatorData, allOptions);
+    const mergedOptions = $.extend(true, {}, allOptions);
 
-    axis = new axisModule.Axis({
+    const axis = new axisModule.Axis({
         renderer: new vizMocks.Renderer(),
         stripsGroup: allOptions.stripsGroup,
         labelAxesGroup: allOptions.labelAxesGroup,
         constantLinesGroup: allOptions.constantLinesGroup,
         axesContainerGroup: allOptions.axesContainerGroup,
         gridGroup: allOptions.gridGroup,
-        axisType: "xyAxes",
-        drawingType: "linear",
+        axisType: 'xyAxes',
+        drawingType: 'linear',
         isHorizontal: isHorizontal,
         incidentOccurred: allOptions.incidentOccurred
     });
@@ -274,7 +273,7 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
 
 function mockItem(itemKey, moduleName, mock) {
     if(sourceItemsToMocking[itemKey]) {
-        throw "Item " + itemKey + " already mocked";
+        throw 'Item ' + itemKey + ' already mocked';
     }
     sourceItemsToMocking[itemKey] = moduleName[itemKey];
     moduleName[itemKey] = mock;
@@ -285,6 +284,45 @@ function restoreItem(itemKey, moduleName) {
     sourceItemsToMocking[itemKey] = null;
 }
 
+const MockSeriesFamily = Class.inherit({
+    ctor: function(options) {
+        this.options = options;
+        this.addedSeries = [];
+    },
+    updateOptions: function(options) {
+        this.options = options;
+    },
+    dispose: function() {
+        this.disposed = true;
+    },
+    adjustSeriesValues: function() {
+        this.adjustedValues = true;
+
+        this.allSeriesHavePoints = (this.addedSeries || [])
+            .reduce(function(r, s) { return r.concat(s); }, [])
+            .reduce(function(r, s) {
+
+                return r && (s.getAllPoints ? !!s.getAllPoints().length : true);
+            }, true);
+    },
+    adjustSeriesDimensions: function() {
+        this.adjustedDimensions = true;
+    },
+    add: function(series) {
+        this.addedSeries.push(series);
+        series.parentFamily = this;
+    },
+    updateSeriesValues: function() {
+        this.updatedValues = true;
+    },
+    resetMock: function() {
+        this.disposed = null;
+        this.adjustedValues = null;
+        this.adjustedDimensions = null;
+        this.updatedValues = null;
+    }
+});
+
 export const insertMockFactory = function insertMockFactory() {
     seriesMockData = {
         series: [],
@@ -292,16 +330,16 @@ export const insertMockFactory = function insertMockFactory() {
         currentSeries: 0
     };
 
-    mockItem("Point", pointModule, function(series, data, options) {
-        var opt = $.extend(true, {}, data, options);
+    mockItem('Point', pointModule, function(series, data, options) {
+        const opt = $.extend(true, {}, data, options);
         opt.series = series;
         return new MockPoint(opt);
     });
 
-    mockItem("Series", seriesModule, function(renderSettings, options) {
+    mockItem('Series', seriesModule, function(renderSettings, options) {
         seriesMockData.args.push(arguments);
         if(seriesMockData.series.length > seriesMockData.currentSeries) {
-            var series = seriesMockData.series[seriesMockData.currentSeries++];
+            const series = seriesMockData.series[seriesMockData.currentSeries++];
             series.name = series.name || options.name;
             series.type = options.type;
             series.axis = options.axis;
@@ -321,26 +359,26 @@ export const insertMockFactory = function insertMockFactory() {
             series.renderSettings = renderSettings;
             return series;
         }
-        currentAssert().ok(false, "Unexpected series request (request #" + seriesMockData.currentSeries + ")");
-        throw "Unexpected series request";
+        currentAssert().ok(false, 'Unexpected series request (request #' + seriesMockData.currentSeries + ')');
+        throw 'Unexpected series request';
     });
 
-    mockItem("LoadingIndicator", loadingIndicatorModule, function(parameters) {
+    mockItem('LoadingIndicator', loadingIndicatorModule, function(parameters) {
         return new vizMocks.LoadingIndicator(parameters);
     });
 
-    axisModule && mockItem("Axis", axisModule, function(parameters) {
-        var axis = new MockAxis(parameters);
+    axisModule && mockItem('Axis', axisModule, function(parameters) {
+        const axis = new MockAxis(parameters);
         axis.draw = sinon.spy(axis.draw);
         return axis;
     });
 };
 
 export const restoreMockFactory = function() {
-    restoreItem("Point", pointModule);
-    restoreItem("Series", seriesModule);
-    restoreItem("LoadingIndicator", loadingIndicatorModule);
-    axisModule && restoreItem("Axis", axisModule);
+    restoreItem('Point', pointModule);
+    restoreItem('Series', seriesModule);
+    restoreItem('LoadingIndicator', loadingIndicatorModule);
+    axisModule && restoreItem('Axis', axisModule);
 };
 
 export const resetMockFactory = function resetMockFactory() {
@@ -355,45 +393,45 @@ export const setupSeriesFamily = function() {
 //  Translator
 
 export const MockTranslator = function(data) {
-    var innerData = data,
-        failOnWrongData = data && data.failOnWrongData;
+    const innerData = data;
+    const failOnWrongData = data && data.failOnWrongData;
     return {
         translate: function(index) {
             currentAssert().ok(index !== null, 'Verification of value that was passed to Translator (translate)');
             index = index === undefined ? 0 : index;
-            var result = innerData.translate[index.toString()];
-            if(typeof index === "number" && failOnWrongData && result === undefined) {
+            const result = innerData.translate[index.toString()];
+            if(typeof index === 'number' && failOnWrongData && result === undefined) {
                 currentAssert().ok(false, 'translate(' + index + ') = undefined');
             }
             return result;
         },
         from: function(index) {
             currentAssert().ok(index !== undefined && index !== null, 'Verification of value that was passed to Translator (from)');
-            var result = innerData.from[index.toString()];
-            if(typeof index === "number" && failOnWrongData && result === undefined) {
+            const result = innerData.from[index.toString()];
+            if(typeof index === 'number' && failOnWrongData && result === undefined) {
                 currentAssert().ok(false, 'from(' + index + ') = undefined');
             }
             return result;
         },
         translateSpecialCase: function(specialCase) {
             currentAssert().ok(specialCase !== undefined && specialCase !== null, 'Verification of value that was passed to Translator (translateSpecialCase)');
-            var result = innerData.specialCases[specialCase];
+            const result = innerData.specialCases[specialCase];
             if(failOnWrongData && result === undefined) {
                 currentAssert().ok(false, 'translateSpecialCase(' + specialCase + ') = undefined');
             }
             return result;
         },
         getInterval: function() {
-            var result = innerData.interval;
+            const result = innerData.interval;
             if(failOnWrongData && result === undefined) {
                 currentAssert().ok(false, 'interval = undefined');
             }
             return result;
         },
         getCanvasVisibleArea: function() {
-            var result = innerData.getCanvasVisibleArea;
+            const result = innerData.getCanvasVisibleArea;
             if(failOnWrongData && result === undefined) {
-                currentAssert().ok(false, "getCanvasVisibleArea = undefined");
+                currentAssert().ok(false, 'getCanvasVisibleArea = undefined');
             }
             return result || {};
         },
@@ -417,7 +455,7 @@ export const MockTranslator = function(data) {
 };
 
 export const MockAngularTranslator = function(data) {
-    var innerData = data;
+    const innerData = data;
     return {
         translate: function(index) {
             currentAssert().ok(index !== undefined && index !== null, 'Verification of value that was passed to Translator (translate)');
@@ -445,7 +483,7 @@ export const MockSeries = function MockSeries(options) {
 
             this.disposed = true;
         },
-        type: options.type || "mockType",
+        type: options.type || 'mockType',
         wasDrawn: false,
         dataReinitialized: false,
         reinitializedData: [],
@@ -460,7 +498,7 @@ export const MockSeries = function MockSeries(options) {
         _argumentAxis: options.argumentAxis,
         createPoints: sinon.spy(),
         pointsByArgument: (function() {
-            var pointsByArgument = {};
+            const pointsByArgument = {};
 
             $.each(options.points, function(_, p) {
                 if(p.argument) {
@@ -472,7 +510,7 @@ export const MockSeries = function MockSeries(options) {
             return pointsByArgument;
         })(),
         styles: {
-            themeColor: "seriesThemeColor", point: {}, pointStyles: []
+            themeColor: 'seriesThemeColor', point: {}, pointStyles: []
         },
         getValueAxis: function() {
             return this._valueAxis;
@@ -494,7 +532,7 @@ export const MockSeries = function MockSeries(options) {
             if(options.visible === false) {
                 return { arg: {}, val: {} };
             }
-            var range = $.extend(true, {}, options.range || {});
+            const range = $.extend(true, {}, options.range || {});
 
             range.arg = range.arg || {};
             range.val = range.val || {};
@@ -543,13 +581,13 @@ export const MockSeries = function MockSeries(options) {
             return options.barOverlapGroup;
         },
         isFullStackedSeries: function() {
-            return this.type && this.type.indexOf("fullstacked") !== -1;
+            return this.type && this.type.indexOf('fullstacked') !== -1;
         },
         isStackedSeries: function() {
-            return this.type.indexOf("stacked") === 0;
+            return this.type.indexOf('stacked') === 0;
         },
         isFinancialSeries: function() {
-            return this.type === "stock" || this.type === "candlestick";
+            return this.type === 'stock' || this.type === 'candlestick';
         },
 
         select: function() {
@@ -562,7 +600,7 @@ export const MockSeries = function MockSeries(options) {
             this.deselectedPoint = point;
         },
         getPointsByArg: function(arg) {
-            var f = [];
+            const f = [];
             $.each(options.points, function(_, point) {
                 // eslint-disable-next-line eqeqeq
                 if(point.argument.valueOf() == arg.valueOf()) {
@@ -573,7 +611,7 @@ export const MockSeries = function MockSeries(options) {
         },
         getPointsByKeys: sinon.stub(),
         getArgumentField: function() {
-            var options = this._options;
+            const options = this._options;
             return options.argumentField;
         },
         showPointTooltip: function(point) {
@@ -596,7 +634,7 @@ export const MockSeries = function MockSeries(options) {
             return this._options;
         },
         getColor: function() {
-            return "seriesColor";
+            return 'seriesColor';
         },
         getLegendStyles: function() {
             return {
@@ -609,7 +647,7 @@ export const MockSeries = function MockSeries(options) {
             return this._visible !== undefined ? this._visible : true;
         },
         setClippingParams: function(baseId, wideId, force) {
-            this["clip-path"] = baseId,
+            this['clip-path'] = baseId,
             this.wideId = wideId,
             this.forceClipping = force;
         },
@@ -638,7 +676,7 @@ export const MockPoint = Class.inherit(
         },
 
         update: function(options) {
-            this._options = this.mockOptions = options || {};
+            this._options = options || {};
             this.argument = options.argument;
             this.value = options.value !== undefined ? options.value : 0;
             this.size = options.size;
@@ -658,9 +696,8 @@ export const MockPoint = Class.inherit(
                 this.value = options.reductionValue;
             }
             this.labelFormatObject = {};
-            this.series = options.series || { type: "" };
+            this.series = options.series || { type: '' };
 
-            this.options = this.mockOptions.options;
             this.pointClassName = options.pointClassName;
 
             this.x = options.x;
@@ -677,7 +714,6 @@ export const MockPoint = Class.inherit(
         dispose: function() {
             delete this.options;
             delete this.series;
-            delete this.mockOptions;
             this.disposed = true;
         },
         isInVisibleArea: function() {
@@ -700,7 +736,9 @@ export const MockPoint = Class.inherit(
                 this.correctionWasReset = false;
             }
         },
-
+        getMinValue() {
+            return this.minValue;
+        },
         resetCorrection: function() {
             this.correctionWasReset = true;
         },
@@ -717,7 +755,7 @@ export const MockPoint = Class.inherit(
         },
         correctPosition: function(correction) {
             // correct angles?...
-            var that = this;
+            const that = this;
             that.radiusInner = correction.radiusInner;
             that.radiusOuter = correction.radiusOuter;
             that.centerX = correction.centerX;
@@ -727,7 +765,7 @@ export const MockPoint = Class.inherit(
             if(this.hasValue()) {
                 this.total = total;
                 this.percent = this.value / total;
-                var isFullStackedSeries = this.series.type === "" || this.series.type.indexOf("fullstacked") === 0;
+                const isFullStackedSeries = this.series.type === '' || this.series.type.indexOf('fullstacked') === 0;
                 if(fullStacked && isFullStackedSeries) {
                     this.value = this.value / total;
                     this.minValue = this.minValue / total;
@@ -801,13 +839,13 @@ export const MockPoint = Class.inherit(
             this.selectedStateWasReleased = true;
         },
         applyNormalStyle: function() {
-            this.currentStyle = "normal";
+            this.currentStyle = 'normal';
         },
         applyHoverStyle: function() {
-            this.currentStyle = "hovered";
+            this.currentStyle = 'hovered';
         },
         applySelectionStyle: function() {
-            this.currentStyle = "selected";
+            this.currentStyle = 'selected';
         },
         select: function() {
             this.selected = true;
@@ -837,14 +875,14 @@ export const MockPoint = Class.inherit(
             return this;
         },
         getClassName: function() {
-            return "pointClass";
+            return 'pointClass';
         },
         updateOptions: sinon.spy(function() { }),
         isVisible: function() {
             return this._visible !== undefined ? this._visible : true;
         },
         getOptions: function() {
-            return this.options;
+            return this._options;
         },
         getLegendStyles: function() {
             return {
@@ -861,8 +899,8 @@ export const MockPoint = Class.inherit(
     });
 
 export const MockAxis = function(renderOptions) {
-    var renderer = renderOptions.renderer,
-        axisElementsGroup = renderer.g();
+    const renderer = renderOptions.renderer;
+    const axisElementsGroup = renderer.g();
     return {
         updateOptions: function(options) {
             this.pane = options.pane;
@@ -901,6 +939,12 @@ export const MockAxis = function(renderOptions) {
         getMargins: function() {
             return { left: 0, top: 0, right: 0, bottom: 0 };
         },
+        visualRange: sinon.spy(function() {
+            if(arguments.length === 0) {
+                const opt = this._options || {};
+                return opt.visualRange;
+            }
+        }),
         updateSize: sinon.stub(),
 
         setBusinessRange: sinon.stub(),
@@ -981,7 +1025,7 @@ export const MockAxis = function(renderOptions) {
             return this._options.mockAxesSpacing || 5;
         },
         getTranslator: function() {
-            var businessRange = this.setBusinessRange.lastCall && this.setBusinessRange.lastCall.args[0] || {};
+            const businessRange = this.setBusinessRange.lastCall && this.setBusinessRange.lastCall.args[0] || {};
             businessRange.minVisible = businessRange.minVisible || businessRange.min;
             businessRange.maxVisible = businessRange.maxVisible || businessRange.max;
             return this._options && this._options.mockTranslator || new MockTranslator(businessRange);
@@ -1036,10 +1080,15 @@ export const MockAxis = function(renderOptions) {
         getAxisShift: function() {
             return 0;
         },
+        customPositionIsAvailable() {
+            return false;
+        },
+        hasCustomPosition() {
+            return false;
+        },
         getMarginOptions: sinon.stub.returns({}),
         applyVisualRangeSetter: sinon.spy(),
         _setVisualRange: sinon.spy(),
-        visualRange: sinon.spy(),
         _getAdjustedBusinessRange: sinon.spy(),
         refreshVisualRangeOption: sinon.spy(),
         prepareAnimation: sinon.spy(),
@@ -1048,61 +1097,22 @@ export const MockAxis = function(renderOptions) {
     };
 };
 
-var MockSeriesFamily = Class.inherit({
-    ctor: function(options) {
-        this.options = options;
-        this.addedSeries = [];
-    },
-    updateOptions: function(options) {
-        this.options = options;
-    },
-    dispose: function() {
-        this.disposed = true;
-    },
-    adjustSeriesValues: function() {
-        this.adjustedValues = true;
-
-        this.allSeriesHavePoints = (this.addedSeries || [])
-            .reduce(function(r, s) { return r.concat(s); }, [])
-            .reduce(function(r, s) {
-
-                return r && (s.getAllPoints ? !!s.getAllPoints().length : true);
-            }, true);
-    },
-    adjustSeriesDimensions: function() {
-        this.adjustedDimensions = true;
-    },
-    add: function(series) {
-        this.addedSeries.push(series);
-        series.parentFamily = this;
-    },
-    updateSeriesValues: function() {
-        this.updatedValues = true;
-    },
-    resetMock: function() {
-        this.disposed = null;
-        this.adjustedValues = null;
-        this.adjustedDimensions = null;
-        this.updatedValues = null;
-    }
-});
-
 export const checkTextSpecial = function(i, text, x, y, attr) {
-    var assert = currentAssert();
-    assert.strictEqual(renderer.text.getCall(i).args[0], text, "Text for text " + i);
-    assert.equal(renderer.text.getCall(i).args[1], x, "X for text " + i);
-    assert.equal(renderer.text.getCall(i).args[2], y, "Y for text " + i);
+    const assert = currentAssert();
+    assert.strictEqual(renderer.text.getCall(i).args[0], text, 'Text for text ' + i);
+    assert.equal(renderer.text.getCall(i).args[1], x, 'X for text ' + i);
+    assert.equal(renderer.text.getCall(i).args[2], y, 'Y for text ' + i);
 
-    assert.ok(renderer.text.getCall(i).returnValue.attr.firstCall.args[0], "attributes were passed for text " + i);
-    assert.equal(renderer.text.getCall(i).returnValue.attr.firstCall.args[0]["align"], attr.align, "Incorrect label align for text " + i);
+    assert.ok(renderer.text.getCall(i).returnValue.attr.firstCall.args[0], 'attributes were passed for text ' + i);
+    assert.equal(renderer.text.getCall(i).returnValue.attr.firstCall.args[0]['align'], attr.align, 'Incorrect label align for text ' + i);
     if(attr.rotate) {
-        assert.equal(renderer.text.getCall(i).returnValue.attr.firstCall.args[0]["rotate"], attr.rotate, "Incorrect label rotation for text " + i);
+        assert.equal(renderer.text.getCall(i).returnValue.attr.firstCall.args[0]['rotate'], attr.rotate, 'Incorrect label rotation for text ' + i);
     }
 };
 
 export const commonMethodsForTests = {
     checkTranslatorsCount: function(assert, translators, panesCount, axesCount) {
-        var i = 0;
+        let i = 0;
         $.each(translators, function(pane, axes) {
             panesCount--;
             $.each(axes, function(axis, tr) {
@@ -1117,9 +1127,9 @@ export const commonMethodsForTests = {
     },
 
     assertRange: function(assert, range, options) {
-        assert.ok(range, "Range is created for pane " + options.pane);
-        assert.equal(range.pane, options.pane, "Pane name set for " + options.pane);
-        assert.strictEqual(range.min, options.min, "Min for " + options.pane);
-        assert.strictEqual(range.max, options.max, "Max for " + options.pane);
+        assert.ok(range, 'Range is created for pane ' + options.pane);
+        assert.equal(range.pane, options.pane, 'Pane name set for ' + options.pane);
+        assert.strictEqual(range.min, options.min, 'Min for ' + options.pane);
+        assert.strictEqual(range.max, options.max, 'Max for ' + options.pane);
     }
 };

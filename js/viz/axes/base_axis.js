@@ -1,22 +1,22 @@
-import { smartFormatter as _format, formatRange } from "./smart_formatter";
-import vizUtils from "../core/utils";
-import { isDefined, isFunction, isPlainObject, isNumeric, type } from "../../core/utils/type";
-import constants from "./axes_constants";
-import { extend } from "../../core/utils/extend";
-import { inArray } from "../../core/utils/array";
-import formatHelper from "../../format_helper";
-import parseUtils from "../components/parse_utils";
-import tickGeneratorModule from "./tick_generator";
-import Translator2DModule from "../translators/translator2d";
-import { Range } from "../translators/range";
-import { tick } from "./tick";
-import { adjust } from "../../core/utils/math";
-import { dateToMilliseconds } from "../../core/utils/date";
-import { noop as _noop } from "../../core/utils/common";
-import xyMethods from "./xy_axes";
-import polarMethods from "./polar_axes";
-import createConstantLine from "./constant_line";
-import createStrip from "./strip";
+import { smartFormatter as _format, formatRange } from './smart_formatter';
+import vizUtils from '../core/utils';
+import { isDefined, isFunction, isPlainObject, isNumeric, type } from '../../core/utils/type';
+import constants from './axes_constants';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import formatHelper from '../../format_helper';
+import parseUtils from '../components/parse_utils';
+import tickGeneratorModule from './tick_generator';
+import Translator2DModule from '../translators/translator2d';
+import { Range } from '../translators/range';
+import { tick } from './tick';
+import { adjust } from '../../core/utils/math';
+import { dateToMilliseconds } from '../../core/utils/date';
+import { noop as _noop } from '../../core/utils/common';
+import xyMethods from './xy_axes';
+import polarMethods from './polar_axes';
+import createConstantLine from './constant_line';
+import createStrip from './strip';
 
 const convertTicksToValues = constants.convertTicksToValues;
 const patchFontOptions = vizUtils.patchFontOptions;
@@ -38,11 +38,11 @@ const LEFT = constants.left;
 const RIGHT = constants.right;
 const CENTER = constants.center;
 
-const KEEP = "keep";
-const SHIFT = "shift";
-const RESET = "reset";
+const KEEP = 'keep';
+const SHIFT = 'shift';
+const RESET = 'reset';
 
-const ROTATE = "rotate";
+const ROTATE = 'rotate';
 
 const DEFAULT_AXIS_DIVISION_FACTOR = 50;
 const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15;
@@ -85,7 +85,7 @@ function getTickGenerator(options, incidentOccurred, skipTickGeneration, rangeIs
 }
 
 function createMajorTick(axis, renderer, skippedCategory) {
-    var options = axis.getOptions();
+    const options = axis.getOptions();
 
     return tick(
         axis,
@@ -98,7 +98,7 @@ function createMajorTick(axis, renderer, skippedCategory) {
 }
 
 function createMinorTick(axis, renderer) {
-    var options = axis.getOptions();
+    const options = axis.getOptions();
 
     return tick(
         axis,
@@ -109,7 +109,7 @@ function createMinorTick(axis, renderer) {
 }
 
 function createBoundaryTick(axis, renderer, isFirst) {
-    var options = axis.getOptions();
+    const options = axis.getOptions();
 
     return tick(
         axis,
@@ -127,23 +127,23 @@ function callAction(elements, action, actionArgument1, actionArgument2) {
 }
 
 function initTickCoords(ticks) {
-    callAction(ticks, "initCoords");
+    callAction(ticks, 'initCoords');
 }
 
 function drawTickMarks(ticks, options) {
-    callAction(ticks, "drawMark", options);
+    callAction(ticks, 'drawMark', options);
 }
 
 function drawGrids(ticks, drawLine) {
-    callAction(ticks, "drawGrid", drawLine);
+    callAction(ticks, 'drawGrid', drawLine);
 }
 
 function updateTicksPosition(ticks, options, animate) {
-    callAction(ticks, "updateTickPosition", options, animate);
+    callAction(ticks, 'updateTickPosition', options, animate);
 }
 
 function updateGridsPosition(ticks, animate) {
-    callAction(ticks, "updateGridPosition", animate);
+    callAction(ticks, 'updateGridPosition', animate);
 }
 const measureLabels = exports.measureLabels = function(items) {
     items.forEach(function(item) {
@@ -152,7 +152,7 @@ const measureLabels = exports.measureLabels = function(items) {
 };
 
 function cleanUpInvalidTicks(ticks) {
-    var i = ticks.length - 1;
+    let i = ticks.length - 1;
     for(i; i >= 0; i--) {
         if(!removeInvalidTick(ticks, i)) {
             break;
@@ -176,10 +176,10 @@ function removeInvalidTick(ticks, i) {
 }
 
 function validateAxisOptions(options) {
-    var labelOptions = options.label,
-        position = options.position,
-        defaultPosition = options.isHorizontal ? BOTTOM : LEFT,
-        secondaryPosition = options.isHorizontal ? TOP : RIGHT;
+    const labelOptions = options.label;
+    let position = options.position;
+    const defaultPosition = options.isHorizontal ? BOTTOM : LEFT;
+    const secondaryPosition = options.isHorizontal ? TOP : RIGHT;
 
     if(position !== defaultPosition && position !== secondaryPosition) {
         position = defaultPosition;
@@ -190,7 +190,7 @@ function validateAxisOptions(options) {
     }
 
     options.position = position;
-    options.hoverMode = options.hoverMode ? options.hoverMode.toLowerCase() : "none";
+    options.hoverMode = options.hoverMode ? options.hoverMode.toLowerCase() : 'none';
     labelOptions.minSpacing = isDefined(labelOptions.minSpacing) ? labelOptions.minSpacing : DEFAULT_AXIS_LABEL_SPACING;
 
     options.type && (options.type = options.type.toLowerCase());
@@ -199,7 +199,7 @@ function validateAxisOptions(options) {
 }
 
 function getOptimalAngle(boxes, labelOpt) {
-    var angle = _math.asin((boxes[0].height + labelOpt.minSpacing) / (boxes[1].x - boxes[0].x)) * 180 / _math.PI;
+    const angle = _math.asin((boxes[0].height + labelOpt.minSpacing) / (boxes[1].x - boxes[0].x)) * 180 / _math.PI;
     return angle < 45 ? -45 : -90;
 }
 
@@ -230,7 +230,7 @@ function getZoomBoundValue(optionValue, dataValue) {
 }
 
 function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, minTickInterval) {
-    var tickGeneratorOptions = extend({}, options, {
+    const tickGeneratorOptions = extend({}, options, {
         endOnTick: true,
         axisDivisionFactor,
         skipCalculationLimits: true,
@@ -292,7 +292,7 @@ const calculateCanvasMargins = exports.calculateCanvasMargins = function(bBoxes,
 };
 
 const Axis = exports.Axis = function(renderSettings) {
-    var that = this;
+    const that = this;
 
     that._renderer = renderSettings.renderer;
     that._incidentOccurred = renderSettings.incidentOccurred;
@@ -304,7 +304,7 @@ const Axis = exports.Axis = function(renderSettings) {
     that._scaleBreaksGroup = renderSettings.scaleBreaksGroup;
     that._axesContainerGroup = renderSettings.axesContainerGroup;
     that._gridContainerGroup = renderSettings.gridGroup;
-    that._axisCssPrefix = renderSettings.widgetClass + "-" + (renderSettings.axisClass ? renderSettings.axisClass + "-" : "");
+    that._axisCssPrefix = renderSettings.widgetClass + '-' + (renderSettings.axisClass ? renderSettings.axisClass + '-' : '');
 
     that._setType(renderSettings.axisType, renderSettings.drawingType);
     that._createAxisGroups();
@@ -330,36 +330,56 @@ Axis.prototype = {
         this._axisElement = this._createAxisElement();
         this._updateAxisElementPosition();
 
-        this._axisElement.attr({ "stroke-width": options.width, stroke: options.color, "stroke-opacity": options.opacity })
+        this._axisElement.attr({ 'stroke-width': options.width, stroke: options.color, 'stroke-opacity': options.opacity })
             .sharp(this._getSharpParam(true), this.getAxisSharpDirection())
             .append(this._axisLineGroup);
     },
 
     _createPathElement(points, attr, sharpDirection) {
-        return this.sharp(this._renderer.path(points, "line").attr(attr), sharpDirection);
+        return this.sharp(this._renderer.path(points, 'line').attr(attr), sharpDirection);
     },
 
     sharp(svgElement, sharpDirection = 1) {
         return svgElement.sharp(this._getSharpParam(), sharpDirection);
     },
 
+    customPositionIsAvailable() {
+        return false;
+    },
+
+    getCustomPosition: _noop,
+
+    getCustomBoundaryPosition: _noop,
+
+    hasCustomPosition() {
+        return false;
+    },
+
+    customPositionIsBoundaryOppositeAxis() {
+        return false;
+    },
+
+    getResolvedBoundaryPosition() {
+        return this.getOptions().position;
+    },
+
     getAxisSharpDirection() {
-        const position = this._options.position;
-        return position === TOP || position === LEFT ? 1 : -1;
+        const position = this.getResolvedBoundaryPosition();
+        return this.hasCustomPosition() || position !== BOTTOM && position !== RIGHT ? 1 : -1;
     },
 
     getSharpDirectionByCoords(coords) {
         const canvas = this._getCanvasStartEnd();
         const maxCoord = Math.max(canvas.start, canvas.end);
 
-        return this.getRadius ? 0 : (maxCoord !== coords[(this._isHorizontal ? "x" : "y")] ? 1 : -1);
+        return this.getRadius ? 0 : (maxCoord !== coords[(this._isHorizontal ? 'x' : 'y')] ? 1 : -1);
     },
 
     _getGridLineDrawer: function() {
-        var that = this;
+        const that = this;
 
         return function(tick, gridStyle) {
-            var grid = that._getGridPoints(tick.coords);
+            const grid = that._getGridPoints(tick.coords);
 
             if(grid.points) {
                 return that._createPathElement(grid.points, gridStyle, that.getSharpDirectionByCoords(tick.coords));
@@ -369,28 +389,28 @@ Axis.prototype = {
     },
 
     _getGridPoints: function(coords) {
-        var that = this,
-            isHorizontal = this._isHorizontal,
-            tickPositionField = isHorizontal ? "x" : "y",
-            orthogonalPositions = this._orthogonalPositions,
-            positionFrom = orthogonalPositions.start,
-            positionTo = orthogonalPositions.end;
+        const that = this;
+        const isHorizontal = this._isHorizontal;
+        const tickPositionField = isHorizontal ? 'x' : 'y';
+        const orthogonalPositions = this._orthogonalPositions;
+        const positionFrom = orthogonalPositions.start;
+        const positionTo = orthogonalPositions.end;
 
         const borderOptions = that.borderOptions;
 
-        var canvasStart = isHorizontal ? LEFT : TOP,
-            canvasEnd = isHorizontal ? RIGHT : BOTTOM,
-            axisCanvas = that.getCanvas(),
-            canvas = {
-                left: axisCanvas.left,
-                right: axisCanvas.width - axisCanvas.right,
-                top: axisCanvas.top,
-                bottom: axisCanvas.height - axisCanvas.bottom
-            },
-            firstBorderLinePosition = (borderOptions.visible && borderOptions[canvasStart]) ? canvas[canvasStart] : undefined,
-            lastBorderLinePosition = (borderOptions.visible && borderOptions[canvasEnd]) ? canvas[canvasEnd] : undefined,
-            minDelta = MAX_GRID_BORDER_ADHENSION + firstBorderLinePosition,
-            maxDelta = lastBorderLinePosition - MAX_GRID_BORDER_ADHENSION;
+        const canvasStart = isHorizontal ? LEFT : TOP;
+        const canvasEnd = isHorizontal ? RIGHT : BOTTOM;
+        const axisCanvas = that.getCanvas();
+        const canvas = {
+            left: axisCanvas.left,
+            right: axisCanvas.width - axisCanvas.right,
+            top: axisCanvas.top,
+            bottom: axisCanvas.height - axisCanvas.bottom
+        };
+        const firstBorderLinePosition = (borderOptions.visible && borderOptions[canvasStart]) ? canvas[canvasStart] : undefined;
+        const lastBorderLinePosition = (borderOptions.visible && borderOptions[canvasEnd]) ? canvas[canvasEnd] : undefined;
+        const minDelta = MAX_GRID_BORDER_ADHENSION + firstBorderLinePosition;
+        const maxDelta = lastBorderLinePosition - MAX_GRID_BORDER_ADHENSION;
 
         if(that.areCoordsOutsideAxis(coords) ||
             coords[tickPositionField] === undefined ||
@@ -406,7 +426,7 @@ Axis.prototype = {
     },
 
     _getConstantLinePos: function(parsedValue, canvasStart, canvasEnd) {
-        var value = this._getTranslatedCoord(parsedValue);
+        const value = this._getTranslatedCoord(parsedValue);
 
         if(!isDefined(value) || value < _min(canvasStart, canvasEnd) || value > _max(canvasStart, canvasEnd)) {
             return undefined;
@@ -416,8 +436,8 @@ Axis.prototype = {
     },
 
     _getConstantLineGraphicAttributes: function(value) {
-        var positionFrom = this._orthogonalPositions.start,
-            positionTo = this._orthogonalPositions.end;
+        const positionFrom = this._orthogonalPositions.start;
+        const positionTo = this._orthogonalPositions.end;
 
         return {
             points: this._isHorizontal ? [value, positionFrom, value, positionTo] : [positionFrom, value, positionTo, value]
@@ -431,16 +451,16 @@ Axis.prototype = {
     _drawConstantLineLabelText: function(text, x, y, { font, cssClass }, group) {
         return this._renderer.text(text, x, y)
             .css(patchFontOptions(extend({}, this._options.label.font, font)))
-            .attr({ align: "center", "class": cssClass })
+            .attr({ align: 'center', 'class': cssClass })
             .append(group);
     },
 
     _drawConstantLineLabels: function(parsedValue, lineLabelOptions, value, group) {
-        var that = this,
-            text = lineLabelOptions.text,
-            options = that._options,
-            labelOptions = options.label,
-            coords;
+        const that = this;
+        let text = lineLabelOptions.text;
+        const options = that._options;
+        const labelOptions = options.label;
+        let coords;
 
         that._checkAlignmentConstantLineLabels(lineLabelOptions);
 
@@ -451,17 +471,17 @@ Axis.prototype = {
     },
 
     _getStripPos: function(startValue, endValue, canvasStart, canvasEnd, range) {
-        var isContinuous = !!(range.minVisible || range.maxVisible),
-            categories = (range.categories || []).reduce(function(result, cat) {
-                result.push(cat.valueOf());
-                return result;
-            }, []),
-            start,
-            end,
-            swap,
-            startCategoryIndex,
-            endCategoryIndex,
-            min = range.minVisible;
+        const isContinuous = !!(range.minVisible || range.maxVisible);
+        const categories = (range.categories || []).reduce(function(result, cat) {
+            result.push(cat.valueOf());
+            return result;
+        }, []);
+        let start;
+        let end;
+        let swap;
+        let startCategoryIndex;
+        let endCategoryIndex;
+        const min = range.minVisible;
 
         if(!isContinuous) {
             if(isDefined(startValue) && isDefined(endValue)) {
@@ -481,7 +501,7 @@ Axis.prototype = {
         }
 
         if(isDefined(startValue)) {
-            startValue = this.validateUnit(startValue, "E2105", "strip");
+            startValue = this.validateUnit(startValue, 'E2105', 'strip');
             start = this._getTranslatedCoord(startValue, -1);
             if(!isDefined(start) && isContinuous) {
                 start = (startValue < min) ? canvasStart : canvasEnd;
@@ -491,7 +511,7 @@ Axis.prototype = {
         }
 
         if(isDefined(endValue)) {
-            endValue = this.validateUnit(endValue, "E2105", "strip");
+            endValue = this.validateUnit(endValue, 'E2105', 'strip');
             end = this._getTranslatedCoord(endValue, 1);
             if(!isDefined(end) && isContinuous) {
                 end = (endValue > min) ? canvasEnd : canvasStart;
@@ -504,13 +524,13 @@ Axis.prototype = {
     },
 
     _getStripGraphicAttributes: function(fromPoint, toPoint) {
-        var x,
-            y,
-            width,
-            height,
-            orthogonalPositions = this._orthogonalPositions,
-            positionFrom = orthogonalPositions.start,
-            positionTo = orthogonalPositions.end;
+        let x;
+        let y;
+        let width;
+        let height;
+        const orthogonalPositions = this._orthogonalPositions;
+        const positionFrom = orthogonalPositions.start;
+        const positionTo = orthogonalPositions.end;
 
         if(this._isHorizontal) {
             x = fromPoint;
@@ -537,7 +557,7 @@ Axis.prototype = {
     },
 
     _adjustStripLabels: function() {
-        var that = this;
+        const that = this;
 
         this._strips.forEach(function(strip) {
             if(strip.label) {
@@ -557,17 +577,17 @@ Axis.prototype = {
     },
 
     _adjustLabels: function(offset) {
-        var that = this,
-            maxSize = that._majorTicks.reduce(function(size, tick) {
-                if(!tick.label) return size;
-                var bBox = tick.labelRotationAngle ? vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
-                return {
-                    width: _max(size.width || 0, bBox.width),
-                    height: _max(size.height || 0, bBox.height),
-                    offset: _max(size.offset || 0, tick.labelOffset || 0)
-                };
-            }, {}),
-            additionalOffset = that._isHorizontal ? maxSize.height : maxSize.width;
+        const that = this;
+        const maxSize = that._majorTicks.reduce(function(size, tick) {
+            if(!tick.label) return size;
+            const bBox = tick.labelRotationAngle ? vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
+            return {
+                width: _max(size.width || 0, bBox.width),
+                height: _max(size.height || 0, bBox.height),
+                offset: _max(size.offset || 0, tick.labelOffset || 0)
+            };
+        }, {});
+        const additionalOffset = that._isHorizontal ? maxSize.height : maxSize.width;
 
         that._adjustLabelsCoord(offset, maxSize.width);
 
@@ -576,19 +596,19 @@ Axis.prototype = {
 
     _getLabelAdjustedCoord: function(tick, offset, maxWidth) {
         offset = offset || 0;
-        var that = this,
-            options = that._options,
-            box = vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0),
-            position = options.position,
-            textAlign = tick.labelAlignment || options.label.alignment,
-            isDiscrete = that._options.type === "discrete",
-            isFlatLabel = tick.labelRotationAngle % 90 === 0,
-            indentFromAxis = options.label.indentFromAxis,
-            axisPosition = that._axisPosition,
-            labelCoords = tick.labelCoords,
-            labelX = labelCoords.x,
-            translateX,
-            translateY;
+        const that = this;
+        const options = that._options;
+        const box = vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0);
+        const position = options.position;
+        const textAlign = tick.labelAlignment || options.label.alignment;
+        const isDiscrete = that._options.type === 'discrete';
+        const isFlatLabel = tick.labelRotationAngle % 90 === 0;
+        const indentFromAxis = options.label.indentFromAxis;
+        const axisPosition = that._axisPosition;
+        const labelCoords = tick.labelCoords;
+        const labelX = labelCoords.x;
+        let translateX;
+        let translateY;
 
         if(that._isHorizontal) {
             if(position === BOTTOM) {
@@ -634,17 +654,17 @@ Axis.prototype = {
     },
 
     _createAxisConstantLineGroups: function() {
-        var that = this,
-            renderer = that._renderer,
-            classSelector = that._axisCssPrefix,
-            constantLinesClass = classSelector + "constant-lines",
-            insideGroup,
-            outsideGroup1,
-            outsideGroup2;
+        const that = this;
+        const renderer = that._renderer;
+        const classSelector = that._axisCssPrefix;
+        const constantLinesClass = classSelector + 'constant-lines';
+        let insideGroup;
+        let outsideGroup1;
+        let outsideGroup2;
 
-        insideGroup = renderer.g().attr({ "class": constantLinesClass });
-        outsideGroup1 = renderer.g().attr({ "class": constantLinesClass });
-        outsideGroup2 = renderer.g().attr({ "class": constantLinesClass });
+        insideGroup = renderer.g().attr({ 'class': constantLinesClass });
+        outsideGroup1 = renderer.g().attr({ 'class': constantLinesClass });
+        outsideGroup2 = renderer.g().attr({ 'class': constantLinesClass });
 
         return {
             inside: insideGroup,
@@ -668,27 +688,27 @@ Axis.prototype = {
     },
 
     _createAxisGroups: function() {
-        var that = this,
-            renderer = that._renderer,
-            classSelector = that._axisCssPrefix;
+        const that = this;
+        const renderer = that._renderer;
+        const classSelector = that._axisCssPrefix;
 
-        that._axisGroup = renderer.g().attr({ "class": classSelector + "axis" });
-        that._axisStripGroup = renderer.g().attr({ "class": classSelector + "strips" });
-        that._axisGridGroup = renderer.g().attr({ "class": classSelector + "grid" });
-        that._axisElementsGroup = renderer.g().attr({ "class": classSelector + "elements" }).append(that._axisGroup);
-        that._axisLineGroup = renderer.g().attr({ "class": classSelector + "line" }).append(that._axisGroup);
-        that._axisTitleGroup = renderer.g().attr({ "class": classSelector + "title" }).append(that._axisGroup);
+        that._axisGroup = renderer.g().attr({ 'class': classSelector + 'axis' });
+        that._axisStripGroup = renderer.g().attr({ 'class': classSelector + 'strips' });
+        that._axisGridGroup = renderer.g().attr({ 'class': classSelector + 'grid' });
+        that._axisElementsGroup = renderer.g().attr({ 'class': classSelector + 'elements' }).append(that._axisGroup);
+        that._axisLineGroup = renderer.g().attr({ 'class': classSelector + 'line' }).append(that._axisGroup);
+        that._axisTitleGroup = renderer.g().attr({ 'class': classSelector + 'title' }).append(that._axisGroup);
 
         that._axisConstantLineGroups = {
             above: that._createAxisConstantLineGroups(),
             under: that._createAxisConstantLineGroups(),
         };
 
-        that._axisStripLabelGroup = renderer.g().attr({ "class": classSelector + "axis-labels" });
+        that._axisStripLabelGroup = renderer.g().attr({ 'class': classSelector + 'axis-labels' });
     },
 
     _clearAxisGroups: function() {
-        var that = this;
+        const that = this;
 
         that._axisGroup.remove();
         that._axisStripGroup.remove();
@@ -711,7 +731,7 @@ Axis.prototype = {
     _getLabelFormatObject: function(value, labelOptions, range, point, tickInterval, ticks) {
         range = range || this._getViewportRange();
 
-        var formatObject = {
+        const formatObject = {
             value: value,
             valueText: _format(value, {
                 labelOptions: labelOptions,
@@ -722,7 +742,7 @@ Axis.prototype = {
                 type: this._options.type,
                 showTransition: !this._options.marker.visible,
                 point: point
-            }) || "",
+            }) || '',
 
             // B252346
             min: range.minVisible,
@@ -738,13 +758,13 @@ Axis.prototype = {
     },
 
     formatLabel: function(value, labelOptions, range, point, tickInterval, ticks) {
-        var formatObject = this._getLabelFormatObject(value, labelOptions, range, point, tickInterval, ticks);
+        const formatObject = this._getLabelFormatObject(value, labelOptions, range, point, tickInterval, ticks);
 
         return isFunction(labelOptions.customizeText) ? labelOptions.customizeText.call(formatObject, formatObject) : formatObject.valueText;
     },
 
     formatHint: function(value, labelOptions, range) {
-        var formatObject = this._getLabelFormatObject(value, labelOptions, range);
+        const formatObject = this._getLabelFormatObject(value, labelOptions, range);
 
         return isFunction(labelOptions.customizeHint) ? labelOptions.customizeHint.call(formatObject, formatObject) : undefined;
     },
@@ -754,45 +774,54 @@ Axis.prototype = {
     },
 
     _setTickOffset: function() {
-        var options = this._options,
-            discreteAxisDivisionMode = options.discreteAxisDivisionMode;
-        this._tickOffset = +(discreteAxisDivisionMode !== "crossLabels" || !discreteAxisDivisionMode);
+        const options = this._options;
+        const discreteAxisDivisionMode = options.discreteAxisDivisionMode;
+        this._tickOffset = +(discreteAxisDivisionMode !== 'crossLabels' || !discreteAxisDivisionMode);
     },
 
     getMargins: function() {
-        var that = this,
-            options = that._options,
-            position = options.position,
-            placeholderSize = options.placeholderSize,
-            canvas = that.getCanvas(),
-            cLeft = canvas.left,
-            cTop = canvas.top,
-            cRight = canvas.width - canvas.right,
-            cBottom = canvas.height - canvas.bottom,
-            edgeMarginCorrection = _max(options.grid.visible && options.grid.width || 0, options.tick.visible && options.tick.width || 0),
-            constantLineAboveSeries = that._axisConstantLineGroups.above,
-            constantLineUnderSeries = that._axisConstantLineGroups.under,
-            boxes = [that._axisElementsGroup,
-                constantLineAboveSeries.outside1, constantLineAboveSeries.outside2,
-                constantLineUnderSeries.outside1, constantLineUnderSeries.outside2,
-                that._axisLineGroup
-            ]
-                .map(group => group && group.getBBox())
-                .concat((function(group) {
-                    var box = group && group.getBBox();
+        const that = this;
+        if(that.hasCustomPosition()) {
+            return {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            };
+        }
 
-                    if(!box || box.isEmpty) {
-                        return box;
-                    }
-                    if(that._isHorizontal) {
-                        box.x = cLeft;
-                        box.width = cRight - cLeft;
-                    } else {
-                        box.y = cTop;
-                        box.height = cBottom - cTop;
-                    }
+        const options = that._options;
+        const position = options.position;
+        const placeholderSize = options.placeholderSize;
+        const canvas = that.getCanvas();
+        const cLeft = canvas.left;
+        const cTop = canvas.top;
+        const cRight = canvas.width - canvas.right;
+        const cBottom = canvas.height - canvas.bottom;
+        const edgeMarginCorrection = _max(options.grid.visible && options.grid.width || 0, options.tick.visible && options.tick.width || 0);
+        const constantLineAboveSeries = that._axisConstantLineGroups.above;
+        const constantLineUnderSeries = that._axisConstantLineGroups.under;
+        const boxes = [that._axisElementsGroup,
+            constantLineAboveSeries.outside1, constantLineAboveSeries.outside2,
+            constantLineUnderSeries.outside1, constantLineUnderSeries.outside2,
+            that._axisLineGroup
+        ]
+            .map(group => group && group.getBBox())
+            .concat((function(group) {
+                const box = group && group.getBBox();
+
+                if(!box || box.isEmpty) {
                     return box;
-                })(that._axisTitleGroup));
+                }
+                if(that._isHorizontal) {
+                    box.x = cLeft;
+                    box.width = cRight - cLeft;
+                } else {
+                    box.y = cTop;
+                    box.height = cBottom - cTop;
+                }
+                return box;
+            })(that._axisTitleGroup));
 
         const margins = calculateCanvasMargins(boxes, canvas);
 
@@ -815,7 +844,7 @@ Axis.prototype = {
     },
 
     validateUnit: function(unit, idError, parameters) {
-        var that = this;
+        const that = this;
         unit = that.parser(unit);
         if(unit === undefined && idError) {
             that._incidentOccurred(idError, [parameters]);
@@ -824,14 +853,14 @@ Axis.prototype = {
     },
 
     _setType: function(axisType, drawingType) {
-        var that = this,
-            axisTypeMethods;
+        const that = this;
+        let axisTypeMethods;
 
         switch(axisType) {
-            case "xyAxes":
+            case 'xyAxes':
                 axisTypeMethods = xyMethods;
                 break;
-            case "polarAxes":
+            case 'polarAxes':
                 axisTypeMethods = polarMethods;
                 break;
         }
@@ -847,7 +876,7 @@ Axis.prototype = {
 
     // public
     dispose: function() {
-        var that = this;
+        const that = this;
 
         [that._axisElementsGroup, that._axisStripGroup, that._axisGroup].forEach(function(g) { g.dispose(); });
 
@@ -890,8 +919,8 @@ Axis.prototype = {
     },
 
     updateOptions: function(options) {
-        var that = this,
-            labelOpt = options.label;
+        const that = this;
+        const labelOpt = options.label;
 
         validateAxisOptions(options);
         that._options = options;
@@ -915,17 +944,17 @@ Axis.prototype = {
         that.name = options.name;
         that.priority = options.priority;
 
-        that._hasLabelFormat = labelOpt.format !== "" && isDefined(labelOpt.format);
+        that._hasLabelFormat = labelOpt.format !== '' && isDefined(labelOpt.format);
         that._textOptions = {
             opacity: labelOpt.opacity,
-            align: "center",
-            "class": labelOpt.cssClass
+            align: 'center',
+            'class': labelOpt.cssClass
         };
         that._textFontStyles = vizUtils.patchFontOptions(labelOpt.font);
 
         if(options.type === constants.logarithmic) {
             if(options.logarithmBaseError) {
-                that._incidentOccurred("E2104");
+                that._incidentOccurred('E2104');
                 delete options.logarithmBaseError;
             }
         }
@@ -938,7 +967,7 @@ Axis.prototype = {
     },
 
     calculateInterval: function(value, prevValue) {
-        var options = this._options;
+        const options = this._options;
 
         if(!options || (options.type !== constants.logarithmic)) {
             return _abs(value - prevValue);
@@ -951,16 +980,19 @@ Axis.prototype = {
         return canvas;
     },
 
-    updateCanvas: function(canvas) {
-        var positions = this._orthogonalPositions = {
-            start: !this._isHorizontal ? canvas.left : canvas.top,
-            end: !this._isHorizontal ? canvas.width - canvas.right : canvas.height - canvas.bottom
-        };
+    updateCanvas: function(canvas, canvasRedesign) {
+        if(!canvasRedesign) {
+            const positions = this._orthogonalPositions = {
+                start: !this._isHorizontal ? canvas.left : canvas.top,
+                end: !this._isHorizontal ? canvas.width - canvas.right : canvas.height - canvas.bottom
+            };
+
+            positions.center = positions.start + (positions.end - positions.start) / 2;
+        } else {
+            this._orthogonalPositions = null;
+        }
 
         this._canvas = canvas;
-
-        positions.center = positions.start + (positions.end - positions.start) / 2;
-
         this._translator.updateCanvas(this._processCanvas(canvas));
 
         this._initAxisPositions();
@@ -975,10 +1007,10 @@ Axis.prototype = {
     },
 
     hideTitle: function() {
-        var that = this;
+        const that = this;
 
         if(that._options.title.text) {
-            that._incidentOccurred("W2105", [that._isHorizontal ? "horizontal" : "vertical"]);
+            that._incidentOccurred('W2105', [that._isHorizontal ? 'horizontal' : 'vertical']);
             that._axisTitleGroup.clear();
         }
     },
@@ -988,13 +1020,13 @@ Axis.prototype = {
     },
 
     hideOuterElements: function() {
-        var that = this,
-            options = that._options;
+        const that = this;
+        const options = that._options;
 
         if((options.label.visible || that._outsideConstantLines.length) && !that._translator.getBusinessRange().isEmpty()) {
-            that._incidentOccurred("W2106", [that._isHorizontal ? "horizontal" : "vertical"]);
+            that._incidentOccurred('W2106', [that._isHorizontal ? 'horizontal' : 'vertical']);
             that._axisElementsGroup.clear();
-            callAction(that._outsideConstantLines, "removeLabel");
+            callAction(that._outsideConstantLines, 'removeLabel');
         }
     },
 
@@ -1007,7 +1039,7 @@ Axis.prototype = {
         const visualRange = that.getViewport() || {};
 
         const result = new Range(businessRange);
-        that._addConstantLinesToRange(result, "minVisible", "maxVisible");
+        that._addConstantLinesToRange(result, 'minVisible', 'maxVisible');
 
         let minDefined = isDefined(visualRange.startValue);
         let maxDefined = isDefined(visualRange.endValue);
@@ -1017,8 +1049,8 @@ Axis.prototype = {
             maxDefined = maxDefined && (!isDefined(wholeRange.startValue) || visualRange.endValue > wholeRange.startValue);
         }
 
-        let minVisible = minDefined ? visualRange.startValue : result.minVisible;
-        let maxVisible = maxDefined ? visualRange.endValue : result.maxVisible;
+        const minVisible = minDefined ? visualRange.startValue : result.minVisible;
+        const maxVisible = maxDefined ? visualRange.endValue : result.maxVisible;
 
         if(!isDiscrete) {
             result.min = isDefined(wholeRange.startValue) ? wholeRange.startValue : result.min;
@@ -1070,7 +1102,7 @@ Axis.prototype = {
             range.endValue = disabledNegatives && range.endValue <= 0 ? null : range.endValue;
         }
         if(!isDiscrete && isDefined(range.startValue) && isDefined(range.endValue) && range.startValue > range.endValue) {
-            let tmp = range.endValue;
+            const tmp = range.endValue;
             range.endValue = range.startValue;
             range.startValue = tmp;
         }
@@ -1092,7 +1124,7 @@ Axis.prototype = {
                     if(categories &&
                         newCategories &&
                         categories.length &&
-                        newCategories.map(c => c.valueOf()).join(",").indexOf(categories.map(c => c.valueOf()).join(",")) !== -1 &&
+                        newCategories.map(c => c.valueOf()).join(',').indexOf(categories.map(c => c.valueOf()).join(',')) !== -1 &&
                         (visualRange.startValue.valueOf() !== categories[0].valueOf() ||
                             visualRange.endValue.valueOf() !== categories[categories.length - 1].valueOf())
                     ) {
@@ -1273,30 +1305,30 @@ Axis.prototype = {
     },
 
     getLabelsPosition: function() {
-        var that = this,
-            options = that._options,
-            position = options.position,
-            labelShift = options.label.indentFromAxis + (that._axisShift || 0) + that._constantLabelOffset,
-            axisPosition = that._axisPosition;
+        const that = this;
+        const options = that._options;
+        const position = options.position;
+        const labelShift = options.label.indentFromAxis + (that._axisShift || 0) + that._constantLabelOffset;
+        const axisPosition = that._axisPosition;
 
         return position === TOP || position === LEFT ? axisPosition - labelShift : axisPosition + labelShift;
     },
 
     getFormattedValue: function(value, options, point) {
-        var labelOptions = this._options.label;
+        const labelOptions = this._options.label;
 
         return isDefined(value) ? this.formatLabel(value, extend(true, {}, labelOptions, options), undefined, point) : null;
     },
 
     _getBoundaryTicks: function(majors, viewPort) {
-        var that = this,
-            length = majors.length,
-            options = that._options,
-            customBounds = options.customBoundTicks,
-            min = viewPort.minVisible,
-            max = viewPort.maxVisible,
-            addMinMax = options.showCustomBoundaryTicks ? that._boundaryTicksVisibility : {},
-            boundaryTicks = [];
+        const that = this;
+        const length = majors.length;
+        const options = that._options;
+        const customBounds = options.customBoundTicks;
+        const min = viewPort.minVisible;
+        const max = viewPort.maxVisible;
+        const addMinMax = options.showCustomBoundaryTicks ? that._boundaryTicksVisibility : {};
+        let boundaryTicks = [];
 
         if(options.type === constants.discrete) {
             if(that._tickOffset && majors.length !== 0) {
@@ -1326,7 +1358,7 @@ Axis.prototype = {
 
     setPercentLabelFormat: function() {
         if(!this._hasLabelFormat) {
-            this._options.label.format = "percent";
+            this._options.label.format = 'percent';
         }
     },
 
@@ -1348,7 +1380,7 @@ Axis.prototype = {
     },
 
     setTicks: function(ticks) {
-        var majors = ticks.majorTicks || [];
+        const majors = ticks.majorTicks || [];
         this._majorTicks = majors.map(createMajorTick(this, this._renderer, this._getSkippedCategory(majors)));
         this._minorTicks = (ticks.minorTicks || []).map(createMinorTick(this, this._renderer));
         this._isSynchronized = true;
@@ -1359,10 +1391,10 @@ Axis.prototype = {
     },
 
     _getTicks: function(viewPort, incidentOccurred, skipTickGeneration) {
-        var that = this,
-            options = that._options,
-            customTicks = options.customTicks,
-            customMinorTicks = options.customMinorTicks;
+        const that = this;
+        const options = that._options;
+        const customTicks = options.customTicks;
+        const customMinorTicks = options.customMinorTicks;
 
         return getTickGenerator(options, incidentOccurred || that._incidentOccurred, skipTickGeneration, that._translator.getBusinessRange().isEmpty(), that._adjustDivisionFactor.bind(that), viewPort)(
             {
@@ -1375,7 +1407,7 @@ Axis.prototype = {
             },
             that._getScreenDelta(),
             options.tickInterval,
-            options.label.overlappingBehavior === "ignore" || options.forceUserTickInterval,
+            options.label.overlappingBehavior === 'ignore' || options.forceUserTickInterval,
             {
                 majors: customTicks,
                 minors: customMinorTicks
@@ -1387,12 +1419,10 @@ Axis.prototype = {
     },
 
     _createTicksAndLabelFormat: function(range, incidentOccurred) {
-        var options = this._options,
-            ticks;
+        const options = this._options;
+        const ticks = this._getTicks(range, incidentOccurred, false);
 
-        ticks = this._getTicks(range, incidentOccurred, false);
-
-        if(!range.isEmpty() && options.type === constants.discrete && options.dataType === "datetime" && !this._hasLabelFormat && ticks.ticks.length) {
+        if(!range.isEmpty() && options.type === constants.discrete && options.dataType === 'datetime' && !this._hasLabelFormat && ticks.ticks.length) {
             options.label.format = formatHelper.getDateFormatByTicks(ticks.ticks);
         }
 
@@ -1400,14 +1430,14 @@ Axis.prototype = {
     },
 
     getAggregationInfo(useAllAggregatedPoints, range) {
-        let that = this,
-            options = that._options,
-            marginOptions = that._marginOptions,
-            businessRange = new Range(that.getTranslator().getBusinessRange()).addRange(range),
-            visualRange = that.getViewport(),
-            minVisible = visualRange && isDefined(visualRange.startValue) ? visualRange.startValue : businessRange.minVisible,
-            maxVisible = visualRange && isDefined(visualRange.endValue) ? visualRange.endValue : businessRange.maxVisible,
-            ticks = [];
+        const that = this;
+        const options = that._options;
+        const marginOptions = that._marginOptions;
+        const businessRange = new Range(that.getTranslator().getBusinessRange()).addRange(range);
+        const visualRange = that.getViewport();
+        const minVisible = visualRange && isDefined(visualRange.startValue) ? visualRange.startValue : businessRange.minVisible;
+        const maxVisible = visualRange && isDefined(visualRange.endValue) ? visualRange.endValue : businessRange.maxVisible;
+        let ticks = [];
 
         if(options.type === constants.discrete && options.aggregateByCategory) {
             return {
@@ -1415,7 +1445,7 @@ Axis.prototype = {
             };
         }
 
-        let aggregationInterval = options.aggregationInterval;
+        const aggregationInterval = options.aggregationInterval;
         let aggregationGroupWidth = options.aggregationGroupWidth;
 
         if(!aggregationGroupWidth && marginOptions) {
@@ -1430,7 +1460,7 @@ Axis.prototype = {
         const minInterval = !options.aggregationGroupWidth && !aggregationInterval && range.interval;
 
         const generateTicks = configureGenerator(options, aggregationGroupWidth, businessRange, that._getScreenDelta(), minInterval);
-        let tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible, that._breaks).tickInterval;
+        const tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible, that._breaks).tickInterval;
 
         if(options.type !== constants.discrete) {
             const min = useAllAggregatedPoints ? businessRange.min : minVisible;
@@ -1445,7 +1475,7 @@ Axis.prototype = {
                 let start = min;
                 let end = max;
                 if(!useAllAggregatedPoints) {
-                    const maxMinDistance = Math.max(that.calculateInterval(max, min), options.dataType === "datetime" ? dateToMilliseconds(tickInterval) : tickInterval);
+                    const maxMinDistance = Math.max(that.calculateInterval(max, min), options.dataType === 'datetime' ? dateToMilliseconds(tickInterval) : tickInterval);
                     start = add(min, maxMinDistance, -1);
                     end = add(max, maxMinDistance);
                 }
@@ -1468,12 +1498,12 @@ Axis.prototype = {
     },
 
     createTicks: function(canvas) {
-        var that = this,
-            renderer = that._renderer,
-            options = that._options,
-            ticks,
-            boundaryTicks,
-            range;
+        const that = this;
+        const renderer = that._renderer;
+        const options = that._options;
+        let ticks;
+        let boundaryTicks;
+        let range;
 
         if(!canvas) {
             return;
@@ -1507,7 +1537,7 @@ Axis.prototype = {
             that._boundaryTicks = [];
         }
 
-        var minors = (ticks.minorTicks || []).filter(function(minor) {
+        const minors = (ticks.minorTicks || []).filter(function(minor) {
             return !boundaryTicks.some(function(boundary) {
                 return valueOf(boundary) === valueOf(minor);
             });
@@ -1557,8 +1587,8 @@ Axis.prototype = {
     },
 
     _reinitTranslator: function(range) {
-        var that = this,
-            translator = that._translator;
+        const that = this;
+        const translator = that._translator;
 
         if(that._correctedBreaks) {
             range.breaks = that._correctedBreaks;
@@ -1590,11 +1620,11 @@ Axis.prototype = {
     },
 
     _calculateRangeInterval: function(interval) {
-        var isDateTime = this._options.dataType === "datetime",
-            minArgs = [],
-            addToArgs = function(value) {
-                isDefined(value) && minArgs.push(isDateTime ? dateToMilliseconds(value) : value);
-            };
+        const isDateTime = this._options.dataType === 'datetime';
+        const minArgs = [];
+        const addToArgs = function(value) {
+            isDefined(value) && minArgs.push(isDateTime ? dateToMilliseconds(value) : value);
+        };
 
         addToArgs(this._tickInterval);
         addToArgs(this._estimatedTickInterval);
@@ -1606,7 +1636,7 @@ Axis.prototype = {
 
     _calculateWorkWeekInterval(businessInterval) {
         const options = this._options;
-        if(options.dataType === "datetime" && options.workdaysOnly && businessInterval) {
+        if(options.dataType === 'datetime' && options.workdaysOnly && businessInterval) {
             const workWeek = options.workWeek.length * dateIntervals.day;
             const weekend = dateIntervals.week - workWeek;
             if(workWeek !== businessInterval && weekend < businessInterval) {
@@ -1628,8 +1658,8 @@ Axis.prototype = {
         const dataRange = this._getViewportRange();
         const viewPort = this.getViewport();
         const screenDelta = that._getScreenDelta();
-        const isDiscrete = (options.type || "").indexOf(constants.discrete) !== -1;
-        const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete;
+        const isDiscrete = (options.type || '').indexOf(constants.discrete) !== -1;
+        const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete && !that.customPositionIsBoundaryOppositeAxis();
 
         const translator = that._translator;
 
@@ -1724,8 +1754,8 @@ Axis.prototype = {
 
             const invertMultiplier = firstTickPosition > lastTickPosition ? -1 : 1;
 
-            let minTickPadding = _max(invertMultiplier * (canvasStartEnd.start - firstTickPosition), 0);
-            let maxTickPadding = _max(invertMultiplier * (lastTickPosition - canvasStartEnd.end), 0);
+            const minTickPadding = _max(invertMultiplier * (canvasStartEnd.start - firstTickPosition), 0);
+            const maxTickPadding = _max(invertMultiplier * (lastTickPosition - canvasStartEnd.end), 0);
 
             if(minTickPadding > minPadding || maxTickPadding > maxPadding) {
                 const commonPadding = (maxTickPadding + minTickPadding);
@@ -1818,8 +1848,8 @@ Axis.prototype = {
     _createConstantLines() {
         const constantLines = (this._options.constantLines || []).map(o => createConstantLine(this, o));
 
-        this._outsideConstantLines = constantLines.filter(l => l.labelPosition === "outside");
-        this._insideConstantLines = constantLines.filter(l => l.labelPosition === "inside");
+        this._outsideConstantLines = constantLines.filter(l => l.labelPosition === 'outside');
+        this._insideConstantLines = constantLines.filter(l => l.labelPosition === 'inside');
     },
 
     draw: function(canvas, borderOptions) {
@@ -1850,16 +1880,16 @@ Axis.prototype = {
         drawGrids(that._majorTicks, drawGridLine);
         drawGrids(that._minorTicks, drawGridLine);
 
-        callAction(that._majorTicks, "drawLabel", that._getViewportRange());
+        callAction(that._majorTicks, 'drawLabel', that._getViewportRange());
         that._majorTicks.forEach(function(tick) {
             tick.labelRotationAngle = 0;
             tick.labelAlignment = undefined;
             tick.labelOffset = 0;
         });
 
-        callAction(that._outsideConstantLines.concat(that._insideConstantLines), "draw");
+        callAction(that._outsideConstantLines.concat(that._insideConstantLines), 'draw');
 
-        callAction(that._strips, "draw");
+        callAction(that._strips, 'draw');
 
         that._dateMarkers = that._drawDateMarkers() || [];
 
@@ -1884,22 +1914,23 @@ Axis.prototype = {
         let convertedTickInterval;
         const tickInterval = that._tickInterval;
         if(isDefined(tickInterval)) {
-            convertedTickInterval = that.getTranslator().getInterval(options.dataType === "datetime" ? dateToMilliseconds(tickInterval) : tickInterval);
+            convertedTickInterval = that.getTranslator().getInterval(options.dataType === 'datetime' ? dateToMilliseconds(tickInterval) : tickInterval);
         }
+        const usefulSpace = isDefined(options.placeholderSize) ? options.placeholderSize - options.label.indentFromAxis : undefined;
         if(that._isHorizontal) {
             textWidth = convertedTickInterval;
-            textHeight = options.placeholderSize;
+            textHeight = usefulSpace;
         } else {
-            textWidth = options.placeholderSize;
+            textWidth = usefulSpace;
             textHeight = convertedTickInterval;
         }
 
         const displayMode = that._validateDisplayMode(options.label.displayMode);
         const overlappingMode = that._validateOverlappingMode(options.label.overlappingBehavior, displayMode);
-        const wordWrapMode = options.label.wordWrap || "none";
-        const overflowMode = options.label.textOverflow || "none";
+        const wordWrapMode = options.label.wordWrap || 'none';
+        const overflowMode = options.label.textOverflow || 'none';
 
-        if((wordWrapMode !== "none" || overflowMode !== "none") && displayMode !== ROTATE && overlappingMode !== ROTATE && overlappingMode !== "auto") {
+        if((wordWrapMode !== 'none' || overflowMode !== 'none') && displayMode !== ROTATE && overlappingMode !== ROTATE && overlappingMode !== 'auto') {
             let correctByWidth = false;
             let correctByHeight = false;
             if(textWidth) {
@@ -1928,7 +1959,7 @@ Axis.prototype = {
         that._adjustConstantLineLabels(that._insideConstantLines);
         that._adjustStripLabels();
 
-        var offset = that._constantLabelOffset = that._adjustConstantLineLabels(that._outsideConstantLines);
+        let offset = that._constantLabelOffset = that._adjustConstantLineLabels(that._outsideConstantLines);
 
         if(!that._translator.getBusinessRange().isEmpty()) {
             that._setLabelsPlacement();
@@ -1942,11 +1973,11 @@ Axis.prototype = {
     _measureTitle: _noop,
 
     animate() {
-        callAction(this._majorTicks, "animateLabels");
+        callAction(this._majorTicks, 'animateLabels');
     },
 
     updateSize: function(canvas, animate, updateTitle = true) {
-        var that = this;
+        const that = this;
         that.updateCanvas(canvas);
 
         if(updateTitle) {
@@ -1977,17 +2008,17 @@ Axis.prototype = {
         updateTicksPosition(that._minorTicks, options.minorTick, animationEnabled);
         updateTicksPosition(that._boundaryTicks, options.tick);
 
-        callAction(that._majorTicks, "updateLabelPosition", animationEnabled);
+        callAction(that._majorTicks, 'updateLabelPosition', animationEnabled);
 
         that._outsideConstantLines.concat(that._insideConstantLines || []).forEach(l => l.updatePosition(animationEnabled));
 
-        callAction(that._strips, "updatePosition", animationEnabled);
+        callAction(that._strips, 'updatePosition', animationEnabled);
 
         updateGridsPosition(that._majorTicks, animationEnabled);
         updateGridsPosition(that._minorTicks, animationEnabled);
 
         if(animationEnabled) {
-            callAction(that._ticksToRemove || [], "fadeOutElements");
+            callAction(that._ticksToRemove || [], 'fadeOutElements');
         }
 
         that.prepareAnimation();
@@ -2001,7 +2032,7 @@ Axis.prototype = {
 
     prepareAnimation() {
         const that = this;
-        const action = "saveCoords";
+        const action = 'saveCoords';
         callAction(that._majorTicks, action);
         callAction(that._minorTicks, action);
         callAction(that._insideConstantLines, action);
@@ -2010,8 +2041,8 @@ Axis.prototype = {
     },
 
     applyClipRects: function(elementsClipID, canvasClipID) {
-        this._axisGroup.attr({ "clip-path": canvasClipID });
-        this._axisStripGroup.attr({ "clip-path": elementsClipID });
+        this._axisGroup.attr({ 'clip-path': canvasClipID });
+        this._axisStripGroup.attr({ 'clip-path': elementsClipID });
     },
 
     _mergeViewportOptions() {
@@ -2050,10 +2081,10 @@ Axis.prototype = {
         const that = this;
 
         if(options.min !== undefined) {
-            options.min = that.validateUnit(options.min, "E2106");
+            options.min = that.validateUnit(options.min, 'E2106');
         }
         if(options.max !== undefined) {
-            options.max = that.validateUnit(options.max, "E2106");
+            options.max = that.validateUnit(options.max, 'E2106');
         }
 
         options.wholeRange = that._validateVisualRange(options.wholeRange);
@@ -2211,7 +2242,7 @@ Axis.prototype = {
         const zoomStartEvent = that.getZoomStartEventArg(domEvent, action);
         const previousRange = zoomStartEvent.range;
 
-        !preventEvents.start && that._eventTrigger("zoomStart", zoomStartEvent);
+        !preventEvents.start && that._eventTrigger('zoomStart', zoomStartEvent);
         const zoomResults = {
             isPrevented: zoomStartEvent.cancel,
             skipEventRising: preventEvents.skipEventRising,
@@ -2247,11 +2278,11 @@ Axis.prototype = {
             };
             const typeIsNotChanged = that.getOptions().type === that._storedZoomEndParams.type;
             const shift = typeIsNotChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange)) : NaN;
-            const zoomFactor = typeIsNotChanged ? +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2") : NaN;
+            const zoomFactor = typeIsNotChanged ? +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + 'e+2') + 'e-2') : NaN;
             const zoomEndEvent = that.getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 
-            zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor === 1 ? "pan" : "zoom", zoomFactor);
-            that._eventTrigger("zoomEnd", zoomEndEvent);
+            zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor === 1 ? 'pan' : 'zoom', zoomFactor);
+            that._eventTrigger('zoomEnd', zoomEndEvent);
 
             if(zoomEndEvent.cancel) {
                 that.restorePreviousVisualRange(previousRange);
@@ -2271,7 +2302,7 @@ Axis.prototype = {
         const that = this;
         const options = that._options;
         let minZoom = options.minVisualRangeLength;
-        let isOvercoming = actionType === "zoom" && zoomFactor >= 1;
+        let isOvercoming = actionType === 'zoom' && zoomFactor >= 1;
         const businessRange = that._translator.getBusinessRange();
         let visualRange;
         if(isDefined(range)) {
@@ -2284,9 +2315,9 @@ Axis.prototype = {
         }
         const visualRangeLength = that.getVisualRangeLength(visualRange);
 
-        if(options.type !== "discrete") {
+        if(options.type !== 'discrete') {
             if(isDefined(minZoom)) {
-                if(options.dataType === "datetime" && !isNumeric(minZoom)) {
+                if(options.dataType === 'datetime' && !isNumeric(minZoom)) {
                     minZoom = dateToMilliseconds(minZoom);
                 }
                 isOvercoming &= minZoom >= visualRangeLength;
@@ -2312,7 +2343,7 @@ Axis.prototype = {
         let maxDataValue;
         const translator = this.getTranslator();
 
-        if(this._options.type === "discrete") {
+        if(this._options.type === 'discrete') {
             const categories = translator.getBusinessRange().categories;
             minDataValue = categories[0];
             maxDataValue = categories[categories.length - 1];
@@ -2342,7 +2373,7 @@ Axis.prototype = {
         let extremeDataValue;
         let seriesData;
 
-        if(this._options.type === "discrete") {
+        if(this._options.type === 'discrete') {
             seriesData = this._translator.getBusinessRange();
             extremeDataValue = isMax ? seriesData.categories[seriesData.categories.length - 1] : seriesData.categories[0];
         } else {
@@ -2363,7 +2394,7 @@ Axis.prototype = {
     },
 
     getFullTicks: function() {
-        var majors = this._majorTicks || [];
+        const majors = this._majorTicks || [];
         if(this._options.type === constants.discrete) {
             return convertTicksToValues(majors);
         } else {
@@ -2375,16 +2406,16 @@ Axis.prototype = {
     },
 
     measureLabels: function(canvas, withIndents) {
-        var that = this,
-            options = that._options,
-            widthAxis = options.visible ? options.width : 0,
-            ticks,
-            maxText,
-            text,
-            box,
-            indent = withIndents ? options.label.indentFromAxis + (options.tick.length * 0.5) : 0,
-            tickInterval,
-            viewportRange = that._getViewportRange();
+        const that = this;
+        const options = that._options;
+        const widthAxis = options.visible ? options.width : 0;
+        let ticks;
+        let maxText;
+        let text;
+        let box;
+        const indent = withIndents ? options.label.indentFromAxis + (options.tick.length * 0.5) : 0;
+        let tickInterval;
+        const viewportRange = that._getViewportRange();
 
         if(viewportRange.isEmpty() || !options.label.visible || !that._axisElementsGroup) {
             return { height: widthAxis, width: widthAxis, x: 0, y: 0 };
@@ -2393,14 +2424,14 @@ Axis.prototype = {
         if(that._majorTicks) {
             ticks = convertTicksToValues(that._majorTicks);
         } else {
-            this.updateCanvas(canvas);
+            that.updateCanvas(canvas);
             ticks = that._createTicksAndLabelFormat(viewportRange, _noop);
             tickInterval = ticks.tickInterval;
             ticks = ticks.ticks;
         }
 
         maxText = ticks.reduce(function(prevLabel, tick, index) {
-            var label = that.formatLabel(tick, options.label, viewportRange, undefined, tickInterval, ticks);
+            const label = that.formatLabel(tick, options.label, viewportRange, undefined, tickInterval, ticks);
             if(prevLabel.length < label.length) {
                 return label;
             } else {
@@ -2419,20 +2450,18 @@ Axis.prototype = {
         if(!this._options.label.visible) {
             return;
         }
-        var that = this,
-            labelOpt = that._options.label,
-            displayMode = that._validateDisplayMode(labelOpt.displayMode),
-            overlappingMode = that._validateOverlappingMode(labelOpt.overlappingBehavior, displayMode),
-            ignoreOverlapping = overlappingMode === "none" || overlappingMode === "ignore",
-            behavior = {
-                rotationAngle: labelOpt.rotationAngle,
-                staggeringSpacing: labelOpt.staggeringSpacing
-            },
-            notRecastStep,
-            boxes = that._majorTicks.map(function(tick) { return tick.labelBBox; }),
-            step;
-
-        step = that._getStep(boxes);
+        const that = this;
+        const labelOpt = that._options.label;
+        const displayMode = that._validateDisplayMode(labelOpt.displayMode);
+        const overlappingMode = that._validateOverlappingMode(labelOpt.overlappingBehavior, displayMode);
+        const ignoreOverlapping = overlappingMode === 'none' || overlappingMode === 'ignore';
+        const behavior = {
+            rotationAngle: labelOpt.rotationAngle,
+            staggeringSpacing: labelOpt.staggeringSpacing
+        };
+        let notRecastStep;
+        const boxes = that._majorTicks.map(function(tick) { return tick.labelBBox; });
+        let step = that._getStep(boxes);
         switch(displayMode) {
             case ROTATE:
                 if(ignoreOverlapping) {
@@ -2441,7 +2470,7 @@ Axis.prototype = {
                 }
                 that._applyLabelMode(displayMode, step, boxes, labelOpt, notRecastStep);
                 break;
-            case "stagger":
+            case 'stagger':
                 if(ignoreOverlapping) {
                     step = 2;
                 }
@@ -2453,14 +2482,14 @@ Axis.prototype = {
     },
 
     _applyLabelOverlapping: function(boxes, mode, step, behavior) {
-        var that = this,
-            labelOpt = that._options.label,
-            majorTicks = that._majorTicks;
+        const that = this;
+        const labelOpt = that._options.label;
+        const majorTicks = that._majorTicks;
 
-        if(mode === "none" || mode === "ignore") {
+        if(mode === 'none' || mode === 'ignore') {
             return;
         }
-        var checkLabels = function(box, index, array) {
+        const checkLabels = function(box, index, array) {
             if(index === 0) {
                 return false;
             }
@@ -2473,13 +2502,13 @@ Axis.prototype = {
     },
 
     _applyLabelMode: function(mode, step, boxes, behavior, notRecastStep) {
-        var that = this,
-            majorTicks = that._majorTicks,
-            labelOpt = that._options.label,
-            angle = behavior.rotationAngle,
-            labelHeight,
-            alignment,
-            func;
+        const that = this;
+        const majorTicks = that._majorTicks;
+        const labelOpt = that._options.label;
+        const angle = behavior.rotationAngle;
+        let labelHeight;
+        let alignment;
+        let func;
         switch(mode) {
             case ROTATE:
                 if(!labelOpt.userAlignment) {
@@ -2496,7 +2525,7 @@ Axis.prototype = {
                 };
                 updateLabels(majorTicks, step, func);
                 break;
-            case "stagger":
+            case 'stagger':
                 labelHeight = that._getMaxLabelHeight(boxes, behavior.staggeringSpacing);
 
                 func = function(tick, index) {
@@ -2506,10 +2535,10 @@ Axis.prototype = {
                 };
                 updateLabels(majorTicks, step - 1, func);
                 break;
-            case "auto":
-            case "_auto":
+            case 'auto':
+            case '_auto':
                 if(step === 2) {
-                    that._applyLabelMode("stagger", step, boxes, behavior);
+                    that._applyLabelMode('stagger', step, boxes, behavior);
                 } else {
                     that._applyLabelMode(ROTATE, step, boxes, { rotationAngle: getOptimalAngle(boxes, labelOpt) });
                 }
@@ -2545,12 +2574,12 @@ Axis.prototype = {
     },
 
     _updateTranslator: function() {
-        var translator = this._translator;
+        const translator = this._translator;
         translator.update(translator.getBusinessRange(), this._canvas || {}, this._getTranslatorOptions());
     },
 
     _getTranslatorOptions: function() {
-        var options = this._options;
+        const options = this._options;
         return {
             isHorizontal: this._isHorizontal,
             shiftZeroValue: !this.isArgumentAxis,
@@ -2566,10 +2595,10 @@ Axis.prototype = {
     },
 
     _getCanvasStartEnd: function() {
-        var isHorizontal = this._isHorizontal,
-            canvas = this._canvas || {},
-            invert = this._translator.getBusinessRange().invert,
-            coords = isHorizontal ? [canvas.left, canvas.width - canvas.right] : [canvas.height - canvas.bottom, canvas.top];
+        const isHorizontal = this._isHorizontal;
+        const canvas = this._canvas || {};
+        const invert = this._translator.getBusinessRange().invert;
+        const coords = isHorizontal ? [canvas.left, canvas.width - canvas.right] : [canvas.height - canvas.bottom, canvas.top];
 
         invert && coords.reverse();
 
@@ -2580,11 +2609,11 @@ Axis.prototype = {
     },
 
     _getScreenDelta: function() {
-        var that = this,
-            canvas = that._getCanvasStartEnd(),
-            breaks = that._breaks,
-            breaksLength = breaks ? breaks.length : 0,
-            screenDelta = _abs(canvas.start - canvas.end);
+        const that = this;
+        const canvas = that._getCanvasStartEnd();
+        const breaks = that._breaks;
+        const breaksLength = breaks ? breaks.length : 0;
+        const screenDelta = _abs(canvas.start - canvas.end);
 
         return screenDelta - (breaksLength ? breaks[breaksLength - 1].cumulativeWidth : 0);
     },

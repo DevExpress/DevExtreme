@@ -1,33 +1,33 @@
-import formatHelper from "../../format_helper";
-import { isDefined, isFunction, isExponential, isObject } from "../../core/utils/type";
-import dateUtils from "../../core/utils/date";
-import { adjust, getPrecision, getExponent } from "../../core/utils/math";
-import { getAdjustedLog10 as log10 } from "../core/utils";
+import formatHelper from '../../format_helper';
+import { isDefined, isFunction, isExponential, isObject } from '../../core/utils/type';
+import dateUtils from '../../core/utils/date';
+import { adjust, getPrecision, getExponent } from '../../core/utils/math';
+import { getAdjustedLog10 as log10 } from '../core/utils';
 
 const _format = formatHelper.format;
 const floor = Math.floor;
 const abs = Math.abs;
-const EXPONENTIAL = "exponential";
-const formats = ["fixedPoint", "thousands", "millions", "billions", "trillions", EXPONENTIAL];
+const EXPONENTIAL = 'exponential';
+const formats = ['fixedPoint', 'thousands', 'millions', 'billions', 'trillions', EXPONENTIAL];
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'month', 'year'];
 
 function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
-    var prevDifferences,
-        nextDifferences,
-        dateUnitInterval,
-        tickFormatIndex,
-        dateUnitsLength = dateUnitIntervals.length,
-        i,
-        j;
+    let prevDifferences;
+    let nextDifferences;
+    let dateUnitInterval;
+    let tickFormatIndex;
+    const dateUnitsLength = dateUnitIntervals.length;
+    let i;
+    let j;
 
-    if(tickFormat === "week") {
-        tickFormat = "day";
-    } else if(tickFormat === "quarter") {
-        tickFormat = "month";
-    } else if(tickFormat === "shorttime") {
-        tickFormat = "hour";
-    } else if(tickFormat === "longtime") {
-        tickFormat = "second";
+    if(tickFormat === 'week') {
+        tickFormat = 'day';
+    } else if(tickFormat === 'quarter') {
+        tickFormat = 'month';
+    } else if(tickFormat === 'shorttime') {
+        tickFormat = 'hour';
+    } else if(tickFormat === 'longtime') {
+        tickFormat = 'second';
     }
 
     tickFormatIndex = dateUnitIntervals.indexOf(tickFormat);
@@ -39,7 +39,7 @@ function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
             for(i = dateUnitsLength - 1; i >= tickFormatIndex; i--) {
                 dateUnitInterval = dateUnitIntervals[i];
                 if(i === tickFormatIndex) {
-                    setDateUnitInterval(nextDifferences, tickFormatIndex + (nextDifferences["millisecond"] ? 2 : 1));
+                    setDateUnitInterval(nextDifferences, tickFormatIndex + (nextDifferences['millisecond'] ? 2 : 1));
                 } else if(nextDifferences[dateUnitInterval]) {
                     resetDateUnitInterval(nextDifferences, i);
                     break;
@@ -69,9 +69,9 @@ function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
 }
 
 function isDateTimeStart(date, dateUnitInterval) {
-    var unitNumbers = [date.getMilliseconds(), date.getSeconds(), date.getMinutes(), date.getHours(), date.getDate(), date.getMonth()],
-        unitIndex = dateUnitIntervals.indexOf(dateUnitInterval),
-        i;
+    const unitNumbers = [date.getMilliseconds(), date.getSeconds(), date.getMinutes(), date.getHours(), date.getDate(), date.getMonth()];
+    const unitIndex = dateUnitIntervals.indexOf(dateUnitInterval);
+    let i;
     for(i = 0; i < unitIndex; i++) {
         if((i === 4 && unitNumbers[i] !== 1) || (i !== 4 && unitNumbers[i] !== 0)) {
             return false;
@@ -81,7 +81,7 @@ function isDateTimeStart(date, dateUnitInterval) {
 }
 
 function resetDateUnitInterval(differences, intervalIndex) {
-    var dateUnitInterval = dateUnitIntervals[intervalIndex];
+    const dateUnitInterval = dateUnitIntervals[intervalIndex];
 
     if(differences[dateUnitInterval]) {
         differences[dateUnitInterval] = false;
@@ -90,7 +90,7 @@ function resetDateUnitInterval(differences, intervalIndex) {
 }
 
 function setDateUnitInterval(differences, intervalIndex) {
-    var dateUnitInterval = dateUnitIntervals[intervalIndex];
+    const dateUnitInterval = dateUnitIntervals[intervalIndex];
 
     if(differences[dateUnitInterval] === false) {
         differences[dateUnitInterval] = true;
@@ -103,10 +103,10 @@ function getNoZeroIndex(str) {
 }
 
 function getTransitionTickIndex(ticks, value) {
-    var i,
-        curDiff,
-        minDiff,
-        nearestTickIndex = 0;
+    let i;
+    let curDiff;
+    let minDiff;
+    let nearestTickIndex = 0;
 
     minDiff = abs(value - ticks[0]);
     for(i = 1; i < ticks.length; i++) {
@@ -121,7 +121,7 @@ function getTransitionTickIndex(ticks, value) {
 }
 
 function splitDecimalNumber(value) {
-    return value.toString().split(".");
+    return value.toString().split('.');
 }
 
 function createFormat(type) {
@@ -135,31 +135,31 @@ function createFormat(type) {
 }
 
 export function smartFormatter(tick, options) {
-    var tickInterval = options.tickInterval,
-        tickIntervalIndex,
-        tickIndex,
-        actualIndex,
-        stringTick = abs(tick).toString(),
-        precision = 0,
-        typeFormat,
-        offset = 0,
-        separatedTickInterval,
-        indexOfFormat = 0,
-        indexOfTick = -1,
-        datesDifferences,
-        format = options.labelOptions.format,
-        ticks = options.ticks,
-        log10Tick,
-        prevDateIndex,
-        nextDateIndex,
-        isLogarithmic = options.type === "logarithmic";
+    let tickInterval = options.tickInterval;
+    let tickIntervalIndex;
+    let tickIndex;
+    let actualIndex;
+    const stringTick = abs(tick).toString();
+    let precision = 0;
+    let typeFormat;
+    let offset = 0;
+    let separatedTickInterval;
+    let indexOfFormat = 0;
+    let indexOfTick = -1;
+    let datesDifferences;
+    let format = options.labelOptions.format;
+    const ticks = options.ticks;
+    let log10Tick;
+    let prevDateIndex;
+    let nextDateIndex;
+    const isLogarithmic = options.type === 'logarithmic';
 
     if(ticks.length === 1 && ticks.indexOf(tick) === 0 && !isDefined(tickInterval)) {
         tickInterval = abs(tick) >= 1 ? 1 : adjust(1 - abs(tick), tick);
     }
 
-    if(!isDefined(format) && options.type !== "discrete" && tick && (options.logarithmBase === 10 || !isLogarithmic)) {
-        if(options.dataType !== "datetime" && isDefined(tickInterval)) {
+    if(!isDefined(format) && options.type !== 'discrete' && tick && (options.logarithmBase === 10 || !isLogarithmic)) {
+        if(options.dataType !== 'datetime' && isDefined(tickInterval)) {
             if(ticks.length && ticks.indexOf(tick) === -1) {
                 indexOfTick = getTransitionTickIndex(ticks, tick);
                 tickInterval = adjust(abs(tick - ticks[indexOfTick]), tick);
@@ -186,10 +186,10 @@ export function smartFormatter(tick, options) {
                     precision = separatedTickInterval[1].length;
                     typeFormat = formats[indexOfFormat];
                 } else {
-                    if(isExponential(tickInterval) && (stringTick.indexOf(".") !== -1 || isExponential(tick))) {
+                    if(isExponential(tickInterval) && (stringTick.indexOf('.') !== -1 || isExponential(tick))) {
                         typeFormat = EXPONENTIAL;
                         if(!isExponential(tick)) {
-                            precision = abs(getNoZeroIndex(stringTick.split(".")[1]) - getExponent(tickInterval) + 1);
+                            precision = abs(getNoZeroIndex(stringTick.split('.')[1]) - getExponent(tickInterval) + 1);
                         } else {
                             precision = Math.max(abs(getExponent(tick) - getExponent(tickInterval)), abs(getPrecision(tick) - getPrecision(tickInterval)));
                         }
@@ -229,7 +229,7 @@ export function smartFormatter(tick, options) {
                     precision: precision
                 };
             }
-        } else if(options.dataType === "datetime") {
+        } else if(options.dataType === 'datetime') {
             typeFormat = dateUtils.getDateFormatByTickInterval(tickInterval);
             if(options.showTransition && ticks.length) {
                 indexOfTick = ticks.map(Number).indexOf(+tick);
@@ -255,8 +255,8 @@ export function smartFormatter(tick, options) {
 
 function getHighDiffFormat(diff) {
     let stop = false;
-    for(let i in diff) {
-        if(diff[i] === true || i === "hour" || stop) {
+    for(const i in diff) {
+        if(diff[i] === true || i === 'hour' || stop) {
             diff[i] = false;
             stop = true;
         } else if(diff[i] === false) {
@@ -269,7 +269,7 @@ function getHighDiffFormat(diff) {
 
 function getHighAndSelfDiffFormat(diff, interval) {
     let stop = false;
-    for(let i in diff) {
+    for(const i in diff) {
         if(stop) {
             diff[i] = false;
         } else if(i === interval) {
@@ -284,7 +284,7 @@ function getHighAndSelfDiffFormat(diff, interval) {
 
 function formatDateRange(startValue, endValue, tickInterval) {
     const diff = getDatesDifferences(startValue, endValue);
-    let typeFormat = dateUtils.getDateFormatByTickInterval(tickInterval);
+    const typeFormat = dateUtils.getDateFormatByTickInterval(tickInterval);
     const diffFormatType = formatHelper.getDateFormatByDifferences(diff, typeFormat);
     const diffFormat = createFormat(diffFormatType);
     const values = [];
@@ -307,7 +307,7 @@ function formatDateRange(startValue, endValue, tickInterval) {
         values.push(`${_format(startValue, diffFormat)} - ${_format(endValue, diffFormat)}`);
     }
 
-    return values.join(", ");
+    return values.join(', ');
 }
 
 function processDateInterval(interval) {
@@ -323,11 +323,11 @@ function processDateInterval(interval) {
 }
 
 export function formatRange(startValue, endValue, tickInterval, { dataType, type, logarithmBase }) {
-    if(type === "discrete") {
-        return "";
+    if(type === 'discrete') {
+        return '';
     }
 
-    if(dataType === "datetime") {
+    if(dataType === 'datetime') {
         return formatDateRange(startValue, endValue, processDateInterval(tickInterval));
     }
 

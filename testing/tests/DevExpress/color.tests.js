@@ -1,9 +1,9 @@
-var Color = require("color");
+const Color = require('color');
 
 QUnit.module('Colors parsing', {
     beforeEach: function() {
         this.check = function(color, expected, message, assert) {
-            if(typeof expected.colorIsInvalid === "undefined") {
+            if(typeof expected.colorIsInvalid === 'undefined') {
                 expected.colorIsInvalid = false;
             }
 
@@ -132,7 +132,7 @@ QUnit.test('transparent value', function(assert) {
 });
 
 QUnit.test('get pure color', function(assert) {
-    var pureColor = new Color('#1c4a12').getPureColor();
+    const pureColor = new Color('#1c4a12').getPureColor();
     this.check(pureColor, { r: 47, g: 255, b: 0, a: 1 }, 'pure color as rgb', assert);
     assert.strictEqual(pureColor.toHex(), '#2fff00', 'pure color as hex');
 });
@@ -148,76 +148,64 @@ QUnit.test('to hex', function(assert) {
     assert.strictEqual(new Color('rgba(10, 20, 40, .5)').toHex(), '#0a1428', 'rgba(10,20,40)');
 });
 
-QUnit.test("T266166 - color should be converted from hsv to rgb correctly when hue is 360", function(assert) {
-    var color = new Color();
+QUnit.test('T266166 - color should be converted from hsv to rgb correctly when hue is 360', function(assert) {
+    const color = new Color();
     color.hsv.h = 360;
-    assert.equal(color.getPureColor().toHex(), "#ff0000", "converted color is correct");
+    assert.equal(color.getPureColor().toHex(), '#ff0000', 'converted color is correct');
 });
 
 QUnit.module('Darkening and highlighting');
 
 QUnit.test('Highlight color on the edge', function(assert) {
-    // arrange
-    // act
-    var color = new Color('red');
-    // assert
+    const color = new Color('red');
+
     assert.ok(color);
-    assert.equal(color.highlight(), "#ff0a0a");
+    assert.equal(color.highlight(), '#ff0a0a');
 
 });
 
 QUnit.test('Highlight intermediate color with custom step', function(assert) {
-    // arrange
-    // act
-    var color = new Color('#010101');
-    // assert
+    const color = new Color('#010101');
+
     assert.ok(color);
-    assert.equal(color.highlight(11), "#0c0c0c");
+    assert.equal(color.highlight(11), '#0c0c0c');
 });
 
 QUnit.test('Highlight intermediate color', function(assert) {
-    // arrange
-    // act
-    var color = new Color('#010101');
-    // assert
+    const color = new Color('#010101');
+
     assert.ok(color);
-    assert.equal(color.highlight(), "#0b0b0b");
+    assert.equal(color.highlight(), '#0b0b0b');
 });
 
 QUnit.test('Darken color on the edge', function(assert) {
-    // arrange
-    // act
-    var color = new Color('#001F00');
-    // assert
-    assert.equal(color.darken(), "#001500");
+    const color = new Color('#001F00');
+
+    assert.equal(color.darken(), '#001500');
 });
 
 QUnit.test('Darken intermediate color', function(assert) {
-    // arrange
-    // act
-    var color = new Color('#1F1F1F');
-    // assert
-    assert.equal(color.darken(), "#151515");
+    const color = new Color('#1F1F1F');
+
+    assert.equal(color.darken(), '#151515');
 });
 
 QUnit.test('Darken intermediate color with custom step', function(assert) {
-    // arrange
-    // act
-    var color = new Color('#1F1F1F');
-    // assert
-    assert.equal(color.darken(11), "#141414");
+    const color = new Color('#1F1F1F');
+
+    assert.equal(color.darken(11), '#141414');
 });
 
 QUnit.test('Alter color width positive step', function(assert) {
-    var color = new Color('#1F1F1F'),
-        newColor = color.alter(10).toHex();
+    const color = new Color('#1F1F1F');
+    const newColor = color.alter(10).toHex();
 
     assert.equal(newColor, '#292929');
 });
 
 QUnit.test('Alter color with negative step', function(assert) {
-    var color = new Color('#1F1F1F'),
-        newColor = color.alter(-10).toHex();
+    const color = new Color('#1F1F1F');
+    const newColor = color.alter(-10).toHex();
 
     assert.equal(newColor, '#151515');
 });
@@ -236,10 +224,10 @@ QUnit.test('blend - paired', function(assert) {
     assert.strictEqual(new Color('#8eefd4').blend('#09a0dd', 0.3).toHex(), '#66d7d7', '#8eefd4 - #09a0dd 0.3');
 });
 
-QUnit.module("Color validation");
+QUnit.module('Color validation');
 
 QUnit.test('is valid hex', function(assert) {
-    var color = new Color();
+    const color = new Color();
     assert.equal(color.isValidHex('#ff0000'), true);
     assert.equal(color.isValidHex('#0000FF'), true);
     assert.equal(color.isValidHex('#606060'), true);
@@ -251,12 +239,12 @@ QUnit.test('is valid hex', function(assert) {
 });
 
 QUnit.test('is valid RGB', function(assert) {
-    var color = new Color();
+    const color = new Color();
     assert.equal(color.isValidRGB(0, 0, 0), true);
     assert.equal(color.isValidRGB(250, 100, 255), true);
     assert.equal(color.isValidRGB(-250, 100, 255), false);
     assert.equal(color.isValidRGB(250, 400, 255), false);
-    assert.equal(color.isValidRGB(250, "sdsd", 255), false);
+    assert.equal(color.isValidRGB(250, 'sdsd', 255), false);
     assert.equal(color.isValidRGB(250, null, 100), false);
     assert.equal(color.isValidRGB(250, 100), false);
     assert.equal(color.isValidRGB(250, 100, NaN), false);
@@ -264,12 +252,12 @@ QUnit.test('is valid RGB', function(assert) {
 });
 
 QUnit.test('is valid alpha', function(assert) {
-    var color = new Color();
+    const color = new Color();
     assert.equal(color.isValidAlpha(0), true);
     assert.equal(color.isValidAlpha(0.8), true);
     assert.equal(color.isValidAlpha(1), true);
     assert.equal(color.isValidAlpha(-0.5), false);
     assert.equal(color.isValidAlpha(), false);
     assert.equal(color.isValidAlpha(100), false);
-    assert.equal(color.isValidAlpha("sdss"), false);
+    assert.equal(color.isValidAlpha('sdss'), false);
 });

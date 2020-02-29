@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets/accordion.markup.tests.js");
+require('../DevExpress.ui.widgets/accordion.markup.tests.js');

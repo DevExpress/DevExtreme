@@ -1,8 +1,8 @@
-import { isDefined } from "../../core/utils/type";
+import { isDefined } from '../../core/utils/type';
 
 export default function createConstantLine(axis, options) {
     const labelOptions = options.label || {};
-    const labelPosition = labelOptions.position || "inside";
+    const labelPosition = labelOptions.position || 'inside';
 
     let parsedValue;
     let valueIsParsed = false;
@@ -24,7 +24,7 @@ export default function createConstantLine(axis, options) {
 
         getParsedValue() {
             if(!valueIsParsed) {
-                parsedValue = axis.validateUnit(options.value, "E2105", "constantLine");
+                parsedValue = axis.validateUnit(options.value, 'E2105', 'constantLine');
                 valueIsParsed = true;
                 return parsedValue;
             }
@@ -52,9 +52,9 @@ export default function createConstantLine(axis, options) {
                 return this;
             }
 
-            var path = axis._createConstantLine(this.coord, {
+            const path = axis._createConstantLine(this.coord, {
                 stroke: options.color,
-                "stroke-width": options.width,
+                'stroke-width': options.width,
                 dashStyle: options.dashStyle
             });
 

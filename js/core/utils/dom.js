@@ -1,19 +1,19 @@
-var $ = require("../../core/renderer"),
-    config = require("../../core/config"),
-    domAdapter = require("../../core/dom_adapter"),
-    windowUtils = require("./window"),
-    window = windowUtils.getWindow(),
-    eventsEngine = require("../../events/core/events_engine"),
-    inArray = require("./array").inArray,
-    typeUtils = require("./type"),
-    isDefined = typeUtils.isDefined,
-    isRenderer = typeUtils.isRenderer,
-    htmlParser = require("../../core/utils/html_parser"),
-    elementStrategy;
+const $ = require('../../core/renderer');
+const config = require('../../core/config');
+const domAdapter = require('../../core/dom_adapter');
+const windowUtils = require('./window');
+const window = windowUtils.getWindow();
+const eventsEngine = require('../../events/core/events_engine');
+const inArray = require('./array').inArray;
+const typeUtils = require('./type');
+const isDefined = typeUtils.isDefined;
+const isRenderer = typeUtils.isRenderer;
+const htmlParser = require('../../core/utils/html_parser');
+let elementStrategy;
 
-var resetActiveElement = function() {
-    var activeElement = domAdapter.getActiveElement(),
-        body = domAdapter.getBody();
+const resetActiveElement = function() {
+    const activeElement = domAdapter.getActiveElement();
+    const body = domAdapter.getBody();
 
     // todo: remove this hack after msie 11 support stopped
     if(activeElement && activeElement !== body && activeElement.blur) {
@@ -25,10 +25,10 @@ var resetActiveElement = function() {
     }
 };
 
-var clearSelection = function() {
-    var selection = window.getSelection();
+const clearSelection = function() {
+    const selection = window.getSelection();
     if(!selection) return;
-    if(selection.type === "Caret") return;
+    if(selection.type === 'Caret') return;
 
     if(selection.empty) {
         selection.empty();
@@ -40,19 +40,19 @@ var clearSelection = function() {
     }
 };
 
-var closestCommonParent = function(startTarget, endTarget) {
-    var $startTarget = $(startTarget),
-        $endTarget = $(endTarget);
+const closestCommonParent = function(startTarget, endTarget) {
+    const $startTarget = $(startTarget);
+    const $endTarget = $(endTarget);
 
     if($startTarget[0] === $endTarget[0]) {
         return $startTarget[0];
     }
 
-    var $startParents = $startTarget.parents(),
-        $endParents = $endTarget.parents(),
-        startingParent = Math.min($startParents.length, $endParents.length);
+    const $startParents = $startTarget.parents();
+    const $endParents = $endTarget.parents();
+    const startingParent = Math.min($startParents.length, $endParents.length);
 
-    for(var i = -startingParent; i < 0; i++) {
+    for(let i = -startingParent; i < 0; i++) {
         if($startParents.get(i) === $endParents.get(i)) {
             return $startParents.get(i);
         }
@@ -60,52 +60,52 @@ var closestCommonParent = function(startTarget, endTarget) {
 };
 
 
-var triggerVisibilityChangeEvent = function(eventName) {
-    var VISIBILITY_CHANGE_SELECTOR = ".dx-visibility-change-handler";
+const triggerVisibilityChangeEvent = function(eventName) {
+    const VISIBILITY_CHANGE_SELECTOR = '.dx-visibility-change-handler';
 
     return function(element) {
-        var $element = $(element || "body");
+        const $element = $(element || 'body');
 
-        var changeHandlers = $element.filter(VISIBILITY_CHANGE_SELECTOR).
+        const changeHandlers = $element.filter(VISIBILITY_CHANGE_SELECTOR).
             add($element.find(VISIBILITY_CHANGE_SELECTOR));
 
-        for(var i = 0; i < changeHandlers.length; i++) {
+        for(let i = 0; i < changeHandlers.length; i++) {
             eventsEngine.triggerHandler(changeHandlers[i], eventName);
         }
     };
 };
 
-var uniqueId = (function() {
-    var counter = 0;
+const uniqueId = (function() {
+    let counter = 0;
 
     return function(prefix) {
-        return (prefix || "") + counter++;
+        return (prefix || '') + counter++;
     };
 })();
 
 
-var dataOptionsAttributeName = "data-options";
+const dataOptionsAttributeName = 'data-options';
 
-var getElementOptions = function(element) {
-    var optionsString = $(element).attr(dataOptionsAttributeName) || "";
+const getElementOptions = function(element) {
+    const optionsString = $(element).attr(dataOptionsAttributeName) || '';
 
     return config().optionsParser(optionsString);
 };
 
-var createComponents = function(elements, componentTypes) {
-    var result = [],
-        selector = "[" + dataOptionsAttributeName + "]";
+const createComponents = function(elements, componentTypes) {
+    const result = [];
+    const selector = '[' + dataOptionsAttributeName + ']';
 
-    var $items = elements.find(selector).add(elements.filter(selector));
+    const $items = elements.find(selector).add(elements.filter(selector));
     $items.each(function(index, element) {
-        var $element = $(element),
-            options = getElementOptions(element);
+        const $element = $(element);
+        const options = getElementOptions(element);
 
-        for(var componentName in options) {
+        for(const componentName in options) {
             if(!componentTypes || inArray(componentName, componentTypes) > -1) {
                 if($element[componentName]) {
                     $element[componentName](options[componentName]);
-                    result.push($element[componentName]("instance"));
+                    result.push($element[componentName]('instance'));
                 }
             }
         }
@@ -114,12 +114,12 @@ var createComponents = function(elements, componentTypes) {
     return result;
 };
 
-var createMarkupFromString = function(str) {
+const createMarkupFromString = function(str) {
     if(!window.WinJS) {
         return $(htmlParser.parseHTML(str));
     }
 
-    var tempElement = $("<div>");
+    const tempElement = $('<div>');
 
     // otherwise WinJS browser strips HTML comments required for KO
     window.WinJS.Utilities.setInnerHTMLUnsafe(tempElement.get(0), str);
@@ -127,49 +127,49 @@ var createMarkupFromString = function(str) {
     return tempElement.contents();
 };
 
-var extractTemplateMarkup = function(element) {
+const extractTemplateMarkup = function(element) {
     element = $(element);
 
-    var templateTag = element.length && element.filter(function isNotExecutableScript() {
-        var $node = $(this);
-        return $node.is("script[type]") && ($node.attr("type").indexOf("script") < 0);
+    const templateTag = element.length && element.filter(function isNotExecutableScript() {
+        const $node = $(this);
+        return $node.is('script[type]') && ($node.attr('type').indexOf('script') < 0);
     });
 
     if(templateTag.length) {
         return templateTag.eq(0).html();
     } else {
-        element = $("<div>").append(element);
+        element = $('<div>').append(element);
         return element.html();
     }
 };
 
-var normalizeTemplateElement = function(element) {
-    var $element = isDefined(element) && (element.nodeType || isRenderer(element))
+const normalizeTemplateElement = function(element) {
+    let $element = isDefined(element) && (element.nodeType || isRenderer(element))
         ? $(element)
-        : $("<div>").html(element).contents();
+        : $('<div>').html(element).contents();
 
     if($element.length === 1) {
-        if($element.is("script")) {
+        if($element.is('script')) {
             $element = normalizeTemplateElement($element.html().trim());
-        } else if($element.is("table")) {
-            $element = $element.children("tbody").contents();
+        } else if($element.is('table')) {
+            $element = $element.children('tbody').contents();
         }
     }
 
     return $element;
 };
 
-var clipboardText = function(event, text) {
-    var clipboard = (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
+const clipboardText = function(event, text) {
+    const clipboard = (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
 
     if(arguments.length === 1) {
-        return clipboard && clipboard.getData("Text");
+        return clipboard && clipboard.getData('Text');
     }
 
-    clipboard && clipboard.setData("Text", text);
+    clipboard && clipboard.setData('Text', text);
 };
 
-var contains = function(container, element) {
+const contains = function(container, element) {
     if(!element) {
         return false;
     }
@@ -178,11 +178,11 @@ var contains = function(container, element) {
     return domAdapter.isDocument(container) ? container.documentElement.contains(element) : container.contains(element);
 };
 
-var getPublicElement = function($element) {
+const getPublicElement = function($element) {
     return elementStrategy($element);
 };
 
-var setPublicElementWrapper = function(value) {
+const setPublicElementWrapper = function(value) {
     elementStrategy = value;
 };
 
@@ -190,35 +190,35 @@ setPublicElementWrapper(function(element) {
     return element && element.get(0);
 });
 
-var createTextElementHiddenCopy = function(element, text, options) {
-    var elementStyles = window.getComputedStyle($(element).get(0));
-    var includePaddings = options && options.includePaddings;
+const createTextElementHiddenCopy = function(element, text, options) {
+    const elementStyles = window.getComputedStyle($(element).get(0));
+    const includePaddings = options && options.includePaddings;
 
-    return $("<div>").text(text).css({
-        "fontStyle": elementStyles.fontStyle,
-        "fontVariant": elementStyles.fontVariant,
-        "fontWeight": elementStyles.fontWeight,
-        "fontSize": elementStyles.fontSize,
-        "fontFamily": elementStyles.fontFamily,
-        "letterSpacing": elementStyles.letterSpacing,
-        "border": elementStyles.border,
-        "paddingTop": includePaddings ? elementStyles.paddingTop : "",
-        "paddingRight": includePaddings ? elementStyles.paddingRight : "",
-        "paddingBottom": includePaddings ? elementStyles.paddingBottom : "",
-        "paddingLeft": includePaddings ? elementStyles.paddingLeft : "",
-        "visibility": "hidden",
-        "whiteSpace": "nowrap",
-        "position": "absolute",
-        "float": "left"
+    return $('<div>').text(text).css({
+        'fontStyle': elementStyles.fontStyle,
+        'fontVariant': elementStyles.fontVariant,
+        'fontWeight': elementStyles.fontWeight,
+        'fontSize': elementStyles.fontSize,
+        'fontFamily': elementStyles.fontFamily,
+        'letterSpacing': elementStyles.letterSpacing,
+        'border': elementStyles.border,
+        'paddingTop': includePaddings ? elementStyles.paddingTop : '',
+        'paddingRight': includePaddings ? elementStyles.paddingRight : '',
+        'paddingBottom': includePaddings ? elementStyles.paddingBottom : '',
+        'paddingLeft': includePaddings ? elementStyles.paddingLeft : '',
+        'visibility': 'hidden',
+        'whiteSpace': 'nowrap',
+        'position': 'absolute',
+        'float': 'left'
     });
 };
 
 exports.setPublicElementWrapper = setPublicElementWrapper;
 exports.resetActiveElement = resetActiveElement;
 exports.createMarkupFromString = createMarkupFromString;
-exports.triggerShownEvent = triggerVisibilityChangeEvent("dxshown");
-exports.triggerHidingEvent = triggerVisibilityChangeEvent("dxhiding");
-exports.triggerResizeEvent = triggerVisibilityChangeEvent("dxresize");
+exports.triggerShownEvent = triggerVisibilityChangeEvent('dxshown');
+exports.triggerHidingEvent = triggerVisibilityChangeEvent('dxhiding');
+exports.triggerResizeEvent = triggerVisibilityChangeEvent('dxresize');
 exports.getElementOptions = getElementOptions;
 exports.createComponents = createComponents;
 exports.extractTemplateMarkup = extractTemplateMarkup;

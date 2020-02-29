@@ -1,41 +1,41 @@
-var windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
-    registerComponent = require("../../core/component_registrator"),
-    typeUtils = require("../../core/utils/type"),
-    dom = require("../../core/utils/dom"),
-    each = require("../../core/utils/iterator").each,
-    compareVersions = require("../../core/utils/version").compare,
-    extend = require("../../core/utils/extend").extend,
-    support = require("../../core/utils/support"),
-    devices = require("../../core/devices"),
-    config = require("../../core/config"),
-    dateUtils = require("../../core/utils/date"),
-    uiDateUtils = require("./ui.date_utils"),
-    dateSerialization = require("../../core/utils/date_serialization"),
-    DropDownEditor = require("../drop_down_editor/ui.drop_down_editor"),
-    dateLocalization = require("../../localization/date"),
-    messageLocalization = require("../../localization/message"),
+const windowUtils = require('../../core/utils/window');
+const window = windowUtils.getWindow();
+const registerComponent = require('../../core/component_registrator');
+const typeUtils = require('../../core/utils/type');
+const dom = require('../../core/utils/dom');
+const each = require('../../core/utils/iterator').each;
+const compareVersions = require('../../core/utils/version').compare;
+const extend = require('../../core/utils/extend').extend;
+const support = require('../../core/utils/support');
+const devices = require('../../core/devices');
+const config = require('../../core/config');
+const dateUtils = require('../../core/utils/date');
+const uiDateUtils = require('./ui.date_utils');
+const dateSerialization = require('../../core/utils/date_serialization');
+const DropDownEditor = require('../drop_down_editor/ui.drop_down_editor');
+const dateLocalization = require('../../localization/date');
+const messageLocalization = require('../../localization/message');
 
-    DATEBOX_CLASS = "dx-datebox",
-    DX_AUTO_WIDTH_CLASS = "dx-auto-width",
-    DX_INVALID_BADGE_CLASS = "dx-show-invalid-badge",
-    DX_CLEAR_BUTTON_CLASS = "dx-clear-button-area",
-    DATEBOX_WRAPPER_CLASS = "dx-datebox-wrapper";
+const DATEBOX_CLASS = 'dx-datebox';
+const DX_AUTO_WIDTH_CLASS = 'dx-auto-width';
+const DX_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
+const DX_CLEAR_BUTTON_CLASS = 'dx-clear-button-area';
+const DATEBOX_WRAPPER_CLASS = 'dx-datebox-wrapper';
 
-var PICKER_TYPE = {
-    calendar: "calendar",
-    rollers: "rollers",
-    list: "list",
-    native: "native"
+const PICKER_TYPE = {
+    calendar: 'calendar',
+    rollers: 'rollers',
+    list: 'list',
+    native: 'native'
 };
 
-var TYPE = {
-    date: "date",
-    datetime: "datetime",
-    time: "time"
+const TYPE = {
+    date: 'date',
+    datetime: 'datetime',
+    time: 'time'
 };
 
-var STRATEGY_NAME = {
+const STRATEGY_NAME = {
     calendar: 'Calendar',
     dateView: 'DateView',
     native: 'Native',
@@ -43,15 +43,15 @@ var STRATEGY_NAME = {
     list: 'List'
 };
 
-var STRATEGY_CLASSES = {
-    Calendar: require("./ui.date_box.strategy.calendar"),
-    DateView: require("./ui.date_box.strategy.date_view"),
-    Native: require("./ui.date_box.strategy.native"),
-    CalendarWithTime: require("./ui.date_box.strategy.calendar_with_time"),
-    List: require("./ui.date_box.strategy.list")
+const STRATEGY_CLASSES = {
+    Calendar: require('./ui.date_box.strategy.calendar'),
+    DateView: require('./ui.date_box.strategy.date_view'),
+    Native: require('./ui.date_box.strategy.native'),
+    CalendarWithTime: require('./ui.date_box.strategy.calendar_with_time'),
+    List: require('./ui.date_box.strategy.list')
 };
 
-var DateBox = DropDownEditor.inherit({
+const DateBox = DropDownEditor.inherit({
 
     _supportedKeys: function() {
         return extend(this.callBase(), this._strategy.supportedKeys());
@@ -61,8 +61,8 @@ var DateBox = DropDownEditor.inherit({
         this.callBase();
 
         extend(this._deprecatedOptions, {
-            "maxZoomLevel": { since: "18.1", alias: "calendarOptions.maxZoomLevel" },
-            "minZoomLevel": { since: "18.1", alias: "calendarOptions.minZoomLevel" }
+            'maxZoomLevel': { since: '18.1', alias: 'calendarOptions.maxZoomLevel' },
+            'minZoomLevel': { since: '18.1', alias: 'calendarOptions.minZoomLevel' }
         });
     },
 
@@ -73,152 +73,40 @@ var DateBox = DropDownEditor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-             * @name dxDateBoxOptions.type
-             * @type Enums.DateBoxType
-             * @default "date"
-             */
-            type: "date",
+            type: 'date',
 
-            /**
-             * @name dxDateBoxOptions.showAnalogClock
-             * @type boolean
-             * @default true
-             */
             showAnalogClock: true,
 
-            /**
-             * @name dxDateBoxOptions.value
-             * @type Date|number|string
-             * @default null
-             */
             value: null,
 
-            /**
-             * @name dxDateBoxOptions.dateSerializationFormat
-             * @type string
-             * @default undefined
-             */
             dateSerializationFormat: undefined,
 
-            /**
-             * @name dxDateBoxOptions.min
-             * @type Date|number|string
-             * @default undefined
-             */
             min: undefined,
 
-            /**
-             * @name dxDateBoxOptions.max
-             * @type Date|number|string
-             * @default undefined
-             */
             max: undefined,
 
-            /**
-             * @name dxDateBoxOptions.placeholder
-             * @type string
-             * @default ""
-             */
 
-            /**
-             * @name dxDateBoxOptions.displayFormat
-             * @type format
-             * @default null
-             */
             displayFormat: null,
 
-            /**
-             * @name dxDateBoxOptions.interval
-             * @type number
-             * @default 30
-             */
             interval: 30,
 
-            /**
-             * @name dxDateBoxOptions.disabledDates
-             * @type Array<Date>|function(data)
-             * @default null
-             * @type_function_param1 data:object
-             * @type_function_param1_field1 component:dxDateBox
-             * @type_function_param1_field2 date:Date
-             * @type_function_param1_field3 view:string
-             * @type_function_return boolean
-             */
             disabledDates: null,
 
-            /**
-             * @name dxDateBoxOptions.maxZoomLevel
-             * @type Enums.CalendarZoomLevel
-             * @default 'month'
-             * @deprecated dxDateBoxOptions.calendarOptions
-             */
-            maxZoomLevel: "month",
+            maxZoomLevel: 'month',
 
-            /**
-             * @name dxDateBoxOptions.minZoomLevel
-             * @type Enums.CalendarZoomLevel
-             * @default 'century'
-             * @deprecated dxDateBoxOptions.calendarOptions
-             */
-            minZoomLevel: "century",
+            minZoomLevel: 'century',
 
-            /**
-             * @name dxDateBoxOptions.pickerType
-             * @type Enums.DateBoxPickerType
-             * @default 'calendar'
-             */
-            pickerType: PICKER_TYPE["calendar"],
+            pickerType: PICKER_TYPE['calendar'],
 
-            /**
-             * @name dxDateBoxOptions.invalidDateMessage
-             * @type string
-             * @default "Value must be a date or time"
-             */
-            invalidDateMessage: messageLocalization.format("dxDateBox-validation-datetime"),
+            invalidDateMessage: messageLocalization.format('dxDateBox-validation-datetime'),
 
-            /**
-             * @name dxDateBoxOptions.dateOutOfRangeMessage
-             * @type string
-             * @default "Value is out of range"
-             */
-            dateOutOfRangeMessage: messageLocalization.format("validation-range"),
+            dateOutOfRangeMessage: messageLocalization.format('validation-range'),
 
-            /**
-             * @name dxDateBoxOptions.applyButtonText
-             * @type string
-             * @default "OK"
-             */
-            applyButtonText: messageLocalization.format("OK"),
+            applyButtonText: messageLocalization.format('OK'),
 
-            /**
-             * @name dxDateBoxOptions.cancelButtonText
-             * @type string
-             * @default "Cancel"
-             */
 
-            /**
-             * @name dxDateBoxMethods.open
-             * @publicName open()
-             */
-
-            /**
-             * @name dxDateBoxMethods.close
-             * @publicName close()
-             */
-
-            /**
-             * @name dxDateBoxOptions.adaptivityEnabled
-             * @type boolean
-             * @default false
-             */
             adaptivityEnabled: false,
 
-            /**
-             * @name dxDateBoxOptions.calendarOptions
-             * @type dxCalendarOptions
-             * @default {}
-             */
             calendarOptions: {},
 
             useHiddenSubmitElement: true
@@ -228,55 +116,45 @@ var DateBox = DropDownEditor.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: { platform: "ios" },
+                device: { platform: 'ios' },
                 options: {
                     showPopupTitle: true
                 }
             },
             {
-                device: { platform: "android" },
+                device: { platform: 'android' },
                 options: {
-                    buttonsLocation: "bottom after"
+                    buttonsLocation: 'bottom after'
                 }
             },
             {
                 device: function() {
-                    var realDevice = devices.real(),
-                        platform = realDevice.platform;
-                    return platform === "ios" || platform === "android";
+                    const realDevice = devices.real();
+                    const platform = realDevice.platform;
+                    return platform === 'ios' || platform === 'android';
                 },
                 options: {
-                    /**
-                     * @name dxDateBoxOptions.pickerType
-                     * @default 'native' @for iOS
-                     * @default 'native' @for Android
-                     */
                     pickerType: PICKER_TYPE.native
                 }
             },
             {
                 device: function(currentDevice) {
-                    var realDevice = devices.real(),
-                        platform = realDevice.platform,
-                        version = realDevice.version;
-                    return platform === "generic" && currentDevice.deviceType !== "desktop" || (platform === "android" && compareVersions(version, [4, 4]) < 0);
+                    const realDevice = devices.real();
+                    const platform = realDevice.platform;
+                    const version = realDevice.version;
+                    return platform === 'generic' && currentDevice.deviceType !== 'desktop' || (platform === 'android' && compareVersions(version, [4, 4]) < 0);
                 },
                 options: {
-                    /**
-                     * @name dxDateBoxOptions.pickerType
-                     * @default 'rollers' @for Android_below_version_4.4
-                     * @default 'rollers' @for mobile_devices
-                     */
                     pickerType: PICKER_TYPE.rollers
                 }
             },
             {
                 device: {
-                    platform: "generic",
-                    deviceType: "desktop"
+                    platform: 'generic',
+                    deviceType: 'desktop'
                 },
                 options: {
-                    buttonsLocation: "bottom after"
+                    buttonsLocation: 'bottom after'
                 }
             }
         ]);
@@ -289,8 +167,8 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _updatePickerOptions: function() {
-        var pickerType = this.option("pickerType");
-        var type = this.option("type");
+        let pickerType = this.option('pickerType');
+        const type = this.option('type');
 
         if(pickerType === PICKER_TYPE.list && (type === TYPE.datetime || type === TYPE.date)) {
             pickerType = PICKER_TYPE.calendar;
@@ -300,7 +178,7 @@ var DateBox = DropDownEditor.inherit({
             pickerType = PICKER_TYPE.list;
         }
 
-        this.option("showDropDownButton", devices.real().platform !== "generic" || pickerType !== PICKER_TYPE["native"]);
+        this.option('showDropDownButton', devices.real().platform !== 'generic' || pickerType !== PICKER_TYPE['native']);
         this._pickerType = pickerType;
     },
 
@@ -317,8 +195,8 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _initStrategy: function() {
-        var strategyName = this._getStrategyName(this._getFormatType()),
-            strategy = STRATEGY_CLASSES[strategyName];
+        const strategyName = this._getStrategyName(this._getFormatType());
+        const strategy = STRATEGY_CLASSES[strategyName];
 
         if(!(this._strategy && this._strategy.NAME === strategyName)) {
             this._strategy = new strategy(this);
@@ -326,10 +204,10 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getFormatType: function() {
-        var currentType = this.option("type");
-        var isTime = /h|m|s/g.test(currentType),
-            isDate = /d|M|Y/g.test(currentType);
-        var type = "";
+        const currentType = this.option('type');
+        const isTime = /h|m|s/g.test(currentType);
+        const isDate = /d|M|Y/g.test(currentType);
+        let type = '';
 
         if(isDate) {
             type += TYPE.date;
@@ -343,12 +221,12 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getStrategyName: function(type) {
-        var pickerType = this._pickerType;
+        const pickerType = this._pickerType;
 
         if(pickerType === PICKER_TYPE.rollers) {
             return STRATEGY_NAME.dateView;
         } else if(pickerType === PICKER_TYPE.native) {
-            return STRATEGY_NAME["native"];
+            return STRATEGY_NAME['native'];
         }
 
         if(type === TYPE.date) {
@@ -381,27 +259,27 @@ var DateBox = DropDownEditor.inherit({
 
     _renderDimensions: function() {
         this.callBase();
-        this.$element().toggleClass(DX_AUTO_WIDTH_CLASS, !this.option("width"));
+        this.$element().toggleClass(DX_AUTO_WIDTH_CLASS, !this.option('width'));
     },
 
     _refreshFormatClass: function() {
-        var $element = this.$element();
+        const $element = this.$element();
 
         each(TYPE, function(_, item) {
-            $element.removeClass(DATEBOX_CLASS + "-" + item);
+            $element.removeClass(DATEBOX_CLASS + '-' + item);
         });
 
-        $element.addClass(DATEBOX_CLASS + "-" + this.option("type"));
+        $element.addClass(DATEBOX_CLASS + '-' + this.option('type'));
     },
 
     _refreshPickerTypeClass: function() {
-        var $element = this.$element();
+        const $element = this.$element();
 
         each(PICKER_TYPE, function(_, item) {
-            $element.removeClass(DATEBOX_CLASS + "-" + item);
+            $element.removeClass(DATEBOX_CLASS + '-' + item);
         });
 
-        $element.addClass(DATEBOX_CLASS + "-" + this._pickerType);
+        $element.addClass(DATEBOX_CLASS + '-' + this._pickerType);
     },
 
     _formatValidationIcon: function() {
@@ -409,13 +287,13 @@ var DateBox = DropDownEditor.inherit({
             return;
         }
 
-        var inputElement = this._input().get(0);
-        var isRtlEnabled = this.option("rtlEnabled");
-        var clearButtonWidth = this._getClearButtonWidth();
-        var longestElementDimensions = this._getLongestElementDimensions();
-        var curWidth = parseFloat(window.getComputedStyle(inputElement).width) - clearButtonWidth;
-        var shouldHideValidationIcon = (longestElementDimensions.width > curWidth);
-        var style = inputElement.style;
+        const inputElement = this._input().get(0);
+        const isRtlEnabled = this.option('rtlEnabled');
+        const clearButtonWidth = this._getClearButtonWidth();
+        const longestElementDimensions = this._getLongestElementDimensions();
+        const curWidth = parseFloat(window.getComputedStyle(inputElement).width) - clearButtonWidth;
+        const shouldHideValidationIcon = (longestElementDimensions.width > curWidth);
+        const style = inputElement.style;
 
         this.$element().toggleClass(DX_INVALID_BADGE_CLASS, !shouldHideValidationIcon);
 
@@ -425,14 +303,14 @@ var DateBox = DropDownEditor.inherit({
             }
             isRtlEnabled ? style.paddingLeft = 0 : style.paddingRight = 0;
         } else {
-            isRtlEnabled ? style.paddingLeft = this._storedPadding + "px" : style.paddingRight = this._storedPadding + "px";
+            isRtlEnabled ? style.paddingLeft = this._storedPadding + 'px' : style.paddingRight = this._storedPadding + 'px';
         }
     },
 
     _getClearButtonWidth: function() {
-        var clearButtonWidth = 0;
-        if(this._isClearButtonVisible() && this._input().val() === "") {
-            var clearButtonElement = this.$element().find("." + DX_CLEAR_BUTTON_CLASS).get(0);
+        let clearButtonWidth = 0;
+        if(this._isClearButtonVisible() && this._input().val() === '') {
+            const clearButtonElement = this.$element().find('.' + DX_CLEAR_BUTTON_CLASS).get(0);
             clearButtonWidth = parseFloat(window.getComputedStyle(clearButtonElement).width);
         }
 
@@ -440,19 +318,19 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getLongestElementDimensions: function() {
-        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
-            longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
-        var $input = this._input();
-        var inputElement = $input.get(0);
-        var $longestValueElement = dom.createTextElementHiddenCopy($input, longestValue);
-        var isPaddingStored = this._storedPadding !== undefined;
-        var storedPadding = !isPaddingStored ? 0 : this._storedPadding;
+        const format = this._strategy.getDisplayFormat(this.option('displayFormat'));
+        const longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
+        const $input = this._input();
+        const inputElement = $input.get(0);
+        const $longestValueElement = dom.createTextElementHiddenCopy($input, longestValue);
+        const isPaddingStored = this._storedPadding !== undefined;
+        const storedPadding = !isPaddingStored ? 0 : this._storedPadding;
 
         $longestValueElement.appendTo(this.$element());
-        var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width);
-        var rightPadding = parseFloat(window.getComputedStyle(inputElement).paddingRight);
-        var leftPadding = parseFloat(window.getComputedStyle(inputElement).paddingLeft);
-        var necessaryWidth = elementWidth + leftPadding + rightPadding + storedPadding;
+        const elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width);
+        const rightPadding = parseFloat(window.getComputedStyle(inputElement).paddingRight);
+        const leftPadding = parseFloat(window.getComputedStyle(inputElement).paddingLeft);
+        const necessaryWidth = elementWidth + leftPadding + rightPadding + storedPadding;
         $longestValueElement.remove();
 
         return {
@@ -473,7 +351,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _popupConfig: function() {
-        var popupConfig = this.callBase();
+        const popupConfig = this.callBase();
         return extend(this._strategy.popupConfig(popupConfig), {
             title: this._getPopupTitle(),
             dragEnabled: false
@@ -485,16 +363,16 @@ var DateBox = DropDownEditor.inherit({
             return;
         }
 
-        var $element = this.$element();
-        var classPostfixes = extend({}, TYPE, PICKER_TYPE);
+        const $element = this.$element();
+        const classPostfixes = extend({}, TYPE, PICKER_TYPE);
 
         each(classPostfixes, (function(_, item) {
-            $element.removeClass(DATEBOX_WRAPPER_CLASS + "-" + item);
+            $element.removeClass(DATEBOX_WRAPPER_CLASS + '-' + item);
         }).bind(this));
 
         this._popup._wrapper()
-            .addClass(DATEBOX_WRAPPER_CLASS + "-" + this.option("type"))
-            .addClass(DATEBOX_WRAPPER_CLASS + "-" + this._pickerType);
+            .addClass(DATEBOX_WRAPPER_CLASS + '-' + this.option('type'))
+            .addClass(DATEBOX_WRAPPER_CLASS + '-' + this._pickerType);
     },
 
     _renderPopupContent: function() {
@@ -527,7 +405,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _clearValueHandler: function(e) {
-        this.option("text", "");
+        this.option('text', '');
         this.callBase(e);
     },
 
@@ -536,11 +414,11 @@ var DateBox = DropDownEditor.inherit({
             return true;
         }
 
-        var platform = devices.real().platform,
-            isCustomValueDisabled = this._isNativeType() && (platform === "ios" || platform === "android");
+        const platform = devices.real().platform;
+        const isCustomValueDisabled = this._isNativeType() && (platform === 'ios' || platform === 'android');
 
         if(isCustomValueDisabled) {
-            return this.option("readOnly");
+            return this.option('readOnly');
         }
 
         return this.callBase();
@@ -551,32 +429,32 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _renderValue: function() {
-        var value = this.dateOption("value");
+        const value = this.dateOption('value');
 
-        this.option("text", this._getDisplayedText(value));
+        this.option('text', this._getDisplayedText(value));
         this._strategy.renderValue();
 
         return this.callBase();
     },
 
     _setSubmitValue: function() {
-        var value = this.dateOption("value");
-        var dateSerializationFormat = this.option("dateSerializationFormat");
-        var submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[this.option("type")];
-        var submitValue = dateSerializationFormat ? dateSerialization.serializeDate(value, dateSerializationFormat) : uiDateUtils.toStandardDateFormat(value, submitFormat);
+        const value = this.dateOption('value');
+        const dateSerializationFormat = this.option('dateSerializationFormat');
+        const submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[this.option('type')];
+        const submitValue = dateSerializationFormat ? dateSerialization.serializeDate(value, dateSerializationFormat) : uiDateUtils.toStandardDateFormat(value, submitFormat);
 
         this._getSubmitElement().val(submitValue);
     },
 
     _getDisplayedText: function(value) {
-        var mode = this.option("mode"),
-            displayedText;
+        const mode = this.option('mode');
+        let displayedText;
 
-        if(mode === "text") {
-            var displayFormat = this._strategy.getDisplayFormat(this.option("displayFormat"));
+        if(mode === 'text') {
+            const displayFormat = this._strategy.getDisplayFormat(this.option('displayFormat'));
             displayedText = dateLocalization.format(value, displayFormat);
         } else {
-            var format = this._getFormatByMode(mode);
+            const format = this._getFormatByMode(mode);
 
             if(format) {
                 displayedText = dateLocalization.format(value, format);
@@ -593,22 +471,22 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _valueChangeEventHandler: function(e) {
-        var text = this.option("text"),
-            currentValue = this.dateOption("value");
+        const text = this.option('text');
+        const currentValue = this.dateOption('value');
 
         if(text === this._getDisplayedText(currentValue)) {
             this._validateValue(currentValue);
             return;
         }
 
-        var parsedDate = this._getParsedDate(text),
-            value = currentValue || this._getDateByDefault(),
-            type = this.option("type"),
-            newValue = uiDateUtils.mergeDates(value, parsedDate, type),
-            date = parsedDate && type === "time" ? newValue : parsedDate;
+        const parsedDate = this._getParsedDate(text);
+        const value = currentValue || this._getDateByDefault();
+        const type = this.option('type');
+        const newValue = uiDateUtils.mergeDates(value, parsedDate, type);
+        const date = parsedDate && type === 'time' ? newValue : parsedDate;
 
         if(this._applyInternalValidation(date)) {
-            var displayedText = this._getDisplayedText(newValue);
+            const displayedText = this._getDisplayedText(newValue);
 
             if(value && newValue && value.getTime() === newValue.getTime() && displayedText !== text) {
                 this._renderValue();
@@ -625,31 +503,31 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getParsedDate: function(text) {
-        var displayFormat = this._strategy.getDisplayFormat(this.option("displayFormat"));
-        var parsedText = this._strategy.getParsedText(text, displayFormat);
+        const displayFormat = this._strategy.getDisplayFormat(this.option('displayFormat'));
+        const parsedText = this._strategy.getParsedText(text, displayFormat);
 
         return typeUtils.isDefined(parsedText) ? parsedText : undefined;
     },
 
     _validateValue: function(value) {
-        const internalResult = this._applyInternalValidation(value),
-            customResult = !this._skipCustomValidation ? this._applyCustomValidation(value) : true;
+        const internalResult = this._applyInternalValidation(value);
+        const customResult = !this._skipCustomValidation ? this._applyCustomValidation(value) : true;
         this._skipCustomValidation = false;
         return internalResult && customResult;
     },
 
     _applyInternalValidation(value) {
-        var text = this.option("text"),
-            hasText = !!text && value !== null,
-            isDate = !!value && typeUtils.isDate(value) && !isNaN(value.getTime()),
-            isDateInRange = isDate && dateUtils.dateInRange(value, this.dateOption("min"), this.dateOption("max"), this.option("type")),
-            isValid = !hasText && !value || isDateInRange,
-            validationMessage = "";
+        const text = this.option('text');
+        const hasText = !!text && value !== null;
+        const isDate = !!value && typeUtils.isDate(value) && !isNaN(value.getTime());
+        const isDateInRange = isDate && dateUtils.dateInRange(value, this.dateOption('min'), this.dateOption('max'), this.option('type'));
+        const isValid = !hasText && !value || isDateInRange;
+        let validationMessage = '';
 
         if(!isDate) {
-            validationMessage = this.option("invalidDateMessage");
+            validationMessage = this.option('invalidDateMessage');
         } else if(!isDateInRange) {
-            validationMessage = this.option("dateOutOfRangeMessage");
+            validationMessage = this.option('dateOutOfRangeMessage');
         }
 
         this.option({
@@ -669,27 +547,27 @@ var DateBox = DropDownEditor.inherit({
             value
         });
 
-        return this.option("isValid");
+        return this.option('isValid');
     },
 
     _isValueChanged: function(newValue) {
-        var oldValue = this.dateOption("value"),
-            oldTime = oldValue && oldValue.getTime(),
-            newTime = newValue && newValue.getTime();
+        const oldValue = this.dateOption('value');
+        const oldTime = oldValue && oldValue.getTime();
+        const newTime = newValue && newValue.getTime();
 
         return oldTime !== newTime;
     },
 
     _isTextChanged: function(newValue) {
-        var oldText = this.option("text"),
-            newText = newValue && this._getDisplayedText(newValue) || "";
+        const oldText = this.option('text');
+        const newText = newValue && this._getDisplayedText(newValue) || '';
 
         return oldText !== newText;
     },
 
     _renderProps: function() {
         this.callBase();
-        this._input().attr("autocomplete", "off");
+        this._input().attr('autocomplete', 'off');
     },
 
     _renderOpenedState: function() {
@@ -705,27 +583,27 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getPopupTitle: function() {
-        var placeholder = this.option("placeholder");
+        const placeholder = this.option('placeholder');
 
         if(placeholder) {
             return placeholder;
         }
 
-        var type = this.option("type");
+        const type = this.option('type');
 
         if(type === TYPE.time) {
-            return messageLocalization.format("dxDateBox-simulatedDataPickerTitleTime");
+            return messageLocalization.format('dxDateBox-simulatedDataPickerTitleTime');
         }
 
         if(type === TYPE.date || type === TYPE.datetime) {
-            return messageLocalization.format("dxDateBox-simulatedDataPickerTitleDate");
+            return messageLocalization.format('dxDateBox-simulatedDataPickerTitleDate');
         }
 
-        return "";
+        return '';
     },
 
     _renderPlaceholder: function() {
-        this._popup && this._popup.option("title", this._getPopupTitle());
+        this._popup && this._popup.option('title', this._getPopupTitle());
         this.callBase();
     },
 
@@ -737,7 +615,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _applyButtonHandler: function(e) {
-        var value = this._strategy.getValue();
+        const value = this._strategy.getValue();
         if(this._applyInternalValidation(value)) {
             this.dateValue(value, e.event);
         }
@@ -750,23 +628,23 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _isNativeType: function() {
-        return this._pickerType === PICKER_TYPE["native"];
+        return this._pickerType === PICKER_TYPE['native'];
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "showClearButton":
-            case "buttons":
+            case 'showClearButton':
+            case 'buttons':
                 this.callBase.apply(this, arguments);
                 this._formatValidationIcon();
                 break;
-            case "pickerType":
+            case 'pickerType':
                 this._updatePickerOptions({ pickerType: args.value });
                 this._refreshStrategy();
                 this._refreshPickerTypeClass();
                 this._invalidate();
                 break;
-            case "type":
+            case 'type':
                 this._updatePickerOptions({ format: args.value });
                 this._refreshStrategy();
                 this._refreshFormatClass();
@@ -774,59 +652,50 @@ var DateBox = DropDownEditor.inherit({
                 this._formatValidationIcon();
                 this._updateValue();
                 break;
-            case "placeholder":
+            case 'placeholder':
                 this._renderPlaceholder();
                 break;
-            case "min":
-            case "max":
-                if(this.option("isValid")) {
-                    this._applyInternalValidation(this.dateOption("value"));
+            case 'min':
+            case 'max':
+                if(this.option('isValid')) {
+                    this._applyInternalValidation(this.dateOption('value'));
                 } else {
-                    this._validateValue(this.dateOption("value"));
+                    this._validateValue(this.dateOption('value'));
                 }
                 this._invalidate();
                 break;
-            case "dateSerializationFormat":
-            case "interval":
-            case "disabledDates":
-            case "calendarOptions":
-            case "minZoomLevel":
-            case "maxZoomLevel":
+            case 'dateSerializationFormat':
+            case 'interval':
+            case 'disabledDates':
+            case 'calendarOptions':
+            case 'minZoomLevel':
+            case 'maxZoomLevel':
                 this._invalidate();
                 break;
-            case "displayFormat":
-                this.option("text", this._getDisplayedText(this.dateOption("value")));
+            case 'displayFormat':
+                this.option('text', this._getDisplayedText(this.dateOption('value')));
                 this._renderInputValue();
                 break;
-            case "formatWidthCalculator":
-                break;
-            case "closeOnValueChange":
-                var applyValueMode = args.value ? "instantly" : "useButtons";
-                this.option("applyValueMode", applyValueMode);
-                break;
-            case "applyValueMode":
-                this.option("closeOnValueChange", args.value === "instantly");
-                this.callBase.apply(this, arguments);
-                break;
-            case "text":
+            case 'text':
                 this._strategy.textChangedHandler(args.value);
                 this.callBase.apply(this, arguments);
                 break;
-            case "isValid":
+            case 'isValid':
                 this.callBase.apply(this, arguments);
                 this._formatValidationIcon();
                 break;
-            case "showDropDownButton":
+            case 'showDropDownButton':
                 this._formatValidationIcon();
+                this.callBase.apply(this, arguments);
                 break;
-            case "readOnly":
+            case 'readOnly':
                 this.callBase.apply(this, arguments);
                 this._formatValidationIcon();
                 break;
-            case "invalidDateMessage":
-            case "dateOutOfRangeMessage":
-            case "adaptivityEnabled":
-            case "showAnalogClock":
+            case 'invalidDateMessage':
+            case 'dateOutOfRangeMessage':
+            case 'adaptivityEnabled':
+            case 'showAnalogClock':
                 break;
             default:
                 this.callBase.apply(this, arguments);
@@ -834,14 +703,14 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getSerializationFormat: function() {
-        var value = this.option("value");
+        const value = this.option('value');
 
-        if(this.option("dateSerializationFormat") && config().forceIsoDateParsing) {
-            return this.option("dateSerializationFormat");
+        if(this.option('dateSerializationFormat') && config().forceIsoDateParsing) {
+            return this.option('dateSerializationFormat');
         }
 
         if(typeUtils.isNumeric(value)) {
-            return "number";
+            return 'number';
         }
 
         if(!typeUtils.isString(value)) {
@@ -853,11 +722,11 @@ var DateBox = DropDownEditor.inherit({
 
     _updateValue: function(value) {
         this.callBase();
-        this._validateValue(value || this.dateOption("value"));
+        this._validateValue(value || this.dateOption('value'));
     },
 
     dateValue: function(value, dxEvent) {
-        var isValueChanged = this._isValueChanged(value);
+        const isValueChanged = this._isValueChanged(value);
 
         if(isValueChanged && dxEvent) {
             this._saveValueChangeEvent(dxEvent);
@@ -867,7 +736,7 @@ var DateBox = DropDownEditor.inherit({
             this._updateValue(value);
         }
 
-        return this.dateOption("value", value);
+        return this.dateOption('value', value);
     },
 
     dateOption: function(optionName, value) {
@@ -875,18 +744,18 @@ var DateBox = DropDownEditor.inherit({
             return dateSerialization.deserializeDate(this.option(optionName));
         }
 
-        var serializationFormat = this._getSerializationFormat();
+        const serializationFormat = this._getSerializationFormat();
         this.option(optionName, dateSerialization.serializeDate(value, serializationFormat));
     },
 
     reset: function() {
         const defaultOptions = this._getDefaultOptions();
-        this._skipCustomValidation = defaultOptions.value === this.dateOption("value");
+        this._skipCustomValidation = defaultOptions.value === this.dateOption('value');
         this.callBase();
-        this._updateValue(this.dateOption("value"));
+        this._updateValue(this.dateOption('value'));
     }
 });
 
-registerComponent("dxDateBox", DateBox);
+registerComponent('dxDateBox', DateBox);
 
 module.exports = DateBox;

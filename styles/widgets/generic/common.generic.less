@@ -70,11 +70,10 @@
     }
 }
 
-.disabled-widget(@opacity: @texteditor-disabled-opacity) { // stylelint-disable-line selector-class-pattern
+.disabled-widget(@opacity: @base-disabled-opacity) { // stylelint-disable-line selector-class-pattern
     opacity: @opacity;
     .user-select(none);
 
-    zoom: 1;
     cursor: default;
 }
 
@@ -91,6 +90,7 @@
 }
 @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING: (@GENERIC_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE - @GENERIC_INVALID_BADGE_SIZE) / 2;
 @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING: @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING / 2;
+@badge-invalid-bg: @base-invalid-color;
 
 
 .badge-settings() {

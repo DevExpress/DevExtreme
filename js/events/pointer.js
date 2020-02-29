@@ -1,12 +1,12 @@
-import support from "../core/utils/support";
-import { each } from "../core/utils/iterator";
-import browser from "../core/utils/browser";
-import devices from "../core/devices";
-import registerEvent from "./core/event_registrator";
-import TouchStrategy from "./pointer/touch";
-import MsPointerStrategy from "./pointer/mspointer";
-import MouseStrategy from "./pointer/mouse";
-import MouseAndTouchStrategy from "./pointer/mouse_and_touch";
+import support from '../core/utils/support';
+import { each } from '../core/utils/iterator';
+import browser from '../core/utils/browser';
+import devices from '../core/devices';
+import registerEvent from './core/event_registrator';
+import TouchStrategy from './pointer/touch';
+import MsPointerStrategy from './pointer/mspointer';
+import MouseStrategy from './pointer/mouse';
+import MouseAndTouchStrategy from './pointer/mouse_and_touch';
 
 /**
   * @name UI Events.dxpointerdown
@@ -89,14 +89,14 @@ each(EventStrategy.map, (pointerEvent, originalEvents) => {
 });
 
 const pointer = {
-    down: "dxpointerdown",
-    up: "dxpointerup",
-    move: "dxpointermove",
-    cancel: "dxpointercancel",
-    enter: "dxpointerenter",
-    leave: "dxpointerleave",
-    over: "dxpointerover",
-    out: "dxpointerout"
+    down: 'dxpointerdown',
+    up: 'dxpointerup',
+    move: 'dxpointermove',
+    cancel: 'dxpointercancel',
+    enter: 'dxpointerenter',
+    leave: 'dxpointerleave',
+    over: 'dxpointerover',
+    out: 'dxpointerout'
 };
 
 ///#DEBUG

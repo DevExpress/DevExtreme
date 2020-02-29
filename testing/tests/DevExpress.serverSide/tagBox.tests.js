@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets.editors/tagBox.markup.tests.js");
+require('../DevExpress.ui.widgets.editors/tagBox.markup.tests.js');

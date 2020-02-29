@@ -1,10 +1,10 @@
-var noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    BaseIndicator = require("viz/gauges/base_indicators").BaseIndicator,
-    animation = require("viz/core/renderers/animation"),
-    translator1DModule = require("viz/translators/translator1d");
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const BaseIndicator = require('viz/gauges/base_indicators').BaseIndicator;
+const animation = require('viz/core/renderers/animation');
+const translator1DModule = require('viz/translators/translator1d');
 
-var BaseIndicatorTester = BaseIndicator.inherit({
+const BaseIndicatorTester = BaseIndicator.inherit({
     _isEnabled: function() {
         return 'enabled' in this ? !!this.enabled : true;
     },
@@ -31,7 +31,7 @@ var BaseIndicatorTester = BaseIndicator.inherit({
 });
 
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.patchRenderer();
@@ -61,59 +61,59 @@ var environment = {
 
 QUnit.module('BaseIndicator - rendering', environment);
 
-QUnit.test("Init", function(assert) {
-    assert.deepEqual(this.renderer.g.firstCall.returnValue.attr.lastCall.args, [{ "class": "root-class" }], "root settings");
-    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkOn.lastCall.args, [this.owner, { name: "value-indicator", after: "core" }], "root is linked to container");
-    assert.deepEqual(this.renderer.path.firstCall.args, [[], "area"], "tracker");
+QUnit.test('Init', function(assert) {
+    assert.deepEqual(this.renderer.g.firstCall.returnValue.attr.lastCall.args, [{ 'class': 'root-class' }], 'root settings');
+    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkOn.lastCall.args, [this.owner, { name: 'value-indicator', after: 'core' }], 'root is linked to container');
+    assert.deepEqual(this.renderer.path.firstCall.args, [[], 'area'], 'tracker');
 });
 
-QUnit.test("Dispose", function(assert) {
+QUnit.test('Dispose', function(assert) {
     this.target.dispose();
     this.target.dispose = noop;
-    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkOff.lastCall.args, [], "root is unlinked");
+    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkOff.lastCall.args, [], 'root is unlinked');
 });
 
 QUnit.test('Render', function(assert) {
-    var target = this.target;
+    const target = this.target;
     target.render({ currentValue: 10, color: 'green' }).resize();
 
     assert.ok(target._rootElement, '_rootElement');
     assert.deepEqual(target._rootElement._stored_settings, { 'class': 'root-class', fill: 'green' }, '_rootElement settings');
 
     assert.ok(target._trackerElement, '_trackerElement');
-    assert.deepEqual(target._trackerElement._stored_settings, { points: [], type: "area" }, '_trackerElement settings');
+    assert.deepEqual(target._trackerElement._stored_settings, { points: [], type: 'area' }, '_trackerElement settings');
     assert.strictEqual(this.tracker.attached, target._trackerElement, 'tracker is attached');
 
     assert.ok(target._element, '_element');
     assert.strictEqual(target._element.parent, target._rootElement, '_element parent');
     assert.deepEqual(target._element._stored_settings, { value: 10, position: 210 }, '_element settings');
 
-    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkAppend.lastCall.args, [], "root is appended to container");
+    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkAppend.lastCall.args, [], 'root is appended to container');
 });
 
 QUnit.test('Render then clean', function(assert) {
-    var target = this.target;
+    const target = this.target;
     target.render({ currentValue: 10 }).clean();
 
     assert.ok(this.tracker.detached, 'tracker is detached');
     assert.ok(!target._element, '_element');
 
-    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkRemove.lastCall.args, [], "root is removed from container");
+    assert.deepEqual(this.renderer.g.firstCall.returnValue.linkRemove.lastCall.args, [], 'root is removed from container');
 });
 
 QUnit.test('Render when not enabled', function(assert) {
-    var target = this.target;
+    const target = this.target;
     target.enabled = false;
     target.render({ currentValue: 10 });
 
     assert.ok(!this.tracker.attached, 'tracker is not attached');
     assert.ok(!target._element, '_element');
 
-    assert.strictEqual(this.renderer.g.firstCall.returnValue.stub("linkAppend").lastCall, null, "root is not appended to container");
+    assert.strictEqual(this.renderer.g.firstCall.returnValue.stub('linkAppend').lastCall, null, 'root is not appended to container');
 });
 
 QUnit.test('Render then render again', function(assert) {
-    var target = this.target;
+    const target = this.target;
     target.render({ currentValue: 10 });
 
     target.clean();
@@ -122,19 +122,19 @@ QUnit.test('Render then render again', function(assert) {
 
     assert.strictEqual(this.tracker.attached, target._trackerElement, 'tracker is attached');
 
-    assert.strictEqual(this.renderer.g.firstCall.returnValue.linkAppend.callCount, 2, "root is appended to container");
+    assert.strictEqual(this.renderer.g.firstCall.returnValue.linkAppend.callCount, 2, 'root is appended to container');
 });
 
 //  B236758
 QUnit.test('Render when "currentValue" option is out of ranges (left)', function(assert) {
-    var target = this.target;
+    const target = this.target;
     target.render({ currentValue: -500 }).resize();
     assert.deepEqual(target._element._stored_settings, { value: 0, position: 200 }, '_element settings');
 });
 
 //  B236758
 QUnit.test('Render when "currentValue" option is out of ranges (right)', function(assert) {
-    var target = this.target;
+    const target = this.target;
     target.render({ currentValue: 500 }).resize();
     assert.deepEqual(target._element._stored_settings, { value: 100, position: 300 }, '_element settings');
 });
@@ -225,7 +225,7 @@ QUnit.test('Hide indicator with null value', function(assert) {
     this.target.value(null);
 
     assert.strictEqual(this.target.value(), null);
-    assert.strictEqual(this.renderer.g.firstCall.returnValue.attr.lastCall.args[0].visibility, "hidden");
+    assert.strictEqual(this.renderer.g.firstCall.returnValue.attr.lastCall.args[0].visibility, 'hidden');
 });
 
 QUnit.test('Show indicator with not-null value', function(assert) {
@@ -248,16 +248,17 @@ QUnit.module('BaseIndicator - animation', {
         environment.afterEach.apply(this, arguments);
     },
     patchRenderer: function() {
-        var that = this,
-            _createGroup = that.renderer.stub("g"),
-            animationController = this.animationController;
+        const that = this;
+        const _createGroup = that.renderer.stub('g');
+        const animationController = this.animationController;
 
         this.renderer.g = function() {
-            var group = _createGroup.apply(this, arguments);
+            const group = _createGroup.apply(this, arguments);
 
             group.animate = function(properties, options) {
-                var that = this,
-                    _originalStep = options.step, _originalComplete = options.complete;
+                const that = this;
+                const _originalStep = options.step;
+                const _originalComplete = options.complete;
 
                 options.step = function(pos) {
                     _originalStep && _originalStep.apply(this, arguments);
@@ -280,8 +281,8 @@ QUnit.module('BaseIndicator - animation', {
 });
 
 QUnit.testInActiveWindow('Value is changed', function(assert) {
-    var done = assert.async(),
-        target = this.target;
+    const done = assert.async();
+    const target = this.target;
     target._rootElement.animateComplete = function() {
         assert.strictEqual(target._element._stored_settings.value, 60, 'state after animation');
         assert.expect(3);
@@ -293,8 +294,8 @@ QUnit.testInActiveWindow('Value is changed', function(assert) {
 });
 
 QUnit.testInActiveWindow('Value is changed during running animation', function(assert) {
-    var done = assert.async(),
-        target = this.target;
+    const done = assert.async();
+    const target = this.target;
     target._rootElement.animateStep = function(pos) {
         if(pos > 0.5) {
             delete target._rootElement.animateStep;
@@ -317,8 +318,8 @@ QUnit.testInActiveWindow('Value is changed during running animation', function(a
 });
 
 QUnit.testInActiveWindow('Clean during running animation', function(assert) {
-    var done = assert.async(),
-        target = this.target;
+    const done = assert.async();
+    const target = this.target;
     target._rootElement.animateStep = function(pos) {
         if(pos > 0.5) {
             target.clean();
@@ -334,9 +335,9 @@ QUnit.testInActiveWindow('Clean during running animation', function(assert) {
 });
 
 QUnit.testInActiveWindow('Element state is changed during animation', function(assert) {
-    var done = assert.async(),
-        target = this.target,
-        count = 0;
+    const done = assert.async();
+    const target = this.target;
+    let count = 0;
     target._rootElement.animateStep = function(pos) {
         if(pos > 0) {
             ++count;

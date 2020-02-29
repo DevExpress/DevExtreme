@@ -1,23 +1,23 @@
-var $ = require("../../../core/renderer"),
-    noop = require("../../../core/utils/common").noop,
-    registerComponent = require("../../../core/component_registrator"),
-    SchedulerWorkSpace = require("./ui.scheduler.work_space.indicator"),
-    dateUtils = require("../../../core/utils/date"),
-    dateLocalization = require("../../../localization/date");
+const $ = require('../../../core/renderer');
+const noop = require('../../../core/utils/common').noop;
+const registerComponent = require('../../../core/component_registrator');
+const SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
+const dateUtils = require('../../../core/utils/date');
+const dateLocalization = require('../../../localization/date');
 
-var MONTH_CLASS = "dx-scheduler-work-space-month",
+const MONTH_CLASS = 'dx-scheduler-work-space-month';
 
-    DATE_TABLE_CURRENT_DATE_CLASS = "dx-scheduler-date-table-current-date",
-    DATE_TABLE_FIRST_OF_MONTH_CLASS = "dx-scheduler-date-table-first-of-month",
-    DATE_TABLE_OTHER_MONTH_DATE_CLASS = "dx-scheduler-date-table-other-month",
-    DATE_TABLE_SCROLLABLE_FIXED_CLASS = "dx-scheduler-scrollable-fixed-content";
+const DATE_TABLE_CURRENT_DATE_CLASS = 'dx-scheduler-date-table-current-date';
+const DATE_TABLE_FIRST_OF_MONTH_CLASS = 'dx-scheduler-date-table-first-of-month';
+const DATE_TABLE_OTHER_MONTH_DATE_CLASS = 'dx-scheduler-date-table-other-month';
+const DATE_TABLE_SCROLLABLE_FIXED_CLASS = 'dx-scheduler-scrollable-fixed-content';
 
-var DAYS_IN_WEEK = 7,
-    DAY_IN_MILLISECONDS = 86400000;
+const DAYS_IN_WEEK = 7;
+const DAY_IN_MILLISECONDS = 86400000;
 
-var toMs = dateUtils.dateToMilliseconds;
+const toMs = dateUtils.dateToMilliseconds;
 
-var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
+const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     _toggleFixedScrollableClass: function() {
         this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount() && !this._isVerticalGroupedWorkSpace());
     },
@@ -27,7 +27,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _getRowCount: function() {
-        return this._isWorkSpaceWithCount() ? 4 * this.option("intervalCount") + 2 : 6;
+        return this._isWorkSpaceWithCount() ? 4 * this.option('intervalCount') + 2 : 6;
     },
 
     _getCellCount: function() {
@@ -35,7 +35,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _getDateByIndex: function(headerIndex) {
-        var resultDate = new Date(this._firstViewDate);
+        const resultDate = new Date(this._firstViewDate);
         resultDate.setDate(this._firstViewDate.getDate() + headerIndex);
 
         return resultDate;
@@ -60,14 +60,14 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _getIntervalBetween: function(currentDate) {
-        var firstViewDate = this.getStartViewDate(),
-            timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
+        const firstViewDate = this.getStartViewDate();
+        const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
-        return currentDate.getTime() - (firstViewDate.getTime() - this.option("startDayHour") * 3600000) - timeZoneOffset;
+        return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
     },
 
     _getDateByCellIndexes: function(rowIndex, cellIndex) {
-        var date = this.callBase(rowIndex, cellIndex);
+        const date = this.callBase(rowIndex, cellIndex);
 
         this._setStartDayHour(date);
 
@@ -93,8 +93,8 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return false;
     },
     _getCellCoordinatesByIndex: function(index) {
-        var rowIndex = Math.floor(index / this._getCellCount()),
-            cellIndex = index - this._getCellCount() * rowIndex;
+        const rowIndex = Math.floor(index / this._getCellCount());
+        const cellIndex = index - this._getCellCount() * rowIndex;
 
         return {
             rowIndex: rowIndex,
@@ -111,7 +111,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _needCreateCrossScrolling: function() {
-        return this.option("crossScrollingEnabled") || this._isVerticalGroupedWorkSpace();
+        return this.option('crossScrollingEnabled') || this._isVerticalGroupedWorkSpace();
     },
 
     _renderTimePanel: noop,
@@ -121,23 +121,23 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     _changeAllDayVisibility: noop,
 
     _setFirstViewDate: function() {
-        var firstMonthDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
-        this._firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, this.option("firstDayOfWeek") || dateLocalization.firstDayOfWeekIndex());
+        const firstMonthDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
+        this._firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, this.option('firstDayOfWeek') || dateLocalization.firstDayOfWeekIndex());
         this._setStartDayHour(this._firstViewDate);
 
-        var date = this._getViewStartByOptions();
+        const date = this._getViewStartByOptions();
         this._minVisibleDate = new Date(date.setDate(1));
-        this._maxVisibleDate = new Date(new Date(date.setMonth(date.getMonth() + this.option("intervalCount"))).setDate(0));
+        this._maxVisibleDate = new Date(new Date(date.setMonth(date.getMonth() + this.option('intervalCount'))).setDate(0));
     },
 
     _getViewStartByOptions: function() {
-        if(!this.option("startDate")) {
-            return new Date(this.option("currentDate").getTime());
+        if(!this.option('startDate')) {
+            return new Date(this.option('currentDate').getTime());
         } else {
-            var startDate = this._getStartViewDate(),
-                currentDate = this.option("currentDate"),
-                diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1,
-                endDate = new Date(new Date(this._getStartViewDate().setMonth(this._getStartViewDate().getMonth() + diff * this.option("intervalCount"))));
+            let startDate = this._getStartViewDate();
+            const currentDate = this.option('currentDate');
+            const diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1;
+            let endDate = new Date(new Date(this._getStartViewDate().setMonth(this._getStartViewDate().getMonth() + diff * this.option('intervalCount'))));
 
             while(!this._dateInRange(currentDate, startDate, endDate, diff)) {
                 startDate = new Date(endDate);
@@ -146,7 +146,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
                     startDate.setDate(1);
                 }
 
-                endDate = new Date(new Date(endDate.setMonth(endDate.getMonth() + diff * this.option("intervalCount"))));
+                endDate = new Date(new Date(endDate.setMonth(endDate.getMonth() + diff * this.option('intervalCount'))));
             }
 
             return diff > 0 ? startDate : endDate;
@@ -154,7 +154,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _getStartViewDate: function() {
-        var firstMonthDate = dateUtils.getFirstMonthDate(this.option("startDate"));
+        const firstMonthDate = dateUtils.getFirstMonthDate(this.option('startDate'));
         return firstMonthDate;
     },
 
@@ -164,28 +164,28 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _getCellText: function(rowIndex, cellIndex) {
-        if(this.option("groupByDate") && this._getGroupCount()) {
+        if(this.option('groupByDate') && this._getGroupCount()) {
             cellIndex = Math.floor(cellIndex / this._getGroupCount());
         } else {
             cellIndex = cellIndex % this._getCellCount();
         }
 
-        var date = this._getDate(rowIndex, cellIndex);
+        const date = this._getDate(rowIndex, cellIndex);
 
         if(this._isWorkSpaceWithCount() && this._isFirstDayOfMonth(date)) {
             return this._formatMonthAndDay(date);
         }
-        return dateLocalization.format(date, "dd");
+        return dateLocalization.format(date, 'dd');
     },
 
     _formatMonthAndDay: function(date) {
-        var monthName = dateLocalization.getMonthNames("abbreviated")[date.getMonth()];
-        return [monthName, dateLocalization.format(date, "day")].join(" ");
+        const monthName = dateLocalization.getMonthNames('abbreviated')[date.getMonth()];
+        return [monthName, dateLocalization.format(date, 'day')].join(' ');
     },
 
     _getDate: function(week, day) {
-        var result = new Date(this._firstViewDate),
-            lastRowInDay = this._getRowCount();
+        const result = new Date(this._firstViewDate);
+        const lastRowInDay = this._getRowCount();
 
         result.setDate(result.getDate() + (week % lastRowInDay) * DAYS_IN_WEEK + day);
         return result;
@@ -196,8 +196,8 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _prepareCellData: function(rowIndex, cellIndex, cell) {
-        var data = this.callBase(rowIndex, cellIndex, cell),
-            $cell = $(cell);
+        const data = this.callBase(rowIndex, cellIndex, cell);
+        const $cell = $(cell);
 
         $cell
             .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, this._isCurrentDate(data.startDate))
@@ -208,7 +208,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _isCurrentDate: function(cellDate) {
-        var today = new Date();
+        const today = new Date();
 
         return dateUtils.sameDate(cellDate, today);
     },
@@ -218,7 +218,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _isOtherMonth: function(cellDate) {
-        return !dateUtils.dateInRange(cellDate, this._minVisibleDate, this._maxVisibleDate, "date");
+        return !dateUtils.dateInRange(cellDate, this._minVisibleDate, this._maxVisibleDate, 'date');
     },
 
     needRenderDateTimeIndication: function() {
@@ -230,7 +230,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     getIntervalDuration: function() {
-        return toMs("day");
+        return toMs('day');
     },
 
     getTimePanelWidth: function() {
@@ -246,9 +246,9 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     getCellCountToLastViewDate: function(date) {
-        var firstDateTime = date.getTime(),
-            lastDateTime = this.getEndViewDate().getTime(),
-            dayDurationInMs = this.getCellDuration();
+        const firstDateTime = date.getTime();
+        const lastDateTime = this.getEndViewDate().getTime();
+        const dayDurationInMs = this.getCellDuration();
 
         return Math.ceil((lastDateTime - firstDateTime) / dayDurationInMs);
     },
@@ -262,8 +262,8 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     calculateEndDate: function(startDate) {
-        var startDateCopy = new Date(startDate);
-        return new Date(startDateCopy.setHours(this.option("endDayHour")));
+        const startDateCopy = new Date(startDate);
+        return new Date(startDateCopy.setHours(this.option('endDayHour')));
     },
 
     getWorkSpaceLeftOffset: function() {
@@ -279,9 +279,9 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _getCellPositionByIndex: function(index, groupIndex) {
-        var position = this.callBase(index, groupIndex),
-            rowIndex = this._getCellCoordinatesByIndex(index).rowIndex,
-            calculatedTopOffset;
+        const position = this.callBase(index, groupIndex);
+        const rowIndex = this._getCellCoordinatesByIndex(index).rowIndex;
+        let calculatedTopOffset;
         if(!this._isVerticalGroupedWorkSpace()) {
             calculatedTopOffset = this.getCellHeight() * rowIndex;
         } else {
@@ -305,6 +305,6 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     scrollToTime: noop
 });
 
-registerComponent("dxSchedulerWorkSpaceMonth", SchedulerWorkSpaceMonth);
+registerComponent('dxSchedulerWorkSpaceMonth', SchedulerWorkSpaceMonth);
 
 module.exports = SchedulerWorkSpaceMonth;

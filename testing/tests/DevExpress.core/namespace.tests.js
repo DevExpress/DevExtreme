@@ -1,10 +1,10 @@
-var testGlobalExports = require("../../helpers/publicModulesHelper.js"),
-    version = require("core/version");
+const testGlobalExports = require('../../helpers/publicModulesHelper.js');
+const version = require('core/version');
 
-require("bundles/modules/core");
+require('bundles/modules/core');
 
 testGlobalExports({
-    "DevExpress": DevExpress
+    'DevExpress': DevExpress
 }, {
-    "VERSION": version
+    'VERSION': version
 });

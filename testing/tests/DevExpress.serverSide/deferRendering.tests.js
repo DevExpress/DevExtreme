@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets/deferRendering.tests.js");
+require('../DevExpress.ui.widgets/deferRendering.tests.js');

@@ -1,168 +1,169 @@
-var typeUtils = require("../../core/utils/type"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    config = require("../../core/config"),
-    extend = require("../../core/utils/extend").extend,
-    queryAdapters = require("../query_adapters"),
-    odataUtils = require("./utils"),
-    serializePropName = odataUtils.serializePropName,
-    errors = require("../errors").errors,
-    dataUtils = require("../utils"),
-    isFunction = typeUtils.isFunction;
+import { isFunction } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import config from '../../core/config';
+import { extend } from '../../core/utils/extend';
+import queryAdapters from '../query_adapters';
+import { sendRequest, generateSelect, generateExpand, serializeValue, convertPrimitiveValue, serializePropName } from './utils';
+import { errors } from '../errors';
+import { isUnaryOperation, isConjunctiveOperator, normalizeBinaryCriterion } from '../utils';
 
-var DEFAULT_PROTOCOL_VERSION = 2;
+const DEFAULT_PROTOCOL_VERSION = 2;
+const STRING_FUNCTIONS = ['contains', 'notcontains', 'startswith', 'endswith'];
 
-var compileCriteria = (function() {
-    var protocolVersion,
-        forceLowerCase,
-        fieldTypes;
+const compileCriteria = (() => {
+    let protocolVersion;
+    let forceLowerCase;
+    let fieldTypes;
 
-    var createBinaryOperationFormatter = function(op) {
-        return function(prop, val) {
-            return prop + " " + op + " " + val;
-        };
-    };
+    const createBinaryOperationFormatter = (op) => (prop, val) => `${prop} ${op} ${val}`;
 
-    var createStringFuncFormatter = function(op, reverse) {
-        return function(prop, val) {
-            var bag = [op, "("];
+    const createStringFuncFormatter = (op, reverse) => (prop, val) => {
+        const bag = [op, '('];
 
-            if(forceLowerCase) {
-                prop = prop.indexOf("tolower(") === -1 ? "tolower(" + prop + ")" : prop;
-                val = val.toLowerCase();
-            }
-
-            if(reverse) {
-                bag.push(val, ",", prop);
-            } else {
-                bag.push(prop, ",", val);
-            }
-
-            bag.push(")");
-            return bag.join("");
-        };
-    };
-
-    var formatters = {
-        "=": createBinaryOperationFormatter("eq"),
-        "<>": createBinaryOperationFormatter("ne"),
-        ">": createBinaryOperationFormatter("gt"),
-        ">=": createBinaryOperationFormatter("ge"),
-        "<": createBinaryOperationFormatter("lt"),
-        "<=": createBinaryOperationFormatter("le"),
-        "startswith": createStringFuncFormatter("startswith"),
-        "endswith": createStringFuncFormatter("endswith")
-    };
-
-    var formattersV2 = extend({}, formatters, {
-        "contains": createStringFuncFormatter("substringof", true),
-        "notcontains": createStringFuncFormatter("not substringof", true)
-    });
-
-    var formattersV4 = extend({}, formatters, {
-        "contains": createStringFuncFormatter("contains"),
-        "notcontains": createStringFuncFormatter("not contains")
-    });
-
-    var compileBinary = function(criteria) {
-        criteria = dataUtils.normalizeBinaryCriterion(criteria);
-
-        var op = criteria[1],
-            formatters = protocolVersion === 4
-                ? formattersV4
-                : formattersV2,
-            formatter = formatters[op.toLowerCase()];
-
-        if(!formatter) {
-            throw errors.Error("E4003", op);
+        if(forceLowerCase) {
+            prop = prop.indexOf('tolower(') === -1 ? `tolower(${prop})` : prop;
+            val = val.toLowerCase();
         }
 
-        var fieldName = criteria[0],
-            value = criteria[2];
+        if(reverse) {
+            bag.push(val, ',', prop);
+        } else {
+            bag.push(prop, ',', val);
+        }
 
-        if(fieldTypes && fieldTypes[fieldName]) {
-            value = odataUtils.convertPrimitiveValue(fieldTypes[fieldName], value);
+        bag.push(')');
+        return bag.join('');
+    };
+
+    const isStringFunction = function(name) {
+        return STRING_FUNCTIONS.some((funcName) => funcName === name);
+    };
+
+    const formatters = {
+        '=': createBinaryOperationFormatter('eq'),
+        '<>': createBinaryOperationFormatter('ne'),
+        '>': createBinaryOperationFormatter('gt'),
+        '>=': createBinaryOperationFormatter('ge'),
+        '<': createBinaryOperationFormatter('lt'),
+        '<=': createBinaryOperationFormatter('le'),
+        'startswith': createStringFuncFormatter('startswith'),
+        'endswith': createStringFuncFormatter('endswith')
+    };
+
+    const formattersV2 = extend({}, formatters, {
+        'contains': createStringFuncFormatter('substringof', true),
+        'notcontains': createStringFuncFormatter('not substringof', true)
+    });
+
+    const formattersV4 = extend({}, formatters, {
+        'contains': createStringFuncFormatter('contains'),
+        'notcontains': createStringFuncFormatter('not contains')
+    });
+
+    const compileBinary = (criteria) => {
+        criteria = normalizeBinaryCriterion(criteria);
+
+        const op = criteria[1];
+        const fieldName = criteria[0];
+        const fieldType = fieldTypes && fieldTypes[fieldName];
+
+        if(fieldType && isStringFunction(op) && fieldType !== 'String') {
+            throw new errors.Error('E4024', op, fieldName, fieldType);
+        }
+
+        const formatters = protocolVersion === 4
+            ? formattersV4
+            : formattersV2;
+        const formatter = formatters[op.toLowerCase()];
+
+        if(!formatter) {
+            throw errors.Error('E4003', op);
+        }
+
+        let value = criteria[2];
+
+        if(fieldTypes?.[fieldName]) {
+            value = convertPrimitiveValue(fieldTypes[fieldName], value);
         }
 
         return formatter(
             serializePropName(fieldName),
-            odataUtils.serializeValue(value, protocolVersion)
+            serializeValue(value, protocolVersion)
         );
     };
 
 
-    var compileUnary = function(criteria) {
-        var op = criteria[0],
-            crit = compileCore(criteria[1]);
+    const compileUnary = (criteria) => {
+        const op = criteria[0];
+        const crit = compileCore(criteria[1]);
 
-        if(op === "!") {
-            return "not (" + crit + ")";
+        if(op === '!') {
+            return `not (${crit})`;
         }
 
-        throw errors.Error("E4003", op);
+        throw errors.Error('E4003', op);
     };
 
-    var compileGroup = function(criteria) {
-        var bag = [],
-            groupOperator,
-            nextGroupOperator;
+    const compileGroup = (criteria) => {
+        const bag = [];
+        let groupOperator;
+        let nextGroupOperator;
 
-        iteratorUtils.each(criteria, function(index, criterion) {
+        each(criteria, function(index, criterion) {
             if(Array.isArray(criterion)) {
 
                 if(bag.length > 1 && groupOperator !== nextGroupOperator) {
-                    throw new errors.Error("E4019");
+                    throw new errors.Error('E4019');
                 }
 
-                bag.push("(" + compileCore(criterion) + ")");
+                bag.push(`(${compileCore(criterion)})`);
 
                 groupOperator = nextGroupOperator;
-                nextGroupOperator = "and";
+                nextGroupOperator = 'and';
             } else {
-                nextGroupOperator = dataUtils.isConjunctiveOperator(this) ? "and" : "or";
+                nextGroupOperator = isConjunctiveOperator(this) ? 'and' : 'or';
             }
         });
 
-        return bag.join(" " + groupOperator + " ");
+        return bag.join(` ${groupOperator} `);
     };
 
-    var compileCore = function(criteria) {
+    const compileCore = (criteria) => {
         if(Array.isArray(criteria[0])) {
             return compileGroup(criteria);
         }
 
-        if(dataUtils.isUnaryOperation(criteria)) {
+        if(isUnaryOperation(criteria)) {
             return compileUnary(criteria);
         }
 
         return compileBinary(criteria);
     };
 
-    return function(criteria, version, types, filterToLower) {
+    return (criteria, version, types, filterToLower) => {
         fieldTypes = types;
-        forceLowerCase = typeUtils.isDefined(filterToLower) ? filterToLower : config().oDataFilterToLower;
+        forceLowerCase = filterToLower ?? config().oDataFilterToLower;
         protocolVersion = version;
 
         return compileCore(criteria);
     };
 })();
 
-var createODataQueryAdapter = function(queryOptions) {
-    var _sorting = [],
-        _criteria = [],
-        _expand = queryOptions.expand,
-        _select,
-        _skip,
-        _take,
-        _countQuery,
+const createODataQueryAdapter = (queryOptions) => {
+    let _sorting = [];
+    const _criteria = [];
+    const _expand = queryOptions.expand;
+    let _select;
+    let _skip;
+    let _take;
+    let _countQuery;
 
-        _oDataVersion = queryOptions.version || DEFAULT_PROTOCOL_VERSION;
+    const _oDataVersion = queryOptions.version || DEFAULT_PROTOCOL_VERSION;
 
-    var hasSlice = function() {
-        return _skip || _take !== undefined;
-    };
+    const hasSlice = () => _skip || _take !== undefined;
 
-    var hasFunction = function(criterion) {
-        for(var i = 0; i < criterion.length; i++) {
+    const hasFunction = (criterion) => {
+        for(let i = 0; i < criterion.length; i++) {
             if(isFunction(criterion[i])) {
                 return true;
             }
@@ -174,52 +175,52 @@ var createODataQueryAdapter = function(queryOptions) {
         return false;
     };
 
-    var requestData = function() {
-        var result = {};
+    const requestData = () => {
+        const result = {};
 
         if(!_countQuery) {
             if(_sorting.length) {
-                result["$orderby"] = _sorting.join(",");
+                result['$orderby'] = _sorting.join(',');
             }
             if(_skip) {
-                result["$skip"] = _skip;
+                result['$skip'] = _skip;
             }
             if(_take !== undefined) {
-                result["$top"] = _take;
+                result['$top'] = _take;
             }
 
-            result["$select"] = odataUtils.generateSelect(_oDataVersion, _select) || undefined;
-            result["$expand"] = odataUtils.generateExpand(_oDataVersion, _expand, _select) || undefined;
+            result['$select'] = generateSelect(_oDataVersion, _select) || undefined;
+            result['$expand'] = generateExpand(_oDataVersion, _expand, _select) || undefined;
         }
 
         if(_criteria.length) {
-            var criteria = _criteria.length < 2 ? _criteria[0] : _criteria,
-                fieldTypes = queryOptions && queryOptions.fieldTypes,
-                filterToLower = queryOptions && queryOptions.filterToLower;
+            const criteria = _criteria.length < 2 ? _criteria[0] : _criteria;
+            const fieldTypes = queryOptions?.fieldTypes;
+            const filterToLower = queryOptions?.filterToLower;
 
-            result["$filter"] = compileCriteria(criteria, _oDataVersion, fieldTypes, filterToLower);
+            result['$filter'] = compileCriteria(criteria, _oDataVersion, fieldTypes, filterToLower);
         }
 
         if(_countQuery) {
-            result["$top"] = 0;
+            result['$top'] = 0;
         }
 
         if(queryOptions.requireTotalCount || _countQuery) {
             // todo: tests!!!
             if(_oDataVersion !== 4) {
-                result["$inlinecount"] = "allpages";
+                result['$inlinecount'] = 'allpages';
             } else {
-                result["$count"] = "true";
+                result['$count'] = 'true';
             }
         }
 
         return result;
     };
 
-    function tryLiftSelect(tasks) {
-        var selectIndex = -1;
-        for(var i = 0; i < tasks.length; i++) {
-            if(tasks[i].name === "select") {
+    const tryLiftSelect = (tasks) => {
+        let selectIndex = -1;
+        for(let i = 0; i < tasks.length; i++) {
+            if(tasks[i].name === 'select') {
                 selectIndex = i;
                 break;
             }
@@ -227,24 +228,22 @@ var createODataQueryAdapter = function(queryOptions) {
 
         if(selectIndex < 0 || !isFunction(tasks[selectIndex].args[0])) return;
 
-        var nextTask = tasks[1 + selectIndex];
-        if(!nextTask || nextTask.name !== "slice") return;
+        const nextTask = tasks[1 + selectIndex];
+        if(!nextTask || nextTask.name !== 'slice') return;
 
         tasks[1 + selectIndex] = tasks[selectIndex];
         tasks[selectIndex] = nextTask;
-    }
+    };
 
     return {
 
-        optimize: function(tasks) {
-            tryLiftSelect(tasks);
-        },
+        optimize: tryLiftSelect,
 
-        exec: function(url) {
-            return odataUtils.sendRequest(_oDataVersion,
+        exec(url) {
+            return sendRequest(_oDataVersion,
                 {
-                    url: url,
-                    params: extend(requestData(), queryOptions && queryOptions.params)
+                    url,
+                    params: extend(requestData(), queryOptions?.params)
                 },
                 {
                     beforeSend: queryOptions.beforeSend,
@@ -258,25 +257,25 @@ var createODataQueryAdapter = function(queryOptions) {
             );
         },
 
-        multiSort: function(args) {
-            var rules;
+        multiSort(args) {
+            let rules;
 
             if(hasSlice()) {
                 return false;
             }
 
-            for(var i = 0; i < args.length; i++) {
-                var getter = args[i][0],
-                    desc = !!args[i][1],
-                    rule;
+            for(let i = 0; i < args.length; i++) {
+                const getter = args[i][0];
+                const desc = !!args[i][1];
+                let rule;
 
-                if(typeof getter !== "string") {
+                if(typeof getter !== 'string') {
                     return false;
                 }
 
                 rule = serializePropName(getter);
                 if(desc) {
-                    rule += " desc";
+                    rule += ' desc';
                 }
 
                 rules = rules || [];
@@ -286,7 +285,7 @@ var createODataQueryAdapter = function(queryOptions) {
             _sorting = rules;
         },
 
-        slice: function(skipCount, takeCount) {
+        slice(skipCount, takeCount) {
             if(hasSlice()) {
                 return false;
             }
@@ -295,7 +294,7 @@ var createODataQueryAdapter = function(queryOptions) {
             _take = takeCount;
         },
 
-        filter: function(criterion) {
+        filter(criterion) {
             if(hasSlice()) {
                 return false;
             }
@@ -309,13 +308,13 @@ var createODataQueryAdapter = function(queryOptions) {
             }
 
             if(_criteria.length) {
-                _criteria.push("and");
+                _criteria.push('and');
             }
 
             _criteria.push(criterion);
         },
 
-        select: function(expr) {
+        select(expr) {
             if(_select || isFunction(expr)) {
                 return false;
             }
@@ -327,12 +326,10 @@ var createODataQueryAdapter = function(queryOptions) {
             _select = expr;
         },
 
-        count: function() {
-            _countQuery = true;
-        }
+        count: () => _countQuery = true
     };
 };
 
 queryAdapters.odata = createODataQueryAdapter;
 
-exports.odata = createODataQueryAdapter;
+export const odata = createODataQueryAdapter;

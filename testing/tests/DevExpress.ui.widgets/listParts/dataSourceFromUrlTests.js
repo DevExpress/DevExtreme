@@ -1,16 +1,16 @@
-var $ = require("jquery"),
-    List = require("ui/list"),
-    ajaxMock = require("../../../helpers/ajaxMock.js");
+import $ from 'jquery';
+import List from 'ui/list';
+import ajaxMock from '../../../helpers/ajaxMock.js';
 
 QUnit.module(
-    "data source from url",
+    'data source from url',
     {
         afterEach: function() {
             ajaxMock.clear();
         }
     },
     function() {
-        var TEST_URL = "/a3211c1d-c725-4185-acc0-0a59a4152aae";
+        const TEST_URL = '/a3211c1d-c725-4185-acc0-0a59a4152aae';
 
         function setupAjaxMock(responseFactory) {
             ajaxMock.setup({
@@ -22,13 +22,13 @@ QUnit.module(
         }
 
         function appendWidgetContainer(id) {
-            return $("#qunit-fixture").append("<div id=list></div>");
+            return $('#qunit-fixture').append('<div id=list></div>');
         }
 
-        QUnit.test("list refresh", function(assert) {
-            var done = assert.async(),
-                dataVersion = 1,
-                list;
+        QUnit.test('list refresh', function(assert) {
+            const done = assert.async();
+            let dataVersion = 1;
+            let list;
 
             appendWidgetContainer();
             setupAjaxMock(function() {
@@ -38,7 +38,7 @@ QUnit.module(
                 }
             });
 
-            list = new List("#list", {
+            list = new List('#list', {
                 dataSource: TEST_URL,
                 onItemRendered: handleItemRendered
             });
@@ -60,18 +60,18 @@ QUnit.module(
 
         });
 
-        QUnit.test("list search", function(assert) {
-            var done = assert.async(),
-                list,
-                itemRenderedCount = 0,
-                searching = false;
+        QUnit.test('list search', function(assert) {
+            const done = assert.async();
+            let list;
+            let itemRenderedCount = 0;
+            let searching = false;
 
             appendWidgetContainer();
             setupAjaxMock(function() {
-                return [ "a", "z" ];
+                return [ 'a', 'z' ];
             });
 
-            list = new List("#list", {
+            list = new List('#list', {
                 dataSource: TEST_URL,
                 onItemRendered: handleItemRendered
             });
@@ -80,15 +80,15 @@ QUnit.module(
                 if(!searching) {
                     itemRenderedCount++;
                     if(itemRenderedCount === 2) {
-                        var source = list.getDataSource();
-                        source.searchExpr("this");
-                        source.searchValue("z");
+                        const source = list.getDataSource();
+                        source.searchExpr('this');
+                        source.searchValue('z');
 
                         searching = true;
                         source.load();
                     }
                 } else {
-                    assert.equal(e.itemData, "z");
+                    assert.equal(e.itemData, 'z');
                     done();
                 }
             }

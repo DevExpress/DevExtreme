@@ -1,16 +1,16 @@
-import $ from "../../../core/renderer";
-import { compileGetter } from "../../../core/utils/data";
-import { isString } from "../../../core/utils/type";
-import { extend } from "../../../core/utils/extend";
-import { getPublicElement } from "../../../core/utils/dom";
-import { Event as dxEvent } from "../../../events/core/events_engine";
+import $ from '../../../core/renderer';
+import { compileGetter } from '../../../core/utils/data';
+import { isString } from '../../../core/utils/type';
+import { extend } from '../../../core/utils/extend';
+import { getPublicElement } from '../../../core/utils/dom';
+import { Event as dxEvent } from '../../../events/core/events_engine';
 
-import PopupModule from "./popup";
-import Mention from "../formats/mention";
+import PopupModule from './popup';
+import Mention from '../formats/mention';
 
-const USER_ACTION = "user";
-const SILENT_ACTION = "silent";
-const DEFAULT_MARKER = "@";
+const USER_ACTION = 'user';
+const SILENT_ACTION = 'silent';
+const DEFAULT_MARKER = '@';
 
 const KEY_CODES = {
     ARROW_UP: 38,
@@ -35,18 +35,18 @@ const NAVIGATION_KEYS = [
     KEY_CODES.HOME
 ];
 
-const ALLOWED_PREFIX_CHARS = [" ", "\n"];
+const ALLOWED_PREFIX_CHARS = [' ', '\n'];
 
-const DISABLED_STATE_CLASS = "dx-state-disabled";
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 class MentionModule extends PopupModule {
     _getDefaultOptions() {
         const baseConfig = super._getDefaultOptions();
 
         return extend(baseConfig, {
-            itemTemplate: "item",
-            valueExpr: "this",
-            displayExpr: "this",
+            itemTemplate: 'item',
+            valueExpr: 'this',
+            displayExpr: 'this',
             template: null,
             searchExpr: null,
             searchTimeout: 500,
@@ -75,17 +75,17 @@ class MentionModule extends PopupModule {
 
         this._attachKeyboardHandlers();
         this.editorInstance.addCleanCallback(this.clean.bind(this));
-        this.quill.on("text-change", this.onTextChange.bind(this));
+        this.quill.on('text-change', this.onTextChange.bind(this));
     }
 
     _attachKeyboardHandlers() {
         this.quill.keyboard.addBinding({
             key: KEY_CODES.ARROW_UP
-        }, this._arrowUpKeyHandler.bind(this));
+        }, this._moveToItem.bind(this, 'prev'));
 
         this.quill.keyboard.addBinding({
             key: KEY_CODES.ARROW_DOWN
-        }, this._arrowDownKeyHandler.bind(this));
+        }, this._moveToItem.bind(this, 'next'));
 
         this.quill.keyboard.addBinding({
             key: KEY_CODES.ENTER
@@ -119,27 +119,19 @@ class MentionModule extends PopupModule {
         });
     }
 
-    _arrowUpKeyHandler() {
-        if(this._isMentionActive) {
-            const $focusedItem = $(this._list.option("focusedElement"));
-            let $prevItem = $focusedItem.prev();
+    _moveToItem(direction) {
+        const dataSource = this._list.getDataSource();
 
-            $prevItem = $prevItem.length ? $prevItem : this._activeListItems.last();
-            this._list.option("focusedElement", getPublicElement($prevItem));
-            this._list.scrollToItem($prevItem);
-        }
-        return !this._isMentionActive;
-    }
+        if(this._isMentionActive && !dataSource.isLoading()) {
+            const $focusedItem = $(this._list.option('focusedElement'));
+            const defaultItemPosition = direction === 'next' ? 'first' : 'last';
+            let $nextItem = $focusedItem[direction]();
 
-    _arrowDownKeyHandler() {
-        if(this._isMentionActive) {
-            const $focusedItem = $(this._list.option("focusedElement"));
-            let $nextItem = $focusedItem.next();
-
-            $nextItem = $nextItem.length ? $nextItem : this._activeListItems.first();
-            this._list.option("focusedElement", getPublicElement($nextItem));
+            $nextItem = $nextItem.length ? $nextItem : this._activeListItems[defaultItemPosition]();
+            this._list.option('focusedElement', getPublicElement($nextItem));
             this._list.scrollToItem($nextItem);
         }
+
         return !this._isMentionActive;
     }
 
@@ -161,7 +153,7 @@ class MentionModule extends PopupModule {
 
     _selectItemHandler() {
         if(this._isMentionActive) {
-            this._list.selectItem(this._list.option("focusedElement"));
+            this._list.selectItem(this._list.option('focusedElement'));
         }
         return !this._isMentionActive;
     }
@@ -204,7 +196,7 @@ class MentionModule extends PopupModule {
         const textLength = markerLength + this._searchValue.length;
         const caretPosition = this.getPosition();
         const startIndex = Math.max(0, caretPosition - markerLength);
-        const selectedItem = this._list.option("selectedItem");
+        const selectedItem = this._list.option('selectedItem');
 
         const value = {
             value: this._valueGetter(selectedItem),
@@ -215,7 +207,7 @@ class MentionModule extends PopupModule {
         setTimeout(function() {
             this.quill.insertText(startIndex, ' ', SILENT_ACTION);
             this.quill.deleteText(startIndex + 1, textLength, SILENT_ACTION);
-            this.quill.insertEmbed(startIndex, "mention", value);
+            this.quill.insertEmbed(startIndex, 'mention', value);
             this.quill.setSelection(startIndex + 2);
         }.bind(this));
     }
@@ -261,7 +253,7 @@ class MentionModule extends PopupModule {
     }
 
     _processSearchValue(operation) {
-        const isInsertOperation = "insert" in operation;
+        const isInsertOperation = 'insert' in operation;
 
         if(isInsertOperation) {
             this._searchValue += operation.insert;
@@ -289,8 +281,8 @@ class MentionModule extends PopupModule {
         if(this._activeMentionConfig) {
             this._updateList(this._activeMentionConfig);
             this.savePosition(caret.index);
-            this._popup.option("position", this._popupPosition);
-            this._searchValue = "";
+            this._popup.option('position', this._popupPosition);
+            this._searchValue = '';
             this._popup.show();
         }
     }
@@ -324,7 +316,7 @@ class MentionModule extends PopupModule {
             return;
         }
 
-        var searchTimeout = this._activeMentionConfig.searchTimeout;
+        const searchTimeout = this._activeMentionConfig.searchTimeout;
 
         if(searchTimeout) {
             clearTimeout(this._searchTimer);
@@ -347,7 +339,7 @@ class MentionModule extends PopupModule {
 
     _search(searchValue) {
         this._hasSearch = true;
-        this._list.option("searchValue", searchValue);
+        this._list.option('searchValue', searchValue);
     }
 
     _focusFirstElement() {
@@ -356,7 +348,7 @@ class MentionModule extends PopupModule {
         }
 
         const $firstItem = this._activeListItems.first();
-        this._list.option("focusedElement", getPublicElement($firstItem));
+        this._list.option('focusedElement', getPublicElement($firstItem));
         this._list.scrollToItem($firstItem);
     }
 
@@ -364,7 +356,7 @@ class MentionModule extends PopupModule {
         const position = this.getPosition();
         const { left: mentionLeft, top: mentionTop, height: mentionHeight } = this.quill.getBounds(position ? position - 1 : position);
         const { left: leftOffset, top: topOffset } = $(this.quill.root).offset();
-        const positionEvent = dxEvent("positionEvent", {
+        const positionEvent = dxEvent('positionEvent', {
             pageX: leftOffset + mentionLeft,
             pageY: topOffset + mentionTop
         });
@@ -373,11 +365,11 @@ class MentionModule extends PopupModule {
             offset: {
                 v: mentionHeight
             },
-            my: "top left",
-            at: "top left",
+            my: 'top left',
+            at: 'top left',
             collision: {
-                y: "flip",
-                x: "flipfit"
+                y: 'flip',
+                x: 'flipfit'
             }
         };
     }
@@ -392,7 +384,7 @@ class MentionModule extends PopupModule {
             },
             onHidden: () => {
                 this._list.unselectAll();
-                this._list.option("focusedElement", null);
+                this._list.option('focusedElement', null);
                 this._isMentionActive = false;
                 this._search(null);
             },

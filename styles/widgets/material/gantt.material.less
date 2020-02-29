@@ -16,7 +16,7 @@
     }
 
     .dx-gantt-header {
-        color: @treelist-columnchooser-item-color;
+        color: @datagrid-columnchooser-item-color;
         font-size: @MATERIAL_FORM_LABEL_FONT_SIZE;
 
         .dx-gantt-tsac,
@@ -152,7 +152,7 @@
     }
 
     .dx-gantt-sel {
-        background-color: @treelist-selection-bg;
+        background-color: @datagrid-selection-bg;
     }
 
     .dx-gantt-conn-v {
@@ -165,6 +165,15 @@
 
     .dx-gantt-arrow {
         border: 5px solid @base-text-color;
+    }
+
+    .dx-gantt-tm {
+        border-left: 1px dashed @base-accent;
+
+        &.dx-gantt-ti {
+            border-right: 1px dashed @base-accent;
+            background-color: fade(@base-accent, 15%);
+        }
     }
 
     .dx-gantt-altRow,

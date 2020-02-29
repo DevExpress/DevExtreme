@@ -1,13 +1,13 @@
-import { parseScalar as _parseScalar } from "../core/utils";
-import { Projection } from "./projection.main";
-import controlBarModule from "./control_bar";
-import gestureHandlerModule from "./gesture_handler";
-import trackerModule from "./tracker";
-import dataExchangerModule from "./data_exchanger";
-import legendModule from "./legend";
-import layoutModule from "./layout";
-import { MapLayerCollection, getMaxBound } from "./map_layer";
-import tooltipViewerModule from "./tooltip_viewer";
+import { parseScalar as _parseScalar } from '../core/utils';
+import { Projection } from './projection.main';
+import controlBarModule from './control_bar';
+import gestureHandlerModule from './gesture_handler';
+import trackerModule from './tracker';
+import dataExchangerModule from './data_exchanger';
+import legendModule from './legend';
+import layoutModule from './layout';
+import { MapLayerCollection, getMaxBound } from './map_layer';
+import tooltipViewerModule from './tooltip_viewer';
 
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 400;
@@ -15,11 +15,11 @@ const RE_STARTS_LAYERS = /^layers/;
 const RE_ENDS_DATA_SOURCE = /\.dataSource$/;
 let nextDataKey = 1;
 
-import "./projection";
-import BaseWidget from "../core/base_widget";
+import './projection';
+import BaseWidget from '../core/base_widget';
 
 function generateDataKey() {
-    return "vectormap-data-" + nextDataKey++;
+    return 'vectormap-data-' + nextDataKey++;
 }
 
 function mergeBounds(sumBounds, dataBounds) {
@@ -29,29 +29,29 @@ function mergeBounds(sumBounds, dataBounds) {
         Math.max(dataBounds[1], dataBounds[3], sumBounds[1])] : sumBounds;
 }
 
-var dxVectorMap = BaseWidget.inherit({
+const dxVectorMap = BaseWidget.inherit({
     _eventsMap: {
-        "onClick": { name: "click" },
-        "onCenterChanged": { name: "centerChanged" },
-        "onZoomFactorChanged": { name: "zoomFactorChanged" },
-        "onHoverChanged": { name: "hoverChanged" },
-        "onSelectionChanged": { name: "selectionChanged" }
+        'onClick': { name: 'click' },
+        'onCenterChanged': { name: 'centerChanged' },
+        'onZoomFactorChanged': { name: 'zoomFactorChanged' },
+        'onHoverChanged': { name: 'hoverChanged' },
+        'onSelectionChanged': { name: 'selectionChanged' }
     },
 
-    _rootClassPrefix: "dxm",
+    _rootClassPrefix: 'dxm',
 
-    _rootClass: "dxm-vector-map",
+    _rootClass: 'dxm-vector-map',
 
-    _themeSection: "map",
+    _themeSection: 'map',
 
     _fontFields: [
-        "layer:area.label.font",
-        "layer:marker:dot.label.font", "layer:marker:bubble.label.font", "layer:marker:pie.label.font", "layer:marker:image.label.font",
-        "legend.font", "legend.title.font", "legend.title.subtitle.font"
+        'layer:area.label.font',
+        'layer:marker:dot.label.font', 'layer:marker:bubble.label.font', 'layer:marker:pie.label.font', 'layer:marker:image.label.font',
+        'legend.font', 'legend.title.font', 'legend.title.subtitle.font'
     ],
 
     _initLayerCollection: function(dataKey) {
-        var that = this;
+        const that = this;
         that._layerCollection = new MapLayerCollection({
             renderer: that._renderer,
             projection: that._projection,
@@ -66,13 +66,13 @@ var dxVectorMap = BaseWidget.inherit({
             dataReady() {
                 let bounds;
 
-                if(that.option("getBoundsFromData") && !that.option("bounds")) {
+                if(that.option('getBoundsFromData') && !that.option('bounds')) {
                     that._preventProjectionEvents();
                     bounds = that._getBoundsFromData();
                     that._projection.setBounds(bounds);
                     that._allowProjectionEvents();
                 }
-                if(!that.option("projection")) {
+                if(!that.option('projection')) {
                     bounds = bounds || that._getBoundsFromData();
 
                     if(Math.ceil(bounds[0]) < -180 || Math.ceil(bounds[3]) < -90 || Math.floor(bounds[2]) > 180 || Math.floor(bounds[1]) > 90) {
@@ -113,7 +113,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _initLegendsControl: function() {
-        var that = this;
+        const that = this;
         that._legendsControl = new legendModule.LegendsControl({
             renderer: that._renderer,
             container: that._root,
@@ -127,7 +127,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _initControlBar: function(dataKey) {
-        var that = this;
+        const that = this;
         that._controlBar = new controlBarModule.ControlBar({
             renderer: that._renderer,
             container: that._root,
@@ -139,10 +139,10 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _initElements: function() {
-        var that = this,
-            dataKey = generateDataKey(),
-            notifyCounter = 0;
-        var preventProjectionEvents;
+        const that = this;
+        const dataKey = generateDataKey();
+        let notifyCounter = 0;
+        let preventProjectionEvents;
 
         that._preventProjectionEvents = function() {
             preventProjectionEvents = true;
@@ -167,12 +167,12 @@ var dxVectorMap = BaseWidget.inherit({
         that._projection = new Projection({
             centerChanged: function(value) {
                 if(!preventProjectionEvents) {
-                    that._eventTrigger("centerChanged", { center: value });
+                    that._eventTrigger('centerChanged', { center: value });
                 }
             },
             zoomChanged: function(value) {
                 if(!preventProjectionEvents) {
-                    that._eventTrigger("zoomFactorChanged", { zoomFactor: value });
+                    that._eventTrigger('zoomFactorChanged', { zoomFactor: value });
                 }
             }
         });
@@ -191,17 +191,17 @@ var dxVectorMap = BaseWidget.inherit({
         this._layoutControl.resume();
     },
 
-    _initialChanges: ["PROJECTION", "RESUME_LAYOUT", "LAYOUT_INIT", "BOUNDS", "MAX_ZOOM_FACTOR", "ZOOM_FACTOR", "CENTER"],
+    _initialChanges: ['PROJECTION', 'RESUME_LAYOUT', 'LAYOUT_INIT', 'BOUNDS', 'MAX_ZOOM_FACTOR', 'ZOOM_FACTOR', 'CENTER'],
 
-    _layoutChangesOrder: ["RESUME_LAYOUT", "LAYERS"],
+    _layoutChangesOrder: ['RESUME_LAYOUT', 'LAYERS'],
 
     _initCore: function() {
-        this._root = this._renderer.root.attr({ align: "center", cursor: "default" });
+        this._root = this._renderer.root.attr({ align: 'center', cursor: 'default' });
         this._initElements();
     },
 
     _disposeCore: function() {
-        var that = this;
+        const that = this;
         that._controlBar.dispose();
         that._gestureHandler.dispose();
         that._tracker.dispose();
@@ -217,9 +217,9 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _setupInteraction: function() {
-        var options = {
-            centeringEnabled: !!_parseScalar(this._getOption("panningEnabled", true), true),
-            zoomingEnabled: !!_parseScalar(this._getOption("zoomingEnabled", true), true)
+        const options = {
+            centeringEnabled: !!_parseScalar(this._getOption('panningEnabled', true), true),
+            zoomingEnabled: !!_parseScalar(this._getOption('zoomingEnabled', true), true)
         };
         this._gestureHandler.setInteraction(options);
         this._controlBar.setInteraction(options);
@@ -230,7 +230,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _applySize: function(rect) {
-        var layout = { left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1], right: 0, bottom: 0 };
+        const layout = { left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1], right: 0, bottom: 0 };
         this._projection.setSize(layout);
         this._layoutControl.setSize(layout);
         this._layerCollection.setRect([layout.left, layout.top, layout.width, layout.height]);
@@ -262,22 +262,22 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _optionChangesMap: {
-        background: "BACKGROUND",
-        layers: "LAYERS",
-        controlBar: "CONTROL_BAR",
-        legends: "LEGENDS",
-        touchEnabled: "TRACKER",
-        wheelEnabled: "TRACKER",
-        panningEnabled: "INTERACTION",
-        zoomingEnabled: "INTERACTION",
-        projection: "PROJECTION",
-        bounds: "BOUNDS",
-        maxZoomFactor: "MAX_ZOOM_FACTOR",
-        zoomFactor: "ZOOM_FACTOR",
-        center: "CENTER"
+        background: 'BACKGROUND',
+        layers: 'LAYERS',
+        controlBar: 'CONTROL_BAR',
+        legends: 'LEGENDS',
+        touchEnabled: 'TRACKER',
+        wheelEnabled: 'TRACKER',
+        panningEnabled: 'INTERACTION',
+        zoomingEnabled: 'INTERACTION',
+        projection: 'PROJECTION',
+        bounds: 'BOUNDS',
+        maxZoomFactor: 'MAX_ZOOM_FACTOR',
+        zoomFactor: 'ZOOM_FACTOR',
+        center: 'CENTER'
     },
 
-    _optionChangesOrder: ["PROJECTION", "BOUNDS", "MAX_ZOOM_FACTOR", "ZOOM_FACTOR", "CENTER", "BACKGROUND", "CONTROL_BAR", "LEGENDS", "TRACKER", "INTERACTION"],
+    _optionChangesOrder: ['PROJECTION', 'BOUNDS', 'MAX_ZOOM_FACTOR', 'ZOOM_FACTOR', 'CENTER', 'BACKGROUND', 'CONTROL_BAR', 'LEGENDS', 'TRACKER', 'INTERACTION'],
 
     _change_PROJECTION: function() {
         this._setProjection();
@@ -323,34 +323,34 @@ var dxVectorMap = BaseWidget.inherit({
         this._setupInteraction();
     },
 
-    _themeDependentChanges: ["BACKGROUND", "LAYERS", "CONTROL_BAR", "LEGENDS", "TRACKER", "INTERACTION"],
+    _themeDependentChanges: ['BACKGROUND', 'LAYERS', 'CONTROL_BAR', 'LEGENDS', 'TRACKER', 'INTERACTION'],
 
     _setProjection: function() {
-        this._projection.setEngine(this.option("projection"));
+        this._projection.setEngine(this.option('projection'));
     },
 
     _setBounds: function() {
-        this._projection.setBounds(this.option("bounds"));
+        this._projection.setBounds(this.option('bounds'));
     },
 
     _setMaxZoom: function() {
-        this._projection.setMaxZoom(this.option("maxZoomFactor"));
+        this._projection.setMaxZoom(this.option('maxZoomFactor'));
     },
 
     _setZoom: function() {
-        this._projection.setZoom(this.option("zoomFactor"));
+        this._projection.setZoom(this.option('zoomFactor'));
     },
 
     _setCenter: function() {
-        this._projection.setCenter(this.option("center"));
+        this._projection.setCenter(this.option('center'));
     },
 
     _setBackgroundOptions: function() {
-        this._layerCollection.setBackgroundOptions(this._getOption("background"));
+        this._layerCollection.setBackgroundOptions(this._getOption('background'));
     },
 
     _setLayerCollectionOptions: function() {
-        this._layerCollection.setOptions(this.option("layers"));
+        this._layerCollection.setOptions(this.option('layers'));
     },
 
     _getBoundingBoxFromDataSource() {
@@ -377,17 +377,17 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _setControlBarOptions: function() {
-        this._controlBar.setOptions(this._getOption("controlBar"));
+        this._controlBar.setOptions(this._getOption('controlBar'));
     },
 
     _setLegendsOptions: function() {
-        this._legendsControl.setOptions(this.option("legends"));
+        this._legendsControl.setOptions(this.option('legends'));
     },
 
     _setTrackerOptions: function() {
         this._tracker.setOptions({
-            touchEnabled: this._getOption("touchEnabled", true),
-            wheelEnabled: this._getOption("wheelEnabled", true)
+            touchEnabled: this._getOption('touchEnabled', true),
+            wheelEnabled: this._getOption('wheelEnabled', true)
         });
     },
 
@@ -396,19 +396,19 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     getLayerByIndex: function(index) {
-        var layer = this._layerCollection.byIndex(index);
+        const layer = this._layerCollection.byIndex(index);
         return layer ? layer.proxy : null;
     },
 
     getLayerByName: function(name) {
-        var layer = this._layerCollection.byName(name);
+        const layer = this._layerCollection.byName(name);
         return layer ? layer.proxy : null;
     },
 
     clearSelection: function(_noEvent) {
-        var layers = this._layerCollection.items(),
-            i,
-            ii = layers.length;
+        const layers = this._layerCollection.items();
+        let i;
+        const ii = layers.length;
         for(i = 0; i < ii; ++i) {
             layers[i].clearSelection(_noEvent);
         }
@@ -416,7 +416,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     center: function(value) {
-        var that = this;
+        const that = this;
         if(value === undefined) {
             return that._projection.getCenter();
         } else {
@@ -426,7 +426,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     zoomFactor: function(value) {
-        var that = this;
+        const that = this;
         if(value === undefined) {
             return that._projection.getZoom();
         } else {
@@ -436,7 +436,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     viewport: function(value) {
-        var that = this;
+        const that = this;
         if(value === undefined) {
             return that._projection.getViewport();
         } else {
@@ -459,8 +459,8 @@ var dxVectorMap = BaseWidget.inherit({
     }
 });
 
-import componentRegistrator from "../../core/component_registrator";
-componentRegistrator("dxVectorMap", dxVectorMap);
+import componentRegistrator from '../../core/component_registrator';
+componentRegistrator('dxVectorMap', dxVectorMap);
 
 module.exports = dxVectorMap;
 ///#DEBUG
@@ -470,10 +470,10 @@ module.exports._TESTS_resetDataKey = function() {
 ///#ENDDEBUG
 
 // PLUGINS_SECTION
-import { plugin as ExportPlugin } from "../core/export";
-import { plugin as TitlePlugin } from "../core/title";
-import { plugin as TooltipPlugin } from "../core/tooltip";
-import { plugin as LoadingIndicatorPlugin } from "../core/loading_indicator";
+import { plugin as ExportPlugin } from '../core/export';
+import { plugin as TitlePlugin } from '../core/title';
+import { plugin as TooltipPlugin } from '../core/tooltip';
+import { plugin as LoadingIndicatorPlugin } from '../core/loading_indicator';
 dxVectorMap.addPlugin(ExportPlugin);
 dxVectorMap.addPlugin(TitlePlugin);
 dxVectorMap.addPlugin(TooltipPlugin);

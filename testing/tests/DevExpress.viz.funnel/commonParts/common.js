@@ -1,30 +1,30 @@
-import $ from "jquery";
-import vizMocks from "../../../helpers/vizMocks.js";
-import rendererModule from "viz/core/renderers/renderer";
-import tiling from "viz/funnel/tiling";
+import $ from 'jquery';
+import vizMocks from '../../../helpers/vizMocks.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import tiling from 'viz/funnel/tiling';
 
-import "viz/funnel/funnel";
-import "viz/themes";
+import 'viz/funnel/funnel';
+import 'viz/themes';
 
 export const stubAlgorithm = { normalizeValues: sinon.stub(), getFigures: sinon.stub() };
-tiling.addAlgorithm("stub", stubAlgorithm);
+tiling.addAlgorithm('stub', stubAlgorithm);
 
-$("#qunit-fixture").append('<div id="test-container"></div>');
+$('#qunit-fixture').append('<div id="test-container"></div>');
 
 export function createFunnel(options) {
-    var defaultOptions = {
+    const defaultOptions = {
         legend: {
             visible: false
         },
-        valueField: "value",
-        argumentField: "argument"
+        valueField: 'value',
+        argumentField: 'argument'
     };
-    return $("#test-container").dxFunnel($.extend({}, defaultOptions, options)).dxFunnel("instance");
+    return $('#test-container').dxFunnel($.extend({}, defaultOptions, options)).dxFunnel('instance');
 }
 
 export const environment = {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.renderer = new vizMocks.Renderer();
 
         stubAlgorithm.normalizeValues.reset();
@@ -34,7 +34,7 @@ export const environment = {
 
         this.itemGroupNumber = 0;
 
-        sinon.stub(rendererModule, "Renderer", function() {
+        sinon.stub(rendererModule, 'Renderer', function() {
             return that.renderer;
         });
     },
@@ -61,7 +61,8 @@ function checkNumbersWithError(actual, expected, error) {
 }
 
 QUnit.assert.checkItem = function(actual, expected, error, message) {
-    var check = true, i;
+    let check = true;
+    let i;
     if(!error) {
         error = 0.1;
     }

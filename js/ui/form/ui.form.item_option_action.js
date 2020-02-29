@@ -1,4 +1,4 @@
-import { abstract } from "../../core/class";
+import { abstract } from '../../core/class';
 
 export default class ItemOptionAction {
     constructor(options) {

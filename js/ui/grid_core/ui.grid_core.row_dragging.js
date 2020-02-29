@@ -1,65 +1,66 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import Sortable from "../sortable";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import Sortable from '../sortable';
+import { setEmptyText } from './ui.grid_core.utils';
 
-let COMMAND_HANDLE_CLASS = "dx-command-drag",
-    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    HANDLE_ICON_CLASS = "drag-icon",
-    ROWS_VIEW = "rowsview",
-    SORTABLE_WITHOUT_HANDLE_CLASS = "dx-sortable-without-handle";
+const COMMAND_HANDLE_CLASS = 'dx-command-drag';
+const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const HANDLE_ICON_CLASS = 'drag-icon';
+const ROWS_VIEW = 'rowsview';
+const SORTABLE_WITHOUT_HANDLE_CLASS = 'dx-sortable-without-handle';
 
-var RowDraggingExtender = {
+const RowDraggingExtender = {
     init: function() {
         this.callBase.apply(this, arguments);
         this._updateHandleColumn();
     },
 
     _allowReordering: function() {
-        let rowDragging = this.option("rowDragging");
+        const rowDragging = this.option('rowDragging');
 
         return !!(rowDragging && (rowDragging.allowReordering || rowDragging.allowDropInsideItem || rowDragging.group));
     },
 
     _updateHandleColumn: function() {
-        let rowDragging = this.option("rowDragging"),
-            allowReordering = this._allowReordering(),
-            columnsController = this._columnsController,
-            isHandleColumnVisible = allowReordering && rowDragging.showDragIcons;
+        const rowDragging = this.option('rowDragging');
+        const allowReordering = this._allowReordering();
+        const columnsController = this._columnsController;
+        const isHandleColumnVisible = allowReordering && rowDragging.showDragIcons;
 
         columnsController && columnsController.addCommandColumn({
-            type: "drag",
-            command: "drag",
+            type: 'drag',
+            command: 'drag',
             visibleIndex: -2,
-            alignment: "center",
+            alignment: 'center',
             cssClass: COMMAND_HANDLE_CLASS,
-            width: "auto",
+            width: 'auto',
             cellTemplate: this._getHandleTemplate(),
             visible: isHandleColumnVisible
         });
 
-        columnsController.columnOption("type:drag", "visible", isHandleColumnVisible);
+        columnsController.columnOption('type:drag', 'visible', isHandleColumnVisible);
     },
 
     _renderContent: function() {
-        let that = this,
-            rowDragging = this.option("rowDragging"),
-            allowReordering = this._allowReordering(),
-            $content = that.callBase.apply(that, arguments);
+        const that = this;
+        const rowDragging = this.option('rowDragging');
+        const allowReordering = this._allowReordering();
+        const $content = that.callBase.apply(that, arguments);
 
         if(allowReordering && $content.length) {
             that._sortable = that._createComponent($content, Sortable, extend({
                 component: that.component,
                 contentTemplate: null,
-                filter: "> table > tbody > .dx-row:not(.dx-freespace-row):not(.dx-virtual-row)",
+                filter: '> table > tbody > .dx-row:not(.dx-freespace-row):not(.dx-virtual-row)',
                 dragTemplate: that._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
-                dropFeedbackMode: "indicate"
+                dropFeedbackMode: 'indicate'
             }, rowDragging, {
                 onDragStart: function(e) {
                     const row = e.component.getVisibleRows()[e.fromIndex];
                     e.itemData = row && row.data;
 
-                    const isDataRow = row && row.rowType === "data";
+                    const isDataRow = row && row.rowType === 'data';
                     e.cancel = !isDataRow;
 
                     const onDragStart = rowDragging.onDragStart;
@@ -74,9 +75,9 @@ var RowDraggingExtender = {
     },
 
     _getDraggableGridOptions: function(options) {
-        let gridOptions = this.option(),
-            columns = this.getColumns(),
-            $rowElement = $(this.getRowElement(options.rowIndex));
+        const gridOptions = this.option();
+        const columns = this.getColumns();
+        const $rowElement = $(this.getRowElement(options.rowIndex));
 
         return {
             dataSource: [{ id: 1, parentId: 0 }],
@@ -101,7 +102,7 @@ var RowDraggingExtender = {
                 };
             }),
             onRowPrepared: (e) => {
-                const rowsView = e.component.getView("rowsView");
+                const rowsView = e.component.getView('rowsView');
                 $(e.rowElement).replaceWith($rowElement.eq(rowsView._isFixedTableRendering ? 1 : 0).clone());
             }
         };
@@ -109,14 +110,14 @@ var RowDraggingExtender = {
 
     _getDraggableRowTemplate: function() {
         return (options) => {
-            let $rootElement = this.component.$element(),
-                $dataGridContainer = $("<div>").width($rootElement.width()),
-                items = this._dataController.items(),
-                row = items && items[options.fromIndex],
-                gridOptions = this._getDraggableGridOptions(row);
+            const $rootElement = this.component.$element();
+            const $dataGridContainer = $('<div>').width($rootElement.width());
+            const items = this._dataController.items();
+            const row = items && items[options.fromIndex];
+            const gridOptions = this._getDraggableGridOptions(row);
 
             this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
-            $dataGridContainer.find(".dx-gridbase-container").children(`:not(.${this.addWidgetPrefix(ROWS_VIEW)})`).hide();
+            $dataGridContainer.find('.dx-gridbase-container').children(`:not(.${this.addWidgetPrefix(ROWS_VIEW)})`).hide();
 
             return $dataGridContainer;
         };
@@ -124,13 +125,17 @@ var RowDraggingExtender = {
 
     _getHandleTemplate: function() {
         return (container, options) => {
-            $(container).addClass(CELL_FOCUS_DISABLED_CLASS);
-            return $("<span>").addClass(this.addWidgetPrefix(HANDLE_ICON_CLASS));
+            if(options.rowType === 'data') {
+                $(container).addClass(CELL_FOCUS_DISABLED_CLASS);
+                return $('<span>').addClass(this.addWidgetPrefix(HANDLE_ICON_CLASS));
+            } else {
+                setEmptyText($(container));
+            }
         };
     },
 
     optionChanged: function(args) {
-        if(args.name === "rowDragging") {
+        if(args.name === 'rowDragging') {
             this._updateHandleColumn();
             this._invalidate(true, true);
             args.handled = true;
@@ -144,10 +149,6 @@ var RowDraggingExtender = {
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.rowDragging
-             * @type object
-             */
             rowDragging: {
                 /**
                 * @name GridBaseOptions.rowDragging.showDragIcons
@@ -160,7 +161,7 @@ module.exports = {
                  * @type Enums.DropFeedbackMode
                  * @default "indicate"
                  */
-                dropFeedbackMode: "indicate",
+                dropFeedbackMode: 'indicate',
                 /**
                  * @name GridBaseOptions.rowDragging.allowReordering
                  * @type boolean

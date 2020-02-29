@@ -1,18 +1,18 @@
-var typeUtils = require("../../core/utils/type"),
-    isNumber = typeUtils.isNumeric,
-    isDefined = typeUtils.isDefined,
-    dateUtils = require("../../core/utils/date"),
-    addInterval = dateUtils.addInterval,
-    dateToMilliseconds = dateUtils.dateToMilliseconds,
-    floor = Math.floor,
-    adjust = require("../../core/utils/math").adjust;
+const typeUtils = require('../../core/utils/type');
+const isNumber = typeUtils.isNumeric;
+const isDefined = typeUtils.isDefined;
+const dateUtils = require('../../core/utils/date');
+const addInterval = dateUtils.addInterval;
+const dateToMilliseconds = dateUtils.dateToMilliseconds;
+const floor = Math.floor;
+const adjust = require('../../core/utils/math').adjust;
 
 module.exports = {
     _intervalize: function(value, interval) {
         if(!isDefined(value)) {
             return undefined;
         }
-        if(this._businessRange.dataType === "datetime") {
+        if(this._businessRange.dataType === 'datetime') {
             if(isNumber(value)) {
                 value = new Date(value);
             } else {
@@ -26,8 +26,8 @@ module.exports = {
     },
 
     translate: function(bp, direction, interval) {
-        var that = this,
-            specialValue = that.translateSpecialCase(bp);
+        const that = this;
+        const specialValue = that.translateSpecialCase(bp);
 
         if(isDefined(specialValue)) {
             return Math.round(specialValue);
@@ -53,7 +53,7 @@ module.exports = {
     getScale: function() { },
 
     _parse: function(value) {
-        return this._businessRange.dataType === "datetime" ? new Date(value) : Number(value);
+        return this._businessRange.dataType === 'datetime' ? new Date(value) : Number(value);
     },
 
     _fromValue: function(value) {
@@ -65,17 +65,17 @@ module.exports = {
     },
 
     isValid: function(value, interval) {
-        var that = this,
-            co = that._canvasOptions,
-            rangeMin = co.rangeMin,
-            rangeMax = co.rangeMax;
+        const that = this;
+        const co = that._canvasOptions;
+        let rangeMin = co.rangeMin;
+        let rangeMax = co.rangeMax;
 
         interval = interval || that._options.interval;
         if(value === null || isNaN(value)) {
             return false;
         }
 
-        value = that._businessRange.dataType === "datetime" && isNumber(value) ? new Date(value) : value;
+        value = that._businessRange.dataType === 'datetime' && isNumber(value) ? new Date(value) : value;
 
         if(interval !== that._options.interval) {
             rangeMin = that._intervalize(rangeMin, interval);
@@ -90,13 +90,13 @@ module.exports = {
     },
 
     to: function(bp, direction, interval) {
-        var that = this;
+        const that = this;
 
         interval = interval || that._options.interval;
-        var v1 = that._intervalize(bp, interval),
-            v2 = addInterval(v1, interval),
-            res = that._to(v1),
-            p2 = that._to(v2);
+        const v1 = that._intervalize(bp, interval);
+        const v2 = addInterval(v1, interval);
+        let res = that._to(v1);
+        const p2 = that._to(v2);
 
         if(!direction) {
             res = floor((res + p2) / 2);
@@ -107,10 +107,10 @@ module.exports = {
     },
 
     _to: function(value) {
-        var co = this._canvasOptions,
-            rMin = co.rangeMinVisible,
-            rMax = co.rangeMaxVisible,
-            offset = value - rMin;
+        const co = this._canvasOptions;
+        const rMin = co.rangeMinVisible;
+        const rMax = co.rangeMaxVisible;
+        let offset = value - rMin;
 
         if(value < rMin) {
             offset = 0;
@@ -122,15 +122,15 @@ module.exports = {
     },
 
     from: function(position, direction) {
-        var that = this,
-            origInterval = that._options.interval,
-            interval = origInterval,
-            co = that._canvasOptions,
-            rMin = co.rangeMinVisible,
-            rMax = co.rangeMaxVisible,
-            value;
+        const that = this;
+        const origInterval = that._options.interval;
+        let interval = origInterval;
+        const co = that._canvasOptions;
+        const rMin = co.rangeMinVisible;
+        const rMax = co.rangeMaxVisible;
+        let value;
 
-        if(that._businessRange.dataType === "datetime") {
+        if(that._businessRange.dataType === 'datetime') {
             interval = dateToMilliseconds(origInterval);
         }
 

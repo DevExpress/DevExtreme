@@ -41,7 +41,6 @@
         background: transparent;
     }
 
-    .dx-state-disabled &,
     .dx-state-disabled & {
         .dx-dropdowneditor-icon {
             opacity: 1;
@@ -58,7 +57,7 @@
 .dx-dropdowneditor-icon {
     border: @GENERIC_BASE_BORDER_WIDTH solid transparent;
     color: @dropdowneditor-icon-color;
-    .dx-icon-spindown;
+    .dx-icon(spindown);
     .dx-dropdowneditor-button-icon();
 }
 
@@ -76,16 +75,21 @@
 .dx-dropdowneditor-button-visible {
     .dx-texteditor-input {
         padding-right: 0;
+    }
+}
 
-        .dx-rtl &,
-        .dx-rtl& {
+.dx-rtl {
+    .dx-dropdowneditor-button-visible,
+    &.dx-dropdowneditor-button-visible {
+        .dx-texteditor-input {
             padding-right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
             padding-left: 0;
         }
 
-        .dx-rtl.dx-editor-underlined&,
-        .dx-rtl .dx-editor-underlined& {
-            padding-right: 0;
+        &.dx-editor-underlined {
+            .dx-texteditor-input {
+                padding-right: 0;
+            }
         }
     }
 }
@@ -143,8 +147,8 @@
         &:after {
             right: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
 
-            .dx-rtl &,
-            .dx-rtl& {
+            .dx-rtl&,
+            .dx-rtl & {
                 right: auto;
                 left: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
             }
@@ -156,8 +160,8 @@
             &:after {
                 right: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_WITH_CLEAR_OFFSET;
 
-                .dx-rtl &,
-                .dx-rtl& {
+                .dx-rtl&,
+                .dx-rtl & {
                     right: auto;
                     left: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_WITH_CLEAR_OFFSET;
                 }

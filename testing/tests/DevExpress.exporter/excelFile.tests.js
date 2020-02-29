@@ -1,14 +1,14 @@
-import typeUtils from "core/utils/type";
+import typeUtils from 'core/utils/type';
 import ExcelFile from 'exporter/excel/excel.file';
 
 function getExpectedFillsXml(expectedFillXmlArray) {
     if(!typeUtils.isDefined(expectedFillXmlArray)) {
-        return `<fills count="1"><fill><patternFill patternType="none" /></fill></fills>`;
+        return '<fills count="1"><fill><patternFill patternType="none" /></fill></fills>';
     } else {
         return `<fills count="${2 + expectedFillXmlArray.length}">` +
             '<fill><patternFill patternType="none" /></fill>' +
             '<fill><patternFill patternType="Gray125" /></fill>' +
-            `${expectedFillXmlArray.join("")}</fills>`;
+            `${expectedFillXmlArray.join('')}</fills>`;
     }
 }
 
@@ -16,12 +16,12 @@ function getFullXml(excelFile) {
     return excelFile.generateCellFormatsXml() + excelFile.generateFillsXml() + excelFile.generateFontsXml() + excelFile.generateNumberFormatsXml();
 }
 
-QUnit.test("Empty 1", function(assert) {
+QUnit.test('Empty 1', function(assert) {
     const file = new ExcelFile();
     assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
-QUnit.test("Empty 2", function(assert) {
+QUnit.test('Empty 2', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat(), undefined);
     assert.equal(file.registerCellFormat(null), undefined);
@@ -31,14 +31,14 @@ QUnit.test("Empty 2", function(assert) {
     assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
-QUnit.test("Copy empty", function(assert) {
+QUnit.test('Copy empty', function(assert) {
     assert.strictEqual(ExcelFile.copyCellFormat(null), null);
     assert.strictEqual(ExcelFile.copyCellFormat(undefined), undefined);
 
     assert.propEqual(ExcelFile.copyCellFormat({}), {});
 });
 
-QUnit.test("Empty numberFormat", function(assert) {
+QUnit.test('Empty numberFormat', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ numberFormat: undefined }), undefined);
     assert.equal(file.registerCellFormat({ numberFormat: null }), undefined);
@@ -47,7 +47,7 @@ QUnit.test("Empty numberFormat", function(assert) {
     assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
-QUnit.test("Various numberFormat as identifiers of predefined formats", function(assert) {
+QUnit.test('Various numberFormat as identifiers of predefined formats', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ numberFormat: 0 }), 0);
     assert.equal(file.registerCellFormat({ numberFormat: 0 }), 0);
@@ -64,7 +64,7 @@ QUnit.test("Various numberFormat as identifiers of predefined formats", function
         getExpectedFillsXml() + '<fonts count="0" />');
 });
 
-QUnit.test("Various numberFormat as custom format", function(assert) {
+QUnit.test('Various numberFormat as custom format', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ numberFormat: 0 }), 0);
     assert.equal(file.registerCellFormat({ numberFormat: 0 }), 0);
@@ -84,7 +84,7 @@ QUnit.test("Various numberFormat as custom format", function(assert) {
         '<numFmts count="2"><numFmt numFmtId="165" formatCode="0" /><numFmt numFmtId="166" formatCode="a" /></numFmts>');
 });
 
-QUnit.test("Copy numberFormat", function(assert) {
+QUnit.test('Copy numberFormat', function(assert) {
     assert.propEqual(ExcelFile.copyCellFormat({ numberFormat: undefined }), {});
     assert.propEqual(ExcelFile.copyCellFormat({ numberFormat: null }), { numberFormat: null });
     assert.propEqual(ExcelFile.copyCellFormat({ numberFormat: 0 }), { numberFormat: 0 });
@@ -97,7 +97,7 @@ QUnit.test("Copy numberFormat", function(assert) {
     assert.propEqual(format_, { numberFormat: '1' });
 });
 
-QUnit.test("Empty alignments", function(assert) {
+QUnit.test('Empty alignments', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ alignment: undefined }), undefined);
     assert.equal(file.registerCellFormat({ alignment: null }), undefined);
@@ -107,7 +107,7 @@ QUnit.test("Empty alignments", function(assert) {
     assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
-QUnit.test("Various alignments", function(assert) {
+QUnit.test('Various alignments', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ alignment: { vertical: 'top' } }), 0);
     assert.equal(file.registerCellFormat({ alignment: { vertical: 'top' } }), 0);
@@ -131,7 +131,7 @@ QUnit.test("Various alignments", function(assert) {
         getExpectedFillsXml() + '<fonts count="0" />');
 });
 
-QUnit.test("Copy alignment", function(assert) {
+QUnit.test('Copy alignment', function(assert) {
     assert.propEqual(ExcelFile.copyCellFormat({ alignment: undefined }), {});
     assert.propEqual(ExcelFile.copyCellFormat({ alignment: null }), { alignment: null });
 
@@ -156,7 +156,7 @@ QUnit.test("Copy alignment", function(assert) {
     assert.propEqual(format, { alignment: { horizontal: '1', vertical: '2', wrapText: '3' } });
 });
 
-QUnit.test("Empty fills (OOXML format)", function(assert) {
+QUnit.test('Empty fills (OOXML format)', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ fill: undefined }), undefined);
     assert.equal(file.registerCellFormat({ fill: null }), undefined);
@@ -181,14 +181,14 @@ QUnit.test("Empty fills (OOXML format)", function(assert) {
     assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
-QUnit.test("Empty fills (simple format)", function(assert) {
+QUnit.test('Empty fills (simple format)', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternType: null }), undefined);
     assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: 'fcolor_1', fillPatternType: null }), undefined);
     assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternType: 'type_1' }), undefined);
 });
 
-QUnit.test("Various fills (OOXML format)", function(assert) {
+QUnit.test('Various fills (OOXML format)', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1' } } }), 0);
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1' } } }), 0);
@@ -246,7 +246,7 @@ QUnit.test("Various fills (OOXML format)", function(assert) {
     );
 });
 
-QUnit.test("Various fills (simple format)", function(assert) {
+QUnit.test('Various fills (simple format)', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ backgroundColor: 'b1' }), 0, 'b1');
     assert.equal(file.registerCellFormat({ backgroundColor: 'b1' }), 0, 'b1_');
@@ -284,7 +284,7 @@ QUnit.test("Various fills (simple format)", function(assert) {
     );
 });
 
-QUnit.test("Copy fills (OOXML format)", function(assert) {
+QUnit.test('Copy fills (OOXML format)', function(assert) {
     assert.propEqual(ExcelFile.copyCellFormat({ fill: undefined }), {});
     assert.propEqual(ExcelFile.copyCellFormat({ fill: null }), { fill: null });
     assert.propEqual(ExcelFile.copyCellFormat({ fill: {} }), { fill: {} });
@@ -322,7 +322,7 @@ QUnit.test("Copy fills (OOXML format)", function(assert) {
     assert.propEqual(format, { fill: { patternFill: { patternType: '1', foregroundColor: { rgb: '1', theme: '1' } } } });
 });
 
-QUnit.test("Copy fills (simple format)", function(assert) {
+QUnit.test('Copy fills (simple format)', function(assert) {
     assert.propEqual(ExcelFile.copyCellFormat({ backgroundColor: undefined, fillPatternColor: undefined, fillPatternType: undefined }), {});
     assert.propEqual(ExcelFile.copyCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternType: null }), { backgroundColor: null, fillPatternColor: null, fillPatternType: null });
     assert.propEqual(ExcelFile.copyCellFormat({ backgroundColor: '1', fillPatternColor: '2', fillPatternType: '3' }), { backgroundColor: '1', fillPatternColor: '2', fillPatternType: '3' });
@@ -335,7 +335,7 @@ QUnit.test("Copy fills (simple format)", function(assert) {
     assert.propEqual(format, { backgroundColor: '1', fillPatternColor: '2', fillPatternType: '3' });
 });
 
-QUnit.test("Fills with empty subitems", function(assert) {
+QUnit.test('Fills with empty subitems', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: {}, foregroundColor: {} } } }), 0);
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: { rgb: '1' }, foregroundColor: {} } } }), 1);
@@ -355,7 +355,7 @@ QUnit.test("Fills with empty subitems", function(assert) {
     );
 });
 
-QUnit.test("Passed fills should be copied", function(assert) {
+QUnit.test('Passed fills should be copied', function(assert) {
     const file = new ExcelFile();
     const format1 = { fill: { patternFill: { patternType: '1', backgroundColor: { rgb: '1', theme: '1' }, foregroundColor: { rgb: '1', theme: '1' } } } };
     file.registerCellFormat(format1);
@@ -380,7 +380,7 @@ QUnit.test("Passed fills should be copied", function(assert) {
     );
 });
 
-QUnit.test("Empty fonts", function(assert) {
+QUnit.test('Empty fonts', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ font: undefined }), undefined);
     assert.equal(file.registerCellFormat({ font: null }), undefined);
@@ -397,7 +397,7 @@ QUnit.test("Empty fonts", function(assert) {
     assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
-QUnit.test("Various fonts", function(assert) {
+QUnit.test('Various fonts', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ font: { bold: true } }), 0);
     assert.equal(file.registerCellFormat({ font: { bold: true } }), 0);
@@ -421,25 +421,25 @@ QUnit.test("Various fonts", function(assert) {
     assert.equal(file.registerCellFormat({ font: { underline: 'single' } }), 10);
     assert.equal(file.registerCellFormat({ font: { underline: 'single' } }), 10);
     assert.equal(file.registerCellFormat({ font: { underline: 'double' } }), 11);
-    assert.equal(file.registerCellFormat({ font: { color: { rgb: 'FF001100' } } }), 12, "color: { rgb: 'FF001100' }");
-    assert.equal(file.registerCellFormat({ font: { color: { rgb: 'FF001100' } } }), 12, "color: { rgb: 'FF001100' }");
-    assert.equal(file.registerCellFormat({ font: { color: { rgb: '#001100' } } }), 12, "{ rgb: '#001100' }");
-    assert.equal(file.registerCellFormat({ font: { color: { rgb: '#001100FF' } } }), 12, "color: { rgb: '#001100FF' }");
-    assert.equal(file.registerCellFormat({ font: { color: 'FF001100' } }), 12, "color: 'FF001100'");
-    assert.equal(file.registerCellFormat({ font: { color: '#001100' } }), 12, "color: '#001100'");
-    assert.equal(file.registerCellFormat({ font: { color: '#001100FF' } }), 12, "color: '#001100FF' }");
-    assert.equal(file.registerCellFormat({ font: { color: { rgb: 'AA001100' } } }), 13, "color: { rgb: 'AA001100' }");
-    assert.equal(file.registerCellFormat({ font: { color: { rgb: '#001100AA' } } }), 13, "color: { rgb: '#001100AA' }");
-    assert.equal(file.registerCellFormat({ font: { color: 'AA001100' } }), 13, "color: 'AA001100'");
-    assert.equal(file.registerCellFormat({ font: { color: '#001100AA' } }), 13, "color: '#001100AA'");
-    assert.equal(file.registerCellFormat({ font: { color: { theme: 't1' } } }), 14, "color: { theme: 't1' }");
-    assert.equal(file.registerCellFormat({ font: { color: { theme: 't1' } } }), 14, "color: { theme: 't1' }");
-    assert.equal(file.registerCellFormat({ font: { color: { theme: 't2' } } }), 15, "color: { theme: 't2' }");
-    assert.equal(file.registerCellFormat({ font: { color: '11223' } }), 16, "color: '11223'");
-    assert.equal(file.registerCellFormat({ font: { color: '#11223' } }), 16, "color: '#11223'");
-    assert.equal(file.registerCellFormat({ font: { color: '#anycha' } }), 17, "color: '#anycha'");
-    assert.equal(file.registerCellFormat({ font: { color: '#anychaFF' } }), 17, "color: '#anychaFF'");
-    assert.equal(file.registerCellFormat({ font: { color: '#1234567' } }), 18, "color: '#1234567'");
+    assert.equal(file.registerCellFormat({ font: { color: { rgb: 'FF001100' } } }), 12, 'color: { rgb: \'FF001100\' }');
+    assert.equal(file.registerCellFormat({ font: { color: { rgb: 'FF001100' } } }), 12, 'color: { rgb: \'FF001100\' }');
+    assert.equal(file.registerCellFormat({ font: { color: { rgb: '#001100' } } }), 12, '{ rgb: \'#001100\' }');
+    assert.equal(file.registerCellFormat({ font: { color: { rgb: '#001100FF' } } }), 12, 'color: { rgb: \'#001100FF\' }');
+    assert.equal(file.registerCellFormat({ font: { color: 'FF001100' } }), 12, 'color: \'FF001100\'');
+    assert.equal(file.registerCellFormat({ font: { color: '#001100' } }), 12, 'color: \'#001100\'');
+    assert.equal(file.registerCellFormat({ font: { color: '#001100FF' } }), 12, 'color: \'#001100FF\' }');
+    assert.equal(file.registerCellFormat({ font: { color: { rgb: 'AA001100' } } }), 13, 'color: { rgb: \'AA001100\' }');
+    assert.equal(file.registerCellFormat({ font: { color: { rgb: '#001100AA' } } }), 13, 'color: { rgb: \'#001100AA\' }');
+    assert.equal(file.registerCellFormat({ font: { color: 'AA001100' } }), 13, 'color: \'AA001100\'');
+    assert.equal(file.registerCellFormat({ font: { color: '#001100AA' } }), 13, 'color: \'#001100AA\'');
+    assert.equal(file.registerCellFormat({ font: { color: { theme: 't1' } } }), 14, 'color: { theme: \'t1\' }');
+    assert.equal(file.registerCellFormat({ font: { color: { theme: 't1' } } }), 14, 'color: { theme: \'t1\' }');
+    assert.equal(file.registerCellFormat({ font: { color: { theme: 't2' } } }), 15, 'color: { theme: \'t2\' }');
+    assert.equal(file.registerCellFormat({ font: { color: '11223' } }), 16, 'color: \'11223\'');
+    assert.equal(file.registerCellFormat({ font: { color: '#11223' } }), 16, 'color: \'#11223\'');
+    assert.equal(file.registerCellFormat({ font: { color: '#anycha' } }), 17, 'color: \'#anycha\'');
+    assert.equal(file.registerCellFormat({ font: { color: '#anychaFF' } }), 17, 'color: \'#anychaFF\'');
+    assert.equal(file.registerCellFormat({ font: { color: '#1234567' } }), 18, 'color: \'#1234567\'');
 
     assert.equal(getFullXml(file),
         '<cellXfs count="19">' +
@@ -472,7 +472,7 @@ QUnit.test("Various fonts", function(assert) {
         '</fonts>');
 });
 
-QUnit.test("Copy fonts (ARGB color)", function(assert) {
+QUnit.test('Copy fonts (ARGB color)', function(assert) {
     assert.propEqual(ExcelFile.copyCellFormat({ font: undefined }), {});
     assert.propEqual(ExcelFile.copyCellFormat({ font: null }), { font: null });
     assert.propEqual(ExcelFile.copyCellFormat({ font: {} }), { font: {} });
@@ -492,7 +492,7 @@ QUnit.test("Copy fonts (ARGB color)", function(assert) {
     assert.propEqual(format, { font: { bold: '1', italic: '2', color: { rgb: '3', theme: '4' } } });
 });
 
-QUnit.test("Fonts with empty subitems", function(assert) {
+QUnit.test('Fonts with empty subitems', function(assert) {
     const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ font: { size: 10, color: { } } }), 0);
 
@@ -506,7 +506,7 @@ QUnit.test("Fonts with empty subitems", function(assert) {
         '</fonts>');
 });
 
-QUnit.test("Passed fonts should be copied", function(assert) {
+QUnit.test('Passed fonts should be copied', function(assert) {
     const file = new ExcelFile();
     const format1 = { font: { size: 1, color: { rgb: '1' } } };
     file.registerCellFormat(format1);

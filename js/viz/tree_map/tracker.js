@@ -1,39 +1,39 @@
-var proto = require("./tree_map.base").prototype,
-    Tracker = require("../components/tracker").Tracker,
-    expand = require("../core/helpers").expand,
-    _parseScalar = require("../core/utils").parseScalar,
-    DATA_KEY_BASE = "__treemap_data_",
-    dataKeyModifier = 0;
+const proto = require('./tree_map.base').prototype;
+const Tracker = require('../components/tracker').Tracker;
+const expand = require('../core/helpers').expand;
+const _parseScalar = require('../core/utils').parseScalar;
+const DATA_KEY_BASE = '__treemap_data_';
+let dataKeyModifier = 0;
 
-require("./api");
-require("./hover");
-require("./tooltip");
+require('./api');
+require('./hover');
+require('./tooltip');
 
-proto._eventsMap.onClick = { name: "click" };
+proto._eventsMap.onClick = { name: 'click' };
 
-expand(proto, "_initCore", function() {
-    var that = this,
-        dataKey = DATA_KEY_BASE + dataKeyModifier++,
-        getProxy = function(index) {
-            return that._nodes[index].proxy;
-        };
+expand(proto, '_initCore', function() {
+    const that = this;
+    const dataKey = DATA_KEY_BASE + dataKeyModifier++;
+    const getProxy = function(index) {
+        return that._nodes[index].proxy;
+    };
 
     that._tracker = new Tracker({
         widget: that,
         root: that._renderer.root,
         getNode: function(id) {
-            var proxy = getProxy(id),
-                interactWithGroup = _parseScalar(that._getOption("interactWithGroup", true));
+            const proxy = getProxy(id);
+            const interactWithGroup = _parseScalar(that._getOption('interactWithGroup', true));
 
             return interactWithGroup && proxy.isLeaf() && proxy.getParent().isActive() ? proxy.getParent() : proxy;
         },
         getData: function(e) {
-            var target = e.target;
-            return (target.tagName === "tspan" ? target.parentNode : target)[dataKey];
+            const target = e.target;
+            return (target.tagName === 'tspan' ? target.parentNode : target)[dataKey];
         },
         getProxy: getProxy,
         click: function(e) {
-            that._eventTrigger("click", e);
+            that._eventTrigger('click', e);
         }
     });
     that._handlers.setTrackerData = function(node, element) {
@@ -45,6 +45,6 @@ expand(proto, "_initCore", function() {
     ///#ENDDEBUG
 });
 
-expand(proto, "_disposeCore", function() {
+expand(proto, '_disposeCore', function() {
     this._tracker.dispose();
 });

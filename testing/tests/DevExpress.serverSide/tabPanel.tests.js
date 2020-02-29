@@ -1,1 +1,1 @@
-import "../DevExpress.ui.widgets/tabPanel.markup.tests.js";
+import '../DevExpress.ui.widgets/tabPanel.markup.tests.js';

@@ -106,7 +106,7 @@ export default class TemplateManager {
         });
 
         const templates = [];
-        for(let templateName in templatesMap) {
+        for(const templateName in templatesMap) {
             const deviceTemplate = findTemplateByDevice(templatesMap[templateName]);
             if(deviceTemplate) {
                 templates.push({

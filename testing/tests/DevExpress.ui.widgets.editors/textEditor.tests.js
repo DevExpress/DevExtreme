@@ -1,13 +1,13 @@
-var $ = require("jquery");
+import $ from 'jquery';
 
-require("common.css!");
+import 'common.css!';
 
 QUnit.testStart(function() {
-    var markup = '<div id="texteditor"></div>';
+    const markup = '<div id="texteditor"></div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-require("./textEditorParts/markup.tests.js");
-require("./textEditorParts/common.tests.js");
-require("./textEditorParts/mask.tests.js");
+import './textEditorParts/markup.tests.js';
+import './textEditorParts/common.tests.js';
+import './textEditorParts/mask.tests.js';

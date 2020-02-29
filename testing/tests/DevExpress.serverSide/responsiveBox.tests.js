@@ -1,1 +1,1 @@
-import "../DevExpress.ui.widgets/responsiveBox.markup.tests.js";
+import '../DevExpress.ui.widgets/responsiveBox.markup.tests.js';

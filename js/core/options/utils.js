@@ -1,7 +1,7 @@
 import devices from '../devices';
-import { isEmptyObject, isFunction } from "../utils/type";
+import { isEmptyObject, isFunction } from '../utils/type';
 import { findBestMatches } from '../utils/common';
-import { extend } from "../utils/extend";
+import { extend } from '../utils/extend';
 
 export const convertRulesToOptions = (rules) => {
     const currentDevice = devices.current();

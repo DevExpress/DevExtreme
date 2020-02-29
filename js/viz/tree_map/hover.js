@@ -1,26 +1,26 @@
-var proto = require("./tree_map.base").prototype,
-    nodeProto = require("./node").prototype,
-    expand = require("../core/helpers").expand,
-    common = require("./common"),
+const proto = require('./tree_map.base').prototype;
+const nodeProto = require('./node').prototype;
+const expand = require('../core/helpers').expand;
+const common = require('./common');
 
-    _parseScalar = require("../core/utils").parseScalar,
-    _buildRectAppearance = common.buildRectAppearance,
+const _parseScalar = require('../core/utils').parseScalar;
+const _buildRectAppearance = common.buildRectAppearance;
 
-    STATE_CODE = 1;
+const STATE_CODE = 1;
 
-require("./api");
-require("./states");
+require('./api');
+require('./states');
 
-proto._eventsMap.onHoverChanged = { name: "hoverChanged" };
+proto._eventsMap.onHoverChanged = { name: 'hoverChanged' };
 
-expand(proto._handlers, "calculateAdditionalStates", function(states, options) {
+expand(proto._handlers, 'calculateAdditionalStates', function(states, options) {
     states[1] = options.hoverStyle ? _buildRectAppearance(options.hoverStyle) : {};
 });
 
-require("./tree_map.base").addChange({
-    code: "HOVER_ENABLED",
+require('./tree_map.base').addChange({
+    code: 'HOVER_ENABLED',
     handler: function() {
-        var hoverEnabled = _parseScalar(this._getOption("hoverEnabled", true), true);
+        const hoverEnabled = _parseScalar(this._getOption('hoverEnabled', true), true);
         if(!hoverEnabled) {
             this.clearHover();
         }
@@ -28,14 +28,14 @@ require("./tree_map.base").addChange({
     },
     isThemeDependent: true,
     isOptionChange: true,
-    option: "hoverEnabled"
+    option: 'hoverEnabled'
 });
 
 nodeProto.statesMap[1] = 1;
 nodeProto.additionalStates.push(1);
 
-expand(proto, "_extendProxyType", function(proto) {
-    var that = this;
+expand(proto, '_extendProxyType', function(proto) {
+    const that = this;
 
     proto.setHover = function() {
         that._hoverNode(this._id);
@@ -45,13 +45,13 @@ expand(proto, "_extendProxyType", function(proto) {
     };
 });
 
-expand(proto, "_onNodesCreated", function() {
+expand(proto, '_onNodesCreated', function() {
     this._hoverIndex = -1;
 });
 
-expand(proto, "_changeGroupSettings", function() {
-    var that = this;
-    that._groupHoverEnabled = _parseScalar(that._getOption("group").hoverEnabled, true);
+expand(proto, '_changeGroupSettings', function() {
+    const that = this;
+    that._groupHoverEnabled = _parseScalar(that._getOption('group').hoverEnabled, true);
     if(!that._groupHoverEnabled) {
         that.clearHover();
     }
@@ -59,13 +59,13 @@ expand(proto, "_changeGroupSettings", function() {
 
 proto._applyHoverState = function(index, state) {
     setNodeStateRecursive(this._nodes[index], STATE_CODE, state);
-    this._eventTrigger("hoverChanged", { node: this._nodes[index].proxy });
+    this._eventTrigger('hoverChanged', { node: this._nodes[index].proxy });
 };
 
 function setNodeStateRecursive(node, code, state) {
-    var nodes = node.isNode() && node.nodes,
-        i,
-        ii = nodes && nodes.length;
+    const nodes = node.isNode() && node.nodes;
+    let i;
+    const ii = nodes && nodes.length;
 
     node.setState(code, state);
     for(i = 0; i < ii; ++i) {
@@ -74,8 +74,8 @@ function setNodeStateRecursive(node, code, state) {
 }
 
 proto._hoverNode = function(index) {
-    var that = this,
-        currentIndex = that._hoverIndex;
+    const that = this;
+    const currentIndex = that._hoverIndex;
 
     if(that._hoverEnabled && currentIndex !== index) {
         if(!that._groupHoverEnabled && index >= 0 && that._nodes[index].isNode()) {

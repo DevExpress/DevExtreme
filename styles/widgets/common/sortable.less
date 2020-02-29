@@ -2,7 +2,6 @@
 
 .dx-sortable {
     overflow: hidden;
-    .user-select(none);
 }
 
 .dx-sortable-dragging.dx-sortable-clone {
@@ -14,7 +13,7 @@
     z-index: @MAX_INTEGER;
 }
 
-.dx-sortable-dragging {
+.dx-sortable-dragging.dx-sortable-clone * {
     cursor: pointer;
     cursor: grabbing;
 }

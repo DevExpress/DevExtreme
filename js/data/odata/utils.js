@@ -1,83 +1,74 @@
-var Class = require("../../core/class"),
-    extend = require("../../core/utils/extend").extend,
-    typeUtils = require("../../core/utils/type"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    each = require("../../core/utils/iterator").each,
-    ajax = require("../../core/utils/ajax"),
-    Guid = require("../../core/guid"),
-    isDefined = typeUtils.isDefined,
-    isPlainObject = typeUtils.isPlainObject,
-    grep = require("../../core/utils/common").grep,
-    Deferred = require("../../core/utils/deferred").Deferred,
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import { isDefined, isPlainObject, type, isObject } from '../../core/utils/type';
+import { each, map } from '../../core/utils/iterator';
+import ajax from '../../core/utils/ajax';
+import Guid from '../../core/guid';
+import { grep } from '../../core/utils/common';
+import { Deferred } from '../../core/utils/deferred';
+import { errors } from '../errors';
+import { XHR_ERROR_UNLOAD, errorMessageFromXhr } from '../utils';
+import { format as stringFormat } from '../../core/utils/string';
 
-    errors = require("../errors").errors,
-    dataUtils = require("../utils");
+const GUID_REGEX = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
 
-var GUID_REGEX = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
-
-var VERBOSE_DATE_REGEX = /^\/Date\((-?\d+)((\+|-)?(\d+)?)\)\/$/;
-var ISO8601_DATE_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[-+]{1}\d{2}(:?)(\d{2})?)?$/;
+const VERBOSE_DATE_REGEX = /^\/Date\((-?\d+)((\+|-)?(\d+)?)\)\/$/;
+const ISO8601_DATE_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[-+]{1}\d{2}(:?)(\d{2})?)?$/;
 
 // Request processing
-var JSON_VERBOSE_MIME_TYPE = "application/json;odata=verbose";
+const JSON_VERBOSE_MIME_TYPE = 'application/json;odata=verbose';
 
-var makeArray = function(value) {
-    return typeUtils.type(value) === "string" ? value.split() : value;
-};
+const makeArray = value => type(value) === 'string' ? value.split() : value;
 
-var hasDot = function(x) {
-    return /\./.test(x);
-};
+const hasDot = x => /\./.test(x);
 
-var pad = function(text, length, right) {
+const pad = (text, length, right) => {
     text = String(text);
     while(text.length < length) {
-        text = right ? (text + "0") : ("0" + text);
+        text = right ? (`${text}0`) : (`0${text}`);
     }
     return text;
 };
 
-function formatISO8601(date, skipZeroTime, skipTimezone) {
-    var bag = [];
+const formatISO8601 = (date, skipZeroTime, skipTimezone) => {
+    const bag = [];
 
-    var isZeroTime = function() {
-        return date.getHours() + date.getMinutes() + date.getSeconds() + date.getMilliseconds() < 1;
-    };
+    const isZeroTime = () => date.getHours() + date.getMinutes() + date.getSeconds() + date.getMilliseconds() < 1;
 
-    var padLeft2 = function(text) { return pad(text, 2); };
+    const padLeft2 = text => pad(text, 2);
 
     bag.push(date.getFullYear());
-    bag.push("-");
+    bag.push('-');
     bag.push(padLeft2(date.getMonth() + 1));
-    bag.push("-");
+    bag.push('-');
     bag.push(padLeft2(date.getDate()));
 
     if(!(skipZeroTime && isZeroTime())) {
-        bag.push("T");
+        bag.push('T');
         bag.push(padLeft2(date.getHours()));
-        bag.push(":");
+        bag.push(':');
         bag.push(padLeft2(date.getMinutes()));
-        bag.push(":");
+        bag.push(':');
         bag.push(padLeft2(date.getSeconds()));
 
         if(date.getMilliseconds()) {
-            bag.push(".");
+            bag.push('.');
             bag.push(pad(date.getMilliseconds(), 3));
         }
 
         if(!skipTimezone) {
-            bag.push("Z");
+            bag.push('Z');
         }
     }
 
-    return bag.join("");
-}
+    return bag.join('');
+};
 
-function parseISO8601(isoString) {
-    var result = new Date(new Date(0).getTimezoneOffset() * 60 * 1000),
-        chunks = isoString.replace("Z", "").split("T"),
-        date = /(\d{4})-(\d{2})-(\d{2})/.exec(chunks[0]),
-        time = /(\d{2}):(\d{2}):(\d{2})\.?(\d{0,7})?/.exec(chunks[1]);
+const parseISO8601 = (isoString) => {
+    const result = new Date(new Date(0).getTimezoneOffset() * 60 * 1000);
+    const chunks = isoString.replace('Z', '').split('T');
+    const date = /(\d{4})-(\d{2})-(\d{2})/.exec(chunks[0]);
+    const time = /(\d{2}):(\d{2}):(\d{2})\.?(\d{0,7})?/.exec(chunks[1]);
 
     result.setFullYear(Number(date[1]));
     result.setMonth(Number(date[2]) - 1);
@@ -88,61 +79,77 @@ function parseISO8601(isoString) {
         result.setMinutes(Number(time[2]));
         result.setSeconds(Number(time[3]));
 
-        var fractional = (time[4] || "").slice(0, 3);
+        let fractional = (time[4] || '').slice(0, 3);
         fractional = pad(fractional, 3, true);
         result.setMilliseconds(Number(fractional));
     }
 
     return result;
-}
+};
 
-function isAbsoluteUrl(url) {
-    return /^(?:[a-z]+:)?\/\//i.test(url);
-}
+const isAbsoluteUrl = (url) => /^(?:[a-z]+:)?\/\//i.test(url);
 
-function toAbsoluteUrl(basePath, relativePath) {
-    var part;
-    var baseParts = stripParams(basePath).split("/");
-    var relativeParts = relativePath.split("/");
-
-    function stripParams(url) {
-        var index = url.indexOf("?");
-        if(index > -1) {
-            return url.substr(0, index);
-        }
-        return url;
+const stripParams = (url) => {
+    const index = url.indexOf('?');
+    if(index > -1) {
+        return url.substr(0, index);
     }
+    return url;
+};
+
+const toAbsoluteUrl = (basePath, relativePath) => {
+    let part;
+    const baseParts = stripParams(basePath).split('/');
+    const relativeParts = relativePath.split('/');
 
     baseParts.pop();
     while(relativeParts.length) {
         part = relativeParts.shift();
 
-        if(part === "..") {
+        if(part === '..') {
             baseParts.pop();
         } else {
             baseParts.push(part);
         }
     }
 
-    return baseParts.join("/");
-}
-
-var param = function(params) {
-    var result = [];
-
-    for(var name in params) {
-        result.push(name + "=" + params[name]);
-    }
-
-    return result.join("&");
+    return baseParts.join('/');
 };
 
-var ajaxOptionsForRequest = function(protocolVersion, request, options) {
+const param = (params) => {
+    const result = [];
+
+    for(const name in params) {
+        result.push(name + '=' + params[name]);
+    }
+
+    return result.join('&');
+};
+
+const ajaxOptionsForRequest = (protocolVersion, request, options = {}) => {
+    const formatPayload = (payload) => JSON.stringify(payload, function(key, value) {
+        if(!(this[key] instanceof Date)) {
+            return value;
+        }
+
+        value = formatISO8601(this[key]);
+        switch(protocolVersion) {
+            case 2:
+                return value.substr(0, value.length - 1);
+
+            case 3:
+            case 4:
+                return value;
+
+            default: throw errors.Error('E4002');
+        }
+    });
+
     request = extend(
         {
             async: true,
-            method: "get",
-            url: "",
+            method: 'get',
+            url: '',
             params: {},
             payload: null,
             headers: {
@@ -152,111 +159,83 @@ var ajaxOptionsForRequest = function(protocolVersion, request, options) {
         request
     );
 
-    options = options || {};
+    options.beforeSend?.(request);
 
-    var beforeSend = options.beforeSend;
-    if(beforeSend) {
-        beforeSend(request);
-    }
+    const { async, timeout, headers } = request;
+    let { url, method } = request;
+    const { jsonp, withCredentials } = options;
 
-    var method = (request.method || "get").toLowerCase(),
-        isGet = method === "get",
-        useJsonp = isGet && options.jsonp,
-        params = extend({}, request.params),
-        ajaxData = isGet ? params : formatPayload(request.payload),
-        qs = !isGet && param(params),
-        url = request.url,
-        contentType = !isGet && JSON_VERBOSE_MIME_TYPE;
+    method = (method || 'get').toLowerCase();
+    const isGet = method === 'get';
+    const useJsonp = isGet && jsonp;
+    const params = extend({}, request.params);
+    const ajaxData = isGet ? params : formatPayload(request.payload);
+    const qs = !isGet && param(params);
+    const contentType = !isGet && JSON_VERBOSE_MIME_TYPE;
 
     if(qs) {
-        url += (url.indexOf("?") > -1 ? "&" : "?") + qs;
+        url += (url.indexOf('?') > -1 ? '&' : '?') + qs;
     }
 
     if(useJsonp) {
-        ajaxData["$format"] = "json";
+        ajaxData['$format'] = 'json';
     }
 
     return {
-        url: url,
+        url,
         data: ajaxData,
-        dataType: useJsonp ? "jsonp" : "json",
-        jsonp: useJsonp && "$callback",
-        method: method,
-        async: request.async,
-        timeout: request.timeout,
-        headers: request.headers,
-        contentType: contentType,
+        dataType: useJsonp ? 'jsonp' : 'json',
+        jsonp: useJsonp && '$callback',
+        method,
+        async,
+        timeout,
+        headers,
+        contentType,
         accepts: {
-            json: [JSON_VERBOSE_MIME_TYPE, "text/plain"].join()
+            json: [JSON_VERBOSE_MIME_TYPE, 'text/plain'].join()
         },
         xhrFields: {
-            withCredentials: options.withCredentials
+            withCredentials
         }
     };
-
-    function formatPayload(payload) {
-        return JSON.stringify(payload, function(key, value) {
-
-            if(!(this[key] instanceof Date)) {
-                return value;
-            }
-
-            value = formatISO8601(this[key]);
-            switch(protocolVersion) {
-                case 2:
-                    return value.substr(0, value.length - 1);
-
-                case 3:
-                case 4:
-                    return value;
-
-                default: throw errors.Error("E4002");
-            }
-        });
-    }
 };
 
-var sendRequest = function(protocolVersion, request, options) {
-    var d = new Deferred();
-    var ajaxOptions = ajaxOptionsForRequest(protocolVersion, request, options);
+export const sendRequest = (protocolVersion, request, options) => {
+    const { deserializeDates, fieldTypes, countOnly, isPaged } = options;
+    const d = new Deferred();
+    const ajaxOptions = ajaxOptionsForRequest(protocolVersion, request, options);
 
-    ajax.sendRequest(ajaxOptions).always(function(obj, textStatus) {
-        var transformOptions = {
-                deserializeDates: options.deserializeDates,
-                fieldTypes: options.fieldTypes
-            },
-            tuple = interpretJsonFormat(obj, textStatus, transformOptions, ajaxOptions),
-            error = tuple.error,
-            data = tuple.data,
-            nextUrl = tuple.nextUrl,
-            extra;
+    ajax.sendRequest(ajaxOptions).always((obj, textStatus) => {
+        const transformOptions = {
+            deserializeDates,
+            fieldTypes
+        };
+        const tuple = interpretJsonFormat(obj, textStatus, transformOptions, ajaxOptions);
+        const { error, data, count } = tuple;
+        let { nextUrl } = tuple;
 
         if(error) {
-            if(error.message !== dataUtils.XHR_ERROR_UNLOAD) {
+            if(error.message !== XHR_ERROR_UNLOAD) {
                 d.reject(error);
             }
-        } else if(options.countOnly) {
+        } else if(countOnly) {
 
-            if(isFinite(tuple.count)) {
-                d.resolve(tuple.count);
+            if(isFinite(count)) {
+                d.resolve(count);
             } else {
-                d.reject(new errors.Error("E4018"));
+                d.reject(new errors.Error('E4018'));
             }
 
-        } else if(nextUrl && !options.isPaged) {
+        } else if(nextUrl && !isPaged) {
             if(!isAbsoluteUrl(nextUrl)) {
                 nextUrl = toAbsoluteUrl(ajaxOptions.url, nextUrl);
             }
 
             sendRequest(protocolVersion, { url: nextUrl }, options)
                 .fail(d.reject)
-                .done(function(nextData) {
-                    d.resolve(data.concat(nextData));
-                });
+                .done((nextData) => d.resolve(data.concat(nextData)));
         } else {
-            if(isFinite(tuple.count)) {
-                extra = { totalCount: tuple.count };
-            }
+            const extra = isFinite(count) ? { totalCount: count } : undefined;
 
             d.resolve(data, extra);
         }
@@ -265,20 +244,16 @@ var sendRequest = function(protocolVersion, request, options) {
     return d.promise();
 };
 
-var formatDotNetError = function(errorObj) {
-    var message,
-        currentError = errorObj;
+const formatDotNetError = (errorObj) => {
+    let message;
+    let currentError = errorObj;
 
-    if("message" in errorObj) {
-        if(errorObj.message.value) {
-            message = errorObj.message.value;
-        } else {
-            message = errorObj.message;
-        }
+    if('message' in errorObj) {
+        message = errorObj.message?.value || errorObj.message;
     }
-    while((currentError = (currentError["innererror"] || currentError["internalexception"]))) {
+    while((currentError = (currentError['innererror'] || currentError['internalexception']))) {
         message = currentError.message;
-        if(currentError["internalexception"] && (message.indexOf("inner exception") === -1)) {
+        if(currentError['internalexception'] && (message.indexOf('inner exception') === -1)) {
             break;
         }
     }
@@ -286,31 +261,32 @@ var formatDotNetError = function(errorObj) {
 };
 
 // TODO split: decouple HTTP errors from OData errors
-var errorFromResponse = function(obj, textStatus, ajaxOptions) {
-    if(textStatus === "nocontent") {
+const errorFromResponse = (obj, textStatus, ajaxOptions) => {
+    if(textStatus === 'nocontent') {
         return null; // workaround for http://bugs.jquery.com/ticket/13292
     }
 
-    var message = "Unknown error",
-        response = obj,
-        httpStatus = 200,
-        errorData = {
-            requestOptions: ajaxOptions
-        };
+    let message = 'Unknown error';
+    let response = obj;
+    let httpStatus = 200;
+    const errorData = {
+        requestOptions: ajaxOptions
+    };
 
-    if(textStatus !== "success") {
-        httpStatus = obj.status;
-        message = dataUtils.errorMessageFromXhr(obj, textStatus);
+    if(textStatus !== 'success') {
+        const { status, responseText } = obj;
+
+        httpStatus = status;
+        message = errorMessageFromXhr(obj, textStatus);
         try {
-            response = JSON.parse(obj.responseText);
+            response = JSON.parse(responseText);
         } catch(x) {
         }
     }
-    var errorObj = response &&
-        // NOTE: $.Deferred rejected and response contain error message
-        (response.then && response
-        // NOTE: $.Deferred resolved with odata error
-        || response.error || response["odata.error"] || response["@odata.error"]);
+    const errorObj = response?.then || response?.error || response?.['odata.error'] || response?.['@odata.error'];
+    // NOTE: $.Deferred rejected and response contain error message
+    // NOTE: $.Deferred resolved with odata error
+
 
     if(errorObj) {
         message = formatDotNetError(errorObj) || message;
@@ -320,7 +296,7 @@ var errorFromResponse = function(obj, textStatus, ajaxOptions) {
             httpStatus = 500;
         }
 
-        var customCode = Number(errorObj.code);
+        const customCode = Number(errorObj.code);
         if(isFinite(customCode) && customCode >= 400) {
             httpStatus = customCode;
         }
@@ -334,111 +310,81 @@ var errorFromResponse = function(obj, textStatus, ajaxOptions) {
     return null;
 };
 
-var interpretJsonFormat = function(obj, textStatus, transformOptions, ajaxOptions) {
-    var error = errorFromResponse(obj, textStatus, ajaxOptions),
-        value;
+const interpretJsonFormat = (obj, textStatus, transformOptions, ajaxOptions) => {
+    const error = errorFromResponse(obj, textStatus, ajaxOptions);
 
     if(error) {
-        return { error: error };
+        return { error };
     }
 
     if(!isPlainObject(obj)) {
         return { data: obj };
     }
 
-    if("d" in obj && (Array.isArray(obj.d) || typeUtils.isObject(obj.d))) {
-        value = interpretVerboseJsonFormat(obj, textStatus);
-    } else {
-        value = interpretLightJsonFormat(obj, textStatus);
-    }
+    const value = 'd' in obj && (Array.isArray(obj.d) || isObject(obj.d))
+        ? interpretVerboseJsonFormat(obj, textStatus)
+        : interpretLightJsonFormat(obj, textStatus);
 
     transformTypes(value, transformOptions);
 
     return value;
 };
 
-var interpretVerboseJsonFormat = function(obj) {
-    var data = obj.d;
+const interpretVerboseJsonFormat = ({ d: data }) => {
     if(!isDefined(data)) {
-        return { error: Error("Malformed or unsupported JSON response received") };
-    }
-
-    if(isDefined(data.results)) {
-        data = data.results;
+        return { error: Error('Malformed or unsupported JSON response received') };
     }
 
     return {
-        data: data,
-        nextUrl: obj.d.__next,
-        count: parseInt(obj.d.__count, 10)
+        data: data.results ?? data,
+        nextUrl: data.__next,
+        count: parseInt(data.__count, 10)
     };
 };
 
-var interpretLightJsonFormat = function(obj) {
-    var data = obj;
-
-    if(isDefined(data.value)) {
-        data = data.value;
-    }
-
-    return {
-        data: data,
-        nextUrl: obj["@odata.nextLink"],
-        count: parseInt(obj["@odata.count"], 10)
-    };
-};
+const interpretLightJsonFormat = obj => ({
+    data: obj.value ?? obj,
+    nextUrl: obj['@odata.nextLink'],
+    count: parseInt(obj['@odata.count'], 10)
+});
 
 // Serialization and parsing
 
-/**
-* @name EdmLiteral
-* @type object
-* @namespace DevExpress.data
-* @module data/odata/utils
-* @export EdmLiteral
-*/
-var EdmLiteral = Class.inherit({
+export const EdmLiteral = Class.inherit({
     /**
     * @name EdmLiteralMethods.ctor
     * @publicName ctor(value)
     * @param1 value:string
     */
-    ctor: function(value) {
+    ctor(value) {
         this._value = value;
     },
 
-    /**
-    * @name EdmLiteralMethods.valueOf
-    * @publicName valueOf()
-    * @return string
-    */
-    valueOf: function() {
+    valueOf() {
         return this._value;
     }
 });
 
-var transformTypes = function(obj, options) {
-    options = options || {};
+const transformTypes = (obj, options = {}) => {
+    each(obj, (key, value) => {
+        if(value !== null && typeof value === 'object') {
 
-    each(obj, function(key, value) {
-        if(value !== null && typeof value === "object") {
-
-            if("results" in value) {
+            if('results' in value) {
                 obj[key] = value.results;
             }
 
             transformTypes(obj[key], options);
-        } else if(typeof value === "string") {
-            var fieldTypes = options.fieldTypes,
-                canBeGuid = !fieldTypes || fieldTypes[key] !== "String";
+        } else if(typeof value === 'string') {
+            const { fieldTypes, deserializeDates } = options;
+            const canBeGuid = !fieldTypes || fieldTypes[key] !== 'String';
 
             if(canBeGuid && GUID_REGEX.test(value)) {
                 obj[key] = new Guid(value);
             }
 
-            if(options.deserializeDates !== false) {
+            if(deserializeDates !== false) {
                 if(value.match(VERBOSE_DATE_REGEX)) {
-                    var date = new Date(Number(RegExp.$1) + RegExp.$2 * 60 * 1000);
+                    const date = new Date(Number(RegExp.$1) + RegExp.$2 * 60 * 1000);
                     obj[key] = new Date(date.valueOf() + date.getTimezoneOffset() * 60 * 1000);
                 } else if(ISO8601_DATE_REGEX.test(value)) {
                     obj[key] = new Date(parseISO8601(obj[key]).valueOf());
@@ -448,23 +394,16 @@ var transformTypes = function(obj, options) {
     });
 };
 
-var serializeDate = function(date) {
-    return "datetime'" + formatISO8601(date, true, true) + "'";
-};
+const serializeDate = date => `datetime'${formatISO8601(date, true, true)}'`;
 
-var serializeString = function(value) {
-    return "'" + value.replace(/'/g, "''") + "'";
-};
+const serializeString = value => `'${value.replace(/'/g, '\'\'')}'`;
 
-var serializePropName = function(propName) {
-    if(propName instanceof EdmLiteral) {
-        return propName.valueOf();
-    }
+export const serializePropName = propName =>
+    propName instanceof EdmLiteral
+        ? propName.valueOf()
+        : propName.replace(/\./g, '/');
 
-    return propName.replace(/\./g, "/");
-};
-
-var serializeValueV4 = function(value) {
+const serializeValueV4 = (value) => {
     if(value instanceof Date) {
         return formatISO8601(value, false, false);
     }
@@ -472,260 +411,219 @@ var serializeValueV4 = function(value) {
         return value.valueOf();
     }
     if(Array.isArray(value)) {
-        return "[" + value.map(function(item) {
-            return serializeValueV4(item);
-        }).join(",") + "]";
+        return `[${value.map((item) => serializeValueV4(item)).join(',')}]`;
     }
     return serializeValueV2(value);
 };
 
-var serializeValueV2 = function(value) {
+const serializeValueV2 = (value) => {
     if(value instanceof Date) {
         return serializeDate(value);
     }
     if(value instanceof Guid) {
-        return "guid'" + value + "'";
+        return `guid'${value}'`;
     }
     if(value instanceof EdmLiteral) {
         return value.valueOf();
     }
-    if(typeof value === "string") {
+    if(typeof value === 'string') {
         return serializeString(value);
     }
     return String(value);
 };
 
-var serializeValue = function(value, protocolVersion) {
+export const serializeValue = (value, protocolVersion) => {
     switch(protocolVersion) {
         case 2:
         case 3:
             return serializeValueV2(value);
         case 4:
             return serializeValueV4(value);
-        default: throw errors.Error("E4002");
+        default: throw errors.Error('E4002');
     }
 };
 
-var serializeKey = function(key, protocolVersion) {
+export const serializeKey = (key, protocolVersion) => {
     if(isPlainObject(key)) {
-        var parts = [];
-        each(key, function(k, v) {
-            parts.push(serializePropName(k) + "=" + serializeValue(v, protocolVersion));
-        });
+        const parts = [];
+        each(key, (k, v) => parts.push(`${serializePropName(k)}=${serializeValue(v, protocolVersion)}`));
         return parts.join();
     }
     return serializeValue(key, protocolVersion);
 };
 
-/**
-* @const Utils.keyConverters
-* @publicName odata.keyConverters
-* @type object
-* @namespace DevExpress.data.utils.odata
-* @module data/odata/utils
-* @export keyConverters
-*/
-var keyConverters = {
+export const keyConverters = {
 
-    String: function(value) {
-        return value + "";
-    },
+    String: value => `${value}`,
 
-    Int32: function(value) {
-        return Math.floor(value);
-    },
+    Int32: value => Math.floor(value),
 
-    Int64: function(value) {
-        if(value instanceof EdmLiteral) {
-            return value;
-        }
-        return new EdmLiteral(value + "L");
-    },
+    Int64: value => value instanceof EdmLiteral ? value : new EdmLiteral(`${value}L`),
 
-    Guid: function(value) {
-        if(value instanceof Guid) {
-            return value;
-        }
-        return new Guid(value);
-    },
+    Guid: value => value instanceof Guid ? value : new Guid(value),
 
-    Boolean: function(value) {
-        return !!value;
-    },
+    Boolean: value => !!value,
 
-    Single: function(value) {
-        if(value instanceof EdmLiteral) {
-            return value;
-        }
-        return new EdmLiteral(value + "f");
-    },
+    Single: value => value instanceof EdmLiteral ? value : new EdmLiteral(value + 'f'),
 
-    Decimal: function(value) {
-        if(value instanceof EdmLiteral) {
-            return value;
-        }
-        return new EdmLiteral(value + "m");
-    }
+    Decimal: value => value instanceof EdmLiteral ? value : new EdmLiteral(value + 'm')
 };
 
-var convertPrimitiveValue = function(type, value) {
+export const convertPrimitiveValue = (type, value) => {
     if(value === null) return null;
-    var converter = keyConverters[type];
+    const converter = keyConverters[type];
     if(!converter) {
-        throw errors.Error("E4014", type);
+        throw errors.Error('E4014', type);
     }
     return converter(value);
 };
 
-var generateSelect = function(oDataVersion, select) {
+export const generateSelect = (oDataVersion, select) => {
     if(!select) {
         return;
     }
 
-    if(oDataVersion < 4) {
-        return serializePropName(select.join());
-    }
-
-    return grep(select, hasDot, true).join();
+    return oDataVersion < 4
+        ? serializePropName(select.join())
+        : grep(select, hasDot, true).join();
 };
 
-var generateExpand = function(oDataVersion, expand, select) {
-    var generatorV2 = function() {
-        var hash = {};
+const formatCore = (hash) => {
+    let result = '';
+    const selectValue = [];
+    const expandValue = [];
 
+    each(hash, (key, value) => {
+        if(Array.isArray(value)) {
+            [].push.apply(selectValue, value);
+        }
+
+        if(isPlainObject(value)) {
+            expandValue.push(`${key}${formatCore(value)}`);
+        }
+    });
+
+    if(selectValue.length || expandValue.length) {
+        result += '(';
+
+        if(selectValue.length) {
+            result += `$select=${map(selectValue, serializePropName).join()}`;
+        }
+
+        if(expandValue.length) {
+            if(selectValue.length) {
+                result += ';';
+            }
+
+            result += `$expand=${map(expandValue, serializePropName).join()}`;
+        }
+        result += ')';
+    }
+
+    return result;
+};
+
+const format = (hash) => {
+    const result = [];
+
+    each(hash, (key, value) => result.push(`${key}${formatCore(value)}`));
+
+    return result.join();
+};
+
+const parseCore = (exprParts, root, stepper) => {
+    const result = stepper(root, exprParts.shift(), exprParts);
+    if(result === false) {
+        return;
+    }
+
+    parseCore(exprParts, result, stepper);
+};
+
+const parseTree = (exprs, root, stepper) =>
+    each(exprs, (_, x) => parseCore(x.split('.'), root, stepper));
+
+const generatorV2 = (expand, select) => {
+    const hash = {};
+
+    if(expand) {
+        each(makeArray(expand), function() {
+            hash[serializePropName(this)] = 1;
+        });
+    }
+
+    if(select) {
+        each(makeArray(select), function() {
+            const path = this.split('.');
+            if(path.length < 2) {
+                return;
+            }
+
+            path.pop();
+            hash[serializePropName(path.join('.'))] = 1;
+        });
+    }
+
+    return map(hash, (_, v) => v).join();
+};
+
+const generatorV4 = (expand, select) => {
+    const hash = {};
+
+    if(expand || select) {
         if(expand) {
-            iteratorUtils.each(makeArray(expand), function() {
-                hash[serializePropName(this)] = 1;
+            parseTree(makeArray(expand), hash, (node, key, path) => {
+                node[key] = node[key] || {};
+
+                return !path.length ? false : node[key];
             });
         }
 
         if(select) {
-            iteratorUtils.each(makeArray(select), function() {
-                var path = this.split(".");
-                if(path.length < 2) {
-                    return;
+            parseTree(grep(makeArray(select), hasDot), hash, (node, key, path) => {
+                if(!path.length) {
+                    node[key] = node[key] || [];
+                    node[key].push(key);
+                    return false;
                 }
 
-                path.pop();
-                hash[serializePropName(path.join("."))] = 1;
+                return (node[key] = node[key] || {});
             });
         }
 
-        return iteratorUtils.map(hash, function(k, v) { return v; }).join();
-    };
-
-    var generatorV4 = function() {
-        var format = function(hash) {
-            var formatCore = function(hash) {
-                var result = "",
-                    selectValue = [],
-                    expandValue = [];
-
-                iteratorUtils.each(hash, function(key, value) {
-                    if(Array.isArray(value)) {
-                        [].push.apply(selectValue, value);
-                    }
-
-                    if(isPlainObject(value)) {
-                        expandValue.push(key + formatCore(value));
-                    }
-                });
-
-                if(selectValue.length || expandValue.length) {
-                    result += "(";
-
-                    if(selectValue.length) {
-                        result += "$select=" + iteratorUtils.map(selectValue, serializePropName).join();
-                    }
-
-                    if(expandValue.length) {
-                        if(selectValue.length) {
-                            result += ";";
-                        }
-
-                        result += "$expand=" + iteratorUtils.map(expandValue, serializePropName).join();
-                    }
-                    result += ")";
-                }
-
-                return result;
-            };
-
-            var result = [];
-
-            iteratorUtils.each(hash, function(key, value) {
-                result.push(key + formatCore(value));
-            });
-
-            return result.join();
-        };
-
-        var parseTree = function(exprs, root, stepper) {
-            var parseCore = function(exprParts, root, stepper) {
-                var result = stepper(root, exprParts.shift(), exprParts);
-                if(result === false) {
-                    return;
-                }
-
-                parseCore(exprParts, result, stepper);
-            };
-
-            iteratorUtils.each(exprs, function(_, x) {
-                parseCore(x.split("."), root, stepper);
-            });
-        };
-
-        var hash = {};
-
-        if(expand || select) {
-            if(expand) {
-                parseTree(makeArray(expand), hash, function(node, key, path) {
-                    node[key] = node[key] || {};
-
-                    if(!path.length) {
-                        return false;
-                    }
-
-                    return node[key];
-                });
-            }
-
-            if(select) {
-                parseTree(grep(makeArray(select), hasDot), hash, function(node, key, path) {
-                    if(!path.length) {
-                        node[key] = node[key] || [];
-                        node[key].push(key);
-                        return false;
-                    }
-
-                    return (node[key] = node[key] || {});
-                });
-            }
-
-            return format(hash);
-        }
-    };
-
-    if(oDataVersion < 4) {
-        return generatorV2();
+        return format(hash);
     }
-
-    return generatorV4();
 };
 
-exports.sendRequest = sendRequest;
-exports.serializePropName = serializePropName;
-exports.serializeValue = serializeValue;
-exports.serializeKey = serializeKey;
-exports.keyConverters = keyConverters;
-exports.convertPrimitiveValue = convertPrimitiveValue;
-exports.generateExpand = generateExpand;
-exports.generateSelect = generateSelect;
+export const generateExpand = (oDataVersion, expand, select) =>
+    oDataVersion < 4
+        ? generatorV2(expand, select)
+        : generatorV4(expand, select);
 
-exports.EdmLiteral = EdmLiteral;
+export const formatFunctionInvocationUrl = (baseUrl, args) =>
+    stringFormat(
+        '{0}({1})',
+        baseUrl,
+        map(args || {}, (value, key) => stringFormat('{0}={1}', key, value)).join(',')
+    );
+
+export const escapeServiceOperationParams = (params, version) => {
+    if(!params) {
+        return params;
+    }
+
+    // From WCF Data Services docs:
+    // The type of each parameter must be a primitive type.
+    // Any data of a non-primitive type must be serialized and passed into a string parameter
+    const result = {};
+    each(params, (k, v) => {
+        result[k] = serializeValue(v, version);
+    });
+    return result;
+};
 
 ///#DEBUG
-exports.OData__internals = {
-    interpretJsonFormat: interpretJsonFormat
+export const OData__internals = {
+    interpretJsonFormat
 };
 ///#ENDDEBUG

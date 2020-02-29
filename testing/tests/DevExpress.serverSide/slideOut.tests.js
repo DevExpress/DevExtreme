@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets/slideOut.markup.tests.js");
+require('../DevExpress.ui.widgets/slideOut.markup.tests.js');

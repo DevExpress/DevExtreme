@@ -2,8 +2,8 @@
   {
     "name": "animation/frame",
     "exports": {
-      "cancel": { "path": "utils.cancelAnimationFrame" },
-      "request": { "path": "utils.requestAnimationFrame" }
+      "cancelAnimationFrame": { "path": "utils.cancelAnimationFrame" },
+      "requestAnimationFrame": { "path": "utils.requestAnimationFrame" }
     }
   },
   {
@@ -22,6 +22,12 @@
     "name": "animation/transition_executor",
     "exports": {
       "default": { "path": "TransitionExecutor" }
+    }
+  },
+  {
+    "name": "core/component_registrator",
+    "exports": {
+      "default": { "path": "registerComponent" }
     }
   },
   {
@@ -169,6 +175,30 @@
       "off": { "path": "events.off" },
       "trigger": { "path": "events.trigger" },
       "triggerHandler": { "path": "events.triggerHandler" }
+    }
+  },
+  {
+    "name": "file_management/file_system_item",
+    "exports": {
+      "default": { "path": "fileManagement.FileSystemItem" }
+    }
+  },
+  {
+    "name": "file_management/custom_provider",
+    "exports": {
+      "default": { "path": "fileManagement.CustomFileSystemProvider" }
+    }
+  },
+  {
+    "name": "file_management/object_provider",
+    "exports": {
+      "default": { "path": "fileManagement.ObjectFileSystemProvider" }
+    }
+  },
+  {
+    "name": "file_management/remote_provider",
+    "exports": {
+      "default": { "path": "fileManagement.RemoteFileSystemProvider" }
     }
   },
   {
@@ -354,30 +384,6 @@
     "name": "ui/file_manager",
     "exports": {
       "default": { "path": "ui.dxFileManager", "isWidget": true }
-    }
-  },
-  {
-    "name": "ui/file_manager/file_provider/remote",
-    "exports": {
-      "default": { "path": "fileProvider.RemoteFileProvider" }
-    }
-  },
-  {
-    "name": "ui/file_manager/file_provider/custom",
-    "exports": {
-      "default": { "path": "fileProvider.CustomFileProvider" }
-    }
-  },
-  {
-    "name": "ui/file_manager/file_provider/array",
-    "exports": {
-      "default": { "path": "fileProvider.ArrayFileProvider" }
-    }
-  },
-  {
-    "name": "ui/file_manager/file_provider/ajax",
-    "exports": {
-      "default": { "path": "fileProvider.AjaxFileProvider" }
     }
   },
   {

@@ -1,13 +1,13 @@
-var CustomStore = require("data/custom_store"),
-    ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js");
+const CustomStore = require('data/custom_store');
+const ErrorHandlingHelper = require('../../helpers/data.errorHandlingHelper.js');
 
-var RAW = "raw";
+const RAW = 'raw';
 
-QUnit.module("load", function() {
+QUnit.module('load', function() {
 
-    QUnit.test("only userData is passed to user func", function(assert) {
-        var done = assert.async(),
-            userData = { custom: 123 };
+    QUnit.test('only userData is passed to user func', function(assert) {
+        const done = assert.async();
+        const userData = { custom: 123 };
 
         new CustomStore({
             loadMode: RAW,
@@ -16,53 +16,53 @@ QUnit.module("load", function() {
                 done();
             }
         }).load({
-            sort: "a",
-            group: "b",
+            sort: 'a',
+            group: 'b',
             filter: function() { return true; },
-            select: "c",
+            select: 'c',
             skip: 1,
             take: 2,
             userData: userData
         });
     });
 
-    QUnit.test("data is processed locally", function(assert) {
-        var done = assert.async();
+    QUnit.test('data is processed locally', function(assert) {
+        const done = assert.async();
 
         new CustomStore({
             loadMode: RAW,
             load: function() {
                 return [
-                    { g: "g5", v: "v5" },
-                    { g: "g4", v: "v4" },
-                    { g: "g3", v: "v3" },
-                    { g: "g2", v: "v2" },
-                    { g: "g1", v: "v1" }
+                    { g: 'g5', v: 'v5' },
+                    { g: 'g4', v: 'v4' },
+                    { g: 'g3', v: 'v3' },
+                    { g: 'g2', v: 'v2' },
+                    { g: 'g1', v: 'v1' }
                 ];
             }
         }).load({
-            group: "g",
-            sort: "v",
-            filter: [ "v", "<>", "v3" ],
+            group: 'g',
+            sort: 'v',
+            filter: [ 'v', '<>', 'v3' ],
             skip: 1,
             take: 2
         }).done(function(result) {
             assert.deepEqual(result, [
                 {
-                    key: "g2",
-                    items: [ { g: "g2", v: "v2" } ]
+                    key: 'g2',
+                    items: [ { g: 'g2', v: 'v2' } ]
                 },
                 {
-                    key: "g4",
-                    items: [ { g: "g4", v: "v4" } ]
+                    key: 'g4',
+                    items: [ { g: 'g4', v: 'v4' } ]
                 }
             ]);
             done();
         });
     });
 
-    QUnit.test("requireTotalCount", function(assert) {
-        var done = assert.async();
+    QUnit.test('requireTotalCount', function(assert) {
+        const done = assert.async();
 
         new CustomStore({
             loadMode: RAW,
@@ -77,12 +77,12 @@ QUnit.module("load", function() {
         });
     });
 
-    QUnit.test("error during local processing", function(assert) {
-        var done = assert.async(),
-            helper = new ErrorHandlingHelper();
+    QUnit.test('error during local processing', function(assert) {
+        const done = assert.async();
+        const helper = new ErrorHandlingHelper();
 
         helper.extraChecker = function(error) {
-            assert.equal(error.message, "expected error");
+            assert.equal(error.message, 'expected error');
         };
 
         helper.run(function() {
@@ -91,17 +91,17 @@ QUnit.module("load", function() {
                 load: function() { return [ null ]; },
                 errorHandler: helper.optionalHandler
             }).load({
-                filter: function() { throw Error("expected error"); }
+                filter: function() { throw Error('expected error'); }
             });
         }, done, assert);
     });
 
 });
 
-QUnit.module("totalCount", function() {
+QUnit.module('totalCount', function() {
 
-    QUnit.test("user func takes precedence", function(assert) {
-        var done = assert.async();
+    QUnit.test('user func takes precedence', function(assert) {
+        const done = assert.async();
 
         new CustomStore({
             loadMode: RAW,
@@ -114,9 +114,9 @@ QUnit.module("totalCount", function() {
         });
     });
 
-    QUnit.test("based on raw load", function(assert) {
-        var done = assert.async(),
-            userData = { custom: 123 };
+    QUnit.test('based on raw load', function(assert) {
+        const done = assert.async();
+        const userData = { custom: 123 };
 
         new CustomStore({
             loadMode: RAW,
@@ -126,20 +126,20 @@ QUnit.module("totalCount", function() {
             }
         }).totalCount({
             userData: userData,
-            filter: [ "this", "<>", 2 ],
-            sort: "anything"
+            filter: [ 'this', '<>', 2 ],
+            sort: 'anything'
         }).done(function(count) {
             assert.equal(count, 2);
             done();
         });
     });
 
-    QUnit.test("error during local processing", function(assert) {
-        var done = assert.async(),
-            helper = new ErrorHandlingHelper();
+    QUnit.test('error during local processing', function(assert) {
+        const done = assert.async();
+        const helper = new ErrorHandlingHelper();
 
         helper.extraChecker = function(error) {
-            assert.equal(error.message, "expected error");
+            assert.equal(error.message, 'expected error');
         };
 
         helper.run(function() {
@@ -148,36 +148,36 @@ QUnit.module("totalCount", function() {
                 load: function() { return [ null ]; },
                 errorHandler: helper.optionalHandler
             }).totalCount({
-                filter: function() { throw Error("expected error"); }
+                filter: function() { throw Error('expected error'); }
             });
         }, done, assert);
     });
 
 });
 
-QUnit.module("byKey", function() {
+QUnit.module('byKey', function() {
 
-    QUnit.test("user func takes precedence", function(assert) {
-        var done = assert.async();
+    QUnit.test('user func takes precedence', function(assert) {
+        const done = assert.async();
 
         new CustomStore({
             loadMode: RAW,
             byKey: function() {
                 return 123;
             }
-        }).byKey("*").done(function(item) {
+        }).byKey('*').done(function(item) {
             assert.equal(item, 123);
             done();
         });
     });
 
-    QUnit.test("success", function(assert) {
-        var done = assert.async(),
-            needle = { id: 123 };
+    QUnit.test('success', function(assert) {
+        const done = assert.async();
+        const needle = { id: 123 };
 
         new CustomStore({
             loadMode: RAW,
-            key: "id",
+            key: 'id',
             load: function() {
                 return [ needle ];
             }
@@ -187,25 +187,25 @@ QUnit.module("byKey", function() {
         });
     });
 
-    QUnit.test("not found", function(assert) {
-        var done = assert.async();
+    QUnit.test('not found', function(assert) {
+        const done = assert.async();
 
         new CustomStore({
             loadMode: RAW,
-            key: "id",
+            key: 'id',
             load: function() {
                 return [ ];
             }
-        }).byKey("anything").fail(function(x) {
+        }).byKey('anything').fail(function(x) {
             assert.ok(/^E4009 /.test(x.message));
             done();
         });
     });
 
-    QUnit.test("key not specified", function(assert) {
+    QUnit.test('key not specified', function(assert) {
         assert.throws(
             function() {
-                new CustomStore({ loadMode: RAW }).byKey("anything");
+                new CustomStore({ loadMode: RAW }).byKey('anything');
             },
             function(x) {
                 assert.ok(/^E4005 /.test(x.message));
@@ -216,14 +216,14 @@ QUnit.module("byKey", function() {
 
 });
 
-QUnit.module("raw data caching", function() {
+QUnit.module('raw data caching', function() {
 
-    QUnit.test("enabled by default", function(assert) {
-        var done = assert.async(),
-            loadCallCount = 0;
+    QUnit.test('enabled by default', function(assert) {
+        const done = assert.async();
+        let loadCallCount = 0;
 
-        var store = new CustomStore({
-            key: "this",
+        const store = new CustomStore({
+            key: 'this',
             loadMode: RAW,
             load: function() {
                 loadCallCount++;
@@ -237,11 +237,11 @@ QUnit.module("raw data caching", function() {
         });
     });
 
-    QUnit.test("can be disabled", function(assert) {
-        var done = assert.async(),
-            loadCallCount = 0;
+    QUnit.test('can be disabled', function(assert) {
+        const done = assert.async();
+        let loadCallCount = 0;
 
-        var store = new CustomStore({
+        const store = new CustomStore({
             loadMode: RAW,
             cacheRawData: false,
             load: function() {
@@ -258,10 +258,10 @@ QUnit.module("raw data caching", function() {
 
 });
 
-QUnit.test("ensure valid results regardless of presence of options (checks optimizations)", function(assert) {
-    var done = assert.async();
+QUnit.test('ensure valid results regardless of presence of options (checks optimizations)', function(assert) {
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         loadMode: RAW,
         load: function() { return [ 1, 2, 3 ]; }
     });
@@ -270,7 +270,7 @@ QUnit.test("ensure valid results regardless of presence of options (checks optim
         assert.deepEqual(result, [ 1, 2, 3 ]);
         assert.equal(extra.totalCount, 3);
 
-        store.load({ filter: [ "this", "<>", 2 ], requireTotalCount: true }).done(function(result, extra) {
+        store.load({ filter: [ 'this', '<>', 2 ], requireTotalCount: true }).done(function(result, extra) {
             assert.deepEqual(result, [ 1, 3 ]);
             assert.equal(extra.totalCount, 2);
 
@@ -279,24 +279,24 @@ QUnit.test("ensure valid results regardless of presence of options (checks optim
     });
 });
 
-QUnit.test("uses default search", function(assert) {
+QUnit.test('uses default search', function(assert) {
     assert.strictEqual(
         new CustomStore({ loadMode: RAW })._useDefaultSearch,
         true
     );
 });
 
-QUnit.test("async load", function(assert) {
-    var loadCallCount = 0;
-    var store = new CustomStore({
-        loadMode: "raw",
-        key: "ID",
+QUnit.test('async load', function(assert) {
+    let loadCallCount = 0;
+    const store = new CustomStore({
+        loadMode: 'raw',
+        key: 'ID',
         load: function() {
             loadCallCount++;
             return new Promise(function(resolve) {
                 resolve([
-                    { "ID": 1 },
-                    { "ID": 2 }
+                    { 'ID': 1 },
+                    { 'ID': 2 }
                 ]);
             });
         }

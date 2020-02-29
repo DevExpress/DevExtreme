@@ -3,8 +3,8 @@
 module.exports = {
     output: {
         sourcePrefix: '    ',
-        devtoolModuleFilenameTemplate: "devextreme:///[resource-path]",
-        devtoolFallbackModuleFilenameTemplate: "devextreme:///[resource-path]?[hash]"
+        devtoolModuleFilenameTemplate: 'devextreme:///[resource-path]',
+        devtoolFallbackModuleFilenameTemplate: 'devextreme:///[resource-path]?[hash]'
     },
     externals: {
         // Optional (calling through window to skip error on script load)
@@ -21,7 +21,7 @@ module.exports = {
         'turndown': 'window.TurndownService',
         'showdown': 'window.showdown',
         'exceljs': 'window.ExcelJS',
-        "devexpress-diagram": 'window.DevExpress.diagram',
+        'devexpress-diagram': 'window.DevExpress.diagram',
         'devexpress-gantt': 'window.DevExpress.Gantt'
     }
 };

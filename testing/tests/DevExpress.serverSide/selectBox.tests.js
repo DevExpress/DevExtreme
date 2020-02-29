@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets.editors/selectBox.markup.tests.js");
+require('../DevExpress.ui.widgets.editors/selectBox.markup.tests.js');

@@ -1,31 +1,30 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import Config from "../../core/config";
-import registerComponentCallbacks from "../../core/component_registrator_callbacks";
-import Class from "../../core/class";
-import Callbacks from "../../core/utils/callbacks";
-import typeUtils from "../../core/utils/type";
-import iterator from "../../core/utils/iterator";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import Config from '../../core/config';
+import registerComponentCallbacks from '../../core/component_registrator_callbacks';
+import Class from '../../core/class';
+import Callbacks from '../../core/utils/callbacks';
+import typeUtils from '../../core/utils/type';
+import iterator from '../../core/utils/iterator';
 const each = iterator.each;
-import arrayUtils from "../../core/utils/array";
+import arrayUtils from '../../core/utils/array';
 const inArray = arrayUtils.inArray;
-import Locker from "../../core/utils/locker";
-import Widget from "../../core/dom_component_with_template";
-import Editor from "../../ui/editor/editor";
-import { NgTemplate } from "./template";
-import ngModule from "./module";
-import CollectionWidget from "../../ui/collection/ui.collection_widget.edit";
-import dataUtils from "../../core/utils/data";
-import { equals } from "../../core/utils/comparator";
+import Locker from '../../core/utils/locker';
+import Editor from '../../ui/editor/editor';
+import { NgTemplate } from './template';
+import ngModule from './module';
+import CollectionWidget from '../../ui/collection/ui.collection_widget.edit';
+import dataUtils from '../../core/utils/data';
+import { equals } from '../../core/utils/comparator';
 const compileSetter = dataUtils.compileSetter;
 const compileGetter = dataUtils.compileGetter;
-import extendUtils from "../../core/utils/extend";
+import extendUtils from '../../core/utils/extend';
 const extendFromObject = extendUtils.extendFromObject;
-import inflector from "../../core/utils/inflector";
-import errors from "../../core/errors";
-const ITEM_ALIAS_ATTRIBUTE_NAME = "dxItemAlias";
-const SKIP_APPLY_ACTION_CATEGORIES = ["rendering"];
-const NG_MODEL_OPTION = "value";
+import inflector from '../../core/utils/inflector';
+import errors from '../../core/errors';
+const ITEM_ALIAS_ATTRIBUTE_NAME = 'dxItemAlias';
+const SKIP_APPLY_ACTION_CATEGORIES = ['rendering'];
+const NG_MODEL_OPTION = 'value';
 
 const safeApply = (func, scope) => {
     if(scope.$root.$$phase) {
@@ -35,11 +34,30 @@ const safeApply = (func, scope) => {
     }
 };
 
-/**
- * @name DOMComponentOptions.bindingOptions
- * @type object
- * @default {}
- */
+const getClassMethod = (initClass, methodName) => {
+    const hasParentProperty = Object.prototype.hasOwnProperty.bind(initClass)('parent');
+    const isES6Class = !hasParentProperty && initClass.parent;
+
+    if(isES6Class) {
+        const baseClass = Object.getPrototypeOf(initClass);
+
+        return baseClass.prototype[methodName]
+            ? () => baseClass.prototype[methodName]()
+            : getClassMethod(baseClass, methodName);
+    } else {
+        const method = initClass.parent.prototype[methodName];
+        if(method) {
+            return () => method();
+        }
+
+        if(!method || !initClass.parent.subclassOf) {
+            return () => undefined;
+        }
+
+        return getClassMethod(initClass.parent, methodName);
+    }
+};
+
 
 let ComponentBuilder = Class.inherit({
 
@@ -155,22 +173,22 @@ let ComponentBuilder = Class.inherit({
 
             optionDependencies[optionForSubscribe][optionPath] = valuePath;
 
-            const watchCallback = (newValue, oldValue) => {
-                if(this._ngLocker.locked(optionPath)) {
-                    return;
-                }
+            const updateWatcher = () => {
+                const watchCallback = (newValue, oldValue) => {
+                    if(this._ngLocker.locked(optionPath)) {
+                        return;
+                    }
 
-                this._ngLocker.obtain(optionPath);
-                this._component.option(optionPath, newValue);
-                updateWatcher();
+                    this._ngLocker.obtain(optionPath);
+                    this._component.option(optionPath, newValue);
+                    updateWatcher();
 
-                if(equals(oldValue, newValue) && this._ngLocker.locked(optionPath)) {
-                    this._ngLocker.release(optionPath);
-                }
-            };
+                    if(equals(oldValue, newValue) && this._ngLocker.locked(optionPath)) {
+                        this._ngLocker.release(optionPath);
+                    }
+                };
 
-            var updateWatcher = () => {
-                const watchMethod = Array.isArray(this._scope.$eval(valuePath)) && !forcePlainWatchMethod ? "$watchCollection" : "$watch";
+                const watchMethod = Array.isArray(this._scope.$eval(valuePath)) && !forcePlainWatchMethod ? '$watchCollection' : '$watch';
 
                 if(prevWatchMethod !== watchMethod) {
                     if(clearWatcher) {
@@ -245,7 +263,7 @@ let ComponentBuilder = Class.inherit({
 
     _optionsAreNested(optionPath1, optionPath2) {
         const parentSeparator = optionPath1[optionPath2.length];
-        return optionPath1.indexOf(optionPath2) === 0 && (parentSeparator === "." || parentSeparator === "[");
+        return optionPath1.indexOf(optionPath2) === 0 && (parentSeparator === '.' || parentSeparator === '[');
     },
 
     _optionsAreLinked(optionPath1, optionPath2) {
@@ -271,7 +289,7 @@ let ComponentBuilder = Class.inherit({
             $resultMarkup.appendTo(options.container);
 
             if(!options.noModel) {
-                eventsEngine.on($resultMarkup, "$destroy", () => {
+                eventsEngine.on($resultMarkup, '$destroy', () => {
                     const destroyAlreadyCalled = !templateScope.$parent;
 
                     if(destroyAlreadyCalled) {
@@ -295,14 +313,16 @@ let ComponentBuilder = Class.inherit({
         func(scope);
         if(!scope.$root.$$phase) {
             if(!this._renderingTimer) {
+                const clearRenderingTimer = () => {
+                    clearTimeout(this._renderingTimer);
+                };
                 this._renderingTimer = setTimeout(() => {
                     scope.$apply();
                     this._renderingTimer = null;
+                    this._componentDisposing.remove(clearRenderingTimer);
                 });
+                this._componentDisposing.add(clearRenderingTimer);
             }
-            this._componentDisposing.add(() => {
-                clearTimeout(this._renderingTimer);
-            });
         }
     },
 
@@ -327,7 +347,7 @@ let ComponentBuilder = Class.inherit({
     },
 
     _synchronizeScopes(itemScope, parentPrefix, itemIndex) {
-        if(this._itemAlias && typeof (itemScope[this._itemAlias]) !== "object") {
+        if(this._itemAlias && typeof (itemScope[this._itemAlias]) !== 'object') {
             this._synchronizeScopeField({
                 parentScope: this._scope,
                 childScope: itemScope,
@@ -344,19 +364,18 @@ let ComponentBuilder = Class.inherit({
         const fieldPath = args.fieldPath;
         const parentPrefix = args.parentPrefix;
         const itemIndex = args.itemIndex;
-        const innerPathSuffix = fieldPath === this._itemAlias ? "" : "." + fieldPath;
+        const innerPathSuffix = fieldPath === this._itemAlias ? '' : '.' + fieldPath;
         const collectionField = itemIndex !== undefined;
         const optionOuterBag = [parentPrefix];
-        let optionOuterPath;
 
         if(collectionField) {
             if(!typeUtils.isNumeric(itemIndex)) return;
 
-            optionOuterBag.push("[", itemIndex, "]");
+            optionOuterBag.push('[', itemIndex, ']');
         }
 
         optionOuterBag.push(innerPathSuffix);
-        optionOuterPath = optionOuterBag.join("");
+        const optionOuterPath = optionOuterBag.join('');
 
         const clearParentWatcher = parentScope.$watch(optionOuterPath, (newValue, oldValue) => {
             if(newValue !== oldValue) {
@@ -409,12 +428,12 @@ let ComponentBuilder = Class.inherit({
         };
         result.beforeActionExecute = result.onActionCreated;
         result.nestedComponentOptions = component => ({
-            templatesRenderAsynchronously: component.option("templatesRenderAsynchronously"),
-            forceApplyBindings: component.option("forceApplyBindings"),
-            modelByElement: component.option("modelByElement"),
-            onActionCreated: component.option("onActionCreated"),
-            beforeActionExecute: component.option("beforeActionExecute"),
-            nestedComponentOptions: component.option("nestedComponentOptions")
+            templatesRenderAsynchronously: component.option('templatesRenderAsynchronously'),
+            forceApplyBindings: component.option('forceApplyBindings'),
+            modelByElement: component.option('modelByElement'),
+            onActionCreated: component.option('onActionCreated'),
+            beforeActionExecute: component.option('beforeActionExecute'),
+            nestedComponentOptions: component.option('nestedComponentOptions')
         });
 
         result.templatesRenderAsynchronously = true;
@@ -458,20 +477,20 @@ let ComponentBuilder = Class.inherit({
                 return disposeWatcher;
             },
             templates: {
-                "dx-polymorph-widget": {
+                'dx-polymorph-widget': {
                     render: options => {
                         let widgetName = options.model.widget;
                         if(!widgetName) {
                             return;
                         }
 
-                        if(widgetName === "button" || widgetName === "tabs" || widgetName === "dropDownMenu") {
+                        if(widgetName === 'button' || widgetName === 'tabs' || widgetName === 'dropDownMenu') {
                             const deprecatedName = widgetName;
-                            widgetName = inflector.camelize("dx-" + widgetName);
-                            errors.log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
+                            widgetName = inflector.camelize('dx-' + widgetName);
+                            errors.log('W0001', 'dxToolbar - \'widget\' item field', deprecatedName, '16.1', 'Use: \'' + widgetName + '\' instead');
                         }
 
-                        const markup = $("<div>").attr(inflector.dasherize(widgetName), "options").get(0);
+                        const markup = $('<div>').attr(inflector.dasherize(widgetName), 'options').get(0);
 
                         const newScope = this._scope.$new();
                         newScope.options = options.model.options;
@@ -558,15 +577,18 @@ ComponentBuilder = ComponentBuilder.inherit({
 const registeredComponents = {};
 
 const registerComponentDirective = name => {
-    const priority = name !== "dxValidator" ? 1 : 10;
-    ngModule.directive(name, ["$compile", "$parse", "dxDigestCallbacks", ($compile, $parse, dxDigestCallbacks) => ({
-        restrict: "A",
-        require: "^?ngModel",
+    const priority = name !== 'dxValidator' ? 1 : 10;
+    ngModule.directive(name, ['$compile', '$parse', 'dxDigestCallbacks', ($compile, $parse, dxDigestCallbacks) => ({
+        restrict: 'A',
+        require: '^?ngModel',
         priority,
 
         compile($element) {
             const componentClass = registeredComponents[name];
-            const $content = componentClass.subclassOf(Widget) ? $element.contents().detach() : null;
+            const useTemplates = componentClass.prototype._useTemplates
+                ? componentClass.prototype._useTemplates()
+                : getClassMethod(componentClass, '_useTemplates')();
+            const $content = useTemplates ? $element.contents().detach() : null;
 
             return (scope, $element, attrs, ngModelController, transcludeFn) => {
                 $element.append($content);

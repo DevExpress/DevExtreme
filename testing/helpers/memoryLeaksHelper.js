@@ -3,7 +3,7 @@
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             root.memoryLeaksHelper = module.exports = factory(
-                require("jquery")
+                require('jquery')
             );
         });
     } else {
@@ -13,11 +13,11 @@
     }
 }(window, function($) {
 
-    var exports = {};
+    const exports = {};
 
     exports.createTestNode = function() {
-        var testNode = $("<div />");
-        testNode.appendTo("body");
+        const testNode = $('<div />');
+        testNode.appendTo('body');
         return testNode;
     };
 
@@ -26,54 +26,54 @@
     };
 
     exports.getAllPossibleEventTargets = function() {
-        return $(document).find("*").addBack().add(window);
+        return $(document).find('*').addBack().add(window);
     };
 
     exports.getAllEventSubscriptions = function() {
-        var eventSubscriptions = {},
-            anEvent;
+        const eventSubscriptions = {};
+        let anEvent;
         exports.getAllPossibleEventTargets().each(function() {
-            for(anEvent in $._data(this, "events")) {
-                eventSubscriptions[anEvent] = $._data(this, "events")[anEvent].length;
+            for(anEvent in $._data(this, 'events')) {
+                eventSubscriptions[anEvent] = $._data(this, 'events')[anEvent].length;
             }
         });
         return eventSubscriptions;
     };
 
     exports.compareDomElements = function(originalDomElements, newDomElements, ignorePatterns) {
-        var errorMessage = "",
-            addedElements = {},
-            isIgnored;
+        let errorMessage = '';
+        const addedElements = {};
+        let isIgnored;
 
         if(ignorePatterns) {
             isIgnored = function(element) {
-                var result = false;
+                let result = false;
                 $.each(ignorePatterns, function(tagName, pattern) {
-                    result = result || ((element.tagName || "").toLowerCase() === tagName.toLowerCase() && pattern.test(element.innerHTML));
+                    result = result || ((element.tagName || '').toLowerCase() === tagName.toLowerCase() && pattern.test(element.innerHTML));
                 });
                 return result;
             };
         }
 
-        var diffElement = function(element, diff) {
+        const diffElement = function(element, diff) {
             if(isIgnored && isIgnored(element)) {
                 return;
             }
-            var id = element.tagName + ' ' + element.className;
+            const id = element.tagName + ' ' + element.className;
             addedElements[id] = (addedElements[id] || 0) + diff;
         };
         $.each(newDomElements, function() { diffElement(this, +1); });
         $.each(originalDomElements, function() { diffElement(this, -1); });
         $.each(addedElements, function(index, value) {
             if(value) {
-                errorMessage += (value > 0 ? '+' : '') + value + ' ' + index + "\n";
+                errorMessage += (value > 0 ? '+' : '') + value + ' ' + index + '\n';
             }
         });
         return errorMessage;
     };
 
     exports.componentCanBeTriviallyInstantiated = function(componentName) {
-        return $.inArray(componentName, ["dxDashboardViewer"]) === -1;
+        return $.inArray(componentName, ['dxDashboardViewer']) === -1;
     };
 
     exports.getComponentOptions = function(componentName) {

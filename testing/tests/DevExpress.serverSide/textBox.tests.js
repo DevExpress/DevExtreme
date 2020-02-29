@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets.editors/textbox.markup.tests.js");
+require('../DevExpress.ui.widgets.editors/textbox.markup.tests.js');

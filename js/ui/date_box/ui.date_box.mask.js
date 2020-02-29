@@ -1,19 +1,20 @@
-import { addNamespace, normalizeKeyName } from "../../events/utils";
-import { isFunction } from "../../core/utils/type";
-import { clipboardText } from "../../core/utils/dom";
-import { extend } from "../../core/utils/extend";
-import { fitIntoRange } from "../../core/utils/math";
-import { inRange } from "../../core/utils/math";
-import eventsEngine from "../../events/core/events_engine";
-import { getDatePartIndexByPosition, renderDateParts } from "./ui.date_box.mask.parts";
-import dateLocalization from "../../localization/date";
-import { getRegExpInfo } from "../../localization/ldml/date.parser";
-import { getFormat } from "../../localization/ldml/date.format";
-import { isString } from "../../core/utils/type";
-import { sign } from "../../core/utils/math";
-import DateBoxBase from "./ui.date_box.base";
+import { addNamespace, normalizeKeyName } from '../../events/utils';
+import { isFunction } from '../../core/utils/type';
+import { clipboardText } from '../../core/utils/dom';
+import { extend } from '../../core/utils/extend';
+import { fitIntoRange } from '../../core/utils/math';
+import { inRange } from '../../core/utils/math';
+import eventsEngine from '../../events/core/events_engine';
+import { getDatePartIndexByPosition, renderDateParts } from './ui.date_box.mask.parts';
+import dateLocalization from '../../localization/date';
+import { getRegExpInfo } from '../../localization/ldml/date.parser';
+import { getFormat } from '../../localization/ldml/date.format';
+import { isString } from '../../core/utils/type';
+import { sign } from '../../core/utils/math';
+import DateBoxBase from './ui.date_box.base';
+import numberLocalization from '../../localization/number';
 
-const MASK_EVENT_NAMESPACE = "dateBoxMask";
+const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
 const BACKWARD = -1;
 
@@ -96,8 +97,8 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _shouldUseOriginalHandler(e) {
-        const keysToHandleByMask = ["backspace", "del"];
-        const isNotDeletingInCalendar = this.option("opened") && e && keysToHandleByMask.indexOf(normalizeKeyName(e)) === -1;
+        const keysToHandleByMask = ['backspace', 'del'];
+        const isNotDeletingInCalendar = this.option('opened') && e && keysToHandleByMask.indexOf(normalizeKeyName(e)) === -1;
 
         return !this._useMaskBehavior() || isNotDeletingInCalendar || (e && e.altKey);
     },
@@ -116,27 +117,21 @@ const DateBoxMask = DateBoxBase.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
 
-            /**
-             * @name dxDateBoxOptions.useMaskBehavior
-             * @type boolean
-             * @default false
-             */
             useMaskBehavior: false,
 
-            emptyDateValue: new Date(2000, 0, 1, 0, 0, 0),
-            advanceCaret: true
+            emptyDateValue: new Date(2000, 0, 1, 0, 0, 0)
         });
     },
 
     _isSingleCharKey(e) {
         const key = e.originalEvent.key;
-        return typeof key === "string" && key.length === 1 && !e.ctrl && !e.alt;
+        return typeof key === 'string' && key.length === 1 && !e.ctrl && !e.alt;
     },
 
     _keyboardHandler(e) {
         const key = e.originalEvent.key;
 
-        let result = this.callBase(e);
+        const result = this.callBase(e);
 
         if(!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
             return result;
@@ -158,7 +153,7 @@ const DateBoxMask = DateBoxBase.inherit({
     _isAllSelected() {
         const caret = this._caret();
 
-        return caret.end - caret.start === this.option("text").length;
+        return caret.end - caret.start === this.option('text').length;
     },
 
     _getFormatPattern() {
@@ -166,7 +161,7 @@ const DateBoxMask = DateBoxBase.inherit({
             return this._formatPattern;
         }
 
-        const format = this._strategy.getDisplayFormat(this.option("displayFormat"));
+        const format = this._strategy.getDisplayFormat(this.option('displayFormat'));
         const isLDMLPattern = isString(format) && !dateLocalization._getPatternByFormat(format);
 
         if(isLDMLPattern) {
@@ -182,17 +177,27 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _setNewDateIfEmpty() {
         if(!this._maskValue) {
-            var value = this.option("type") === "time" ? new Date(null) : new Date();
+            const value = this.option('type') === 'time' ? new Date(null) : new Date();
             this._maskValue = value;
             this._initialMaskValue = value;
             this._renderDateParts();
         }
     },
 
+    _partLimitsReached(max) {
+        const maxLimitLength = String(max).length;
+        const formatLength = this._getActivePartProp('pattern').length;
+        const isShortFormat = formatLength === 1;
+        const maxSearchLength = isShortFormat ? maxLimitLength : Math.min(formatLength, maxLimitLength);
+        const isLengthExceeded = this._searchValue.length === maxSearchLength;
+        const isValueOverflowed = parseInt(this._searchValue + '0') > max;
+
+        return isLengthExceeded || isValueOverflowed;
+    },
+
     _searchNumber(char) {
         const { max } = this._getActivePartLimits();
         const maxLimitLength = String(max).length;
-        const formatLength = this._getActivePartProp("pattern").length;
 
         this._searchValue = (this._searchValue + char).substr(-maxLimitLength);
         if(isNaN(this._searchValue)) {
@@ -201,31 +206,24 @@ const DateBoxMask = DateBoxBase.inherit({
 
         this._setActivePartValue(this._searchValue);
 
-        if(this.option("advanceCaret")) {
-            const isShortFormat = formatLength === 1;
-            const maxSearchLength = isShortFormat ? maxLimitLength : Math.min(formatLength, maxLimitLength);
-            const isLengthExceeded = this._searchValue.length === maxSearchLength;
-            const isValueOverflowed = parseInt(this._searchValue + "0") > max;
-
-            if(isLengthExceeded || isValueOverflowed) {
-                this._selectNextPart(FORWARD);
-            }
+        if(this._partLimitsReached(max)) {
+            this._selectNextPart(FORWARD);
         }
     },
 
     _searchString(char) {
-        if(!isNaN(parseInt(this._getActivePartProp("text")))) {
+        if(!isNaN(parseInt(this._getActivePartProp('text')))) {
             return;
         }
 
-        let limits = this._getActivePartProp("limits")(this._maskValue),
-            startString = this._searchValue + char.toLowerCase(),
-            endLimit = limits.max - limits.min;
+        const limits = this._getActivePartProp('limits')(this._maskValue);
+        const startString = this._searchValue + char.toLowerCase();
+        const endLimit = limits.max - limits.min;
 
         for(let i = 0; i <= endLimit; i++) {
             this._loadMaskValue(this._initialMaskValue);
             this._partIncrease(i + 1);
-            if(this._getActivePartProp("text").toLowerCase().indexOf(startString) === 0) {
+            if(this._getActivePartProp('text').toLowerCase().indexOf(startString) === 0) {
                 this._searchValue = startString;
                 return;
             }
@@ -240,12 +238,12 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _clearSearchValue() {
-        this._searchValue = "";
+        this._searchValue = '';
     },
 
     _revertPart: function(direction) {
         if(!this._isAllSelected()) {
-            const actual = this._getActivePartValue(this.option("emptyDateValue"));
+            const actual = this._getActivePartValue(this.option('emptyDateValue'));
             this._setActivePartValue(actual);
 
             this._selectNextPart(direction);
@@ -254,13 +252,21 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _useMaskBehavior() {
-        return this.option("useMaskBehavior") && this.option("mode") === "text";
+        return this.option('useMaskBehavior') && this.option('mode') === 'text';
+    },
+
+    _prepareRegExpInfo() {
+        this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
+        const regExp = this._regExpInfo.regexp;
+        const flags = regExp.flags;
+        const convertedRegExp = numberLocalization.convertDigits(this._regExpInfo.regexp.source, false);
+        this._regExpInfo.regexp = RegExp(convertedRegExp, flags);
     },
 
     _initMaskState() {
         this._activePartIndex = 0;
         this._formatPattern = null;
-        this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
+        this._prepareRegExpInfo();
         this._loadMaskValue();
     },
 
@@ -281,7 +287,7 @@ const DateBoxMask = DateBoxBase.inherit({
             return;
         }
 
-        const text = this.option("text") || this._getDisplayedText(this._maskValue);
+        const text = this.option('text') || this._getDisplayedText(this._maskValue);
 
         if(text) {
             this._dateParts = renderDateParts(text, this._regExpInfo);
@@ -290,27 +296,27 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _detachMaskEvents() {
-        eventsEngine.off(this._input(), "." + MASK_EVENT_NAMESPACE);
+        eventsEngine.off(this._input(), '.' + MASK_EVENT_NAMESPACE);
     },
 
     _attachMaskEvents() {
-        eventsEngine.on(this._input(), addNamespace("dxclick", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
-        eventsEngine.on(this._input(), addNamespace("paste", MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this));
-        eventsEngine.on(this._input(), addNamespace("drop", MASK_EVENT_NAMESPACE), () => {
+        eventsEngine.on(this._input(), addNamespace('dxclick', MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
+        eventsEngine.on(this._input(), addNamespace('paste', MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this));
+        eventsEngine.on(this._input(), addNamespace('drop', MASK_EVENT_NAMESPACE), () => {
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
             this._selectNextPart();
         });
     },
 
     _selectLastPart() {
-        if(this.option("text")) {
+        if(this.option('text')) {
             this._activePartIndex = this._dateParts.length;
             this._selectNextPart(BACKWARD);
         }
     },
 
     _selectFirstPart() {
-        if(this.option("text")) {
+        if(this.option('text')) {
             this._activePartIndex = -1;
             this._selectNextPart(FORWARD);
         }
@@ -323,7 +329,7 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _selectNextPart(step = 0) {
-        if(!this.option("text") || this._disposed) {
+        if(!this.option('text') || this._disposed) {
             return;
         }
 
@@ -333,7 +339,7 @@ const DateBoxMask = DateBoxBase.inherit({
 
         let index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
         if(this._dateParts[index].isStub) {
-            let isBoundaryIndex = index === 0 && step < 0 || index === this._dateParts.length - 1 && step > 0;
+            const isBoundaryIndex = index === 0 && step < 0 || index === this._dateParts.length - 1 && step > 0;
             if(!isBoundaryIndex) {
                 this._selectNextPart(step >= 0 ? step + 1 : step - 1);
                 return;
@@ -347,38 +353,38 @@ const DateBoxMask = DateBoxBase.inherit({
         }
 
         this._activePartIndex = index;
-        this._caret(this._getActivePartProp("caret"));
+        this._caret(this._getActivePartProp('caret'));
     },
 
     _getRealLimitsPattern() {
-        if(this._getActivePartProp("pattern")[0] === "d") {
-            return "dM";
+        if(this._getActivePartProp('pattern')[0] === 'd') {
+            return 'dM';
         }
     },
 
     _getActivePartLimits(lockOtherParts) {
-        const limitFunction = this._getActivePartProp("limits");
+        const limitFunction = this._getActivePartProp('limits');
         return limitFunction(this._maskValue, lockOtherParts && this._getRealLimitsPattern());
     },
 
     _getActivePartValue(dateValue) {
         dateValue = dateValue || this._maskValue;
-        const getter = this._getActivePartProp("getter");
+        const getter = this._getActivePartProp('getter');
         return isFunction(getter) ? getter(dateValue) : dateValue[getter]();
     },
 
     _addLeadingZeroes(value) {
-        const zeroes = this._searchValue.match(/^0+/),
-            limits = this._getActivePartLimits(),
-            maxLimitLength = String(limits.max).length;
+        const zeroes = this._searchValue.match(/^0+/);
+        const limits = this._getActivePartLimits();
+        const maxLimitLength = String(limits.max).length;
 
-        return ((zeroes && zeroes[0] || "") + String(value)).substr(-maxLimitLength);
+        return ((zeroes && zeroes[0] || '') + String(value)).substr(-maxLimitLength);
     },
 
     _setActivePartValue(value, dateValue) {
         dateValue = dateValue || this._maskValue;
-        const setter = this._getActivePartProp("setter"),
-            limits = this._getActivePartLimits();
+        const setter = this._getActivePartProp('setter');
+        const limits = this._getActivePartLimits();
 
         value = inRange(value, limits.min, limits.max) ? value : value % 10;
         value = this._addLeadingZeroes(fitIntoRange(value, limits.min, limits.max));
@@ -397,7 +403,7 @@ const DateBoxMask = DateBoxBase.inherit({
         return this._dateParts[this._activePartIndex][property];
     },
 
-    _loadMaskValue(value = this.dateOption("value")) {
+    _loadMaskValue(value = this.dateOption('value')) {
         this._maskValue = value && new Date(value);
         this._initialMaskValue = value && new Date(value);
     },
@@ -405,7 +411,7 @@ const DateBoxMask = DateBoxBase.inherit({
     _saveMaskValue() {
         const value = this._maskValue && new Date(this._maskValue);
         this._initialMaskValue = new Date(value);
-        this.dateOption("value", value);
+        this.dateOption('value', value);
     },
 
     _revertChanges() {
@@ -417,7 +423,7 @@ const DateBoxMask = DateBoxBase.inherit({
     _renderDisplayText(text) {
         this.callBase(text);
         if(this._useMaskBehavior()) {
-            this.option("text", text);
+            this.option('text', text);
         }
     },
 
@@ -450,15 +456,15 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _maskClickHandler() {
-        if(this.option("text")) {
+        if(this.option('text')) {
             this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
-            this._caret(this._getActivePartProp("caret"));
+            this._caret(this._getActivePartProp('caret'));
         }
     },
 
     _maskPasteHandler(e) {
-        let newText = this._replaceSelectedText(this.option("text"), this._caret(), clipboardText(e));
-        let date = dateLocalization.parse(newText, this._getFormatPattern());
+        const newText = this._replaceSelectedText(this.option('text'), this._caret(), clipboardText(e));
+        const date = dateLocalization.parse(newText, this._getFormatPattern());
 
         if(date) {
             this._maskValue = date;
@@ -471,7 +477,7 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _isValueDirty() {
-        const value = this.dateOption("value");
+        const value = this.dateOption('value');
         return (this._maskValue && this._maskValue.getTime()) !== (value && value.getTime());
     },
 
@@ -479,7 +485,7 @@ const DateBoxMask = DateBoxBase.inherit({
         this._clearSearchValue();
 
         if(this._isValueDirty()) {
-            eventsEngine.trigger(this._input(), "change");
+            eventsEngine.trigger(this._input(), 'change');
         }
     },
 
@@ -500,7 +506,7 @@ const DateBoxMask = DateBoxBase.inherit({
     _valueChangeEventHandler(e) {
         if(this._useMaskBehavior()) {
             this._saveValueChangeEvent(e);
-            if(!this.option("text")) {
+            if(!this.option('text')) {
                 this._maskValue = null;
             }
             this._saveMaskValue();
@@ -511,21 +517,20 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _optionChanged(args) {
         switch(args.name) {
-            case "useMaskBehavior":
+            case 'useMaskBehavior':
                 this._renderMask();
                 break;
-            case "displayFormat":
-            case "mode":
+            case 'displayFormat':
+            case 'mode':
                 this.callBase(args);
                 this._renderMask();
                 break;
-            case "value":
+            case 'value':
                 this._loadMaskValue();
                 this.callBase(args);
                 this._renderDateParts();
                 break;
-            case "advanceCaret":
-            case "emptyDateValue":
+            case 'emptyDateValue':
                 break;
             default:
                 this.callBase(args);

@@ -1,4 +1,4 @@
-import { getQuill } from "./quill_importer";
+import { getQuill } from './quill_importer';
 
 class QuillRegistrator {
     constructor() {
@@ -8,38 +8,38 @@ class QuillRegistrator {
 
         const quill = this.getQuill();
 
-        const BaseTheme = require("./themes/base").default;
-        const Image = require("./formats/image").default;
-        const Link = require("./formats/link").default;
-        const FontStyle = require("./formats/font").default;
-        const SizeStyle = require("./formats/size").default;
-        const AlignStyle = require("./formats/align").default;
-        const Mention = require("./formats/mention").default;
-        const Toolbar = require("./modules/toolbar").default;
-        const DropImage = require("./modules/dropImage").default;
-        const Variables = require("./modules/variables").default;
-        const Resizing = require("./modules/resizing").default;
-        const MentionsModule = require("./modules/mentions").default;
+        const BaseTheme = require('./themes/base').default;
+        const Image = require('./formats/image').default;
+        const Link = require('./formats/link').default;
+        const FontStyle = require('./formats/font').default;
+        const SizeStyle = require('./formats/size').default;
+        const AlignStyle = require('./formats/align').default;
+        const Mention = require('./formats/mention').default;
+        const Toolbar = require('./modules/toolbar').default;
+        const DropImage = require('./modules/dropImage').default;
+        const Variables = require('./modules/variables').default;
+        const Resizing = require('./modules/resizing').default;
+        const MentionsModule = require('./modules/mentions').default;
 
-        const DirectionStyle = quill.import("attributors/style/direction");
+        const DirectionStyle = quill.import('attributors/style/direction');
 
         quill.register({
-            "formats/align": AlignStyle,
-            "formats/direction": DirectionStyle,
-            "formats/font": FontStyle,
-            "formats/size": SizeStyle,
+            'formats/align': AlignStyle,
+            'formats/direction': DirectionStyle,
+            'formats/font': FontStyle,
+            'formats/size': SizeStyle,
 
-            "formats/extendedImage": Image,
-            "formats/link": Link,
-            "formats/mention": Mention,
+            'formats/extendedImage': Image,
+            'formats/link': Link,
+            'formats/mention': Mention,
 
-            "modules/toolbar": Toolbar,
-            "modules/dropImage": DropImage,
-            "modules/variables": Variables,
-            "modules/resizing": Resizing,
-            "modules/mentions": MentionsModule,
+            'modules/toolbar': Toolbar,
+            'modules/dropImage': DropImage,
+            'modules/variables': Variables,
+            'modules/resizing': Resizing,
+            'modules/mentions': MentionsModule,
 
-            "themes/basic": BaseTheme
+            'themes/basic': BaseTheme
         },
         true
         );
@@ -55,7 +55,7 @@ class QuillRegistrator {
     }
 
     registerModules(modulesConfig) {
-        const isModule = RegExp("modules/*");
+        const isModule = RegExp('modules/*');
         const quill = this.getQuill();
         const isRegisteredModule = (modulePath) => {
             return !!quill.imports[modulePath];

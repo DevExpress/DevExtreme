@@ -1,20 +1,20 @@
-import $ from "jquery";
-import Class from "core/class";
-import { DataController } from "ui/pivot_grid/ui.pivot_grid.data_controller";
-import virtualScrolling from "ui/grid_core/ui.grid_core.virtual_scrolling_core";
-import stateStoring from "ui/grid_core/ui.grid_core.state_storing_core";
-import pivotGridUtils from "ui/pivot_grid/ui.pivot_grid.utils";
-import PivotGridDataSource from "ui/pivot_grid/data_source";
-import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import $ from 'jquery';
+import Class from 'core/class';
+import { DataController } from 'ui/pivot_grid/ui.pivot_grid.data_controller';
+import virtualScrolling from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
+import stateStoring from 'ui/grid_core/ui.grid_core.state_storing_core';
+import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
+import PivotGridDataSource from 'ui/pivot_grid/data_source';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
-        var StateStoringController = stateStoring.StateStoringController;
+        const StateStoringController = stateStoring.StateStoringController;
 
-        var stateStoringController = sinon.createStubInstance(StateStoringController);
+        const stateStoringController = sinon.createStubInstance(StateStoringController);
         stateStoringController.init.returns(stateStoringController);
 
-        sinon.stub(stateStoring, "StateStoringController", function() {
+        sinon.stub(stateStoring, 'StateStoringController', function() {
             return stateStoringController;
         });
 
@@ -36,83 +36,83 @@ function prepareLoadedData(data) {
     return data;
 }
 
-QUnit.module("dxPivotGrid DataController", moduleConfig);
+QUnit.module('dxPivotGrid DataController', moduleConfig);
 
-var texts = {
+const texts = {
     grandTotal: 'Grand Total',
     total: '{0} Total',
-    dataNotAvailable: "Error"
+    dataNotAvailable: 'Error'
 };
 
-QUnit.test("Without options", function(assert) {
-    var dataController = new DataController({});
-    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: "GT", isLast: true }]]);
-    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: "GT", isLast: true }]]);
+QUnit.test('Without options', function(assert) {
+    const dataController = new DataController({});
+    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
+    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
     assert.deepEqual(dataController.getCellsInfo(), []);
 });
 
-QUnit.test("With empty fields", function(assert) {
-    var dataController = new DataController({ dataSource: { fields: [] } });
-    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: "GT", isLast: true }]]);
-    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: "GT", isLast: true }]]);
+QUnit.test('With empty fields', function(assert) {
+    const dataController = new DataController({ dataSource: { fields: [] } });
+    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
+    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
     assert.deepEqual(dataController.getCellsInfo(), []);
 });
 
-QUnit.test("No dataSource options", function(assert) {
-    var dataController = new DataController({});
-    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: "GT", isLast: true }]]);
-    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: "GT", isLast: true }]]);
+QUnit.test('No dataSource options', function(assert) {
+    const dataController = new DataController({});
+    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
+    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
     assert.deepEqual(dataController.getCellsInfo(), []);
 });
 
-QUnit.test("Empty dataSource", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Empty dataSource', function(assert) {
+    const dataController = new DataController({
         dataSource: {}
     });
-    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: "GT", isLast: true }]]);
-    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: "GT", isLast: true }]]);
+    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
+    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
     assert.deepEqual(dataController.getCellsInfo(), []);
     assert.ok(dataController.isEmpty(), 'isEmpty');
 });
 
-QUnit.test("DataSource with empty data", function(assert) {
-    var dataController = new DataController({
+QUnit.test('DataSource with empty data', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "column", width: 100 },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'column' },
+                { area: 'column', width: 100 },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             grandTotalRowIndex: 0,
             grandTotalColumnIndex: 0
         }
     });
-    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: "GT", isLast: true }]]);
-    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: "GT", isLast: true }]]);
+    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
+    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
     assert.deepEqual(dataController.getCellsInfo(), []);
     assert.ok(dataController.isEmpty(), 'isEmpty');
 });
 
-QUnit.test("Empty dataSource when showRowGrandTotals/showColumnGrandTotals disabled", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Empty dataSource when showRowGrandTotals/showColumnGrandTotals disabled', function(assert) {
+    const dataController = new DataController({
         showRowGrandTotals: false,
         showColumnGrandTotals: false,
         dataSource: {},
         texts: texts
     });
 
-    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: undefined }]], "Rows Info");
-    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: undefined }]], "Columns Info");
-    assert.deepEqual(dataController.getCellsInfo(), [], "Cells Info");
+    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: undefined }]], 'Rows Info');
+    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: undefined }]], 'Columns Info');
+    assert.deepEqual(dataController.getCellsInfo(), [], 'Cells Info');
 });
 
-QUnit.test("dataSource by options disposing", function(assert) {
-    var dataController = new DataController({
-            dataSource: {}
-        }),
-        onScrollChanged = sinon.stub();
+QUnit.test('dataSource by options disposing', function(assert) {
+    const dataController = new DataController({
+        dataSource: {}
+    });
+    const onScrollChanged = sinon.stub();
 
-    var dataSource = dataController.getDataSource();
+    const dataSource = dataController.getDataSource();
     dataController.scrollChanged.add(onScrollChanged);
 
     // act
@@ -121,14 +121,14 @@ QUnit.test("dataSource by options disposing", function(assert) {
     dataController.scrollChanged.fire();
 
     // assert
-    assert.ok(dataSource, "dataSource created");
-    assert.ok(dataSource.isDisposed(), "dataSource disposed");
-    assert.ok(!onScrollChanged.called, "onScrollChanged");
+    assert.ok(dataSource, 'dataSource created');
+    assert.ok(dataSource.isDisposed(), 'dataSource disposed');
+    assert.ok(!onScrollChanged.called, 'onScrollChanged');
 });
 
-QUnit.test("dataSource by instance disposing", function(assert) {
-    var dataSource = new PivotGridDataSource({});
-    var dataController = new DataController({
+QUnit.test('dataSource by instance disposing', function(assert) {
+    const dataSource = new PivotGridDataSource({});
+    const dataController = new DataController({
         dataSource: dataSource
     });
 
@@ -136,19 +136,19 @@ QUnit.test("dataSource by instance disposing", function(assert) {
     dataController.dispose();
 
     // assert
-    assert.ok(dataSource, "dataSource created");
-    assert.strictEqual(dataController.getDataSource(), dataSource, "DataController dataSource equal dataSource instance");
-    assert.ok(!dataSource.isDisposed(), "dataSource is not disposed");
+    assert.ok(dataSource, 'dataSource created');
+    assert.strictEqual(dataController.getDataSource(), dataSource, 'DataController dataSource equal dataSource instance');
+    assert.ok(!dataSource.isDisposed(), 'dataSource is not disposed');
     assert.ok(this.stateStoringController.dispose.calledOnce);
 });
 
-QUnit.test("columnsInfo when cells descriptions count === 1", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo when cells descriptions count === 1', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "column", width: 100 },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'column' },
+                { area: 'column', width: 100 },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -171,13 +171,13 @@ QUnit.test("columnsInfo when cells descriptions count === 1", function(assert) {
     ]);
 });
 
-QUnit.test("columnsInfo when cells descriptions count === 1 and sorting by summary", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summary', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { sortBySummaryField: "sum", sortBySummaryPath: ["A", "P2"], area: "row" },
-                { area: "column" }, { area: "column" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { sortBySummaryField: 'sum', sortBySummaryPath: ['A', 'P2'], area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
 
             columns: [{
@@ -200,26 +200,26 @@ QUnit.test("columnsInfo when cells descriptions count === 1 and sorting by summa
     ]);
 });
 
-QUnit.test("columnsInfo when cells descriptions count === 1 and sorting by summary when used key in summary Path", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summary when used key in summary Path', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { sortBySummaryField: "sum", sortBySummaryPath: ["&[A]", "&[P2]"], area: "row" },
-                { area: "column" }, { area: "column" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { sortBySummaryField: 'sum', sortBySummaryPath: ['&[A]', '&[P2]'], area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
 
             columns: [{
-                value: 'A', key: "&[A]", children: [{ value: 'P1', key: "&[P1]" }, { value: 'P2', key: "&[P2]" }]
+                value: 'A', key: '&[A]', children: [{ value: 'P1', key: '&[P1]' }, { value: 'P2', key: '&[P2]' }]
             },
-            { value: 'C1', key: "&[C1]" }]
+            { value: 'C1', key: '&[C1]' }]
         },
         texts: texts
     });
     assert.deepEqual(dataController.getColumnsInfo(), [
         [
-            { text: 'A', colspan: 2, expanded: true, path: ["&[A]"], type: 'D' },
-            { text: 'A Total', rowspan: 2, path: ["&[A]"], type: 'T', isLast: true },
+            { text: 'A', colspan: 2, expanded: true, path: ['&[A]'], type: 'D' },
+            { text: 'A Total', rowspan: 2, path: ['&[A]'], type: 'T', isLast: true },
             { text: 'C1', rowspan: 2, expanded: false, path: ['&[C1]'], type: 'D', isLast: true },
             { text: 'Grand Total', rowspan: 2, type: 'GT', isLast: true }],
         [
@@ -229,26 +229,26 @@ QUnit.test("columnsInfo when cells descriptions count === 1 and sorting by summa
     ]);
 });
 
-QUnit.test("columnsInfo when cells descriptions count === 1 and sorting by summary when caption path", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summary when caption path', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { sortBySummaryField: "sum", sortBySummaryPath: ["Atext", "P2text"], area: "row" },
-                { area: "column" }, { area: "column" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { sortBySummaryField: 'sum', sortBySummaryPath: ['Atext', 'P2text'], area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
 
             columns: [{
-                value: 'A', key: "&[A]", text: "Atext", children: [{ value: 'P1', key: "&[P1]", text: "P1text" }, { value: 'P2', key: "&[P2]", text: "P2text" }]
+                value: 'A', key: '&[A]', text: 'Atext', children: [{ value: 'P1', key: '&[P1]', text: 'P1text' }, { value: 'P2', key: '&[P2]', text: 'P2text' }]
             },
-            { value: 'C1', key: "&[C1]", text: "C1text" }]
+            { value: 'C1', key: '&[C1]', text: 'C1text' }]
         },
         texts: texts
     });
     assert.deepEqual(dataController.getColumnsInfo(), [
         [
-            { text: 'Atext', colspan: 2, expanded: true, path: ["&[A]"], type: 'D' },
-            { text: 'Atext Total', rowspan: 2, path: ["&[A]"], type: 'T', isLast: true },
+            { text: 'Atext', colspan: 2, expanded: true, path: ['&[A]'], type: 'D' },
+            { text: 'Atext Total', rowspan: 2, path: ['&[A]'], type: 'T', isLast: true },
             { text: 'C1text', rowspan: 2, expanded: false, path: ['&[C1]'], type: 'D', isLast: true },
             { text: 'Grand Total', rowspan: 2, type: 'GT', isLast: true }],
         [
@@ -258,26 +258,26 @@ QUnit.test("columnsInfo when cells descriptions count === 1 and sorting by summa
     ]);
 });
 
-QUnit.test("Sort local total when sortBysummary path by caption", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Sort local total when sortBysummary path by caption', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { sortBySummaryField: "sum", sortBySummaryPath: ["Atext"], area: "row" },
-                { area: "column" }, { area: "column" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { sortBySummaryField: 'sum', sortBySummaryPath: ['Atext'], area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
 
             columns: [{
-                value: 'A', key: "&[A]", text: "Atext", children: [{ value: 'P1', key: "&[P1]", text: "P1text" }, { value: 'P2', key: "&[P2]", text: "P2text" }]
+                value: 'A', key: '&[A]', text: 'Atext', children: [{ value: 'P1', key: '&[P1]', text: 'P1text' }, { value: 'P2', key: '&[P2]', text: 'P2text' }]
             },
-            { value: 'C1', key: "&[C1]", text: "C1text" }]
+            { value: 'C1', key: '&[C1]', text: 'C1text' }]
         },
         texts: texts
     });
     assert.deepEqual(dataController.getColumnsInfo(), [
         [
-            { text: 'Atext', colspan: 2, expanded: true, path: ["&[A]"], type: 'D' },
-            { text: 'Atext Total', rowspan: 2, path: ["&[A]"], type: 'T', isLast: true, sorted: true },
+            { text: 'Atext', colspan: 2, expanded: true, path: ['&[A]'], type: 'D' },
+            { text: 'Atext Total', rowspan: 2, path: ['&[A]'], type: 'T', isLast: true, sorted: true },
             { text: 'C1text', rowspan: 2, expanded: false, path: ['&[C1]'], type: 'D', isLast: true },
             { text: 'Grand Total', rowspan: 2, type: 'GT', isLast: true }],
         [
@@ -287,18 +287,18 @@ QUnit.test("Sort local total when sortBysummary path by caption", function(asser
     ]);
 });
 
-QUnit.test("columnsInfo when cells descriptions count === 1 and sorting by summary when caption path and one level", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summary when caption path and one level', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { sortBySummaryField: "sum", sortBySummaryPath: ["Atext"], area: "row" },
-                { area: "column" }, { area: "column" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { sortBySummaryField: 'sum', sortBySummaryPath: ['Atext'], area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
 
             columns: [
-                { value: 'A', key: "&[A]", text: "Atext" },
-                { value: 'C1', key: "&[C1]", text: "C1text" }
+                { value: 'A', key: '&[A]', text: 'Atext' },
+                { value: 'C1', key: '&[C1]', text: 'C1text' }
             ]
         },
         texts: texts
@@ -308,35 +308,35 @@ QUnit.test("columnsInfo when cells descriptions count === 1 and sorting by summa
             expanded: false,
             isLast: true,
             path: [
-                "&[A]"
+                '&[A]'
             ],
             sorted: true,
-            text: "Atext",
-            type: "D"
+            text: 'Atext',
+            type: 'D'
         },
         {
             expanded: false,
             isLast: true,
             path: [
-                "&[C1]"
+                '&[C1]'
             ],
-            text: "C1text",
-            type: "D"
+            text: 'C1text',
+            type: 'D'
         },
         {
             isLast: true,
-            text: "Grand Total",
-            type: "GT"
+            text: 'Grand Total',
+            type: 'GT'
         }]]);
 });
 
-QUnit.test("columnsInfo when cells descriptions count === 1 and sorting by summary when key are used", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summary when key are used', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { sortBySummaryField: "sum", sortBySummaryPath: ["A", "P2"], area: "row" },
-                { area: "column" }, { area: "column" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { sortBySummaryField: 'sum', sortBySummaryPath: ['A', 'P2'], area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
 
             columns: [{
@@ -359,14 +359,14 @@ QUnit.test("columnsInfo when cells descriptions count === 1 and sorting by summa
     ]);
 });
 
-QUnit.test("columnsInfo when cells descriptions count === 1 and sorting by summary for total", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summary for total', function(assert) {
+    const dataController = new DataController({
 
         dataSource: {
             fields: [
-                { sortBySummaryField: "sum", sortBySummaryPath: ["A"], area: "row" },
-                { area: "column" }, { area: "column" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { sortBySummaryField: 'sum', sortBySummaryPath: ['A'], area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
 
             columns: [{
@@ -389,14 +389,14 @@ QUnit.test("columnsInfo when cells descriptions count === 1 and sorting by summa
     ]);
 });
 
-QUnit.test("columnsInfo when cells descriptions count === 1 when showColumnTotals disabled", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo when cells descriptions count === 1 when showColumnTotals disabled', function(assert) {
+    const dataController = new DataController({
         showColumnTotals: false,
 
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'column' }, { area: 'column' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
 
             columns: [{
@@ -418,13 +418,13 @@ QUnit.test("columnsInfo when cells descriptions count === 1 when showColumnTotal
     ]);
 });
 
-QUnit.test("columnsInfo when cells descriptions count === 1 when showColumnGrandTotals disabled", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo when cells descriptions count === 1 when showColumnGrandTotals disabled', function(assert) {
+    const dataController = new DataController({
         showColumnGrandTotals: false,
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'column' }, { area: 'column' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -446,14 +446,14 @@ QUnit.test("columnsInfo when cells descriptions count === 1 when showColumnGrand
     ]);
 });
 
-QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled', function(assert) {
+    const dataController = new DataController({
         showColumnGrandTotals: false,
         showRowGrandTotals: false,
 
         dataSource: {
             fields: [
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             columns: [],
             rows: []
@@ -466,22 +466,22 @@ QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTota
             text: undefined,
             type: undefined
         }
-    ]], "Columns Info");
+    ]], 'Columns Info');
 
     assert.deepEqual(dataController.getRowsInfo(), [[
         {
             text: undefined,
             type: undefined
         }
-    ]], "Rows Info");
+    ]], 'Rows Info');
 });
 
-QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level', function(assert) {
+    const dataController = new DataController({
 
         dataSource: {
             fields: [
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data", showGrandTotals: false }
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false }
             ],
             columns: [],
             rows: []
@@ -492,26 +492,26 @@ QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTota
     assert.deepEqual(dataController.getColumnsInfo(), [[
         {
             isLast: true,
-            text: "Grand Total",
-            type: "GT"
+            text: 'Grand Total',
+            type: 'GT'
         }
-    ]], "Columns Info");
+    ]], 'Columns Info');
 
     assert.deepEqual(dataController.getRowsInfo(), [[
         {
             isLast: true,
-            text: "Grand Total",
-            type: "GT"
+            text: 'Grand Total',
+            type: 'GT'
         }
-    ]], "Rows Info");
+    ]], 'Rows Info');
 });
 
-QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level. Two data fields", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level. Two data fields', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data", showGrandTotals: false },
-                { dataField: "avg", caption: 'Avg', format: 'fixedPoint', area: "data", showGrandTotals: false }
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false },
+                { dataField: 'avg', caption: 'Avg', format: 'fixedPoint', area: 'data', showGrandTotals: false }
             ],
             columns: [],
             rows: []
@@ -521,8 +521,8 @@ QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTota
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         {
-            text: "Grand Total",
-            type: "GT",
+            text: 'Grand Total',
+            type: 'GT',
             colspan: 2
         }
     ],
@@ -530,81 +530,81 @@ QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTota
         {
             dataIndex: 0,
             isLast: true,
-            text: "Sum",
-            type: "GT"
+            text: 'Sum',
+            type: 'GT'
         },
         {
             dataIndex: 1,
             isLast: true,
-            text: "Avg",
-            type: "GT"
+            text: 'Avg',
+            type: 'GT'
         }
 
-    ]], "Columns Info");
+    ]], 'Columns Info');
 
     assert.deepEqual(dataController.getRowsInfo(), [[
         {
             isLast: true,
-            text: "Grand Total",
-            type: "GT"
+            text: 'Grand Total',
+            type: 'GT'
         }
-    ]], "Rows Info");
+    ]], 'Rows Info');
 });
 
-QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level. Two data fields, dataFieldArea = row", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level. Two data fields, dataFieldArea = row', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data", showGrandTotals: false },
-                { dataField: "avg", caption: 'Avg', format: 'fixedPoint', area: "data", showGrandTotals: false }
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false },
+                { dataField: 'avg', caption: 'Avg', format: 'fixedPoint', area: 'data', showGrandTotals: false }
             ],
             columns: [],
             rows: []
         },
         texts: texts,
-        dataFieldArea: "row"
+        dataFieldArea: 'row'
     });
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
             {
-                text: "Grand Total",
-                type: "GT",
+                text: 'Grand Total',
+                type: 'GT',
                 rowspan: 2
             },
             {
                 dataIndex: 0,
                 isLast: true,
-                text: "Sum",
-                type: "GT"
+                text: 'Sum',
+                type: 'GT'
             },
         ],
         [
             {
                 dataIndex: 1,
                 isLast: true,
-                text: "Avg",
-                type: "GT"
+                text: 'Avg',
+                type: 'GT'
             }
 
         ]
-    ], "Rows Info");
+    ], 'Rows Info');
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         {
             isLast: true,
-            text: "Grand Total",
-            type: "GT"
+            text: 'Grand Total',
+            type: 'GT'
         }
-    ]], "Columns Info");
+    ]], 'Columns Info');
 });
 
-QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level only for one field.", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level only for one field.', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data", showGrandTotals: false },
-                { dataField: "avg", caption: 'Avg', format: 'fixedPoint', area: "data" }
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false },
+                { dataField: 'avg', caption: 'Avg', format: 'fixedPoint', area: 'data' }
             ],
             columns: [],
             rows: []
@@ -614,100 +614,100 @@ QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTota
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         {
-            text: "Grand Total",
-            type: "GT"
+            text: 'Grand Total',
+            type: 'GT'
         }],
 
     [{
         dataIndex: 1,
         isLast: true,
-        text: "Avg",
-        type: "GT"
-    }]], "Columns Info");
+        text: 'Avg',
+        type: 'GT'
+    }]], 'Columns Info');
 
     assert.deepEqual(dataController.getRowsInfo(), [[
         {
             isLast: true,
-            text: "Grand Total",
-            type: "GT"
+            text: 'Grand Total',
+            type: 'GT'
         }
-    ]], "Rows Info");
+    ]], 'Rows Info');
 });
 
-QUnit.test("T541266. No dublicate cells in Chrome 60", function(assert) {
-    var dataController = new DataController({
+QUnit.test('T541266. No dublicate cells in Chrome 60', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "row" },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'row' },
+                { area: 'row' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
-            rows: [{ "value": 2014, "index": 1, "text": "2014", "children": [{ "value": 1, "index": 10, "text": "Q1" }, { "value": 2, "index": 11, "text": "Q2" }, { "value": 3, "index": 12, "text": "Q3" }, { "value": 4, "index": 13, "text": "Q4" }] }, { "value": 2015, "index": 2, "text": "2015", "children": [{ "value": 1, "index": 4, "text": "Q1", "children": [{ "value": 1, "index": 6, "text": "January" }, { "value": 2, "index": 7, "text": "February" }, { "value": 3, "index": 8, "text": "March" }] }] }]
+            rows: [{ 'value': 2014, 'index': 1, 'text': '2014', 'children': [{ 'value': 1, 'index': 10, 'text': 'Q1' }, { 'value': 2, 'index': 11, 'text': 'Q2' }, { 'value': 3, 'index': 12, 'text': 'Q3' }, { 'value': 4, 'index': 13, 'text': 'Q4' }] }, { 'value': 2015, 'index': 2, 'text': '2015', 'children': [{ 'value': 1, 'index': 4, 'text': 'Q1', 'children': [{ 'value': 1, 'index': 6, 'text': 'January' }, { 'value': 2, 'index': 7, 'text': 'February' }, { 'value': 3, 'index': 8, 'text': 'March' }] }] }]
         },
         texts: texts
     });
 
-    var rowsInfo = dataController.getRowsInfo(true);
+    const rowsInfo = dataController.getRowsInfo(true);
 
     assert.equal(rowsInfo[0].length, 2);
     assert.equal(rowsInfo[5].length, 3);
 });
 
-QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level only for one field and dataFieldArea = row", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level only for one field and dataFieldArea = row', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data", showGrandTotals: false },
-                { dataField: "avg", caption: 'Avg', format: 'fixedPoint', area: "data" }
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false },
+                { dataField: 'avg', caption: 'Avg', format: 'fixedPoint', area: 'data' }
             ],
             columns: [],
             rows: []
         },
         texts: texts,
-        dataFieldArea: "row"
+        dataFieldArea: 'row'
     });
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
             {
-                text: "Grand Total",
-                type: "GT",
+                text: 'Grand Total',
+                type: 'GT',
                 rowspan: 2
             },
             {
                 dataIndex: 0,
                 isLast: true,
-                text: "Sum",
-                type: "GT"
+                text: 'Sum',
+                type: 'GT'
             },
         ],
         [
             {
                 dataIndex: 1,
                 isLast: true,
-                text: "Avg",
-                type: "GT"
+                text: 'Avg',
+                type: 'GT'
             }
 
         ]
-    ], "Rows Info");
+    ], 'Rows Info');
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         {
             isLast: true,
-            text: "Grand Total",
-            type: "GT"
+            text: 'Grand Total',
+            type: 'GT'
         }
-    ]], "Columns Info");
+    ]], 'Columns Info');
 });
 
 // B234872
-QUnit.test("columnsInfo with empty array children when cells descriptions count === 1", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo with empty array children when cells descriptions count === 1', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" }, { area: "column" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'column' }, { area: 'column' }, { area: 'column' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1', children: [] }, { value: 'P2' }]
@@ -729,12 +729,12 @@ QUnit.test("columnsInfo with empty array children when cells descriptions count 
     ]);
 });
 
-QUnit.test("columnsInfo with two expanded items when cells descriptions count === 1", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo with two expanded items when cells descriptions count === 1', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'column' }, { area: 'column' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             columns: [
                 { value: 'A', children: [{ value: 'P1' }, { value: 'P2' }] },
@@ -761,12 +761,12 @@ QUnit.test("columnsInfo with two expanded items when cells descriptions count ==
     ]);
 });
 
-QUnit.test("columnsInfo when cells descriptions count > 1", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo when cells descriptions count > 1', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', area: "data" }, { caption: 'Avg', area: "data" }
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', area: 'data' }, { caption: 'Avg', area: 'data' }
             ],
             columns: [
                 {
@@ -804,163 +804,163 @@ QUnit.test("columnsInfo when cells descriptions count > 1", function(assert) {
     ]);
 });
 
-QUnit.test("rowsInfo when cells descriptions count > 1. dataFieldArea is 'rowArea'", function(assert) {
-    var dataController = new DataController({
+QUnit.test('rowsInfo when cells descriptions count > 1. dataFieldArea is \'rowArea\'', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" }, { area: "row", width: 100 },
-                { caption: 'Sum', area: "data" }, { caption: 'Avg', area: "data" }
+                { area: 'row' }, { area: 'row', width: 100 },
+                { caption: 'Sum', area: 'data' }, { caption: 'Avg', area: 'data' }
             ],
             rows: [{ value: 'A' }]
         },
         texts: texts,
-        dataFieldArea: "row"
+        dataFieldArea: 'row'
     });
     assert.deepEqual(dataController.getRowsInfo(), [
         [
-            { expanded: false, path: ["A"], rowspan: 2, text: "A", type: "D" },
-            { dataIndex: 0, isLast: true, path: ["A"], text: "Sum", type: "D" }
+            { expanded: false, path: ['A'], rowspan: 2, text: 'A', type: 'D' },
+            { dataIndex: 0, isLast: true, path: ['A'], text: 'Sum', type: 'D' }
         ],
         [
-            { dataIndex: 1, isLast: true, path: ["A"], text: "Avg", type: "D" }
+            { dataIndex: 1, isLast: true, path: ['A'], text: 'Avg', type: 'D' }
         ],
         [
-            { rowspan: 2, text: "Grand Total", type: "GT" },
-            { dataIndex: 0, isLast: true, text: "Sum", type: "GT" }
+            { rowspan: 2, text: 'Grand Total', type: 'GT' },
+            { dataIndex: 0, isLast: true, text: 'Sum', type: 'GT' }
         ],
         [
-            { dataIndex: 1, isLast: true, text: "Avg", type: "GT" }
+            { dataIndex: 1, isLast: true, text: 'Avg', type: 'GT' }
         ]
     ]);
 });
 
-QUnit.test("Pass wordWrapEnabled option to HeaderInfo", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Pass wordWrapEnabled option to HeaderInfo', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row", wordWrapEnabled: true }, { area: "row", width: 100, wordWrapEnabled: false },
-                { caption: 'Sum', area: "data", wordWrapEnabled: true }, { caption: 'Avg', area: "data" }
+                { area: 'row', wordWrapEnabled: true }, { area: 'row', width: 100, wordWrapEnabled: false },
+                { caption: 'Sum', area: 'data', wordWrapEnabled: true }, { caption: 'Avg', area: 'data' }
             ],
-            rows: [{ value: 'A', children: [{ value: "a" }] }]
+            rows: [{ value: 'A', children: [{ value: 'a' }] }]
         },
         texts: texts,
-        dataFieldArea: "row"
+        dataFieldArea: 'row'
     });
     assert.deepEqual(dataController.getRowsInfo(), [
         [
             {
-                "expanded": true,
-                "path": [
-                    "A"
+                'expanded': true,
+                'path': [
+                    'A'
                 ],
-                "rowspan": 2,
-                "text": "A",
-                "type": "D",
-                "wordWrapEnabled": true
+                'rowspan': 2,
+                'text': 'A',
+                'type': 'D',
+                'wordWrapEnabled': true
             },
             {
-                "path": [
-                    "A",
-                    "a"
+                'path': [
+                    'A',
+                    'a'
                 ],
-                "rowspan": 2,
-                "text": "a",
-                "type": "D",
-                "width": 100,
-                "wordWrapEnabled": false
+                'rowspan': 2,
+                'text': 'a',
+                'type': 'D',
+                'width': 100,
+                'wordWrapEnabled': false
             },
             {
-                "dataIndex": 0,
-                "isLast": true,
-                "path": [
-                    "A",
-                    "a"
+                'dataIndex': 0,
+                'isLast': true,
+                'path': [
+                    'A',
+                    'a'
                 ],
-                "text": "Sum",
-                "type": "D",
+                'text': 'Sum',
+                'type': 'D',
                 wordWrapEnabled: true
             }
         ],
         [
             {
-                "dataIndex": 1,
-                "isLast": true,
-                "path": [
-                    "A",
-                    "a"
+                'dataIndex': 1,
+                'isLast': true,
+                'path': [
+                    'A',
+                    'a'
                 ],
-                "text": "Avg",
-                "type": "D"
+                'text': 'Avg',
+                'type': 'D'
             }
         ],
         [
             {
-                "colspan": 2,
-                "path": [
-                    "A"
+                'colspan': 2,
+                'path': [
+                    'A'
                 ],
-                "rowspan": 2,
-                "text": "A Total",
-                "type": "T",
-                "wordWrapEnabled": true
+                'rowspan': 2,
+                'text': 'A Total',
+                'type': 'T',
+                'wordWrapEnabled': true
             },
             {
-                "dataIndex": 0,
-                "isLast": true,
-                "path": [
-                    "A"
+                'dataIndex': 0,
+                'isLast': true,
+                'path': [
+                    'A'
                 ],
-                "text": "Sum",
-                "type": "T",
-                "wordWrapEnabled": true
+                'text': 'Sum',
+                'type': 'T',
+                'wordWrapEnabled': true
             }
         ],
         [
             {
-                "dataIndex": 1,
-                "isLast": true,
-                "path": [
-                    "A"
+                'dataIndex': 1,
+                'isLast': true,
+                'path': [
+                    'A'
                 ],
-                "text": "Avg",
-                "type": "T"
+                'text': 'Avg',
+                'type': 'T'
             }
         ],
         [
             {
-                "colspan": 2,
-                "rowspan": 2,
-                "text": "Grand Total",
-                "type": "GT",
-                "wordWrapEnabled": true
+                'colspan': 2,
+                'rowspan': 2,
+                'text': 'Grand Total',
+                'type': 'GT',
+                'wordWrapEnabled': true
             },
             {
-                "dataIndex": 0,
-                "isLast": true,
-                "text": "Sum",
-                "type": "GT",
+                'dataIndex': 0,
+                'isLast': true,
+                'text': 'Sum',
+                'type': 'GT',
                 wordWrapEnabled: true
             }
         ],
         [
             {
-                "dataIndex": 1,
-                "isLast": true,
-                "text": "Avg",
-                "type": "GT"
+                'dataIndex': 1,
+                'isLast': true,
+                'text': 'Avg',
+                'type': 'GT'
             }
         ]
     ]);
 });
 
 
-QUnit.test("columnsInfo when cells descriptions count > 1 when sorting by summary", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo when cells descriptions count > 1 when sorting by summary', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { sortBySummaryField: "sum", sortBySummaryPath: ["A", "P2"], area: "row" }, { sortBySummaryField: "avg", area: "row" },
-                { area: "column" }, { area: "column" },
-                { dataField: "sum", caption: 'Sum', area: "data" }, { dataField: "avg", caption: 'Avg', area: "data" }
+                { sortBySummaryField: 'sum', sortBySummaryPath: ['A', 'P2'], area: 'row' }, { sortBySummaryField: 'avg', area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { dataField: 'sum', caption: 'Sum', area: 'data' }, { dataField: 'avg', caption: 'Avg', area: 'data' }
             ],
             columns: [
                 {
@@ -999,12 +999,12 @@ QUnit.test("columnsInfo when cells descriptions count > 1 when sorting by summar
 });
 
 // B234872
-QUnit.test("columnsInfo with empty array children when cells descriptions count > 1", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo with empty array children when cells descriptions count > 1', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', area: "data" }, { caption: 'Avg', area: "data" }
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', area: 'data' }, { caption: 'Avg', area: 'data' }
             ],
             columns: [
                 {
@@ -1042,11 +1042,11 @@ QUnit.test("columnsInfo with empty array children when cells descriptions count 
     ]);
 });
 
-QUnit.test("columnsInfo when no column descriptions", function(assert) {
-    var dataController = new DataController({
+QUnit.test('columnsInfo when no column descriptions', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ]
         },
         texts: texts
@@ -1056,32 +1056,32 @@ QUnit.test("columnsInfo when no column descriptions", function(assert) {
     ]);
 });
 
-QUnit.test("columns formatting", function(assert) {
-    var customizeTextThisObjects = [],
-        column = {
-            area: "column",
-            areaIndex: 0,
-            format: 'decimal', customizeText: function(e) {
-                customizeTextThisObjects.push(this);
-                return e.valueText + ' year';
-            },
-            caption: "Caption"
+QUnit.test('columns formatting', function(assert) {
+    const customizeTextThisObjects = [];
+    const column = {
+        area: 'column',
+        areaIndex: 0,
+        format: 'decimal', customizeText: function(e) {
+            customizeTextThisObjects.push(this);
+            return e.valueText + ' year';
         },
-        dataController = new DataController({
-            dataSource: {
-                fields: [
-                    column,
-                    { format: 'month', area: "column" },
-                    { caption: 'Sum', format: 'fixedPoint', area: "data" }
-                ],
+        caption: 'Caption'
+    };
+    const dataController = new DataController({
+        dataSource: {
+            fields: [
+                column,
+                { format: 'month', area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
+            ],
 
-                columns: [{
-                    value: 2009, children: [{ value: new Date(2009, 5, 11) }, { value: new Date(2009, 7, 5) }]
-                },
-                { value: 2010 }]
+            columns: [{
+                value: 2009, children: [{ value: new Date(2009, 5, 11) }, { value: new Date(2009, 7, 5) }]
             },
-            texts: texts
-        });
+            { value: 2010 }]
+        },
+        texts: texts
+    });
     assert.deepEqual(dataController.getColumnsInfo(), [
         [
             { text: '2009 year', colspan: 2, expanded: true, path: [2009], type: 'D' },
@@ -1096,18 +1096,18 @@ QUnit.test("columns formatting", function(assert) {
 
     assert.strictEqual(customizeTextThisObjects.length, 2); // TODO
 
-    var compareColumn = $.extend({ index: 0 }, column);
+    const compareColumn = $.extend({ index: 0 }, column);
     assert.deepEqual(customizeTextThisObjects[0], compareColumn);
     assert.deepEqual(customizeTextThisObjects[1], compareColumn);
 });
 
-QUnit.test("rowsInfo", function(assert) {
-    var dataController = new DataController({
+QUnit.test('rowsInfo', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { width: 100, area: "row" }, { area: "row" },
-                { sortBySummaryField: "sum", sortBySummaryPath: ['A', 'P2'], area: "column" },
-                { dataField: "sum", caption: 'Sum', area: "data" }
+                { width: 100, area: 'row' }, { area: 'row' },
+                { sortBySummaryField: 'sum', sortBySummaryPath: ['A', 'P2'], area: 'column' },
+                { dataField: 'sum', caption: 'Sum', area: 'data' }
             ],
             rows: [{
                 value: 'A',
@@ -1134,13 +1134,13 @@ QUnit.test("rowsInfo", function(assert) {
     ]);
 });
 
-QUnit.test("rowsInfo when showRowTotals disabled", function(assert) {
-    var dataController = new DataController({
+QUnit.test('rowsInfo when showRowTotals disabled', function(assert) {
+    const dataController = new DataController({
         showRowTotals: false,
         dataSource: {
             fields: [
-                { area: "row" }, { area: "row" },
-                { caption: 'Sum', area: "data" }
+                { area: 'row' }, { area: 'row' },
+                { caption: 'Sum', area: 'data' }
             ],
             rows: [{
                 value: 'A',
@@ -1165,13 +1165,13 @@ QUnit.test("rowsInfo when showRowTotals disabled", function(assert) {
     ]);
 });
 
-QUnit.test("rowsInfo when showRowGrandTotals disabled", function(assert) {
-    var dataController = new DataController({
+QUnit.test('rowsInfo when showRowGrandTotals disabled', function(assert) {
+    const dataController = new DataController({
         showRowGrandTotals: false,
         dataSource: {
             fields: [
-                { area: "row" }, { area: "row" },
-                { caption: 'Sum', area: "data" }
+                { area: 'row' }, { area: 'row' },
+                { caption: 'Sum', area: 'data' }
             ],
             rows: [{
                 value: 'A',
@@ -1196,10 +1196,10 @@ QUnit.test("rowsInfo when showRowGrandTotals disabled", function(assert) {
     ]);
 });
 
-QUnit.test("rowsInfo when no row fields", function(assert) {
-    var dataController = new DataController({
+QUnit.test('rowsInfo when no row fields', function(assert) {
+    const dataController = new DataController({
         dataSource: {
-            fields: [{ area: "data" }]
+            fields: [{ area: 'data' }]
         },
         texts: texts
     });
@@ -1208,12 +1208,12 @@ QUnit.test("rowsInfo when no row fields", function(assert) {
     ]);
 });
 
-QUnit.test("rows formatting", function(assert) {
-    var dataController = new DataController({
+QUnit.test('rows formatting', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row", format: 'decimal' }, { area: "row", format: 'month' },
-                { caption: 'Sum', area: "data" }
+                { area: 'row', format: 'decimal' }, { area: 'row', format: 'month' },
+                { caption: 'Sum', area: 'data' }
             ],
             rows: [{
                 value: 2009,
@@ -1234,12 +1234,12 @@ QUnit.test("rows formatting", function(assert) {
     ]);
 });
 
-var prepareCellsInfo = function(cellsInfo) {
-    var result = [],
-        rowIndex,
-        cellInfo,
-        preparedCellInfo,
-        columnIndex;
+const prepareCellsInfo = function(cellsInfo) {
+    const result = [];
+    let rowIndex;
+    let cellInfo;
+    let preparedCellInfo;
+    let columnIndex;
 
     for(rowIndex = 0; rowIndex < cellsInfo.length; rowIndex++) {
         result.push([]);
@@ -1259,13 +1259,13 @@ var prepareCellsInfo = function(cellsInfo) {
     return result;
 };
 
-QUnit.test("cellInfo when cells descriptions count === 1", function(assert) {
-    var dataController = new DataController({
+QUnit.test('cellInfo when cells descriptions count === 1', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -1282,48 +1282,48 @@ QUnit.test("cellInfo when cells descriptions count === 1", function(assert) {
     });
 
     assert.deepEqual(dataController.getCellsInfo()[0][4].columnPath, []);
-    assert.deepEqual(dataController.getCellsInfo()[0][1].columnPath, ["A", "P2"]);
-    assert.deepEqual(dataController.getCellsInfo()[0][2].columnPath, ["A"]);
+    assert.deepEqual(dataController.getCellsInfo()[0][1].columnPath, ['A', 'P2']);
+    assert.deepEqual(dataController.getCellsInfo()[0][2].columnPath, ['A']);
 
-    assert.deepEqual(dataController.getCellsInfo()[0][4].rowPath, ["Vasya"]);
+    assert.deepEqual(dataController.getCellsInfo()[0][4].rowPath, ['Vasya']);
     assert.deepEqual(dataController.getCellsInfo()[2][1].rowPath, []);
 
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "T", rowType: "D", text: "1" },
-            { columnType: "D", rowType: "D", text: "6" },
-            { columnType: "GT", rowType: "D", text: "12" }
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'T', rowType: 'D', text: '1' },
+            { columnType: 'D', rowType: 'D', text: '6' },
+            { columnType: 'GT', rowType: 'D', text: '12' }
         ],
         [
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "T", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "9" },
-            { columnType: "GT", rowType: "D", text: "18" }
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'T', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '9' },
+            { columnType: 'GT', rowType: 'D', text: '18' }
         ],
         [
-            { columnType: "D", rowType: "GT", text: "5" },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "T", rowType: "GT", text: "3" },
-            { columnType: "D", rowType: "GT", text: "15" },
-            { columnType: "GT", rowType: "GT", text: "30" }
+            { columnType: 'D', rowType: 'GT', text: '5' },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'T', rowType: 'GT', text: '3' },
+            { columnType: 'D', rowType: 'GT', text: '15' },
+            { columnType: 'GT', rowType: 'GT', text: '30' }
         ]]);
 });
 
-QUnit.test("Get Cell info for column depth = 3", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Get Cell info for column depth = 3', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [],
             columns: [{
                 value: 'A', index: 0,
-                children: [{ value: 'P1', index: 1, children: [{ value: "P11", index: 2 }, { value: "P12", index: 3 }] }, { value: 'P2', index: 4 }]
+                children: [{ value: 'P1', index: 1, children: [{ value: 'P11', index: 2 }, { value: 'P12', index: 3 }] }, { value: 'P2', index: 4 }]
             },
             { value: 'C', index: 5 }],
             values: [
@@ -1333,24 +1333,24 @@ QUnit.test("Get Cell info for column depth = 3", function(assert) {
     });
 
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [[
-        { columnType: "D", rowType: "GT", text: "7" },
-        { columnType: "D", rowType: "GT", text: "15" },
-        { columnType: "T", rowType: "GT", text: "5" },
-        { columnType: "D", rowType: "GT", text: "30" },
-        { columnType: "T", rowType: "GT", text: "3" },
-        { columnType: "D", rowType: "GT", text: "" },
-        { columnType: "GT", rowType: "GT", text: "" }
+        { columnType: 'D', rowType: 'GT', text: '7' },
+        { columnType: 'D', rowType: 'GT', text: '15' },
+        { columnType: 'T', rowType: 'GT', text: '5' },
+        { columnType: 'D', rowType: 'GT', text: '30' },
+        { columnType: 'T', rowType: 'GT', text: '3' },
+        { columnType: 'D', rowType: 'GT', text: '' },
+        { columnType: 'GT', rowType: 'GT', text: '' }
     ]]);
 });
 
-QUnit.test("get cells info with hidden data field", function(assert) {
-    var dataController = new DataController({
+QUnit.test('get cells info with hidden data field', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" },
-                { caption: 'Sum', area: "data", visible: false },
-                { caption: 'Avg', area: "data" }
+                { area: 'row' },
+                { area: 'column' },
+                { caption: 'Sum', area: 'data', visible: false },
+                { caption: 'Avg', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }],
             columns: [{ value: 'A', index: 0 }],
@@ -1362,22 +1362,22 @@ QUnit.test("get cells info with hidden data field", function(assert) {
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "GT", rowType: "D", text: "13" }
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'GT', rowType: 'D', text: '13' }
         ],
         [
-            { columnType: "D", rowType: "GT", text: "8" },
-            { columnType: "GT", rowType: "GT", text: "31" }
+            { columnType: 'D', rowType: 'GT', text: '8' },
+            { columnType: 'GT', rowType: 'GT', text: '31' }
         ],
     ]);
 });
 
-QUnit.test("cellInfo when cells when no dataFields", function(assert) {
-    var dataController = new DataController({
+QUnit.test('cellInfo when cells when no dataFields', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -1396,15 +1396,15 @@ QUnit.test("cellInfo when cells when no dataFields", function(assert) {
     ]);
 });
 
-QUnit.test("cellInfo when cells descriptions count === 1 when showTotals disabled", function(assert) {
-    var dataController = new DataController({
+QUnit.test('cellInfo when cells descriptions count === 1 when showTotals disabled', function(assert) {
+    const dataController = new DataController({
         showRowTotals: false,
         showColumnTotals: false,
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -1421,43 +1421,43 @@ QUnit.test("cellInfo when cells descriptions count === 1 when showTotals disable
     });
 
     assert.deepEqual(dataController.getCellsInfo()[0][3].columnPath, []);
-    assert.deepEqual(dataController.getCellsInfo()[0][0].columnPath, ["A", "P1"]);
-    assert.deepEqual(dataController.getCellsInfo()[0][1].columnPath, ["A", "P2"]);
-    assert.deepEqual(dataController.getCellsInfo()[0][2].columnPath, ["C"]);
+    assert.deepEqual(dataController.getCellsInfo()[0][0].columnPath, ['A', 'P1']);
+    assert.deepEqual(dataController.getCellsInfo()[0][1].columnPath, ['A', 'P2']);
+    assert.deepEqual(dataController.getCellsInfo()[0][2].columnPath, ['C']);
 
-    assert.deepEqual(dataController.getCellsInfo()[0][3].rowPath, ["Vasya"]);
+    assert.deepEqual(dataController.getCellsInfo()[0][3].rowPath, ['Vasya']);
     assert.deepEqual(dataController.getCellsInfo()[2][1].rowPath, []);
 
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "6" },
-            { columnType: "GT", rowType: "D", text: "12" }
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '6' },
+            { columnType: 'GT', rowType: 'D', text: '12' }
         ],
         [
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "D", rowType: "D", text: "9" },
-            { columnType: "GT", rowType: "D", text: "18" }
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'D', rowType: 'D', text: '9' },
+            { columnType: 'GT', rowType: 'D', text: '18' }
         ],
         [
-            { columnType: "D", rowType: "GT", text: "5" },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "D", rowType: "GT", text: "15" },
-            { columnType: "GT", rowType: "GT", text: "30" }
+            { columnType: 'D', rowType: 'GT', text: '5' },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'D', rowType: 'GT', text: '15' },
+            { columnType: 'GT', rowType: 'GT', text: '30' }
         ]]);
 });
 
-QUnit.test("cellInfo when cells descriptions count === 1 when showGrandTotals disabled", function(assert) {
-    var dataController = new DataController({
+QUnit.test('cellInfo when cells descriptions count === 1 when showGrandTotals disabled', function(assert) {
+    const dataController = new DataController({
         showRowGrandTotals: false,
         showColumnGrandTotals: false,
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -1474,28 +1474,28 @@ QUnit.test("cellInfo when cells descriptions count === 1 when showGrandTotals di
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "T", rowType: "D", text: "1" },
-            { columnType: "D", rowType: "D", text: "6" }
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'T', rowType: 'D', text: '1' },
+            { columnType: 'D', rowType: 'D', text: '6' }
         ],
         [
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "T", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "9" }
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'T', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '9' }
         ]]);
 
 });
 
-QUnit.test("cellInfo when no columns and when showGrandTotals disabled", function(assert) {
-    var dataController = new DataController({
+QUnit.test('cellInfo when no columns and when showGrandTotals disabled', function(assert) {
+    const dataController = new DataController({
         showRowGrandTotals: false,
         showColumnGrandTotals: false,
         dataSource: {
             fields: [
-                { area: "row" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [],
@@ -1510,13 +1510,13 @@ QUnit.test("cellInfo when no columns and when showGrandTotals disabled", functio
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [[], []]);
 });
 
-QUnit.test("cellInfo when cells descriptions count > 1", function(assert) {
-    var dataController = new DataController({
+QUnit.test('cellInfo when cells descriptions count > 1', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }, { caption: 'Avg', format: 'decimal', width: 100, area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }, { caption: 'Avg', format: 'decimal', width: 100, area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -1533,52 +1533,52 @@ QUnit.test("cellInfo when cells descriptions count > 1", function(assert) {
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3", width: 100 },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4", width: 100 },
-            { columnType: "T", rowType: "D", text: "1" },
-            { columnType: "T", rowType: "D", text: "2", width: 100 },
-            { columnType: "D", rowType: "D", text: "6" },
-            { columnType: "D", rowType: "D", text: "7", width: 100 },
-            { columnType: "GT", rowType: "D", text: "12" },
-            { columnType: "GT", rowType: "D", text: "13", width: 100 }
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3', width: 100 },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4', width: 100 },
+            { columnType: 'T', rowType: 'D', text: '1' },
+            { columnType: 'T', rowType: 'D', text: '2', width: 100 },
+            { columnType: 'D', rowType: 'D', text: '6' },
+            { columnType: 'D', rowType: 'D', text: '7', width: 100 },
+            { columnType: 'GT', rowType: 'D', text: '12' },
+            { columnType: 'GT', rowType: 'D', text: '13', width: 100 }
         ],
         [
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4", width: 100 },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "D", rowType: "D", text: "5", width: 100 },
-            { columnType: "T", rowType: "D", text: "2" },
-            { columnType: "T", rowType: "D", text: "3", width: 100 },
-            { columnType: "D", rowType: "D", text: "9" },
-            { columnType: "D", rowType: "D", text: "10", width: 100 },
-            { columnType: "GT", rowType: "D", text: "18" },
-            { columnType: "GT", rowType: "D", text: "19", width: 100 }
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4', width: 100 },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'D', rowType: 'D', text: '5', width: 100 },
+            { columnType: 'T', rowType: 'D', text: '2' },
+            { columnType: 'T', rowType: 'D', text: '3', width: 100 },
+            { columnType: 'D', rowType: 'D', text: '9' },
+            { columnType: 'D', rowType: 'D', text: '10', width: 100 },
+            { columnType: 'GT', rowType: 'D', text: '18' },
+            { columnType: 'GT', rowType: 'D', text: '19', width: 100 }
         ],
         [
-            { columnType: "D", rowType: "GT", text: "5" },
-            { columnType: "D", rowType: "GT", text: "6", width: 100 },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "D", rowType: "GT", text: "8", width: 100 },
-            { columnType: "T", rowType: "GT", text: "3" },
-            { columnType: "T", rowType: "GT", text: "4", width: 100 },
-            { columnType: "D", rowType: "GT", text: "15" },
-            { columnType: "D", rowType: "GT", text: "16", width: 100 },
-            { columnType: "GT", rowType: "GT", text: "30" },
-            { columnType: "GT", rowType: "GT", text: "31", width: 100 }
+            { columnType: 'D', rowType: 'GT', text: '5' },
+            { columnType: 'D', rowType: 'GT', text: '6', width: 100 },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'D', rowType: 'GT', text: '8', width: 100 },
+            { columnType: 'T', rowType: 'GT', text: '3' },
+            { columnType: 'T', rowType: 'GT', text: '4', width: 100 },
+            { columnType: 'D', rowType: 'GT', text: '15' },
+            { columnType: 'D', rowType: 'GT', text: '16', width: 100 },
+            { columnType: 'GT', rowType: 'GT', text: '30' },
+            { columnType: 'GT', rowType: 'GT', text: '31', width: 100 }
         ]]);
 });
 
-QUnit.test("cellInfo when cells descriptions count === 1, dataFieldArea = row", function(assert) {
-    var dataController = new DataController({
-        dataFieldArea: "row",
+QUnit.test('cellInfo when cells descriptions count === 1, dataFieldArea = row', function(assert) {
+    const dataController = new DataController({
+        dataFieldArea: 'row',
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" },
-                { caption: 'Sum1', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' },
+                { caption: 'Sum1', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }],
             columns: [{ value: 'A', index: 0 }],
@@ -1590,27 +1590,27 @@ QUnit.test("cellInfo when cells descriptions count === 1, dataFieldArea = row", 
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "D", text: "0" },
-            { columnType: "GT", rowType: "D", text: "1" }
+            { columnType: 'D', rowType: 'D', text: '0' },
+            { columnType: 'GT', rowType: 'D', text: '1' }
         ], [
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "GT", rowType: "D", text: "3" }
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'GT', rowType: 'D', text: '3' }
         ], [
-            { columnType: "D", rowType: "GT", text: "4" },
-            { columnType: "GT", rowType: "GT", text: "5" }
+            { columnType: 'D', rowType: 'GT', text: '4' },
+            { columnType: 'GT', rowType: 'GT', text: '5' }
         ],
         [
-            { columnType: "D", rowType: "GT", text: "6" },
-            { columnType: "GT", rowType: "GT", text: "7" }
+            { columnType: 'D', rowType: 'GT', text: '6' },
+            { columnType: 'GT', rowType: 'GT', text: '7' }
         ]]);
 });
 
-QUnit.test("cellInfo when no column descriptions", function(assert) {
-    var dataController = new DataController({
+QUnit.test('cellInfo when no column descriptions', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             values: [
@@ -1621,17 +1621,17 @@ QUnit.test("cellInfo when no column descriptions", function(assert) {
         }
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
-        [{ columnType: "GT", rowType: "D", text: "12" }],
-        [{ columnType: "GT", rowType: "D", text: "18" }],
-        [{ columnType: "GT", rowType: "GT", text: "30" }]]);
+        [{ columnType: 'GT', rowType: 'D', text: '12' }],
+        [{ columnType: 'GT', rowType: 'D', text: '18' }],
+        [{ columnType: 'GT', rowType: 'GT', text: '30' }]]);
 });
 
-QUnit.test("collapse column item", function(assert) {
-    var dataController = new DataController({
+QUnit.test('collapse column item', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -1650,12 +1650,12 @@ QUnit.test("collapse column item", function(assert) {
     ]);
 });
 
-QUnit.test("collapse column item second level", function(assert) {
-    var dataController = new DataController({
+QUnit.test('collapse column item second level', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'column' }, { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1', children: [{ value: 'P11' }, { value: 'P12' }] }, { value: 'P2', children: [{ value: 'P21' }, { value: 'P22' }] }]
@@ -1667,28 +1667,28 @@ QUnit.test("collapse column item second level", function(assert) {
     assert.ok(dataController.collapseHeaderItem('column', ['A', 'P2']));
     assert.deepEqual(dataController.getColumnsInfo(), [
         [
-            { colspan: 4, expanded: true, path: ['A'], text: "A", type: "D" },
-            { rowspan: 3, text: "A Total", path: ['A'], type: "T", isLast: true },
-            { expanded: false, path: ['C'], rowspan: 3, text: "C", type: "D", isLast: true },
-            { rowspan: 3, text: "Grand Total", type: "GT", isLast: true }
+            { colspan: 4, expanded: true, path: ['A'], text: 'A', type: 'D' },
+            { rowspan: 3, text: 'A Total', path: ['A'], type: 'T', isLast: true },
+            { expanded: false, path: ['C'], rowspan: 3, text: 'C', type: 'D', isLast: true },
+            { rowspan: 3, text: 'Grand Total', type: 'GT', isLast: true }
         ],
         [
-            { colspan: 2, expanded: true, path: ['A', 'P1'], text: "P1", type: "D" },
-            { rowspan: 2, text: "P1 Total", path: ['A', 'P1'], type: "T", isLast: true },
-            { expanded: false, path: ['A', 'P2'], rowspan: 2, text: "P2", type: "D", isLast: true }
+            { colspan: 2, expanded: true, path: ['A', 'P1'], text: 'P1', type: 'D' },
+            { rowspan: 2, text: 'P1 Total', path: ['A', 'P1'], type: 'T', isLast: true },
+            { expanded: false, path: ['A', 'P2'], rowspan: 2, text: 'P2', type: 'D', isLast: true }
         ],
         [
-            { isLast: true, text: "P11", path: ['A', 'P1', 'P11'], type: "D" },
-            { isLast: true, text: "P12", path: ['A', 'P1', 'P12'], type: "D" }
+            { isLast: true, text: 'P11', path: ['A', 'P1', 'P11'], type: 'D' },
+            { isLast: true, text: 'P12', path: ['A', 'P1', 'P12'], type: 'D' }
         ]]);
 });
 
-QUnit.test("collapse column item for incorrect path", function(assert) {
-    var dataController = new DataController({
+QUnit.test('collapse column item for incorrect path', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -1701,12 +1701,12 @@ QUnit.test("collapse column item for incorrect path", function(assert) {
     assert.ok(!dataController.collapseHeaderItem('column', ['A', 'P3']));
 });
 
-QUnit.test("collapse collapsed item", function(assert) {
-    var dataController = new DataController({
+QUnit.test('collapse collapsed item', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -1719,12 +1719,12 @@ QUnit.test("collapse collapsed item", function(assert) {
     assert.ok(!dataController.collapseHeaderItem('column', ['C']));
 });
 
-QUnit.test("collapse row item", function(assert) {
-    var dataController = new DataController({
+QUnit.test('collapse row item', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" }, { area: "row" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' }, { area: 'row' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -1746,12 +1746,12 @@ QUnit.test("collapse row item", function(assert) {
 
 });
 
-QUnit.test("expand collapsed column item", function(assert) {
-    var dataController = new DataController({
+QUnit.test('expand collapsed column item', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -1779,12 +1779,12 @@ QUnit.test("expand collapsed column item", function(assert) {
     ]);
 });
 
-QUnit.test("expand not collapsed column item", function(assert) {
-    var dataController = new DataController({
+QUnit.test('expand not collapsed column item', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -1799,13 +1799,13 @@ QUnit.test("expand not collapsed column item", function(assert) {
     // when expandHeaderItem return false, need request for partial dataController for children
 });
 
-QUnit.test("apply partial dataController with columns path", function(assert) {
-    var dataController = new DataController({
+QUnit.test('apply partial dataController with columns path', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [
@@ -1833,7 +1833,7 @@ QUnit.test("apply partial dataController with columns path", function(assert) {
         { value: 'C', index: 3, children: [{ value: 'P3', index: 5 }, { value: 'P4', index: 6 }] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell && cell.text;
@@ -1846,13 +1846,13 @@ QUnit.test("apply partial dataController with columns path", function(assert) {
     ]);
 });
 
-QUnit.test("Apply partial dataController with empty data. Update columns", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Apply partial dataController with empty data. Update columns', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [
@@ -1878,7 +1878,7 @@ QUnit.test("Apply partial dataController with empty data. Update columns", funct
         { value: 'C', index: 3, children: [] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell && cell.text;
@@ -1891,13 +1891,13 @@ QUnit.test("Apply partial dataController with empty data. Update columns", funct
     ]);
 });
 
-QUnit.test("Apply partial dataController with empty data. Update rows", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Apply partial dataController with empty data. Update rows', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" }, { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' }, { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [
@@ -1925,7 +1925,7 @@ QUnit.test("Apply partial dataController with empty data. Update rows", function
         { value: 'Vasya', index: 0 }, { value: 'Piter', index: 1, children: [] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell && cell.text;
@@ -1939,13 +1939,13 @@ QUnit.test("Apply partial dataController with empty data. Update rows", function
 });
 
 // T737140
-QUnit.test("Apply partial dataController by rows after column collapsing", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Apply partial dataController by rows after column collapsing', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" }, { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' }, { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [
@@ -1968,7 +1968,7 @@ QUnit.test("Apply partial dataController by rows after column collapsing", funct
             { value: 'C', index: 3 }
         ],
         rows: [
-            { value: "T1", index: 0 }
+            { value: 'T1', index: 0 }
         ],
         values: [
             [1, 2, 3, 6, 12]
@@ -1978,7 +1978,7 @@ QUnit.test("Apply partial dataController by rows after column collapsing", funct
     assert.deepEqual(prepareLoadedData(dataController.getData().rows), [
         { value: 'Vasya', index: 0 },
         { value: 'Piter', index: 1, children: [{
-            value: "T1",
+            value: 'T1',
             index: 3
         }] }
     ]);
@@ -1988,7 +1988,7 @@ QUnit.test("Apply partial dataController by rows after column collapsing", funct
         { value: 'C', index: 3 }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell && cell.text;
@@ -2002,13 +2002,13 @@ QUnit.test("Apply partial dataController by rows after column collapsing", funct
     ]);
 });
 
-QUnit.test("Apply partial dataController with empty data. Update Rows", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Apply partial dataController with empty data. Update Rows', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [
@@ -2033,7 +2033,7 @@ QUnit.test("Apply partial dataController with empty data. Update Rows", function
         { value: 'Vasya', index: 0, children: [] }, { value: 'Piter', index: 1 }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell && cell.text;
@@ -2047,13 +2047,13 @@ QUnit.test("Apply partial dataController with empty data. Update Rows", function
 });
 
 // B234872
-QUnit.test("apply partial dataController with empty data", function(assert) {
-    var dataController = new DataController({
+QUnit.test('apply partial dataController with empty data', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [
@@ -2081,7 +2081,7 @@ QUnit.test("apply partial dataController with empty data", function(assert) {
         { value: 'C', index: 3, children: [] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2095,13 +2095,13 @@ QUnit.test("apply partial dataController with empty data", function(assert) {
 });
 
 // B234219
-QUnit.test("collapse column after apply partial dataController with column path", function(assert) {
-    var dataController = new DataController({
+QUnit.test('collapse column after apply partial dataController with column path', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [
@@ -2128,10 +2128,10 @@ QUnit.test("collapse column after apply partial dataController with column path"
 
     assert.deepEqual(prepareLoadedData(dataController.getData().columns), [
         { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
-        { value: 'C', index: 3, collapsedChildren: [{ value: 'P3', index: 5, text: "P3" }, { value: 'P4', index: 6, text: "P4" }] }
+        { value: 'C', index: 3, collapsedChildren: [{ value: 'P3', index: 5, text: 'P3' }, { value: 'P4', index: 6, text: 'P4' }] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2144,13 +2144,13 @@ QUnit.test("collapse column after apply partial dataController with column path"
     ]);
 });
 
-QUnit.test("apply partial dataController with columns path, removed row item", function(assert) {
-    var dataController = new DataController({
+QUnit.test('apply partial dataController with columns path, removed row item', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [
@@ -2179,7 +2179,7 @@ QUnit.test("apply partial dataController with columns path, removed row item", f
 
     assert.deepEqual(prepareLoadedData(dataController.getData().rows), [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2192,13 +2192,13 @@ QUnit.test("apply partial dataController with columns path, removed row item", f
     ]);
 });
 
-QUnit.test("apply partial dataController with columns path length 2", function(assert) {
-    var dataController = new DataController({
+QUnit.test('apply partial dataController with columns path length 2', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [
@@ -2227,7 +2227,7 @@ QUnit.test("apply partial dataController with columns path length 2", function(a
         { value: 'C', index: 3 }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2240,13 +2240,13 @@ QUnit.test("apply partial dataController with columns path length 2", function(a
     ]);
 });
 
-QUnit.test("apply partial dataController with rows path", function(assert) {
-    var dataController = new DataController({
+QUnit.test('apply partial dataController with rows path', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" }, { area: "row" },
-                { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' }, { area: 'row' },
+                { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [
                 { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
@@ -2276,7 +2276,7 @@ QUnit.test("apply partial dataController with rows path", function(assert) {
         { value: 'C', index: 3, children: [{ value: 'P3', index: 5 }, { value: 'P4', index: 6 }] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2294,13 +2294,13 @@ QUnit.test("apply partial dataController with rows path", function(assert) {
 });
 
 // B234219
-QUnit.test("collapse row after apply partial dataController with rows path", function(assert) {
-    var dataController = new DataController({
+QUnit.test('collapse row after apply partial dataController with rows path', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" }, { area: "row" },
-                { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' }, { area: 'row' },
+                { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [
                 { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
@@ -2327,10 +2327,10 @@ QUnit.test("collapse row after apply partial dataController with rows path", fun
     dataController.collapseHeaderItem('row', ['C']);
     assert.deepEqual(prepareLoadedData(dataController.getData().rows), [
         { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
-        { value: 'C', index: 3, collapsedChildren: [{ value: 'P3', index: 5, text: "P3" }, { value: 'P4', index: 6, text: "P4" }] }
+        { value: 'C', index: 3, collapsedChildren: [{ value: 'P3', index: 5, text: 'P3' }, { value: 'P4', index: 6, text: 'P4' }] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2346,13 +2346,13 @@ QUnit.test("collapse row after apply partial dataController with rows path", fun
 });
 
 // B232736
-QUnit.test("lost cells after several collapse/expand/applyPartialDataSource", function(assert) {
-    var dataController = new DataController({
+QUnit.test('lost cells after several collapse/expand/applyPartialDataSource', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" }, { area: "row" },
-                { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' }, { area: 'row' },
+                { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [
                 { value: 'A', index: 0 },
@@ -2389,7 +2389,7 @@ QUnit.test("lost cells after several collapse/expand/applyPartialDataSource", fu
         { value: 'C', index: 1, children: [{ value: 'P3', index: 5 }, { value: 'P4', index: 6 }] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2406,13 +2406,13 @@ QUnit.test("lost cells after several collapse/expand/applyPartialDataSource", fu
     ]);
 });
 
-QUnit.test("apply partial dataController with rows path when no column descriptions", function(assert) {
-    var dataController = new DataController({
+QUnit.test('apply partial dataController with rows path when no column descriptions', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" }, { area: "row" },
-                { area: "column" },
-                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' }, { area: 'row' },
+                { area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [
                 { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
@@ -2439,7 +2439,7 @@ QUnit.test("apply partial dataController with rows path when no column descripti
         { value: 'C', index: 3, children: [{ value: 'P3', index: 5 }, { value: 'P4', index: 6 }] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2457,12 +2457,12 @@ QUnit.test("apply partial dataController with rows path when no column descripti
 });
 
 // Q561802
-QUnit.test("Header item text for an item with displayText equal to empty string", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Header item text for an item with displayText equal to empty string', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column", caption: 'column' },
-                { caption: 'value', format: 'fixedPoint', area: "data" }
+                { area: 'column', caption: 'column' },
+                { caption: 'value', format: 'fixedPoint', area: 'data' }
             ],
             rows: [],
             columns: [{ value: 'columnValue1', displayText: '', index: 0 }, { value: 'columnValue2', displayText: 'value2', index: 1 }],
@@ -2475,13 +2475,13 @@ QUnit.test("Header item text for an item with displayText equal to empty string"
     assert.equal(dataController.getColumnsInfo()[0][0].text, '');
 });
 
-QUnit.test("update options", function(assert) {
-    var dataController = new DataController({
+QUnit.test('update options', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "column", width: 100 },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'column' },
+                { area: 'column', width: 100 },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -2495,7 +2495,7 @@ QUnit.test("update options", function(assert) {
     dataController.updateViewOptions({
         showColumnTotals: false,
         texts: {
-            grandTotal: "Итого"
+            grandTotal: 'Итого'
         }
     });
 
@@ -2515,14 +2515,14 @@ QUnit.test("update options", function(assert) {
 
 });
 
-QUnit.test("Hide empty columns in a single group", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide empty columns in a single group', function(assert) {
+    const dataController = new DataController({
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -2541,104 +2541,104 @@ QUnit.test("Hide empty columns in a single group", function(assert) {
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "2"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '2'
             }, {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "3"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '3'
             }, {
-                "columnType": "GT",
-                "rowType": "D",
-                "text": "12"
+                'columnType': 'GT',
+                'rowType': 'D',
+                'text': '12'
             }],
         [
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "3"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '3'
             },
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "4"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '4'
             },
             {
-                "columnType": "GT",
-                "rowType": "D",
-                "text": "18"
+                'columnType': 'GT',
+                'rowType': 'D',
+                'text': '18'
             }
         ], [
             {
-                "columnType": "D",
-                "rowType": "GT",
-                "text": "5"
+                'columnType': 'D',
+                'rowType': 'GT',
+                'text': '5'
             },
             {
-                "columnType": "D",
-                "rowType": "GT",
-                "text": "7"
+                'columnType': 'D',
+                'rowType': 'GT',
+                'text': '7'
             },
             {
-                "columnType": "GT",
-                "rowType": "GT",
-                "text": "30"
+                'columnType': 'GT',
+                'rowType': 'GT',
+                'text': '30'
             }]
-    ], "cells info");
+    ], 'cells info');
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         {
             dataSourceIndex: 0,
-            "colspan": 2,
-            "expanded": true,
-            "path": [
-                "A"
+            'colspan': 2,
+            'expanded': true,
+            'path': [
+                'A'
             ],
-            "text": "A",
-            "type": "D"
+            'text': 'A',
+            'type': 'D'
         },
         {
-            "isLast": true,
-            "rowspan": 2,
-            "text": undefined,
-            "type": "GT"
+            'isLast': true,
+            'rowspan': 2,
+            'text': undefined,
+            'type': 'GT'
         }
     ],
     [
         {
-            "dataSourceIndex": 1,
-            "isLast": true,
-            "path": [
-                "A",
-                "P1"
+            'dataSourceIndex': 1,
+            'isLast': true,
+            'path': [
+                'A',
+                'P1'
             ],
-            "text": "P1",
-            "type": "D"
+            'text': 'P1',
+            'type': 'D'
         },
         {
-            "dataSourceIndex": 2,
-            "isLast": true,
-            "path": [
-                "A",
-                "P2"
+            'dataSourceIndex': 2,
+            'isLast': true,
+            'path': [
+                'A',
+                'P2'
             ],
-            "text": "P2",
-            "type": "D"
+            'text': 'P2',
+            'type': 'D'
         }
     ]]);
     assert.strictEqual(dataController.totalColumnCount(), 3);
     assert.strictEqual(dataController.totalRowCount(), 3);
 });
 
-QUnit.test("Hide empty columns in a single group isEmpty field is array", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide empty columns in a single group isEmpty field is array', function(assert) {
+    const dataController = new DataController({
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -2657,104 +2657,104 @@ QUnit.test("Hide empty columns in a single group isEmpty field is array", functi
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "2"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '2'
             }, {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "3"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '3'
             }, {
-                "columnType": "GT",
-                "rowType": "D",
-                "text": "12"
+                'columnType': 'GT',
+                'rowType': 'D',
+                'text': '12'
             }],
         [
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "3"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '3'
             },
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "4"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '4'
             },
             {
-                "columnType": "GT",
-                "rowType": "D",
-                "text": "18"
+                'columnType': 'GT',
+                'rowType': 'D',
+                'text': '18'
             }
         ], [
             {
-                "columnType": "D",
-                "rowType": "GT",
-                "text": "5"
+                'columnType': 'D',
+                'rowType': 'GT',
+                'text': '5'
             },
             {
-                "columnType": "D",
-                "rowType": "GT",
-                "text": "7"
+                'columnType': 'D',
+                'rowType': 'GT',
+                'text': '7'
             },
             {
-                "columnType": "GT",
-                "rowType": "GT",
-                "text": "30"
+                'columnType': 'GT',
+                'rowType': 'GT',
+                'text': '30'
             }]
-    ], "cells info");
+    ], 'cells info');
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         {
             dataSourceIndex: 0,
-            "colspan": 2,
-            "expanded": true,
-            "path": [
-                "A"
+            'colspan': 2,
+            'expanded': true,
+            'path': [
+                'A'
             ],
-            "text": "A",
-            "type": "D"
+            'text': 'A',
+            'type': 'D'
         },
         {
-            "isLast": true,
-            "rowspan": 2,
-            "text": undefined,
-            "type": "GT"
+            'isLast': true,
+            'rowspan': 2,
+            'text': undefined,
+            'type': 'GT'
         }
     ],
     [
         {
-            "dataSourceIndex": 1,
-            "isLast": true,
-            "path": [
-                "A",
-                "P1"
+            'dataSourceIndex': 1,
+            'isLast': true,
+            'path': [
+                'A',
+                'P1'
             ],
-            "text": "P1",
-            "type": "D"
+            'text': 'P1',
+            'type': 'D'
         },
         {
-            "dataSourceIndex": 2,
-            "isLast": true,
-            "path": [
-                "A",
-                "P2"
+            'dataSourceIndex': 2,
+            'isLast': true,
+            'path': [
+                'A',
+                'P2'
             ],
-            "text": "P2",
-            "type": "D"
+            'text': 'P2',
+            'type': 'D'
         }
     ]]);
     assert.strictEqual(dataController.totalColumnCount(), 3);
     assert.strictEqual(dataController.totalRowCount(), 3);
 });
 
-QUnit.test("Hide empty rows in a single group", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide empty rows in a single group', function(assert) {
+    const dataController = new DataController({
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "row" }, { area: "row" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'column' },
+                { area: 'row' }, { area: 'row' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             columns: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             rows: [{
@@ -2775,98 +2775,98 @@ QUnit.test("Hide empty rows in a single group", function(assert) {
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "2"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '2'
             },
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "3"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '3'
             },
             {
-                "columnType": "GT",
-                "rowType": "D",
-                "text": "5"
+                'columnType': 'GT',
+                'rowType': 'D',
+                'text': '5'
             }
         ],
         [
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "3"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '3'
             },
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "4"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '4'
             },
             {
-                "columnType": "GT",
-                "rowType": "D",
-                "text": "7"
+                'columnType': 'GT',
+                'rowType': 'D',
+                'text': '7'
             }
         ],
         [
             {
-                "columnType": "D",
-                "rowType": "GT",
-                "text": "12"
+                'columnType': 'D',
+                'rowType': 'GT',
+                'text': '12'
             },
             {
-                "columnType": "D",
-                "rowType": "GT",
-                "text": "18"
+                'columnType': 'D',
+                'rowType': 'GT',
+                'text': '18'
             },
             {
-                "columnType": "GT",
-                "rowType": "GT",
-                "text": "30"
+                'columnType': 'GT',
+                'rowType': 'GT',
+                'text': '30'
             }
         ]
-    ], "cells info");
+    ], 'cells info');
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
             {
                 dataSourceIndex: 0,
-                "expanded": true,
-                "path": [
-                    "A"
+                'expanded': true,
+                'path': [
+                    'A'
                 ],
-                "rowspan": 2,
-                "text": "A",
-                "type": "D"
+                'rowspan': 2,
+                'text': 'A',
+                'type': 'D'
             },
             {
                 dataSourceIndex: 1,
-                "isLast": true,
-                "path": [
-                    "A",
-                    "P1"
+                'isLast': true,
+                'path': [
+                    'A',
+                    'P1'
                 ],
-                "text": "P1",
-                "type": "D"
+                'text': 'P1',
+                'type': 'D'
             }
         ],
         [
             {
                 dataSourceIndex: 2,
-                "isLast": true,
-                "path": [
-                    "A",
-                    "P2"
+                'isLast': true,
+                'path': [
+                    'A',
+                    'P2'
                 ],
-                "text": "P2",
-                "type": "D"
+                'text': 'P2',
+                'type': 'D'
             }
         ],
         [
             {
-                "colspan": 2,
-                "isLast": true,
-                "text": undefined,
-                "type": "GT"
+                'colspan': 2,
+                'isLast': true,
+                'text': undefined,
+                'type': 'GT'
             }
         ]
     ]);
@@ -2874,14 +2874,14 @@ QUnit.test("Hide empty rows in a single group", function(assert) {
     assert.strictEqual(dataController.totalRowCount(), 3);
 });
 
-QUnit.test("Hide empty columns in different groups", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide empty columns in different groups', function(assert) {
+    const dataController = new DataController({
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -2901,104 +2901,104 @@ QUnit.test("Hide empty columns in different groups", function(assert) {
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "3"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '3'
             }, {
-                "columnType": "T",
-                "rowType": "D",
-                "text": "1"
+                'columnType': 'T',
+                'rowType': 'D',
+                'text': '1'
             }, {
-                "columnType": "GT",
-                "rowType": "D",
-                "text": "12"
+                'columnType': 'GT',
+                'rowType': 'D',
+                'text': '12'
             }],
         [
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "4"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '4'
             },
             {
-                "columnType": "T",
-                "rowType": "D",
-                "text": "2"
+                'columnType': 'T',
+                'rowType': 'D',
+                'text': '2'
             },
             {
-                "columnType": "GT",
-                "rowType": "D",
-                "text": "18"
+                'columnType': 'GT',
+                'rowType': 'D',
+                'text': '18'
             }
         ], [
             {
-                "columnType": "D",
-                "rowType": "GT",
-                "text": "7"
+                'columnType': 'D',
+                'rowType': 'GT',
+                'text': '7'
             },
             {
-                "columnType": "T",
-                "rowType": "GT",
-                "text": "3"
+                'columnType': 'T',
+                'rowType': 'GT',
+                'text': '3'
             },
             {
-                "columnType": "GT",
-                "rowType": "GT",
-                "text": "30"
+                'columnType': 'GT',
+                'rowType': 'GT',
+                'text': '30'
             }]
-    ], "cells info");
+    ], 'cells info');
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         {
             dataSourceIndex: 0,
-            "expanded": true,
-            "path": [
-                "A"
+            'expanded': true,
+            'path': [
+                'A'
             ],
-            "text": "A",
-            "type": "D"
+            'text': 'A',
+            'type': 'D'
         },
         {
             dataSourceIndex: 0,
-            "isLast": true,
-            "path": [
-                "A"
+            'isLast': true,
+            'path': [
+                'A'
             ],
-            "rowspan": 2,
-            "text": "",
-            "type": "T"
+            'rowspan': 2,
+            'text': '',
+            'type': 'T'
         },
         {
-            "isLast": true,
-            "rowspan": 2,
-            "text": undefined,
-            "type": "GT"
+            'isLast': true,
+            'rowspan': 2,
+            'text': undefined,
+            'type': 'GT'
         }
     ],
     [
         {
             dataSourceIndex: 2,
-            "isLast": true,
-            "path": [
-                "A",
-                "P2"
+            'isLast': true,
+            'path': [
+                'A',
+                'P2'
             ],
-            "text": "P2",
-            "type": "D"
+            'text': 'P2',
+            'type': 'D'
         }
-    ]], "column Info");
+    ]], 'column Info');
 
     assert.strictEqual(dataController.totalColumnCount(), 3);
     assert.strictEqual(dataController.totalRowCount(), 3);
 });
 
-QUnit.test("Not hide empty columns", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Not hide empty columns', function(assert) {
+    const dataController = new DataController({
         showEmptyColumns: false,
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -3018,14 +3018,14 @@ QUnit.test("Not hide empty columns", function(assert) {
     assert.strictEqual(dataController.totalRowCount(), 3);
 });
 
-QUnit.test("Not hide empty rows", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Not hide empty rows', function(assert) {
+    const dataController = new DataController({
         hideEmptySummaryCells: false,
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "row" }, { area: "row" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'column' },
+                { area: 'row' }, { area: 'row' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             columns: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             rows: [{
@@ -3047,14 +3047,14 @@ QUnit.test("Not hide empty rows", function(assert) {
     assert.strictEqual(dataController.totalRowCount(), 5);
 });
 
-QUnit.test("Hide all children items", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide all children items', function(assert) {
+    const dataController = new DataController({
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "row" }, { area: "row" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'column' },
+                { area: 'row' }, { area: 'row' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             columns: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             rows: [{
@@ -3075,89 +3075,89 @@ QUnit.test("Hide all children items", function(assert) {
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
             {
-                "columnType": "D",
-                "rowType": "T",
-                "text": "1"
+                'columnType': 'D',
+                'rowType': 'T',
+                'text': '1'
             },
             {
-                "columnType": "D",
-                "rowType": "T",
-                "text": "2"
+                'columnType': 'D',
+                'rowType': 'T',
+                'text': '2'
             },
             {
-                "columnType": "GT",
-                "rowType": "T",
-                "text": "3"
+                'columnType': 'GT',
+                'rowType': 'T',
+                'text': '3'
             }
         ],
         [
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "6"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '6'
             },
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "9"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '9'
             },
             {
-                "columnType": "GT",
-                "rowType": "D",
-                "text": "15"
+                'columnType': 'GT',
+                'rowType': 'D',
+                'text': '15'
             }
         ],
         [
             {
-                "columnType": "D",
-                "rowType": "GT",
-                "text": "12"
+                'columnType': 'D',
+                'rowType': 'GT',
+                'text': '12'
             },
             {
-                "columnType": "D",
-                "rowType": "GT",
-                "text": "18"
+                'columnType': 'D',
+                'rowType': 'GT',
+                'text': '18'
             },
             {
-                "columnType": "GT",
-                "rowType": "GT",
-                "text": "30"
+                'columnType': 'GT',
+                'rowType': 'GT',
+                'text': '30'
             }
         ]
-    ], "cells info");
+    ], 'cells info');
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
             {
-                "colspan": 2,
-                "dataSourceIndex": 0,
-                "isLast": true,
-                "path": [
-                    "A"
+                'colspan': 2,
+                'dataSourceIndex': 0,
+                'isLast': true,
+                'path': [
+                    'A'
                 ],
-                "text": "",
-                "type": "T"
+                'text': '',
+                'type': 'T'
             }
         ],
         [
             {
-                "colspan": 2,
-                "dataSourceIndex": 3,
-                "expanded": false,
-                "isLast": true,
-                "path": [
-                    "C"
+                'colspan': 2,
+                'dataSourceIndex': 3,
+                'expanded': false,
+                'isLast': true,
+                'path': [
+                    'C'
                 ],
-                "text": "C",
-                "type": "D"
+                'text': 'C',
+                'type': 'D'
             }
         ],
         [
             {
-                "colspan": 2,
-                "isLast": true,
-                "text": undefined,
-                "type": "GT"
+                'colspan': 2,
+                'isLast': true,
+                'text': undefined,
+                'type': 'GT'
             }
         ]
     ]);
@@ -3165,15 +3165,15 @@ QUnit.test("Hide all children items", function(assert) {
     assert.strictEqual(dataController.totalRowCount(), 3);
 });
 
-QUnit.test("Hide totals on data field level", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide totals on data field level', function(assert) {
+    const dataController = new DataController({
         showRowTotals: true,
         showColumnTotals: true,
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data", showTotals: false }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data', showTotals: false }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -3190,19 +3190,19 @@ QUnit.test("Hide totals on data field level", function(assert) {
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "GT", rowType: "GT", text: "30" }
+            { columnType: 'GT', rowType: 'GT', text: '30' }
         ]]);
 });
 
-QUnit.test("Hide values on data column field level when showTotals is true. Two fields", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide values on data column field level when showTotals is true. Two fields', function(assert) {
+    const dataController = new DataController({
         showRowTotals: true,
         showColumnTotals: true,
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" },
-                { caption: 'Sum2', format: 'decimal', area: "data", showTotals: true, showValues: false }
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' },
+                { caption: 'Sum2', format: 'decimal', area: 'data', showTotals: true, showValues: false }
             ],
             rows: [],
             columns: [{
@@ -3218,25 +3218,25 @@ QUnit.test("Hide values on data column field level when showTotals is true. Two 
 
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "GT", text: "3" },
-            { columnType: "D", rowType: "GT", text: "5" },
-            { columnType: "T", rowType: "GT", text: "1" },
-            { columnType: "T", rowType: "GT", text: "2" },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "GT", rowType: "GT", text: "9" },
-            { columnType: "GT", rowType: "GT", text: "10" }
+            { columnType: 'D', rowType: 'GT', text: '3' },
+            { columnType: 'D', rowType: 'GT', text: '5' },
+            { columnType: 'T', rowType: 'GT', text: '1' },
+            { columnType: 'T', rowType: 'GT', text: '2' },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'GT', rowType: 'GT', text: '9' },
+            { columnType: 'GT', rowType: 'GT', text: '10' }
         ]]);
 });
 
-QUnit.test("Hide totals on data column field level when showValues is true. Two fields", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide totals on data column field level when showValues is true. Two fields', function(assert) {
+    const dataController = new DataController({
         showRowTotals: true,
         showColumnTotals: true,
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" },
-                { caption: 'Sum2', format: 'decimal', area: "data", showTotals: false, showValues: true }
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' },
+                { caption: 'Sum2', format: 'decimal', area: 'data', showTotals: false, showValues: true }
             ],
             rows: [],
             columns: [{
@@ -3255,25 +3255,25 @@ QUnit.test("Hide totals on data column field level when showValues is true. Two 
 
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "GT", text: "3" },
-            { columnType: "D", rowType: "GT", text: "4" },
-            { columnType: "T", rowType: "GT", text: "1" },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "D", rowType: "GT", text: "8" },
-            { columnType: "T", rowType: "GT", text: "5" },
-            { columnType: "GT", rowType: "GT", text: "9" },
-            { columnType: "GT", rowType: "GT", text: "10" }
+            { columnType: 'D', rowType: 'GT', text: '3' },
+            { columnType: 'D', rowType: 'GT', text: '4' },
+            { columnType: 'T', rowType: 'GT', text: '1' },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'D', rowType: 'GT', text: '8' },
+            { columnType: 'T', rowType: 'GT', text: '5' },
+            { columnType: 'GT', rowType: 'GT', text: '9' },
+            { columnType: 'GT', rowType: 'GT', text: '10' }
         ]]);
 });
 
-QUnit.test("Hide values on data column field level when showTotals is true. One data field", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide values on data column field level when showTotals is true. One data field', function(assert) {
+    const dataController = new DataController({
         showRowTotals: true,
         showColumnTotals: true,
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum2', format: 'decimal', area: "data", showTotals: true, showValues: false }
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum2', format: 'decimal', area: 'data', showTotals: true, showValues: false }
             ],
             rows: [],
             columns: [{
@@ -3289,30 +3289,30 @@ QUnit.test("Hide values on data column field level when showTotals is true. One 
 
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "T", rowType: "GT", text: "1" },
-            { columnType: "GT", rowType: "GT", text: "9" }
+            { columnType: 'T', rowType: 'GT', text: '1' },
+            { columnType: 'GT', rowType: 'GT', text: '9' }
         ]]);
 });
 
-QUnit.test("Not hide row with not empty second cell", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Not hide row with not empty second cell', function(assert) {
+    const dataController = new DataController({
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" },
-                { area: "data" },
-                { area: "data" }
+                { area: 'row' },
+                { area: 'column' },
+                { area: 'data' },
+                { area: 'data' }
             ],
-            "rows": [
-                { "value": "Los Angeles", "index": 2, "text": "Los Angeles", "isEmpty": [true, false] },
-                { "value": "New York", "index": 1, "text": "New York", "isEmpty": [false, false] }
+            'rows': [
+                { 'value': 'Los Angeles', 'index': 2, 'text': 'Los Angeles', 'isEmpty': [true, false] },
+                { 'value': 'New York', 'index': 1, 'text': 'New York', 'isEmpty': [false, false] }
             ],
-            "columns": [
-                { "value": 1, "index": 1, "text": "January", "isEmpty": [false, false] },
-                { "value": 2, "index": 2, "text": "February", "isEmpty": [true, false] }
+            'columns': [
+                { 'value': 1, 'index': 1, 'text': 'January', 'isEmpty': [false, false] },
+                { 'value': 2, 'index': 2, 'text': 'February', 'isEmpty': [true, false] }
             ],
-            "values": [
+            'values': [
                 [[1740, 2], [1740, 1], [null, 1]],
                 [[1740, 1], [1740, 1], [null]],
                 [[null, 1], [null], [null, 1]]
@@ -3324,38 +3324,38 @@ QUnit.test("Not hide row with not empty second cell", function(assert) {
 
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { "columnType": "D", "rowType": "D", "text": "" },
-            { "columnType": "D", "rowType": "D", "text": "" },
-            { "columnType": "D", "rowType": "D", "text": "1" },
-            { "columnType": "GT", "rowType": "D", "text": "" },
-            { "columnType": "GT", "rowType": "D", "text": "1" }
+            { 'columnType': 'D', 'rowType': 'D', 'text': '' },
+            { 'columnType': 'D', 'rowType': 'D', 'text': '' },
+            { 'columnType': 'D', 'rowType': 'D', 'text': '1' },
+            { 'columnType': 'GT', 'rowType': 'D', 'text': '' },
+            { 'columnType': 'GT', 'rowType': 'D', 'text': '1' }
         ],
         [
-            { "columnType": "D", "rowType": "D", "text": "1740" },
-            { "columnType": "D", "rowType": "D", "text": "1" },
-            { "columnType": "D", "rowType": "D", "text": "" },
-            { "columnType": "GT", "rowType": "D", "text": "1740" },
-            { "columnType": "GT", "rowType": "D", "text": "1" }
+            { 'columnType': 'D', 'rowType': 'D', 'text': '1740' },
+            { 'columnType': 'D', 'rowType': 'D', 'text': '1' },
+            { 'columnType': 'D', 'rowType': 'D', 'text': '' },
+            { 'columnType': 'GT', 'rowType': 'D', 'text': '1740' },
+            { 'columnType': 'GT', 'rowType': 'D', 'text': '1' }
         ],
         [
-            { "columnType": "D", "rowType": "GT", "text": "1740" },
-            { "columnType": "D", "rowType": "GT", "text": "1" },
-            { "columnType": "D", "rowType": "GT", "text": "1" },
-            { "columnType": "GT", "rowType": "GT", "text": "1740" },
-            { "columnType": "GT", "rowType": "GT", "text": "2" }
+            { 'columnType': 'D', 'rowType': 'GT', 'text': '1740' },
+            { 'columnType': 'D', 'rowType': 'GT', 'text': '1' },
+            { 'columnType': 'D', 'rowType': 'GT', 'text': '1' },
+            { 'columnType': 'GT', 'rowType': 'GT', 'text': '1740' },
+            { 'columnType': 'GT', 'rowType': 'GT', 'text': '2' }
         ]
-    ], "cells info");
+    ], 'cells info');
 });
 
 
-QUnit.test("Hide totals on data column field level when showValues is true. One data field", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide totals on data column field level when showValues is true. One data field', function(assert) {
+    const dataController = new DataController({
         showRowTotals: true,
         showColumnTotals: true,
         dataSource: {
             fields: [
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum2', format: 'decimal', area: "data", showTotals: false, showValues: true }
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum2', format: 'decimal', area: 'data', showTotals: false, showValues: true }
             ],
             rows: [],
             columns: [{
@@ -3371,22 +3371,22 @@ QUnit.test("Hide totals on data column field level when showValues is true. One 
 
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "GT", text: "3" },
-            { columnType: "D", rowType: "GT", text: "5" },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "GT", rowType: "GT", text: "9" }
+            { columnType: 'D', rowType: 'GT', text: '3' },
+            { columnType: 'D', rowType: 'GT', text: '5' },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'GT', rowType: 'GT', text: '9' }
         ]]);
 });
 
-QUnit.test("Hide GrandTotals on data field level", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide GrandTotals on data field level', function(assert) {
+    const dataController = new DataController({
         showRowGrandTotals: true,
         showColumnGrandTotals: true,
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data", showGrandTotals: false }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data', showGrandTotals: false }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -3403,36 +3403,36 @@ QUnit.test("Hide GrandTotals on data field level", function(assert) {
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "T", rowType: "D", text: "1" },
-            { columnType: "D", rowType: "D", text: "6" }
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'T', rowType: 'D', text: '1' },
+            { columnType: 'D', rowType: 'D', text: '6' }
         ],
         [
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "T", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "9" }
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'T', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '9' }
         ]]);
 
 });
 
-QUnit.test("hide grand totals on field level when two data fields", function(assert) {
-    var dataController = new DataController({
+QUnit.test('hide grand totals on field level when two data fields', function(assert) {
+    const dataController = new DataController({
         showRowGrandTotals: true,
         showColumnGrandTotals: true,
         showRowTotals: true,
         showColumnTotals: true,
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" },
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' },
                 {
                     caption: 'Avg',
                     format: 'decimal',
                     width: 100,
-                    area: "data",
+                    area: 'data',
                     showGrandTotals: false
                 }
             ],
@@ -3451,47 +3451,47 @@ QUnit.test("hide grand totals on field level when two data fields", function(ass
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3", width: 100 },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4", width: 100 },
-            { columnType: "T", rowType: "D", text: "1" },
-            { columnType: "T", rowType: "D", text: "2", width: 100 },
-            { columnType: "D", rowType: "D", text: "6" },
-            { columnType: "D", rowType: "D", text: "7", width: 100 },
-            { columnType: "GT", rowType: "D", text: "12" }
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3', width: 100 },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4', width: 100 },
+            { columnType: 'T', rowType: 'D', text: '1' },
+            { columnType: 'T', rowType: 'D', text: '2', width: 100 },
+            { columnType: 'D', rowType: 'D', text: '6' },
+            { columnType: 'D', rowType: 'D', text: '7', width: 100 },
+            { columnType: 'GT', rowType: 'D', text: '12' }
         ],
         [
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4", width: 100 },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "D", rowType: "D", text: "5", width: 100 },
-            { columnType: "T", rowType: "D", text: "2" },
-            { columnType: "T", rowType: "D", text: "3", width: 100 },
-            { columnType: "D", rowType: "D", text: "9" },
-            { columnType: "D", rowType: "D", text: "10", width: 100 },
-            { columnType: "GT", rowType: "D", text: "18" }
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4', width: 100 },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'D', rowType: 'D', text: '5', width: 100 },
+            { columnType: 'T', rowType: 'D', text: '2' },
+            { columnType: 'T', rowType: 'D', text: '3', width: 100 },
+            { columnType: 'D', rowType: 'D', text: '9' },
+            { columnType: 'D', rowType: 'D', text: '10', width: 100 },
+            { columnType: 'GT', rowType: 'D', text: '18' }
         ],
         [
-            { columnType: "D", rowType: "GT", text: "5" },
-            { columnType: "D", rowType: "GT", text: "6", width: 100 },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "D", rowType: "GT", text: "8", width: 100 },
-            { columnType: "T", rowType: "GT", text: "3" },
-            { columnType: "T", rowType: "GT", text: "4", width: 100 },
-            { columnType: "D", rowType: "GT", text: "15" },
-            { columnType: "D", rowType: "GT", text: "16", width: 100 },
-            { columnType: "GT", rowType: "GT", text: "30" }
+            { columnType: 'D', rowType: 'GT', text: '5' },
+            { columnType: 'D', rowType: 'GT', text: '6', width: 100 },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'D', rowType: 'GT', text: '8', width: 100 },
+            { columnType: 'T', rowType: 'GT', text: '3' },
+            { columnType: 'T', rowType: 'GT', text: '4', width: 100 },
+            { columnType: 'D', rowType: 'GT', text: '15' },
+            { columnType: 'D', rowType: 'GT', text: '16', width: 100 },
+            { columnType: 'GT', rowType: 'GT', text: '30' }
         ]]);
 });
 
-QUnit.test("Hide totals on data column header field level", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide totals on data column header field level', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column", showTotals: false }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column', showTotals: false }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -3509,23 +3509,23 @@ QUnit.test("Hide totals on data column header field level", function(assert) {
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "6" },
-            { columnType: "GT", rowType: "D", text: "12" }
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '6' },
+            { columnType: 'GT', rowType: 'D', text: '12' }
         ],
         [
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "D", rowType: "D", text: "9" },
-            { columnType: "GT", rowType: "D", text: "18" }
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'D', rowType: 'D', text: '9' },
+            { columnType: 'GT', rowType: 'D', text: '18' }
         ],
         [
-            { columnType: "D", rowType: "GT", text: "5" },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "D", rowType: "GT", text: "15" },
-            { columnType: "GT", rowType: "GT", text: "30" }
-        ]], "cells info");
+            { columnType: 'D', rowType: 'GT', text: '5' },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'D', rowType: 'GT', text: '15' },
+            { columnType: 'GT', rowType: 'GT', text: '30' }
+        ]], 'cells info');
 
     assert.deepEqual(dataController.getColumnsInfo(), [
         [
@@ -3536,18 +3536,18 @@ QUnit.test("Hide totals on data column header field level", function(assert) {
             { dataSourceIndex: 1, text: 'P1', type: 'D', path: ['A', 'P1'], isLast: true },
             { dataSourceIndex: 2, text: 'P2', type: 'D', path: ['A', 'P2'], isLast: true }
         ]
-    ], "columns info");
+    ], 'columns info');
 
 });
 
-QUnit.test("Hide totals when showColumnsTotals is false and showTotal is true for header field", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide totals when showColumnsTotals is false and showTotal is true for header field', function(assert) {
+    const dataController = new DataController({
         showColumnTotals: false,
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column", showTotals: true }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column', showTotals: true }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -3565,23 +3565,23 @@ QUnit.test("Hide totals when showColumnsTotals is false and showTotal is true fo
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "6" },
-            { columnType: "GT", rowType: "D", text: "12" }
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '6' },
+            { columnType: 'GT', rowType: 'D', text: '12' }
         ],
         [
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "D", rowType: "D", text: "9" },
-            { columnType: "GT", rowType: "D", text: "18" }
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'D', rowType: 'D', text: '9' },
+            { columnType: 'GT', rowType: 'D', text: '18' }
         ],
         [
-            { columnType: "D", rowType: "GT", text: "5" },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "D", rowType: "GT", text: "15" },
-            { columnType: "GT", rowType: "GT", text: "30" }
-        ]], "cells info");
+            { columnType: 'D', rowType: 'GT', text: '5' },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'D', rowType: 'GT', text: '15' },
+            { columnType: 'GT', rowType: 'GT', text: '30' }
+        ]], 'cells info');
 
     assert.deepEqual(dataController.getColumnsInfo(), [
         [
@@ -3592,17 +3592,17 @@ QUnit.test("Hide totals when showColumnsTotals is false and showTotal is true fo
             { dataSourceIndex: 1, text: 'P1', type: 'D', path: ['A', 'P1'], isLast: true },
             { dataSourceIndex: 2, text: 'P2', type: 'D', path: ['A', 'P2'], isLast: true }
         ]
-    ], "columns info");
+    ], 'columns info');
 
 });
 
-QUnit.test("Hide totals on data row header field level", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Hide totals on data row header field level', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "row", showTotals: false }, { area: "row" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'column' },
+                { area: 'row', showTotals: false }, { area: 'row' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             columns: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             rows: [{
@@ -3622,26 +3622,26 @@ QUnit.test("Hide totals on data row header field level", function(assert) {
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "GT", rowType: "D", text: "5" }
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'GT', rowType: 'D', text: '5' }
         ],
         [
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "GT", rowType: "D", text: "7" }
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'GT', rowType: 'D', text: '7' }
         ],
         [
-            { columnType: "D", rowType: "D", text: "6" },
-            { columnType: "D", rowType: "D", text: "9" },
-            { columnType: "GT", rowType: "D", text: "15" }
+            { columnType: 'D', rowType: 'D', text: '6' },
+            { columnType: 'D', rowType: 'D', text: '9' },
+            { columnType: 'GT', rowType: 'D', text: '15' }
         ],
         [
-            { columnType: "D", rowType: "GT", text: "12" },
-            { columnType: "D", rowType: "GT", text: "18" },
-            { columnType: "GT", rowType: "GT", text: "30" }
+            { columnType: 'D', rowType: 'GT', text: '12' },
+            { columnType: 'D', rowType: 'GT', text: '18' },
+            { columnType: 'GT', rowType: 'GT', text: '30' }
         ]
-    ], "cells info");
+    ], 'cells info');
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
@@ -3654,38 +3654,38 @@ QUnit.test("Hide totals on data row header field level", function(assert) {
         ], [
             { text: 'Grand Total', colspan: 2, type: 'GT', isLast: true }
         ]
-    ], "rows info");
+    ], 'rows info');
 
 });
 
 // T504918
-QUnit.test("Format cell with error value", function(assert) {
-    var dataController = new DataController({
+QUnit.test('Format cell with error value', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "column", caption: 'column' },
-                { caption: 'value', format: 'fixedPoint', area: "data" }
+                { area: 'column', caption: 'column' },
+                { caption: 'value', format: 'fixedPoint', area: 'data' }
             ],
             rows: [],
             columns: [{ value: 'columnValue1', displayText: '', index: 0 }],
-            values: [[1, "#N/A"]]
+            values: [[1, '#N/A']]
         },
         texts: texts
     });
 
-    assert.equal(dataController.getCellsInfo()[0][0].text, "1");
-    assert.equal(dataController.getCellsInfo()[0][1].text, "Error");
+    assert.equal(dataController.getCellsInfo()[0][0].text, '1');
+    assert.equal(dataController.getCellsInfo()[0][1].text, 'Error');
 });
 
-QUnit.test("T492326. Not set colspan in rowInfo item if all values and totals are hidden", function(assert) {
-    var dataController = new DataController({
+QUnit.test('T492326. Not set colspan in rowInfo item if all values and totals are hidden', function(assert) {
+    const dataController = new DataController({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "row" },
-                { area: "column" },
+                { area: 'row' },
+                { area: 'row' },
+                { area: 'column' },
                 {
-                    caption: 'Sum', format: 'decimal', area: "data",
+                    caption: 'Sum', format: 'decimal', area: 'data',
                     showValues: false,
                     showTotals: false,
                     showGrandTotals: true,
@@ -3693,10 +3693,10 @@ QUnit.test("T492326. Not set colspan in rowInfo item if all values and totals ar
             ],
             rows: [{
                 index: 0,
-                value: "1",
+                value: '1',
                 children: [
                     {
-                        value: "2",
+                        value: '2',
                         index: 1
                     }
                 ]
@@ -3713,27 +3713,27 @@ QUnit.test("T492326. Not set colspan in rowInfo item if all values and totals ar
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [{
-            "isLast": true,
-            "text": undefined,
-            "type": "GT"
+            'isLast': true,
+            'text': undefined,
+            'type': 'GT'
         }]
     ]);
 });
 
 
-QUnit.module("Showing total on the top", moduleConfig);
+QUnit.module('Showing total on the top', moduleConfig);
 
-QUnit.test("Get header info. Show column totals near", function(assert) {
-    var dataController = new DataController({
-        showTotalsPrior: "columns",
+QUnit.test('Get header info. Show column totals near', function(assert) {
+    const dataController = new DataController({
+        showTotalsPrior: 'columns',
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "column", width: 100 },
+                { area: 'column' },
+                { area: 'column', width: 100 },
 
-                { area: "row" },
-                { area: "row" },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'row' },
+                { area: 'row' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -3779,17 +3779,17 @@ QUnit.test("Get header info. Show column totals near", function(assert) {
     ]);
 });
 
-QUnit.test("Get header info. Show row totals near", function(assert) {
-    var dataController = new DataController({
-        showTotalsPrior: "rows",
+QUnit.test('Get header info. Show row totals near', function(assert) {
+    const dataController = new DataController({
+        showTotalsPrior: 'rows',
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "column", width: 100 },
+                { area: 'column' },
+                { area: 'column', width: 100 },
 
-                { area: "row" },
-                { area: "row" },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'row' },
+                { area: 'row' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -3836,17 +3836,17 @@ QUnit.test("Get header info. Show row totals near", function(assert) {
     ]);
 });
 
-QUnit.test("Get header info. Show all totals near", function(assert) {
-    var dataController = new DataController({
-        showTotalsPrior: "both",
+QUnit.test('Get header info. Show all totals near', function(assert) {
+    const dataController = new DataController({
+        showTotalsPrior: 'both',
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "column", width: 100 },
+                { area: 'column' },
+                { area: 'column', width: 100 },
 
-                { area: "row" },
-                { area: "row" },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'row' },
+                { area: 'row' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             columns: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -3893,21 +3893,21 @@ QUnit.test("Get header info. Show all totals near", function(assert) {
     ]);
 });
 
-QUnit.test("Get header info with near total and two level expanded", function(assert) {
-    var dataController = new DataController({
-        showTotalsPrior: "columns",
+QUnit.test('Get header info with near total and two level expanded', function(assert) {
+    const dataController = new DataController({
+        showTotalsPrior: 'columns',
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "column", width: 100 },
-                { area: "column" },
+                { area: 'column' },
+                { area: 'column', width: 100 },
+                { area: 'column' },
 
-                { area: "row" },
-                { area: "row" },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'row' },
+                { area: 'row' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             columns: [{
-                value: 'A', children: [{ value: 'P1', children: [{ value: "P11" }] }, { value: 'P2' }]
+                value: 'A', children: [{ value: 'P1', children: [{ value: 'P11' }] }, { value: 'P2' }]
             },
             { value: 'C1' }]
         },
@@ -3928,19 +3928,19 @@ QUnit.test("Get header info with near total and two level expanded", function(as
             { text: 'P2', type: 'D', rowspan: 2, path: ['A', 'P2'], isLast: true, width: 100, expanded: false }
         ],
         [
-            { text: 'P11', type: 'D', path: ['A', 'P1', "P11"], isLast: true }
+            { text: 'P11', type: 'D', path: ['A', 'P1', 'P11'], isLast: true }
         ]
     ]);
 });
 
-QUnit.test("cellInfo when cells descriptions count === 1", function(assert) {
-    var dataController = new DataController({
-        showTotalsPrior: "both",
+QUnit.test('cellInfo when cells descriptions count === 1', function(assert) {
+    const dataController = new DataController({
+        showTotalsPrior: 'both',
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -3957,34 +3957,34 @@ QUnit.test("cellInfo when cells descriptions count === 1", function(assert) {
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "GT", rowType: "GT", text: "30" },
-            { columnType: "T", rowType: "GT", text: "3" },
-            { columnType: "D", rowType: "GT", text: "5" },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "D", rowType: "GT", text: "15" }
+            { columnType: 'GT', rowType: 'GT', text: '30' },
+            { columnType: 'T', rowType: 'GT', text: '3' },
+            { columnType: 'D', rowType: 'GT', text: '5' },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'D', rowType: 'GT', text: '15' }
         ], [
-            { columnType: "GT", rowType: "D", text: "12" },
-            { columnType: "T", rowType: "D", text: "1" },
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "6" }
+            { columnType: 'GT', rowType: 'D', text: '12' },
+            { columnType: 'T', rowType: 'D', text: '1' },
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '6' }
         ], [
-            { columnType: "GT", rowType: "D", text: "18" },
-            { columnType: "T", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "D", rowType: "D", text: "9" }
+            { columnType: 'GT', rowType: 'D', text: '18' },
+            { columnType: 'T', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'D', rowType: 'D', text: '9' }
         ]]);
 });
 
-QUnit.test("cellInfo when cells descriptions count === 1. Show only row totals near", function(assert) {
-    var dataController = new DataController({
-        showTotalsPrior: "rows",
+QUnit.test('cellInfo when cells descriptions count === 1. Show only row totals near', function(assert) {
+    const dataController = new DataController({
+        showTotalsPrior: 'rows',
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -4001,36 +4001,36 @@ QUnit.test("cellInfo when cells descriptions count === 1. Show only row totals n
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "GT", text: "5" },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "T", rowType: "GT", text: "3" },
-            { columnType: "D", rowType: "GT", text: "15" },
-            { columnType: "GT", rowType: "GT", text: "30" }
+            { columnType: 'D', rowType: 'GT', text: '5' },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'T', rowType: 'GT', text: '3' },
+            { columnType: 'D', rowType: 'GT', text: '15' },
+            { columnType: 'GT', rowType: 'GT', text: '30' }
         ],
         [
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "T", rowType: "D", text: "1" },
-            { columnType: "D", rowType: "D", text: "6" },
-            { columnType: "GT", rowType: "D", text: "12" }
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'T', rowType: 'D', text: '1' },
+            { columnType: 'D', rowType: 'D', text: '6' },
+            { columnType: 'GT', rowType: 'D', text: '12' }
         ], [
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "T", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "9" },
-            { columnType: "GT", rowType: "D", text: "18" }
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'T', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '9' },
+            { columnType: 'GT', rowType: 'D', text: '18' }
         ]
     ]);
 });
 
-QUnit.test("cellInfo when cells descriptions count === 1. Show only column totals near", function(assert) {
-    var dataController = new DataController({
-        showTotalsPrior: "columns",
+QUnit.test('cellInfo when cells descriptions count === 1. Show only column totals near', function(assert) {
+    const dataController = new DataController({
+        showTotalsPrior: 'columns',
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -4047,37 +4047,37 @@ QUnit.test("cellInfo when cells descriptions count === 1. Show only column total
     });
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "GT", rowType: "D", text: "12" },
-            { columnType: "T", rowType: "D", text: "1" },
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "6" }
+            { columnType: 'GT', rowType: 'D', text: '12' },
+            { columnType: 'T', rowType: 'D', text: '1' },
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '6' }
         ], [
-            { columnType: "GT", rowType: "D", text: "18" },
-            { columnType: "T", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "D", rowType: "D", text: "9" }
+            { columnType: 'GT', rowType: 'D', text: '18' },
+            { columnType: 'T', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'D', rowType: 'D', text: '9' }
         ],
         [
-            { columnType: "GT", rowType: "GT", text: "30" },
-            { columnType: "T", rowType: "GT", text: "3" },
-            { columnType: "D", rowType: "GT", text: "5" },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "D", rowType: "GT", text: "15" }
+            { columnType: 'GT', rowType: 'GT', text: '30' },
+            { columnType: 'T', rowType: 'GT', text: '3' },
+            { columnType: 'D', rowType: 'GT', text: '5' },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'D', rowType: 'GT', text: '15' }
         ]
     ]);
 });
 
-QUnit.test("Hide empty columns in different groups", function(assert) {
-    var dataController = new DataController({
-        showTotalsPrior: "columns",
+QUnit.test('Hide empty columns in different groups', function(assert) {
+    const dataController = new DataController({
+        showTotalsPrior: 'columns',
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -4096,107 +4096,107 @@ QUnit.test("Hide empty columns in different groups", function(assert) {
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
             {
-                "columnType": "GT",
-                "rowType": "D",
-                "text": "12"
+                'columnType': 'GT',
+                'rowType': 'D',
+                'text': '12'
             },
             {
-                "columnType": "T",
-                "rowType": "D",
-                "text": "1"
+                'columnType': 'T',
+                'rowType': 'D',
+                'text': '1'
             },
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "3"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '3'
             }],
         [
             {
-                "columnType": "GT",
-                "rowType": "D",
-                "text": "18"
+                'columnType': 'GT',
+                'rowType': 'D',
+                'text': '18'
             },
             {
-                "columnType": "T",
-                "rowType": "D",
-                "text": "2"
+                'columnType': 'T',
+                'rowType': 'D',
+                'text': '2'
             },
             {
-                "columnType": "D",
-                "rowType": "D",
-                "text": "4"
+                'columnType': 'D',
+                'rowType': 'D',
+                'text': '4'
             }
         ], [
             {
-                "columnType": "GT",
-                "rowType": "GT",
-                "text": "30"
+                'columnType': 'GT',
+                'rowType': 'GT',
+                'text': '30'
             },
             {
-                "columnType": "T",
-                "rowType": "GT",
-                "text": "3"
+                'columnType': 'T',
+                'rowType': 'GT',
+                'text': '3'
             },
             {
-                "columnType": "D",
-                "rowType": "GT",
-                "text": "7"
+                'columnType': 'D',
+                'rowType': 'GT',
+                'text': '7'
             }]
-    ], "cells info");
+    ], 'cells info');
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         {
-            "isLast": true,
-            "rowspan": 2,
-            "text": undefined,
-            "type": "GT"
+            'isLast': true,
+            'rowspan': 2,
+            'text': undefined,
+            'type': 'GT'
         },
         {
-            "dataSourceIndex": 0,
-            "isLast": true,
-            "expanded": true,
-            "path": [
-                "A"
+            'dataSourceIndex': 0,
+            'isLast': true,
+            'expanded': true,
+            'path': [
+                'A'
             ],
-            "rowspan": 2,
-            "text": "",
-            "type": "T"
+            'rowspan': 2,
+            'text': '',
+            'type': 'T'
         },
         {
-            "dataSourceIndex": 0,
-            "path": [
-                "A"
+            'dataSourceIndex': 0,
+            'path': [
+                'A'
             ],
-            "text": "A",
-            "type": "D"
+            'text': 'A',
+            'type': 'D'
         }
     ],
     [
         {
-            "dataSourceIndex": 2,
-            "isLast": true,
-            "path": [
-                "A",
-                "P2"
+            'dataSourceIndex': 2,
+            'isLast': true,
+            'path': [
+                'A',
+                'P2'
             ],
-            "text": "P2",
-            "type": "D"
+            'text': 'P2',
+            'type': 'D'
         }
-    ]], "column Info");
+    ]], 'column Info');
 
     assert.strictEqual(dataController.totalColumnCount(), 3);
     assert.strictEqual(dataController.totalRowCount(), 3);
 });
 
-QUnit.module("Tree-Like row layout", moduleConfig);
+QUnit.module('Tree-Like row layout', moduleConfig);
 
-QUnit.test("get Rows info", function(assert) {
-    var dataController = new DataController({
-        rowHeaderLayout: "tree",
+QUnit.test('get Rows info', function(assert) {
+    const dataController = new DataController({
+        rowHeaderLayout: 'tree',
         dataSource: {
             fields: [
-                { area: "row" }, { area: "row" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row' }, { area: 'row' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -4222,15 +4222,15 @@ QUnit.test("get Rows info", function(assert) {
     ]);
 });
 
-QUnit.test("get Rows info. with data fields", function(assert) {
-    var dataController = new DataController({
-        rowHeaderLayout: "tree",
-        dataFieldArea: "row",
+QUnit.test('get Rows info. with data fields', function(assert) {
+    const dataController = new DataController({
+        rowHeaderLayout: 'tree',
+        dataFieldArea: 'row',
         dataSource: {
             fields: [
-                { area: "row" }, { area: "row" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" },
-                { dataField: "sum", caption: 'Sum1', format: 'fixedPoint', area: "data" }
+                { area: 'row' }, { area: 'row' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' },
+                { dataField: 'sum', caption: 'Sum1', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -4243,51 +4243,51 @@ QUnit.test("get Rows info. with data fields", function(assert) {
     assert.deepEqual(dataController.getRowsInfo(), [
         [
             { text: 'A Total', colspan: 2, rowspan: 2, path: ['A'], type: 'T', expanded: true },
-            { dataIndex: 0, isLast: true, text: "Sum", type: "T", path: ['A'] }
+            { dataIndex: 0, isLast: true, text: 'Sum', type: 'T', path: ['A'] }
         ],
         [
-            { dataIndex: 1, isLast: true, text: "Sum1", type: "T", path: ['A'] }
+            { dataIndex: 1, isLast: true, text: 'Sum1', type: 'T', path: ['A'] }
         ],
         [
             { text: 'A', rowspan: 4, isWhiteSpace: true, path: ['A'], type: 'D', width: null },
             { text: 'P1', type: 'D', rowspan: 2, path: ['A', 'P1'] },
-            { dataIndex: 0, isLast: true, text: "Sum", type: "D", path: ['A', 'P1'] }
+            { dataIndex: 0, isLast: true, text: 'Sum', type: 'D', path: ['A', 'P1'] }
         ],
         [
-            { dataIndex: 1, isLast: true, text: "Sum1", type: "D", path: ['A', 'P1'] }
+            { dataIndex: 1, isLast: true, text: 'Sum1', type: 'D', path: ['A', 'P1'] }
         ],
         [
             { text: 'P2', type: 'D', rowspan: 2, path: ['A', 'P2'] },
-            { dataIndex: 0, isLast: true, text: "Sum", type: "D", path: ['A', 'P2'] }
+            { dataIndex: 0, isLast: true, text: 'Sum', type: 'D', path: ['A', 'P2'] }
         ],
         [
-            { dataIndex: 1, isLast: true, text: "Sum1", type: "D", path: ['A', 'P2'] }
+            { dataIndex: 1, isLast: true, text: 'Sum1', type: 'D', path: ['A', 'P2'] }
         ],
         [
             { text: 'C1', colspan: 2, rowspan: 2, expanded: false, path: ['C1'], type: 'D' },
-            { dataIndex: 0, isLast: true, text: "Sum", type: "D", path: ['C1'] }
+            { dataIndex: 0, isLast: true, text: 'Sum', type: 'D', path: ['C1'] }
         ],
         [
-            { dataIndex: 1, isLast: true, text: "Sum1", type: "D", path: ['C1'] }
+            { dataIndex: 1, isLast: true, text: 'Sum1', type: 'D', path: ['C1'] }
         ],
         [
             { text: 'Grand Total', colspan: 2, rowspan: 2, type: 'GT' },
-            { dataIndex: 0, isLast: true, text: "Sum", type: "GT" }
+            { dataIndex: 0, isLast: true, text: 'Sum', type: 'GT' }
         ], [
-            { dataIndex: 1, isLast: true, text: "Sum1", type: "GT" }
+            { dataIndex: 1, isLast: true, text: 'Sum1', type: 'GT' }
         ]
     ]);
 });
 
-QUnit.test("get Rows info. Totals are Disabled", function(assert) {
-    var dataController = new DataController({
-        rowHeaderLayout: "tree",
+QUnit.test('get Rows info. Totals are Disabled', function(assert) {
+    const dataController = new DataController({
+        rowHeaderLayout: 'tree',
         showRowTotals: false,
         showRowGrandTotals: false,
         dataSource: {
             fields: [
-                { area: "row", showTotals: false }, { area: "row" },
-                { dataField: "sum", caption: 'Sum', format: 'fixedPoint', area: "data" }
+                { area: 'row', showTotals: false }, { area: 'row' },
+                { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data' }
             ],
             rows: [{
                 value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -4311,71 +4311,71 @@ QUnit.test("get Rows info. Totals are Disabled", function(assert) {
     ]);
 });
 
-QUnit.module("Virtual scrolling", {
+QUnit.module('Virtual scrolling', {
     beforeEach: function() {
         this.data = [
             {
-                "value": "Accessories",
-                "children": [
-                    { "value": "Bike Racks" },
-                    { "value": "Bottles and Cages" },
-                    { "value": "Cleaners" },
-                    { "value": "Helmets" },
-                    { "value": "Hydration Packs" },
-                    { "value": "Locks" },
-                    { "value": "Pumps" },
-                    { "value": "Tires and Tubes" }
+                'value': 'Accessories',
+                'children': [
+                    { 'value': 'Bike Racks' },
+                    { 'value': 'Bottles and Cages' },
+                    { 'value': 'Cleaners' },
+                    { 'value': 'Helmets' },
+                    { 'value': 'Hydration Packs' },
+                    { 'value': 'Locks' },
+                    { 'value': 'Pumps' },
+                    { 'value': 'Tires and Tubes' }
                 ]
             },
             {
-                "value": "Bikes",
-                "children": [
-                    { "value": "Mountain Bikes" },
-                    { "value": "Road Bikes" },
-                    { "value": "Touring Bikes" }
+                'value': 'Bikes',
+                'children': [
+                    { 'value': 'Mountain Bikes' },
+                    { 'value': 'Road Bikes' },
+                    { 'value': 'Touring Bikes' }
                 ]
             },
             {
-                "value": "Clothing",
-                "children": [
-                    { "value": "Bib-Shorts" },
-                    { "text": "Caps", "value": "Caps" },
-                    { "value": "Gloves" },
-                    { "value": "Jerseys" },
-                    { "value": "Shorts" },
-                    { "value": "Socks" },
-                    { "value": "Tights" },
-                    { "value": "Vests" }
+                'value': 'Clothing',
+                'children': [
+                    { 'value': 'Bib-Shorts' },
+                    { 'text': 'Caps', 'value': 'Caps' },
+                    { 'value': 'Gloves' },
+                    { 'value': 'Jerseys' },
+                    { 'value': 'Shorts' },
+                    { 'value': 'Socks' },
+                    { 'value': 'Tights' },
+                    { 'value': 'Vests' }
                 ]
             },
             {
-                "value": "Components",
-                "children": [
-                    { "value": "Bottom Brackets" },
-                    { "value": "Brakes" },
-                    { "value": "Chains" },
-                    { "value": "Cranksets" },
-                    { "value": "Derailleurs" },
-                    { "value": "Forks" },
-                    { "value": "Handlebars" },
-                    { "value": "Headsets" },
-                    { "value": "Mountain Frames" },
-                    { "value": "Pedals" },
-                    { "value": "Road Frames" },
-                    { "value": "Saddles" },
-                    { "value": "Touring Frames" },
-                    { "value": "Wheels" }
+                'value': 'Components',
+                'children': [
+                    { 'value': 'Bottom Brackets' },
+                    { 'value': 'Brakes' },
+                    { 'value': 'Chains' },
+                    { 'value': 'Cranksets' },
+                    { 'value': 'Derailleurs' },
+                    { 'value': 'Forks' },
+                    { 'value': 'Handlebars' },
+                    { 'value': 'Headsets' },
+                    { 'value': 'Mountain Frames' },
+                    { 'value': 'Pedals' },
+                    { 'value': 'Road Frames' },
+                    { 'value': 'Saddles' },
+                    { 'value': 'Touring Frames' },
+                    { 'value': 'Wheels' }
                 ]
             }];
 
-        var VirtualScrollController = virtualScrolling.VirtualScrollController;
+        const VirtualScrollController = virtualScrolling.VirtualScrollController;
 
-        this.VirtualScrollController = sinon.stub(virtualScrolling, "VirtualScrollController", function() {
+        this.VirtualScrollController = sinon.stub(virtualScrolling, 'VirtualScrollController', function() {
             return sinon.createStubInstance(VirtualScrollController);
         });
 
         this.component = {
-            option: sinon.stub().withArgs("scrolling.mode").returns("virtual")
+            option: sinon.stub().withArgs('scrolling.mode').returns('virtual')
         };
 
         this.getOptions = function(options) {
@@ -4392,12 +4392,12 @@ QUnit.module("Virtual scrolling", {
     }
 });
 
-QUnit.test("create dataController with virtual scrollController when scrolling is virtual", function(assert) {
-    var dataController = new DataController(this.getOptions({
+QUnit.test('create dataController with virtual scrollController when scrolling is virtual', function(assert) {
+    const dataController = new DataController(this.getOptions({
         fields: [
-            { area: "row" },
-            { area: "column" }, { area: "column" },
-            { caption: 'Sum', format: 'decimal', area: "data" }
+            { area: 'row' },
+            { area: 'column' }, { area: 'column' },
+            { caption: 'Sum', format: 'decimal', area: 'data' }
         ],
         rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
         columns: [{
@@ -4424,11 +4424,11 @@ QUnit.test("create dataController with virtual scrollController when scrolling i
     assert.strictEqual(dataController._rowsScrollController, this.VirtualScrollController.firstCall.returnValue);
 });
 
-QUnit.test("Calculate virtual content params", function(assert) {
-    var dataController = new DataController(this.getOptions({})),
-        rowsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsScrollController = this.VirtualScrollController.secondCall.returnValue,
-        scrollChanged = sinon.stub();
+QUnit.test('Calculate virtual content params', function(assert) {
+    const dataController = new DataController(this.getOptions({}));
+    const rowsScrollController = this.VirtualScrollController.firstCall.returnValue;
+    const columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
+    const scrollChanged = sinon.stub();
 
     dataController.scrollChanged.add(scrollChanged);
 
@@ -4443,10 +4443,10 @@ QUnit.test("Calculate virtual content params", function(assert) {
     columnsScrollController.getViewportPosition.returns(400);
     rowsScrollController.getViewportPosition.returns(500);
 
-    var itemWidths = [100, 100, 100, 100, 100, 100];
-    var itemHeights = [100, 100, 100, 100, 100, 100, 100, 100];
+    const itemWidths = [100, 100, 100, 100, 100, 100];
+    const itemHeights = [100, 100, 100, 100, 100, 100, 100, 100];
     // act
-    var result = dataController.calculateVirtualContentParams({
+    const result = dataController.calculateVirtualContentParams({
         virtualRowHeight: 40,
         virtualColumnWidth: 15,
         itemWidths: itemWidths,
@@ -4489,10 +4489,10 @@ QUnit.test("Calculate virtual content params", function(assert) {
     });
 });
 
-QUnit.test("setViewPortPosition", function(assert) {
-    var dataController = new DataController(this.getOptions({})),
-        rowsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
+QUnit.test('setViewPortPosition', function(assert) {
+    const dataController = new DataController(this.getOptions({}));
+    const rowsScrollController = this.VirtualScrollController.firstCall.returnValue;
+    const columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
 
     // act
     dataController.setViewportPosition(20, 100);
@@ -4511,11 +4511,11 @@ QUnit.test("setViewPortPosition", function(assert) {
     assert.strictEqual(rowsScrollController.setViewportPosition.getCall(2).args[0], 0);
 });
 
-QUnit.test("subscribeToWindowScrollEvents", function(assert) {
-    var dataController = new DataController(this.getOptions({})),
-        rowsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsScrollController = this.VirtualScrollController.secondCall.returnValue,
-        testElement = $("<div>");
+QUnit.test('subscribeToWindowScrollEvents', function(assert) {
+    const dataController = new DataController(this.getOptions({}));
+    const rowsScrollController = this.VirtualScrollController.firstCall.returnValue;
+    const columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
+    const testElement = $('<div>');
 
     // act
     dataController.subscribeToWindowScrollEvents(testElement);
@@ -4526,10 +4526,10 @@ QUnit.test("subscribeToWindowScrollEvents", function(assert) {
     assert.strictEqual(rowsScrollController.subscribeToWindowScrollEvents.getCall(0).args[0], testElement);
 });
 
-QUnit.test("updateWindowScrollPosition", function(assert) {
-    var dataController = new DataController(this.getOptions({})),
-        rowsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
+QUnit.test('updateWindowScrollPosition', function(assert) {
+    const dataController = new DataController(this.getOptions({}));
+    const rowsScrollController = this.VirtualScrollController.firstCall.returnValue;
+    const columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
 
     // act
     dataController.updateWindowScrollPosition(145);
@@ -4540,34 +4540,34 @@ QUnit.test("updateWindowScrollPosition", function(assert) {
     assert.strictEqual(rowsScrollController.scrollTo.getCall(0).args[0], 145);
 });
 
-QUnit.test("dataAdapter for columnsScrollController", function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: "row" },
-                    { area: "column" }, { area: "column" },
-                    { caption: 'Sum', format: 'decimal', area: "data" }
-                ],
-                rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
-                columns: [{
-                    value: 'A', index: 0,
-                    children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
-                },
-                { value: 'C', index: 3 }],
-                values: [
-                    [1, 2, 3, 6, 12],
-                    [2, 3, 4, 9, 18],
-                    [3, 5, 7, 15, 30]
-                ]
-            }
-        })),
-        changed = sinon.stub(),
-        dataSourceChanged = sinon.stub();
+QUnit.test('dataAdapter for columnsScrollController', function(assert) {
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
+            columns: [{
+                value: 'A', index: 0,
+                children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
+            },
+            { value: 'C', index: 3 }],
+            values: [
+                [1, 2, 3, 6, 12],
+                [2, 3, 4, 9, 18],
+                [3, 5, 7, 15, 30]
+            ]
+        }
+    }));
+    const changed = sinon.stub();
+    const dataSourceChanged = sinon.stub();
 
     dataController.changed.add(changed);
     dataController.dataSourceChanged.add(dataSourceChanged);
 
-    var dataAdapter = this.VirtualScrollController.secondCall.args[1];
+    const dataAdapter = this.VirtualScrollController.secondCall.args[1];
 
     dataController.columnPageSize(2);
     dataController.rowPageSize(3);
@@ -4597,25 +4597,25 @@ QUnit.test("dataAdapter for columnsScrollController", function(assert) {
 });
 
 
-QUnit.test("dataSourceChanged should fired only on data change", function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: "row" },
-                    { area: "column" }
-                ],
-                rows: [{ value: 'Vasya', index: 0 }],
-                columns: [
-                    { value: 'A', index: 0 },
-                    { value: 'C', index: 3 }
-                ],
-                values: [
-                    [1, 6, 7],
-                    [1, 6, 7]
-                ]
-            }
-        })),
-        dataSourceChanged = sinon.stub();
+QUnit.test('dataSourceChanged should fired only on data change', function(assert) {
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'row' },
+                { area: 'column' }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }],
+            columns: [
+                { value: 'A', index: 0 },
+                { value: 'C', index: 3 }
+            ],
+            values: [
+                [1, 6, 7],
+                [1, 6, 7]
+            ]
+        }
+    }));
+    const dataSourceChanged = sinon.stub();
 
     dataController.dataSourceChanged.add(dataSourceChanged);
 
@@ -4623,30 +4623,30 @@ QUnit.test("dataSourceChanged should fired only on data change", function(assert
     assert.ok(dataSourceChanged.calledOnce);
 });
 
-QUnit.test("dataAdapter for columnsScrollController. Load when rowPageIndex greater then pagecount", function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: "row" },
-                    { area: "column" }, { area: "column" },
-                    { caption: 'Sum', format: 'decimal', area: "data" }
-                ],
-                rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
-                columns: [{
-                    value: 'A', index: 0,
-                    children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
-                },
-                { value: 'C', index: 3 }],
-                values: [
-                    [1, 2, 3, 6, 12],
-                    [2, 3, 4, 9, 18],
-                    [3, 5, 7, 15, 30]
-                ]
-            }
-        })),
-        changed = sinon.stub(),
-        dataAdapter = this.VirtualScrollController.secondCall.args[1],
-        scrollController = this.VirtualScrollController.secondCall.returnValue;
+QUnit.test('dataAdapter for columnsScrollController. Load when rowPageIndex greater then pagecount', function(assert) {
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
+            columns: [{
+                value: 'A', index: 0,
+                children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
+            },
+            { value: 'C', index: 3 }],
+            values: [
+                [1, 2, 3, 6, 12],
+                [2, 3, 4, 9, 18],
+                [3, 5, 7, 15, 30]
+            ]
+        }
+    }));
+    const changed = sinon.stub();
+    const dataAdapter = this.VirtualScrollController.secondCall.args[1];
+    const scrollController = this.VirtualScrollController.secondCall.returnValue;
 
     dataController.changed.add(changed);
     scrollController.pageIndex.returns(10);
@@ -4660,29 +4660,29 @@ QUnit.test("dataAdapter for columnsScrollController. Load when rowPageIndex grea
     assert.strictEqual(scrollController.pageIndex.lastCall.args[0], 0);
 });
 
-QUnit.test("dataAdapter for rowsScrollController", function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: "row" },
-                    { area: "column" }, { area: "column" },
-                    { caption: 'Sum', format: 'decimal', area: "data" }
-                ],
-                rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
-                columns: [{
-                    value: 'A', index: 0,
-                    children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
-                },
-                { value: 'C', index: 3 }],
-                values: [
-                    [1, 2, 3, 6, 12],
-                    [2, 3, 4, 9, 18],
-                    [3, 5, 7, 15, 30]
-                ]
-            }
-        })),
-        changed = sinon.stub(),
-        dataAdapter = this.VirtualScrollController.firstCall.args[1];
+QUnit.test('dataAdapter for rowsScrollController', function(assert) {
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
+            columns: [{
+                value: 'A', index: 0,
+                children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
+            },
+            { value: 'C', index: 3 }],
+            values: [
+                [1, 2, 3, 6, 12],
+                [2, 3, 4, 9, 18],
+                [3, 5, 7, 15, 30]
+            ]
+        }
+    }));
+    const changed = sinon.stub();
+    const dataAdapter = this.VirtualScrollController.firstCall.args[1];
 
     dataController.changed.add(changed);
     dataController.rowPageSize(2);
@@ -4709,30 +4709,30 @@ QUnit.test("dataAdapter for rowsScrollController", function(assert) {
     assert.ok(changed.calledOnce);
 });
 
-QUnit.test("dataAdapter for rowsScrollController. Load when rowPageIndex greater then pagecount", function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: "row" },
-                    { area: "column" }, { area: "column" },
-                    { caption: 'Sum', format: 'decimal', area: "data" }
-                ],
-                rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
-                columns: [{
-                    value: 'A', index: 0,
-                    children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
-                },
-                { value: 'C', index: 3 }],
-                values: [
-                    [1, 2, 3, 6, 12],
-                    [2, 3, 4, 9, 18],
-                    [3, 5, 7, 15, 30]
-                ]
-            }
-        })),
-        changed = sinon.stub(),
-        dataAdapter = this.VirtualScrollController.firstCall.args[1],
-        scrollController = this.VirtualScrollController.firstCall.returnValue;
+QUnit.test('dataAdapter for rowsScrollController. Load when rowPageIndex greater then pagecount', function(assert) {
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
+            columns: [{
+                value: 'A', index: 0,
+                children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
+            },
+            { value: 'C', index: 3 }],
+            values: [
+                [1, 2, 3, 6, 12],
+                [2, 3, 4, 9, 18],
+                [3, 5, 7, 15, 30]
+            ]
+        }
+    }));
+    const changed = sinon.stub();
+    const dataAdapter = this.VirtualScrollController.firstCall.args[1];
+    const scrollController = this.VirtualScrollController.firstCall.returnValue;
 
     dataController.changed.add(changed);
     scrollController.pageIndex.returns(10);
@@ -4746,8 +4746,8 @@ QUnit.test("dataAdapter for rowsScrollController. Load when rowPageIndex greater
     assert.strictEqual(scrollController.pageIndex.lastCall.args[0], 0);
 });
 
-QUnit.test("Dispose DataController", function(assert) {
-    var dataController = new DataController(this.getOptions());
+QUnit.test('Dispose DataController', function(assert) {
+    const dataController = new DataController(this.getOptions());
 
     dataController.dispose();
 
@@ -4755,35 +4755,35 @@ QUnit.test("Dispose DataController", function(assert) {
     assert.ok(this.VirtualScrollController.secondCall.returnValue.dispose.calledOnce);
 });
 
-QUnit.test("Paging methods. Get/set", function(assert) {
-    var dataController = new DataController({});
+QUnit.test('Paging methods. Get/set', function(assert) {
+    const dataController = new DataController({});
 
-    assert.strictEqual(dataController.rowPageSize(), 20, "get default row page size");
-    assert.strictEqual(dataController.rowPageSize(100), 100, "set row page size");
-    assert.strictEqual(dataController.rowPageSize(), 100, "get row page size after setting");
+    assert.strictEqual(dataController.rowPageSize(), 20, 'get default row page size');
+    assert.strictEqual(dataController.rowPageSize(100), 100, 'set row page size');
+    assert.strictEqual(dataController.rowPageSize(), 100, 'get row page size after setting');
 
-    assert.strictEqual(dataController.columnPageSize(), 20, "get default column page size");
-    assert.strictEqual(dataController.columnPageSize(100), 100, "set column page size");
-    assert.strictEqual(dataController.columnPageSize(), 100, "get column page size after setting");
+    assert.strictEqual(dataController.columnPageSize(), 20, 'get default column page size');
+    assert.strictEqual(dataController.columnPageSize(100), 100, 'set column page size');
+    assert.strictEqual(dataController.columnPageSize(), 100, 'get column page size after setting');
 
 
-    assert.strictEqual(dataController.rowPageIndex(), 0, "get default row page index");
-    assert.strictEqual(dataController.rowPageIndex(100), 100, "set row page index");
-    assert.strictEqual(dataController.rowPageIndex(), 100, "get row page index after setting");
+    assert.strictEqual(dataController.rowPageIndex(), 0, 'get default row page index');
+    assert.strictEqual(dataController.rowPageIndex(100), 100, 'set row page index');
+    assert.strictEqual(dataController.rowPageIndex(), 100, 'get row page index after setting');
 
-    assert.strictEqual(dataController.columnPageIndex(), 0, "get default column page index");
-    assert.strictEqual(dataController.columnPageIndex(100), 100, "set column page index");
-    assert.strictEqual(dataController.columnPageIndex(), 100, "get column page index after setting");
+    assert.strictEqual(dataController.columnPageIndex(), 0, 'get default column page index');
+    assert.strictEqual(dataController.columnPageIndex(100), 100, 'set column page index');
+    assert.strictEqual(dataController.columnPageIndex(), 100, 'get column page index after setting');
 
 });
 
-QUnit.test("Get data by pageIndex, pageSize, pageCount. Rows", function(assert) {
-    var dataController = new DataController(this.getOptions({
+QUnit.test('Get data by pageIndex, pageSize, pageCount. Rows', function(assert) {
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "row" },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'row' },
+                { area: 'row' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             rows: this.data
         },
@@ -4797,55 +4797,55 @@ QUnit.test("Get data by pageIndex, pageSize, pageCount. Rows", function(assert) 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
             {
-                "expanded": true,
-                "path": [
-                    "Accessories"
+                'expanded': true,
+                'path': [
+                    'Accessories'
                 ],
-                "rowspan": 4,
-                "text": "Accessories",
-                "type": "D"
+                'rowspan': 4,
+                'text': 'Accessories',
+                'type': 'D'
             },
             {
-                "isLast": true,
-                "path": [
-                    "Accessories",
-                    "Cleaners"
+                'isLast': true,
+                'path': [
+                    'Accessories',
+                    'Cleaners'
                 ],
-                "text": "Cleaners",
-                "type": "D"
+                'text': 'Cleaners',
+                'type': 'D'
             }
         ],
         [
             {
-                "isLast": true,
-                "path": [
-                    "Accessories",
-                    "Helmets"
+                'isLast': true,
+                'path': [
+                    'Accessories',
+                    'Helmets'
                 ],
-                "text": "Helmets",
-                "type": "D"
+                'text': 'Helmets',
+                'type': 'D'
             }
         ],
         [
             {
-                "isLast": true,
-                "path": [
-                    "Accessories",
-                    "Hydration Packs"
+                'isLast': true,
+                'path': [
+                    'Accessories',
+                    'Hydration Packs'
                 ],
-                "text": "Hydration Packs",
-                "type": "D"
+                'text': 'Hydration Packs',
+                'type': 'D'
             }
         ],
         [
             {
-                "isLast": true,
-                "path": [
-                    "Accessories",
-                    "Locks"
+                'isLast': true,
+                'path': [
+                    'Accessories',
+                    'Locks'
                 ],
-                "text": "Locks",
-                "type": "D"
+                'text': 'Locks',
+                'type': 'D'
             }
         ]]);
 
@@ -4856,113 +4856,113 @@ QUnit.test("Get data by pageIndex, pageSize, pageCount. Rows", function(assert) 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
             {
-                "expanded": true,
-                "path": [
-                    "Accessories"
+                'expanded': true,
+                'path': [
+                    'Accessories'
                 ],
-                "rowspan": 4,
-                "text": "Accessories",
-                "type": "D"
+                'rowspan': 4,
+                'text': 'Accessories',
+                'type': 'D'
             },
             {
-                "isLast": true,
-                "path": [
-                    "Accessories",
-                    "Hydration Packs"
+                'isLast': true,
+                'path': [
+                    'Accessories',
+                    'Hydration Packs'
                 ],
-                "text": "Hydration Packs",
-                "type": "D"
+                'text': 'Hydration Packs',
+                'type': 'D'
             }
         ],
 
 
         [
             {
-                "isLast": true,
-                "path": [
-                    "Accessories",
-                    "Locks"
+                'isLast': true,
+                'path': [
+                    'Accessories',
+                    'Locks'
                 ],
-                "text": "Locks",
-                "type": "D"
+                'text': 'Locks',
+                'type': 'D'
             }
         ],
         [
             {
-                "isLast": true,
-                "path": [
-                    "Accessories",
-                    "Pumps"
+                'isLast': true,
+                'path': [
+                    'Accessories',
+                    'Pumps'
                 ],
-                "text": "Pumps",
-                "type": "D"
+                'text': 'Pumps',
+                'type': 'D'
             }
         ],
         [
             {
-                "isLast": true,
-                "path": [
-                    "Accessories",
-                    "Tires and Tubes"
+                'isLast': true,
+                'path': [
+                    'Accessories',
+                    'Tires and Tubes'
                 ],
-                "text": "Tires and Tubes",
-                "type": "D"
+                'text': 'Tires and Tubes',
+                'type': 'D'
             }
         ],
         [
             {
-                "colspan": 2,
-                "isLast": true,
-                "path": [
-                    "Accessories"
+                'colspan': 2,
+                'isLast': true,
+                'path': [
+                    'Accessories'
                 ],
-                "text": "Accessories Total",
-                "type": "T"
+                'text': 'Accessories Total',
+                'type': 'T'
             }
         ],
         [
             {
-                "expanded": true,
-                "path": [
-                    "Bikes"
+                'expanded': true,
+                'path': [
+                    'Bikes'
                 ],
-                "rowspan": 1,
-                "text": "Bikes",
-                "type": "D"
+                'rowspan': 1,
+                'text': 'Bikes',
+                'type': 'D'
             },
             {
-                "isLast": true,
-                "path": [
-                    "Bikes",
-                    "Mountain Bikes"
+                'isLast': true,
+                'path': [
+                    'Bikes',
+                    'Mountain Bikes'
                 ],
-                "text": "Mountain Bikes",
-                "type": "D"
+                'text': 'Mountain Bikes',
+                'type': 'D'
             }
         ]
     ]);
 
 });
 
-QUnit.test("T318502. Get rows info with three level expanded items", function(assert) {
+QUnit.test('T318502. Get rows info with three level expanded items', function(assert) {
     this.data[0].children = this.data[0].children.slice(0, 2);
     this.data[1].children = null;
     this.data[2].children = null;
     this.data[3].children = null;
 
     this.data[0].children[1].children = [{
-        value: "Red"
+        value: 'Red'
     }, {
-        value: "Black"
+        value: 'Black'
     }];
 
-    var dataController = new DataController(this.getOptions({
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "row" },
-                { area: "row" },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'row' },
+                { area: 'row' },
+                { area: 'row' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             rows: this.data
         },
@@ -4975,126 +4975,126 @@ QUnit.test("T318502. Get rows info with three level expanded items", function(as
 
     assert.deepEqual(dataController.getRowsInfo(), [[
         {
-            "expanded": true,
-            "path": [
-                "Accessories"
+            'expanded': true,
+            'path': [
+                'Accessories'
             ],
-            "rowspan": 4,
-            "text": "Accessories",
-            "type": "D"
+            'rowspan': 4,
+            'text': 'Accessories',
+            'type': 'D'
         },
         {
-            "colspan": 2,
-            "expanded": false,
-            "isLast": true,
-            "path": [
-                "Accessories",
-                "Bike Racks"
+            'colspan': 2,
+            'expanded': false,
+            'isLast': true,
+            'path': [
+                'Accessories',
+                'Bike Racks'
             ],
-            "text": "Bike Racks",
-            "type": "D"
+            'text': 'Bike Racks',
+            'type': 'D'
         }
     ],
     [
         {
-            "expanded": true,
-            "path": [
-                "Accessories",
-                "Bottles and Cages"
+            'expanded': true,
+            'path': [
+                'Accessories',
+                'Bottles and Cages'
             ],
-            "rowspan": 2,
-            "text": "Bottles and Cages",
-            "type": "D"
+            'rowspan': 2,
+            'text': 'Bottles and Cages',
+            'type': 'D'
         },
         {
-            "isLast": true,
-            "path": [
-                "Accessories",
-                "Bottles and Cages",
-                "Red"
+            'isLast': true,
+            'path': [
+                'Accessories',
+                'Bottles and Cages',
+                'Red'
             ],
-            "text": "Red",
-            "type": "D"
+            'text': 'Red',
+            'type': 'D'
         }
     ],
     [
         {
-            "isLast": true,
-            "path": [
-                "Accessories",
-                "Bottles and Cages",
-                "Black"
+            'isLast': true,
+            'path': [
+                'Accessories',
+                'Bottles and Cages',
+                'Black'
             ],
-            "text": "Black",
-            "type": "D"
+            'text': 'Black',
+            'type': 'D'
         }
     ],
     [
         {
-            "colspan": 2,
-            "isLast": true,
-            "path": [
-                "Accessories",
-                "Bottles and Cages"
+            'colspan': 2,
+            'isLast': true,
+            'path': [
+                'Accessories',
+                'Bottles and Cages'
             ],
-            "text": "Bottles and Cages Total",
-            "type": "T"
+            'text': 'Bottles and Cages Total',
+            'type': 'T'
         }
     ],
     [
         {
-            "colspan": 3,
-            "isLast": true,
-            "path": [
-                "Accessories"
+            'colspan': 3,
+            'isLast': true,
+            'path': [
+                'Accessories'
             ],
-            "text": "Accessories Total",
-            "type": "T"
+            'text': 'Accessories Total',
+            'type': 'T'
         }
     ],
     [
         {
-            "colspan": 3,
-            "expanded": false,
-            "isLast": true,
-            "path": [
-                "Bikes"
+            'colspan': 3,
+            'expanded': false,
+            'isLast': true,
+            'path': [
+                'Bikes'
             ],
-            "text": "Bikes",
-            "type": "D"
+            'text': 'Bikes',
+            'type': 'D'
         }
     ],
     [
         {
-            "colspan": 3,
-            "expanded": false,
-            "isLast": true,
-            "path": [
-                "Clothing"
+            'colspan': 3,
+            'expanded': false,
+            'isLast': true,
+            'path': [
+                'Clothing'
             ],
-            "text": "Clothing",
-            "type": "D"
+            'text': 'Clothing',
+            'type': 'D'
         }
     ],
     [
         {
-            "colspan": 3,
+            'colspan': 3,
 
-            "expanded": false,
-            "isLast": true,
-            "path": [
-                "Components"
+            'expanded': false,
+            'isLast': true,
+            'path': [
+                'Components'
             ],
-            "text": "Components",
-            "type": "D"
+            'text': 'Components',
+            'type': 'D'
         }
     ],
     [
         {
-            "colspan": 3,
-            "isLast": true,
-            "text": "Grand Total",
-            "type": "GT"
+            'colspan': 3,
+            'isLast': true,
+            'text': 'Grand Total',
+            'type': 'GT'
         }
     ]]);
 
@@ -5105,94 +5105,94 @@ QUnit.test("T318502. Get rows info with three level expanded items", function(as
     assert.deepEqual(dataController.getRowsInfo(), [
         [
             {
-                "expanded": true,
-                "path": [
-                    "Accessories"
+                'expanded': true,
+                'path': [
+                    'Accessories'
                 ],
-                "rowspan": 1,
-                "text": "Accessories",
-                "type": "D"
+                'rowspan': 1,
+                'text': 'Accessories',
+                'type': 'D'
             },
             {
-                "colspan": 1,
-                "isLast": true,
-                "path": [
-                    "Accessories",
-                    "Bottles and Cages"
+                'colspan': 1,
+                'isLast': true,
+                'path': [
+                    'Accessories',
+                    'Bottles and Cages'
                 ],
-                "text": "Bottles and Cages Total",
-                "type": "T"
+                'text': 'Bottles and Cages Total',
+                'type': 'T'
             }
         ],
         [
             {
-                "colspan": 2,
-                "isLast": true,
-                "path": [
-                    "Accessories"
+                'colspan': 2,
+                'isLast': true,
+                'path': [
+                    'Accessories'
                 ],
-                "text": "Accessories Total",
-                "type": "T"
+                'text': 'Accessories Total',
+                'type': 'T'
             }
         ],
         [
             {
-                "colspan": 2,
-                "expanded": false,
-                "isLast": true,
-                "path": [
-                    "Bikes"
+                'colspan': 2,
+                'expanded': false,
+                'isLast': true,
+                'path': [
+                    'Bikes'
                 ],
-                "text": "Bikes",
-                "type": "D"
+                'text': 'Bikes',
+                'type': 'D'
             }
         ],
         [
             {
-                "colspan": 2,
-                "expanded": false,
-                "isLast": true,
-                "path": [
-                    "Clothing"
+                'colspan': 2,
+                'expanded': false,
+                'isLast': true,
+                'path': [
+                    'Clothing'
                 ],
-                "text": "Clothing",
-                "type": "D"
+                'text': 'Clothing',
+                'type': 'D'
             }
         ],
         [
             {
-                "colspan": 2,
-                "expanded": false,
-                "isLast": true,
-                "path": [
-                    "Components"
+                'colspan': 2,
+                'expanded': false,
+                'isLast': true,
+                'path': [
+                    'Components'
                 ],
-                "text": "Components",
-                "type": "D"
+                'text': 'Components',
+                'type': 'D'
             }
         ],
         [
             {
-                "colspan": 2,
-                "isLast": true,
-                "text": "Grand Total",
-                "type": "GT"
+                'colspan': 2,
+                'isLast': true,
+                'text': 'Grand Total',
+                'type': 'GT'
             }
         ]
     ]);
 });
 
-QUnit.test("Get data by pageIndex, pageSize, pageCount. Rows first level when there are expanded headers", function(assert) {
+QUnit.test('Get data by pageIndex, pageSize, pageCount. Rows first level when there are expanded headers', function(assert) {
     this.data[1].children = null;
     this.data[2].children = null;
     this.data[3].children = null;
 
-    var dataController = new DataController(this.getOptions({
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "row" },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'row' },
+                { area: 'row' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             rows: this.data
         },
@@ -5209,53 +5209,53 @@ QUnit.test("Get data by pageIndex, pageSize, pageCount. Rows first level when th
     assert.deepEqual(dataController.getRowsInfo(), [
         [
             {
-                "colspan": 1,
-                "expanded": false,
-                "isLast": true,
-                "path": [
-                    "Clothing"
+                'colspan': 1,
+                'expanded': false,
+                'isLast': true,
+                'path': [
+                    'Clothing'
                 ],
-                "text": "Clothing",
-                "type": "D"
+                'text': 'Clothing',
+                'type': 'D'
             }
         ],
         [
             {
-                "colspan": 1,
-                "expanded": false,
-                "isLast": true,
-                "path": [
-                    "Components"
+                'colspan': 1,
+                'expanded': false,
+                'isLast': true,
+                'path': [
+                    'Components'
                 ],
-                "text": "Components",
-                "type": "D"
+                'text': 'Components',
+                'type': 'D'
             }
         ],
         [
             {
-                "colspan": 1,
-                "isLast": true,
-                "text": "Grand Total",
-                "type": "GT"
+                'colspan': 1,
+                'isLast': true,
+                'text': 'Grand Total',
+                'type': 'GT'
             }
         ]
     ]);
     assert.strictEqual(dataController.getRowsInfo(true)[10][0].colspan, 2);
 });
 
-QUnit.test("Get data by pageIndex, pageSize, pageCount. Columns", function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: "column" },
-                    { area: "column" },
-                    { area: "data", caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            },
-            texts: texts
-        })),
-        columnsInfo;
+QUnit.test('Get data by pageIndex, pageSize, pageCount. Columns', function(assert) {
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        },
+        texts: texts
+    }));
+    let columnsInfo;
 
     dataController.columnPageSize(2);
     dataController._columnsScrollController.beginPageIndex.returns(1);
@@ -5265,51 +5265,51 @@ QUnit.test("Get data by pageIndex, pageSize, pageCount. Columns", function(asser
     assert.strictEqual(columnsInfo.length, 2);
 
     assert.deepEqual(columnsInfo[0], [{
-        "expanded": true,
-        "path": [
-            "Accessories"
+        'expanded': true,
+        'path': [
+            'Accessories'
         ],
-        "colspan": 4,
-        "text": "Accessories",
-        "type": "D"
+        'colspan': 4,
+        'text': 'Accessories',
+        'type': 'D'
     }]);
 
     assert.deepEqual(columnsInfo[1], [
         {
-            "isLast": true,
-            "path": [
-                "Accessories",
-                "Cleaners"
+            'isLast': true,
+            'path': [
+                'Accessories',
+                'Cleaners'
             ],
-            "text": "Cleaners",
-            "type": "D"
+            'text': 'Cleaners',
+            'type': 'D'
         },
         {
-            "isLast": true,
-            "path": [
-                "Accessories",
-                "Helmets"
+            'isLast': true,
+            'path': [
+                'Accessories',
+                'Helmets'
             ],
-            "text": "Helmets",
-            "type": "D"
+            'text': 'Helmets',
+            'type': 'D'
         },
         {
-            "isLast": true,
-            "path": [
-                "Accessories",
-                "Hydration Packs"
+            'isLast': true,
+            'path': [
+                'Accessories',
+                'Hydration Packs'
             ],
-            "text": "Hydration Packs",
-            "type": "D"
+            'text': 'Hydration Packs',
+            'type': 'D'
         },
         {
-            "isLast": true,
-            "path": [
-                "Accessories",
-                "Locks"
+            'isLast': true,
+            'path': [
+                'Accessories',
+                'Locks'
             ],
-            "text": "Locks",
-            "type": "D"
+            'text': 'Locks',
+            'type': 'D'
         }
     ]);
 
@@ -5320,134 +5320,134 @@ QUnit.test("Get data by pageIndex, pageSize, pageCount. Columns", function(asser
     columnsInfo = dataController.getColumnsInfo();
 
     assert.deepEqual(columnsInfo[0], [{
-        "colspan": 4,
-        "expanded": true,
-        "path": [
-            "Accessories"
+        'colspan': 4,
+        'expanded': true,
+        'path': [
+            'Accessories'
         ],
-        "text": "Accessories",
-        "type": "D"
+        'text': 'Accessories',
+        'type': 'D'
     },
     {
-        "isLast": true,
-        "path": [
-            "Accessories"
+        'isLast': true,
+        'path': [
+            'Accessories'
         ],
-        "rowspan": 2,
-        "text": "Accessories Total",
-        "type": "T"
+        'rowspan': 2,
+        'text': 'Accessories Total',
+        'type': 'T'
     },
     {
-        "colspan": 3,
-        "expanded": true,
-        "path": [
-            "Bikes"
+        'colspan': 3,
+        'expanded': true,
+        'path': [
+            'Bikes'
         ],
-        "text": "Bikes",
-        "type": "D"
+        'text': 'Bikes',
+        'type': 'D'
     },
     {
-        "isLast": true,
-        "path": [
-            "Bikes"
+        'isLast': true,
+        'path': [
+            'Bikes'
         ],
-        "rowspan": 2,
-        "text": "Bikes Total",
-        "type": "T"
+        'rowspan': 2,
+        'text': 'Bikes Total',
+        'type': 'T'
     }, {
-        "colspan": 1,
-        "expanded": true,
-        "path": [
-            "Clothing"
+        'colspan': 1,
+        'expanded': true,
+        'path': [
+            'Clothing'
         ],
-        "text": "Clothing",
-        "type": "D"
+        'text': 'Clothing',
+        'type': 'D'
     }]);
 
     assert.strictEqual(columnsInfo[1].length, 8);
 
     assert.deepEqual(columnsInfo[1], [{
-        "isLast": true,
-        "path": [
-            "Accessories",
-            "Hydration Packs"
+        'isLast': true,
+        'path': [
+            'Accessories',
+            'Hydration Packs'
         ],
-        "text": "Hydration Packs",
-        "type": "D"
+        'text': 'Hydration Packs',
+        'type': 'D'
     },
     {
-        "isLast": true,
-        "path": [
-            "Accessories",
-            "Locks"
+        'isLast': true,
+        'path': [
+            'Accessories',
+            'Locks'
         ],
-        "text": "Locks",
-        "type": "D"
+        'text': 'Locks',
+        'type': 'D'
     },
     {
-        "isLast": true,
-        "path": [
-            "Accessories",
-            "Pumps"
+        'isLast': true,
+        'path': [
+            'Accessories',
+            'Pumps'
         ],
-        "text": "Pumps",
-        "type": "D"
+        'text': 'Pumps',
+        'type': 'D'
     },
     {
-        "isLast": true,
-        "path": [
-            "Accessories",
-            "Tires and Tubes"
+        'isLast': true,
+        'path': [
+            'Accessories',
+            'Tires and Tubes'
         ],
-        "text": "Tires and Tubes",
-        "type": "D"
+        'text': 'Tires and Tubes',
+        'type': 'D'
     },
     {
-        "isLast": true,
-        "path": [
-            "Bikes",
-            "Mountain Bikes"
+        'isLast': true,
+        'path': [
+            'Bikes',
+            'Mountain Bikes'
         ],
-        "text": "Mountain Bikes",
-        "type": "D"
+        'text': 'Mountain Bikes',
+        'type': 'D'
     },
     {
-        "isLast": true,
-        "path": [
-            "Bikes",
-            "Road Bikes"
+        'isLast': true,
+        'path': [
+            'Bikes',
+            'Road Bikes'
         ],
-        "text": "Road Bikes",
-        "type": "D"
+        'text': 'Road Bikes',
+        'type': 'D'
     },
     {
-        "isLast": true,
-        "path": [
-            "Bikes",
-            "Touring Bikes"
+        'isLast': true,
+        'path': [
+            'Bikes',
+            'Touring Bikes'
         ],
-        "text": "Touring Bikes",
-        "type": "D"
+        'text': 'Touring Bikes',
+        'type': 'D'
     },
     {
-        "isLast": true,
-        "path": [
-            "Clothing",
-            "Bib-Shorts"
+        'isLast': true,
+        'path': [
+            'Clothing',
+            'Bib-Shorts'
         ],
-        "text": "Bib-Shorts",
-        "type": "D"
+        'text': 'Bib-Shorts',
+        'type': 'D'
     }]);
 });
 
-QUnit.test("T522627. Columns info. Second row not in the visible pages", function(assert) {
-    var dataController = new DataController(this.getOptions({
+QUnit.test('T522627. Columns info. Second row not in the visible pages', function(assert) {
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "column" },
-                { area: "data", caption: "d1" },
-                { area: "data", caption: "d2" }
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'd1' },
+                { area: 'data', caption: 'd2' }
             ],
             columns: [
                 { value: 'A' },
@@ -5468,84 +5468,82 @@ QUnit.test("T522627. Columns info. Second row not in the visible pages", functio
     dataController._columnsScrollController.beginPageIndex.returns(0);
     dataController._columnsScrollController.endPageIndex.returns(0);
 
-    var columnsInfo = dataController.getColumnsInfo();
+    const columnsInfo = dataController.getColumnsInfo();
 
     assert.strictEqual(columnsInfo.length, 3);
     assert.deepEqual(columnsInfo[1], []);
 });
 
-QUnit.test("Get page start with begin of header element. Columns", function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: "column" },
-                    { area: "column" },
-                    { area: "data", caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            },
-            texts: texts
-        })),
-        columnsInfo;
+QUnit.test('Get page start with begin of header element. Columns', function(assert) {
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        },
+        texts: texts
+    }));
 
     dataController.columnPageSize(2);
     dataController._columnsScrollController.beginPageIndex.returns(4);
     dataController._columnsScrollController.endPageIndex.returns(5);
-    columnsInfo = dataController.getColumnsInfo();
+    const columnsInfo = dataController.getColumnsInfo();
 
     assert.strictEqual(columnsInfo.length, 2);
 
     assert.deepEqual(columnsInfo[0], [{
-        "isLast": true,
-        "path": [
-            "Accessories"
+        'isLast': true,
+        'path': [
+            'Accessories'
         ],
-        "rowspan": 2,
-        "text": "Accessories Total",
-        "type": "T"
+        'rowspan': 2,
+        'text': 'Accessories Total',
+        'type': 'T'
     },
     {
-        "colspan": 3,
-        "expanded": true,
-        "path": [
-            "Bikes"
+        'colspan': 3,
+        'expanded': true,
+        'path': [
+            'Bikes'
         ],
-        "text": "Bikes",
-        "type": "D"
+        'text': 'Bikes',
+        'type': 'D'
     }]);
 });
 
-QUnit.test("Get all data when paging. Columns", function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: "column" },
-                    { area: "column" },
-                    { area: "data", caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            },
-            texts: texts
-        })),
-        columnsInfo;
+QUnit.test('Get all data when paging. Columns', function(assert) {
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        },
+        texts: texts
+    }));
 
     dataController.columnPageSize(2);
     dataController._columnsScrollController.beginPageIndex.returns(4);
     dataController._columnsScrollController.endPageIndex.returns(5);
-    columnsInfo = dataController.getColumnsInfo(true);
+    const columnsInfo = dataController.getColumnsInfo(true);
 
     assert.strictEqual(columnsInfo.length, 2);
     assert.strictEqual(columnsInfo[0].length, 9);
     assert.strictEqual(columnsInfo[1].length, 33);
 });
 
-QUnit.test("Get all data when paging. Rows", function(assert) {
-    var dataController = new DataController(this.getOptions({
+QUnit.test('Get all data when paging. Rows', function(assert) {
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "row" },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'row' },
+                { area: 'row' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             rows: this.data
         },
@@ -5556,18 +5554,18 @@ QUnit.test("Get all data when paging. Rows", function(assert) {
     dataController._rowsScrollController.beginPageIndex.returns(1);
     dataController._rowsScrollController.endPageIndex.returns(2);
 
-    var rowsInfo = dataController.getRowsInfo(true);
+    const rowsInfo = dataController.getRowsInfo(true);
 
     assert.strictEqual(rowsInfo.length, 38);
 });
 
-QUnit.test("get cells info", function(assert) {
-    var dataController = new DataController(this.getOptions({
+QUnit.test('get cells info', function(assert) {
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "column" }, { area: "column" },
-                { caption: 'Sum', format: 'decimal', area: "data" }
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
             ],
             rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
             columns: [{
@@ -5594,49 +5592,49 @@ QUnit.test("get cells info", function(assert) {
 
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "T", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "9" },
-            { columnType: "GT", rowType: "D", text: "18" }
+            { columnType: 'T', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '9' },
+            { columnType: 'GT', rowType: 'D', text: '18' }
         ],
         [
-            { columnType: "T", rowType: "GT", text: "3" },
-            { columnType: "D", rowType: "GT", text: "15" },
-            { columnType: "GT", rowType: "GT", text: "30" }
+            { columnType: 'T', rowType: 'GT', text: '3' },
+            { columnType: 'D', rowType: 'GT', text: '15' },
+            { columnType: 'GT', rowType: 'GT', text: '30' }
         ]
     ]);
 
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo(true)), [
         [
-            { columnType: "D", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "T", rowType: "D", text: "1" },
-            { columnType: "D", rowType: "D", text: "6" },
-            { columnType: "GT", rowType: "D", text: "12" }
+            { columnType: 'D', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'T', rowType: 'D', text: '1' },
+            { columnType: 'D', rowType: 'D', text: '6' },
+            { columnType: 'GT', rowType: 'D', text: '12' }
         ],
         [
-            { columnType: "D", rowType: "D", text: "3" },
-            { columnType: "D", rowType: "D", text: "4" },
-            { columnType: "T", rowType: "D", text: "2" },
-            { columnType: "D", rowType: "D", text: "9" },
-            { columnType: "GT", rowType: "D", text: "18" }
+            { columnType: 'D', rowType: 'D', text: '3' },
+            { columnType: 'D', rowType: 'D', text: '4' },
+            { columnType: 'T', rowType: 'D', text: '2' },
+            { columnType: 'D', rowType: 'D', text: '9' },
+            { columnType: 'GT', rowType: 'D', text: '18' }
         ],
         [
-            { columnType: "D", rowType: "GT", text: "5" },
-            { columnType: "D", rowType: "GT", text: "7" },
-            { columnType: "T", rowType: "GT", text: "3" },
-            { columnType: "D", rowType: "GT", text: "15" },
-            { columnType: "GT", rowType: "GT", text: "30" }
+            { columnType: 'D', rowType: 'GT', text: '5' },
+            { columnType: 'D', rowType: 'GT', text: '7' },
+            { columnType: 'T', rowType: 'GT', text: '3' },
+            { columnType: 'D', rowType: 'GT', text: '15' },
+            { columnType: 'GT', rowType: 'GT', text: '30' }
         ]
-    ], "get All data");
+    ], 'get All data');
 });
 
-QUnit.test("Get total count cells. Rows with data and empty columns", function(assert) {
-    var dataController = new DataController(this.getOptions({
+QUnit.test('Get total count cells. Rows with data and empty columns', function(assert) {
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
-                { area: "row" },
-                { area: "row" },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'row' },
+                { area: 'row' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             rows: this.data
         },
@@ -5647,13 +5645,13 @@ QUnit.test("Get total count cells. Rows with data and empty columns", function(a
     assert.strictEqual(dataController.totalColumnCount(), 1);
 });
 
-QUnit.test("Get total count cells. columns with data and empty rows", function(assert) {
-    var dataController = new DataController(this.getOptions({
+QUnit.test('Get total count cells. columns with data and empty rows', function(assert) {
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
-                { area: "column" },
-                { area: "column" },
-                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
             ],
             columns: this.data
         },
@@ -5664,37 +5662,37 @@ QUnit.test("Get total count cells. columns with data and empty rows", function(a
     assert.strictEqual(dataController.totalColumnCount(), 38);
 });
 
-QUnit.test("Can get changingTime. after load columnsScrollController", function(assert) {
-    var clock = sinon.useFakeTimers(),
-        dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: "column" },
-                    { area: "column" },
-                    { area: "data", caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            }
-        }));
+QUnit.test('Can get changingTime. after load columnsScrollController', function(assert) {
+    const clock = sinon.useFakeTimers();
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        }
+    }));
 
     dataController.changed.add(function() {
         clock.tick(377);
     });
 
-    var columnsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsDataAdapter = this.VirtualScrollController.firstCall.args[1],
-        rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
+    const columnsScrollController = this.VirtualScrollController.firstCall.returnValue;
+    const columnsDataAdapter = this.VirtualScrollController.firstCall.args[1];
+    const rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
 
-    columnsScrollController.handleDataChanged.returns("handleChangedResult");
+    columnsScrollController.handleDataChanged.returns('handleChangedResult');
 
-    var loadResult = columnsDataAdapter.load(),
-        handleDataChangedArg = columnsScrollController.handleDataChanged.lastCall.args[0];
+    const loadResult = columnsDataAdapter.load();
+    const handleDataChangedArg = columnsScrollController.handleDataChanged.lastCall.args[0];
 
     // act
     handleDataChangedArg();
 
     assert.ok(columnsScrollController);
-    assert.strictEqual(loadResult, "handleChangedResult");
+    assert.strictEqual(loadResult, 'handleChangedResult');
     assert.strictEqual(columnsDataAdapter.changingDuration(), 377);
     assert.strictEqual(rowsDataAdapter.changingDuration(), 377);
 
@@ -5702,19 +5700,19 @@ QUnit.test("Can get changingTime. after load columnsScrollController", function(
     clock.restore();
 });
 
-QUnit.test("changingDuration if paginate", function(assert) {
-    var clock = sinon.useFakeTimers(),
-        dataController = new DataController(this.getOptions({
-            dataSource: {
-                paginate: true,
-                fields: [
-                    { area: "column" },
-                    { area: "column" },
-                    { area: "data", caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            }
-        }));
+QUnit.test('changingDuration if paginate', function(assert) {
+    const clock = sinon.useFakeTimers();
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            paginate: true,
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        }
+    }));
 
     dataController._dataSource.paginate = function() {
         return true;
@@ -5724,20 +5722,20 @@ QUnit.test("changingDuration if paginate", function(assert) {
         clock.tick(377);
     });
 
-    var columnsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsDataAdapter = this.VirtualScrollController.firstCall.args[1],
-        rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
+    const columnsScrollController = this.VirtualScrollController.firstCall.returnValue;
+    const columnsDataAdapter = this.VirtualScrollController.firstCall.args[1];
+    const rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
 
-    columnsScrollController.handleDataChanged.returns("handleChangedResult");
+    columnsScrollController.handleDataChanged.returns('handleChangedResult');
 
-    var loadResult = columnsDataAdapter.load(),
-        handleDataChangedArg = columnsScrollController.handleDataChanged.lastCall.args[0];
+    const loadResult = columnsDataAdapter.load();
+    const handleDataChangedArg = columnsScrollController.handleDataChanged.lastCall.args[0];
 
     // act
     handleDataChangedArg();
 
     assert.ok(columnsScrollController);
-    assert.strictEqual(loadResult, "handleChangedResult");
+    assert.strictEqual(loadResult, 'handleChangedResult');
     assert.strictEqual(columnsDataAdapter.changingDuration(), 300);
     assert.strictEqual(rowsDataAdapter.changingDuration(), 300);
 
@@ -5745,37 +5743,37 @@ QUnit.test("changingDuration if paginate", function(assert) {
     clock.restore();
 });
 
-QUnit.test("Can get changingTime. after load rowsScrollController", function(assert) {
-    var clock = sinon.useFakeTimers(),
-        dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: "column" },
-                    { area: "column" },
-                    { area: "data", caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            }
-        }));
+QUnit.test('Can get changingTime. after load rowsScrollController', function(assert) {
+    const clock = sinon.useFakeTimers();
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        }
+    }));
 
     dataController.changed.add(function() {
         clock.tick(377);
     });
 
-    var rowsScrollController = this.VirtualScrollController.secondCall.returnValue,
-        columnsDataAdapter = this.VirtualScrollController.firstCall.args[1],
-        rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
+    const rowsScrollController = this.VirtualScrollController.secondCall.returnValue;
+    const columnsDataAdapter = this.VirtualScrollController.firstCall.args[1];
+    const rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
 
-    rowsScrollController.handleDataChanged.returns("handleChangedResult");
+    rowsScrollController.handleDataChanged.returns('handleChangedResult');
 
-    var loadResult = rowsDataAdapter.load(),
-        handleDataChangedArg = rowsScrollController.handleDataChanged.lastCall.args[0];
+    const loadResult = rowsDataAdapter.load();
+    const handleDataChangedArg = rowsScrollController.handleDataChanged.lastCall.args[0];
 
     // act
     handleDataChangedArg();
 
     assert.ok(rowsScrollController);
-    assert.strictEqual(loadResult, "handleChangedResult");
+    assert.strictEqual(loadResult, 'handleChangedResult');
 
     assert.strictEqual(columnsDataAdapter.changingDuration(), 377);
     assert.strictEqual(rowsDataAdapter.changingDuration(), 377);
@@ -5784,20 +5782,20 @@ QUnit.test("Can get changingTime. after load rowsScrollController", function(ass
     clock.restore();
 });
 
-QUnit.test("T327502. DataController changed once on update", function(assert) {
+QUnit.test('T327502. DataController changed once on update', function(assert) {
     this.VirtualScrollController.restore();
 
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: "column" },
-                    { area: "column" },
-                    { area: "data", caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            }
-        })),
-        changedCallback = sinon.stub();
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        }
+    }));
+    const changedCallback = sinon.stub();
 
     dataController.changed.add(changedCallback);
     // act
@@ -5807,7 +5805,7 @@ QUnit.test("T327502. DataController changed once on update", function(assert) {
 });
 
 
-QUnit.module("StateStoring", {
+QUnit.module('StateStoring', {
     beforeEach: function() {
         moduleConfig.beforeEach.call(this);
         this.component = {
@@ -5816,14 +5814,14 @@ QUnit.module("StateStoring", {
 
         this.stateStoringController.isEnabled.returns(true);
 
-        this.stateStoringController.load.returns($.Deferred().resolve({ fields: [{ area: "column", filterValues: ["ValueFromState"] }] }));
+        this.stateStoringController.load.returns($.Deferred().resolve({ fields: [{ area: 'column', filterValues: ['ValueFromState'] }] }));
     },
     afterEach: function() {
         moduleConfig.afterEach.call(this);
     }
 });
 {
-    QUnit.test("Create stateStoringController", function(assert) {
+    QUnit.test('Create stateStoringController', function(assert) {
         new DataController({
             component: this.component,
             dataSource: {
@@ -5839,14 +5837,14 @@ QUnit.module("StateStoring", {
 
         assert.strictEqual(this.stateStoringController.state.callCount, 1);
         assert.deepEqual(this.stateStoringController.state.lastCall.args[0], {
-            "columnExpandedPaths": [],
-            "fields": [],
-            "rowExpandedPaths": []
+            'columnExpandedPaths': [],
+            'fields': [],
+            'rowExpandedPaths': []
         });
         assert.ok(this.stateStoringController.save.calledAfter(this.stateStoringController.state));
     });
 
-    QUnit.test("Create stateStoringController when state storing is disabled", function(assert) {
+    QUnit.test('Create stateStoringController when state storing is disabled', function(assert) {
         this.stateStoringController.isEnabled.returns(false);
 
         new DataController({
@@ -5865,8 +5863,8 @@ QUnit.module("StateStoring", {
         assert.strictEqual(this.stateStoringController.state.callCount, 0);
     });
 
-    QUnit.test("Load dataController when stateStoring isEnabled", function(assert) {
-        var dataController = new DataController({
+    QUnit.test('Load dataController when stateStoring isEnabled', function(assert) {
+        const dataController = new DataController({
             component: this.component,
             dataSource: {
                 fields: [{}]
@@ -5874,11 +5872,11 @@ QUnit.module("StateStoring", {
         });
 
         assert.deepEqual(dataController._dataSource.fields(), [{
-            area: "column",
+            area: 'column',
             areaIndex: 0,
-            caption: "",
+            caption: '',
             filterValues: [
-                "ValueFromState"
+                'ValueFromState'
             ],
             expanded: undefined,
             filterType: undefined,
@@ -5903,10 +5901,10 @@ QUnit.module("StateStoring", {
         }]);
     });
 
-    QUnit.test("Load dataController when stateStoring is disabled", function(assert) {
+    QUnit.test('Load dataController when stateStoring is disabled', function(assert) {
         this.stateStoringController.isEnabled.returns(false);
 
-        var dataController = new DataController({
+        const dataController = new DataController({
             component: this.component,
             dataSource: {
                 fields: [{}]
@@ -5915,19 +5913,19 @@ QUnit.module("StateStoring", {
 
 
         assert.deepEqual(dataController._dataSource.fields(), [{
-            caption: "",
-            "_initProperties": {
-                "caption": undefined
+            caption: '',
+            '_initProperties': {
+                'caption': undefined
             },
             index: 0
         }]);
     });
 
-    QUnit.test("Load dataController when stateStoring is enabled and no state", function(assert) {
+    QUnit.test('Load dataController when stateStoring is enabled and no state', function(assert) {
         this.stateStoringController.isEnabled.returns(false);
         this.stateStoringController.load.returns($.Deferred().resolve(undefined));
 
-        var dataController = new DataController({
+        const dataController = new DataController({
             component: this.component,
             dataSource: {
                 fields: [{}]
@@ -5935,23 +5933,23 @@ QUnit.module("StateStoring", {
         });
 
         assert.deepEqual(dataController._dataSource.fields(), [{
-            caption: "",
-            "_initProperties": {
-                "caption": undefined
+            caption: '',
+            '_initProperties': {
+                'caption': undefined
             },
             index: 0
         }]);
     });
 
-    QUnit.module("Begin/end loading changing", {
+    QUnit.module('Begin/end loading changing', {
         beforeEach: function() {
             moduleConfig.beforeEach.call(this);
             this.dataController = new DataController({
                 dataSource: {
                     fields: [
-                        { area: "column" },
-                        { area: "column", width: 100 },
-                        { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                        { area: 'column' },
+                        { area: 'column', width: 100 },
+                        { area: 'data', caption: 'Sum', format: 'fixedPoint' }
                     ],
                     columns: [{
                         value: 'A', children: [{ value: 'P1' }, { value: 'P2' }]
@@ -5960,37 +5958,37 @@ QUnit.module("StateStoring", {
                 },
                 texts: texts
             });
-            sinon.spy(this.dataController._dataSource, "beginLoading");
-            sinon.spy(this.dataController._dataSource, "endLoading");
+            sinon.spy(this.dataController._dataSource, 'beginLoading');
+            sinon.spy(this.dataController._dataSource, 'endLoading');
         },
         afterEach: function() {
             moduleConfig.afterEach.call(this);
         }
     });
 
-    QUnit.test("beginLoading", function(assert) {
+    QUnit.test('beginLoading', function(assert) {
         this.dataController.beginLoading();
 
-        assert.equal(this.dataController._dataSource.beginLoading.callCount, 1, "beginLoading was called once");
-        assert.equal(this.dataController._dataSource.endLoading.callCount, 0, "endLoading was not called");
+        assert.equal(this.dataController._dataSource.beginLoading.callCount, 1, 'beginLoading was called once');
+        assert.equal(this.dataController._dataSource.endLoading.callCount, 0, 'endLoading was not called');
     });
 
-    QUnit.test("endLoading", function(assert) {
+    QUnit.test('endLoading', function(assert) {
         this.dataController.endLoading();
 
-        assert.equal(this.dataController._dataSource.beginLoading.callCount, 0, "beginLoading was not called");
-        assert.equal(this.dataController._dataSource.endLoading.callCount, 1, "endLoading was called once");
+        assert.equal(this.dataController._dataSource.beginLoading.callCount, 0, 'beginLoading was not called');
+        assert.equal(this.dataController._dataSource.endLoading.callCount, 1, 'endLoading was called once');
     });
 
 }
 
-QUnit.module("Remote paging", {
+QUnit.module('Remote paging', {
     beforeEach: function() {
-        var createItems = function(count, prefix, skip, take, desc) {
-            var items = [];
+        const createItems = function(count, prefix, skip, take, desc) {
+            const items = [];
 
-            for(var i = 0; i < count; i++) {
-                var value = prefix + (desc ? count - i : i + 1);
+            for(let i = 0; i < count; i++) {
+                const value = prefix + (desc ? count - i : i + 1);
 
                 if((skip && i < skip) || (take && i >= skip + take)) {
                     items.push({});
@@ -6005,22 +6003,22 @@ QUnit.module("Remote paging", {
             return items;
         };
 
-        var createValues = function(loadOptions, columnCount) {
-            var result = [];
-            for(var rowIndex = loadOptions.rowSkip; rowIndex < loadOptions.rowSkip + loadOptions.rowTake + 1; rowIndex++) {
-                var row = [];
+        const createValues = function(loadOptions, columnCount) {
+            const result = [];
+            for(let rowIndex = loadOptions.rowSkip; rowIndex < loadOptions.rowSkip + loadOptions.rowTake + 1; rowIndex++) {
+                const row = [];
                 result.push(row);
-                for(var columnIndex = loadOptions.columnSkip; columnIndex < loadOptions.columnSkip + loadOptions.columnTake + 1; columnIndex++) {
+                for(let columnIndex = loadOptions.columnSkip; columnIndex < loadOptions.columnSkip + loadOptions.columnTake + 1; columnIndex++) {
                     row.push([ rowIndex * 10 + columnIndex ]);
                 }
             }
             return result;
         };
 
-        var that = this;
+        const that = this;
         this.loadArgs = [];
 
-        var MockStore = Class.inherit({
+        const MockStore = Class.inherit({
             ctor: function(options) {
                 this._rowCount = options.rowCount;
                 this._columnCount = options.columnCount;
@@ -6033,12 +6031,12 @@ QUnit.module("Remote paging", {
             },
             load: function(loadOptions) {
                 that.loadArgs.push(loadOptions);
-                var rowCount = loadOptions.rows.length ? this._rowCount : 0;
-                var columnCount = loadOptions.columns.length ? this._columnCount : 0;
+                const rowCount = loadOptions.rows.length ? this._rowCount : 0;
+                const columnCount = loadOptions.columns.length ? this._columnCount : 0;
 
                 return $.Deferred().resolve({
-                    rows: createItems(rowCount, "row ", loadOptions.rowSkip, loadOptions.rowTake, rowCount && loadOptions.rows[0].sortOrder === "desc"),
-                    columns: createItems(columnCount, "column ", loadOptions.columnSkip, loadOptions.columnTake, columnCount && loadOptions.columns[0].sortOrder === "desc"),
+                    rows: createItems(rowCount, 'row ', loadOptions.rowSkip, loadOptions.rowTake, rowCount && loadOptions.rows[0].sortOrder === 'desc'),
+                    columns: createItems(columnCount, 'column ', loadOptions.columnSkip, loadOptions.columnTake, columnCount && loadOptions.columns[0].sortOrder === 'desc'),
                     values: createValues(loadOptions),
                     grandTotalRowIndex: 0,
                     grandTotalColumnIndex: 0
@@ -6048,8 +6046,8 @@ QUnit.module("Remote paging", {
 
         this.component = {
             option: function(name) {
-                if(name === "scrolling.mode") {
-                    return "virtual";
+                if(name === 'scrolling.mode') {
+                    return 'virtual';
                 }
             }
         };
@@ -6070,17 +6068,17 @@ QUnit.module("Remote paging", {
                     columnCount: 10
                 }),
                 pageSize: 4,
-                fields: Array.apply(null, Array(rowFieldCount)).map(function() { return { area: "row" }; })
+                fields: Array.apply(null, Array(rowFieldCount)).map(function() { return { area: 'row' }; })
                     .concat(
-                        Array.apply(null, Array(columnFieldCount)).map(function() { return { area: "column" }; })
+                        Array.apply(null, Array(columnFieldCount)).map(function() { return { area: 'column' }; })
                     ).concat(
-                        [{ area: "data" }]
+                        [{ area: 'data' }]
                     )
             };
         };
 
         this.setup = function(dataSourceOptions) {
-            var dataController = new DataController(this.getOptions({
+            const dataController = new DataController(this.getOptions({
                 dataSource: dataSourceOptions || this.createDataSource(),
                 texts: texts
             }));
@@ -6104,16 +6102,16 @@ QUnit.module("Remote paging", {
     }
 });
 
-QUnit.test("first load", function(assert) {
-    var dataController = this.setup();
+QUnit.test('first load', function(assert) {
+    const dataController = this.setup();
 
-    assert.strictEqual(this.loadArgs.length, 1, "one load");
-    assert.strictEqual(this.loadArgs[0].rows.length, 1, "load args rows");
-    assert.strictEqual(this.loadArgs[0].columns.length, 1, "load args columns");
-    assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
-    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[0].rowTake, 2, "load args rowTake");
-    assert.strictEqual(this.loadArgs[0].columnTake, 2, "load args columnTake");
+    assert.strictEqual(this.loadArgs.length, 1, 'one load');
+    assert.strictEqual(this.loadArgs[0].rows.length, 1, 'load args rows');
+    assert.strictEqual(this.loadArgs[0].columns.length, 1, 'load args columns');
+    assert.strictEqual(this.loadArgs[0].rowSkip, 0, 'load args rowSkip');
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, 'load args columnSkip');
+    assert.strictEqual(this.loadArgs[0].rowTake, 2, 'load args rowTake');
+    assert.strictEqual(this.loadArgs[0].columnTake, 2, 'load args columnTake');
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
@@ -6127,18 +6125,18 @@ QUnit.test("first load", function(assert) {
 
     assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
         [
-            { columnType: "D", rowType: "D", text: "11" },
-            { columnType: "D", rowType: "D", text: "12" }
+            { columnType: 'D', rowType: 'D', text: '11' },
+            { columnType: 'D', rowType: 'D', text: '12' }
         ],
         [
-            { columnType: "D", rowType: "D", text: "21" },
-            { columnType: "D", rowType: "D", text: "22" }
+            { columnType: 'D', rowType: 'D', text: '21' },
+            { columnType: 'D', rowType: 'D', text: '22' }
         ]
     ]);
 });
 
-QUnit.test("expanded field option should be ignored", function(assert) {
-    var dataController = this.setup({
+QUnit.test('expanded field option should be ignored', function(assert) {
+    const dataController = this.setup({
         paginate: true,
         store: new this.MockStore({
             rowCount: 10,
@@ -6146,19 +6144,19 @@ QUnit.test("expanded field option should be ignored", function(assert) {
         }),
         pageSize: 4,
         fields: [
-            { area: "row", expanded: true }, { area: "row" },
-            { area: "column", expanded: true }, { area: "column" },
-            { area: "data" }
+            { area: 'row', expanded: true }, { area: 'row' },
+            { area: 'column', expanded: true }, { area: 'column' },
+            { area: 'data' }
         ]
     });
 
-    assert.strictEqual(this.loadArgs.length, 1, "one load");
-    assert.strictEqual(this.loadArgs[0].rows.length, 2, "load args rows");
-    assert.strictEqual(this.loadArgs[0].columns.length, 2, "load args columns");
-    assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
-    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[0].rowTake, 2, "load args rowTake");
-    assert.strictEqual(this.loadArgs[0].columnTake, 2, "load args columnTake");
+    assert.strictEqual(this.loadArgs.length, 1, 'one load');
+    assert.strictEqual(this.loadArgs[0].rows.length, 2, 'load args rows');
+    assert.strictEqual(this.loadArgs[0].columns.length, 2, 'load args columns');
+    assert.strictEqual(this.loadArgs[0].rowSkip, 0, 'load args rowSkip');
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, 'load args columnSkip');
+    assert.strictEqual(this.loadArgs[0].rowTake, 2, 'load args rowTake');
+    assert.strictEqual(this.loadArgs[0].columnTake, 2, 'load args columnTake');
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true, expanded: false },
@@ -6171,20 +6169,20 @@ QUnit.test("expanded field option should be ignored", function(assert) {
     ]);
 });
 
-QUnit.test("load after scroll", function(assert) {
-    var dataController = this.setup();
+QUnit.test('load after scroll', function(assert) {
+    const dataController = this.setup();
 
     this.loadArgs = [];
 
     dataController.setViewportPosition(0, 4 * 20);
 
-    assert.strictEqual(this.loadArgs.length, 1, "one load");
-    assert.strictEqual(this.loadArgs[0].rows.length, 1, "load args rows");
-    assert.strictEqual(this.loadArgs[0].columns.length, 1, "load args columns");
-    assert.strictEqual(this.loadArgs[0].rowSkip, 4, "load args rowSkip");
-    assert.strictEqual(this.loadArgs[0].rowTake, 4, "load args rowTake");
-    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[0].columnTake, 4, "load args columnTake");
+    assert.strictEqual(this.loadArgs.length, 1, 'one load');
+    assert.strictEqual(this.loadArgs[0].rows.length, 1, 'load args rows');
+    assert.strictEqual(this.loadArgs[0].columns.length, 1, 'load args columns');
+    assert.strictEqual(this.loadArgs[0].rowSkip, 4, 'load args rowSkip');
+    assert.strictEqual(this.loadArgs[0].rowTake, 4, 'load args rowTake');
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, 'load args columnSkip');
+    assert.strictEqual(this.loadArgs[0].columnTake, 4, 'load args columnTake');
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
@@ -6201,8 +6199,8 @@ QUnit.test("load after scroll", function(assert) {
     ]);
 });
 
-QUnit.test("load from cache after scroll and return scroll", function(assert) {
-    var dataController = this.setup();
+QUnit.test('load from cache after scroll and return scroll', function(assert) {
+    const dataController = this.setup();
 
     dataController.setViewportPosition(0, 0);
     dataController.setViewportPosition(0, 8 * 20);
@@ -6210,7 +6208,7 @@ QUnit.test("load from cache after scroll and return scroll", function(assert) {
     this.loadArgs = [];
     dataController.setViewportPosition(0, 0);
 
-    assert.strictEqual(this.loadArgs.length, 0, "no load");
+    assert.strictEqual(this.loadArgs.length, 0, 'no load');
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
@@ -6226,21 +6224,21 @@ QUnit.test("load from cache after scroll and return scroll", function(assert) {
     ]);
 });
 
-QUnit.test("change sort order", function(assert) {
-    var dataController = this.setup();
+QUnit.test('change sort order', function(assert) {
+    const dataController = this.setup();
 
     this.loadArgs = [];
 
-    dataController.getDataSource().field(0, { sortOrder: "desc" });
+    dataController.getDataSource().field(0, { sortOrder: 'desc' });
     dataController.getDataSource().load();
 
-    assert.strictEqual(this.loadArgs.length, 1, "one load");
-    assert.strictEqual(this.loadArgs[0].rows.length, 1, "load args rows");
-    assert.strictEqual(this.loadArgs[0].columns.length, 1, "load args columns");
-    assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
-    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[0].rowTake, 2, "load args rowTake");
-    assert.strictEqual(this.loadArgs[0].columnTake, 2, "load args columnTake");
+    assert.strictEqual(this.loadArgs.length, 1, 'one load');
+    assert.strictEqual(this.loadArgs[0].rows.length, 1, 'load args rows');
+    assert.strictEqual(this.loadArgs[0].columns.length, 1, 'load args columns');
+    assert.strictEqual(this.loadArgs[0].rowSkip, 0, 'load args rowSkip');
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, 'load args columnSkip');
+    assert.strictEqual(this.loadArgs[0].rowTake, 2, 'load args rowTake');
+    assert.strictEqual(this.loadArgs[0].columnTake, 2, 'load args columnTake');
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
@@ -6253,22 +6251,22 @@ QUnit.test("change sort order", function(assert) {
     ]);
 });
 
-QUnit.test("expand row", function(assert) {
-    var dataController = this.setup(this.createDataSource(2, 0));
+QUnit.test('expand row', function(assert) {
+    const dataController = this.setup(this.createDataSource(2, 0));
 
     this.loadArgs = [];
     dataController.expandHeaderItem('row', ['row 1']);
 
-    assert.strictEqual(this.loadArgs.length, 1, "one load");
-    assert.strictEqual(this.loadArgs[0].headerName, "rows", "load args headerName");
-    assert.strictEqual(this.loadArgs[0].area, "row", "load args area");
-    assert.deepEqual(this.loadArgs[0].path, ["row 1"], "load args path");
-    assert.strictEqual(this.loadArgs[0].rows.length, 2, "load args rows");
-    assert.strictEqual(this.loadArgs[0].columns.length, 0, "load args columns");
-    assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
-    assert.strictEqual(this.loadArgs[0].rowTake, 4, "load args rowTake");
-    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[0].columnTake, 4, "load args columnTake");
+    assert.strictEqual(this.loadArgs.length, 1, 'one load');
+    assert.strictEqual(this.loadArgs[0].headerName, 'rows', 'load args headerName');
+    assert.strictEqual(this.loadArgs[0].area, 'row', 'load args area');
+    assert.deepEqual(this.loadArgs[0].path, ['row 1'], 'load args path');
+    assert.strictEqual(this.loadArgs[0].rows.length, 2, 'load args rows');
+    assert.strictEqual(this.loadArgs[0].columns.length, 0, 'load args columns');
+    assert.strictEqual(this.loadArgs[0].rowSkip, 0, 'load args rowSkip');
+    assert.strictEqual(this.loadArgs[0].rowTake, 4, 'load args rowTake');
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, 'load args columnSkip');
+    assert.strictEqual(this.loadArgs[0].columnTake, 4, 'load args columnTake');
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
@@ -6279,8 +6277,8 @@ QUnit.test("expand row", function(assert) {
     ]);
 });
 
-QUnit.test("reload after expand row", function(assert) {
-    var dataController = this.setup(this.createDataSource(2, 1));
+QUnit.test('reload after expand row', function(assert) {
+    const dataController = this.setup(this.createDataSource(2, 1));
 
     dataController.expandHeaderItem('row', ['row 1']);
 
@@ -6298,8 +6296,8 @@ QUnit.test("reload after expand row", function(assert) {
         };
     }), [
         { path: undefined, area: undefined, rowSkip: 0, rowTake: 2, columnSkip: 0, columnTake: 2 },
-        { path: ["row 1"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 2 }
-    ], "load options");
+        { path: ['row 1'], area: 'row', rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 2 }
+    ], 'load options');
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
@@ -6310,22 +6308,22 @@ QUnit.test("reload after expand row", function(assert) {
     ]);
 });
 
-QUnit.test("expand column", function(assert) {
-    var dataController = this.setup(this.createDataSource(0, 2));
+QUnit.test('expand column', function(assert) {
+    const dataController = this.setup(this.createDataSource(0, 2));
 
     this.loadArgs = [];
     dataController.expandHeaderItem('column', ['column 1']);
 
-    assert.strictEqual(this.loadArgs.length, 1, "one load");
-    assert.strictEqual(this.loadArgs[0].headerName, "columns", "load args headerName");
-    assert.strictEqual(this.loadArgs[0].area, "column", "load args area");
-    assert.deepEqual(this.loadArgs[0].path, ["column 1"], "load args path");
-    assert.strictEqual(this.loadArgs[0].rows.length, 0, "load args rows");
-    assert.strictEqual(this.loadArgs[0].columns.length, 2, "load args columns");
-    assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
-    assert.strictEqual(this.loadArgs[0].rowTake, 4, "load args rowTake");
-    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[0].columnTake, 4, "load args columnTake");
+    assert.strictEqual(this.loadArgs.length, 1, 'one load');
+    assert.strictEqual(this.loadArgs[0].headerName, 'columns', 'load args headerName');
+    assert.strictEqual(this.loadArgs[0].area, 'column', 'load args area');
+    assert.deepEqual(this.loadArgs[0].path, ['column 1'], 'load args path');
+    assert.strictEqual(this.loadArgs[0].rows.length, 0, 'load args rows');
+    assert.strictEqual(this.loadArgs[0].columns.length, 2, 'load args columns');
+    assert.strictEqual(this.loadArgs[0].rowSkip, 0, 'load args rowSkip');
+    assert.strictEqual(this.loadArgs[0].rowTake, 4, 'load args rowTake');
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, 'load args columnSkip');
+    assert.strictEqual(this.loadArgs[0].columnTake, 4, 'load args columnTake');
 
     assert.deepEqual(dataController.getColumnsInfo(), [
         [{ dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', expanded: true, colspan: 2 }],
@@ -6336,15 +6334,15 @@ QUnit.test("expand column", function(assert) {
     ]);
 });
 
-QUnit.test("collapse row", function(assert) {
-    var dataController = this.setup(this.createDataSource(2, 0));
+QUnit.test('collapse row', function(assert) {
+    const dataController = this.setup(this.createDataSource(2, 0));
 
     dataController.expandHeaderItem('row', ['row 1']);
 
     this.loadArgs = [];
     dataController.collapseHeaderItem('row', ['row 1']);
 
-    assert.strictEqual(this.loadArgs.length, 0, "no load");
+    assert.strictEqual(this.loadArgs.length, 0, 'no load');
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true, expanded: false }],
@@ -6352,8 +6350,8 @@ QUnit.test("collapse row", function(assert) {
     ]);
 });
 
-QUnit.test("expand several rows and columns", function(assert) {
-    var dataController = this.setup({
+QUnit.test('expand several rows and columns', function(assert) {
+    const dataController = this.setup({
         paginate: true,
         store: new this.MockStore({
             rowCount: 10,
@@ -6361,9 +6359,9 @@ QUnit.test("expand several rows and columns", function(assert) {
         }),
         pageSize: 4,
         fields: [
-            { area: "row" }, { area: "row" }, { area: "row" },
-            { area: "column" }, { area: "column" }, { area: "column" },
-            { area: "data" }
+            { area: 'row' }, { area: 'row' }, { area: 'row' },
+            { area: 'column' }, { area: 'column' }, { area: 'column' },
+            { area: 'data' }
         ]
     });
 
@@ -6385,123 +6383,123 @@ QUnit.test("expand several rows and columns", function(assert) {
             columnTake: options.columnTake
         };
     }), [
-        { path: ["row 1", "row 2"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 4, oppositePath: undefined },
-        { path: ["row 1", "row 2"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 4, oppositePath: ["column 1"] },
-        { path: ["row 1", "row 2"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 4, oppositePath: ["column 1", "column 2"] },
-    ], "load options");
+        { path: ['row 1', 'row 2'], area: 'row', rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 4, oppositePath: undefined },
+        { path: ['row 1', 'row 2'], area: 'row', rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 4, oppositePath: ['column 1'] },
+        { path: ['row 1', 'row 2'], area: 'row', rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 4, oppositePath: ['column 1', 'column 2'] },
+    ], 'load options');
 
     assert.deepEqual(dataController.getColumnsInfo(), [
         [
             {
-                "colspan": 2,
-                "dataSourceIndex": 1,
-                "expanded": true,
-                "path": [
-                    "column 1"
+                'colspan': 2,
+                'dataSourceIndex': 1,
+                'expanded': true,
+                'path': [
+                    'column 1'
                 ],
-                "text": "column 1",
-                "type": "D"
+                'text': 'column 1',
+                'type': 'D'
             }
         ],
         [
             {
-                "dataSourceIndex": 4,
-                "expanded": false,
-                "isLast": true,
-                "path": [
-                    "column 1",
-                    "column 1"
+                'dataSourceIndex': 4,
+                'expanded': false,
+                'isLast': true,
+                'path': [
+                    'column 1',
+                    'column 1'
                 ],
-                "rowspan": 2,
-                "text": "column 1",
-                "type": "D"
+                'rowspan': 2,
+                'text': 'column 1',
+                'type': 'D'
             },
             {
-                "colspan": 1,
-                "dataSourceIndex": 5,
-                "expanded": true,
-                "path": [
-                    "column 1",
-                    "column 2"
+                'colspan': 1,
+                'dataSourceIndex': 5,
+                'expanded': true,
+                'path': [
+                    'column 1',
+                    'column 2'
                 ],
-                "text": "column 2",
-                "type": "D"
+                'text': 'column 2',
+                'type': 'D'
             }
         ],
         [
             {
-                "dataSourceIndex": 9,
-                "isLast": true,
-                "path": [
-                    "column 1",
-                    "column 2",
-                    "column 1"
+                'dataSourceIndex': 9,
+                'isLast': true,
+                'path': [
+                    'column 1',
+                    'column 2',
+                    'column 1'
                 ],
-                "text": "column 1",
-                "type": "D"
+                'text': 'column 1',
+                'type': 'D'
             }
         ]
-    ], "columns");
+    ], 'columns');
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
             {
-                "dataSourceIndex": 1,
-                "expanded": true,
-                "path": [
-                    "row 1"
+                'dataSourceIndex': 1,
+                'expanded': true,
+                'path': [
+                    'row 1'
                 ],
-                "rowspan": 2,
-                "text": "row 1",
-                "type": "D"
+                'rowspan': 2,
+                'text': 'row 1',
+                'type': 'D'
             },
             {
-                "colspan": 2,
-                "dataSourceIndex": 6,
-                "expanded": false,
-                "isLast": true,
-                "path": [
-                    "row 1",
-                    "row 1"
+                'colspan': 2,
+                'dataSourceIndex': 6,
+                'expanded': false,
+                'isLast': true,
+                'path': [
+                    'row 1',
+                    'row 1'
                 ],
-                "text": "row 1",
-                "type": "D"
+                'text': 'row 1',
+                'type': 'D'
             }
         ],
         [
             {
-                "dataSourceIndex": 7,
-                "expanded": true,
-                "path": [
-                    "row 1",
-                    "row 2"
+                'dataSourceIndex': 7,
+                'expanded': true,
+                'path': [
+                    'row 1',
+                    'row 2'
                 ],
-                "rowspan": 1,
-                "text": "row 2",
-                "type": "D"
+                'rowspan': 1,
+                'text': 'row 2',
+                'type': 'D'
             },
             {
-                "dataSourceIndex": 11,
-                "isLast": true,
-                "path": [
-                    "row 1",
-                    "row 2",
-                    "row 1"
+                'dataSourceIndex': 11,
+                'isLast': true,
+                'path': [
+                    'row 1',
+                    'row 2',
+                    'row 1'
                 ],
-                "text": "row 1",
-                "type": "D"
+                'text': 'row 1',
+                'type': 'D'
             }
         ]
-    ], "rows");
+    ], 'rows');
 });
 
-QUnit.test("scroll after expand row", function(assert) {
-    var dataController = this.setup(this.createDataSource(2, 0));
+QUnit.test('scroll after expand row', function(assert) {
+    const dataController = this.setup(this.createDataSource(2, 0));
 
     dataController.expandHeaderItem('row', ['row 2']);
 
     this.loadArgs = [];
-    var changedSpy = sinon.spy();
+    const changedSpy = sinon.spy();
     dataController.changed.add(changedSpy);
 
     dataController.setViewportPosition(0, 4 * 20);
@@ -6512,7 +6510,7 @@ QUnit.test("scroll after expand row", function(assert) {
             rowSkip: options.rowSkip,
             rowTake: options.rowTake
         };
-    }), [{ path: ["row 2"], rowSkip: 4, rowTake: 4 }], "load options");
+    }), [{ path: ['row 2'], rowSkip: 4, rowTake: 4 }], 'load options');
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
@@ -6522,18 +6520,18 @@ QUnit.test("scroll after expand row", function(assert) {
         [{ dataSourceIndex: 8, text: 'row 5', path: ['row 2', 'row 5'], type: 'D', isLast: true }],
         [{ dataSourceIndex: 9, text: 'row 6', path: ['row 2', 'row 6'], type: 'D', isLast: true }],
         [{ dataSourceIndex: 10, text: 'row 7', path: ['row 2', 'row 7'], type: 'D', isLast: true }]
-    ], "rows info");
+    ], 'rows info');
 
-    assert.strictEqual(changedSpy.callCount, 3, "changed call count");
+    assert.strictEqual(changedSpy.callCount, 3, 'changed call count');
 });
 
-QUnit.test("scroll by columns after expand column", function(assert) {
-    var dataController = this.setup(this.createDataSource(0, 2));
+QUnit.test('scroll by columns after expand column', function(assert) {
+    const dataController = this.setup(this.createDataSource(0, 2));
 
     dataController.expandHeaderItem('column', ['column 2']);
 
     this.loadArgs = [];
-    var changedSpy = sinon.spy();
+    const changedSpy = sinon.spy();
     dataController.changed.add(changedSpy);
 
     dataController.setViewportPosition(4 * 20, 0);
@@ -6544,7 +6542,7 @@ QUnit.test("scroll by columns after expand column", function(assert) {
             columnSkip: options.columnSkip,
             columnTake: options.columnTake
         };
-    }), [{ path: ["column 2"], columnSkip: 4, columnTake: 4 }], "load options");
+    }), [{ path: ['column 2'], columnSkip: 4, columnTake: 4 }], 'load options');
 
     assert.deepEqual(dataController.getColumnsInfo(), [
         [{ dataSourceIndex: 2, text: 'column 2', path: ['column 2'], type: 'D', expanded: true, colspan: 4 }],
@@ -6554,18 +6552,18 @@ QUnit.test("scroll by columns after expand column", function(assert) {
             { dataSourceIndex: 9, text: 'column 6', path: ['column 2', 'column 6'], type: 'D', isLast: true },
             { dataSourceIndex: 10, text: 'column 7', path: ['column 2', 'column 7'], type: 'D', isLast: true }
         ]
-    ], "rows info");
+    ], 'rows info');
 
-    assert.strictEqual(changedSpy.callCount, 3, "changed call count");
+    assert.strictEqual(changedSpy.callCount, 3, 'changed call count');
 });
 
-QUnit.test("scroll by rows after expand column", function(assert) {
-    var dataController = this.setup(this.createDataSource(1, 2));
+QUnit.test('scroll by rows after expand column', function(assert) {
+    const dataController = this.setup(this.createDataSource(1, 2));
 
     dataController.expandHeaderItem('column', ['column 2']);
 
     this.loadArgs = [];
-    var changedSpy = sinon.spy();
+    const changedSpy = sinon.spy();
     dataController.changed.add(changedSpy);
 
     dataController.setViewportPosition(0, 4 * 20);
@@ -6580,8 +6578,8 @@ QUnit.test("scroll by rows after expand column", function(assert) {
         };
     }), [
         { path: undefined, columnSkip: 0, columnTake: 4, rowSkip: 4, rowTake: 4 },
-        { path: ["column 2"], columnSkip: 0, columnTake: 4, rowSkip: 4, rowTake: 4 }
-    ], "load options");
+        { path: ['column 2'], columnSkip: 0, columnTake: 4, rowSkip: 4, rowTake: 4 }
+    ], 'load options');
 
     assert.deepEqual(dataController.getColumnsInfo(), [
         [
@@ -6593,18 +6591,18 @@ QUnit.test("scroll by rows after expand column", function(assert) {
             { dataSourceIndex: 5, text: 'column 2', path: ['column 2', 'column 2'], type: 'D', isLast: true },
             { dataSourceIndex: 6, text: 'column 3', path: ['column 2', 'column 3'], type: 'D', isLast: true }
         ]
-    ], "rows info");
+    ], 'rows info');
 
-    assert.strictEqual(changedSpy.callCount, 4, "changed call count");
+    assert.strictEqual(changedSpy.callCount, 4, 'changed call count');
 });
 
-QUnit.test("scroll to end of expanded row", function(assert) {
-    var dataController = this.setup(this.createDataSource(2, 0));
+QUnit.test('scroll to end of expanded row', function(assert) {
+    const dataController = this.setup(this.createDataSource(2, 0));
 
     dataController.expandHeaderItem('row', ['row 2']);
 
     this.loadArgs = [];
-    var changedSpy = sinon.spy();
+    const changedSpy = sinon.spy();
     dataController.changed.add(changedSpy);
 
     dataController.setViewportPosition(0, 10 * 20);
@@ -6616,9 +6614,9 @@ QUnit.test("scroll to end of expanded row", function(assert) {
             rowTake: options.rowTake
         };
     }), [
-        { path: ["row 2"], rowSkip: 8, rowTake: 4 },
+        { path: ['row 2'], rowSkip: 8, rowTake: 4 },
         { path: undefined, rowSkip: 0, rowTake: 4 }
-    ], "load options");
+    ], 'load options');
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [
@@ -6628,39 +6626,39 @@ QUnit.test("scroll to end of expanded row", function(assert) {
         [{ dataSourceIndex: 2, text: 'row 2 Total', path: ['row 2'], type: 'T', isLast: true, colspan: 2 }],
         [{ dataSourceIndex: 10, text: 'row 3', path: ['row 3'], type: 'D', isLast: true, colspan: 2, expanded: false }],
         [{ dataSourceIndex: 11, text: 'row 4', path: ['row 4'], type: 'D', isLast: true, colspan: 2, expanded: false }]
-    ], "rows info");
+    ], 'rows info');
 
-    assert.strictEqual(changedSpy.callCount, 3, "changed call count");
+    assert.strictEqual(changedSpy.callCount, 3, 'changed call count');
 });
 
-QUnit.skip("load with CustomStore", function(assert) {
-    var that = this;
+QUnit.skip('load with CustomStore', function(assert) {
+    const that = this;
 
-    var dataController = that.setup({
+    const dataController = that.setup({
         paginate: true,
-        fields: [{ dataField: "row", area: "row" }],
+        fields: [{ dataField: 'row', area: 'row' }],
         load: function(loadOptions) {
             that.loadArgs.push(loadOptions);
-            return $.Deferred().resolve([{ key: "row 1" }, { key: "row 2" }], {
+            return $.Deferred().resolve([{ key: 'row 1' }, { key: 'row 2' }], {
                 groupCount: 10
             });
         }
     });
 
-    assert.strictEqual(this.loadArgs.length, 1, "one load");
+    assert.strictEqual(this.loadArgs.length, 1, 'one load');
     assert.deepEqual(this.loadArgs[0], {
         group: [{
             desc: false,
             groupInterval: undefined,
             isExpanded: false,
-            selector: "row"
+            selector: 'row'
         }],
         groupSummary: [],
         requireGroupCount: true,
         skip: 0,
         take: 2,
         totalSummary: []
-    }, "load args");
+    }, 'load args');
 
     assert.deepEqual(dataController.getRowsInfo(), [
         [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true }],

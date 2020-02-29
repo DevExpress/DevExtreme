@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets.editors/lookup.markup.tests.js");
+require('../DevExpress.ui.widgets.editors/lookup.markup.tests.js');

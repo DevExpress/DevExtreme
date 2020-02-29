@@ -1,4 +1,4 @@
-import { isDefined } from "../../core/utils/type";
+import { isDefined } from '../../core/utils/type';
 import tagHelper from './excel.tag_helper';
 import cellAlignmentHelper from './excel.cell_alignment_helper';
 import fillHelper from './excel.fill_helper';
@@ -88,7 +88,7 @@ const cellFormatHelper = {
 
         // §18.8.45 xf (Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
         return tagHelper.toXml(
-            "xf",
+            'xf',
             {
                 'xfId': 0,
                 applyAlignment: isAlignmentEmpty ? null : 1,

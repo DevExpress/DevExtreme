@@ -1,4 +1,4 @@
-import { isDefined } from "core/utils/type";
+import { isDefined } from 'core/utils/type';
 
 const { assert } = QUnit;
 
@@ -26,11 +26,11 @@ class ExcelJSTestHelper {
         assert.strictEqual(actualColumn.caption, expectedColumn.caption, `column.caption, ${callIndex}`);
         assert.strictEqual(actualColumn.index, expectedColumn.index, `column.index, ${callIndex}`);
 
-        const gridCellSkipProperties = ["column"];
+        const gridCellSkipProperties = ['column'];
 
         for(const propertyName in gridCell) {
             if(gridCellSkipProperties.indexOf(propertyName) === -1) {
-                if(propertyName === "groupSummaryItems" || propertyName === "value") {
+                if(propertyName === 'groupSummaryItems' || propertyName === 'value') {
                     assert.deepEqual(gridCell[propertyName], expectedCell.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
                 } else {
                     assert.strictEqual(gridCell[propertyName], expectedCell.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
@@ -39,13 +39,13 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkAutoFilter(autoFilterEnabled, autoFilter, frozenState) {
-        assert.deepEqual(this.worksheet.views, frozenState ? [frozenState] : [], "worksheet.views");
+    checkAutoFilter(autoFilterEnabled, autoFilter, worksheetViews) {
+        assert.deepEqual(this.worksheet.views, worksheetViews ? [worksheetViews] : [], 'worksheet.views');
 
         if(autoFilterEnabled === true) {
-            assert.deepEqual(this.worksheet.autoFilter, autoFilter, "worksheet.autoFilter");
+            assert.deepEqual(this.worksheet.autoFilter, autoFilter, 'worksheet.autoFilter');
         } else {
-            assert.deepEqual(this.worksheet.autoFilter, null, "worksheet.autoFilter");
+            assert.deepEqual(this.worksheet.autoFilter, null, 'worksheet.autoFilter');
         }
     }
 
@@ -58,9 +58,17 @@ class ExcelJSTestHelper {
         });
     }
 
-    checkColumnWidths(expectedWidths, startColumnIndex) {
+    checkColumnWidths(expectedWidths, startColumnIndex, tolerance) {
         for(let i = 0; i < expectedWidths.length; i++) {
-            assert.equal(this.worksheet.getColumn(startColumnIndex + i).width, expectedWidths[i], `worksheet.getColumns(${i}).width`);
+            const actual = this.worksheet.getColumn(startColumnIndex + i).width;
+            const expected = expectedWidths[i];
+            const message = `worksheet.getColumns(${i}).width`;
+
+            if(tolerance && isFinite(expected)) {
+                assert.roughEqual(actual, expected, tolerance, message);
+            } else {
+                assert.equal(actual, expected, message);
+            }
         }
     }
 
@@ -89,18 +97,18 @@ class ExcelJSTestHelper {
     }
 
     checkRowAndColumnCount(actual, total, topLeft) {
-        assert.equal(this.worksheet.actualRowCount, actual.row, "worksheet.actualRowCount");
-        assert.equal(this.worksheet.actualColumnCount, actual.column, "worksheet.actualColumnCount");
-        assert.equal(this.worksheet.rowCount, total.row === 0 ? total.row : topLeft.row + total.row - 1, "worksheet.rowCount");
-        assert.equal(this.worksheet.columnCount, total.column === 0 ? total.column : topLeft.column + total.column - 1, "worksheet.columnCount");
+        assert.equal(this.worksheet.actualRowCount, actual.row, 'worksheet.actualRowCount');
+        assert.equal(this.worksheet.actualColumnCount, actual.column, 'worksheet.actualColumnCount');
+        assert.equal(this.worksheet.rowCount, total.row === 0 ? total.row : topLeft.row + total.row - 1, 'worksheet.rowCount');
+        assert.equal(this.worksheet.columnCount, total.column === 0 ? total.column : topLeft.column + total.column - 1, 'worksheet.columnCount');
     }
 
-    checkCellsRange(cellsRange, actual, topLeft) {
-        assert.deepEqual(cellsRange.from, topLeft, "cellsRange.from");
+    checkCellRange(cellRange, actual, topLeft) {
+        assert.deepEqual(cellRange.from, topLeft, 'cellRange.from');
         if(actual.row > 0 && actual.column > 0) {
-            assert.deepEqual(cellsRange.to, { row: topLeft.row + actual.row - 1, column: topLeft.column + actual.column - 1 }, "cellsRange.to");
+            assert.deepEqual(cellRange.to, { row: topLeft.row + actual.row - 1, column: topLeft.column + actual.column - 1 }, 'cellRange.to');
         } else {
-            assert.deepEqual(cellsRange.to, { row: topLeft.row + actual.row, column: topLeft.column + actual.column }, "cellsRange.to");
+            assert.deepEqual(cellRange.to, { row: topLeft.row + actual.row, column: topLeft.column + actual.column }, 'cellRange.to');
         }
     }
 
@@ -111,7 +119,7 @@ class ExcelJSTestHelper {
                 column: columnIndex + topLeft.column
             };
 
-            if(!("value" in cellArgs.gridCell)) {
+            if(!('value' in cellArgs.gridCell)) {
                 cellArgs.gridCell.value = cellArgs.excelCell.value;
             }
         });
@@ -120,7 +128,7 @@ class ExcelJSTestHelper {
     _iterateCells(cellsArray, callback) {
         for(let rowIndex = 0; rowIndex < cellsArray.length; rowIndex++) {
             for(let columnIndex = 0; columnIndex < cellsArray[rowIndex].length; columnIndex++) {
-                let currentCell = cellsArray[rowIndex][columnIndex];
+                const currentCell = cellsArray[rowIndex][columnIndex];
 
                 callback(currentCell, rowIndex, columnIndex);
             }

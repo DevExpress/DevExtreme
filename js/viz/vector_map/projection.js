@@ -1,30 +1,30 @@
-var projectionModule = require("./projection.main"),
-    projection = projectionModule.projection,
+const projectionModule = require('./projection.main');
+const projection = projectionModule.projection;
 
-    _min = Math.min,
-    _max = Math.max,
-    _sin = Math.sin,
-    _asin = Math.asin,
-    _tan = Math.tan,
-    _atan = Math.atan,
-    _exp = Math.exp,
-    _log = Math.log,
+const _min = Math.min;
+const _max = Math.max;
+const _sin = Math.sin;
+const _asin = Math.asin;
+const _tan = Math.tan;
+const _atan = Math.atan;
+const _exp = Math.exp;
+const _log = Math.log;
 
-    PI = Math.PI,
-    PI_DIV_4 = PI / 4,
-    GEO_LON_BOUND = 180,
-    GEO_LAT_BOUND = 90,
-    RADIANS = PI / 180,
+const PI = Math.PI;
+const PI_DIV_4 = PI / 4;
+const GEO_LON_BOUND = 180;
+const GEO_LAT_BOUND = 90;
+const RADIANS = PI / 180;
 
-    MERCATOR_LAT_BOUND = (2 * _atan(_exp(PI)) - PI / 2) / RADIANS,
-    MILLER_LAT_BOUND = (2.5 * _atan(_exp(0.8 * PI)) - 0.625 * PI) / RADIANS;
+const MERCATOR_LAT_BOUND = (2 * _atan(_exp(PI)) - PI / 2) / RADIANS;
+const MILLER_LAT_BOUND = (2.5 * _atan(_exp(0.8 * PI)) - 0.625 * PI) / RADIANS;
 
 function clamp(value, threshold) {
     return _max(_min(value, +threshold), -threshold);
 }
 
 // https://en.wikipedia.org/wiki/Mercator_projection
-projection.add("mercator", projection({
+projection.add('mercator', projection({
     aspectRatio: 1,
 
     to: function(coordinates) {
@@ -43,7 +43,7 @@ projection.add("mercator", projection({
 }));
 
 // https://en.wikipedia.org/wiki/Equirectangular_projection
-projection.add("equirectangular", projection({
+projection.add('equirectangular', projection({
     aspectRatio: 2,
 
     to: function(coordinates) {
@@ -62,7 +62,7 @@ projection.add("equirectangular", projection({
 }));
 
 // https://en.wikipedia.org/wiki/Lambert_cylindrical_equal-area_projection
-projection.add("lambert", projection({
+projection.add('lambert', projection({
     aspectRatio: 2,
 
     to: function(coordinates) {
@@ -81,7 +81,7 @@ projection.add("lambert", projection({
 }));
 
 // https://en.wikipedia.org/wiki/Miller_cylindrical_projection
-projection.add("miller", projection({
+projection.add('miller', projection({
     aspectRatio: 1,
 
     to: function(coordinates) {

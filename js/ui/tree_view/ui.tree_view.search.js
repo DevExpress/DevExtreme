@@ -1,20 +1,20 @@
-import $ from "../../core/renderer";
-import registerComponent from "../../core/component_registrator";
-import searchBoxMixin from "../widget/ui.search_box_mixin";
-import { extend } from "../../core/utils/extend";
-import TreeViewBase from "./ui.tree_view.base";
+import $ from '../../core/renderer';
+import registerComponent from '../../core/component_registrator';
+import searchBoxMixin from '../widget/ui.search_box_mixin';
+import { extend } from '../../core/utils/extend';
+import TreeViewBase from './ui.tree_view.base';
 
-const WIDGET_CLASS = "dx-treeview";
+const WIDGET_CLASS = 'dx-treeview';
 const NODE_CONTAINER_CLASS = `${WIDGET_CLASS}-node-container`;
 
-var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
+const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     _addWidgetPrefix: function(className) {
         return `${WIDGET_CLASS}-${className}`;
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "searchValue":
+            case 'searchValue':
                 if(this._showCheckboxes() && this._isRecursiveSelection()) {
                     this._removeSelection();
                 }
@@ -23,12 +23,12 @@ var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
                 this._updateSearch();
                 this._repaintContainer();
                 break;
-            case "searchExpr":
+            case 'searchExpr':
                 this._initDataAdapter();
                 this.repaint();
                 break;
-            case "searchMode":
-                this.option("expandNodesRecursive") ? this._updateDataAdapter() : this._initDataAdapter();
+            case 'searchMode':
+                this.option('expandNodesRecursive') ? this._updateDataAdapter() : this._initDataAdapter();
                 this.repaint();
                 break;
             default:
@@ -37,31 +37,31 @@ var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     },
 
     _updateDataAdapter: function() {
-        this._setOptionWithoutOptionChange("expandNodesRecursive", false);
+        this._setOptionWithoutOptionChange('expandNodesRecursive', false);
 
         this._initDataAdapter();
 
-        this._setOptionWithoutOptionChange("expandNodesRecursive", true);
+        this._setOptionWithoutOptionChange('expandNodesRecursive', true);
     },
 
     _getDataAdapterOptions: function() {
         return extend(this.callBase(), {
-            searchValue: this.option("searchValue"),
-            searchMode: this.option("searchMode") || "contains",
-            searchExpr: this.option("searchExpr")
+            searchValue: this.option('searchValue'),
+            searchMode: this.option('searchMode') || 'contains',
+            searchExpr: this.option('searchExpr')
         });
     },
 
     _updateSearch: function() {
         if(this._searchEditor) {
-            var editorOptions = this._getSearchEditorOptions();
+            const editorOptions = this._getSearchEditorOptions();
             this._searchEditor.option(editorOptions);
         }
     },
 
     _repaintContainer: function() {
-        var $container = this.$element().find(`.${NODE_CONTAINER_CLASS}`).first(),
-            rootNodes;
+        const $container = this.$element().find(`.${NODE_CONTAINER_CLASS}`).first();
+        let rootNodes;
 
         if($container.length) {
             $container.empty();
@@ -90,6 +90,6 @@ var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     }
 });
 
-registerComponent("dxTreeView", TreeViewSearch);
+registerComponent('dxTreeView', TreeViewSearch);
 
 module.exports = TreeViewSearch;

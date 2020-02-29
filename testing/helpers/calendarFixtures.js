@@ -1,9 +1,9 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    Class = require("core/class"),
-    Views = require("ui/calendar/ui.calendar.views");
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const Class = require('core/class');
+const Views = require('ui/calendar/ui.calendar.views');
 
-var TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
+const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
 window.DevExpress = window.DevExpress || {};
 
@@ -25,12 +25,12 @@ $.extend(true, DevExpress.ui = DevExpress.ui || {}, {
             },
             extractClassArray: function(elements) {
                 return this.extractArray(elements, function(element, index) {
-                    return element.getAttribute("class") || "";
+                    return element.getAttribute('class') || '';
                 });
             },
             typeIntoInput: function(dateString, input) {
-                var keyPress = $.Event("keypress"),
-                    i;
+                const keyPress = $.Event('keypress');
+                let i;
                 for(i = 0; i < dateString.length; ++i) {
                     keyPress.key = dateString[i];
                     input.val(input.val() + dateString[i]);
@@ -38,7 +38,7 @@ $.extend(true, DevExpress.ui = DevExpress.ui || {}, {
                 }
             }
         }),
-        MockMonthView: Views["month"].inherit({
+        MockMonthView: Views['month'].inherit({
             renderHeader: noop,
             renderBody: noop
         })
@@ -49,16 +49,16 @@ $.extend(true, DevExpress.ui, {
     testing: {
         CalendarFixture: DevExpress.ui.testing.BaseCalendarFixture.inherit({
             ctor: function(options) {
-                this.rootElement = $("<div id='calendar'></div>");
-                this.rootElement.appendTo("body");
-                this.calendar = $("#calendar")
+                this.rootElement = $('<div id=\'calendar\'></div>');
+                this.rootElement.appendTo('body');
+                this.calendar = $('#calendar')
                     .dxCalendar($.extend({ monthViewType: DevExpress.ui.testing.MockMonthView }, options))
-                    .dxCalendar("instance");
+                    .dxCalendar('instance');
                 this.navigatorLinks = {
-                    "prevYear": this.rootElement.find(".dx-calendar-navigator-previous-year"),
-                    "prevView": this.rootElement.find(".dx-calendar-navigator-previous-view"),
-                    "nextYear": this.rootElement.find(".dx-calendar-navigator-next-year"),
-                    "nextView": this.rootElement.find(".dx-calendar-navigator-next-view")
+                    'prevYear': this.rootElement.find('.dx-calendar-navigator-previous-year'),
+                    'prevView': this.rootElement.find('.dx-calendar-navigator-previous-view'),
+                    'nextYear': this.rootElement.find('.dx-calendar-navigator-next-year'),
+                    'nextView': this.rootElement.find('.dx-calendar-navigator-next-view')
                 };
             },
             dispose: function() {
@@ -69,16 +69,16 @@ $.extend(true, DevExpress.ui, {
 
         DateBoxFixture: DevExpress.ui.testing.BaseCalendarFixture.inherit({
             ctor: function(element, options) {
-                this.format = "shortdate";
+                this.format = 'shortdate';
                 this.rootElement = $(element);
 
                 this.dateBox = this.rootElement
                     .dxDateBox($.extend(true, {
-                        pickerType: "calendar",
+                        pickerType: 'calendar',
                         displayFormat: this.format,
                         calendarOptions: { monthViewType: DevExpress.ui.testing.MockMonthView }
                     }, options))
-                    .dxDateBox("instance");
+                    .dxDateBox('instance');
                 this.input = this.rootElement.find(TEXTEDITOR_INPUT_SELECTOR);
             },
             dispose: function() {

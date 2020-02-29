@@ -1,19 +1,19 @@
-import $ from "jquery";
+import $ from 'jquery';
 import helper from '../../helpers/pivotGridExportTestsHelper.js';
-import JSZipMock from "../../helpers/jszipMock.js";
-import excel_creator from "exporter/excel_creator";
+import JSZipMock from '../../helpers/jszipMock.js';
+import excel_creator from 'exporter/excel_creator';
 
 QUnit.testStart(function() {
-    var markup = '<div id="pivotGrid" style="width: 700px"></div>';
-    $("#qunit-fixture").html(markup);
+    const markup = '<div id="pivotGrid" style="width: 700px"></div>';
+    $('#qunit-fixture').html(markup);
 });
 
-QUnit.module("PivotGrid export tests", {
+QUnit.module('PivotGrid export tests', {
     beforeEach: helper.beforeEachTest,
     afterEach: helper.afterEachTest,
 });
 
-QUnit.test("Export empty pivot", function(assert) {
+QUnit.test('Export empty pivot', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="3">' +
@@ -26,7 +26,7 @@ QUnit.test("Export empty pivot", function(assert) {
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>0</v></c><c r="B2" s="2" t="s" /></row>' +
@@ -38,7 +38,7 @@ QUnit.test("Export empty pivot", function(assert) {
     helper.runGeneralTest(assert, {}, { styles, worksheet, sharedStrings });
 });
 
-QUnit.test("Export with async jsZip", function(assert) {
+QUnit.test('Export with async jsZip', function(assert) {
     const expectedData = { isZipData: true };
     class AsyncJSZipMock extends JSZipMock {
         constructor() {
@@ -52,7 +52,7 @@ QUnit.test("Export with async jsZip", function(assert) {
     helper.runGeneralTest(assert, {}, { data: { isZipData: true } });
 });
 
-QUnit.test("Check header/data/total cell style/data type", function(assert) { // column headers, row headers, showColumnGrandTotals, showRowGrandTotals, column totals, row totals
+QUnit.test('Check header/data/total cell style/data type', function(assert) { // column headers, row headers, showColumnGrandTotals, showRowGrandTotals, column totals, row totals
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="3">' +
@@ -65,8 +65,8 @@ QUnit.test("Check header/data/total cell style/data type", function(assert) { //
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="2" topLeftCell="C3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" />' +
+        '<col width="13.57" min="4" max="4" customWidth="1" /><col width="13.57" min="5" max="5" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="0" t="s" /><c r="B1" s="2" t="n" /><c r="C1" s="0" t="s" /><c r="D1" s="0" t="s" /><c r="E1" s="0" t="s" />' +
@@ -93,11 +93,11 @@ QUnit.test("Check header/data/total cell style/data type", function(assert) { //
             showRowGrandTotals: true,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string", expanded: true, showTotals: true },
+                    { area: 'row', dataField: 'row1', dataType: 'string', expanded: true, showTotals: true },
                     { area: 'row', dataField: 'row2' },
-                    { area: 'column', dataField: 'col1', dataType: "string", expanded: true, showTotals: true },
-                    { area: 'column', dataField: 'col2', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number" }
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true, showTotals: true },
+                    { area: 'column', dataField: 'col2', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', row2: 'A1', col1: 'a', col2: 'a1' },
@@ -108,12 +108,12 @@ QUnit.test("Check header/data/total cell style/data type", function(assert) { //
         { styles, worksheet });
 });
 
-QUnit.test("Export [string x string x number]", function(assert) {
+QUnit.test('Export [string x string x number]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>1</v></c><c r="B2" t="n"><v>1</v></c></row>' +
@@ -130,9 +130,9 @@ QUnit.test("Export [string x string x number]", function(assert) {
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string" },
-                    { area: 'column', dataField: 'col1', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number" }
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', col1: 'a' },
@@ -143,12 +143,12 @@ QUnit.test("Export [string x string x number]", function(assert) {
     );
 });
 
-QUnit.test("Export [string x string x number] & showColumnGrandTotals", function(assert) {
+QUnit.test('Export [string x string x number] & showColumnGrandTotals', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>1</v></c><c r="B2" t="n"><v>1</v></c></row>' +
@@ -165,8 +165,8 @@ QUnit.test("Export [string x string x number] & showColumnGrandTotals", function
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number" }
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', col1: 'a' },
@@ -177,12 +177,12 @@ QUnit.test("Export [string x string x number] & showColumnGrandTotals", function
     );
 });
 
-QUnit.test("Export [string x string x number] with row grand totals", function(assert) {
+QUnit.test('Export [string x string x number] with row grand totals', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>1</v></c><c r="B2" t="n"><v>1</v></c></row>' +
@@ -199,8 +199,8 @@ QUnit.test("Export [string x string x number] with row grand totals", function(a
             showRowGrandTotals: true,
             dataSource: {
                 fields: [
-                    { area: 'column', dataField: 'col1', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number" }
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', col1: 'a' },
@@ -211,7 +211,7 @@ QUnit.test("Export [string x string x number] with row grand totals", function(a
     );
 });
 
-QUnit.test("Export [string x string x number] with 'format: currency'", function(assert) {
+QUnit.test('Export [string x string x number] with \'format: currency\'', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="1"><numFmt numFmtId="165" formatCode="$#,##0_);\\($#,##0\\)" /></numFmts>' +
         helper.BASE_STYLE_XML +
@@ -225,7 +225,7 @@ QUnit.test("Export [string x string x number] with 'format: currency'", function
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>1</v></c><c r="B2" s="2" t="n"><v>1</v></c></row>' +
@@ -242,9 +242,9 @@ QUnit.test("Export [string x string x number] with 'format: currency'", function
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string" },
-                    { area: 'column', dataField: 'col1', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number", format: 'currency' }
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number', format: 'currency' }
                 ],
                 store: [
                     { row1: 'A', col1: 'a' },
@@ -255,12 +255,12 @@ QUnit.test("Export [string x string x number] with 'format: currency'", function
     );
 });
 
-QUnit.test("Export [string x string x number,number] with 'dataFieldArea:column'", function(assert) {
+QUnit.test('Export [string x string x number,number] with \'dataFieldArea:column\'', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="2" topLeftCell="B3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c><c r="C1" t="s" /></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="n" /><c r="B2" t="s"><v>1</v></c><c r="C2" t="s"><v>2</v></c></row>' +
@@ -281,10 +281,10 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:column'
             dataFieldArea: 'column',
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string" },
-                    { area: 'column', dataField: 'col1', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number" },
-                    { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: "number" }
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', col1: 'a', data1: 42 },
@@ -295,12 +295,12 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:column'
     );
 });
 
-QUnit.test("Export [string x string x number,number] with 'dataFieldArea:row'", function(assert) {
+QUnit.test('Export [string x string x number,number] with \'dataFieldArea:row\'', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="1" topLeftCell="C2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="n" /><c r="C1" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>1</v></c><c r="B2" t="s"><v>2</v></c><c r="C2" t="n"><v>1</v></c></row>' +
@@ -321,10 +321,10 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:row'", 
             dataFieldArea: 'row',
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string" },
-                    { area: 'column', dataField: 'col1', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number" },
-                    { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: "number" }
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' },
+                    { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', col1: 'a', data1: 42 },
@@ -335,12 +335,12 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:row'", 
     );
 });
 
-QUnit.test("Export [string x string/string(a1,a2) x None]", function(assert) {
+QUnit.test('Export [string x string/string(a1,a2) x None]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="2" topLeftCell="B3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c><c r="C1" t="s" /></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s" /><c r="B2" t="s"><v>1</v></c><c r="C2" t="s"><v>2</v></c></row>' +
@@ -362,9 +362,9 @@ QUnit.test("Export [string x string/string(a1,a2) x None]", function(assert) {
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string" },
-                    { area: 'column', dataField: 'col1', dataType: "string", expanded: true, showTotals: false },
-                    { area: 'column', dataField: 'col2', dataType: "string" },
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true, showTotals: false },
+                    { area: 'column', dataField: 'col2', dataType: 'string' },
                 ],
                 store: [
                     { row1: 'A', col1: 'a', col2: 'a1' },
@@ -376,12 +376,12 @@ QUnit.test("Export [string x string/string(a1,a2) x None]", function(assert) {
     );
 });
 
-QUnit.test("Export [string x string/string(a1,a2) x number]", function(assert) {
+QUnit.test('Export [string x string/string(a1,a2) x number]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="2" topLeftCell="B3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c><c r="C1" t="s" /></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="n" /><c r="B2" t="s"><v>1</v></c><c r="C2" t="s"><v>2</v></c></row>' +
@@ -403,10 +403,10 @@ QUnit.test("Export [string x string/string(a1,a2) x number]", function(assert) {
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string" },
-                    { area: 'column', dataField: 'col1', dataType: "string", expanded: true, showTotals: false },
-                    { area: 'column', dataField: 'col2', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number" }
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true, showTotals: false },
+                    { area: 'column', dataField: 'col2', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', col1: 'a', col2: 'a1' },
@@ -419,12 +419,12 @@ QUnit.test("Export [string x string/string(a1,a2) x number]", function(assert) {
     );
 });
 
-QUnit.test("Export [string x string/string(a1,a2) x number] with column totals", function(assert) {
+QUnit.test('Export [string x string/string(a1,a2) x number] with column totals', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="2" topLeftCell="B3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c><c r="C1" t="s" /><c r="D1" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="n" /><c r="B2" t="s"><v>2</v></c><c r="C2" t="s"><v>3</v></c><c r="D2" t="s" /></row>' +
@@ -447,10 +447,10 @@ QUnit.test("Export [string x string/string(a1,a2) x number] with column totals",
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string" },
-                    { area: 'column', dataField: 'col1', dataType: "string", expanded: true, showTotals: true },
-                    { area: 'column', dataField: 'col2', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number" }
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true, showTotals: true },
+                    { area: 'column', dataField: 'col2', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', col1: 'a', col2: 'a1' },
@@ -463,12 +463,12 @@ QUnit.test("Export [string x string/string(a1,a2) x number] with column totals",
     );
 });
 
-QUnit.test("Export [string/string(A1,A2) x string x None]", function(assert) {
+QUnit.test('Export [string/string(A1,A2) x string x None]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="1" topLeftCell="C2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s" /><c r="C1" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>1</v></c><c r="B2" t="s"><v>2</v></c><c r="C2" t="s" /></row>' +
@@ -490,9 +490,9 @@ QUnit.test("Export [string/string(A1,A2) x string x None]", function(assert) {
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string", expanded: true, showTotals: false },
+                    { area: 'row', dataField: 'row1', dataType: 'string', expanded: true, showTotals: false },
                     { area: 'row', dataField: 'row2' },
-                    { area: 'column', dataField: 'col1', dataType: "string" },
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
                 ],
                 store: [
                     { row1: 'A', row2: 'A1', col1: 'a' },
@@ -504,12 +504,12 @@ QUnit.test("Export [string/string(A1,A2) x string x None]", function(assert) {
     );
 });
 
-QUnit.test("Export [string/string(A1,A2) x string x number]", function(assert) {
+QUnit.test('Export [string/string(A1,A2) x string x number]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="1" topLeftCell="C2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="n" /><c r="C1" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>1</v></c><c r="B2" t="s"><v>2</v></c><c r="C2" t="n"><v>1</v></c></row>' +
@@ -531,10 +531,10 @@ QUnit.test("Export [string/string(A1,A2) x string x number]", function(assert) {
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string", expanded: true, showTotals: false },
+                    { area: 'row', dataField: 'row1', dataType: 'string', expanded: true, showTotals: false },
                     { area: 'row', dataField: 'row2' },
-                    { area: 'column', dataField: 'col1', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number" }
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', row2: 'A1', col1: 'a' },
@@ -547,12 +547,12 @@ QUnit.test("Export [string/string(A1,A2) x string x number]", function(assert) {
     );
 });
 
-QUnit.test("Export [string/string(A1,A2) x string x number] with row totals", function(assert) {
+QUnit.test('Export [string/string(A1,A2) x string x number] with row totals', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="1" topLeftCell="C2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="n" /><c r="C1" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>1</v></c><c r="B2" t="s"><v>2</v></c><c r="C2" t="n"><v>1</v></c></row>' +
@@ -576,10 +576,10 @@ QUnit.test("Export [string/string(A1,A2) x string x number] with row totals", fu
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string", expanded: true, showTotals: true },
+                    { area: 'row', dataField: 'row1', dataType: 'string', expanded: true, showTotals: true },
                     { area: 'row', dataField: 'row2' },
-                    { area: 'column', dataField: 'col1', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number" }
+                    { area: 'column', dataField: 'col1', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', row2: 'A1', col1: 'a' },
@@ -592,12 +592,12 @@ QUnit.test("Export [string/string(A1,A2) x string x number] with row totals", fu
     );
 });
 
-QUnit.test("Export [string/string(A1,A2) x string/string(a1,a2) x None]", function(assert) {
+QUnit.test('Export [string/string(A1,A2) x string/string(a1,a2) x None]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="2" topLeftCell="C3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s" /><c r="C1" t="s"><v>0</v></c><c r="D1" t="s" /></row>' +
         '<row r="2" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s" /><c r="B2" t="s" /><c r="C2" t="s"><v>1</v></c><c r="D2" t="s"><v>2</v></c></row>' +
@@ -622,9 +622,9 @@ QUnit.test("Export [string/string(A1,A2) x string/string(a1,a2) x None]", functi
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string", expanded: true, showTotals: false },
+                    { area: 'row', dataField: 'row1', dataType: 'string', expanded: true, showTotals: false },
                     { area: 'row', dataField: 'row2' },
-                    { area: 'column', dataField: 'col1', dataType: "string", expanded: true, showTotals: false },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true, showTotals: false },
                     { area: 'column', dataField: 'col2' },
                 ],
                 store: [
@@ -637,12 +637,12 @@ QUnit.test("Export [string/string(A1,A2) x string/string(a1,a2) x None]", functi
     );
 });
 
-QUnit.test("Export [string/string(A1,A2) x string/string(a1,a2) x Number]", function(assert) {
+QUnit.test('Export [string/string(A1,A2) x string/string(a1,a2) x Number]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="2" topLeftCell="C3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="n" /><c r="C1" t="s"><v>0</v></c><c r="D1" t="s" /></row>' +
         '<row r="2" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="n" /><c r="B2" t="n" /><c r="C2" t="s"><v>1</v></c><c r="D2" t="s"><v>2</v></c></row>' +
@@ -667,11 +667,11 @@ QUnit.test("Export [string/string(A1,A2) x string/string(a1,a2) x Number]", func
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string", expanded: true, showTotals: false },
+                    { area: 'row', dataField: 'row1', dataType: 'string', expanded: true, showTotals: false },
                     { area: 'row', dataField: 'row2' },
-                    { area: 'column', dataField: 'col1', dataType: "string", expanded: true, showTotals: false },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true, showTotals: false },
                     { area: 'column', dataField: 'col2' },
-                    { area: 'data', summaryType: 'count', dataType: "number" }
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', row2: 'A1', col1: 'a', col2: 'a1' },
@@ -684,12 +684,12 @@ QUnit.test("Export [string/string(A1,A2) x string/string(a1,a2) x Number]", func
     );
 });
 
-QUnit.test("Export [string(A,B) x None x None]", function(assert) {
+QUnit.test('Export [string(A,B) x None x None]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s" /></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>0</v></c><c r="B2" t="s" /></row>' +
@@ -718,12 +718,12 @@ QUnit.test("Export [string(A,B) x None x None]", function(assert) {
     );
 });
 
-QUnit.test("Export [string(A,B) x None x None] & showColumnGrandTotals", function(assert) {
+QUnit.test('Export [string(A,B) x None x None] & showColumnGrandTotals', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>1</v></c><c r="B2" t="s" /></row>' +
@@ -753,12 +753,12 @@ QUnit.test("Export [string(A,B) x None x None] & showColumnGrandTotals", functio
     );
 });
 
-QUnit.test("Export [string(A,B) x None x number]", function(assert) {
+QUnit.test('Export [string(A,B) x None x number]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s" /></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>0</v></c><c r="B2" t="n" /></row>' +
@@ -790,12 +790,12 @@ QUnit.test("Export [string(A,B) x None x number]", function(assert) {
     );
 });
 
-QUnit.test("Export [string(A,B) x None x number] & showColumnGrandTotals", function(assert) {
+QUnit.test('Export [string(A,B) x None x number] & showColumnGrandTotals', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>1</v></c><c r="B2" t="n"><v>1</v></c></row>' +
@@ -828,12 +828,12 @@ QUnit.test("Export [string(A,B) x None x number] & showColumnGrandTotals", funct
     );
 });
 
-QUnit.test("Export [string(A,B) x string x None]", function(assert) {
+QUnit.test('Export [string(A,B) x string x None]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>1</v></c><c r="B2" t="s" /></row>' +
@@ -864,12 +864,12 @@ QUnit.test("Export [string(A,B) x string x None]", function(assert) {
     );
 });
 
-QUnit.test("Export [string(A,B) x string x number]", function(assert) {
+QUnit.test('Export [string(A,B) x string x number]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>1</v></c><c r="B2" t="n"><v>1</v></c></row>' +
@@ -890,7 +890,7 @@ QUnit.test("Export [string(A,B) x string x number]", function(assert) {
                 fields: [
                     { area: 'row', dataField: 'row1' },
                     { area: 'column', dataField: 'col1' },
-                    { area: 'data', summaryType: 'count', dataType: "number" }
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', col1: 'a' },
@@ -903,12 +903,12 @@ QUnit.test("Export [string(A,B) x string x number]", function(assert) {
     );
 });
 
-QUnit.test("Export [string(A,B) x string(a,b) x None]", function(assert) {
+QUnit.test('Export [string(A,B) x string(a,b) x None]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c><c r="C1" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>2</v></c><c r="B2" t="s" /><c r="C2" t="s" /></row>' +
@@ -940,12 +940,12 @@ QUnit.test("Export [string(A,B) x string(a,b) x None]", function(assert) {
     );
 });
 
-QUnit.test("Export [string(A,B) x string(a,b) x number]", function(assert) {
+QUnit.test('Export [string(A,B) x string(a,b) x number]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c><c r="C1" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s"><v>2</v></c><c r="B2" t="n"><v>1</v></c><c r="C2" t="n" /></row>' +
@@ -967,7 +967,7 @@ QUnit.test("Export [string(A,B) x string(a,b) x number]", function(assert) {
                 fields: [
                     { area: 'row', dataField: 'row1' },
                     { area: 'column', dataField: 'col1' },
-                    { area: 'data', summaryType: 'count', dataType: "number" }
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', col1: 'a' },
@@ -980,12 +980,12 @@ QUnit.test("Export [string(A,B) x string(a,b) x number]", function(assert) {
     );
 });
 
-QUnit.test("Export [string(A,B) x string/string(a1,a2) x None]", function(assert) {
+QUnit.test('Export [string(A,B) x string/string(a1,a2) x None]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="2" topLeftCell="B3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c><c r="C1" t="s" /></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s" /><c r="B2" t="s"><v>1</v></c><c r="C2" t="s"><v>2</v></c></row>' +
@@ -1009,9 +1009,9 @@ QUnit.test("Export [string(A,B) x string/string(a1,a2) x None]", function(assert
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string" },
-                    { area: 'column', dataField: 'col1', dataType: "string", expanded: true, showTotals: false },
-                    { area: 'column', dataField: 'col2', dataType: "string" },
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true, showTotals: false },
+                    { area: 'column', dataField: 'col2', dataType: 'string' },
                 ],
                 store: [
                     { row1: 'A', col1: 'a', col2: 'a1' },
@@ -1024,12 +1024,12 @@ QUnit.test("Export [string(A,B) x string/string(a1,a2) x None]", function(assert
     );
 });
 
-QUnit.test("Export [string(A,B) x string/string(a1,a2) x None] & showColumnGrandTotals", function(assert) {
+QUnit.test('Export [string(A,B) x string/string(a1,a2) x None] & showColumnGrandTotals', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="2" topLeftCell="B3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c><c r="C1" t="s" /><c r="D1" t="s"><v>1</v></c></row>' +
         '<row r="2" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="s" /><c r="B2" t="s"><v>2</v></c><c r="C2" t="s"><v>3</v></c><c r="D2" t="s" /></row>' +
@@ -1054,9 +1054,9 @@ QUnit.test("Export [string(A,B) x string/string(a1,a2) x None] & showColumnGrand
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string" },
-                    { area: 'column', dataField: 'col1', dataType: "string", expanded: true, showTotals: false },
-                    { area: 'column', dataField: 'col2', dataType: "string" },
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true, showTotals: false },
+                    { area: 'column', dataField: 'col2', dataType: 'string' },
                 ],
                 store: [
                     { row1: 'A', col1: 'a', col2: 'a1' },
@@ -1068,12 +1068,12 @@ QUnit.test("Export [string(A,B) x string/string(a1,a2) x None] & showColumnGrand
     );
 });
 
-QUnit.test("Export [string(A,B) x string/string(a1,a2) x Number]", function(assert) {
+QUnit.test('Export [string(A,B) x string/string(a1,a2) x Number]', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="2" topLeftCell="B3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c><c r="C1" t="s" /></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" t="n" /><c r="B2" t="s"><v>1</v></c><c r="C2" t="s"><v>2</v></c></row>' +
@@ -1097,10 +1097,10 @@ QUnit.test("Export [string(A,B) x string/string(a1,a2) x Number]", function(asse
             showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { area: 'row', dataField: 'row1', dataType: "string" },
-                    { area: 'column', dataField: 'col1', dataType: "string", expanded: true, showTotals: false },
-                    { area: 'column', dataField: 'col2', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number" }
+                    { area: 'row', dataField: 'row1', dataType: 'string' },
+                    { area: 'column', dataField: 'col1', dataType: 'string', expanded: true, showTotals: false },
+                    { area: 'column', dataField: 'col2', dataType: 'string' },
+                    { area: 'data', summaryType: 'count', dataType: 'number' }
                 ],
                 store: [
                     { row1: 'A', col1: 'a', col2: 'a2' },
@@ -1113,12 +1113,12 @@ QUnit.test("Export [string(A,B) x string/string(a1,a2) x Number]", function(asse
     );
 });
 
-QUnit.test("Export with 'PivotGrid.wordWrapEnabled: true'", function(assert) {
+QUnit.test('Export with \'PivotGrid.wordWrapEnabled: true\'', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" t="s" />' +
@@ -1151,12 +1151,12 @@ QUnit.test("Export with 'PivotGrid.wordWrapEnabled: true'", function(assert) {
     );
 });
 
-QUnit.test("Export with 'PivotGrid.dataSource.fields.wordWrapEnabled: true'", function(assert) {
+QUnit.test('Export with \'PivotGrid.dataSource.fields.wordWrapEnabled: true\'', function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" t="s" />' +
@@ -1194,7 +1194,7 @@ QUnit.test("Export with 'PivotGrid.dataSource.fields.wordWrapEnabled: true'", fu
             '<sheetPr/><dimension ref="A1:C1"/>' +
             '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="3" topLeftCell="B4" /></sheetView></sheetViews>' +
             '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-            '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /></cols>' +
+            '<cols><col width="13.57" min="1" max="1" customWidth="1" /><col width="13.57" min="2" max="2" customWidth="1" /><col width="13.57" min="3" max="3" customWidth="1" /><col width="13.57" min="4" max="4" customWidth="1" /></cols>' +
             '<sheetData>' +
             '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
             '<c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c><c r="C1" t="s" /><c r="D1" t="s"><v>1</v></c>' +

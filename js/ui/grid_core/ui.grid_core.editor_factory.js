@@ -1,46 +1,46 @@
-import $ from "../../core/renderer";
-import domAdapter from "../../core/dom_adapter";
-import eventsEngine from "../../events/core/events_engine";
-import modules from "./ui.grid_core.modules";
-import clickEvent from "../../events/click";
-import pointerEvents from "../../events/pointer";
-import positionUtils from "../../animation/position";
-import { addNamespace, fireEvent, normalizeKeyName } from "../../events/utils";
-import browser from "../../core/utils/browser";
-import { extend } from "../../core/utils/extend";
-import EditorFactoryMixin from "../shared/ui.editor_factory_mixin";
-import { isElementInCurrentGrid } from "./ui.grid_core.utils";
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import eventsEngine from '../../events/core/events_engine';
+import modules from './ui.grid_core.modules';
+import clickEvent from '../../events/click';
+import pointerEvents from '../../events/pointer';
+import positionUtils from '../../animation/position';
+import { addNamespace, fireEvent, normalizeKeyName } from '../../events/utils';
+import browser from '../../core/utils/browser';
+import { extend } from '../../core/utils/extend';
+import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
+import { isElementInCurrentGrid } from './ui.grid_core.utils';
 
-var EDITOR_INLINE_BLOCK = "dx-editor-inline-block",
-    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    FOCUS_OVERLAY_CLASS = "focus-overlay",
-    CONTENT_CLASS = "content",
-    FOCUSED_ELEMENT_CLASS = "dx-focused",
-    ROW_CLASS = "dx-row",
-    MODULE_NAMESPACE = "dxDataGridEditorFactory",
-    UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, "focusin", clickEvent.name].join(" "), MODULE_NAMESPACE),
-    POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
-    POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
-    DX_HIDDEN = "dx-hidden";
+const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
+const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const FOCUS_OVERLAY_CLASS = 'focus-overlay';
+const CONTENT_CLASS = 'content';
+const FOCUSED_ELEMENT_CLASS = 'dx-focused';
+const ROW_CLASS = 'dx-row';
+const MODULE_NAMESPACE = 'dxDataGridEditorFactory';
+const UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEvent.name].join(' '), MODULE_NAMESPACE);
+const POINTER_EVENTS_TARGET_CLASS = 'dx-pointer-events-target';
+const POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none';
+const DX_HIDDEN = 'dx-hidden';
 
-var EditorFactory = modules.ViewController.inherit({
+const EditorFactory = modules.ViewController.inherit({
     _getFocusedElement: function($dataGridElement) {
-        const rowSelector = this.option("focusedRowEnabled") ? "tr[tabindex]:focus" : "tr[tabindex]:not(.dx-data-row):focus",
-            focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus`;
+        const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
+        const focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus`;
 
         // T181706
         return $dataGridElement.find(focusedElementSelector);
     },
 
     _getFocusCellSelector: function() {
-        return ".dx-row > td";
+        return '.dx-row > td';
     },
 
     _updateFocusCore: function() {
-        var $focus = this._$focusedElement,
-            $dataGridElement = this.component && this.component.$element(),
-            $focusCell,
-            hideBorders;
+        let $focus = this._$focusedElement;
+        const $dataGridElement = this.component && this.component.$element();
+        let $focusCell;
+        let hideBorders;
 
         if($dataGridElement) {
             // this selector is specific to IE
@@ -48,7 +48,7 @@ var EditorFactory = modules.ViewController.inherit({
 
             if($focus.length) {
                 if(!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(ROW_CLASS)) {
-                    $focusCell = $focus.closest(this._getFocusCellSelector() + ", ." + CELL_FOCUS_DISABLED_CLASS);
+                    $focusCell = $focus.closest(this._getFocusCellSelector() + ', .' + CELL_FOCUS_DISABLED_CLASS);
                     hideBorders = $focusCell.get(0) !== $focus.get(0) && $focusCell.hasClass(EDITOR_INLINE_BLOCK);
                     $focus = $focusCell;
                 }
@@ -64,8 +64,8 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     _updateFocus: function(e) {
-        var that = this,
-            isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+        const that = this;
+        const isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
 
         that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
 
@@ -83,7 +83,7 @@ var EditorFactory = modules.ViewController.inherit({
     _updateFocusOverlaySize: function($element, position) {
         $element.hide();
 
-        const location = positionUtils.calculate($element, extend({ collision: "fit" }, position));
+        const location = positionUtils.calculate($element, extend({ collision: 'fit' }, position));
 
         if(location.h.oversize > 0) {
             $element.outerWidth($element.outerWidth() - location.h.oversize);
@@ -97,11 +97,11 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     callbackNames: function() {
-        return ["focused"];
+        return ['focused'];
     },
 
     focus: function($element, hideBorder) {
-        var that = this;
+        const that = this;
 
         if($element === undefined) {
             return that._$focusedElement;
@@ -126,24 +126,24 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     renderFocusOverlay: function($element, hideBorder) {
-        var that = this,
-            focusOverlayPosition;
+        const that = this;
+        let focusOverlayPosition;
 
         if(!isElementInCurrentGrid(this, $element)) {
             return;
         }
 
         if(!that._$focusOverlay) {
-            that._$focusOverlay = $("<div>").addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS) + " " + POINTER_EVENTS_TARGET_CLASS);
+            that._$focusOverlay = $('<div>').addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS) + ' ' + POINTER_EVENTS_TARGET_CLASS);
         }
 
         if(hideBorder) {
             that._$focusOverlay.addClass(DX_HIDDEN);
         } else if($element.length) {
             // align "left bottom" for IE, align "right bottom" for Mozilla
-            var align = browser.msie ? "left bottom" : browser.mozilla ? "right bottom" : "left top",
-                $content = $element.closest("." + that.addWidgetPrefix(CONTENT_CLASS)),
-                elemCoord = $element[0].getBoundingClientRect();
+            const align = browser.msie ? 'left bottom' : browser.mozilla ? 'right bottom' : 'left top';
+            const $content = $element.closest('.' + that.addWidgetPrefix(CONTENT_CLASS));
+            const elemCoord = $element[0].getBoundingClientRect();
 
             that._$focusOverlay
                 .removeClass(DX_HIDDEN)
@@ -162,12 +162,12 @@ var EditorFactory = modules.ViewController.inherit({
             that._updateFocusOverlaySize(that._$focusOverlay, focusOverlayPosition);
             positionUtils.setup(that._$focusOverlay, focusOverlayPosition);
 
-            that._$focusOverlay.css("visibility", "visible"); // for ios
+            that._$focusOverlay.css('visibility', 'visible'); // for ios
         }
     },
 
     resize: function() {
-        var $focusedElement = this._$focusedElement;
+        const $focusedElement = this._$focusedElement;
 
         if($focusedElement) {
             this.focus($focusedElement);
@@ -181,8 +181,8 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     init: function() {
-        this.createAction("onEditorPreparing", { excludeValidators: ["disabled", "readOnly"], category: "rendering" });
-        this.createAction("onEditorPrepared", { excludeValidators: ["disabled", "readOnly"], category: "rendering" });
+        this.createAction('onEditorPreparing', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
+        this.createAction('onEditorPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
 
         this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
         eventsEngine.on(domAdapter.getDocument(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
@@ -191,13 +191,13 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     _attachContainerEventHandlers: function() {
-        var that = this,
-            $container = that.component && that.component.$element();
+        const that = this;
+        const $container = that.component && that.component.$element();
 
         if($container) {
             // T179518
-            eventsEngine.on($container, addNamespace("keydown", MODULE_NAMESPACE), function(e) {
-                if(normalizeKeyName(e) === "tab") {
+            eventsEngine.on($container, addNamespace('keydown', MODULE_NAMESPACE), function(e) {
+                if(normalizeKeyName(e) === 'tab') {
                     that._updateFocusHandler(e);
                 }
             });
@@ -205,10 +205,10 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     _focusOverlayEventProxy: function(e) {
-        var $target = $(e.target),
-            $currentTarget = $(e.currentTarget),
-            element,
-            needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS);
+        const $target = $(e.target);
+        const $currentTarget = $(e.currentTarget);
+        let element;
+        const needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS);
 
         if(!needProxy || $currentTarget.hasClass(DX_HIDDEN)) return;
 
@@ -225,8 +225,8 @@ var EditorFactory = modules.ViewController.inherit({
 
         $currentTarget.removeClass(DX_HIDDEN);
 
-        if(e.type === clickEvent.name && element.tagName === "INPUT") {
-            eventsEngine.trigger($(element), "focus");
+        if(e.type === clickEvent.name && element.tagName === 'INPUT') {
+            eventsEngine.trigger($(element), 'focus');
         }
     },
 
@@ -240,87 +240,8 @@ var EditorFactory = modules.ViewController.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-              * @name dxDataGridOptions.onEditorPreparing
-              * @type function(e)
-              * @type_function_param1 e:object
-              * @type_function_param1_field4 parentType:string
-              * @type_function_param1_field5 value:any
-              * @type_function_param1_field6 setValue(newValue, newText):any
-              * @type_function_param1_field7 updateValueTimeout:number
-              * @type_function_param1_field8 width:number
-              * @type_function_param1_field9 disabled:boolean
-              * @type_function_param1_field10 rtlEnabled:boolean
-              * @type_function_param1_field11 cancel:boolean
-              * @type_function_param1_field12 editorElement:dxElement
-              * @type_function_param1_field13 readOnly:boolean
-              * @type_function_param1_field14 editorName:string
-              * @type_function_param1_field15 editorOptions:object
-              * @type_function_param1_field16 dataField:string
-              * @type_function_param1_field17 row:dxDataGridRowObject
-              * @extends Action
-              * @action
-             */
 
-            /**
-              * @name dxTreeListOptions.onEditorPreparing
-              * @type function(e)
-              * @type_function_param1 e:object
-              * @type_function_param1_field4 parentType:string
-              * @type_function_param1_field5 value:any
-              * @type_function_param1_field6 setValue(newValue, newText):any
-              * @type_function_param1_field7 updateValueTimeout:number
-              * @type_function_param1_field8 width:number
-              * @type_function_param1_field9 disabled:boolean
-              * @type_function_param1_field10 rtlEnabled:boolean
-              * @type_function_param1_field11 cancel:boolean
-              * @type_function_param1_field12 editorElement:dxElement
-              * @type_function_param1_field13 readOnly:boolean
-              * @type_function_param1_field14 editorName:string
-              * @type_function_param1_field15 editorOptions:object
-              * @type_function_param1_field16 dataField:string
-              * @type_function_param1_field17 row:dxTreeListRowObject
-              * @extends Action
-              * @action
-             */
 
-            /**
-              * @name dxDataGridOptions.onEditorPrepared
-              * @type function(options)
-              * @type_function_param1 options:object
-              * @type_function_param1_field4 parentType:string
-              * @type_function_param1_field5 value:any
-              * @type_function_param1_field6 setValue(newValue, newText):any
-              * @type_function_param1_field7 updateValueTimeout:number
-              * @type_function_param1_field8 width:number
-              * @type_function_param1_field9 disabled:boolean
-              * @type_function_param1_field10 rtlEnabled:boolean
-              * @type_function_param1_field11 editorElement:dxElement
-              * @type_function_param1_field12 readOnly:boolean
-              * @type_function_param1_field13 dataField:string
-              * @type_function_param1_field14 row:dxDataGridRowObject
-              * @extends Action
-              * @action
-             */
-
-            /**
-              * @name dxTreeListOptions.onEditorPrepared
-              * @type function(options)
-              * @type_function_param1 options:object
-              * @type_function_param1_field4 parentType:string
-              * @type_function_param1_field5 value:any
-              * @type_function_param1_field6 setValue(newValue, newText):any
-              * @type_function_param1_field7 updateValueTimeout:number
-              * @type_function_param1_field8 width:number
-              * @type_function_param1_field9 disabled:boolean
-              * @type_function_param1_field10 rtlEnabled:boolean
-              * @type_function_param1_field11 editorElement:dxElement
-              * @type_function_param1_field12 readOnly:boolean
-              * @type_function_param1_field13 dataField:string
-              * @type_function_param1_field14 row:dxTreeListRowObject
-              * @extends Action
-              * @action
-             */
         };
     },
     controllers: {
@@ -333,7 +254,7 @@ module.exports = {
                     this.callBase(args);
 
                     if(this.isResizing()) {
-                        this.getController("editorFactory").loseFocus();
+                        this.getController('editorFactory').loseFocus();
                     }
                 }
             }

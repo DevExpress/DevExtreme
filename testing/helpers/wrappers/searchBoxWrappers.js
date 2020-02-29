@@ -1,6 +1,6 @@
-import { WrapperBase } from "./wrapperBase.js";
+import { WrapperBase } from './wrapperBase.js';
 
-const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 export class SearchBoxWrapper extends WrapperBase {
     constructor(containerSelector, widgetName) {
@@ -19,12 +19,12 @@ export class SearchBoxWrapper extends WrapperBase {
 
 export class TreeViewSearchBoxWrapper extends SearchBoxWrapper {
     constructor(containerSelector) {
-        super(containerSelector, "treeview");
+        super(containerSelector, 'treeview');
     }
 }
 
 export class ListSearchBoxWrapper extends SearchBoxWrapper {
     constructor(containerSelector) {
-        super(containerSelector, "list");
+        super(containerSelector, 'list');
     }
 }

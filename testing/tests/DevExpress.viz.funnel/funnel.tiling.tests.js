@@ -1,27 +1,27 @@
-var common = require("./commonParts/common.js"),
-    createFunnel = common.createFunnel,
-    environment = common.environment;
+const common = require('./commonParts/common.js');
+const createFunnel = common.createFunnel;
+const environment = common.environment;
 
-QUnit.module("Algorithms", environment);
+QUnit.module('Algorithms', environment);
 
-QUnit.test("Funnel. Normalize values", function(assert) {
-    var funnel = createFunnel({
-            dataSource: [
-                {
-                    value: 430
-                },
-                {
-                    value: 201
-                },
-                {
-                    value: 300
-                },
-                {
-                    value: 45
-                }
-            ]
-        }),
-        items = funnel.getAllItems();
+QUnit.test('Funnel. Normalize values', function(assert) {
+    const funnel = createFunnel({
+        dataSource: [
+            {
+                value: 430
+            },
+            {
+                value: 201
+            },
+            {
+                value: 300
+            },
+            {
+                value: 45
+            }
+        ]
+    });
+    const items = funnel.getAllItems();
 
     assert.equal(items.length, 4);
     assert.equal(items[0].percent, 1);
@@ -30,7 +30,7 @@ QUnit.test("Funnel. Normalize values", function(assert) {
     assert.roughEqual(items[3].percent, 0.1, 0.01);
 });
 
-QUnit.test("Funnel. Drawing", function(assert) {
+QUnit.test('Funnel. Drawing', function(assert) {
     createFunnel({
         dataSource: [
             {
@@ -48,7 +48,7 @@ QUnit.test("Funnel. Drawing", function(assert) {
         ]
     });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 848.8, 100, 151.1, 100]);
@@ -57,25 +57,25 @@ QUnit.test("Funnel. Drawing", function(assert) {
     assert.checkItem(items[3].attr.firstCall.args[0].points, [447.6, 300, 552.3, 300, 552.3, 400, 447.6, 400]);
 });
 
-QUnit.test("Pyramid. Normalize values", function(assert) {
-    var funnel = createFunnel({
-            algorithm: "dynamicHeight",
-            dataSource: [
-                {
-                    value: 430
-                },
-                {
-                    value: 201
-                },
-                {
-                    value: 300
-                },
-                {
-                    value: 45
-                }
-            ]
-        }),
-        items = funnel.getAllItems();
+QUnit.test('Pyramid. Normalize values', function(assert) {
+    const funnel = createFunnel({
+        algorithm: 'dynamicHeight',
+        dataSource: [
+            {
+                value: 430
+            },
+            {
+                value: 201
+            },
+            {
+                value: 300
+            },
+            {
+                value: 45
+            }
+        ]
+    });
+    const items = funnel.getAllItems();
 
     assert.equal(items.length, 4);
     assert.roughEqual(items[0].percent, 0.44, 0.01);
@@ -84,9 +84,9 @@ QUnit.test("Pyramid. Normalize values", function(assert) {
     assert.roughEqual(items[3].percent, 0.04, 0.01);
 });
 
-QUnit.test("Pyramid. Drawing", function(assert) {
+QUnit.test('Pyramid. Drawing', function(assert) {
     createFunnel({
-        algorithm: "dynamicHeight",
+        algorithm: 'dynamicHeight',
         dataSource: [
             {
                 value: 430
@@ -102,7 +102,7 @@ QUnit.test("Pyramid. Drawing", function(assert) {
             }
         ]
     });
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 779.7, 176.2, 220.2, 176.2]);
@@ -111,9 +111,9 @@ QUnit.test("Pyramid. Drawing", function(assert) {
     assert.checkItem(items[3].attr.firstCall.args[0].points, [476.9, 381.5, 523, 381.5, 500, 400, 500, 400]);
 });
 
-QUnit.test("Normalize algorithm name", function(assert) {
+QUnit.test('Normalize algorithm name', function(assert) {
     createFunnel({
-        algorithm: "dynamicHeIGht",
+        algorithm: 'dynamicHeIGht',
         dataSource: [
             {
                 value: 430
@@ -129,7 +129,7 @@ QUnit.test("Normalize algorithm name", function(assert) {
             }
         ]
     });
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 779.7, 176.2, 220.2, 176.2]);
@@ -138,9 +138,9 @@ QUnit.test("Normalize algorithm name", function(assert) {
     assert.checkItem(items[3].attr.firstCall.args[0].points, [476.9, 381.5, 523, 381.5, 500, 400, 500, 400]);
 });
 
-QUnit.test("Pyramid. Drawing with neckWidth", function(assert) {
+QUnit.test('Pyramid. Drawing with neckWidth', function(assert) {
     createFunnel({
-        algorithm: "dynamicHeight",
+        algorithm: 'dynamicHeight',
         neckWidth: 0.2,
         dataSource: [
             {
@@ -157,7 +157,7 @@ QUnit.test("Pyramid. Drawing with neckWidth", function(assert) {
             }
         ]
     });
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 823.7, 176.2, 176.2, 176.2]);
@@ -166,9 +166,9 @@ QUnit.test("Pyramid. Drawing with neckWidth", function(assert) {
     assert.checkItem(items[3].attr.firstCall.args[0].points, [381.5, 381.5, 618.4, 381.5, 600, 400, 400, 400]);
 });
 
-QUnit.test("Pyramid. Drawing with neckHeight", function(assert) {
+QUnit.test('Pyramid. Drawing with neckHeight', function(assert) {
     createFunnel({
-        algorithm: "dynamicHeight",
+        algorithm: 'dynamicHeight',
         neckWidth: 0.2,
         neckHeight: 0.18,
         dataSource: [
@@ -187,7 +187,7 @@ QUnit.test("Pyramid. Drawing with neckHeight", function(assert) {
         ]
     });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 785, 176.2, 214.9, 176.2]);
@@ -196,9 +196,9 @@ QUnit.test("Pyramid. Drawing with neckHeight", function(assert) {
     assert.checkItem(items[3].attr.firstCall.args[0].points, [400, 381.5, 600, 381.5, 600, 400, 400, 400]);
 });
 
-QUnit.test("Pyramid. Update neckWidth and neckHeight", function(assert) {
-    var funnel = createFunnel({
-        algorithm: "dynamicHeight",
+QUnit.test('Pyramid. Update neckWidth and neckHeight', function(assert) {
+    const funnel = createFunnel({
+        algorithm: 'dynamicHeight',
         neckWidth: 0.2,
         neckHeight: 0.18,
         dataSource: [
@@ -219,7 +219,7 @@ QUnit.test("Pyramid. Update neckWidth and neckHeight", function(assert) {
 
     funnel.option({ neckWidth: 0.3, neckHeight: 0.4 });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 743, 176.2, 257, 176.2]);
@@ -228,8 +228,8 @@ QUnit.test("Pyramid. Update neckWidth and neckHeight", function(assert) {
     assert.checkItem(items[3].attr.firstCall.args[0].points, [350, 381.5, 650, 381.5, 650, 400, 350, 400]);
 });
 
-QUnit.test("Update option from funnel to pyramid", function(assert) {
-    var funnel = createFunnel({
+QUnit.test('Update option from funnel to pyramid', function(assert) {
+    const funnel = createFunnel({
         dataSource: [
             {
                 value: 430
@@ -246,9 +246,9 @@ QUnit.test("Update option from funnel to pyramid", function(assert) {
         ]
     });
 
-    funnel.option({ algorithm: "dynamicHeight" });
+    funnel.option({ algorithm: 'dynamicHeight' });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 779.7, 176.2, 220.2, 176.2]);

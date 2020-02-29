@@ -1,20 +1,20 @@
-var gulp = require('gulp');
-var path = require('path');
-var fs = require('fs');
-var rename = require('gulp-rename');
-var concat = require('gulp-concat');
-var tap = require('gulp-tap');
-var gulpIf = require('gulp-if');
-var merge = require('merge-stream');
-var template = require('gulp-template');
+const gulp = require('gulp');
+const path = require('path');
+const fs = require('fs');
+const rename = require('gulp-rename');
+const concat = require('gulp-concat');
+const tap = require('gulp-tap');
+const gulpIf = require('gulp-if');
+const merge = require('merge-stream');
+const template = require('gulp-template');
 
-var context = require('./context.js');
-var headerPipes = require('./header-pipes.js');
-var compressionPipes = require('./compression-pipes.js');
+const context = require('./context.js');
+const headerPipes = require('./header-pipes.js');
+const compressionPipes = require('./compression-pipes.js');
 
-var VECTORMAP_UTILS_PATH = 'js/viz/vector_map.utils';
-var VECTORMAP_UTILS_RESULT_PATH = path.join(context.RESULT_JS_PATH, 'vectormap-utils');
-var VECTORMAP_DATA_RESULT_PATH = path.join(context.RESULT_JS_PATH, 'vectormap-data');
+const VECTORMAP_UTILS_PATH = 'js/viz/vector_map.utils';
+const VECTORMAP_UTILS_RESULT_PATH = path.join(context.RESULT_JS_PATH, 'vectormap-utils');
+const VECTORMAP_DATA_RESULT_PATH = path.join(context.RESULT_JS_PATH, 'vectormap-data');
 
 function transformFileName(fileName) {
     return path.join(VECTORMAP_UTILS_PATH, fileName) + '.js';
@@ -29,8 +29,8 @@ gulp.task('vectormap-utils', function() {
 });
 
 gulp.task('vectormap-data', gulp.series('vectormap-utils', function() {
-    var stream = merge();
-    var processFiles = require(path.join('../..', VECTORMAP_UTILS_RESULT_PATH, 'dx.vectormaputils.node.js')).processFiles;
+    const stream = merge();
+    const processFiles = require(path.join('../..', VECTORMAP_UTILS_RESULT_PATH, 'dx.vectormaputils.node.js')).processFiles;
 
     if(!fs.existsSync(VECTORMAP_DATA_RESULT_PATH)) {
         fs.mkdirSync(VECTORMAP_DATA_RESULT_PATH);
@@ -40,10 +40,10 @@ gulp.task('vectormap-data', gulp.series('vectormap-utils', function() {
         output: VECTORMAP_DATA_RESULT_PATH,
         settings: 'build/vectormap-sources/_settings.js'
     }, function() {
-        var files = fs.readdirSync(VECTORMAP_DATA_RESULT_PATH);
+        const files = fs.readdirSync(VECTORMAP_DATA_RESULT_PATH);
 
         files.forEach(file => {
-            var data = fs.readFileSync(path.join(VECTORMAP_DATA_RESULT_PATH, file), 'utf8');
+            const data = fs.readFileSync(path.join(VECTORMAP_DATA_RESULT_PATH, file), 'utf8');
 
             stream.add(
                 gulp.src('build/gulp/vectormapdata-template.jst')

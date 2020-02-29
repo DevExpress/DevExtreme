@@ -1,16 +1,16 @@
-import { equalByValue } from "../../core/utils/common";
-import VerticalAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.vertical";
-import HorizontalAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.horizontal";
-import HorizontalMonthLineAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line";
-import HorizontalMonthAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month";
-import AgendaAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.agenda";
+import { equalByValue } from '../../core/utils/common';
+import VerticalAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.vertical';
+import HorizontalAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal';
+import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line';
+import HorizontalMonthAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
+import AgendaAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.agenda';
 
 const RENDERING_STRATEGIES = {
-    "horizontal": HorizontalAppointmentsStrategy,
-    "horizontalMonth": HorizontalMonthAppointmentsStrategy,
-    "horizontalMonthLine": HorizontalMonthLineAppointmentsStrategy,
-    "vertical": VerticalAppointmentsStrategy,
-    "agenda": AgendaAppointmentsStrategy
+    'horizontal': HorizontalAppointmentsStrategy,
+    'horizontalMonth': HorizontalMonthAppointmentsStrategy,
+    'horizontalMonthLine': HorizontalMonthLineAppointmentsStrategy,
+    'vertical': VerticalAppointmentsStrategy,
+    'agenda': AgendaAppointmentsStrategy
 };
 
 class AppointmentLayoutManager {
@@ -21,7 +21,11 @@ class AppointmentLayoutManager {
 
     getCellDimensions(options) {
         if(this.instance._workSpace) {
-            options.callback(this.instance._workSpace.getCellWidth(), this.instance._workSpace.getCellHeight(), this.instance._workSpace.getAllDayHeight());
+            return {
+                width: this.instance._workSpace.getCellWidth(),
+                height: this.instance._workSpace.getCellHeight(),
+                allDayHeight: this.instance._workSpace.getAllDayHeight()
+            };
         }
     }
 
@@ -38,13 +42,10 @@ class AppointmentLayoutManager {
     }
 
     createAppointmentsMap(items) {
-        this.getCellDimensions({
-            callback: (width, height, allDayHeight) => {
-                this.instance._cellWidth = width;
-                this.instance._cellHeight = height;
-                this.instance._allDayCellHeight = allDayHeight;
-            }
-        });
+        const { width, height, allDayHeight } = this.getCellDimensions();
+        this.instance._cellWidth = width;
+        this.instance._cellHeight = height;
+        this.instance._allDayCellHeight = allDayHeight;
         this.getGroupOrientation({
             callback: groupOrientation => this.instance._groupOrientation = groupOrientation
         });
@@ -62,7 +63,7 @@ class AppointmentLayoutManager {
 
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach(settings => {
-                settings.direction = this.renderingStrategy === "vertical" && !settings.allDay ? "vertical" : "horizontal";
+                settings.direction = this.renderingStrategy === 'vertical' && !settings.allDay ? 'vertical' : 'horizontal';
             });
 
             return {
@@ -85,8 +86,8 @@ class AppointmentLayoutManager {
         }
 
         for(let i = 0; i < settingList.length; i++) {
-            const newSettings = settingList[i],
-                oldSettings = oldSettingList[i];
+            const newSettings = settingList[i];
+            const oldSettings = oldSettingList[i];
 
             if(oldSettings) { // exclude sortedIndex property for comparison in commonUtils.equalByValue
                 oldSettings.sortedIndex = newSettings.sortedIndex;
@@ -126,7 +127,7 @@ class AppointmentLayoutManager {
     }
 
     getRepaintedAppointments(appointmentList, oldAppointmentList) {
-        if(oldAppointmentList.length === 0 || this.renderingStrategy === "agenda") {
+        if(oldAppointmentList.length === 0 || this.renderingStrategy === 'agenda') {
             return appointmentList;
         }
 

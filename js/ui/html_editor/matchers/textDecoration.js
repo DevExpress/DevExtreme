@@ -1,8 +1,8 @@
-import { extend } from "../../../core/utils/extend";
-import { isObject } from "../../../core/utils/type";
+import { extend } from '../../../core/utils/extend';
+import { isObject } from '../../../core/utils/type';
 
 function getMatcher(quill) {
-    const Delta = quill.import("delta");
+    const Delta = quill.import('delta');
     const applyFormat = function(delta, format, value) {
         if(isObject(format)) {
             return Object.keys(format).reduce((newDelta, key) => {
@@ -27,8 +27,8 @@ function getMatcher(quill) {
     return (node, delta) => {
         const formats = {};
         const { textDecoration } = node.style || {};
-        const isLineThrough = textDecoration && textDecoration.indexOf("line-through") !== -1;
-        const isUnderline = textDecoration && textDecoration.indexOf("underline") !== -1;
+        const isLineThrough = textDecoration && textDecoration.indexOf('line-through') !== -1;
+        const isUnderline = textDecoration && textDecoration.indexOf('underline') !== -1;
 
         if(isLineThrough) {
             formats.strike = true;

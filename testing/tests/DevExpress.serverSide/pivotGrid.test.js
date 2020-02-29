@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets.pivotGrid/pivotGrid.markup.tests.js");
+require('../DevExpress.ui.widgets.pivotGrid/pivotGrid.markup.tests.js');

@@ -1,1 +1,1 @@
-module.exports = require("./range_selector/range_selector");
+module.exports = require('./range_selector/range_selector');

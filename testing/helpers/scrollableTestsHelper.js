@@ -1,13 +1,13 @@
-import $ from "jquery";
-import devices from "core/devices";
-import browser from "core/utils/browser";
+import $ from 'jquery';
+import devices from 'core/devices';
+import browser from 'core/utils/browser';
 
-const SCROLLABLE_CONTAINER = "dx-scrollable-container";
-const SCROLLABLE_CONTENT = "dx-scrollable-content";
+const SCROLLABLE_CONTAINER = 'dx-scrollable-container';
+const SCROLLABLE_CONTENT = 'dx-scrollable-content';
 
 const $tempVScrollBar = $('<div id="getVScrollBarWidth" style="width: 75px; height: 100px"><div style="width: 125px; height: 150px"></div></div>');
-$("#qunit").append($tempVScrollBar);
-$tempVScrollBar.dxScrollable({ direction: "both", useNative: true });
+$('#qunit').append($tempVScrollBar);
+$tempVScrollBar.dxScrollable({ direction: 'both', useNative: true });
 const $tempVScrollBarContainer = $tempVScrollBar.find(`.${SCROLLABLE_CONTAINER}`);
 
 export const nativeVScrollBarWidth = $tempVScrollBarContainer[0].offsetWidth - $tempVScrollBarContainer[0].clientWidth;
@@ -41,7 +41,7 @@ export function checkScrollableSizes(assert, $rootContainer, { id, width, height
             expectedContainerScrollHeight = containerScrollHeight + (overflowY ? 2 : 3); // magic numbers for ios: padding-top: 1px; padding-bottom: 1px; min-height: 101%;
         }
     } else if(browser.msie) {
-        if(useNativeScrolling && overflowX && !overflowY && configDetails !== "insideResponsiveBox") {
+        if(useNativeScrolling && overflowX && !overflowY && configDetails !== 'insideResponsiveBox') {
             expectedContainerScrollHeight = containerScrollHeight - nativeVScrollBarHeight;
         }
     } else if(useNativeScrolling && overflowX && !overflowY) {
@@ -58,7 +58,7 @@ export function checkScrollableSizes(assert, $rootContainer, { id, width, height
     assert.strictEqual($container[0].clientHeight, expectedContainerClientHeight, `${id}: container.clientHeight`);
 
     if(Array.isArray(containerScrollHeight)) {
-        assert.ok($container[0].scrollHeight > containerScrollHeight[0] && $container[0].scrollHeight < containerScrollHeight[1], "container.scrollHeight(" + $container[0].scrollHeight + ")");
+        assert.ok($container[0].scrollHeight > containerScrollHeight[0] && $container[0].scrollHeight < containerScrollHeight[1], 'container.scrollHeight(' + $container[0].scrollHeight + ')');
     } else {
         assert.strictEqual($container[0].scrollHeight, expectedContainerScrollHeight, `${id}: container.scrollHeigh`);
     }
@@ -76,6 +76,6 @@ export function QUnitTestIfSupported(name, isSupported, testCallback) {
     if(isSupported /* TODO: ScrollView/Tree/Tile within ResponsiveBox are incorrectly painted if placed in two columns and 'flex' strategy is active. We will review these configs in future. */) {
         QUnit.test.call(null, name, testCallback);
     } else {
-        QUnit.skip.call(null, "TODO: " + name, testCallback);
+        QUnit.skip.call(null, 'TODO: ' + name, testCallback);
     }
 }

@@ -6,10 +6,10 @@ SystemJS.config({
 });
 
 define(function(require) {
-    const getGantt = require("ui/gantt/gantt_importer").getGanttViewCore;
+    const getGantt = require('ui/gantt/gantt_importer').getGanttViewCore;
 
-    QUnit.module("Import devexpress-gantt", function() {
-        QUnit.test("throw an error if the devexpress-gantt script isn't referenced", function(assert) {
+    QUnit.module('Import devexpress-gantt', function() {
+        QUnit.test('throw an error if the devexpress-gantt script isn\'t referenced', function(assert) {
             assert.throws(
                 function() { getGantt(); },
                 function(e) {

@@ -1,15 +1,15 @@
-var $ = require("../../core/renderer"),
-    registerComponent = require("../../core/component_registrator"),
-    each = require("../../core/utils/iterator").each,
-    List = require("../list/ui.list.base");
+const $ = require('../../core/renderer');
+const registerComponent = require('../../core/component_registrator');
+const each = require('../../core/utils/iterator').each;
+const List = require('../list/ui.list.base');
 
-var TOOLBAR_MENU_ACTION_CLASS = "dx-toolbar-menu-action",
-    TOOLBAR_HIDDEN_BUTTON_CLASS = "dx-toolbar-hidden-button",
-    TOOLBAR_MENU_SECTION_CLASS = "dx-toolbar-menu-section",
-    TOOLBAR_MENU_LAST_SECTION_CLASS = "dx-toolbar-menu-last-section";
+const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
+const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
+const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
+const TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
 
-var ToolbarMenu = List.inherit({
-    _activeStateUnit: "." + TOOLBAR_MENU_ACTION_CLASS,
+const ToolbarMenu = List.inherit({
+    _activeStateUnit: '.' + TOOLBAR_MENU_ACTION_CLASS,
 
     _initMarkup: function() {
         this._renderSections();
@@ -25,15 +25,15 @@ var ToolbarMenu = List.inherit({
     },
 
     _renderSections: function() {
-        var that = this,
-            $container = this._itemContainer();
+        const that = this;
+        const $container = this._itemContainer();
 
-        each(["before", "center", "after", "menu"], function() {
-            var sectionName = "_$" + this + "Section",
-                $section = that[sectionName];
+        each(['before', 'center', 'after', 'menu'], function() {
+            const sectionName = '_$' + this + 'Section';
+            let $section = that[sectionName];
 
             if(!$section) {
-                that[sectionName] = $section = $("<div>")
+                that[sectionName] = $section = $('<div>')
                     .addClass(TOOLBAR_MENU_SECTION_CLASS);
             }
 
@@ -47,27 +47,25 @@ var ToolbarMenu = List.inherit({
     },
 
     _updateSections: function() {
-        var $sections = this.$element().find("." + TOOLBAR_MENU_SECTION_CLASS);
+        const $sections = this.$element().find('.' + TOOLBAR_MENU_SECTION_CLASS);
         $sections.removeClass(TOOLBAR_MENU_LAST_SECTION_CLASS);
-        $sections.not(":empty").eq(-1).addClass(TOOLBAR_MENU_LAST_SECTION_CLASS);
+        $sections.not(':empty').eq(-1).addClass(TOOLBAR_MENU_LAST_SECTION_CLASS);
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
-        var location = item.location || "menu",
-            $container = this["_$" + location + "Section"],
-            itemElement;
-
-        itemElement = this.callBase(index, item, $container, $after);
+        const location = item.location || 'menu';
+        const $container = this['_$' + location + 'Section'];
+        const itemElement = this.callBase(index, item, $container, $after);
 
         if(this._getItemTemplateName({ itemData: item })) {
-            itemElement.addClass("dx-toolbar-menu-custom");
+            itemElement.addClass('dx-toolbar-menu-custom');
         }
 
-        if(location === "menu" || item.widget === "dxButton" || item.isAction) {
+        if(location === 'menu' || item.widget === 'dxButton' || item.isAction) {
             itemElement.addClass(TOOLBAR_MENU_ACTION_CLASS);
         }
 
-        if(item.widget === "dxButton") {
+        if(item.widget === 'dxButton') {
             itemElement.addClass(TOOLBAR_HIDDEN_BUTTON_CLASS);
         }
 
@@ -77,16 +75,16 @@ var ToolbarMenu = List.inherit({
     },
 
     _getItemTemplateName: function(args) {
-        var template = this.callBase(args);
+        const template = this.callBase(args);
 
-        var data = args.itemData,
-            menuTemplate = data && data["menuItemTemplate"];
+        const data = args.itemData;
+        const menuTemplate = data && data['menuItemTemplate'];
 
         return menuTemplate || template;
     },
 
     _itemClickHandler: function(e, args, config) {
-        if($(e.target).closest("." + TOOLBAR_MENU_ACTION_CLASS).length) {
+        if($(e.target).closest('.' + TOOLBAR_MENU_ACTION_CLASS).length) {
             this.callBase(e, args, config);
         }
     },
@@ -97,6 +95,6 @@ var ToolbarMenu = List.inherit({
     }
 });
 
-registerComponent("dxToolbarMenu", ToolbarMenu);
+registerComponent('dxToolbarMenu', ToolbarMenu);
 
 module.exports = ToolbarMenu;

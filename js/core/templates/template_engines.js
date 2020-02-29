@@ -1,7 +1,7 @@
-import { extractTemplateMarkup } from "../utils/dom";
+import { extractTemplateMarkup } from '../utils/dom';
 import { registerTemplateEngine } from './template_engine_registry';
 
-registerTemplateEngine("jquery-tmpl", {
+registerTemplateEngine('jquery-tmpl', {
     compile: (element) => extractTemplateMarkup(element),
     render: (template, data) => {
         /* global jQuery */
@@ -9,7 +9,7 @@ registerTemplateEngine("jquery-tmpl", {
     }
 });
 
-registerTemplateEngine("jsrender", {
+registerTemplateEngine('jsrender', {
     compile: (element) => {
         /* global jsrender */
         return (jQuery ? jQuery : jsrender).templates(extractTemplateMarkup(element));
@@ -17,7 +17,7 @@ registerTemplateEngine("jsrender", {
     render: (template, data) => template.render(data)
 });
 
-registerTemplateEngine("mustache", {
+registerTemplateEngine('mustache', {
     compile: (element) => {
         /* global Mustache */
         return extractTemplateMarkup(element);
@@ -25,7 +25,7 @@ registerTemplateEngine("mustache", {
     render: (template, data) => Mustache.render(template, data)
 });
 
-registerTemplateEngine("hogan", {
+registerTemplateEngine('hogan', {
     compile: (element) => {
         /* global Hogan */
         return Hogan.compile(extractTemplateMarkup(element));
@@ -33,7 +33,7 @@ registerTemplateEngine("hogan", {
     render: (template, data) => template.render(data)
 });
 
-registerTemplateEngine("underscore", {
+registerTemplateEngine('underscore', {
     compile: (element) => {
         /* global _ */
         return _.template(extractTemplateMarkup(element));
@@ -41,7 +41,7 @@ registerTemplateEngine("underscore", {
     render: (template, data) => template(data)
 });
 
-registerTemplateEngine("handlebars", {
+registerTemplateEngine('handlebars', {
     compile: (element) => {
         /* global Handlebars */
         return Handlebars.compile(extractTemplateMarkup(element));
@@ -49,7 +49,7 @@ registerTemplateEngine("handlebars", {
     render: (template, data) => template(data)
 });
 
-registerTemplateEngine("doT", {
+registerTemplateEngine('doT', {
     compile: (element) => {
         /* global doT */
         return doT.template(extractTemplateMarkup(element));

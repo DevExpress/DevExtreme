@@ -1,7 +1,7 @@
-import { getQuill } from "../quill_importer";
+import { getQuill } from '../quill_importer';
 
 const quill = getQuill();
-const FontStyle = quill.import("attributors/style/font");
+const FontStyle = quill.import('attributors/style/font');
 
 FontStyle.whitelist = null;
 

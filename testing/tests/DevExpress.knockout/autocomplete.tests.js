@@ -1,33 +1,33 @@
-var $ = require("jquery"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    ko = require("knockout"),
-    Autocomplete = require("ui/autocomplete");
+const $ = require('jquery');
+const keyboardMock = require('../../helpers/keyboardMock.js');
+const ko = require('knockout');
+const Autocomplete = require('ui/autocomplete');
 
-require("integration/knockout");
+require('integration/knockout');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="T131530" data-bind="dxAutocomplete: { items: [{}, {}], itemTemplate: \'item\', searchTimeout: 0 }">\
             <div data-options="dxTemplate: { name: \'item\' }">Template</div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-var TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 Autocomplete.defaultOptions({ options: { deferRendering: false } });
 
-QUnit.test("autocomplete should delegate templates to child widgets (T131530)", function(assert) {
-    var $autocomplete = $("#T131530");
+QUnit.test('autocomplete should delegate templates to child widgets (T131530)', function(assert) {
+    const $autocomplete = $('#T131530');
     ko.applyBindings({}, $autocomplete.get(0));
 
-    var autocomplete = $autocomplete.dxAutocomplete("instance"),
-        popupContent = autocomplete._popup.$content(),
-        $input = $autocomplete.find("." + TEXTEDITOR_INPUT_CLASS),
-        kb = keyboardMock($input);
+    const autocomplete = $autocomplete.dxAutocomplete('instance');
+    const popupContent = autocomplete._popup.$content();
+    const $input = $autocomplete.find('.' + TEXTEDITOR_INPUT_CLASS);
+    const kb = keyboardMock($input);
 
-    kb.type("T");
+    kb.type('T');
 
-    assert.equal($.trim(popupContent.find(".dx-list-item").text()), "TemplateTemplate");
+    assert.equal($.trim(popupContent.find('.dx-list-item').text()), 'TemplateTemplate');
 });

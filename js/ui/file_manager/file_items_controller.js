@@ -1,14 +1,18 @@
-import { FileProvider, FileManagerItem, FileManagerRootItem } from "./file_provider/file_provider";
-import ArrayFileProvider from "./file_provider/array";
-import AjaxFileProvider from "./file_provider/ajax";
-import RemoteFileProvider from "./file_provider/remote";
-import CustomFileProvider from "./file_provider/custom";
-import { pathCombine, getEscapedFileName, getPathParts, getFileExtension } from "./ui.file_manager.utils";
-import whenSome, { ErrorCode } from "./ui.file_manager.common";
+import FileSystemProviderBase from '../../file_management/provider_base';
+import FileSystemItem from '../../file_management/file_system_item';
+import ObjectFileSystemProvider from '../../file_management/object_provider';
+import RemoteFileSystemProvider from '../../file_management/remote_provider';
+import CustomFileSystemProvider from '../../file_management/custom_provider';
+import ErrorCode from '../../file_management/errors';
+import { pathCombine, getEscapedFileName, getPathParts, getFileExtension } from '../../file_management/utils';
+import whenSome from './ui.file_manager.common';
 
-import { Deferred, when } from "../../core/utils/deferred";
-import { find } from "../../core/utils/array";
-import { extend } from "../../core/utils/extend";
+import { Deferred, when } from '../../core/utils/deferred';
+import { find } from '../../core/utils/array';
+import { extend } from '../../core/utils/extend';
+import { equalByValue } from '../../core/utils/common';
+
+const DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME = 'Files';
 
 export default class FileItemsController {
 
@@ -16,16 +20,14 @@ export default class FileItemsController {
         options = options || {};
         this._options = extend({ }, options);
 
-        const rootDirectory = this._createRootDirectory(options.rootText);
-        this._rootDirectoryInfo = this._createDirectoryInfo(rootDirectory, null);
-
+        this._rootDirectoryInfo = this._createRootDirectoryInfo(options.rootText);
         this._currentDirectoryInfo = this._rootDirectoryInfo;
 
         this._defaultIconMap = this._createDefaultIconMap();
 
         this._securityController = new FileSecurityController({
             allowedFileExtensions: this._options.allowedFileExtensions,
-            maxFileSize: this._options.maxUploadFileSize
+            maxFileSize: this._options.uploadMaxFileSize
         });
 
         this.setProvider(options.fileProvider);
@@ -33,7 +35,11 @@ export default class FileItemsController {
 
         this._loadedItems = {};
 
-        this.setCurrentPath(options.currentPath);
+        if(options.currentPathKeys && options.currentPathKeys.length) {
+            this.setCurrentPathByKeys(options.currentPathKeys);
+        } else {
+            this.setCurrentPath(options.currentPath);
+        }
     }
 
     setProvider(fileProvider) {
@@ -47,25 +53,21 @@ export default class FileItemsController {
         }
 
         if(Array.isArray(fileProvider)) {
-            return new ArrayFileProvider({ data: fileProvider });
+            return new ObjectFileSystemProvider({ data: fileProvider });
         }
 
-        if(typeof fileProvider === "string") {
-            return new AjaxFileProvider({ url: fileProvider });
-        }
-
-        if(fileProvider instanceof FileProvider) {
+        if(fileProvider instanceof FileSystemProviderBase) {
             return fileProvider;
         }
 
         switch(fileProvider.type) {
-            case "remote":
-                return new RemoteFileProvider(fileProvider);
-            case "custom":
-                return new CustomFileProvider(fileProvider);
+            case 'remote':
+                return new RemoteFileSystemProvider(fileProvider);
+            case 'custom':
+                return new CustomFileSystemProvider(fileProvider);
         }
 
-        return new ArrayFileProvider(fileProvider);
+        return new ObjectFileSystemProvider(fileProvider);
     }
 
     setCurrentPath(path) {
@@ -75,19 +77,21 @@ export default class FileItemsController {
             return;
         }
 
-        return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts)
-            .then(directoryInfo => {
-                for(let info = directoryInfo.parentDirectory; info; info = info.parentDirectory) {
-                    info.expanded = true;
-                }
-                this.setCurrentDirectory(directoryInfo);
-            });
+        return this._setCurrentDirectoryByPathParts(pathParts);
+    }
+
+    setCurrentPathByKeys(pathKeys) {
+        if(equalByValue(this.getCurrentDirectory().fileItem.pathKeys, pathKeys, 0, true)) {
+            return;
+        }
+
+        return this._setCurrentDirectoryByPathParts(pathKeys, true);
     }
 
     getCurrentPath() {
-        let currentPath = "";
+        let currentPath = '';
         let directory = this.getCurrentDirectory();
-        while(directory && !directory.fileItem.isRoot) {
+        while(directory && !directory.fileItem.isRoot()) {
             const escapedName = getEscapedFileName(directory.fileItem.name);
             currentPath = pathCombine(escapedName, currentPath);
             directory = directory.parentDirectory;
@@ -136,14 +140,13 @@ export default class FileItemsController {
                 .promise();
         }
 
-        const dirKey = parentDirectoryInfo.fileItem.key;
+        const dirKey = parentDirectoryInfo.getInternalKey();
         let loadItemsDeferred = this._loadedItems[dirKey];
         if(loadItemsDeferred) {
             return loadItemsDeferred;
         }
 
-        const pathInfo = this._getPathInfo(parentDirectoryInfo);
-        loadItemsDeferred = this._getFileItems(pathInfo)
+        loadItemsDeferred = this._getFileItems(parentDirectoryInfo)
             .then(fileItems => {
                 parentDirectoryInfo.items = fileItems.map(fileItem =>
                     fileItem.isDirectory && this._createDirectoryInfo(fileItem, parentDirectoryInfo) || this._createFileInfo(fileItem, parentDirectoryInfo)
@@ -160,20 +163,20 @@ export default class FileItemsController {
         return loadItemsDeferred;
     }
 
-    _getFileItems(pathInfo) {
-        return when(this._fileProvider.getItems(pathInfo))
+    _getFileItems(parentDirectoryInfo) {
+        return when(this._fileProvider.getItems(parentDirectoryInfo.fileItem))
             .then(fileItems => this._securityController.getAllowedItems(fileItems));
     }
 
     createDirectory(parentDirectoryInfo, name) {
-        const actionInfo = this._createEditActionInfo("create", parentDirectoryInfo, parentDirectoryInfo);
+        const actionInfo = this._createEditActionInfo('create', parentDirectoryInfo, parentDirectoryInfo);
         return this._processEditAction(actionInfo,
-            () => this._fileProvider.createFolder(parentDirectoryInfo.fileItem, name),
+            () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name),
             () => this._resetDirectoryState(parentDirectoryInfo));
     }
 
     renameItem(fileItemInfo, name) {
-        const actionInfo = this._createEditActionInfo("rename", fileItemInfo, fileItemInfo.parentDirectory);
+        const actionInfo = this._createEditActionInfo('rename', fileItemInfo, fileItemInfo.parentDirectory);
         return this._processEditAction(actionInfo,
             () => {
                 if(!fileItemInfo.fileItem.isDirectory) {
@@ -189,7 +192,7 @@ export default class FileItemsController {
 
     moveItems(itemInfos, destinationDirectory) {
         const items = itemInfos.map(i => i.fileItem);
-        const actionInfo = this._createEditActionInfo("move", itemInfos, destinationDirectory);
+        const actionInfo = this._createEditActionInfo('move', itemInfos, destinationDirectory);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.moveItems(items, destinationDirectory.fileItem),
             () => {
@@ -201,7 +204,7 @@ export default class FileItemsController {
 
     copyItems(itemInfos, destinationDirectory) {
         const items = itemInfos.map(i => i.fileItem);
-        const actionInfo = this._createEditActionInfo("copy", itemInfos, destinationDirectory);
+        const actionInfo = this._createEditActionInfo('copy', itemInfos, destinationDirectory);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.copyItems(items, destinationDirectory.fileItem),
             () => {
@@ -214,7 +217,7 @@ export default class FileItemsController {
     deleteItems(itemInfos) {
         const items = itemInfos.map(i => i.fileItem);
         const directory = itemInfos.length > 0 ? itemInfos[0].parentDirectory : null;
-        const actionInfo = this._createEditActionInfo("delete", itemInfos, directory);
+        const actionInfo = this._createEditActionInfo('delete', itemInfos, directory);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.deleteItems(items),
             () => {
@@ -228,7 +231,7 @@ export default class FileItemsController {
 
     processUploadSession(sessionInfo, uploadDirectoryInfo) {
         const itemInfos = this._getItemInfosForUploaderFiles(sessionInfo.files, uploadDirectoryInfo);
-        const actionInfo = this._createEditActionInfo("upload", itemInfos, uploadDirectoryInfo, { sessionInfo });
+        const actionInfo = this._createEditActionInfo('upload', itemInfos, uploadDirectoryInfo, { sessionInfo });
         return this._processEditAction(actionInfo,
             () => sessionInfo.deferreds,
             () => this._resetDirectoryState(uploadDirectoryInfo));
@@ -245,6 +248,10 @@ export default class FileItemsController {
     }
 
     getFileUploadChunkSize() {
+        const chunkSize = this._options.uploadChunkSize;
+        if(chunkSize && chunkSize > 0) {
+            return chunkSize;
+        }
         return this._fileProvider.getFileUploadChunkSize();
     }
 
@@ -255,7 +262,7 @@ export default class FileItemsController {
 
     getItemContent(itemInfos) {
         const items = itemInfos.map(i => i.fileItem);
-        return when(this._fileProvider.getItemContent(items));
+        return when(this._fileProvider.getItemsContent(items));
     }
 
     _processEditAction(actionInfo, action, completeAction) {
@@ -301,7 +308,7 @@ export default class FileItemsController {
         const result = [];
         for(let i = 0; i < files.length; i++) {
             const file = files[i];
-            const item = new FileManagerItem(pathInfo, file.name, false);
+            const item = new FileSystemItem(pathInfo, file.name, false);
             const itemInfo = this._createFileInfo(item, parentDirectoryInfo);
             result.push(itemInfo);
         }
@@ -350,27 +357,39 @@ export default class FileItemsController {
             () => null);
     }
 
-    _getDirectoryByPathParts(parentDirectoryInfo, pathParts) {
+    _setCurrentDirectoryByPathParts(pathParts, useKeys) {
+        return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts, useKeys)
+            .then(directoryInfo => {
+                for(let info = directoryInfo.parentDirectory; info; info = info.parentDirectory) {
+                    info.expanded = true;
+                }
+                this.setCurrentDirectory(directoryInfo);
+            });
+    }
+
+    _getDirectoryByPathParts(parentDirectoryInfo, pathParts, useKeys) {
         if(pathParts.length < 1) {
             return new Deferred()
                 .resolve(parentDirectoryInfo)
                 .promise();
         }
 
+        const fieldName = useKeys ? 'key' : 'name';
         return this.getDirectories(parentDirectoryInfo)
             .then(dirInfos => {
-                const subDirInfo = find(dirInfos, d => d.fileItem.name === pathParts[0]);
+                const subDirInfo = find(dirInfos, d => d.fileItem[fieldName] === pathParts[0]);
                 if(!subDirInfo) {
                     return new Deferred().reject().promise();
                 }
-                return this._getDirectoryByPathParts(subDirInfo, pathParts.splice(1));
+                const restPathParts = [...pathParts].splice(1);
+                return this._getDirectoryByPathParts(subDirInfo, restPathParts, useKeys);
             });
     }
 
     _getDirectoryPathKeyParts(directoryInfo) {
-        let pathParts = [ directoryInfo.fileItem.key ];
+        const pathParts = [];
         while(directoryInfo && directoryInfo.parentDirectory) {
-            pathParts.unshift(directoryInfo.parentDirectory.fileItem.key);
+            pathParts.unshift(directoryInfo.fileItem.key);
             directoryInfo = directoryInfo.parentDirectory;
         }
         return pathParts;
@@ -378,11 +397,11 @@ export default class FileItemsController {
 
     _findSelectedDirectoryByPathKeyParts(keyParts) {
         let selectedDirInfo = this._rootDirectoryInfo;
-        if(keyParts.length < 2 || keyParts[0] !== this._rootDirectoryInfo.fileItem.key) {
+        if(keyParts.length === 0) {
             return selectedDirInfo;
         }
 
-        let i = 1;
+        let i = 0;
         let newSelectedDir = selectedDirInfo;
         while(newSelectedDir && i < keyParts.length) {
             newSelectedDir = find(selectedDirInfo.items, info => info.fileItem.key === keyParts[i]);
@@ -397,8 +416,8 @@ export default class FileItemsController {
 
     _createDirectoryInfo(fileItem, parentDirectoryInfo) {
         return extend(this._createFileInfo(fileItem, parentDirectoryInfo), {
-            icon: "folder",
-            expanded: fileItem.isRoot,
+            icon: 'folder',
+            expanded: fileItem.isRoot(),
             items: [ ]
         });
     }
@@ -407,7 +426,13 @@ export default class FileItemsController {
         return {
             fileItem,
             parentDirectory: parentDirectoryInfo,
-            icon: this._getFileItemDefaultIcon(fileItem)
+            icon: this._getFileItemDefaultIcon(fileItem),
+            getInternalKey() {
+                return `FIK_${this.fileItem.key}`;
+            },
+            getDisplayName() {
+                return this.displayName || this.fileItem.name;
+            }
         };
     }
 
@@ -418,38 +443,40 @@ export default class FileItemsController {
 
     _getFileItemDefaultIcon(fileItem) {
         if(fileItem.isDirectory) {
-            return "folder";
+            return 'folder';
         }
 
         const extension = fileItem.getExtension();
         const icon = this._defaultIconMap[extension];
-        return icon || "doc";
+        return icon || 'doc';
     }
 
     _createDefaultIconMap() {
         const result = {
-            ".txt": "txtfile",
-            ".rtf": "rtffile",
-            ".doc": "docfile",
-            ".docx": "docxfile",
-            ".xls": "xlsfile",
-            ".xlsx": "xlsxfile",
-            ".ppt": "pptfile",
-            ".pptx": "pptxfile",
-            ".pdf": "pdffile"
+            '.txt': 'txtfile',
+            '.rtf': 'rtffile',
+            '.doc': 'docfile',
+            '.docx': 'docxfile',
+            '.xls': 'xlsfile',
+            '.xlsx': 'xlsxfile',
+            '.ppt': 'pptfile',
+            '.pptx': 'pptxfile',
+            '.pdf': 'pdffile'
         };
 
-        [".png", ".gif", ".jpg", ".jpeg", ".ico", ".bmp"].forEach(extension => {
-            result[extension] = "image";
+        ['.png', '.gif', '.jpg', '.jpeg', '.ico', '.bmp'].forEach(extension => {
+            result[extension] = 'image';
         });
 
         return result;
     }
 
-    _createRootDirectory(text) {
-        let root = new FileManagerRootItem();
-        root.name = text || "";
-        return root;
+    _createRootDirectoryInfo(text) {
+        const rootDirectory = new FileSystemItem(null, '', true);
+
+        const result = this._createDirectoryInfo(rootDirectory, null);
+        result.displayName = text || DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME;
+        return result;
     }
 
     _raiseSelectedDirectoryChanged(directoryInfo) {
@@ -501,7 +528,7 @@ export default class FileItemsController {
 
     _getPathInfo(directoryInfo) {
         const pathInfo = [ ];
-        for(let dirInfo = directoryInfo; dirInfo && !dirInfo.fileItem.isRoot; dirInfo = dirInfo.parentDirectory) {
+        for(let dirInfo = directoryInfo; dirInfo && !dirInfo.fileItem.isRoot(); dirInfo = dirInfo.parentDirectory) {
             pathInfo.unshift({
                 key: dirInfo.fileItem.key,
                 name: dirInfo.fileItem.name

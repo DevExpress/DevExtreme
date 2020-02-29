@@ -1,13 +1,6 @@
-var Class = require("./class");
+const Class = require('./class');
 
-/**
-* @name Guid
-* @type object
-* @namespace DevExpress.data
-* @module core/guid
-* @export default
-*/
-var Guid = Class.inherit({
+const Guid = Class.inherit({
 
     /**
     * @name Guidmethods.ctor
@@ -26,9 +19,9 @@ var Guid = Class.inherit({
     },
 
     _normalize: function(value) {
-        value = value.replace(/[^a-f0-9]/ig, "").toLowerCase();
+        value = value.replace(/[^a-f0-9]/ig, '').toLowerCase();
         while(value.length < 32) {
-            value += "0";
+            value += '0';
         }
         return [
             value.substr(0, 8),
@@ -36,31 +29,21 @@ var Guid = Class.inherit({
             value.substr(12, 4),
             value.substr(16, 4),
             value.substr(20, 12)
-        ].join("-");
+        ].join('-');
     },
 
     _generate: function() {
-        var value = "";
-        for(var i = 0; i < 32; i++) {
+        let value = '';
+        for(let i = 0; i < 32; i++) {
             value += Math.round(Math.random() * 15).toString(16);
         }
         return value;
     },
 
-    /**
-    * @name Guidmethods.toString
-    * @publicName toString()
-    * @return string
-    */
     toString: function() {
         return this._value;
     },
 
-    /**
-    * @name Guidmethods.valueOf
-    * @publicName valueOf()
-    * @return string
-    */
     valueOf: function() {
         return this._value;
     },

@@ -1,16 +1,16 @@
-import { getDocument } from "../../core/dom_adapter";
-import { isDefined } from "../../core/utils/type";
-import { Tooltip } from "../core/tooltip";
-import { extend } from "../../core/utils/extend";
-import { patchFontOptions } from "./utils";
-import { Plaque } from "./plaque";
-import pointerEvents from "../../events/pointer";
-import dragEvents from "../../events/drag";
-import { addNamespace } from "../../events/utils";
-import eventsEngine from "../../events/core/events_engine";
+import { getDocument } from '../../core/dom_adapter';
+import { isDefined } from '../../core/utils/type';
+import { Tooltip } from '../core/tooltip';
+import { extend } from '../../core/utils/extend';
+import { patchFontOptions } from './utils';
+import { Plaque } from './plaque';
+import pointerEvents from '../../events/pointer';
+import dragEvents from '../../events/drag';
+import { addNamespace } from '../../events/utils';
+import eventsEngine from '../../events/core/events_engine';
 
-const EVENT_NS = "annotations";
-const DOT_EVENT_NS = "." + EVENT_NS;
+const EVENT_NS = 'annotations';
+const DOT_EVENT_NS = '.' + EVENT_NS;
 const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
 const POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, EVENT_NS);
 
@@ -20,17 +20,6 @@ const DRAG_END_EVENT_NAME = dragEvents.end + DOT_EVENT_NS;
 
 function coreAnnotation(options, contentTemplate) {
     return {
-        type: options.type,
-        name: options.name,
-        x: options.x,
-        y: options.y,
-        value: options.value,
-        argument: options.argument,
-        axis: options.axis,
-        series: options.series,
-        options: options,
-        offsetX: options.offsetX,
-        offsetY: options.offsetY,
         draw: function(widget, group) {
             const annotationGroup = widget._renderer.g().append(group)
                 .css(patchFontOptions(options.font));
@@ -69,11 +58,11 @@ function coreAnnotation(options, contentTemplate) {
 
 function getTemplateFunction(options, widget) {
     let template;
-    if(options.type === "text") {
+    if(options.type === 'text') {
         template = function(item, groupElement) {
             const text = widget._renderer
                 .text(item.text)
-                .attr({ "class": item.cssClass })
+                .attr({ 'class': item.cssClass })
                 .append({ element: groupElement });
 
             if(item.width > 0 || item.height > 0) {
@@ -83,7 +72,7 @@ function getTemplateFunction(options, widget) {
                 });
             }
         };
-    } else if(options.type === "image") {
+    } else if(options.type === 'image') {
         template = function(item, groupElement) {
             const { width, height, url, location } = item.image || {};
             const { width: outerWidth, height: outerHeight } = item;
@@ -91,21 +80,21 @@ function getTemplateFunction(options, widget) {
             const imageHeight = outerHeight > 0 ? Math.min(height, outerHeight) : height;
 
             widget._renderer
-                .image(0, 0, imageWidth, imageHeight, url, location || "center")
+                .image(0, 0, imageWidth, imageHeight, url, location || 'center')
                 .append({ element: groupElement });
         };
-    } else if(options.type === "custom") {
+    } else if(options.type === 'custom') {
         template = options.template;
     }
 
     return template;
 }
 
-export let createAnnotations = function(widget, items, commonAnnotationSettings = {}, customizeAnnotation) {
+export let createAnnotations = function(widget, items, commonAnnotationSettings = {}, customizeAnnotation, pullOptions) {
     return items.reduce((arr, item) => {
         const options = extend(true, {}, commonAnnotationSettings, item, customizeAnnotation && customizeAnnotation.call ? customizeAnnotation(item) : {});
         const templateFunction = getTemplateFunction(options, widget);
-        const annotation = templateFunction && coreAnnotation(options, widget._getTemplate(templateFunction));
+        const annotation = templateFunction && extend(true, pullOptions(options), coreAnnotation(options, widget._getTemplate(templateFunction)));
         annotation && arr.push(annotation);
         return arr;
     }, []);
@@ -124,7 +113,7 @@ export const __test_utils = {
 ///#ENDDEBUG
 
 const chartPlugin = {
-    name: "annotations_chart",
+    name: 'annotations_chart',
     init() {},
     dispose() {},
     members: {
@@ -133,8 +122,8 @@ const chartPlugin = {
                 offsetX: annotation.offsetX,
                 offsetY: annotation.offsetY
             };
-            const argCoordName = this._options.silent("rotated") ? "y" : "x";
-            const valCoordName = this._options.silent("rotated") ? "x" : "y";
+            const argCoordName = this._options.silent('rotated') ? 'y' : 'x';
+            const valCoordName = this._options.silent('rotated') ? 'x' : 'y';
             const argAxis = this.getArgumentAxis();
             const argument = argAxis.validateUnit(annotation.argument);
             let axis = this.getValueAxis(annotation.axis);
@@ -213,11 +202,80 @@ const chartPlugin = {
                 annotation.showTooltip(this._annotations.tooltip, coords);
                 event.stopPropagation();
             }
+        },
+        _pullOptions(options) {
+            return {
+                type: options.type,
+                name: options.name,
+                x: options.x,
+                y: options.y,
+                value: options.value,
+                argument: options.argument,
+                axis: options.axis,
+                series: options.series,
+                options: options,
+                offsetX: options.offsetX,
+                offsetY: options.offsetY
+            };
+        }
+    }
+};
+const polarChartPlugin = {
+    name: 'annotations_polar_chart',
+    init() {},
+    dispose() {},
+    members: {
+        _getAnnotationCoords(annotation) {
+            const coords = {
+                offsetX: annotation.offsetX,
+                offsetY: annotation.offsetY,
+                canvas: this._calcCanvas()
+            };
+            const argAxis = this.getArgumentAxis();
+            let argument = argAxis.validateUnit(annotation.argument);
+            const value = this.getValueAxis().validateUnit(annotation.value);
+            const radius = annotation.radius;
+            const angle = annotation.angle;
+            let pointCoords;
+            let series;
+
+            if(annotation.series) {
+                series = this.series.filter(s => s.name === annotation.series)[0];
+            }
+
+            extend(true, coords, this.getXYFromPolar(angle, radius, argument, value));
+
+            if(isDefined(series)) {
+                if(isDefined(coords.angle) && !isDefined(value) && !isDefined(radius)) {
+                    if(!isDefined(argument)) {
+                        argument = argAxis.getTranslator().from(isFinite(angle) ? this.getActualAngle(angle) : coords.angle);
+                    }
+                    pointCoords = series.getSeriesPairCoord({ argument, angle: -coords.angle }, true);
+                } else if(isDefined(coords.radius) && !isDefined(argument) && !isDefined(angle)) {
+                    pointCoords = series.getSeriesPairCoord({ radius: coords.radius }, false);
+                }
+                if(isDefined(pointCoords)) {
+                    coords.x = pointCoords.x;
+                    coords.y = pointCoords.y;
+                }
+            }
+            if(annotation.series && !isDefined(pointCoords)) {
+                coords.x = coords.y = undefined;
+            }
+
+            return coords;
+        },
+        _annotationsPointerEventHandler: chartPlugin.members._annotationsPointerEventHandler,
+        _pullOptions(options) {
+            return extend({}, {
+                radius: options.radius,
+                angle: options.angle,
+            }, chartPlugin.members._pullOptions(options));
         }
     }
 };
 const corePlugin = {
-    name: "annotations_core",
+    name: 'annotations_core',
     init() {
         this._annotations = {
             items: [],
@@ -235,7 +293,7 @@ const corePlugin = {
         };
 
         this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
-        const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"));
+        const tooltipOptions = extend({}, this._themeManager.getOptions('tooltip'));
 
         tooltipOptions.contentTemplate = tooltipOptions.customizeTooltip = undefined;
 
@@ -249,7 +307,7 @@ const corePlugin = {
     },
     extenders: {
         _createHtmlStructure() {
-            this._annotationsGroup = this._renderer.g().attr({ "class": `${this._rootClassPrefix}-annotations` }).linkOn(this._renderer.root, "annotations").linkAppend();
+            this._annotationsGroup = this._renderer.g().attr({ 'class': `${this._rootClassPrefix}-annotations` }).linkOn(this._renderer.root, 'annotations').linkAppend();
             eventsEngine.on(getDocument(), POINTER_ACTION, () => this._annotations.hideTooltip());
             eventsEngine.on(getDocument(), POINTER_UP_EVENT_NAME, (event) => {
                 this._annotations._hideToolTipForDrag = false;
@@ -269,47 +327,49 @@ const corePlugin = {
         _buildAnnotations() {
             this._annotations.items = [];
 
-            const items = this._getOption("annotations");
+            const items = this._getOption('annotations');
             if(!items || !items.length) {
                 return;
             }
-            this._annotations.items = createAnnotations(this, items, this._getOption("commonAnnotationSettings"), this._getOption("customizeAnnotation"));
+            this._annotations.items = createAnnotations(this, items, this._getOption('commonAnnotationSettings'), this._getOption('customizeAnnotation'), this._pullOptions);
         },
-        _getAnnotationCoords() { return {}; }
+        _getAnnotationCoords() { return {}; },
+        _pullOptions() { return {}; }
     },
     customize(constructor) {
         constructor.addChange({
-            code: "ANNOTATIONITEMS",
+            code: 'ANNOTATIONITEMS',
             handler() {
-                this._requestChange(["ANNOTATIONS"]);
+                this._requestChange(['ANNOTATIONS']);
             },
             isOptionChange: true,
-            option: "annotations"
+            option: 'annotations'
         });
 
         constructor.addChange({
-            code: "ANNOTATIONSSETTINGS",
+            code: 'ANNOTATIONSSETTINGS',
             handler() {
-                this._requestChange(["ANNOTATIONS"]);
+                this._requestChange(['ANNOTATIONS']);
             },
             isOptionChange: true,
-            option: "commonAnnotationSettings"
+            option: 'commonAnnotationSettings'
         });
 
         constructor.addChange({
-            code: "ANNOTATIONS",
+            code: 'ANNOTATIONS',
             handler() {
                 this._buildAnnotations();
-                this._change(["FORCE_RENDER"]);
+                this._change(['FORCE_RENDER']);
             },
             isThemeDependent: true,
             isOptionChange: true
         });
     },
-    fontFields: ["commonAnnotationSettings.font"]
+    fontFields: ['commonAnnotationSettings.font']
 };
 
 export const plugins = {
     core: corePlugin,
-    chart: chartPlugin
+    chart: chartPlugin,
+    polarChart: polarChartPlugin
 };

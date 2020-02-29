@@ -1,25 +1,25 @@
-var $ = require("../../core/renderer"),
-    windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
-    navigator = windowUtils.getNavigator(),
-    browser = require("../../core/utils/browser"),
-    eventsEngine = require("../../events/core/events_engine"),
-    devices = require("../../core/devices"),
-    inArray = require("../../core/utils/array").inArray,
-    extend = require("../../core/utils/extend").extend,
-    registerComponent = require("../../core/component_registrator"),
-    TextEditor = require("./ui.text_editor"),
-    eventUtils = require("../../events/utils");
+const $ = require('../../core/renderer');
+const windowUtils = require('../../core/utils/window');
+const window = windowUtils.getWindow();
+const navigator = windowUtils.getNavigator();
+const browser = require('../../core/utils/browser');
+const eventsEngine = require('../../events/core/events_engine');
+const devices = require('../../core/devices');
+const inArray = require('../../core/utils/array').inArray;
+const extend = require('../../core/utils/extend').extend;
+const registerComponent = require('../../core/component_registrator');
+const TextEditor = require('./ui.text_editor');
+const eventUtils = require('../../events/utils');
 
-var ua = navigator.userAgent,
-    ignoreKeys = ["backspace", "tab", "enter", "pageUp", "pageDown", "end", "home", "leftArrow", "rightArrow", "downArrow", "upArrow", "del"],
+let ua = navigator.userAgent;
+const ignoreKeys = ['backspace', 'tab', 'enter', 'pageUp', 'pageDown', 'end', 'home', 'leftArrow', 'rightArrow', 'downArrow', 'upArrow', 'del'];
 
-    TEXTBOX_CLASS = "dx-textbox",
-    SEARCHBOX_CLASS = "dx-searchbox",
-    ICON_CLASS = "dx-icon",
-    SEARCH_ICON_CLASS = "dx-icon-search";
+const TEXTBOX_CLASS = 'dx-textbox';
+const SEARCHBOX_CLASS = 'dx-searchbox';
+const ICON_CLASS = 'dx-icon';
+const SEARCH_ICON_CLASS = 'dx-icon-search';
 
-var TextBox = TextEditor.inherit({
+const TextBox = TextEditor.inherit({
 
     ctor: function(element, options) {
         if(options) {
@@ -31,24 +31,9 @@ var TextBox = TextEditor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxTextBoxOptions.value
-            * @type string
-            * @default ""
-            */
-            value: "",
-            /**
-            * @name dxTextBoxOptions.mode
-            * @type Enums.TextBoxMode
-            * @default "text"
-            */
-            mode: "text",
+            value: '',
+            mode: 'text',
 
-            /**
-            * @name dxTextBoxOptions.maxLength
-            * @type string|number
-            * @default null
-            */
             maxLength: null
         });
     },
@@ -57,7 +42,7 @@ var TextBox = TextEditor.inherit({
         this.$element().addClass(TEXTBOX_CLASS);
 
         this.callBase();
-        this.setAria("role", "textbox");
+        this.setAria('role', 'textbox');
     },
 
     _renderContentImpl: function() {
@@ -73,8 +58,8 @@ var TextBox = TextEditor.inherit({
 
     _renderMaxLengthHandlers: function() {
         if(this._isAndroidOrIE()) {
-            eventsEngine.on(this._input(), eventUtils.addNamespace("keydown", this.NAME), this._onKeyDownCutOffHandler.bind(this));
-            eventsEngine.on(this._input(), eventUtils.addNamespace("change", this.NAME), this._onChangeCutOffHandler.bind(this));
+            eventsEngine.on(this._input(), eventUtils.addNamespace('keydown', this.NAME), this._onKeyDownCutOffHandler.bind(this));
+            eventsEngine.on(this._input(), eventUtils.addNamespace('change', this.NAME), this._onChangeCutOffHandler.bind(this));
         }
     },
 
@@ -84,35 +69,35 @@ var TextBox = TextEditor.inherit({
     },
 
     _toggleMaxLengthProp: function() {
-        var maxLength = this._getMaxLength();
+        const maxLength = this._getMaxLength();
         if(maxLength && maxLength > 0) {
-            this._input().attr("maxLength", maxLength);
+            this._input().attr('maxLength', maxLength);
         } else {
-            this._input().removeAttr("maxLength");
+            this._input().removeAttr('maxLength');
         }
     },
 
     _renderSearchMode: function() {
-        var $element = this._$element;
+        const $element = this._$element;
 
-        if(this.option("mode") === "search") {
+        if(this.option('mode') === 'search') {
             $element.addClass(SEARCHBOX_CLASS);
             this._renderSearchIcon();
 
             if(this._showClearButton === undefined) {
-                this._showClearButton = this.option("showClearButton");
-                this.option("showClearButton", true);
+                this._showClearButton = this.option('showClearButton');
+                this.option('showClearButton', true);
             }
         } else {
             $element.removeClass(SEARCHBOX_CLASS);
             this._$searchIcon && this._$searchIcon.remove();
-            this.option("showClearButton", this._showClearButton === undefined ? this.option("showClearButton") : this._showClearButton);
+            this.option('showClearButton', this._showClearButton === undefined ? this.option('showClearButton') : this._showClearButton);
             delete this._showClearButton;
         }
     },
 
     _renderSearchIcon: function() {
-        var $searchIcon = $("<div>")
+        const $searchIcon = $('<div>')
             .addClass(ICON_CLASS)
             .addClass(SEARCH_ICON_CLASS);
 
@@ -122,11 +107,11 @@ var TextBox = TextEditor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "maxLength":
+            case 'maxLength':
                 this._toggleMaxLengthProp();
                 this._renderMaxLengthHandlers();
                 break;
-            case "mask":
+            case 'mask':
                 this.callBase(args);
                 this._toggleMaxLengthProp();
                 break;
@@ -136,45 +121,45 @@ var TextBox = TextEditor.inherit({
     },
 
     _onKeyDownCutOffHandler: function(e) {
-        var actualMaxLength = this._getMaxLength();
+        const actualMaxLength = this._getMaxLength();
         if(actualMaxLength) {
-            var $input = $(e.target),
-                key = eventUtils.normalizeKeyName(e);
+            const $input = $(e.target);
+            const key = eventUtils.normalizeKeyName(e);
 
             this._cutOffExtraChar($input);
 
             return ($input.val().length < actualMaxLength
                     || inArray(key, ignoreKeys) !== -1
-                    || window.getSelection().toString() !== "");
+                    || window.getSelection().toString() !== '');
         } else {
             return true;
         }
     },
 
     _onChangeCutOffHandler: function(e) {
-        var $input = $(e.target);
-        if(this.option("maxLength")) {
+        const $input = $(e.target);
+        if(this.option('maxLength')) {
             this._cutOffExtraChar($input);
         }
     },
 
     _cutOffExtraChar: function($input) {
-        var actualMaxLength = this._getMaxLength(),
-            textInput = $input.val();
+        const actualMaxLength = this._getMaxLength();
+        const textInput = $input.val();
         if(actualMaxLength && textInput.length > actualMaxLength) {
             $input.val(textInput.substr(0, actualMaxLength));
         }
     },
 
     _getMaxLength: function() {
-        var isMaskSpecified = !!this.option("mask");
-        return isMaskSpecified ? null : this.option("maxLength");
+        const isMaskSpecified = !!this.option('mask');
+        return isMaskSpecified ? null : this.option('maxLength');
     },
 
     _isAndroidOrIE: function() {
-        var realDevice = devices.real();
-        var version = realDevice.version.join(".");
-        return browser.msie || realDevice.platform === "android" && version && /^(2\.|4\.1)/.test(version) && !/chrome/i.test(ua);
+        const realDevice = devices.real();
+        const version = realDevice.version.join('.');
+        return browser.msie || realDevice.platform === 'android' && version && /^(2\.|4\.1)/.test(version) && !/chrome/i.test(ua);
     }
 });
 
@@ -192,6 +177,6 @@ TextBox.__internals = {
 };
 
 ///#ENDDEBUG
-registerComponent("dxTextBox", TextBox);
+registerComponent('dxTextBox', TextBox);
 
 module.exports = TextBox;

@@ -3,6 +3,7 @@ import config from './config';
 import errors from './errors';
 import windowResizeCallbacks from '../core/utils/resize_callbacks';
 import Component from './component';
+import TemplateManager from './template_manager';
 import { attachInstanceToElement, getInstanceByElement } from './utils/public_component';
 import { cleanDataRecursive } from './element_data';
 import { each } from './utils/iterator';
@@ -16,69 +17,22 @@ import { resize as resizeEvent, visibility as visibilityEvents } from '../events
 
 const { abstract } = Component;
 
-/**
- * @name DOMComponent
- * @section uiWidgets
- * @type object
- * @inherits Component
- * @namespace DevExpress
- * @module core/dom_component
- * @export default
- * @hidden
- */
 const DOMComponent = Component.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            /**
-            * @name DOMComponentOptions.onOptionChanged
-            * @type function
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 name:string
-            * @type_function_param1_field5 fullName:string
-            * @type_function_param1_field6 value:any
-            * @action
-            * @extends Action
-            */
-            /**
-            * @name DOMComponentOptions.onDisposing
-            * @action
-            * @extends Action
-            */
 
-            /**
-            * @name DOMComponentOptions.width
-            * @type number|string|function
-            * @default undefined
-            * @type_function_return number|string
-            */
             width: undefined,
 
-            /**
-            * @name DOMComponentOptions.height
-            * @type number|string|function
-            * @default undefined
-            * @type_function_return number|string
-            */
             height: undefined,
 
-            /**
-            * @name DOMComponentOptions.rtlEnabled
-            * @type boolean
-            * @default false
-            */
             rtlEnabled: config().rtlEnabled,
 
-            /**
-             * @name DOMComponentOptions.elementAttr
-             * @type object
-             * @default {}
-             */
             elementAttr: {},
 
             disabled: false,
 
             integrationOptions: {}
-        });
+        }, this._useTemplates() ? TemplateManager.createDefaultOptions() : {});
     },
     /**
     * @name DOMComponentMethods.ctor
@@ -88,10 +42,14 @@ const DOMComponent = Component.inherit({
     * @hidden
     */
     ctor(element, options) {
-        this._$element = $(element);
+        this._createElement(element);
         attachInstanceToElement(this._$element, this, this._dispose);
 
         this.callBase(options);
+    },
+
+    _createElement(element) {
+        this._$element = $(element);
     },
 
     _getSynchronizableOptionsForCreateComponent() {
@@ -104,6 +62,7 @@ const DOMComponent = Component.inherit({
     _init() {
         this.callBase();
         this._attachWindowResizeCallback();
+        this._initTemplateManager();
     },
 
     _setOptionsByDevice(instanceCustomRules) {
@@ -260,6 +219,7 @@ const DOMComponent = Component.inherit({
     },
 
     _dispose() {
+        this._templateManager && this._templateManager.dispose();
         this.callBase();
         this._clean();
         this._detachWindowResizeCallback();
@@ -283,7 +243,8 @@ const DOMComponent = Component.inherit({
             value => !(value in config)
         );
 
-        let { nestedComponentOptions, integrationOptions } = this.option();
+        const { integrationOptions } = this.option();
+        let { nestedComponentOptions } = this.option();
 
         nestedComponentOptions = nestedComponentOptions || noop;
 
@@ -424,21 +385,12 @@ const DOMComponent = Component.inherit({
         return this._$element;
     },
 
-    /**
-    * @name DOMComponentMethods.element
-    * @publicName element()
-    * @return dxElement
-    */
     element() {
         const $element = this.$element();
 
         return getPublicElement($element);
     },
 
-    /**
-    * @name DOMComponentMethods.dispose
-    * @publicName dispose()
-    */
     dispose() {
         const element = this.$element().get(0);
 
@@ -456,31 +408,74 @@ const DOMComponent = Component.inherit({
 
             !isDefined(initialOption) && this.$element().css(optionName, '');
         }
-    }
+    },
 
+    _getAnonymousTemplateName() {
+        return void 0;
+    },
+
+    _initTemplateManager() {
+        if(this._templateManager || !this._useTemplates()) return void 0;
+
+        const { integrationOptions = {} } = this.option();
+        const { createTemplate } = integrationOptions;
+
+        this._templateManager = new TemplateManager(
+            createTemplate,
+            this._getAnonymousTemplateName()
+        );
+        this._initTemplates();
+    },
+
+    _initTemplates() {
+        const { templates, anonymousTemplateMeta } = this._templateManager.extractTemplates(this.$element());
+        const anonymousTemplate = this.option(`integrationOptions.templates.${anonymousTemplateMeta.name}`);
+
+        templates.forEach(({ name, template }) => {
+            this._options.silent(`integrationOptions.templates.${name}`, template);
+        });
+
+        if(anonymousTemplateMeta.name && !anonymousTemplate) {
+            this._options.silent(`integrationOptions.templates.${anonymousTemplateMeta.name}`, anonymousTemplateMeta.template);
+        }
+    },
+
+    _getTemplateByOption(optionName) {
+        return this._getTemplate(this.option(optionName));
+    },
+
+    _getTemplate(templateSource) {
+        const templates = this.option('integrationOptions.templates');
+        const isAsyncTemplate = this.option('templatesRenderAsynchronously');
+        const skipTemplates = this.option('integrationOptions.skipTemplates');
+
+        return this._templateManager.getTemplate(
+            templateSource,
+            templates,
+            {
+                isAsyncTemplate,
+                skipTemplates
+            },
+            this
+        );
+    },
+
+    _saveTemplate(name, template) {
+        this._setOptionWithoutOptionChange(
+            'integrationOptions.templates.' + name,
+            this._templateManager._createTemplate(template)
+        );
+    },
+
+    _useTemplates() {
+        return true;
+    },
 });
 
-/**
-* @name DOMComponentMethods.getInstance
-* @static
-* @section uiWidgets
-* @publicName getInstance(element)
-* @param1 element:Node|JQuery
-* @return DOMComponent
-*/
 DOMComponent.getInstance = function(element) {
     return getInstanceByElement($(element), this);
 };
 
-/**
-* @name DOMComponentMethods.defaultOptions
-* @static
-* @section uiWidgets
-* @publicName defaultOptions(rule)
-* @param1 rule:Object
-* @param1_field1 device:Device|Array<Device>|function
-* @param1_field2 options:Object
-*/
 DOMComponent.defaultOptions = function(rule) {
     this._classCustomRules = this._classCustomRules || [];
     this._classCustomRules.push(rule);

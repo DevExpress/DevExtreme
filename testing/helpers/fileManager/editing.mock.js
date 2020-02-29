@@ -1,5 +1,5 @@
-import { extend } from "core/utils/extend";
-import FileManagerEditingControl from "ui/file_manager/ui.file_manager.editing";
+import { extend } from 'core/utils/extend';
+import FileManagerEditingControl from 'ui/file_manager/ui.file_manager.editing';
 
 export default class FileManagerEditingControlMock extends FileManagerEditingControl {
 
@@ -12,7 +12,7 @@ export default class FileManagerEditingControlMock extends FileManagerEditingCon
         return {
             show: dialogArgument => {
                 setTimeout(() => {
-                    const dialogResultGetter = this.option("getDialogResult");
+                    const dialogResultGetter = this.option('getDialogResult');
                     const dialogResult = dialogResultGetter ? dialogResultGetter(sourceDialog, dialogArgument) : {};
                     this._onDialogClosed({ dialogResult });
                 });
@@ -21,7 +21,7 @@ export default class FileManagerEditingControlMock extends FileManagerEditingCon
     }
 
     _getFileUploaderComponent() {
-        const component = this.option("fileUploaderComponent");
+        const component = this.option('fileUploaderComponent');
         return component ? component : super._getFileUploaderComponent();
     }
 
@@ -37,9 +37,9 @@ export default class FileManagerEditingControlMock extends FileManagerEditingCon
         const name = args.name;
 
         switch(name) {
-            case "getDialogResult":
-            case "fileUploaderComponent":
-            case "logger":
+            case 'getDialogResult':
+            case 'fileUploaderComponent':
+            case 'logger':
                 break;
             default:
                 super._optionChanged(args);

@@ -1,30 +1,30 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import Class from "../../core/class";
-import Callbacks from "../../core/utils/callbacks";
-import { grep } from "../../core/utils/common";
-import { isFunction } from "../../core/utils/type";
-import { inArray } from "../../core/utils/array";
-import { each } from "../../core/utils/iterator";
-import errors from "../widget/ui.errors";
-import messageLocalization from "../../localization/message";
-import { hasWindow } from "../../core/utils/window";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import Class from '../../core/class';
+import Callbacks from '../../core/utils/callbacks';
+import { grep } from '../../core/utils/common';
+import { isFunction } from '../../core/utils/type';
+import { inArray } from '../../core/utils/array';
+import { each } from '../../core/utils/iterator';
+import errors from '../widget/ui.errors';
+import messageLocalization from '../../localization/message';
+import { hasWindow } from '../../core/utils/window';
 
-var WIDGET_WITH_LEGACY_CONTAINER_NAME = "dxDataGrid";
+const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
 
-var ModuleItem = Class.inherit({
+const ModuleItem = Class.inherit({
     _endUpdateCore: function() { },
 
     ctor: function(component) {
-        var that = this;
+        const that = this;
         that._updateLockCount = 0;
         that.component = component;
         that._actions = {};
         that._actionConfigs = {};
 
         each(this.callbackNames() || [], function(index, name) {
-            var flags = that.callbackFlags(name) || {};
+            const flags = that.callbackFlags(name) || {};
 
             flags.unique = true,
             flags.syncStrategy = true;
@@ -55,8 +55,8 @@ var ModuleItem = Class.inherit({
     },
 
     option: function(name) {
-        var component = this.component,
-            optionCache = component._optionCache;
+        const component = this.component;
+        const optionCache = component._optionCache;
 
         if(arguments.length === 1 && optionCache) {
             if(!(name in optionCache)) {
@@ -69,7 +69,7 @@ var ModuleItem = Class.inherit({
     },
 
     localize: function(name) {
-        var optionCache = this.component._optionCache;
+        const optionCache = this.component._optionCache;
 
         if(optionCache) {
             if(!(name in optionCache)) {
@@ -101,8 +101,8 @@ var ModuleItem = Class.inherit({
     },
 
     setAria: function(name, value, $target) {
-        var target = $target.get(0),
-            prefix = (name !== "role" && name !== "id") ? "aria-" : "";
+        const target = $target.get(0);
+        const prefix = (name !== 'role' && name !== 'id') ? 'aria-' : '';
 
         if(target.setAttribute) {
             target.setAttribute(prefix + name, value);
@@ -120,7 +120,7 @@ var ModuleItem = Class.inherit({
     },
 
     createAction: function(actionName, config) {
-        var action;
+        let action;
 
         if(isFunction(actionName)) {
             action = this.component._createAction(actionName.bind(this), config);
@@ -134,34 +134,34 @@ var ModuleItem = Class.inherit({
     },
 
     executeAction: function(actionName, options) {
-        var action = this._actions[actionName];
+        const action = this._actions[actionName];
 
         return action && action(options);
     },
 
     dispose: function() {
-        var that = this;
+        const that = this;
         each(that.callbackNames() || [], function() {
             that[this].empty();
         });
     },
 
     addWidgetPrefix: function(className) {
-        var componentName = this.component.NAME;
+        const componentName = this.component.NAME;
 
-        return "dx-" + componentName.slice(2).toLowerCase() + (className ? "-" + className : "");
+        return 'dx-' + componentName.slice(2).toLowerCase() + (className ? '-' + className : '');
     },
 
     getWidgetContainerClass: function() {
-        var containerName = this.component.NAME === WIDGET_WITH_LEGACY_CONTAINER_NAME ? null : "container";
+        const containerName = this.component.NAME === WIDGET_WITH_LEGACY_CONTAINER_NAME ? null : 'container';
 
         return this.addWidgetPrefix(containerName);
     }
 });
 
-var Controller = ModuleItem;
+const Controller = ModuleItem;
 
-var ViewController = Controller.inherit({
+const ViewController = Controller.inherit({
     getView: function(name) {
         return this.component._views[name];
     },
@@ -171,7 +171,7 @@ var ViewController = Controller.inherit({
     }
 });
 
-var View = ModuleItem.inherit({
+const View = ModuleItem.inherit({
     _isReady: function() {
         return this.component.isReady();
     },
@@ -216,13 +216,13 @@ var View = ModuleItem.inherit({
     },
 
     getElementHeight: function() {
-        var $element = this.element();
+        const $element = this.element();
 
         if(!$element) return 0;
 
-        var marginTop = parseFloat($element.css("marginTop")) || 0,
-            marginBottom = parseFloat($element.css("marginBottom")) || 0,
-            offsetHeight = $element.get(0).offsetHeight;
+        const marginTop = parseFloat($element.css('marginTop')) || 0;
+        const marginBottom = parseFloat($element.css('marginBottom')) || 0;
+        const offsetHeight = $element.get(0).offsetHeight;
 
         return offsetHeight + marginTop + marginBottom;
     },
@@ -236,19 +236,19 @@ var View = ModuleItem.inherit({
     },
 
     render: function($parent, options) {
-        var $element = this._$element,
-            isVisible = this.isVisible();
+        let $element = this._$element;
+        const isVisible = this.isVisible();
 
         if(!$element && !$parent) return;
 
         this._requireReady = false;
 
         if(!$element) {
-            $element = this._$element = $("<div>").appendTo($parent);
+            $element = this._$element = $('<div>').appendTo($parent);
             this._$parent = $parent;
         }
 
-        $element.toggleClass("dx-hidden", !isVisible);
+        $element.toggleClass('dx-hidden', !isVisible);
         if(isVisible) {
             this.component._optionCache = {};
             this._renderCore(options);
@@ -266,23 +266,23 @@ var View = ModuleItem.inherit({
     },
 
     focus: function() {
-        eventsEngine.trigger(this.element(), "focus");
+        eventsEngine.trigger(this.element(), 'focus');
     }
 });
 
-var MODULES_ORDER_MAX_INDEX = 1000000;
+const MODULES_ORDER_MAX_INDEX = 1000000;
 
-var processModules = function(that, componentClass) {
-    var modules = componentClass.modules,
-        modulesOrder = componentClass.modulesOrder,
-        controllerTypes = componentClass.controllerTypes || {},
-        viewTypes = componentClass.viewTypes || {};
+const processModules = function(that, componentClass) {
+    const modules = componentClass.modules;
+    const modulesOrder = componentClass.modulesOrder;
+    const controllerTypes = componentClass.controllerTypes || {};
+    const viewTypes = componentClass.viewTypes || {};
 
     if(!componentClass.controllerTypes) {
         if(modulesOrder) {
             modules.sort(function(module1, module2) {
-                var orderIndex1 = inArray(module1.name, modulesOrder);
-                var orderIndex2 = inArray(module2.name, modulesOrder);
+                let orderIndex1 = inArray(module1.name, modulesOrder);
+                let orderIndex2 = inArray(module2.name, modulesOrder);
 
                 if(orderIndex1 < 0) {
                     orderIndex1 = MODULES_ORDER_MAX_INDEX;
@@ -297,31 +297,31 @@ var processModules = function(that, componentClass) {
         }
 
         each(modules, function() {
-            var controllers = this.controllers,
-                moduleName = this.name,
-                views = this.views;
+            const controllers = this.controllers;
+            const moduleName = this.name;
+            const views = this.views;
 
             controllers && each(controllers, function(name, type) {
                 if(controllerTypes[name]) {
-                    throw errors.Error("E1001", moduleName, name);
+                    throw errors.Error('E1001', moduleName, name);
                 } else if(!(type && type.subclassOf && type.subclassOf(Controller))) {
                     type.subclassOf(Controller);
-                    throw errors.Error("E1002", moduleName, name);
+                    throw errors.Error('E1002', moduleName, name);
                 }
                 controllerTypes[name] = type;
             });
             views && each(views, function(name, type) {
                 if(viewTypes[name]) {
-                    throw errors.Error("E1003", moduleName, name);
+                    throw errors.Error('E1003', moduleName, name);
                 } else if(!(type && type.subclassOf && type.subclassOf(View))) {
-                    throw errors.Error("E1004", moduleName, name);
+                    throw errors.Error('E1004', moduleName, name);
                 }
                 viewTypes[name] = type;
             });
         });
 
         each(modules, function() {
-            var extenders = this.extenders;
+            const extenders = this.extenders;
 
             if(extenders) {
                 extenders.controllers && each(extenders.controllers, function(name, extender) {
@@ -341,8 +341,8 @@ var processModules = function(that, componentClass) {
         componentClass.viewTypes = viewTypes;
     }
 
-    var registerPublicMethods = function(that, name, moduleItem) {
-        var publicMethods = moduleItem.publicMethods();
+    const registerPublicMethods = function(that, name, moduleItem) {
+        const publicMethods = moduleItem.publicMethods();
         if(publicMethods) {
             each(publicMethods, function(index, methodName) {
                 if(moduleItem[methodName]) {
@@ -351,20 +351,20 @@ var processModules = function(that, componentClass) {
                             return moduleItem[methodName].apply(moduleItem, arguments);
                         };
                     } else {
-                        throw errors.Error("E1005", methodName);
+                        throw errors.Error('E1005', methodName);
                     }
                 } else {
-                    throw errors.Error("E1006", name, methodName);
+                    throw errors.Error('E1006', name, methodName);
                 }
             });
         }
     };
 
-    var createModuleItems = function(moduleTypes) {
-        var moduleItems = {};
+    const createModuleItems = function(moduleTypes) {
+        const moduleItems = {};
 
         each(moduleTypes, function(name, moduleType) {
-            var moduleItem = new moduleType(that);
+            const moduleItem = new moduleType(that);
             moduleItem.name = name;
             registerPublicMethods(that, name, moduleItem);
 
@@ -378,7 +378,7 @@ var processModules = function(that, componentClass) {
     that._views = createModuleItems(viewTypes);
 };
 
-var callModuleItemsMethod = function(that, methodName, args) {
+const callModuleItemsMethod = function(that, methodName, args) {
     args = args || [];
     if(that._controllers) {
         each(that._controllers, function() {
@@ -402,8 +402,8 @@ module.exports = {
     Controller: Controller,
 
     registerModule: function(name, module) {
-        var modules = this.modules,
-            i;
+        const modules = this.modules;
+        let i;
 
         for(i = 0; i < modules.length; i++) {
             if(modules[i].name === name) {

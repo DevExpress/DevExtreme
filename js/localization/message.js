@@ -1,11 +1,11 @@
-import $ from "../core/renderer";
-import dependencyInjector from "../core/utils/dependency_injector";
-import { extend } from "../core/utils/extend";
-import { each } from "../core/utils/iterator";
-import { format as stringFormat } from "../core/utils/string";
-import { humanize } from "../core/utils/inflector";
-import coreLocalization from "./core";
-import defaultMessages from "./default_messages";
+import $ from '../core/renderer';
+import dependencyInjector from '../core/utils/dependency_injector';
+import { extend } from '../core/utils/extend';
+import { each } from '../core/utils/iterator';
+import { format as stringFormat } from '../core/utils/string';
+import { humanize } from '../core/utils/inflector';
+import coreLocalization from './core';
+import defaultMessages from './default_messages';
 
 const baseDictionary = extend(true, {}, defaultMessages);
 
@@ -17,7 +17,7 @@ const newMessages = {};
 
 const messageLocalization = dependencyInjector({
     engine: function() {
-        return "base";
+        return 'base';
     },
 
     _dictionary: baseDictionary,
@@ -26,7 +26,7 @@ const messageLocalization = dependencyInjector({
         extend(true, this._dictionary, messages);
     },
 
-    _localizablePrefix: "@",
+    _localizablePrefix: '@',
 
     setup: function(localizablePrefix) {
         this._localizablePrefix = localizablePrefix;
@@ -34,7 +34,7 @@ const messageLocalization = dependencyInjector({
 
     localizeString: function(text) {
         const that = this;
-        const regex = new RegExp("(^|[^a-zA-Z_0-9" + that._localizablePrefix + "-]+)(" + that._localizablePrefix + "{1,2})([a-zA-Z_0-9-]+)", "g");
+        const regex = new RegExp('(^|[^a-zA-Z_0-9' + that._localizablePrefix + '-]+)(' + that._localizablePrefix + '{1,2})([a-zA-Z_0-9-]+)', 'g');
         const escapeString = that._localizablePrefix + that._localizablePrefix;
 
         return text.replace(regex, (str, prefix, escape, localizationKey) => {
@@ -64,9 +64,9 @@ const messageLocalization = dependencyInjector({
             if(nodeItem.nodeType === 3) {
                 nodeItem.nodeValue = that.localizeString(nodeItem.nodeValue);
             } else {
-                if(!$(nodeItem).is("iframe")) { // T199912
+                if(!$(nodeItem).is('iframe')) { // T199912
                     each(nodeItem.attributes || [], (index, attr) => {
-                        if(typeof attr.value === "string") {
+                        if(typeof attr.value === 'string') {
                             const localizedValue = that.localizeString(attr.value);
 
                             if(attr.value !== localizedValue) {
@@ -114,7 +114,7 @@ const messageLocalization = dependencyInjector({
         const formatter = this.getFormatter(key);
         const values = Array.prototype.slice.call(arguments, 1);
 
-        return formatter && formatter.apply(this, values) || "";
+        return formatter && formatter.apply(this, values) || '';
     }
 });
 

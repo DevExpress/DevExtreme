@@ -1,17 +1,16 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import { Deferred } from "../../core/utils/deferred";
-import { each } from "../../core/utils/iterator";
-import { format } from "../../core/utils/string";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import { Deferred } from '../../core/utils/deferred';
+import { each } from '../../core/utils/iterator';
+import { format } from '../../core/utils/string';
 
-import messageLocalization from "../../localization/message";
+import messageLocalization from '../../localization/message';
 
-import Widget from "../widget/ui.widget";
+import Widget from '../widget/ui.widget';
 
-import FileManagerNameEditorDialog from "./ui.file_manager.dialog.name_editor";
-import FileManagerFolderChooserDialog from "./ui.file_manager.dialog.folder_chooser";
-import FileManagerFileUploader from "./ui.file_manager.file_uploader";
-import { FileManagerMessages } from "./ui.file_manager.messages";
+import FileManagerDialogManager from './ui.file_manager.dialog_manager';
+import FileManagerFileUploader from './ui.file_manager.file_uploader';
+import { FileManagerMessages } from './ui.file_manager.messages';
 
 class FileManagerEditingControl extends Widget {
 
@@ -20,33 +19,25 @@ class FileManagerEditingControl extends Widget {
 
         this._initActions();
 
-        this._controller = this.option("controller");
-        this._controller.on("EditActionStarting", this._onEditActionStarting.bind(this));
-        this._controller.on("EditActionResultAcquired", this._onEditActionResultAcquired.bind(this));
-        this._controller.on("EditActionItemError", this._onEditActionItemError.bind(this));
-        this._controller.on("EditActionError", this._onEditActionError.bind(this));
-        this._controller.on("CompleteEditActionItem", this._onCompleteEditActionItem.bind(this));
-        this._controller.on("CompleteEditAction", this._onCompleteEditAction.bind(this));
+        this._controller = this.option('controller');
+        this._controller.on('EditActionStarting', this._onEditActionStarting.bind(this));
+        this._controller.on('EditActionResultAcquired', this._onEditActionResultAcquired.bind(this));
+        this._controller.on('EditActionItemError', this._onEditActionItemError.bind(this));
+        this._controller.on('EditActionError', this._onEditActionError.bind(this));
+        this._controller.on('CompleteEditActionItem', this._onCompleteEditActionItem.bind(this));
+        this._controller.on('CompleteEditAction', this._onCompleteEditAction.bind(this));
 
-        this._model = this.option("model");
+        this._model = this.option('model');
         this._uploadOperationInfoMap = {};
 
-        this._renameItemDialog = this._createEnterNameDialog(
-            messageLocalization.format("dxFileManager-dialogRenameItemTitle"),
-            messageLocalization.format("dxFileManager-dialogRenameItemButtonText"));
-        this._createFolderDialog = this._createEnterNameDialog(
-            messageLocalization.format("dxFileManager-dialogCreateDirectoryTitle"),
-            messageLocalization.format("dxFileManager-dialogCreateDirectoryButtonText"));
-
-        const $chooseFolderDialog = $("<div>").appendTo(this.$element());
-        this._chooseFolderDialog = this._createComponent($chooseFolderDialog, FileManagerFolderChooserDialog, {
-            provider: this._controller._fileProvider,
-            getDirectories: this._controller.getDirectories.bind(this._controller),
-            getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
-            onClosed: this._onDialogClosed.bind(this)
+        this._dialogManager = new FileManagerDialogManager(this.$element(), {
+            chooseDirectoryDialog: {
+                provider: this._controller._fileProvider,
+                getDirectories: this._controller.getDirectories.bind(this._controller),
+                getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
+            },
+            onDialogClosed: this._onDialogClosed.bind(this)
         });
-
-        this._confirmationDialog = this._createConfirmationDialog();
 
         this._fileUploader = this._createFileUploader();
 
@@ -66,7 +57,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _createFileUploader() {
-        const $fileUploader = $("<div>").appendTo(this.$element());
+        const $fileUploader = $('<div>').appendTo(this.$element());
         return this._createComponent($fileUploader, this._getFileUploaderComponent(), {
             getController: this._getFileUploaderController.bind(this),
             onUploadSessionStarted: e => this._onUploadSessionStarted(e),
@@ -83,89 +74,70 @@ class FileManagerEditingControl extends Widget {
         };
     }
 
-    _createEnterNameDialog(title, buttonText) {
-        const $dialog = $("<div>").appendTo(this.$element());
-        return this._createComponent($dialog, FileManagerNameEditorDialog, {
-            title: title,
-            buttonText: buttonText,
-            onClosed: this._onDialogClosed.bind(this)
-        });
-    }
-
-    _createConfirmationDialog() {
-        return { // TODO implement this dialog
-            show: () => {
-                setTimeout(() => {
-                    this._onDialogClosed({ dialogResult: {} });
-                });
-            }
-        };
-    }
-
     _createMetadataMap() {
         this._metadataMap = {
 
             create: {
                 action: arg => this._tryCreate(arg),
                 affectsAllItems: true,
-                singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingCreateSingleItemProcessingMessage"),
-                singleItemSuccessMessage: messageLocalization.format("dxFileManager-editingCreateSingleItemSuccessMessage"),
-                singleItemErrorMessage: messageLocalization.format("dxFileManager-editingCreateSingleItemErrorMessage"),
-                commonErrorMessage: messageLocalization.format("dxFileManager-editingCreateCommonErrorMessage")
+                singleItemProcessingMessage: messageLocalization.format('dxFileManager-editingCreateSingleItemProcessingMessage'),
+                singleItemSuccessMessage: messageLocalization.format('dxFileManager-editingCreateSingleItemSuccessMessage'),
+                singleItemErrorMessage: messageLocalization.format('dxFileManager-editingCreateSingleItemErrorMessage'),
+                commonErrorMessage: messageLocalization.format('dxFileManager-editingCreateCommonErrorMessage')
             },
 
             rename: {
                 action: arg => this._tryRename(arg),
-                singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingRenameSingleItemProcessingMessage"),
-                singleItemSuccessMessage: messageLocalization.format("dxFileManager-editingRenameSingleItemSuccessMessage"),
-                singleItemErrorMessage: messageLocalization.format("dxFileManager-editingRenameSingleItemErrorMessage"),
-                commonErrorMessage: messageLocalization.format("dxFileManager-editingRenameCommonErrorMessage")
+                singleItemProcessingMessage: messageLocalization.format('dxFileManager-editingRenameSingleItemProcessingMessage'),
+                singleItemSuccessMessage: messageLocalization.format('dxFileManager-editingRenameSingleItemSuccessMessage'),
+                singleItemErrorMessage: messageLocalization.format('dxFileManager-editingRenameSingleItemErrorMessage'),
+                commonErrorMessage: messageLocalization.format('dxFileManager-editingRenameCommonErrorMessage')
             },
 
             delete: {
                 action: arg => this._tryDelete(arg),
-                singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingDeleteSingleItemProcessingMessage"),
-                multipleItemsProcessingMessage: messageLocalization.format("dxFileManager-editingDeleteMultipleItemsProcessingMessage"),
-                singleItemSuccessMessage: messageLocalization.format("dxFileManager-editingDeleteSingleItemSuccessMessage"),
-                multipleItemsSuccessMessage: messageLocalization.format("dxFileManager-editingDeleteMultipleItemsSuccessMessage"),
-                singleItemErrorMessage: messageLocalization.format("dxFileManager-editingDeleteSingleItemErrorMessage"),
-                multipleItemsErrorMessage: messageLocalization.format("dxFileManager-editingDeleteMultipleItemsErrorMessage"),
-                commonErrorMessage: messageLocalization.format("dxFileManager-editingDeleteCommonErrorMessage")
+                singleItemProcessingMessage: messageLocalization.format('dxFileManager-editingDeleteSingleItemProcessingMessage'),
+                multipleItemsProcessingMessage: messageLocalization.format('dxFileManager-editingDeleteMultipleItemsProcessingMessage'),
+                singleItemSuccessMessage: messageLocalization.format('dxFileManager-editingDeleteSingleItemSuccessMessage'),
+                multipleItemsSuccessMessage: messageLocalization.format('dxFileManager-editingDeleteMultipleItemsSuccessMessage'),
+                singleItemErrorMessage: messageLocalization.format('dxFileManager-editingDeleteSingleItemErrorMessage'),
+                multipleItemsErrorMessage: messageLocalization.format('dxFileManager-editingDeleteMultipleItemsErrorMessage'),
+                commonErrorMessage: messageLocalization.format('dxFileManager-editingDeleteCommonErrorMessage')
             },
 
             move: {
                 action: arg => this._tryMove(arg),
-                singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingMoveSingleItemProcessingMessage"),
-                multipleItemsProcessingMessage: messageLocalization.format("dxFileManager-editingMoveMultipleItemsProcessingMessage"),
-                singleItemSuccessMessage: messageLocalization.format("dxFileManager-editingMoveSingleItemSuccessMessage"),
-                multipleItemsSuccessMessage: messageLocalization.format("dxFileManager-editingMoveMultipleItemsSuccessMessage"),
-                singleItemErrorMessage: messageLocalization.format("dxFileManager-editingMoveSingleItemErrorMessage"),
-                multipleItemsErrorMessage: messageLocalization.format("dxFileManager-editingMoveMultipleItemsErrorMessage"),
-                commonErrorMessage: messageLocalization.format("dxFileManager-editingMoveCommonErrorMessage")
+                singleItemProcessingMessage: messageLocalization.format('dxFileManager-editingMoveSingleItemProcessingMessage'),
+                multipleItemsProcessingMessage: messageLocalization.format('dxFileManager-editingMoveMultipleItemsProcessingMessage'),
+                singleItemSuccessMessage: messageLocalization.format('dxFileManager-editingMoveSingleItemSuccessMessage'),
+                multipleItemsSuccessMessage: messageLocalization.format('dxFileManager-editingMoveMultipleItemsSuccessMessage'),
+                singleItemErrorMessage: messageLocalization.format('dxFileManager-editingMoveSingleItemErrorMessage'),
+                multipleItemsErrorMessage: messageLocalization.format('dxFileManager-editingMoveMultipleItemsErrorMessage'),
+                commonErrorMessage: messageLocalization.format('dxFileManager-editingMoveCommonErrorMessage')
             },
 
             copy: {
                 action: arg => this._tryCopy(arg),
-                singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingCopySingleItemProcessingMessage"),
-                multipleItemsProcessingMessage: messageLocalization.format("dxFileManager-editingCopyMultipleItemsProcessingMessage"),
-                singleItemSuccessMessage: messageLocalization.format("dxFileManager-editingCopySingleItemSuccessMessage"),
-                multipleItemsSuccessMessage: messageLocalization.format("dxFileManager-editingCopyMultipleItemsSuccessMessage"),
-                singleItemErrorMessage: messageLocalization.format("dxFileManager-editingCopySingleItemErrorMessage"),
-                multipleItemsErrorMessage: messageLocalization.format("dxFileManager-editingCopyMultipleItemsErrorMessage"),
-                commonErrorMessage: messageLocalization.format("dxFileManager-editingCopyCommonErrorMessage")
+                singleItemProcessingMessage: messageLocalization.format('dxFileManager-editingCopySingleItemProcessingMessage'),
+                multipleItemsProcessingMessage: messageLocalization.format('dxFileManager-editingCopyMultipleItemsProcessingMessage'),
+                singleItemSuccessMessage: messageLocalization.format('dxFileManager-editingCopySingleItemSuccessMessage'),
+                multipleItemsSuccessMessage: messageLocalization.format('dxFileManager-editingCopyMultipleItemsSuccessMessage'),
+                singleItemErrorMessage: messageLocalization.format('dxFileManager-editingCopySingleItemErrorMessage'),
+                multipleItemsErrorMessage: messageLocalization.format('dxFileManager-editingCopyMultipleItemsErrorMessage'),
+                commonErrorMessage: messageLocalization.format('dxFileManager-editingCopyCommonErrorMessage')
             },
 
             upload: {
                 action: arg => this._tryUpload(arg),
                 allowCancel: true,
                 allowItemProgress: true,
-                singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingUploadSingleItemProcessingMessage"),
-                multipleItemsProcessingMessage: messageLocalization.format("dxFileManager-editingUploadMultipleItemsProcessingMessage"),
-                singleItemSuccessMessage: messageLocalization.format("dxFileManager-editingUploadSingleItemSuccessMessage"),
-                multipleItemsSuccessMessage: messageLocalization.format("dxFileManager-editingUploadMultipleItemsSuccessMessage"),
-                singleItemErrorMessage: messageLocalization.format("dxFileManager-editingUploadSingleItemErrorMessage"),
-                multipleItemsErrorMessage: messageLocalization.format("dxFileManager-editingUploadMultipleItemsErrorMessage"),
-                canceledMessage: messageLocalization.format("dxFileManager-editingUploadCanceledMessage")
+                singleItemProcessingMessage: messageLocalization.format('dxFileManager-editingUploadSingleItemProcessingMessage'),
+                multipleItemsProcessingMessage: messageLocalization.format('dxFileManager-editingUploadMultipleItemsProcessingMessage'),
+                singleItemSuccessMessage: messageLocalization.format('dxFileManager-editingUploadSingleItemSuccessMessage'),
+                multipleItemsSuccessMessage: messageLocalization.format('dxFileManager-editingUploadMultipleItemsSuccessMessage'),
+                singleItemErrorMessage: messageLocalization.format('dxFileManager-editingUploadSingleItemErrorMessage'),
+                multipleItemsErrorMessage: messageLocalization.format('dxFileManager-editingUploadMultipleItemsErrorMessage'),
+                canceledMessage: messageLocalization.format('dxFileManager-editingUploadCanceledMessage')
             },
 
             download: {
@@ -219,7 +191,7 @@ class FileManagerEditingControl extends Widget {
         const operationInfo = this._notificationControl.addOperation(context.processingMessage, actionMetadata.allowCancel, !actionMetadata.allowItemProgress);
         extend(actionInfo.customData, { context, operationInfo });
 
-        if(actionInfo.name === "upload") {
+        if(actionInfo.name === 'upload') {
             const sessionId = actionInfo.customData.sessionInfo.sessionId;
             operationInfo.uploadSessionId = sessionId;
             this._uploadOperationInfoMap[sessionId] = operationInfo;
@@ -261,39 +233,39 @@ class FileManagerEditingControl extends Widget {
         const { context, operationInfo } = actionInfo.customData;
         this._completeAction(operationInfo, context);
 
-        if(actionInfo.name === "upload") {
+        if(actionInfo.name === 'upload') {
             delete this._uploadOperationInfoMap[actionInfo.customData.sessionInfo.sessionId];
         }
     }
 
     _tryCreate(parentDirectories) {
         const parentDirectoryInfo = parentDirectories && parentDirectories[0] || this._getCurrentDirectory();
-        const newDirName = messageLocalization.format("dxFileManager-newDirectoryName");
-        return this._showDialog(this._createFolderDialog, newDirName)
+        const newDirName = messageLocalization.format('dxFileManager-newDirectoryName');
+        return this._showDialog(this._dialogManager.getCreateItemDialog(), newDirName)
             .then(({ name }) => this._controller.createDirectory(parentDirectoryInfo, name));
     }
 
     _tryRename(itemInfos) {
         const itemInfo = itemInfos && itemInfos[0] || this._model.getMultipleSelectedItems()[0];
-        return this._showDialog(this._renameItemDialog, itemInfo.fileItem.name)
+        return this._showDialog(this._dialogManager.getRenameItemDialog(), itemInfo.fileItem.name)
             .then(({ name }) => this._controller.renameItem(itemInfo, name));
     }
 
     _tryDelete(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        return this._showDialog(this._confirmationDialog)
+        return this._showDialog(this._dialogManager.getConfirmationDialog())
             .then(() => this._controller.deleteItems(itemInfos));
     }
 
     _tryMove(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        return this._showDialog(this._chooseFolderDialog)
+        return this._showDialog(this._dialogManager.getMoveDialog())
             .then(({ folder }) => this._controller.moveItems(itemInfos, folder));
     }
 
     _tryCopy(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        return this._showDialog(this._chooseFolderDialog)
+        return this._showDialog(this._dialogManager.getCopyDialog())
             .then(({ folder }) => this._controller.copyItems(itemInfos, folder));
     }
 
@@ -390,7 +362,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _getItemThumbnail(item) {
-        const itemThumbnailGetter = this.option("getItemThumbnail");
+        const itemThumbnailGetter = this.option('getItemThumbnail');
         if(!itemThumbnailGetter) {
             return null;
         }
@@ -400,9 +372,9 @@ class FileManagerEditingControl extends Widget {
 
     _initActions() {
         this._actions = {
-            onSuccess: this._createActionByOption("onSuccess"),
-            onError: this._createActionByOption("onError"),
-            onCreating: this._createActionByOption("onCreating"),
+            onSuccess: this._createActionByOption('onSuccess'),
+            onError: this._createActionByOption('onError'),
+            onCreating: this._createActionByOption('onCreating'),
         };
     }
 
@@ -423,17 +395,17 @@ class FileManagerEditingControl extends Widget {
         const name = args.name;
 
         switch(name) {
-            case "model":
+            case 'model':
                 this.repaint();
                 break;
-            case "notificationControl":
+            case 'notificationControl':
                 this._initNotificationControl(args.value);
                 break;
-            case "getItemThumbnail":
+            case 'getItemThumbnail':
                 break;
-            case "onSuccess":
-            case "onError":
-            case "onCreating":
+            case 'onSuccess':
+            case 'onError':
+            case 'onCreating':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -466,7 +438,7 @@ class FileManagerActionContext {
         this._onlyFiles = !this._actionMetadata.affectsAllItems && this._itemInfos.every(info => !info.fileItem.isDirectory);
         this._items = this._itemInfos.map(itemInfo => itemInfo.fileItem);
         this._multipleItems = this._items.length > 1;
-        this._location = directoryInfo.fileItem.name;
+        this._location = directoryInfo.getDisplayName();
 
         this._singleRequest = true;
 

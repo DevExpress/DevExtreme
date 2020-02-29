@@ -1,29 +1,29 @@
-var vizMocks = require("../../../helpers/vizMocks.js"),
+const vizMocks = require('../../../helpers/vizMocks.js');
 
-    rendererModule = require("viz/core/renderers/renderer"),
-    titleModule = require("viz/core/title"),
-    tooltipModule = require("viz/core/tooltip"),
-    loadingIndicatorModule = require("viz/core/loading_indicator"),
+const rendererModule = require('viz/core/renderers/renderer');
+const titleModule = require('viz/core/title');
+const tooltipModule = require('viz/core/tooltip');
+const loadingIndicatorModule = require('viz/core/loading_indicator');
 
-    $ = require("jquery");
+const $ = require('jquery');
 
 titleModule.Title = vizMocks.Title;
 tooltipModule.Tooltip = vizMocks.Tooltip;
 loadingIndicatorModule.LoadingIndicator = vizMocks.LoadingIndicator;
 
-require("viz/tree_map/tree_map.base");
+require('viz/tree_map/tree_map.base');
 
-$("#qunit-fixture").append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
+$('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
 
-var createRenderer = exports.createRenderer = function() {
-    var renderer = new vizMocks.Renderer();
+const createRenderer = exports.createRenderer = function() {
+    const renderer = new vizMocks.Renderer();
     rendererModule.Renderer = function() { return renderer; };
     return renderer;
 };
 
 exports.createWidget = function(options) {
-    exports.$container = $("#test-container");
-    return exports.$container.dxTreeMap(options).dxTreeMap("instance");
+    exports.$container = $('#test-container');
+    return exports.$container.dxTreeMap(options).dxTreeMap('instance');
 };
 
 exports.returnValue = function(value) {
@@ -44,8 +44,8 @@ exports.environment = {
     },
 
     resetTilesAttr: function() {
-        var i,
-            ii = this.tileCount();
+        let i;
+        const ii = this.tileCount();
 
         for(i = 0; i < ii; ++i) {
             this.tile(i).attr.reset();
@@ -54,7 +54,7 @@ exports.environment = {
 };
 
 QUnit.assert.checkTile = function(actual, expected, message) {
-    var check = actual.x === expected[0] && actual.x + actual.width === expected[2]
+    const check = actual.x === expected[0] && actual.x + actual.width === expected[2]
         && actual.y === expected[1] && actual.y + actual.height === expected[3];
     this.pushResult({
         result: check,

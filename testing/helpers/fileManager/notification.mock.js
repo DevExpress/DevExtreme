@@ -1,7 +1,7 @@
-import $ from "jquery";
-import { extend } from "core/utils/extend";
-import { isString } from "core/utils/type";
-import FileManagerNotificationControl from "ui/file_manager/ui.file_manager.notification";
+import $ from 'jquery';
+import { extend } from 'core/utils/extend';
+import { isString } from 'core/utils/type';
+import FileManagerNotificationControl from 'ui/file_manager/ui.file_manager.notification';
 
 export default class FileManagerNotificationControlMock extends FileManagerNotificationControl {
 
@@ -15,25 +15,25 @@ export default class FileManagerNotificationControlMock extends FileManagerNotif
             info = extend(info, contentInfo);
         }
 
-        this._logEvent("_showPopup", info);
+        this._logEvent('_showPopup', info);
     }
 
     _getLogInfo($content) {
-        const commonText = $content.find(".dx-filemanager-notification-common").text();
-        const detailsText = $content.find(".dx-filemanager-notification-details").text();
+        const commonText = $content.find('.dx-filemanager-notification-common').text();
+        const detailsText = $content.find('.dx-filemanager-notification-details').text();
         return { commonText, detailsText };
     }
 
     _logEvent(type, info) {
-        const logger = this.option("logger");
+        const logger = this.option('logger');
         if(logger) {
-            type = "notification-" + type;
+            type = 'notification-' + type;
             logger.addEntry(type, info);
         }
     }
 
     _getProgressPanelComponent() {
-        const component = this.option("progressPanelComponent");
+        const component = this.option('progressPanelComponent');
         return component ? component : super._getProgressPanelComponent();
     }
 
@@ -48,8 +48,8 @@ export default class FileManagerNotificationControlMock extends FileManagerNotif
         const name = args.name;
 
         switch(name) {
-            case "progressPanelComponent":
-            case "logger":
+            case 'progressPanelComponent':
+            case 'logger':
                 break;
             default:
                 super._optionChanged(args);

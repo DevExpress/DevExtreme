@@ -1,4 +1,4 @@
-require("./modules/parts/widgets-all");
-require("./modules/parts/viz");
+require('./modules/parts/widgets-all');
+require('./modules/parts/viz');
 
-module.exports = require("./modules/core");
+module.exports = require('./modules/core');

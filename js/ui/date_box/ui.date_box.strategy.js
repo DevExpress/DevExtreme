@@ -1,12 +1,12 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    noop = require("../../core/utils/common").noop,
-    Class = require("../../core/class"),
-    dateLocalization = require("../../localization/date");
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const noop = require('../../core/utils/common').noop;
+const Class = require('../../core/class');
+const dateLocalization = require('../../localization/date');
 
-var abstract = Class.abstract;
+const abstract = Class.abstract;
 
-var DateBoxStrategy = Class.inherit({
+const DateBoxStrategy = Class.inherit({
     ctor: function(dateBox) {
         this.dateBox = dateBox;
     },
@@ -16,14 +16,14 @@ var DateBoxStrategy = Class.inherit({
     },
 
     _renderWidget: function(element) {
-        element = element || $("<div>");
+        element = element || $('<div>');
         this._widget = this._createWidget(element);
         this._widget.$element().appendTo(this._getWidgetContainer());
     },
 
     _createWidget: function(element) {
-        var widgetName = this._getWidgetName();
-        var widgetOptions = this._getWidgetOptions();
+        const widgetName = this._getWidgetName();
+        const widgetOptions = this._getWidgetOptions();
 
         return this.dateBox._createComponent(element, widgetName, widgetOptions);
     },
@@ -33,7 +33,7 @@ var DateBoxStrategy = Class.inherit({
     _getWidgetName: abstract,
 
     getDefaultOptions: function() {
-        return { mode: "text" };
+        return { mode: 'text' };
     },
 
     getDisplayFormat: abstract,
@@ -45,7 +45,7 @@ var DateBoxStrategy = Class.inherit({
     customizeButtons: noop,
 
     getParsedText: function(text, format) {
-        var value = dateLocalization.parse(text, format);
+        const value = dateLocalization.parse(text, format);
         return value ? value : dateLocalization.parse(text);
     },
 
@@ -58,12 +58,12 @@ var DateBoxStrategy = Class.inherit({
     popupConfig: abstract,
 
     renderPopupContent: function() {
-        var popup = this._getPopup();
+        const popup = this._getPopup();
         this._renderWidget();
 
-        var $popupContent = popup.$content().parent();
-        eventsEngine.off($popupContent, "mousedown");
-        eventsEngine.on($popupContent, "mousedown", this._preventFocusOnPopup.bind(this));
+        const $popupContent = popup.$content().parent();
+        eventsEngine.off($popupContent, 'mousedown');
+        eventsEngine.on($popupContent, 'mousedown', this._preventFocusOnPopup.bind(this));
     },
 
     getFirstPopupElement: noop,
@@ -87,13 +87,7 @@ var DateBoxStrategy = Class.inherit({
     popupHiddenHandler: noop,
 
     _updateValue: function() {
-        this._widget && this._widget.option("value", this.dateBoxValue());
-    },
-
-    _valueChangedHandler: function(args) {
-        if(this.dateBox.option("opened") && this.dateBox.option("applyValueMode") === "instantly") {
-            this.dateBoxValue(args.value);
-        }
+        this._widget && this._widget.option('value', this.dateBoxValue());
     },
 
     useCurrentDateByDefault: noop,
@@ -105,13 +99,13 @@ var DateBoxStrategy = Class.inherit({
     textChangedHandler: noop,
 
     renderValue: function() {
-        if(this.dateBox.option("opened")) {
+        if(this.dateBox.option('opened')) {
             this._updateValue();
         }
     },
 
     getValue: function() {
-        return this._widget.option("value");
+        return this._widget.option('value');
     },
 
     isAdaptivityChanged: function() {
@@ -119,7 +113,7 @@ var DateBoxStrategy = Class.inherit({
     },
 
     dispose: function() {
-        var popup = this._getPopup();
+        const popup = this._getPopup();
 
         if(popup) {
             popup.$content().empty();
@@ -130,7 +124,7 @@ var DateBoxStrategy = Class.inherit({
         if(arguments.length) {
             return this.dateBox.dateValue.apply(this.dateBox, arguments);
         } else {
-            return this.dateBox.dateOption.apply(this.dateBox, ["value"]);
+            return this.dateBox.dateOption.apply(this.dateBox, ['value']);
         }
     }
 });

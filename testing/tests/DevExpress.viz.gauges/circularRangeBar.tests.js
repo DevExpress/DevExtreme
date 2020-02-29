@@ -1,14 +1,14 @@
 /* global currentTest */
 
-var vizMocks = require("../../helpers/vizMocks.js"),
-    circularIndicatorsModule = require("viz/gauges/circular_indicators"),
-    Translator1D = require("viz/translators/translator1d").Translator1D;
+const vizMocks = require('../../helpers/vizMocks.js');
+const circularIndicatorsModule = require('viz/gauges/circular_indicators');
+const Translator1D = require('viz/translators/translator1d').Translator1D;
 
-var rangeBar,
-    renderer,
-    tracker,
-    owner,
-    options;
+let rangeBar;
+let renderer;
+let tracker;
+let owner;
+let options;
 
 QUnit.module('CircularRangeBar', {
     beforeEach: function() {
@@ -18,8 +18,8 @@ QUnit.module('CircularRangeBar', {
             attach: function(arg) { this.attached = arg; },
             detach: function(arg) { this.detached = arg; }
         };
-        var translator = new Translator1D(0, 100, 180, 0);
-        rangeBar = new circularIndicatorsModule["rangebar"]({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
+        const translator = new Translator1D(0, 100, 180, 0);
+        rangeBar = new circularIndicatorsModule['rangebar']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
         this.layout = {
             x: 200,
             y: 100,
@@ -44,9 +44,9 @@ QUnit.module('CircularRangeBar', {
             baseValue: 50,
             currentValue: 25
         };
-        var baseCreateText = renderer.stub("text");
+        const baseCreateText = renderer.stub('text');
         renderer.text = sinon.spy(function() {
-            var text = baseCreateText.apply(this, arguments);
+            const text = baseCreateText.apply(this, arguments);
             text.getBBox = sinon.spy(function() { return { x: -20, y: -10, width: 40, height: 16 }; });
             return text;
         });
@@ -94,11 +94,11 @@ function checkBars(assert, angle1, angle2, spaceAngle, mainColor, backColor, spa
     spaceColor = spaceColor || options.containerBackgroundColor;
 
     assert.deepEqual(rangeBar._rootElement._stored_settings, { 'class': 'root-class', fill: mainColor }, 'root group settings');
-    assert.deepEqual(rangeBar._backItem1._stored_settings, { 'class': 'dxg-back-bar', x: 200, y: 100, innerRadius: 68, outerRadius: 80, startAngle: angle1 + spaceAngle, endAngle: 180, fill: backColor, "stroke-linejoin": "round" }, '_backItem1 settings');
-    assert.deepEqual(rangeBar._backItem2._stored_settings, { 'class': 'dxg-back-bar', x: 200, y: 100, innerRadius: 68, outerRadius: 80, startAngle: 0, endAngle: angle2 - spaceAngle, fill: backColor, "stroke-linejoin": "round" }, '_backItem2 settings');
-    assert.deepEqual(rangeBar._spaceItem1._stored_settings, { 'class': 'dxg-space-bar', x: 200, y: 100, innerRadius: 68, outerRadius: 80, startAngle: angle1, endAngle: angle1 + spaceAngle, fill: spaceColor, "stroke-linejoin": "round" }, '_spaceItem1 settings');
-    assert.deepEqual(rangeBar._spaceItem2._stored_settings, { 'class': 'dxg-space-bar', x: 200, y: 100, innerRadius: 68, outerRadius: 80, startAngle: angle2 - spaceAngle, endAngle: angle2, fill: spaceColor, "stroke-linejoin": "round" }, '_spaceItem2 settings');
-    assert.deepEqual(rangeBar._mainItem._stored_settings, { 'class': 'dxg-main-bar', x: 200, y: 100, innerRadius: 68, outerRadius: 80, startAngle: angle2, endAngle: angle1, "stroke-linejoin": "round" }, '_mainItem settings');
+    assert.deepEqual(rangeBar._backItem1._stored_settings, { 'class': 'dxg-back-bar', x: 200, y: 100, innerRadius: 68, outerRadius: 80, startAngle: angle1 + spaceAngle, endAngle: 180, fill: backColor, 'stroke-linejoin': 'round' }, '_backItem1 settings');
+    assert.deepEqual(rangeBar._backItem2._stored_settings, { 'class': 'dxg-back-bar', x: 200, y: 100, innerRadius: 68, outerRadius: 80, startAngle: 0, endAngle: angle2 - spaceAngle, fill: backColor, 'stroke-linejoin': 'round' }, '_backItem2 settings');
+    assert.deepEqual(rangeBar._spaceItem1._stored_settings, { 'class': 'dxg-space-bar', x: 200, y: 100, innerRadius: 68, outerRadius: 80, startAngle: angle1, endAngle: angle1 + spaceAngle, fill: spaceColor, 'stroke-linejoin': 'round' }, '_spaceItem1 settings');
+    assert.deepEqual(rangeBar._spaceItem2._stored_settings, { 'class': 'dxg-space-bar', x: 200, y: 100, innerRadius: 68, outerRadius: 80, startAngle: angle2 - spaceAngle, endAngle: angle2, fill: spaceColor, 'stroke-linejoin': 'round' }, '_spaceItem2 settings');
+    assert.deepEqual(rangeBar._mainItem._stored_settings, { 'class': 'dxg-main-bar', x: 200, y: 100, innerRadius: 68, outerRadius: 80, startAngle: angle2, endAngle: angle1, 'stroke-linejoin': 'round' }, '_mainItem settings');
 }
 
 QUnit.test('render', function(assert) {
@@ -139,7 +139,7 @@ QUnit.test('render - with text', function(assert) {
     assert.deepEqual(rangeBar._line._stored_settings, {
         points: [200, 20, 200, 11, 202, 11, 202, 20], 'class': 'dxg-main-bar',
         type: 'line',
-        "stroke-linecap": "square"
+        'stroke-linecap': 'square'
     }, '_line settings');
     assert.deepEqual(rangeBar._line.rotate.firstCall.args, [-45, 200, 100], '_line rotation');
     assert.equal(rangeBar._line.sharp.callCount, 1, '_line is sharped');
@@ -171,7 +171,7 @@ QUnit.test('render - currentValue and baseValue are reversed, with text', functi
     assert.deepEqual(rangeBar._line._stored_settings, {
         points: [198, 20, 198, 11, 200, 11, 200, 20], 'class': 'dxg-main-bar',
         type: 'line',
-        "stroke-linecap": "square"
+        'stroke-linecap': 'square'
     }, '_line settings');
     assert.deepEqual(rangeBar._line.rotate.firstCall.args, [45, 200, 100], '_line rotation');
     assert.equal(rangeBar._line.sharp.callCount, 1, '_line is sharped');
@@ -246,7 +246,7 @@ QUnit.test('not valid radius (not rendered)', function(assert) {
 
 QUnit.test('getTooltipParameters', function(assert) {
     render();
-    var parameters = rangeBar.getTooltipParameters();
+    const parameters = rangeBar.getTooltipParameters();
     assert.strictEqual(parameters.color, 'black', 'color');
     assert.strictEqual(parameters.value, 25, 'value');
     assert.strictEqual(parameters.offset, 0, 'offset');

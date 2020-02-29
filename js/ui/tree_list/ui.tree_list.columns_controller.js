@@ -10,11 +10,11 @@ exports.ColumnsController = columnsControllerModule.controllers.columns.inherit(
             });
         },
         getFirstDataColumnIndex: function() {
-            var visibleColumns = this.getVisibleColumns(),
-                visibleColumnsLength = visibleColumns.length,
-                firstDataColumnIndex = 0;
+            const visibleColumns = this.getVisibleColumns();
+            const visibleColumnsLength = visibleColumns.length;
+            let firstDataColumnIndex = 0;
 
-            for(var i = 0; i <= visibleColumnsLength - 1; i++) {
+            for(let i = 0; i <= visibleColumnsLength - 1; i++) {
                 if(!isDefined(visibleColumns[i].command)) {
                     firstDataColumnIndex = visibleColumns[i].index;
                     break;
@@ -26,7 +26,7 @@ exports.ColumnsController = columnsControllerModule.controllers.columns.inherit(
     };
 })());
 
-treeListCore.registerModule("columns", {
+treeListCore.registerModule('columns', {
     defaultOptions: columnsControllerModule.defaultOptions,
     controllers: {
         columns: exports.ColumnsController

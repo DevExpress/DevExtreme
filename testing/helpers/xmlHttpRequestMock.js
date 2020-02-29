@@ -1,15 +1,15 @@
 /* global $ */
 
-var RealXMLHttpRequest = window.XMLHttpRequest;
+const RealXMLHttpRequest = window.XMLHttpRequest;
 
 window.XMLHttpRequestMock = function() {
-    var LOAD_TIMEOUT_DEFAULT = 500;
-    var PROGRESS_INTERVAL_DEFAULT = 100;
+    const LOAD_TIMEOUT_DEFAULT = 500;
+    const PROGRESS_INTERVAL_DEFAULT = 100;
 
-    var xhrList = [];
-    var LOAD_TIMEOUT = this.LOAD_TIMEOUT = LOAD_TIMEOUT_DEFAULT;
-    var PROGRESS_INTERVAL = this.PROGRESS_INTERVAL = PROGRESS_INTERVAL_DEFAULT;
-    var STATUS = this.STATUS = 200;
+    const xhrList = [];
+    let LOAD_TIMEOUT = this.LOAD_TIMEOUT = LOAD_TIMEOUT_DEFAULT;
+    let PROGRESS_INTERVAL = this.PROGRESS_INTERVAL = PROGRESS_INTERVAL_DEFAULT;
+    let STATUS = this.STATUS = 200;
 
     this.startSeries = function() {
         this.changeTimeouts(100, 100);
@@ -54,14 +54,14 @@ window.XMLHttpRequestMock = function() {
         this.uploaded = false;
         this.uploadAborted = false;
         this.uploadFailed = false;
-        if("withCredentials" in (new RealXMLHttpRequest())) {
+        if('withCredentials' in (new RealXMLHttpRequest())) {
             this.withCredentials = false;
         }
 
         this._timeout = null;
 
         this._getLoadedSize = function() {
-            return (this.onProgressCallCount + 1) * this._stepSize;
+            return Math.floor((this.onProgressCallCount + 1) * this._stepSize);
         };
 
         this._isStatusError = function() {
@@ -77,19 +77,19 @@ window.XMLHttpRequestMock = function() {
                 return;
             }
 
-            var progressEvent = {
+            const progressEvent = {
                 loaded: this._getLoadedSize(),
                 total: this._fileSize
             };
 
             this.loadedSize = progressEvent.loaded;
             this.onProgressCallCount++;
-            if(this.upload["onprogress"]) {
-                this.upload["onprogress"](progressEvent);
+            if(this.upload['onprogress']) {
+                this.upload['onprogress'](progressEvent);
             }
 
             if(progressEvent.loaded >= progressEvent.total) {
-                var readyStateEvent = {
+                const readyStateEvent = {
                     currentTarget: {
                         status: STATUS,
                         readyState: 4
@@ -100,19 +100,19 @@ window.XMLHttpRequestMock = function() {
                 this.upload.onload(progressEvent);
                 this.readyState = 4;
                 this.status = STATUS;
-                this["onreadystatechange"](readyStateEvent);
+                this['onreadystatechange'](readyStateEvent);
             } else {
                 this._timeout = setTimeout($.proxy(this._progressHandler, this), PROGRESS_INTERVAL);
             }
         };
 
         this._errorHandler = function() {
-            var errorEvent = {
+            const errorEvent = {
                 loaded: 0,
                 total: 0
             };
 
-            var readyStateEvent = {
+            const readyStateEvent = {
                 currentTarget: {
                     status: STATUS,
                     readyState: 4
@@ -123,7 +123,7 @@ window.XMLHttpRequestMock = function() {
             this.upload.onerror(errorEvent);
             this.status = STATUS;
             this.readyState = 4;
-            this["onreadystatechange"](readyStateEvent);
+            this['onreadystatechange'](readyStateEvent);
         };
 
         this.setRequestHeader = function(name, value) {
@@ -138,7 +138,7 @@ window.XMLHttpRequestMock = function() {
 
         this.send = function(data) {
             if(!this._opened) {
-                throw Error("Failed to execute 'send' on 'XMLHttpRequest': The object's state must be OPENED.");
+                throw Error('Failed to execute \'send\' on \'XMLHttpRequest\': The object\'s state must be OPENED.');
             }
 
             this.uploadStarted = true;
@@ -152,27 +152,27 @@ window.XMLHttpRequestMock = function() {
             this.uploaded = false;
             this.onProgressCallCount = 0;
 
-            var file = data.getTopElement && data.getTopElement().fieldValue;
+            const file = data.getTopElement && data.getTopElement().fieldValue;
             this._fileSize = file && file.size;
 
             this._stepSize = this._fileSize * PROGRESS_INTERVAL / LOAD_TIMEOUT;
-            this.upload["onloadstart"]();
+            this.upload['onloadstart']();
             this._progressHandler();
         };
 
         this.abort = function() {
             this.uploadAborted = true;
-            this.upload["onabort"]();
+            this.upload['onabort']();
         };
 
-        this["onreadystatechange"] = function() {};
+        this['onreadystatechange'] = function() {};
 
         this.upload = {
-            "onabort": function() {},
-            "onprogress": function() {},
-            "onload": function() {},
-            "onerror": function() {},
-            "onloadstart": function() {}
+            'onabort': function() {},
+            'onprogress': function() {},
+            'onload': function() {},
+            'onerror': function() {},
+            'onloadstart': function() {}
         };
 
         xhrList.push(this);
@@ -180,7 +180,7 @@ window.XMLHttpRequestMock = function() {
 };
 
 window.FormDataMock = function() {
-    var formDataArray = this.formDataArray = [];
+    const formDataArray = this.formDataArray = [];
 
     this.getInstanceAt = function(index) {
         index = index || 0;
@@ -195,7 +195,7 @@ window.FormDataMock = function() {
         this.fields = [];
 
         this.append = function(fieldName, fieldValue) {
-            this.fields.push({ "fieldName": fieldName, "fieldValue": fieldValue });
+            this.fields.push({ 'fieldName': fieldName, 'fieldValue': fieldValue });
         };
 
         this.getTopElement = function() {

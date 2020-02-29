@@ -1,100 +1,51 @@
-var $ = require("../core/renderer"),
-    window = require("../core/utils/window").getWindow(),
-    noop = require("../core/utils/common").noop,
-    messageLocalization = require("../localization/message"),
-    registerComponent = require("../core/component_registrator"),
-    extend = require("../core/utils/extend").extend,
-    Button = require("./button"),
-    CollectionWidget = require("./collection/ui.collection_widget.edit"),
-    Popup = require("./popup"),
-    Popover = require("./popover"),
-    BindableTemplate = require("../core/templates/bindable_template").BindableTemplate,
-    Deferred = require("../core/utils/deferred").Deferred;
+const $ = require('../core/renderer');
+const window = require('../core/utils/window').getWindow();
+const noop = require('../core/utils/common').noop;
+const messageLocalization = require('../localization/message');
+const registerComponent = require('../core/component_registrator');
+const extend = require('../core/utils/extend').extend;
+const Button = require('./button');
+const CollectionWidget = require('./collection/ui.collection_widget.edit');
+const Popup = require('./popup');
+const Popover = require('./popover');
+const BindableTemplate = require('../core/templates/bindable_template').BindableTemplate;
+const Deferred = require('../core/utils/deferred').Deferred;
 
-var ACTION_SHEET_CLASS = "dx-actionsheet",
-    ACTION_SHEET_CONTAINER_CLASS = "dx-actionsheet-container",
-    ACTION_SHEET_POPUP_WRAPPER_CLASS = "dx-actionsheet-popup-wrapper",
-    ACTION_SHEET_POPOVER_WRAPPER_CLASS = "dx-actionsheet-popover-wrapper",
-    ACTION_SHEET_CANCEL_BUTTON_CLASS = "dx-actionsheet-cancel",
-    ACTION_SHEET_ITEM_CLASS = "dx-actionsheet-item",
-    ACTION_SHEET_ITEM_DATA_KEY = "dxActionSheetItemData",
-    ACTION_SHEET_WITHOUT_TITLE_CLASS = "dx-actionsheet-without-title";
+const ACTION_SHEET_CLASS = 'dx-actionsheet';
+const ACTION_SHEET_CONTAINER_CLASS = 'dx-actionsheet-container';
+const ACTION_SHEET_POPUP_WRAPPER_CLASS = 'dx-actionsheet-popup-wrapper';
+const ACTION_SHEET_POPOVER_WRAPPER_CLASS = 'dx-actionsheet-popover-wrapper';
+const ACTION_SHEET_CANCEL_BUTTON_CLASS = 'dx-actionsheet-cancel';
+const ACTION_SHEET_ITEM_CLASS = 'dx-actionsheet-item';
+const ACTION_SHEET_ITEM_DATA_KEY = 'dxActionSheetItemData';
+const ACTION_SHEET_WITHOUT_TITLE_CLASS = 'dx-actionsheet-without-title';
 
 
-/**
-* @name dxActionSheet
-* @inherits CollectionWidget
-* @module ui/action_sheet
-* @export default
-*/
-var ActionSheet = CollectionWidget.inherit({
+const ActionSheet = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxActionSheetOptions.usePopover
-            * @type boolean
-            * @default false
-            */
             usePopover: false,
 
-            /**
-            * @name dxActionSheetOptions.target
-            * @type string|Node|jQuery
-            */
             target: null,
 
-            /**
-            * @name dxActionSheetOptions.title
-            * @type string
-            * @default ""
-            */
-            title: "",
+            title: '',
 
-            /**
-            * @name dxActionSheetOptions.showTitle
-            * @type boolean
-            * @default true
-            */
             showTitle: true,
 
-            /**
-            * @name dxActionSheetOptions.showCancelButton
-            * @type boolean
-            * @default true
-            */
             showCancelButton: true,
 
-            /**
-            * @name dxActionSheetOptions.cancelText
-            * @type string
-            * @default "Cancel"
-            */
-            cancelText: messageLocalization.format("Cancel"),
+            cancelText: messageLocalization.format('Cancel'),
 
-            /**
-            * @name dxActionSheetOptions.onCancelClick
-            * @type function(e)|string
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 cancel:boolean
-            * @action
-            */
             onCancelClick: null,
 
-            /**
-            * @name dxActionSheetOptions.visible
-            * @type boolean
-            * @default false
-            * @fires dxActionSheetOptions.onOptionChanged
-            */
             visible: false,
 
             /**
             * @name dxActionSheetOptions.noDataText
             * @hidden
             */
-            noDataText: "",
+            noDataText: '',
 
             /**
             * @name dxActionSheetOptions.activeStateEnabled
@@ -142,17 +93,6 @@ var ActionSheet = CollectionWidget.inherit({
             * @hidden
             */
 
-            /**
-             * @name dxActionSheetOptions.dataSource
-             * @type string|Array<string,dxActionSheetItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
-
-            /**
-             * @name dxActionSheetOptions.items
-             * @type Array<string, dxActionSheetItem, object>
-             * @fires dxActionSheetOptions.onOptionChanged
-             */
 
             /**
              * @name dxActionSheetOptions.focusStateEnabled
@@ -168,12 +108,8 @@ var ActionSheet = CollectionWidget.inherit({
 
     _defaultOptionsRules: function() {
         return this.callBase().concat([{
-            device: { platform: "ios", tablet: true },
+            device: { platform: 'ios', tablet: true },
             options: {
-                /**
-                * @name dxActionSheetOptions.usePopover
-                * @default true @for iPad
-                */
                 usePopover: true
             }
         }]);
@@ -185,26 +121,6 @@ var ActionSheet = CollectionWidget.inherit({
         * @name dxActionSheetItem
         * @inherits CollectionWidgetItem
         * @type object
-        */
-        /**
-        * @name dxActionSheetItem.type
-        * @type Enums.ButtonType
-        * @default 'normal'
-        */
-        /**
-        * @name dxActionSheetItem.onClick
-        * @type function(e)|string
-        * @default null
-        * @type_function_param1 e:object
-        * @type_function_param1_field1 component:dxActionSheet
-        * @type_function_param1_field2 element:dxElement
-        * @type_function_param1_field3 model:object
-        * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-        * @type_function_param1_field5 event:event
-        */
-        /**
-        * @name dxActionSheetItem.icon
-        * @type String
         */
         /**
         * @name dxActionSheetItem.visible
@@ -219,9 +135,9 @@ var ActionSheet = CollectionWidget.inherit({
         */
         this._templateManager.addDefaultTemplates({
             item: new BindableTemplate(function($container, data) {
-                var button = new Button($("<div>"), extend({ onClick: data && data.click }, data));
+                const button = new Button($('<div>'), extend({ onClick: data && data.click }, data));
                 $container.append(button.$element());
-            }, ["disabled", "icon", "text", "type", "onClick", "click"], this.option("integrationOptions.watchMethod"))
+            }, ['disabled', 'icon', 'text', 'type', 'onClick', 'click'], this.option('integrationOptions.watchMethod'))
         });
     },
 
@@ -252,19 +168,19 @@ var ActionSheet = CollectionWidget.inherit({
     },
 
     _createItemContainer: function() {
-        this._$itemContainer = $("<div>").addClass(ACTION_SHEET_CONTAINER_CLASS);
+        this._$itemContainer = $('<div>').addClass(ACTION_SHEET_CONTAINER_CLASS);
         this._renderDisabled();
     },
 
     _renderDisabled: function() {
-        this._$itemContainer.toggleClass("dx-state-disabled", this.option("disabled"));
+        this._$itemContainer.toggleClass('dx-state-disabled', this.option('disabled'));
     },
 
     _renderPopup: function() {
-        this._$popup = $("<div>").appendTo(this.$element());
+        this._$popup = $('<div>').appendTo(this.$element());
         this._isPopoverMode() ? this._createPopover() : this._createPopup();
         this._renderPopupTitle();
-        this._mapPopupOption("visible");
+        this._mapPopupOption('visible');
     },
 
     _mapPopupOption: function(optionName) {
@@ -272,12 +188,12 @@ var ActionSheet = CollectionWidget.inherit({
     },
 
     _isPopoverMode: function() {
-        return this.option("usePopover") && this.option("target");
+        return this.option('usePopover') && this.option('target');
     },
 
     _renderPopupTitle: function() {
-        this._mapPopupOption("showTitle");
-        this._popup && this._popup._wrapper().toggleClass(ACTION_SHEET_WITHOUT_TITLE_CLASS, !this.option("showTitle"));
+        this._mapPopupOption('showTitle');
+        this._popup && this._popup._wrapper().toggleClass(ACTION_SHEET_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
     },
 
     _clean: function() {
@@ -295,7 +211,7 @@ var ActionSheet = CollectionWidget.inherit({
             }).bind(this),
             disabled: false,
             showTitle: true,
-            title: this.option("title"),
+            title: this.option('title'),
             deferRendering: !window.angular,
             onContentReady: this._popupContentReadyAction.bind(this),
             onHidden: this.hide.bind(this)
@@ -304,9 +220,9 @@ var ActionSheet = CollectionWidget.inherit({
 
     _createPopover: function() {
         this._createComponent(this._$popup, Popover, extend(this._overlayConfig(), {
-            width: this.option("width") || 200,
-            height: this.option("height") || "auto",
-            target: this.option("target")
+            width: this.option('width') || 200,
+            height: this.option('height') || 'auto',
+            target: this.option('target')
         }));
 
         this._popup._wrapper().addClass(ACTION_SHEET_POPOVER_WRAPPER_CLASS);
@@ -315,47 +231,47 @@ var ActionSheet = CollectionWidget.inherit({
     _createPopup: function() {
         this._createComponent(this._$popup, Popup, extend(this._overlayConfig(), {
             dragEnabled: false,
-            width: this.option("width") || "100%",
-            height: this.option("height") || "auto",
+            width: this.option('width') || '100%',
+            height: this.option('height') || 'auto',
             showCloseButton: false,
             position: {
-                my: "bottom",
-                at: "bottom",
+                my: 'bottom',
+                at: 'bottom',
                 of: window
             },
             animation: {
                 show: {
-                    type: "slide",
+                    type: 'slide',
                     duration: 400,
                     from: {
                         position: {
-                            my: "top",
-                            at: "bottom",
+                            my: 'top',
+                            at: 'bottom',
                             of: window
                         }
                     },
                     to: {
                         position: {
-                            my: "bottom",
-                            at: "bottom",
+                            my: 'bottom',
+                            at: 'bottom',
                             of: window
                         }
                     }
                 },
                 hide: {
-                    type: "slide",
+                    type: 'slide',
                     duration: 400,
                     from: {
                         position: {
-                            my: "bottom",
-                            at: "bottom",
+                            my: 'bottom',
+                            at: 'bottom',
                             of: window
                         }
                     },
                     to: {
                         position: {
-                            my: "top",
-                            at: "bottom",
+                            my: 'top',
+                            at: 'bottom',
                             of: window
                         }
                     }
@@ -386,17 +302,17 @@ var ActionSheet = CollectionWidget.inherit({
             this._$cancelButton.remove();
         }
 
-        if(this.option("showCancelButton")) {
-            var cancelClickAction = this._createActionByOption("onCancelClick") || noop,
-                that = this;
+        if(this.option('showCancelButton')) {
+            const cancelClickAction = this._createActionByOption('onCancelClick') || noop;
+            const that = this;
 
-            this._$cancelButton = $("<div>").addClass(ACTION_SHEET_CANCEL_BUTTON_CLASS)
+            this._$cancelButton = $('<div>').addClass(ACTION_SHEET_CANCEL_BUTTON_CLASS)
                 .appendTo(this._popup && this._popup.$content());
             this._createComponent(this._$cancelButton, Button, {
                 disabled: false,
-                text: this.option("cancelText"),
+                text: this.option('cancelText'),
                 onClick: function(e) {
-                    var hidingArgs = { event: e, cancel: false };
+                    const hidingArgs = { event: e, cancel: false };
                     cancelClickAction(hidingArgs);
 
                     if(!hidingArgs.cancel) {
@@ -413,7 +329,7 @@ var ActionSheet = CollectionWidget.inherit({
     _itemClickHandler: function(e) {
         this.callBase(e);
 
-        if(!$(e.target).is(".dx-state-disabled, .dx-state-disabled *")) {
+        if(!$(e.target).is('.dx-state-disabled, .dx-state-disabled *')) {
             this.hide();
         }
     },
@@ -421,33 +337,33 @@ var ActionSheet = CollectionWidget.inherit({
     _itemHoldHandler: function(e) {
         this.callBase(e);
 
-        if(!$(e.target).is(".dx-state-disabled, .dx-state-disabled *")) {
+        if(!$(e.target).is('.dx-state-disabled, .dx-state-disabled *')) {
             this.hide();
         }
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "width":
-            case "height":
-            case "visible":
-            case "title":
+            case 'width':
+            case 'height':
+            case 'visible':
+            case 'title':
                 this._mapPopupOption(args.name);
                 break;
-            case "disabled":
+            case 'disabled':
                 this._renderDisabled();
                 break;
-            case "showTitle":
+            case 'showTitle':
                 this._renderPopupTitle();
                 break;
-            case "showCancelButton":
-            case "onCancelClick":
-            case "cancelText":
+            case 'showCancelButton':
+            case 'onCancelClick':
+            case 'cancelText':
                 this._renderCancelButton();
                 break;
-            case "target":
-            case "usePopover":
-            case "items":
+            case 'target':
+            case 'usePopover':
+            case 'items':
                 this._invalidate();
                 break;
             default:
@@ -455,38 +371,22 @@ var ActionSheet = CollectionWidget.inherit({
         }
     },
 
-    /**
-    * @name dxActionSheetMethods.toggle
-    * @publicName toggle(showing)
-    * @param1 showing:boolean
-    * @return Promise<void>
-    */
     toggle: function(showing) {
-        var that = this,
-            d = new Deferred();
+        const that = this;
+        const d = new Deferred();
 
         that._popup.toggle(showing).done(function() {
-            that.option("visible", showing);
+            that.option('visible', showing);
             d.resolveWith(that);
         });
 
         return d.promise();
     },
 
-    /**
-    * @name dxActionSheetMethods.show
-    * @publicName show()
-    * @return Promise<void>
-    */
     show: function() {
         return this.toggle(true);
     },
 
-    /**
-    * @name dxActionSheetMethods.hide
-    * @publicName hide()
-    * @return Promise<void>
-    */
     hide: function() {
         return this.toggle(false);
     }
@@ -505,6 +405,6 @@ var ActionSheet = CollectionWidget.inherit({
 
 });
 
-registerComponent("dxActionSheet", ActionSheet);
+registerComponent('dxActionSheet', ActionSheet);
 
 module.exports = ActionSheet;

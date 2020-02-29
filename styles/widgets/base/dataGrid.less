@@ -27,8 +27,6 @@
 
 .dx-sortable-dragging > div > .dx-gridbase-container > .dx-datagrid-rowsview {
     border-color: @datagrid-drag-header-border-color;
-    cursor: pointer;
-    cursor: grabbing;
 }
 
 .dx-datagrid-error-message() {
@@ -42,11 +40,11 @@
     background-color: @datagrid-base-background-color;
 
     .dx-sort-up {
-        .dx-icon-sortup;
+        .dx-icon(sortup);
     }
 
     .dx-sort-down {
-        .dx-icon-sortdown;
+        .dx-icon(sortdown);
     }
 
     .dx-sort-down,
@@ -99,7 +97,7 @@
     .dx-header-filter {
         position: relative;
         color: @HEADER_FILTER_COLOR;
-        .dx-icon-filter;
+        .dx-icon(filter);
     }
 
     .dx-header-filter-empty {
@@ -199,7 +197,7 @@
     }
 
     .dx-command-drag .dx-datagrid-drag-icon {
-        .dx-icon-dragvertical;
+        .dx-icon(dragvertical);
     }
 }
 
@@ -232,13 +230,9 @@
     }
 }
 
-.dx-datagrid-column-chooser {
-    .dx-base-typography();
-}
-
 .dx-datagrid-adaptive-more {
     cursor: pointer;
-    .dx-icon-more;
+    .dx-icon(more);
     .dx-icon-sizing(21px);
 }
 

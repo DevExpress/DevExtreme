@@ -1,4 +1,4 @@
-.dx-icon-sizing(@icon_size, @container_size, @borders_size: 0) {
+.dx-icon-sizing(@icon_size, @container_size: @icon_size, @borders_size: 0) {
     @icon_paddings_dirty: @container_size - @icon_size;
     @icon_paddings: @icon_paddings_dirty - @borders_size;
     @icon_padding: floor(@icon_paddings/2);
@@ -19,12 +19,6 @@
     text-align: center;
     line-height: @container_size - @icon_paddings_dirty;
 }
-
-// NOTE: use @container_size: @icon_size parameter declaration in previous mixin when upgrade less
-.dx-icon-sizing(@icon_size) {
-    .dx-icon-sizing(@icon_size, @icon_size);
-}
-
 
 .dx-icon-font-centered-sizing(@icon_size) {
     font-size: @icon_size;
@@ -47,8 +41,8 @@
     margin-right: @size;
     margin-left: 0;
 
-    .dx-rtl &,
-    .dx-rtl& {
+    .dx-rtl&,
+    .dx-rtl & {
         margin-left: @size;
         margin-right: 0;
     }
@@ -57,14 +51,225 @@
         margin-left: @size;
         margin-right: 0;
 
-        .dx-rtl &,
-        .dx-rtl& {
+        .dx-rtl&,
+        .dx-rtl & {
             margin-right: @size;
             margin-left: 0;
         }
     }
 }
 
+.dx-font-icon(@glyph) {
+    font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
+
+    &:before {
+        content: @glyph;
+    }
+}
+
+// stylelint-disable property-no-unknown
+@icons: {
+    add: "\f00b";
+    airplane: "\f000";
+    bookmark: "\f017";
+    box: "\f018";
+    car: "\f01b";
+    card: "\f019";
+    cart: "\f01a";
+    chart: "\f01c";
+    check: "\f005";
+    clear: "\f008";
+    clock: "\f01d";
+    close: "\f00a";
+    coffee: "\f02a";
+    comment: "\f01e";
+    doc: "\f021";
+    file: "\f021";
+    download: "\f022";
+    dragvertical: "\f038";
+    edit: "\f023";
+    email: "\f024";
+    event: "\f026";
+    favorites: "\f025";
+    find: "\f027";
+    filter: "\f050";
+    folder: "\f028";
+    activefolder: "\f028";
+    food: "\f029";
+    gift: "\f02b";
+    globe: "\f02c";
+    group: "\f02e";
+    help: "\f02f";
+    home: "\f030";
+    image: "\f031";
+    info: "\f032";
+    key: "\f033";
+    like: "\f034";
+    map: "\f035";
+    menu: "\f00c";
+    message: "\f024";
+    money: "\f036";
+    music: "\f037";
+    overflow: "\f00d";
+    percent: "\f039";
+    photo: "\f03a";
+    plus: "\f00b";
+    minus: "\f074";
+    preferences: "\f03b";
+    product: "\f03c";
+    pulldown: "\f062";
+    refresh: "\f03d";
+    remove: "\f00a";
+    revert: "\f04c";
+    runner: "\f040";
+    save: "\f041";
+    search: "\f027";
+    tags: "\f009";
+    tel: "\f003";
+    tips: "\f004";
+    todo: "\f005";
+    toolbox: "\f007";
+    trash: "\f03e";
+    user: "\f02d";
+    upload: "\f006";
+    floppy: "\f073";
+    arrowleft: "\f011";
+    arrowdown: "\f015";
+    arrowright: "\f00e";
+    arrowup: "\f013";
+    spinleft: "\f04f";
+    spinprev: "\f04f";
+    spinright: "\f04e";
+    spinnext: "\f04e";
+    spindown: "\f001";
+    spinup: "\f002";
+    chevronleft: "\f012";
+    chevronprev: "\f012";
+    back: "\f012";
+    chevronright: "\f010";
+    chevronnext: "\f010";
+    chevrondown: "\f016";
+    chevronup: "\f014";
+    chevrondoubleleft: "\f042";
+    chevrondoubleright: "\f03f";
+    equal: "\f044";
+    notequal: "\f045";
+    less: "\f046";
+    greater: "\f047";
+    lessorequal: "\f048";
+    greaterorequal: "\f049";
+    isblank: "\f075";
+    isnotblank: "\f076";
+    sortup: "\f051";
+    sortdown: "\f052";
+    sortuptext: "\f053";
+    sortdowntext: "\f054";
+    sorted: "\f055";
+    expand: "\f04a";
+    collapse: "\f04b";
+    columnfield: "\f057";
+    rowfield: "\f058";
+    datafield: "\f101";
+    fields: "\f059";
+    fieldchooser: "\f05a";
+    columnchooser: "\f04d";
+    pin: "\f05b";
+    unpin: "\f05c";
+    pinleft: "\f05d";
+    pinright: "\f05e";
+    contains: "\f063";
+    startswith: "\f064";
+    endswith: "\f065";
+    doesnotcontain: "\f066";
+    range: "\f06a";
+    export: "\f05f";
+    exportxlsx: "\f060";
+    exportpdf: "\f061";
+    exportselected: "\f06d";
+    warning: "\f06b";
+    more: "\f06c";
+    square: "\f067";
+    clearsquare: "\f068";
+    repeat: "\f069";
+    selectall: "\f070";
+    unselectall: "\f071";
+    print: "\f072";
+    bold: "\f077";
+    italic: "\f078";
+    underline: "\f079";
+    strike: "\f07a";
+    indent: "\f07b";
+    increaselinespacing: "\f07b";
+    font: "\f11b"; // stylelint-disable-line font-family-no-missing-generic-family-keyword
+    fontsize: "\f07c";
+    shrinkfont: "\f07d";
+    growfont: "\f07e";
+    color: "\f07f";
+    background: "\f080";
+    fill: "\f10d";
+    palette: "\f120";
+    superscript: "\f081";
+    subscript: "\f082";
+    header: "\f083";
+    blockquote: "\f084";
+    formula: "\f056";
+    codeblock: "\f085";
+    orderedlist: "\f086";
+    bulletlist: "\f087";
+    increaseindent: "\f088";
+    decreaseindent: "\f089";
+    decreaselinespacing: "\f106";
+    alignleft: "\f08a";
+    alignright: "\f08b";
+    aligncenter: "\f08c";
+    alignjustify: "\f08d";
+    link: "\f08e";
+    video: "\f08f";
+    mention: "\f090";
+    variable: "\f091";
+    clearformat: "\f092";
+    fullscreen: "\f11a";
+    hierarchy: "\f124";
+    docfile: "\f111";
+    docxfile: "\f110";
+    pdffile: "\f118";
+    pptfile: "\f114";
+    pptxfile: "\f115";
+    rtffile: "\f112";
+    txtfile: "\f113";
+    xlsfile: "\f116";
+    xlsxfile: "\f117";
+    copy: "\f107";
+    cut: "\f10a";
+    paste: "\f108";
+    share: "\f11f";
+    inactivefolder: "\f105";
+    newfolder: "\f123";
+    movetofolder: "\f121";
+    parentfolder: "\f122";
+    rename: "\f109";
+    detailslayout: "\f10b";
+    contentlayout: "\f11e";
+    smalliconslayout: "\f119";
+    mediumiconslayout: "\f10c";
+    undo: "\f04c";
+    redo: "\f093";
+    hidepanel: "\f11c";
+    showpanel: "\f11d";
+}
+// stylelint-enable
+
+.dx-icon(@name) {
+    .dx-font-icon(@icons[$@name]);
+}
+
+.dx-font-icons-list() {
+    each(@icons, {
+        .dx-icon-@{key} {
+            .dx-icon(@key);
+        }
+    });
+}
 
 .dx-font-icons(@font-file: "dxicons", @font-name: "DevExtreme Generic Icons", @font-name-safari: "devextreme_generic_icons") {
     @font-face {
@@ -85,263 +290,43 @@
         text-rendering: auto;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        transform: translate(0, 0);
-    }
-
-    .dx-font-icon(@glyph) {
-        font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
-
-        &:before {
-            content: @glyph;
-        }
     }
 
     .dx-font-icons-list();
 }
 
-.dx-font-icons-list() {
-
-    .dx-icon-add { .dx-font-icon("\f00b"); }
-    .dx-icon-airplane { .dx-font-icon("\f000"); }
-    .dx-icon-bookmark { .dx-font-icon("\f017"); }
-    .dx-icon-box { .dx-font-icon("\f018"); }
-    .dx-icon-car { .dx-font-icon("\f01b"); }
-    .dx-icon-card { .dx-font-icon("\f019"); }
-    .dx-icon-cart { .dx-font-icon("\f01a"); }
-    .dx-icon-chart { .dx-font-icon("\f01c"); }
-    .dx-icon-check { .dx-font-icon("\f005"); }
-    .dx-icon-clear { .dx-font-icon("\f008"); }
-    .dx-icon-clock { .dx-font-icon("\f01d"); }
-    .dx-icon-close { .dx-font-icon("\f00a"); }
-    .dx-icon-coffee { .dx-font-icon("\f02a"); }
-    .dx-icon-comment { .dx-font-icon("\f01e"); }
-    .dx-icon-doc { .dx-font-icon("\f021"); }
-    .dx-icon-download { .dx-font-icon("\f022"); }
-    .dx-icon-dragvertical { .dx-font-icon("\f038"); }
-    .dx-icon-edit { .dx-font-icon("\f023"); }
-    .dx-icon-email { .dx-font-icon("\f024"); }
-    .dx-icon-event { .dx-font-icon("\f026"); }
-    .dx-icon-favorites { .dx-font-icon("\f025"); }
-    .dx-icon-find { .dx-font-icon("\f027"); }
-    .dx-icon-filter { .dx-font-icon("\f050"); }
-    .dx-icon-folder { .dx-font-icon("\f028"); }
-    .dx-icon-food { .dx-font-icon("\f029"); }
-    .dx-icon-gift { .dx-font-icon("\f02b"); }
-    .dx-icon-globe { .dx-font-icon("\f02c"); }
-    .dx-icon-group { .dx-font-icon("\f02e"); }
-    .dx-icon-help { .dx-font-icon("\f02f"); }
-    .dx-icon-home { .dx-font-icon("\f030"); }
-    .dx-icon-image { .dx-font-icon("\f031"); }
-    .dx-icon-info { .dx-font-icon("\f032"); }
-    .dx-icon-key { .dx-font-icon("\f033"); }
-    .dx-icon-like { .dx-font-icon("\f034"); }
-    .dx-icon-map { .dx-font-icon("\f035"); }
-    .dx-icon-menu { .dx-font-icon("\f00c"); }
-    .dx-icon-message { .dx-font-icon("\f024"); }
-    .dx-icon-money { .dx-font-icon("\f036"); }
-    .dx-icon-music { .dx-font-icon("\f037"); }
-    .dx-icon-overflow { .dx-font-icon("\f00d"); }
-    .dx-icon-percent { .dx-font-icon("\f039"); }
-    .dx-icon-photo { .dx-font-icon("\f03a"); }
-    .dx-icon-plus { .dx-font-icon("\f00b"); }
-    .dx-icon-minus { .dx-font-icon("\f074"); }
-    .dx-icon-preferences { .dx-font-icon("\f03b"); }
-    .dx-icon-product { .dx-font-icon("\f03c"); }
-    .dx-icon-pulldown { .dx-font-icon("\f062"); }
-    .dx-icon-refresh { .dx-font-icon("\f03d"); }
-    .dx-icon-remove { .dx-font-icon("\f00a"); }
-    .dx-icon-revert { .dx-font-icon("\f04c"); }
-    .dx-icon-runner { .dx-font-icon("\f040"); }
-    .dx-icon-save { .dx-font-icon("\f041"); }
-    .dx-icon-search { .dx-font-icon("\f027"); }
-    .dx-icon-tags { .dx-font-icon("\f009"); }
-    .dx-icon-tel { .dx-font-icon("\f003"); }
-    .dx-icon-tips { .dx-font-icon("\f004"); }
-    .dx-icon-todo { .dx-font-icon("\f005"); }
-    .dx-icon-toolbox { .dx-font-icon("\f007"); }
-    .dx-icon-trash { .dx-font-icon("\f03e"); }
-    .dx-icon-user { .dx-font-icon("\f02d"); }
-    .dx-icon-upload { .dx-font-icon("\f006"); }
-    .dx-icon-floppy { .dx-font-icon("\f073"); }
-
-    .dx-icon-arrowleft { .dx-font-icon("\f011"); }
-    .dx-icon-arrowdown { .dx-font-icon("\f015"); }
-    .dx-icon-arrowright { .dx-font-icon("\f00e"); }
-    .dx-icon-arrowup { .dx-font-icon("\f013"); }
-
-    .dx-icon-spinleft { .dx-font-icon("\f04f"); }
-    .dx-icon-spinright { .dx-font-icon("\f04e"); }
-
-    .dx-icon-spinnext {
-        .dx-icon-spinright;
-        .dx-rtl &:before { content: "\f04f"; } //.dx-icon-spinleft
+.dx-rtl {
+    .dx-icon-spinnext:before {
+        content: "\f04f"; //.dx-icon-spinleft
     }
 
-    .dx-icon-spinprev {
-        .dx-icon-spinleft;
-        .dx-rtl &:before { content: "\f04e"; } //.dx-icon-spinright
-    }
-    .dx-icon-spindown { .dx-font-icon("\f001"); }
-    .dx-icon-spinup { .dx-font-icon("\f002"); }
-
-    .dx-icon-chevronleft { .dx-font-icon("\f012"); }
-    .dx-icon-chevronright { .dx-font-icon("\f010"); }
-
-    .dx-icon-chevronnext {
-        .dx-icon-chevronright;
-        .dx-rtl &:before { content: "\f012"; } //.dx-icon-chevronleft
+    .dx-icon-spinprev:before {
+        content: "\f04e"; //.dx-icon-spinright
     }
 
-    .dx-icon-chevronprev {
-        .dx-icon-chevronleft;
-        .dx-rtl &:before { content: "\f010"; } //.dx-icon-chevronright
-    }
-    .dx-icon-chevrondown { .dx-font-icon("\f016"); }
-    .dx-icon-chevronup { .dx-font-icon("\f014"); }
-    .dx-icon-chevrondoubleleft { .dx-font-icon("\f042"); }
-    .dx-icon-chevrondoubleright { .dx-font-icon("\f03f"); }
-
-    .dx-icon-equal { .dx-font-icon("\f044"); }
-    .dx-icon-notequal { .dx-font-icon("\f045"); }
-    .dx-icon-less { .dx-font-icon("\f046"); }
-    .dx-icon-greater { .dx-font-icon("\f047"); }
-    .dx-icon-lessorequal { .dx-font-icon("\f048"); }
-    .dx-icon-greaterorequal { .dx-font-icon("\f049"); }
-    .dx-icon-isblank { .dx-font-icon("\f075"); }
-    .dx-icon-isnotblank { .dx-font-icon("\f076"); }
-
-    .dx-icon-sortup { .dx-font-icon("\f051"); }
-    .dx-icon-sortdown { .dx-font-icon("\f052"); }
-    .dx-icon-sortuptext { .dx-font-icon("\f053"); }
-    .dx-icon-sortdowntext { .dx-font-icon("\f054"); }
-    .dx-icon-sorted { .dx-font-icon("\f055"); }
-
-    .dx-icon-expand { .dx-font-icon("\f04a"); }
-    .dx-icon-collapse { .dx-font-icon("\f04b"); }
-
-    .dx-icon-columnfield { .dx-font-icon("\f057"); }
-    .dx-icon-rowfield { .dx-font-icon("\f058"); }
-    .dx-icon-datafield { .dx-font-icon("\f101"); }
-    .dx-icon-fields { .dx-font-icon("\f059"); }
-    .dx-icon-fieldchooser { .dx-font-icon("\f05a"); }
-    .dx-icon-columnchooser { .dx-font-icon("\f04d"); }
-
-    .dx-icon-pin { .dx-font-icon("\f05b"); }
-    .dx-icon-unpin { .dx-font-icon("\f05c"); }
-    .dx-icon-pinleft { .dx-font-icon("\f05d"); }
-    .dx-icon-pinright { .dx-font-icon("\f05e"); }
-
-    .dx-icon-contains { .dx-font-icon("\f063"); }
-    .dx-icon-startswith { .dx-font-icon("\f064"); }
-    .dx-icon-endswith { .dx-font-icon("\f065"); }
-    .dx-icon-doesnotcontain { .dx-font-icon("\f066"); }
-    .dx-icon-range { .dx-font-icon("\f06a"); }
-
-    .dx-icon-export { .dx-font-icon("\f05f"); }
-    .dx-icon-exportxlsx { .dx-font-icon("\f060"); }
-    .dx-icon-exportpdf { .dx-font-icon("\f061"); }
-    .dx-icon-exportselected { .dx-font-icon("\f06d"); }
-
-    .dx-icon-warning { .dx-font-icon("\f06b"); }
-    .dx-icon-more { .dx-font-icon("\f06c"); }
-
-    .dx-icon-square { .dx-font-icon("\f067"); }
-    .dx-icon-clearsquare { .dx-font-icon("\f068"); }
-
-    .dx-icon-back {
-        .dx-icon-chevronleft;
-        .dx-rtl &:before { content: "\f010"; } //.dx-icon-chevronright
+    .dx-icon-chevronnext:before {
+        content: "\f012"; //.dx-icon-chevronleft
     }
 
-    .dx-icon-repeat { .dx-font-icon("\f069"); }
-
-    .dx-icon-selectall { .dx-font-icon("\f070"); }
-    .dx-icon-unselectall { .dx-font-icon("\f071"); }
-    .dx-icon-print { .dx-font-icon("\f072"); }
-
-    .dx-icon-bold { .dx-font-icon("\f077"); }
-    .dx-icon-italic { .dx-font-icon("\f078"); }
-    .dx-icon-underline { .dx-font-icon("\f079"); }
-    .dx-icon-strike { .dx-font-icon("\f07a"); }
-    .dx-icon-indent { .dx-font-icon("\f07b"); }
-    .dx-icon-font { .dx-font-icon("\f11b"); }
-    .dx-icon-fontsize { .dx-font-icon("\f07c"); }
-    .dx-icon-shrinkfont { .dx-font-icon("\f07d"); }
-    .dx-icon-growfont { .dx-font-icon("\f07e"); }
-    .dx-icon-color { .dx-font-icon("\f07f"); }
-    .dx-icon-background { .dx-font-icon("\f080"); }
-    .dx-icon-fill { .dx-font-icon("\f10d"); }
-    .dx-icon-palette { .dx-font-icon("\f120"); }
-    .dx-icon-superscript { .dx-font-icon("\f081"); }
-    .dx-icon-subscript { .dx-font-icon("\f082"); }
-    .dx-icon-header { .dx-font-icon("\f083"); }
-    .dx-icon-blockquote { .dx-font-icon("\f084"); }
-    .dx-icon-formula { .dx-font-icon("\f056"); }
-    .dx-icon-codeblock { .dx-font-icon("\f085"); }
-    .dx-icon-orderedlist { .dx-font-icon("\f086"); }
-    .dx-icon-bulletlist { .dx-font-icon("\f087"); }
-    .dx-icon-increaseindent { .dx-font-icon("\f088"); }
-    .dx-icon-decreaseindent { .dx-font-icon("\f089"); }
-    .dx-icon-increaselinespacing { .dx-icon-indent; }
-    .dx-icon-decreaselinespacing { .dx-font-icon("\f106"); }
-    .dx-icon-alignleft { .dx-font-icon("\f08a"); }
-    .dx-icon-alignright { .dx-font-icon("\f08b"); }
-    .dx-icon-aligncenter { .dx-font-icon("\f08c"); }
-    .dx-icon-alignjustify { .dx-font-icon("\f08d"); }
-    .dx-icon-link { .dx-font-icon("\f08e"); }
-    .dx-icon-video { .dx-font-icon("\f08f"); }
-    .dx-icon-mention { .dx-font-icon("\f090"); }
-    .dx-icon-variable { .dx-font-icon("\f091"); }
-    .dx-icon-clearformat { .dx-font-icon("\f092"); }
-    .dx-icon-fullscreen { .dx-font-icon("\f11a"); }
-    .dx-icon-hierarchy { .dx-font-icon("\f124"); }
-
-    .dx-icon-file { .dx-icon-doc; }
-    .dx-icon-docfile { .dx-font-icon("\f111"); }
-    .dx-icon-docxfile { .dx-font-icon("\f110"); }
-    .dx-icon-pdffile { .dx-font-icon("\f118"); }
-    .dx-icon-pptfile { .dx-font-icon("\f114"); }
-    .dx-icon-pptxfile { .dx-font-icon("\f115"); }
-    .dx-icon-rtffile { .dx-font-icon("\f112"); }
-    .dx-icon-txtfile { .dx-font-icon("\f113"); }
-    .dx-icon-xlsfile { .dx-font-icon("\f116"); }
-    .dx-icon-xlsxfile { .dx-font-icon("\f117"); }
-
-    .dx-icon-copy { .dx-font-icon("\f107"); }
-    .dx-icon-cut { .dx-font-icon("\f10a"); }
-    .dx-icon-paste { .dx-font-icon("\f108"); }
-    .dx-icon-share { .dx-font-icon("\f11f"); }
-
-    .dx-icon-activefolder { .dx-icon-folder; }
-    .dx-icon-inactivefolder { .dx-font-icon("\f105"); }
-    .dx-icon-newfolder { .dx-font-icon("\f123"); }
-    .dx-icon-movetofolder { .dx-font-icon("\f121"); }
-    .dx-icon-parentfolder { .dx-font-icon("\f122"); }
-    .dx-icon-rename { .dx-font-icon("\f109"); }
-
-    .dx-icon-detailslayout { .dx-font-icon("\f10b"); }
-    .dx-icon-contentlayout { .dx-font-icon("\f11e"); }
-    .dx-icon-smalliconslayout { .dx-font-icon("\f119"); }
-    .dx-icon-mediumiconslayout { .dx-font-icon("\f10c"); }
-
-
-    .dx-icon-undo {
-        .dx-font-icon("\f04c");
-        .dx-rtl &:before { content: "\f093"; } // redo icon
+    .dx-icon-chevronprev:before,
+    .dx-icon-back:before {
+        content: "\f010"; //.dx-icon-chevronright
     }
 
-    .dx-icon-redo {
-        .dx-font-icon("\f093");
-        .dx-rtl &:before { content: "\f04c"; } // undo icon
+    .dx-icon-undo:before {
+        content: "\f093"; // redo icon
     }
 
-    .dx-icon-hidepanel {
-        .dx-font-icon("\f11c");
-        .dx-rtl &:before { content: "\f11d"; } // showpanel icon
+    .dx-icon-redo:before {
+        content: "\f04c"; // undo icon
     }
 
-    .dx-icon-showpanel {
-        .dx-font-icon("\f11d");
-        .dx-rtl &:before { content: "\f11c"; } // hidepanel icon
+    .dx-icon-hidepanel:before {
+        content: "\f11d"; // showpanel icon
+    }
+
+    .dx-icon-showpanel:before {
+        content: "\f11c"; // hidepanel icon
     }
 }
+

@@ -1,29 +1,29 @@
-var swipeEvents = require("../swipe"),
-    eventsEngine = require("../../events/core/events_engine"),
-    DOMComponent = require("../../core/dom_component"),
-    each = require("../../core/utils/iterator").each,
-    eventUtils = require("../utils"),
-    extend = require("../../core/utils/extend").extend,
-    publicComponentUtils = require("../../core/utils/public_component");
+const swipeEvents = require('../swipe');
+const eventsEngine = require('../../events/core/events_engine');
+const DOMComponent = require('../../core/dom_component');
+const each = require('../../core/utils/iterator').each;
+const eventUtils = require('../utils');
+const extend = require('../../core/utils/extend').extend;
+const publicComponentUtils = require('../../core/utils/public_component');
 
-var DX_SWIPEABLE = "dxSwipeable",
-    SWIPEABLE_CLASS = "dx-swipeable",
+const DX_SWIPEABLE = 'dxSwipeable';
+const SWIPEABLE_CLASS = 'dx-swipeable';
 
-    ACTION_TO_EVENT_MAP = {
-        "onStart": swipeEvents.start,
-        "onUpdated": swipeEvents.swipe,
-        "onEnd": swipeEvents.end,
-        "onCancel": "dxswipecancel"
-    };
+const ACTION_TO_EVENT_MAP = {
+    'onStart': swipeEvents.start,
+    'onUpdated': swipeEvents.swipe,
+    'onEnd': swipeEvents.end,
+    'onCancel': 'dxswipecancel'
+};
 
 
-var Swipeable = DOMComponent.inherit({
+const Swipeable = DOMComponent.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             elastic: true,
             immediate: false,
-            direction: "horizontal",
+            direction: 'horizontal',
             itemSizeFunc: null,
             onStart: null,
             onUpdated: null,
@@ -42,16 +42,16 @@ var Swipeable = DOMComponent.inherit({
     _attachEventHandlers: function() {
         this._detachEventHandlers();
 
-        if(this.option("disabled")) {
+        if(this.option('disabled')) {
             return;
         }
 
-        var NAME = this.NAME;
+        const NAME = this.NAME;
 
         this._createEventData();
 
         each(ACTION_TO_EVENT_MAP, (function(actionName, eventName) {
-            var action = this._createActionByOption(actionName, { context: this });
+            const action = this._createActionByOption(actionName, { context: this });
 
             eventName = eventUtils.addNamespace(eventName, NAME);
 
@@ -63,39 +63,42 @@ var Swipeable = DOMComponent.inherit({
 
     _createEventData: function() {
         this._eventData = {
-            elastic: this.option("elastic"),
-            itemSizeFunc: this.option("itemSizeFunc"),
-            direction: this.option("direction"),
-            immediate: this.option("immediate")
+            elastic: this.option('elastic'),
+            itemSizeFunc: this.option('itemSizeFunc'),
+            direction: this.option('direction'),
+            immediate: this.option('immediate')
         };
     },
 
     _detachEventHandlers: function() {
-        eventsEngine.off(this.$element(), "." + DX_SWIPEABLE);
+        eventsEngine.off(this.$element(), '.' + DX_SWIPEABLE);
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "disabled":
-            case "onStart":
-            case "onUpdated":
-            case "onEnd":
-            case "onCancel":
-            case "elastic":
-            case "immediate":
-            case "itemSizeFunc":
-            case "direction":
+            case 'disabled':
+            case 'onStart':
+            case 'onUpdated':
+            case 'onEnd':
+            case 'onCancel':
+            case 'elastic':
+            case 'immediate':
+            case 'itemSizeFunc':
+            case 'direction':
                 this._detachEventHandlers();
                 this._attachEventHandlers();
                 break;
-            case "rtlEnabled":
+            case 'rtlEnabled':
                 break;
             default:
                 this.callBase(args);
         }
 
-    }
+    },
 
+    _useTemplates: function() {
+        return false;
+    },
 });
 
 publicComponentUtils.name(Swipeable, DX_SWIPEABLE);

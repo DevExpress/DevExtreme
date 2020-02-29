@@ -1,9 +1,9 @@
-import { isObject } from "../../core/utils/type";
+import { isObject } from '../../core/utils/type';
 
 const isCorrectStructure = data => {
     return Array.isArray(data) && data.every(item => {
         const hasTwoFields = Object.keys(item).length === 2;
-        const hasCorrectFields = "key" in item && "items" in item;
+        const hasCorrectFields = 'key' in item && 'items' in item;
 
         return hasTwoFields && hasCorrectFields && Array.isArray(item.items);
     });
@@ -11,8 +11,8 @@ const isCorrectStructure = data => {
 
 export default {
     _getSpecificDataSourceOption: function() {
-        const groupKey = "key";
-        let dataSource = this.option("dataSource");
+        const groupKey = 'key';
+        let dataSource = this.option('dataSource');
         let hasSimpleItems = false;
         let data = {};
 
@@ -35,14 +35,14 @@ export default {
 
             dataSource = {
                 store: {
-                    type: "array",
+                    type: 'array',
                     data
                 },
-                group: { selector: "key", keepInitialKeyOrder: true }
+                group: { selector: 'key', keepInitialKeyOrder: true }
             };
 
             if(hasSimpleItems) {
-                dataSource.searchExpr = "text";
+                dataSource.searchExpr = 'text';
             }
         }
 

@@ -1,27 +1,11 @@
-import $ from "../renderer";
-import { getBody } from "../dom_adapter";
-import Callbacks from "../utils/callbacks";
-import { contains, triggerShownEvent } from "../utils/dom";
-import errors from "../errors";
+import $ from '../renderer';
+import { getBody } from '../dom_adapter';
+import Callbacks from '../utils/callbacks';
+import { contains, triggerShownEvent } from '../utils/dom';
+import errors from '../errors';
 
 export const renderedCallbacks = Callbacks({ syncStrategy: true });
 
-/**
-* @name dxTemplate
-* @section uiWidgetMarkupComponents
-* @type object
-*/
-
-/**
-* @name dxTemplateOptions.name
-* @type string
-*/
-
-/**
-* @name template
-* @type String|function|Node|jQuery
-* @section Common
-*/
 
 export class TemplateBase {
     render(options) {
@@ -60,6 +44,6 @@ export class TemplateBase {
     }
 
     _renderCore() {
-        throw errors.Error("E0001");
+        throw errors.Error('E0001');
     }
 }

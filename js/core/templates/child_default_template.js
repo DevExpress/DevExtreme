@@ -1,4 +1,4 @@
-import { TemplateBase } from "./template_base";
+import { TemplateBase } from './template_base';
 
 export class ChildDefaultTemplate extends TemplateBase {
     constructor(name) {

@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets.editors/autocomplete.markup.tests.js");
+require('../DevExpress.ui.widgets.editors/autocomplete.markup.tests.js');

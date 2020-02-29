@@ -1,9 +1,9 @@
-var objectUtils = require("core/utils/object");
+const objectUtils = require('core/utils/object');
 
-QUnit.test("orderEach", function(assert) {
-    var checkOrderEach = function(mapKeys, keys) {
-        var i,
-            map = {};
+QUnit.test('orderEach', function(assert) {
+    const checkOrderEach = function(mapKeys, keys) {
+        let i;
+        const map = {};
         for(i = 0; i < mapKeys.length; i++) {
             map[mapKeys[i]] = i;
         }
@@ -11,20 +11,20 @@ QUnit.test("orderEach", function(assert) {
         mapKeys = [];
         objectUtils.orderEach(map, function(key, value) {
             mapKeys.push(key);
-            assert.strictEqual(map[key], value, "key value");
+            assert.strictEqual(map[key], value, 'key value');
         });
-        assert.deepEqual(mapKeys, keys, "keys order");
+        assert.deepEqual(mapKeys, keys, 'keys order');
     };
 
-    checkOrderEach(["", 1, "100", 12, -5, "test", 3, undefined, null], ["-5", "1", "3", "12", "100", "", "null", "test", "undefined"]);
+    checkOrderEach(['', 1, '100', 12, -5, 'test', 3, undefined, null], ['-5', '1', '3', '12', '100', '', 'null', 'test', 'undefined']);
 });
 
 // T396670
-QUnit.test("orderEach when there is custom method in prototype of the array", function(assert) {
+QUnit.test('orderEach when there is custom method in prototype of the array', function(assert) {
     /* eslint-disable no-extend-native */
     // arrange
-    var array = [1, 2, 3],
-        keys = [];
+    const array = [1, 2, 3];
+    const keys = [];
 
     Array.prototype.add = function(item) {
         this[this.length] = item;
@@ -36,7 +36,7 @@ QUnit.test("orderEach when there is custom method in prototype of the array", fu
     });
 
     // assert
-    assert.deepEqual(keys, ["0", "1", "2"], "keys order");
+    assert.deepEqual(keys, ['0', '1', '2'], 'keys order');
     delete Array.prototype.add;
 });
 
@@ -53,7 +53,7 @@ QUnit.module('Object cloning', {
 
 QUnit.test('Prototypical cloning', function(assert) {
     // act
-    var clone = objectUtils.clone(this.source);
+    const clone = objectUtils.clone(this.source);
 
     // assert
     assert.ok(clone);
@@ -63,9 +63,9 @@ QUnit.test('Prototypical cloning', function(assert) {
     assert.equal(clone.b, 'b');
 });
 
-QUnit.test("External source changes affect clone", function(assert) {
+QUnit.test('External source changes affect clone', function(assert) {
     // arrange
-    var clone = objectUtils.clone(this.source);
+    const clone = objectUtils.clone(this.source);
 
     // act
     this.source.a = 'aa';
@@ -75,9 +75,9 @@ QUnit.test("External source changes affect clone", function(assert) {
     assert.equal(clone.a, 'aa');
 });
 
-QUnit.test("External clone changes don't affect source", function(assert) {
+QUnit.test('External clone changes don\'t affect source', function(assert) {
     // arrange
-    var clone = objectUtils.clone(this.source);
+    const clone = objectUtils.clone(this.source);
 
     // act
     clone.a = 'aa';
@@ -87,9 +87,9 @@ QUnit.test("External clone changes don't affect source", function(assert) {
     assert.equal(clone.a, 'aa');
 });
 
-QUnit.test("Internal source changes affect clone", function(assert) {
+QUnit.test('Internal source changes affect clone', function(assert) {
     // arrange
-    var clone = objectUtils.clone(this.source);
+    const clone = objectUtils.clone(this.source);
 
     // act
     this.source.changeB(15);
@@ -99,9 +99,9 @@ QUnit.test("Internal source changes affect clone", function(assert) {
     assert.equal(clone.b, 15);
 });
 
-QUnit.test("Internal clone changes don't affect source", function(assert) {
+QUnit.test('Internal clone changes don\'t affect source', function(assert) {
     // arrange
-    var clone = objectUtils.clone(this.source);
+    const clone = objectUtils.clone(this.source);
 
     // act
     clone.changeB([]);
@@ -120,66 +120,58 @@ QUnit.module('deepExtendArraySafe utility', {
     }
 });
 
-QUnit.test("deepExtendArraySafe utility does not change complex 'object' to plain 'object' by default", function(assert) {
-    var target = {
-        deepProp: new this.SomeClass("simple value", "value to be changed")
+QUnit.test('deepExtendArraySafe utility does not change complex \'object\' to plain \'object\' by default', function(assert) {
+    const target = {
+        deepProp: new this.SomeClass('simple value', 'value to be changed')
     };
-    var changes = {
-        deepProp: { toChange: "changed value" }
+    const changes = {
+        deepProp: { toChange: 'changed value' }
     };
-    var result;
-
-    result = objectUtils.deepExtendArraySafe(target, changes);
+    const result = objectUtils.deepExtendArraySafe(target, changes);
 
     assert.equal(result.deepProp.simpleProp, undefined);
-    assert.equal(result.deepProp.toChange, "changed value");
+    assert.equal(result.deepProp.toChange, 'changed value');
 });
 
-QUnit.test("deepExtendArraySafe utility can extend complex 'object' by plain 'object' (T482160)", function(assert) {
-    var target = {
-        deepProp: new this.SomeClass("simple value", "value to be changed")
+QUnit.test('deepExtendArraySafe utility can extend complex \'object\' by plain \'object\' (T482160)', function(assert) {
+    const target = {
+        deepProp: new this.SomeClass('simple value', 'value to be changed')
     };
-    var changes = {
-        deepProp: { toChange: "changed value" }
+    const changes = {
+        deepProp: { toChange: 'changed value' }
     };
-    var result;
+    const result = objectUtils.deepExtendArraySafe(target, changes, true);
 
-    result = objectUtils.deepExtendArraySafe(target, changes, true);
-
-    assert.equal(result.deepProp.simpleProp, "simple value");
-    assert.equal(result.deepProp.toChange, "changed value");
+    assert.equal(result.deepProp.simpleProp, 'simple value');
+    assert.equal(result.deepProp.toChange, 'changed value');
 });
 
-QUnit.test("deepExtendArraySafe utility could not extend complex 'object' by another complex 'object' ", function(assert) {
-    var oldValue = {
-        deepProp: new this.SomeClass("some value", "missed value")
+QUnit.test('deepExtendArraySafe utility could not extend complex \'object\' by another complex \'object\' ', function(assert) {
+    const oldValue = {
+        deepProp: new this.SomeClass('some value', 'missed value')
     };
-    var newValue = {
-        deepProp: new this.SomeClass("new value")
+    const newValue = {
+        deepProp: new this.SomeClass('new value')
     };
-    var result;
+    const result = objectUtils.deepExtendArraySafe(oldValue, newValue, true);
 
-    result = objectUtils.deepExtendArraySafe(oldValue, newValue, true);
-
-    assert.equal(result.deepProp.simpleProp, "new value");
+    assert.equal(result.deepProp.simpleProp, 'new value');
     assert.notOk(!!result.deepProp.toChange);
 });
 
-QUnit.test("deepExtendArraySafe utility does not throw an error with 'null' deep property", function(assert) {
-    var oldValue = {
+QUnit.test('deepExtendArraySafe utility does not throw an error with \'null\' deep property', function(assert) {
+    const oldValue = {
         deepProp: null
     };
-    var newValue = {
-        deepProp: { toChange: "changed value" }
+    const newValue = {
+        deepProp: { toChange: 'changed value' }
     };
-    var result;
+    const result = objectUtils.deepExtendArraySafe(oldValue, newValue, true);
 
-    result = objectUtils.deepExtendArraySafe(oldValue, newValue, true);
-
-    assert.equal(result.deepProp.toChange, "changed value");
+    assert.equal(result.deepProp.toChange, 'changed value');
 });
 
-QUnit.test("deepExtendArraySafe utility does not pollute object prototype", function(assert) {
-    objectUtils.deepExtendArraySafe({ }, JSON.parse(`{ "__proto__": { "pollution": true }}`), true);
-    assert.ok(!("pollution" in { }), "object prototype is not polluted");
+QUnit.test('deepExtendArraySafe utility does not pollute object prototype', function(assert) {
+    objectUtils.deepExtendArraySafe({ }, JSON.parse('{ "__proto__": { "pollution": true }}'), true);
+    assert.ok(!('pollution' in { }), 'object prototype is not polluted');
 });

@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets.editors/datebox.markup.tests.js");
+require('../DevExpress.ui.widgets.editors/datebox.markup.tests.js');

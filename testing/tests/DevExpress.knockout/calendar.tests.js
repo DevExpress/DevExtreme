@@ -1,11 +1,11 @@
-var $ = require("jquery"),
-    ko = require("knockout");
+const $ = require('jquery');
+const ko = require('knockout');
 
-require("integration/knockout");
-require("ui/calendar");
+require('integration/knockout');
+require('ui/calendar');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="T354951" data-bind="dxCalendar: {}">\
             <div data-options="dxTemplate: { name: \'cell\' }">\
                 <div class="root-model-data" data-bind="text: $root.text"></div>\
@@ -13,18 +13,18 @@ QUnit.testStart(function() {
             </div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 
-QUnit.test("cellTemplate should have access to a $root model", function(assert) {
-    var viewModel = {
+QUnit.test('cellTemplate should have access to a $root model', function(assert) {
+    const viewModel = {
         calendarConfig: {},
         text: ko.observable('rootModelData')
     };
-    var $calendar = $("#T354951");
+    const $calendar = $('#T354951');
     ko.applyBindings(viewModel, $calendar.get(0));
 
-    assert.equal($.trim($calendar.find(".root-model-data").first().text()), "rootModelData", "cellTemplate get access to $root model");
-    assert.notEqual($.trim($calendar.find(".model-data").first().text()), "rootModelData", "cellTemplate get access to model");
+    assert.equal($.trim($calendar.find('.root-model-data').first().text()), 'rootModelData', 'cellTemplate get access to $root model');
+    assert.notEqual($.trim($calendar.find('.model-data').first().text()), 'rootModelData', 'cellTemplate get access to model');
 });

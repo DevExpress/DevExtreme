@@ -1,35 +1,35 @@
-const assert = require("chai").assert;
-const LessTemplateLoader = require("../modules/less-template-loader");
-const lessCompiler = require("less/lib/less-node");
+const assert = require('chai').assert;
+const LessTemplateLoader = require('../modules/less-template-loader');
+const lessCompiler = require('less/lib/less-node');
 
 const metadata = [ {
-    "Name": "10. Text color",
-    "Key": "@base-text-color",
+    'Name': '10. Text color',
+    'Key': '@base-text-color',
 }, {
-    "Name": "20. Base background color",
-    "Key": "@base-bg",
+    'Name': '20. Base background color',
+    'Key': '@base-bg',
 }, {
-    "Key": "@datagrid-base-color"
+    'Key': '@datagrid-base-color'
 }, {
-    "Key": "@treelist-base-color"
+    'Key': '@treelist-base-color'
 }];
 
 
-const emptyHeader = () => { return ""; };
+const emptyHeader = () => { return ''; };
 
-describe("Migration LessTemplateLoader", () => {
+describe('Migration LessTemplateLoader', () => {
 
-    it("compileLess", () => {
-        let config = {
+    it('compileLess', () => {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
-            outColorScheme: "my-custom",
+            outColorScheme: 'my-custom',
             makeSwatch: true,
         };
 
-        let less = `
-        div { color: @base-bg; }
-        div { color: @base-text-color; }
+        const less = `
+        div .class1 { color: @base-bg; }
+        div .class2 { color: @base-text-color; }
         .dx-datagrid {
             color: @datagrid-base-color;
         }
@@ -37,24 +37,24 @@ describe("Migration LessTemplateLoader", () => {
             color: @treelist-base-color;
         }`;
 
-        let metadataVariables = {};
+        const metadataVariables = {};
 
         metadata.forEach(metaItem => {
-            metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
+            metadataVariables[metaItem.Key.replace('@', '')] = metaItem.Key;
         });
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.compileLess(less, {
-            "base-bg": "#fff",
-            "base-text-color": "#000",
-            "datagrid-base-color": "red",
-            "treelist-base-color": "green"
+            'base-bg': '#fff',
+            'base-text-color': '#000',
+            'datagrid-base-color': 'red',
+            'treelist-base-color': 'green'
         }, metadataVariables).then(data => {
-            assert.equal(data.css, `.dx-swatch-my-custom div {
+            assert.equal(data.css, `.dx-swatch-my-custom div .class1 {
   color: #fff;
 }
-.dx-swatch-my-custom div {
+.dx-swatch-my-custom div .class2 {
   color: #000;
 }
 .dx-swatch-my-custom .dx-datagrid {
@@ -63,7 +63,6 @@ describe("Migration LessTemplateLoader", () => {
 .dx-swatch-my-custom .dx-treelist {
   color: green;
 }
-
 `);
         });
     });

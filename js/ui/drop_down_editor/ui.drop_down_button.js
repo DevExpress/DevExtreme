@@ -1,24 +1,24 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import messageLocalization from "../../localization/message";
-import TextEditorButton from "../text_box/texteditor_button_collection/button";
-import Button from "../button";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import messageLocalization from '../../localization/message';
+import TextEditorButton from '../text_box/texteditor_button_collection/button';
+import Button from '../button';
 
-const DROP_DOWN_EDITOR_BUTTON_CLASS = "dx-dropdowneditor-button";
-const DROP_DOWN_EDITOR_BUTTON_VISIBLE = "dx-dropdowneditor-button-visible";
+const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
+const DROP_DOWN_EDITOR_BUTTON_VISIBLE = 'dx-dropdowneditor-button-visible';
 
-const BUTTON_MESSAGE = "dxDropDownEditor-selectLabel";
+const BUTTON_MESSAGE = 'dxDropDownEditor-selectLabel';
 
 export default class ClearButton extends TextEditorButton {
     _attachEvents(instance) {
         const { editor } = this;
 
-        instance.option("onClick", (e) => {
-            !editor.option("openOnFieldClick") && editor._openHandler(e);
+        instance.option('onClick', (e) => {
+            !editor.option('openOnFieldClick') && editor._openHandler(e);
         });
 
-        eventsEngine.on(instance.$element(), "mousedown", (e) => {
-            if(editor.$element().is(".dx-state-focused")) {
+        eventsEngine.on(instance.$element(), 'mousedown', (e) => {
+            if(editor.$element().is('.dx-state-focused')) {
                 e.preventDefault();
             }
         });
@@ -26,13 +26,13 @@ export default class ClearButton extends TextEditorButton {
 
     _create() {
         const { editor } = this;
-        const $element = $("<div>");
+        const $element = $('<div>');
         const options = this._getOptions();
 
         this._addToContainer($element);
 
         const instance = editor._createComponent($element, Button, options);
-        instance.setAria("label", messageLocalization.format(BUTTON_MESSAGE));
+        instance.setAria('label', messageLocalization.format(BUTTON_MESSAGE));
 
         this._legacyRender(editor.$element(), $element, options.visible);
 
@@ -45,8 +45,8 @@ export default class ClearButton extends TextEditorButton {
     _getOptions() {
         const { editor } = this;
         const visible = this._isVisible();
-        const isReadOnly = editor.option("readOnly");
-        const template = editor._getTemplateByOption("dropDownButtonTemplate");
+        const isReadOnly = editor.option('readOnly');
+        const template = editor._getTemplateByOption('dropDownButtonTemplate');
 
         return {
             focusStateEnabled: false,
@@ -62,7 +62,7 @@ export default class ClearButton extends TextEditorButton {
     _isVisible() {
         const { editor } = this;
 
-        return super._isVisible() && editor.option("showDropDownButton");
+        return super._isVisible() && editor.option('showDropDownButton');
     }
 
     // TODO: get rid of it
@@ -70,7 +70,7 @@ export default class ClearButton extends TextEditorButton {
         $editor.toggleClass(DROP_DOWN_EDITOR_BUTTON_VISIBLE, isVisible);
 
         if($element) {
-            $element.removeClass("dx-button");
+            $element.removeClass('dx-button');
             $element.addClass(DROP_DOWN_EDITOR_BUTTON_CLASS);
         }
     }

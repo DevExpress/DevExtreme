@@ -4,7 +4,7 @@ import { Deferred } from '../../core/utils/deferred';
 import focusModule from '../grid_core/ui.grid_core.focus';
 
 function findIndex(items, callback) {
-    var result = -1;
+    let result = -1;
 
     items.forEach(function(node, index) {
         if(callback(node)) {
@@ -15,24 +15,24 @@ function findIndex(items, callback) {
     return result;
 }
 
-core.registerModule("focus", extend(true, {}, focusModule, {
+core.registerModule('focus', extend(true, {}, focusModule, {
     extenders: {
         controllers: {
             data: {
                 changeRowExpand: function(key) {
-                    if(this.option("focusedRowEnabled") && this.isRowExpanded(key)) {
+                    if(this.option('focusedRowEnabled') && this.isRowExpanded(key)) {
                         if(this._isFocusedRowInside(key)) {
-                            this.option("focusedRowKey", key);
+                            this.option('focusedRowKey', key);
                         }
                     }
 
                     return this.callBase.apply(this, arguments);
                 },
                 _isFocusedRowInside: function(parentKey) {
-                    var focusedRowKey = this.option("focusedRowKey"),
-                        rowIndex = this.getRowIndexByKey(focusedRowKey),
-                        focusedRow = rowIndex >= 0 && this.getVisibleRows()[rowIndex],
-                        parent = focusedRow && focusedRow.node.parent;
+                    const focusedRowKey = this.option('focusedRowKey');
+                    const rowIndex = this.getRowIndexByKey(focusedRowKey);
+                    const focusedRow = rowIndex >= 0 && this.getVisibleRows()[rowIndex];
+                    let parent = focusedRow && focusedRow.node.parent;
 
                     while(parent) {
                         if(parent.key === parentKey) {
@@ -44,18 +44,18 @@ core.registerModule("focus", extend(true, {}, focusModule, {
                     return false;
                 },
                 getParentKey: function(key) {
-                    var that = this,
-                        dataSource = that._dataSource,
-                        node = that.getNodeByKey(key),
-                        d = new Deferred();
+                    const that = this;
+                    const dataSource = that._dataSource;
+                    const node = that.getNodeByKey(key);
+                    const d = new Deferred();
 
                     if(node) {
                         d.resolve(node.parent ? node.parent.key : undefined);
                     } else {
                         dataSource.load({
-                            filter: [dataSource.getKeyExpr(), "=", key]
+                            filter: [dataSource.getKeyExpr(), '=', key]
                         }).done(function(items) {
-                            var parentData = items[0];
+                            const parentData = items[0];
 
                             if(parentData) {
                                 d.resolve(dataSource.parentKeyOf(parentData));
@@ -68,12 +68,12 @@ core.registerModule("focus", extend(true, {}, focusModule, {
                     return d.promise();
                 },
                 expandAscendants: function(key) {
-                    var that = this,
-                        dataSource = that._dataSource,
-                        d = new Deferred();
+                    const that = this;
+                    const dataSource = that._dataSource;
+                    const d = new Deferred();
 
                     that.getParentKey(key).done(function(parentKey) {
-                        if(dataSource && parentKey !== undefined && parentKey !== that.option("rootValue")) {
+                        if(dataSource && parentKey !== undefined && parentKey !== that.option('rootValue')) {
                             dataSource._isNodesInitializing = true;
                             that.expandRow(parentKey);
                             dataSource._isNodesInitializing = false;
@@ -86,21 +86,21 @@ core.registerModule("focus", extend(true, {}, focusModule, {
                     return d.promise();
                 },
                 getPageIndexByKey: function(key) {
-                    var that = this,
-                        dataSource = that._dataSource,
-                        d = new Deferred();
+                    const that = this;
+                    const dataSource = that._dataSource;
+                    const d = new Deferred();
 
                     that.expandAscendants(key).done(function() {
                         dataSource.load({
                             filter: that.getCombinedFilter(),
-                            sort: that.getController("columns").getSortDataSourceParameters(!dataSource.remoteOperations().sorting),
+                            sort: that.getController('columns').getSortDataSourceParameters(!dataSource.remoteOperations().sorting),
                             parentIds: []
                         }).done(function(nodes) {
-                            var offset = findIndex(nodes, function(node) {
+                            const offset = findIndex(nodes, function(node) {
                                 return that.keyOf(node.data) === key;
                             });
 
-                            var pageIndex = that.pageIndex();
+                            let pageIndex = that.pageIndex();
 
                             if(offset >= 0) {
                                 pageIndex = Math.floor(offset / that.pageSize());

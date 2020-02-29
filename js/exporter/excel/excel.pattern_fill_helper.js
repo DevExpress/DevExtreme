@@ -1,4 +1,4 @@
-import { isDefined } from "../../core/utils/type";
+import { isDefined } from '../../core/utils/type';
 import tagHelper from './excel.tag_helper';
 import colorHelper from './excel.color_helper';
 
@@ -52,13 +52,13 @@ const patternFillHelper = {
     toXml: function(tag) {
         const content =
             [
-                isDefined(tag.foregroundColor) ? colorHelper.toXml("fgColor", tag.foregroundColor) : '', // 18.8.19 fgColor (Foreground Color)
-                isDefined(tag.backgroundColor) ? colorHelper.toXml("bgColor", tag.backgroundColor) : '', // 18.8.3 bgColor (Background Color)
-            ].join("");
+                isDefined(tag.foregroundColor) ? colorHelper.toXml('fgColor', tag.foregroundColor) : '', // 18.8.19 fgColor (Foreground Color)
+                isDefined(tag.backgroundColor) ? colorHelper.toXml('bgColor', tag.backgroundColor) : '', // 18.8.3 bgColor (Background Color)
+            ].join('');
 
         // §18.8.32 patternFill (Pattern), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
         return tagHelper.toXml(
-            "patternFill",
+            'patternFill',
             { patternType: tag.patternType }, // 18.18.55 ST_PatternType (Pattern Type)
             content
         );

@@ -1,19 +1,19 @@
-import { Deferred } from "core/utils/deferred";
+import { Deferred } from 'core/utils/deferred';
 
-import { FileProvider } from "ui/file_manager/file_provider/file_provider";
-import { ErrorCode } from "ui/file_manager/ui.file_manager.common";
+import FileSystemProviderBase from 'file_management/provider_base';
+import ErrorCode from 'file_management/errors';
 
 const DEFAULT_DELAY = 2000;
 
-export default class TestFileProvider extends FileProvider {
+export default class TestFileSystemProvider extends FileSystemProviderBase {
 
     constructor(options) {
         super(options);
 
         this._provider = options.provider;
 
-        this._requestMode = options.requestMode || "multiple";
-        this._raiseErrorMode = options.raiseErrorMode || "none";
+        this._requestMode = options.requestMode || 'multiple';
+        this._raiseErrorMode = options.raiseErrorMode || 'none';
         this._onRaiseError = options.onRaiseError;
     }
 
@@ -30,13 +30,13 @@ export default class TestFileProvider extends FileProvider {
         this._provider.renameItem(item, name);
     }
 
-    createFolder(parentDir, name) {
-        return this._doDelay(() => this._createFolderCore(parentDir, name));
+    createDirectory(parentDir, name) {
+        return this._doDelay(() => this._createDirectoryCore(parentDir, name));
     }
 
-    _createFolderCore(parentDir, name) {
+    _createDirectoryCore(parentDir, name) {
         this._raiseError();
-        this._provider.createFolder(parentDir, name);
+        this._provider.createDirectory(parentDir, name);
     }
 
     deleteItems(items) {
@@ -132,7 +132,7 @@ export default class TestFileProvider extends FileProvider {
     _raiseError(item, index) {
         if(!this._needRaiseError()) {
             return;
-        } else if(this._raiseErrorMode === "always") {
+        } else if(this._raiseErrorMode === 'always') {
             this._raiseErrorCore(item);
         }
 
@@ -174,19 +174,19 @@ export default class TestFileProvider extends FileProvider {
     }
 
     _needRaiseError() {
-        return this._raiseErrorMode !== "none";
+        return this._raiseErrorMode !== 'none';
     }
 
     _useDefaultRequestMode() {
-        return this._requestModeIs("default");
+        return this._requestModeIs('default');
     }
 
     _useSingleRequestMode() {
-        return this._requestModeIs("single");
+        return this._requestModeIs('single');
     }
 
     _useMultipleRequestMode() {
-        return this._requestModeIs("multiple");
+        return this._requestModeIs('multiple');
     }
 
     _requestModeIs(value) {

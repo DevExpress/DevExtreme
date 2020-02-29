@@ -1,11 +1,11 @@
-import Class from "../../core/class";
-import { compileGetter } from "../../core/utils/data";
-import { isFunction } from "../../core/utils/type";
-import { errors } from "../../data/errors";
-import { aggregators } from "../../data/utils";
+import Class from '../../core/class';
+import { compileGetter } from '../../core/utils/data';
+import { isFunction } from '../../core/utils/type';
+import { errors } from '../../data/errors';
+import { aggregators } from '../../data/utils';
 
 function depthFirstSearch(i, depth, root, callback) {
-    var j = 0;
+    let j = 0;
     if(i < depth) {
         for(; j < root.items.length; j++) {
             depthFirstSearch(i + 1, depth, root.items[j], callback);
@@ -19,9 +19,10 @@ function depthFirstSearch(i, depth, root, callback) {
 
 // NOTE: https://github.com/jquery/jquery/blame/master/src/core.js#L392
 function map(array, callback) {
-    var i, result;
+    let i;
+    let result;
 
-    if("map" in array) {
+    if('map' in array) {
         return array.map(callback);
     }
 
@@ -34,7 +35,7 @@ function map(array, callback) {
 }
 
 function isEmpty(x) {
-    return (x !== x) || (x === "") || (x === null) || (x === undefined);
+    return (x !== x) || (x === '') || (x === null) || (x === undefined);
 }
 
 function isCount(aggregator) {
@@ -42,17 +43,17 @@ function isCount(aggregator) {
 }
 
 function normalizeAggregate(aggregate) {
-    var selector = compileGetter(aggregate.selector),
-        skipEmptyValues = ("skipEmptyValues" in aggregate)
-            ? aggregate.skipEmptyValues
-            : true,
-        aggregator = aggregate.aggregator;
+    const selector = compileGetter(aggregate.selector);
+    const skipEmptyValues = ('skipEmptyValues' in aggregate)
+        ? aggregate.skipEmptyValues
+        : true;
+    let aggregator = aggregate.aggregator;
 
 
-    if(typeof aggregator === "string") {
+    if(typeof aggregator === 'string') {
         aggregator = aggregators[aggregator];
         if(!aggregator) {
-            throw errors.Error("E4001", aggregate.aggregator);
+            throw errors.Error('E4001', aggregate.aggregator);
         }
     }
 
@@ -87,8 +88,9 @@ module.exports = Class.inherit({
     },
 
     _aggregate: function(aggregates, data, container) {
-        var i, j,
-            length = data.items ? data.items.length : 0;
+        let i;
+        let j;
+        const length = data.items ? data.items.length : 0;
 
         for(i = 0; i < aggregates.length; i++) {
             if(isCount(aggregates[i].aggregator)) {
@@ -103,7 +105,7 @@ module.exports = Class.inherit({
     },
 
     _calculateTotals: function(level, data) {
-        var i;
+        let i;
         if(level === 0) {
             this._totals = this._seed(this._totalAggregates);
         }
@@ -122,12 +124,12 @@ module.exports = Class.inherit({
     },
 
     _calculateGroups: function(root) {
-        var maxLevel = this._groupLevel,
-            currentLevel = maxLevel + 1,
+        const maxLevel = this._groupLevel;
+        let currentLevel = maxLevel + 1;
 
-            seedFn = this._seed.bind(this, this._groupAggregates),
-            stepFn = this._aggregate.bind(this, this._groupAggregates),
-            finalizeFn = this._finalize.bind(this, this._groupAggregates);
+        const seedFn = this._seed.bind(this, this._groupAggregates);
+        const stepFn = this._aggregate.bind(this, this._groupAggregates);
+        const finalizeFn = this._finalize.bind(this, this._groupAggregates);
 
         function aggregator(node) {
             node.aggregates = seedFn(currentLevel - 1);
@@ -150,19 +152,19 @@ module.exports = Class.inherit({
 
     _seed: function(aggregates, groupIndex) {
         return map(aggregates, function(aggregate) {
-            var aggregator = aggregate.aggregator,
-                seed = "seed" in aggregator
-                    ? (isFunction(aggregator.seed) ? aggregator.seed(groupIndex) : aggregator.seed)
-                    : NaN;
+            const aggregator = aggregate.aggregator;
+            const seed = 'seed' in aggregator
+                ? (isFunction(aggregator.seed) ? aggregator.seed(groupIndex) : aggregator.seed)
+                : NaN;
 
             return seed;
         });
     },
 
     _accumulate: function(aggregateIndex, aggregate, results, item) {
-        var value = aggregate.selector(item),
-            aggregator = aggregate.aggregator,
-            skipEmptyValues = aggregate.skipEmptyValues;
+        const value = aggregate.selector(item);
+        const aggregator = aggregate.aggregator;
+        const skipEmptyValues = aggregate.skipEmptyValues;
 
         if(skipEmptyValues && isEmpty(value)) {
             return;
@@ -177,7 +179,7 @@ module.exports = Class.inherit({
 
     _finalize: function(aggregates, results) {
         return map(aggregates, function(aggregate, index) {
-            var fin = aggregate.aggregator.finalize;
+            const fin = aggregate.aggregator.finalize;
             return fin
                 ? fin(results[index])
                 : results[index];

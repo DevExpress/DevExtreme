@@ -1,18 +1,19 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import BaseCollectionWidget from "./ui.collection_widget.base";
-import errors from "../widget/ui.errors";
-import { extend } from "../../core/utils/extend";
-import { each } from "../../core/utils/iterator";
-import { noop } from "../../core/utils/common";
-import { isDefined } from "../../core/utils/type";
-import PlainEditStrategy from "./ui.collection_widget.edit.strategy.plain";
-import { compileGetter } from "../../core/utils/data";
-import { DataSource, normalizeLoadResult } from "../../data/data_source/data_source";
-import Selection from "../selection/selection";
-import { when, Deferred, fromPromise } from "../../core/utils/deferred";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import BaseCollectionWidget from './ui.collection_widget.base';
+import errors from '../widget/ui.errors';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { noop } from '../../core/utils/common';
+import { isDefined } from '../../core/utils/type';
+import PlainEditStrategy from './ui.collection_widget.edit.strategy.plain';
+import { compileGetter } from '../../core/utils/data';
+import { DataSource } from '../../data/data_source/data_source';
+import { normalizeLoadResult } from '../../data/data_source/utils';
+import Selection from '../selection/selection';
+import { when, Deferred, fromPromise } from '../../core/utils/deferred';
 
-const ITEM_DELETING_DATA_KEY = "dxItemDeleting";
+const ITEM_DELETING_DATA_KEY = 'dxItemDeleting';
 const NOT_EXISTING_INDEX = -1;
 
 const indexExists = function(index) {
@@ -56,55 +57,18 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             */
             selectionByClick: true,
 
-            /**
-            * @name CollectionWidgetOptions.selectedItems
-            * @type Array<any>
-            * @fires CollectionWidgetOptions.onSelectionChanged
-            */
             selectedItems: [],
 
-            /**
-             * @name CollectionWidgetOptions.selectedItemKeys
-             * @type Array<any>
-             * @fires CollectionWidgetOptions.onSelectionChanged
-             */
             selectedItemKeys: [],
 
             maxFilterLengthInRequest: 1500,
 
-            /**
-             * @name CollectionWidgetOptions.keyExpr
-             * @type string|function
-             * @default null
-             */
             keyExpr: null,
 
-            /**
-            * @name CollectionWidgetOptions.selectedIndex
-            * @type number
-            * @default -1
-            * @fires CollectionWidgetOptions.onSelectionChanged
-            */
             selectedIndex: NOT_EXISTING_INDEX,
 
-            /**
-            * @name CollectionWidgetOptions.selectedItem
-            * @type object
-            * @default null
-            * @fires CollectionWidgetOptions.onSelectionChanged
-            * @ref
-            */
             selectedItem: null,
 
-            /**
-            * @name CollectionWidgetOptions.onSelectionChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 addedItems:array<any>
-            * @type_function_param1_field5 removedItems:array<any>
-            * @action
-            */
             onSelectionChanged: null,
 
             /**
@@ -166,13 +130,13 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
         this._initSelectionModule();
 
-        if(this.option("selectionMode") === "multi") {
+        if(this.option('selectionMode') === 'multi') {
             this._showDeprecatedSelectionMode();
         }
     },
 
     _initKeyGetter: function() {
-        this._keyGetter = compileGetter(this.option("keyExpr"));
+        this._keyGetter = compileGetter(this.option('keyExpr'));
     },
 
     _getKeysByItems: function(selectedItems) {
@@ -204,7 +168,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     key: function() {
-        if(this.option("keyExpr")) return this.option("keyExpr");
+        if(this.option('keyExpr')) return this.option('keyExpr');
         return this._dataSource && this._dataSource.key();
     },
 
@@ -212,7 +176,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         let key = item;
         const store = this._dataSource && this._dataSource.store();
 
-        if(this.option("keyExpr")) {
+        if(this.option('keyExpr')) {
             key = this._keyGetter(item);
         } else if(store) {
             key = store.keyOf(item);
@@ -226,23 +190,23 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _initSelectionModule: function() {
-        const that = this,
-            itemsGetter = that._editStrategy.itemsGetter;
+        const that = this;
+        const itemsGetter = that._editStrategy.itemsGetter;
 
         this._selection = new Selection({
             allowNullValue: this._nullValueSelectionSupported(),
-            mode: this.option("selectionMode"),
-            maxFilterLengthInRequest: this.option("maxFilterLengthInRequest"),
+            mode: this.option('selectionMode'),
+            maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
             equalByReference: !this._isKeySpecified(),
             onSelectionChanged: function(args) {
                 if(args.addedItemKeys.length || args.removedItemKeys.length) {
-                    that.option("selectedItems", that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+                    that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
                     that._updateSelectedItems(args);
                 }
             },
             filter: that._getCombinedFilter.bind(that),
             totalCount: function() {
-                const items = that.option("items");
+                const items = that.option('items');
                 const dataSource = that._dataSource;
                 return dataSource && dataSource.totalCount() >= 0 ? dataSource.totalCount() : items.length;
             },
@@ -283,8 +247,8 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _getSelectedItemIndices: function(keys) {
-        const that = this,
-            indices = [];
+        const that = this;
+        const indices = [];
 
         keys = keys || this._selection.getSelectedItemKeys();
 
@@ -332,60 +296,60 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         let selectedItems;
 
         switch(byOption) {
-            case "selectedIndex":
-                selectedItem = this._editStrategy.getItemDataByIndex(this.option("selectedIndex"));
+            case 'selectedIndex':
+                selectedItem = this._editStrategy.getItemDataByIndex(this.option('selectedIndex'));
 
                 if(isDefined(selectedItem)) {
-                    this._setOptionWithoutOptionChange("selectedItems", [selectedItem]);
-                    this._setOptionWithoutOptionChange("selectedItem", selectedItem);
-                    this._setOptionWithoutOptionChange("selectedItemKeys", this._editStrategy.getKeysByItems([selectedItem]));
+                    this._setOptionWithoutOptionChange('selectedItems', [selectedItem]);
+                    this._setOptionWithoutOptionChange('selectedItem', selectedItem);
+                    this._setOptionWithoutOptionChange('selectedItemKeys', this._editStrategy.getKeysByItems([selectedItem]));
                 } else {
-                    this._setOptionWithoutOptionChange("selectedItems", []);
-                    this._setOptionWithoutOptionChange("selectedItemKeys", []);
-                    this._setOptionWithoutOptionChange("selectedItem", null);
+                    this._setOptionWithoutOptionChange('selectedItems', []);
+                    this._setOptionWithoutOptionChange('selectedItemKeys', []);
+                    this._setOptionWithoutOptionChange('selectedItem', null);
                 }
                 break;
 
-            case "selectedItems":
-                selectedItems = this.option("selectedItems") || [];
+            case 'selectedItems':
+                selectedItems = this.option('selectedItems') || [];
                 selectedIndex = this._editStrategy.getIndexByItemData(selectedItems[0]);
 
-                if(this.option("selectionRequired") && !indexExists(selectedIndex)) {
-                    return this._syncSelectionOptions("selectedIndex");
+                if(this.option('selectionRequired') && !indexExists(selectedIndex)) {
+                    return this._syncSelectionOptions('selectedIndex');
                 }
 
-                this._setOptionWithoutOptionChange("selectedItem", selectedItems[0]);
-                this._setOptionWithoutOptionChange("selectedIndex", selectedIndex);
-                this._setOptionWithoutOptionChange("selectedItemKeys", this._editStrategy.getKeysByItems(selectedItems));
+                this._setOptionWithoutOptionChange('selectedItem', selectedItems[0]);
+                this._setOptionWithoutOptionChange('selectedIndex', selectedIndex);
+                this._setOptionWithoutOptionChange('selectedItemKeys', this._editStrategy.getKeysByItems(selectedItems));
                 break;
 
-            case "selectedItem":
-                selectedItem = this.option("selectedItem");
+            case 'selectedItem':
+                selectedItem = this.option('selectedItem');
                 selectedIndex = this._editStrategy.getIndexByItemData(selectedItem);
 
-                if(this.option("selectionRequired") && !indexExists(selectedIndex)) {
-                    return this._syncSelectionOptions("selectedIndex");
+                if(this.option('selectionRequired') && !indexExists(selectedIndex)) {
+                    return this._syncSelectionOptions('selectedIndex');
                 }
 
                 if(isDefined(selectedItem)) {
-                    this._setOptionWithoutOptionChange("selectedItems", [selectedItem]);
-                    this._setOptionWithoutOptionChange("selectedIndex", selectedIndex);
-                    this._setOptionWithoutOptionChange("selectedItemKeys", this._editStrategy.getKeysByItems([selectedItem]));
+                    this._setOptionWithoutOptionChange('selectedItems', [selectedItem]);
+                    this._setOptionWithoutOptionChange('selectedIndex', selectedIndex);
+                    this._setOptionWithoutOptionChange('selectedItemKeys', this._editStrategy.getKeysByItems([selectedItem]));
                 } else {
-                    this._setOptionWithoutOptionChange("selectedItems", []);
-                    this._setOptionWithoutOptionChange("selectedItemKeys", []);
-                    this._setOptionWithoutOptionChange("selectedIndex", NOT_EXISTING_INDEX);
+                    this._setOptionWithoutOptionChange('selectedItems', []);
+                    this._setOptionWithoutOptionChange('selectedItemKeys', []);
+                    this._setOptionWithoutOptionChange('selectedIndex', NOT_EXISTING_INDEX);
                 }
                 break;
 
-            case "selectedItemKeys":
-                selectedItemKeys = this.option("selectedItemKeys");
+            case 'selectedItemKeys':
+                selectedItemKeys = this.option('selectedItemKeys');
 
-                if(this.option("selectionRequired")) {
+                if(this.option('selectionRequired')) {
                     const selectedItemIndex = this._getIndexByKey(selectedItemKeys[0]);
 
                     if(!indexExists(selectedItemIndex)) {
-                        return this._syncSelectionOptions("selectedIndex");
+                        return this._syncSelectionOptions('selectedIndex');
                     }
                 }
 
@@ -396,20 +360,20 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _chooseSelectOption: function() {
-        let optionName = "selectedIndex";
+        let optionName = 'selectedIndex';
 
         const isOptionDefined = function(optionName) {
-            const optionValue = this.option(optionName),
-                length = isDefined(optionValue) && optionValue.length;
+            const optionValue = this.option(optionName);
+            const length = isDefined(optionValue) && optionValue.length;
             return length || optionName in this._userOptions;
         }.bind(this);
 
-        if(isOptionDefined("selectedItems")) {
-            optionName = "selectedItems";
-        } else if(isOptionDefined("selectedItem")) {
-            optionName = "selectedItem";
-        } else if(isOptionDefined("selectedItemKeys")) {
-            optionName = "selectedItemKeys";
+        if(isOptionDefined('selectedItems')) {
+            optionName = 'selectedItems';
+        } else if(isOptionDefined('selectedItem')) {
+            optionName = 'selectedItem';
+        } else if(isOptionDefined('selectedItemKeys')) {
+            optionName = 'selectedItemKeys';
         }
 
         return optionName;
@@ -430,13 +394,13 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _normalizeSelectedItems: function() {
-        if(this.option("selectionMode") === "none") {
-            this._setOptionWithoutOptionChange("selectedItems", []);
-            this._syncSelectionOptions("selectedItems");
-        } else if(this.option("selectionMode") === "single") {
-            const newSelection = this.option("selectedItems");
+        if(this.option('selectionMode') === 'none') {
+            this._setOptionWithoutOptionChange('selectedItems', []);
+            this._syncSelectionOptions('selectedItems');
+        } else if(this.option('selectionMode') === 'single') {
+            const newSelection = this.option('selectedItems');
 
-            if(newSelection.length > 1 || !newSelection.length && this.option("selectionRequired") && this.option("items") && this.option("items").length) {
+            if(newSelection.length > 1 || !newSelection.length && this.option('selectionRequired') && this.option('items') && this.option('items').length) {
                 const currentSelection = this._selection.getSelectedItems();
                 let normalizedSelection = newSelection[0] === undefined ? currentSelection[0] : newSelection[0];
 
@@ -444,20 +408,20 @@ const CollectionWidget = BaseCollectionWidget.inherit({
                     normalizedSelection = this._editStrategy.itemsGetter()[0];
                 }
 
-                if(this.option("grouped") && normalizedSelection && normalizedSelection.items) {
+                if(this.option('grouped') && normalizedSelection && normalizedSelection.items) {
                     normalizedSelection.items = [normalizedSelection.items[0]];
                 }
 
                 this._selection.setSelection(this._getKeysByItems([normalizedSelection]));
 
-                this._setOptionWithoutOptionChange("selectedItems", [normalizedSelection]);
+                this._setOptionWithoutOptionChange('selectedItems', [normalizedSelection]);
 
-                return this._syncSelectionOptions("selectedItems");
+                return this._syncSelectionOptions('selectedItems');
             } else {
                 this._selection.setSelection(this._getKeysByItems(newSelection));
             }
         } else {
-            const newKeys = this._getKeysByItems(this.option("selectedItems"));
+            const newKeys = this._getKeysByItems(this.option('selectedItems'));
             const oldKeys = this._selection.getSelectedItemKeys();
             if(!this._compareKeys(oldKeys, newKeys)) {
                 this._selection.setSelection(newKeys);
@@ -471,7 +435,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         this._createAction((function(e) {
             this._itemSelectHandler(e.event);
         }).bind(this), {
-            validatingTargetName: "itemElement"
+            validatingTargetName: 'itemElement'
         })({
             itemElement: $(e.currentTarget),
             event: e
@@ -481,7 +445,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _itemSelectHandler: function(e) {
-        if(!this.option("selectionByClick")) {
+        if(!this.option('selectionByClick')) {
             return;
         }
 
@@ -499,10 +463,10 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _postprocessRenderItem: function(args) {
-        if(this.option("selectionMode") !== "none") {
-            const $itemElement = $(args.itemElement),
-                normalizedItemIndex = this._editStrategy.getNormalizedIndex($itemElement),
-                isItemSelected = this._isItemSelected(normalizedItemIndex);
+        if(this.option('selectionMode') !== 'none') {
+            const $itemElement = $(args.itemElement);
+            const normalizedItemIndex = this._editStrategy.getNormalizedIndex($itemElement);
+            const isItemSelected = this._isItemSelected(normalizedItemIndex);
 
             this._processSelectableItem($itemElement, isItemSelected);
         }
@@ -514,9 +478,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _updateSelectedItems: function(args) {
-        const that = this,
-            addedItemKeys = args.addedItemKeys,
-            removedItemKeys = args.removedItemKeys;
+        const that = this;
+        const addedItemKeys = args.addedItemKeys;
+        const removedItemKeys = args.removedItemKeys;
 
         if(that._rendered && (addedItemKeys.length || removedItemKeys.length)) {
             const selectionChangePromise = that._selectionChangePromise;
@@ -551,15 +515,15 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _fireSelectionChangeEvent: function(addedItems, removedItems) {
-        this._createActionByOption("onSelectionChanged", {
-            excludeValidators: ["disabled", "readOnly"]
+        this._createActionByOption('onSelectionChanged', {
+            excludeValidators: ['disabled', 'readOnly']
         })({ addedItems: addedItems, removedItems: removedItems });
     },
 
     _updateSelection: noop,
 
     _setAriaSelected: function($target, value) {
-        this.setAria("selected", value, $target);
+        this.setAria('selected', value, $target);
     },
 
     _removeSelection: function(normalizedIndex) {
@@ -567,13 +531,13 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
         if(indexExists(normalizedIndex)) {
             this._processSelectableItem($itemElement, false);
-            eventsEngine.triggerHandler($itemElement, "stateChanged", false);
+            eventsEngine.triggerHandler($itemElement, 'stateChanged', false);
         }
     },
 
     _showDeprecatedSelectionMode: function() {
-        errors.log("W0001", this.NAME, "selectionMode: 'multi'", "16.1", "Use selectionMode: 'multiple' instead");
-        this.option("selectionMode", "multiple");
+        errors.log('W0001', this.NAME, 'selectionMode: \'multi\'', '16.1', 'Use selectionMode: \'multiple\' instead');
+        this.option('selectionMode', 'multiple');
     },
 
     _addSelection: function(normalizedIndex) {
@@ -581,7 +545,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
         if(indexExists(normalizedIndex)) {
             this._processSelectableItem($itemElement, true);
-            eventsEngine.triggerHandler($itemElement, "stateChanged", true);
+            eventsEngine.triggerHandler($itemElement, 'stateChanged', true);
         }
     },
 
@@ -592,38 +556,38 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "selectionMode":
-                if(args.value === "multi") {
+            case 'selectionMode':
+                if(args.value === 'multi') {
                     this._showDeprecatedSelectionMode();
                 } else {
                     this._invalidate();
                 }
                 break;
-            case "dataSource":
+            case 'dataSource':
                 if(!args.value || Array.isArray(args.value) && !args.value.length) {
-                    this.option("selectedItemKeys", []);
+                    this.option('selectedItemKeys', []);
                 }
 
                 this.callBase(args);
                 break;
-            case "selectedIndex":
-            case "selectedItem":
-            case "selectedItems":
-            case "selectedItemKeys":
+            case 'selectedIndex':
+            case 'selectedItem':
+            case 'selectedItems':
+            case 'selectedItemKeys':
                 this._syncSelectionOptions(args.name).done(() => this._normalizeSelectedItems());
                 break;
-            case "keyExpr":
+            case 'keyExpr':
                 this._initKeyGetter();
                 break;
-            case "selectionRequired":
+            case 'selectionRequired':
                 this._normalizeSelectedItems();
                 break;
-            case "selectionByClick":
-            case "onSelectionChanged":
-            case "onItemDeleting":
-            case "onItemDeleted":
-            case "onItemReordered":
-            case "maxFilterLengthInRequest":
+            case 'selectionByClick':
+            case 'onSelectionChanged':
+            case 'onItemDeleting':
+            case 'onItemDeleted':
+            case 'onItemReordered':
+            case 'maxFilterLengthInRequest':
                 break;
             default:
                 this.callBase(args);
@@ -631,8 +595,8 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _clearSelectedItems: function() {
-        this._setOptionWithoutOptionChange("selectedItems", []);
-        this._syncSelectionOptions("selectedItems");
+        this._setOptionWithoutOptionChange('selectedItems', []);
+        this._syncSelectionOptions('selectedItems');
     },
 
     _waitDeletingPrepare: function($itemElement) {
@@ -642,16 +606,16 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
         $itemElement.data(ITEM_DELETING_DATA_KEY, true);
 
-        const deferred = new Deferred(),
-            deletingActionArgs = { cancel: false },
-            deletePromise = this._itemEventHandler($itemElement, "onItemDeleting", deletingActionArgs, { excludeValidators: ["disabled", "readOnly"] });
+        const deferred = new Deferred();
+        const deletingActionArgs = { cancel: false };
+        const deletePromise = this._itemEventHandler($itemElement, 'onItemDeleting', deletingActionArgs, { excludeValidators: ['disabled', 'readOnly'] });
 
         when(deletePromise).always((function(value) {
-            const deletePromiseExists = !deletePromise,
-                deletePromiseResolved = !deletePromiseExists && deletePromise.state() === "resolved",
-                argumentsSpecified = !!arguments.length,
+            const deletePromiseExists = !deletePromise;
+            const deletePromiseResolved = !deletePromiseExists && deletePromise.state() === 'resolved';
+            const argumentsSpecified = !!arguments.length;
 
-                shouldDelete = deletePromiseExists || deletePromiseResolved && !argumentsSpecified || deletePromiseResolved && value;
+            const shouldDelete = deletePromiseExists || deletePromiseResolved && !argumentsSpecified || deletePromiseResolved && value;
 
             when(fromPromise(deletingActionArgs.cancel))
                 .always(function() {
@@ -671,14 +635,14 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             return new Deferred().resolve().promise();
         }
 
-        const deferred = new Deferred(),
-            disabledState = this.option("disabled"),
-            dataStore = this._dataSource.store();
+        const deferred = new Deferred();
+        const disabledState = this.option('disabled');
+        const dataStore = this._dataSource.store();
 
-        this.option("disabled", true);
+        this.option('disabled', true);
 
         if(!dataStore.remove) {
-            throw errors.Error("E1011");
+            throw errors.Error('E1011');
         }
 
         dataStore.remove(dataStore.keyOf(this._getItemData($item)))
@@ -694,7 +658,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             });
 
         deferred.always((function() {
-            this.option("disabled", disabledState);
+            this.option('disabled', disabledState);
         }).bind(this));
 
         return deferred;
@@ -703,7 +667,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     _tryRefreshLastPage: function() {
         const deferred = new Deferred();
 
-        if(this._isLastPage() || this.option("grouped")) {
+        if(this._isLastPage() || this.option('grouped')) {
             deferred.resolve();
         } else {
             this._refreshLastPage().done(function() {
@@ -759,7 +723,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     * @hidden
     */
     selectItem: function(itemElement) {
-        if(this.option("selectionMode") === "none") return;
+        if(this.option('selectionMode') === 'none') return;
 
         const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
         if(!indexExists(itemIndex)) {
@@ -772,10 +736,10 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             return;
         }
 
-        if(this.option("selectionMode") === "single") {
+        if(this.option('selectionMode') === 'single') {
             this._selection.setSelection([key]);
         } else {
-            const selectedItemKeys = this.option("selectedItemKeys") || [];
+            const selectedItemKeys = this.option('selectedItemKeys') || [];
             this._selection.setSelection([...selectedItemKeys, key]);
         }
     },
@@ -794,7 +758,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
         const selectedItemKeys = this._selection.getSelectedItemKeys();
 
-        if(this.option("selectionRequired") && selectedItemKeys.length <= 1) {
+        if(this.option('selectionRequired') && selectedItemKeys.length <= 1) {
             return;
         }
 
@@ -814,13 +778,13 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _afterItemElementDeleted: function($item, deletedActionArgs) {
-        const changingOption = this._dataSource ? "dataSource" : "items";
+        const changingOption = this._dataSource ? 'dataSource' : 'items';
         this._simulateOptionChange(changingOption);
-        this._itemEventHandler($item, "onItemDeleted", deletedActionArgs, {
+        this._itemEventHandler($item, 'onItemDeleted', deletedActionArgs, {
             beforeExecute: function() {
                 $item.remove();
             },
-            excludeValidators: ["disabled", "readOnly"]
+            excludeValidators: ['disabled', 'readOnly']
         });
         this._renderEmptyMessage();
     },
@@ -833,12 +797,12 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     * @hidden
     */
     deleteItem: function(itemElement) {
-        const that = this,
+        const that = this;
 
-            deferred = new Deferred(),
-            $item = this._editStrategy.getItemElement(itemElement),
-            index = this._editStrategy.getNormalizedIndex(itemElement),
-            itemResponseWaitClass = this._itemResponseWaitClass();
+        const deferred = new Deferred();
+        const $item = this._editStrategy.getItemElement(itemElement);
+        const index = this._editStrategy.getNormalizedIndex(itemElement);
+        const itemResponseWaitClass = this._itemResponseWaitClass();
 
         if(indexExists(index)) {
             this._waitDeletingPrepare($item).done(function() {
@@ -873,17 +837,17 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     * @hidden
     */
     reorderItem: function(itemElement, toItemElement) {
-        const deferred = new Deferred(),
+        const deferred = new Deferred();
 
-            that = this,
-            strategy = this._editStrategy,
+        const that = this;
+        const strategy = this._editStrategy;
 
-            $movingItem = strategy.getItemElement(itemElement),
-            $destinationItem = strategy.getItemElement(toItemElement),
-            movingIndex = strategy.getNormalizedIndex(itemElement),
-            destinationIndex = strategy.getNormalizedIndex(toItemElement),
+        const $movingItem = strategy.getItemElement(itemElement);
+        const $destinationItem = strategy.getItemElement(toItemElement);
+        const movingIndex = strategy.getNormalizedIndex(itemElement);
+        const destinationIndex = strategy.getNormalizedIndex(toItemElement);
 
-            changingOption = this._dataSource ? "dataSource" : "items";
+        const changingOption = this._dataSource ? 'dataSource' : 'items';
 
         const canMoveItems = indexExists(movingIndex) && indexExists(destinationIndex) && movingIndex !== destinationIndex;
         if(canMoveItems) {
@@ -897,16 +861,16 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
             strategy.moveItemAtIndexToIndex(movingIndex, destinationIndex);
             this._updateIndicesAfterIndex(movingIndex);
-            that.option("selectedItems", that._getItemsByKeys(that._selection.getSelectedItemKeys(), that._selection.getSelectedItems()));
+            that.option('selectedItems', that._getItemsByKeys(that._selection.getSelectedItemKeys(), that._selection.getSelectedItems()));
 
-            if(changingOption === "items") {
+            if(changingOption === 'items') {
                 that._simulateOptionChange(changingOption);
             }
-            that._itemEventHandler($movingItem, "onItemReordered", {
+            that._itemEventHandler($movingItem, 'onItemReordered', {
                 fromIndex: strategy.getIndex(movingIndex),
                 toIndex: strategy.getIndex(destinationIndex)
             }, {
-                excludeValidators: ["disabled", "readOnly"]
+                excludeValidators: ['disabled', 'readOnly']
             });
         });
     }

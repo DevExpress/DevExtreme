@@ -1,6 +1,6 @@
 /* global document */
-import injector from "./utils/dependency_injector";
-import { noop } from "./utils/common";
+import injector from './utils/dependency_injector';
+import { noop } from './utils/common';
 
 const ELEMENT_NODE = 1;
 const TEXT_NODE = 3;
@@ -49,7 +49,7 @@ const nativeDOMAdapterStrategy = {
     },
 
     isNode(element) {
-        return typeof element === "object" && "nodeType" in element;
+        return typeof element === 'object' && 'nodeType' in element;
     },
 
     isElementNode(element) {
@@ -114,15 +114,15 @@ const nativeDOMAdapterStrategy = {
             } else { // IE9
                 const classNameSupported = typeof element.className === 'string';
                 const elementClass = classNameSupported ? element.className : (this.getAttribute(element, 'class') || '');
-                const classNames = elementClass.split(" ");
+                const classNames = elementClass.split(' ');
                 const classIndex = classNames.indexOf(className);
                 let resultClassName;
                 if(isAdd && classIndex < 0) {
-                    resultClassName = elementClass ? elementClass + " " + className : className;
+                    resultClassName = elementClass ? elementClass + ' ' + className : className;
                 }
                 if(!isAdd && classIndex >= 0) {
                     classNames.splice(classIndex, 1);
-                    resultClassName = classNames.join(" ");
+                    resultClassName = classNames.join(' ');
                 }
                 if(resultClassName !== undefined) {
                     if(classNameSupported) {
@@ -139,7 +139,7 @@ const nativeDOMAdapterStrategy = {
         element.style[name] = value || '';
     },
 
-    _document: typeof document === "undefined" ? undefined : document,
+    _document: typeof document === 'undefined' ? undefined : document,
 
     getDocument() {
         return this._document;
@@ -182,7 +182,7 @@ const nativeDOMAdapterStrategy = {
     },
 
     listen(element, event, callback, options) {
-        if(!element || !("addEventListener" in element)) {
+        if(!element || !('addEventListener' in element)) {
             return noop;
         }
 

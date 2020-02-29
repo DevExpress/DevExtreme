@@ -1,9 +1,9 @@
-var errors = require("../errors");
+const errors = require('../errors');
 
-var Locker = function() {
-    var info = {};
+const Locker = function() {
+    const info = {};
 
-    var currentCount = function(lockName) {
+    const currentCount = function(lockName) {
         return info[lockName] || 0;
     };
 
@@ -13,10 +13,10 @@ var Locker = function() {
         },
 
         release: function(lockName) {
-            var count = currentCount(lockName);
+            const count = currentCount(lockName);
 
             if(count < 1) {
-                throw errors.Error("E0014");
+                throw errors.Error('E0014');
             }
 
             if(count === 1) {

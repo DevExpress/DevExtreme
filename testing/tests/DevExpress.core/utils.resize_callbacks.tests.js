@@ -1,25 +1,28 @@
-var resizeCallbacks = require("core/utils/resize_callbacks"),
-    domAdapter = require("core/dom_adapter");
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import domAdapter from 'core/dom_adapter';
+import windowUtils from 'core/utils/window';
 
 QUnit.module('resizeCallbacks', {
     beforeEach: function() {
-        var test = this;
-        test.__originalDocumentElementGetter = domAdapter.getDocumentElement;
+        const test = this;
+        test.__originalWindowElementGetter = windowUtils.getWindow;
         test.width = 400;
         test.height = 300;
 
-        domAdapter.getDocumentElement = function() {
-            return {
-                clientWidth: test.width,
-                clientHeight: test.height
-            };
+        windowUtils.getWindow = function() {
+            const fakeWindow = {};
+            fakeWindow.window = fakeWindow;
+            fakeWindow.innerHeight = test.height;
+            fakeWindow.innerWidth = test.width;
+
+            return fakeWindow;
         };
 
         test.__originalListener = domAdapter.listen;
 
-        var resizeHandlers = [];
+        const resizeHandlers = [];
         domAdapter.listen = function(element, event, handler) {
-            if(element.window === element && event === "resize") {
+            if(element.window === element && event === 'resize') {
                 resizeHandlers.push(handler);
             }
         };
@@ -39,9 +42,10 @@ QUnit.module('resizeCallbacks', {
         this.triggerResize(); //  to reset size cache
     },
     afterEach: function() {
-        domAdapter.getDocumentElement = this.__originalDocumentElementGetter;
+        windowUtils.getWindow = this.__originalWindowElementGetter;
         domAdapter.listen = this.__originalListener;
         delete this.__originalDocumentElementGetter;
+        delete this.__originalWindowElementGetter;
         delete this.__originalListener;
         delete this.width;
         delete this.height;
@@ -52,7 +56,7 @@ QUnit.module('resizeCallbacks', {
 });
 
 QUnit.test('Callback is called on window resize', function(assert) {
-    var called = false;
+    let called = false;
     this.callbacks.add(function() {
         called = true;
     });
@@ -63,7 +67,7 @@ QUnit.test('Callback is called on window resize', function(assert) {
 });
 
 QUnit.test('Callback is called for each resize for multiple resizes', function(assert) {
-    var callCount = 0;
+    let callCount = 0;
     this.callbacks.add(function() {
         ++callCount;
     });
@@ -76,7 +80,7 @@ QUnit.test('Callback is called for each resize for multiple resizes', function(a
 });
 
 QUnit.test('Callback is not called if size is not changed', function(assert) {
-    var called = false;
+    let called = false;
     this.callbacks.add(function() {
         called = true;
     });
@@ -86,10 +90,26 @@ QUnit.test('Callback is not called if size is not changed', function(assert) {
     assert.ok(!called, 'callback is not called');
 });
 
+QUnit.test('Callback is called if window innerHeight is changed (T834502)', function(assert) {
+    const spy = sinon.spy();
+    this.callbacks.add(spy);
+
+    try {
+        sinon.stub(windowUtils, 'getWindow').returns({ innerHeight: 100, innerWidth: 200 });
+
+        this.triggerResize(false);
+
+        assert.strictEqual(spy.callCount, 1, 'callback is called');
+    } finally {
+        windowUtils.getWindow.restore();
+        this.callbacks.remove(spy);
+    }
+});
+
 QUnit.test('add', function(assert) {
-    var called1 = false,
-        called2 = false,
-        called3 = false;
+    let called1 = false;
+    let called2 = false;
+    let called3 = false;
     this.callbacks.add(function() {
         called1 = true;
     }).add(function() {
@@ -106,10 +126,10 @@ QUnit.test('add', function(assert) {
 });
 
 QUnit.test('remove', function(assert) {
-    var callCount1 = 0,
-        callCount2 = 0;
-    var callback1 = function() { ++callCount1; };
-    var callback2 = function() { ++callCount2; };
+    let callCount1 = 0;
+    let callCount2 = 0;
+    const callback1 = function() { ++callCount1; };
+    const callback2 = function() { ++callCount2; };
     this.callbacks.add(callback1).add(callback2);
 
     this.triggerResize();
@@ -121,8 +141,8 @@ QUnit.test('remove', function(assert) {
 });
 
 QUnit.test('has', function(assert) {
-    var callback1 = function() { };
-    var callback2 = function() { };
+    const callback1 = function() { };
+    const callback2 = function() { };
     this.callbacks.add(callback1).add(callback2);
 
     assert.ok(this.callbacks.has(callback1), 'has callback1');
@@ -138,8 +158,8 @@ QUnit.test('has', function(assert) {
 });
 
 QUnit.test('add - one callback several times', function(assert) {
-    var callCount = 0;
-    var callback = function() { ++callCount; };
+    let callCount = 0;
+    const callback = function() { ++callCount; };
 
     this.callbacks.add(callback).add(callback).add(callback);
     this.triggerResize();
@@ -148,8 +168,8 @@ QUnit.test('add - one callback several times', function(assert) {
 });
 
 QUnit.test('remove - one callback several times', function(assert) {
-    var callCount = 0;
-    var callback = function() { ++callCount; };
+    let callCount = 0;
+    const callback = function() { ++callCount; };
     this.callbacks.add(callback);
 
     this.callbacks.remove(callback).remove(callback).remove(callback);
@@ -159,7 +179,7 @@ QUnit.test('remove - one callback several times', function(assert) {
 });
 
 QUnit.test('callbacks should be fired with changed dimensions', function(assert) {
-    var callback = sinon.spy();
+    const callback = sinon.spy();
     this.callbacks.add(callback);
 
     callback.reset();

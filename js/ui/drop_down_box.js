@@ -1,41 +1,38 @@
-import DropDownEditor from "./drop_down_editor/ui.drop_down_editor";
-import DataExpressionMixin from "./editor/ui.data_expression";
-import { ensureDefined, noop, grep } from "../core/utils/common";
-import { isObject } from "../core/utils/type";
-import { map } from "../core/utils/iterator";
-import selectors from "./widget/selectors";
-import { when, Deferred } from "../core/utils/deferred";
-import $ from "../core/renderer";
-import eventsEngine from "../events/core/events_engine";
-import { extend } from "../core/utils/extend";
-import { getElementMaxHeightByWindow } from "../ui/overlay/utils";
-import registerComponent from "../core/component_registrator";
-import { normalizeKeyName } from "../events/utils";
-import { keyboard } from "../events/short";
+import DropDownEditor from './drop_down_editor/ui.drop_down_editor';
+import DataExpressionMixin from './editor/ui.data_expression';
+import { ensureDefined, noop, grep } from '../core/utils/common';
+import { isObject } from '../core/utils/type';
+import { map } from '../core/utils/iterator';
+import selectors from './widget/selectors';
+import { when, Deferred } from '../core/utils/deferred';
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import { extend } from '../core/utils/extend';
+import { getElementMaxHeightByWindow } from '../ui/overlay/utils';
+import registerComponent from '../core/component_registrator';
+import { normalizeKeyName } from '../events/utils';
+import { keyboard } from '../events/short';
+import devices from '../core/devices';
+import { getActiveElement } from '../core/dom_adapter';
+import { getPublicElement } from '../core/utils/dom';
 
-var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
-    ANONYMOUS_TEMPLATE_NAME = "content";
+const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
+const ANONYMOUS_TEMPLATE_NAME = 'content';
 
-/**
- * @name dxDropDownBox
- * @isEditor
- * @inherits DataExpressionMixin, dxDropDownEditor
- * @hasTranscludedContent
- * @module ui/drop_down_box
- * @export default
- */
-var DropDownBox = DropDownEditor.inherit({
+const realDevice = devices.real();
+
+const DropDownBox = DropDownEditor.inherit({
     _supportedKeys: function() {
         return extend({}, this.callBase(), {
             tab: function(e) {
-                if(!this.option("opened")) {
+                if(!this.option('opened')) {
                     return;
                 }
 
-                var $tabbableElements = this._getTabbableElements(),
-                    $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
+                const $tabbableElements = this._getTabbableElements();
+                const $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
 
-                $focusableElement && eventsEngine.trigger($focusableElement, "focus");
+                $focusableElement && eventsEngine.trigger($focusableElement, 'focus');
                 e.preventDefault();
             }
         });
@@ -46,7 +43,7 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _getElements: function() {
-        return $(this.content()).find("*");
+        return $(this.content()).find('*');
     },
 
     _getDefaultOptions: function() {
@@ -56,39 +53,10 @@ var DropDownBox = DropDownEditor.inherit({
              * @hidden
              */
 
-            /**
-             * @name dxDropDownBoxOptions.acceptCustomValue
-             * @type boolean
-             * @default false
-             */
             acceptCustomValue: false,
 
-            /**
-             * @name dxDropDownBoxOptions.contentTemplate
-             * @type template|function
-             * @default 'content'
-             * @type_function_param1 templateData:object
-             * @type_function_param1_field1 component:dxDropDownBox
-             * @type_function_param1_field2 value:any
-             * @type_function_param2 contentElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
-            contentTemplate: "content",
+            contentTemplate: ANONYMOUS_TEMPLATE_NAME,
 
-            /**
-             * @name dxDropDownBoxOptions.dropDownOptions
-             * @type dxPopupOptions
-             * @default {}
-             */
-
-            /**
-             * @name dxDropDownBoxOptions.fieldTemplate
-             * @type template|function
-             * @default null
-             * @type_function_param1 value:object
-             * @type_function_param2 fieldElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
 
             /**
             * @name dxDropDownBoxOptions.onContentReady
@@ -118,26 +86,11 @@ var DropDownBox = DropDownEditor.inherit({
              * @hidden
              */
 
-            /**
-             * @name dxDropDownBoxOptions.openOnFieldClick
-             * @default true
-             */
             openOnFieldClick: true,
 
-            /**
-             * @name dxDropDownBoxOptions.valueChangeEvent
-             * @type string
-             * @default "change"
-             */
 
-            /**
-             * @name dxDropDownBoxOptions.displayValueFormatter
-             * @type function(value)
-             * @type_function_param1 value:string|Array<any>
-             * @type_function_return string
-             */
             displayValueFormatter: function(value) {
-                return Array.isArray(value) ? value.join(", ") : value;
+                return Array.isArray(value) ? value.join(', ') : value;
             },
             useHiddenSubmitElement: true
         });
@@ -159,33 +112,33 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _setSubmitValue: function() {
-        const value = this.option("value");
+        const value = this.option('value');
         const submitValue = this._shouldUseDisplayValue(value) ? this._displayGetter(value) : value;
 
         this._getSubmitElement().val(submitValue);
     },
 
     _shouldUseDisplayValue: function(value) {
-        return this.option("valueExpr") === "this" && isObject(value);
+        return this.option('valueExpr') === 'this' && isObject(value);
     },
 
     _renderInputValue: function() {
-        var callBase = this.callBase.bind(this),
-            values = [];
+        const callBase = this.callBase.bind(this);
+        const values = [];
 
         if(!this._dataSource) {
             callBase(values);
             return new Deferred().resolve();
         }
 
-        var currentValue = this._getCurrentValue(),
-            keys = ensureDefined(currentValue, []);
+        const currentValue = this._getCurrentValue();
+        let keys = ensureDefined(currentValue, []);
 
         keys = Array.isArray(keys) ? keys : [keys];
 
-        var itemLoadDeferreds = map(keys, (function(key) {
+        const itemLoadDeferreds = map(keys, (function(key) {
             return this._loadItem(key).always((function(item) {
-                var displayValue = this._displayGetter(item);
+                const displayValue = this._displayGetter(item);
                 values.push(ensureDefined(displayValue, key));
             }).bind(this));
         }).bind(this));
@@ -193,17 +146,17 @@ var DropDownBox = DropDownEditor.inherit({
         return when
             .apply(this, itemLoadDeferreds)
             .always((function() {
-                this.option("displayValue", values);
+                this.option('displayValue', values);
                 callBase(values.length && values);
             }).bind(this))
             .fail(callBase);
     },
 
     _loadItem: function(value) {
-        var deferred = new Deferred(),
-            that = this;
+        const deferred = new Deferred();
+        const that = this;
 
-        var selectedItem = grep(this.option("items") || [], (function(item) {
+        const selectedItem = grep(this.option('items') || [], (function(item) {
             return this._isValueEquals(this._valueGetter(item), value);
         }).bind(this))[0];
 
@@ -215,7 +168,7 @@ var DropDownBox = DropDownEditor.inherit({
                     deferred.resolve(item);
                 })
                 .fail(function(args) {
-                    if(that.option("acceptCustomValue")) {
+                    if(that.option('acceptCustomValue')) {
                         deferred.resolve(value);
                     } else {
                         deferred.reject();
@@ -227,21 +180,21 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _updatePopupWidth: function() {
-        this._setPopupOption("width", this.$element().outerWidth());
+        this._setPopupOption('width', this.$element().outerWidth());
     },
 
     _popupElementTabHandler: function(e) {
-        if(normalizeKeyName(e) !== "tab") return;
+        if(normalizeKeyName(e) !== 'tab') return;
 
-        var $firstTabbable = this._getTabbableElements().first().get(0),
-            $lastTabbable = this._getTabbableElements().last().get(0),
-            $target = e.originalEvent.target,
-            moveBackward = !!($target === $firstTabbable && e.shift),
-            moveForward = !!($target === $lastTabbable && !e.shift);
+        const $firstTabbable = this._getTabbableElements().first().get(0);
+        const $lastTabbable = this._getTabbableElements().last().get(0);
+        const $target = e.originalEvent.target;
+        const moveBackward = !!($target === $firstTabbable && e.shift);
+        const moveForward = !!($target === $lastTabbable && !e.shift);
 
         if(moveBackward || moveForward) {
             this.close();
-            eventsEngine.trigger(this._input(), "focus");
+            eventsEngine.trigger(this._input(), 'focus');
 
             if(moveBackward) {
                 e.originalEvent.preventDefault();
@@ -252,31 +205,73 @@ var DropDownBox = DropDownEditor.inherit({
     _renderPopup: function(e) {
         this.callBase();
 
-        if(this.option("focusStateEnabled")) {
+        if(this.option('focusStateEnabled')) {
             keyboard.on(this.content(), null, e => this._popupElementTabHandler(e));
         }
     },
 
     _renderPopupContent: function() {
-        if(this.option("contentTemplate") === ANONYMOUS_TEMPLATE_NAME) {
+        if(this.option('contentTemplate') === ANONYMOUS_TEMPLATE_NAME) {
             return;
         }
 
-        return this.callBase();
+        const contentTemplate = this._getTemplateByOption('contentTemplate');
+
+        if(!(contentTemplate && this.option('contentTemplate'))) {
+            return;
+        }
+
+        const $popupContent = this._popup.$content();
+        const templateData = {
+            value: this._fieldRenderData(),
+            component: this
+        };
+
+        $popupContent.empty();
+
+        contentTemplate.render({
+            container: getPublicElement($popupContent),
+            model: templateData
+        });
+    },
+
+    _canShowVirtualKeyboard: function() {
+        return realDevice.mac; // T845484
+    },
+
+    _isNestedElementActive: function() {
+        const activeElement = getActiveElement();
+        return activeElement && this._popup.$content().get(0).contains(activeElement);
+    },
+
+    _shouldCloseOnTargetScroll: function() {
+        return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && this._isNestedElementActive();
     },
 
     _popupConfig: function() {
         const { focusStateEnabled } = this.option();
+        const horizontalAlignment = this.option('rtlEnabled') ? 'right' : 'left';
 
         return extend(this.callBase(), {
             width: function() {
                 return this.$element().outerWidth();
             }.bind(this),
-            height: "auto",
+            height: 'auto',
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled,
-            onKeyboardHandled: opts => this.option("focusStateEnabled") && this._popupElementTabHandler(opts),
+            contentTemplate: ANONYMOUS_TEMPLATE_NAME,
+            closeOnTargetScroll: this._shouldCloseOnTargetScroll.bind(this),
+            position: {
+                of: this.$element(),
+                collision: 'flipfit',
+                my: 'top ' + horizontalAlignment,
+                at: 'bottom ' + horizontalAlignment,
+                offset: {
+                    y: -1
+                }
+            },
+            onKeyboardHandled: opts => this.option('focusStateEnabled') && this._popupElementTabHandler(opts),
             maxHeight: function() {
                 return getElementMaxHeightByWindow(this.$element());
             }.bind(this)
@@ -285,8 +280,8 @@ var DropDownBox = DropDownEditor.inherit({
 
     _popupShownHandler: function() {
         this.callBase();
-        var $firstElement = this._getTabbableElements().first();
-        eventsEngine.trigger($firstElement, "focus");
+        const $firstElement = this._getTabbableElements().first();
+        eventsEngine.trigger($firstElement, 'focus');
     },
 
     _setCollectionWidgetOption: noop,
@@ -294,18 +289,21 @@ var DropDownBox = DropDownEditor.inherit({
     _optionChanged: function(args) {
         this._dataExpressionOptionChanged(args);
         switch(args.name) {
-            case "width":
+            case 'width':
                 this.callBase(args);
                 this._popup && this._popup.repaint();
                 break;
-            case "dataSource":
+            case 'dataSource':
                 this._renderInputValue();
                 break;
-            case "displayValue":
-                this.option("text", args.value);
+            case 'displayValue':
+                this.option('text', args.value);
                 break;
-            case "displayExpr":
+            case 'displayExpr':
                 this._renderValue();
+                break;
+            case 'contentTemplate':
+                this._invalidate();
                 break;
             default:
                 this.callBase(args);
@@ -313,6 +311,10 @@ var DropDownBox = DropDownEditor.inherit({
     }
 }).include(DataExpressionMixin);
 
-registerComponent("dxDropDownBox", DropDownBox);
+registerComponent('dxDropDownBox', DropDownBox);
 
 module.exports = DropDownBox;
+
+///#DEBUG
+module.exports.realDevice = realDevice;
+///#ENDDEBUG

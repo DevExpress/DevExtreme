@@ -1,14 +1,14 @@
-var lazyPipe = require('lazypipe');
-var replace = require('gulp-replace');
-var uglify = require('gulp-uglify');
-var gulpIf = require('gulp-if');
-var eol = require('gulp-eol');
-var prettify = require('gulp-jsbeautifier');
+const lazyPipe = require('lazypipe');
+const replace = require('gulp-replace');
+const uglify = require('gulp-uglify');
+const gulpIf = require('gulp-if');
+const eol = require('gulp-eol');
+const prettify = require('gulp-jsbeautifier');
 
-var context = require('./context.js');
+const context = require('./context.js');
 
-var removeDebug = lazyPipe().pipe(function() {
-    return replace(/\/{2,}#DEBUG[\s\S]*?\/{2,}#ENDDEBUG/g, "");
+const removeDebug = lazyPipe().pipe(function() {
+    return replace(/\/{2,}#DEBUG[\s\S]*?\/{2,}#ENDDEBUG/g, '');
 });
 
 function saveLicenseComments(node, comment) {

@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<!--qunit-fixture-->\
     <div id="container">\
         <div id="treeList">\
@@ -7,7 +7,7 @@ QUnit.testStart(function() {
     </div>\
 ';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 import 'common.css!';
@@ -19,8 +19,8 @@ import { setupTreeListModules, MockColumnsController, MockDataController } from 
 
 fx.off = true;
 
-var setupModule = function() {
-    var that = this;
+const setupModule = function() {
+    const that = this;
 
     that.options = {};
     that.columns = [
@@ -30,7 +30,7 @@ var setupModule = function() {
     ];
 
     that.setupTreeList = function() {
-        setupTreeListModules(that, ["data", "columns", "headerPanel", "editing", "columnChooser"], {
+        setupTreeListModules(that, ['data', 'columns', 'headerPanel', 'editing', 'columnChooser'], {
             initViews: true,
             controllers: {
                 columns: new MockColumnsController(that.columns),
@@ -40,18 +40,18 @@ var setupModule = function() {
     };
 };
 
-var teardownModule = function() {
+const teardownModule = function() {
     this.dispose();
 };
 
-QUnit.module("Header panel", { beforeEach: setupModule, afterEach: teardownModule });
+QUnit.module('Header panel', { beforeEach: setupModule, afterEach: teardownModule });
 
-QUnit.test("Draw edit buttons", function(assert) {
+QUnit.test('Draw edit buttons', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing = {
-        mode: "batch",
+        mode: 'batch',
         allowUpdating: true,
         allowAdding: true
     };
@@ -61,14 +61,14 @@ QUnit.test("Draw edit buttons", function(assert) {
     this.headerPanel.render($testElement);
 
     // assert
-    assert.equal($testElement.find(".dx-treelist-addrow-button").length, 1, "cancel button");
-    assert.equal($testElement.find(".dx-treelist-save-button").length, 1, "cancel button");
-    assert.equal($testElement.find(".dx-treelist-cancel-button").length, 1, "cancel button");
+    assert.equal($testElement.find('.dx-treelist-addrow-button').length, 1, 'cancel button');
+    assert.equal($testElement.find('.dx-treelist-save-button').length, 1, 'cancel button');
+    assert.equal($testElement.find('.dx-treelist-cancel-button').length, 1, 'cancel button');
 });
 
-QUnit.test("Draw column chooser button", function(assert) {
+QUnit.test('Draw column chooser button', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.columnChooser = {
         enabled: true
@@ -79,5 +79,5 @@ QUnit.test("Draw column chooser button", function(assert) {
     this.headerPanel.render($testElement);
 
     // assert
-    assert.equal($testElement.find(".dx-treelist-column-chooser-button").length, 1, "cancel button");
+    assert.equal($testElement.find('.dx-treelist-column-chooser-button').length, 1, 'cancel button');
 });

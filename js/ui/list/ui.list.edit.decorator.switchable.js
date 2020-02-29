@@ -1,32 +1,32 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    noop = require("../../core/utils/common").noop,
-    EditDecorator = require("./ui.list.edit.decorator"),
-    abstract = EditDecorator.abstract,
-    eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
-    feedbackEvents = require("../../events/core/emitter.feedback");
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const noop = require('../../core/utils/common').noop;
+const EditDecorator = require('./ui.list.edit.decorator');
+const abstract = EditDecorator.abstract;
+const eventUtils = require('../../events/utils');
+const pointerEvents = require('../../events/pointer');
+const feedbackEvents = require('../../events/core/emitter.feedback');
 
-var LIST_EDIT_DECORATOR = "dxListEditDecorator",
-    POINTER_DOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, LIST_EDIT_DECORATOR),
-    ACTIVE_EVENT_NAME = eventUtils.addNamespace(feedbackEvents.active, LIST_EDIT_DECORATOR),
+const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
+const POINTER_DOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, LIST_EDIT_DECORATOR);
+const ACTIVE_EVENT_NAME = eventUtils.addNamespace(feedbackEvents.active, LIST_EDIT_DECORATOR);
 
-    LIST_ITEM_CONTENT_CLASS = "dx-list-item-content",
+const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
 
-    SWITCHABLE_DELETE_READY_CLASS = "dx-list-switchable-delete-ready",
-    SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS = "dx-list-switchable-menu-shield-positioning",
-    SWITCHABLE_DELETE_TOP_SHIELD_CLASS = "dx-list-switchable-delete-top-shield",
-    SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS = "dx-list-switchable-delete-bottom-shield",
-    SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS = "dx-list-switchable-menu-item-shield-positioning",
-    SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS = "dx-list-switchable-delete-item-content-shield",
-    SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = "dx-list-switchable-delete-button-container";
+const SWITCHABLE_DELETE_READY_CLASS = 'dx-list-switchable-delete-ready';
+const SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS = 'dx-list-switchable-menu-shield-positioning';
+const SWITCHABLE_DELETE_TOP_SHIELD_CLASS = 'dx-list-switchable-delete-top-shield';
+const SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS = 'dx-list-switchable-delete-bottom-shield';
+const SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS = 'dx-list-switchable-menu-item-shield-positioning';
+const SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS = 'dx-list-switchable-delete-item-content-shield';
+const SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = 'dx-list-switchable-delete-button-container';
 
-var SwitchableEditDecorator = EditDecorator.inherit({
+const SwitchableEditDecorator = EditDecorator.inherit({
 
     _init: function() {
-        this._$topShield = $("<div>").addClass(SWITCHABLE_DELETE_TOP_SHIELD_CLASS);
-        this._$bottomShield = $("<div>").addClass(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS);
-        this._$itemContentShield = $("<div>").addClass(SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS);
+        this._$topShield = $('<div>').addClass(SWITCHABLE_DELETE_TOP_SHIELD_CLASS);
+        this._$bottomShield = $('<div>').addClass(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS);
+        this._$itemContentShield = $('<div>').addClass(SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS);
 
         eventsEngine.on(this._$topShield, POINTER_DOWN_EVENT_NAME, this._cancelDeleteReadyItem.bind(this));
         eventsEngine.on(this._$bottomShield, POINTER_DOWN_EVENT_NAME, this._cancelDeleteReadyItem.bind(this));
@@ -80,15 +80,15 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     },
 
     _updateShieldsHeight: function($itemElement) {
-        var $list = this._list.$element(),
+        const $list = this._list.$element();
 
-            listTopOffset = $list.offset().top,
-            listHeight = $list.outerHeight(),
-            itemTopOffset = $itemElement.offset().top,
-            itemHeight = $itemElement.outerHeight(),
+        const listTopOffset = $list.offset().top;
+        const listHeight = $list.outerHeight();
+        const itemTopOffset = $itemElement.offset().top;
+        const itemHeight = $itemElement.outerHeight();
 
-            dirtyTopShieldHeight = itemTopOffset - listTopOffset,
-            dirtyBottomShieldHeight = listHeight - itemHeight - dirtyTopShieldHeight;
+        const dirtyTopShieldHeight = itemTopOffset - listTopOffset;
+        const dirtyBottomShieldHeight = listHeight - itemHeight - dirtyTopShieldHeight;
 
         this._$topShield.height(Math.max(dirtyTopShieldHeight, 0));
         this._$bottomShield.height(Math.max(dirtyBottomShieldHeight, 0));
@@ -97,7 +97,7 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     _toggleContentShield: function($itemElement, enabled) {
         if(enabled) {
             $itemElement
-                .find("." + LIST_ITEM_CONTENT_CLASS)
+                .find('.' + LIST_ITEM_CONTENT_CLASS)
                 .first()
                 .append(this._$itemContentShield);
         } else {
@@ -106,12 +106,12 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     },
 
     _toggleScrolling: function(readyToDelete) {
-        var scrollView = this._list.$element().dxScrollView("instance");
+        const scrollView = this._list.$element().dxScrollView('instance');
 
         if(readyToDelete) {
-            scrollView.on("start", this._cancelScrolling);
+            scrollView.on('start', this._cancelScrolling);
         } else {
-            scrollView.off("start", this._cancelScrolling);
+            scrollView.off('start', this._cancelScrolling);
         }
     },
 
@@ -165,14 +165,14 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     _getDeleteButtonContainer: function($itemElement) {
         $itemElement = $itemElement || this._$readyToDeleteItem;
 
-        return $itemElement.children("." + SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS);
+        return $itemElement.children('.' + SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS);
     },
 
     _deleteItem: function($itemElement) {
         $itemElement = $itemElement || this._$readyToDeleteItem;
         this._getDeleteButtonContainer($itemElement).detach();
 
-        if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
+        if($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
             return;
         }
 
@@ -181,7 +181,7 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     },
 
     _isRtlEnabled: function() {
-        return this._list.option("rtlEnabled");
+        return this._list.option('rtlEnabled');
     },
 
     dispose: function() {

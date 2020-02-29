@@ -1,6 +1,6 @@
-import Popup from "../popup";
-import Form from "../form";
-import "../tag_box";
+import Popup from '../popup';
+import Form from '../form';
+import '../tag_box';
 
 export class GanttDialog {
     constructor(owner, $element) {
@@ -51,34 +51,34 @@ class DialogInfoBase {
     _updateParameters() {}
     _getOkToolbarItem() {
         return {
-            widget: "dxButton",
-            location: "after",
-            toolbar: "bottom",
+            widget: 'dxButton',
+            location: 'after',
+            toolbar: 'bottom',
             options: {
-                text: "Ok",
+                text: 'Ok',
                 onClick: this._applyAction
             }
         };
     }
     _getCancelToolbarItem() {
         return {
-            widget: "dxButton",
-            location: "after",
-            toolbar: "bottom",
+            widget: 'dxButton',
+            location: 'after',
+            toolbar: 'bottom',
             options: {
-                text: "Cancel",
+                text: 'Cancel',
                 onClick: this._hideAction
             }
         };
     }
 
-    getTitle() { return ""; }
+    getTitle() { return ''; }
     getToolbarItems() {
         return this._editingOptions.enabled ?
             [ this._getOkToolbarItem(), this._getCancelToolbarItem()] : [this._getCancelToolbarItem()];
     }
     getMaxWidth() { return 400; }
-    getHeight() { return "auto"; }
+    getHeight() { return 'auto'; }
     getContentTemplate() {
         return (content) => {
             this._form = new Form(content, {
@@ -89,66 +89,66 @@ class DialogInfoBase {
         };
     }
     getResult() {
-        const formData = this._form.option("formData");
+        const formData = this._form.option('formData');
         this._updateParameters(formData);
         return this._parameters;
     }
 }
 
 class TaskEditDialogInfo extends DialogInfoBase {
-    getTitle() { return "Task Details"; }
+    getTitle() { return 'Task Details'; }
     _getFormItems() {
         const readOnly = !this._editingOptions.enabled || !this._editingOptions.allowTaskUpdating;
         return [{
-            dataField: "title",
-            editorType: "dxTextBox",
-            label: { text: "Title" },
+            dataField: 'title',
+            editorType: 'dxTextBox',
+            label: { text: 'Title' },
             editorOptions: { readOnly: readOnly }
         }, {
-            dataField: "start",
-            editorType: "dxDateBox",
-            label: { text: "Start" },
+            dataField: 'start',
+            editorType: 'dxDateBox',
+            label: { text: 'Start' },
             editorOptions: {
-                type: "datetime",
-                width: "100%",
+                type: 'datetime',
+                width: '100%',
                 readOnly: readOnly
             }
         }, {
-            dataField: "end",
-            editorType: "dxDateBox",
-            label: { text: "End" },
+            dataField: 'end',
+            editorType: 'dxDateBox',
+            label: { text: 'End' },
             editorOptions: {
-                type: "datetime",
-                width: "100%",
+                type: 'datetime',
+                width: '100%',
                 readOnly: readOnly
             }
         }, {
-            dataField: "progress",
-            editorType: "dxNumberBox",
-            label: { text: "Progress" },
+            dataField: 'progress',
+            editorType: 'dxNumberBox',
+            label: { text: 'Progress' },
             editorOptions: {
                 value: this._parameters.progress / 100,
                 showSpinButtons: true,
                 min: 0,
                 max: 1,
-                format: "#0%",
+                format: '#0%',
                 step: 0.01,
                 readOnly: readOnly
             }
         }, {
-            dataField: "assigned.items",
-            editorType: "dxTagBox",
-            label: { text: "Resources" },
+            dataField: 'assigned.items',
+            editorType: 'dxTagBox',
+            label: { text: 'Resources' },
             editorOptions: {
                 readOnly: readOnly,
                 dataSource: this._parameters.resources.items,
-                displayExpr: "text",
+                displayExpr: 'text',
                 buttons: [{
-                    name: "editResources",
-                    location: "after",
+                    name: 'editResources',
+                    location: 'after',
                     options: {
-                        text: "...",
-                        hint: "Edit Resource List",
+                        text: '...',
+                        hint: 'Edit Resource List',
                         onClick: () => {
                             this._parameters.showResourcesDialogCommand.execute();
                         }
@@ -167,47 +167,47 @@ class TaskEditDialogInfo extends DialogInfoBase {
 }
 
 class ResourcesEditDialogInfo extends DialogInfoBase {
-    getTitle() { return "Resources"; }
+    getTitle() { return 'Resources'; }
     _getFormItems() {
         return [{
             label: { visible: false },
-            dataField: "resources.items",
-            editorType: "dxList",
+            dataField: 'resources.items',
+            editorType: 'dxList',
             editorOptions: {
                 allowItemDeleting: this._editingOptions.enabled && this._editingOptions.allowResourceDeleting,
-                itemDeleteMode: "static",
-                selectionMode: "none",
+                itemDeleteMode: 'static',
+                selectionMode: 'none',
                 items: this._parameters.resources.items,
                 height: 250,
-                noDataText: "No resources",
+                noDataText: 'No resources',
                 onInitialized: (e) => { this.list = e.component; },
                 onItemDeleted: (e) => { this._parameters.resources.remove(e.itemData); }
             }
         }, {
             label: { visible: false },
-            editorType: "dxTextBox",
+            editorType: 'dxTextBox',
             editorOptions: {
                 readOnly: !this._editingOptions.enabled || !this._editingOptions.allowResourceAdding,
                 onInitialized: (e) => { this.textBox = e.component; },
                 onInput: (e) => {
-                    const addButton = e.component.getButton("addResource");
-                    const resourceName = e.component.option("text");
-                    addButton.option("disabled", resourceName.length === 0);
+                    const addButton = e.component.getButton('addResource');
+                    const resourceName = e.component.option('text');
+                    addButton.option('disabled', resourceName.length === 0);
                 },
                 buttons: [{
-                    name: "addResource",
-                    location: "after",
+                    name: 'addResource',
+                    location: 'after',
                     options: {
-                        text: "Add",
+                        text: 'Add',
                         disabled: true,
                         onClick: (e) => {
                             const newItem = this._parameters.resources.createItem();
-                            newItem.text = this.textBox.option("text");
+                            newItem.text = this.textBox.option('text');
                             this._parameters.resources.add(newItem);
-                            this.list.option("items", this._parameters.resources.items);
+                            this.list.option('items', this._parameters.resources.items);
                             this.list.scrollToItem(newItem);
                             this.textBox.reset();
-                            e.component.option("disabled", true);
+                            e.component.option('disabled', true);
                         }
                     }
                 }]

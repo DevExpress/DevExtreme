@@ -1,87 +1,79 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import commonUtils from "../../core/utils/common";
-import { getPublicElement, getElementOptions } from "../../core/utils/dom";
-import domAdapter from "../../core/dom_adapter";
-import { isPlainObject, isFunction, isDefined } from "../../core/utils/type";
-import { when } from "../../core/utils/deferred";
-import { extend } from "../../core/utils/extend";
-import { inArray } from "../../core/utils/array";
-import iteratorUtils from "../../core/utils/iterator";
-import Action from "../../core/action";
-import Guid from "../../core/guid";
-import Widget from "../widget/ui.widget";
-import * as eventUtils from "../../events/utils";
-import pointerEvents from "../../events/pointer";
-import DataHelperMixin from "../../data_helper";
-import CollectionWidgetItem from "./item";
-import selectors from "../widget/selectors";
-import messageLocalization from "../../localization/message";
-import holdEvent from "../../events/hold";
-import { compileGetter } from "../../core/utils/data";
-import clickEvent from "../../events/click";
-import contextMenuEvent from "../../events/contextmenu";
-import { BindableTemplate } from "../../core/templates/bindable_template";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import commonUtils from '../../core/utils/common';
+import { getPublicElement, getElementOptions } from '../../core/utils/dom';
+import domAdapter from '../../core/dom_adapter';
+import { isPlainObject, isFunction, isDefined } from '../../core/utils/type';
+import { when } from '../../core/utils/deferred';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import iteratorUtils from '../../core/utils/iterator';
+import Action from '../../core/action';
+import Guid from '../../core/guid';
+import Widget from '../widget/ui.widget';
+import * as eventUtils from '../../events/utils';
+import pointerEvents from '../../events/pointer';
+import DataHelperMixin from '../../data_helper';
+import CollectionWidgetItem from './item';
+import selectors from '../widget/selectors';
+import messageLocalization from '../../localization/message';
+import holdEvent from '../../events/hold';
+import { compileGetter } from '../../core/utils/data';
+import clickEvent from '../../events/click';
+import contextMenuEvent from '../../events/contextmenu';
+import { BindableTemplate } from '../../core/templates/bindable_template';
 
-const COLLECTION_CLASS = "dx-collection";
-const ITEM_CLASS = "dx-item";
-const CONTENT_CLASS_POSTFIX = "-content";
-const ITEM_CONTENT_PLACEHOLDER_CLASS = "dx-item-content-placeholder";
-const ITEM_DATA_KEY = "dxItemData";
-const ITEM_INDEX_KEY = "dxItemIndex";
-const ITEM_TEMPLATE_ID_PREFIX = "tmpl-";
-const ITEMS_SELECTOR = "[data-options*='dxItem']";
-const SELECTED_ITEM_CLASS = "dx-item-selected";
-const ITEM_RESPONSE_WAIT_CLASS = "dx-item-response-wait";
-const EMPTY_COLLECTION = "dx-empty-collection";
-const TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
+const COLLECTION_CLASS = 'dx-collection';
+const ITEM_CLASS = 'dx-item';
+const CONTENT_CLASS_POSTFIX = '-content';
+const ITEM_CONTENT_PLACEHOLDER_CLASS = 'dx-item-content-placeholder';
+const ITEM_DATA_KEY = 'dxItemData';
+const ITEM_INDEX_KEY = 'dxItemIndex';
+const ITEM_TEMPLATE_ID_PREFIX = 'tmpl-';
+const ITEMS_SELECTOR = '[data-options*=\'dxItem\']';
+const SELECTED_ITEM_CLASS = 'dx-item-selected';
+const ITEM_RESPONSE_WAIT_CLASS = 'dx-item-response-wait';
+const EMPTY_COLLECTION = 'dx-empty-collection';
+const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 const ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+([\w.]+)$/;
 const ANONYMOUS_TEMPLATE_NAME = 'item';
 
-const FOCUS_UP = "up";
-const FOCUS_DOWN = "down";
-const FOCUS_LEFT = "left";
-const FOCUS_RIGHT = "right";
-const FOCUS_PAGE_UP = "pageup";
-const FOCUS_PAGE_DOWN = "pagedown";
-const FOCUS_LAST = "last";
-const FOCUS_FIRST = "first";
+const FOCUS_UP = 'up';
+const FOCUS_DOWN = 'down';
+const FOCUS_LEFT = 'left';
+const FOCUS_RIGHT = 'right';
+const FOCUS_PAGE_UP = 'pageup';
+const FOCUS_PAGE_DOWN = 'pagedown';
+const FOCUS_LAST = 'last';
+const FOCUS_FIRST = 'first';
 
-/**
-* @name CollectionWidget
-* @type object
-* @inherits Widget, DataHelperMixin
-* @module ui/collection/ui.collection_widget.base
-* @export default
-* @hidden
-*/
-var CollectionWidget = Widget.inherit({
+const CollectionWidget = Widget.inherit({
 
-    _activeStateUnit: "." + ITEM_CLASS,
+    _activeStateUnit: '.' + ITEM_CLASS,
 
     _supportedKeys: function() {
-        var enter = function(e) {
-                var $itemElement = $(this.option("focusedElement"));
+        const enter = function(e) {
+            const $itemElement = $(this.option('focusedElement'));
 
-                if(!$itemElement.length) {
-                    return;
-                }
+            if(!$itemElement.length) {
+                return;
+            }
 
-                this._itemClickHandler(extend({}, e, {
-                    target: $itemElement,
-                    currentTarget: $itemElement
-                }));
-            },
-            space = function(e) {
-                e.preventDefault();
-                enter.call(this, e);
-            },
-            move = function(location, e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._moveFocus(location, e);
-            };
+            this._itemClickHandler(extend({}, e, {
+                target: $itemElement,
+                currentTarget: $itemElement
+            }));
+        };
+        const space = function(e) {
+            e.preventDefault();
+            enter.call(this, e);
+        };
+        const move = function(location, e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this._moveFocus(location, e);
+        };
         return extend(this.callBase(), {
             space: space,
             enter: enter,
@@ -112,111 +104,32 @@ var CollectionWidget = Widget.inherit({
             */
             loopItemFocus: true,
 
-            /**
-            * @name CollectionWidgetOptions.items
-            * @type Array<string, CollectionWidgetItem, object>
-            * @fires CollectionWidgetOptions.onOptionChanged
-            */
             items: [],
 
-            /**
-            * @name CollectionWidgetOptions.itemTemplate
-            * @type template|function
-            * @default "item"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
-            itemTemplate: "item",
+            itemTemplate: 'item',
 
-            /**
-            * @name CollectionWidgetOptions.onItemRendered
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @action
-            */
             onItemRendered: null,
 
-            /**
-            * @name CollectionWidgetOptions.onItemClick
-            * @type function(e)|string
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @action
-            */
             onItemClick: null,
 
-            /**
-            * @name CollectionWidgetOptions.onItemHold
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 event:event
-            * @action
-            */
             onItemHold: null,
 
-            /**
-            * @name CollectionWidgetOptions.itemHoldTimeout
-            * @type number
-            * @default 750
-            */
             itemHoldTimeout: 750,
 
-            /**
-            * @name CollectionWidgetOptions.onItemContextMenu
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @action
-            */
             onItemContextMenu: null,
 
             onFocusedItemChanged: null,
 
-            /**
-            * @name CollectionWidgetOptions.noDataText
-            * @type string
-            * @default "No data to display"
-            */
-            noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
+            noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
-            /**
-            * @name CollectionWidgetOptions.dataSource
-            * @type string|Array<string,CollectionWidgetItem>|DataSource|DataSourceOptions
-            * @default null
-            */
             dataSource: null,
             /**
             * @name CollectionWidgetItem
             * @type object
             */
-            /**
-            * @name CollectionWidgetItem.template
-            * @type template|function
-            * @type_function_return string|Node|jQuery
-            */
 
             _itemAttributes: {},
-            itemTemplateProperty: "template",
+            itemTemplateProperty: 'template',
             focusOnSelectedItem: true,
             /**
             * @name CollectionWidgetOptions.focusedElement
@@ -230,24 +143,6 @@ var CollectionWidget = Widget.inherit({
             disabledExpr: function(data) { return data ? data.disabled : undefined; },
             visibleExpr: function(data) { return data ? data.visible : undefined; }
 
-            /**
-            * @name CollectionWidgetItem.html
-            * @type String
-            */
-            /**
-            * @name CollectionWidgetItem.text
-            * @type String
-            */
-            /**
-            * @name CollectionWidgetItem.disabled
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name CollectionWidgetItem.visible
-            * @type boolean
-            * @default true
-            */
         });
     },
 
@@ -260,8 +155,8 @@ var CollectionWidget = Widget.inherit({
     },
 
     _compileDisplayGetter: function() {
-        var displayExpr = this.option("displayExpr");
-        this._displayGetter = displayExpr ? compileGetter(this.option("displayExpr")) : undefined;
+        const displayExpr = this.option('displayExpr');
+        this._displayGetter = displayExpr ? compileGetter(this.option('displayExpr')) : undefined;
     },
 
     _initTemplates: function() {
@@ -276,7 +171,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _initDefaultItemTemplate: function() {
-        var fieldsMap = this._getFieldsMap();
+        const fieldsMap = this._getFieldsMap();
         this._templateManager.addDefaultTemplates({
             item: new BindableTemplate((function($container, data) {
                 if(isPlainObject(data)) {
@@ -285,14 +180,14 @@ var CollectionWidget = Widget.inherit({
                     if(fieldsMap && isFunction(fieldsMap.text)) {
                         data = fieldsMap.text(data);
                     }
-                    $container.text(String(commonUtils.ensureDefined(data, "")));
+                    $container.text(String(commonUtils.ensureDefined(data, '')));
                 }
-            }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"), fieldsMap)
+            }).bind(this), this._getBindableFields(), this.option('integrationOptions.watchMethod'), fieldsMap)
         });
     },
 
     _getBindableFields: function() {
-        return ["text", "html"];
+        return ['text', 'html'];
     },
 
     _getFieldsMap: function() {
@@ -312,15 +207,15 @@ var CollectionWidget = Widget.inherit({
     },
 
     _initItemsFromMarkup: function() {
-        var $items = this.$element().contents().filter(ITEMS_SELECTOR);
-        if(!$items.length || this.option("items").length) {
+        const $items = this.$element().contents().filter(ITEMS_SELECTOR);
+        if(!$items.length || this.option('items').length) {
             return;
         }
 
-        var items = [].slice.call($items).map((item) => {
-            var $item = $(item);
-            var result = getElementOptions(item).dxItem;
-            var isTemplateRequired = $item.html().trim() && !result.template;
+        const items = [].slice.call($items).map((item) => {
+            const $item = $(item);
+            const result = getElementOptions(item).dxItem;
+            const isTemplateRequired = $item.html().trim() && !result.template;
 
             if(isTemplateRequired) {
                 result.template = this._prepareItemTemplate($item);
@@ -331,15 +226,15 @@ var CollectionWidget = Widget.inherit({
             return result;
         });
 
-        this.option("items", items);
+        this.option('items', items);
     },
 
     _prepareItemTemplate: function($item) {
-        var templateId = ITEM_TEMPLATE_ID_PREFIX + new Guid();
-        var $template = $item
+        const templateId = ITEM_TEMPLATE_ID_PREFIX + new Guid();
+        const $template = $item
             .detach()
             .clone()
-            .removeAttr("data-options")
+            .removeAttr('data-options')
             .addClass(TEMPLATE_WRAPPER_CLASS);
 
         this._saveTemplate(templateId, $template);
@@ -366,13 +261,13 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        var $focusedElement = $(this.option("focusedElement"));
+        const $focusedElement = $(this.option('focusedElement'));
         if($focusedElement.length) {
             this._setFocusedItem($focusedElement);
         } else {
-            var $activeItem = this._getActiveItem();
+            const $activeItem = this._getActiveItem();
             if($activeItem.length) {
-                this.option("focusedElement", getPublicElement($activeItem));
+                this.option('focusedElement', getPublicElement($activeItem));
             }
         }
     },
@@ -380,19 +275,19 @@ var CollectionWidget = Widget.inherit({
     _focusOutHandler: function() {
         this.callBase.apply(this, arguments);
 
-        const $target = $(this.option("focusedElement"));
+        const $target = $(this.option('focusedElement'));
 
         this._updateFocusedItemState($target, false);
     },
 
     _getActiveItem: function(last) {
-        const $focusedElement = $(this.option("focusedElement"));
+        const $focusedElement = $(this.option('focusedElement'));
 
         if($focusedElement.length) {
             return $focusedElement;
         }
 
-        let index = this.option("focusOnSelectedItem") ? this.option("selectedIndex") : 0;
+        let index = this.option('focusOnSelectedItem') ? this.option('selectedIndex') : 0;
 
         const activeElements = this._getActiveElement();
         const lastIndex = activeElements.length - 1;
@@ -405,8 +300,8 @@ var CollectionWidget = Widget.inherit({
     },
 
     _moveFocus: function(location) {
-        var $items = this._getAvailableItems(),
-            $newTarget;
+        const $items = this._getAvailableItems();
+        let $newTarget;
 
         switch(location) {
             case FOCUS_PAGE_UP:
@@ -418,10 +313,10 @@ var CollectionWidget = Widget.inherit({
                 $newTarget = this._nextItem($items);
                 break;
             case FOCUS_RIGHT:
-                $newTarget = this.option("rtlEnabled") ? this._prevItem($items) : this._nextItem($items);
+                $newTarget = this.option('rtlEnabled') ? this._prevItem($items) : this._nextItem($items);
                 break;
             case FOCUS_LEFT:
-                $newTarget = this.option("rtlEnabled") ? this._nextItem($items) : this._prevItem($items);
+                $newTarget = this.option('rtlEnabled') ? this._nextItem($items) : this._prevItem($items);
                 break;
             case FOCUS_FIRST:
                 $newTarget = $items.first();
@@ -434,25 +329,25 @@ var CollectionWidget = Widget.inherit({
         }
 
         if($newTarget.length !== 0) {
-            this.option("focusedElement", getPublicElement($newTarget));
+            this.option('focusedElement', getPublicElement($newTarget));
         }
     },
 
     _getVisibleItems: function($itemElements) {
         $itemElements = $itemElements || this._itemElements();
-        return $itemElements.filter(":visible");
+        return $itemElements.filter(':visible');
     },
 
     _getAvailableItems: function($itemElements) {
-        return this._getVisibleItems($itemElements).not(".dx-state-disabled");
+        return this._getVisibleItems($itemElements).not('.dx-state-disabled');
     },
 
     _prevItem: function($items) {
-        var $target = this._getActiveItem(),
-            targetIndex = $items.index($target),
-            $last = $items.last(),
-            $item = $($items[targetIndex - 1]),
-            loop = this.option("loopItemFocus");
+        const $target = this._getActiveItem();
+        const targetIndex = $items.index($target);
+        const $last = $items.last();
+        let $item = $($items[targetIndex - 1]);
+        const loop = this.option('loopItemFocus');
 
         if($item.length === 0 && loop) {
             $item = $last;
@@ -462,11 +357,11 @@ var CollectionWidget = Widget.inherit({
     },
 
     _nextItem: function($items) {
-        var $target = this._getActiveItem(true),
-            targetIndex = $items.index($target),
-            $first = $items.first(),
-            $item = $($items[targetIndex + 1]),
-            loop = this.option("loopItemFocus");
+        const $target = this._getActiveItem(true);
+        const targetIndex = $items.index($target);
+        const $first = $items.first();
+        let $item = $($items[targetIndex + 1]);
+        const loop = this.option('loopItemFocus');
 
         if($item.length === 0 && loop) {
             $item = $first;
@@ -490,14 +385,14 @@ var CollectionWidget = Widget.inherit({
     },
 
     _refreshActiveDescendant: function($target) {
-        this.setAria("activedescendant", isDefined(this.option("focusedElement")) ? this.getFocusedItemId() : null, $target);
+        this.setAria('activedescendant', isDefined(this.option('focusedElement')) ? this.getFocusedItemId() : null, $target);
     },
 
     _refreshItemId: function($target, needCleanItemId) {
-        if(!needCleanItemId && this.option("focusedElement")) {
-            this.setAria("id", this.getFocusedItemId(), $target);
+        if(!needCleanItemId && this.option('focusedElement')) {
+            this.setAria('id', this.getFocusedItemId(), $target);
         } else {
-            this.setAria("id", null, $target);
+            this.setAria('id', null, $target);
         }
     },
 
@@ -509,17 +404,17 @@ var CollectionWidget = Widget.inherit({
         this._updateFocusedItemState($target, true);
         this.onFocusedItemChanged(this.getFocusedItemId());
 
-        if(this.option("selectOnFocus")) {
+        if(this.option('selectOnFocus')) {
             this._selectFocusedItem($target);
         }
     },
 
     _findItemElementByItem: function(item) {
-        var result = $(),
-            that = this;
+        let result = $();
+        const that = this;
 
         this.itemElements().each(function() {
-            var $item = $(this);
+            const $item = $(this);
             if($item.data(that._itemDataKey()) === item) {
                 result = $item;
                 return false;
@@ -530,11 +425,11 @@ var CollectionWidget = Widget.inherit({
     },
 
     _getIndexByItem: function(item) {
-        return this.option("items").indexOf(item);
+        return this.option('items').indexOf(item);
     },
 
     _itemOptionChanged: function(item, property, value, oldValue) {
-        var $item = this._findItemElementByItem(item);
+        const $item = this._findItemElementByItem(item);
         if(!$item.length) {
             return;
         }
@@ -542,7 +437,7 @@ var CollectionWidget = Widget.inherit({
             this._refreshItem($item, item);
         }
 
-        const isDisabling = property === "disabled" && value;
+        const isDisabling = property === 'disabled' && value;
 
         if(isDisabling) {
             this._resetItemFocus($item);
@@ -550,25 +445,25 @@ var CollectionWidget = Widget.inherit({
     },
 
     _resetItemFocus($item) {
-        if($item.is(this.option("focusedElement"))) {
-            this.option("focusedElement", null);
+        if($item.is(this.option('focusedElement'))) {
+            this.option('focusedElement', null);
         }
     },
 
     _refreshItem: function($item) {
-        var itemData = this._getItemData($item),
-            index = $item.data(this._itemIndexKey());
+        const itemData = this._getItemData($item);
+        const index = $item.data(this._itemIndexKey());
         this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
     },
 
     _optionChanged: function(args) {
-        if(args.name === "items") {
-            var matches = args.fullName.match(ITEM_PATH_REGEX);
+        if(args.name === 'items') {
+            const matches = args.fullName.match(ITEM_PATH_REGEX);
 
             if(matches && matches.length) {
-                var property = matches[matches.length - 1],
-                    itemPath = args.fullName.replace("." + property, ""),
-                    item = this.option(itemPath);
+                const property = matches[matches.length - 1];
+                const itemPath = args.fullName.replace('.' + property, '');
+                const item = this.option(itemPath);
 
                 this._itemOptionChanged(item, property, args.value, args.previousValue);
                 return;
@@ -576,53 +471,53 @@ var CollectionWidget = Widget.inherit({
         }
 
         switch(args.name) {
-            case "items":
-            case "_itemAttributes":
-            case "itemTemplateProperty":
-            case "showItemDataTitle":
+            case 'items':
+            case '_itemAttributes':
+            case 'itemTemplateProperty':
+            case 'showItemDataTitle':
                 this._cleanRenderedItems();
                 this._invalidate();
                 break;
-            case "dataSource":
+            case 'dataSource':
                 this._refreshDataSource();
                 this._renderEmptyMessage();
                 break;
-            case "noDataText":
+            case 'noDataText':
                 this._renderEmptyMessage();
                 break;
-            case "itemTemplate":
+            case 'itemTemplate':
                 this._invalidate();
                 break;
-            case "onItemRendered":
+            case 'onItemRendered':
                 this._createItemRenderAction();
                 break;
-            case "onItemClick":
+            case 'onItemClick':
                 break;
-            case "onItemHold":
-            case "itemHoldTimeout":
+            case 'onItemHold':
+            case 'itemHoldTimeout':
                 this._attachHoldEvent();
                 break;
-            case "onItemContextMenu":
+            case 'onItemContextMenu':
                 this._attachContextMenuEvent();
                 break;
-            case "onFocusedItemChanged":
-                this.onFocusedItemChanged = this._createActionByOption("onFocusedItemChanged");
+            case 'onFocusedItemChanged':
+                this.onFocusedItemChanged = this._createActionByOption('onFocusedItemChanged');
                 break;
-            case "selectOnFocus":
-            case "loopItemFocus":
-            case "focusOnSelectedItem":
+            case 'selectOnFocus':
+            case 'loopItemFocus':
+            case 'focusOnSelectedItem':
                 break;
-            case "focusedElement":
+            case 'focusedElement':
                 this._updateFocusedItemState(args.previousValue, false, true);
                 this._setFocusedItem($(args.value));
                 break;
-            case "displayExpr":
+            case 'displayExpr':
                 this._compileDisplayGetter();
                 this._initDefaultItemTemplate();
                 this._invalidate();
                 break;
-            case "visibleExpr":
-            case "disabledExpr":
+            case 'visibleExpr':
+            case 'disabledExpr':
                 this._invalidate();
                 break;
             default:
@@ -631,13 +526,13 @@ var CollectionWidget = Widget.inherit({
     },
 
     _invalidate: function() {
-        this.option("focusedElement", null);
+        this.option('focusedElement', null);
 
         return this.callBase.apply(this, arguments);
     },
 
     _loadNextPage: function() {
-        var dataSource = this._dataSource;
+        const dataSource = this._dataSource;
 
         this._expectNextPageLoading();
         dataSource.pageIndex(1 + dataSource.pageIndex());
@@ -658,7 +553,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems) {
-        var items = this.option("items");
+        const items = this.option('items');
         if(this._initialized && items && this._shouldAppendItems()) {
             this._renderedItemsCount = items.length;
             if(!this._isLastPage() || this._startIndexForAppendedItems !== -1) {
@@ -668,7 +563,7 @@ var CollectionWidget = Widget.inherit({
             this._forgetNextPageLoading();
             this._refreshContent();
         } else {
-            this.option("items", newItems.slice());
+            this.option('items', newItems.slice());
         }
     },
 
@@ -679,7 +574,7 @@ var CollectionWidget = Widget.inherit({
 
     _dataSourceLoadErrorHandler: function() {
         this._forgetNextPageLoading();
-        this.option("items", this.option("items"));
+        this.option('items', this.option('items'));
     },
 
     _shouldAppendItems: function() {
@@ -732,7 +627,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemSelector: function() {
-        return "." + this._itemClass();
+        return '.' + this._itemClass();
     },
 
     _itemDataKey: function() {
@@ -749,7 +644,7 @@ var CollectionWidget = Widget.inherit({
 
     _initMarkup: function() {
         this.callBase();
-        this.onFocusedItemChanged = this._createActionByOption("onFocusedItemChanged");
+        this.onFocusedItemChanged = this._createActionByOption('onFocusedItemChanged');
 
         this.$element().addClass(COLLECTION_CLASS);
         this._prepareContent();
@@ -772,13 +667,13 @@ var CollectionWidget = Widget.inherit({
     },
 
     _attachClickEvent: function() {
-        var itemSelector = this._itemSelector(),
-            clickEventNamespace = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            pointerDownEventNamespace = eventUtils.addNamespace(pointerEvents.down, this.NAME),
-            that = this;
+        const itemSelector = this._itemSelector();
+        const clickEventNamespace = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const pointerDownEventNamespace = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        const that = this;
 
-        var pointerDownAction = new Action(function(args) {
-            var event = args.event;
+        const pointerDownAction = new Action(function(args) {
+            const event = args.event;
             that._itemPointerDownHandler(event);
         });
 
@@ -794,11 +689,11 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemClickHandler: function(e, args, config) {
-        this._itemDXEventHandler(e, "onItemClick", args, config);
+        this._itemDXEventHandler(e, 'onItemClick', args, config);
     },
 
     _itemPointerDownHandler: function(e) {
-        if(!this.option("focusStateEnabled")) {
+        if(!this.option('focusStateEnabled')) {
             return;
         }
 
@@ -810,12 +705,12 @@ var CollectionWidget = Widget.inherit({
                 return;
             }
 
-            var $target = $(e.target),
-                $closestItem = $target.closest(this._itemElements()),
-                $closestFocusable = this._closestFocusable($target);
+            const $target = $(e.target);
+            const $closestItem = $target.closest(this._itemElements());
+            const $closestFocusable = this._closestFocusable($target);
 
             if($closestItem.length && $closestFocusable && inArray($closestFocusable.get(0), this._focusTarget()) !== -1) {
-                this.option("focusedElement", getPublicElement($closestItem));
+                this.option('focusedElement', getPublicElement($closestItem));
             }
         }.bind(this);
 
@@ -848,53 +743,53 @@ var CollectionWidget = Widget.inherit({
     },
 
     _attachHoldEvent: function() {
-        var $itemContainer = this._itemContainer(),
-            itemSelector = this._itemSelector(),
-            eventName = eventUtils.addNamespace(holdEvent.name, this.NAME);
+        const $itemContainer = this._itemContainer();
+        const itemSelector = this._itemSelector();
+        const eventName = eventUtils.addNamespace(holdEvent.name, this.NAME);
 
         eventsEngine.off($itemContainer, eventName, itemSelector);
         eventsEngine.on($itemContainer, eventName, itemSelector, { timeout: this._getHoldTimeout() }, this._itemHoldHandler.bind(this));
     },
 
     _getHoldTimeout: function() {
-        return this.option("itemHoldTimeout");
+        return this.option('itemHoldTimeout');
     },
 
     _shouldFireHoldEvent: function() {
-        return this.hasActionSubscription("onItemHold");
+        return this.hasActionSubscription('onItemHold');
     },
 
     _itemHoldHandler: function(e) {
         if(this._shouldFireHoldEvent()) {
-            this._itemDXEventHandler(e, "onItemHold");
+            this._itemDXEventHandler(e, 'onItemHold');
         } else {
             e.cancel = true;
         }
     },
 
     _attachContextMenuEvent: function() {
-        var $itemContainer = this._itemContainer(),
-            itemSelector = this._itemSelector(),
-            eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
+        const $itemContainer = this._itemContainer();
+        const itemSelector = this._itemSelector();
+        const eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
 
         eventsEngine.off($itemContainer, eventName, itemSelector);
         eventsEngine.on($itemContainer, eventName, itemSelector, this._itemContextMenuHandler.bind(this));
     },
 
     _shouldFireContextMenuEvent: function() {
-        return this.hasActionSubscription("onItemContextMenu");
+        return this.hasActionSubscription('onItemContextMenu');
     },
 
     _itemContextMenuHandler: function(e) {
         if(this._shouldFireContextMenuEvent()) {
-            this._itemDXEventHandler(e, "onItemContextMenu");
+            this._itemDXEventHandler(e, 'onItemContextMenu');
         } else {
             e.cancel = true;
         }
     },
 
     _renderContentImpl: function() {
-        var items = this.option("items") || [];
+        const items = this.option('items') || [];
         if(this._renderedItemsCount) {
             this._renderItems(items.slice(this._renderedItemsCount));
         } else {
@@ -914,21 +809,21 @@ var CollectionWidget = Widget.inherit({
 
     _renderItem: function(index, itemData, $container, $itemToReplace) {
         $container = $container || this._itemContainer();
-        var $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
+        const $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, index);
-        $itemFrame.attr(this.option("_itemAttributes"));
+        $itemFrame.attr(this.option('_itemAttributes'));
         this._attachItemClickEvent(itemData, $itemFrame);
-        var $itemContent = this._getItemContent($itemFrame);
+        const $itemContent = this._getItemContent($itemFrame);
 
-        var renderContentPromise = this._renderItemContent({
+        const renderContentPromise = this._renderItemContent({
             index: index,
             itemData: itemData,
             container: getPublicElement($itemContent),
             contentClass: this._itemContentClass(),
-            defaultTemplateName: this.option("itemTemplate")
+            defaultTemplateName: this.option('itemTemplate')
         });
 
-        var that = this;
+        const that = this;
         when(renderContentPromise).done(function($itemContent) {
             that._postprocessRenderItem({
                 itemElement: $itemFrame,
@@ -944,7 +839,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _getItemContent: function($itemFrame) {
-        var $itemContent = $itemFrame.find("." + ITEM_CONTENT_PLACEHOLDER_CLASS);
+        const $itemContent = $itemFrame.find('.' + ITEM_CONTENT_PLACEHOLDER_CLASS);
         $itemContent.removeClass(ITEM_CONTENT_PLACEHOLDER_CLASS);
         return $itemContent;
     },
@@ -962,11 +857,11 @@ var CollectionWidget = Widget.inherit({
     },
 
     _renderItemContent: function(args) {
-        var itemTemplateName = this._getItemTemplateName(args);
-        var itemTemplate = this._getTemplate(itemTemplateName);
+        const itemTemplateName = this._getItemTemplateName(args);
+        const itemTemplate = this._getTemplate(itemTemplateName);
 
         this._addItemContentClasses(args);
-        var $templateResult = $(this._createItemByTemplate(itemTemplate, args));
+        const $templateResult = $(this._createItemByTemplate(itemTemplate, args));
         if(!$templateResult.hasClass(TEMPLATE_WRAPPER_CLASS)) {
             return args.container;
         }
@@ -983,12 +878,12 @@ var CollectionWidget = Widget.inherit({
     },
 
     _addItemContentClasses: function(args) {
-        var classes = [
+        const classes = [
             ITEM_CLASS + CONTENT_CLASS_POSTFIX,
             args.contentClass
         ];
 
-        $(args.container).addClass(classes.join(" "));
+        $(args.container).addClass(classes.join(' '));
     },
 
     _appendItemToContainer: function($container, $itemFrame, index) {
@@ -996,7 +891,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _renderItemFrame: function(index, itemData, $container, $itemToReplace) {
-        var $itemFrame = $("<div>");
+        const $itemFrame = $('<div>');
         new (this.constructor.ItemClass)($itemFrame, this._itemOptions(), itemData || {});
 
         if($itemToReplace && $itemToReplace.length) {
@@ -1005,24 +900,24 @@ var CollectionWidget = Widget.inherit({
             this._appendItemToContainer.call(this, $container, $itemFrame, index);
         }
 
-        if(this.option("showItemDataTitle")) {
-            var displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
-            $itemFrame.attr("title", displayValue);
+        if(this.option('showItemDataTitle')) {
+            const displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
+            $itemFrame.attr('title', displayValue);
         }
 
         return $itemFrame;
     },
 
     _itemOptions: function() {
-        var that = this;
+        const that = this;
         return {
             watchMethod: function() {
-                return that.option("integrationOptions.watchMethod");
+                return that.option('integrationOptions.watchMethod');
             },
             owner: that,
             fieldGetter: function(field) {
-                var expr = that.option(field + "Expr"),
-                    getter = compileGetter(expr);
+                const expr = that.option(field + 'Expr');
+                const getter = compileGetter(expr);
 
                 return getter;
             }
@@ -1041,16 +936,16 @@ var CollectionWidget = Widget.inherit({
 
     _setElementData: function(element, data, index) {
         element
-            .addClass([ITEM_CLASS, this._itemClass()].join(" "))
+            .addClass([ITEM_CLASS, this._itemClass()].join(' '))
             .data(this._itemDataKey(), data)
             .data(this._itemIndexKey(), index);
     },
 
     _createItemRenderAction: function() {
-        return (this._itemRenderAction = this._createActionByOption("onItemRendered", {
+        return (this._itemRenderAction = this._createActionByOption('onItemRendered', {
             element: this.element(),
-            excludeValidators: ["disabled", "readOnly"],
-            category: "rendering"
+            excludeValidators: ['disabled', 'readOnly'],
+            category: 'rendering'
         }));
     },
 
@@ -1059,9 +954,9 @@ var CollectionWidget = Widget.inherit({
     },
 
     _getItemTemplateName: function(args) {
-        var data = args.itemData,
-            templateProperty = args.templateProperty || this.option("itemTemplateProperty"),
-            template = data && data[templateProperty];
+        const data = args.itemData;
+        const templateProperty = args.templateProperty || this.option('itemTemplateProperty');
+        const template = data && data[templateProperty];
 
         return template || args.defaultTemplateName;
     },
@@ -1079,22 +974,22 @@ var CollectionWidget = Widget.inherit({
     },
 
     _renderEmptyMessage: function(items) {
-        items = items || this.option("items");
-        var noDataText = this.option("noDataText"),
-            hideNoData = !noDataText || (items && items.length) || this._isDataSourceLoading();
+        items = items || this.option('items');
+        const noDataText = this.option('noDataText');
+        const hideNoData = !noDataText || (items && items.length) || this._isDataSourceLoading();
 
         if(hideNoData && this._$noData) {
             this._$noData.remove();
             this._$noData = null;
-            this.setAria("label", undefined);
+            this.setAria('label', undefined);
         }
 
         if(!hideNoData) {
-            this._$noData = this._$noData || $("<div>").addClass("dx-empty-message");
+            this._$noData = this._$noData || $('<div>').addClass('dx-empty-message');
             this._$noData
                 .appendTo(this._emptyMessageContainer())
                 .html(noDataText);
-            this.setAria("label", noDataText);
+            this.setAria('label', noDataText);
         }
         this.$element().toggleClass(EMPTY_COLLECTION, !hideNoData);
     },
@@ -1106,22 +1001,22 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemEventHandler: function(initiator, handlerOptionName, actionArgs, actionConfig) {
-        var action = this._createActionByOption(handlerOptionName, extend({
-            validatingTargetName: "itemElement"
+        const action = this._createActionByOption(handlerOptionName, extend({
+            validatingTargetName: 'itemElement'
         }, actionConfig));
         return this._itemEventHandlerImpl(initiator, action, actionArgs);
     },
 
     _itemEventHandlerByHandler: function(initiator, handler, actionArgs, actionConfig) {
-        var action = this._createAction(handler, extend({
-            validatingTargetName: "itemElement"
+        const action = this._createAction(handler, extend({
+            validatingTargetName: 'itemElement'
         }, actionConfig));
         return this._itemEventHandlerImpl(initiator, action, actionArgs);
     },
 
     _itemEventHandlerImpl: function(initiator, action, actionArgs) {
-        var $itemElement = this._closestItemElement($(initiator)),
-            args = extend({}, actionArgs);
+        const $itemElement = this._closestItemElement($(initiator));
+        const args = extend({}, actionArgs);
 
         return action(extend(actionArgs, this._extendActionArgs($itemElement), args));
     },
@@ -1143,7 +1038,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _getSummaryItemsWidth: function(items, includeMargin) {
-        var result = 0;
+        let result = 0;
 
         if(items) {
             iteratorUtils.each(items, function(_, item) {
@@ -1162,7 +1057,7 @@ var CollectionWidget = Widget.inherit({
     */
     getFocusedItemId: function() {
         if(!this._focusedItemId) {
-            this._focusedItemId = "dx-" + new Guid();
+            this._focusedItemId = 'dx-' + new Guid();
         }
 
         return this._focusedItemId;

@@ -1,1 +1,1 @@
-require("../DevExpress.localization/localization.intl.tests.js");
+require('../DevExpress.localization/localization.intl.tests.js');

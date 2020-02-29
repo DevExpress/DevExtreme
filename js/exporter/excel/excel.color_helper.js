@@ -1,4 +1,4 @@
-import { isDefined } from "../../core/utils/type";
+import { isDefined } from '../../core/utils/type';
 import tagHelper from './excel.tag_helper';
 
 const colorHelper = {
@@ -8,7 +8,7 @@ const colorHelper = {
         }
         let result;
         if(source.length > 0 && source[0] === '#') {
-            let colorCode = source.substr(1, source.length);
+            const colorCode = source.substr(1, source.length);
             if(colorCode.length === 6) { // RRGGBB
                 result = 'FF' + colorCode;
             } else if(colorCode.length === 8) { // RRGGBBAA

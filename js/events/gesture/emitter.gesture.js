@@ -1,69 +1,69 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    devices = require("../../core/devices"),
-    styleUtils = require("../../core/utils/style"),
-    callOnce = require("../../core/utils/call_once"),
-    domUtils = require("../../core/utils/dom"),
-    readyCallbacks = require("../../core/utils/ready_callbacks"),
-    ready = readyCallbacks.add,
-    mathUtils = require("../../core/utils/math"),
-    noop = require("../../core/utils/common").noop,
-    isDefined = require("../../core/utils/type").isDefined,
-    eventUtils = require("../utils"),
-    Emitter = require("../core/emitter"),
-    sign = mathUtils.sign,
-    abs = Math.abs;
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const devices = require('../../core/devices');
+const styleUtils = require('../../core/utils/style');
+const callOnce = require('../../core/utils/call_once');
+const domUtils = require('../../core/utils/dom');
+const readyCallbacks = require('../../core/utils/ready_callbacks');
+const ready = readyCallbacks.add;
+const mathUtils = require('../../core/utils/math');
+const noop = require('../../core/utils/common').noop;
+const isDefined = require('../../core/utils/type').isDefined;
+const eventUtils = require('../utils');
+const Emitter = require('../core/emitter');
+const sign = mathUtils.sign;
+const abs = Math.abs;
 
-var SLEEP = 0,
-    INITED = 1,
-    STARTED = 2,
+const SLEEP = 0;
+const INITED = 1;
+const STARTED = 2;
 
-    TOUCH_BOUNDARY = 10,
-    IMMEDIATE_TOUCH_BOUNDARY = 0,
-    IMMEDIATE_TIMEOUT = 180;
+let TOUCH_BOUNDARY = 10;
+const IMMEDIATE_TOUCH_BOUNDARY = 0;
+const IMMEDIATE_TIMEOUT = 180;
 
-var supportPointerEvents = function() {
-    return styleUtils.styleProp("pointer-events");
+const supportPointerEvents = function() {
+    return styleUtils.styleProp('pointer-events');
 };
 
-var setGestureCover = callOnce(function() {
-    var GESTURE_COVER_CLASS = "dx-gesture-cover";
+const setGestureCover = callOnce(function() {
+    const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 
-    var isDesktop = devices.real().deviceType === "desktop";
+    const isDesktop = devices.real().deviceType === 'desktop';
 
     if(!supportPointerEvents() || !isDesktop) {
         return noop;
     }
 
-    var $cover = $("<div>")
+    const $cover = $('<div>')
         .addClass(GESTURE_COVER_CLASS)
-        .css("pointerEvents", "none");
+        .css('pointerEvents', 'none');
 
-    eventsEngine.subscribeGlobal($cover, "dxmousewheel", function(e) {
+    eventsEngine.subscribeGlobal($cover, 'dxmousewheel', function(e) {
         e.preventDefault();
     });
 
     ready(function() {
-        $cover.appendTo("body");
+        $cover.appendTo('body');
     });
 
     return function(toggle, cursor) {
-        $cover.css("pointerEvents", toggle ? "all" : "none");
-        toggle && $cover.css("cursor", cursor);
+        $cover.css('pointerEvents', toggle ? 'all' : 'none');
+        toggle && $cover.css('cursor', cursor);
     };
 });
 
-var gestureCover = function(toggle, cursor) {
-    var gestureCoverStrategy = setGestureCover();
+const gestureCover = function(toggle, cursor) {
+    const gestureCoverStrategy = setGestureCover();
     gestureCoverStrategy(toggle, cursor);
 };
 
-var GestureEmitter = Emitter.inherit({
+const GestureEmitter = Emitter.inherit({
 
     gesture: true,
 
     configure: function(data) {
-        this.getElement().css("msTouchAction", data.immediate ? "pinch-zoom" : "");
+        this.getElement().css('msTouchAction', data.immediate ? 'pinch-zoom' : '');
 
         this.callBase(data);
     },
@@ -136,18 +136,18 @@ var GestureEmitter = Emitter.inherit({
     },
 
     _directionConfirmed: function(e) {
-        var touchBoundary = this._getTouchBoundary(e),
-            delta = eventUtils.eventDelta(this._startEventData, eventUtils.eventData(e)),
-            deltaX = abs(delta.x),
-            deltaY = abs(delta.y);
+        const touchBoundary = this._getTouchBoundary(e);
+        const delta = eventUtils.eventDelta(this._startEventData, eventUtils.eventData(e));
+        const deltaX = abs(delta.x);
+        const deltaY = abs(delta.y);
 
-        var horizontalMove = this._validateMove(touchBoundary, deltaX, deltaY),
-            verticalMove = this._validateMove(touchBoundary, deltaY, deltaX);
+        const horizontalMove = this._validateMove(touchBoundary, deltaX, deltaY);
+        const verticalMove = this._validateMove(touchBoundary, deltaY, deltaX);
 
-        var direction = this.getDirection(e),
-            bothAccepted = direction === "both" && (horizontalMove || verticalMove),
-            horizontalAccepted = direction === "horizontal" && horizontalMove,
-            verticalAccepted = direction === "vertical" && verticalMove;
+        const direction = this.getDirection(e);
+        const bothAccepted = direction === 'both' && (horizontalMove || verticalMove);
+        const horizontalAccepted = direction === 'horizontal' && horizontalMove;
+        const verticalAccepted = direction === 'vertical' && verticalMove;
 
         return bothAccepted || horizontalAccepted || verticalAccepted || this._immediateAccepted;
     },
@@ -161,15 +161,15 @@ var GestureEmitter = Emitter.inherit({
     },
 
     _adjustStartEvent: function(e) {
-        var touchBoundary = this._getTouchBoundary(e),
-            delta = eventUtils.eventDelta(this._startEventData, eventUtils.eventData(e));
+        const touchBoundary = this._getTouchBoundary(e);
+        const delta = eventUtils.eventDelta(this._startEventData, eventUtils.eventData(e));
 
         this._startEvent.pageX += sign(delta.x) * touchBoundary;
         this._startEvent.pageY += sign(delta.y) * touchBoundary;
     },
 
     _resetActiveElement: function() {
-        if(devices.real().platform === "ios" && this.getElement().find(":focus").length) {
+        if(devices.real().platform === 'ios' && this.getElement().find(':focus').length) {
             domUtils.resetActiveElement();
         }
     },
@@ -179,10 +179,10 @@ var GestureEmitter = Emitter.inherit({
     },
 
     _toggleGestureCoverImpl: function(toggle) {
-        var isStarted = this._stage === STARTED;
+        const isStarted = this._stage === STARTED;
 
         if(isStarted) {
-            gestureCover(toggle, this.getElement().css("cursor"));
+            gestureCover(toggle, this.getElement().css('cursor'));
         }
     },
 

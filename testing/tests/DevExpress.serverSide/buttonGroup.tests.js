@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets/buttonGroup.markup.tests.js");
+require('../DevExpress.ui.widgets/buttonGroup.markup.tests.js');

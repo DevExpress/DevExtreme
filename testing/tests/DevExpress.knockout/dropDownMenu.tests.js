@@ -1,13 +1,13 @@
-var $ = require("jquery"),
-    ko = require("knockout"),
-    fx = require("animation/fx"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js");
+const $ = require('jquery');
+const ko = require('knockout');
+const fx = require('animation/fx');
+const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 
-require("ui/drop_down_menu");
-require("integration/knockout");
+require('ui/drop_down_menu');
+require('integration/knockout');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="dropDownMenuKO" data-bind="dxDropDownMenu: { items: items, onContentReady: onContentReady, opened: opened }">\
             <div data-options="dxTemplate: { name: \'item\' }">\
                 <img  class="my-icon" data-bind="attr: { src: icon }" />\
@@ -31,10 +31,10 @@ QUnit.testStart(function() {
             </div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-QUnit.module("KO cases", {
+QUnit.module('KO cases', {
     beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
@@ -47,84 +47,84 @@ QUnit.module("KO cases", {
     }
 });
 
-QUnit.test("custom item template", function(assert) {
+QUnit.test('custom item template', function(assert) {
     assert.expect(3);
 
-    var element = $("#dropDownMenuKO");
+    const element = $('#dropDownMenuKO');
 
     ko.applyBindings({
         items: [
             {
-                text: "0",
-                icon: "http://1.png"
+                text: '0',
+                icon: 'http://1.png'
             },
             {
-                text: "1",
-                icon: "http://1.png"
+                text: '1',
+                icon: 'http://1.png'
             },
             {
-                text: "2",
-                icon: "http://3.png"
+                text: '2',
+                icon: 'http://3.png'
             }
 
         ],
         onContentReady: function() {
-            var instance = element.dxDropDownMenu("instance"),
-                popupElement = instance._popup._wrapper();
+            const instance = element.dxDropDownMenu('instance');
+            const popupElement = instance._popup._wrapper();
 
             instance.close();
 
-            instance._popup.option("onShown", function() {
-                assert.equal(popupElement.find(".dx-list-item").length, 3);
-                assert.equal(popupElement.find("img.my-icon").length, 3);
-                assert.equal(popupElement.find("span.my-text").length, 3);
+            instance._popup.option('onShown', function() {
+                assert.equal(popupElement.find('.dx-list-item').length, 3);
+                assert.equal(popupElement.find('img.my-icon').length, 3);
+                assert.equal(popupElement.find('span.my-text').length, 3);
             });
 
-            $("#dropDownMenuKO").trigger("dxclick");
+            $('#dropDownMenuKO').trigger('dxclick');
         },
         opened: true
     }, element[0]);
 });
 
-QUnit.test("custom template name", function(assert) {
-    var vm = {
-            items: [
-                {
-                    text: "0",
-                    icon: "http://1.png"
-                },
-                {
-                    text: "1",
-                    icon: "http://1.png"
-                },
-                {
-                    text: "2",
-                    icon: "http://3.png"
-                }
+QUnit.test('custom template name', function(assert) {
+    const vm = {
+        items: [
+            {
+                text: '0',
+                icon: 'http://1.png'
+            },
+            {
+                text: '1',
+                icon: 'http://1.png'
+            },
+            {
+                text: '2',
+                icon: 'http://3.png'
+            }
 
-            ],
-            itemTemplate: "itemWithIcon"
-        },
-        $element = $("#dropDownMenuCustomTemplateName");
+        ],
+        itemTemplate: 'itemWithIcon'
+    };
+    const $element = $('#dropDownMenuCustomTemplateName');
 
     ko.applyBindings(vm, $element.get(0));
 
-    var instance = $element.dxDropDownMenu("instance");
+    const instance = $element.dxDropDownMenu('instance');
 
-    $element.trigger("dxclick");
+    $element.trigger('dxclick');
 
-    assert.equal(instance._popup._wrapper().find(".my-icon").length, 3);
-    assert.equal(instance._popup._wrapper().find(".my-text").length, 3);
+    assert.equal(instance._popup._wrapper().find('.my-icon').length, 3);
+    assert.equal(instance._popup._wrapper().find('.my-text').length, 3);
 });
 
 
-QUnit.test("dropdownmenu should delegate templates to child widgets (T131530)", function(assert) {
-    var $dropDownMenu = $("#T131530");
+QUnit.test('dropdownmenu should delegate templates to child widgets (T131530)', function(assert) {
+    const $dropDownMenu = $('#T131530');
     ko.applyBindings({
         opened: true
     }, $dropDownMenu.get(0));
 
-    $dropDownMenu.dxDropDownMenu("close");
-    assert.equal($.trim($dropDownMenu.find(".dx-list-item").eq(0).text()), "Template 1");
-    assert.equal($.trim($dropDownMenu.find(".dx-list-item").eq(1).text()), "Template 2");
+    $dropDownMenu.dxDropDownMenu('close');
+    assert.equal($.trim($dropDownMenu.find('.dx-list-item').eq(0).text()), 'Template 1');
+    assert.equal($.trim($dropDownMenu.find('.dx-list-item').eq(1).text()), 'Template 2');
 });

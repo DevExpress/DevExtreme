@@ -1,49 +1,42 @@
-var $ = require("../core/renderer"),
-    window = require("../core/utils/window").getWindow(),
-    devices = require("../core/devices"),
-    registerComponent = require("../core/component_registrator"),
-    extend = require("../core/utils/extend").extend,
-    Widget = require("./widget/ui.widget"),
-    Button = require("./button"),
-    Popover = require("./popover"),
-    DataHelperMixin = require("../data_helper"),
-    List = require("./list"),
-    themes = require("./themes"),
-    ChildDefaultTemplate = require("../core/templates/child_default_template").ChildDefaultTemplate;
+const $ = require('../core/renderer');
+const window = require('../core/utils/window').getWindow();
+const devices = require('../core/devices');
+const registerComponent = require('../core/component_registrator');
+const extend = require('../core/utils/extend').extend;
+const Widget = require('./widget/ui.widget');
+const Button = require('./button');
+const Popover = require('./popover');
+const DataHelperMixin = require('../data_helper');
+const List = require('./list');
+const themes = require('./themes');
+const ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
 
-var DROP_DOWN_MENU_CLASS = "dx-dropdownmenu",
-    DROP_DOWN_MENU_POPUP_CLASS = "dx-dropdownmenu-popup",
-    DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = "dx-dropdownmenu-popup-wrapper",
-    DROP_DOWN_MENU_LIST_CLASS = "dx-dropdownmenu-list",
-    DROP_DOWN_MENU_BUTTON_CLASS = "dx-dropdownmenu-button";
+const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
+const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
+const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
+const DROP_DOWN_MENU_LIST_CLASS = 'dx-dropdownmenu-list';
+const DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
 
-var POPUP_OPTION_MAP = {
-    "popupWidth": "width",
-    "popupHeight": "height",
-    "popupMaxHeight": "maxHeight",
-    "popupAutoResizeEnabled": "autoResizeEnabled"
+const POPUP_OPTION_MAP = {
+    'popupWidth': 'width',
+    'popupHeight': 'height',
+    'popupMaxHeight': 'maxHeight',
+    'popupAutoResizeEnabled': 'autoResizeEnabled'
 };
 
-var BUTTON_OPTION_MAP = {
-    "buttonIcon": "icon",
-    "buttonText": "text",
-    "buttonWidth": "width",
-    "buttonHeight": "height",
-    "buttonTemplate": "template"
+const BUTTON_OPTION_MAP = {
+    'buttonIcon': 'icon',
+    'buttonText': 'text',
+    'buttonWidth': 'width',
+    'buttonHeight': 'height',
+    'buttonTemplate': 'template'
 };
 
-/**
-* @name dxDropDownMenu
-* @inherits Widget
-* @module ui/drop_down_menu
-* @export default
-* @hidden
-*/
-var DropDownMenu = Widget.inherit({
+const DropDownMenu = Widget.inherit({
     _supportedKeys: function() {
-        var extension = {};
+        let extension = {};
 
-        if(!this.option("opened") || !this._list.option("focusedElement")) {
+        if(!this.option('opened') || !this._list.option('focusedElement')) {
             extension = this._button._supportedKeys();
         }
 
@@ -56,116 +49,41 @@ var DropDownMenu = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxDropDownMenuOptions.items
-            * @type Array<Object>
-            */
             items: [],
 
-            /**
-            * @name dxDropDownMenuOptions.onItemClick
-            * @type function(e)|string
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 event:event
-            * @action
-            */
             onItemClick: null,
 
-            /**
-            * @name dxDropDownMenuOptions.dataSource
-            * @type string|Array<Object>|DataSource|DataSourceOptions
-            * @default null
-            */
             dataSource: null,
 
-            /**
-            * @name dxDropDownMenuOptions.itemTemplate
-            * @type template|function
-            * @default "item"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
-            itemTemplate: "item",
+            itemTemplate: 'item',
 
-            /**
-            * @name dxDropDownMenuOptions.buttonText
-            * @type string
-            * @default ""
-            */
-            buttonText: "",
+            buttonText: '',
 
-            /**
-            * @name dxDropDownMenuOptions.buttonIcon
-            * @type string
-            * @default "overflow"
-            */
-            buttonIcon: "overflow",
+            buttonIcon: 'overflow',
 
             buttonWidth: undefined,
             buttonHeight: undefined,
-            buttonTemplate: "content",
+            buttonTemplate: 'content',
 
-            /**
-            * @name dxDropDownMenuOptions.onButtonClick
-            * @type function(e)|string
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onButtonClick: null,
 
-            /**
-            * @name dxDropDownMenuOptions.usePopover
-            * @type boolean
-            * @default false
-            */
             usePopover: false,
 
-            /**
-             * @name dxDropDownMenuOptions.popupWidth
-             * @type number|string|function
-             * @default auto
-             */
-            popupWidth: "auto",
+            popupWidth: 'auto',
 
-            /**
-             * @name dxDropDownMenuOptions.popupHeight
-             * @type number|string|function
-             * @default auto
-             */
-            popupHeight: "auto",
+            popupHeight: 'auto',
 
-            /**
-             * @name dxDropDownMenuOptions.activeStateEnabled
-             * @type boolean
-             * @default true
-             */
             activeStateEnabled: true,
 
-            /**
-             * @name dxDropDownMenuOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxDropDownMenuOptions.opened
-            * @type boolean
-            * @default false
-            */
             opened: false,
 
+            selectionMode: 'none',
+            selectedItemKeys: [],
+
             deferRendering: false,
-            popupPosition: { my: "top center", at: "bottom center", collision: "fit flip", offset: { v: 1 } },
+            popupPosition: { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 1 } },
             popupAnimation: undefined,
             onItemRendered: null,
             menuWidget: List,
@@ -180,43 +98,43 @@ var DropDownMenu = Widget.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: { platform: "ios" },
+                device: { platform: 'ios' },
                 options: {
                     usePopover: true
                 }
             },
             {
-                device: { platform: "generic" },
+                device: { platform: 'generic' },
                 options: {
                     popupPosition: { offset: { v: 4 } }
                 }
             },
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     focusStateEnabled: true
                 }
             },
             {
-                device: { platform: "android" },
+                device: { platform: 'android' },
 
                 options: {
                     popupPosition: {
-                        my: "top " + (this.option("rtlEnabled") ? "left" : "right"),
-                        at: "top " + (this.option("rtlEnabled") ? "left" : "right"),
-                        collision: "flipfit"
+                        my: 'top ' + (this.option('rtlEnabled') ? 'left' : 'right'),
+                        at: 'top ' + (this.option('rtlEnabled') ? 'left' : 'right'),
+                        collision: 'flipfit'
                     },
                     popupAnimation: {
                         show: {
-                            type: "pop",
+                            type: 'pop',
                             duration: 200,
                             from: { scale: 0 },
                             to: { scale: 1 }
                         },
                         hide: {
-                            type: "pop",
+                            type: 'pop',
                             duration: 200,
                             from: { scale: 1 },
                             to: { scale: 0 }
@@ -236,11 +154,11 @@ var DropDownMenu = Widget.inherit({
     },
 
     _initOptions: function(options) {
-        if(devices.current().platform === "android") {
+        if(devices.current().platform === 'android') {
             if(!options.popupPosition) {
                 options.popupPosition = {
-                    at: (options.usePopover ? "bottom " : "top ") +
-                        (options.rtlEnabled ? "left" : "right")
+                    at: (options.usePopover ? 'bottom ' : 'top ') +
+                        (options.rtlEnabled ? 'left' : 'right')
                 };
             }
         }
@@ -264,16 +182,16 @@ var DropDownMenu = Widget.inherit({
     },
 
     _initItemClickAction: function() {
-        this._itemClickAction = this._createActionByOption("onItemClick");
+        this._itemClickAction = this._createActionByOption('onItemClick');
     },
 
     _initButtonClickAction: function() {
-        this._buttonClickAction = this._createActionByOption("onButtonClick");
+        this._buttonClickAction = this._createActionByOption('onButtonClick');
     },
 
     _initTemplates: function() {
         this._templateManager.addDefaultTemplates({
-            content: new ChildDefaultTemplate("content")
+            content: new ChildDefaultTemplate('content')
         });
         this.callBase();
     },
@@ -286,14 +204,14 @@ var DropDownMenu = Widget.inherit({
     _render: function() {
         this.callBase();
         this.setAria({
-            "role": "menubar",
-            "haspopup": true,
-            "expanded": this.option("opened")
+            'role': 'menubar',
+            'haspopup': true,
+            'expanded': this.option('opened')
         });
     },
 
     _renderContentImpl: function() {
-        if(this.option("opened")) {
+        if(this.option('opened')) {
             this._renderPopup();
         }
     },
@@ -308,8 +226,8 @@ var DropDownMenu = Widget.inherit({
     },
 
     _renderButton: function() {
-        var $button = this.$element().addClass(DROP_DOWN_MENU_BUTTON_CLASS),
-            config = this._buttonOptions();
+        const $button = this.$element().addClass(DROP_DOWN_MENU_BUTTON_CLASS);
+        const config = this._buttonOptions();
 
         this._button = this._createComponent($button, Button, config);
     },
@@ -320,29 +238,29 @@ var DropDownMenu = Widget.inherit({
 
     _buttonOptions: function() {
         return {
-            text: this.option("buttonText"),
-            icon: this.option("buttonIcon"),
-            width: this.option("buttonWidth"),
-            height: this.option("buttonHeight"),
-            useInkRipple: this.option("useInkRipple"),
-            template: this.option("buttonTemplate"),
+            text: this.option('buttonText'),
+            icon: this.option('buttonIcon'),
+            width: this.option('buttonWidth'),
+            height: this.option('buttonHeight'),
+            useInkRipple: this.option('useInkRipple'),
+            template: this.option('buttonTemplate'),
             focusStateEnabled: false,
             onClick: (function(e) {
-                this.option("opened", !this.option("opened"));
+                this.option('opened', !this.option('opened'));
                 this._buttonClickAction(e);
             }).bind(this)
         };
     },
 
     _toggleMenuVisibility: function(opened) {
-        var state = opened === undefined ? !this._popup.option("visible") : opened;
+        const state = opened === undefined ? !this._popup.option('visible') : opened;
 
         if(opened) {
             this._renderPopup();
         }
 
         this._popup.toggle(state);
-        this.setAria("expanded", state);
+        this.setAria('expanded', state);
     },
 
     _renderPopup: function() {
@@ -350,14 +268,14 @@ var DropDownMenu = Widget.inherit({
             return;
         }
 
-        var $popup = this._$popup = $("<div>").appendTo(this.$element()),
-            config = this._popupOptions();
+        const $popup = this._$popup = $('<div>').appendTo(this.$element());
+        const config = this._popupOptions();
 
         this._popup = this._createComponent($popup, Popover, config); // TODO: Circular dep
     },
 
     _popupOptions: function() {
-        var usePopup = !this.option("usePopover");
+        const usePopup = !this.option('usePopover');
 
         return {
             onInitialized: function(args) {
@@ -365,34 +283,34 @@ var DropDownMenu = Widget.inherit({
                     .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
                     .toggleClass(DROP_DOWN_MENU_POPUP_CLASS, usePopup);
             },
-            visible: this.option("opened"),
+            visible: this.option('opened'),
             deferRendering: false,
             contentTemplate: (function(contentElement) {
                 this._renderList(contentElement);
             }).bind(this),
-            position: this.option("popupPosition"),
-            animation: this.option("popupAnimation"),
+            position: this.option('popupPosition'),
+            animation: this.option('popupAnimation'),
             onOptionChanged: (function(args) {
-                if(args.name === "visible") {
-                    this.option("opened", args.value);
+                if(args.name === 'visible') {
+                    this.option('opened', args.value);
                 }
             }).bind(this),
             target: this.$element(),
-            height: this.option("popupHeight"),
-            width: this.option("popupWidth"),
-            maxHeight: this.option("popupMaxHeight"),
-            container: this.option("container"),
-            autoResizeEnabled: this.option("popupAutoResizeEnabled")
+            height: this.option('popupHeight'),
+            width: this.option('popupWidth'),
+            maxHeight: this.option('popupMaxHeight'),
+            container: this.option('container'),
+            autoResizeEnabled: this.option('popupAutoResizeEnabled')
         };
     },
 
     _renderList: function(contentElement) {
-        var $content = $(contentElement),
-            listConfig = this._listOptions();
+        const $content = $(contentElement);
+        const listConfig = this._listOptions();
 
         $content.addClass(DROP_DOWN_MENU_LIST_CLASS);
 
-        this._list = this._createComponent($content, this.option("menuWidget"), listConfig);
+        this._list = this._createComponent($content, this.option('menuWidget'), listConfig);
 
         // todo: replace with option
         this._list._getAriaTarget = (function() {
@@ -401,7 +319,7 @@ var DropDownMenu = Widget.inherit({
 
         this._setListDataSource();
 
-        var listMaxHeight = $(window).height() * 0.5;
+        const listMaxHeight = $(window).height() * 0.5;
         if($content.height() > listMaxHeight) {
             $content.height(listMaxHeight);
         }
@@ -409,27 +327,29 @@ var DropDownMenu = Widget.inherit({
 
     _listOptions: function() {
         return {
-            pageLoadMode: "scrollBottom",
+            pageLoadMode: 'scrollBottom',
             indicateLoading: false,
-            noDataText: "",
-            itemTemplate: this.option("itemTemplate"),
+            noDataText: '',
+            selectionMode: this.option('selectionMode'),
+            selectedItemKeys: this.option('selectedItemKeys'),
+            itemTemplate: this.option('itemTemplate'),
             onItemClick: (function(e) {
-                if(this.option("closeOnClick")) {
-                    this.option("opened", false);
+                if(this.option('closeOnClick')) {
+                    this.option('opened', false);
                 }
                 this._itemClickAction(e);
             }).bind(this),
             tabIndex: -1,
-            focusStateEnabled: this.option("focusStateEnabled"),
-            activeStateEnabled: this.option("activeStateEnabled"),
-            onItemRendered: this.option("onItemRendered"),
-            _itemAttributes: { role: "menuitem" }
+            focusStateEnabled: this.option('focusStateEnabled'),
+            activeStateEnabled: this.option('activeStateEnabled'),
+            onItemRendered: this.option('onItemRendered'),
+            _itemAttributes: { role: 'menuitem' }
         };
     },
 
     _setListDataSource: function() {
         if(this._list) {
-            this._list.option("dataSource", this._dataSource || this.option("items"));
+            this._list.option('dataSource', this._dataSource || this.option('items'));
         }
 
         delete this._deferRendering;
@@ -441,77 +361,79 @@ var DropDownMenu = Widget.inherit({
 
     _toggleVisibility: function(visible) {
         this.callBase(visible);
-        this._button.option("visible", visible);
+        this._button.option('visible', visible);
     },
 
     _optionChanged: function(args) {
-        var name = args.name;
-        var value = args.value;
+        const name = args.name;
+        const value = args.value;
 
         switch(name) {
-            case "items":
-            case "dataSource":
-                if(this.option("deferRendering") && !this.option("opened")) {
+            case 'items':
+            case 'dataSource':
+                if(this.option('deferRendering') && !this.option('opened')) {
                     this._deferRendering = true;
                 } else {
                     this._refreshDataSource();
                     this._setListDataSource();
                 }
                 break;
-            case "itemTemplate":
+            case 'itemTemplate':
                 if(this._list) {
                     this._list.option(name, this._getTemplate(value));
                 }
                 break;
-            case "onItemClick":
+            case 'onItemClick':
                 this._initItemClickAction();
                 break;
-            case "onButtonClick":
+            case 'onButtonClick':
                 this._buttonClickAction();
                 break;
-            case "buttonIcon":
-            case "buttonText":
-            case "buttonWidth":
-            case "buttonHeight":
-            case "buttonTemplate":
+            case 'buttonIcon':
+            case 'buttonText':
+            case 'buttonWidth':
+            case 'buttonHeight':
+            case 'buttonTemplate':
                 this._button.option(BUTTON_OPTION_MAP[name], value);
                 this._renderPopup();
                 break;
-            case "popupWidth":
-            case "popupHeight":
-            case "popupMaxHeight":
-            case "popupAutoResizeEnabled":
+            case 'popupWidth':
+            case 'popupHeight':
+            case 'popupMaxHeight':
+            case 'popupAutoResizeEnabled':
                 this._popup.option(POPUP_OPTION_MAP[name], value);
                 break;
-            case "usePopover":
-            case "menuWidget":
-            case "useInkRipple":
+            case 'usePopover':
+            case 'menuWidget':
+            case 'useInkRipple':
                 this._invalidate();
                 break;
-            case "focusStateEnabled":
-            case "activeStateEnabled":
+            case 'focusStateEnabled':
+            case 'activeStateEnabled':
                 if(this._list) {
                     this._list.option(name, value);
                 }
                 this.callBase(args);
                 break;
-            case "onItemRendered":
+            case 'selectionMode':
+            case 'selectedItemKeys':
+            case 'onItemRendered':
                 if(this._list) {
                     this._list.option(name, value);
                 }
                 break;
-            case "opened":
+            case 'opened':
                 if(this._deferRendering) {
                     this._refreshDataSource();
                     this._setListDataSource();
                 }
                 this._toggleMenuVisibility(value);
                 break;
-            case "deferRendering":
-            case "popupPosition":
-            case "closeOnClick":
+            case 'deferRendering':
+            case 'popupPosition':
+            case 'closeOnClick':
                 break;
-            case "container":
+            case 'container':
                 this._popup && this._popup.option(args.name, args.value);
                 break;
             default:
@@ -519,24 +441,16 @@ var DropDownMenu = Widget.inherit({
         }
     },
 
-    /**
-    * @name dxDropDownMenuMethods.open
-    * @publicName open()
-    */
     open: function() {
-        this.option("opened", true);
+        this.option('opened', true);
     },
 
-    /**
-    * @name dxDropDownMenuMethods.close
-    * @publicName close()
-    */
     close: function() {
-        this.option("opened", false);
+        this.option('opened', false);
     }
 
 }).include(DataHelperMixin);
 
-registerComponent("dxDropDownMenu", DropDownMenu);
+registerComponent('dxDropDownMenu', DropDownMenu);
 
 module.exports = DropDownMenu;

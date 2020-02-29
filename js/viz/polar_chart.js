@@ -1,11 +1,14 @@
-var _noop = require("../core/utils/common").noop,
-    registerComponent = require("../core/component_registrator"),
-    extend = require("../core/utils/extend").extend,
-    vizUtils = require("./core/utils"),
-    AdvancedChart = require("./chart_components/advanced_chart").AdvancedChart,
-    DEFAULT_PANE_NAME = 'default';
+import { noop } from '../core/utils/common';
+import registerComponent from '../core/component_registrator';
+import { extend } from '../core/utils/extend';
+import vizUtils from './core/utils';
+import { AdvancedChart } from './chart_components/advanced_chart';
+import { isDefined } from '../core/utils/type';
 
-var dxPolarChart = AdvancedChart.inherit({
+const DEFAULT_PANE_NAME = 'default';
+const DOUBLE_PI_ANGLE = 360;
+
+const dxPolarChart = AdvancedChart.inherit({
     _themeSection: 'polar',
 
     _createPanes: function() {
@@ -18,29 +21,29 @@ var dxPolarChart = AdvancedChart.inherit({
     },
 
     _getAxisRenderingOptions: function(typeSelector) {
-        var isArgumentAxis = typeSelector === "argumentAxis",
-            type = isArgumentAxis ? "circular" : "linear",
-            useSpiderWeb = this.option("useSpiderWeb");
+        const isArgumentAxis = typeSelector === 'argumentAxis';
+        let type = isArgumentAxis ? 'circular' : 'linear';
+        const useSpiderWeb = this.option('useSpiderWeb');
 
         if(useSpiderWeb) {
-            type += "Spider";
+            type += 'Spider';
         }
 
         return {
-            axisType: "polarAxes",
+            axisType: 'polarAxes',
             drawingType: type
         };
     },
 
     _prepareAxisOptions: function(typeSelector, axisOptions) {
-        var isArgumentAxis = typeSelector === "argumentAxis",
-            themeManager = this._themeManager,
-            axisUserOptions = this.option("argumentAxis"),
-            argumentAxisOptions = themeManager.getOptions("argumentAxis", axisUserOptions) || {},
-            startAngle = isFinite(argumentAxisOptions.startAngle) ? vizUtils.normalizeAngle(argumentAxisOptions.startAngle) : 0;
+        const isArgumentAxis = typeSelector === 'argumentAxis';
+        const themeManager = this._themeManager;
+        const axisUserOptions = this.option('argumentAxis');
+        const argumentAxisOptions = themeManager.getOptions('argumentAxis', axisUserOptions) || {};
+        const startAngle = isFinite(argumentAxisOptions.startAngle) ? vizUtils.normalizeAngle(argumentAxisOptions.startAngle) : 0;
 
         return {
-            type: this.option("useSpiderWeb") && isArgumentAxis ? "discrete" : axisOptions.type,
+            type: this.option('useSpiderWeb') && isArgumentAxis ? 'discrete' : axisOptions.type,
             isHorizontal: true,
             showCustomBoundaryTicks: isArgumentAxis,
             startAngle: startAngle,
@@ -49,11 +52,11 @@ var dxPolarChart = AdvancedChart.inherit({
     },
 
     _optionChangesMap: {
-        useSpiderWeb: "AXES_AND_PANES"
+        useSpiderWeb: 'AXES_AND_PANES'
     },
 
     _getExtraOptions: function() {
-        return { spiderWidget: this.option("useSpiderWeb") };
+        return { spiderWidget: this.option('useSpiderWeb') };
     },
 
     _prepareToRender: function() {
@@ -70,9 +73,9 @@ var dxPolarChart = AdvancedChart.inherit({
     },
 
     _renderAxes: function(drawOptions) {
-        var that = this,
-            valueAxis = that._getValueAxis(),
-            argumentAxis = that.getArgumentAxis();
+        const that = this;
+        const valueAxis = that._getValueAxis();
+        const argumentAxis = that.getArgumentAxis();
 
         argumentAxis.draw(that._canvas);
         valueAxis.setSpiderTicks(argumentAxis.getSpiderTicks());
@@ -90,8 +93,8 @@ var dxPolarChart = AdvancedChart.inherit({
     },
 
     _shrinkAxes: function(sizeStorage) {
-        var valueAxis = this._getValueAxis(),
-            argumentAxis = this.getArgumentAxis();
+        const valueAxis = this._getValueAxis();
+        const argumentAxis = this.getArgumentAxis();
 
         if(sizeStorage && (sizeStorage.width || sizeStorage.height)
         ) {
@@ -158,17 +161,65 @@ var dxPolarChart = AdvancedChart.inherit({
         series.setClippingParams(this._panesClipRects.base[0].id, wideClipRect && wideClipRect.id, false, false);
     },
 
-    _applyPointMarkersAutoHiding: _noop,
+    getActualAngle(angle) {
+        return this.getArgumentAxis().getOptions().inverted ? DOUBLE_PI_ANGLE - angle : angle;
+    },
 
-    _createScrollBar: _noop,
+    getXYFromPolar(angle, radius, argument, value) {
+        const layoutInfo = {
+            angle: undefined,
+            radius: undefined,
+            x: undefined,
+            y: undefined
+        };
 
-    _isRotated: _noop,
+        if(!isDefined(angle) && !isDefined(radius) && !isDefined(argument) && !isDefined(value)) {
+            return layoutInfo;
+        }
 
-    _getCrosshairOptions: _noop,
+        const argAxis = this.getArgumentAxis();
+        const startAngle = argAxis.getAngles()[0];
+        let argAngle;
+        let translatedRadius;
 
-    _isLegendInside: _noop
+        if(isDefined(argument)) {
+            argAngle = argAxis.getTranslator().translate(argument);
+        } else if(isFinite(angle)) {
+            argAngle = this.getActualAngle(angle);
+        } else if(!isDefined(angle)) {
+            argAngle = 0;
+        }
+
+        if(isDefined(value)) {
+            translatedRadius = this.getValueAxis().getTranslator().translate(value);
+        } else if(isFinite(radius)) {
+            translatedRadius = radius;
+        } else if(!isDefined(radius)) {
+            translatedRadius = argAxis.getRadius();
+        }
+
+        if(isDefined(argAngle) && isDefined(translatedRadius)) {
+            const coords = vizUtils.convertPolarToXY(argAxis.getCenter(), startAngle, argAngle, translatedRadius);
+            extend(layoutInfo, coords, { angle: argAxis.getTranslatedAngle(argAngle), radius: translatedRadius });
+        }
+
+        return layoutInfo;
+    },
+
+    _applyPointMarkersAutoHiding: noop,
+
+    _createScrollBar: noop,
+
+    _isRotated: noop,
+
+    _getCrosshairOptions: noop,
+
+    _isLegendInside: noop
 });
 
-registerComponent("dxPolarChart", dxPolarChart);
+dxPolarChart.addPlugin(require('./core/annotations').plugins.core);
+dxPolarChart.addPlugin(require('./core/annotations').plugins.polarChart);
+
+registerComponent('dxPolarChart', dxPolarChart);
 
 module.exports = dxPolarChart;

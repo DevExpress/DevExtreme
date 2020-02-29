@@ -1,16 +1,16 @@
-import $ from "../../../core/renderer";
-import { extend } from "../../../core/utils/extend";
+import $ from '../../../core/renderer';
+import { extend } from '../../../core/utils/extend';
 
-import Popup from "../../popup";
-import Form from "../../form";
-import { getActiveElement } from "../../../core/dom_adapter";
-import { resetActiveElement } from "../../../core/utils/dom";
-import { Deferred } from "../../../core/utils/deferred";
-import { format } from "../../../localization/message";
-import browser from "../../../core/utils/browser";
+import Popup from '../../popup';
+import Form from '../../form';
+import { getActiveElement } from '../../../core/dom_adapter';
+import { resetActiveElement } from '../../../core/utils/dom';
+import { Deferred } from '../../../core/utils/deferred';
+import { format } from '../../../localization/message';
+import browser from '../../../core/utils/browser';
 
-const DIALOG_CLASS = "dx-formdialog";
-const FORM_CLASS = "dx-formdialog-form";
+const DIALOG_CLASS = 'dx-formdialog';
+const FORM_CLASS = 'dx-formdialog-form';
 
 class FormDialog {
 
@@ -23,7 +23,7 @@ class FormDialog {
 
     _renderPopup() {
         const editorInstance = this._editorInstance;
-        const $container = $("<div>")
+        const $container = $('<div>')
             .addClass(DIALOG_CLASS)
             .appendTo(editorInstance.$element());
         const popupConfig = this._getPopupConfig();
@@ -36,29 +36,29 @@ class FormDialog {
     }
 
     _addEscapeHandler(e) {
-        e.component.registerKeyHandler("escape", this._escKeyHandler.bind(this));
+        e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
     }
 
     _getPopupConfig() {
         return extend({
             onInitialized: (e) => {
                 this._popup = e.component;
-                this._popup.on("hiding", () => { this.deferred.reject(); });
-                this._popup.on("shown", () => { this._form.focus(); });
+                this._popup.on('hiding', () => { this.deferred.reject(); });
+                this._popup.on('shown', () => { this._form.focus(); });
             },
             deferRendering: false,
             focusStateEnabled: false,
             showCloseButton: false,
             contentTemplate: (contentElem) => {
-                const $formContainer = $("<div>").appendTo(contentElem);
+                const $formContainer = $('<div>').appendTo(contentElem);
 
                 this._renderForm($formContainer, {
                     onEditorEnterKey: ({ component, dataField }) => {
                         this._updateEditorValue(component, dataField);
-                        this.hide(component.option("formData"));
+                        this.hide(component.option('formData'));
                     },
                     customizeItem: (item) => {
-                        if(item.itemType === "simple") {
+                        if(item.itemType === 'simple') {
                             item.editorOptions = extend(
                                 true,
                                 {},
@@ -71,23 +71,23 @@ class FormDialog {
             },
             toolbarItems: [
                 {
-                    toolbar: "bottom",
-                    location: "after",
-                    widget: "dxButton",
+                    toolbar: 'bottom',
+                    location: 'after',
+                    widget: 'dxButton',
                     options: {
                         onInitialized: this._addEscapeHandler.bind(this),
-                        text: format("OK"),
+                        text: format('OK'),
                         onClick: () => {
-                            this.hide(this._form.option("formData"));
+                            this.hide(this._form.option('formData'));
                         }
                     }
                 }, {
-                    toolbar: "bottom",
-                    location: "after",
-                    widget: "dxButton",
+                    toolbar: 'bottom',
+                    location: 'after',
+                    widget: 'dxButton',
                     options: {
                         onInitialized: this._addEscapeHandler.bind(this),
-                        text: format("Cancel"),
+                        text: format('Cancel'),
                         onClick: () => {
                             this._popup.hide();
                         }
@@ -114,7 +114,7 @@ class FormDialog {
     }
 
     show(formUserConfig) {
-        if(this._popup.option("visible")) {
+        if(this._popup.option('visible')) {
             return;
         }
 

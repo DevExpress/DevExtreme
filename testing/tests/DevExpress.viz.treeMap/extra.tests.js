@@ -1,26 +1,26 @@
-var common = require("./commonParts/common.js"),
-    $ = require("jquery");
+const common = require('./commonParts/common.js');
+const $ = require('jquery');
 
-require("viz/tree_map/api");
-require("viz/tree_map/tracker");
+require('viz/tree_map/api');
+require('viz/tree_map/tracker');
 
-QUnit.module("T438413, two widgets", common.environment);
+QUnit.module('T438413, two widgets', common.environment);
 
-QUnit.test("After change options that reset nodes (e.g. maxDepth)", function(assert) {
-    var widget = common.createWidget({
-            dataSource: [{
-                items: [{
-                    value: 1
-                }, {
-                    value: 2
-                }]
+QUnit.test('After change options that reset nodes (e.g. maxDepth)', function(assert) {
+    const widget = common.createWidget({
+        dataSource: [{
+            items: [{
+                value: 1
+            }, {
+                value: 2
             }]
-        }),
-        args = this.tile(3).data.lastCall.args,
-        renderer = this.renderer;
+        }]
+    });
+    const args = this.tile(3).data.lastCall.args;
+    const renderer = this.renderer;
 
     common.createRenderer();
-    $("<div>").css({ width: 600, height: 400 }).appendTo("#qunit-fixture").dxTreeMap({
+    $('<div>').css({ width: 600, height: 400 }).appendTo('#qunit-fixture').dxTreeMap({
         dataSource: []
     });
     this.renderer = renderer;
@@ -31,20 +31,20 @@ QUnit.test("After change options that reset nodes (e.g. maxDepth)", function(ass
     assert.deepEqual(this.tile(3).data.lastCall.args, args);
 });
 
-QUnit.test("Change valueField option", function(assert) {
-    var widget = common.createWidget({
-            dataSource: [{
-                items: [{
-                    value: 1
-                }, {
-                    value: 2
-                }]
+QUnit.test('Change valueField option', function(assert) {
+    const widget = common.createWidget({
+        dataSource: [{
+            items: [{
+                value: 1
+            }, {
+                value: 2
             }]
-        }),
-        renderer = this.renderer;
+        }]
+    });
+    const renderer = this.renderer;
 
     common.createRenderer();
-    $("<div>").css({ width: 600, height: 400 }).appendTo("#qunit-fixture").dxTreeMap({
+    $('<div>').css({ width: 600, height: 400 }).appendTo('#qunit-fixture').dxTreeMap({
         dataSource: []
     });
     this.renderer = renderer;

@@ -1,27 +1,23 @@
-var each = require("../core/utils/iterator").each,
-    Callbacks = require("./utils/callbacks");
+import { each } from '../core/utils/iterator';
+import Callbacks from './utils/callbacks';
 
-var MemorizedCallbacks = function() {
+export default class MemorizedCallbacks {
+    constructor() {
+        this.memory = [];
+        this.callbacks = Callbacks();
+    }
 
-    var memory = [];
-    var callbacks = Callbacks();
+    add(fn) {
+        each(this.memory, (_, item) => fn.apply(fn, item));
+        this.callbacks.add(fn);
+    }
 
-    this.add = function(fn) {
-        each(memory, function(_, item) {
-            fn.apply(fn, item);
-        });
-        callbacks.add(fn);
-    };
+    remove(fn) {
+        this.callbacks.remove(fn);
+    }
 
-    this.remove = function(fn) {
-        callbacks.remove(fn);
-    };
-
-    this.fire = function() {
-        memory.push(arguments);
-        callbacks.fire.apply(callbacks, arguments);
-    };
-
-};
-
-module.exports = MemorizedCallbacks;
+    fire(...args) {
+        this.memory.push(args);
+        this.callbacks.fire.apply(this.callbacks, args);
+    }
+}

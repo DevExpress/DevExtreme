@@ -1,12 +1,12 @@
-import { getQuill } from "../quill_importer";
+import { getQuill } from '../quill_importer';
 
-import eventsEngine from "../../../events/core/events_engine";
-import { addNamespace } from "../../../events/utils";
-import { each } from "../../../core/utils/iterator";
-import browser from "../../../core/utils/browser";
-import { getWindow } from "../../../core/utils/window";
+import eventsEngine from '../../../events/core/events_engine';
+import { addNamespace } from '../../../events/utils';
+import { each } from '../../../core/utils/iterator';
+import browser from '../../../core/utils/browser';
+import { getWindow } from '../../../core/utils/window';
 
-const BaseModule = getQuill().import("core/module");
+const BaseModule = getQuill().import('core/module');
 
 class DropImageModule extends BaseModule {
     constructor(quill, options) {
@@ -15,9 +15,9 @@ class DropImageModule extends BaseModule {
         this.editorInstance = options.editorInstance;
         const widgetName = this.editorInstance.NAME;
 
-        eventsEngine.on(this.quill.root, addNamespace("dragover", widgetName), this._dragOverHandler.bind(this));
-        eventsEngine.on(this.quill.root, addNamespace("drop", widgetName), this._dropHandler.bind(this));
-        eventsEngine.on(this.quill.root, addNamespace("paste", widgetName), this._pasteHandler.bind(this));
+        eventsEngine.on(this.quill.root, addNamespace('dragover', widgetName), this._dragOverHandler.bind(this));
+        eventsEngine.on(this.quill.root, addNamespace('drop', widgetName), this._dropHandler.bind(this));
+        eventsEngine.on(this.quill.root, addNamespace('paste', widgetName), this._pasteHandler.bind(this));
     }
 
     _dragOverHandler(e) {
@@ -44,7 +44,7 @@ class DropImageModule extends BaseModule {
         }
 
         const hasDataItems = clipboardData.items && clipboardData.items.length;
-        const isHtmlData = clipboardData.getData("text/html");
+        const isHtmlData = clipboardData.getData('text/html');
 
         if(!isHtmlData && hasDataItems) {
             this._getImage(clipboardData.items, (imageData) => {
@@ -88,7 +88,7 @@ class DropImageModule extends BaseModule {
         const selection = this.quill.getSelection();
         const pasteIndex = selection ? selection.index : this.quill.getLength();
 
-        this.quill.insertEmbed(pasteIndex, "extendedImage", data, "user");
+        this.quill.insertEmbed(pasteIndex, 'extendedImage', data, 'user');
     }
 }
 

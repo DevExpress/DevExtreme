@@ -1,1 +1,1 @@
-require("./modules/parts/viz");
+require('./modules/parts/viz');

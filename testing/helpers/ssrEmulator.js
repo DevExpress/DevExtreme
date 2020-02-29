@@ -1,12 +1,12 @@
-var domAdapter = require("core/dom_adapter");
-var windowUtils = require("core/utils/window");
-var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
+import domAdapter from 'core/dom_adapter';
+import windowUtils from 'core/utils/window';
+import serverSideDOMAdapter from './serverSideDOMAdapterPatch.js';
 
 (function emulateNoContains() {
-    var originalContains = Element.prototype.contains;
+    const originalContains = Element.prototype.contains;
     Element.prototype.contains = function(element) {
         if(!element) {
-            throw new Error("element should be defined");
+            throw new Error('element should be defined');
         }
 
         return originalContains.apply(this, arguments);
@@ -15,10 +15,10 @@ var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
 
 (function emulateNoXMLNSAttr() {
     // NOTE: Will be allowed soon https://github.com/fgnass/domino/commit/b16cb1923f83db096b7cd0638734474e54b3308d#diff-52cea43ae897a1705ec51162aed25f63
-    var originalSetAttribute = Element.prototype.setAttribute;
+    const originalSetAttribute = Element.prototype.setAttribute;
     Element.prototype.setAttribute = function(name, value) {
         if(name.toLowerCase().substring(0, 5) === 'xmlns') {
-            throw new Error("the operation is not allowed by Namespaces in XML");
+            throw new Error('the operation is not allowed by Namespaces in XML');
         }
 
         return originalSetAttribute.apply(this, arguments);
@@ -26,12 +26,12 @@ var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
 })();
 
 (function emulateNoElementSizes() {
-    var originalCreateElement = document.createElement;
+    const originalCreateElement = document.createElement;
 
     document.createElement = function() {
-        var result = originalCreateElement.apply(this, arguments);
+        const result = originalCreateElement.apply(this, arguments);
 
-        ["offsetWidth", "offsetHeight", "getBoundingClientRect"].forEach(function(field) {
+        ['offsetWidth', 'offsetHeight', 'getBoundingClientRect'].forEach(function(field) {
             Object.defineProperty(result, field, {
                 get: function() {
                     return undefined;
@@ -47,135 +47,135 @@ var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
 })();
 
 (function emulateStyleProps() {
-    var originalCreateElement = document.createElement;
-    var serverStyles = [
-        "background",
-        "backgroundAttachment",
-        "backgroundColor",
-        "backgroundImage",
-        "backgroundPosition",
-        "backgroundRepeat",
-        "border",
-        "borderBottom",
-        "borderBottomColor",
-        "borderBottomStyle",
-        "borderBottomWidth",
-        "borderCollapse",
-        "borderColor",
-        "borderLeft",
-        "borderLeftColor",
-        "borderLeftStyle",
-        "borderLeftWidth",
-        "borderRight",
-        "borderRightColor",
-        "borderRightStyle",
-        "borderRightWidth",
-        "borderSpacing",
-        "borderStyle",
-        "borderTop",
-        "borderTopColor",
-        "borderTopStyle",
-        "borderTopWidth",
-        "borderWidth",
-        "bottom",
-        "captionSide",
-        "clear",
-        "clip",
-        "color",
-        "content",
-        "counterIncrement",
-        "counterReset",
-        "cssFloat",
-        "cursor",
-        "direction",
-        "display",
-        "emptyCells",
-        "font",
-        "fontFamily",
-        "fontSize",
-        "fontSizeAdjust",
-        "fontStretch",
-        "fontStyle",
-        "fontVariant",
-        "fontWeight",
-        "height",
-        "left",
-        "letterSpacing",
-        "lineHeight",
-        "listStyle",
-        "listStyleImage",
-        "listStylePosition",
-        "listStyleType",
-        "margin",
-        "marginBottom",
-        "marginLeft",
-        "marginRight",
-        "marginTop",
-        "markerOffset",
-        "marks",
-        "maxHeight",
-        "maxWidth",
-        "minHeight",
-        "minWidth",
-        "opacity",
-        "orphans",
-        "outline",
-        "outlineColor",
-        "outlineStyle",
-        "outlineWidth",
-        "overflow",
-        "padding",
-        "paddingBottom",
-        "paddingLeft",
-        "paddingRight",
-        "paddingTop",
-        "page",
-        "pageBreakAfter",
-        "pageBreakBefore",
-        "pageBreakInside",
-        "position",
-        "quotes",
-        "right",
-        "size",
-        "tableLayout",
-        "textAlign",
-        "textDecoration",
-        "textIndent",
-        "textShadow",
-        "textTransform",
-        "top",
-        "unicodeBidi",
-        "verticalAlign",
-        "visibility",
-        "whiteSpace",
-        "widows",
-        "width",
-        "wordSpacing",
-        "zIndex"
+    const originalCreateElement = document.createElement;
+    const serverStyles = [
+        'background',
+        'backgroundAttachment',
+        'backgroundColor',
+        'backgroundImage',
+        'backgroundPosition',
+        'backgroundRepeat',
+        'border',
+        'borderBottom',
+        'borderBottomColor',
+        'borderBottomStyle',
+        'borderBottomWidth',
+        'borderCollapse',
+        'borderColor',
+        'borderLeft',
+        'borderLeftColor',
+        'borderLeftStyle',
+        'borderLeftWidth',
+        'borderRight',
+        'borderRightColor',
+        'borderRightStyle',
+        'borderRightWidth',
+        'borderSpacing',
+        'borderStyle',
+        'borderTop',
+        'borderTopColor',
+        'borderTopStyle',
+        'borderTopWidth',
+        'borderWidth',
+        'bottom',
+        'captionSide',
+        'clear',
+        'clip',
+        'color',
+        'content',
+        'counterIncrement',
+        'counterReset',
+        'cssFloat',
+        'cursor',
+        'direction',
+        'display',
+        'emptyCells',
+        'font',
+        'fontFamily',
+        'fontSize',
+        'fontSizeAdjust',
+        'fontStretch',
+        'fontStyle',
+        'fontVariant',
+        'fontWeight',
+        'height',
+        'left',
+        'letterSpacing',
+        'lineHeight',
+        'listStyle',
+        'listStyleImage',
+        'listStylePosition',
+        'listStyleType',
+        'margin',
+        'marginBottom',
+        'marginLeft',
+        'marginRight',
+        'marginTop',
+        'markerOffset',
+        'marks',
+        'maxHeight',
+        'maxWidth',
+        'minHeight',
+        'minWidth',
+        'opacity',
+        'orphans',
+        'outline',
+        'outlineColor',
+        'outlineStyle',
+        'outlineWidth',
+        'overflow',
+        'padding',
+        'paddingBottom',
+        'paddingLeft',
+        'paddingRight',
+        'paddingTop',
+        'page',
+        'pageBreakAfter',
+        'pageBreakBefore',
+        'pageBreakInside',
+        'position',
+        'quotes',
+        'right',
+        'size',
+        'tableLayout',
+        'textAlign',
+        'textDecoration',
+        'textIndent',
+        'textShadow',
+        'textTransform',
+        'top',
+        'unicodeBidi',
+        'verticalAlign',
+        'visibility',
+        'whiteSpace',
+        'widows',
+        'width',
+        'wordSpacing',
+        'zIndex'
     ];
 
-    var styleObj = {};
+    const styleObj = {};
 
     serverStyles.forEach(function(style) {
-        styleObj[style] = "";
+        styleObj[style] = '';
     });
 
     document.createElement = function(tagName) {
-        return tagName === "dx" ? { style: styleObj } : originalCreateElement.apply(this, arguments);
+        return tagName === 'dx' ? { style: styleObj } : originalCreateElement.apply(this, arguments);
     };
 })();
 
 (function emulateIncorrectMatches() {
     // https://github.com/fgnass/domino/issues/121
-    var originalMatches = Element.prototype.matches;
+    const originalMatches = Element.prototype.matches;
     Element.prototype.matches = function(selector) {
-        var selectorParts = selector.split(/\s|>/);
-        var lastSelectorPart = selectorParts[selectorParts.length - 1];
+        const selectorParts = selector.split(/\s|>/);
+        let lastSelectorPart = selectorParts[selectorParts.length - 1];
         if(/^\.[\w|-]+$/.test(lastSelectorPart)) {
             lastSelectorPart = lastSelectorPart.substr(1);
-            var index = this.className.indexOf(lastSelectorPart);
-            var l = this.className[index + lastSelectorPart.length];
-            if(index > -1 && l && l !== " ") {
+            const index = this.className.indexOf(lastSelectorPart);
+            const l = this.className[index + lastSelectorPart.length];
+            if(index > -1 && l && l !== ' ') {
                 return false;
             }
         }
@@ -184,45 +184,43 @@ var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
     };
 })();
 
-var domAdapterBackup = {};
-var makeDOMAdapterEmpty = function() {
-    for(var field in domAdapter) {
+const domAdapterBackup = {};
+const makeDOMAdapterEmpty = function() {
+    for(const field in domAdapter) {
         domAdapterBackup[field] = domAdapter[field];
         delete domAdapter[field];
     }
 };
-var restoreOriginalDomAdapter = function() {
-    for(var field in domAdapterBackup) {
+const restoreOriginalDomAdapter = function() {
+    for(const field in domAdapterBackup) {
         domAdapter[field] = domAdapterBackup[field];
     }
 };
 
-var windowMock = {
+const windowMock = {
     isWindowMock: true
 };
 
-var errorFunc = function() {
-    throw new Error("Window fields using is prevented");
+const errorFunc = function() {
+    throw new Error('Window fields using is prevented');
 };
 
-var windowGetter = function() {
+const windowGetter = function() {
     return windowMock;
 };
 
-for(var field in window) {
+for(const field in window) {
     Object.defineProperty(windowMock, field, {
-        get: field === "window" ? windowGetter : errorFunc,
+        get: field === 'window' ? windowGetter : errorFunc,
         set: errorFunc
     });
 }
 
-var makeWindowEmpty = function() {
-    windowUtils.hasWindow = function() {
-        return false;
-    };
-    windowUtils.getWindow = function() {
-        return windowMock;
-    };
+const makeWindowEmpty = function() {
+    windowUtils.hasWindow = () => false;
+    windowUtils.getWindow = () => windowMock;
+    windowUtils.getNavigator = () => ({ userAgent: '' });
+    windowUtils.hasProperty = () => false;
 };
 
 // Ensure domAdapter is not used on scripts loading stage (until the integration is not injected)

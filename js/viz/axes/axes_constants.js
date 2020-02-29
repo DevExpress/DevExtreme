@@ -1,18 +1,18 @@
-var _map = require("../core/utils").map;
+const _map = require('../core/utils').map;
 
 module.exports = {
-    logarithmic: "logarithmic",
-    discrete: "discrete",
-    numeric: "numeric",
+    logarithmic: 'logarithmic',
+    discrete: 'discrete',
+    numeric: 'numeric',
 
-    left: "left",
-    right: "right",
-    top: "top",
-    bottom: "bottom",
-    center: "center",
+    left: 'left',
+    right: 'right',
+    top: 'top',
+    bottom: 'bottom',
+    center: 'center',
 
-    horizontal: "horizontal",
-    vertical: "vertical",
+    horizontal: 'horizontal',
+    vertical: 'vertical',
 
     convertTicksToValues: function(ticks) {
         return _map(ticks || [], function(item) {
@@ -21,11 +21,11 @@ module.exports = {
     },
 
     validateOverlappingMode: function(mode) {
-        return mode === "ignore" || mode === "none" ? mode : "hide";
+        return mode === 'ignore' || mode === 'none' ? mode : 'hide';
     },
 
     getTicksCountInRange: function(ticks, valueKey, range) {
-        var i = 1;
+        let i = 1;
 
         if(ticks.length > 1) {
             for(; i < ticks.length; i++) {
@@ -38,19 +38,19 @@ module.exports = {
     },
 
     areLabelsOverlap: function(bBox1, bBox2, spacing, alignment) {
-        var horizontalInverted = bBox1.x > bBox2.x,
-            verticalInverted = bBox1.y > bBox2.y,
-            x1 = bBox1.x,
-            x2 = bBox2.x,
-            width1 = bBox1.width,
-            width2 = bBox2.width,
-            hasHorizontalOverlapping,
-            hasVerticalOverlapping;
+        const horizontalInverted = bBox1.x > bBox2.x;
+        const verticalInverted = bBox1.y > bBox2.y;
+        let x1 = bBox1.x;
+        let x2 = bBox2.x;
+        const width1 = bBox1.width;
+        const width2 = bBox2.width;
+        let hasHorizontalOverlapping;
+        let hasVerticalOverlapping;
 
-        if(alignment === "left") {
+        if(alignment === 'left') {
             x1 += width1 / 2;
             x2 += width2 / 2;
-        } else if(alignment === "right") {
+        } else if(alignment === 'right') {
             x1 -= width1 / 2;
             x2 -= width2 / 2;
         }

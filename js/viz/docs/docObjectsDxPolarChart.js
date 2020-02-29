@@ -4,14 +4,14 @@
 * @type object
 * @inherits baseSeriesObject
 */
-var polarSeriesObject = {
+const polarSeriesObject = {
     /**
     * @name polarChartSeriesObjectFields.axis
     * @type string
     * @hidden
     */
     axis: null
-}
+};
 
 /**
 * @name polarPointObject
@@ -19,7 +19,7 @@ var polarSeriesObject = {
 * @type object
 * @inherits basePointObject
 */
-var polarPointObject = {
+const polarPointObject = {
     /**
     * @name polarPointObjectMethods.getBoundingRect
     * @publicName getBoundingRect()

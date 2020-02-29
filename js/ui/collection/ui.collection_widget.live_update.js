@@ -1,15 +1,15 @@
-import $ from "../../core/renderer";
-import CollectionWidget from "./ui.collection_widget.edit";
-import { extend } from "../../core/utils/extend";
-import { isDefined } from "../../core/utils/type";
-import arrayUtils from "../../data/array_utils";
-import { keysEqual } from "../../data/utils";
-import { when } from "../../core/utils/deferred";
-import { findChanges } from "../../core/utils/array_compare";
-import { insertElement } from "../../core/dom_adapter";
-import { noop } from "../../core/utils/common";
+import $ from '../../core/renderer';
+import CollectionWidget from './ui.collection_widget.edit';
+import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../core/utils/type';
+import arrayUtils from '../../data/array_utils';
+import { keysEqual } from '../../data/utils';
+import { when } from '../../core/utils/deferred';
+import { findChanges } from '../../core/utils/array_compare';
+import { insertElement } from '../../core/dom_adapter';
+import { noop } from '../../core/utils/common';
 
-const PRIVATE_KEY_FIELD = "__dx_key__";
+const PRIVATE_KEY_FIELD = '__dx_key__';
 
 export default CollectionWidget.inherit({
     _getDefaultOptions: function() {
@@ -22,7 +22,7 @@ export default CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
 
         this._customizeStoreLoadOptions = (e) => {
-            var dataSource = this._dataSource;
+            const dataSource = this._dataSource;
             if(dataSource && !dataSource.isLoaded()) {
                 this._correctionIndex = 0;
             }
@@ -31,7 +31,7 @@ export default CollectionWidget.inherit({
             }
         },
 
-        this._dataSource && this._dataSource.on("customizeStoreLoadOptions", this._customizeStoreLoadOptions);
+        this._dataSource && this._dataSource.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
     },
 
     reload: function() {
@@ -46,10 +46,10 @@ export default CollectionWidget.inherit({
 
     _findItemElementByKey: function(key) {
         let result = $();
-        var keyExpr = this.key();
+        const keyExpr = this.key();
         this.itemElements().each((_, item) => {
-            let $item = $(item),
-                itemData = this._getItemData($item);
+            const $item = $(item);
+            const itemData = this._getItemData($item);
             if(keyExpr ? keysEqual(keyExpr, this.keyOf(itemData), key) : this._isItemEquals(itemData, key)) {
                 result = $item;
                 return false;
@@ -74,14 +74,14 @@ export default CollectionWidget.inherit({
     },
 
     _partialRefresh: function() {
-        if(this.option("repaintChangesOnly")) {
+        if(this.option('repaintChangesOnly')) {
             const keyOf = (data) => {
                 if(data && data[PRIVATE_KEY_FIELD] !== undefined) {
                     return data[PRIVATE_KEY_FIELD];
                 }
                 return this.keyOf(data);
             };
-            let result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemEquals);
+            const result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemEquals);
             if(result && this._itemsCache.length) {
                 this._modifyByChanges(result, true);
                 this._renderEmptyMessage();
@@ -94,7 +94,7 @@ export default CollectionWidget.inherit({
     },
 
     _refreshItemsCache: function() {
-        if(this.option("repaintChangesOnly")) {
+        if(this.option('repaintChangesOnly')) {
             const items = this._editStrategy.itemsGetter();
             try {
                 this._itemsCache = extend(true, [], items);
@@ -113,7 +113,7 @@ export default CollectionWidget.inherit({
     },
 
     _dispose: function() {
-        this._dataSource && this._dataSource.off("customizeStoreLoadOptions", this._customizeStoreLoadOptions);
+        this._dataSource && this._dataSource.off('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
         this.callBase();
     },
 
@@ -121,7 +121,7 @@ export default CollectionWidget.inherit({
         if(isPartialRefresh) {
             this._renderItem(change.index, change.data, null, this._findItemElementByKey(change.key));
         } else {
-            let changedItem = items[arrayUtils.indexByKey(keyInfo, items, change.key)];
+            const changedItem = items[arrayUtils.indexByKey(keyInfo, items, change.key)];
             if(changedItem) {
                 arrayUtils.update(keyInfo, items, change.key, change.data).done(() => {
                     this._renderItem(items.indexOf(changedItem), changedItem, null, this._findItemElementByKey(change.key));
@@ -140,33 +140,33 @@ export default CollectionWidget.inherit({
     },
 
     _updateSelectionAfterRemoveByChange: function(removeIndex) {
-        var selectedIndex = this.option("selectedIndex");
+        const selectedIndex = this.option('selectedIndex');
 
         if(selectedIndex > removeIndex) {
-            this.option("selectedIndex", selectedIndex - 1);
-        } else if(selectedIndex === removeIndex && this.option("selectedItems").length === 1) {
-            this.option("selectedItems", []);
+            this.option('selectedIndex', selectedIndex - 1);
+        } else if(selectedIndex === removeIndex && this.option('selectedItems').length === 1) {
+            this.option('selectedItems', []);
         } else {
             this._normalizeSelectedItems();
         }
     },
 
     _beforeItemElementInserted: function(change) {
-        var selectedIndex = this.option("selectedIndex");
+        const selectedIndex = this.option('selectedIndex');
 
         if(change.index <= selectedIndex) {
-            this.option("selectedIndex", selectedIndex + 1);
+            this.option('selectedIndex', selectedIndex + 1);
         }
     },
 
     _afterItemElementInserted: noop,
 
     _removeByChange: function(keyInfo, items, change, isPartialRefresh) {
-        let index = isPartialRefresh ? change.index : arrayUtils.indexByKey(keyInfo, items, change.key),
-            removedItem = isPartialRefresh ? change.oldItem : items[index];
+        const index = isPartialRefresh ? change.index : arrayUtils.indexByKey(keyInfo, items, change.key);
+        const removedItem = isPartialRefresh ? change.oldItem : items[index];
         if(removedItem) {
-            let $removedItemElement = this._findItemElementByKey(change.key),
-                deletedActionArgs = this._extendActionArgs($removedItemElement);
+            const $removedItemElement = this._findItemElementByKey(change.key);
+            const deletedActionArgs = this._extendActionArgs($removedItemElement);
 
             this._waitDeletingPrepare($removedItemElement).done(()=>{
                 if(isPartialRefresh) {
@@ -184,14 +184,14 @@ export default CollectionWidget.inherit({
     },
 
     _modifyByChanges: function(changes, isPartialRefresh) {
-        let items = this._editStrategy.itemsGetter(),
-            keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) },
-            dataSource = this._dataSource,
-            paginate = dataSource && dataSource.paginate(),
-            group = dataSource && dataSource.group();
+        const items = this._editStrategy.itemsGetter();
+        const keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) };
+        const dataSource = this._dataSource;
+        const paginate = dataSource && dataSource.paginate();
+        const group = dataSource && dataSource.group();
 
         if(paginate || group) {
-            changes = changes.filter(item => item.type !== "insert" || item.index !== undefined);
+            changes = changes.filter(item => item.type !== 'insert' || item.index !== undefined);
         }
 
         changes.forEach(change => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
@@ -201,26 +201,27 @@ export default CollectionWidget.inherit({
     },
 
     _appendItemToContainer: function($container, $itemFrame, index) {
-        let nextSiblingElement = $container.children(this._itemSelector()).get(index);
+        const nextSiblingElement = $container.children(this._itemSelector()).get(index);
         insertElement($container.get(0), $itemFrame.get(0), nextSiblingElement);
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "items":
-                var isItemsUpdated = this._partialRefresh(args.value);
+            case 'items': {
+                const isItemsUpdated = this._partialRefresh(args.value);
                 if(!isItemsUpdated) {
                     this.callBase(args);
                 }
                 break;
-            case "dataSource":
-                if(!this.option("repaintChangesOnly") || !args.value) {
-                    this.option("items", []);
+            }
+            case 'dataSource':
+                if(!this.option('repaintChangesOnly') || !args.value) {
+                    this.option('items', []);
                 }
 
                 this.callBase(args);
                 break;
-            case "repaintChangesOnly":
+            case 'repaintChangesOnly':
                 break;
             default:
                 this.callBase(args);

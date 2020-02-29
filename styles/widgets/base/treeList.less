@@ -1,3 +1,13 @@
+@treelist-border: @datagrid-border;
+@treelist-drag-header-border-color: @datagrid-drag-header-border-color;
+@treelist-row-error-bg: @datagrid-row-error-bg;
+@treelist-base-color: @datagrid-base-color;
+@treelist-base-background-color: @datagrid-base-background-color;
+@treelist-border-color: @datagrid-border-color;
+@treelist-focused-border-color: @datagrid-focused-border-color;
+@treelist-text-stub-background-image-path: @datagrid-text-stub-background-image-path;
+@treelist-row-error-color: @datagrid-row-error-color;
+
 .dx-treelist-borders {
     > .dx-treelist-headers,
     > .dx-treelist-rowsview,
@@ -27,8 +37,6 @@
 
 .dx-sortable-dragging > div > .dx-gridbase-container > .dx-treelist-rowsview {
     border-color: @treelist-drag-header-border-color;
-    cursor: pointer;
-    cursor: grabbing;
 }
 
 .dx-treelist-error-message() {
@@ -49,7 +57,7 @@
     }
 
     .dx-command-drag .dx-treelist-drag-icon {
-        .dx-icon-dragvertical;
+        .dx-icon(dragvertical);
     }
 }
 
@@ -58,11 +66,11 @@
     background-color: @treelist-base-background-color;
 
     .dx-sort-up {
-        .dx-icon-sortup;
+        .dx-icon(sortup);
     }
 
     .dx-sort-down {
-        .dx-icon-sortdown;
+        .dx-icon(sortdown);
     }
 
     .dx-sort-down,
@@ -99,7 +107,7 @@
     .dx-header-filter {
         position: relative;
         color: @HEADER_FILTER_COLOR;
-        .dx-icon-filter;
+        .dx-icon(filter);
     }
 
     .dx-header-filter-empty {
@@ -217,10 +225,6 @@
     }
 }
 
-.dx-treelist-column-chooser {
-    .dx-base-typography();
-}
-
 .dx-treelist-export-menu {
     .dx-menu-item .dx-icon-exportxlsx {
         .dx-icon-sizing(16px);
@@ -229,7 +233,7 @@
 
 .dx-treelist-adaptive-more {
     cursor: pointer;
-    .dx-icon-more;
+    .dx-icon(more);
     .dx-icon-sizing(21px);
 }
 

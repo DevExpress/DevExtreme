@@ -1,9 +1,9 @@
-import config from "../config";
-import Guid from "../guid";
-import { when, Deferred } from "../utils/deferred";
-import { toComparable } from "./data";
-import { each } from "./iterator";
-import { isDefined, isFunction, isString, isObject } from "./type";
+import config from '../config';
+import Guid from '../guid';
+import { when, Deferred } from '../utils/deferred';
+import { toComparable } from './data';
+import { each } from './iterator';
+import { isDefined, isFunction, isString, isObject } from './type';
 
 const ensureDefined = function(value, defaultValue) {
     return isDefined(value) ? value : defaultValue;
@@ -12,7 +12,6 @@ const ensureDefined = function(value, defaultValue) {
 const executeAsync = function(action, context/* , internal */) {
     const deferred = new Deferred();
     const normalizedContext = context || this;
-    let timerId;
     const task = {
         promise: deferred.promise(),
         abort: function() {
@@ -33,7 +32,7 @@ const executeAsync = function(action, context/* , internal */) {
         }
     };
 
-    timerId = (arguments[2] || setTimeout)(callback, typeof context === "number" ? context : 0);
+    const timerId = (arguments[2] || setTimeout)(callback, typeof context === 'number' ? context : 0);
 
     return task;
 };
@@ -72,24 +71,24 @@ const deferExecute = function(name, func, deferred) {
         }
 
         if(!executingName && delayedFuncs.length) {
-            (delayedNames.shift() === "render" ? deferRender : deferUpdate)(delayedFuncs.shift(), delayedDeferreds.shift());
+            (delayedNames.shift() === 'render' ? deferRender : deferUpdate)(delayedFuncs.shift(), delayedDeferreds.shift());
         }
         return result || when();
     }
 };
 
 const deferRender = function(func, deferred) {
-    return deferExecute("render", func, deferred);
+    return deferExecute('render', func, deferred);
 };
 
 const deferUpdate = function(func, deferred) {
-    return deferExecute("update", func, deferred);
+    return deferExecute('update', func, deferred);
 };
 
 const deferRenderer = function(func) {
     return function() {
         const that = this;
-        return deferExecute("render", function() {
+        return deferExecute('render', function() {
             return func.call(that);
         });
     };
@@ -98,7 +97,7 @@ const deferRenderer = function(func) {
 const deferUpdater = function(func) {
     return function() {
         const that = this;
-        return deferExecute("update", function() {
+        return deferExecute('update', function() {
             return func.call(that);
         });
     };
@@ -113,7 +112,7 @@ const findBestMatches = function(targetFilter, items, mapFn) {
         const item = mapFn ? mapFn(itemSrc) : itemSrc;
 
         each(targetFilter, (paramName, targetValue) => {
-            let value = item[paramName];
+            const value = item[paramName];
 
             if(value === undefined) {
                 return;
@@ -167,11 +166,11 @@ const match = function(value, targetValue) {
 
 const splitPair = function(raw) {
     switch(typeof raw) {
-        case "string":
+        case 'string':
             return raw.split(/\s+/, 2);
-        case "object":
+        case 'object':
             return [raw.x || raw.h, raw.y || raw.v];
-        case "number":
+        case 'number':
             return [raw];
         default:
             return raw;
@@ -183,7 +182,7 @@ const normalizeKey = function(id) {
     const arr = key.match(/[^a-zA-Z0-9_]/g);
 
     arr && each(arr, (_, sign) => {
-        key = key.replace(sign, "__" + sign.charCodeAt() + "__");
+        key = key.replace(sign, '__' + sign.charCodeAt() + '__');
     });
     return key;
 };
@@ -192,7 +191,7 @@ const denormalizeKey = function(key) {
     const arr = key.match(/__\d+__/g);
 
     arr && arr.forEach((char) => {
-        const charCode = parseInt(char.replace("__", ""));
+        const charCode = parseInt(char.replace('__', ''));
 
         key = key.replace(char, String.fromCharCode(charCode));
     });
@@ -221,7 +220,7 @@ const getKeyHash = function(key) {
     } else if(isObject(key) || Array.isArray(key)) {
         try {
             const keyHash = JSON.stringify(key);
-            return keyHash === "{}" ? key : keyHash;
+            return keyHash === '{}' ? key : keyHash;
         } catch(e) {
             return key;
         }
@@ -231,13 +230,13 @@ const getKeyHash = function(key) {
 };
 
 const escapeRegExp = function(string) {
-    return string.replace(/[[\]{}\-()*+?.\\^$|\s]/g, "\\$&");
+    return string.replace(/[[\]{}\-()*+?.\\^$|\s]/g, '\\$&');
 };
 
 const applyServerDecimalSeparator = function(value) {
     const separator = config().serverDecimalSeparator;
     if(isDefined(value)) {
-        value = value.toString().replace(".", separator);
+        value = value.toString().replace('.', separator);
     }
     return value;
 };
@@ -275,11 +274,11 @@ const arraysEqualByValue = function(array1, array2, depth) {
     return true;
 };
 
-const objectsEqualByValue = function(object1, object2, depth) {
+const objectsEqualByValue = function(object1, object2, depth, strict) {
     for(const propertyName in object1) {
         if(
             Object.prototype.hasOwnProperty.call(object1, propertyName) &&
-            !equalByValue(object1[propertyName], object2[propertyName], depth + 1)
+            !equalByValue(object1[propertyName], object2[propertyName], depth + 1, strict)
         ) {
             return false;
         }
@@ -296,18 +295,20 @@ const objectsEqualByValue = function(object1, object2, depth) {
 
 const maxEqualityDepth = 3;
 
-const equalByValue = function(object1, object2, depth) {
-    depth = depth || 0;
+const equalByValue = function(object1, object2, depth = 0, strict = true) {
 
     object1 = toComparable(object1, true);
     object2 = toComparable(object2, true);
 
-    if(object1 === object2 || depth >= maxEqualityDepth) {
+    // eslint-disable-next-line eqeqeq
+    const comparisonResult = strict ? object1 === object2 : object1 == object2;
+
+    if(comparisonResult || depth >= maxEqualityDepth) {
         return true;
     }
 
     if(isObject(object1) && isObject(object2)) {
-        return objectsEqualByValue(object1, object2, depth);
+        return objectsEqualByValue(object1, object2, depth, strict);
     } else if(Array.isArray(object1) && Array.isArray(object2)) {
         return arraysEqualByValue(object1, object2, depth);
     }

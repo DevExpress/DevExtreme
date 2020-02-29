@@ -1,4 +1,4 @@
-import $ from "../../../core/renderer";
+import $ from '../../../core/renderer';
 
 export default class TextEditorButton {
     constructor(name, editor, options) {
@@ -12,7 +12,7 @@ export default class TextEditorButton {
     }
 
     _addPlaceMarker($container) {
-        this.$placeMarker = $("<div>").appendTo($container);
+        this.$placeMarker = $('<div>').appendTo($container);
     }
 
     _addToContainer($element) {
@@ -22,11 +22,11 @@ export default class TextEditorButton {
     }
 
     _attachEvents(/* instance, $element */) {
-        throw "Not implemented";
+        throw 'Not implemented';
     }
 
     _create() {
-        throw "Not implemented";
+        throw 'Not implemented';
     }
 
     _isRendered() {
@@ -36,11 +36,11 @@ export default class TextEditorButton {
     _isVisible() {
         const { editor, options } = this;
 
-        return options.visible || !editor.option("readOnly");
+        return options.visible || !editor.option('readOnly');
     }
 
     _isDisabled() {
-        throw "Not implemented";
+        throw 'Not implemented';
     }
 
     _shouldRender() {

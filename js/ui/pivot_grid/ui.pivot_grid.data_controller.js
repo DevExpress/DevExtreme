@@ -1,34 +1,34 @@
-import Callbacks from "../../core/utils/callbacks";
-import { when, Deferred } from "../../core/utils/deferred";
-import { extend } from "../../core/utils/extend";
-import { inArray } from "../../core/utils/array";
-import iteratorUtils from "../../core/utils/iterator";
-import Class from "../../core/class";
-import stringUtils from "../../core/utils/string";
-import commonUtils from "../../core/utils/common";
-import { isDefined, isString } from "../../core/utils/type";
-import virtualScrolling from "../grid_core/ui.grid_core.virtual_scrolling_core";
-import virtualColumnsCore from "../grid_core/ui.grid_core.virtual_columns_core";
-import stateStoring from "../grid_core/ui.grid_core.state_storing_core";
-import PivotGridDataSource from "./data_source";
+import Callbacks from '../../core/utils/callbacks';
+import { when, Deferred } from '../../core/utils/deferred';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import iteratorUtils from '../../core/utils/iterator';
+import Class from '../../core/class';
+import stringUtils from '../../core/utils/string';
+import commonUtils from '../../core/utils/common';
+import { isDefined, isString } from '../../core/utils/type';
+import virtualScrolling from '../grid_core/ui.grid_core.virtual_scrolling_core';
+import virtualColumnsCore from '../grid_core/ui.grid_core.virtual_columns_core';
+import stateStoring from '../grid_core/ui.grid_core.state_storing_core';
+import PivotGridDataSource from './data_source';
 import pivotGridUtils, {
     foreachTree,
     foreachTreeAsync,
     createPath,
     formatValue
-} from "./ui.pivot_grid.utils";
+} from './ui.pivot_grid.utils';
 
-var math = Math,
-    GRAND_TOTAL_TYPE = "GT",
-    TOTAL_TYPE = "T",
-    DATA_TYPE = "D",
-    NOT_AVAILABLE = "#N/A",
-    CHANGING_DURATION_IF_PAGINATE = 300;
+const math = Math;
+const GRAND_TOTAL_TYPE = 'GT';
+const TOTAL_TYPE = 'T';
+const DATA_TYPE = 'D';
+const NOT_AVAILABLE = '#N/A';
+const CHANGING_DURATION_IF_PAGINATE = 300;
 
-var proxyMethod = function(instance, methodName, defaultResult) {
+const proxyMethod = function(instance, methodName, defaultResult) {
     if(!instance[methodName]) {
         instance[methodName] = function() {
-            var dataSource = this._dataSource;
+            const dataSource = this._dataSource;
             return dataSource ? dataSource[methodName].apply(dataSource, arguments) : defaultResult;
         };
     }
@@ -37,7 +37,7 @@ var proxyMethod = function(instance, methodName, defaultResult) {
 exports.DataController = Class.inherit((function() {
 
     function getHeaderItemText(item, description, options) {
-        var text = item.text;
+        let text = item.text;
 
         if(isDefined(item.displayText)) {
             text = item.displayText;
@@ -58,9 +58,9 @@ exports.DataController = Class.inherit((function() {
         return value === NOT_AVAILABLE ? errorText : formatValue(value, dataField);
     }
 
-    var createHeaderInfo = (function() {
-        var getHeaderItemsDepth = function(headerItems) {
-            var depth = 0;
+    const createHeaderInfo = (function() {
+        const getHeaderItemsDepth = function(headerItems) {
+            let depth = 0;
 
             foreachTree(headerItems, function(items) {
                 depth = math.max(depth, items.length);
@@ -69,26 +69,17 @@ exports.DataController = Class.inherit((function() {
             return depth;
         };
 
-        var createInfoItem = function(headerItem, breadth, isHorizontal, isTree) {
+        const createInfoItem = function(headerItem, breadth, isHorizontal, isTree) {
             /**
             * @name dxPivotGridPivotGridCell
             * @type object
             */
-            var infoItem = {
-                /**
-                * @name dxPivotGridPivotGridCell.type
-                * @acceptValues "D" | "T" | "GT"
-                * @type string
-                */
+            const infoItem = {
                 type: headerItem.type,
                 text: headerItem.text
             };
 
             if(headerItem.path) {
-                /**
-                * @name dxPivotGridPivotGridCell.path
-                * @type Array<string, number, Date>
-                */
                 infoItem.path = headerItem.path;
             }
             if(headerItem.width) {
@@ -108,10 +99,6 @@ exports.DataController = Class.inherit((function() {
                 infoItem.dataIndex = headerItem.dataIndex;
             }
             if(isDefined(headerItem.expanded)) {
-                /**
-                * @name dxPivotGridPivotGridCell.expanded
-                * @type boolean
-                */
                 infoItem.expanded = headerItem.expanded;
             }
             if(breadth > 1) {
@@ -133,22 +120,21 @@ exports.DataController = Class.inherit((function() {
             return infoItem;
         };
 
-        var addInfoItem = function(info, options) {
-            var itemInfo,
-                breadth = (options.lastIndex - options.index) || 1,
-                addInfoItemCore = function(info, infoItem, itemIndex, depthIndex, isHorizontal) {
-                    var index = isHorizontal ? depthIndex : itemIndex;
-                    while(!info[index]) {
-                        info.push([]);
-                    }
-                    if(isHorizontal) {
-                        info[index].push(infoItem);
-                    } else {
-                        info[index].unshift(infoItem);
-                    }
-                };
+        const addInfoItem = function(info, options) {
+            const breadth = (options.lastIndex - options.index) || 1;
+            const addInfoItemCore = function(info, infoItem, itemIndex, depthIndex, isHorizontal) {
+                const index = isHorizontal ? depthIndex : itemIndex;
+                while(!info[index]) {
+                    info.push([]);
+                }
+                if(isHorizontal) {
+                    info[index].push(infoItem);
+                } else {
+                    info[index].unshift(infoItem);
+                }
+            };
 
-            itemInfo = createInfoItem(options.headerItem, breadth, options.isHorizontal, options.isTree);
+            const itemInfo = createInfoItem(options.headerItem, breadth, options.isHorizontal, options.isTree);
             addInfoItemCore(info, itemInfo, options.index, options.depth, options.isHorizontal);
             if(!options.headerItem.children || options.headerItem.children.length === 0) {
                 return options.lastIndex + 1;
@@ -156,13 +142,13 @@ exports.DataController = Class.inherit((function() {
             return options.lastIndex;
         };
 
-        var isItemSorted = function(items, sortBySummaryPath) {
-            var path,
-                item = items[0],
-                stringValuesUsed = isString(sortBySummaryPath[0]),
-                headerItem = item.dataIndex >= 0 ? items[1] : item;
+        const isItemSorted = function(items, sortBySummaryPath) {
+            let path;
+            const item = items[0];
+            const stringValuesUsed = isString(sortBySummaryPath[0]);
+            const headerItem = item.dataIndex >= 0 ? items[1] : item;
 
-            if((stringValuesUsed && sortBySummaryPath[0].indexOf("&[") !== -1 && headerItem.key) || !headerItem.key) {
+            if((stringValuesUsed && sortBySummaryPath[0].indexOf('&[') !== -1 && headerItem.key) || !headerItem.key) {
                 path = createPath(items);
             } else {
                 path = iteratorUtils.map(items, function(item) { return item.dataIndex >= 0 ? item.value : item.text; }).reverse();
@@ -172,38 +158,38 @@ exports.DataController = Class.inherit((function() {
                 path = path.slice(1);
             }
 
-            return path.join("/") === sortBySummaryPath.join("/");
+            return path.join('/') === sortBySummaryPath.join('/');
         };
 
-        var getViewHeaderItems = function(headerItems, headerDescriptions, cellDescriptions, depthSize, options) {
-            var cellDescriptionsCount = cellDescriptions.length,
-                viewHeaderItems = createViewHeaderItems(headerItems, headerDescriptions),
-                dataFields = options.dataFields,
-                d = new Deferred();
+        const getViewHeaderItems = function(headerItems, headerDescriptions, cellDescriptions, depthSize, options) {
+            const cellDescriptionsCount = cellDescriptions.length;
+            const viewHeaderItems = createViewHeaderItems(headerItems, headerDescriptions);
+            const dataFields = options.dataFields;
+            const d = new Deferred();
 
             when(viewHeaderItems).done(function(viewHeaderItems) {
                 options.notifyProgress(0.5);
 
                 if(options.showGrandTotals) {
-                    viewHeaderItems[!options.showTotalsPrior ? "push" : "unshift"]({
+                    viewHeaderItems[!options.showTotalsPrior ? 'push' : 'unshift']({
                         type: GRAND_TOTAL_TYPE,
                         isEmpty: options.isEmptyGrandTotal
                     });
                 }
 
-                var hideTotals = options.showTotals === false || dataFields.length > 0 && (dataFields.length === options.hiddenTotals.length),
-                    hideData = dataFields.length > 0 && options.hiddenValues.length === dataFields.length;
+                const hideTotals = options.showTotals === false || dataFields.length > 0 && (dataFields.length === options.hiddenTotals.length);
+                const hideData = dataFields.length > 0 && options.hiddenValues.length === dataFields.length;
 
                 if(hideData && hideTotals) {
                     depthSize = 1;
                 }
 
-                if(!hideTotals || options.layout === "tree") {
-                    addAdditionalTotalHeaderItems(viewHeaderItems, headerDescriptions, options.showTotalsPrior, options.layout === "tree");
+                if(!hideTotals || options.layout === 'tree') {
+                    addAdditionalTotalHeaderItems(viewHeaderItems, headerDescriptions, options.showTotalsPrior, options.layout === 'tree');
                 }
 
                 when(foreachTreeAsync(viewHeaderItems, function(items) {
-                    var item = items[0];
+                    const item = items[0];
 
                     if(!item.children || item.children.length === 0) {
                         item.depthSize = depthSize - items.length + 1;
@@ -218,16 +204,16 @@ exports.DataController = Class.inherit((function() {
                     options.notifyProgress(0.75);
 
                     when(foreachTreeAsync(viewHeaderItems, function(items) {
-                        var item = items[0],
-                            isMetric = item.isMetric,
-                            field = headerDescriptions[items.length - 1] || {};
+                        const item = items[0];
+                        const isMetric = item.isMetric;
+                        const field = headerDescriptions[items.length - 1] || {};
 
                         if(item.type === DATA_TYPE && !isMetric) {
                             item.width = field.width;
                         }
 
                         if(hideData === true && item.type === DATA_TYPE) {
-                            var parentChildren = (items[1] ? items[1].children : viewHeaderItems) || [];
+                            const parentChildren = (items[1] ? items[1].children : viewHeaderItems) || [];
 
                             parentChildren.splice(inArray(item, parentChildren), 1);
                             return;
@@ -270,14 +256,14 @@ exports.DataController = Class.inherit((function() {
         };
 
         function createHeaderItem(childrenStack, depth, index) {
-            var parent = childrenStack[depth] = childrenStack[depth] || [],
-                node = parent[index] = {};
+            const parent = childrenStack[depth] = childrenStack[depth] || [];
+            const node = parent[index] = {};
 
 
             if(childrenStack[depth + 1]) {
                 node.children = childrenStack[depth + 1];
                 // T541266
-                for(var i = depth + 1; i < childrenStack.length; i++) {
+                for(let i = depth + 1; i < childrenStack.length; i++) {
                     childrenStack[i] = undefined;
                 }
                 childrenStack.length = depth + 1;
@@ -287,14 +273,14 @@ exports.DataController = Class.inherit((function() {
         }
 
         function createViewHeaderItems(headerItems, headerDescriptions) {
-            var headerDescriptionsCount = (headerDescriptions && headerDescriptions.length) || 0,
-                childrenStack = [],
-                d = new Deferred(),
-                headerItem;
+            const headerDescriptionsCount = (headerDescriptions && headerDescriptions.length) || 0;
+            const childrenStack = [];
+            const d = new Deferred();
+            let headerItem;
 
             when(foreachTreeAsync(headerItems, function(items, index) {
-                var item = items[0],
-                    path = createPath(items);
+                const item = items[0];
+                const path = createPath(items);
 
                 headerItem = createHeaderItem(childrenStack, path.length, index);
 
@@ -317,19 +303,19 @@ exports.DataController = Class.inherit((function() {
             return d;
         }
 
-        var addMetricHeaderItems = function(headerItems, cellDescriptions, options) {
+        function addMetricHeaderItems(headerItems, cellDescriptions, options) {
             foreachTree(headerItems, function(items) {
-                var item = items[0],
-                    i;
+                const item = items[0];
+                let i;
 
                 if(!item.children || item.children.length === 0) {
 
                     item.children = [];
                     for(i = 0; i < cellDescriptions.length; i++) {
-                        var isGrandTotal = item.type === GRAND_TOTAL_TYPE,
-                            isTotal = item.type === TOTAL_TYPE,
-                            isValue = item.type === DATA_TYPE,
-                            columnIsHidden = cellDescriptions[i].visible === false ||
+                        const isGrandTotal = item.type === GRAND_TOTAL_TYPE;
+                        const isTotal = item.type === TOTAL_TYPE;
+                        const isValue = item.type === DATA_TYPE;
+                        const columnIsHidden = cellDescriptions[i].visible === false ||
                             (isGrandTotal && inArray(i, options.hiddenGrandTotals) !== -1) ||
                             (isTotal && inArray(i, options.hiddenTotals) !== -1) ||
                             (isValue && inArray(i, options.hiddenValues) !== -1);
@@ -351,15 +337,15 @@ exports.DataController = Class.inherit((function() {
                     }
                 }
             });
-        };
+        }
 
-        var addAdditionalTotalHeaderItems = function(headerItems, headerDescriptions, showTotalsPrior, isTree) {
+        function addAdditionalTotalHeaderItems(headerItems, headerDescriptions, showTotalsPrior, isTree) {
             showTotalsPrior = showTotalsPrior || isTree;
 
             foreachTree(headerItems, function(items, index) {
-                var item = items[0],
-                    parentChildren = (items[1] ? items[1].children : headerItems) || [],
-                    dataField = headerDescriptions[items.length - 1];
+                const item = items[0];
+                const parentChildren = (items[1] ? items[1].children : headerItems) || [];
+                const dataField = headerDescriptions[items.length - 1];
 
                 if(item.type === DATA_TYPE && item.expanded && (dataField.showTotals !== false || isTree)) {
                     index !== -1 && parentChildren.splice(showTotalsPrior ? index : index + 1, 0, extend({}, item, {
@@ -374,10 +360,10 @@ exports.DataController = Class.inherit((function() {
                     }
                 }
             });
-        };
+        }
 
-        var removeEmptyParent = function(items, index) {
-            var parent = items[index + 1];
+        const removeEmptyParent = function(items, index) {
+            const parent = items[index + 1];
 
             if(!items[index].children.length && parent && parent.children) {
                 parent.children.splice(inArray(items[index], parent.children), 1);
@@ -386,11 +372,11 @@ exports.DataController = Class.inherit((function() {
 
         };
 
-        var removeHiddenItems = function(headerItems) {
+        function removeHiddenItems(headerItems) {
             foreachTree([{ children: headerItems }], function(items, index) {
-                var item = items[0],
-                    parentChildren = (items[1] ? items[1].children : headerItems) || [],
-                    isEmpty = item.isEmpty;
+                const item = items[0];
+                const parentChildren = (items[1] ? items[1].children : headerItems) || [];
+                let isEmpty = item.isEmpty;
 
                 if(isEmpty && isEmpty.length) {
                     isEmpty = item.isEmpty.filter(function(isEmpty) { return isEmpty; }).length === isEmpty.length;
@@ -401,16 +387,16 @@ exports.DataController = Class.inherit((function() {
                     removeEmptyParent(items, 1);
                 }
             });
-        };
+        }
 
-        var fillHeaderInfo = function(info, viewHeaderItems, depthSize, isHorizontal, isTree) {
-            var lastIndex = 0,
-                index,
-                depth,
-                indexesByDepth = [0];
+        const fillHeaderInfo = function(info, viewHeaderItems, depthSize, isHorizontal, isTree) {
+            let lastIndex = 0;
+            let index;
+            let depth;
+            const indexesByDepth = [0];
 
             foreachTree(viewHeaderItems, function(items) {
-                var headerItem = items[0];
+                const headerItem = items[0];
                 depth = headerItem.isMetric ? depthSize : items.length - 1;
                 while(indexesByDepth.length - 1 < depth) {
                     indexesByDepth.push(indexesByDepth[indexesByDepth.length - 1]);
@@ -428,12 +414,12 @@ exports.DataController = Class.inherit((function() {
         };
 
         return function(headerItems, headerDescriptions, cellDescriptions, isHorizontal, options) {
-            var info = [],
-                depthSize = getHeaderItemsDepth(headerItems) || 1,
-                d = new Deferred();
+            const info = [];
+            const depthSize = getHeaderItemsDepth(headerItems) || 1;
+            const d = new Deferred();
 
             getViewHeaderItems(headerItems, headerDescriptions, cellDescriptions, depthSize, options).done(function(viewHeaderItems) {
-                fillHeaderInfo(info, viewHeaderItems, depthSize, isHorizontal, options.layout === "tree");
+                fillHeaderInfo(info, viewHeaderItems, depthSize, isHorizontal, options.layout === 'tree');
                 options.notifyProgress(1);
                 d.resolve(info);
             });
@@ -443,10 +429,10 @@ exports.DataController = Class.inherit((function() {
     })();
 
     function createSortPaths(headerFields, dataFields) {
-        var sortBySummaryPaths = [];
+        const sortBySummaryPaths = [];
 
         iteratorUtils.each(headerFields, function(index, headerField) {
-            var fieldIndex = pivotGridUtils.findField(dataFields, headerField.sortBySummaryField);
+            const fieldIndex = pivotGridUtils.findField(dataFields, headerField.sortBySummaryField);
             if(fieldIndex >= 0) {
                 sortBySummaryPaths.push((headerField.sortBySummaryPath || []).concat([fieldIndex]));
             }
@@ -455,13 +441,13 @@ exports.DataController = Class.inherit((function() {
     }
 
     function foreachRowInfo(rowsInfo, callback) {
-        var columnOffset = 0,
-            columnOffsetResetIndexes = [];
+        let columnOffset = 0;
+        const columnOffsetResetIndexes = [];
 
-        for(var i = 0; i < rowsInfo.length; i++) {
-            for(var j = 0; j < rowsInfo[i].length; j++) {
-                var rowSpanOffset = (rowsInfo[i][j].rowspan || 1) - 1,
-                    visibleIndex = i + rowSpanOffset;
+        for(let i = 0; i < rowsInfo.length; i++) {
+            for(let j = 0; j < rowsInfo[i].length; j++) {
+                const rowSpanOffset = (rowsInfo[i][j].rowspan || 1) - 1;
+                const visibleIndex = i + rowSpanOffset;
 
                 if(columnOffsetResetIndexes[i]) {
                     columnOffset -= columnOffsetResetIndexes[i];
@@ -479,68 +465,38 @@ exports.DataController = Class.inherit((function() {
     }
 
     function createCellsInfo(rowsInfo, columnsInfo, data, dataFields, dataFieldArea, errorText) {
-        var info = [],
-            dataFieldAreaInRows = dataFieldArea === "row",
-            dataSourceCells = data.values;
+        const info = [];
+        const dataFieldAreaInRows = dataFieldArea === 'row';
+        const dataSourceCells = data.values;
 
         dataSourceCells.length && foreachRowInfo(rowsInfo, function(rowInfo, rowIndex) {
-            var row = info[rowIndex] = [],
-                dataRow = dataSourceCells[rowInfo.dataSourceIndex >= 0 ? rowInfo.dataSourceIndex : data.grandTotalRowIndex] || [];
+            const row = info[rowIndex] = [];
+            const dataRow = dataSourceCells[rowInfo.dataSourceIndex >= 0 ? rowInfo.dataSourceIndex : data.grandTotalRowIndex] || [];
 
             rowInfo.isLast && virtualColumnsCore.foreachColumnInfo(columnsInfo, function(columnInfo, columnIndex) {
-                var dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0,
-                    dataField = dataFields[dataIndex];
+                const dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0;
+                const dataField = dataFields[dataIndex];
 
                 if(columnInfo.isLast && dataField) {
-                    var cell = dataRow[columnInfo.dataSourceIndex >= 0 ? columnInfo.dataSourceIndex : data.grandTotalColumnIndex],
-                        cellValue;
+                    let cell = dataRow[columnInfo.dataSourceIndex >= 0 ? columnInfo.dataSourceIndex : data.grandTotalColumnIndex];
 
                     if(!Array.isArray(cell)) {
                         cell = [cell];
                     }
 
-                    cellValue = cell[dataIndex];
+                    const cellValue = cell[dataIndex];
 
                     row[columnIndex] = {
-                        /**
-                        * @name dxPivotGridPivotGridCell.text
-                        * @type string
-                        */
                         text: formatCellValue(cellValue, dataField, errorText),
-                        /**
-                       * @name dxPivotGridPivotGridCell.value
-                       */
                         value: cellValue,
                         format: dataField.format,
                         dataType: dataField.dataType,
 
-                        /**
-                        * @name dxPivotGridPivotGridCell.columnType
-                        * @acceptValues "D" | "T" | "GT"
-                        * @type string
-                        */
                         columnType: columnInfo.type,
 
-                        /**
-                        * @name dxPivotGridPivotGridCell.rowType
-                        * @acceptValues "D" | "T" | "GT"
-                        * @type string
-                        */
                         rowType: rowInfo.type,
-                        /**
-                       * @name dxPivotGridPivotGridCell.rowPath
-                       * @type Array<string, number, Date>
-                       */
                         rowPath: rowInfo.path || [],
-                        /**
-                        * @name dxPivotGridPivotGridCell.columnPath
-                        * @type Array<string, number, Date>
-                        */
                         columnPath: columnInfo.path || [],
-                        /**
-                        * @name dxPivotGridPivotGridCell.dataIndex
-                        * @type number
-                        */
                         dataIndex: dataIndex
                     };
 
@@ -555,16 +511,16 @@ exports.DataController = Class.inherit((function() {
     }
 
     function getHeaderIndexedItems(headerItems, options) {
-        var visibleIndex = 0,
-            indexedItems = [];
+        let visibleIndex = 0;
+        const indexedItems = [];
 
         foreachTree(headerItems, function(items) {
-            var headerItem = items[0],
-                path = createPath(items);
+            const headerItem = items[0];
+            const path = createPath(items);
 
             if(headerItem.children && options.showTotals === false) return;
 
-            var indexedItem = extend(true, {}, headerItem, {
+            const indexedItem = extend(true, {}, headerItem, {
                 visibleIndex: visibleIndex++,
                 path: path
             });
@@ -579,7 +535,7 @@ exports.DataController = Class.inherit((function() {
     }
 
     function createScrollController(dataController, component, dataAdapter) {
-        if(component && component.option("scrolling.mode") === "virtual") {
+        if(component && component.option('scrolling.mode') === 'virtual') {
             return new virtualScrolling.VirtualScrollController(component, extend({
                 hasKnownLastPage: function() {
                     return true;
@@ -611,7 +567,7 @@ exports.DataController = Class.inherit((function() {
                 },
 
                 changingDuration: function() {
-                    var dataSource = dataController._dataSource;
+                    const dataSource = dataController._dataSource;
                     if(dataSource.paginate()) {
                         return CHANGING_DURATION_IF_PAGINATE;
                     }
@@ -622,7 +578,7 @@ exports.DataController = Class.inherit((function() {
     }
 
     function getHiddenTotals(dataFields) {
-        var result = [];
+        const result = [];
         iteratorUtils.each(dataFields, function(index, field) {
             if(field.showTotals === false) {
                 result.push(index);
@@ -632,7 +588,7 @@ exports.DataController = Class.inherit((function() {
     }
 
     function getHiddenValues(dataFields) {
-        var result = [];
+        const result = [];
 
         dataFields.forEach(function(field, index) {
             if(field.showValues === undefined && field.showTotals === false || field.showValues === false) {
@@ -644,7 +600,7 @@ exports.DataController = Class.inherit((function() {
     }
 
     function getHiddenGrandTotalsTotals(dataFields, columnFields) {
-        var result = [];
+        let result = [];
         iteratorUtils.each(dataFields, function(index, field) {
             if(field.showGrandTotals === false) {
                 result.push(index);
@@ -658,10 +614,10 @@ exports.DataController = Class.inherit((function() {
         return result;
     }
 
-    var members = {
+    const members = {
         ctor: function(options) {
-            var that = this,
-                virtualScrollControllerChanged = that._fireChanged.bind(that);
+            const that = this;
+            const virtualScrollControllerChanged = that._fireChanged.bind(that);
 
             options = that._options = options || {};
 
@@ -737,15 +693,15 @@ exports.DataController = Class.inherit((function() {
         },
 
         _fireChanged: function() {
-            var that = this,
-                startChanging = new Date();
+            const that = this;
+            const startChanging = new Date();
 
             that.changed && !that._lockChanged && that.changed.fire();
             that._changingDuration = new Date() - startChanging;
         },
 
         _correctSkipsTakes: function(rowIndex, rowSkip, rowSpan, levels, skips, takes) {
-            var endIndex = rowSpan ? rowIndex + rowSpan - 1 : rowIndex;
+            const endIndex = rowSpan ? rowIndex + rowSpan - 1 : rowIndex;
             skips[levels.length] = skips[levels.length] || 0;
             takes[levels.length] = takes[levels.length] || 0;
             if(endIndex < rowSkip) {
@@ -756,13 +712,14 @@ exports.DataController = Class.inherit((function() {
         },
 
         _calculatePagingForRowExpandedPaths: function(options, skips, takes, rowExpandedSkips, rowExpandedTakes) {
-            var rows = this._rowsInfo,
-                rowCount = Math.min(options.rowSkip + options.rowTake, rows.length),
-                rowExpandedPaths = options.rowExpandedPaths,
-                levels = [],
-                expandedPathIndexes = {},
-                i, j,
-                path;
+            const rows = this._rowsInfo;
+            const rowCount = Math.min(options.rowSkip + options.rowTake, rows.length);
+            const rowExpandedPaths = options.rowExpandedPaths;
+            let levels = [];
+            const expandedPathIndexes = {};
+            let i;
+            let j;
+            let path;
 
             rowExpandedPaths.forEach((path, index) => {
                 expandedPathIndexes[path] = index;
@@ -771,13 +728,13 @@ exports.DataController = Class.inherit((function() {
             for(i = 0; i < rowCount; i++) {
                 takes.length = skips.length = levels.length + 1;
                 for(j = 0; j < rows[i].length; j++) {
-                    var cell = rows[i][j];
+                    const cell = rows[i][j];
 
-                    if(cell.type === "D") {
+                    if(cell.type === 'D') {
                         this._correctSkipsTakes(i, options.rowSkip, cell.rowspan, levels, skips, takes);
 
                         path = cell.path || path;
-                        var expandIndex = path && path.length > 1 ? expandedPathIndexes[path.slice(0, -1)] : -1;
+                        const expandIndex = path && path.length > 1 ? expandedPathIndexes[path.slice(0, -1)] : -1;
 
                         if(expandIndex >= 0) {
                             rowExpandedSkips[expandIndex] = skips[levels.length] || 0;
@@ -794,13 +751,13 @@ exports.DataController = Class.inherit((function() {
         },
 
         _calculatePagingForColumnExpandedPaths: function(options, skips, takes, expandedSkips, expandedTakes) {
-            var skipByPath = {},
-                takeByPath = {};
+            const skipByPath = {};
+            const takeByPath = {};
 
             virtualColumnsCore.foreachColumnInfo(this._columnsInfo, function(columnInfo, columnIndex) {
-                if(columnInfo.type === "D" && columnInfo.path && columnInfo.dataIndex === undefined) {
-                    var colspan = columnInfo.colspan || 1,
-                        path = columnInfo.path.slice(0, -1).toString();
+                if(columnInfo.type === 'D' && columnInfo.path && columnInfo.dataIndex === undefined) {
+                    const colspan = columnInfo.colspan || 1;
+                    const path = columnInfo.path.slice(0, -1).toString();
 
                     skipByPath[path] = skipByPath[path] || 0;
                     takeByPath[path] = takeByPath[path] || 0;
@@ -817,8 +774,8 @@ exports.DataController = Class.inherit((function() {
             takes[0] = takeByPath[[]];
 
             options.columnExpandedPaths.forEach(function(path, index) {
-                var skip = skipByPath[path];
-                var take = takeByPath[path];
+                const skip = skipByPath[path];
+                const take = takeByPath[path];
 
                 if(skip !== undefined) {
                     expandedSkips[index] = skip;
@@ -830,14 +787,14 @@ exports.DataController = Class.inherit((function() {
         },
 
         _processPagingForExpandedPaths: function(options, area, storeLoadOptions, reload) {
-            var expandedPaths = options[area + "ExpandedPaths"],
-                expandedSkips = expandedPaths.map(() => 0),
-                expandedTakes = expandedPaths.map(() => reload ? options.pageSize : 0),
-                skips = [],
-                takes = [];
+            const expandedPaths = options[area + 'ExpandedPaths'];
+            const expandedSkips = expandedPaths.map(() => 0);
+            const expandedTakes = expandedPaths.map(() => reload ? options.pageSize : 0);
+            const skips = [];
+            const takes = [];
 
             if(!reload) {
-                if(area === "row") {
+                if(area === 'row') {
                     this._calculatePagingForRowExpandedPaths(options, skips, takes, expandedSkips, expandedTakes);
                 } else {
                     this._calculatePagingForColumnExpandedPaths(options, skips, takes, expandedSkips, expandedTakes);
@@ -847,67 +804,67 @@ exports.DataController = Class.inherit((function() {
         },
 
         _savePagingForExpandedPaths: function(options, area, storeLoadOptions, skip, take, expandedSkips, expandedTakes) {
-            var expandedPaths = options[area + "ExpandedPaths"];
+            const expandedPaths = options[area + 'ExpandedPaths'];
 
-            options[area + "ExpandedPaths"] = [];
-            options[area + "Skip"] = skip !== undefined ? skip : options[area + "Skip"];
-            options[area + "Take"] = take !== undefined ? take : options[area + "Take"];
+            options[area + 'ExpandedPaths'] = [];
+            options[area + 'Skip'] = skip !== undefined ? skip : options[area + 'Skip'];
+            options[area + 'Take'] = take !== undefined ? take : options[area + 'Take'];
 
-            for(var i = 0; i < expandedPaths.length; i++) {
+            for(let i = 0; i < expandedPaths.length; i++) {
                 if(expandedTakes[i]) {
-                    var isOppositeArea = options.area && options.area !== area;
+                    const isOppositeArea = options.area && options.area !== area;
 
                     storeLoadOptions.push(extend({
                         area: area,
-                        headerName: area + "s"
+                        headerName: area + 's'
                     }, options, {
-                        [area + "Skip"]: expandedSkips[i],
-                        [area + "Take"]: expandedTakes[i],
-                        [isOppositeArea ? "oppositePath" : "path"]: expandedPaths[i]
+                        [area + 'Skip']: expandedSkips[i],
+                        [area + 'Take']: expandedTakes[i],
+                        [isOppositeArea ? 'oppositePath' : 'path']: expandedPaths[i]
                     }));
                 }
             }
         },
 
         _handleCustomizeStoreLoadOptions: function(storeLoadOptions, reload) {
-            var options = storeLoadOptions[0];
-            var rowsScrollController = this._rowsScrollController;
+            const options = storeLoadOptions[0];
+            const rowsScrollController = this._rowsScrollController;
 
             if(this._dataSource.paginate() && rowsScrollController) {
-                var rowPageSize = rowsScrollController._dataSource.pageSize();
+                const rowPageSize = rowsScrollController._dataSource.pageSize();
 
-                if(options.headerName === "rows") {
+                if(options.headerName === 'rows') {
                     options.rowSkip = 0;
                     options.rowTake = rowPageSize;
                     options.rowExpandedPaths = [];
                 } else {
                     options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
                     options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
-                    this._processPagingForExpandedPaths(options, "row", storeLoadOptions, reload);
+                    this._processPagingForExpandedPaths(options, 'row', storeLoadOptions, reload);
                 }
             }
 
-            var columnsScrollController = this._columnsScrollController;
+            const columnsScrollController = this._columnsScrollController;
 
             if(this._dataSource.paginate() && columnsScrollController) {
-                var columnPageSize = columnsScrollController._dataSource.pageSize();
+                const columnPageSize = columnsScrollController._dataSource.pageSize();
                 storeLoadOptions.forEach((options, index) => {
-                    if(options.headerName === "columns") {
+                    if(options.headerName === 'columns') {
                         options.columnSkip = 0;
                         options.columnTake = columnPageSize;
                         options.columnExpandedPaths = [];
                     } else {
                         options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
                         options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
-                        this._processPagingForExpandedPaths(options, "column", storeLoadOptions, reload);
+                        this._processPagingForExpandedPaths(options, 'column', storeLoadOptions, reload);
                     }
                 });
             }
         },
 
         load: function() {
-            var that = this,
-                stateStoringController = this._stateStoringController;
+            const that = this;
+            const stateStoringController = this._stateStoringController;
 
             if(stateStoringController.isEnabled() && !stateStoringController.isLoaded()) {
                 stateStoringController.load().always(function(state) {
@@ -923,9 +880,9 @@ exports.DataController = Class.inherit((function() {
         },
 
         calculateVirtualContentParams: function(contentParams) {
-            var that = this,
-                rowsScrollController = that._rowsScrollController,
-                columnsScrollController = that._columnsScrollController;
+            const that = this;
+            const rowsScrollController = that._rowsScrollController;
+            const columnsScrollController = that._columnsScrollController;
 
             if(rowsScrollController && columnsScrollController) {
                 rowsScrollController.viewportItemSize(contentParams.virtualRowHeight);
@@ -986,9 +943,9 @@ exports.DataController = Class.inherit((function() {
             this._options.onFieldsPrepared && this._options.onFieldsPrepared(e);
         },
         _createDataSource: function(options) {
-            var that = this,
-                dataSourceOptions = options.dataSource,
-                dataSource;
+            const that = this;
+            const dataSourceOptions = options.dataSource;
+            let dataSource;
 
             that._isSharedDataSource = dataSourceOptions instanceof PivotGridDataSource;
 
@@ -1010,12 +967,12 @@ exports.DataController = Class.inherit((function() {
                 that._handleProgressChanged(progress * 0.8);
             };
 
-            dataSource.on("changed", that._changedHandler);
-            dataSource.on("expandValueChanging", that._expandValueChangingHandler);
-            dataSource.on("loadingChanged", that._loadingChangedHandler);
-            dataSource.on("progressChanged", that._progressChangedHandler);
-            dataSource.on("fieldsPrepared", that._fieldsPreparedHandler);
-            dataSource.on("customizeStoreLoadOptions", that._customizeStoreLoadOptionsHandler);
+            dataSource.on('changed', that._changedHandler);
+            dataSource.on('expandValueChanging', that._expandValueChangingHandler);
+            dataSource.on('loadingChanged', that._loadingChangedHandler);
+            dataSource.on('progressChanged', that._progressChangedHandler);
+            dataSource.on('fieldsPrepared', that._fieldsPreparedHandler);
+            dataSource.on('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
 
             return dataSource;
         },
@@ -1033,56 +990,59 @@ exports.DataController = Class.inherit((function() {
             this._dataSource.endLoading();
         },
         _update: function() {
-            var that = this,
-                dataSource = that._dataSource,
-                options = that._options,
-                columnFields = dataSource.getAreaFields("column"),
-                rowFields = dataSource.getAreaFields("row"),
-                dataFields = dataSource.getAreaFields("data"),
-                dataFieldsForRows = options.dataFieldArea === "row" ? dataFields : [],
-                dataFieldsForColumns = options.dataFieldArea !== "row" ? dataFields : [],
-                data = dataSource.getData(),
-                hiddenTotals = getHiddenTotals(dataFields),
-                hiddenValues = getHiddenValues(dataFields),
-                hiddenGrandTotals = getHiddenGrandTotalsTotals(dataFields, columnFields),
-                grandTotalsAreHiddenForNotAllDataFields = dataFields.length > 0 ? hiddenGrandTotals.length !== dataFields.length : true,
-                notifyProgress = function(progress) {
-                    this.progress = progress;
-                    that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
-                },
-                rowOptions = {
-                    isEmptyGrandTotal: data.isEmptyGrandTotalRow,
-                    texts: options.texts || {},
-                    hiddenTotals: hiddenTotals,
-                    hiddenValues: hiddenValues,
-                    hiddenGrandTotals: [],
-                    showTotals: options.showRowTotals,
-                    showGrandTotals: options.showRowGrandTotals !== false && grandTotalsAreHiddenForNotAllDataFields,
-                    sortBySummaryPaths: createSortPaths(columnFields, dataFields),
-                    showTotalsPrior: options.showTotalsPrior === "rows" || options.showTotalsPrior === "both",
-                    showEmpty: !options.hideEmptySummaryCells,
-                    layout: options.rowHeaderLayout,
-                    fields: rowFields,
-                    dataFields: dataFields,
-                    progress: 0,
-                    notifyProgress: notifyProgress
-                },
-                columnOptions = {
-                    isEmptyGrandTotal: data.isEmptyGrandTotalColumn,
-                    texts: options.texts || {},
-                    hiddenTotals: hiddenTotals,
-                    hiddenValues: hiddenValues,
-                    hiddenGrandTotals: hiddenGrandTotals,
-                    showTotals: options.showColumnTotals,
-                    showTotalsPrior: options.showTotalsPrior === "columns" || options.showTotalsPrior === "both",
-                    showGrandTotals: options.showColumnGrandTotals !== false && grandTotalsAreHiddenForNotAllDataFields,
-                    sortBySummaryPaths: createSortPaths(rowFields, dataFields),
-                    showEmpty: !options.hideEmptySummaryCells,
-                    fields: columnFields,
-                    dataFields: dataFields,
-                    progress: 0,
-                    notifyProgress: notifyProgress
-                };
+            const that = this;
+            const dataSource = that._dataSource;
+            const options = that._options;
+            const columnFields = dataSource.getAreaFields('column');
+            const rowFields = dataSource.getAreaFields('row');
+            const dataFields = dataSource.getAreaFields('data');
+            const dataFieldsForRows = options.dataFieldArea === 'row' ? dataFields : [];
+            const dataFieldsForColumns = options.dataFieldArea !== 'row' ? dataFields : [];
+            const data = dataSource.getData();
+            const hiddenTotals = getHiddenTotals(dataFields);
+            const hiddenValues = getHiddenValues(dataFields);
+            const hiddenGrandTotals = getHiddenGrandTotalsTotals(dataFields, columnFields);
+            const grandTotalsAreHiddenForNotAllDataFields = dataFields.length > 0 ? hiddenGrandTotals.length !== dataFields.length : true;
+
+            const rowOptions = {
+                isEmptyGrandTotal: data.isEmptyGrandTotalRow,
+                texts: options.texts || {},
+                hiddenTotals: hiddenTotals,
+                hiddenValues: hiddenValues,
+                hiddenGrandTotals: [],
+                showTotals: options.showRowTotals,
+                showGrandTotals: options.showRowGrandTotals !== false && grandTotalsAreHiddenForNotAllDataFields,
+                sortBySummaryPaths: createSortPaths(columnFields, dataFields),
+                showTotalsPrior: options.showTotalsPrior === 'rows' || options.showTotalsPrior === 'both',
+                showEmpty: !options.hideEmptySummaryCells,
+                layout: options.rowHeaderLayout,
+                fields: rowFields,
+                dataFields: dataFields,
+                progress: 0
+            };
+            const columnOptions = {
+                isEmptyGrandTotal: data.isEmptyGrandTotalColumn,
+                texts: options.texts || {},
+                hiddenTotals: hiddenTotals,
+                hiddenValues: hiddenValues,
+                hiddenGrandTotals: hiddenGrandTotals,
+                showTotals: options.showColumnTotals,
+                showTotalsPrior: options.showTotalsPrior === 'columns' || options.showTotalsPrior === 'both',
+                showGrandTotals: options.showColumnGrandTotals !== false && grandTotalsAreHiddenForNotAllDataFields,
+                sortBySummaryPaths: createSortPaths(rowFields, dataFields),
+                showEmpty: !options.hideEmptySummaryCells,
+                fields: columnFields,
+                dataFields: dataFields,
+                progress: 0
+            };
+
+            const notifyProgress = function(progress) {
+                this.progress = progress;
+                that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
+            };
+
+            rowOptions.notifyProgress = notifyProgress;
+            columnOptions.notifyProgress = notifyProgress;
 
             if(!isDefined(data.grandTotalRowIndex)) {
                 data.grandTotalRowIndex = getHeaderIndexedItems(data.rows, rowOptions).length;
@@ -1121,22 +1081,22 @@ exports.DataController = Class.inherit((function() {
         },
 
         getRowsInfo: function(getAllData) {
-            var that = this,
-                rowsInfo = that._rowsInfo,
-                scrollController = that._rowsScrollController,
-                rowspan,
-                i;
+            const that = this;
+            const rowsInfo = that._rowsInfo;
+            const scrollController = that._rowsScrollController;
+            let rowspan;
+            let i;
 
             if(scrollController && !getAllData) {
-                var startIndex = scrollController.beginPageIndex() * that.rowPageSize(),
-                    endIndex = scrollController.endPageIndex() * that.rowPageSize() + that.rowPageSize(),
-                    newRowsInfo = [],
-                    maxDepth = 1;
+                const startIndex = scrollController.beginPageIndex() * that.rowPageSize();
+                const endIndex = scrollController.endPageIndex() * that.rowPageSize() + that.rowPageSize();
+                const newRowsInfo = [];
+                let maxDepth = 1;
 
                 foreachRowInfo(rowsInfo, function(rowInfo, visibleIndex, rowIndex, _, columnIndex) {
-                    var isVisible = visibleIndex >= startIndex && rowIndex < endIndex,
-                        index = rowIndex < startIndex ? 0 : rowIndex - startIndex,
-                        cell = rowInfo;
+                    const isVisible = visibleIndex >= startIndex && rowIndex < endIndex;
+                    const index = rowIndex < startIndex ? 0 : rowIndex - startIndex;
+                    let cell = rowInfo;
 
                     if(isVisible) {
                         newRowsInfo[index] = newRowsInfo[index] || [];
@@ -1161,7 +1121,7 @@ exports.DataController = Class.inherit((function() {
                 });
 
                 foreachRowInfo(newRowsInfo, function(rowInfo, visibleIndex, rowIndex, columnIndex, realColumnIndex) {
-                    var colspan = rowInfo.colspan || 1;
+                    const colspan = rowInfo.colspan || 1;
 
                     if(realColumnIndex + colspan > maxDepth) {
                         newRowsInfo[rowIndex][columnIndex] = extend({}, rowInfo, {
@@ -1177,13 +1137,13 @@ exports.DataController = Class.inherit((function() {
         },
 
         getColumnsInfo: function(getAllData) {
-            var that = this,
-                info = that._columnsInfo,
-                scrollController = that._columnsScrollController;
+            const that = this;
+            let info = that._columnsInfo;
+            const scrollController = that._columnsScrollController;
 
             if(scrollController && !getAllData) {
-                var startIndex = scrollController.beginPageIndex() * that.columnPageSize(),
-                    endIndex = scrollController.endPageIndex() * that.columnPageSize() + that.columnPageSize();
+                const startIndex = scrollController.beginPageIndex() * that.columnPageSize();
+                const endIndex = scrollController.endPageIndex() * that.columnPageSize() + that.columnPageSize();
 
                 info = virtualColumnsCore.createColumnsInfo(info, startIndex, endIndex);
             }
@@ -1203,9 +1163,9 @@ exports.DataController = Class.inherit((function() {
         },
 
         totalColumnCount: function() {
-            var count = 0;
+            let count = 0;
             if(this._columnsInfo && this._columnsInfo.length) {
-                for(var i = 0; i < this._columnsInfo[0].length; i++) {
+                for(let i = 0; i < this._columnsInfo[0].length; i++) {
                     count += this._columnsInfo[0][i].colspan || 1;
                 }
             }
@@ -1235,23 +1195,23 @@ exports.DataController = Class.inherit((function() {
         },
 
         getCellsInfo: function(getAllData) {
-            var rowsInfo = this.getRowsInfo(getAllData),
-                columnsInfo = this.getColumnsInfo(getAllData),
-                data = this._dataSource.getData(),
-                texts = this._options.texts || {};
+            const rowsInfo = this.getRowsInfo(getAllData);
+            const columnsInfo = this.getColumnsInfo(getAllData);
+            const data = this._dataSource.getData();
+            const texts = this._options.texts || {};
 
-            return createCellsInfo(rowsInfo, columnsInfo, data, this._dataSource.getAreaFields("data"), this._options.dataFieldArea, texts.dataNotAvailable);
+            return createCellsInfo(rowsInfo, columnsInfo, data, this._dataSource.getAreaFields('data'), this._options.dataFieldArea, texts.dataNotAvailable);
         },
 
         dispose: function() {
-            var that = this;
+            const that = this;
             if(that._isSharedDataSource) {
-                that._dataSource.off("changed", that._changedHandler);
-                that._dataSource.off("expandValueChanging", that._expandValueChangingHandler);
-                that._dataSource.off("loadingChanged", that._loadingChangedHandler);
-                that._dataSource.off("progressChanged", that._progressChangedHandler);
-                that._dataSource.off("fieldsPrepared", that._fieldsPreparedHandler);
-                that._dataSource.off("customizeStoreLoadOptions", that._customizeStoreLoadOptionsHandler);
+                that._dataSource.off('changed', that._changedHandler);
+                that._dataSource.off('expandValueChanging', that._expandValueChangingHandler);
+                that._dataSource.off('loadingChanged', that._loadingChangedHandler);
+                that._dataSource.off('progressChanged', that._progressChangedHandler);
+                that._dataSource.off('fieldsPrepared', that._fieldsPreparedHandler);
+                that._dataSource.off('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
             } else {
                 that._dataSource.dispose();
             }
@@ -1270,11 +1230,11 @@ exports.DataController = Class.inherit((function() {
         }
     };
 
-    proxyMethod(members, "applyPartialDataSource");
-    proxyMethod(members, "collapseHeaderItem");
-    proxyMethod(members, "expandHeaderItem");
-    proxyMethod(members, "getData");
-    proxyMethod(members, "isEmpty");
+    proxyMethod(members, 'applyPartialDataSource');
+    proxyMethod(members, 'collapseHeaderItem');
+    proxyMethod(members, 'expandHeaderItem');
+    proxyMethod(members, 'getData');
+    proxyMethod(members, 'isEmpty');
 
     return members;
 })());

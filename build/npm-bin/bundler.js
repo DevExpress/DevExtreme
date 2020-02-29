@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 
-var path = require("path"),
-    webpack = require("webpack"),
-    webpackVersion = require("webpack/package.json").version;
+const path = require('path');
+const webpack = require('webpack');
+const webpackVersion = require('webpack/package.json').version;
 
-var outputDir = process.cwd(),
-    sourcesDir = path.join(__dirname, ".."),
-    bundle = process.argv.length > 2 ? process.argv[2] : "dx.custom";
+const outputDir = process.cwd();
+const sourcesDir = path.join(__dirname, '..');
+let bundle = process.argv.length > 2 ? process.argv[2] : 'dx.custom';
 
-bundle = bundle.replace(/.config.js$/, "");
+bundle = bundle.replace(/.config.js$/, '');
 
-var baseConfig = require("./webpack.config.js");
-var createConfig = function(outputFile, mode) {
-    var config = Object.assign({}, baseConfig);
+const baseConfig = require('./webpack.config.js');
+const createConfig = function(outputFile, mode) {
+    const config = Object.assign({}, baseConfig);
 
-    if(webpackVersion.split(".")[0] >= 4) {
+    if(webpackVersion.split('.')[0] >= 4) {
         config.mode = mode;
-    } else if(mode === "production") {
+    } else if(mode === 'production') {
         config.plugins = (config.plugins || []).concat([
             new webpack.optimize.UglifyJsPlugin({
                 compress: { warnings: false }
@@ -24,7 +24,7 @@ var createConfig = function(outputFile, mode) {
         ]);
     }
     config.context = process.cwd();
-    config.entry = "./" + bundle + ".config.js";
+    config.entry = './' + bundle + '.config.js';
     config.output = {
         path: outputDir,
         filename: outputFile
@@ -39,19 +39,19 @@ var createConfig = function(outputFile, mode) {
     return config;
 };
 
-console.log("bundling using '" + bundle + ".config.js'...");
+console.log('bundling using \'' + bundle + '.config.js\'...');
 webpack([
-    createConfig(bundle + ".debug.js", "development"),
-    createConfig(bundle + ".js", "production")
+    createConfig(bundle + '.debug.js', 'development'),
+    createConfig(bundle + '.js', 'production')
 ], function(err, stats) {
     if(err) {
         throw err;
     }
 
-    var jsonStats = stats.toJson();
+    const jsonStats = stats.toJson();
     if(jsonStats.errors.length) {
-        console.log("'" + bundle + "' bundles creation failed!\n\n" + jsonStats.errors.join("\n\n"));
+        console.log('\'' + bundle + '\' bundles creation failed!\n\n' + jsonStats.errors.join('\n\n'));
     } else {
-        console.log("'" + bundle + "' bundles created!");
+        console.log('\'' + bundle + '\' bundles created!');
     }
 });

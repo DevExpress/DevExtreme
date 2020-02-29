@@ -1,24 +1,25 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import devices from "../../core/devices";
-import { deferRender } from "../../core/utils/common";
-import inkRipple from "../widget/utils.ink_ripple";
-import registerComponent from "../../core/component_registrator";
-import CollectionWidget from "../collection/ui.collection_widget.edit";
-import DataExpressionMixin from "../editor/ui.data_expression";
-import Editor from "../editor/editor";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import devices from '../../core/devices';
+import { deferRender } from '../../core/utils/common';
+import inkRipple from '../widget/utils.ink_ripple';
+import registerComponent from '../../core/component_registrator';
+import CollectionWidget from '../collection/ui.collection_widget.edit';
+import DataExpressionMixin from '../editor/ui.data_expression';
+import Editor from '../editor/editor';
+import { Deferred } from '../../core/utils/deferred';
 
-const RADIO_BUTTON_CHECKED_CLASS = "dx-radiobutton-checked",
-    RADIO_BUTTON_CLASS = "dx-radiobutton",
-    RADIO_BUTTON_ICON_CHECKED_CLASS = "dx-radiobutton-icon-checked",
-    RADIO_BUTTON_ICON_CLASS = "dx-radiobutton-icon",
-    RADIO_BUTTON_ICON_DOT_CLASS = "dx-radiobutton-icon-dot",
-    RADIO_GROUP_HORIZONTAL_CLASS = "dx-radiogroup-horizontal",
-    RADIO_GROUP_VERTICAL_CLASS = "dx-radiogroup-vertical",
-    RADIO_VALUE_CONTAINER_CLASS = "dx-radio-value-container",
-    RADIO_GROUP_CLASS = "dx-radiogroup",
+const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
+const RADIO_BUTTON_CLASS = 'dx-radiobutton';
+const RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';
+const RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon';
+const RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot';
+const RADIO_GROUP_HORIZONTAL_CLASS = 'dx-radiogroup-horizontal';
+const RADIO_GROUP_VERTICAL_CLASS = 'dx-radiogroup-vertical';
+const RADIO_VALUE_CONTAINER_CLASS = 'dx-radio-value-container';
+const RADIO_GROUP_CLASS = 'dx-radiogroup';
 
-    RADIO_FEEDBACK_HIDE_TIMEOUT = 100;
+const RADIO_FEEDBACK_HIDE_TIMEOUT = 100;
 
 class RadioCollection extends CollectionWidget {
     _focusTarget() {
@@ -33,7 +34,7 @@ class RadioCollection extends CollectionWidget {
         const defaultOptions = super._getDefaultOptions();
 
         return extend(defaultOptions, DataExpressionMixin._dataExpressionDefaultOptions(), {
-            _itemAttributes: { role: "radio" }
+            _itemAttributes: { role: 'radio' }
         });
     }
 
@@ -53,11 +54,11 @@ class RadioCollection extends CollectionWidget {
         const { itemData: { html }, itemElement } = args;
 
         if(!html) {
-            const $radio = $("<div>").addClass(RADIO_BUTTON_ICON_CLASS);
+            const $radio = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
 
-            $("<div>").addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
+            $('<div>').addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
 
-            const $radioContainer = $("<div>").append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
+            const $radioContainer = $('<div>').append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
 
             $(itemElement).prepend($radioContainer);
         }
@@ -74,7 +75,7 @@ class RadioCollection extends CollectionWidget {
             .first()
             .toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, isSelected);
 
-        this.setAria("checked", isSelected, $itemElement);
+        this.setAria('checked', isSelected, $itemElement);
     }
 
     _refreshContent() {
@@ -121,20 +122,11 @@ class RadioGroup extends Editor {
         return defaultOptionsRules.concat([{
             device: { tablet: true },
             options: {
-                /**
-                 * @name dxRadioGroupOptions.layout
-                 * @default 'horizontal' @for tablets
-                 */
-                layout: "horizontal"
+                layout: 'horizontal'
             }
         }, {
-            device: () => devices.real().deviceType === "desktop" && !devices.isSimulator(),
+            device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
             options: {
-                /**
-                * @name dxRadioGroupOptions.focusStateEnabled
-                * @type boolean
-                * @default true @for desktop
-                */
                 focusStateEnabled: true
             }
         }]);
@@ -157,39 +149,15 @@ class RadioGroup extends Editor {
 
         return extend(defaultOptions, extend(DataExpressionMixin._dataExpressionDefaultOptions(), {
 
-            /**
-             * @name dxRadioGroupOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxRadioGroupOptions.activeStateEnabled
-            * @type boolean
-            * @default true
-            */
             activeStateEnabled: true,
 
-            /**
-            * @name dxRadioGroupOptions.layout
-            * @type Enums.Orientation
-            * @default "vertical"
-            */
-            layout: "vertical",
+            layout: 'vertical',
 
             useInkRipple: false
 
-            /**
-            * @name dxRadioGroupOptions.value
-            * @ref
-            */
 
-            /**
-            * @name dxRadioGroupOptions.name
-            * @type string
-            * @hidden false
-            */
         }));
     }
 
@@ -211,9 +179,9 @@ class RadioGroup extends Editor {
     _initMarkup() {
         this.$element().addClass(RADIO_GROUP_CLASS);
         this._renderSubmitElement();
-        this.setAria("role", "radiogroup");
+        this.setAria('role', 'radiogroup');
         this._renderRadios();
-        this.option("useInkRipple") && this._renderInkRipple();
+        this.option('useInkRipple') && this._renderInkRipple();
         super._initMarkup();
     }
 
@@ -221,9 +189,9 @@ class RadioGroup extends Editor {
         if(this.itemElements().is(itemElement)) {
             const newValue = this._getItemValue(itemData);
 
-            if(newValue !== this.option("value")) {
+            if(newValue !== this.option('value')) {
                 this._saveValueChangeEvent(event);
-                this.option("value", newValue);
+                this.option('value', newValue);
             }
         }
     }
@@ -234,34 +202,34 @@ class RadioGroup extends Editor {
         this._dataExpressionOptionChanged(args);
 
         switch(name) {
-            case "useInkRipple":
+            case 'useInkRipple':
                 this._invalidate();
                 break;
-            case "focusStateEnabled":
-            case "accessKey":
-            case "tabIndex":
+            case 'focusStateEnabled':
+            case 'accessKey':
+            case 'tabIndex':
                 this._setCollectionWidgetOption(name, value);
                 break;
-            case "disabled":
+            case 'disabled':
                 super._optionChanged(args);
                 this._setCollectionWidgetOption(name, value);
                 break;
-            case "dataSource":
-                this._setCollectionWidgetOption("dataSource", this._dataSource);
+            case 'dataSource':
+                this._setCollectionWidgetOption('dataSource', this._dataSource);
                 break;
-            case "valueExpr":
-                this._setCollectionWidgetOption("keyExpr", this._getCollectionKeyExpr());
+            case 'valueExpr':
+                this._setCollectionWidgetOption('keyExpr', this._getCollectionKeyExpr());
                 break;
-            case "value":
-                this._setCollectionWidgetOption("selectedItemKeys", [value]);
+            case 'value':
+                this._setCollectionWidgetOption('selectedItemKeys', [value]);
                 this._setSubmitValue(value);
                 super._optionChanged(args);
                 break;
-            case "items":
-            case "itemTemplate":
-            case "displayExpr":
+            case 'items':
+            case 'itemTemplate':
+            case 'displayExpr':
                 break;
-            case "layout":
+            case 'layout':
                 this._renderLayout();
                 this._updateItemsSize();
                 break;
@@ -285,37 +253,39 @@ class RadioGroup extends Editor {
     }
 
     _renderLayout() {
-        const layout = this.option("layout"),
-            $element = this.$element();
+        const layout = this.option('layout');
+        const $element = this.$element();
 
-        $element.toggleClass(RADIO_GROUP_VERTICAL_CLASS, layout === "vertical");
-        $element.toggleClass(RADIO_GROUP_HORIZONTAL_CLASS, layout === "horizontal");
+        $element.toggleClass(RADIO_GROUP_VERTICAL_CLASS, layout === 'vertical');
+        $element.toggleClass(RADIO_GROUP_HORIZONTAL_CLASS, layout === 'horizontal');
     }
 
     _renderRadios() {
-        const $radios = $("<div>").appendTo(this.$element());
+        this._areRadiosCreated = new Deferred();
+        const $radios = $('<div>').appendTo(this.$element());
 
         this._radios = this._createComponent($radios, RadioCollection, {
-            displayExpr: this.option("displayExpr"),
-            accessKey: this.option("accessKey"),
+            displayExpr: this.option('displayExpr'),
+            accessKey: this.option('accessKey'),
             dataSource: this._dataSource,
-            focusStateEnabled: this.option("focusStateEnabled"),
-            itemTemplate: this.option("itemTemplate"),
+            focusStateEnabled: this.option('focusStateEnabled'),
+            itemTemplate: this.option('itemTemplate'),
             keyExpr: this._getCollectionKeyExpr(),
-            noDataText: "",
+            noDataText: '',
             onContentReady: () => this._fireContentReadyAction(true),
             onItemClick: this._itemClickHandler.bind(this),
             scrollingEnabled: false,
             selectionByClick: false,
-            selectionMode: "single",
-            selectedItemKeys: [this.option("value")],
-            tabIndex: this.option("tabIndex")
+            selectionMode: 'single',
+            selectedItemKeys: [this.option('value')],
+            tabIndex: this.option('tabIndex')
         });
+        this._areRadiosCreated.resolve();
     }
 
     _renderSubmitElement() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
+        this._$submitElement = $('<input>')
+            .attr('type', 'hidden')
             .appendTo(this.$element());
 
         this._setSubmitValue();
@@ -327,15 +297,15 @@ class RadioGroup extends Editor {
     }
 
     _setSubmitValue(value) {
-        value = value || this.option("value");
+        value = value || this.option('value');
 
-        const submitValue = this.option("valueExpr") === "this" ? this._displayGetter(value) : value;
+        const submitValue = this.option('valueExpr') === 'this' ? this._displayGetter(value) : value;
 
         this._$submitElement.val(submitValue);
     }
 
     _setCollectionWidgetOption() {
-        this._setWidgetOption("_radios", arguments);
+        this._areRadiosCreated.done(this._setWidgetOption.bind(this, '_radios', arguments));
     }
 
     _toggleActiveState($element, value, e) {
@@ -352,12 +322,12 @@ class RadioGroup extends Editor {
     }
 
     _updateItemsSize() {
-        if(this.option("layout") === "horizontal") {
-            this.itemElements().css("height", "auto");
+        if(this.option('layout') === 'horizontal') {
+            this.itemElements().css('height', 'auto');
         } else {
-            const itemsCount = this.option("items").length;
+            const itemsCount = this.option('items').length;
 
-            this.itemElements().css("height", 100 / itemsCount + "%");
+            this.itemElements().css('height', 100 / itemsCount + '%');
         }
     }
 
@@ -372,6 +342,6 @@ class RadioGroup extends Editor {
 
 RadioGroup.include(DataExpressionMixin);
 
-registerComponent("dxRadioGroup", RadioGroup);
+registerComponent('dxRadioGroup', RadioGroup);
 
 module.exports = RadioGroup;

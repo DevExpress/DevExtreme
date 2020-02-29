@@ -1,23 +1,23 @@
-var states = ["normal", "hover", "selection", "selection"],
-    isDefined = require("../../core/utils/type").isDefined;
+const states = ['normal', 'hover', 'selection', 'selection'];
+const isDefined = require('../../core/utils/type').isDefined;
 
 function parseStyles(color, style, baseStyle) {
-    var border = style.border,
-        baseBorder = baseStyle.border,
-        borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible,
-        borderWidth = isDefined(border.width) ? border.width : baseBorder.width;
+    const border = style.border;
+    const baseBorder = baseStyle.border;
+    const borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible;
+    const borderWidth = isDefined(border.width) ? border.width : baseBorder.width;
 
     return {
         fill: color,
         hatching: style.hatching,
         stroke: border.color || baseBorder.color,
-        "stroke-width": borderVisible ? borderWidth : 0
+        'stroke-width': borderVisible ? borderWidth : 0
     };
 }
 
 function Item(widget, options) {
-    var that = this,
-        data = options.data;
+    const that = this;
+    const data = options.data;
 
     that.code = 0;
     that.widget = widget;
@@ -52,14 +52,14 @@ Item.prototype = {
     },
 
     hover: function(state) {
-        if(!this.widget._getOption("hoverEnabled", true) || state === this.isHovered()) {
+        if(!this.widget._getOption('hoverEnabled', true) || state === this.isHovered()) {
             return;
         }
 
         this.widget._suspend();
         state && this.widget.clearHover();
         this.setState(1, state);
-        this.widget._eventTrigger("hoverChanged", { item: this });
+        this.widget._eventTrigger('hoverChanged', { item: this });
         this.widget._resume();
     },
 
@@ -73,16 +73,16 @@ Item.prototype = {
     },
 
     select: function(state) {
-        var mode = this.widget._getOption("selectionMode", true);
-        if(mode === "none" || state === this.isSelected()) {
+        const mode = this.widget._getOption('selectionMode', true);
+        if(mode === 'none' || state === this.isSelected()) {
             return;
         }
         this.widget._suspend();
-        if(state && mode !== "multiple") {
+        if(state && mode !== 'multiple') {
             this.widget.clearSelection();
         }
         this.setState(2, state);
-        this.widget._eventTrigger("selectionChanged", { item: this });
+        this.widget._eventTrigger('selectionChanged', { item: this });
         this.widget._resume();
     },
 

@@ -46,12 +46,21 @@
 @typography-bg: @base-bg;
 @typography-color: @base-text-color;
 @typography-link-color: @base-link-color;
+@base-disabled-opacity: 0.5;
 
 /**
 * @name 1. Invalid widget state - active color
 * @type color
 */
 @base-invalid-color: #EA4444;
+
+/**
+* @name 2. Invalid widget state - border color
+* @type color
+*/
+@base-invalid-faded-border-color: @base-invalid-color;
+
+// Validation
 
 @VALIDATION_MESSAGE_COLOR: @base-text-color;
 @VALIDATION_MESSAGE_BACKGROUND_COLOR: @base-invalid-color;
@@ -60,19 +69,13 @@
 
 @validation-overlay-border-radius: @base-border-radius;
 
-@datagrid-row-hovered-color: @base-text-color;
-
-/**
-* @name 2. Invalid widget state - border color
-* @type color
-*/
-@base-invalid-faded-border-color: @base-invalid-color;
-
 /**
 * @name 20. Label color
 * @type color
 */
 @base-label-color: @base-text-color;
+
+@base-dropdown-shadow-color: @base-shadow-color;
 
 // Badges
 
@@ -81,7 +84,6 @@
 * @type color
 */
 @badge-color: @base-inverted-text-color;
-@badge-invalid-bg: @base-invalid-color;
 
 /**
 * @name 20. Badge background color
@@ -119,7 +121,6 @@
 @texteditor-hover-border-color: @base-border-color;
 
 @texteditor-color: @base-text-color;
-@texteditor-disabled-opacity: 0.5;
 
 @texteditor-placeholder-color: @base-text-color;
 
@@ -314,6 +315,7 @@
 
 // ButtonGroup
 
+@button-group-normal-contained-selected-bg: @base-inverted-bg;
 @button-group-normal-selected-bg: @base-inverted-bg;
 @button-group-default-selected-bg: @base-default;
 @button-group-danger-selected-bg: @base-danger;
@@ -324,16 +326,17 @@
 @button-group-danger-selected-color: @base-inverted-text-color;
 @button-group-success-selected-color: @base-inverted-text-color;
 
+@button-group-normal-contained-selected-bg-hover: @base-inverted-bg;
 @button-group-normal-selected-bg-hover: @base-inverted-bg;
 @button-group-default-selected-bg-hover: @base-inverted-bg;
 @button-group-danger-selected-bg-hover: @base-inverted-bg;
 @button-group-success-selected-bg-hover: @base-inverted-bg;
 
+@button-group-normal-contained-selected-bg-focused: @base-inverted-bg;
 @button-group-normal-selected-bg-focused: @base-inverted-bg;
 @button-group-default-selected-bg-focused: @base-inverted-bg;
 @button-group-danger-selected-bg-focused: @base-inverted-bg;
 @button-group-success-selected-bg-focused: @base-inverted-bg;
-
 
 // Checkbox
 
@@ -553,6 +556,7 @@
 @list-group-header-default-padding-top: 10px;
 @list-group-header-compact-padding-top: 5px;
 @list-item-chevron-icon-color: @base-icon-color;
+@list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/contrast/list/delete.png');
 
 // Overlay
 @overlay-content-shadow-color: @base-shadow-color;
@@ -593,16 +597,7 @@
 // Popover
 @popover-arrow-bg: @base-bg;
 
-// Toast
-@toast-shadow-color: @base-shadow-color;
-
-@toast-border-radius: @base-border-radius + 2px;
-
-/**
-* @name 10. Text color
-* @type color
-*/
-@toast-color: #fff;
+// DropDownEditor
 
 @dropdowneditor-button-hover-border-color: @base-border-color;
 @dropdowneditor-button-active-border-color: transparent;
@@ -630,7 +625,6 @@
 * @type color
 */
 @selectbox-list-bg: @base-bg;
-@selectbox-shadow-color: @base-shadow-color;
 
 // Tabs
 @tabs-tab-color: @base-text-color;
@@ -740,6 +734,11 @@
 */
 @scrollable-scrollbar-active-bg: fade(@base-accent, 80%);
 
+@scrollbar-button-horizontal-decrement-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-horizontal-arrow-start.png') no-repeat;
+@scrollbar-button-horizontal-increment-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-horizontal-arrow-end.png') no-repeat;
+@scrollbar-button-vertical-decrement-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-vertical-arrow-up.png') no-repeat;
+@scrollbar-button-vertical-increment-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-vertical-arrow-down.png') no-repeat;
+
 
 // Toolbar
 
@@ -750,7 +749,16 @@
 @toolbar-bg: @base-bg;
 
 @toolbar-color: @base-text-color;
+
 // Toast
+@toast-shadow-color: @base-shadow-color;
+@toast-border-radius: @base-border-radius + 2px;
+
+/**
+* @name 10. Text color
+* @type color
+*/
+@toast-color: #fff;
 
 /**
 * @name 20. Info background color
@@ -776,6 +784,11 @@
 */
 @toast-success-bg: @base-success;
 
+@toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png');
+@toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png');
+@toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png');
+@toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png');
+
 // LoadIndicator
 
 /**
@@ -784,6 +797,7 @@
 */
 @loadindicator-bg: @base-inverted-bg;
 @loadindicator-segment-shadow-color: @base-shadow-color;
+@loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif');
 
 // LoadPanel
 @loadpanel-border-color: @base-border-color;
@@ -874,6 +888,7 @@
 // ScrollView
 
 @scrollview-shadow-color: @base-shadow-color;
+@scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat;
 
 //Pager
 
@@ -899,6 +914,7 @@
 */
 @colorbox-overlay-bg: @base-bg;
 @colorbox-palette-cell-bg: @base-bg;
+@colorbox-preview-empty-bg: data-uri('images/widgets/generic/color-schemes/contrast/colorbox/nocolor.png');
 
 // DataGrid
 
@@ -967,6 +983,7 @@
 * @type color
 */
 @datagrid-row-focused-bg: @base-accent;
+@datagrid-row-hovered-color: @base-text-color;
 
 /**
 * @name 90. Hovered row background color
@@ -986,7 +1003,7 @@
 */
 @datagrid-cell-modified-border-color: @base-text-color;
 
-@datagrid-row-removed-bg: @base-text-color;
+@datagrid-row-removed-bg: fade(@base-success, 50%);
 
 /**
 * @name 73. Invalidate data faded color
@@ -1095,183 +1112,9 @@
 
 
 // TreeList
-
-/**
-* @name 10. Text color
-* @type color
-*/
-@treelist-base-color: @base-text-color;
-
-/**
-* @name 60. Background color
-* @type color
-*/
-@treelist-base-background-color: @base-bg;
-
-/**
-* @name 70. Border color
-* @type color
-*/
-@treelist-border-color: @base-border-color;
-@treelist-border: 1px solid @treelist-border-color;
-
-/**
-* @name 20. Header text color
-* @type color
-*/
-@treelist-columnchooser-item-color: @base-text-color;
-@treelist-columnchooser-font-weight: normal;
-
-/**
-* @name 71. Draggable header border color
-* @type color
-*/
-@treelist-drag-header-border-color: @base-border-color;
-@treelist-drag-header-shadow-color: @base-shadow-color;
-@treelist-drag-header-second-shadow-color: @base-shadow-color;
-@treelist-header-drag-bg: @base-bg;
-
-/**
-* @name 80. Selected row background color
-* @type color
-*/
-@treelist-selection-bg: @base-inverted-bg;
-
-/**
-* @name 81. Selected row border color
-* @type color
-*/
-@treelist-row-selected-border-color: @treelist-base-background-color;
-
-/**
-* @name 82. Selected row text color
-* @type color
-*/
-@treelist-row-selected-color: @base-inverted-text-color;
-
-/**
-* @name 83. Focused row text color
-* @type color
-*/
-@treelist-row-focused-color: @base-text-color;
-
-/**
-* @name 84. Focused row background color
-* @type color
-*/
-@treelist-row-focused-bg: @base-accent;
-
-/**
-* @name 90. Hovered row background color
-* @type color
-*/
-@treelist-hover-bg: @base-hover-color;
-
-/**
-* @name 70. Context menu icons color
-* @type color
-*/
-@treelist-menu-icon-color: @base-icon-color;
-
-/**
-* @name 71. Modified data color
-* @type color
-*/
-@treelist-cell-modified-border-color: @base-text-color;
-
-@treelist-row-removed-bg: @base-text-color;
-
-/**
-* @name 73. Invalidate data faded color
-* @type color
-*/
-@treelist-row-invalid-faded-border-color: @base-invalid-faded-border-color;
-@treelist-row-invalid-border-color: @base-invalid-color;
-
-/**
-* @name 30. NoData message text color
-* @type color
-*/
-@treelist-nodata-color: @base-text-color;
-
-@treelist-master-detail-cell-bg: @base-bg;
-
-/**
-* @name 150. Highlighted text color
-* @type color
-*/
-@treelist-search-color: @base-inverted-text-color;
-
 @treelist-spin-icon-color: @base-icon-color;
 @treelist-selection-spin-icon-color: @base-inverted-text-color;
-
-/**
-* @name 160. Highlighted text background color
-* @type color
-*/
-@treelist-search-bg: @base-inverted-bg;
-
-/**
-* @name 170. Error row text color
-* @type color
-*/
-@treelist-row-error-color: @base-inverted-text-color;
-
-/**
-* @name 180. Error row background color
-* @type color
-*/
-@treelist-row-error-bg: @base-invalid-color;
-
-/**
-* @name 40. Link color
-* @type color
-*/
-@treelist-link-color: @base-link-color;
-
-/**
-* @name 130. Focused cell border color
-* @type color
-*/
-@treelist-focused-border-color: @base-accent;
-
-/**
-* @name 131. Editor background
-* @type color
-*/
-@treelist-editor-bg: @treelist-base-background-color;
-@treelist-drop-highlight-bg: @base-inverted-bg;
-@treelist-drop-highlight-color: @base-inverted-text-color;
-
-/**
-* @name 140. Column chooser background color
-* @type color
-*/
-@treelist-columnchooser-bg: @base-bg;
-
-/**
-* @name 100. Row alternation background color
-* @type color
-*/
-@treelist-row-alternation-bg: @base-bg;
-@treelist-columnchooser-item-bg: @base-bg;
-
-/**
-* @name 170. Summary item color
-* @type color
-*/
-@treelist-summary-color: @base-text-color;
-@treelist-columnchooser-message-color: @base-text-color;
-
-@treelist-overlay-content-shadow-color: fade(@base-shadow-color, 15%);
-@treelist-columnchooser-shadow-color: fade(@base-shadow-color, 20%);
-
-@treelist-columnchooser-overlay-border-radius: @base-border-radius + 2px;
-
-@treelist-column-separator-bg: darken(@treelist-base-background-color, 13.5%);
-
-@treelist-row-hovered-color: @base-text-color;
-@treelist-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/contrast/grid/text-stub.png');
+@treelist-row-alternation-bg: @datagrid-row-alternation-bg;
 
 
 // dxPivotGrid
@@ -1480,6 +1323,8 @@
 */
 @calendar-shevron-icon-color: @base-icon-color;
 
+@calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/contrast/calendar/empty-cell.png') center center no-repeat;
+
 // Tooltip
 
 /**
@@ -1575,8 +1420,6 @@
 @timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/contrast/timeView/hour-arrow.svg');
 @timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/contrast/timeView/min-arrow.svg');
 
-// theme-depends shadow parameters
-
 // DateView
 @dateview-border-color: @base-border-color;
 @dateview-shadow-up: 0deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
@@ -1604,21 +1447,6 @@
 @form-group-border-color: @base-border-color;
 @form-field-required-color: saturate(darken(@base-text-color, 40.8%), 80%);
 @form-field-mark-color: @base-accent;
-
-// Images
-@list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/contrast/list/delete.png');
-@scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') 0 0 no-repeat;
-@loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif');
-@toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/info.png');
-@toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/warning.png');
-@toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/error.png');
-@toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/light/toast/success.png');
-@scrollbar-button-horizontal-decrement-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-horizontal-arrow-start.png') no-repeat;
-@scrollbar-button-horizontal-increment-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-horizontal-arrow-end.png') no-repeat;
-@scrollbar-button-vertical-decrement-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-vertical-arrow-up.png') no-repeat;
-@scrollbar-button-vertical-increment-bg: data-uri('images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-vertical-arrow-down.png') no-repeat;
-@colorbox-preview-empty-bg: data-uri('images/widgets/generic/color-schemes/contrast/colorbox/nocolor.png');
-@calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/contrast/calendar/empty-cell.png') center center no-repeat;
 
 // Fieldset
 
@@ -1701,6 +1529,7 @@
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-inverted-text-color;
 @filemanager-file-item-select-bg: @base-inverted-bg;
+@filemanager-item-focused-color: @base-text-color;
 @filemanager-progressbox-shadow-color: @base-shadow-color;
 
 // SpeedDialAction
@@ -1714,7 +1543,7 @@
 
 // Gantt
 @gantt-collapsable-row-bg: lighten(@base-bg, 5%);
-@gantt-selection-bg: fade(@treelist-selection-bg, 30%);
+@gantt-selection-bg: fade(@datagrid-selection-bg, 30%);
 
 // Splitter
 @splitter-inactive-color: @base-border-color;

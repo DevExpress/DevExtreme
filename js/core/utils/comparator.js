@@ -1,6 +1,6 @@
-import domAdapter from "../dom_adapter";
-import { toComparable } from "./data";
-import typeUtils from "./type";
+import domAdapter from '../dom_adapter';
+import { toComparable } from './data';
+import typeUtils from './type';
 
 const hasNegation = function(oldValue, newValue) {
     return (1 / oldValue) === (1 / newValue);
@@ -24,7 +24,7 @@ const equals = function(oldValue, newValue) {
         return hasNegation(oldValue, newValue);
     }
 
-    if(oldValue === null || typeof oldValue !== "object" || domAdapter.isElementNode(oldValue)) {
+    if(oldValue === null || typeof oldValue !== 'object' || domAdapter.isElementNode(oldValue)) {
         return oldValue === newValue;
     }
 

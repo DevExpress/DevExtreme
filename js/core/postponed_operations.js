@@ -1,5 +1,5 @@
-import { Deferred, when } from "./utils/deferred";
-import { isDefined } from "./utils/type";
+import { Deferred, when } from './utils/deferred';
+import { isDefined } from './utils/type';
 
 export class PostponedOperations {
     constructor() {
@@ -10,7 +10,7 @@ export class PostponedOperations {
         if(key in this._postponedOperations) {
             postponedPromise && this._postponedOperations[key].promises.push(postponedPromise);
         } else {
-            var completePromise = new Deferred();
+            const completePromise = new Deferred();
             this._postponedOperations[key] = {
                 fn: fn,
                 completePromise: completePromise,
@@ -22,8 +22,8 @@ export class PostponedOperations {
     }
 
     callPostponedOperations() {
-        for(var key in this._postponedOperations) {
-            var operation = this._postponedOperations[key];
+        for(const key in this._postponedOperations) {
+            const operation = this._postponedOperations[key];
 
             if(isDefined(operation)) {
                 if(operation.promises && operation.promises.length) {

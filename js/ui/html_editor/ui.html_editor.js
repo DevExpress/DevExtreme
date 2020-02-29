@@ -1,35 +1,35 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import { isDefined, isFunction } from "../../core/utils/type";
-import { getPublicElement } from "../../core/utils/dom";
-import { executeAsync, noop } from "../../core/utils/common";
-import registerComponent from "../../core/component_registrator";
-import { EmptyTemplate } from "../../core/templates/empty_template";
-import Editor from "../editor/editor";
-import Errors from "../widget/ui.errors";
-import Callbacks from "../../core/utils/callbacks";
-import { Deferred } from "../../core/utils/deferred";
-import eventsEngine from "../../events/core/events_engine";
-import { isDxMouseWheelEvent, addNamespace } from "../../events/utils";
-import scrollEvents from "../scroll_view/ui.events.emitter.gesture.scroll";
-import { allowScroll } from "../text_box/utils.scroll";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import { isDefined, isFunction } from '../../core/utils/type';
+import { getPublicElement } from '../../core/utils/dom';
+import { executeAsync, noop } from '../../core/utils/common';
+import registerComponent from '../../core/component_registrator';
+import { EmptyTemplate } from '../../core/templates/empty_template';
+import Editor from '../editor/editor';
+import Errors from '../widget/ui.errors';
+import Callbacks from '../../core/utils/callbacks';
+import { Deferred } from '../../core/utils/deferred';
+import eventsEngine from '../../events/core/events_engine';
+import { isDxMouseWheelEvent, addNamespace } from '../../events/utils';
+import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
+import { allowScroll } from '../text_box/utils.scroll';
 
-import QuillRegistrator from "./quill_registrator";
-import "./converters/delta";
-import ConverterController from "./converterController";
-import getWordMatcher from "./matchers/wordLists";
-import getTextDecorationMatcher from "./matchers/textDecoration";
-import FormDialog from "./ui/formDialog";
+import QuillRegistrator from './quill_registrator';
+import './converters/delta';
+import ConverterController from './converterController';
+import getWordMatcher from './matchers/wordLists';
+import getTextDecorationMatcher from './matchers/textDecoration';
+import FormDialog from './ui/formDialog';
 
-const HTML_EDITOR_CLASS = "dx-htmleditor";
-const QUILL_CONTAINER_CLASS = "dx-quill-container";
-const QUILL_CLIPBOARD_CLASS = "ql-clipboard";
-const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
-const HTML_EDITOR_CONTENT_CLASS = "dx-htmleditor-content";
+const HTML_EDITOR_CLASS = 'dx-htmleditor';
+const QUILL_CONTAINER_CLASS = 'dx-quill-container';
+const QUILL_CLIPBOARD_CLASS = 'ql-clipboard';
+const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = 'dx-htmleditor-submit-element';
+const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 
-const MARKDOWN_VALUE_TYPE = "markdown";
+const MARKDOWN_VALUE_TYPE = 'markdown';
 
-const ANONYMOUS_TEMPLATE_NAME = "htmlContent";
+const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 
 const ELEMENT_NODE = 1;
 
@@ -37,76 +37,15 @@ const HtmlEditor = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-             * @name dxHtmlEditorOptions.focusStateEnabled
-             * @type boolean
-             * @default true
-             */
             focusStateEnabled: true,
 
-            /**
-            * @name dxHtmlEditorOptions.onFocusIn
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 event:event
-            * @action
-            */
-            /**
-            * @name dxHtmlEditorOptions.onFocusOut
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 event:event
-            * @action
-            */
-            /**
-            * @name dxHtmlEditorOptions.name
-            * @type string
-            * @hidden false
-            */
 
-            /**
-            * @name dxHtmlEditorOptions.valueType
-            * @type Enums.HtmlEditorValueType
-            * @default "html"
-            */
-            valueType: "html",
-            /**
-            * @name dxHtmlEditorOptions.placeholder
-            * @type string
-            * @default ""
-            */
-            placeholder: "",
-            /**
-            * @name dxHtmlEditorOptions.toolbar
-            * @type dxHtmlEditorToolbar
-            * @default null
-            */
+            valueType: 'html',
+            placeholder: '',
             toolbar: null,
-            /**
-            * @name dxHtmlEditorOptions.variables
-            * @type dxHtmlEditorVariables
-            * @default null
-            */
             variables: null,
-            /**
-            * @name dxHtmlEditorOptions.mediaResizing
-            * @type dxHtmlEditorMediaResizing
-            * @default null
-            */
             mediaResizing: null,
-            /**
-            * @name dxHtmlEditorOptions.mentions
-            * @type Array<dxHtmlEditorMention>
-            * @default null
-            */
             mentions: null,
-            /**
-             * @name dxHtmlEditorOptions.customizeModules
-             * @type function
-             * @type_function_param1 config:object
-             */
             customizeModules: null,
 
             formDialogOptions: null
@@ -115,122 +54,25 @@ const HtmlEditor = Editor.inherit({
             * @name dxHtmlEditorToolbar
             * @type object
             */
-            /**
-            * @name dxHtmlEditorToolbar.container
-            * @type string|Node|jQuery
-            */
-            /**
-            * @name dxHtmlEditorToolbar.items
-            * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
-            */
 
             /**
             * @name dxHtmlEditorToolbarItem
             * @inherits dxToolbarItem
-            */
-            /**
-            * @name dxHtmlEditorToolbarItem.formatName
-            * @type Enums.HtmlEditorToolbarItem|string
-            */
-            /**
-            * @name dxHtmlEditorToolbarItem.formatValues
-            * @type Array<string,number,boolean>
-            */
-            /**
-            * @name dxHtmlEditorToolbarItem.location
-            * @default "before"
             */
 
             /**
             * @name dxHtmlEditorVariables
             * @type object
             */
-            /**
-            * @name dxHtmlEditorVariables.dataSource
-            * @type string|Array<string>|DataSource|DataSourceOptions
-            * @default null
-            */
-            /**
-            * @name dxHtmlEditorVariables.escapeChar
-            * @type string|Array<string>
-            * @default ""
-            */
 
             /**
             * @name dxHtmlEditorMediaResizing
             * @type object
             */
-            /**
-            * @name dxHtmlEditorMediaResizing.enabled
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name dxHtmlEditorMediaResizing.allowedTargets
-            * @type Array<string>
-            * @default ["images"]
-            */
 
             /**
             * @name dxHtmlEditorMention
             * @type object
-            */
-            /**
-            * @name dxHtmlEditorMention.dataSource
-            * @type Array<string>|DataSource|DataSourceOptions
-            * @default null
-            */
-            /**
-            * @name dxHtmlEditorMention.marker
-            * @type string
-            * @default "@"
-            */
-            /**
-            * @name dxHtmlEditorMention.minSearchLength
-            * @type number
-            * @default 0
-            */
-            /**
-            * @name dxHtmlEditorMention.searchTimeout
-            * @type number
-            * @default 500
-            */
-            /**
-            * @name dxHtmlEditorMention.itemTemplate
-            * @type template|function
-            * @default "item"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
-            /**
-            * @name dxHtmlEditorMention.displayExpr
-            * @type string|function(item)
-            * @default "this"
-            * @type_function_param1 item:object
-            * @type_function_return string
-            */
-            /**
-            * @name dxHtmlEditorMention.searchExpr
-            * @type getter|Array<getter>
-            * @default "this"
-            */
-            /**
-            * @name dxHtmlEditorMention.valueExpr
-            * @type string|function
-            * @default "this"
-            */
-            /**
-            * @name dxHtmlEditorMention.template
-            * @type template|function
-            * @default null
-            * @type_function_param1 mentionData:object
-            * @type_function_param1_field1 marker:string
-            * @type_function_param1_field2 id:string|number
-            * @type_function_param1_field3 value:any
-            * @type_function_param2 contentElement:dxElement
-            * @type_function_return string|Node|jQuery
             */
         });
     },
@@ -285,7 +127,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _initMarkup: function() {
-        this._$htmlContainer = $("<div>").addClass(QUILL_CONTAINER_CLASS);
+        this._$htmlContainer = $('<div>').addClass(QUILL_CONTAINER_CLASS);
 
         this.$element()
             .addClass(HTML_EDITOR_CLASS)
@@ -307,12 +149,12 @@ const HtmlEditor = Editor.inherit({
     },
 
     _renderSubmitElement: function() {
-        this._$submitElement = $("<textarea>")
+        this._$submitElement = $('<textarea>')
             .addClass(HTML_EDITOR_SUBMIT_ELEMENT_CLASS)
-            .attr("hidden", true)
+            .attr('hidden', true)
             .appendTo(this.$element());
 
-        this._setSubmitValue(this.option("value"));
+        this._setSubmitValue(this.option('value'));
     },
 
     _setSubmitValue: function(value) {
@@ -324,7 +166,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _updateContainerMarkup: function() {
-        let markup = this.option("value");
+        let markup = this.option('value');
 
         if(this._isMarkdownValue()) {
             this._prepareMarkdownConverter();
@@ -337,12 +179,12 @@ const HtmlEditor = Editor.inherit({
     },
 
     _prepareMarkdownConverter: function() {
-        const MarkdownConverter = ConverterController.getConverter("markdown");
+        const MarkdownConverter = ConverterController.getConverter('markdown');
 
         if(MarkdownConverter) {
             this._markdownConverter = new MarkdownConverter();
         } else {
-            throw Errors.Error("E1051", "markdown");
+            throw Errors.Error('E1051', 'markdown');
         }
     },
 
@@ -365,14 +207,14 @@ const HtmlEditor = Editor.inherit({
 
     _prepareConverters: function() {
         if(!this._deltaConverter) {
-            const DeltaConverter = ConverterController.getConverter("delta");
+            const DeltaConverter = ConverterController.getConverter('delta');
 
             if(DeltaConverter) {
                 this._deltaConverter = new DeltaConverter();
             }
         }
 
-        if(this.option("valueType") === MARKDOWN_VALUE_TYPE && !this._markdownConverter) {
+        if(this.option('valueType') === MARKDOWN_VALUE_TYPE && !this._markdownConverter) {
             this._prepareMarkdownConverter();
         }
     },
@@ -390,7 +232,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _renderHtmlEditor: function() {
-        const customizeModules = this.option("customizeModules");
+        const customizeModules = this.option('customizeModules');
         const modulesConfig = this._getModulesConfig();
 
         if(isFunction(customizeModules)) {
@@ -398,15 +240,15 @@ const HtmlEditor = Editor.inherit({
         }
 
         this._quillInstance = this._getRegistrator().createEditor(this._$htmlContainer[0], {
-            placeholder: this.option("placeholder"),
-            readOnly: this.option("readOnly") || this.option("disabled"),
+            placeholder: this.option('placeholder'),
+            readOnly: this.option('readOnly') || this.option('disabled'),
             modules: modulesConfig,
-            theme: "basic"
+            theme: 'basic'
         });
 
         this._deltaConverter.setQuillInstance(this._quillInstance);
         this._textChangeHandlerWithContext = this._textChangeHandler.bind(this);
-        this._quillInstance.on("text-change", this._textChangeHandlerWithContext);
+        this._quillInstance.on('text-change', this._textChangeHandlerWithContext);
         this._renderScrollHandler();
         if(this._hasTranscludedContent()) {
             this._updateContentTask = executeAsync(() => {
@@ -454,12 +296,12 @@ const HtmlEditor = Editor.inherit({
     _getModulesConfig: function() {
         const quill = this._getRegistrator().getQuill();
         const wordListMatcher = getWordMatcher(quill);
-        let modulesConfig = extend({
-            toolbar: this._getModuleConfigByOption("toolbar"),
-            variables: this._getModuleConfigByOption("variables"),
+        const modulesConfig = extend({
+            toolbar: this._getModuleConfigByOption('toolbar'),
+            variables: this._getModuleConfigByOption('variables'),
             dropImage: this._getBaseModuleConfig(),
-            resizing: this._getModuleConfigByOption("mediaResizing"),
-            mentions: this._getModuleConfigByOption("mentions"),
+            resizing: this._getModuleConfigByOption('mediaResizing'),
+            mentions: this._getModuleConfigByOption('mentions'),
             clipboard: {
                 matchVisual: false,
                 matchers: [
@@ -510,9 +352,9 @@ const HtmlEditor = Editor.inherit({
         const htmlMarkup = this._deltaConverter.toHtml();
         const value = this._isMarkdownValue() ? this._updateValueByType(MARKDOWN_VALUE_TYPE, htmlMarkup) : htmlMarkup;
 
-        if(this.option("value") !== value) {
+        if(this.option('value') !== value) {
             this._isEditorUpdating = true;
-            this.option("value", value);
+            this.option('value', value);
         }
 
         this._finalizeContentRendering();
@@ -534,18 +376,18 @@ const HtmlEditor = Editor.inherit({
             return;
         }
 
-        const currentValue = value || this.option("value");
+        const currentValue = value || this.option('value');
 
         return valueType === MARKDOWN_VALUE_TYPE ? converter.toMarkdown(currentValue) : converter.toHtml(currentValue);
     },
 
     _isMarkdownValue: function() {
-        return this.option("valueType") === MARKDOWN_VALUE_TYPE;
+        return this.option('valueType') === MARKDOWN_VALUE_TYPE;
     },
 
     _resetEnabledState: function() {
         if(this._quillInstance) {
-            const isEnabled = !(this.option("readOnly") || this.option("disabled"));
+            const isEnabled = !(this.option('readOnly') || this.option('disabled'));
 
             this._quillInstance.enable(isEnabled);
         }
@@ -553,10 +395,10 @@ const HtmlEditor = Editor.inherit({
 
     _renderFormDialog: function() {
         const userOptions = extend(true, {
-            width: "auto",
-            height: "auto",
+            width: 'auto',
+            height: 'auto',
             closeOnOutsideClick: true
-        }, this.option("formDialogOptions"));
+        }, this.option('formDialogOptions'));
 
         this._formDialog = new FormDialog(this, userOptions);
     },
@@ -567,12 +409,12 @@ const HtmlEditor = Editor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "value":
+            case 'value':
                 if(this._quillInstance) {
                     if(this._isEditorUpdating) {
                         this._isEditorUpdating = false;
                     } else {
-                        const updatedValue = this._isMarkdownValue() ? this._updateValueByType("HTML", args.value) : args.value;
+                        const updatedValue = this._isMarkdownValue() ? this._updateValueByType('HTML', args.value) : args.value;
                         this._updateHtmlContent(updatedValue);
                     }
                 } else {
@@ -583,40 +425,40 @@ const HtmlEditor = Editor.inherit({
 
                 this.callBase(args);
                 break;
-            case "placeholder":
-            case "variables":
-            case "toolbar":
-            case "mentions":
-            case "customizeModules":
+            case 'placeholder':
+            case 'variables':
+            case 'toolbar':
+            case 'mentions':
+            case 'customizeModules':
                 this._invalidate();
                 break;
-            case "valueType": {
+            case 'valueType': {
                 this._prepareConverters();
                 const newValue = this._updateValueByType(args.value);
 
-                if(args.value === "html" && this._quillInstance) {
+                if(args.value === 'html' && this._quillInstance) {
                     this._updateHtmlContent(newValue);
                 } else {
-                    this.option("value", newValue);
+                    this.option('value', newValue);
                 }
                 break;
             }
-            case "readOnly":
-            case "disabled":
+            case 'readOnly':
+            case 'disabled':
                 this.callBase(args);
                 this._resetEnabledState();
                 break;
-            case "formDialogOptions":
+            case 'formDialogOptions':
                 this._renderFormDialog();
                 break;
-            case "mediaResizing":
+            case 'mediaResizing':
                 if(!args.previousValue || !args.value) {
                     this._invalidate();
                 } else {
-                    this._quillInstance.getModule("resizing").option(args.name, args.value);
+                    this._quillInstance.getModule('resizing').option(args.name, args.value);
                 }
                 break;
-            case "width":
+            case 'width':
                 this.callBase(args);
                 this._repaintToolbar();
                 break;
@@ -626,7 +468,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _repaintToolbar: function() {
-        const toolbar = this._quillInstance.getModule("toolbar");
+        const toolbar = this._quillInstance.getModule('toolbar');
         toolbar && toolbar.repaint();
     },
 
@@ -638,7 +480,7 @@ const HtmlEditor = Editor.inherit({
     _clean: function() {
         if(this._quillInstance) {
             eventsEngine.off(this._getContent(), `.${this.NAME}`);
-            this._quillInstance.off("text-change", this._textChangeHandlerWithContext);
+            this._quillInstance.off('text-change', this._textChangeHandlerWithContext);
             this._cleanCallback.fire();
         }
 
@@ -675,11 +517,6 @@ const HtmlEditor = Editor.inherit({
         this._contentInitializedCallback.add(callback);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.register
-    * @publicName register(components)
-    * @param1 modules:Object
-    */
     register: function(components) {
         this._getRegistrator().registerModules(components);
 
@@ -688,178 +525,70 @@ const HtmlEditor = Editor.inherit({
         }
     },
 
-    /**
-    * @name dxHtmlEditorMethods.get
-    * @publicName get(componentPath)
-    * @param1 componentPath:string
-    * @return Object
-    */
     get: function(modulePath) {
         return this._getRegistrator().getQuill().import(modulePath);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.getQuillInstance
-    * @publicName getQuillInstance()
-    * @return Object
-    */
     getQuillInstance: function() {
         return this._quillInstance;
     },
 
-    /**
-    * @name dxHtmlEditorMethods.getSelection
-    * @publicName getSelection()
-    * @return Object
-    */
     getSelection: function() {
-        return this._applyQuillMethod("getSelection");
+        return this._applyQuillMethod('getSelection');
     },
 
-    /**
-    * @name dxHtmlEditorMethods.setSelection
-    * @publicName setSelection(index, length)
-    * @param1 index:number
-    * @param2 length:number
-    */
     setSelection: function(index, length) {
-        this._applyQuillMethod("setSelection", arguments);
+        this._applyQuillMethod('setSelection', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.format
-    * @publicName format(formatName, formatValue)
-    * @param1 formatName:Enums.HtmlEditorFormat|string
-    * @param2 formatValue:any
-    */
     format: function(formatName, formatValue) {
-        this._applyQuillMethod("format", arguments);
+        this._applyQuillMethod('format', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.formatText
-    * @publicName formatText(index, length, formatName, formatValue)
-    * @param1 index:number
-    * @param2 length:number
-    * @param3 formatName:Enums.HtmlEditorFormat|string
-    * @param4 formatValue:any
-    */
-    /**
-    * @name dxHtmlEditorMethods.formatText
-    * @publicName formatText(index, length, formats)
-    * @param1 index:number
-    * @param2 length:number
-    * @param3 formats:object
-    */
     formatText: function(index, length, formatName, formatValue) {
-        this._applyQuillMethod("formatText", arguments);
+        this._applyQuillMethod('formatText', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.formatLine
-    * @publicName formatLine(index, length, formatName, formatValue)
-    * @param1 index:number
-    * @param2 length:number
-    * @param3 formatName:Enums.HtmlEditorFormat|string
-    * @param4 formatValue:any
-    */
-    /**
-    * @name dxHtmlEditorMethods.formatLine
-    * @publicName formatLine(index, length, formats)
-    * @param1 index:number
-    * @param2 length:number
-    * @param3 formats:object
-    */
     formatLine: function(index, length, formatName, formatValue) {
-        this._applyQuillMethod("formatLine", arguments);
+        this._applyQuillMethod('formatLine', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.getFormat
-    * @publicName getFormat(index, length)
-    * @param1 index:number
-    * @param2 length:number
-    * @return Object
-    */
     getFormat: function(index, length) {
-        return this._applyQuillMethod("getFormat", arguments);
+        return this._applyQuillMethod('getFormat', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.removeFormat
-    * @publicName removeFormat(index, length)
-    * @param1 index:number
-    * @param2 length:number
-    */
     removeFormat: function(index, length) {
-        return this._applyQuillMethod("removeFormat", arguments);
+        return this._applyQuillMethod('removeFormat', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.clearHistory
-    * @publicName clearHistory()
-    */
     clearHistory: function() {
-        this._applyQuillHistoryMethod("clear");
+        this._applyQuillHistoryMethod('clear');
     },
 
-    /**
-    * @name dxHtmlEditorMethods.undo
-    * @publicName undo()
-    */
     undo: function() {
-        this._applyQuillHistoryMethod("undo");
+        this._applyQuillHistoryMethod('undo');
 
     },
 
-    /**
-    * @name dxHtmlEditorMethods.redo
-    * @publicName redo()
-    */
     redo: function() {
-        this._applyQuillHistoryMethod("redo");
+        this._applyQuillHistoryMethod('redo');
 
     },
 
-    /**
-    * @name dxHtmlEditorMethods.getLength
-    * @publicName getLength()
-    * @return number
-    */
     getLength: function() {
-        return this._applyQuillMethod("getLength");
+        return this._applyQuillMethod('getLength');
     },
 
-    /**
-    * @name dxHtmlEditorMethods.delete
-    * @publicName delete(index, length)
-    * @param1 index:number
-    * @param2 length:number
-    */
     delete: function(index, length) {
-        this._applyQuillMethod("deleteText", arguments);
+        this._applyQuillMethod('deleteText', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.insertText
-    * @publicName insertText(index, text, formats)
-    * @param1 index:number
-    * @param2 text:string
-    * @param3 formats:object
-    */
     insertText: function(index, text, formats) {
-        this._applyQuillMethod("insertText", arguments);
+        this._applyQuillMethod('insertText', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.insertEmbed
-    * @publicName insertEmbed(index, type, config)
-    * @param1 index:number
-    * @param2 type:string
-    * @param3 config:any
-    */
     insertEmbed: function(index, type, config) {
-        this._applyQuillMethod("insertEmbed", arguments);
+        this._applyQuillMethod('insertEmbed', arguments);
     },
 
     showFormDialog: function(formConfig) {
@@ -873,10 +602,10 @@ const HtmlEditor = Editor.inherit({
     focus: function() {
         this.callBase();
 
-        this._applyQuillMethod("focus");
+        this._applyQuillMethod('focus');
     }
 });
 
-registerComponent("dxHtmlEditor", HtmlEditor);
+registerComponent('dxHtmlEditor', HtmlEditor);
 
 module.exports = HtmlEditor;

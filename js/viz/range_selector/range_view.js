@@ -1,11 +1,11 @@
 // TODO: Move it inside the "SeriesDataSource"
 function drawSeriesView(root, seriesDataSource, canvas, isAnimationEnabled) {
-    let seriesList = seriesDataSource.getSeries();
+    const seriesList = seriesDataSource.getSeries();
     if(!seriesList.length) {
         return;
     }
 
-    let valueAxis = seriesList[0].getValueAxis();
+    const valueAxis = seriesList[0].getValueAxis();
 
     valueAxis.updateCanvas({
         top: canvas.top,
@@ -13,7 +13,7 @@ function drawSeriesView(root, seriesDataSource, canvas, isAnimationEnabled) {
         height: canvas.height + canvas.top
     });
     seriesDataSource.adjustSeriesDimensions();
-    let valueRange = seriesDataSource.getBoundRange().val;
+    const valueRange = seriesDataSource.getBoundRange().val;
     valueRange.sortCategories(valueAxis.getCategoriesSorter());
     valueAxis.setBusinessRange(valueRange);
 
@@ -30,17 +30,17 @@ function merge(a, b) {
 function RangeView(params) {
     this._params = params;
     this._clipRect = params.renderer.clipRect();
-    params.root.attr({ "clip-path": this._clipRect.id });
+    params.root.attr({ 'clip-path': this._clipRect.id });
 }
 
 RangeView.prototype = {
     constructor: RangeView,
 
     update: function(backgroundOption, backgroundTheme, canvas, isCompactMode, isAnimationEnabled, seriesDataSource) {
-        var renderer = this._params.renderer,
-            root = this._params.root,
-            canvasWidth = canvas.width - canvas.left,
-            seriesGroup;
+        const renderer = this._params.renderer;
+        const root = this._params.root;
+        const canvasWidth = canvas.width - canvas.left;
+        let seriesGroup;
 
         backgroundOption = backgroundOption || {};
         root.clear();
@@ -52,7 +52,7 @@ RangeView.prototype = {
                         // Seems that "backgroundTheme.color" is never used and so can be removed both from here and from themes
                         // TODO: Check it (special attention to WidgetsGallery) and remove the option
                         fill: merge(backgroundOption.color, backgroundTheme.color),
-                        "class": "dx-range-selector-background"
+                        'class': 'dx-range-selector-background'
                     }).append(root);
                 }
                 if(backgroundOption.image && backgroundOption.image.url) {
@@ -62,7 +62,7 @@ RangeView.prototype = {
                 }
             }
             if(seriesDataSource && seriesDataSource.isShowChart()) {
-                seriesGroup = renderer.g().attr({ "class": "dxrs-series-group" }).append(root);
+                seriesGroup = renderer.g().attr({ 'class': 'dxrs-series-group' }).append(root);
                 drawSeriesView(seriesGroup, seriesDataSource, canvas, isAnimationEnabled);
             }
         }

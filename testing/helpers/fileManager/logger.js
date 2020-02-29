@@ -1,5 +1,5 @@
-import { extend } from "core/utils/extend";
-import { isNumeric } from "core/utils/type";
+import { extend } from 'core/utils/extend';
+import { isNumeric } from 'core/utils/type';
 
 export default class FileManagerLogger {
 
@@ -24,7 +24,7 @@ export default class FileManagerLogger {
     _getPreparedObject(srcObject) {
         const result = {};
 
-        for(let key in srcObject) {
+        for(const key in srcObject) {
             if(!Object.prototype.hasOwnProperty.call(srcObject, key)) {
                 continue;
             }

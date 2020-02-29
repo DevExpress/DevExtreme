@@ -48,7 +48,7 @@
     }
 
     &.dx-rtl .dx-texteditor-input {
-        padding: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING;
+        padding: @MATERIAL_FILLED_TEXTEDITOR_INPUT_PADDING;
         padding-left: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
     }
 }
@@ -56,8 +56,8 @@
 .texteditor-validation-icon-offset() {
     right: @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING;
 
-    .dx-rtl &,
-    .dx-rtl& {
+    .dx-rtl&,
+    .dx-rtl & {
         left: @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING;
         right: auto;
     }
@@ -66,8 +66,8 @@
 .texteditor-validation-icon-offset-filled() {
     right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + 1px;
 
-    .dx-rtl &,
-    .dx-rtl& {
+    .dx-rtl&,
+    .dx-rtl & {
         left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + 1px;
         right: auto;
     }
@@ -175,8 +175,8 @@
             .dx-texteditor-input {
                 padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
 
-                .dx-rtl &,
-                .dx-rtl& {
+                .dx-rtl&,
+                .dx-rtl & {
                     padding: @MATERIAL_FILLED_TEXTEDITOR_INPUT_PADDING;
                     padding-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
                 }
@@ -404,6 +404,11 @@
             > .dx-dropdowneditor-button:last-child {
                 margin-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
+
+            > .dx-clear-button-area:last-child,
+            > .dx-numberbox-spin-container:last-child {
+                margin-right: 8px;
+            }
         }
 
         .dx-rtl& {
@@ -441,6 +446,12 @@
 
                 > .dx-dropdowneditor-button:last-child {
                     margin-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                    margin-right: 0;
+                }
+
+                > .dx-clear-button-area:last-child,
+                > .dx-numberbox-spin-container:last-child {
+                    margin-left: 8px;
                     margin-right: 0;
                 }
             }

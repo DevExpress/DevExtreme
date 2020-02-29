@@ -1,19 +1,19 @@
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    commons = require("./chartParts/commons.js"),
-    dataValidatorModule = require("viz/components/data_validator"),
-    layoutManagerModule = require("viz/chart_components/layout_manager"),
-    dxPieChart = require("viz/pie_chart"),
-    chartMocks = require("../../helpers/chartMocks.js"),
-    MockSeries = chartMocks.MockSeries,
-    MockPoint = chartMocks.MockPoint,
-    insertMockFactory = chartMocks.insertMockFactory,
-    restoreMockFactory = chartMocks.restoreMockFactory,
-    resetMockFactory = chartMocks.resetMockFactory;
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const commons = require('./chartParts/commons.js');
+const dataValidatorModule = require('viz/components/data_validator');
+const layoutManagerModule = require('viz/chart_components/layout_manager');
+const dxPieChart = require('viz/pie_chart');
+const chartMocks = require('../../helpers/chartMocks.js');
+const MockSeries = chartMocks.MockSeries;
+const MockPoint = chartMocks.MockPoint;
+const insertMockFactory = chartMocks.insertMockFactory;
+const restoreMockFactory = chartMocks.restoreMockFactory;
+const resetMockFactory = chartMocks.resetMockFactory;
 
 function getContainer(hidden) {
-    var div = $('<div>').appendTo("#qunit-fixture");
+    const div = $('<div>').appendTo('#qunit-fixture');
     hidden && div.hide();
     return div;
 }
@@ -45,38 +45,38 @@ function setupMocks() {
     insertMockFactory();
 
     this.stubPoints = [
-        new MockPoint({ argument: "First", value: 10, visible: true }),
-        new MockPoint({ argument: "Second", value: 11, visible: true }),
-        new MockPoint({ argument: "Third", value: 12, visible: true })
+        new MockPoint({ argument: 'First', value: 10, visible: true }),
+        new MockPoint({ argument: 'Second', value: 11, visible: true }),
+        new MockPoint({ argument: 'Third', value: 12, visible: true })
     ];
 }
 
 function checkCorrectPosition(assert, correctPos, x, y, outer, inner, canvas) {
-    assert.equal(correctPos[0].centerX, x, "centerX");
-    assert.equal(correctPos[0].centerY, y, "centerY");
-    assert.equal(correctPos[0].radiusOuter, outer, "radiusOuter");
-    assert.equal(correctPos[0].radiusInner, inner, "radiusInner");
-    assert.deepEqual(correctPos[1], canvas, "canvas");
+    assert.equal(correctPos[0].centerX, x, 'centerX');
+    assert.equal(correctPos[0].centerY, y, 'centerY');
+    assert.equal(correctPos[0].radiusOuter, outer, 'radiusOuter');
+    assert.equal(correctPos[0].radiusInner, inner, 'radiusInner');
+    assert.deepEqual(correctPos[1], canvas, 'canvas');
 }
 
-var dataSourceTemplate = [
-    { cat: "First", val: 100 },
-    { cat: "Second", val: 200 },
-    { cat: "Third", val: 300 }
+const dataSourceTemplate = [
+    { cat: 'First', val: 100 },
+    { cat: 'Second', val: 200 },
+    { cat: 'Third', val: 300 }
 ];
 
 commons.rendererModule.Renderer = sinon.spy(function(parameters) {
     return new vizMocks.Renderer(parameters);
 });
 
-var environment = {
+const environment = {
     beforeEach: function() {
         setupMocks.call(this);
 
         this.originalLayoutManagerCtor = layoutManagerModule.LayoutManager;
-        this.LayoutManager = sinon.stub(layoutManagerModule, "LayoutManager");
+        this.LayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager');
 
-        this.validateData = sinon.stub(dataValidatorModule, "validateData", function(data) {
+        this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
             return { arg: data || [] };
         });
     },
@@ -91,7 +91,7 @@ var environment = {
     createPieChart: function(options, layout, minLayout) {
         this._pieCounter = this._pieCounter || 0;
 
-        var layoutManager = sinon.createStubInstance(this.originalLayoutManagerCtor);
+        const layoutManager = sinon.createStubInstance(this.originalLayoutManagerCtor);
         layoutManager.needMoreSpaceForPanesCanvas.returns(true);
         layoutManager.applyPieChartSeriesLayout.returns(layout);
         layoutManager.applyEqualPieChartLayout.returns(minLayout);
@@ -102,10 +102,10 @@ var environment = {
     }
 };
 
-QUnit.module("Get layout from LayoutManagers", environment);
+QUnit.module('Get layout from LayoutManagers', environment);
 
-QUnit.test("Create pies without groups. Get individual layout", function(assert) {
-    var done = assert.async(2);
+QUnit.test('Create pies without groups. Get individual layout', function(assert) {
+    const done = assert.async(2);
 
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
@@ -125,26 +125,26 @@ QUnit.test("Create pies without groups. Get individual layout", function(assert)
 
     function checkPie(done, x, y, rOuter, rInner) {
         return function(e) {
-            var series = e.component.series[0];
+            const series = e.component.series[0];
 
             assert.equal(series.drawLabelsWOPoints.callCount, 1);
             checkCorrectPosition(assert, series.correctPosition.lastCall.args, x, y, rOuter, rInner, e.component.DEBUG_canvas);
-            assert.equal(series.correctRadius.lastCall.args[0].radiusOuter, rOuter, "correction radiusOuter");
-            assert.equal(series.correctRadius.lastCall.args[0].radiusInner, rInner, "correction radiusInner");
+            assert.equal(series.correctRadius.lastCall.args[0].radiusOuter, rOuter, 'correction radiusOuter');
+            assert.equal(series.correctRadius.lastCall.args[0].radiusInner, rInner, 'correction radiusInner');
             assert.equal(series.draw.callCount, 1);
             done();
         };
     }
 });
 
-QUnit.test("Create pies with group. Get common layout", function(assert) {
-    var done = assert.async(2);
+QUnit.test('Create pies with group. Get common layout', function(assert) {
+    const done = assert.async(2);
 
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: checkPie(done, 150, 250, 200, 0)
@@ -152,7 +152,7 @@ QUnit.test("Create pies with group. Get common layout", function(assert) {
     { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: checkPie(done, 150, 250, 200, 0)
@@ -162,13 +162,13 @@ QUnit.test("Create pies with group. Get common layout", function(assert) {
 
     function checkPie(done, x, y, rOuter, rInner) {
         return function(e) {
-            var series = e.component.series[0];
+            const series = e.component.series[0];
 
             assert.equal(series.drawLabelsWOPoints.callCount, 2);
             checkCorrectPosition(assert, series.correctPosition.lastCall.args, x, y, rOuter, rInner, e.component.DEBUG_canvas);
             assert.ok(series.drawLabelsWOPoints.lastCall.calledAfter(series.correctPosition.lastCall));
-            assert.equal(series.correctRadius.lastCall.args[0].radiusOuter, rOuter, "correction radiusOuter");
-            assert.equal(series.correctRadius.lastCall.args[0].radiusInner, rInner, "correction radiusInner");
+            assert.equal(series.correctRadius.lastCall.args[0].radiusOuter, rOuter, 'correction radiusOuter');
+            assert.equal(series.correctRadius.lastCall.args[0].radiusInner, rInner, 'correction radiusInner');
             assert.deepEqual(e.component.layoutManager.correctPieLabelRadius.lastCall.args, [
                 e.component.series,
                 e.component.layoutManager.applyEqualPieChartLayout.lastCall.returnValue,
@@ -180,10 +180,10 @@ QUnit.test("Create pies with group. Get common layout", function(assert) {
     }
 });
 
-QUnit.module("Pass common layout to LayoutManagers", environment);
+QUnit.module('Pass common layout to LayoutManagers', environment);
 
-QUnit.test("Create pies without groups. Do not ask for common layout", function(assert) {
-    var done = assert.async(2);
+QUnit.test('Create pies without groups. Do not ask for common layout', function(assert) {
+    const done = assert.async(2);
 
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
@@ -207,14 +207,14 @@ QUnit.test("Create pies without groups. Do not ask for common layout", function(
     }
 });
 
-QUnit.test("Create pies with same group. Ask for common layout", function(assert) {
-    var checkPie = getPieChecker(150, 250, 200, assert, assert.async(2));
+QUnit.test('Create pies with same group. Ask for common layout', function(assert) {
+    const checkPie = getPieChecker(150, 250, 200, assert, assert.async(2));
 
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: checkPie
@@ -222,7 +222,7 @@ QUnit.test("Create pies with same group. Ask for common layout", function(assert
     { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: checkPie
@@ -231,16 +231,16 @@ QUnit.test("Create pies with same group. Ask for common layout", function(assert
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
 });
 
-QUnit.test("Create pies with same group, but one pie is hidden. Do not ask hidden pie for its layout", function(assert) {
-    var done = assert.async(1);
-    var checkPie = getPieChecker(150, 250, 200, assert, done);
+QUnit.test('Create pies with same group, but one pie is hidden. Do not ask hidden pie for its layout', function(assert) {
+    const done = assert.async(1);
+    const checkPie = getPieChecker(150, 250, 200, assert, done);
 
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     this.createPieChart({
         hidden: true,
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: done
@@ -248,7 +248,7 @@ QUnit.test("Create pies with same group, but one pie is hidden. Do not ask hidde
     { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} },
     { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} });
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: checkPie
@@ -257,8 +257,8 @@ QUnit.test("Create pies with same group, but one pie is hidden. Do not ask hidde
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
 });
 
-QUnit.test("Create two sets of pies with different groups. Ask corresponding common layout", function(assert) {
-    var done = assert.async(4);
+QUnit.test('Create two sets of pies with different groups. Ask corresponding common layout', function(assert) {
+    const done = assert.async(4);
 
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
@@ -266,7 +266,7 @@ QUnit.test("Create two sets of pies with different groups. Ask corresponding com
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: getPieChecker(150, 250, 200, assert, done)
@@ -274,7 +274,7 @@ QUnit.test("Create two sets of pies with different groups. Ask corresponding com
     { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: getPieChecker(150, 250, 200, assert, done)
@@ -283,7 +283,7 @@ QUnit.test("Create two sets of pies with different groups. Ask corresponding com
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
 
     this.createPieChart({
-        sizeGroup: "group2",
+        sizeGroup: 'group2',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: getPieChecker(200, 300, 100, assert, done)
@@ -291,7 +291,7 @@ QUnit.test("Create two sets of pies with different groups. Ask corresponding com
     { radiusInner: 0, radiusOuter: 100, centerX: 200, centerY: 300, canvas: {} },
     { radiusInner: 0, radiusOuter: 100, centerX: 200, centerY: 300, canvas: {} });
     this.createPieChart({
-        sizeGroup: "group2",
+        sizeGroup: 'group2',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: getPieChecker(200, 300, 100, assert, done)
@@ -300,19 +300,19 @@ QUnit.test("Create two sets of pies with different groups. Ask corresponding com
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
 });
 
-QUnit.test("Have pies with group. Add new pie to the same group. Ask common layout for all pies", function(assert) {
-    var checkPie = getPieChecker(200, 300, 100, assert, assert.async(3));
+QUnit.test('Have pies with group. Add new pie to the same group. Ask common layout for all pies', function(assert) {
+    const checkPie = getPieChecker(200, 300, 100, assert, assert.async(3));
 
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
-    var skipFirstCallAndCreateNewPie = function(that) {
-        var firstCall = true;
+    const skipFirstCallAndCreateNewPie = function(that) {
+        let firstCall = true;
         return function(e) {
             if(firstCall) {
                 that.createPieChart({
-                    sizeGroup: "group1",
+                    sizeGroup: 'group1',
                     dataSource: dataSourceTemplate,
                     series: [{}],
                     onDrawn: checkPie
@@ -326,8 +326,8 @@ QUnit.test("Have pies with group. Add new pie to the same group. Ask common layo
         };
     };
 
-    var skipFirstCall = (function() {
-        var skipped = false;
+    const skipFirstCall = (function() {
+        let skipped = false;
         return function(e) {
             skipped && checkPie(e);
             skipped = true;
@@ -335,7 +335,7 @@ QUnit.test("Have pies with group. Add new pie to the same group. Ask common layo
     })();
 
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: skipFirstCallAndCreateNewPie(this)
@@ -343,7 +343,7 @@ QUnit.test("Have pies with group. Add new pie to the same group. Ask common layo
     { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: skipFirstCall
@@ -352,19 +352,19 @@ QUnit.test("Have pies with group. Add new pie to the same group. Ask common layo
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
 });
 
-QUnit.module("Misc", environment);
+QUnit.module('Misc', environment);
 
-QUnit.test("Have pies with group. Change group of one pie. Redraw only changed pie", function(assert) {
-    var done = assert.async(2);
+QUnit.test('Have pies with group. Change group of one pie. Redraw only changed pie', function(assert) {
+    const done = assert.async(2);
     assert.expect(0);
 
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
-    var changeGroupOnFirstCall = (function() {
-        var firstCall = true;
+    const changeGroupOnFirstCall = (function() {
+        let firstCall = true;
         return function(e) {
             if(firstCall) {
-                e.component.option("sizeGroup", "group2");
+                e.component.option('sizeGroup', 'group2');
             }
             done();
             firstCall = false;
@@ -372,7 +372,7 @@ QUnit.test("Have pies with group. Change group of one pie. Redraw only changed p
     })();
 
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: changeGroupOnFirstCall
@@ -381,27 +381,27 @@ QUnit.test("Have pies with group. Change group of one pie. Redraw only changed p
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
 });
 
-QUnit.test("Do not touch disposed pies", function(assert) {
-    var done = assert.async(3);
+QUnit.test('Do not touch disposed pies', function(assert) {
+    const done = assert.async(3);
     assert.expect(0);
 
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
-    var killPieAndChangeGroupOnFirstCall = function(pieToKill) {
-        var firstCall = true;
+    const killPieAndChangeGroupOnFirstCall = function(pieToKill) {
+        let firstCall = true;
         return function(e) {
             if(firstCall) {
                 pieToKill.$element().remove();
-                e.component.option("sizeGroup", "group2");
+                e.component.option('sizeGroup', 'group2');
             }
             done();
             firstCall = false;
         };
     };
 
-    var pie1 = this.createPieChart({
-        sizeGroup: "group1",
+    const pie1 = this.createPieChart({
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: done
@@ -410,7 +410,7 @@ QUnit.test("Do not touch disposed pies", function(assert) {
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
 
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: killPieAndChangeGroupOnFirstCall(pie1)
@@ -419,13 +419,13 @@ QUnit.test("Do not touch disposed pies", function(assert) {
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
 });
 
-QUnit.test("Create pies with group. Series should be animated", function(assert) {
-    var done = assert.async(1);
+QUnit.test('Create pies with group. Series should be animated', function(assert) {
+    const done = assert.async(1);
 
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         dataSource: dataSourceTemplate,
         series: [{}],
         onDrawn: check
@@ -439,22 +439,22 @@ QUnit.test("Create pies with group. Series should be animated", function(assert)
     }
 });
 
-QUnit.test("Hide labes after first measuring render", function(assert) {
-    var series1 = new MockSeries({ points: this.stubPoints });
+QUnit.test('Hide labes after first measuring render', function(assert) {
+    const series1 = new MockSeries({ points: this.stubPoints });
     chartMocks.seriesMockData.series.push(series1);
 
     series1.drawLabelsWOPoints = sinon.spy(function() { return true; });
 
     chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
-    var pie = this.createPieChart({
+    const pie = this.createPieChart({
         dataSource: dataSourceTemplate,
         series: [{}]
     },
     { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
 
-    var series = pie.series[0];
+    const series = pie.series[0];
 
     assert.equal(pie.layoutManager.applyPieChartSeriesLayout.callCount, 2);
     assert.equal(series.drawLabelsWOPoints.callCount, 1);
@@ -463,11 +463,11 @@ QUnit.test("Hide labes after first measuring render", function(assert) {
 
 });
 
-QUnit.test("Create pie with group but w/o series. Do not ask for common layout. T602149", function(assert) {
-    var done = assert.async();
+QUnit.test('Create pie with group but w/o series. Do not ask for common layout. T602149', function(assert) {
+    const done = assert.async();
 
     this.createPieChart({
-        sizeGroup: "group1",
+        sizeGroup: 'group1',
         onDrawn: checkPie
     },
     { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} });

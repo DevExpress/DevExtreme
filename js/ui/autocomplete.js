@@ -1,25 +1,18 @@
-var $ = require("../core/renderer"),
-    noop = require("../core/utils/common").noop,
-    registerComponent = require("../core/component_registrator"),
-    extend = require("../core/utils/extend").extend,
-    DropDownList = require("./drop_down_editor/ui.drop_down_list"),
-    Deferred = require("../core/utils/deferred").Deferred;
+const $ = require('../core/renderer');
+const noop = require('../core/utils/common').noop;
+const registerComponent = require('../core/component_registrator');
+const extend = require('../core/utils/extend').extend;
+const DropDownList = require('./drop_down_editor/ui.drop_down_list');
+const Deferred = require('../core/utils/deferred').Deferred;
 
-var AUTOCOMPLETE_CLASS = "dx-autocomplete",
-    AUTOCOMPLETE_POPUP_WRAPPER_CLASS = "dx-autocomplete-popup-wrapper";
+const AUTOCOMPLETE_CLASS = 'dx-autocomplete';
+const AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
 
-/**
-* @name dxAutocomplete
-* @isEditor
-* @inherits dxDropDownList
-* @module ui/autocomplete
-* @export default
-*/
-var Autocomplete = DropDownList.inherit({
+const Autocomplete = DropDownList.inherit({
 
     _supportedKeys: function() {
-        var item = this._list ? this._list.option("focusedElement") : null,
-            parent = this.callBase();
+        let item = this._list ? this._list.option('focusedElement') : null;
+        const parent = this.callBase();
 
         item = item && $(item);
 
@@ -47,31 +40,16 @@ var Autocomplete = DropDownList.inherit({
                     this.close();
                 }
                 parent.enter.apply(this, arguments);
-                return this.option("opened");
+                return this.option('opened');
             }
         });
     },
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxAutocompleteOptions.value
-            * @type string
-            * @default null
-            */
 
-            /**
-            * @name dxAutocompleteOptions.minSearchLength
-            * @type number
-            * @default 1
-            */
             minSearchLength: 1,
 
-            /**
-            * @name dxAutocompleteOptions.maxItemCount
-            * @type number
-            * @default 10
-            */
             maxItemCount: 10,
 
             /**
@@ -80,12 +58,8 @@ var Autocomplete = DropDownList.inherit({
             * @default ""
             * @hidden
             */
-            noDataText: "",
+            noDataText: '',
 
-            /**
-             * @name dxAutocompleteOptions.showDropDownButton
-             * @default false
-             */
             showDropDownButton: false,
 
             searchEnabled: true
@@ -126,20 +100,20 @@ var Autocomplete = DropDownList.inherit({
     _initMarkup: function() {
         this.callBase();
         this.$element().addClass(AUTOCOMPLETE_CLASS);
-        this.setAria("autocomplete", "inline");
+        this.setAria('autocomplete', 'inline');
     },
 
     _loadValue: function() {
-        return new Deferred().resolve(this.option("value"));
+        return new Deferred().resolve(this.option('value'));
     },
 
     _displayGetterExpr: function() {
-        return this.option("valueExpr");
+        return this.option('valueExpr');
     },
 
     _setSelectedItem: function(item) {
         this.callBase(item);
-        this.option("displayValue", this.option("value"));
+        this.option('displayValue', this.option('value'));
     },
 
     _popupConfig: function() {
@@ -152,22 +126,22 @@ var Autocomplete = DropDownList.inherit({
 
     _renderDimensions: function() {
         this.callBase();
-        this._setPopupOption("width");
+        this._setPopupOption('width');
     },
 
     _popupWrapperClass: function() {
-        return this.callBase() + " " + AUTOCOMPLETE_POPUP_WRAPPER_CLASS;
+        return this.callBase() + ' ' + AUTOCOMPLETE_POPUP_WRAPPER_CLASS;
     },
 
     _listConfig: function() {
         return extend(this.callBase(), {
-            pageLoadMode: "none"
+            pageLoadMode: 'none'
         });
     },
 
     _listItemClickHandler: function(e) {
-        var value = this._displayGetter(e.itemData);
-        this.option("value", value);
+        const value = this._displayGetter(e.itemData);
+        this.option('value', value);
         this.close();
     },
 
@@ -176,7 +150,7 @@ var Autocomplete = DropDownList.inherit({
             return;
         }
 
-        this._list.option("selectedItems", []);
+        this._list.option('selectedItems', []);
         this.callBase();
     },
 
@@ -194,35 +168,35 @@ var Autocomplete = DropDownList.inherit({
     },
 
     _searchDataSource: function() {
-        this._dataSource.pageSize(this.option("maxItemCount"));
+        this._dataSource.pageSize(this.option('maxItemCount'));
         this.callBase();
         this._clearFocusedItem();
     },
 
     _clearFocusedItem: function() {
         if(this._list) {
-            this._list.option("focusedElement", null);
-            this._list.option("selectedIndex", -1);
+            this._list.option('focusedElement', null);
+            this._list.option('selectedIndex', -1);
         }
     },
 
     _renderValueEventName: function() {
-        return "input keyup";
+        return 'input keyup';
     },
 
     _valueChangeEventHandler: function(e) {
-        var value = this._input().val() || null;
+        const value = this._input().val() || null;
         return this.callBase(e, value);
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "maxItemCount":
+            case 'maxItemCount':
                 this._searchDataSource();
                 break;
-            case "valueExpr":
+            case 'valueExpr':
                 this._compileDisplayGetter();
-                this._setListOption("displayExpr", this._displayGetterExpr());
+                this._setListOption('displayExpr', this._displayGetterExpr());
                 this.callBase(args);
                 break;
             default:
@@ -236,6 +210,6 @@ var Autocomplete = DropDownList.inherit({
     }
 });
 
-registerComponent("dxAutocomplete", Autocomplete);
+registerComponent('dxAutocomplete', Autocomplete);
 
 module.exports = Autocomplete;

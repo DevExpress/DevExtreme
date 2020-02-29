@@ -1,14 +1,14 @@
-import $ from "../../../core/renderer";
-import domAdapter from "../../../core/dom_adapter";
-import windowUtils from "../../../core/utils/window";
-import callOnce from "../../../core/utils/call_once";
+import $ from '../../../core/renderer';
+import domAdapter from '../../../core/dom_adapter';
+import windowUtils from '../../../core/utils/window';
+import callOnce from '../../../core/utils/call_once';
 
-import eventsEngine from "../../../events/core/events_engine";
-import browser from "../../../core/utils/browser";
-import { getSvgMarkup } from "../../../core/utils/svg";
-import animation from "./animation";
-import { normalizeBBox, rotateBBox, normalizeEnum } from "../utils";
-import { isDefined } from "../../../core/utils/type";
+import eventsEngine from '../../../events/core/events_engine';
+import browser from '../../../core/utils/browser';
+import { getSvgMarkup } from '../../../core/utils/svg';
+import animation from './animation';
+import { normalizeBBox, rotateBBox, normalizeEnum } from '../utils';
+import { isDefined } from '../../../core/utils/type';
 
 const window = windowUtils.getWindow();
 
@@ -18,38 +18,38 @@ const PI_DIV_180 = PI / 180;
 const SHARPING_CORRECTION = 0.5;
 const ARC_COORD_PREC = 5;
 
-let pxAddingExceptions = {
-    "column-count": true,
-    "fill-opacity": true,
-    "flex-grow": true,
-    "flex-shrink": true,
-    "font-weight": true,
-    "line-height": true,
-    "opacity": true,
-    "order": true,
-    "orphans": true,
-    "widows": true,
-    "z-index": true,
-    "zoom": true
+const pxAddingExceptions = {
+    'column-count': true,
+    'fill-opacity': true,
+    'flex-grow': true,
+    'flex-shrink': true,
+    'font-weight': true,
+    'line-height': true,
+    'opacity': true,
+    'order': true,
+    'orphans': true,
+    'widows': true,
+    'z-index': true,
+    'zoom': true
 };
 
-const KEY_TEXT = "text";
-const KEY_STROKE = "stroke";
-const KEY_STROKE_WIDTH = "stroke-width";
-const KEY_STROKE_OPACITY = "stroke-opacity";
-const KEY_FONT_SIZE = "font-size";
-const KEY_FONT_STYLE = "font-style";
-const KEY_FONT_WEIGHT = "font-weight";
-const KEY_TEXT_DECORATION = "text-decoration";
-const KEY_TEXTS_ALIGNMENT = "textsAlignment";
-const NONE = "none";
+const KEY_TEXT = 'text';
+const KEY_STROKE = 'stroke';
+const KEY_STROKE_WIDTH = 'stroke-width';
+const KEY_STROKE_OPACITY = 'stroke-opacity';
+const KEY_FONT_SIZE = 'font-size';
+const KEY_FONT_STYLE = 'font-style';
+const KEY_FONT_WEIGHT = 'font-weight';
+const KEY_TEXT_DECORATION = 'text-decoration';
+const KEY_TEXTS_ALIGNMENT = 'textsAlignment';
+const NONE = 'none';
 const DEFAULT_FONT_SIZE = 12;
-const ELLIPSIS = "...";
+const ELLIPSIS = '...';
 
-let objectCreate = (function() {
+const objectCreate = (function() {
     if(!Object.create) {
         return function(proto) {
-            let F = function() { };
+            const F = function() { };
             F.prototype = proto;
             return new F();
         };
@@ -60,17 +60,17 @@ let objectCreate = (function() {
     }
 })();
 
-let DEFAULTS = {
+const DEFAULTS = {
     scaleX: 1,
     scaleY: 1,
-    "pointer-events": null
+    'pointer-events': null
 };
 
-let getBackup = callOnce(function() {
-    let backupContainer = domAdapter.createElement("div"),
-        backupCounter = 0;
-    backupContainer.style.left = "-9999px";
-    backupContainer.style.position = "absolute";
+const getBackup = callOnce(function() {
+    const backupContainer = domAdapter.createElement('div');
+    const backupCounter = 0;
+    backupContainer.style.left = '-9999px';
+    backupContainer.style.position = 'absolute';
 
     return {
         backupContainer: backupContainer,
@@ -96,19 +96,19 @@ function restoreRoot(root, container) {
 
 let getNextDefsSvgId = (function() {
     let numDefsSvgElements = 1;
-    return function() { return "DevExpress_" + numDefsSvgElements++; };
+    return function() { return 'DevExpress_' + numDefsSvgElements++; };
 })();
 
 function isObjectArgument(value) {
-    return value && (typeof value !== "string");
+    return value && (typeof value !== 'string');
 }
 
 function createElement(tagName) {
-    return domAdapter.createElementNS("http://www.w3.org/2000/svg", tagName);
+    return domAdapter.createElementNS('http://www.w3.org/2000/svg', tagName);
 }
 
 function getFuncIri(id, pathModified) {
-    return id !== null ? "url(" + (pathModified ? window.location.href.split("#")[0] : "") + "#" + id + ")" : id;
+    return id !== null ? 'url(' + (pathModified ? window.location.href.split('#')[0] : '') + '#' + id + ')' : id;
 }
 
 module.exports.getFuncIri = getFuncIri;
@@ -137,21 +137,21 @@ function getBoundingClientRect(element) {
     return box || { left: 0, top: 0 };
 }
 
-let preserveAspectRatioMap = {
-    "full": NONE,
-    "lefttop": "xMinYMin",
-    "leftcenter": "xMinYMid",
-    "leftbottom": "xMinYMax",
-    "centertop": "xMidYMin",
-    "center": "xMidYMid",
-    "centerbottom": "xMidYMax",
-    "righttop": "xMaxYMin",
-    "rightcenter": "xMaxYMid",
-    "rightbottom": "xMaxYMax"
+const preserveAspectRatioMap = {
+    'full': NONE,
+    'lefttop': 'xMinYMin',
+    'leftcenter': 'xMinYMid',
+    'leftbottom': 'xMinYMax',
+    'centertop': 'xMidYMin',
+    'center': 'xMidYMid',
+    'centerbottom': 'xMidYMax',
+    'righttop': 'xMaxYMin',
+    'rightcenter': 'xMaxYMid',
+    'rightbottom': 'xMaxYMax'
 };
 
 function processHatchingAttrs(element, attrs) {
-    if(attrs.hatching && normalizeEnum(attrs.hatching.direction) !== "none") {
+    if(attrs.hatching && normalizeEnum(attrs.hatching.direction) !== 'none') {
         attrs = extend({}, attrs);
         attrs.fill = element._hatching = element.renderer.lockHatching(attrs.fill, attrs.hatching, element._hatching);
         delete attrs.hatching;
@@ -169,9 +169,9 @@ module.exports.processHatchingAttrs = processHatchingAttrs;
 //
 
 function normalizeArcParams(x, y, innerR, outerR, startAngle, endAngle) {
-    let isCircle,
-        noArc = true,
-        angleDiff = roundValue(endAngle, 3) - roundValue(startAngle, 3);
+    let isCircle;
+    let noArc = true;
+    const angleDiff = roundValue(endAngle, 3) - roundValue(startAngle, 3);
 
     if(angleDiff) {
         if((abs(angleDiff) % 360) === 0) {
@@ -208,34 +208,34 @@ function normalizeArcParams(x, y, innerR, outerR, startAngle, endAngle) {
         cos(endAngle),
         sin(endAngle),
         isCircle,
-        floor(abs(endAngle - startAngle) / PI) % 2 ? "1" : "0",
+        floor(abs(endAngle - startAngle) / PI) % 2 ? '1' : '0',
         noArc
     ];
 }
 
-let buildArcPath = function(x, y, innerR, outerR, startAngleCos, startAngleSin, endAngleCos, endAngleSin, isCircle, longFlag) {
+const buildArcPath = function(x, y, innerR, outerR, startAngleCos, startAngleSin, endAngleCos, endAngleSin, isCircle, longFlag) {
     return [
-        "M", (x + outerR * startAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * startAngleSin).toFixed(ARC_COORD_PREC),
-        "A", outerR.toFixed(ARC_COORD_PREC), outerR.toFixed(ARC_COORD_PREC), 0, longFlag, 0, (x + outerR * endAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * endAngleSin).toFixed(ARC_COORD_PREC),
-        (isCircle ? "M" : "L"), (x + innerR * endAngleCos).toFixed(5), (y - innerR * endAngleSin).toFixed(ARC_COORD_PREC),
-        "A", innerR.toFixed(ARC_COORD_PREC), innerR.toFixed(ARC_COORD_PREC), 0, longFlag, 1, (x + innerR * startAngleCos).toFixed(ARC_COORD_PREC), (y - innerR * startAngleSin).toFixed(ARC_COORD_PREC),
-        "Z"
-    ].join(" ");
+        'M', (x + outerR * startAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * startAngleSin).toFixed(ARC_COORD_PREC),
+        'A', outerR.toFixed(ARC_COORD_PREC), outerR.toFixed(ARC_COORD_PREC), 0, longFlag, 0, (x + outerR * endAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * endAngleSin).toFixed(ARC_COORD_PREC),
+        (isCircle ? 'M' : 'L'), (x + innerR * endAngleCos).toFixed(5), (y - innerR * endAngleSin).toFixed(ARC_COORD_PREC),
+        'A', innerR.toFixed(ARC_COORD_PREC), innerR.toFixed(ARC_COORD_PREC), 0, longFlag, 1, (x + innerR * startAngleCos).toFixed(ARC_COORD_PREC), (y - innerR * startAngleSin).toFixed(ARC_COORD_PREC),
+        'Z'
+    ].join(' ');
 };
 
 function buildPathSegments(points, type) {
-    let list = [["M", 0, 0]];
+    let list = [['M', 0, 0]];
     switch(type) {
-        case "line":
+        case 'line':
             list = buildLineSegments(points);
             break;
-        case "area":
+        case 'area':
             list = buildLineSegments(points, true);
             break;
-        case "bezier":
+        case 'bezier':
             list = buildCurveSegments(points);
             break;
-        case "bezierarea":
+        case 'bezierarea':
             list = buildCurveSegments(points, true);
             break;
     }
@@ -251,9 +251,9 @@ function buildCurveSegments(points, close) {
 }
 
 function buildSegments(points, buildSimpleSegment, close) {
-    let i,
-        ii,
-        list = [];
+    let i;
+    let ii;
+    const list = [];
     if(points[0] && points[0].length) {
         for(i = 0, ii = points.length; i < ii; ++i) {
             buildSimpleSegment(points[i], close, list);
@@ -265,40 +265,40 @@ function buildSegments(points, buildSimpleSegment, close) {
 }
 
 function buildSimpleLineSegment(points, close, list) {
-    let i = 0,
-        k0 = list.length,
-        k = k0,
-        ii = (points || []).length;
+    let i = 0;
+    const k0 = list.length;
+    let k = k0;
+    const ii = (points || []).length;
     if(ii) {
         // backward compatibility
         if(points[0].x !== undefined) {
             for(; i < ii;) {
-                list[k++] = ["L", points[i].x, points[i++].y];
+                list[k++] = ['L', points[i].x, points[i++].y];
             }
         } else {
             for(; i < ii;) {
-                list[k++] = ["L", points[i++], points[i++]];
+                list[k++] = ['L', points[i++], points[i++]];
             }
         }
-        list[k0][0] = "M";
+        list[k0][0] = 'M';
     } else {
-        list[k] = ["M", 0, 0];
+        list[k] = ['M', 0, 0];
     }
-    close && list.push(["Z"]);
+    close && list.push(['Z']);
     return list;
 }
 
 function buildSimpleCurveSegment(points, close, list) {
-    let i,
-        k = list.length,
-        ii = (points || []).length;
+    let i;
+    let k = list.length;
+    const ii = (points || []).length;
     if(ii) {
         // backward compatibility
         if(points[0].x !== undefined) {
-            list[k++] = ["M", points[0].x, points[0].y];
+            list[k++] = ['M', points[0].x, points[0].y];
             for(i = 1; i < ii;) {
                 list[k++] = [
-                    "C",
+                    'C',
                     points[i].x,
                     points[i++].y,
                     points[i].x,
@@ -308,10 +308,10 @@ function buildSimpleCurveSegment(points, close, list) {
                 ];
             }
         } else {
-            list[k++] = ["M", points[0], points[1]];
+            list[k++] = ['M', points[0], points[1]];
             for(i = 2; i < ii;) {
                 list[k++] = [
-                    "C",
+                    'C',
                     points[i++],
                     points[i++],
                     points[i++],
@@ -322,35 +322,35 @@ function buildSimpleCurveSegment(points, close, list) {
             }
         }
     } else {
-        list[k] = ["M", 0, 0];
+        list[k] = ['M', 0, 0];
     }
-    close && list.push(["Z"]);
+    close && list.push(['Z']);
     return list;
 }
 
 function combinePathParam(segments) {
-    let d = [],
-        k = 0,
-        i,
-        ii = segments.length,
-        segment,
-        j,
-        jj;
+    const d = [];
+    let k = 0;
+    let i;
+    const ii = segments.length;
+    let segment;
+    let j;
+    let jj;
     for(i = 0; i < ii; ++i) {
         segment = segments[i];
         for(j = 0, jj = segment.length; j < jj; ++j) {
             d[k++] = segment[j];
         }
     }
-    return d.join(" ");
+    return d.join(' ');
 }
 
 function compensateSegments(oldSegments, newSegments, type) {
-    let oldLength = oldSegments.length,
-        newLength = newSegments.length,
-        i,
-        originalNewSegments,
-        makeEqualSegments = (type.indexOf("area") !== -1) ? makeEqualAreaSegments : makeEqualLineSegments;
+    const oldLength = oldSegments.length;
+    const newLength = newSegments.length;
+    let i;
+    let originalNewSegments;
+    const makeEqualSegments = (type.indexOf('area') !== -1) ? makeEqualAreaSegments : makeEqualLineSegments;
 
     if(oldLength === 0) {
         for(i = 0; i < newLength; i++) {
@@ -366,16 +366,16 @@ function compensateSegments(oldSegments, newSegments, type) {
 }
 
 function prepareConstSegment(constSeg, type) {
-    let x = constSeg[constSeg.length - 2],
-        y = constSeg[constSeg.length - 1];
+    const x = constSeg[constSeg.length - 2];
+    const y = constSeg[constSeg.length - 1];
     switch(type) {
-        case "line":
-        case "area":
-            constSeg[0] = "L";
+        case 'line':
+        case 'area':
+            constSeg[0] = 'L';
             break;
-        case "bezier":
-        case "bezierarea":
-            constSeg[0] = "C";
+        case 'bezier':
+        case 'bezierarea':
+            constSeg[0] = 'C';
             constSeg[1] = constSeg[3] = constSeg[5] = x;
             constSeg[2] = constSeg[4] = constSeg[6] = y;
             break;
@@ -383,8 +383,8 @@ function prepareConstSegment(constSeg, type) {
 }
 
 function makeEqualLineSegments(short, long, type) {
-    let constSeg = short[short.length - 1].slice(),
-        i = short.length;
+    const constSeg = short[short.length - 1].slice();
+    let i = short.length;
     prepareConstSegment(constSeg, type);
     for(; i < long.length; i++) {
         short[i] = constSeg.slice(0);
@@ -392,12 +392,12 @@ function makeEqualLineSegments(short, long, type) {
 }
 
 function makeEqualAreaSegments(short, long, type) {
-    let i,
-        head,
-        shortLength = short.length,
-        longLength = long.length,
-        constsSeg1,
-        constsSeg2;
+    let i;
+    let head;
+    const shortLength = short.length;
+    const longLength = long.length;
+    let constsSeg1;
+    let constsSeg2;
 
     if((shortLength - 1) % 2 === 0 && (longLength - 1) % 2 === 0) {
         i = (shortLength - 1) / 2 - 1;
@@ -414,17 +414,17 @@ function makeEqualAreaSegments(short, long, type) {
 }
 
 function baseCss(that, styles) {
-    let elemStyles = that._styles,
-        str = "",
-        key,
-        value;
+    const elemStyles = that._styles;
+    let str = '';
+    let key;
+    let value;
 
     styles = styles || {};
     for(key in styles) {
         value = styles[key];
         if(isDefined(value)) {
-            value += typeof value === "number" && !pxAddingExceptions[key] ? "px" : "";
-            elemStyles[key] = value !== "" ? value : null;
+            value += typeof value === 'number' && !pxAddingExceptions[key] ? 'px' : '';
+            elemStyles[key] = value !== '' ? value : null;
         }
     }
     // NOTE: Seems that [].concat is not faster when there are only few entries in the `styles` (and in most cases there are few of them)
@@ -432,18 +432,18 @@ function baseCss(that, styles) {
         // The alternative is to *delete* entries in the previous cycle, but it is *delete*!
         value = elemStyles[key];
         if(value) {
-            str += key + ":" + value + ";";
+            str += key + ':' + value + ';';
         }
     }
-    str && that.element.setAttribute("style", str);
+    str && that.element.setAttribute('style', str);
     return that;
 }
 
 function fixFuncIri(wrapper, attribute) {
-    let element = wrapper.element,
-        id = wrapper.attr(attribute);
+    const element = wrapper.element;
+    const id = wrapper.attr(attribute);
 
-    if(id && id.indexOf("DevExpress") !== -1) {
+    if(id && id.indexOf('DevExpress') !== -1) {
         element.removeAttribute(attribute);
         element.setAttribute(attribute, getFuncIri(id, wrapper.renderer.pathModified));
     }
@@ -451,17 +451,17 @@ function fixFuncIri(wrapper, attribute) {
 
 function baseAttr(that, attrs) {
     attrs = attrs || {};
-    let settings = that._settings,
-        attributes = {},
-        key,
-        value,
-        elem = that.element,
-        renderer = that.renderer,
-        rtl = renderer.rtl,
-        hasTransformations,
-        recalculateDashStyle,
-        sw,
-        i;
+    const settings = that._settings;
+    const attributes = {};
+    let key;
+    let value;
+    const elem = that.element;
+    const renderer = that.renderer;
+    const rtl = renderer.rtl;
+    let hasTransformations;
+    let recalculateDashStyle;
+    let sw;
+    let i;
 
     if(!isObjectArgument(attrs)) {
         if(attrs in settings) {
@@ -482,15 +482,15 @@ function baseAttr(that, attrs) {
         }
         settings[key] = value;
 
-        if(key === "align") {
-            key = "text-anchor";
-            value = { left: rtl ? "end" : "start", center: "middle", right: rtl ? "start" : "end" }[value] || null;
-        } else if(key === "dashStyle") {
+        if(key === 'align') {
+            key = 'text-anchor';
+            value = { left: rtl ? 'end' : 'start', center: 'middle', right: rtl ? 'start' : 'end' }[value] || null;
+        } else if(key === 'dashStyle') {
             recalculateDashStyle = true;
             continue;
         } else if(key === KEY_STROKE_WIDTH) {
             recalculateDashStyle = true;
-        } else if(value && (key === "fill" || key === "clip-path" || key === "filter") && value.indexOf("DevExpress") === 0) {
+        } else if(value && (key === 'fill' || key === 'clip-path' || key === 'filter') && value.indexOf('DevExpress') === 0) {
             that._addFixIRICallback();
             value = getFuncIri(value, renderer.pathModified);
         } else if(/^(translate(X|Y)|rotate[XY]?|scale(X|Y)|sharp|sharpDirection)$/i.test(key)) {
@@ -507,22 +507,22 @@ function baseAttr(that, attrs) {
         }
     }
 
-    if(recalculateDashStyle && ("dashStyle" in settings)) {
+    if(recalculateDashStyle && ('dashStyle' in settings)) {
         value = settings.dashStyle;
-        sw = (("_originalSW" in that) ? that._originalSW : settings[KEY_STROKE_WIDTH]) || 1;
-        key = "stroke-dasharray";
+        sw = (('_originalSW' in that) ? that._originalSW : settings[KEY_STROKE_WIDTH]) || 1;
+        key = 'stroke-dasharray';
 
-        value = value === null ? "" : normalizeEnum(value);
+        value = value === null ? '' : normalizeEnum(value);
 
-        if(value === "" || value === "solid" || value === NONE) {
+        if(value === '' || value === 'solid' || value === NONE) {
             that.element.removeAttribute(key);
         } else {
-            value = value.replace(/longdash/g, "8,3,").replace(/dash/g, "4,3,").replace(/dot/g, "1,3,").replace(/,$/, "").split(",");
+            value = value.replace(/longdash/g, '8,3,').replace(/dash/g, '4,3,').replace(/dot/g, '1,3,').replace(/,$/, '').split(',');
             i = value.length;
             while(i--) {
                 value[i] = parseInt((value[i])) * sw;
             }
-            that.element.setAttribute(key, value.join(","));
+            that.element.setAttribute(key, value.join(','));
         }
     }
 
@@ -534,13 +534,13 @@ function baseAttr(that, attrs) {
 }
 
 function pathAttr(attrs) {
-    let that = this,
-        segments;
+    const that = this;
+    let segments;
 
     if(isObjectArgument(attrs)) {
         attrs = extend({}, attrs);
         segments = attrs.segments;
-        if("points" in attrs) {
+        if('points' in attrs) {
             segments = buildPathSegments(attrs.points, that.type);
             delete attrs.points;
         }
@@ -554,18 +554,23 @@ function pathAttr(attrs) {
 }
 
 function arcAttr(attrs) {
-    let settings = this._settings,
-        x, y, innerRadius, outerRadius, startAngle, endAngle;
+    const settings = this._settings;
+    let x;
+    let y;
+    let innerRadius;
+    let outerRadius;
+    let startAngle;
+    let endAngle;
 
     if(isObjectArgument(attrs)) {
         attrs = extend({}, attrs);
-        if("x" in attrs || "y" in attrs || "innerRadius" in attrs || "outerRadius" in attrs || "startAngle" in attrs || "endAngle" in attrs) {
-            settings.x = x = "x" in attrs ? attrs.x : settings.x; delete attrs.x;
-            settings.y = y = "y" in attrs ? attrs.y : settings.y; delete attrs.y;
-            settings.innerRadius = innerRadius = "innerRadius" in attrs ? attrs.innerRadius : settings.innerRadius; delete attrs.innerRadius;
-            settings.outerRadius = outerRadius = "outerRadius" in attrs ? attrs.outerRadius : settings.outerRadius; delete attrs.outerRadius;
-            settings.startAngle = startAngle = "startAngle" in attrs ? attrs.startAngle : settings.startAngle; delete attrs.startAngle;
-            settings.endAngle = endAngle = "endAngle" in attrs ? attrs.endAngle : settings.endAngle; delete attrs.endAngle;
+        if('x' in attrs || 'y' in attrs || 'innerRadius' in attrs || 'outerRadius' in attrs || 'startAngle' in attrs || 'endAngle' in attrs) {
+            settings.x = x = 'x' in attrs ? attrs.x : settings.x; delete attrs.x;
+            settings.y = y = 'y' in attrs ? attrs.y : settings.y; delete attrs.y;
+            settings.innerRadius = innerRadius = 'innerRadius' in attrs ? attrs.innerRadius : settings.innerRadius; delete attrs.innerRadius;
+            settings.outerRadius = outerRadius = 'outerRadius' in attrs ? attrs.outerRadius : settings.outerRadius; delete attrs.outerRadius;
+            settings.startAngle = startAngle = 'startAngle' in attrs ? attrs.startAngle : settings.startAngle; delete attrs.startAngle;
+            settings.endAngle = endAngle = 'endAngle' in attrs ? attrs.endAngle : settings.endAngle; delete attrs.endAngle;
 
             attrs.d = buildArcPath.apply(null, normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, endAngle));
         }
@@ -574,14 +579,14 @@ function arcAttr(attrs) {
 }
 
 function rectAttr(attrs) {
-    let that = this,
-        x,
-        y,
-        width,
-        height,
-        sw,
-        maxSW,
-        newSW;
+    const that = this;
+    let x;
+    let y;
+    let width;
+    let height;
+    let sw;
+    let maxSW;
+    let newSW;
 
     if(isObjectArgument(attrs)) {
         attrs = extend({}, attrs);
@@ -607,7 +612,7 @@ function rectAttr(attrs) {
             (((sw || 0) !== newSW) || !(newSW === 0 && sw === undefined)) && (attrs[KEY_STROKE_WIDTH] = newSW);
         }
 
-        if("sharp" in attrs) {
+        if('sharp' in attrs) {
             delete attrs.sharp;
         }
     }
@@ -615,11 +620,11 @@ function rectAttr(attrs) {
 }
 
 function textAttr(attrs) {
-    let that = this,
-        settings,
-        isResetRequired,
-        wasStroked,
-        isStroked;
+    const that = this;
+    let settings;
+    let isResetRequired;
+    let wasStroked;
+    let isStroked;
 
     if(!isObjectArgument(attrs)) {
         return baseAttr(that, attrs);
@@ -658,7 +663,7 @@ function textAttr(attrs) {
         createTextNodes(that, settings.text, isStroked);
         that._hasEllipsis = false;
     }
-    if(isResetRequired || attrs["x"] !== undefined || attrs["y"] !== undefined) {
+    if(isResetRequired || attrs['x'] !== undefined || attrs['y'] !== undefined) {
         locateTextNodes(that);
     }
     if(isStroked) {
@@ -677,29 +682,29 @@ function textCss(styles) {
 }
 
 function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
-    let style,
-        realStyle,
-        i,
-        ii,
-        nodes;
+    let style;
+    let realStyle;
+    let i;
+    let ii;
+    let nodes;
 
     if(node.wholeText !== undefined) {
         list.push({ value: node.wholeText, style: parentStyle, className: parentClassName /* EXPERIMENTAL */, line: line, height: parentStyle[KEY_FONT_SIZE] || 0 });
-    } else if(node.tagName === "BR") {
+    } else if(node.tagName === 'BR') {
         ++line;
     } else if(domAdapter.isElementNode(node)) {
         extend(style = {}, parentStyle);
         switch(node.tagName) {
-            case "B":
-            case "STRONG":
-                style[KEY_FONT_WEIGHT] = "bold";
+            case 'B':
+            case 'STRONG':
+                style[KEY_FONT_WEIGHT] = 'bold';
                 break;
-            case "I":
-            case "EM":
-                style[KEY_FONT_STYLE] = "italic";
+            case 'I':
+            case 'EM':
+                style[KEY_FONT_STYLE] = 'italic';
                 break;
-            case "U":
-                style[KEY_TEXT_DECORATION] = "underline";
+            case 'U':
+                style[KEY_TEXT_DECORATION] = 'underline';
                 break;
         }
         realStyle = node.style;
@@ -716,9 +721,10 @@ function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
 }
 
 function adjustLineHeights(items) {
-    let i, ii,
-        currentItem = items[0],
-        item;
+    let i;
+    let ii;
+    let currentItem = items[0];
+    let item;
     for(i = 1, ii = items.length; i < ii; ++i) {
         item = items[i];
         if(item.line === currentItem.line) {
@@ -733,31 +739,31 @@ function adjustLineHeights(items) {
 }
 
 function removeExtraAttrs(html) {
-    let findTagAttrs = /(?:(<[a-z0-9]+\s*))([\s\S]*?)(>|\/>)/gi,
-        findStyleAndClassAttrs = /(style|class)\s*=\s*(["'])(?:(?!\2).)*\2\s?/gi;
+    const findTagAttrs = /(?:(<[a-z0-9]+\s*))([\s\S]*?)(>|\/>)/gi;
+    const findStyleAndClassAttrs = /(style|class)\s*=\s*(["'])(?:(?!\2).)*\2\s?/gi;
 
     return html.replace(findTagAttrs, function(allTagAttrs, p1, p2, p3) {
         p2 = (p2 && p2.match(findStyleAndClassAttrs) || []).map(function(str) {
             return str;
-        }).join(" ");
+        }).join(' ');
 
         return p1 + p2 + p3;
     });
 }
 
 function parseHTML(text) {
-    let items = [],
-        div = domAdapter.createElement("div");
-    div.innerHTML = text.replace(/\r/g, "").replace(/\n/g, "<br/>");
-    orderHtmlTree(items, 0, div, {}, "");
+    const items = [];
+    const div = domAdapter.createElement('div');
+    div.innerHTML = text.replace(/\r/g, '').replace(/\n/g, '<br/>');
+    orderHtmlTree(items, 0, div, {}, '');
     adjustLineHeights(items);
     return items;
 }
 
 function parseMultiline(text) {
-    let texts = text.replace(/\r/g, "").split(/\n/g),
-        i = 0,
-        items = [];
+    const texts = text.replace(/\r/g, '').split(/\n/g);
+    let i = 0;
+    const items = [];
     for(; i < texts.length; i++) {
         items.push({ value: texts[i].trim(), height: 0, line: i });
     }
@@ -765,13 +771,15 @@ function parseMultiline(text) {
 }
 
 function createTspans(items, element, fieldName) {
-    let i, ii, item;
+    let i;
+    let ii;
+    let item;
     for(i = 0, ii = items.length; i < ii; ++i) {
         item = items[i];
-        item[fieldName] = createElement("tspan");
+        item[fieldName] = createElement('tspan');
         item[fieldName].appendChild(domAdapter.createTextNode(item.value));
         item.style && baseCss({ element: item[fieldName], _styles: {} }, item.style);
-        item.className && item[fieldName].setAttribute("class", item.className); // EXPERIMENTAL
+        item.className && item[fieldName].setAttribute('class', item.className); // EXPERIMENTAL
         element.appendChild(item[fieldName]);
     }
 }
@@ -783,17 +791,17 @@ function restoreText() {
 }
 
 function applyEllipsis(maxWidth) {
-    let that = this,
-        lines,
-        hasEllipsis = false,
-        i,
-        ii,
-        lineParts,
-        j,
-        jj,
-        text,
-        ellipsis,
-        ellipsisWidth;
+    const that = this;
+    let lines;
+    let hasEllipsis = false;
+    let i;
+    let ii;
+    let lineParts;
+    let j;
+    let jj;
+    let text;
+    let ellipsis;
+    let ellipsisWidth;
 
     restoreText.call(that);
 
@@ -834,14 +842,14 @@ function cloneAndRemoveAttrs(node) {
     let clone;
     if(node) {
         clone = node.cloneNode();
-        clone.removeAttribute("y");
-        clone.removeAttribute("x");
+        clone.removeAttribute('y');
+        clone.removeAttribute('x');
     }
     return clone || node;
 }
 
 function detachAndStoreTitleElements(element) {
-    const titleElements = domAdapter.querySelectorAll(element, "title");
+    const titleElements = domAdapter.querySelectorAll(element, 'title');
 
     for(let i = 0; i < titleElements.length; i++) {
         element.removeChild(titleElements[i]);
@@ -855,13 +863,13 @@ function detachAndStoreTitleElements(element) {
 }
 
 function setMaxSize(maxWidth, maxHeight, options = {}) {
-    let that = this,
-        lines = [],
-        textChanged = false,
-        textIsEmpty = false,
-        ellipsis,
-        ellipsisWidth,
-        ellipsisMaxWidth = maxWidth;
+    const that = this;
+    let lines = [];
+    let textChanged = false;
+    let textIsEmpty = false;
+    let ellipsis;
+    let ellipsisWidth;
+    let ellipsisMaxWidth = maxWidth;
 
     restoreText.call(that);
     const restoreTitleElement = detachAndStoreTitleElements(this.element);
@@ -883,7 +891,7 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
 
         this._texts = lines.reduce((texts, line) => {
             return texts.concat(line.parts);
-        }, []).filter(t => t.value !== "").map(t => {
+        }, []).filter(t => t.value !== '').map(t => {
             t.stroke && t.tspan.parentNode.appendChild(t.stroke);
             return t;
         }).map(t => {
@@ -897,7 +905,7 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
         if(this._texts) {
             locateTextNodes(this);
         } else {
-            this.element.textContent = "";
+            this.element.textContent = '';
             textIsEmpty = true;
         }
     }
@@ -909,8 +917,8 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
 }
 
 function getIndexForEllipsis(text, maxWidth, startBox, endBox) {
-    let k,
-        kk;
+    let k;
+    let kk;
     if(startBox <= maxWidth && endBox > maxWidth) {
         for(k = 1, kk = text.value.length; k <= kk; ++k) {
             if(startBox + text.tspan.getSubStringLength(0, k) > maxWidth) {
@@ -925,12 +933,12 @@ function getTextWidth(text) {
 }
 
 function prepareLines(element, texts, maxWidth) {
-    let lines = [],
-        i,
-        ii,
-        text,
-        startBox,
-        endBox;
+    let lines = [];
+    let i;
+    let ii;
+    let text;
+    let startBox;
+    let endBox;
 
     if(texts) {
         for(i = 0, ii = texts.length; i < ii; ++i) {
@@ -959,8 +967,8 @@ function prepareLines(element, texts, maxWidth) {
 
 function getSpaceBreakIndex(text, maxWidth) {
     const initialIndices = text.startBox > 0 ? [0] : [];
-    const spaceIndices = text.value.split("").reduce((indices, char, index) => {
-        if(char === " ") {
+    const spaceIndices = text.value.split('').reduce((indices, char, index) => {
+        if(char === ' ') {
             indices.push(index);
         }
         return indices;
@@ -983,11 +991,11 @@ function getWordBreakIndex(text, maxWidth) {
 }
 
 function getEllipsisString(ellipsisMaxWidth, { hideOverflowEllipsis }) {
-    return hideOverflowEllipsis && ellipsisMaxWidth === 0 ? "" : ELLIPSIS;
+    return hideOverflowEllipsis && ellipsisMaxWidth === 0 ? '' : ELLIPSIS;
 }
 
 function setEllipsis(text, ellipsisMaxWidth, options) {
-    let ellipsis = getEllipsisString(ellipsisMaxWidth, options);
+    const ellipsis = getEllipsisString(ellipsisMaxWidth, options);
     if(text.value.length && text.tspan.parentNode) {
         for(let i = text.value.length - 1; i >= 1; i--) {
             if(text.startBox + text.tspan.getSubStringLength(0, i) < ellipsisMaxWidth) {
@@ -1003,17 +1011,17 @@ function setEllipsis(text, ellipsisMaxWidth, options) {
 function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
     const wholeText = text.value;
     let breakIndex;
-    if(options.wordWrap !== "none") {
-        breakIndex = options.wordWrap === "normal" ? getSpaceBreakIndex(text, maxWidth) : getWordBreakIndex(text, maxWidth);
+    if(options.wordWrap !== 'none') {
+        breakIndex = options.wordWrap === 'normal' ? getSpaceBreakIndex(text, maxWidth) : getWordBreakIndex(text, maxWidth);
     }
 
     let restLines = [];
     let restText;
 
     if(isFinite(breakIndex)) {
-        setNewText(text, breakIndex, "");
+        setNewText(text, breakIndex, '');
 
-        const newTextOffset = wholeText[breakIndex] === " " ? 1 : 0;
+        const newTextOffset = wholeText[breakIndex] === ' ' ? 1 : 0;
 
         const restString = wholeText.slice(breakIndex + newTextOffset);
         if(restString.length) {
@@ -1044,11 +1052,11 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
     }
 
     if(text.value.length) {
-        if(options.textOverflow === "ellipsis" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
+        if(options.textOverflow === 'ellipsis' && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
             setEllipsis(text, ellipsisMaxWidth, options);
         }
 
-        if(options.textOverflow === "hide" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
+        if(options.textOverflow === 'hide' && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
             return [];
         }
     } else {
@@ -1074,7 +1082,7 @@ function setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, lineHeight) {
     const textOverflow = options.textOverflow;
     if(!isFinite(maxHeight)
         || Number(maxHeight) === 0
-        || textOverflow === "none"
+        || textOverflow === 'none'
     ) {
         return lines;
     }
@@ -1087,7 +1095,7 @@ function setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, lineHeight) {
             l.parts.forEach(item => {
                 removeTextSpan(item);
             });
-            if(textOverflow === "ellipsis") {
+            if(textOverflow === 'ellipsis') {
                 const prevLine = arr[index - 1];
                 if(prevLine) {
                     const text = prevLine.parts[prevLine.parts.length - 1];
@@ -1104,7 +1112,7 @@ function setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, lineHeight) {
         return [lines, commonHeight];
     }, [[], 0]);
 
-    if(textOverflow === "hide" && result[1] > maxHeight) {
+    if(textOverflow === 'hide' && result[1] > maxHeight) {
         result[0].forEach(l => {
             l.parts.forEach(item => {
                 removeTextSpan(item);
@@ -1120,8 +1128,8 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
     if(!texts) {
         const textValue = element.textContent;
         const text = { value: textValue, height: 0, line: 0 };
-        element.textContent = "";
-        createTspans([text], element, "tspan");
+        element.textContent = '';
+        createTspans([text], element, 'tspan');
 
         texts = [text];
     }
@@ -1136,7 +1144,7 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
             lines.push({ commonLength: text.value.length, parts: [text] });
         } else {
             text.startBox = startBox;
-            if(startBox > ellipsisMaxWidth && options.wordWrap === "none" && options.textOverflow === "ellipsis") {
+            if(startBox > ellipsisMaxWidth && options.wordWrap === 'none' && options.textOverflow === 'ellipsis') {
                 removeTextSpan(text);
                 return [lines, startBox, endBox, stop, lineNumber];
             }
@@ -1163,7 +1171,7 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
 }
 
 function setNewText(text, index, insertString = ELLIPSIS) {
-    let newText = text.value.substr(0, index) + insertString;
+    const newText = text.value.substr(0, index) + insertString;
     text.value = text.tspan.textContent = newText;
     text.stroke && (text.stroke.textContent = newText);
     if(insertString === ELLIPSIS) {
@@ -1177,16 +1185,16 @@ function removeTextSpan(text) {
 }
 
 function createTextNodes(wrapper, text, isStroked) {
-    let items,
-        parsedHtml;
+    let items;
+    let parsedHtml;
 
     wrapper._texts = null;
     wrapper.clear();
 
     if(text === null) return;
 
-    text = "" + text;
-    if(!wrapper.renderer.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.indexOf("&") !== -1)) {
+    text = '' + text;
+    if(!wrapper.renderer.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.indexOf('&') !== -1)) {
         parsedHtml = removeExtraAttrs(text);
         items = parseHTML(parsedHtml);
         ///#DEBUG
@@ -1203,7 +1211,7 @@ function createTextNodes(wrapper, text, isStroked) {
             if(isStroked) {
                 createTspans(items, wrapper.element, KEY_STROKE);
             }
-            createTspans(items, wrapper.element, "tspan");
+            createTspans(items, wrapper.element, 'tspan');
         }
     } else {
         wrapper.element.appendChild(domAdapter.createTextNode(text));
@@ -1221,75 +1229,78 @@ function getItemLineHeight(item, defaultValue) {
 
 function locateTextNodes(wrapper) {
     if(!wrapper._texts) return;
-    let items = wrapper._texts,
-        x = wrapper._settings.x,
-        lineHeight = wrapper._getLineHeight(),
-        i, ii,
-        item = items[0];
-    setTextNodeAttribute(item, "x", x);
-    setTextNodeAttribute(item, "y", wrapper._settings.y);
+    const items = wrapper._texts;
+    const x = wrapper._settings.x;
+    const lineHeight = wrapper._getLineHeight();
+    let i;
+    let ii;
+    let item = items[0];
+    setTextNodeAttribute(item, 'x', x);
+    setTextNodeAttribute(item, 'y', wrapper._settings.y);
     for(i = 1, ii = items.length; i < ii; ++i) {
         item = items[i];
         if(parseFloat(item.height) >= 0) {
-            setTextNodeAttribute(item, "x", x);
+            setTextNodeAttribute(item, 'x', x);
             const height = getItemLineHeight(item, lineHeight);
-            setTextNodeAttribute(item, "dy", height); // T177039
+            setTextNodeAttribute(item, 'dy', height); // T177039
         }
     }
 }
 
 function alignTextNodes(wrapper, alignment) {
-    if(!wrapper._texts || alignment === "center") {
+    if(!wrapper._texts || alignment === 'center') {
         return;
     }
 
     const items = wrapper._texts;
-    const direction = alignment === "left" ? -1 : 1;
+    const direction = alignment === 'left' ? -1 : 1;
     const maxTextWidth = Math.max.apply(Math, items.map(t => { return getTextWidth(t); }));
 
     for(let i = 0; i < items.length; i++) {
         const item = items[i];
         const textWidth = getTextWidth(item);
         if(maxTextWidth !== 0 && maxTextWidth !== textWidth) {
-            setTextNodeAttribute(item, "dx", direction * round(((maxTextWidth - textWidth) / 2) * 10) / 10);
+            setTextNodeAttribute(item, 'dx', direction * round(((maxTextWidth - textWidth) / 2) * 10) / 10);
         }
     }
 }
 
 function maxLengthFontSize(fontSize1, fontSize2) {
-    let parsedHeight1 = parseFloat(fontSize1),
-        parsedHeight2 = parseFloat(fontSize2),
-        height1 = parsedHeight1 || DEFAULT_FONT_SIZE,
-        height2 = parsedHeight2 || DEFAULT_FONT_SIZE;
+    const parsedHeight1 = parseFloat(fontSize1);
+    const parsedHeight2 = parseFloat(fontSize2);
+    const height1 = parsedHeight1 || DEFAULT_FONT_SIZE;
+    const height2 = parsedHeight2 || DEFAULT_FONT_SIZE;
 
     return height1 > height2 ? (!isNaN(parsedHeight1) ? fontSize1 : height1) : (!isNaN(parsedHeight2) ? fontSize2 : height2);
 }
 
 function strokeTextNodes(wrapper) {
     if(!wrapper._texts) return;
-    let items = wrapper._texts,
-        stroke = wrapper._settings[KEY_STROKE],
-        strokeWidth = wrapper._settings[KEY_STROKE_WIDTH],
-        strokeOpacity = wrapper._settings[KEY_STROKE_OPACITY] || 1,
-        tspan, i, ii;
+    const items = wrapper._texts;
+    const stroke = wrapper._settings[KEY_STROKE];
+    const strokeWidth = wrapper._settings[KEY_STROKE_WIDTH];
+    const strokeOpacity = wrapper._settings[KEY_STROKE_OPACITY] || 1;
+    let tspan;
+    let i;
+    let ii;
     for(i = 0, ii = items.length; i < ii; ++i) {
         tspan = items[i].stroke;
         tspan.setAttribute(KEY_STROKE, stroke);
         tspan.setAttribute(KEY_STROKE_WIDTH, strokeWidth);
         tspan.setAttribute(KEY_STROKE_OPACITY, strokeOpacity);
-        tspan.setAttribute("stroke-linejoin", "round");
+        tspan.setAttribute('stroke-linejoin', 'round');
     }
 }
 
 function baseAnimate(that, params, options, complete) {
     options = options || {};
-    let key,
-        value,
-        renderer = that.renderer,
-        settings = that._settings,
-        animationParams = {};
+    let key;
+    let value;
+    const renderer = that.renderer;
+    const settings = that._settings;
+    const animationParams = {};
 
-    let defaults = {
+    const defaults = {
         translateX: 0,
         translateY: 0,
         scaleX: 1,
@@ -1310,7 +1321,7 @@ function baseAnimate(that, params, options, complete) {
                 animationParams.transform = animationParams.transform || { from: {}, to: {} };
                 animationParams.transform.from[key] = key in settings ? Number(settings[key].toFixed(3)) : defaults[key]; // T338486
                 animationParams.transform.to[key] = value;
-            } else if(key === "arc" || key === "segments") {
+            } else if(key === 'arc' || key === 'segments') {
                 animationParams[key] = value;
             } else {
                 animationParams[key] = {
@@ -1330,12 +1341,12 @@ function baseAnimate(that, params, options, complete) {
 }
 
 function pathAnimate(params, options, complete) {
-    let that = this,
-        curSegments = that.segments || [],
-        newSegments,
-        endSegments;
+    const that = this;
+    const curSegments = that.segments || [];
+    let newSegments;
+    let endSegments;
 
-    if(that.renderer.animationEnabled() && "points" in params) {
+    if(that.renderer.animationEnabled() && 'points' in params) {
         newSegments = buildPathSegments(params.points, that.type);
         endSegments = compensateSegments(curSegments, newSegments, that.type);
 
@@ -1347,12 +1358,12 @@ function pathAnimate(params, options, complete) {
 }
 
 function arcAnimate(params, options, complete) {
-    let that = this,
-        settings = that._settings,
-        arcParams = { from: {}, to: {} };
+    const that = this;
+    const settings = that._settings;
+    const arcParams = { from: {}, to: {} };
 
     if(that.renderer.animationEnabled() &&
-        ("x" in params || "y" in params || "innerRadius" in params || "outerRadius" in params || "startAngle" in params || "endAngle" in params)) {
+        ('x' in params || 'y' in params || 'innerRadius' in params || 'outerRadius' in params || 'startAngle' in params || 'endAngle' in params)) {
 
         arcParams.from.x = settings.x || 0;
         arcParams.from.y = settings.y || 0;
@@ -1361,12 +1372,12 @@ function arcAnimate(params, options, complete) {
         arcParams.from.startAngle = settings.startAngle || 0;
         arcParams.from.endAngle = settings.endAngle || 0;
 
-        arcParams.to.x = "x" in params ? params.x : settings.x; delete params.x;
-        arcParams.to.y = "y" in params ? params.y : settings.y; delete params.y;
-        arcParams.to.innerRadius = "innerRadius" in params ? params.innerRadius : settings.innerRadius; delete params.innerRadius;
-        arcParams.to.outerRadius = "outerRadius" in params ? params.outerRadius : settings.outerRadius; delete params.outerRadius;
-        arcParams.to.startAngle = "startAngle" in params ? params.startAngle : settings.startAngle; delete params.startAngle;
-        arcParams.to.endAngle = "endAngle" in params ? params.endAngle : settings.endAngle; delete params.endAngle;
+        arcParams.to.x = 'x' in params ? params.x : settings.x; delete params.x;
+        arcParams.to.y = 'y' in params ? params.y : settings.y; delete params.y;
+        arcParams.to.innerRadius = 'innerRadius' in params ? params.innerRadius : settings.innerRadius; delete params.innerRadius;
+        arcParams.to.outerRadius = 'outerRadius' in params ? params.outerRadius : settings.outerRadius; delete params.outerRadius;
+        arcParams.to.startAngle = 'startAngle' in params ? params.startAngle : settings.startAngle; delete params.startAngle;
+        arcParams.to.endAngle = 'endAngle' in params ? params.endAngle : settings.endAngle; delete params.endAngle;
 
         params.arc = arcParams;
     }
@@ -1388,7 +1399,7 @@ exports.DEBUG_removeBackupContainer = function() {
 ///#ENDDEBUG
 
 function buildLink(target, parameters) {
-    let obj = { is: false, name: parameters.name || parameters, after: parameters.after };
+    const obj = { is: false, name: parameters.name || parameters, after: parameters.after };
     if(target) {
         obj.to = target;
     } else {
@@ -1399,14 +1410,14 @@ function buildLink(target, parameters) {
 
 // SvgElement
 function SvgElement(renderer, tagName, type) {
-    let that = this;
+    const that = this;
     that.renderer = renderer;
     that.element = createElement(tagName);
     that._settings = {};
     that._styles = {};
 
-    if(tagName === "path") {
-        that.type = type || "line";
+    if(tagName === 'path') {
+        that.type = type || 'line';
     }
 }
 
@@ -1424,12 +1435,12 @@ SvgElement.prototype = {
     },
 
     _addFixIRICallback: function() {
-        let that = this,
-            fn = function() {
-                fixFuncIri(that, "fill");
-                fixFuncIri(that, "clip-path");
-                fixFuncIri(that, "filter");
-            };
+        const that = this;
+        const fn = function() {
+            fixFuncIri(that, 'fill');
+            fixFuncIri(that, 'clip-path');
+            fixFuncIri(that, 'filter');
+        };
 
         that.element._fixFuncIri = fn;
         fn.renderer = that.renderer;
@@ -1438,7 +1449,7 @@ SvgElement.prototype = {
     },
 
     _clearChildrenFuncIri: function() {
-        let clearChildren = function(element) {
+        const clearChildren = function(element) {
             let i;
 
             for(i = 0; i < element.childNodes.length; i++) {
@@ -1463,7 +1474,7 @@ SvgElement.prototype = {
     },
 
     remove: function() {
-        let element = this.element;
+        const element = this.element;
         element.parentNode && element.parentNode.removeChild(element);
         return this;
     },
@@ -1476,17 +1487,17 @@ SvgElement.prototype = {
 
     ///#DEBUG
     checkLinks: function() {
-        let count = 0,
-            links = this._links,
-            i,
-            ii = links.length;
+        let count = 0;
+        const links = this._links;
+        let i;
+        const ii = links.length;
         for(i = 0; i < ii; ++i) {
             if(!links[i]._link.virtual) {
                 ++count;
             }
         }
         if(count > 0) {
-            throw new Error("There are non disposed links!");
+            throw new Error('There are non disposed links!');
         }
     },
     ///#ENDDEBUG
@@ -1515,10 +1526,10 @@ SvgElement.prototype = {
 
     // It might be better to traverse list to start (not to end) as widget components more likely will be rendered in the same order as they were created
     linkAppend: function() {
-        let link = this._link,
-            items = link.to._links,
-            i,
-            next;
+        const link = this._link;
+        const items = link.to._links;
+        let i;
+        let next;
         for(i = link.i + 1; (next = items[i]) && !next._link.is; ++i);
         this._insert(link.to, next);
         link.is = true;
@@ -1543,15 +1554,15 @@ SvgElement.prototype = {
     },
 
     toBackground: function() {
-        let elem = this.element,
-            parent = elem.parentNode;
+        const elem = this.element;
+        const parent = elem.parentNode;
         parent && parent.insertBefore(elem, parent.firstChild);
         return this;
     },
 
     toForeground: function() {
-        let elem = this.element,
-            parent = elem.parentNode;
+        const elem = this.element;
+        const parent = elem.parentNode;
         parent && parent.appendChild(elem);
         return this;
     },
@@ -1586,39 +1597,39 @@ SvgElement.prototype = {
         const sharpMode = tr.sharp;
         const trDirection = tr.sharpDirection || 1;
         const strokeOdd = tr[KEY_STROKE_WIDTH] % 2;
-        const correctionX = (strokeOdd && (sharpMode === "h" || sharpMode === true)) ? SHARPING_CORRECTION * trDirection : 0;
-        const correctionY = (strokeOdd && (sharpMode === "v" || sharpMode === true)) ? SHARPING_CORRECTION * trDirection : 0;
+        const correctionX = (strokeOdd && (sharpMode === 'h' || sharpMode === true)) ? SHARPING_CORRECTION * trDirection : 0;
+        const correctionY = (strokeOdd && (sharpMode === 'v' || sharpMode === true)) ? SHARPING_CORRECTION * trDirection : 0;
 
-        transformations.push("translate(" + ((tr.translateX || 0) + correctionX) + "," + ((tr.translateY || 0) + correctionY) + ")");
+        transformations.push('translate(' + ((tr.translateX || 0) + correctionX) + ',' + ((tr.translateY || 0) + correctionY) + ')');
 
         if(tr.rotate) {
-            if("rotateX" in tr) {
+            if('rotateX' in tr) {
                 rotateX = tr.rotateX;
             } else {
                 rotateX = tr.x;
             }
 
-            if("rotateY" in tr) {
+            if('rotateY' in tr) {
                 rotateY = tr.rotateY;
             } else {
                 rotateY = tr.y;
             }
 
-            transformations.push("rotate(" + tr.rotate + "," + (rotateX || 0) + "," + (rotateY || 0) + ")");
+            transformations.push('rotate(' + tr.rotate + ',' + (rotateX || 0) + ',' + (rotateY || 0) + ')');
         }
         scaleXDefined = isDefined(tr.scaleX);
         scaleYDefined = isDefined(tr.scaleY);
         if(scaleXDefined || scaleYDefined) {
-            transformations.push("scale(" + (scaleXDefined ? tr.scaleX : 1) + "," + (scaleYDefined ? tr.scaleY : 1) + ")");
+            transformations.push('scale(' + (scaleXDefined ? tr.scaleX : 1) + ',' + (scaleYDefined ? tr.scaleY : 1) + ')');
         }
 
         if(transformations.length) {
-            this.element.setAttribute("transform", transformations.join(" "));
+            this.element.setAttribute('transform', transformations.join(' '));
         }
     },
 
     move: function(x, y, animate, animOptions) {
-        let obj = {};
+        const obj = {};
 
         isDefined(x) && (obj.translateX = x);
         isDefined(y) && (obj.translateY = y);
@@ -1632,7 +1643,7 @@ SvgElement.prototype = {
     },
 
     rotate: function(angle, x, y, animate, animOptions) {
-        let obj = {
+        const obj = {
             rotate: angle || 0
         };
 
@@ -1648,8 +1659,8 @@ SvgElement.prototype = {
     },
 
     _getElementBBox: function() {
-        let elem = this.element,
-            bBox;
+        const elem = this.element;
+        let bBox;
 
         try {
             bBox = elem.getBBox && elem.getBBox();
@@ -1660,13 +1671,13 @@ SvgElement.prototype = {
 
     // TODO do we need to round results and consider rotation coordinates?
     getBBox: function() {
-        let transformation = this._settings,
-            bBox = this._getElementBBox();
+        const transformation = this._settings;
+        let bBox = this._getElementBBox();
 
         if(transformation.rotate) {
             bBox = rotateBBox(bBox, [
-                (("rotateX" in transformation) ? transformation.rotateX : transformation.x) || 0,
-                (("rotateY" in transformation) ? transformation.rotateY : transformation.y) || 0
+                (('rotateX' in transformation) ? transformation.rotateX : transformation.x) || 0,
+                (('rotateY' in transformation) ? transformation.rotateY : transformation.y) || 0
             ], -transformation.rotate); // Angle is transformed from svg to right-handed cartesian space
         } else {
             bBox = normalizeBBox(bBox);
@@ -1683,20 +1694,20 @@ SvgElement.prototype = {
     },
 
     stopAnimation: function(disableComplete) {
-        let animation = this.animation;
+        const animation = this.animation;
         animation && animation.stop(disableComplete);
         return this;
     },
 
     setTitle: function(text) {
-        let titleElem = createElement('title');
+        const titleElem = createElement('title');
         titleElem.textContent = text || '';
         this.element.appendChild(titleElem);
     },
 
     data: function(obj, val) {
-        let elem = this.element,
-            key;
+        const elem = this.element;
+        let key;
         if(val !== undefined) {
             elem[obj] = val;
         } else {
@@ -1708,21 +1719,21 @@ SvgElement.prototype = {
     },
 
     on: function() {
-        let args = [ this._getJQElement() ];
+        const args = [ this._getJQElement() ];
         args.push.apply(args, arguments);
         eventsEngine.on.apply(eventsEngine, args);
         return this;
     },
 
     off: function() {
-        let args = [ this._getJQElement() ];
+        const args = [ this._getJQElement() ];
         args.push.apply(args, arguments);
         eventsEngine.off.apply(eventsEngine, args);
         return this;
     },
 
     trigger: function() {
-        let args = [ this._getJQElement() ];
+        const args = [ this._getJQElement() ];
         args.push.apply(args, arguments);
         eventsEngine.trigger.apply(eventsEngine, args);
         return this;
@@ -1732,7 +1743,7 @@ SvgElement.prototype = {
 
 // PathSvgElement
 function PathSvgElement(renderer, type) {
-    SvgElement.call(this, renderer, "path", type);
+    SvgElement.call(this, renderer, 'path', type);
 }
 exports.PathSvgElement = PathSvgElement;
 
@@ -1747,7 +1758,7 @@ extend(PathSvgElement.prototype, {
 
 // ArcSvgElement
 function ArcSvgElement(renderer) {
-    SvgElement.call(this, renderer, "path", "arc");
+    SvgElement.call(this, renderer, 'path', 'arc');
 }
 exports.ArcSvgElement = ArcSvgElement;
 
@@ -1762,7 +1773,7 @@ extend(ArcSvgElement.prototype, {
 
 // RectSvgElement
 function RectSvgElement(renderer) {
-    SvgElement.call(this, renderer, "rect");
+    SvgElement.call(this, renderer, 'rect');
 }
 exports.RectSvgElement = RectSvgElement;
 
@@ -1776,8 +1787,8 @@ extend(RectSvgElement.prototype, {
 
 // TextSvgElement
 function TextSvgElement(renderer) {
-    SvgElement.call(this, renderer, "text");
-    this.css({ "white-space": "pre" });
+    SvgElement.call(this, renderer, 'text');
+    this.css({ 'white-space': 'pre' });
 }
 exports.TextSvgElement = TextSvgElement;
 
@@ -1797,18 +1808,18 @@ extend(TextSvgElement.prototype, {
 // TextSvgElement
 
 function updateIndexes(items, k) {
-    let i,
-        item;
+    let i;
+    let item;
     for(i = k; (item = items[i]); ++i) {
         item._link.i = i;
     }
 }
 
 function linkItem(target, container) {
-    let items = container._links,
-        key = (target._link.after = target._link.after || container._linkAfter),
-        i,
-        item;
+    const items = container._links;
+    const key = (target._link.after = target._link.after || container._linkAfter);
+    let i;
+    let item;
     if(key) {
         for(i = 0; (item = items[i]) && item._link.name !== key; ++i);
         if(item) {
@@ -1822,31 +1833,31 @@ function linkItem(target, container) {
 }
 
 function unlinkItem(target) {
-    let i,
-        items = target._link.to._links;
+    let i;
+    const items = target._link.to._links;
     for(i = 0; items[i] !== target; ++i);
     items.splice(i, 1);
     updateIndexes(items, i);
 }
 
 function Renderer(options) {
-    let that = this;
-    that.root = that._createElement("svg", {
-        xmlns: "http://www.w3.org/2000/svg",
-        version: "1.1",
+    const that = this;
+    that.root = that._createElement('svg', {
+        xmlns: 'http://www.w3.org/2000/svg',
+        version: '1.1',
 
         // Backward compatibility
         fill: NONE,
         stroke: NONE,
-        "stroke-width": 0
-    }).attr({ "class": options.cssClass }).css({
-        "line-height": "normal", // T179515
-        "-ms-user-select": NONE,
-        "-moz-user-select": NONE,
-        "-webkit-user-select": NONE,
-        "-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)",
-        display: "block",
-        overflow: "hidden"
+        'stroke-width': 0
+    }).attr({ 'class': options.cssClass }).css({
+        'line-height': 'normal', // T179515
+        '-ms-user-select': NONE,
+        '-moz-user-select': NONE,
+        '-webkit-user-select': NONE,
+        '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)',
+        display: 'block',
+        overflow: 'hidden'
     });
 
     that._init();
@@ -1864,11 +1875,11 @@ Renderer.prototype = {
     constructor: Renderer,
 
     _init: function() {
-        let that = this;
-        that._defs = that._createElement("defs").append(that.root);
+        const that = this;
+        that._defs = that._createElement('defs').append(that.root);
 
         that._animationController = new animation.AnimationController(that.root.element);
-        that._animation = { enabled: true, duration: 1000, easing: "easeOutCubic" };
+        that._animation = { enabled: true, duration: 1000, easing: 'easeOutCubic' };
     },
 
     fixPlacement: function() {
@@ -1876,13 +1887,13 @@ Renderer.prototype = {
             return;
         }
 
-        let box = getBoundingClientRect(this._$container.get(0)),
-            dx = roundValue(box.left % 1, 2),
-            dy = roundValue(box.top % 1, 2);
+        const box = getBoundingClientRect(this._$container.get(0));
+        const dx = roundValue(box.left % 1, 2);
+        const dy = roundValue(box.top % 1, 2);
 
         if(browser.msie) {
             this.root.css({
-                transform: "translate(" + -dx + "px," + -dy + "px)"
+                transform: 'translate(' + -dx + 'px,' + -dy + 'px)'
             });
         } else if(browser.mozilla) {
             this.root.move(-dx, -dy);
@@ -1895,33 +1906,33 @@ Renderer.prototype = {
         }
 
         if(browser.msie) {
-            this.root.css({ transform: "" });
+            this.root.css({ transform: '' });
         } else if(browser.mozilla) {
             this.root.attr({ transform: null });
         }
     },
 
     setOptions: function(options) {
-        let that = this;
+        const that = this;
         that.rtl = !!options.rtl;
         that.encodeHtml = !!options.encodeHtml;
 
         that.updateAnimationOptions(options.animation || {});
 
-        that.root.attr({ direction: that.rtl ? "rtl" : "ltr" });
+        that.root.attr({ direction: that.rtl ? 'rtl' : 'ltr' });
         return that;
     },
 
     _createElement: function(tagName, attr, type) {
-        let elem = new exports.SvgElement(this, tagName, type);
+        const elem = new exports.SvgElement(this, tagName, type);
         attr && elem.attr(attr);
         return elem;
     },
 
     lock: function() {
-        let that = this;
+        const that = this;
         if(that._locker === 0) {
-            that._backed = !that._$container.is(":visible");
+            that._backed = !that._$container.is(':visible');
             if(that._backed) {
                 backupRoot(that.root);
             }
@@ -1931,7 +1942,7 @@ Renderer.prototype = {
     },
 
     unlock: function() {
-        let that = this;
+        const that = this;
         --that._locker;
         if(that._locker === 0) {
             if(that._backed) {
@@ -1951,8 +1962,8 @@ Renderer.prototype = {
     },
 
     dispose: function() {
-        let that = this,
-            key;
+        const that = this;
+        let key;
         that.root.dispose();
         that._defs.dispose();
         that._animationController.dispose();
@@ -1975,7 +1986,7 @@ Renderer.prototype = {
     },
 
     stopAllAnimations: function(lock) {
-        this._animationController[lock ? "lock" : "stop"]();
+        this._animationController[lock ? 'lock' : 'stop']();
         return this;
     },
 
@@ -1986,7 +1997,7 @@ Renderer.prototype = {
 
     svg: function() {
         this.removePlacementFix();
-        let markup = this.root.markup();
+        const markup = this.root.markup();
         this.fixPlacement();
         return markup;
     },
@@ -2000,59 +2011,59 @@ Renderer.prototype = {
     },
 
     rect: function(x, y, width, height) {
-        let elem = new exports.RectSvgElement(this);
+        const elem = new exports.RectSvgElement(this);
         return elem.attr({ x: x || 0, y: y || 0, width: width || 0, height: height || 0 });
     },
 
     simpleRect: function() {
-        return this._createElement("rect");
+        return this._createElement('rect');
     },
 
     circle: function(x, y, r) {
-        return this._createElement("circle", { cx: x || 0, cy: y || 0, r: r || 0 });
+        return this._createElement('circle', { cx: x || 0, cy: y || 0, r: r || 0 });
     },
 
     g: function() {
-        return this._createElement("g");
+        return this._createElement('g');
     },
 
     image: function(x, y, w, h, href, location) {
-        let image = this._createElement("image", {
+        const image = this._createElement('image', {
             x: x || 0, y: y || 0, width: w || 0, height: h || 0,
             preserveAspectRatio: preserveAspectRatioMap[normalizeEnum(location)] || NONE
         });
 
-        image.element.setAttributeNS("http://www.w3.org/1999/xlink", "href", href || "");
+        image.element.setAttributeNS('http://www.w3.org/1999/xlink', 'href', href || '');
         return image;
     },
 
     // to combine different d attributes use helper methods
     path: function(points, type) {
-        let elem = new exports.PathSvgElement(this, type);
+        const elem = new exports.PathSvgElement(this, type);
         return elem.attr({ points: points || [] });
     },
 
     // TODO check B232257
     // TODO animate end angle special case
     arc: function(x, y, innerRadius, outerRadius, startAngle, endAngle) {
-        let elem = new exports.ArcSvgElement(this);
+        const elem = new exports.ArcSvgElement(this);
         return elem.attr({ x: x || 0, y: y || 0, innerRadius: innerRadius || 0, outerRadius: outerRadius || 0, startAngle: startAngle || 0, endAngle: endAngle || 0 });
     },
 
     text: function(text, x, y) {
-        let elem = new exports.TextSvgElement(this);
+        const elem = new exports.TextSvgElement(this);
         return elem.attr({ text: text, x: x || 0, y: y || 0 });
     },
 
     linearGradient: function(stops) {
-        let gradient,
-            id = getNextDefsSvgId(),
-            that = this;
-        gradient = that._createElement("linearGradient", { id: id }).append(that._defs);
+        let gradient;
+        const id = getNextDefsSvgId();
+        const that = this;
+        gradient = that._createElement('linearGradient', { id: id }).append(that._defs);
         gradient.id = id;
 
         stops.forEach((stop) => {
-            that._createElement("stop", { offset: stop.offset, 'stop-color': stop['stop-color'] }).append(gradient);
+            that._createElement('stop', { offset: stop.offset, 'stop-color': stop['stop-color'] }).append(gradient);
         });
 
         return gradient;
@@ -2062,27 +2073,27 @@ Renderer.prototype = {
     pattern: function(color, hatching, _id) {
         hatching = hatching || {};
 
-        let that = this,
-            id,
-            d,
-            pattern,
-            rect,
-            path,
-            step = hatching.step || 6,
-            stepTo2 = step / 2,
-            stepBy15 = step * 1.5;
+        const that = this;
+        let id;
+        let d;
+        let pattern;
+        let rect;
+        let path;
+        const step = hatching.step || 6;
+        const stepTo2 = step / 2;
+        const stepBy15 = step * 1.5;
 
         id = _id || getNextDefsSvgId();
 
-        d = (normalizeEnum(hatching.direction) === "right" ?
-            "M " + stepTo2 + " " + (-stepTo2) + " L " + (-stepTo2) + " " + stepTo2 + " M 0 " + step + " L " + step + " 0 M " + stepBy15 + " " + stepTo2 + " L " + stepTo2 + " " + stepBy15
-            : "M 0 0 L " + step + " " + step + " M " + (-stepTo2) + " " + stepTo2 + " L " + stepTo2 + " " + stepBy15 + " M " + stepTo2 + " " + (-stepTo2) + " L " + stepBy15 + " " + stepTo2);
+        d = (normalizeEnum(hatching.direction) === 'right' ?
+            'M ' + stepTo2 + ' ' + (-stepTo2) + ' L ' + (-stepTo2) + ' ' + stepTo2 + ' M 0 ' + step + ' L ' + step + ' 0 M ' + stepBy15 + ' ' + stepTo2 + ' L ' + stepTo2 + ' ' + stepBy15
+            : 'M 0 0 L ' + step + ' ' + step + ' M ' + (-stepTo2) + ' ' + stepTo2 + ' L ' + stepTo2 + ' ' + stepBy15 + ' M ' + stepTo2 + ' ' + (-stepTo2) + ' L ' + stepBy15 + ' ' + stepTo2);
 
-        pattern = that._createElement("pattern", { id: id, width: step, height: step, patternUnits: "userSpaceOnUse" }).append(that._defs);
+        pattern = that._createElement('pattern', { id: id, width: step, height: step, patternUnits: 'userSpaceOnUse' }).append(that._defs);
         pattern.id = id;
 
         rect = that.rect(0, 0, step, step).attr({ fill: color, opacity: hatching.opacity }).append(pattern);
-        path = (new exports.PathSvgElement(this)).attr({ d: d, "stroke-width": hatching.width || 1, stroke: color }).append(pattern);
+        path = (new exports.PathSvgElement(this)).attr({ d: d, 'stroke-width': hatching.width || 1, stroke: color }).append(pattern);
 
         ///#DEBUG
         pattern.rect = rect;
@@ -2105,7 +2116,7 @@ Renderer.prototype = {
     clipShape: function(method, methodArgs) {
         const that = this;
         const id = getNextDefsSvgId();
-        let clipPath = that._createElement("clipPath", { id: id }).append(that._defs);
+        let clipPath = that._createElement('clipPath', { id: id }).append(that._defs);
         const shape = method.apply(that, methodArgs).append(clipPath);
         shape.id = id;
 
@@ -2113,7 +2124,7 @@ Renderer.prototype = {
         shape.clipPath = clipPath;
         ///#ENDDEBUG
 
-        shape.remove = function() { throw "Not implemented"; };
+        shape.remove = function() { throw 'Not implemented'; };
         shape.dispose = function() {
             clipPath.dispose();
             clipPath = null;
@@ -2134,14 +2145,14 @@ Renderer.prototype = {
 
     // appended automatically
     shadowFilter: function(x, y, width, height, offsetX, offsetY, blur, color, opacity) {
-        let that = this,
-            id = getNextDefsSvgId(),
-            filter = that._createElement("filter", { id: id, x: x || 0, y: y || 0, width: width || 0, height: height || 0 }).append(that._defs),
-            gaussianBlur = that._createElement("feGaussianBlur", { "in": "SourceGraphic", "result": "gaussianBlurResult", "stdDeviation": blur || 0 }).append(filter),
-            offset = that._createElement("feOffset", { "in": "gaussianBlurResult", "result": "offsetResult", "dx": offsetX || 0, "dy": offsetY || 0 }).append(filter),
-            flood = that._createElement("feFlood", { "result": "floodResult", "flood-color": color || "", "flood-opacity": opacity }).append(filter),
-            composite = that._createElement("feComposite", { "in": "floodResult", "in2": "offsetResult", "operator": "in", "result": "compositeResult" }).append(filter),
-            finalComposite = that._createElement("feComposite", { "in": "SourceGraphic", "in2": "compositeResult", "operator": "over" }).append(filter);
+        const that = this;
+        const id = getNextDefsSvgId();
+        const filter = that._createElement('filter', { id: id, x: x || 0, y: y || 0, width: width || 0, height: height || 0 }).append(that._defs);
+        const gaussianBlur = that._createElement('feGaussianBlur', { 'in': 'SourceGraphic', 'result': 'gaussianBlurResult', 'stdDeviation': blur || 0 }).append(filter);
+        const offset = that._createElement('feOffset', { 'in': 'gaussianBlurResult', 'result': 'offsetResult', 'dx': offsetX || 0, 'dy': offsetY || 0 }).append(filter);
+        const flood = that._createElement('feFlood', { 'result': 'floodResult', 'flood-color': color || '', 'flood-opacity': opacity }).append(filter);
+        const composite = that._createElement('feComposite', { 'in': 'floodResult', 'in2': 'offsetResult', 'operator': 'in', 'result': 'compositeResult' }).append(filter);
+        const finalComposite = that._createElement('feComposite', { 'in': 'SourceGraphic', 'in2': 'compositeResult', 'operator': 'over' }).append(filter);
 
         filter.id = id;
         filter.gaussianBlur = gaussianBlur;
@@ -2151,25 +2162,25 @@ Renderer.prototype = {
         filter.finalComposite = finalComposite;
 
         filter.attr = function(attrs) {
-            let that = this,
-                filterAttrs = {},
-                offsetAttrs = {},
-                floodAttrs = {};
+            const that = this;
+            const filterAttrs = {};
+            const offsetAttrs = {};
+            const floodAttrs = {};
 
-            ("x" in attrs) && (filterAttrs.x = attrs.x);
-            ("y" in attrs) && (filterAttrs.y = attrs.y);
-            ("width" in attrs) && (filterAttrs.width = attrs.width);
-            ("height" in attrs) && (filterAttrs.height = attrs.height);
+            ('x' in attrs) && (filterAttrs.x = attrs.x);
+            ('y' in attrs) && (filterAttrs.y = attrs.y);
+            ('width' in attrs) && (filterAttrs.width = attrs.width);
+            ('height' in attrs) && (filterAttrs.height = attrs.height);
             baseAttr(that, filterAttrs);
 
-            ("blur" in attrs) && that.gaussianBlur.attr({ "stdDeviation": attrs.blur });
+            ('blur' in attrs) && that.gaussianBlur.attr({ 'stdDeviation': attrs.blur });
 
-            ("offsetX" in attrs) && (offsetAttrs.dx = attrs.offsetX);
-            ("offsetY" in attrs) && (offsetAttrs.dy = attrs.offsetY);
+            ('offsetX' in attrs) && (offsetAttrs.dx = attrs.offsetX);
+            ('offsetY' in attrs) && (offsetAttrs.dy = attrs.offsetY);
             that.offset.attr(offsetAttrs);
 
-            ("color" in attrs) && (floodAttrs["flood-color"] = attrs.color);
-            ("opacity" in attrs) && (floodAttrs["flood-opacity"] = attrs.opacity);
+            ('color' in attrs) && (floodAttrs['flood-color'] = attrs.color);
+            ('opacity' in attrs) && (floodAttrs['flood-opacity'] = attrs.opacity);
             that.flood.attr(floodAttrs);
 
             return that;
@@ -2179,19 +2190,19 @@ Renderer.prototype = {
     },
 
     brightFilter: function(type, slope) {
-        let that = this,
-            id = getNextDefsSvgId(),
-            filter = that._createElement("filter", { id: id }).append(that._defs),
-            componentTransferElement = that._createElement("feComponentTransfer").append(filter),
-            attrs = {
-                type: type,
-                slope: slope
-            };
+        const that = this;
+        const id = getNextDefsSvgId();
+        const filter = that._createElement('filter', { id: id }).append(that._defs);
+        const componentTransferElement = that._createElement('feComponentTransfer').append(filter);
+        const attrs = {
+            type: type,
+            slope: slope
+        };
 
         filter.id = id;
-        that._createElement("feFuncR", attrs).append(componentTransferElement);
-        that._createElement("feFuncG", attrs).append(componentTransferElement);
-        that._createElement("feFuncB", attrs).append(componentTransferElement);
+        that._createElement('feFuncR', attrs).append(componentTransferElement);
+        that._createElement('feFuncG', attrs).append(componentTransferElement);
+        that._createElement('feFuncB', attrs).append(componentTransferElement);
         return filter;
     },
 
@@ -2200,12 +2211,12 @@ Renderer.prototype = {
             return this._grayScaleFilter;
         }
 
-        let that = this,
-            id = getNextDefsSvgId(),
-            filter = that._createElement("filter", { id: id }).append(that._defs);
+        const that = this;
+        const id = getNextDefsSvgId();
+        const filter = that._createElement('filter', { id: id }).append(that._defs);
 
-        that._createElement("feColorMatrix")
-            .attr({ type: "matrix", values: "0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 0.6 0" })
+        that._createElement('feColorMatrix')
+            .attr({ type: 'matrix', values: '0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 0.6 0' })
             .append(filter);
 
         filter.id = id;
@@ -2215,9 +2226,9 @@ Renderer.prototype = {
     },
 
     initHatching: function() {
-        let storage = this._hatchingStorage = this._hatchingStorage || { byHash: {}, baseId: getNextDefsSvgId() },
-            byHash = storage.byHash,
-            name;
+        const storage = this._hatchingStorage = this._hatchingStorage || { byHash: {}, baseId: getNextDefsSvgId() };
+        const byHash = storage.byHash;
+        let name;
 
         for(name in byHash) {
             byHash[name].pattern.dispose();
@@ -2228,10 +2239,10 @@ Renderer.prototype = {
     },
 
     lockHatching: function(color, hatching, ref) {
-        let storage = this._hatchingStorage,
-            hash = getHatchingHash(color, hatching),
-            storageItem,
-            pattern;
+        const storage = this._hatchingStorage;
+        const hash = getHatchingHash(color, hatching);
+        let storageItem;
+        let pattern;
 
         if(storage.refToHash[ref] !== hash) {
             if(ref) {
@@ -2239,7 +2250,7 @@ Renderer.prototype = {
             }
             storageItem = storage.byHash[hash];
             if(!storageItem) {
-                pattern = this.pattern(color, hatching, storage.baseId + "-hatching-" + storage.nextId++);
+                pattern = this.pattern(color, hatching, storage.baseId + '-hatching-' + storage.nextId++);
                 storageItem = storage.byHash[hash] = { pattern: pattern, count: 0 };
                 storage.refToHash[pattern.id] = hash;
             }
@@ -2250,9 +2261,9 @@ Renderer.prototype = {
     },
 
     releaseHatching: function(ref) {
-        let storage = this._hatchingStorage,
-            hash = storage.refToHash[ref],
-            storageItem = storage.byHash[hash];
+        const storage = this._hatchingStorage;
+        const hash = storage.refToHash[ref];
+        const storageItem = storage.byHash[hash];
 
         if(storageItem && --storageItem.count === 0) {
             storageItem.pattern.dispose();
@@ -2263,11 +2274,11 @@ Renderer.prototype = {
 };
 
 function getHatchingHash(color, hatching) {
-    return "@" + color + "::" + hatching.step + ":" + hatching.width + ":" + hatching.opacity + ":" + hatching.direction;
+    return '@' + color + '::' + hatching.step + ':' + hatching.width + ':' + hatching.opacity + ':' + hatching.direction;
 }
 
 // paths modifier
-let fixFuncIriCallbacks = (function() {
+const fixFuncIriCallbacks = (function() {
     let callbacks = [];
 
     return {

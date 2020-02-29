@@ -53,6 +53,13 @@
     }
 }
 
+.dx-field-value-widget-position(@name, @size) {
+    &.@{name},
+    &:not(.dx-widget) > .@{name} {
+        margin: (@GENERIC_FIELD_MIN_HEIGHT - @size)/2 0;
+    }
+}
+
 // TODO: merge with .dx-fieldset-sizing after removing scope .dx-device-phone
 .dx-fieldset-sizing-base() {
     .dx-field-label {
@@ -78,12 +85,6 @@
             }
         }
 
-        .dx-field-value-widget-position(@name, @size) {
-            &.@{name},
-            &:not(.dx-widget) > .@{name} {
-                margin: (@GENERIC_FIELD_MIN_HEIGHT - @size)/2 0;
-            }
-        }
         .dx-field-value-widget-position(dx-checkbox, @GENERIC_CHECKBOX_SIZE);
         .dx-field-value-widget-position(dx-switch, @GENERIC_SWITCH_HEIGHT);
         .dx-field-value-widget-position(dx-slider, @GENERIC_SLIDER_HEIGHT);
@@ -126,7 +127,7 @@
 
     .dx-fieldset-header {
         margin: 0 0 @header-vertical-margin 0;
-        .dx-theme-generic-typography.dx-font-s;
+        .dx-s-font-mixin();
     }
 
     .dx-field {

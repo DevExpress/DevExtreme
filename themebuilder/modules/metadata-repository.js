@@ -6,7 +6,7 @@ class MetadataRepository {
 
     getDataItemByKey(key, theme) {
         let result = null;
-        const themeData = this.repositoryData[theme.name + "-" + theme.colorScheme];
+        const themeData = this.repositoryData[theme.name + '-' + theme.colorScheme];
 
         for(let i = 0; i < themeData.length; i++) {
             if(themeData[i].Key === key) {
@@ -19,14 +19,14 @@ class MetadataRepository {
     }
 
     init(themes) {
-        let promises = [];
+        const promises = [];
 
         themes.forEach(theme => {
             promises.push(new Promise(resolve => {
                 this.metadataLoader
                     .load(theme.name, theme.colorScheme)
                     .then(metadata => {
-                        this.repositoryData[theme.name + "-" + theme.colorScheme] = metadata;
+                        this.repositoryData[theme.name + '-' + theme.colorScheme] = metadata;
                         resolve();
                     });
             }));
@@ -37,12 +37,12 @@ class MetadataRepository {
 
     getData(theme) {
         if(!theme) return this.repositoryData;
-        return this.repositoryData[theme.name + "-" + theme.colorScheme];
+        return this.repositoryData[theme.name + '-' + theme.colorScheme];
     }
 
     updateData(data, theme) {
         data.forEach(item => {
-            let dataItem = this.getDataItemByKey(item.key, theme);
+            const dataItem = this.getDataItemByKey(item.key, theme);
             if(item) dataItem.Value = item.value;
         });
     }

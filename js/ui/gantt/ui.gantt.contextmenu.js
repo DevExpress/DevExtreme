@@ -1,4 +1,4 @@
-import ContextMenu from "../context_menu";
+import ContextMenu from '../context_menu';
 
 class GanttContextMenuBar { // IBar
     constructor(element, owner) {
@@ -30,23 +30,23 @@ class GanttContextMenuBar { // IBar
             addTask: 5
         };
         this._items = [
-            { text: "Add",
+            { text: 'Add',
                 commandId: commandIds.addTask,
                 items: [
-                    { text: "New Task", commandId: commandIds.createTask },
-                    { text: "New Subtask", commandId: commandIds.createSubTask }
+                    { text: 'New Task', commandId: commandIds.createTask },
+                    { text: 'New Subtask', commandId: commandIds.createSubTask }
                 ]
             },
-            { text: "Task Details...", commandId: commandIds.showTasksDialog },
-            { text: "Remove Task", commandId: commandIds.removeTask },
-            { text: "Remove Dependency", commandId: commandIds.removeDependency },
+            { text: 'Task Details...', commandId: commandIds.showTasksDialog },
+            { text: 'Remove Task', commandId: commandIds.removeTask },
+            { text: 'Remove Dependency', commandId: commandIds.removeDependency },
         ];
     }
     // IBar
     getCommandKeys() {
         const itemsCache = this._getItemsCache();
         const result = [];
-        for(let itemKey in itemsCache) {
+        for(const itemKey in itemsCache) {
             result.push(parseInt(itemKey));
         }
         return result;
@@ -65,7 +65,7 @@ class GanttContextMenuBar { // IBar
     }
     setItemValue(_key, _value) {}
     setEnabled(enabled) {
-        this._menu.option("disabled", !enabled);
+        this._menu.option('disabled', !enabled);
     }
     updateItemsList() {}
     isVisible() {
@@ -77,8 +77,8 @@ class GanttContextMenuBar { // IBar
     // end IBar
 
     show(point) {
-        this._menu.option("items", this._items);
-        this._menu.option("position.offset", { x: point.x, y: point.y });
+        this._menu.option('items', this._items);
+        this._menu.option('position.offset', { x: point.x, y: point.y });
         this._menu.show();
     }
 

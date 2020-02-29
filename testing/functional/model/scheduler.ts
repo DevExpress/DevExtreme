@@ -8,6 +8,7 @@ const CLASS = {
     appointmentTooltipWrapper: 'dx-scheduler-appointment-tooltip-wrapper',
     appointmentPopup: 'dx-scheduler-appointment-popup',
     dateTableCell: 'dx-scheduler-date-table-cell',
+    allDayTableCell: 'dx-scheduler-all-day-table-cell',
     dateTableRow: 'dx-scheduler-date-table-row',
     dateTableScrollable: 'dx-scheduler-date-table-scrollable',
     headerPanelCell: 'dx-scheduler-header-panel-cell',
@@ -22,6 +23,7 @@ const CLASS = {
     resizableHandleTop: 'dx-resizable-handle-top',
     scrollableContainer: 'dx-scrollable-container',
     stateFocused: 'dx-state-focused',
+    allDay: 'dx-scheduler-all-day-appointment',
     stateInvisible: 'dx-state-invisible',
     tooltip: 'dx-tooltip',
     tooltipAppointmentItemContentDate: 'dx-tooltip-appointment-item-content-date',
@@ -39,10 +41,11 @@ const CLASS = {
 
 class Appointment {
     element: Selector;
-    date: { startTime: Promise<string>, endTime: Promise<string> };
+    date: { time: Promise<string> };
     resizableHandle: { left: Selector, right: Selector, top: Selector, bottom: Selector };
     size: { width: Promise<string>, height: Promise<string> };
     isFocused: Promise<boolean>;
+    isAllDay: Promise<boolean>;
 
     constructor(scheduler: Selector, index: number = 0, title?: string) {
         const element = scheduler.find(`.${CLASS.appointment}`);
@@ -51,8 +54,7 @@ class Appointment {
         const appointmentContentDate = this.element.find(`.${CLASS.appointmentContentDate}`);
 
         this.date = {
-            startTime: appointmentContentDate.nth(0).innerText,
-            endTime: appointmentContentDate.nth(2).innerText
+            time: appointmentContentDate.nth(0).innerText
         };
 
         this.resizableHandle = {
@@ -68,6 +70,7 @@ class Appointment {
         }
 
         this.isFocused = this.element.hasClass(CLASS.stateFocused);
+        this.isAllDay = this.element.hasClass(CLASS.allDay);
     }
 }
 
@@ -189,6 +192,7 @@ class SchedulerNavigator {
 
 export default class Scheduler extends Widget {
     dateTableCells: Selector;
+    allDayTableCells: Selector;
     dateTableRows: Selector;
     dateTableScrollable: Selector;
     headerPanelCells: Selector;
@@ -203,6 +207,7 @@ export default class Scheduler extends Widget {
         super(id);
 
         this.dateTableCells = this.element.find(`.${CLASS.dateTableCell}`);
+        this.allDayTableCells = this.element.find(`.${CLASS.allDayTableCell}`);
         this.dateTableRows = this.element.find(`.${CLASS.dateTableRow}`);
         this.dateTableScrollable =  this.element.find(`.${CLASS.dateTableScrollable}`);
         this.headerPanelCells = this.element.find(`.${CLASS.headerPanelCell}`);
@@ -230,6 +235,10 @@ export default class Scheduler extends Widget {
 
     getDateTableCell(rowIndex: number = 0, cellIndex: number = 0): Selector {
         return this.dateTableRows.nth(rowIndex).find(`.${CLASS.dateTableCell}`).nth(cellIndex);
+    }
+
+    getAllDayTableCell(cellIndex: number = 0): Selector {
+        return this.allDayTableCells.nth(cellIndex);
     }
 
     getAppointment(title: string, index: number = 0): Appointment {

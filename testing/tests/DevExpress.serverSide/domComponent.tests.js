@@ -1,31 +1,31 @@
-require("../DevExpress.core/domComponent.markup.tests.js");
+require('../DevExpress.core/domComponent.markup.tests.js');
 
-var DOMComponent = require("core/dom_component");
-var Proxy = window.Proxy;
+const DOMComponent = require('core/dom_component');
+const Proxy = window.Proxy;
 
-QUnit.module("SSR specific for DOM Component", {
+QUnit.module('SSR specific for DOM Component', {
     beforeEach: function(module) {
         this.TestComponent = DOMComponent.inherit({});
     }
 });
 
-QUnit.test("safe attributes removing on dispose", function(assert) {
+QUnit.test('safe attributes removing on dispose', function(assert) {
     assert.expect(0);
 
     if(!Proxy) {
         return;
     }
 
-    var element = document.createElement("div");
-    var serverSideElementAttributesMock = [ undefined ];
+    let element = document.createElement('div');
+    const serverSideElementAttributesMock = [ undefined ];
 
     element = new Proxy(element, {
         get: function(target, name) {
-            if(name === "attributes") {
+            if(name === 'attributes') {
                 return serverSideElementAttributesMock;
             }
 
-            var value = target[name];
+            const value = target[name];
             return value && value.bind ? value.bind(target) : value;
         },
         set: function(obj, prop, value) {
@@ -34,7 +34,7 @@ QUnit.test("safe attributes removing on dispose", function(assert) {
         }
     });
 
-    var instance = new this.TestComponent(element);
+    const instance = new this.TestComponent(element);
 
     instance.dispose();
 });

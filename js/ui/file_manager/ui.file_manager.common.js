@@ -1,18 +1,6 @@
-import { when, Deferred } from "../../core/utils/deferred";
-import { noop } from "../../core/utils/common";
-import typeUtils from "../../core/utils/type";
-
-const ErrorCode = {
-    NoAccess: 0,
-    FileExists: 1,
-    FileNotFound: 2,
-    DirectoryExists: 3,
-    DirectoryNotFound: 4,
-    WrongFileExtension: 5,
-    MaxFileSizeExceeded: 6,
-    InvalidSymbols: 7,
-    Other: 32767
-};
+import { when, Deferred } from '../../core/utils/deferred';
+import { noop } from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
 
 const whenSome = function(arg, onSuccess, onError) {
     onSuccess = onSuccess || noop;
@@ -42,5 +30,17 @@ const whenSome = function(arg, onSuccess, onError) {
     return when.apply(null, deferreds);
 };
 
+const getDisplayFileSize = function(byteSize) {
+    const sizesTitles = [ 'B', 'KB', 'MB', 'GB', 'TB' ];
+    let index = 0;
+    let displaySize = byteSize;
+    while(displaySize >= 1024 && index <= sizesTitles.length - 1) {
+        displaySize /= 1024;
+        index++;
+    }
+    displaySize = Math.round(displaySize * 10) / 10;
+    return `${displaySize} ${sizesTitles[index]}`;
+};
+
 module.exports = whenSome;
-module.exports.ErrorCode = ErrorCode;
+module.exports.getDisplayFileSize = getDisplayFileSize;

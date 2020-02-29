@@ -1,20 +1,20 @@
-var $ = require("jquery");
+const $ = require('jquery');
 
 exports.MockDataProvider = function(data, columns) {
     data = data || [
-        [true, "test1", 12, new Date("03/11/2014 12:00:00")],
-        [true, "test2", 122, new Date("04/11/2014 12:00:00")],
-        [false, "test3", 1, new Date("05/11/2014 12:00:00")],
-        [false, "ColumnClone", 4, new Date("06/11/2014 12:00:00")],
-        [true, "test5", 5, new Date("07/11/2014 12:00:00")],
-        [true, "ColumnClone", 5, new Date("07/11/2014 12:00:00")]
+        [true, 'test1', 12, new Date('03/11/2014 12:00:00')],
+        [true, 'test2', 122, new Date('04/11/2014 12:00:00')],
+        [false, 'test3', 1, new Date('05/11/2014 12:00:00')],
+        [false, 'ColumnClone', 4, new Date('06/11/2014 12:00:00')],
+        [true, 'test5', 5, new Date('07/11/2014 12:00:00')],
+        [true, 'ColumnClone', 5, new Date('07/11/2014 12:00:00')]
     ];
 
     columns = columns || [
-        { dataType: "boolean", width: 100, alignment: "center", dataField: "Column1", caption: "Column1" },
-        { dataType: "string", width: 200, alignment: "left", dataField: "Column2", caption: "ColumnClone" },
-        { dataType: "number", width: 150, alignment: "right", dataField: "Column3", caption: "ColumnClone" },
-        { dataType: "date", width: 160, alignment: "center", dataField: "Column4", caption: "Column4", format: "shortDate" }
+        { dataType: 'boolean', width: 100, alignment: 'center', dataField: 'Column1', caption: 'Column1' },
+        { dataType: 'string', width: 200, alignment: 'left', dataField: 'Column2', caption: 'ColumnClone' },
+        { dataType: 'number', width: 150, alignment: 'right', dataField: 'Column3', caption: 'ColumnClone' },
+        { dataType: 'date', width: 160, alignment: 'center', dataField: 'Column4', caption: 'Column4', format: 'shortDate' }
     ];
 
     return {
@@ -58,7 +58,7 @@ exports.MockDataProvider = function(data, columns) {
         getStyleId: sinon.stub().returns(0),
 
         getFrozenArea: function() {
-            var that = this;
+            const that = this;
 
             return { x: 0, y: that.getHeaderRowCount() };
         },
@@ -68,8 +68,8 @@ exports.MockDataProvider = function(data, columns) {
 };
 
 exports.checkUniqueValue = function checkUniqueValue(arrayTarget) {
-    var tmpArray = [],
-        i;
+    const tmpArray = [];
+    let i;
 
     for(i = 0; i < arrayTarget.length; i++) {
         if($.inArray(arrayTarget[i], tmpArray) === -1) {

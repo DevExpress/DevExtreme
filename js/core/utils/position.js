@@ -1,9 +1,9 @@
-var config = require("../config");
+import config from '../config';
 
-var getDefaultAlignment = function(isRtlEnabled) {
-    var rtlEnabled = isRtlEnabled || config().rtlEnabled;
+const getDefaultAlignment = function(isRtlEnabled) {
+    const rtlEnabled = isRtlEnabled ?? config().rtlEnabled;
 
-    return rtlEnabled ? "right" : "left";
+    return rtlEnabled ? 'right' : 'left';
 };
 
 exports.getDefaultAlignment = getDefaultAlignment;

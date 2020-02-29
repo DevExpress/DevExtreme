@@ -1,28 +1,28 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    devices = require("../../core/devices"),
-    extend = require("../../core/utils/extend").extend,
-    inkRipple = require("../widget/utils.ink_ripple"),
-    registerComponent = require("../../core/component_registrator"),
-    Editor = require("../editor/editor"),
-    eventUtils = require("../../events/utils"),
-    clickEvent = require("../../events/click");
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const devices = require('../../core/devices');
+const extend = require('../../core/utils/extend').extend;
+const inkRipple = require('../widget/utils.ink_ripple');
+const registerComponent = require('../../core/component_registrator');
+const Editor = require('../editor/editor');
+const eventUtils = require('../../events/utils');
+const clickEvent = require('../../events/click');
 
-var RADIO_BUTTON_CLASS = "dx-radiobutton",
-    RADIO_BUTTON_ICON_CLASS = "dx-radiobutton-icon",
-    RADIO_BUTTON_ICON_DOT_CLASS = "dx-radiobutton-icon-dot",
-    RADIO_BUTTON_CHECKED_CLASS = "dx-radiobutton-checked",
-    RADIO_BUTTON_ICON_CHECKED_CLASS = "dx-radiobutton-icon-checked";
+const RADIO_BUTTON_CLASS = 'dx-radiobutton';
+const RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon';
+const RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot';
+const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
+const RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';
 
 /**
 * @name dxRadioButton
 * @inherits CollectionWidget
 * @hidden
 */
-var RadioButton = Editor.inherit({
+const RadioButton = Editor.inherit({
 
     _supportedKeys: function() {
-        var click = function(e) {
+        const click = function(e) {
             e.preventDefault();
             this._clickAction({ event: e });
         };
@@ -48,7 +48,7 @@ var RadioButton = Editor.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     focusStateEnabled: true
@@ -67,10 +67,10 @@ var RadioButton = Editor.inherit({
         this.callBase();
 
         this._renderIcon();
-        this.option("useInkRipple") && this._renderInkRipple();
-        this._renderCheckedState(this.option("value"));
+        this.option('useInkRipple') && this._renderInkRipple();
+        this._renderCheckedState(this.option('value'));
         this._renderClick();
-        this.setAria("role", "radio");
+        this.setAria('role', 'radio');
     },
 
     _renderInkRipple: function() {
@@ -87,7 +87,7 @@ var RadioButton = Editor.inherit({
             return;
         }
 
-        var config = {
+        const config = {
             element: element,
             event: dxEvent,
             wave: waveIndex
@@ -111,22 +111,22 @@ var RadioButton = Editor.inherit({
     },
 
     _renderIcon: function() {
-        this._$icon = $("<div>").addClass(RADIO_BUTTON_ICON_CLASS);
+        this._$icon = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
 
-        $("<div>").addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo(this._$icon);
+        $('<div>').addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo(this._$icon);
         this.$element().append(this._$icon);
     },
 
     _renderCheckedState: function(checked) {
         this.$element()
             .toggleClass(RADIO_BUTTON_CHECKED_CLASS, checked)
-            .find("." + RADIO_BUTTON_ICON_CLASS)
+            .find('.' + RADIO_BUTTON_ICON_CLASS)
             .toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, checked);
-        this.setAria("checked", checked);
+        this.setAria('checked', checked);
     },
 
     _renderClick: function() {
-        var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
         this._clickAction = this._createAction((function(args) {
             this._clickHandler(args.event);
@@ -141,15 +141,15 @@ var RadioButton = Editor.inherit({
 
     _clickHandler: function(e) {
         this._saveValueChangeEvent(e);
-        this.option("value", true);
+        this.option('value', true);
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "useInkRipple":
+            case 'useInkRipple':
                 this._invalidate();
                 break;
-            case "value":
+            case 'value':
                 this._renderCheckedState(args.value);
                 this.callBase(args);
                 break;
@@ -164,6 +164,6 @@ var RadioButton = Editor.inherit({
     }
 });
 
-registerComponent("dxRadioButton", RadioButton);
+registerComponent('dxRadioButton', RadioButton);
 
 module.exports = RadioButton;

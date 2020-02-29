@@ -1,35 +1,35 @@
-var Calendar = require("../calendar"),
-    DateBoxStrategy = require("./ui.date_box.strategy"),
-    dateUtils = require("../../core/utils/date"),
-    commonUtils = require("../../core/utils/common"),
-    isFunction = require("../../core/utils/type").isFunction,
-    extend = require("../../core/utils/extend").extend,
-    messageLocalization = require("../../localization/message");
+const Calendar = require('../calendar');
+const DateBoxStrategy = require('./ui.date_box.strategy');
+const dateUtils = require('../../core/utils/date');
+const commonUtils = require('../../core/utils/common');
+const isFunction = require('../../core/utils/type').isFunction;
+const extend = require('../../core/utils/extend').extend;
+const messageLocalization = require('../../localization/message');
 
-var CalendarStrategy = DateBoxStrategy.inherit({
+const CalendarStrategy = DateBoxStrategy.inherit({
 
-    NAME: "Calendar",
+    NAME: 'Calendar',
 
     supportedKeys: function() {
         return {
             rightArrow: function() {
-                if(this.option("opened")) {
+                if(this.option('opened')) {
                     return true;
                 }
             },
             leftArrow: function() {
-                if(this.option("opened")) {
+                if(this.option('opened')) {
                     return true;
                 }
             },
             enter: (function(e) {
-                if(this.dateBox.option("opened")) {
+                if(this.dateBox.option('opened')) {
                     e.preventDefault();
 
-                    if(this._widget.option("zoomLevel") === this._widget.option("maxZoomLevel")) {
-                        var contouredDate = this._widget._view.option("contouredDate");
-                        var lastActionElement = this._lastActionElement;
-                        if(contouredDate && lastActionElement === "calendar") {
+                    if(this._widget.option('zoomLevel') === this._widget.option('maxZoomLevel')) {
+                        const contouredDate = this._widget._view.option('contouredDate');
+                        const lastActionElement = this._lastActionElement;
+                        if(contouredDate && lastActionElement === 'calendar') {
                             this.dateBoxValue(contouredDate, e);
                         }
 
@@ -46,7 +46,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     getDisplayFormat: function(displayFormat) {
-        return displayFormat || "shortdate";
+        return displayFormat || 'shortdate';
     },
 
     _getWidgetName: function() {
@@ -58,13 +58,13 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _getWidgetOptions: function() {
-        var disabledDates = this.dateBox.option("disabledDates");
+        const disabledDates = this.dateBox.option('disabledDates');
 
-        return extend(this.dateBox.option("calendarOptions"), {
+        return extend(this.dateBox.option('calendarOptions'), {
             value: this.dateBoxValue() || null,
             dateSerializationFormat: null,
-            min: this.dateBox.dateOption("min"),
-            max: this.dateBox.dateOption("max"),
+            min: this.dateBox.dateOption('min'),
+            max: this.dateBox.dateOption('max'),
             onValueChanged: this._valueChangedHandler.bind(this),
             onCellClick: this._cellClickHandler.bind(this),
             tabIndex: null,
@@ -75,7 +75,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _injectComponent: function(func) {
-        var that = this;
+        const that = this;
         return function(params) {
             extend(params, { component: that.dateBox });
             return func(params);
@@ -83,34 +83,34 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _refreshActiveDescendant: function(e) {
-        this._lastActionElement = "calendar";
-        this.dateBox.setAria("activedescendant", e.actionValue);
+        this._lastActionElement = 'calendar';
+        this.dateBox.setAria('activedescendant', e.actionValue);
     },
 
     popupConfig: function(popupConfig) {
-        var toolbarItems = popupConfig.toolbarItems,
-            buttonsLocation = this.dateBox.option("buttonsLocation");
+        const toolbarItems = popupConfig.toolbarItems;
+        const buttonsLocation = this.dateBox.option('buttonsLocation');
 
-        var position = [];
+        let position = [];
 
-        if(buttonsLocation !== "default") {
+        if(buttonsLocation !== 'default') {
             position = commonUtils.splitPair(buttonsLocation);
         } else {
-            position = ["bottom", "center"];
+            position = ['bottom', 'center'];
         }
 
-        if(this.dateBox.option("applyValueMode") === "useButtons") {
+        if(this.dateBox.option('applyValueMode') === 'useButtons') {
             toolbarItems.unshift({
-                widget: "dxButton",
+                widget: 'dxButton',
                 toolbar: position[0],
-                location: position[1] === "after" ? "before" : position[1],
+                location: position[1] === 'after' ? 'before' : position[1],
                 options: {
                     onInitialized: function(e) {
-                        e.component.registerKeyHandler("escape", this._escapeHandler.bind(this));
+                        e.component.registerKeyHandler('escape', this._escapeHandler.bind(this));
                     }.bind(this),
                     onClick: (function() { this._widget._toTodayView(); }).bind(this),
-                    text: messageLocalization.format("dxCalendar-todayButtonText"),
-                    type: "today"
+                    text: messageLocalization.format('dxCalendar-todayButtonText'),
+                    type: 'today'
                 }
             });
         }
@@ -118,7 +118,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
         return extend(true, popupConfig, {
             toolbarItems: toolbarItems,
             position: {
-                collision: "flipfit flip"
+                collision: 'flipfit flip'
             }
         });
     },
@@ -129,15 +129,15 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _valueChangedHandler: function(e) {
-        var dateBox = this.dateBox,
-            value = e.value,
-            prevValue = e.previousValue;
+        const dateBox = this.dateBox;
+        const value = e.value;
+        const prevValue = e.previousValue;
 
         if(dateUtils.sameDate(value, prevValue)) {
             return;
         }
 
-        if(dateBox.option("applyValueMode") === "instantly") {
+        if(dateBox.option('applyValueMode') === 'instantly') {
             this.dateBoxValue(this.getValue(), e.event);
         }
     },
@@ -147,22 +147,22 @@ var CalendarStrategy = DateBoxStrategy.inherit({
             return;
         }
 
-        this._widget.option("value", this.dateBoxValue());
+        this._widget.option('value', this.dateBoxValue());
     },
 
     textChangedHandler: function() {
-        this._lastActionElement = "input";
+        this._lastActionElement = 'input';
 
-        if(this.dateBox.option("opened") && this._widget) {
+        if(this.dateBox.option('opened') && this._widget) {
             this._updateValue(true);
         }
     },
 
     _cellClickHandler: function(e) {
-        var dateBox = this.dateBox;
+        const dateBox = this.dateBox;
 
-        if(dateBox.option("applyValueMode") === "instantly") {
-            dateBox.option("opened", false);
+        if(dateBox.option('applyValueMode') === 'instantly') {
+            dateBox.option('opened', false);
             this.dateBoxValue(this.getValue(), e.event);
         }
     }

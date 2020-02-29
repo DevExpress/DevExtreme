@@ -1,17 +1,10 @@
-import { rejectedPromise, trivialPromise } from "./utils";
-import Query from "./query";
-import { errors } from "./errors";
-import Store from "./abstract_store";
-import arrayUtils from "./array_utils";
+import { rejectedPromise, trivialPromise } from './utils';
+import Query from './query';
+import { errors } from './errors';
+import Store from './abstract_store';
+import arrayUtils from './array_utils';
 
-/**
-* @name ArrayStore
-* @inherits Store
-* @type object
-* @module data/array_store
-* @export default
-*/
-var ArrayStore = Store.inherit({
+const ArrayStore = Store.inherit({
     ctor: function(options) {
         if(Array.isArray(options)) {
             options = { data: options };
@@ -21,23 +14,14 @@ var ArrayStore = Store.inherit({
 
         this.callBase(options);
 
-        var initialArray = options.data;
+        const initialArray = options.data;
         if(initialArray && !Array.isArray(initialArray)) {
-            throw errors.Error("E4006");
+            throw errors.Error('E4006');
         }
 
-        /**
-         * @name ArrayStoreOptions.data
-         * @type Array<any>
-         */
         this._array = initialArray || [];
     },
 
-    /**
-    * @name ArrayStoreMethods.createQuery
-    * @publicName createQuery()
-    * @return object
-    */
     createQuery: function() {
         return Query(this._array, {
             errorHandler: this._errorHandler
@@ -45,10 +29,10 @@ var ArrayStore = Store.inherit({
     },
 
     _byKeyImpl: function(key) {
-        var index = arrayUtils.indexByKey(this, this._array, key);
+        const index = arrayUtils.indexByKey(this, this._array, key);
 
         if(index === -1) {
-            return rejectedPromise(errors.Error("E4009"));
+            return rejectedPromise(errors.Error('E4009'));
         }
 
         return trivialPromise(this._array[index]);
@@ -70,15 +54,11 @@ var ArrayStore = Store.inherit({
         return arrayUtils.remove(this, this._array, key);
     },
 
-    /**
-    * @name ArrayStoreMethods.clear
-    * @publicName clear()
-    */
     clear: function() {
-        this._eventsStrategy.fireEvent("modifying");
+        this._eventsStrategy.fireEvent('modifying');
         this._array = [];
-        this._eventsStrategy.fireEvent("modified");
+        this._eventsStrategy.fireEvent('modified');
     }
-}, "array");
+}, 'array');
 
 module.exports = ArrayStore;

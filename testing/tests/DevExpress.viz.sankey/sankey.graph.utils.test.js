@@ -1,6 +1,6 @@
-var logicModule = require("viz/sankey/graph"),
-    common = require("./commonParts/common.js"),
-    environment = common.environment;
+const logicModule = require('viz/sankey/graph');
+const common = require('./commonParts/common.js');
+const environment = common.environment;
 
 const noCycle0 = [['A', 'B', 2], ['B', 'C', 2], ['C', 'D', 2], ['D', 'F', 2]];
 const noCycle1 = [['A', 'B', 2], ['B', 'C1', 2], ['B', 'C2', 2], ['C1', 'D', 2], ['C2', 'D', 2], ['D', 'F', 2]];
@@ -13,9 +13,9 @@ const cycle3 = [['A', 'B', 2], ['B', 'C1', 2], ['C1', 'D', 2], ['C1', 'A', 2], [
 const cycle4 = [['A', 'B', 1], ['B', 'C', 1], ['C', 'D', 1], ['D', 'E', 1], ['E', 'F', 1], ['C', 'C1', 1], ['C1', 'C2', 1], ['C2', 'B', 1]];
 const cycle5 = [['A', 'X', 1], ['A', 'Y', 1], ['A', 'M', 1], ['A', 'N', 1], ['N', 'X', 1], ['M', 'X', 1], ['N', 'Y', 1], ['M', 'Y', 1], ['N', 'A', 1]];
 
-QUnit.module("Graph utils", environment);
+QUnit.module('Graph utils', environment);
 
-QUnit.test("Vertices extracting from links", function(assert) {
+QUnit.test('Vertices extracting from links', function(assert) {
     let links = [['A', 'B', 2], ['B', 'C', 2]];
     let vertices = logicModule.getVertices(links);
     assert.deepEqual(['A', 'B', 'C'], vertices);
@@ -38,9 +38,9 @@ QUnit.test("Vertices extracting from links", function(assert) {
 });
 
 
-QUnit.test("Adjacent vertices extracting from links", function(assert) {
-    let links = [['A', 'B', 2], ['B', 'C', 2], ['C', 'D', 2]],
-        vertices = logicModule.getAdjacentVertices(links, 'A');
+QUnit.test('Adjacent vertices extracting from links', function(assert) {
+    let links = [['A', 'B', 2], ['B', 'C', 2], ['C', 'D', 2]];
+    let vertices = logicModule.getAdjacentVertices(links, 'A');
 
     assert.deepEqual(['B'], vertices);
 
@@ -56,9 +56,9 @@ QUnit.test("Adjacent vertices extracting from links", function(assert) {
     assert.deepEqual(['X', 'Y', 'A'], vertices);
 });
 
-QUnit.test("Reverse adjacent vertices extracting from links", function(assert) {
-    let links = [['A', 'B', 2], ['B', 'C', 2], ['C', 'D', 2]],
-        vertices = logicModule.getReverseAdjacentVertices(links, 'A');
+QUnit.test('Reverse adjacent vertices extracting from links', function(assert) {
+    let links = [['A', 'B', 2], ['B', 'C', 2], ['C', 'D', 2]];
+    let vertices = logicModule.getReverseAdjacentVertices(links, 'A');
 
     assert.deepEqual([], vertices);
 
@@ -74,7 +74,7 @@ QUnit.test("Reverse adjacent vertices extracting from links", function(assert) {
     assert.deepEqual(['A'], vertices);
 });
 
-QUnit.test("Cycle detection", function(assert) {
+QUnit.test('Cycle detection', function(assert) {
     assert.equal(logicModule.struct.hasCycle(noCycle1), false);
     assert.equal(logicModule.struct.hasCycle(noCycle2), false);
     assert.equal(logicModule.struct.hasCycle(noCycle3), false);
@@ -86,12 +86,12 @@ QUnit.test("Cycle detection", function(assert) {
     assert.equal(logicModule.struct.hasCycle(cycle5), true);
 });
 
-QUnit.test("maxOfArray, no callback", function(assert) {
+QUnit.test('maxOfArray, no callback', function(assert) {
     assert.equal(logicModule.routines.maxOfArray([5, 7, 1, 9, 8, 2, 3]), 9);
     assert.equal(logicModule.routines.maxOfArray([5]), 5);
 });
 
-QUnit.test("maxOfArray, callback", function(assert) {
+QUnit.test('maxOfArray, callback', function(assert) {
     assert.deepEqual(logicModule.routines.maxOfArray(
         [{ val: 5 }, { val: 7 }, { val: 1 }, { val: 9 }, { val: 8 }, { val: 2 }, { val: 3 }],
         function(item) { return item.val; }),
@@ -99,8 +99,9 @@ QUnit.test("maxOfArray, callback", function(assert) {
     );
 });
 
-QUnit.test("Toposort and computing longest paths in graph", function(assert) {
-    let vertices, expected;
+QUnit.test('Toposort and computing longest paths in graph', function(assert) {
+    let vertices;
+    let expected;
 
     logicModule.struct.hasCycle(noCycle0);
     vertices = logicModule.struct.computeLongestPaths(noCycle0);

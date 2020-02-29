@@ -1,15 +1,15 @@
-import Class from "../core/class";
-import { extend } from "../core/utils/extend";
-import { inArray } from "../core/utils/array";
-import { each } from "../core/utils/iterator";
-import { EventsStrategy } from "../core/events_strategy";
-import errors from "../core/errors";
-import { grep } from "../core/utils/common";
-import typeUtils from "../core/utils/type";
-import numberLocalization from "../localization/number";
-import messageLocalization from "../localization/message";
-import Promise from "../core/polyfills/promise";
-import { fromPromise, Deferred } from "../core/utils/deferred";
+import Class from '../core/class';
+import { extend } from '../core/utils/extend';
+import { inArray } from '../core/utils/array';
+import { each } from '../core/utils/iterator';
+import { EventsStrategy } from '../core/events_strategy';
+import errors from '../core/errors';
+import { grep } from '../core/utils/common';
+import typeUtils from '../core/utils/type';
+import numberLocalization from '../localization/number';
+import messageLocalization from '../localization/message';
+import Promise from '../core/polyfills/promise';
+import { fromPromise, Deferred } from '../core/utils/deferred';
 
 const STATUS = {
     valid: 'valid',
@@ -19,7 +19,7 @@ const STATUS = {
 
 class BaseRuleValidator {
     constructor() {
-        this.NAME = "base";
+        this.NAME = 'base';
     }
     defaultMessage(value) {
         return messageLocalization.getFormatter(`validation-${this.NAME}`)(value);
@@ -50,23 +50,9 @@ class BaseRuleValidator {
 class RequiredRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "required";
+        this.NAME = 'required';
     }
 
-    /**
-     * @name RequiredRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name RequiredRule.trim
-     * @type boolean
-     * @default true
-     */
-    /**
-     * @name RequiredRule.message
-     * @type string
-     * @default 'Required'
-     */
     _validate(value, rule) {
         if(!typeUtils.isDefined(value)) return false;
         if(value === false) {
@@ -76,30 +62,16 @@ class RequiredRuleValidator extends BaseRuleValidator {
         if(rule.trim || !typeUtils.isDefined(rule.trim)) {
             value = value.trim();
         }
-        return value !== "";
+        return value !== '';
     }
 }
 
 class NumericRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "numeric";
+        this.NAME = 'numeric';
     }
 
-    /**
-     * @name NumericRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name NumericRule.message
-     * @type string
-     * @default 'Value should be a number'
-     */
-    /**
-     * @name NumericRule.ignoreEmptyValue
-     * @type boolean
-     * @default true
-     */
     _validate(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
@@ -115,45 +87,18 @@ class NumericRuleValidator extends BaseRuleValidator {
 class RangeRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "range";
+        this.NAME = 'range';
     }
 
-    /**
-     * @name RangeRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name RangeRule.min
-     * @type datetime|number
-     */
-    /**
-     * @name RangeRule.max
-     * @type datetime|number
-     */
-    /**
-     * @name RangeRule.message
-     * @type string
-     * @default 'Value is out of range'
-     */
-    /**
-     * @name RangeRule.reevaluate
-     * @type boolean
-     * @default false
-     */
-    /**
-     * @name RangeRule.ignoreEmptyValue
-     * @type boolean
-     * @default true
-     */
     _validate(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
-        const validNumber = rulesValidators["numeric"].validate(value, rule),
-            validValue = typeUtils.isDefined(value) && value !== "",
-            number = validNumber ? parseFloat(value) : validValue && value.valueOf(),
-            min = rule.min,
-            max = rule.max;
+        const validNumber = rulesValidators['numeric'].validate(value, rule);
+        const validValue = typeUtils.isDefined(value) && value !== '';
+        const number = validNumber ? parseFloat(value) : validValue && value.valueOf();
+        const min = rule.min;
+        const max = rule.max;
         if(!(validNumber || typeUtils.isDate(value)) && !validValue) {
             return false;
         }
@@ -166,7 +111,7 @@ class RangeRuleValidator extends BaseRuleValidator {
             if(typeUtils.isDefined(max)) {
                 return number <= max;
             } else {
-                throw errors.Error("E0101");
+                throw errors.Error('E0101');
             }
         }
     }
@@ -175,38 +120,11 @@ class RangeRuleValidator extends BaseRuleValidator {
 class StringLengthRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "stringLength";
+        this.NAME = 'stringLength';
     }
 
-    /**
-     * @name StringLengthRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name StringLengthRule.min
-     * @type number
-     */
-    /**
-     * @name StringLengthRule.max
-     * @type number
-     */
-    /**
-     * @name StringLengthRule.trim
-     * @type boolean
-     * @default true
-     */
-    /**
-     * @name StringLengthRule.message
-     * @type string
-     * @default 'The length of the value is not correct'
-     */
-    /**
-     * @name StringLengthRule.ignoreEmptyValue
-     * @type boolean
-     * @default false
-     */
     _validate(value, rule) {
-        value = typeUtils.isDefined(value) ? String(value) : "";
+        value = typeUtils.isDefined(value) ? String(value) : '';
         if(rule.trim || !typeUtils.isDefined(rule.trim)) {
             value = value.trim();
         }
@@ -221,52 +139,21 @@ class StringLengthRuleValidator extends BaseRuleValidator {
 class CustomRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "custom";
+        this.NAME = 'custom';
     }
 
-    /**
-     * @name CustomRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name CustomRule.validationCallback
-     * @type function
-     * @type_function_return boolean
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 value:string|number
-     * @type_function_param1_field2 rule:object
-     * @type_function_param1_field3 validator:object
-     * @type_function_param1_field4 data:object
-     * @type_function_param1_field5 column:object
-     * @type_function_param1_field6 formItem:object
-     */
-    /**
-     * @name CustomRule.message
-     * @type string
-     * @default 'Value is invalid'
-     */
-    /**
-     * @name CustomRule.reevaluate
-     * @type boolean
-     * @default false
-     */
-    /**
-     * @name CustomRule.ignoreEmptyValue
-     * @type boolean
-     * @default false
-     */
     validate(value, rule) {
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
-        const validator = rule.validator,
-            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
-            extraParams = typeUtils.isFunction(dataGetter) && dataGetter(),
-            params = {
-                value: value,
-                validator: validator,
-                rule: rule
-            };
+        const validator = rule.validator;
+        const dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter');
+        const extraParams = typeUtils.isFunction(dataGetter) && dataGetter();
+        const params = {
+            value: value,
+            validator: validator,
+            rule: rule
+        };
         if(extraParams) {
             extend(params, extraParams);
         }
@@ -277,40 +164,9 @@ class CustomRuleValidator extends BaseRuleValidator {
 class AsyncRuleValidator extends CustomRuleValidator {
     constructor() {
         super();
-        this.NAME = "async";
+        this.NAME = 'async';
     }
 
-    /**
-     * @name AsyncRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name AsyncRule.validationCallback
-     * @type function
-     * @type_function_return Promise<any>
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 value:string|number
-     * @type_function_param1_field2 rule:object
-     * @type_function_param1_field3 validator:object
-     * @type_function_param1_field4 data:object
-     * @type_function_param1_field5 column:object
-     * @type_function_param1_field6 formItem:object
-     */
-    /**
-     * @name AsyncRule.message
-     * @type string
-     * @default 'Value is invalid'
-     */
-    /**
-     * @name AsyncRule.reevaluate
-     * @type boolean
-     * @default true
-     */
-    /**
-     * @name AsyncRule.ignoreEmptyValue
-     * @type boolean
-     * @default false
-     */
     validate(value, rule) {
         if(!typeUtils.isDefined(rule.reevaluate)) {
             extend(rule, { reevaluate: true });
@@ -318,20 +174,20 @@ class AsyncRuleValidator extends CustomRuleValidator {
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
-        const validator = rule.validator,
-            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
-            extraParams = typeUtils.isFunction(dataGetter) && dataGetter(),
-            params = {
-                value: value,
-                validator: validator,
-                rule: rule
-            };
+        const validator = rule.validator;
+        const dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter');
+        const extraParams = typeUtils.isFunction(dataGetter) && dataGetter();
+        const params = {
+            value: value,
+            validator: validator,
+            rule: rule
+        };
         if(extraParams) {
             extend(params, extraParams);
         }
         const callbackResult = rule.validationCallback(params);
         if(!typeUtils.isPromise(callbackResult)) {
-            throw errors.Error("E0103");
+            throw errors.Error('E0103');
         }
         return this._getWrappedPromise(fromPromise(callbackResult).promise());
     }
@@ -341,7 +197,7 @@ class AsyncRuleValidator extends CustomRuleValidator {
         promise.then(function(res) {
             deferred.resolve(res);
         }, function(err) {
-            let res = {
+            const res = {
                 isValid: false
             };
             if(typeUtils.isDefined(err)) {
@@ -360,64 +216,35 @@ class AsyncRuleValidator extends CustomRuleValidator {
 class CompareRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "compare";
+        this.NAME = 'compare';
     }
 
-    /**
-     * @name CompareRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name CompareRule.comparisonTarget
-     * @type function
-     * @type_function_return object
-     */
-    /**
-     * @name CompareRule.comparisonType
-     * @type Enums.ComparisonOperator
-     * @default '=='
-     */
-    /**
-     * @name CompareRule.message
-     * @type string
-     * @default 'Values do not match'
-     */
-    /**
-     * @name CompareRule.reevaluate
-     * @type boolean
-     * @default true
-     */
-    /**
-     * @name CompareRule.ignoreEmptyValue
-     * @type boolean
-     * @default false
-     */
     _validate(value, rule) {
         if(!rule.comparisonTarget) {
-            throw errors.Error("E0102");
+            throw errors.Error('E0102');
         }
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
         extend(rule, { reevaluate: true });
-        const otherValue = rule.comparisonTarget(),
-            type = rule.comparisonType || "==";
+        const otherValue = rule.comparisonTarget();
+        const type = rule.comparisonType || '==';
         switch(type) {
-            case "==":
+            case '==':
                 return value == otherValue; // eslint-disable-line eqeqeq
-            case "!=":
+            case '!=':
                 return value != otherValue; // eslint-disable-line eqeqeq
-            case "===":
+            case '===':
                 return value === otherValue;
-            case "!==":
+            case '!==':
                 return value !== otherValue;
-            case ">":
+            case '>':
                 return value > otherValue;
-            case ">=":
+            case '>=':
                 return value >= otherValue;
-            case "<":
+            case '<':
                 return value < otherValue;
-            case "<=":
+            case '<=':
                 return value <= otherValue;
         }
     }
@@ -426,27 +253,9 @@ class CompareRuleValidator extends BaseRuleValidator {
 class PatternRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "pattern";
+        this.NAME = 'pattern';
     }
 
-    /**
-     * @name PatternRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name PatternRule.pattern
-     * @type regexp|string
-     */
-    /**
-     * @name PatternRule.message
-     * @type string
-     * @default 'Value does not match pattern'
-     */
-    /**
-     * @name PatternRule.ignoreEmptyValue
-     * @type boolean
-     * @default true
-     */
     _validate(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
@@ -462,23 +271,9 @@ class PatternRuleValidator extends BaseRuleValidator {
 class EmailRuleValidator extends BaseRuleValidator {
     constructor() {
         super();
-        this.NAME = "email";
+        this.NAME = 'email';
     }
 
-    /**
-     * @name EmailRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name EmailRule.message
-     * @type string
-     * @default 'Email is invalid'
-     */
-    /**
-     * @name EmailRule.ignoreEmptyValue
-     * @type boolean
-     * @default true
-     */
     _validate(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
@@ -498,63 +293,63 @@ const rulesValidators = {
      * @section dxValidator
      * @type object
      */
-    "required": new RequiredRuleValidator(),
+    'required': new RequiredRuleValidator(),
 
     /**
      * @name NumericRule
      * @section dxValidator
      * @type object
      */
-    "numeric": new NumericRuleValidator(),
+    'numeric': new NumericRuleValidator(),
 
     /**
      * @name RangeRule
      * @section dxValidator
      * @type object
      */
-    "range": new RangeRuleValidator(),
+    'range': new RangeRuleValidator(),
 
     /**
      * @name StringLengthRule
      * @section dxValidator
      * @type object
      */
-    "stringLength": new StringLengthRuleValidator(),
+    'stringLength': new StringLengthRuleValidator(),
 
     /**
      * @name CustomRule
      * @section dxValidator
      * @type object
      */
-    "custom": new CustomRuleValidator(),
+    'custom': new CustomRuleValidator(),
 
     /**
      * @name AsyncRule
      * @section dxValidator
      * @type object
      */
-    "async": new AsyncRuleValidator(),
+    'async': new AsyncRuleValidator(),
 
     /**
      * @name CompareRule
      * @section dxValidator
      * @type object
      */
-    "compare": new CompareRuleValidator(),
+    'compare': new CompareRuleValidator(),
 
     /**
      * @name PatternRule
      * @section dxValidator
      * @type object
      */
-    "pattern": new PatternRuleValidator(),
+    'pattern': new PatternRuleValidator(),
 
     /**
      * @name EmailRule
      * @section dxValidator
      * @type object
      */
-    "email": new EmailRuleValidator()
+    'email': new EmailRuleValidator()
 };
 
 const GroupConfig = Class.inherit({
@@ -573,30 +368,10 @@ const GroupConfig = Class.inherit({
          * @type Object
          */
         const result = {
-            /**
-             * @name dxValidationGroupResult.isValid
-             * @type boolean
-             */
             isValid: true,
-            /**
-             * @name dxValidationGroupResult.brokenRules
-             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-             */
             brokenRules: [],
-            /**
-             * @name dxValidationGroupResult.validators
-             * @type Array<Object>
-             */
             validators: [],
-            /**
-             * @name dxValidationGroupResult.status
-             * @type Enums.ValidationStatus
-             */
             status: STATUS.valid,
-            /**
-             * @name dxValidationGroupResult.complete
-             * @type Promise<dxValidationGroupResult>
-             */
             complete: null
         };
         this._unsubscribeFromAllChangeEvents();
@@ -626,13 +401,13 @@ const GroupConfig = Class.inherit({
     },
 
     _subscribeToChangeEvents(validator) {
-        validator.on("validating", this._onValidatorStatusChanged);
-        validator.on("validated", this._onValidatorStatusChanged);
+        validator.on('validating', this._onValidatorStatusChanged);
+        validator.on('validated', this._onValidatorStatusChanged);
     },
 
     _unsubscribeFromChangeEvents(validator) {
-        validator.off("validating", this._onValidatorStatusChanged);
-        validator.off("validated", this._onValidatorStatusChanged);
+        validator.off('validating', this._onValidatorStatusChanged);
+        validator.off('validated', this._onValidatorStatusChanged);
     },
 
     _unsubscribeFromAllChangeEvents() {
@@ -713,8 +488,8 @@ const GroupConfig = Class.inherit({
             }
             this._validationInfo.result.status = this._validationInfo.result.brokenRules.length === 0 ? STATUS.valid : STATUS.invalid;
             this._validationInfo.result.isValid = this._validationInfo.result.status === STATUS.valid;
-            const res = extend({}, this._validationInfo.result, { complete: null }),
-                deferred = this._validationInfo.deferred;
+            const res = extend({}, this._validationInfo.result, { complete: null });
+            const deferred = this._validationInfo.deferred;
             this._resetValidationInfo();
             this._raiseValidatedEvent(res);
             deferred && setTimeout(() => {
@@ -724,7 +499,7 @@ const GroupConfig = Class.inherit({
     },
 
     _raiseValidatedEvent(result) {
-        this._eventsStrategy.fireEvent("validated", [result]);
+        this._eventsStrategy.fireEvent('validated', [result]);
     },
 
     _resetValidationInfo() {
@@ -775,31 +550,9 @@ const GroupConfig = Class.inherit({
     },
 });
 
-/**
- * @name validationEngine
- * @section Core
- * @namespace DevExpress
- * @module ui/validation_engine
- * @export default
- */
 const ValidationEngine = {
     groups: [],
 
-    /**
-    * @name validationEngineMethods.getGroupConfig
-    * @section Core
-    * @publicName getGroupConfig(group)
-    * @param1 group:string|object
-    * @return object
-    * @static
-    */
-    /**
-    * @name validationEngineMethods.getGroupConfig
-    * @section Core
-    * @publicName getGroupConfig()
-    * @return object
-    * @static
-    */
     getGroupConfig(group) {
         const result = grep(this.groups, function(config) {
             return config.group === group;
@@ -812,10 +565,10 @@ const ValidationEngine = {
 
     findGroup($element, model) {
         // try to find out if this control is child of validation group
-        const $dxGroup = $element.parents(".dx-validationgroup").first();
+        const $dxGroup = $element.parents('.dx-validationgroup').first();
 
         if($dxGroup.length) {
-            return $dxGroup.dxValidationGroup("instance");
+            return $dxGroup.dxValidationGroup('instance');
         }
 
         // Trick to be able to securely get ViewModel instance ($data) in Knockout
@@ -837,8 +590,8 @@ const ValidationEngine = {
     },
 
     removeGroup(group) {
-        const config = this.getGroupConfig(group),
-            index = inArray(config, this.groups);
+        const config = this.getGroupConfig(group);
+        const index = inArray(config, this.groups);
         if(index > -1) {
             this.groups.splice(index, 1);
         }
@@ -874,45 +627,13 @@ const ValidationEngine = {
          */
         let result = {
             name: name,
-            /**
-             * @name dxValidatorResult.value
-             * @type any
-             */
             value: value,
-            /**
-             * @name dxValidatorResult.brokenRule
-             * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
-             */
             brokenRule: null,
-            /**
-             * @name dxValidatorResult.brokenRules
-             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-             */
             brokenRules: null,
-            /**
-             * @name dxValidatorResult.isValid
-             * @type boolean
-             */
             isValid: true,
-            /**
-             * @name dxValidatorResult.validationRules
-             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-             */
             validationRules: rules,
-            /**
-             * @name dxValidatorResult.pendingRules
-             * @type Array<AsyncRule>
-             */
             pendingRules: null,
-            /**
-             * @name dxValidatorResult.status
-             * @type Enums.ValidationStatus
-             */
             status: STATUS.valid,
-            /**
-             * @name dxValidatorResult.complete
-             * @type Promise<dxValidatorResult>
-             */
             complete: null
         };
         const asyncRuleItems = [];
@@ -932,7 +653,7 @@ const ValidationEngine = {
                     return true;
                 }
                 rule.value = value;
-                if(rule.type === "async") {
+                if(rule.type === 'async') {
                     asyncRuleItems.push({
                         rule: rule,
                         ruleValidator: ruleValidator
@@ -957,7 +678,7 @@ const ValidationEngine = {
                     return false;
                 }
             } else {
-                throw errors.Error("E0100");
+                throw errors.Error('E0100');
             }
         });
         if(result.isValid && !result.brokenRules && asyncRuleItems.length) {
@@ -1066,8 +787,8 @@ const ValidationEngine = {
     },
 
     _shouldRemoveGroup(group, validatorsInGroup) {
-        const isDefaultGroup = group === undefined,
-            isValidationGroupInstance = group && group.NAME === "dxValidationGroup";
+        const isDefaultGroup = group === undefined;
+        const isValidationGroupInstance = group && group.NAME === 'dxValidationGroup';
         return !isDefaultGroup && !isValidationGroupInstance && !validatorsInGroup.length;
     },
 
@@ -1120,7 +841,7 @@ const ValidationEngine = {
                 return newStatus !== validationStatus ? { validationStatus: newStatus } : {};
             }
             case 'validationErrors': {
-                let validationError = !value || !value.length ? null : value[0];
+                const validationError = !value || !value.length ? null : value[0];
 
                 return options.validationError !== validationError ? { validationError } : {};
             }
@@ -1141,46 +862,18 @@ const ValidationEngine = {
         return {};
     },
 
-    /**
-    * @name validationEngineMethods.validateGroup
-    * @section Core
-    * @publicName validateGroup(group)
-    * @param1 group:string|object
-    * @return dxValidationGroupResult
-    * @static
-    */
-    /**
-    * @name validationEngineMethods.validateGroup
-    * @section Core
-    * @publicName validateGroup()
-    * @return dxValidationGroupResult
-    * @static
-    */
     validateGroup(group) {
         const groupConfig = ValidationEngine.getGroupConfig(group);
         if(!groupConfig) {
-            throw errors.Error("E0110");
+            throw errors.Error('E0110');
         }
         return groupConfig.validate();
     },
 
-    /**
-    * @name validationEngineMethods.resetGroup
-    * @section Core
-    * @publicName resetGroup(group)
-    * @param1 group:string|object
-    * @static
-    */
-    /**
-    * @name validationEngineMethods.resetGroup
-    * @section Core
-    * @publicName resetGroup()
-    * @static
-    */
     resetGroup(group) {
         const groupConfig = ValidationEngine.getGroupConfig(group);
         if(!groupConfig) {
-            throw errors.Error("E0110");
+            throw errors.Error('E0110');
         }
         return groupConfig.reset();
     }

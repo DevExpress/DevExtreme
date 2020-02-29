@@ -1,15 +1,15 @@
-var $ = require("jquery");
+import $ from 'jquery';
 
-require("common.css!");
+import 'common.css!';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="map"></div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-require("./mapParts/commonTests.js");
-require("./mapParts/googleStaticTests.js");
-require("./mapParts/googleTests.js");
-require("./mapParts/bingTests.js");
+import './mapParts/commonTests.js';
+import './mapParts/googleStaticTests.js';
+import './mapParts/googleTests.js';
+import './mapParts/bingTests.js';

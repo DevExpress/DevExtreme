@@ -1,4 +1,4 @@
-import { isDefined } from "../../core/utils/type";
+import { isDefined } from '../../core/utils/type';
 import tagHelper from './excel.tag_helper';
 
 const numberFormatHelper = {
@@ -31,7 +31,7 @@ const numberFormatHelper = {
     toXml: function(tag) {
         // §18.8.30 numFmt (Number Format)
         return tagHelper.toXml(
-            "numFmt",
+            'numFmt',
             {
                 'numFmtId': tag[numberFormatHelper.ID_PROPERTY_NAME],
                 formatCode: tag.formatCode // §21.2.2.71 formatCode (Format Code), §18.8.31 numFmts (Number Formats)
