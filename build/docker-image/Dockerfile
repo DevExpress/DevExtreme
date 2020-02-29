@@ -14,7 +14,7 @@ RUN apt-get install -y ca-certificates curl
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https gnupg localepurge
 
 # Node
-RUN curl -L https://deb.nodesource.com/setup_10.x | bash -
+RUN curl -L https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs
 RUN npm i -g npm@6
 RUN npm cache clean --force
@@ -23,6 +23,8 @@ RUN npm set loglevel=error
 RUN npm set unsafe-perm=true
 RUN npm set fetch-retries 5
 RUN npm set audit false
+RUN npm set fund false
+RUN npm set package-lock false
 
 # .NET Core
 RUN curl -L https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
@@ -33,6 +35,8 @@ RUN rm /usr/share/dotnet/sdk/*/nuGetPackagesArchive.lzma
 
 # Slim
 RUN rm -r /usr/share/dotnet/sdk/*/FSharp
+RUN rm -r /usr/share/dotnet/sdk/*/Templates
+RUN rm -r /usr/share/dotnet/sdk/*/DotnetTools
 RUN rm -r /usr/share/dotnet/sdk/NuGetFallbackFolder/*
 RUN rm -r /usr/share/dotnet/shared/Microsoft.AspNetCore.*
 RUN find /usr/share/dotnet -type f -name '*.resources.dll' -delete
@@ -94,7 +98,8 @@ ENV LC_ALL=en_US.UTF-8 \
     DISPLAY=:99 \
     NUGET_XMLDOC_MODE=skip \
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \
-    DOTNET_CLI_TELEMETRY_OPTOUT=1
+    DOTNET_CLI_TELEMETRY_OPTOUT=1 \
+    DOTNET_USE_POLLING_FILE_WATCHER=true
 
 WORKDIR /devextreme
 STOPSIGNAL SIGKILL
