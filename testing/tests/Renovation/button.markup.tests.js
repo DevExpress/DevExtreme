@@ -190,19 +190,20 @@ QUnit.module('Button markup', () => {
         });
     });
 
-    // TODO
-    QUnit.skip('Button should render custom template with render function that returns dom node', function(assert) {
+    QUnit.test('Button should render custom template with render function that returns dom node', function(assert) {
         const $element = $('#button').Button({
-            integrationOptions: {
-                templates: {
-                    'content': {
-                        render: function(args) {
-                            const $element = $('<span>')
-                                .addClass('dx-template-wrapper')
-                                .text('button text');
+            template: 'test',
+        });
 
-                            return $element.get(0);
-                        }
+        $element.Button('instance').option('integrationOptions', {
+            templates: {
+                'test': {
+                    render: function(args) {
+                        const $element = $('<span>')
+                            .addClass('dx-template-wrapper')
+                            .text('button text');
+
+                        return $element.get(0);
                     }
                 }
             }
@@ -230,19 +231,16 @@ QUnit.module('aria accessibility', () => {
         assert.equal($element.attr('aria-label'), 'test', 'aria label for all params is correct');
 
         instance.option('text', '');
-        // TODO
-        // assert.equal($element.attr('aria-label'), 'find', 'aria label without text is correct');
+        assert.equal($element.attr('aria-label'), 'find', 'aria label without text is correct');
 
         instance.option('icon', '/path/file.png');
-        // TODO
-        // assert.equal($element.attr('aria-label'), 'file', 'aria label without text and icon is correct');
+        assert.equal($element.attr('aria-label'), 'file', 'aria label without text and icon is correct');
 
         instance.option('icon', '');
         assert.equal($element.attr('aria-label'), undefined, 'aria label without text and icon is correct');
     });
 
-    // TODO
-    QUnit.skip('icon-type base64 should not be parsed for aria-label creation (T281454)', function(assert) {
+    QUnit.test('icon-type base64 should not be parsed for aria-label creation (T281454)', function(assert) {
         const $element = $('#button').Button({
             icon: 'data:image/png;base64,'
         });

@@ -1,8 +1,12 @@
 import { click } from '../events/short';
 import { initConfig, showWave, hideWave } from '../ui/widget/utils.ink_ripple';
 import { Component, ComponentBindings, Effect, JSXComponent, OneWay, Ref } from 'devextreme-generator/component_declaration/common';
+import { getImageSourceType } from '../core/utils/icon';
 import Widget, { WidgetInput } from './widget';
 import Icon from './icon';
+import devices from '../core/devices';
+import themes from '../ui/themes';
+import createDefaultOptionRules from '../core/options/utils';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 const defaultClassNames = ['dx-button'];
@@ -33,11 +37,20 @@ const getCssClasses = (model: ButtonInput) => {
     return classNames.join(' ');
 };
 
+const getAriaLabel = (text, icon) => {
+    let label = text && text.trim() || icon;
+    if (!text && getImageSourceType(icon) === 'image') {
+        label = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
+    }
+
+    return label ? { label } : {};
+};
+
 export const viewModelFunction = (model: Button):ButtonViewModel => {
     const props = model.props;
     return {
         ...props,
-        aria: { label: props.text && props.text.trim() },
+        aria: getAriaLabel(model.props.text, model.props.icon),
         contentRef: model.contentRef,
         cssClasses: getCssClasses(props),
         elementAttr: { ...props.elementAttr, role: 'button' },
@@ -116,7 +129,6 @@ export class ButtonInput extends WidgetInput {
     @OneWay() activeStateEnabled?: boolean = true;
     @OneWay() classNames?: string[];
     @OneWay() contentRender?: any;
-    @OneWay() focusStateEnabled?: boolean = true;
     @OneWay() hoverStateEnabled?: boolean = true;
     @OneWay() icon?: string = '';
     @OneWay() iconPosition?: string = 'left';
@@ -126,14 +138,25 @@ export class ButtonInput extends WidgetInput {
     @OneWay() template?: any = '';
     @OneWay() text?: string = '';
     @OneWay() type?: string;
-    @OneWay() useInkRipple: boolean = false;
+    @OneWay() useInkRipple?: boolean = false;
     @OneWay() useSubmitBehavior?: boolean = false;
 }
 
+const defaultOptionRules = createDefaultOptionRules<ButtonInput>([
+    {
+        device: () => devices.real().deviceType === 'desktop' && !(devices as any).isSimulator(),
+        options: {
+            focusStateEnabled: true,
+        },
+    },
+    {
+        device: () => (themes as any).isMaterial(themes.current()),
+        options: { useInkRipple: true },
+    },
+]);
 // tslint:disable-next-line: max-classes-per-file
 @Component({
-    components: [],
-    name: 'Button',
+    defaultOptionsRules: defaultOptionRules,
     view: viewFunction,
     viewModel: viewModelFunction,
 })

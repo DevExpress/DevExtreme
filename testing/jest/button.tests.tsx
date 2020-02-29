@@ -1,14 +1,40 @@
-import Button from '../../js/renovation/button.p.js';
+import Button, { defaultOptions } from '../../js/renovation/button.p.js';
 import Widget from '../../js/renovation/widget.p.js';
 import Icon from '../../js/renovation/icon.p.js';
 import { h } from 'preact';
 import { clear as clearEventHandlers, defaultEvent, emit, emitKeyboard, EVENT, KEY } from './utils/events-mock';
 import { mount } from 'enzyme';
+import devices from '../../js/core/devices';
+import themes from '../../js/ui/themes';
+
+jest.mock('../../js/core/devices', () => {
+    const actualDevices = require.requireActual('../../js/core/devices');
+    return {
+        ...actualDevices,
+        ...actualDevices.__proto__,
+        isSimulator: jest.fn(() => false),
+        real: jest.fn(() => ({ deviceType: 'desktop' })),
+    };
+});
+
+jest.mock('../../js/ui/themes', () => ({
+    ...require.requireActual('../../js/ui/themes'),
+    current: jest.fn(() => 'generic'),
+}));
 
 describe('Button', () => {
     const render = (props = {}) => mount(<Button {...props} />).childAt(0);
 
-    beforeEach(clearEventHandlers);
+    beforeEach(() => {
+        (devices.real as any).mockImplementation(() => ({ deviceType: 'desktop' }));
+        (devices as any).isSimulator.mockImplementation(() => false);
+        (themes.current as any).mockImplementation(() => 'generic');
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
+        clearEventHandlers();
+    });
 
     describe('Props', () => {
         describe('useInkRipple', () => {
@@ -118,11 +144,11 @@ describe('Button', () => {
             });
 
             it('should be called with passed event', () => {
-              const clickHandler = jest.fn();
-              const button = render({ onClick: clickHandler });
+                const clickHandler = jest.fn();
+                const button = render({ onClick: clickHandler });
 
-              emit(EVENT.dxClick, defaultEvent, button.getDOMNode());
-              expect(clickHandler).toHaveBeenCalledWith({ event: defaultEvent });
+                emit(EVENT.dxClick, defaultEvent, button.getDOMNode());
+                expect(clickHandler).toHaveBeenCalledWith({ event: defaultEvent });
             });
 
             it('should be called by Enter', () => {
@@ -231,8 +257,8 @@ describe('Button', () => {
 
             it('should render contentRender', () => {
                 const button = render({
-                    text: 'My button',
                     contentRender,
+                    text: 'My button',
                 });
                 const customRender = button.find(contentRender);
 
@@ -244,7 +270,7 @@ describe('Button', () => {
             });
 
             it('should rerender contentRender in runtime', () => {
-                const button = mount(<Button text='My button' />);
+                const button = mount(<Button text="My button" />);
 
                 expect(button.exists(contentRender)).toBe(false);
 
@@ -256,7 +282,7 @@ describe('Button', () => {
             });
 
             it('should change properties in runtime', () => {
-                const button = mount(<Button text='My button' contentRender={contentRender} />);
+                const button = mount(<Button text="My button" contentRender={contentRender} />);
                 let buttonContent = button.find(contentRender);
 
                 expect(buttonContent.props().model.text).toBe('My button');
@@ -271,9 +297,9 @@ describe('Button', () => {
 
             it('should get original icon prop', () => {
                 const button = render({
-                    text: 'My button',
-                    icon: 'testicon',
                     contentRender: ({ icon }) => <div>{icon}</div>,
+                    icon: 'testicon',
+                    text: 'My button',
                 });
                 const buttonContentChildren = button.find('.dx-button-content').children();
 
@@ -301,8 +327,8 @@ describe('Button', () => {
         describe('iconPosition', () => {
             it('should render icon before text if iconPosition is left (by default)', () => {
                 const button = render({
+                    icon: 'test',
                     text: 'myButton',
-                    icon: 'test'
                 });
 
                 const elements = button.find('.dx-button-content').children();
@@ -314,9 +340,9 @@ describe('Button', () => {
 
             it('should render icon after text if iconPosition is right', () => {
                 const button = render({
-                    text: 'myButton',
                     icon: 'test',
-                    iconPosition: 'right'
+                    iconPosition: 'right',
+                    text: 'myButton',
                 });
 
                 const elements = button.find('.dx-button-content').children();
@@ -385,9 +411,80 @@ describe('Button', () => {
         });
     });
 
+    describe('ARIA accessibility', () => {
+        it('should use `text` value as aria-label', () => {
+            const tree = render({ text: 'button-text' });
+
+            expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'button-text' });
+        });
+
+        it('should use `icon` name as aria-label', () => {
+            const tree = render({ text: '', icon: 'find' });
+
+            expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'find' });
+        });
+
+        it('should use `icon` file name as aria-label if local icon is used', () => {
+            const tree = render({ text: '', icon: '/path/file.png' });
+
+            expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'file' });
+        });
+
+        it('should not define aria-label if properties are not defined', () => {
+            const tree = render({ text: '', icon: '' });
+
+            expect(tree.find(Widget).prop('aria')).toStrictEqual({});
+        });
+
+        it('should not parse icon if icon-type is base64 for aria-label', () => {
+            const tree = render({ text: '', icon: 'data:image/png;base64,' });
+
+            expect(tree.find(Widget).prop('aria')).toStrictEqual({ label: 'Base64' });
+        });
+    });
+
     it('should have dx-button class', () => {
         const tree = render();
 
         expect(tree.is('.dx-button')).toBe(true);
+    });
+
+    describe('DefaultOptionRules', () => {
+        const getDefaultProps = () => {
+            defaultOptions({
+                device: () => false,
+                options: {},
+            });
+            return Button.defaultProps;
+        };
+
+        describe('focusStateEnabled', () => {
+            it('should be false if device is not desktop', () => {
+                (devices.real as any).mockImplementation(() => ({ deviceType: 'android' }));
+                expect(getDefaultProps().focusStateEnabled).toBe(false);
+            });
+
+            it('should be true on desktop and not simulator', () => {
+                expect(getDefaultProps().focusStateEnabled).toBe(true);
+            });
+
+            it('should be false on simulator', () => {
+                (devices as any).isSimulator.mockImplementation(() => true);
+
+                expect(getDefaultProps().focusStateEnabled).toBe(false);
+            });
+        });
+
+        describe('useInkRiple', () => {
+            it('should be true if material theme', () => {
+                (themes.current as any).mockImplementation(() => 'material');
+                expect(getDefaultProps().useInkRipple).toBe(true);
+            });
+
+            it('should be false if theme is not material', () => {
+                (themes.current as any).mockImplementation(() => 'generic');
+                expect(getDefaultProps().useInkRipple).toBe(false);
+            });
+        });
     });
 });

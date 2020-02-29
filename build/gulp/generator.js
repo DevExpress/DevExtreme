@@ -15,6 +15,8 @@ const knownErrors = [
 
 gulp.task('generate-components', function() {
     const tsProject = ts.createProject('build/gulp/preact.tsconfig.json');
+    generator.defaultOptionsModule = 'js/core/options/utils';
+
     return gulp.src(SRC)
         .pipe(generateComponents(generator))
         .pipe(plumber(()=>null))

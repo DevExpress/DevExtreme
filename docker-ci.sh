@@ -6,7 +6,6 @@ trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
 export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
-export DOTNET_USE_POLLING_FILE_WATCHER=true
 
 function run_lint {
     npm i npm-run-all \
@@ -20,7 +19,6 @@ function run_ts {
     cp $target $target.current
 
     npm i
-    unlink package-lock.json
     npm update devextreme-internal-tools
     npm ls devextreme-internal-tools
 
