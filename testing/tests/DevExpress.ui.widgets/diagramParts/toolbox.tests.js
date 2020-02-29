@@ -7,12 +7,25 @@ import { Consts, findViewToolbarItem, findContextMenuItem } from '../../../helpe
 
 const moduleConfig = {
     beforeEach: function() {
-        this.$element = $('#diagram').dxDiagram();
+        this.$element = $('#diagram').dxDiagram({
+            toolbox: {
+                visibility: 'visible'
+            }
+        });
         this.instance = this.$element.dxDiagram('instance');
     }
 };
 
-QUnit.module('Toolbox', moduleConfig, () => {
+QUnit.module('Toolbox', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach.apply(this, arguments);
+    },
+    afterEach: function() {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
     test('should render if toolbox.visibility is "visible"', function(assert) {
         this.instance.option('toolbox.visibility', 'visible');
         const $accordion = $('body').find(Consts.TOOLBOX_ACCORDION_SELECTOR);

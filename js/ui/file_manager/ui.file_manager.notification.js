@@ -1,12 +1,17 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
+import { Deferred } from '../../core/utils/deferred';
+import { getWindow, hasWindow } from '../../core/utils/window';
 
 import Widget from '../widget/ui.widget';
 import Popup from '../popup';
 import Drawer from '../drawer/ui.drawer';
 
 import FileManagerProgressPanel from './ui.file_manager.notification.progress_panel';
+
+const window = getWindow();
+const ADAPTIVE_STATE_SCREEN_WIDTH = 1000;
 
 const FILE_MANAGER_NOTIFICATION_CLASS = 'dx-filemanager-notification';
 const FILE_MANAGER_NOTIFICATION_DRAWER_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-drawer`;
@@ -27,6 +32,7 @@ export default class FileManagerNotificationControl extends Widget {
         this._actionProgressStatus = 'default';
         this._operationInProgressCount = 0;
         this._failedOperationCount = 0;
+        this._isInAdaptiveState = this._isSmallScreen();
 
         const $progressPanelContainer = this.option('progressPanelContainer');
         const $progressDrawer = $('<div>')
@@ -38,25 +44,28 @@ export default class FileManagerNotificationControl extends Widget {
             contentRenderer($progressDrawer);
         }
 
-        this._progressDrawer = this._createComponent($progressDrawer, Drawer, {
+        const drawerOptions = extend({
             opened: false,
             position: 'right',
-            openedStateMode: 'overlap',
-            closeOnOutsideClick: true,
-            shading: true,
-            template: container => this._progressDrawerTemplate(container)
-        });
+            template: (container) => this._ensureProgressPanelCreated(container)
+        },
+        this._getProgressDrawerAdaptiveOptions());
+
+        this._progressDrawer = this._createComponent($progressDrawer, Drawer, drawerOptions);
     }
 
     tryShowProgressPanel() {
+        const promise = new Deferred();
         if(this._actionProgressStatus === 'default') {
-            return;
+            return promise.resolve().promise();
         }
 
         setTimeout(() => {
-            this._progressDrawer.show();
+            this._progressDrawer.show().done(promise.resolve);
+            this._getNotificationPopup().hide();
             this._tryHideActionProgress();
         });
+        return promise.promise();
     }
 
     addOperation(processingMessage, allowCancel, allowProgressAutoUpdate) {
@@ -121,16 +130,59 @@ export default class FileManagerNotificationControl extends Widget {
         this._raiseActionProgress(message, status);
     }
 
-    _progressDrawerTemplate(container) {
-        const $panel = $('<div>')
-            .appendTo(container);
+    _isSmallScreen() {
+        if(!hasWindow()) {
+            return false;
+        }
+        return $(window).width() <= ADAPTIVE_STATE_SCREEN_WIDTH;
+    }
 
-        this._progressPanel = this._createComponent($panel, this._getProgressPanelComponent(), {
-            onOperationClosed: ({ info }) => this._onProgressPanelOperationClosed(info),
-            onOperationCanceled: ({ info }) => this._raiseOperationCanceled(info),
-            onOperationItemCanceled: ({ item, itemIndex }) => this._raiseOperationItemCanceled(item, itemIndex),
-            onPanelClosed: () => this._hideProgressPanel()
-        });
+    _dimensionChanged(dimension) {
+        if(!dimension || dimension !== 'height') {
+            this._checkAdaptiveState();
+        }
+    }
+
+    _checkAdaptiveState() {
+        const oldState = this._isInAdaptiveState;
+        this._isInAdaptiveState = this._isSmallScreen();
+        if(this._progressDrawer && oldState !== this._isInAdaptiveState) {
+            if(this._progressPanel) {
+                this._progressPanel.$element().detach();
+            }
+            const options = this._getProgressDrawerAdaptiveOptions();
+            this._progressDrawer.option(options);
+        }
+    }
+
+    _getProgressDrawerAdaptiveOptions() {
+        if(this._isInAdaptiveState) {
+            return {
+                openedStateMode: 'overlap',
+                shading: true,
+                closeOnOutsideClick: true
+            };
+        } else {
+            return {
+                openedStateMode: 'shrink',
+                shading: false,
+                closeOnOutsideClick: false
+            };
+        }
+    }
+
+    _ensureProgressPanelCreated(container) {
+        if(!this._progressPanel) {
+            const $progressPanelElement = $('<div>').appendTo(container);
+            this._progressPanel = this._createComponent($progressPanelElement, this._getProgressPanelComponent(), {
+                onOperationClosed: ({ info }) => this._onProgressPanelOperationClosed(info),
+                onOperationCanceled: ({ info }) => this._raiseOperationCanceled(info),
+                onOperationItemCanceled: ({ item, itemIndex }) => this._raiseOperationItemCanceled(item, itemIndex),
+                onPanelClosed: () => this._hideProgressPanel()
+            });
+        } else {
+            this._progressPanel.$element().appendTo(container);
+        }
     }
 
     _getProgressPanelComponent() {

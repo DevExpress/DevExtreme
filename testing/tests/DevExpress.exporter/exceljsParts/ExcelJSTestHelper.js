@@ -58,9 +58,17 @@ class ExcelJSTestHelper {
         });
     }
 
-    checkColumnWidths(expectedWidths, startColumnIndex) {
+    checkColumnWidths(expectedWidths, startColumnIndex, tolerance) {
         for(let i = 0; i < expectedWidths.length; i++) {
-            assert.equal(this.worksheet.getColumn(startColumnIndex + i).width, expectedWidths[i], `worksheet.getColumns(${i}).width`);
+            const actual = this.worksheet.getColumn(startColumnIndex + i).width;
+            const expected = expectedWidths[i];
+            const message = `worksheet.getColumns(${i}).width`;
+
+            if(tolerance && isFinite(expected)) {
+                assert.roughEqual(actual, expected, tolerance, message);
+            } else {
+                assert.equal(actual, expected, message);
+            }
         }
     }
 

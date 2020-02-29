@@ -14,7 +14,6 @@ gulp.task('generate-scss', gulp.series(
     // TODO - create common bundle
     'create-base-widget',
     'create-theme-index',
-    'sass-material',
-    'sass-generic',
+    'compile',
     'scss-raw-scss-clean'
 ));

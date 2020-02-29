@@ -29,11 +29,21 @@ class DiagramToolbox extends DiagramFloatingPanel {
     _getPopupClass() {
         return DIAGRAM_TOOLBOX_POPUP_CLASS;
     }
+    _getPopupHeight() {
+        return this.isMobileView() ? '100%' : super._getPopupHeight();
+    }
     _getPopupMinHeight() {
         return DIAGRAM_TOOLBOX_MIN_HEIGHT;
     }
     _getPopupOptions() {
         return extend(super._getPopupOptions(), {
+            position: {
+                my: 'left top',
+                at: 'left top',
+                of: this.option('offsetParent'),
+                offset: (this.isMobileView() ? 0 : this.option('offsetX')) +
+                    ' ' + (this.isMobileView() ? 0 : this.option('offsetY'))
+            },
             toolbarItems: [{
                 widget: 'dxButton',
                 location: 'center',

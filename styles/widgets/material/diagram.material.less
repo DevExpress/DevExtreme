@@ -123,10 +123,12 @@
         .dx-button {
             width: @MATERIAL_MAIN_FA_BUTTON_SIZE;
             height: @MATERIAL_MAIN_FA_BUTTON_SIZE;
-        }
 
-        .dx-button-content {
-            line-height: @MATERIAL_MAIN_FA_BUTTON_SIZE * 0.75;
+            .dx-button-content {
+                padding-top: 0;
+                padding-bottom: 0;
+                line-height: @MATERIAL_MAIN_FA_BUTTON_SIZE;
+            }
         }
     }
 
@@ -256,6 +258,19 @@
     .dx-diagram-properties-panel-group-toolbar:first-child {
         padding-top: @DIAGRAM_PROPERTIES_PANEL_SPACING;
     }
+
+    &.dx-diagram-mobile-popup {
+        .dx-popup-title {
+            padding: 8px 8px 0 0;
+        }
+
+        .dx-tabpanel {
+            .dx-tab-selected:before {
+                top: 0;
+                bottom: initial;
+            }
+        }
+    }
 }
 
 .dx-diagram-toolbar {
@@ -347,7 +362,7 @@
     }
 }
 
-.diagram-action-icons-mixin(@base-text-color, @base-text-color, @MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE);
+.diagram-action-icons-mixin(@base-text-color, @base-text-color, @MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE, @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH);
 
 .dx-diagram-toolbox-popup .dx-button-has-icon .dx-icon.dx-icon-diagram-toolbox-drag {
     .diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/toolbox-drag.svg'), @popup-title-color, @DIAGRAM_TOOLBOX_TITLE_SIZE, @DIAGRAM_TOOLBOX_TITLE_SIZE);

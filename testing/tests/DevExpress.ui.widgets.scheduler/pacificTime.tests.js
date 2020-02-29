@@ -1,4 +1,5 @@
 import { initTestMarkup, createWrapper } from './helpers.js';
+import pointerMock from '../../helpers/pointerMock.js';
 import dateLocalization from 'localization/date';
 import fx from 'animation/fx';
 
@@ -90,6 +91,28 @@ if((new Date()).getTimezoneOffset() === pacificTimezoneOffset) {
                     }
                 });
             });
+        });
+        QUnit.test('onAppointmentFormOpening should have correct dates on new appointment when custom timezone', function(assert) {
+            const assertDate = new Date(2015, 0, 25, 2, 0);
+            const scheduler = createWrapper({
+                height: 600,
+                dataSource: [],
+                timeZone: 'Etc/UTC',
+                views: ['day'],
+                currentView: 'day',
+                startDayHour: 10,
+                endDayHour: 16,
+                currentDate: assertDate,
+                onAppointmentAdding: function(e) {
+                    assert.deepEqual(e.appointmentData.startDate, assertDate, 'onAppointmentAdding has correct date');
+                },
+                onAppointmentFormOpening: function(e) {
+                    assert.deepEqual(e.appointmentData.startDate, assertDate, 'onAppointmentFormOpening has correct date');
+                }
+            });
+
+            pointerMock(scheduler.workSpace.getCell(0, 0)).start().click().click();
+            scheduler.appointmentPopup.clickDoneButton();
         });
     });
 }

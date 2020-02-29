@@ -63,7 +63,7 @@ gulp.task('fix-bundles', () => {
 
 gulp.task('fix-base', () => {
     return gulp
-        .src(`${unfixedScssPath}/widgets/base/*.scss`)
+        .src([`${unfixedScssPath}/widgets/base/*.scss`, 'build/gulp/scss/snippets/string.scss'])
         // .pipe(replace(/\.dx-font-icon\("/g, '@include dx-font-icon("'))
         // icons
         .pipe(replace('@mixin dx-icon-sizing', '@use "sass:map";\n\n@mixin dx-icon-sizing'))
@@ -75,10 +75,10 @@ gulp.task('fix-base', () => {
         .pipe(replace(/each\(\$icons,\s{([\w\W]*)}\);/, '@each $key, $val in $icons {$1}'))
 
         // dataGrid
-        .pipe(replace('.dx-datagrid-borders', '@use "./mixins" as *;\n@use "./icons" as *;\n\n.dx-datagrid-borders'))
+        .pipe(replace('.dx-datagrid-borders', '@use "sass:color";\n@use "./mixins" as *;\n@use "./icons" as *;\n\n.dx-datagrid-borders'))
 
         // treeList
-        .pipe(replace(/\$treelist-border/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$treelist-border'))
+        .pipe(replace(/\$treelist-border/, '@use "sass:color";\n@use "./mixins" as *;\n@use "./icons" as *;\n\n$treelist-border'))
 
         // pivotGrid
         .pipe(replace(/^\$PIVOTGRID_DRAG_HEADER_BORDER/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$PIVOTGRID_DRAG_HEADER_BORDER'))
@@ -93,7 +93,20 @@ gulp.task('fix-base', () => {
         .pipe(replace(/(_TOP|_LEFT|100%|absolute|inherit|""|0|_COLOR|none|_BORDER|relative|inline-block|hidden|left),$/gm, '$1;'))
         .pipe(replace(/^\$SCHEDULER_NAVIGATOR_OFFSET/, '@use "./mixins" as *;\n@use "./icons" as *;\n\n$SCHEDULER_NAVIGATOR_OFFSET'))
 
+        // fileManager, diagram
+        .pipe(replace(/\.(filemanager|diagram)-icon-colored\(d/g, '@include $1-icon-colored(d'))
+        .pipe(replace(/@mixin (filemanager|diagram)-icon-colored/, '@use "sass:string";\n@use "./string" as *;\n\n@mixin $1-icon-colored'))
+        .pipe(replace(/, "gi"/g, ''))
+        .pipe(replace(/(\W)e\(/g, '$1string.unquote('))
+
+        // sortable
+        .pipe(replace('.dx-sortable-placeholder', '@use "sass:color";\n\n.dx-sortable-placeholder'))
+
         .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
+        .pipe(through.obj((file, enc, callback) => {
+            file.contents = new Buffer(replaceColorFunctions(file.contents.toString()));
+            callback(null, file);
+        }))
         .pipe(rename((path) => {
             path.basename = '_' + path.basename;
         }))

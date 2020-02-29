@@ -122,18 +122,7 @@
 
     .dx-tabpanel .dx-multiview-wrapper {
         border-left: 0;
-        border-bottom: 0;
         border-right: 0;
-    }
-
-    .dx-diagram-properties-panel-no-tabs {
-        .dx-tabpanel-tabs {
-            display: none;
-        }
-
-        .dx-multiview-wrapper {
-            border: 0;
-        }
     }
 
     .dx-diagram-properties-panel-group-toolbar {
@@ -155,11 +144,43 @@
             }
         }
     }
+
+    &:not(.dx-diagram-mobile-popup) {
+        .dx-tabpanel .dx-multiview-wrapper {
+            border-bottom: 0;
+        }
+    }
+
+    &.dx-diagram-mobile-popup {
+        .dx-popup-title {
+            border: 0;
+            min-height: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dx-toolbar .dx-toolbar-items-container {
+            height: auto;
+
+            .dx-toolbar-item {
+                padding: 0;
+            }
+        }
+
+        .dx-tabpanel {
+            display: flex;
+            flex-direction: column-reverse;
+
+            .dx-multiview-wrapper {
+                border-top: 0;
+            }
+        }
+    }
 }
 
 .dx-diagram-floating-toolbar-container {
     position: absolute;
-    z-index: 1000;
+    z-index: @OVERLAY_ZINDEX + 1;
     width: 100%;
 
     &.dx-diagram-properties-panel-toolbar-container {
@@ -167,7 +188,7 @@
         border: 0;
         padding: 0;
 
-        & div {
+        div {
             border-radius: 50%;
         }
     }

@@ -817,7 +817,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(typeUtils.isDefined(pos) && typeUtils.isDefined(pos.left) && that._scrollLeft !== pos.left) {
             that._scrollLeft = pos.left;
-            $scrollContainer && $scrollContainer.scrollLeft(Math.round(pos.left));
+            $scrollContainer && $scrollContainer.scrollLeft(pos.left);
             that._skipScrollChanged = true;
         }
     },

@@ -1,20 +1,14 @@
-const noop = require('../../core/utils/common').noop;
-const commonModule = require('./common');
+import { noop } from '../../core/utils/common';
+import commonModule from './common';
+import Slider from './slider';
+import { normalizeEnum as _normalizeEnum, rangesAreEqual, adjustVisualRange } from '../core/utils';
+import { isNumeric } from '../../core/utils/type';
+import { adjust } from '../../core/utils/math';
 const animationSettings = commonModule.utils.animationSettings;
 const emptySliderMarkerText = commonModule.consts.emptySliderMarkerText;
-const Slider = require('./slider');
-const _normalizeEnum = require('../core/utils').normalizeEnum;
-const typeUtils = require('../../core/utils/type');
-const isNumeric = typeUtils.isNumeric;
-const vizUtils = require('../core/utils');
-const adjust = require('../../core/utils/math').adjust;
 
 function buildRectPoints(left, top, right, bottom) {
     return [left, top, right, top, right, bottom, left, bottom];
-}
-
-function valueOf(value) {
-    return value && value.valueOf();
 }
 
 function isLess(a, b) {
@@ -97,7 +91,7 @@ SlidersController.prototype = {
     _processSelectionChanged: function(e) {
         const that = this;
         const selectedRange = that.getSelectedRange();
-        if(valueOf(selectedRange.startValue) !== valueOf(that._lastSelectedRange.startValue) || valueOf(selectedRange.endValue) !== valueOf(that._lastSelectedRange.endValue)) {
+        if(!rangesAreEqual(selectedRange, that._lastSelectedRange)) {
             that._params.updateSelectedRange(selectedRange, that._lastSelectedRange, e);
             that._lastSelectedRange = selectedRange;
         }
@@ -167,11 +161,10 @@ SlidersController.prototype = {
 
     _applyTotalPosition: function(isAnimated) {
         const sliders = this._sliders;
-        let areOverlapped;
         isAnimated = this._animationEnabled && isAnimated;
         sliders[0].applyPosition(isAnimated);
         sliders[1].applyPosition(isAnimated);
-        areOverlapped = sliders[0].getCloudBorder() > sliders[1].getCloudBorder();
+        const areOverlapped = sliders[0].getCloudBorder() > sliders[1].getCloudBorder();
         sliders[0].setOverlapped(areOverlapped);
         sliders[1].setOverlapped(areOverlapped);
         this._applyAreaTrackersPosition();
@@ -225,7 +218,7 @@ SlidersController.prototype = {
             return a <= b;
         };
 
-        let { startValue, endValue } = vizUtils.adjustVisualRange({
+        let { startValue, endValue } = adjustVisualRange({
             dataType: businessRange.dataType,
             axisType: businessRange.axisType,
             base: businessRange.base
@@ -291,7 +284,6 @@ SlidersController.prototype = {
         const interval = sliders[1].getPosition() - sliders[0].getPosition();
         let startPosition = screenPosition - interval / 2;
         let endPosition = screenPosition + interval / 2;
-        let startValue;
         if(startPosition < translator.getScreenRange()[0]) {
             startPosition = translator.getScreenRange()[0];
             endPosition = startPosition + interval;
@@ -302,7 +294,7 @@ SlidersController.prototype = {
         }
 
         // Check for "minRange" and "maxRange" is not performed because it was not performed in the previous code, though I find it strange.
-        startValue = selectClosestValue(translator.from(startPosition, -1), that._values);
+        const startValue = selectClosestValue(translator.from(startPosition, -1), that._values);
         sliders[0].setDisplayValue(startValue);
         sliders[1].setDisplayValue(selectClosestValue(translator.from(translator.to(startValue, -1) + interval, +1), that._values));
         sliders[0]._position = startPosition;
@@ -324,7 +316,6 @@ SlidersController.prototype = {
         let thresholdPosition;
         const positions = [];
         const values = [];
-        let handler;
         values[index] = translator.from(firstPosition, dir);
         values[1 - index] = translator.from(secondPosition, -dir);
         positions[1 - index] = secondPosition;
@@ -365,7 +356,7 @@ SlidersController.prototype = {
             that._processSelectionChanged(e);
         }
 
-        handler = that.beginSliderMoving(1 - index, secondPosition);
+        const handler = that.beginSliderMoving(1 - index, secondPosition);
         sliders[1 - index]._sliderGroup.stopAnimation();
         that._shutter.stopAnimation();
         handler(secondPosition);
