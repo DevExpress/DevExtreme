@@ -683,7 +683,6 @@ const BaseChart = BaseWidget.inherit({
             that._shrinkAxes(needSpace, canvas);
         });
 
-
         that._applyClipRects(preparedOptions);
         that._appendSeriesGroups();
         that._createCrosshairCursor();

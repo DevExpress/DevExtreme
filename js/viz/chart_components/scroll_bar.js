@@ -199,6 +199,10 @@ ScrollBar.prototype = {
         that._applyPosition(_min(minPoint, maxPoint), _max(minPoint, maxPoint));
     },
 
+    customPositionIsAvailable() {
+        return false;
+    },
+
     dispose: function() {
         this._scroll.dispose();
         this._scroll = this._translator = null;

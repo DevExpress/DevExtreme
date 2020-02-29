@@ -179,7 +179,6 @@ QUnit.module('Rows view', {
         // arrange
         const rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]);
         const navigationController = this.dataGrid.keyboardNavigationController;
-        let $cell;
 
         navigationController._isCellValid = function($cell) {
             const cell = $cell[0];
@@ -190,7 +189,7 @@ QUnit.module('Rows view', {
         rowsView.render($('#container'));
 
         // assert, act
-        $cell = navigationController._getNextCell.call(navigationController, 'nextInRow');
+        const $cell = navigationController._getNextCell.call(navigationController, 'nextInRow');
         assert.equal($cell[0].cellIndex, 3);
     });
 
@@ -198,7 +197,6 @@ QUnit.module('Rows view', {
         // arrange
         const rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]);
         const navigationController = this.dataGrid.keyboardNavigationController;
-        let $cell;
 
         navigationController._isCellValid = function($cell) {
             const cell = $cell[0];
@@ -209,7 +207,7 @@ QUnit.module('Rows view', {
         rowsView.render($('#container'));
 
         // assert, act
-        $cell = navigationController._getNextCell.call(navigationController, 'previousInRow');
+        const $cell = navigationController._getNextCell.call(navigationController, 'previousInRow');
         assert.equal($cell[0].cellIndex, 0);
     });
 

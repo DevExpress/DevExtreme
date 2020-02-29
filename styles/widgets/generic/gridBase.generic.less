@@ -78,9 +78,11 @@
 .grid-base(@widgetName) {
     .dx-@{widgetName},
     .dx-@{widgetName}-container {
-        .dx-menu-item-has-icon {
-            .dx-icon {
-                color: @datagrid-menu-icon-color;
+        &.dx-filter-menu {
+            .dx-menu-item-has-icon {
+                .dx-icon {
+                    color: @datagrid-menu-icon-color;
+                }
             }
         }
 
