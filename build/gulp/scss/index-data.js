@@ -79,5 +79,14 @@ module.exports = [
     { content: 'tabPanel', task: 'widget' },
     { content: 'fileUploader', task: 'widget' },
     { content: 'scheduler', task: 'widget' },
+    { content: 'form', task: 'widget' },
+    { content: 'filterBuilder', task: 'widget' },
+    { content: 'drawer', task: 'widget' },
+    { content: 'htmlEditor', task: 'widget' },
+    { content: 'speedDialAction', task: 'widget' },
+    { content: 'fileManager', task: 'widget' },
+    { content: 'diagram', task: 'widget' },
+    { content: 'gantt', task: 'widget' },
+    { content: 'sortable', task: 'widget' },
     { task: 'newline' }
 ];

@@ -38,6 +38,7 @@ const SchedulerHeader = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             views: [],
+            isAdaptive: false,
             intervalCount: 1,
             currentView: 'day',
             firstDayOfWeek: undefined,
@@ -136,12 +137,7 @@ const SchedulerHeader = Widget.inherit({
         this._validateViews();
 
         const $viewSwitcher = $('<div>').addClass(VIEW_SWITCHER_CLASS).appendTo(this.$element());
-
-        if(!this.option('useDropDownViewSwitcher')) {
-            this._renderViewSwitcherTabs($viewSwitcher);
-        } else {
-            this._renderViewSwitcherDropDownMenu($viewSwitcher);
-        }
+        this.option('useDropDownViewSwitcher') ? this._renderViewSwitcherDropDownMenu($viewSwitcher) : this._renderViewSwitcherTabs($viewSwitcher);
     },
 
     _validateViews: function() {
@@ -218,6 +214,8 @@ const SchedulerHeader = Widget.inherit({
             onItemClick: this._updateCurrentView.bind(this),
             buttonIcon: this.option('_dropDownButtonIcon'),
             items: this.option('views'),
+            selectionMode: this.option('isAdaptive') ? 'single' : 'none',
+            selectedItemKeys: [this.option('currentView')],
             itemTemplate: function(item) {
                 return $('<span>')
                     .addClass('dx-dropdownmenu-item-text')

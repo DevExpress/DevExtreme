@@ -1094,6 +1094,22 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
      */
     position?: 'bottom' | 'left' | 'right' | 'top';
     /**
+     * @docid dxChartOptions.argumentAxis.customPosition
+     * @type number | datetime | string
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    customPosition?: number | Date | string;
+    /**
+     * @docid dxChartOptions.argumentAxis.offset
+     * @type number
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    offset?: number;
+    /**
      * @docid dxChartOptions.argumentAxis.singleWorkdays
      * @type Array<Date, string>| Array<number>
      * @default undefined
@@ -2181,6 +2197,22 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
      * @public
      */
     position?: 'bottom' | 'left' | 'right' | 'top';
+    /**
+     * @docid dxChartOptions.valueAxis.customPosition
+     * @type number | datetime | string
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    customPosition?: number | Date | string;
+    /**
+     * @docid dxChartOptions.valueAxis.offset
+     * @type number
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    offset?: number;
     /**
      * @docid dxChartOptions.valueAxis.showZero
      * @type boolean

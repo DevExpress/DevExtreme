@@ -762,6 +762,8 @@ const dxChart = {
             }
         }],
         position: 'bottom',
+        customPosition: undefined,
+        offset: undefined,
         min: undefined,
         max: undefined,
         visualRange: undefined,
@@ -821,6 +823,8 @@ const dxChart = {
             }
         }],
         position: 'left',
+        customPosition: undefined,
+        offset: undefined,
         min: undefined,
         max: undefined,
         visualRange: undefined,
