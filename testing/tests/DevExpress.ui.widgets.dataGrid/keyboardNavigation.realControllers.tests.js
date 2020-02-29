@@ -228,7 +228,8 @@ QUnit.module('Real DataController and ColumnsController', {
         this.clock.tick();
 
         assert.deepEqual(navigationController._focusedCellPosition, { rowIndex: 1, columnIndex: 1 });
-        assert.ok(dataGridWrapper.rowsView.cellHasFocusedClass(1, 1));
+        const cell = dataGridWrapper.rowsView.getDataRow(1).getCell(1);
+        assert.ok(cell.hasFocusedClass());
         assert.ok($(':focus').hasClass('input2'));
     });
 
@@ -1307,7 +1308,8 @@ QUnit.module('Real DataController and ColumnsController', {
                 this.gridView.render($testElement);
 
                 // act
-                const $selectCell = rowsViewWrapper.getCellElement(0, 0);
+                const dataRow0 = rowsViewWrapper.getDataRow(0);
+                const $selectCell = dataRow0.getCell(0).getElement();
                 $selectCell
                     .focus()
                     .removeClass('dx-cell-focus-disabled');
@@ -1324,7 +1326,7 @@ QUnit.module('Real DataController and ColumnsController', {
                 assert.notOk($selectCell.hasClass('dx-focused'), 'Cell has no .dx-focused');
                 assert.ok($selectCell.hasClass('dx-cell-focus-disabled'), 'Cell has disable focus class');
 
-                const $selectCheckBox = rowsViewWrapper.getSelectCheckBox(0, 0);
+                const $selectCheckBox = dataRow0.getSelectCheckBox(0).getElement();
                 $selectCheckBox
                     .focus()
                     .removeClass('dx-cell-focus-disabled');

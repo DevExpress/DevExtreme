@@ -74,6 +74,7 @@ QUnit.module('Filter Row', {
         fx.off = true;
     },
     afterEach: function() {
+        this.dispose();
         this.clock.restore();
         fx.off = false;
     }
