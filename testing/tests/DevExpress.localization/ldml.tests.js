@@ -128,6 +128,18 @@ QUnit.module('number formatter', () => {
         assert.strictEqual(formatter(123456), '456', 'format large integer');
     });
 
+    QUnit.test('integer with zero format with unlimitedIntegerDigits flag (for dashbords)', function(assert) {
+        const formatter = getNumberFormatter('0', { unlimitedIntegerDigits: true });
+
+        assert.strictEqual(formatter(null), '', 'format an empty value');
+        assert.strictEqual(formatter(NaN), '', 'NaN value should not be formatted');
+        assert.strictEqual(formatter(0), '0', 'format zero');
+        assert.strictEqual(formatter(1), '1', 'format integer with 1 digit');
+        assert.strictEqual(formatter(-1), '-1', 'format nagative integer with 1 digit');
+        assert.strictEqual(formatter(123456), '123456', 'format large integer');
+        assert.strictEqual(formatter(123456.7), '123457', 'format large integer with float part');
+    });
+
     QUnit.test('float with precision formatting', function(assert) {
         const formatter = getNumberFormatter('#.00');
 

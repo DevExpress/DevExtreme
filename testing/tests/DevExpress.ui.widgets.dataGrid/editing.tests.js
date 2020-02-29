@@ -1723,12 +1723,14 @@ QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up 
     this.clock.tick();
 
     // act
-    rowsViewWrapper.getEditorInput(0, 2).trigger('dxpointerdown');
+    let editor = rowsViewWrapper.getDataRow(0).getCell(2).getEditor();
+    editor.getInputElement().trigger('dxpointerdown');
     rowsViewWrapper.getElement().find('tbody').first().trigger('dxclick'); // chrome 73+
     this.clock.tick();
 
     // assert
-    assert.equal(rowsViewWrapper.getEditorInput(0, 2).length, 1, 'editor is not closed');
+    editor = rowsViewWrapper.getDataRow(0).getCell(2).getEditor();
+    assert.ok(editor.isExists(), 'editor is not closed');
 });
 
 // T318313
@@ -5036,6 +5038,34 @@ QUnit.test('deleteRow should works if cell value is changed', function(assert) {
     assert.strictEqual(testElement.find('input').length, 0, 'no editors');
 });
 
+QUnit.test('deleteRow should works in row editing mode if boolean column and validation are exist (T865833, T864931)', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'row',
+        allowDeleting: true
+    };
+
+    that.options.columns.push({ dataField: 'booleanField', dataType: 'boolean', validationRules: [{ type: 'required' }] });
+    that.columnsController.reset();
+    that.editingController.init();
+
+    rowsView.render(testElement);
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 7, 'row count');
+
+    // act
+    that.deleteRow(1);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
+});
+
 // T804894
 QUnit.test('addRow should not work if updating is started with validation error', function(assert) {
     // arrange
@@ -7608,6 +7638,27 @@ QUnit.test('Add a custom cssClass for image icons in the \'buttons\' command col
     assert.ok($testElement.find('.dx-command-edit').first().hasClass('dx-command-edit-with-icons'), 'Command edit cell has icons');
     assert.ok($buttonElement.hasClass('myIcon'), 'Custom cssClass is applied');
     assert.ok($buttonElement.hasClass('dx-icon'), 'Custom icon is created');
+});
+
+QUnit.test('dx-svg-icon should not have \'pointerEvents: none\' if a column button set using svg icon (T863635)', function(assert) {
+    // arrange
+    const $testElement = $('#container');
+    this.options.columns.push({
+        type: 'buttons',
+        buttons: [{
+            icon: '<svg><circle r="10" /></svg>'
+        }]
+    });
+    this.columnsController.reset();
+
+    // act
+    this.rowsView.render($testElement);
+    const svgIcon = $testElement.find('.dx-command-edit').first().find('.dx-svg-icon').first();
+
+    // assert
+    const pointerEvents = browser.msie && parseInt(browser.version) <= 11 ? 'visiblePainted' : 'auto';
+    assert.strictEqual(window.getComputedStyle(svgIcon[0]).pointerEvents, pointerEvents, 'dx-svg-icon allows pointer events');
+    assert.strictEqual(window.getComputedStyle(svgIcon.find('svg')[0]).pointerEvents, 'none', 'dx-svg-icon svg does not allow pointer events');
 });
 
 QUnit.test('Add a custom command column', function(assert) {
@@ -13477,182 +13528,98 @@ QUnit.test('cancelEditData after scrolling if scrolling mode is editing', functi
     assert.equal(testElement.find('.dx-edit-row').length, 0, 'edit row is closed');
 });
 
-QUnit.test('Add new row items on \'append\' if virtual scrolling (T812340)', function(assert) {
-    // arrange
-    this.options = $.extend(this.options, {
-        dataSource: generateDataSource(50, 2),
-        keyExpr: 'column1',
-        editing: {
-            mode: 'batch'
-        },
-        paging: {
-            pageSize: 3
-        },
-        scrolling: {
-            mode: 'virtual',
-            useNative: false
-        }
+['virtual', 'standard'].forEach(rowRenderingMode => {
+    QUnit.test(`Add new row items on 'append' if scrolling.mode: 'virtual', scrolling.rowRenderingMode: ${rowRenderingMode} (T812340)`, function(assert) {
+        // arrange
+        this.options = $.extend(this.options, {
+            dataSource: generateDataSource(50, 2),
+            keyExpr: 'column1',
+            editing: {
+                mode: 'batch'
+            },
+            paging: {
+                pageSize: 3
+            },
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: rowRenderingMode,
+                useNative: false
+            }
+        });
+
+        this.setupDataGrid();
+
+        this.rowsView.render($('#container'));
+        this.rowsView.height(200);
+        this.rowsView.resize();
+
+        this.clock.tick();
+
+        // act
+        this.pageIndex(5);
+        this.addRow();
+        this.addRow();
+        this.pageIndex(4);
+        this.pageIndex(3);
+        this.pageIndex(2);
+        this.pageIndex(3);
+        this.pageIndex(4);
+        this.pageIndex(5);
+        // arrange, assert
+        const newRows = this.dataController.items().filter(item => item.isNewRow);
+        assert.equal(newRows.length, 2, 'Two new rows');
+        assert.equal(this.dataController.items()[11].key, 'Item161', 'Next row');
+
+        const rowsViewWrapper = dataGridWrapper.rowsView;
+        assert.ok(rowsViewWrapper.getDataRow(9).isNewRow(), 'Row 9 is new in view');
+        assert.ok(rowsViewWrapper.getDataRow(10).isNewRow(), 'Row 10 is new in view');
     });
 
-    this.setupDataGrid();
+    QUnit.test(`Add new row items on "prepend" if scrolling.mode: 'virtual', scrolling.rowRenderingMode: ${rowRenderingMode} (T812340)`, function(assert) {
+        // arrange
+        this.options = $.extend(this.options, {
+            dataSource: generateDataSource(50, 2),
+            keyExpr: 'column1',
+            editing: {
+                mode: 'batch'
+            },
+            paging: {
+                pageSize: 3
+            },
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: rowRenderingMode,
+                useNative: false
+            }
+        });
 
-    this.rowsView.render($('#container'));
-    this.rowsView.height(200);
-    this.rowsView.resize();
+        this.setupDataGrid();
 
-    this.clock.tick();
+        this.rowsView.render($('#container'));
+        this.rowsView.height(200);
+        this.rowsView.resize();
 
-    // act
-    this.pageIndex(5);
-    this.addRow();
-    this.addRow();
-    this.pageIndex(4);
-    this.pageIndex(3);
-    this.pageIndex(2);
-    this.pageIndex(3);
-    this.pageIndex(4);
-    this.pageIndex(5);
-    // arrange, assert
-    const rowsViewWrapper = dataGridWrapper.rowsView;
-    const newRows = this.dataController.items().filter(item => item.isNewRow);
-    assert.equal(newRows.length, 2, 'Two new rows');
-    assert.equal(this.dataController.items()[11].key, 'Item161', 'Next row');
-    assert.ok(rowsViewWrapper.isNewRow(9), 'Row 9 is new in view');
-    assert.ok(rowsViewWrapper.isNewRow(10), 'Row 10 is new in view');
-});
+        this.clock.tick();
 
-QUnit.test('Add new row items on \'prepend\' if virtual scrolling (T812340)', function(assert) {
-    // arrange
-    this.options = $.extend(this.options, {
-        dataSource: generateDataSource(50, 2),
-        keyExpr: 'column1',
-        editing: {
-            mode: 'batch'
-        },
-        paging: {
-            pageSize: 3
-        },
-        scrolling: {
-            mode: 'virtual',
-            useNative: false
-        }
+        // act
+        this.pageIndex(5);
+        this.addRow();
+        this.addRow();
+        this.pageIndex(6);
+        this.pageIndex(7);
+        this.pageIndex(8);
+        this.pageIndex(7);
+        this.pageIndex(6);
+        this.pageIndex(5);
+        // arrange, assert
+        const newRows = this.dataController.items().filter(item => item.isNewRow);
+        assert.equal(newRows.length, 2, 'Two new rows');
+        assert.equal(this.dataController.items()[2].key, 'Item161', 'Next row');
+
+        const rowsViewWrapper = dataGridWrapper.rowsView;
+        assert.ok(rowsViewWrapper.getDataRow(0).isNewRow(), 'Row 0 is new in view');
+        assert.ok(rowsViewWrapper.getDataRow(1).isNewRow(), 'Row 1 is new in view');
     });
-
-    this.setupDataGrid();
-
-    this.rowsView.render($('#container'));
-    this.rowsView.height(200);
-    this.rowsView.resize();
-
-    this.clock.tick();
-
-    // act
-    this.pageIndex(5);
-    this.addRow();
-    this.addRow();
-    this.pageIndex(6);
-    this.pageIndex(7);
-    this.pageIndex(8);
-    this.pageIndex(7);
-    this.pageIndex(6);
-    this.pageIndex(5);
-    // arrange, assert
-    const rowsViewWrapper = dataGridWrapper.rowsView;
-    const newRows = this.dataController.items().filter(item => item.isNewRow);
-    assert.equal(newRows.length, 2, 'Two new rows');
-    assert.equal(this.dataController.items()[2].key, 'Item161', 'Next row');
-    assert.ok(rowsViewWrapper.isNewRow(0), 'Row 0 is new in view');
-    assert.ok(rowsViewWrapper.isNewRow(1), 'Row 1 is new in view');
-});
-
-QUnit.test('Add new row items on \'append\' if virtual scrolling and rowRenderingMode is virtual (T812340)', function(assert) {
-    // arrange
-    this.options = $.extend(this.options, {
-        dataSource: generateDataSource(50, 2),
-        keyExpr: 'column1',
-        editing: {
-            mode: 'batch'
-        },
-        paging: {
-            pageSize: 3
-        },
-        scrolling: {
-            mode: 'virtual',
-            rowRenderingMode: 'virtual',
-            useNative: false
-        }
-    });
-
-    this.setupDataGrid();
-
-    this.rowsView.render($('#container'));
-    this.rowsView.height(200);
-    this.rowsView.resize();
-
-    this.clock.tick();
-
-    // act
-    this.pageIndex(5);
-    this.addRow();
-    this.addRow();
-    this.pageIndex(4);
-    this.pageIndex(3);
-    this.pageIndex(2);
-    this.pageIndex(3);
-    this.pageIndex(4);
-    this.pageIndex(5);
-    // arrange, assert
-    const rowsViewWrapper = dataGridWrapper.rowsView;
-    const newRows = this.dataController.items().filter(item => item.isNewRow);
-    assert.equal(newRows.length, 2, 'Two new rows');
-    assert.equal(this.dataController.items()[11].key, 'Item161', 'Next row');
-    assert.ok(rowsViewWrapper.isNewRow(9), 'Row 9 is new in view');
-    assert.ok(rowsViewWrapper.isNewRow(10), 'Row 10 is new in view');
-});
-
-QUnit.test('Add new row items on \'prepend\' if virtual scrolling and rowRenderingMode is virtual (T812340)', function(assert) {
-    // arrange
-    this.options = $.extend(this.options, {
-        dataSource: generateDataSource(50, 2),
-        keyExpr: 'column1',
-        editing: {
-            mode: 'batch'
-        },
-        paging: {
-            pageSize: 3
-        },
-        scrolling: {
-            mode: 'virtual',
-            rowRenderingMode: 'virtual',
-            useNative: false
-        },
-    });
-
-    this.setupDataGrid();
-
-    this.rowsView.render($('#container'));
-    this.rowsView.height(200);
-    this.rowsView.resize();
-
-    this.clock.tick();
-
-    // act
-    this.pageIndex(5);
-    this.addRow();
-    this.addRow();
-    this.pageIndex(6);
-    this.pageIndex(7);
-    this.pageIndex(8);
-    this.pageIndex(7);
-    this.pageIndex(6);
-    this.pageIndex(5);
-    // arrange, assert
-    const rowsViewWrapper = dataGridWrapper.rowsView;
-    const newRows = this.dataController.items().filter(item => item.isNewRow);
-    assert.equal(newRows.length, 2, 'Two new rows');
-    assert.equal(this.dataController.items()[2].key, 'Item161', 'Next row');
-    assert.ok(rowsViewWrapper.isNewRow(0), 'Row 0 is new in view');
-    assert.ok(rowsViewWrapper.isNewRow(1), 'Row 1 is new in view');
 });
 
 QUnit.test('DataGrid should show error message on adding row if dataSource is not specified (T711831)', function(assert) {
