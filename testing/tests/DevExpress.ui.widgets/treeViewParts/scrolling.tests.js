@@ -1,5 +1,4 @@
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
-import errors from 'ui/widget/ui.errors';
 
 const configs = [];
 [false, true, undefined].forEach((expanded) => {
@@ -122,8 +121,8 @@ QUnit.module('TreeView scrolling', () => {
 
         const done = assert.async();
         completionCallback
-            .fail((error) => {
-                assert.deepEqual(error, errors.Error('W1015'));
+            .fail(() => {
+                assert.ok('callback must fail');
                 done();
             });
     });
@@ -134,8 +133,8 @@ QUnit.module('TreeView scrolling', () => {
 
         const done = assert.async();
         completionCallback
-            .fail((error) => {
-                assert.deepEqual(error, errors.Error('W1015'));
+            .fail(() => {
+                assert.ok('callback must fail');
                 done();
             });
     });
