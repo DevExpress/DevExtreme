@@ -206,9 +206,10 @@ QUnit.test('The parts of recurrence appointment before and after midnight should
         cellDuration: 60
     });
 
+    const cellHeight = scheduler.workSpace.getCellHeight();
 
     assert.equal(scheduler.appointments.getAppointmentCount(), 4, 'Appt parts are shown');
-    assert.equal(scheduler.appointments.getAppointmentPosition(2).top, 1150, 'Second appointment part before midnight has a right top position');
+    assert.equal(scheduler.appointments.getAppointmentPosition(2).top, cellHeight * 23, 'Second appointment part before midnight has a correct top position');
     assert.equal(scheduler.appointments.getAppointmentPosition(3).top, 0, 'Second appointment part after midnight has a right top position');
 });
 
@@ -226,8 +227,10 @@ QUnit.test('The part of recurrence appointment before midnight should be shown o
         cellDuration: 60
     });
 
+    const cellHeight = scheduler.workSpace.getCellHeight();
+
     assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appt part is shown');
-    assert.equal(scheduler.appointments.getAppointmentPosition().top, 1150, 'Appointment has a right top position');
+    assert.equal(scheduler.appointments.getAppointmentPosition().top, cellHeight * 23, 'Appointment has a correct top position');
 });
 
 QUnit.test('The part of recurrence appointment after midnight should be shown on Day view', function(assert) {
@@ -245,12 +248,12 @@ QUnit.test('The part of recurrence appointment after midnight should be shown on
     });
 
     assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appt part is shown on 2d day');
-    assert.equal(scheduler.appointments.getAppointmentPosition().top, 0, 'Appointment has a right top position');
+    assert.equal(scheduler.appointments.getAppointmentPosition().top, 0, 'Appointment has a correct top position');
 
     scheduler.instance.option('currentDate', new Date(2015, 4, 28));
 
     assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appt part is shown on 2d day');
-    assert.equal(scheduler.appointments.getAppointmentPosition().top, 0, 'Appointment has a right top position');
+    assert.equal(scheduler.appointments.getAppointmentPosition().top, 0, 'Appointment has a correct top position');
 });
 
 QUnit.test('The part of recurrence appointment after midnight should have right height on the first day of week', function(assert) {
