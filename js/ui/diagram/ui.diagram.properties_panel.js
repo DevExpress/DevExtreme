@@ -40,6 +40,7 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
     _getPopupOptions() {
         return extend(super._getPopupOptions(), {
             showTitle: this.isMobileView(),
+            showCloseButton: this.isMobileView(),
             position: {
                 my: 'right bottom',
                 at: 'right bottom',

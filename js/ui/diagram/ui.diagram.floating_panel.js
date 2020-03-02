@@ -31,9 +31,14 @@ class DiagramFloatingPanel extends DiagramPanel {
         this._popup = this._createComponent($popupElement, Popup, this._getPopupOptions());
         this._updatePopupVisible();
     }
+    show() {
+        this.option('isVisible', true);
+    }
+    hide() {
+        this.option('isVisible', false);
+    }
     toggle() {
         this.option('isVisible', !this.isVisible());
-        this._updatePopupVisible();
     }
 
     _getPopupContent() {
