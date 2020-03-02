@@ -14,8 +14,7 @@ import {
 
 import {
     baseSeriesObject,
-    chartAxisObject,
-    dxChartCommonAnnotationConfig
+    chartAxisObject
 } from './chart';
 
 import {
@@ -23,7 +22,8 @@ import {
     BaseChartAdaptiveLayout,
     BaseChartLegend,
     BaseChartOptions,
-    BaseChartTooltip
+    BaseChartTooltip,
+    BaseChartAnnotationConfig
 } from './chart_components/base_chart';
 
 import {
@@ -1378,7 +1378,7 @@ export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotati
     name?: string;
 }
 
-export interface dxPolarChartCommonAnnotationConfig extends dxChartCommonAnnotationConfig {
+export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
     /**
      * @docid dxPolarChartCommonAnnotationConfig.angle
      * @type number
