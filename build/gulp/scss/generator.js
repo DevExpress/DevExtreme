@@ -19,7 +19,7 @@ const compactMixinUsageReplacement = /@include\s+dx-size-(compact|default);/g;
 
 // replacement for parent selector (https://github.com/sass/sass/issues/1425)
 const parentSelectorRegex = /^(\s*)([.\w\s-]*[\w])&/mg;
-const parentSelectorReplacement = '$1@at-root $2#{&}';
+const parentSelectorReplacement = '$1@at-root #{selector-append("$2", &)}';
 
 let widgetsColorVariables = {};
 
@@ -42,11 +42,15 @@ const replaceColorFunctions = (content) => {
     // change fade($color, 20%) to the color.change($color, $alpha: 0.20), $color can be other function
     // change fadein($color, 20%) to the color.adjust($color, $alpha: 0.20), $color can be other function
 
-    content = content.replace(/(fadein|fade)\(([$\d\w-#]*|[\w]*\(.*\)),\s*(\d+)%\)(;|,|\))/g, (match, func, color, percent, sign) => {
+    content = content.replace(/(fadein|fade)\(([$\d\w-#]*|[\w]*\(.*\)),\s*([\d.]+)%\)(;|,|\)|\s)/g, (match, func, color, percent, sign) => {
         const colorFunction = func === 'fade' ? 'change' : 'adjust';
         return `color.${colorFunction}(${color}, $alpha: ${percent / 100})${sign}`;
     });
     return content;
+};
+
+const replaceInterpolatedCalcContent = (content) => {
+    return content.replace(/calc\(([\d]+%) - ((round|\$).*)\);/g, 'calc($1 - #{$2});');
 };
 
 gulp.task('fix-bundles', () => {
@@ -102,9 +106,15 @@ gulp.task('fix-base', () => {
         // sortable
         .pipe(replace('.dx-sortable-placeholder', '@use "sass:color";\n\n.dx-sortable-placeholder'))
 
+        // filterBuilder
+        .pipe(replace(/^.dx-filterbuilder/, '@use "./icons" as *;\n\n.dx-filterbuilder'))
+
         .pipe(replace(parentSelectorRegex, parentSelectorReplacement))
         .pipe(through.obj((file, enc, callback) => {
-            file.contents = new Buffer(replaceColorFunctions(file.contents.toString()));
+            let content = file.contents.toString();
+            content = replaceColorFunctions(content);
+            content = replaceInterpolatedCalcContent(content);
+            file.contents = new Buffer(content);
             callback(null, file);
         }))
         .pipe(rename((path) => {
@@ -217,6 +227,7 @@ gulp.task('create-widgets', () => {
             indexContent += content.replace(compactMixinReplacementIndex, '');
             indexContent = specificReplacement(indexContent, folder, 'index');
             indexContent = replaceColorFunctions(indexContent);
+            indexContent = replaceInterpolatedCalcContent(indexContent);
             indexContent = indexContent.replace(parentSelectorRegex, parentSelectorReplacement);
             chunk.contents = new Buffer(indexContent);
 

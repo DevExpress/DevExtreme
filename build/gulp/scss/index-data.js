@@ -65,6 +65,7 @@ module.exports = [
     { content: 'lookup', task: 'widget' },
     { content: 'loadPanel', task: 'widget' },
     { content: 'tagBox', task: 'widget' },
+    { content: 'radioButton', task: 'widget', private: true },
     { content: 'radioGroup', task: 'widget' },
     { content: 'accordion', task: 'widget' },
     { content: 'slideOutView', task: 'widget' },
