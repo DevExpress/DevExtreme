@@ -18,6 +18,11 @@ class Widget extends WidgetBase {
                 useSubmitBehavior && setTimeout(() => this._submitInput().click());
             }
         });
+
+        props.onContentReady = this._createActionByOption('onContentReady', {
+            excludeValidators: ['disabled', 'readOnly']
+        });
+
         return props;
     }
 

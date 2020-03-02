@@ -16,6 +16,7 @@ import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
+import { useLayoutEffect } from 'preact/hooks';
 
 const getStyles = ({ width, height }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
@@ -93,6 +94,7 @@ export const viewModelFunction = ({
         tabIndex,
         visible,
         width,
+        onContentReady,
         onVisibilityChange,
     },
 
@@ -117,6 +119,7 @@ export const viewModelFunction = ({
         disabled,
         focusStateEnabled,
         hoverStateEnabled,
+        onContentReady,
         styles,
         tabIndex: focusStateEnabled && !disabled && tabIndex,
         title: hint,
@@ -126,6 +129,10 @@ export const viewModelFunction = ({
 };
 
 export const viewFunction = (viewModel: any) => {
+    useLayoutEffect(() => {
+        !viewModel.disabled && viewModel.onContentReady?.();
+    }, [viewModel.children]);
+
     return (
         <div
             ref={viewModel.widgetRef}
@@ -160,7 +167,8 @@ export class WidgetInput {
     @OneWay() hoverStateEnabled?: boolean = false;
     @OneWay() name?: string = '';
     @OneWay() onActive?: (e: any) => any = (() => undefined);
-    @Event() onClick?: (e: any) => void = (() => { });
+    @Event() onClick?: (e: any) => void = (() => {});
+    @Event() onContentReady?: (e: any) => any = (() => {});
     @OneWay() onDimensionChanged?: () => any = (() => undefined);
     @OneWay() onInactive?: (e: any) => any = (() => undefined);
     @OneWay() onKeyboardHandled?: (args: any) => any | undefined;

@@ -91,6 +91,7 @@ export const viewFunction = (viewModel: ButtonViewModel) => {
         hint={viewModel.hint}
         hoverStateEnabled={viewModel.hoverStateEnabled}
         onActive={viewModel.onActive}
+        onContentReady={viewModel.onContentReady}
         onClick={viewModel.onWidgetClick}
         onInactive={viewModel.onInactive}
         onKeyPress={viewModel.onWidgetKeyPress}

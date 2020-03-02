@@ -300,8 +300,7 @@ QUnit.module('regressions', {
 });
 
 QUnit.module('contentReady', {}, () => {
-    // TODO
-    QUnit.skip('T355000 - the \'onContentReady\' action should be fired after widget is rendered entirely', function(assert) {
+    QUnit.test('T355000 - the \'onContentReady\' action should be fired after widget is rendered entirely', function(assert) {
         const buttonConfig = {
             text: 'Test button',
             icon: 'trash'
