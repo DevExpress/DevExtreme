@@ -9319,6 +9319,48 @@ QUnit.test('Scrollable should have the correct padding when the grid inside the 
     assert.strictEqual($scrollableContent.css('paddingLeft'), '0px', 'paddingLeft');
 });
 
+QUnit.test('Content height equals scrollable container height if no horizontal scroll (T865137)', function(assert) {
+    const dataGrid = createDataGrid({
+        height: 200,
+        dataSource: [{ id: 1 }],
+        keyExpr: 'id',
+        scrolling: {
+            showScrollbar: 'always'
+        }
+    });
+    this.clock.tick();
+
+    const scrollable = dataGrid.getScrollable();
+    const content = dataGrid.$element().find('.dx-datagrid-rowsview .dx-datagrid-content')[0];
+
+    assert.equal(content.clientHeight, scrollable.$element().height(), 'Content height equals scrollable container height');
+});
+
+QUnit.test('Content height differs from the scrollable container height by the height of horizontal scroll (T865137)', function(assert) {
+    if(devices.real().deviceType !== 'desktop') {
+        assert.ok(true, 'not actual for not desktop devices');
+        return;
+    }
+
+    const dataGrid = createDataGrid({
+        height: 200,
+        width: 200,
+        dataSource: [{ id: 1, name: 'Sam', age: 26 }],
+        columnWidth: 100,
+        keyExpr: 'id',
+        scrolling: {
+            showScrollbar: 'always'
+        }
+    });
+    this.clock.tick();
+
+    const scrollable = dataGrid.getScrollable();
+    const content = dataGrid.$element().find('.dx-datagrid-rowsview .dx-datagrid-content')[0];
+    const scrollbarWidth = dataGrid.getView('rowsView').getScrollbarWidth(true);
+
+    assert.equal(scrollable.$element().height() - content.clientHeight, scrollbarWidth, 'Content height is correct');
+});
+
 QUnit.module('Virtual row rendering', baseModuleConfig);
 
 QUnit.test('editing should starts correctly if scrolling mode is virtual', function(assert) {
