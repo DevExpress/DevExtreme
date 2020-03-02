@@ -52,6 +52,7 @@
     "cldr-core": "latest",
     "cldr-numbers-full": "latest",
     "cldrjs": "^0.5.0",
+    "cssom": "^0.4.4",
     "del": "^2.2.2",
     "devextreme-internal-tools": "~1.2.0",
     "eslint": "^6.0.0",

@@ -257,6 +257,7 @@ module.exports = {
         { import: '../button', type: 'index' },
         { import: '../button/colors', type: 'index' },
         { import: '../validation/colors', type: 'index' },
+        { import: '../pager', type: 'index' },
         { regex: /@mixin dx-icon\(equal\),/, replacement: '@include dx-icon(equal);' },
         { regex: /@mixin dx-icon-sizing\(\$MATERIAL_GRID_BASE_HEADER_ICON_SIZE\),/, replacement: '@include dx-icon-sizing($MATERIAL_GRID_BASE_HEADER_ICON_SIZE);' },
         { regex: /\.dx-icon\((.*)\),/g, replacement: '@include dx-icon($1);' },
@@ -480,5 +481,8 @@ module.exports = {
     ],
     'sortable': [
         { import: '../../base/sortable', type: 'index', withVars: [ 'base-accent' ] },
-    ]
+    ],
+    'pager': [
+        { import: '../../base/icons', type: 'index' },
+    ],
 };
