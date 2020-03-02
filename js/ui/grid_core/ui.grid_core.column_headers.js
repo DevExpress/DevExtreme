@@ -35,15 +35,16 @@ module.exports = {
     views: {
         columnHeadersView: columnsView.ColumnsView.inherit((function() {
             const createCellContent = function(that, $cell, options) {
-                let showColumnLines;
                 const $cellContent = $('<div>').addClass(that.addWidgetPrefix(CELL_CONTENT_CLASS));
 
                 that.setAria('role', 'presentation', $cellContent);
 
                 addCssClassesToCellContent(that, $cell, options.column, $cellContent);
-                showColumnLines = that.option('showColumnLines');
 
-                return $cellContent[(showColumnLines || options.column.alignment === 'right') && !that.option('rtlEnabled') ? 'appendTo' : 'prependTo']($cell);
+                const showColumnLines = that.option('showColumnLines');
+                const contentAlignment = that._getHeaderContentAlignment(options.column.alignment);
+
+                return $cellContent[(showColumnLines || contentAlignment === 'right') ? 'appendTo' : 'prependTo']($cell);
             };
 
             var addCssClassesToCellContent = function(that, $cell, column, $cellContent) {
@@ -104,6 +105,16 @@ module.exports = {
 
                 _getHeaderTemplate: function(column) {
                     return column.headerCellTemplate || { allowRenderToDetachedContainer: true, render: this._getDefaultTemplate(column) };
+                },
+
+                _getHeaderContentAlignment: function(columnAlignment) {
+                    const rtlEnabled = this.option('rtlEnabled');
+
+                    if(rtlEnabled) {
+                        return columnAlignment === 'left' ? 'right' : 'left';
+                    }
+
+                    return columnAlignment;
                 },
 
                 _processTemplate: function(template, options) {
