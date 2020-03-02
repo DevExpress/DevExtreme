@@ -309,11 +309,11 @@ class Diagram extends Widget {
                     if(e.visible && this.isMobileScreenSize()) {
                         this._historyToolbarZIndex = zIndexPool.create(Overlay.baseZIndex());
                         this._historyToolbar.$element().css('zIndex', this._historyToolbarZIndex);
-                        this._historyToolbar.$element().css('box-shadow', 'none');
+                        this._historyToolbar.$element().css('boxShadow', 'none');
                     } else if(this._historyToolbarZIndex) {
                         zIndexPool.remove(this._historyToolbarZIndex);
                         this._historyToolbar.$element().css('zIndex', '');
-                        this._historyToolbar.$element().css('box-shadow', '');
+                        this._historyToolbar.$element().css('boxShadow', '');
                         this._historyToolbarZIndex = undefined;
                     }
                 }
