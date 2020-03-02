@@ -15,6 +15,8 @@ const INVISIBLE_ITEM_CLASS = 'dx-state-invisible';
 const CHECK_BOX_CLASS = 'dx-checkbox';
 const CHECK_BOX_CHECKED_CLASS = 'dx-checkbox-checked';
 
+const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+
 const { assert } = QUnit;
 
 class TreeViewTestWrapper {
@@ -109,9 +111,13 @@ class TreeViewTestWrapper {
         assert.deepEqual(this.eventLog, expectedEventLog, 'eventLog ' + additionalErrorMessage);
     }
 
-    checkScrollPosition(expectedScrollTop) {
-        const actualScrollTop = this.getElement().find('.dx-scrollable-container').get(0).scrollTop;
-        assert.strictEqual(actualScrollTop, expectedScrollTop);
+    checkScrollPosition(expectedScrollTop, expectedScrollLeft) {
+        const scrollContainer = this.getElement().find(`.${SCROLLABLE_CONTAINER_CLASS}`).get(0);
+        const actualScrollTop = scrollContainer.scrollTop;
+        assert.strictEqual(actualScrollTop, expectedScrollTop, ' scrollTop');
+
+        const actualScrollLeft = scrollContainer.scrollLeft;
+        assert.strictEqual(actualScrollLeft, expectedScrollLeft, ' scrollLeft');
     }
 
     clearEventLog() {

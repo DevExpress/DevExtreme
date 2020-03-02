@@ -527,11 +527,11 @@ const Scrollable = DOMComponent.inherit({
 
         const scrollPosition = { top: 0, left: 0 };
         const direction = this.option('direction');
-        if(direction === VERTICAL) {
-            scrollPosition.top = this._elementPositionRelativeToContent($element, 'top');
-        }
-        if(direction === HORIZONTAL) {
+        if(direction !== VERTICAL) {
             scrollPosition.left = this._elementPositionRelativeToContent($element, 'left');
+        }
+        if(direction !== HORIZONTAL) {
+            scrollPosition.top = this._elementPositionRelativeToContent($element, 'top');
         }
 
         this.scrollTo(scrollPosition);
