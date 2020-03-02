@@ -129,10 +129,6 @@ export const viewModelFunction = ({
 };
 
 export const viewFunction = (viewModel: any) => {
-    useLayoutEffect(() => {
-        !viewModel.disabled && viewModel.onContentReady?.();
-    }, [viewModel.children]);
-
     return (
         <div
             ref={viewModel.widgetRef}
@@ -260,6 +256,13 @@ export default class Widget extends JSXComponent<WidgetInput> {
         );
 
         return () => dxClick.off(this.widgetRef, { namespace });
+    }
+
+    @Effect()
+    contentReadyEffect() {
+        const { onContentReady } = this.props;
+
+        onContentReady?.({});
     }
 
     @Effect()
