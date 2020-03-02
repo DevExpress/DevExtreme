@@ -31,7 +31,7 @@ QUnit.module('History Toolbar', {
     });
     test('should fill toolbar with default items', function(assert) {
         const toolbar = getHistoryToolbarInstance(this.$element);
-        assert.equal(toolbar.option('dataSource').length, 2);
+        assert.equal(toolbar.option('dataSource').length, this.instance.isMobileScreenSize() ? 4 : 2);
     });
     test('should fill toolbar with custom items', function(assert) {
         this.instance.option('historyToolbar.commands', ['copy']);
