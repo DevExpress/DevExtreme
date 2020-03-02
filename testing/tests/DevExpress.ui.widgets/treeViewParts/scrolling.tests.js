@@ -56,7 +56,6 @@ QUnit.module('TreeView scrolling', () => {
                 }
 
                 const wrapper = createWrapper(items);
-                wrapper.getElement().find('.dx-treeview-node').css('padding-left', '1px');
                 const completionCallback = wrapper.instance.scrollToItem(testCase.key);
 
                 const done = assert.async();
