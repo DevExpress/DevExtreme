@@ -131,6 +131,13 @@ module.exports = {
                 return scrollable ? Math.ceil(parseFloat(scrollable.$content().css('paddingBottom'))) : 0;
             };
 
+            const hideHorizontalScrollbarSpaceIfNeed = function(that) {
+                if(!that.isScrollbarVisible(true)) {
+                    const scrollable = that.getScrollable();
+                    scrollable && scrollable.$content().css('paddingBottom', 0);
+                }
+            };
+
             return {
                 _getDefaultTemplate: function(column) {
                     switch(column.command) {
@@ -829,9 +836,10 @@ module.exports = {
                             } else {
                                 freeSpaceRowElements.hide();
                                 deferUpdate(function() {
-                                    const scrollablePadding = getScrollableBottomPadding(that); // T697699
+                                    hideHorizontalScrollbarSpaceIfNeed(that); // T865137
+
                                     const scrollbarWidth = that.getScrollbarWidth(true);
-                                    const elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth - scrollablePadding;
+                                    const elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth;
                                     const contentHeight = contentElement.outerHeight();
                                     const showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0;
                                     const rowsHeight = that._getRowsHeight(contentElement.children().first());
@@ -935,7 +943,7 @@ module.exports = {
                             scrollbarWidth = scrollableContainer.clientWidth ? scrollableContainer.offsetWidth - scrollableContainer.clientWidth : 0;
                         } else {
                             scrollbarWidth = scrollableContainer.clientHeight ? scrollableContainer.offsetHeight - scrollableContainer.clientHeight : 0;
-                            scrollbarWidth += getScrollableBottomPadding(this); // T703649
+                            scrollbarWidth += getScrollableBottomPadding(this); // T703649, T697699
                         }
                     }
                     return scrollbarWidth > 0 ? scrollbarWidth : 0;
