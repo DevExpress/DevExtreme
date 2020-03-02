@@ -981,7 +981,7 @@ QUnit.test('Change value in startDateTimeZone editor should trigger change value
     assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
 });
 
-QUnit.test('Change value in endDateTimeZone editor should trigger change value in startDateTimeZone editor', function(assert) {
+QUnit.test('Change value in endDateTimeZone editor shouldn\'t trigger change value in startDateTimeZone editor', function(assert) {
     this.instance.option('editing.allowEditingTimeZones', true);
     this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
 
@@ -989,24 +989,10 @@ QUnit.test('Change value in endDateTimeZone editor should trigger change value i
     const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
     const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
 
+    startDateTimezoneEditor.option('value', 'Asia/Pyongyang');
     endDateTimezoneEditor.option('value', 'Africa/Cairo');
 
-    assert.equal(startDateTimezoneEditor.option('value'), 'Africa/Cairo', 'startDateTimeZone editor value should be "Africa/Cairo"');
-    assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
-});
-
-QUnit.test('Changing value in timezone editor should not trigger change value in another not empty timezone editor', function(assert) {
-    this.instance.option('editing.allowEditingTimeZones', true);
-    this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
-
-    const form = this.instance.getAppointmentDetailsForm();
-    const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-    const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-
-    startDateTimezoneEditor.option('value', 'Europe/Athens');
-    endDateTimezoneEditor.option('value', 'Africa/Cairo');
-
-    assert.equal(startDateTimezoneEditor.option('value'), 'Europe/Athens', 'startDateTimeZone editor value should be "Europe/Athens"');
+    assert.equal(startDateTimezoneEditor.option('value'), 'Asia/Pyongyang', 'startDateTimeZone editor value should be "Africa/Cairo"');
     assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
 });
 

@@ -69,7 +69,7 @@ const SchedulerAppointmentForm = {
         }
     },
 
-    _getTimezoneEditor: function(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, schedulerInst, isShow = false) {
+    _getTimezoneEditor: function(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, schedulerInst, isMainTimeZone, isShow = false) {
         const that = this;
         return {
             dataField: timeZoneExpr,
@@ -84,7 +84,7 @@ const SchedulerAppointmentForm = {
                 onValueChanged: function(args) {
                     const form = that._appointmentForm;
                     const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);
-                    if(!secondTimezoneEditor.option('value')) {
+                    if(isMainTimeZone) {
                         secondTimezoneEditor.option('value', args.value);
                     }
                 }
@@ -124,14 +124,14 @@ const SchedulerAppointmentForm = {
                     that._dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => { return endValue < startValue; });
                 }),
 
-            this._getTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, schedulerInst, allowEditingTimeZones),
+            this._getTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, schedulerInst, true, allowEditingTimeZones),
 
             this._getDateBoxEditor(dataExprs.endDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelEndDate',
                 function(args) {
                     that._dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => { return endValue < startValue; });
                 }),
 
-            this._getTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, schedulerInst, allowEditingTimeZones)
+            this._getTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, schedulerInst, false, allowEditingTimeZones)
         ];
     },
 
