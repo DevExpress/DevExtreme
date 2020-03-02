@@ -41,8 +41,9 @@ module.exports = {
 
                 addCssClassesToCellContent(that, $cell, options.column, $cellContent);
                 const showColumnLines = that.option('showColumnLines');
+                const contentAlignment = that._getHeaderContentAlignment(options.column.alignment);
 
-                return $cellContent[(showColumnLines || options.column.alignment === 'right') && !that.option('rtlEnabled') ? 'appendTo' : 'prependTo']($cell);
+                return $cellContent[(showColumnLines || contentAlignment === 'right') ? 'appendTo' : 'prependTo']($cell);
             };
 
             function addCssClassesToCellContent(that, $cell, column, $cellContent) {
@@ -103,6 +104,16 @@ module.exports = {
 
                 _getHeaderTemplate: function(column) {
                     return column.headerCellTemplate || { allowRenderToDetachedContainer: true, render: this._getDefaultTemplate(column) };
+                },
+
+                _getHeaderContentAlignment: function(columnAlignment) {
+                    const rtlEnabled = this.option('rtlEnabled');
+
+                    if(rtlEnabled) {
+                        return columnAlignment === 'left' ? 'right' : 'left';
+                    }
+
+                    return columnAlignment;
                 },
 
                 _processTemplate: function(template, options) {

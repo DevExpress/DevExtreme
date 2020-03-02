@@ -1876,12 +1876,14 @@ QUnit.test('Header with sorting and headerFilter (rtl enabled)', function(assert
     const $headerCellContent = $testElement.find('.dx-header-row .dx-datagrid-text-content');
     const $headerCellIndicators = $testElement.find('.dx-header-row .dx-column-indicators');
 
-    assert.ok($headerCellContent.eq(0).offset().left > $headerCellIndicators.eq(0).offset().left, 'indicators are on the left');
+    assert.ok($headerCellContent.eq(0).offset().left < $headerCellIndicators.eq(0).offset().left, 'indicators are on the right');
+
+    assert.ok($headerCellIndicators.eq(1).hasClass('dx-visibility-hidden'), 'indicator is hidden');
 
     assert.ok($headerCellContent.eq(1).offset().left > $headerCellIndicators.eq(2).offset().left, 'indicators are on the left');
-    assert.equal($headerCellIndicators.eq(2).children().length, 2, 'indicator count');
+    assert.notOk($headerCellIndicators.eq(2).hasClass('dx-visibility-hidden'), 'indicator is not hidden');
 
-    assert.ok($headerCellContent.eq(2).offset().left > $headerCellIndicators.eq(3).offset().left, 'indicators are on the right');
+    assert.ok($headerCellContent.eq(2).offset().left > $headerCellIndicators.eq(3).offset().left, 'indicators are on the left');
 });
 
 QUnit.test('Header without sorting and headerFilter - alignment cell content', function(assert) {
