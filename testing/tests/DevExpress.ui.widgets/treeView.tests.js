@@ -205,6 +205,7 @@ import './treeViewParts/lazyRendering.js';
 import './treeViewParts/optionChanged.js';
 import './treeViewParts/regression.js';
 import './treeViewParts/rendering.js';
+import './treeViewParts/scrolling.tests.js';
 import './treeViewParts/selection.js';
 import './treeViewParts/searching.js';
 import './treeViewParts/selectAllMode.js';

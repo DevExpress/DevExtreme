@@ -502,9 +502,7 @@ const Scrollable = DOMComponent.inherit({
 
     scrollToElement: function(element, offset) {
         const $element = $(element);
-        const elementInsideContent = this.$content().find(element).length;
-        const elementIsInsideContent = ($element.parents('.' + SCROLLABLE_CLASS).length - $element.parents('.' + SCROLLABLE_CONTENT_CLASS).length) === 0;
-        if(!elementInsideContent || !elementIsInsideContent) {
+        if(!this._checkElementIsInsideContent($element)) {
             return;
         }
 
@@ -519,6 +517,31 @@ const Scrollable = DOMComponent.inherit({
         }
 
         this.scrollTo(scrollPosition);
+    },
+
+    scrollToElementStartPosition(element) {
+        const $element = $(element);
+        if(!this._checkElementIsInsideContent($element)) {
+            return;
+        }
+
+        const scrollPosition = { top: 0, left: 0 };
+        const direction = this.option('direction');
+        if(direction === VERTICAL) {
+            scrollPosition.top = this._elementPositionRelativeToContent($element, 'top');
+        }
+        if(direction === HORIZONTAL) {
+            scrollPosition.left = this._elementPositionRelativeToContent($element, 'left');
+        }
+
+        this.scrollTo(scrollPosition);
+    },
+
+    _checkElementIsInsideContent($element) {
+        const elementInsideContent = this.$content().find($element).length;
+        const elementIsInsideContent = ($element.parents('.' + SCROLLABLE_CLASS).length - $element.parents('.' + SCROLLABLE_CONTENT_CLASS).length) === 0;
+
+        return elementInsideContent && elementIsInsideContent;
     },
 
     getScrollElementPosition: function($element, direction, offset) {

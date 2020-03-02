@@ -888,7 +888,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const nodeContainerExists = $nodeContainer.length > 0;
 
         if(!state || nodeContainerExists && !$nodeContainer.is(':empty')) {
-            this._updateExpandedItem(node, state, e);
+            this._animateNodeContainer(node, state, e);
             return;
         }
 
@@ -899,7 +899,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._renderSublevel($node, node, this._getChildNodes(node));
         this._fireContentReadyAction();
-        this._updateExpandedItem(node, state, e);
+        this._animateNodeContainer(node, state, e);
     },
 
     _loadNestedItemsWithUpdate: function(node, state, e) {
@@ -913,7 +913,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
 
             this._fireContentReadyAction();
-            this._updateExpandedItem(actualNodeData, state, e);
+            this._animateNodeContainer(actualNodeData, state, e);
         });
     },
 
@@ -951,10 +951,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _appendItems: function(newItems) {
         this.option().items = this.option('items').concat(newItems);
         this._initDataAdapter();
-    },
-
-    _updateExpandedItem: function(node, state, e) {
-        this._animateNodeContainer(node, state, e);
     },
 
     _animateNodeContainer: function(node, state, e) {
@@ -1583,8 +1579,56 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         each(this._dataAdapter.getExpandedNodesKeys(), (function(_, key) {
             this._toggleExpandedState(key, false);
         }).bind(this));
-    }
+    },
 
+    scrollToItem: function(keyOrElement) {
+        const node = this._getNode(keyOrElement);
+        if(!node) {
+            return new Deferred().reject(errors.Error('W1015'));
+        }
+
+        const nodeKeysToExpand = [];
+        let parentNode = node.internalFields.publicNode.parent;
+        while(parentNode != null) {
+            if(!parentNode.expanded) {
+                nodeKeysToExpand.push(parentNode.key);
+            }
+            parentNode = parentNode.parent;
+        }
+
+        const allNodesExpandedCallback = this._expandNodes(nodeKeysToExpand.reverse());
+        const element = this._getNodeElement(node);
+        if(!element || element.length === 0) {
+            return new Deferred().reject(errors.Error('W1015'));
+        }
+
+        allNodesExpandedCallback.done(() => {
+            this._scrollableContainer.scrollToElementStartPosition(element);
+        });
+
+        return allNodesExpandedCallback;
+    },
+
+    _expandNodes: function(keysToExpand) {
+        if(!keysToExpand || keysToExpand.length === 0) {
+            return new Deferred().resolve();
+        }
+
+        const allItemsExpandedCallback = new Deferred();
+        const onExpandedCallback = (item) => {
+            const lastIndex = keysToExpand.length - 1;
+            if(item.node.key === keysToExpand[lastIndex]) {
+                this.off('itemExpanded', onExpandedCallback);
+                allItemsExpandedCallback.resolve();
+            }
+        };
+        this.on('itemExpanded', onExpandedCallback);
+        keysToExpand.forEach(key => {
+            this.expandItem(key);
+        });
+
+        return allItemsExpandedCallback;
+    }
 });
 
 module.exports = TreeViewBase;

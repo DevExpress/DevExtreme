@@ -109,6 +109,11 @@ class TreeViewTestWrapper {
         assert.deepEqual(this.eventLog, expectedEventLog, 'eventLog ' + additionalErrorMessage);
     }
 
+    checkScrollPosition(expectedScrollTop) {
+        const actualScrollTop = this.getElement().find('.dx-scrollable-container').get(0).scrollTop;
+        assert.strictEqual(actualScrollTop, expectedScrollTop);
+    }
+
     clearEventLog() {
         this.eventLog = [];
     }
