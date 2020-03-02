@@ -19633,7 +19633,8 @@ QUnit.module('Validation with virtual scrolling and rendering', {
             showBorders: true,
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual'
+                rowRenderingMode: 'virtual',
+                useNative: false
             },
             paging: { pageSize: 50 },
             editing: {
@@ -19711,7 +19712,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
     });
 
     // T838674
-    QUnit.test('Validation error hightlighting should disappear after scrolling if newly added row failed validation', function(assert) {
+    QUnit.test('Validation error hightlighting should not disappear after scrolling if newly added row failed validation', function(assert) {
         // arrange
         let $input; let dataGrid; let $firstCell;
 
@@ -19760,7 +19761,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         $input = $firstCell.find('input');
 
         // assert
-        assert.notOk($firstCell.hasClass('dx-datagrid-invalid'), 'cell has not invalid class');
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell has invalid class');
         assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
         assert.ok($input, 'cell has input');
     });
