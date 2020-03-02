@@ -10,18 +10,6 @@ class Widget extends WidgetBase {
 
     getProps(isFirstRender) {
         const props = super.getProps(isFirstRender);
-        props.onClick = this._createActionByOption('onClick', {
-            excludeValidators: ['readOnly'],
-            afterExecute: () => {
-                const { useSubmitBehavior } = this.option();
-
-                useSubmitBehavior && setTimeout(() => this._submitInput().click());
-            }
-        });
-
-        props.onContentReady = this._createActionByOption('onContentReady', {
-            excludeValidators: ['disabled', 'readOnly']
-        });
 
         return props;
     }

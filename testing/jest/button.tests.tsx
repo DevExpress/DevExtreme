@@ -375,40 +375,6 @@ describe('Button', () => {
                 expect(tree.find(Widget).prop('tabIndex')).toBe(10);
             });
         });
-
-        describe('onContentReady', () => {
-            it('should call on first render', () => {
-                const contentReadyHandler = jest.fn();
-                render({
-                    onContentReady: contentReadyHandler,
-                });
-
-                expect(contentReadyHandler).toHaveBeenCalled();
-            });
-
-            it('should call on onContentReady change', () => {
-                const contentReadyHandler = jest.fn();
-                const button = mount(<Button />);
-
-                expect(contentReadyHandler).toHaveBeenCalledTimes(0);
-
-                button.setProps({ onContentReady: contentReadyHandler });
-                expect(contentReadyHandler).toHaveBeenCalledTimes(1);
-            });
-
-            it('should call on content change', () => {
-                const contentReadyHandler = jest.fn();
-                const button = mount(<Button onContentReady={contentReadyHandler} />);
-
-                expect(contentReadyHandler).toHaveBeenCalledTimes(1);
-
-                button.setProps({ text: 'button', icon: 'test' });
-                expect(contentReadyHandler).toHaveBeenCalledTimes(2);
-
-                button.setProps({ template: () => {} });
-                expect(contentReadyHandler).toHaveBeenCalledTimes(3);
-            });
-        });
     });
 
     describe('ARIA accessibility', () => {

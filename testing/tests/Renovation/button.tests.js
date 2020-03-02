@@ -301,6 +301,7 @@ QUnit.module('regressions', {
 
 QUnit.module('contentReady', {}, () => {
     QUnit.test('T355000 - the \'onContentReady\' action should be fired after widget is rendered entirely', function(assert) {
+        const done = assert.async();
         const buttonConfig = {
             text: 'Test button',
             icon: 'trash'
@@ -340,6 +341,7 @@ QUnit.module('contentReady', {}, () => {
         $('#button').Button($.extend({}, buttonConfig, {
             onContentReady(e) {
                 assert.ok(areElementsEqual($firstButton, $(e.element)), 'rendered widget and widget with fired action are equals');
+                done();
             }
         }));
     });
