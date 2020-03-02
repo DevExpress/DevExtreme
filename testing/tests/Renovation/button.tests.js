@@ -739,8 +739,8 @@ QUnit.module('templates', () => {
 });
 
 QUnit.module('events subscriptions', () => {
-    // TODO
-    QUnit.skip('click', function(assert) {
+    QUnit.test('click', function(assert) {
+        const done = assert.async();
         const clickHandler = sinon.spy();
         const $button = $('#button').Button({
             text: 'test'
@@ -749,28 +749,36 @@ QUnit.module('events subscriptions', () => {
 
         button.on('click', clickHandler);
 
-        $button.trigger('dxclick');
+        setTimeout(() => {
+            $button.trigger('dxclick');
 
-        assert.ok(clickHandler.calledOnce, 'Handler should be called');
-        const params = clickHandler.getCall(0).args[0];
-        assert.ok(params, 'Event params should be passed');
-        assert.ok(params.event, 'Event should be passed');
-        assert.ok(params.validationGroup, 'validationGroup should be passed');
+            setTimeout(() => {
+                assert.ok(clickHandler.calledOnce, 'Handler should be called');
+                const params = clickHandler.getCall(0).args[0];
+                assert.ok(params, 'Event params should be passed');
+                assert.ok(params.event, 'Event should be passed');
+                // TODO
+                // assert.ok(params.validationGroup, 'validationGroup should be passed');
+
+                done();
+            }, 100);
+        }, 100);
     });
 
-    // TODO
-    QUnit.skip('contentReady', function(assert) {
+    QUnit.test('contentReady', function(assert) {
+        const done = assert.async();
         assert.expect(3);
 
         const button = $('#button').Button({
             text: 'test'
         }).Button('instance');
 
+        // NOTE: now we shouldn't call repaint, because we call onContentReady async
         button.on('contentReady', (e) => {
             assert.ok(e.component, 'Component info should be passed');
             assert.ok(e.element, 'Element info should be passed');
             assert.strictEqual($(e.element).text(), 'test', 'Text is rendered to the element');
+            done();
         });
-        button.repaint();
     });
 });
