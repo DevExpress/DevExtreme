@@ -267,10 +267,14 @@ const polarChartPlugin = {
         },
         _annotationsPointerEventHandler: chartPlugin.members._annotationsPointerEventHandler,
         _pullOptions(options) {
-            return extend({}, {
+            const polarOptions = extend({}, {
                 radius: options.radius,
                 angle: options.angle,
             }, chartPlugin.members._pullOptions(options));
+
+            delete polarOptions.axis;
+
+            return polarOptions;
         }
     }
 };
