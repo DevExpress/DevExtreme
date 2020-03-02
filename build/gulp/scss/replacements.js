@@ -358,6 +358,14 @@ module.exports = {
     'fileUploader': [
         { import: '../../base/mixins', type: 'index' },
     ],
+    'recurrenceEditor': [
+        { import: '../scheduler/sizes', type: 'index' },
+        { import: '../../base/recurrenceEditor', type: 'index', withVars: [
+            'base-border-color',
+            'SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET',
+            'SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET',
+        ] },
+    ],
     'scheduler': [
         { import: '../../base/mixins', type: 'index' },
         { import: '../../base/icons', type: 'index' },
@@ -382,12 +390,14 @@ module.exports = {
             'SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR',
             'SCHEDULER_APPOINTMENT_TEXT_COLOR',
             'SCHEDULER_FILL_FOCUSED_APPOINTMENT',
-            'SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR'
+            'SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR',
+            'SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET',
         ] },
         { import: '../button/colors', type: 'index' },
         { import: '../button', type: 'index' },
         { import: '../button/colors', type: 'sizes' },
         { import: '../tooltip/colors', type: 'index' },
+        { import: '../recurrenceEditor', type: 'index' },
         { regex: /@mixin dx-scheduler-all-day-title-mixin\(\$MATERIAL_SCHEDULER_HEADER_HEIGHT \+ \$MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT\),/, replacement: '@include dx-scheduler-all-day-title-mixin($MATERIAL_SCHEDULER_HEADER_HEIGHT + $MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT);' },
         { regex: /top: \$MATERIAL_SCHEDULER_HEADER_HEIGHT \+ \$MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT,/, replacement: 'top: $MATERIAL_SCHEDULER_HEADER_HEIGHT + $MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT;' },
         { regex: /@mixin dx-scheduler-header-scrollable-mixin\(\$MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT \* 2\),/, replacement: '@include dx-scheduler-header-scrollable-mixin($MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT * 2);' },
