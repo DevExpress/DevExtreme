@@ -10,6 +10,7 @@ import Widget from '../widget/ui.widget';
 import Overlay from '../overlay';
 import ValidationEngine from '../validation_engine';
 import EventsEngine from '../../events/core/events_engine';
+import { encodeHtml } from '../../core/utils/string';
 
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 const INVALID_CLASS = 'dx-invalid';
@@ -29,7 +30,7 @@ const getValidationErrorMessage = function(validationErrors) {
     if(validationErrors) {
         validationErrors.forEach(function(err) {
             if(err.message) {
-                validationErrorMessage += ((validationErrorMessage ? '<br />' : '') + err.message);
+                validationErrorMessage += ((validationErrorMessage ? '<br />' : '') + encodeHtml(err.message));
             }
         });
     }

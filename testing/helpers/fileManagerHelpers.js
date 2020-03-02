@@ -13,6 +13,9 @@ export const Consts = {
     CONTAINER_CLASS: 'dx-filemanager-container',
     DRAWER_PANEL_CONTENT_CLASS: 'dx-drawer-panel-content',
     DRAWER_CONTENT_CLASS: 'dx-drawer-content',
+    DRAWER_MODE_SHRINK: 'dx-drawer-shrink',
+    DRAWER_MODE_OVERLAP: 'dx-drawer-overlap',
+    NOTIFICATION_DRAWER_CLASS: 'dx-filemanager-notification-drawer',
     DIRS_PANEL_CLASS: 'dx-filemanager-dirs-panel',
     DIRS_TREE_CLASS: 'dx-filemanager-dirs-tree',
     ITEMS_VIEW_CLASS: 'dx-filemanager-files-view',
@@ -306,6 +309,10 @@ export class FileManagerWrapper {
 
     getDrawerPanelContent() {
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
+    }
+
+    getProgressDrawer() {
+        return this._$element.find(`.${Consts.NOTIFICATION_DRAWER_CLASS}`);
     }
 
     getItemsPanel() {

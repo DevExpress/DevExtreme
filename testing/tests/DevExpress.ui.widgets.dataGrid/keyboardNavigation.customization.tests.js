@@ -2025,7 +2025,6 @@ QUnit.module('Customize keyboard navigation', {
     testInDesktop('Input should have a correct value in fast editing mode in Microsoft Edge Browser (T808348)', function(assert) {
         // arrange
         const rowsViewWrapper = dataGridWrapper.rowsView;
-        let $input;
 
         this.options = {
             editing: {
@@ -2047,7 +2046,8 @@ QUnit.module('Customize keyboard navigation', {
         this.triggerKeyDown('1');
 
         // arrange, assert
-        $input = rowsViewWrapper.getEditorInput(0, 0);
+        const editor = rowsViewWrapper.getCell(0, 0).getEditor();
+        const $input = editor.getInputElement();
         assert.equal($input.val(), 'Alex', 'input value has not changed');
 
         this.clock.tick();

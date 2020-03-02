@@ -2,6 +2,7 @@ import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/testHelper';
 import DataGrid from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
+import { ClientFunction } from 'testcafe';
 
 fixture `Editing`
     .page(url(__dirname, '../container.html'));
@@ -23,6 +24,30 @@ test("Tab key on editor should focus next cell if editing mode is cell", async t
     columns: [{ dataField: "name", allowEditing: false }, { dataField: "value", showEditorAlways: true }]
 }));
 
+test("Click should work if a column button set using svg icon (T863635)", async t => {
+    await t
+        .click("#svg-icon")
+        .expect(ClientFunction(() => (window as any).onSvgClickCounter)()).eql(1)
+
+}).before(() => createWidget("dxDataGrid", {
+    dataSource: [{ value: 1 }],
+    columns: [{
+        type: "buttons",
+        width: 110,
+        buttons: [
+        {
+            hint: "svg icon",
+            icon: '<svg id="svg-icon"><circle cx="15" cy="15" r="14" /> </svg>',
+            onClick: function(e) {
+                const global = window as any;
+                if (!global.onSvgClickCounter) {
+                    global.onSvgClickCounter = 0;
+                }
+                global.onSvgClickCounter++;
+            }
+        }]
+    }]
+}));
 
 test("Value change on dataGrid row should be fired after clicking on editor (T823431)", async t => {
     const dataGrid = new DataGrid("#container");
