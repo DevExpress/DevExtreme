@@ -20,22 +20,24 @@
 @DIAGRAM_TOOLBOX_TITLE_SIZE: 12px;
 
 .dx-size-default() {
-    @DIAGRAM_TOOLBOX_H_PADDING: 8px;
+    @DIAGRAM_TOOLBOX_WIDTH: 144px;
+    @DIAGRAM_TOOLBOX_H_PADDING: 12px;
     @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING: 6px;
     @DIAGRAM_TOOLBOX_INPUT_V_PADDING: 6px;
     @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE: 12px;
-    @DIAGRAM_TOOLBOX_MOBILE_PADDING: 72px;
+    @DIAGRAM_TOOLBOX_MOBILE_PADDING: 66px;
 
     @DIAGRAM_PROPERTIES_PANEL_SPACING: 8px;
     @DIAGRAM_PROPERTIES_LAYOUT_ICON_SIZE: 64px;
 }
 
 .dx-size-compact() {
-    @DIAGRAM_TOOLBOX_H_PADDING: 6px;
+    @DIAGRAM_TOOLBOX_WIDTH: 114px;
+    @DIAGRAM_TOOLBOX_H_PADDING: 8px;
     @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING: 4px;
     @DIAGRAM_TOOLBOX_INPUT_V_PADDING: 4px;
     @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE: 10px;
-    @DIAGRAM_TOOLBOX_MOBILE_PADDING: 60px;
+    @DIAGRAM_TOOLBOX_MOBILE_PADDING: 56px;
 
     @DIAGRAM_PROPERTIES_PANEL_SPACING: 4px;
     @DIAGRAM_PROPERTIES_LAYOUT_ICON_SIZE: 48px;
@@ -148,12 +150,25 @@
         height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
     }
 
-    .dx-diagram-toolbox-input .dx-button .dx-button-content {
-        padding: 2px;
+    .dx-accordion {
+        width: @DIAGRAM_TOOLBOX_WIDTH;
     }
 
-    .dx-diagram-toolbox-input .dx-button .dx-icon {
-        font-size: @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE;
+    .dx-diagram-toolbox-input {
+        width: @DIAGRAM_TOOLBOX_WIDTH;
+
+        .dx-texteditor-input,
+        .dx-placeholder:before {
+            padding: @DIAGRAM_TOOLBOX_INPUT_V_PADDING @DIAGRAM_TOOLBOX_H_PADDING;
+        }
+
+        .dx-button .dx-button-content {
+            padding: 2px;
+        }
+
+        .dx-button .dx-icon {
+            font-size: @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE;
+        }
     }
 
     .dx-popup-title .dx-closebutton {
@@ -170,13 +185,6 @@
         line-height: 8px;
         background-position: 1px 1px;
         background-size: 8px 8px;
-    }
-
-    .dx-diagram-toolbox-input {
-        .dx-texteditor-input,
-        .dx-placeholder:before {
-            padding: @DIAGRAM_TOOLBOX_INPUT_V_PADDING @DIAGRAM_TOOLBOX_H_PADDING;
-        }
     }
 
     &.dx-diagram-mobile-popup {

@@ -9,7 +9,6 @@ import ScrollView from '../scroll_view';
 import Tooltip from '../tooltip';
 import DiagramFloatingPanel from './ui.diagram.floating_panel';
 
-const DIAGRAM_TOOLBOX_WIDTH = 146;
 const DIAGRAM_TOOLBOX_MIN_HEIGHT = 130;
 const DIAGRAM_TOOLBOX_POPUP_CLASS = 'dx-diagram-toolbox-popup';
 const DIAGRAM_TOOLBOX_PANEL_CLASS = 'dx-diagram-toolbox-panel';
@@ -70,7 +69,6 @@ class DiagramToolbox extends DiagramFloatingPanel {
             .addClass(DIAGRAM_TOOLBOX_INPUT_CLASS)
             .appendTo($parent);
         this._searchInput = this._createComponent($input, TextBox, {
-            width: DIAGRAM_TOOLBOX_WIDTH,
             placeholder: messageLocalization.format('dxDiagram-uiSearch'),
             onValueChanged: function(data) {
                 that._onInputChanged(data.value);
@@ -125,17 +123,12 @@ class DiagramToolbox extends DiagramFloatingPanel {
                 shapes: toolboxGroups[i].shapes,
                 onTemplate: (widget, $element, data) => {
                     const $toolboxElement = $($element);
-                    let toolboxWidth = DIAGRAM_TOOLBOX_WIDTH;
-                    if(hasWindow()) {
-                        toolboxWidth -= ($toolboxElement.parent().width() - $toolboxElement.width());
-                    }
                     this._onShapeCategoryRenderedAction({
                         category: data.category,
                         displayMode: data.displayMode,
                         dataToggle: DIAGRAM_TOOLTIP_DATATOGGLE,
                         shapes: data.shapes,
-                        $element: $toolboxElement,
-                        width: toolboxWidth
+                        $element: $toolboxElement
                     });
                     this._toolboxes.push($toolboxElement);
 
@@ -177,7 +170,6 @@ class DiagramToolbox extends DiagramFloatingPanel {
     _renderAccordion($container) {
         const data = this._getAccordionDataSource();
         this._accordion = this._createComponent($container, Accordion, {
-            width: DIAGRAM_TOOLBOX_WIDTH,
             multiple: true,
             activeStateEnabled: false,
             focusStateEnabled: false,

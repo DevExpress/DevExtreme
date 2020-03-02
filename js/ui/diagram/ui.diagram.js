@@ -50,12 +50,8 @@ const DIAGRAM_DEFAULT_AUTOZOOM_MODE = 'disabled';
 const DIAGRAM_DEFAULT_PAGE_ORIENTATION = 'portrait';
 const DIAGRAM_DEFAULT_PAGE_COLOR = 'white';
 
-const DIAGRAM_TOOLBOX_ITEM_SIZE = 30;
-
 const DIAGRAM_MAX_MOBILE_WINDOW_WIDTH = 576;
-const DIAGRAM_TOOLBOX_ITEM_SPACING = 10;
-const DIAGRAM_CONTEXT_TOOLBOX_ICON_SIZE = 24;
-const DIAGRAM_CONTEXT_TOOLBOX_ICON_SPACING = 8;
+const DIAGRAM_TOOLBOX_ITEM_SPACING = 12;
 
 const DIAGRAM_NAMESPACE = 'dxDiagramEvent';
 const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('fullscreenchange', DIAGRAM_NAMESPACE);
@@ -289,9 +285,8 @@ class Diagram extends Widget {
                 if(isServerSide) return;
 
                 this._diagramInstance.createToolbox(e.$element[0],
-                    DIAGRAM_TOOLBOX_ITEM_SIZE, DIAGRAM_TOOLBOX_ITEM_SPACING,
-                    { 'data-toggle': e.dataToggle },
-                    e.shapes || e.category, e.displayMode === 'texts', e.width
+                    undefined, DIAGRAM_TOOLBOX_ITEM_SPACING, { 'data-toggle': e.dataToggle },
+                    e.shapes || e.category, e.displayMode === 'texts', undefined, 3
                 );
             },
             onFilterChanged: (e) => {
@@ -417,7 +412,7 @@ class Diagram extends Widget {
             .appendTo($parent);
 
         const offsetX = DIAGRAM_FLOATING_PANEL_OFFSET;
-        const offsetY = 2 * DIAGRAM_FLOATING_PANEL_OFFSET + this._propertiesPanelToolbar.$element().height();
+        const offsetY = 2 * DIAGRAM_FLOATING_PANEL_OFFSET + (!isServerSide ? this._propertiesPanelToolbar.$element().height() : 0);
         this._propertiesPanel = this._createComponent($propertiesPanel, DiagramPropertiesPanel, {
             isMobileView: this.isMobileScreenSize(),
             isVisible: this._isPropertiesPanelVisible(),
@@ -503,12 +498,14 @@ class Diagram extends Widget {
                         isTextGroup = group.displayMode === 'texts';
                     }
                 }
-                this._diagramInstance.createContextToolbox($toolboxContainer[0], DIAGRAM_CONTEXT_TOOLBOX_ICON_SIZE, DIAGRAM_CONTEXT_TOOLBOX_ICON_SPACING, {},
+                this._diagramInstance.createContextToolbox($toolboxContainer[0],
+                    undefined, DIAGRAM_TOOLBOX_ITEM_SPACING, {},
                     shapes || category || e.category, isTextGroup,
-                    function(shapeType) {
+                    (shapeType) => {
                         e.callback(shapeType);
                         this._diagramInstance.captureFocus();
-                    }.bind(this)
+                    },
+                    undefined, 4
                 );
             }
         });
