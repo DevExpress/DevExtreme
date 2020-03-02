@@ -301,7 +301,7 @@ class Diagram extends Widget {
                     this._viewToolbar.setCommandChecked(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME, e.visible);
                 }
                 if(e.visible && this.isMobileScreenSize() && this._propertiesPanel) {
-                    this._propertiesPanel.option('isVisible', false);
+                    this._propertiesPanel.hide();
                 }
                 if(this._historyToolbar) {
                     this._historyToolbar.option('isToolboxVisible', e.visible);
@@ -309,9 +309,11 @@ class Diagram extends Widget {
                     if(e.visible && this.isMobileScreenSize()) {
                         this._historyToolbarZIndex = zIndexPool.create(Overlay.baseZIndex());
                         this._historyToolbar.$element().css('zIndex', this._historyToolbarZIndex);
+                        this._historyToolbar.$element().css('box-shadow', 'none');
                     } else if(this._historyToolbarZIndex) {
                         zIndexPool.remove(this._historyToolbarZIndex);
                         this._historyToolbar.$element().css('zIndex', '');
+                        this._historyToolbar.$element().css('box-shadow', '');
                         this._historyToolbarZIndex = undefined;
                     }
                 }
@@ -436,7 +438,7 @@ class Diagram extends Widget {
                     this._propertiesPanelToolbar.option('isPropertiesPanelVisible', e.visible);
                 }
                 if(e.visible && this.isMobileScreenSize() && this._toolbox) {
-                    this._toolbox.option('isVisible', false);
+                    this._toolbox.hide();
                 }
             },
             onVisibilityChanging: ({ component }) => this._updatePropertiesPanelGroupBars(component),
@@ -504,6 +506,7 @@ class Diagram extends Widget {
                     (shapeType) => {
                         e.callback(shapeType);
                         this._diagramInstance.captureFocus();
+                        e.hide();
                     },
                     undefined, 4
                 );
@@ -1732,7 +1735,7 @@ class Diagram extends Widget {
                 /**
                 * @name dxDiagramOptions.mainToolbar.visible
                 * @type boolean
-                * @default true
+                * @default false
                 */
                 visible: false,
                 /**
@@ -1894,11 +1897,21 @@ class Diagram extends Widget {
     _raiseToolboxDragStart() {
         if(this._toolbox) {
             this._toolbox._raiseToolboxDragStart();
+
+            if(this.isMobileScreenSize()) {
+                this._toolbox.hide();
+                this._toolboxDragHidden = true;
+            }
         }
     }
     _raiseToolboxDragEnd() {
         if(this._toolbox) {
             this._toolbox._raiseToolboxDragEnd();
+
+            if(this._toolboxDragHidden) {
+                this._toolbox.show();
+                delete this._toolboxDragHidden;
+            }
         }
     }
 
