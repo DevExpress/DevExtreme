@@ -21,14 +21,12 @@ QUnit.module('TreeView scrolling', () => {
         });
     }
 
-    const testCases = [
-        { key: 0, expectedOffset: 0 },
-        { key: 10, expectedOffset: 320 },
-        { key: 20, expectedOffset: 640 },
-        { key: 29, expectedOffset: 860 }];
-
     configs.forEach(config => {
-        testCases.forEach(testCase => {
+        [{ key: 0, expectedOffset: 0 },
+            { key: 10, expectedOffset: 320 },
+            { key: 20, expectedOffset: 640 },
+            { key: 29, expectedOffset: 860 }
+        ].forEach(testCase => {
             QUnit.test(`flat array, allItems.expanded: ${config.expanded} -> scrollToItem(${testCase.key})`, function(assert) {
                 const items = [];
                 for(let i = 0; i < TOTAL_ITEMS_COUNT; i++) {
@@ -44,7 +42,13 @@ QUnit.module('TreeView scrolling', () => {
                     done();
                 });
             });
+        });
 
+        [{ key: 0, expandedExpectedOffset: 0, collapsedExpectedOffset: 0 },
+            { key: 10, expandedExpectedOffset: 320, collapsedExpectedOffset: 252 },
+            { key: 20, expandedExpectedOffset: 640, collapsedExpectedOffset: 572 },
+            { key: 29, expandedExpectedOffset: 860, collapsedExpectedOffset: 860 }
+        ].forEach(testCase => {
             QUnit.test(`deep array, allItems.expanded: ${config.expanded} -> scrollToItem(${testCase.key})`, function(assert) {
                 const items = [];
                 for(let i = 0; i < TOTAL_ITEMS_COUNT; i++) {
@@ -57,25 +61,29 @@ QUnit.module('TreeView scrolling', () => {
 
                 const done = assert.async();
                 completionCallback.done(() => {
-                    wrapper.checkScrollPosition(testCase.expectedOffset);
+                    if(config.expanded === true) {
+                        wrapper.checkScrollPosition(testCase.expandedExpectedOffset);
+                    } else {
+                        wrapper.checkScrollPosition(testCase.collapsedExpectedOffset);
+                    }
                     done();
                 });
             });
         });
     });
 
-    [(wrapper) => wrapper.scrollToItem(LAST_ITEM_KEY),
-        (wrapper) => wrapper.scrollToItem(wrapper.$element().find(`[data-item-id="${LAST_ITEM_KEY}"]`)),
-        (wrapper) => wrapper.scrollToItem(wrapper.option('dataSource')[TOTAL_ITEMS_COUNT - 1])
-    ].forEach(scrollFunc => {
-        QUnit.test('scrollToItem(LAST_ITEM_KEY)', function(assert) {
+    [{ argType: 'key', scrollFunc: (wrapper) => wrapper.scrollToItem(LAST_ITEM_KEY) },
+        { argType: 'itemElement', scrollFunc: (wrapper) => wrapper.scrollToItem(wrapper.$element().find(`[data-item-id="${LAST_ITEM_KEY}"]`)) },
+        { argType: 'itemData', scrollFunc: (wrapper) => wrapper.scrollToItem(wrapper.option('dataSource')[TOTAL_ITEMS_COUNT - 1]) }
+    ].forEach(testCase => {
+        QUnit.test(`scrollToItem(${testCase.argType})`, function(assert) {
             const items = [];
             for(let i = 0; i < TOTAL_ITEMS_COUNT; i++) {
                 items.push({ id: i, text: 'item' + i, parentId: i - 1, expanded: true });
             }
 
             const wrapper = createWrapper(items);
-            const completionCallback = scrollFunc(wrapper.instance);
+            const completionCallback = testCase.scrollFunc(wrapper.instance);
 
             const done = assert.async();
             completionCallback.done(() => {
@@ -85,7 +93,7 @@ QUnit.module('TreeView scrolling', () => {
         });
     });
 
-    QUnit.test('scrollToItem(LAST_ITEM_KEY) -> scrollToItem(1)', function(assert) {
+    QUnit.test('scrollToItem(LAST_ITEM_KEY) -> scrollToItem(0)', function(assert) {
         const items = [];
         for(let i = 0; i < TOTAL_ITEMS_COUNT; i++) {
             items.push({ id: i, text: 'item' + i, parentId: i - 1, expanded: true });

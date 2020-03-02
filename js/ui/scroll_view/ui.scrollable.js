@@ -519,7 +519,7 @@ const Scrollable = DOMComponent.inherit({
         this.scrollTo(scrollPosition);
     },
 
-    scrollToElementStartPosition(element) {
+    scrollToElementBeginPosition(element) {
         const $element = $(element);
         if(!this._checkElementIsInsideContent($element)) {
             return;

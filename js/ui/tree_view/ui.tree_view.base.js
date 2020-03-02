@@ -1603,7 +1603,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         allNodesExpandedCallback.done(() => {
-            this._scrollableContainer.scrollToElementStartPosition(element);
+            this._scrollableContainer.scrollToElementBeginPosition(element);
         });
 
         return allNodesExpandedCallback;
