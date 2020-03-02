@@ -1174,6 +1174,7 @@ const dxPolarChart = {
     },
     commonAnnotationSettings: undefined,
     annotations: [{}],
+    customizeAnnotation: undefined,
     onSeriesHoverChanged: function() { },
     onSeriesSelectionChanged: function() { },
     series: undefined,

@@ -9224,6 +9224,8 @@ declare module DevExpress.viz {
         commonSeriesSettings?: dxPolarChartCommonSeriesSettings;
         /** @name dxPolarChart.Options.containerBackgroundColor */
         containerBackgroundColor?: string;
+        /** @name dxPolarChart.Options.customizeAnnotation */
+        customizeAnnotation?: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig);
         /** @name dxPolarChart.Options.dataPrepareSettings */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) };
         /** @deprecated */
