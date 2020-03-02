@@ -4,6 +4,7 @@ import Toolbar from '../toolbar';
 import ContextMenu from '../context_menu';
 import DiagramBar from './diagram.bar';
 import { extend } from '../../core/utils/extend';
+import { hasWindow } from '../../core/utils/window';
 
 import DiagramPanel from './ui.diagram.panel';
 import DiagramMenuHelper from './ui.diagram.menu_helper';
@@ -33,12 +34,22 @@ class DiagramToolbar extends DiagramPanel {
     _initMarkup() {
         super._initMarkup();
 
+        const isServerSide = !hasWindow();
+        if(this.option('needAdjustSize') && !isServerSide) {
+            this.$element().width('');
+        }
+
         this._commands = this._getCommands();
         this._itemHelpers = {};
         this._contextMenus = {};
 
         const $toolbar = this._createMainElement();
         this._renderToolbar($toolbar);
+
+        if(this.option('needAdjustSize') && !isServerSide) {
+            const $toolbarContent = this.$element().find('.dx-toolbar-before');
+            this.$element().width($toolbarContent.width());
+        }
     }
 
     _createMainElement() {
@@ -370,14 +381,15 @@ class DiagramToolbar extends DiagramPanel {
     }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            'export': {
+            export: {
                 fileName: 'Diagram',
                 proxyUrl: undefined
             },
-            'locateInMenu': 'auto',
-            'buttonStylingMode': 'text',
-            'buttonType': 'normal',
-            'editorStylingMode': 'filled'
+            locateInMenu: 'auto',
+            buttonStylingMode: 'text',
+            buttonType: 'normal',
+            editorStylingMode: 'filled',
+            needAdjustSize: false
         });
     }
 
