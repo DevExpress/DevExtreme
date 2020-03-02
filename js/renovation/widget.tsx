@@ -16,7 +16,6 @@ import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { focusable } from '../ui/widget/selectors';
 import { isFakeClickEvent } from '../events/utils';
-import { useLayoutEffect } from 'preact/hooks';
 
 const getStyles = ({ width, height }) => {
     const computedWidth = typeof width === 'function' ? width() : width;
