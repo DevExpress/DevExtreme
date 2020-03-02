@@ -341,6 +341,19 @@ QUnit.test('Popup should show or not show reccurence editor after many opening w
     checkFormWithRecurrenceEditor(assert, scheduler.instance, false);
 });
 
+QUnit.test('Popup should show or not to show reccurence editor after many opening with and change visibility', function(assert) {
+    const scheduler = createScheduler();
+    scheduler.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: 'a' });
+
+    const form = scheduler.instance.getAppointmentDetailsForm();
+    form.getEditor('visibilityChanged').option('value', true);
+    scheduler.instance.getAppointmentPopup().hide();
+
+    scheduler.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: 'b', recurrenceRule: 'FREQ=WEEKLY' });
+    $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
+    checkFormWithRecurrenceEditor(assert, scheduler.instance, true);
+});
+
 QUnit.test('Popup should not contain recurrence editor, if recurrenceRuleExpr is null', function(assert) {
     const scheduler = createScheduler();
     const appointment = {
