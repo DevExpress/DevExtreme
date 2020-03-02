@@ -69,7 +69,7 @@ QUnit.module('CommandManager', {
         assert.equal(DiagramCommandsManager.getMainToolbarCommands().length, 25);
     });
     test('default history toolbar commands', function(assert) {
-        assert.equal(DiagramCommandsManager.getHistoryToolbarCommands().length, 3);
+        assert.equal(DiagramCommandsManager.getHistoryToolbarCommands().length, 4);
     });
     test('default view toolbar commands', function(assert) {
         const commands = DiagramCommandsManager.getViewToolbarCommands();

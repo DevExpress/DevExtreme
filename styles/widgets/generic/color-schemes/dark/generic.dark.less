@@ -92,6 +92,7 @@
 
 @base-select-color: @base-text-color;
 @base-select-bg: fade(#ffffff, 12%);
+@base-inverted-text-color: #2a2a2a;
 
 /**
 * @name 100. Focused state text color
@@ -109,7 +110,6 @@
 @typography-color: @base-text-color;
 @typography-link-color: @base-link-color;
 
-@base-inverted-text-color: #2a2a2a;
 @base-inverted-icon-color: @base-inverted-text-color;
 @base-disabled-opacity: 0.5;
 @base-dropdown-shadow-color: fade(@base-shadow-color, 17.5%);
@@ -596,6 +596,7 @@
 // List
 
 @list-border-color: @base-border-color;
+@list-normal-color: @base-text-color;
 
 /**
 * @name 20. Group header text color
@@ -608,7 +609,6 @@
 * @type color
 */
 @list-group-header-bg: fade(lighten(@base-bg, 6.5%), 5%);
-@list-normal-color: @base-text-color;
 @list-item-hover-bg: @base-hover-bg;
 
 /**

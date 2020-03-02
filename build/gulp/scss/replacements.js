@@ -230,6 +230,9 @@ module.exports = {
         { regex: /@mixin dx-icon\(clear\),/, replacement: '@include dx-icon(clear);' },
         { regex: /(px|block|absolute|%|-remove-color|-active-color|-bg|none|0 0),/g, replacement: '$1;' },
     ],
+    'radioButton': [
+        { import: '../radioGroup/colors', type: 'index' },
+    ],
     'accordion': [
         { import: '../../base/icons', type: 'index' },
     ],
@@ -355,6 +358,14 @@ module.exports = {
     'fileUploader': [
         { import: '../../base/mixins', type: 'index' },
     ],
+    'recurrenceEditor': [
+        { import: '../scheduler/sizes', type: 'index' },
+        { import: '../../base/recurrenceEditor', type: 'index', withVars: [
+            'base-border-color',
+            'SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET',
+            'SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET',
+        ] },
+    ],
     'scheduler': [
         { import: '../../base/mixins', type: 'index' },
         { import: '../../base/icons', type: 'index' },
@@ -379,12 +390,14 @@ module.exports = {
             'SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR',
             'SCHEDULER_APPOINTMENT_TEXT_COLOR',
             'SCHEDULER_FILL_FOCUSED_APPOINTMENT',
-            'SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR'
+            'SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR',
+            'SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET',
         ] },
         { import: '../button/colors', type: 'index' },
         { import: '../button', type: 'index' },
         { import: '../button/colors', type: 'sizes' },
         { import: '../tooltip/colors', type: 'index' },
+        { import: '../recurrenceEditor', type: 'index' },
         { regex: /@mixin dx-scheduler-all-day-title-mixin\(\$MATERIAL_SCHEDULER_HEADER_HEIGHT \+ \$MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT\),/, replacement: '@include dx-scheduler-all-day-title-mixin($MATERIAL_SCHEDULER_HEADER_HEIGHT + $MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT);' },
         { regex: /top: \$MATERIAL_SCHEDULER_HEADER_HEIGHT \+ \$MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT,/, replacement: 'top: $MATERIAL_SCHEDULER_HEADER_HEIGHT + $MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT;' },
         { regex: /@mixin dx-scheduler-header-scrollable-mixin\(\$MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT \* 2\),/, replacement: '@include dx-scheduler-header-scrollable-mixin($MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT * 2);' },
@@ -404,7 +417,30 @@ module.exports = {
         { regex: /\$SCHEDULER_SMALL_SIZE_FACTOR([\s;])/g, replacement: 'baseScheduler.$SCHEDULER_SMALL_SIZE_FACTOR$1' },
     ],
     'filterBuilder': [
-        // { import: '../../base/filterBuilder', type: 'index' }, // TODO
+        { import: '../../base/filterBuilder', type: 'index', withVars: [
+            'filterbuilder-bg',
+            'filterbuilder-text-color',
+            'filterbuilder-text-focus-color',
+            'filterbuilder-group-operation-color',
+            'filterbuilder-group-operation-hover-color',
+            'filterbuilder-group-operation-focus-color',
+            'filterbuilder-item-operator-color',
+            'filterbuilder-item-operator-hover-color',
+            'filterbuilder-item-operator-focus-color',
+            'filterbuilder-item-field-color',
+            'filterbuilder-item-field-hover-color',
+            'filterbuilder-item-field-focus-color',
+            'filterbuilder-item-value-color',
+            'filterbuilder-item-value-hover-color',
+            'filterbuilder-item-value-focus-color',
+            'filterbuilder-plus-icon-color',
+            'filterbuilder-plus-icon-hover-color',
+            'filterbuilder-plus-icon-focus-color',
+            'filterbuilder-remove-icon-color',
+            'filterbuilder-remove-icon-hover-color',
+            'filterbuilder-remove-icon-focus-color',
+            'filterbuilder-menu-icon-color',
+        ] },
         { import: '../textEditor/colors', type: 'index' },
     ],
     'htmlEditor': [

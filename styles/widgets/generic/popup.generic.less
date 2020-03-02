@@ -81,10 +81,10 @@
         .dx-closebutton-sizing(@size, @offset, @iconSize, @iconContainerSize) {
             width: @size;
             height: @size;
-            margin: 0 -@offset 0 @offset;
+            margin: 0 (-@offset) 0 @offset;
 
             .dx-rtl & {
-                margin: 0 @offset 0 -@offset;
+                margin: 0 @offset 0 (-@offset);
             }
 
             .dx-icon {

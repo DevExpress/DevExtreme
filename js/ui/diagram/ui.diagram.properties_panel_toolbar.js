@@ -8,14 +8,14 @@ class DiagramPropertiesPanelToolbar extends DiagramToolbar {
         const commands = DiagramCommandsManager.getPropertiesPanelToolbarCommands();
         commands.forEach(command => {
             if(command.command === DiagramCommandsManager.SHOW_PROPERTIES_PANEL_COMMAND_NAME) {
-                command.icon = this.option('active') ? 'close' : 'dx-diagram-i dx-diagram-i-button-properties-panel';
+                command.icon = this.option('isPropertiesPanelVisible') ? 'close' : 'dx-diagram-i dx-diagram-i-button-properties-panel-open';
             }
         });
         return commands;
     }
     _optionChanged(args) {
         switch(args.name) {
-            case 'active':
+            case 'isPropertiesPanelVisible':
                 this._invalidate();
                 break;
             default:
@@ -24,7 +24,7 @@ class DiagramPropertiesPanelToolbar extends DiagramToolbar {
     }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            active: false,
+            isPropertiesPanelVisible: false,
         });
     }
 }
