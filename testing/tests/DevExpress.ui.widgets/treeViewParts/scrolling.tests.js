@@ -1,4 +1,5 @@
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import devices from 'core/devices';
 
 const configs = [];
 ['vertical', 'horizontal', 'both'].forEach((scrollDirection) => {
@@ -9,6 +10,10 @@ const configs = [];
 
 
 QUnit.module('TreeView scrolling', () => {
+    if(devices.real().ios) {
+        return;
+    }
+
     const ROOT_ID = -1;
     const TOTAL_ITEMS_COUNT = 21;
     const LAST_ITEM_KEY = TOTAL_ITEMS_COUNT - 1;
@@ -105,40 +110,25 @@ QUnit.module('TreeView scrolling', () => {
         });
     });
 
-    QUnit.test('allItems.expanded::true -> scrollToItem(lastItem.key) -> scrollToItem(firstItem.key)', function(assert) {
+    QUnit.test('allItems.expanded::true -> scrollToItem(lastItem.key) -> scrollToItem(10) -> scrollToItem(firstItem.key)', function(assert) {
         const items = [];
         for(let i = 0; i < TOTAL_ITEMS_COUNT; i++) {
             items.push({ id: i, text: 'item' + i, parentId: i - 1, expanded: true });
         }
 
         const wrapper = createWrapper('both', items);
-        let completionCallback = wrapper.instance.scrollToItem(LAST_ITEM_KEY);
 
         const done = assert.async();
-        completionCallback.done(() => {
-            completionCallback = wrapper.instance.scrollToItem(0);
-            completionCallback.done(() => {
-                wrapper.checkScrollPosition(0, 0);
-                done();
-            });
-        });
-    });
+        wrapper.instance.scrollToItem(LAST_ITEM_KEY).done(() => {
+            wrapper.checkScrollPosition(572, 270);
 
-    QUnit.test('allItems.expanded::true -> scrollToItem(10) -> scrollToItem(10)', function(assert) {
-        const items = [];
-        for(let i = 0; i < TOTAL_ITEMS_COUNT; i++) {
-            items.push({ id: i, text: 'item' + i, parentId: i - 1, expanded: true });
-        }
-
-        const wrapper = createWrapper('both', items);
-        let completionCallback = wrapper.instance.scrollToItem(10);
-
-        const done = assert.async();
-        completionCallback.done(() => {
-            completionCallback = wrapper.instance.scrollToItem(10);
-            completionCallback.done(() => {
+            wrapper.instance.scrollToItem(10).done(() => {
                 wrapper.checkScrollPosition(320, 150);
-                done();
+
+                wrapper.instance.scrollToItem(0).done(() => {
+                    wrapper.checkScrollPosition(0, 0);
+                    done();
+                });
             });
         });
     });
