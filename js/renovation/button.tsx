@@ -46,80 +46,52 @@ const getAriaLabel = (text, icon) => {
     return label ? { label } : {};
 };
 
-export const viewModelFunction = (model: Button):ButtonViewModel => {
-    const props = model.props;
-    return {
-        ...props,
-        aria: getAriaLabel(model.props.text, model.props.icon),
-        contentRef: model.contentRef,
-        cssClasses: getCssClasses(props),
-        elementAttr: { ...props.elementAttr, role: 'button' },
-        iconSource: (props.icon || props.type === 'back') ? (props.icon || 'back') : '',
-        onActive: model.onActive,
-        onInactive: model.onInactive,
-        onWidgetClick: model.onWidgetClick,
-        onWidgetKeyPress: model.onWidgetKeyPress,
-        submitInputRef: model.submitInputRef,
-    };
-};
-
-declare type ButtonViewModel = {
-    contentRef: any;
-    cssClasses: string;
-    iconSource: string;
-    onActive: (e: Event) => any;
-    onInactive: (e: Event) => any;
-    onWidgetClick: (e: Event) => any;
-    onWidgetKeyPress: (e: Event, options:any) => void;
-    submitInputRef: any;
-} & ButtonInput;
-
-export const viewFunction = (viewModel: ButtonViewModel) => {
-    const renderText = !viewModel.contentRender && viewModel.text;
-    const isIconLeft = viewModel.iconPosition === 'left';
-    const leftIcon = !viewModel.contentRender && isIconLeft;
-    const rightIcon = !viewModel.contentRender && !isIconLeft;
-    const icon = !viewModel.contentRender && viewModel.iconSource
-        && <Icon source={viewModel.iconSource} position={viewModel.iconPosition}/>;
+export const viewFunction = (viewModel: Button) => {
+    const renderText = !viewModel.props.contentRender && viewModel.props.text;
+    const isIconLeft = viewModel.props.iconPosition === 'left';
+    const leftIcon = !viewModel.props.contentRender && isIconLeft;
+    const rightIcon = !viewModel.props.contentRender && !isIconLeft;
+    const icon = !viewModel.props.contentRender && viewModel.iconSource
+        && <Icon source={viewModel.iconSource} position={viewModel.props.iconPosition}/>;
 
     return <Widget
-        accessKey={viewModel.accessKey}
-        activeStateEnabled={viewModel.activeStateEnabled}
+        accessKey={viewModel.props.accessKey}
+        activeStateEnabled={viewModel.props.activeStateEnabled}
         aria={viewModel.aria}
         className={viewModel.cssClasses}
-        disabled={viewModel.disabled}
+        disabled={viewModel.props.disabled}
         elementAttr={viewModel.elementAttr}
-        focusStateEnabled={viewModel.focusStateEnabled}
-        height={viewModel.height}
-        hint={viewModel.hint}
-        hoverStateEnabled={viewModel.hoverStateEnabled}
+        focusStateEnabled={viewModel.props.focusStateEnabled}
+        height={viewModel.props.height}
+        hint={viewModel.props.hint}
+        hoverStateEnabled={viewModel.props.hoverStateEnabled}
         onActive={viewModel.onActive}
-        onContentReady={viewModel.onContentReady}
+        onContentReady={viewModel.props.onContentReady}
         onClick={viewModel.onWidgetClick}
         onInactive={viewModel.onInactive}
         onKeyPress={viewModel.onWidgetKeyPress}
-        rtlEnabled={viewModel.rtlEnabled}
-        tabIndex={viewModel.tabIndex}
-        visible={viewModel.visible}
-        width={viewModel.width}
+        rtlEnabled={viewModel.props.rtlEnabled}
+        tabIndex={viewModel.props.tabIndex}
+        visible={viewModel.props.visible}
+        width={viewModel.props.width}
     >
-        <div className="dx-button-content" ref={viewModel.contentRef}>
-            {viewModel.contentRender &&
-                <viewModel.contentRender
+        <div className="dx-button-content" ref={viewModel.contentRef as any}>
+            {viewModel.props.contentRender &&
+                <viewModel.props.contentRender
                     model={{
-                        icon: viewModel.icon,
-                        text: viewModel.text,
+                        icon: viewModel.props.icon,
+                        text: viewModel.props.text,
                     }}
                     parentRef={viewModel.contentRef}
                 />
             }
             {leftIcon && icon}
             {renderText &&
-                <span className="dx-button-text">{viewModel.text}</span>
+                <span className="dx-button-text">{viewModel.props.text}</span>
             }
             {rightIcon && icon}
-            {viewModel.useSubmitBehavior &&
-                <input ref={viewModel.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
+            {viewModel.props.useSubmitBehavior &&
+                <input ref={viewModel.submitInputRef as any} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
             }
         </div>
     </Widget>;
@@ -159,7 +131,6 @@ const defaultOptionRules = createDefaultOptionRules<ButtonInput>([
 @Component({
     defaultOptionsRules: defaultOptionRules,
     view: viewFunction,
-    viewModel: viewModelFunction,
 })
 
 export default class Button extends JSXComponent<ButtonInput> {
@@ -206,5 +177,21 @@ export default class Button extends JSXComponent<ButtonInput> {
         }, { namespace });
 
         return () => click.off(this.submitInputRef, { namespace });
+    }
+
+    get aria() {
+        return getAriaLabel(this.props.text, this.props.icon);
+    }
+
+    get cssClasses():string {
+        return getCssClasses(this.props);
+    }
+
+    get elementAttr() {
+        return { ...this.props.elementAttr, role: 'button' };
+    }
+
+    get iconSource():string {
+        return (this.props.icon || this.props.type === 'back') ? (this.props.icon || 'back') : '';
     }
 }
