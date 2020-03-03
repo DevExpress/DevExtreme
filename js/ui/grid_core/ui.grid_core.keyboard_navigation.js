@@ -78,6 +78,10 @@ function isElementDefined($element) {
     return isDefined($element) && $element.length > 0;
 }
 
+function isMobile() {
+    return devices.current().deviceType !== 'desktop';
+}
+
 const KeyboardNavigationController = core.ViewController.inherit({
     // #region Initialization
     init: function() {
@@ -127,8 +131,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const clickSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
             const $focusedElement = $(':focus');
             const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length || (browser.msie && $focusedElement.is('body'));
-            const isMobile = devices.current().deviceType !== 'desktop';
-            const pointerEventName = !isMobile ? pointerEvents.down : clickEvent.name;
+            const pointerEventName = !isMobile() ? pointerEvents.down : clickEvent.name;
 
             eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), pointerEventAction);
             eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation'), clickSelector, pointerEventAction);
@@ -726,7 +729,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
     // #region Pointer_Event_Handler
     _pointerEventHandler: function(e) {
-        const event = e.event;
+        const event = e.event || e;
         let $target = $(event.currentTarget);
         const rowsView = this.getView('rowsView');
         const focusedViewElement = rowsView && rowsView.element();
@@ -1350,15 +1353,18 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const rowIndex = this.getVisibleRowIndex();
         const row = this._dataController.items()[rowIndex];
         const column = this._columnsController.getVisibleColumns()[focusedCellPosition.columnIndex];
-        const isAllowEditing = this._editingController.allowUpdating({ row: row }) && column && column.allowEditing;
 
-        if(isAllowEditing) {
+        if(this._isAllowEditing(row, column)) {
             if(this._isRowEditMode()) {
                 this._editingController.editRow(rowIndex);
             } else if(focusedCellPosition) {
                 this._startEditingCell(eventArgs, fastEditingKey);
             }
         }
+    },
+
+    _isAllowEditing: function(row, column) {
+        return this.getController('editing').allowUpdating({ row: row }) && column && column.allowEditing;
     },
 
     _startEditingCell: function(eventArgs, fastEditingKey) {
@@ -1760,11 +1766,35 @@ module.exports = {
             rowsView: {
                 _rowClick: function(e) {
                     const editRowIndex = this.getController('editing').getEditRowIndex();
+                    const keyboardController = this.getController('keyboardNavigation');
+
                     if(editRowIndex === e.rowIndex) {
-                        this.getController('keyboardNavigation').setCellFocusType();
+                        keyboardController.setCellFocusType();
                     }
+
+                    const needTriggerPointerEventHandler = isMobile() && this.option('focusedRowEnabled');
+                    if(needTriggerPointerEventHandler) {
+                        this._triggerPointerDownEventHandler(e);
+                    }
+
                     this.callBase.apply(this, arguments);
                 },
+                _triggerPointerDownEventHandler: function(e) {
+                    const originalEvent = e.event.originalEvent;
+                    if(originalEvent) {
+                        const keyboardController = this.getController('keyboardNavigation');
+                        const $cell = $(originalEvent.target);
+                        const columnIndex = this.getCellIndex($cell);
+                        const column = this.getController('columns').getVisibleColumns()[columnIndex];
+                        const row = this.getController('data').items()[e.rowIndex];
+
+                        if(keyboardController._isAllowEditing(row, column)) {
+                            const eventArgs = eventUtils.createEvent(originalEvent, { currentTarget: originalEvent.target });
+                            keyboardController._pointerEventHandler(eventArgs);
+                        }
+                    }
+                },
+
                 renderFocusState: function() {
                     const dataController = this._dataController;
                     let rowIndex = this.option('focusedRowIndex') || 0;

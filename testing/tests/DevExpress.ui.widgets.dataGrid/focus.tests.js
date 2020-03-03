@@ -15,9 +15,11 @@ import 'data/odata/store';
 import $ from 'jquery';
 import ArrayStore from 'data/array_store';
 import pointerEvents from 'events/pointer';
+import clickEvent from 'events/click';
 import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
-import { CLICK_EVENT, device, fireKeyDown, triggerKeyDown } from '../../helpers/grid/keyboardNavigationHelper.js';
+import { CLICK_EVENT, isMobile, device, fireKeyDown, triggerKeyDown } from '../../helpers/grid/keyboardNavigationHelper.js';
+import commonUtils from 'core/utils/common';
 
 const dataGridWrapper = new DataGridWrapper('#container');
 const rowsViewWrapper = dataGridWrapper.rowsView;
@@ -3969,6 +3971,105 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // assert
         assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
         assert.equal(this.option('focusedRowKey'), 'Ben', 'focusedRowKey');
+    });
+
+    ['batch', 'cell'].forEach(editMode => {
+        QUnit.test(`Row should being focused after click if editing.mode: ${editMode}`, function(assert) {
+            // arrange
+            this.options = {
+                focusedRowEnabled: true,
+                keyExpr: 'name',
+                editing: {
+                    mode: editMode,
+                    allowEditing: true,
+                    allowUpdating: true
+                }
+            };
+
+            this.data = [
+                { name: 'Alex', phone: '123' },
+                { name: 'Ben', phone: '456' }
+            ];
+
+            this.setupModule();
+            addOptionChangedHandlers(this);
+
+            this.gridView.render($('#container'));
+            this.clock.tick();
+
+            // act
+            const $cell = $(this.getCellElement(1, 1));
+
+            if(isMobile) {
+                $cell.click();
+            } else {
+                $cell
+                    .trigger(pointerEvents.down)
+                    .trigger(clickEvent.name);
+            }
+            this.clock.tick();
+
+            // assert
+            assert.equal(this.option('focusedRowIndex'), 1, 'FocusedRowIndex');
+            assert.equal(this.option('focusedRowKey'), 'Ben', 'FocusedRowKey');
+            assert.ok(rowsViewWrapper.getDataRow(1).isFocusedRow(), 'Focused row');
+            assert.ok(rowsViewWrapper.getCell(1, 1).isEditorCell(), 'Editor cell');
+        });
+
+        QUnit.test(`Focused row events should handle only once after click disabled editing cell if editing.mode: ${editMode}`, function(assert) {
+            let focusedRowChangingCounter = 0;
+            let focusedRowChangedCounter = 0;
+            // arrange
+            this.options = {
+                focusedRowEnabled: true,
+                keyExpr: 'name',
+                editing: {
+                    mode: editMode,
+                    allowEditing: true,
+                    allowUpdating: true
+                },
+                columns: [
+                    'name',
+                    {
+                        dataField: 'phone',
+                        allowEditing: false
+                    }
+                ],
+                onFocusedRowChanging: e => ++focusedRowChangingCounter,
+                onFocusedRowChanged: e => ++focusedRowChangedCounter,
+            };
+
+            this.data = [
+                { name: 'Alex', phone: '123' },
+                { name: 'Ben', phone: '456' }
+            ];
+
+            this.setupModule();
+            addOptionChangedHandlers(this);
+
+            this.gridView.render($('#container'));
+            this.clock.tick();
+
+            // act
+            const $cell = $(this.getCellElement(1, 1));
+
+            if(isMobile) {
+                const event = $.Event('dxclick', {
+                    originalEvent: { target: $cell.get(0) },
+                    preventDefault: commonUtils.noop
+                });
+                $cell.trigger(event);
+            } else {
+                $cell
+                    .trigger(pointerEvents.down)
+                    .trigger(clickEvent.name);
+            }
+            this.clock.tick();
+
+            // assert
+            assert.equal(focusedRowChangingCounter, 1, 'focusedRowChangingCounter');
+            assert.equal(focusedRowChangedCounter, 1, 'focusedRowChangedCounter');
+        });
     });
 });
 

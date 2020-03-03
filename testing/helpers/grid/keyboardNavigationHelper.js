@@ -6,6 +6,7 @@ import {
     MockDataController,
     MockColumnsController,
     MockSelectionController } from '../dataGridMocks.js';
+import clickEvent from 'events/click';
 import pointerEvents from 'events/pointer';
 import { keyboard } from 'events/short';
 import DataGridWrapper from '../wrappers/dataGridWrappers.js';
@@ -85,8 +86,8 @@ export function setupModules(that, modulesOptions, gridModules) {
 }
 
 export const device = devices.real();
-const isMobile = device.deviceType !== 'desktop';
-const pointerEventName = !isMobile ? pointerEvents.down : 'dxclick';
+export const isMobile = device.deviceType !== 'desktop';
+const pointerEventName = !isMobile ? pointerEvents.down : clickEvent.name;
 export const CLICK_EVENT = eventUtils.addNamespace(pointerEventName, 'dxDataGridKeyboardNavigation');
 
 const KEYS = {
