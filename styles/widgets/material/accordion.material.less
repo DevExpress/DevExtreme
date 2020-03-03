@@ -131,7 +131,11 @@
         width: @MATERIAL_BASE_ICON_SIZE;
     }
 
-    .dx-accordion-item-title-caption > .dx-icon {
+    .dx-icon {
+        .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
+    }
+
+    .dx-accordion-item-title-caption .dx-icon {
         position: relative;
         top: @ACCORDION_TITLE_ICON_TOP_OFFSET;
         margin-right: @ACCORDION_TITLE_ICON_MARGIN_RIGHT;
