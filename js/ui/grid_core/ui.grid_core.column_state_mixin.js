@@ -15,8 +15,8 @@ module.exports = {
         const isGroupPanelItem = parameters.rootElement.hasClass(GROUP_PANEL_ITEM_CLASS);
         const $indicatorsContainer = that._createIndicatorContainer(parameters, isGroupPanelItem);
         const $span = $('<span>').addClass(that._getIndicatorClassName(options.name));
-        const columnsController = that.component.getController('columns');
-        const indicatorAlignment = columnsController._getHeaderContentAlignment(columnAlignment);
+        const columnsController = that.component?.getController('columns');
+        const indicatorAlignment = columnsController?.getHeaderContentAlignment(columnAlignment) || columnAlignment;
 
         parameters.container = $indicatorsContainer;
         parameters.indicator = $span;

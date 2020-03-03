@@ -602,7 +602,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return column.command ? 'command:' + column.command : column.index;
             },
 
-            _getHeaderContentAlignment: function(columnAlignment) {
+            getHeaderContentAlignment: function(columnAlignment) {
                 return columnAlignment;
             }
         };
