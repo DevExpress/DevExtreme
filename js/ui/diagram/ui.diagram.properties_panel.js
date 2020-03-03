@@ -20,7 +20,6 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
         this._commandTabs = DiagramCommandsManager.getPropertyPanelCommandTabs(this.option('propertyTabs'));
         this._createOnCreateToolbar();
         this._createOnSelectedGroupChanged();
-        this._createOnVisibilityChangingAction();
     }
     _initMarkup() {
         this._toolbars = [];
@@ -37,24 +36,68 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
     _getPopupHeight() {
         return DIAGRAM_PROPERTIES_POPUP_HEIGHT;
     }
+    _getPopupPosition() {
+        const $parent = this.option('offsetParent');
+        if(this.isMobileView()) {
+            return {
+                my: 'left bottom',
+                at: 'left bottom',
+                of: $parent
+            };
+        }
+        return {
+            my: 'right bottom',
+            at: 'right bottom',
+            of: $parent,
+            offset: '-' + this.option('offsetX') + ' -' + this.option('offsetY')
+        };
+    }
+    _getPopupAnimation() {
+        const $parent = this.option('offsetParent');
+        if(this.isMobileView()) {
+            return {
+                hide: this._getPopupSlideAnimationObject({
+                    direction: 'bottom',
+                    from: {
+                        position: {
+                            my: 'left bottom',
+                            at: 'left bottom',
+                            of: $parent
+                        }
+                    },
+                    to: {
+                        position: {
+                            my: 'left top',
+                            at: 'left bottom',
+                            of: $parent
+                        }
+                    }
+                }),
+                show: this._getPopupSlideAnimationObject({
+                    direction: 'top',
+                    from: {
+                        position: {
+                            my: 'left top',
+                            at: 'left bottom',
+                            of: $parent
+                        }
+                    },
+                    to: {
+                        position: {
+                            my: 'left bottom',
+                            at: 'left bottom',
+                            of: $parent
+                        }
+                    }
+                }),
+            };
+        }
+        return super._getPopupAnimation();
+    }
     _getPopupOptions() {
         return extend(super._getPopupOptions(), {
             showTitle: this.isMobileView(),
-            showCloseButton: this.isMobileView(),
-            position: {
-                my: 'right bottom',
-                at: 'right bottom',
-                of: this.option('offsetParent'),
-                offset: '-' + (this.isMobileView() ? 0 : this.option('offsetX')) +
-                    ' -' + (this.isMobileView() ? 0 : this.option('offsetY'))
-            },
-            onShowing: (e) => {
-                if(this._inOnShowing === true) return;
-
-                this._inOnShowing = true;
-                this._onVisibilityChangingAction({ visible: true, component: this });
-                delete this._inOnShowing;
-            }
+            showCloseButton: this.isMobileView()
         });
     }
     _renderPopupContent($parent) {
@@ -144,9 +187,6 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
     _createOnSelectedGroupChanged() {
         this._onSelectedGroupChangedAction = this._createActionByOption('onSelectedGroupChanged');
     }
-    _createOnVisibilityChangingAction() {
-        this._onVisibilityChangingAction = this._createActionByOption('onVisibilityChanging');
-    }
     _optionChanged(args) {
         switch(args.name) {
             case 'onCreateToolbar':
@@ -154,9 +194,6 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
                 break;
             case 'onSelectedGroupChanged':
                 this._createOnSelectedGroupChanged();
-                break;
-            case 'onVisibilityChanging':
-                this._createOnVisibilityChangingAction();
                 break;
             case 'propertyTabs':
                 this._invalidate();

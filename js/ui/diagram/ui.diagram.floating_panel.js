@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
+import { hasWindow } from '../../core/utils/window';
 import Popup from '../popup';
 
 import DiagramPanel from './ui.diagram.panel';
@@ -10,6 +11,7 @@ class DiagramFloatingPanel extends DiagramPanel {
     _init() {
         super._init();
 
+        this._createOnVisibilityChangingAction();
         this._createOnVisibilityChangedAction();
     }
     isVisible() {
@@ -76,26 +78,48 @@ class DiagramFloatingPanel extends DiagramPanel {
     _getPopupMinHeight() {
         return 0;
     }
+    _getPopupPosition() {
+        return {};
+    }
+    _getPopupSlideAnimationObject(properties) {
+        return extend({
+            type: 'slide',
+            start: () => { $('body').css('overflow', 'hidden'); },
+            complete: () => { $('body').css('overflow', ''); },
+        }, properties);
+    }
+    _getPopupAnimation() {
+        return {
+            hide: { type: 'fadeOut' },
+            show: { type: 'fadeIn' },
+        };
+    }
     _getPopupOptions() {
         const that = this;
         return {
-            animation: null,
+            animation: hasWindow() ? this._getPopupAnimation() : null,
             shading: false,
             showTitle: false,
             focusStateEnabled: false,
             width: this._getPopupWidthOption(),
             height: this._getPopupHeightOption(),
-            position: this.option('position'),
+            position: this._getPopupPosition(),
             onContentReady: function() {
                 that._renderPopupContent(that._popup.content());
             },
+            onShowing: () => {
+                this._onVisibilityChangingAction({ visible: true, component: this });
+            },
             onShown: () => {
                 this.option('isVisible', true);
-                this._onVisibilityChangedAction({ visible: true });
+                this._onVisibilityChangedAction({ visible: true, component: this });
+            },
+            onHiding: () => {
+                this._onVisibilityChangingAction({ visible: false, component: this });
             },
             onHidden: () => {
                 this.option('isVisible', false);
-                this._onVisibilityChangedAction({ visible: false });
+                this._onVisibilityChangedAction({ visible: false, component: this });
             }
         };
     }
@@ -104,11 +128,17 @@ class DiagramFloatingPanel extends DiagramPanel {
     _updatePopupVisible() {
         this._popup.option('visible', this.isVisible());
     }
+    _createOnVisibilityChangingAction() {
+        this._onVisibilityChangingAction = this._createActionByOption('onVisibilityChanging');
+    }
     _createOnVisibilityChangedAction() {
         this._onVisibilityChangedAction = this._createActionByOption('onVisibilityChanged');
     }
     _optionChanged(args) {
         switch(args.name) {
+            case 'onVisibilityChanging':
+                this._createOnVisibilityChangingAction();
+                break;
             case 'onVisibilityChanged':
                 this._createOnVisibilityChangedAction();
                 break;

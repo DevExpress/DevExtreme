@@ -52,6 +52,8 @@ const DIAGRAM_DEFAULT_PAGE_COLOR = 'white';
 
 const DIAGRAM_MAX_MOBILE_WINDOW_WIDTH = 576;
 const DIAGRAM_TOOLBOX_ITEM_SPACING = 12;
+const DIAGRAM_TOOLBOX_ITEM_COUNT_IN_ROW = 3;
+const DIAGRAM_CONTEXT_TOOLBOX_ITEM_COUNT_IN_ROW = 4;
 
 const DIAGRAM_NAMESPACE = 'dxDiagramEvent';
 const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('fullscreenchange', DIAGRAM_NAMESPACE);
@@ -285,8 +287,12 @@ class Diagram extends Widget {
                 if(isServerSide) return;
 
                 this._diagramInstance.createToolbox(e.$element[0],
-                    undefined, DIAGRAM_TOOLBOX_ITEM_SPACING, { 'data-toggle': e.dataToggle },
-                    e.shapes || e.category, e.displayMode === 'texts', undefined, 3
+                    e.displayMode === 'texts', e.shapes || e.category,
+                    {
+                        shapeIconSpacing: DIAGRAM_TOOLBOX_ITEM_SPACING,
+                        shapeIconCountInRow: DIAGRAM_TOOLBOX_ITEM_COUNT_IN_ROW,
+                        shapeIconAttributes: { 'data-toggle': e.dataToggle }
+                    }
                 );
             },
             onFilterChanged: (e) => {
@@ -294,23 +300,33 @@ class Diagram extends Widget {
 
                 this._diagramInstance.applyToolboxFilter(e.text, e.filteringToolboxes);
             },
+            onVisibilityChanging: (e) => {
+                if(isServerSide) return;
+
+                if(this._propertiesPanel) {
+                    if(e.visible && this.isMobileScreenSize()) {
+                        this._propertiesPanel.hide();
+                    }
+                }
+
+                if(this._historyToolbar) {
+                    if(e.visible && this.isMobileScreenSize()) {
+                        this._historyToolbarZIndex = zIndexPool.create(Overlay.baseZIndex());
+                        this._historyToolbar.$element().css('zIndex', this._historyToolbarZIndex);
+                        this._historyToolbar.$element().css('boxShadow', 'none');
+                    }
+                }
+            },
             onVisibilityChanged: (e) => {
                 if(isServerSide) return;
 
                 if(this._viewToolbar) {
                     this._viewToolbar.setCommandChecked(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME, e.visible);
                 }
-                if(e.visible && this.isMobileScreenSize() && this._propertiesPanel) {
-                    this._propertiesPanel.hide();
-                }
                 if(this._historyToolbar) {
                     this._historyToolbar.option('isToolboxVisible', e.visible);
 
-                    if(e.visible && this.isMobileScreenSize()) {
-                        this._historyToolbarZIndex = zIndexPool.create(Overlay.baseZIndex());
-                        this._historyToolbar.$element().css('zIndex', this._historyToolbarZIndex);
-                        this._historyToolbar.$element().css('boxShadow', 'none');
-                    } else if(this._historyToolbarZIndex) {
+                    if(!e.visible && this.isMobileScreenSize() && this._historyToolbarZIndex) {
                         zIndexPool.remove(this._historyToolbarZIndex);
                         this._historyToolbar.$element().css('zIndex', '');
                         this._historyToolbar.$element().css('boxShadow', '');
@@ -325,10 +341,15 @@ class Diagram extends Widget {
             this._toolbox.option('height', bounds.height);
             const prevIsMobileView = this._toolbox.option('isMobileView');
             if(prevIsMobileView !== this.isMobileScreenSize()) {
-                this._toolbox.option({
-                    isMobileView: this.isMobileScreenSize(),
-                    isVisible: this._isToolboxVisible()
-                });
+                if(this._toolbox) {
+                    this._toolbox.option({
+                        isMobileView: this.isMobileScreenSize(),
+                        isVisible: this._isToolboxVisible()
+                    });
+                }
+                if(this._historyToolbar) {
+                    this._historyToolbar.option('isToolboxVisible', this._isToolboxVisible());
+                }
             }
         };
     }
@@ -431,27 +452,39 @@ class Diagram extends Widget {
                     })
                 );
             },
+            onVisibilityChanging: (e) => {
+                this._updatePropertiesPanelGroupBars(e.component);
+
+                if(isServerSide) return;
+
+                if(this._toolbox) {
+                    if(e.visible && this.isMobileScreenSize()) {
+                        this._toolbox.hide();
+                    }
+                }
+            },
             onVisibilityChanged: (e) => {
                 if(isServerSide) return;
 
                 if(this._propertiesPanelToolbar) {
                     this._propertiesPanelToolbar.option('isPropertiesPanelVisible', e.visible);
                 }
-                if(e.visible && this.isMobileScreenSize() && this._toolbox) {
-                    this._toolbox.hide();
-                }
             },
-            onVisibilityChanging: ({ component }) => this._updatePropertiesPanelGroupBars(component),
             onSelectedGroupChanged: ({ component }) => this._updatePropertiesPanelGroupBars(component),
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
         this._propertiesPanelResizeCallback = () => {
             const prevIsMobileView = this._propertiesPanel.option('isMobileView');
             if(prevIsMobileView !== this.isMobileScreenSize()) {
-                this._propertiesPanel.option({
-                    isMobileView: this.isMobileScreenSize(),
-                    isVisible: this._isPropertiesPanelVisible(),
-                });
+                if(this._propertiesPanel) {
+                    this._propertiesPanel.option({
+                        isMobileView: this.isMobileScreenSize(),
+                        isVisible: this._isPropertiesPanelVisible(),
+                    });
+                }
+                if(this._propertiesPanelToolbar) {
+                    this._propertiesPanelToolbar.option('isPropertiesPanelVisible', this._isPropertiesPanelVisible());
+                }
             }
         };
     }
@@ -501,14 +534,16 @@ class Diagram extends Widget {
                     }
                 }
                 this._diagramInstance.createContextToolbox($toolboxContainer[0],
-                    undefined, DIAGRAM_TOOLBOX_ITEM_SPACING, {},
-                    shapes || category || e.category, isTextGroup,
+                    isTextGroup, shapes || category || e.category,
+                    {
+                        shapeIconSpacing: DIAGRAM_TOOLBOX_ITEM_SPACING,
+                        shapeIconCountInRow: DIAGRAM_CONTEXT_TOOLBOX_ITEM_COUNT_IN_ROW
+                    },
                     (shapeType) => {
                         e.callback(shapeType);
                         this._diagramInstance.captureFocus();
                         e.hide();
-                    },
-                    undefined, 4
+                    }
                 );
             }
         });
