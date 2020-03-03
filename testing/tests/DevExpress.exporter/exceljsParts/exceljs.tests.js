@@ -954,7 +954,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { topLeftCell: topLeft })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells);
@@ -6402,13 +6402,24 @@ const moduleConfig = {
     });
 });
 
-QUnit.module('_getFullOptions', () => {
+QUnit.module('_getFullOptions', moduleConfig, () => {
     QUnit.test('topLeftCell', function(assert) {
         assert.deepEqual(_getFullOptions({}).topLeftCell, { row: 1, column: 1 }, 'no member');
         assert.deepEqual(_getFullOptions({ topLeftCell: undefined }).topLeftCell, { row: 1, column: 1 }, 'undefined');
         assert.deepEqual(_getFullOptions({ topLeftCell: null }).topLeftCell, { row: 1, column: 1 }, 'null');
 
         assert.deepEqual(_getFullOptions({ topLeftCell: { row: 2, column: 3 } }).topLeftCell, { row: 2, column: 3 }, '{ row: 2, column: 3 }');
+        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'A1' }).topLeftCell, { row: 1, column: 1 }, 'A1');
+        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'D38' }).topLeftCell, { row: 38, column: 4 }, 'D38');
+        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'AD8' }).topLeftCell, { row: 8, column: 30 }, 'AD8');
+
+        let errorMessage;
+        try {
+            _getFullOptions({ worksheet: this.worksheet, topLeftCell: 'AA' });
+        } catch(e) {
+            errorMessage = e.message;
+        }
+        assert.strictEqual(errorMessage, 'Invalid Address: AA', 'Exception was thrown');
     });
 
     QUnit.test('keepColumnWidths', function(assert) {
