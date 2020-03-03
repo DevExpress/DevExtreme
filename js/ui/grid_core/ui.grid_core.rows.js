@@ -227,11 +227,8 @@ module.exports = {
                 _rowPrepared: function($row, rowOptions, row) {
                     if(rowOptions.rowType === 'data') {
                         if(this.option('rowAlternationEnabled')) {
-                            const getRowAlt = () => {
-                                return row.dataIndex % 2 === 1;
-                            };
-                            getRowAlt() && $row.addClass(ROW_ALTERNATION_CLASS);
-                            rowOptions.watch && rowOptions.watch(getRowAlt, value => {
+                            this._isAltRow(row) && $row.addClass(ROW_ALTERNATION_CLASS);
+                            rowOptions.watch && rowOptions.watch(() => this._isAltRow(row), value => {
                                 $row.toggleClass(ROW_ALTERNATION_CLASS, value);
                             });
                         }
