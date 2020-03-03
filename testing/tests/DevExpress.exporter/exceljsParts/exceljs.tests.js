@@ -954,7 +954,7 @@ const moduleConfig = {
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
-            exportDataGrid(getOptions(this, dataGrid, expectedCells, { topLeftCell: topLeft })).then((cellRange) => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells);
