@@ -455,6 +455,11 @@ const Scheduler = Widget.inherit({
                  * @default true
                  * @default false @for Android|iOS
                 */
+            /**
+                * @name dxSchedulerOptions.editing.allowEditingTimeZones
+                * @type boolean
+                * @default false
+                */
 
 
             /**
