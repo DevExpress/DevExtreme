@@ -20,6 +20,9 @@ const APPOINTMENT_POPUP_WIDTH = 485;
 const APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE = 970;
 const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH = 1000;
 
+const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH_MOBILE = 500;
+const APPOINTMENT_POPUP_WIDTH_MOBILE = 350;
+
 const TOOLBAR_ITEM_AFTER_LOCATION = 'after';
 const TOOLBAR_ITEM_BEFORE_LOCATION = 'before';
 
@@ -217,10 +220,16 @@ export default class AppointmentPopup {
         editor && this._appointmentForm.itemOption(name, 'editorOptions', options);
     }
 
+    _isDeviceMobile() {
+        return devices.current().deviceType !== 'desktop';
+    }
+
     _isPopupFullScreenNeeded() {
         const width = this._getWindowWidth();
-        return width ? width < APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH : false;
-
+        if(width) {
+            return this._isDeviceMobile() ? width < APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH_MOBILE : width < APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH;
+        }
+        return false;
     }
 
     _getWindowWidth() {
@@ -235,6 +244,9 @@ export default class AppointmentPopup {
     }
 
     _getMaxWidth(isRecurrence) {
+        if(this._isDeviceMobile()) {
+            return APPOINTMENT_POPUP_WIDTH_MOBILE;
+        }
         return isRecurrence ? APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE : APPOINTMENT_POPUP_WIDTH;
     }
 

@@ -1,6 +1,7 @@
 import Form from '../form';
 import dateSerialization from '../../core/utils/date_serialization';
 import messageLocalization from '../../localization/message';
+import devices from '../../core/devices';
 
 import './ui.scheduler.recurrence_editor';
 import './timezones/ui.scheduler.timezone_editor';
@@ -49,7 +50,7 @@ const SchedulerAppointmentForm = {
             showColonAfterLabel: false,
             labelLocation: 'top',
             screenByWidth: (width) => {
-                return width < SCREEN_SIZE_OF_SINGLE_COLUMN ? 'xs' : 'lg';
+                return width < SCREEN_SIZE_OF_SINGLE_COLUMN || devices.current().deviceType !== 'desktop' ? 'xs' : 'lg';
             }
         });
 

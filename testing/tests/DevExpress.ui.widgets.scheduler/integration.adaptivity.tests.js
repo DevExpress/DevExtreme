@@ -141,91 +141,254 @@ module('Mobile tooltip', moduleConfig, () => {
     });
 });
 
-module('Appointment form', {
-    beforeEach() {
-        fx.off = true;
-        setWindowWidth(800);
-    },
+if(isDesktopEnvironment()) {
+    module('Appointment form on desktop', {
+        beforeEach() {
+            fx.off = true;
+        },
 
-    afterEach() {
-        fx.off = false;
-        resetWindowWidth();
-    }
-}, () => {
-    test('Items has layout with one column when the form\'s width < 600px', function(assert) {
-        const scheduler = createInstance();
-        setWindowWidth(500);
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
+        afterEach() {
+            fx.off = false;
+            resetWindowWidth();
+        }
+    }, () => {
+        test('Items has layout with one column when the form\'s width < 600px', function(assert) {
+            const scheduler = createInstance();
+            setWindowWidth(500);
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
 
-        assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
+            assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
+        });
+
+        test('Items with recurrence editor has layout with one column when the form\'s width < 600px', function(assert) {
+            const scheduler = createInstance();
+            setWindowWidth(500);
+            scheduler.option('dataSource', [{
+                startDate: new Date(2015, 1, 1),
+                endDate: new Date(2015, 1, 2),
+                recurrenceRule: 'FREQ=WEEKLY'
+            }]);
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+            $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
+
+            assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
+        });
+
+        test('Items has layout with non-one column when the form\'s width > 600px', function(assert) {
+            const scheduler = createInstance();
+            setWindowWidth(700);
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+
+            assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
+        });
+
+        test('Items with recurrence editor has layout with non-one column when the form\'s width > 600px', function(assert) {
+            const scheduler = createInstance();
+            setWindowWidth(700);
+            scheduler.option('dataSource', [{
+                startDate: new Date(2015, 1, 1),
+                endDate: new Date(2015, 1, 2),
+                recurrenceRule: 'FREQ=WEEKLY'
+            }]);
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+            $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
+
+            assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
+        });
+
+        test('Items has layout with one column when the form\'s width < 600px on window resizing', function(assert) {
+            const scheduler = createInstance();
+            setWindowWidth(700);
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+
+            setWindowWidth(500);
+            resizeCallbacks.fire();
+
+            assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
+        });
+
+        test('Items has layout with non-one column when the form\'s width > 600px on window resizing', function(assert) {
+            const scheduler = createInstance();
+            setWindowWidth(500);
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+
+            setWindowWidth(700);
+            resizeCallbacks.fire();
+
+            assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
+        });
     });
+}
 
-    test('Items with recurrence editor has layout with one column when the form\'s width < 600px', function(assert) {
-        const scheduler = createInstance();
-        setWindowWidth(500);
-        scheduler.option('dataSource', [{
-            startDate: new Date(2015, 1, 1),
-            endDate: new Date(2015, 1, 2),
-            recurrenceRule: 'FREQ=WEEKLY'
-        }]);
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-        $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
+if(!isDesktopEnvironment()) {
+    module('Appointment form on mobile', {
+        beforeEach() {
+            fx.off = true;
+            setWindowWidth(800);
+        },
 
-        assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
+        afterEach() {
+            fx.off = false;
+            resetWindowWidth();
+        }
+    }, () => {
+        test('Items has layout with one column', function(assert) {
+            const scheduler = createInstance();
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+
+            assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
+        });
     });
+}
 
-    test('Items has layout with non-one column when the form\'s width > 600px', function(assert) {
-        const scheduler = createInstance();
-        setWindowWidth(700);
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
+if(isDesktopEnvironment()) {
+    module('Appointment popup size, desktop', {
+        beforeEach() {
+            fx.off = true;
+        },
 
-        assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
+        afterEach() {
+            fx.off = false;
+            resetWindowWidth();
+        }
+    }, () => {
+        test('The fullscreen mode is enabled of popup when window\'s width < 1000px', function(assert) {
+            setWindowWidth(900);
+
+            const scheduler = createInstance();
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+            const popup = scheduler.appointmentPopup.getPopupInstance();
+
+            assert.ok(popup.option('fullScreen'), 'The fullscreen mode is enabled');
+            assert.equal(popup.option('maxWidth'), '100%', 'maxWidth');
+        });
+
+        test('The fullscreen mode is disabled of popup when window\'s width > 1000px', function(assert) {
+            setWindowWidth(1001);
+
+            const scheduler = createInstance();
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+            const popup = scheduler.appointmentPopup.getPopupInstance();
+
+            assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
+            assert.equal(popup.option('maxWidth'), 485, 'maxWidth');
+        });
+
+        test('The fullscreen mode is disabled of popup when window\'s width > 1000px, with recurrence editor', function(assert) {
+            setWindowWidth(1001);
+
+            const scheduler = createInstance();
+            scheduler.option('dataSource', [{
+                startDate: new Date(2015, 1, 1),
+                endDate: new Date(2015, 1, 2),
+                recurrenceRule: 'FREQ=WEEKLY'
+            }]);
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+            $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
+            const popup = scheduler.appointmentPopup.getPopupInstance();
+
+            assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
+            assert.equal(popup.option('maxWidth'), 970, 'maxWidth');
+        });
+
+        test('The fullscreen mode is enabled of popup when the window\'s width < 1000px by resizing the window', function(assert) {
+            setWindowWidth(1001);
+
+            const scheduler = createInstance();
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+            const popup = scheduler.appointmentPopup.getPopupInstance();
+
+            setWindowWidth(767);
+            resizeCallbacks.fire();
+
+            assert.ok(popup.option('fullScreen'), 'The fullscreen mode is enabled');
+            assert.equal(popup.option('maxWidth'), '100%', 'maxWidth');
+        });
+
+        test('The fullscreen mode is disabled of popup when the window\'s width > 1000px by resizing the window', function(assert) {
+            setWindowWidth(799);
+
+            const scheduler = createInstance();
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+            const popup = scheduler.appointmentPopup.getPopupInstance();
+
+            setWindowWidth(1001);
+            resizeCallbacks.fire();
+
+            assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
+            assert.equal(popup.option('maxWidth'), 485, 'maxWidth');
+        });
     });
+}
 
-    test('Items with recurrence editor has layout with non-one column when the form\'s width > 600px', function(assert) {
-        const scheduler = createInstance();
-        setWindowWidth(700);
-        scheduler.option('dataSource', [{
-            startDate: new Date(2015, 1, 1),
-            endDate: new Date(2015, 1, 2),
-            recurrenceRule: 'FREQ=WEEKLY'
-        }]);
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-        $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
+if(!isDesktopEnvironment()) {
+    module('Appointment popup size, mobile', {
+        beforeEach() {
+            fx.off = true;
+        },
 
-        assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
+        afterEach() {
+            fx.off = false;
+            resetWindowWidth();
+        }
+    }, () => {
+        test('The fullscreen mode is enabled of popup when window\'s width < 500px', function(assert) {
+            setWindowWidth(499);
+
+            const scheduler = createInstance();
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+            const popup = scheduler.appointmentPopup.getPopupInstance();
+
+            assert.ok(popup.option('fullScreen'), 'The fullscreen mode is enabled');
+            assert.equal(popup.option('maxWidth'), '100%', 'maxWidth');
+        });
+
+        test('The fullscreen mode is disabled of popup when window\'s width > 500px', function(assert) {
+            setWindowWidth(501);
+
+            const scheduler = createInstance();
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+            const popup = scheduler.appointmentPopup.getPopupInstance();
+
+            assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
+            assert.equal(popup.option('maxWidth'), 350, 'maxWidth');
+        });
+
+        test('The fullscreen mode is disabled of popup when window\'s width > 500px, with recurrence editor', function(assert) {
+            setWindowWidth(501);
+
+            const scheduler = createInstance();
+            scheduler.option('dataSource', [{
+                startDate: new Date(2015, 1, 1),
+                endDate: new Date(2015, 1, 2),
+                recurrenceRule: 'FREQ=WEEKLY'
+            }]);
+            scheduler.appointments.compact.click();
+            scheduler.tooltip.clickOnItem();
+            $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
+            const popup = scheduler.appointmentPopup.getPopupInstance();
+
+            assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
+            assert.equal(popup.option('maxWidth'), 350, 'maxWidth');
+        });
     });
+}
 
-    test('Items has layout with one column when the form\'s width < 600px on window resizing', function(assert) {
-        const scheduler = createInstance();
-        setWindowWidth(700);
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-
-        setWindowWidth(500);
-        resizeCallbacks.fire();
-
-        assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
-    });
-
-    test('Items has layout with non-one column when the form\'s width Ю 600px on window resizing', function(assert) {
-        const scheduler = createInstance();
-        setWindowWidth(500);
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-
-        setWindowWidth(700);
-        resizeCallbacks.fire();
-
-        assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
-    });
-});
-
-module('Appointment popup', moduleConfig, () => {
+module('Appointment popup buttons', moduleConfig, () => {
     const SECTION_AFTER = 'after';
     const SECTION_BEFORE = 'before';
     const DONE_BUTTON = 'done';
@@ -273,89 +436,7 @@ module('Appointment popup', moduleConfig, () => {
             this.realDeviceMock.restore();
         }
     });
-
-    test('The fullscreen mode is enabled of popup when window\'s width < 1000px', function(assert) {
-        setWindowWidth(900);
-
-        const scheduler = createInstance();
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-        const popup = scheduler.appointmentPopup.getPopupInstance();
-
-        assert.ok(popup.option('fullScreen'), 'The fullscreen mode is enabled');
-        assert.equal(popup.option('maxWidth'), '100%', 'maxWidth');
-
-        resetWindowWidth();
-    });
-
-    test('The fullscreen mode is disabled of popup when window\'s width > 1000px', function(assert) {
-        setWindowWidth(1001);
-
-        const scheduler = createInstance();
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-        const popup = scheduler.appointmentPopup.getPopupInstance();
-
-        assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
-        assert.equal(popup.option('maxWidth'), 485, 'maxWidth');
-
-        resetWindowWidth();
-    });
-
-    test('The fullscreen mode is disabled of popup when window\'s width > 1000px, with recurrence editor', function(assert) {
-        setWindowWidth(1001);
-
-        const scheduler = createInstance();
-        scheduler.option('dataSource', [{
-            startDate: new Date(2015, 1, 1),
-            endDate: new Date(2015, 1, 2),
-            recurrenceRule: 'FREQ=WEEKLY'
-        }]);
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-        $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
-        const popup = scheduler.appointmentPopup.getPopupInstance();
-
-        assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
-        assert.equal(popup.option('maxWidth'), 970, 'maxWidth');
-
-        resetWindowWidth();
-    });
-
-    test('The fullscreen mode is enabled of popup when the window\'s width < 1000px by resizing the window', function(assert) {
-        setWindowWidth(1001);
-
-        const scheduler = createInstance();
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-        const popup = scheduler.appointmentPopup.getPopupInstance();
-
-        setWindowWidth(767);
-        resizeCallbacks.fire();
-
-        assert.ok(popup.option('fullScreen'), 'The fullscreen mode is enabled');
-        assert.equal(popup.option('maxWidth'), '100%', 'maxWidth');
-
-        resetWindowWidth();
-    });
-
-    test('The fullscreen mode is disabled of popup when the window\'s width > 1000px by resizing the window', function(assert) {
-        setWindowWidth(799);
-
-        const scheduler = createInstance();
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.clickOnItem();
-        const popup = scheduler.appointmentPopup.getPopupInstance();
-
-        setWindowWidth(1001);
-        resizeCallbacks.fire();
-
-        assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
-        assert.equal(popup.option('maxWidth'), 485, 'maxWidth');
-
-        resetWindowWidth();
-    });
-});
+}),
 
 module('View switcher', moduleConfig, () => {
     test('View switcher should render selection current view', function(assert) {
