@@ -54,7 +54,18 @@ const STRATEGY_CLASSES = {
 const DateBox = DropDownEditor.inherit({
 
     _supportedKeys: function() {
-        return extend(this.callBase(), this._strategy.supportedKeys());
+        const homeEndHandler = function(e) {
+            if(this.option('opened')) {
+                e.preventDefault();
+                return true;
+            }
+            return false;
+        };
+
+        return extend(this.callBase(), {
+            home: homeEndHandler,
+            end: homeEndHandler
+        }, this._strategy.supportedKeys());
     },
 
     _setDeprecatedOptions: function() {
