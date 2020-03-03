@@ -266,17 +266,17 @@ module('Resizing module', moduleConfig, () => {
 
         this.$image.trigger(clickEvent);
 
-        const frameClientRect = this.$element
+        const { left: frameLeft, top: frameTop } = this.$element
             .find(`.${RESIZE_FRAME_CLASS}`)
             .get(0)
             .getBoundingClientRect();
 
-        const imageClientRect = this.$image
+        const { left: imageLeft, top: imageTop } = this.$image
             .get(0)
             .getBoundingClientRect();
 
-        assert.strictEqual(frameClientRect.left + BORDER_PADDING_WIDTH, imageClientRect.left, 'Frame positioned correctly by the left');
-        assert.strictEqual(frameClientRect.top + BORDER_PADDING_WIDTH, imageClientRect.top, 'Frame positioned correctly by the top');
+        assert.strictEqual(frameLeft + BORDER_PADDING_WIDTH, imageLeft, 'Frame positioned correctly by the left');
+        assert.strictEqual(frameTop + BORDER_PADDING_WIDTH, imageTop, 'Frame positioned correctly by the top');
     });
 
     test('resize frame should have specific class on mobile devices', function(assert) {
