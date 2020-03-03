@@ -254,13 +254,10 @@ const polarChartPlugin = {
                 } else if(isDefined(coords.radius) && !isDefined(argument) && !isDefined(angle)) {
                     pointCoords = series.getSeriesPairCoord({ radius: coords.radius }, false);
                 }
-                if(isDefined(pointCoords)) {
-                    coords.x = pointCoords.x;
-                    coords.y = pointCoords.y;
+                if(!((isDefined(angle) || isDefined(argument)) && (isDefined(radius) || isDefined(value)))) {
+                    coords.x = pointCoords?.x;
+                    coords.y = pointCoords?.y;
                 }
-            }
-            if(annotation.series && !isDefined(pointCoords)) {
-                coords.x = coords.y = undefined;
             }
 
             return coords;

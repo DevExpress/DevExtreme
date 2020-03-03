@@ -750,13 +750,23 @@ QUnit.module('Coordinates calculation. PolarChart plugin', {
         this.checkCoords(assert, polarChart, { angle: 350, series: 's2' }, { x: 95, y: 71.3 });
     });
 
+    QUnit.test('Get coordinates from series. Special cases', function(assert) {
+        const polarChart = this.getPolarChartForSeriesTests();
+        this.checkCoords(assert, polarChart, { argument: 265, value: 150, series: 'wrongseries' }, { x: 61, y: 164 });
+        this.checkCoords(assert, polarChart, { argument: 265, series: 'wrongseries' }, { x: 48, y: 185 });
+        this.checkCoords(assert, polarChart, { value: 150, series: 'wrongseries' }, { x: 175, y: 100 });
+        this.checkCoords(assert, polarChart, { argument: 265, value: 150, series: 's1' }, { x: 61, y: 164 });
+        this.checkCoords(assert, polarChart, { angle: 140, radius: 85, series: 's2' }, { x: 35, y: 45 });
+        this.checkCoords(assert, polarChart, { angle: 185, value: 120, series: 's1' }, { x: 40, y: 105 });
+    });
+
     QUnit.test('Cases when coords can not be calculated', function(assert) {
         const polarChart = this.getPolarChartForSeriesTests();
-
         this.checkCoords(assert, polarChart, { x: 50, y: 50, series: 's0' }, { x: undefined, y: undefined });
-        this.checkCoords(assert, polarChart, { value: 150, series: 'wrongseries' }, { x: undefined, y: undefined });
         this.checkCoords(assert, polarChart, { argument: 170, radius: 'radius' }, { x: undefined, y: undefined });
         this.checkCoords(assert, polarChart, { angle: 'angle', radius: 'radius' }, { x: undefined, y: undefined });
+        this.checkCoords(assert, polarChart, { argument: 'argument', series: 's2' }, { x: undefined, y: undefined });
+        this.checkCoords(assert, polarChart, { value: 'value', series: 's2' }, { x: undefined, y: undefined });
         this.checkCoords(assert, polarChart, { angle: 'angle', series: 's1' }, { x: undefined, y: undefined });
         this.checkCoords(assert, polarChart, { radius: 'radius', series: 's1' }, { x: undefined, y: undefined });
     });
