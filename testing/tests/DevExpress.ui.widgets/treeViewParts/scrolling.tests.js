@@ -21,8 +21,8 @@ QUnit.module('TreeView scrolling', () => {
     function createWrapper(scrollDirection, items) {
         return new TreeViewTestWrapper({
             scrollDirection,
-            height: 100,
-            width: 100,
+            height: 20,
+            width: 20,
             dataStructure: 'plain',
             rootValue: ROOT_ID,
             dataSource: items
@@ -32,7 +32,7 @@ QUnit.module('TreeView scrolling', () => {
     configs.forEach(config => {
         [{ key: 0, expectedScrollTop: 0 },
             { key: 10, expectedScrollTop: 320 },
-            { key: 20, expectedScrollTop: 572 }
+            { key: 20, expectedScrollTop: 640 }
         ].forEach(testCase => {
             QUnit.test(`allItems.expanded: ${config.expanded}, scrollDirection: ${config.scrollDirection}, flatArray -> scrollToItem(${testCase.key})`, function(assert) {
                 const items = [];
@@ -54,9 +54,9 @@ QUnit.module('TreeView scrolling', () => {
             });
         });
 
-        [{ key: 0, expectedExpandedScrollTop: 0, expectedCollapsedScrollTop: 0, expectedExpandedScrollLeft: 0, expectedCollapsedScrollLeft: 0 },
-            { key: 10, expectedExpandedScrollTop: 320, expectedCollapsedScrollTop: 252, expectedExpandedScrollLeft: 150, expectedCollapsedScrollLeft: 120 },
-            { key: 20, expectedExpandedScrollTop: 572, expectedCollapsedScrollTop: 572, expectedExpandedScrollLeft: 270, expectedCollapsedScrollLeft: 270 }
+        [{ key: 0, expectedScrollTop: 0, expectedScrollLeft: 0 },
+            { key: 10, expectedScrollTop: 320, expectedScrollLeft: 150 },
+            { key: 20, expectedScrollTop: 640, expectedScrollLeft: 300 }
         ].forEach(testCase => {
             QUnit.test(`allItems.expanded: ${config.expanded}, scrollDirection: ${config.scrollDirection}, deep array -> scrollToItem(${testCase.key})`, function(assert) {
                 const items = [];
@@ -69,19 +69,14 @@ QUnit.module('TreeView scrolling', () => {
 
                 const done = assert.async();
                 completionCallback.done(() => {
-                    let expectedScrollTop = 0;
-                    if(config.scrollDirection !== 'horizontal') {
-                        expectedScrollTop = config.expanded === true
-                            ? testCase.expectedExpandedScrollTop
-                            : testCase.expectedCollapsedScrollTop;
-                    }
+                    const expectedScrollTop = config.scrollDirection !== 'horizontal'
+                        ? testCase.expectedScrollTop
+                        : 0;
 
-                    let expectedScrollLeft = 0;
-                    if(config.scrollDirection !== 'vertical') {
-                        expectedScrollLeft = config.expanded === true
-                            ? testCase.expectedExpandedScrollLeft
-                            : testCase.expectedCollapsedScrollLeft;
-                    }
+                    const expectedScrollLeft = config.scrollDirection !== 'vertical'
+                        ? testCase.expectedScrollLeft
+                        : 0;
+
                     wrapper.checkScrollPosition(expectedScrollTop, expectedScrollLeft);
                     done();
                 });
@@ -104,13 +99,13 @@ QUnit.module('TreeView scrolling', () => {
 
             const done = assert.async();
             completionCallback.done(() => {
-                wrapper.checkScrollPosition(572, 270);
+                wrapper.checkScrollPosition(640, 300);
                 done();
             });
         });
     });
 
-    QUnit.test('allItems.expanded::true -> scrollToItem(lastItem.key) -> scrollToItem(10) -> scrollToItem(firstItem.key)', function(assert) {
+    QUnit.test('allItems.expanded:true -> scrollToItem(lastItem.key) -> scrollToItem(10) -> scrollToItem(firstItem.key)', function(assert) {
         const items = [];
         for(let i = 0; i < TOTAL_ITEMS_COUNT; i++) {
             items.push({ id: i, text: 'item' + i, parentId: i - 1, expanded: true });
@@ -120,7 +115,7 @@ QUnit.module('TreeView scrolling', () => {
 
         const done = assert.async();
         wrapper.instance.scrollToItem(LAST_ITEM_KEY).done(() => {
-            wrapper.checkScrollPosition(572, 270);
+            wrapper.checkScrollPosition(640, 300);
 
             wrapper.instance.scrollToItem(10).done(() => {
                 wrapper.checkScrollPosition(320, 150);
@@ -160,7 +155,7 @@ QUnit.module('TreeView scrolling', () => {
 
         const done = assert.async();
         completionCallback.done(() => {
-            wrapper.checkScrollPosition(572, 270);
+            wrapper.checkScrollPosition(640, 300);
             done();
         });
     });
