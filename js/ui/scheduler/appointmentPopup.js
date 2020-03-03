@@ -160,7 +160,6 @@ export default class AppointmentPopup {
             element,
             this._isReadOnly(appointmentData),
             formData,
-            this._getWindowWidth
         );
     }
 
@@ -199,7 +198,7 @@ export default class AppointmentPopup {
         this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
-        AppointmentForm.checkEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
+        AppointmentForm.setEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
     }
 
     _getEditorOptions(name) {
@@ -240,8 +239,10 @@ export default class AppointmentPopup {
     }
 
     changeSize(isRecurrence) {
-        this._popup && this._popup.option({
-            maxWidth: this._getMaxWidth(isRecurrence)
+        const isFullScreen = this._isPopupFullScreenNeeded();
+        this._popup.option({
+            maxWidth: isFullScreen ? '100%' : this._getMaxWidth(isRecurrence),
+            fullScreen: isFullScreen
         });
     }
 
@@ -251,11 +252,7 @@ export default class AppointmentPopup {
         }
         const isRecurrence = AppointmentForm.getRecurrenceRule(this._appointmentForm.option('formData'), this.scheduler._dataAccessors.expr);
         if(this.isVisible()) {
-            const isFullScreen = this._isPopupFullScreenNeeded();
-            this._popup.option({
-                maxWidth: isFullScreen ? '100%' : this._getMaxWidth(isRecurrence),
-                fullScreen: isFullScreen
-            });
+            this.changeSize(isRecurrence);
         }
     }
 

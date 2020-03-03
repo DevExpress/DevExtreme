@@ -1,7 +1,7 @@
 import 'common.css!';
 import 'generic_light.css!';
 
-import { SchedulerTestWrapper, initTestMarkup, createWrapper } from './helpers.js';
+import { SchedulerTestWrapper, initTestMarkup, createWrapper, isDesktopEnvironment } from './helpers.js';
 
 import $ from 'jquery';
 import devices from 'core/devices';
@@ -1289,24 +1289,26 @@ QUnit.test('Appointment form will have right dates on multiple openings (T727713
     assert.equal(formDataChangedCount, 1, 'Form data changed one time');
 });
 
-QUnit.test('The vertical scroll bar is shown when an appointment popup fill to a small window\'s height', function(assert) {
-    const scheduler = createInstance({
-        currentDate: new Date(2015, 1, 1),
-        currentView: 'day',
-        dataSource: []
+if(isDesktopEnvironment()) {
+    QUnit.test('The vertical scroll bar is shown when an appointment popup fill to a small window\'s height', function(assert) {
+        const scheduler = createInstance({
+            currentDate: new Date(2015, 1, 1),
+            currentView: 'day',
+            dataSource: []
+        });
+
+        scheduler.instance.fire('showAddAppointmentPopup', {
+            startDate: new Date(2015, 1, 1),
+            endDate: new Date(2015, 1, 1, 1),
+            allDay: true
+        });
+
+        const popup = scheduler.appointmentPopup;
+        popup.setPopupHeight(300);
+
+        assert.ok(popup.hasVerticalScroll(), 'The popup has the vertical scrolling');
     });
-
-    scheduler.instance.fire('showAddAppointmentPopup', {
-        startDate: new Date(2015, 1, 1),
-        endDate: new Date(2015, 1, 1, 1),
-        allDay: true
-    });
-
-    const popup = scheduler.appointmentPopup;
-    popup.setPopupHeight(300);
-
-    assert.ok(popup.hasVerticalScroll(), 'The popup has the vertical scrolling');
-});
+}
 
 QUnit.test('The resize event of appointment popup is triggered the the window is resize', function(assert) {
     const scheduler = createInstance({

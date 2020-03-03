@@ -34,7 +34,7 @@ const SchedulerAppointmentForm = {
         return new Date(new Date(startDate).setHours(startDayHour));
     },
 
-    create: function(componentCreator, $container, isReadOnly, formData, getWindowWidth) {
+    create: function(componentCreator, $container, isReadOnly, formData) {
         this._appointmentForm = componentCreator($container, Form, {
             items: this._editors,
             readOnly: isReadOnly,
@@ -48,8 +48,8 @@ const SchedulerAppointmentForm = {
             formData: formData,
             showColonAfterLabel: false,
             labelLocation: 'top',
-            screenByWidth: () => {
-                return getWindowWidth() < SCREEN_SIZE_OF_SINGLE_COLUMN ? 'xs' : 'lg';
+            screenByWidth: (width) => {
+                return width < SCREEN_SIZE_OF_SINGLE_COLUMN ? 'xs' : 'lg';
             }
         });
 
@@ -276,10 +276,9 @@ const SchedulerAppointmentForm = {
         this._editors[0].items = this._editors[0].items.concat(resources);
     },
 
-    checkEditorsType: function(form, startDateExpr, endDateExpr, allDay) {
+    setEditorsType: function(form, startDateExpr, endDateExpr, allDay) {
         const startDateFormItem = form.itemOption(startDateExpr);
         const endDateFormItem = form.itemOption(endDateExpr);
-
 
         if(startDateFormItem && endDateFormItem) {
             const startDateEditorOptions = startDateFormItem.editorOptions;
