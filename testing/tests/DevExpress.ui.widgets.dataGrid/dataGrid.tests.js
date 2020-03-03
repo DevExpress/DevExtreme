@@ -3720,8 +3720,6 @@ QUnit.test('Resize grid after column resizing to right when columnResizingMode i
 
 QUnit.test('DataGrid - A fixed rows should be synchronized after change column width if wordWrapEnabled and height are set (T830739)', function(assert) {
     // arrange
-    let fixedRow;
-    let dataRow;
     const rowsViewWrapper = dataGridWrapper.rowsView;
     const dataGrid = $('#dataGrid').dxDataGrid({
         loadingTimeout: undefined,
@@ -3745,16 +3743,16 @@ QUnit.test('DataGrid - A fixed rows should be synchronized after change column w
     dataGrid.columnOption('c0', 'width', 60);
 
     // arrange, assert
-    fixedRow = rowsViewWrapper.getFixedDataRowElement(0);
-    dataRow = rowsViewWrapper.getDataRowElement(0);
-    assert.deepEqual(fixedRow.position(), dataRow.position(), '1st row position');
-    assert.equal(fixedRow.height(), dataRow.height(), '1st row height');
+    let $fixedRow = rowsViewWrapper.getFixedDataRow(0).getElement();
+    let $dataRow = rowsViewWrapper.getDataRow(0).getElement();
+    assert.deepEqual($fixedRow.position(), $dataRow.position(), '1st row position');
+    assert.equal($fixedRow.height(), $dataRow.height(), '1st row height');
 
     // arrange, assert
-    fixedRow = rowsViewWrapper.getFixedDataRowElement(1);
-    dataRow = rowsViewWrapper.getDataRowElement(1);
-    assert.deepEqual(fixedRow.position(), dataRow.position(), '2nd row position');
-    assert.equal(fixedRow.height(), dataRow.height(), '2nd row height');
+    $fixedRow = rowsViewWrapper.getFixedDataRow(1).getElement();
+    $dataRow = rowsViewWrapper.getDataRow(1).getElement();
+    assert.deepEqual($fixedRow.position(), $dataRow.position(), '2nd row position');
+    assert.equal($fixedRow.height(), $dataRow.height(), '2nd row height');
 });
 
 QUnit.test('DataGrid - A fixed rows should be synchronized after resize column if wordWrapEnabled and height are set (T830739)', function(assert) {
