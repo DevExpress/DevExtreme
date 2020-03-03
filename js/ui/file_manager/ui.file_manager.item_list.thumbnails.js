@@ -7,18 +7,20 @@ import { name as contextMenuEventName } from '../../events/contextmenu';
 import { getDisplayFileSize } from './ui.file_manager.common';
 import messageLocalization from '../../localization/message';
 
+import FileManagerThumbnailListBox from './ui.file_manager.items_list.thumbnails.list';
+// import FileManagerThumbnailsItemListBox from './ui.file_manager.collection_widget_test';
 import FileManagerItemListBase from './ui.file_manager.item_list';
 
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS = 'dx-filemanager-thumbnails';
 const FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS = 'dx-filemanager-thumbnails-view-port';
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS = 'dx-filemanager-thumbnails-container';
 const FILE_MANAGER_THUMBNAILS_ITEM_CLASS = 'dx-filemanager-thumbnails-item';
-const FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS = 'dx-filemanager-thumbnails-item-content';
+// const FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS = 'dx-filemanager-thumbnails-item-content';
 const FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-thumbnails-item-thumbnail';
 const FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS = 'dx-filemanager-thumbnails-item-spacer';
 const FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS = 'dx-filemanager-thumbnails-item-name';
-const FILE_MANAGER_ITEM_SELECTED_CLASS = 'dx-filemanager-item-selected';
-const FILE_MANAGER_ITEM_FOCUSED_CLASS = 'dx-filemanager-item-focused';
+// const FILE_MANAGER_ITEM_SELECTED_CLASS = 'dx-filemanager-item-selected';
+// const FILE_MANAGER_ITEM_FOCUSED_CLASS = 'dx-filemanager-item-focused';
 
 const FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE = 'dxFileManager_thumbnails';
 
@@ -34,14 +36,6 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     _initMarkup() {
         super._initMarkup();
 
-        const multipleSelection = this.option('selectionMode') === 'multiple';
-        const controllerOptions = {
-            selectableItemFilter: itemInfo => !itemInfo.fileItem.isParentFolder,
-            onSelectionChanged: this._onControllerSelectionChanged.bind(this)
-        };
-        const controllerClass = multipleSelection ? MultipleSelectionController : SingleSelectionController;
-        this._selectionController = new controllerClass(controllerOptions);
-
         this._$itemViewContainer = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS);
 
         this._$viewPort = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS);
@@ -51,62 +45,34 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this.$element().append(this._$viewPort);
 
         const contextMenuEvent = addNamespace(contextMenuEventName, FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
-        const clickEvent = addNamespace('click', FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
         eventsEngine.on(this.$element(), contextMenuEvent, this._onContextMenu.bind(this));
-        eventsEngine.on(this.$element(), clickEvent, this._onClick.bind(this));
 
         this._loadItems();
+
+        this._createFilesView();
     }
 
-    _supportedKeys() {
-        return extend(super._supportedKeys(), {
-            rightArrow(e) {
-                this._beforeKeyProcessing(e);
-                this._processMoveArrow(1, true, e);
-            },
-            leftArrow(e) {
-                this._beforeKeyProcessing(e);
-                this._processMoveArrow(-1, true, e);
-            },
-            upArrow(e) {
-                this._beforeKeyProcessing(e);
-                this._processMoveArrow(-1, false, e);
-            },
-            downArrow(e) {
-                this._beforeKeyProcessing(e);
-                this._processMoveArrow(1, false, e);
-            },
-            home(e) {
-                this._beforeKeyProcessing(e);
-                this._selectItemByIndex(0, true, e);
-            },
-            end(e) {
-                this._beforeKeyProcessing(e);
-                this._selectItemByIndex(this._items.length - 1, true, e);
-            },
-            pageUp(e) {
-                this._beforeKeyProcessing(e);
-                this._processPageChange(true, e);
-            },
-            pageDown(e) {
-                this._beforeKeyProcessing(e);
-                this._processPageChange(false, e);
-            },
-            space(e) {
-                this._beforeKeyProcessing(e);
-                this._selectionController.invertFocusedItemSelection();
-            },
-            enter(e) {
-                this._beforeKeyProcessing(e);
-                this.tryOpen();
-            },
-            A(e) {
-                this._beforeKeyProcessing(e);
-                if(e.ctrlKey) {
-                    this._selectAll();
-                }
-            }
+    _createFilesView() {
+        const selectionMode = this._isMultipleSelectionMode() ? 'multiple' : 'single';
+
+        this._filesView = this._createComponent(this._$itemViewContainer, FileManagerThumbnailListBox, {
+            dataSource: this._items,
+            selectionMode,
+            selectableItemFilter: itemInfo => !itemInfo.fileItem.isParentFolder,
+            activeStateEnabled: true,
+            hoverStateEnabled: true,
+            loopItemFocus: false,
+            focusStateEnabled: true,
+            defaultItemTemplate: this._getItemTemplate.bind(this),
+            onEnterKeyPressed: this.tryOpen.bind(this),
+            beforeKeyProcessing: this._beforeKeyProcessing.bind(this),
+            processMoveArrow: this._processMoveArrow.bind(this),
+            processPageChange: this._processPageChange.bind(this),
+            processHomeEndKeys: this._processHomeEndKeys.bind(this),
+            onSelectionChanged: this._onSelectionChanged.bind(this)
         });
+
+        this.refresh();
     }
 
     _beforeKeyProcessing(e) {
@@ -126,8 +92,8 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
                 offset *= layout.itemPerRowCount;
             }
 
-            const newItemIndex = item._state.index + offset;
-            this._selectItemByIndex(newItemIndex, true, eventArgs);
+            const newItemIndex = this._filesView.getIndexByItem(item) + offset;
+            this._focusItemByIndex(newItemIndex, true, eventArgs);
         }
     }
 
@@ -142,7 +108,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             return;
         }
 
-        const itemLayout = this._createItemLayoutModel(item._state.index);
+        const itemLayout = this._createItemLayoutModel(this._filesView.getIndexByItem(item));
 
         const rowOffset = pageUp ? layout.rowPerPageRate : -layout.rowPerPageRate;
         const newRowRate = itemLayout.itemRowIndex - rowOffset;
@@ -155,29 +121,22 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             newItemIndex = this._items.length - 1;
         }
 
-        this._selectItemByIndex(newItemIndex, true, eventArgs);
+        this._focusItemByIndex(newItemIndex, true, eventArgs);
     }
 
-    _onClick(e) {
+    _simulateSelection(e) {
         const $item = $(e.target).closest(this._getItemSelector());
         if($item.length > 0) {
-            this._selectItemByItemElement($item, e);
-        } else {
-            this.clearSelection();
+            this._filesView.selectOnlyOneItem($item);
         }
     }
 
     _onContextMenu(e) {
         e.preventDefault();
-        this._onClick(e);
+        this._simulateSelection(e);
 
         const items = this._getSelectedItemsInternal(true);
         this._showContextMenu(items, e.target, e);
-    }
-
-    _selectItemByItemElement($item, e) {
-        const index = $item.data('index');
-        this._selectItemByIndex(index, false, e);
     }
 
     _getItemThumbnailCssClass() {
@@ -190,8 +149,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _onItemDblClick(e) {
         const $item = $(e.currentTarget);
-        const index = $item.data('index');
-        const item = this._items[index];
+        const item = this._filesView.getItemByItemElement($item);
         this._raiseSelectedItemOpened(item);
     }
 
@@ -201,7 +159,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             return;
         }
 
-        const itemRowIndex = Math.floor(item._state.index / layout.itemPerRowCount);
+        const itemRowIndex = Math.floor(this._filesView.getIndexByItem(item) / layout.itemPerRowCount);
         const itemTop = itemRowIndex * layout.itemHeight;
         const itemBottom = itemTop + layout.itemHeight;
 
@@ -233,7 +191,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         }
 
         const item = this._items[0];
-        const $item = item._state.$element;
+        const $item = this._filesView.getItemElementByItem(item);
 
         const itemWidth = $item.outerWidth(true);
         if(itemWidth === 0) {
@@ -282,25 +240,39 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _selectAll() {
-        this._selectionController.selectAll();
+        this._filesView.selectAll();
     }
 
     _selectItem(item, scrollToItem, eventArgs) {
-        this._selectionController.selectItem(item, eventArgs);
+        this._filesView.selectItem(item, eventArgs);
         if(scrollToItem) {
             this._scrollToItem(item);
         }
     }
 
-    _selectItemByIndex(index, scrollToItem, eventArgs) {
+    _processHomeEndKeys(index, scrollToItem, eventArgs) {
         if(index >= 0 && index < this._items.length) {
-            const item = this._items[index];
-            this._selectItem(item, scrollToItem, eventArgs);
+            const item = this._filesView.getItemByIndex(index);
+            this._focusItem(item, scrollToItem);
+        }
+    }
+
+    _focusItem(item, scrollToItem) {
+        this._filesView.setFocusedItem(item);
+        if(scrollToItem) {
+            this._scrollToItem(item);
+        }
+    }
+
+    _focusItemByIndex(index, scrollToItem, eventArgs) {
+        if(index >= 0 && index < this._items.length) {
+            const item = this._filesView.getItemByIndex(index);
+            this._focusItem(item, scrollToItem, eventArgs);
         }
     }
 
     _getFocusedItem() {
-        return this._selectionController.getFocusedItem();
+        return this._filesView.getFocusedItem();
     }
 
     _loadItems() {
@@ -322,34 +294,13 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _applyItems(items) {
         this._items = items;
-        this._selectionController.setItems(items);
-        this._renderItems(items);
+        this._filesView.option('dataSource', this._items);
     }
 
-    _renderItems(items) {
-        this._$itemViewContainer.empty();
-
-        for(let i = 0; i < items.length; i++) {
-            const item = items[i];
-
-            item._state = {
-                index: i,
-                selected: false,
-                $element: null
-            };
-            this._renderItem(item);
-        }
-    }
-
-    _renderItem(fileItemInfo) {
-        const $item = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_ITEM_CLASS)
-            .attr('title', this._getTooltipText(fileItemInfo))
-            .data('index', fileItemInfo._state.index);
-
-        const $itemContent = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS);
+    _getItemTemplate(fileItemInfo, $itemElement) {
+        $itemElement.attr('title', this._getTooltipText(fileItemInfo));
 
         const $itemThumbnail = this._getItemThumbnailContainer(fileItemInfo);
-        eventsEngine.on($itemThumbnail, 'dragstart', this._disableDragging);
 
         const $itemSpacer = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS);
 
@@ -357,11 +308,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             .addClass(FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS)
             .text(fileItemInfo.fileItem.name);
 
-        $item.append($itemContent);
-        $itemContent.append($itemThumbnail, $itemSpacer, $itemName);
-        this._$itemViewContainer.append($item);
-
-        fileItemInfo._state.$element = $item;
+        $itemElement.append($itemThumbnail, $itemSpacer, $itemName);
     }
 
     _getTooltipText(fileItemInfo) {
@@ -392,17 +339,17 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         });
     }
 
-    _onControllerSelectionChanged({ currentSelectedItems, currentDeselectedItems }) {
+    _onSelectionChanged({ addedItems, removedItems }) {
         const selectedItems = this.getSelectedItems().map(itemInfo => itemInfo.fileItem);
         const selectedItemKeys = selectedItems.map(item => item.key);
-        const currentSelectedItemKeys = currentSelectedItems.map(itemInfo => itemInfo.fileItem.key);
-        const currentDeselectedItemKeys = currentDeselectedItems.map(itemInfo => itemInfo.fileItem.key);
+        const currentSelectedItemKeys = addedItems.map(itemInfo => itemInfo.fileItem.key);
+        const currentDeselectedItemKeys = removedItems.map(itemInfo => itemInfo.fileItem.key);
 
         this._raiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
     }
 
     _getSelectedItemsInternal(allowParentDirectoryItem) {
-        return this._selectionController.getSelectedItems(allowParentDirectoryItem);
+        return this._filesView.getSelectedItems(allowParentDirectoryItem);
     }
 
     refresh() {
@@ -417,213 +364,16 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         }
     }
 
+    _isMultipleSelectionMode() {
+        return this.option('selectionMode') === 'multiple';
+    }
+
     clearSelection() {
-        this._selectionController.clearSelection();
+        this._filesView.clearSelection();
     }
 
     getSelectedItems() {
         return this._getSelectedItemsInternal();
-    }
-
-}
-
-class SingleSelectionController {
-
-    constructor(options) {
-        this._options = options;
-
-        this._items = [];
-
-        this._selectionChangedHandler = options.onSelectionChanged;
-        this._resetSelectionChanges();
-    }
-
-    selectAll() {
-
-    }
-
-    clearSelection() {
-        this._beginUpdate();
-
-        this._setAllItemsSelectedState(false);
-
-        this._endUpdate();
-    }
-
-    selectItem(item, eventArgs) {
-        this._beginUpdate();
-
-        this._setAllItemsSelectedState(false, [item]);
-        this._setItemSelectedState(item, true);
-
-        this._endUpdate();
-    }
-
-    invertFocusedItemSelection(item) {
-
-    }
-
-    getFocusedItem() {
-        const selectedItems = this.getSelectedItems(true);
-        return selectedItems.length > 0 ? selectedItems[0] : null;
-    }
-
-    getSelectedItems(ignoreSelectableFilter) {
-        return this._items.filter(item => (ignoreSelectableFilter || this._isSelectableItem(item)) && item._state.selected);
-    }
-
-    setItems(items) {
-        this._items = items;
-    }
-
-    _setItemSelectedState(item, selected) {
-        if(item._state.selected === selected) {
-            return;
-        }
-
-        item._state.selected = selected;
-        item._state.$element.toggleClass(FILE_MANAGER_ITEM_SELECTED_CLASS, selected);
-
-        if(!this._isSelectableItem(item)) {
-            return;
-        }
-
-        const arrayToAdd = selected ? this._currentSelectedItems : this._currentDeselectedItems;
-        const arrayToRemove = selected ? this._currentDeselectedItems : this._currentSelectedItems;
-
-        if(arrayToAdd.indexOf(item) === -1) {
-            arrayToAdd.push(item);
-        }
-
-        const removeIndex = arrayToRemove.indexOf(item);
-        if(removeIndex !== -1) {
-            arrayToRemove.splice(removeIndex, 1);
-        }
-
-        this._selectionChanged = true;
-    }
-
-    _setAllItemsSelectedState(selected, exceptedItems) {
-        for(let i = 0; i < this._items.length; i++) {
-            const item = this._items[i];
-
-            if(exceptedItems && exceptedItems.indexOf(item) !== -1) {
-                continue;
-            }
-
-            this._setItemSelectedState(item, selected);
-        }
-    }
-
-    _beginUpdate() {
-        this._selectionChanged = false;
-        this._currentSelectedItems = [];
-        this._currentDeselectedItems = [];
-    }
-
-    _endUpdate() {
-        if(this._selectionChanged) {
-            const args = {
-                currentSelectedItems: this._currentSelectedItems,
-                currentDeselectedItems: this._currentDeselectedItems
-            };
-            this._selectionChangedHandler(args);
-            this._resetSelectionChanges();
-        }
-    }
-
-    _resetSelectionChanges() {
-        this._selectionChanged = false;
-        this._currentSelectedItems = null;
-        this._currentDeselectedItems = null;
-    }
-
-    _isSelectableItem(item) {
-        const itemFilter = this._options.selectableItemFilter;
-        return itemFilter ? itemFilter(item) : true;
-    }
-
-}
-
-class MultipleSelectionController extends SingleSelectionController {
-
-    constructor(options) {
-        super(options);
-        this._focusedItem = null;
-    }
-
-    selectAll() {
-        this._beginUpdate();
-
-        this._setAllItemsSelectedState(true);
-
-        this._endUpdate();
-    }
-
-    selectItem(item, eventArgs) {
-        this._beginUpdate();
-
-        if(eventArgs.shiftKey) {
-            this._setItemsRangeSelectedState(this._focusedItem._state.index, item._state.index, eventArgs.ctrlKey, true);
-        } else if(eventArgs.ctrlKey) {
-            const needSelect = this._items.length === 1 && this._focusedItem === item || !item._state.selected;
-            this._setItemSelectedState(item, needSelect);
-        } else {
-            this._setAllItemsSelectedState(false, [item]);
-            this._setItemSelectedState(item, true);
-        }
-
-        this._setFocusedItem(item);
-
-        this._endUpdate();
-    }
-
-    _setItemsRangeSelectedState(startIndex, endIndex, invert, selected) {
-        if(startIndex > endIndex) {
-            const temp = endIndex;
-            endIndex = startIndex;
-            startIndex = temp;
-        }
-
-        for(let i = startIndex; i <= endIndex; i++) {
-            const item = this._items[i];
-            const actualSelected = invert ? !item._state.selected : selected;
-            this._setItemSelectedState(item, actualSelected);
-        }
-    }
-
-    _setFocusedItem(item) {
-        if(this._focusedItem === item) {
-            return;
-        }
-
-        if(this._focusedItem) {
-            this._focusedItem._state.$element.removeClass(FILE_MANAGER_ITEM_FOCUSED_CLASS);
-        }
-        item._state.$element.addClass(FILE_MANAGER_ITEM_FOCUSED_CLASS);
-
-        this._focusedItem = item;
-    }
-
-    invertFocusedItemSelection() {
-        if(!this._focusedItem) {
-            return;
-        }
-
-        this._beginUpdate();
-
-        this._setItemSelectedState(this._focusedItem, !this._focusedItem._state.selected);
-
-        this._endUpdate();
-    }
-
-    getFocusedItem() {
-        return this._focusedItem;
-    }
-
-    setItems(items) {
-        super.setItems(items);
-        this._focusedItem = items.length > 0 ? items[0] : null;
     }
 
 }
