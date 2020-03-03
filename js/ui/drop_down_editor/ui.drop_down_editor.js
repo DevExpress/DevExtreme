@@ -35,14 +35,6 @@ const isIOs = devices.current().platform === 'ios';
 const DropDownEditor = TextBox.inherit({
 
     _supportedKeys: function() {
-        const homeEndHandler = function(e) {
-            if(this.option('opened')) {
-                e.preventDefault();
-                return true;
-            }
-            return false;
-        };
-
         return extend({}, this.callBase(), {
             tab: function(e) {
                 if(!this.option('opened')) {
@@ -93,9 +85,7 @@ const DropDownEditor = TextBox.inherit({
                     this._valueChangeEventHandler(e);
                 }
                 return true;
-            },
-            home: homeEndHandler,
-            end: homeEndHandler
+            }
         });
     },
 
