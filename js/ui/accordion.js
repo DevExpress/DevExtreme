@@ -115,7 +115,7 @@ const Accordion = CollectionWidget.inherit({
                     }
 
                     const $iconElement = getImageContainer(data.icon);
-                    $iconElement && $iconElement.appendTo($container);
+                    $iconElement && $iconElement.prependTo($container);
                 } else {
                     if(isDefined(data)) {
                         $container.text(String(data));
