@@ -53,6 +53,10 @@ class Button extends Widget {
             }
         });
 
+        props.onContentReady = this._createActionByOption('onContentReady', {
+            excludeValidators: ['disabled', 'readOnly']
+        });
+
         return props;
     }
 

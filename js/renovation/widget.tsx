@@ -93,6 +93,7 @@ export const viewModelFunction = ({
         tabIndex,
         visible,
         width,
+        onContentReady,
         onVisibilityChange,
     },
 
@@ -117,6 +118,7 @@ export const viewModelFunction = ({
         disabled,
         focusStateEnabled,
         hoverStateEnabled,
+        onContentReady,
         styles,
         tabIndex: focusStateEnabled && !disabled && tabIndex,
         title: hint,
@@ -160,7 +162,8 @@ export class WidgetInput {
     @OneWay() hoverStateEnabled?: boolean = false;
     @OneWay() name?: string = '';
     @OneWay() onActive?: (e: any) => any = (() => undefined);
-    @Event() onClick?: (e: any) => void = (() => { });
+    @Event() onClick?: (e: any) => void = (() => {});
+    @Event() onContentReady?: (e: any) => any = (() => {});
     @OneWay() onDimensionChanged?: () => any = (() => undefined);
     @OneWay() onInactive?: (e: any) => any = (() => undefined);
     @OneWay() onKeyboardHandled?: (args: any) => any | undefined;
@@ -252,6 +255,13 @@ export default class Widget extends JSXComponent<WidgetInput> {
         );
 
         return () => dxClick.off(this.widgetRef, { namespace });
+    }
+
+    @Effect()
+    contentReadyEffect() {
+        const { onContentReady } = this.props;
+
+        onContentReady?.({});
     }
 
     @Effect()
