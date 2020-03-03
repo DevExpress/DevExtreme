@@ -2547,7 +2547,16 @@ module.exports = {
 
                     return column.index;
                 },
-                getCustomizeTextByDataType: getCustomizeTextByDataType
+                getCustomizeTextByDataType: getCustomizeTextByDataType,
+                getHeaderContentAlignment: function(columnAlignment) {
+                    const rtlEnabled = this.option('rtlEnabled');
+
+                    if(rtlEnabled) {
+                        return columnAlignment === 'left' ? 'right' : 'left';
+                    }
+
+                    return columnAlignment;
+                }
             };
         })())
     }

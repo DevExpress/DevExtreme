@@ -536,20 +536,5 @@ module.exports = {
                 }
             };
         })())
-    },
-    extenders: {
-        controllers: {
-            columns: {
-                getHeaderContentAlignment: function(columnAlignment) {
-                    const rtlEnabled = this.option('rtlEnabled');
-
-                    if(rtlEnabled) {
-                        return columnAlignment === 'left' ? 'right' : 'left';
-                    }
-
-                    return columnAlignment;
-                }
-            }
-        }
     }
 };
