@@ -11,6 +11,14 @@ const CalendarStrategy = DateBoxStrategy.inherit({
     NAME: 'Calendar',
 
     supportedKeys: function() {
+        const homeEndHandler = function(e) {
+            if(this.option('opened')) {
+                e.preventDefault();
+                return true;
+            }
+            return false;
+        };
+
         return {
             rightArrow: function() {
                 if(this.option('opened')) {
@@ -38,7 +46,9 @@ const CalendarStrategy = DateBoxStrategy.inherit({
                 } else {
                     this.dateBox._valueChangeEventHandler(e);
                 }
-            }).bind(this)
+            }).bind(this),
+            home: homeEndHandler,
+            end: homeEndHandler
         };
     },
 
