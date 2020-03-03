@@ -126,16 +126,22 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _simulateSelection(e) {
         const $item = $(e.target).closest(this._getItemSelector());
-        if($item.length > 0) {
-            this._filesView.selectOnlyOneItem($item);
+        if($item.length > 0 && !this._filesView.isItemSelected($item)) {
+            this._filesView.selectItemConditionally($item);
         }
+        return $item;
     }
 
     _onContextMenu(e) {
         e.preventDefault();
-        this._simulateSelection(e);
+        e.stopPropagation();
+        const targetItemElement = this._simulateSelection(e);
+        let items = null;
+        if(targetItemElement.length > 0) {
+            const targetItem = this._filesView.getItemByItemElement(targetItemElement);
+            items = this._getFileItemsForContextMenu(targetItem);
+        }
 
-        const items = this._getSelectedItemsInternal(true);
         this._showContextMenu(items, e.target, e);
     }
 
@@ -345,8 +351,14 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._raiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
     }
 
-    _getSelectedItemsInternal(allowParentDirectoryItem) {
-        return this._filesView.getSelectedItems(allowParentDirectoryItem);
+    _getFileItemsForContextMenu(fileItem) {
+        const result = this.getSelectedItems();
+
+        if(this._isParentDirectoryItem(fileItem)) {
+            result.push(fileItem);
+        }
+
+        return result;
     }
 
     refresh() {
@@ -370,7 +382,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     getSelectedItems() {
-        return this._getSelectedItemsInternal();
+        return this._filesView.getSelectedItems();
     }
 
 }

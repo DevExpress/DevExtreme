@@ -96,7 +96,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     }
 
     _itemSelectHandler(e) {
-        const index = this._editStrategy.getNormalizedIndex(e.currentTarget);
+        const index = this.getIndexByItemElement(e.currentTarget);
         if(index === -1) {
             return;
         }
@@ -141,8 +141,11 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     }
 
     getItemByItemElement(itemElement) {
-        const index = this._editStrategy.getNormalizedIndex(itemElement);
-        return this.getItemByIndex(index);
+        return this.getItemByIndex(this.getIndexByItemElement(itemElement));
+    }
+
+    getIndexByItemElement(itemElement) {
+        return this._editStrategy.getNormalizedIndex(itemElement);
     }
 
     getIndexByItem(item) {
@@ -163,12 +166,11 @@ class FileManagerThumbnailListBox extends CollectionWidget {
 
     selectAll() {
         this._selection.selectAll();
+        this._isPreserveSelectionMode = true;
     }
 
-    selectOnlyOneItem(itemElement) {
-        const item = this.getItemByItemElement(itemElement);
-        const index = this.getIndexByItem(item);
-        this._selection.changeItemSelection(index, {});
+    selectItemConditionally(itemElement) {
+        this._selection.changeItemSelection(this.getIndexByItemElement(itemElement), { control: this._isPreserveSelectionMode });
     }
 
     clearSelection() {
