@@ -58,7 +58,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._filesView = this._createComponent(this._$itemViewContainer, FileManagerThumbnailListBox, {
             dataSource: this._items,
             selectionMode,
-            selectableItemFilter: itemInfo => !itemInfo.fileItem.isParentFolder,
+            selectableItemFilter: itemInfo => !this._isParentDirectoryItem(itemInfo),
             activeStateEnabled: true,
             hoverStateEnabled: true,
             loopItemFocus: false,
@@ -243,13 +243,6 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._filesView.selectAll();
     }
 
-    _selectItem(item, scrollToItem, eventArgs) {
-        this._filesView.selectItem(item, eventArgs);
-        if(scrollToItem) {
-            this._scrollToItem(item);
-        }
-    }
-
     _processHomeEndKeys(index, scrollToItem, eventArgs) {
         if(index >= 0 && index < this._items.length) {
             const item = this._filesView.getItemByIndex(index);
@@ -295,6 +288,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     _applyItems(items) {
         this._items = items;
         this._filesView.option('dataSource', this._items);
+    }
+
+    _isParentDirectoryItem(itemInfo) {
+        return itemInfo.fileItem.isParentFolder;
     }
 
     _getItemTemplate(fileItemInfo, $itemElement) {
