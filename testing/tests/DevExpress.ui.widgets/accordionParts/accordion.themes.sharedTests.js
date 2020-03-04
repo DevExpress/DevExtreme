@@ -2,6 +2,9 @@ import $ from 'jquery';
 import 'ui/accordion';
 import 'ui/button';
 
+const TITLE_CAPTION_CLASS = 'dx-accordion-item-title-caption';
+const ICON_CLASS = 'dx-icon';
+
 export const runThemesSharedTests = function(moduleNamePostfix) {
     QUnit.module('Scenarios.' + moduleNamePostfix, {
         beforeEach: function() {
@@ -28,8 +31,8 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                 dataSource: [{ title: 'Caption', icon: 'remove' }],
             });
 
-            const iconRect = $accordion.find('.dx-accordion-item-title-caption .dx-icon').get(0).getBoundingClientRect();
-            const textRect = $accordion.find('.dx-accordion-item-title-caption span').get(0).getBoundingClientRect();
+            const iconRect = $accordion.find(`.${TITLE_CAPTION_CLASS} .${ICON_CLASS}`).get(0).getBoundingClientRect();
+            const textRect = $accordion.find(`.${TITLE_CAPTION_CLASS} span`).get(0).getBoundingClientRect();
 
             const epsilon = 1.6;
             assert.roughEqual(iconRect.top + iconRect.height / 2, textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);

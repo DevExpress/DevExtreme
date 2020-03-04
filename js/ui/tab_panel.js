@@ -102,12 +102,12 @@ const TabPanel = MultiView.inherit({
         this._templateManager.addDefaultTemplates({
             title: new BindableTemplate(function($container, data) {
                 if(isPlainObject(data)) {
+                    const $iconElement = getImageContainer(data.icon);
+                    $iconElement && $container.append($iconElement);
+
                     if(isDefined(data.title) && !isPlainObject(data.title)) {
                         $container.text(data.title);
                     }
-
-                    const $iconElement = getImageContainer(data.icon);
-                    $iconElement && $iconElement.prependTo($container);
                 } else {
                     if(isDefined(data)) {
                         $container.text(String(data));
