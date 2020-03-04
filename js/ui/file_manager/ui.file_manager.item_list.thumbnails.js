@@ -47,9 +47,9 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         const contextMenuEvent = addNamespace(contextMenuEventName, FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
         eventsEngine.on(this.$element(), contextMenuEvent, this._onContextMenu.bind(this));
 
-        this._loadItems();
-
         this._createFilesView();
+
+        this._loadItems();
     }
 
     _createFilesView() {
@@ -71,8 +71,6 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             processHomeEndKeys: this._processHomeEndKeys.bind(this),
             onSelectionChanged: this._onSelectionChanged.bind(this)
         });
-
-        this.refresh();
     }
 
     _beforeKeyProcessing(e) {
@@ -293,7 +291,9 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _applyItems(items) {
         this._items = items;
-        this._filesView.option('dataSource', this._items);
+        if(this._filesView) {
+            this._filesView.option('dataSource', this._items);
+        }
     }
 
     _isParentDirectoryItem(itemInfo) {
