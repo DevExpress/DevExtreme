@@ -139,19 +139,29 @@
         }
 
         .dx-filemanager-thumbnails-item {
-            &.dx-filemanager-item-selected {
+            &.dx-item-selected {
                 color: @filemanager-file-item-select-color;
                 background: @filemanager-file-item-select-bg;
+            }
+
+            &.dx-state-hover:not(.dx-state-focused):not(.dx-item-selected) {
+                background: @filemanager-file-item-hover-bg;
+            }
+
+            &.dx-state-focused:not(.dx-item-selected) {
+                color: @filemanager-item-focused-color;
+                background: @filemanager-file-item-focused-bg;
+            }
+
+            &.dx-item-selected.dx-state-focused {
+                color: @filemanager-item-focused-color;
+                background: @filemanager-file-item-focused-bg + #222;
             }
 
             .dx-filemanager-thumbnails-item-thumbnail {
                 width: @GENERIC_BASE_ICON_SIZE * 2;
                 height: @GENERIC_BASE_ICON_SIZE * 2;
                 font-size: @GENERIC_BASE_ICON_SIZE * 2;
-            }
-
-            &.dx-filemanager-item-focused {
-                border-color: @base-text-color;
             }
 
             .dx-filemanager-item-custom-thumbnail {
