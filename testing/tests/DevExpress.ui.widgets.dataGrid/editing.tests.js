@@ -17516,7 +17516,7 @@ QUnit.module('Async validation', {
         });
     });
 
-    QUnit.test('Cell - Only the last cell should be switched to edit mode', function(assert) {
+    QUnit.skip('Cell - Only the last cell should be switched to edit mode', function(assert) {
         // arrange
         const rowsView = this.rowsView;
         const testElement = $('#container');
