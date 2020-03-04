@@ -308,7 +308,7 @@ QUnit.test('Correct background color of focused grouped row when RTL', function(
 
     const cellBackgroundColor = browser.msie ? 'transparent' : 'rgba(0, 0, 0, 0)';
     const $groupedRow = $(dataGrid.getRowElement(0)[0]);
-    assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgb(51, 122, 183)', 'focused grouped row has correct background color in rtl mode');
+    assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgb(92, 149, 197)', 'focused grouped row has correct background color in rtl mode');
     assert.equal(window.getComputedStyle($groupedRow.find('td')[0]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
     assert.equal(window.getComputedStyle($groupedRow.find('td')[1]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
 });
@@ -7720,6 +7720,26 @@ QUnit.test('no action cursor for column header when sorting and dragging not all
 
     // assert
     assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 2, 'two drag actions for hiding columns');
+});
+
+// T862537
+QUnit.test('column should be draggable if grid contains this column and column with allowHiding: false', function(assert) {
+    // act
+    const dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        columns: [{ dataField: 'field1', allowHiding: false }, { dataField: 'field2' }],
+        dataSource: []
+    });
+
+    // assert
+    assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 0, 'no drag actions');
+    assert.equal($(dataGrid.$element()).find('.dx-datagrid-action').length, 2, 'two actions');
+
+    // act
+    dataGrid.showColumnChooser();
+
+    // assert
+    assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 1, 'one drag action for hiding column');
 });
 
 QUnit.test('Correct runtime changing of a columnChooser mode (string)', function(assert) {

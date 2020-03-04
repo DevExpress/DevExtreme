@@ -3931,6 +3931,44 @@ QUnit.module('keyboard navigation', {
         assert.ok($cancelButton.hasClass('dx-state-focused'), 'cancel button is focused');
     });
 
+    QUnit.test('Home and end key press prevent default when popup in opened (T587313)', function(assert) {
+        assert.expect(1);
+
+        let prevented = 0;
+
+        this.dateBox.option('opened', true);
+
+        this.$dateBox.on('keydown', (e) => {
+            if(e.isDefaultPrevented()) {
+                prevented++;
+            }
+        });
+
+        this.keyboard.keyDown('home');
+        this.keyboard.keyDown('end');
+
+        assert.equal(prevented, 0, 'defaults prevented on home and end keys');
+    });
+
+    QUnit.test('Home and end key press does not prevent default when popup in not opened (T587313)', function(assert) {
+        assert.expect(1);
+
+        let prevented = 0;
+
+        this.dateBox.option('opened', false);
+
+        this.$dateBox.on('keydown', (e) => {
+            if(e.isDefaultPrevented()) {
+                prevented++;
+            }
+        });
+
+        this.keyboard.keyDown('home');
+        this.keyboard.keyDown('end');
+
+        assert.equal(prevented, 0, 'defaults has not prevented on home and end keys');
+    });
+
     QUnit.testInActiveWindow('Unsupported key handlers must be processed correctly', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
