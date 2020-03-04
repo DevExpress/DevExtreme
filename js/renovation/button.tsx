@@ -47,12 +47,13 @@ const getAriaLabel = (text, icon) => {
 };
 
 export const viewFunction = (viewModel: Button) => {
-    const renderText = !viewModel.props.contentRender && viewModel.props.text;
-    const isIconLeft = viewModel.props.iconPosition === 'left';
-    const leftIcon = !viewModel.props.contentRender && isIconLeft;
-    const rightIcon = !viewModel.props.contentRender && !isIconLeft;
-    const icon = !viewModel.props.contentRender && viewModel.iconSource
-        && <Icon source={viewModel.iconSource} position={viewModel.props.iconPosition}/>;
+    const { contentRender, text, iconPosition } = viewModel.props;
+    const renderText = !contentRender && text;
+    const isIconLeft = iconPosition === 'left';
+    const leftIcon = !contentRender && isIconLeft;
+    const rightIcon = !contentRender && !isIconLeft;
+    const icon = !contentRender && viewModel.iconSource
+        && <Icon source={viewModel.iconSource} position={iconPosition}/>;
 
     return <Widget
         accessKey={viewModel.props.accessKey}
@@ -76,18 +77,18 @@ export const viewFunction = (viewModel: Button) => {
         width={viewModel.props.width}
     >
         <div className="dx-button-content" ref={viewModel.contentRef as any}>
-            {viewModel.props.contentRender &&
+            {contentRender &&
                 <viewModel.props.contentRender
                     model={{
-                        icon: viewModel.props.icon,
-                        text: viewModel.props.text,
+                        icon,
+                        text,
                     }}
                     parentRef={viewModel.contentRef}
                 />
             }
             {leftIcon && icon}
             {renderText &&
-                <span className="dx-button-text">{viewModel.props.text}</span>
+                <span className="dx-button-text">{text}</span>
             }
             {rightIcon && icon}
             {viewModel.props.useSubmitBehavior &&
@@ -191,7 +192,8 @@ export default class Button extends JSXComponent<ButtonInput> {
         return { ...this.props.elementAttr, role: 'button' };
     }
 
-    get iconSource():string {
-        return (this.props.icon || this.props.type === 'back') ? (this.props.icon || 'back') : '';
+    get iconSource(): string {
+        const { icon, type } = this.props;
+        return (icon || type === 'back') ? (icon || 'back') : '';
     }
 }
