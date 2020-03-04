@@ -1096,7 +1096,7 @@
 * @name 70. Focused row background color
 * @type color
 */
-@datagrid-row-focused-bg: @base-accent;
+@datagrid-row-focused-bg: mix(@base-bg, @base-accent, 20%);
 @datagrid-hover-bg: fade(darken(@base-bg, 9%), 40%);
 @datagrid-row-hovered-color: @datagrid-base-color;
 
@@ -1171,7 +1171,7 @@
 * @name 75. Focused cell border color
 * @type color
 */
-@datagrid-focused-border-color: darken(@base-focus-bg, 15%);
+@datagrid-focused-border-color: mix(@base-bg, darken(@base-focus-bg, 15%), 20%);
 
 /**
 * @name 80. Editor background
