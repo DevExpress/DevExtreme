@@ -37,7 +37,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
             },
             enter(e) {
                 this._beforeKeyProcessing(e);
-                this._tryOpenAction();
+                this._onItemEnterKeyPressed();
             },
             A(e) {
                 this._beforeKeyProcessing(e);
@@ -50,7 +50,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
 
     _initActions() {
         this._getDefaultItemTemplate = this.option('defaultItemTemplate');
-        this._tryOpenAction = this._createActionByOption('onEnterKeyPressed');
+        this._onItemEnterKeyPressed = this._createActionByOption('onItemEnterKeyPressed');
         this._beforeKeyProcessing = this.option('beforeKeyProcessing');
         this._processMoveArrow = this.option('processMoveArrow');
         this._processHomeEndKeys = this.option('processHomeEndKeys');

@@ -59,7 +59,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             loopItemFocus: false,
             focusStateEnabled: true,
             defaultItemTemplate: this._getItemTemplate.bind(this),
-            onEnterKeyPressed: this.tryOpen.bind(this),
+            onItemEnterKeyPressed: this.tryOpen.bind(this),
             beforeKeyProcessing: this._beforeKeyProcessing.bind(this),
             processMoveArrow: this._processMoveArrow.bind(this),
             processPageChange: this._processPageChange.bind(this),
