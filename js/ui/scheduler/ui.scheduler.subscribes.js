@@ -129,10 +129,10 @@ const subscribes = {
         options.$appointment = $(options.target);
         options.skipHoursProcessing = true;
 
-        const singleAppointmentData = this._getSingleAppointmentData(appointmentData, options);
-        const startDate = this.fire('getField', 'startDate', singleAppointmentData);
+        const targetedData = this._getAppointmentData(appointmentData, options);
+        const startDate = this.fire('getField', 'startDate', targetedData);
 
-        this.showAppointmentPopup(appointmentData, false, singleAppointmentData, startDate);
+        this.showAppointmentPopup(appointmentData, false, targetedData, startDate);
     },
 
     updateAppointmentAfterResize: function(options) {
@@ -140,13 +140,13 @@ const subscribes = {
 
         options.isAppointmentResized = true;
 
-        const singleAppointment = this._getSingleAppointmentData(targetAppointment, options);
-        const startDate = this.fire('getField', 'startDate', singleAppointment);
+        const targetedData = this._getAppointmentData(targetAppointment, options);
+        const startDate = this.fire('getField', 'startDate', targetedData);
         const updatedData = extend(true, {}, options.data);
 
         this._convertDatesByTimezoneBack(true, updatedData);
 
-        this._checkRecurringAppointment(targetAppointment, singleAppointment, startDate, (function() {
+        this._checkRecurringAppointment(targetAppointment, targetedData, startDate, (function() {
             this._updateAppointment(targetAppointment, updatedData, function() {
                 this._appointments.moveAppointmentBack();
             });
@@ -190,9 +190,9 @@ const subscribes = {
         options.$appointment = $(options.target);
 
         const appointmentData = options.data;
-        const singleAppointmentData = this._getSingleAppointmentData(appointmentData, options);
+        const targetedData = this._getAppointmentData(appointmentData, options);
 
-        this.checkAndDeleteAppointment(appointmentData, singleAppointmentData);
+        this.checkAndDeleteAppointment(appointmentData, targetedData);
     },
 
     getAppointmentColor: function(options) {
@@ -240,11 +240,6 @@ const subscribes = {
         const appointmentFields = this.fire('_getAppointmentFields', extend({}, data, currentData), fields);
         let startDate = appointmentFields.startDate;
         let endDate = appointmentFields.endDate;
-
-        if(!this._isAppointmentRecurrence(data)) {
-            startDate = this.fire('convertDateByTimezone', appointmentFields.startDate, appointmentFields.startDateTimeZone);
-            endDate = this.fire('convertDateByTimezone', appointmentFields.endDate, appointmentFields.endDateTimeZone);
-        }
 
         const formatType = format || this.fire('_getTypeFormat', startDate, endDate, appointmentFields.allDay);
 
@@ -466,11 +461,7 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) {
-        const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement);
-
-        if(this._isAppointmentRecurrence(config.itemData)) {
-            this._convertDatesByTimezoneBack(false, targetedData);
-        }
+        const targetedData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement, true);
 
         return {
             appointmentData: config.itemData,
@@ -756,18 +747,18 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, needConvertByTimezones) {
         const $appointmentElement = $(appointmentElement);
         const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
 
-        const recurringData = this._getSingleAppointmentData(appointmentData, {
+        const targetedData = this._getAppointmentData(appointmentData, {
             skipDateCalculation: true,
             $appointment: $appointmentElement,
-            skipHoursProcessing: true
+            skipHoursProcessing: needConvertByTimezones ? false : true
         });
         const result = {};
 
-        extend(true, result, appointmentData, recurringData);
+        extend(true, result, appointmentData, targetedData);
 
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 

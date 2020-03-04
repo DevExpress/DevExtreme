@@ -7722,6 +7722,26 @@ QUnit.test('no action cursor for column header when sorting and dragging not all
     assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 2, 'two drag actions for hiding columns');
 });
 
+// T862537
+QUnit.test('column should be draggable if grid contains this column and column with allowHiding: false', function(assert) {
+    // act
+    const dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        columns: [{ dataField: 'field1', allowHiding: false }, { dataField: 'field2' }],
+        dataSource: []
+    });
+
+    // assert
+    assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 0, 'no drag actions');
+    assert.equal($(dataGrid.$element()).find('.dx-datagrid-action').length, 2, 'two actions');
+
+    // act
+    dataGrid.showColumnChooser();
+
+    // assert
+    assert.equal($(dataGrid.$element()).find('.dx-datagrid-drag-action').length, 1, 'one drag action for hiding column');
+});
+
 QUnit.test('Correct runtime changing of a columnChooser mode (string)', function(assert) {
     // arrange
     const dataGrid = createDataGrid({
@@ -19633,7 +19653,8 @@ QUnit.module('Validation with virtual scrolling and rendering', {
             showBorders: true,
             scrolling: {
                 mode: 'virtual',
-                rowRenderingMode: 'virtual'
+                rowRenderingMode: 'virtual',
+                useNative: false
             },
             paging: { pageSize: 50 },
             editing: {
@@ -19711,7 +19732,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
     });
 
     // T838674
-    QUnit.test('Validation error hightlighting should disappear after scrolling if newly added row failed validation', function(assert) {
+    QUnit.test('Validation error hightlighting should not disappear after scrolling if newly added row failed validation', function(assert) {
         // arrange
         let $input; let dataGrid; let $firstCell;
 
@@ -19760,7 +19781,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         $input = $firstCell.find('input');
 
         // assert
-        assert.notOk($firstCell.hasClass('dx-datagrid-invalid'), 'cell has not invalid class');
+        assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell has invalid class');
         assert.ok($firstCell.hasClass('dx-editor-cell'), 'editor cell');
         assert.ok($input, 'cell has input');
     });

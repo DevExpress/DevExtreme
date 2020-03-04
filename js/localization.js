@@ -4,6 +4,9 @@ const number = require('./localization/number');
 const date = require('./localization/date');
 require('./localization/currency');
 
+/**
+ * @name localization
+ */
 
 exports.locale = core.locale.bind(core);
 

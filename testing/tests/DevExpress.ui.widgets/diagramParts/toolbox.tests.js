@@ -49,6 +49,7 @@ QUnit.module('Toolbox', {
         assert.equal($accordion.length, 1);
         assert.equal($accordion.is(':visible'), true);
         showToolboxButton.trigger('dxclick');
+        this.clock.tick(2000);
         assert.equal($accordion.length, 1);
         assert.equal($accordion.is(':visible'), false);
     });

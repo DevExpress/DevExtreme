@@ -212,6 +212,7 @@ const EditingController = modules.ViewController.inherit((function() {
             that._rowsView = that.getView('rowsView');
             that._editForm = null;
             that._updateEditFormDeferred = null;
+            that._lastOperation = null;
 
             if(that._deferreds) {
                 that._deferreds.forEach(d => d.reject('cancel'));
@@ -1114,11 +1115,28 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
+        executeOperation: function(deferred, func) {
+            if(this._lastOperation) {
+                this._lastOperation.reject();
+            }
+
+            this._lastOperation = deferred;
+
+            when(...this._deferreds).always(() => {
+                this._lastOperation = null;
+            }).done(() => {
+                if(deferred.state() === 'rejected') {
+                    return;
+                }
+                func();
+            }).fail(deferred.reject);
+        },
+
         editCell: function(rowIndex, columnIndex) {
             const d = new Deferred();
             let coreResult;
 
-            when(...this._deferreds).done(() => {
+            this.executeOperation(d, () => {
                 coreResult = this._editCellCore(rowIndex, columnIndex);
                 when(coreResult)
                     .done(d.resolve)
@@ -1729,10 +1747,10 @@ const EditingController = modules.ViewController.inherit((function() {
             if(!isRowEditMode(that)) {
                 result = deferredUtils.Deferred();
                 setTimeout(() => {
-                    when(...this._deferreds).done(() => {
+                    this.executeOperation(result, () => {
                         this._closeEditCellCore(isError, oldEditRowIndex);
                         result.resolve();
-                    }).fail(result.reject);
+                    });
                 });
             }
             return result.promise();
@@ -1781,6 +1799,18 @@ const EditingController = modules.ViewController.inherit((function() {
             return skipCurrentRow ? [] : [row.rowIndex];
         },
 
+        addDeferred: function(deferred) {
+            if(this._deferreds.indexOf(deferred) < 0) {
+                this._deferreds.push(deferred);
+                deferred.always(() => {
+                    const index = this._deferreds.indexOf(deferred);
+                    if(index >= 0) {
+                        this._deferreds.splice(index, 1);
+                    }
+                });
+            }
+        },
+
         _prepareEditDataParams: function(options, value, text) {
             const that = this;
             const newData = {};
@@ -1814,13 +1844,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     options.values[options.columnIndex] = value;
                 }
 
-                that._deferreds.push(setCellValueResult);
-                setCellValueResult.always(function() {
-                    const index = that._deferreds.indexOf(setCellValueResult);
-                    if(index >= 0) {
-                        that._deferreds.splice(index, 1);
-                    }
-                });
+                that.addDeferred(setCellValueResult);
             }
 
             return deferred;
@@ -1914,13 +1938,14 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _updateEditRow: function(row, forceUpdateRow, isCustomSetCellValue) {
             const that = this;
-
             if(forceUpdateRow || !isRowEditMode(that)) {
                 that._updateEditRowCore(row, !forceUpdateRow, isCustomSetCellValue);
                 if(!forceUpdateRow) {
                     that._focusEditingCell();
                 }
             } else {
+                const deferred = new Deferred();
+                that.addDeferred(deferred);
                 setTimeout(function() {
                     const $focusedElement = $(domAdapter.getActiveElement());
                     const columnIndex = that._rowsView.getCellIndex($focusedElement, row.rowIndex);
@@ -1940,6 +1965,7 @@ const EditingController = modules.ViewController.inherit((function() {
                             });
                         });
                     }
+                    deferred.resolve();
                 });
             }
         },
@@ -2270,7 +2296,6 @@ const EditingController = modules.ViewController.inherit((function() {
 
         showHighlighting: function($cell) {
             const $highlight = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
-
             if($cell.get(0).tagName === 'TD' && !$highlight.length) {
                 $cell.wrapInner($('<div>').addClass(CELL_HIGHLIGHT_OUTLINE + ' ' + POINTER_EVENTS_TARGET_CLASS));
             }
@@ -2318,6 +2343,12 @@ const EditingController = modules.ViewController.inherit((function() {
 
         allowDeleting: function(options) {
             return this._allowEditAction('allowDeleting', options);
+        },
+
+        isCellModified: function(parameters) {
+            const columnIndex = parameters.columnIndex;
+            const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
+            return modifiedValues && modifiedValues[columnIndex] !== undefined;
         }
     };
 })());
@@ -2636,7 +2667,6 @@ module.exports = {
                     }
                 },
                 _cellPrepared: function($cell, parameters) {
-                    const columnIndex = parameters.columnIndex;
                     const editingController = this._editingController;
                     const isCommandCell = !!parameters.column.command;
                     const isEditableCell = parameters.setValue;
@@ -2650,6 +2680,7 @@ module.exports = {
                             .toggleClass(this.addWidgetPrefix(READONLY_CLASS), !isEditableCell)
                             .toggleClass(CELL_FOCUS_DISABLED_CLASS, !isEditableCell);
 
+
                         if(alignment) {
                             $cell.find(EDITORS_INPUT_SELECTOR).first().css('textAlign', alignment);
                         }
@@ -2659,9 +2690,8 @@ module.exports = {
                         this._editCellPrepared($cell);
                     }
 
-                    const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
-
-                    if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
+                    const cellModified = editingController.isCellModified(parameters);
+                    if(cellModified && parameters.column && !isCommandCell && parameters.column.setCellValue) {
                         editingController.showHighlighting($cell);
                         $cell.addClass(CELL_MODIFIED);
                     } else if(isEditableCell) {
