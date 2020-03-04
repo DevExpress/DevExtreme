@@ -73,72 +73,18 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetInput>) => {
     return className.join(' ');
 };
 
-export const viewModelFunction = ({
-    _active,
-    _focused,
-    _hovered,
-
-    props: {
-        accessKey,
-        aria,
-        children,
-        className,
-        disabled,
-        elementAttr,
-        focusStateEnabled,
-        height,
-        hint,
-        hoverStateEnabled,
-        rtlEnabled,
-        tabIndex,
-        visible,
-        width,
-        onContentReady,
-        onVisibilityChange,
-    },
-
-    widgetRef,
-}: Widget) => {
-    const styles = getStyles({ width, height });
-    const attrsWithoutClass = getAttributes({
-        accessKey: focusStateEnabled && !disabled && accessKey,
-        elementAttr,
-    });
-    const arias = getAria({ ...aria, disabled, hidden: !visible });
-    const cssClasses = getCssClasses({
-        _active, _focused, _hovered, className,
-        disabled, elementAttr, focusStateEnabled, hoverStateEnabled,
-        onVisibilityChange, rtlEnabled, visible,
-    });
-
-    return {
-        attributes: { ...attrsWithoutClass, ...arias },
-        children,
-        cssClasses,
-        disabled,
-        focusStateEnabled,
-        hoverStateEnabled,
-        onContentReady,
-        styles,
-        tabIndex: focusStateEnabled && !disabled && tabIndex,
-        title: hint,
-        visible,
-        widgetRef,
-    };
-};
-
-export const viewFunction = (viewModel: any) => {
+export const viewFunction = (viewModel: Widget) => {
     return (
         <div
-            ref={viewModel.widgetRef}
+            ref={viewModel.widgetRef as any}
             {...viewModel.attributes}
             className={viewModel.cssClasses}
             tabIndex={viewModel.tabIndex}
-            title={viewModel.title}
+            title={viewModel.props.hint}
             style={viewModel.styles}
-            hidden={!viewModel.visible}
+            hidden={!viewModel.props.visible}
         >
-            {viewModel.children}
+            {viewModel.props.children}
         </div>
     );
 };
@@ -180,7 +126,6 @@ export class WidgetInput {
     components: [],
     name: 'Widget',
     view: viewFunction,
-    viewModel: viewModelFunction,
 })
 
 export default class Widget extends JSXComponent<WidgetInput> {
@@ -259,9 +204,7 @@ export default class Widget extends JSXComponent<WidgetInput> {
 
     @Effect()
     contentReadyEffect() {
-        const { onContentReady } = this.props;
-
-        onContentReady?.({});
+        this.props.onContentReady?.({});
     }
 
     @Effect()
@@ -350,5 +293,54 @@ export default class Widget extends JSXComponent<WidgetInput> {
         }
 
         return null;
+    }
+
+    get attributes() {
+        const {
+            aria,
+            visible,
+            focusStateEnabled,
+            disabled,
+            accessKey,
+            elementAttr,
+        } = this.props;
+
+        const attrsWithoutClass = getAttributes({
+            accessKey: focusStateEnabled && !disabled && accessKey,
+            elementAttr,
+        });
+        const arias = getAria({ ...aria, disabled, hidden: !visible });
+
+        return { ...attrsWithoutClass, ...arias };
+    }
+
+    get styles() {
+        const { width, height } = this.props;
+        return getStyles({ width, height });
+    }
+
+    get cssClasses() {
+        const {
+            className,
+            disabled,
+            elementAttr,
+            focusStateEnabled,
+            hoverStateEnabled,
+            onVisibilityChange,
+            rtlEnabled,
+            visible,
+        } = this.props;
+
+        return getCssClasses({
+            _active: this._active, _focused: this._focused, _hovered: this._hovered, className,
+            disabled, elementAttr, focusStateEnabled, hoverStateEnabled,
+            onVisibilityChange, rtlEnabled, visible,
+        });
+    }
+
+    get tabIndex() {
+        return this.props.focusStateEnabled &&
+            !this.props.disabled &&
+            this.props.tabIndex;
     }
 }
