@@ -333,6 +333,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         });
     }
 
+    clearSelection() {
+        this._filesView.clearSelection();
+    }
+
     refresh() {
         this.clearSelection();
         this._filesView.option('dataSource', {

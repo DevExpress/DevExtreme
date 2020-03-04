@@ -15,12 +15,9 @@ const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS = 'dx-filemanager-thumbnails';
 const FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS = 'dx-filemanager-thumbnails-view-port';
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS = 'dx-filemanager-thumbnails-container';
 const FILE_MANAGER_THUMBNAILS_ITEM_CLASS = 'dx-filemanager-thumbnails-item';
-// const FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS = 'dx-filemanager-thumbnails-item-content';
 const FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-thumbnails-item-thumbnail';
 const FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS = 'dx-filemanager-thumbnails-item-spacer';
 const FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS = 'dx-filemanager-thumbnails-item-name';
-// const FILE_MANAGER_ITEM_SELECTED_CLASS = 'dx-filemanager-item-selected';
-// const FILE_MANAGER_ITEM_FOCUSED_CLASS = 'dx-filemanager-item-focused';
 
 const FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE = 'dxFileManager_thumbnails';
 
@@ -379,6 +376,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         if(item) {
             this._raiseSelectedItemOpened(item);
         }
+    }
+
+    clearSelection() {
+        this._filesView.clearSelection();
     }
 
     getSelectedItems() {

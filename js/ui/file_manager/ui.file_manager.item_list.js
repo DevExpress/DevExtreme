@@ -187,7 +187,7 @@ class FileManagerItemListBase extends Widget {
     }
 
     clearSelection() {
-        this._filesView.clearSelection();
+
     }
 
     selectItem() {
