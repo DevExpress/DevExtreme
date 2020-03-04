@@ -63,7 +63,7 @@ QUnit.performanceTest('render with virtual scrolling', function(assert) {
         scrolling: { mode: 'virtual' }
     });
 
-    assert.measureStyleRecalculation(measureFunction, 14);
+    assert.measureStyleRecalculation(measureFunction, 13);
 });
 
 QUnit.performanceTest('updateDimensions', function(assert) {
