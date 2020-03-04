@@ -1290,8 +1290,10 @@ const EditingController = modules.ViewController.inherit((function() {
 
         deleteRow: function(rowIndex) {
             if(this.option('editing.mode') === 'cell' && this.isEditing()) {
+                const isNewRow = this._dataController.items()[rowIndex].isNewRow;
+
                 // T850905
-                this.closeEditCell().always(() => {
+                this.closeEditCell(null, isNewRow).always(() => {
                     this._checkAndDeleteRow(rowIndex);
                 });
             } else {
@@ -1306,7 +1308,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const confirmDelete = editingOptions && editingOptions.confirmDelete;
             const confirmDeleteMessage = editingTexts && editingTexts.confirmDeleteMessage;
             const item = that._dataController.items()[rowIndex];
-            const allowDeleting = isBatchMode || !that.isEditing(); // T741746
+            const allowDeleting = isBatchMode || !that.isEditing() || item.isNewRow; // T741746
 
             if(item && allowDeleting) {
                 if(isBatchMode || !confirmDelete || !confirmDeleteMessage) {
@@ -1739,7 +1741,7 @@ const EditingController = modules.ViewController.inherit((function() {
         hasEditData: function() {
             return this.hasChanges();
         },
-        closeEditCell: function(isError) {
+        closeEditCell: function(isError, withoutSaveEditData) {
             const that = this;
             let result = deferredUtils.when();
             const oldEditRowIndex = that._getVisibleEditRowIndex();
@@ -1748,7 +1750,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 result = deferredUtils.Deferred();
                 setTimeout(() => {
                     this.executeOperation(result, () => {
-                        this._closeEditCellCore(isError, oldEditRowIndex);
+                        this._closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData);
                         result.resolve();
                     });
                 });
@@ -1756,16 +1758,19 @@ const EditingController = modules.ViewController.inherit((function() {
             return result.promise();
         },
 
-        _closeEditCellCore(isError, oldEditRowIndex) {
+        _closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData) {
             const that = this;
             const editMode = getEditMode(that);
             const dataController = that._dataController;
+
             if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
-                that.saveEditData().done(function(error) {
-                    if(!that.hasChanges()) {
-                        that.closeEditCell(!!error);
-                    }
-                });
+                if(!withoutSaveEditData) {
+                    that.saveEditData().done(function(error) {
+                        if(!that.hasChanges()) {
+                            that.closeEditCell(!!error);
+                        }
+                    });
+                }
             } else if(oldEditRowIndex >= 0) {
                 const rowIndices = [oldEditRowIndex];
 
