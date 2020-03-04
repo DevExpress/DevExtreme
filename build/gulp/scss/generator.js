@@ -42,8 +42,9 @@ const replaceColorFunctions = (content) => {
     // change fade($color, 20%) to the color.change($color, $alpha: 0.20), $color can be other function
     // change fadein($color, 20%) to the color.adjust($color, $alpha: 0.20), $color can be other function
 
-    content = content.replace(/(fadein|fade)\(([$\d\w-#]*|[\w]*\(.*\)),\s*([\d.]+)%\)(;|,|\)|\s)/g, (match, func, color, percent, sign) => {
+    content = content.replace(/(fadein|fadeout|fade)\(([$\d\w-#]*|[\w]*\(.*\)),\s*([\d.]+)%?\)(;|,|\)|\s)/g, (match, func, color, percent, sign) => {
         const colorFunction = func === 'fade' ? 'change' : 'adjust';
+        percent = func === 'fadeout' ? -percent : percent;
         return `color.${colorFunction}(${color}, $alpha: ${percent / 100})${sign}`;
     });
     return content;
