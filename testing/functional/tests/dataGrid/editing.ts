@@ -73,3 +73,73 @@ test("Value change on dataGrid row should be fired after clicking on editor (T82
         createWidget("dxSelectBox", {}, false, "#otherContainer")
     ]);
 });
+
+test("Async Validation(Cell) - Only the last cell should be switched to edit mode", async t => {
+    const dataGrid = new DataGrid("#container");
+
+    await ClientFunction(() => {
+        const editingController = (window as any).widget.getController("editing") as any;
+        const baseEditCellCore = editingController._editCellCore.bind(editingController);
+        editingController._editCellCore = function(rowIndex, columnIndex) {
+            (window as any).callInfo.push(columnIndex);
+            baseEditCellCore(rowIndex, columnIndex);
+        };
+    })();
+
+
+    await t.click(dataGrid.getDataCell(0, 0).element);
+
+    await ClientFunction(() => {
+        const gridInstance = (window as any).widget;
+        const validatingController = gridInstance.getController("validating");
+        (window as any).result = validatingController.getCellValidationResult({ rowKey: gridInstance.getKeyByRowIndex(0), columnIndex: 0 });
+    })();
+
+    await t
+        .click(dataGrid.getDataCell(0, 1).element)
+        .click(dataGrid.getDataCell(0, 2).element);
+
+
+    const callInfo = await ClientFunction(() => (window as any).callInfo)();
+
+    await ClientFunction(() => (window as any).result.complete)();
+
+    await t
+        .expect(callInfo.length).eql(2, "_editCellCore should be called twice")
+        .expect(callInfo[callInfo.length - 1]).eql(2, "_editCellCore is called last time for the third column")
+        .expect(dataGrid.element.find(".dx-editor-cell").length).eql(1, "only one cell is in editing mode")
+        .expect(dataGrid.getDataCell(0, 2).element.hasClass("dx-editor-cell")).ok("the third cell in the first row is in editing mode");
+
+}).before(() => createWidget("dxDataGrid", {
+    errorRowEnabled: true,
+    editing: {
+        mode: 'cell',
+        allowUpdating: true,
+        allowAdding: true
+    },
+    commonColumnSettings: {
+        allowEditing: true
+    },
+    columns: [{
+        dataField: 'age',
+        validationRules: [{
+            type: 'async',
+            validationCallback: function(params) {
+                const d = $.Deferred();
+                setTimeout(function() {
+                    d.resolve(true);
+                }, 10);
+                return d.promise();
+            }
+        }]
+    }, 'name', 'lastName'],
+    dataSource: {
+        asyncLoadEnabled: false,
+        store: [{ name: 'Alex', age: 15, lastName: 'John', }],
+        paginate: true
+    },
+    legacyRendering: false,
+    onInitialized: () => {
+        (window as any).callInfo = [];
+    }
+}));
