@@ -114,7 +114,7 @@ const Accordion = CollectionWidget.inherit({
                     $iconElement && $container.append($iconElement);
 
                     if(isDefined(data.title) && !isPlainObject(data.title)) {
-                        $container.append(data.title);
+                        $container.append($('<span>').text(data.title));
                     }
                 } else {
                     if(isDefined(data)) {
