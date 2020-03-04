@@ -7,7 +7,7 @@ import { name as contextMenuEventName } from '../../events/contextmenu';
 import { getDisplayFileSize } from './ui.file_manager.common';
 import messageLocalization from '../../localization/message';
 
-import FileManagerThumbnailListBox from './ui.file_manager.items_list.thumbnails.list';
+import FileManagerThumbnailListBox from './ui.file_manager.items_list.thumbnails.list_box';
 // import FileManagerThumbnailsItemListBox from './ui.file_manager.collection_widget_test';
 import FileManagerItemListBase from './ui.file_manager.item_list';
 
