@@ -25,7 +25,7 @@ const wheel = {
         fireEvent({
             type: EVENT_NAME,
             originalEvent,
-            deltaY: -deltaY,
+            delta: -deltaY,
             deltaMode,
             pointerType: 'mouse'
         });
