@@ -4092,29 +4092,29 @@ declare module DevExpress.ui {
         showResources?: boolean;
         /** @name dxGantt.Options.showRowLines */
         showRowLines?: boolean;
+        /** @name dxGantt.Options.stripLines */
+        stripLines?: Array<dxGanttStripLine>;
         /** @name dxGantt.Options.taskListWidth */
         taskListWidth?: number;
         /** @name dxGantt.Options.taskTitlePosition */
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /** @name dxGantt.Options.tasks */
         tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
-        /** @name dxGantt.Options.timeMarkers */
-        timeMarkers?: Array<dxGanttTimeMarker>;
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {
         constructor(element: Element, options?: dxGanttOptions)
         constructor(element: JQuery, options?: dxGanttOptions)
     }
-    /** @name dxGanttTimeMarker */
-    export interface dxGanttTimeMarker {
-        /** @name dxGanttTimeMarker.cssClass */
+    /** @name dxGanttStripLine */
+    export interface dxGanttStripLine {
+        /** @name dxGanttStripLine.cssClass */
         cssClass?: string;
-        /** @name dxGanttTimeMarker.end */
+        /** @name dxGanttStripLine.end */
         end?: Date | number | string | (() => Date | number | string);
-        /** @name dxGanttTimeMarker.start */
+        /** @name dxGanttStripLine.start */
         start?: Date | number | string | (() => Date | number | string);
-        /** @name dxGanttTimeMarker.title */
+        /** @name dxGanttStripLine.title */
         title?: string;
     }
     /** @name dxHtmlEditor.Options */
