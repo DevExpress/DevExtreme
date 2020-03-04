@@ -49,6 +49,41 @@
     .dxdi-control .dxdi-canvas {
         background-color: darken(@overlay-content-bg, 15%);
 
+        .selection-mark,
+        .item-selection-rect,
+        .item-multi-selection-rect,
+        .items-selection-rect,
+        .connector-side-mark,
+        .connector-point-mark,
+        .connector-selection,
+        .connector-multi-selection,
+        .extension-line line,
+        .extension-line text {
+            stroke: @button-default-bg;
+        }
+
+        .connector-side-mark {
+            fill: @button-default-bg;
+        }
+
+        .container-target,
+        .connection-target,
+        .connection-mark:not(.selector),
+        .connection-point:not(.selector) {
+            stroke: @button-success-bg;
+        }
+
+        .connection-mark:not(.selector),
+        .connection-point:not(.selector) {
+            &.active {
+                fill: @button-success-bg;
+            }
+        }
+
+        .geometry-mark {
+            stroke: @button-danger-bg;
+        }
+
         .dxdi-main .dxdi-image {
             .dxdi-spinner {
                 path {
