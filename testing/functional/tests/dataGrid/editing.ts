@@ -76,39 +76,19 @@ test("Value change on dataGrid row should be fired after clicking on editor (T82
 
 test("Async Validation(Cell) - Only the last cell should be switched to edit mode", async t => {
     const dataGrid = new DataGrid("#container");
-
-    await ClientFunction(() => {
-        const editingController = (window as any).widget.getController("editing") as any;
-        const baseEditCellCore = editingController._editCellCore.bind(editingController);
-        editingController._editCellCore = function(rowIndex, columnIndex) {
-            (window as any).callInfo.push(columnIndex);
-            baseEditCellCore(rowIndex, columnIndex);
-        };
-    })();
-
-
-    await t.click(dataGrid.getDataCell(0, 0).element);
-
-    await ClientFunction(() => {
-        const gridInstance = (window as any).widget;
-        const validatingController = gridInstance.getController("validating");
-        (window as any).result = validatingController.getCellValidationResult({ rowKey: gridInstance.getKeyByRowIndex(0), columnIndex: 0 });
-    })();
+    const cell0 = dataGrid.getDataCell(0, 0);
+    const cell1 = dataGrid.getDataCell(0, 1);
+    const cell2 = dataGrid.getDataCell(0, 2);
 
     await t
-        .click(dataGrid.getDataCell(0, 1).element)
-        .click(dataGrid.getDataCell(0, 2).element);
-
-
-    const callInfo = await ClientFunction(() => (window as any).callInfo)();
-
-    await ClientFunction(() => (window as any).result.complete)();
-
-    await t
-        .expect(callInfo.length).eql(2, "_editCellCore should be called twice")
-        .expect(callInfo[callInfo.length - 1]).eql(2, "_editCellCore is called last time for the third column")
-        .expect(dataGrid.element.find(".dx-editor-cell").length).eql(1, "only one cell is in editing mode")
-        .expect(dataGrid.getDataCell(0, 2).element.hasClass("dx-editor-cell")).ok("the third cell in the first row is in editing mode");
+        .click(cell0.element)
+        .expect(cell0.isValidationPending).ok()
+        .click(cell1.element)
+        .expect(cell1.isFocused).notOk("the second cell should not be focused")
+        .click(cell2.element)
+        .expect(cell0.isValidationPending).notOk("validating is completed")
+        .expect(cell2.hasHiddenFocusState).notOk()
+        .expect(cell2.isFocused).ok("the third cell should be focused");
 
 }).before(() => createWidget("dxDataGrid", {
     errorRowEnabled: true,
@@ -128,7 +108,7 @@ test("Async Validation(Cell) - Only the last cell should be switched to edit mod
                 const d = $.Deferred();
                 setTimeout(function() {
                     d.resolve(true);
-                }, 10);
+                }, 1000);
                 return d.promise();
             }
         }]
@@ -138,8 +118,5 @@ test("Async Validation(Cell) - Only the last cell should be switched to edit mod
         store: [{ name: 'Alex', age: 15, lastName: 'John', }],
         paginate: true
     },
-    legacyRendering: false,
-    onInitialized: () => {
-        (window as any).callInfo = [];
-    }
+    legacyRendering: false
 }));

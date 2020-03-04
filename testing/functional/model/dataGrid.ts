@@ -33,7 +33,8 @@ const CLASS = {
     editFormRow: 'edit-form',
     button: 'dx-button',
     formButtonsContainer: 'form-buttons-container',
-    selectCheckBox: 'dx-select-checkbox'
+    selectCheckBox: 'dx-select-checkbox',
+    pendingIndicator: 'dx-pending-indicator'
 };
 
 const addWidgetPrefix = function(widgetName: string, className: string) {
@@ -117,11 +118,13 @@ class DataCell extends DxElement {
     element: Selector;
     isEditCell: Promise<boolean>;
     isFocused: Promise<boolean>;
+    isValidationPending: Promise<boolean>;
 
     constructor(dataRow: Selector, index: number) {
         super(dataRow.find(`td:nth-child(${++index})`));
         this.isEditCell = this.element.hasClass(CLASS.editCell);
         this.isFocused = this.element.hasClass(CLASS.focused);
+        this.isValidationPending = this.element.find(`div.${CLASS.pendingIndicator}`).exists;
     }
 }
 
