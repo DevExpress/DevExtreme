@@ -1,25 +1,15 @@
-// import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 
-// import CollectionWidget from '../collection/ui.collection_widget.edit';
-import CollectionWidget from '../collection/ui.collection_widget.live_update';
+import CollectionWidget from '../collection/ui.collection_widget.edit';
 
-// const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS = 'dx-filemanager-thumbnails';
-// const FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS = 'dx-filemanager-thumbnails-view-port';
-// const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS = 'dx-filemanager-thumbnails-container';
 const FILE_MANAGER_THUMBNAILS_ITEM_CLASS = 'dx-filemanager-thumbnails-item';
-// const FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS = 'dx-filemanager-thumbnails-item-content';
-// const FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-thumbnails-item-thumbnail';
-// const FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS = 'dx-filemanager-thumbnails-item-spacer';
-// const FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS = 'dx-filemanager-thumbnails-item-name';
 
 const FILE_MANAGER_THUMBNAILS_ITEM_CLASS_DATA_KEY = 'dxFileManagerItemDataKey';
 
 class FileManagerThumbnailListBox extends CollectionWidget {
     _init() {
         super._init();
-        this._selection.options.isSelectableItem = this._selectableItemFilter;
         this._selection.options.filter = () => this._selectableItemFilter;
     }
 
@@ -91,7 +81,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
             item: new BindableTemplate(function($container, data, itemModel) {
                 const $itemElement = this._getDefaultItemTemplate(itemModel, $container);
                 $container.append($itemElement);
-            }.bind(this), ['fileItem', '_state'], this.option('integrationOptions.watchMethod'))
+            }.bind(this), ['fileItem'], this.option('integrationOptions.watchMethod'))
         });
     }
 

@@ -69,7 +69,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             processMoveArrow: this._processMoveArrow.bind(this),
             processPageChange: this._processPageChange.bind(this),
             processHomeEndKeys: this._processHomeEndKeys.bind(this),
-            onSelectionChanged: this._onSelectionChanged.bind(this)
+            onSelectionChanged: this._onFilesViewSelectionChanged.bind(this)
         });
     }
 
@@ -291,6 +291,11 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _applyItems(items) {
         this._items = items;
+
+        const parentDirectoryItem = this._findParentDirectoryItem(this._items);
+        this._hasParentDirectoryItem = !!parentDirectoryItem;
+        this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
+
         if(this._filesView) {
             this._filesView.option('dataSource', this._items);
         }
@@ -298,6 +303,16 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _isParentDirectoryItem(itemInfo) {
         return itemInfo.fileItem.isParentFolder;
+    }
+
+    _findParentDirectoryItem(itemInfos) {
+        for(let i = 0; i < itemInfos.length; i++) {
+            const itemInfo = itemInfos[i];
+            if(this._isParentDirectoryItem(itemInfo)) {
+                return itemInfo;
+            }
+        }
+        return null;
     }
 
     _getItemTemplate(fileItemInfo, $itemElement) {
@@ -342,13 +357,63 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         });
     }
 
-    _onSelectionChanged({ addedItems, removedItems }) {
-        const selectedItems = this.getSelectedItems().map(itemInfo => itemInfo.fileItem);
-        const selectedItemKeys = selectedItems.map(item => item.key);
-        const currentSelectedItemKeys = addedItems.map(itemInfo => itemInfo.fileItem.key);
-        const currentDeselectedItemKeys = removedItems.map(itemInfo => itemInfo.fileItem.key);
+    _onFilesViewSelectionChanged({ addedItems, removedItems }) {
+        let selectedItems = this.getSelectedItems().map(itemInfo => itemInfo.fileItem);
+        let selectedItemKeys = selectedItems.map(item => item.key);
+        let currentSelectedItemKeys = addedItems.map(itemInfo => itemInfo.fileItem.key);
+        let currentDeselectedItemKeys = removedItems.map(itemInfo => itemInfo.fileItem.key);
 
-        this._raiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
+        const parentDirectoryItem = this._findParentDirectoryItem(this.getSelectedItems());
+        if(parentDirectoryItem) {
+            const $parentDir = this._filesView.getItemElementByItem(parentDirectoryItem);
+            this._filesView.unselectItem($parentDir);
+        }
+
+        let raiseEvent = !this._hasParentDirectoryItem;
+        raiseEvent = raiseEvent || this._hasValidKeys(currentSelectedItemKeys) || this._hasValidKeys(currentDeselectedItemKeys);
+
+        if(raiseEvent) {
+            selectedItems = this._filterOutParentDirectory(selectedItems);
+
+            selectedItemKeys = this._filterOutParentDirectoryKey(selectedItemKeys, true);
+            currentSelectedItemKeys = this._filterOutParentDirectoryKey(currentSelectedItemKeys, true);
+            currentDeselectedItemKeys = this._filterOutParentDirectoryKey(currentDeselectedItemKeys, true);
+            this._raiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
+        }
+
+    }
+
+    _hasValidKeys(keys) {
+        return keys.length > 1 || keys.length === 1 && keys[0] !== this._parentDirectoryItemKey;
+    }
+
+    _filterOutParentDirectory(array, createNewArray) {
+        return this._filterOutItemByPredicate(array, item => item.key === this._parentDirectoryItemKey, createNewArray);
+    }
+
+    _filterOutParentDirectoryKey(array, createNewArray) {
+        return this._filterOutItemByPredicate(array, key => key === this._parentDirectoryItemKey, createNewArray);
+    }
+
+    _filterOutItemByPredicate(array, predicate, createNewArray) {
+        let result = array;
+        let index = -1;
+
+        for(let i = 0; i < array.length; i++) {
+            if(predicate(array[i])) {
+                index = i;
+                break;
+            }
+        }
+
+        if(index !== -1) {
+            if(createNewArray) {
+                result = [...array];
+            }
+            result.splice(index, 1);
+        }
+
+        return result;
     }
 
     _getFileItemsForContextMenu(fileItem) {
