@@ -47,12 +47,12 @@ const getAriaLabel = (text, icon) => {
 };
 
 export const viewFunction = (viewModel: Button) => {
-    const { contentRender, text, iconPosition } = viewModel.props;
+    const { contentRender, text, iconPosition, icon } = viewModel.props;
     const renderText = !contentRender && text;
     const isIconLeft = iconPosition === 'left';
     const leftIcon = !contentRender && isIconLeft;
     const rightIcon = !contentRender && !isIconLeft;
-    const icon = !contentRender && viewModel.iconSource
+    const iconComponent = !contentRender && viewModel.iconSource
         && <Icon source={viewModel.iconSource} position={iconPosition}/>;
 
     return <Widget
@@ -86,11 +86,11 @@ export const viewFunction = (viewModel: Button) => {
                     parentRef={viewModel.contentRef}
                 />
             }
-            {leftIcon && icon}
+            {leftIcon && iconComponent}
             {renderText &&
                 <span className="dx-button-text">{text}</span>
             }
-            {rightIcon && icon}
+            {rightIcon && iconComponent}
             {viewModel.props.useSubmitBehavior &&
                 <input ref={viewModel.submitInputRef as any} type="submit" tabIndex={-1} className="dx-button-submit-input"/>
             }
