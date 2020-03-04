@@ -392,6 +392,7 @@ module.exports = {
             'SCHEDULER_FILL_FOCUSED_APPOINTMENT',
             'SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR',
             'SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET',
+            'SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET',
         ] },
         { import: '../button/colors', type: 'index' },
         { import: '../button', type: 'index' },

@@ -34,18 +34,66 @@ class DiagramToolbox extends DiagramFloatingPanel {
     _getPopupMinHeight() {
         return DIAGRAM_TOOLBOX_MIN_HEIGHT;
     }
-    _getPopupOptions() {
-        let options = extend(super._getPopupOptions(), {
-            position: {
-                my: 'left top',
-                at: 'left top',
-                of: this.option('offsetParent'),
-                offset: (this.isMobileView() ? 0 : this.option('offsetX')) +
-                    ' ' + (this.isMobileView() ? 0 : this.option('offsetY'))
-            }
-        });
+    _getPopupPosition() {
+        const $parent = this.option('offsetParent');
+        const position = {
+            my: 'left top',
+            at: 'left top',
+            of: $parent
+        };
         if(!this.isMobileView()) {
-            options = extend(options, {
+            return extend(position, {
+                offset: this.option('offsetX') + ' ' + this.option('offsetY')
+            });
+        }
+        return position;
+    }
+    _getPopupAnimation() {
+        const $parent = this.option('offsetParent');
+        if(this.isMobileView()) {
+            return {
+                hide: this._getPopupSlideAnimationObject({
+                    direction: 'left',
+                    from: {
+                        position: {
+                            my: 'left top',
+                            at: 'left top',
+                            of: $parent
+                        }
+                    },
+                    to: {
+                        position: {
+                            my: 'right top',
+                            at: 'left top',
+                            of: $parent
+                        }
+                    }
+                }),
+                show: this._getPopupSlideAnimationObject({
+                    direction: 'right',
+                    from: {
+                        position: {
+                            my: 'right top',
+                            at: 'left top',
+                            of: $parent
+                        }
+                    },
+                    to: {
+                        position: {
+                            my: 'left top',
+                            at: 'left top',
+                            of: $parent
+                        }
+                    }
+                }),
+            };
+        }
+        return super._getPopupAnimation();
+    }
+    _getPopupOptions() {
+        const options = super._getPopupOptions();
+        if(!this.isMobileView()) {
+            return extend(options, {
                 showTitle: true,
                 toolbarItems: [{
                     widget: 'dxButton',

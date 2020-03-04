@@ -1966,17 +1966,6 @@ module.exports = {
                         assignColumns(that, createColumnsFromOptions(that, columns));
                     }
                 },
-                _checkAsyncValidationRules: function() {
-                    const currentEditMode = this.option('editing.mode');
-                    if(currentEditMode !== 'form' && currentEditMode !== 'popup') {
-                        const hasAsyncRules = this._columns.some(function(col) {
-                            return (col.validationRules || []).some(rule => rule.type === 'async');
-                        });
-                        if(hasAsyncRules) {
-                            errors.log('E1057', this.component.NAME, currentEditMode);
-                        }
-                    }
-                },
                 updateColumns: function(dataSource, forceApplying) {
                     const that = this;
                     let sortParameters;
@@ -1991,8 +1980,6 @@ module.exports = {
                         groupParameters = dataSource ? dataSource.group() || [] : that.getGroupDataSourceParameters();
 
                         that._customizeColumns(that._columns);
-
-                        that._checkAsyncValidationRules();
 
                         updateIndexes(that);
 

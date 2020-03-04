@@ -12,7 +12,16 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('Properties Panel', moduleConfig, () => {
+QUnit.module('Properties Panel', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach.apply(this, arguments);
+    },
+    afterEach: function() {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
     test('should render if propertiesPanel.visibility is "visible"', function(assert) {
         this.instance.option('propertiesPanel.visibility', 'visible');
         const $panel = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
@@ -42,6 +51,7 @@ QUnit.module('Properties Panel', moduleConfig, () => {
 
         $button = findPropertiesPanelToolbarItem(this.$element, 'properties');
         $button.trigger('dxclick');
+        this.clock.tick(2000);
         assert.equal($panel.length, 1);
         assert.equal($panel.is(':visible'), false);
     });

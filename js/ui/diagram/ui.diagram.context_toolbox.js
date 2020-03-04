@@ -71,7 +71,7 @@ class DiagramContextToolbox extends Widget {
             contentTemplate: $content,
             onContentReady: function() {
                 const $element = this.$element().find('.' + DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS);
-                this._onShownAction({ category, callback, $element });
+                this._onShownAction({ category, callback, $element, hide: () => this._popoverInstance.hide() });
             }.bind(this)
         });
         this._popoverInstance.show();

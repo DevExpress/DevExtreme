@@ -16,13 +16,13 @@ import Widget, {
 
 export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
-     * @docid dxDiagramOptions.autoZoom
+     * @docid dxDiagramOptions.autoZoomMode
      * @type Enums.DiagramAutoZoom
      * @default "disabled"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    autoZoom?: 'fitContent' | 'fitWidth' | 'disabled';
+    autoZoomMode?: 'fitContent' | 'fitWidth' | 'disabled';
     /**
      * @docid dxDiagramOptions.contextMenu
      * @type Object
