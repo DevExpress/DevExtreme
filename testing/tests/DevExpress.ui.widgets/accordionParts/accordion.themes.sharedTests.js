@@ -25,7 +25,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
 
         QUnit.test('dataSource: { title, icon }', function(assert) {
             const $accordion = $('#accordion').dxAccordion({
-                dataSource: [{ title: 'title', icon: 'remove' }],
+                dataSource: [{ title: 'Caption', icon: 'remove' }],
             });
 
             const epsilon = 2;
