@@ -8,10 +8,6 @@ const FILE_MANAGER_THUMBNAILS_ITEM_CLASS = 'dx-filemanager-thumbnails-item';
 const FILE_MANAGER_THUMBNAILS_ITEM_CLASS_DATA_KEY = 'dxFileManagerItemDataKey';
 
 class FileManagerThumbnailListBox extends CollectionWidget {
-    _init() {
-        super._init();
-        this._selection.options.filter = () => this._selectableItemFilter;
-    }
 
     _supportedKeys() {
         return extend(super._supportedKeys(), {
@@ -59,7 +55,6 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         this._processMoveArrow = this.option('processMoveArrow');
         this._processHomeEndKeys = this.option('processHomeEndKeys');
         this._processPageChange = this.option('processPageChange');
-        this._selectableItemFilter = this.option('selectableItemFilter');
     }
 
     _itemContainer() {

@@ -53,9 +53,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         const selectionMode = this._isMultipleSelectionMode() ? 'multiple' : 'single';
 
         this._filesView = this._createComponent(this._$itemViewContainer, FileManagerThumbnailListBox, {
-            dataSource: this._items,
             selectionMode,
-            selectableItemFilter: itemInfo => !this._isParentDirectoryItem(itemInfo),
             activeStateEnabled: true,
             hoverStateEnabled: true,
             loopItemFocus: false,
