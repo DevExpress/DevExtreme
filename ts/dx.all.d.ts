@@ -1621,7 +1621,7 @@ declare module DevExpress.excelExporter {
         /** @name ExportDataGridProps.selectedRowsOnly */
         selectedRowsOnly?: boolean;
         /** @name ExportDataGridProps.topLeftCell */
-        topLeftCell?: CellAddress;
+        topLeftCell?: CellAddress | string;
         /** @name ExportDataGridProps.worksheet */
         worksheet?: any;
     }
