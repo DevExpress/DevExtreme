@@ -623,47 +623,47 @@ QUnit.module('Context Menu', moduleConfig, () => {
     });
 });
 
-QUnit.module('Time Markers', moduleConfig, () => {
+QUnit.module('Strip Lines', moduleConfig, () => {
     test('render', function(assert) {
-        const timeMarkers = [
+        const stripLines = [
             { start: tasks[0].start, title: 'First' },
             { start: new Date(2019, 2, 1) },
             { start: new Date(2019, 5, 5), end: () => tasks[tasks.length - 1].end, title: 'Interval', cssClass: 'end' }
         ];
         const options = {
             tasks: { dataSource: tasks },
-            timeMarkers: timeMarkers
+            stripLines: stripLines
         };
         this.createInstance(options);
         this.clock.tick();
 
-        const $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
-        assert.equal($timeMarkers.length, timeMarkers.length, 'all time markers are rendered');
+        const $stripLines = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($stripLines.length, 2, 'all strip lines are rendered');
         const $timeIntervals = this.$element.find(TIME_INTERVAL_SELECTOR);
         assert.equal($timeIntervals.length, 1, 'all time intervals are rendered');
-        assert.ok($timeMarkers.eq(2).hasClass(timeMarkers[2].cssClass), 'custom cssClass rendered');
-        assert.equal($timeMarkers.eq(0).attr('title'), timeMarkers[0].title, 'title rendered');
+        assert.ok($timeIntervals.eq(0).hasClass(stripLines[2].cssClass), 'custom cssClass rendered');
+        assert.equal($stripLines.eq(0).attr('title'), stripLines[0].title, 'title rendered');
     });
     test('changing', function(assert) {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
 
-        let $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
-        assert.equal($timeMarkers.length, 0, 'gantt has no time markers');
+        let $stripLines = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($stripLines.length, 0, 'gantt has no strip lines');
         let $timeIntervals = this.$element.find(TIME_INTERVAL_SELECTOR);
         assert.equal($timeIntervals.length, 0, 'gantt has no time intervals');
 
-        this.instance.option('timeMarkers', [
+        this.instance.option('stripLines', [
             { start: tasks[0].start },
             { start: tasks[tasks.length - 1].start, end: tasks[tasks.length - 1].end }
         ]);
-        $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
-        assert.equal($timeMarkers.length, 2, 'gantt has time markers');
+        $stripLines = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($stripLines.length, 1, 'gantt has strip line');
         $timeIntervals = this.$element.find(TIME_INTERVAL_SELECTOR);
         assert.equal($timeIntervals.length, 1, 'gantt has time interval');
 
-        this.instance.option('timeMarkers', []);
-        $timeMarkers = this.$element.find(TIME_MARKER_SELECTOR);
-        assert.equal($timeMarkers.length, 0, 'gantt has no time markers');
+        this.instance.option('stripLines', []);
+        $stripLines = this.$element.find(TIME_MARKER_SELECTOR);
+        assert.equal($stripLines.length, 0, 'gantt has no strip lines');
     });
 });

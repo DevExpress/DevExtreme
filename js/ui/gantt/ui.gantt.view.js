@@ -18,7 +18,7 @@ export class GanttView extends Widget {
             taskTitlePosition: this._getTaskTitlePosition(this.option('taskTitlePosition')),
             allowSelectTask: this.option('allowSelection'),
             editing: this.option('editing'),
-            timeMarkers: this.option('timeMarkers'),
+            stripLines: { stripLines: this.option('stripLines') },
             areHorizontalBordersEnabled: this.option('showRowLines'),
             areAlternateRowsEnabled: false,
             viewType: this._getViewTypeByScaleType(this.option('scaleType'))
@@ -120,8 +120,8 @@ export class GanttView extends Widget {
             case 'scaleType':
                 this._ganttViewCore.setViewType(this._getViewTypeByScaleType(args.value));
                 break;
-            case 'timeMarkers':
-                this._ganttViewCore.setTimeMarkers(args.value);
+            case 'stripLines':
+                this._ganttViewCore.setStripLines({ stripLines: args.value });
                 break;
             default:
                 super._optionChanged(args);

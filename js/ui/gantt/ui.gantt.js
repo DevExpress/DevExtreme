@@ -118,7 +118,7 @@ class Gantt extends Widget {
             showRowLines: this.option('showRowLines'),
             scaleType: this.option('scaleType'),
             editing: this.option('editing'),
-            timeMarkers: this.option('timeMarkers'),
+            stripLines: this.option('stripLines'),
             bars: this._bars,
             onSelectionChanged: this._onGanttViewSelectionChanged.bind(this),
             onScroll: this._onGanttViewScroll.bind(this),
@@ -431,7 +431,7 @@ class Gantt extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
-            * @name dxGanttTimeMarker
+            * @name dxGanttStripLine
             * @type object
             */
 
@@ -570,7 +570,7 @@ class Gantt extends Widget {
             onSelectionChanged: null,
             allowSelection: true,
             showRowLines: true,
-            timeMarkers: undefined,
+            stripLines: undefined,
             scaleType: 'auto',
             editing: {
                 /**
@@ -677,8 +677,8 @@ class Gantt extends Widget {
                 this._setTreeListOption('showRowLines', args.value);
                 this._setGanttViewOption('showRowLines', args.value);
                 break;
-            case 'timeMarkers':
-                this._setGanttViewOption('timeMarkers', args.value);
+            case 'stripLines':
+                this._setGanttViewOption('stripLines', args.value);
                 break;
             case 'scaleType':
                 this._setGanttViewOption('scaleType', args.value);
