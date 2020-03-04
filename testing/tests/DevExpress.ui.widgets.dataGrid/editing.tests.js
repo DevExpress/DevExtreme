@@ -48,6 +48,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 
 const device = devices.real();
 const dataGridWrapper = new DataGridWrapper('#container');
+const rowsViewWrapper = dataGridWrapper.rowsView;
 
 function getInputElements($container) {
     return $container.find('input:not([type=\'hidden\'])');
@@ -1708,7 +1709,6 @@ QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up 
     // arrange
     const that = this;
     const rowsView = this.rowsView;
-    const rowsViewWrapper = dataGridWrapper.rowsView;
 
     that.options.editing = {
         allowUpdating: true,
@@ -7634,7 +7634,7 @@ QUnit.test('Add a custom cssClass for image icons in the \'buttons\' command col
     assert.ok($buttonElement.hasClass('dx-icon'), 'Custom icon is created');
 });
 
-QUnit.test('dx-svg-icon should not have \'pointerEvents: none\' if a column button set using svg icon (T863635)', function(assert) {
+QUnit.test('dx-svg-icon should not have "pointerEvents: none" if a column button set using svg icon (T863635)', function(assert) {
     // arrange
     const $testElement = $('#container');
     this.options.columns.push({
@@ -13522,7 +13522,7 @@ QUnit.test('cancelEditData after scrolling if scrolling mode is editing', functi
     assert.equal(testElement.find('.dx-edit-row').length, 0, 'edit row is closed');
 });
 
-QUnit.test('Add new row items on \'append\' if virtual scrolling (T812340)', function(assert) {
+QUnit.test('Add new row items on "append" if virtual scrolling (T812340)', function(assert) {
     // arrange
     this.options = $.extend(this.options, {
         dataSource: generateDataSource(50, 2),
@@ -13558,12 +13558,11 @@ QUnit.test('Add new row items on \'append\' if virtual scrolling (T812340)', fun
     this.pageIndex(4);
     this.pageIndex(5);
     // arrange, assert
-    const rowsViewWrapper = dataGridWrapper.rowsView;
     const newRows = this.dataController.items().filter(item => item.isNewRow);
     assert.equal(newRows.length, 2, 'Two new rows');
     assert.equal(this.dataController.items()[11].key, 'Item161', 'Next row');
-    assert.ok(rowsViewWrapper.isNewRow(9), 'Row 9 is new in view');
-    assert.ok(rowsViewWrapper.isNewRow(10), 'Row 10 is new in view');
+    assert.ok(rowsViewWrapper.getDataRow(9).isNewRow(), 'Row 9 is new in view');
+    assert.ok(rowsViewWrapper.getDataRow(10).isNewRow(), 'Row 10 is new in view');
 });
 
 ['virtual', 'standard'].forEach(rowRenderingMode => {
@@ -13608,7 +13607,6 @@ QUnit.test('Add new row items on \'append\' if virtual scrolling (T812340)', fun
         assert.equal(newRows.length, 2, 'Two new rows');
         assert.equal(this.dataController.items()[11].key, 'Item161', 'Next row');
 
-        const rowsViewWrapper = dataGridWrapper.rowsView;
         assert.ok(rowsViewWrapper.getDataRow(9).isNewRow(), 'Row 9 is new in view');
         assert.ok(rowsViewWrapper.getDataRow(10).isNewRow(), 'Row 10 is new in view');
     });
@@ -13654,7 +13652,6 @@ QUnit.test('Add new row items on \'append\' if virtual scrolling (T812340)', fun
         assert.equal(newRows.length, 2, 'Two new rows');
         assert.equal(this.dataController.items()[2].key, 'Item161', 'Next row');
 
-        const rowsViewWrapper = dataGridWrapper.rowsView;
         assert.ok(rowsViewWrapper.getDataRow(0).isNewRow(), 'Row 0 is new in view');
         assert.ok(rowsViewWrapper.getDataRow(1).isNewRow(), 'Row 1 is new in view');
     });
