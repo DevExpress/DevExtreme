@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const cssom = require('cssom');
 
-// TODO right exit codes
 const SUCCESS = 0;
 const ERROR = 1;
 
