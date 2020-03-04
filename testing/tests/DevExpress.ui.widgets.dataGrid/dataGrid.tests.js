@@ -272,7 +272,7 @@ QUnit.test('Correct background color of focused grouped row when RTL', function(
 
     const cellBackgroundColor = browser.msie ? 'transparent' : 'rgba(0, 0, 0, 0)';
     const $groupedRow = $(dataGrid.getRowElement(0)[0]);
-    assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgb(51, 122, 183)', 'focused grouped row has correct background color in rtl mode');
+    assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgb(92, 149, 197)', 'focused grouped row has correct background color in rtl mode');
     assert.equal(window.getComputedStyle($groupedRow.find('td')[0]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
     assert.equal(window.getComputedStyle($groupedRow.find('td')[1]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
 });
