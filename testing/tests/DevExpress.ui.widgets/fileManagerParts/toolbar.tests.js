@@ -63,7 +63,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.notStrictEqual($elements.eq(2).attr('title').indexOf('Thumbnails'), -1, 'view switcher displayed');
 
         const $item = this.wrapper.findThumbnailsItem('File 1.txt');
-        $item.trigger('click');
+        $item.trigger('dxclick');
         this.clock.tick(400);
 
         $toolbar = this.wrapper.getToolbar();
@@ -87,6 +87,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.ok($toolbar.hasClass(Consts.GENERAL_TOOLBAR_CLASS), 'general toolbar displayed');
 
         const $item = this.wrapper.findThumbnailsItem('File 1.txt');
+        $item.trigger('dxclick');
         $item.trigger('click');
         this.clock.tick(400);
 
@@ -192,7 +193,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.equal(this.wrapper.getToolbarSeparators().length, 1, 'specified separator visible');
 
         const $item = this.wrapper.findThumbnailsItem('File 1.txt');
-        $item.trigger('click');
+        $item.trigger('dxclick');
         this.clock.tick(400);
 
         $toolbar = this.wrapper.getToolbar();
