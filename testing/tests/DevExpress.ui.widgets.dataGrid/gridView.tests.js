@@ -2240,7 +2240,7 @@ function createGridView(options, userOptions) {
             // assert
             $fixedContent = $testElement.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed');
             assert.strictEqual(parseFloat($fixedContent.css('marginBottom')), 0, 'margin bottom in fixed content');
-            assert.ok(parseFloat($fixedContent.find('table').first().css('marginBottom')) > 0, 'margin bottom in fixed table');
+            assert.equal(parseFloat($fixedContent.find('table').first().css('marginBottom')), this.getScrollbarWidth(), 'margin bottom in fixed table');
         });
     }
 
