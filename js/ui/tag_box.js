@@ -989,7 +989,10 @@ const TagBox = SelectBox.inherit({
             this._renderTag(item, $multiTag || this._input());
         });
 
-        this._scrollContainer('end');
+        if(this._isFocused()) {
+            this._scrollContainer('end');
+        }
+
         this._refreshTagElements();
     },
 

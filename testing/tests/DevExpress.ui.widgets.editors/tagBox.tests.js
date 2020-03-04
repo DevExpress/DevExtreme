@@ -4438,14 +4438,22 @@ QUnit.module('single line mode', {
         assert.ok(this.$element.hasClass(TAGBOX_SINGLE_LINE_CLASS), 'the single line class is added');
     });
 
-    QUnit.test('tags container should be scrolled to the end on value change', function(assert) {
+    QUnit.test('tags container should be scrolled to the end on value change if the widget is focused', function(assert) {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
+        this.instance.focus();
         this.instance.option('value', [this.items[0]]);
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
 
         this.instance.option('value', this.items);
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+    });
+
+    QUnit.test('tags container should not be scrolled to the end on value change without focus (T865611)', function(assert) {
+        const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+
+        this.instance.option('value', this.items);
+        assert.equal($container.scrollLeft(), 0, 'tags container is not scrolled if the widget has no focus');
     });
 
     QUnit.test('tags should be scrolled by mouse wheel (T386939)', function(assert) {
@@ -4744,6 +4752,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
         const isScrollReverted = (browser.msie || browser.mozilla);
         const sign = browser.webkit || browser.msie ? 1 : -1;
 
+        this.instance.focus();
         this.instance.option('value', [this.items[0]]);
 
         let expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
