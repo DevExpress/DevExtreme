@@ -165,7 +165,7 @@ const SchedulerAppointmentForm = {
                 colSpan: 2,
                 items: [{
                     dataField: dataExprs.allDayExpr,
-                    cssClass: 'dx-uppointment-form-switch',
+                    cssClass: 'dx-appointment-form-switch',
                     editorType: 'dxSwitch',
                     label: {
                         text: messageLocalization.format('dxScheduler-allDay'),
@@ -197,7 +197,7 @@ const SchedulerAppointmentForm = {
                 }, {
                     editorType: 'dxSwitch',
                     dataField: 'repeat',
-                    cssClass: 'dx-uppointment-form-switch',
+                    cssClass: 'dx-appointment-form-switch',
                     name: 'visibilityChanged',
                     label: {
                         text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
