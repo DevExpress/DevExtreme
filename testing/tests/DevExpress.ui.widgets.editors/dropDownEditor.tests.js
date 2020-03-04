@@ -705,31 +705,12 @@ QUnit.module('keyboard navigation', {
         assert.ok(handler.calledOnce, 'Children keyboard processor can process the \'esc\' key pressing');
     });
 
-    QUnit.test('Home and end key press prevent default when popup in opened', function(assert) {
+    QUnit.test('Home and end key press does not prevent default when popup in opened (T865192)', function(assert) {
         assert.expect(1);
 
         let prevented = 0;
 
         this.dropDownEditor.option('opened', true);
-
-        this.$rootElement.on('keydown', function(e) {
-            if(e.isDefaultPrevented()) {
-                prevented++;
-            }
-        });
-
-        this.keyboard.keyDown('home');
-        this.keyboard.keyDown('end');
-
-        assert.equal(prevented, 2, 'defaults prevented on home and end keys');
-    });
-
-    QUnit.test('Home and end key press does not prevent default when popup in not opened', function(assert) {
-        assert.expect(1);
-
-        let prevented = 0;
-
-        this.dropDownEditor.option('opened', false);
 
         this.$rootElement.on('keydown', function(e) {
             if(e.isDefaultPrevented()) {
