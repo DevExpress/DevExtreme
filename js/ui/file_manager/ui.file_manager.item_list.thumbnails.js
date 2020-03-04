@@ -4,8 +4,6 @@ import { when } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils';
 import { name as contextMenuEventName } from '../../events/contextmenu';
-import { getDisplayFileSize } from './ui.file_manager.common';
-import messageLocalization from '../../localization/message';
 
 import FileManagerThumbnailListBox from './ui.file_manager.items_list.thumbnails.list_box';
 // import FileManagerThumbnailsItemListBox from './ui.file_manager.collection_widget_test';
@@ -16,8 +14,6 @@ const FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS = 'dx-filemanager-thumbnails-view-
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS = 'dx-filemanager-thumbnails-container';
 const FILE_MANAGER_THUMBNAILS_ITEM_CLASS = 'dx-filemanager-thumbnails-item';
 const FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-thumbnails-item-thumbnail';
-const FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS = 'dx-filemanager-thumbnails-item-spacer';
-const FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS = 'dx-filemanager-thumbnails-item-name';
 
 const FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE = 'dxFileManager_thumbnails';
 
@@ -58,79 +54,23 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             hoverStateEnabled: true,
             loopItemFocus: false,
             focusStateEnabled: true,
-            defaultItemTemplate: this._getItemTemplate.bind(this),
             onItemEnterKeyPressed: this.tryOpen.bind(this),
-            beforeKeyProcessing: this._beforeKeyProcessing.bind(this),
-            processMoveArrow: this._processMoveArrow.bind(this),
-            processPageChange: this._processPageChange.bind(this),
-            processHomeEndKeys: this._processHomeEndKeys.bind(this),
+            getItemThumbnail: this._getItemThumbnailContainer.bind(this),
+
+            scrollableElement: this._$viewPort,
             onSelectionChanged: this._onFilesViewSelectionChanged.bind(this)
         });
-    }
-
-    _beforeKeyProcessing(e) {
-        e.preventDefault();
-        this._resetLayoutModel();
-    }
-
-    _processMoveArrow(offset, horizontal, eventArgs) {
-        const item = this._getFocusedItem();
-        if(item) {
-            if(!horizontal) {
-                const layout = this._getLayoutModel();
-                if(!layout) {
-                    return;
-                }
-
-                offset *= layout.itemPerRowCount;
-            }
-
-            const newItemIndex = this._itemList.getIndexByItem(item) + offset;
-            this._focusItemByIndex(newItemIndex, true, eventArgs);
-        }
-    }
-
-    _processPageChange(pageUp, eventArgs) {
-        const item = this._getFocusedItem();
-        if(!item) {
-            return;
-        }
-
-        const layout = this._getLayoutModel();
-        if(!layout) {
-            return;
-        }
-
-        const itemLayout = this._createItemLayoutModel(this._itemList.getIndexByItem(item));
-
-        const rowOffset = pageUp ? layout.rowPerPageRate : -layout.rowPerPageRate;
-        const newRowRate = itemLayout.itemRowIndex - rowOffset;
-        const roundFunc = pageUp ? Math.ceil : Math.floor;
-        const newRowIndex = roundFunc(newRowRate);
-        let newItemIndex = newRowIndex * layout.itemPerRowCount + itemLayout.itemColumnIndex;
-        if(newItemIndex < 0) {
-            newItemIndex = 0;
-        } else if(newItemIndex >= this._items.length) {
-            newItemIndex = this._items.length - 1;
-        }
-
-        this._focusItemByIndex(newItemIndex, true, eventArgs);
-    }
-
-    _simulateSelection(e) {
-        const $item = $(e.target).closest(this._getItemSelector());
-        if($item.length > 0 && !this._itemList.isItemSelected($item)) {
-            this._itemList.selectItemConditionally($item);
-        }
-        return $item;
     }
 
     _onContextMenu(e) {
         e.preventDefault();
         e.stopPropagation();
-        const targetItemElement = this._simulateSelection(e);
         let items = null;
+        const targetItemElement = $(e.target).closest(this._itemList.getItemClass());
         if(targetItemElement.length > 0) {
+            if(!this._itemList.isItemSelected(targetItemElement)) {
+                this._itemList.selectItemConditionally(targetItemElement);
+            }
             const targetItem = this._itemList.getItemByItemElement(targetItemElement);
             items = this._getFileItemsForContextMenu(targetItem);
         }
@@ -152,115 +92,8 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._raiseSelectedItemOpened(item);
     }
 
-    _scrollToItem(item) {
-        const layout = this._getLayoutModel();
-        if(!layout) {
-            return;
-        }
-
-        const itemRowIndex = Math.floor(this._itemList.getIndexByItem(item) / layout.itemPerRowCount);
-        const itemTop = itemRowIndex * layout.itemHeight;
-        const itemBottom = itemTop + layout.itemHeight;
-
-        let newScrollTop = layout.viewPortScrollTop;
-
-        if(itemTop < layout.viewPortScrollTop) {
-            newScrollTop = itemTop;
-        } else if(itemBottom > layout.viewPortScrollBottom) {
-            newScrollTop = itemBottom - layout.viewPortHeight;
-        }
-
-        this._$viewPort.scrollTop(newScrollTop);
-    }
-
-    _resetLayoutModel() {
-        this._layoutModel = null;
-    }
-
-    _getLayoutModel() {
-        if(!this._layoutModel) {
-            this._layoutModel = this._createLayoutModel();
-        }
-        return this._layoutModel;
-    }
-
-    _createLayoutModel() {
-        if(this._items.length === 0) {
-            return null;
-        }
-
-        const item = this._items[0];
-        const $item = this._itemList.getItemElementByItem(item);
-
-        const itemWidth = $item.outerWidth(true);
-        if(itemWidth === 0) {
-            return null;
-        }
-
-        const itemHeight = $item.outerHeight(true);
-
-        const viewPortWidth = this._$itemViewContainer.innerWidth();
-        const viewPortHeight = this._$viewPort.innerHeight();
-        const viewPortScrollTop = this._$viewPort.scrollTop();
-        const viewPortScrollBottom = viewPortScrollTop + viewPortHeight;
-
-        const itemPerRowCount = Math.floor(viewPortWidth / itemWidth);
-        const rowPerPageRate = viewPortHeight / itemHeight;
-
-        return {
-            itemWidth: itemWidth,
-            itemHeight: itemHeight,
-            viewPortWidth: viewPortWidth,
-            viewPortHeight: viewPortHeight,
-            viewPortScrollTop: viewPortScrollTop,
-            viewPortScrollBottom: viewPortScrollBottom,
-            itemPerRowCount: itemPerRowCount,
-            rowPerPageRate: rowPerPageRate
-        };
-    }
-
-    _createItemLayoutModel(index) {
-        const layout = this._getLayoutModel();
-        if(!layout) {
-            return null;
-        }
-
-        const itemRowIndex = Math.floor(index / layout.itemPerRowCount);
-        const itemColumnIndex = index % layout.itemPerRowCount;
-        const itemTop = itemRowIndex * layout.itemHeight;
-        const itemBottom = itemTop + layout.itemHeight;
-
-        return {
-            itemRowIndex: itemRowIndex,
-            itemColumnIndex: itemColumnIndex,
-            itemTop: itemTop,
-            itemBottom: itemBottom
-        };
-    }
-
     _selectAll() {
         this._itemList.selectAll();
-    }
-
-    _processHomeEndKeys(index, scrollToItem, eventArgs) {
-        if(index >= 0 && index < this._items.length) {
-            const item = this._itemList.getItemByIndex(index);
-            this._focusItem(item, scrollToItem);
-        }
-    }
-
-    _focusItem(item, scrollToItem) {
-        this._itemList.setFocusedItem(item);
-        if(scrollToItem) {
-            this._scrollToItem(item);
-        }
-    }
-
-    _focusItemByIndex(index, scrollToItem, eventArgs) {
-        if(index >= 0 && index < this._items.length) {
-            const item = this._itemList.getItemByIndex(index);
-            this._focusItem(item, scrollToItem, eventArgs);
-        }
     }
 
     _getFocusedItem() {
@@ -294,34 +127,6 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         if(this._itemList) {
             this._itemList.option('dataSource', this._items);
         }
-    }
-
-    _getItemTemplate(fileItemInfo, $itemElement) {
-        $itemElement.attr('title', this._getTooltipText(fileItemInfo));
-
-        const $itemThumbnail = this._getItemThumbnailContainer(fileItemInfo);
-
-        const $itemSpacer = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS);
-
-        const $itemName = $('<div>')
-            .addClass(FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS)
-            .text(fileItemInfo.fileItem.name);
-
-        $itemElement.append($itemThumbnail, $itemSpacer, $itemName);
-    }
-
-    _getTooltipText(fileItemInfo) {
-        const item = fileItemInfo.fileItem;
-        if(item.tooltipText) {
-            return item.tooltipText;
-        }
-
-        let text = `${item.name}\r\n`;
-        if(!item.isDirectory) {
-            text += `${messageLocalization.format('dxFileManager-listThumbnailsTooltipTextSize')}: ${getDisplayFileSize(item.size)}\r\n`;
-        }
-        text += `${messageLocalization.format('dxFileManager-listThumbnailsTooltipTextDateModified')}: ${item.dateModified}`;
-        return text;
     }
 
     _getUniqueId() {
