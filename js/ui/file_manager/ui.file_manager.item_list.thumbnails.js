@@ -44,15 +44,15 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         const contextMenuEvent = addNamespace(contextMenuEventName, FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
         eventsEngine.on(this.$element(), contextMenuEvent, this._onContextMenu.bind(this));
 
-        this._createFilesView();
+        this._createItemList();
 
         this._loadItems();
     }
 
-    _createFilesView() {
+    _createItemList() {
         const selectionMode = this._isMultipleSelectionMode() ? 'multiple' : 'single';
 
-        this._filesView = this._createComponent(this._$itemViewContainer, FileManagerThumbnailListBox, {
+        this._itemList = this._createComponent(this._$itemViewContainer, FileManagerThumbnailListBox, {
             selectionMode,
             activeStateEnabled: true,
             hoverStateEnabled: true,
@@ -85,7 +85,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
                 offset *= layout.itemPerRowCount;
             }
 
-            const newItemIndex = this._filesView.getIndexByItem(item) + offset;
+            const newItemIndex = this._itemList.getIndexByItem(item) + offset;
             this._focusItemByIndex(newItemIndex, true, eventArgs);
         }
     }
@@ -101,7 +101,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             return;
         }
 
-        const itemLayout = this._createItemLayoutModel(this._filesView.getIndexByItem(item));
+        const itemLayout = this._createItemLayoutModel(this._itemList.getIndexByItem(item));
 
         const rowOffset = pageUp ? layout.rowPerPageRate : -layout.rowPerPageRate;
         const newRowRate = itemLayout.itemRowIndex - rowOffset;
@@ -119,8 +119,8 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _simulateSelection(e) {
         const $item = $(e.target).closest(this._getItemSelector());
-        if($item.length > 0 && !this._filesView.isItemSelected($item)) {
-            this._filesView.selectItemConditionally($item);
+        if($item.length > 0 && !this._itemList.isItemSelected($item)) {
+            this._itemList.selectItemConditionally($item);
         }
         return $item;
     }
@@ -131,7 +131,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         const targetItemElement = this._simulateSelection(e);
         let items = null;
         if(targetItemElement.length > 0) {
-            const targetItem = this._filesView.getItemByItemElement(targetItemElement);
+            const targetItem = this._itemList.getItemByItemElement(targetItemElement);
             items = this._getFileItemsForContextMenu(targetItem);
         }
 
@@ -148,7 +148,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _onItemDblClick(e) {
         const $item = $(e.currentTarget);
-        const item = this._filesView.getItemByItemElement($item);
+        const item = this._itemList.getItemByItemElement($item);
         this._raiseSelectedItemOpened(item);
     }
 
@@ -158,7 +158,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             return;
         }
 
-        const itemRowIndex = Math.floor(this._filesView.getIndexByItem(item) / layout.itemPerRowCount);
+        const itemRowIndex = Math.floor(this._itemList.getIndexByItem(item) / layout.itemPerRowCount);
         const itemTop = itemRowIndex * layout.itemHeight;
         const itemBottom = itemTop + layout.itemHeight;
 
@@ -190,7 +190,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         }
 
         const item = this._items[0];
-        const $item = this._filesView.getItemElementByItem(item);
+        const $item = this._itemList.getItemElementByItem(item);
 
         const itemWidth = $item.outerWidth(true);
         if(itemWidth === 0) {
@@ -239,18 +239,18 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _selectAll() {
-        this._filesView.selectAll();
+        this._itemList.selectAll();
     }
 
     _processHomeEndKeys(index, scrollToItem, eventArgs) {
         if(index >= 0 && index < this._items.length) {
-            const item = this._filesView.getItemByIndex(index);
+            const item = this._itemList.getItemByIndex(index);
             this._focusItem(item, scrollToItem);
         }
     }
 
     _focusItem(item, scrollToItem) {
-        this._filesView.setFocusedItem(item);
+        this._itemList.setFocusedItem(item);
         if(scrollToItem) {
             this._scrollToItem(item);
         }
@@ -258,13 +258,13 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _focusItemByIndex(index, scrollToItem, eventArgs) {
         if(index >= 0 && index < this._items.length) {
-            const item = this._filesView.getItemByIndex(index);
+            const item = this._itemList.getItemByIndex(index);
             this._focusItem(item, scrollToItem, eventArgs);
         }
     }
 
     _getFocusedItem() {
-        return this._filesView.getFocusedItem();
+        return this._itemList.getFocusedItem();
     }
 
     _loadItems() {
@@ -291,8 +291,8 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._hasParentDirectoryItem = !!parentDirectoryItem;
         this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
 
-        if(this._filesView) {
-            this._filesView.option('dataSource', this._items);
+        if(this._itemList) {
+            this._itemList.option('dataSource', this._items);
         }
     }
 
@@ -346,8 +346,8 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         const parentDirectoryItem = this._findParentDirectoryItem(this.getSelectedItems());
         if(parentDirectoryItem) {
-            const $parentDir = this._filesView.getItemElementByItem(parentDirectoryItem);
-            this._filesView.unselectItem($parentDir);
+            const $parentDir = this._itemList.getItemElementByItem(parentDirectoryItem);
+            this._itemList.unselectItem($parentDir);
         }
 
         let raiseEvent = !this._hasParentDirectoryItem;
@@ -377,11 +377,11 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     clearSelection() {
-        this._filesView.clearSelection();
+        this._itemList.clearSelection();
     }
 
     getSelectedItems() {
-        return this._filesView.getSelectedItems();
+        return this._itemList.getSelectedItems();
     }
 
 }
