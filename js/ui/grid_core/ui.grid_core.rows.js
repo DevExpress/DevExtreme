@@ -31,7 +31,6 @@ const EMPTY_CLASS = 'dx-empty';
 const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
-const SCROLLABLE_CONTENT_PADDING_BOTTOM = 8;
 
 module.exports = {
     defaultOptions: function() {
@@ -130,11 +129,6 @@ module.exports = {
             const getScrollableBottomPadding = function(that) {
                 const scrollable = that.getScrollable();
                 return scrollable ? Math.ceil(parseFloat(scrollable.$content().css('paddingBottom'))) : 0;
-            };
-
-            const updateHorizontalScrollbarSpace = function(that) {
-                const scrollable = that.getScrollable();
-                scrollable && scrollable.$content().css('paddingBottom', that.isScrollbarVisible(true) ? SCROLLABLE_CONTENT_PADDING_BOTTOM : 0);
             };
 
             return {
@@ -806,26 +800,21 @@ module.exports = {
                 },
 
                 updateFreeSpaceRowHeight: function($table) {
-                    const that = this;
-                    const dataController = that._dataController;
+                    const dataController = this._dataController;
                     const itemCount = dataController.items(true).length;
-                    const contentElement = that._findContentElement();
-                    const freeSpaceRowElements = that._getFreeSpaceRowElements($table);
-                    let freeSpaceRowCount;
-                    let scrollingMode;
+                    const contentElement = this._findContentElement();
+                    const freeSpaceRowElements = this._getFreeSpaceRowElements($table);
 
                     if(freeSpaceRowElements && contentElement && dataController.totalCount() >= 0) {
                         let isFreeSpaceRowVisible = false;
 
                         if(itemCount > 0) {
-                            updateHorizontalScrollbarSpace(that); // T865137
-
-                            if(!that._hasHeight) {
-                                freeSpaceRowCount = dataController.pageSize() - itemCount;
-                                scrollingMode = that.option('scrolling.mode');
+                            if(!this._hasHeight) {
+                                const freeSpaceRowCount = dataController.pageSize() - itemCount;
+                                const scrollingMode = this.option('scrolling.mode');
 
                                 if(freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== 'virtual' && scrollingMode !== 'infinite') {
-                                    styleUtils.setHeight(freeSpaceRowElements, freeSpaceRowCount * that._rowHeight);
+                                    styleUtils.setHeight(freeSpaceRowElements, freeSpaceRowCount * this._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
                                 if(!isFreeSpaceRowVisible && $table) {
@@ -833,36 +822,34 @@ module.exports = {
                                 } else {
                                     freeSpaceRowElements.toggle(isFreeSpaceRowVisible);
                                 }
-                                that._updateLastRowBorder(isFreeSpaceRowVisible);
+                                this._updateLastRowBorder(isFreeSpaceRowVisible);
                             } else {
                                 freeSpaceRowElements.hide();
-                                deferUpdate(function() {
-                                    const scrollbarWidth = that.getScrollbarWidth(true);
-                                    const elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth;
+                                deferUpdate(() => {
+                                    const scrollbarWidth = this.getScrollbarWidth(true);
+                                    const elementHeightWithoutScrollbar = this.element().height() - scrollbarWidth;
                                     const contentHeight = contentElement.outerHeight();
                                     const showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0;
-                                    const rowsHeight = that._getRowsHeight(contentElement.children().first());
-                                    const $tableElement = $table || that.getTableElements();
+                                    const rowsHeight = this._getRowsHeight(contentElement.children().first());
+                                    const $tableElement = $table || this.getTableElements();
                                     const borderTopWidth = Math.ceil(parseFloat($tableElement.css('borderTopWidth')));
-                                    const heightCorrection = that._getHeightCorrection();
+                                    const heightCorrection = this._getHeightCorrection();
                                     const resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth - heightCorrection;
 
                                     if(showFreeSpaceRow) {
-                                        deferRender(function() {
+                                        deferRender(() => {
                                             freeSpaceRowElements.css('height', resultHeight);
                                             isFreeSpaceRowVisible = true;
                                             freeSpaceRowElements.show();
                                         });
                                     }
-                                    deferRender(function() {
-                                        that._updateLastRowBorder(isFreeSpaceRowVisible);
-                                    });
+                                    deferRender(() => this._updateLastRowBorder(isFreeSpaceRowVisible));
                                 });
                             }
                         } else {
                             freeSpaceRowElements.css('height', 0);
                             freeSpaceRowElements.show();
-                            that._updateLastRowBorder(true);
+                            this._updateLastRowBorder(true);
                         }
                     }
                 },
