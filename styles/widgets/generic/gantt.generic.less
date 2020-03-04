@@ -141,6 +141,13 @@
 
             .dx-gantt-task-edit-progress {
                 border-color: transparent transparent darken(@base-accent, 10%) transparent;
+
+                &:before {
+                    width: 12px;
+                    height: 6px;
+                    bottom: -14px;
+                    border: 1px solid darken(@base-accent, 10%);
+                }
             }
 
             .dx-gantt-task-edit-progress-status {
