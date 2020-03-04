@@ -31,6 +31,7 @@ const EMPTY_CLASS = 'dx-empty';
 const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
+const SCROLLABLE_CONTENT_PADDING_BOTTOM = 8;
 
 module.exports = {
     defaultOptions: function() {
@@ -131,11 +132,9 @@ module.exports = {
                 return scrollable ? Math.ceil(parseFloat(scrollable.$content().css('paddingBottom'))) : 0;
             };
 
-            const hideHorizontalScrollbarSpaceIfNeed = function(that) {
-                if(!that.isScrollbarVisible(true)) {
-                    const scrollable = that.getScrollable();
-                    scrollable && scrollable.$content().css('paddingBottom', 0);
-                }
+            const updateHorizontalScrollbarSpace = function(that) {
+                const scrollable = that.getScrollable();
+                scrollable && scrollable.$content().css('paddingBottom', that.isScrollbarVisible(true) ? SCROLLABLE_CONTENT_PADDING_BOTTOM : 0);
             };
 
             return {
@@ -819,6 +818,8 @@ module.exports = {
                         let isFreeSpaceRowVisible = false;
 
                         if(itemCount > 0) {
+                            updateHorizontalScrollbarSpace(that); // T865137
+
                             if(!that._hasHeight) {
                                 freeSpaceRowCount = dataController.pageSize() - itemCount;
                                 scrollingMode = that.option('scrolling.mode');
@@ -836,8 +837,6 @@ module.exports = {
                             } else {
                                 freeSpaceRowElements.hide();
                                 deferUpdate(function() {
-                                    hideHorizontalScrollbarSpaceIfNeed(that); // T865137
-
                                     const scrollbarWidth = that.getScrollbarWidth(true);
                                     const elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth;
                                     const contentHeight = contentElement.outerHeight();
