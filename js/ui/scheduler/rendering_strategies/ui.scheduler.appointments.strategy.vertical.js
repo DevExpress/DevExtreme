@@ -60,7 +60,9 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const isRecurring = !!this.instance.fire('getField', 'recurrenceRule', item);
         const appointmentStartDate = this.startDate(item, true);
         const appointmentEndDate = this.endDate(item);
-        const isAppointmentTakesSeveralDays = !dateUtils.sameDate(appointmentStartDate, appointmentEndDate);
+
+        // NOTE: subtract 1 millisecond to avoid 00.00 time
+        const isAppointmentTakesSeveralDays = !dateUtils.sameDate(appointmentStartDate, new Date(appointmentEndDate.getTime() - 1));
 
         if(allDay) {
             return super._getItemPosition(item);
@@ -101,7 +103,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
                 width: width,
                 allDay: allDay,
                 originalAppointmentStartDate: appointmentStartDate,
-                originalAppointmentEndDate: this.endDate(item),
+                originalAppointmentEndDate: appointmentEndDate,
                 endDate: this.endDate(item, position[j], isRecurring),
                 appointmentReduced: appointmentReduced
             });
