@@ -788,7 +788,7 @@ const subscribes = {
 
             result = ceilQuantityOfDays * visibleDayDuration;
         } else {
-            const isDifferentDate = utils.isSameAppointmentDates(startDate, endDate);
+            const isDifferentDate = !utils.isSameAppointmentDates(startDate, endDate);
             const floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration);
             let tailDuration;
 
