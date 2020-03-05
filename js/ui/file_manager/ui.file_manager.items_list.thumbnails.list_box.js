@@ -20,7 +20,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS);
         this._renderItemsContainer();
 
-        this._layoutUtils = new ListBoxLayoutUtils(this.$element(), this._$itemContainer, this.itemElements());
+        this._layoutUtils = new ListBoxLayoutUtils(this.$element(), this._$itemContainer, this.itemElements().first());
     }
 
     _initActions() {
@@ -271,7 +271,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         switch(args.name) {
             case 'items':
                 if(this._layoutUtils) {
-                    this._layoutUtils.updateItems(this.itemElements());
+                    this._layoutUtils.updateItems(this.itemElements().first());
                 }
                 super._optionChanged(args);
                 break;

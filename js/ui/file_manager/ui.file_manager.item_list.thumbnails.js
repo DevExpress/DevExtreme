@@ -113,6 +113,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     refresh() {
+        this.clearSelection();
         this._itemList.option('dataSource', { store: this._createStore() });
     }
 

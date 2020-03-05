@@ -320,6 +320,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     refresh() {
+        this.clearSelection();
         this._filesView.option('dataSource', { store: this._createStore() });
     }
 
