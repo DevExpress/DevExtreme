@@ -4,6 +4,7 @@ const generator = require('devextreme-generator/preact-generator').default;
 const ts = require('gulp-typescript');
 const lint = require('gulp-eslint');
 const plumber = require('gulp-plumber');
+const gulpIf = require('gulp-if');
 
 const SRC = 'js/renovation/**/*.tsx';
 const DEST = 'js/renovation/';
@@ -28,11 +29,13 @@ gulp.task('generate-components', function() {
             },
             finish() {}
         }))
-        .pipe(lint({
-            quiet: true,
-            fix: true,
-            useEslintrc: true
-        }))
+        .pipe(gulpIf(file => file.extname === '.js',
+            lint({
+                quiet: true,
+                fix: true,
+                useEslintrc: true
+            })
+        ))
         .pipe(lint.format())
         .pipe(gulp.dest(DEST));
 });

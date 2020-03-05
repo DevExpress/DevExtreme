@@ -168,7 +168,7 @@ describe('Button', () => {
                 emitKeyboard(KEY.space);
                 expect(clickHandler).toHaveBeenCalledTimes(1);
             });
-            
+
             it('should be called by key press with passed event', () => {
                 const clickHandler = jest.fn();
 
@@ -252,58 +252,58 @@ describe('Button', () => {
             });
         });
 
-        describe('contentRender', () => {
-            const contentRender = ({ model: { text } }) => <div className={'custom-content'}>{`${text}123`}</div>;
+        describe('template', () => {
+            const template = ({ text }) => <div className={'custom-content'}>{`${text}123`}</div>;
 
-            it('should render contentRender', () => {
+            it('should render template', () => {
                 const button = render({
-                    contentRender,
+                    render: template,
                     text: 'My button',
                 });
-                const customRender = button.find(contentRender);
+                const customRender = button.find(template);
 
                 expect(customRender.exists()).toBe(true);
                 expect(customRender.exists('.custom-content')).toBe(true);
 
-                expect(customRender.props().model.text).toBe('My button');
+                expect(customRender.props().text).toBe('My button');
                 expect(customRender.text()).toBe('My button123');
             });
 
-            it('should rerender contentRender in runtime', () => {
+            it('should rerender template in runtime', () => {
                 const button = mount(<Button text="My button" />);
 
-                expect(button.exists(contentRender)).toBe(false);
+                expect(button.exists(template)).toBe(false);
 
-                button.setProps({ contentRender });
-                expect(button.exists(contentRender)).toBe(true);
+                button.setProps({ render: template });
+                expect(button.exists(template)).toBe(true);
 
-                button.setProps({ contentRender: undefined });
-                expect(button.exists(contentRender)).toBe(false);
+                button.setProps({ render: undefined });
+                expect(button.exists(template)).toBe(false);
             });
 
             it('should change properties in runtime', () => {
-                const button = mount(<Button text="My button" contentRender={contentRender} />);
-                let buttonContent = button.find(contentRender);
+                const button = mount(<Button text="My button" render={template} />);
+                let buttonContent = button.find(template);
 
-                expect(buttonContent.props().model.text).toBe('My button');
+                expect(buttonContent.props().text).toBe('My button');
                 expect(buttonContent.text()).toBe('My button123');
 
                 button.setProps({ text: 'New value' });
-                buttonContent = button.find(contentRender);
+                buttonContent = button.find(template);
 
-                expect(buttonContent.props().model.text).toBe('New value');
+                expect(buttonContent.props().text).toBe('New value');
                 expect(buttonContent.text()).toBe('New value123');
             });
 
             it('should get original icon prop', () => {
                 const button = render({
-                    contentRender: ({ icon }) => <div>{icon}</div>,
+                    render: ({ icon }) => <div>{icon}</div>,
                     icon: 'testicon',
                     text: 'My button',
                 });
                 const buttonContentChildren = button.find('.dx-button-content').children();
 
-                expect(buttonContentChildren.props().model.icon).toBe('testicon');
+                expect(buttonContentChildren.props().icon).toBe('testicon');
             });
         });
 
@@ -455,7 +455,7 @@ describe('Button', () => {
                 device: () => false,
                 options: {},
             });
-            return Button.defaultProps;
+            return (Button as any).defaultProps;
         };
 
         describe('focusStateEnabled', () => {
