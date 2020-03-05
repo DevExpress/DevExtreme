@@ -62,7 +62,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const appointmentStartDate = this.startDate(item, true);
         const appointmentEndDate = this.endDate(item);
 
-        const isAppointmentTakesSeveralDays = utils.isDifferentDates(appointmentStartDate, appointmentEndDate);
+        const isAppointmentTakesSeveralDays = !utils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
 
         if(allDay) {
             return super._getItemPosition(item);
