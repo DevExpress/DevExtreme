@@ -1620,11 +1620,14 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const onItemExpanded = (item) => {
             const lastIndex = keysToExpand.length - 1;
             if(item.node.key === keysToExpand[lastIndex]) {
-                this.off('itemExpanded', onItemExpanded);
                 allItemsExpandedCallback.resolve();
             }
         };
+
         this.on('itemExpanded', onItemExpanded);
+        allItemsExpandedCallback.always(() => {
+            this.off('itemExpanded', onItemExpanded);
+        });
         keysToExpand.forEach(key => {
             this.expandItem(key);
         });
