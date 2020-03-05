@@ -204,7 +204,8 @@ class Diagram extends Widget {
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
-            onCustomCommandExecuted: this._onCustomCommandExecuted.bind(this)
+            onCustomCommandExecuted: this._onCustomCommandExecuted.bind(this),
+            isMobileView: this.isMobileScreenSize()
         };
     }
     _onCustomCommandExecuted(e) {
@@ -229,7 +230,8 @@ class Diagram extends Widget {
             .appendTo(this.$element());
         this._mainToolbar = this._createComponent($toolbarWrapper, DiagramMainToolbar,
             extend(this._getToolbarBaseOptions(), {
-                commands: this.option('mainToolbar.commands')
+                commands: this.option('mainToolbar.commands'),
+                skipAdjustSize: true
             })
         );
     }
@@ -244,9 +246,7 @@ class Diagram extends Widget {
         this._historyToolbar = this._createComponent($container, DiagramHistoryToolbar,
             extend(this._getToolbarBaseOptions(), {
                 commands: this.option('historyToolbar.commands'),
-                isMobileView: this.isMobileScreenSize(),
-                isToolboxVisible: this._isToolboxVisible(),
-                needAdjustSize: true
+                isToolboxVisible: this._isToolboxVisible()
             })
         );
         this._updateHistoryToolbarPosition($container, $parent, isServerSide);
@@ -375,8 +375,7 @@ class Diagram extends Widget {
             .appendTo($parent);
         this._viewToolbar = this._createComponent($container, DiagramViewToolbar,
             extend(this._getToolbarBaseOptions(), {
-                commands: this.option('viewToolbar.commands'),
-                needAdjustSize: true
+                commands: this.option('viewToolbar.commands')
             })
         );
         this._updateViewToolbarPosition($container, $parent, isServerSide);
@@ -410,8 +409,7 @@ class Diagram extends Widget {
             extend(this._getToolbarBaseOptions(), {
                 buttonStylingMode: 'contained',
                 buttonType: 'default',
-                isPropertiesPanelVisible: this._isPropertiesPanelVisible(),
-                needAdjustSize: true
+                isPropertiesPanelVisible: this._isPropertiesPanelVisible()
             })
         );
         this._updatePropertiesPanelToolbarPosition($container, $parent, isServerSide);

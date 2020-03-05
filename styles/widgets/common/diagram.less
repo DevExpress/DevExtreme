@@ -152,6 +152,8 @@
     }
 
     &.dx-diagram-mobile-popup {
+        width: calc(100% - 2px) !important; // stylelint-disable-line declaration-no-important
+
         .dx-popup-title {
             border: 0;
             min-height: 0;
@@ -243,6 +245,50 @@
                 .dx-texteditor-input {
                     width: 0;
                     padding-left: 0;
+                }
+            }
+        }
+    }
+}
+
+.dx-diagram-mobile-toolbar-color-box-opened {
+    .dx-dropdowneditor-overlay {
+        transform: none !important; // stylelint-disable-line declaration-no-important
+        width: 100% !important; // stylelint-disable-line declaration-no-important
+        height: 100% !important; // stylelint-disable-line declaration-no-important
+
+        .dx-overlay-content {
+            transform: none !important; // stylelint-disable-line declaration-no-important
+            width: 100% !important; // stylelint-disable-line declaration-no-important
+            top: initial !important; // stylelint-disable-line declaration-no-important
+            bottom: 0 !important; // stylelint-disable-line declaration-no-important
+
+            .dx-popup-content {
+                padding: 8px;
+            }
+
+            .dx-colorview-container {
+                width: 100%;
+
+                .dx-colorview-container-row {
+                    display: flex;
+
+                    .dx-colorview-palette-cell {
+                        flex-grow: 1;
+
+                        .dx-colorview-palette {
+                            width: 100%;
+                            min-width: 300px;
+                        }
+                    }
+
+                    .dx-colorview-hue-scale-cell {
+                        margin-left: 12px;
+                    }
+
+                    .dx-colorview-controls-container {
+                        margin-left: 12px;
+                    }
                 }
             }
         }

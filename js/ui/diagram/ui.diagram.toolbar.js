@@ -17,6 +17,7 @@ const ACTIVE_FORMAT_CLASS = 'dx-format-active';
 const DIAGRAM_TOOLBAR_CLASS = 'dx-diagram-toolbar';
 const DIAGRAM_TOOLBAR_SEPARATOR_CLASS = 'dx-diagram-toolbar-separator';
 const DIAGRAM_TOOLBAR_MENU_SEPARATOR_CLASS = 'dx-diagram-toolbar-menu-separator';
+const DIAGRAM_MOBILE_TOOLBAR_COLOR_BOX_OPENED_CLASS = 'dx-diagram-mobile-toolbar-color-box-opened';
 
 class DiagramToolbar extends DiagramPanel {
     _init() {
@@ -35,7 +36,7 @@ class DiagramToolbar extends DiagramPanel {
         super._initMarkup();
 
         const isServerSide = !hasWindow();
-        if(this.option('needAdjustSize') && !isServerSide) {
+        if(!this.option('skipAdjustSize') && !isServerSide) {
             this.$element().width('');
         }
 
@@ -46,7 +47,7 @@ class DiagramToolbar extends DiagramPanel {
         const $toolbar = this._createMainElement();
         this._renderToolbar($toolbar);
 
-        if(this.option('needAdjustSize') && !isServerSide) {
+        if(!this.option('skipAdjustSize') && !isServerSide) {
             const $toolbarContent = this.$element().find('.dx-toolbar-before');
             this.$element().width($toolbarContent.width());
         }
@@ -195,6 +196,18 @@ class DiagramToolbar extends DiagramPanel {
                 }
             });
         }
+        options = extend(true, options, {
+            options: {
+                onOpened: () => {
+                    if(this.option('isMobileView')) {
+                        $('body').addClass(DIAGRAM_MOBILE_TOOLBAR_COLOR_BOX_OPENED_CLASS);
+                    }
+                },
+                onClosed: () => {
+                    $('body').removeClass(DIAGRAM_MOBILE_TOOLBAR_COLOR_BOX_OPENED_CLASS);
+                },
+            }
+        });
         return options;
     }
     _createTextEditorItemOptions(hint) {
@@ -364,6 +377,10 @@ class DiagramToolbar extends DiagramPanel {
 
     _optionChanged(args) {
         switch(args.name) {
+            case 'isMobileView':
+                $('body').removeClass(DIAGRAM_MOBILE_TOOLBAR_COLOR_BOX_OPENED_CLASS);
+                this._invalidate();
+                break;
             case 'onSubMenuVisibilityChanging':
                 this._createOnSubMenuVisibilityChangingAction();
                 break;
@@ -381,6 +398,7 @@ class DiagramToolbar extends DiagramPanel {
     }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
+            isMobileView: false,
             export: {
                 fileName: 'Diagram',
                 proxyUrl: undefined
@@ -389,7 +407,7 @@ class DiagramToolbar extends DiagramPanel {
             buttonStylingMode: 'text',
             buttonType: 'normal',
             editorStylingMode: 'filled',
-            needAdjustSize: false
+            skipAdjustSize: false
         });
     }
 
