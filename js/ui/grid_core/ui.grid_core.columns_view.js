@@ -280,11 +280,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             let formItemOptions;
             const rowOptions = $cell.parent().data('options');
             const options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()];
-            let resultOptions;
 
             if(!$cell.closest('table').is(event.delegateTarget)) return;
 
-            resultOptions = extend({}, options, {
+            const resultOptions = extend({}, options, {
                 cellElement: getPublicElement($cell),
                 event: event,
                 eventType: event.type
@@ -518,11 +517,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         options = options || {};
 
         const that = this;
-        let $table;
 
         options.columns = that._columnsController.getVisibleColumns();
         const changeType = options.change && options.change.changeType;
-        $table = that._createTable(options.columns, changeType === 'append' || changeType === 'prepend' || changeType === 'update');
+        const $table = that._createTable(options.columns, changeType === 'append' || changeType === 'prepend' || changeType === 'update');
 
         that._renderRows($table, options);
 
@@ -543,15 +541,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _renderRow: function($table, options) {
         const that = this;
-        let $row;
-        let $wrappedRow;
 
         if(!options.columnIndices) {
             options.row.cells = [];
         }
 
-        $row = that._createRow(options.row);
-        $wrappedRow = that._wrapRowIfNeed($table, $row);
+        const $row = that._createRow(options.row);
+        const $wrappedRow = that._wrapRowIfNeed($table, $row);
         if(options.changeType !== 'remove') {
             that._renderCells($row, options);
         }
@@ -611,7 +607,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         if(cellOptions.rowType !== 'freeSpace') {
             this.setAria('selected', false, $cell);
             this.setAria('role', 'gridcell', $cell);
-            this.setAria('colindex', cellOptions.columnIndex + 1, $cell);
+
+            const columnIndexOffset = this._columnsController.getColumnIndexOffset();
+            const ariaColIndex = cellOptions.columnIndex + columnIndexOffset + 1;
+            this.setAria('colindex', ariaColIndex, $cell);
         }
     },
 
@@ -827,9 +826,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _wrapTableInScrollContainer: function($table) {
         const that = this;
-        let $scrollContainer;
-
-        $scrollContainer = $('<div>');
+        const $scrollContainer = $('<div>');
 
         eventsEngine.on($scrollContainer, 'scroll', function() {
             !that._skipScrollChanged && that.scrollChanged.fire({

@@ -1,7 +1,7 @@
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/testHelper';
 import DataGrid from '../../model/dataGrid';
-import { Selector } from 'testcafe';
+import { Selector, ClientFunction } from 'testcafe';
 
 fixture `Keyboard Navigation`
     .page(url(__dirname, '../container.html'));
@@ -614,7 +614,7 @@ test("Cell should be highlighted after editing another cell when startEditAction
     onFocusedCellChanging: (e) => e.isHighlighted = true
 }));
 
-test("Focus cells by tab if columnRenderingMode is virtual", async t => {
+test('Focus cells by tab if scrolling.columnRenderingMode: virtual', async t => {
     const dataGrid = new DataGrid("#container");
 
     await t
@@ -667,5 +667,111 @@ test("Focus cells by tab if columnRenderingMode is virtual", async t => {
             console.log('onFocusedCellChanging');
             e.isHighlighted = true;
         }
+    });
+});
+
+test('Horizontal moving by keydown if scrolling.columnRenderingMode: virtual', async t => {
+    const dataGrid = new DataGrid("#container");
+    let columnIndex = 0;
+    let cell = dataGrid.getDataCell(0, columnIndex);
+
+    await t.click(dataGrid.getDataCell(0, 0).element);
+
+    // Moving right
+    for(let i = 0; i < 19; ++i) {
+        await t.pressKey('right');
+
+        columnIndex = i + 1;
+        cell = dataGrid.getDataCell(0, columnIndex);
+        await t.expect(cell.isFocused).ok(`Cell[0, ${columnIndex}] is focused`);
+    }
+
+    // Moving left
+    for(let i = 19; i >= 1; --i) {
+        await t.pressKey('left');
+
+        columnIndex = i - 1;
+        cell = dataGrid.getDataCell(0, columnIndex);
+        await t.expect(cell.isFocused).ok(`Cell[0, ${columnIndex}] is focused`);
+    }
+}).before(() => {
+    const generateData = function(rowCount, columnCount) {
+        var items = [];
+
+        for(let i = 0; i < rowCount; i++) {
+            let item = { };
+            for(let j = 0; j < columnCount; j++) {
+                item[`field${j}`] = `${i}-${j}`;
+            }
+            items.push(item);
+        }
+        return items;
+    };
+    const data = generateData(2, 20);
+
+    return createWidget("dxDataGrid", {
+        width: 300,
+        dataSource: data,
+        columnWidth: 90,
+        scrolling: {
+            columnRenderingMode: "virtual"
+        },
+        paging: {
+            enabled: false
+        },
+        onFocusedCellChanging: e => e.isHighlighted = true
+    });
+});
+
+test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRenderingMode: virtual', async t => {
+    const dataGrid = new DataGrid("#container");
+    let rowIndex = 0;
+    let cell = dataGrid.getDataCell(rowIndex, 0);
+
+    await t.click(cell.element);
+
+    // Moving Down
+    for(let i = 0; i < 19; ++i) {
+        await t.pressKey('down');
+        rowIndex = i + 1;
+        cell = dataGrid.getDataCell(rowIndex, 0);
+        await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, 0] is focused`);
+    }
+
+    // Moving Up
+    for(let i = 19; i >= 1; --i) {
+        await t.pressKey('up');
+
+        rowIndex = i - 1;
+        cell = dataGrid.getDataCell(rowIndex, 0);
+        await t.expect(cell.isFocused).ok(`Cell[${rowIndex}, 0] is focused`);
+    }
+
+}).before(() => {
+    const generateData = function (rowCount, columnCount) {
+        var items = [];
+
+        for(let i = 0; i < rowCount; i++) {
+            let item = { };
+            for(let j = 0; j < columnCount; j++) {
+                item[`field${j}`] = `${i}-${j}`;
+            }
+            items.push(item);
+        }
+        return items;
+    };
+    const data = generateData(20, 2);
+
+    return createWidget("dxDataGrid", {
+        width: 300,
+        dataSource: data,
+        scrolling: {
+            mode: 'virtual',
+            rowRenderingMode: "virtual"
+        },
+        paging: {
+            enabled: false
+        },
+        onFocusedCellChanging: e => e.isHighlighted = true
     });
 });

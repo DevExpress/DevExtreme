@@ -222,7 +222,7 @@ const ColumnsControllerExtender = (function() {
             return visibleColumns;
         },
         getColumnIndexOffset: function() {
-            const offset = this.getBeginPageIndex(this._position) * this.getColumnPageSize();
+            const offset = this._beginPageIndex * this.getColumnPageSize();
             return offset > 0 ? offset - 1 : 0;
         },
         dispose: function() {

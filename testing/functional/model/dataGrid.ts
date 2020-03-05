@@ -148,7 +148,7 @@ class DataCell extends DxElement {
     isModified: Promise<boolean>;
 
     constructor(dataRow: Selector, index: number) {
-        super(dataRow.find(`td:nth-child(${++index})`));
+        super(dataRow.find(`td[aria-colindex='${index + 1}']`));
         this.isEditCell = this.element.hasClass(CLASS.editCell);
         this.isFocused = this.element.hasClass(CLASS.focused);
         this.isValidationPending = this.element.find(`div.${CLASS.pendingIndicator}`).exists;
@@ -310,7 +310,7 @@ export default class DataGrid extends Widget {
     }
 
     getDataRow(index: number): DataRow {
-        return new DataRow(this.element.find(`.${CLASS.dataRow}:nth-child(${++index})`));
+        return new DataRow(this.element.find(`.${CLASS.dataRow}[aria-rowindex='${++index}']`));
     }
 
     getDataCell(rowIndex: number, columnIndex: number): DataCell {
