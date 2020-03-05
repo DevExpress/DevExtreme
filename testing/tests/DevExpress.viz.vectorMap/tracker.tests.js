@@ -37,7 +37,7 @@ const EVENTS = {
         'pointer': 'pointerup'
     },
     'wheel': {
-        'mouse': document['onwheel'] !== undefined ? 'wheel' : 'mousewheel'
+        'mouse': 'wheel'
     }
 };
 
@@ -339,33 +339,33 @@ QUnit.module('zoom / mouse', $.extend({}, environment, {
 }));
 
 QUnit.test('raised on wheel', function(assert) {
-    this.trigger('wheel', { x: 10, y: 20 }, { wheelDelta: 120 });
+    this.trigger('wheel', { x: 10, y: 20 }, { deltaY: -120 });
 
     assert.deepEqual(this.onZoom.lastCall.args, [{ delta: 1, x: 10, y: 20 }]);
 });
 
 // T107589
 QUnit.test('raised on small deltas', function(assert) {
-    this.trigger('wheel', { x: 10, y: 20 }, { wheelDelta: -20 });
+    this.trigger('wheel', { x: 10, y: 20 }, { deltaY: 20 });
 
     assert.deepEqual(this.onZoom.lastCall.args, [{ delta: -1, x: 10, y: 20 }]);
 });
 
 QUnit.test('too big deltas are truncated', function(assert) {
-    this.trigger('wheel', { x: 10, y: 20 }, { wheelDelta: 800 });
+    this.trigger('wheel', { x: 10, y: 20 }, { deltaY: -800 });
 
     assert.deepEqual(this.onZoom.lastCall.args, [{ delta: 4, x: 10, y: 20 }]);
 });
 
 QUnit.test('consequent deltas are ignored', function(assert) {
-    this.trigger('wheel', { x: 10, y: 20 }, { wheelDelta: 200 }).trigger('wheel', { x: 11, y: 22 }, { wheelDelta: 120 });
+    this.trigger('wheel', { x: 10, y: 20 }, { deltaY: -200 }).trigger('wheel', { x: 11, y: 22 }, { deltaY: -120 });
 
     assert.deepEqual(this.onZoom.lastCall.args, [{ delta: 2, x: 10, y: 20 }]);
 });
 
 QUnit.test('not raised when disabled', function(assert) {
     this.tracker.setOptions({ wheelEnabled: false });
-    this.trigger('wheel', { x: 10, y: 20 }, { wheelDelta: 120 });
+    this.trigger('wheel', { x: 10, y: 20 }, { deltaY: -120 });
 
     assert.strictEqual(this.onZoom.lastCall, null);
 });

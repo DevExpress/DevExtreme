@@ -961,17 +961,10 @@
             },
 
             wheel: function(d, shiftKey) {
-                if(document['onwheel'] !== undefined) {
-                    triggerEvent('wheel', {
-                        deltaY: -d,
-                        shiftKey: shiftKey
-                    });
-                } else {
-                    triggerEvent('mousewheel', {
-                        wheelDelta: d,
-                        shiftKey: shiftKey
-                    });
-                }
+                triggerEvent('wheel', {
+                    deltaY: -d,
+                    shiftKey: shiftKey
+                });
 
                 triggerEvent('scroll');
                 return this;

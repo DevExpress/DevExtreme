@@ -19,18 +19,18 @@ const wheel = {
         eventsEngine.off(element, `.${EVENT_NAMESPACE}`);
     },
 
-    _wheelHandler: function({ originalEvent }) {
-        const { deltaY, deltaMode } = originalEvent;
+    _wheelHandler: function(e) {
+        const { deltaY, deltaMode } = e.originalEvent;
 
         fireEvent({
             type: EVENT_NAME,
-            originalEvent,
+            originalEvent: e,
             delta: -deltaY,
             deltaMode,
             pointerType: 'mouse'
         });
 
-        originalEvent.stopPropagation();
+        e.stopPropagation();
     }
 };
 
