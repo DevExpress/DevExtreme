@@ -3,6 +3,7 @@ import { extend } from '../../../core/utils/extend';
 import { isNumeric } from '../../../core/utils/type';
 import devices from '../../../core/devices';
 import dateUtils from '../../../core/utils/date';
+import utils from './../utils';
 
 const WEEK_APPOINTMENT_DEFAULT_OFFSET = 25;
 const WEEK_APPOINTMENT_MOBILE_OFFSET = 50;
@@ -61,8 +62,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const appointmentStartDate = this.startDate(item, true);
         const appointmentEndDate = this.endDate(item);
 
-        // NOTE: subtract 1 millisecond to avoid 00.00 time
-        const isAppointmentTakesSeveralDays = !dateUtils.sameDate(appointmentStartDate, new Date(appointmentEndDate.getTime() - 1));
+        const isAppointmentTakesSeveralDays = utils.isDifferentDates(appointmentStartDate, appointmentEndDate);
 
         if(allDay) {
             return super._getItemPosition(item);

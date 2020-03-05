@@ -10,6 +10,7 @@ import { extend } from '../../core/utils/extend';
 import arrayUtils from '../../core/utils/array';
 import query from '../../data/query';
 import { Deferred } from '../../core/utils/deferred';
+import utils from './utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -491,24 +492,10 @@ class AppointmentModel {
 
     appointmentTakesSeveralDays(appointment) {
         const dataAccessors = this._dataAccessors;
-        const startDate = dataAccessors.getter.startDate(appointment);
-        const endDate = dataAccessors.getter.endDate(appointment);
+        const startDate = new Date(dataAccessors.getter.startDate(appointment));
+        const endDate = new Date(dataAccessors.getter.endDate(appointment));
 
-        return this.isDifferentDates(new Date(startDate), new Date(endDate));
-        // const startDateCopy = dateUtils.trimTime(new Date(startDate));
-        // let endDateCopy = new Date(endDate);
-
-        // // NOTE: subtract 1 millisecond to avoid 00.00 time
-        // endDateCopy = dateUtils.trimTime(new Date(endDateCopy.getTime() - 1));
-
-        // return startDateCopy.getTime() !== endDateCopy.getTime();
-    }
-
-    isDifferentDates(startDate, endDate) {
-        // NOTE: subtract 1 millisecond to avoid 00.00 time
-        endDate = new Date(endDate.getTime() - 1);
-
-        return !dateUtils.sameDate(startDate, endDate);
+        return utils.isDifferentDates(startDate, endDate);
     }
 
     customizeDateFilter(dateFilter, timeZoneProcessor) {
