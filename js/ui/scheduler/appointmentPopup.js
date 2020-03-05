@@ -97,22 +97,7 @@ export default class AppointmentPopup {
             contentTemplate: () => {
                 return this._createPopupContent();
             },
-            onShowing: (e) => {
-                const arg = {
-                    form: this._appointmentForm,
-                    appointmentData: this.state.appointment.data,
-                    cancel: false
-                };
-
-                this.scheduler._actions['onAppointmentFormOpening'](arg);
-                this.scheduler._processActionResult(arg, canceled => {
-                    if(canceled) {
-                        e.cancel = true;
-                    } else {
-                        this.updatePopupFullScreenMode();
-                    }
-                });
-            },
+            onShowing: this._onShowing.bind(this),
             defaultOptionsRules: [
                 {
                     device: () => devices.current().android,
@@ -122,6 +107,23 @@ export default class AppointmentPopup {
                 }
             ]
         };
+    }
+
+    _onShowing(e) {
+        const arg = {
+            form: this._appointmentForm,
+            appointmentData: this.state.appointment.data,
+            cancel: false
+        };
+
+        this.scheduler._actions['onAppointmentFormOpening'](arg);
+        this.scheduler._processActionResult(arg, canceled => {
+            if(canceled) {
+                e.cancel = true;
+            } else {
+                this.updatePopupFullScreenMode();
+            }
+        });
     }
 
     _createPopupContent() {
@@ -225,14 +227,14 @@ export default class AppointmentPopup {
     }
 
     _isPopupFullScreenNeeded() {
-        const width = this._getWindowWidth();
+        const width = this._tryGetWindowWidth();
         if(width) {
             return this._isDeviceMobile() ? width < APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH_MOBILE : width < APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH;
         }
         return false;
     }
 
-    _getWindowWidth() {
+    _tryGetWindowWidth() {
         if(windowUtils.hasWindow()) {
             const window = windowUtils.getWindow();
             return $(window).width();

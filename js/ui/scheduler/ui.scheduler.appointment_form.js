@@ -71,7 +71,6 @@ const SchedulerAppointmentForm = {
     },
 
     _getTimezoneEditor: function(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, schedulerInst, isMainTimeZone, isShow = false) {
-        const that = this;
         return {
             dataField: timeZoneExpr,
             editorType: 'dxSchedulerTimezoneEditor',
@@ -82,8 +81,8 @@ const SchedulerAppointmentForm = {
             },
             editorOptions: {
                 observer: schedulerInst,
-                onValueChanged: function(args) {
-                    const form = that._appointmentForm;
+                onValueChanged: (args) => {
+                    const form = this._appointmentForm;
                     const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);
                     if(isMainTimeZone) {
                         secondTimezoneEditor.option('value', args.value);
@@ -116,20 +115,19 @@ const SchedulerAppointmentForm = {
     },
 
     _getDateBoxItems: function(dataExprs, schedulerInst, allowEditingTimeZones) {
-        const that = this;
         const colSpan = allowEditingTimeZones ? 2 : 1;
         const firstDayOfWeek = schedulerInst.option('firstDayOfWeek');
         return [
             this._getDateBoxEditor(dataExprs.startDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelStartDate',
-                function(args) {
-                    that._dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => { return endValue < startValue; });
+                (args) => {
+                    this._dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => { return endValue < startValue; });
                 }),
 
             this._getTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, schedulerInst, true, allowEditingTimeZones),
 
             this._getDateBoxEditor(dataExprs.endDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelEndDate',
-                function(args) {
-                    that._dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => { return endValue < startValue; });
+                (args) => {
+                    this._dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => { return endValue < startValue; });
                 }),
 
             this._getTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, schedulerInst, false, allowEditingTimeZones)
@@ -137,7 +135,6 @@ const SchedulerAppointmentForm = {
     },
 
     _getMainItems: function(dataExprs, schedulerInst, triggerResize, changeSize, allowEditingTimeZones) {
-        const that = this;
         return [
             {
                 dataField: dataExprs.textExpr,
@@ -172,19 +169,19 @@ const SchedulerAppointmentForm = {
                         location: 'right',
                     },
                     editorOptions: {
-                        onValueChanged: function(args) {
+                        onValueChanged: (args) => {
                             const value = args.value;
-                            const startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr);
-                            const endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr);
+                            const startDateEditor = this._appointmentForm.getEditor(dataExprs.startDateExpr);
+                            const endDateEditor = this._appointmentForm.getEditor(dataExprs.endDateExpr);
                             const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
 
-                            if(!that._appointmentForm._lockDateShiftFlag && startDate) {
+                            if(!this._appointmentForm._lockDateShiftFlag && startDate) {
                                 if(value) {
-                                    const allDayStartDate = that._getAllDayStartDate(startDate);
+                                    const allDayStartDate = this._getAllDayStartDate(startDate);
                                     startDateEditor.option('value', allDayStartDate);
-                                    endDateEditor.option('value', that._getAllDayEndDate(allDayStartDate));
+                                    endDateEditor.option('value', this._getAllDayEndDate(allDayStartDate));
                                 } else {
-                                    const startDateWithStartHour = that._getStartDateWithStartHour(startDate, schedulerInst.option('startDayHour'));
+                                    const startDateWithStartHour = this._getStartDateWithStartHour(startDate, schedulerInst.option('startDayHour'));
                                     const endDate = schedulerInst._workSpace.calculateEndDate(startDateWithStartHour);
                                     startDateEditor.option('value', startDateWithStartHour);
                                     endDateEditor.option('value', endDate);
@@ -204,8 +201,8 @@ const SchedulerAppointmentForm = {
                         location: 'right',
                     },
                     editorOptions: {
-                        onValueChanged: function(args) {
-                            const form = that._appointmentForm;
+                        onValueChanged: (args) => {
+                            const form = this._appointmentForm;
                             form.option('items[0].colSpan', args.value ? 1 : 2);
                             form.getEditor(dataExprs.recurrenceRuleExpr).option('visible', args.value);
                             changeSize(args.value);
@@ -234,7 +231,6 @@ const SchedulerAppointmentForm = {
     },
 
     prepareAppointmentFormEditors: function(dataExprs, schedulerInst, triggerResize, changeSize, appointmentData, allowEditingTimeZones) {
-        const that = this;
         const recurrenceEditorVisibility = !!this.getRecurrenceRule(appointmentData, dataExprs);
 
         this._editors = [
@@ -253,7 +249,7 @@ const SchedulerAppointmentForm = {
                 editorOptions: {
                     firstDayOfWeek: schedulerInst.option('firstDayOfWeek'),
                     onInitialized: (e) => {
-                        const form = that._appointmentForm;
+                        const form = this._appointmentForm;
                         if(form.option) {
                             e.component.option('visible', !!this.getRecurrenceRule(form.option('formData'), dataExprs));
                         }
