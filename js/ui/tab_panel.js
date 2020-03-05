@@ -108,7 +108,7 @@ const TabPanel = MultiView.inherit({
                     }
 
                     if(isDefined(data.title) && !isPlainObject(data.title)) {
-                        $container.append(data.title);
+                        $container.append(String(data.title));
                     }
                 } else {
                     if(isDefined(data)) {
