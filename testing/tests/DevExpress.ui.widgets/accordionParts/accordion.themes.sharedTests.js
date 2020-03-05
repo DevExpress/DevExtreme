@@ -28,17 +28,11 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
 
         QUnit.test('dataSource: { title, icon }', function(assert) {
             const $accordion = $('#accordion').dxAccordion({
-                dataSource: [{ title: 'Caption', icon: 'remove' }],
+                dataSource: [{ title: 'Caption<i>', icon: 'remove' }],
             });
-            const $caption = $accordion.find(`.${TITLE_CAPTION_CLASS}`);
 
-            const TEXT_NODE_TYPE = 3;
-            $caption.contents()
-                .filter(function() { return this.nodeType === TEXT_NODE_TYPE; })
-                .wrap('<span />');
-
-            const iconRect = $caption.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect();
-            const textRect = $caption.find('span').get(0).getBoundingClientRect();
+            const iconRect = $accordion.find(`.${TITLE_CAPTION_CLASS} .${ICON_CLASS}`).get(0).getBoundingClientRect();
+            const textRect = $accordion.find(`.${TITLE_CAPTION_CLASS} span`).get(0).getBoundingClientRect();
 
             const epsilon = 1.6;
             assert.roughEqual(iconRect.top + iconRect.height / 2, textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
