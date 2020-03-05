@@ -151,7 +151,7 @@ QUnit.test('Appointment with resources should have a right height and position i
 });
 
 QUnit.test('Breaking an appointment into parts depends on the timezone', function(assert) {
-    this.createInstance({
+    const scheduler = createInstance({
         dataSource: [{
             startDate: '2017-05-24T20:15:00+01:00',
             endDate: '2017-05-25T01:30:00+01:00',
@@ -164,14 +164,11 @@ QUnit.test('Breaking an appointment into parts depends on the timezone', functio
         cellDuration: 60
     });
 
-    const $element = this.instance.$element();
-    const $appointment = $element.find('.' + APPOINTMENT_CLASS);
-
-    assert.equal($appointment.length, 1, 'ok');
+    assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment has 1 part');
 });
 
 QUnit.test('Breaking an appointment into parts should work correctly when endDate is a midnight', function(assert) {
-    this.createInstance({
+    const scheduler = createInstance({
         dataSource: [{
             startDate: '2017-05-24T20:15:00+01:00',
             endDate: '2017-05-25T08:00:00+01:00',
@@ -184,10 +181,7 @@ QUnit.test('Breaking an appointment into parts should work correctly when endDat
         cellDuration: 60
     });
 
-    const $element = this.instance.$element();
-    const $appointment = $element.find('.' + APPOINTMENT_CLASS);
-
-    assert.equal($appointment.length, 1, 'ok');
+    assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment has 1 part');
 });
 
 QUnit.test('The part of the appointment that ends after midnight should be shown on Week view', function(assert) {
