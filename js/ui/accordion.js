@@ -111,10 +111,12 @@ const Accordion = CollectionWidget.inherit({
             title: new BindableTemplate(function($container, data) {
                 if(isPlainObject(data)) {
                     const $iconElement = getImageContainer(data.icon);
-                    $iconElement && $container.append($iconElement);
+                    if($iconElement) {
+                        $container.append($iconElement);
+                    }
 
                     if(isDefined(data.title) && !isPlainObject(data.title)) {
-                        $container.append($('<span>').text(data.title));
+                        $container.append(data.title);
                     }
                 } else {
                     if(isDefined(data)) {
