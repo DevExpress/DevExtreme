@@ -10,7 +10,6 @@ import { extend } from '../../core/utils/extend';
 import arrayUtils from '../../core/utils/array';
 import query from '../../data/query';
 import { Deferred } from '../../core/utils/deferred';
-import utils from './utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -495,7 +494,7 @@ class AppointmentModel {
         const startDate = new Date(dataAccessors.getter.startDate(appointment));
         const endDate = new Date(dataAccessors.getter.endDate(appointment));
 
-        return utils.isDifferentDates(startDate, endDate);
+        return !dateUtils.sameDate(startDate, endDate);
     }
 
     customizeDateFilter(dateFilter, timeZoneProcessor) {
