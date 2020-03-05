@@ -110,10 +110,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _onFilesViewSelectionChanged({ addedItems, removedItems }) {
-        let selectedItems = this.getSelectedItems().map(itemInfo => itemInfo.fileItem);
-        let selectedItemKeys = selectedItems.map(item => item.key);
-        let currentSelectedItemKeys = addedItems.map(itemInfo => itemInfo.fileItem.key);
-        let currentDeselectedItemKeys = removedItems.map(itemInfo => itemInfo.fileItem.key);
+        const selectedItems = this.getSelectedItems().map(itemInfo => itemInfo.fileItem);
+        const selectedItemKeys = selectedItems.map(item => item.key);
+        const currentSelectedItemKeys = addedItems.map(itemInfo => itemInfo.fileItem.key);
+        const currentDeselectedItemKeys = removedItems.map(itemInfo => itemInfo.fileItem.key);
 
         const parentDirectoryItem = this._findParentDirectoryItem(this.getSelectedItems());
         if(parentDirectoryItem) {
@@ -121,18 +121,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             this._itemList.unselectItem($parentDir);
         }
 
-        let raiseEvent = !this._hasParentDirectoryItem;
-        raiseEvent = raiseEvent || this._hasValidKeys(currentSelectedItemKeys) || this._hasValidKeys(currentDeselectedItemKeys);
-
-        if(raiseEvent) {
-            selectedItems = this._filterOutParentDirectory(selectedItems);
-
-            selectedItemKeys = this._filterOutParentDirectoryKey(selectedItemKeys, true);
-            currentSelectedItemKeys = this._filterOutParentDirectoryKey(currentSelectedItemKeys, true);
-            currentDeselectedItemKeys = this._filterOutParentDirectoryKey(currentDeselectedItemKeys, true);
-            this._raiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
-        }
-
+        this._tryRaiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
     }
 
     _loadItems() {

@@ -226,28 +226,21 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _onFilesViewSelectionChanged({ selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {
-        const parentDirectoryItem = this._findParentDirectoryItem(selectedRowsData);
-        if(parentDirectoryItem) {
-            this._filesView.deselectRows([ parentDirectoryItem.fileItem.key ]);
-        }
-
         this._selectAllCheckBoxUpdating = true;
         this._selectAllCheckBox.option('value', this._isAllItemsSelected());
         this._selectAllCheckBoxUpdating = false;
 
-        let raiseEvent = !this._hasParentDirectoryItem;
-        raiseEvent = raiseEvent || this._hasValidKeys(currentSelectedRowKeys) || this._hasValidKeys(currentDeselectedRowKeys);
-
-        if(raiseEvent) {
-            let selectedItems = selectedRowsData.map(itemInfo => itemInfo.fileItem);
-            selectedItems = this._filterOutParentDirectory(selectedItems);
-
-            const selectedItemKeys = this._filterOutParentDirectoryKey(selectedRowKeys, true);
-            const currentSelectedItemKeys = this._filterOutParentDirectoryKey(currentSelectedRowKeys, true);
-            const currentDeselectedItemKeys = this._filterOutParentDirectoryKey(currentDeselectedRowKeys, true);
-
-            this._raiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
+        const parentDirectoryItem = this._findParentDirectoryItem(selectedRowsData);
+        if(parentDirectoryItem) {
+            this._filesView.deselectRows([ parentDirectoryItem.fileItem.key ]);
         }
+        const selectedItems = selectedRowsData.map(itemInfo => itemInfo.fileItem);
+        this._tryRaiseSelectionChanged({
+            selectedItems,
+            selectedItemKeys: selectedRowKeys,
+            currentSelectedItemKeys: currentSelectedRowKeys,
+            currentDeselectedItemKeys: currentDeselectedRowKeys
+        });
     }
 
     _onFocusedRowChanged({ row }) {

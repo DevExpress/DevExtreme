@@ -79,6 +79,19 @@ class FileManagerItemListBase extends Widget {
         this._actions.onSelectedItemOpened({ fileItemInfo });
     }
 
+    _tryRaiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
+        let raiseEvent = !this._hasParentDirectoryItem;
+        raiseEvent = raiseEvent || this._hasValidKeys(currentSelectedItemKeys) || this._hasValidKeys(currentDeselectedItemKeys);
+
+        if(raiseEvent) {
+            selectedItems = this._filterOutParentDirectory(selectedItems);
+            selectedItemKeys = this._filterOutParentDirectoryKey(selectedItemKeys, true);
+            currentSelectedItemKeys = this._filterOutParentDirectoryKey(currentSelectedItemKeys, true);
+            currentDeselectedItemKeys = this._filterOutParentDirectoryKey(currentDeselectedItemKeys, true);
+            this._raiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
+        }
+    }
+
     _getItemThumbnail(fileInfo) {
         const itemThumbnailGetter = this.option('getItemThumbnail');
         return itemThumbnailGetter ? itemThumbnailGetter(fileInfo) : { thumbnail: '' };
