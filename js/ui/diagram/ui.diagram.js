@@ -95,6 +95,12 @@ class Diagram extends Widget {
             this._renderHistoryToolbar($contentWrapper);
         }
 
+        delete this._propertiesToolbar;
+        delete this._propertiesToolbarResizeCallback;
+        if(this._isPropertiesPanelEnabled()) {
+            this._renderPropertiesToolbar($contentWrapper);
+        }
+
         delete this._viewToolbar;
         delete this._viewToolbarResizeCallback;
         if(this.option('viewToolbar.visible')) {
@@ -109,10 +115,7 @@ class Diagram extends Widget {
 
         delete this._propertiesPanel;
         delete this._propertiesPanelResizeCallback;
-        delete this._propertiesToolbar;
-        delete this._propertiesToolbarResizeCallback;
         if(this._isPropertiesPanelEnabled()) {
-            this._renderPropertiesToolbar($contentWrapper);
             this._renderPropertiesPanel($contentWrapper);
         }
 
@@ -371,11 +374,11 @@ class Diagram extends Widget {
             height: !isServerSide ? $parent.height() - 2 * DIAGRAM_FLOATING_PANEL_OFFSET : 0
         };
         if(this._historyToolbar && !isServerSide) {
-            result.offsetY += this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
-            result.height -= this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
+            result.offsetY += this._historyToolbar.$element().outerHeight() + DIAGRAM_FLOATING_PANEL_OFFSET;
+            result.height -= this._historyToolbar.$element().outerHeight() + DIAGRAM_FLOATING_PANEL_OFFSET;
         }
         if(this._viewToolbar && !isServerSide) {
-            result.height -= this._viewToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
+            result.height -= this._viewToolbar.$element().outerHeight() + this._getViewToolbarYOffset(isServerSide);
         }
         return result;
     }
@@ -394,6 +397,15 @@ class Diagram extends Widget {
             this._updateViewToolbarPosition($container, $parent, isServerSide);
         };
     }
+    _getViewToolbarYOffset(isServerSide) {
+        if(isServerSide) return;
+
+        let result = DIAGRAM_FLOATING_PANEL_OFFSET;
+        if(this._viewToolbar && this._propertiesToolbar) {
+            result += (this._propertiesToolbar.$element().outerHeight() - this._viewToolbar.$element().outerHeight()) / 2;
+        }
+        return result;
+    }
     _updateViewToolbarPosition($container, $parent, isServerSide) {
         if(isServerSide) return;
 
@@ -401,7 +413,7 @@ class Diagram extends Widget {
             my: 'left bottom',
             at: 'left bottom',
             of: $parent,
-            offset: DIAGRAM_FLOATING_PANEL_OFFSET + ' -' + DIAGRAM_FLOATING_PANEL_OFFSET
+            offset: DIAGRAM_FLOATING_PANEL_OFFSET + ' -' + this._getViewToolbarYOffset(isServerSide)
         });
     }
     _isPropertiesPanelEnabled() {
@@ -444,7 +456,7 @@ class Diagram extends Widget {
             .appendTo($parent);
 
         const offsetX = DIAGRAM_FLOATING_PANEL_OFFSET;
-        const offsetY = 2 * DIAGRAM_FLOATING_PANEL_OFFSET + (!isServerSide ? this._propertiesToolbar.$element().height() : 0);
+        const offsetY = 2 * DIAGRAM_FLOATING_PANEL_OFFSET + (!isServerSide ? this._propertiesToolbar.$element().outerHeight() : 0);
         this._propertiesPanel = this._createComponent($propertiesPanel, DiagramPropertiesPanel, {
             isMobileView: this.isMobileScreenSize(),
             isVisible: this._isPropertiesPanelVisible(),
