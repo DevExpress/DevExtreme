@@ -494,13 +494,21 @@ class AppointmentModel {
         const startDate = dataAccessors.getter.startDate(appointment);
         const endDate = dataAccessors.getter.endDate(appointment);
 
-        const startDateCopy = dateUtils.trimTime(new Date(startDate));
-        let endDateCopy = new Date(endDate);
+        return this.isDifferentDates(new Date(startDate), new Date(endDate));
+        // const startDateCopy = dateUtils.trimTime(new Date(startDate));
+        // let endDateCopy = new Date(endDate);
 
+        // // NOTE: subtract 1 millisecond to avoid 00.00 time
+        // endDateCopy = dateUtils.trimTime(new Date(endDateCopy.getTime() - 1));
+
+        // return startDateCopy.getTime() !== endDateCopy.getTime();
+    }
+
+    isDifferentDates(startDate, endDate) {
         // NOTE: subtract 1 millisecond to avoid 00.00 time
-        endDateCopy = dateUtils.trimTime(new Date(endDateCopy.getTime() - 1));
+        endDate = new Date(endDate.getTime() - 1);
 
-        return startDateCopy.getTime() !== endDateCopy.getTime();
+        return !dateUtils.sameDate(startDate, endDate);
     }
 
     customizeDateFilter(dateFilter, timeZoneProcessor) {
