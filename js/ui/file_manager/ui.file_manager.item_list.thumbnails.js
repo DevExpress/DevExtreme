@@ -1,10 +1,10 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import { when } from '../../core/utils/deferred';
-import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils';
+import eventsEngine from '../../events/core/events_engine';
 import { name as contextMenuEventName } from '../../events/contextmenu';
 
+import CustomStore from '../../data/custom_store';
 import FileManagerThumbnailListBox from './ui.file_manager.items_list.thumbnails.list_box';
 // import FileManagerThumbnailsItemListBox from './ui.file_manager.collection_widget_test';
 import FileManagerItemListBase from './ui.file_manager.item_list';
@@ -20,7 +20,6 @@ const FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE = 'dxFileManager_thumbnails';
 class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _init() {
-        this._items = [];
         this._currentLoadOperationId = 0;
 
         super._init();
@@ -41,8 +40,6 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         eventsEngine.on(this.$element(), contextMenuEvent, this._onContextMenu.bind(this));
 
         this._createItemList();
-
-        this._loadItems();
     }
 
     _createItemList() {
@@ -60,16 +57,18 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             scrollableElement: this._$viewPort,
             onSelectionChanged: this._onFilesViewSelectionChanged.bind(this)
         });
+
+        this.refresh();
     }
 
     _onContextMenu(e) {
         e.preventDefault();
         e.stopPropagation();
         let items = null;
-        const targetItemElement = $(e.target).closest(this._itemList.getItemClass());
+        const targetItemElement = $(e.target).closest(this._getItemSelector());
         if(targetItemElement.length > 0) {
             if(!this._itemList.isItemSelected(targetItemElement)) {
-                this._itemList.selectItemConditionally(targetItemElement);
+                this._itemList.changeItemSelection(targetItemElement);
             }
             const targetItem = this._itemList.getItemByItemElement(targetItemElement);
             items = this._getFileItemsForContextMenu(targetItem);
@@ -98,39 +97,6 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _getFocusedItem() {
         return this._itemList.getFocusedItem();
-    }
-
-    _loadItems() {
-        const loadOperationId = this._getUniqueId();
-        this._currentLoadOperationId = loadOperationId;
-
-        when(this._getItems())
-            .then(items => {
-                if(this._currentLoadOperationId === loadOperationId) {
-                    this._applyItems(items || []);
-                }
-            },
-            error => {
-                if(this._currentLoadOperationId === loadOperationId) {
-                    this._raiseOnError(error);
-                }
-            });
-    }
-
-    _applyItems(items) {
-        this._items = items;
-
-        const parentDirectoryItem = this._findParentDirectoryItem(this._items);
-        this._hasParentDirectoryItem = !!parentDirectoryItem;
-        this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
-
-        if(this._itemList) {
-            this._itemList.option('dataSource', this._items);
-        }
-    }
-
-    _getUniqueId() {
-        return `${Date.now()}_${Math.round(Math.random() * 100000)}`;
     }
 
     _disableDragging() {
@@ -169,9 +135,22 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     }
 
+    _loadItems() {
+        return this._getItems().done(itemInfos => {
+            const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
+            this._hasParentDirectoryItem = !!parentDirectoryItem;
+            this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
+        });
+    }
+
     refresh() {
         this.clearSelection();
-        this._loadItems();
+        this._itemList.option('dataSource', {
+            'store': new CustomStore({
+                key: 'fileItem.key',
+                load: this._loadItems.bind(this)
+            })
+        });
     }
 
     tryOpen() {

@@ -79,7 +79,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     }
 
     _processArrowKeys(offset, horizontal, eventArgs) {
-        const item = this._getFocusedItem();
+        const item = this.getFocusedItem();
         if(item) {
             if(!horizontal) {
                 const layout = this._getLayoutModel();
@@ -100,7 +100,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     }
 
     _processPageChange(pageUp, eventArgs) {
-        const item = this._getFocusedItem();
+        const item = this.getFocusedItem();
         if(!item) {
             return;
         }
@@ -167,7 +167,6 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     }
 
     _itemSelectHandler(e) {
-        const index = this.getIndexByItemElement(e.currentTarget);
         let options = {};
         if(this.option('selectionMode') === 'multiple') {
             if(!this._isPreserveSelectionMode) {
@@ -178,7 +177,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
                 shift: e.shiftKey
             };
         }
-        this._selection.changeItemSelection(index, options);
+        this.changeItemSelection(e.currentTarget, options);
     }
 
     _updateSelection(addedSelection, removedSelection) {
@@ -213,7 +212,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         }
 
         const item = this._getItems()[0];
-        const $item = this._getItemElementByItem(item);
+        const $item = this.getItemElementByItem(item);
 
         const itemWidth = $item.outerWidth(true);
         if(itemWidth === 0) {
@@ -222,7 +221,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
 
         const itemHeight = $item.outerHeight(true);
 
-        const viewPortWidth = this.$element().innerWidth();
+        const viewPortWidth = this._itemContainer().innerWidth();
         const viewPortHeight = this._$scrollable.innerHeight();
         const viewPortScrollTop = this._$scrollable.scrollTop();
         const viewPortScrollBottom = viewPortScrollTop + viewPortHeight;
@@ -286,10 +285,6 @@ class FileManagerThumbnailListBox extends CollectionWidget {
 
     _focusOutHandler() {}
 
-    getItems() {
-        return this.option('items') || [];
-    }
-
     _getItems() {
         return this.option('items') || [];
     }
@@ -298,60 +293,16 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         return this._getItems().length;
     }
 
-    getSelectedItems() {
-        return this._selection.getSelectedItems();
-    }
-
-    getItemElementByItem(item) {
-        return this._findItemElementByItem(item);
-    }
-
-    _getItemElementByItem(item) {
-        return this._findItemElementByItem(item);
-    }
-
-    _getItemElementByIndex(index) {
-        return this.itemElements()[index];
-    }
-
-    getItemByItemElement(itemElement) {
-        return this.getItemByIndex(this.getIndexByItemElement(itemElement));
-    }
-
-    getIndexByItemElement(itemElement) {
+    _getIndexByItemElement(itemElement) {
         return this._editStrategy.getNormalizedIndex(itemElement);
-    }
-
-    // getIndexByItem(item) {
-    //     return this._getIndexByItem(item);
-    // }
-
-    // _getIndexByItem(item) {
-    //     return this._getIndexByItem(item);
-    // }
-
-    getItemByIndex(index) {
-        return this._getItems()[index];
     }
 
     _getItemByIndex(index) {
         return this._getItems()[index];
     }
 
-    getFocusedItem() {
-        return this.getItemByItemElement(this.option('focusedElement'));
-    }
-
-    _getFocusedItem() {
-        return this.getItemByItemElement(this.option('focusedElement'));
-    }
-
-    setFocusedItem(item) {
-        this.option('focusedElement', this.getItemElementByItem(item));
-    }
-
     _focusItem(item, scrollToItem) {
-        this.setFocusedItem(item);
+        this.option('focusedElement', this.getItemElementByItem(item));
         if(scrollToItem) {
             this._scrollToItem(item);
         }
@@ -364,25 +315,38 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         }
     }
 
+    getSelectedItems() {
+        return this._selection.getSelectedItems();
+    }
+
+    getItemElementByItem(item) {
+        return this._findItemElementByItem(item);
+    }
+
+    getItemByItemElement(itemElement) {
+        return this._getItemByIndex(this._getIndexByItemElement(itemElement));
+    }
+
+    getFocusedItem() {
+        return this.getItemByItemElement(this.option('focusedElement'));
+    }
+
     selectAll() {
         this._selection.selectAll();
         this._isPreserveSelectionMode = true;
     }
 
-    selectItemConditionally(itemElement) {
-        this._selection.changeItemSelection(this.getIndexByItemElement(itemElement), { control: this._isPreserveSelectionMode });
+    changeItemSelection(itemElement, options) {
+        options = options || { control: this._isPreserveSelectionMode };
+        this._selection.changeItemSelection(this._getIndexByItemElement(itemElement), options);
     }
 
     clearSelection() {
         this._selection.deselectAll();
     }
 
-    clearFocus() {
+    clearFocus() { // ?
         this.option('focusedElement', null);
-    }
-
-    getItemClass() {
-        return this._itemClass();
     }
 
 }
