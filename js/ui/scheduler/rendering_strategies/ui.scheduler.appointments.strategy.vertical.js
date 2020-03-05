@@ -58,8 +58,9 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     _getItemPosition(item) {
         const allDay = this.isAllDay(item);
         const isRecurring = !!this.instance.fire('getField', 'recurrenceRule', item);
-        const isAppointmentLong = this.instance.fire('appointmentTakesSeveralDays', item);
-        const appointmentStartDate = this.startDate(item, true); // NOTE: Timezones and timestamp
+        const appointmentStartDate = this.startDate(item, true);
+        const appointmentEndDate = this.endDate(item);
+        const isAppointmentTakesSeveralDays = !dateUtils.sameDate(appointmentStartDate, appointmentEndDate);
 
         if(allDay) {
             return super._getItemPosition(item);
@@ -76,7 +77,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             let multiDaysAppointmentParts = [];
             const currentMaxAllowedPosition = position[j].vMax;
 
-            if(this._isMultiDayAppointment(position[j], height) || (isAppointmentLong && !isRecurring)) {
+            if(this._isMultiDayAppointment(position[j], height) || (isAppointmentTakesSeveralDays && !isRecurring)) {
                 if(dateUtils.sameDate(appointmentStartDate, position[j].startDate) || isRecurring) {
                     appointmentReduced = 'head';
 
