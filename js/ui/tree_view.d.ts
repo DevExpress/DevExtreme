@@ -481,29 +481,29 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
      * @docid dxTreeViewMethods.scrollToItem
      * @publicName scrollToItem(itemData)
      * @param1 itemData:Object
-     * @return Promise<void>
+     * @return Promise<boolean>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToItem(itemData: any): Promise<void> & JQueryPromise<void>;
+    scrollToItem(itemData: any): Promise<boolean> & JQueryPromise<boolean>;
     /**
      * @docid dxTreeViewMethods.scrollToItem
      * @publicName scrollToItem(itemElement)
      * @param1 itemElement:Node
-     * @return Promise<void>
+     * @return Promise<boolean>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
+    scrollToItem(itemElement: Element): Promise<boolean> & JQueryPromise<boolean>;
     /**
      * @docid dxTreeViewMethods.scrollToItem
      * @publicName scrollToItem(key)
      * @param1 key:any
-     * @return Promise<void>
+     * @return Promise<boolean>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToItem(key: any): Promise<void> & JQueryPromise<void>;;
+    scrollToItem(key: any): Promise<boolean> & JQueryPromise<boolean>;
 }
 
 export interface dxTreeViewItem extends CollectionWidgetItem {

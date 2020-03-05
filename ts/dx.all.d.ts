@@ -6349,11 +6349,11 @@ declare module DevExpress.ui {
         /** @name dxTreeView.getSelectedNodes() */
         getSelectedNodes(): Array<dxTreeViewNode>;
         /** @name dxTreeView.scrollToItem(itemData) */
-        scrollToItem(itemData: any): Promise<void> & JQueryPromise<void>;
+        scrollToItem(itemData: any): Promise<boolean> & JQueryPromise<boolean>;
         /** @name dxTreeView.scrollToItem(itemElement) */
-        scrollToItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
+        scrollToItem(itemElement: Element): Promise<boolean> & JQueryPromise<boolean>;
         /** @name dxTreeView.scrollToItem(key) */
-        scrollToItem(key: any): Promise<void> & JQueryPromise<void>;
+        scrollToItem(key: any): Promise<boolean> & JQueryPromise<boolean>;
         /** @name dxTreeView.selectAll() */
         selectAll(): void;
         /** @name dxTreeView.selectItem(itemData) */

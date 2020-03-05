@@ -44,10 +44,12 @@ QUnit.module('TreeView scrolling', () => {
                 const completionCallback = wrapper.instance.scrollToItem(testCase.key);
 
                 const done = assert.async();
-                completionCallback.done(() => {
+                completionCallback.done((result) => {
                     const expectedScrollTop = config.scrollDirection !== 'horizontal'
                         ? testCase.expectedScrollTop
                         : 0;
+
+                    assert.equal(result, true, 'callback result');
                     wrapper.checkScrollPosition(expectedScrollTop, 0);
                     done();
                 });
@@ -68,7 +70,7 @@ QUnit.module('TreeView scrolling', () => {
                 const completionCallback = wrapper.instance.scrollToItem(testCase.key);
 
                 const done = assert.async();
-                completionCallback.done(() => {
+                completionCallback.done((result) => {
                     const expectedScrollTop = config.scrollDirection !== 'horizontal'
                         ? testCase.expectedScrollTop
                         : 0;
@@ -77,6 +79,7 @@ QUnit.module('TreeView scrolling', () => {
                         ? testCase.expectedScrollLeft
                         : 0;
 
+                    assert.equal(result, true, 'callback result');
                     wrapper.checkScrollPosition(expectedScrollTop, expectedScrollLeft);
                     done();
                 });
@@ -98,7 +101,8 @@ QUnit.module('TreeView scrolling', () => {
             const completionCallback = testCase.scrollFunc(wrapper.instance);
 
             const done = assert.async();
-            completionCallback.done(() => {
+            completionCallback.done((result) => {
+                assert.equal(result, true, 'callback result');
                 wrapper.checkScrollPosition(640, 300);
                 done();
             });
@@ -114,13 +118,16 @@ QUnit.module('TreeView scrolling', () => {
         const wrapper = createWrapper('both', items);
 
         const done = assert.async();
-        wrapper.instance.scrollToItem(LAST_ITEM_KEY).done(() => {
+        wrapper.instance.scrollToItem(LAST_ITEM_KEY).done((lastItemScrollResult) => {
+            assert.equal(lastItemScrollResult, true, 'callback result');
             wrapper.checkScrollPosition(640, 300);
 
-            wrapper.instance.scrollToItem(10).done(() => {
+            wrapper.instance.scrollToItem(10).done((tenthItemScrollResult) => {
+                assert.equal(tenthItemScrollResult, true, 'callback result');
                 wrapper.checkScrollPosition(320, 150);
 
-                wrapper.instance.scrollToItem(0).done(() => {
+                wrapper.instance.scrollToItem(0).done((firstItemScrollResult) => {
+                    assert.equal(firstItemScrollResult, true, 'callback result');
                     wrapper.checkScrollPosition(0, 0);
                     done();
                 });
@@ -138,8 +145,8 @@ QUnit.module('TreeView scrolling', () => {
         const completionCallback = wrapper.instance.scrollToItem(LAST_ITEM_KEY);
 
         const done = assert.async();
-        completionCallback.fail(() => {
-            assert.ok('callback must fail');
+        completionCallback.done((result) => {
+            assert.equal(result, false, 'callback result');
             done();
         });
     });
@@ -154,7 +161,8 @@ QUnit.module('TreeView scrolling', () => {
         const completionCallback = wrapper.instance.scrollToItem(LAST_ITEM_KEY);
 
         const done = assert.async();
-        completionCallback.done(() => {
+        completionCallback.done((result) => {
+            assert.equal(result, true, 'callback result');
             wrapper.checkScrollPosition(640, 300);
             done();
         });
@@ -165,8 +173,8 @@ QUnit.module('TreeView scrolling', () => {
         const completionCallback = wrapper.instance.scrollToItem(12345);
 
         const done = assert.async();
-        completionCallback.fail(() => {
-            assert.ok('callback must fail');
+        completionCallback.done((result) => {
+            assert.equal(result, false, 'callback result');
             done();
         });
     });

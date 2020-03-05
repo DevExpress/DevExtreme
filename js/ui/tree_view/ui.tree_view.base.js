@@ -1584,7 +1584,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     scrollToItem: function(keyOrElement) {
         const node = this._getNode(keyOrElement);
         if(!node) {
-            return new Deferred().reject();
+            return new Deferred().resolve(false);
         }
 
         const nodeKeysToExpand = [];
@@ -1599,14 +1599,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const allNodesExpandedCallback = this._expandNodes(nodeKeysToExpand.reverse());
         const element = this._getNodeElement(node);
         if(!element || element.length === 0) {
-            return new Deferred().reject();
+            return new Deferred().resolve(false);
         }
 
+        const scrollCallback = new Deferred();
         allNodesExpandedCallback.done(() => {
             this._scrollableContainer.scrollToElementBeginPosition(element);
+            scrollCallback.resolve(true);
         });
 
-        return allNodesExpandedCallback;
+        return scrollCallback;
     },
 
     _expandNodes: function(keysToExpand) {

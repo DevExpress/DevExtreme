@@ -386,12 +386,22 @@ const Scrollable = DOMComponent.inherit({
     _isDirection: function(direction) {
         const current = this.option('direction');
         if(direction === VERTICAL) {
-            return current !== HORIZONTAL;
+            return current === VERTICAL || current === BOTH;
         }
         if(direction === HORIZONTAL) {
-            return current !== VERTICAL;
+            return current === HORIZONTAL || current === BOTH;
         }
         return current === direction;
+    },
+
+    _isDirectionVerticalOrBoth() {
+        const direction = this.option('direction');
+        return direction === VERTICAL || direction === BOTH;
+    },
+
+    _isDirectionHorizontalOrBoth() {
+        const direction = this.option('direction');
+        return direction === HORIZONTAL || direction === BOTH;
     },
 
     _updateAllowedDirection: function() {
@@ -507,12 +517,10 @@ const Scrollable = DOMComponent.inherit({
         }
 
         const scrollPosition = { top: 0, left: 0 };
-        const direction = this.option('direction');
-
-        if(direction !== VERTICAL) {
+        if(this._isDirectionHorizontalOrBoth()) {
             scrollPosition.left = this.getScrollElementPosition($element, HORIZONTAL, offset);
         }
-        if(direction !== HORIZONTAL) {
+        if(this._isDirectionVerticalOrBoth()) {
             scrollPosition.top = this.getScrollElementPosition($element, VERTICAL, offset);
         }
 
@@ -526,11 +534,10 @@ const Scrollable = DOMComponent.inherit({
         }
 
         const scrollPosition = { top: 0, left: 0 };
-        const direction = this.option('direction');
-        if(direction !== VERTICAL) {
+        if(this._isDirectionHorizontalOrBoth()) {
             scrollPosition.left = this._elementPositionRelativeToContent($element, 'left');
         }
-        if(direction !== HORIZONTAL) {
+        if(this._isDirectionVerticalOrBoth()) {
             scrollPosition.top = this._elementPositionRelativeToContent($element, 'top');
         }
 
