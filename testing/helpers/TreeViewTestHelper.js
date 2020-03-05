@@ -15,8 +15,6 @@ const INVISIBLE_ITEM_CLASS = 'dx-state-invisible';
 const CHECK_BOX_CLASS = 'dx-checkbox';
 const CHECK_BOX_CHECKED_CLASS = 'dx-checkbox-checked';
 
-const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
-
 const { assert } = QUnit;
 
 class TreeViewTestWrapper {
@@ -111,13 +109,15 @@ class TreeViewTestWrapper {
         assert.deepEqual(this.eventLog, expectedEventLog, 'eventLog ' + additionalErrorMessage);
     }
 
-    checkScrollPosition(expectedScrollTop, expectedScrollLeft) {
-        const scrollContainer = this.getElement().find(`.${SCROLLABLE_CONTAINER_CLASS}`).get(0);
-        const actualScrollTop = scrollContainer.scrollTop;
-        assert.strictEqual(actualScrollTop, expectedScrollTop, 'scrollTop');
-
-        const actualScrollLeft = scrollContainer.scrollLeft;
-        assert.strictEqual(actualScrollLeft, expectedScrollLeft, 'scrollLeft');
+    checkNodePosition(nodeKey, position) {
+        const treeRect = this.getElement().get(0).getBoundingClientRect();
+        const nodeRect = this.getElement().find(`[data-item-id="${nodeKey}"]`).get(0).getBoundingClientRect();
+        if(position === 'top' || position === 'topAndLeft') {
+            assert.roughEqual(treeRect.top, nodeRect.top, 0.1, 'node and treeView top position is the same');
+        }
+        if(position === 'left' || position === 'topAndLeft') {
+            assert.roughEqual(treeRect.left, nodeRect.left, 0.1, 'node and treeView left position is the same');
+        }
     }
 
     clearEventLog() {

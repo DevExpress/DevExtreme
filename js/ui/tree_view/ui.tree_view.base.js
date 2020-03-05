@@ -1581,8 +1581,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }).bind(this));
     },
 
-    scrollToItem: function(keyOrElement) {
-        const node = this._getNode(keyOrElement);
+    scrollToItem: function(keyOrItemOrElement) {
+        const node = this._getNode(keyOrItemOrElement);
         if(!node) {
             return new Deferred().resolve(false);
         }
