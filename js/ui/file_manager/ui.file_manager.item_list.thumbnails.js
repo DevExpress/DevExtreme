@@ -17,13 +17,6 @@ const FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-thumbnails-
 const FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE = 'dxFileManager_thumbnails';
 
 class FileManagerThumbnailsItemList extends FileManagerItemListBase {
-
-    _init() {
-        this._currentLoadOperationId = 0;
-
-        super._init();
-    }
-
     _initMarkup() {
         super._initMarkup();
 
