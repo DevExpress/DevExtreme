@@ -13,9 +13,13 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
+const { test, module } = QUnit;
+
 const RADIO_GROUP_CLASS = 'dx-radiogroup';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
+const RADIO_GROUP_VERTICAL_CLASS = 'dx-radiogroup-vertical';
+const RADIO_GROUP_HORIZONTAL_CLASS = 'dx-radiogroup-horizontal';
 
 const toSelector = cssClass => '.' + cssClass;
 
@@ -307,5 +311,36 @@ QUnit.module('Aria accessibility', {
         helper.widget.option('focusedElement', null);
         helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
         helper.checkItemsAttributes([0], { attributes: ['aria-selected', 'aria-checked'], role: 'radio' });
+    });
+});
+
+module('layout', moduleConfig, () => {
+    const createRadioGroup = options => $('#radioGroup').dxRadioGroup(options);
+    const getInstance = $element => $element.dxRadioGroup('instance');
+
+    test('should be generated proper class with vertical layout', function(assert) {
+        const $radioGroup = createRadioGroup({
+            layout: 'vertical'
+        });
+
+        assert.ok($radioGroup.hasClass(RADIO_GROUP_VERTICAL_CLASS), 'class set correctly');
+    });
+
+    test('should be generated proper class with horizontal layout', function(assert) {
+        const $radioGroup = createRadioGroup({
+            layout: 'horizontal'
+        });
+
+        assert.ok($radioGroup.hasClass(RADIO_GROUP_HORIZONTAL_CLASS), 'class set correctly');
+    });
+
+    test('should be generated proper class when layout is changed', function(assert) {
+        const $radioGroup = createRadioGroup({
+            layout: 'horizontal'
+        });
+
+        getInstance($radioGroup).option('layout', 'vertical');
+
+        assert.ok($radioGroup.hasClass(RADIO_GROUP_VERTICAL_CLASS), 'class set correctly');
     });
 });
