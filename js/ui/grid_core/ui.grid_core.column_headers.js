@@ -41,7 +41,9 @@ module.exports = {
 
                 addCssClassesToCellContent(that, $cell, options.column, $cellContent);
                 const showColumnLines = that.option('showColumnLines');
-                return $cellContent[(showColumnLines || options.column.alignment === 'right') ? 'appendTo' : 'prependTo']($cell);
+                const contentAlignment = that.getController('columns').getHeaderContentAlignment(options.column.alignment);
+
+                return $cellContent[(showColumnLines || contentAlignment === 'right') ? 'appendTo' : 'prependTo']($cell);
             };
 
             function addCssClassesToCellContent(that, $cell, column, $cellContent) {
