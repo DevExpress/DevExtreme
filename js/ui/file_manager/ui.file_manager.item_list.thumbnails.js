@@ -1,16 +1,15 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
+import { addNamespace } from '../../events/utils';
 import { name as contextMenuEventName } from '../../events/contextmenu';
+import { getDisplayFileSize } from './ui.file_manager.common';
+import messageLocalization from '../../localization/message';
 
-import CustomStore from '../../data/custom_store';
 import FileManagerThumbnailListBox from './ui.file_manager.items_list.thumbnails.list_box';
 import FileManagerItemListBase from './ui.file_manager.item_list';
 
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS = 'dx-filemanager-thumbnails';
-const FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS = 'dx-filemanager-thumbnails-view-port';
-const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS = 'dx-filemanager-thumbnails-container';
 const FILE_MANAGER_THUMBNAILS_ITEM_CLASS = 'dx-filemanager-thumbnails-item';
 const FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-thumbnails-item-thumbnail';
 
@@ -20,13 +19,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     _initMarkup() {
         super._initMarkup();
 
-        this._$itemViewContainer = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS);
-
-        this._$viewPort = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS);
-        this._$viewPort.append(this._$itemViewContainer);
-
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS);
-        this.$element().append(this._$viewPort);
 
         const contextMenuEvent = addNamespace(contextMenuEventName, FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
         eventsEngine.on(this.$element(), contextMenuEvent, this._onContextMenu.bind(this));
@@ -37,16 +30,16 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     _createItemList() {
         const selectionMode = this._isMultipleSelectionMode() ? 'multiple' : 'single';
 
-        this._itemList = this._createComponent(this._$itemViewContainer, FileManagerThumbnailListBox, {
+        const $itemViewContainer = $('<div>').appendTo(this.$element());
+        this._itemList = this._createComponent($itemViewContainer, FileManagerThumbnailListBox, {
             selectionMode,
             activeStateEnabled: true,
             hoverStateEnabled: true,
             loopItemFocus: false,
             focusStateEnabled: true,
-            onItemEnterKeyPressed: this.tryOpen.bind(this),
-            getItemThumbnail: this._getItemThumbnailContainer.bind(this),
-
-            scrollableElement: this._$viewPort,
+            onItemEnterKeyPressed: this._tryOpen.bind(this),
+            itemThumbnailTemplate: this._getItemThumbnailContainer.bind(this),
+            getTooltipText: this._getTooltipText.bind(this),
             onSelectionChanged: this._onFilesViewSelectionChanged.bind(this)
         });
 
@@ -55,14 +48,11 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _onContextMenu(e) {
         e.preventDefault();
-        e.stopPropagation();
         let items = null;
         const targetItemElement = $(e.target).closest(this._getItemSelector());
         if(targetItemElement.length > 0) {
-            if(!this._itemList.isItemSelected(targetItemElement)) {
-                this._itemList.changeItemSelection(targetItemElement);
-            }
             const targetItem = this._itemList.getItemByItemElement(targetItemElement);
+            this._itemList.selectItem(targetItem);
             items = this._getFileItemsForContextMenu(targetItem);
         }
 
@@ -77,18 +67,30 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         return `.${FILE_MANAGER_THUMBNAILS_ITEM_CLASS}`;
     }
 
+    _getTooltipText(fileItemInfo) {
+        const item = fileItemInfo.fileItem;
+        if(item.tooltipText) {
+            return item.tooltipText;
+        }
+
+        let text = `${item.name}\r\n`;
+        if(!item.isDirectory) {
+            text += `${messageLocalization.format('dxFileManager-listThumbnailsTooltipTextSize')}: ${getDisplayFileSize(item.size)}\r\n`;
+        }
+        text += `${messageLocalization.format('dxFileManager-listThumbnailsTooltipTextDateModified')}: ${item.dateModified}`;
+        return text;
+    }
+
     _onItemDblClick(e) {
         const $item = $(e.currentTarget);
         const item = this._itemList.getItemByItemElement($item);
-        this._raiseSelectedItemOpened(item);
+        this._tryOpen(item);
     }
 
-    _selectAll() {
-        this._itemList.selectAll();
-    }
-
-    _getFocusedItem() {
-        return this._itemList.getFocusedItem();
+    _tryOpen(item) {
+        if(item) {
+            this._raiseSelectedItemOpened(item);
+        }
     }
 
     _disableDragging() {
@@ -107,38 +109,15 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         const currentSelectedItemKeys = addedItems.map(itemInfo => itemInfo.fileItem.key);
         const currentDeselectedItemKeys = removedItems.map(itemInfo => itemInfo.fileItem.key);
 
-        const parentDirectoryItem = this._findParentDirectoryItem(this.getSelectedItems());
-        if(parentDirectoryItem) {
-            const $parentDir = this._itemList.getItemElementByItem(parentDirectoryItem);
-            this._itemList.unselectItem($parentDir);
-        }
-
         this._tryRaiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
     }
 
-    _loadItems() {
-        return this._getItems().done(itemInfos => {
-            const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
-            this._hasParentDirectoryItem = !!parentDirectoryItem;
-            this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
-        });
-    }
-
     refresh() {
-        this.clearSelection();
-        this._itemList.option('dataSource', {
-            'store': new CustomStore({
-                key: 'fileItem.key',
-                load: this._loadItems.bind(this)
-            })
-        });
+        this._itemList.option('dataSource', { store: this._createStore() });
     }
 
-    tryOpen() {
-        const item = this._getFocusedItem();
-        if(item) {
-            this._raiseSelectedItemOpened(item);
-        }
+    _deselectItem(item) {
+        this._itemList.deselectItem(item);
     }
 
     clearSelection() {

@@ -3,7 +3,6 @@ import typeUtils from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
 import DataGrid from '../data_grid/ui.data_grid';
-import CustomStore from '../../data/custom_store';
 
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
@@ -230,10 +229,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         this._selectAllCheckBox.option('value', this._isAllItemsSelected());
         this._selectAllCheckBoxUpdating = false;
 
-        const parentDirectoryItem = this._findParentDirectoryItem(selectedRowsData);
-        if(parentDirectoryItem) {
-            this._filesView.deselectRows([ parentDirectoryItem.fileItem.key ]);
-        }
         const selectedItems = selectedRowsData.map(itemInfo => itemInfo.fileItem);
         this._tryRaiseSelectionChanged({
             selectedItems,
@@ -289,6 +284,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         selectItemFunc.call(this, fileItemInfo);
     }
 
+    _deselectItem(item) {
+        this._filesView.deselectRows([ item.fileItem.key ]);
+    }
+
     _selectItemSingleSelection(fileItemInfo) {
         if(!this._focusedItem || this._focusedItem.fileItem.key !== fileItemInfo.fileItem.key) {
             const oldFocusedItem = this._focusedItem;
@@ -316,28 +315,12 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
-    _getItemsInternal() {
-        return this._getItems().done(itemInfos => {
-            this._itemCount = itemInfos.length;
-
-            const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
-            this._hasParentDirectoryItem = !!parentDirectoryItem;
-            this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
-        });
-    }
-
     clearSelection() {
         this._filesView.clearSelection();
     }
 
     refresh() {
-        this.clearSelection();
-        this._filesView.option('dataSource', {
-            'store': new CustomStore({
-                key: 'fileItem.key',
-                load: this._getItemsInternal.bind(this)
-            })
-        });
+        this._filesView.option('dataSource', { store: this._createStore() });
     }
 
     getSelectedItems() {

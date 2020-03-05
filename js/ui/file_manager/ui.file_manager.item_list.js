@@ -4,6 +4,7 @@ import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
 import { getImageContainer } from '../../core/utils/icon';
 
+import CustomStore from '../../data/custom_store';
 import Widget from '../widget/ui.widget';
 
 const FILE_MANAGER_FILES_VIEW_CLASS = 'dx-filemanager-files-view';
@@ -63,8 +64,16 @@ class FileManagerItemListBase extends Widget {
     }
 
     _getItems() {
-        const itemsGetter = this.option('getItems');
-        return itemsGetter ? itemsGetter() : [];
+        let itemsGetter = this.option('getItems');
+        itemsGetter = itemsGetter ? itemsGetter() : [];
+
+        return itemsGetter.done(itemInfos => {
+            this._itemCount = itemInfos.length;
+
+            const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
+            this._hasParentDirectoryItem = !!parentDirectoryItem;
+            this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
+        });
     }
 
     _raiseOnError(error) {
@@ -80,6 +89,11 @@ class FileManagerItemListBase extends Widget {
     }
 
     _tryRaiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
+        const parentDirectoryItem = this._findParentDirectoryItem(this.getSelectedItems());
+        if(parentDirectoryItem) {
+            this._deselectItem(parentDirectoryItem);
+        }
+
         let raiseEvent = !this._hasParentDirectoryItem;
         raiseEvent = raiseEvent || this._hasValidKeys(currentSelectedItemKeys) || this._hasValidKeys(currentDeselectedItemKeys);
 
@@ -191,8 +205,13 @@ class FileManagerItemListBase extends Widget {
         return this.option('selectionMode') === 'multiple';
     }
 
-    refresh() {
+    _deselectItem(item) {}
 
+    _createStore() {
+        return new CustomStore({
+            key: 'fileItem.key',
+            load: this._getItems.bind(this)
+        });
     }
 
     getSelectedItems() {
