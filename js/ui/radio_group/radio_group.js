@@ -215,6 +215,7 @@ class RadioGroup extends Editor {
         this.setAria('role', 'radiogroup');
         this._renderRadios();
         this.option('useInkRipple') && this._renderInkRipple();
+        this._renderLayout();
         super._initMarkup();
     }
 
@@ -272,7 +273,6 @@ class RadioGroup extends Editor {
     }
 
     _render() {
-        this._renderLayout();
         super._render();
         this._updateItemsSize();
     }
