@@ -622,15 +622,15 @@ const DiagramCommandsManager = {
                 }
             ]);
     },
-    getPropertiesPanelToolbarCommands: function(commands, excludeCommands) {
+    getPropertiesToolbarCommands: function(commands, excludeCommands) {
         const allCommands = this.getAllCommands();
-        const viewToolbarCommands = commands ? this._getPreparedCommands(allCommands, commands) :
-            this._getDefaultPropertiesPanelToolbarCommands(allCommands);
-        return this._prepareToolbarCommands(viewToolbarCommands, excludeCommands);
+        const propertiesCommands = commands ? this._getPreparedCommands(allCommands, commands) :
+            this._getDefaultPropertiesToolbarCommands(allCommands);
+        return this._prepareToolbarCommands(propertiesCommands, excludeCommands);
     },
-    _getDefaultPropertiesPanelToolbarCommands: function(allCommands) {
-        return this._defaultPropertiesPanelToolbarCommands ||
-            (this._defaultPropertiesPanelToolbarCommands = [
+    _getDefaultPropertiesToolbarCommands: function(allCommands) {
+        return this._defaultPropertiesToolbarCommands ||
+            (this._defaultPropertiesToolbarCommands = [
                 allCommands['showPropertiesPanel']
             ]);
     },

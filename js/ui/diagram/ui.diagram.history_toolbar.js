@@ -22,9 +22,6 @@ class DiagramHistoryToolbar extends DiagramToolbar {
     }
     _optionChanged(args) {
         switch(args.name) {
-            case 'isMobileView':
-                this._invalidate();
-                break;
             case 'isToolboxVisible':
                 this._invalidate();
                 break;
@@ -34,7 +31,6 @@ class DiagramHistoryToolbar extends DiagramToolbar {
     }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            isMobileView: false,
             isToolboxVisible: false
         });
     }
