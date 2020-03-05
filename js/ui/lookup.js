@@ -234,12 +234,12 @@ const Lookup = DropDownList.inherit({
             */
 
             /**
-             * @name dxLookupOptions.disableOptionCentering
+             * @name dxLookupOptions.itemCenteringEnabled
              * @type boolean
-             * @default false @for Material
+             * @default true @for Material
              * @public
              */
-            disableOptionCentering: true,
+            itemCenteringEnabled: false,
 
             _scrollToSelectedItemEnabled: false,
             useHiddenSubmitElement: true
@@ -313,7 +313,7 @@ const Lookup = DropDownList.inherit({
 
                     shading: false,
 
-                    disableOptionCentering: false,
+                    itemCenteringEnabled: true,
 
                     _scrollToSelectedItemEnabled: true
                 }
@@ -476,7 +476,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _setPopupPosition: function() {
-        if(this.option('disableOptionCentering')) return;
+        if(!this.option('itemCenteringEnabled')) return;
 
 
         const selectedIndex = this._list.option('selectedIndex');
@@ -509,7 +509,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _getPopupHeight: function(listItemsCount) {
-        return (this._list && this._list.itemElements() && !this.option('disableOptionCentering')) ?
+        return (this._list && this._list.itemElements() && this.option('itemCenteringEnabled')) ?
             (this._list.itemElements().height() * listItemsCount) +
             MATERIAL_LOOKUP_LIST_PADDING * 2 +
             (this._$searchWrapper ? this._$searchWrapper.outerHeight() : 0) +
@@ -519,18 +519,12 @@ const Lookup = DropDownList.inherit({
     },
 
     _getPopupWidth: function() {
-        return !this.option('disableOptionCentering') ? $(this.element()).outerWidth() : $(window).width() * 0.8;
+        return this.option('itemCenteringEnabled') ? $(this.element()).outerWidth() : $(window).width() * 0.8;
     },
 
     _renderPopup: function() {
-        if(!this.option('_scrollToSelectedItemEnabled')) {
-            if(this.option('usePopover') && !this.option('fullScreen')) {
-                this._renderPopover();
-            } else {
-                this.callBase();
-            }
-        } else {
-            if(this.option('usePopover') && this.option('disableOptionCentering')) {
+        if(this.option('usePopover')) {
+            if(this.option('_scrollToSelectedItemEnabled') && !this.option('itemCenteringEnabled') || !this.option('fullScreen')) {
                 this._renderPopover();
             } else {
                 this.callBase();
@@ -607,7 +601,7 @@ const Lookup = DropDownList.inherit({
 
         result.maxHeight = function() { return $(window).height(); };
 
-        if(this.option('_scrollToSelectedItemEnabled') && !this.option('disableOptionCentering')) {
+        if(this.option('_scrollToSelectedItemEnabled') && this.option('itemCenteringEnabled')) {
             result.position = {
                 my: 'left top',
                 at: 'left top',
@@ -994,8 +988,9 @@ const Lookup = DropDownList.inherit({
                 break;
             case 'cleanSearchOnOpening':
             case '_scrollToSelectedItemEnabled':
-            case 'disableOptionCentering':
-                if(this.option('_scrollToSelectedItemEnabled') && !value) {
+                break;
+            case 'itemCenteringEnabled':
+                if(this.option('_scrollToSelectedItemEnabled') && value) {
                     this.option('usePopover', false);
                 }
                 break;
