@@ -4,7 +4,8 @@
 /js/bundles/dx.custom.js
 /js/localization/default_messages.js
 /js/localization/cldr-data
-/js/**/*.p.js
+/js/renovation/**/*.p.d.ts
+/js/renovation/**/*.p.js
 /themebuilder/data/less
 /themebuilder/data/metadata
 /scss

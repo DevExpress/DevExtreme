@@ -257,7 +257,7 @@ describe('Button', () => {
 
             it('should render template', () => {
                 const button = render({
-                    template,
+                    render: template,
                     text: 'My button',
                 });
                 const customRender = button.find(template);
@@ -274,15 +274,15 @@ describe('Button', () => {
 
                 expect(button.exists(template)).toBe(false);
 
-                button.setProps({ template });
+                button.setProps({ render: template });
                 expect(button.exists(template)).toBe(true);
 
-                button.setProps({ template: undefined });
+                button.setProps({ render: undefined });
                 expect(button.exists(template)).toBe(false);
             });
 
             it('should change properties in runtime', () => {
-                const button = mount(<Button text="My button" template={template} />);
+                const button = mount(<Button text="My button" render={template} />);
                 let buttonContent = button.find(template);
 
                 expect(buttonContent.props().text).toBe('My button');
@@ -297,7 +297,7 @@ describe('Button', () => {
 
             it('should get original icon prop', () => {
                 const button = render({
-                    template: ({ icon }) => <div>{icon}</div>,
+                    render: ({ icon }) => <div>{icon}</div>,
                     icon: 'testicon',
                     text: 'My button',
                 });
@@ -455,7 +455,7 @@ describe('Button', () => {
                 device: () => false,
                 options: {},
             });
-            return Button.defaultProps;
+            return (Button as any).defaultProps;
         };
 
         describe('focusStateEnabled', () => {
