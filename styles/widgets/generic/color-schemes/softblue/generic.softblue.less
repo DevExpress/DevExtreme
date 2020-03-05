@@ -237,7 +237,8 @@
 @radiogroup-readonly-bg: @radiogroup-bg;
 
 // Accordion
-// Accordion
+
+@accordion-color: @base-text-color;
 
 /**
 * @name 10. Item title text color
@@ -257,7 +258,6 @@
 */
 @accordion-item-border-color: @base-border-color;
 @accordion-item-focused-border-color: @base-accent;
-@accordion-color: @base-text-color;
 @accordion-background-color: @base-bg;
 @accordion-title-active-color: @accordion-color;
 @accordion-title-active-bg: fade(darken(@accordion-background-color, 62.5%), 20%);
@@ -678,6 +678,12 @@
 */
 @overlay-shader-bg: fade(@base-bg, 80%);
 
+/**
+* @name 20. Focus border color
+* @type color
+*/
+@overlay-focus-border-color: @base-border-color;
+
 // Popup
 
 /**
@@ -690,12 +696,6 @@
 @popup-bottom-bg: @popup-title-bg;
 @popup-bottom-color: @base-text-color;
 @popup-border-radius: @base-border-radius-large;
-
-/**
-* @name 20. Focus border color
-* @type color
-*/
-@overlay-focus-border-color: @base-border-color;
 
 // Popover
 @popover-arrow-bg: @overlay-content-bg;

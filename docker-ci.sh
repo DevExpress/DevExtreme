@@ -189,6 +189,8 @@ function run_test_functional {
 function run_test_scss {
     npm i
     npx gulp generate-scss
+    npm run build-themes
+    node build/gulp/scss/tests/identical.test.js
 }
 
 function start_runner_watchdog {

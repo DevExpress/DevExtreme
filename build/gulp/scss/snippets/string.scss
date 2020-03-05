@@ -1,12 +1,5 @@
 @use "sass:string";
 
-@function escape($color) {
-    @if(string.index($color, "#") == 1) {
-        $color: "%23" + string.slice($color, 2);
-    }
-    @return $color;
-}
-
 @function replace($string, $search, $replace: '') {
     $index: string.index($string, $search);
 
@@ -15,4 +8,13 @@
     }
 
     @return $string;
+}
+
+@function escape($color) {
+    $color: replace($color, '#', '%23');
+    $color: replace($color, '(', '%28');
+    $color: replace($color, ')', '%29');
+    $color: replace($color, ' ', '%20');
+
+    @return $color;
 }
