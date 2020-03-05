@@ -963,7 +963,7 @@
             wheel: function(d, shiftKey) {
                 if(document['onwheel'] !== undefined) {
                     triggerEvent('wheel', {
-                        deltaY: -d / 30,
+                        deltaY: -d,
                         shiftKey: shiftKey
                     });
                 } else {
