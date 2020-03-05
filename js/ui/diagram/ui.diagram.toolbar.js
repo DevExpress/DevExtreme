@@ -261,6 +261,7 @@ class DiagramToolbar extends DiagramPanel {
                 target: widget.$element(),
                 cssClass: DiagramMenuHelper.getContextMenuCssClass(),
                 showEvent: widget.NAME === 'dxTextBox' ? '' : 'dxclick',
+                focusStateEnabled: false,
                 position: { at: 'left bottom' },
                 itemTemplate: function(itemData, itemIndex, itemElement) {
                     DiagramMenuHelper.getContextMenuItemTemplate(this, itemData, itemIndex, itemElement);

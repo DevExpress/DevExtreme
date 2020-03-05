@@ -52,7 +52,6 @@ class DiagramScrollView extends Widget {
         return 0;
     }
     dispose() {
-        this._dispose();
     }
 
     _raiseOnScroll(left, top) {

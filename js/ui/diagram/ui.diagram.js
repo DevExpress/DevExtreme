@@ -21,7 +21,7 @@ import DiagramToolbar from './ui.diagram.toolbar';
 import DiagramMainToolbar from './ui.diagram.main_toolbar';
 import DiagramHistoryToolbar from './ui.diagram.history_toolbar';
 import DiagramViewToolbar from './ui.diagram.view_toolbar';
-import DiagramPropertiesPanelToolbar from './ui.diagram.properties_panel_toolbar';
+import DiagramPropertiesToolbar from './ui.diagram.properties_toolbar';
 import DiagramContextMenu from './ui.diagram.context_menu';
 import DiagramContextToolbox from './ui.diagram.context_toolbox';
 import DiagramDialog from './ui.diagram.dialogs';
@@ -109,10 +109,10 @@ class Diagram extends Widget {
 
         delete this._propertiesPanel;
         delete this._propertiesPanelResizeCallback;
-        delete this._propertiesPanelToolbar;
-        delete this._propertiesPanelToolbarResizeCallback;
+        delete this._propertiesToolbar;
+        delete this._propertiesToolbarResizeCallback;
         if(this._isPropertiesPanelEnabled()) {
-            this._renderPropertiesPanelToolbar($contentWrapper);
+            this._renderPropertiesToolbar($contentWrapper);
             this._renderPropertiesPanel($contentWrapper);
         }
 
@@ -172,7 +172,7 @@ class Diagram extends Widget {
         this._isMobileScreenSize = undefined;
 
         this._historyToolbarResizeCallback.call(this);
-        this._propertiesPanelToolbarResizeCallback.call(this);
+        this._propertiesToolbarResizeCallback.call(this);
         this._propertiesPanelResizeCallback.call(this);
         this._viewToolbarResizeCallback.call(this);
         this._toolboxResizeCallback.call(this);
@@ -410,25 +410,25 @@ class Diagram extends Widget {
     _isPropertiesPanelVisible() {
         return this.option('propertiesPanel.visibility') === 'visible';
     }
-    _renderPropertiesPanelToolbar($parent) {
+    _renderPropertiesToolbar($parent) {
         const isServerSide = !hasWindow();
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .addClass(DIAGRAM_PROPERTIES_PANEL_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
-        this._propertiesPanelToolbar = this._createComponent($container, DiagramPropertiesPanelToolbar,
+        this._propertiesToolbar = this._createComponent($container, DiagramPropertiesToolbar,
             extend(this._getToolbarBaseOptions(), {
                 buttonStylingMode: 'contained',
                 buttonType: 'default',
                 isPropertiesPanelVisible: this._isPropertiesPanelVisible()
             })
         );
-        this._updatePropertiesPanelToolbarPosition($container, $parent, isServerSide);
-        this._propertiesPanelToolbarResizeCallback = () => {
-            this._updatePropertiesPanelToolbarPosition($container, $parent, isServerSide);
+        this._updatePropertiesToolbarPosition($container, $parent, isServerSide);
+        this._propertiesToolbarResizeCallback = () => {
+            this._updatePropertiesToolbarPosition($container, $parent, isServerSide);
         };
     }
-    _updatePropertiesPanelToolbarPosition($container, $parent, isServerSide) {
+    _updatePropertiesToolbarPosition($container, $parent, isServerSide) {
         if(isServerSide) return;
 
         positionUtils.setup($container, {
@@ -444,7 +444,7 @@ class Diagram extends Widget {
             .appendTo($parent);
 
         const offsetX = DIAGRAM_FLOATING_PANEL_OFFSET;
-        const offsetY = 2 * DIAGRAM_FLOATING_PANEL_OFFSET + (!isServerSide ? this._propertiesPanelToolbar.$element().height() : 0);
+        const offsetY = 2 * DIAGRAM_FLOATING_PANEL_OFFSET + (!isServerSide ? this._propertiesToolbar.$element().height() : 0);
         this._propertiesPanel = this._createComponent($propertiesPanel, DiagramPropertiesPanel, {
             isMobileView: this.isMobileScreenSize(),
             isVisible: this._isPropertiesPanelVisible(),
@@ -475,8 +475,8 @@ class Diagram extends Widget {
             onVisibilityChanged: (e) => {
                 if(isServerSide) return;
 
-                if(this._propertiesPanelToolbar) {
-                    this._propertiesPanelToolbar.option('isPropertiesPanelVisible', e.visible);
+                if(this._propertiesToolbar) {
+                    this._propertiesToolbar.option('isPropertiesPanelVisible', e.visible);
                 }
             },
             onSelectedGroupChanged: ({ component }) => this._updatePropertiesPanelGroupBars(component),
@@ -491,8 +491,8 @@ class Diagram extends Widget {
                         isVisible: this._isPropertiesPanelVisible(),
                     });
                 }
-                if(this._propertiesPanelToolbar) {
-                    this._propertiesPanelToolbar.option('isPropertiesPanelVisible', this._isPropertiesPanelVisible());
+                if(this._propertiesToolbar) {
+                    this._propertiesToolbar.option('isPropertiesPanelVisible', this._isPropertiesPanelVisible());
                 }
             }
         };

@@ -46,6 +46,13 @@ QUnit.module('View Toolbar', {
         $fullScreenButton.trigger('dxclick');
         assert.notOk(this.$element.hasClass(Consts.FULLSCREEN_CLASS));
     });
+    test('diagram should be focused after button click', function(assert) {
+        assert.notOk(this.$element.hasClass(Consts.FULLSCREEN_CLASS));
+        const $fullScreenButton = findViewToolbarItem(this.$element, 'full screen');
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
+        $fullScreenButton.trigger('dxclick');
+        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
+    });
     test('should toggle check state on show grid button click', function(assert) {
         assert.equal(this.instance.option('showGrid'), true);
 

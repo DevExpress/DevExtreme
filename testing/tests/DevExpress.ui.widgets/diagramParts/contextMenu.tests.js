@@ -62,6 +62,15 @@ QUnit.module('Context Menu', {
         findContextMenuItem(this.$element, 'select all').trigger('dxclick');
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
     });
+    test('diagram should be focused after menu item click', function(assert) {
+        this.instance.option('contextMenu.commands', ['selectAll']);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
+        const contextMenu = getContextMenuInstance(this.$element);
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
+        contextMenu.show();
+        findContextMenuItem(this.$element, 'select all').trigger('dxclick');
+        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
+    });
     test('should execute custom commands on click', function(assert) {
         this.instance.option('contextMenu.commands', [
             {
