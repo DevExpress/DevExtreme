@@ -34,7 +34,8 @@
         overflow: hidden;
     }
 
-    .dx-diagram-content {
+    .dx-diagram-content,
+    .dx-diagram-scroll-view {
         height: 100%;
         width: 100%;
     }
@@ -46,6 +47,12 @@
         height: 100% !important; // stylelint-disable-line declaration-no-important
         position: fixed;
         z-index: 2;
+    }
+
+    .dxdi-control { // stylelint-disable-line selector-class-pattern
+        width: auto;
+        height: auto;
+        overflow: visible;
     }
 
     .dxdi-canvas { // stylelint-disable-line selector-class-pattern

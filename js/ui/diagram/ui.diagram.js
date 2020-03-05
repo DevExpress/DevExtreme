@@ -25,6 +25,7 @@ import DiagramPropertiesPanelToolbar from './ui.diagram.properties_panel_toolbar
 import DiagramContextMenu from './ui.diagram.context_menu';
 import DiagramContextToolbox from './ui.diagram.context_toolbox';
 import DiagramDialog from './ui.diagram.dialogs';
+import DiagramScrollView from './ui.diagram.scroll_view';
 import DiagramToolboxManager from './diagram.toolbox_manager';
 import DiagramToolbox from './ui.diagram.toolbox';
 import DiagramPropertiesPanel from './ui.diagram.properties_panel';
@@ -39,6 +40,7 @@ const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
 const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + '-toolbar-wrapper';
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + '-content-wrapper';
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + '-content';
+const DIAGRAM_SCROLL_VIEW_CLASS = DIAGRAM_CLASS + '-scroll-view';
 const DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS = DIAGRAM_CLASS + '-floating-toolbar-container';
 const DIAGRAM_PROPERTIES_PANEL_TOOLBAR_CONTAINER_CLASS = DIAGRAM_CLASS + '-properties-panel-toolbar-container';
 const DIAGRAM_LOADING_INDICATOR_CLASS = DIAGRAM_CLASS + '-loading-indicator';
@@ -114,23 +116,32 @@ class Diagram extends Widget {
             this._renderPropertiesPanel($contentWrapper);
         }
 
-        this._content = $('<div>')
+        this._$content = $('<div>')
             .addClass(DIAGRAM_CONTENT_CLASS)
             .appendTo($contentWrapper);
 
         delete this._contextMenu;
         if(this.option('contextMenu.enabled')) {
-            this._renderContextMenu(this._content);
+            this._renderContextMenu(this._$content);
         }
 
         delete this._contextToolbox;
         if(this.option('contextToolbox.enabled')) {
-            this._renderContextToolbox(this._content);
+            this._renderContextToolbox(this._$content);
         }
 
-        this._renderDialog(this._content);
+        this._renderDialog(this._$content);
 
-        !isServerSide && this._diagramInstance.createDocument(this._content[0]);
+        if(!isServerSide) {
+            const $scrollViewWrapper = $('<div>')
+                .addClass(DIAGRAM_SCROLL_VIEW_CLASS)
+                .appendTo(this._$content);
+            this._createComponent($scrollViewWrapper, DiagramScrollView, {
+                onCreateDiagram: (e) => {
+                    this._diagramInstance.createDocument(e.$parent[0], e.scrollView);
+                }
+            });
+        }
 
         if(this.option('zoomLevel') !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
             this._updateZoomLevelState();
@@ -573,7 +584,7 @@ class Diagram extends Widget {
     _showLoadingIndicator() {
         this._loadingIndicator = $('<div>').addClass(DIAGRAM_LOADING_INDICATOR_CLASS);
         this._createComponent(this._loadingIndicator, LoadIndicator, {});
-        const $parent = this._content || this.$element();
+        const $parent = this._$content || this.$element();
         $parent.append(this._loadingIndicator);
     }
     _hideLoadingIndicator() {
