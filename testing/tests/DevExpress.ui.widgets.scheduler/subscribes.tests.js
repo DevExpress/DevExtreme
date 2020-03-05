@@ -598,16 +598,11 @@ QUnit.test('appointmentTakesSeveralDays should return true, if startDate and end
         {
             startDate: new Date(2016, 1, 2, 2),
             endDate: new Date(2016, 1, 2, 7)
-        },
-        {
-            startDate: new Date(2016, 1, 2, 2),
-            endDate: new Date(2016, 1, 3, 0)
         }
     ];
 
     assert.ok(this.instance.fire('appointmentTakesSeveralDays', appointments[0]), 'appointmentTakesSeveralDays works correctly');
     assert.notOk(this.instance.fire('appointmentTakesSeveralDays', appointments[1]), 'appointmentTakesSeveralDays works correctly');
-    assert.notOk(this.instance.fire('appointmentTakesSeveralDays', appointments[2]), 'appointmentTakesSeveralDays works correctly');
 });
 
 QUnit.test('UpdateAppointmentStartDate should return corrected startDate for long appointments', function(assert) {
