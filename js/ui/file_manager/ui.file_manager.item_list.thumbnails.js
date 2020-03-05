@@ -6,7 +6,6 @@ import { name as contextMenuEventName } from '../../events/contextmenu';
 
 import CustomStore from '../../data/custom_store';
 import FileManagerThumbnailListBox from './ui.file_manager.items_list.thumbnails.list_box';
-// import FileManagerThumbnailsItemListBox from './ui.file_manager.collection_widget_test';
 import FileManagerItemListBase from './ui.file_manager.item_list';
 
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS = 'dx-filemanager-thumbnails';
