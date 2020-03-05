@@ -1479,6 +1479,138 @@ const overlappingEnvironment = $.extend({}, environment, {
         assert.strictEqual(action.getCall(3).args[0], 'applySelected', 'fourth item');
     });
 
+    QUnit.test('Legend callback. Hover mode - none', function(assert) {
+        const points = [
+            createPoint({ argument: 'First', value: 10, visible: true }),
+            createPoint({ argument: 'Second', value: 11, visible: true }),
+            createPoint({ argument: 'Third', value: 12, visible: true }),
+            createPoint({ argument: 'Fourth', value: 12, visible: true })
+        ];
+        const points2 = [
+            createPoint({ argument: 'First', value: 10, visible: true }),
+            createPoint({ argument: 'Second', value: 11, visible: true }),
+            createPoint({ argument: 'Third', value: 12, visible: true }),
+            createPoint({ argument: 'Fourth', value: 11, visible: true })
+        ];
+        const stubSeries = new MockSeries({
+            points: points
+        });
+
+        const stubSeries2 = new MockSeries({
+            points: points2,
+            hoverMode: 'none'
+        });
+        const action = sinon.stub();
+
+        chartMocks.seriesMockData.series.push(stubSeries);
+        points.forEach(function(p) { p.series = stubSeries; });
+
+        chartMocks.seriesMockData.series.push(stubSeries2);
+        points2.forEach(function(p) { p.series = stubSeries2; });
+
+        stubSeries.getPointsByKeys.withArgs('First', 0).returns([points[0]]);
+        stubSeries.getPointsByKeys.withArgs('Second', 0).returns([points[1]]);
+        stubSeries.getPointsByKeys.withArgs('Third', 0).returns([points[2]]);
+        stubSeries.getPointsByKeys.withArgs('Fourth', 0).returns([points[3]]);
+
+        stubSeries2.getPointsByKeys.withArgs('First', 0).returns([points2[0]]);
+        stubSeries2.getPointsByKeys.withArgs('Second', 0).returns([points2[1]]);
+        stubSeries2.getPointsByKeys.withArgs('Third', 0).returns([points2[2]]);
+        stubSeries2.getPointsByKeys.withArgs('Fourth', 0).returns([points2[3]]);
+
+        points[0].fullState = points2[0].fullState = 0;
+
+        points[1].fullState = 0;
+        points2[1].fullState = 1;
+
+        points[2].fullState = 0;
+        points2[2].fullState = 2;
+
+        points[3].fullState = 1;
+        points2[3].fullState = 2;
+
+        this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}, {}]
+        });
+
+        commons.getLegendStub().stub('getActionCallback').returns(action);
+        const legendCallback = chartMocks.seriesMockData.series[0].legendCallback;
+        // act
+        legendCallback();
+
+        assert.strictEqual(action.getCall(0).args[0], 'resetItem', 'first item');
+        assert.strictEqual(action.getCall(1).args[0], 'resetItem', 'second item');
+        assert.strictEqual(action.getCall(2).args[0], 'applySelected', 'third item');
+        assert.strictEqual(action.getCall(3).args[0], 'applySelected', 'fourth item');
+    });
+
+    QUnit.test('Legend callback. Selection mode - none', function(assert) {
+        const points = [
+            createPoint({ argument: 'First', value: 10, visible: true }),
+            createPoint({ argument: 'Second', value: 11, visible: true }),
+            createPoint({ argument: 'Third', value: 12, visible: true }),
+            createPoint({ argument: 'Fourth', value: 12, visible: true })
+        ];
+        const points2 = [
+            createPoint({ argument: 'First', value: 10, visible: true }),
+            createPoint({ argument: 'Second', value: 11, visible: true }),
+            createPoint({ argument: 'Third', value: 12, visible: true }),
+            createPoint({ argument: 'Fourth', value: 11, visible: true })
+        ];
+        const stubSeries = new MockSeries({
+            points: points
+        });
+
+        const stubSeries2 = new MockSeries({
+            points: points2,
+            selectionMode: 'none'
+        });
+        const action = sinon.stub();
+
+        chartMocks.seriesMockData.series.push(stubSeries);
+        points.forEach(function(p) { p.series = stubSeries; });
+
+        chartMocks.seriesMockData.series.push(stubSeries2);
+        points2.forEach(function(p) { p.series = stubSeries2; });
+
+        stubSeries.getPointsByKeys.withArgs('First', 0).returns([points[0]]);
+        stubSeries.getPointsByKeys.withArgs('Second', 0).returns([points[1]]);
+        stubSeries.getPointsByKeys.withArgs('Third', 0).returns([points[2]]);
+        stubSeries.getPointsByKeys.withArgs('Fourth', 0).returns([points[3]]);
+
+        stubSeries2.getPointsByKeys.withArgs('First', 0).returns([points2[0]]);
+        stubSeries2.getPointsByKeys.withArgs('Second', 0).returns([points2[1]]);
+        stubSeries2.getPointsByKeys.withArgs('Third', 0).returns([points2[2]]);
+        stubSeries2.getPointsByKeys.withArgs('Fourth', 0).returns([points2[3]]);
+
+        points[0].fullState = points2[0].fullState = 0;
+
+        points[1].fullState = 0;
+        points2[1].fullState = 1;
+
+        points[2].fullState = 0;
+        points2[2].fullState = 2;
+
+        points[3].fullState = 1;
+        points2[3].fullState = 2;
+
+        this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}, {}]
+        });
+
+        commons.getLegendStub().stub('getActionCallback').returns(action);
+        const legendCallback = chartMocks.seriesMockData.series[0].legendCallback;
+        // act
+        legendCallback();
+
+        assert.strictEqual(action.getCall(0).args[0], 'resetItem', 'first item');
+        assert.strictEqual(action.getCall(1).args[0], 'applyHover', 'second item');
+        assert.strictEqual(action.getCall(2).args[0], 'resetItem', 'third item');
+        assert.strictEqual(action.getCall(3).args[0], 'applyHover', 'fourth item');
+    });
+
     QUnit.test('Legend callback with target', function(assert) {
         const points = [
             createPoint({ argument: 'First', value: 10, visible: true }),
