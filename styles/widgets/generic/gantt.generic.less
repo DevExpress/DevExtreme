@@ -7,6 +7,15 @@
 .dx-gantt {
     border: 1px solid @base-border-color;
 
+    .dx-gantt-toolbar-wrapper {
+        padding: 5px;
+        border-bottom: 1px solid @base-border-color;
+
+        .dx-gantt-toolbar-separator {
+            border-left-color: @base-border-color;
+        }
+    }
+
     .dx-treelist .dx-treelist-rowsview .dx-selection.dx-row > td,
     .dx-treelist .dx-treelist-rowsview .dx-selection.dx-row:hover > td,
     .dx-treelist .dx-treelist-rowsview .dx-selection.dx-row > tr > td,
