@@ -5,11 +5,17 @@
 @import (once) "./selectBox.material.less";
 @import (once) "./dateBox.material.less";
 
+@RECURRENCE_NUMBER_BOX_MARGIN_RIGHT: 11px;
+
 .dx-recurrence-editor-container {
     position: relative;
 
     .dx-recurrence-interval-field {
         margin-bottom: 20px;
+    }
+
+    .dx-recurrence-numberbox-interval {
+        margin-right: @RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
     }
 }
 
@@ -45,5 +51,6 @@
 
     .dx-recurrence-numberbox-repeat-count {
         margin-left: 11px;
+        margin-right: @RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
     }
 }
