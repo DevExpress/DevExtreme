@@ -516,6 +516,16 @@
         "dxDiagram-shapeCardDefaultText": "Nom de la personne",
         "dxDiagram-shapeCardWithImageOnLeft": "Carte avec image à gauche",
         "dxDiagram-shapeCardWithImageOnTop": "Carte avec image sur le dessus",
-        "dxDiagram-shapeCardWithImageOnRight": "Carte avec image à droite"
+        "dxDiagram-shapeCardWithImageOnRight": "Carte avec image à droite",
+
+        "dxGantt-dialogTitle": "!TODO!",
+        "dxGantt-dialogStartTitle": "!TODO!",
+        "dxGantt-dialogEndTitle": "!TODO!",
+        "dxGantt-dialogProgressTitle": "!TODO!",
+        "dxGantt-dialogResourcesTitle": "!TODO!",
+        "dxGantt-dialogTaskDetailsTitle": "!TODO!",
+        "dxGantt-dialogEditResourceListHint": "!TODO!",
+        "dxGantt-dialogEditNoResources": "!TODO!",
+        "dxGantt-dialogButtonAdd": "!TODO!"
     }
 }

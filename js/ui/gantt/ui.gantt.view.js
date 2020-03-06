@@ -1,6 +1,7 @@
 import Widget from '../widget/ui.widget';
 import { getGanttViewCore } from './gantt_importer';
 import { TaskAreaContainer } from './ui.gantt.task.area.container';
+import dateLocalization from '../../localization/date';
 
 export class GanttView extends Widget {
     _init() {
@@ -21,7 +22,8 @@ export class GanttView extends Widget {
             stripLines: { stripLines: this.option('stripLines') },
             areHorizontalBordersEnabled: this.option('showRowLines'),
             areAlternateRowsEnabled: false,
-            viewType: this._getViewTypeByScaleType(this.option('scaleType'))
+            viewType: this._getViewTypeByScaleType(this.option('scaleType')),
+            cultureInfo: this._getCultureInfo()
         });
         this._selectTask(this.option('selectedRowKey'));
     }
@@ -56,6 +58,17 @@ export class GanttView extends Widget {
         this._ganttViewCore.resetAndUpdate();
     }
 
+    _getCultureInfo() {
+        return {
+            monthNames: dateLocalization.getMonthNames('wide'),
+            dayNames: dateLocalization.getDayNames('wide'),
+            abbrMonthNames: dateLocalization.getMonthNames('abbreviated'),
+            abbrDayNames: dateLocalization.getDayNames('abbreviated'),
+            quarterNames: dateLocalization.getQuarterNames(),
+            amText: dateLocalization.getPeriodNames()[0],
+            pmText: dateLocalization.getPeriodNames()[1]
+        };
+    }
     _getTaskTitlePosition(value) {
         switch(value) {
             case 'outside':

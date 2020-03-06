@@ -1,6 +1,7 @@
 import Popup from '../popup';
 import Form from '../form';
 import '../tag_box';
+import messageLocalization from '../../localization/message';
 
 export class GanttDialog {
     constructor(owner, $element) {
@@ -55,7 +56,7 @@ class DialogInfoBase {
             location: 'after',
             toolbar: 'bottom',
             options: {
-                text: 'Ok',
+                text: messageLocalization.format('OK'),
                 onClick: this._applyAction
             }
         };
@@ -66,7 +67,7 @@ class DialogInfoBase {
             location: 'after',
             toolbar: 'bottom',
             options: {
-                text: 'Cancel',
+                text: messageLocalization.format('Cancel'),
                 onClick: this._hideAction
             }
         };
@@ -96,18 +97,18 @@ class DialogInfoBase {
 }
 
 class TaskEditDialogInfo extends DialogInfoBase {
-    getTitle() { return 'Task Details'; }
+    getTitle() { return messageLocalization.format('dxGantt-dialogTaskDetailsTitle'); }
     _getFormItems() {
         const readOnly = !this._editingOptions.enabled || !this._editingOptions.allowTaskUpdating;
         return [{
             dataField: 'title',
             editorType: 'dxTextBox',
-            label: { text: 'Title' },
+            label: { text: messageLocalization.format('dxGantt-dialogTitle') },
             editorOptions: { readOnly: readOnly }
         }, {
             dataField: 'start',
             editorType: 'dxDateBox',
-            label: { text: 'Start' },
+            label: { text: messageLocalization.format('dxGantt-dialogStartTitle') },
             editorOptions: {
                 type: 'datetime',
                 width: '100%',
@@ -116,7 +117,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
         }, {
             dataField: 'end',
             editorType: 'dxDateBox',
-            label: { text: 'End' },
+            label: { text: messageLocalization.format('dxGantt-dialogEndTitle') },
             editorOptions: {
                 type: 'datetime',
                 width: '100%',
@@ -125,7 +126,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
         }, {
             dataField: 'progress',
             editorType: 'dxNumberBox',
-            label: { text: 'Progress' },
+            label: { text: messageLocalization.format('dxGantt-dialogProgressTitle') },
             editorOptions: {
                 value: this._parameters.progress / 100,
                 showSpinButtons: true,
@@ -138,7 +139,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
         }, {
             dataField: 'assigned.items',
             editorType: 'dxTagBox',
-            label: { text: 'Resources' },
+            label: { text: messageLocalization.format('dxGantt-dialogResourcesTitle') },
             editorOptions: {
                 readOnly: readOnly,
                 dataSource: this._parameters.resources.items,
@@ -148,7 +149,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
                     location: 'after',
                     options: {
                         text: '...',
-                        hint: 'Edit Resource List',
+                        hint: messageLocalization.format('dxGantt-dialogEditResourceListHint'),
                         onClick: () => {
                             this._parameters.showResourcesDialogCommand.execute();
                         }
@@ -167,7 +168,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
 }
 
 class ResourcesEditDialogInfo extends DialogInfoBase {
-    getTitle() { return 'Resources'; }
+    getTitle() { return messageLocalization.format('dxGantt-dialogResourcesTitle'); }
     _getFormItems() {
         return [{
             label: { visible: false },
@@ -179,7 +180,7 @@ class ResourcesEditDialogInfo extends DialogInfoBase {
                 selectionMode: 'none',
                 items: this._parameters.resources.items,
                 height: 250,
-                noDataText: 'No resources',
+                noDataText: messageLocalization.format('dxGantt-dialogEditNoResources'),
                 onInitialized: (e) => { this.list = e.component; },
                 onItemDeleted: (e) => { this._parameters.resources.remove(e.itemData); }
             }
@@ -198,7 +199,7 @@ class ResourcesEditDialogInfo extends DialogInfoBase {
                     name: 'addResource',
                     location: 'after',
                     options: {
-                        text: 'Add',
+                        text: messageLocalization.format('dxGantt-dialogButtonAdd'),
                         disabled: true,
                         onClick: (e) => {
                             const newItem = this._parameters.resources.createItem();

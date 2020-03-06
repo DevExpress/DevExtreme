@@ -487,6 +487,16 @@
         "dxDiagram-shapeCardDefaultText": "人の名前",
         "dxDiagram-shapeCardWithImageOnLeft": "左側に画像を表示するカード",
         "dxDiagram-shapeCardWithImageOnTop": "上部に画像を表示するカード",
-        "dxDiagram-shapeCardWithImageOnRight": "右側に画像を表示するカード"
+        "dxDiagram-shapeCardWithImageOnRight": "右側に画像を表示するカード",
+
+        "dxGantt-dialogTitle": "!TODO!",
+        "dxGantt-dialogStartTitle": "!TODO!",
+        "dxGantt-dialogEndTitle": "!TODO!",
+        "dxGantt-dialogProgressTitle": "!TODO!",
+        "dxGantt-dialogResourcesTitle": "!TODO!",
+        "dxGantt-dialogTaskDetailsTitle": "!TODO!",
+        "dxGantt-dialogEditResourceListHint": "!TODO!",
+        "dxGantt-dialogEditNoResources": "!TODO!",
+        "dxGantt-dialogButtonAdd": "!TODO!"
     }
 }

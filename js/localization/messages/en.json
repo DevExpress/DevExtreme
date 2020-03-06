@@ -519,6 +519,16 @@
         "dxDiagram-shapeCardDefaultText": "Person's Name",
         "dxDiagram-shapeCardWithImageOnLeft": "Card with Image on the Left",
         "dxDiagram-shapeCardWithImageOnTop": "Card with Image on the Top",
-        "dxDiagram-shapeCardWithImageOnRight": "Card with Image on the Right"
+        "dxDiagram-shapeCardWithImageOnRight": "Card with Image on the Right",
+
+        "dxGantt-dialogTitle": "Title",
+        "dxGantt-dialogStartTitle": "Start",
+        "dxGantt-dialogEndTitle": "End",
+        "dxGantt-dialogProgressTitle": "Progress",
+        "dxGantt-dialogResourcesTitle": "Resources",
+        "dxGantt-dialogTaskDetailsTitle": "Task Details",
+        "dxGantt-dialogEditResourceListHint": "Edit Resource List",
+        "dxGantt-dialogEditNoResources": "No resources",
+        "dxGantt-dialogButtonAdd": "Add"
       }
 }
