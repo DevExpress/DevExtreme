@@ -435,7 +435,7 @@ class Gantt extends Widget {
         } else {
             this._$toolbarWrapper.hide();
         }
-        this._toolbar.createItems(items);
+        this._toolbar && this._toolbar.createItems(items);
         this._updateBarItemsState();
     }
     _updateBarItemsState() {
