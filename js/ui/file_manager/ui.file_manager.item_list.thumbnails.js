@@ -30,8 +30,8 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     _createItemList() {
         const selectionMode = this._isMultipleSelectionMode() ? 'multiple' : 'single';
 
-        const $itemViewContainer = $('<div>').appendTo(this.$element());
-        this._itemList = this._createComponent($itemViewContainer, FileManagerThumbnailListBox, {
+        const $itemListContainer = $('<div>').appendTo(this.$element());
+        this._itemList = this._createComponent($itemListContainer, FileManagerThumbnailListBox, {
             selectionMode,
             activeStateEnabled: true,
             hoverStateEnabled: true,
@@ -114,7 +114,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     refresh() {
         this.clearSelection();
-        this._itemList.option('dataSource', { store: this._createStore() });
+        this._itemList.option('dataSource', this._createDataSource());
     }
 
     _deselectItem(item) {

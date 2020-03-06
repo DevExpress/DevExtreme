@@ -64,10 +64,10 @@ class FileManagerItemListBase extends Widget {
     }
 
     _getItems() {
-        let itemsGetter = this.option('getItems');
-        itemsGetter = itemsGetter ? itemsGetter() : [];
+        const itemsGetter = this.option('getItems');
+        const itemsResult = itemsGetter ? itemsGetter() : [];
 
-        return itemsGetter.done(itemInfos => {
+        return itemsResult.done(itemInfos => {
             this._itemCount = itemInfos.length;
 
             const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
@@ -207,11 +207,13 @@ class FileManagerItemListBase extends Widget {
 
     _deselectItem(item) {}
 
-    _createStore() {
-        return new CustomStore({
-            key: 'fileItem.key',
-            load: this._getItems.bind(this)
-        });
+    _createDataSource() {
+        return {
+            store: new CustomStore({
+                key: 'fileItem.key',
+                load: this._getItems.bind(this)
+            })
+        };
     }
 
     getSelectedItems() {

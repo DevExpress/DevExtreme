@@ -321,7 +321,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     refresh() {
         this.clearSelection();
-        this._filesView.option('dataSource', { store: this._createStore() });
+        this._filesView.option('dataSource', this._createDataSource());
     }
 
     getSelectedItems() {
