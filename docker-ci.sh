@@ -134,6 +134,8 @@ function run_test {
 
                 if [ "$MOBILE_UA" == "ios9" ]; then
                     user_agent="Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1"
+                elif [ "$MOBILE_UA" == "android6" ]; then
+                    user_agent="Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Mobile Safari/537.36"
                 else
                     exit 1
                 fi
