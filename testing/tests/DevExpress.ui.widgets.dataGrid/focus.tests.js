@@ -94,7 +94,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(rowsView.getRow(0).attr('tabindex'), undefined, 'Row 0 tabIndex');
-        assert.equal(rowsView.getRow(1).find('td').eq(2).attr('tabindex'), 0, 'TabIndex set for the cell(1,2)');
+        assert.equal($(rowsView.getCellElement(1, 2)).attr('tabindex'), 0, 'TabIndex set for the cell(1,2)');
     });
 
     QUnit.testInActiveWindow('PageUp / PageDown keys and focusedRow', function(assert) {

@@ -4624,7 +4624,9 @@ QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \
         assert.equal(columnController.getColumnIndexOffset(), 0, 'Column index offset is 0');
 
         // act
-        dataGrid.getScrollable().scrollTo({ x: 900 });
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollTo({ x: 900 });
+        $(scrollable._container()).trigger('scroll');
         this.clock.tick();
 
         // assert

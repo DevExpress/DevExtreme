@@ -1900,31 +1900,32 @@ module.exports = {
                 },
                 _updateFocusedCellTabIndex: function(cellElements, columnIndex) {
                     const that = this;
-                    let $cell;
                     const tabIndex = that.option('tabIndex') || 0;
                     const keyboardNavigation = that.getController('keyboardNavigation');
                     const oldFocusedView = keyboardNavigation._focusedView;
                     const cellElementsLength = cellElements ? cellElements.length : -1;
+                    const updateCellTabIndex = $cell => {
+                        const isMasterDetailCell = keyboardNavigation._isMasterDetailCell($cell);
+                        const isValidCell = keyboardNavigation._isCellValid($cell);
+                        if(!isMasterDetailCell && isValidCell && isCellElement($cell)) {
+                            $cell.attr('tabIndex', tabIndex);
+                            keyboardNavigation.setCellFocusType();
+                            return true;
+                        }
+                    };
 
                     keyboardNavigation._focusedView = that;
 
-                    const currentAriaColIndex = columnIndex + 1;
-                    $cell = cellElements.first(`[aria-colindex='${currentAriaColIndex + 1}']`);
+                    const $cell = cellElements.filter(`[aria-colindex='${columnIndex + 1}']`);
                     if($cell.length) {
-                        $cell.attr('tabIndex', tabIndex);
-                        keyboardNavigation.setCellFocusType();
+                        updateCellTabIndex($cell);
                     } else {
                         if(cellElementsLength <= columnIndex) {
                             columnIndex = cellElementsLength - 1;
                         }
                         for(let i = columnIndex; i < cellElementsLength; ++i) {
-                            $cell = $(cellElements[i]);
-                            if(!keyboardNavigation._isMasterDetailCell($cell)) {
-                                if(keyboardNavigation._isCellValid($cell) && isCellElement($cell)) {
-                                    $cell.attr('tabIndex', tabIndex);
-                                    keyboardNavigation.setCellFocusType();
-                                    break;
-                                }
+                            if(updateCellTabIndex($(cellElements[i]))) {
+                                break;
                             }
                         }
                     }
