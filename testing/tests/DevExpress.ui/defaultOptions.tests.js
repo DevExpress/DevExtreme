@@ -400,7 +400,8 @@ testComponentDefaults(Lookup,
         closeOnOutsideClick: true,
         searchEnabled: false,
         showCancelButton: false,
-        showPopupTitle: false
+        showPopupTitle: false,
+        itemCenteringEnabled: true
     },
     function() {
         this.origIsMaterial = themes.isMaterial;

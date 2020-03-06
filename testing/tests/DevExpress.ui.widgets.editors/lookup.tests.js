@@ -3297,7 +3297,7 @@ QUnit.module('default options', {
         }
     });
 
-    QUnit.test('Check disableOptionCentering option for Material theme', function(assert) {
+    QUnit.test('Check itemCenteringEnabled option for Material theme', function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
@@ -3307,7 +3307,7 @@ QUnit.module('default options', {
 
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'green'], value: 'blue' }).dxLookup('instance');
 
-            lookup.option('disableOptionCentering', true);
+            lookup.option('itemCenteringEnabled', false);
 
             $(lookup.field()).trigger('dxclick');
 
@@ -3339,7 +3339,7 @@ QUnit.module('default options', {
 
             lookup.close();
 
-            lookup.option('disableOptionCentering', false);
+            lookup.option('itemCenteringEnabled', true);
 
             $(lookup.field()).trigger('dxclick');
 
@@ -3355,14 +3355,14 @@ QUnit.module('default options', {
     });
 
 
-    QUnit.test('Check disableOptionCentering option for Generic theme', function(assert) {
+    QUnit.test('Check itemCenteringEnabled option for Generic theme', function(assert) {
         const $lookup = $('<div>').prependTo('body');
 
         try {
 
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'green'], value: 'blue' }).dxLookup('instance');
 
-            lookup.option('disableOptionCentering', false);
+            lookup.option('itemCenteringEnabled', true);
 
             $(lookup.field()).trigger('dxclick');
 
