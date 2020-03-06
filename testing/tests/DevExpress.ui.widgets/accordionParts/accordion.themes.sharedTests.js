@@ -43,8 +43,8 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
             const iconRect = $accordion.find(`.${TITLE_CAPTION_CLASS} .${ICON_CLASS}`).get(0).getBoundingClientRect();
             const textRect = $accordion.find(`.${TITLE_CAPTION_CLASS} span`).get(0).getBoundingClientRect();
 
-            const epsilon = 1.1;
-            assert.roughEqual((iconRect.top + iconRect.height / 2), textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
+            const epsilon = 1.6;
+            assert.roughEqual((iconRect.top + iconRect.height / 2), textRect.top + textRect.height / 2, 0, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
             assert.roughEqual(textRect.left - iconRect.left - iconRect.width, iconRect.width / 3, epsilon, `correct horizontal aligment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
         });
     });
