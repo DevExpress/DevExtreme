@@ -82,7 +82,6 @@ import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTE
 import 'ui/scroll_view';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 
-
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
@@ -4589,7 +4588,7 @@ QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \
         });
     });
 
-    QUnit.test(`Test1 where scrollingMode: ${scrollingMode}`, function(assert) {
+    QUnit.test(`Test columnsController.getColumnIndexOffset where scrollingMode: ${scrollingMode} and columnRenderingMode: virtual`, function(assert) {
         // arrange
         const data = [];
         const columns = [];
@@ -4613,7 +4612,8 @@ QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \
             columnWidth: 90,
             scrolling: {
                 mode: scrollingMode,
-                columnRenderingMode: 'virtual'
+                columnRenderingMode: 'virtual',
+                useNative: true
             },
             loadingTimeout: undefined
         }).dxDataGrid('instance');
@@ -5531,7 +5531,7 @@ QUnit.test('aria-rowindex aria-colindex if default pager mode', function(assert)
 });
 
 // T595044
-QUnit.test('aria-rowindex aria-colindex if virtual scrolling', function(assert) {
+QUnit.test('aria-rowindex if virtual scrolling', function(assert) {
     // arrange, act
     const array = [];
     let dataGrid;
@@ -5606,6 +5606,60 @@ QUnit.test('aria-rowindex if virtual row rendering', function(assert) {
 
     $row = rowsView.element().find('.dx-data-row').last();
     assert.equal($row.attr('aria-rowindex'), 50, 'last row is correct after scrolling');
+});
+
+QUnit.test('aria-colindex if scrolling.columnRenderingMode: virtual', function(assert) {
+    // arrange, act
+    let $cell;
+    let colIndex;
+    const data = [{ }];
+
+    for(let i = 0; i < 100; i++) {
+        data[0][`field_${i}`] = `0-${i + 1}`;
+    }
+
+    const dataGrid = $('#dataGrid').dxDataGrid({
+        width: 200,
+        dataSource: data,
+        columnWidth: 100,
+        scrolling: {
+            columnRenderingMode: 'virtual',
+            useNative: false
+        }
+    }).dxDataGrid('instance');
+
+    this.clock.tick(300);
+
+    const columnPageSize = dataGrid.option('scrolling.columnPageSize');
+    for(let i = 0; i < columnPageSize; ++i) {
+        $cell = $(dataGrid.getCellElement(0, i));
+
+        colIndex = i + 1;
+
+        // assert
+        assert.equal($cell.attr('aria-colindex'), colIndex, `Data cell aria-colindex == ${colIndex}`);
+        assert.strictEqual($cell.text(), `0-${colIndex}`, `Data cell text == 0-${colIndex}`);
+    }
+
+    dataGrid.getScrollable().scrollTo({ x: 1000 });
+    this.clock.tick();
+
+    // assert
+    $cell = $(dataGrid.getCellElement(0, 0));
+    assert.equal($cell.attr('aria-colindex'), 10, `Virtual cell aria-colindex == ${colIndex}`);
+
+    for(let i = 1; i < columnPageSize + 1; ++i) {
+        $cell = $(dataGrid.getCellElement(0, i));
+
+        colIndex = i + 10;
+
+        // assert
+        assert.equal($cell.attr('aria-colindex'), colIndex, `Data cell aria-colindex == ${colIndex}`);
+        assert.strictEqual($cell.text(), `0-${colIndex}`, `Data cell text == 0-${colIndex}`);
+    }
+
+    $cell = $(dataGrid.getCellElement(0, columnPageSize));
+    assert.equal($cell.attr('aria-colindex'), columnPageSize + 10, `Virtual cell aria-colindex == ${colIndex}`);
 });
 
 // T595044
