@@ -526,9 +526,9 @@ const Lookup = DropDownList.inherit({
         if(this.option('usePopover')) {
             if(this.option('_scrollToSelectedItemEnabled') && !this.option('itemCenteringEnabled') || !this.option('fullScreen')) {
                 this._renderPopover();
-            } else {
-                this.callBase();
             }
+        } else {
+            this.callBase();
         }
 
         this._$popup.addClass(LOOKUP_POPUP_CLASS);
