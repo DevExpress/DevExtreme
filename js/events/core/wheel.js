@@ -38,7 +38,7 @@ const wheel = {
         e.stopPropagation();
     },
 
-    _normalizeDelta(delta, deltaMode) {
+    _normalizeDelta(delta, deltaMode = PIXEL_MODE) {
         if(deltaMode === PIXEL_MODE) {
             return -delta;
         } else {
