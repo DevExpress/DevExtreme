@@ -960,9 +960,10 @@
                 return this;
             },
 
-            wheel: function(d, shiftKey) {
+            wheel: function(d, shiftKey, deltaMode) {
                 triggerEvent('wheel', {
                     deltaY: -d,
+                    deltaMode: deltaMode || 0,
                     shiftKey: shiftKey
                 });
 
