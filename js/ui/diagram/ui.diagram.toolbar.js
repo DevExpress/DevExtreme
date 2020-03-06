@@ -27,7 +27,7 @@ class DiagramToolbar extends DiagramPanel {
         this._valueConverters = {};
         this.bar = new DiagramToolbarBar(this);
 
-        this._createOnCustomCommandExecuted();
+        this._createOnCustomCommand();
         this._createOnSubMenuVisibilityChangingAction();
 
         super._init();
@@ -318,11 +318,11 @@ class DiagramToolbar extends DiagramPanel {
             this.bar.raiseBarCommandExecuted(command, value);
         }
         if(typeof command === 'string') {
-            this._onCustomCommandExecutedAction({ command });
+            this._onCustomCommandAction({ command });
         }
     }
-    _createOnCustomCommandExecuted() {
-        this._onCustomCommandExecutedAction = this._createActionByOption('onCustomCommandExecuted');
+    _createOnCustomCommand() {
+        this._onCustomCommandAction = this._createActionByOption('onCustomCommand');
     }
 
     _setItemEnabled(command, enabled) {
@@ -385,8 +385,8 @@ class DiagramToolbar extends DiagramPanel {
             case 'onSubMenuVisibilityChanging':
                 this._createOnSubMenuVisibilityChangingAction();
                 break;
-            case 'onCustomCommandExecuted':
-                this._createOnCustomCommandExecuted();
+            case 'onCustomCommand':
+                this._createOnCustomCommand();
                 break;
             case 'commands':
                 this._invalidate();

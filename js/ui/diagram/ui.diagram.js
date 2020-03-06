@@ -71,7 +71,7 @@ class Diagram extends Widget {
         super._init();
         this._initDiagram();
 
-        this._createCustomCommandExecuted();
+        this._createCustomCommand();
 
         this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
     }
@@ -218,11 +218,11 @@ class Diagram extends Widget {
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
-            onCustomCommandExecuted: this._onCustomCommandExecuted.bind(this),
+            onCustomCommand: this._onCustomCommand.bind(this),
             isMobileView: this.isMobileScreenSize()
         };
     }
-    _onCustomCommandExecuted(e) {
+    _onCustomCommand(e) {
         switch(e.command) {
             case DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME:
                 if(this._toolbox) {
@@ -235,7 +235,7 @@ class Diagram extends Widget {
                 }
                 break;
             default:
-                this._customCommandExecutedAction({ name: e.command });
+                this._customCommandAction({ name: e.command });
         }
     }
     _renderMainToolbar() {
@@ -528,7 +528,7 @@ class Diagram extends Widget {
             onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); },
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
-            onCustomCommandExecuted: this._onCustomCommandExecuted.bind(this)
+            onCustomCommand: this._onCustomCommand.bind(this)
         });
     }
 
@@ -1980,8 +1980,8 @@ class Diagram extends Widget {
     _createSelectionChangedAction() {
         this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
     }
-    _createCustomCommandExecuted() {
-        this._customCommandExecutedAction = this._createActionByOption('onCustomCommandExecuted');
+    _createCustomCommand() {
+        this._customCommandAction = this._createActionByOption('onCustomCommand');
     }
     _raiseItemClickAction(nativeItem) {
         if(!this._itemClickAction) {
@@ -2215,8 +2215,8 @@ class Diagram extends Widget {
             case 'onSelectionChanged':
                 this._createSelectionChangedAction();
                 break;
-            case 'onCustomCommandExecuted':
-                this._createCustomCommandExecuted();
+            case 'onCustomCommand':
+                this._createCustomCommand();
                 break;
             case 'export':
                 if(this._mainToolbar) {
