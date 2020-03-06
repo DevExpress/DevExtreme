@@ -442,6 +442,16 @@
         "dxDiagram-shapeCardDefaultText": "TODO",
         "dxDiagram-shapeCardWithImageOnLeft": "TODO",
         "dxDiagram-shapeCardWithImageOnTop": "TODO",
-        "dxDiagram-shapeCardWithImageOnRight": "TODO"
+        "dxDiagram-shapeCardWithImageOnRight": "TODO",
+
+        "dxGantt-dialogTitle": "!TODO!",
+        "dxGantt-dialogStartTitle": "!TODO!",
+        "dxGantt-dialogEndTitle": "!TODO!",
+        "dxGantt-dialogProgressTitle": "!TODO!",
+        "dxGantt-dialogResourcesTitle": "!TODO!",
+        "dxGantt-dialogTaskDetailsTitle": "!TODO!",
+        "dxGantt-dialogEditResourceListHint": "!TODO!",
+        "dxGantt-dialogEditNoResources": "!TODO!",
+        "dxGantt-dialogButtonAdd": "!TODO!"
     }
 }
