@@ -1009,6 +1009,11 @@ QUnit.test('CheckBox mode - Update a selection state when column visibility is c
     });
 
     // assert
+    const $checkboxes = $('.dx-datagrid-column-chooser-list').find('.dx-treeview-item-with-checkbox');
+
+    assert.equal($checkboxes.eq(0).attr('aria-selected'), 'false', 'first checkbox is not selected'); // T868198
+    assert.equal($checkboxes.eq(1).attr('aria-selected'), 'true', 'second checkbox is selected');
+
     assert.ok(!this.columnChooserView._columnChooserList.getNodes()[0].selected, 'first item is not selected');
     assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, 'treeview is not rerendered'); // T726413
 
