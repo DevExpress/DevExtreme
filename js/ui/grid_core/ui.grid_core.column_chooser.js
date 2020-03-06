@@ -123,6 +123,8 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
                     columnChooserList.option('items[' + i + '].selected', items[i].selected);
                 }
             }
+
+            columnChooserList.repaint();
         } else if(!isSelectMode || !columnChooserList || change === 'full') {
             this._popupContainer._wrapper()
                 .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_DRAG_CLASS), !isSelectMode)
@@ -188,8 +190,6 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
 
     _renderTreeView: function($container, items) {
         const that = this;
-        let scrollTop;
-        let scrollableInstance;
         const columnChooser = this.option('columnChooser');
         const isSelectMode = columnChooser.mode === 'select';
         const treeViewConfig = {
@@ -223,8 +223,8 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
             }
         };
 
-        scrollableInstance = $container.find('.dx-scrollable').data('dxScrollable');
-        scrollTop = scrollableInstance && scrollableInstance.scrollTop();
+        const scrollableInstance = $container.find('.dx-scrollable').data('dxScrollable');
+        const scrollTop = scrollableInstance && scrollableInstance.scrollTop();
 
         if(isSelectMode && !this._columnsController.isBandColumnsUsed()) {
             $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
