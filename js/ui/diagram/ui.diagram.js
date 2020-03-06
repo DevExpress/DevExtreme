@@ -71,7 +71,7 @@ class Diagram extends Widget {
         super._init();
         this._initDiagram();
 
-        this._createCustomCommandExecuted();
+        this._createCustomCommand();
 
         this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
     }
@@ -95,6 +95,12 @@ class Diagram extends Widget {
             this._renderHistoryToolbar($contentWrapper);
         }
 
+        delete this._propertiesToolbar;
+        delete this._propertiesToolbarResizeCallback;
+        if(this._isPropertiesPanelEnabled()) {
+            this._renderPropertiesToolbar($contentWrapper);
+        }
+
         delete this._viewToolbar;
         delete this._viewToolbarResizeCallback;
         if(this.option('viewToolbar.visible')) {
@@ -109,10 +115,7 @@ class Diagram extends Widget {
 
         delete this._propertiesPanel;
         delete this._propertiesPanelResizeCallback;
-        delete this._propertiesToolbar;
-        delete this._propertiesToolbarResizeCallback;
         if(this._isPropertiesPanelEnabled()) {
-            this._renderPropertiesToolbar($contentWrapper);
             this._renderPropertiesPanel($contentWrapper);
         }
 
@@ -215,11 +218,11 @@ class Diagram extends Widget {
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
-            onCustomCommandExecuted: this._onCustomCommandExecuted.bind(this),
+            onCustomCommand: this._onCustomCommand.bind(this),
             isMobileView: this.isMobileScreenSize()
         };
     }
-    _onCustomCommandExecuted(e) {
+    _onCustomCommand(e) {
         switch(e.command) {
             case DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME:
                 if(this._toolbox) {
@@ -232,7 +235,7 @@ class Diagram extends Widget {
                 }
                 break;
             default:
-                this._customCommandExecutedAction({ name: e.command });
+                this._customCommandAction({ name: e.command });
         }
     }
     _renderMainToolbar() {
@@ -371,11 +374,11 @@ class Diagram extends Widget {
             height: !isServerSide ? $parent.height() - 2 * DIAGRAM_FLOATING_PANEL_OFFSET : 0
         };
         if(this._historyToolbar && !isServerSide) {
-            result.offsetY += this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
-            result.height -= this._historyToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
+            result.offsetY += this._historyToolbar.$element().outerHeight() + DIAGRAM_FLOATING_PANEL_OFFSET;
+            result.height -= this._historyToolbar.$element().outerHeight() + DIAGRAM_FLOATING_PANEL_OFFSET;
         }
         if(this._viewToolbar && !isServerSide) {
-            result.height -= this._viewToolbar.$element().height() + DIAGRAM_FLOATING_PANEL_OFFSET;
+            result.height -= this._viewToolbar.$element().outerHeight() + this._getViewToolbarYOffset(isServerSide);
         }
         return result;
     }
@@ -394,6 +397,15 @@ class Diagram extends Widget {
             this._updateViewToolbarPosition($container, $parent, isServerSide);
         };
     }
+    _getViewToolbarYOffset(isServerSide) {
+        if(isServerSide) return;
+
+        let result = DIAGRAM_FLOATING_PANEL_OFFSET;
+        if(this._viewToolbar && this._propertiesToolbar) {
+            result += (this._propertiesToolbar.$element().outerHeight() - this._viewToolbar.$element().outerHeight()) / 2;
+        }
+        return result;
+    }
     _updateViewToolbarPosition($container, $parent, isServerSide) {
         if(isServerSide) return;
 
@@ -401,7 +413,7 @@ class Diagram extends Widget {
             my: 'left bottom',
             at: 'left bottom',
             of: $parent,
-            offset: DIAGRAM_FLOATING_PANEL_OFFSET + ' -' + DIAGRAM_FLOATING_PANEL_OFFSET
+            offset: DIAGRAM_FLOATING_PANEL_OFFSET + ' -' + this._getViewToolbarYOffset(isServerSide)
         });
     }
     _isPropertiesPanelEnabled() {
@@ -444,7 +456,7 @@ class Diagram extends Widget {
             .appendTo($parent);
 
         const offsetX = DIAGRAM_FLOATING_PANEL_OFFSET;
-        const offsetY = 2 * DIAGRAM_FLOATING_PANEL_OFFSET + (!isServerSide ? this._propertiesToolbar.$element().height() : 0);
+        const offsetY = 2 * DIAGRAM_FLOATING_PANEL_OFFSET + (!isServerSide ? this._propertiesToolbar.$element().outerHeight() : 0);
         this._propertiesPanel = this._createComponent($propertiesPanel, DiagramPropertiesPanel, {
             isMobileView: this.isMobileScreenSize(),
             isVisible: this._isPropertiesPanelVisible(),
@@ -516,7 +528,7 @@ class Diagram extends Widget {
             onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); },
             export: this.option('export'),
             excludeCommands: this._getExcludeCommands(),
-            onCustomCommandExecuted: this._onCustomCommandExecuted.bind(this)
+            onCustomCommand: this._onCustomCommand.bind(this)
         });
     }
 
@@ -1968,8 +1980,8 @@ class Diagram extends Widget {
     _createSelectionChangedAction() {
         this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
     }
-    _createCustomCommandExecuted() {
-        this._customCommandExecutedAction = this._createActionByOption('onCustomCommandExecuted');
+    _createCustomCommand() {
+        this._customCommandAction = this._createActionByOption('onCustomCommand');
     }
     _raiseItemClickAction(nativeItem) {
         if(!this._itemClickAction) {
@@ -2203,8 +2215,8 @@ class Diagram extends Widget {
             case 'onSelectionChanged':
                 this._createSelectionChangedAction();
                 break;
-            case 'onCustomCommandExecuted':
-                this._createCustomCommandExecuted();
+            case 'onCustomCommand':
+                this._createCustomCommand();
                 break;
             case 'export':
                 if(this._mainToolbar) {

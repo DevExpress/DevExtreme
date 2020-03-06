@@ -8,9 +8,9 @@ import { Consts, getMainToolbarInstance, findMainToolbarItem, getToolbarIcon, fi
 
 const moduleConfig = {
     beforeEach: function() {
-        this.onCustomCommandExecuted = sinon.spy();
+        this.onCustomCommand = sinon.spy();
         this.$element = $('#diagram').dxDiagram({
-            onCustomCommandExecuted: this.onCustomCommandExecuted,
+            onCustomCommand: this.onCustomCommand,
             mainToolbar: {
                 visible: true
             }
@@ -78,10 +78,10 @@ QUnit.module('Main Toolbar', {
         findMainToolbarItem(this.$element, 'custom').trigger('dxclick');
         findMainToolbarItem(this.$element, 'sub menu').trigger('dxclick');
         findContextMenuItem(this.$element, 'custom2').trigger('dxclick');
-        assert.ok(this.onCustomCommandExecuted.called);
-        assert.equal(this.onCustomCommandExecuted.getCalls().length, 2);
-        assert.equal(this.onCustomCommandExecuted.getCall(0).args[0]['name'], 'custom');
-        assert.equal(this.onCustomCommandExecuted.getCall(1).args[0]['name'], 'custom2');
+        assert.ok(this.onCustomCommand.called);
+        assert.equal(this.onCustomCommand.getCalls().length, 2);
+        assert.equal(this.onCustomCommand.getCall(0).args[0]['name'], 'custom');
+        assert.equal(this.onCustomCommand.getCall(1).args[0]['name'], 'custom2');
     });
     test('selectBox should have items', function(assert) {
         assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontName).getState().value, 'Arial');

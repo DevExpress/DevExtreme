@@ -8,9 +8,9 @@ import { Consts, getContextMenuInstance, findContextMenuItem } from '../../../he
 
 const moduleConfig = {
     beforeEach: function() {
-        this.onCustomCommandExecuted = sinon.spy();
+        this.onCustomCommand = sinon.spy();
         this.$element = $('#diagram').dxDiagram({
-            onCustomCommandExecuted: this.onCustomCommandExecuted
+            onCustomCommand: this.onCustomCommand
         });
         this.instance = this.$element.dxDiagram('instance');
     }
@@ -90,9 +90,9 @@ QUnit.module('Context Menu', {
         findContextMenuItem(this.$element, 'custom').trigger('dxclick');
         findContextMenuItem(this.$element, 'sub menu').trigger('dxclick');
         findContextMenuItem(this.$element, 'custom2').trigger('dxclick');
-        assert.ok(this.onCustomCommandExecuted.called);
-        assert.equal(this.onCustomCommandExecuted.getCalls().length, 2);
-        assert.equal(this.onCustomCommandExecuted.getCall(0).args[0]['name'], 'custom');
-        assert.equal(this.onCustomCommandExecuted.getCall(1).args[0]['name'], 'custom2');
+        assert.ok(this.onCustomCommand.called);
+        assert.equal(this.onCustomCommand.getCalls().length, 2);
+        assert.equal(this.onCustomCommand.getCall(0).args[0]['name'], 'custom');
+        assert.equal(this.onCustomCommand.getCall(1).args[0]['name'], 'custom2');
     });
 });

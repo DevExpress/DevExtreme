@@ -26,6 +26,7 @@
     @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING: 8px 0 4px 4px;
     @DIAGRAM_TOOLBOX_MOBILE_PADDING: 90px;
 
+    @DIAGRAM_PROPERTIES_PANEL_PADDING: 0px;
     @DIAGRAM_PROPERTIES_PANEL_SPACING: 16px;
     @DIAGRAM_PROPERTIES_LAYOUT_ICON_SIZE: 64px;
 
@@ -43,6 +44,7 @@
     @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING: 4px 0 4px 4px;
     @DIAGRAM_TOOLBOX_MOBILE_PADDING: 76px;
 
+    @DIAGRAM_PROPERTIES_PANEL_PADDING: 6px;
     @DIAGRAM_PROPERTIES_PANEL_SPACING: 8px;
     @DIAGRAM_PROPERTIES_LAYOUT_ICON_SIZE: 48px;
 
@@ -291,8 +293,8 @@
 }
 
 .dx-diagram-properties-popup {
-    .dx-popup-content {
-        padding: @DIAGRAM_PROPERTIES_PANEL_SPACING;
+    .dx-multiview-item {
+        padding: @DIAGRAM_PROPERTIES_PANEL_PADDING;
     }
 
     .dx-diagram-properties-panel-group-title {
