@@ -1635,42 +1635,40 @@ QUnit.test('refresh after collapseRow when autoExpandAll', function(assert) {
     assert.strictEqual(items[0].isExpanded, false, 'item 1 is not expanded');
 });
 
-/*
-QUnit.test("Initial load when dataSource has filter and filterMode is standard", function(assert) {
+QUnit.skip('Initial load when dataSource has filter and filterMode is standard', function(assert) {
     // arrange, act
     var loadingArgs = [];
 
     this.setupTreeList({
-        filterMode: "standard",
+        filterMode: 'standard',
         dataSource: {
             store: {
-                type: "array",
+                type: 'array',
                 data: this.items,
                 onLoading: function(e) {
                     loadingArgs.push(e);
                 }
             },
-            filter: ["age", "=", 19]
+            filter: ['age', '=', 19]
         }
     });
 
     // assert
     assert.deepEqual(loadingArgs, [
         {
-            filter: [["parentId", "=", 0], "and", ["age", "=", 19]],
+            filter: [['parentId', '=', 0], 'and', ['age', '=', 19]],
             group: null,
             sort: null,
             parentIds: [0],
             userData: {}
         }
-    ], "loading arguments");
+    ], 'loading arguments');
 
     var items = this.dataController.items();
-    assert.equal(items.length, 2, "count items");
-    assert.equal(items[0].data.name, "Name 3", "item 1 name value");
-    assert.equal(items[1].data.name, "Name 1", "item 2 name value");
+    assert.equal(items.length, 2, 'count items');
+    assert.equal(items[0].data.name, 'Name 3', 'item 1 name value');
+    assert.equal(items[1].data.name, 'Name 1', 'item 2 name value');
 });
-*/
 
 QUnit.test('Initial load when dataSource has filter and filterMode is withAncestors (default)', function(assert) {
     // arrange, act
@@ -2928,4 +2926,51 @@ QUnit.test('The filter query should be correct after resetting the filter value'
     items = this.dataController.items();
     assert.strictEqual(items.length, 3, 'item count');
     assert.deepEqual(filter, ['parentId', '=', 0], 'filter');
+});
+
+// T866113
+QUnit.test('Filtering should work correctly when data is returned as an object', function(assert) {
+    // arrange
+    /* eslint-disable */
+    const store = new ArrayStore([
+        { id: 1, parentId: 0, name: "Name 3", age: 19 },
+            { id: 4, parentId: 1, name: "Name 6", age: 16 },
+            { id: 5, parentId: 1, name: "Name 5", age: 15 },
+            { id: 6, parentId: 1, name: "Name 4", age: 15 },
+                { id: 7, parentId: 6, name: "Name 7", age: 18 },
+        { id: 2, parentId: 0, name: "Name 1", age: 19 },
+        { id: 3, parentId: 0, name: "Name 2", age: 18 }
+    ]);
+    /* eslint-enable */
+
+    this.setupTreeList({
+        remoteOperations: {
+            filtering: true
+        },
+        dataSource: {
+            load: function(loadOptions) {
+                const d = $.Deferred();
+
+                store.load(loadOptions).done((items) => {
+                    d.resolve({
+                        data: items,
+                        totalCount: 7
+                    });
+                });
+
+                return d.promise();
+            }
+        },
+        columns: [{ dataField: 'name', dataType: 'string' }, { dataField: 'age', dataType: 'number' }]
+    });
+
+    // act
+    this.columnOption('name', 'filterValue', 'Name 7');
+
+    // assert
+    const rows = this.getVisibleRows();
+    assert.strictEqual(rows.length, 3, 'row count');
+    assert.strictEqual(rows[0].key, 1, 'first row');
+    assert.strictEqual(rows[1].key, 6, 'second row');
+    assert.strictEqual(rows[2].key, 7, 'third row');
 });
