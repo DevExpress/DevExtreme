@@ -28,13 +28,13 @@ export function getHistoryToolbarInstance($diagramElement) {
     return getHistoryToolbarElement($diagramElement).dxToolbar('instance');
 }
 export function getViewToolbarElement($diagramElement) {
-    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(1));
+    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(2));
 }
 export function getViewToolbarInstance($diagramElement) {
     return getViewToolbarElement($diagramElement).dxToolbar('instance');
 }
 export function getPropertiesToolbarElement($diagramElement) {
-    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(2));
+    return $($diagramElement.find(Consts.FLOATING_TOOLBAR_SELECTOR).get(1));
 }
 export function getPropertiesToolbarInstance($diagramElement) {
     return getPropertiesToolbarElement($diagramElement).dxToolbar('instance');

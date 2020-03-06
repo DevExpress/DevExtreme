@@ -31,11 +31,13 @@ QUnit.module('Properties Panel', {
         assert.equal($toolbar.length, 1);
     });
     test('should not render if propertiesPanel.visibility is "disabled"', function(assert) {
+        let $toolbar = this.$element.find(Consts.FLOATING_TOOLBAR_SELECTOR);
+        assert.equal($toolbar.length, 3);
         this.instance.option('propertiesPanel.visibility', 'disabled');
         const $panel = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
         assert.equal($panel.length, 0);
-        const $toolbar = getPropertiesToolbarElement(this.$element);
-        assert.equal($toolbar.length, 0);
+        $toolbar = this.$element.find(Consts.FLOATING_TOOLBAR_SELECTOR);
+        assert.equal($toolbar.length, 2);
     });
     test('should render if propertiesPanel.visibility is "collapsed"', function(assert) {
         this.instance.option('propertiesPanel.visibility', 'collapsed');
