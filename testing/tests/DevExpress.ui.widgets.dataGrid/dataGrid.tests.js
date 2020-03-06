@@ -43,7 +43,6 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
-    // $(gridMarkup).appendTo('body');
 });
 
 import 'common.css!';
@@ -725,10 +724,9 @@ QUnit.test('Should not cut border of selected cell by \'Add row\' (T748046)', fu
         },
         dataSource: [...new Array(20)].map((x, i) => ({ name: i }))
     });
-    let scrollable;
 
     clock.tick();
-    scrollable = $('.dx-scrollable').dxScrollable('instance');
+    const scrollable = $('.dx-scrollable').dxScrollable('instance');
 
     scrollable.scrollTo({ y: 5 });
     clock.tick();
@@ -4560,9 +4558,9 @@ QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \
     assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, 'navigated row is visible');
 });
 
-['standard', 'infinite', 'virtual'].forEach((scrollingMode) => {
-    ['standard', 'virtual'].forEach((columnRenderingMode) => {
-        QUnit.test(`Grid should not scroll top after navigate to row on the same page if scrolling.mode is ${scrollingMode} and scrolling.rowRenderingMode is ${columnRenderingMode} (T836612)`, function(assert) {
+['standard', 'infinite', 'virtual'].forEach(scrollingMode => {
+    ['standard', 'virtual'].forEach(rowRenderingMode => {
+        QUnit.test(`Grid should not scroll top after navigate to row on the same page if scrolling.mode is ${scrollingMode} and scrolling.rowRenderingMode is ${rowRenderingMode} (T836612)`, function(assert) {
             // arrange
             const data = [];
 
@@ -4576,7 +4574,7 @@ QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \
                 dataSource: data,
                 scrolling: {
                     mode: 'virtual',
-                    rowRenderingMode: 'virtual',
+                    rowRenderingMode: rowRenderingMode,
                     useNative: false
                 },
                 loadingTimeout: undefined
@@ -4589,6 +4587,48 @@ QUnit.test('DataGrid - navigateToRow method should work if rowRenderingMode is \
             // assert
             assert.equal(dataGrid.pageIndex(), 1, 'Page index');
         });
+    });
+
+    QUnit.test(`Test1 where scrollingMode: ${scrollingMode}`, function(assert) {
+        // arrange
+        const data = [];
+        const columns = [];
+
+        for(let i = 0; i < 2; ++i) {
+            const item = {};
+            for(let j = 0; j < 100; ++j) {
+                const fieldName = `field${j}`;
+                item[fieldName] = `${i}-${j}`;
+                if(columns.length !== 100) {
+                    columns.push(fieldName);
+                }
+            }
+            data.push(item);
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 270,
+            columns: columns,
+            dataSource: data,
+            columnWidth: 90,
+            scrolling: {
+                mode: scrollingMode,
+                columnRenderingMode: 'virtual'
+            },
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const columnController = dataGrid.getController('columns');
+
+        // assert
+        assert.equal(columnController.getColumnIndexOffset(), 0, 'Column index offset is 0');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ x: 900 });
+        this.clock.tick();
+
+        // assert
+        assert.equal(columnController.getColumnIndexOffset(), 9, 'Column index offset');
     });
 });
 

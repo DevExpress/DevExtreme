@@ -2158,7 +2158,6 @@ QUnit.test('Not update dates for array store after inserting', function(assert) 
     ]);
 });
 
-
 QUnit.test('parsing dates', function(assert) {
     const array = [
         { name: 'Alex', date: new Date(2012, 10, 5), numberDate: 5000000, stringDate: '2005/08/09 18:31:42'/* , stringDateDotNet: "\/Date(1310669017000)\/", stringDateISO8601UTC: '1997-07-16T19:20:15.123Z', stringDateISO8601ZeroTime: '1997-07-16T00:00:00.000Z', stringDateTimeZone: '2005-08-09T18:31:42+05', stringDateTimeZoneWithMinutes : '2005-08-09T18:31:42+03:30' */ }
