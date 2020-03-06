@@ -12479,6 +12479,130 @@ QUnit.test('No exceptions on editing a column with given setCellValue when repai
     }
 });
 
+// T865329
+[true, false].forEach(withConfirm => {
+    QUnit.test('Validation should not block deleting newly added row in cell edit mode ' + withConfirm ? '(with confirm)' : '(no confirm)', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        let visibleRows;
+
+        rowsView.render(testElement);
+
+        const editingOptions = {
+            mode: 'cell',
+            allowDeleting: true,
+            allowAdding: true
+        };
+
+        if(withConfirm) {
+            editingOptions.confirmDelete = true;
+            editingOptions.texts = {
+                confirmDeleteMessage: 'confirm delete'
+            };
+        }
+
+        this.applyOptions({
+            editing: editingOptions,
+            columns: [{
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        // act
+        this.addRow();
+        this.clock.tick();
+
+        // assert
+        visibleRows = this.getVisibleRows();
+
+        assert.equal(visibleRows.length, 4, 'rows count');
+        assert.ok(visibleRows[0].isNewRow, 'first row is new');
+        assert.ok(visibleRows[0].isEditing, 'editing first row');
+
+        // act
+        this.deleteRow(0);
+        this.clock.tick();
+
+        if(withConfirm) {
+            // assert
+            const dialog = $('body').find('.dx-dialog').first();
+
+            assert.ok(dialog.length, 'dialog was shown');
+            assert.notOk($('.dx-datagrid-invalid').length, 'error message was not shown');
+
+            // act
+            dialog.find('.dx-dialog-button').first().trigger('dxclick');
+        }
+
+        // assert
+        visibleRows = this.getVisibleRows();
+
+        assert.equal(visibleRows.length, 3, 'rows count');
+    });
+});
+
+// T865329
+[true, false].forEach((withConfirm) => {
+    QUnit.test('Deleting should be blocked while editing newly added row in cell edit mode' + withConfirm ? '(with confirm)' : '(no confirm)', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        let visibleRows;
+
+        rowsView.render(testElement);
+
+        const editingOptions = {
+            mode: 'cell',
+            allowDeleting: true,
+            allowAdding: true
+        };
+
+        if(withConfirm) {
+            editingOptions.confirmDelete = true;
+            editingOptions.texts = {
+                confirmDeleteMessage: 'confirm delete'
+            };
+        }
+
+        this.applyOptions({
+            editing: editingOptions,
+            columns: [{
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        // act
+        this.addRow();
+        this.clock.tick();
+
+        // assert
+        visibleRows = this.getVisibleRows();
+
+        assert.equal(visibleRows.length, 4, 'rows count');
+        assert.ok(visibleRows[0].isNewRow, 'first row is new');
+        assert.ok(visibleRows[0].isEditing, 'editing first row');
+
+        // act
+        this.deleteRow(1);
+        this.clock.tick();
+
+        // assert
+        if(withConfirm) {
+            const dialog = $('body').find('.dx-dialog').first();
+
+            assert.notOk(dialog.length, 'dialog was not shown');
+        }
+
+        visibleRows = this.getVisibleRows();
+
+        assert.ok($('.dx-datagrid-invalid').length, 'error message was shown');
+
+        assert.equal(visibleRows.length, 4, 'rows count');
+    });
+});
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
