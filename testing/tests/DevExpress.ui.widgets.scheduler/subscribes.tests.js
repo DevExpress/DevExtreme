@@ -598,7 +598,7 @@ QUnit.test('appointmentTakesSeveralDays should return true, if startDate and end
         {
             startDate: new Date(2016, 1, 2, 2),
             endDate: new Date(2016, 1, 2, 7)
-        },
+        }
     ];
 
     assert.ok(this.instance.fire('appointmentTakesSeveralDays', appointments[0]), 'appointmentTakesSeveralDays works correctly');
