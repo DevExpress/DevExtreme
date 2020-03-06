@@ -43,7 +43,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        this.wrapper.findThumbnailsItem('Folder 1').trigger('click');
+        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxclick');
         this.clock.tick(400);
 
         assert.strictEqual(selectionSpy.callCount, 1, 'event raised');
@@ -52,7 +52,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [ 'Folder 1' ], 'item selected');
         assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [], 'no items deselected');
 
-        this.wrapper.findThumbnailsItem('Folder 2').trigger('click');
+        this.wrapper.findThumbnailsItem('Folder 2').trigger('dxclick');
         this.clock.tick(400);
 
         assert.strictEqual(selectionSpy.callCount, 2, 'event raised');
@@ -66,7 +66,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         const selectionSpy = sinon.spy();
         this.fileManager.option('onSelectionChanged', selectionSpy);
 
-        this.wrapper.findThumbnailsItem('Folder 1').trigger('click');
+        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxclick');
         this.clock.tick(400);
 
         assert.strictEqual(selectionSpy.callCount, 1, 'event raised');
@@ -75,7 +75,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [ 'Folder 1' ], 'item selected');
         assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [], 'no item deselected');
 
-        let e = $.Event('click');
+        let e = $.Event('dxclick');
         e.ctrlKey = true;
         this.wrapper.findThumbnailsItem('Folder 3').trigger(e);
         this.clock.tick(400);
@@ -86,7 +86,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.deepEqual(selectionSpy.args[1][0].currentSelectedItemKeys, [ 'Folder 3' ], 'item selected');
         assert.deepEqual(selectionSpy.args[1][0].currentDeselectedItemKeys, [], 'no item deselected');
 
-        e = $.Event('click');
+        e = $.Event('dxclick');
         e.ctrlKey = true;
         this.wrapper.findThumbnailsItem('Folder 1').trigger(e);
         this.clock.tick(400);
@@ -97,7 +97,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.deepEqual(selectionSpy.args[2][0].currentSelectedItemKeys, [], 'no item selected');
         assert.deepEqual(selectionSpy.args[2][0].currentDeselectedItemKeys, [ 'Folder 1' ], 'item deselected');
 
-        e = $.Event('click');
+        e = $.Event('dxclick');
         e.ctrlKey = true;
         this.wrapper.findThumbnailsItem('Folder 3').trigger(e);
         this.clock.tick(400);
@@ -118,7 +118,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        this.wrapper.findThumbnailsItem('Folder 1.1').trigger('click');
+        this.wrapper.findThumbnailsItem('Folder 1.1').trigger('dxclick');
         this.clock.tick(400);
 
         assert.strictEqual(selectionSpy.callCount, 1, 'event raised');
@@ -127,7 +127,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [ 'Folder 1/Folder 1.1' ], 'item selected');
         assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [], 'no item deselected');
 
-        this.wrapper.findThumbnailsItem('..').trigger('click');
+        this.wrapper.findThumbnailsItem('..').trigger('dxclick');
         this.clock.tick(400);
 
         assert.strictEqual(selectionSpy.callCount, 2, 'event raised');
@@ -136,7 +136,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.deepEqual(selectionSpy.args[1][0].currentSelectedItemKeys, [], 'no item selected');
         assert.deepEqual(selectionSpy.args[1][0].currentDeselectedItemKeys, [ 'Folder 1/Folder 1.1' ], 'item deselected');
 
-        this.wrapper.findThumbnailsItem('Folder 1.1').trigger('click');
+        this.wrapper.findThumbnailsItem('Folder 1.1').trigger('dxclick');
         this.clock.tick(400);
 
         assert.strictEqual(selectionSpy.callCount, 3, 'event raised');
@@ -145,7 +145,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.deepEqual(selectionSpy.args[2][0].currentSelectedItemKeys, [ 'Folder 1/Folder 1.1' ], 'item selected');
         assert.deepEqual(selectionSpy.args[2][0].currentDeselectedItemKeys, [], 'no item deselected');
 
-        const e = $.Event('click');
+        const e = $.Event('dxclick');
         e.ctrlKey = true;
         this.wrapper.findThumbnailsItem('..').trigger(e);
         this.clock.tick(400);
