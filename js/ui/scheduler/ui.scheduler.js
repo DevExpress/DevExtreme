@@ -61,8 +61,6 @@ const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
 const WIDGET_ADAPTIVE_CLASS = `${WIDGET_CLASS}-adaptive`;
 const WIDGET_WIN_NO_TOUCH_CLASS = `${WIDGET_CLASS}-win-no-touch`;
 const WIDGET_READONLY_CLASS = `${WIDGET_CLASS}-readonly`;
-const RECURRENCE_EDITOR_ITEM_CLASS = `${WIDGET_CLASS}-recurrence-rule-item`;
-const RECURRENCE_EDITOR_OPENED_ITEM_CLASS = `${WIDGET_CLASS}-recurrence-rule-item-opened`;
 const WIDGET_SMALL_WIDTH = 400;
 
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
@@ -424,7 +422,8 @@ const Scheduler = Widget.inherit({
                 allowDeleting: true,
                 allowDragging: true,
                 allowResizing: true,
-                allowUpdating: true
+                allowUpdating: true,
+                allowEditingTimeZones: false,
             },
 
             /**
@@ -453,6 +452,11 @@ const Scheduler = Widget.inherit({
                  * @type boolean
                  * @default true
                  * @default false @for Android|iOS
+                */
+            /**
+                * @name dxSchedulerOptions.editing.allowEditingTimeZones
+                * @type boolean
+                * @default false
                 */
 
 
@@ -1143,7 +1147,7 @@ const Scheduler = Widget.inherit({
 
         this.hideAppointmentTooltip();
 
-        this.resizePopup();
+        this._appointmentPopup.triggerResize();
         this._appointmentPopup.updatePopupFullScreenMode();
     },
 
@@ -2077,10 +2081,6 @@ const Scheduler = Widget.inherit({
         return recurrenceRule && recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid;
     },
 
-    resizePopup() {
-        this._appointmentPopup.triggerResize();
-    },
-
     _getAppointmentData: function(appointmentData, options) {
         options = options || {};
 
@@ -2242,9 +2242,11 @@ const Scheduler = Widget.inherit({
         return this._appointmentPopup.getPopup();
     },
 
+    ///#DEBUG
     getAppointmentDetailsForm: function() { // TODO for tests
         return this._appointmentPopup._appointmentForm;
     },
+    ///#ENDDEBUG
 
     getUpdatedAppointment: function() {
         return this._appointmentModel.getUpdatedAppointment();
@@ -2334,14 +2336,6 @@ const Scheduler = Widget.inherit({
         exception.setHours(exceptionByStartDate.getHours());
         exception = dateSerialization.serializeDate(exception, FULL_DATE_FORMAT);
         return exception;
-    },
-
-    recurrenceEditorVisibilityChanged: function(visible) {
-        if(this._appointmentPopup._appointmentForm) {
-            this._appointmentPopup._appointmentForm.$element()
-                .find('.' + RECURRENCE_EDITOR_ITEM_CLASS)
-                .toggleClass(RECURRENCE_EDITOR_OPENED_ITEM_CLASS, visible);
-        }
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {

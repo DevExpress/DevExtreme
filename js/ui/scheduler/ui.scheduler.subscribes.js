@@ -503,14 +503,6 @@ const subscribes = {
         }).bind(this));
     },
 
-    recurrenceEditorVisibilityChanged: function(visible) {
-        this.recurrenceEditorVisibilityChanged(visible);
-    },
-
-    resizePopup: function() {
-        this.resizePopup();
-    },
-
     getField: function(field, obj) {
         if(!typeUtils.isDefined(this._dataAccessors.getter[field])) {
             return;

@@ -115,7 +115,7 @@ QUnit.module('DST/STD for recurrence appointments, T804886 and T856624', moduleC
         endDateEditor = scheduler.appointmentForm.getEditor('endDate');
         assert.equal(startDateEditor.option('text'), '3/1/2019, 3:00 AM', 'Start Date is displayed correctly in appointment popup form before time changing in custom timezone');
         assert.equal(endDateEditor.option('text'), '3/1/2019, 6:00 AM', 'End Date is displayed correctly in appointment popup form before time changing in custom timezone');
-        scheduler.appointmentPopup.hide();
+        scheduler.appointmentPopup.clickCancelButton();
 
         scheduler.instance.option('currentDate', new Date(2019, 2, 14)); // NOTE: DST Montreal, STD Paris
 
@@ -128,7 +128,7 @@ QUnit.module('DST/STD for recurrence appointments, T804886 and T856624', moduleC
         endDateEditor = scheduler.appointmentForm.getEditor('endDate');
         assert.equal(startDateEditor.option('text'), '3/14/2019, 4:00 AM', 'Start Date is displayed correctly in appointment popup form before time changing in custom timezone');
         assert.equal(endDateEditor.option('text'), '3/14/2019, 7:00 AM', 'End Date is displayed correctly in appointment popup form before time changing in custom timezone');
-        scheduler.appointmentPopup.hide();
+        scheduler.appointmentPopup.clickCancelButton();
 
         scheduler.instance.option('currentDate', new Date(2019, 3, 2)); // NOTE: DST Paris
 
@@ -224,7 +224,7 @@ QUnit.module('DST/STD for recurrence appointments, T804886 and T856624', moduleC
         endDateEditor = scheduler.appointmentForm.getEditor('endDate');
         assert.equal(startDateEditor.option('text'), '3/10/2019, 4:00 AM', 'Start Date is displayed correctly in appointment popup form after time changing in custom timezone');
         assert.equal(endDateEditor.option('text'), '3/10/2019, 7:00 AM', 'End Date is displayed correctly in appointment popup form after time changing in custom timezone');
-        scheduler.appointmentPopup.hide();
+        scheduler.appointmentPopup.clickCancelButton();
 
         scheduler.instance.option('currentDate', new Date(2019, 2, 31)); // NOTE: DST Paris
 
@@ -237,7 +237,7 @@ QUnit.module('DST/STD for recurrence appointments, T804886 and T856624', moduleC
         endDateEditor = scheduler.appointmentForm.getEditor('endDate');
         assert.equal(startDateEditor.option('text'), '3/31/2019, 3:00 AM', 'Start Date is displayed correctly in appointment popup form before time changing in appointment timezone');
         assert.equal(endDateEditor.option('text'), '3/31/2019, 6:00 AM', 'End Date is displayed correctly in appointment popup form before time changing in appointment timezone');
-        scheduler.appointmentPopup.hide();
+        scheduler.appointmentPopup.clickCancelButton();
     });
 
     QUnit.test('Recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone', function(assert) {
@@ -381,7 +381,7 @@ QUnit.module('DST/STD for recurrence appointments, T804886 and T856624', moduleC
         endDateEditor = scheduler.appointmentForm.getEditor('endDate');
         assert.equal(startDateEditor.option('text'), '10/27/2019, 4:00 AM', 'Start Date is displayed correctly in appointment popup form after time changing in custom timezone');
         assert.equal(endDateEditor.option('text'), '10/27/2019, 7:00 AM', 'End Date is displayed correctly in appointment popup form after time changing in custom timezone');
-        scheduler.appointmentPopup.hide();
+        scheduler.appointmentPopup.clickCancelButton();
 
         scheduler.instance.option('currentDate', new Date(2019, 10, 3)); // NOTE: STD Montreal, STD Paris
 
@@ -394,7 +394,7 @@ QUnit.module('DST/STD for recurrence appointments, T804886 and T856624', moduleC
         endDateEditor = scheduler.appointmentForm.getEditor('endDate');
         assert.equal(startDateEditor.option('text'), '11/3/2019, 3:00 AM', 'Start Date is displayed correctly in appointment popup form before time changing in appointment timezone');
         assert.equal(endDateEditor.option('text'), '11/3/2019, 6:00 AM', 'End Date is displayed correctly in appointment popup form before time changing in appointment timezone');
-        scheduler.appointmentPopup.hide();
+        scheduler.appointmentPopup.clickCancelButton();
     });
 });
 

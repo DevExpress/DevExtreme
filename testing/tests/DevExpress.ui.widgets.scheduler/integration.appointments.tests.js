@@ -3,7 +3,6 @@ import { noop } from 'core/utils/common';
 import errors from 'ui/widget/ui.errors';
 import translator from 'animation/translator';
 import dateLocalization from 'localization/date';
-import messageLocalization from 'localization/message';
 import dblclickEvent from 'events/dblclick';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -590,42 +589,6 @@ QUnit.test('DblClick on appointment should not affect the related cell start dat
     }
 });
 
-QUnit.test('Recurrence repeat-type editor should have default \'never\' value after reopening appointment popup', function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 1, 9),
-        dataSource: new DataSource({
-            store: []
-        }),
-        currentView: 'week'
-    });
-
-    const firstAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 1' };
-    const secondAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 2' };
-
-    this.instance.showAppointmentPopup(firstAppointment);
-
-    let form = this.instance.getAppointmentDetailsForm();
-    let recurrenceEditor = form.getEditor('recurrenceRule');
-    let freqEditor = recurrenceEditor._freqEditor;
-    let repeatTypeEditor = form.getEditor('recurrenceRule')._repeatTypeEditor;
-
-    freqEditor.option('value', 'daily');
-
-    repeatTypeEditor.option('value', 'count');
-    $('.dx-scheduler-appointment-popup').find('.dx-popup-done').trigger('dxclick');
-
-    this.instance.showAppointmentPopup(secondAppointment);
-
-    form = this.instance.getAppointmentDetailsForm();
-    recurrenceEditor = form.getEditor('recurrenceRule');
-    freqEditor = recurrenceEditor._freqEditor;
-    repeatTypeEditor = form.getEditor('recurrenceRule')._repeatTypeEditor;
-
-    freqEditor.option('value', 'daily');
-
-    assert.strictEqual(repeatTypeEditor.option('value'), 'never', 'Repeat-type editor value is ok');
-});
-
 QUnit.test('Appointment dates should not be normalized before sending to the details view', function(assert) {
     const startDate = 1429776000000;
     const endDate = 1429794000000;
@@ -660,40 +623,6 @@ QUnit.test('Appointment dates should not be normalized before sending to the det
     } finally {
         this.instance._appointmentPopup.show.restore();
     }
-});
-
-QUnit.test('Appointment labels should be localized before sending to the details view', function(assert) {
-    const startDate = 1429776000000;
-    const endDate = 1429794000000;
-    const task = {
-        text: 'Task 1',
-        startDate: startDate,
-        endDate: endDate
-    };
-
-    this.createInstance({
-        dataSource: new DataSource({
-            store: [task]
-        }),
-        currentDate: new Date(2015, 3, 23)
-    });
-
-    this.clock.tick();
-    this.instance.showAppointmentPopup(task);
-
-    const detailsForm = this.instance.getAppointmentDetailsForm();
-    const formItems = detailsForm.option('items');
-
-    assert.equal(formItems[0].label.text, messageLocalization.format('dxScheduler-editorLabelTitle'), 'Title is OK');
-    assert.equal(formItems[1].label.text, messageLocalization.format('dxScheduler-editorLabelStartDate'), 'Start date is OK');
-    assert.equal(formItems[2].label.text, ' ', 'Start date tz is OK');
-    assert.equal(formItems[3].label.text, messageLocalization.format('dxScheduler-editorLabelEndDate'), 'End date is OK');
-    assert.equal(formItems[4].label.text, ' ', 'End date tz is OK');
-    assert.equal(formItems[5].label.text, messageLocalization.format('dxScheduler-allDay'), 'All-day is OK');
-    assert.equal(formItems[6].itemType, 'empty', 'Item is empty');
-    assert.equal(formItems[7].label.text, messageLocalization.format('dxScheduler-editorLabelDescription'), 'Description is OK');
-    assert.equal(formItems[8].itemType, 'empty', 'Item is empty');
-    assert.equal(formItems[9].label.text, messageLocalization.format('dxScheduler-editorLabelRecurrence'), 'Recurrence is OK');
 });
 
 QUnit.test('Appointment should be copied before sending to the details view', function(assert) {
@@ -2947,10 +2876,9 @@ QUnit.test('Scheduler appointment popup should be opened correctly for recurrenc
     $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
     const popup = this.instance.getAppointmentPopup();
-    const $checkboxes = $(popup.$content()).find('.dx-checkbox');
+    const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
-    assert.equal($checkboxes.eq(1).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked. Popup is correct');
-    assert.equal($checkboxes.eq(4).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked. Popup is correct');
+    assert.deepEqual($buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys');
 });
 
 QUnit.test('Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)', function(assert) {
@@ -2986,10 +2914,9 @@ QUnit.test('Scheduler appointment popup should be opened correctly for recurrenc
     $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
     const popup = this.instance.getAppointmentPopup();
-    const $checkboxes = $(popup.$content()).find('.dx-checkbox');
+    const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
-    assert.equal($checkboxes.eq(1).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked. Popup is correct');
-    assert.equal($checkboxes.eq(4).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked. Popup is correct');
+    $buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys';
 
     this.instance.hideAppointmentPopup();
     this.instance.showAppointmentPopup(tasks[0]);
