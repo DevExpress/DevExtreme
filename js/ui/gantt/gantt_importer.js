@@ -1,25 +1,13 @@
 import Errors from '../widget/ui.errors';
-import { getWindow } from '../../core/utils/window';
+import Gantt from 'devexpress-gantt';
 
-let ganttViewCore;
 
 function getGanttViewCore() {
-    if(!ganttViewCore) {
-        ganttViewCore = requestGantt();
-    }
-
-    return ganttViewCore;
-}
-
-function requestGantt() {
-    const window = getWindow();
-    const ganttViewCore = window && window.DevExpress && window.DevExpress.Gantt || require('devexpress-gantt');
-
-    if(!ganttViewCore) {
+    if(!Gantt) {
         throw Errors.Error('E1041', 'devexpress-gantt');
     }
 
-    return ganttViewCore;
+    return Gantt;
 }
 
 export { getGanttViewCore };
