@@ -1,5 +1,5 @@
-import Errors from '../widget/ui.errors';
-import Gantt from 'devexpress-gantt';
+const Errors = require('../widget/ui.errors');
+const Gantt = require('devexpress-gantt');
 
 
 function getGanttViewCore() {
@@ -10,4 +10,4 @@ function getGanttViewCore() {
     return Gantt;
 }
 
-export { getGanttViewCore };
+module.exports.getGanttViewCore = getGanttViewCore;
