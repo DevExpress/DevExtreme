@@ -28,7 +28,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
 
         QUnit.test('dataSource: { title, icon }', function(assert) {
             const $accordion = $('#accordion').dxAccordion({
-                dataSource: [{ title: 'Caption<i>', icon: 'remove' }],
+                dataSource: [{ title: 'Caption', icon: 'remove' }],
             });
 
             const iconRect = $accordion.find(`.${TITLE_CAPTION_CLASS} .${ICON_CLASS}`).get(0).getBoundingClientRect();

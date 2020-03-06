@@ -2,6 +2,7 @@ import $ from '../core/renderer';
 import support from '../core/utils/support';
 import { extend } from '../core/utils/extend';
 import devices from '../core/devices';
+import domAdapter from '../core/dom_adapter';
 import registerComponent from '../core/component_registrator';
 import MultiView from './multi_view';
 import Tabs from './tabs';
@@ -108,7 +109,7 @@ const TabPanel = MultiView.inherit({
                     }
 
                     if(isDefined(data.title) && !isPlainObject(data.title)) {
-                        $container.append($('<span>').text(data.title));
+                        $container.append(domAdapter.getDocument().createTextNode(data.title));
                     }
                 } else {
                     if(isDefined(data)) {

@@ -3,6 +3,7 @@ import eventsEngine from '../events/core/events_engine';
 import fx from '../animation/fx';
 import clickEvent from '../events/click';
 import devices from '../core/devices';
+import domAdapter from '../core/dom_adapter';
 import { extend } from '../core/utils/extend';
 import { deferRender } from '../core/utils/common';
 import { getPublicElement } from '../core/utils/dom';
@@ -116,7 +117,7 @@ const Accordion = CollectionWidget.inherit({
                     }
 
                     if(isDefined(data.title) && !isPlainObject(data.title)) {
-                        $container.append($('<span>').text(data.title));
+                        $container.append(domAdapter.getDocument().createTextNode(data.title));
                     }
                 } else {
                     if(isDefined(data)) {
