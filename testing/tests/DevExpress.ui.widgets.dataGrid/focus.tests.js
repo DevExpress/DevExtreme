@@ -20,6 +20,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { CLICK_EVENT, fireKeyDown, triggerKeyDown } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 const dataGridWrapper = new DataGridWrapper('#container');
+const rowsViewWrapper = dataGridWrapper.rowsView;
 
 const addOptionChangedHandlers = function(that) {
     that.optionCalled.add(function(optionName, value) {
@@ -3967,7 +3968,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 assert.equal(this.option('focusedRowKey'), focusedRowKey, 'focusedRowKey');
                 assert.equal(this.option('focusedRowIndex'), focusedRowKey, 'focusedRowIndex');
                 if(focusedRowKey) {
-                    assert.ok(dataGridWrapper.rowsView.isFocusedRow(focusedRowKey), 'Row is focused');
+                    const dataRow = rowsViewWrapper.getDataRow(focusedRowKey);
+                    assert.ok(dataRow.isFocusedRow(), 'Row is focused');
                 }
 
                 // act
@@ -3977,8 +3979,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 // assert
                 assert.equal(this.option('focusedRowKey'), 3, 'focusedRowKey was changed');
                 assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex was changed');
-                assert.notOk(dataGridWrapper.rowsView.isFocusedRow(0), 'Row 0 is not focused row');
-                assert.ok(dataGridWrapper.rowsView.isFocusedRow(1), 'Row 1 is focused row');
+                assert.notOk(rowsViewWrapper.getDataRow(0).isFocusedRow(), 'Row 0 is not focused row');
+                assert.ok(rowsViewWrapper.getDataRow(1).isFocusedRow(), 'Row 1 is focused row');
             });
         });
 
@@ -4019,7 +4021,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 assert.equal(this.option('focusedRowKey'), focusedRowIndex, 'focusedRowKey');
                 assert.equal(this.option('focusedRowIndex'), focusedRowIndex, 'focusedRowIndex');
                 if(focusedRowIndex) {
-                    assert.ok(dataGridWrapper.rowsView.isFocusedRow(focusedRowIndex), 'Row is focused');
+                    const dataRow = rowsViewWrapper.getDataRow(focusedRowIndex);
+                    assert.ok(dataRow.isFocusedRow(), 'Row is focused');
                 }
 
                 // act
@@ -4029,8 +4032,8 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
                 // assert
                 assert.equal(this.option('focusedRowKey'), 3, 'focusedRowKey was changed');
                 assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex was changed');
-                assert.notOk(dataGridWrapper.rowsView.isFocusedRow(0), 'Row 0 is not focused row');
-                assert.ok(dataGridWrapper.rowsView.isFocusedRow(1), 'Row 1 is focused row');
+                assert.notOk(rowsViewWrapper.getDataRow(0).isFocusedRow(), 'Row 0 is not focused row');
+                assert.ok(rowsViewWrapper.getDataRow(1).isFocusedRow(), 'Row 1 is focused row');
             });
         });
     });
@@ -4498,7 +4501,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(this.option('focusedRowKey'), 'Den', 'FocusedRowKey');
         assert.equal(this.pageIndex(), 2, 'PageIndex');
         assert.equal($(rowsView.getCellElement(11, 1)).text(), 'Alice');
-        assert.ok(dataGridWrapper.rowsView.isRowVisible(11));
+        assert.ok(rowsViewWrapper.isRowVisible(11));
     });
 
     QUnit.testInActiveWindow('DataGrid should focus row by focusedRowIndex if data was filtered', function(assert) {
@@ -5180,7 +5183,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // assert
-        assert.notOk(dataGridWrapper.rowsView.isFocusOverlayVisible(), 'has no focus overlay');
+        assert.notOk(rowsViewWrapper.getFocusOverlay().isVisible(), 'has no focus overlay');
     });
 
     QUnit.test('Test navigateToRow method if paging', function(assert) {
@@ -5719,8 +5722,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // act
         try {
-            dataGridWrapper.rowsView.getVirtualCell(0).trigger(pointerEvents.up).click();
-            dataGridWrapper.rowsView.getVirtualCell(1).trigger(pointerEvents.up).click();
+            const virtualRowWrapper = dataGridWrapper.rowsView.getVirtualRow();
+            const $virtualCell0 = virtualRowWrapper.getCell(0).getElement();
+            const $virtualCell1 = virtualRowWrapper.getCell(1).getElement();
+
+            $virtualCell0.trigger(CLICK_EVENT).click();
+            $virtualCell1.trigger(CLICK_EVENT).click();
+
             assert.ok(true, 'No Exception');
         } catch(e) {
             // assert

@@ -1561,8 +1561,11 @@ QUnit.test('Column hiding should work if width is set as string (T817146)', func
     this.clock.tick();
 
     // assert
-    assert.ok(dataGridWrapper.rowsView.isRowAdaptiveVisible(0), 'Command adaptive element is visible');
-    assert.ok(dataGridWrapper.rowsView.isRowAdaptiveVisible(1), 'Command adaptive element is visible');
+    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const commandAdaptive0 = rowsViewWrapper.getDataRow(0).getCommandAdaptive();
+    const commandAdaptive1 = rowsViewWrapper.getDataRow(1).getCommandAdaptive();
+    assert.ok(commandAdaptive0.isVisible(), 'Row 0 command adaptive element is visible');
+    assert.ok(commandAdaptive1.isVisible(), 'Row 1 command adaptive element is visible');
 });
 
 QUnit.test('Calculate correct an average width of column when some columns has percent width', function(assert) {
