@@ -137,7 +137,7 @@ const RecurrenceEditor = Editor.inherit({
             /**
             * @name dxRecurrenceEditorOptions.startDate
             * @type Date
-            * @default undefiend
+            * @default undefined
             * @hidden
             */
             startDate: undefined,
