@@ -26,6 +26,7 @@ export class GanttView extends Widget {
             cultureInfo: this._getCultureInfo()
         });
         this._selectTask(this.option('selectedRowKey'));
+        this.updateBarItemsState();
     }
 
     getTaskAreaContainer() {
@@ -45,6 +46,9 @@ export class GanttView extends Widget {
     }
     updateView() {
         this._ganttViewCore.updateView();
+    }
+    updateBarItemsState() {
+        this._ganttViewCore.barManager.updateItemsState([]);
     }
     setWidth(value) {
         this._ganttViewCore.setWidth(value);
@@ -193,4 +197,8 @@ export class GanttView extends Widget {
             position: position
         });
     }
+    getMainElement() {
+        return this.option('mainElement').get(0);
+    }
+    adjustControl() {}
 }

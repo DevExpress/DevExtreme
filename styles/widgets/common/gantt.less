@@ -4,7 +4,20 @@
 
 .dx-gantt {
     display: flex;
+    flex-direction: column;
     position: relative;
+
+    .dx-gantt-main-wrapper {
+        display: flex;
+        position: relative;
+        flex-direction: row;
+        height: 100%;
+    }
+
+    .dx-gantt-toolbar-separator {
+        height: 100%;
+        border-left: 1px solid transparent;
+    }
 
     .dx-gantt-si {
         text-align: center;
