@@ -117,7 +117,7 @@ const Accordion = CollectionWidget.inherit({
                     }
 
                     if(isDefined(data.title) && !isPlainObject(data.title)) {
-                        $container.append(domAdapter.getDocument().createTextNode(data.title));
+                        $container.append(domAdapter.createTextNode(data.title));
                     }
                 } else {
                     if(isDefined(data)) {
