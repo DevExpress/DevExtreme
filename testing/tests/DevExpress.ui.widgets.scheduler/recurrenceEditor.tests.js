@@ -76,7 +76,11 @@ QUnit.test('Recurrence editor should has right items', function(assert) {
     const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
 
     const items = freqEditor.option('items');
-    // TODO { text: 'Minutely', value: 'minutely' };
+    /* {
+        // functionality is not removed, but hide the ability to set minute recurrence in the editor.
+        // in the future, if we publish the dxRecurrenceEditor, then we publish the minute recurrence
+        { text: 'Minutely', value: 'minutely' };
+    }*/
     const itemValues = [{ text: 'Hourly', value: 'hourly' }, { text: 'Daily', value: 'daily' }, { text: 'Weekly', value: 'weekly' }, { text: 'Monthly', value: 'monthly' }, { text: 'Yearly', value: 'yearly' }];
 
     for(let i = 0, len = items.length; i < len; i++) {
