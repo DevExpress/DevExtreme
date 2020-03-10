@@ -1637,7 +1637,7 @@ QUnit.test('refresh after collapseRow when autoExpandAll', function(assert) {
 
 QUnit.skip('Initial load when dataSource has filter and filterMode is standard', function(assert) {
     // arrange, act
-    var loadingArgs = [];
+    let loadingArgs = [];
 
     this.setupTreeList({
         filterMode: 'standard',
@@ -1664,7 +1664,7 @@ QUnit.skip('Initial load when dataSource has filter and filterMode is standard',
         }
     ], 'loading arguments');
 
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.equal(items.length, 2, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 1 name value');
     assert.equal(items[1].data.name, 'Name 1', 'item 2 name value');
