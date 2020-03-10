@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import typeUtils from '../../core/utils/type';
+import { isDefined, isFunction } from '../../core/utils/type';
 import { getPublicElement } from '../../core/utils/dom';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
@@ -15,6 +15,7 @@ import { name as CLICK_EVENT_NAME } from '../../events/click';
 import fx from '../../animation/fx';
 import { Deferred } from '../../core/utils/deferred';
 import { triggerResizeEvent } from '../../core/utils/dom';
+import * as zIndexPool from '../overlay/z_index';
 
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
@@ -30,27 +31,16 @@ const Drawer = Widget.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
-
             position: 'left',
-
             opened: false,
-
             minSize: null,
-
             maxSize: null,
-
             shading: false,
-
             template: PANEL_TEMPLATE_NAME,
-
             openedStateMode: 'shrink',
-
             revealMode: 'slide',
-
             animationEnabled: true,
-
             animationDuration: 400,
-
             closeOnOutsideClick: false,
 
             /**
@@ -137,7 +127,7 @@ const Drawer = Widget.inherit({
     _viewContentWrapperClickHandler(e) {
         let closeOnOutsideClick = this.option('closeOnOutsideClick');
 
-        if(typeUtils.isFunction(closeOnOutsideClick)) {
+        if(isFunction(closeOnOutsideClick)) {
             closeOnOutsideClick = closeOnOutsideClick(e);
         }
 
@@ -149,7 +139,6 @@ const Drawer = Widget.inherit({
             }
 
             this.hide();
-            this._toggleShaderVisibility(false);
         }
     },
 
@@ -284,7 +273,7 @@ const Drawer = Widget.inherit({
 
     getRealPanelWidth() {
         if(hasWindow()) {
-            if(typeUtils.isDefined(this.option('templateSize'))) {
+            if(isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
                 return this.getElementWidth(this._strategy.getPanelContent());
@@ -302,7 +291,7 @@ const Drawer = Widget.inherit({
 
     getRealPanelHeight() {
         if(hasWindow()) {
-            if(typeUtils.isDefined(this.option('templateSize'))) {
+            if(isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
                 return this.getElementHeight(this._strategy.getPanelContent());
@@ -335,11 +324,6 @@ const Drawer = Widget.inherit({
         }
     },
 
-    setZIndex(zIndex) {
-        this._$shader.css('zIndex', zIndex - 1);
-        this._$panelContentWrapper.css('zIndex', zIndex);
-    },
-
     resizeContent() { // TODO: keep for ui.file_manager.adaptivity.js
         this.resizeViewContent;
     },
@@ -363,15 +347,11 @@ const Drawer = Widget.inherit({
             return;
         }
 
-        animate = typeUtils.isDefined(animate) ? animate && this.option('animationEnabled') : this.option('animationEnabled');
-
-        if(isDrawerOpened) {
-            this._toggleShaderVisibility(isDrawerOpened);
-        }
+        animate = isDefined(animate) ? animate && this.option('animationEnabled') : this.option('animationEnabled');
 
         this._strategy.renderPosition(isDrawerOpened, animate);
 
-        this._strategy.renderShaderVisibility(isDrawerOpened, animate, this.option('animationDuration'));
+        this._renderShaderVisibility(isDrawerOpened, animate, this.option('animationDuration'));
     },
 
     _animationCompleteHandler() {
@@ -403,13 +383,58 @@ const Drawer = Widget.inherit({
         this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
     },
 
+    _renderShaderVisibility(visible, animate, duration) {
+        const fadeConfig = visible ? { from: 0, to: 1 } : { from: 1, to: 0 };
+
+        if(visible) {
+            this._toggleShaderVisibility(visible);
+        }
+
+        if(animate) {
+            animation.fade($(this._$shader), fadeConfig, duration, () => {
+                this._toggleShaderVisibility(visible);
+                this._strategy._shaderAnimation.resolve();
+            });
+        } else {
+            this._toggleShaderVisibility(visible);
+            this._$shader.css('opacity', fadeConfig.to);
+        }
+    },
+
     _toggleShaderVisibility(visible) {
         if(this.option('shading')) {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, !visible);
             this._$shader.css('visibility', visible ? 'visible' : 'hidden');
+
+            this.toggleZIndex(visible);
         } else {
             this._$shader.toggleClass(INVISIBLE_STATE_CLASS, true);
+            this._$shader.css('visibility', 'hidden');
         }
+    },
+
+    toggleZIndex(visible) {
+        if(visible && !isDefined(this._zIndex)) {
+            this._zIndex = zIndexPool.create();
+            this._setZIndex(this._zIndex);
+        }
+
+        if(!visible && isDefined(this._zIndex)) {
+            this._clearZIndex();
+        }
+    },
+
+    _setZIndex(zIndex) {
+        this._$shader.css('zIndex', zIndex);
+        this._$panelContentWrapper.css('zIndex', zIndex + 1);
+    },
+
+    _clearZIndex() {
+        zIndexPool.remove(this._zIndex);
+        zIndexPool.remove(this._zIndex + 1);
+        this._$shader.css('zIndex', '');
+        this._$panelContentWrapper.css('zIndex', '');
+        delete this._zIndex;
     },
 
     _toggleOpenedStateClass(opened) {
@@ -440,7 +465,7 @@ const Drawer = Widget.inherit({
 
     _clean() {
         this._cleanFocusState();
-
+        this._clearZIndex();
         this._removePanelContentWrapper();
         this._removeOverlay();
     },

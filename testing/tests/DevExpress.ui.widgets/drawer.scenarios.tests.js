@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { extend } from 'core/utils/extend';
 import { drawerTesters } from '../../helpers/drawerHelpers.js';
+import { clearStack } from 'ui/overlay/z_index';
 
 import 'common.css!';
 
@@ -17,15 +18,18 @@ const configs = [];
 ['shrink', 'push', 'overlap'].forEach(openedStateMode => {
     ['left', 'top', 'right'].forEach(position => {
         ['slide', 'expand'].forEach(revealMode => {
-            configs.push({ openedStateMode, position, revealMode });
+            [true, false].forEach(shading => {
+                configs.push({ openedStateMode, position, revealMode, shading });
+            });
         });
     });
 });
 
 configs.forEach(config => {
-    QUnit.module(`Scenarios (${config.openedStateMode}, ${config.position}, ${config.revealMode})`, {
+    QUnit.module(`Scenarios (${config.openedStateMode}, ${config.position}, ${config.revealMode}, shading: ${config.shading})`, {
         beforeEach() {
             this.clock = sinon.useFakeTimers();
+            clearStack();
         },
         afterEach() {
             this.clock.restore();
@@ -57,7 +61,7 @@ configs.forEach(config => {
                 openedStateMode: config.openedStateMode,
                 position: config.position,
                 rtlEnabled: false,
-                shading: false,
+                shading: config.shading,
                 animationEnabled: false
             };
             return extend(defaultOptions, targetOptions);

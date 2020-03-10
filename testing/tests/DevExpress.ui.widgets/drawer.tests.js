@@ -1084,25 +1084,36 @@ QUnit.module('Rtl', () => {
 });
 
 QUnit.module('CloseOnOutsideClick', () => {
-    QUnit.test('drawer should be hidden after click on content', function(assert) {
-        const drawer = $('#drawer').dxDrawer({
-            closeOnOutsideClick: false,
-            opened: true,
-            shading: true
-        })
-            .dxDrawer('instance');
-        const $content = drawer.viewContent();
+    ['overlap', 'shrink', 'push'].forEach(openedStateMode => {
+        [true, false].forEach(shading => {
+            QUnit.test(`Click on content, shading: ${shading}, openedStateMode: ${openedStateMode}`, function(assert) {
+                const clock = sinon.useFakeTimers();
+                const drawer = $('#drawer').dxDrawer({
+                    closeOnOutsideClick: false,
+                    opened: true,
+                    animationDuration: 0,
+                    shading: shading
+                }).dxDrawer('instance');
+                const $content = $(drawer.viewContent());
 
-        $($content).trigger('dxclick');
-        assert.equal(drawer.option('opened'), true, 'drawer is not hidden');
-        drawer.option('closeOnOutsideClick', true);
+                $content.trigger('dxclick');
+                assert.equal(drawer.option('opened'), true, 'drawer.opened');
 
-        const $shader = drawer.$element().find('.' + DRAWER_SHADER_CLASS);
-        $($content).trigger('dxclick');
+                drawer.option('closeOnOutsideClick', true);
 
-        assert.equal(drawer.option('opened'), false, 'drawer is hidden');
-        assert.ok($shader.is(':hidden'), 'shader is hidden');
+                const $shader = drawer.$element().find(`.${DRAWER_SHADER_CLASS}`);
+                $content.trigger('dxclick');
+
+                shading && clock.tick(100);
+
+                assert.equal(drawer.option('opened'), false, 'drawer.opened');
+                assert.ok($shader.is(':hidden'), 'shader is hidden');
+
+                clock.restore();
+            });
+        });
     });
+
 
     QUnit.test('closeOnOutsideClick as function should be processed correctly', function(assert) {
         const drawer = $('#drawer').dxDrawer({
