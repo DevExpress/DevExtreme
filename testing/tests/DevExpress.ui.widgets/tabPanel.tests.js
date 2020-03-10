@@ -56,8 +56,11 @@ QUnit.module('rendering', {
 
         const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
         const $tabs = $tabPanel.find('.' + TABS_CLASS);
-        assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
-        assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
+
+        const borderWidth = parseInt($tabs.css('border-top-width'));
+        const tabsHeight = $tabs.outerHeight() - borderWidth;
+        assert.roughEqual(parseFloat($container.css('padding-top')), tabsHeight, 0.1, 'padding correct');
+        assert.roughEqual(parseFloat($container.css('margin-top')), -tabsHeight, 0.1, 'margin correct');
     });
 
     QUnit.test('container should consider tabs height for async datasource', function(assert) {
