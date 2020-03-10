@@ -21,21 +21,18 @@
     }
 }
 
-.dx-radio-value-container {
-    padding-right: 0;
-}
-
 .dx-recurrence-button-group {
     width: 100%;
 
     .dx-button-content {
         padding: @BUTTON_CONTENT_PADDING;
     }
+
+    .dx-buttongroup-wrapper > div {
+        flex: 1;
+    }
 }
 
-.dx-buttongroup-wrapper > div {
-    flex: 1;
-}
 
 .dx-recurrence-numberbox-interval,
 .dx-recurrence-numberbox-day-of-month,
@@ -43,14 +40,9 @@
     width: @RECURRENCE_EDITOR_NUMBERBOX_WIDTH !important; // stylelint-disable-line declaration-no-important
 }
 
-.dx-recurrence-repeat-end-wrapper {
-    padding: 0 5px;
-}
-
 .dx-recurrence-radiogroup-repeat-type-label,
 .dx-recurrence-repeat-end-label {
     display: inline-block;
-    padding: 0 5px;
     vertical-align: top;
 }
 
