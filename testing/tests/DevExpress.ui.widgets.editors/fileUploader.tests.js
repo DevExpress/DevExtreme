@@ -2322,6 +2322,9 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         const dropEvent = $.Event($.Event('drop', {
             dataTransfer: { files: [fakeFile] }
         }));
+        const dragOverEvent = $.Event($.Event('dragover', {
+            dataTransfer: { files: [fakeFile] }
+        }));
         const eventsCount = events.length;
 
         assert.expect(eventsCount);
@@ -2333,6 +2336,8 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 
             if(event === 'drop') {
                 event = dropEvent;
+            } else if(event === 'dragover') {
+                event = dragOverEvent;
             }
 
             $inputWrapper.trigger(event);
@@ -2350,13 +2355,20 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         const dragAndDropSpy = sinon.spy();
         const events = ['dragenter', 'dragover', 'dragleave', 'drop'];
         const eventsCount = events.length;
+        const dragOverEvent = $.Event($.Event('dragover', {
+            dataTransfer: { files: [fakeFile] }
+        }));
 
         assert.expect(eventsCount);
 
         $inputWrapper.on(events.join(' '), dragAndDropSpy);
 
         for(let i = 0; i < eventsCount; i++) {
-            $inputWrapper.trigger(events[i]);
+            let event = events[i];
+            if(event === 'dragover') {
+                event = dragOverEvent;
+            }
+            $inputWrapper.trigger(event);
             assert.ok(!dragAndDropSpy.args[i][0].isDefaultPrevented(), 'default is not prevented for ' + events[i]);
         }
     });
