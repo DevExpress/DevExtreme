@@ -47,6 +47,8 @@ const replaceColorFunctions = (content) => {
         percent = func === 'fadeout' ? -percent : percent;
         return `color.${colorFunction}(${color}, $alpha: ${percent / 100})${sign}`;
     });
+
+    content = content.replace(/(\s)(screen|difference)\(/g, '$1extColor.$2(');
     return content;
 };
 
@@ -367,14 +369,32 @@ gulp.task('create-base-widget-generic-colors', (callback) => {
 
     // read all base variables (to the first widget-specific comment)
     const sourcePath = path.join(repositoryRoot, unfixedScssPath, 'widgets', 'generic', 'color-schemes');
-    const genericLightPath = path.join(sourcePath, 'light', 'generic.light.scss');
+    const genericLightPath = path.join(sourcePath, 'carmine', 'generic.carmine.scss');
     const genericLightIconsPath = path.join(sourcePath, 'light', 'generic.light.icons.scss');
     const themeIconsContent = fs.readFileSync(genericLightIconsPath).toString();
     const genericContent = fs.readFileSync(genericLightPath).toString();
     const genericBaseContent = getBaseContent(genericContent) + '\n' + themeIconsContent;
     const genericBaseVariables = getVariableNames(genericBaseContent);
 
-    let colorsContent = '@use "sass:color";\n$color: null !default;\n\n';
+    // additional variables
+    Array.prototype.push.apply(genericBaseVariables, [
+        // contrast
+        '$base-default',
+        '$base-info',
+        // darkmoon
+        '$screen-text-color',
+        '$base-grid-selected-border-color',
+        // darkviolet
+        '$base-accent-highlight-color',
+        '$base-row-alternation-background',
+        '$base-selected-border',
+        // softblue
+        '$base-webwidget-hover-background',
+        '$base-grid-selection-background',
+        '$base-grid-selectedrow-border-color'
+    ]);
+
+    let colorsContent = '@use "sass:color";\n@use "./color" as extColor;\n$color: null !default;\n\n';
     colorsContent += generateDefaultVariablesBlock(genericBaseVariables);
     colorsContent += '\n';
 
@@ -391,6 +411,7 @@ gulp.task('create-base-widget-generic-colors', (callback) => {
         });
 
         fs.writeFileSync(path.join(baseWidgetPath, '_colors.scss'), colorsContent);
+        fs.copyFileSync(path.join(__dirname, 'snippets', 'color.scss'), path.join(baseWidgetPath, 'color.scss'));
         fillWidgetColors('generic');
         cleanWidgetColorVariables();
         callback();
@@ -435,6 +456,7 @@ gulp.task('create-base-widget-material-colors', (callback) => {
         });
 
         fs.writeFileSync(path.join(baseWidgetPath, '_colors.scss'), colorsContent);
+        fs.copyFileSync(path.join(__dirname, 'snippets', 'color.scss'), path.join(baseWidgetPath, 'color.scss'));
         fillWidgetColors('material');
         cleanWidgetColorVariables();
         callback();

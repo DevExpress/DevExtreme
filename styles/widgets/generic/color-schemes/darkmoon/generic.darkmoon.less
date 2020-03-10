@@ -131,7 +131,8 @@
 * @type text
 */
 @base-border-radius-large: @base-border-radius + 2px;
-
+@screen-text-color: screen(@base-bg, #686868);
+@base-grid-selected-border-color: #45c7de;
 
 // Badges
 
@@ -146,9 +147,6 @@
 * @type color
 */
 @badge-bg: lighten(@base-accent, 25%);
-
-@screen-text-color: screen(@base-bg, #686868);
-@base-grid-selected-border-color: #45c7de;
 
 // Validation
 
@@ -174,6 +172,13 @@
 @texteditor-underlined-bg: transparent;
 
 /**
+* @name 50. Text color
+* @type color
+*/
+
+@texteditor-color: @base-text-color;
+
+/**
 * @name 15. Filled editor background color
 * @type color
 */
@@ -191,13 +196,6 @@
 * @type color
 */
 @texteditor-hover-border-color: fade(@base-accent, 40%);
-
-/**
-* @name 50. Text color
-* @type color
-*/
-
-@texteditor-color: @base-text-color;
 
 /**
 * @name 60. Placeholder text color
