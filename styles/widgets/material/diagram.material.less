@@ -32,7 +32,9 @@
 
     @DIAGRAM_TOUCHBAR_ITEM_PADDING: 10px;
 
-    @DIAGRAM_FLOATING_TOOLBAR_ITEMS_HEIGHT: 56px;
+    @DIAGRAM_FLOATING_TOOLBAR_ITEMS_HEIGHT: 36px;
+    @DIAGRAM_FLOATING_TOOLBAR_EDITOR_PADDING: 8px 6px;
+    @DIAGRAM_FLOATING_TOOLBAR_EDITOR_BUTTON_PADDING: 4px;
 }
 
 .dx-size-compact() {
@@ -50,7 +52,9 @@
 
     @DIAGRAM_TOUCHBAR_ITEM_PADDING: 7px;
 
-    @DIAGRAM_FLOATING_TOOLBAR_ITEMS_HEIGHT: 42px;
+    @DIAGRAM_FLOATING_TOOLBAR_ITEMS_HEIGHT: 28px;
+    @DIAGRAM_FLOATING_TOOLBAR_EDITOR_PADDING: 6px 4px;
+    @DIAGRAM_FLOATING_TOOLBAR_EDITOR_BUTTON_PADDING: 2px;
 }
 
 .dx-diagram {
@@ -166,6 +170,25 @@
 
     .dx-toolbar .dx-toolbar-items-container {
         height: @DIAGRAM_FLOATING_TOOLBAR_ITEMS_HEIGHT;
+
+        .dx-texteditor {
+            .dx-texteditor-input,
+            .dx-placeholder:before {
+                padding: @DIAGRAM_FLOATING_TOOLBAR_EDITOR_PADDING;
+            }
+
+            .dx-button {
+                width: auto;
+                height: auto;
+                min-width: 24px;
+                min-height: 24px;
+                margin: 2px;
+
+                .dx-button-content {
+                    padding: @DIAGRAM_FLOATING_TOOLBAR_EDITOR_BUTTON_PADDING;
+                }
+            }
+        }
     }
 
     &.dx-diagram-properties-panel-toolbar-container {
