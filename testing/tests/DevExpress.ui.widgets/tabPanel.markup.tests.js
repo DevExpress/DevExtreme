@@ -2,7 +2,6 @@ import $ from 'jquery';
 import TabPanel from 'ui/tab_panel';
 
 import 'common.css!';
-import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -27,8 +26,6 @@ const TABS_CLASS = 'dx-tabs';
 const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
 const TABS_ITEM_CLASS = 'dx-tab';
 const MUTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
-const TABS_TITLE_TEXT_CLASS = 'dx-tab-text';
-const ICON_CLASS = 'dx-icon';
 
 const toSelector = cssClass => '.' + cssClass;
 
@@ -160,36 +157,6 @@ QUnit.module('TabPanel items', () => {
             const $itemElements = $element.find(toSelector(TABS_CLASS)).dxTabs('instance').itemElements();
 
             assert.strictEqual($itemElements.eq(0).find('.dx-tab-text').text(), value.expected, 'item.title');
-        });
-    });
-
-    [true, false].forEach(rtlEnabled => {
-        QUnit.test(`rtlEnabled: ${rtlEnabled}, items: { title, icon } -> icon alignment`, function(assert) {
-            const $element = $('<div>').appendTo('#qunit-fixture');
-            new TabPanel($element, { rtlEnabled, items: [{ title: 'Caption', icon: 'remove' }], });
-
-            const TEXT_NODE_TYPE = 3;
-            const $title = $element.find(`.${TABS_TITLE_TEXT_CLASS}`);
-            assert.notEqual($title.length, 0);
-
-            $title.contents()
-                .filter((index, node) => { return node.nodeType === TEXT_NODE_TYPE; })
-                .wrap('<span/>');
-
-            assert.strictEqual($element.html(), '');
-
-            assert.notEqual($title.find(`.${ICON_CLASS}`).length, 0);
-
-            const $title1 = $element.find(`.${TABS_TITLE_TEXT_CLASS}`); // for testing only
-            assert.notEqual($title1.find(`.${ICON_CLASS}`).get(0), undefined, 'element'); // for testing only
-            assert.notEqual($title1.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect, undefined, 'getBoundingClientRect'); // for testing only
-            assert.equal($title1.find(`.${ICON_CLASS}`).get(0).tagName, 'I', 'tagName'); // for testing only
-            assert.notEqual($title1.find(`.${ICON_CLASS}`).get(0).outerHTML, '', 'outerHTML'); // for testing only
-            assert.notEqual($title1.find(`.${ICON_CLASS}`).get(0).nodeType, 1, 'nodeType'); // for testing only
-            assert.notEqual($title1.find(`.${ICON_CLASS}`).get(0).length, 10, 'length'); // for testing only
-            const iconRect = $title1.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect(); // for testing only
-            assert.notEqual(iconRect, undefined); // for testing only
-            assert.equal(1, 1); // for testing only
         });
     });
 });
