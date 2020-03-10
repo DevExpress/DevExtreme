@@ -27,8 +27,8 @@ const TABS_CLASS = 'dx-tabs';
 const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
 const TABS_ITEM_CLASS = 'dx-tab';
 const MUTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
-const ICON_CLASS = 'dx-icon';
 const TABS_TITLE_TEXT_CLASS = 'dx-tab-text';
+const ICON_CLASS = 'dx-icon';
 
 const toSelector = cssClass => '.' + cssClass;
 
@@ -166,13 +166,10 @@ QUnit.module('TabPanel items', () => {
     [true, false].forEach(rtlEnabled => {
         QUnit.test(`rtlEnabled: ${rtlEnabled}, dataSource: { title, icon } -> icon alignment`, function(assert) {
             const $element = $('<div>').appendTo('#qunit-fixture');
-            new TabPanel($element, {
-                rtlEnabled,
-                items: [{ title: 'Caption', icon: 'remove' }], });
-
-            const $title = $element.find(`.${TABS_TITLE_TEXT_CLASS}`);
+            new TabPanel($element, { rtlEnabled, items: [{ title: 'Caption', icon: 'remove' }], });
 
             const TEXT_NODE_TYPE = 3;
+            const $title = $element.find(`.${TABS_TITLE_TEXT_CLASS}`);
             $title.contents()
                 .filter((index, node) => { return node.nodeType === TEXT_NODE_TYPE; })
                 .wrap('<span/>');
