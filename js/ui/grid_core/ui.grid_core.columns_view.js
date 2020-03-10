@@ -188,8 +188,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             }
         }
 
-        // T823783, T852898
-        if(browser.mozilla && options.column.fixed && options.rowType !== 'group') {
+        // T823783, T852898, T865179
+        if(browser.mozilla && options.column.fixed && options.rowType !== 'group' && !options.isAltRow) {
             $cell.addClass(FIXED_COL_CLASS);
         }
 
@@ -200,6 +200,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const $element = $('<tr>').addClass(ROW_CLASS);
         this.setAria('role', 'row', $element);
         return $element;
+    },
+
+    _isAltRow: function(row) {
+        return row && row.dataIndex % 2 === 1;
     },
 
     _createTable: function(columns, isAppend) {
@@ -611,9 +615,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _renderCell: function($row, options) {
-        const that = this;
-        const cellOptions = that._getCellOptions(options);
-        let $cell;
+        const cellOptions = this._getCellOptions(options);
 
         if(options.columnIndices) {
             if(options.row.cells) {
@@ -623,11 +625,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             options.row.cells.push(cellOptions);
         }
 
-        $cell = that._createCell(cellOptions);
+        const $cell = this._createCell(cellOptions);
 
-        that._setCellAriaAttributes($cell, cellOptions);
+        this._setCellAriaAttributes($cell, cellOptions);
 
-        that._renderCellContent($cell, cellOptions);
+        this._renderCellContent($cell, cellOptions);
 
         $row.get(0).appendChild($cell.get(0));
 
@@ -652,7 +654,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const cellOptions = {
             column: options.column,
             columnIndex: options.columnIndex,
-            rowType: options.row.rowType
+            rowType: options.row.rowType,
+            isAltRow: this._isAltRow(options.row)
         };
 
         this._addWatchMethod(cellOptions);
