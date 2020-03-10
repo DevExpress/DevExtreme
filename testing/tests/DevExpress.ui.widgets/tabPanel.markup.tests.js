@@ -164,19 +164,20 @@ QUnit.module('TabPanel items', () => {
     });
 
     [true, false].forEach(rtlEnabled => {
-        QUnit.test(`rtlEnabled: ${rtlEnabled}, dataSource: { title, icon } -> icon alignment`, function(assert) {
+        QUnit.test(`rtlEnabled: ${rtlEnabled}, items: { title, icon } -> icon alignment`, function(assert) {
             const $element = $('<div>').appendTo('#qunit-fixture');
             new TabPanel($element, { rtlEnabled, items: [{ title: 'Caption', icon: 'remove' }], });
 
             const TEXT_NODE_TYPE = 3;
             const $title = $element.find(`.${TABS_TITLE_TEXT_CLASS}`);
-            const $title1 = $element.find(`.${TABS_TITLE_TEXT_CLASS}`);
+            assert.notEqual($title.length, 0);
+
             $title.contents()
                 .filter((index, node) => { return node.nodeType === TEXT_NODE_TYPE; })
                 .wrap('<span/>');
 
             const iconRect = $title.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect();
-            const textRect = $title1.find('span').get(0).getBoundingClientRect();
+            const textRect = $title.find('span').get(0).getBoundingClientRect();
 
             const epsilon = 2.1;
             assert.roughEqual((iconRect.top + iconRect.height / 2), textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
