@@ -23,7 +23,7 @@ const commonEnvironment = {
 
 QUnit.module('Intl localization', () => {
     QUnit.module('DateBox', commonEnvironment, () => {
-        QUnit.test('DateBox should not raise error when digits are not default arabic digits', function(assert) {
+        QUnit.test('DateBox should not raise error when digits are true arabic digits', function(assert) {
             const currentLocale = locale();
             try {
                 locale('ar-u-nu-arab');
@@ -36,6 +36,46 @@ QUnit.module('Intl localization', () => {
 
                 const date = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR).val();
                 assert.equal(date, '١٠/١١/٢٠١٥', 'date is localized');
+            } catch(e) {
+                assert.ok(false, 'Error occured: ' + e.message);
+            } finally {
+                locale(currentLocale);
+            }
+        });
+
+        QUnit.test('DateBox should not raise error when digits are Farsi digits', function(assert) {
+            const currentLocale = locale();
+            try {
+                locale('fa');
+                const $dateBox = $('#dateBox').dxDateBox({
+                    value: new Date(2015, 10, 10),
+                    type: 'date',
+                    pickerType: 'calendar',
+                    useMaskBehavior: true
+                });
+
+                const date = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR).val();
+                assert.equal(date, '۲۰۱۵/۱۱/۱۰', 'date is localized');
+            } catch(e) {
+                assert.ok(false, 'Error occured: ' + e.message);
+            } finally {
+                locale(currentLocale);
+            }
+        });
+
+        QUnit.test('DateBox should not raise error when digits are Marathi digits', function(assert) {
+            const currentLocale = locale();
+            try {
+                locale('mr');
+                const $dateBox = $('#dateBox').dxDateBox({
+                    value: new Date(2015, 10, 10),
+                    type: 'date',
+                    pickerType: 'calendar',
+                    useMaskBehavior: true
+                });
+
+                const date = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR).val();
+                assert.equal(date, '१०/११/२०१५', 'date is localized');
             } catch(e) {
                 assert.ok(false, 'Error occured: ' + e.message);
             } finally {
