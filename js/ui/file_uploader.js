@@ -817,6 +817,7 @@ class FileUploader extends Editor {
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
+        e.originalEvent.dataTransfer.dropEffect = 'copy';
     }
 
     _dragLeaveHandler(e) {
