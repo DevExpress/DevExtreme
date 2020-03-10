@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import modules from './ui.grid_core.modules';
-import { createObjectWithChanges, getIndexByKey } from './ui.grid_core.utils';
+import { createObjectWithChanges, getIndexByKey, getWidgetInstance } from './ui.grid_core.utils';
 import { deferUpdate, equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { isDefined, isEmptyObject } from '../../core/utils/type';
@@ -296,11 +296,20 @@ const ValidatingController = modules.Controller.inherit((function() {
                         eventsEngine.trigger($focus, pointerEvents.down);
                     }
                 }
+                const editor = !column.editCellTemplate && this.getController('editorFactory').getEditorInstance($container);
                 if(result.status === VALIDATION_STATUS.pending) {
                     this._editingController.showHighlighting($container, true);
-                    this.renderCellPendingIndicator($container);
+                    if(editor) {
+                        editor.option('validationStatus', VALIDATION_STATUS.pending);
+                    } else {
+                        this.renderCellPendingIndicator($container);
+                    }
                 } else {
-                    this.disposeCellPendingIndicator($container);
+                    if(editor) {
+                        editor.option('validationStatus', VALIDATION_STATUS.valid);
+                    } else {
+                        this.disposeCellPendingIndicator($container);
+                    }
                 }
                 $container.toggleClass(this.addWidgetPrefix(INVALIDATE_CLASS), result.status === VALIDATION_STATUS.invalid);
             }
@@ -1082,6 +1091,11 @@ module.exports = {
 
                         this.updateCellState($element, validationResult, hideBorder);
                         return this.callBase($element, hideBorder);
+                    },
+
+                    getEditorInstance: function($container) {
+                        const $editor = $container.find('.dx-texteditor').eq(0);
+                        return getWidgetInstance($editor);
                     }
                 };
             })()
