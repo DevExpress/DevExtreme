@@ -1494,6 +1494,36 @@ QUnit.module('Formatting', function() {
 
         assert.equal(utils.getCurrentValueText(field, value), '9/5/2017, 12:30 PM');
     });
+
+    // T867525
+    QUnit.test('date with defined editorOptions.dateSerializationFormat and format', function(assert) {
+        const field = {
+            dataType: 'date',
+            format: 'dd-MM-yyyy',
+            editorOptions: {
+                dateSerializationFormat: 'yyyy-MM-dd'
+            }
+        };
+
+        const value = '2020-10-20';
+
+        assert.equal(utils.getCurrentValueText(field, value), '20-10-2020');
+    });
+
+    // T867525
+    QUnit.test('datetime with defined editorOptions.dateSerializationFormat and format', function(assert) {
+        const field = {
+            dataType: 'datetime',
+            format: 'dd-MM-yyyy',
+            editorOptions: {
+                dateSerializationFormat: 'yyyy-MM-dd'
+            }
+        };
+
+        const value = '2020-10-20';
+
+        assert.equal(utils.getCurrentValueText(field, value), '20-10-2020');
+    });
 });
 
 QUnit.module('Lookup Value', function() {

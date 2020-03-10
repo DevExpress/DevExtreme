@@ -9,6 +9,7 @@ import { extend } from '../../core/utils/extend';
 import inflector from '../../core/utils/inflector';
 import between from './between';
 import messageLocalization from '../../localization/message';
+import dateLocalization from '../../localization/date';
 import { DataSource } from '../../data/data_source/data_source';
 import filterOperationsDictionary from './ui.filter_operations_dictionary';
 
@@ -48,6 +49,15 @@ const AVAILABLE_FIELD_PROPERTIES = [
 
 function getFormattedValueText(field, value) {
     const fieldFormat = field.format || DEFAULT_FORMAT[field.dataType];
+    const dateSerializationFormat = field.editorOptions?.dateSerializationFormat;
+    const isDateBasedDataType = field.dataType === 'date' || field.dataType === 'datetime';
+
+    if(isDateBasedDataType && dateSerializationFormat) {
+        const parsedDate = dateLocalization.parse(value, dateSerializationFormat);
+
+        return formatHelper.format(parsedDate, fieldFormat);
+    }
+
     return formatHelper.format(value, fieldFormat);
 }
 
