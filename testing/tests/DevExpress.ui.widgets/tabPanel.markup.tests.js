@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import TabPanel from 'ui/tab_panel';
 
+import 'common.css!';
+import 'generic_light.css!';
+
 QUnit.testStart(() => {
     const markup =
         '<div id="tabPanel">\
@@ -24,6 +27,8 @@ const TABS_CLASS = 'dx-tabs';
 const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
 const TABS_ITEM_CLASS = 'dx-tab';
 const MUTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
+const ICON_CLASS = 'dx-icon';
+const TABS_TITLE_TEXT_CLASS = 'dx-tab-text';
 
 const toSelector = cssClass => '.' + cssClass;
 
@@ -155,6 +160,33 @@ QUnit.module('TabPanel items', () => {
             const $itemElements = $element.find(toSelector(TABS_CLASS)).dxTabs('instance').itemElements();
 
             assert.strictEqual($itemElements.eq(0).find('.dx-tab-text').text(), value.expected, 'item.title');
+        });
+    });
+
+    [true, false].forEach(rtlEnabled => {
+        QUnit.test(`rtlEnabled: ${rtlEnabled}, dataSource: { title, icon } -> icon alignment`, function(assert) {
+            const $element = $('<div>').appendTo('#qunit-fixture');
+            new TabPanel($element, {
+                rtlEnabled,
+                items: [{ title: 'Caption', icon: 'remove' }], });
+
+            const $title = $element.find(`.${TABS_TITLE_TEXT_CLASS}`);
+
+            const TEXT_NODE_TYPE = 3;
+            $title.contents()
+                .filter((index, node) => { return node.nodeType === TEXT_NODE_TYPE; })
+                .wrap('<span/>');
+
+            const iconRect = $title.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect();
+            const textRect = $title.find('span').get(0).getBoundingClientRect();
+
+            const epsilon = 2.1;
+            assert.roughEqual((iconRect.top + iconRect.height / 2), textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
+
+            const horizontalMargin = rtlEnabled
+                ? iconRect.right - textRect.right - iconRect.width
+                : textRect.left - iconRect.left - iconRect.width;
+            assert.strictEqual(horizontalMargin, 9, `correct horizontal alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
         });
     });
 });

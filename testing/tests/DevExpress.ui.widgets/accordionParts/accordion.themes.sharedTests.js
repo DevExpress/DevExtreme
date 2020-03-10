@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'ui/accordion';
 import 'ui/button';
 
-const TITLE_CAPTION_CLASS = 'dx-accordion-item-title-caption';
+const ACCORDION_ITEM_TITLE_CAPTION_CLASS = 'dx-accordion-item-title-caption';
 const ICON_CLASS = 'dx-icon';
 
 export const runThemesSharedTests = function(moduleNamePostfix) {
@@ -26,27 +26,31 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
             assert.roughEqual(iconRect.top - iconParentRect.top, iconParentRect.bottom - iconRect.bottom, 0.1, `correct vertical centering ${JSON.stringify(iconRect)} in ${JSON.stringify(iconParentRect)}`);
         });
 
-        QUnit.test('dataSource: { title, icon }', function(assert) {
-            const $accordion = $('#accordion').dxAccordion({
-                dataSource: [{ title: 'Caption', icon: 'remove' }],
+        [true, false].forEach(rtlEnabled => {
+            QUnit.test(`rtlEnabled: ${rtlEnabled}, dataSource: { title, icon }`, function(assert) {
+                const $accordion = $('#accordion').dxAccordion({
+                    rtlEnabled,
+                    dataSource: [{ title: 'Caption', icon: 'remove' }],
+                });
+                const $accordionTitle = $accordion.find(`.${ACCORDION_ITEM_TITLE_CAPTION_CLASS}`);
+
+                const TEXT_NODE_TYPE = 3;
+                $accordionTitle.contents()
+                    .filter((index, node) => { return node.nodeType === TEXT_NODE_TYPE; })
+                    .wrap('<span/>');
+
+                const iconRect = $accordionTitle.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect();
+                const textRect = $accordionTitle.find('span').get(0).getBoundingClientRect();
+
+                const epsilon = 0.6;
+                const icon_inner_shift = 1;
+                assert.roughEqual((iconRect.top + iconRect.height / 2) - icon_inner_shift, textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
+
+                const horizontalMargin = rtlEnabled
+                    ? iconRect.right - textRect.right - iconRect.width
+                    : textRect.left - iconRect.left - iconRect.width;
+                assert.roughEqual(horizontalMargin, iconRect.width / 3, epsilon, `correct horizontal alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
             });
-
-            const TEXT_NODE_TYPE = 3;
-            $('#accordion')
-                .find(`.${TITLE_CAPTION_CLASS}`)
-                .contents()
-                .filter(function() {
-                    return this.nodeType === TEXT_NODE_TYPE;
-                })
-                .wrap('<span/>');
-
-            const iconRect = $accordion.find(`.${TITLE_CAPTION_CLASS} .${ICON_CLASS}`).get(0).getBoundingClientRect();
-            const textRect = $accordion.find(`.${TITLE_CAPTION_CLASS} span`).get(0).getBoundingClientRect();
-
-            const epsilon = 0.6;
-            const icon_content_shift = 1;
-            assert.roughEqual((iconRect.top + iconRect.height / 2) - icon_content_shift, textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
-            assert.roughEqual(textRect.left - iconRect.left - iconRect.width, iconRect.width / 3, epsilon, `correct horizontal aligment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
         });
     });
 };
