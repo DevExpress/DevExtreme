@@ -179,12 +179,11 @@ QUnit.module('TabPanel items', () => {
             assert.strictEqual($element.html(), '');
 
             assert.notEqual($title.find(`.${ICON_CLASS}`).length, 0);
-            assert.notEqual($title.find(`.${ICON_CLASS}`).get(0), undefined); // for testing only
 
             const $title1 = $element.find(`.${TABS_TITLE_TEXT_CLASS}`); // for testing only
-            assert.notEqual($title.find(`.${ICON_CLASS}`).get(0), undefined, 'element'); // for testing only
-            assert.notEqual($title.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect, undefined, 'getBoundingClientRect'); // for testing only
-            assert.equal($title.find(`.${ICON_CLASS}`).get(0).tagName, 'I', 'getBoundingClientRect'); // for testing only
+            assert.notEqual($title1.find(`.${ICON_CLASS}`).get(0), undefined, 'element'); // for testing only
+            assert.notEqual($title1.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect, undefined, 'getBoundingClientRect'); // for testing only
+            assert.equal($title1.find(`.${ICON_CLASS}`).get(0).tagName, 'I', 'tagName'); // for testing only
             const iconRect = $title1.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect(); // for testing only
             assert.notEqual(iconRect, undefined); // for testing only
             assert.equal(1, 1); // for testing only
