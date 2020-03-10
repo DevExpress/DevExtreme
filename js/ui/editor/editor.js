@@ -95,7 +95,9 @@ const Editor = Widget.inherit({
 
             validationMessageOffset: { h: 0, v: 0 },
 
-            validationTooltipOptions: {}
+            validationTooltipOptions: {},
+
+            showValidationMark: true
         });
     },
 

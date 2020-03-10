@@ -385,5 +385,17 @@ QUnit.module('Editors Standard Adapter', {
         editor.option('validationErrors', null);
         assert.notOk(editor.option('validationError'), 'validationError === null');
     });
+
+
+    QUnit.test('Editor should not display a valid mark when showValidationMark is false', function(assert) {
+        const editor = this.fixture.createTextEditor({
+            showValidationMark: false
+        });
+
+        editor.option('validationStatus', 'pending');
+        editor.option('validationStatus', 'valid');
+
+        assert.notOk(this.fixture.$element.hasClass('dx-valid'), 'valid mark is not rendered');
+    });
 });
 
