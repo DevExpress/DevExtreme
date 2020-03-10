@@ -17,6 +17,30 @@ $('#qunit-fixture').append('<div id="test-root"></div>');
 
 animationFrame.requestAnimationFrame = animationFrame.cancelAnimationFrame = noop;
 
+const EVENTS = {
+    'start': {
+        'mouse': 'mousedown',
+        'touch': 'touchstart',
+        'MSPointer': 'MSPointerDown',
+        'pointer': 'pointerdown'
+    },
+    'move': {
+        'mouse': 'mousemove',
+        'touch': 'touchmove',
+        'MSPointer': 'MSPointerMove',
+        'pointer': 'pointermove'
+    },
+    'end': {
+        'mouse': 'mouseup',
+        'touch': 'touchend',
+        'MSPointer': 'MSPointerUp',
+        'pointer': 'pointerup'
+    },
+    'wheel': {
+        'mouse': 'wheel'
+    }
+};
+
 const environment = {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
@@ -141,30 +165,6 @@ QUnit.test('Event emitter methods are injected', function(assert) {
         assert.strictEqual(tracker[name], method, name);
     });
 });
-
-var EVENTS = {
-    'start': {
-        'mouse': 'mousedown',
-        'touch': 'touchstart',
-        'MSPointer': 'MSPointerDown',
-        'pointer': 'pointerdown'
-    },
-    'move': {
-        'mouse': 'mousemove',
-        'touch': 'touchmove',
-        'MSPointer': 'MSPointerMove',
-        'pointer': 'pointermove'
-    },
-    'end': {
-        'mouse': 'mouseup',
-        'touch': 'touchend',
-        'MSPointer': 'MSPointerUp',
-        'pointer': 'pointerup'
-    },
-    'wheel': {
-        'mouse': document['onwheel'] !== undefined ? 'wheel' : 'mousewheel'
-    }
-};
 
 // T249548, T322560
 QUnit.module('Default prevention', $.extend({}, environment, {
@@ -339,33 +339,33 @@ QUnit.module('zoom / mouse', $.extend({}, environment, {
 }));
 
 QUnit.test('raised on wheel', function(assert) {
-    this.trigger('wheel', { x: 10, y: 20 }, { wheelDelta: 120 });
+    this.trigger('wheel', { x: 10, y: 20 }, { deltaY: -120, deltaMode: 0 });
 
     assert.deepEqual(this.onZoom.lastCall.args, [{ delta: 1, x: 10, y: 20 }]);
 });
 
 // T107589
 QUnit.test('raised on small deltas', function(assert) {
-    this.trigger('wheel', { x: 10, y: 20 }, { wheelDelta: -20 });
+    this.trigger('wheel', { x: 10, y: 20 }, { deltaY: 20, deltaMode: 0 });
 
     assert.deepEqual(this.onZoom.lastCall.args, [{ delta: -1, x: 10, y: 20 }]);
 });
 
 QUnit.test('too big deltas are truncated', function(assert) {
-    this.trigger('wheel', { x: 10, y: 20 }, { wheelDelta: 800 });
+    this.trigger('wheel', { x: 10, y: 20 }, { deltaY: -800, deltaMode: 0 });
 
     assert.deepEqual(this.onZoom.lastCall.args, [{ delta: 4, x: 10, y: 20 }]);
 });
 
 QUnit.test('consequent deltas are ignored', function(assert) {
-    this.trigger('wheel', { x: 10, y: 20 }, { wheelDelta: 200 }).trigger('wheel', { x: 11, y: 22 }, { wheelDelta: 120 });
+    this.trigger('wheel', { x: 10, y: 20 }, { deltaY: -200, deltaMode: 0 }).trigger('wheel', { x: 11, y: 22 }, { deltaY: -120, deltaMode: 0 });
 
     assert.deepEqual(this.onZoom.lastCall.args, [{ delta: 2, x: 10, y: 20 }]);
 });
 
 QUnit.test('not raised when disabled', function(assert) {
     this.tracker.setOptions({ wheelEnabled: false });
-    this.trigger('wheel', { x: 10, y: 20 }, { wheelDelta: 120 });
+    this.trigger('wheel', { x: 10, y: 20 }, { deltaY: -120, deltaMode: 0 });
 
     assert.strictEqual(this.onZoom.lastCall, null);
 });

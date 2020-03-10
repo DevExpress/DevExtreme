@@ -1,47 +1,52 @@
-const $ = require('../../core/renderer');
-const eventsEngine = require('../../events/core/events_engine');
-const domAdapter = require('../../core/dom_adapter');
-const callOnce = require('../../core/utils/call_once');
-const registerEvent = require('./event_registrator');
-const eventUtils = require('../utils');
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import registerEvent from './event_registrator';
+import { addNamespace, fireEvent } from '../utils';
+
 
 const EVENT_NAME = 'dxmousewheel';
 const EVENT_NAMESPACE = 'dxWheel';
+const NATIVE_EVENT_NAME = 'wheel';
 
-const getWheelEventName = callOnce(function() {
-    return domAdapter.hasDocumentProperty('onwheel') ? 'wheel' : 'mousewheel';
-});
+const PIXEL_MODE = 0;
+const DELTA_MUTLIPLIER = 30;
 
-var wheel = {
-
+const wheel = {
     setup: function(element) {
         const $element = $(element);
-        eventsEngine.on($element, eventUtils.addNamespace(getWheelEventName(), EVENT_NAMESPACE), wheel._wheelHandler.bind(wheel));
+        eventsEngine.on($element, addNamespace(NATIVE_EVENT_NAME, EVENT_NAMESPACE), wheel._wheelHandler.bind(wheel));
     },
 
     teardown: function(element) {
-        eventsEngine.off(element, '.' + EVENT_NAMESPACE);
+        eventsEngine.off(element, `.${EVENT_NAMESPACE}`);
     },
 
     _wheelHandler: function(e) {
-        const delta = this._getWheelDelta(e.originalEvent);
+        const { deltaMode, deltaY, deltaX, deltaZ } = e.originalEvent;
 
-        eventUtils.fireEvent({
+        fireEvent({
             type: EVENT_NAME,
             originalEvent: e,
-            delta: delta,
+            delta: this._normalizeDelta(deltaY, deltaMode),
+            deltaX,
+            deltaY,
+            deltaZ,
+            deltaMode,
             pointerType: 'mouse'
         });
 
         e.stopPropagation();
     },
 
-    _getWheelDelta: function(event) {
-        return event.wheelDelta
-            ? event.wheelDelta
-            : -event.deltaY * 30;
+    _normalizeDelta(delta, deltaMode = PIXEL_MODE) {
+        if(deltaMode === PIXEL_MODE) {
+            return -delta;
+        } else {
+            // Use multiplier to get rough delta value in px for the LINE or PAGE mode
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=1392460
+            return -DELTA_MUTLIPLIER * delta;
+        }
     }
-
 };
 
 registerEvent(EVENT_NAME, wheel);
