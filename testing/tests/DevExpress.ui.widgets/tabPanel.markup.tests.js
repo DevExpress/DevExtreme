@@ -176,6 +176,8 @@ QUnit.module('TabPanel items', () => {
                 .filter((index, node) => { return node.nodeType === TEXT_NODE_TYPE; })
                 .wrap('<span/>');
 
+            assert.strictEqual($element.html(), '');
+
             assert.notEqual($title.find(`.${ICON_CLASS}`).length, 0);
             assert.notEqual($title.find(`.${ICON_CLASS}`).get(0), undefined); // for testing only
 
