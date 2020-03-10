@@ -184,6 +184,9 @@ QUnit.module('TabPanel items', () => {
             assert.notEqual($title1.find(`.${ICON_CLASS}`).get(0), undefined, 'element'); // for testing only
             assert.notEqual($title1.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect, undefined, 'getBoundingClientRect'); // for testing only
             assert.equal($title1.find(`.${ICON_CLASS}`).get(0).tagName, 'I', 'tagName'); // for testing only
+            assert.notEqual($title1.find(`.${ICON_CLASS}`).get(0).outerHTML, '', 'outerHTML'); // for testing only
+            assert.notEqual($title1.find(`.${ICON_CLASS}`).get(0).nodeType, 1, 'nodeType'); // for testing only
+            assert.notEqual($title1.find(`.${ICON_CLASS}`).get(0).length, 10, 'length'); // for testing only
             const iconRect = $title1.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect(); // for testing only
             assert.notEqual(iconRect, undefined); // for testing only
             assert.equal(1, 1); // for testing only
