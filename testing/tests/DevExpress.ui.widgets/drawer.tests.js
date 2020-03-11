@@ -724,10 +724,11 @@ QUnit.module('Drawer behavior', () => {
         $('#drawer').dxDrawer({
             openedStateMode: 'overlap',
             templatesRenderAsynchronously: true,
+            opened: true,
             integrationOptions: {
                 templates: {
                     'panel': {
-                        render: function(args) {
+                        render: (args) => {
                             const $div = $('<div/>').appendTo(args.container);
                             setTimeout(() => {
                                 $div.css('height', 600);
@@ -741,9 +742,11 @@ QUnit.module('Drawer behavior', () => {
         });
 
         clock.tick(100);
-        const $panel = $('#drawer').find('.dx-drawer-panel-content');
+        const $panel = $('#drawer').find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+        const $shader = $('#drawer').find(`.${DRAWER_SHADER_CLASS}`);
 
-        assert.equal($panel.css('zIndex'), 1501, 'panel has correct zIndex');
+        assert.strictEqual($panel.css('zIndex'), '1503', 'panel.zIndex');
+        assert.strictEqual($shader.css('zIndex'), '1502', 'shader.zIndex');
         clock.restore();
     });
 
@@ -982,18 +985,6 @@ QUnit.module('Shader', () => {
 
         assert.equal($shader.offset().left, $content.offset().left, 'shader has correct position');
     });
-
-    QUnit.test('shader should have correct zIndex in overlap mode', function(assert) {
-        const $element = $('#drawer').dxDrawer({
-            opened: true,
-            openedStateMode: 'overlap',
-            shading: true
-        });
-
-        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
-
-        assert.equal($shader.css('zIndex'), 1500, 'shader has correct zIndex');
-    });
 });
 
 QUnit.module('Rtl', () => {
@@ -1097,18 +1088,20 @@ QUnit.module('CloseOnOutsideClick', () => {
                 const $content = $(drawer.viewContent());
 
                 $content.trigger('dxclick');
-                assert.equal(drawer.option('opened'), true, 'drawer.opened');
+                assert.strictEqual(drawer.option('opened'), true, 'drawer.opened');
 
                 drawer.option('closeOnOutsideClick', true);
 
                 const $shader = drawer.$element().find(`.${DRAWER_SHADER_CLASS}`);
+                const $panel = drawer.$element().find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
                 $content.trigger('dxclick');
 
                 shading && clock.tick(100);
 
-                assert.equal(drawer.option('opened'), false, 'drawer.opened');
-                assert.ok($shader.is(':hidden'), 'shader is hidden');
-
+                assert.strictEqual(drawer.option('opened'), false, 'drawer.opened');
+                assert.strictEqual($shader.is(':hidden'), true, 'shader is hidden');
+                assert.strictEqual($panel.css('zIndex'), '1502', 'panel.zIndex');
+                assert.strictEqual($shader.css('zIndex'), '1501', 'shader.zIndex');
                 clock.restore();
             });
         });

@@ -212,6 +212,23 @@ class DrawerStrategy {
     isViewContentFirst() {
         return false;
     }
+
+    setZIndex(zIndex) {
+        const drawer = this.getDrawerInstance();
+
+        drawer._$shader.css('zIndex', zIndex);
+        drawer._$panelContentWrapper.css('zIndex', zIndex + 1);
+    }
+
+    clearZIndex(zIndexPool) {
+        const drawer = this.getDrawerInstance();
+
+        zIndexPool.remove(drawer._zIndex);
+        zIndexPool.remove(drawer._zIndex + 1);
+        drawer._$shader.css('zIndex', '');
+        drawer._$panelContentWrapper.css('zIndex', '');
+        delete drawer._zIndex;
+    }
 }
 
 module.exports = DrawerStrategy;

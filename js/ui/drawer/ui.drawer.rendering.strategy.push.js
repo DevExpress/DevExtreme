@@ -41,6 +41,20 @@ class PushStrategy extends DrawerStrategy {
             maxSize: this._getPanelSize(true)
         });
     }
+
+    setZIndex(zIndex) {
+        const drawer = this.getDrawerInstance();
+
+        drawer._$shader.css('zIndex', zIndex);
+    }
+
+    clearZIndex(zIndexPool) {
+        const drawer = this.getDrawerInstance();
+
+        zIndexPool.remove(drawer._zIndex);
+        drawer._$shader.css('zIndex', '');
+        delete drawer._zIndex;
+    }
 }
 
 module.exports = PushStrategy;
