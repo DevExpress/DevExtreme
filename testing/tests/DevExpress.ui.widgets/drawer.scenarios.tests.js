@@ -9,7 +9,7 @@ QUnit.testStart(() => {
     // $("#qunit-tests").prepend(drawerTesters.markup);
 });
 
-// TODO: templateSize, minSize, maxSize, shading, scrolling, rtlEnabled, animationEnabled, onRendered, _viewPortChangeHandler, target, template overflow and/or view overflow
+// TODO: templateSize, minSize, maxSize, scrolling, rtlEnabled, animationEnabled, onRendered, _viewPortChangeHandler, target, template overflow and/or view overflow
 const configs = [];
 
 ['shrink', 'push', 'overlap'].forEach(openedStateMode => {

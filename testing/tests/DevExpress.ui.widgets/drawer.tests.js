@@ -725,6 +725,7 @@ QUnit.module('Drawer behavior', () => {
             openedStateMode: 'overlap',
             templatesRenderAsynchronously: true,
             opened: true,
+            shading: true,
             integrationOptions: {
                 templates: {
                     'panel': {
@@ -745,8 +746,8 @@ QUnit.module('Drawer behavior', () => {
         const $panel = $('#drawer').find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
         const $shader = $('#drawer').find(`.${DRAWER_SHADER_CLASS}`);
 
-        assert.strictEqual($panel.css('zIndex'), '1503', 'panel.zIndex');
-        assert.strictEqual($shader.css('zIndex'), '1502', 'shader.zIndex');
+        assert.strictEqual($panel.css('zIndex'), '1502', 'panel.zIndex');
+        assert.strictEqual($shader.css('zIndex'), '1501', 'shader.zIndex');
         clock.restore();
     });
 
@@ -1086,22 +1087,24 @@ QUnit.module('CloseOnOutsideClick', () => {
                     shading: shading
                 }).dxDrawer('instance');
                 const $content = $(drawer.viewContent());
+                const $shader = drawer.$element().find(`.${DRAWER_SHADER_CLASS}`);
+                const $panel = drawer.$element().find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
 
                 $content.trigger('dxclick');
                 assert.strictEqual(drawer.option('opened'), true, 'drawer.opened');
+                assert.strictEqual($shader.is(':hidden'), shading ? false : true, 'shader is hidden');
+                assert.strictEqual($panel.css('zIndex'), shading ? '1502' : 'auto', 'panel.zIndex');
+                assert.strictEqual($shader.css('zIndex'), shading ? '1501' : 'auto', 'shader.zIndex');
 
                 drawer.option('closeOnOutsideClick', true);
-
-                const $shader = drawer.$element().find(`.${DRAWER_SHADER_CLASS}`);
-                const $panel = drawer.$element().find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
                 $content.trigger('dxclick');
 
                 shading && clock.tick(100);
 
                 assert.strictEqual(drawer.option('opened'), false, 'drawer.opened');
                 assert.strictEqual($shader.is(':hidden'), true, 'shader is hidden');
-                assert.strictEqual($panel.css('zIndex'), '1502', 'panel.zIndex');
-                assert.strictEqual($shader.css('zIndex'), '1501', 'shader.zIndex');
+                assert.strictEqual($panel.css('zIndex'), 'auto', 'panel.zIndex');
+                assert.strictEqual($shader.css('zIndex'), 'auto', 'shader.zIndex');
                 clock.restore();
             });
         });

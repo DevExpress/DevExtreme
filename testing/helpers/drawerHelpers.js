@@ -62,19 +62,23 @@ class DrawerTester {
 
     checkShader() {
         const { visibility } = window.getComputedStyle(this.shaderElement());
+        const { opened, shading, openedStateMode } = this.drawer.option();
 
-        if(this.drawer.option('opened') && this.drawer.option('shading')) {
+        if(opened && shading) {
             assert.strictEqual(visibility, 'visible', 'shader is visible');
             assert.strictEqual(this.shaderElement().classList.contains('dx-state-invisible'), false, 'shader has not .dx-invisible-class');
-            assert.strictEqual(window.getComputedStyle(this.shaderElement()).zIndex, '1501', 'shader should be shown above view');
-            assert.strictEqual(window.getComputedStyle(this.templateElement().parentElement).zIndex, this.drawer.option('openedStateMode') === 'push' ? 'auto' : '1502', 'template should be shown under view');
+            assert.strictEqual(window.getComputedStyle(this.shaderElement()).zIndex, '1501', 'shader.zIndex');
+            assert.strictEqual(window.getComputedStyle(this.templateElement().parentElement).zIndex, openedStateMode === 'push' ? 'auto' : '1502', 'panel.zIndex');
 
-            ['top', 'left', 'width', 'height'].forEach(key => {
-                assert.strictEqual(this.viewElement().getBoundingClientRect()[key], this.shaderElement().getBoundingClientRect()[key], `view[${key}] === shader[${key}]`);
-            });
+            this.checkBoundingClientRect(this.viewElement(), this.shaderElement().getBoundingClientRect(), 'shader');
         } else {
             assert.strictEqual(visibility, 'hidden', 'shader is hidden');
             assert.strictEqual(this.shaderElement().classList.contains('dx-state-invisible'), true, 'shader has .dx-invisible-class');
+            assert.strictEqual(window.getComputedStyle(this.shaderElement()).zIndex, 'auto', 'shader.zIndex');
+            if(isDefined(this.templateElement())) { // Scenarios (overlap) opened: false, visible: false -> visible: true'
+                assert.strictEqual(window.getComputedStyle(this.templateElement().parentElement).zIndex, openedStateMode === 'overlap' ? '1501' : 'auto', 'panel.zIndex');
+            }
+            this.checkBoundingClientRect(this.shaderElement(), { width: 0, height: 0, top: 0, left: 0 }, 'shader');
         }
     }
 
