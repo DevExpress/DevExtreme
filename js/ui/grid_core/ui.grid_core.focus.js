@@ -78,7 +78,9 @@ exports.FocusController = core.ViewController.inherit((function() {
             const pageSize = dataController.pageSize();
             const setKeyByIndex = () => {
                 if(this._isValidFocusedRowIndex(index)) {
-                    const rowIndex = Math.min(index - dataController.getRowIndexOffset(), dataController.items().length - 1);
+                    const visibleIndex = index - dataController.getRowIndexOffset();
+                    const lastItemIndex = dataController.items(true).length - 1;
+                    const rowIndex = Math.min(visibleIndex, lastItemIndex);
                     const focusedRowKey = dataController.getKeyByRowIndex(rowIndex);
 
                     if(focusedRowKey !== undefined && !this.isRowFocused(focusedRowKey)) {
