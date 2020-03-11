@@ -151,7 +151,7 @@ const lineMethods = {
     },
 
     _createMainElement: function(points, settings) {
-        return this._renderer.path(points, 'line').attr(settings).sharp();
+        return this._renderer.path(points, 'line').attr(settings);
     },
 
     _sortPoints: function(points, rotated) {
@@ -418,7 +418,7 @@ exports.chart['spline'] = _extend({}, lineSeries, {
     },
 
     _createMainElement: function(points, settings) {
-        return this._renderer.path(points, 'bezier').attr(settings).sharp();
+        return this._renderer.path(points, 'bezier').attr(settings);
     },
 
 
