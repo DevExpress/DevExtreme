@@ -101,6 +101,7 @@ const Autocomplete = DropDownList.inherit({
         this.callBase();
         this.$element().addClass(AUTOCOMPLETE_CLASS);
         this.setAria('autocomplete', 'inline');
+        this._dataSource.pageSize(this.option('maxItemCount'));
     },
 
     _loadValue: function() {
