@@ -1,8 +1,10 @@
-import { getQuill } from '../quill_importer';
+import Quill from 'quill';
 
-const quill = getQuill();
-const SizeStyle = quill.import('attributors/style/size');
+let SizeStyle = {};
 
-SizeStyle.whitelist = null;
+if(Quill) {
+    SizeStyle = Quill.import('attributors/style/size');
+    SizeStyle.whitelist = null;
+}
 
 export default SizeStyle;
