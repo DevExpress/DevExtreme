@@ -9,6 +9,7 @@ import DiagramCommandsManager from './diagram.commands_manager';
 const DIAGRAM_PROPERTIES_POPUP_WIDTH = 420;
 const DIAGRAM_PROPERTIES_POPUP_HEIGHT = 340;
 const DIAGRAM_PROPERTIES_POPUP_CLASS = 'dx-diagram-properties-popup';
+const DIAGRAM_PROPERTIES_POPUP_NOTABS_CLASS = 'dx-diagram-properties-popup-notabs';
 const DIAGRAM_PROPERTIES_PANEL_CLASS = 'dx-diagram-properties-panel';
 const DIAGRAM_PROPERTIES_PANEL_GROUP_TITLE_CLASS = 'dx-diagram-properties-panel-group-title';
 const DIAGRAM_PROPERTIES_PANEL_GROUP_TOOLBAR_CLASS = 'dx-diagram-properties-panel-group-toolbar';
@@ -28,7 +29,11 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
         super._initMarkup();
     }
     _getPopupClass() {
-        return DIAGRAM_PROPERTIES_POPUP_CLASS;
+        let className = DIAGRAM_PROPERTIES_POPUP_CLASS;
+        if(!this._hasTabPanel()) {
+            className += ' ' + DIAGRAM_PROPERTIES_POPUP_NOTABS_CLASS;
+        }
+        return className;
     }
     _getPopupWidth() {
         return this.isMobileView() ? '100%' : DIAGRAM_PROPERTIES_POPUP_WIDTH;
@@ -106,11 +111,14 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
         const $panel = $('<div>')
             .addClass(DIAGRAM_PROPERTIES_PANEL_CLASS)
             .appendTo($parent);
-        if(this._commandTabs.length === 1) {
-            this._renderTabContent($panel, this._commandTabs[0], 0, true);
-        } else {
+        if(this._hasTabPanel()) {
             this._renderTabPanel($panel);
+        } else {
+            this._renderTabContent($panel, this._commandTabs[0], 0, true);
         }
+    }
+    _hasTabPanel() {
+        return this._commandTabs.length > 1;
     }
     _renderTabPanel($parent) {
         const $tabPanel = $('<div>')

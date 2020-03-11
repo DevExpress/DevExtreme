@@ -8,11 +8,12 @@ import messageLocalization from '../../localization/message';
 const SEPARATOR = 'separator';
 const SEPARATOR_COMMAND = { widget: SEPARATOR };
 const CSS_CLASSES = {
-    SMALL_SELECT: 'dx-diagram-select-sm',
-    LARGE_SELECT: 'dx-diagram-select-lg',
-    BUTTON_SELECT: 'dx-diagram-select-b',
-    LARGE_ICON: 'dx-diagram-btn-l-icon',
-    BUTTON_COLOR: 'dx-diagram-color-b',
+    SMALL_EDITOR_ITEM: 'dx-diagram-sm-edit-item',
+    MEDIUM_EDITOR_ITEM: 'dx-diagram-md-edit-item',
+    LARGE_EDITOR_ITEM: 'dx-diagram-lg-edit-item',
+    IMAGE_DROPDOWN_ITEM: 'dx-diagram-image-dropdown-item',
+    COLOR_EDITOR_ITEM: 'dx-diagram-color-edit-item',
+    LARGE_ICON_ITEM: 'dx-diagram-lg-icon-item'
 };
 
 const DiagramCommandsManager = {
@@ -116,7 +117,8 @@ const DiagramCommandsManager = {
                         'Trebuchet MS'
                     ].map(item => {
                         return { text: item, value: item };
-                    })
+                    }),
+                    cssClass: CSS_CLASSES.MEDIUM_EDITOR_ITEM
                 },
                 fontSize: {
                     command: DiagramCommand.FontSize,
@@ -128,7 +130,7 @@ const DiagramCommandsManager = {
                     ].map(item => {
                         return { text: item + 'pt', value: item + 'pt' };
                     }),
-                    cssClass: CSS_CLASSES.SMALL_SELECT
+                    cssClass: CSS_CLASSES.SMALL_EDITOR_ITEM
                 },
                 bold: {
                     command: DiagramCommand.Bold,
@@ -158,7 +160,7 @@ const DiagramCommandsManager = {
                     widget: 'dxColorBox',
                     icon: 'dx-icon dx-icon-color',
                     menuIcon: 'dx-icon dx-icon-color',
-                    cssClass: CSS_CLASSES.BUTTON_COLOR
+                    cssClass: CSS_CLASSES.COLOR_EDITOR_ITEM
                 },
                 lineColor: {
                     command: DiagramCommand.StrokeColor,
@@ -167,7 +169,7 @@ const DiagramCommandsManager = {
                     widget: 'dxColorBox',
                     icon: 'dx-icon dx-icon-background',
                     menuIcon: 'dx-icon dx-icon-background',
-                    cssClass: CSS_CLASSES.BUTTON_COLOR
+                    cssClass: CSS_CLASSES.COLOR_EDITOR_ITEM
                 },
                 lineWidth: {
                     command: DiagramCommand.StrokeWidth,
@@ -179,7 +181,7 @@ const DiagramCommandsManager = {
                     ].map(item => {
                         return { text: item + 'px', value: item.toString() };
                     }),
-                    cssClass: CSS_CLASSES.SMALL_SELECT
+                    cssClass: CSS_CLASSES.SMALL_EDITOR_ITEM
                 },
                 lineStyle: {
                     command: DiagramCommand.StrokeStyle,
@@ -203,7 +205,7 @@ const DiagramCommandsManager = {
                             hint: messageLocalization.format('dxDiagram-commandLineStyleDashed')
                         }
                     ],
-                    cssClass: CSS_CLASSES.BUTTON_SELECT
+                    cssClass: CSS_CLASSES.IMAGE_DROPDOWN_ITEM
                 },
                 fillColor: {
                     command: DiagramCommand.FillColor,
@@ -212,7 +214,7 @@ const DiagramCommandsManager = {
                     widget: 'dxColorBox',
                     icon: 'dx-diagram-i dx-diagram-i-button-fill',
                     menuIcon: 'dx-diagram-i dx-diagram-i-menu-fill',
-                    cssClass: CSS_CLASSES.BUTTON_COLOR
+                    cssClass: CSS_CLASSES.COLOR_EDITOR_ITEM
                 },
                 textAlignLeft: {
                     command: DiagramCommand.TextLeftAlign,
@@ -297,7 +299,7 @@ const DiagramCommandsManager = {
                             hint: messageLocalization.format('dxDiagram-commandConnectorLineOrthogonal')
                         }
                     ],
-                    cssClass: CSS_CLASSES.BUTTON_SELECT
+                    cssClass: CSS_CLASSES.IMAGE_DROPDOWN_ITEM
                 },
                 connectorLineStart: {
                     command: DiagramCommand.ConnectorStartLineEnding,
@@ -315,7 +317,7 @@ const DiagramCommandsManager = {
                         }
                     ],
                     hint: messageLocalization.format('dxDiagram-commandConnectorLineStart'),
-                    cssClass: CSS_CLASSES.BUTTON_SELECT
+                    cssClass: CSS_CLASSES.IMAGE_DROPDOWN_ITEM
                 },
                 connectorLineEnd: {
                     command: DiagramCommand.ConnectorEndLineEnding,
@@ -333,63 +335,63 @@ const DiagramCommandsManager = {
                         }
                     ],
                     hint: messageLocalization.format('dxDiagram-commandConnectorLineEnd'),
-                    cssClass: CSS_CLASSES.BUTTON_SELECT
+                    cssClass: CSS_CLASSES.IMAGE_DROPDOWN_ITEM
                 },
                 layoutTreeTopToBottom: {
                     command: DiagramCommand.AutoLayoutTreeVertical,
                     text: messageLocalization.format('dxDiagram-uiLayoutTopToBottom'),
                     hint: messageLocalization.format('dxDiagram-uiLayoutTopToBottom'),
                     icon: 'dx-diagram-i-button-layout-tree-tb dx-diagram-i',
-                    cssClass: CSS_CLASSES.LARGE_ICON
+                    cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutTreeBottomToTop: {
                     command: DiagramCommand.AutoLayoutTreeVerticalBottomToTop,
                     text: messageLocalization.format('dxDiagram-uiLayoutBottomToTop'),
                     hint: messageLocalization.format('dxDiagram-uiLayoutBottomToTop'),
                     icon: 'dx-diagram-i-button-layout-tree-bt dx-diagram-i',
-                    cssClass: CSS_CLASSES.LARGE_ICON
+                    cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutTreeLeftToRight: {
                     command: DiagramCommand.AutoLayoutTreeHorizontal,
                     text: messageLocalization.format('dxDiagram-uiLayoutLeftToRight'),
                     hint: messageLocalization.format('dxDiagram-uiLayoutLeftToRight'),
                     icon: 'dx-diagram-i-button-layout-tree-lr dx-diagram-i',
-                    cssClass: CSS_CLASSES.LARGE_ICON
+                    cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutTreeRightToLeft: {
                     command: DiagramCommand.AutoLayoutTreeHorizontalRightToLeft,
                     text: messageLocalization.format('dxDiagram-uiLayoutRightToLeft'),
                     hint: messageLocalization.format('dxDiagram-uiLayoutRightToLeft'),
                     icon: 'dx-diagram-i-button-layout-tree-rl dx-diagram-i',
-                    cssClass: CSS_CLASSES.LARGE_ICON
+                    cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutLayeredTopToBottom: {
                     command: DiagramCommand.AutoLayoutLayeredVertical,
                     text: messageLocalization.format('dxDiagram-uiLayoutTopToBottom'),
                     hint: messageLocalization.format('dxDiagram-uiLayoutTopToBottom'),
                     icon: 'dx-diagram-i-button-layout-layered-tb dx-diagram-i',
-                    cssClass: CSS_CLASSES.LARGE_ICON
+                    cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutLayeredBottomToTop: {
                     command: DiagramCommand.AutoLayoutLayeredVerticalBottomToTop,
                     text: messageLocalization.format('dxDiagram-uiLayoutBottomToTop'),
                     hint: messageLocalization.format('dxDiagram-uiLayoutBottomToTop'),
                     icon: 'dx-diagram-i-button-layout-layered-bt dx-diagram-i',
-                    cssClass: CSS_CLASSES.LARGE_ICON
+                    cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutLayeredLeftToRight: {
                     command: DiagramCommand.AutoLayoutLayeredHorizontal,
                     text: messageLocalization.format('dxDiagram-uiLayoutLeftToRight'),
                     hint: messageLocalization.format('dxDiagram-uiLayoutLeftToRight'),
                     icon: 'dx-diagram-i-button-layout-layered-lr dx-diagram-i',
-                    cssClass: CSS_CLASSES.LARGE_ICON
+                    cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 layoutLayeredRightToLeft: {
                     command: DiagramCommand.AutoLayoutLayeredHorizontalRightToLeft,
                     text: messageLocalization.format('dxDiagram-uiLayoutRightToLeft'),
                     hint: messageLocalization.format('dxDiagram-uiLayoutRightToLeft'),
                     icon: 'dx-diagram-i-button-layout-layered-rl dx-diagram-i',
-                    cssClass: CSS_CLASSES.LARGE_ICON
+                    cssClass: CSS_CLASSES.LARGE_ICON_ITEM
                 },
                 fullScreen: {
                     command: DiagramCommand.Fullscreen,
@@ -397,7 +399,7 @@ const DiagramCommandsManager = {
                     text: messageLocalization.format('dxDiagram-commandFullscreen'),
                     icon: 'dx-diagram-i dx-diagram-i-button-fullscreen',
                     menuIcon: 'dx-diagram-i dx-diagram-i-menu-fullscreen',
-                    cssClass: CSS_CLASSES.BUTTON_COLOR
+                    cssClass: CSS_CLASSES.COLOR_EDITOR_ITEM
                 },
 
                 units: {
@@ -436,7 +438,7 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandPageSize'),
                     text: messageLocalization.format('dxDiagram-commandPageSize'),
                     widget: 'dxSelectBox',
-                    cssClass: CSS_CLASSES.LARGE_SELECT,
+                    cssClass: CSS_CLASSES.LARGE_EDITOR_ITEM,
                     getCommandValue: (v) => JSON.parse(v),
                     getEditorValue: (v) => JSON.stringify(v)
                 },
@@ -448,7 +450,8 @@ const DiagramCommandsManager = {
                     items: [
                         { value: true, text: messageLocalization.format('dxDiagram-commandPageOrientationLandscape') },
                         { value: false, text: messageLocalization.format('dxDiagram-commandPageOrientationPortrait') }
-                    ]
+                    ],
+                    cssClass: CSS_CLASSES.MEDIUM_EDITOR_ITEM
                 },
                 pageColor: {
                     command: DiagramCommand.PageColor,
@@ -457,7 +460,7 @@ const DiagramCommandsManager = {
                     widget: 'dxColorBox',
                     icon: 'dx-diagram-i dx-diagram-i-button-fill',
                     menuIcon: 'dx-diagram-i dx-diagram-i-menu-fill',
-                    cssClass: CSS_CLASSES.BUTTON_COLOR
+                    cssClass: CSS_CLASSES.COLOR_EDITOR_ITEM
                 },
                 zoomLevel: {
                     command: DiagramCommand.ZoomLevel,
@@ -490,7 +493,8 @@ const DiagramCommandsManager = {
                     ],
                     getEditorDisplayValue: (v) => {
                         return Math.round(v * 100) + '%';
-                    }
+                    },
+                    cssClass: CSS_CLASSES.SMALL_EDITOR_ITEM
                 },
                 // Custom commands
                 showToolbox: {
