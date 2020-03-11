@@ -529,6 +529,10 @@
         "dxGantt-dialogTaskDetailsTitle": "Task Details",
         "dxGantt-dialogEditResourceListHint": "Edit Resource List",
         "dxGantt-dialogEditNoResources": "No resources",
-        "dxGantt-dialogButtonAdd": "Add"
+        "dxGantt-dialogButtonAdd": "Add",
+        "dxGantt-contextMenuNewTask": "New Task",
+        "dxGantt-contextMenuNewSubtask": "New Subtask",
+        "dxGantt-contextMenuRemoveTask": "Remove Task",
+        "dxGantt-contextMenuRemoveDependency": "Remove Dependency"
       }
 }
