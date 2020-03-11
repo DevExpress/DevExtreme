@@ -179,8 +179,7 @@ QUnit.module('options changed callbacks', {
         const params = clickHandler.getCall(0).args[0];
         assert.ok(params, 'Event params should be passed');
         assert.ok(params.event, 'Event should be passed');
-        // TODO
-        // assert.ok(params.validationGroup, 'validationGroup should be passed');
+        assert.ok(params.validationGroup, 'validationGroup should be passed');
     });
 
     QUnit.test('icon', function(assert) {
@@ -224,7 +223,7 @@ QUnit.module('options changed callbacks', {
         assert.ok(this.element.hasClass('dx-state-disabled'));
     });
 
-    // TODO
+    // NOTE: deprecated property
     QUnit.skip('_templateData', function(assert) {
         const template = sinon.stub().returns('TPL');
         this.instance.option('template', template);
@@ -348,7 +347,7 @@ QUnit.module('contentReady', {}, () => {
 });
 
 QUnit.module('inkRipple', {}, () => {
-    // TODO
+    // NOTE: deprecated behavior
     QUnit.skip('inkRipple should be removed when widget is removed', function(assert) {
         $('#inkButton').Button({
             useInkRipple: true,
@@ -362,7 +361,7 @@ QUnit.module('inkRipple', {}, () => {
         $('#inkButton').trigger('dxclick');
     });
 
-    // TODO
+    // NOTE: deprecated behavior
     QUnit.skip('widget should works correctly when the useInkRipple option is changed at runtime', function(assert) {
         const clock = sinon.useFakeTimers();
         const $inkButton = $('#inkButton').Button({
@@ -469,8 +468,7 @@ QUnit.module('keyboard navigation', {}, () => {
         const params = clickHandler.getCall(0).args[0];
         assert.ok(params, 'Event params should be passed');
         assert.ok(params.event, 'Event should be passed');
-        // TODO
-        // assert.ok(params.validationGroup, 'validationGroup should be passed');
+        assert.ok(params.validationGroup, 'validationGroup should be passed');
     });
 });
 
@@ -551,8 +549,7 @@ QUnit.module('submit behavior', {
         }
     });
 
-    // TODO
-    QUnit.skip('button onClick event handler should raise once (T443747)', function(assert) {
+    QUnit.test('button onClick event handler should raise once (T443747)', function(assert) {
         const clickHandlerSpy = sinon.spy();
         this.$element.Button({ onClick: clickHandlerSpy });
         this.clickButton();
@@ -754,8 +751,7 @@ QUnit.module('events subscriptions', () => {
                 const params = clickHandler.getCall(0).args[0];
                 assert.ok(params, 'Event params should be passed');
                 assert.ok(params.event, 'Event should be passed');
-                // TODO
-                // assert.ok(params.validationGroup, 'validationGroup should be passed');
+                assert.ok(params.validationGroup, 'validationGroup should be passed');
 
                 done();
             }, 100);
