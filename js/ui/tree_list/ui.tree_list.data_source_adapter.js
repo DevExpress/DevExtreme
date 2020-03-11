@@ -400,7 +400,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
 
             store = options.fullData ? new ArrayStore(options.fullData) : that._dataSource.store();
 
-            store.load(loadOptions).done(function(loadedData) {
+            that.loadFromStore(loadOptions, store).done(function(loadedData) {
                 if(loadedData.length) {
                     if(needLocalFiltering) {
                         loadedData = query(loadedData).filter(filter).toArray();
