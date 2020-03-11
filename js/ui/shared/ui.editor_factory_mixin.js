@@ -284,8 +284,8 @@ const EditorFactoryMixin = (function() {
                 options.editorName = options.editorType;
             }
 
-            if(options.parentType === 'dataRow' && !options.isOnForm && !typeUtils.isDefined(options.editorOptions.enableValidMark)) {
-                options.editorOptions.enableValidMark = false;
+            if(options.parentType === 'dataRow' && !options.isOnForm && !typeUtils.isDefined(options.editorOptions.showValidationMark)) {
+                options.editorOptions.showValidationMark = false;
             }
 
             createEditorCore(this, options);
