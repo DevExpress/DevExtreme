@@ -153,6 +153,7 @@ const TabPanel = MultiView.inherit({
 
     _renderLayout: function() {
         if(this._tabs) {
+            this._updateLayout();
             return;
         }
 
