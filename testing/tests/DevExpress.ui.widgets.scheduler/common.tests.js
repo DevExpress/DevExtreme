@@ -2815,6 +2815,7 @@ QUnit.testStart(function() {
             }),
             views: ['month'],
             currentView: 'month',
+            maxAppointmentsPerCell: 1,
             onAppointmentRendered: function(args) {
                 assert.equal($(args.appointmentElement).find('.dx-scheduler-appointment-reduced-icon').length, 1, 'Appointment reduced icon is applied');
             },

@@ -423,7 +423,7 @@ class BaseRenderingStrategy {
     }
 
     _skipSortedIndex(index) {
-        return this.instance.fire('getMaxAppointmentsPerCell') && index > this._getMaxAppointmentCountPerCell() - 1;
+        return index > this._getMaxAppointmentCountPerCell() - 1;
     }
 
     _findIndexByKey(arr, iKey, jKey, iValue, jValue) {

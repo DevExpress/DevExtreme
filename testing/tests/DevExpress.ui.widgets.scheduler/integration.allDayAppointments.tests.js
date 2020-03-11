@@ -43,7 +43,7 @@ QUnit.module('Integration: allDay appointments', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options)).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
         };
 
         this.clock = sinon.useFakeTimers();
@@ -330,7 +330,8 @@ QUnit.test('Height of appointment should be correct after dragged into the all d
         currentDate: new Date(2015, 1, 9),
         dataSource: data,
         currentView: 'week',
-        editing: true
+        editing: true,
+        maxAppointmentsPerCell: 'unlimited'
     });
 
     const $element = $(this.instance.$element());
@@ -371,23 +372,19 @@ QUnit.test('Height of allDay appointment should be correct, 3 appts in cell', fu
         ]
     });
 
-    this.createInstance({
+    const scheduler = createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: data,
         currentView: 'week',
-        editing: true
+        editing: true,
+        maxAppointmentsPerCell: 2
     });
 
-    const $element = $(this.instance.$element());
-    const $appointments = $element.find('.dx-scheduler-appointment');
-    const firstPosition = translator.locate($appointments.eq(0));
+    assert.roughEqual(scheduler.appointments.getAppointmentHeight(0), 25, 1.5, 'Appointment has correct height');
+    assert.roughEqual(scheduler.appointments.getAppointmentHeight(1), 25, 1.5, 'Appointment has correct height');
+    assert.roughEqual(scheduler.appointments.getAppointmentPosition(0).top, 25, 1.5, 'Appointment has correct top');
 
-    assert.roughEqual($appointments.eq(0).outerHeight(), 25, 1.5, 'Appointment has correct height');
-    assert.roughEqual($appointments.eq(1).outerHeight(), 25, 1.5, 'Appointment has correct height');
-    assert.roughEqual(firstPosition.top, 25, 1.5, 'Appointment has correct top');
-
-    assert.roughEqual($appointments.eq(2).outerWidth(), 15, 1.1, 'Compact appointment has correct width');
-    assert.roughEqual($appointments.eq(2).outerHeight(), 15, 1.1, 'Compact appointment has correct height');
+    assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Appointment collector is rendered');
 });
 
 QUnit.test('allDayExpanded option of workspace should be updated after dragged off from the all day container', function(assert) {
@@ -741,12 +738,7 @@ QUnit.test('DropDown appointment should be removed correctly when needed', funct
     const items = [
         { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
         { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
-        { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
-        { text: '4', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
-        { text: '5', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
-        { text: '6', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
-        { text: '7', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
-        { text: '8', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true }
+        { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true }
     ];
 
     this.instance.option('dataSource', items);
@@ -754,7 +746,7 @@ QUnit.test('DropDown appointment should be removed correctly when needed', funct
     let $dropDown = this.instance.$element().find('.dx-scheduler-appointment-collector');
     assert.equal($dropDown.length, 1, 'Dropdown appointment was rendered');
 
-    this.instance.deleteAppointment(items[7]);
+    this.instance.deleteAppointment(items[2]);
 
     $dropDown = this.instance.$element().find('.dx-scheduler-appointment-collector');
     assert.equal($dropDown.length, 0, 'Dropdown appointment was removed');
@@ -790,7 +782,8 @@ QUnit.test('New allDay appointment should have correct height', function(assert)
         currentDate: new Date(2015, 2, 10),
         dataSource: data,
         currentView: 'week',
-        showAllDayPanel: true
+        showAllDayPanel: true,
+        maxAppointmentsPerCell: 'unlimited'
     });
 
     const newItem = { startDate: new Date(2015, 2, 10, 1), allDay: true, text: 'caption', endDate: new Date(2015, 2, 10, 1, 30) };
@@ -849,7 +842,8 @@ QUnit.test('AllDay appointment is visible on month view, if showAllDayPanel = fa
         }],
         currentView: 'week',
         views: ['day', 'week', 'month'],
-        showAllDayPanel: false
+        showAllDayPanel: false,
+        maxAppointmentsPerCell: 1
     });
 
     assert.equal(this.instance.$element().find('.dx-scheduler-all-day-appointment').length, 0, 'AllDay appointments are not visible on \'week\' view');
@@ -866,7 +860,8 @@ QUnit.test('AllDay appointment should have correct height', function(assert) {
         currentDate: new Date(2015, 2, 10),
         dataSource: [appointment],
         currentView: 'week',
-        showAllDayPanel: true
+        showAllDayPanel: true,
+        maxAppointmentsPerCell: 'unlimited'
     });
 
     const appointmentHeight = $(this.instance.$element()).find('.dx-scheduler-all-day-appointment').outerHeight();
@@ -904,7 +899,8 @@ QUnit.test('AllDay appointment should have correct height after changing view', 
         currentDate: new Date(2015, 2, 4),
         dataSource: [appointment],
         currentView: 'week',
-        showAllDayPanel: true
+        showAllDayPanel: true,
+        maxAppointmentsPerCell: 'unlimited'
     });
 
     const allDayPanelHeight = $(this.instance.$element()).find('.dx-scheduler-all-day-table-cell').eq(0).get(0).getBoundingClientRect().height;
@@ -1069,6 +1065,7 @@ QUnit.test('AllDay appointment should be displayed correctly after changing view
     this.createInstance({
         currentDate: new Date(2015, 2, 4),
         currentView: 'day',
+        maxAppointmentsPerCell: 'unlimited',
         dataSource: new DataSource({
             store: new CustomStore({
                 load: function(options) {
@@ -1102,6 +1099,7 @@ QUnit.test('AllDay appointment should be displayed correctly after changing date
     this.createInstance({
         currentDate: new Date(2015, 2, 4),
         currentView: 'day',
+        maxAppointmentsPerCell: 'unlimited',
         dataSource: new DataSource({
             store: new CustomStore({
                 load: function(options) {
@@ -1198,7 +1196,8 @@ QUnit.test('DblClick on appointment should call scheduler.showAppointmentPopup f
     this.createInstance({
         currentDate: new Date(2015, 2, 4),
         currentView: 'month',
-        dataSource: data
+        dataSource: data,
+        maxAppointmentsPerCell: 1
     });
 
     this.clock.tick();
@@ -1231,6 +1230,7 @@ QUnit.test('All-day & common appointments should have a right sorting', function
         currentDate: new Date(2016, 1, 10),
         currentView: 'day',
         width: 800,
+        maxAppointmentsPerCell: 'unlimited',
         dataSource: [
             {
                 text: 'Full 1',
@@ -1406,6 +1406,7 @@ QUnit.test('AllDay appointments should have correct height, groupOrientation = v
         groupOrientation: 'vertical',
         currentView: 'day',
         showAllDayPanel: true,
+        maxAppointmentsPerCell: 'unlimited',
         groups: ['ownerId'],
         resources: [
             {
