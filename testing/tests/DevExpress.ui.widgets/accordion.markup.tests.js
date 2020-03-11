@@ -351,6 +351,7 @@ QUnit.module('default title template', {
 
     [
         { title: 'text', expected: 'text' },
+        { title: 'text<i>text</i>', expected: 'text<i>text</i>' },
         { title: null, expected: '' },
         { title: undefined, expected: '' },
         { title: '', expected: '' },

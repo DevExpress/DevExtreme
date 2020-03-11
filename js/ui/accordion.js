@@ -3,6 +3,7 @@ import eventsEngine from '../events/core/events_engine';
 import fx from '../animation/fx';
 import clickEvent from '../events/click';
 import devices from '../core/devices';
+import domAdapter from '../core/dom_adapter';
 import { extend } from '../core/utils/extend';
 import { deferRender } from '../core/utils/common';
 import { getPublicElement } from '../core/utils/dom';
@@ -109,12 +110,14 @@ const Accordion = CollectionWidget.inherit({
         */
         this._defaultTemplates['title'] = new BindableTemplate(function($container, data) {
             if(isPlainObject(data)) {
-                if(isDefined(data.title) && !isPlainObject(data.title)) {
-                    $container.text(data.title);
+                const $iconElement = getImageContainer(data.icon);
+                if($iconElement) {
+                    $container.append($iconElement);
                 }
 
-                const $iconElement = getImageContainer(data.icon);
-                $iconElement && $iconElement.appendTo($container);
+                if(isDefined(data.title) && !isPlainObject(data.title)) {
+                    $container.append(domAdapter.createTextNode(data.title));
+                }
             } else {
                 if(isDefined(data)) {
                     $container.text(String(data));
