@@ -1151,6 +1151,23 @@ function setDiscreteType(series) {
         });
     });
 
+    QUnit.test('Update width option - Normal State', function(assert) {
+        const series = this.createSeries(this.options);
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+
+        const newOptions = $.extend(true, {}, series._options, { width: 'm width' });
+
+        series.updateOptions(newOptions);
+        series.draw();
+
+        $.each(series._elementsGroup.children, function(_, path) {
+            assert.equal(path._stored_settings['stroke-width'], 'm width');
+        });
+    });
+
     QUnit.test('Select series before drawing', function(assert) {
         const series = this.createSeries(this.options);
         series.updateData(this.data);
@@ -1196,6 +1213,25 @@ function setDiscreteType(series) {
             assert.equal(path._stored_settings['stroke-width'], 'h width');
             assert.ok(path.sharp.called);
             assert.ok(path.sharp.lastCall.calledAfter(path.attr.lastCall));
+        });
+    });
+
+    QUnit.test('Apply hover state and update width option (normal state)', function(assert) {
+        const series = this.createSeries(this.options);
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+
+        series.hover();
+
+        const newOptions = $.extend(true, {}, series._options, { width: 'm width' });
+
+        series.updateOptions(newOptions);
+        series.draw();
+
+        $.each(series._elementsGroup.children, function(_, path) {
+            assert.equal(path._stored_settings['stroke-width'], 'h width');
         });
     });
 
