@@ -803,7 +803,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this._dataAdapter.getNodeByKey(key);
     },
 
-    _toggleExpandedState: function(itemElement, state, e) {
+    _toggleExpandedState: function(itemElement, state, e, completedCallback) {
         const node = this._getNode(itemElement);
         const currentState = node.internalFields.expanded;
 
@@ -827,7 +827,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
 
-        this._updateExpandedItemsUI(node, state, e);
+        this._updateExpandedItemsUI(node, state, e, completedCallback);
     },
 
     _createLoadIndicator: function($node) {
@@ -868,7 +868,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    _updateExpandedItemsUI: function(node, state, e) {
+    _updateExpandedItemsUI: function(node, state, e, completedCallback) {
         const $node = this._getNodeElement(node);
         const isHiddenNode = !$node.length || state && $node.is(':hidden');
 
@@ -888,21 +888,21 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const nodeContainerExists = $nodeContainer.length > 0;
 
         if(!state || nodeContainerExists && !$nodeContainer.is(':empty')) {
-            this._animateNodeContainer(node, state, e);
+            this._animateNodeContainer(node, state, e, completedCallback);
             return;
         }
 
         if(this._isVirtualMode() || this._useCustomChildrenLoader()) {
-            this._loadNestedItemsWithUpdate(node, state, e);
+            this._loadNestedItemsWithUpdate(node, state, e, completedCallback);
             return;
         }
 
         this._renderSublevel($node, node, this._getChildNodes(node));
         this._fireContentReadyAction();
-        this._animateNodeContainer(node, state, e);
+        this._animateNodeContainer(node, state, e, completedCallback);
     },
 
-    _loadNestedItemsWithUpdate: function(node, state, e) {
+    _loadNestedItemsWithUpdate: function(node, state, e, completedCallback) {
         const $node = this._getNodeElement(node);
         this._loadNestedItems(node).done(items => {
             const actualNodeData = this._getActualNode(node);
@@ -913,7 +913,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             }
 
             this._fireContentReadyAction();
-            this._animateNodeContainer(actualNodeData, state, e);
+            this._animateNodeContainer(actualNodeData, state, e, completedCallback);
         });
     },
 
@@ -953,7 +953,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._initDataAdapter();
     },
 
-    _animateNodeContainer: function(node, state, e) {
+    _animateNodeContainer: function(node, state, e, completedCallback) {
         const $node = this._getNodeElement(node);
         const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
 
@@ -977,6 +977,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.setAria('expanded', state, $node);
                 this._scrollableContainer.update();
                 this._fireExpandedStateUpdatedEvent(state, node, e);
+                if(completedCallback) {
+                    completedCallback.resolve();
+                }
             }).bind(this)
         });
     },
@@ -1338,8 +1341,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(!$target.children().hasClass(DISABLED_STATE_CLASS)) {
             this.callBase($target);
         }
-
-        this._scrollableContainer.scrollToElement($target.find('.' + ITEM_CLASS).first());
     },
 
     _itemPointerDownHandler: function(e) {
@@ -1383,41 +1384,44 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         switch(location) {
             case FOCUS_UP: {
-                const $prevItem = this._prevItem($items);
-
-                this.option('focusedElement', getPublicElement($prevItem));
+                const $prevNode = this._prevItem($items);
+                const itemElement = this._getNodeItemElement($prevNode);
+                this.option('focusedElement', getPublicElement($prevNode));
+                this._scrollableContainer.scrollToElement(itemElement);
                 if(e.shiftKey && this._showCheckboxes()) {
-                    this._updateItemSelection(true, $prevItem.find('.' + ITEM_CLASS).get(0));
+                    this._updateItemSelection(true, itemElement);
                 }
                 break;
             }
             case FOCUS_DOWN: {
-                const $nextItem = this._nextItem($items);
-
-                this.option('focusedElement', getPublicElement($nextItem));
+                const $nextNode = this._nextItem($items);
+                const itemElement = this._getNodeItemElement($nextNode);
+                this.option('focusedElement', getPublicElement($nextNode));
+                this._scrollableContainer.scrollToElement(itemElement);
                 if(e.shiftKey && this._showCheckboxes()) {
-                    this._updateItemSelection(true, $nextItem.find('.' + ITEM_CLASS).get(0));
+                    this._updateItemSelection(true, itemElement);
                 }
                 break;
             }
             case FOCUS_FIRST: {
-                const $firstItem = $items.first();
-
+                const $firstNode = $items.first();
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateSelectionToFirstItem($items, $items.index(this._prevItem($items)));
                 }
 
-                this.option('focusedElement', getPublicElement($firstItem));
+                this.option('focusedElement', getPublicElement($firstNode));
+                this._scrollableContainer.scrollToElement(this._getNodeItemElement($firstNode));
                 break;
             }
             case FOCUS_LAST: {
-                const $lastItem = $items.last();
+                const $lastNode = $items.last();
 
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateSelectionToLastItem($items, $items.index(this._nextItem($items)));
                 }
 
-                this.option('focusedElement', getPublicElement($lastItem));
+                this.option('focusedElement', getPublicElement($lastNode));
+                this._scrollableContainer.scrollToElement(this._getNodeItemElement($lastNode));
                 break;
             }
             case FOCUS_RIGHT: {
@@ -1432,6 +1436,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this.callBase.apply(this, arguments);
                 return;
         }
+    },
+
+
+    _getNodeItemElement: function($node) {
+        return $node.find('.' + ITEM_CLASS).get(0);
     },
 
     _nodeElements: function() {
@@ -1449,8 +1458,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const $node = $focusedNode.find(`.${NODE_CONTAINER_CLASS}`).eq(0);
 
         if($node.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
-            const $nextItem = this._nextItem(this._findNonDisabledNodes(this._nodeElements()));
-            this.option('focusedElement', getPublicElement($nextItem));
+            const $nextNode = this._nextItem(this._findNonDisabledNodes(this._nodeElements()));
+            this.option('focusedElement', getPublicElement($nextNode));
+            this._scrollableContainer.scrollToElement(this._getNodeItemElement($nextNode));
             return;
         }
 
@@ -1479,8 +1489,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             const node = this._getNodeByElement($focusedNode.children('.' + ITEM_CLASS));
             this._toggleExpandedState(node, false);
         } else {
-            const collapsedNode = this._getClosestNonDisabledNode($focusedNode);
-            collapsedNode.length && this.option('focusedElement', getPublicElement(collapsedNode));
+            const $collapsedNode = this._getClosestNonDisabledNode($focusedNode);
+            $collapsedNode.length && this.option('focusedElement', getPublicElement($collapsedNode));
+            this._scrollableContainer.scrollToElement(this._getNodeItemElement($collapsedNode));
         }
     },
 
@@ -1617,23 +1628,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         const allItemsExpandedCallback = new Deferred();
-        const onItemExpanded = (item) => {
-            const lastIndex = keysToExpand.length - 1;
-            if(item.node.key === keysToExpand[lastIndex]) {
-                allItemsExpandedCallback.resolve();
+        keysToExpand.forEach((key, index) => {
+            if(index === keysToExpand.length - 1) {
+                this._toggleExpandedState(key, true, undefined, allItemsExpandedCallback);
+            } else {
+                this._toggleExpandedState(key, true);
             }
-        };
-
-        this.on('itemExpanded', onItemExpanded);
-        allItemsExpandedCallback.always(() => {
-            this.off('itemExpanded', onItemExpanded);
-        });
-        keysToExpand.forEach(key => {
-            this.expandItem(key);
         });
 
         return allItemsExpandedCallback;
-    }
+    },
 });
 
 module.exports = TreeViewBase;
