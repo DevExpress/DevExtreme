@@ -35,6 +35,10 @@
     @DIAGRAM_FLOATING_TOOLBAR_ITEMS_HEIGHT: 36px;
     @DIAGRAM_FLOATING_TOOLBAR_EDITOR_PADDING: 8px 6px;
     @DIAGRAM_FLOATING_TOOLBAR_EDITOR_BUTTON_PADDING: 4px;
+
+    @DIAGRAM_SMALL_EDITOR_WIDTH: 100px;
+    @DIAGRAM_MEDIUM_EDITOR_WIDTH: 180px;
+    @DIAGRAM_LARGE_EDITOR_WIDTH: 280px;
 }
 
 .dx-size-compact() {
@@ -55,6 +59,10 @@
     @DIAGRAM_FLOATING_TOOLBAR_ITEMS_HEIGHT: 28px;
     @DIAGRAM_FLOATING_TOOLBAR_EDITOR_PADDING: 6px 4px;
     @DIAGRAM_FLOATING_TOOLBAR_EDITOR_BUTTON_PADDING: 2px;
+
+    @DIAGRAM_SMALL_EDITOR_WIDTH: 80px;
+    @DIAGRAM_MEDIUM_EDITOR_WIDTH: 120px;
+    @DIAGRAM_LARGE_EDITOR_WIDTH: 220px;
 }
 
 .dx-diagram {
@@ -342,7 +350,7 @@
                 height: auto;
             }
 
-            &.dx-diagram-btn-l-icon .dx-diagram-i {
+            &.dx-diagram-lg-icon-item .dx-diagram-i {
                 background-size: @DIAGRAM_PROPERTIES_LAYOUT_ICON_SIZE @DIAGRAM_PROPERTIES_LAYOUT_ICON_SIZE;
                 width: @DIAGRAM_PROPERTIES_LAYOUT_ICON_SIZE;
                 height: @DIAGRAM_PROPERTIES_LAYOUT_ICON_SIZE;
@@ -403,21 +411,19 @@
         padding: @MATERIAL_FIELD_VALUE_TOP_PADDING 0 @MATERIAL_FIELD_VALUE_BOTTOM_PADDING @MATERIAL_FIELD_LABELVALUE_SPACING;
     }
 
-    .dx-format-sm {
-        .dx-texteditor {
-            width: 110px;
-        }
+    .dx-diagram-lg-edit-item .dx-texteditor {
+        width: @DIAGRAM_LARGE_EDITOR_WIDTH;
     }
 
-    .dx-diagram-select-lg .dx-texteditor {
-        width: 220px;
+    .dx-diagram-md-edit-item .dx-texteditor {
+        width: @DIAGRAM_MEDIUM_EDITOR_WIDTH;
     }
 
-    .dx-diagram-select-sm .dx-texteditor {
-        width: 110px;
+    .dx-diagram-sm-edit-item .dx-texteditor {
+        width: @DIAGRAM_SMALL_EDITOR_WIDTH;
     }
 
-    .dx-diagram-color-b .dx-dropdowneditor-field-template-wrapper {
+    .dx-diagram-color-edit-item .dx-dropdowneditor-field-template-wrapper {
         .dx-diagram-i,
         .dx-icon {
             border-bottom-width: @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH;
@@ -428,8 +434,8 @@
 
 .dx-diagram-toolbar,
 .dx-dropdownmenu-popup {
-    .dx-diagram-select-b,
-    .dx-diagram-color-b {
+    .dx-diagram-image-dropdown-item,
+    .dx-diagram-color-edit-item {
         .dx-dropdowneditor-field-template-wrapper {
             .dx-diagram-i,
             .dx-icon {
