@@ -20,3 +20,7 @@ export const wrapElement = ($element, $wrapper) => {
 
     return children;
 };
+
+export const getInnerActionName = (actionName) => {
+    return actionName.charAt(2).toLowerCase() + actionName.substr(3) + 'Action';
+};

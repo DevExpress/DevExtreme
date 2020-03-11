@@ -4,11 +4,22 @@ import registerComponent from '../../core/component_registrator';
 import Widget from '../preact-wrapper/component';
 import { extend } from '../../core/utils/extend';
 import ButtonView from '../button.p';
-import { wrapElement } from '../preact-wrapper/utils';
+import { wrapElement, getInnerActionName } from '../preact-wrapper/utils';
 import { useLayoutEffect } from 'preact/hooks';
 import { getPublicElement } from '../../core/utils/dom';
 
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
+
+const actions = {
+    onClick: {
+        excludeValidators: ['readOnly'],
+        afterExecute: function() {
+            const { useSubmitBehavior } = this.option();
+
+            useSubmitBehavior && setTimeout(() => this._submitInput().click());
+        } },
+    onContentReady: { excludeValidators: ['disabled', 'readOnly'] },
+};
 
 class Button extends Widget {
     getView() {
@@ -42,17 +53,8 @@ class Button extends Widget {
             };
         }
 
-        props.onClick = this._createActionByOption('onClick', {
-            excludeValidators: ['readOnly'],
-            afterExecute: () => {
-                const { useSubmitBehavior } = this.option();
-
-                useSubmitBehavior && setTimeout(() => this._submitInput().click());
-            }
-        });
-
-        props.onContentReady = this._createActionByOption('onContentReady', {
-            excludeValidators: ['disabled', 'readOnly']
+        Object.keys(actions).forEach((name) => {
+            props[name] = this.option(getInnerActionName(name));
         });
 
         return props;
@@ -68,6 +70,22 @@ class Button extends Widget {
             template: '',
             text: '',
         });
+    }
+
+    _init() {
+        super._init();
+
+        Object.keys(actions).forEach((name) => {
+            this._addAction(name, actions[name]);
+        });
+    }
+
+    _optionChanged(option) {
+        if(actions[option.name]) {
+            this._addAction(option.name, actions[option.name]);
+        }
+
+        super._optionChanged();
     }
 }
 

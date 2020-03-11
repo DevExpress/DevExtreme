@@ -203,11 +203,6 @@ export default class Widget extends JSXComponent<WidgetInput> {
     }
 
     @Effect()
-    contentReadyEffect() {
-        this.props.onContentReady?.({});
-    }
-
-    @Effect()
     focusEffect() {
         const { disabled, focusStateEnabled, name } = this.props;
         const namespace = `${name}Focus`;
