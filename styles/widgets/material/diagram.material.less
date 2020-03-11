@@ -164,7 +164,7 @@
 
 .dx-diagram-floating-toolbar-container {
     background: @overlay-content-bg;
-    box-shadow: 0 11px 15px -7px fade(@base-shadow-color, 20%), 0 24px 38px 3px fade(@base-shadow-color, 14%), 0 9px 46px 8px fade(@base-shadow-color, 12%);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.175);
     border-radius: @popup-border-radius;
     padding: 4px;
 
@@ -214,19 +214,25 @@
 }
 
 .dx-diagram-toolbox-popup {
-    .dx-popup-title.dx-toolbar {
-        font-size: 0.8em;
-        min-height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
+    & > .dx-overlay-content {
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.175);
     }
 
-    .dx-popup-title.dx-toolbar .dx-toolbar-items-container {
-        height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
-    }
+    .dx-popup-title {
+        &.dx-toolbar {
+            font-size: 0.8em;
+            min-height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
 
-    .dx-popup-title .dx-button.dx-button-has-icon:not(.dx-button-has-text),
-    .dx-popup-title .dx-button-content {
-        width: @DIAGRAM_TOOLBOX_TITLE_SIZE;
-        height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
+            .dx-toolbar-items-container {
+                height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
+            }
+        }
+
+        .dx-button.dx-button-has-icon:not(.dx-button-has-text),
+        .dx-button-content {
+            width: @DIAGRAM_TOOLBOX_TITLE_SIZE;
+            height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
+        }
     }
 
     .dx-accordion {
