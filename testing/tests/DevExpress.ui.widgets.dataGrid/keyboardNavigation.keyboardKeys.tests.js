@@ -2140,6 +2140,7 @@ QUnit.module('Keyboard keys', {
 
         // act
         const isPreventDefaultCalled = that.triggerKeyDown('tab', false, false, $('#container').find('input')).preventDefault;
+        this.clock.tick();
 
         // assert
         assert.equal(that.editingController._editRowIndex, 1, 'edit row index');
@@ -2879,7 +2880,7 @@ QUnit.module('Keyboard keys', {
         });
     }
 
-    QUnit.testInActiveWindow('Edit next cell after tab key when first cell focused at \'editCell\' function call', function(assert) {
+    QUnit.testInActiveWindow('Edit next cell after tab key when first cell focused at "editCell" function call', function(assert) {
         setupModules(this);
         this.options.editing = { allowUpdating: true, mode: 'batch' };
         this.gridView.render($('#container'));
@@ -2888,6 +2889,7 @@ QUnit.module('Keyboard keys', {
         this.editingController.editCell(0, 0);
         this.clock.tick();
         const isPreventDefaultCalled = this.triggerKeyDown('tab', false, false, $('#container').find('input'));
+        this.clock.tick();
 
         // assert
         assert.equal(this.editingController._editRowIndex, 0, 'edit row index');
@@ -3742,6 +3744,7 @@ QUnit.module('Keyboard keys', {
 
         // act
         this.triggerKeyDown('tab', false, false, $('#container').find('input'));
+        this.clock.tick();
 
         // assert
         assert.ok($testElement.find('.dx-datagrid-rowsview').find('tbody > tr').eq(1).children().eq(1).hasClass('dx-editor-cell'), 'second cell of the second row is edited');
@@ -3863,6 +3866,8 @@ QUnit.module('Keyboard keys', {
         // act
         const $cell = $(this.getCellElement(0, 0));
         this.triggerKeyDown('tab', false, false, $cell);
+        this.clock.tick();
+
         this.keyboardNavigationController._updateFocus = function() {
             // assert
             assert.ok(false, 'keyboardNavigation._updateFocus should not be called');

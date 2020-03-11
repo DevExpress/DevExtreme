@@ -518,7 +518,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const cellIndex = this.getView('rowsView').getCellIndex($cell);
         const columnIndex = cellIndex + columnsController.getColumnIndexOffset();
         const column = columnsController.getVisibleColumns(null, true)[columnIndex];
-        const row = this._dataController.items()[this._getRowIndex($cell && $cell.parent())];
+        const $row = $cell && $cell.parent();
+        const rowIndex = this._getRowIndex($row);
+        const row = this._dataController.items()[rowIndex];
         const editingController = this.getController('editing');
 
         if(column && column.allowEditing) {
@@ -1361,7 +1363,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const $row = $cell.parent();
             const columnsController = this.getController('columns');
             const columnIndex = rowsView.getCellIndex($cell) + columnsController.getColumnIndexOffset();
-            const column = columnsController.getColumns()[columnIndex];
+            const column = columnsController.getVisibleColumns(null, true)[columnIndex];
             const visibleColumnCount = this._getVisibleColumnCount();
             const editingController = this._editingController;
             const isMasterDetailRow = isDetailRow($row);

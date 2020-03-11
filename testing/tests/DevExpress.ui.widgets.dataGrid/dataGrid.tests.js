@@ -5185,9 +5185,6 @@ QUnit.test('DataGrid should not scroll back to the focused row after pageIndex c
 
 QUnit.testInActiveWindow('Data cell in group column with showWhenGrouped=true should be focused', function(assert) {
     // arrange
-    let $cell;
-    let keyboardController;
-
     const data = [
         { name: 'Alex', phone: '555555', room: 0 },
         { name: 'Dan1', phone: '666666', room: 1 },
@@ -5202,11 +5199,11 @@ QUnit.testInActiveWindow('Data cell in group column with showWhenGrouped=true sh
 
     // act
     dataGrid.focus(dataGrid.getCellElement(1, 2));
-    keyboardController = dataGrid.getController('keyboardNavigation');
+    const keyboardController = dataGrid.getController('keyboardNavigation');
     keyboardController._keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(':focus').get(0) }) });
     this.clock.tick();
 
-    $cell = $(dataGrid.element()).find('.dx-focused');
+    const $cell = $(dataGrid.element()).find('.dx-focused');
 
     // assert
     assert.equal($cell.text(), '0');

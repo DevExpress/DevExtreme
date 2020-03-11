@@ -4278,7 +4278,7 @@ QUnit.module('Keyboard navigation', {
         assert.equal($input.val(), 'Super', 'current input is correct');
     });
 
-    QUnit.testInActiveWindow('Skip hidden column when use a keyboard navigation via \'tab\' key', function(assert) {
+    QUnit.testInActiveWindow('Skip hidden column when use a keyboard navigation via "tab" key', function(assert) {
         // arrange
         this.columns = [
             { dataField: 'firstName', index: 0, allowEditing: true },
@@ -4299,6 +4299,7 @@ QUnit.module('Keyboard navigation', {
         const e = $.Event('keydown');
         e.key = 'Tab';
         this.getActiveInputElement().trigger(e);
+        this.clock.tick();
 
         // assert
         assert.equal(this.getActiveInputElement().val(), 'Full Name');
