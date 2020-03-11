@@ -624,6 +624,10 @@
     .dx-scheduler-work-space-week,
     .dx-scheduler-work-space-work-week,
     .dx-scheduler-work-space-day {
+        .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content {
+            padding: 0 7px;
+        }
+
         .dx-scheduler-date-time-indicator {
             margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
             height: @SCHEDULER_TIME_INDICATOR_SIZE;
@@ -946,14 +950,6 @@
     .dx-scheduler-work-space-day.dx-scheduler-work-space-count {
         .dx-scheduler-all-day-title {
             border-top: @SCHEDULER_BASE_BORDER;
-        }
-    }
-
-    .dx-scheduler-work-space-week,
-    .dx-scheduler-work-space-work-week,
-    .dx-scheduler-work-space-day.dx-scheduler-work-space-overlapping {
-        .dx-scheduler-all-day-appointment .dx-scheduler-appointment-content {
-            padding: 0 7px;
         }
     }
 
