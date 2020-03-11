@@ -5,6 +5,8 @@ import { locale } from 'localization/core';
 
 import $ from 'jquery';
 import 'ui/date_box';
+import { excel as excelCreator } from 'exporter';
+import dateLocalization from 'localization/date';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -82,5 +84,28 @@ QUnit.module('Intl localization', () => {
                 locale(currentLocale);
             }
         });
+    });
+});
+
+QUnit.module('Excel creator', commonEnvironment, () => {
+    QUnit.test('Arabic data convert', function(assert) {
+        const originalCulture = locale();
+
+        try {
+            locale('ar');
+
+            const convertDate = function(formatter) {
+                return excelCreator.formatConverter.convertFormat(formatter, null, 'date');
+            };
+
+            const pattern = '[$-2010009]d\\/M\\/yyyy';
+            const formatter = function(value) {
+                return dateLocalization.format(value, 'shortdate');
+            };
+
+            assert.strictEqual(convertDate(formatter), pattern, `Pattern: "${pattern}" Example:"${formatter(new Date())}"`);
+        } finally {
+            locale(originalCulture);
+        }
     });
 });

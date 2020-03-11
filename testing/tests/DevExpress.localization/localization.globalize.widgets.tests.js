@@ -25,6 +25,7 @@ const dateLocalization = require('localization/date');
 
 require('ui/date_box');
 require('viz/chart');
+const excelCreator = require('exporter').excel;
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 const DATEVIEW_ITEM_SELECTOR = '.dx-dateview-item';
@@ -38,9 +39,9 @@ const commonEnvironment = {
     beforeEach: function() {
         const markup =
                 '<div id="dateBox"></div>\
-                    <div id="dateBoxWithPicker"></div>\
-                    <div id="widthRootStyle" style="width: 300px;"></div>\
-                    <div id="calendar"></div>';
+                <div id="dateBoxWithPicker"></div>\
+                <div id="widthRootStyle" style="width: 300px;"></div>\
+                <div id="calendar"></div>';
 
         $('#qunit-fixture').html(markup);
     },
@@ -307,3 +308,27 @@ QUnit.module('Chart', commonEnvironment, () => {
         assert.strictEqual($($('.dxc-val-elements').children()[0]).text(), '0.0001');
     });
 });
+
+QUnit.module('Excel creator', commonEnvironment, () => {
+    QUnit.test('Arabic data convert', function(assert) {
+        const originalCulture = Globalize.locale().locale;
+
+        try {
+            Globalize.locale('ar');
+
+            const convertDate = function(formatter) {
+                return excelCreator.formatConverter.convertFormat(formatter, null, 'date');
+            };
+
+            const pattern = '[$-2010009]d\\/M\\/yyyy';
+            const formatter = function(value) {
+                return dateLocalization.format(value, 'shortdate');
+            };
+
+            assert.strictEqual(convertDate(formatter), pattern, `Pattern: "${pattern}" Example:"${formatter(new Date())}"`);
+        } finally {
+            Globalize.locale(originalCulture);
+        }
+    });
+});
+
