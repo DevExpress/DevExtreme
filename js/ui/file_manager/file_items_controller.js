@@ -528,7 +528,7 @@ class FileSecurityController {
 
         this._extensionsMap = {};
         this._allowedFileExtensions.forEach(extension => {
-            this._extensionsMap[extension] = true;
+            this._extensionsMap[extension.toUpperCase()] = true;
         });
     }
 
@@ -555,8 +555,7 @@ class FileSecurityController {
         if(this._allowedFileExtensions.length === 0) {
             return true;
         }
-
-        const extension = getFileExtension(name).toLowerCase();
+        const extension = getFileExtension(name).toUpperCase();
         return this._extensionsMap[extension];
     }
 
