@@ -111,6 +111,7 @@ export class ButtonInput extends WidgetInput {
     @OneWay() type?: string;
     @OneWay() useInkRipple?: boolean = false;
     @OneWay() useSubmitBehavior?: boolean = false;
+    @OneWay() validationGroup?: string = undefined;
 }
 
 const defaultOptionRules = createDefaultOptionRules<ButtonInput>([
@@ -160,11 +161,11 @@ export default class Button extends JSXComponent<ButtonInput> {
     }
 
     onWidgetClick(e: Event) {
-        const { onClick, useSubmitBehavior } = this.props;
+        const { onClick, useSubmitBehavior, validationGroup } = this.props;
 
         useSubmitBehavior && this.submitInputRef.click();
 
-        return onClick?.({ event: e });
+        return onClick?.({ event: e, validationGroup });
     }
 
     onWidgetKeyPress(e: Event, { keyName, which }) {

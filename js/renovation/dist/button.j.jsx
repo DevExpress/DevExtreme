@@ -1,6 +1,7 @@
 import $ from '../../core/renderer';
 import * as Preact from 'preact';
 import registerComponent from '../../core/component_registrator';
+import ValidationEngine from '../../ui/validation_engine';
 import Widget from '../preact-wrapper/component';
 import { extend } from '../../core/utils/extend';
 import ButtonView from '../button.p';
@@ -51,7 +52,17 @@ class Button extends Widget {
             props[name] = this.option(getInnerActionName(name));
         });
 
+        props.validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
+
         return props;
+    }
+
+    _findGroup() {
+        const $element = this.$element();
+        const model = this._modelByElement($element);
+        const { validationGroup } = this.option();
+
+        return validationGroup || ValidationEngine.findGroup($element, model);
     }
 
     _getDefaultOptions() {
@@ -63,6 +74,9 @@ class Button extends Widget {
             iconPosition: 'left',
             template: '',
             text: '',
+            useInkRipple: false,
+            useSubmitBehavior: false,
+            validationGroup: undefined,
         });
     }
 
