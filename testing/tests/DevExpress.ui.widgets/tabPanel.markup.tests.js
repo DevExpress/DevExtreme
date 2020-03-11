@@ -2,7 +2,6 @@ import $ from 'jquery';
 import TabPanel from 'ui/tab_panel';
 
 import 'common.css!';
-
 QUnit.testStart(() => {
     const markup =
         '<div id="tabPanel">\
