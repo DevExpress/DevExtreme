@@ -11,13 +11,7 @@ import { getPublicElement } from '../../core/utils/dom';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 const actions = {
-    onClick: {
-        excludeValidators: ['readOnly'],
-        afterExecute: function() {
-            const { useSubmitBehavior } = this.option();
-
-            useSubmitBehavior && setTimeout(() => this._submitInput().click());
-        } },
+    onClick: { excludeValidators: ['readOnly'] },
     onContentReady: { excludeValidators: ['disabled', 'readOnly'] },
 };
 
