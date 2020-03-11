@@ -397,5 +397,17 @@ QUnit.module('Editors Standard Adapter', {
 
         assert.notOk(this.fixture.$element.hasClass('dx-valid'), 'valid mark is not rendered');
     });
+
+    QUnit.test('Editor should display a valid mark when showValidationMark is changed at runtime to true', function(assert) {
+        const editor = this.fixture.createTextEditor({
+            showValidationMark: false
+        });
+
+        editor.option('validationStatus', 'pending');
+        editor.option('showValidationMark', true);
+        editor.option('validationStatus', 'valid');
+
+        assert.ok(this.fixture.$element.hasClass('dx-valid'), 'valid mark is rendered');
+    });
 });
 

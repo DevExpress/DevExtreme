@@ -374,6 +374,8 @@ const Editor = Widget.inherit({
             case 'name':
                 this._setSubmitElementName(args.value);
                 break;
+            case 'showValidationMark':
+                break;
             default:
                 this.callBase(args);
         }
