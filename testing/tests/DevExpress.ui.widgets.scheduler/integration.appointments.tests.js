@@ -71,7 +71,7 @@ QUnit.module('Integration: Appointments', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler($.extend(options)).dxScheduler('instance');
             this.clock.tick(300);
             this.instance.focus();
 

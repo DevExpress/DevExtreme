@@ -1592,7 +1592,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 1, 9),
             currentView: 'month',
             dataSource: data,
-            maxAppointmentsPerCell: null,
+            maxAppointmentsPerCell: 2,
             height: 500,
             width: 800
         });
@@ -2814,7 +2814,6 @@ QUnit.testStart(function() {
                 }],
             }),
             views: ['month'],
-            maxAppointmentsPerCell: null,
             currentView: 'month',
             onAppointmentRendered: function(args) {
                 assert.equal($(args.appointmentElement).find('.dx-scheduler-appointment-reduced-icon').length, 1, 'Appointment reduced icon is applied');
@@ -2858,7 +2857,6 @@ QUnit.testStart(function() {
                 }],
             }),
             views: ['month'],
-            maxAppointmentsPerCell: null,
             currentView: 'month',
             onAppointmentRendered: function(args) {
                 assert.ok(true, 'Appointment was rendered');
@@ -2892,7 +2890,6 @@ QUnit.testStart(function() {
             views: ['timelineWeek'],
             currentView: 'timelineWeek',
             cellDuration: 60,
-            maxAppointmentsPerCell: null,
             onAppointmentRendered: function(args) {
                 assert.ok(true, 'Appointment was rendered');
             },
@@ -3045,7 +3042,6 @@ QUnit.testStart(function() {
             }),
             views: ['month'],
             currentView: 'month',
-            maxAppointmentsPerCell: null,
             currentDate: new Date(2015, 2, 9),
             onAppointmentClick: function(e) {
                 assert.deepEqual(isRenderer(e.appointmentElement), !!config().useJQuery, 'appointmentElement is correct');
@@ -3122,7 +3118,6 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 2, 9),
             startDateExpr: 'start.date',
             endDateExpr: 'end.date',
-            maxAppointmentsPerCell: null,
             recurrenceRuleExpr: 'recurrence.rule',
             onAppointmentClick: function(e) {
                 const targetedAppointmentData = e.targetedAppointmentData;
@@ -3223,7 +3218,6 @@ QUnit.testStart(function() {
             }),
             views: ['month'],
             currentView: 'month',
-            maxAppointmentsPerCell: null,
             currentDate: new Date(2015, 2, 9),
             onAppointmentContextMenu: function(e) {
                 assert.deepEqual(isRenderer(e.appointmentElement), !!config().useJQuery, 'appointmentElement is correct');
@@ -3847,7 +3841,6 @@ QUnit.testStart(function() {
             this.createInstance({
                 width: 300,
                 currentView: 'week',
-                maxAppointmentsPerCell: null,
                 dataSource: [{
                     text: 'a',
                     startDate: new Date(2015, 6, 5, 0, 0),

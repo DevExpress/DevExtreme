@@ -558,15 +558,9 @@ class BaseRenderingStrategy {
             allDay: allDay,
         });
     }
-
+    // NOTE: remove
     _getMaxNeighborAppointmentCount() {
-        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
-        if(!overlappingMode) {
-            const outerAppointmentWidth = this.getCompactAppointmentDefaultWidth() + this.getCompactAppointmentLeftOffset();
-            return Math.floor(this.getDropDownAppointmentWidth() / outerAppointmentWidth);
-        } else {
-            return 0;
-        }
+        return 0;
     }
 
     _markAppointmentAsVirtual(coordinates, isAllDay) {
@@ -723,9 +717,6 @@ class BaseRenderingStrategy {
             const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
             let appointmentCountPerCell;
 
-            if(!overlappingMode) {
-                appointmentCountPerCell = 2;
-            }
             if(isNumeric(overlappingMode)) {
                 appointmentCountPerCell = overlappingMode;
             }

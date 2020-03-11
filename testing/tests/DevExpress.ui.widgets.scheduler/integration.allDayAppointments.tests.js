@@ -35,7 +35,7 @@ function getOffset() {
 }
 
 const createInstance = function(options) {
-    const instance = $('#scheduler').dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler('instance');
+    const instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
     return new SchedulerTestWrapper(instance);
 };
 
@@ -43,7 +43,7 @@ QUnit.module('Integration: allDay appointments', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler($.extend(options)).dxScheduler('instance');
         };
 
         this.clock = sinon.useFakeTimers();

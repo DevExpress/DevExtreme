@@ -8,7 +8,7 @@ import utils from './../utils';
 const WEEK_APPOINTMENT_DEFAULT_OFFSET = 25;
 const WEEK_APPOINTMENT_MOBILE_OFFSET = 50;
 
-const APPOINTMENT_MIN_WIDTH = 5;
+// const APPOINTMENT_MIN_WIDTH = 5;
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -175,24 +175,28 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getVerticalAppointmentGeometry(coordinates) {
-        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+        const config = this._calculateVerticalGeometryConfig(coordinates);
 
-        if(overlappingMode) {
-            const config = this._calculateVerticalGeometryConfig(coordinates);
+        return this._customizeVerticalCoordinates(coordinates, config.width, config.appointmentCountPerCell, config.offset);
+        // const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
 
-            return this._customizeVerticalCoordinates(coordinates, config.width, config.appointmentCountPerCell, config.offset);
-        } else {
-            let width = this._getAppointmentMaxWidth() / coordinates.count;
-            const height = coordinates.height;
-            const top = coordinates.top;
-            const left = coordinates.left + (coordinates.index * width);
+        // if(overlappingMode) {
+        //     const config = this._calculateVerticalGeometryConfig(coordinates);
 
-            if(width < APPOINTMENT_MIN_WIDTH) {
-                width = APPOINTMENT_MIN_WIDTH;
-            }
+        //     return this._customizeVerticalCoordinates(coordinates, config.width, config.appointmentCountPerCell, config.offset);
+        // }
+        // else {
+        //     let width = this._getAppointmentMaxWidth() / coordinates.count;
+        //     const height = coordinates.height;
+        //     const top = coordinates.top;
+        //     const left = coordinates.left + (coordinates.index * width);
 
-            return { height: height, width: width, top: top, left: left, empty: this._isAppointmentEmpty(height, width) };
-        }
+        //     if(width < APPOINTMENT_MIN_WIDTH) {
+        //         width = APPOINTMENT_MIN_WIDTH;
+        //     }
+
+        //     return { height: height, width: width, top: top, left: left, empty: this._isAppointmentEmpty(height, width) };
+        // }
     }
 
     _customizeVerticalCoordinates(coordinates, width, appointmentCountPerCell, topOffset, isAllDay) {

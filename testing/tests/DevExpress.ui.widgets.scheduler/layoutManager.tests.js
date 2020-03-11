@@ -42,7 +42,7 @@ QUnit.testStart(function() {
 const moduleOptions = {
     beforeEach: function() {
         this.createInstance = options => {
-            this.instance = $('#scheduler').dxScheduler($.extend(options, { editing: true, maxAppointmentsPerCell: null })).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler($.extend(options, { editing: true })).dxScheduler('instance');
             this.scheduler = new SchedulerTestWrapper(this.instance);
         };
     },
@@ -1192,7 +1192,6 @@ QUnit.test('Four rival appointments should have correct positions', function(ass
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'timelineDay',
-            maxAppointmentsPerCell: null,
             height: 500,
             dataSource: items,
             startDayHour: 1
@@ -2625,28 +2624,6 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     const $dropDownMenu = $(this.instance.$element()).find('.dx-scheduler-appointment-collector');
 
     assert.equal($dropDownMenu.length, 0, 'ddAppointment isn\'t rendered');
-});
-
-QUnit.test('Appointments should not have specific class if maxAppointmentsPerCell=null', function(assert) {
-    const items = [
-        { text: 'Task 2', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) }];
-
-    this.createInstance(
-        {
-            currentDate: new Date(2015, 2, 4),
-            currentView: 'week',
-            width: 800,
-            views: [{
-                type: 'week',
-                maxAppointmentsPerCell: null
-            }],
-            height: 600,
-            dataSource: items
-        }
-    );
-
-    const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment'));
-    assert.ok(!$appointment.eq(0).hasClass('dx-scheduler-appointment-empty'), 'appointment has not the class');
 });
 
 QUnit.test('_isAppointmentEmpty should work correctly in different strategies', function(assert) {

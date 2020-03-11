@@ -33,7 +33,7 @@ QUnit.module('Integration: Multi-Week appointments', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler($.extend(options)).dxScheduler('instance');
         };
     },
     afterEach: function() {

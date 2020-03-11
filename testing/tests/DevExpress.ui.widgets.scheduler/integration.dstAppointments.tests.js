@@ -434,7 +434,6 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
         const scheduler = createWrapper({
             currentDate: new Date(2018, 2, 11),
             views: ['timelineDay'],
-            maxAppointmentsPerCell: null,
             currentView: 'timelineDay',
             dataSource: [{
                 text: 'DST',
@@ -462,7 +461,6 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
             currentDate: new Date(2018, 2, 12),
             views: ['timelineDay'],
             currentView: 'timelineDay',
-            maxAppointmentsPerCell: null,
             dataSource: [{
                 text: 'DST',
                 startDate: startDate,
@@ -488,7 +486,6 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
             currentView: 'timelineWeek',
             cellDuration: 60,
             currentDate: currentDate,
-            maxAppointmentsPerCell: null,
             dataSource: [{
                 text: 'DST',
                 startDate: startDate,
@@ -511,7 +508,6 @@ QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
             currentDate: currentDate,
             views: ['timelineDay'],
             currentView: 'timelineDay',
-            maxAppointmentsPerCell: null,
             dataSource: [{
                 text: 'DST',
                 startDate: startDate,

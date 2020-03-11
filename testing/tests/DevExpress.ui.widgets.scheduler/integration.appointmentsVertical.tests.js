@@ -16,10 +16,7 @@ import 'ui/switch';
 import { SchedulerTestWrapper } from './helpers.js';
 
 const createInstance = function(options) {
-    const defaultOption = {
-        maxAppointmentsPerCell: null
-    };
-    const instance = $('#scheduler').dxScheduler($.extend(defaultOption, options)).dxScheduler('instance');
+    const instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
     return new SchedulerTestWrapper(instance);
 };
 
@@ -51,7 +48,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler($.extend(options)).dxScheduler('instance');
         };
         this.getAppointmentColor = function($task, checkedProperty) {
             checkedProperty = checkedProperty || 'backgroundColor';
@@ -536,8 +533,7 @@ QUnit.test('dropDown appointment should not compact class on vertical view', fun
     this.createInstance({
         currentDate: new Date(2015, 4, 25),
         views: [{ type: 'week', name: 'week' }],
-        currentView: 'week',
-        maxAppointmentsPerCell: 'auto'
+        currentView: 'week'
     });
 
     this.instance.option('dataSource', [
@@ -859,8 +855,7 @@ QUnit.test('Appointments should be rendered correctly in vertical grouped worksp
         endDayHour: 15,
         cellDuration: 60,
         showAllDayPanel: true,
-        width: 2000,
-        maxAppointmentsPerCell: 'auto'
+        width: 2000
     });
 
     const $appointments = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS);
@@ -913,8 +908,7 @@ QUnit.test('Rival allDay appointments from different groups should be rendered c
         startDayHour: 9,
         endDayHour: 15,
         cellDuration: 60,
-        showAllDayPanel: true,
-        maxAppointmentsPerCell: 'auto'
+        showAllDayPanel: true
     });
 
     const $appointments = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS);
@@ -968,8 +962,7 @@ QUnit.test('Rival allDay appointments from same groups should be rendered correc
         startDayHour: 9,
         endDayHour: 15,
         cellDuration: 60,
-        showAllDayPanel: true,
-        maxAppointmentsPerCell: 'auto'
+        showAllDayPanel: true
     });
 
     const $appointments = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS);
@@ -1003,8 +996,7 @@ QUnit.test('Rival appointments from one group should be rendered correctly in ve
         startDayHour: 9,
         endDayHour: 15,
         cellDuration: 60,
-        showAllDayPanel: true,
-        maxAppointmentsPerCell: null
+        showAllDayPanel: true
     });
 
     const defaultWidthStub = sinon.stub(this.instance.getRenderingStrategyInstance(), '_getAppointmentMaxWidth').returns(50);
@@ -1070,8 +1062,7 @@ QUnit.test('Appointment in bottom cell should be rendered cirrectly in vertical 
         endDayHour: 15,
         width: 2000,
         cellDuration: 60,
-        showAllDayPanel: true,
-        maxAppointmentsPerCell: 'auto'
+        showAllDayPanel: true
     });
 
     const $appointments = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS);

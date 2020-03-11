@@ -16,7 +16,7 @@ import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
 const createInstance = function(options) {
-    const instance = $('#scheduler').dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler('instance');
+    const instance = $('#scheduler').dxScheduler($.extend(options)).dxScheduler('instance');
     return new SchedulerTestWrapper(instance);
 };
 
@@ -39,7 +39,7 @@ QUnit.module('Integration: Appointments rendering when timezone is set', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler('instance');
+            this.instance = $('#scheduler').dxScheduler($.extend(options)).dxScheduler('instance');
         };
 
         this.clock = sinon.useFakeTimers();

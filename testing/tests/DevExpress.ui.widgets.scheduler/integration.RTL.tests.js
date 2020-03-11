@@ -111,8 +111,7 @@ module('RTL', moduleConfig, () => {
                     startDate: new Date(2015, 1, 9, 1, 0),
                     endDate: new Date(2015, 1, 9, 2, 0)
                 }],
-                rtlEnabled: true,
-                maxAppointmentsPerCell: null
+                rtlEnabled: true
             });
         };
 
