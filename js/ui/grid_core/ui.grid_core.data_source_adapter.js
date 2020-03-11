@@ -544,13 +544,15 @@ module.exports = gridCore.Controller.inherit((function() {
         hasKnownLastPage: function() {
             return this._hasLastPage || this._dataSource.totalCount() >= 0;
         },
-        loadFromStore: function(loadOptions) {
+        loadFromStore: function(loadOptions, store) {
             const dataSource = this._dataSource;
             const d = new Deferred();
 
             if(!dataSource) return;
 
-            dataSource.store().load(loadOptions).done(function(data, extra) {
+            store = store || dataSource.store();
+
+            store.load(loadOptions).done(function(data, extra) {
                 if(data && !Array.isArray(data) && Array.isArray(data.data)) {
                     extra = data;
                     data = data.data;
