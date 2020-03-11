@@ -129,6 +129,7 @@ module.exports = {
         { import: '../textEditor/sizes', type: 'index' },
         { import: '../textEditor/colors', type: 'index' },
         { import: '../button/colors', type: 'colors' },
+        { import: '../color', type: 'colors', alias: 'extColor' },
     ],
     'dateView': [
         { import: '../../base/mixins', type: 'index' },

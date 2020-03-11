@@ -282,10 +282,10 @@ const generateDefaultVariablesBlock = (variables) => {
     return content;
 };
 
-const createBaseWidgetFolder = (theme) => {
-    const baseWidgetPath = path.join(repositoryRoot, outputPath, 'widgets', theme);
-    if(!fs.existsSync(baseWidgetPath)) fs.mkdirSync(baseWidgetPath);
-    return baseWidgetPath;
+const createThemeFolder = (theme) => {
+    const themePath = path.join(repositoryRoot, outputPath, 'widgets', theme);
+    if(!fs.existsSync(themePath)) fs.mkdirSync(themePath);
+    return themePath;
 };
 
 const makeIndent = (content) => {
@@ -363,7 +363,7 @@ const cleanWidgetColorVariables = () => {
 };
 
 gulp.task('create-base-widget-generic-colors', (callback) => {
-    const baseWidgetPath = createBaseWidgetFolder('generic');
+    const themePath = createThemeFolder('generic');
 
     // _colors
 
@@ -410,8 +410,8 @@ gulp.task('create-base-widget-generic-colors', (callback) => {
             collectWidgetColorVariables(themeContent, file);
         });
 
-        fs.writeFileSync(path.join(baseWidgetPath, '_colors.scss'), colorsContent);
-        fs.copyFileSync(path.join(__dirname, 'snippets', 'color.scss'), path.join(baseWidgetPath, 'color.scss'));
+        fs.writeFileSync(path.join(themePath, '_colors.scss'), colorsContent);
+        fs.copyFileSync(path.join(__dirname, 'snippets', 'color.scss'), path.join(themePath, 'color.scss'));
         fillWidgetColors('generic');
         cleanWidgetColorVariables();
         callback();
@@ -419,7 +419,7 @@ gulp.task('create-base-widget-generic-colors', (callback) => {
 });
 
 gulp.task('create-base-widget-material-colors', (callback) => {
-    const baseWidgetPath = createBaseWidgetFolder('material');
+    const themePath = createThemeFolder('material');
 
     // _colors
 
@@ -447,16 +447,17 @@ gulp.task('create-base-widget-material-colors', (callback) => {
         });
 
         ['light', 'dark'].forEach(mode => {
-            const themeContent = fs.readFileSync(path.join(sourcePath, `material.${mode}.scss`)).toString();
+            let themeContent = fs.readFileSync(path.join(sourcePath, `material.${mode}.scss`)).toString();
             const themeIconsContent = fs.readFileSync(path.join(sourcePath, `material.${mode}.icons.scss`)).toString();
+            themeContent = themeContent.replace(/#F44336;/, '#F44336 !default; /* TODO move outside @if */');
             colorsContent += `@if $mode == "${mode}" {\n${makeIndent([getBaseContent(themeContent), themeIconsContent].join('\n'))}\n}\n\n`;
             colorsContent = replaceColorFunctions(colorsContent);
 
             collectWidgetColorVariables(themeContent, mode);
         });
 
-        fs.writeFileSync(path.join(baseWidgetPath, '_colors.scss'), colorsContent);
-        fs.copyFileSync(path.join(__dirname, 'snippets', 'color.scss'), path.join(baseWidgetPath, 'color.scss'));
+        fs.writeFileSync(path.join(themePath, '_colors.scss'), colorsContent);
+        fs.copyFileSync(path.join(__dirname, 'snippets', 'color.scss'), path.join(themePath, 'color.scss'));
         fillWidgetColors('material');
         cleanWidgetColorVariables();
         callback();
@@ -465,7 +466,7 @@ gulp.task('create-base-widget-material-colors', (callback) => {
 
 gulp.task('create-base-widget-sizes', (callback) => {
     ['generic', 'material'].forEach(theme => {
-        const baseWidgetPath = createBaseWidgetFolder(theme);
+        const baseWidgetPath = createThemeFolder(theme);
         const sourcePath = path.join(repositoryRoot, unfixedScssPath, 'widgets', theme, 'size-schemes');
         const sharedBasePath = path.join(sourcePath, 'shared/base.scss');
         const sharedMobilePath = path.join(sourcePath, 'shared/mobile.scss');

@@ -5,14 +5,12 @@ const cssom = require('cssom');
 const SUCCESS = 0;
 const ERROR = 1;
 
-const themes = [
-    'light',
-    'material.blue.light'
-];
-
 const blackList = [
     '.dx-show-clear-button .dx-icon-clear'
 ];
+
+const artifactsPath = path.join(__dirname, '..', '..', '..', '..', 'artifacts');
+const scssPath = path.join(artifactsPath, 'scss-css');
 
 const normalizeSelector = selector => selector
     .replace(/"/g, '\'')
@@ -25,6 +23,25 @@ const normalizeSelector = selector => selector
 const normalizeRule = rule => rule
     .replace(/"/g, '\'')
     .replace(/\.3333333333px/, '.33333333px')
+    .replace(/gray/, 'grey')
+
+    // colors rounding (mix, darken)
+    .replace(/#dd5841/, '#dc5840')
+    .replace(/#101010/, '#111')
+    .replace(/#1d9e92/, '#1c9e92')
+    .replace(/#8c49ff/, '#8c4aff')
+    .replace(/#6c7986/, '#6c7987')
+    .replace(/#529893/, '#529793')
+    .replace(/#d43300/, '#d53300')
+    .replace(/#3794e1/, '#3895e1')
+    .replace(/#bddbf5/, '#bddcf5')
+    .replace(/rgba\(140,73,255,\.(1|4)\)/, 'rgba(140,74,255,.$1)')
+    .replace(/rgba\(107,22,255,.8\)/, 'rgba(107,23,255,.8)')
+    .replace(/rgba\(55,148,225,.8\)/, 'rgba(56,149,225,.8)')
+
+    // replace color in inlined svg
+    .replace(/(%3A|%22)%23000000/g, '$1black')
+
     .replace(/'(.)'/, (_, letter) => {
         // utf char to escaped notation
         const codePoint = letter.codePointAt(0);
@@ -97,22 +114,22 @@ const printArrayItems = (array) => {
     array.forEach(item => console.log(item + '\n'));
 };
 
-const printSelectorsErrors = (etalonDiff, targetDiff, theme) => {
-    console.log(`${theme} theme selectors diff:\n\nEtalon diff:\n`);
+const printSelectorsErrors = (etalonDiff, targetDiff, themeFile) => {
+    console.log(`${themeFile} bundle selectors diff:\n\nEtalon diff:\n`);
     printArrayItems(etalonDiff);
     console.log('\nTarget diff:\n');
     printArrayItems(targetDiff);
 };
 
-const printRuleErrors = (ruleErrors, theme) => {
-    console.log(`${theme} theme rule errors:\n\n`);
+const printRuleErrors = (ruleErrors, themeFile) => {
+    console.log(`${themeFile} bundle rule errors:\n\n`);
     ruleErrors.forEach(error => {
         console.log(`Selector:\n${error.selector}\nRules:`);
         printArrayItems(error.properties);
     });
 };
 
-const compareCssContent = (etalon, target, theme) => {
+const compareCssContent = (etalon, target, themeFile) => {
     const etalonCssom = cssom.parse(etalon);
     const targetCssom = cssom.parse(target);
 
@@ -125,14 +142,14 @@ const compareCssContent = (etalon, target, theme) => {
     const diffs = compareSelectors(etalonSelectors, targetSelectors);
 
     if(diffs[0].length || diffs[1].length) {
-        printSelectorsErrors(diffs[0], diffs[1], theme);
+        printSelectorsErrors(diffs[0], diffs[1], themeFile);
         return ERROR;
     }
 
     const ruleErrors = deepCompare(etalonCssObject, targetCssObject);
 
     if(ruleErrors.length) {
-        printRuleErrors(ruleErrors, theme);
+        printRuleErrors(ruleErrors, themeFile);
         return ERROR;
     }
 
@@ -141,17 +158,16 @@ const compareCssContent = (etalon, target, theme) => {
 
 let exitCode = SUCCESS;
 
-themes.forEach(theme => {
-    const compiledThemeFile = `dx.${theme}.css`;
-    const artifactsPath = path.join(__dirname, '..', '..', '..', '..', 'artifacts');
+const files = fs.readdirSync(scssPath);
 
-    const lessFile = path.join(artifactsPath, 'css', compiledThemeFile);
-    const scssFile = path.join(artifactsPath, 'scss-css', compiledThemeFile);
+files.forEach(file => {
+    const lessFile = path.join(artifactsPath, 'css', file);
+    const scssFile = path.join(artifactsPath, 'scss-css', file);
 
     const lessFileContent = fs.readFileSync(lessFile).toString();
     const scssFileContent = fs.readFileSync(scssFile).toString();
 
-    if(compareCssContent(lessFileContent, scssFileContent, theme) === ERROR) {
+    if(compareCssContent(lessFileContent, scssFileContent, file) === ERROR) {
         exitCode = ERROR;
     }
 });
