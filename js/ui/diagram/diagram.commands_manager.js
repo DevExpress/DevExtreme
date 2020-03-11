@@ -499,13 +499,15 @@ const DiagramCommandsManager = {
                 // Custom commands
                 showToolbox: {
                     command: this.SHOW_TOOLBOX_COMMAND_NAME,
-                    icon: 'dx-diagram-i dx-diagram-i-button-toolbox-open',
+                    iconChecked: 'dx-diagram-i dx-diagram-i-button-toolbox-close',
+                    iconUnchecked: 'dx-diagram-i dx-diagram-i-button-toolbox-open',
                     hint: messageLocalization.format('dxDiagram-uiShowToolbox'),
                     text: messageLocalization.format('dxDiagram-uiShowToolbox')
                 },
                 showPropertiesPanel: {
                     command: this.SHOW_PROPERTIES_PANEL_COMMAND_NAME,
-                    icon: 'dx-diagram-i dx-diagram-i-button-properties-panel-open',
+                    iconChecked: 'close',
+                    iconUnchecked: 'dx-diagram-i dx-diagram-i-button-properties-panel-open',
                     hint: messageLocalization.format('dxDiagram-uiProperties'),
                     text: messageLocalization.format('dxDiagram-uiProperties')
                 }

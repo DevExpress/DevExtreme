@@ -107,7 +107,9 @@ class DiagramToolbar extends DiagramPanel {
                 type: this.option('buttonType'),
                 text: item.text,
                 hint: item.hint,
-                icon: item.icon,
+                icon: item.icon || item.iconUnchecked || item.iconChecked,
+                iconChecked: item.iconChecked,
+                iconUnchecked: item.iconUnchecked,
                 onInitialized: (e) => this._onItemInitialized(e.component, item),
                 onContentReady: (e) => this._onItemContentReady(e.component, item, actionHandler),
             }
@@ -487,7 +489,11 @@ class DiagramToolbarItemHelper {
         }
     }
     _updateButtonValue(value) {
-        this._widget.$element().toggleClass(ACTIVE_FORMAT_CLASS, value);
+        if(this._widget.option('iconChecked') && this._widget.option('iconUnchecked')) {
+            this._widget.option('icon', value ? this._widget.option('iconChecked') : this._widget.option('iconUnchecked'));
+        } else {
+            this._widget.$element().toggleClass(ACTIVE_FORMAT_CLASS, value);
+        }
     }
     _updateContextMenuItemValue(contextMenu, itemOptionText, rootCommandKey, value) {
         DiagramMenuHelper.updateContextMenuItemValue(contextMenu, itemOptionText, rootCommandKey, value);

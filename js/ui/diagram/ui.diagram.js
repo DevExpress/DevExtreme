@@ -67,6 +67,7 @@ class Diagram extends Widget {
     _init() {
         this._updateDiagramLockCount = 0;
         this._browserResizeTimer = -1;
+        this._toolbars = [];
 
         super._init();
         this._initDiagram();
@@ -77,6 +78,9 @@ class Diagram extends Widget {
     }
     _initMarkup() {
         super._initMarkup();
+
+        this._toolbars = [];
+
         const isServerSide = !hasWindow();
         this.$element().addClass(DIAGRAM_CLASS);
 
@@ -170,6 +174,9 @@ class Diagram extends Widget {
                 this._browserResizeTimer = setTimeout(() => this._processBrowserResize(), 100);
             });
         }
+
+        this._setCustomCommandChecked(DiagramCommandsManager.SHOW_PROPERTIES_PANEL_COMMAND_NAME, this._isPropertiesPanelVisible());
+        this._setCustomCommandChecked(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME, this._isToolboxVisible());
     }
     _processBrowserResize() {
         this._isMobileScreenSize = undefined;
@@ -197,6 +204,10 @@ class Diagram extends Widget {
     notifyBarCommandExecuted() {
         this._diagramInstance.captureFocus();
     }
+    _registerToolbar(component) {
+        this._registerBar(component);
+        this._toolbars.push(component);
+    }
     _registerBar(component) {
         component.bar.onChanged.add(this);
         this._diagramInstance.barManager.registerBar(component.bar);
@@ -213,7 +224,7 @@ class Diagram extends Widget {
     }
     _getToolbarBaseOptions() {
         return {
-            onContentReady: ({ component }) => this._registerBar(component),
+            onContentReady: ({ component }) => this._registerToolbar(component),
             onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
@@ -260,7 +271,6 @@ class Diagram extends Widget {
         this._historyToolbar = this._createComponent($container, DiagramHistoryToolbar,
             extend(this._getToolbarBaseOptions(), {
                 commands: this.option('historyToolbar.commands'),
-                isToolboxVisible: this._isToolboxVisible()
             })
         );
         this._updateHistoryToolbarPosition($container, $parent, isServerSide);
@@ -317,6 +327,8 @@ class Diagram extends Widget {
             onVisibilityChanging: (e) => {
                 if(isServerSide) return;
 
+                this._setCustomCommandChecked(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME, e.visible);
+
                 if(this._propertiesPanel) {
                     if(e.visible && this.isMobileScreenSize()) {
                         this._propertiesPanel.hide();
@@ -334,12 +346,7 @@ class Diagram extends Widget {
             onVisibilityChanged: (e) => {
                 if(isServerSide) return;
 
-                if(this._viewToolbar) {
-                    this._viewToolbar.setCommandChecked(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME, e.visible);
-                }
                 if(this._historyToolbar) {
-                    this._historyToolbar.option('isToolboxVisible', e.visible);
-
                     if(!e.visible && this.isMobileScreenSize() && this._historyToolbarZIndex) {
                         zIndexPool.remove(this._historyToolbarZIndex);
                         this._historyToolbar.$element().css('zIndex', '');
@@ -361,9 +368,7 @@ class Diagram extends Widget {
                         isVisible: this._isToolboxVisible()
                     });
                 }
-                if(this._historyToolbar) {
-                    this._historyToolbar.option('isToolboxVisible', this._isToolboxVisible());
-                }
+                this._setCustomCommandChecked(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME, this._isToolboxVisible());
             }
         };
     }
@@ -432,7 +437,6 @@ class Diagram extends Widget {
             extend(this._getToolbarBaseOptions(), {
                 buttonStylingMode: 'contained',
                 buttonType: 'default',
-                isPropertiesPanelVisible: this._isPropertiesPanelVisible()
             })
         );
         this._updatePropertiesToolbarPosition($container, $parent, isServerSide);
@@ -474,21 +478,15 @@ class Diagram extends Widget {
                 );
             },
             onVisibilityChanging: (e) => {
-                this._updatePropertiesPanelGroupBars(e.component);
-
                 if(isServerSide) return;
+
+                this._updatePropertiesPanelGroupBars(e.component);
+                this._setCustomCommandChecked(DiagramCommandsManager.SHOW_PROPERTIES_PANEL_COMMAND_NAME, e.visible);
 
                 if(this._toolbox) {
                     if(e.visible && this.isMobileScreenSize()) {
                         this._toolbox.hide();
                     }
-                }
-            },
-            onVisibilityChanged: (e) => {
-                if(isServerSide) return;
-
-                if(this._propertiesToolbar) {
-                    this._propertiesToolbar.option('isPropertiesPanelVisible', e.visible);
                 }
             },
             onSelectedGroupChanged: ({ component }) => this._updatePropertiesPanelGroupBars(component),
@@ -503,9 +501,7 @@ class Diagram extends Widget {
                         isVisible: this._isPropertiesPanelVisible(),
                     });
                 }
-                if(this._propertiesToolbar) {
-                    this._propertiesToolbar.option('isPropertiesPanelVisible', this._isPropertiesPanelVisible());
-                }
+                this._setCustomCommandChecked(DiagramCommandsManager.SHOW_PROPERTIES_PANEL_COMMAND_NAME, this._isPropertiesPanelVisible());
             }
         };
     }
@@ -567,6 +563,11 @@ class Diagram extends Widget {
                     }
                 );
             }
+        });
+    }
+    _setCustomCommandChecked(command, checked) {
+        this._toolbars.forEach(tb => {
+            tb.setCommandChecked(command, checked);
         });
     }
 
