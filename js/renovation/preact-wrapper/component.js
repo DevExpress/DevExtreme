@@ -1,6 +1,7 @@
 import Widget from '../../ui/widget/ui.widget';
 import * as Preact from 'preact';
 import { extend } from '../../core/utils/extend';
+import { getInnerActionName } from './utils';
 
 export default class PreactWrapper extends Widget {
     getInstance() {
@@ -49,6 +50,10 @@ export default class PreactWrapper extends Widget {
 
     _optionChanged() {
         this._invalidate();
+    }
+
+    _addAction(name, config) {
+        this.option(getInnerActionName(name), this._createActionByOption(name, config));
     }
 
     _refresh() {

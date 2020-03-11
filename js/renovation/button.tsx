@@ -135,6 +135,16 @@ export default class Button extends JSXComponent<ButtonInput> {
     @Ref() contentRef!: HTMLDivElement;
     @Ref() submitInputRef!: HTMLInputElement;
 
+    @Effect()
+    contentReadyEffect() {
+        // NOTE: we should trigger this effect on change each
+        //       property upon which onContentReady depends
+        //       (for example, text, icon, etc)
+        const { onContentReady } = this.props;
+
+        onContentReady?.({ element: this.contentRef.parentNode });
+    }
+
     onActive(event: Event) {
         const { useInkRipple } = this.props;
         const config = getInkRippleConfig(this.props);
