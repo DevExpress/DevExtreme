@@ -12,6 +12,7 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
 import 'common.css!css';
+import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -36,6 +37,8 @@ const TABS_ITEM_CLASS = 'dx-tab';
 const SELECTED_TAB_CLASS = 'dx-tab-selected';
 const SELECTED_ITEM_CLASS = 'dx-item-selected';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
+const TABS_TITLE_TEXT_CLASS = 'dx-tab-text';
+const ICON_CLASS = 'dx-icon';
 
 const toSelector = cssClass => {
     return '.' + cssClass;
@@ -46,15 +49,18 @@ QUnit.module('rendering', {
         this.$tabPanel = $('#tabPanel').dxTabPanel();
     }
 }, () => {
-    QUnit.test('container should consider tabs height', function(assert) {
-        const $tabPanel = $('#tabPanel').dxTabPanel({
-            items: [{ text: 'test' }]
-        });
+    [true, false].forEach(hasItems => {
+        QUnit.test(`tabPanel.hasItems:${hasItems}, container should consider tabs height`, function(assert) {
+            const items = hasItems ? [{ text: 'test' }] : [];
+            const $tabPanel = $('#tabPanel').dxTabPanel({
+                items: items
+            });
+            const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
+            const $tabs = $tabPanel.find('.' + TABS_CLASS);
 
-        const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
-        const $tabs = $tabPanel.find('.' + TABS_CLASS);
-        assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
-        assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
+            assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.1, 'padding correct');
+            assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.1, 'margin correct');
+        });
     });
 
     QUnit.test('container should consider tabs height for async datasource', function(assert) {
@@ -138,6 +144,33 @@ QUnit.module('rendering', {
 
         assert.equal($contents.length, 1, 'one content is rendered');
         assert.equal($contents.eq(0).text(), 'Test1', 'first item content is rendered');
+    });
+
+    [true, false].forEach(rtlEnabled => {
+        QUnit.test(`rtlEnabled: ${rtlEnabled}, dataSource: { title, icon } -> icon alignment`, function(assert) {
+            const $element = $('<div>').appendTo('#qunit-fixture');
+            new TabPanel($element, {
+                rtlEnabled,
+                items: [{ title: 'Caption', icon: 'remove' }], });
+
+            const $title = $element.find(`.${TABS_TITLE_TEXT_CLASS}`);
+
+            const TEXT_NODE_TYPE = 3;
+            $title.contents()
+                .filter((index, node) => { return node.nodeType === TEXT_NODE_TYPE; })
+                .wrap('<span/>');
+
+            const iconRect = $title.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect();
+            const textRect = $title.find('span').get(0).getBoundingClientRect();
+
+            const epsilon = 2.1;
+            assert.roughEqual((iconRect.top + iconRect.height / 2), textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
+
+            const horizontalMargin = rtlEnabled
+                ? iconRect.right - textRect.right - iconRect.width
+                : textRect.left - iconRect.left - iconRect.width;
+            assert.strictEqual(horizontalMargin, 9, `correct horizontal alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
+        });
     });
 });
 
