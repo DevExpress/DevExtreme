@@ -416,25 +416,12 @@ const Drawer = Widget.inherit({
     toggleZIndex(visible) {
         if(visible && !isDefined(this._zIndex)) {
             this._zIndex = zIndexPool.create();
-            this._setZIndex(this._zIndex);
+            this._strategy.setZIndex(this._zIndex);
         }
 
         if(!visible && isDefined(this._zIndex)) {
-            this._clearZIndex();
+            this._strategy.clearZIndex(zIndexPool);
         }
-    },
-
-    _setZIndex(zIndex) {
-        this._$shader.css('zIndex', zIndex);
-        this._$panelContentWrapper.css('zIndex', zIndex + 1);
-    },
-
-    _clearZIndex() {
-        zIndexPool.remove(this._zIndex);
-        zIndexPool.remove(this._zIndex + 1);
-        this._$shader.css('zIndex', '');
-        this._$panelContentWrapper.css('zIndex', '');
-        delete this._zIndex;
     },
 
     _toggleOpenedStateClass(opened) {
@@ -465,7 +452,7 @@ const Drawer = Widget.inherit({
 
     _clean() {
         this._cleanFocusState();
-        this._clearZIndex();
+        this._strategy.clearZIndex(zIndexPool);
         this._removePanelContentWrapper();
         this._removeOverlay();
     },
