@@ -369,10 +369,10 @@ gulp.task('create-base-widget-generic-colors', (callback) => {
 
     // read all base variables (to the first widget-specific comment)
     const sourcePath = path.join(repositoryRoot, unfixedScssPath, 'widgets', 'generic', 'color-schemes');
-    const genericLightPath = path.join(sourcePath, 'carmine', 'generic.carmine.scss');
+    const genericCarminePath = path.join(sourcePath, 'carmine', 'generic.carmine.scss');
     const genericLightIconsPath = path.join(sourcePath, 'light', 'generic.light.icons.scss');
     const themeIconsContent = fs.readFileSync(genericLightIconsPath).toString();
-    const genericContent = fs.readFileSync(genericLightPath).toString();
+    const genericContent = fs.readFileSync(genericCarminePath).toString();
     const genericBaseContent = getBaseContent(genericContent) + '\n' + themeIconsContent;
     const genericBaseVariables = getVariableNames(genericBaseContent);
 
