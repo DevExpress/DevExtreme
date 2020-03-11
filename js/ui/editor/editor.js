@@ -95,9 +95,7 @@ const Editor = Widget.inherit({
 
             validationMessageOffset: { h: 0, v: 0 },
 
-            validationTooltipOptions: {},
-
-            showValidationMark: true
+            validationTooltipOptions: {}
         });
     },
 
@@ -373,8 +371,6 @@ const Editor = Widget.inherit({
                 break;
             case 'name':
                 this._setSubmitElementName(args.value);
-                break;
-            case 'showValidationMark':
                 break;
             default:
                 this.callBase(args);

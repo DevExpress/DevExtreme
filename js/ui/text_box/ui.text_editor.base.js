@@ -136,7 +136,9 @@ const TextEditorBase = Editor.inherit({
             },
 
 
-            stylingMode: config().editorStylingMode || 'outlined'
+            stylingMode: config().editorStylingMode || 'outlined',
+
+            showValidationMark: true
         });
     },
 
@@ -728,6 +730,8 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'displayValueFormatter':
                 this._invalidate();
+                break;
+            case 'showValidationMark':
                 break;
             default:
                 this.callBase(args);
