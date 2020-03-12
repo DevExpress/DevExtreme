@@ -94,6 +94,21 @@ QUnit.module('dxAutocomplete', {
         assert.equal(instance._dataSource.items()[0], 'qwerty', 'autocomplete-s dataSource initialization');
     });
 
+    QUnit.test('maxItemCount should override datasource pageSize on init', function(assert) {
+        const element = $('#autocomplete2').dxAutocomplete({
+            dataSource: ['1', '2', '3'],
+            maxItemCount: 1,
+            minSearchLength: 0
+        });
+
+        const instance = element.dxAutocomplete('instance');
+
+        instance.open();
+        const items = instance._popup.$content().find('.dx-list-item');
+
+        assert.strictEqual(items.length, 1, 'list items count is correct');
+    });
+
     QUnit.test('Resize by option', function(assert) {
         const setUpWidth = 456;
         const setUpHeight = 1000;
@@ -160,7 +175,6 @@ QUnit.module('dxAutocomplete', {
 
     QUnit.testInActiveWindow('list showing/hiding', function(assert) {
         const keyboard = this.keyboard;
-        let $list;
 
         this.element.dxAutocomplete({
             value: '',
@@ -168,7 +182,7 @@ QUnit.module('dxAutocomplete', {
             focusStateEnabled: true
         });
 
-        $list = this.instance._list._$element;
+        const $list = this.instance._list._$element;
 
         assert.equal($list.is(':hidden'), true, 'when start list is hidden');
 
@@ -231,9 +245,7 @@ QUnit.module('dxAutocomplete', {
     });
 
     QUnit.test('item click sets value', function(assert) {
-        let $list;
-
-        $list = this.instance._list._$element;
+        const $list = this.instance._list._$element;
 
         assert.equal(this.instance.option('value'), 'text');
         $($list.find('.' + LIST_ITEM_CLASS).first()).trigger('dxclick');
@@ -312,15 +324,13 @@ QUnit.module('dxAutocomplete', {
     });
 
     QUnit.testInActiveWindow('minimal search length', function(assert) {
-        let $list;
-
         this.element.dxAutocomplete({
             value: '',
             dataSource: ['item 1', 'item 2', 'item 3'],
             minSearchLength: 2
         });
 
-        $list = this.instance._list._$element;
+        const $list = this.instance._list._$element;
 
         this.keyboard.type('i');
         assert.equal($list.is(':hidden'), true, 'when enter first char, list is hidden');
@@ -333,7 +343,6 @@ QUnit.module('dxAutocomplete', {
         const instance = this.instance;
         const deferred = new $.Deferred();
         let searchValue;
-        let $list;
 
         this.element.dxAutocomplete({
             value: '',
@@ -349,7 +358,7 @@ QUnit.module('dxAutocomplete', {
         });
 
         this.keyboard.type('q');
-        $list = this.instance._list._$element;
+        const $list = this.instance._list._$element;
 
         assert.equal(instance._list._dataSource, null, 'list has no dataSource');
 
@@ -445,7 +454,6 @@ QUnit.module('dxAutocomplete', {
         }
 
         const instance = this.instance;
-        let $list;
         const keyboard = this.keyboard;
         let $selectedItem;
 
@@ -464,7 +472,7 @@ QUnit.module('dxAutocomplete', {
         assert.equal(instance.option('value'), '', 'when we press enter and list is hidden, input value don\'t change');
 
         keyboard.keyDown(KEY_UP);
-        $list = instance._list._$element;
+        const $list = instance._list._$element;
         assert.equal($list.is(':hidden'), true, 'when press \'key_ap\' and list is hidden, list stay hidden');
 
         keyboard.type('i');
@@ -631,9 +639,7 @@ QUnit.module('dxAutocomplete', {
     });
 
     QUnit.testInActiveWindow('esc_key close list', function(assert) {
-        let $list;
-
-        $list = this.instance._list._$element;
+        const $list = this.instance._list._$element;
 
         this.instance.option('value', '');
         this.keyboard.type('i');
@@ -941,14 +947,13 @@ QUnit.module('Overlay integration', {
 }, () => {
     QUnit.testInActiveWindow('list animation jumps to end', function(assert) {
         const keyboard = this.keyboard;
-        let $overlayContent;
 
         this.element.dxAutocomplete({
             value: '',
             dataSource: ['item 1', 'item 2', 'item 3']
         });
 
-        $overlayContent = this.popup.find('.dx-overlay-content').eq(0);
+        const $overlayContent = this.popup.find('.dx-overlay-content').eq(0);
         assert.equal($overlayContent.is(':hidden'), true, 'when start list is hidden');
         keyboard.type('i');
         assert.equal($overlayContent.is(':hidden'), false, 'when type, list is visible');
@@ -1085,15 +1090,11 @@ QUnit.module('regressions', {
     }
 }, () => {
     QUnit.test('update input value on click', function(assert) {
-        let $item;
-        let mouse;
-        let $list;
-
-        $list = this.instance._list._$element;
+        const $list = this.instance._list._$element;
 
         this.keyboard.type('i');
-        $item = $list.find('.dx-list-item').first();
-        mouse = pointerMock($item);
+        const $item = $list.find('.dx-list-item').first();
+        const mouse = pointerMock($item);
         mouse.click();
 
         assert.equal(this.inputValue(), 'item 1', 'input value');
@@ -1254,9 +1255,6 @@ QUnit.module('regressions', {
     });
 
     QUnit.test('B234608 check offset for iOS devices', function(assert) {
-        let popup;
-        let vOffset;
-
         devices.current('iPad');
 
         const element = $('#autocomplete2').dxAutocomplete({
@@ -1264,19 +1262,18 @@ QUnit.module('regressions', {
             dataSource: ['item 1', 'item 2', 'item 3']
         });
 
-        popup = element.dxAutocomplete('instance')._popup;
-        vOffset = popup.option('position').offset.v;
+        const popup = element.dxAutocomplete('instance')._popup;
+        const vOffset = popup.option('position').offset.v;
         assert.equal(vOffset, -1, 'vertical offset for iOS devices');
 
         devices.current(null);
     });
 
     QUnit.testInActiveWindow('B234649 if item not selected and pressed enter key - close popup', function(assert) {
-        let $list;
         const keyboard = this.keyboard;
 
         keyboard.type('i');
-        $list = this.instance._list._$element;
+        const $list = this.instance._list._$element;
         assert.equal($list.is(':hidden'), false, 'when type char, that can be found in list - show popup');
 
         keyboard.keyDown(KEY_ENTER);
@@ -1284,7 +1281,6 @@ QUnit.module('regressions', {
     });
 
     QUnit.test('B238021', function(assert) {
-        let $list;
         const $input = this.$input;
 
         this.keyboard
@@ -1292,7 +1288,7 @@ QUnit.module('regressions', {
             .keyDown(KEY_TAB);
 
         $($input).trigger('focusout');
-        $list = this.instance._list._$element;
+        const $list = this.instance._list._$element;
 
         assert.ok($list.is(':hidden'), 'close menu after input losts focus');
     });
@@ -1349,10 +1345,8 @@ QUnit.module('regressions', {
             items: ['a', 'b']
         }).dxAutocomplete('instance');
 
-        let items;
-
         instance.option('items', ['a', 'b', 'c']);
-        items = instance._popup.$content().find('.dx-list-item');
+        const items = instance._popup.$content().find('.dx-list-item');
 
         assert.equal(items.length, 3);
         assert.equal(items.text(), 'abc');
