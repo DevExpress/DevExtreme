@@ -19588,6 +19588,82 @@ QUnit.test('Filter builder custom operations should update filterValue immediate
     assert.equal(filterBuilder.getItemValueTextParts().length, 2, 'IsAnyOf operation applyed');
 });
 
+QUnit.test('Row height should not be changed after validation', function(assert) {
+    // arrange
+    const done = assert.async();
+    const data = [
+        { a: 'a', b: 'b', c: 'c' }
+    ];
+
+    const grid = createDataGrid({
+        dataSource: {
+            asyncLoadEnabled: false,
+            store: data
+        },
+        editing: {
+            mode: 'cell',
+            allowUpdating: true
+        },
+        columns: [
+            {
+                dataField: 'a',
+                setCellValue: function(newData, value, currentData) {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve('');
+                    }, 20);
+                    return d.promise();
+                },
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = $.Deferred();
+                        setTimeout(function() {
+                            d.reject();
+                        }, 10);
+                        return d.promise();
+                    }
+                }]
+            }, {
+                dataField: 'b',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = $.Deferred();
+                        setTimeout(function() {
+                            params.value ? d.resolve(true) : d.reject();
+                        }, 20);
+                        return d.promise();
+                    }
+                }]
+            }, {
+                dataField: 'c',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = $.Deferred();
+                        setTimeout(function() {
+                            params.value ? d.resolve(true) : d.reject();
+                        }, 20);
+                        return d.promise();
+                    }
+                }]
+            }
+        ]
+    });
+
+    this.clock.tick();
+    const rowHeight = $(grid.getRowElement(0)).height();
+    this.clock.restore();
+
+    grid.cellValue(0, 1, '');
+    grid.saveEditData().done(() => {
+        assert.strictEqual($(grid.getRowElement(0)).height(), rowHeight, 'row height is not changed');
+
+        done();
+    });
+});
+
 
 QUnit.module('Row dragging', baseModuleConfig);
 
