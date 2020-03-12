@@ -138,7 +138,7 @@ class FileManagerItemListBase extends Widget {
     }
 
     _isDesktop() {
-        return devices.real().deviceType === 'desktop'; // && !devices.isSimulator();
+        return devices.real().deviceType === 'desktop';
     }
 
     _showContextMenu(items, element, offset) {

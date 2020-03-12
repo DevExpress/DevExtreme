@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-// import support from '../../core/utils/support';
 import { extend } from '../../core/utils/extend';
 
 import holdEvent from '../../events/hold';
@@ -160,25 +159,24 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         this._focusItemByIndex(newItemIndex, true, eventArgs);
     }
 
-    processLongTap(e) {
+    _processLongTap(e) {
         const $targetItem = this._closestItemElement($(e.target));
         const itemIndex = this._getIndexByItemElement($targetItem);
         this._selection.changeItemSelection(itemIndex, { control: true });
     }
 
     _attachEventHandlers() {
-        if(this.option('selectionMode') !== 'none') {
-            // if(!support.touch) {
+        if(this.option('selectionMode') === 'multiple') {
             eventsEngine.on(this._itemContainer(), FILE_MANAGER_THUMBNAILS_LIST_BOX_HOLD_EVENT_NAME, `.${this._itemContentClass()}`, e => {
-                this.processLongTap(e);
+                this._processLongTap(e);
                 e.stopPropagation();
             });
-            eventsEngine.on(this._itemContainer(), 'mousedown selectstart', e => {
-                if(e.shiftKey) {
-                    e.preventDefault();
-                }
-            });
         }
+        eventsEngine.on(this._itemContainer(), 'mousedown selectstart', e => {
+            if(e.shiftKey) {
+                e.preventDefault();
+            }
+        });
     }
 
     _detachEventHandlers() {
