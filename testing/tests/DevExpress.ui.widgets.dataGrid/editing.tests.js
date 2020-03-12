@@ -17174,4 +17174,35 @@ QUnit.module('Async validation', {
         assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
         assert.equal($formRow.find('.dx-validation-pending').length, 1, 'There is one pending editor in first row');
     });
+
+    QUnit.test('Pending validator should be rendered in a cell editor', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            loadingTimeout: undefined,
+            editing: {
+                mode: 'batch',
+                allowUpdating: true,
+            },
+            columns: [{
+                dataField: 'age',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        return new Deferred().promise();
+                    }
+                }]
+            }]
+        });
+
+        // act
+        this.editCell(0, 0);
+        const $editor = $(this.getCellElement(0, 0)).find('.dx-texteditor');
+
+        assert.ok($editor.hasClass('dx-validation-pending'));
+    });
 });
