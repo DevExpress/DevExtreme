@@ -79,19 +79,15 @@ describe('Button', () => {
                 });
             });
 
-            it('should submit form by button click', (done) => {
-                let callsCount = 0;
+            it('should submit form by button click', () => {
                 const button = render({ useSubmitBehavior: true });
                 const submitInput = button.find('input.dx-button-submit-input');
-                const submitInputClick = () => {
-                    callsCount += 1;
-                    expect(callsCount).toBe(1);
-                    done();
-                };
+                const submitInputClick = jest.fn();
 
                 submitInput.getDOMNode().click = submitInputClick;
-                expect(callsCount).toBe(0);
+                expect(submitInputClick).toHaveBeenCalledTimes(0);
                 emit(EVENT.dxClick, defaultEvent, button.getDOMNode());
+                expect(submitInputClick).toHaveBeenCalledTimes(1);
             });
 
             it('should submit form by submit input click', () => {
@@ -104,34 +100,26 @@ describe('Button', () => {
                 expect(onSubmit).toHaveBeenCalledTimes(1);
             });
 
-            it('should submit form by enter press', (done) => {
-                let callsCount = 0;
+            it('should submit form by enter press', () => {
                 const button = render({ useSubmitBehavior: true });
                 const submitInput = button.find('input.dx-button-submit-input');
-                const submitInputClick = () => {
-                    callsCount += 1;
-                    expect(callsCount).toBe(1);
-                    done();
-                };
+                const submitInputClick = jest.fn();
 
                 submitInput.getDOMNode().click = submitInputClick;
-                expect(callsCount).toBe(0);
+                expect(submitInputClick).toHaveBeenCalledTimes(0);
                 emitKeyboard(KEY.enter);
+                expect(submitInputClick).toHaveBeenCalledTimes(1);
             });
 
-            it('should submit form by space press', (done) => {
-                let callsCount = 0;
+            it('should submit form by space press', () => {
                 const button = render({ useSubmitBehavior: true });
                 const submitInput = button.find('input.dx-button-submit-input');
-                const submitInputClick = () => {
-                    callsCount += 1;
-                    expect(callsCount).toBe(1);
-                    done();
-                };
+                const submitInputClick = jest.fn();
 
                 submitInput.getDOMNode().click = submitInputClick;
-                expect(callsCount).toBe(0);
+                expect(submitInputClick).toHaveBeenCalledTimes(0);
                 emitKeyboard(KEY.space);
+                expect(submitInputClick).toHaveBeenCalledTimes(1);
             });
 
             it('should stop event propagation', () => {

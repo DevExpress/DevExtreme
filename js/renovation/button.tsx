@@ -165,7 +165,7 @@ export default class Button extends JSXComponent<ButtonInput> {
 
         onClick?.({ event: e, validationGroup });
 
-        useSubmitBehavior && setTimeout(() => this.submitInputRef.click());
+        useSubmitBehavior && this.submitInputRef.click();
     }
 
     onWidgetKeyPress(e: Event, { keyName, which }) {
