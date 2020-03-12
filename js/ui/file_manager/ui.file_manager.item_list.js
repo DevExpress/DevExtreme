@@ -3,6 +3,7 @@ import { name as dblClickName } from '../../events/double_click';
 import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
 import { getImageContainer } from '../../core/utils/icon';
+import devices from '../../core/devices';
 
 import CustomStore from '../../data/custom_store';
 import Widget from '../widget/ui.widget';
@@ -134,6 +135,10 @@ class FileManagerItemListBase extends Widget {
 
     _onItemDblClick(e) {
 
+    }
+
+    _isDesktop() {
+        return devices.real().deviceType === 'desktop'; // && !devices.isSimulator();
     }
 
     _showContextMenu(items, element, offset) {

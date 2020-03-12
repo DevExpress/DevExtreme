@@ -44,7 +44,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         this._filesView = this._createComponent($filesView, DataGrid, {
             hoverStateEnabled: true,
             selection: {
-                mode: selectionMode
+                mode: selectionMode,
+                showCheckBoxesMode: this._isDesktop() ? 'onClick' : 'none'
             },
             focusedRowEnabled: true,
             allowColumnResizing: true,
@@ -183,7 +184,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     _onSelectAllCheckBoxValueChanged({ event, previousValue, value }) {
         if(!event) {
             if(previousValue && !this._selectAllCheckBoxUpdating) {
-                this._selectAllCheckBox.option('value', previousValue);
+                this._selectAllCheckBox && this._selectAllCheckBox.option('value', previousValue);
             }
             return;
         }
@@ -213,6 +214,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _onContextMenuPreparing(e) {
+        e.event.preventDefault();
+        if(!this._isDesktop()) {
+            return;
+        }
         let fileItems = null;
 
         if(e.row && e.row.rowType === 'data') {
@@ -226,7 +231,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _onFilesViewSelectionChanged({ selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {
         this._selectAllCheckBoxUpdating = true;
-        this._selectAllCheckBox.option('value', this._isAllItemsSelected());
+        this._selectAllCheckBox && this._selectAllCheckBox.option('value', this._isAllItemsSelected());
         this._selectAllCheckBoxUpdating = false;
 
         const selectedItems = selectedRowsData.map(itemInfo => itemInfo.fileItem);

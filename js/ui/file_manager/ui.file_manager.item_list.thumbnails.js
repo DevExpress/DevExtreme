@@ -48,6 +48,9 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _onContextMenu(e) {
         e.preventDefault();
+        if(!this._isDesktop()) {
+            return;
+        }
         let items = null;
         const targetItemElement = $(e.target).closest(this._getItemSelector());
         if(targetItemElement.length > 0) {
@@ -118,7 +121,8 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _deselectItem(item) {
-        this._itemList.deselectItem(item);
+        const itemElement = this._itemList.getItemElementByItem(item);
+        this._itemList.unselectItem(itemElement);
     }
 
     clearSelection() {

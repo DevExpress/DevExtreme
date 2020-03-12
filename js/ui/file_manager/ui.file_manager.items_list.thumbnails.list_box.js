@@ -1,5 +1,11 @@
 import $ from '../../core/renderer';
+// import support from '../../core/utils/support';
 import { extend } from '../../core/utils/extend';
+
+import holdEvent from '../../events/hold';
+import { addNamespace } from '../../events/utils';
+import eventsEngine from '../../events/core/events_engine';
+
 import { BindableTemplate } from '../../core/templates/bindable_template';
 
 import CollectionWidget from '../collection/ui.collection_widget.edit';
@@ -11,6 +17,9 @@ const FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS = 'dx-filemanager-thumbnails-item-
 const FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS = 'dx-filemanager-thumbnails-item-spacer';
 
 const FILE_MANAGER_THUMBNAILS_ITEM_DATA_KEY = 'dxFileManagerItemData';
+
+const FILE_MANAGER_THUMBNAILS_LIST_BOX_NAMESPACE = 'dxFileManagerThumbnailsListBox';
+const FILE_MANAGER_THUMBNAILS_LIST_BOX_HOLD_EVENT_NAME = addNamespace(holdEvent.name, FILE_MANAGER_THUMBNAILS_LIST_BOX_NAMESPACE);
 
 class FileManagerThumbnailListBox extends CollectionWidget {
     _initMarkup() {
@@ -45,6 +54,18 @@ class FileManagerThumbnailListBox extends CollectionWidget {
                 .addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS)
                 .appendTo(this.$element());
         }
+    }
+
+    _render() {
+        super._render();
+
+        this._detachEventHandlers();
+        this._attachEventHandlers();
+    }
+
+    _clean() {
+        this._detachEventHandlers();
+        super._clean();
     }
 
     _supportedKeys() {
@@ -137,6 +158,32 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         }
 
         this._focusItemByIndex(newItemIndex, true, eventArgs);
+    }
+
+    processLongTap(e) {
+        const $targetItem = this._closestItemElement($(e.target));
+        const itemIndex = this._getIndexByItemElement($targetItem);
+        this._selection.changeItemSelection(itemIndex, { control: true });
+    }
+
+    _attachEventHandlers() {
+        if(this.option('selectionMode') !== 'none') {
+            // if(!support.touch) {
+            eventsEngine.on(this._itemContainer(), FILE_MANAGER_THUMBNAILS_LIST_BOX_HOLD_EVENT_NAME, `.${this._itemContentClass()}`, e => {
+                this.processLongTap(e);
+                e.stopPropagation();
+            });
+            eventsEngine.on(this._itemContainer(), 'mousedown selectstart', e => {
+                if(e.shiftKey) {
+                    e.preventDefault();
+                }
+            });
+        }
+    }
+
+    _detachEventHandlers() {
+        eventsEngine.off(this._itemContainer(), FILE_MANAGER_THUMBNAILS_LIST_BOX_HOLD_EVENT_NAME);
+        eventsEngine.off(this._itemContainer(), 'mousedown selectstart');
     }
 
     _itemContainer() {

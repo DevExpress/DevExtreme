@@ -126,6 +126,7 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.deepEqual(selectionSpy.args[0][0].selectedItemKeys, [ 'Folder 1/Folder 1.1' ], 'selection keys valid');
         assert.deepEqual(selectionSpy.args[0][0].currentSelectedItemKeys, [ 'Folder 1/Folder 1.1' ], 'item selected');
         assert.deepEqual(selectionSpy.args[0][0].currentDeselectedItemKeys, [], 'no item deselected');
+        assert.strictEqual(this.fileManager.getSelectedItems().length, 1, 'only one item is selected');
 
         this.wrapper.findThumbnailsItem('..').trigger('dxclick');
         this.clock.tick(400);
@@ -135,22 +136,30 @@ QUnit.module('Thumbnails View', moduleConfig, () => {
         assert.deepEqual(selectionSpy.args[1][0].selectedItemKeys, [], 'selection keys valid');
         assert.deepEqual(selectionSpy.args[1][0].currentSelectedItemKeys, [], 'no item selected');
         assert.deepEqual(selectionSpy.args[1][0].currentDeselectedItemKeys, [ 'Folder 1/Folder 1.1' ], 'item deselected');
+        assert.strictEqual(this.fileManager.getSelectedItems().length, 0, 'no selected items');
 
         this.wrapper.findThumbnailsItem('Folder 1.1').trigger('dxclick');
         this.clock.tick(400);
+
+        const oldSelectedItems = this.fileManager.getSelectedItems();
 
         assert.strictEqual(selectionSpy.callCount, 3, 'event raised');
         assert.deepEqual(selectionSpy.args[2][0].selectedItems.map(item => item.path), [ 'Folder 1/Folder 1.1' ], 'selection valid');
         assert.deepEqual(selectionSpy.args[2][0].selectedItemKeys, [ 'Folder 1/Folder 1.1' ], 'selection keys valid');
         assert.deepEqual(selectionSpy.args[2][0].currentSelectedItemKeys, [ 'Folder 1/Folder 1.1' ], 'item selected');
         assert.deepEqual(selectionSpy.args[2][0].currentDeselectedItemKeys, [], 'no item deselected');
+        assert.strictEqual(oldSelectedItems.length, 1, 'only one item is selected');
 
         const e = $.Event('dxclick');
         e.ctrlKey = true;
         this.wrapper.findThumbnailsItem('..').trigger(e);
         this.clock.tick(400);
 
+        const newSelectedItems = this.fileManager.getSelectedItems();
+
         assert.strictEqual(selectionSpy.callCount, 3, 'event not raised');
+        assert.strictEqual(newSelectedItems.length, 1, 'only one item is selected');
+        assert.deepEqual(newSelectedItems, oldSelectedItems, 'selected item has not changed');
     });
 
 });
