@@ -590,8 +590,7 @@ QUnit.module('submit behavior', {
         }
     });
 
-    // TODO
-    QUnit.skip('Submit button should change the \'disabled\' option to \'false\' when validation is passed negatively', function(assert) {
+    QUnit.test('Submit button should change the \'disabled\' option to \'false\' when validation is passed negatively', function(assert) {
         this.clock.restore();
         const validator = new Validator($('<div>').appendTo(this.$form), {
             adapter: sinon.createStubInstance(DefaultAdapter),
@@ -608,18 +607,16 @@ QUnit.module('submit behavior', {
         });
         const done = assert.async();
 
-        this.$element.Button({
-            validationGroup: 'testGroup',
-            onOptionChanged: function(args) {
-                if(args.name === 'disabled') {
-                    if(args.value === true) {
-                        assert.equal(validator._validationInfo.result.status, 'pending', 'validator in pending');
-                    } else {
-                        assert.equal(validator._validationInfo.result.status, 'invalid', 'validator is invalid');
+        this.$element.Button({ validationGroup: 'testGroup' });
+        this.$element.Button('instance').option('onOptionChanged', (args) => {
+            if(args.name === 'disabled') {
+                if(args.value === true) {
+                    assert.equal(validator._validationInfo.result.status, 'pending', 'validator in pending');
+                } else {
+                    assert.equal(validator._validationInfo.result.status, 'invalid', 'validator is invalid');
 
-                        ValidationEngine.initGroups();
-                        done();
-                    }
+                    ValidationEngine.initGroups();
+                    done();
                 }
             }
         });
@@ -628,8 +625,7 @@ QUnit.module('submit behavior', {
         this.$element.trigger('dxclick');
     });
 
-    // TODO
-    QUnit.skip('Submit button should change the \'disabled\' option to \'false\' when validation is passed positively', function(assert) {
+    QUnit.test('Submit button should change the \'disabled\' option to \'false\' when validation is passed positively', function(assert) {
         this.clock.restore();
         const validator = new Validator($('<div>').appendTo(this.$form), {
             adapter: sinon.createStubInstance(DefaultAdapter),
@@ -646,18 +642,16 @@ QUnit.module('submit behavior', {
         });
         const done = assert.async();
 
-        this.$element.Button({
-            validationGroup: 'testGroup',
-            onOptionChanged: function(args) {
-                if(args.name === 'disabled') {
-                    if(args.value === true) {
-                        assert.equal(validator._validationInfo.result.status, 'pending', 'validator in pending');
-                    } else {
-                        assert.equal(validator._validationInfo.result.status, 'valid', 'validator is valid');
+        this.$element.Button({ validationGroup: 'testGroup' });
+        this.$element.Button('instance').option('onOptionChanged', (args) => {
+            if(args.name === 'disabled') {
+                if(args.value === true) {
+                    assert.equal(validator._validationInfo.result.status, 'pending', 'validator in pending');
+                } else {
+                    assert.equal(validator._validationInfo.result.status, 'valid', 'validator is valid');
 
-                        ValidationEngine.initGroups();
-                        done();
-                    }
+                    ValidationEngine.initGroups();
+                    done();
                 }
             }
         });

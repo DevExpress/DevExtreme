@@ -92,7 +92,8 @@ class Button extends Widget {
         });
     }
 
-    _optionChanged({ name, value }) {
+    _optionChanged(option) {
+        const { name, value } = option;
         if(actions[name]) {
             this._addAction(name, actions[name]);
         }
@@ -100,6 +101,9 @@ class Button extends Widget {
         switch(name) {
             case 'useSubmitBehavior':
                 value === true && this.option('onSubmit', this._getSubmitAction());
+                break;
+            case 'onOptionChanged':
+                super._optionChanged(option);
                 break;
         }
 

@@ -48,7 +48,10 @@ export default class PreactWrapper extends Widget {
         Preact.render(this.renderView(this.getProps(isFirstRender)), this.$element().get(0), container);
     }
 
-    _optionChanged() {
+    _optionChanged(option) {
+        if(option) {
+            super._optionChanged(option);
+        }
         this._invalidate();
     }
 
