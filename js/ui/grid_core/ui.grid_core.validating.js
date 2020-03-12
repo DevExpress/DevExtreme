@@ -679,25 +679,27 @@ module.exports = {
                     } else {
                         const disposeValidators = this._createInvisibleColumnValidators(this._editData);
                         result = new Deferred();
-                        validatingController.validate(true).done((isFullValid) => {
-                            disposeValidators();
-                            this._updateRowAndPageIndices();
+                        this.executeOperation(result, () => {
+                            validatingController.validate(true).done((isFullValid) => {
+                                disposeValidators();
+                                this._updateRowAndPageIndices();
 
-                            switch(this.getEditMode()) {
-                                case EDIT_MODE_CELL:
-                                    if(!isFullValid) {
-                                        this._focusEditingCell();
-                                    }
-                                    break;
-                                case EDIT_MODE_BATCH:
-                                    if(!isFullValid) {
-                                        this._editRowIndex = -1;
-                                        this._editColumnIndex = -1;
-                                        this.getController('data').updateItems();
-                                    }
-                                    break;
-                            }
-                            result.resolve(!isFullValid);
+                                switch(this.getEditMode()) {
+                                    case EDIT_MODE_CELL:
+                                        if(!isFullValid) {
+                                            this._focusEditingCell();
+                                        }
+                                        break;
+                                    case EDIT_MODE_BATCH:
+                                        if(!isFullValid) {
+                                            this._editRowIndex = -1;
+                                            this._editColumnIndex = -1;
+                                            this.getController('data').updateItems();
+                                        }
+                                        break;
+                                }
+                                result.resolve(!isFullValid);
+                            });
                         });
                     }
                     return result.promise ? result.promise() : result;
@@ -753,13 +755,18 @@ module.exports = {
                 updateFieldValue: function(e) {
                     const editMode = this.getEditMode();
                     const validatingController = this.getController('validating');
-                    validatingController.resetRowValidationResults(this.getEditDataByKey(e.key));
-                    this.callBase.apply(this, arguments);
+                    const deferred = new Deferred();
 
-                    if(editMode === EDIT_MODE_ROW || (editMode === EDIT_MODE_BATCH && e.column.showEditorAlways)) {
-                        const currentValidator = validatingController.getValidator();
-                        currentValidator && validatingController.validateCell(currentValidator);
-                    }
+                    validatingController.resetRowValidationResults(this.getEditDataByKey(e.key));
+                    this.callBase.apply(this, arguments).done(() => {
+                        if(editMode === EDIT_MODE_ROW || (editMode === EDIT_MODE_BATCH && e.column.showEditorAlways)) {
+                            const currentValidator = validatingController.getValidator();
+                            when(currentValidator && validatingController.validateCell(currentValidator)).done(deferred.resolve);
+                            return;
+                        }
+                        deferred.resolve();
+                    });
+                    return deferred.promise();
                 },
 
                 showHighlighting: function($cell, skipValidation) {

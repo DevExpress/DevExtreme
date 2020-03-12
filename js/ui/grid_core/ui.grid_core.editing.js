@@ -1546,7 +1546,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         return;
                     }
                     this._saveEditDataInner().done(deferred.resolve).fail(deferred.reject);
-                });
+                }).fail(deferred.reject);
             }).fail(deferred.reject);
             return deferred.promise();
         },
@@ -1848,7 +1848,6 @@ const EditingController = modules.ViewController.inherit((function() {
                 if(options.values) {
                     options.values[options.columnIndex] = value;
                 }
-
                 that.addDeferred(setCellValueResult);
             }
 
@@ -1856,18 +1855,24 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         updateFieldValue: function(options, value, text, forceUpdateRow) {
-            const that = this;
             const rowKey = options.key;
+            const deferred = new Deferred();
 
             if(rowKey === undefined) {
-                that._dataController.fireError('E1043');
+                this._dataController.fireError('E1043');
             }
 
             if(options.column.setCellValue) {
                 this._prepareEditDataParams(options, value, text).done(params => {
-                    this._applyEditDataParams(options, params, forceUpdateRow);
+                    when(this._applyEditDataParams(options, params, forceUpdateRow)).always(() => {
+                        deferred.resolve();
+                    });
                 });
+            } else {
+                deferred.resolve();
             }
+
+            return deferred.promise();
         },
         _focusPreviousEditingCellIfNeed: function(options) {
             const that = this;
