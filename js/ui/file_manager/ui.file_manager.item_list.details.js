@@ -214,7 +214,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _onContextMenuPreparing(e) {
-        e.event.preventDefault();
         if(!this._isDesktop()) {
             return;
         }
