@@ -21,9 +21,11 @@
     @DIAGRAM_TOOLBOX_WIDTH: 156px;
     @DIAGRAM_TOOLBOX_H_PADDING: 12px;
     @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING: 8px;
+    @DIAGRAM_TOOLBOX_INPUT_MARGIN: 2px;
+    @DIAGRAM_TOOLBOX_INPUT_H_PADDING: 9px;
     @DIAGRAM_TOOLBOX_INPUT_V_PADDING: 12px;
     @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE: 18px;
-    @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING: 8px 0 4px 4px;
+    @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING: 6px 4px;
     @DIAGRAM_TOOLBOX_MOBILE_PADDING: 90px;
 
     @DIAGRAM_PROPERTIES_PANEL_PADDING: 0px;
@@ -45,9 +47,11 @@
     @DIAGRAM_TOOLBOX_WIDTH: 130px;
     @DIAGRAM_TOOLBOX_H_PADDING: 10px;
     @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING: 6px;
-    @DIAGRAM_TOOLBOX_INPUT_V_PADDING: 10px;
+    @DIAGRAM_TOOLBOX_INPUT_MARGIN: 2px;
+    @DIAGRAM_TOOLBOX_INPUT_H_PADDING: 8px;
+    @DIAGRAM_TOOLBOX_INPUT_V_PADDING: 8px;
     @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE: 14px;
-    @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING: 4px 0 4px 4px;
+    @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING: 3px 4px;
     @DIAGRAM_TOOLBOX_MOBILE_PADDING: 76px;
 
     @DIAGRAM_PROPERTIES_PANEL_PADDING: 6px;
@@ -150,24 +154,6 @@
 .dx-diagram-toolbox-panel,
 .dx-diagram-properties-panel {
     background: @overlay-content-bg;
-
-    .dx-accordion {
-        .dx-accordion-item {
-            border-left: none;
-            border-right: none;
-            box-shadow: none;
-        }
-
-        .dx-state-focused {
-            &.dx-accordion-item {
-                border-color: @accordion-item-border-color;
-            }
-
-            &.dx-accordion-item-closed:not(:last-of-type) {
-                border-bottom-color: transparent;
-            }
-        }
-    }
 }
 
 .dx-diagram-floating-toolbar-container {
@@ -227,6 +213,8 @@
     }
 
     .dx-popup-title {
+        margin-bottom: 0;
+
         &.dx-toolbar {
             font-size: 0.8em;
             min-height: @DIAGRAM_TOOLBOX_TITLE_SIZE;
@@ -248,19 +236,32 @@
     }
 
     .dx-diagram-toolbox-input {
-        width: @DIAGRAM_TOOLBOX_WIDTH;
+        width: @DIAGRAM_TOOLBOX_WIDTH - 2 * @DIAGRAM_TOOLBOX_INPUT_MARGIN;
+        margin: @DIAGRAM_TOOLBOX_INPUT_MARGIN;
 
         .dx-texteditor-input,
         .dx-placeholder:before {
-            padding: @DIAGRAM_TOOLBOX_INPUT_V_PADDING @DIAGRAM_TOOLBOX_H_PADDING;
+            padding: @DIAGRAM_TOOLBOX_INPUT_V_PADDING @DIAGRAM_TOOLBOX_INPUT_H_PADDING;
         }
 
-        .dx-button .dx-button-content {
-            padding: @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING;
+        &.dx-editor-outlined {
+            &:not(.dx-state-focused) {
+                box-shadow: none;
+            }
+
+            .dx-texteditor-buttons-container:last-child > .dx-button:last-child {
+                margin-right: 0;
+            }
         }
 
-        .dx-button .dx-icon {
-            font-size: @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE;
+        .dx-button {
+            .dx-button-content {
+                padding: @DIAGRAM_TOOLBOX_INPUT_IMAGE_PADDING;
+            }
+
+            .dx-icon {
+                font-size: @DIAGRAM_TOOLBOX_INPUT_IMAGE_SIZE;
+            }
         }
     }
 
@@ -288,44 +289,51 @@
 }
 
 .dx-diagram-toolbox-panel {
+    &:not(:first-child) {
+        border-top: 1px solid @accordion-item-border-color;
+    }
+
     .dx-accordion {
         margin: 0;
-    }
 
-    .dx-accordion-item {
-        border-bottom: 1px solid @accordion-item-border-color;
-        border-top: none;
-    }
+        .dx-accordion-item {
+            border-left: none;
+            border-right: none;
+            border-bottom: 1px solid @accordion-item-border-color;
+            border-top: none;
+            box-shadow: none;
+        }
 
-    .dx-accordion-item-opened {
-        margin: 0;
+        .dx-accordion-item-opened {
+            margin: 0;
+        }
+
+        .dx-item-content.dx-accordion-item-title {
+            height: 32px;
+
+            .dx-accordion-item-title-caption {
+                font-size: 0.8em;
+                text-transform: uppercase;
+                left: @DIAGRAM_TOOLBOX_H_PADDING;
+                top: @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING;
+                right: 32px;
+            }
+
+            &::before {
+                font-size: 1em;
+                line-height: 0.8em;
+                right: 0;
+                top: @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING;
+            }
+        }
+
+        .dx-item-content.dx-accordion-item-body {
+            padding: @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING @DIAGRAM_TOOLBOX_H_PADDING;
+        }
     }
 
     .dxdi-toolbox .dxdi-canvas .dxdi-shape-text { // stylelint-disable-line selector-class-pattern
         opacity: @diagram-toolbox-shape-text-opacity;
-    }
-
-    .dx-item-content.dx-accordion-item-title {
-        height: 32px;
-
-        .dx-accordion-item-title-caption {
-            font-size: 0.8em;
-            text-transform: uppercase;
-            left: @DIAGRAM_TOOLBOX_H_PADDING;
-            top: @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING;
-            right: 32px;
-        }
-
-        &::before {
-            font-size: 1em;
-            line-height: 0.8em;
-            right: 0;
-            top: @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING;
-        }
-    }
-
-    .dx-item-content.dx-accordion-item-body {
-        padding: @DIAGRAM_TOOLBOX_ACCORDION_V_PADDING @DIAGRAM_TOOLBOX_H_PADDING;
     }
 }
 
@@ -451,8 +459,14 @@
     }
 }
 
-.dx-diagram-contextmenu.dx-context-menu .dx-menu-item .dx-menu-item-content .dx-menu-item-popout-container {
-    right: 0;
+.dx-diagram-contextmenu.dx-context-menu {
+    .dx-menu-item .dx-menu-item-content .dx-menu-item-popout-container {
+        right: 0;
+    }
+
+    .dx-menu-no-icons > .dx-menu-item-wrapper > .dx-menu-item > .dx-menu-item-content .dx-menu-item-text {
+        padding-left: 4px;
+    }
 }
 
 .dx-diagram-touchbar {

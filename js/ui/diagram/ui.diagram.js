@@ -271,6 +271,7 @@ class Diagram extends Widget {
         this._historyToolbar = this._createComponent($container, DiagramHistoryToolbar,
             extend(this._getToolbarBaseOptions(), {
                 commands: this.option('historyToolbar.commands'),
+                locateInMenu: 'never'
             })
         );
         this._updateHistoryToolbarPosition($container, $parent, isServerSide);
@@ -393,7 +394,8 @@ class Diagram extends Widget {
             .appendTo($parent);
         this._viewToolbar = this._createComponent($container, DiagramViewToolbar,
             extend(this._getToolbarBaseOptions(), {
-                commands: this.option('viewToolbar.commands')
+                commands: this.option('viewToolbar.commands'),
+                locateInMenu: 'never'
             })
         );
         this._updateViewToolbarPosition($container, $parent, isServerSide);
@@ -436,6 +438,7 @@ class Diagram extends Widget {
             extend(this._getToolbarBaseOptions(), {
                 buttonStylingMode: 'contained',
                 buttonType: 'default',
+                locateInMenu: 'never'
             })
         );
         this._updatePropertiesToolbarPosition($container, $parent, isServerSide);
