@@ -1,10 +1,10 @@
 /* global DATA, internals, initTree */
 
 import $ from 'jquery';
-import { noop } from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import devices from 'core/devices';
+import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 
 const NODE_CLASS = 'dx-treeview-node';
 const ITEM_CLASS = 'dx-treeview-item';
@@ -60,29 +60,120 @@ QUnit.testInActiveWindow('widget should not have focus-state class after click o
     assert.ok(!$node.hasClass('dx-state-focused'), 'focus state was toggle after click');
 });
 
-QUnit.test('focus on the item should move scroll position to this item (T226868)', function(assert) {
-    assert.expect(1);
 
-    if(devices.real().deviceType !== 'desktop') {
-        assert.ok(true, 'unnecessary test on mobile devices');
-        return;
+const ITEM_HEIGHT = 32;
+const NODE_MARGIN = 15;
+
+const configs = [];
+['up', 'down', 'left', 'right', 'first', 'last'].forEach(direction => {
+    [false, true].forEach(expanded => {
+        [1, 2, 3, 4, 5, 6].forEach(initialFocusedItemKey => {
+            configs.push({ expanded, direction, initialFocusedItemKey });
+        });
+    });
+});
+
+configs.forEach(config => {
+    function getScrollPosition($node, key, direction, expanded) {
+        let newFocusedItemKey = getNextFocusedItemKey($node, key, direction, expanded);
+        switch(newFocusedItemKey) {
+            case 1:
+                return { top: 0, left: NODE_MARGIN };
+            case 2:
+                return { top: ITEM_HEIGHT, left: NODE_MARGIN * 2 };
+            case 3:
+                return expanded
+                    ? { top: ITEM_HEIGHT * 2, left: NODE_MARGIN }
+                    : { top: ITEM_HEIGHT, left: NODE_MARGIN };
+            case 4:
+                return { top: ITEM_HEIGHT * 3, left: NODE_MARGIN * 2 };
+            case 5:
+                return expanded
+                    ? { top: ITEM_HEIGHT * 4, left: NODE_MARGIN }
+                    : { top: ITEM_HEIGHT * 2, left: NODE_MARGIN };
+            case 6:
+                return { top: ITEM_HEIGHT * 5, left: NODE_MARGIN * 2 };
+        }
     }
 
-    const $treeView = initTree({
-        items: [{ id: 1, text: 'item 1' }, { id: 2, text: 'item 2', expanded: true, items: [{ id: 3, text: 'item 3' }] }],
-        focusStateEnabled: true,
-        height: 40
+    function getNextFocusedItemKey($node, key, direction, expanded) {
+        const isFirstLevelNode = $node.attr('aria-level') === '1';
+        const firstKey = 1;
+        const lastKey = expanded ? 6 : 5;
+
+        let nextFocusedItemKey = 1;
+        switch(direction) {
+            case 'up':
+                if(isFirstLevelNode) {
+                    nextFocusedItemKey = expanded ? key - 1 : key - 2;
+                } else {
+                    nextFocusedItemKey = key - 1;
+                }
+                break;
+            case 'down':
+                if(isFirstLevelNode) {
+                    nextFocusedItemKey = expanded ? key + 1 : key + 2;
+                } else {
+                    nextFocusedItemKey = key + 1;
+                }
+                break;
+            case 'left':
+                nextFocusedItemKey = isFirstLevelNode
+                    ? key
+                    : key - 1;
+                break;
+            case 'right':
+                nextFocusedItemKey = !config.expanded || !isFirstLevelNode
+                    ? key
+                    : key + 1;
+                break;
+            case 'first':
+                nextFocusedItemKey = firstKey;
+                break;
+            case 'last':
+                nextFocusedItemKey = lastKey;
+                break;
+        }
+
+        if(nextFocusedItemKey < firstKey) {
+            nextFocusedItemKey = lastKey;
+        } else if(nextFocusedItemKey > lastKey) {
+            nextFocusedItemKey = firstKey;
+        }
+
+        return nextFocusedItemKey;
+    }
+
+    QUnit.test(`all.Expanded: ${config.expanded} -> click(key:${config.initialFocusedItemKey}) -> moveFocus('${config.direction}'); (T226868)`, function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'unnecessary test on mobile devices');
+            return;
+        }
+        const wrapper = new TreeViewTestWrapper({
+            items: [
+                { id: 1, text: 'item1', expanded: config.expanded, items: [{ id: 2, text: 'item1_1' }] },
+                { id: 3, text: 'item2', expanded: config.expanded, items: [{ id: 4, text: 'item2_1' }] },
+                { id: 5, text: 'item3', expanded: config.expanded, items: [{ id: 6, text: 'item3_1' }] }
+            ],
+            focusStateEnabled: true,
+            scrollDirection: 'both',
+            height: ITEM_HEIGHT,
+            width: 30
+        });
+
+        const $node = wrapper.getElement().find(`[data-item-id="${config.initialFocusedItemKey}"]`);
+        if(!$node.length) {
+            assert.ok(true, 'not real scenario');
+            return;
+        }
+
+        const $item = $node.find('.dx-treeview-item').eq(0);
+        wrapper.instance._scrollableContainer.scrollToElement($item);
+        $item.trigger('dxpointerdown');
+
+        wrapper.instance._moveFocus(config.direction, {});
+        wrapper.checkScrollPosition(getScrollPosition($node, config.initialFocusedItemKey, config.direction, config.expanded));
     });
-    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(1);
-    const scrollable = $treeView.find('.dx-scrollable').dxScrollable('instance');
-
-    scrollable.option('onScroll', function(args) {
-        assert.equal(args.scrollOffset.top, 24, 'scrolled to the item');
-        scrollable.option('onScroll', noop);
-    });
-
-    $item.trigger('dxpointerdown');
-
 });
 
 QUnit.test('PointerDown event at checkbox should not be ignored', function(assert) {
@@ -142,7 +233,7 @@ QUnit.test('Scroll should not jump down when focusing on item (T492496)', functi
     try {
         $items.last().trigger('dxpointerdown');
 
-        assert.equal(scrollable.scrollTop(), 56, 'scroll top position');
+        assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
 
         scrollable.scrollTo({ y: 0 });
 
@@ -175,7 +266,7 @@ QUnit.test('Scroll should not jump down when focusing on Select All (T517945)', 
     try {
         $items.last().trigger('dxpointerdown');
 
-        assert.equal(scrollable.scrollTop(), 106, 'scroll top position');
+        assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
 
         scrollable.scrollTo({ y: 0 });
 
