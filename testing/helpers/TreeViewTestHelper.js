@@ -14,6 +14,8 @@ const INVISIBLE_ITEM_CLASS = 'dx-state-invisible';
 
 const CHECK_BOX_CLASS = 'dx-checkbox';
 const CHECK_BOX_CHECKED_CLASS = 'dx-checkbox-checked';
+const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
 const { assert } = QUnit;
 
@@ -41,6 +43,8 @@ class TreeViewTestWrapper {
     getAllSelectedCheckboxes() { return this.getElement().find(`.${CHECK_BOX_CHECKED_CLASS}`); }
     getToggleItemVisibility($node) { return isDefined($node) ? $node.find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`) : this.getElement().find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`); }
     getNodeLoadIndicator($node) { return isDefined($node) ? $node.find(`.${NODE_LOAD_INDICATOR_CLASS}`) : this.getElement().find(`.${NODE_LOAD_INDICATOR_CLASS}`); }
+    getScrollHeight() { return this.getElement().find(`.${SCROLLABLE_CONTENT_CLASS}`).height(); }
+    getScrollWidth() { return this.getElement().find(`.${SCROLLABLE_CONTENT_CLASS}`).width(); }
 
     hasWidgetClass($item) { return $item.hasClass(WIDGET_CLASS); }
     hasItemClass($item) { return $item.hasClass(ITEM_CLASS); }
@@ -109,15 +113,12 @@ class TreeViewTestWrapper {
         assert.deepEqual(this.eventLog, expectedEventLog, 'eventLog ' + additionalErrorMessage);
     }
 
-    checkNodePosition(nodeKey, position) {
-        const treeRect = this.getElement().get(0).getBoundingClientRect();
-        const nodeRect = this.getElement().find(`[data-item-id="${nodeKey}"]`).get(0).getBoundingClientRect();
-        if(position === 'top' || position === 'topAndLeft') {
-            assert.roughEqual(treeRect.top, nodeRect.top, 0.1, 'node and treeView top position is the same');
-        }
-        if(position === 'left' || position === 'topAndLeft') {
-            assert.roughEqual(treeRect.left, nodeRect.left, 0.1, 'node and treeView left position is the same');
-        }
+    checkScrollPosition(expected) {
+        const scrollContainer = this.getElement().find(`.${SCROLLABLE_CONTAINER_CLASS}`).get(0);
+
+        const epsilon = 0.3;
+        assert.roughEqual(scrollContainer.scrollTop, expected.top, epsilon, ' scrollTop');
+        assert.roughEqual(scrollContainer.scrollLeft, expected.left, epsilon, ' scrollLeft');
     }
 
     clearEventLog() {
