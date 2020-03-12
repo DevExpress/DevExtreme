@@ -100,6 +100,7 @@ class Button extends Widget {
         switch(name) {
             case 'useSubmitBehavior':
                 value === true && this.option('onSubmit', this._getSubmitAction());
+                break;
         }
 
         super._optionChanged();
