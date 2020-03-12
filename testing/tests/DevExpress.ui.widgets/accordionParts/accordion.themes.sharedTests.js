@@ -2,6 +2,8 @@ import $ from 'jquery';
 import 'ui/accordion';
 import 'ui/button';
 
+import browser from 'core/utils/browser';
+
 const ACCORDION_ITEM_TITLE_CAPTION_CLASS = 'dx-accordion-item-title-caption';
 const ICON_CLASS = 'dx-icon';
 
@@ -42,7 +44,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                 const iconRect = $accordionTitle.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect();
                 const textRect = $accordionTitle.find('span').get(0).getBoundingClientRect();
 
-                const epsilon = 0.6;
+                const epsilon = browser.msie ? 1.4 : 0.6;
                 const icon_inner_shift = 1;
                 assert.roughEqual((iconRect.top + iconRect.height / 2) - icon_inner_shift, textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
 

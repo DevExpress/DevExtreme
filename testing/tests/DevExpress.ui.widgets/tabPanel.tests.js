@@ -4,6 +4,7 @@ import support from 'core/utils/support';
 import domUtils from 'core/utils/dom';
 import { deferUpdate } from 'core/utils/common';
 import devices from 'core/devices';
+import browser from 'core/utils/browser';
 import TabPanel from 'ui/tab_panel';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -163,7 +164,7 @@ QUnit.module('rendering', {
             const iconRect = $title.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect();
             const textRect = $title.find('span').get(0).getBoundingClientRect();
 
-            const epsilon = 2.1;
+            const epsilon = browser.msie ? 2.3 : 2.1;
             assert.roughEqual((iconRect.top + iconRect.height / 2), textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
 
             const horizontalMargin = rtlEnabled
