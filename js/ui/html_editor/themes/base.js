@@ -1,13 +1,19 @@
-import { getQuill } from '../quill_importer';
+import Quill from 'quill';
 
-const Theme = getQuill().import('core/theme');
+let BaseTheme;
 
-class BaseTheme extends Theme {
-    constructor(quill, options) {
+if(Quill) {
+    const Theme = Quill.import('core/theme');
 
-        super(quill, options);
-        this.quill.root.classList.add('dx-htmleditor-content');
-    }
+    BaseTheme = class BaseTheme extends Theme {
+        constructor(quill, options) {
+
+            super(quill, options);
+            this.quill.root.classList.add('dx-htmleditor-content');
+        }
+    };
+} else {
+    BaseTheme = {};
 }
 
 export default BaseTheme;

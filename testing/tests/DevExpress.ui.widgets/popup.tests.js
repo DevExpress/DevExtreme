@@ -1567,6 +1567,32 @@ QUnit.module('templates', () => {
             });
         });
     });
+
+    QUnit.test('Popup toolbar should render custom template with render function passed from integrationOptions', function(assert) {
+        const text = 'toolbar template';
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            width: 'auto',
+            height: 'auto',
+            toolbarItems: [{
+                location: 'before',
+                toolbar: 'bottom',
+                template: 'custom'
+            }],
+            integrationOptions: {
+                templates: {
+                    'custom': {
+                        render: function(args) {
+                            $('<span>').text(text).appendTo(args.container);
+                        }
+                    }
+                }
+            }
+        }).dxPopup('instance');
+
+        const toolbarItemText = popup.$element().find('.dx-toolbar-item').text();
+        assert.strictEqual(toolbarItemText, text, 'Custom template rendered');
+    });
 });
 
 QUnit.module('renderGeometry', () => {

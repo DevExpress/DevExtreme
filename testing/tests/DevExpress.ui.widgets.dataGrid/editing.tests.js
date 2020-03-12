@@ -33,6 +33,7 @@ import 'generic_light.css!';
 import 'ui/data_grid/ui.data_grid';
 import 'ui/autocomplete';
 import 'ui/color_box';
+import 'ui/validator';
 
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -1723,12 +1724,14 @@ QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up 
     this.clock.tick();
 
     // act
-    rowsViewWrapper.getEditorInput(0, 2).trigger('dxpointerdown');
+    let editor = rowsViewWrapper.getDataRow(0).getCell(2).getEditor();
+    editor.getInputElement().trigger('dxpointerdown');
     rowsViewWrapper.getElement().find('tbody').first().trigger('dxclick'); // chrome 73+
     this.clock.tick();
 
     // assert
-    assert.equal(rowsViewWrapper.getEditorInput(0, 2).length, 1, 'editor is not closed');
+    editor = rowsViewWrapper.getDataRow(0).getCell(2).getEditor();
+    assert.ok(editor.isExists(), 'editor is not closed');
 });
 
 // T318313
@@ -2799,6 +2802,61 @@ QUnit.test('Batch mode - The allowUpdating callback should not be called on clic
     assert.strictEqual(allowUpdating.callCount, 0, 'allowUpdating isn\'t called');
 });
 
+QUnit.test('editingController.addDeferred should add the same deferred object only once', function(assert) {
+    // arrange
+    const deferred1 = new Deferred();
+    const deferred2 = new Deferred();
+
+    // act
+    this.editingController.addDeferred(deferred1);
+    this.editingController.addDeferred(deferred1);
+
+    // assert
+    assert.strictEqual(this.editingController._deferreds.length, 1, 'a single deferred object is added');
+
+    // act
+    deferred1.resolve();
+
+    // assert
+    assert.strictEqual(this.editingController._deferreds.length, 0, 'deferreds array should be empty');
+
+    // act
+    this.editingController.addDeferred(deferred2);
+
+    // assert
+    assert.strictEqual(this.editingController._deferreds.length, 1, 'a deferred object is added');
+
+    // act
+    deferred2.reject();
+
+    // assert
+    assert.strictEqual(this.editingController._deferreds.length, 0, 'deferreds array should be empty');
+});
+
+QUnit.test('editingController.executeOperation - only the last operation should be executed', function(assert) {
+    // arrange
+    let value = 0;
+    const deferred1 = new Deferred();
+    const func = function() {
+        value++;
+    };
+
+    // act
+    this.editingController.addDeferred(deferred1);
+    this.editingController.executeOperation(deferred1, func);
+
+    const deferred2 = new Deferred();
+    this.editingController.addDeferred(deferred2);
+    this.editingController.executeOperation(deferred2, func);
+
+    deferred2.resolve();
+
+    // assert
+    assert.strictEqual(value, 1, 'value === 1');
+    assert.notOk(this.editingController._deferreds.length, 'deferreds should be empty');
+});
+
+
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -3198,6 +3256,49 @@ QUnit.test('Remove the inserted row with edit mode batch and hidden column', fun
 
     // assert
     assert.ok(!testElement.find('tbody > tr').first().hasClass('dx-row-inserted'), 'not has row inserted');
+});
+
+[true, false].forEach((needAddRow) => {
+    [true, false].forEach((changePageViaDataSource) => {
+        let testName = 'cell should not be edited after ' + (needAddRow ? 'row adding' : 'editing');
+        testName += ' and page change ' + (changePageViaDataSource ? 'via dataSource' : '');
+
+        // T861092
+        QUnit.test(testName + ' (cell edit mode)', function(assert) {
+            // arrange
+            const that = this;
+
+            that.options.editing = {
+                mode: 'cell',
+                allowAdding: true
+            };
+
+            that.dataController.pageSize(3);
+
+            // act
+            if(needAddRow) {
+                that.addRow();
+            }
+
+            that.editCell(0, 0);
+
+            // assert
+            assert.ok(that.editingController.isEditing(), 'editing started');
+
+            // act
+            if(changePageViaDataSource) {
+                const dataSource = that.getDataSource();
+
+                dataSource.pageIndex(1);
+                dataSource.load();
+            } else {
+                that.pageIndex(1);
+            }
+
+            // assert
+            assert.notOk(that.editingController.isEditing(), 'is not editing');
+        });
+    });
 });
 
 QUnit.test('AddRow method should return Deferred', function(assert) {
@@ -4991,6 +5092,34 @@ QUnit.test('deleteRow should works if cell value is changed', function(assert) {
     // assert
     assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
     assert.strictEqual(testElement.find('input').length, 0, 'no editors');
+});
+
+QUnit.test('deleteRow should works in row editing mode if boolean column and validation are exist (T865833, T864931)', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'row',
+        allowDeleting: true
+    };
+
+    that.options.columns.push({ dataField: 'booleanField', dataType: 'boolean', validationRules: [{ type: 'required' }] });
+    that.columnsController.reset();
+    that.editingController.init();
+
+    rowsView.render(testElement);
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 7, 'row count');
+
+    // act
+    that.deleteRow(1);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
 });
 
 // T804894
@@ -7565,6 +7694,27 @@ QUnit.test('Add a custom cssClass for image icons in the \'buttons\' command col
     assert.ok($testElement.find('.dx-command-edit').first().hasClass('dx-command-edit-with-icons'), 'Command edit cell has icons');
     assert.ok($buttonElement.hasClass('myIcon'), 'Custom cssClass is applied');
     assert.ok($buttonElement.hasClass('dx-icon'), 'Custom icon is created');
+});
+
+QUnit.test('dx-svg-icon should not have \'pointerEvents: none\' if a column button set using svg icon (T863635)', function(assert) {
+    // arrange
+    const $testElement = $('#container');
+    this.options.columns.push({
+        type: 'buttons',
+        buttons: [{
+            icon: '<svg><circle r="10" /></svg>'
+        }]
+    });
+    this.columnsController.reset();
+
+    // act
+    this.rowsView.render($testElement);
+    const svgIcon = $testElement.find('.dx-command-edit').first().find('.dx-svg-icon').first();
+
+    // assert
+    const pointerEvents = browser.msie && parseInt(browser.version) <= 11 ? 'visiblePainted' : 'auto';
+    assert.strictEqual(window.getComputedStyle(svgIcon[0]).pointerEvents, pointerEvents, 'dx-svg-icon allows pointer events');
+    assert.strictEqual(window.getComputedStyle(svgIcon.find('svg')[0]).pointerEvents, 'none', 'dx-svg-icon svg does not allow pointer events');
 });
 
 QUnit.test('Add a custom command column', function(assert) {
@@ -11542,154 +11692,6 @@ QUnit.test('It\'s impossible to save new data when editing form is invalid', fun
     assert.equal($invalid.find('.dx-overlay-content').css('whiteSpace'), 'normal', 'white-space is normal');
 });
 
-QUnit.test('It\'s impossible to save new data when editing form is invalid (async)', function(assert) {
-    // arrange
-    this.clock.restore();
-    const rowsView = this.rowsView;
-    const testElement = $('#container');
-    let $formRow;
-    let inputElement;
-    const done = assert.async();
-
-    rowsView.render(testElement);
-
-    this.applyOptions({
-        editing: {
-            mode: 'form',
-            allowUpdating: true,
-        },
-        columns: [{
-            dataField: 'age',
-            validationRules: [{
-                type: 'async',
-                validationCallback: function(params) {
-                    const d = new Deferred();
-                    setTimeout(function() {
-                        d.reject();
-                    }, 10);
-                    return d.promise();
-                }
-            }]
-        }]
-    });
-
-    // act
-    this.editRow(0);
-    $formRow = rowsView.getRow(0);
-
-    inputElement = getInputElements(testElement).first();
-    inputElement.val('');
-    inputElement.trigger('change');
-    this.saveEditData().done(() => {
-        assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
-        assert.equal($formRow.find('.dx-invalid').length, 1, 'There is one invalid editor in first row');
-        done();
-    });
-
-    // assert
-    assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
-    assert.equal($formRow.find('.dx-validation-pending').length, 1, 'There is one pending editor in first row');
-});
-
-QUnit.test('Only valid data is saved (async)', function(assert) {
-    // arrange
-    this.clock.restore();
-    const rowsView = this.rowsView;
-    const testElement = $('#container');
-    let $formRow;
-    let inputElement;
-    const done = assert.async();
-
-    rowsView.render(testElement);
-
-    this.applyOptions({
-        loadingTimeout: undefined,
-        editing: {
-            mode: 'form',
-            allowUpdating: true,
-        },
-        columns: [{
-            dataField: 'age',
-            validationRules: [{
-                type: 'async',
-                validationCallback: function(params) {
-                    const d = new Deferred();
-                    setTimeout(function() {
-                        params.value === 1 ? d.resolve(true) : d.reject();
-                    }, 10);
-                    return d.promise();
-                }
-            }]
-        }]
-    });
-
-    // act
-    this.editRow(0);
-    $formRow = rowsView.getRow(0);
-
-    inputElement = getInputElements(testElement).first();
-    inputElement.val('');
-    inputElement.trigger('change');
-
-    this.saveEditData().done(() => {
-        assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
-        assert.equal($formRow.find('.dx-invalid').length, 1, 'There is one invalid editor in first row');
-
-        inputElement.val('1');
-        inputElement.trigger('change');
-        this.saveEditData().done(() => {
-            assert.equal(this.editingController._editRowIndex, -1, 'there is no editing row');
-            const $row = rowsView.getRow(0);
-            assert.ok($row.hasClass('dx-data-row'), 'The form was closed');
-            done();
-        });
-    });
-
-    // assert
-    assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
-    assert.equal($formRow.find('.dx-validation-pending').length, 1, 'There is one pending editor in first row');
-});
-
-QUnit.test('AsyncRule.validationCallback accepts extra parameters', function(assert) {
-    // arrange
-    const rowsView = this.rowsView;
-    const testElement = $('#container');
-    let inputElement;
-    const validationCallback = sinon.spy(function() { return new Deferred().resolve().promise(); });
-
-    rowsView.render(testElement);
-
-    this.applyOptions({
-        loadingTimeout: undefined,
-        editing: {
-            mode: 'form',
-            allowUpdating: true,
-        },
-        columns: [{
-            dataField: 'age',
-            validationRules: [{
-                type: 'async',
-                validationCallback: validationCallback
-            }]
-        }]
-    });
-
-    // act
-    this.editRow(0);
-
-    inputElement = getInputElements(testElement).first();
-    inputElement.val('');
-    inputElement.trigger('change');
-
-    assert.equal(validationCallback.callCount, 1, 'valdiationCallback should be called once');
-
-    const params = validationCallback.getCall(0).args[0];
-
-    assert.ok(params.data, 'data should be passed');
-    assert.strictEqual(params.column.dataField, 'age', 'column.dataField === \'age\'');
-    assert.ok(params.column.validationRules, 'column.validationRules !== null');
-});
-
 QUnit.test('CustomRule.validationCallback accepts extra parameters', function(assert) {
     // arrange
     const rowsView = this.rowsView;
@@ -12393,6 +12395,369 @@ QUnit.test('No exceptions on editing a column with given setCellValue when repai
     }
 });
 
+QUnit.test('validatingController.isInvalidCell - cell should be invalid', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'row'
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{ type: 'required' }]
+        }]
+    });
+
+    this.editRow(0);
+
+    // act
+    this.cellValue(0, 'name', '');
+    const key = this.getKeyByRowIndex(0);
+
+    // assert
+    assert.notOk(this.validatingController.isInvalidCell({ rowKey: key, columnIndex: 0 }), 'cell should be invalid');
+});
+
+QUnit.test('validatingController.validateCell should not call the validate method of the current validator', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+    const done = assert.async();
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'batch'
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{ type: 'required' }]
+        }]
+    });
+
+    this.editCell(0, 0);
+    this.cellValue(0, 0, '');
+
+    const validator = $(this.getCellElement(0, 0)).dxValidator('instance');
+
+    // assert
+    assert.ok(validator, 'validator should be created');
+    validator.validate = sinon.spy();
+
+    this.validatingController.validateCell(validator).done(result => {
+        // assert
+        assert.strictEqual(result.status, 'invalid', 'status === "invalid"');
+        assert.equal(result.brokenRules.length, 1, 'one rule should be broken');
+        assert.equal(validator.validate.callCount, 0, 'validator.validate should not be called');
+
+        done();
+    });
+});
+
+QUnit.test('validatingController - validation result should be cached', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'row'
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{ type: 'required' }]
+        }]
+    });
+
+    this.editRow(0);
+    this.clock.tick();
+    const rowKey = this.getKeyByRowIndex(0);
+
+    let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+    // assert
+    assert.strictEqual(result.status, 'valid', 'result.status === "valid"');
+
+    const validationResult = {
+        status: 'invalid',
+        brokenRules: [{
+            type: 'required',
+            message: 'invalid value'
+        }]
+    };
+    this.validatingController.updateCellValidationResult({ rowKey, columnIndex: 0, validationResult });
+    result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+    // assert
+    assert.strictEqual(result.status, validationResult.status, 'result.status === validationResult.status');
+    assert.strictEqual(result.brokenRules, validationResult.brokenRules, 'result.brokenRules === validationReulst.brokenRules');
+});
+
+QUnit.test('validatingController - validation result should be cached with hidden validation', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'cell'
+        },
+        columns: [{
+            dataField: 'name'
+        }]
+    });
+
+    this.editCell(0, 0);
+    this.clock.tick();
+    const rowKey = this.getKeyByRowIndex(0);
+    this.validatingController.setDisableApplyValidationResults(true);
+    const deferred = new Deferred();
+    const validationResult = {
+        status: 'pending',
+        id: '123',
+        complete: deferred.promise()
+    };
+    this.validatingController.updateCellValidationResult({ rowKey, columnIndex: 0, validationResult });
+
+    let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+    // assert
+    assert.strictEqual(result.status, validationResult.status, 'result.status === validationResult.status');
+    assert.strictEqual(result.id, validationResult.id, 'result.id === validationResult.id');
+    assert.strictEqual(result.complete, validationResult.complete, 'result.complete === validationResult.complete');
+    assert.strictEqual(result.disabledPendingId, validationResult.id, 'result.disabledPendingId === validationResult.id');
+    assert.equal(this.editingController._deferreds.length, 1, 'deferreds should contain a single object');
+    assert.equal(this.editingController._deferreds[0], result.deferred, 'deferreds should contain result.deferred');
+
+    validationResult.status = 'valid';
+    validationResult.complete = null;
+    deferred.resolve();
+    this.validatingController.updateCellValidationResult({ rowKey, columnIndex: 0, validationResult });
+    result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+    // assert
+    assert.strictEqual(result.status, validationResult.status, 'result.status === validationResult.status');
+    assert.strictEqual(result.id, validationResult.id, 'result.id === validationResult.id');
+    assert.notOk(result.disabledPendingId, 'result.disabledPendingId is not defined');
+    assert.equal(this.editingController._deferreds.length, 0, 'deferreds should be empty');
+});
+
+QUnit.test('validatingController - validation result should be removed from cache', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'cell'
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{ type: 'required' }]
+        }]
+    });
+
+    this.editCell(0, 0);
+    this.clock.tick();
+    const rowKey = this.getKeyByRowIndex(0);
+
+    let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+    // assert
+    assert.ok(result, 'result should be restored from cache');
+
+    const editData = this.editingController.getEditDataByKey(rowKey);
+    this.validatingController.removeCellValidationResult({ editData, columnIndex: 0 });
+    result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+
+    // assert
+    assert.notOk(result, 'result should not be defined');
+});
+
+QUnit.test('validatingController - all validation results of a certain row should be removed', function(assert) {
+    // arrange
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: 'row'
+        },
+        columns: [
+            {
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            },
+            {
+                dataField: 'age',
+                validationRules: [{ type: 'required' }]
+            }
+        ]
+    });
+
+    this.editRow(0);
+    this.clock.tick();
+    const rowKey = this.getKeyByRowIndex(0);
+    this.cellValue(0, 0, '');
+    this.saveEditData();
+    this.clock.tick();
+
+    let result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+    let result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
+    const editData = this.editingController.getEditDataByKey(rowKey);
+
+    // assert
+    assert.ok(result1, 'result1 should be restored from cache');
+    assert.ok(result2, 'result2 should be restored from cache');
+    assert.ok(editData.validated, 'editData should be validated');
+
+    this.validatingController.resetRowValidationResults(editData);
+    result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
+    result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
+
+    // assert
+    assert.notOk(result1, 'result1 should not be defined');
+    assert.notOk(result2, 'result2 should not be defined');
+    assert.notOk(editData.validated, 'editData should not be validated');
+});
+
+// T865329
+[true, false].forEach(withConfirm => {
+    QUnit.test('Validation should not block deleting newly added row in cell edit mode ' + withConfirm ? '(with confirm)' : '(no confirm)', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        let visibleRows;
+
+        rowsView.render(testElement);
+
+        const editingOptions = {
+            mode: 'cell',
+            allowDeleting: true,
+            allowAdding: true
+        };
+
+        if(withConfirm) {
+            editingOptions.confirmDelete = true;
+            editingOptions.texts = {
+                confirmDeleteMessage: 'confirm delete'
+            };
+        }
+
+        this.applyOptions({
+            editing: editingOptions,
+            columns: [{
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        // act
+        this.addRow();
+        this.clock.tick();
+
+        // assert
+        visibleRows = this.getVisibleRows();
+
+        assert.equal(visibleRows.length, 4, 'rows count');
+        assert.ok(visibleRows[0].isNewRow, 'first row is new');
+        assert.ok(visibleRows[0].isEditing, 'editing first row');
+
+        // act
+        this.deleteRow(0);
+        this.clock.tick();
+
+        if(withConfirm) {
+            // assert
+            const dialog = $('body').find('.dx-dialog').first();
+
+            assert.ok(dialog.length, 'dialog was shown');
+            assert.notOk($('.dx-datagrid-invalid').length, 'error message was not shown');
+
+            // act
+            dialog.find('.dx-dialog-button').first().trigger('dxclick');
+        }
+
+        // assert
+        visibleRows = this.getVisibleRows();
+
+        assert.equal(visibleRows.length, 3, 'rows count');
+    });
+});
+
+// T865329
+[true, false].forEach((withConfirm) => {
+    QUnit.test('Deleting should be blocked while editing newly added row in cell edit mode' + withConfirm ? '(with confirm)' : '(no confirm)', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        let visibleRows;
+
+        rowsView.render(testElement);
+
+        const editingOptions = {
+            mode: 'cell',
+            allowDeleting: true,
+            allowAdding: true
+        };
+
+        if(withConfirm) {
+            editingOptions.confirmDelete = true;
+            editingOptions.texts = {
+                confirmDeleteMessage: 'confirm delete'
+            };
+        }
+
+        this.applyOptions({
+            editing: editingOptions,
+            columns: [{
+                dataField: 'name',
+                validationRules: [{ type: 'required' }]
+            }]
+        });
+
+        // act
+        this.addRow();
+        this.clock.tick();
+
+        // assert
+        visibleRows = this.getVisibleRows();
+
+        assert.equal(visibleRows.length, 4, 'rows count');
+        assert.ok(visibleRows[0].isNewRow, 'first row is new');
+        assert.ok(visibleRows[0].isEditing, 'editing first row');
+
+        // act
+        this.deleteRow(1);
+        this.clock.tick();
+
+        // assert
+        if(withConfirm) {
+            const dialog = $('body').find('.dx-dialog').first();
+
+            assert.notOk(dialog.length, 'dialog was not shown');
+        }
+
+        visibleRows = this.getVisibleRows();
+
+        assert.ok($('.dx-datagrid-invalid').length, 'error message was shown');
+
+        assert.equal(visibleRows.length, 4, 'rows count');
+    });
+});
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
@@ -13434,182 +13799,98 @@ QUnit.test('cancelEditData after scrolling if scrolling mode is editing', functi
     assert.equal(testElement.find('.dx-edit-row').length, 0, 'edit row is closed');
 });
 
-QUnit.test('Add new row items on \'append\' if virtual scrolling (T812340)', function(assert) {
-    // arrange
-    this.options = $.extend(this.options, {
-        dataSource: generateDataSource(50, 2),
-        keyExpr: 'column1',
-        editing: {
-            mode: 'batch'
-        },
-        paging: {
-            pageSize: 3
-        },
-        scrolling: {
-            mode: 'virtual',
-            useNative: false
-        }
+['virtual', 'standard'].forEach(rowRenderingMode => {
+    QUnit.test(`Add new row items on 'append' if scrolling.mode: 'virtual', scrolling.rowRenderingMode: ${rowRenderingMode} (T812340)`, function(assert) {
+        // arrange
+        this.options = $.extend(this.options, {
+            dataSource: generateDataSource(50, 2),
+            keyExpr: 'column1',
+            editing: {
+                mode: 'batch'
+            },
+            paging: {
+                pageSize: 3
+            },
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: rowRenderingMode,
+                useNative: false
+            }
+        });
+
+        this.setupDataGrid();
+
+        this.rowsView.render($('#container'));
+        this.rowsView.height(200);
+        this.rowsView.resize();
+
+        this.clock.tick();
+
+        // act
+        this.pageIndex(5);
+        this.addRow();
+        this.addRow();
+        this.pageIndex(4);
+        this.pageIndex(3);
+        this.pageIndex(2);
+        this.pageIndex(3);
+        this.pageIndex(4);
+        this.pageIndex(5);
+        // arrange, assert
+        const newRows = this.dataController.items().filter(item => item.isNewRow);
+        assert.equal(newRows.length, 2, 'Two new rows');
+        assert.equal(this.dataController.items()[11].key, 'Item161', 'Next row');
+
+        const rowsViewWrapper = dataGridWrapper.rowsView;
+        assert.ok(rowsViewWrapper.getDataRow(9).isNewRow(), 'Row 9 is new in view');
+        assert.ok(rowsViewWrapper.getDataRow(10).isNewRow(), 'Row 10 is new in view');
     });
 
-    this.setupDataGrid();
+    QUnit.test(`Add new row items on "prepend" if scrolling.mode: 'virtual', scrolling.rowRenderingMode: ${rowRenderingMode} (T812340)`, function(assert) {
+        // arrange
+        this.options = $.extend(this.options, {
+            dataSource: generateDataSource(50, 2),
+            keyExpr: 'column1',
+            editing: {
+                mode: 'batch'
+            },
+            paging: {
+                pageSize: 3
+            },
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: rowRenderingMode,
+                useNative: false
+            }
+        });
 
-    this.rowsView.render($('#container'));
-    this.rowsView.height(200);
-    this.rowsView.resize();
+        this.setupDataGrid();
 
-    this.clock.tick();
+        this.rowsView.render($('#container'));
+        this.rowsView.height(200);
+        this.rowsView.resize();
 
-    // act
-    this.pageIndex(5);
-    this.addRow();
-    this.addRow();
-    this.pageIndex(4);
-    this.pageIndex(3);
-    this.pageIndex(2);
-    this.pageIndex(3);
-    this.pageIndex(4);
-    this.pageIndex(5);
-    // arrange, assert
-    const rowsViewWrapper = dataGridWrapper.rowsView;
-    const newRows = this.dataController.items().filter(item => item.isNewRow);
-    assert.equal(newRows.length, 2, 'Two new rows');
-    assert.equal(this.dataController.items()[11].key, 'Item161', 'Next row');
-    assert.ok(rowsViewWrapper.isNewRow(9), 'Row 9 is new in view');
-    assert.ok(rowsViewWrapper.isNewRow(10), 'Row 10 is new in view');
-});
+        this.clock.tick();
 
-QUnit.test('Add new row items on \'prepend\' if virtual scrolling (T812340)', function(assert) {
-    // arrange
-    this.options = $.extend(this.options, {
-        dataSource: generateDataSource(50, 2),
-        keyExpr: 'column1',
-        editing: {
-            mode: 'batch'
-        },
-        paging: {
-            pageSize: 3
-        },
-        scrolling: {
-            mode: 'virtual',
-            useNative: false
-        }
+        // act
+        this.pageIndex(5);
+        this.addRow();
+        this.addRow();
+        this.pageIndex(6);
+        this.pageIndex(7);
+        this.pageIndex(8);
+        this.pageIndex(7);
+        this.pageIndex(6);
+        this.pageIndex(5);
+        // arrange, assert
+        const newRows = this.dataController.items().filter(item => item.isNewRow);
+        assert.equal(newRows.length, 2, 'Two new rows');
+        assert.equal(this.dataController.items()[2].key, 'Item161', 'Next row');
+
+        const rowsViewWrapper = dataGridWrapper.rowsView;
+        assert.ok(rowsViewWrapper.getDataRow(0).isNewRow(), 'Row 0 is new in view');
+        assert.ok(rowsViewWrapper.getDataRow(1).isNewRow(), 'Row 1 is new in view');
     });
-
-    this.setupDataGrid();
-
-    this.rowsView.render($('#container'));
-    this.rowsView.height(200);
-    this.rowsView.resize();
-
-    this.clock.tick();
-
-    // act
-    this.pageIndex(5);
-    this.addRow();
-    this.addRow();
-    this.pageIndex(6);
-    this.pageIndex(7);
-    this.pageIndex(8);
-    this.pageIndex(7);
-    this.pageIndex(6);
-    this.pageIndex(5);
-    // arrange, assert
-    const rowsViewWrapper = dataGridWrapper.rowsView;
-    const newRows = this.dataController.items().filter(item => item.isNewRow);
-    assert.equal(newRows.length, 2, 'Two new rows');
-    assert.equal(this.dataController.items()[2].key, 'Item161', 'Next row');
-    assert.ok(rowsViewWrapper.isNewRow(0), 'Row 0 is new in view');
-    assert.ok(rowsViewWrapper.isNewRow(1), 'Row 1 is new in view');
-});
-
-QUnit.test('Add new row items on \'append\' if virtual scrolling and rowRenderingMode is virtual (T812340)', function(assert) {
-    // arrange
-    this.options = $.extend(this.options, {
-        dataSource: generateDataSource(50, 2),
-        keyExpr: 'column1',
-        editing: {
-            mode: 'batch'
-        },
-        paging: {
-            pageSize: 3
-        },
-        scrolling: {
-            mode: 'virtual',
-            rowRenderingMode: 'virtual',
-            useNative: false
-        }
-    });
-
-    this.setupDataGrid();
-
-    this.rowsView.render($('#container'));
-    this.rowsView.height(200);
-    this.rowsView.resize();
-
-    this.clock.tick();
-
-    // act
-    this.pageIndex(5);
-    this.addRow();
-    this.addRow();
-    this.pageIndex(4);
-    this.pageIndex(3);
-    this.pageIndex(2);
-    this.pageIndex(3);
-    this.pageIndex(4);
-    this.pageIndex(5);
-    // arrange, assert
-    const rowsViewWrapper = dataGridWrapper.rowsView;
-    const newRows = this.dataController.items().filter(item => item.isNewRow);
-    assert.equal(newRows.length, 2, 'Two new rows');
-    assert.equal(this.dataController.items()[11].key, 'Item161', 'Next row');
-    assert.ok(rowsViewWrapper.isNewRow(9), 'Row 9 is new in view');
-    assert.ok(rowsViewWrapper.isNewRow(10), 'Row 10 is new in view');
-});
-
-QUnit.test('Add new row items on \'prepend\' if virtual scrolling and rowRenderingMode is virtual (T812340)', function(assert) {
-    // arrange
-    this.options = $.extend(this.options, {
-        dataSource: generateDataSource(50, 2),
-        keyExpr: 'column1',
-        editing: {
-            mode: 'batch'
-        },
-        paging: {
-            pageSize: 3
-        },
-        scrolling: {
-            mode: 'virtual',
-            rowRenderingMode: 'virtual',
-            useNative: false
-        },
-    });
-
-    this.setupDataGrid();
-
-    this.rowsView.render($('#container'));
-    this.rowsView.height(200);
-    this.rowsView.resize();
-
-    this.clock.tick();
-
-    // act
-    this.pageIndex(5);
-    this.addRow();
-    this.addRow();
-    this.pageIndex(6);
-    this.pageIndex(7);
-    this.pageIndex(8);
-    this.pageIndex(7);
-    this.pageIndex(6);
-    this.pageIndex(5);
-    // arrange, assert
-    const rowsViewWrapper = dataGridWrapper.rowsView;
-    const newRows = this.dataController.items().filter(item => item.isNewRow);
-    assert.equal(newRows.length, 2, 'Two new rows');
-    assert.equal(this.dataController.items()[2].key, 'Item161', 'Next row');
-    assert.ok(rowsViewWrapper.isNewRow(0), 'Row 0 is new in view');
-    assert.ok(rowsViewWrapper.isNewRow(1), 'Row 1 is new in view');
 });
 
 QUnit.test('DataGrid should show error message on adding row if dataSource is not specified (T711831)', function(assert) {
@@ -15332,6 +15613,66 @@ QUnit.test('editing.popup options should apply to editing popup', function(asser
     assert.ok(that.editPopupInstance.option('fullScreen'), 'Editing popup shown in fullScreen mode');
 });
 
+QUnit.test('editing popup toolbarItems option changing should be applied (T862799)', function(assert) {
+    const that = this;
+
+    let button;
+
+    that.options.editing.popup = {
+        toolbarItems: [{
+            toolbar: 'bottom',
+            location: 'after',
+            widget: 'dxButton',
+            options: {
+                onInitialized(e) {
+                    button = e.component;
+                },
+                text: 'My Button',
+                visible: false
+            }
+        }]
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    // act
+    that.editRow(0);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(button.option('visible'), false, 'Toolbar button is not visible');
+
+    // act
+    that.editingController.optionChanged({ name: 'editing', fullName: 'editing.popup.toolbarItems[0].options.visible', value: true });
+
+    // assert
+    assert.strictEqual(button.option('visible'), true, 'Toolbar button is visible');
+});
+
+QUnit.test('editing popup option changing should be applied (T862799)', function(assert) {
+    const that = this;
+
+    const popupOptions = {
+        toolbarItems: [{
+            widget: 'dxButton'
+        }]
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    that.editRow(0);
+    that.clock.tick();
+    that.preparePopupHelpers();
+
+    // act
+    that.editingController.optionChanged({ name: 'editing', fullName: 'editing.popup', value: popupOptions });
+
+    // assert
+    assert.strictEqual(that.editPopupInstance.option('toolbarItems'), popupOptions.toolbarItems, 'popup options are applied');
+});
+
 QUnit.test('Cancel edit data when popup hide not after click on \'save\' or \'cancel\' button', function(assert) {
     const that = this;
 
@@ -16623,4 +16964,214 @@ QUnit.test('Adding row and editing another row when the onInitNewRow event is as
     // assert
     assert.ok($(this.rowsView.getRowElement(0)).hasClass('dx-edit-row dx-row-inserted'), 'new row');
     assert.notOk($(this.rowsView.getRowElement(3)).hasClass('dx-edit-row'), 'row isn\'t edited');
+});
+
+
+QUnit.module('Async validation', {
+    beforeEach: function() {
+        this.$element = () => $('#container');
+        this.gridContainer = $('#container > .dx-datagrid');
+
+        this.array = [
+            { name: 'Alex', age: 15, lastName: 'John', },
+            { name: 'Dan', age: 16, lastName: 'Skip' },
+            { name: 'Vadim', age: 17, lastName: 'Dog' }
+        ];
+        this.options = {
+            errorRowEnabled: true,
+            editing: {
+                mode: 'row',
+                allowUpdating: true,
+                allowAdding: true
+            },
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            columns: ['name', 'age', 'lastName'],
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: this.array,
+                paginate: true
+            }
+        };
+
+        this.$element = function() {
+            return renderer('.dx-datagrid');
+        };
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'columnFixing', 'rows', 'editing', 'masterDetail', 'gridView', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity', 'summary'], {
+            initViews: true
+        });
+
+        this.applyOptions = function(options) {
+            $.extend(true, this.options, options);
+            this.dataController.init();
+            this.columnsController.init();
+            this.editingController.init();
+            this.validatingController.init();
+        };
+
+        this.columnHeadersView.getColumnCount = function() {
+            return 3;
+        };
+
+        this.changeInputValue = function({ inputContainer, value }) {
+            const inputElement = getInputElements(inputContainer).first();
+            inputElement.val(value);
+            inputElement.trigger('change');
+        };
+
+    },
+    afterEach: function() {
+        this.dispose();
+    }
+}, () => {
+    QUnit.test('AsyncRule.validationCallback accepts extra parameters', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const validationCallback = sinon.spy(function() { return new Deferred().resolve().promise(); });
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            loadingTimeout: undefined,
+            editing: {
+                mode: 'form',
+                allowUpdating: true,
+            },
+            columns: [{
+                dataField: 'age',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: validationCallback
+                }]
+            }]
+        });
+
+        // act
+        this.editRow(0);
+
+        this.changeInputValue({
+            inputContainer: testElement,
+            value: ''
+        });
+
+        assert.equal(validationCallback.callCount, 1, 'valdiationCallback should be called once');
+
+        const params = validationCallback.getCall(0).args[0];
+
+        assert.ok(params.data, 'data should be passed');
+        assert.strictEqual(params.column.dataField, 'age', 'column.dataField === \'age\'');
+        assert.ok(params.column.validationRules, 'column.validationRules !== null');
+    });
+
+    QUnit.test('Form - It\'s impossible to save modified invalid data', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            editing: {
+                mode: 'form',
+                allowUpdating: true,
+            },
+            columns: [{
+                dataField: 'age',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = new Deferred();
+                        setTimeout(function() {
+                            d.reject();
+                        }, 10);
+                        return d.promise();
+                    }
+                }]
+            }]
+        });
+
+        // act
+        this.editRow(0);
+        const $formRow = rowsView.getRow(0);
+
+        this.changeInputValue({
+            inputContainer: testElement,
+            value: ''
+        });
+
+        this.saveEditData().done(() => {
+            assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+            assert.equal($formRow.find('.dx-invalid').length, 1, 'There is one invalid editor in first row');
+            done();
+        });
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+        assert.equal($formRow.find('.dx-validation-pending').length, 1, 'There is one pending editor in first row');
+    });
+
+    QUnit.test('Form - Only valid data is saved', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+        const done = assert.async();
+
+        rowsView.render(testElement);
+
+        this.applyOptions({
+            loadingTimeout: undefined,
+            editing: {
+                mode: 'form',
+                allowUpdating: true,
+            },
+            columns: [{
+                dataField: 'age',
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function(params) {
+                        const d = new Deferred();
+                        setTimeout(function() {
+                            params.value === 1 ? d.resolve(true) : d.reject();
+                        }, 10);
+                        return d.promise();
+                    }
+                }]
+            }]
+        });
+
+        // act
+        this.editRow(0);
+        const $formRow = rowsView.getRow(0);
+
+        this.changeInputValue({
+            inputContainer: testElement,
+            value: ''
+        });
+
+        this.saveEditData().done(() => {
+            assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+            assert.equal($formRow.find('.dx-invalid').length, 1, 'There is one invalid editor in first row');
+
+            this.changeInputValue({
+                inputContainer: testElement,
+                value: '1'
+            });
+            this.saveEditData().done(() => {
+                const $row = rowsView.getRow(0);
+                // asset
+                assert.equal(this.editingController._editRowIndex, -1, 'there is no editing row');
+                assert.ok($row.hasClass('dx-data-row'), 'The form was closed');
+
+                done();
+            });
+        });
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, 'first row is still editing');
+        assert.equal($formRow.find('.dx-validation-pending').length, 1, 'There is one pending editor in first row');
+    });
 });

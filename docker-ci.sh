@@ -6,12 +6,9 @@ trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
 export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
-export DOTNET_USE_POLLING_FILE_WATCHER=true
 
 function run_lint {
-    npm i npm-run-all \
-        eslint eslint-plugin-qunit eslint-plugin-spellcheck babel-eslint \
-        stylelint stylelint-config-standard
+    npm i
     npm run lint
 }
 
@@ -20,7 +17,6 @@ function run_ts {
     cp $target $target.current
 
     npm i
-    unlink package-lock.json
     npm update devextreme-internal-tools
     npm ls devextreme-internal-tools
 
@@ -136,6 +132,8 @@ function run_test {
 
                 if [ "$MOBILE_UA" == "ios9" ]; then
                     user_agent="Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1"
+                elif [ "$MOBILE_UA" == "android6" ]; then
+                    user_agent="Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Mobile Safari/537.36"
                 else
                     exit 1
                 fi
@@ -193,6 +191,8 @@ function run_test_functional {
 function run_test_scss {
     npm i
     npx gulp generate-scss
+    npm run build-themes
+    node build/gulp/scss/tests/identical.test.js
 }
 
 function start_runner_watchdog {

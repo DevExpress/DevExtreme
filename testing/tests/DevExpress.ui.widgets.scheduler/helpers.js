@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { extend } from 'core/utils/extend';
 import translator from 'animation/translator';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
@@ -157,15 +156,7 @@ export class SchedulerTestWrapper {
             },
             getPopupInstance: () => $('.dx-scheduler-appointment-popup.dx-widget').dxPopup('instance'),
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
-            hide: () => this.appointmentPopup.getPopup().find('.dx-closebutton.dx-button').trigger('dxclick'),
-            setInitialPopupSize: size => {
-                const _createPopupConfig = this.instance._appointmentPopup._createPopupConfig;
-                this.instance._appointmentPopup._createPopupConfig = () => {
-                    const config = _createPopupConfig.call(this.instance._appointmentPopup);
-                    return extend(config, size);
-                };
-            },
-            setPopupWidth: width => this.appointmentPopup.getPopupInstance().option('width', width),
+            setPopupHeight: height => this.appointmentPopup.getPopupInstance().option('height', height),
             getToolbarElementByLocation: location => {
                 const toolbarName = location === TOOLBAR_TOP_LOCATION ? 'title' : TOOLBAR_BOTTOM_LOCATION;
                 return this.appointmentPopup.getPopup().find(`.dx-toolbar.dx-widget.dx-popup-${toolbarName}`);
@@ -246,6 +237,22 @@ export class SchedulerTestWrapper {
             clickOnNextButton: () => {
                 this.navigator.getNavigator().find('.dx-scheduler-navigator-next').trigger('dxclick');
             }
+        },
+
+        this.viewSwitcher = {
+            getElement: () => $('.dx-dropdownmenu-popup-wrapper.dx-position-bottom'),
+            show: () => {
+                $('.dx-scheduler-view-switcher').trigger('dxclick');
+            },
+            click: (name) => {
+                this.viewSwitcher.getElement().find('.dx-list-item').filter((index, element) => {
+                    return $(element).find('.dx-dropdownmenu-item-text').text() === name;
+                }).trigger('dxclick');
+            },
+            getSelectedViewName: () => {
+                return this.viewSwitcher.getElement().find('.dx-list-item-selected .dx-dropdownmenu-item-text').text();
+            },
+            getLabel: () => $('.dx-scheduler-view-switcher-label')
         },
 
         this.header = {

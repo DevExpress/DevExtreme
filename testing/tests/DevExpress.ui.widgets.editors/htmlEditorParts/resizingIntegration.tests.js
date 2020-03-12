@@ -12,6 +12,7 @@ const RESIZABLE_HANDLER_CLASS = 'dx-resizable-handle-corner-bottom-right';
 
 const IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgZGT8DwABDQEDEkMQNQAAAABJRU5ErkJggg==';
 const IMAGE_SIZE = 100;
+const BORDER_PADDING_WIDTH = 2;
 
 module('Resizing integration', {
     beforeEach: function() {
@@ -135,4 +136,29 @@ module('Resizing integration', {
             .dragEnd();
     });
 
+    test('check frame position for list item with nested image', function(assert) {
+        this.options = {
+            value: `<ol><li><img src="${IMAGE}" width="${IMAGE_SIZE}" height="${IMAGE_SIZE}"></li></ol>`,
+            mediaResizing: {
+                enabled: true
+            }
+        };
+        this.createWidget();
+
+        const $image = this.$element.find('img');
+
+        $image.trigger(clickEvent);
+
+        const { left: frameLeft, top: frameTop } = this.$element
+            .find(`.${RESIZE_FRAME_CLASS}`)
+            .get(0)
+            .getBoundingClientRect();
+
+        const { left: imageLeft, top: imageTop } = $image
+            .get(0)
+            .getBoundingClientRect();
+
+        assert.strictEqual(frameLeft + BORDER_PADDING_WIDTH, imageLeft, 'Frame positioned correctly by the left');
+        assert.strictEqual(frameTop + BORDER_PADDING_WIDTH, imageTop, 'Frame positioned correctly by the top');
+    });
 });

@@ -8,9 +8,9 @@ import { Consts, getMainToolbarInstance, findMainToolbarItem, getToolbarIcon, fi
 
 const moduleConfig = {
     beforeEach: function() {
-        this.onCustomCommandExecuted = sinon.spy();
+        this.onCustomCommand = sinon.spy();
         this.$element = $('#diagram').dxDiagram({
-            onCustomCommandExecuted: this.onCustomCommandExecuted,
+            onCustomCommand: this.onCustomCommand,
             mainToolbar: {
                 visible: true
             }
@@ -78,10 +78,10 @@ QUnit.module('Main Toolbar', {
         findMainToolbarItem(this.$element, 'custom').trigger('dxclick');
         findMainToolbarItem(this.$element, 'sub menu').trigger('dxclick');
         findContextMenuItem(this.$element, 'custom2').trigger('dxclick');
-        assert.ok(this.onCustomCommandExecuted.called);
-        assert.equal(this.onCustomCommandExecuted.getCalls().length, 2);
-        assert.equal(this.onCustomCommandExecuted.getCall(0).args[0]['name'], 'custom');
-        assert.equal(this.onCustomCommandExecuted.getCall(1).args[0]['name'], 'custom2');
+        assert.ok(this.onCustomCommand.called);
+        assert.equal(this.onCustomCommand.getCalls().length, 2);
+        assert.equal(this.onCustomCommand.getCall(0).args[0]['name'], 'custom');
+        assert.equal(this.onCustomCommand.getCall(1).args[0]['name'], 'custom2');
     });
     test('selectBox should have items', function(assert) {
         assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontName).getState().value, 'Arial');
@@ -95,21 +95,21 @@ QUnit.module('Main Toolbar', {
         assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontName).getState().value, 'Arial Black');
     });
     test('selectboxes with icon items should be replaced with select buttons', function(assert) {
-        const $selectButtonTemplates = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-diagram-select-b').find('.dx-dropdowneditor-field-template-wrapper');
+        const $selectButtonTemplates = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-diagram-image-dropdown-item').find('.dx-dropdowneditor-field-template-wrapper');
         assert.ok($selectButtonTemplates.length > 0, 'select buttons are rendered');
         const selectButtonsCount = $selectButtonTemplates.length;
         assert.equal($selectButtonTemplates.find('.dx-diagram-i').length, selectButtonsCount, 'icons are rendered');
         assert.equal($selectButtonTemplates.find('.dx-textbox')[0].offsetWidth, 0, 'textbox is hidden');
     });
     test('colorboxes should be replaced with color buttons', function(assert) {
-        const $selectButtonTemplates = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-diagram-color-b').find('.dx-dropdowneditor-field-template-wrapper');
+        const $selectButtonTemplates = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-diagram-color-edit-item').find('.dx-dropdowneditor-field-template-wrapper');
         assert.ok($selectButtonTemplates.length > 0, 'color buttons are rendered');
         const selectButtonsCount = $selectButtonTemplates.length;
         assert.equal($selectButtonTemplates.find('.dx-diagram-i, .dx-icon').length, selectButtonsCount, 'icons are rendered');
         assert.equal($selectButtonTemplates.find('.dx-textbox')[0].offsetWidth, 0, 'textbox is hidden');
     });
     test('colorbuttons should show an active color', function(assert) {
-        const colorButton = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-diagram-color-b').first();
+        const colorButton = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-diagram-color-edit-item').first();
         assert.equal(getToolbarIcon(colorButton).css('borderBottomColor'), 'rgb(0, 0, 0)');
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontColor).execute('rgb(255, 0, 0)');
         assert.equal(getToolbarIcon(colorButton).css('borderBottomColor'), 'rgb(255, 0, 0)', 'button changed via command');
@@ -121,7 +121,7 @@ QUnit.module('Main Toolbar', {
         assert.equal(getToolbarIcon(colorButton).css('borderBottomColor'), 'rgb(0, 255, 0)', 'button changed via coloredit');
     });
     test('colorbutton should show dropdown on icon click', function(assert) {
-        const colorButton = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-diagram-color-b').first();
+        const colorButton = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-diagram-color-edit-item').first();
         const colorBox = colorButton.find('.dx-colorbox').dxColorBox('instance');
         getToolbarIcon(colorButton).trigger('dxclick');
         assert.ok(colorBox.option('opened'), true);

@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import browser from 'core/utils/browser';
-import devices from 'core/devices';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
 import messageLocalization from 'localization/message';
@@ -442,8 +441,6 @@ const moduleConfig = {
         });
 
         QUnit.test('Header - 2 column, column.width: auto', function(assert) {
-            const currentDevice = devices.current();
-            const isWinPhone = currentDevice.deviceType === 'phone' && currentDevice.platform === 'generic';
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -452,13 +449,7 @@ const moduleConfig = {
             }).dxDataGrid('instance');
 
             exportDataGrid(getOptions(this, dataGrid, null, true)).then(() => {
-                let expectedWidths = [3.71, 67.71, undefined];
-                if(browser.mozilla) {
-                    expectedWidths = [3.85, 67.57, undefined];
-                } else if(browser.msie && !isWinPhone) {
-                    expectedWidths = [3.77, 67.65, undefined];
-                }
-                helper.checkColumnWidths(expectedWidths, topLeft.column);
+                helper.checkColumnWidths([3.8, 67.6, undefined], topLeft.column, 0.2);
                 done();
             });
         });
@@ -6411,13 +6402,24 @@ const moduleConfig = {
     });
 });
 
-QUnit.module('_getFullOptions', () => {
+QUnit.module('_getFullOptions', moduleConfig, () => {
     QUnit.test('topLeftCell', function(assert) {
         assert.deepEqual(_getFullOptions({}).topLeftCell, { row: 1, column: 1 }, 'no member');
         assert.deepEqual(_getFullOptions({ topLeftCell: undefined }).topLeftCell, { row: 1, column: 1 }, 'undefined');
         assert.deepEqual(_getFullOptions({ topLeftCell: null }).topLeftCell, { row: 1, column: 1 }, 'null');
 
         assert.deepEqual(_getFullOptions({ topLeftCell: { row: 2, column: 3 } }).topLeftCell, { row: 2, column: 3 }, '{ row: 2, column: 3 }');
+        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'A1' }).topLeftCell, { row: 1, column: 1 }, 'A1');
+        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'D38' }).topLeftCell, { row: 38, column: 4 }, 'D38');
+        assert.deepEqual(_getFullOptions({ worksheet: this.worksheet, topLeftCell: 'AD8' }).topLeftCell, { row: 8, column: 30 }, 'AD8');
+
+        let errorMessage;
+        try {
+            _getFullOptions({ worksheet: this.worksheet, topLeftCell: 'AA' });
+        } catch(e) {
+            errorMessage = e.message;
+        }
+        assert.strictEqual(errorMessage, 'Invalid Address: AA', 'Exception was thrown');
     });
 
     QUnit.test('keepColumnWidths', function(assert) {

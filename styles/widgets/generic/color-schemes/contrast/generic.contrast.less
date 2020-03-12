@@ -11,7 +11,7 @@
 * @type color
 */
 @base-bg: #000;
-@base-inverted-bg: #fff - @base-bg;
+@base-inverted-bg: difference(#fff, @base-bg);
 
 @base-border-color: #fff;
 @base-border-radius: 4px;
@@ -34,8 +34,8 @@
 @base-text-color: #fff;
 @base-icon-color: #fff;
 
-@base-inverted-text-color: #fff - @base-text-color;
-@base-inverted-icon-color: #fff - @base-text-color;
+@base-inverted-text-color: difference(#fff, @base-text-color);
+@base-inverted-icon-color: difference(#fff, @base-text-color);
 
 /**
 * @name 30. Link color
@@ -60,6 +60,13 @@
 */
 @base-invalid-faded-border-color: @base-invalid-color;
 
+/**
+* @name 20. Label color
+* @type color
+*/
+@base-label-color: @base-text-color;
+@base-dropdown-shadow-color: @base-shadow-color;
+
 // Validation
 
 @VALIDATION_MESSAGE_COLOR: @base-text-color;
@@ -68,14 +75,6 @@
 @VALIDATION_SUMMARY_COLOR: @base-invalid-color;
 
 @validation-overlay-border-radius: @base-border-radius;
-
-/**
-* @name 20. Label color
-* @type color
-*/
-@base-label-color: @base-text-color;
-
-@base-dropdown-shadow-color: @base-shadow-color;
 
 // Badges
 
@@ -105,6 +104,7 @@
 */
 @texteditor-bg: @base-bg;
 @texteditor-underlined-bg: transparent;
+@texteditor-color: @base-text-color;
 
 /**
 * @name 15. Filled editor background color
@@ -119,8 +119,6 @@
 @texteditor-focused-border-color: @base-focus-color;
 @texteditor-hover-bg: @base-bg;
 @texteditor-hover-border-color: @base-border-color;
-
-@texteditor-color: @base-text-color;
 
 @texteditor-placeholder-color: @base-text-color;
 
@@ -441,7 +439,7 @@
 @gallery-indicator-focused-bg: @base-inverted-bg;
 
 @gallery-indicator-item-border-color: @base-border-color;
-@gallery-indicator-selected-border-color: #fff - @base-border-color;
+@gallery-indicator-selected-border-color: difference(#fff, @base-border-color);
 
 
 @gallery-navbutton-degradation-bg: @base-inverted-bg;
@@ -474,7 +472,7 @@
 @htmleditor-variable-bg: fade(@base-accent, 15%);
 @htmleditor-resize-frame-border-color: @base-accent;
 @htmleditor-resize-handle-bg: @base-accent;
-@htmleditor-mention-bg: #fff - @base-bg;
+@htmleditor-mention-bg: difference(#fff, @base-bg);
 @htmleditor-mention-color: @base-inverted-text-color;
 
 // List
@@ -673,7 +671,7 @@
 * @name 30. Tag background color
 * @type color
 */
-@tagbox-tag-bg: #fff - @base-bg;
+@tagbox-tag-bg: difference(#fff, @base-bg);
 
 /**
 * @name 40. Tag text color
@@ -701,7 +699,7 @@
 * @name 10. Selected tab background color
 * @type color
 */
-@navbar-tab-selected-bg: #fff - @base-bg;
+@navbar-tab-selected-bg: difference(#fff, @base-bg);
 @navbar-tab-focused-border-color: @base-focus-color;
 
 @navbar-tab-bg: @base-bg;
@@ -820,7 +818,7 @@
 @slider-range-bg: @base-accent;
 @slider-range-border-color: @slider-range-bg;
 @slider-handle-bg: @base-inverted-bg;
-@slider-handle-border-color: #fff - @base-border-color;
+@slider-handle-border-color: difference(#fff, @base-border-color);
 @slider-handle-active-bg: @base-inverted-bg;
 @slider-handle-hover-bg: @slider-range-bg;
 @slider-handle-focused-bg: @slider-handle-hover-bg;
@@ -1167,7 +1165,7 @@
 @SCHEDULER_APPOINTMENT_BASE_COLOR: @base-accent;
 @SCHEDULER_APPOINTMENT_TEXT_COLOR: @base-text-color;
 @SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR: @base-inverted-text-color;
-@scheduler-appointment-focus-color: #fff - @base-text-color;
+@scheduler-appointment-focus-color: difference(#fff, @base-text-color);
 @SCHEDULER_APPOINTMENT_START_COLOR: @base-inverted-bg;
 
 @SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR: lighten(@base-accent, 5%);
@@ -1183,7 +1181,7 @@
 @scheduler-popup-title-bg: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR;
 
 @SCHEDULER_WORKSPACE_ACTIVE_CELL_COLOR: @SCHEDULER_ACCENT_BORDER_COLOR;
-@SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR: #fff - @base-text-color;
+@SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR: difference(#fff, @base-text-color);
 
 @scheduler-group-header-color: @base-text-color;
 
@@ -1347,12 +1345,14 @@
 @tooltip-shadow-color: @base-shadow-color;
 @tooltip-border-radius: @base-border-radius;
 
+// NumberBox
+
 /**
 * @name 10. Active spin buttons color
 * @type color
 */
 @numberbox-spin-active-bg: @base-inverted-bg;
-@numberbox-spin-active-color: #fff - @base-border-color;
+@numberbox-spin-active-color: difference(#fff, @base-border-color);
 
 /**
 * @name 20. Hovered spin buttons border color
@@ -1529,6 +1529,8 @@
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-inverted-text-color;
 @filemanager-file-item-select-bg: @base-inverted-bg;
+@filemanager-file-item-hover-bg: @base-hover-color;
+@filemanager-file-item-focused-bg: @base-accent;
 @filemanager-item-focused-color: @base-text-color;
 @filemanager-progressbox-shadow-color: @base-shadow-color;
 

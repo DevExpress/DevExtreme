@@ -275,7 +275,9 @@ const numberLocalization = dependencyInjector({
         const numberConfig = this._parseNumberFormatString(format.type);
 
         if(!numberConfig) {
-            return this.convertDigits(ldmlNumber.getFormatter(format.type, this._getSeparators())(value));
+            const formatterConfig = this._getSeparators();
+            formatterConfig.unlimitedIntegerDigits = format.unlimitedIntegerDigits;
+            return this.convertDigits(ldmlNumber.getFormatter(format.type, formatterConfig)(value));
         }
 
         return this._formatNumber(value, numberConfig, format);

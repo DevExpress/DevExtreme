@@ -4,6 +4,7 @@ import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
 import { getImageContainer } from '../../core/utils/icon';
 
+import CustomStore from '../../data/custom_store';
 import Widget from '../widget/ui.widget';
 
 const FILE_MANAGER_FILES_VIEW_CLASS = 'dx-filemanager-files-view';
@@ -64,7 +65,15 @@ class FileManagerItemListBase extends Widget {
 
     _getItems() {
         const itemsGetter = this.option('getItems');
-        return itemsGetter ? itemsGetter() : [];
+        const itemsResult = itemsGetter ? itemsGetter() : [];
+
+        return itemsResult.done(itemInfos => {
+            this._itemCount = itemInfos.length;
+
+            const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
+            this._hasParentDirectoryItem = !!parentDirectoryItem;
+            this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
+        });
     }
 
     _raiseOnError(error) {
@@ -77,6 +86,24 @@ class FileManagerItemListBase extends Widget {
 
     _raiseSelectedItemOpened(fileItemInfo) {
         this._actions.onSelectedItemOpened({ fileItemInfo });
+    }
+
+    _tryRaiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
+        const parentDirectoryItem = this._findParentDirectoryItem(this.getSelectedItems());
+        if(parentDirectoryItem) {
+            this._deselectItem(parentDirectoryItem);
+        }
+
+        let raiseEvent = !this._hasParentDirectoryItem;
+        raiseEvent = raiseEvent || this._hasValidKeys(currentSelectedItemKeys) || this._hasValidKeys(currentDeselectedItemKeys);
+
+        if(raiseEvent) {
+            selectedItems = this._filterOutParentDirectory(selectedItems);
+            selectedItemKeys = this._filterOutParentDirectoryKey(selectedItemKeys, true);
+            currentSelectedItemKeys = this._filterOutParentDirectoryKey(currentSelectedItemKeys, true);
+            currentDeselectedItemKeys = this._filterOutParentDirectoryKey(currentDeselectedItemKeys, true);
+            this._raiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
+        }
     }
 
     _getItemThumbnail(fileInfo) {
@@ -117,8 +144,76 @@ class FileManagerItemListBase extends Widget {
         return this.option('contextMenu');
     }
 
-    refresh() {
+    _findParentDirectoryItem(itemInfos) {
+        for(let i = 0; i < itemInfos.length; i++) {
+            const itemInfo = itemInfos[i];
+            if(this._isParentDirectoryItem(itemInfo)) {
+                return itemInfo;
+            }
+        }
+        return null;
+    }
 
+    _getFileItemsForContextMenu(fileItem) {
+        const result = this.getSelectedItems();
+
+        if(this._isParentDirectoryItem(fileItem)) {
+            result.push(fileItem);
+        }
+
+        return result;
+    }
+
+    _isParentDirectoryItem(itemInfo) {
+        return itemInfo.fileItem.isParentFolder;
+    }
+
+    _hasValidKeys(keys) {
+        return keys.length > 1 || keys.length === 1 && keys[0] !== this._parentDirectoryItemKey;
+    }
+
+    _filterOutParentDirectory(array, createNewArray) {
+        return this._filterOutItemByPredicate(array, item => item.key === this._parentDirectoryItemKey, createNewArray);
+    }
+
+    _filterOutParentDirectoryKey(array, createNewArray) {
+        return this._filterOutItemByPredicate(array, key => key === this._parentDirectoryItemKey, createNewArray);
+    }
+
+    _filterOutItemByPredicate(array, predicate, createNewArray) {
+        let result = array;
+        let index = -1;
+
+        for(let i = 0; i < array.length; i++) {
+            if(predicate(array[i])) {
+                index = i;
+                break;
+            }
+        }
+
+        if(index !== -1) {
+            if(createNewArray) {
+                result = [...array];
+            }
+            result.splice(index, 1);
+        }
+
+        return result;
+    }
+
+    _isMultipleSelectionMode() {
+        return this.option('selectionMode') === 'multiple';
+    }
+
+    _deselectItem(item) {}
+
+    _createDataSource() {
+        return {
+            store: new CustomStore({
+                key: 'fileItem.key',
+                load: this._getItems.bind(this)
+            })
+        };
     }
 
     getSelectedItems() {

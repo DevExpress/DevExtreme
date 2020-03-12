@@ -41,7 +41,9 @@ module.exports = {
 
                 addCssClassesToCellContent(that, $cell, options.column, $cellContent);
                 const showColumnLines = that.option('showColumnLines');
-                return $cellContent[(showColumnLines || options.column.alignment === 'right') ? 'appendTo' : 'prependTo']($cell);
+                const contentAlignment = that.getController('columns').getHeaderContentAlignment(options.column.alignment);
+
+                return $cellContent[(showColumnLines || contentAlignment === 'right') ? 'appendTo' : 'prependTo']($cell);
             };
 
             function addCssClassesToCellContent(that, $cell, column, $cellContent) {
@@ -400,10 +402,11 @@ module.exports = {
 
                 allowDragging: function(column, sourceLocation, draggingPanels) {
                     let i;
+                    let draggableColumnCount = 0;
+
                     const rowIndex = column && this._columnsController.getRowIndex(column.index);
                     const columns = this.getColumns(rowIndex === 0 ? 0 : null);
-                    let draggableColumnCount = 0;
-                    let draggingPanel;
+                    const canHideColumn = column?.allowHiding && columns.length > 1;
                     const allowDrag = function(column) {
                         return column.allowReordering || column.allowGrouping || column.allowHiding;
                     };
@@ -414,14 +417,15 @@ module.exports = {
                         }
                     }
 
-                    if(draggableColumnCount <= 1) {
+                    if(draggableColumnCount <= 1 && !canHideColumn) {
                         return false;
                     } else if(!draggingPanels) {
                         return (this.option('allowColumnReordering') || this._columnsController.isColumnOptionUsed('allowReordering')) && column && column.allowReordering;
                     }
 
                     for(i = 0; i < draggingPanels.length; i++) {
-                        draggingPanel = draggingPanels[i];
+                        const draggingPanel = draggingPanels[i];
+
                         if(draggingPanel && draggingPanel.allowDragging(column, sourceLocation)) {
                             return true;
                         }

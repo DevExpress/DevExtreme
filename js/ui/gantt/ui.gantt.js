@@ -4,7 +4,7 @@ import Widget from '../widget/ui.widget';
 import registerComponent from '../../core/component_registrator';
 import dataCoreUtils from '../../core/utils/data';
 import { GanttView } from './ui.gantt.view';
-import GanttContextMenuBar from './ui.gantt.contextmenu';
+import { GanttToolbar, GanttContextMenuBar } from './ui.gantt.bars';
 import dxTreeList from '../tree_list';
 import { extend } from '../../core/utils/extend';
 import { hasWindow } from '../../core/utils/window';
@@ -17,6 +17,8 @@ const GANTT_CLASS = 'dx-gantt';
 const GANTT_VIEW_CLASS = 'dx-gantt-view';
 const GANTT_COLLAPSABLE_ROW = 'dx-gantt-collapsable-row';
 const GANTT_TREE_LIST_WRAPPER = 'dx-gantt-treelist-wrapper';
+const GANTT_TOOLBAR_WRAPPER = 'dx-gantt-toolbar-wrapper';
+const GANTT_MAIN_WRAPPER = 'dx-gantt-main-wrapper';
 
 const GANTT_TASKS = 'tasks';
 const GANTT_DEPENDENCIES = 'dependencies';
@@ -30,16 +32,25 @@ class Gantt extends Widget {
         super._initMarkup();
         this.$element().addClass(GANTT_CLASS);
 
+        this._$toolbarWrapper = $('<div>')
+            .addClass(GANTT_TOOLBAR_WRAPPER)
+            .appendTo(this.$element());
+        this._$toolbar = $('<div>')
+            .appendTo(this._$toolbarWrapper);
+
+        this._$mainWrapper = $('<div>')
+            .addClass(GANTT_MAIN_WRAPPER)
+            .appendTo(this.$element());
         this._$treeListWrapper = $('<div>')
             .addClass(GANTT_TREE_LIST_WRAPPER)
-            .appendTo(this.$element());
+            .appendTo(this._$mainWrapper);
         this._$treeList = $('<div>')
             .appendTo(this._$treeListWrapper);
         this._$splitter = $('<div>')
-            .appendTo(this.$element());
+            .appendTo(this._$mainWrapper);
         this._$ganttView = $('<div>')
             .addClass(GANTT_VIEW_CLASS)
-            .appendTo(this.$element());
+            .appendTo(this._$mainWrapper);
         this._$dialog = $('<div>')
             .appendTo(this.$element());
         this._$loadPanel = $('<div>')
@@ -54,9 +65,9 @@ class Gantt extends Widget {
     }
 
     _renderContent() {
+        this._renderBars();
         this._renderTreeList();
         this._renderSplitter();
-        this._renderBars();
     }
     _renderTreeList() {
         const { keyExpr, parentIdExpr } = this.option(GANTT_TASKS);
@@ -66,7 +77,7 @@ class Gantt extends Widget {
             parentIdExpr: parentIdExpr,
             columns: this.option('columns'),
             columnResizingMode: 'nextColumn',
-            height: '100%',
+            height: this._$treeList.height() ? this._$treeList.height() : '100%',
             width: this.option('taskListWidth'),
             selection: { mode: this._getSelectionMode(this.option('allowSelection')) },
             selectedRowKeys: this._getArrayFromOneElement(this.option('selectedRowKey')),
@@ -94,8 +105,12 @@ class Gantt extends Widget {
         this._splitter.option('initialLeftPanelWidth', this.option('taskListWidth'));
     }
     _renderBars() {
+        this._bars = [];
+        this._toolbar = new GanttToolbar(this._$toolbar, this);
+        this._updateToolbarContent();
+        this._bars.push(this._toolbar);
         this._contextMenuBar = new GanttContextMenuBar(this._$contextMenu, this);
-        this._bars = [this._contextMenuBar];
+        this._bars.push(this._contextMenuBar);
     }
 
     _initGanttView() {
@@ -118,8 +133,9 @@ class Gantt extends Widget {
             showRowLines: this.option('showRowLines'),
             scaleType: this.option('scaleType'),
             editing: this.option('editing'),
-            timeMarkers: this.option('timeMarkers'),
+            stripLines: this.option('stripLines'),
             bars: this._bars,
+            mainElement: this.$element(),
             onSelectionChanged: this._onGanttViewSelectionChanged.bind(this),
             onScroll: this._onGanttViewScroll.bind(this),
             onDialogShowing: this._showDialog.bind(this),
@@ -408,6 +424,24 @@ class Gantt extends Widget {
         return element === undefined || element === null ? [] : [element];
     }
 
+    _getToolbarItems() {
+        const items = this.option('toolbar.items');
+        return items ? items : [];
+    }
+    _updateToolbarContent() {
+        const items = this._getToolbarItems();
+        if(items.length) {
+            this._$toolbarWrapper.show();
+        } else {
+            this._$toolbarWrapper.hide();
+        }
+        this._toolbar && this._toolbar.createItems(items);
+        this._updateBarItemsState();
+    }
+    _updateBarItemsState() {
+        this._ganttView && this._ganttView.updateBarItemsState();
+    }
+
     _showDialog(e) {
         if(!this._dialogInstance) {
             this._dialogInstance = new GanttDialog(this, this._$dialog);
@@ -431,7 +465,7 @@ class Gantt extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
-            * @name dxGanttTimeMarker
+            * @name dxGanttStripLine
             * @type object
             */
 
@@ -570,7 +604,7 @@ class Gantt extends Widget {
             onSelectionChanged: null,
             allowSelection: true,
             showRowLines: true,
-            timeMarkers: undefined,
+            stripLines: undefined,
             scaleType: 'auto',
             editing: {
                 /**
@@ -633,7 +667,8 @@ class Gantt extends Widget {
                 * @default true
                 */
                 allowResourceUpdating: true
-            }
+            },
+            toolbar: null
         });
     }
 
@@ -677,14 +712,17 @@ class Gantt extends Widget {
                 this._setTreeListOption('showRowLines', args.value);
                 this._setGanttViewOption('showRowLines', args.value);
                 break;
-            case 'timeMarkers':
-                this._setGanttViewOption('timeMarkers', args.value);
+            case 'stripLines':
+                this._setGanttViewOption('stripLines', args.value);
                 break;
             case 'scaleType':
                 this._setGanttViewOption('scaleType', args.value);
                 break;
             case 'editing':
                 this._setGanttViewOption('editing', this.option(args.name));
+                break;
+            case 'toolbar':
+                this._updateToolbarContent();
                 break;
             default:
                 super._optionChanged(args);

@@ -3,6 +3,11 @@
 
 @GENERIC_SCHEDULER_RECURRENCE_REPEAT_END_CONTAINER_PADDING_TOP: 10px;
 
+@BUTTON_CONTENT_PADDING: 8px;
+
+@SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING: 7px;
+@SCHEDULER_RECURRENCE_BORDER_COLOR: @base-border-color;
+
 .dx-recurrence-numberbox-interval,
 .dx-recurrence-numberbox-day-of-month,
 .dx-recurrence-selectbox-month-of-year,
@@ -16,20 +21,28 @@
     }
 }
 
+.dx-recurrence-button-group {
+    width: 100%;
+
+    .dx-button-content {
+        padding: @BUTTON_CONTENT_PADDING;
+    }
+
+    .dx-buttongroup-wrapper > div {
+        flex: 1;
+    }
+}
+
+
 .dx-recurrence-numberbox-interval,
 .dx-recurrence-numberbox-day-of-month,
 .dx-recurrence-numberbox-repeat-count {
     width: @RECURRENCE_EDITOR_NUMBERBOX_WIDTH !important; // stylelint-disable-line declaration-no-important
 }
 
-.dx-recurrence-repeat-end-wrapper {
-    padding: 0 5px;
-}
-
 .dx-recurrence-radiogroup-repeat-type-label,
 .dx-recurrence-repeat-end-label {
     display: inline-block;
-    padding: 0 5px;
     vertical-align: top;
 }
 
@@ -43,11 +56,6 @@
 .dx-recurrence-selectbox-month-of-year {
     width: @RECURRENCE_EDITOR_SELECTBOX_WIDTH !important; // stylelint-disable-line declaration-no-important
     top: 0 !important; // stylelint-disable-line declaration-no-important
-}
-
-.dx-recurrence-checkbox-day-of-week {
-    position: relative !important; // stylelint-disable-line declaration-no-important
-    padding-right: 10px;
 }
 
 .dx-recurrence-radiogroup-repeat-type {
@@ -80,6 +88,7 @@
     .dx-field-label {
         width: auto;
         float: none;
+        padding: 0;
     }
 }
 
@@ -161,11 +170,6 @@
     }
 
     &.dx-label-h-align {
-        .dx-recurrence-repeat-on-week {
-            padding-top: @SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING;
-            padding-bottom: @SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING;
-        }
-
         .dx-recurrence-repeat-end-container.dx-field {
             padding-top: @GENERIC_SCHEDULER_RECURRENCE_REPEAT_END_CONTAINER_PADDING_TOP;
         }

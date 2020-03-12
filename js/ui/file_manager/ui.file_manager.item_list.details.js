@@ -3,7 +3,6 @@ import typeUtils from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
 import DataGrid from '../data_grid/ui.data_grid';
-import CustomStore from '../../data/custom_store';
 
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
@@ -226,28 +225,17 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _onFilesViewSelectionChanged({ selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {
-        const parentDirectoryItem = this._findParentDirectoryItem(selectedRowsData);
-        if(parentDirectoryItem) {
-            this._filesView.deselectRows([ parentDirectoryItem.fileItem.key ]);
-        }
-
         this._selectAllCheckBoxUpdating = true;
         this._selectAllCheckBox.option('value', this._isAllItemsSelected());
         this._selectAllCheckBoxUpdating = false;
 
-        let raiseEvent = !this._hasParentDirectoryItem;
-        raiseEvent = raiseEvent || this._hasValidKeys(currentSelectedRowKeys) || this._hasValidKeys(currentDeselectedRowKeys);
-
-        if(raiseEvent) {
-            let selectedItems = selectedRowsData.map(itemInfo => itemInfo.fileItem);
-            selectedItems = this._filterOutParentDirectory(selectedItems);
-
-            const selectedItemKeys = this._filterOutParentDirectoryKey(selectedRowKeys, true);
-            const currentSelectedItemKeys = this._filterOutParentDirectoryKey(currentSelectedRowKeys, true);
-            const currentDeselectedItemKeys = this._filterOutParentDirectoryKey(currentDeselectedRowKeys, true);
-
-            this._raiseSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
-        }
+        const selectedItems = selectedRowsData.map(itemInfo => itemInfo.fileItem);
+        this._tryRaiseSelectionChanged({
+            selectedItems,
+            selectedItemKeys: selectedRowKeys,
+            currentSelectedItemKeys: currentSelectedRowKeys,
+            currentDeselectedItemKeys: currentDeselectedRowKeys
+        });
     }
 
     _onFocusedRowChanged({ row }) {
@@ -296,6 +284,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         selectItemFunc.call(this, fileItemInfo);
     }
 
+    _deselectItem(item) {
+        this._filesView.deselectRows([ item.fileItem.key ]);
+    }
+
     _selectItemSingleSelection(fileItemInfo) {
         if(!this._focusedItem || this._focusedItem.fileItem.key !== fileItemInfo.fileItem.key) {
             const oldFocusedItem = this._focusedItem;
@@ -323,89 +315,13 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
-    _getItemsInternal() {
-        return this._getItems().done(itemInfos => {
-            this._itemCount = itemInfos.length;
-
-            const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
-            this._hasParentDirectoryItem = !!parentDirectoryItem;
-            this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
-        });
-    }
-
-    _findParentDirectoryItem(itemInfos) {
-        for(let i = 0; i < itemInfos.length; i++) {
-            const itemInfo = itemInfos[i];
-            if(this._isParentDirectoryItem(itemInfo)) {
-                return itemInfo;
-            }
-        }
-        return null;
-    }
-
-    _getFileItemsForContextMenu(fileItem) {
-        const result = this.getSelectedItems();
-
-        if(this._isParentDirectoryItem(fileItem)) {
-            result.push(fileItem);
-        }
-
-        return result;
-    }
-
-    _isParentDirectoryItem(itemInfo) {
-        return itemInfo.fileItem.isParentFolder;
-    }
-
-    _hasValidKeys(keys) {
-        return keys.length > 1 || keys.length === 1 && keys[0] !== this._parentDirectoryItemKey;
-    }
-
-    _filterOutParentDirectory(array, createNewArray) {
-        return this._filterOutItemByPredicate(array, item => item.key === this._parentDirectoryItemKey, createNewArray);
-    }
-
-    _filterOutParentDirectoryKey(array, createNewArray) {
-        return this._filterOutItemByPredicate(array, key => key === this._parentDirectoryItemKey, createNewArray);
-    }
-
-    _filterOutItemByPredicate(array, predicate, createNewArray) {
-        let result = array;
-        let index = -1;
-
-        for(let i = 0; i < array.length; i++) {
-            if(predicate(array[i])) {
-                index = i;
-                break;
-            }
-        }
-
-        if(index !== -1) {
-            if(createNewArray) {
-                result = [...array];
-            }
-            result.splice(index, 1);
-        }
-
-        return result;
-    }
-
-    _isMultipleSelectionMode() {
-        return this.option('selectionMode') === 'multiple';
-    }
-
     clearSelection() {
         this._filesView.clearSelection();
     }
 
     refresh() {
         this.clearSelection();
-        this._filesView.option('dataSource', {
-            'store': new CustomStore({
-                key: 'fileItem.key',
-                load: this._getItemsInternal.bind(this)
-            })
-        });
+        this._filesView.option('dataSource', this._createDataSource());
     }
 
     getSelectedItems() {

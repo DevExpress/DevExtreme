@@ -4,6 +4,7 @@ import Toolbar from '../toolbar';
 import ContextMenu from '../context_menu';
 import DiagramBar from './diagram.bar';
 import { extend } from '../../core/utils/extend';
+import { hasWindow } from '../../core/utils/window';
 
 import DiagramPanel from './ui.diagram.panel';
 import DiagramMenuHelper from './ui.diagram.menu_helper';
@@ -16,6 +17,7 @@ const ACTIVE_FORMAT_CLASS = 'dx-format-active';
 const DIAGRAM_TOOLBAR_CLASS = 'dx-diagram-toolbar';
 const DIAGRAM_TOOLBAR_SEPARATOR_CLASS = 'dx-diagram-toolbar-separator';
 const DIAGRAM_TOOLBAR_MENU_SEPARATOR_CLASS = 'dx-diagram-toolbar-menu-separator';
+const DIAGRAM_MOBILE_TOOLBAR_COLOR_BOX_OPENED_CLASS = 'dx-diagram-mobile-toolbar-color-box-opened';
 
 class DiagramToolbar extends DiagramPanel {
     _init() {
@@ -25,7 +27,7 @@ class DiagramToolbar extends DiagramPanel {
         this._valueConverters = {};
         this.bar = new DiagramToolbarBar(this);
 
-        this._createOnCustomCommandExecuted();
+        this._createOnCustomCommand();
         this._createOnSubMenuVisibilityChangingAction();
 
         super._init();
@@ -33,12 +35,22 @@ class DiagramToolbar extends DiagramPanel {
     _initMarkup() {
         super._initMarkup();
 
+        const isServerSide = !hasWindow();
+        if(!this.option('skipAdjustSize') && !isServerSide) {
+            this.$element().width('');
+        }
+
         this._commands = this._getCommands();
         this._itemHelpers = {};
         this._contextMenus = {};
 
         const $toolbar = this._createMainElement();
         this._renderToolbar($toolbar);
+
+        if(!this.option('skipAdjustSize') && !isServerSide) {
+            const $toolbarContent = this.$element().find('.dx-toolbar-before');
+            this.$element().width($toolbarContent.width());
+        }
     }
 
     _createMainElement() {
@@ -184,6 +196,18 @@ class DiagramToolbar extends DiagramPanel {
                 }
             });
         }
+        options = extend(true, options, {
+            options: {
+                onOpened: () => {
+                    if(this.option('isMobileView')) {
+                        $('body').addClass(DIAGRAM_MOBILE_TOOLBAR_COLOR_BOX_OPENED_CLASS);
+                    }
+                },
+                onClosed: () => {
+                    $('body').removeClass(DIAGRAM_MOBILE_TOOLBAR_COLOR_BOX_OPENED_CLASS);
+                },
+            }
+        });
         return options;
     }
     _createTextEditorItemOptions(hint) {
@@ -237,6 +261,7 @@ class DiagramToolbar extends DiagramPanel {
                 target: widget.$element(),
                 cssClass: DiagramMenuHelper.getContextMenuCssClass(),
                 showEvent: widget.NAME === 'dxTextBox' ? '' : 'dxclick',
+                focusStateEnabled: false,
                 position: { at: 'left bottom' },
                 itemTemplate: function(itemData, itemIndex, itemElement) {
                     DiagramMenuHelper.getContextMenuItemTemplate(this, itemData, itemIndex, itemElement);
@@ -293,11 +318,11 @@ class DiagramToolbar extends DiagramPanel {
             this.bar.raiseBarCommandExecuted(command, value);
         }
         if(typeof command === 'string') {
-            this._onCustomCommandExecutedAction({ command });
+            this._onCustomCommandAction({ command });
         }
     }
-    _createOnCustomCommandExecuted() {
-        this._onCustomCommandExecutedAction = this._createActionByOption('onCustomCommandExecuted');
+    _createOnCustomCommand() {
+        this._onCustomCommandAction = this._createActionByOption('onCustomCommand');
     }
 
     _setItemEnabled(command, enabled) {
@@ -353,11 +378,15 @@ class DiagramToolbar extends DiagramPanel {
 
     _optionChanged(args) {
         switch(args.name) {
+            case 'isMobileView':
+                $('body').removeClass(DIAGRAM_MOBILE_TOOLBAR_COLOR_BOX_OPENED_CLASS);
+                this._invalidate();
+                break;
             case 'onSubMenuVisibilityChanging':
                 this._createOnSubMenuVisibilityChangingAction();
                 break;
-            case 'onCustomCommandExecuted':
-                this._createOnCustomCommandExecuted();
+            case 'onCustomCommand':
+                this._createOnCustomCommand();
                 break;
             case 'commands':
                 this._invalidate();
@@ -370,14 +399,16 @@ class DiagramToolbar extends DiagramPanel {
     }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            'export': {
+            isMobileView: false,
+            export: {
                 fileName: 'Diagram',
                 proxyUrl: undefined
             },
-            'locateInMenu': 'auto',
-            'buttonStylingMode': 'text',
-            'buttonType': 'normal',
-            'editorStylingMode': 'filled'
+            locateInMenu: 'auto',
+            buttonStylingMode: 'text',
+            buttonType: 'normal',
+            editorStylingMode: 'filled',
+            skipAdjustSize: false
         });
     }
 

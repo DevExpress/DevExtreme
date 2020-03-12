@@ -4,6 +4,7 @@ import Widget from "./internal/widget";
 const CLASS = {
     headers: 'headers',
     headerRow: 'dx-header-row',
+    headerPanel: 'header-panel',
     filterRow: 'filter-row',
     filterMenu: 'dx-filter-menu',
     dataRow: 'dx-data-row',
@@ -30,10 +31,17 @@ const CLASS = {
     textEditor: 'dx-texteditor',
     textEditorInput: 'dx-texteditor-input',
     invalid: 'dx-invalid',
+    invalidCell: 'dx-datagrid-invalid',
+    cellModified: 'dx-cell-modified',
     editFormRow: 'edit-form',
     button: 'dx-button',
     formButtonsContainer: 'form-buttons-container',
-    selectCheckBox: 'dx-select-checkbox'
+    selectCheckBox: 'dx-select-checkbox',
+    pendingIndicator: 'dx-pending-indicator',
+    addRowButton: 'addrow-button',
+    insertedRow: 'dx-row-inserted',
+    editedRow: 'dx-edit-row',
+    saveButton: 'save-button'
 };
 
 const addWidgetPrefix = function(widgetName: string, className: string) {
@@ -49,6 +57,24 @@ class DxElement {
         this.element = element;
         this.hasFocusedState = this.element.hasClass(CLASS.focusedState);
         this.hasHiddenFocusState = this.element.hasClass(CLASS.hiddenFocusedState);
+    }
+}
+
+
+class HeaderPanel extends DxElement {
+    widgetName: string;
+
+    constructor(element: Selector, widgetName: string) {
+        super(element);
+        this.widgetName = widgetName;
+    }
+
+    getAddRowButton(): Selector {
+        return this.element.find(`.${addWidgetPrefix(this.widgetName, CLASS.addRowButton)}`);
+    }
+
+    getSaveButton(): Selector {
+        return this.element.find(`.${addWidgetPrefix(this.widgetName, CLASS.saveButton)}`);
     }
 }
 
@@ -117,11 +143,21 @@ class DataCell extends DxElement {
     element: Selector;
     isEditCell: Promise<boolean>;
     isFocused: Promise<boolean>;
+    isValidationPending: Promise<boolean>;
+    isInvalid: Promise<boolean>;
+    isModified: Promise<boolean>;
 
     constructor(dataRow: Selector, index: number) {
         super(dataRow.find(`td:nth-child(${++index})`));
         this.isEditCell = this.element.hasClass(CLASS.editCell);
         this.isFocused = this.element.hasClass(CLASS.focused);
+        this.isValidationPending = this.element.find(`div.${CLASS.pendingIndicator}`).exists;
+        this.isInvalid = this.element.hasClass(CLASS.invalidCell);
+        this.isModified = this.element.hasClass(CLASS.cellModified);
+    }
+
+    getEditor(): DxElement {
+        return new DxElement(this.element.find(`.${CLASS.editorInput}`));
     }
 }
 
@@ -139,12 +175,16 @@ class DataRow extends DxElement {
     isRemoved: Promise<boolean>;
     isFocusedRow: Promise<boolean>;
     isSelected: Promise<boolean>;
+    isInserted: Promise<boolean>;
+    isEdited: Promise<boolean>;
 
     constructor(element: Selector) {
         super(element);
         this.isRemoved = this.element.hasClass(CLASS.rowRemoved);
         this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
         this.isSelected = this.element.hasClass(CLASS.selection);
+        this.isInserted = this.element.hasClass(CLASS.insertedRow);
+        this.isEdited = this.element.hasClass(CLASS.editedRow);
     }
 
     getDataCell(index: number): DataCell {
@@ -328,6 +368,10 @@ export default class DataGrid extends Widget {
         return new EditForm(element, buttons);
     }
 
+    getHeaderPanel(): HeaderPanel {
+        return new HeaderPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.headerPanel)}`), this.name);
+    }
+
     api_option(name: any, value = 'undefined') : Promise<any> {
         const getGridInstance: any = this.getGridInstance;
 
@@ -354,6 +398,16 @@ export default class DataGrid extends Widget {
         return ClientFunction(
             () => getGridInstance().cancelEditData(),
             { dependencies: { getGridInstance } }
+        )();
+    }
+
+    api_getCellValidationStatus(rowIndex: number, columnIndex: number) : Promise<any> {
+        const getGridInstance: any = this.getGridInstance;
+        return ClientFunction(() => {
+            const dataGrid = getGridInstance();
+            const result = dataGrid.getController('validating').getCellValidationResult({ rowKey : dataGrid.getKeyByRowIndex(rowIndex), columnIndex });
+            return result ? result.status : null;
+        }, { dependencies: { getGridInstance, rowIndex, columnIndex } }
         )();
     }
 }

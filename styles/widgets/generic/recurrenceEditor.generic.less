@@ -7,6 +7,7 @@
 
 @RECURRENCE_EDITOR_CONTAINER_PADDING_TOP: 17px;
 @RECURRENCE_EDITOR_CONTAINER_MARGIN_BOTTOM: 21px;
+@RECURRENCE_NUMBER_BOX_MARGIN_RIGHT: 11px;
 
 .dx-scheduler-recurrence-rule-item.dx-label-v-align {
     .dx-recurrence-editor-container {
@@ -16,7 +17,10 @@
 
 .dx-recurrence-editor-container {
     position: relative;
-    margin-bottom: @RECURRENCE_EDITOR_CONTAINER_MARGIN_BOTTOM;
+
+    .dx-recurrence-numberbox-interval {
+        margin-right: @RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
+    }
 }
 
 .dx-recurrence-repeat-end-container {
@@ -36,6 +40,7 @@
 
         &.dx-recurrence-numberbox-repeat-count {
             margin-left: 11px;
+            margin-right: @RECURRENCE_NUMBER_BOX_MARGIN_RIGHT;
         }
     }
 }

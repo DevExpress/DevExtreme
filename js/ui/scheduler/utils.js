@@ -52,6 +52,13 @@ const isTimezoneChangeInDate = (date) => {
     return (startDayDate.getTimezoneOffset() - endDayDate.getTimezoneOffset()) !== 0;
 };
 
+const isSameAppointmentDates = (startDate, endDate) => {
+    // NOTE: subtract 1 millisecond to avoid 00.00 time. Method should return 'true' for "2020:10:10 22:00:00" and "2020:10:11 00:00:00", for example.
+    endDate = new Date(endDate.getTime() - 1);
+
+    return dateUtils.sameDate(startDate, endDate);
+};
+
 const utils = {
     getDaylightOffset: getDaylightOffset,
     getDaylightOffsetInMs: getDaylightOffsetInMs,
@@ -59,7 +66,8 @@ const utils = {
     getTimezoneOffsetChangeInMs: getTimezoneOffsetChangeInMs,
     calculateTimezoneByValue: calculateTimezoneByValue,
     getCorrectedDateByDaylightOffsets: getCorrectedDateByDaylightOffsets,
-    isTimezoneChangeInDate: isTimezoneChangeInDate
+    isTimezoneChangeInDate: isTimezoneChangeInDate,
+    isSameAppointmentDates: isSameAppointmentDates
 };
 
 module.exports = utils;

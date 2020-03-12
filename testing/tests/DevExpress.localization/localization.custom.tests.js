@@ -129,3 +129,8 @@ QUnit.test('getThousandsSeparator', function(assert) {
 QUnit.test('format number', function(assert) {
     assert.equal(numberLocalization.format(1234.5, '#,##0.00'), '1 234.50');
 });
+
+QUnit.test('format number with unlimitedIntegerDigits flag (for dashbords)', function(assert) {
+    assert.equal(numberLocalization.format(0, { type: '0', unlimitedIntegerDigits: true }), '0');
+    assert.equal(numberLocalization.format(12345.6, { type: '0', unlimitedIntegerDigits: true }), '12346');
+});

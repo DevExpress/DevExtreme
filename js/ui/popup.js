@@ -286,11 +286,13 @@ const Popup = Overlay.inherit({
         const toolbarTemplate = template instanceof EmptyTemplate;
 
         if(toolbarTemplate) {
+            const integrationOptions = this.option('integrationOptions');
             const toolbarOptions = extend(additionalToolbarOptions, {
                 items: data,
                 rtlEnabled: this.option('rtlEnabled'),
                 useDefaultButtons: this.option('useDefaultToolbarButtons'),
-                useFlatButtons: this.option('useFlatToolbarButtons')
+                useFlatButtons: this.option('useFlatToolbarButtons'),
+                integrationOptions
             });
 
             this._getTemplate('dx-polymorph-widget').render({

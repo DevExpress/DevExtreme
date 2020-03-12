@@ -203,7 +203,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 
     test('getSelectedItems method', function(assert) {
         const testCases = [
-            { mode: 'thumbnails', wrapperMethod: 'findThumbnailsItem', eventName: 'click' },
+            { mode: 'thumbnails', wrapperMethod: 'findThumbnailsItem', eventName: 'dxclick' },
             { mode: 'details', wrapperMethod: 'findDetailsItem', eventName: 'dxclick' }
         ];
 

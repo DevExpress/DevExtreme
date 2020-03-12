@@ -3,7 +3,8 @@ const { test } = QUnit;
 import 'common.css!';
 import 'ui/diagram';
 
-import { Consts, getPropertiesPanelToolbarElement, findPropertiesPanelToolbarItem } from '../../../helpers/diagramHelpers.js';
+import { DiagramCommand } from 'devexpress-diagram';
+import { Consts, getPropertiesToolbarElement, getPropertiesToolbarInstance, findPropertiesToolbarItem, findPropertiesPanelToolbarItem } from '../../../helpers/diagramHelpers.js';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -12,47 +13,73 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('Properties Panel', moduleConfig, () => {
+QUnit.module('Properties Panel', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach.apply(this, arguments);
+    },
+    afterEach: function() {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
     test('should render if propertiesPanel.visibility is "visible"', function(assert) {
         this.instance.option('propertiesPanel.visibility', 'visible');
-        const $accordion = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
-        assert.equal($accordion.length, 1);
-        const $toolbar = getPropertiesPanelToolbarElement(this.$element);
+        const $panel = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
+        assert.equal($panel.length, 1);
+        const $toolbar = getPropertiesToolbarElement(this.$element);
         assert.equal($toolbar.length, 1);
     });
     test('should not render if propertiesPanel.visibility is "disabled"', function(assert) {
+        let $toolbar = this.$element.find(Consts.FLOATING_TOOLBAR_SELECTOR);
+        assert.equal($toolbar.length, 3);
         this.instance.option('propertiesPanel.visibility', 'disabled');
-        const $accordion = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
-        assert.equal($accordion.length, 0);
-        const $toolbar = getPropertiesPanelToolbarElement(this.$element);
-        assert.equal($toolbar.length, 0);
+        const $panel = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
+        assert.equal($panel.length, 0);
+        $toolbar = this.$element.find(Consts.FLOATING_TOOLBAR_SELECTOR);
+        assert.equal($toolbar.length, 2);
     });
     test('should render if propertiesPanel.visibility is "collapsed"', function(assert) {
         this.instance.option('propertiesPanel.visibility', 'collapsed');
-        let $accordion = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
-        assert.equal($accordion.length, 0);
-        const $toolbar = getPropertiesPanelToolbarElement(this.$element);
+        let $panel = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
+        assert.equal($panel.length, 0);
+        const $toolbar = getPropertiesToolbarElement(this.$element);
         assert.equal($toolbar.length, 1);
 
-        const $button = findPropertiesPanelToolbarItem(this.$element, 'properties');
+        let $button = findPropertiesToolbarItem(this.$element, 'properties');
         $button.trigger('dxclick');
-        $accordion = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
-        assert.equal($accordion.length, 1);
-        assert.equal($accordion.is(':visible'), true);
+        $panel = $('body').find(Consts.PROPERTIES_PANEL_SELECTOR);
+        assert.equal($panel.length, 1);
+        assert.equal($panel.is(':visible'), true);
 
+        $button = findPropertiesToolbarItem(this.$element, 'properties');
         $button.trigger('dxclick');
-        assert.equal($accordion.length, 1);
-        assert.equal($accordion.is(':visible'), false);
+        this.clock.tick(2000);
+        assert.equal($panel.length, 1);
+        assert.equal($panel.is(':visible'), false);
     });
     test('should fill properties panel with default items', function(assert) {
         this.instance.option('propertiesPanel.visibility', 'visible');
-        const toolbar = $('body').find(Consts.PROPERTIES_PANEL_TOOLBAR_SELECTOR).dxToolbar('instance');
-        assert.ok(toolbar.option('items').length > 1);
+        const toolbar = getPropertiesToolbarInstance(this.$element);
+        assert.equal(toolbar.option('items').length, 1);
     });
     test('should fill properties panel with custom items', function(assert) {
-        this.instance.option('propertiesPanel.groups', [{ commands: ['units'] }]);
+        this.instance.option('propertiesPanel.tabs', [{ commands: ['units'] }]);
         this.instance.option('propertiesPanel.visibility', 'visible');
-        const toolbar = $('body').find(Consts.PROPERTIES_PANEL_TOOLBAR_SELECTOR).dxToolbar('instance');
+        const toolbar = getPropertiesToolbarInstance(this.$element);
         assert.equal(toolbar.option('items').length, 1);
+    });
+    test('button should raise diagram commands', function(assert) {
+        this.instance.option('propertiesPanel.visibility', 'visible');
+        assert.notOk(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.TextLeftAlign).getState().value);
+        findPropertiesPanelToolbarItem(this.$element, 'left').trigger('dxclick');
+        assert.ok(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.TextLeftAlign).getState().value);
+    });
+    test('diagram should be focused after set font bold', function(assert) {
+        this.instance.option('propertiesPanel.visibility', 'visible');
+        const $boldButton = findPropertiesPanelToolbarItem(this.$element, 'bold');
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
+        $boldButton.trigger('dxclick');
+        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
 });

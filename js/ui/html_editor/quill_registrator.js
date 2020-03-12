@@ -1,4 +1,15 @@
 import { getQuill } from './quill_importer';
+import BaseTheme from './themes/base';
+import Image from './formats/image';
+import Link from './formats/link';
+import FontStyle from './formats/font';
+import SizeStyle from './formats/size';
+import AlignStyle from './formats/align';
+import Toolbar from './modules/toolbar';
+import DropImage from './modules/dropImage';
+import Variables from './modules/variables';
+import Resizing from './modules/resizing';
+import MentionsModule from './modules/mentions';
 
 class QuillRegistrator {
     constructor() {
@@ -7,20 +18,6 @@ class QuillRegistrator {
         }
 
         const quill = this.getQuill();
-
-        const BaseTheme = require('./themes/base').default;
-        const Image = require('./formats/image').default;
-        const Link = require('./formats/link').default;
-        const FontStyle = require('./formats/font').default;
-        const SizeStyle = require('./formats/size').default;
-        const AlignStyle = require('./formats/align').default;
-        const Mention = require('./formats/mention').default;
-        const Toolbar = require('./modules/toolbar').default;
-        const DropImage = require('./modules/dropImage').default;
-        const Variables = require('./modules/variables').default;
-        const Resizing = require('./modules/resizing').default;
-        const MentionsModule = require('./modules/mentions').default;
-
         const DirectionStyle = quill.import('attributors/style/direction');
 
         quill.register({
@@ -31,7 +28,6 @@ class QuillRegistrator {
 
             'formats/extendedImage': Image,
             'formats/link': Link,
-            'formats/mention': Mention,
 
             'modules/toolbar': Toolbar,
             'modules/dropImage': DropImage,

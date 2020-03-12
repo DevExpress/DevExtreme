@@ -9,14 +9,19 @@ import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { Deferred, when } from '../../core/utils/deferred';
+import { isDefined } from '../../core/utils/type';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 const WIDGET_CLASS = 'dx-scheduler';
 const APPOINTMENT_POPUP_CLASS = `${WIDGET_CLASS}-appointment-popup`;
 
-const APPOINTMENT_POPUP_WIDTH = 610;
-const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH = 768;
+const APPOINTMENT_POPUP_WIDTH = 485;
+const APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE = 970;
+const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH = 1000;
+
+const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH_MOBILE = 500;
+const APPOINTMENT_POPUP_WIDTH_MOBILE = 350;
 
 const TOOLBAR_ITEM_AFTER_LOCATION = 'after';
 const TOOLBAR_ITEM_BEFORE_LOCATION = 'before';
@@ -39,40 +44,16 @@ export default class AppointmentPopup {
         };
     }
 
-    show(data, showButtons, processTimeZone) {
-        this.state.appointment = {
-            data: data || {},
-            processTimeZone: processTimeZone
-        };
+    show(data = {}, showButtons, processTimeZone) {
+        this.state.appointment.data = data;
+        this.state.appointment.processTimeZone = processTimeZone;
 
         if(!this._popup) {
-            this._popup = this._createPopup();
+            const popupConfig = this._createPopupConfig(showButtons);
+            this._popup = this._createPopup(popupConfig);
+        } else {
+            this._updateForm();
         }
-
-        this._popup.option({
-            toolbarItems: showButtons ? this._getPopupToolbarItems() : [],
-            showCloseButton: showButtons ? this._popup.initialOption('showCloseButton') : true
-        });
-
-        this._popup.option('onShowing', e => {
-            this._updateForm(data, processTimeZone);
-
-            const arg = {
-                form: this._appointmentForm,
-                appointmentData: data,
-                cancel: false
-            };
-
-            this.scheduler._actions['onAppointmentFormOpening'](arg);
-            this.scheduler._processActionResult(arg, canceled => {
-                if(canceled) {
-                    e.cancel = true;
-                } else {
-                    this.updatePopupFullScreenMode();
-                }
-            });
-        });
-
         this._popup.show();
     }
 
@@ -84,9 +65,11 @@ export default class AppointmentPopup {
         return this._popup ? this._popup.option('visible') : false;
     }
 
+    ///#DEBUG
     getPopup() {
         return this._popup;
     }
+    ///#ENDDEBUG
 
     dispose() {
         if(this._$popup) {
@@ -95,20 +78,26 @@ export default class AppointmentPopup {
         }
     }
 
-    _createPopup() {
+    _createPopup(options) {
         const popupElement = $('<div>')
             .addClass(APPOINTMENT_POPUP_CLASS)
             .appendTo(this.scheduler.$element());
 
-        return this.scheduler._createComponent(popupElement, Popup, this._createPopupConfig());
+        return this.scheduler._createComponent(popupElement, Popup, options);
     }
 
-    _createPopupConfig() {
+    _createPopupConfig(showButtons) {
         return {
             height: 'auto',
             maxHeight: '100%',
+            toolbarItems: showButtons ? this._getPopupToolbarItems() : [],
+            showCloseButton: false,
+            showTitle: false,
             onHiding: () => { this.scheduler.focus(); },
-            contentTemplate: () => this._createPopupContent(),
+            contentTemplate: () => {
+                return this._createPopupContent();
+            },
+            onShowing: this._onShowing.bind(this),
             defaultOptionsRules: [
                 {
                     device: () => devices.current().android,
@@ -120,15 +109,32 @@ export default class AppointmentPopup {
         };
     }
 
+    _onShowing(e) {
+        const arg = {
+            form: this._appointmentForm,
+            appointmentData: this.state.appointment.data,
+            cancel: false
+        };
+
+        this.scheduler._actions['onAppointmentFormOpening'](arg);
+        this.scheduler._processActionResult(arg, canceled => {
+            if(canceled) {
+                e.cancel = true;
+            } else {
+                this.updatePopupFullScreenMode();
+            }
+        });
+    }
+
     _createPopupContent() {
         const formElement = $('<div>');
         this._appointmentForm = this._createForm(formElement);
-
+        this._updateForm();
         return formElement;
     }
 
     _createAppointmentFormData(appointmentData) {
-        const result = extend(true, {}, appointmentData);
+        const result = extend(true, { repeat: !!appointmentData.recurrenceRule }, appointmentData);
         each(this.scheduler._resourcesManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
 
         return result;
@@ -137,28 +143,28 @@ export default class AppointmentPopup {
     _createForm(element) {
         const { expr } = this.scheduler._dataAccessors;
         const resources = this.scheduler.option('resources');
+        const allowEditingTimeZones = this.scheduler.option('editing').allowEditingTimeZones;
+        const appointmentData = this.state.appointment.data;
+        const formData = this._createAppointmentFormData(appointmentData);
 
-        AppointmentForm.prepareAppointmentFormEditors({
-            textExpr: expr.textExpr,
-            allDayExpr: expr.allDayExpr,
-            startDateExpr: expr.startDateExpr,
-            endDateExpr: expr.endDateExpr,
-            descriptionExpr: expr.descriptionExpr,
-            recurrenceRuleExpr: expr.recurrenceRuleExpr,
-            startDateTimeZoneExpr: expr.startDateTimeZoneExpr,
-            endDateTimeZoneExpr: expr.endDateTimeZoneExpr
-        }, this.scheduler);
+        AppointmentForm.prepareAppointmentFormEditors(
+            expr,
+            this.scheduler,
+            this.triggerResize.bind(this),
+            this.changeSize.bind(this),
+            formData,
+            allowEditingTimeZones
+        );
 
         if(resources && resources.length) {
-            this.scheduler._resourcesManager.setResources(this.scheduler.option('resources'));
             AppointmentForm.concatResources(this.scheduler._resourcesManager.getEditors());
         }
 
         return AppointmentForm.create(
             this.scheduler._createComponent.bind(this.scheduler),
             element,
-            this._isReadOnly(this.state.appointment.data),
-            this._createAppointmentFormData(this.state.appointment.data)
+            this._isReadOnly(appointmentData),
+            formData,
         );
     }
 
@@ -169,70 +175,98 @@ export default class AppointmentPopup {
         return this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false;
     }
 
-    _updateForm(appointmentData, isProcessTimeZone) {
-        const allDay = this.scheduler.fire('getField', 'allDay', appointmentData);
-        let startDate = this.scheduler.fire('getField', 'startDate', appointmentData);
-        let endDate = this.scheduler.fire('getField', 'endDate', appointmentData);
+    _updateForm() {
+        const { data, processTimeZone } = this.state.appointment;
+        const allDay = this.scheduler.fire('getField', 'allDay', data);
+        let startDate = this.scheduler.fire('getField', 'startDate', data);
+        let endDate = this.scheduler.fire('getField', 'endDate', data);
+        this.state.appointment.isEmptyText = data === undefined || data.text === undefined;
+        this.state.appointment.isEmptyDescription = data === undefined || data.description === undefined;
 
-        const formData = this._createAppointmentFormData(appointmentData);
+        const formData = extend({}, { text: '', description: '', recurrenceRule: '' }, this._createAppointmentFormData(data));
 
-        this.state.appointment.isEmptyText = appointmentData === undefined || appointmentData.text === undefined;
-        this.state.appointment.isEmptyDescription = appointmentData === undefined || appointmentData.description === undefined;
-
-        if(this.state.appointment.isEmptyText) {
-            formData.text = '';
-        }
-        if(this.state.appointment.isEmptyDescription) {
-            formData.description = '';
-        }
-
-        if(isProcessTimeZone) {
-            startDate = this.scheduler.fire('convertDateByTimezone', startDate);
-            endDate = this.scheduler.fire('convertDateByTimezone', endDate);
-
-            this.scheduler.fire('setField', 'startDate', formData, startDate);
-            this.scheduler.fire('setField', 'endDate', formData, endDate);
+        if(processTimeZone) {
+            if(startDate) {
+                startDate = this.scheduler.fire('convertDateByTimezone', startDate);
+                this.scheduler.fire('setField', 'startDate', formData, startDate);
+            }
+            if(endDate) {
+                endDate = this.scheduler.fire('convertDateByTimezone', endDate);
+                this.scheduler.fire('setField', 'endDate', formData, endDate);
+            }
         }
 
-        const startDateExpr = this.scheduler._dataAccessors.expr.startDateExpr;
-        const endDateExpr = this.scheduler._dataAccessors.expr.endDateExpr;
-
-        formData.recurrenceRule = formData.recurrenceRule || ''; // TODO: plug for recurrent editor
+        const { startDateExpr, endDateExpr, recurrenceRuleExpr } = this.scheduler._dataAccessors.expr;
+        const recurrenceEditorOptions = this._getEditorOptions(recurrenceRuleExpr);
+        const isRecurrence = AppointmentForm.getRecurrenceRule(formData, this.scheduler._dataAccessors.expr);
+        this._setEditorOptions(recurrenceRuleExpr, extend({}, recurrenceEditorOptions, { startDate: startDate, visible: !!isRecurrence }));
+        this._appointmentForm.option('readOnly', this._isReadOnly(data));
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
-        this._appointmentForm.option('readOnly', this._isReadOnly(this.state.appointment.data));
+        AppointmentForm.setEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
+    }
 
-        AppointmentForm.checkEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
-
-        const recurrenceRuleExpr = this.scheduler._dataAccessors.expr.recurrenceRuleExpr;
-        const recurrentEditorItem = recurrenceRuleExpr ? this._appointmentForm.itemOption(recurrenceRuleExpr) : null;
-
-        if(recurrentEditorItem) {
-            const options = recurrentEditorItem.editorOptions || {};
-            options.startDate = startDate;
-            this._appointmentForm.itemOption(recurrenceRuleExpr, 'editorOptions', options);
+    _getEditorOptions(name) {
+        if(!name) {
+            return;
         }
+        const editor = this._appointmentForm.itemOption(name);
+        return editor ? editor.editorOptions : {};
+    }
+
+    _setEditorOptions(name, options) {
+        if(!name) {
+            return;
+        }
+        const editor = this._appointmentForm.itemOption(name);
+        editor && this._appointmentForm.itemOption(name, 'editorOptions', options);
+    }
+
+    _isDeviceMobile() {
+        return devices.current().deviceType !== 'desktop';
     }
 
     _isPopupFullScreenNeeded() {
-        if(windowUtils.hasWindow()) {
-            const window = windowUtils.getWindow();
-            return $(window).width() < APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH;
+        const width = this._tryGetWindowWidth();
+        if(width) {
+            return this._isDeviceMobile() ? width < APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH_MOBILE : width < APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH;
         }
         return false;
+    }
+
+    _tryGetWindowWidth() {
+        if(windowUtils.hasWindow()) {
+            const window = windowUtils.getWindow();
+            return $(window).width();
+        }
     }
 
     triggerResize() {
         this._popup && domUtils.triggerResizeEvent(this._popup.$element());
     }
 
+    _getMaxWidth(isRecurrence) {
+        if(this._isDeviceMobile()) {
+            return APPOINTMENT_POPUP_WIDTH_MOBILE;
+        }
+        return isRecurrence ? APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE : APPOINTMENT_POPUP_WIDTH;
+    }
+
+    changeSize(isRecurrence) {
+        const isFullScreen = this._isPopupFullScreenNeeded();
+        this._popup.option({
+            maxWidth: isFullScreen ? '100%' : this._getMaxWidth(isRecurrence),
+            fullScreen: isFullScreen
+        });
+    }
+
     updatePopupFullScreenMode() {
+        if(!this._appointmentForm) {
+            return;
+        }
+        const isRecurrence = AppointmentForm.getRecurrenceRule(this._appointmentForm.option('formData'), this.scheduler._dataAccessors.expr);
         if(this.isVisible()) {
-            const isFullScreen = this._isPopupFullScreenNeeded();
-            this._popup.option({
-                maxWidth: isFullScreen ? '100%' : APPOINTMENT_POPUP_WIDTH,
-                fullScreen: isFullScreen
-            });
+            this.changeSize(isRecurrence);
         }
     }
 
@@ -241,6 +275,7 @@ export default class AppointmentPopup {
         return [
             {
                 shortcut: 'done',
+                options: { text: 'Done' },
                 location: TOOLBAR_ITEM_AFTER_LOCATION,
                 onClick: (e) => this._doneButtonClickHandler(e)
             },
@@ -284,6 +319,9 @@ export default class AppointmentPopup {
             }
             if(state.data.recurrenceRule === undefined && formData.recurrenceRule === '') { // TODO: plug for recurrent editor
                 delete formData.recurrenceRule;
+            }
+            if(isDefined(formData.repeat)) {
+                delete formData.repeat;
             }
 
             if(oldData) {

@@ -130,13 +130,13 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      */
     tasks?: { dataSource?: Array<any> | DataSource | DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
     /**
-     * @docid dxGanttOptions.timeMarkers
-     * @type Array<dxGanttTimeMarker>
+     * @docid dxGanttOptions.stripLines
+     * @type Array<dxGanttStripLine>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    timeMarkers?: Array<dxGanttTimeMarker>;
+    stripLines?: Array<dxGanttStripLine>;
 }
 /**
  * @docid dxGantt
@@ -151,9 +151,9 @@ export default class dxGantt extends Widget {
     constructor(element: JQuery, options?: dxGanttOptions)
 }
 
-export interface dxGanttTimeMarker {
+export interface dxGanttStripLine {
     /**
-     * @docid dxGanttTimeMarker.cssClass
+     * @docid dxGanttStripLine.cssClass
      * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -161,7 +161,7 @@ export interface dxGanttTimeMarker {
      */
     cssClass?: string;
     /**
-     * @docid dxGanttTimeMarker.end
+     * @docid dxGanttStripLine.end
      * @type Date|number|string|function
      * @type_function_return Date|number|string
      * @default undefined
@@ -170,7 +170,7 @@ export interface dxGanttTimeMarker {
      */
     end?: Date | number | string | (() => Date | number | string);
     /**
-     * @docid dxGanttTimeMarker.start
+     * @docid dxGanttStripLine.start
      * @type Date|number|string|function
      * @type_function_return Date|number|string
      * @default undefined
@@ -180,7 +180,7 @@ export interface dxGanttTimeMarker {
     start?: Date | number | string | (() => Date | number | string);
     /**
      /**
-     * @docid dxGanttTimeMarker.title
+     * @docid dxGanttStripLine.title
      * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui

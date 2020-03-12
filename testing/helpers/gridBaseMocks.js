@@ -600,6 +600,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getColumnId: function(column) {
                 return column.command ? 'command:' + column.command : column.index;
+            },
+
+            getHeaderContentAlignment: function(columnAlignment) {
+                return columnAlignment;
             }
         };
     };

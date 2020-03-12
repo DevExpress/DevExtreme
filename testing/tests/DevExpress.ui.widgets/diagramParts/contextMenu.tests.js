@@ -8,9 +8,9 @@ import { Consts, getContextMenuInstance, findContextMenuItem } from '../../../he
 
 const moduleConfig = {
     beforeEach: function() {
-        this.onCustomCommandExecuted = sinon.spy();
+        this.onCustomCommand = sinon.spy();
         this.$element = $('#diagram').dxDiagram({
-            onCustomCommandExecuted: this.onCustomCommandExecuted
+            onCustomCommand: this.onCustomCommand
         });
         this.instance = this.$element.dxDiagram('instance');
     }
@@ -62,6 +62,15 @@ QUnit.module('Context Menu', {
         findContextMenuItem(this.$element, 'select all').trigger('dxclick');
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
     });
+    test('diagram should be focused after menu item click', function(assert) {
+        this.instance.option('contextMenu.commands', ['selectAll']);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
+        const contextMenu = getContextMenuInstance(this.$element);
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
+        contextMenu.show();
+        findContextMenuItem(this.$element, 'select all').trigger('dxclick');
+        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
+    });
     test('should execute custom commands on click', function(assert) {
         this.instance.option('contextMenu.commands', [
             {
@@ -81,9 +90,9 @@ QUnit.module('Context Menu', {
         findContextMenuItem(this.$element, 'custom').trigger('dxclick');
         findContextMenuItem(this.$element, 'sub menu').trigger('dxclick');
         findContextMenuItem(this.$element, 'custom2').trigger('dxclick');
-        assert.ok(this.onCustomCommandExecuted.called);
-        assert.equal(this.onCustomCommandExecuted.getCalls().length, 2);
-        assert.equal(this.onCustomCommandExecuted.getCall(0).args[0]['name'], 'custom');
-        assert.equal(this.onCustomCommandExecuted.getCall(1).args[0]['name'], 'custom2');
+        assert.ok(this.onCustomCommand.called);
+        assert.equal(this.onCustomCommand.getCalls().length, 2);
+        assert.equal(this.onCustomCommand.getCall(0).args[0]['name'], 'custom');
+        assert.equal(this.onCustomCommand.getCall(1).args[0]['name'], 'custom2');
     });
 });

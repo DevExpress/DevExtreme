@@ -23,7 +23,7 @@ const customCommands = [
     'showToolbox'
 ];
 
-const customGroups = [
+const customTabs = [
     {
         title: 'AAA',
         groups: [
@@ -69,7 +69,7 @@ QUnit.module('CommandManager', {
         assert.equal(DiagramCommandsManager.getMainToolbarCommands().length, 25);
     });
     test('default history toolbar commands', function(assert) {
-        assert.equal(DiagramCommandsManager.getHistoryToolbarCommands().length, 3);
+        assert.equal(DiagramCommandsManager.getHistoryToolbarCommands().length, 4);
     });
     test('default view toolbar commands', function(assert) {
         const commands = DiagramCommandsManager.getViewToolbarCommands();
@@ -115,14 +115,14 @@ QUnit.module('CommandManager', {
         assert.equal(commands[4].items.length, 2);
         assert.equal(commands[4].items[1].beginGroup, true);
     });
-    test('default properties panel command groups', function(assert) {
-        const groups = DiagramCommandsManager.getPropertyPanelCommandGroups();
+    test('default properties panel command tabs', function(assert) {
+        const groups = DiagramCommandsManager.getPropertyPanelCommandTabs();
         assert.equal(groups.length, 3);
         assert.equal(groups[0].groups.length, 3);
         assert.equal(groups[0].groups[2].commands.length, 3);
     });
-    test('custom properties panel command groups', function(assert) {
-        const groups = DiagramCommandsManager.getPropertyPanelCommandGroups(customGroups);
+    test('custom properties panel command tabs', function(assert) {
+        const groups = DiagramCommandsManager.getPropertyPanelCommandTabs(customTabs);
         assert.equal(groups.length, 2);
         assert.equal(groups[0].groups.length, 2);
         assert.equal(groups[0].groups[0].commands.length, 2);

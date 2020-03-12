@@ -11,19 +11,19 @@ const animation = {
         const toConfig = {};
         let animationType;
 
-        if(direction === 'right') {
-            toConfig['transform'] = 'translate(' + position + 'px, 0px)';
-            animationType = 'custom';
-        }
-
-        if(direction === 'left') {
-            toConfig['left'] = position;
-            animationType = 'slide';
-        }
-
-        if(direction === 'top' || direction === 'bottom') {
-            toConfig['top'] = position;
-            animationType = 'slide';
+        switch(direction) {
+            case 'right':
+                toConfig['transform'] = 'translate(' + position + 'px, 0px)';
+                animationType = 'custom';
+                break;
+            case 'left':
+                toConfig['left'] = position;
+                animationType = 'slide';
+                break;
+            case 'top':
+            case 'bottom':
+                toConfig['top'] = position;
+                animationType = 'slide';
         }
 
         fx.animate($element, {
@@ -75,6 +75,7 @@ const animation = {
         if(direction === 'bottom') {
             toConfig['marginTop'] = marginTop;
         }
+
         fx.animate($element, {
             to: toConfig,
             duration,
@@ -97,36 +98,37 @@ class DrawerStrategy {
         return this._drawer;
     }
 
-    renderPanel(template, whenPanelRendered) {
-        template && template.render({
-            container: this.getDrawerInstance().content(),
-            onRendered: () => {
-                whenPanelRendered.resolve();
-            }
-        });
+    renderPanelContent(whenPanelContentRendered) {
+        const drawer = this.getDrawerInstance();
+        const template = drawer._getTemplate(drawer.option('template'));
+        if(template) {
+            template.render({
+                container: drawer.content(),
+                onRendered: () => {
+                    whenPanelContentRendered.resolve();
+                }
+            });
+        }
     }
 
-    renderPosition(offset, animate) {
-        const drawer = this.getDrawerInstance();
-        const revealMode = drawer.option('revealMode');
+    renderPosition(isDrawerOpened, animate) {
+        this._prepareAnimationDeferreds(animate);
 
-        this.prepareAnimationDeferreds(animate);
+        const config = this._getPositionRenderingConfig(isDrawerOpened);
 
-        const config = this.getPositionRenderingConfig(offset);
-
-        if(this.useDefaultAnimation()) {
-            this.defaultPositionRendering(config, offset, animate);
+        if(this._useDefaultAnimation()) {
+            this._defaultPositionRendering(config, isDrawerOpened, animate);
         } else {
+            const revealMode = this.getDrawerInstance().option('revealMode');
             if(revealMode === 'slide') {
-                this.slidePositionRendering(config, offset, animate);
-            }
-            if(revealMode === 'expand') {
-                this.expandPositionRendering(config, offset, animate);
+                this._slidePositionRendering(config, isDrawerOpened, animate);
+            } else if(revealMode === 'expand') {
+                this._expandPositionRendering(config, isDrawerOpened, animate);
             }
         }
     }
 
-    prepareAnimationDeferreds(animate) {
+    _prepareAnimationDeferreds(animate) {
         const drawer = this.getDrawerInstance();
 
         this._contentAnimation = new Deferred();
@@ -140,23 +142,23 @@ class DrawerStrategy {
                 drawer._animationCompleteHandler();
             });
         } else {
-            drawer.resizeContent();
+            drawer.resizeViewContent();
         }
     }
 
-    getPositionRenderingConfig(offset) {
+    _getPositionRenderingConfig(isDrawerOpened) {
         const drawer = this.getDrawerInstance();
 
         return {
-            direction: drawer.getDrawerPosition(),
+            direction: drawer.calcTargetPosition(),
             $panel: $(drawer.content()),
             $content: $(drawer.viewContent()),
             defaultAnimationConfig: this._defaultAnimationConfig(),
-            size: this._getPanelSize(offset)
+            size: this._getPanelSize(isDrawerOpened)
         };
     }
 
-    useDefaultAnimation() {
+    _useDefaultAnimation() {
         return false;
     }
 
@@ -173,47 +175,33 @@ class DrawerStrategy {
         };
     }
 
-    _getPanelOffset(offset) {
+    _getPanelOffset(isDrawerOpened) {
         const drawer = this.getDrawerInstance();
         const size = drawer.isHorizontalDirection() ? drawer.getRealPanelWidth() : drawer.getRealPanelHeight();
 
-        if(offset) {
+        if(isDrawerOpened) {
             return -(size - drawer.getMaxSize());
         } else {
             return -(size - drawer.getMinSize());
         }
     }
 
-    _getPanelSize(offset) {
-        return offset ? this.getDrawerInstance().getMaxSize() : this.getDrawerInstance().getMinSize();
+    _getPanelSize(isDrawerOpened) {
+        return isDrawerOpened ? this.getDrawerInstance().getMaxSize() : this.getDrawerInstance().getMinSize();
     }
 
-    renderShaderVisibility(offset, animate, duration) {
-        const fadeConfig = this._getFadeConfig(offset);
+    renderShaderVisibility(isShaderVisible, animate, duration) {
         const drawer = this.getDrawerInstance();
+        const fadeConfig = isShaderVisible ? { from: 0, to: 1 } : { from: 1, to: 0 };
 
         if(animate) {
             animation.fade($(drawer._$shader), fadeConfig, duration, () => {
-                this._drawer._toggleShaderVisibility(offset);
+                this._drawer._toggleShaderVisibility(isShaderVisible);
                 this._shaderAnimation.resolve();
             });
         } else {
-            drawer._toggleShaderVisibility(offset);
+            drawer._toggleShaderVisibility(isShaderVisible);
             drawer._$shader.css('opacity', fadeConfig.to);
-        }
-    }
-
-    _getFadeConfig(offset) {
-        if(offset) {
-            return {
-                to: 1,
-                from: 0
-            };
-        } else {
-            return {
-                to: 0,
-                from: 1
-            };
         }
     }
 
@@ -221,23 +209,22 @@ class DrawerStrategy {
         return $(this.getDrawerInstance().content());
     }
 
-    getWidth() {
-        return this.getDrawerInstance().$element().get(0).getBoundingClientRect().width;
+    setPanelSize(calcFromRealPanelSize) { // TODO: keep for ui.file_manager.adaptivity.js
+        this.refreshPanelElementSize(calcFromRealPanelSize);
     }
 
-    setPanelSize(keepMaxSize) {
+    refreshPanelElementSize(calcFromRealPanelSize) {
         const drawer = this.getDrawerInstance();
         const panelSize = this._getPanelSize(drawer.option('opened'));
 
-
         if(drawer.isHorizontalDirection()) {
-            $(drawer.content()).width(keepMaxSize ? drawer.getRealPanelWidth() : panelSize);
+            $(drawer.content()).width(calcFromRealPanelSize ? drawer.getRealPanelWidth() : panelSize);
         } else {
-            $(drawer.content()).height(keepMaxSize ? drawer.getRealPanelHeight() : panelSize);
+            $(drawer.content()).height(calcFromRealPanelSize ? drawer.getRealPanelHeight() : panelSize);
         }
     }
 
-    needOrderContent() {
+    isViewContentFirst() {
         return false;
     }
 }

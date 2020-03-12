@@ -1419,13 +1419,17 @@ QUnit.test('TreeList should focus only one focused row (T827201)', function(asse
 
     this.clock.tick();
 
+    // assert
+    const rowIndex = treeList.getRowIndexByKey(3);
+    assert.ok(rowsViewWrapper.getDataRow(rowIndex).isFocusedRow(), 'Row 3 is a focused row');
+
     // act
     $(treeList.getCellElement(4, 1)).trigger(CLICK_EVENT);
     this.clock.tick();
 
     // assert
-    assert.equal(rowsViewWrapper.getFocusedRow().length, 1, 'Only one row is focused');
-    assert.ok(rowsViewWrapper.isFocusedRow(treeList.getRowIndexByKey(9)), 'Row with key 9 is focused');
+    assert.notOk(rowsViewWrapper.getDataRow(rowIndex).isFocusedRow(), 'Row 3 is not a focused row');
+    assert.ok(rowsViewWrapper.getDataRow(4).isFocusedRow(), 'Row 4 is a focused row');
 });
 
 QUnit.test('TreeList navigateTo', function(assert) {

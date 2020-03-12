@@ -93,6 +93,7 @@
 
 @base-select-color: @base-text-color;
 @base-select-bg: fade(#000000, 10%);
+@base-inverted-text-color: #fff;
 
 /**
 * @name 100. Focused state text color
@@ -111,7 +112,6 @@
 @typography-color: @base-text-color;
 @typography-link-color: @base-link-color;
 
-@base-inverted-text-color: #fff;
 @base-inverted-icon-color: @base-inverted-text-color;
 @base-disabled-opacity: 0.5;
 @base-dropdown-shadow-color: fade(@base-shadow-color, 17.5%);
@@ -671,6 +671,12 @@
 */
 @overlay-shader-bg: fade(@base-bg, 80%);
 
+/**
+* @name 20. Focus border color
+* @type color
+*/
+@overlay-focus-border-color: @base-border-color;
+
 // Popup
 
 /**
@@ -685,12 +691,6 @@
 @popup-bottom-color: @base-text-color;
 
 @popup-border-radius: @base-border-radius-large;
-
-/**
-* @name 20. Focus border color
-* @type color
-*/
-@overlay-focus-border-color: @base-border-color;
 
 // Popover
 @popover-arrow-bg: @overlay-content-bg;
@@ -1096,7 +1096,7 @@
 * @name 70. Focused row background color
 * @type color
 */
-@datagrid-row-focused-bg: @base-accent;
+@datagrid-row-focused-bg: mix(@base-bg, @base-accent, 20%);
 @datagrid-hover-bg: fade(darken(@base-bg, 9%), 40%);
 @datagrid-row-hovered-color: @datagrid-base-color;
 
@@ -1171,7 +1171,7 @@
 * @name 75. Focused cell border color
 * @type color
 */
-@datagrid-focused-border-color: darken(@base-focus-bg, 15%);
+@datagrid-focused-border-color: mix(@base-bg, darken(@base-focus-bg, 15%), 20%);
 
 /**
 * @name 80. Editor background
@@ -1622,6 +1622,8 @@
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-bg;
 @filemanager-file-item-select-bg: @base-link-color;
+@filemanager-file-item-hover-bg: fade(darken(@base-bg, 9%), 40%);
+@filemanager-file-item-focused-bg: @base-accent;
 @filemanager-item-focused-color: @base-inverted-text-color;
 @filemanager-progressbox-shadow-color: fade(@base-shadow-color, 17.5%);
 

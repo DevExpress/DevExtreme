@@ -18,7 +18,7 @@ class DiagramContextMenu extends Widget {
         super._init();
 
         this._createOnVisibilityChangingAction();
-        this._createOnCustomCommandExecuted();
+        this._createOnCustomCommand();
         this._createOnItemClickAction();
         this._tempState = undefined;
 
@@ -111,11 +111,11 @@ class DiagramContextMenu extends Widget {
             this.bar.raiseBarCommandExecuted(command, value);
         }
         if(typeof command === 'string') {
-            this._onCustomCommandExecutedAction({ command });
+            this._onCustomCommandAction({ command });
         }
     }
-    _createOnCustomCommandExecuted() {
-        this._onCustomCommandExecutedAction = this._createActionByOption('onCustomCommandExecuted');
+    _createOnCustomCommand() {
+        this._onCustomCommandAction = this._createActionByOption('onCustomCommand');
     }
 
     _getCommands() {
@@ -165,8 +165,8 @@ class DiagramContextMenu extends Widget {
             case 'onVisibilityChanging':
                 this._createOnVisibilityChangingAction();
                 break;
-            case 'onCustomCommandExecuted':
-                this._createOnCustomCommandExecuted();
+            case 'onCustomCommand':
+                this._createOnCustomCommand();
                 break;
             case 'onItemClick':
                 this._createOnItemClickAction();

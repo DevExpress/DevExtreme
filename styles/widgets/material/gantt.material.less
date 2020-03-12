@@ -7,6 +7,15 @@
 .dx-gantt {
     border: 1px solid @base-border-color;
 
+    .dx-gantt-toolbar-wrapper {
+        padding: 5px;
+        border-bottom: 1px solid @base-border-color;
+
+        .dx-gantt-toolbar-separator {
+            border-left-color: @base-border-color;
+        }
+    }
+
     .dx-gantt-view {
         background-color: @base-bg;
     }
@@ -110,6 +119,13 @@
 
             .dx-gantt-task-edit-progress {
                 border-color: transparent transparent darken(@base-accent, 10%) transparent;
+
+                &:before {
+                    width: 12px;
+                    height: 6px;
+                    bottom: -14px;
+                    border: 1px solid darken(@base-accent, 10%);
+                }
             }
 
             .dx-gantt-task-edit-progress-status {
@@ -169,11 +185,12 @@
 
     .dx-gantt-tm {
         border-left: 1px dashed @base-accent;
+    }
 
-        &.dx-gantt-ti {
-            border-right: 1px dashed @base-accent;
-            background-color: fade(@base-accent, 15%);
-        }
+    .dx-gantt-ti {
+        border-left: 1px dashed @base-accent;
+        border-right: 1px dashed @base-accent;
+        background-color: fade(@base-accent, 15%);
     }
 
     .dx-gantt-altRow,

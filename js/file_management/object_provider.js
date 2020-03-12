@@ -8,6 +8,7 @@ import { Deferred } from '../core/utils/deferred';
 import { getWindow } from '../core/utils/window';
 import { fileSaver } from '../exporter/file_saver';
 import Errors from '../ui/widget/ui.errors';
+import JSZip from 'jszip';
 
 import FileSystemProviderBase from './provider_base';
 import ErrorCode from './errors';
@@ -377,25 +378,13 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
 
 }
 
-let JSZip;
 
 function getJSZip() {
     if(!JSZip) {
-        JSZip = requestJSZip();
-    }
-
-    return JSZip;
-}
-
-function requestJSZip() {
-    const window = getWindow();
-    const jsZip = window && window.JSZip || require('jszip');
-
-    if(!jsZip) {
         throw Errors.Error('E1041', 'JSZip');
     }
 
-    return jsZip;
+    return JSZip;
 }
 
 module.exports = ObjectFileSystemProvider;

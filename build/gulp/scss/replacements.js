@@ -44,6 +44,9 @@ module.exports = {
         { import: '../button/colors', type: 'index' },
         { import: '../button/colors', type: 'colors' },
     ],
+    'badge': [
+        { import: '../color', type: 'colors', alias: 'extColor' },
+    ],
     'scrollView': [
         { import: '../scrollable/colors', type: 'index' },
     ],
@@ -62,6 +65,7 @@ module.exports = {
     ],
     'navBar': [
         { import: '../../base/icons', type: 'index' },
+        { import: '../color', type: 'colors', alias: 'extColor' },
     ],
     'validation': [
         { import: '../../base/validation', type: 'index' },
@@ -72,8 +76,8 @@ module.exports = {
         { import: '../button/sizes', type: 'index' },
         { import: '../common', type: 'index' },
         { import: '../button', type: 'index' },
-        { regex: /@mixin texteditor-input-padding-filled\(\),/g, replacement: '@inclide texteditor-input-padding-filled();' },
-        { regex: /@mixin texteditor-input-padding\(\),/g, replacement: '@inclide texteditor-input-padding();' },
+        { regex: /@mixin texteditor-input-padding-filled\(\),/g, replacement: '@include texteditor-input-padding-filled();' },
+        { regex: /@mixin texteditor-input-padding\(\),/g, replacement: '@include texteditor-input-padding();' },
         { regex: /.texteditor-validation-icon-offset-filled\(\),/g, replacement: '@include texteditor-validation-icon-offset-filled();' },
         { regex: /.texteditor-validation-icon-offset\(\),/g, replacement: '@include texteditor-validation-icon-offset();' },
         { regex: /@mixin dx-icon-sizing\(\$MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE\),/, replacement: '@include dx-icon-sizing($MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);' },
@@ -125,6 +129,7 @@ module.exports = {
         { import: '../textEditor/sizes', type: 'index' },
         { import: '../textEditor/colors', type: 'index' },
         { import: '../button/colors', type: 'colors' },
+        { import: '../color', type: 'colors', alias: 'extColor' },
     ],
     'dateView': [
         { import: '../../base/mixins', type: 'index' },
@@ -203,12 +208,15 @@ module.exports = {
     ],
     'progressBar': [
         { import: '../../base/mixins', type: 'index' },
+        { import: '../color', type: 'colors', alias: 'extColor' },
     ],
     'tooltip': [
         { import: '../overlay/colors', type: 'colors' },
+        { import: '../color', type: 'colors', alias: 'extColor' },
     ],
     'gallery': [
         { import: '../../base/icons', type: 'index' },
+        { import: '../color', type: 'colors', alias: 'extColor' },
     ],
     'lookup': [
         { import: '../../base/icons', type: 'index' },
@@ -227,11 +235,18 @@ module.exports = {
         { import: '../../base/icons', type: 'index' },
         { import: '../textEditor', type: 'index' },
         { import: '../common', type: 'index' },
+        { import: '../color', type: 'colors', alias: 'extColor' },
         { regex: /@mixin dx-icon\(clear\),/, replacement: '@include dx-icon(clear);' },
         { regex: /(px|block|absolute|%|-remove-color|-active-color|-bg|none|0 0),/g, replacement: '$1;' },
     ],
+    'radioButton': [
+        { import: '../radioGroup/colors', type: 'index' },
+    ],
     'accordion': [
         { import: '../../base/icons', type: 'index' },
+    ],
+    'slider': [
+        { import: '../color', type: 'colors', alias: 'extColor' },
     ],
     'slideOut': [
         { import: '../../base/icons', type: 'index' },
@@ -254,6 +269,7 @@ module.exports = {
         { import: '../button', type: 'index' },
         { import: '../button/colors', type: 'index' },
         { import: '../validation/colors', type: 'index' },
+        { import: '../pager', type: 'index' },
         { regex: /@mixin dx-icon\(equal\),/, replacement: '@include dx-icon(equal);' },
         { regex: /@mixin dx-icon-sizing\(\$MATERIAL_GRID_BASE_HEADER_ICON_SIZE\),/, replacement: '@include dx-icon-sizing($MATERIAL_GRID_BASE_HEADER_ICON_SIZE);' },
         { regex: /\.dx-icon\((.*)\),/g, replacement: '@include dx-icon($1);' },
@@ -355,9 +371,18 @@ module.exports = {
     'fileUploader': [
         { import: '../../base/mixins', type: 'index' },
     ],
+    'recurrenceEditor': [
+        { import: '../scheduler/sizes', type: 'index' },
+        { import: '../../base/recurrenceEditor', type: 'index', withVars: [
+            'base-border-color',
+            'SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET',
+            'SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET',
+        ] },
+    ],
     'scheduler': [
         { import: '../../base/mixins', type: 'index' },
         { import: '../../base/icons', type: 'index' },
+        { import: '../color', type: 'colors', alias: 'extColor' },
         { import: '../../base/scheduler', type: 'index', alias: 'baseScheduler', withVars: [
             'SCHEDULER_APPOINTMENT_BASE_COLOR',
             'SCHEDULER_APPOINTMENT_START_COLOR',
@@ -379,12 +404,15 @@ module.exports = {
             'SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR',
             'SCHEDULER_APPOINTMENT_TEXT_COLOR',
             'SCHEDULER_FILL_FOCUSED_APPOINTMENT',
-            'SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR'
+            'SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR',
+            'SCHEDULER_RECURRENCE_REPEAT_LABEL_OFFSET',
+            'SCHEDULER_RECURRENCE_EDITOR_ITEM_OFFSET',
         ] },
         { import: '../button/colors', type: 'index' },
         { import: '../button', type: 'index' },
         { import: '../button/colors', type: 'sizes' },
         { import: '../tooltip/colors', type: 'index' },
+        { import: '../recurrenceEditor', type: 'index' },
         { regex: /@mixin dx-scheduler-all-day-title-mixin\(\$MATERIAL_SCHEDULER_HEADER_HEIGHT \+ \$MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT\),/, replacement: '@include dx-scheduler-all-day-title-mixin($MATERIAL_SCHEDULER_HEADER_HEIGHT + $MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT);' },
         { regex: /top: \$MATERIAL_SCHEDULER_HEADER_HEIGHT \+ \$MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT,/, replacement: 'top: $MATERIAL_SCHEDULER_HEADER_HEIGHT + $MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT;' },
         { regex: /@mixin dx-scheduler-header-scrollable-mixin\(\$MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT \* 2\),/, replacement: '@include dx-scheduler-header-scrollable-mixin($MATERIAL_SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT * 2);' },
@@ -402,5 +430,74 @@ module.exports = {
         { regex: /@include dx-scheduler-agenda-group-mixin/g, replacement: '@include baseScheduler.dx-scheduler-agenda-group-mixin' },
         { regex: /\$SCHEDULER_BASE_BORDER([\s;])/g, replacement: 'baseScheduler.$SCHEDULER_BASE_BORDER$1' },
         { regex: /\$SCHEDULER_SMALL_SIZE_FACTOR([\s;])/g, replacement: 'baseScheduler.$SCHEDULER_SMALL_SIZE_FACTOR$1' },
-    ]
+    ],
+    'filterBuilder': [
+        { import: '../../base/filterBuilder', type: 'index', withVars: [
+            'filterbuilder-bg',
+            'filterbuilder-text-color',
+            'filterbuilder-text-focus-color',
+            'filterbuilder-group-operation-color',
+            'filterbuilder-group-operation-hover-color',
+            'filterbuilder-group-operation-focus-color',
+            'filterbuilder-item-operator-color',
+            'filterbuilder-item-operator-hover-color',
+            'filterbuilder-item-operator-focus-color',
+            'filterbuilder-item-field-color',
+            'filterbuilder-item-field-hover-color',
+            'filterbuilder-item-field-focus-color',
+            'filterbuilder-item-value-color',
+            'filterbuilder-item-value-hover-color',
+            'filterbuilder-item-value-focus-color',
+            'filterbuilder-plus-icon-color',
+            'filterbuilder-plus-icon-hover-color',
+            'filterbuilder-plus-icon-focus-color',
+            'filterbuilder-remove-icon-color',
+            'filterbuilder-remove-icon-hover-color',
+            'filterbuilder-remove-icon-focus-color',
+            'filterbuilder-menu-icon-color',
+        ] },
+        { import: '../textEditor/colors', type: 'index' },
+    ],
+    'htmlEditor': [
+        { import: '../button/colors', type: 'colors' },
+        { import: '../button/sizes', type: 'index' },
+        { import: '../color', type: 'colors', alias: 'extColor' },
+        { import: '../textEditor/colors', type: 'index' },
+        { import: '../common', type: 'index' },
+    ],
+    'speedDialAction': [
+        { import: '../../base/speedDialAction', type: 'index' },
+        { import: '../overlay/colors', type: 'colors' },
+        { import: '../button/colors', type: 'index' },
+    ],
+    'fileManager': [
+        { import: '../../base/fileManager', type: 'index' },
+        { import: '../splitter', type: 'index' },
+    ],
+    'diagram': [
+        { import: '../../base/diagram', type: 'index' },
+        { import: '../button/colors', type: 'colors' },
+        { import: '../button/colors', type: 'index' },
+        { import: '../loadIndicator/colors', type: 'colors' },
+        { import: '../overlay/colors', type: 'index' },
+        { import: '../accordion/colors', type: 'index' },
+        { import: '../popup/colors', type: 'index' },
+        { import: '../speedDialAction', type: 'index' },
+        { import: '../fieldset', type: 'index' },
+        { import: '../fieldset/sizes', type: 'index' },
+        { import: '../menu/colors', type: 'index' },
+        { import: '../tabs', type: 'index' },
+        { regex: /\.diagram-icon-colored\(d/g, replacement: '@include diagram-icon-colored(d' }
+    ],
+    'gantt': [
+        { import: '../splitter', type: 'index' },
+        { import: '../gridBase/colors', type: 'colors' },
+        { import: '../gridBase/colors', type: 'index' },
+    ],
+    'sortable': [
+        { import: '../../base/sortable', type: 'index', withVars: [ 'base-accent' ] },
+    ],
+    'pager': [
+        { import: '../../base/icons', type: 'index' },
+    ],
 };

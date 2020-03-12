@@ -16,8 +16,6 @@ testStart(() => {
 });
 
 const RADIO_GROUP_CLASS = 'dx-radiogroup';
-const RADIO_GROUP_VERTICAL_CLASS = 'dx-radiogroup-vertical';
-const RADIO_GROUP_HORIZONTAL_CLASS = 'dx-radiogroup-horizontal';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const FOCUSED_CLASS = 'dx-state-focused';
@@ -211,39 +209,15 @@ module('buttons group rendering', () => {
 });
 
 module('layout', moduleConfig, () => {
-    test('should be generated proper class with vertical layout', function(assert) {
-        const $radioGroup = createRadioGroup({
-            layout: 'vertical'
-        });
-
-        assert.ok($radioGroup.hasClass(RADIO_GROUP_VERTICAL_CLASS), 'class set correctly');
-    });
-
-    test('should be generated proper class with horizontal layout', function(assert) {
-        const $radioGroup = createRadioGroup({
-            layout: 'horizontal'
-        });
-
-        assert.ok($radioGroup.hasClass(RADIO_GROUP_HORIZONTAL_CLASS), 'class set correctly');
-    });
-
-    test('should be generated proper class when layout is changed', function(assert) {
-        const $radioGroup = createRadioGroup({
-            layout: 'horizontal'
-        });
-
-        getInstance($radioGroup).option('layout', 'vertical');
-
-        assert.ok($radioGroup.hasClass(RADIO_GROUP_VERTICAL_CLASS), 'class set correctly');
-    });
-
     test('On the tablet radio group must use a horizontal layout', function(assert) {
+        const currentDevice = devices.current();
         devices.current('iPad');
 
         const $radioGroup = createRadioGroup();
         const isHorizontalLayout = getInstance($radioGroup).option('layout') === 'horizontal';
 
         assert.ok(isHorizontalLayout, 'radio group on tablet have horizontal layout');
+        devices.current(currentDevice);
     });
 
     test('RadioGroup items should have the \'dx-radio-button\' class after render on deferUpdate (T820582)', function(assert) {
@@ -665,7 +639,7 @@ module('focus policy', moduleConfig, () => {
         assert.ok(!$firstRButton.hasClass(FOCUSED_CLASS), 'radio group item lost focus after focusout on radio group');
     });
 
-    test('radioGroup item has not dx-state-focused class after radioGroup lose focus', function(assert) {
+    test('RadioGroup item has dx-state-focused class when RadioGroup focused', function(assert) {
         assert.expect(2);
 
         const $radioGroup = createRadioGroup({
@@ -679,7 +653,7 @@ module('focus policy', moduleConfig, () => {
 
         $radioGroup.focusin();
 
-        assert.ok($firstRButton.hasClass(FOCUSED_CLASS), 'radioGroup item is not focused');
+        assert.ok($firstRButton.hasClass(FOCUSED_CLASS), 'radioGroup item is focused');
     });
 
     test('radioGroup element should get \'dx-state-focused\' class', function(assert) {

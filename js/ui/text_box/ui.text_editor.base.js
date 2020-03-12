@@ -136,7 +136,9 @@ const TextEditorBase = Editor.inherit({
             },
 
 
-            stylingMode: config().editorStylingMode || 'outlined'
+            stylingMode: config().editorStylingMode || 'outlined',
+
+            showValidationMark: true
         });
     },
 
@@ -283,13 +285,13 @@ const TextEditorBase = Editor.inherit({
             if(this.option('validationStatus') === 'invalid') {
                 this._showValidMark = false;
             }
-            if(!this._showValidMark) {
+            if(!this._showValidMark && this.option('showValidationMark') === true) {
                 this._showValidMark = this.option('validationStatus') === 'valid' && !!this._pendingIndicator;
             }
             this._disposePendingIndicator();
         }
 
-        $element.toggleClass(TEXTEDITOR_VALID_CLASS, this._showValidMark);
+        $element.toggleClass(TEXTEDITOR_VALID_CLASS, !!this._showValidMark);
     },
 
     _renderButtonContainers: function() {
@@ -728,6 +730,8 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'displayValueFormatter':
                 this._invalidate();
+                break;
+            case 'showValidationMark':
                 break;
             default:
                 this.callBase(args);

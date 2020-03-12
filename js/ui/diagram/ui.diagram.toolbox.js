@@ -9,7 +9,6 @@ import ScrollView from '../scroll_view';
 import Tooltip from '../tooltip';
 import DiagramFloatingPanel from './ui.diagram.floating_panel';
 
-const DIAGRAM_TOOLBOX_WIDTH = 136;
 const DIAGRAM_TOOLBOX_MIN_HEIGHT = 130;
 const DIAGRAM_TOOLBOX_POPUP_CLASS = 'dx-diagram-toolbox-popup';
 const DIAGRAM_TOOLBOX_PANEL_CLASS = 'dx-diagram-toolbox-panel';
@@ -29,24 +28,88 @@ class DiagramToolbox extends DiagramFloatingPanel {
     _getPopupClass() {
         return DIAGRAM_TOOLBOX_POPUP_CLASS;
     }
+    _getPopupHeight() {
+        return this.isMobileView() ? '100%' : super._getPopupHeight();
+    }
     _getPopupMinHeight() {
         return DIAGRAM_TOOLBOX_MIN_HEIGHT;
     }
+    _getPopupPosition() {
+        const $parent = this.option('offsetParent');
+        const position = {
+            my: 'left top',
+            at: 'left top',
+            of: $parent
+        };
+        if(!this.isMobileView()) {
+            return extend(position, {
+                offset: this.option('offsetX') + ' ' + this.option('offsetY')
+            });
+        }
+        return position;
+    }
+    _getPopupAnimation() {
+        const $parent = this.option('offsetParent');
+        if(this.isMobileView()) {
+            return {
+                hide: this._getPopupSlideAnimationObject({
+                    direction: 'left',
+                    from: {
+                        position: {
+                            my: 'left top',
+                            at: 'left top',
+                            of: $parent
+                        }
+                    },
+                    to: {
+                        position: {
+                            my: 'right top',
+                            at: 'left top',
+                            of: $parent
+                        }
+                    }
+                }),
+                show: this._getPopupSlideAnimationObject({
+                    direction: 'right',
+                    from: {
+                        position: {
+                            my: 'right top',
+                            at: 'left top',
+                            of: $parent
+                        }
+                    },
+                    to: {
+                        position: {
+                            my: 'left top',
+                            at: 'left top',
+                            of: $parent
+                        }
+                    }
+                }),
+            };
+        }
+        return super._getPopupAnimation();
+    }
     _getPopupOptions() {
-        return extend(super._getPopupOptions(), {
-            toolbarItems: [{
-                widget: 'dxButton',
-                location: 'center',
-                options: {
-                    activeStateEnabled: false,
-                    focusStateEnabled: false,
-                    hoverStateEnabled: false,
-                    icon: 'diagram-toolbox-drag',
-                    stylingMode: 'outlined',
-                    type: 'normal',
-                }
-            }]
-        });
+        const options = super._getPopupOptions();
+        if(!this.isMobileView()) {
+            return extend(options, {
+                showTitle: true,
+                toolbarItems: [{
+                    widget: 'dxButton',
+                    location: 'center',
+                    options: {
+                        activeStateEnabled: false,
+                        focusStateEnabled: false,
+                        hoverStateEnabled: false,
+                        icon: 'diagram-toolbox-drag',
+                        stylingMode: 'outlined',
+                        type: 'normal',
+                    }
+                }]
+            });
+        }
+        return options;
     }
     _renderPopupContent($parent) {
         const that = this;
@@ -54,7 +117,6 @@ class DiagramToolbox extends DiagramFloatingPanel {
             .addClass(DIAGRAM_TOOLBOX_INPUT_CLASS)
             .appendTo($parent);
         this._searchInput = this._createComponent($input, TextBox, {
-            width: DIAGRAM_TOOLBOX_WIDTH,
             placeholder: messageLocalization.format('dxDiagram-uiSearch'),
             onValueChanged: function(data) {
                 that._onInputChanged(data.value);
@@ -109,17 +171,12 @@ class DiagramToolbox extends DiagramFloatingPanel {
                 shapes: toolboxGroups[i].shapes,
                 onTemplate: (widget, $element, data) => {
                     const $toolboxElement = $($element);
-                    let toolboxWidth = DIAGRAM_TOOLBOX_WIDTH;
-                    if(hasWindow()) {
-                        toolboxWidth -= ($toolboxElement.parent().width() - $toolboxElement.width());
-                    }
                     this._onShapeCategoryRenderedAction({
                         category: data.category,
                         displayMode: data.displayMode,
                         dataToggle: DIAGRAM_TOOLTIP_DATATOGGLE,
                         shapes: data.shapes,
-                        $element: $toolboxElement,
-                        width: toolboxWidth
+                        $element: $toolboxElement
                     });
                     this._toolboxes.push($toolboxElement);
 
@@ -161,7 +218,6 @@ class DiagramToolbox extends DiagramFloatingPanel {
     _renderAccordion($container) {
         const data = this._getAccordionDataSource();
         this._accordion = this._createComponent($container, Accordion, {
-            width: DIAGRAM_TOOLBOX_WIDTH,
             multiple: true,
             activeStateEnabled: false,
             focusStateEnabled: false,

@@ -7,7 +7,7 @@ import 'ui/drawer';
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
-const DRAWER_CONTENT_CLASS = 'dx-drawer-content';
+const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
 const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
 const OPENED_STATE_CLASS = 'dx-drawer-opened';
 
@@ -42,7 +42,7 @@ QUnit.module('rendering', () => {
         assert.ok($element.hasClass(DRAWER_CLASS), 'drawer rendered');
         assert.equal($element.find('.' + DRAWER_WRAPPER_CLASS).length, 1, 'drawer has wrapper');
         assert.equal($element.find('.' + DRAWER_PANEL_CONTENT_CLASS).length, 1, 'drawer has panel container');
-        assert.equal($element.find('.' + DRAWER_CONTENT_CLASS).length, 1, 'drawer has content');
+        assert.equal($element.find('.' + DRAWER_VIEW_CONTENT_CLASS).length, 1, 'drawer has content');
     });
 
     QUnit.test('drawer should have correct mode class by default', function(assert) {
@@ -59,7 +59,7 @@ QUnit.module('rendering', () => {
 
     QUnit.test('render drawer content', function(assert) {
         const $element = $('#drawer').dxDrawer({});
-        const $content = $element.find('.' + DRAWER_CONTENT_CLASS);
+        const $content = $element.find('.' + DRAWER_VIEW_CONTENT_CLASS);
 
         assert.equal($content.text().trim(), 'Test Content', 'drawer content was rendered');
     });
