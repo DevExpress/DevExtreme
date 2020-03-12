@@ -163,9 +163,9 @@ export default class Button extends JSXComponent<ButtonInput> {
     onWidgetClick(e: Event) {
         const { onClick, useSubmitBehavior, validationGroup } = this.props;
 
-        useSubmitBehavior && this.submitInputRef.click();
+        onClick?.({ event: e, validationGroup });
 
-        return onClick?.({ event: e, validationGroup });
+        useSubmitBehavior && setTimeout(() => this.submitInputRef.click());
     }
 
     onWidgetKeyPress(e: Event, { keyName, which }) {
@@ -178,14 +178,18 @@ export default class Button extends JSXComponent<ButtonInput> {
     @Effect()
     submitEffect() {
         const namespace = 'UIFeedback';
-        const { onSubmit } = this.props;
+        const { useSubmitBehavior, onSubmit } = this.props;
 
-        click.on(this.submitInputRef, (e) => {
-            onSubmit?.(e);
-            e.stopPropagation();
-        }, { namespace });
+        if (useSubmitBehavior) {
+            click.on(this.submitInputRef,
+                event => onSubmit?.({ event, submitInput: this.submitInputRef }),
+                { namespace },
+            );
 
-        return () => click.off(this.submitInputRef, { namespace });
+            return () => click.off(this.submitInputRef, { namespace });
+        }
+
+        return null;
     }
 
     get aria() {

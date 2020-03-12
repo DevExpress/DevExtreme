@@ -83,17 +83,63 @@ class Button extends Widget {
     _init() {
         super._init();
 
+        if(this.option('useSubmitBehavior')) {
+            this.option('onSubmit', this._getSubmitAction());
+        }
+
         Object.keys(actions).forEach((name) => {
             this._addAction(name, actions[name]);
         });
     }
 
-    _optionChanged(option) {
-        if(actions[option.name]) {
-            this._addAction(option.name, actions[option.name]);
+    _optionChanged({ name, value }) {
+        if(actions[name]) {
+            this._addAction(name, actions[name]);
+        }
+
+        switch(name) {
+            case 'useSubmitBehavior':
+                value === true && this.option('onSubmit', this._getSubmitAction());
         }
 
         super._optionChanged();
+    }
+
+    _getSubmitAction() {
+        let needValidate = true;
+        let validationStatus = 'valid';
+
+        return this._createAction(({ event, submitInput }) => {
+            if(needValidate) {
+                const validationGroup = this._validationGroupConfig;
+
+                if(validationGroup) {
+                    const { status, complete } = validationGroup.validate();
+
+                    validationStatus = status;
+
+                    if(status === 'pending') {
+                        needValidate = false;
+                        this.option('disabled', true);
+
+                        complete.then(({ status }) => {
+                            needValidate = true;
+                            this.option('disabled', false);
+
+                            validationStatus = status;
+                            validationStatus === 'valid' && submitInput.click();
+                        });
+                    }
+                }
+            }
+
+            validationStatus !== 'valid' && event.preventDefault();
+            event.stopPropagation();
+        });
+    }
+
+    get _validationGroupConfig() {
+        return ValidationEngine.getGroupConfig(this._findGroup());
     }
 }
 

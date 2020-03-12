@@ -494,11 +494,12 @@ QUnit.module('submit behavior', {
         assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1);
     });
 
-    // TODO
-    QUnit.skip('button click call click() on submit input', function(assert) {
+    QUnit.test('button click call click() on submit input', function(assert) {
         const clickHandlerSpy = sinon.spy();
+        // NOTE: workaround to synchronize test
+        const $element = this.$element.Button({ validationGroup: '' });
 
-        this.$element
+        $element
             .find('.' + BUTTON_SUBMIT_INPUT_CLASS)
             .on('click', clickHandlerSpy);
 
@@ -519,8 +520,7 @@ QUnit.module('submit behavior', {
         assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1, 'has submit class if useSubmitBehavior is false');
     });
 
-    // TODO
-    QUnit.skip('preventDefault is called to dismiss submit of form if validation failed', function(assert) {
+    QUnit.test('preventDefault is called to dismiss submit of form if validation failed', function(assert) {
         assert.expect(2);
         try {
             const validatorStub = sinon.createStubInstance(Validator);
@@ -556,8 +556,7 @@ QUnit.module('submit behavior', {
         assert.ok(clickHandlerSpy.calledOnce);
     });
 
-    // TODO
-    QUnit.skip('Submit button should not be enabled on pending', function(assert) {
+    QUnit.test('Submit button should not be enabled on pending', function(assert) {
         try {
             const validator = new Validator(document.createElement('div'), {
                 adapter: sinon.createStubInstance(DefaultAdapter),
