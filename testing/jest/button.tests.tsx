@@ -123,7 +123,8 @@ describe('Button', () => {
             });
 
             it('should stop event propagation', () => {
-                const button = render({ useSubmitBehavior: true });
+                const onSubmit = ({ event }) => event.stopPropagation();
+                const button = render({ useSubmitBehavior: true, onSubmit });
                 const submitInput = button.find('input.dx-button-submit-input');
                 const e = { ...defaultEvent, stopPropagation: jest.fn() };
 

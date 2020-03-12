@@ -494,11 +494,12 @@ QUnit.module('submit behavior', {
         assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1);
     });
 
-    // TODO
-    QUnit.skip('button click call click() on submit input', function(assert) {
+    QUnit.test('button click call click() on submit input', function(assert) {
         const clickHandlerSpy = sinon.spy();
+        // NOTE: workaround to synchronize test
+        const $element = this.$element.Button({ validationGroup: '' });
 
-        this.$element
+        $element
             .find('.' + BUTTON_SUBMIT_INPUT_CLASS)
             .on('click', clickHandlerSpy);
 
@@ -519,8 +520,7 @@ QUnit.module('submit behavior', {
         assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1, 'has submit class if useSubmitBehavior is false');
     });
 
-    // TODO
-    QUnit.skip('preventDefault is called to dismiss submit of form if validation failed', function(assert) {
+    QUnit.test('preventDefault is called to dismiss submit of form if validation failed', function(assert) {
         assert.expect(2);
         try {
             const validatorStub = sinon.createStubInstance(Validator);
@@ -556,8 +556,7 @@ QUnit.module('submit behavior', {
         assert.ok(clickHandlerSpy.calledOnce);
     });
 
-    // TODO
-    QUnit.skip('Submit button should not be enabled on pending', function(assert) {
+    QUnit.test('Submit button should not be enabled on pending', function(assert) {
         try {
             const validator = new Validator(document.createElement('div'), {
                 adapter: sinon.createStubInstance(DefaultAdapter),
@@ -591,7 +590,7 @@ QUnit.module('submit behavior', {
         }
     });
 
-    // TODO
+    // NOTE: unstable (problem with preact timers)
     QUnit.skip('Submit button should change the \'disabled\' option to \'false\' when validation is passed negatively', function(assert) {
         this.clock.restore();
         const validator = new Validator($('<div>').appendTo(this.$form), {
@@ -609,18 +608,16 @@ QUnit.module('submit behavior', {
         });
         const done = assert.async();
 
-        this.$element.Button({
-            validationGroup: 'testGroup',
-            onOptionChanged: function(args) {
-                if(args.name === 'disabled') {
-                    if(args.value === true) {
-                        assert.equal(validator._validationInfo.result.status, 'pending', 'validator in pending');
-                    } else {
-                        assert.equal(validator._validationInfo.result.status, 'invalid', 'validator is invalid');
+        this.$element.Button({ validationGroup: 'testGroup' });
+        this.$element.Button('instance').option('onOptionChanged', (args) => {
+            if(args.name === 'disabled') {
+                if(args.value === true) {
+                    assert.equal(validator._validationInfo.result.status, 'pending', 'validator in pending');
+                } else {
+                    assert.equal(validator._validationInfo.result.status, 'invalid', 'validator is invalid');
 
-                        ValidationEngine.initGroups();
-                        done();
-                    }
+                    ValidationEngine.initGroups();
+                    done();
                 }
             }
         });
@@ -629,7 +626,7 @@ QUnit.module('submit behavior', {
         this.$element.trigger('dxclick');
     });
 
-    // TODO
+    // NOTE: unstable (problem with preact timers)
     QUnit.skip('Submit button should change the \'disabled\' option to \'false\' when validation is passed positively', function(assert) {
         this.clock.restore();
         const validator = new Validator($('<div>').appendTo(this.$form), {
@@ -647,18 +644,16 @@ QUnit.module('submit behavior', {
         });
         const done = assert.async();
 
-        this.$element.Button({
-            validationGroup: 'testGroup',
-            onOptionChanged: function(args) {
-                if(args.name === 'disabled') {
-                    if(args.value === true) {
-                        assert.equal(validator._validationInfo.result.status, 'pending', 'validator in pending');
-                    } else {
-                        assert.equal(validator._validationInfo.result.status, 'valid', 'validator is valid');
+        this.$element.Button({ validationGroup: 'testGroup' });
+        this.$element.Button('instance').option('onOptionChanged', (args) => {
+            if(args.name === 'disabled') {
+                if(args.value === true) {
+                    assert.equal(validator._validationInfo.result.status, 'pending', 'validator in pending');
+                } else {
+                    assert.equal(validator._validationInfo.result.status, 'valid', 'validator is valid');
 
-                        ValidationEngine.initGroups();
-                        done();
-                    }
+                    ValidationEngine.initGroups();
+                    done();
                 }
             }
         });
