@@ -362,14 +362,13 @@ class Diagram extends Widget {
             this._toolbox.option('height', bounds.height);
             const prevIsMobileView = this._toolbox.option('isMobileView');
             if(prevIsMobileView !== this.isMobileScreenSize()) {
-                if(this._toolbox) {
-                    this._toolbox.option({
-                        isMobileView: this.isMobileScreenSize(),
-                        isVisible: this._isToolboxVisible()
-                    });
-                }
+                this._toolbox.option({
+                    isMobileView: this.isMobileScreenSize(),
+                    isVisible: this._isToolboxVisible()
+                });
                 this._setCustomCommandChecked(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME, this._isToolboxVisible());
             }
+            this._toolbox.updateMaxHeight();
         };
     }
     _getToolboxBounds($parent, isServerSide) {
@@ -495,12 +494,10 @@ class Diagram extends Widget {
         this._propertiesPanelResizeCallback = () => {
             const prevIsMobileView = this._propertiesPanel.option('isMobileView');
             if(prevIsMobileView !== this.isMobileScreenSize()) {
-                if(this._propertiesPanel) {
-                    this._propertiesPanel.option({
-                        isMobileView: this.isMobileScreenSize(),
-                        isVisible: this._isPropertiesPanelVisible(),
-                    });
-                }
+                this._propertiesPanel.option({
+                    isMobileView: this.isMobileScreenSize(),
+                    isVisible: this._isPropertiesPanelVisible(),
+                });
                 this._setCustomCommandChecked(DiagramCommandsManager.SHOW_PROPERTIES_PANEL_COMMAND_NAME, this._isPropertiesPanelVisible());
             }
         };
