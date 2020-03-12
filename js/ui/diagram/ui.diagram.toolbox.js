@@ -7,6 +7,8 @@ import TextBox from '../text_box';
 import Accordion from '../accordion';
 import ScrollView from '../scroll_view';
 import Tooltip from '../tooltip';
+
+import { getDiagram } from './diagram.importer';
 import DiagramFloatingPanel from './ui.diagram.floating_panel';
 
 const DIAGRAM_TOOLBOX_MIN_HEIGHT = 130;
@@ -50,6 +52,9 @@ class DiagramToolbox extends DiagramFloatingPanel {
             });
         }
         return position;
+    }
+    _getPopupContainer() {
+        return this.isMobileView() ? super._getPopupContainer() : undefined;
     }
     _getPopupAnimation() {
         const $parent = this.option('offsetParent');
@@ -214,6 +219,9 @@ class DiagramToolbox extends DiagramFloatingPanel {
         return result;
     }
     _createTooltips(targets) {
+        const { Browser } = getDiagram();
+        if(Browser.TouchUI) return;
+
         const $container = this.$element();
         targets.each((index, element) => {
             const $target = $(element);

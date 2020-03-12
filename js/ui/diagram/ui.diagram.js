@@ -181,13 +181,15 @@ class Diagram extends Widget {
     _processBrowserResize() {
         this._isMobileScreenSize = undefined;
 
+        this._processDiagramResize();
+        this._killBrowserResizeTimer();
+    }
+    _processDiagramResize() {
         this._historyToolbarResizeCallback.call(this);
         this._propertiesToolbarResizeCallback.call(this);
         this._propertiesPanelResizeCallback.call(this);
         this._viewToolbarResizeCallback.call(this);
         this._toolboxResizeCallback.call(this);
-
-        this._killBrowserResizeTimer();
     }
     _killBrowserResizeTimer() {
         if(this._browserResizeTimer > -1) {
@@ -303,6 +305,7 @@ class Diagram extends Widget {
         this._toolbox = this._createComponent($toolBox, DiagramToolbox, {
             isMobileView: this.isMobileScreenSize(),
             isVisible: this._isToolboxVisible(),
+            container: this.$element(),
             height: bounds.height,
             offsetParent: $parent,
             offsetX: bounds.offsetX,
@@ -466,6 +469,7 @@ class Diagram extends Widget {
         this._propertiesPanel = this._createComponent($propertiesPanel, DiagramPropertiesPanel, {
             isMobileView: this.isMobileScreenSize(),
             isVisible: this._isPropertiesPanelVisible(),
+            container: this.$element(),
             offsetParent: $parent,
             offsetX,
             offsetY,
@@ -1010,6 +1014,14 @@ class Diagram extends Widget {
         this._changeNativeFullscreen(fullScreen);
         this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullScreen);
         this._diagramInstance.updateLayout();
+
+        this._processDiagramResize();
+        if(this._toolbox) {
+            this._toolbox.repaint();
+        }
+        if(this._propertiesPanel) {
+            this._propertiesPanel.repaint();
+        }
     }
     _changeNativeFullscreen(setModeOn) {
         const window = getWindow();
