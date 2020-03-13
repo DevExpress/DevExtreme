@@ -3099,7 +3099,24 @@ QUnit.module("datebox w/ time list", {
         assert.equal($listItems.last().text(), "11:30 PM", "max value is right");
     });
 
-    QUnit.test("min/max option test", (assert) => {
+    QUnit.test('list should contain all correct values when min/max options are defined (T869203)', (assert) => {
+        this.dateBox.option({
+            min: new Date(2015, 11, 1, 5, 45),
+            max: new Date(2015, 11, 1, 6, 15),
+            interval: 15
+        });
+
+        this.dateBox.option('opened', true);
+
+        const $timeList = $('.dx-list');
+        const $listItems = $timeList.find('.dx-list-item-content');
+
+        assert.strictEqual($listItems.first().text(), '5:45 AM', 'min value is right');
+        assert.strictEqual($listItems.last().text(), '6:15 AM', 'max value is right');
+        assert.strictEqual($listItems.length, 3, 'list items count is correct');
+    });
+
+    QUnit.test('min/max option test', (assert) => {
         this.dateBox.option({
             min: new Date(2008, 7, 8, 4, 0),
             max: new Date(2008, 7, 8, 8, 59)
@@ -3125,8 +3142,8 @@ QUnit.module("datebox w/ time list", {
         const $timeList = $(".dx-list");
         const $listItems = $timeList.find(".dx-list-item-content");
 
-        assert.equal($listItems.first().text(), "4:00 AM", "min value is right");
-        assert.equal($listItems.last().text(), "3:30 AM", "max value is right");
+        assert.strictEqual($listItems.first().text(), '4:00 AM', 'min value is right');
+        assert.strictEqual($listItems.last().text(), '4:00 AM', 'max value is right');
     });
 
     QUnit.test("interval option", (assert) => {
@@ -3142,7 +3159,7 @@ QUnit.module("datebox w/ time list", {
         let $timeList = $(".dx-list");
         let items = $timeList.find(LIST_ITEM_SELECTOR);
 
-        assert.equal(items.length, 2, "interval option works");
+        assert.strictEqual(items.length, 3, 'interval option works');
 
         this.dateBox.option("interval", 120);
         this.dateBox.option("opened", true);
@@ -3150,7 +3167,7 @@ QUnit.module("datebox w/ time list", {
         $timeList = $(".dx-list");
         items = $timeList.find(LIST_ITEM_SELECTOR);
 
-        assert.equal(items.length, 1, "interval option works");
+        assert.strictEqual(items.length, 2, 'interval option works');
     });
 
     QUnit.test("T240639 - correct list item should be highlighted if appropriate datebox value is set", (assert) => {
@@ -3282,7 +3299,7 @@ QUnit.module("datebox w/ time list", {
         const $timeList = $(".dx-list");
         const items = $timeList.find(LIST_ITEM_SELECTOR);
 
-        assert.equal(items.length, 15, "list should be contain right count of items");
+        assert.strictEqual(items.length, 16, 'list should be contain right count of items');
     });
 
     QUnit.test("value and max are belong to one day", (assert) => {
@@ -3344,8 +3361,8 @@ QUnit.module("datebox w/ time list", {
         const $timeList = $(".dx-list");
         const $listItems = $timeList.find(".dx-list-item-content");
 
-        assert.equal($listItems.first().text(), "8:00 AM", "min value is right");
-        assert.equal($listItems.last().text(), "7:30 PM", "max value is right");
+        assert.strictEqual($listItems.first().text(), '8:00 AM', 'min value is right');
+        assert.strictEqual($listItems.last().text(), '8:00 PM', 'max value is right');
     });
 
     QUnit.test("min/max settings should be work if value option is undefined", (assert) => {
@@ -3360,8 +3377,8 @@ QUnit.module("datebox w/ time list", {
         const $timeList = $(".dx-list");
         const $listItems = $timeList.find(".dx-list-item-content");
 
-        assert.equal($listItems.first().text(), "8:00 AM", "min value is right");
-        assert.equal($listItems.last().text(), "7:30 PM", "max value is right");
+        assert.strictEqual($listItems.first().text(), '8:00 AM', 'min value is right');
+        assert.strictEqual($listItems.last().text(), '8:00 PM', 'max value is right');
     });
 
     QUnit.test("validator correctly check value with 'time' format", assert => {
@@ -3474,23 +3491,23 @@ QUnit.module("keyboard navigation", {
 
         const $timeList = $(".dx-list");
 
-        assert.ok(!$timeList.find(LIST_ITEM_SELECTOR).eq(0).hasClass(STATE_FOCUSED_CLASS), "the first item is not focused");
+        assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(2).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
 
-        this.keyboard.keyDown("down");
-        assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(0).hasClass(STATE_FOCUSED_CLASS), "the first item is focused");
+        this.keyboard.keyDown('down');
+        assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(3).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
 
-        this.keyboard.keyDown("down");
-        assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(1).hasClass(STATE_FOCUSED_CLASS), "the second item is focused");
+        this.keyboard.keyDown('down');
+        assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(0).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
 
-        this.keyboard.keyDown("up");
-        assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(0).hasClass(STATE_FOCUSED_CLASS), "the first item is focused");
+        this.keyboard.keyDown('up');
+        assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(3).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
 
-        this.keyboard.keyDown("enter");
-        assert.equal(this.dateBox.option("opened"), false, "popup is hidden");
+        this.keyboard.keyDown('enter');
+        assert.strictEqual(this.dateBox.option('opened'), false, 'popup is hidden');
 
-        const selectedDate = this.dateBox.option("value");
-        assert.equal(selectedDate.getHours(), 4, "hours is right");
-        assert.equal(selectedDate.getMinutes(), 30, "minutes is right");
+        const selectedDate = this.dateBox.option('value');
+        assert.strictEqual(selectedDate.getHours(), 6, 'hours is right');
+        assert.strictEqual(selectedDate.getMinutes(), 0, 'minutes is right');
     });
 
     QUnit.test("apply contoured date on enter for date and datetime mode", (assert) => {
