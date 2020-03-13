@@ -169,6 +169,25 @@ QUnit.module('widget rendering', moduleSetup, () => {
         assert.equal($element.find('.' + ACCORDION_ITEM_BODY_CLASS).length, 1, 'body is rendered');
     });
 
+    QUnit.test('item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)', function(assert) {
+        const $element = this.$element.dxAccordion({
+            items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ],
+            collapsible: true,
+            multiple: true,
+        });
+        const instance = $element.dxAccordion('instance');
+        const item1 = $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
+        assert.ok(item1.is(':hidden'), 'item1 is hidden');
+
+        instance.option('items[1].visible', true);
+        assert.ok(item1.is(':visible'), 'item1 is visible');
+        assert.ok(item1.height() > 0, 'item1 has valid height');
+
+        instance.option('items[1].visible', false);
+        assert.ok(item1.is(':hidden'), 'item1 is hodden');
+        assert.strictEqual(item1.height(), 0, 'item1 has zero height');
+    });
+
     QUnit.test('Item body should be rendered on item changing and selectionChanging when the \'deferRendering\' option is true (T586536)', function(assert) {
         const $element = this.$element.dxAccordion({
             items: this.items,

@@ -388,6 +388,10 @@ const Accordion = CollectionWidget.inherit({
             case 'multiple':
                 this.option('selectionMode', args.value ? 'multiple' : 'single');
                 break;
+            case 'items':
+                this.callBase(args);
+                this._updateItemHeightsWrapper(true);
+                break;
             default:
                 this.callBase(args);
         }
