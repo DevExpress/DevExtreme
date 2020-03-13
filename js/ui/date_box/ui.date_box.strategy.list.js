@@ -196,7 +196,7 @@ const ListStrategy = DateBoxStrategy.inherit({
         const rangeItems = [];
         const interval = this.dateBox.option('interval');
 
-        while(currentValue - startValue < rangeDuration) {
+        while(currentValue - startValue <= rangeDuration) {
             rangeItems.push(new Date(currentValue));
             currentValue.setMinutes(currentValue.getMinutes() + interval);
         }
