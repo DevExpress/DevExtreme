@@ -173,24 +173,29 @@ QUnit.module('widget rendering', moduleSetup, () => {
     [true, false].forEach(collapsible => {
         [true, false].forEach(multiple => {
             [true, false].forEach(deferRendering => {
-                QUnit.test(`collapsible: ${collapsible}, multiple: ${multiple}, deferRendering: ${deferRendering} item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)`, function(assert) {
-                    const $element = this.$element.dxAccordion({
-                        items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ],
-                        deferRendering,
-                        collapsible,
-                        multiple
+                [true, false].forEach(repaintChangesOnly => {
+                    QUnit.test(`collapsible: ${collapsible}, multiple: ${multiple}, deferRendering: ${deferRendering}, repaintChangesOnly: ${repaintChangesOnly}, item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)`, function(assert) {
+                        const $element = this.$element.dxAccordion({
+                            items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ],
+                            repaintChangesOnly,
+                            deferRendering,
+                            collapsible,
+                            multiple
+                        });
+                        const instance = $element.dxAccordion('instance');
+                        let item1 = $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
+                        assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
+
+                        instance.option('items[1].visible', true);
+                        item1 = $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
+                        assert.strictEqual(item1.hasClass(HIDDEN_CLASS), false, 'item1 is visible');
+                        assert.roughEqual(item1.height(), 21, 0.5, 'item1 has valid height');
+
+                        instance.option('items[1].visible', false);
+                        item1 = $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
+                        assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
+                        assert.strictEqual(item1.height(), 0, 'item1 has zero height');
                     });
-                    const instance = $element.dxAccordion('instance');
-                    const item1 = $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
-                    assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
-
-                    instance.option('items[1].visible', true);
-                    assert.strictEqual(item1.hasClass(HIDDEN_CLASS), false, 'item1 is visible');
-                    assert.roughEqual(item1.height(), 21, 0.5, 'item1 has valid height');
-
-                    instance.option('items[1].visible', false);
-                    assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
-                    assert.strictEqual(item1.height(), 0, 'item1 has zero height');
                 });
             });
         });
