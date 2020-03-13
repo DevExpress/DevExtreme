@@ -3,7 +3,7 @@ const { test } = QUnit;
 import 'ui/file_manager';
 import fx from 'animation/fx';
 import pointerEvents from 'events/pointer';
-import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import { Consts, FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 
 const moduleConfig = {
 
@@ -44,7 +44,11 @@ const moduleConfig = {
 
 QUnit.module('Raise context menu', moduleConfig, () => {
 
-    test('right click by row', function(assert) {
+    test('right click by row on desktops', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desctops');
+            return;
+        }
         const $row1 = this.wrapper.getRowInDetailsView(1);
         assert.notOk($row1.hasClass(Consts.SELECTION_CLASS));
         assert.equal(this.wrapper.getContextMenuItems().length, 0);
@@ -62,7 +66,82 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         assert.ok(this.wrapper.getContextMenuItems().length > 0);
     });
 
+    test('right click by row on mobiles', function(assert) {
+        if(isDesktopDevice()) {
+            assert.ok(true, 'only on mobiles');
+            return;
+        }
+
+        assert.equal(this.wrapper.getContextMenuItems().length, 0);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
+        assert.strictEqual(this.wrapper.getContextMenuItems().length, 0);
+
+        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxcontextmenu');
+        assert.strictEqual(this.wrapper.getContextMenuItems().length, 0);
+    });
+
+    test('right click by thumbnails item on desktops', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desctops');
+            return;
+        }
+
+        this.wrapper.getInstance().option({
+            itemView: {
+                mode: 'thumbnails',
+                showFolders: true
+            },
+            permissions: {
+                download: true
+            }
+        });
+        this.clock.tick(400);
+
+        const item1 = this.wrapper.findThumbnailsItem('File 1.txt');
+        const item2 = this.wrapper.findThumbnailsItem('Folder 1');
+
+        assert.equal(this.wrapper.getContextMenuItems().length, 0);
+
+        item1.trigger('dxcontextmenu');
+        assert.strictEqual(this.wrapper.getContextMenuItems().length, 6, 'context menu items for files');
+        assert.ok(item1.hasClass(Consts.ITEM_SELECTED_CLASS));
+        assert.notOk(item2.hasClass(Consts.ITEM_SELECTED_CLASS));
+
+        item2.trigger('dxcontextmenu');
+        assert.strictEqual(this.wrapper.getContextMenuItems().length, 5, 'context menu items for folders');
+        assert.notOk(item1.hasClass(Consts.ITEM_SELECTED_CLASS));
+        assert.ok(item2.hasClass(Consts.ITEM_SELECTED_CLASS));
+    });
+
+    test('right click by thumbnails item on mobiles', function(assert) {
+        if(isDesktopDevice()) {
+            assert.ok(true, 'only on mobiles');
+            return;
+        }
+
+        this.wrapper.getInstance().option({
+            itemView: {
+                mode: 'thumbnails',
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getContextMenuItems().length, 0);
+
+        this.wrapper.findThumbnailsItem('File 1.txt').trigger('dxcontextmenu');
+        assert.strictEqual(this.wrapper.getContextMenuItems().length, 0);
+
+        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxcontextmenu');
+        assert.strictEqual(this.wrapper.getContextMenuItems().length, 0);
+    });
+
     test('right click by row and click by select check box', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true);
+            return;
+        }
         this.wrapper.getSelectCheckBoxInDetailsView(1).trigger('dxclick');
 
         const $row1 = this.wrapper.getRowInDetailsView(1);
@@ -102,7 +181,9 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const $row2 = this.wrapper.getRowInDetailsView(2);
         $row2.trigger('dxhoverstart');
         this.wrapper.getRowActionButtonInDetailsView(2).trigger('dxclick');
-        assert.ok($row1.hasClass(Consts.SELECTION_CLASS));
+        if(isDesktopDevice()) {
+            assert.ok($row1.hasClass(Consts.SELECTION_CLASS));
+        }
         assert.ok($row2.hasClass(Consts.SELECTION_CLASS));
         assert.ok(this.wrapper.getContextMenuItems().length > 0);
     });
@@ -222,6 +303,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 QUnit.module('Cutomize context menu', moduleConfig, () => {
 
     test('default items rearrangement and modification', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const testClick = sinon.spy();
 
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
@@ -271,6 +356,10 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('custom items render and modification', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const testClick = sinon.spy();
 
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
@@ -351,6 +440,10 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('nested items set and use', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
         fileManagerInstance.option('contextMenu', {
             items: [
@@ -403,6 +496,10 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('context menu for parent directory item contains no edit actions', function(assert) {
+        if(!isDesktopDevice()) {
+            assert.ok(true, 'only on desktops');
+            return;
+        }
         const fileManager = this.$element.dxFileManager('instance');
         fileManager.option('currentPath', 'Folder 1');
         this.clock.tick(400);

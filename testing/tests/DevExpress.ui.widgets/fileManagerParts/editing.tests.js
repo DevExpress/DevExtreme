@@ -585,7 +585,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const initialItemsLength = this.wrapper.getRowsInDetailsView().length;
         this.wrapper.getRowNameCellInDetailsView(1).trigger('dxclick');
         this.clock.tick(400);
-        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxcontextmenu');
+        this.wrapper.getRowActionButtonInDetailsView(1).trigger('dxclick');
         this.clock.tick(400);
         this.wrapper.getContextMenuItem('New directory').trigger('dxclick');
         this.clock.tick(400);
