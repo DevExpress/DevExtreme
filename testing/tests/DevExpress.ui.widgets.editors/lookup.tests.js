@@ -3362,6 +3362,7 @@ QUnit.module('default options', {
 
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'green'], value: 'blue' }).dxLookup('instance');
 
+            lookup.option('usePopover', true);
             lookup.option('itemCenteringEnabled', true);
 
             $(lookup.field()).trigger('dxclick');
