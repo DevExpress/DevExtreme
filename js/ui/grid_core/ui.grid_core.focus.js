@@ -79,7 +79,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             const setKeyByIndex = () => {
                 if(this._isValidFocusedRowIndex(index)) {
                     const visibleIndex = index - dataController.getRowIndexOffset();
-                    const lastItemIndex = dataController.items(true).length - 1;
+                    const lastItemIndex = dataController._getLastItemIndex();
                     const rowIndex = Math.min(visibleIndex, lastItemIndex);
                     const focusedRowKey = dataController.getKeyByRowIndex(rowIndex);
 
@@ -698,6 +698,10 @@ module.exports = {
                     }
 
                     return filter;
+                },
+
+                _getLastItemIndex: function() {
+                    return this.items(true).length - 1;
                 }
             }
         },
