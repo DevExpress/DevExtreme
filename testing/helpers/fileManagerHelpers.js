@@ -49,6 +49,7 @@ export const Consts = {
     MENU_ITEM_WITH_SUBMENU_CLASS: 'dx-menu-item-has-submenu',
     SUBMENU_CLASS: 'dx-submenu',
     SELECTION_CLASS: 'dx-selection',
+    ITEM_SELECTED_CLASS: 'dx-item-selected',
     FOCUSED_ROW_CLASS: 'dx-row-focused',
     SPLITTER_CLASS: 'dx-splitter',
     DISABLED_STATE_CLASS: 'dx-state-disabled',
@@ -741,5 +742,5 @@ export const stubFileReader = object => {
 };
 
 export const isDesktopDevice = () => {
-    devices.real().deviceType === 'desktop';
+    return devices.real().deviceType === 'desktop';
 };
